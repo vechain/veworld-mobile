@@ -85,8 +85,7 @@ export const CloudKitWalletCard = ({
                                 <BaseView flexDirection="row" style={styles.icloudTag}>
                                     <BaseIcon
                                         size={18}
-                                        // TODO replace icon-cloud with icon-google-drive
-                                        name={PlatformUtils.isIOS() ? "icon-cloud" : "icon-cloud"}
+                                        name={PlatformUtils.isIOS() ? "icon-cloud" : "icon-google-drive"}
                                         color={theme.colors.textReversed}
                                         style={styles.cloudIcon}
                                     />

@@ -80,8 +80,7 @@ export const BrowserBottomBar: React.FC = () => {
                 disabled: !canGoForward,
             },
             {
-                // TODO icon-bookmark-full
-                name: isBookMarked ? "icon-bookmark" : "icon-bookmark",
+                name: isBookMarked ? "icon-bookmark-minus" : "icon-bookmark-plus",
                 onPress: () => {
                     toggleBookmark()
                 },

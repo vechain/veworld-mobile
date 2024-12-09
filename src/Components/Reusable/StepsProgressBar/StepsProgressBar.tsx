@@ -48,29 +48,29 @@ export const StepsProgressBar: React.FC<Props> = ({ steps, currentStep, isCurren
                     const isDone = index < currentStep
                     const isError = isCurrentStepError && isActive
 
-                    const bgColor = isError
-                        ? theme.colors.danger
-                        : isNext
-                        ? trackColor
-                        : isActive
-                        ? theme.colors.primary
-                        : theme.colors.primary
+                    const getBackgroundColor = () => {
+                        if (isError) return theme.colors.danger
+                        if (isNext) return trackColor
+                        return theme.colors.primary
+                    }
 
-                    const text = isNext
-                        ? step.isNextText
-                        : isActive
-                        ? step.isActiveText
-                        : isDone
-                        ? step.isDoneText
-                        : step.isActiveText
+                    const getText = () => {
+                        if (isNext) return step.isNextText
+                        if (isActive) return step.isActiveText
+                        if (isDone) return step.isDoneText
+                        return step.isActiveText
+                    }
 
-                    const icon = isError
-                        ? "icon-x"
-                        : isDone
-                        ? "icon-check"
-                        : isNext
-                        ? "icon-more-horizontal"
-                        : "icon-circle"
+                    const getIcon = () => {
+                        if (isError) return "icon-x"
+                        if (isDone) return "icon-check"
+                        if (isNext) return "icon-more-horizontal"
+                        return "icon-circle"
+                    }
+
+                    const bgColor = getBackgroundColor()
+                    const text = getText()
+                    const icon = getIcon()
 
                     return (
                         <BaseView key={index} justifyContent="flex-start" alignItems="center">
