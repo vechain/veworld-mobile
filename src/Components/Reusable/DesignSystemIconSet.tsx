@@ -1,5 +1,5 @@
 import { createIconSet } from "@expo/vector-icons"
-import designSystemIconMap from "~Assets/Fonts/DesignSystemIcons/DesignSystemIconMap.json"
+import designSystemIconMap from "~Assets/Fonts/DesignSystemIcons/designSystemIconMap.json"
 
 export const Icon = createIconSet(
     designSystemIconMap,
