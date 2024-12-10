@@ -26,7 +26,7 @@ export const BaseSearchInput = memo(
         setValue,
         testID,
         showIcon = true,
-        iconName = "icon-zoom-in",
+        iconName = "icon-search",
         iconSize = 24,
         onIconPress,
     }: Props) => {

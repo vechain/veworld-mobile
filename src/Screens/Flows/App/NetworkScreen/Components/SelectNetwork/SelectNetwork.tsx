@@ -20,7 +20,7 @@ export const SelectNetwork: React.FC<Props> = ({ selectedNetwork, openBottomShee
 
             <BaseSpacer height={16} />
 
-            <NetworkBox network={selectedNetwork} onPress={openBottomSheet} rightIcon="icon-zoom-in" flex={1} />
+            <NetworkBox network={selectedNetwork} onPress={openBottomSheet} rightIcon="icon-search" flex={1} />
         </>
     )
 }
