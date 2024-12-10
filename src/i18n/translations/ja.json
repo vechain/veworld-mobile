@@ -551,6 +551,8 @@
   "NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED": "DAppはウォレット接続で確認されていません",
   "NOTIFICATION_WC_ACCOUNT_CHANGED": "アカウントが変更されました: {account : string}",
   "NOTIFICATION_WC_NETWORK_CHANGED": "ネットワークが変更されました: {network : string}",
+  "NOTIFICATION_failed_subdomain": "VNSサブドメインの作成に失敗しました",
+  "NOTIFICATION_failed_subdomain_already": "VNSサブドメインはすでに取得されています",
   "NOTIFICATION_found_token_transfer": "{alias: string}で{token: string}の転送が見つかりました: {amount: string}",
   "NOTIFICATION_received_token_transfer": "受信した転送: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "送信した転送: {amount : string } {token : string}",

@@ -551,6 +551,8 @@
   "NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED": "DApp Wallet Connect üzerinde doğrulanmadı",
   "NOTIFICATION_WC_ACCOUNT_CHANGED": "Hesap değiştirildi: {account : string}",
   "NOTIFICATION_WC_NETWORK_CHANGED": "Ağ değiştirildi: {network : string}",
+  "NOTIFICATION_failed_subdomain": "VNS alt alan adı oluşturulamadı",
+  "NOTIFICATION_failed_subdomain_already": "VNS alt alan adı zaten alınmış",
   "NOTIFICATION_found_token_transfer": "{alias: string} üzerinde {amount: string} 'lik {token: string} transferi bulundu.",
   "NOTIFICATION_received_token_transfer": "Transfer alındı: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "Transfer gönderildi: {amount : string } {token : string}",

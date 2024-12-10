@@ -551,6 +551,8 @@
   "NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED": "DApp:en är inte verifierad på Wallet Connect",
   "NOTIFICATION_WC_ACCOUNT_CHANGED": "Konto ändrat till: {account : string}",
   "NOTIFICATION_WC_NETWORK_CHANGED": "Nätverk ändrat till: {network : string}",
+  "NOTIFICATION_failed_subdomain": "Misslyckades med att skapa VNS-subdomän",
+  "NOTIFICATION_failed_subdomain_already": "VNS-subdomän är redan anspråkad",
   "NOTIFICATION_found_token_transfer": "Hittade {token : string} överföring: {amount : string} på {alias: string}",
   "NOTIFICATION_received_token_transfer": "Överföring mottagen: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "Överföring skickad: {amount : string } {token : string}",

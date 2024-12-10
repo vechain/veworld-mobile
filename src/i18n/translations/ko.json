@@ -551,6 +551,8 @@
   "NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED": "DApp이 Wallet Connect에서 검증되지 않았습니다.",
   "NOTIFICATION_WC_ACCOUNT_CHANGED": "계정이 다음으로 변경되었습니다: {account : string}",
   "NOTIFICATION_WC_NETWORK_CHANGED": "네트워크가 다음으로 변경되었습니다: {network : string}",
+  "NOTIFICATION_failed_subdomain": "VNS 하위 도메인 생성 실패",
+  "NOTIFICATION_failed_subdomain_already": "VNS 하위 도메인이 이미 사용 중",
   "NOTIFICATION_found_token_transfer": "{alias: string}에서 {amount : string} {token : string} 전송을 발견했습니다.",
   "NOTIFICATION_received_token_transfer": "수신된 전송: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "발송된 전송: {amount : string } {token : string}",

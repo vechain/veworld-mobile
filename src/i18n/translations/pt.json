@@ -551,6 +551,8 @@
   "NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED": "O DApp não está verificado no Wallet Connect",
   "NOTIFICATION_WC_ACCOUNT_CHANGED": "Conta alterada para: {account : string}",
   "NOTIFICATION_WC_NETWORK_CHANGED": "Rede alterada para: {network : string}",
+  "NOTIFICATION_failed_subdomain": "Falha ao criar subdomínio VNS",
+  "NOTIFICATION_failed_subdomain_already": "Subdomínio VNS já reivindicado",
   "NOTIFICATION_found_token_transfer": "Transferência de {token : string} encontrada: {amount : string} em {alias: string}",
   "NOTIFICATION_received_token_transfer": "Transferência recebida: {amount : string} {token : string}",
   "NOTIFICATION_sent_token_transfer": "Transferência enviada: {amount : string} {token : string}",

@@ -551,6 +551,8 @@
   "NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED": "DApp Wallet Connect पर सत्यापित नहीं है",
   "NOTIFICATION_WC_ACCOUNT_CHANGED": "खाता परिवर्तन किया गया: {account : string}",
   "NOTIFICATION_WC_NETWORK_CHANGED": "नेटवर्क में बदलाव हुआ: {network : string}",
+  "NOTIFICATION_failed_subdomain": "VNS सबडोमेन बनाने में विफल रहा",
+  "NOTIFICATION_failed_subdomain_already": "VNS सबडोमेन पहले से ही दावा किया गया है",
   "NOTIFICATION_found_token_transfer": "{alias: string} पर {amount : string} के {token : string} ट्रांसफर मिला।",
   "NOTIFICATION_received_token_transfer": "प्राप्त स्थानांतरण: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "भेजा गया स्थानांतरण: {amount : string } {token : string}",

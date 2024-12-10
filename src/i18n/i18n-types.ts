@@ -2266,6 +2266,14 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
 	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​V​N​S​ ​s​u​b​d​o​m​a​i​n
+	 */
+	NOTIFICATION_failed_subdomain: string
+	/**
+	 * V​N​S​ ​s​u​b​d​o​m​a​i​n​ ​a​l​r​e​a​d​y​ ​c​l​a​i​m​e​d
+	 */
+	NOTIFICATION_failed_subdomain_already: string
+	/**
 	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
 	 * @param {string} amount
 	 * @param {string} token
@@ -5748,6 +5756,14 @@ Try reconnect your device to the internet.
 	 * Network changed to: {network}
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
+	/**
+	 * Failed to create VNS subdomain
+	 */
+	NOTIFICATION_failed_subdomain: () => LocalizedString
+	/**
+	 * VNS subdomain already claimed
+	 */
+	NOTIFICATION_failed_subdomain_already: () => LocalizedString
 	/**
 	 * Transfer received: {amount} {token}
 	 */

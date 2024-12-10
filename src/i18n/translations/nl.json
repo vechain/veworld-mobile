@@ -551,6 +551,8 @@
   "NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED": "De DApp is niet geverifieerd op Wallet Connect",
   "NOTIFICATION_WC_ACCOUNT_CHANGED": "Account gewijzigd naar: {account : string}",
   "NOTIFICATION_WC_NETWORK_CHANGED": "Netwerk gewijzigd naar: {network : string}",
+  "NOTIFICATION_failed_subdomain": "Het aanmaken van VNS-subdomein is mislukt",
+  "NOTIFICATION_failed_subdomain_already": "VNS-subdomein is al geclaimd",
   "NOTIFICATION_found_token_transfer": "Gevonden {token : string} overdracht: {amount : string} op {alias: string}",
   "NOTIFICATION_received_token_transfer": "Ontvangst van overschrijving: {amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "Overschrijving verzonden: {amount : string } {token : string}",

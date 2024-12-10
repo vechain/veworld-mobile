@@ -551,6 +551,8 @@
   "NOTIFICATION_WALLET_CONNECT_DAPP_NOT_VERIFIED": "該 DApp 未在 Wallet Connect 上進行驗證",
   "NOTIFICATION_WC_ACCOUNT_CHANGED": "帳戶已更改為：{account : string}",
   "NOTIFICATION_WC_NETWORK_CHANGED": "網絡已更改為：{network : string}",
+  "NOTIFICATION_failed_subdomain": "無法建立 VNS 子域名",
+  "NOTIFICATION_failed_subdomain_already": "VNS 子域名已被認領",
   "NOTIFICATION_found_token_transfer": "發現 {token : string} 轉移：{amount : string} 在 {alias: string}",
   "NOTIFICATION_received_token_transfer": "收到轉帳：{amount : string } {token : string}",
   "NOTIFICATION_sent_token_transfer": "已送出轉帳：{amount : string } {token : string}",
