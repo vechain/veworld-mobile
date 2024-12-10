@@ -5,34 +5,22 @@ import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 
 type Props = {
-    leftIcon?: IconKey | Exclude<React.ReactNode, string>
-    rightIcon?: IconKey | Exclude<React.ReactNode, string>
+    leftIcon?: IconKey
+    rightIcon?: IconKey
     title: string
     action?: () => void
 }
 export const CardButton = ({ leftIcon, rightIcon, title, action }: Props) => {
     const theme = useTheme()
 
-    const isDesignSystemIcon = (icon: IconKey | Exclude<React.ReactNode, string>): icon is IconKey => {
-        return typeof icon === "string"
-    }
-
     const renderLeftIcon = useMemo(() => {
         if (!leftIcon) return null
-        return isDesignSystemIcon(leftIcon) ? (
-            <BaseIcon name={leftIcon} size={24} color={theme.colors.primary} />
-        ) : (
-            leftIcon
-        )
+        return <BaseIcon name={leftIcon} size={24} color={theme.colors.primary} />
     }, [leftIcon, theme.colors.primary])
 
     const renderRightIcon = useMemo(() => {
         if (!rightIcon) return null
-        return isDesignSystemIcon(rightIcon) ? (
-            <BaseIcon name={rightIcon} size={24} color={theme.colors.primary} />
-        ) : (
-            rightIcon
-        )
+        return <BaseIcon name={rightIcon} size={24} color={theme.colors.primary} />
     }, [rightIcon, theme.colors.primary])
 
     return (

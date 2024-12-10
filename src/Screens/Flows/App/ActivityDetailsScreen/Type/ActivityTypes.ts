@@ -1,5 +1,4 @@
 import { TFonts } from "~Constants"
-
 import { IconKey } from "~Model"
 
 export type ActivityDetail = {

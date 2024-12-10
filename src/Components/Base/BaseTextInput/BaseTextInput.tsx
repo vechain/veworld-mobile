@@ -15,7 +15,7 @@ export type BaseTextInputProps = {
     value?: string
     errorMessage?: string
     testID?: string
-    rightIcon?: IconKey | Exclude<React.ReactNode, string>
+    rightIcon?: IconKey | React.ReactElement
     rightIconTestID?: string
     onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
@@ -59,7 +59,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                 <BaseIcon
                     haptics="Light"
                     action={onIconPress}
-                    name={rightIcon as IconKey}
+                    name={rightIcon}
                     size={24}
                     color={theme.colors.text}
                     style={styles.rightIconStyle}

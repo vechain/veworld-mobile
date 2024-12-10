@@ -109,7 +109,7 @@ export const useSearchOrScanInput = (
                 placeholder={LL.SEND_ENTER_AN_ADDRESS()}
                 errorMessage={errorMessage}
                 testID="InsertAddressSendScreen_addressInput"
-                rightIcon={searchText ? "close" : "qrcode-scan"}
+                rightIcon={searchText ? "icon-x" : "icon-qr-code"}
                 onIconPress={searchText ? onTextReset : handleOnIconPress}
             />
         ),
