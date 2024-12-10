@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from "react"
 import { useWindowDimensions } from "react-native"
 import Animated, { ReduceMotion, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
-import { BaseSearchInput, BaseView, Icon, IconKey } from "~Components"
+import { BaseSearchInput, BaseView, Icon } from "~Components"
+import { IconKey } from "~Model"
 
 type AnimatedSearchBarProps = {
     placeholder: string

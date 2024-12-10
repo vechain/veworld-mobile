@@ -1,7 +1,8 @@
 import React from "react"
 import { TouchableOpacity } from "react-native"
 import { useTheme } from "~Hooks"
-import { Icon, IconKey } from "~Components"
+import { Icon } from "~Components"
+import { IconKey } from "~Model"
 
 type Props = {
     title: IconKey

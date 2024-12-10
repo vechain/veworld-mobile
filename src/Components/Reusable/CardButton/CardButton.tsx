@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
-import { IconKey } from "~Components"
+import { IconKey } from "~Model"
 
 type Props = {
     leftIcon?: IconKey | Exclude<React.ReactNode, string>

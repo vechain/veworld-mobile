@@ -1,5 +1,6 @@
 import { TFonts } from "~Constants"
-import { IconKey } from "~Components"
+
+import { IconKey } from "~Model"
 
 export type ActivityDetail = {
     id: number

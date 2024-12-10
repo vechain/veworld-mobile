@@ -2,7 +2,8 @@ import React from "react"
 import { TestWrapper } from "~Test"
 import { render, fireEvent, screen } from "@testing-library/react-native"
 import { BaseButtonGroupHorizontal } from "./BaseButtonGroupHorizontal"
-import { IconKey } from "~Components"
+import { IconKey } from "~Model"
+
 const buttons: {
     id: string
     label: string

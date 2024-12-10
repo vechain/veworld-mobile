@@ -1,9 +1,10 @@
 import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useThemedStyles } from "~Hooks"
-import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView, IconKey } from "~Components"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
+import { IconKey } from "~Model"
 
 type Props = {
     icon: IconKey

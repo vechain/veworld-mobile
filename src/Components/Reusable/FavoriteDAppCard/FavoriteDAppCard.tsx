@@ -1,10 +1,11 @@
 import React, { memo, useCallback } from "react"
 import { StyleSheet, TouchableOpacityProps, ViewStyle } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView, IconKey } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useDappBookmarking, useThemedStyles } from "~Hooks"
 import { DAppUtils } from "~Utils"
 import { DAppIcon } from "./DAppIcon"
+import { IconKey } from "~Model"
 
 type Props = {
     dapp: DiscoveryDApp

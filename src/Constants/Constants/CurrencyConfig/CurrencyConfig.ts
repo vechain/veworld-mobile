@@ -1,5 +1,5 @@
 import { CURRENCY, CURRENCY_SYMBOLS, SYMBOL_POSITIONS } from "~Constants/Enums/CurrencyEnum"
-import { IconKey } from "~Components"
+import { IconKey } from "~Model"
 
 export interface CurrencyConfig {
     currency: CURRENCY

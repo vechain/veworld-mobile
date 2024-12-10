@@ -3,8 +3,9 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import { useTheme } from "~Hooks"
-import { BaseIcon, BaseText, BaseTouchable, BaseView, IconKey } from "~Components"
+import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { RootStackParamListSettings, Routes } from "~Navigation"
+import { IconKey } from "~Model"
 
 type Excluded = Routes.WALLET_DETAILS | Routes.ICLOUD_MNEMONIC_BACKUP | Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD
 

@@ -1,8 +1,9 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseText, BaseTouchableBox, BaseView, IconKey } from "~Components"
+import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { IconKey } from "~Model"
 
 type BackupStatusVariant = "success" | "error" | "neutral"
 

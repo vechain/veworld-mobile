@@ -1,6 +1,7 @@
 import React from "react"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, IconKey } from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
+import { IconKey } from "~Model"
 
 export type ListEmptyResultsProps = {
     onClick?: () => void

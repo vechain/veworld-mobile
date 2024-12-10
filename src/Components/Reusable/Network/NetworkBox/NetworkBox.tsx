@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { StringUtils } from "~Utils"
-import { BaseCard, BaseIcon, BaseText, BaseTouchableBox, BaseView, IconKey } from "~Components"
-import { Network } from "~Model"
+import { BaseCard, BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
+import { IconKey, Network } from "~Model"
 import { useI18nContext } from "~i18n"
 
 type Props = {

@@ -2,9 +2,10 @@ import React, { forwardRef, memo, useMemo } from "react"
 import { KeyboardTypeOptions, StyleProp, StyleSheet, TextInputProps, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType, typography } from "~Constants"
-import { BaseIcon, BaseText, BaseView, IconKey } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { TextInput } from "react-native-gesture-handler"
 import { PlatformUtils } from "~Utils"
+import { IconKey } from "~Model"
 
 const { defaults: defaultTypography } = typography
 

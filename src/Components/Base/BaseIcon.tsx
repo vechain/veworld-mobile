@@ -5,9 +5,7 @@ import { useTheme } from "~Hooks"
 import HapticsService from "~Services/HapticsService"
 import { Icon } from "~Components"
 import { IconProps } from "react-native-vector-icons/Icon"
-import { designSystemIconMap } from "~Assets"
-
-export type IconKey = keyof typeof designSystemIconMap
+import { IconKey } from "~Model"
 
 type Props =
     | {

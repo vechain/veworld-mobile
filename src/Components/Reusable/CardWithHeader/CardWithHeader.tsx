@@ -1,8 +1,9 @@
 import { StyleSheet, ViewStyle } from "react-native"
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, IconKey } from "~Components"
+import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import React from "react"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
+import { IconKey } from "~Model"
 
 type Props = {
     containerStyle?: ViewStyle

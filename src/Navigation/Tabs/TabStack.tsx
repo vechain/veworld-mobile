@@ -2,9 +2,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { IconKey, TabIcon } from "~Components"
+import { TabIcon } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
-import { NETWORK_TYPE } from "~Model"
+import { IconKey, NETWORK_TYPE } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
     DiscoverStack,

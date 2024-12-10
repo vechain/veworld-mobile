@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useMemo } from "react"
 import { BackHandler, StyleSheet } from "react-native"
-import { BaseIcon, IconKey, useInAppBrowser } from "~Components"
+import { BaseIcon, useInAppBrowser } from "~Components"
 import { useBlockchainNetwork, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { useRoute } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { IconKey } from "~Model"
 
 type IconProps = {
     name: IconKey

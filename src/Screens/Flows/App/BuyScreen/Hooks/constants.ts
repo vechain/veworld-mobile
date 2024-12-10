@@ -1,4 +1,4 @@
-import { IconKey } from "~Components"
+import { IconKey } from "~Model"
 
 export type PaymentMethod = {
     id: string

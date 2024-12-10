@@ -1,8 +1,9 @@
 import React, { useCallback } from "react"
-import { BaseIcon, BaseText, BaseView, hideToast, IconKey, ToastAddress } from "~Components"
+import { BaseIcon, BaseText, BaseView, hideToast, ToastAddress } from "~Components"
 import { useTheme } from "~Hooks"
 import { ToastStyles } from "../util"
 import { ToastAddressesContent } from "./ToastAddressesContent"
+import { IconKey } from "~Model"
 
 type Props = {
     styles: ToastStyles
