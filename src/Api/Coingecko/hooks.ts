@@ -128,7 +128,7 @@ export const useVechainStatsTokenInfo = (tokenSymbol: string) => {
         select: data => {
             if (!data[tokenSymbol]) return null
             const exchageRates = data[tokenSymbol]
-            return currency === "USD" ? exchageRates.price_eur : exchageRates.price_eur
+            return currency === "USD" ? exchageRates.price_usd : exchageRates.price_eur
         },
     })
 }

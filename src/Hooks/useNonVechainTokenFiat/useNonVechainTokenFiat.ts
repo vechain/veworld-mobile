@@ -19,7 +19,7 @@ export const useNonVechainTokenFiat = () => {
 
             const exchangeRate = currency === "USD" ? tokenExchangeRate.price_usd : tokenExchangeRate.price_eur
 
-            return BalanceUtils.getFiatBalance(token.balance.balance ?? 0, Number(exchangeRate) ?? 0, token.decimals)
+            return BalanceUtils.getFiatBalance(token.balance.balance ?? 0, Number(exchangeRate ?? 0), token.decimals)
         })
     }, [currency, nonVeChainTokens, visibleTokens])
 
