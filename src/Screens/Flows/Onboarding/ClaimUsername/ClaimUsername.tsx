@@ -12,22 +12,41 @@ import {
 } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { domainBase, useDisclosure, useThemedStyles, useVns, useWalletSecurity } from "~Hooks"
-import { Routes } from "~Navigation"
-import { selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
+import { Routes, RootStackParamListOnboarding } from "~Navigation"
+import { selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
+import { useHandleWalletCreation } from "../WelcomeScreen/useHandleWalletCreation"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { useI18nContext } from "~i18n"
 
-export const ClaimUsername = () => {
+type Props = NativeStackScreenProps<RootStackParamListOnboarding, Routes.CLAIM_USERNAME>
+
+export const ClaimUsername: React.FC<Props> = ({ route }) => {
+    const { pin } = route.params || {}
     const [isLoading, setIsLoading] = useState(false)
     const [subdomain, setSubdomain] = useState("")
     const [isAvailable, setIsAvailable] = useState(false)
     const [isChecking, setIsChecking] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
 
+    const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { isWalletSecurityBiometrics } = useWalletSecurity()
-    const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
+    const { isOpen: isPasswordPromptOpen, onClose: closePasswordPrompt } = useDisclosure()
     const { isSubdomainAvailable, registerSubdomain } = useVns()
+    const { migrateFromOnboarding } = useHandleWalletCreation()
     const nav = useNavigation()
-
     const account = useAppSelector(selectSelectedAccountOrNull)
+    const device = useAppSelector(state => selectDevice(state, account?.rootAddress))
+
+    const isFieldValid = useMemo(() => {
+        if (subdomain && subdomain.length <= 3) {
+            setErrorMessage("Min 3 chars")
+            return false
+        }
+
+        setErrorMessage("")
+        return true
+    }, [subdomain])
 
     const onSetSubdomain = useCallback((value: string) => {
         setSubdomain(value)
@@ -36,76 +55,60 @@ export const ClaimUsername = () => {
     //Debounce searching for domain availability
     useEffect(() => {
         const checkIsAvailable = setTimeout(async () => {
-            if (subdomain.length > 3) {
+            if (isFieldValid) {
                 setIsChecking(true)
                 const availability = await isSubdomainAvailable(`${subdomain}${domainBase}`)
                 setIsAvailable(availability)
                 setIsChecking(false)
             }
-        }, 500)
+        }, 250)
 
         return () => clearTimeout(checkIsAvailable)
-    }, [isSubdomainAvailable, subdomain])
+    }, [isFieldValid, isSubdomainAvailable, subdomain])
 
     const onSubmit = useCallback(async () => {
-        if (isWalletSecurityBiometrics) {
-            setIsLoading(true)
-            if (!account) return
-            const success = await registerSubdomain(account, subdomain)
-            // console.log("CLAIM RESULT", success)
-            setIsLoading(false)
-            if (success) {
-                nav.navigate(Routes.USERNAME_CLAIMED)
-            }
-        } else {
-            setIsLoading(true)
-            openPasswordPrompt()
+        setIsLoading(true)
+        if (!device || !account) return
+        const success = await registerSubdomain(device, account.address, subdomain, pin)
+        setIsLoading(false)
+        if (success) {
+            nav.navigate(Routes.USERNAME_CLAIMED, pin && !isWalletSecurityBiometrics ? { pin } : undefined)
         }
-    }, [account, isWalletSecurityBiometrics, nav, openPasswordPrompt, registerSubdomain, subdomain])
+    }, [account, device, isWalletSecurityBiometrics, nav, pin, registerSubdomain, subdomain])
 
-    const onPasswordSuccess = useCallback(
-        async (pin: string) => {
-            if (!account) return
-            const success = await registerSubdomain(account, subdomain, pin)
-            // console.log("CLAIM RESULT PIN", success)
-            setIsLoading(false)
-            if (success) {
-                nav.navigate(Routes.USERNAME_CLAIMED)
-            }
-        },
-        [account, nav, registerSubdomain, subdomain],
-    )
+    const onSkipUsernameCreation = useCallback(async () => {
+        await migrateFromOnboarding(pin)
+    }, [migrateFromOnboarding, pin])
 
     const renderSubdomainStatus = useMemo(() => {
         if (subdomain.length > 3) {
-            if (isChecking) return <BaseText>{"checking availability..."}</BaseText>
+            if (isChecking) return <BaseText>{LL.CHECKING_USERNAME_AVAILABILITY()}</BaseText>
             if (!isChecking && isAvailable)
-                return <BaseText color={theme.colors.success}>{"Domain available"}</BaseText>
+                return <BaseText color={theme.colors.success}>{LL.SUCCESS_DOMAIN_AVAILABLE()}</BaseText>
             if (!isChecking && !isAvailable)
-                return <BaseText color={theme.colors.danger}>{"Domain already taken"}</BaseText>
+                return <BaseText color={theme.colors.danger}>{LL.ERROR_DOMAIN_ALREADY_TAKEN()}</BaseText>
         }
         return <></>
-    }, [isAvailable, isChecking, subdomain.length, theme])
+    }, [LL, isAvailable, isChecking, subdomain, theme.colors.danger, theme.colors.success])
 
     return (
         <BaseSafeArea grow={1} style={[styles.container]}>
             <BaseView style={[styles.contentContainer]}>
                 {/* Title */}
                 <BaseView flexDirection="row" justifyContent="center" alignItems="center">
-                    <BaseText typographyFont="subTitleBold">{"Username"}</BaseText>
+                    <BaseText typographyFont="subTitleBold">{LL.TITLE_CLAIM_USERNAME()}</BaseText>
                 </BaseView>
                 <BaseSpacer height={24} />
                 {/* Body */}
                 <BaseView flexGrow={1}>
-                    <BaseText typographyFont="subSubTitleLight">
-                        {"You can claim for free your unique username for this wallet:"}
-                    </BaseText>
+                    <BaseText typographyFont="subSubTitleLight">{LL.SB_CLAIM_USERNAME()}</BaseText>
                     <BaseSpacer height={40} />
+                    <BaseText>{account?.address}</BaseText>
                     {/* Input container */}
                     <BaseView>
                         <BaseView mb={8} flexDirection="row" justifyContent="space-between">
                             <BaseText typographyFont="subSubTitleBold" style={[styles.inputLabel]}>
-                                {"Username"}
+                                {LL.TITLE_CLAIM_USERNAME()}
                             </BaseText>
                             <BaseView flexDirection="row">
                                 <BaseText typographyFont="caption" style={[styles.inputLabel]}>
@@ -117,9 +120,11 @@ export const ClaimUsername = () => {
                             </BaseView>
                         </BaseView>
                         <BaseTextInput
-                            placeholder="Write your username"
+                            placeholder={LL.INPUT_PLACEHOLDER_USERNAME()}
                             value={subdomain}
+                            maxLength={20}
                             setValue={onSetSubdomain}
+                            errorMessage={errorMessage}
                             rightIcon={<BaseText typographyFont="body">{domainBase}</BaseText>}
                         />
                         {renderSubdomainStatus}
@@ -128,20 +133,16 @@ export const ClaimUsername = () => {
                 {/* Footer */}
                 <BaseView flexDirection="row" w={100} style={[styles.footerContainer]}>
                     {!isLoading && (
-                        <BaseButton variant="outline" flex={1} action={() => {}}>
-                            {"Skip"}
+                        <BaseButton variant="outline" flex={1} action={() => onSkipUsernameCreation()}>
+                            {LL.BTN_SKIP()}
                         </BaseButton>
                     )}
                     <BaseButton flex={1} disabled={isLoading || !subdomain} action={onSubmit}>
-                        {isLoading ? "Confirming..." : "Confirm"}
+                        {isLoading ? LL.BTN_CONFRIMING() : LL.BTN_CONFIRM()}
                     </BaseButton>
                 </BaseView>
             </BaseView>
-            <RequireUserPassword
-                isOpen={isPasswordPromptOpen}
-                onClose={closePasswordPrompt}
-                onSuccess={onPasswordSuccess}
-            />
+            <RequireUserPassword isOpen={isPasswordPromptOpen} onClose={closePasswordPrompt} onSuccess={() => {}} />
         </BaseSafeArea>
     )
 }

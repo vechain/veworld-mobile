@@ -9,6 +9,8 @@ import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
 import { DerivationPath } from "~Constants"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 export const useHandleWalletCreation = () => {
     const biometrics = useBiometrics()
@@ -18,6 +20,7 @@ export const useHandleWalletCreation = () => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const [isError, setIsError] = useState("")
+    const nav = useNavigation()
 
     const onWalletCreationError = useCallback(
         (_error: unknown) => {
@@ -65,13 +68,15 @@ export const useHandleWalletCreation = () => {
                     onError: onWalletCreationError,
                     derivationPath,
                 })
-                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
+
+                nav.navigate(Routes.CLAIM_USERNAME)
+                // await migrateOnboarding(SecurityLevelType.BIOMETRIC)
                 dispatch(setIsAppLoading(false))
             } else {
                 onOpen()
             }
         },
-        [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
+        [biometrics, createLocalWallet, dispatch, nav, onOpen, onWalletCreationError],
     )
 
     const onSuccess = useCallback(
@@ -100,10 +105,23 @@ export const useHandleWalletCreation = () => {
                 onError: onWalletCreationError,
                 derivationPath,
             })
-            await migrateOnboarding(SecurityLevelType.SECRET, pin)
+
+            nav.navigate(Routes.CLAIM_USERNAME, { pin })
+            // await migrateOnboarding(SecurityLevelType.SECRET, pin)
             dispatch(setIsAppLoading(false))
         },
-        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
+        [createLocalWallet, dispatch, nav, onClose, onWalletCreationError],
+    )
+
+    const migrateFromOnboarding = useCallback(
+        async (pin?: string) => {
+            if (pin) {
+                await migrateOnboarding(SecurityLevelType.SECRET, pin)
+            } else {
+                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
+            }
+        },
+        [migrateOnboarding],
     )
 
     const onCreateLedgerWallet = useCallback(
@@ -230,6 +248,7 @@ export const useHandleWalletCreation = () => {
 
     return {
         onCreateWallet,
+        migrateFromOnboarding,
         isOpen,
         isError,
         onSuccess,

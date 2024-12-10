@@ -761,9 +761,17 @@ type RootTranslation = {
 	 */
 	BTN_CLOSE_APP: string
 	/**
+	 * C​o​n​f​i​r​m
+	 */
+	BTN_CONFIRM: string
+	/**
 	 * C​o​n​f​i​r​m​ ​p​a​s​s​w​o​r​d
 	 */
 	BTN_CONFIRN_PASSWORD: string
+	/**
+	 * C​o​n​f​i​r​m​i​n​g​.​.​.
+	 */
+	BTN_CONFRIMING: string
 	/**
 	 * C​o​n​t​i​n​u​e
 	 */
@@ -983,6 +991,10 @@ type RootTranslation = {
 	 */
 	BTN_SHOW_QR_CODE: string
 	/**
+	 * S​k​i​p
+	 */
+	BTN_SKIP: string
+	/**
 	 * S​w​a​p
 	 */
 	BTN_SWAP: string
@@ -1034,6 +1046,10 @@ type RootTranslation = {
 	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
 	 */
 	CERT_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * C​h​e​c​k​i​n​g​ ​i​f​ ​u​s​e​r​n​a​m​e​ ​i​s​ ​a​v​a​i​l​a​b​l​e​.​.​.
+	 */
+	CHECKING_USERNAME_AVAILABILITY: string
 	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​i​C​l​o​u​d​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
 	 */
@@ -1650,6 +1666,10 @@ type RootTranslation = {
 	 */
 	ERROR_DECRYPTING_WALLET: string
 	/**
+	 * A​l​r​e​a​d​y​ ​t​a​k​e​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​o​n​e​.
+	 */
+	ERROR_DOMAIN_ALREADY_TAKEN: string
+	/**
 	 * E​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​U​R​L
 	 */
 	ERROR_ENTER_VALID_URL: string
@@ -1869,6 +1889,10 @@ type RootTranslation = {
 	 * I​m​p​o​r​t​ ​N​F​T
 	 */
 	IMPORT_NFT: string
+	/**
+	 * W​r​i​t​e​ ​y​o​u​r​ ​u​s​e​r​n​a​m​e
+	 */
+	INPUT_PLACEHOLDER_USERNAME: string
 	/**
 	 * I​r​i​s
 	 */
@@ -2487,6 +2511,10 @@ type RootTranslation = {
 	 */
 	SB_CHOOSE_A_WALLET: string
 	/**
+	 * Y​o​u​ ​c​a​n​ ​c​l​a​i​m​ ​f​o​r​ ​f​r​e​e​ ​y​o​u​r​ ​u​n​i​q​u​e​ ​u​s​e​r​n​a​m​e​ ​f​o​r​ ​t​h​i​s​ ​w​a​l​l​e​t​:
+	 */
+	SB_CLAIM_USERNAME: string
+	/**
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
 	SB_COLLECTIBLES: string
@@ -2600,6 +2628,10 @@ type RootTranslation = {
 	 * A​l​s​o​,​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​a​s​k​e​d​ ​t​o​ ​u​s​e​ ​y​o​u​r​ ​b​i​o​m​e​t​r​i​c​s​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​f​o​r​ ​e​a​c​h​ ​w​a​l​l​e​t​!
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: string
+	/**
+	 * Y​o​u​r​ ​u​n​i​q​u​e​ ​u​s​e​r​n​a​m​e​ ​w​a​s​ ​c​l​a​i​m​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​a​n​d​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​s​ ​n​o​w​ ​r​e​a​d​y​ ​t​o​ ​u​s​e​.
+	 */
+	SB_USERNAME_CLAIMED: string
 	/**
 	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​t​o​ ​a​u​t​h​o​r​i​z​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
 	 */
@@ -3044,6 +3076,10 @@ type RootTranslation = {
 	 */
 	STATUS: string
 	/**
+	 * A​v​a​i​l​a​b​l​e​ ​t​o​ ​c​l​a​i​m
+	 */
+	SUCCESS_DOMAIN_AVAILABLE: string
+	/**
 	 * S​u​c​c​e​s​s​!
 	 */
 	SUCCESS_GENERIC: string
@@ -3144,6 +3180,10 @@ type RootTranslation = {
 	 * B​u​y​ ​V​e​c​h​a​i​n​T​h​o​r​ ​t​o​k​e​n​s
 	 */
 	TITLE_BUY: string
+	/**
+	 * U​s​e​r​n​a​m​e
+	 */
+	TITLE_CLAIM_USERNAME: string
 	/**
 	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
@@ -3278,6 +3318,10 @@ type RootTranslation = {
 	 * U​n​l​o​c​k​ ​k​e​y​s​t​o​r​e
 	 */
 	TITLE_UNLOCK_KEYSTORE: string
+	/**
+	 * U​s​e​r​n​a​m​e​ ​c​l​a​i​m​e​d​!
+	 */
+	TITLE_USERNAME_CLAIMED: string
 	/**
 	 * C​h​o​o​s​e​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
 	 */
@@ -4272,9 +4316,17 @@ Try reconnect your device to the internet.
 	 */
 	BTN_CLOSE_APP: () => LocalizedString
 	/**
+	 * Confirm
+	 */
+	BTN_CONFIRM: () => LocalizedString
+	/**
 	 * Confirm password
 	 */
 	BTN_CONFIRN_PASSWORD: () => LocalizedString
+	/**
+	 * Confirming...
+	 */
+	BTN_CONFRIMING: () => LocalizedString
 	/**
 	 * Continue
 	 */
@@ -4492,6 +4544,10 @@ Try reconnect your device to the internet.
 	 */
 	BTN_SHOW_QR_CODE: () => LocalizedString
 	/**
+	 * Skip
+	 */
+	BTN_SKIP: () => LocalizedString
+	/**
 	 * Swap
 	 */
 	BTN_SWAP: () => LocalizedString
@@ -4543,6 +4599,10 @@ Try reconnect your device to the internet.
 	 * We are signing your certificate with your Ledger, please confirm the signature on your device when required
 	 */
 	CERT_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * Checking if username is available...
+	 */
+	CHECKING_USERNAME_AVAILABILITY: () => LocalizedString
 	/**
 	 * An error occurred while trying to connect to iCloud service. Try again!
 	 */
@@ -5152,6 +5212,10 @@ Try reconnect your device to the internet.
 	 */
 	ERROR_DECRYPTING_WALLET: () => LocalizedString
 	/**
+	 * Already taken. Please try a different one.
+	 */
+	ERROR_DOMAIN_ALREADY_TAKEN: () => LocalizedString
+	/**
 	 * Enter a valid URL
 	 */
 	ERROR_ENTER_VALID_URL: () => LocalizedString
@@ -5371,6 +5435,10 @@ Try reconnect your device to the internet.
 	 * Import NFT
 	 */
 	IMPORT_NFT: () => LocalizedString
+	/**
+	 * Write your username
+	 */
+	INPUT_PLACEHOLDER_USERNAME: () => LocalizedString
 	/**
 	 * Iris
 	 */
@@ -5969,6 +6037,10 @@ Try reconnect your device to the internet.
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
 	/**
+	 * You can claim for free your unique username for this wallet:
+	 */
+	SB_CLAIM_USERNAME: () => LocalizedString
+	/**
 	 * Collectibles
 	 */
 	SB_COLLECTIBLES: () => LocalizedString
@@ -6080,6 +6152,10 @@ Try reconnect your device to the internet.
 	 * Also, you will be asked to use your biometrics security method for each wallet!
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: () => LocalizedString
+	/**
+	 * Your unique username was claimed successfully and your wallet is now ready to use.
+	 */
+	SB_USERNAME_CLAIMED: () => LocalizedString
 	/**
 	 * This password will be used to authorize transactions.
 	 */
@@ -6521,6 +6597,10 @@ Try reconnect your device to the internet.
 	 */
 	STATUS: () => LocalizedString
 	/**
+	 * Available to claim
+	 */
+	SUCCESS_DOMAIN_AVAILABLE: () => LocalizedString
+	/**
 	 * Success!
 	 */
 	SUCCESS_GENERIC: () => LocalizedString
@@ -6620,6 +6700,10 @@ Try reconnect your device to the internet.
 	 * Buy VechainThor tokens
 	 */
 	TITLE_BUY: () => LocalizedString
+	/**
+	 * Username
+	 */
+	TITLE_CLAIM_USERNAME: () => LocalizedString
 	/**
 	 * Confirm your mnemonic
 	 */
@@ -6752,6 +6836,10 @@ Try reconnect your device to the internet.
 	 * Unlock keystore
 	 */
 	TITLE_UNLOCK_KEYSTORE: () => LocalizedString
+	/**
+	 * Username claimed!
+	 */
+	TITLE_USERNAME_CLAIMED: () => LocalizedString
 	/**
 	 * Choose your 6-digit PIN
 	 */

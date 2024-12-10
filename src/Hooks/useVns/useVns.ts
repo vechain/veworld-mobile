@@ -2,7 +2,7 @@ import { showErrorToast, useThor, WalletEncryptionKeyHelper } from "~Components"
 import { useCallback, useMemo } from "react"
 import { selectAccounts, selectContacts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { AccountWithDevice, Network, NETWORK_TYPE } from "~Model"
+import { Device, LocalDevice, Network, NETWORK_TYPE } from "~Model"
 import { abi } from "thor-devkit"
 import { queryClient } from "~Api/QueryProvider"
 import {
@@ -19,8 +19,9 @@ import {
     VeChainProvider,
     VeChainSigner,
     vnsUtils,
+    TESTNET_URL,
 } from "@vechain/sdk-network"
-import { error, info } from "~Utils"
+import { error } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
@@ -89,7 +90,7 @@ type VnsHook = {
     getVnsName: (address: string) => Promise<string | undefined>
     getVnsAddress: (name: string) => Promise<string | undefined>
     isSubdomainAvailable: (domainName: string) => Promise<boolean>
-    registerSubdomain: (account: AccountWithDevice, domainName: string, pin?: string) => Promise<boolean>
+    registerSubdomain: (account: Device, accountAddress: string, domainName: string, pin?: string) => Promise<boolean>
 }
 
 export const useVns = (props?: Vns): VnsHook => {
@@ -98,7 +99,7 @@ export const useVns = (props?: Vns): VnsHook => {
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
 
-    const thorClient = useMemo(() => ThorClient.at(network.currentUrl), [network.currentUrl])
+    const thorClient = useMemo(() => ThorClient.at(TESTNET_URL), [])
 
     const fetchVns = useCallback(async () => {
         const nameRes = await getVnsName(thor, network, address)
@@ -141,15 +142,14 @@ export const useVns = (props?: Vns): VnsHook => {
 
     //#region  Subdomain registration
     const getSigner = useCallback(
-        async (account: AccountWithDevice, password?: string) => {
+        async (account: LocalDevice, accountAddress: string, password?: string) => {
             const wallet = await WalletEncryptionKeyHelper.decryptWallet({
-                encryptedWallet: account.rootAddress,
+                encryptedWallet: account.wallet,
                 pinCode: password,
             })
 
             if (!wallet.mnemonic && !wallet.privateKey)
                 throw new Error("Either mnemonic or privateKey must be provided")
-            if (!account || !address) throw new Error("No address found")
 
             try {
                 let privateKey: Uint8Array<ArrayBufferLike> = !wallet.mnemonic
@@ -170,7 +170,7 @@ export const useVns = (props?: Vns): VnsHook => {
 
                 const providerWithDelegationEnabled = new VeChainProvider(
                     thorClient,
-                    new ProviderInternalBaseWallet([{ privateKey, address: account.address }], {
+                    new ProviderInternalBaseWallet([{ privateKey, address: accountAddress }], {
                         delegator: { delegatorUrl },
                     }),
                     true,
@@ -180,7 +180,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [address, thorClient],
+        [thorClient],
     )
 
     const getTotalGas = useCallback(
@@ -202,7 +202,7 @@ export const useVns = (props?: Vns): VnsHook => {
     )
 
     const buildClaimTx = useCallback(
-        async (subdomain: string) => {
+        async (subdomain: string, accountAddress: string) => {
             try {
                 const dataClaimer = new abi.Function(abis.VetDomains.claim).encode(
                     subdomain,
@@ -241,17 +241,22 @@ export const useVns = (props?: Vns): VnsHook => {
                     gasPriceCoef: 0,
                     reserved: { features: 1 },
                     simulateTransactionOptions: {
-                        caller: address!,
+                        caller: accountAddress,
                     },
                 }
 
                 const totalGas = await getTotalGas(transaction)
                 if (!totalGas) throw new Error("No gas")
+                const bufferedGas = totalGas + totalGas * 0.2
 
                 // 4 - Build transaction body
-                return await thorClient.transactions.buildTransactionBody(transaction.clauses, totalGas, {
-                    isDelegated: true,
-                })
+                return await thorClient.transactions.buildTransactionBody(
+                    transaction.clauses,
+                    parseInt(bufferedGas.toFixed(0), 10),
+                    {
+                        isDelegated: true,
+                    },
+                )
             } catch (e) {
                 throw new Error((e as Error)?.message)
             }
@@ -274,7 +279,10 @@ export const useVns = (props?: Vns): VnsHook => {
 
                 // 6 - Wait for transaction receipt
                 const txReceipt = await sendTransactionResult.wait()
-                info("SIGN", txReceipt)
+
+                if (txReceipt?.reverted) {
+                    throw new Error("Error claiming domain")
+                }
             } catch (e) {
                 throw new Error((e as Error)?.message)
             }
@@ -284,16 +292,16 @@ export const useVns = (props?: Vns): VnsHook => {
     //#endregion
 
     const registerSubdomain = useCallback(
-        async (account: AccountWithDevice, domainName: string, password?: string) => {
+        async (account: Device, accountAddress: string, domainName: string, password?: string) => {
             try {
-                const { address: accountAddress } = account || {}
-                if (!accountAddress) throw new Error("No address found")
-                const signer = await getSigner(account, password)
+                if (!("wallet" in account)) throw new Error("Ledger device not supported")
+                const signer = await getSigner(account, accountAddress, password)
 
                 if (!signer) throw new Error("No signer")
 
-                const txBody = await buildClaimTx(domainName)
+                const txBody = await buildClaimTx(domainName, accountAddress)
                 await signClaimTx(signer, txBody, accountAddress)
+
                 return true
             } catch (e) {
                 const err = e as Error

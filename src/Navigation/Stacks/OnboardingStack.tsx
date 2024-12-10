@@ -17,8 +17,8 @@ import { useNavAnimation } from "~Hooks"
 
 export type RootStackParamListOnboarding = {
     [Routes.WELCOME]: undefined
-    [Routes.CLAIM_USERNAME]: undefined
-    [Routes.USERNAME_CLAIMED]: undefined
+    [Routes.CLAIM_USERNAME]: { pin: string } | undefined
+    [Routes.USERNAME_CLAIMED]: { pin: string } | undefined
     [Routes.IMPORT_MNEMONIC]: undefined
     [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
     [Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS]: {

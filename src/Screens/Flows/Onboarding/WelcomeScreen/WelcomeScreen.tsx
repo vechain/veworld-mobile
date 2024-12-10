@@ -91,6 +91,10 @@ export const WelcomeScreen = () => {
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
 
+    const onNewWallet = useCallback(async () => {
+        await onCreateWallet({ derivationPath: DerivationPath.VET })
+    }, [onCreateWallet])
+
     const onGoToImportFromCLoud = useCallback(() => {
         onQuickCloudModalClose()
         nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
@@ -127,7 +131,7 @@ export const WelcomeScreen = () => {
                         )}
 
                         <BaseButton
-                            action={() => onCreateWallet({ derivationPath: DerivationPath.VET })}
+                            action={() => onNewWallet()}
                             w={100}
                             title={LL.BTN_CREATE_WALLET()}
                             testID="CREATE_WALLET_BTN"
