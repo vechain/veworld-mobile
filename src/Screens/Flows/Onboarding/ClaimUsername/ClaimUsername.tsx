@@ -49,7 +49,7 @@ export const ClaimUsername: React.FC<Props> = ({ route }) => {
     }, [subdomain])
 
     const onSetSubdomain = useCallback((value: string) => {
-        setSubdomain(value)
+        setSubdomain(value.replace(/[^a-z]/g, ""))
     }, [])
 
     //Debounce searching for domain availability
@@ -80,16 +80,42 @@ export const ClaimUsername: React.FC<Props> = ({ route }) => {
         await migrateFromOnboarding(pin)
     }, [migrateFromOnboarding, pin])
 
+    const isNotAvailable = useMemo(() => isAvailable === false, [isAvailable])
+
+    const hasErrors = useMemo(() => Boolean(isNotAvailable || errorMessage), [isNotAvailable, errorMessage])
+
+    const isDomainAvailable = useMemo(
+        () => Boolean(!!subdomain && subdomain?.length >= 3 && isAvailable === true && !hasErrors && !isChecking),
+        [subdomain, isAvailable, hasErrors, isChecking],
+    )
+
     const renderSubdomainStatus = useMemo(() => {
-        if (subdomain.length > 3) {
-            if (isChecking) return <BaseText>{LL.CHECKING_USERNAME_AVAILABILITY()}</BaseText>
-            if (!isChecking && isAvailable)
-                return <BaseText color={theme.colors.success}>{LL.SUCCESS_DOMAIN_AVAILABLE()}</BaseText>
-            if (!isChecking && !isAvailable)
-                return <BaseText color={theme.colors.danger}>{LL.ERROR_DOMAIN_ALREADY_TAKEN()}</BaseText>
+        if (isChecking) {
+            return <BaseText>{LL.CHECKING_USERNAME_AVAILABILITY()}</BaseText>
+        } else {
+            return (
+                <>
+                    {isDomainAvailable && (
+                        <BaseText color={theme.colors.success}>{LL.SUCCESS_DOMAIN_AVAILABLE()}</BaseText>
+                    )}
+                    {hasErrors && (
+                        <BaseText color={theme.colors.danger}>
+                            {isNotAvailable ? LL.ERROR_DOMAIN_ALREADY_TAKEN() : errorMessage}
+                        </BaseText>
+                    )}
+                </>
+            )
         }
-        return <></>
-    }, [LL, isAvailable, isChecking, subdomain, theme.colors.danger, theme.colors.success])
+    }, [
+        LL,
+        errorMessage,
+        hasErrors,
+        isChecking,
+        isDomainAvailable,
+        isNotAvailable,
+        theme.colors.danger,
+        theme.colors.success,
+    ])
 
     return (
         <BaseSafeArea grow={1} style={[styles.container]}>
@@ -103,7 +129,6 @@ export const ClaimUsername: React.FC<Props> = ({ route }) => {
                 <BaseView flexGrow={1}>
                     <BaseText typographyFont="subSubTitleLight">{LL.SB_CLAIM_USERNAME()}</BaseText>
                     <BaseSpacer height={40} />
-                    <BaseText>{account?.address}</BaseText>
                     {/* Input container */}
                     <BaseView>
                         <BaseView mb={8} flexDirection="row" justifyContent="space-between">
