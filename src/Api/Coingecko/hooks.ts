@@ -15,6 +15,9 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 // const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
 // const CHART_DATA_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000").toNumber()
 
+const EXCHANGE_RATE_STALE_TIME = 1000 * 60 // Data considered staled after 1 min
+const EXCHANGE_RATE_REFETCH_INTERVAL = 1000 * 60 * 2 // Refetch every 2 mins
+
 const getTokenInfoQueryKey = ({ id }: { id?: string }) => ["TOKEN_INFO", id]
 
 /**
@@ -27,7 +30,8 @@ export const useTokenInfo = ({ id }: { id?: string }) => {
         queryKey: getTokenInfoQueryKey({ id }),
         queryFn: () => getTokenInfo(id),
         enabled: !!id,
-        //staleTime: EXCHANGE_RATE_SYNC_PERIOD,
+        staleTime: EXCHANGE_RATE_STALE_TIME,
+        refetchInterval: EXCHANGE_RATE_REFETCH_INTERVAL,
     })
 }
 
@@ -105,8 +109,9 @@ export const useSmartMarketChart = ({
                 ? getSmartMarketChart({ highestResolutionMarketChartData, days })
                 : getMarketChart({ coinGeckoId: id, vs_currency, days }),
         enabled: !!highestResolutionMarketChartData,
-        // staleTime: CHART_DATA_SYNC_PERIOD,
         placeholderData,
+        staleTime: EXCHANGE_RATE_STALE_TIME,
+        refetchInterval: EXCHANGE_RATE_REFETCH_INTERVAL,
     })
 }
 
@@ -130,6 +135,8 @@ export const useVechainStatsTokenInfo = (tokenSymbol: string) => {
             const exchageRates = data[tokenSymbol]
             return currency === "USD" ? exchageRates.price_usd : exchageRates.price_eur
         },
+        staleTime: EXCHANGE_RATE_STALE_TIME,
+        refetchInterval: EXCHANGE_RATE_REFETCH_INTERVAL,
     })
 }
 
@@ -153,8 +160,8 @@ export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency:
         queryKey: getExchangeRateQueryKey({ id, vs_currency }),
         queryFn: () => tokenInfo?.market_data.current_price[currency],
         enabled: !!tokenInfo,
-        // staleTime: EXCHANGE_RATE_SYNC_PERIOD,
-        refetchInterval: 1000 * 60 * 2, //Refetch every 2 mins
+        staleTime: EXCHANGE_RATE_STALE_TIME,
+        refetchInterval: EXCHANGE_RATE_REFETCH_INTERVAL,
     })
 }
 

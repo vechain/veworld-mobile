@@ -27,6 +27,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 import { AccountUtils } from "~Utils"
+import { B3TR } from "~Constants"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -100,7 +101,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={12} />
 
-                        {token.symbol === "B3TR" && (
+                        {token.symbol === B3TR.symbol && (
                             <AlertInline status="info" variant="inline" message={LL.ALERT_TITLE_INVALID_CHARTS()} />
                         )}
 
