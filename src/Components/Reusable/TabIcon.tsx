@@ -20,7 +20,7 @@ export const TabIcon: FC<Props> = memo(({ focused, title, isSettings, isShowBack
         <BaseView justifyContent="center" alignItems="center" style={styles.container}>
             {isSettings && isShowBackupModal && <BaseView style={styles.warningLabel} />}
 
-            <Icon name={title.toLowerCase() as IconKey} size={20} color={(styles.icon as TextStyle).color} />
+            <Icon name={title} size={20} color={(styles.icon as TextStyle).color} />
         </BaseView>
     )
 })
