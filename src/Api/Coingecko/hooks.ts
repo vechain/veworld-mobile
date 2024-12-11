@@ -154,6 +154,7 @@ export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency:
         queryFn: () => tokenInfo?.market_data.current_price[currency],
         enabled: !!tokenInfo,
         // staleTime: EXCHANGE_RATE_SYNC_PERIOD,
+        refetchInterval: 1000 * 60 * 2, //Refetch every 2 mins
     })
 }
 
