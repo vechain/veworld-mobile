@@ -29,7 +29,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
         return (
             <ToastContent
                 styles={styles}
-                icon="check-circle-outline"
+                icon="icon-check-circle-2"
                 addresses={addresses}
                 text1={text1}
                 text2={text2}
@@ -49,7 +49,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
         return (
             <ToastContent
                 styles={styles}
-                icon="alert-outline"
+                icon="icon-alert-triangle"
                 addresses={addresses}
                 text1={text1}
                 text2={text2}
@@ -69,7 +69,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
         return (
             <ToastContent
                 styles={styles}
-                icon="alert-outline"
+                icon="icon-alert-triangle"
                 addresses={addresses}
                 text1={text1}
                 text2={text2}
@@ -89,7 +89,7 @@ export const toastConfig = (theme: ColorThemeType) => ({
         return (
             <ToastContent
                 styles={styles}
-                icon="alert-circle-outline"
+                icon="icon-info"
                 addresses={addresses}
                 text1={text1}
                 text2={text2}

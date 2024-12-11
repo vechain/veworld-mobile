@@ -40,7 +40,7 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
                                         {digit}
                                     </BaseText>
                                 ) : (
-                                    <BaseIcon name="backspace-outline" color={theme.colors.text} />
+                                    <BaseIcon name="icon-delete" color={theme.colors.text} />
                                 )}
                             </Pressable>
                         ) : null}

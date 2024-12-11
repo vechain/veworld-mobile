@@ -84,7 +84,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 value: `${transactionIDshort}`,
                 typographyFont: "subSubTitle",
                 underline: false,
-                icon: "content-copy",
+                icon: "icon-copy",
                 onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
             },
             {

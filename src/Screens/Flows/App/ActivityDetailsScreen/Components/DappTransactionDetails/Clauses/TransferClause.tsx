@@ -24,7 +24,7 @@ export const TransferClause: React.FC<Props> = memo(({ clause }) => {
                     title={LL.TO()}
                     value={AddressUtils.humanAddress(clause.to, 7, 9)}
                     onValuePress={() => onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_ADDRESS())}
-                    valueIcon="content-copy"
+                    valueIcon="icon-copy"
                 />
             )}
             {clause.tokenSymbol && <ClauseDetail title={LL.TOKEN_SYMBOL()} value={clause.tokenSymbol} border={false} />}

@@ -1,7 +1,6 @@
 import { RouteProp, StackActions, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useRef, useState } from "react"
 import { Keyboard } from "react-native"
-import { FeatherKeySVG } from "~Assets"
 import {
     BackButtonHeader,
     BaseButton,
@@ -153,7 +152,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
             body={
                 <BaseView style={styles.rootContainer}>
                     <BaseView justifyContent="center" alignItems="center" style={styles.keyIcon}>
-                        <FeatherKeySVG width={64} height={64} stroke={theme.colors.text} />
+                        <BaseIcon name="icon-key" size={64} color={theme.colors.text} />
                         <BaseSpacer height={20} />
                         <BaseView justifyContent="center" alignItems="center">
                             <BaseText align="center" typographyFont="subSubTitleMedium">
@@ -179,7 +178,7 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                             <BaseIcon
                                 haptics="Light"
                                 action={() => setSecureText(prev => !prev)}
-                                name={secureText ? "eye-off-outline" : "eye-outline"}
+                                name={secureText ? "icon-eye-off" : "icon-eye"}
                                 size={16}
                                 color={COLORS.GREY_500}
                                 style={styles.toggleIcon}

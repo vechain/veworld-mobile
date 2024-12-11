@@ -115,7 +115,7 @@ export const HomeScreen = () => {
                     nav.navigate(Routes.BUY_FLOW)
                     track(AnalyticsEvent.BUY_CRYPTO_BUTTON_CLICKED)
                 },
-                icon: <BaseIcon color={theme.colors.text} name="plus-circle-outline" size={21} />,
+                icon: <BaseIcon color={theme.colors.text} name="icon-plus-circle" size={21} />,
                 testID: "buyButton",
             })
         }
@@ -125,7 +125,7 @@ export const HomeScreen = () => {
             actions.push({
                 name: LL.BTN_SEND(),
                 action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
-                icon: <BaseIcon color={theme.colors.text} name="arrow-up" />,
+                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-up" />,
                 testID: "sendButton",
             })
         }
@@ -134,7 +134,7 @@ export const HomeScreen = () => {
             actions.push({
                 name: LL.BTN_SWAP(),
                 action: () => nav.navigate(Routes.SWAP),
-                icon: <BaseIcon color={theme.colors.text} name="swap-horizontal" />,
+                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" />,
                 testID: "swapButton",
             })
         }

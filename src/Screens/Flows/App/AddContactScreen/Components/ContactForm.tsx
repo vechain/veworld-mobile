@@ -6,6 +6,7 @@ import { Keyboard } from "react-native"
 import HapticsService from "~Services/HapticsService"
 import { isEmpty } from "lodash"
 import { useI18nContext } from "~i18n"
+import { IconKey } from "~Model"
 
 type Props = {
     titleName: string
@@ -150,7 +151,7 @@ export const ContactForm: React.FC<Props> = memo(
                 setValue: (address: string) => handleOnSetValue(address),
                 errorMessage: canShowAddressError ? addressError : "",
                 value: valueAddress,
-                rightIcon: isEmpty(valueAddress) ? "qrcode-scan" : "close",
+                rightIcon: (isEmpty(valueAddress) ? "icon-qr-code" : "icon-x") as IconKey,
                 onIconPress: onHandleIconTap,
                 testID: "Contact-Address-Input",
                 editable: !addressFieldDisabled,

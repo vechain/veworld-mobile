@@ -281,7 +281,7 @@ const CloudKitModalReminder = ({
                                 textColor={theme.isDark ? theme.colors.text : undefined}
                                 rightIcon={
                                     <BaseIcon
-                                        name={PlatformUtils.isIOS() ? "apple-icloud" : "google-drive"}
+                                        name={PlatformUtils.isIOS() ? "icon-cloud" : "icon-google-drive"}
                                         size={22}
                                         color={theme.isDark ? theme.colors.text : theme.colors.textReversed}
                                         style={s.icon}

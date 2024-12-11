@@ -192,7 +192,7 @@ export const ObserveWalletScreen = () => {
                                     value={inputValue}
                                     autoFocus
                                     onIconPress={() => (inputValue ? onClearAddress() : handleOnIconPress())}
-                                    rightIcon={inputValue ? "close" : "qrcode-scan"}
+                                    rightIcon={inputValue ? "icon-x" : "icon-qr-code"}
                                 />
 
                                 <BaseSpacer height={40} />

@@ -26,7 +26,7 @@ import {
     useTheme,
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { CloudKitWallet, DrivetWallet, DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
+import { CloudKitWallet, DEVICE_CREATION_ERRORS as ERRORS, DrivetWallet, IMPORT_TYPE } from "~Model"
 import { Routes } from "~Navigation"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import HapticsService from "~Services/HapticsService"
@@ -333,7 +333,7 @@ export const ImportLocalWallet = () => {
     const footerButtonLeftIcon = useMemo(() => {
         switch (computeButtonType) {
             case ButtonType.icloud:
-                return "apple-icloud"
+                return "icon-cloud"
             default:
                 return undefined
         }
@@ -383,14 +383,14 @@ export const ImportLocalWallet = () => {
 
                                 <BaseView flexDirection="row" alignSelf="flex-end">
                                     <BaseIcon
-                                        name={"content-paste"}
+                                        name={"icon-copy"}
                                         size={32}
                                         style={styles.icon}
                                         bg={theme.colors.secondary}
                                         action={onPasteFromClipboard}
                                     />
                                     <BaseIcon
-                                        name={"trash-can-outline"}
+                                        name={"icon-trash"}
                                         size={32}
                                         bg={theme.colors.secondary}
                                         action={onClearSeed}
@@ -414,7 +414,7 @@ export const ImportLocalWallet = () => {
                                             {"Derivation Path"}
                                         </BaseText>
                                     </BaseView>
-                                    <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
+                                    <BaseIcon name="icon-chevron-right" size={24} color={theme.colors.text} />
                                 </BaseTouchableBox>
 
                                 <UnlockKeystoreBottomSheet
@@ -488,7 +488,7 @@ export const ImportLocalWallet = () => {
                                     isLoading={isLoading}
                                     leftIcon={
                                         <BaseIcon
-                                            name={"google-drive"}
+                                            name={"icon-google-drive"}
                                             color={theme.colors.textReversed}
                                             style={styles.ickoudIcon}
                                         />

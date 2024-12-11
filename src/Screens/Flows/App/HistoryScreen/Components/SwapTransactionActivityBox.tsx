@@ -37,7 +37,7 @@ export const SwapTransactionActivityBox: React.FC<Props> = memo(({ activity, dec
                     <DropShadow style={[theme.shadows.card]}>
                         <BaseView flexDirection="column" alignItems="center">
                             <BaseIcon
-                                name="swap-horizontal"
+                                name="icon-arrow-left-right"
                                 size={20}
                                 color={COLORS.DARK_PURPLE}
                                 testID="swap-horizontal"
@@ -61,7 +61,7 @@ export const SwapTransactionActivityBox: React.FC<Props> = memo(({ activity, dec
                     </BaseView>
                 </BaseView>
                 <BaseView flexDirection="column" alignItems="center" pl={5}>
-                    <BaseIcon size={24} name="chevron-right" color={theme.colors.text} />
+                    <BaseIcon size={24} name="icon-chevron-right" color={theme.colors.text} />
                 </BaseView>
             </BaseView>
         </BaseTouchable>

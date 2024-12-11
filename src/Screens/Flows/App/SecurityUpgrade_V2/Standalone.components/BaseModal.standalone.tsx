@@ -33,7 +33,7 @@ export const BaseModalWithChildren: React.FC<IBaseModal> = memo(
                             haptics="Light"
                             px={12}
                             size={36}
-                            name="chevron-left"
+                            name="icon-chevron-left"
                             action={onClose}
                             // eslint-disable-next-line react-native/no-inline-styles
                             style={{

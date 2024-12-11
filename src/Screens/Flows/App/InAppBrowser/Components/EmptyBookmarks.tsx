@@ -45,7 +45,7 @@ export const EmptyBookmarks = ({ onClose }: EmptyBookmarksProps) => {
                         alignItems="center"
                         borderRadius={16}
                         style={emptyListStyles.quickActions}>
-                        <BaseIcon name="plus" size={55} />
+                        <BaseIcon name="icon-plus" size={55} />
                         <BaseText color={COLORS.DARK_PURPLE} typographyFont="bodyMedium">
                             {LL.BROWSER_ADD_BOOKMARK_TITLE()}
                         </BaseText>

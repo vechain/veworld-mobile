@@ -343,7 +343,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                                             {isExchangeRateAvailable && (
                                                 <BaseIcon
-                                                    name={"autorenew"}
+                                                    name={"icon-refresh-cw"}
                                                     size={20}
                                                     disabled={areFeesLoading}
                                                     color={COLORS.DARK_PURPLE}
@@ -498,7 +498,7 @@ function BalanceWarningView(props: Readonly<IBalanceWarningView>) {
     return (
         <Animated.View {...animatedViewProps}>
             <BaseView flexDirection="row">
-                <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
+                <BaseIcon name={"icon-alert-circle"} size={20} color={theme.colors.danger} />
                 <BaseSpacer width={8} />
                 <BaseText typographyFont="body" fontSize={12} color={theme.colors.danger}>
                     {text}

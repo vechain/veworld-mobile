@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { IconKey } from "~Model"
 
 type BackupStatusVariant = "success" | "error" | "neutral"
 
@@ -12,10 +13,10 @@ enum StatusColorVariant {
     "neutral" = "neutralVariant",
 }
 
-const ICON_NAMES: Record<BackupStatusVariant, string> = {
-    success: "check-circle-outline",
-    error: "close-circle-outline",
-    neutral: "information-outline",
+const ICON_NAMES: Record<BackupStatusVariant, IconKey> = {
+    success: "icon-check-circle-2",
+    error: "icon-x-circle",
+    neutral: "icon-info",
 }
 
 type Props = {

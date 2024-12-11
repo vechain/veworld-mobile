@@ -37,7 +37,7 @@ export const ChangeAccountButtonPill = ({ title, text, action }: Props) => {
             <View style={themedStyles.seperator} />
 
             <BaseView w={35}>
-                <BaseIcon name="account-sync-outline" color={theme.colors.textReversed} />
+                <BaseIcon name="icon-arrow-left-right" color={theme.colors.textReversed} />
             </BaseView>
         </BaseTouchable>
     )

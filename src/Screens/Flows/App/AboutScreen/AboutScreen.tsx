@@ -43,7 +43,7 @@ export const AboutScreen = () => {
                             <BaseText typographyFont="captionRegular">{link.subtitle}</BaseText>
                         </BaseView>
                         <BaseView>
-                            <BaseIcon name="chevron-right" size={25} color={theme.colors.text} />
+                            <BaseIcon name="icon-chevron-right" size={25} color={theme.colors.text} />
                         </BaseView>
                     </BaseView>
                 </BaseCard>

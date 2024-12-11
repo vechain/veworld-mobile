@@ -16,7 +16,7 @@ function NotEnoughGasMessage() {
     return (
         <BaseView flexDirection="column">
             <BaseView flexDirection="row" alignItems="center">
-                <BaseIcon name="alert-circle-outline" color={theme.colors.danger} size={20} />
+                <BaseIcon name="icon-alert-circle" color={theme.colors.danger} size={20} />
                 <BaseSpacer width={6} />
                 <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
                     {LL.SEND_ACCEPT_NO_GAS_TITLE()}

@@ -2,8 +2,8 @@ import { Pressable, StyleSheet, Text, View } from "react-native"
 import React, { useCallback } from "react"
 import { ColorThemeType, valueToHP } from "~Constants"
 import { widthPercentageToDP as wp } from "react-native-responsive-screen"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
 import { useThemedStyles } from "~Hooks"
+import { Icon } from "~Components"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
 
@@ -36,7 +36,7 @@ export const StandaloneNumPad = ({ onDigitPress, onDigitDelete }: Props) => {
                                 {digit !== "canc" ? (
                                     <Text style={styles.digitText}>{digit}</Text>
                                 ) : (
-                                    <Icon size={22} name="backspace-outline" color={theme.colors.text} />
+                                    <Icon size={22} name="icon-delete" color={theme.colors.text} />
                                 )}
                             </Pressable>
                         ) : null}

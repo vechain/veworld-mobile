@@ -140,7 +140,7 @@ export const SecurityUpgrade_V2 = ({
         <SafeAreaView style={{ backgroundColor: theme.colors.background }}>
             <BaseView justifyContent="space-between" alignItems="center" h={100} w={100} p={24}>
                 <BaseView alignItems="center">
-                    <BaseIcon name="shield-alert-outline" size={72} color={theme.colors.text} />
+                    <BaseIcon name="icon-shield-alert" size={72} color={theme.colors.text} />
                     <BaseSpacer height={24} />
                     <BaseText align="center" typographyFont="title">
                         {LL.SECURITY_ENHANCEMENT_TITLE()}

@@ -4,9 +4,10 @@ import { useThemedStyles } from "~Hooks"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
+import { IconKey } from "~Model"
 
 type Props = {
-    icon: string | React.ReactNode
+    icon: IconKey
     title: string
     description: string
     mainButton?: React.ReactNode
@@ -30,11 +31,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 <BaseView>
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center" alignItems="center">
-                        {typeof icon === "string" ? (
-                            <BaseIcon name={icon} style={styles.icon} size={66} color={theme.colors.text} />
-                        ) : (
-                            icon
-                        )}
+                        <BaseIcon name={icon} style={styles.icon} size={66} color={theme.colors.text} />
                         <BaseSpacer height={26} />
                         <BaseText align="center" typographyFont="subSubTitleMedium">
                             {title}
