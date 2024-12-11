@@ -115,22 +115,24 @@ export const useSmartMarketChart = ({
     })
 }
 
-export const getVechainStatsTokenQueryKey = () => ["VechainStats", "TOKENS_INFO"]
+export const getVechainStatsTokensQueryKey = () => ["VechainStats", "TOKENS_INFO"]
 
 export const useVechainStatsTokensInfo = () => {
     return useQuery({
-        queryKey: getVechainStatsTokenQueryKey(),
+        queryKey: getVechainStatsTokensQueryKey(),
         queryFn: () => getVechainStatsTokensInfo(),
         staleTime: EXCHANGE_RATE_STALE_TIME,
         refetchInterval: EXCHANGE_RATE_REFETCH_INTERVAL,
     })
 }
 
+export const getVechainStatsTokenQueryKey = (tokenSymbol: string) => ["VechainStats", "TOKENS_INFO", tokenSymbol]
+
 export const useVechainStatsTokenInfo = (tokenSymbol: string) => {
     const currency = useAppSelector(selectCurrency)
 
     return useQuery({
-        queryKey: getVechainStatsTokenQueryKey(),
+        queryKey: getVechainStatsTokenQueryKey(tokenSymbol),
         queryFn: () => getVechainStatsTokensInfo(),
         select: data => {
             if (!data[tokenSymbol]) return null
@@ -147,6 +149,7 @@ const getExchangeRateQueryKey = ({ id, vs_currency }: { id?: string; vs_currency
     id,
     vs_currency,
 ]
+
 /**
  *  Get the exchange rate of a coin reusing the token info
  * @param id  the id of the coin
