@@ -39,6 +39,8 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
         [tokenWithBalance.balance.balance, tokenWithBalance.decimals],
     )
 
+    const isIlliquidToken = useMemo(() => tokenWithBalance.symbol === "VOT3", [tokenWithBalance])
+
     return (
         <BaseView style={styles.innerRow}>
             <BaseView flexDirection="row">
@@ -90,7 +92,7 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
                 </BaseView>
             </BaseView>
 
-            {!isEdit && (
+            {!isEdit && !isIlliquidToken && (
                 <BaseView style={[styles.balancesContainer]}>
                     <FiatBalance
                         balances={[fiatBalance]}
