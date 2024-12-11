@@ -121,6 +121,8 @@ export const useVechainStatsTokensInfo = () => {
     return useQuery({
         queryKey: getVechainStatsTokenQueryKey(),
         queryFn: () => getVechainStatsTokensInfo(),
+        staleTime: EXCHANGE_RATE_STALE_TIME,
+        refetchInterval: EXCHANGE_RATE_REFETCH_INTERVAL,
     })
 }
 
