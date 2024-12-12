@@ -1,11 +1,11 @@
 import React, { memo, useMemo } from "react"
-import { TextInput, StyleSheet, KeyboardTypeOptions } from "react-native"
+import { KeyboardTypeOptions, StyleSheet, TextInput } from "react-native"
 import { useTheme, useThemedStyles } from "~Hooks"
-import { typography, ColorThemeType, COLORS } from "~Constants"
-import { BaseIcon } from "../BaseIcon"
-import { BaseView } from "../BaseView"
+import { COLORS, ColorThemeType, typography } from "~Constants"
+import { BaseIcon, BaseTouchable, BaseView } from "~Components"
 import { PlatformUtils } from "~Utils"
-import { BaseTouchable } from "../BaseTouchable"
+import { IconKey } from "~Model"
+
 const { defaults: defaultTypography } = typography
 
 type Props = {
@@ -14,7 +14,7 @@ type Props = {
     setValue?: (s: string) => void
     testID?: string
     showIcon?: boolean
-    iconName?: string
+    iconName?: IconKey
     iconSize?: number
     onIconPress?: () => void
 }
@@ -26,7 +26,7 @@ export const BaseSearchInput = memo(
         setValue,
         testID,
         showIcon = true,
-        iconName = "magnify",
+        iconName = "icon-search",
         iconSize = 24,
         onIconPress,
     }: Props) => {

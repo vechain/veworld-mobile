@@ -1,3 +1,5 @@
+import { IconKey } from "~Model"
+
 export type AlertStatus = "success" | "error" | "info"
 
 export enum StatusColorVariant {
@@ -6,8 +8,8 @@ export enum StatusColorVariant {
     "info" = "infoVariant",
 }
 
-export const ICON_NAMES: Record<AlertStatus, string> = {
-    success: "check-circle-outline",
-    error: "alert-outline",
-    info: "information-outline",
+export const ICON_NAMES: Record<AlertStatus, IconKey> = {
+    success: "icon-check-circle-2",
+    error: "icon-alert-triangle",
+    info: "icon-info",
 }

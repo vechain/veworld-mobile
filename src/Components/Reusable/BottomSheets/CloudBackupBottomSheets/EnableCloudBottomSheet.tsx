@@ -34,7 +34,7 @@ export const EnableCloudBottomSheet = React.forwardRef<BottomSheetModalMethods, 
             title={LL.ALERT_TITLE_ICLOUD_ERROR()}
             description={LL.ALERT_MSG_ICLOUD_ERROR()}
             secondaryButton={secondaryButton}
-            icon="alert-circle-outline"
+            icon="icon-alert-circle"
         />
     )
 })

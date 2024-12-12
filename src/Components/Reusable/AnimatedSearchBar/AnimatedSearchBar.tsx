@@ -1,13 +1,13 @@
 import React, { useEffect, useRef } from "react"
 import { useWindowDimensions } from "react-native"
 import Animated, { ReduceMotion, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { BaseSearchInput, BaseView } from "~Components"
+import { BaseSearchInput, BaseView, Icon } from "~Components"
+import { IconKey } from "~Model"
 
 type AnimatedSearchBarProps = {
     placeholder: string
     value: string
-    iconName?: string
+    iconName: IconKey
     iconColor: string
     onTextChange: (text: string) => void
     onIconPress?: () => void
@@ -76,7 +76,7 @@ export const AnimatedSearchBar = ({
                     setValue={onTextChange}
                     value={value}
                     showIcon={value.length > 0}
-                    iconName="close"
+                    iconName="icon-x"
                     iconSize={18}
                     onIconPress={() => onTextChange("")}
                 />

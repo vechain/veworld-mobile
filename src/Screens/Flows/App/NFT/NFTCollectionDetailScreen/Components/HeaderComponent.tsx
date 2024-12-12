@@ -49,7 +49,7 @@ export const HeaderComponent = memo(({ collection }: { collection: NftCollection
                                 <BaseView mr={4}>
                                     <BaseIcon
                                         color={deriveButtonColor}
-                                        name={isBlacklisted ? "eye-outline" : "eye-off-outline"}
+                                        name={isBlacklisted ? "icon-eye" : "icon-eye-off"}
                                     />
                                 </BaseView>
                             }

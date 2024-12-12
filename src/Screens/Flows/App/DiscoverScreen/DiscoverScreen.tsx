@@ -120,16 +120,14 @@ export const DiscoverScreen: React.FC = () => {
             <>
                 <AnimatedTitle title={LL.DISCOVER_TITLE()} scrollOffset={offset} />
                 <BaseSpacer height={12} />
-                <BaseView pl={12}>
-                    <AnimatedSearchBar
-                        placeholder={LL.DISCOVER_SEARCH()}
-                        value={filteredSearch}
-                        iconName={"history"}
-                        iconColor={visitedUrls.length > 0 ? theme.colors.primary : theme.colors.disabledButton}
-                        onTextChange={onTextChange}
-                        onIconPress={onNavigateToBrowserHistory}
-                    />
-                </BaseView>
+                <AnimatedSearchBar
+                    placeholder={LL.DISCOVER_SEARCH()}
+                    value={filteredSearch}
+                    iconName={"icon-history"}
+                    iconColor={visitedUrls.length > 0 ? theme.colors.primary : theme.colors.disabledButton}
+                    onTextChange={onTextChange}
+                    onIconPress={onNavigateToBrowserHistory}
+                />
                 <BaseSpacer height={12} />
             </>
         )

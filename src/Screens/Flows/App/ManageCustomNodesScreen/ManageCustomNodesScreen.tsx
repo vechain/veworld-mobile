@@ -145,7 +145,7 @@ export const ManageCustomNodesScreen = () => {
                     setSelectedItem={(network?: Network) => setNetworkToDelete(network?.id)}
                     onPress={onPress}
                     isOpen={networkToDelete === item.id}>
-                    <NetworkBox network={item} rightIcon="pencil-outline" flex={1} />
+                    <NetworkBox network={item} rightIcon="icon-pencil" flex={1} />
                 </SwipeableRow>
             )
         },
@@ -166,7 +166,7 @@ export const ManageCustomNodesScreen = () => {
             <BackButtonHeader />
             <BaseView flexDirection="row" justifyContent="space-between" mx={20}>
                 <BaseText typographyFont="subTitleBold">{LL.BD_CUSTOM_NODES()}</BaseText>
-                <BaseIcon name={"plus"} size={24} bg={theme.colors.secondary} action={onAddNetworkPress} />
+                <BaseIcon name={"icon-plus"} size={24} bg={theme.colors.secondary} action={onAddNetworkPress} />
             </BaseView>
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" style={styles.listContainer}>

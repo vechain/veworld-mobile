@@ -160,7 +160,7 @@ export const ContactsScreen = () => {
                         {contacts.length > 0 && (
                             <BaseIcon
                                 haptics="Light"
-                                name={"plus"}
+                                name="icon-plus"
                                 size={24}
                                 bg={theme.colors.secondary}
                                 action={onAddContactPress}

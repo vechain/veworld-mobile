@@ -31,7 +31,7 @@ export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup 
                 <BaseSpacer style={styles.line} height={1} />
             </BaseView>
             <BaseSpacer height={16} />
-            <CardWithHeader title={LL.TITLE_BACKUP_MANUALLY()} iconName="pencil-outline">
+            <CardWithHeader title={LL.TITLE_BACKUP_MANUALLY()} iconName="icon-pencil">
                 <BaseView>
                     <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_PASSWORD_WARNING()}</BaseText>
                     <BaseSpacer height={12} />

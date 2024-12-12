@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "Ortungsdienste aktivieren",
   "ALERT_TITLE_ICLOUD_ERROR": "iCloud-Fehler",
   "ALERT_TITLE_IMPORTANT": "Wichtig",
+  "ALERT_TITLE_INVALID_CHARTS": "Die Langzeit-Charts sind ungenau, da der Token zu neu ist, um ausreichende historische Daten bereitzustellen.",
   "ALERT_TITLE_NEW_VERSION": "Neue Version",
   "ALERT_TITLE_NOT_ENROLLED": "Biometrie nicht verfügbar",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "Bluetooth wird nicht unterstützt",

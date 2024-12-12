@@ -17,7 +17,7 @@ export const ChangeLanguage: React.FC<Props> = ({ language, onPress }) => {
     return (
         <BaseTouchableBox action={onPress} justifyContent="space-between" haptics="Light">
             <BaseText typographyFont="smallButtonPrimary">{selectedLanguageName}</BaseText>
-            <BaseIcon name={"web"} color={theme.colors.text} size={24} />
+            <BaseIcon name={"icon-globe"} color={theme.colors.text} size={24} />
         </BaseTouchableBox>
     )
 }

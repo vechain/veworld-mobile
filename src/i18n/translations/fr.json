@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "Activer les services de localisation",
   "ALERT_TITLE_ICLOUD_ERROR": "Erreur iCloud",
   "ALERT_TITLE_IMPORTANT": "Important",
+  "ALERT_TITLE_INVALID_CHARTS": "Les graphiques de longue période sont inexacts car le jeton est trop récent pour fournir des données historiques suffisantes.",
   "ALERT_TITLE_NEW_VERSION": "Nouvelle version",
   "ALERT_TITLE_NOT_ENROLLED": "Données biométriques non disponibles",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "Le Bluetooth n'est pas pris en charge",

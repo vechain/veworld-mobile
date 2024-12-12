@@ -112,7 +112,7 @@ export const TransactionDetails = ({
                         <>
                             <BaseSpacer height={8} />
                             <BaseView flexDirection="row">
-                                <BaseIcon name="alert-circle-outline" color={theme.colors.danger} size={16} />
+                                <BaseIcon name="icon-alert-circle" color={theme.colors.danger} size={16} />
                                 <BaseSpacer width={4} />
                                 <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
                                     {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance} {VTHO.symbol}

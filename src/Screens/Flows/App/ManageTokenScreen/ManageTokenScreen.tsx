@@ -17,8 +17,8 @@ import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
 import {
     selectNonVechainFungibleTokens,
-    selectSelectedAccount,
     selectNonVechainTokensWithBalances,
+    selectSelectedAccount,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance, setIsAppLoading } from "~Storage/Redux/Slices"
@@ -135,7 +135,7 @@ export const ManageTokenScreen = () => {
                                 </BaseText>
                                 <BaseIcon
                                     haptics="Light"
-                                    name={"plus"}
+                                    name={"icon-plus"}
                                     size={24}
                                     bg={theme.colors.secondary}
                                     action={openAddCustomTokenSheet}
@@ -150,7 +150,7 @@ export const ManageTokenScreen = () => {
                                 haptics="Light"
                                 action={navigateManageCustomTokenScreen}
                                 justifyContent="center">
-                                <BaseIcon name="tune" color={theme.colors.primary} />
+                                <BaseIcon name="icon-settings-2" color={theme.colors.primary} />
                                 <BaseSpacer width={8} />
                                 <BaseText typographyFont="bodyMedium">
                                     {LL.MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED()}

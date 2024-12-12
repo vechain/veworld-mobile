@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "Включите службы определения местоположения",
   "ALERT_TITLE_ICLOUD_ERROR": "Ошибка iCloud",
   "ALERT_TITLE_IMPORTANT": "Важно",
+  "ALERT_TITLE_INVALID_CHARTS": "Долгосрочные графики неточные, так как токен слишком новый, чтобы предоставить достаточные исторические данные.",
   "ALERT_TITLE_NEW_VERSION": "Новая версия",
   "ALERT_TITLE_NOT_ENROLLED": "Биометрия недоступна",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "Bluetooth не поддерживается",

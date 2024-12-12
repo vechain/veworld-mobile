@@ -39,17 +39,17 @@ export const GasFeeOptions = ({
             {
                 id: String(GasPriceCoefficient.REGULAR),
                 label: LL.SEND_FEE_REGULAR(),
-                icon: "walk",
+                icon: "icon-person-standing",
             },
             {
                 id: String(GasPriceCoefficient.MEDIUM),
                 label: LL.SEND_FEE_MEDIUM(),
-                icon: "car-outline",
+                icon: "icon-car",
             },
             {
                 id: String(GasPriceCoefficient.HIGH),
                 label: LL.SEND_FEE_HIGH(),
-                icon: "airplane",
+                icon: "icon-airplay",
             },
         ]
     }, [LL])
@@ -160,7 +160,7 @@ function GasWarningView(props: IGasWarningView) {
         <Animated.View {...animatedViewProps}>
             <BaseView flexDirection="row">
                 <BaseIcon
-                    name="alert-circle-outline"
+                    name="icon-alert-circle"
                     color={props.isDelegattion ? theme.colors.success : theme.colors.danger}
                     size={16}
                 />

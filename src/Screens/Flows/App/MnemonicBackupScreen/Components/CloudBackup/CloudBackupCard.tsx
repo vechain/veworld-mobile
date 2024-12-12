@@ -206,7 +206,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             <BaseView justifyContent="center">
                 <CardWithHeader
                     title={LL.TITLE_BACKUP_CLOUD()}
-                    iconName="cloud-outline"
+                    iconName="icon-cloud"
                     sideHeader={
                         <BaseView style={styles.sideHeader}>
                             <BaseText
@@ -230,7 +230,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                                     style={styles.lottie}
                                 />
                             ) : (
-                                <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                                <BaseIcon name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
                             )
                         }
                         onPress={handleCloudBackupPress}

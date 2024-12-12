@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "Bật dịch vụ vị trí",
   "ALERT_TITLE_ICLOUD_ERROR": "Lỗi iCloud",
   "ALERT_TITLE_IMPORTANT": "Quan trọng",
+  "ALERT_TITLE_INVALID_CHARTS": "Biểu đồ dài hạn không chính xác vì mã thông báo quá mới để cung cấp đủ dữ liệu lịch sử.",
   "ALERT_TITLE_NEW_VERSION": "Phiên bản mới",
   "ALERT_TITLE_NOT_ENROLLED": "Sinh trắc học không khả dụng",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "Bluetooth không được hỗ trợ",

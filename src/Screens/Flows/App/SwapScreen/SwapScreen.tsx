@@ -133,7 +133,7 @@ export const SwapScreen = () => {
                             ItemSeparatorComponent={renderSeparator}
                             showsVerticalScrollIndicator={false}
                             ListEmptyComponent={
-                                <ListEmptyResults subtitle={LL.SWAP_EMPTY_LIST()} icon={"search-web"} />
+                                <ListEmptyResults subtitle={LL.SWAP_EMPTY_LIST()} icon={"icon-search"} />
                             }
                         />
                     )}

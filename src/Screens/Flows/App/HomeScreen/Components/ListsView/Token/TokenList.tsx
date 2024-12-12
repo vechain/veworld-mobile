@@ -5,7 +5,7 @@ import Animated, { AnimateProps } from "react-native-reanimated"
 import { SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
-import { ColorThemeType, VET, VTHO } from "~Constants"
+import { B3TR, ColorThemeType, VET, VTHO } from "~Constants"
 import { changeBalancePosition, removeTokenBalance, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectNonVechainTokensWithBalances,
@@ -47,6 +47,7 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
+    const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
 
     const { styles } = useThemedStyles(baseStyles)
 
@@ -146,9 +147,15 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
                     isBalanceVisible={isBalanceVisible}
                 />
                 <AnimatedChartCard
+                    tokenWithInfo={tokenWithInfoB3TR}
+                    isEdit={isEdit}
+                    isBalanceVisible={isBalanceVisible}
+                />
+                <AnimatedChartCard
                     tokenWithInfo={tokenWithInfoVTHO}
                     isEdit={isEdit}
                     isBalanceVisible={isBalanceVisible}
+                    hideChart
                 />
 
                 <NestableDraggableFlatList

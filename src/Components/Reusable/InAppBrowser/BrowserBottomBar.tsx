@@ -7,9 +7,10 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { useRoute } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { IconKey } from "~Model"
 
 type IconProps = {
-    name: string
+    name: IconKey
     onPress: () => void
     disabled?: boolean
 }
@@ -70,24 +71,24 @@ export const BrowserBottomBar: React.FC = () => {
     const IconConfig: IconProps[] = useMemo(() => {
         return [
             {
-                name: "chevron-left",
+                name: "icon-chevron-left",
                 onPress: onBackHandler,
                 disabled: !canGoBack,
             },
             {
-                name: "chevron-right",
+                name: "icon-chevron-right",
                 onPress: goForward,
                 disabled: !canGoForward,
             },
             {
-                name: isBookMarked ? "bookmark" : "bookmark-outline",
+                name: isBookMarked ? "icon-bookmark-minus" : "icon-bookmark-plus",
                 onPress: () => {
                     toggleBookmark()
                 },
                 disabled: !fromDiscovery,
             },
             {
-                name: "refresh",
+                name: "icon-refresh-cw",
                 onPress: () => webviewRef.current?.reload(),
             },
         ]

@@ -181,6 +181,10 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_IMPORTANT: string
 	/**
+	 * T​h​e​ ​l​o​n​g​-​p​e​r​i​o​d​ ​c​h​a​r​t​s​ ​a​r​e​ ​i​n​a​c​c​u​r​a​t​e​ ​a​s​ ​t​h​e​ ​t​o​k​e​n​ ​i​s​ ​t​o​o​ ​n​e​w​ ​t​o​ ​p​r​o​v​i​d​e​ ​s​u​f​f​i​c​i​e​n​t​ ​h​i​s​t​o​r​i​c​a​l​ ​d​a​t​a​.
+	 */
+	ALERT_TITLE_INVALID_CHARTS: string
+	/**
 	 * N​e​w​ ​v​e​r​s​i​o​n
 	 */
 	ALERT_TITLE_NEW_VERSION: string
@@ -3719,6 +3723,10 @@ Try reconnect your device to the internet.
 	 * Important
 	 */
 	ALERT_TITLE_IMPORTANT: () => LocalizedString
+	/**
+	 * The long-period charts are inaccurate as the token is too new to provide sufficient historical data.
+	 */
+	ALERT_TITLE_INVALID_CHARTS: () => LocalizedString
 	/**
 	 * New version
 	 */

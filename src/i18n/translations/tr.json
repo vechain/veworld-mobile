@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "Konum Servislerini Etkinleştir",
   "ALERT_TITLE_ICLOUD_ERROR": "iCloud hatası",
   "ALERT_TITLE_IMPORTANT": "Önemli",
+  "ALERT_TITLE_INVALID_CHARTS": "Uzun dönem grafikler, tokenin yeterli geçmiş verilere sahip olmadığı için doğru değildir.",
   "ALERT_TITLE_NEW_VERSION": "Yeni sürüm",
   "ALERT_TITLE_NOT_ENROLLED": "Biyometrik veriler mevcut değil",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "Bluetooth desteklenmiyor",

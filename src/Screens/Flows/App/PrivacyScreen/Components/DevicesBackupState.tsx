@@ -57,7 +57,7 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
                     {statusText}
                 </BaseText>
             ) : (
-                <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                <BaseIcon name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
             )
 
             return (
@@ -91,7 +91,7 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
     return (
         <>
             {ListHeaderComponent}
-            <CardWithHeader iconName="wallet-outline" title={LL.SB_YOUR_WALLETS()}>
+            <CardWithHeader iconName="icon-wallet" title={LL.SB_YOUR_WALLETS()}>
                 <FlatList
                     data={devices}
                     keyExtractor={keyExtractor}

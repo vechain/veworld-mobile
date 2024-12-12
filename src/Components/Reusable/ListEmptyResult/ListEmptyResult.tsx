@@ -1,12 +1,13 @@
 import React from "react"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
+import { IconKey } from "~Model"
 
 export type ListEmptyResultsProps = {
     onClick?: () => void
     title?: string
     subtitle: string
-    icon: string
+    icon: IconKey
 }
 
 export const ListEmptyResults = ({ onClick, title, subtitle, icon }: ListEmptyResultsProps) => {
