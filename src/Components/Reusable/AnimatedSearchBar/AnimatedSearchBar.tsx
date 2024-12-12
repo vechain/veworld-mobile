@@ -7,7 +7,7 @@ import { IconKey } from "~Model"
 type AnimatedSearchBarProps = {
     placeholder: string
     value: string
-    iconName: IconKey
+    iconName?: IconKey
     iconColor: string
     onTextChange: (text: string) => void
     onIconPress?: () => void

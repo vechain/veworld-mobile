@@ -31,7 +31,7 @@ export const NotificationBox = () => {
                             {LL.PUSH_NOTIFICATIONS_DESC()}
                         </BaseText>
                     </BaseView>
-                    <BaseIcon name={"chevron-right"} color={theme.colors.text} />
+                    <BaseIcon name={"icon-chevron-right"} color={theme.colors.text} />
                 </BaseView>
             </BaseTouchableBox>
         </BaseView>
