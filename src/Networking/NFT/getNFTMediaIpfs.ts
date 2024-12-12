@@ -9,6 +9,9 @@ export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
         const response = await axios.get(URIUtils.convertUriToUrl(uri), {
             responseType: "blob",
             maxContentLength: MAX_IMAGE_SIZE,
+            headers: {
+                "x-project-id": "veworld-mobile",
+            },
         })
 
         // Check if the MIME type is allowed

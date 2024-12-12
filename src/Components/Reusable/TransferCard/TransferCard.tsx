@@ -1,7 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
-import { ColorThemeType, SCREEN_WIDTH, COLORS } from "~Constants"
+import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import { AddressUtils } from "~Utils"
 import { useThemedStyles, useVns } from "~Hooks"
 import {
@@ -156,7 +156,7 @@ export const TransferCard = memo(
                                 <>
                                     <BaseIcon
                                         style={[styles.icon, { marginTop: -35 }]}
-                                        name={"arrow-down"}
+                                        name={"icon-arrow-down"}
                                         color={COLORS.WHITE}
                                         size={24}
                                         bg={theme.colors.switcher}
@@ -177,7 +177,7 @@ export const TransferCard = memo(
                                 <>
                                     <BaseIcon
                                         style={[styles.icon, { marginTop: -20 }]}
-                                        name={"arrow-down"}
+                                        name={"icon-arrow-down"}
                                         color={COLORS.WHITE}
                                         size={24}
                                         bg={theme.colors.switcher}
@@ -329,7 +329,7 @@ const AccountCard = ({
                     <BaseView pl={12}>
                         <BaseIcon
                             haptics="Light"
-                            name={"account-plus-outline"}
+                            name={"icon-user-plus"}
                             size={20}
                             bg={COLORS.LIME_GREEN}
                             iconPadding={3}

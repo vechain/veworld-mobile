@@ -208,12 +208,12 @@ const AnimatedCard = ({ index, isStacked, onDAppPress, dapp }: AnimatedCardProps
                 </BaseView>
                 {isFirst ? (
                     <Animated.View style={[dynamicIconStyle]}>
-                        <BaseIcon name="chevron-down" color={theme.colors.text} size={36} testID="chevron" />
+                        <BaseIcon name="icon-chevron-down" color={theme.colors.text} size={36} testID="chevron" />
                     </Animated.View>
                 ) : (
                     <BaseIcon
                         onPress={toggleBookmark}
-                        name={isBookMarked ? "bookmark" : "bookmark-outline"}
+                        name={isBookMarked ? "icon-bookmark-minus" : "icon-bookmark-plus"}
                         color={theme.colors.text}
                         size={24}
                     />

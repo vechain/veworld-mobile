@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
-import { BaseTouchable, BaseView, BaseIcon, BaseText } from "~Components"
+import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -31,7 +31,7 @@ export const TypedDataActivityBox: React.FC<Props> = ({ activity, onPress }) => 
                 <BaseView flexDirection="row">
                     <BaseView flexDirection="column" alignItems="center">
                         <BaseIcon
-                            name="text-box-check-outline"
+                            name="icon-check-check"
                             size={20}
                             color={COLORS.DARK_PURPLE}
                             testID="magnify"
@@ -54,7 +54,7 @@ export const TypedDataActivityBox: React.FC<Props> = ({ activity, onPress }) => 
                     </BaseView>
                 </BaseView>
                 <BaseView flexDirection="column" alignItems="center" pl={5}>
-                    <BaseIcon size={24} name="chevron-right" color={theme.colors.text} />
+                    <BaseIcon size={24} name="icon-chevron-right" color={theme.colors.text} />
                 </BaseView>
             </BaseView>
         </BaseTouchable>

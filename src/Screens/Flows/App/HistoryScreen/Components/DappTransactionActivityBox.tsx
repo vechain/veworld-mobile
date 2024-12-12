@@ -31,7 +31,7 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(({ activity, onP
                 <BaseView flexDirection="row">
                     <BaseView flexDirection="column" alignItems="center">
                         <BaseIcon
-                            name="view-grid-outline"
+                            name="icon-layout-grid"
                             size={20}
                             color={COLORS.DARK_PURPLE}
                             testID="magnify"
@@ -54,7 +54,7 @@ export const DappTransactionActivityBox: React.FC<Props> = memo(({ activity, onP
                     </BaseView>
                 </BaseView>
                 <BaseView flexDirection="column" alignItems="center" pl={5}>
-                    <BaseIcon size={24} name="chevron-right" color={theme.colors.text} />
+                    <BaseIcon size={24} name="icon-chevron-right" color={theme.colors.text} />
                 </BaseView>
             </BaseView>
         </BaseTouchable>

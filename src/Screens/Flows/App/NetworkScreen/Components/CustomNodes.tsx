@@ -29,7 +29,7 @@ export const CustomNodes: React.FC<Props> = ({ onManageNodesClick }) => {
 
             {customNodes.length ? (
                 <BaseTouchableBox haptics="Light" action={onManageNodesClick} justifyContent="center">
-                    <BaseIcon name="tune" color={theme.colors.primary} />
+                    <BaseIcon name="icon-settings-2" color={theme.colors.primary} />
                     <BaseText px={8} typographyFont="buttonSecondary">
                         {LL.NETWORK_MANAGE_NODES()}
                     </BaseText>
@@ -41,7 +41,7 @@ export const CustomNodes: React.FC<Props> = ({ onManageNodesClick }) => {
                 </BaseTouchableBox>
             ) : (
                 <BaseTouchableBox haptics="Light" action={onAddCustomPress} justifyContent="center">
-                    <BaseIcon name="plus" color={theme.colors.text} />
+                    <BaseIcon name="icon-plus" color={theme.colors.text} />
                     <BaseText pl={8} typographyFont="buttonSecondary">
                         {LL.NETWORK_ADD_CUSTOM_NODE()}
                     </BaseText>

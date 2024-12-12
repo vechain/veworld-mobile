@@ -85,7 +85,7 @@ export const FavouritesScreen = () => {
                         setValue={onTextChange}
                         value={filteredSearch}
                         showIcon={filteredSearch.length > 0}
-                        iconName="close"
+                        iconName="icon-x"
                         iconSize={18}
                         onIconPress={() => setFilteredSearch("")}
                     />
@@ -103,7 +103,7 @@ export const FavouritesScreen = () => {
                         ItemSeparatorComponent={renderSeparator}
                         showsVerticalScrollIndicator={false}
                         ListEmptyComponent={
-                            <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"search-web"} />
+                            <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
                         }
                     />
                 </BaseView>

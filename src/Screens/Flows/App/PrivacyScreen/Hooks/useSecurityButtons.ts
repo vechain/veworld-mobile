@@ -27,13 +27,13 @@ export const useSecurityButtons = (handleOnSecurityUpgrade: () => void) => {
                 {
                     id: SecurityLevelType.BIOMETRIC,
                     label: PlatformUtils.isAndroid() ? LL.TOUCH_ID() : LL.FACE_ID(),
-                    icon: PlatformUtils.isAndroid() ? "fingerprint" : "face-recognition",
+                    icon: PlatformUtils.isAndroid() ? "icon-fingerprint" : "icon-scan-face",
                     disabled: !biometrics || biometrics.currentSecurityLevel !== SecurityLevelType.BIOMETRIC,
                 },
                 {
                     id: SecurityLevelType.SECRET,
                     label: LL.PIN_CODE(),
-                    icon: "dialpad",
+                    icon: "icon-pincode",
                     disabled: isWalletSecurityBiometrics, // disable if wallet is already secured with biometrics
                 },
             ],

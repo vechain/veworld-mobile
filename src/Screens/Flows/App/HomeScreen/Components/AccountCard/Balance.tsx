@@ -28,7 +28,7 @@ export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible }) => {
                 <BaseIcon
                     action={toggleVisible}
                     haptics="Light"
-                    name={isVisible ? "eye-off" : "eye"}
+                    name={isVisible ? "icon-eye-off" : "icon-eye"}
                     color={theme.colors.textReversed}
                     size={18}
                     style={baseStyles.marginLeft}

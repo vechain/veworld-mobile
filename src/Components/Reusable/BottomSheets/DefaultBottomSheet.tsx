@@ -4,17 +4,19 @@ import { useThemedStyles } from "~Hooks"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { StyleSheet } from "react-native"
+import { IconKey } from "~Model"
 
 type Props = {
-    icon: string | React.ReactNode
+    icon: IconKey
     title: string
     description: string
     mainButton?: React.ReactNode
     secondaryButton?: React.ReactNode
+    enablePanDownToClose?: boolean
 }
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ icon, title, description, mainButton, secondaryButton }, ref) => {
+    ({ icon, title, description, mainButton, secondaryButton, enablePanDownToClose = true }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
@@ -24,15 +26,12 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 noMargins
                 style={styles.bottomSheet}
                 backgroundStyle={styles.bottomSheet}
+                enablePanDownToClose={enablePanDownToClose}
                 blurBackdrop={true}>
                 <BaseView>
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center" alignItems="center">
-                        {typeof icon === "string" ? (
-                            <BaseIcon name={icon} style={styles.icon} size={66} color={theme.colors.text} />
-                        ) : (
-                            icon
-                        )}
+                        <BaseIcon name={icon} style={styles.icon} size={66} color={theme.colors.text} />
                         <BaseSpacer height={26} />
                         <BaseText align="center" typographyFont="subSubTitleMedium">
                             {title}

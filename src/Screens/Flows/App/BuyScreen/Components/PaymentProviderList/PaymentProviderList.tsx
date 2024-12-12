@@ -50,7 +50,7 @@ export const PaymentProviderList = () => {
                             </BaseText>
                         </BaseView>
                         <BaseView style={styles.arrowBackground} flex={1} flexDirection="row" justifyContent="center">
-                            <BaseIcon color={theme.colors.textReversed} name="chevron-right" />
+                            <BaseIcon color={theme.colors.textReversed} name="icon-chevron-right" />
                         </BaseView>
                     </BaseView>
                 </TouchableOpacity>

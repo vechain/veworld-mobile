@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useCopyClipboard, useTheme, useVns } from "~Hooks"
-import { BaseIcon, BaseSpacer, BaseText, BaseView, BaseBottomSheet, BaseButton } from "~Components"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 
 import { useI18nContext } from "~i18n"
 import { useAppSelector } from "~Storage/Redux"
@@ -65,7 +65,7 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                     size="md"
                     title={AddressUtils.humanAddress(selectedAccount.address, 8, 7)}
                     action={() => onCopyToClipboard(selectedAccount.address, LL.COMMON_LBL_ADDRESS())}
-                    rightIcon={<BaseIcon name="content-copy" color={theme.colors.card} style={baseStyles.icon} />}
+                    rightIcon={<BaseIcon name="icon-copy" color={theme.colors.card} style={baseStyles.icon} />}
                     m={16}
                 />
 
@@ -81,7 +81,7 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                             action={() => onCopyToClipboard(nameOrAddress, LL.COMMON_LBL_ADDRESS())}
                             rightIcon={
                                 <BaseIcon
-                                    name="content-copy"
+                                    name="icon-copy"
                                     color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
                                     style={baseStyles.icon}
                                 />

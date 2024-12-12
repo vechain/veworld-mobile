@@ -17,7 +17,7 @@ export const SwipeableUnderlay = ({ action, index }: Props) => {
             <BaseSpacer width={20} />
             <View style={styles.underlayLeft}>
                 <BaseIcon
-                    name="delete"
+                    name="icon-trash-2"
                     size={20}
                     bg={theme.colors.danger}
                     color={theme.colors.card}

@@ -5,15 +5,16 @@ import { LocalizedString } from "typesafe-i18n"
 import { useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { RootStackParamListSettings, Routes } from "~Navigation"
+import { IconKey } from "~Model"
 
-type Excluded = Routes.WALLET_DETAILS | Routes.ICLOUD_MNEMONIC_BACKUP
+type Excluded = Routes.WALLET_DETAILS | Routes.ICLOUD_MNEMONIC_BACKUP | Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD
 
 type ExcludedSettingRoutes = Excluded | Routes.SETTINGS_GET_SUPPORT | Routes.SETTINGS_GIVE_FEEDBACK
 
 export type RowProps = {
     title: LocalizedString
     screenName: keyof Omit<RootStackParamListSettings, Excluded>
-    icon: string
+    icon: IconKey
     url?: string
 }
 
@@ -40,7 +41,7 @@ export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
                 </BaseText>
             </BaseView>
 
-            <BaseIcon color={theme.colors.text} name={"chevron-right"} size={24} />
+            <BaseIcon color={theme.colors.text} name={"icon-chevron-right"} size={16} />
         </BaseTouchable>
     )
 }

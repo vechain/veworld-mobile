@@ -26,7 +26,7 @@ export const AccountAddressButtonPill = ({ text, openQRCodeSheet, switchAccount 
                         {vnsName || AddressUtils.humanAddress(address || text, 6, 3)}
                     </BaseText>
                     <BaseSpacer width={4} />
-                    <BaseIcon name="content-copy" color={theme.colors.text} size={12} />
+                    <BaseIcon name="icon-copy" color={theme.colors.text} size={12} />
                 </BaseView>
             </BaseTouchable>
             <View style={themedStyles.seperator} />
@@ -36,7 +36,7 @@ export const AccountAddressButtonPill = ({ text, openQRCodeSheet, switchAccount 
                 style={themedStyles.pressable}
                 testID="AccountCard_changeAccountButton">
                 <BaseView px={8}>
-                    <BaseIcon name="account-sync-outline" color={theme.colors.text} size={20} />
+                    <BaseIcon name="icon-arrow-left-right" color={theme.colors.text} size={20} />
                 </BaseView>
             </BaseTouchable>
         </BaseView>

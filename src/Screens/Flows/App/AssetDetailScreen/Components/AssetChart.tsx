@@ -9,6 +9,7 @@ import {
     MOCK_LINE_CHART_DATA,
     MarketChartResponse,
     getCoinGeckoIdBySymbol,
+    getMarketChart,
     getMarketChartQueryKey,
     getSmartMarketChart,
     marketChartTimeframes,
@@ -21,10 +22,10 @@ type Props = {
     token: TokenWithCompleteInfo
 }
 
-const defaultTimeframe = marketChartTimeframes[0].value
+const defaultTimeframe = marketChartTimeframes[0]
 export const AssetChart = ({ token }: Props) => {
     const queryClient = useQueryClient()
-    const [selectedTimeframe, setSelectedTimeframe] = useState<number>(defaultTimeframe)
+    const [selectedTimeframe, setSelectedTimeframe] = useState<number>(defaultTimeframe.value)
     const [fakeLoading, setFakeLoading] = useState<boolean>(false)
 
     const currency = useAppSelector(selectCurrency)
@@ -41,7 +42,7 @@ export const AssetChart = ({ token }: Props) => {
     const onTimelineButtonPress = useCallback((button: string) => {
         setFakeLoading(true)
         const foundData = marketChartTimeframes.find(o => o.label === button)
-        setSelectedTimeframe(foundData?.value ?? defaultTimeframe)
+        setSelectedTimeframe(foundData?.value ?? defaultTimeframe.value)
         //to avoid flickerings and errors in AssetPriceBanner, which is using the chartData
         setTimeout(() => {
             setFakeLoading(false)
@@ -71,10 +72,17 @@ export const AssetChart = ({ token }: Props) => {
                             days: timeframe.value,
                         }),
                         queryFn: () =>
-                            getSmartMarketChart({
-                                highestResolutionMarketChartData: highestTimeframeData,
-                                days: timeframe.value,
-                            }),
+                            timeframe.value > 1
+                                ? getSmartMarketChart({
+                                      highestResolutionMarketChartData: highestTimeframeData,
+                                      days: timeframe.value,
+                                  })
+                                : // Handle the daily timeframe to get data every 5
+                                  getMarketChart({
+                                      coinGeckoId: getCoinGeckoIdBySymbol[token.symbol],
+                                      vs_currency: currency,
+                                      days: 1,
+                                  }),
                     })
                 }
             }

@@ -25,7 +25,7 @@ export const CopyToClipboardAddress: React.FC<Props> = ({ address, lenghtBefore 
             <BaseText typographyFont="bodyMedium" style={styles.addressValueLabel}>
                 {AddressUtils.humanAddress(address, lenghtBefore, lenghtAfter)}
             </BaseText>
-            <BaseIcon name="content-copy" size={14} color={theme.colors.primary} />
+            <BaseIcon name="icon-copy" size={14} color={theme.colors.primary} />
         </BaseTouchable>
     )
 }

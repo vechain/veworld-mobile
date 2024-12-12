@@ -32,7 +32,7 @@ export const ConnectedAppsHeader = ({ showAddButton = true }: Props) => {
             <BaseText typographyFont="title">{LL.CONNECTED_APPS_SCREEN_TITLE()}</BaseText>
             {showAddButton && (
                 <BaseView flexDirection="row">
-                    <BaseIcon size={24} name="plus" bg={theme.colors.secondary} action={handleOpenCamera} />
+                    <BaseIcon size={24} name="icon-plus" bg={theme.colors.secondary} action={handleOpenCamera} />
                 </BaseView>
             )}
 
