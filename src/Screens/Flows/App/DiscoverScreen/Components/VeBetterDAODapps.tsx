@@ -48,7 +48,9 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
     )
 
     const Card = useCallback(
-        ({ href, source, isError = false }: CardProps) => {
+        (props: CardProps) => {
+            const { href, source, isError = false } = props
+
             return (
                 <BaseTouchable
                     style={containerStyle}

@@ -120,10 +120,10 @@ export const NotificationScreen = () => {
     const Skeleton = useMemo(() => {
         return (
             <BaseView>
-                {[1, 2, 3, 4, 5, 6, 7, 8].map((_, index) => {
+                {[1, 2, 3, 4, 5, 6, 7, 8].map(value => {
                     return (
                         <BaseSkeleton
-                            key={index}
+                            key={value}
                             animationDirection="horizontalLeft"
                             containerStyle={styles.skeletonCard}
                             boneColor={theme.colors.skeletonBoneColor}
