@@ -15,7 +15,7 @@ export const useAppReset = () => {
     const { resetApplication } = useApplicationSecurity()
     const { resetThemeCache } = usePersistedTheme()
     const { googleAccountSignOut } = useGoogleDrive()
-    const { removeAllTags } = useNotifications()
+    const { removeAllTags, featureEnabled } = useNotifications()
 
     const queryClient = useQueryClient()
 
@@ -37,7 +37,7 @@ export const useAppReset = () => {
             await googleAccountSignOut()
         }
 
-        removeAllTags()
+        featureEnabled && removeAllTags()
 
         await removeEncryptionKeysFromKeychain()
 
@@ -54,6 +54,7 @@ export const useAppReset = () => {
 
         info(ERROR_EVENTS.SECURITY, "App Reset Finished")
     }, [
+        featureEnabled,
         removeAllTags,
         removeEncryptionKeysFromKeychain,
         resetCaches,

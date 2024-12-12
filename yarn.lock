@@ -5999,9 +5999,9 @@ bare-path@^2.0.0, bare-path@^2.1.0:
     bare-os "^2.1.0"
 
 bare-stream@^2.0.0:
-  version "2.5.3"
-  resolved "https://registry.yarnpkg.com/bare-stream/-/bare-stream-2.5.3.tgz#c9feea9925181b1d5239e8d6418941a21fbe7156"
-  integrity sha512-p+zwXMlLluovtQXGKvT9oZkSYZA9wgpYaY3EluZlQJXYgPIL2r5Ym/3ZS8pvDkXLVWXnnRkeipdD+V1SAm25aw==
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/bare-stream/-/bare-stream-2.6.0.tgz#bffbebf65100704714e88dc626ad3a03c085f467"
+  integrity sha512-4omnbbguWZra7365XDM4ak5WDI9E/JFVYj2fQDnbp35wO+vcGcHiVvCmgD8IIyMdPTHKsvnvH30vpr1e1Phq3Q==
   dependencies:
     streamx "^2.21.0"
 
@@ -16047,9 +16047,9 @@ stream-shift@^1.0.2:
   integrity sha512-76ORR0DO1o1hlKwTbi/DM3EXWGf3ZJYO8cXX5RJwnul2DEg2oyoZyjLNoQM8WsvZiFKCRfC1O0J7iCvie3RZmQ==
 
 streamx@^2.15.0, streamx@^2.21.0:
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/streamx/-/streamx-2.21.0.tgz#ef42a3b3fada6887ba06964443adbbbec60c5851"
-  integrity sha512-Qz6MsDZXJ6ur9u+b+4xCG18TluU7PGlRfXVAAjNiGsFrBUt/ioyLkxbFaKJygoPs+/kW4VyBj0bSj89Qu0IGyg==
+  version "2.21.1"
+  resolved "https://registry.yarnpkg.com/streamx/-/streamx-2.21.1.tgz#f02979d8395b6b637d08a589fb514498bed55845"
+  integrity sha512-PhP9wUnFLa+91CPy3N6tiQsK+gnYyUNuk15S3YG/zjYE7RuPeCjJngqnzpC31ow0lzBHQ+QGO4cNJnd0djYUsw==
   dependencies:
     fast-fifo "^1.3.2"
     queue-tick "^1.0.1"

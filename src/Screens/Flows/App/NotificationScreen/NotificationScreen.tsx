@@ -29,8 +29,14 @@ export const NotificationScreen = () => {
     const [tags, setTags] = useState<{ [key: string]: string }>({})
     const [searchText, setSearchText] = useState("")
 
-    const { isNotificationPermissionEnabled, isUserOptedIn, optIn, optOut, requestNotficationPermission } =
-        useNotifications()
+    const {
+        isNotificationPermissionEnabled,
+        isUserOptedIn,
+        optIn,
+        optOut,
+        requestNotficationPermission,
+        featureEnabled,
+    } = useNotifications()
 
     const areNotificationsEnabled = isUserOptedIn && isNotificationPermissionEnabled
 
@@ -50,6 +56,10 @@ export const NotificationScreen = () => {
     )
 
     const toggleNotificationsSwitch = useCallback(() => {
+        if (!featureEnabled) {
+            return
+        }
+
         if (isUserOptedIn && !isNotificationPermissionEnabled) {
             requestNotficationPermission()
         } else if (!isUserOptedIn) {
@@ -57,7 +67,7 @@ export const NotificationScreen = () => {
         } else {
             optOut()
         }
-    }, [isNotificationPermissionEnabled, isUserOptedIn, optIn, optOut, requestNotficationPermission])
+    }, [featureEnabled, isNotificationPermissionEnabled, isUserOptedIn, optIn, optOut, requestNotficationPermission])
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<VeBetterDaoDapp>) => {

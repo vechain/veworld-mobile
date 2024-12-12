@@ -35,16 +35,16 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
     const { data, isPending, error } = useVeBetterDaoDAppsMetadata(`ipfs://${item.metadataURI}`)
     const showSkeleton = isPending || !data || areDappsLoading
     const localDApp = localDaoDAppsMetadata.find(metdata => metdata.name === item.name)
-    const { increaseDappCounter } = useNotifications()
+    const { increaseDappCounter, featureEnabled } = useNotifications()
 
     const onCardPress = useCallback(
         ({ href, dappId }: { href: string; custom?: boolean; dappId?: string }) => {
-            if (dappId) {
+            if (dappId && featureEnabled) {
                 increaseDappCounter(dappId)
             }
             onPress({ href: href })
         },
-        [increaseDappCounter, onPress],
+        [featureEnabled, increaseDappCounter, onPress],
     )
 
     const Card = useCallback(

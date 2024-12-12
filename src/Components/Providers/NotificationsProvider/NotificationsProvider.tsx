@@ -7,6 +7,7 @@ import {
     increaseDappVisitCounter,
     removeDappVisitCounter,
     selectDappVisitCounter,
+    selectNotificationFeautureEnabled,
     selectNotificationOptedIn,
     selectNotificationPermissionEnabled,
     selectSelectedNetwork,
@@ -39,6 +40,7 @@ const ecosystemDappIdToVeBetterDappId = {
 } as { [key: string]: string }
 
 type ContextType = {
+    featureEnabled: boolean
     optIn: typeof OneSignal.User.pushSubscription.optIn
     optOut: typeof OneSignal.User.pushSubscription.optOut
     requestNotficationPermission: () => void
@@ -65,6 +67,7 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
     const optedIn = useAppSelector(selectNotificationOptedIn)
     const dappVisitCounter = useAppSelector(selectDappVisitCounter)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
     const isFetcingTags = useRef(false)
 
     const { currentState, previousState } = useAppState()
@@ -189,7 +192,7 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
     )
 
     const removeAllTags = useCallback(() => {
-        getTags().then(tags => {
+        getTags()?.then(tags => {
             const tagKeys = Object.keys(tags)
             const tagsToRemove = tagKeys.filter(tag => tag !== veBetterDaoTagKey)
             OneSignal.User.removeTags(tagsToRemove)
@@ -197,27 +200,36 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
     }, [getTags])
 
     useEffect(() => {
-        init()
-    }, [init])
+        featureEnabled && init()
+    }, [featureEnabled, init])
 
     useEffect(() => {
+        if (!featureEnabled) {
+            return
+        }
+
         OneSignal.Notifications.addEventListener("click", onNotificationClicked)
         OneSignal.Notifications.addEventListener("permissionChange", onPermissionChanged)
         OneSignal.User.pushSubscription.addEventListener("change", onOptInStatusChanged)
 
         return () => {
+            if (!featureEnabled) {
+                return
+            }
+
             OneSignal.Notifications.removeEventListener("click", onNotificationClicked)
             OneSignal.Notifications.removeEventListener("permissionChange", onPermissionChanged)
             OneSignal.User.pushSubscription.removeEventListener("change", onOptInStatusChanged)
         }
-    }, [onNotificationClicked, onOptInStatusChanged, onPermissionChanged])
+    }, [featureEnabled, onNotificationClicked, onOptInStatusChanged, onPermissionChanged])
 
     useEffect(() => {
         if (
             currentState === AppStateType.ACTIVE &&
             currentState !== previousState &&
             !isFetcingTags.current &&
-            isMainnet
+            isMainnet &&
+            featureEnabled
         ) {
             isFetcingTags.current = true
             getTags()
@@ -234,7 +246,7 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
                     isFetcingTags.current = false
                 })
         }
-    }, [dappVisitCounter, dispatch, currentState, previousState, isMainnet, addTag, getTags])
+    }, [dappVisitCounter, dispatch, currentState, previousState, isMainnet, addTag, getTags, featureEnabled])
 
     const increaseDappCounter = useCallback(
         (dappId: string) => {
@@ -248,6 +260,7 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
 
     const contextValue = useMemo(() => {
         return {
+            featureEnabled: featureEnabled,
             optIn: optInUser,
             optOut: optOutUser,
             requestNotficationPermission: requestPermission,
@@ -261,6 +274,7 @@ const NotificationsProvider = React.memo(({ children }: PropsWithChildren) => {
         }
     }, [
         addTag,
+        featureEnabled,
         getTags,
         increaseDappCounter,
         optInUser,

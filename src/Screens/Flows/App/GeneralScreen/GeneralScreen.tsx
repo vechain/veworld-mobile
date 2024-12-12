@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
+import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout, useNotifications } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
 import { Locales, useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
@@ -36,6 +36,8 @@ export const GeneralScreen = () => {
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
+
+    const { featureEnabled } = useNotifications()
 
     const toggleSentryTrackingSwitch = useCallback(
         (newValue: boolean) => {
@@ -100,7 +102,7 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
                     <BaseSpacer height={20} />
                     <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
-                    {isMainnet && (
+                    {isMainnet && featureEnabled && (
                         <>
                             <BaseSpacer height={24} />
                             <NotificationBox />

@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { NotificationState } from "../Types"
 
 export const initialNotificationState: NotificationState = {
+    feautureEnabled: false,
     permissionEnabled: false,
     optedIn: false,
     dappVisitCounter: {},
