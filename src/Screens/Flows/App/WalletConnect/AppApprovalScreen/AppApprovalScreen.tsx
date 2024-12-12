@@ -51,18 +51,21 @@ export const AppApprovalScreen = () => {
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<AccountWithDevice>) => {
             return (
-                <BaseTouchable activeOpacity={1} onPress={() => onAcountPress(item)} style={styles.cardContainer}>
-                    <AccountDetailBox
-                        isBalanceVisible={true}
-                        account={item}
-                        isSelected={isSelected(item)}
-                        isDisabled={false}
-                        isEditable={false}
-                    />
-                </BaseTouchable>
+                <BaseView style={styles.cardContainer}>
+                    <BaseView style={styles.card}>
+                        <AccountDetailBox
+                            isBalanceVisible={true}
+                            account={item}
+                            isSelected={isSelected(item)}
+                            isDisabled={false}
+                            isEditable={false}
+                        />
+                    </BaseView>
+                    <BaseTouchable activeOpacity={1} onPress={() => onAcountPress(item)} style={styles.cardTouchable} />
+                </BaseView>
             )
         },
-        [isSelected, onAcountPress, styles.cardContainer],
+        [isSelected, onAcountPress, styles.card, styles.cardContainer, styles.cardTouchable],
     )
 
     const itemSeperator = useCallback(() => {
@@ -162,6 +165,18 @@ const baseStyles = (theme: ColorThemeType) =>
         cardContainer: {
             backgroundColor: theme.colors.card,
             borderRadius: 16,
+        },
+        card: {
+            zIndex: 1,
+        },
+        cardTouchable: {
+            position: "absolute",
+            left: 0,
+            top: 0,
+            width: "100%",
+            height: "100%",
+            borderRadius: 16,
+            zIndex: 2,
         },
         list: {
             flex: 1,
