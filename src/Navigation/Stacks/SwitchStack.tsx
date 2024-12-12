@@ -4,6 +4,7 @@ import { TabStack } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import {
+    AppApprovalScreen,
     BlackListedCollectionsScreen,
     ChooseMnemonicBackupPassword,
     ConnectAppScreen,
@@ -74,6 +75,7 @@ export type RootStackParamListSwitch = {
 
     [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
     [Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD]: { mnemonicArray: string[]; device: LocalDevice }
+    [Routes.CONNECTED_V2_APP_APPROVAL]: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -153,6 +155,8 @@ export const SwitchStack = () => {
                                 presentation: "modal",
                             }}
                         />
+
+                        <Switch.Screen name={Routes.CONNECTED_V2_APP_APPROVAL} component={AppApprovalScreen} />
                     </Switch.Group>
                 </>
             )

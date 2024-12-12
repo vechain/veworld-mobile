@@ -81,4 +81,6 @@ export enum Routes {
     SECURITY_UPGRADE_V2 = "Security_Upgrade_V2",
     SECURITY_UPGRADE_V2_HOME = "Security_Upgrade_V2_Home",
     SECURITY_UPGRADE_V2_MNEMONIC_BACKUP = "Security_Upgrade_V2_Mnemonic_Backup",
+
+    CONNECTED_V2_APP_APPROVAL = "Connected_V2_App_Approval",
 }

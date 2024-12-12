@@ -1,7 +1,6 @@
 import React, { FC } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseSpacer, BaseView } from "~Components/Base"
-import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 type Props = {
@@ -26,7 +25,7 @@ export const SignAndReject: FC<Props> = React.memo(
         rejectButtonDisabled = false,
         isRejectLoading = false,
     }: Props) => {
-        const { styles } = useThemedStyles(baseStyles)
+        const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
             <BaseView style={styles.rootContainer}>
@@ -47,19 +46,19 @@ export const SignAndReject: FC<Props> = React.memo(
                     action={onReject}
                     isLoading={isRejectLoading}
                     disabled={rejectButtonDisabled}
+                    style={{ backgroundColor: theme.colors.background }}
                 />
             </BaseView>
         )
     },
 )
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
         rootContainer: {
             height: 194,
             width: "100%",
             padding: 24,
             alignItems: "center",
-            backgroundColor: theme.colors.card,
         },
     })
