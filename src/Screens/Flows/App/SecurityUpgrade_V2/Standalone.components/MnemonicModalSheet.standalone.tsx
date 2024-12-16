@@ -1,18 +1,18 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React from "react"
 import {
-    BaseButton,
     BaseBottomSheet,
-    BaseView,
-    BaseText,
-    BaseSpacer,
-    MnemonicCard,
+    BaseButton,
     BaseIcon,
+    BaseSpacer,
+    BaseText,
+    BaseView,
     MnemonicAvoidScreenshotAlert,
 } from "~Components"
 import { useCopyClipboard, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Wallet } from "~Model"
+import { MnemonicCard } from "./MnemonicCard.standalone"
 
 type Props = {
     selectedWallet: Wallet | null
@@ -50,7 +50,7 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
                             variant="ghost"
                             rightIcon={
                                 <BaseView ml={5}>
-                                    <BaseIcon name="content-copy" size={14} color={theme.colors.text} />
+                                    <BaseIcon name="icon-copy" size={14} color={theme.colors.text} />
                                 </BaseView>
                             }
                             title={LL.BTN_MNEMONIC_CLIPBOARD()}

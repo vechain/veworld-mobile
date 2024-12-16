@@ -14,7 +14,9 @@ export enum Routes {
     DISCOVER_STACK = "DiscoverStack",
 
     IMPORT_FROM_CLOUD = "Import_From_Cloud",
+    IMPORT_MNEMONIC_BACKUP_PASSWORD = "Import_Mnemonic_Backup_Password",
     ICLOUD_MNEMONIC_BACKUP = "Icloud_Mnemonic_Backup",
+    CHOOSE_MNEMONIC_BACKUP_PASSWORD = "Choose_Mnemonic_Backup_Password",
     USER_CREATE_PASSWORD = "User_Create_Password",
     APP_SECURITY = "App_Security",
     SETTINGS = "Settings",

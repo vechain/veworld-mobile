@@ -2,10 +2,12 @@ import React from "react"
 import { TestWrapper } from "~Test"
 import { render, fireEvent, screen } from "@testing-library/react-native"
 import { BaseButtonGroupHorizontal } from "./BaseButtonGroupHorizontal"
+import { IconKey } from "~Model"
+
 const buttons: {
     id: string
     label: string
-    icon?: string
+    icon?: IconKey
     disabled?: boolean
 }[] = [
     {
@@ -19,7 +21,7 @@ const buttons: {
     {
         id: "3",
         label: "Button 3",
-        icon: "star",
+        icon: "icon-star",
     },
 ]
 

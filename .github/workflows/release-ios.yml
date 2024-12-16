@@ -9,7 +9,7 @@ on:
         required: true
       build: 
         description: 'Build number'
-        type: number
+        type: string
         required: true
 
   workflow_call:
@@ -20,8 +20,9 @@ on:
         required: true
       build: 
         description: 'Build number'
-        type: number
+        type: string
         required: true
+
 
 
 jobs:
@@ -112,15 +113,7 @@ jobs:
              filename: ".env"
              is-executable: false
              working-directory: "./ios/fastlane"
-
-      - name: datadog-ci decode
-        uses: mobiledevops/secret-to-file-action@v1
-        with:
-            base64-encoded-secret: ${{ secrets.DATADOG_CI}}
-            filename: "datadog-ci.json"
-            is-executable: false
-            working-directory: "."
-      
+             
       - name: Decode prod env      
         uses: mobiledevops/secret-to-file-action@v1
         with:
@@ -129,16 +122,13 @@ jobs:
             is-executable: false
             working-directory: "."
 
-      - name: Build apk with fastlane
+      - name: Build ipa with fastlane
         env:
           MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
         run: |
               cd ios
               git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
-              pwd
-              ls
               cd fastlane
-              cat .env
-              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{github.event.inputs.version}} build:${{github.event.inputs.build}}
+              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}
               
 

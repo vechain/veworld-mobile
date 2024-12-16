@@ -5,14 +5,20 @@ import { View, ViewProps } from "react-native"
 import { useTheme } from "~Hooks"
 
 type Props = {
+    iconTestID?: string
     title?: string
-    hasBottomSpacer?: boolean
     beforeNavigating?: () => Promise<void> | void
     action?: () => void
     onGoBack?: () => void
 } & ViewProps
 
-export const BackButtonHeaderV2 = ({ title, beforeNavigating, onGoBack, action }: Props) => {
+export const BackButtonHeaderV2 = ({
+    title,
+    beforeNavigating,
+    onGoBack,
+    action,
+    iconTestID = "BackButtonHeader2-BaseIcon-backButton",
+}: Props) => {
     const nav = useNavigation()
     const theme = useTheme()
 
@@ -35,9 +41,10 @@ export const BackButtonHeaderV2 = ({ title, beforeNavigating, onGoBack, action }
                     <BaseIcon
                         haptics="Light"
                         action={onActionPress}
-                        name="arrow-left"
+                        name="icon-arrow-left"
                         size={24}
                         color={theme.colors.text}
+                        testID={iconTestID}
                     />
                     <BaseText typographyFont="subTitleBold">{title}</BaseText>
                     <BaseSpacer width={24} />

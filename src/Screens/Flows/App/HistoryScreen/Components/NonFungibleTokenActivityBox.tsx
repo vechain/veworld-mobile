@@ -54,7 +54,7 @@ export const NonFungibleTokenActivityBox: React.FC<Props> = memo(({ activity, on
                     </BaseView>
                 </BaseView>
                 <BaseView flexDirection="column" alignItems="center" pl={5}>
-                    <BaseIcon size={24} name="chevron-right" color={theme.colors.text} />
+                    <BaseIcon size={24} name="icon-chevron-right" color={theme.colors.text} />
                 </BaseView>
             </BaseView>
         </BaseTouchable>

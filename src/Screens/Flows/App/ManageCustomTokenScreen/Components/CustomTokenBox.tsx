@@ -74,7 +74,7 @@ export const CustomTokenBox: React.FC<Props> = memo(({ tokenBalance, onTogglePre
                     </BaseView>
                 </BaseView>
                 <BaseView style={baseStyles.rightSubContainer}>
-                    <BaseIcon color={theme.colors.primary} size={24} name={"plus"} action={handleTokenPress} />
+                    <BaseIcon color={theme.colors.primary} size={24} name={"icon-plus"} action={handleTokenPress} />
                 </BaseView>
             </BaseTouchableBox>
         </BaseView>

@@ -63,7 +63,7 @@ export const InfoSectionView = <T extends NFTAttributeData[] | string | React.JS
                 <>
                     {isDanger ? (
                         <BaseView flexDirection="row">
-                            <BaseIcon name="alert-circle-outline" color={COLORS.DARK_RED} size={16} />
+                            <BaseIcon name="icon-alert-circle" color={COLORS.DARK_RED} size={16} />
                             <BaseSpacer width={4} />
                             <BaseText typographyFont="buttonSecondary" color={COLORS.DARK_RED}>
                                 {LL.SEND_INSUFFICIENT_VTHO()} {data}

@@ -1,13 +1,14 @@
 import { StyleSheet, ViewStyle } from "react-native"
-import { BaseCard, BaseView, BaseIcon, BaseText, BaseSpacer } from "~Components"
+import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import React from "react"
 import { useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
+import { IconKey } from "~Model"
 
 type Props = {
     containerStyle?: ViewStyle
     cardStyle?: ViewStyle
-    iconName: string
+    iconName: IconKey
     iconSize?: number
     title: string
     titleColor?: string

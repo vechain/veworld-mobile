@@ -30,7 +30,7 @@ export const SignedCertificateActivityBox: React.FC<Props> = memo(({ activity, o
                 <BaseView flexDirection="row">
                     <BaseView flexDirection="column" alignItems="center">
                         <BaseIcon
-                            name="text-box-check-outline"
+                            name="icon-check-square"
                             size={20}
                             color={COLORS.DARK_PURPLE}
                             testID="magnify"
@@ -48,7 +48,7 @@ export const SignedCertificateActivityBox: React.FC<Props> = memo(({ activity, o
                     </BaseView>
                 </BaseView>
                 <BaseView flexDirection="column" alignItems="center" pl={5}>
-                    <BaseIcon size={24} name="chevron-right" color={theme.colors.text} />
+                    <BaseIcon size={24} name="icon-chevron-right" color={theme.colors.text} />
                 </BaseView>
             </BaseView>
         </BaseTouchable>

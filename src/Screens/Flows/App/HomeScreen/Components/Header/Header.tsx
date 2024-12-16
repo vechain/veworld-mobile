@@ -82,7 +82,7 @@ export const Header = memo(() => {
             <BaseView flexDirection="row">
                 <SelectedNetworkViewer />
                 <BaseIcon
-                    name={"qrcode-scan"}
+                    name={"icon-qr-code"}
                     size={24}
                     color={theme.colors.text}
                     action={handleOpenCamera}
@@ -90,7 +90,7 @@ export const Header = memo(() => {
                 />
 
                 <BaseIcon
-                    name={"wallet-outline"}
+                    name={"icon-wallet"}
                     size={24}
                     color={theme.colors.text}
                     action={goToWalletManagement}

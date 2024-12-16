@@ -3,7 +3,7 @@ import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import { useThemedStyles } from "~Hooks"
-import { BigNutils, AddressUtils } from "~Utils"
+import { AddressUtils, BigNutils } from "~Utils"
 import { COLORS, ColorThemeType, getCoinGeckoIdBySymbol } from "~Constants"
 import { BaseIcon, BaseView } from "~Components"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -134,7 +134,7 @@ export const SwapCard = memo(
                     {/* ICON */}
                     <BaseIcon
                         style={[styles.icon, { marginTop: -20 }]}
-                        name="swap-horizontal"
+                        name="icon-arrow-left-right"
                         color={COLORS.WHITE}
                         size={24}
                         bg={theme.colors.switcher}

@@ -21,6 +21,10 @@ appId: org.vechain.veworld.app
     when:
       platform: Android
     commands:
+      - swipe:
+         from:
+           id: "button-light"
+         direction: "UP"
       - tapOn:
           text: "Reset App"
           index: 0
@@ -30,6 +34,10 @@ appId: org.vechain.veworld.app
     when:
       platform: iOS
     commands:
+      - swipe:
+          from:
+            id: "button-light"
+          direction: "UP"
       - tapOn: "Reset App"
       - tapOn: "I am aware that this action is irreversible (required)"
 - tapOn: "Reset App"

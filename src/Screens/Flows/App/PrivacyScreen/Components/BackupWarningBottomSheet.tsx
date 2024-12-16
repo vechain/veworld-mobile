@@ -46,7 +46,7 @@ export const BackupWarningBottomSheet = React.forwardRef<BottomSheetModalMethods
                         {/* Warning ICON */}
                         <BaseView justifyContent="center" alignItems="center">
                             <BaseView justifyContent="center" bg={COLORS.PASTEL_ORANGE} style={baseStyles.warningIcon}>
-                                <BaseIcon my={8} size={55} name="alert-outline" color={COLORS.MEDIUM_ORANGE} />
+                                <BaseIcon my={8} size={55} name="icon-alert-triangle" color={COLORS.MEDIUM_ORANGE} />
                             </BaseView>
                         </BaseView>
 

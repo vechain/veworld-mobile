@@ -3,6 +3,7 @@ import { BaseSpacer, BaseView, MnemonicAvoidScreenshotAlert, MnemonicCard } from
 import { LocalDevice } from "~Model"
 import { CopyMnemonicButton } from "./CopyMnemonicButton"
 import { DoNotShareAlert } from "./DoNotShareAlert"
+import { ManualBackupDoneBanner } from "./ManualBackupDoneBanner"
 
 export const ManualBackupContent = ({
     mnemonicArray,
@@ -22,10 +23,16 @@ export const ManualBackupContent = ({
                     deviceToBackup={deviceToBackup}
                 />
             )}
-            <BaseSpacer height={12} />
+            <BaseSpacer height={8} />
             <CopyMnemonicButton mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
             <BaseSpacer height={20} />
             <MnemonicAvoidScreenshotAlert />
+            {deviceToBackup?.isBackedUpManual && (
+                <>
+                    <BaseSpacer height={12} />
+                    <ManualBackupDoneBanner />
+                </>
+            )}
         </BaseView>
     )
 }

@@ -39,19 +39,47 @@ export type Colors = {
     horizontalButtonSelected: string
     horizontalButtonText: string
     horizontalButtonTextReversed: string
-    alertCards: {
-        error: {
-            border: string
-            background: string
-            icon: string
-            title: string
-        }
-    }
     cardBorder: string
     switchEnabled: string
     textLight: string
-    successBackground: string
-    successIcon: string
+    checkboxFilledBackground: string
+    checkboxIcon: string
+    passwordPlaceholder: string
+    blurBackdropBottomSheet: string
+    mnemonicCardBackground: string
+    mnemonicCardBorder: string
+    toggleMnemonicButtonBackground: string
+    successVariant: {
+        background: string
+        border: string
+        borderLight: string
+        icon: string
+        title: string
+        titleInline: string
+    }
+    errorVariant: {
+        background: string
+        border: string
+        borderLight: string
+        icon: string
+        title: string
+        titleInline: string
+    }
+    neutralVariant: {
+        background: string
+        border: string
+        borderLight: string
+        icon: string
+        title: string
+        titleInline: string
+    }
+    infoVariant: {
+        background: string
+        border: string
+        icon: string
+        title: string
+        titleInline: string
+    }
 }
 
 export enum COLORS {
@@ -64,8 +92,10 @@ export enum COLORS {
     LIME_GREEN = "#E2F895",
     LIME_GREEN_LIGHT = "#E6F5B2",
     LIME_GREEN_DISABLED = "#B7C685",
-    DARK_PURPLE = "#09022f",
+    LIME_GREEN_TRANSPARENT = "rgba(226, 248, 149, 0.25)",
+    DARK_PURPLE = "#0B0043",
     DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
+    PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
     PURPLE = "#30265F",
     LIGHT_PURPLE = "#55498c",
@@ -77,7 +107,9 @@ export enum COLORS {
     DARK_RED_ALERT = "#9D1800",
     MEDIUM_RED = "#E02200",
     RED_700 = "#9B2C2C",
+    RED_600 = "#C53030",
     RED_500 = "#E53E3E",
+    RED_400 = "#F56565",
     RED_200 = "#FEB2B2",
     RED_100 = "#FED7D7",
     RED_50 = "#FFF5F5",
@@ -86,7 +118,9 @@ export enum COLORS {
     LIGHT_BLUE = "#90CDF4",
     MEDIUM_BLUE = "#3182CE",
     PASTEL_BLUE = "#4299E1",
-    DARK_BLUE_ALERT = "#2C5282",
+    BLUE_700 = "#2C5282",
+    BLUE_100 = "#BEE3F8",
+    BLUE_50 = "#EBF8FF",
     LIGHT_GREEN = "#AAD836",
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
@@ -100,11 +134,18 @@ export enum COLORS {
     MEDIUM_ORANGE = "#FA710E",
     DISABLED_GREY = "#E5E5E5",
     MEDIUM_GRAY = "#C4C4C4",
+    GREY_700 = "#363A3F",
     GREY_600 = "#4A5568",
     GREY_500 = "#718096",
+    GREY_400 = "#AAAFB6",
     GREY_300 = "#CBD5E0",
     GREY_200 = "#E2E8F0",
     GREY_100 = "#EDF2F7",
+    GREY_50 = "#F9F9FA",
+    ORANGE_50 = "#FFFAF0",
+    ORANGE_100 = "#FEEBCB",
+    ORANGE_500 = "#DD6B20",
+    ORANGE_700 = "#9C4221",
     COINBASE_BACKGROUND_LIGHT = "#ffffff",
     COINBASE_BACKGROUND_DARK = "#0a0b0d",
     COINBASE_BACKGROUND_BLUE = "#0052FF",
@@ -125,7 +166,7 @@ const light: Colors = {
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.LIME_GREEN,
     disabled: COLORS.WHITE_DISABLED,
-    disabledButton: COLORS.DARK_PURPLE_DISABLED,
+    disabledButton: COLORS.PURPLE_BLUR_TRANSPARENT,
     danger: COLORS.DARK_RED,
     success: COLORS.DARK_GREEN,
     successMedium: COLORS.WHITE,
@@ -159,17 +200,45 @@ const light: Colors = {
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.DARK_PURPLE,
-    alertCards: {
-        error: {
-            border: COLORS.RED_200,
-            background: COLORS.RED_50,
-            icon: COLORS.RED_500,
-            title: COLORS.RED_700,
-        },
-    },
     switchEnabled: COLORS.LIGHT_GREEN,
-    successBackground: COLORS.GREEN_50,
-    successIcon: COLORS.GREEN_500,
+    checkboxFilledBackground: COLORS.DARK_PURPLE,
+    checkboxIcon: COLORS.WHITE,
+    passwordPlaceholder: COLORS.GREY_400,
+    blurBackdropBottomSheet: COLORS.PURPLE_BLUR_TRANSPARENT,
+    mnemonicCardBackground: COLORS.GREY_100,
+    mnemonicCardBorder: COLORS.GREY_300,
+    toggleMnemonicButtonBackground: COLORS.GREY_200,
+    successVariant: {
+        background: COLORS.GREEN_50,
+        border: COLORS.GREEN_200,
+        borderLight: COLORS.GREEN_100,
+        icon: COLORS.GREEN_500,
+        title: COLORS.GREEN_700,
+        titleInline: COLORS.GREEN_700,
+    },
+    errorVariant: {
+        background: COLORS.RED_50,
+        border: COLORS.RED_200,
+        borderLight: COLORS.RED_100,
+        icon: COLORS.RED_500,
+        title: COLORS.RED_700,
+        titleInline: COLORS.RED_700,
+    },
+    neutralVariant: {
+        background: COLORS.GREY_50,
+        border: COLORS.GREY_200,
+        borderLight: COLORS.GREY_200,
+        icon: COLORS.GREY_500,
+        title: COLORS.GREY_700,
+        titleInline: COLORS.GREY_700,
+    },
+    infoVariant: {
+        background: COLORS.BLUE_50,
+        border: COLORS.LIGHT_BLUE,
+        icon: COLORS.MEDIUM_BLUE,
+        title: COLORS.BLUE_700,
+        titleInline: COLORS.BLUE_700,
+    },
 }
 
 const dark: Colors = {
@@ -181,7 +250,7 @@ const dark: Colors = {
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.DARK_PURPLE,
     disabled: COLORS.WHITE_DISABLED,
-    disabledButton: COLORS.LIME_GREEN_DISABLED,
+    disabledButton: COLORS.LIME_GREEN_TRANSPARENT,
     danger: COLORS.LIGHT_RED,
     success: COLORS.LIGHT_GREEN,
     successMedium: COLORS.MEDIUM_GREEN,
@@ -215,17 +284,45 @@ const dark: Colors = {
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.WHITE,
-    alertCards: {
-        error: {
-            border: COLORS.RED_200,
-            background: COLORS.RED_50,
-            icon: COLORS.RED_500,
-            title: COLORS.RED_700,
-        },
-    },
     switchEnabled: COLORS.LIGHT_GREEN,
-    successBackground: COLORS.GREEN_50,
-    successIcon: COLORS.GREEN_500,
+    checkboxFilledBackground: COLORS.WHITE,
+    checkboxIcon: COLORS.DARK_PURPLE,
+    passwordPlaceholder: COLORS.GREY_400,
+    blurBackdropBottomSheet: COLORS.PURPLE_BLUR_TRANSPARENT,
+    mnemonicCardBackground: COLORS.DARK_PURPLE_DISABLED,
+    mnemonicCardBorder: COLORS.DARK_PURPLE,
+    toggleMnemonicButtonBackground: COLORS.PURPLE,
+    successVariant: {
+        background: COLORS.GREEN_100,
+        border: COLORS.GREEN_200,
+        borderLight: COLORS.GREEN_200,
+        icon: COLORS.GREEN_500,
+        title: COLORS.GREEN_700,
+        titleInline: COLORS.GREEN_200,
+    },
+    errorVariant: {
+        background: COLORS.RED_100,
+        border: COLORS.RED_200,
+        borderLight: COLORS.RED_200,
+        icon: COLORS.RED_500,
+        title: COLORS.RED_700,
+        titleInline: COLORS.RED_200,
+    },
+    neutralVariant: {
+        background: COLORS.GREY_100,
+        border: COLORS.GREY_300,
+        borderLight: COLORS.GREY_300,
+        icon: COLORS.GREY_500,
+        title: COLORS.GREY_700,
+        titleInline: COLORS.GREY_200,
+    },
+    infoVariant: {
+        background: COLORS.BLUE_100,
+        border: COLORS.LIGHT_BLUE,
+        icon: COLORS.MEDIUM_BLUE,
+        title: COLORS.BLUE_700,
+        titleInline: COLORS.LIGHT_BLUE,
+    },
 }
 
 export const colors = { light, dark }

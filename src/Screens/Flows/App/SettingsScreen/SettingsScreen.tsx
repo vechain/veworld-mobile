@@ -124,43 +124,43 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
             element: "settingsRow",
             title: LL.TITLE_GENERAL_SETTINGS(),
             screenName: Routes.SETTINGS_GENERAL,
-            icon: "cog-outline",
+            icon: "icon-settings",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_MANAGE_WALLET(),
             screenName: Routes.WALLET_MANAGEMENT,
-            icon: "wallet-outline",
+            icon: "icon-wallet",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_TRANSACTIONS(),
             screenName: Routes.SETTINGS_TRANSACTIONS,
-            icon: "currency-usd",
+            icon: "icon-transaction",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_NETWORKS(),
             screenName: Routes.SETTINGS_NETWORK,
-            icon: "web",
+            icon: "icon-globe",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_CONNECTED_APPS(),
             screenName: Routes.SETTINGS_CONNECTED_APPS,
-            icon: "widgets-outline",
+            icon: "icon-apps",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_CONTACTS(),
             screenName: Routes.SETTINGS_CONTACTS,
-            icon: "account-multiple-outline",
+            icon: "icon-users",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_PRIVACY(),
             screenName: Routes.SETTINGS_PRIVACY,
-            icon: "shield-check-outline",
+            icon: "icon-shield-check",
         },
         {
             element: "backupBanner",
@@ -175,21 +175,21 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
             element: "settingsRow",
             title: LL.TITLE_GET_SUPPORT(),
             screenName: Routes.SETTINGS_GET_SUPPORT,
-            icon: "help-circle-outline",
+            icon: "icon-help-circle",
             url: "https://support.veworld.com",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_GIVE_FEEDBACK(),
             screenName: Routes.SETTINGS_GIVE_FEEDBACK,
-            icon: "message-outline",
+            icon: "icon-message-square",
             url: "https://forms.office.com/e/Vq1CUJD9Vy",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_ABOUT(),
             screenName: Routes.SETTINGS_ABOUT,
-            icon: "information-outline",
+            icon: "icon-info",
         },
     ]
 
@@ -198,7 +198,7 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
             element: "settingsRow",
             title: LL.TITLE_ALERTS(),
             screenName: Routes.SETTINGS_ALERTS,
-            icon: "bell-outline",
+            icon: "icon-bell",
         })
     }
 

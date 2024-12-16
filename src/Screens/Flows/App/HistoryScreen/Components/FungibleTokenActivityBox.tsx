@@ -60,7 +60,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
 
     const transferDirectionText = activity.direction === DIRECTIONS.UP ? LL.BTN_SEND() : LL.RECEIVE_ACTIVITY()
 
-    const directionIcon = activity.direction === DIRECTIONS.UP ? "arrow-up" : "arrow-down"
+    const directionIcon = activity.direction === DIRECTIONS.UP ? "icon-arrow-up" : "icon-arrow-down"
 
     const renderTransferSummary = useMemo(() => {
         if (!amountTransferred) return undefined
@@ -120,7 +120,7 @@ export const FungibleTokenActivityBox: React.FC<Props> = memo(({ activity, onPre
                 <BaseView flexDirection="row">
                     {renderTransferSummary}
                     <BaseView flexDirection="column" alignItems="center" pl={5}>
-                        <BaseIcon size={24} name="chevron-right" color={theme.colors.text} />
+                        <BaseIcon size={24} name="icon-chevron-right" color={theme.colors.text} />
                     </BaseView>
                 </BaseView>
             </BaseView>

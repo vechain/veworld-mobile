@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
-import { VET, VTHO } from "~Constants"
-import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
+import { B3TR, VET, VTHO } from "~Constants"
+import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import FiatBalance from "./FiatBalance"
 
 type AccountFiatBalanceProps = {
@@ -14,10 +14,21 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
+    const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
+    const nonVechaiTokensFiat = useNonVechainTokenFiat()
 
     const sum = useMemo(
-        () => Number(tokenWithInfoVET.fiatBalance) + Number(tokenWithInfoVTHO.fiatBalance),
-        [tokenWithInfoVET.fiatBalance, tokenWithInfoVTHO.fiatBalance],
+        () =>
+            Number(tokenWithInfoVET.fiatBalance) +
+            Number(tokenWithInfoVTHO.fiatBalance) +
+            Number(tokenWithInfoB3TR.fiatBalance) +
+            Number(nonVechaiTokensFiat.reduce((a, b) => Number(a) + Number(b), 0)),
+        [
+            tokenWithInfoVET.fiatBalance,
+            tokenWithInfoVTHO.fiatBalance,
+            tokenWithInfoB3TR.fiatBalance,
+            nonVechaiTokensFiat,
+        ],
     )
 
     const isLong = useMemo(() => sum.toFixed(2).length > 12, [sum])
@@ -28,7 +39,12 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
             isVisible={isVisible}
             color={theme.colors.textReversed}
             typographyFont={isLong ? "title" : "largeTitle"}
-            balances={[tokenWithInfoVET.fiatBalance, tokenWithInfoVTHO.fiatBalance]}
+            balances={[
+                tokenWithInfoVET.fiatBalance,
+                tokenWithInfoVTHO.fiatBalance,
+                tokenWithInfoB3TR.fiatBalance,
+                ...nonVechaiTokensFiat,
+            ]}
         />
     )
 }

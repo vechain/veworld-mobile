@@ -34,7 +34,7 @@ export const EmptyListView = () => {
                         alignItems="center"
                         borderRadius={16}
                         style={baseStyles.quickNFTActions}>
-                        <BaseIcon name="plus" size={55} />
+                        <BaseIcon name="icon-plus" size={55} />
                         <BaseText color={COLORS.DARK_PURPLE} typographyFont="bodyMedium">
                             {LL.ADD_APP()}
                         </BaseText>

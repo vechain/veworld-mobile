@@ -1,6 +1,6 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { selectSelectedAccount } from "./Account"
-import { VET, VTHO } from "~Constants"
+import { B3TR, VET, VTHO } from "~Constants"
 import { RootState } from "~Storage/Redux/Types"
 import { BigNumber } from "bignumber.js"
 import { selectSelectedNetwork } from "./Network"
@@ -97,7 +97,8 @@ export const selectNonVechainTokensWithBalances = createSelector(
             tokensWithBalance.filter(
                 tokenWithBalance =>
                     !compareAddresses(tokenWithBalance.address, VET.address) &&
-                    !compareAddresses(tokenWithBalance.address, VTHO.address),
+                    !compareAddresses(tokenWithBalance.address, VTHO.address) &&
+                    !compareAddresses(tokenWithBalance.address, B3TR.address),
             ),
             balance => balance.balance.position,
         ),

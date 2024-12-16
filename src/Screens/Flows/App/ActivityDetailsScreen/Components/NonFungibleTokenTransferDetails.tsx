@@ -47,7 +47,7 @@ export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(({ activity
             value: `${transactionIDshort}`,
             typographyFont: "subSubTitle",
             underline: true,
-            icon: "content-copy",
+            icon: "icon-copy",
             onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
         },
         {

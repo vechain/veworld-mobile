@@ -1,11 +1,12 @@
 import React, { forwardRef, memo, useMemo } from "react"
-import { StyleSheet, TextInputProps, StyleProp, ViewStyle, KeyboardTypeOptions } from "react-native"
+import { KeyboardTypeOptions, StyleProp, StyleSheet, TextInputProps, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
-import { COLORS, typography, ColorThemeType } from "~Constants"
-import { BaseIcon, BaseText } from "~Components"
-import { BaseView } from "../BaseView"
+import { COLORS, ColorThemeType, typography } from "~Constants"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { TextInput } from "react-native-gesture-handler"
 import { PlatformUtils } from "~Utils"
+import { IconKey } from "~Model"
+
 const { defaults: defaultTypography } = typography
 
 export type BaseTextInputProps = {
@@ -14,7 +15,7 @@ export type BaseTextInputProps = {
     value?: string
     errorMessage?: string
     testID?: string
-    rightIcon?: string
+    rightIcon?: IconKey | React.ReactElement
     rightIconTestID?: string
     onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
@@ -52,10 +53,27 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
 
         const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
+        const renderRightIcon = useMemo(() => {
+            if (!rightIcon) return null
+            return typeof rightIcon === "string" ? (
+                <BaseIcon
+                    haptics="Light"
+                    action={onIconPress}
+                    name={rightIcon}
+                    size={24}
+                    color={theme.colors.text}
+                    style={styles.rightIconStyle}
+                    testID={rightIconTestID}
+                />
+            ) : (
+                rightIcon
+            )
+        }, [onIconPress, rightIcon, rightIconTestID, styles.rightIconStyle, theme.colors.text])
+
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {
                 return {
-                    keyboardType: "email-address" as KeyboardTypeOptions,
+                    keyboardType: "default" as KeyboardTypeOptions,
                     autoCorrect: false,
                 }
             } else {
@@ -98,21 +116,11 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         onBlur={handleBlur}
                         {...otherProps}
                     />
-                    {rightIcon && (
-                        <BaseIcon
-                            haptics="Light"
-                            action={onIconPress}
-                            name={rightIcon}
-                            size={24}
-                            color={theme.colors.text}
-                            style={styles.rightIconStyle}
-                            testID={rightIconTestID}
-                        />
-                    )}
+                    {renderRightIcon}
                 </BaseView>
                 {errorMessage && (
                     <BaseView pt={10} flexDirection="row" justifyContent="flex-start" style={styles.errorContainer}>
-                        <BaseIcon name="alert-circle-outline" size={20} color={theme.colors.danger} />
+                        <BaseIcon name="icon-alert-circle" size={20} color={theme.colors.danger} />
                         <BaseText px={7} color={theme.colors.danger} typographyFont="caption">
                             {errorMessage || " "}
                         </BaseText>

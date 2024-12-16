@@ -5,7 +5,7 @@ import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
 import { NavigationContainer, useNavigationContainerRef } from "@react-navigation/native"
-import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
     ApplicationSecurityProvider,
@@ -17,6 +17,7 @@ import {
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import {
+    DesignSystemIcons,
     Inter_Bold,
     Inter_Light,
     Inter_Medium,
@@ -32,11 +33,11 @@ import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
-    selectSentryTrackingEnabled,
-    useAppSelector,
-    useAppDispatch,
-    setCurrentMountedScreen,
     selectLanguage,
+    selectSentryTrackingEnabled,
+    setCurrentMountedScreen,
+    useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
@@ -75,6 +76,7 @@ const Main = () => {
         [fontFamily["Mono-Bold"]]: Mono_Bold,
         [fontFamily["Mono-Regular"]]: Mono_Regular,
         [fontFamily["Mono-Light"]]: Mono_Light,
+        [fontFamily.DesignSystemIcons]: DesignSystemIcons,
     })
 
     // Online status management

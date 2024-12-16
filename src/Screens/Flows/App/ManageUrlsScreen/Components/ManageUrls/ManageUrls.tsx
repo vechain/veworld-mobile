@@ -55,7 +55,7 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
                 <BaseText typographyFont="subTitleBold">{LL.SEND_DELEGATION_MANAGE_URL()}</BaseText>
                 <BaseIcon
                     haptics="Light"
-                    name={"plus"}
+                    name={"icon-plus"}
                     bg={theme.colors.secondary}
                     action={openAddUrl}
                     testID="ManageUrls_addUrlButton"

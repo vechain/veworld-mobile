@@ -1,9 +1,10 @@
 import { CURRENCY, CURRENCY_SYMBOLS, SYMBOL_POSITIONS } from "~Constants/Enums/CurrencyEnum"
+import { IconKey } from "~Model"
 
 export interface CurrencyConfig {
     currency: CURRENCY
     symbol: CURRENCY_SYMBOLS
-    iconName: string
+    iconName: IconKey
 }
 
 const fiatCurrencies: CurrencyConfig[] = []
@@ -11,13 +12,13 @@ const fiatCurrencies: CurrencyConfig[] = []
 fiatCurrencies.push({
     currency: CURRENCY.USD,
     symbol: CURRENCY_SYMBOLS.USD,
-    iconName: "currency-usd",
+    iconName: "icon-dollar-sign",
 })
 
 fiatCurrencies.push({
     currency: CURRENCY.EUR,
     symbol: CURRENCY_SYMBOLS.EUR,
-    iconName: "currency-eur",
+    iconName: "icon-euro",
 })
 
 export default [...fiatCurrencies].sort(function (a, b) {

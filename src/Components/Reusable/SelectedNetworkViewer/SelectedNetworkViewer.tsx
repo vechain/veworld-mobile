@@ -18,7 +18,7 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
         <BaseView style={styles.networkViewer}>
             <BaseView style={styles.networkViewerIconText}>
                 <BaseIcon
-                    name="web"
+                    name="icon-globe"
                     color={theme.colors.text}
                     size={15}
                     testID="web"

@@ -214,7 +214,7 @@ describe("toastConfig", () => {
             type: "error",
         })
 
-        expect(result.props.icon).toBe("alert-circle-outline")
+        expect(result.props.icon).toBe("icon-alert-triangle")
         expect(result.props.text1).toBe("Error")
         expect(result.props.text2).toBe("Details")
         expect(result.props.text3).toBe("Click here")
@@ -236,7 +236,7 @@ describe("toastConfig", () => {
             type: "success",
         })
 
-        expect(result.props.icon).toBe("check-circle-outline")
+        expect(result.props.icon).toBe("icon-check-circle-2")
         expect(result.props.text1).toBe("Success")
         expect(result.props.text2).toBe("Details")
         expect(result.props.text3).toBe("Click here")
@@ -258,7 +258,7 @@ describe("toastConfig", () => {
             type: "warning",
         })
 
-        expect(result.props.icon).toBe("alert-outline")
+        expect(result.props.icon).toBe("icon-alert-triangle")
         expect(result.props.text1).toBe("Warning")
         expect(result.props.text2).toBe("Details")
         expect(result.props.text3).toBe("Click here")
@@ -280,7 +280,7 @@ describe("toastConfig", () => {
             type: "info",
         })
 
-        expect(result.props.icon).toBe("alert-circle-outline")
+        expect(result.props.icon).toBe("icon-info")
         expect(result.props.text1).toBe("Info")
         expect(result.props.text2).toBe("Details")
         expect(result.props.text3).toBe("Click here")
@@ -290,6 +290,7 @@ describe("toastConfig", () => {
 describe("hideToast", () => {
     it("calls Toast.hide()", () => {
         showSuccessToast({ text1: "Success" })
+        jest.useFakeTimers()
 
         act(() => {
             // Wait for the toast to be displayed
@@ -299,5 +300,7 @@ describe("hideToast", () => {
         hideToast()
 
         expect(Toast.hide).toHaveBeenCalled()
+
+        jest.clearAllTimers()
     })
 })

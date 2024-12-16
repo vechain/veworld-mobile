@@ -34,7 +34,7 @@ export const informUserForIncomingNFT = ({
             collectionName: isEmpty(collectionName) ? "" : collectionName + "!",
             from: formattedFrom,
         }),
-        textLink: i18n.i18n()[locale].NOTIFIACTION_INCOMING_NFT_ACTION(),
+        textLink: i18n.i18n()[locale].NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
         onPress: () => informUser({ accountAddress: transfer.to }),
         visibilityTime: 10000,
         testID: "informUserForIncomingNFTSuccessToast",
@@ -62,12 +62,16 @@ export const informUserForOutgoingNFT = ({
     const formattedTo = AddressUtils.humanAddress(to, 4, 5)
 
     showSuccessToast({
+        addresses: {
+            sender: from,
+            recipient: to,
+        },
         text1: i18n.i18n()[locale].NOTIFICATION_OUTGOING_NFT_TITLE(),
         text2: i18n.i18n()[locale].NOTIFICATION_OUTGOING_NFT_BODY({
             collectionName,
             to: formattedTo,
         }),
-        textLink: i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+        textLink: i18n.i18n()[locale].NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
         onPress: () => informUser({ txId, accountAddress: from }),
         visibilityTime: 10000,
         testID: "informUserForOutgoingNFTSuccessToast",
@@ -79,7 +83,6 @@ type InformUserForIncomingTokenProps = {
     amount: string
     symbol: string
     decimals: number
-    alias: string
     transfer: IncomingTransferResponse
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
@@ -88,7 +91,6 @@ export const InformUserForIncomingToken = ({
     amount,
     symbol,
     decimals,
-    alias,
     transfer,
     informUser,
 }: InformUserForIncomingTokenProps) => {
@@ -97,14 +99,16 @@ export const InformUserForIncomingToken = ({
     const formattedAmmount = BigNutils(amount).toHuman(decimals).toTokenFormat_string(2)
 
     showSuccessToast({
-        text1: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
-        text2: i18n.i18n()[locale].NOTIFICATION_found_token_transfer({
+        addresses: {
+            sender: transfer.from,
+            recipient: transfer.to,
+        },
+        text1: i18n.i18n()[locale].NOTIFICATION_received_token_transfer({
             token: symbol,
             amount: formattedAmmount,
-            alias,
         }),
-        textLink: i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
-        onPress: () => informUser({ accountAddress: transfer.to }),
+        textLink: i18n.i18n()[locale].NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
+        onPress: () => informUser({ accountAddress: transfer.to, txId: transfer.txId }),
         visibilityTime: 7000,
         testID: "informUserForIncomingTokenSuccessToast",
     })
@@ -117,7 +121,6 @@ type InformUserForOutgoingTokenProps = {
     decimals: number
     transfer: IncomingTransferResponse
     informUser: (params: { accountAddress: string; txId?: string }) => void
-    to: string
     symbol: string
 }
 
@@ -127,22 +130,22 @@ export const InformUserForOutgoingToken = ({
     decimals,
     transfer,
     informUser,
-    to,
     symbol,
 }: InformUserForOutgoingTokenProps) => {
     const locale = i18n.detectLocale()
 
-    const formattedTo = AddressUtils.humanAddress(to, 4, 5)
     const formattedAmmount = BigNutils(amount).toHuman(decimals).toTokenFormat_string(2)
 
     showSuccessToast({
-        text1: i18n.i18n()[locale].SUCCESS_GENERIC(),
-        text2: i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN({
+        addresses: {
+            sender: transfer.from,
+            recipient: transfer.to,
+        },
+        text1: i18n.i18n()[locale].NOTIFICATION_sent_token_transfer({
             token: symbol,
             amount: formattedAmmount,
-            to: formattedTo,
         }),
-        textLink: i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+        textLink: i18n.i18n()[locale].NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
         onPress: () => informUser({ accountAddress: transfer.from, txId }),
         visibilityTime: 7000,
         testID: "informUserForOutgoingTokenSuccessToast",
@@ -152,25 +155,28 @@ export const InformUserForOutgoingToken = ({
 // ~VET - INCOMING
 type InformUserForIncomingVETProps = {
     amount: string
-    alias: string
+    from: string
     to: string
+    txId: string
     informUser: (params: { accountAddress: string; txId?: string }) => void
 }
 
-export const InformUserForIncomingVET = ({ amount, alias, to, informUser }: InformUserForIncomingVETProps) => {
+export const InformUserForIncomingVET = ({ amount, from, to, txId, informUser }: InformUserForIncomingVETProps) => {
     const locale = i18n.detectLocale()
 
     const formattedAmount = BigNutils(amount).toHuman(VET.decimals).toTokenFormat_string(2)
 
     showSuccessToast({
-        text1: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
-        text2: i18n.i18n()[locale].NOTIFICATION_found_token_transfer({
+        addresses: {
+            sender: from,
+            recipient: to,
+        },
+        text1: i18n.i18n()[locale].NOTIFICATION_received_token_transfer({
             token: VET.symbol,
             amount: formattedAmount,
-            alias,
         }),
-        textLink: i18n.i18n()[locale].NOTIFICATION_VIEW_ACCOUNT(),
-        onPress: () => informUser({ accountAddress: to }),
+        textLink: i18n.i18n()[locale].NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
+        onPress: () => informUser({ accountAddress: to, txId }),
         visibilityTime: 7000,
         testID: "informUserForIncomingVETSuccessToast",
     })
@@ -188,17 +194,18 @@ type InformUserForOutgoingTokenVET = {
 export const InformUserForOutgoingVET = ({ txId, amount, to, from, informUser }: InformUserForOutgoingTokenVET) => {
     const locale = i18n.detectLocale()
 
-    const fomattedTo = AddressUtils.humanAddress(to, 4, 5)
     const formattedAmount = BigNutils(amount).toHuman(VET.decimals).toTokenFormat_string(2)
 
     showSuccessToast({
-        text1: i18n.i18n()[locale].SUCCESS_GENERIC(),
-        text2: i18n.i18n()[locale].NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN({
+        addresses: {
+            sender: from,
+            recipient: to,
+        },
+        text1: i18n.i18n()[locale].NOTIFICATION_sent_token_transfer({
             token: VET.symbol,
             amount: formattedAmount,
-            to: fomattedTo,
         }),
-        textLink: i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+        textLink: i18n.i18n()[locale].NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
         onPress: () => informUser({ accountAddress: from, txId }),
         visibilityTime: 7000,
         testID: "InformUserForOutgoingVETSuccessToast",
@@ -215,7 +222,7 @@ export const informUserforRevertedTransaction = ({ txId, network }: { txId: stri
         text2: i18n.i18n()[locale].NOTIFICATION_transaction_reverted({
             txId: formattedTxId,
         }),
-        textLink: i18n.i18n()[locale].SUCCESS_GENERIC_VIEW_DETAIL_LINK(),
+        textLink: i18n.i18n()[locale].NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
         onPress: () => {
             Linking.openURL(`${network.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${txId}`)
         },

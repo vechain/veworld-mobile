@@ -1,24 +1,41 @@
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import Lottie from "lottie-react-native"
-import React, { FC, useCallback, useEffect, useState } from "react"
+import React, { FC, useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
-import { getTimeZone } from "react-native-localize"
 import { LoaderDark, LoaderLight } from "~Assets"
 import {
     BaseIcon,
     BaseText,
-    BaseTouchableBox,
     BaseView,
     CardWithHeader,
-    CloudKitWarningBottomSheet,
-    showErrorToast,
+    ConfirmDeleteCloudBackupBottomSheet,
+    DeleteCloudBackupBottomSheet,
+    EnableCloudBottomSheet,
+    RequireUserPassword,
+    WalletBackupStatusRow,
 } from "~Components"
-import { COLORS, ColorThemeType, DerivationPath } from "~Constants"
-import { useBottomSheetModal, useCloudBackup, useThemedStyles } from "~Hooks"
+import { COLORS, ColorThemeType } from "~Constants"
+import {
+    useBiometricsValidation,
+    useBottomSheetModal,
+    useCheckIdentity,
+    useCloudBackup,
+    useThemedStyles,
+    useWalletSecurity,
+} from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalDevice } from "~Model"
-import { setDeviceIsBackup, useAppDispatch } from "~Storage/Redux"
-import { AddressUtils, CryptoUtils, DateUtils, HexUtils, PasswordUtils, PlatformUtils } from "~Utils"
+import { Routes } from "~Navigation"
+import {
+    selectAccounts,
+    selectIsAppLoading,
+    setDeviceIsBackup,
+    setIsAppLoading,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { DateUtils, PlatformUtils } from "~Utils"
+import { getTimeZone } from "react-native-localize"
 
 type Props = {
     mnemonicArray: string[]
@@ -28,56 +45,43 @@ type Props = {
 export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) => {
     const dispatch = useAppDispatch()
     const { LL, locale } = useI18nContext()
+    const navigation = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const nav = useNavigation()
-    const [isWalletBackedUp, setIsWalletBackedUp] = useState(true)
-    const [isLoading, setIsLoading] = useState(false)
 
-    const { saveWalletToCloud, getWalletByRootAddress } = useCloudBackup()
+    const isAppLoading = useAppSelector(selectIsAppLoading)
+    const accounts = useAppSelector(selectAccounts)
 
-    const { ref: warningRef, onOpen, onClose: onCloseWarning } = useBottomSheetModal()
+    const { getWalletByRootAddress, deleteWallet, isCloudAvailable } = useCloudBackup()
+
+    const { isWalletSecurityBiometrics } = useWalletSecurity()
+    const { authenticateBiometrics } = useBiometricsValidation()
+
+    const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
+    const [isCloudError, setIsCloudError] = useState(false)
 
     const getWallet = useCallback(async () => {
-        setIsLoading(true)
-        const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
-        setIsLoading(false)
+        dispatch(setIsAppLoading(true))
+        try {
+            const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
+            setIsWalletBackedUp(!!wallet)
+            setIsCloudError(false)
+        } catch {
+            setIsWalletBackedUp(false)
+            setIsCloudError(true)
+        } finally {
+            dispatch(setIsAppLoading(false))
+        }
+    }, [deviceToBackup?.rootAddress, dispatch, getWalletByRootAddress])
 
-        setIsWalletBackedUp(!!wallet)
-    }, [deviceToBackup?.rootAddress, getWalletByRootAddress])
+    const handleConfirmDelete = useCallback(async () => {
+        if (!deviceToBackup?.rootAddress) {
+            throw new Error("No root address found")
+        }
 
-    useEffect(() => {
-        getWallet()
-    }, [getWallet])
-
-    const onHandleBackupToCloudKit = useCallback(
-        async (password: string) => {
-            setIsLoading(true)
-            onCloseWarning()
-
-            if (!deviceToBackup?.xPub) {
-                showErrorToast({
-                    text1: LL.CLOUDKIT_ERROR_GENERIC(),
-                })
-                return
-            }
-
-            const firstAccountAddress = AddressUtils.getAddressFromXPub(deviceToBackup.xPub, 0)
-            const salt = HexUtils.generateRandom(256)
-            const iv = PasswordUtils.getRandomIV(16)
-            const mnemonic = await CryptoUtils.encrypt(mnemonicArray, password, salt, iv)
-            await saveWalletToCloud({
-                mnemonic,
-                _rootAddress: deviceToBackup?.rootAddress,
-                deviceType: deviceToBackup?.type,
-                firstAccountAddress,
-                salt,
-                iv,
-                derivationPath: deviceToBackup?.derivationPath ?? DerivationPath.VET,
-            })
-
-            setIsLoading(false)
-            setIsWalletBackedUp(true)
-
+        dispatch(setIsAppLoading(true))
+        try {
+            await deleteWallet(deviceToBackup.rootAddress)
+            const wallet = await getWalletByRootAddress(deviceToBackup.rootAddress)
             const formattedDate = DateUtils.formatDateTime(
                 Date.now(),
                 locale,
@@ -86,33 +90,123 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             dispatch(
                 setDeviceIsBackup({
                     rootAddress: deviceToBackup.rootAddress,
-                    isBackup: true,
+                    isBackup: !!wallet,
+                    isBackupManual: !!deviceToBackup.isBackedUpManual,
                     date: formattedDate,
                 }),
             )
-            nav.goBack()
-        },
-        [
-            LL,
-            deviceToBackup?.derivationPath,
-            deviceToBackup?.rootAddress,
-            deviceToBackup?.type,
-            deviceToBackup?.xPub,
-            dispatch,
-            locale,
-            mnemonicArray,
-            nav,
-            onCloseWarning,
-            saveWalletToCloud,
-        ],
+            setIsWalletBackedUp(!!wallet)
+            navigation.goBack()
+        } catch (error) {
+            setIsCloudError(true)
+            dispatch(setIsAppLoading(false))
+        }
+    }, [
+        deviceToBackup?.rootAddress,
+        deviceToBackup?.isBackedUpManual,
+        deleteWallet,
+        getWalletByRootAddress,
+        locale,
+        dispatch,
+        setIsWalletBackedUp,
+        setIsCloudError,
+        navigation,
+    ])
+
+    const {
+        ref: confirmDeleteBackupRef,
+        openWithDelay: onOpenConfirmDeleteBackup,
+        onClose: onCloseConfirmDeleteBackup,
+    } = useBottomSheetModal()
+    const { ref: deleteBackupRef, onOpen: onOpenDeleteBackup, onClose: onCloseDeleteBackup } = useBottomSheetModal()
+    const { ref: EnableCloudRef, onOpen: onOpenEnableCloud, onClose: onCloseEnableCloud } = useBottomSheetModal()
+
+    useFocusEffect(
+        useCallback(() => {
+            if (!isCloudAvailable) {
+                return
+            }
+
+            if (!accounts.find(account => account.rootAddress === deviceToBackup?.rootAddress)) {
+                navigation.goBack()
+            } else {
+                getWallet()
+            }
+        }, [accounts, deviceToBackup?.rootAddress, getWallet, isCloudAvailable, navigation]),
     )
+
+    const goToChoosePasswordScreen = useCallback(async () => {
+        if (isCloudError) {
+            dispatch(setIsAppLoading(true))
+            try {
+                const wallet = await getWalletByRootAddress(deviceToBackup?.rootAddress)
+                const isBackuped = !!wallet
+                setIsWalletBackedUp(isBackuped)
+                setIsCloudError(false)
+
+                if (!isBackuped && deviceToBackup) {
+                    navigation.navigate(Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD, {
+                        mnemonicArray,
+                        device: deviceToBackup,
+                    })
+                }
+            } catch {
+                setIsWalletBackedUp(false)
+                setIsCloudError(true)
+            } finally {
+                dispatch(setIsAppLoading(false))
+            }
+        } else if (deviceToBackup) {
+            navigation.navigate(Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD, {
+                mnemonicArray,
+                device: deviceToBackup,
+            })
+        }
+    }, [
+        deviceToBackup,
+        dispatch,
+        getWalletByRootAddress,
+        isCloudError,
+        mnemonicArray,
+        navigation,
+        setIsCloudError,
+        setIsWalletBackedUp,
+    ])
+
+    const handleCloudBackupPress = useCallback(() => {
+        if (!isCloudAvailable) {
+            onOpenEnableCloud()
+        } else if (isWalletBackedUp) {
+            onOpenDeleteBackup()
+        } else if (!isWalletBackedUp) {
+            goToChoosePasswordScreen()
+        }
+    }, [isCloudAvailable, isWalletBackedUp, onOpenEnableCloud, onOpenDeleteBackup, goToChoosePasswordScreen])
+
+    const handleProceedToDelete = useCallback(() => {
+        onCloseDeleteBackup()
+        onOpenConfirmDeleteBackup(1000)
+    }, [onCloseDeleteBackup, onOpenConfirmDeleteBackup])
+
+    const { onPasswordSuccess, checkIdentityBeforeOpening, isPasswordPromptOpen, handleClosePasswordModal } =
+        useCheckIdentity({
+            onIdentityConfirmed: async () => await handleConfirmDelete(),
+            allowAutoPassword: false,
+        })
+
+    const handleConfirmDeleteWithAuth = useCallback(() => {
+        if (isWalletSecurityBiometrics) {
+            return authenticateBiometrics(handleConfirmDelete)
+        }
+        return checkIdentityBeforeOpening()
+    }, [isWalletSecurityBiometrics, authenticateBiometrics, handleConfirmDelete, checkIdentityBeforeOpening])
 
     return (
         <>
             <BaseView justifyContent="center">
                 <CardWithHeader
                     title={LL.TITLE_BACKUP_CLOUD()}
-                    iconName="cloud-outline"
+                    iconName="icon-cloud"
                     sideHeader={
                         <BaseView style={styles.sideHeader}>
                             <BaseText
@@ -124,42 +218,46 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                             </BaseText>
                         </BaseView>
                     }>
-                    <BaseTouchableBox
-                        containerStyle={[
-                            styles.cloudRow,
-                            {
-                                backgroundColor:
-                                    isWalletBackedUp || isLoading ? theme.colors.successBackground : COLORS.LIME_GREEN,
-                                borderColor:
-                                    isWalletBackedUp || isLoading ? theme.colors.successBackground : COLORS.LIME_GREEN,
-                            },
-                        ]}
-                        disabled={isWalletBackedUp || isLoading}
-                        style={styles.cloudRowContent}
-                        action={onOpen}>
-                        <BaseView style={styles.cloudInfo}>
-                            <BaseText typographyFont="bodyMedium" color={COLORS.DARK_PURPLE}>
-                                {PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
-                            </BaseText>
-                        </BaseView>
-
-                        {isLoading ? (
-                            <Lottie
-                                source={theme.isDark ? LoaderDark : LoaderLight}
-                                autoPlay
-                                loop
-                                style={styles.lottie}
-                            />
-                        ) : (
-                            !isWalletBackedUp && <BaseIcon name="chevron-right" size={14} color={COLORS.DARK_PURPLE} />
-                        )}
-                    </BaseTouchableBox>
+                    <WalletBackupStatusRow
+                        variant={isWalletBackedUp ? "success" : "error"}
+                        title={PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
+                        rightElement={
+                            isAppLoading ? (
+                                <Lottie
+                                    source={theme.isDark ? LoaderDark : LoaderLight}
+                                    autoPlay
+                                    loop
+                                    style={styles.lottie}
+                                />
+                            ) : (
+                                <BaseIcon name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                            )
+                        }
+                        onPress={handleCloudBackupPress}
+                        disabled={isAppLoading}
+                        loading={isAppLoading}
+                    />
                 </CardWithHeader>
             </BaseView>
-            <CloudKitWarningBottomSheet
-                ref={warningRef}
-                onHandleBackupToCloudKit={onHandleBackupToCloudKit}
-                openLocation="Backup_Screen"
+
+            <DeleteCloudBackupBottomSheet
+                ref={deleteBackupRef}
+                onClose={onCloseDeleteBackup}
+                onProceedToDelete={handleProceedToDelete}
+            />
+
+            <ConfirmDeleteCloudBackupBottomSheet
+                ref={confirmDeleteBackupRef}
+                onClose={onCloseConfirmDeleteBackup}
+                onConfirm={handleConfirmDeleteWithAuth}
+            />
+
+            <EnableCloudBottomSheet ref={EnableCloudRef} onClose={onCloseEnableCloud} />
+
+            <RequireUserPassword
+                isOpen={isPasswordPromptOpen}
+                onClose={handleClosePasswordModal}
+                onSuccess={onPasswordSuccess}
             />
         </>
     )
@@ -167,27 +265,6 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        cloudRow: {
-            borderRadius: 8,
-            borderWidth: 1,
-            padding: 0,
-        },
-        cloudRowContent: {
-            flexDirection: "row",
-            alignItems: "center",
-            paddingLeft: 14,
-            paddingRight: 12,
-            paddingVertical: 10,
-        },
-        cloudInfo: {
-            flexDirection: "row",
-            alignItems: "center",
-            flex: 1,
-        },
-        verifyCloudText: {
-            paddingLeft: 12,
-            color: COLORS.DARK_PURPLE,
-        },
         sideHeader: {
             borderWidth: 1,
             borderRadius: 4,

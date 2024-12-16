@@ -1,6 +1,6 @@
-import { useNavigation } from "@react-navigation/native"
+import { useFocusEffect, useNavigation } from "@react-navigation/native"
 import * as Clipboard from "expo-clipboard"
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
 import {
     BackButtonHeader,
@@ -15,7 +15,6 @@ import {
     Layout,
     RequireUserPassword,
     SelectDerivationPathBottomSheet,
-    showInfoToast,
 } from "~Components"
 import { AnalyticsEvent, DerivationPath } from "~Constants"
 import {
@@ -27,7 +26,7 @@ import {
     useTheme,
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { CloudKitWallet, DrivetWallet, DEVICE_CREATION_ERRORS as ERRORS, IMPORT_TYPE } from "~Model"
+import { CloudKitWallet, DEVICE_CREATION_ERRORS as ERRORS, DrivetWallet, IMPORT_TYPE } from "~Model"
 import { Routes } from "~Navigation"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import HapticsService from "~Services/HapticsService"
@@ -71,21 +70,12 @@ export const ImportLocalWallet = () => {
 
     const { isCloudAvailable, getAllWalletFromCloud, googleAccountSignOut } = useCloudBackup()
 
-    const [wallets, setWallets] = useState<(CloudKitWallet | DrivetWallet)[] | null>(null)
+    const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
-    const showNoWalletsFound = useCallback(() => {
-        showInfoToast({
-            text1: LL.CLOUD_NO_WALLETS_AVAILABLE_TITLE(),
-            text2: LL.CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION({
-                cloud: PlatformUtils.isIOS() ? "iCloud" : "Google Drive",
-            }),
-        })
-    }, [LL])
-
     const goToImportFromCloud = useCallback(() => {
-        nav.navigate(Routes.IMPORT_FROM_CLOUD)
-    }, [nav])
+        nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
+    }, [nav, wallets])
 
     const getWalletsFromICloud = useCallback(async () => {
         setIsLoading(true)
@@ -100,16 +90,17 @@ export const ImportLocalWallet = () => {
         setIsLoading(false)
 
         if (_wallets?.length) {
-            goToImportFromCloud()
+            nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets: _wallets })
         } else {
             await googleAccountSignOut()
-            showNoWalletsFound()
         }
-    }, [getAllWalletFromCloud, goToImportFromCloud, googleAccountSignOut, showNoWalletsFound])
+    }, [getAllWalletFromCloud, googleAccountSignOut, nav])
 
-    useEffect(() => {
-        isCloudAvailable && PlatformUtils.isIOS() && getWalletsFromICloud()
-    }, [getWalletsFromICloud, isCloudAvailable])
+    useFocusEffect(
+        useCallback(() => {
+            isCloudAvailable && PlatformUtils.isIOS() && getWalletsFromICloud()
+        }, [getWalletsFromICloud, isCloudAvailable]),
+    )
 
     const computeButtonType = useMemo(() => {
         if (textValue.length || PlatformUtils.isAndroid()) {
@@ -342,7 +333,7 @@ export const ImportLocalWallet = () => {
     const footerButtonLeftIcon = useMemo(() => {
         switch (computeButtonType) {
             case ButtonType.icloud:
-                return "apple-icloud"
+                return "icon-cloud"
             default:
                 return undefined
         }
@@ -392,14 +383,14 @@ export const ImportLocalWallet = () => {
 
                                 <BaseView flexDirection="row" alignSelf="flex-end">
                                     <BaseIcon
-                                        name={"content-paste"}
+                                        name={"icon-copy"}
                                         size={32}
                                         style={styles.icon}
                                         bg={theme.colors.secondary}
                                         action={onPasteFromClipboard}
                                     />
                                     <BaseIcon
-                                        name={"trash-can-outline"}
+                                        name={"icon-trash"}
                                         size={32}
                                         bg={theme.colors.secondary}
                                         action={onClearSeed}
@@ -423,7 +414,7 @@ export const ImportLocalWallet = () => {
                                             {"Derivation Path"}
                                         </BaseText>
                                     </BaseView>
-                                    <BaseIcon name="chevron-right" size={24} color={theme.colors.text} />
+                                    <BaseIcon name="icon-chevron-right" size={24} color={theme.colors.text} />
                                 </BaseTouchableBox>
 
                                 <UnlockKeystoreBottomSheet
@@ -490,14 +481,14 @@ export const ImportLocalWallet = () => {
                             haptics="Light"
                         />
 
-                        {PlatformUtils.isAndroid() && (
+                        {PlatformUtils.isAndroid() && isCloudAvailable && (
                             <>
                                 <BaseSpacer height={8} />
                                 <BaseButton
                                     isLoading={isLoading}
                                     leftIcon={
                                         <BaseIcon
-                                            name={"google-drive"}
+                                            name={"icon-google-drive"}
                                             color={theme.colors.textReversed}
                                             style={styles.ickoudIcon}
                                         />

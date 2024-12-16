@@ -61,7 +61,7 @@ export const NFTDetailImage = ({ nft, isBlacklisted }: Props) => {
 
                 {isBlacklisted ? (
                     <BaseIcon
-                        name={!removeBlur ? "eye-outline" : "eye-off-outline"}
+                        name={!removeBlur ? "icon-eye" : "icon-eye-off"}
                         size={32}
                         color={"white"}
                         action={onRemoveBlurMomentarily}

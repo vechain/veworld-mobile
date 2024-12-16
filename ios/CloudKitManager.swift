@@ -6,7 +6,10 @@
 //
 
 import Foundation
+
+#if !targetEnvironment(macCatalyst)
 import CloudKit
+#endif
 
 
 @objc(CloudKitManager)

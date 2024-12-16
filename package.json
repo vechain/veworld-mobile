@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -10,7 +10,7 @@
     "reinstall": "yarn purge && yarn install:all",
     "android": "react-native run-android",
     "android:emus": "react-native run-android --list-devices",
-    "ios": "SKIP_SENTRY=true react-native run-ios --simulator 'iPhone 15 Pro'",
+    "ios": "SKIP_SENTRY=true react-native run-ios --simulator 'iPhone 16 Pro'",
     "ios:old-device": "SKIP_SENTRY=true react-native run-ios --simulator 'iPhone SE (3rd generation)'",
     "start": "watchman watch-del './'; watchman watch-project './'; react-native start --reset-cache",
     "start:watchman": "watchman watch-del './'; watchman watch-project './'; react-native start",
@@ -79,8 +79,8 @@
     "@vechain/connex-driver": "^2.1.0",
     "@vechain/connex-framework": "^2.1.0",
     "@vechain/picasso": "^2.1.1",
-    "@vechain/sdk-core": "^1.0.0-beta.31",
-    "@vechain/sdk-network": "^1.0.0-beta.31",
+    "@vechain/sdk-core": "1.0.0-rc.4",
+    "@vechain/sdk-network": "1.0.0-rc.4",
     "@vechain/web3-providers-connex": "^1.1.2",
     "@walletconnect/core": "2.15.2",
     "@walletconnect/react-native-compat": "2.15.2",

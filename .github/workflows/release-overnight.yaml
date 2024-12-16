@@ -1,0 +1,165 @@
+name: Release Overnight - Android & iOS
+
+on:
+    workflow_dispatch:
+        inputs:
+            merged_override:
+              description: 'Override the merged PRs check'
+              required: false
+              default: false
+              type: boolean
+    schedule:
+    - cron: '0 23 * * 1-5'  # Runs at 23:00 UTC Monday through Friday 
+
+env:
+    IOS_VERSION: ${{ vars.ios_version }}
+    IOS_BUILD: ${{ vars.ios_build }}
+    ANDROID_VERSION: ${{ vars.android_version }}
+    ANDROID_BUILD: ${{ vars.android_build }}
+
+jobs:
+    check-merged-pr:
+        runs-on: ubuntu-latest
+        if: ${{ github.event.inputs.merged_override == 'true' }}
+        outputs:
+          should_release: ${{ steps.check_merged_prs.outputs.should_release }}
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+            - name: Check for merged PRs
+              id: check_merged_prs
+              env:
+                GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                MERGED_OVERRIDE: ${{ github.event.inputs.merged_override }}
+              run: |
+                since_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ" --date="24 hours ago")
+                repo=${GITHUB_REPOSITORY}
+            
+                echo "Since date: $since_date"
+            
+                # Fetch the total count of merged PRs since the since_date
+                merged_prs_count=$(gh api \
+                  --header "Accept: application/vnd.github+json" \
+                  --method GET \
+                  "search/issues" \
+                  -f q="repo:$repo is:pr is:merged base:main merged:>=$since_date" \
+                  --jq '.total_count')
+            
+                echo "Merged PRs in the last 24 hours: $merged_prs_count"
+            
+                # Fetch the last 5 merged PRs and their merge dates
+                echo "Last 5 merged PRs:"
+                gh api \
+                  --header "Accept: application/vnd.github+json" \
+                  --method GET \
+                  "search/issues" \
+                  -f q="repo:$repo is:pr is:merged base:main" \
+                  -f sort="updated" \
+                  -f order="desc" \
+                  -f per_page=5 \
+                  --jq '.items[] | {number: .number, title: .title, merged_at: .closed_at}'
+            
+                if [ "$merged_prs_count" -gt 0 ] || [ "$MERGED_OVERRIDE" ]; then
+                  echo "should_release=true" >> $GITHUB_OUTPUT
+                else
+                  echo "should_release=false" >> $GITHUB_OUTPUT
+                fi
+
+   
+    setup-version-build:
+        runs-on: ubuntu-latest
+        needs: check-merged-pr
+        if: needs.check-merged-pr.outputs.should_release == 'true'
+        permissions:
+          actions: write
+          contents: read
+        env:
+          IOS_VERSION: ${{ vars.ios_version }}
+          IOS_BUILD: ${{ vars.ios_build }}
+          ANDROID_VERSION: ${{ vars.android_version }}
+          ANDROID_BUILD: ${{ vars.android_build }}
+        outputs:
+          new_version_ios: ${{ steps.increment.outputs.new_version_ios }}
+          new_build_ios: ${{ steps.increment.outputs.new_build_ios }}
+          new_version_android: ${{ steps.increment.outputs.new_version_android }}
+          new_build_android: ${{ steps.increment.outputs.new_build_android }}
+          pr_branch: ${{ steps.increment.outputs.pr_branch }}
+        steps:
+          - name: Generate a token
+            id: generate-token
+            uses: actions/create-github-app-token@v1
+            with:
+              app-id: ${{ secrets.APP_ID }}
+              private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+          - name: Set GH_TOKEN environment variable
+            run: echo "GH_TOKEN=${{ steps.generate-token.outputs.token }}" >> $GITHUB_ENV
+
+          - name: Checkout repository
+            uses: actions/checkout@v4
+            with:
+              token: ${{ steps.generate-token.outputs.token }}
+
+          - name: Increment Version and Build
+            id: increment
+            env:
+              GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+              IOS_VERSION: ${{ env.IOS_VERSION }}
+              IOS_BUILD: ${{ env.IOS_BUILD }}
+              ANDROID_VERSION: ${{ env.ANDROID_VERSION }}
+              ANDROID_BUILD: ${{ env.ANDROID_BUILD }}
+            run: |
+
+              # Increment build number
+              ios_build_incremented=$((IOS_BUILD + 1))
+              android_build_incremented=$((ANDROID_BUILD + 1))
+              PR_BRANCH="release-build-ci-$ios_build_incremented-$IOS_VERSION"
+
+
+              # Output the new version and build
+              echo "new_versio_ios=$IOS_VERSION" >> $GITHUB_ENV
+              echo "new_build_ios=$ios_build_incremented" >> $GITHUB_ENV
+              echo "new_version_android=$ANDROID_VERSION" >> $GITHUB_ENV
+              echo "new_build_android=$android_build_incremented" >> $GITHUB_ENV
+              echo "pr_branch=$PR_BRANCH" >> $GITHUB_ENV
+
+              # Set outputs for the job
+              echo "new_version_ios=$IOS_VERSION" >> $GITHUB_OUTPUT
+              echo "new_build_ios=$ios_build_incremented" >> $GITHUB_OUTPUT
+              echo "new_version_android=$ANDROID_VERSION" >> $GITHUB_OUTPUT
+              echo "new_build_android=$android_build_incremented" >> $GITHUB_OUTPUT
+              echo "pr_branch=$PR_BRANCH" >> $GITHUB_OUTPUT
+
+              # Update Repo with new version and build
+              gh variable set IOS_VERSION --body "$IOS_VERSION"
+              gh variable set IOS_BUILD --body "$ios_build_incremented"
+              gh variable set ANDROID_VERSION --body "$ANDROID_VERSION"
+              gh variable set ANDROID_BUILD --body "$android_build_incremented"
+
+          - name: Output new version and build
+            run: |
+              echo "New ios_version: ${{ steps.increment.outputs.new_version_ios }}"
+              echo "New ios_build: ${{ steps.increment.outputs.new_build_ios }}"
+              echo "New android_version: ${{ steps.increment.outputs.new_version_android }}"
+              echo "New android_build: ${{ steps.increment.outputs.new_build_android }}"
+              echo "PR Branch: ${{ steps.increment.outputs.pr_branch }}"
+
+    
+    release-ios:
+      uses: ./.github/workflows/release-ios.yml
+      needs: setup-version-build
+      secrets: inherit
+      with:
+        version: ${{ needs.setup-version-build.outputs.new_version_ios }}
+        build: ${{ needs.setup-version-build.outputs.new_build_ios }}
+
+    release-android:
+      uses: ./.github/workflows/release-andorid.yaml
+      needs: 
+        - setup-version-build
+        - release-ios
+      secrets: inherit
+      with:
+        version: ${{ needs.setup-version-build.outputs.new_version_android }}
+        build: ${{ needs.setup-version-build.outputs.new_build_android }}
+        pr_branch: ${{ needs.setup-version-build.outputs.pr_branch }}
