@@ -245,6 +245,7 @@
     "semver": "7.5.4",
     "d3-color": "3.1.0",
     "cross-spawn": "^6.0.6",
+    "elliptic": "^6.6.0",
     "ethers/@ethersproject/providers/ws": "^7.5.10",
     "@vechain/connex-driver/axios": "0.28.0",
     "@walletconnect/types": "2.15.2"
