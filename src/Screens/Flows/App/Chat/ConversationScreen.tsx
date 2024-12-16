@@ -67,7 +67,13 @@ const ConversationScreen = ({ route, navigation }: Props) => {
             noBackButton
             fixedHeader={
                 <BaseView flexDirection="row" px={20} pb={8} style={styles.titleContainer}>
-                    <BaseIcon haptics="Light" action={onGoBack} name="arrow-left" size={24} color={theme.colors.text} />
+                    <BaseIcon
+                        haptics="Light"
+                        action={onGoBack}
+                        name="icon-arrow-left"
+                        size={24}
+                        color={theme.colors.text}
+                    />
                     <BaseView flexDirection="row" flex={1} pr={10} alignItems="center">
                         <AccountIcon address={recipient} size={24} />
                         <BaseText typographyFont="subTitleBold" mx={8}>
@@ -96,7 +102,7 @@ const ConversationScreen = ({ route, navigation }: Props) => {
                     <BaseSpacer height={2} background={theme.colors.card} />
                     <BaseView w={100} flexDirection="row" p={12}>
                         {/* TODO: Implement sending token flows */}
-                        <BaseIcon name="currency-usd" color={theme.colors.text} bg={theme.colors.card} />
+                        <BaseIcon name="icon-dollar-sign" color={theme.colors.text} bg={theme.colors.card} />
                         <BaseView flex={1} mx={6}>
                             <BaseTextInput
                                 value={message}
@@ -108,7 +114,7 @@ const ConversationScreen = ({ route, navigation }: Props) => {
                         </BaseView>
                         {message && (
                             <BaseIcon
-                                name={"send"}
+                                name={"icon-send"}
                                 bg={theme.colors.primaryLight}
                                 color={theme.colors.textReversed}
                                 action={() => onSendMessage()}

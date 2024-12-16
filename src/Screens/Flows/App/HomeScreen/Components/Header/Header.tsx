@@ -100,7 +100,7 @@ export const Header = memo(() => {
                 />
 
                 <BaseIcon
-                    name={"chat-outline"}
+                    name={"icon-message-circle"}
                     size={24}
                     color={theme.colors.text}
                     action={goToChat}

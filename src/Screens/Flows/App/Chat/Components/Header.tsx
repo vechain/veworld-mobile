@@ -26,14 +26,20 @@ const Header: React.FC<Props> = ({ isOnboarding, onChangeAccountPress, onNewConv
     return (
         <BaseView w={100} px={12} pb={8} flexDirection="row" alignItems="center" justifyContent="space-between">
             <BaseView flexDirection="row" style={styles.titleContainer}>
-                <BaseIcon haptics="Light" action={onGoBack} name="arrow-left" size={24} color={theme.colors.text} />
+                <BaseIcon
+                    haptics="Light"
+                    action={onGoBack}
+                    name="icon-arrow-left"
+                    size={24}
+                    color={theme.colors.text}
+                />
                 <BaseTouchable testID="Chat_change_account" action={onChangeAccountPress}>
                     <BaseView flexDirection="row" flex={1} pr={10} alignItems="center">
                         <AccountIcon address={currentAccount.address} size={24} />
                         <BaseText typographyFont="subTitleBold" mx={8}>
                             {vnsName ? vnsName : humanAddress(currentAccount.address, 4, 6)}
                         </BaseText>
-                        <BaseIcon name="chevron-down" size={18} color={theme.colors.text} />
+                        <BaseIcon name="icon-chevron-down" size={18} color={theme.colors.text} />
                     </BaseView>
                 </BaseTouchable>
             </BaseView>
@@ -41,7 +47,7 @@ const Header: React.FC<Props> = ({ isOnboarding, onChangeAccountPress, onNewConv
             {!isOnboarding && (
                 <BaseView flexDirection="row">
                     <BaseIcon
-                        name={"plus"}
+                        name={"icon-plus"}
                         size={24}
                         color={theme.colors.textReversed}
                         bg={theme.colors.primary}
@@ -50,7 +56,7 @@ const Header: React.FC<Props> = ({ isOnboarding, onChangeAccountPress, onNewConv
                         haptics="Light"
                     />
                     <BaseIcon
-                        name={"dots-vertical"}
+                        name={"icon-more-vertical"}
                         size={24}
                         color={theme.colors.text}
                         action={() => {}}

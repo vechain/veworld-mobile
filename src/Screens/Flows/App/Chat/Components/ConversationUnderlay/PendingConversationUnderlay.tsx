@@ -19,12 +19,12 @@ export const PendingConversationUnderlay: React.FC<Props> = ({ onAcceptConversat
                     color={theme.colors.card}
                     testID="ConversationUnderlay_AcceptIcon"
                     haptics="Light"
-                    name={"check-circle-outline"}
+                    name={"icon-check-circle-2"}
                 />
             </BaseTouchable>
             <BaseTouchable action={onRejectConversation} style={[styles.underlayItem, styles.rejectUnderlay]}>
                 <BaseIcon
-                    name={"cancel"}
+                    name={"icon-x-circle"}
                     size={24}
                     color={theme.colors.card}
                     testID="ConversationUnderlay_RejectIcon"

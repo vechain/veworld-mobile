@@ -15,7 +15,7 @@ export const DeletedConversationUnderlay: React.FC<Props> = ({ onPress }) => {
         <BaseView style={styles.underlayContainer}>
             <BaseTouchable action={onPress} style={[styles.underlayLeft]}>
                 <BaseIcon
-                    name="restore"
+                    name="icon-undo"
                     size={24}
                     bg={theme.colors.primaryLight}
                     color={theme.colors.card}

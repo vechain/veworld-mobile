@@ -61,7 +61,7 @@ const HeaderComponent = ({ counter }: { counter: number }) => {
             <BaseTouchable onPress={() => nav.navigate(Routes.CHAT_REQUESTS)}>
                 <BaseView flexDirection="row" justifyContent="space-between" p={12} w={100}>
                     <BaseView flexDirection="row" flex={1}>
-                        <BaseIcon name="tray-alert" color={theme.colors.text} />
+                        <BaseIcon name="icon-inbox" color={theme.colors.text} />
                         <BaseText typographyFont="subSubTitle" mx={12}>
                             {"Requests"}
                         </BaseText>
