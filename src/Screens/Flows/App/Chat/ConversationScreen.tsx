@@ -54,7 +54,7 @@ const ConversationScreen = ({ route, navigation }: Props) => {
     const messageItem = useCallback(
         ({ item, index }: { item: DecodedMessage; index: number }) => {
             info("VE_CHAT", "ITEM", item.contentTypeId)
-            if (item.contentTypeId === "xmtp.org/group_updated:1.0") return <></>
+            if (item.contentTypeId === "xmtp.org/group_updated:1.0" || !item.contentTypeId) return <></>
             return <MessageBubble item={item} index={index} recipient={recipient} />
         },
         [recipient],

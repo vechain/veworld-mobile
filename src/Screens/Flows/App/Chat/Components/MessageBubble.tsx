@@ -27,7 +27,7 @@ const MessageBubble: React.FC<Props> = ({ item, index }) => {
 
     const messageContent = useMemo(() => {
         if (item.contentTypeId === "xmtp.org/text:1.0") {
-            return item.content()
+            return item.nativeContent.text
         }
     }, [item])
 

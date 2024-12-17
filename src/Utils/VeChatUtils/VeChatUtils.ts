@@ -14,9 +14,11 @@ export const convertAccountToXmtpSigner = (accout: VeChainSigner): Signer => {
 }
 
 export const createXmtpClient = async (wallet: Signer, encryptionKey: Uint8Array) => {
+    const address = await wallet.getAddress()
     return await Client.create(wallet, {
         env: "production",
         dbEncryptionKey: encryptionKey,
+        dbDirectory: `/vechain/chat/${address}`, //TODO: fix error while creating client with db directory
         preAuthenticateToInboxCallback: () => {},
     })
 }
