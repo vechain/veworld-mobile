@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
-import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect } from "~Components"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes, TabStackParamList } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
@@ -76,7 +76,6 @@ export const Header = memo(() => {
             </BaseView>
 
             <BaseView flexDirection="row">
-                <SelectedNetworkViewer />
                 <BaseIcon
                     name={"icon-qr-code"}
                     size={24}
@@ -89,11 +88,13 @@ export const Header = memo(() => {
                 <BaseIcon
                     name={"icon-wallet"}
                     size={24}
-                    bg={theme.colors.secondary}
+                    color={theme.colors.text}
                     action={goToWalletManagement}
                     haptics="Light"
                     testID="HomeScreen_WalletManagementButton"
                 />
+                <BaseSpacer width={12} />
+                <SelectedNetworkViewer />
             </BaseView>
 
             {RenderCameraModal}
