@@ -35,6 +35,7 @@ export type Colors = {
     alertRedMedium: string
     placeholder: string
     testnetBackground: string
+    testnetText: string
     gradientBackground: string[]
     horizontalButtonSelected: string
     horizontalButtonText: string
@@ -98,6 +99,7 @@ export enum COLORS {
     PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
     PURPLE = "#30265F",
+    PRIMARY_800 = "#261470",
     LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",
     DARK_PURPLE_DISABLED = "#59527F",
@@ -195,7 +197,8 @@ const light: Colors = {
     alertOrangeMedium: COLORS.MEDIUM_ORANGE,
     alertRedMedium: COLORS.MEDIUM_RED,
     placeholder: COLORS.DISABLED_GREY,
-    testnetBackground: COLORS.TESTNET_BACKGROUND_LIGHT,
+    testnetBackground: COLORS.PRIMARY_800,
+    testnetText: COLORS.LIGHT_GREEN,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_LIGHT_TOP, COLORS.GRADIENT_BACKGROUND_LIGHT_BOTTOM],
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,
@@ -279,7 +282,8 @@ const dark: Colors = {
     alertOrangeMedium: COLORS.PASTEL_ORANGE,
     alertRedMedium: COLORS.PASTEL_RED,
     placeholder: COLORS.PURPLE,
-    testnetBackground: COLORS.TESTNET_BACKGROUND_DARK,
+    testnetBackground: COLORS.LIGHT_GREEN,
+    testnetText: COLORS.PRIMARY_800,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_DARK_TOP, COLORS.GRADIENT_BACKGROUND_DARK_BOTTOM],
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,

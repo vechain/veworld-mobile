@@ -25,6 +25,7 @@ export type TFonts =
     | "captionMedium"
     | "smallCaption"
     | "smallCaptionMedium"
+    | "smallCaptionSemiBold"
     | "smallCaptionBold"
     | "smallCaptionRegular"
     | "largeTitleAccent"
@@ -80,6 +81,7 @@ const lineHeight = {
     body: 18.2,
     captionMedium: 16,
     caption: 15.6,
+    captionSmall: 12,
 }
 
 export type TypographyObject = {
@@ -229,6 +231,12 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontSize: 10,
         fontWeight: fontWeight.normal,
         lineHeight: lineHeight.caption,
+    },
+    smallCaptionSemiBold: {
+        fontFamily: fontFamily["Inter-Bold"],
+        fontSize: 10,
+        fontWeight: fontWeight[600],
+        lineHeight: lineHeight.captionSmall,
     },
     smallCaptionBold: {
         fontFamily: fontFamily["Inter-Bold"],

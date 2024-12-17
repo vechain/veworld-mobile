@@ -33,7 +33,7 @@ describe("SelectedNetworkViewer", () => {
         render(<SelectedNetworkViewer />, {
             wrapper: TestWrapper,
         })
-        const textInput = await findLabel("Testnet")
+        const textInput = await findLabel("testnet")
         expect(textInput).toBeVisible()
     })
 
@@ -89,7 +89,7 @@ describe("SelectedNetworkViewer", () => {
             wrapper: TestWrapper,
         })
 
-        const textInput = await findLabel("Mainnet")
+        const textInput = await findLabel("mainnet")
         expect(textInput).toBeVisible()
     })
 })
