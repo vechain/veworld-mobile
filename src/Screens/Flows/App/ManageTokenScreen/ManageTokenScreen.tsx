@@ -27,6 +27,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 import { AnalyticsEvent } from "~Constants"
+import { PlusHeaderIcon } from "~Components/Reusable/HeaderRightIcons"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
@@ -121,27 +122,11 @@ export const ManageTokenScreen = () => {
         <DismissKeyboardView>
             <Layout
                 safeAreaTestID="Manage_Tokens_Screen"
+                title={LL.MANAGE_TOKEN_TITLE()}
+                headerRightElement={<PlusHeaderIcon action={openAddCustomTokenSheet} />}
                 body={
                     <>
                         <BaseView>
-                            <BaseView
-                                flexDirection="row"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                w={100}
-                                pt={16}>
-                                <BaseText typographyFont="title" testID="contacts-screen-title">
-                                    {LL.MANAGE_TOKEN_TITLE()}
-                                </BaseText>
-                                <BaseIcon
-                                    haptics="Light"
-                                    name={"icon-plus"}
-                                    size={24}
-                                    bg={theme.colors.secondary}
-                                    action={openAddCustomTokenSheet}
-                                    testID="ManageTokenScreen_AddCustomToken_Button"
-                                />
-                            </BaseView>
                             <BaseSpacer height={8} />
                             <BaseText typographyFont="body">{LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}</BaseText>
                             <BaseSpacer height={16} />

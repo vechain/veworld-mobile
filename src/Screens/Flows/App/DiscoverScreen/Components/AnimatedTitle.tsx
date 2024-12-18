@@ -33,7 +33,7 @@ export const AnimatedTitle = ({ title, scrollOffset }: AnimatedTitleProps) => {
 
     return (
         <Animated.View style={[styles.rootContainer, animatedStylesHeader]}>
-            <BaseText typographyFont="largeTitle" testID="settings-screen">
+            <BaseText typographyFont="subTitleMedium" testID="settings-screen">
                 {title}
             </BaseText>
             <SelectedNetworkViewer />

@@ -36,6 +36,7 @@ export const SelectTokenSendScreen = () => {
             title={LL.SEND_TOKEN_TITLE()}
             fixedHeader={
                 <BaseView>
+                    <BaseSpacer height={24} />
                     <BaseText typographyFont="button">{LL.SEND_TOKEN_SUBTITLE()}</BaseText>
                     <BaseSpacer height={8} />
                     <BaseText typographyFont="body">{LL.SEND_TOKEN_SELECT_ASSET()}</BaseText>

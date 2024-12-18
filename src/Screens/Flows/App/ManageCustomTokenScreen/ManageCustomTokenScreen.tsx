@@ -178,12 +178,10 @@ export const ManageCustomTokenScreen = () => {
     return (
         <Layout
             safeAreaTestID="History_Screen"
+            title={LL.MANAGE_TOKEN_TITLE_YOUR_TOKENS()}
             fixedHeader={
                 <>
-                    <BaseText typographyFont="subTitleBold" pb={8}>
-                        {LL.MANAGE_TOKEN_TITLE_YOUR_TOKENS()}
-                    </BaseText>
-                    <BaseText typographyFont="bodyMedium" pb={8}>
+                    <BaseText typographyFont="bodyMedium" pt={26}>
                         {LL.MANAGE_TOKEN_ADD_CUSTOM_TOKNE_SUBTITLE()}
                     </BaseText>
                 </>

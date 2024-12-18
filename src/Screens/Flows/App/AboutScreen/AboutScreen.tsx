@@ -54,11 +54,9 @@ export const AboutScreen = () => {
 
     return (
         <Layout
+            title={LL.TITLE_ABOUT()}
             body={
                 <>
-                    <BaseText typographyFont="title" pt={16}>
-                        {LL.TITLE_ABOUT()}
-                    </BaseText>
                     <BaseView h={100} alignItems="center">
                         <BaseSpacer height={24} />
                         <BaseCard

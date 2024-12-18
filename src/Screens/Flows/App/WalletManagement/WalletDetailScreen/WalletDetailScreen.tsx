@@ -110,9 +110,8 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     return (
         <Layout
-            noMargin
             fixedHeader={
-                <BaseView px={20} pb={16}>
+                <BaseView pb={16}>
                     <BaseView flexDirection="row" w={100} justifyContent="space-between">
                         <BaseView flex={1}>
                             <BaseText typographyFont="subTitleBold" ellipsizeMode="tail" numberOfLines={1}>

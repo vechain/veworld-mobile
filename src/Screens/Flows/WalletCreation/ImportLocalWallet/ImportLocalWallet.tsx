@@ -360,12 +360,12 @@ export const ImportLocalWallet = () => {
         <DismissKeyboardView>
             <Layout
                 preventGoBack={isLoading && PlatformUtils.isAndroid()}
+                title={LL.TITLE_WALLET_IMPORT_LOCAL()}
                 body={
                     <>
                         <BaseView justifyContent="space-between">
                             <BaseView>
                                 <BaseView flexDirection="row" w={100}>
-                                    <BaseText typographyFont="title">{LL.TITLE_WALLET_IMPORT_LOCAL()}</BaseText>
                                     {areDevFeaturesEnabled && (
                                         <BaseButton
                                             size="md"

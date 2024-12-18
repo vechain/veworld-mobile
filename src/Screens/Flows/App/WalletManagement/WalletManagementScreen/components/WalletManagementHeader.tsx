@@ -1,6 +1,6 @@
 import React from "react"
 import { useTheme } from "~Hooks"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { COLORS } from "~Constants"
 import { selectDevices, useAppSelector } from "~Storage/Redux"
@@ -16,8 +16,7 @@ export const WalletManagementHeader = ({ isEdit, setIsEdit, goToCreateWalletFlow
     const devices = useAppSelector(selectDevices)
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-            <BaseText typographyFont="title">{LL.TITLE_WALLET_MANAGEMENT()}</BaseText>
+        <BaseView flexDirection="row" justifyContent="flex-end" mt={20} w={100}>
             <BaseView flexDirection="row">
                 {isEdit ? (
                     <BaseButton
