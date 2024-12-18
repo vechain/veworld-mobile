@@ -24,6 +24,7 @@ export type Colors = {
     splashBackground: string
     splashColorLayer: string
     card: string
+    icon: string
     border: string
     notification: string
     transparent: string
@@ -186,6 +187,7 @@ const light: Colors = {
     splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.WHITE,
+    icon: COLORS.PRIMARY_800,
     cardBorder: COLORS.GREY_300,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
@@ -271,6 +273,7 @@ const dark: Colors = {
     splashColorLayer: COLORS.LIME_GREEN,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.PURPLE,
+    icon: COLORS.WHITE,
     cardBorder: COLORS.DARK_PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,

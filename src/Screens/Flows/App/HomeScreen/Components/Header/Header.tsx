@@ -78,7 +78,7 @@ export const Header = memo(() => {
             <BaseView flexDirection="row">
                 <BaseIcon
                     name={"icon-qr-code"}
-                    size={24}
+                    size={22}
                     color={theme.colors.text}
                     action={handleOpenCamera}
                     mx={12}

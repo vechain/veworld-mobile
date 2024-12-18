@@ -49,11 +49,10 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                     )}
                     <BaseIcon
                         haptics="Light"
-                        name="icon-pencil"
-                        bg={COLORS.LIME_GREEN}
-                        color={COLORS.DARK_PURPLE}
+                        name="icon-settings-2"
+                        color={theme.colors.text}
                         action={handleManageToken}
-                        size={24}
+                        size={20}
                         testID="EditTokensBar_BaseIcon_manageToken"
                         style={styles.icon}
                     />
