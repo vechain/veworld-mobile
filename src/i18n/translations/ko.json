@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "위치 서비스 활성화",
   "ALERT_TITLE_ICLOUD_ERROR": "iCloud 오류",
   "ALERT_TITLE_IMPORTANT": "중요",
+  "ALERT_TITLE_INVALID_CHARTS": "토큰이 너무 새로워서 충분한 역사적 데이터를 제공할 수 없기 때문에 장기 차트가 부정확합니다.",
   "ALERT_TITLE_NEW_VERSION": "새 버전",
   "ALERT_TITLE_NOT_ENROLLED": "바이오메트릭스 사용 불가",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "블루투스가 지원되지 않음",

@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 import { FungibleToken } from "~Model"
-import { VET, VTHO } from "~Constants"
+import { B3TR, VET, VTHO } from "~Constants"
 import { HexUtils, TokenUtils } from "~Utils"
 import { selectSelectedNetwork } from "./Network"
 import { selectSelectedAccount } from "./Account"
@@ -47,6 +47,8 @@ export const selectSuggestedTokens = createSelector(selectTokensForNetwork, stat
 export const selectNonVechainFungibleTokens = createSelector(selectOfficialTokens, tokens =>
     tokens.filter(
         (token: FungibleToken) =>
-            !compareAddresses(token.address, VET.address) && !compareAddresses(token.address, VTHO.address),
+            !compareAddresses(token.address, VET.address) &&
+            !compareAddresses(token.address, VTHO.address) &&
+            !compareAddresses(token.address, B3TR.address),
     ),
 )

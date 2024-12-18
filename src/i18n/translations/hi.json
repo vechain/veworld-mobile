@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "स्थान सेवाएं सक्षम करें",
   "ALERT_TITLE_ICLOUD_ERROR": "iCloud त्रुटि",
   "ALERT_TITLE_IMPORTANT": "महत्वपूर्ण",
+  "ALERT_TITLE_INVALID_CHARTS": "टोकन बहुत नया होने के कारण लंबी अवधि के चार्ट गलत हैं क्योंकि यह पर्याप्त ऐतिहासिक डेटा प्रदान नहीं कर सका है।",
   "ALERT_TITLE_NEW_VERSION": "नई संस्करण",
   "ALERT_TITLE_NOT_ENROLLED": "बायोमेट्रिक्स उपलब्ध नहीं है",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "ब्लूटूथ समर्थित नहीं है",

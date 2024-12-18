@@ -8,6 +8,9 @@ import URIUtils from "~Utils/URIUtils"
 export const getNFTMetadataIpfs = async (uri: string): Promise<NFTMetadata> => {
     const metadata = await axios.get<NFTMetadata>(URIUtils.convertUriToUrl(uri), {
         timeout: NFT_AXIOS_TIMEOUT,
+        headers: {
+            "x-project-id": "veworld-mobile",
+        },
     })
 
     return metadata.data

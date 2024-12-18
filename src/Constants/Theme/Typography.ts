@@ -44,6 +44,7 @@ const fontFamily = {
     "Mono-Bold": "Mono-Bold",
     "Mono-Regular": "Mono-Regular",
     "Mono-Light": "Mono-Light",
+    DesignSystemIcons: "DesignSystemIcons",
 }
 
 const fontWeight = {

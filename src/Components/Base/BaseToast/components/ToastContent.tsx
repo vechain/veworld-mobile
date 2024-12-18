@@ -3,10 +3,11 @@ import { BaseIcon, BaseText, BaseView, hideToast, ToastAddress } from "~Componen
 import { useTheme } from "~Hooks"
 import { ToastStyles } from "../util"
 import { ToastAddressesContent } from "./ToastAddressesContent"
+import { IconKey } from "~Model"
 
 type Props = {
     styles: ToastStyles
-    icon: string
+    icon: IconKey
     text1?: string
     text2?: string
     text3?: string
@@ -57,7 +58,7 @@ export const ToastContent = ({ styles, text1, icon, text2, text3, addresses, onP
                                 onPress={handleOnPress}
                                 color={textColor}
                                 typographyFont="body">
-                                {text3} <BaseIcon name="arrow-top-right" color={textColor} size={12} />
+                                {text3} <BaseIcon name="icon-arrow-link" color={textColor} size={12} />
                             </BaseText>
                         )}
                     </BaseView>

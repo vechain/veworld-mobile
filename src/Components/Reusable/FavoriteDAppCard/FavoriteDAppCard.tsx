@@ -5,13 +5,14 @@ import { DiscoveryDApp } from "~Constants"
 import { useDappBookmarking, useThemedStyles } from "~Hooks"
 import { DAppUtils } from "~Utils"
 import { DAppIcon } from "./DAppIcon"
+import { IconKey } from "~Model"
 
 type Props = {
     dapp: DiscoveryDApp
     onDAppPress: ({ href }: { href: string; custom?: boolean }) => void
     disabled?: boolean
     iconPressDisabled?: boolean
-    iconName?: string
+    iconName?: IconKey
     activeOpacity?: TouchableOpacityProps["activeOpacity"]
     opacity?: ViewStyle["opacity"]
     backgroundColor?: string
@@ -40,7 +41,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
             if (iconName) {
                 return iconName
             } else {
-                return isBookMarked ? "bookmark" : "bookmark-outline"
+                return isBookMarked ? "icon-bookmark-minus" : "icon-bookmark-plus"
             }
         }
 

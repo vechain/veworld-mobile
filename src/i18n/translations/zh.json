@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "启用定位服务",
   "ALERT_TITLE_ICLOUD_ERROR": "iCloud错误",
   "ALERT_TITLE_IMPORTANT": "重要",
+  "ALERT_TITLE_INVALID_CHARTS": "由于代币过于新，无法提供足够的历史数据，因此长期图表不准确。",
   "ALERT_TITLE_NEW_VERSION": "新版本",
   "ALERT_TITLE_NOT_ENROLLED": "生物识别不可用",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "不支持蓝牙",

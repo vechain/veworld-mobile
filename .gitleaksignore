@@ -22,3 +22,6 @@ d3f0b10a98096d0061d615f1a7c857302c62288a:.maestro/tokenManagement/tokenManagemen
 d3f0b10a98096d0061d615f1a7c857302c62288a:.maestro/tokenManagement/tokenManagement.yaml:generic-api-key:4
 99840c07ba519ccb528cbaf4ed2a68b9d2b6ebae:ios/Podfile.lock:generic-api-key:1124
 896259539d94615ad69433ab6b1401b5f0b03e4f:src/Utils/CryptoUtils_Legacy/CryptoUtils_Legacy.spec.ts:generic-api-key:10
+3d5633d53e618fd176e5200633c688fe77fa206d:android/pc-api-4895632399891248889-903-c30062a54347.json:private-key:5
+3d5633d53e618fd176e5200633c688fe77fa206d:android/pc-api-4895632399891248889-903-c30062a54347.json:generic-api-key:4
+3d5633d53e618fd176e5200633c688fe77fa206d:datadog-ci.json:generic-api-key:3

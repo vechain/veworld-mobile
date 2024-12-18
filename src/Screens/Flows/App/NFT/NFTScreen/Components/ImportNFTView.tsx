@@ -33,7 +33,7 @@ export const ImportNFTView = ({ onImportPress }: Props) => {
                         alignItems="center"
                         borderRadius={16}
                         style={baseStyles.quickNFTActions}>
-                        <BaseIcon name="arrow-down" size={38} />
+                        <BaseIcon name="icon-arrow-down" size={38} />
                         <BaseText color={COLORS.PURPLE} typographyFont="bodyMedium">
                             {LL.RECEIVE_NFT()}
                         </BaseText>

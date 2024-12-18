@@ -1,7 +1,6 @@
 import React from "react"
 import { ImageBackground, ImageStyle, StyleProp, StyleSheet } from "react-native"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
-import { BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseText, BaseTouchable, BaseView, Icon } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 const assetImage = require("~Assets/Img/make-your-dapp.png")
@@ -23,7 +22,7 @@ export const MakeYourOwnDApp = React.memo(({ label, onPress }: MakeYourOwnDAppPr
                     </BaseText>
                 </BaseView>
             </ImageBackground>
-            <Icon name={"open-in-new"} size={16} color={COLORS.WHITE} style={styles.iconStyle} />
+            <Icon name={"icon-external-link"} size={16} color={COLORS.WHITE} style={styles.iconStyle} />
         </BaseTouchable>
     )
 })

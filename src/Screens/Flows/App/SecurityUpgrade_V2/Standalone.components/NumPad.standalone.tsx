@@ -38,7 +38,7 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: NumPadProps) => {
                                         {digit}
                                     </BaseText>
                                 ) : (
-                                    <BaseIcon name="backspace-outline" color={theme.colors.text} />
+                                    <BaseIcon name="icon-delete" color={theme.colors.text} />
                                 )}
                             </Pressable>
                         ) : null}

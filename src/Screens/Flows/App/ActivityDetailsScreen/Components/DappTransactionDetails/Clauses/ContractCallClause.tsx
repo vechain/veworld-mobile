@@ -24,7 +24,7 @@ export const ContractCallClause: React.FC<Props> = memo(({ clause }) => {
                     title={LL.TO()}
                     value={AddressUtils.humanAddress(clause.to, 7, 9)}
                     onValuePress={() => onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_ADDRESS())}
-                    valueIcon="content-copy"
+                    valueIcon="icon-copy"
                 />
             )}
 
@@ -33,7 +33,7 @@ export const ContractCallClause: React.FC<Props> = memo(({ clause }) => {
                 value={AddressUtils.humanAddress(clause.data, 7, 9)}
                 border={false}
                 onValuePress={() => onCopyToClipboard(clause.to ?? "", LL.COMMON_LBL_DATA())}
-                valueIcon="content-copy"
+                valueIcon="icon-copy"
             />
         </BaseView>
     )

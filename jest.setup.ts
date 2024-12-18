@@ -7,6 +7,7 @@ import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-
 import { ReactNode } from "react"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { MMKV } from "react-native-mmkv"
+import localizeMock from "react-native-localize/mock"
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 const componentMock = ({ children }: { children: ReactNode }) => children
@@ -64,8 +65,10 @@ jest.mock("expo-haptics", () => ({
     },
     impactAsync: jest.fn(),
 }))
-
-import localizeMock from "react-native-localize/mock"
+jest.mock("expo-font", () => ({
+    ...jest.requireActual("expo-font"),
+    loadAsync: jest.fn().mockResolvedValue(true),
+}))
 
 jest.mock("react-native-localize", () => localizeMock)
 

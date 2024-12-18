@@ -2,17 +2,17 @@ import React, { useCallback, useEffect, useRef, useState } from "react"
 import { useBottomSheetModal, useCheckIdentity, useRenameWallet, useSetSelectedAccount, useTheme } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
-    BaseTextInput,
     BaseButton,
     BaseIcon,
     BaseSpacer,
     BaseText,
+    BaseTextInput,
     BaseView,
+    Layout,
+    RequireUserPassword,
     showSuccessToast,
     showWarningToast,
-    Layout,
     SwipeableRow,
-    RequireUserPassword,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -129,7 +129,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                 textColor={COLORS.DARK_PURPLE}
                                 radius={30}
                                 py={10}
-                                leftIcon={<BaseIcon name="plus" size={20} color={COLORS.DARK_PURPLE} />}>
+                                leftIcon={<BaseIcon name="icon-plus" size={20} color={COLORS.DARK_PURPLE} />}>
                                 <BaseSpacer width={2} />
                                 {LL.ADD_ACCOUNT()}
                             </BaseButton>

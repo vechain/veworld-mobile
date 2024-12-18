@@ -44,7 +44,7 @@ export const UnknownAppMessage: React.FC<Props> = ({ verifyContext, confirmed, s
 
                 <BaseView bg={bgColor} flexDirection={"row"} alignItems={"center"} style={baseStyles.warningBackground}>
                     <BaseView style={baseStyles.icon}>
-                        <BaseIcon size={40} name="alert-outline" color={iconColor} />
+                        <BaseIcon size={40} name="icon-alert-triangle" color={iconColor} />
                     </BaseView>
 
                     <BaseView style={baseStyles.text}>

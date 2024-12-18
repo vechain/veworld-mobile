@@ -46,7 +46,7 @@ export const DeviceBox: React.FC<Props> = ({
                     {isEdit && (
                         <>
                             <Pressable onPressIn={isEdit ? drag : undefined} disabled={isActive}>
-                                <BaseIcon name="drag" color={theme.colors.text} size={24} />
+                                <BaseIcon name="icon-grip-vertical" color={theme.colors.text} size={24} />
                             </Pressable>
                             <BaseSpacer width={8} />
                         </>
@@ -60,7 +60,7 @@ export const DeviceBox: React.FC<Props> = ({
 
                     {device?.derivationPath === DerivationPath.ETH && (
                         <>
-                            <BaseIcon name="ethereum" size={20} color={theme.colors.textDisabled} />
+                            <BaseIcon name="icon-ethereum" size={20} color={theme.colors.textDisabled} />
                             <BaseSpacer width={8} />
                         </>
                     )}
@@ -79,7 +79,7 @@ export const DeviceBox: React.FC<Props> = ({
                 </BaseView>
                 <BaseSpacer width={12} />
 
-                {isIconVisible && !isEdit && <BaseIcon name="pencil-outline" color={theme.colors.text} size={24} />}
+                {isIconVisible && !isEdit && <BaseIcon name="icon-pencil" color={theme.colors.text} size={24} />}
 
                 {showWarningLabel && (
                     <BaseView flexDirection="row">

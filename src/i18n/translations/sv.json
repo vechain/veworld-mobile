@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "Aktivera platstjänster",
   "ALERT_TITLE_ICLOUD_ERROR": "iCloud-fel",
   "ALERT_TITLE_IMPORTANT": "Viktigt",
+  "ALERT_TITLE_INVALID_CHARTS": "De långsiktiga diagrammen är felaktiga eftersom token är för ny för att tillhandahålla tillräcklig historisk data.",
   "ALERT_TITLE_NEW_VERSION": "Ny version",
   "ALERT_TITLE_NOT_ENROLLED": "Biometri är inte tillgängligt",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "Bluetooth stöds inte",

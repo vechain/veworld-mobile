@@ -37,7 +37,7 @@ export const ListFooterView = memo(
                                     justifyContent="center"
                                     alignItems="center">
                                     <BaseText typographyFont="bodyBold">{LL.HIDDEN_COLLECTIONS()}</BaseText>
-                                    <BaseIcon name="chevron-down" color={theme.colors.text} />
+                                    <BaseIcon name="icon-chevron-down" color={theme.colors.text} />
                                 </BaseView>
                             </>
                         }

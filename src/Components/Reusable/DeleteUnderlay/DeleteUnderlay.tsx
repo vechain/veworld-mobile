@@ -12,7 +12,7 @@ export const DeleteUnderlay: React.FC<Props> = ({ onPress, isObservable }) => {
         <BaseView style={styles.underlayContainer}>
             <BaseTouchable action={onPress} style={styles.underlayLeft}>
                 <BaseIcon
-                    name="delete"
+                    name="icon-trash"
                     size={24}
                     bg={theme.colors.danger}
                     color={theme.colors.card}

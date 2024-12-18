@@ -36,6 +36,7 @@
   "ALERT_TITLE_ENABLE_LOCATION": "位置情報サービスを有効にする",
   "ALERT_TITLE_ICLOUD_ERROR": "iCloudエラー",
   "ALERT_TITLE_IMPORTANT": "重要",
+  "ALERT_TITLE_INVALID_CHARTS": "トークンが新しすぎて十分な履歴データを提供できないため、長期間のチャートは不正確です。",
   "ALERT_TITLE_NEW_VERSION": "新しいバージョン",
   "ALERT_TITLE_NOT_ENROLLED": "生体認証が利用できません",
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "Bluetoothはサポートされていません",

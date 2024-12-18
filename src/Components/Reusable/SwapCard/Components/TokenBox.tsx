@@ -53,7 +53,13 @@ export const TokenBox = ({
                         <BaseImage source={{ uri: token.icon }} style={baseStyles.tokenIcon} />
                     </BaseCard>
                 ) : (
-                    <BaseIcon name="help" size={22} color={COLORS.DARK_PURPLE} bg={COLORS.WHITE} iconPadding={4} />
+                    <BaseIcon
+                        name="icon-help-circle"
+                        size={22}
+                        color={COLORS.DARK_PURPLE}
+                        bg={COLORS.WHITE}
+                        iconPadding={4}
+                    />
                 )}
             </BaseView>
         </DropShadow>
@@ -90,7 +96,7 @@ export const TokenBox = ({
                 {!isTokenAdded && (
                     <BaseView pl={12}>
                         <BaseIcon
-                            name="plus"
+                            name="icon-plus"
                             size={20}
                             bg={COLORS.LIME_GREEN}
                             iconPadding={3}

@@ -55,7 +55,7 @@ export const URLBar = () => {
                     haptics="Light"
                     size={20}
                     style={[styles.icon]}
-                    name={isSecure ? "lock-check-outline" : "lock-open-outline"}
+                    name={isSecure ? "icon-lock" : "icon-unlock"}
                     color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
                 />
 
@@ -79,7 +79,7 @@ export const URLBar = () => {
                     action={navBackToDiscover}
                     haptics="Light"
                     style={[styles.icon]}
-                    name="close"
+                    name="icon-x"
                     color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
                 />
             </BaseView>

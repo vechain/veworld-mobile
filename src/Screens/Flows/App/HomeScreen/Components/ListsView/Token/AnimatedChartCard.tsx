@@ -17,9 +17,10 @@ export type NativeTokenProps = {
     tokenWithInfo: TokenWithCompleteInfo
     isEdit: boolean
     isBalanceVisible: boolean
+    hideChart?: boolean
 }
 
-export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
+export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible, hideChart }: NativeTokenProps) => {
     const nav = useNavigation()
     const theme = useTheme()
 
@@ -28,13 +29,13 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
     const { data: chartData } = useSmartMarketChart({
         id: getCoinGeckoIdBySymbol[tokenWithInfo.symbol],
         vs_currency: currency,
-        days: 7,
+        days: 1,
         placeholderData: DEFAULT_LINE_CHART_DATA,
     })
 
     const animatedOuterCard = useAnimatedStyle(() => {
         return {
-            height: withTiming(isEdit ? 62 : 162, {
+            height: withTiming(isEdit || hideChart ? 62 : 162, {
                 duration: 200,
             }),
 
@@ -46,7 +47,7 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
 
     const animatedInnerCard = useAnimatedStyle(() => {
         return {
-            height: withTiming(isEdit ? 0 : HEIGHT, {
+            height: withTiming(isEdit || hideChart ? 0 : HEIGHT, {
                 duration: 200,
             }),
 
@@ -70,15 +71,17 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
                         tokenWithInfo={tokenWithInfo}
                         isAnimation={isEdit}
                     />
-                    <Animated.View style={animatedInnerCard}>
-                        <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
-                            <LineChart height={HEIGHT}>
-                                <LineChart.Path color={theme.colors.primary} width={2}>
-                                    <LineChart.Gradient />
-                                </LineChart.Path>
-                            </LineChart>
-                        </LineChart.Provider>
-                    </Animated.View>
+                    {!hideChart && (
+                        <Animated.View style={animatedInnerCard}>
+                            <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
+                                <LineChart height={HEIGHT}>
+                                    <LineChart.Path color={theme.colors.primary} width={2}>
+                                        <LineChart.Gradient />
+                                    </LineChart.Path>
+                                </LineChart>
+                            </LineChart.Provider>
+                        </Animated.View>
+                    )}
                 </Animated.View>
             </TouchableOpacity>
         </BaseView>

@@ -48,7 +48,7 @@ export const DeleteCloudBackupBottomSheet = React.forwardRef<BottomSheetModalMet
                     repeatCloudType: cloudType,
                 })}
                 secondaryButton={secondaryButton}
-                icon="cloud-outline"
+                icon="icon-cloud"
             />
         )
     },
