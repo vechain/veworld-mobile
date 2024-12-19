@@ -176,8 +176,8 @@ export const LockScreen: React.FC<Props> = memo(
                 children={
                     <>
                         <BaseSpacer height={20} />
-                        <BaseView mx={24} alignItems="center">
-                            <BaseView alignSelf="flex-start">
+                        <BaseView alignItems="center">
+                            <BaseView mx={24} alignSelf="flex-start">
                                 <BaseText typographyFont="title">{title}</BaseText>
                                 <BaseText typographyFont="body" my={10}>
                                     {subTitle}

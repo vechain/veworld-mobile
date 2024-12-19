@@ -78,9 +78,8 @@ export const SettingsScreen = () => {
 
     return (
         <BaseSafeArea>
-            <BaseSpacer height={16} />
-            <BaseView flexDirection="row" justifyContent="space-between" mx={24} mb={8}>
-                <BaseText typographyFont="subTitleBold" testID="settings-screen">
+            <BaseView flexDirection="row" justifyContent="space-between" mx={20} mb={8}>
+                <BaseText typographyFont="subTitleMedium" testID="settings-screen">
                     {LL.TITLE_SETTINGS()}
                 </BaseText>
                 <SelectedNetworkViewer />

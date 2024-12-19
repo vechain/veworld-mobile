@@ -220,12 +220,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     return (
         <Layout
             beforeNavigating={disconnectLedger}
+            title={LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
             fixedHeader={
                 <BaseView>
-                    <BaseView flexDirection="row" w={100}>
-                        <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
-                    </BaseView>
-                    <BaseText typographyFont="body" my={10}>
+                    <BaseText typographyFont="body" my={16}>
                         {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
                     </BaseText>
 

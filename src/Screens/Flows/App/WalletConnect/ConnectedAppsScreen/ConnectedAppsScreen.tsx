@@ -134,10 +134,10 @@ export const ConnectedAppsScreen = () => {
     return (
         <Layout
             safeAreaTestID="ConnectedAppsScreen"
-            noMargin
+            title={LL.CONNECTED_APPS_SCREEN_TITLE()}
             body={
                 <BaseView pt={16}>
-                    <BaseView mx={20}>
+                    <BaseView>
                         <ConnectedAppsHeader showAddButton={totalSessions > 0} />
 
                         <BaseSpacer height={24} />

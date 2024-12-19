@@ -6,9 +6,11 @@ import { useAppSelector } from "~Storage/Redux"
 import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { CustomNodes, SelectNetwork, SelectNetworkBottomSheet } from "./Components"
 import { Routes } from "~Navigation"
+import { useI18nContext } from "~i18n"
 
 export const ChangeNetworkScreen = () => {
     const nav = useNavigation()
+    const { LL } = useI18nContext()
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
@@ -25,9 +27,10 @@ export const ChangeNetworkScreen = () => {
     return (
         <Layout
             safeAreaTestID="NetworkScreen"
+            title={LL.TITLE_NETWORKS()}
             body={
                 <>
-                    <BaseView pt={16}>
+                    <BaseView pt={8}>
                         <SelectNetwork
                             openBottomSheet={openSelectNetworkBottomSheet}
                             selectedNetwork={selectedNetwork}

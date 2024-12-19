@@ -61,11 +61,9 @@ export const GeneralScreen = () => {
     return (
         <Layout
             safeAreaTestID="General_Screen"
+            title={LL.TITLE_GENERAL_SETTINGS()}
             body={
-                <BaseView pt={16}>
-                    <BaseText typographyFont="title">{LL.TITLE_GENERAL_SETTINGS()}</BaseText>
-                    <BaseSpacer height={20} />
-
+                <BaseView pt={8}>
                     <BaseText typographyFont="bodyMedium" my={8}>
                         {LL.BD_CONVERSION_CURRENCY()}
                     </BaseText>
