@@ -5,7 +5,7 @@ import { z } from "zod"
 import { queryClient } from "~Api/QueryProvider"
 import { FeatureFlags } from "~Api/FeatureFlags"
 
-export const COINGECKO_URL = () => {
+export const getCoingeckoUrl = () => {
     const { marketsProxyFeature } = queryClient.getQueryData<FeatureFlags>(["Feature", "Flags"]) || {}
     if (!marketsProxyFeature) return process.env.REACT_APP_COINGECKO_URL
 
@@ -20,7 +20,7 @@ const timeout = Number(process.env.REACT_APP_EXCHANGE_CLIENT_AXIOS_TIMEOUT ?? "5
 
 const axiosInstance = axios.create({
     timeout,
-    baseURL: COINGECKO_URL(),
+    baseURL: getCoingeckoUrl(),
 })
 
 const TokenInfoMarketDataSchema = z.object({
