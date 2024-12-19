@@ -10,7 +10,6 @@ export const getFeatureFlags = async () => {
     try {
         const req = await fetch("https://vechain.github.io/veworld-feature-flags/mobile-feature-flags.json", {
             method: "GET",
-            cache: "no-cache",
         })
 
         const response: FeatureFlags = await req.json()
