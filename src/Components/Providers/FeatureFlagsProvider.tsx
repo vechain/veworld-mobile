@@ -28,7 +28,7 @@ export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }
         retreiveFeatureFlags()
     }, [retreiveFeatureFlags])
 
-    return <FeatureFlagsContex.Provider value={{ ...featureFlags }}>{children}</FeatureFlagsContex.Provider>
+    return <FeatureFlagsContex.Provider value={featureFlags}>{children}</FeatureFlagsContex.Provider>
 }
 
 export const useFeatureFlags = () => {
