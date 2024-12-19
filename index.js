@@ -13,6 +13,7 @@ import {
     ConnexContextProvider,
     TranslationProvider,
     WalletConnectContextProvider,
+    FeatureFlagsProvider,
 } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
@@ -120,16 +121,18 @@ const Main = () => {
                     persistOptions={{
                         persister: clientPersister,
                     }}>
-                    <NavigationProvider>
-                        <WalletConnectContextProvider>
-                            <InAppBrowserProvider>
-                                <BottomSheetModalProvider>
-                                    <EntryPoint />
-                                </BottomSheetModalProvider>
-                            </InAppBrowserProvider>
-                        </WalletConnectContextProvider>
-                    </NavigationProvider>
-                    <BaseToast />
+                    <FeatureFlagsProvider>
+                        <NavigationProvider>
+                            <WalletConnectContextProvider>
+                                <InAppBrowserProvider>
+                                    <BottomSheetModalProvider>
+                                        <EntryPoint />
+                                    </BottomSheetModalProvider>
+                                </InAppBrowserProvider>
+                            </WalletConnectContextProvider>
+                        </NavigationProvider>
+                        <BaseToast />
+                    </FeatureFlagsProvider>
                 </PersistQueryClientProvider>
             </ConnexContextProvider>
         </GestureHandlerRootView>

@@ -2,12 +2,25 @@ import axios from "axios"
 import { ERROR_EVENTS } from "~Constants"
 import { error } from "~Utils"
 import { z } from "zod"
+import { queryClient } from "~Api/QueryProvider"
+import { FeatureFlags } from "~Api/FeatureFlags"
 
-export const COINGECKO_URL = process.env.REACT_APP_COINGECKO_URL
+export const getCoingeckoUrl = () => {
+    const { marketsProxyFeature } = queryClient.getQueryData<FeatureFlags>(["Feature", "Flags"]) || {}
+    if (!marketsProxyFeature) return process.env.REACT_APP_COINGECKO_URL
+
+    if (marketsProxyFeature.enabled) {
+        return marketsProxyFeature.url
+    } else {
+        return marketsProxyFeature?.fallbackUrl
+    }
+}
+
 const timeout = Number(process.env.REACT_APP_EXCHANGE_CLIENT_AXIOS_TIMEOUT ?? "5000")
+
 const axiosInstance = axios.create({
     timeout,
-    baseURL: COINGECKO_URL,
+    baseURL: getCoingeckoUrl(),
 })
 
 const TokenInfoMarketDataSchema = z.object({
@@ -51,7 +64,7 @@ const VechainStatsTokenInfoResponse = z.record(
         price_eur: z.nullable(z.string()),
         price_cny: z.nullable(z.string()),
         price_vet: z.nullable(z.string()),
-        last_updated: z.number(),
+        last_updated: z.nullable(z.number()),
     }),
 )
 
