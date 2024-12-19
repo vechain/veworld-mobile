@@ -71,59 +71,53 @@ export const ManageCustomTokenScreen = () => {
 
     const renderCustomTokensList = useMemo(() => {
         return (
-            <>
-                <BaseView flexDirection="row" style={[styles.list]}>
-                    <FlashList
-                        data={tokens}
-                        keyExtractor={token => token.tokenAddress}
-                        ItemSeparatorComponent={tokensListSeparator}
-                        onViewableItemsChanged={onViewableItemsChanged}
-                        viewabilityConfig={viewabilityConfig}
-                        scrollEnabled={isListScrollable}
-                        ListHeaderComponent={<BaseSpacer height={8} />}
-                        ListFooterComponent={
-                            hasFetched ? (
-                                <BaseSpacer height={20} />
-                            ) : (
-                                <BaseView mx={20} pt={8}>
-                                    <BaseCard
-                                        style={styles.skeletonContainer}
-                                        containerStyle={styles.skeletonCardContainer}>
-                                        <SkeletonCustomTokenBox />
-                                    </BaseCard>
-                                </BaseView>
-                            )
-                        }
-                        renderItem={({ item: token }) => {
-                            const tokenId = `${token.tokenAddress}`
+            <BaseView flexDirection="row" style={[styles.list]}>
+                <FlashList
+                    data={tokens}
+                    keyExtractor={token => token.tokenAddress}
+                    ItemSeparatorComponent={tokensListSeparator}
+                    onViewableItemsChanged={onViewableItemsChanged}
+                    viewabilityConfig={viewabilityConfig}
+                    scrollEnabled={isListScrollable}
+                    ListHeaderComponent={<BaseSpacer height={8} />}
+                    ListFooterComponent={
+                        hasFetched ? (
+                            <BaseSpacer height={20} />
+                        ) : (
+                            <BaseView mx={20} pt={8}>
+                                <BaseCard
+                                    style={styles.skeletonContainer}
+                                    containerStyle={styles.skeletonCardContainer}>
+                                    <SkeletonCustomTokenBox />
+                                </BaseCard>
+                            </BaseView>
+                        )
+                    }
+                    renderItem={({ item: token }) => {
+                        const tokenId = `${token.tokenAddress}`
 
-                            return (
-                                <BaseView mx={20} testID={tokenId}>
-                                    <CustomTokenBox tokenBalance={token} onTogglePress={onAddCustomToken} />
-                                </BaseView>
-                            )
-                        }}
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        estimatedItemSize={80}
-                        estimatedListSize={{
-                            height: 80 * tokens.length,
-                            width: 400,
-                        }}
-                        onScroll={onScroll}
-                        onEndReachedThreshold={0.5}
-                        onEndReached={onEndReached}
-                        refreshControl={
-                            <RefreshControl
-                                refreshing={refreshing}
-                                onRefresh={onRefresh}
-                                tintColor={theme.colors.border}
-                            />
-                        }
-                        testID="contacts-list"
-                    />
-                </BaseView>
-            </>
+                        return (
+                            <BaseView mx={20} testID={tokenId}>
+                                <CustomTokenBox tokenBalance={token} onTogglePress={onAddCustomToken} />
+                            </BaseView>
+                        )
+                    }}
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    estimatedItemSize={80}
+                    estimatedListSize={{
+                        height: 80 * tokens.length,
+                        width: 400,
+                    }}
+                    onScroll={onScroll}
+                    onEndReachedThreshold={0.5}
+                    onEndReached={onEndReached}
+                    refreshControl={
+                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.border} />
+                    }
+                    testID="contacts-list"
+                />
+            </BaseView>
         )
     }, [
         hasFetched,

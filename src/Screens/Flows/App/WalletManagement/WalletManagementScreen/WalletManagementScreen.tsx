@@ -83,18 +83,6 @@ export const WalletManagementScreen = () => {
         return allDevices
     }, [accounts, devices])
 
-    // const setIsEdit = useCallback(
-    //     (_isEdit: boolean) => {
-    //         if (_isEdit) {
-    //             closeOtherSwipeableItems()
-    //             _setIsEdit(true)
-    //         } else {
-    //             _setIsEdit(false)
-    //         }
-    //     },
-    //     [closeOtherSwipeableItems],
-    // )
-
     const nav = useNavigation()
     const onDeviceSelected = useCallback(
         (device: BaseDevice) => {
