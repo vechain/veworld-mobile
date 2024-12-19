@@ -7,6 +7,8 @@ import { abi } from "thor-devkit"
 import { queryClient } from "~Api/QueryProvider"
 import {
     abis,
+    DOMAIN_BASE,
+    DEFAULT_DELEGATOR_URL,
     TESTNET_VNS_PUBLIC_RESOLVER,
     TESTNET_VNS_REGISTRAR_CONTRACT,
     TESTNET_VNS_SUBDOMAIN_CONTRACT,
@@ -30,10 +32,6 @@ const VNS_RESOLVER: Partial<{ [key in NETWORK_TYPE]: string }> = {
     mainnet: "0xA11413086e163e41901bb81fdc5617c975Fa5a1A",
     testnet: "0xc403b8EA53F707d7d4de095f0A20bC491Cf2bc94",
 } as const
-
-// export const domainBase = ".veworld.vet"
-export const domainBase = ".ve-world-manager.vet"
-const delegatorUrl = "https://sponsor-testnet.vechain.energy/by/90"
 
 type SubdomainClaimTransaction = TransactionBody & {
     simulateTransactionOptions: { caller: string }
@@ -126,7 +124,7 @@ export const useVns = (props?: Vns): VnsHook => {
 
     const isSubdomainAvailable = useCallback(
         async (domainName: string) => {
-            if (domainName.includes(domainBase)) {
+            if (domainName.includes(DOMAIN_BASE)) {
                 try {
                     const res = await vnsUtils.resolveName(thorClient, domainName)
                     if (res) throw new Error("Subdomain is not available")
@@ -171,7 +169,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 const providerWithDelegationEnabled = new VeChainProvider(
                     thorClient,
                     new ProviderInternalBaseWallet([{ privateKey, address: accountAddress }], {
-                        delegator: { delegatorUrl },
+                        delegator: { delegatorUrl: DEFAULT_DELEGATOR_URL },
                     }),
                     true,
                 )
@@ -209,7 +207,7 @@ export const useVns = (props?: Vns): VnsHook => {
                     TESTNET_VNS_PUBLIC_RESOLVER,
                 )
 
-                const fulldomain = `${subdomain}${domainBase}`
+                const fulldomain = `${subdomain}${DOMAIN_BASE}`
 
                 const dataRegistrar = new abi.Function(abis.VetDomains.setName).encode(fulldomain)
 

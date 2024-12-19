@@ -10,18 +10,16 @@ import {
     BaseView,
     RequireUserPassword,
 } from "~Components"
-import { COLORS, ColorThemeType } from "~Constants"
-import { domainBase, useDisclosure, useThemedStyles, useVns, useWalletSecurity } from "~Hooks"
-import { Routes, RootStackParamListOnboarding } from "~Navigation"
+import { COLORS, ColorThemeType, DOMAIN_BASE } from "~Constants"
+import { useDisclosure, useThemedStyles, useVns } from "~Hooks"
+import { Routes, RootStackParamListHome } from "~Navigation"
 import { selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
-import { useHandleWalletCreation } from "../WelcomeScreen/useHandleWalletCreation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
 
-type Props = NativeStackScreenProps<RootStackParamListOnboarding, Routes.CLAIM_USERNAME>
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CLAIM_USERNAME>
 
-export const ClaimUsername: React.FC<Props> = ({ route }) => {
-    const { pin } = route.params || {}
+export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [subdomain, setSubdomain] = useState("")
     const [isAvailable, setIsAvailable] = useState(false)
@@ -30,10 +28,9 @@ export const ClaimUsername: React.FC<Props> = ({ route }) => {
 
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { isWalletSecurityBiometrics } = useWalletSecurity()
     const { isOpen: isPasswordPromptOpen, onClose: closePasswordPrompt } = useDisclosure()
     const { isSubdomainAvailable, registerSubdomain } = useVns()
-    const { migrateFromOnboarding } = useHandleWalletCreation()
+    // const { migrateFromOnboarding } = useHandleWalletCreation()
     const nav = useNavigation()
     const account = useAppSelector(selectSelectedAccountOrNull)
     const device = useAppSelector(state => selectDevice(state, account?.rootAddress))
@@ -57,7 +54,7 @@ export const ClaimUsername: React.FC<Props> = ({ route }) => {
         const checkIsAvailable = setTimeout(async () => {
             if (isFieldValid) {
                 setIsChecking(true)
-                const availability = await isSubdomainAvailable(`${subdomain}${domainBase}`)
+                const availability = await isSubdomainAvailable(`${subdomain}${DOMAIN_BASE}`)
                 setIsAvailable(availability)
                 setIsChecking(false)
             }
@@ -69,16 +66,16 @@ export const ClaimUsername: React.FC<Props> = ({ route }) => {
     const onSubmit = useCallback(async () => {
         setIsLoading(true)
         if (!device || !account) return
-        const success = await registerSubdomain(device, account.address, subdomain, pin)
+        const success = await registerSubdomain(device, account.address, subdomain)
         setIsLoading(false)
         if (success) {
-            nav.navigate(Routes.USERNAME_CLAIMED, pin && !isWalletSecurityBiometrics ? { pin } : undefined)
+            nav.navigate(Routes.USERNAME_CLAIMED)
         }
-    }, [account, device, isWalletSecurityBiometrics, nav, pin, registerSubdomain, subdomain])
+    }, [account, device, nav, registerSubdomain, subdomain])
 
     const onSkipUsernameCreation = useCallback(async () => {
-        await migrateFromOnboarding(pin)
-    }, [migrateFromOnboarding, pin])
+        navigation.navigate(Routes.HOME)
+    }, [navigation])
 
     const isNotAvailable = useMemo(() => isAvailable === false, [isAvailable])
 
@@ -150,7 +147,7 @@ export const ClaimUsername: React.FC<Props> = ({ route }) => {
                             maxLength={20}
                             setValue={onSetSubdomain}
                             errorMessage={errorMessage}
-                            rightIcon={<BaseText typographyFont="body">{domainBase}</BaseText>}
+                            rightIcon={<BaseText typographyFont="body">{DOMAIN_BASE}</BaseText>}
                         />
                         {renderSubdomainStatus}
                     </BaseView>

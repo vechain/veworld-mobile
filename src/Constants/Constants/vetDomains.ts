@@ -1,3 +1,12 @@
 // export const DOMAIN_BASE = ".veworld.vet"
-export const DOMAIN_BASE = ".ve-world-manager.vet"
+export const DOMAIN_BASE = ".veworld.vet"
 export const DEFAULT_DELEGATOR_URL = "https://sponsor-testnet.vechain.energy/by/90"
+
+export const MAINNET_VNS_SUBDOMAIN_CONTRACT = ""
+export const TESTNET_VNS_SUBDOMAIN_CONTRACT = "0x358001343196f7a9eb4b637cfdad8efde37c2230"
+
+export const MAINNET_VNS_PUBLIC_RESOLVER = "0xabac49445584C8b6c1472b030B1076Ac3901D7cf"
+export const TESTNET_VNS_PUBLIC_RESOLVER = "0xA6eFd130085a127D090ACb0b100294aD1079EA6f"
+
+export const MAINNET_VNS_REGISTRAR_CONTRACT = "0x5c970901a587BA3932C835D4ae5FAE2BEa7e78Bc"
+export const TESTNET_VNS_REGISTRAR_CONTRACT = "0x6878f1aD5e3015310CfE5B38d7B7071C5D8818Ca"

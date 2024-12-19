@@ -33,6 +33,8 @@ import {
     TransactionSummarySendScreen,
     WalletDetailScreen,
     WalletManagementScreen,
+    ClaimUsername,
+    UsernameClaimed,
 } from "~Screens"
 
 export type RootStackParamListHome = {
@@ -86,6 +88,8 @@ export type RootStackParamListHome = {
         url: string
         ul?: boolean
     }
+    [Routes.CLAIM_USERNAME]: undefined
+    [Routes.USERNAME_CLAIMED]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -178,6 +182,10 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
+            </Group>
+            <Group>
+                <Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
+                <Screen name={Routes.USERNAME_CLAIMED} component={UsernameClaimed} options={{ headerShown: false }} />
             </Group>
         </Navigator>
     )

@@ -1,26 +1,23 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
-import { RootStackParamListOnboarding, Routes } from "~Navigation"
-import { useHandleWalletCreation } from "../WelcomeScreen/useHandleWalletCreation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 
-type Props = NativeStackScreenProps<RootStackParamListOnboarding, Routes.USERNAME_CLAIMED>
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.USERNAME_CLAIMED>
 
-export const UsernameClaimed: React.FC<Props> = ({ route }) => {
-    const { pin } = route.params || {}
+export const UsernameClaimed: React.FC<Props> = ({ navigation }) => {
     const { LL } = useI18nContext()
-    const { migrateFromOnboarding } = useHandleWalletCreation()
 
     const onPress = useCallback(async () => {
-        await migrateFromOnboarding(pin)
-    }, [migrateFromOnboarding, pin])
+        navigation.navigate(Routes.HOME)
+    }, [navigation])
 
     return (
         <BaseSafeArea>
             <BaseView flexGrow={1} p={24}>
                 <BaseView flexGrow={1} alignItems="center" justifyContent="center">
-                    <BaseIcon name="check-circle-outline" size={40} />
+                    <BaseIcon name="icon-check-circle" size={40} />
 
                     <BaseSpacer height={24} />
 

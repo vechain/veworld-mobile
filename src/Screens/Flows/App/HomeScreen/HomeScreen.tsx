@@ -35,7 +35,14 @@ import {
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AccountCard, DeviceBackupBottomSheet, EditTokensBar, Header, TokenList } from "./Components"
+import {
+    AccountCard,
+    ClaimUsernameBanner,
+    DeviceBackupBottomSheet,
+    EditTokensBar,
+    Header,
+    TokenList,
+} from "./Components"
 import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
@@ -156,6 +163,8 @@ export const HomeScreen = () => {
                     }>
                     <BaseView>
                         <BaseView alignItems="center">
+                            <BaseSpacer height={20} />
+                            <ClaimUsernameBanner />
                             <BaseSpacer height={20} />
                             <AccountCard
                                 balanceVisible={isBalanceVisible}
