@@ -82,10 +82,10 @@ export const EnableAdditionalSettings: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
+            title={LL.WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE()}
             fixedHeader={
                 <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="title">{LL.WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_TITLE()}</BaseText>
-                    <BaseText typographyFont="body" my={10}>
+                    <BaseText typographyFont="body" my={16}>
                         {LL.WALLET_LEDGER_ENABLE_ADDITION_SETTINGS_SB()}
                     </BaseText>
                 </BaseView>

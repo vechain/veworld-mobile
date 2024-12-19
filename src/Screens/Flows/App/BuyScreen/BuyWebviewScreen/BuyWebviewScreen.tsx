@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useMemo } from "react"
-import { BackButtonHeader, BaseSpacer, CoinbasePayWebView, Layout, TransakPayWebView } from "~Components"
+import { BackButtonHeader, BaseSpacer, BaseView, CoinbasePayWebView, Layout, TransakPayWebView } from "~Components"
 import { RootStackParamListBuy, Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
@@ -25,11 +25,10 @@ export const BuyWebviewScreen: React.FC<Props> = ({ route }) => {
             noBackButton
             noMargin
             fixedHeader={
-                <>
+                <BaseView px={24}>
                     <BaseSpacer height={8} />
-                    <BackButtonHeader hasBottomSpacer={false} text={`${providerName}${ifTest}`} />
-                    <BaseSpacer height={8} />
-                </>
+                    <BackButtonHeader hasBottomSpacer={false} title={`${providerName}${ifTest}`} />
+                </BaseView>
             }
             fixedBody={
                 <>

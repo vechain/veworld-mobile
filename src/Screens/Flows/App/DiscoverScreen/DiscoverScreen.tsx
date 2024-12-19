@@ -120,7 +120,7 @@ export const DiscoverScreen: React.FC = () => {
         return (
             <>
                 <AnimatedTitle title={LL.DISCOVER_TITLE()} scrollOffset={offset} />
-                <BaseSpacer height={12} />
+                <BaseSpacer height={16} />
                 <AnimatedSearchBar
                     placeholder={LL.DISCOVER_SEARCH()}
                     value={filteredSearch}

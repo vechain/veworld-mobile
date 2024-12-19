@@ -97,10 +97,9 @@ export const SettingsTransactionsScreen = () => {
     return (
         <Layout
             safeAreaTestID="SettingsTransactionsScreen"
+            title={LL.SETTINGS_TRANSACTIONS_TITLE()}
             body={
-                <BaseView pt={16}>
-                    <BaseText typographyFont="title">{LL.SETTINGS_TRANSACTIONS_TITLE()}</BaseText>
-                    <BaseSpacer height={24} />
+                <BaseView pt={8}>
                     <BaseText typographyFont="button">{LL.SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION()}</BaseText>
                     <BaseSpacer height={8} />
                     <BaseText typographyFont="captionRegular">

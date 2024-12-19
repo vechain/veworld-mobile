@@ -258,7 +258,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
     return (
         <BaseSafeArea grow={1}>
-            <BackButtonHeader beforeNavigating={disconnectLedger} />
+            <BackButtonHeader title={LL.SEND_LEDGER_TITLE()} beforeNavigating={disconnectLedger} />
             <BaseView alignItems="flex-start" flexGrow={1} flex={1} mx={20}>
                 <BaseText typographyFont="title">{LL.SEND_LEDGER_TITLE()}</BaseText>
                 <BaseText typographyFont="body" my={10}>

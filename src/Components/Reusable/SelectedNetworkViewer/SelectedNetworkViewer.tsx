@@ -34,7 +34,7 @@ const selectedNetworkViewerStyle = (isMainnet: boolean) => (theme: ColorThemeTyp
     StyleSheet.create({
         networkViewer: {
             borderRadius: 6,
-            padding: 6,
+            padding: 8,
             backgroundColor: isMainnet ? theme.colors.card : theme.colors.testnetBackground,
             justifyContent: "center",
         },

@@ -142,8 +142,7 @@ export const PrivacyScreen = () => {
     return (
         <Layout
             safeAreaTestID="PrivacyScreen"
-            noBackButton
-            pageHeader={LL.TITLE_PRIVACY()}
+            title={LL.TITLE_PRIVACY()}
             body={
                 <>
                     <BaseView pt={8}>
