@@ -108,7 +108,6 @@ export const NFTScreen = () => {
         <Layout
             fixedHeader={renderHeader}
             noBackButton
-            noMargin
             fixedBody={
                 <>
                     <BaseView flex={1} justifyContent="center">

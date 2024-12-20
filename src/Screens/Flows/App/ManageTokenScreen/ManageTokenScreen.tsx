@@ -10,6 +10,7 @@ import {
     DismissKeyboardView,
     Layout,
     OfficialTokenCard,
+    PlusHeaderIcon,
     useThor,
 } from "~Components"
 
@@ -27,7 +28,6 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 import { AnalyticsEvent } from "~Constants"
-import { PlusHeaderIcon } from "~Components/Reusable/HeaderRightIcons"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()

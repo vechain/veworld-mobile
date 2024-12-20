@@ -10,8 +10,8 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
     const { LL } = useI18nContext()
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" mx={20} pb={8}>
-            <BaseText typographyFont="subTitleMedium">{LL.TITLE_NFTS()}</BaseText>
+        <BaseView flexDirection="row" justifyContent="space-between">
+            <BaseText typographyFont="subTitleSemiBold">{LL.TITLE_NFTS()}</BaseText>
             <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                 <SelectedNetworkViewer />
                 <BaseSpacer width={8} />

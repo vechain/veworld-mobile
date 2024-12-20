@@ -102,6 +102,7 @@ export enum COLORS {
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
     PURPLE = "#30265F",
     PRIMARY_800 = "#261470",
+    PRIMARY_400 = "#836CE4",
     PRIMARY_200 = "#CCC3F4",
     PRIMARY_50 = "#F9F8FB",
     LIGHT_PURPLE = "#55498c",
@@ -251,8 +252,8 @@ const light: Colors = {
 }
 
 const dark: Colors = {
-    primary: COLORS.LIME_GREEN,
-    primaryLight: COLORS.LIME_GREEN_LIGHT,
+    primary: COLORS.PURPLE,
+    primaryLight: COLORS.LIGHT_GREEN,
     primaryReversed: COLORS.DARK_PURPLE,
     primaryDisabled: COLORS.PURPLE_DISABLED,
     neutralDisabled: COLORS.PURPLE_DISABLED,
@@ -268,7 +269,7 @@ const dark: Colors = {
     error: COLORS.MEDIUM_RED,
     text: COLORS.WHITE,
     textDisabled: COLORS.WHITE_DISABLED,
-    textReversed: COLORS.DARK_PURPLE,
+    textReversed: COLORS.WHITE,
     alertDescription: COLORS.GREY_600,
     textLight: COLORS.WHITE,
     background: COLORS.DARK_PURPLE,

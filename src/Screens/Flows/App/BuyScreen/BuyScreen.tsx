@@ -14,12 +14,9 @@ export const BuyScreen = () => {
         <Layout
             hasSafeArea={isAndroid}
             noBackButton
-            noMargin
             fixedHeader={
                 <BaseView px={24}>
-                    <BaseSpacer height={8} />
                     <BackButtonHeader hasBottomSpacer={false} title={LL.TITLE_BUY()} />
-                    <BaseSpacer height={8} />
                 </BaseView>
             }
             fixedBody={
