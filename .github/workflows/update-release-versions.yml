@@ -19,6 +19,9 @@ on:
         description: 'Android Build Number'
         required: true
         default: '1'
+  pull_request:
+    branches:
+        - "*"
 jobs:
   set-variables:
     runs-on: ubuntu-latest
