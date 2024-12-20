@@ -1,0 +1,53 @@
+name: Set Repository Variables
+
+on:
+  workflow_dispatch:
+    inputs:
+      ios_version:
+        description: 'iOS Version'
+        required: true
+        default: '1.0.0'
+      ios_build:
+        description: 'iOS Build Number'
+        required: true
+        default: '1'
+      android_version:
+        description: 'Android Version'
+        required: true
+        default: '1.0.0'
+      android_build:
+        description: 'Android Build Number'
+        required: true
+        default: '1'
+jobs:
+  set-variables:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Set GH_TOKEN environment variable
+        run: echo "GH_TOKEN=${{ steps.generate-token.outputs.token }}" >> $GITHUB_ENV
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+
+      - name: Set Repository Variables
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+        run: |
+          gh variable set IOS_VERSION --body "${{ github.event.inputs.ios_version }}"
+          gh variable set IOS_BUILD --body "${{ github.event.inputs.ios_build }}"
+          gh variable set ANDROID_VERSION --body "${{ github.event.inputs.android_version }}"
+          gh variable set ANDROID_BUILD --body "${{ github.event.inputs.android_build }}"
+
+      - name: Verify Repository Variables
+        run: |
+          gh variable list
