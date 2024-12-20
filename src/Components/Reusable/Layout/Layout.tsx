@@ -1,18 +1,16 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useMemo, useState } from "react"
-import { BaseSafeArea, BaseScrollView, BaseSpacer, BaseView } from "~Components/Base"
+import { BaseSafeArea, BaseScrollView, BaseView } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
 import { useTabBarBottomMargin } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { BackButtonHeaderV2 } from "~Components/Reusable/BackButtonHeader/BackButtonHeaderV2"
 
 type Props = {
     noBackButton?: boolean
     noMargin?: boolean
     title?: string
-    pageHeader?: string
     fixedHeader?: ReactNode
     body?: ReactNode
     fixedBody?: ReactNode
@@ -37,7 +35,6 @@ export const Layout = ({
     noBackButton = false,
     noMargin = false,
     title,
-    pageHeader,
     fixedHeader,
     body,
     fixedBody,
@@ -87,17 +84,9 @@ export const Layout = ({
                             />
                         </BaseView>
                     )}
-                    {pageHeader && (
-                        <BaseView>
-                            <BaseView mx={noMargin ? 0 : 20}>
-                                <BackButtonHeaderV2 title={pageHeader} />
-                            </BaseView>
-                        </BaseView>
-                    )}
                     {fixedHeader && (
-                        <BaseView>
-                            <BaseView mx={noMargin ? 0 : 20}>{<BaseView>{fixedHeader}</BaseView>}</BaseView>
-                            {!noMargin && <BaseSpacer height={8} />}
+                        <BaseView justifyContent="center" py={8} px={noMargin ? 0 : 20}>
+                            <BaseView>{fixedHeader}</BaseView>
                         </BaseView>
                     )}
                     {showSelectedNetwork && (
@@ -121,10 +110,8 @@ export const Layout = ({
                         testID={scrollViewTestID || "Layout_ScrollView"}
                         scrollEnabled={scrollViewContentHeight > scrollViewHeight}
                         style={noMargin ? {} : styles.scrollView}
-                        // eslint-disable-next-line react-native/no-inline-styles
                         contentContainerStyle={{
                             paddingBottom: isAndroid() ? androidOnlyTabBarBottomMargin : _iosOnlyTabBarBottomMargin,
-                            paddingTop: noMargin ? 0 : 16,
                         }}>
                         {body}
                     </BaseScrollView>
@@ -152,7 +139,6 @@ export const Layout = ({
             preventGoBack,
             title,
             headerRightElement,
-            pageHeader,
             fixedHeader,
             showSelectedNetwork,
             body,
@@ -189,7 +175,7 @@ export const Layout = ({
 
 const styles = StyleSheet.create({
     scrollView: {
-        paddingHorizontal: 24,
+        paddingHorizontal: 20,
     },
     selectedNetworkViewerView: {
         position: "absolute",

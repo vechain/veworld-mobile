@@ -10,6 +10,7 @@ import {
     showSuccessToast,
     showWarningToast,
     SwipeableRow,
+    PlusHeaderIcon,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -22,7 +23,6 @@ import { useAccountDelete } from "./hooks"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { FlatList } from "react-native"
-import { PlusHeaderIcon } from "~Components/Reusable/HeaderRightIcons"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 

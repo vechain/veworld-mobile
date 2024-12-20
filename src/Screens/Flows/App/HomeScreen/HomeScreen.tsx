@@ -146,7 +146,6 @@ export const HomeScreen = () => {
         <Layout
             fixedHeader={<Header />}
             noBackButton
-            noMargin
             fixedBody={
                 <NestableScrollContainer
                     ref={scrollViewRef}
@@ -156,7 +155,7 @@ export const HomeScreen = () => {
                     }>
                     <BaseView>
                         <BaseView alignItems="center">
-                            <BaseSpacer height={20} />
+                            <BaseSpacer height={8} />
                             <AccountCard
                                 balanceVisible={isBalanceVisible}
                                 openSelectAccountBottomSheet={openSelectAccountBottomSheet}

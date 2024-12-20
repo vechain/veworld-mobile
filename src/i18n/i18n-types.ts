@@ -3193,6 +3193,10 @@ type RootTranslation = {
 	 */
 	TITLE_MANAGE_WALLET: string
 	/**
+	 * M​e​n​u
+	 */
+	TITLE_MENU: string
+	/**
 	 * Y​o​u​r​ ​M​n​e​m​o​n​i​c
 	 */
 	TITLE_MNEMONIC: string
@@ -6664,6 +6668,10 @@ Try reconnect your device to the internet.
 	 * Manage wallets
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
+	/**
+	 * Menu
+	 */
+	TITLE_MENU: () => LocalizedString
 	/**
 	 * Your Mnemonic
 	 */

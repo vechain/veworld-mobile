@@ -4,7 +4,15 @@ import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { SCREEN_WIDTH } from "~Constants"
 import { TransactionUtils } from "~Utils"
-import { BaseText, BaseView, ChangeAccountButtonPill, BaseSpacer, SelectAccountBottomSheet, Layout } from "~Components"
+import {
+    BaseText,
+    BaseView,
+    ChangeAccountButtonPill,
+    BaseSpacer,
+    SelectAccountBottomSheet,
+    Layout,
+    SelectedNetworkViewer,
+} from "~Components"
 import {
     selectBalanceVisible,
     selectOfficialTokens,
@@ -254,8 +262,12 @@ export const HistoryScreen = () => {
             noBackButton
             fixedHeader={
                 <BaseView flexDirection="row" justifyContent="space-between">
-                    <BaseText typographyFont="subTitleMedium">{LL.BTN_HISTORY()}</BaseText>
-                    <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
+                    <BaseText typographyFont="subTitleSemiBold">{LL.BTN_HISTORY()}</BaseText>
+                    <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
+                        <SelectedNetworkViewer />
+                        <BaseSpacer width={8} />
+                        <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
+                    </BaseView>
                 </BaseView>
             }
             fixedBody={

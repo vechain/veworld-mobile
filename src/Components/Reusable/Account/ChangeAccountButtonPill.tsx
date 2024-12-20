@@ -1,8 +1,7 @@
 import React from "react"
-import { BaseIcon, BaseSpacer } from "~Components/Base"
+import { BaseIcon, BaseSpacer, HeaderIconButton } from "~Components"
 import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
-import { HeaderIconButton } from "~Components/Reusable/HeaderRightIcons"
 
 type Props = {
     action: () => void
@@ -19,7 +18,7 @@ export const ChangeAccountButtonPill = ({ action }: Props) => {
                 color={theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_400}
             />
             <BaseSpacer width={6} />
-            <BaseIcon size={16} name="icon-wallet" color={theme.isDark ? COLORS.PRIMARY_50 : COLORS.GREY_600} />
+            <BaseIcon size={16} name="icon-wallet" color={theme.isDark ? COLORS.PRIMARY_400 : COLORS.GREY_600} />
         </HeaderIconButton>
     )
 }
