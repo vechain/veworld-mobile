@@ -25,7 +25,7 @@ export const selectCustomTokens = createSelector(
 )
 
 export const selectOfficialTokens = createSelector(selectTokensForNetwork, state =>
-    TokenUtils.mergeTokens([{ ...VET }, { ...VTHO }], state.officialTokens),
+    TokenUtils.mergeTokens([{ ...VET }, { ...B3TR }, { ...VTHO }], state.officialTokens),
 )
 
 export const selectAllTokens = createSelector(

@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard } from "~Components"
-import { VET, VTHO } from "~Constants"
+import { B3TR, VET, VTHO } from "~Constants"
 import { useTokenWithCompleteInfo } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -28,6 +28,7 @@ export const SelectTokenSendScreen = () => {
     }
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
+    const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
 
     return (
@@ -53,6 +54,7 @@ export const SelectTokenSendScreen = () => {
                     {filteredTokens.length ? (
                         filteredTokens.map(token => {
                             const isVET = token.symbol === VET.symbol
+                            const isB3TR = token.symbol === B3TR.symbol
                             const isVTHO = token.symbol === VTHO.symbol
 
                             const getTokenWithInfo = () => {
@@ -60,6 +62,8 @@ export const SelectTokenSendScreen = () => {
                                     return tokenWithInfoVET
                                 } else if (isVTHO) {
                                     return tokenWithInfoVTHO
+                                } else if (isB3TR) {
+                                    return tokenWithInfoB3TR
                                 }
                             }
 
