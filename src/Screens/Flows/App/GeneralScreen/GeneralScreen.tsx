@@ -104,7 +104,7 @@ export const GeneralScreen = () => {
                     <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
                     {isMainnet && featureEnabled && (
                         <>
-                            <BaseSpacer height={24} />
+                            <BaseSpacer height={20} />
                             <NotificationBox />
                         </>
                     )}
