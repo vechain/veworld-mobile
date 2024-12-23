@@ -97,23 +97,10 @@ export const SwapScreen = () => {
     return (
         <Layout
             safeAreaTestID="Swap_Screen"
-            noMargin
             hasSafeArea={true}
             hasTopSafeAreaOnly={false}
-            fixedHeader={
-                <BaseView px={20}>
-                    <BaseView flexDirection="row" justifyContent="space-between">
-                        <BaseText typographyFont="title">{LL.SWAP_TITLE()}</BaseText>
-
-                        <ChangeAccountButtonPill
-                            title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
-                            text={selectedAccount.address}
-                            action={openSelectAccountBottomSheet}
-                        />
-                    </BaseView>
-                    <BaseSpacer height={16} />
-                </BaseView>
-            }
+            title={LL.SWAP_TITLE()}
+            headerRightElement={<ChangeAccountButtonPill action={openSelectAccountBottomSheet} />}
             fixedBody={
                 <BaseView flex={1} px={20}>
                     <BaseSpacer height={24} />

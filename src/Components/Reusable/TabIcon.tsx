@@ -44,13 +44,13 @@ const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
             position: "relative",
         },
         warningLabel: {
-            width: 8,
-            height: 8,
+            width: 5,
+            height: 5,
             borderRadius: 4,
-            backgroundColor: theme.colors.danger,
+            backgroundColor: COLORS.RED_500,
             position: "absolute",
-            top: 6,
-            right: 6,
+            top: 8,
+            right: 10,
         },
     })
 }

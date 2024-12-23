@@ -16,11 +16,11 @@ export const BuyScreen = () => {
             noBackButton
             noMargin
             fixedHeader={
-                <>
+                <BaseView px={24}>
                     <BaseSpacer height={8} />
-                    <BackButtonHeader hasBottomSpacer={false} />
+                    <BackButtonHeader hasBottomSpacer={false} title={LL.TITLE_BUY()} />
                     <BaseSpacer height={8} />
-                </>
+                </BaseView>
             }
             fixedBody={
                 <BaseView
@@ -29,10 +29,6 @@ export const BuyScreen = () => {
                     mt={StatusBar.currentHeight ?? 0}
                     pt={PlatformUtils.isIOS() ? 40 : 12}
                     mx={24}>
-                    <BaseText fontSize={24} fontWeight="bold" typographyFont="title">
-                        {LL.TITLE_BUY()}
-                    </BaseText>
-                    <BaseSpacer height={10} />
                     <BaseText fontSize={18} fontWeight="bold" pt={20}>
                         {LL.BD_SELECT_PAYMENT_PROVIDER()}
                     </BaseText>

@@ -12,6 +12,7 @@ export const updateOfficialTokens = (network: Network) => async (dispatch: AppTh
     const tokens = await getTokensFromGithub({
         network,
     })
+
     dispatch(addOfficialTokens({ network: network.type, tokens }))
 }
 

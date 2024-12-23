@@ -254,13 +254,8 @@ export const HistoryScreen = () => {
             noBackButton
             fixedHeader={
                 <BaseView flexDirection="row" justifyContent="space-between">
-                    <BaseText typographyFont="title">{LL.BTN_HISTORY()}</BaseText>
-
-                    <ChangeAccountButtonPill
-                        title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
-                        text={selectedAccount.address}
-                        action={openSelectAccountBottomSheet}
-                    />
+                    <BaseText typographyFont="subTitleMedium">{LL.BTN_HISTORY()}</BaseText>
+                    <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
                 </BaseView>
             }
             fixedBody={

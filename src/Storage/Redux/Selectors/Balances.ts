@@ -124,10 +124,30 @@ export const selectVthoTokenWithBalance = createSelector(
         tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, VTHO.address)),
 )
 
+/**
+ * Get just b3tr balance for selected account
+ */
+export const selectB3trTokenWithBalance = createSelector(
+    selectSelectedAccount,
+    selectTokensWithBalances,
+    (account, tokensWithBalance) =>
+        tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, B3TR.address)),
+)
+
 export const selectSendableTokensWithBalance = createSelector(
-    [selectVetTokenWithBalance, selectVthoTokenWithBalance, selectNonVechainTokensWithBalances],
-    (vetTokenWithBalance, vthoTokenWithBalance, nonVechainTokensWithBalances) => {
-        const balances = [vetTokenWithBalance, vthoTokenWithBalance, ...nonVechainTokensWithBalances]
+    [
+        selectVetTokenWithBalance,
+        selectB3trTokenWithBalance,
+        selectVthoTokenWithBalance,
+        selectNonVechainTokensWithBalances,
+    ],
+    (vetTokenWithBalance, b3trTokenWithBalance, vthoTokenWithBalance, nonVechainTokensWithBalances) => {
+        const balances = [
+            vetTokenWithBalance,
+            b3trTokenWithBalance,
+            vthoTokenWithBalance,
+            ...nonVechainTokensWithBalances,
+        ]
         return balances.filter(
             tokenWithBalance => tokenWithBalance && !new BigNumber(tokenWithBalance.balance.balance).isZero(),
         ) as FungibleTokenWithBalance[]
