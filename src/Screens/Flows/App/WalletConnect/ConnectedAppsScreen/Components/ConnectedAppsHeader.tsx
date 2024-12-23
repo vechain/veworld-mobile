@@ -1,7 +1,6 @@
 import React, { useCallback } from "react"
 import { useCameraBottomSheet, useTheme } from "~Hooks"
-import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
-import { useI18nContext } from "~i18n"
+import { BaseIcon, BaseView, useWalletConnect } from "~Components"
 import { ScanTarget } from "~Constants"
 import HapticsService from "~Services/HapticsService"
 
@@ -10,7 +9,6 @@ type Props = {
 }
 
 export const ConnectedAppsHeader = ({ showAddButton = true }: Props) => {
-    const { LL } = useI18nContext()
     const theme = useTheme()
     const { onPair } = useWalletConnect()
 
@@ -29,7 +27,6 @@ export const ConnectedAppsHeader = ({ showAddButton = true }: Props) => {
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-            <BaseText typographyFont="title">{LL.CONNECTED_APPS_SCREEN_TITLE()}</BaseText>
             {showAddButton && (
                 <BaseView flexDirection="row">
                     <BaseIcon size={24} name="icon-plus" bg={theme.colors.secondary} action={handleOpenCamera} />

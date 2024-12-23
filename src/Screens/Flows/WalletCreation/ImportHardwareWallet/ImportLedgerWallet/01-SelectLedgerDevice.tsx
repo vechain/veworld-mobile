@@ -114,11 +114,11 @@ export const SelectLedgerDevice = () => {
         <Layout
             safeAreaTestID="Select_Hw_Device_Screen"
             noStaticBottomPadding
+            title={LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
             fixedHeader={
                 <>
                     <BaseView>
-                        <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
-                        <BaseText typographyFont="body" my={10}>
+                        <BaseText typographyFont="body" my={16}>
                             {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
                         </BaseText>
                     </BaseView>

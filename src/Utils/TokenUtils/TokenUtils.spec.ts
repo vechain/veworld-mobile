@@ -1,6 +1,6 @@
 import { FungibleToken } from "~Model"
 import { isVechainToken, mergeTokens } from "./TokenUtils"
-import { VET, VTHO } from "~Constants"
+import { B3TR, VET, VTHO } from "~Constants"
 
 describe("mergeTokens", () => {
     it("mergeTokens should merge two token arrays and remove duplicates based on address", () => {
@@ -33,6 +33,7 @@ describe("isVechainToken", () => {
     it("should return correctly", () => {
         expect(isVechainToken(VET.symbol)).toBe(true)
         expect(isVechainToken(VTHO.symbol)).toBe(true)
+        expect(isVechainToken(B3TR.symbol)).toBe(true)
         expect(isVechainToken("bar")).toBe(false)
     })
 })

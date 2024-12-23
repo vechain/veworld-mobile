@@ -1,5 +1,5 @@
-import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useCallback, useMemo, useState } from "react"
-import { BaseSafeArea, BaseScrollView, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useMemo, useState } from "react"
+import { BaseSafeArea, BaseScrollView, BaseSpacer, BaseView } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
 import { useTabBarBottomMargin } from "~Hooks"
@@ -30,6 +30,7 @@ type Props = {
     beforeNavigating?: () => Promise<void> | void
     hasSafeArea?: boolean
     hasTopSafeAreaOnly?: boolean
+    headerRightElement?: ReactNode
 }
 
 export const Layout = ({
@@ -55,6 +56,7 @@ export const Layout = ({
     beforeNavigating,
     hasSafeArea = true,
     hasTopSafeAreaOnly = false,
+    headerRightElement,
 }: Props) => {
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } = useTabBarBottomMargin()
 
@@ -66,15 +68,6 @@ export const Layout = ({
         return tabBarBottomMargin ? 24 : 40
     }, [noStaticBottomPadding, tabBarBottomMargin])
 
-    const Title = useCallback(
-        () => (
-            <BaseText typographyFont="title" mb={16}>
-                {title}
-            </BaseText>
-        ),
-        [title],
-    )
-
     const [scrollViewHeight, setScrollViewHeight] = useState(0)
     const [scrollViewContentHeight, setScrollViewContentHeight] = useState(0)
 
@@ -83,15 +76,16 @@ export const Layout = ({
             <BaseView h={100}>
                 <BaseView>
                     {!noBackButton && (
-                        <>
+                        <BaseView mx={noMargin ? 0 : 20}>
                             <BackButtonHeader
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}
                                 onGoBack={onGoBack}
                                 preventGoBack={preventGoBack}
+                                title={title}
+                                rightElement={headerRightElement}
                             />
-                            <BaseSpacer height={8} />
-                        </>
+                        </BaseView>
                     )}
                     {pageHeader && (
                         <BaseView>
@@ -102,11 +96,8 @@ export const Layout = ({
                     )}
                     {fixedHeader && (
                         <BaseView>
-                            <BaseView mx={noMargin ? 0 : 20}>
-                                {title && <Title />}
-                                {<BaseView>{fixedHeader}</BaseView>}
-                            </BaseView>
-                            {!noMargin && <BaseSpacer height={16} />}
+                            <BaseView mx={noMargin ? 0 : 20}>{<BaseView>{fixedHeader}</BaseView>}</BaseView>
+                            {!noMargin && <BaseSpacer height={8} />}
                         </BaseView>
                     )}
                     {showSelectedNetwork && (
@@ -135,7 +126,6 @@ export const Layout = ({
                             paddingBottom: isAndroid() ? androidOnlyTabBarBottomMargin : _iosOnlyTabBarBottomMargin,
                             paddingTop: noMargin ? 0 : 16,
                         }}>
-                        {!fixedHeader && title && <Title />}
                         {body}
                     </BaseScrollView>
                 )}
@@ -156,14 +146,14 @@ export const Layout = ({
         ),
         [
             noBackButton,
+            noMargin,
             beforeNavigating,
             onGoBack,
             preventGoBack,
+            title,
+            headerRightElement,
             pageHeader,
             fixedHeader,
-            noMargin,
-            title,
-            Title,
             showSelectedNetwork,
             body,
             scrollViewRef,

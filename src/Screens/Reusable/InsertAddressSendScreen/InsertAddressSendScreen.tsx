@@ -121,7 +121,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             noStaticBottomPadding
             fixedHeader={
                 <BaseView>
-                    <BaseSpacer height={4} />
+                    <BaseSpacer height={24} />
                     <BaseView flexDirection="row" w={100}>
                         {BaseTextInputElement}
                     </BaseView>

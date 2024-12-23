@@ -24,6 +24,8 @@ export type Colors = {
     splashBackground: string
     splashColorLayer: string
     card: string
+    icon: string
+    rightIconHeaderBorder: string
     border: string
     notification: string
     transparent: string
@@ -35,6 +37,7 @@ export type Colors = {
     alertRedMedium: string
     placeholder: string
     testnetBackground: string
+    testnetText: string
     gradientBackground: string[]
     horizontalButtonSelected: string
     horizontalButtonText: string
@@ -98,6 +101,9 @@ export enum COLORS {
     PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
     PURPLE = "#30265F",
+    PRIMARY_800 = "#261470",
+    PRIMARY_200 = "#CCC3F4",
+    PRIMARY_50 = "#F9F8FB",
     LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",
     DARK_PURPLE_DISABLED = "#59527F",
@@ -184,6 +190,8 @@ const light: Colors = {
     splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.WHITE,
+    icon: COLORS.PRIMARY_800,
+    rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
@@ -195,7 +203,8 @@ const light: Colors = {
     alertOrangeMedium: COLORS.MEDIUM_ORANGE,
     alertRedMedium: COLORS.MEDIUM_RED,
     placeholder: COLORS.DISABLED_GREY,
-    testnetBackground: COLORS.TESTNET_BACKGROUND_LIGHT,
+    testnetBackground: COLORS.PURPLE,
+    testnetText: COLORS.LIGHT_GREEN,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_LIGHT_TOP, COLORS.GRADIENT_BACKGROUND_LIGHT_BOTTOM],
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,
@@ -268,6 +277,8 @@ const dark: Colors = {
     splashColorLayer: COLORS.LIME_GREEN,
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.PURPLE,
+    icon: COLORS.WHITE,
+    rightIconHeaderBorder: COLORS.TRANSPARENT,
     cardBorder: COLORS.DARK_PURPLE,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
@@ -279,7 +290,8 @@ const dark: Colors = {
     alertOrangeMedium: COLORS.PASTEL_ORANGE,
     alertRedMedium: COLORS.PASTEL_RED,
     placeholder: COLORS.PURPLE,
-    testnetBackground: COLORS.TESTNET_BACKGROUND_DARK,
+    testnetBackground: COLORS.PURPLE,
+    testnetText: COLORS.LIGHT_GREEN,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_DARK_TOP, COLORS.GRADIENT_BACKGROUND_DARK_BOTTOM],
     horizontalButtonSelected: COLORS.DARK_PURPLE,
     horizontalButtonText: COLORS.WHITE,
