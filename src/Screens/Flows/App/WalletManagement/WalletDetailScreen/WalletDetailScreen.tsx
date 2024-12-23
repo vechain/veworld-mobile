@@ -107,7 +107,11 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     return (
         <Layout
             title={walletAlias || device?.alias || ""}
-            headerRightElement={showButton && <PlusHeaderIcon action={onAddAccountClicked} />}
+            headerRightElement={
+                showButton && (
+                    <PlusHeaderIcon testID="WalletDetailScreen_addAccountButton" action={onAddAccountClicked} />
+                )
+            }
             fixedHeader={
                 <BaseView py={16}>
                     {!showWalletNameInput && (
