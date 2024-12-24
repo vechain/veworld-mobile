@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         borderRadius: 30,
         padding: 10,
+        justifyContent: "center",
     },
     icon: {
         width: 38,

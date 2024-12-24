@@ -151,12 +151,10 @@ export const ContactsScreen = () => {
     return (
         <Layout
             safeAreaTestID="ContactsScreen"
+            title={LL.TITLE_CONTACTS()}
             fixedHeader={
                 <BaseView pb={16}>
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" w={100}>
-                        <BaseText typographyFont="title" testID="contacts-screen-title">
-                            {LL.TITLE_CONTACTS()}
-                        </BaseText>
                         {contacts.length > 0 && (
                             <BaseIcon
                                 haptics="Light"

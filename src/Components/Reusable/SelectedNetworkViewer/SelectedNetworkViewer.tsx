@@ -17,14 +17,10 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
     return showEvenIfMainnet || !isMainnet ? (
         <BaseView style={styles.networkViewer}>
             <BaseView style={styles.networkViewerIconText}>
-                <BaseIcon
-                    name="icon-globe"
-                    color={theme.colors.text}
-                    size={15}
-                    testID="web"
-                    style={styles.networkViewerNetworkIcon}
-                />
-                <BaseText pl={5}>{network.name.length > 0 && formatNetworkName(network.name)}</BaseText>
+                <BaseIcon name="icon-globe" color={theme.colors.testnetText} size={16} testID="web" />
+                <BaseText pl={5} typographyFont="smallCaptionSemiBold" color={theme.colors.testnetText}>
+                    {network.name.length > 0 && formatNetworkName(network.name).toLowerCase()}
+                </BaseText>
             </BaseView>
         </BaseView>
     ) : null
@@ -37,18 +33,15 @@ const formatNetworkName = (networkName: string) => {
 const selectedNetworkViewerStyle = (isMainnet: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         networkViewer: {
-            height: 25,
-            borderRadius: 10,
+            borderRadius: 6,
+            padding: 8,
             backgroundColor: isMainnet ? theme.colors.card : theme.colors.testnetBackground,
             justifyContent: "center",
         },
         networkViewerIconText: {
             flexDirection: "row",
             justifyContent: "center",
-            paddingLeft: 10,
-            paddingRight: 10,
-        },
-        networkViewerNetworkIcon: {
-            paddingTop: 1,
+            alignItems: "center",
+            alignContent: "center",
         },
     })

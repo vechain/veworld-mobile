@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
-import { BaseIcon, BaseText, BaseView, useWalletConnect } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect } from "~Components"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes, TabStackParamList } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
@@ -9,6 +9,7 @@ import { ERROR_EVENTS, ScanTarget } from "~Constants"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
 import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { VeWorldLogoSVG } from "~Assets"
 
 type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
     NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
@@ -68,32 +69,35 @@ export const Header = memo(() => {
     }, [nav])
 
     return (
-        <BaseView w={100} px={20} pb={8} flexDirection="row" alignItems="center" justifyContent="space-between">
-            <BaseView alignItems="flex-start" alignSelf="flex-start">
-                <BaseText typographyFont="largeTitle" testID="veworld-homepage">
+        <BaseView w={100} px={20} pb={4} flexDirection="row" alignItems="center" justifyContent="space-between">
+            <BaseView flexDirection="row" alignItems="center" alignSelf="flex-start">
+                <VeWorldLogoSVG height={32} width={32} />
+                <BaseSpacer width={8} />
+                <BaseText typographyFont="captionSemiBold" testID="veworld-homepage">
                     {LL.VEWORLD()}
                 </BaseText>
             </BaseView>
 
             <BaseView flexDirection="row">
-                <SelectedNetworkViewer />
                 <BaseIcon
                     name={"icon-qr-code"}
-                    size={24}
+                    size={22}
                     color={theme.colors.text}
                     action={handleOpenCamera}
-                    mx={12}
+                    mx={14}
                     haptics="Light"
                 />
 
                 <BaseIcon
                     name={"icon-wallet"}
                     size={24}
-                    bg={theme.colors.secondary}
+                    color={theme.colors.text}
                     action={goToWalletManagement}
                     haptics="Light"
                     testID="HomeScreen_WalletManagementButton"
                 />
+                <BaseSpacer width={16} />
+                <SelectedNetworkViewer />
             </BaseView>
 
             {RenderCameraModal}

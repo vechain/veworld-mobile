@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { TabIcon } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
-import { IconKey, NETWORK_TYPE } from "~Model"
+import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
     DiscoverStack,
@@ -16,7 +16,7 @@ import {
 } from "~Navigation/Stacks"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import PlatformUtils from "~Utils/PlatformUtils"
 
 export type TabStackParamList = {
@@ -32,7 +32,6 @@ const Tab = createBottomTabNavigator<TabStackParamList>()
 export const TabStack = () => {
     const theme = useTheme()
     const currentScreen = useAppSelector(selectCurrentScreen)
-    const network = useAppSelector(selectSelectedNetwork)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
@@ -76,8 +75,7 @@ export const TabStack = () => {
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     display,
-                    backgroundColor:
-                        network.type === NETWORK_TYPE.MAIN ? theme.colors.card : theme.colors.testnetBackground,
+                    backgroundColor: theme.colors.card,
                     ...tabbarBaseStyles.tabbar,
                     ...tabbarBaseStyles.shadow,
                 },
