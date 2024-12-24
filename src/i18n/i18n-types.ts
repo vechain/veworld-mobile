@@ -234,6 +234,10 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
+	 * C​l​a​i​m​ ​y​o​u​r​ ​u​s​e​r​n​a​m​e​ ​f​o​r​ ​f​r​e​e​ ​n​o​w
+	 */
+	BANNER_TITLE_CLAIM_USERNAME: string
+	/**
 	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​a​c​c​e​s​s​ ​i​t​ ​b​y​ ​a​d​d​i​n​g​ ​n​e​w​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​t​h​e​ ​w​a​l​l​e​t​.
 	 */
 	BD_ACCOUNT_REMOVAL: string
@@ -3795,6 +3799,10 @@ Try reconnect your device to the internet.
 	 * Backup your wallet
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
+	/**
+	 * Claim your username for free now
+	 */
+	BANNER_TITLE_CLAIM_USERNAME: () => LocalizedString
 	/**
 	 * Your account will be removed, but you can still access it by adding new accounts to the wallet.
 	 */

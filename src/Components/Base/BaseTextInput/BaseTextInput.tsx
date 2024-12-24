@@ -66,9 +66,11 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                     testID={rightIconTestID}
                 />
             ) : (
-                rightIcon
+                <BaseView style={styles.rightIconContainer}>
+                    <BaseView style={styles.rightIconStyle}>{rightIcon}</BaseView>
+                </BaseView>
             )
-        }, [onIconPress, rightIcon, rightIconTestID, styles.rightIconStyle, theme.colors.text])
+        }, [onIconPress, rightIcon, rightIconTestID, styles, theme])
 
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {
@@ -137,9 +139,9 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            borderColor: isError ? theme.colors.danger : theme.colors.transparent,
+            borderColor: isError ? theme.colors.danger : COLORS.GREY_200,
             borderWidth: 1,
-            borderRadius: 16,
+            borderRadius: 8,
             backgroundColor: theme.colors.card,
         },
         input: {
@@ -147,16 +149,22 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             backgroundColor: theme.colors.card,
             borderColor: theme.colors.transparent,
             borderWidth: 1,
-            borderRadius: 16,
+            borderRadius: 7,
             fontSize: defaultTypography.body.fontSize,
             fontFamily: defaultTypography.body.fontFamily,
             paddingVertical: 12,
             paddingLeft: 16,
             paddingRight: 8,
         },
-        rightIconStyle: {
-            marginRight: 16,
+        rightIconContainer: {
+            maxWidth: 150,
+            backgroundColor: COLORS.GREY_50,
+            borderLeftColor: COLORS.GREY_200,
+            borderLeftWidth: 1,
+            borderTopRightRadius: 7,
+            borderBottomRightRadius: 7,
         },
+        rightIconStyle: { flex: 1, justifyContent: "center", paddingHorizontal: 12 },
         errorContainer: {
             opacity: isError ? 1 : 0,
         },

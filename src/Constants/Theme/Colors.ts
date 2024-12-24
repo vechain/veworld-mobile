@@ -83,6 +83,14 @@ export type Colors = {
         title: string
         titleInline: string
     }
+    actionBanner: {
+        background: string
+        border: string
+        title: string
+        buttonBackground: string
+        buttonBorder: string
+        buttonText: string
+    }
 }
 
 export enum COLORS {
@@ -154,9 +162,11 @@ export enum COLORS {
     ORANGE_700 = "#9C4221",
     PURPLE_50 = "#F9F8FB",
     PURPLE_300 = "#A897EC",
+    PURPLE_200 = "#CCC3F4",
     PURPLE_400 = "#836CE4",
     PURPLE_500 = "#6042DD",
     PURPLE_800 = "#261470",
+    PURPLE_700 = "#351C9B",
     PURPLE_900 = "#170D45",
     COINBASE_BACKGROUND_LIGHT = "#ffffff",
     COINBASE_BACKGROUND_DARK = "#0a0b0d",
@@ -254,6 +264,14 @@ const light: Colors = {
         title: COLORS.BLUE_700,
         titleInline: COLORS.BLUE_700,
     },
+    actionBanner: {
+        background: COLORS.PURPLE_50,
+        border: COLORS.PURPLE_300,
+        title: COLORS.PURPLE_700,
+        buttonBackground: COLORS.WHITE,
+        buttonBorder: COLORS.GREY_200,
+        buttonText: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -340,6 +358,14 @@ const dark: Colors = {
         icon: COLORS.MEDIUM_BLUE,
         title: COLORS.BLUE_700,
         titleInline: COLORS.LIGHT_BLUE,
+    },
+    actionBanner: {
+        background: COLORS.PURPLE_900,
+        border: COLORS.PURPLE_400,
+        title: COLORS.PURPLE_200,
+        buttonBackground: COLORS.PURPLE_300,
+        buttonBorder: COLORS.PURPLE_500,
+        buttonText: COLORS.PURPLE_800,
     },
 }
 

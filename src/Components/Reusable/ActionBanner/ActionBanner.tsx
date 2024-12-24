@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseView } from "~Components/Base"
-import { COLORS, ColorThemeType } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 type Props = {
@@ -21,7 +21,7 @@ export const ActionBanner: React.FC<Props> = ({ children, actionText, actionTest
                 action={onPress}
                 testID={actionTestID}
                 title={actionText}
-                textColor={theme.isDark ? COLORS.PURPLE_800 : COLORS.GREY_600}
+                textColor={theme.colors.actionBanner.buttonText}
             />
         </BaseView>
     )
@@ -37,17 +37,17 @@ const baseStyles = (theme: ColorThemeType) =>
             gap: 24,
             padding: 8,
             borderRadius: 8,
-            borderColor: theme.isDark ? COLORS.PURPLE_400 : COLORS.PURPLE_300,
+            borderColor: theme.colors.actionBanner.border,
             borderWidth: 1,
-            backgroundColor: theme.isDark ? COLORS.PURPLE_900 : COLORS.PURPLE_50,
+            backgroundColor: theme.colors.actionBanner.background,
         },
         childrenContainer: {
             flexWrap: "wrap",
         },
         buttonContainer: {
-            borderColor: theme.isDark ? COLORS.PURPLE_500 : theme.colors.cardBorder,
+            borderColor: theme.colors.actionBanner.buttonBorder,
             borderWidth: 1,
-            backgroundColor: theme.isDark ? COLORS.PURPLE_300 : COLORS.PURPLE_50,
+            backgroundColor: theme.colors.actionBanner.buttonBackground,
             paddingVertical: 8,
         },
     })

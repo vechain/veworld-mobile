@@ -1,8 +1,15 @@
 import { showErrorToast, useThor, WalletEncryptionKeyHelper } from "~Components"
 import { useCallback, useMemo } from "react"
-import { selectAccounts, selectContacts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import {
+    selectAccounts,
+    selectContacts,
+    selectDevice,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    useAppSelector,
+} from "~Storage/Redux"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { Device, LocalDevice, Network, NETWORK_TYPE } from "~Model"
+import { LocalDevice, Network, NETWORK_TYPE } from "~Model"
 import { abi } from "thor-devkit"
 import { queryClient } from "~Api/QueryProvider"
 import {
@@ -21,7 +28,6 @@ import {
     VeChainProvider,
     VeChainSigner,
     vnsUtils,
-    TESTNET_URL,
 } from "@vechain/sdk-network"
 import { error } from "~Utils"
 import { useI18nContext } from "~i18n"
@@ -88,7 +94,7 @@ type VnsHook = {
     getVnsName: (address: string) => Promise<string | undefined>
     getVnsAddress: (name: string) => Promise<string | undefined>
     isSubdomainAvailable: (domainName: string) => Promise<boolean>
-    registerSubdomain: (account: Device, accountAddress: string, domainName: string, pin?: string) => Promise<boolean>
+    registerSubdomain: (domainName: string, pin?: string) => Promise<boolean>
 }
 
 export const useVns = (props?: Vns): VnsHook => {
@@ -96,8 +102,10 @@ export const useVns = (props?: Vns): VnsHook => {
     const thor = useThor()
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
+    const account = useAppSelector(selectSelectedAccount)
+    const device = useAppSelector(state => selectDevice(state, account.rootAddress))
 
-    const thorClient = useMemo(() => ThorClient.at(TESTNET_URL), [])
+    const thorClient = useMemo(() => ThorClient.at(network.currentUrl), [network.currentUrl])
 
     const fetchVns = useCallback(async () => {
         const nameRes = await getVnsName(thor, network, address)
@@ -140,9 +148,9 @@ export const useVns = (props?: Vns): VnsHook => {
 
     //#region  Subdomain registration
     const getSigner = useCallback(
-        async (account: LocalDevice, accountAddress: string, password?: string) => {
+        async (_device: LocalDevice, password?: string) => {
             const wallet = await WalletEncryptionKeyHelper.decryptWallet({
-                encryptedWallet: account.wallet,
+                encryptedWallet: _device.wallet,
                 pinCode: password,
             })
 
@@ -155,7 +163,7 @@ export const useVns = (props?: Vns): VnsHook => {
                     : new Uint8Array()
 
                 if (wallet.mnemonic) {
-                    const derivedPrivateKey = HDKey.fromMnemonic(wallet.mnemonic).deriveChild(account?.index).privateKey
+                    const derivedPrivateKey = HDKey.fromMnemonic(wallet.mnemonic).deriveChild(account.index).privateKey
 
                     if (!derivedPrivateKey) throw new Error("No private key found")
 
@@ -168,7 +176,7 @@ export const useVns = (props?: Vns): VnsHook => {
 
                 const providerWithDelegationEnabled = new VeChainProvider(
                     thorClient,
-                    new ProviderInternalBaseWallet([{ privateKey, address: accountAddress }], {
+                    new ProviderInternalBaseWallet([{ privateKey, address: account.address }], {
                         delegator: { delegatorUrl: DEFAULT_DELEGATOR_URL },
                     }),
                     true,
@@ -178,7 +186,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [thorClient],
+        [account, thorClient],
     )
 
     const getTotalGas = useCallback(
@@ -200,7 +208,7 @@ export const useVns = (props?: Vns): VnsHook => {
     )
 
     const buildClaimTx = useCallback(
-        async (subdomain: string, accountAddress: string) => {
+        async (subdomain: string) => {
             try {
                 const dataClaimer = new abi.Function(abis.VetDomains.claim).encode(
                     subdomain,
@@ -224,7 +232,7 @@ export const useVns = (props?: Vns): VnsHook => {
                     },
                 ]
 
-                const gas = await thorClient.gas.estimateGas(clauses, address)
+                const gas = await thorClient.gas.estimateGas(clauses, account.address)
                 const blockRef = await thorClient.blocks.getBestBlockRef()
                 if (!blockRef) throw new Error("Failed to get block ref")
 
@@ -239,7 +247,7 @@ export const useVns = (props?: Vns): VnsHook => {
                     gasPriceCoef: 0,
                     reserved: { features: 1 },
                     simulateTransactionOptions: {
-                        caller: accountAddress,
+                        caller: account.address,
                     },
                 }
 
@@ -259,15 +267,15 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [address, getTotalGas, network.genesis.id, thorClient.blocks, thorClient.gas, thorClient.transactions],
+        [account.address, getTotalGas, network.genesis.id, thorClient],
     )
 
     const signClaimTx = useCallback(
-        async (signer: VeChainSigner, txBody: TransactionBody, _address: string) => {
+        async (signer: VeChainSigner, txBody: TransactionBody) => {
             try {
                 const rawDelegateSigned =
                     (await signer?.signTransaction(
-                        signerUtils.transactionBodyToTransactionRequestInput(txBody, _address),
+                        signerUtils.transactionBodyToTransactionRequestInput(txBody, account.address),
                     )) || ""
 
                 const delegatedSignedTx = Transaction.decode(HexUInt.of(rawDelegateSigned.slice(2)).bytes, true)
@@ -276,29 +284,32 @@ export const useVns = (props?: Vns): VnsHook => {
                 const sendTransactionResult = await thorClient.transactions.sendTransaction(delegatedSignedTx)
 
                 // 6 - Wait for transaction receipt
-                const txReceipt = await sendTransactionResult.wait()
+                const txReceipt = await thorClient.transactions.waitForTransaction(sendTransactionResult.id)
 
                 if (txReceipt?.reverted) {
-                    throw new Error("Error claiming domain")
+                    // Get the revert reason
+                    const revertReason = await thorClient.transactions.getRevertReason(sendTransactionResult.id)
+                    throw new Error(revertReason ?? "Error claiming subdomain")
                 }
             } catch (e) {
                 throw new Error((e as Error)?.message)
             }
         },
-        [thorClient.transactions],
+        [account.address, thorClient.transactions],
     )
     //#endregion
 
     const registerSubdomain = useCallback(
-        async (account: Device, accountAddress: string, domainName: string, password?: string) => {
+        async (domainName: string, password?: string) => {
+            if (!device) return false
             try {
-                if (!("wallet" in account)) throw new Error("Ledger device not supported")
-                const signer = await getSigner(account, accountAddress, password)
+                if (!("wallet" in device)) throw new Error("Ledger device not supported")
+                const signer = await getSigner(device, password)
 
                 if (!signer) throw new Error("No signer")
 
-                const txBody = await buildClaimTx(domainName, accountAddress)
-                await signClaimTx(signer, txBody, accountAddress)
+                const txBody = await buildClaimTx(domainName)
+                await signClaimTx(signer, txBody)
 
                 return true
             } catch (e) {
@@ -314,7 +325,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 return false
             }
         },
-        [LL, buildClaimTx, getSigner, signClaimTx],
+        [LL, buildClaimTx, device, getSigner, signClaimTx],
     )
 
     return {

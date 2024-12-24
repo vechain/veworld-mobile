@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
     BaseButton,
+    BaseIcon,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -11,9 +12,8 @@ import {
     RequireUserPassword,
 } from "~Components"
 import { COLORS, ColorThemeType, DOMAIN_BASE } from "~Constants"
-import { useDisclosure, useThemedStyles, useVns } from "~Hooks"
+import { useDisclosure, useThemedStyles, useVns, useWalletSecurity } from "~Hooks"
 import { Routes, RootStackParamListHome } from "~Navigation"
-import { selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
 
@@ -28,12 +28,10 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
 
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const { isOpen: isPasswordPromptOpen, onClose: closePasswordPrompt } = useDisclosure()
+    const { isOpen: isPasswordPromptOpen, onClose: closePasswordPrompt, onOpen: openPasswordPrompt } = useDisclosure()
     const { isSubdomainAvailable, registerSubdomain } = useVns()
-    // const { migrateFromOnboarding } = useHandleWalletCreation()
+    const { isWalletSecurityBiometrics } = useWalletSecurity()
     const nav = useNavigation()
-    const account = useAppSelector(selectSelectedAccountOrNull)
-    const device = useAppSelector(state => selectDevice(state, account?.rootAddress))
 
     const isFieldValid = useMemo(() => {
         if (subdomain && subdomain.length <= 3) {
@@ -63,15 +61,33 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
         return () => clearTimeout(checkIsAvailable)
     }, [isFieldValid, isSubdomainAvailable, subdomain])
 
-    const onSubmit = useCallback(async () => {
-        setIsLoading(true)
-        if (!device || !account) return
-        const success = await registerSubdomain(device, account.address, subdomain)
-        setIsLoading(false)
-        if (success) {
-            nav.navigate(Routes.USERNAME_CLAIMED)
+    const onClaimUsername = useCallback(
+        async (pin?: string) => {
+            setIsLoading(true)
+            const success = await registerSubdomain(subdomain, pin)
+            setIsLoading(false)
+            if (success) {
+                nav.navigate(Routes.USERNAME_CLAIMED)
+            }
+        },
+        [nav, registerSubdomain, subdomain],
+    )
+
+    const onSuccess = useCallback(
+        (pin?: string) => {
+            closePasswordPrompt()
+            onClaimUsername(pin)
+        },
+        [closePasswordPrompt, onClaimUsername],
+    )
+
+    const onSubmit = useCallback(() => {
+        if (!isWalletSecurityBiometrics) {
+            openPasswordPrompt()
+        } else {
+            onClaimUsername()
         }
-    }, [account, device, nav, registerSubdomain, subdomain])
+    }, [isWalletSecurityBiometrics, onClaimUsername, openPasswordPrompt])
 
     const onSkipUsernameCreation = useCallback(async () => {
         navigation.navigate(Routes.HOME)
@@ -88,31 +104,36 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
 
     const renderSubdomainStatus = useMemo(() => {
         if (isChecking) {
-            return <BaseText>{LL.CHECKING_USERNAME_AVAILABILITY()}</BaseText>
+            return (
+                <BaseView flexDirection="row" style={styles.inputMessage}>
+                    <BaseText color={theme.colors.infoVariant.titleInline}>
+                        {LL.CHECKING_USERNAME_AVAILABILITY()}
+                    </BaseText>
+                </BaseView>
+            )
         } else {
             return (
-                <>
+                <BaseView flexDirection="row" style={styles.inputMessage}>
                     {isDomainAvailable && (
-                        <BaseText color={theme.colors.success}>{LL.SUCCESS_DOMAIN_AVAILABLE()}</BaseText>
+                        <>
+                            <BaseIcon name="icon-check-circle" color={theme.colors.successVariant.icon} size={16} />
+                            <BaseText color={theme.colors.successVariant.titleInline}>
+                                {LL.SUCCESS_DOMAIN_AVAILABLE()}
+                            </BaseText>
+                        </>
                     )}
                     {hasErrors && (
-                        <BaseText color={theme.colors.danger}>
-                            {isNotAvailable ? LL.ERROR_DOMAIN_ALREADY_TAKEN() : errorMessage}
-                        </BaseText>
+                        <>
+                            <BaseIcon name="icon-alert-triangle" color={theme.colors.errorVariant.icon} size={16} />
+                            <BaseText color={theme.colors.errorVariant.titleInline}>
+                                {isNotAvailable ? LL.ERROR_DOMAIN_ALREADY_TAKEN() : errorMessage}
+                            </BaseText>
+                        </>
                     )}
-                </>
+                </BaseView>
             )
         }
-    }, [
-        LL,
-        errorMessage,
-        hasErrors,
-        isChecking,
-        isDomainAvailable,
-        isNotAvailable,
-        theme.colors.danger,
-        theme.colors.success,
-    ])
+    }, [LL, errorMessage, hasErrors, isChecking, isDomainAvailable, isNotAvailable, styles, theme])
 
     return (
         <BaseSafeArea grow={1} style={[styles.container]}>
@@ -129,7 +150,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                     {/* Input container */}
                     <BaseView>
                         <BaseView mb={8} flexDirection="row" justifyContent="space-between">
-                            <BaseText typographyFont="subSubTitleBold" style={[styles.inputLabel]}>
+                            <BaseText typographyFont="subSubTitle" style={[styles.inputLabel]}>
                                 {LL.TITLE_CLAIM_USERNAME()}
                             </BaseText>
                             <BaseView flexDirection="row">
@@ -146,8 +167,11 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                             value={subdomain}
                             maxLength={20}
                             setValue={onSetSubdomain}
-                            errorMessage={errorMessage}
-                            rightIcon={<BaseText typographyFont="body">{DOMAIN_BASE}</BaseText>}
+                            rightIcon={
+                                <BaseText typographyFont="body" style={[styles.inputLabel]}>
+                                    {DOMAIN_BASE}
+                                </BaseText>
+                            }
                         />
                         {renderSubdomainStatus}
                     </BaseView>
@@ -164,7 +188,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                     </BaseButton>
                 </BaseView>
             </BaseView>
-            <RequireUserPassword isOpen={isPasswordPromptOpen} onClose={closePasswordPrompt} onSuccess={() => {}} />
+            <RequireUserPassword isOpen={isPasswordPromptOpen} onClose={closePasswordPrompt} onSuccess={onSuccess} />
         </BaseSafeArea>
     )
 }
@@ -181,5 +205,9 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         inputLabel: {
             color: theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600,
+        },
+        inputMessage: {
+            gap: 8,
+            marginVertical: 8,
         },
     })

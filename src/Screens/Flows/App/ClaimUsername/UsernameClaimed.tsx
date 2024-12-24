@@ -17,7 +17,7 @@ export const UsernameClaimed: React.FC<Props> = ({ navigation }) => {
         <BaseSafeArea>
             <BaseView flexGrow={1} p={24}>
                 <BaseView flexGrow={1} alignItems="center" justifyContent="center">
-                    <BaseIcon name="icon-check-circle" size={40} />
+                    <BaseIcon name="icon-check-circle" size={64} />
 
                     <BaseSpacer height={24} />
 
@@ -25,7 +25,9 @@ export const UsernameClaimed: React.FC<Props> = ({ navigation }) => {
 
                     <BaseSpacer height={8} />
 
-                    <BaseText typographyFont="body">{LL.SB_USERNAME_CLAIMED()}</BaseText>
+                    <BaseText typographyFont="body" align="center">
+                        {LL.SB_USERNAME_CLAIMED()}
+                    </BaseText>
                 </BaseView>
                 <BaseView mb={24} flexDirection="row">
                     <BaseButton w={100} action={() => onPress()} selfAlign="flex-end">
