@@ -75,7 +75,23 @@ export type RootStackParamListSwitch = {
 
     [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
     [Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD]: { mnemonicArray: string[]; device: LocalDevice }
-    [Routes.CONNECTED_V2_APP_APPROVAL]: undefined
+
+    [Routes.CONNECTED_V2_APP_APPROVAL]: {
+        request: {
+            id: string
+            genesisId: string
+            message: {
+                payload: {
+                    content: string
+                    type: string
+                }
+                puerpose: string
+            }
+            method: string
+            oprtions: {}
+            origin: string
+        }
+    }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 

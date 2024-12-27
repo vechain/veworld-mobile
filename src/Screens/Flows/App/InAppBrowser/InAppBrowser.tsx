@@ -1,14 +1,15 @@
-import { Layout, useInAppBrowser, BrowserBottomBar, URLBar } from "~Components"
-import { StyleSheet, View } from "react-native"
-import React, { MutableRefObject, useEffect } from "react"
-import WebView from "react-native-webview"
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListBrowser, Routes } from "~Navigation"
+import React, { MutableRefObject, useEffect } from "react"
+import { StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
-import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import WebView from "react-native-webview"
+import { BrowserBottomBar, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
-import { useNavigation } from "@react-navigation/native"
+import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { ApiV2AccountNotConnectedBottomSheet } from "./Components"
+import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
@@ -25,6 +26,10 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         handleCloseChangeAccountNetworkBottomSheet,
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
+        onLoadStart,
+        apiV2AccountNotConnectedBottomSheetRef,
+        connectApiV2Account,
+        rejectApiV2AccountConnection,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -73,6 +78,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                             scalesPageToFit={true}
                             injectedJavaScriptBeforeContentLoaded={injectVechainScript}
                             allowsInlineMediaPlayback={true}
+                            onLoadStart={onLoadStart}
                         />
                     )}
                     <ChangeAccountNetworkBottomSheet
@@ -81,6 +87,11 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                         ref={ChangeAccountNetworkBottomSheetRef}
                         onClose={handleCloseChangeAccountNetworkBottomSheet}
                         onConfirm={handleConfirmChangeAccountNetworkBottomSheet}
+                    />
+                    <ApiV2AccountNotConnectedBottomSheet
+                        ref={apiV2AccountNotConnectedBottomSheetRef}
+                        onConfirm={connectApiV2Account}
+                        onCancel={rejectApiV2AccountConnection}
                     />
                 </View>
             }

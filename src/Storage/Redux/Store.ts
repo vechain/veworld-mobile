@@ -19,6 +19,7 @@ import {
     WalletConnectSessionsSlice,
     AnalyticsSlice,
     BrowserSlice,
+    connectedAppAccountSlice,
 } from "./Slices"
 import { persistReducer } from "redux-persist"
 import { PersistConfig } from "redux-persist/es/types"
@@ -34,6 +35,7 @@ export const reducer = (nftPersistConfig: PersistConfig<NftSliceState>) =>
         [BalanceSlice.name]: BalanceSlice.reducer,
         [CacheSlice.name]: CacheSlice.reducer,
         [ContactsSlice.name]: ContactsSlice.reducer,
+        [connectedAppAccountSlice.name]: connectedAppAccountSlice.reducer,
         [ActivitiesSlice.name]: ActivitiesSlice.reducer,
         [DelegationSlice.name]: DelegationSlice.reducer,
         [NftSlice.name]: persistReducer(nftPersistConfig, NftSlice.reducer), // persist specific keys from a reducer

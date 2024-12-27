@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
 import { NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent } from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
+import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
 import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
@@ -12,16 +13,18 @@ import {
     CertificateRequest,
     InAppRequest,
     Network,
-    TypeDataRequest,
     TransactionRequest,
+    TypeDataRequest,
 } from "~Model"
 import { Routes } from "~Navigation"
 import {
     addConnectedDiscoveryApp,
     changeSelectedNetwork,
+    getAllConnectedAppAccounts,
     selectAccounts,
     selectConnectedDiscoverDApps,
     selectNetworks,
+    selectSelectedAccount,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
     useAppDispatch,
@@ -59,6 +62,10 @@ type ContextType = {
     handleConfirmChangeAccountNetworkBottomSheet: () => void
     ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods>
     switchAccount: (request: WindowRequest) => void
+    onLoadStart?: (event: WebViewNavigationEvent) => void
+    apiV2AccountNotConnectedBottomSheetRef: React.RefObject<BottomSheetModalMethods>
+    connectApiV2Account: () => void
+    rejectApiV2AccountConnection: () => void
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -74,6 +81,92 @@ type Props = {
 }
 
 export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
+
+const useConnectAccounts = () => {
+    const navigation = useNavigation()
+    const connectedAppAccounts = useAppSelector(getAllConnectedAppAccounts)
+    const currentAccount = useAppSelector(selectSelectedAccount)
+
+    const getConnectedAccounts = useCallback(
+        (origin: string) => {
+            const connectedAccounts = connectedAppAccounts[origin]
+            return connectedAccounts
+        },
+        [connectedAppAccounts],
+    )
+
+    const isDAppConnectedWithApiV2 = useCallback(
+        (origin: string) => {
+            const connectedAccounts = getConnectedAccounts(origin)
+            return !!(connectedAccounts?.length > 0)
+        },
+        [getConnectedAccounts],
+    )
+
+    const isCurrentAccountConnectedToDappWithApiV2 = useCallback(
+        (origin: string) => {
+            const connectedAccounts = getConnectedAccounts(origin)
+            return !!connectedAccounts?.find(address => AddressUtils.compareAddresses(address, currentAccount.address))
+        },
+        [currentAccount.address, getConnectedAccounts],
+    )
+
+    const prioritizeCurrentAccount = useCallback(
+        (connectedAccounts: string[]) => {
+            const newList = [
+                ...connectedAccounts.filter(address => !AddressUtils.compareAddresses(address, currentAccount.address)),
+            ]
+
+            newList.unshift(currentAccount.address)
+            return newList
+        },
+        [currentAccount.address],
+    )
+
+    const connectAccounts = useCallback(
+        (
+            request: {
+                id: string
+                genesisId: string
+                message: {
+                    payload: {
+                        content: string
+                        type: string
+                    }
+                    puerpose: string
+                }
+                method: string
+                oprtions: {}
+                origin: string
+            },
+            postMessage: (message: WindowResponse) => void,
+        ) => {
+            const origin = request.origin
+            const connectedAccounts = getConnectedAccounts(origin)
+
+            if (connectedAccounts?.length > 0 && isCurrentAccountConnectedToDappWithApiV2(origin)) {
+                const newList = prioritizeCurrentAccount(connectedAccounts)
+
+                postMessage({
+                    id: request.id,
+                    data: newList,
+                    method: request.method,
+                })
+            } else {
+                navigation.navigate(Routes.CONNECTED_V2_APP_APPROVAL, { request })
+            }
+        },
+        [getConnectedAccounts, isCurrentAccountConnectedToDappWithApiV2, navigation, prioritizeCurrentAccount],
+    )
+
+    return {
+        connectAccounts,
+        isDAppConnectedWithApiV2,
+        isCurrentAccountConnectedToDappWithApiV2,
+        getConnectedAccounts,
+        prioritizeCurrentAccount,
+    }
+}
 
 export const InAppBrowserProvider = ({ children }: Props) => {
     const nav = useNavigation()
@@ -94,6 +187,14 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
+
+    const { connectAccounts, isDAppConnectedWithApiV2, isCurrentAccountConnectedToDappWithApiV2 } = useConnectAccounts()
+
+    const {
+        ref: apiV2AccountNotConnectedBottomSheetRef,
+        onOpen: openApiV2AccountNotConnectedBottomSheet,
+        onClose: closeApiV2AccountNotConnectedBottomSheet,
+    } = useBottomSheetModal()
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -607,17 +708,21 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
             const data = JSON.parse(event.nativeEvent.data)
 
-            if (data.method === RequestMethods.REQUEST_TRANSACTION) {
-                return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
-            } else if (data.method === RequestMethods.SIGN_CERTIFICATE) {
-                return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
-            } else if (data.method === RequestMethods.SIGN_TYPED_DATA) {
-                return validateSignedDataMessage(data, event.nativeEvent.url, event.nativeEvent.title)
-            } else {
-                warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
+            switch (data.method) {
+                case RequestMethods.REQUEST_TRANSACTION:
+                    return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.SIGN_CERTIFICATE:
+                    return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.SIGN_TYPED_DATA:
+                    return validateSignedDataMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.CONNECT: {
+                    return connectAccounts(data, postMessage)
+                }
+                default:
+                    warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
             }
         },
-        [validateTxMessage, validateCertMessage, validateSignedDataMessage],
+        [validateTxMessage, validateCertMessage, validateSignedDataMessage, connectAccounts, postMessage],
     )
 
     const detectScrollDirection = useCallback(
@@ -673,6 +778,28 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         webviewRef.current = undefined
     }, [])
 
+    const connectApiV2Account = useCallback(() => {}, [])
+
+    const rejectApiV2AccountConnection = useCallback(() => {
+        closeApiV2AccountNotConnectedBottomSheet()
+    }, [closeApiV2AccountNotConnectedBottomSheet])
+
+    const onLoadStart = useCallback(
+        (event: WebViewNavigationEvent | WebViewErrorEvent) => {
+            const url = new URL(event.nativeEvent.url)
+            const origin = url.origin
+            const isDAppConnected = isDAppConnectedWithApiV2(origin)
+            const isCurrentAccountConntected = isCurrentAccountConnectedToDappWithApiV2(origin)
+
+            if (isDAppConnected && !isCurrentAccountConntected) {
+                //const connectedAccounts = getConnectedAccounts(origin)
+                //const newList = prioritizeCurrentAccount(connectedAccounts)
+                openApiV2AccountNotConnectedBottomSheet()
+            }
+        },
+        [isCurrentAccountConnectedToDappWithApiV2, isDAppConnectedWithApiV2, openApiV2AccountNotConnectedBottomSheet],
+    )
+
     const contextValue = React.useMemo(() => {
         return {
             webviewRef,
@@ -699,6 +826,10 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             handleConfirmChangeAccountNetworkBottomSheet,
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
+            onLoadStart,
+            apiV2AccountNotConnectedBottomSheetRef,
+            rejectApiV2AccountConnection,
+            connectApiV2Account,
         }
     }, [
         onMessage,
@@ -723,6 +854,10 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
         switchAccount,
+        onLoadStart,
+        apiV2AccountNotConnectedBottomSheetRef,
+        rejectApiV2AccountConnection,
+        connectApiV2Account,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
@@ -829,8 +964,26 @@ window.vechain = {
             },
         }
     },
-    request: function (method, params) {},
-    on: function (event, callback) {},
+    request: function ({ method, params }) {
+        const request = {
+            id: generateRandomId(),
+            method,
+            params,
+            origin: window.origin,
+        }
+
+        window.ReactNativeWebView.postMessage(JSON.stringify(request))
+        return newResponseHandler(request.id)
+    },
+    on: function (event, callback) {
+        const request = {
+           id: generateRandomId(),
+           method: event
+        }
+        
+        window.ReactNativeWebView.postMessage(JSON.stringify(request))
+        return newResponseHandler(request.id)
+    },
     removeListener: function (event, callback) {},
 }
 
