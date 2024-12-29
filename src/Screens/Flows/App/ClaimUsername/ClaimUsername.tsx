@@ -19,6 +19,10 @@ import { useI18nContext } from "~i18n"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CLAIM_USERNAME>
 
+//TODO: Handle display of Claim username banner
+//TODO: Finish refactor of text input
+//TODO: Add entry point for claim flow on wallet management screen
+
 export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [subdomain, setSubdomain] = useState("")
