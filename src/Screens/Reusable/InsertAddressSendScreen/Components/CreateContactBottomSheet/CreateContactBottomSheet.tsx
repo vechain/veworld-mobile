@@ -55,11 +55,16 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
 
         const handleProceedAnywayButton = useCallback(() => {
             onClose()
-            onSubmit(address)
+
+            // this is a workaround to wait for modal to be dismissed before navigating to the next screen, otherwise modal will show up again.
+            // Timeout duration is slight longer than the modal animation duration to ensure it's dismissed.
+            setTimeout(() => {
+                onSubmit(address)
+            }, 350)
         }, [address, onClose, onSubmit])
 
         return (
-            <BaseBottomSheet ref={ref} dynamicHeight>
+            <BaseBottomSheet ref={ref} dynamicHeight animationConfigs={{ duration: 300 }}>
                 {creationMode ? (
                     <BaseView>
                         <BaseView alignItems="stretch" w={100}>
