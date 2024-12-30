@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { FC, useCallback, useMemo } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import React, { FC, useCallback, useMemo, useRef, useState } from "react"
+import { NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet } from "react-native"
 import { blake2b256, Certificate } from "thor-devkit"
 import {
     AccountCard,
@@ -24,6 +24,7 @@ import {
     useCheckIdentity,
     useSetSelectedAccount,
     useSignMessage,
+    useThemedStyles,
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, WatchedAccount } from "~Model"
@@ -47,6 +48,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { processRequest, failRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
     const { LL } = useI18nContext()
+    const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
 
     const {
@@ -72,6 +74,9 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
     )
+
+    const [isVisible, setIsVisible] = useState(true)
+    const yOffset = useRef(0)
 
     const validConnectedApp = useMemo(() => {
         if (!sessionContext) return true
@@ -219,6 +224,27 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
         await onReject()
     }, [onReject])
 
+    const handleScroll = useCallback(
+        (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            e.persist()
+            if (e.nativeEvent.contentOffset) {
+                const offsetY = e.nativeEvent.contentOffset.y
+                const contentHeight = e.nativeEvent.contentSize.height
+                const scrollViewHeight = e.nativeEvent.layoutMeasurement.height
+                const maxOffset = contentHeight > scrollViewHeight ? contentHeight - scrollViewHeight - 10 : 0
+                const isAtBottom = offsetY > maxOffset
+                const shouldShow = offsetY <= yOffset.current || offsetY <= 0 || isAtBottom
+
+                if (shouldShow !== isVisible) {
+                    setIsVisible(shouldShow)
+                }
+
+                yOffset.current = offsetY
+            }
+        },
+        [isVisible],
+    )
+
     return (
         <BaseSafeArea>
             <ScrollView
@@ -226,7 +252,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
-                style={styles.scrollView}>
+                style={styles.scrollView}
+                onScroll={handleScroll}>
                 <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
                     <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
@@ -260,9 +287,11 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         />
                     )}
                 </BaseView>
+                <BaseSpacer height={194} />
             </ScrollView>
 
             <SignAndReject
+                isVisible={isVisible}
                 onConfirmTitle={LL.COMMON_BTN_SIGN()}
                 onRejectTitle={LL.COMMON_BTN_REJECT()}
                 onConfirm={() => onSubmit(checkIdentityBeforeOpening)}
@@ -288,31 +317,32 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     )
 }
 
-const styles = StyleSheet.create({
-    dappLogo: {
-        width: 100,
-        height: 100,
-        borderRadius: 8,
-        marginVertical: 4,
-    },
-    alignLeft: {
-        alignSelf: "flex-start",
-    },
-    scrollViewContainer: {
-        width: "100%",
-    },
-    scrollView: {
-        width: "100%",
-    },
-    footer: {
-        width: "100%",
-        alignItems: "center",
-        paddingLeft: 20,
-        paddingRight: 20,
-    },
-    separator: {
-        borderWidth: 0.5,
-        borderColor: "#0B0043",
-        opacity: 0.56,
-    },
-})
+const baseStyles = () =>
+    StyleSheet.create({
+        dappLogo: {
+            width: 100,
+            height: 100,
+            borderRadius: 8,
+            marginVertical: 4,
+        },
+        alignLeft: {
+            alignSelf: "flex-start",
+        },
+        scrollViewContainer: {
+            width: "100%",
+        },
+        scrollView: {
+            width: "100%",
+        },
+        footer: {
+            width: "100%",
+            alignItems: "center",
+            paddingLeft: 20,
+            paddingRight: 20,
+        },
+        separator: {
+            borderWidth: 0.5,
+            borderColor: "#0B0043",
+            opacity: 0.56,
+        },
+    })

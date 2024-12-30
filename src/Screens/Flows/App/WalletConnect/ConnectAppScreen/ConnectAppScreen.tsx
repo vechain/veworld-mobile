@@ -1,11 +1,10 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { ProposalTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
-import React, { FC, useCallback, useEffect, useMemo } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import React, { FC, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
-    BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -15,12 +14,17 @@ import {
     showErrorToast,
     showInfoToast,
     showSuccessToast,
-    useWalletConnect,
+    SignAndReject,
     useInAppBrowser,
+    useWalletConnect,
 } from "~Components"
+import { ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
+import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
+import { useI18nContext } from "~i18n"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
 import {
     addConnectedAppActivity,
     changeSelectedNetwork,
@@ -30,11 +34,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { error, HexUtils, warn } from "~Utils"
-import { useI18nContext } from "~i18n"
-import { AppConnectionRequests, AppInfo, UnknownAppMessage } from "~Screens"
-import { useSetSelectedAccount } from "~Hooks/useSetSelectedAccount"
 import { distinctValues } from "~Utils/ArrayUtils"
-import { ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useObservedAccountExclusion } from "../Hooks"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECT_APP_SCREEN>
@@ -52,6 +52,9 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
+
+    const [isVisible, setIsVisible] = useState(true)
+    const yOffset = useRef(0)
 
     const {
         ref: selectAccountBottomSheetRef,
@@ -261,6 +264,27 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
         }
     }, [processProposal, request, addAppAndNavToRequest])
 
+    const handleScroll = useCallback(
+        (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            e.persist()
+            if (e.nativeEvent.contentOffset) {
+                const offsetY = e.nativeEvent.contentOffset.y
+                const contentHeight = e.nativeEvent.contentSize.height
+                const scrollViewHeight = e.nativeEvent.layoutMeasurement.height
+                const maxOffset = contentHeight > scrollViewHeight ? contentHeight - scrollViewHeight - 10 : 0
+                const isAtBottom = offsetY > maxOffset
+                const shouldShow = offsetY <= yOffset.current || offsetY <= 0 || isAtBottom
+
+                if (shouldShow !== isVisible) {
+                    setIsVisible(shouldShow)
+                }
+
+                yOffset.current = offsetY
+            }
+        },
+        [isVisible],
+    )
+
     return (
         <BaseSafeArea grow={1}>
             <ScrollView
@@ -268,6 +292,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
+                onScroll={handleScroll}
                 style={styles.scrollView}>
                 <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
@@ -302,26 +327,17 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                         />
                     )}
                 </BaseView>
-
-                <BaseView mx={20}>
-                    <BaseSpacer height={24} />
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        title={LL.COMMON_BTN_CONNECT()}
-                        action={() => onSubmit(handleAccept)}
-                        disabled={isConfirmDisabled}
-                    />
-                    <BaseSpacer height={16} />
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        variant="outline"
-                        title={LL.COMMON_BTN_CANCEL_CAPS_LOCK()}
-                        action={handleReject}
-                    />
-                </BaseView>
+                <BaseSpacer height={194} />
             </ScrollView>
+
+            <SignAndReject
+                isVisible={isVisible}
+                onConfirmTitle={LL.COMMON_BTN_CONNECT()}
+                onRejectTitle={LL.COMMON_BTN_CANCEL_CAPS_LOCK()}
+                onConfirm={() => onSubmit(handleAccept)}
+                onReject={handleReject}
+                confirmButtonDisabled={isConfirmDisabled}
+            />
 
             <SelectAccountBottomSheet
                 closeBottomSheet={closeSelectAccountBottonSheet}

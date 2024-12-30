@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { FC, useCallback, useMemo } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import React, { FC, useCallback, useMemo, useRef, useState } from "react"
+import { NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet } from "react-native"
 import { Transaction } from "thor-devkit"
 import {
     AccountCard,
@@ -57,6 +57,9 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const tokens = useAppSelector(selectOfficialTokens)
+
+    const [isVisible, setIsVisible] = useState(true)
+    const yOffset = useRef(0)
 
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
@@ -213,6 +216,27 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         dappRequest: request,
     })
 
+    const handleScroll = useCallback(
+        (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            e.persist()
+            if (e.nativeEvent.contentOffset) {
+                const offsetY = e.nativeEvent.contentOffset.y
+                const contentHeight = e.nativeEvent.contentSize.height
+                const scrollViewHeight = e.nativeEvent.layoutMeasurement.height
+                const maxOffset = contentHeight > scrollViewHeight ? contentHeight - scrollViewHeight - 10 : 0
+                const isAtBottom = offsetY > maxOffset
+                const shouldShow = offsetY <= yOffset.current || offsetY <= 0 || isAtBottom
+
+                if (shouldShow !== isVisible) {
+                    setIsVisible(shouldShow)
+                }
+
+                yOffset.current = offsetY
+            }
+        },
+        [isVisible],
+    )
+
     return (
         <BaseSafeArea>
             <ScrollView
@@ -220,6 +244,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
+                onScroll={handleScroll}
                 style={styles.scrollView}>
                 <CloseModalButton onPress={onReject} />
 
@@ -279,9 +304,11 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         />
                     )}
                 </BaseView>
+                <BaseSpacer height={194} />
             </ScrollView>
 
             <SignAndReject
+                isVisible={isVisible}
                 onConfirmTitle={LL.COMMON_BTN_SIGN_AND_SEND()}
                 onConfirm={onSubmit}
                 confirmButtonDisabled={isLoading || isDisabledButtonState || (!validConnectedApp && !isInvalidChecked)}
