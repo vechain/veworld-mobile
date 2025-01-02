@@ -1,9 +1,13 @@
-import React, { FC, useEffect } from "react"
-import { StyleSheet } from "react-native"
+import React, { useCallback, useEffect, useImperativeHandle, useRef, useState } from "react"
+import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { ReduceMotion, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { BaseButton, BaseSpacer, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
+
+export type SignAndRejectRefInterface = {
+    onScroll: (e: NativeSyntheticEvent<NativeScrollEvent>) => void
+}
 
 type Props = {
     onConfirmTitle: string
@@ -14,22 +18,26 @@ type Props = {
     isConfirmLoading?: boolean
     rejectButtonDisabled?: boolean
     isRejectLoading?: boolean
-    isVisible?: boolean
 }
 
-export const SignAndReject: FC<Props> = React.memo(
-    ({
-        onConfirmTitle,
-        onRejectTitle,
-        onConfirm,
-        onReject,
-        confirmButtonDisabled = false,
-        isConfirmLoading = false,
-        rejectButtonDisabled = false,
-        isRejectLoading = false,
-        isVisible = false,
-    }: Props) => {
+export const SignAndReject = React.forwardRef<SignAndRejectRefInterface, Props>(
+    (
+        {
+            onConfirmTitle,
+            onRejectTitle,
+            onConfirm,
+            onReject,
+            confirmButtonDisabled = false,
+            isConfirmLoading = false,
+            rejectButtonDisabled = false,
+            isRejectLoading = false,
+        }: Props,
+        ref,
+    ) => {
         const { styles, theme } = useThemedStyles(baseStyles)
+
+        const [isVisible, setIsVisible] = useState(true)
+        const yOffset = useRef(0)
 
         const bottomInitialValue = -194
         const bottom = useSharedValue(bottomInitialValue)
@@ -57,6 +65,28 @@ export const SignAndReject: FC<Props> = React.memo(
                 reduceMotion: ReduceMotion.System,
             })
         }, [bottom, bottomInitialValue, isVisible])
+
+        const onScroll = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            e.persist()
+            if (e.nativeEvent.contentOffset) {
+                const offsetY = e.nativeEvent.contentOffset.y
+                const contentHeight = e.nativeEvent.contentSize.height
+                const scrollViewHeight = e.nativeEvent.layoutMeasurement.height
+                const maxOffset = contentHeight > scrollViewHeight ? contentHeight - scrollViewHeight - 10 : 0
+                const isAtBottom = offsetY > maxOffset
+                const shouldShow = offsetY <= yOffset.current || offsetY <= 0 || isAtBottom
+                setIsVisible(shouldShow)
+                yOffset.current = offsetY
+            }
+        }, [])
+
+        useImperativeHandle(
+            ref,
+            () => ({
+                onScroll: onScroll,
+            }),
+            [onScroll],
+        )
 
         return (
             <Animated.View style={[styles.buttonsContainer, animatedStyle]}>

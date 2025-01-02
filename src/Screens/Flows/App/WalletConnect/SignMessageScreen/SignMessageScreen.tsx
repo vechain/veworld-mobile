@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { getSdkError } from "@walletconnect/utils"
-import React, { FC, useCallback, useMemo, useRef, useState } from "react"
-import { NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet } from "react-native"
+import React, { FC, useCallback, useMemo, useRef } from "react"
+import { ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
     BaseSafeArea,
@@ -13,6 +13,7 @@ import {
     getRpcError,
     RequireUserPassword,
     SignAndReject,
+    SignAndRejectRefInterface,
     useWalletConnect,
 } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
@@ -45,8 +46,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
 
-    const [isVisible, setIsVisible] = useState(true)
-    const yOffset = useRef(0)
+    const signAndRejectRef = useRef<SignAndRejectRefInterface>(null)
 
     const sessionContext = useAppSelector(state => selectVerifyContext(state, requestEvent.topic))
 
@@ -178,27 +178,6 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
         await onReject()
     }, [onReject])
 
-    const handleScroll = useCallback(
-        (e: NativeSyntheticEvent<NativeScrollEvent>) => {
-            e.persist()
-            if (e.nativeEvent.contentOffset) {
-                const offsetY = e.nativeEvent.contentOffset.y
-                const contentHeight = e.nativeEvent.contentSize.height
-                const scrollViewHeight = e.nativeEvent.layoutMeasurement.height
-                const maxOffset = contentHeight > scrollViewHeight ? contentHeight - scrollViewHeight - 10 : 0
-                const isAtBottom = offsetY > maxOffset
-                const shouldShow = offsetY <= yOffset.current || offsetY <= 0 || isAtBottom
-
-                if (shouldShow !== isVisible) {
-                    setIsVisible(shouldShow)
-                }
-
-                yOffset.current = offsetY
-            }
-        },
-        [isVisible],
-    )
-
     return (
         <BaseSafeArea>
             <ScrollView
@@ -206,7 +185,8 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
-                onScroll={handleScroll}
+                scrollEventThrottle={16}
+                onScroll={signAndRejectRef.current?.onScroll}
                 style={styles.scrollView}>
                 <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
@@ -247,7 +227,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
             </ScrollView>
 
             <SignAndReject
-                isVisible={isVisible}
+                ref={signAndRejectRef}
                 onConfirmTitle={LL.COMMON_BTN_SIGN()}
                 onConfirm={checkIdentityBeforeOpening}
                 isConfirmLoading={isBiometricsEmpty}
