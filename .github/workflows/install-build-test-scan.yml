@@ -27,13 +27,35 @@ jobs:
         - name: Detect Test Script Changes
           id: detect-changes
           run: |
-            if git diff --name-only HEAD^ HEAD | grep -q "./maestro/*"; then
+            FIRST_COMMIT=$(git rev-list --max-parents=0 HEAD)
+            if git show --name-only --pretty="" $FIRST_COMMIT | grep -q "./maestro/"; then
+              echo "First commit contains files in the Maestro folder."
+              ONLY_MAESTRO=true
+            else
+              echo "First commit does not contain files in the Maestro folder."
+              ONLY_MAESTRO=false
+            fi
+
+            # Check if all subsequent commits are in the Maestro folder
+            if $ONLY_MAESTRO; then
+              for COMMIT in $(git rev-list HEAD); do
+                if ! git show --name-only --pretty="" $COMMIT | grep -q "./maestro/"; then
+                  echo "Commit $COMMIT contains files outside the Maestro folder."
+                  ONLY_MAESTRO=false
+                  break
+                fi
+              done
+            fi
+
+            # Output result
+            if $ONLY_MAESTRO; then
               echo "only_test_scripts_changed=true" >> $GITHUB_ENV
-              echo "::set-output name=only_test_scripts_changed::true"
+              echo "only_test_scripts_changed=true" >> $GITHUB_OUTPUT
             else
               echo "only_test_scripts_changed=false" >> $GITHUB_ENV
-              echo "::set-output name=only_test_scripts_changed::false"
+              echo "only_test_scripts_changed=false" >> $GITHUB_OUTPUT
             fi
+            
     build-and-test-ios:
         if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         uses: ./.github/workflows/e2e-ios.yml
