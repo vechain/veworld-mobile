@@ -16,61 +16,18 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-    check-build-changes:
-      runs-on: ubuntu-latest
-      outputs:
-        only_test_scripts_changed: ${{ steps.detect-changes.outputs.only_test_scripts_changed }}
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
 
-        - name: Detect Test Script Changes
-          id: detect-changes
-          run: |
-            FIRST_COMMIT=$(git rev-list --max-parents=0 HEAD)
-            if git show --name-only --pretty="" $FIRST_COMMIT | grep -q "./maestro/"; then
-              echo "First commit contains files in the Maestro folder."
-              ONLY_MAESTRO=true
-            else
-              echo "First commit does not contain files in the Maestro folder."
-              ONLY_MAESTRO=false
-            fi
-
-            # Check if all subsequent commits are in the Maestro folder
-            if $ONLY_MAESTRO; then
-              for COMMIT in $(git rev-list HEAD); do
-                if ! git show --name-only --pretty="" $COMMIT | grep -q "./maestro/"; then
-                  echo "Commit $COMMIT contains files outside the Maestro folder."
-                  ONLY_MAESTRO=false
-                  break
-                fi
-              done
-            fi
-
-            # Output result
-            if $ONLY_MAESTRO; then
-              echo "only_test_scripts_changed=true" >> $GITHUB_ENV
-              echo "only_test_scripts_changed=true" >> $GITHUB_OUTPUT
-            else
-              echo "only_test_scripts_changed=false" >> $GITHUB_ENV
-              echo "only_test_scripts_changed=false" >> $GITHUB_OUTPUT
-            fi
-            
     build-and-test-ios:
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         uses: ./.github/workflows/e2e-ios.yml
         needs: scan
         secrets: inherit
 
     build-and-test-android:
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'true'
         uses: ./.github/workflows/e2e-android.yml
         needs: scan
         secrets: inherit
 
     scan:
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
-
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository

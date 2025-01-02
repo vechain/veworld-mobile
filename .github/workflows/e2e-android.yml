@@ -17,17 +17,22 @@ jobs:
         - name: Detect Test Script Changes
           id: detect-changes
           run: |
-            if git diff --name-only HEAD^ HEAD | grep -q "./maestro/*"; then
-              echo "only_test_scripts_changed=true" >> $GITHUB_ENV
-              echo "::set-output name=only_test_scripts_changed::true"
-            else
+            LAST_COMMIT=$(git rev-parse HEAD)
+            CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $LAST_COMMIT)
+
+            if echo "$CHANGED_FILES" | grep -qv "^maestro/"; then
               echo "only_test_scripts_changed=false" >> $GITHUB_ENV
-              echo "::set-output name=only_test_scripts_changed::false"
+              echo "only_test_scripts_changed=false" >> $GITHUB_OUTPUT
+            else
+              echo "only_test_scripts_changed=true" >> $GITHUB_ENV
+              echo "only_test_scripts_changed=true" >> $GITHUB_OUTPUT
+            fi
 
   build-test-android:
       name: Build & Test Android Release
       runs-on: ubuntu-latest
       environment: android-release
+      if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }} && needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
       outputs:
         app: app/build/outputs/apk/release
       env:
