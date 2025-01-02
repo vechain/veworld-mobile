@@ -159,7 +159,7 @@ jobs:
             env:
               GH_TOKEN: ${{ steps.generate-token.outputs.token }}
             run: |  
-                successful_run=${{github.run_id}} + ${{github.run_attempt}}
+                successful_run=$(( ${{github.run_id}} + ${{github.run_attempt}} ))
                 echo "run_id=$successful_run" >> $GITHUB_ENV
                 gh variable set ANDROID_RUN_ID --body "$successful_run"
             
