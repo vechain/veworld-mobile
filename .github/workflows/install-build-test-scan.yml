@@ -19,12 +19,10 @@ jobs:
 
     build-and-test-ios:
         uses: ./.github/workflows/e2e-ios.yml
-        needs: scan
         secrets: inherit
 
     build-and-test-android:
         uses: ./.github/workflows/e2e-android.yml
-        needs: scan
         secrets: inherit
 
     scan:
