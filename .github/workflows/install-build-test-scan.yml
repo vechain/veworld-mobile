@@ -16,17 +16,38 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
+    check-build-changes:
+      runs-on: ubuntu-latest
+      outputs:
+        only_test_scripts_changed: ${{ steps.detect-changes.outputs.only_test_scripts_changed }}
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Detect Test Script Changes
+          id: detect-changes
+          run: |
+            if git diff --name-only HEAD^ HEAD | grep -q "./maestro/*"; then
+              echo "only_test_scripts_changed=true" >> $GITHUB_ENV
+              echo "::set-output name=only_test_scripts_changed::true"
+            else
+              echo "only_test_scripts_changed=false" >> $GITHUB_ENV
+              echo "::set-output name=only_test_scripts_changed::false"
     build-and-test-ios:
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         uses: ./.github/workflows/e2e-ios.yml
         needs: scan
         secrets: inherit
 
     build-and-test-android:
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'true'
         uses: ./.github/workflows/e2e-android.yml
         needs: scan
         secrets: inherit
 
     scan:
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+
         runs-on: ubuntu-latest
         steps:
             - name: Checkout repository
