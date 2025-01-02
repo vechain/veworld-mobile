@@ -6,15 +6,45 @@ on:
   workflow_call:
 
 jobs:
-  build-e2e-test-ios:
+  check-build-changes:
+      runs-on: ubuntu-latest
+      outputs:
+        only_test_scripts_changed: ${{ steps.detect-changes.outputs.only_test_scripts_changed }}
+      steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Detect Test Script Changes
+          id: detect-changes
+          run: |
+            if git diff --name-only HEAD^ HEAD | grep -q "./maestro/*"; then
+              echo "only_test_scripts_changed=true" >> $GITHUB_ENV
+              echo "::set-output name=only_test_scripts_changed::true"
+            else
+              echo "only_test_scripts_changed=false" >> $GITHUB_ENV
+              echo "::set-output name=only_test_scripts_changed::false"
+  build-e2e-ios:
     name: Build & Test iOS Debug
     runs-on: macos-latest
     environment: ios-release
+    permissions:
+          actions: write
+          contents: read
 
     # Proceed only if it's either not a release event or it's a pre-release.
-    if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
+    if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }} && needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
 
     steps:
+      - name: Generate a token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.APP_ID }}
+          private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+      - name: Set GH_TOKEN environment variable
+        run: echo "GH_TOKEN=${{ steps.generate-token.outputs.token }}" >> $GITHUB_ENV
+
       - name: Checkout repository
         uses: actions/checkout@v3
         with:
@@ -110,8 +140,34 @@ jobs:
         with:
           name: VeWorld.app
           path: ${{ env.APP_PATH }}
-      
-      - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
-        with:
-          api-key: ${{ secrets.DCD_API_KEY }}
-          app-file: ${{ env.APP_PATH }}
+
+      - name: Upload run_id number
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          RUN_ID: ${{ github.run_id }}
+        run: |  
+            successful_run=${{github.run_id}} + ${{github.run_attempt}}
+            echo "run_id=$successful_run" >> $GITHUB_ENV
+            gh variable set IOS_RUN_ID --body "$successful_run"
+
+  test-ios:
+    runs-on: macos-latest
+    env:
+      APP_PATH: ${{ needs.build-e2e-ios.outputs.APP_PATH }}
+      GH_TOKEN: ${{ secrets.GH_TOKEN }}
+      RUN_ID: ${{ vars.ios_run_id }}
+    steps:
+        - name: Checkout repository
+          uses: actions/checkout@v3
+          with:
+            ref: ${{ github.ref }}
+
+        - name: Download .app
+          uses: actions/download-artifact@v4
+          with:
+            name: VeWorld.app
+            run_id: ${{ env.RUN_ID }}
+        - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
+          with:
+            api-key: ${{ secrets.DCD_API_KEY }}
+            app-file: ./VeWorld.app
