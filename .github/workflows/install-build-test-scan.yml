@@ -33,6 +33,7 @@ jobs:
             else
               echo "only_test_scripts_changed=false" >> $GITHUB_ENV
               echo "::set-output name=only_test_scripts_changed::false"
+            fi
     build-and-test-ios:
         if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         uses: ./.github/workflows/e2e-ios.yml
