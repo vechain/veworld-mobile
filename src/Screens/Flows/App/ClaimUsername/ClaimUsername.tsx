@@ -183,11 +183,19 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                 {/* Footer */}
                 <BaseView flexDirection="row" w={100} style={[styles.footerContainer]}>
                     {!isLoading && (
-                        <BaseButton variant="outline" flex={1} action={() => onSkipUsernameCreation()}>
+                        <BaseButton
+                            variant="outline"
+                            flex={1}
+                            action={() => onSkipUsernameCreation()}
+                            testID="ClaimUsername_Skip_Btn">
                             {LL.BTN_SKIP()}
                         </BaseButton>
                     )}
-                    <BaseButton flex={1} disabled={isLoading || !subdomain} action={onSubmit}>
+                    <BaseButton
+                        flex={1}
+                        disabled={isLoading || !subdomain}
+                        action={onSubmit}
+                        testID="ClaimUsername_Confirm_Btn">
                         {isLoading ? LL.BTN_CONFRIMING() : LL.BTN_CONFIRM()}
                     </BaseButton>
                 </BaseView>

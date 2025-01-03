@@ -32,7 +32,7 @@ export const UsernameClaimed: React.FC<Props> = ({ navigation }) => {
                     </BaseText>
                 </BaseView>
                 <BaseView mb={24} flexDirection="row">
-                    <BaseButton w={100} action={() => onPress()} selfAlign="flex-end">
+                    <BaseButton w={100} action={onPress} selfAlign="flex-end" testID="UsernameClaimed_Btn">
                         {LL.BTN_CONTINUE()}
                     </BaseButton>
                 </BaseView>
