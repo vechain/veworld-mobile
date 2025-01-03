@@ -15,7 +15,6 @@ import { queryClient } from "~Api/QueryProvider"
 import {
     abis,
     DOMAIN_BASE,
-    DEFAULT_DELEGATOR_URL,
     TESTNET_VNS_PUBLIC_RESOLVER,
     TESTNET_VNS_REGISTRAR_CONTRACT,
     TESTNET_VNS_SUBDOMAIN_CONTRACT,
@@ -174,14 +173,11 @@ export const useVns = (props?: Vns): VnsHook => {
 
                 if (!isValidPrivateKey) throw new Error("Invalid private key")
 
-                const providerWithDelegationEnabled = new VeChainProvider(
+                const provider = new VeChainProvider(
                     thorClient,
-                    new ProviderInternalBaseWallet([{ privateKey, address: account.address }], {
-                        delegator: { delegatorUrl: DEFAULT_DELEGATOR_URL },
-                    }),
-                    true,
+                    new ProviderInternalBaseWallet([{ privateKey, address: account.address }]),
                 )
-                return await providerWithDelegationEnabled.getSigner()
+                return await provider.getSigner()
             } catch (e) {
                 throw new Error((e as Error)?.message)
             }

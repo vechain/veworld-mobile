@@ -1,18 +1,36 @@
 import { useNavigation } from "@react-navigation/native"
+import { Hex, HexInt } from "@vechain/sdk-core"
 import React, { useCallback } from "react"
 import { ActionBanner, BaseText, BaseView } from "~Components"
-import { useTheme } from "~Hooks"
+import { useTheme, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import {
+    selectBalancesForAccount,
+    selectSelectedAccount,
+    selectVthoBalanceByAccount,
+    useAppSelector,
+} from "~Storage/Redux"
 
 export const ClaimUsernameBanner = () => {
     const theme = useTheme()
     const nav = useNavigation()
     const { LL } = useI18nContext()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    selectBalancesForAccount
+    const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, selectedAccount.address))
+
+    const { name } = useVns({
+        address: selectedAccount.address,
+        name: "",
+    })
 
     const onClaimPress = useCallback(() => {
         nav.navigate(Routes.CLAIM_USERNAME)
     }, [nav])
+
+    // Hide the claim banner if VTHO balance is 0 or you already have a vet domain
+    if (name || HexInt.of(vthoBalance).isEqual(Hex.of("0x0"))) return <></>
 
     return (
         <BaseView w={100} px={20}>
