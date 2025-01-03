@@ -2,6 +2,7 @@ import { VeChainSigner } from "@vechain/sdk-network"
 import { Client, Conversation, DecodedMessage, Signer } from "@xmtp/react-native-sdk"
 import { queryClient } from "~Api/QueryProvider"
 import { info } from "~Utils/Logger"
+import RNFS from "react-native-fs"
 
 export const convertAccountToXmtpSigner = (accout: VeChainSigner): Signer => {
     return {
@@ -13,12 +14,25 @@ export const convertAccountToXmtpSigner = (accout: VeChainSigner): Signer => {
     }
 }
 
+export const createOrRetrieveDbPath = async () => {
+    const dbPath = `${RNFS.DocumentDirectoryPath}/Vechain/databases`
+    const directoyExists = await RNFS.exists(dbPath)
+    if (!directoyExists) {
+        await RNFS.mkdir(dbPath)
+        return dbPath
+    }
+
+    return dbPath
+}
+
 export const createXmtpClient = async (wallet: Signer, encryptionKey: Uint8Array) => {
-    const address = await wallet.getAddress()
+    // const address = await wallet.getAddress()
+    const dbPath = await createOrRetrieveDbPath()
+
     return await Client.create(wallet, {
         env: "production",
         dbEncryptionKey: encryptionKey,
-        dbDirectory: `/vechain/chat/${address}`, //TODO: fix error while creating client with db directory
+        dbDirectory: dbPath,
         preAuthenticateToInboxCallback: () => {},
     })
 }
@@ -28,9 +42,12 @@ export const createXmtpClients = async (wallets: Signer[], encryptionKey: Uint8A
 }
 
 export const loadXmtpClient = async (address: string, encryptionKey: Uint8Array) => {
+    const dbPath = await createOrRetrieveDbPath()
+
     return await Client.build(address, {
         env: "production",
         dbEncryptionKey: encryptionKey,
+        dbDirectory: dbPath,
         preAuthenticateToInboxCallback: () => {},
     })
 }

@@ -60,10 +60,6 @@ const MetadataStorage = new MMKV({
     id: "metadata_storage",
 })
 
-const ChatStorage = new MMKV({
-    id: "chat_storage",
-})
-
 export type EncryptedStorage = {
     mmkv: MMKV
     encryptionKey: string
@@ -209,10 +205,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                     mmkv: MetadataStorage,
                     encryptionKey: keys.metadata,
                 })
-                setChatStorage({
-                    mmkv: ChatStorage,
-                    encryptionKey: keys.chats,
-                })
 
                 setWalletStatus(WALLET_STATUS.UNLOCKED)
             }
@@ -326,11 +318,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
                 setMetadataStorage({
                     mmkv: MetadataStorage,
                     encryptionKey: encryptionKeys.metadata,
-                })
-
-                setChatStorage({
-                    mmkv: ChatStorage,
-                    encryptionKey: encryptionKeys.chats,
                 })
 
                 setWalletStatus(WALLET_STATUS.UNLOCKED)

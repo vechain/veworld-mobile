@@ -1,13 +1,16 @@
-import { DecodedMessage } from "@xmtp/react-native-sdk"
 import { useVeChat } from "../VeChatProvider"
 import { useConversation } from "./useConversation"
-import { useMMKV, useMMKVObject } from "react-native-mmkv"
+import { useQuery } from "@tanstack/react-query"
 
-export function useMessages({ topic }: { topic: string }): DecodedMessage[] {
+export function useMessages({ topic }: { topic: string }) {
     const { selectedClient } = useVeChat()
     const { data: conversation } = useConversation({ topic })
-    const chatStorage = useMMKV({ id: "chat_storage" })
-    const [messages] = useMMKVObject<DecodedMessage[]>(`${selectedClient?.address}-${conversation?.topic}`, chatStorage)
 
-    return messages?.sort((a, b) => b.sentNs - a.sentNs) ?? []
+    return useQuery({
+        queryKey: ["veChat", "messages", selectedClient?.address, topic],
+        queryFn: async () => {
+            return (await conversation?.messages()) || []
+        },
+        enabled: !!selectedClient && !!conversation,
+    })
 }

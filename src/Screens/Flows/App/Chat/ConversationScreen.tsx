@@ -18,7 +18,7 @@ import { useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { humanAddress } from "~Utils/AddressUtils/AddressUtils"
 import MessageBubble from "./Components/MessageBubble"
-import { error, info } from "~Utils"
+import { error } from "~Utils"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CHAT_CONVERSATION>
 
@@ -29,7 +29,7 @@ const ConversationScreen = ({ route, navigation }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
-    const messages = useMessages({ topic })
+    const { data: messages, refetch: refetchMessages } = useMessages({ topic })
     const { data: conversation } = useConversation({ topic })
 
     const onGoBack = useCallback(() => {
@@ -42,10 +42,14 @@ const ConversationScreen = ({ route, navigation }: Props) => {
             return
         }
         Keyboard.dismiss()
-        await conversation.send(message)
-        // refetchMessages()
-        setMessage("")
-    }, [conversation, message])
+        try {
+            await conversation.send(message)
+            setMessage("")
+            refetchMessages()
+        } catch (err) {
+            error("VE_CHAT", err)
+        }
+    }, [conversation, message, refetchMessages])
 
     const separatorComponent = useCallback(() => {
         return <BaseSpacer height={6} />
@@ -53,7 +57,7 @@ const ConversationScreen = ({ route, navigation }: Props) => {
 
     const messageItem = useCallback(
         ({ item, index }: { item: DecodedMessage; index: number }) => {
-            info("VE_CHAT", "ITEM", item.contentTypeId)
+            // info("VE_CHAT", "ITEM", item.contentTypeId)
             if (item.contentTypeId === "xmtp.org/group_updated:1.0" || !item.contentTypeId) return <></>
             return <MessageBubble item={item} index={index} recipient={recipient} />
         },
