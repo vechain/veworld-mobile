@@ -56,6 +56,14 @@ jobs:
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
+      
+      - name: Install Correct Ruby Version
+        run: |
+          brew install ruby
+          echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"' >> ~/.zshrc
+          source ~/.zshrc
+          ruby --version
+          
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
         run: |
@@ -66,13 +74,6 @@ jobs:
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
-
-      - name: Install Correct Ruby Version
-        run: |
-          brew install ruby
-          echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"' >> ~/.zshrc
-          source ~/.zshrc
-          ruby --version
       
       # Setup Ruby
       - name: Setup Ruby
