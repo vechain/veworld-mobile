@@ -57,13 +57,18 @@ jobs:
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
       
-      - name: Install Correct Ruby Version
+      - name: Use Correct Ruby Version
         run: |
-          brew install ruby
+          echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"' >> ~/.bash_profile
           echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"' >> ~/.zshrc
-          source ~/.zshrc
+          source ~/.bash_profile
           ruby --version
-          
+       # Update Bundler and Install Gems
+      - name: Update Bundler and Install Gems
+        run: |
+          gem install bundler -v 2.4.22 
+          bundle install --jobs 4 --retry 3 
+
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
         run: |
