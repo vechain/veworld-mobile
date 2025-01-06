@@ -93,7 +93,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     return (
         <Layout
-            noMargin
             fixedBody={
                 <ScrollView>
                     <BaseView style={styles.assetDetailsHeader}>

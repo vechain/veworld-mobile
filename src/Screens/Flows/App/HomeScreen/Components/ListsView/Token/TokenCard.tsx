@@ -28,11 +28,9 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const styles = baseStyles(isEdit)
-
     const icon = tokenWithBalance.icon
 
-    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
+    const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
 
     const tokenBalance = useMemo(
         () => BalanceUtils.getTokenUnitBalance(tokenWithBalance.balance.balance, tokenWithBalance.decimals ?? 0, 2),
@@ -46,7 +44,7 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
             <BaseView flexDirection="row">
                 {icon !== "" && (
                     <BaseCard
-                        style={[styles.imageContainer, { backgroundColor: COLORS.WHITE }]}
+                        style={[styles.imageContainer, { backgroundColor: COLORS.GREY_50 }]}
                         containerStyle={styles.imageShadow}>
                         <BaseImage source={{ uri: icon }} style={styles.image} />
                     </BaseCard>
@@ -61,8 +59,8 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
 
                 <BaseSpacer width={16} />
                 <BaseView>
-                    <BaseText typographyFont="subTitleBold" numberOfLines={1} ellipsizeMode="tail">
-                        {tokenWithBalance.name}
+                    <BaseText typographyFont="captionSemiBold" numberOfLines={1} ellipsizeMode="tail">
+                        {tokenWithBalance.symbol}
                     </BaseText>
                     <BaseView flexDirection="row" alignItems="baseline" justifyContent="flex-start">
                         {isTokensOwnedLoading && isBalanceVisible ? (
@@ -80,11 +78,8 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
                             </BaseView>
                         ) : (
                             <BaseView flexDirection="row" alignItems="center">
-                                <BaseText typographyFont="bodyMedium" color={tokenValueLabelColor}>
-                                    {isBalanceVisible ? tokenBalance : "••••"}{" "}
-                                </BaseText>
                                 <BaseText typographyFont="captionRegular" color={tokenValueLabelColor}>
-                                    {tokenWithBalance.symbol}
+                                    {isBalanceVisible ? tokenBalance : "••••"}{" "}
                                 </BaseText>
                             </BaseView>
                         )}
@@ -95,8 +90,9 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
             {!isEdit && !isIlliquidToken && (
                 <BaseView style={[styles.balancesContainer]}>
                     <FiatBalance
+                        color={theme.colors.tokenCardText}
                         balances={[fiatBalance]}
-                        typographyFont="subTitleBold"
+                        typographyFont="captionRegular"
                         isVisible={isBalanceVisible}
                         isLoading={isTokensOwnedLoading}
                     />
@@ -106,37 +102,36 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
     )
 })
 
-const baseStyles = (isEdit: boolean) =>
-    StyleSheet.create({
-        imageShadow: {
-            width: "auto",
-        },
-        imageContainer: {
-            borderRadius: 30,
-            padding: 10,
-        },
-        image: { width: 20, height: 20 },
-        innerRow: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            flexGrow: 1,
-            paddingHorizontal: 12,
-            paddingLeft: isEdit ? 0 : 12,
-        },
-        fiatBalance: {
-            justifyContent: "flex-end",
-        },
-        balancesContainer: {
-            alignItems: "flex-end",
-        },
-        skeleton: {
-            width: 40,
-        },
-        icon: {
-            width: 40,
-            height: 40,
-            borderRadius: 40 / 2,
-            alignItems: "center",
-            justifyContent: "center",
-        },
-    })
+const styles = StyleSheet.create({
+    imageShadow: {
+        width: "auto",
+    },
+    imageContainer: {
+        borderRadius: 30,
+        padding: 9,
+        backgroundColor: COLORS.GREY_50,
+    },
+    image: { width: 14, height: 14 },
+    innerRow: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        flexGrow: 1,
+        width: "100%",
+    },
+    fiatBalance: {
+        justifyContent: "flex-end",
+    },
+    balancesContainer: {
+        alignItems: "flex-end",
+    },
+    skeleton: {
+        width: 40,
+    },
+    icon: {
+        width: 40,
+        height: 40,
+        borderRadius: 40 / 2,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+})

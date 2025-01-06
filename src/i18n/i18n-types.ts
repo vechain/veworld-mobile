@@ -2561,6 +2561,10 @@ type RootTranslation = {
 	 */
 	SB_INSERT_KEYSTORE_PASSWORD: string
 	/**
+	 * M​y​ ​t​o​k​e​n​s
+	 */
+	SB_MY_TOKENS: string
+	/**
 	 * Y​o​u​r​ ​a​c​t​i​v​i​t​i​e​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
 	 */
 	SB_NO_TRANSACTIONS: string
@@ -6040,6 +6044,10 @@ Try reconnect your device to the internet.
 	 * Insert your keystore password
 	 */
 	SB_INSERT_KEYSTORE_PASSWORD: () => LocalizedString
+	/**
+	 * My tokens
+	 */
+	SB_MY_TOKENS: () => LocalizedString
 	/**
 	 * Your activities will appear here
 	 */

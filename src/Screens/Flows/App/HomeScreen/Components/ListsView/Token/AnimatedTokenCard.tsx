@@ -7,6 +7,7 @@ import { ColorThemeType } from "~Constants"
 import { TokenCard } from "./TokenCard"
 import { FungibleTokenWithBalance } from "~Model"
 import HapticsService from "~Services/HapticsService"
+import Animated from "react-native-reanimated"
 
 interface IAnimatedTokenCard extends RenderItemParams<FungibleTokenWithBalance> {
     isEdit: boolean
@@ -14,36 +15,36 @@ interface IAnimatedTokenCard extends RenderItemParams<FungibleTokenWithBalance> 
 }
 
 export const AnimatedTokenCard = ({ item, drag, isActive, isEdit, isBalanceVisible }: IAnimatedTokenCard) => {
-    const { styles, theme } = useThemedStyles(baseStyles(isActive))
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     useEffect(() => {
         isEdit && HapticsService.triggerImpact({ level: "Light" })
     }, [isActive, isEdit])
 
     return (
-        <BaseView style={styles.animatedOuterContainer}>
-            {isEdit && (
-                <Pressable
-                    disabled={isActive}
-                    style={[styles.animatedInnerContainer]}
-                    onPressIn={isEdit ? drag : undefined}>
-                    <BaseIcon color={theme.colors.text} name={"icon-grip-vertical"} size={30} />
-                </Pressable>
-            )}
-            <TokenCard tokenWithBalance={item} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
+        <BaseView px={20} mb={4}>
+            <Animated.View style={[styles.animatedOuterContainer]}>
+                {isEdit && (
+                    <Pressable style={[styles.animatedInnerContainer]} onPressIn={isEdit ? drag : undefined}>
+                        <BaseIcon color={theme.colors.text} name={"icon-grip-vertical"} size={30} />
+                    </Pressable>
+                )}
+                <TokenCard tokenWithBalance={item} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
+            </Animated.View>
         </BaseView>
     )
 }
 
-const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         animatedOuterContainer: {
-            backgroundColor: theme.colors.card,
-            flexDirection: "row",
             alignItems: "center",
-            borderRadius: 16,
-            opacity: isActive ? 0.6 : 1,
-            height: 62,
+            borderRadius: 8,
+            paddingHorizontal: 12,
+            paddingVertical: 14,
+            backgroundColor: theme.colors.tokenCardBackground,
+            borderColor: theme.colors.tokenCardBorder,
+            borderWidth: 1,
         },
         animatedInnerContainer: {
             position: "relative",

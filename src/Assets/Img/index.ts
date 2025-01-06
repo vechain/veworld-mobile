@@ -7,6 +7,9 @@ export * from "./NFTPlaceholderDark"
 export * from "./NFTPlaceholderLight"
 export * from "./CoinbaseLogoSmallSvg"
 export * from "./CoinbaseLogoSvg"
+export * from "./B3trTokenIcon"
+export * from "./VetTokenIcon"
+export * from "./VthoTokenIcon"
 
 const dark_nft_placeholder = require("./NFTPlaceholder_Dark.png")
 const light_nft_placeholder = require("./NFTPlaceholder_Light.png")

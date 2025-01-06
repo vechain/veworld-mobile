@@ -11,18 +11,18 @@ import { useI18nContext } from "~i18n"
 import FiatBalance from "../../AccountCard/FiatBalance"
 
 type Props = {
-    tokenWithInfo: TokenWithCompleteInfo
+    b3trToken: TokenWithCompleteInfo
+    vot3Token: TokenWithCompleteInfo
     isAnimation: boolean
     isBalanceVisible: boolean
 }
 
-export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVisible }: Props) => {
+export const VeB3trTokenCard = memo(({ b3trToken, vot3Token, isAnimation, isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const { tokenInfo, tokenInfoLoading, fiatBalance, tokenUnitBalance, exchangeRate } = tokenWithInfo
+    const { tokenInfo, tokenInfoLoading, fiatBalance: b3trFiatBalance, exchangeRate } = b3trToken
 
     const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
 
@@ -55,58 +55,69 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
                 </BaseView>
             )
         if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
+
+        const vot3FiatBalance = BigNutils(vot3Token.tokenUnitBalance).multiply(exchangeRate).toString
+
         return (
             <FiatBalance
                 typographyFont="captionRegular"
                 color={theme.colors.tokenCardText}
-                balances={[fiatBalance]}
+                balances={[b3trFiatBalance, vot3FiatBalance]}
                 isVisible={isBalanceVisible}
             />
         )
     }, [
         isTokensOwnedLoading,
-        theme.colors.skeletonBoneColor,
-        theme.colors.skeletonHighlightColor,
-        theme.colors.tokenCardText,
+        theme.colors,
         exchangeRate,
         LL,
-        fiatBalance,
+        b3trFiatBalance,
+        vot3Token.tokenUnitBalance,
         isBalanceVisible,
     ])
 
     const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
-
     const isLoading = tokenInfoLoading || isTokensOwnedLoading
 
     return (
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row">
                 <BaseCard style={[baseStyles.imageContainer]} containerStyle={baseStyles.imageShadow}>
-                    <Image source={{ uri: tokenWithInfo.icon }} style={baseStyles.image} />
+                    <Image source={{ uri: b3trToken.icon }} style={baseStyles.image} />
                 </BaseCard>
                 <BaseSpacer width={12} />
-                <BaseView>
-                    <BaseText typographyFont="captionSemiBold">{tokenWithInfo.symbol}</BaseText>
-                    <BaseView flexDirection="row" alignItems="baseline" justifyContent="flex-start">
+                <BaseView flexDirection="row">
+                    <BaseView flexDirection="column" alignItems="center">
+                        <BaseText typographyFont="captionSemiBold">{b3trToken.symbol}</BaseText>
+                        <BaseText typographyFont="captionSemiBold">{vot3Token.symbol}</BaseText>
+                    </BaseView>
+                    <BaseSpacer height={2} />
+                    <BaseView flexDirection="column" alignItems="center" ml={8}>
                         {isLoading ? (
-                            <BaseView flexDirection="row" alignItems="center">
-                                <BaseSkeleton
-                                    containerStyle={baseStyles.skeletonBalance}
-                                    animationDirection="horizontalLeft"
-                                    boneColor={theme.colors.skeletonBoneColor}
-                                    highlightColor={theme.colors.skeletonHighlightColor}
-                                    height={14}
-                                />
-                                <BaseText typographyFont="captionRegular" color={tokenValueLabelColor} pl={4}>
-                                    {tokenWithInfo.symbol}
-                                </BaseText>
-                            </BaseView>
+                            <BaseSkeleton
+                                animationDirection="horizontalLeft"
+                                boneColor={theme.colors.skeletonBoneColor}
+                                highlightColor={theme.colors.skeletonHighlightColor}
+                                height={12}
+                                width={40}
+                            />
                         ) : (
-                            <BaseView flexDirection="row" alignItems="center">
-                                <BaseText typographyFont="captionRegular" color={tokenValueLabelColor}>
-                                    {isBalanceVisible ? tokenUnitBalance : "•••••"}{" "}
-                                </BaseText>
-                            </BaseView>
+                            <BaseText typographyFont="captionRegular" color={tokenValueLabelColor}>
+                                {isBalanceVisible ? b3trToken.tokenUnitBalance : "•••••"}
+                            </BaseText>
+                        )}
+                        {isLoading ? (
+                            <BaseSkeleton
+                                animationDirection="horizontalLeft"
+                                boneColor={theme.colors.skeletonBoneColor}
+                                highlightColor={theme.colors.skeletonHighlightColor}
+                                height={12}
+                                width={40}
+                            />
+                        ) : (
+                            <BaseText typographyFont="captionRegular" color={tokenValueLabelColor}>
+                                {isBalanceVisible ? vot3Token.tokenUnitBalance : "•••••"}
+                            </BaseText>
                         )}
                     </BaseView>
                 </BaseView>
@@ -157,23 +168,7 @@ const baseStyles = StyleSheet.create({
         width: "100%",
         flexGrow: 1,
     },
-    tokenIcon: {
-        width: 40,
-        height: 40,
-        backgroundColor: "red",
-        borderRadius: 20,
-        marginRight: 10,
-    },
     balancesContainer: {
         alignItems: "flex-end",
-    },
-    skeletonBalance: { width: 50, paddingVertical: 2 },
-    skeletonPercentChange: {
-        width: 40,
-        paddingVertical: 1,
-    },
-    skeletonBalanceValue: {
-        width: 60,
-        paddingVertical: 2,
     },
 })

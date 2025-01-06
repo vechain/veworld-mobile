@@ -219,7 +219,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontWeight: fontWeight[700],
     },
     captionSemiBold: {
-        fontFamily: fontFamily["Inter-Medium"],
+        fontFamily: fontFamily["Inter-SemiBold"],
         fontSize: 12,
         fontWeight: fontWeight[600],
     },

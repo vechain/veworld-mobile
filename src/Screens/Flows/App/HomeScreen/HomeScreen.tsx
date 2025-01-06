@@ -164,13 +164,13 @@ export const HomeScreen = () => {
                                 openQRCodeSheet={openQRCodeSheet}
                             />
                         </BaseView>
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={16} />
 
                         <FastActionsBar actions={Actions} />
 
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={16} />
                         <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={8} />
 
                         <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
                         <BaseSpacer height={24} />

@@ -37,7 +37,7 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
         <FiatBalance
             isLoading={isLoading}
             isVisible={isVisible}
-            color={theme.colors.textReversed}
+            color={theme.colors.textSecondary}
             typographyFont={isLong ? "title" : "largeTitle"}
             balances={[
                 tokenWithInfoVET.fiatBalance,
