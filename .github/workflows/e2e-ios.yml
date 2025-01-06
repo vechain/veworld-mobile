@@ -59,12 +59,14 @@ jobs:
       
       - name: Use Correct Ruby Version
         run: |
-          brew install ruby
-          export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-          export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
-          export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
-          export PKG_CONFIG_PATH="/opt/homebrew/opt/ruby/lib/pkgconfig"
-          
+          brew install rbenv
+          rbenv init
+          echo 'eval "$(rbenv init - bash)"' >> ~/.bash_profile
+          eval "$(rbenv init - bash)"
+          rbenv install 3.3.6 || true
+          rbenv global 3.3.6
+          ruby --version
+
       # Update Bundler and Install Gems
       - name: Update Bundler and Install Gems
         run: |
