@@ -82,13 +82,6 @@ jobs:
 
       - name: Install CocoaPods
         run: |
-          sudo gem install cocoapods
-        
-      - name: Clear CocoaPods Cache and Install Pods
-        run: |
-          pod cache clean --all
-          rm -rf Podfile.lock
-          pod repo update
           yarn install:all
 
       # Install sentry properties
