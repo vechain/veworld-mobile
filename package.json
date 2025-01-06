@@ -5,7 +5,7 @@
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
     "purge:android": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build",
-    "install:all": "yarn install && npx pod-install",
+    "install:all": "yarn install && npx pod-install|| (brew install ruby && gem install cocoapods && npx pod-install)",
     "install:android": "yarn install",
     "reinstall": "yarn purge && yarn install:all",
     "android": "react-native run-android",
