@@ -58,11 +58,7 @@ jobs:
               cache: "yarn"
 
         - name: Install & Patch packages
-          run: |
-            pod cache clean --all
-            rm -rf Podfile.lock
-            pod repo update
-            yarn install
+          run: yarn install
 
         - name: Setup Java
           uses: actions/setup-java@v3
@@ -181,8 +177,8 @@ jobs:
   test-android:
       name: Test Android Release
       needs:
-        - check-build-changes
-        - build-test-android
+          - check-build-changes
+          - build-test-android
       if: needs.check-build-changes.outputs.only_test_scripts_changed == 'true' || needs.build-test-android.result == 'success'
       runs-on: ubuntu-latest
       env:

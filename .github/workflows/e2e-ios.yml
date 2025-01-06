@@ -80,13 +80,16 @@ jobs:
           node-version-file: .nvmrc
           cache: "yarn"
 
-      # install dependencies with yarn
-      - name: Install & Patch packages
-        run: yarn install:all
-
-      # Install CocoaPods
       - name: Install CocoaPods
-        run: yarn install:all
+        run: |
+          sudo gem install cocoapods
+        
+      - name: Clear CocoaPods Cache and Install Pods
+        run: |
+          pod cache clean --all
+          rm -rf Podfile.lock
+          pod repo update
+          yarn install:all
 
       # Install sentry properties
       - name: Sentry properties
