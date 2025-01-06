@@ -60,11 +60,12 @@ jobs:
       - name: Use Correct Ruby Version
         run: |
           brew install ruby
-          echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"' >> ~/.bash_profile
-          echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"' >> ~/.zshrc
-          source ~/.bash_profile
-          ruby --version
-       # Update Bundler and Install Gems
+          export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+          export LDFLAGS="-L/opt/homebrew/opt/ruby/lib"
+          export CPPFLAGS="-I/opt/homebrew/opt/ruby/include"
+          export PKG_CONFIG_PATH="/opt/homebrew/opt/ruby/lib/pkgconfig"
+          
+      # Update Bundler and Install Gems
       - name: Update Bundler and Install Gems
         run: |
           gem install bundler -v 2.4.22 
