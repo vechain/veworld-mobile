@@ -69,7 +69,7 @@ jobs:
       
       # Setup Ruby
       - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
+        uses: ruby/setup-ruby@v1.207.0
         with:
           bundler-cache: true
 
