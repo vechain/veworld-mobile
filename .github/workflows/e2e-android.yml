@@ -176,6 +176,7 @@ jobs:
 
   test-android:
       name: Test Android Release
+      needs: check-build-changes
       if: ${{ needs.check-build-changes.outputs.only_test_scripts_changed == 'true'  }} || ${{ needs.build-test-android.outputs.result == 'success' }}
       runs-on: ubuntu-latest
       env:
