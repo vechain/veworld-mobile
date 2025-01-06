@@ -59,6 +59,7 @@ jobs:
       
       - name: Use Correct Ruby Version
         run: |
+          brew install ruby
           echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"' >> ~/.bash_profile
           echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"' >> ~/.zshrc
           source ~/.bash_profile
