@@ -62,11 +62,17 @@ jobs:
           brew tap wix/brew
           brew install applesimutils
           brew install fastlane
-          brew install ruby
           bundle install
         env:
           HOMEBREW_NO_AUTO_UPDATE: 1
           HOMEBREW_NO_INSTALL_CLEANUP: 1
+
+      - name: Install Correct Ruby Version
+        run: |
+          brew install ruby
+          echo 'export PATH="/opt/homebrew/opt/ruby/bin:$PATH"' >> ~/.zshrc
+          source ~/.zshrc
+          ruby --version
       
       # Setup Ruby
       - name: Setup Ruby
@@ -92,7 +98,7 @@ jobs:
           pod cache clean --all
           rm -rf Pods Podfile.lock ~/Library/Caches/CocoaPods
           pod repo update
-          
+
       - name: Install CocoaPods
         run: |
           yarn install:all
