@@ -1,22 +1,20 @@
 import { StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText, BaseCard, BaseView, BaseSpacer, BaseCustomTokenIcon, BaseSkeleton, BaseImage } from "~Components"
+import { BaseText, BaseView, BaseSpacer, BaseCustomTokenIcon, BaseSkeleton, BaseImage } from "~Components"
 import { COLORS } from "~Constants"
 import { useBalances, useTheme } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import { address } from "thor-devkit"
 import FiatBalance from "../../AccountCard/FiatBalance"
 import { useVechainStatsTokenInfo } from "~Api/Coingecko"
 
 type Props = {
     tokenWithBalance: FungibleTokenWithBalance
-    isEdit: boolean
     isBalanceVisible: boolean
 }
 
-export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: Props) => {
+export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) => {
     const theme = useTheme()
 
     const { data: exchangeRate } = useVechainStatsTokenInfo(tokenWithBalance.symbol.toLowerCase())
@@ -39,20 +37,23 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
 
     const isIlliquidToken = useMemo(() => tokenWithBalance.symbol === "VOT3", [tokenWithBalance])
 
+    const showFiatBalance = useMemo(() => {
+        const numericBalance = Number(fiatBalance)
+        return !isIlliquidToken && numericBalance > 0
+    }, [isIlliquidToken, fiatBalance])
+
     return (
         <BaseView style={styles.innerRow}>
             <BaseView flexDirection="row">
                 {icon !== "" && (
-                    <BaseCard style={[styles.imageContainer]} containerStyle={styles.imageShadow}>
+                    <BaseView style={[styles.imageContainer]}>
                         <BaseImage source={{ uri: icon }} style={styles.image} />
-                    </BaseCard>
+                    </BaseView>
                 )}
                 {!icon && (
-                    <BaseCustomTokenIcon
-                        style={styles.icon}
-                        tokenSymbol={tokenWithBalance.symbol ?? ""}
-                        tokenAddress={address.toChecksumed(tokenWithBalance.address)}
-                    />
+                    <BaseView style={[styles.imageContainer]}>
+                        <BaseCustomTokenIcon style={styles.image} tokenSymbol={tokenWithBalance.symbol ?? ""} />
+                    </BaseView>
                 )}
 
                 <BaseSpacer width={12} />
@@ -82,7 +83,7 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
                 </BaseView>
             </BaseView>
 
-            {!isEdit && !isIlliquidToken && (
+            {showFiatBalance && (
                 <BaseView style={[styles.balancesContainer]}>
                     <FiatBalance
                         color={theme.colors.tokenCardText}
@@ -98,9 +99,6 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
 })
 
 const styles = StyleSheet.create({
-    imageShadow: {
-        width: "auto",
-    },
     imageContainer: {
         borderRadius: 30,
         padding: 9,
@@ -113,20 +111,10 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         width: "100%",
     },
-    fiatBalance: {
-        justifyContent: "flex-end",
-    },
     balancesContainer: {
         alignItems: "flex-end",
     },
     skeleton: {
         width: 40,
-    },
-    icon: {
-        width: 40,
-        height: 40,
-        borderRadius: 40 / 2,
-        alignItems: "center",
-        justifyContent: "center",
     },
 })

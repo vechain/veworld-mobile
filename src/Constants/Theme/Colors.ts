@@ -55,8 +55,8 @@ export type Colors = {
     mnemonicCardBackground: string
     mnemonicCardBorder: string
     toggleMnemonicButtonBackground: string
-    tokenCardBorder: string
-    tokenCardBackground: string
+    pressableCardBorder: string
+    pressableCardBackground: string
     tokenCardText: string
     tokenCardGraphLine: string
     successVariant: {
@@ -158,7 +158,7 @@ export enum COLORS {
     GREY_400 = "#AAAFB6",
     GREY_300 = "#CBD5E0",
     GREY_200 = "#E2E8F0",
-    GREY_100 = "#EDF2F7",
+    GREY_100 = "#F1F2F3",
     GREY_50 = "#F9F9FA",
     ORANGE_50 = "#FFFAF0",
     ORANGE_100 = "#FEEBCB",
@@ -232,8 +232,8 @@ const light: Colors = {
     mnemonicCardBackground: COLORS.GREY_100,
     mnemonicCardBorder: COLORS.GREY_300,
     toggleMnemonicButtonBackground: COLORS.GREY_200,
-    tokenCardBackground: COLORS.GREY_50,
-    tokenCardBorder: COLORS.GREY_200,
+    pressableCardBackground: COLORS.WHITE,
+    pressableCardBorder: COLORS.GREY_200,
     tokenCardText: COLORS.GREY_500,
     tokenCardGraphLine: COLORS.PRIMARY_700,
     successVariant: {
@@ -326,8 +326,8 @@ const dark: Colors = {
     mnemonicCardBackground: COLORS.DARK_PURPLE_DISABLED,
     mnemonicCardBorder: COLORS.DARK_PURPLE,
     toggleMnemonicButtonBackground: COLORS.PURPLE,
-    tokenCardBackground: COLORS.PURPLE,
-    tokenCardBorder: COLORS.DARK_PURPLE_DISABLED,
+    pressableCardBackground: COLORS.PURPLE,
+    pressableCardBorder: COLORS.DARK_PURPLE_DISABLED,
     tokenCardText: COLORS.PRIMARY_200,
     tokenCardGraphLine: COLORS.PRIMARY_200,
     successVariant: {

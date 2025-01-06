@@ -1,10 +1,10 @@
 import React, { memo, useCallback } from "react"
-import { StyleSheet, ViewProps } from "react-native"
+import { ViewProps } from "react-native"
 import { NestableDraggableFlatList, RenderItem } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
-import { B3TR, ColorThemeType, VET, VTHO } from "~Constants"
+import { useTokenWithCompleteInfo } from "~Hooks"
+import { B3TR, VET, VTHO } from "~Constants"
 import { changeBalancePosition, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectNonVechainTokensWithBalances,
@@ -30,8 +30,6 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
     const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
 
-    const { styles } = useThemedStyles(baseStyles)
-
     const handleDragEnd = ({ data }: { data: FungibleTokenWithBalance[] }) => {
         dispatch(
             changeBalancePosition({
@@ -53,16 +51,15 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
                     isActive={isActive}
                     getIndex={getIndex}
                     drag={drag}
-                    isEdit={isEdit}
                     isBalanceVisible={isBalanceVisible}
                 />
             )
         },
-        [isBalanceVisible, isEdit],
+        [isBalanceVisible],
     )
 
     return (
-        <Animated.View style={styles.container} {...animatedViewProps}>
+        <Animated.View {...animatedViewProps}>
             <AnimatedChartCard tokenWithInfo={tokenWithInfoVET} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
             <AnimatedChartCard tokenWithInfo={tokenWithInfoVTHO} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
             <AnimatedChartCard tokenWithInfo={tokenWithInfoB3TR} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
@@ -79,10 +76,3 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
         </Animated.View>
     )
 })
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        container: {
-            backgroundColor: theme.colors.background,
-        },
-    })

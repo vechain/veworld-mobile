@@ -1,6 +1,6 @@
 import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText, BaseCard, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
+import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { BigNutils } from "~Utils"
@@ -56,7 +56,7 @@ export const VeB3trTokenCard = memo(({ b3trToken, vot3Token, isAnimation, isBala
             )
         if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
 
-        const vot3FiatBalance = BigNutils(vot3Token.tokenUnitBalance).multiply(exchangeRate).toString
+        const vot3FiatBalance = BigNutils(vot3Token.tokenUnitFullBalance).multiply(exchangeRate).toString
 
         return (
             <FiatBalance
@@ -66,15 +66,7 @@ export const VeB3trTokenCard = memo(({ b3trToken, vot3Token, isAnimation, isBala
                 isVisible={isBalanceVisible}
             />
         )
-    }, [
-        isTokensOwnedLoading,
-        theme.colors,
-        exchangeRate,
-        LL,
-        b3trFiatBalance,
-        vot3Token.tokenUnitBalance,
-        isBalanceVisible,
-    ])
+    }, [isTokensOwnedLoading, theme.colors, exchangeRate, LL, vot3Token, b3trFiatBalance, isBalanceVisible])
 
     const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
     const isLoading = tokenInfoLoading || isTokensOwnedLoading
@@ -82,9 +74,9 @@ export const VeB3trTokenCard = memo(({ b3trToken, vot3Token, isAnimation, isBala
     return (
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row">
-                <BaseCard style={[baseStyles.imageContainer]} containerStyle={baseStyles.imageShadow}>
+                <BaseView style={[baseStyles.imageContainer]}>
                     <Image source={{ uri: b3trToken.icon }} style={baseStyles.image} />
-                </BaseCard>
+                </BaseView>
                 <BaseSpacer width={12} />
                 <BaseView flexDirection="row">
                     <BaseView flexDirection="column" alignItems="center">
