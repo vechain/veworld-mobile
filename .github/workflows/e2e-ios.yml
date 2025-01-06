@@ -55,7 +55,12 @@ jobs:
           # If it's a pre-release, check out the tag corresponding to the pre-release;
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
-
+      - name: Debug boost.podspec inclusion
+        run: |
+            ls -l node_modules/react-native/third-party-podspecs/
+            echo "Checking for boost.podspec after checkout"
+            cat node_modules/react-native/third-party-podspecs/boost.podspec || echo "boost.podspec not found"
+        
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
         run: |
@@ -72,7 +77,7 @@ jobs:
         uses: ruby/setup-ruby@v1.207.0
         with:
           bundler-cache: true
-
+        
       # Setup Node.js
       - name: Setup Node
         uses: actions/setup-node@v3
@@ -80,6 +85,12 @@ jobs:
           node-version-file: .nvmrc
           cache: "yarn"
 
+      - name: Debug boost.podspec inclusion
+        run: |
+              ls -l node_modules/react-native/third-party-podspecs/
+              echo "Checking for boost.podspec after setup node"
+              cat node_modules/react-native/third-party-podspecs/boost.podspec || echo "boost.podspec not found"
+          
       - name: Install CocoaPods
         run: |
           yarn install:all
