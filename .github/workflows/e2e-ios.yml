@@ -55,33 +55,6 @@ jobs:
           # If it's a pre-release, check out the tag corresponding to the pre-release;
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
-        
-        # Update .ruby-version
-      - name: Update Ruby Version
-        run: echo "3.3.6" > .ruby-version
-
-      - name: Install rbenv and Ruby
-        run: |
-          brew install rbenv
-          rbenv init
-          echo 'eval "$(rbenv init - bash)"' >> ~/.bash_profile
-          eval "$(rbenv init - bash)"
-          rbenv install 3.3.6 || true
-          rbenv global 3.3.6
-          ruby --version
-  
-  
-        # Debug Ruby Version
-      - name: Debug Ruby Version
-        run: |
-          which ruby
-          ruby --version
-
-      # Update Bundler and Install Gems
-      - name: Update Bundler and Install Gems
-        run: |
-          gem install bundler -v 2.4.22 
-          bundle install --jobs 4 --retry 3 
 
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
@@ -106,18 +79,6 @@ jobs:
         with:
           node-version-file: .nvmrc
           cache: "yarn"
-      # Install CocoaPods
-      - name: Install CocoaPods
-        run: |
-          gem install bundler
-          gem install cocoapods
-        
-      # Clear CocoaPods Cache
-      - name: Clear CocoaPods Cache
-        run: |
-          pod cache clean --all
-          rm -rf Pods Podfile.lock ~/Library/Caches/CocoaPods
-          pod repo update
 
       - name: Install CocoaPods
         run: |
