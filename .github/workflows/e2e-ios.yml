@@ -55,6 +55,10 @@ jobs:
           # If it's a pre-release, check out the tag corresponding to the pre-release;
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
+        
+        # Update .ruby-version
+      - name: Update Ruby Version
+        run: echo "3.3.6" > .ruby-version
 
       - name: Install rbenv and Ruby
         run: |
@@ -66,9 +70,6 @@ jobs:
           rbenv global 3.3.6
           ruby --version
   
-        # Update .ruby-version
-      - name: Update Ruby Version
-        run: echo "3.3.6" > .ruby-version
   
         # Debug Ruby Version
       - name: Debug Ruby Version
