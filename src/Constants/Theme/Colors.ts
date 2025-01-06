@@ -11,6 +11,8 @@ export type Colors = {
     danger: string
     success: string
     successMedium: string
+    positive: string
+    negative: string
     info: string
     warning: string
     error: string
@@ -139,6 +141,7 @@ export enum COLORS {
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
     GREEN_700 = "#276749",
+    GREEN_600 = "#25855A",
     GREEN_500 = "#38A169",
     GREEN_400 = "#48BB78",
     GREEN_200 = "#9AE6B4",
@@ -185,6 +188,8 @@ const light: Colors = {
     danger: COLORS.RED_400,
     success: COLORS.GREEN_400,
     successMedium: COLORS.WHITE,
+    positive: COLORS.GREEN_600,
+    negative: COLORS.RED_400,
     info: COLORS.WHITE,
     warning: COLORS.WHITE,
     error: COLORS.WHITE,
@@ -277,6 +282,8 @@ const dark: Colors = {
     danger: COLORS.RED_400,
     success: COLORS.GREEN_400,
     successMedium: COLORS.MEDIUM_GREEN,
+    positive: COLORS.GREEN_400,
+    negative: COLORS.RED_400,
     info: COLORS.DARK_PURPLE,
     warning: COLORS.MEDIUM_ORANGE,
     error: COLORS.MEDIUM_RED,

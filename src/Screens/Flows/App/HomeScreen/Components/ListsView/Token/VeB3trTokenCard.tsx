@@ -142,7 +142,7 @@ export const VeB3trTokenCard = memo(({ b3trToken, vot3Token, isAnimation, isBala
                 ) : (
                     <BaseText
                         typographyFont="captionRegular"
-                        color={isPositive24hChange ? theme.colors.success : theme.colors.danger}>
+                        color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
                         {change24h}
                     </BaseText>
                 )}

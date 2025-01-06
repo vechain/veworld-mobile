@@ -43,9 +43,7 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
         <BaseView style={styles.innerRow}>
             <BaseView flexDirection="row">
                 {icon !== "" && (
-                    <BaseCard
-                        style={[styles.imageContainer, { backgroundColor: COLORS.GREY_50 }]}
-                        containerStyle={styles.imageShadow}>
+                    <BaseCard style={[styles.imageContainer]} containerStyle={styles.imageShadow}>
                         <BaseImage source={{ uri: icon }} style={styles.image} />
                     </BaseCard>
                 )}
@@ -57,14 +55,14 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
                     />
                 )}
 
-                <BaseSpacer width={16} />
+                <BaseSpacer width={12} />
                 <BaseView>
                     <BaseText typographyFont="captionSemiBold" numberOfLines={1} ellipsizeMode="tail">
                         {tokenWithBalance.symbol}
                     </BaseText>
                     <BaseView flexDirection="row" alignItems="baseline" justifyContent="flex-start">
                         {isTokensOwnedLoading && isBalanceVisible ? (
-                            <BaseView w={100} flexDirection="row" alignItems="center" py={2}>
+                            <BaseView w={100} flexDirection="row" alignItems="center">
                                 <BaseSkeleton
                                     animationDirection="horizontalLeft"
                                     boneColor={theme.colors.skeletonBoneColor}
@@ -72,9 +70,6 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
                                     height={12}
                                     width={40}
                                 />
-                                <BaseText typographyFont="captionRegular" color={tokenValueLabelColor} pl={4}>
-                                    {tokenWithBalance.symbol}
-                                </BaseText>
                             </BaseView>
                         ) : (
                             <BaseView flexDirection="row" alignItems="center">

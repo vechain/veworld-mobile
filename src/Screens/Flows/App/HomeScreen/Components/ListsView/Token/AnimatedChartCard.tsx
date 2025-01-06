@@ -38,7 +38,7 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
     const vot3TokenInfo = useTokenWithCompleteInfo(VOT3)
 
     return (
-        <BaseView px={20} mb={4}>
+        <BaseView px={20} mb={8}>
             <TouchableOpacity activeOpacity={isEdit ? 1 : 0.6} onPress={onVechainTokenPress}>
                 <Animated.View style={[styles.nativeTokenContainer, animatedOuterCard]}>
                     {isB3tr ? (
