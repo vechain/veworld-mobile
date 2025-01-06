@@ -158,6 +158,10 @@ jobs:
 
   test-ios:
     runs-on: macos-latest
+    needs:
+        - check-build-changes
+        - build-e2e-ios
+    if: needs.check-build-changes.outputs.only_test_scripts_changed == 'true' || needs.build-e2e-ios.result == 'success'
     env:
       APP_PATH: ${{ needs.build-e2e-ios.outputs.APP_PATH }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
@@ -172,7 +176,7 @@ jobs:
           uses: actions/download-artifact@v4
           with:
             name: VeWorld.app
-            run_id: ${{ env.RUN_ID }}
+            run-id: ${{ env.RUN_ID }}
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
           with:
             api-key: ${{ secrets.DCD_API_KEY }}
