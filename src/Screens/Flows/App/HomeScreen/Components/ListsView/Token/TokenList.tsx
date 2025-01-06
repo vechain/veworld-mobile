@@ -2,8 +2,7 @@ import React, { memo, useCallback } from "react"
 import { ViewProps } from "react-native"
 import { NestableDraggableFlatList, RenderItem } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
-import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { useTokenWithCompleteInfo } from "~Hooks"
+import { useTokenWithCompleteInfo, TokenWithCompleteInfo } from "~Hooks"
 import { B3TR, VET, VTHO } from "~Constants"
 import { changeBalancePosition, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
@@ -11,8 +10,12 @@ import {
     selectSelectedAccount,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
-import { AnimatedChartCard } from "./AnimatedChartCard"
 import { FungibleTokenWithBalance } from "~Model"
+import { AccountUtils, BalanceUtils } from "~Utils"
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
+import { AnimatedTokenListItem } from "./AnimatedTokenListItem"
+import HapticsService from "~Services/HapticsService"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -43,26 +46,72 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
         )
     }
 
+    const nav = useNavigation()
+
+    const onTokenPress = useCallback(
+        (token: FungibleTokenWithBalance) => {
+            const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
+
+            if (!isEdit && isTokenBalance) {
+                if (AccountUtils.isObservedAccount(selectedAccount)) return
+
+                nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+                    token,
+                })
+            }
+        },
+        [isEdit, selectedAccount, nav],
+    )
+
+    const onVechainTokenPress = useCallback(
+        (tokenWithInfo: TokenWithCompleteInfo) => {
+            HapticsService.triggerImpact({ level: "Light" })
+            if (!isEdit) nav.navigate(Routes.TOKEN_DETAILS, { token: tokenWithInfo })
+        },
+        [isEdit, nav],
+    )
+
     const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
         ({ item, getIndex, isActive, drag }) => {
             return (
-                <AnimatedTokenCard
+                <AnimatedTokenListItem
+                    type="nonVet"
                     item={item}
                     isActive={isActive}
                     getIndex={getIndex}
                     drag={drag}
                     isBalanceVisible={isBalanceVisible}
+                    onTokenPress={onTokenPress}
+                    isEdit={isEdit}
                 />
             )
         },
-        [isBalanceVisible],
+        [isBalanceVisible, onTokenPress, isEdit],
     )
 
     return (
         <Animated.View {...animatedViewProps}>
-            <AnimatedChartCard tokenWithInfo={tokenWithInfoVET} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
-            <AnimatedChartCard tokenWithInfo={tokenWithInfoVTHO} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
-            <AnimatedChartCard tokenWithInfo={tokenWithInfoB3TR} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
+            <AnimatedTokenListItem
+                type="vetEcosystem"
+                tokenWithInfo={tokenWithInfoVET}
+                isEdit={isEdit}
+                isBalanceVisible={isBalanceVisible}
+                onPress={() => onVechainTokenPress(tokenWithInfoVET)}
+            />
+            <AnimatedTokenListItem
+                type="vetEcosystem"
+                tokenWithInfo={tokenWithInfoVTHO}
+                isEdit={isEdit}
+                isBalanceVisible={isBalanceVisible}
+                onPress={() => onVechainTokenPress(tokenWithInfoVTHO)}
+            />
+            <AnimatedTokenListItem
+                type="vetEcosystem"
+                tokenWithInfo={tokenWithInfoB3TR}
+                isEdit={isEdit}
+                isBalanceVisible={isBalanceVisible}
+                onPress={() => onVechainTokenPress(tokenWithInfoB3TR)}
+            />
 
             <NestableDraggableFlatList
                 data={tokenBalances}

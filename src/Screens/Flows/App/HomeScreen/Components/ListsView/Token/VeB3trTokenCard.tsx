@@ -2,25 +2,25 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { TokenWithCompleteInfo, useTheme } from "~Hooks"
+import { TokenWithCompleteInfo, useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { BigNutils } from "~Utils"
 import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux"
-import { COLORS } from "~Constants"
+import { COLORS, VOT3 } from "~Constants"
 import { useI18nContext } from "~i18n"
 import FiatBalance from "../../AccountCard/FiatBalance"
 
 type Props = {
     b3trToken: TokenWithCompleteInfo
-    vot3Token: TokenWithCompleteInfo
     isAnimation: boolean
     isBalanceVisible: boolean
 }
 
-export const VeB3trTokenCard = memo(({ b3trToken, vot3Token, isAnimation, isBalanceVisible }: Props) => {
+export const VeB3trTokenCard = memo(({ b3trToken, isAnimation, isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
+    const vot3Token = useTokenWithCompleteInfo(VOT3)
 
     const { tokenInfo, tokenInfoLoading, fiatBalance: b3trFiatBalance, exchangeRate } = b3trToken
 
@@ -56,7 +56,7 @@ export const VeB3trTokenCard = memo(({ b3trToken, vot3Token, isAnimation, isBala
             )
         if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
 
-        const vot3FiatBalance = BigNutils(vot3Token.tokenUnitFullBalance).multiply(exchangeRate).toString
+        const vot3FiatBalance = BigNutils(vot3Token.tokenUnitBalance).multiply(exchangeRate).toString
 
         return (
             <FiatBalance
