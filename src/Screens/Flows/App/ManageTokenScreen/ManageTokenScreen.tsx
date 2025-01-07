@@ -10,7 +10,7 @@ import {
     DismissKeyboardView,
     Layout,
     OfficialTokenCard,
-    PlusHeaderIcon,
+    PlusIconHeaderButton,
     useThor,
 } from "~Components"
 
@@ -123,7 +123,7 @@ export const ManageTokenScreen = () => {
             <Layout
                 safeAreaTestID="Manage_Tokens_Screen"
                 title={LL.MANAGE_TOKEN_TITLE()}
-                headerRightElement={<PlusHeaderIcon action={openAddCustomTokenSheet} />}
+                headerRightElement={<PlusIconHeaderButton action={openAddCustomTokenSheet} />}
                 body={
                     <>
                         <BaseView>

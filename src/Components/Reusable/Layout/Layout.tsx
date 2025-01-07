@@ -73,7 +73,7 @@ export const Layout = ({
             <BaseView h={100}>
                 <BaseView>
                     {!noBackButton && (
-                        <BaseView mx={noMargin ? 0 : 20}>
+                        <BaseView mx={noMargin ? 0 : 16}>
                             <BackButtonHeader
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}
@@ -85,7 +85,7 @@ export const Layout = ({
                         </BaseView>
                     )}
                     {fixedHeader && (
-                        <BaseView justifyContent="center" py={8} px={noMargin ? 0 : 20}>
+                        <BaseView justifyContent="center" py={8} px={noMargin ? 0 : 16}>
                             <BaseView>{fixedHeader}</BaseView>
                         </BaseView>
                     )}
@@ -107,7 +107,7 @@ export const Layout = ({
                         }}
                         ref={scrollViewRef}
                         refreshControl={refreshControl}
-                        testID={scrollViewTestID || "Layout_ScrollView"}
+                        testID={scrollViewTestID ?? "Layout_ScrollView"}
                         scrollEnabled={scrollViewContentHeight > scrollViewHeight}
                         style={noMargin ? {} : styles.scrollView}
                         contentContainerStyle={{
@@ -125,7 +125,7 @@ export const Layout = ({
                 {footer && (
                     <BaseView
                         mb={noMargin ? 0 : Number(androidOnlyTabBarBottomMargin) + STATIC_BOTTOM_PADDING}
-                        mx={noMargin ? 0 : 20}>
+                        mx={noMargin ? 0 : 16}>
                         {footer}
                     </BaseView>
                 )}
@@ -175,7 +175,8 @@ export const Layout = ({
 
 const styles = StyleSheet.create({
     scrollView: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 16,
+        paddingVertical: 16,
     },
     selectedNetworkViewerView: {
         position: "absolute",

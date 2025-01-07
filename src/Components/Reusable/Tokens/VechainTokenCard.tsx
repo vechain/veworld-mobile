@@ -8,7 +8,7 @@ import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
-import FiatBalance from "../../AccountCard/FiatBalance"
+import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo

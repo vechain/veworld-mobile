@@ -22,7 +22,7 @@ export const TokenContainer = ({ children, onPress }: TokenContainerProps) => {
         : {}
 
     return (
-        <BaseView px={20} mb={8}>
+        <BaseView mb={8}>
             <Container {...containerProps}>
                 <Animated.View style={styles.container}>{children}</Animated.View>
             </Container>

@@ -5,7 +5,7 @@ import {
     Layout,
     RequireUserPassword,
     SwipeableRow,
-    PlusHeaderIcon,
+    PlusIconHeaderButton,
     showWarningToast,
 } from "~Components"
 import { BaseDevice, Device } from "~Model"
@@ -155,7 +155,7 @@ export const WalletManagementScreen = () => {
     }
 
     const headerRightElement = useMemo(
-        () => <PlusHeaderIcon action={onOpenAddWalletBottomSheet} testID="Wallet_Management_AddWallet" />,
+        () => <PlusIconHeaderButton action={onOpenAddWalletBottomSheet} testID="Wallet_Management_AddWallet" />,
         [onOpenAddWalletBottomSheet],
     )
 

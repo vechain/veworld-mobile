@@ -71,7 +71,7 @@ export const BackButtonHeader = ({
 const styles = StyleSheet.create({
     rightElementContainer: {
         position: "absolute",
-        right: 8,
+        right: 0,
         top: 8,
     },
 })

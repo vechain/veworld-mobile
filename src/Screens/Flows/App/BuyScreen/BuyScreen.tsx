@@ -14,18 +14,14 @@ export const BuyScreen = () => {
         <Layout
             hasSafeArea={isAndroid}
             noBackButton
-            fixedHeader={
-                <BaseView px={24}>
-                    <BackButtonHeader hasBottomSpacer={false} title={LL.TITLE_BUY()} />
-                </BaseView>
-            }
+            fixedHeader={<BackButtonHeader hasBottomSpacer={false} title={LL.TITLE_BUY()} />}
             fixedBody={
                 <BaseView
                     flex={1}
                     flexDirection="column"
                     mt={StatusBar.currentHeight ?? 0}
-                    pt={PlatformUtils.isIOS() ? 40 : 12}
-                    mx={24}>
+                    pt={PlatformUtils.isIOS() ? 0 : 12}
+                    mx={16}>
                     <BaseText fontSize={18} fontWeight="bold" pt={20}>
                         {LL.BD_SELECT_PAYMENT_PROVIDER()}
                     </BaseText>

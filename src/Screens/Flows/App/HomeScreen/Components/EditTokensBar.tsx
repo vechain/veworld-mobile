@@ -58,7 +58,7 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
     }, [isEdit, onButtonPress, theme.colors.text, handleManageToken, LL])
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" px={20}>
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
             <BaseText typographyFont="bodySemiBold">{LL.SB_MY_TOKENS()}</BaseText>
 
             {getActionsButtons()}

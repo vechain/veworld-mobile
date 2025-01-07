@@ -1,5 +1,5 @@
 import React from "react"
-import { BaseSafeArea, Layout, PlusHeaderIcon } from "~Components"
+import { BaseSafeArea, Layout, PlusIconHeaderButton } from "~Components"
 import { ManageUrls } from "./Components/ManageUrls/ManageUrls"
 import { AddUrlBottomSheet } from "./Components/AddUrlBottomSheet"
 import { useBottomSheetModal } from "~Hooks"
@@ -17,7 +17,7 @@ export const ManageUrlsScreen = () => {
         <Layout
             title={LL.SEND_DELEGATION_MANAGE_URL()}
             headerRightElement={
-                <PlusHeaderIcon action={openSelectDelegationUrlBottomSheet} testID="add-delegation-url" />
+                <PlusIconHeaderButton action={openSelectDelegationUrlBottomSheet} testID="add-delegation-url" />
             }
             body={
                 <BaseSafeArea grow={1}>

@@ -8,7 +8,7 @@ type Props = {
     testID?: string
 }
 
-export const PlusHeaderIcon = ({ action, testID = "Plus-HeaderIcon" }: Props) => {
+export const PlusIconHeaderButton = ({ action, testID = "Plus-HeaderIcon" }: Props) => {
     const theme = useTheme()
 
     return (

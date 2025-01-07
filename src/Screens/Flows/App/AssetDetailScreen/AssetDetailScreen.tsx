@@ -105,8 +105,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         )}
 
                         <BaseSpacer height={24} />
-                        <AssetChart token={token} />
                     </BaseView>
+                    <AssetChart token={token} />
 
                     <BaseView alignItems="center" style={styles.assetDetailsBody}>
                         <BaseSpacer height={24} />
@@ -156,10 +156,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         assetDetailsHeader: {
+            paddingHorizontal: 16,
             marginTop: 25,
-            paddingHorizontal: 24,
         },
         assetDetailsBody: {
-            paddingHorizontal: 24,
+            paddingHorizontal: 16,
         },
     })

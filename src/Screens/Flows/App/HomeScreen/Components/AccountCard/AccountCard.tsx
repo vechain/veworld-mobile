@@ -42,7 +42,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
     }, [account])
 
     return (
-        <BaseView px={20} w={100} flexDirection="row">
+        <BaseView w={100} flexDirection="row">
             <BaseView
                 bg={theme.colors.primary}
                 borderRadius={12}

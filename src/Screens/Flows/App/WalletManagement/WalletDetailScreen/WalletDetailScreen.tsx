@@ -10,7 +10,7 @@ import {
     showSuccessToast,
     showWarningToast,
     SwipeableRow,
-    PlusHeaderIcon,
+    PlusIconHeaderButton,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -107,7 +107,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     return (
         <Layout
             title={walletAlias || device?.alias || ""}
-            headerRightElement={showButton && <PlusHeaderIcon action={onAddAccountClicked} />}
+            headerRightElement={showButton && <PlusIconHeaderButton action={onAddAccountClicked} />}
             fixedHeader={
                 <BaseView py={16}>
                     {!showWalletNameInput && (

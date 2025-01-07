@@ -57,13 +57,7 @@ export const OfficialTokenCard = memo(
             <BaseCard onPress={action} containerStyle={[styles.container, style]} testID={symbol}>
                 <BaseView flexDirection="row" justifyContent="space-between">
                     <BaseView w={14}>
-                        <TokenImage
-                            icon={token.icon}
-                            height={iconHeight}
-                            width={iconWidth}
-                            tokenAddress={token.address}
-                            symbol={token.symbol}
-                        />
+                        <TokenImage icon={token.icon} height={iconHeight} width={iconWidth} symbol={token.symbol} />
                     </BaseView>
                     <BaseView w={42}>
                         <BaseText typographyFont="buttonPrimary" ellipsizeMode="tail" numberOfLines={1}>

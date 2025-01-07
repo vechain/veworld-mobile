@@ -6,7 +6,7 @@ import { useBalances, useTheme } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import FiatBalance from "../../AccountCard/FiatBalance"
+import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 import { useVechainStatsTokenInfo } from "~Api/Coingecko"
 
 type Props = {

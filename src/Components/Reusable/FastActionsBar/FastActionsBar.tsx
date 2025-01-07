@@ -5,7 +5,7 @@ import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { FastAction } from "~Model"
 import { ColorThemeType } from "~Constants"
 
-export const FastActionsBar = memo(({ actions }: { actions: FastAction[]; actionItemWidth?: number }) => {
+export const FastActionsBar = memo(({ actions }: { actions: FastAction[] }) => {
     const { styles } = useThemedStyles(baseStyles)
 
     const renderAction = useCallback(
@@ -39,12 +39,11 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         action: {
             flex: 1,
-            paddingVertical: 14,
+            paddingVertical: 12,
             backgroundColor: theme.colors.card,
             borderRadius: 8,
         },
         actionsContainer: {
-            paddingHorizontal: 20,
             gap: 5,
         },
     })
