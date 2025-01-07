@@ -65,7 +65,7 @@ describe("BaseCustomTokenIcon", () => {
 
         displayedText = await findByText(shortTokenSymbol)
 
-        expect(displayedText.props.color).toBe(COLORS.WHITE)
+        expect(displayedText.props.color).toBe(COLORS.DARK_PURPLE)
     })
 
     it("applies correct font size based on tokenSymbol length", async () => {
