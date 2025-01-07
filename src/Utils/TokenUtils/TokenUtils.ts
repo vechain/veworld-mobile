@@ -1,4 +1,4 @@
-import { VET, VTHO } from "~Constants"
+import { B3TR, VET, VTHO } from "~Constants"
 import { FungibleToken } from "~Model"
 import HexUtils from "~Utils/HexUtils"
 import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
@@ -16,5 +16,7 @@ export const compareSymbols = (sym1?: string, sym2?: string): boolean => {
 }
 
 export const isVechainToken = (symbol: string): boolean => {
-    return compareSymbols(symbol, VET.symbol) || compareSymbols(symbol, VTHO.symbol)
+    return (
+        compareSymbols(symbol, VET.symbol) || compareSymbols(symbol, VTHO.symbol) || compareSymbols(symbol, B3TR.symbol)
+    )
 }
