@@ -1,7 +1,7 @@
 import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 import { TokenWithCompleteInfo, useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { BigNutils } from "~Utils"
 import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
@@ -12,11 +12,10 @@ import FiatBalance from "../../AccountCard/FiatBalance"
 
 type Props = {
     b3trToken: TokenWithCompleteInfo
-    isAnimation: boolean
     isBalanceVisible: boolean
 }
 
-export const VeB3trTokenCard = memo(({ b3trToken, isAnimation, isBalanceVisible }: Props) => {
+export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
@@ -32,14 +31,6 @@ export const VeB3trTokenCard = memo(({ b3trToken, isAnimation, isBalanceVisible 
             .toHuman(0)
             .decimals(2).toString +
         "%"
-
-    const animatedOpacityReverse = useAnimatedStyle(() => {
-        return {
-            opacity: withTiming(isAnimation ? 0 : 1, {
-                duration: 200,
-            }),
-        }
-    }, [isAnimation])
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -114,7 +105,7 @@ export const VeB3trTokenCard = memo(({ b3trToken, isAnimation, isBalanceVisible 
                     </BaseView>
                 </BaseView>
             </BaseView>
-            <Animated.View style={[animatedOpacityReverse, baseStyles.balancesContainer]}>
+            <Animated.View style={[baseStyles.balancesContainer]}>
                 <BaseView flexDirection="row" alignItems="center">
                     {renderFiatBalance}
                 </BaseView>

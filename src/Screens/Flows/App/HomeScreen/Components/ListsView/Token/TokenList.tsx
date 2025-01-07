@@ -18,11 +18,10 @@ import { AnimatedTokenListItem } from "./AnimatedTokenListItem"
 import HapticsService from "~Services/HapticsService"
 
 interface Props extends AnimateProps<ViewProps> {
-    isEdit: boolean
     isBalanceVisible: boolean
 }
 
-export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps }: Props) => {
+export const TokenList = memo(({ isBalanceVisible, ...animatedViewProps }: Props) => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
@@ -52,7 +51,7 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
         (token: FungibleTokenWithBalance) => {
             const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
 
-            if (!isEdit && isTokenBalance) {
+            if (isTokenBalance) {
                 if (AccountUtils.isObservedAccount(selectedAccount)) return
 
                 nav.navigate(Routes.INSERT_ADDRESS_SEND, {
@@ -60,15 +59,15 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
                 })
             }
         },
-        [isEdit, selectedAccount, nav],
+        [selectedAccount, nav],
     )
 
     const onVechainTokenPress = useCallback(
         (tokenWithInfo: TokenWithCompleteInfo) => {
             HapticsService.triggerImpact({ level: "Light" })
-            if (!isEdit) nav.navigate(Routes.TOKEN_DETAILS, { token: tokenWithInfo })
+            nav.navigate(Routes.TOKEN_DETAILS, { token: tokenWithInfo })
         },
-        [isEdit, nav],
+        [nav],
     )
 
     const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
@@ -82,11 +81,10 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
                     drag={drag}
                     isBalanceVisible={isBalanceVisible}
                     onTokenPress={onTokenPress}
-                    isEdit={isEdit}
                 />
             )
         },
-        [isBalanceVisible, onTokenPress, isEdit],
+        [isBalanceVisible, onTokenPress],
     )
 
     return (
@@ -94,28 +92,24 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
             <AnimatedTokenListItem
                 type="vetEcosystem"
                 tokenWithInfo={tokenWithInfoVET}
-                isEdit={isEdit}
                 isBalanceVisible={isBalanceVisible}
                 onPress={() => onVechainTokenPress(tokenWithInfoVET)}
             />
             <AnimatedTokenListItem
                 type="vetEcosystem"
                 tokenWithInfo={tokenWithInfoVTHO}
-                isEdit={isEdit}
                 isBalanceVisible={isBalanceVisible}
                 onPress={() => onVechainTokenPress(tokenWithInfoVTHO)}
             />
             <AnimatedTokenListItem
                 type="vetEcosystem"
                 tokenWithInfo={tokenWithInfoB3TR}
-                isEdit={isEdit}
                 isBalanceVisible={isBalanceVisible}
                 onPress={() => onVechainTokenPress(tokenWithInfoB3TR)}
             />
 
             <NestableDraggableFlatList
                 data={tokenBalances}
-                extraData={isEdit}
                 onDragEnd={handleDragEnd}
                 keyExtractor={item => item.address}
                 renderItem={renderItem}

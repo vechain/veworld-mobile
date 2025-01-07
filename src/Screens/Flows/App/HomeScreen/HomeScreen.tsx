@@ -172,7 +172,7 @@ export const HomeScreen = () => {
                         <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                         <BaseSpacer height={8} />
 
-                        <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
+                        <TokenList isBalanceVisible={isBalanceVisible} entering={animateEntering} />
                         <BaseSpacer height={24} />
                     </BaseView>
 

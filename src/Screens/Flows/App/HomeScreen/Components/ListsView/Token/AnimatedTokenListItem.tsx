@@ -9,7 +9,6 @@ import { B3TR } from "~Constants"
 import { VeB3trTokenCard } from "./VeB3trTokenCard"
 
 interface BaseProps {
-    isEdit: boolean
     isBalanceVisible: boolean
 }
 
@@ -27,26 +26,18 @@ interface NonVetTokenCardProps extends BaseProps, RenderItemParams<FungibleToken
 type Props = VetTokenCardProps | NonVetTokenCardProps
 
 export const AnimatedTokenListItem = memo((props: Props) => {
-    const { isEdit, isBalanceVisible } = props
+    const { isBalanceVisible } = props
 
     if (props.type === "vetEcosystem") {
         const { tokenWithInfo, onPress } = props
         const isB3tr = tokenWithInfo.symbol === B3TR.symbol
 
         return (
-            <TokenContainer isEdit={isEdit} onPress={onPress}>
+            <TokenContainer onPress={onPress}>
                 {isB3tr ? (
-                    <VeB3trTokenCard
-                        isBalanceVisible={isBalanceVisible}
-                        b3trToken={tokenWithInfo}
-                        isAnimation={isEdit}
-                    />
+                    <VeB3trTokenCard isBalanceVisible={isBalanceVisible} b3trToken={tokenWithInfo} />
                 ) : (
-                    <VechainTokenCard
-                        isBalanceVisible={isBalanceVisible}
-                        tokenWithInfo={tokenWithInfo}
-                        isAnimation={isEdit}
-                    />
+                    <VechainTokenCard isBalanceVisible={isBalanceVisible} tokenWithInfo={tokenWithInfo} />
                 )}
             </TokenContainer>
         )
@@ -55,7 +46,7 @@ export const AnimatedTokenListItem = memo((props: Props) => {
     const { item, onTokenPress } = props
 
     return (
-        <TokenContainer isEdit={isEdit} onPress={() => onTokenPress(item)}>
+        <TokenContainer onPress={() => onTokenPress(item)}>
             <TokenCard tokenWithBalance={item} isBalanceVisible={isBalanceVisible} />
         </TokenContainer>
     )

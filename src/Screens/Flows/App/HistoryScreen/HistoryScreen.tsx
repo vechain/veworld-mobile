@@ -262,7 +262,7 @@ export const HistoryScreen = () => {
             noBackButton
             fixedHeader={
                 <BaseView flexDirection="row" justifyContent="space-between">
-                    <BaseText typographyFont="subTitleSemiBold">{LL.BTN_HISTORY()}</BaseText>
+                    <BaseText typographyFont="subSubTitleSemiBold">{LL.BTN_HISTORY()}</BaseText>
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                         <SelectedNetworkViewer />
                         <BaseSpacer width={8} />

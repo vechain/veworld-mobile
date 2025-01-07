@@ -33,7 +33,7 @@ export const AnimatedTitle = ({ title, scrollOffset }: AnimatedTitleProps) => {
 
     return (
         <Animated.View style={[styles.rootContainer, animatedStylesHeader]}>
-            <BaseText typographyFont="subTitleSemiBold" testID="settings-screen">
+            <BaseText typographyFont="subSubTitleSemiBold" testID="settings-screen">
                 {title}
             </BaseText>
         </Animated.View>

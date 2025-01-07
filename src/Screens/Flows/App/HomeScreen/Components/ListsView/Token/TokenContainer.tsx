@@ -3,29 +3,20 @@ import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 
 interface TokenContainerProps {
     children: React.ReactNode
-    isEdit?: boolean
     onPress?: () => void
 }
 
-export const TokenContainer = ({ children, isEdit, onPress }: TokenContainerProps) => {
-    const { styles, theme } = useThemedStyles(baseStyles)
-
-    const animatedOuterCard = useAnimatedStyle(() => {
-        return {
-            backgroundColor: withTiming(isEdit ? theme.colors.neutralDisabled : theme.colors.card, {
-                duration: 200,
-            }),
-        }
-    }, [isEdit, theme.isDark])
+export const TokenContainer = ({ children, onPress }: TokenContainerProps) => {
+    const { styles } = useThemedStyles(baseStyles)
 
     const Container = onPress ? TouchableOpacity : React.Fragment
     const containerProps = onPress
         ? {
-              activeOpacity: isEdit ? 1 : 0.6,
+              activeOpacity: 0.6,
               onPress,
           }
         : {}
@@ -33,7 +24,7 @@ export const TokenContainer = ({ children, isEdit, onPress }: TokenContainerProp
     return (
         <BaseView px={20} mb={8}>
             <Container {...containerProps}>
-                <Animated.View style={[styles.container, animatedOuterCard]}>{children}</Animated.View>
+                <Animated.View style={styles.container}>{children}</Animated.View>
             </Container>
         </BaseView>
     )
