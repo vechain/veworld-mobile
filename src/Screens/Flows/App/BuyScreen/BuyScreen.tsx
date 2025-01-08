@@ -1,5 +1,5 @@
 import React from "react"
-import { BackButtonHeader, BaseSpacer, BaseText, BaseView, Layout } from "~Components"
+import { BaseSpacer, BaseText, BaseView, Layout } from "~Components"
 import { useI18nContext } from "~i18n"
 import { StatusBar } from "react-native"
 import { PlatformUtils } from "~Utils"
@@ -13,8 +13,7 @@ export const BuyScreen = () => {
     return (
         <Layout
             hasSafeArea={isAndroid}
-            noBackButton
-            fixedHeader={<BackButtonHeader hasBottomSpacer={false} title={LL.TITLE_BUY()} />}
+            title={LL.TITLE_BUY()}
             fixedBody={
                 <BaseView
                     flex={1}
