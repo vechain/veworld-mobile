@@ -1,12 +1,9 @@
 import React, { memo } from "react"
-import { TokenContainer } from "~Components/Reusable/Tokens/TokenContainer"
 import { TokenWithCompleteInfo } from "~Hooks"
-import { VechainTokenCard } from "~Components/Reusable/Tokens/VechainTokenCard"
-import { TokenCard } from "~Components/Reusable/Tokens/TokenCard"
 import { FungibleTokenWithBalance } from "~Model"
 import { RenderItemParams } from "react-native-draggable-flatlist"
 import { B3TR } from "~Constants"
-import { VeB3trTokenCard } from "./VeB3trTokenCard"
+import { VeB3trTokenCard, TokenCard, VechainTokenCard, TokenContainer } from "~Screens"
 
 interface BaseProps {
     isBalanceVisible: boolean

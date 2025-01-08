@@ -1,7 +1,6 @@
 import React from "react"
-import { BaseIcon } from "~Components/Base"
+import { BaseIcon, HeaderIconButton } from "~Components"
 import { useTheme } from "~Hooks"
-import { HeaderIconButton } from "./HeaderIconButton"
 
 type Props = {
     action: () => void

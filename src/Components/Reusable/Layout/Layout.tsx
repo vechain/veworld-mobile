@@ -107,7 +107,7 @@ export const Layout = ({
                         }}
                         ref={scrollViewRef}
                         refreshControl={refreshControl}
-                        testID={scrollViewTestID ?? "Layout_ScrollView"}
+                        testID={scrollViewTestID || "Layout_ScrollView"}
                         scrollEnabled={scrollViewContentHeight > scrollViewHeight}
                         style={noMargin ? {} : styles.scrollView}
                         contentContainerStyle={{
