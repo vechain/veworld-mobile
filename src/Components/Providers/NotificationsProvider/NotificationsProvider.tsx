@@ -55,11 +55,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
     const initializeIneSignal = useCallback(() => {
-        if (!process.env.ONE_SIGNAL_APP_ID) {
-            throw new Error("One signal app id is not set")
-        }
-
-        OneSignal.initialize(process.env.ONE_SIGNAL_APP_ID)
+        OneSignal.initialize(process.env.ONE_SIGNAL_APP_ID as string)
     }, [])
 
     const getOptInStatus = useCallback(async () => {
@@ -213,7 +209,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         ) {
             isFetcingTags.current = true
             getTags()
-                .then(tags => {
+                ?.then(tags => {
                     Object.entries(dappVisitCounter).forEach(([dappId, counter]) => {
                         if (tags[dappId] && tags[dappId] === "true" && dappVisitCounter[dappId] !== 2) {
                             dispatch(setDappVisitCounter({ dappId: dappId, counter: 2 }))
