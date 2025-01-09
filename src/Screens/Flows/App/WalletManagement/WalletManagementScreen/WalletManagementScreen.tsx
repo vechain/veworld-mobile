@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { BaseView, DeviceBox, Layout, RequireUserPassword, SwipeableRow, showWarningToast } from "~Components"
+import { BaseText, BaseView, DeviceBox, Layout, RequireUserPassword, SwipeableRow, showWarningToast } from "~Components"
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
@@ -159,6 +159,9 @@ export const WalletManagementScreen = () => {
             headerRightElement={headerRightElement}
             fixedBody={
                 <BaseView style={styles.view} mb={tabBarBottomMargin}>
+                    <BaseView style={styles.subTitleContainer}>
+                        <BaseText typographyFont="body">{LL.SB_WALLETS_MANAGEMENT()}</BaseText>
+                    </BaseView>
                     <DraggableFlatList<Device>
                         data={allDevicesAndObservedAccounts}
                         extraData={isEdit}
@@ -202,11 +205,13 @@ export const WalletManagementScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    view: { flexGrow: 1 },
+    view: { flexGrow: 1, paddingTop: 16 },
+    subTitleContainer: {
+        paddingBottom: 24,
+        paddingHorizontal: 24,
+    },
     draggableFlatListContainer: { flexGrow: 1 },
-
     contentContainerStyle: {
-        paddingTop: 8,
         paddingBottom: 24,
     },
 })

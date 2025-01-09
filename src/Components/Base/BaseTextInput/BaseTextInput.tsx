@@ -53,6 +53,30 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
 
         const placeholderColor = theme.isDark ? COLORS.WHITE_DISABLED : COLORS.DARK_PURPLE_DISABLED
 
+        const computedInputContainerStyles = useMemo(() => {
+            const _styles = [styles.container, inputContainerStyle]
+            if (disabled) return [..._styles, styles.disabledInput]
+            return _styles
+        }, [disabled, inputContainerStyle, styles])
+
+        const computedInputStyles = useMemo(() => {
+            const _styles = [
+                styles.input,
+                {
+                    color: otherProps.editable ? theme.colors.text : theme.colors.textDisabled,
+                },
+                style,
+            ]
+            if (disabled) return [..._styles, styles.disabledInput]
+            return _styles
+        }, [disabled, otherProps.editable, style, styles, theme])
+
+        const computedRightAdornmentStyles = useMemo(() => {
+            const _styles = [styles.rightIconContainer]
+            if (disabled) return [..._styles, styles.disabledInput]
+            return _styles
+        }, [disabled, styles])
+
         const renderRightIcon = useMemo(() => {
             if (!rightIcon) return null
             return typeof rightIcon === "string" ? (
@@ -66,11 +90,19 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                     testID={rightIconTestID}
                 />
             ) : (
-                <BaseView style={styles.rightIconContainer}>
-                    <BaseView style={styles.rightIconStyle}>{rightIcon}</BaseView>
+                <BaseView style={computedRightAdornmentStyles}>
+                    <BaseView style={[styles.rightIconStyle, styles.rightElementStyle]}>{rightIcon}</BaseView>
                 </BaseView>
             )
-        }, [onIconPress, rightIcon, rightIconTestID, styles, theme])
+        }, [
+            computedRightAdornmentStyles,
+            onIconPress,
+            rightIcon,
+            rightIconTestID,
+            styles.rightElementStyle,
+            styles.rightIconStyle,
+            theme.colors.text,
+        ])
 
         const setInputParams = useMemo(() => {
             if (PlatformUtils.isAndroid()) {
@@ -93,16 +125,10 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         {label}
                     </BaseText>
                 )}
-                <BaseView style={[styles.container, inputContainerStyle]}>
+                <BaseView style={[computedInputContainerStyles]}>
                     <TextInput
                         ref={ref}
-                        style={[
-                            styles.input,
-                            {
-                                color: otherProps.editable ? theme.colors.text : theme.colors.textDisabled,
-                            },
-                            style,
-                        ]}
+                        style={[computedInputStyles]}
                         // workarounds for android crashing when using the keyboard
                         keyboardType={setInputParams.keyboardType}
                         autoCorrect={setInputParams.autoCorrect}
@@ -139,8 +165,8 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
             width: "100%",
             flexDirection: "row",
             alignItems: "center",
-            borderColor: isError ? theme.colors.danger : COLORS.GREY_200,
-            borderWidth: 1,
+            borderColor: isError ? theme.colors.danger : theme.colors.cardBorder,
+            borderWidth: isError ? 2 : 1,
             borderRadius: 8,
             backgroundColor: theme.colors.card,
         },
@@ -158,13 +184,17 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
         },
         rightIconContainer: {
             maxWidth: 150,
-            backgroundColor: COLORS.GREY_50,
-            borderLeftColor: COLORS.GREY_200,
+            backgroundColor: theme.isDark ? theme.colors.card : COLORS.GREY_50,
+            borderLeftColor: theme.colors.cardBorder,
             borderLeftWidth: 1,
             borderTopRightRadius: 7,
             borderBottomRightRadius: 7,
         },
-        rightIconStyle: { flex: 1, justifyContent: "center", paddingHorizontal: 12 },
+        rightIconStyle: { justifyContent: "center", paddingHorizontal: 12 },
+        rightElementStyle: { flex: 1 },
+        disabledInput: {
+            backgroundColor: theme.colors.disabledInput,
+        },
         errorContainer: {
             opacity: isError ? 1 : 0,
         },

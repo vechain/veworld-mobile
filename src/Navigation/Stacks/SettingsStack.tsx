@@ -17,6 +17,8 @@ import {
     WalletDetailScreen,
     MnemonicBackupScreen,
     ChooseMnemonicBackupPassword,
+    ClaimUsername,
+    UsernameClaimed,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
@@ -45,6 +47,8 @@ export type RootStackParamListSettings = {
     [Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD]: { mnemonicArray: string[]; device: LocalDevice }
     [Routes.SETTINGS_GET_SUPPORT]: { url: string }
     [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
+    [Routes.CLAIM_USERNAME]: undefined
+    [Routes.USERNAME_CLAIMED]: undefined
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
@@ -153,6 +157,13 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={Routes.SETTINGS_GIVE_FEEDBACK}
                 component={SettingsBrowserView}
+                options={{ headerShown: false }}
+            />
+
+            <Settings.Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
+            <Settings.Screen
+                name={Routes.USERNAME_CLAIMED}
+                component={UsernameClaimed}
                 options={{ headerShown: false }}
             />
         </Settings.Navigator>

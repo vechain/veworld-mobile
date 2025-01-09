@@ -56,7 +56,6 @@ export const TabStack = () => {
         switch (currentScreen) {
             case Routes.SETTINGS_GET_SUPPORT:
             case Routes.SETTINGS_GIVE_FEEDBACK:
-            case Routes.CLAIM_USERNAME:
             case Routes.BROWSER:
                 return "none"
 

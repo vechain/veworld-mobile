@@ -2645,6 +2645,10 @@ type RootTranslation = {
 	 */
 	SB_USER_PASSWORD: string
 	/**
+	 * M​a​n​a​g​e​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​s​ ​a​n​d​ ​a​c​c​o​u​n​t​s​:
+	 */
+	SB_WALLETS_MANAGEMENT: string
+	/**
 	 * Y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n​s
 	 */
 	SB_YOUR_NFTS: string
@@ -3343,7 +3347,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
 	/**
-	 * W​a​l​l​e​t​s
+	 * M​a​n​a​g​e​ ​w​a​l​l​e​t​s
 	 */
 	TITLE_WALLET_MANAGEMENT: string
 	/**
@@ -6177,6 +6181,10 @@ Try reconnect your device to the internet.
 	 */
 	SB_USER_PASSWORD: () => LocalizedString
 	/**
+	 * Manage all of your wallets and accounts:
+	 */
+	SB_WALLETS_MANAGEMENT: () => LocalizedString
+	/**
 	 * Your collections
 	 */
 	SB_YOUR_NFTS: () => LocalizedString
@@ -6869,7 +6877,7 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
-	 * Wallets
+	 * Manage wallets
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**

@@ -1,6 +1,6 @@
 import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText, BaseCard, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
+import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { BigNutils } from "~Utils"
@@ -85,11 +85,9 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
     return (
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row">
-                <BaseCard
-                    style={[baseStyles.imageContainer, { backgroundColor: COLORS.WHITE }]}
-                    containerStyle={baseStyles.imageShadow}>
+                <BaseView style={[baseStyles.imageContainer, { backgroundColor: COLORS.WHITE }]}>
                     <Image source={{ uri: tokenWithInfo.icon }} style={baseStyles.image} />
-                </BaseCard>
+                </BaseView>
                 <BaseSpacer width={16} />
                 <BaseView>
                     <BaseText typographyFont="subTitleBold">{tokenWithInfo.name}</BaseText>

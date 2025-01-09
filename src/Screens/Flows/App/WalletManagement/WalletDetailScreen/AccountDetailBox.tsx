@@ -1,11 +1,14 @@
-import React, { memo, useCallback, useMemo, useState } from "react"
+import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { useRenameAccount, useThemedStyles, useVns } from "~Hooks"
+import { useCopyClipboard, useThemedStyles, useVns } from "~Hooks"
 import { AddressUtils, BigNutils } from "~Utils"
-import { BaseTextInput, BaseSpacer, BaseText, BaseView } from "~Components"
-import { WalletAccount } from "~Model"
+import { BaseSpacer, BaseText, BaseView, BaseButton, BaseIcon, BaseTouchable } from "~Components"
+import { DEVICE_TYPE, WalletAccount } from "~Model"
 import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
-import { ColorThemeType, VET } from "~Constants"
+import { COLORS, ColorThemeType, VET } from "~Constants"
+import { useI18nContext } from "~i18n"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
 
 type Props = {
     account: WalletAccount
@@ -13,32 +16,26 @@ type Props = {
     isBalanceVisible: boolean
     isDisabled: boolean
     isEditable?: boolean
+    onEditPress?: (account: WalletAccount) => void
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({ account, isSelected, isBalanceVisible, isDisabled, isEditable = true }) => {
+    ({ account, isSelected, isBalanceVisible, isDisabled, isEditable = true, onEditPress }) => {
         const { styles, theme } = useThemedStyles(baseStyles)
+        const { LL } = useI18nContext()
+        const nav = useNavigation()
 
-        const { changeAccountAlias } = useRenameAccount(account)
-
-        const [backupAlias, setBackupAlias] = useState(account.alias ?? "")
-        const [accountAlias, setAccountAlias] = useState(account.alias ?? "")
         const { name: vnsName, address: vnsAddress } = useVns({
             name: "",
             address: account.address,
         })
 
-        const onRenameAccount = (name: string) => {
-            setAccountAlias(name)
-            if (name === "") {
-                changeAccountAlias({
-                    newAlias: backupAlias ?? account.alias ?? "",
-                })
-            } else {
-                changeAccountAlias({ newAlias: name })
-            }
-        }
+        const { onCopyToClipboard } = useCopyClipboard()
 
         const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
+
+        const isObservedAccount = "type" in account && account.type === DEVICE_TYPE.LOCAL_WATCHED
+
+        const canClaimUsername = !vnsName && !isObservedAccount
 
         const balance = useMemo(() => {
             if (!isBalanceVisible) {
@@ -47,8 +44,6 @@ export const AccountDetailBox: React.FC<Props> = memo(
 
             return `${BigNutils(vetBalance).toHuman(VET.decimals).toTokenFormat_string(2)} ${VET.symbol}`
         }, [isBalanceVisible, vetBalance])
-
-        const handleFocus = useCallback(() => setBackupAlias(accountAlias), [accountAlias])
 
         const cardBgColor = useMemo(
             () => (isDisabled ? theme.colors.neutralDisabled : undefined),
@@ -67,34 +62,55 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 justifyContent="space-between"
                 bg={cardBgColor}
                 style={[isSelected ? styles.selected : styles.notSelected, styles.container]}>
-                <BaseView style={styles.aliasContainer}>
-                    <BaseTextInput
-                        disabled={!isEditable}
-                        placeholder={account?.alias}
-                        value={accountAlias}
-                        setValue={onRenameAccount}
-                        style={[
-                            styles.alias,
-                            {
-                                backgroundColor: cardBgColor,
-                                opacity: cardOpacity,
-                            },
-                        ]}
-                        inputContainerStyle={{
-                            backgroundColor: cardBgColor,
-                            opacity: cardOpacity,
-                        }}
-                        onFocus={handleFocus}
-                        maxLength={20}
-                    />
-                </BaseView>
-                <BaseView style={(styles.rightSubContainer, { opacity: cardOpacity })} alignItems="flex-end">
-                    <BaseText style={styles.address} fontSize={10}>
-                        {nameOrAddressFrom}
-                    </BaseText>
+                <BaseView style={styles.leftSubContainer} justifyContent="flex-start" alignItems="flex-start">
+                    <BaseView style={styles.aliasContainer}>
+                        <BaseText
+                            typographyFont="bodyBold"
+                            color={isSelected ? theme.colors.textSelected : theme.colors.text}>
+                            {account.alias}
+                        </BaseText>
+                    </BaseView>
+                    <BaseView style={(styles.leftSubContainer, { opacity: cardOpacity })}>
+                        <BaseTouchable
+                            style={styles.addressContainer}
+                            action={() => onCopyToClipboard(account.address, LL.COMMON_LBL_ADDRESS())}>
+                            <BaseText style={styles.address} typographyFont="captionRegular">
+                                {nameOrAddressFrom}
+                            </BaseText>
+                            <BaseIcon color={theme.colors.text} style={styles.address} size={12} name="icon-copy" />
+                        </BaseTouchable>
 
-                    <BaseSpacer height={4} />
-                    <BaseText fontSize={10}>{balance}</BaseText>
+                        <BaseSpacer height={4} />
+                        <BaseText typographyFont="captionRegular">{balance}</BaseText>
+                    </BaseView>
+                </BaseView>
+                {/* Actions */}
+                <BaseView flexDirection="row" style={styles.rightSubContainer}>
+                    {canClaimUsername && (
+                        <BaseButton
+                            title={"Claim"}
+                            action={() => {
+                                nav.navigate(Routes.CLAIM_USERNAME)
+                            }}
+                            bgColor={theme.colors.actionBanner.buttonBackground}
+                            textColor={theme.colors.actionBanner.buttonText}
+                            style={styles.claimBtn}
+                        />
+                    )}
+                    {isEditable && (
+                        <BaseTouchable action={() => onEditPress?.(account)}>
+                            <BaseIcon
+                                name="icon-editBox"
+                                bg={theme.isDark ? theme.colors.cardBorder : theme.colors.transparent}
+                                color={theme.isDark ? theme.colors.text : theme.colors.alertDescription}
+                                style={[styles.editBtn]}
+                                size={16}
+                                px={16}
+                                py={12}
+                                borderRadius={6}
+                            />
+                        </BaseTouchable>
+                    )}
                 </BaseView>
             </BaseView>
         )
@@ -104,12 +120,12 @@ export const AccountDetailBox: React.FC<Props> = memo(
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         selected: {
-            borderWidth: 1.5,
-            borderColor: theme.colors.text,
+            borderWidth: 2,
+            borderColor: theme.isDark ? COLORS.PURPLE_300 : theme.colors.primary,
         },
         notSelected: {
-            borderWidth: 1.5,
-            borderColor: theme.colors.card,
+            borderWidth: 1,
+            borderColor: theme.colors.cardBorder,
         },
         alias: {
             flex: 1,
@@ -119,18 +135,31 @@ const baseStyles = (theme: ColorThemeType) =>
         aliasContainer: {
             flex: 1,
         },
+        addressContainer: {
+            flexDirection: "row",
+            gap: 4,
+        },
         address: {
             opacity: 0.7,
         },
         container: {
             flex: 1,
-            borderRadius: 16,
+            borderRadius: 8,
             paddingHorizontal: 16,
             paddingVertical: 12,
         },
+        leftSubContainer: { flexDirection: "column", alignItems: "flex-start", gap: 4 },
         rightSubContainer: {
-            flexDirection: "column",
-            alignItems: "flex-end",
+            gap: 8,
+        },
+        claimBtn: {
+            paddingHorizontal: 12,
+            paddingVertical: 8,
+        },
+        editBtn: {
+            borderRadius: 6,
+            borderColor: theme.colors.actionBanner.buttonBorder,
+            borderWidth: 1,
         },
         eyeIcon: { marginLeft: 16 },
         deleteIcon: { marginLeft: 16 },

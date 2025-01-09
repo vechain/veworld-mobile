@@ -1,9 +1,16 @@
-import React, { useCallback, useEffect, useRef, useState } from "react"
-import { useBottomSheetModal, useCheckIdentity, useRenameWallet, useSetSelectedAccount } from "~Hooks"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+    useBottomSheetModal,
+    useCheckIdentity,
+    useRenameWallet,
+    useSetSelectedAccount,
+    useThemedStyles,
+    useVns,
+} from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
+    AlertInline,
     BaseSpacer,
-    BaseTextInput,
     BaseView,
     Layout,
     RequireUserPassword,
@@ -13,25 +20,32 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
-import { AccountWithDevice, DEVICE_TYPE } from "~Model"
-import { addAccountForDevice, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { AccountWithDevice, DEVICE_TYPE, WalletAccount } from "~Model"
+import { addAccountForDevice, renameAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useAccountDelete } from "./hooks"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { FlatList } from "react-native"
-import { PlusHeaderIcon } from "~Components/Reusable/HeaderRightIcons"
+import { FlatList, StyleSheet } from "react-native"
+import { EditHeaderIcon, PlusHeaderIcon } from "~Components/Reusable/HeaderRightIcons"
+import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
+
+//TODO: fix modal for edit accounts. Actually nothing is provided as param
 
 export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { device } = params
     const { LL } = useI18nContext()
+    const { styles } = useThemedStyles(baseStyles)
+    const { getVns } = useVns()
     const dispatch = useAppDispatch()
+
     const [walletAlias, setWalletAlias] = useState(device?.alias ?? "")
     const [openedAccount, setOpenedAccount] = useState<AccountWithDevice>()
+    const [editingAccount, setEditingAccount] = useState<WalletAccount>()
 
     const { changeDeviceAlias } = useRenameWallet(device)
 
@@ -43,10 +57,30 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
+    const claimableUsernames = useMemo(() => {
+        const domains = getVns()
+
+        if (!domains || domains.length === 0) return deviceAccounts.map(accounts => accounts.address).length
+
+        const noVnsAccounts = deviceAccounts.filter(account => {
+            const isObservedAccount = "type" in account && account.type === DEVICE_TYPE.LOCAL_WATCHED
+            const domain = domains.find(vns => AddressUtils.compareAddresses(vns.address, account.address))?.name
+            return !isObservedAccount && !domain
+        })
+
+        return noVnsAccounts.length
+    }, [deviceAccounts, getVns])
+
     const {
         ref: removeAccountWarningBottomSheetRef,
         onOpen: openRemoveAccountWarningBottomSheet,
         onClose: closeRemoveAccountWarningBottomSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: editWalletAccountBottomSheetRef,
+        onOpen: openEditWalletAccountBottomSheet,
+        onClose: closeEditWalletAccountBottomSheet,
     } = useBottomSheetModal()
 
     const onAddAccountClicked = () => {
@@ -60,14 +94,42 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         })
     }
 
-    const onRenameWallet = (name: string) => {
-        setWalletAlias(name)
-        if (name === "") {
-            changeDeviceAlias({ newAlias: device?.alias ?? "" })
-        } else {
-            changeDeviceAlias({ newAlias: name })
-        }
-    }
+    const onRenameWallet = useCallback(
+        (name: string) => {
+            setWalletAlias(name)
+            if (name === "") {
+                changeDeviceAlias({ newAlias: device?.alias ?? "" })
+            } else {
+                changeDeviceAlias({ newAlias: name })
+            }
+        },
+        [changeDeviceAlias, device],
+    )
+
+    const changeAccountAlias = useCallback(
+        (name: string) => {
+            if (!editingAccount) throw new Error("Wallet account not provided")
+            dispatch(
+                renameAccount({
+                    address: editingAccount.address,
+                    alias: name,
+                }),
+            )
+        },
+        [dispatch, editingAccount],
+    )
+
+    const onRenameAccount = useCallback(
+        (name: string) => {
+            if (!editingAccount) throw new Error("Wallet account not provided")
+            if (name === "") {
+                changeAccountAlias(editingAccount.alias ?? "")
+            } else {
+                changeAccountAlias(name)
+            }
+        },
+        [changeAccountAlias, editingAccount],
+    )
 
     const { setAccountToRemove, deleteAccount, isOnlyAccount, accountToRemove } = useAccountDelete()
 
@@ -83,6 +145,24 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         },
         [setAccountToRemove, LL, isOnlyAccount, openRemoveAccountWarningBottomSheet],
     )
+
+    const confirmEditWalletAccount = useCallback(
+        (name: string) => {
+            if (editingAccount) {
+                onRenameAccount(name)
+                setEditingAccount(undefined)
+            } else {
+                onRenameWallet(name)
+            }
+            closeEditWalletAccountBottomSheet()
+        },
+        [closeEditWalletAccountBottomSheet, editingAccount, onRenameAccount, onRenameWallet],
+    )
+
+    const cancelEditWalletAccount = useCallback(() => {
+        if (editingAccount) setEditingAccount(undefined)
+        closeEditWalletAccountBottomSheet()
+    }, [closeEditWalletAccountBottomSheet, editingAccount])
 
     useEffect(() => {
         setWalletAlias(device?.alias ?? "")
@@ -102,36 +182,41 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     }, [checkIdentityBeforeOpening, closeRemoveAccountWarningBottomSheet])
 
     const showButton = device?.type === DEVICE_TYPE.LEDGER || device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
-    const showWalletNameInput = device?.type !== DEVICE_TYPE.LOCAL_MNEMONIC
+    const isEditable = device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
 
     return (
         <Layout
             title={walletAlias || device?.alias || ""}
             headerRightElement={
-                showButton && (
-                    <PlusHeaderIcon testID="WalletDetailScreen_addAccountButton" action={onAddAccountClicked} />
-                )
-            }
-            fixedHeader={
-                <BaseView py={16}>
-                    {!showWalletNameInput && (
-                        <BaseTextInput
-                            placeholder={device?.alias || LL.WALLET_MANAGEMENT_WALLET_NAME()}
-                            value={walletAlias}
-                            setValue={onRenameWallet}
-                            maxLength={35}
+                <BaseView flexDirection="row" style={styles.headerActionsContainer}>
+                    {isEditable && (
+                        <EditHeaderIcon
+                            testID="WalletDetailScreen_editWalletButton"
+                            action={openEditWalletAccountBottomSheet}
                         />
+                    )}
+                    {showButton && (
+                        <PlusHeaderIcon testID="WalletDetailScreen_addAccountButton" action={onAddAccountClicked} />
                     )}
                 </BaseView>
             }
             fixedBody={
                 <BaseView flex={1} flexGrow={1}>
+                    <BaseView px={20} mb={16}>
+                        <BaseSpacer height={16} />
+                        {claimableUsernames > 0 && (
+                            <AlertInline
+                                variant="banner"
+                                status="info"
+                                message={`You have ${claimableUsernames} username claim available`}
+                            />
+                        )}
+                    </BaseView>
                     {device && !!deviceAccounts.length && (
                         <FlatList
                             data={deviceAccounts}
                             keyExtractor={account => account.address}
                             extraData={openedAccount}
-                            ListHeaderComponent={<BaseSpacer height={20} />}
                             ListFooterComponent={<BaseSpacer height={20} />}
                             renderItem={({ item }) => {
                                 const isSelected = AddressUtils.compareAddresses(selectedAccount.address, item.address)
@@ -164,6 +249,10 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                             account={item}
                                             isSelected={isSelected}
                                             isDisabled={!item.visible}
+                                            onEditPress={account => {
+                                                setEditingAccount(account)
+                                                openEditWalletAccountBottomSheet()
+                                            }}
                                         />
                                     </SwipeableRow>
                                 )
@@ -178,6 +267,14 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                         isBalanceVisible={isBalanceVisible}
                     />
 
+                    <EditWalletAccountBottomSheet
+                        ref={editWalletAccountBottomSheetRef}
+                        accountAlias={editingAccount ? editingAccount.alias : device.alias}
+                        type={editingAccount ? "account" : "wallet"}
+                        onConfirm={confirmEditWalletAccount}
+                        onCancel={cancelEditWalletAccount}
+                    />
+
                     <RequireUserPassword
                         isOpen={isPasswordPromptOpen}
                         onClose={handleClosePasswordModal}
@@ -188,3 +285,10 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        headerActionsContainer: {
+            gap: 8,
+        },
+    })

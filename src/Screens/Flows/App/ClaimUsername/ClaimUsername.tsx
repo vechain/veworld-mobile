@@ -13,17 +13,13 @@ import {
 } from "~Components"
 import { COLORS, ColorThemeType, DOMAIN_BASE } from "~Constants"
 import { useDisclosure, useThemedStyles, useVns, useWalletSecurity } from "~Hooks"
-import { Routes, RootStackParamListHome } from "~Navigation"
+import { Routes, RootStackParamListHome, RootStackParamListSettings } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CLAIM_USERNAME>
+type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListSettings, Routes.CLAIM_USERNAME>
 
-//TODO: Handle display of Claim username banner
-//TODO: Finish refactor of text input
-//TODO: Add entry point for claim flow on wallet management screen
-
-export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
+export const ClaimUsername: React.FC<Props> = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [subdomain, setSubdomain] = useState("")
     const [isAvailable, setIsAvailable] = useState(false)
@@ -94,8 +90,9 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     }, [isWalletSecurityBiometrics, onClaimUsername, openPasswordPrompt])
 
     const onSkipUsernameCreation = useCallback(async () => {
-        navigation.navigate(Routes.HOME)
-    }, [navigation])
+        // nav.goBack()
+        nav.navigate(Routes.USERNAME_CLAIMED)
+    }, [nav])
 
     const isNotAvailable = useMemo(() => isAvailable === false, [isAvailable])
 
@@ -216,7 +213,7 @@ const baseStyles = (theme: ColorThemeType) =>
             gap: 16,
         },
         inputLabel: {
-            color: theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600,
+            color: theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600,
         },
         inputMessage: {
             gap: 8,

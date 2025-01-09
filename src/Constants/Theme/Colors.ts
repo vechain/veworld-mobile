@@ -8,6 +8,7 @@ export type Colors = {
     tertiary: string
     disabled: string
     disabledButton: string
+    disabledInput: string
     danger: string
     success: string
     successMedium: string
@@ -17,6 +18,7 @@ export type Colors = {
     text: string
     textDisabled: string
     textReversed: string
+    textSelected: string
     alertDescription: string
     background: string
     backgroundReversed: string
@@ -161,12 +163,14 @@ export enum COLORS {
     ORANGE_500 = "#DD6B20",
     ORANGE_700 = "#9C4221",
     PURPLE_50 = "#F9F8FB",
-    PURPLE_300 = "#A897EC",
+    PURPLE_100 = "#F0EEFC",
     PURPLE_200 = "#CCC3F4",
+    PURPLE_300 = "#A897EC",
     PURPLE_400 = "#836CE4",
     PURPLE_500 = "#6042DD",
-    PURPLE_800 = "#261470",
+    PURPLE_600 = "#4324C6",
     PURPLE_700 = "#351C9B",
+    PURPLE_800 = "#261470",
     PURPLE_900 = "#170D45",
     COINBASE_BACKGROUND_LIGHT = "#ffffff",
     COINBASE_BACKGROUND_DARK = "#0a0b0d",
@@ -189,6 +193,7 @@ const light: Colors = {
     tertiary: COLORS.LIME_GREEN,
     disabled: COLORS.WHITE_DISABLED,
     disabledButton: COLORS.PURPLE_BLUR_TRANSPARENT,
+    disabledInput: COLORS.WHITE_DISABLED,
     danger: COLORS.DARK_RED,
     success: COLORS.DARK_GREEN,
     successMedium: COLORS.WHITE,
@@ -196,8 +201,9 @@ const light: Colors = {
     warning: COLORS.WHITE,
     error: COLORS.WHITE,
     text: COLORS.DARK_PURPLE,
-    textDisabled: COLORS.DARK_PURPLE_DISABLED,
+    textDisabled: COLORS.PURPLE_DISABLED,
     textReversed: COLORS.WHITE,
+    textSelected: COLORS.PURPLE_700,
     alertDescription: COLORS.GREY_600,
     textLight: COLORS.GREY_500,
     background: COLORS.LIGHT_GRAY,
@@ -265,9 +271,9 @@ const light: Colors = {
         titleInline: COLORS.BLUE_700,
     },
     actionBanner: {
-        background: COLORS.PURPLE_50,
-        border: COLORS.PURPLE_300,
-        title: COLORS.PURPLE_700,
+        background: COLORS.PURPLE_100,
+        border: COLORS.PURPLE_200,
+        title: COLORS.PURPLE_800,
         buttonBackground: COLORS.WHITE,
         buttonBorder: COLORS.GREY_200,
         buttonText: COLORS.GREY_600,
@@ -284,6 +290,7 @@ const dark: Colors = {
     tertiary: COLORS.DARK_PURPLE,
     disabled: COLORS.WHITE_DISABLED,
     disabledButton: COLORS.LIME_GREEN_TRANSPARENT,
+    disabledInput: COLORS.PURPLE_DISABLED,
     danger: COLORS.LIGHT_RED,
     success: COLORS.LIGHT_GREEN,
     successMedium: COLORS.MEDIUM_GREEN,
@@ -293,6 +300,7 @@ const dark: Colors = {
     text: COLORS.WHITE,
     textDisabled: COLORS.WHITE_DISABLED,
     textReversed: COLORS.DARK_PURPLE,
+    textSelected: COLORS.PURPLE_300,
     alertDescription: COLORS.GREY_600,
     textLight: COLORS.WHITE,
     background: COLORS.DARK_PURPLE,
@@ -303,7 +311,7 @@ const dark: Colors = {
     card: COLORS.PURPLE,
     icon: COLORS.WHITE,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
-    cardBorder: COLORS.DARK_PURPLE,
+    cardBorder: COLORS.DARK_PURPLE_DISABLED,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
     transparent: COLORS.TRANSPARENT,
@@ -360,11 +368,11 @@ const dark: Colors = {
         titleInline: COLORS.LIGHT_BLUE,
     },
     actionBanner: {
-        background: COLORS.PURPLE_900,
-        border: COLORS.PURPLE_400,
+        background: COLORS.PURPLE_800,
+        border: COLORS.PURPLE_600,
         title: COLORS.PURPLE_200,
         buttonBackground: COLORS.PURPLE_300,
-        buttonBorder: COLORS.PURPLE_500,
+        buttonBorder: COLORS.TRANSPARENT,
         buttonText: COLORS.PURPLE_800,
     },
 }

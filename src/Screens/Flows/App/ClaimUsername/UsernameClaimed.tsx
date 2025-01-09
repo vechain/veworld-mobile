@@ -1,7 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useTheme } from "~Hooks"
+import { usePrefetchAllVns, useTheme } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 
@@ -10,6 +10,9 @@ type Props = NativeStackScreenProps<RootStackParamListHome, Routes.USERNAME_CLAI
 export const UsernameClaimed: React.FC<Props> = ({ navigation }) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+
+    //Refetch all the VNS to load the new one
+    usePrefetchAllVns()
 
     const onPress = useCallback(async () => {
         navigation.navigate(Routes.HOME)
@@ -31,7 +34,7 @@ export const UsernameClaimed: React.FC<Props> = ({ navigation }) => {
                         {LL.SB_USERNAME_CLAIMED()}
                     </BaseText>
                 </BaseView>
-                <BaseView mb={24} flexDirection="row">
+                <BaseView mb={12} flexDirection="row">
                     <BaseButton w={100} action={onPress} selfAlign="flex-end" testID="UsernameClaimed_Btn">
                         {LL.BTN_CONTINUE()}
                     </BaseButton>
