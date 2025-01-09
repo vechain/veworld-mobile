@@ -1,6 +1,6 @@
-import { StyleSheet } from "react-native"
+import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText, BaseView, BaseSpacer, BaseCustomTokenIcon, BaseSkeleton, BaseImage } from "~Components"
+import { BaseText, BaseView, BaseSpacer, BaseCustomTokenIcon, BaseSkeleton } from "~Components"
 import { COLORS } from "~Constants"
 import { useBalances, useTheme } from "~Hooks"
 import { BalanceUtils } from "~Utils"
@@ -47,7 +47,7 @@ export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) =>
             <BaseView flexDirection="row">
                 {icon !== "" && (
                     <BaseView style={[styles.imageContainer]}>
-                        <BaseImage source={{ uri: icon }} style={styles.image} />
+                        <Image source={{ uri: icon }} style={styles.image} />
                     </BaseView>
                 )}
                 {!icon && (

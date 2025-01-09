@@ -7,6 +7,7 @@ import { COLORS } from "~Constants"
 import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
+import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -76,31 +77,12 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isBalanceVisible }: Props
                     </BaseView>
                 </BaseView>
             </BaseView>
-            <Animated.View style={[baseStyles.balancesContainer]}>
-                <BaseView flexDirection="row" alignItems="center">
-                    {renderFiatBalance}
-                </BaseView>
-
-                <BaseSpacer height={3} />
-
-                {isLoading ? (
-                    <BaseView flexDirection="row" alignItems="center">
-                        <BaseSkeleton
-                            animationDirection="horizontalLeft"
-                            boneColor={theme.colors.skeletonBoneColor}
-                            highlightColor={theme.colors.skeletonHighlightColor}
-                            height={14}
-                            width={60}
-                        />
-                    </BaseView>
-                ) : (
-                    <BaseText
-                        typographyFont="captionRegular"
-                        color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
-                        {change24h}
-                    </BaseText>
-                )}
-            </Animated.View>
+            <TokenCardBalanceInfo
+                renderFiatBalance={renderFiatBalance}
+                isLoading={isLoading}
+                isPositive24hChange={isPositive24hChange}
+                change24h={change24h}
+            />
         </Animated.View>
     )
 })
