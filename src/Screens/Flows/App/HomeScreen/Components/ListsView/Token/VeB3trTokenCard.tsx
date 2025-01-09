@@ -4,12 +4,10 @@ import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated from "react-native-reanimated"
 import { TokenWithCompleteInfo, useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { BigNutils } from "~Utils"
-import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
-import { useAppSelector } from "~Storage/Redux"
 import { COLORS, VOT3 } from "~Constants"
-import { useI18nContext } from "~i18n"
 import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
-
+import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
+import { useI18nContext } from "~i18n"
 type Props = {
     b3trToken: TokenWithCompleteInfo
     isBalanceVisible: boolean
@@ -18,19 +16,17 @@ type Props = {
 export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
+
+    const {
+        isTokensOwnedLoading,
+        exchangeRate,
+        isPositive24hChange,
+        change24h,
+        isLoading,
+        fiatBalance: b3trFiatBalance,
+    } = useTokenCardFiatInfo(b3trToken)
+
     const vot3Token = useTokenWithCompleteInfo(VOT3)
-
-    const { tokenInfo, tokenInfoLoading, fiatBalance: b3trFiatBalance, exchangeRate } = b3trToken
-
-    const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
-
-    const change24h =
-        (isPositive24hChange ? "+" : "") +
-        BigNutils(tokenInfo?.market_data?.price_change_percentage_24h ?? 0)
-            .toHuman(0)
-            .decimals(2).toString +
-        "%"
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -60,7 +56,6 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
     }, [isTokensOwnedLoading, theme.colors, exchangeRate, LL, vot3Token, b3trFiatBalance, isBalanceVisible])
 
     const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
-    const isLoading = tokenInfoLoading || isTokensOwnedLoading
 
     return (
         <Animated.View style={[baseStyles.innerRow]}>

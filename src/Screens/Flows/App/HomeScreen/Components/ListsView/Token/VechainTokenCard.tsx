@@ -3,12 +3,10 @@ import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated from "react-native-reanimated"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
-import { BigNutils } from "~Utils"
-import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
-import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
-import { useI18nContext } from "~i18n"
 import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
+import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -19,18 +17,8 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isBalanceVisible }: Props
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
-
-    const { tokenInfo, tokenInfoLoading, fiatBalance, tokenUnitBalance, exchangeRate } = tokenWithInfo
-
-    const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
-
-    const change24h =
-        (isPositive24hChange ? "+" : "") +
-        BigNutils(tokenInfo?.market_data?.price_change_percentage_24h ?? 0)
-            .toHuman(0)
-            .decimals(2).toString +
-        "%"
+    const { isTokensOwnedLoading, fiatBalance, exchangeRate, isPositive24hChange, change24h, isLoading } =
+        useTokenCardFiatInfo(tokenWithInfo)
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -54,20 +42,9 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isBalanceVisible }: Props
                 isVisible={isBalanceVisible}
             />
         )
-    }, [
-        isTokensOwnedLoading,
-        theme.colors.skeletonBoneColor,
-        theme.colors.skeletonHighlightColor,
-        theme.colors.tokenCardText,
-        exchangeRate,
-        LL,
-        fiatBalance,
-        isBalanceVisible,
-    ])
+    }, [isTokensOwnedLoading, theme.colors, exchangeRate, LL, fiatBalance, isBalanceVisible])
 
     const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
-
-    const isLoading = tokenInfoLoading || isTokensOwnedLoading
 
     return (
         <Animated.View style={[baseStyles.innerRow]}>
@@ -92,7 +69,7 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isBalanceVisible }: Props
                         ) : (
                             <BaseView flexDirection="row" alignItems="center">
                                 <BaseText typographyFont="captionRegular" color={tokenValueLabelColor}>
-                                    {isBalanceVisible ? tokenUnitBalance : "•••••"}{" "}
+                                    {isBalanceVisible ? tokenWithInfo.tokenUnitBalance : "•••••"}{" "}
                                 </BaseText>
                             </BaseView>
                         )}
