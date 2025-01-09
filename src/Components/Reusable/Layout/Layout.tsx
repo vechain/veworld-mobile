@@ -6,6 +6,7 @@ import { useTabBarBottomMargin } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
 import { SafeAreaView } from "react-native-safe-area-context"
+import { CenteredHeader } from "../CenteredHeader"
 
 type Props = {
     noBackButton?: boolean
@@ -72,7 +73,7 @@ export const Layout = ({
         () => (
             <BaseView h={100}>
                 <BaseView>
-                    {!noBackButton && (
+                    {!noBackButton ? (
                         <BaseView mx={noMargin ? 0 : 16}>
                             <BackButtonHeader
                                 beforeNavigating={beforeNavigating}
@@ -83,6 +84,12 @@ export const Layout = ({
                                 rightElement={headerRightElement}
                             />
                         </BaseView>
+                    ) : (
+                        title && (
+                            <BaseView mx={noMargin ? 0 : 16}>
+                                <CenteredHeader title={title} rightElement={headerRightElement} />
+                            </BaseView>
+                        )
                     )}
                     {fixedHeader && (
                         <BaseView justifyContent="center" py={8} px={noMargin ? 0 : 16}>
