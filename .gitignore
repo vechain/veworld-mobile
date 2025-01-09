@@ -39,7 +39,6 @@ android/app/src/main/res/raw
 node_modules/
 npm-debug.log
 yarn-error.log
-!node_modules/react-native/third-party-podspecs/boost.podspec
 
 # BUCK
 buck-out/
