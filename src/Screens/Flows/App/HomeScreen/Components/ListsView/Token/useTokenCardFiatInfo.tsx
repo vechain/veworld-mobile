@@ -1,6 +1,5 @@
 import { TokenWithCompleteInfo } from "~Hooks"
-import { useAppSelector } from "~Storage/Redux"
-import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
+import { useAppSelector, selectIsTokensOwnedLoading } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 
 export const useTokenCardFiatInfo = (tokenWithInfo: TokenWithCompleteInfo) => {

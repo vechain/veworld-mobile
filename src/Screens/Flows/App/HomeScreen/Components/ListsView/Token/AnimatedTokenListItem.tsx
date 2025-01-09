@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React from "react"
 import { TokenWithCompleteInfo } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RenderItemParams } from "react-native-draggable-flatlist"
@@ -10,22 +10,22 @@ interface BaseProps {
 }
 
 interface VetTokenCardProps extends BaseProps {
-    type: "vetEcosystem"
+    isVechainToken: true
     tokenWithInfo: TokenWithCompleteInfo
     onPress: () => void
 }
 
 interface NonVetTokenCardProps extends BaseProps, RenderItemParams<FungibleTokenWithBalance> {
-    type: "nonVet"
+    isVechainToken: false
     onTokenPress: (token: FungibleTokenWithBalance) => void
 }
 
 type Props = VetTokenCardProps | NonVetTokenCardProps
 
-export const AnimatedTokenListItem = memo((props: Props) => {
+export const AnimatedTokenListItem = (props: Props) => {
     const { isBalanceVisible } = props
 
-    if (props.type === "vetEcosystem") {
+    if (props.isVechainToken) {
         const { tokenWithInfo, onPress } = props
         const isB3tr = tokenWithInfo.symbol === B3TR.symbol
 
@@ -47,4 +47,4 @@ export const AnimatedTokenListItem = memo((props: Props) => {
             <TokenCard tokenWithBalance={item} isBalanceVisible={isBalanceVisible} />
         </TokenContainer>
     )
-})
+}

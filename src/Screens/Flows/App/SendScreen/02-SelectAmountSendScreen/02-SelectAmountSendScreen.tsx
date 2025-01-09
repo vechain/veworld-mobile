@@ -16,6 +16,7 @@ import {
     FadeoutButton,
     Layout,
     showErrorToast,
+    FiatBalance,
 } from "~Components"
 import { B3TR, COLORS, CURRENCY_SYMBOLS, typography, VTHO } from "~Constants"
 import { useAmountInput, useTheme, useThemedStyles } from "~Hooks"
@@ -24,7 +25,6 @@ import HapticsService from "~Services/HapticsService"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 import { useTotalTokenBalance, useUI } from "./Hooks"
 
 const { defaults: defaultTypography } = typography

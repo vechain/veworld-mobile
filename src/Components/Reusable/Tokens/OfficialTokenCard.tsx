@@ -1,12 +1,11 @@
 import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseCard, BaseText, BaseView } from "~Components"
+import { BaseCard, BaseText, BaseView, FiatBalance } from "~Components"
 import { useTheme, useThemedStyles, TokenWithCompleteInfo, useBalances } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { TokenImage } from "../TokenImage"
 import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
 

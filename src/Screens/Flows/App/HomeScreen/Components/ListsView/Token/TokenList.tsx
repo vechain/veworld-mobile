@@ -74,7 +74,7 @@ export const TokenList = memo(({ isBalanceVisible, ...animatedViewProps }: Props
         ({ item, getIndex, isActive, drag }) => {
             return (
                 <AnimatedTokenListItem
-                    type="nonVet"
+                    isVechainToken={false}
                     item={item}
                     isActive={isActive}
                     getIndex={getIndex}
@@ -90,19 +90,19 @@ export const TokenList = memo(({ isBalanceVisible, ...animatedViewProps }: Props
     return (
         <Animated.View {...animatedViewProps}>
             <AnimatedTokenListItem
-                type="vetEcosystem"
+                isVechainToken
                 tokenWithInfo={tokenWithInfoVET}
                 isBalanceVisible={isBalanceVisible}
                 onPress={() => onVechainTokenPress(tokenWithInfoVET)}
             />
             <AnimatedTokenListItem
-                type="vetEcosystem"
+                isVechainToken
                 tokenWithInfo={tokenWithInfoVTHO}
                 isBalanceVisible={isBalanceVisible}
                 onPress={() => onVechainTokenPress(tokenWithInfoVTHO)}
             />
             <AnimatedTokenListItem
-                type="vetEcosystem"
+                isVechainToken
                 tokenWithInfo={tokenWithInfoB3TR}
                 isBalanceVisible={isBalanceVisible}
                 onPress={() => onVechainTokenPress(tokenWithInfoB3TR)}

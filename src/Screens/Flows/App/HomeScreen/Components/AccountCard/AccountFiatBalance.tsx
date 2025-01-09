@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import FiatBalance from "./FiatBalance"
+import { FiatBalance } from "~Components"
 
 type AccountFiatBalanceProps = {
     isVisible?: boolean
