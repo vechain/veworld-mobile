@@ -67,21 +67,23 @@ export const UserCreatePasswordScreen = ({ onSuccess }: { onSuccess: (insertedPi
             hasSafeArea={false}
             noBackButton
             body={
-                <BaseView alignItems="center" justifyContent="flex-start">
-                    <BaseView alignSelf="flex-start">
-                        <BaseText typographyFont="title">{LL.TITLE_USER_PASSWORD()}</BaseText>
-                        <BaseText typographyFont="body" my={10}>
-                            {LL.SB_USER_PASSWORD()}
-                        </BaseText>
+                <BaseView px={90}>
+                    <BaseView alignItems="center" justifyContent="flex-start">
+                        <BaseView alignSelf="flex-start">
+                            <BaseText typographyFont="title">{LL.TITLE_USER_PASSWORD()}</BaseText>
+                            <BaseText typographyFont="body" my={10}>
+                                {LL.SB_USER_PASSWORD()}
+                            </BaseText>
+                        </BaseView>
+                        <BaseSpacer height={valueToHP[40]} />
+                        <PasswordPins
+                            pin={pin}
+                            digitNumber={digitNumber}
+                            isPINRetype={isPinRetype}
+                            isPinError={isConfirmationError}
+                        />
+                        <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={handleOnDigitDelete} />
                     </BaseView>
-                    <BaseSpacer height={valueToHP[40]} />
-                    <PasswordPins
-                        pin={pin}
-                        digitNumber={digitNumber}
-                        isPINRetype={isPinRetype}
-                        isPinError={isConfirmationError}
-                    />
-                    <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={handleOnDigitDelete} />
                 </BaseView>
             }
         />
