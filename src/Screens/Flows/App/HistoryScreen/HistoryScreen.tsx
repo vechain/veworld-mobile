@@ -1,10 +1,25 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo, useState } from "react"
+import { FlashList } from "@shopify/flash-list"
+import React, { useCallback, useMemo, useRef } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
-import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
+import { BaseSpacer, BaseText, BaseView, ChangeAccountButtonPill, Layout, SelectAccountBottomSheet } from "~Components"
 import { SCREEN_WIDTH } from "~Constants"
-import { TransactionUtils } from "~Utils"
-import { BaseText, BaseView, ChangeAccountButtonPill, BaseSpacer, SelectAccountBottomSheet, Layout } from "~Components"
+import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
+import {
+    AccountWithDevice,
+    Activity,
+    ActivityType,
+    ConnectedAppActivity,
+    DappTxActivity,
+    FungibleToken,
+    FungibleTokenActivity,
+    NonFungibleTokenActivity,
+    SignCertActivity,
+    TransactionOutcomes,
+    TypedDataActivity,
+    WatchedAccount,
+} from "~Model"
+import { Routes } from "~Navigation"
 import {
     selectBalanceVisible,
     selectOfficialTokens,
@@ -12,8 +27,8 @@ import {
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
+import { TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { FlashList } from "@shopify/flash-list"
 import {
     ConnectedAppActivityBox,
     DappTransactionActivityBox,
@@ -25,24 +40,8 @@ import {
     SwapTransactionActivityBox,
     TypedDataActivityBox,
 } from "./Components"
-import {
-    AccountWithDevice,
-    Activity,
-    ActivityType,
-    ConnectedAppActivity,
-    DappTxActivity,
-    FungibleToken,
-    FungibleTokenActivity,
-    NonFungibleTokenActivity,
-    SignCertActivity,
-    TypedDataActivity,
-    TransactionOutcomes,
-    WatchedAccount,
-} from "~Model"
-import { Routes } from "~Navigation"
-import { useAccountActivities } from "./Hooks"
+import { useActivities } from "./Hooks"
 
-// Number of Skeleton Activity boxes to show when fetching first page of activities
 const SKELETON_COUNT = 12
 
 export const HistoryScreen = () => {
@@ -65,19 +64,12 @@ export const HistoryScreen = () => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    // Pull down to refresh
-    const [refreshing, setRefreshing] = React.useState(false)
-
-    const { fetchActivities, activities, hasFetched, page, setPage } = useAccountActivities()
+    const { activities, fetchActivities, isFetching, refreshActivities, isRefreshing } = useActivities()
 
     const nav = useNavigation()
-
     const theme = useTheme()
-
     const tokens = useAppSelector(selectOfficialTokens)
-
-    // To prevent fetching next page of activities on FlashList mount
-    const [hasScrolled, setHasScrolled] = useState(false)
+    const hasScrolled = useRef(false)
 
     const onStartTransactingPress = useCallback(() => nav.navigate(Routes.SELECT_TOKEN_SEND), [nav])
 
@@ -94,27 +86,23 @@ export const HistoryScreen = () => {
     )
 
     const onScroll = useCallback(() => {
-        setHasScrolled(true)
+        hasScrolled.current = true
     }, [])
 
-    const onEndReached = useCallback(async () => {
-        if (hasScrolled) {
-            await fetchActivities()
+    const onEndReached = useCallback(() => {
+        if (hasScrolled.current) {
+            fetchActivities()
         }
-    }, [fetchActivities, hasScrolled])
+    }, [fetchActivities])
 
     const onRefresh = useCallback(async () => {
-        setRefreshing(true)
-
-        setHasScrolled(false)
-        setPage(0)
-
-        setRefreshing(false)
-    }, [setPage])
+        await refreshActivities()
+        hasScrolled.current = false
+    }, [refreshActivities])
 
     const renderActivity = useCallback(
-        (activity: Activity, index: number) => {
-            const id = `activity-${index}`
+        (activity: Activity) => {
+            const id = activity.id
 
             switch (activity.type) {
                 case ActivityType.FUNGIBLE_TOKEN:
@@ -190,7 +178,7 @@ export const HistoryScreen = () => {
                     data={activities}
                     keyExtractor={activity => activity.id}
                     ListFooterComponent={
-                        hasFetched ? (
+                        false ? (
                             <BaseSpacer height={20} />
                         ) : (
                             <BaseView mx={20}>
@@ -198,8 +186,8 @@ export const HistoryScreen = () => {
                             </BaseView>
                         )
                     }
-                    renderItem={({ item: activity, index }) => {
-                        return <BaseView mx={20}>{renderActivity(activity, index)}</BaseView>
+                    renderItem={({ item: activity }) => {
+                        return <BaseView mx={20}>{renderActivity(activity)}</BaseView>
                     }}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
@@ -212,12 +200,16 @@ export const HistoryScreen = () => {
                     onEndReachedThreshold={0.5}
                     onEndReached={onEndReached}
                     refreshControl={
-                        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} tintColor={theme.colors.border} />
+                        <RefreshControl
+                            refreshing={isRefreshing}
+                            onRefresh={onRefresh}
+                            tintColor={theme.colors.border}
+                        />
                     }
                 />
             </BaseView>
         )
-    }, [activities, hasFetched, onEndReached, onRefresh, onScroll, refreshing, renderActivity, theme.colors.border])
+    }, [activities, isRefreshing, onEndReached, onRefresh, onScroll, renderActivity, theme.colors.border])
 
     const renderSkeletonList = useMemo(() => {
         return (
@@ -248,6 +240,16 @@ export const HistoryScreen = () => {
         )
     }, [onStartTransactingPress])
 
+    const renderList = useCallback(() => {
+        if (activities.length > 0) {
+            return renderActivitiesList
+        } else if (isFetching && activities.length === 0) {
+            return renderSkeletonList
+        } else {
+            return renderNoActivitiesButton
+        }
+    }, [activities.length, isFetching, renderActivitiesList, renderNoActivitiesButton, renderSkeletonList])
+
     return (
         <Layout
             safeAreaTestID="History_Screen"
@@ -260,15 +262,7 @@ export const HistoryScreen = () => {
             }
             fixedBody={
                 <>
-                    {/* Activities List */}
-                    {!!activities.length && (page !== 0 || hasFetched) && renderActivitiesList}
-
-                    {/* Fetching Activities shows skeleton */}
-                    {!hasFetched && page === 0 && renderSkeletonList}
-
-                    {/* No Activities */}
-                    {!activities.length && hasFetched && renderNoActivitiesButton}
-
+                    {renderList()}
                     <SelectAccountBottomSheet
                         closeBottomSheet={closeSelectAccountBottonSheet}
                         accounts={accounts}

@@ -1,147 +1,133 @@
-import { useCallback, useEffect, useState } from "react"
-import { error, info } from "~Utils"
+import { useCallback, useEffect, useRef, useState } from "react"
 import { showWarningToast } from "~Components"
+import { ERROR_EVENTS } from "~Constants"
 import { Activity } from "~Model"
+import { fetchAccountTransactionActivities } from "~Networking"
 import {
-    selectCurrentActivities,
     selectSelectedAccount,
     selectSelectedNetwork,
     updateAccountTransactionActivities,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { fetchAccountTransactionActivities } from "~Networking"
+import { error, info } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { InteractionManager } from "react-native"
-import { ERROR_EVENTS } from "~Constants"
 
-/**
- * Custom React hook to fetch and manage account activities.
- *
- * @returns {{
- *   fetchActivities: Function,
- *   activities: Activity[],
- *   hasFetched: boolean,
- *   page: number,
- * }} An object containing:
- *     - fetchActivities: A function to fetch account activities.
- *     - activities: An array of account activity objects. Each object contains details about an account activity.
- *     - hasFetched: A boolean indicating whether the account activities have been fetched. `true` if the fetch operation is complete, `false` otherwise.
- *     - page: The current page number for the paginated activity data. The initial page is `0`.
- */
-export const useAccountActivities = () => {
-    // Initialize Redux dispatch
+export const useActivities = () => {
     const dispatch = useAppDispatch()
-
-    const selectedAccount = useAppSelector(selectSelectedAccount)
-
-    // Select network from Redux state
-    const network = useAppSelector(selectSelectedNetwork)
-
-    // Initialize internationalization context
     const { LL } = useI18nContext()
 
-    // State variables
-    const [hasFetched, setHasFetched] = useState<boolean>(false) // Indicates if activities have been fetched
-    const [page, setPage] = useState<number>(0) // Current page number
-    const [activities, setActivities] = useState<Activity[]>([]) // Current set of fetched activities
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const network = useAppSelector(selectSelectedNetwork)
 
-    // Select saved activities from Redux state
-    const activitiesSaved = useAppSelector(selectCurrentActivities)
+    const page = useRef(0)
+    const currentNetwork = useRef(network)
 
-    /**
-     * Fetches account activities from the backend and manages state accordingly.
-     * Utilizes useCallback for memoization to prevent unnecessary re-renders.
-     */
-    const fetchActivities = useCallback(async () => {
-        info(ERROR_EVENTS.ACTIVITIES, "Fetching activities on page", page)
-        // Reset hasFetched flag
-        setHasFetched(false)
-        // Proceed if address exists
-        if (selectedAccount) {
+    const [isFetching, setIsFetching] = useState(false)
+    const [isRefreshing, setIsRefreshing] = useState(false)
+    const [activities, setActivities] = useState<Activity[]>([])
+
+    const resetPageNumber = useCallback(() => {
+        page.current = 0
+    }, [])
+
+    const incrementPageNumber = useCallback(() => {
+        page.current = page.current + 1
+    }, [])
+
+    const sortByTimestamp = useCallback(
+        (_activities: Activity[]) => _activities.sort((a, b) => b.timestamp - a.timestamp),
+        [],
+    )
+
+    const updateActivitiesState = useCallback(
+        (newActivities: Activity[], reset: boolean = false) => {
+            const getNewActivities = (prevActivities: Activity[]) => {
+                let result: Activity[] = []
+
+                if (reset) {
+                    result = newActivities
+                } else {
+                    const activitiesById = new Map<string, Activity>()
+                    prevActivities.forEach(activity => activitiesById.set(activity.id, activity))
+                    newActivities.forEach(activity => activitiesById.set(activity.id, activity))
+                    const mergedActivities = Array.from(activitiesById.values())
+                    result = mergedActivities
+                }
+
+                return sortByTimestamp(result)
+            }
+
+            setActivities(getNewActivities)
+        },
+        [sortByTimestamp],
+    )
+
+    const getActivities = useCallback(
+        async ({ refresh }: { refresh: boolean }) => {
+            if (!selectedAccount) {
+                return
+            }
+
+            info(ERROR_EVENTS.ACTIVITIES, "Fetching activities on page", page)
+            setIsFetching(true)
+            let shouldRefresh = refresh
+            const hasNetworkChanged = currentNetwork.current !== network
+
+            if (hasNetworkChanged) {
+                resetPageNumber()
+                shouldRefresh = true
+                currentNetwork.current = network
+                updateActivitiesState([], true)
+            }
+
             try {
-                // Fetch transaction activities
-                const txActivities = await fetchAccountTransactionActivities(selectedAccount.address, page, network)
+                const txActivities = await fetchAccountTransactionActivities(
+                    selectedAccount.address,
+                    page.current,
+                    network,
+                )
 
-                // If first page, update Redux state and set activities state
-                if (page === 0) {
+                if (page.current === 0) {
                     dispatch(updateAccountTransactionActivities(txActivities))
-
-                    setActivities(txActivities)
-                    incrementPageAndSetFetchedFlag()
-                    return
                 }
 
-                // If no more activities to fetch, set fetched flag and return
-                if (txActivities.length === 0) {
-                    setHasFetched(true)
-                    return
-                }
-
-                // Merge previous activities and new ones, avoiding duplicates
-                setActivities(prevActivities => {
-                    const activitiesMap = new Map<string, Activity>()
-                    const concatenatedActivities = [...prevActivities, ...txActivities]
-
-                    concatenatedActivities.forEach(activity => activitiesMap.set(activity.id, activity))
-
-                    // Sort activities by timestamp and return
-                    const sortedActivities = Array.from(activitiesMap.values()).sort(
-                        (a, b) => b.timestamp - a.timestamp,
-                    )
-
-                    return sortedActivities
-                })
-
-                incrementPageAndSetFetchedFlag()
+                updateActivitiesState(txActivities, shouldRefresh)
+                incrementPageNumber()
             } catch (e) {
-                // In case of error, log and show warning toast
                 error(ERROR_EVENTS.ACTIVITIES, e)
 
                 showWarningToast({
                     text1: LL.HEADS_UP(),
                     text2: LL.ACTIVITIES_NOT_UP_TO_DATE(),
                 })
-
-                // Set fetched flag
-                setHasFetched(true)
-                if (page === 0) setPage(prevPage => prevPage + 1)
+            } finally {
+                setIsFetching(false)
             }
-        }
-    }, [page, selectedAccount, network, dispatch, LL])
+        },
+        [LL, dispatch, incrementPageNumber, network, resetPageNumber, selectedAccount, updateActivitiesState],
+    )
 
-    // Helper function to increment page and set fetched flag
-    const incrementPageAndSetFetchedFlag = () => {
-        setPage(prevPage => prevPage + 1)
-        setHasFetched(true)
-    }
+    const refreshActivities = useCallback(async () => {
+        resetPageNumber()
+        setIsRefreshing(true)
+        await getActivities({ refresh: true })
+        setIsRefreshing(false)
+    }, [getActivities, resetPageNumber])
 
-    // Update activities when saved activities in Redux state changes
+    const fetchActivities = useCallback(async () => {
+        await getActivities({ refresh: false })
+    }, [getActivities])
+
     useEffect(() => {
-        setActivities(activitiesSaved)
-    }, [activitiesSaved])
-
-    // Fetch activities on initial component mount or account change
-    useEffect(() => {
-        const fetchOnMount = async () => {
-            await fetchActivities()
-        }
-
-        InteractionManager.runAfterInteractions(() => {
-            if (page === 0) fetchOnMount()
-        })
-    }, [fetchActivities, page])
-
-    // Reset page number on network change or on account change
-    useEffect(() => {
-        setPage(0)
-    }, [network.type, selectedAccount])
+        getActivities({ refresh: false })
+    }, [getActivities])
 
     return {
+        isFetching,
+        isRefreshing,
         fetchActivities,
+        refreshActivities,
         activities,
-        hasFetched,
-        page,
-        setPage,
     }
 }
