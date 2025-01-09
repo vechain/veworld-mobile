@@ -157,7 +157,7 @@ const baseStyles = () =>
     StyleSheet.create({
         assetDetailsHeader: {
             paddingHorizontal: 16,
-            marginTop: 25,
+            marginTop: 16,
         },
         assetDetailsBody: {
             paddingHorizontal: 16,
