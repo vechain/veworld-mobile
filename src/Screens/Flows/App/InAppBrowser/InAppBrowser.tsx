@@ -1,15 +1,16 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { MutableRefObject, useEffect } from "react"
+import React, { MutableRefObject, useCallback, useEffect } from "react"
 import { StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import WebView from "react-native-webview"
-import { BrowserBottomBar, Layout, URLBar, useInAppBrowser } from "~Components"
+import { BrowserBottomBar, Layout, URLBar, useConnectAccounts, useInAppBrowser } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { ApiV2AccountNotConnectedBottomSheet } from "./Components"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
@@ -34,6 +35,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     const track = useAnalyticTracking()
     const nav = useNavigation()
+    const { getConnectedAccounts } = useConnectAccounts()
 
     useEffect(() => {
         if (route?.params?.ul) {
@@ -47,6 +49,27 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         DeviceInfo.getUserAgent().then(setUserAgent)
     }, [])
 
+    const onMount = useCallback(
+        (event: WebViewNavigationEvent | WebViewErrorEvent) => {
+            const accounts = getConnectedAccounts(event.nativeEvent.url)
+
+            const p = JSON.stringify(accounts)
+
+            webviewRef.current?.injectJavaScript(`(function (){
+                const ev = new CustomEvent("accountsChanged", {detail: ${p}})
+                const evTarget = new EventTarget()
+                setTimeout(() => {
+                    evTarget.dispatchEvent(ev);
+                }, 1000)
+            }
+              
+        )();
+        
+        true`)
+        },
+        [webviewRef, getConnectedAccounts],
+    )
+
     useEffect(() => {
         // set the webview ref to undefined when the component unmounts
         return () => {
@@ -54,7 +77,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
-
     return (
         <Layout
             fixedHeader={<URLBar />}
@@ -74,6 +96,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                             javaScriptEnabled={true}
                             onMessage={onMessage}
                             onScroll={onScroll}
+                            onLoadEnd={onMount}
                             style={styles.loginWebView}
                             scalesPageToFit={true}
                             injectedJavaScriptBeforeContentLoaded={injectVechainScript}

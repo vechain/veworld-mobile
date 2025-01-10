@@ -27,6 +27,7 @@ import {
     selectSelectedAccount,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
+    updateConnectedAppAccount,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -82,10 +83,11 @@ type Props = {
 
 export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
 
-const useConnectAccounts = () => {
+export const useConnectAccounts = () => {
     const navigation = useNavigation()
     const connectedAppAccounts = useAppSelector(getAllConnectedAppAccounts)
     const currentAccount = useAppSelector(selectSelectedAccount)
+    const dispatch = useAppDispatch()
 
     const getConnectedAccounts = useCallback(
         (origin: string) => {
@@ -93,6 +95,14 @@ const useConnectAccounts = () => {
             return connectedAccounts
         },
         [connectedAppAccounts],
+    )
+
+    const addConnectedAccount = useCallback(
+        (origin: string) => {
+            dispatch(updateConnectedAppAccount({ origin, address: currentAccount.address }))
+            return [...getConnectedAccounts(origin), currentAccount.address]
+        },
+        [currentAccount.address, dispatch, getConnectedAccounts],
     )
 
     const isDAppConnectedWithApiV2 = useCallback(
@@ -165,6 +175,7 @@ const useConnectAccounts = () => {
         isCurrentAccountConnectedToDappWithApiV2,
         getConnectedAccounts,
         prioritizeCurrentAccount,
+        addConnectedAccount,
     }
 }
 
@@ -702,6 +713,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         (event: WebViewMessageEvent) => {
             debug(ERROR_EVENTS.DAPP, event.nativeEvent.url)
 
+            // console.log(event.nativeEvent)
             if (!event.nativeEvent.data) {
                 return
             }
@@ -778,7 +790,11 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         webviewRef.current = undefined
     }, [])
 
-    const connectApiV2Account = useCallback(() => {}, [])
+    const connectApiV2Account = useCallback(() => {
+        //TODO:Update accounts/Dapp list and send it to the dapp
+        // addConnectedAccount() //used for update the list of accounts connected to a dapp
+        //TODO:Connect current account in bg
+    }, [])
 
     const rejectApiV2AccountConnection = useCallback(() => {
         closeApiV2AccountNotConnectedBottomSheet()

@@ -10,7 +10,11 @@ export const connectedAppAccountSlice = createSlice({
         updateConnectedAppAccounts: (state, action: PayloadAction<ConnectedAppAccountsState>) => {
             return action.payload
         },
+        updateConnectedAppAccount: (state, action: PayloadAction<{ origin: string; address: string }>) => {
+            const { origin, address } = action.payload
+            state[origin] = [...state[origin], address]
+        },
     },
 })
 
-export const { updateConnectedAppAccounts } = connectedAppAccountSlice.actions
+export const { updateConnectedAppAccounts, updateConnectedAppAccount } = connectedAppAccountSlice.actions
