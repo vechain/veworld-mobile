@@ -80,7 +80,7 @@ export const SettingsScreen = () => {
         <Layout
             noBackButton
             fixedHeader={
-                <BaseView flexDirection="row" justifyContent="space-between">
+                <BaseView flexDirection="row" justifyContent="space-between" py={4}>
                     <BaseText typographyFont="subSubTitleSemiBold" testID="settings-screen">
                         {LL.TITLE_MENU()}
                     </BaseText>
