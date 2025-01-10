@@ -1,25 +1,17 @@
 import { useNavigation } from "@react-navigation/native"
-import { Hex, HexInt } from "@vechain/sdk-core"
 import React, { useCallback } from "react"
 import { ActionBanner, BaseText, BaseView } from "~Components"
 import { useTheme, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { Routes } from "~Navigation"
-import {
-    selectBalancesForAccount,
-    selectSelectedAccount,
-    selectVthoBalanceByAccount,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 
 export const ClaimUsernameBanner = () => {
     const theme = useTheme()
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    selectBalancesForAccount
-    const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, selectedAccount.address))
 
     const isObservedAccount = "type" in selectedAccount && selectedAccount.type === DEVICE_TYPE.LOCAL_WATCHED
 
@@ -32,8 +24,8 @@ export const ClaimUsernameBanner = () => {
         nav.navigate(Routes.CLAIM_USERNAME)
     }, [nav])
 
-    // Hide the claim banner if VTHO balance is 0 or you already have a vet domain or if it's an observed wallet
-    if (name || HexInt.of(vthoBalance).isEqual(Hex.of(0)) || isObservedAccount) return <></>
+    // Hide the claim banner if you already have a vet domain or if it's an observed wallet
+    if (name || isObservedAccount) return <></>
 
     return (
         <BaseView w={100} px={20}>

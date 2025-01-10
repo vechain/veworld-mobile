@@ -20,7 +20,7 @@ export const UsernameClaimed: React.FC<Props> = ({ navigation }) => {
 
     return (
         <BaseSafeArea>
-            <BaseView flexGrow={1} p={24}>
+            <BaseView flexGrow={1} p={24} pb={12}>
                 <BaseView flexGrow={1} alignItems="center" justifyContent="center">
                     <BaseIcon name="icon-check-circle" size={64} color={theme.colors.text} />
 

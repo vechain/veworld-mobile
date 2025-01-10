@@ -60,15 +60,21 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const claimableUsernames = useMemo(() => {
         const domains = getVns()
 
-        if (!domains || domains.length === 0) return deviceAccounts.map(accounts => accounts.address).length
+        if (!domains || domains.length === 0)
+            return deviceAccounts
+                .filter(accounts => accounts.device.type !== DEVICE_TYPE.LEDGER)
+                .map(accounts => accounts.address)
 
-        const noVnsAccounts = deviceAccounts.filter(account => {
-            const isObservedAccount = "type" in account && account.type === DEVICE_TYPE.LOCAL_WATCHED
-            const domain = domains.find(vns => AddressUtils.compareAddresses(vns.address, account.address))?.name
-            return !isObservedAccount && !domain
-        })
+        const noVnsAccounts = deviceAccounts
+            .filter(account => {
+                const isLedger = account.device.type === DEVICE_TYPE.LEDGER
+                const isObservedAccount = "type" in account && account.type === DEVICE_TYPE.LOCAL_WATCHED
+                const domain = domains.find(vns => AddressUtils.compareAddresses(vns.address, account.address))?.name
+                return !isObservedAccount && !domain && !isLedger
+            })
+            .map(accounts => accounts.address)
 
-        return noVnsAccounts.length
+        return noVnsAccounts
     }, [deviceAccounts, getVns])
 
     const {
@@ -204,11 +210,11 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                 <BaseView flex={1} flexGrow={1}>
                     <BaseView px={20} mb={16}>
                         <BaseSpacer height={16} />
-                        {claimableUsernames > 0 && (
+                        {claimableUsernames.length > 0 && (
                             <AlertInline
                                 variant="banner"
                                 status="info"
-                                message={`You have ${claimableUsernames} username claim available`}
+                                message={`You have ${claimableUsernames.length} username claim available`}
                             />
                         )}
                     </BaseView>
@@ -220,7 +226,9 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                             ListFooterComponent={<BaseSpacer height={20} />}
                             renderItem={({ item }) => {
                                 const isSelected = AddressUtils.compareAddresses(selectedAccount.address, item.address)
-
+                                const canClaimUsername = claimableUsernames.some(address =>
+                                    AddressUtils.compareAddresses(address, item.address),
+                                )
                                 return (
                                     <SwipeableRow<AccountWithDevice>
                                         testID={item.address}
@@ -249,6 +257,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                             account={item}
                                             isSelected={isSelected}
                                             isDisabled={!item.visible}
+                                            canClaimUsername={canClaimUsername}
                                             onEditPress={account => {
                                                 setEditingAccount(account)
                                                 openEditWalletAccountBottomSheet()

@@ -19,6 +19,7 @@ import {
     TESTNET_VNS_PUBLIC_RESOLVER,
     TESTNET_VNS_REGISTRAR_CONTRACT,
     TESTNET_VNS_SUBDOMAIN_CONTRACT,
+    AnalyticsEvent,
 } from "~Constants"
 import { HDKey, Hex, HexUInt, Secp256k1, Transaction, TransactionBody } from "@vechain/sdk-core"
 import {
@@ -31,6 +32,7 @@ import {
 } from "@vechain/sdk-network"
 import { error } from "~Utils"
 import { useI18nContext } from "~i18n"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -147,6 +149,7 @@ export const useVns = (props?: Vns): VnsHook => {
     const account = useAppSelector(selectSelectedAccount)
     const device = useAppSelector(state => selectDevice(state, account.rootAddress))
     const qc = useQueryClient()
+    const trackEvent = useAnalyticTracking()
 
     const thorClient = useMemo(() => ThorClient.at(network.currentUrl), [network.currentUrl])
 
@@ -362,17 +365,38 @@ export const useVns = (props?: Vns): VnsHook => {
             } catch (e) {
                 const err = e as Error
                 const errMessage: string = err?.message
-                error("SIGN", errMessage)
+                error("APP", errMessage)
                 const isSubdomainAlreadyClaimed = errMessage.includes("already claimed")
-                showErrorToast({
-                    text1: isSubdomainAlreadyClaimed
-                        ? LL.NOTIFICATION_failed_subdomain_already()
-                        : LL.NOTIFICATION_failed_subdomain(),
-                })
+                const noGasLeft = errMessage.includes("HTTP 403")
+                if (noGasLeft) {
+                    trackEvent(AnalyticsEvent.CLAIM_USERNAME_FAILED, {
+                        reason: "no-gas-left",
+                        domainName,
+                    })
+                    showErrorToast({
+                        text1: LL.NOTIFICATION_failed_no_gas(),
+                    })
+                } else if (isSubdomainAlreadyClaimed) {
+                    trackEvent(AnalyticsEvent.CLAIM_USERNAME_FAILED, {
+                        reason: "already-claimed",
+                        domainName,
+                    })
+                    showErrorToast({
+                        text1: LL.NOTIFICATION_failed_subdomain_already(),
+                    })
+                } else {
+                    trackEvent(AnalyticsEvent.CLAIM_USERNAME_FAILED, {
+                        reason: "generic",
+                        domainName,
+                    })
+                    showErrorToast({
+                        text1: LL.NOTIFICATION_failed_subdomain(),
+                    })
+                }
                 return false
             }
         },
-        [LL, buildClaimTx, device, getSigner, signClaimTx],
+        [LL, buildClaimTx, device, getSigner, signClaimTx, trackEvent],
     )
 
     return {

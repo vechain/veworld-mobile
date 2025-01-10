@@ -2298,11 +2298,15 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
 	/**
-	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​V​N​S​ ​s​u​b​d​o​m​a​i​n
+	 * W​e​'​v​e​ ​r​e​a​c​h​e​d​ ​o​u​r​ ​d​a​i​l​y​ ​l​i​m​i​t​ ​f​o​r​ ​f​r​e​e​ ​u​s​e​r​n​a​m​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r​.
+	 */
+	NOTIFICATION_failed_no_gas: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​u​s​e​r​n​a​m​e
 	 */
 	NOTIFICATION_failed_subdomain: string
 	/**
-	 * V​N​S​ ​s​u​b​d​o​m​a​i​n​ ​a​l​r​e​a​d​y​ ​c​l​a​i​m​e​d
+	 * U​s​e​r​n​a​m​e​ ​a​l​r​e​a​d​y​ ​c​l​a​i​m​e​d
 	 */
 	NOTIFICATION_failed_subdomain_already: string
 	/**
@@ -5845,11 +5849,15 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
 	/**
-	 * Failed to create VNS subdomain
+	 * We've reached our daily limit for free usernames. Please try again later.
+	 */
+	NOTIFICATION_failed_no_gas: () => LocalizedString
+	/**
+	 * Failed to create username
 	 */
 	NOTIFICATION_failed_subdomain: () => LocalizedString
 	/**
-	 * VNS subdomain already claimed
+	 * Username already claimed
 	 */
 	NOTIFICATION_failed_subdomain_already: () => LocalizedString
 	/**

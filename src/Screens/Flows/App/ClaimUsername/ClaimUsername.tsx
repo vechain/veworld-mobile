@@ -4,20 +4,22 @@ import { StyleSheet } from "react-native"
 import {
     BaseButton,
     BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseTextInput,
     BaseView,
+    Layout,
     RequireUserPassword,
 } from "~Components"
-import { COLORS, ColorThemeType, DOMAIN_BASE } from "~Constants"
-import { useDisclosure, useThemedStyles, useVns, useWalletSecurity } from "~Hooks"
+import { AnalyticsEvent, COLORS, ColorThemeType, DOMAIN_BASE } from "~Constants"
+import { useAnalyticTracking, useDisclosure, useThemedStyles, useVns, useWalletSecurity } from "~Hooks"
 import { Routes, RootStackParamListHome, RootStackParamListSettings } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
 
 type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListSettings, Routes.CLAIM_USERNAME>
+
+const MIN_CHARS = 3
 
 export const ClaimUsername: React.FC<Props> = () => {
     const [isLoading, setIsLoading] = useState(false)
@@ -32,10 +34,11 @@ export const ClaimUsername: React.FC<Props> = () => {
     const { isSubdomainAvailable, registerSubdomain } = useVns()
     const { isWalletSecurityBiometrics } = useWalletSecurity()
     const nav = useNavigation()
+    const trackEvent = useAnalyticTracking()
 
     const isFieldValid = useMemo(() => {
-        if (subdomain && subdomain.length <= 3) {
-            setErrorMessage("Min 3 chars")
+        if (subdomain && subdomain.length < MIN_CHARS) {
+            setErrorMessage(`Minimum ${MIN_CHARS} characters required`)
             return false
         }
 
@@ -56,7 +59,7 @@ export const ClaimUsername: React.FC<Props> = () => {
                 setIsAvailable(availability)
                 setIsChecking(false)
             }
-        }, 250)
+        }, 400)
 
         return () => clearTimeout(checkIsAvailable)
     }, [isFieldValid, isSubdomainAvailable, subdomain])
@@ -65,12 +68,16 @@ export const ClaimUsername: React.FC<Props> = () => {
         async (pin?: string) => {
             setIsLoading(true)
             const success = await registerSubdomain(subdomain, pin)
+
+            trackEvent(AnalyticsEvent.CLAIM_USERNAME_CREATED, {
+                subdomain: `${subdomain}${DOMAIN_BASE}`,
+            })
             setIsLoading(false)
             if (success) {
                 nav.navigate(Routes.USERNAME_CLAIMED)
             }
         },
-        [nav, registerSubdomain, subdomain],
+        [nav, registerSubdomain, subdomain, trackEvent],
     )
 
     const onSuccess = useCallback(
@@ -89,17 +96,13 @@ export const ClaimUsername: React.FC<Props> = () => {
         }
     }, [isWalletSecurityBiometrics, onClaimUsername, openPasswordPrompt])
 
-    const onSkipUsernameCreation = useCallback(async () => {
-        // nav.goBack()
-        nav.navigate(Routes.USERNAME_CLAIMED)
-    }, [nav])
-
     const isNotAvailable = useMemo(() => isAvailable === false, [isAvailable])
 
     const hasErrors = useMemo(() => Boolean(isNotAvailable || errorMessage), [isNotAvailable, errorMessage])
 
     const isDomainAvailable = useMemo(
-        () => Boolean(!!subdomain && subdomain?.length >= 3 && isAvailable === true && !hasErrors && !isChecking),
+        () =>
+            Boolean(!!subdomain && subdomain?.length >= MIN_CHARS && isAvailable === true && !hasErrors && !isChecking),
         [subdomain, isAvailable, hasErrors, isChecking],
     )
 
@@ -136,81 +139,76 @@ export const ClaimUsername: React.FC<Props> = () => {
         }
     }, [LL, errorMessage, hasErrors, isChecking, isDomainAvailable, isNotAvailable, styles, theme])
 
+    useEffect(() => {
+        trackEvent(AnalyticsEvent.CLAIM_USERNAME_PAGE_LOADED)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
     return (
-        <BaseSafeArea grow={1} style={[styles.container]}>
-            <BaseView style={[styles.contentContainer]}>
-                {/* Title */}
-                <BaseView flexDirection="row" justifyContent="center" alignItems="center">
-                    <BaseText typographyFont="subTitleBold">{LL.TITLE_CLAIM_USERNAME()}</BaseText>
-                </BaseView>
-                <BaseSpacer height={24} />
-                {/* Body */}
-                <BaseView flexGrow={1}>
-                    <BaseText typographyFont="subSubTitleLight">{LL.SB_CLAIM_USERNAME()}</BaseText>
-                    <BaseSpacer height={40} />
-                    {/* Input container */}
-                    <BaseView>
-                        <BaseView mb={8} flexDirection="row" justifyContent="space-between">
-                            <BaseText typographyFont="subSubTitle" style={[styles.inputLabel]}>
-                                {LL.TITLE_CLAIM_USERNAME()}
-                            </BaseText>
-                            <BaseView flexDirection="row">
-                                <BaseText typographyFont="caption" style={[styles.inputLabel]}>
-                                    {"Powered by"}{" "}
+        <Layout
+            title={LL.TITLE_CLAIM_USERNAME()}
+            fixedBody={
+                <BaseView style={[styles.contentContainer]}>
+                    {/* Body */}
+                    <BaseView flexGrow={1}>
+                        <BaseText typographyFont="subSubTitleLight">{LL.SB_CLAIM_USERNAME()}</BaseText>
+                        <BaseSpacer height={40} />
+                        {/* Input container */}
+                        <BaseView>
+                            <BaseView mb={8} flexDirection="row" justifyContent="space-between">
+                                <BaseText typographyFont="subSubTitle" style={[styles.inputLabel]}>
+                                    {LL.TITLE_CLAIM_USERNAME()}
                                 </BaseText>
-                                <BaseText typographyFont="captionSemiBold" style={[styles.inputLabel]}>
-                                    {"vet.domains"}
-                                </BaseText>
+                                <BaseView flexDirection="row">
+                                    <BaseText typographyFont="caption" style={[styles.inputLabel]}>
+                                        {"Powered by"}{" "}
+                                    </BaseText>
+                                    <BaseText typographyFont="captionSemiBold" style={[styles.inputLabel]}>
+                                        {"vet.domains"}
+                                    </BaseText>
+                                </BaseView>
                             </BaseView>
+                            <BaseTextInput
+                                placeholder={LL.INPUT_PLACEHOLDER_USERNAME()}
+                                value={subdomain}
+                                maxLength={20}
+                                setValue={onSetSubdomain}
+                                rightIcon={
+                                    <BaseText typographyFont="body" style={[styles.inputLabel]}>
+                                        {DOMAIN_BASE}
+                                    </BaseText>
+                                }
+                            />
+                            {renderSubdomainStatus}
                         </BaseView>
-                        <BaseTextInput
-                            placeholder={LL.INPUT_PLACEHOLDER_USERNAME()}
-                            value={subdomain}
-                            maxLength={20}
-                            setValue={onSetSubdomain}
-                            rightIcon={
-                                <BaseText typographyFont="body" style={[styles.inputLabel]}>
-                                    {DOMAIN_BASE}
-                                </BaseText>
-                            }
-                        />
-                        {renderSubdomainStatus}
                     </BaseView>
-                </BaseView>
-                {/* Footer */}
-                <BaseView flexDirection="row" w={100} style={[styles.footerContainer]}>
-                    {!isLoading && (
+                    {/* Footer */}
+                    <BaseView flexDirection="row" w={100}>
                         <BaseButton
-                            variant="outline"
                             flex={1}
-                            action={() => onSkipUsernameCreation()}
-                            testID="ClaimUsername_Skip_Btn">
-                            {LL.BTN_SKIP()}
+                            disabled={isLoading || !subdomain}
+                            action={onSubmit}
+                            testID="ClaimUsername_Confirm_Btn">
+                            {isLoading ? LL.BTN_CONFRIMING() : LL.BTN_CONFIRM()}
                         </BaseButton>
-                    )}
-                    <BaseButton
-                        flex={1}
-                        disabled={isLoading || !subdomain}
-                        action={onSubmit}
-                        testID="ClaimUsername_Confirm_Btn">
-                        {isLoading ? LL.BTN_CONFRIMING() : LL.BTN_CONFIRM()}
-                    </BaseButton>
+                    </BaseView>
+                    <RequireUserPassword
+                        isOpen={isPasswordPromptOpen}
+                        onClose={closePasswordPrompt}
+                        onSuccess={onSuccess}
+                    />
                 </BaseView>
-            </BaseView>
-            <RequireUserPassword isOpen={isPasswordPromptOpen} onClose={closePasswordPrompt} onSuccess={onSuccess} />
-        </BaseSafeArea>
+            }
+        />
     )
 }
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        container: { marginBottom: 24 },
+        container: { marginBottom: 12 },
         contentContainer: {
             flexGrow: 1,
             padding: 24,
-        },
-        footerContainer: {
-            gap: 16,
         },
         inputLabel: {
             color: theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600,

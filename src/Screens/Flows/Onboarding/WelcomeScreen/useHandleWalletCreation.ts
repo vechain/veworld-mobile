@@ -9,8 +9,6 @@ import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
 import { isEmpty } from "lodash"
 import { DerivationPath } from "~Constants"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
 
 export const useHandleWalletCreation = () => {
     const biometrics = useBiometrics()
@@ -20,7 +18,6 @@ export const useHandleWalletCreation = () => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const [isError, setIsError] = useState("")
-    const nav = useNavigation()
 
     const onWalletCreationError = useCallback(
         (_error: unknown) => {
@@ -69,14 +66,13 @@ export const useHandleWalletCreation = () => {
                     derivationPath,
                 })
 
-                nav.navigate(Routes.CLAIM_USERNAME)
-                // await migrateOnboarding(SecurityLevelType.BIOMETRIC)
+                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
                 dispatch(setIsAppLoading(false))
             } else {
                 onOpen()
             }
         },
-        [biometrics, createLocalWallet, dispatch, nav, onOpen, onWalletCreationError],
+        [biometrics, createLocalWallet, dispatch, migrateOnboarding, onOpen, onWalletCreationError],
     )
 
     const onSuccess = useCallback(
@@ -106,11 +102,10 @@ export const useHandleWalletCreation = () => {
                 derivationPath,
             })
 
-            nav.navigate(Routes.CLAIM_USERNAME, { pin })
-            // await migrateOnboarding(SecurityLevelType.SECRET, pin)
+            await migrateOnboarding(SecurityLevelType.SECRET, pin)
             dispatch(setIsAppLoading(false))
         },
-        [createLocalWallet, dispatch, nav, onClose, onWalletCreationError],
+        [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
     )
 
     const migrateFromOnboarding = useCallback(

@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import { useCopyClipboard, useThemedStyles, useVns } from "~Hooks"
 import { AddressUtils, BigNutils } from "~Utils"
 import { BaseSpacer, BaseText, BaseView, BaseButton, BaseIcon, BaseTouchable } from "~Components"
-import { DEVICE_TYPE, WalletAccount } from "~Model"
+import { WalletAccount } from "~Model"
 import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
 import { COLORS, ColorThemeType, VET } from "~Constants"
 import { useI18nContext } from "~i18n"
@@ -15,11 +15,12 @@ type Props = {
     isSelected: boolean
     isBalanceVisible: boolean
     isDisabled: boolean
+    canClaimUsername?: boolean
     isEditable?: boolean
     onEditPress?: (account: WalletAccount) => void
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({ account, isSelected, isBalanceVisible, isDisabled, isEditable = true, onEditPress }) => {
+    ({ account, isSelected, isBalanceVisible, isDisabled, canClaimUsername, isEditable = true, onEditPress }) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const { LL } = useI18nContext()
         const nav = useNavigation()
@@ -32,10 +33,6 @@ export const AccountDetailBox: React.FC<Props> = memo(
         const { onCopyToClipboard } = useCopyClipboard()
 
         const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
-
-        const isObservedAccount = "type" in account && account.type === DEVICE_TYPE.LOCAL_WATCHED
-
-        const canClaimUsername = !vnsName && !isObservedAccount
 
         const balance = useMemo(() => {
             if (!isBalanceVisible) {
@@ -143,6 +140,7 @@ const baseStyles = (theme: ColorThemeType) =>
             opacity: 0.7,
         },
         container: {
+            flexBasis: 80,
             flex: 1,
             borderRadius: 8,
             paddingHorizontal: 16,
