@@ -765,6 +765,10 @@ type RootTranslation = {
 	 */
 	BTN_CHOOSE_PASSWORD: string
 	/**
+	 * C​l​a​i​m
+	 */
+	BTN_CLAIM: string
+	/**
 	 * C​l​o​s​e​ ​A​p​p
 	 */
 	BTN_CLOSE_APP: string
@@ -1006,6 +1010,10 @@ type RootTranslation = {
 	 * S​w​a​p
 	 */
 	BTN_SWAP: string
+	/**
+	 * T​r​y​ ​a​g​a​i​n
+	 */
+	BTN_TRY_AGAIN: string
 	/**
 	 * V​e​r​i​f​y​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​b​a​c​k​u​p
 	 */
@@ -1701,6 +1709,10 @@ type RootTranslation = {
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
+	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_GENERIC_WITH_RETRY_SUBTITLE: string
 	/**
 	 * T​h​i​s​ ​a​p​p​e​a​r​s​ ​t​o​ ​b​e​ ​a​ ​d​u​p​l​i​c​a​t​e​ ​o​f​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
 	 */
@@ -2641,7 +2653,7 @@ type RootTranslation = {
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: string
 	/**
-	 * Y​o​u​r​ ​u​n​i​q​u​e​ ​u​s​e​r​n​a​m​e​ ​w​a​s​ ​c​l​a​i​m​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​a​n​d​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​s​ ​n​o​w​ ​r​e​a​d​y​ ​t​o​ ​u​s​e​.
+	 * w​a​s​ ​c​l​a​i​m​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​f​o​r​ ​t​h​i​s​ ​a​c​c​o​u​n​t​.
 	 */
 	SB_USERNAME_CLAIMED: string
 	/**
@@ -3406,6 +3418,10 @@ type RootTranslation = {
 	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p
 	 */
 	UNVERIFIED_APP_TITLE: string
+	/**
+	 * u​s​e​r​n​a​m​e
+	 */
+	USERNAME: string
 	/**
 	 * V​a​l​u​e
 	 */
@@ -4336,6 +4352,10 @@ Try reconnect your device to the internet.
 	 */
 	BTN_CHOOSE_PASSWORD: () => LocalizedString
 	/**
+	 * Claim
+	 */
+	BTN_CLAIM: () => LocalizedString
+	/**
 	 * Close App
 	 */
 	BTN_CLOSE_APP: () => LocalizedString
@@ -4575,6 +4595,10 @@ Try reconnect your device to the internet.
 	 * Swap
 	 */
 	BTN_SWAP: () => LocalizedString
+	/**
+	 * Try again
+	 */
+	BTN_TRY_AGAIN: () => LocalizedString
 	/**
 	 * Verify Google Drive backup
 	 */
@@ -5263,6 +5287,10 @@ Try reconnect your device to the internet.
 	 * Something went wrong!
 	 */
 	ERROR_GENERIC_SUBTITLE: () => LocalizedString
+	/**
+	 * Something went wrong. Please try again.
+	 */
+	ERROR_GENERIC_WITH_RETRY_SUBTITLE: () => LocalizedString
 	/**
 	 * This appears to be a duplicate of an existing wallet
 	 */
@@ -6181,7 +6209,7 @@ Try reconnect your device to the internet.
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: () => LocalizedString
 	/**
-	 * Your unique username was claimed successfully and your wallet is now ready to use.
+	 * was claimed successfully for this account.
 	 */
 	SB_USERNAME_CLAIMED: () => LocalizedString
 	/**
@@ -6940,6 +6968,10 @@ Try reconnect your device to the internet.
 	 * Unverified app
 	 */
 	UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * username
+	 */
+	USERNAME: () => LocalizedString
 	/**
 	 * Value
 	 */

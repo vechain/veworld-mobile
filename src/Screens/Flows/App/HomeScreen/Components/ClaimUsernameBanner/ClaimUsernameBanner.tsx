@@ -13,6 +13,9 @@ export const ClaimUsernameBanner = () => {
     const { LL } = useI18nContext()
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
+    const bannerTitle = LL.BANNER_TITLE_CLAIM_USERNAME()
+    const [before, after] = bannerTitle.split("username")
+
     const isObservedAccount = "type" in selectedAccount && selectedAccount.type === DEVICE_TYPE.LOCAL_WATCHED
 
     const { name } = useVns({
@@ -31,7 +34,11 @@ export const ClaimUsernameBanner = () => {
         <BaseView w={100} px={20}>
             <ActionBanner actionText="Claim" actionTestID="claimUsernameBtn" onPress={onClaimPress}>
                 <BaseText color={theme.colors.actionBanner.title} typographyFont="captionRegular">
-                    {LL.BANNER_TITLE_CLAIM_USERNAME()}
+                    {before}
+                    <BaseText typographyFont="captionSemiBold" color={theme.colors.actionBanner.title}>
+                        {"username"}
+                    </BaseText>
+                    {after}
                 </BaseText>
             </ActionBanner>
         </BaseView>

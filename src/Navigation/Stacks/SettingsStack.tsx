@@ -48,7 +48,9 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_GET_SUPPORT]: { url: string }
     [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
     [Routes.CLAIM_USERNAME]: undefined
-    [Routes.USERNAME_CLAIMED]: undefined
+    [Routes.USERNAME_CLAIMED]: {
+        username: string
+    }
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()

@@ -8,7 +8,7 @@ import {
     selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
-import { useQuery, useQueryClient } from "@tanstack/react-query"
+import { QueryObserverResult, RefetchOptions, useQuery, useQueryClient } from "@tanstack/react-query"
 import { AccountWithDevice, LocalDevice, Network, NETWORK_TYPE } from "~Model"
 import { abi } from "thor-devkit"
 import { queryClient } from "~Api/QueryProvider"
@@ -133,6 +133,7 @@ type VnsHook = {
     isLoading: boolean
     getVnsName: (address: string) => Promise<string | undefined>
     getVnsAddress: (name: string) => Promise<string | undefined>
+    refetchVns: (options?: RefetchOptions) => Promise<QueryObserverResult<Vns, Error>>
     /**
      * Get all the VNS name/addresses
      */
@@ -142,7 +143,6 @@ type VnsHook = {
 }
 
 export const useVns = (props?: Vns): VnsHook => {
-    const { name, address } = props || {}
     const thor = useThor()
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
@@ -150,6 +150,7 @@ export const useVns = (props?: Vns): VnsHook => {
     const device = useAppSelector(state => selectDevice(state, account.rootAddress))
     const qc = useQueryClient()
     const trackEvent = useAnalyticTracking()
+    const { name, address = account.address } = props || {}
 
     const thorClient = useMemo(() => ThorClient.at(network.currentUrl), [network.currentUrl])
 
@@ -405,6 +406,7 @@ export const useVns = (props?: Vns): VnsHook => {
         isLoading: queryRes?.isLoading,
         getVnsName: addr => getVnsName(thor, network, addr),
         getVnsAddress: n => getVnsAddress(thor, network, n),
+        refetchVns: queryRes?.refetch,
         getVns,
         registerSubdomain,
         isSubdomainAvailable,

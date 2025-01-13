@@ -89,7 +89,9 @@ export type RootStackParamListHome = {
         ul?: boolean
     }
     [Routes.CLAIM_USERNAME]: undefined
-    [Routes.USERNAME_CLAIMED]: undefined
+    [Routes.USERNAME_CLAIMED]: {
+        username: string
+    }
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()

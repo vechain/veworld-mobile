@@ -1,22 +1,22 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
-import { usePrefetchAllVns, useTheme } from "~Hooks"
-import { RootStackParamListHome, Routes } from "~Navigation"
+import { useTheme, useVns } from "~Hooks"
+import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.USERNAME_CLAIMED>
+type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListSettings, Routes.USERNAME_CLAIMED>
 
-export const UsernameClaimed: React.FC<Props> = ({ navigation }) => {
+export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
+    const { username } = route.params
     const { LL } = useI18nContext()
     const theme = useTheme()
-
-    //Refetch all the VNS to load the new one
-    usePrefetchAllVns()
+    const { refetchVns } = useVns()
 
     const onPress = useCallback(async () => {
-        navigation.navigate(Routes.HOME)
-    }, [navigation])
+        refetchVns()
+        navigation.goBack()
+    }, [navigation, refetchVns])
 
     return (
         <BaseSafeArea>
@@ -30,8 +30,9 @@ export const UsernameClaimed: React.FC<Props> = ({ navigation }) => {
 
                     <BaseSpacer height={8} />
 
-                    <BaseText typographyFont="body" align="center">
-                        {LL.SB_USERNAME_CLAIMED()}
+                    <BaseText typographyFont="bodySemiBold" align="center">
+                        {username}
+                        <BaseText typographyFont="body">{LL.SB_USERNAME_CLAIMED()}</BaseText>
                     </BaseText>
                 </BaseView>
                 <BaseView mb={12} flexDirection="row">

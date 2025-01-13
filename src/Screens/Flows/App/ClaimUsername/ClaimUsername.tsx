@@ -1,7 +1,7 @@
-import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
+    AlertInline,
     BaseButton,
     BaseIcon,
     BaseSpacer,
@@ -21,19 +21,19 @@ type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListS
 
 const MIN_CHARS = 3
 
-export const ClaimUsername: React.FC<Props> = () => {
+export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [subdomain, setSubdomain] = useState("")
     const [isAvailable, setIsAvailable] = useState(false)
     const [isChecking, setIsChecking] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
+    const [claimError, setClaimError] = useState(false)
 
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { isOpen: isPasswordPromptOpen, onClose: closePasswordPrompt, onOpen: openPasswordPrompt } = useDisclosure()
     const { isSubdomainAvailable, registerSubdomain } = useVns()
     const { isWalletSecurityBiometrics } = useWalletSecurity()
-    const nav = useNavigation()
     const trackEvent = useAnalyticTracking()
 
     const isFieldValid = useMemo(() => {
@@ -47,7 +47,7 @@ export const ClaimUsername: React.FC<Props> = () => {
     }, [subdomain])
 
     const onSetSubdomain = useCallback((value: string) => {
-        setSubdomain(value.replace(/[^a-z]/g, ""))
+        setSubdomain(value.replace(/[^a-z0-92]/g, ""))
     }, [])
 
     //Debounce searching for domain availability
@@ -67,17 +67,21 @@ export const ClaimUsername: React.FC<Props> = () => {
     const onClaimUsername = useCallback(
         async (pin?: string) => {
             setIsLoading(true)
+            const fullDomain = `${subdomain}${DOMAIN_BASE}`
             const success = await registerSubdomain(subdomain, pin)
 
             trackEvent(AnalyticsEvent.CLAIM_USERNAME_CREATED, {
-                subdomain: `${subdomain}${DOMAIN_BASE}`,
+                subdomain: fullDomain,
             })
+
             setIsLoading(false)
+
+            setClaimError(!success)
             if (success) {
-                nav.navigate(Routes.USERNAME_CLAIMED)
+                navigation.replace(Routes.USERNAME_CLAIMED, { username: fullDomain })
             }
         },
-        [nav, registerSubdomain, subdomain, trackEvent],
+        [navigation, registerSubdomain, subdomain, trackEvent],
     )
 
     const onSuccess = useCallback(
@@ -105,6 +109,12 @@ export const ClaimUsername: React.FC<Props> = () => {
             Boolean(!!subdomain && subdomain?.length >= MIN_CHARS && isAvailable === true && !hasErrors && !isChecking),
         [subdomain, isAvailable, hasErrors, isChecking],
     )
+
+    const renderButtonLabel = useMemo(() => {
+        if (isLoading) return LL.BTN_CONFRIMING()
+        if (claimError) return LL.BTN_TRY_AGAIN()
+        return LL.BTN_CONFIRM()
+    }, [LL, claimError, isLoading])
 
     const renderSubdomainStatus = useMemo(() => {
         if (isChecking) {
@@ -183,15 +193,26 @@ export const ClaimUsername: React.FC<Props> = () => {
                         </BaseView>
                     </BaseView>
                     {/* Footer */}
-                    <BaseView flexDirection="row" w={100}>
-                        <BaseButton
-                            flex={1}
-                            disabled={isLoading || !subdomain}
-                            action={onSubmit}
-                            testID="ClaimUsername_Confirm_Btn">
-                            {isLoading ? LL.BTN_CONFRIMING() : LL.BTN_CONFIRM()}
-                        </BaseButton>
+                    <BaseView>
+                        {claimError && (
+                            <AlertInline
+                                status="error"
+                                variant="banner"
+                                message={LL.ERROR_GENERIC_WITH_RETRY_SUBTITLE()}
+                            />
+                        )}
+                        <BaseSpacer height={24} />
+                        <BaseView flexDirection="row" w={100}>
+                            <BaseButton
+                                flex={1}
+                                disabled={isLoading || !subdomain}
+                                action={onSubmit}
+                                testID="ClaimUsername_Confirm_Btn">
+                                {renderButtonLabel}
+                            </BaseButton>
+                        </BaseView>
                     </BaseView>
+
                     <RequireUserPassword
                         isOpen={isPasswordPromptOpen}
                         onClose={closePasswordPrompt}
