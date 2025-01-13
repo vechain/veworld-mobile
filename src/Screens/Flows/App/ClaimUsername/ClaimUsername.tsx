@@ -16,15 +16,18 @@ import { useAnalyticTracking, useDisclosure, useThemedStyles, useVns, useWalletS
 import { Routes, RootStackParamListHome, RootStackParamListSettings } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
+import { fetchOfficialTokensOwned } from "~Networking"
 
 type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListSettings, Routes.CLAIM_USERNAME>
 
 const MIN_CHARS = 3
+const MAX_CHARS = 20
+const PATTERN = /^[a-z0-9]+$/
 
 export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false)
     const [subdomain, setSubdomain] = useState("")
-    const [isAvailable, setIsAvailable] = useState(false)
+    const [isAvailable, setIsAvailable] = useState<boolean | null>(null)
     const [isChecking, setIsChecking] = useState(false)
     const [errorMessage, setErrorMessage] = useState("")
     const [claimError, setClaimError] = useState(false)
@@ -37,31 +40,44 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     const trackEvent = useAnalyticTracking()
 
     const isFieldValid = useMemo(() => {
-        if (subdomain && subdomain.length < MIN_CHARS) {
-            setErrorMessage(`Minimum ${MIN_CHARS} characters required`)
+        if (subdomain.length < MIN_CHARS) {
+            setErrorMessage(LL.SETTINGS_LABEL_name_min_length({ min: MIN_CHARS }))
             return false
+        }
+
+        if (subdomain.length > MAX_CHARS) {
+            setErrorMessage(LL.SETTINGS_LABEL_name_max_length({ max: MAX_CHARS }))
+            return false
+        }
+
+        if (!PATTERN.test(subdomain)) {
+            setErrorMessage(LL.SETTINGS_LABEL_lowercase_num())
+            return fetchOfficialTokensOwned
         }
 
         setErrorMessage("")
         return true
-    }, [subdomain])
+    }, [subdomain, LL])
 
     const onSetSubdomain = useCallback((value: string) => {
-        setSubdomain(value.replace(/[^a-z0-92]/g, ""))
+        setSubdomain(value)
     }, [])
 
     //Debounce searching for domain availability
     useEffect(() => {
-        const checkIsAvailable = setTimeout(async () => {
-            if (isFieldValid) {
-                setIsChecking(true)
-                const availability = await isSubdomainAvailable(`${subdomain}${DOMAIN_BASE}`)
-                setIsAvailable(availability)
-                setIsChecking(false)
-            }
-        }, 400)
+        setIsAvailable(null)
+        if (subdomain !== "") {
+            const checkIsAvailable = setTimeout(async () => {
+                if (isFieldValid) {
+                    setIsChecking(true)
+                    const availability = await isSubdomainAvailable(`${subdomain}${DOMAIN_BASE}`)
+                    setIsAvailable(availability)
+                    setIsChecking(false)
+                }
+            }, 400)
 
-        return () => clearTimeout(checkIsAvailable)
+            return () => clearTimeout(checkIsAvailable)
+        }
     }, [isFieldValid, isSubdomainAvailable, subdomain])
 
     const onClaimUsername = useCallback(
@@ -102,11 +118,14 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
 
     const isNotAvailable = useMemo(() => isAvailable === false, [isAvailable])
 
-    const hasErrors = useMemo(() => Boolean(isNotAvailable || errorMessage), [isNotAvailable, errorMessage])
+    const hasErrors = useMemo(
+        () => !!subdomain && Boolean(errorMessage || isNotAvailable),
+        [subdomain, isNotAvailable, errorMessage],
+    )
 
-    const isDomainAvailable = useMemo(
+    const isUsernameAvailable = useMemo(
         () =>
-            Boolean(!!subdomain && subdomain?.length >= MIN_CHARS && isAvailable === true && !hasErrors && !isChecking),
+            Boolean(!!subdomain && subdomain.length >= MIN_CHARS && isAvailable === true && !hasErrors && !isChecking),
         [subdomain, isAvailable, hasErrors, isChecking],
     )
 
@@ -127,8 +146,16 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
             )
         } else {
             return (
-                <BaseView flexDirection="row" style={styles.inputMessage}>
-                    {isDomainAvailable && (
+                <BaseView flexDirection="row" style={styles.inputMessage} alignItems="flex-start">
+                    {hasErrors && (
+                        <>
+                            <BaseIcon name="icon-alert-triangle" color={theme.colors.errorVariant.icon} size={16} />
+                            <BaseText color={theme.colors.errorVariant.titleInline} lineBreakMode="clip">
+                                {isNotAvailable ? LL.ERROR_DOMAIN_ALREADY_TAKEN() : errorMessage}
+                            </BaseText>
+                        </>
+                    )}
+                    {isUsernameAvailable && (
                         <>
                             <BaseIcon name="icon-check-circle" color={theme.colors.successVariant.icon} size={16} />
                             <BaseText color={theme.colors.successVariant.titleInline}>
@@ -136,18 +163,10 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                             </BaseText>
                         </>
                     )}
-                    {hasErrors && (
-                        <>
-                            <BaseIcon name="icon-alert-triangle" color={theme.colors.errorVariant.icon} size={16} />
-                            <BaseText color={theme.colors.errorVariant.titleInline}>
-                                {isNotAvailable ? LL.ERROR_DOMAIN_ALREADY_TAKEN() : errorMessage}
-                            </BaseText>
-                        </>
-                    )}
                 </BaseView>
             )
         }
-    }, [LL, errorMessage, hasErrors, isChecking, isDomainAvailable, isNotAvailable, styles, theme])
+    }, [LL, errorMessage, hasErrors, isChecking, isUsernameAvailable, isNotAvailable, styles, theme])
 
     useEffect(() => {
         trackEvent(AnalyticsEvent.CLAIM_USERNAME_PAGE_LOADED)
@@ -164,33 +183,33 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                         <BaseText typographyFont="subSubTitleLight">{LL.SB_CLAIM_USERNAME()}</BaseText>
                         <BaseSpacer height={40} />
                         {/* Input container */}
-                        <BaseView>
-                            <BaseView mb={8} flexDirection="row" justifyContent="space-between">
-                                <BaseText typographyFont="subSubTitle" style={[styles.inputLabel]}>
-                                    {LL.TITLE_CLAIM_USERNAME()}
+                        {/* <BaseView> */}
+                        <BaseView mb={8} flexDirection="row" justifyContent="space-between">
+                            <BaseText typographyFont="subSubTitle" style={[styles.inputLabel]}>
+                                {LL.TITLE_CLAIM_USERNAME()}
+                            </BaseText>
+                            <BaseView flexDirection="row">
+                                <BaseText typographyFont="caption" style={[styles.inputLabel]}>
+                                    {"Powered by"}{" "}
                                 </BaseText>
-                                <BaseView flexDirection="row">
-                                    <BaseText typographyFont="caption" style={[styles.inputLabel]}>
-                                        {"Powered by"}{" "}
-                                    </BaseText>
-                                    <BaseText typographyFont="captionSemiBold" style={[styles.inputLabel]}>
-                                        {"vet.domains"}
-                                    </BaseText>
-                                </BaseView>
+                                <BaseText typographyFont="captionSemiBold" style={[styles.inputLabel]}>
+                                    {"vet.domains"}
+                                </BaseText>
                             </BaseView>
-                            <BaseTextInput
-                                placeholder={LL.INPUT_PLACEHOLDER_USERNAME()}
-                                value={subdomain}
-                                maxLength={20}
-                                setValue={onSetSubdomain}
-                                rightIcon={
-                                    <BaseText typographyFont="body" style={[styles.inputLabel]}>
-                                        {DOMAIN_BASE}
-                                    </BaseText>
-                                }
-                            />
-                            {renderSubdomainStatus}
                         </BaseView>
+                        <BaseTextInput
+                            placeholder={LL.INPUT_PLACEHOLDER_USERNAME()}
+                            value={subdomain}
+                            maxLength={20}
+                            setValue={onSetSubdomain}
+                            rightIcon={
+                                <BaseText typographyFont="body" style={[styles.inputLabel]}>
+                                    {DOMAIN_BASE}
+                                </BaseText>
+                            }
+                        />
+                        {renderSubdomainStatus}
+                        {/* </BaseView> */}
                     </BaseView>
                     {/* Footer */}
                     <BaseView>

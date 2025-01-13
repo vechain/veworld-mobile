@@ -17,6 +17,7 @@ import {
     showSuccessToast,
     showWarningToast,
     SwipeableRow,
+    useFeatureFlags,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -34,8 +35,6 @@ import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBott
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 
-//TODO: fix modal for edit accounts. Actually nothing is provided as param
-
 export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { device } = params
     const { LL } = useI18nContext()
@@ -48,6 +47,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const [editingAccount, setEditingAccount] = useState<WalletAccount>()
 
     const { changeDeviceAlias } = useRenameWallet(device)
+    const { subdomainClaimFeature } = useFeatureFlags()
 
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
@@ -67,7 +67,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
         const noVnsAccounts = deviceAccounts
             .filter(account => {
-                const isLedger = account.device.type === DEVICE_TYPE.LEDGER
+                const isLedger = "device" in account && account.device.type === DEVICE_TYPE.LEDGER
                 const isObservedAccount = "type" in account && account.type === DEVICE_TYPE.LOCAL_WATCHED
                 const domain = domains.find(vns => AddressUtils.compareAddresses(vns.address, account.address))?.name
                 return !isObservedAccount && !domain && !isLedger
@@ -257,7 +257,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                             account={item}
                                             isSelected={isSelected}
                                             isDisabled={!item.visible}
-                                            canClaimUsername={canClaimUsername}
+                                            canClaimUsername={subdomainClaimFeature.enabled && canClaimUsername}
                                             onEditPress={account => {
                                                 setEditingAccount(account)
                                                 openEditWalletAccountBottomSheet()

@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { ActionBanner, BaseText, BaseView } from "~Components"
+import { ActionBanner, BaseText, BaseView, useFeatureFlags } from "~Components"
 import { useTheme, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
@@ -11,6 +11,8 @@ export const ClaimUsernameBanner = () => {
     const theme = useTheme()
     const nav = useNavigation()
     const { LL } = useI18nContext()
+    const { subdomainClaimFeature } = useFeatureFlags()
+
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const bannerTitle = LL.BANNER_TITLE_CLAIM_USERNAME()
@@ -28,11 +30,11 @@ export const ClaimUsernameBanner = () => {
     }, [nav])
 
     // Hide the claim banner if you already have a vet domain or if it's an observed wallet
-    if (name || isObservedAccount) return <></>
+    if (name || isObservedAccount || !subdomainClaimFeature.enabled) return <></>
 
     return (
         <BaseView w={100} px={20}>
-            <ActionBanner actionText="Claim" actionTestID="claimUsernameBtn" onPress={onClaimPress}>
+            <ActionBanner actionText={LL.BTN_CLAIM()} actionTestID="claimUsernameBtn" onPress={onClaimPress}>
                 <BaseText color={theme.colors.actionBanner.title} typographyFont="captionRegular">
                     {before}
                     <BaseText typographyFont="captionSemiBold" color={theme.colors.actionBanner.title}>

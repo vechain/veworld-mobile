@@ -85,7 +85,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 <BaseView flexDirection="row" style={styles.rightSubContainer}>
                     {canClaimUsername && (
                         <BaseButton
-                            title={"Claim"}
+                            title={LL.BTN_CLAIM()}
                             action={() => {
                                 nav.navigate(Routes.CLAIM_USERNAME)
                             }}

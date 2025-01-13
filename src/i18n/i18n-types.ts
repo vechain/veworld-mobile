@@ -3044,6 +3044,20 @@ type RootTranslation = {
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: string
 	/**
+	 * O​n​l​y​ ​l​o​w​e​r​c​a​s​e​ ​l​e​t​t​e​r​s​ ​o​r​ ​n​u​m​b​e​r​s​ ​a​r​e​ ​a​l​l​o​w​e​d
+	 */
+	SETTINGS_LABEL_lowercase_num: string
+	/**
+	 * M​a​x​i​m​u​m​ ​n​u​m​b​e​r​ ​o​f​ ​c​h​a​r​a​c​t​e​r​s​ ​i​s​ ​{​m​a​x​}
+	 * @param {unknown} max
+	 */
+	SETTINGS_LABEL_name_max_length: RequiredParams<'max'>
+	/**
+	 * M​i​n​i​m​u​m​ ​n​u​m​b​e​r​ ​o​f​ ​c​h​a​r​a​c​t​e​r​s​ ​i​s​ ​{​m​i​n​}
+	 * @param {unknown} min
+	 */
+	SETTINGS_LABEL_name_min_length: RequiredParams<'min'>
+	/**
 	 * D​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n
 	 */
 	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: string
@@ -6596,6 +6610,18 @@ Try reconnect your device to the internet.
 	 * Convert balances to fiat
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: () => LocalizedString
+	/**
+	 * Only lowercase letters or numbers are allowed
+	 */
+	SETTINGS_LABEL_lowercase_num: () => LocalizedString
+	/**
+	 * Maximum number of characters is {max}
+	 */
+	SETTINGS_LABEL_name_max_length: (arg: { max: unknown }) => LocalizedString
+	/**
+	 * Minimum number of characters is {min}
+	 */
+	SETTINGS_LABEL_name_min_length: (arg: { min: unknown }) => LocalizedString
 	/**
 	 * Default delegation
 	 */

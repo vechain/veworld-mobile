@@ -63,7 +63,7 @@ export const WalletManagementScreen = () => {
         await checkIdentityBeforeOpening_1()
     }, [onCloseAddWalletBottomSheet, checkIdentityBeforeOpening_1])
 
-    const [isEdit, _setIsEdit] = useState(false)
+    const [isEdit] = useState(false)
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
     const closeOtherSwipeableItems = useCallback(() => {
         swipeableItemRefs?.current.forEach(ref => {
@@ -127,7 +127,6 @@ export const WalletManagementScreen = () => {
                     setSelectedItem={setDeviceToRemove}
                     swipeEnabled={!isEdit}
                     onPress={onDeviceSelected}
-                    isDragMode={isEdit}
                     isOpen={deviceToRemove === item}>
                     <DeviceBox device={item} isEdit={isEdit} drag={drag} isActive={isActive} />
                 </SwipeableRow>
