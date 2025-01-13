@@ -1,14 +1,13 @@
 import React from "react"
-import { BaseIcon } from "~Components/Base"
+import { BaseIcon, HeaderIconButton } from "~Components"
 import { useTheme } from "~Hooks"
-import { HeaderIconButton } from "./HeaderIconButton"
 
 type Props = {
     action: () => void
     testID?: string
 }
 
-export const PlusHeaderIcon = ({ action, testID = "Plus-HeaderIcon" }: Props) => {
+export const PlusIconHeaderButton = ({ action, testID = "Plus-HeaderIcon" }: Props) => {
     const theme = useTheme()
 
     return (

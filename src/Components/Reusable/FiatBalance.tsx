@@ -13,7 +13,7 @@ type FiatBalanceProps = {
     color?: BaseTextProps["color"]
 } & BaseViewProps
 
-const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
+export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
     const {
         isLoading = false,
         isVisible = true,
@@ -62,5 +62,3 @@ const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
         </BaseView>
     )
 }
-
-export default FiatBalance

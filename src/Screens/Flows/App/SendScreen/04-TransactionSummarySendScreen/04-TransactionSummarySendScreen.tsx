@@ -16,6 +16,7 @@ import {
     Layout,
     RequireUserPassword,
     TransferCard,
+    FiatBalance,
 } from "~Components"
 import { AnalyticsEvent, COLORS, GasPriceCoefficient, VET, VTHO, creteAnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
@@ -35,7 +36,6 @@ import {
 import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 import { NotEnoughGasModal } from "./Modal"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>

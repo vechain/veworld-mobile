@@ -103,7 +103,7 @@ export const BaseButton = ({
 
     const backgroundColor = useMemo(() => {
         if (bgColor) return bgColor
-        return theme.colors.primary
+        return theme.colors.button
     }, [theme, bgColor])
 
     const isSolidButton = useMemo(() => variant === "solid", [variant])

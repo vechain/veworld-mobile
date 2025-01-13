@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
-import { B3TR, VET, VTHO } from "~Constants"
+import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import FiatBalance from "./FiatBalance"
+import { FiatBalance } from "~Components"
 
 type AccountFiatBalanceProps = {
     isVisible?: boolean
@@ -15,6 +15,8 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
     const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
+    const tokenWithInfoVOT3 = useTokenWithCompleteInfo(VOT3)
+    const vot3Fiat = Number(tokenWithInfoVOT3.tokenUnitBalance) * (tokenWithInfoB3TR.exchangeRate ?? 0)
     const nonVechaiTokensFiat = useNonVechainTokenFiat()
 
     const sum = useMemo(
@@ -22,11 +24,13 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
             Number(tokenWithInfoVET.fiatBalance) +
             Number(tokenWithInfoVTHO.fiatBalance) +
             Number(tokenWithInfoB3TR.fiatBalance) +
+            vot3Fiat +
             Number(nonVechaiTokensFiat.reduce((a, b) => Number(a) + Number(b), 0)),
         [
             tokenWithInfoVET.fiatBalance,
             tokenWithInfoVTHO.fiatBalance,
             tokenWithInfoB3TR.fiatBalance,
+            vot3Fiat,
             nonVechaiTokensFiat,
         ],
     )
@@ -37,12 +41,13 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
         <FiatBalance
             isLoading={isLoading}
             isVisible={isVisible}
-            color={theme.colors.textReversed}
+            color={theme.colors.textSecondary}
             typographyFont={isLong ? "title" : "largeTitle"}
             balances={[
                 tokenWithInfoVET.fiatBalance,
                 tokenWithInfoVTHO.fiatBalance,
                 tokenWithInfoB3TR.fiatBalance,
+                vot3Fiat.toString(),
                 ...nonVechaiTokensFiat,
             ]}
         />
