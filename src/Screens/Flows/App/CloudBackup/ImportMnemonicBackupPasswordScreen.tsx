@@ -1,6 +1,6 @@
 import { RouteProp, StackActions, useFocusEffect, useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useRef, useState } from "react"
-import { Keyboard } from "react-native"
+import { Keyboard, StyleSheet } from "react-native"
 import {
     BackButtonHeader,
     BaseButton,
@@ -208,8 +208,12 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                     <BaseSpacer height={16} />
 
                     <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
-                        <BaseView justifyContent="flex-start">
-                            <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
+                        <BaseView justifyContent="flex-start" w={100}>
+                            <BackButtonHeader
+                                style={baseStyles.arrowIcon}
+                                action={onCloseCreateFlow}
+                                hasBottomSpacer={false}
+                            />
                             <UserCreatePasswordScreen
                                 onSuccess={pin =>
                                     onSuccess({
@@ -235,3 +239,9 @@ export const ImportMnemonicBackupPasswordScreen = () => {
         />
     )
 }
+
+const baseStyles = StyleSheet.create({
+    arrowIcon: {
+        marginLeft: 16,
+    },
+})

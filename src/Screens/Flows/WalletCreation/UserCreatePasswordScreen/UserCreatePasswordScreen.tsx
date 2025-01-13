@@ -67,7 +67,7 @@ export const UserCreatePasswordScreen = ({ onSuccess }: { onSuccess: (insertedPi
             hasSafeArea={false}
             noBackButton
             body={
-                <BaseView px={90}>
+                <BaseView>
                     <BaseView alignItems="center" justifyContent="flex-start">
                         <BaseView alignSelf="flex-start">
                             <BaseText typographyFont="title">{LL.TITLE_USER_PASSWORD()}</BaseText>

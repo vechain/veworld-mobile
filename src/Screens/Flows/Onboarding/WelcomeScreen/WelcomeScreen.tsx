@@ -200,8 +200,8 @@ export const WelcomeScreen = () => {
             <ImportWalletBottomSheet ref={ref} onClose={onClose} />
 
             <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
-                <BaseView justifyContent="flex-start">
-                    <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
+                <BaseView justifyContent="flex-start" w={100}>
+                    <BackButtonHeader style={s.arrowIcon} action={onCloseCreateFlow} hasBottomSpacer={false} />
                     <UserCreatePasswordScreen
                         onSuccess={pin => onSuccess({ pin, derivationPath: DerivationPath.VET })}
                     />
@@ -332,6 +332,10 @@ const s = StyleSheet.create({
 
     icon: {
         marginLeft: 6,
+    },
+
+    arrowIcon: {
+        marginLeft: 16,
     },
 
     centerButtonContent: {

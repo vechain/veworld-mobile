@@ -436,8 +436,12 @@ export const ImportLocalWallet = () => {
                         />
 
                         <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
-                            <BaseView justifyContent="flex-start">
-                                <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
+                            <BaseView justifyContent="flex-start" w={100}>
+                                <BackButtonHeader
+                                    style={styles.arrowIcon}
+                                    action={onCloseCreateFlow}
+                                    hasBottomSpacer={false}
+                                />
                                 <UserCreatePasswordScreen
                                     onSuccess={pin =>
                                         onSuccess({
@@ -518,6 +522,7 @@ export const ImportLocalWallet = () => {
 
 const styles = StyleSheet.create({
     icon: { marginHorizontal: 20 },
+    arrowIcon: { marginLeft: 16 },
     ickoudIcon: { marginLeft: -12, marginRight: 12 },
     button: { justifyContent: "center", height: 48 },
 })
