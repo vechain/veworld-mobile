@@ -1,7 +1,8 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
+import { StyleSheet, Text } from "react-native"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useTheme, useVns } from "~Hooks"
+import { useThemedStyles, useVns } from "~Hooks"
 import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 
@@ -10,7 +11,7 @@ type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListS
 export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
     const { username } = route.params
     const { LL } = useI18nContext()
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyle)
     const { refetchVns } = useVns()
 
     const onPress = useCallback(async () => {
@@ -30,9 +31,9 @@ export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
 
                     <BaseSpacer height={8} />
 
-                    <BaseText typographyFont="bodySemiBold" align="center">
-                        {username}
-                        <BaseText typographyFont="body">{LL.SB_USERNAME_CLAIMED()}</BaseText>
+                    <BaseText typographyFont="body" align="center" w={60}>
+                        <Text style={styles.inlineBold}>{username} </Text>
+                        {LL.SB_USERNAME_CLAIMED()}
                     </BaseText>
                 </BaseView>
                 <BaseView mb={12} flexDirection="row">
@@ -44,3 +45,12 @@ export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
         </BaseSafeArea>
     )
 }
+
+const baseStyle = () =>
+    StyleSheet.create({
+        inlineBold: {
+            fontFamily: "Inter-Bold",
+            fontSize: 14,
+            fontWeight: "600",
+        },
+    })
