@@ -13,6 +13,7 @@ import {
 import { Routes } from "~Navigation/Enums"
 import {
     AssetDetailScreen,
+    ChangeNetworkScreen,
     ConnectedAppsScreen,
     EnableAdditionalSettings,
     HomeScreen,
@@ -86,6 +87,7 @@ export type RootStackParamListHome = {
         url: string
         ul?: boolean
     }
+    [Routes.SETTINGS_NETWORK]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -169,6 +171,11 @@ export const HomeStack = () => {
                     }}
                 />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.SETTINGS_NETWORK}
+                    component={ChangeNetworkScreen}
+                    options={{ headerShown: false }}
+                />
             </Group>
 
             <Group>

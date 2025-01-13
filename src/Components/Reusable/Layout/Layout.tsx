@@ -1,18 +1,17 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useMemo, useState } from "react"
-import { BaseSafeArea, BaseScrollView, BaseSpacer, BaseView } from "~Components/Base"
+import { BaseSafeArea, BaseScrollView, BaseView } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
 import { useTabBarBottomMargin } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { BackButtonHeaderV2 } from "~Components/Reusable/BackButtonHeader/BackButtonHeaderV2"
+import { CenteredHeader } from "../CenteredHeader"
 
 type Props = {
     noBackButton?: boolean
     noMargin?: boolean
     title?: string
-    pageHeader?: string
     fixedHeader?: ReactNode
     body?: ReactNode
     fixedBody?: ReactNode
@@ -37,7 +36,6 @@ export const Layout = ({
     noBackButton = false,
     noMargin = false,
     title,
-    pageHeader,
     fixedHeader,
     body,
     fixedBody,
@@ -75,8 +73,8 @@ export const Layout = ({
         () => (
             <BaseView h={100}>
                 <BaseView>
-                    {!noBackButton && (
-                        <BaseView mx={noMargin ? 0 : 20}>
+                    {!noBackButton ? (
+                        <BaseView mx={noMargin ? 0 : 16}>
                             <BackButtonHeader
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}
@@ -86,18 +84,16 @@ export const Layout = ({
                                 rightElement={headerRightElement}
                             />
                         </BaseView>
-                    )}
-                    {pageHeader && (
-                        <BaseView>
-                            <BaseView mx={noMargin ? 0 : 20}>
-                                <BackButtonHeaderV2 title={pageHeader} />
+                    ) : (
+                        title && (
+                            <BaseView mx={noMargin ? 0 : 16}>
+                                <CenteredHeader title={title} rightElement={headerRightElement} />
                             </BaseView>
-                        </BaseView>
+                        )
                     )}
                     {fixedHeader && (
-                        <BaseView>
-                            <BaseView mx={noMargin ? 0 : 20}>{<BaseView>{fixedHeader}</BaseView>}</BaseView>
-                            {!noMargin && <BaseSpacer height={8} />}
+                        <BaseView justifyContent="center" py={8} px={noMargin ? 0 : 16}>
+                            <BaseView>{fixedHeader}</BaseView>
                         </BaseView>
                     )}
                     {showSelectedNetwork && (
@@ -118,13 +114,11 @@ export const Layout = ({
                         }}
                         ref={scrollViewRef}
                         refreshControl={refreshControl}
-                        testID={scrollViewTestID || "Layout_ScrollView"}
+                        testID={scrollViewTestID ?? "Layout_ScrollView"}
                         scrollEnabled={scrollViewContentHeight > scrollViewHeight}
                         style={noMargin ? {} : styles.scrollView}
-                        // eslint-disable-next-line react-native/no-inline-styles
                         contentContainerStyle={{
                             paddingBottom: isAndroid() ? androidOnlyTabBarBottomMargin : _iosOnlyTabBarBottomMargin,
-                            paddingTop: noMargin ? 0 : 16,
                         }}>
                         {body}
                     </BaseScrollView>
@@ -138,7 +132,7 @@ export const Layout = ({
                 {footer && (
                     <BaseView
                         mb={noMargin ? 0 : Number(androidOnlyTabBarBottomMargin) + STATIC_BOTTOM_PADDING}
-                        mx={noMargin ? 0 : 20}>
+                        mx={noMargin ? 0 : 16}>
                         {footer}
                     </BaseView>
                 )}
@@ -152,7 +146,6 @@ export const Layout = ({
             preventGoBack,
             title,
             headerRightElement,
-            pageHeader,
             fixedHeader,
             showSelectedNetwork,
             body,
@@ -189,7 +182,8 @@ export const Layout = ({
 
 const styles = StyleSheet.create({
     scrollView: {
-        paddingHorizontal: 24,
+        paddingHorizontal: 16,
+        paddingVertical: 16,
     },
     selectedNetworkViewerView: {
         position: "absolute",

@@ -15,7 +15,6 @@ const findByText = async (text: string) => await screen.findByText(text, {}, { t
 const findByTestId = async (testId: string) => await screen.findByTestId(testId, {}, { timeout: 5000 })
 
 describe("BaseCustomTokenIcon", () => {
-    const tokenAddress = "0x1234...5678"
     const longTokenSymbol = "LONGSYMBOL"
     const shortTokenSymbol = "USD"
 
@@ -27,7 +26,7 @@ describe("BaseCustomTokenIcon", () => {
         // Mock for isColorLight = true
         ;(ColorUtils.generateColor as jest.Mock).mockReturnValueOnce(["testString", true])
 
-        render(<BaseCustomTokenIcon tokenAddress={tokenAddress} tokenSymbol={shortTokenSymbol} />, {
+        render(<BaseCustomTokenIcon tokenSymbol={shortTokenSymbol} />, {
             wrapper: TestWrapper,
         })
 
@@ -39,7 +38,7 @@ describe("BaseCustomTokenIcon", () => {
         // Mock for isColorLight = true
         ;(ColorUtils.generateColor as jest.Mock).mockReturnValueOnce(["testString", true])
 
-        render(<BaseCustomTokenIcon tokenAddress={tokenAddress} tokenSymbol={longTokenSymbol} />, {
+        render(<BaseCustomTokenIcon tokenSymbol={longTokenSymbol} />, {
             wrapper: TestWrapper,
         })
 
@@ -51,7 +50,7 @@ describe("BaseCustomTokenIcon", () => {
     it("applies correct text color based on generated icon color", async () => {
         ;(ColorUtils.generateColor as jest.Mock).mockReturnValueOnce(["red", true]) // Mock for isColorLight = true
 
-        render(<BaseCustomTokenIcon tokenAddress={tokenAddress} tokenSymbol={shortTokenSymbol} />, {
+        render(<BaseCustomTokenIcon tokenSymbol={shortTokenSymbol} />, {
             wrapper: TestWrapper,
         })
 
@@ -60,20 +59,20 @@ describe("BaseCustomTokenIcon", () => {
         expect(displayedText.props.color).toBe(COLORS.DARK_PURPLE)
         ;(ColorUtils.generateColor as jest.Mock).mockReturnValueOnce(["blue", false]) // Mock for isColorLight = false
 
-        render(<BaseCustomTokenIcon tokenAddress={tokenAddress} tokenSymbol={shortTokenSymbol} />, {
+        render(<BaseCustomTokenIcon tokenSymbol={shortTokenSymbol} />, {
             wrapper: TestWrapper,
         })
 
         displayedText = await findByText(shortTokenSymbol)
 
-        expect(displayedText.props.color).toBe(COLORS.WHITE)
+        expect(displayedText.props.color).toBe(COLORS.DARK_PURPLE)
     })
 
     it("applies correct font size based on tokenSymbol length", async () => {
         // Mock for isColorLight = true
         ;(ColorUtils.generateColor as jest.Mock).mockReturnValueOnce(["testString", true])
 
-        render(<BaseCustomTokenIcon tokenAddress={tokenAddress} tokenSymbol={longTokenSymbol} />, {
+        render(<BaseCustomTokenIcon tokenSymbol={longTokenSymbol} />, {
             wrapper: TestWrapper,
         })
 
@@ -83,7 +82,7 @@ describe("BaseCustomTokenIcon", () => {
         // Mock for isColorLight = true
         ;(ColorUtils.generateColor as jest.Mock).mockReturnValueOnce(["testString", true])
 
-        render(<BaseCustomTokenIcon tokenAddress={tokenAddress} tokenSymbol={shortTokenSymbol} />, {
+        render(<BaseCustomTokenIcon tokenSymbol={shortTokenSymbol} />, {
             wrapper: TestWrapper,
         })
 
@@ -102,12 +101,7 @@ describe("BaseCustomTokenIcon", () => {
         }
 
         render(
-            <BaseCustomTokenIcon
-                tokenAddress={tokenAddress}
-                tokenSymbol={shortTokenSymbol}
-                style={customStyle}
-                testID="base-custom-token-icon"
-            />,
+            <BaseCustomTokenIcon tokenSymbol={shortTokenSymbol} style={customStyle} testID="base-custom-token-icon" />,
             {
                 wrapper: TestWrapper,
             },

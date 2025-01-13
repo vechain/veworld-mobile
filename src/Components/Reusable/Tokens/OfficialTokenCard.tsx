@@ -1,12 +1,11 @@
 import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseCard, BaseText, BaseView } from "~Components"
+import { BaseCard, BaseText, BaseView, FiatBalance } from "~Components"
 import { useTheme, useThemedStyles, TokenWithCompleteInfo, useBalances } from "~Hooks"
-import { B3TR, ColorThemeType } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import { TokenImage } from "../TokenImage"
 import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
 
@@ -53,20 +52,11 @@ export const OfficialTokenCard = memo(
         )
         const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
 
-        //TODO: to be removed when the we refactor the cards in home screen (need to be changed also in the token registry)
-        const icon = useMemo(() => (token.symbol === B3TR.symbol ? B3TR.icon : token.icon), [token.icon, token.symbol])
-
         return (
             <BaseCard onPress={action} containerStyle={[styles.container, style]} testID={symbol}>
                 <BaseView flexDirection="row" justifyContent="space-between">
                     <BaseView w={14}>
-                        <TokenImage
-                            icon={icon}
-                            height={iconHeight}
-                            width={iconWidth}
-                            tokenAddress={token.address}
-                            symbol={token.symbol}
-                        />
+                        <TokenImage icon={token.icon} height={iconHeight} width={iconWidth} symbol={token.symbol} />
                     </BaseView>
                     <BaseView w={42}>
                         <BaseText typographyFont="buttonPrimary" ellipsizeMode="tail" numberOfLines={1}>

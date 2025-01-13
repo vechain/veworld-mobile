@@ -2,7 +2,7 @@ import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import { AlertCard, BaseSafeArea, BaseSpacer, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
+import { AlertCard, BaseSpacer, BaseText, BaseView, Layout, SelectedNetworkViewer } from "~Components"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
@@ -77,42 +77,44 @@ export const SettingsScreen = () => {
     )
 
     return (
-        <BaseSafeArea>
-            <BaseView flexDirection="row" justifyContent="space-between" mx={20} mb={8}>
-                <BaseText typographyFont="subTitleMedium" testID="settings-screen">
-                    {LL.TITLE_SETTINGS()}
-                </BaseText>
-                <SelectedNetworkViewer />
-            </BaseView>
-
-            <BaseView style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
-                <FlatList
-                    ref={flatSettingListRef}
-                    data={settingsList}
-                    contentContainerStyle={[themedStyles.contentContainerStyle]}
-                    scrollEnabled={isShowBackupModal || isSmallScreen}
-                    keyExtractor={(item, index) =>
-                        item.element === "settingsRow" ? item.screenName : `${item.element}-${index}`
-                    }
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={renderItem}
-                />
-            </BaseView>
-        </BaseSafeArea>
+        <Layout
+            noBackButton
+            fixedHeader={
+                <BaseView flexDirection="row" justifyContent="space-between" py={4}>
+                    <BaseText typographyFont="subSubTitleSemiBold" testID="settings-screen">
+                        {LL.TITLE_MENU()}
+                    </BaseText>
+                    <SelectedNetworkViewer />
+                </BaseView>
+            }
+            body={
+                <BaseView mt={-8} style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
+                    <FlatList
+                        ref={flatSettingListRef}
+                        data={settingsList}
+                        scrollEnabled={isShowBackupModal || isSmallScreen}
+                        keyExtractor={(item, index) =>
+                            item.element === "settingsRow" ? item.screenName : `${item.element}-${index}`
+                        }
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={renderItem}
+                    />
+                </BaseView>
+            }
+        />
     )
 }
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        contentContainerStyle: {
-            paddingHorizontal: 24,
-        },
         separator: {
             backgroundColor: theme.colors.text,
             height: 0.5,
         },
         list: {
+            paddingTop: 0,
+            paddingHorizontal: 8,
             flex: 1,
         },
     })

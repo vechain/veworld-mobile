@@ -68,7 +68,7 @@ export const AnimatedSearchBar = ({
 
     return (
         <BaseView flexDirection="row" alignItems="center">
-            <Animated.View style={[animatedInputStyle, { paddingHorizontal: dimensions.current.paddingHorizontal }]}>
+            <Animated.View style={[animatedInputStyle]}>
                 <BaseSearchInput
                     placeholder={placeholder}
                     setValue={onTextChange}
@@ -79,7 +79,7 @@ export const AnimatedSearchBar = ({
                     onIconPress={() => onTextChange("")}
                 />
             </Animated.View>
-            <BaseView justifyContent={"center"} alignItems={"center"}>
+            <BaseView justifyContent={"center"} alignItems={"center"} pl={18}>
                 <Icon name={iconName} size={dimensions.current.iconSize} color={iconColor} onPress={onIconPress} />
             </BaseView>
         </BaseView>

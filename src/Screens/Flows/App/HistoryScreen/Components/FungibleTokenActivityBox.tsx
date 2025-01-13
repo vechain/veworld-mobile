@@ -3,14 +3,13 @@ import { StyleSheet } from "react-native"
 import { useFungibleTokenInfo, useTheme } from "~Hooks"
 import { BigNutils, DateUtils } from "~Utils"
 import { COLORS, DIRECTIONS, getCoinGeckoIdBySymbol } from "~Constants"
-import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseTouchable, BaseView, FiatBalance } from "~Components"
 import { Activity, ActivityStatus, FungibleToken, FungibleTokenActivity } from "~Model"
 import { selectCurrency, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { getTimeZone } from "react-native-localize"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 import { useExchangeRate } from "~Api/Coingecko"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 
 type Props = {
     activity: FungibleTokenActivity
