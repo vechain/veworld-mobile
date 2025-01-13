@@ -5,6 +5,7 @@ import ReactNativeBlobUtil, { FetchBlobResponse, StatefulPromise } from "react-n
 import { CameraRoll } from "@react-native-camera-roll/camera-roll"
 import { AlertUtils, PlatformUtils, debug } from "~Utils"
 import { NFTMedia } from "~Model"
+import { hasAndroidPermission } from "./Helpers"
 import { ERROR_EVENTS } from "~Constants"
 
 export const useSaveMediaToPhotos = (image?: NFTMedia, nftName: string = "VeWorld NFT") => {
@@ -27,10 +28,9 @@ export const useSaveMediaToPhotos = (image?: NFTMedia, nftName: string = "VeWorl
     const downloadImage = useCallback(async () => {
         if (!image) return
 
-        //TODO(michael): if app crash when app built due to android missing permissions enable it again (also on manifest.xml)
-        // if (PlatformUtils.isAndroid() && !(await hasAndroidPermission())) {
-        //     return
-        // }
+        if (PlatformUtils.isAndroid() && !(await hasAndroidPermission())) {
+            return
+        }
 
         try {
             // download image to device cache
