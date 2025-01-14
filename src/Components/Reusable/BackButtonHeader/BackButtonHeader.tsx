@@ -54,11 +54,13 @@ export const BackButtonHeader = ({
                         style={[iconStyle]}
                         size={24}
                         name="icon-arrow-left"
-                        color={iconColor ?? theme.colors.text}
+                        color={iconColor ?? theme.colors.title}
                         action={onActionPress}
                         testID={iconTestID}
                     />
-                    <BaseText typographyFont="subSubTitleSemiBold">{title}</BaseText>
+                    <BaseText color={theme.colors.title} typographyFont="subSubTitleSemiBold">
+                        {title}
+                    </BaseText>
                     <BaseSpacer width={24} />
                     {rightElement && <BaseView style={styles.rightElementContainer}>{rightElement}</BaseView>}
                 </BaseView>

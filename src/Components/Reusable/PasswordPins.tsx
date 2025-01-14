@@ -1,8 +1,8 @@
 import React, { FC, memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { ColorThemeType, valueToHP, COLORS } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { BaseText, BaseView, WrapTranslation } from "~Components"
+import { AlertInline, BaseText, BaseView } from "~Components"
 import { PinVerificationErrorType, PinVerificationError } from "~Model"
 import { useI18nContext } from "~i18n"
 
@@ -27,45 +27,30 @@ export const PasswordPins: FC<Props> = memo(({ pin, digitNumber, isPINRetype, is
     const { styles: themedStyles, theme } = useThemedStyles(baseStyles(isMessageVisible))
 
     const getMessageText = useMemo(() => {
-        if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
+        if (isPINRetype)
+            return <AlertInline message={LL.BD_USER_PASSWORD_CONFIRM()} status={"neutral"} variant={"inline"} />
 
         if (errorType === PinVerificationError.VALIDATE_PIN && errorValue)
-            return (
-                <WrapTranslation
-                    message={LL.BD_USER_PASSWORD_ERROR()}
-                    renderComponent={() => (
-                        <BaseView justifyContent="center" alignItems="center" style={themedStyles.danferIcon}>
-                            <BaseText color={theme.colors.danger} fontSize={10}>
-                                !
-                            </BaseText>
-                        </BaseView>
-                    )}
-                />
-            )
+            return <AlertInline message={LL.BD_USER_PASSWORD_ERROR()} status={"error"} variant={"inline"} />
 
-        if (errorType === PinVerificationError.EDIT_PIN && errorValue) return LL.BD_USER_EDIT_PASSWORD_ERROR()
+        if (errorType === PinVerificationError.EDIT_PIN && errorValue)
+            return <AlertInline message={LL.BD_USER_EDIT_PASSWORD_ERROR()} status={"error"} variant={"inline"} />
 
         return MESSAGE_FAKE_PLACEHOLDER
-    }, [isPINRetype, LL, errorType, errorValue, themedStyles.danferIcon, theme.colors.danger])
-
-    const getMessageTextColor = useMemo(() => {
-        if (isPINRetype) return theme.colors.text
-        if (isPinError) return theme.colors.danger
-        return undefined
-    }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.text])
+    }, [isPINRetype, LL, errorType, errorValue])
 
     const getPinMessage = useMemo(() => {
         return (
             <BaseText
                 style={themedStyles.messageTextStyle}
-                typographyFont="bodyAccent"
+                typographyFont="body"
                 alignContainer="center"
-                color={getMessageTextColor}
+                color={theme.colors.subtitle}
                 my={18}>
                 {getMessageText}
             </BaseText>
         )
-    }, [themedStyles.messageTextStyle, getMessageTextColor, getMessageText])
+    }, [themedStyles.messageTextStyle, theme.colors.subtitle, getMessageText])
 
     return (
         <BaseView alignItems="center">
@@ -75,7 +60,7 @@ export const PasswordPins: FC<Props> = memo(({ pin, digitNumber, isPINRetype, is
                     return (
                         <BaseView
                             key={digit}
-                            mx={10}
+                            mx={8}
                             style={[
                                 themedStyles.pinBase,
                                 ...(digitExist ? [themedStyles.pressed] : [themedStyles.notPressed]),
@@ -93,15 +78,15 @@ export const PasswordPins: FC<Props> = memo(({ pin, digitNumber, isPINRetype, is
 const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         pinBase: {
-            width: valueToHP[12],
-            height: valueToHP[12],
-            borderRadius: 6,
+            width: 8,
+            height: 8,
+            borderRadius: 4,
         },
         pressed: {
-            backgroundColor: theme.colors.text,
+            backgroundColor: theme.colors.pinFilled,
         },
         notPressed: {
-            backgroundColor: COLORS.DARK_PURPLE_DISABLED,
+            backgroundColor: theme.colors.pinEmpty,
         },
         messageTextStyle: { opacity: isMessageVisible ? 1 : 0 },
         danferIcon: {

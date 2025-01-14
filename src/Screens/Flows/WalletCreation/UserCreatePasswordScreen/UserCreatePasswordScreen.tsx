@@ -3,13 +3,20 @@ import { BaseSpacer, BaseText, BaseView, Layout, NumPad, PasswordPins } from "~C
 import { useI18nContext } from "~i18n"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
-import { useAnalyticTracking } from "~Hooks"
-import { AnalyticsEvent, valueToHP } from "~Constants"
+import { useAnalyticTracking, useTheme } from "~Hooks"
+import { AnalyticsEvent } from "~Constants"
 import HapticsService from "~Services/HapticsService"
 
 const digitNumber = 6
-export const UserCreatePasswordScreen = ({ onSuccess }: { onSuccess: (insertedPin: string) => void }) => {
+
+interface UserCreatePasswordScreenProps {
+    onSuccess: (insertedPin: string) => void
+    onBack?: () => void
+}
+
+export const UserCreatePasswordScreen: React.FC<UserCreatePasswordScreenProps> = ({ onSuccess, onBack }) => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
     const track = useAnalyticTracking()
 
     /**
@@ -65,22 +72,21 @@ export const UserCreatePasswordScreen = ({ onSuccess }: { onSuccess: (insertedPi
     return (
         <Layout
             hasSafeArea={false}
-            noBackButton
+            title={LL.TITLE_USER_PASSWORD()}
+            onGoBack={onBack}
             body={
                 <BaseView alignItems="center" justifyContent="flex-start">
-                    <BaseView alignSelf="flex-start">
-                        <BaseText typographyFont="title">{LL.TITLE_USER_PASSWORD()}</BaseText>
-                        <BaseText typographyFont="body" my={10}>
-                            {LL.SB_USER_PASSWORD()}
-                        </BaseText>
-                    </BaseView>
-                    <BaseSpacer height={valueToHP[40]} />
+                    <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>
+                        {LL.SB_USER_PASSWORD()}
+                    </BaseText>
+                    <BaseSpacer height={80} />
                     <PasswordPins
                         pin={pin}
                         digitNumber={digitNumber}
                         isPINRetype={isPinRetype}
                         isPinError={isConfirmationError}
                     />
+                    <BaseSpacer height={20} />
                     <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={handleOnDigitDelete} />
                 </BaseView>
             }

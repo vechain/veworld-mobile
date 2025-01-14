@@ -3295,7 +3295,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
 	/**
-	 * W​a​l​l​e​t​s
+	 * M​a​n​a​g​e​ ​W​a​l​l​e​t​s
 	 */
 	TITLE_WALLET_MANAGEMENT: string
 	/**
@@ -6773,7 +6773,7 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
-	 * Wallets
+	 * Manage Wallets
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**
