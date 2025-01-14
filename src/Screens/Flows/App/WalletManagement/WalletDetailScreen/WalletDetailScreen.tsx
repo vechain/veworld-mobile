@@ -10,6 +10,7 @@ import {
     showSuccessToast,
     showWarningToast,
     SwipeableRow,
+    PlusIconHeaderButton,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -22,7 +23,6 @@ import { useAccountDelete } from "./hooks"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { FlatList } from "react-native"
-import { PlusHeaderIcon } from "~Components/Reusable/HeaderRightIcons"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 
@@ -107,11 +107,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     return (
         <Layout
             title={walletAlias || device?.alias || ""}
-            headerRightElement={
-                showButton && (
-                    <PlusHeaderIcon testID="WalletDetailScreen_addAccountButton" action={onAddAccountClicked} />
-                )
-            }
+            headerRightElement={showButton && <PlusIconHeaderButton action={onAddAccountClicked} />}
             fixedHeader={
                 <BaseView py={16}>
                     {!showWalletNameInput && (

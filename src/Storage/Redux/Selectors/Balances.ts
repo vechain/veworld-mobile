@@ -1,13 +1,13 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { selectSelectedAccount } from "./Account"
-import { B3TR, VET, VTHO } from "~Constants"
-import { RootState } from "~Storage/Redux/Types"
 import { BigNumber } from "bignumber.js"
-import { selectSelectedNetwork } from "./Network"
-import { FungibleToken, FungibleTokenWithBalance } from "~Model"
-import { selectAllTokens, selectCustomTokens, selectSuggestedTokens } from "./Tokens"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import sortBy from "lodash/sortBy"
+import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { FungibleToken, FungibleTokenWithBalance } from "~Model"
+import { RootState } from "~Storage/Redux/Types"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { selectSelectedAccount } from "./Account"
+import { selectSelectedNetwork } from "./Network"
+import { selectAllTokens, selectCustomTokens, selectSuggestedTokens } from "./Tokens"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
@@ -95,10 +95,11 @@ export const selectNonVechainTokensWithBalances = createSelector(
     (tokensWithBalance): FungibleTokenWithBalance[] =>
         sortBy(
             tokensWithBalance.filter(
-                tokenWithBalance =>
+                (tokenWithBalance: FungibleTokenWithBalance) =>
                     !compareAddresses(tokenWithBalance.address, VET.address) &&
                     !compareAddresses(tokenWithBalance.address, VTHO.address) &&
-                    !compareAddresses(tokenWithBalance.address, B3TR.address),
+                    !compareAddresses(tokenWithBalance.address, B3TR.address) &&
+                    !compareAddresses(tokenWithBalance.address, VOT3.address),
             ),
             balance => balance.balance.position,
         ),

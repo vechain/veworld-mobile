@@ -2641,6 +2641,10 @@ type RootTranslation = {
 	 */
 	SB_INSERT_KEYSTORE_PASSWORD: string
 	/**
+	 * M​y​ ​t​o​k​e​n​s
+	 */
+	SB_MY_TOKENS: string
+	/**
 	 * Y​o​u​r​ ​a​c​t​i​v​i​t​i​e​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
 	 */
 	SB_NO_TRANSACTIONS: string
@@ -3272,6 +3276,10 @@ type RootTranslation = {
 	 * M​a​n​a​g​e​ ​w​a​l​l​e​t​s
 	 */
 	TITLE_MANAGE_WALLET: string
+	/**
+	 * M​e​n​u
+	 */
+	TITLE_MENU: string
 	/**
 	 * Y​o​u​r​ ​M​n​e​m​o​n​i​c
 	 */
@@ -6201,6 +6209,10 @@ Try reconnect your device to the internet.
 	 */
 	SB_INSERT_KEYSTORE_PASSWORD: () => LocalizedString
 	/**
+	 * My tokens
+	 */
+	SB_MY_TOKENS: () => LocalizedString
+	/**
 	 * Your activities will appear here
 	 */
 	SB_NO_TRANSACTIONS: () => LocalizedString
@@ -6828,6 +6840,10 @@ Try reconnect your device to the internet.
 	 * Manage wallets
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
+	/**
+	 * Menu
+	 */
+	TITLE_MENU: () => LocalizedString
 	/**
 	 * Your Mnemonic
 	 */

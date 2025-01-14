@@ -1,12 +1,11 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import { BaseCard, BaseIcon, BaseImage, BaseText, BaseView } from "~Components/Base"
+import { BaseCard, BaseIcon, BaseImage, BaseText, BaseView, FiatBalance } from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Token } from "~Model"
-import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 import { selectOfficialTokens, selectVisibleCustomTokens, useAppSelector } from "~Storage/Redux"
 import { SWAP_SIDE } from "../SwapCard"
 

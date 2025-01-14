@@ -145,7 +145,7 @@ export const PrivacyScreen = () => {
             title={LL.TITLE_PRIVACY()}
             body={
                 <>
-                    <BaseView pt={8}>
+                    <BaseView>
                         {/*TODO: https://github.com/vechainfoundation/veworld-mobile/issues/1339*/}
                         {__DEV__ && (
                             <>

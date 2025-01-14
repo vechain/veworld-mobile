@@ -32,11 +32,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
     const _chartView = useMemo(() => {
         if (chartData?.length) {
             return (
-                <BaseView
-                    flexDirection="row"
-                    w={100}
-                    alignItems="flex-end"
-                    style={[styles.container, styles.negativeMargin]}>
+                <BaseView flexDirection="row" w={100} alignItems="flex-end" style={[styles.container]}>
                     <LineChart height={180} width={SCREEN_WIDTH} yGutter={20}>
                         <LineChart.Path color={theme.colors.primary} width={2}>
                             <LineChart.Gradient lastGradientValue={0} />
@@ -50,7 +46,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
             )
         } else {
             return (
-                <BaseView justifyContent="center" alignItems="center" style={[styles.negativeMargin, styles.container]}>
+                <BaseView justifyContent="center" alignItems="center" style={[styles.container]}>
                     <BaseView>
                         <LineChart height={180} style={styles.opacity}>
                             <LineChart.Path color={theme.colors.primary} width={0}>
@@ -73,7 +69,6 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
         chartData?.length,
         styles.absolutePosition,
         styles.container,
-        styles.negativeMargin,
         styles.opacity,
         theme.colors.primary,
         token.name,
@@ -81,7 +76,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
 
     return (
         <>
-            <BaseView flexDirection="row" justifyContent="space-between" w={100}>
+            <BaseView flexDirection="row" justifyContent="space-between" w={100} px={16}>
                 <AssetPriceBanner isChartDataLoading={isChartDataLoading} />
             </BaseView>
 
@@ -96,7 +91,6 @@ const baseStyles = () =>
     StyleSheet.create({
         priceText: { opacity: 0 },
         container: { maxHeight: 180 },
-        negativeMargin: { marginLeft: -24 },
         fullWidth: { width: SCREEN_WIDTH - 20 * 2 },
         absolutePosition: {
             position: "absolute",
