@@ -11,6 +11,8 @@ export type Colors = {
     danger: string
     success: string
     successMedium: string
+    positive: string
+    negative: string
     info: string
     warning: string
     error: string
@@ -25,6 +27,7 @@ export type Colors = {
     splashColorLayer: string
     card: string
     icon: string
+    button: string
     rightIconHeaderBorder: string
     border: string
     notification: string
@@ -40,7 +43,7 @@ export type Colors = {
     testnetText: string
     gradientBackground: string[]
     horizontalButtonSelected: string
-    horizontalButtonText: string
+    textSecondary: string
     horizontalButtonTextReversed: string
     cardBorder: string
     switchEnabled: string
@@ -52,6 +55,10 @@ export type Colors = {
     mnemonicCardBackground: string
     mnemonicCardBorder: string
     toggleMnemonicButtonBackground: string
+    pressableCardBorder: string
+    pressableCardBackground: string
+    tokenCardText: string
+    tokenCardGraphLine: string
     successVariant: {
         background: string
         border: string
@@ -102,6 +109,8 @@ export enum COLORS {
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
     PURPLE = "#30265F",
     PRIMARY_800 = "#261470",
+    PRIMARY_700 = "#351C9B",
+    PRIMARY_400 = "#836CE4",
     PRIMARY_200 = "#CCC3F4",
     PRIMARY_50 = "#F9F8FB",
     LIGHT_PURPLE = "#55498c",
@@ -112,6 +121,7 @@ export enum COLORS {
     DARK_RED = "#931536",
     DARK_RED_ALERT = "#9D1800",
     MEDIUM_RED = "#E02200",
+    RED_NEGATIVE = "#E9627B",
     RED_700 = "#9B2C2C",
     RED_600 = "#C53030",
     RED_500 = "#E53E3E",
@@ -131,7 +141,9 @@ export enum COLORS {
     PASTEL_GREEN = "#c5eacd",
     MEDIUM_GREEN = "#30B34E",
     GREEN_700 = "#276749",
+    GREEN_600 = "#25855A",
     GREEN_500 = "#38A169",
+    GREEN_400 = "#48BB78",
     GREEN_200 = "#9AE6B4",
     GREEN_100 = "#C6F6D5",
     GREEN_50 = "#F0FFF4",
@@ -142,11 +154,11 @@ export enum COLORS {
     MEDIUM_GRAY = "#C4C4C4",
     GREY_700 = "#363A3F",
     GREY_600 = "#4A5568",
-    GREY_500 = "#718096",
+    GREY_500 = "#747C89",
     GREY_400 = "#AAAFB6",
     GREY_300 = "#CBD5E0",
     GREY_200 = "#E2E8F0",
-    GREY_100 = "#EDF2F7",
+    GREY_100 = "#F1F2F3",
     GREY_50 = "#F9F9FA",
     ORANGE_50 = "#FFFAF0",
     ORANGE_100 = "#FEEBCB",
@@ -173,9 +185,11 @@ const light: Colors = {
     tertiary: COLORS.LIME_GREEN,
     disabled: COLORS.WHITE_DISABLED,
     disabledButton: COLORS.PURPLE_BLUR_TRANSPARENT,
-    danger: COLORS.DARK_RED,
-    success: COLORS.DARK_GREEN,
+    danger: COLORS.RED_400,
+    success: COLORS.GREEN_400,
     successMedium: COLORS.WHITE,
+    positive: COLORS.GREEN_600,
+    negative: COLORS.RED_400,
     info: COLORS.WHITE,
     warning: COLORS.WHITE,
     error: COLORS.WHITE,
@@ -191,6 +205,7 @@ const light: Colors = {
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.WHITE,
     icon: COLORS.PRIMARY_800,
+    button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
     border: COLORS.DARK_PURPLE,
@@ -207,7 +222,7 @@ const light: Colors = {
     testnetText: COLORS.LIGHT_GREEN,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_LIGHT_TOP, COLORS.GRADIENT_BACKGROUND_LIGHT_BOTTOM],
     horizontalButtonSelected: COLORS.DARK_PURPLE,
-    horizontalButtonText: COLORS.WHITE,
+    textSecondary: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.DARK_PURPLE,
     switchEnabled: COLORS.LIGHT_GREEN,
     checkboxFilledBackground: COLORS.DARK_PURPLE,
@@ -217,6 +232,10 @@ const light: Colors = {
     mnemonicCardBackground: COLORS.GREY_100,
     mnemonicCardBorder: COLORS.GREY_300,
     toggleMnemonicButtonBackground: COLORS.GREY_200,
+    pressableCardBackground: COLORS.WHITE,
+    pressableCardBorder: COLORS.GREY_200,
+    tokenCardText: COLORS.GREY_500,
+    tokenCardGraphLine: COLORS.PRIMARY_700,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -251,7 +270,7 @@ const light: Colors = {
 }
 
 const dark: Colors = {
-    primary: COLORS.LIME_GREEN,
+    primary: COLORS.PURPLE,
     primaryLight: COLORS.LIME_GREEN_LIGHT,
     primaryReversed: COLORS.DARK_PURPLE,
     primaryDisabled: COLORS.PURPLE_DISABLED,
@@ -260,9 +279,11 @@ const dark: Colors = {
     tertiary: COLORS.DARK_PURPLE,
     disabled: COLORS.WHITE_DISABLED,
     disabledButton: COLORS.LIME_GREEN_TRANSPARENT,
-    danger: COLORS.LIGHT_RED,
-    success: COLORS.LIGHT_GREEN,
+    danger: COLORS.RED_400,
+    success: COLORS.GREEN_400,
     successMedium: COLORS.MEDIUM_GREEN,
+    positive: COLORS.GREEN_400,
+    negative: COLORS.RED_400,
     info: COLORS.DARK_PURPLE,
     warning: COLORS.MEDIUM_ORANGE,
     error: COLORS.MEDIUM_RED,
@@ -278,6 +299,7 @@ const dark: Colors = {
     splashBackground: COLORS.DARK_PURPLE,
     card: COLORS.PURPLE,
     icon: COLORS.WHITE,
+    button: COLORS.LIME_GREEN,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
     cardBorder: COLORS.DARK_PURPLE,
     border: COLORS.WHITE,
@@ -294,7 +316,7 @@ const dark: Colors = {
     testnetText: COLORS.LIGHT_GREEN,
     gradientBackground: [COLORS.GRADIENT_BACKGROUND_DARK_TOP, COLORS.GRADIENT_BACKGROUND_DARK_BOTTOM],
     horizontalButtonSelected: COLORS.DARK_PURPLE,
-    horizontalButtonText: COLORS.WHITE,
+    textSecondary: COLORS.WHITE,
     horizontalButtonTextReversed: COLORS.WHITE,
     switchEnabled: COLORS.LIGHT_GREEN,
     checkboxFilledBackground: COLORS.WHITE,
@@ -304,6 +326,10 @@ const dark: Colors = {
     mnemonicCardBackground: COLORS.DARK_PURPLE_DISABLED,
     mnemonicCardBorder: COLORS.DARK_PURPLE,
     toggleMnemonicButtonBackground: COLORS.PURPLE,
+    pressableCardBackground: COLORS.PURPLE,
+    pressableCardBorder: COLORS.DARK_PURPLE_DISABLED,
+    tokenCardText: COLORS.PRIMARY_200,
+    tokenCardGraphLine: COLORS.PRIMARY_200,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,

@@ -2,7 +2,15 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList } from "@shopify/flash-list"
 import React, { useCallback, useMemo, useRef } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
-import { BaseSpacer, BaseText, BaseView, ChangeAccountButtonPill, Layout, SelectAccountBottomSheet } from "~Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    ChangeAccountButtonPill,
+    Layout,
+    SelectAccountBottomSheet,
+    SelectedNetworkViewer,
+} from "~Components"
 import { SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import {
@@ -256,8 +264,12 @@ export const HistoryScreen = () => {
             noBackButton
             fixedHeader={
                 <BaseView flexDirection="row" justifyContent="space-between">
-                    <BaseText typographyFont="subTitleMedium">{LL.BTN_HISTORY()}</BaseText>
-                    <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
+                    <BaseText typographyFont="subSubTitleSemiBold">{LL.BTN_HISTORY()}</BaseText>
+                    <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
+                        <SelectedNetworkViewer />
+                        <BaseSpacer width={8} />
+                        <ChangeAccountButtonPill action={openSelectAccountBottomSheet} />
+                    </BaseView>
                 </BaseView>
             }
             fixedBody={

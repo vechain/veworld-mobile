@@ -10,6 +10,7 @@ import {
     DismissKeyboardView,
     Layout,
     OfficialTokenCard,
+    PlusIconHeaderButton,
     useThor,
 } from "~Components"
 
@@ -27,7 +28,6 @@ import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 import { AnalyticsEvent } from "~Constants"
-import { PlusHeaderIcon } from "~Components/Reusable/HeaderRightIcons"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
@@ -123,7 +123,7 @@ export const ManageTokenScreen = () => {
             <Layout
                 safeAreaTestID="Manage_Tokens_Screen"
                 title={LL.MANAGE_TOKEN_TITLE()}
-                headerRightElement={<PlusHeaderIcon action={openAddCustomTokenSheet} />}
+                headerRightElement={<PlusIconHeaderButton action={openAddCustomTokenSheet} />}
                 body={
                     <>
                         <BaseView>

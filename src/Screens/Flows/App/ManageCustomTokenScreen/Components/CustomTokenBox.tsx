@@ -4,7 +4,6 @@ import { useTheme } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { BaseCustomTokenIcon, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { Balance, FungibleToken } from "~Model"
-import { address } from "thor-devkit"
 
 type Props = {
     tokenBalance: Balance
@@ -51,11 +50,7 @@ export const CustomTokenBox: React.FC<Props> = memo(({ tokenBalance, onTogglePre
                 containerStyle={baseStyles.container}
                 testID={`${tokenBalance.tokenAddress}-token-box`}>
                 <BaseView flexDirection="row" alignItems="center">
-                    <BaseCustomTokenIcon
-                        style={baseStyles.icon}
-                        tokenSymbol={tokenBalance.tokenSymbol ?? ""}
-                        tokenAddress={address.toChecksumed(tokenBalance.tokenAddress ?? "")}
-                    />
+                    <BaseCustomTokenIcon style={baseStyles.icon} tokenSymbol={tokenBalance.tokenSymbol ?? ""} />
 
                     <BaseSpacer width={8} />
 
