@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useMemo } from "react"
-import { useQueryClient } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
+import React from "react"
 import { FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
 
 const initialState: FeatureFlags = {
@@ -8,27 +8,25 @@ const initialState: FeatureFlags = {
         url: "https://coin-api.veworld.vechain.org",
         fallbackUrl: "https://api.coingecko.com/api/v3",
     },
+    pushNotificationFeature: {
+        enabled: false,
+    },
 }
 
-const FeatureFlagsContex = React.createContext<FeatureFlags>(initialState)
+const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)
 
 const queryKey = ["Feature", "Flags"]
 
 export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }) => {
-    const queryClient = useQueryClient()
+    const { data } = useQuery({
+        queryKey,
+        queryFn: getFeatureFlags,
+        staleTime: 0,
+        enabled: true,
+        placeholderData: initialState,
+    })
 
-    const featureFlags = useMemo(() => queryClient.getQueryData<FeatureFlags>(queryKey) || initialState, [queryClient])
-
-    const retreiveFeatureFlags = useCallback(async () => {
-        const response = await getFeatureFlags()
-        queryClient.setQueryData(queryKey, response, { updatedAt: new Date().getTime() })
-    }, [queryClient])
-
-    useEffect(() => {
-        retreiveFeatureFlags()
-    }, [retreiveFeatureFlags])
-
-    return <FeatureFlagsContex.Provider value={featureFlags}>{children}</FeatureFlagsContex.Provider>
+    return <FeatureFlagsContex.Provider value={data ?? initialState}>{children}</FeatureFlagsContex.Provider>
 }
 
 export const useFeatureFlags = () => {

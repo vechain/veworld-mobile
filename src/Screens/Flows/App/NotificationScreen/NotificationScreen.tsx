@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import {
     AnimatedSearchBar,
+    BaseCard,
     BaseSkeleton,
     BaseSpacer,
     BaseText,
@@ -16,11 +17,13 @@ import {
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp } from "~Model"
+import { updateLastNotificationReminder, useAppDispatch } from "~Storage/Redux"
 
 const SUBSCRIPTION_LIMIT = 10
 
 export const NotificationScreen = () => {
     const { LL } = useI18nContext()
+    const dispatch = useAppDispatch()
     const { styles, theme } = useThemedStyles(baseStyle)
     const { data = [], error, isPending } = useVeBetterDaoDapps()
     const { getTags, addTag, removeTag } = useNotifications()
@@ -38,11 +41,15 @@ export const NotificationScreen = () => {
         featureEnabled,
     } = useNotifications()
 
-    const areNotificationsEnabled = isUserOptedIn && isNotificationPermissionEnabled
+    const areNotificationsEnabled = !!isUserOptedIn && !!isNotificationPermissionEnabled
 
     const updateTags = useCallback(() => {
         getTags().then(setTags)
     }, [getTags])
+
+    const resetLastNotificationReminderTimestamp = useCallback(() => {
+        dispatch(updateLastNotificationReminder(null))
+    }, [dispatch])
 
     const filterDapps = useCallback(
         (text: string) => {
@@ -65,9 +72,18 @@ export const NotificationScreen = () => {
         } else if (!isUserOptedIn) {
             optIn()
         } else {
+            resetLastNotificationReminderTimestamp()
             optOut()
         }
-    }, [featureEnabled, isNotificationPermissionEnabled, isUserOptedIn, optIn, optOut, requestNotficationPermission])
+    }, [
+        featureEnabled,
+        isNotificationPermissionEnabled,
+        isUserOptedIn,
+        optIn,
+        optOut,
+        requestNotficationPermission,
+        resetLastNotificationReminderTimestamp,
+    ])
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<VeBetterDaoDapp>) => {
@@ -98,7 +114,7 @@ export const NotificationScreen = () => {
     )
 
     const renderSeparator = useCallback(() => {
-        return <BaseSpacer height={12} />
+        return <BaseSpacer height={16} />
     }, [])
 
     const ListHeaderComponent = useMemo(() => {
@@ -106,14 +122,43 @@ export const NotificationScreen = () => {
             <>
                 <BaseText typographyFont="title">{LL.PUSH_NOTIFICATIONS()}</BaseText>
                 <BaseSpacer height={12} />
+                <BaseCard>
+                    <BaseView flex={1} flexDirection="column">
+                        <EnableFeature
+                            title={LL.PUSH_NOTIFICATIONS_ACTIVE()}
+                            onValueChange={toggleNotificationsSwitch}
+                            value={areNotificationsEnabled}
+                        />
+                    </BaseView>
+                </BaseCard>
+                <BaseSpacer height={24} />
+                <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_TRANSACTION_AND_TOKENS()}</BaseText>
+                <BaseSpacer height={16} />
                 <EnableFeature
-                    title={LL.PUSH_NOTIFICATIONS_ACTIVE()}
-                    onValueChange={toggleNotificationsSwitch}
-                    value={areNotificationsEnabled}
+                    title={LL.PUSH_NOTIFICATIONS_TRANSACTION_RECEIVED()}
+                    onValueChange={() => {}}
+                    value={false}
                 />
+                <BaseSpacer height={40} />
+                <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
+                <BaseSpacer height={16} />
+                <EnableFeature title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()} onValueChange={() => {}} value={false} />
+                <BaseSpacer height={40} />
+                <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
+                <BaseSpacer height={16} />
+                <EnableFeature
+                    title={LL.PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE()}
+                    onValueChange={() => {}}
+                    value={false}
+                />
+                <BaseSpacer height={16} />
+                <EnableFeature title={LL.PUSH_NOTIFICATIONS_NEW_APP_LISTED()} onValueChange={() => {}} value={false} />
+                <BaseSpacer height={40} />
+
                 {areNotificationsEnabled && (
                     <>
-                        <BaseSpacer height={12} />
+                        <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_DAPPS()}</BaseText>
+                        <BaseSpacer height={16} />
                         <AnimatedSearchBar
                             placeholder={LL.PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER()}
                             value={searchText}
@@ -152,6 +197,7 @@ export const NotificationScreen = () => {
                 data={areNotificationsEnabled ? dapps : []}
                 keyExtractor={item => item.id}
                 ItemSeparatorComponent={renderSeparator}
+                ListFooterComponent={<BaseSpacer height={40} />}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}

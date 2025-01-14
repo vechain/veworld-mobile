@@ -145,6 +145,12 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
         },
         {
             element: "settingsRow",
+            title: LL.TITLE_NOTIFICATIONS(),
+            screenName: Routes.SETTINGS_NOTIFICATIONS,
+            icon: "icon-bell-ring",
+        },
+        {
+            element: "settingsRow",
             title: LL.TITLE_CONNECTED_APPS(),
             screenName: Routes.SETTINGS_CONNECTED_APPS,
             icon: "icon-apps",

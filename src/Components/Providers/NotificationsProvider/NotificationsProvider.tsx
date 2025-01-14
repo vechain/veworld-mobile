@@ -13,19 +13,21 @@ import {
     selectNotificationPermissionEnabled,
     selectSelectedNetwork,
     setDappVisitCounter,
+    updateNotificationFeatureFlag,
     updateNotificationOptedIn,
     updateNotificationPermission,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { useFeatureFlags } from "../FeatureFlagsProvider"
 
 type ContextType = {
     featureEnabled: boolean
     optIn: typeof OneSignal.User.pushSubscription.optIn
     optOut: typeof OneSignal.User.pushSubscription.optOut
     requestNotficationPermission: () => void
-    isNotificationPermissionEnabled: boolean
-    isUserOptedIn: boolean
+    isNotificationPermissionEnabled: boolean | null
+    isUserOptedIn: boolean | null
     increaseDappCounter: (dappId: string) => void
     getTags: () => Promise<{
         [key: string]: string
@@ -42,6 +44,7 @@ OneSignal.Debug.setLogLevel(logLevel)
 const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const dispatch = useAppDispatch()
     const navigation = useNavigation()
+    const { pushNotificationFeature } = useFeatureFlags()
 
     const permissionEnabled = useAppSelector(selectNotificationPermissionEnabled)
     const optedIn = useAppSelector(selectNotificationOptedIn)
@@ -141,7 +144,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const init = useCallback(async () => {
         initializeIneSignal()
-        OneSignal.User.pushSubscription.optIn()
         await getOptInStatus()
         await getPermission()
         OneSignal.User.addTag(veBetterDaoTagKey, "true")
@@ -176,8 +178,12 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     }, [getTags])
 
     useEffect(() => {
+        dispatch(updateNotificationFeatureFlag(pushNotificationFeature?.enabled))
+    }, [dispatch, pushNotificationFeature?.enabled])
+
+    useEffect(() => {
         featureEnabled && init()
-    }, [featureEnabled, init])
+    }, [init, featureEnabled])
 
     useEffect(() => {
         if (!featureEnabled) {

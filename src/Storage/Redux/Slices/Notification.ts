@@ -3,8 +3,8 @@ import { NotificationState } from "../Types"
 
 export const initialNotificationState: NotificationState = {
     feautureEnabled: false,
-    permissionEnabled: false,
-    optedIn: false,
+    permissionEnabled: null,
+    optedIn: null,
     dappVisitCounter: {},
     userTags: {},
 }
@@ -13,6 +13,9 @@ export const Notification = createSlice({
     name: "notification",
     initialState: initialNotificationState,
     reducers: {
+        updateNotificationFeatureFlag: (state, action: PayloadAction<boolean>) => {
+            state.feautureEnabled = action.payload
+        },
         updateNotificationPermission: (state, action: PayloadAction<boolean>) => {
             state.permissionEnabled = action.payload
         },
@@ -42,6 +45,7 @@ export const Notification = createSlice({
 })
 
 export const {
+    updateNotificationFeatureFlag,
     updateNotificationPermission,
     updateNotificationOptedIn,
     increaseDappVisitCounter,
