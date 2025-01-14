@@ -207,6 +207,7 @@ export const SecurityUpgrade_V2 = ({
                     onSuccess={(pin: string) =>
                         isUpgrade.current ? onPasswordUpgradeSuccess(pin) : onPasswordSuccess(pin)
                     }
+                    onClose={closePasswordPrompt}
                 />
             </BaseModalWithChildren>
 
