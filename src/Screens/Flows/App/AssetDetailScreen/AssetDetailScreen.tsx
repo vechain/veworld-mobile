@@ -93,7 +93,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     return (
         <Layout
-            noMargin
             fixedBody={
                 <ScrollView>
                     <BaseView style={styles.assetDetailsHeader}>
@@ -106,8 +105,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         )}
 
                         <BaseSpacer height={24} />
-                        <AssetChart token={token} />
                     </BaseView>
+                    <AssetChart token={token} />
 
                     <BaseView alignItems="center" style={styles.assetDetailsBody}>
                         <BaseSpacer height={24} />
@@ -157,10 +156,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         assetDetailsHeader: {
-            marginTop: 25,
-            paddingHorizontal: 24,
+            paddingHorizontal: 16,
+            marginTop: 16,
         },
         assetDetailsBody: {
-            paddingHorizontal: 24,
+            paddingHorizontal: 16,
         },
     })
