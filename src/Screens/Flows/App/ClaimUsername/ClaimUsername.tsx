@@ -213,7 +213,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                     </BaseView>
                     {/* Footer */}
                     <BaseView>
-                        {claimError && (
+                        {!isLoading && claimError && (
                             <AlertInline
                                 status="error"
                                 variant="banner"

@@ -18,7 +18,7 @@ import {
     useBottomSheetModal,
     useCheckVersion,
     useMemoizedAnimation,
-    usePrefetchAllVns,
+    // usePrefetchAllVns,
     useSetSelectedAccount,
     useTheme,
 } from "~Hooks"
@@ -47,7 +47,7 @@ import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
-    usePrefetchAllVns()
+    // usePrefetchAllVns()
 
     const nav = useNavigation()
 

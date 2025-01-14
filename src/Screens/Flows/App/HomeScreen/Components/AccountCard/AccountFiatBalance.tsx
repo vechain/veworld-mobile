@@ -2,14 +2,16 @@ import React, { useMemo } from "react"
 import { B3TR, VET, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import FiatBalance from "./FiatBalance"
+import { BaseTextProps } from "~Components"
 
 type AccountFiatBalanceProps = {
     isVisible?: boolean
     isLoading?: boolean
+    typographyFont?: BaseTextProps["typographyFont"]
 }
 
 const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFiatBalanceProps) => {
-    const { isLoading = false, isVisible = true } = props
+    const { isLoading = false, isVisible = true, typographyFont } = props
     const theme = useTheme()
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
@@ -33,12 +35,19 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
 
     const isLong = useMemo(() => sum.toFixed(2).length > 12, [sum])
 
+    const computedTypographyFont = useMemo(() => {
+        if (typographyFont) return typographyFont
+        if (isLong) return "title"
+
+        return "largeTitle"
+    }, [isLong, typographyFont])
+
     return (
         <FiatBalance
             isLoading={isLoading}
             isVisible={isVisible}
             color={theme.colors.textReversed}
-            typographyFont={isLong ? "title" : "largeTitle"}
+            typographyFont={computedTypographyFont}
             balances={[
                 tokenWithInfoVET.fiatBalance,
                 tokenWithInfoVTHO.fiatBalance,

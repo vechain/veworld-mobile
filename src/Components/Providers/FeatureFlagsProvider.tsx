@@ -23,6 +23,7 @@ export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }
         queryFn: () => getFeatureFlags(),
         placeholderData: initialState,
         staleTime: 0,
+        enabled: true,
     })
 
     return <FeatureFlagsContex.Provider value={data ?? initialState}>{children}</FeatureFlagsContex.Provider>

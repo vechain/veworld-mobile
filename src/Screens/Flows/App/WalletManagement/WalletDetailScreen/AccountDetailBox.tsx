@@ -1,14 +1,14 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useCopyClipboard, useThemedStyles, useVns } from "~Hooks"
-import { AddressUtils, BigNutils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import { BaseSpacer, BaseText, BaseView, BaseButton, BaseIcon, BaseTouchable } from "~Components"
 import { WalletAccount } from "~Model"
-import { selectVetBalanceByAccount, useAppSelector } from "~Storage/Redux"
-import { COLORS, ColorThemeType, VET } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import AccountFiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/AccountFiatBalance"
 
 type Props = {
     account: WalletAccount
@@ -20,7 +20,7 @@ type Props = {
     onEditPress?: (account: WalletAccount) => void
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({ account, isSelected, isBalanceVisible, isDisabled, canClaimUsername, isEditable = true, onEditPress }) => {
+    ({ account, isSelected, isDisabled, isBalanceVisible, canClaimUsername, isEditable = true, onEditPress }) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const { LL } = useI18nContext()
         const nav = useNavigation()
@@ -31,16 +31,6 @@ export const AccountDetailBox: React.FC<Props> = memo(
         })
 
         const { onCopyToClipboard } = useCopyClipboard()
-
-        const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
-
-        const balance = useMemo(() => {
-            if (!isBalanceVisible) {
-                return "•••• " + VET.symbol
-            }
-
-            return `${BigNutils(vetBalance).toHuman(VET.decimals).toTokenFormat_string(2)} ${VET.symbol}`
-        }, [isBalanceVisible, vetBalance])
 
         const cardBgColor = useMemo(
             () => (isDisabled ? theme.colors.neutralDisabled : undefined),
@@ -78,7 +68,8 @@ export const AccountDetailBox: React.FC<Props> = memo(
                         </BaseTouchable>
 
                         <BaseSpacer height={4} />
-                        <BaseText typographyFont="captionRegular">{balance}</BaseText>
+                        {/* <BaseText typographyFont="captionRegular">{fiatBalance}</BaseText> */}
+                        <AccountFiatBalance typographyFont="captionRegular" isVisible={isBalanceVisible} />
                     </BaseView>
                 </BaseView>
                 {/* Actions */}

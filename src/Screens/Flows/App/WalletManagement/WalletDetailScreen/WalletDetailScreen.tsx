@@ -2,12 +2,12 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
     useBottomSheetModal,
     useCheckIdentity,
+    usePrefetchAllVns,
     useRenameWallet,
     useSetSelectedAccount,
     useThemedStyles,
-    useVns,
 } from "~Hooks"
-import { AddressUtils } from "~Utils"
+import { AccountUtils, AddressUtils } from "~Utils"
 import {
     AlertInline,
     BaseSpacer,
@@ -39,7 +39,6 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { device } = params
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
-    const { getVns } = useVns()
     const dispatch = useAppDispatch()
 
     const [walletAlias, setWalletAlias] = useState(device?.alias ?? "")
@@ -47,6 +46,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const [editingAccount, setEditingAccount] = useState<WalletAccount>()
 
     const { changeDeviceAlias } = useRenameWallet(device)
+    const { data: domains } = usePrefetchAllVns()
     const { subdomainClaimFeature } = useFeatureFlags()
 
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
@@ -57,9 +57,8 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
+    //BUG: Do not reload automatically when domain is registered
     const claimableUsernames = useMemo(() => {
-        const domains = getVns()
-
         if (!domains || domains.length === 0)
             return deviceAccounts
                 .filter(accounts => accounts.device.type !== DEVICE_TYPE.LEDGER)
@@ -68,14 +67,14 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         const noVnsAccounts = deviceAccounts
             .filter(account => {
                 const isLedger = "device" in account && account.device.type === DEVICE_TYPE.LEDGER
-                const isObservedAccount = "type" in account && account.type === DEVICE_TYPE.LOCAL_WATCHED
+                const isObservedAccount = AccountUtils.isObservedAccount(account)
                 const domain = domains.find(vns => AddressUtils.compareAddresses(vns.address, account.address))?.name
                 return !isObservedAccount && !domain && !isLedger
             })
             .map(accounts => accounts.address)
 
         return noVnsAccounts
-    }, [deviceAccounts, getVns])
+    }, [deviceAccounts, domains])
 
     const {
         ref: removeAccountWarningBottomSheetRef,

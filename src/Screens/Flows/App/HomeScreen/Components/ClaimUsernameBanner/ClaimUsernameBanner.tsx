@@ -3,9 +3,9 @@ import React, { useCallback } from "react"
 import { ActionBanner, BaseText, BaseView, useFeatureFlags } from "~Components"
 import { useTheme, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils } from "~Utils"
 
 export const ClaimUsernameBanner = () => {
     const theme = useTheme()
@@ -18,8 +18,6 @@ export const ClaimUsernameBanner = () => {
     const bannerTitle = LL.BANNER_TITLE_CLAIM_USERNAME()
     const [before, after] = bannerTitle.split("username")
 
-    const isObservedAccount = "type" in selectedAccount && selectedAccount.type === DEVICE_TYPE.LOCAL_WATCHED
-
     const { name } = useVns({
         address: selectedAccount.address,
         name: "",
@@ -30,7 +28,7 @@ export const ClaimUsernameBanner = () => {
     }, [nav])
 
     // Hide the claim banner if you already have a vet domain or if it's an observed wallet
-    if (name || isObservedAccount || !subdomainClaimFeature.enabled) return <></>
+    if (name || AccountUtils.isObservedAccount(selectedAccount) || !subdomainClaimFeature.enabled) return <></>
 
     return (
         <BaseView w={100} px={20}>
