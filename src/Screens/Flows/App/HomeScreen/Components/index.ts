@@ -1,4 +1,4 @@
-export * from "./ListsView/Token/TokenList"
+export * from "./ListsView/Token"
 export * from "./Header"
 export * from "./AccountCard"
 export * from "./EditTokensBar"

@@ -18,6 +18,8 @@ import {
     showWarningToast,
     SwipeableRow,
     useFeatureFlags,
+    EditIconHeaderButton,
+    PlusIconHeaderButton,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -30,7 +32,6 @@ import { useAccountDelete } from "./hooks"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { FlatList, StyleSheet } from "react-native"
-import { EditHeaderIcon, PlusHeaderIcon } from "~Components/Reusable/HeaderRightIcons"
 import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
@@ -195,13 +196,16 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
             headerRightElement={
                 <BaseView flexDirection="row" style={styles.headerActionsContainer}>
                     {isEditable && (
-                        <EditHeaderIcon
+                        <EditIconHeaderButton
                             testID="WalletDetailScreen_editWalletButton"
                             action={openEditWalletAccountBottomSheet}
                         />
                     )}
                     {showButton && (
-                        <PlusHeaderIcon testID="WalletDetailScreen_addAccountButton" action={onAddAccountClicked} />
+                        <PlusIconHeaderButton
+                            testID="WalletDetailScreen_addAccountButton"
+                            action={onAddAccountClicked}
+                        />
                     )}
                 </BaseView>
             }

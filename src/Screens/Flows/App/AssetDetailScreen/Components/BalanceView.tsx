@@ -1,9 +1,8 @@
 import React, { useCallback } from "react"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
-import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 
 export const BalanceView = ({
     tokenWithInfo,

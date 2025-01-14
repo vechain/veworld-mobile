@@ -48,17 +48,17 @@ export const BackButtonHeader = ({
     return (
         <View {...otherProps}>
             <BaseView>
-                <BaseView flexDirection="row" w={100} px={8} py={8} justifyContent="space-between">
+                <BaseView flexDirection="row" w={100} py={12} justifyContent="space-between">
                     <BaseIcon
                         haptics="Light"
                         style={[iconStyle]}
                         size={24}
                         name="icon-arrow-left"
-                        color={iconColor || theme.colors.text}
+                        color={iconColor ?? theme.colors.text}
                         action={onActionPress}
                         testID={iconTestID}
                     />
-                    <BaseText typographyFont="subTitleBold">{title}</BaseText>
+                    <BaseText typographyFont="subSubTitleSemiBold">{title}</BaseText>
                     <BaseSpacer width={24} />
                     {rightElement && <BaseView style={styles.rightElementContainer}>{rightElement}</BaseView>}
                 </BaseView>
@@ -71,7 +71,7 @@ export const BackButtonHeader = ({
 const styles = StyleSheet.create({
     rightElementContainer: {
         position: "absolute",
-        right: 8,
-        top: 3,
+        right: 0,
+        top: 8,
     },
 })

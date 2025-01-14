@@ -1,5 +1,14 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { BaseText, BaseView, DeviceBox, Layout, RequireUserPassword, SwipeableRow, showWarningToast } from "~Components"
+import {
+    BaseText,
+    BaseView,
+    DeviceBox,
+    Layout,
+    RequireUserPassword,
+    SwipeableRow,
+    PlusIconHeaderButton,
+    showWarningToast,
+} from "~Components"
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
@@ -16,7 +25,6 @@ import { Routes } from "~Navigation"
 import { AccountUtils } from "~Utils"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
 import { DerivationPath } from "~Constants"
-import { PlusHeaderIcon } from "~Components/Reusable/HeaderRightIcons"
 
 export const WalletManagementScreen = () => {
     const { tabBarBottomMargin } = useTabBarBottomMargin()
@@ -147,7 +155,7 @@ export const WalletManagementScreen = () => {
     }
 
     const headerRightElement = useMemo(
-        () => <PlusHeaderIcon action={onOpenAddWalletBottomSheet} testID="Wallet_Management_AddWallet" />,
+        () => <PlusIconHeaderButton action={onOpenAddWalletBottomSheet} testID="Wallet_Management_AddWallet" />,
         [onOpenAddWalletBottomSheet],
     )
 

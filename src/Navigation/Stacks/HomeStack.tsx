@@ -13,6 +13,7 @@ import {
 import { Routes } from "~Navigation/Enums"
 import {
     AssetDetailScreen,
+    ChangeNetworkScreen,
     ConnectedAppsScreen,
     EnableAdditionalSettings,
     HomeScreen,
@@ -88,6 +89,7 @@ export type RootStackParamListHome = {
         url: string
         ul?: boolean
     }
+    [Routes.SETTINGS_NETWORK]: undefined
     [Routes.CLAIM_USERNAME]: undefined
     [Routes.USERNAME_CLAIMED]: {
         username: string
@@ -175,6 +177,11 @@ export const HomeStack = () => {
                     }}
                 />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.SETTINGS_NETWORK}
+                    component={ChangeNetworkScreen}
+                    options={{ headerShown: false }}
+                />
             </Group>
 
             <Group>

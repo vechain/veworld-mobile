@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { LineChart } from "react-native-wagmi-charts"
-import { BaseSpacer, PressableWithUnderline } from "~Components"
+import { BaseSpacer, BaseView, PressableWithUnderline } from "~Components"
 import { TokenWithCompleteInfo } from "~Model"
 import { ChartView } from "./ChartView"
 import HapticsService from "~Services/HapticsService"
@@ -100,7 +100,9 @@ export const AssetChart = ({ token }: Props) => {
 
             <BaseSpacer height={8} />
 
-            <PressableWithUnderline onPress={onTimelineButtonPress} data={marketChartTimeframes} />
+            <BaseView px={16}>
+                <PressableWithUnderline onPress={onTimelineButtonPress} data={marketChartTimeframes} />
+            </BaseView>
         </>
     )
 }

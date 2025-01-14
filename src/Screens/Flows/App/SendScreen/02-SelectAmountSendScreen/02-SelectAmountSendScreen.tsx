@@ -16,15 +16,15 @@ import {
     FadeoutButton,
     Layout,
     showErrorToast,
+    FiatBalance,
 } from "~Components"
-import { B3TR, COLORS, CURRENCY_SYMBOLS, typography, VTHO } from "~Constants"
+import { COLORS, CURRENCY_SYMBOLS, typography, VTHO } from "~Constants"
 import { useAmountInput, useTheme, useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 import { useTotalTokenBalance, useUI } from "./Hooks"
 
 const { defaults: defaultTypography } = typography
@@ -41,9 +41,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const timer = useRef<NodeJS.Timeout | null>(null)
     const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
-
-    //TODO: to be removed when the we refactor the cards in home screen (need to be changed also in the token registry)
-    const icon = useMemo(() => (token.symbol === B3TR.symbol ? B3TR.icon : token.icon), [token.icon, token.symbol])
 
     const currency = useAppSelector(selectCurrency)
 
@@ -313,7 +310,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     </BaseText>
                                                 ) : (
                                                     // @ts-ignore
-                                                    <BaseImage uri={icon} style={styles.logoIcon} />
+                                                    <BaseImage uri={token.icon} style={styles.logoIcon} />
                                                 )}
                                             </BaseView>
                                             <BaseSpacer width={18} />
