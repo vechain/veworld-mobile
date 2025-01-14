@@ -45,15 +45,14 @@ export const PasswordPins: FC<Props> = memo(({ pin, digitNumber, isPINRetype, is
                 style={themedStyles.messageTextStyle}
                 typographyFont="body"
                 alignContainer="center"
-                color={theme.colors.subtitle}
-                my={18}>
+                color={theme.colors.subtitle}>
                 {getMessageText}
             </BaseText>
         )
     }, [themedStyles.messageTextStyle, theme.colors.subtitle, getMessageText])
 
     return (
-        <BaseView alignItems="center">
+        <BaseView alignItems="center" h={8} justifyContent={"space-between"}>
             <BaseView flexDirection="row" justifyContent="center">
                 {Array.from(Array(digitNumber).keys()).map((digit, idx) => {
                     const digitExist = pin[idx]
@@ -89,11 +88,4 @@ const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
             backgroundColor: theme.colors.pinEmpty,
         },
         messageTextStyle: { opacity: isMessageVisible ? 1 : 0 },
-        danferIcon: {
-            borderRadius: 16,
-            height: 16,
-            width: 16,
-            borderWidth: 1,
-            borderColor: theme.colors.danger,
-        },
     })

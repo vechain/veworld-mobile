@@ -1,6 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { BaseSpacer, BaseText, BaseView, StorageEncryptionKeyHelper } from "~Components"
-import { isSmallScreen } from "~Constants"
+import { BaseSpacer, BaseText, BaseView, Layout, StorageEncryptionKeyHelper } from "~Components"
 import { useOnDigitPress, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
@@ -71,22 +70,20 @@ export const LockScreen: React.FC<Props> = memo(({ onSuccess }) => {
     }, [LL])
 
     return (
-        <BaseView flexGrow={1} bg={theme.colors.background}>
-            <BaseSpacer height={20} />
-            <BaseView mx={24} alignItems="center">
-                <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="title">{title}</BaseText>
-                    <BaseText typographyFont="body" my={10}>
+        <Layout
+            noBackButton
+            title={title}
+            body={
+                <BaseView alignItems="center" justifyContent="flex-start">
+                    <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>
                         {subTitle}
                     </BaseText>
+                    <BaseSpacer height={80} />
+                    <PasswordPins _digitNumber={digitNumber} pin={pin} isPinError={isError} />
+                    <BaseSpacer height={80} />
+                    <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
                 </BaseView>
-
-                <BaseSpacer height={isSmallScreen ? 32 : 62} />
-
-                <PasswordPins _digitNumber={digitNumber} pin={pin} isPinError={isError} />
-                <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
-                <BaseSpacer height={60} />
-            </BaseView>
-        </BaseView>
+            }
+        />
     )
 })

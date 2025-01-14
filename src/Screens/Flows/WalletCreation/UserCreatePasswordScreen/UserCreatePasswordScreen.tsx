@@ -73,7 +73,7 @@ export const UserCreatePasswordScreen: React.FC<UserCreatePasswordScreenProps> =
         <Layout
             hasSafeArea={false}
             title={LL.TITLE_USER_PASSWORD()}
-            onGoBack={onBack}
+            onBackButtonPress={onBack}
             body={
                 <BaseView alignItems="center" justifyContent="flex-start">
                     <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>
@@ -86,7 +86,7 @@ export const UserCreatePasswordScreen: React.FC<UserCreatePasswordScreenProps> =
                         isPINRetype={isPinRetype}
                         isPinError={isConfirmationError}
                     />
-                    <BaseSpacer height={20} />
+                    <BaseSpacer height={80} />
                     <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={handleOnDigitDelete} />
                 </BaseView>
             }
