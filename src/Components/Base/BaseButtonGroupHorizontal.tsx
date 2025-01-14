@@ -60,11 +60,11 @@ export const BaseButtonGroupHorizontal = ({
                 return theme.colors.horizontalButtonTextReversed
             }
             if (selected) {
-                return theme.colors.horizontalButtonText
+                return theme.colors.textSecondary
             }
             return theme.colors.text
         },
-        [theme.colors.horizontalButtonText, theme.colors.horizontalButtonTextReversed, theme.colors.text],
+        [theme.colors.textSecondary, theme.colors.horizontalButtonTextReversed, theme.colors.text],
     )
 
     return (

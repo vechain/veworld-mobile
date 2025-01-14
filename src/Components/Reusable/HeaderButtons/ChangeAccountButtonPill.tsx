@@ -1,8 +1,7 @@
 import React from "react"
-import { BaseIcon, BaseSpacer } from "~Components/Base"
+import { BaseIcon, BaseSpacer, HeaderIconButton } from "~Components"
 import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
-import { HeaderIconButton } from "~Components/Reusable/HeaderRightIcons"
 
 type Props = {
     action: () => void

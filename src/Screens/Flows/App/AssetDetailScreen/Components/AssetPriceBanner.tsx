@@ -87,7 +87,7 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 56,
         },
         textBigTitle: {
-            color: theme.colors.primary,
+            color: theme.colors.text,
             fontWeight: "700",
             fontFamily: otherTypography.fontFamily["Inter-Bold"],
         },

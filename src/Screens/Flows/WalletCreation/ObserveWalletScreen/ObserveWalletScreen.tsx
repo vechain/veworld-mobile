@@ -170,33 +170,29 @@ export const ObserveWalletScreen = () => {
         <DismissKeyboardView>
             <Layout
                 safeAreaTestID="Observe_Wallet_Screen"
+                title={LL.TITLE_OBSERVE_WALLET()}
                 body={
                     <>
                         <BaseView justifyContent="space-between">
-                            <BaseView>
-                                <BaseView flexDirection="row" w={100}>
-                                    <BaseText typographyFont="title">{LL.TITLE_OBSERVE_WALLET()}</BaseText>
-                                </BaseView>
-                                <BaseText typographyFont="body" my={10}>
-                                    {LL.BD_OBSERVE_WALLET()}
-                                </BaseText>
+                            <BaseText typographyFont="body" my={10}>
+                                {LL.BD_OBSERVE_WALLET()}
+                            </BaseText>
 
-                                <BaseSpacer height={20} />
+                            <BaseSpacer height={20} />
 
-                                <BaseTextInput
-                                    testID="observe-wallet-address-input"
-                                    placeholder="0x..."
-                                    label={LL.SEND_PLEASE_TYPE_ADDRESS()}
-                                    errorMessage={error}
-                                    setValue={handleOnSetAddress}
-                                    value={inputValue}
-                                    autoFocus
-                                    onIconPress={() => (inputValue ? onClearAddress() : handleOnIconPress())}
-                                    rightIcon={inputValue ? "icon-x" : "icon-qr-code"}
-                                />
+                            <BaseTextInput
+                                testID="observe-wallet-address-input"
+                                placeholder="0x..."
+                                label={LL.SEND_PLEASE_TYPE_ADDRESS()}
+                                errorMessage={error}
+                                setValue={handleOnSetAddress}
+                                value={inputValue}
+                                autoFocus
+                                onIconPress={() => (inputValue ? onClearAddress() : handleOnIconPress())}
+                                rightIcon={inputValue ? "icon-x" : "icon-qr-code"}
+                            />
 
-                                <BaseSpacer height={40} />
-                            </BaseView>
+                            <BaseSpacer height={40} />
                         </BaseView>
 
                         <SelectWatchedAccountBottomSheet
