@@ -1,7 +1,7 @@
 import React, { FC, memo, useMemo } from "react"
 import { StyleSheet, Text, View } from "react-native"
-import { valueToHP, COLORS, ColorThemeType } from "~Constants"
-import { WrapTranslation } from "~Components"
+import { ColorThemeType } from "~Constants"
+import { AlertInline } from "~Components"
 import { PinVerificationErrorType, PinVerificationError } from "~Model"
 import { useI18nContext } from "~i18n"
 import { useThemedStyles } from "~Hooks"
@@ -24,47 +24,37 @@ export const StandalonePasswordPins: FC<Props> = memo(({ pin, digitNumber, isPIN
         return false
     }, [errorValue, isPINRetype])
 
-    const { styles, theme } = useThemedStyles(baseStyles(isMessageVisible))
+    const { styles: themedStyles } = useThemedStyles(baseStyles(isMessageVisible))
 
     const getMessageText = useMemo(() => {
-        if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
+        if (isPINRetype)
+            return <AlertInline message={LL.BD_USER_PASSWORD_CONFIRM()} status={"neutral"} variant={"inline"} />
 
         if (errorType === PinVerificationError.VALIDATE_PIN && errorValue)
-            return (
-                <WrapTranslation
-                    message={LL.BD_USER_PASSWORD_ERROR()}
-                    renderComponent={() => (
-                        <View style={styles.messageContainer}>
-                            <Text style={styles.messageText}>!</Text>
-                        </View>
-                    )}
-                />
-            )
+            return <AlertInline message={LL.BD_USER_PASSWORD_ERROR()} status={"error"} variant={"inline"} />
 
-        if (errorType === PinVerificationError.EDIT_PIN && errorValue) return LL.BD_USER_EDIT_PASSWORD_ERROR()
+        if (errorType === PinVerificationError.EDIT_PIN && errorValue)
+            return <AlertInline message={LL.BD_USER_EDIT_PASSWORD_ERROR()} status={"error"} variant={"inline"} />
 
         return MESSAGE_FAKE_PLACEHOLDER
-    }, [isPINRetype, LL, errorType, errorValue, styles.messageContainer, styles.messageText])
-
-    const getMessageTextColor = useMemo(() => {
-        if (isPINRetype) return theme.colors.text
-        if (isPinError) return theme.colors.danger
-        return undefined
-    }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.text])
+    }, [isPINRetype, LL, errorType, errorValue])
 
     const getPinMessage = useMemo(() => {
-        return <Text style={[styles.pinMessage, { color: getMessageTextColor }]}>{getMessageText}</Text>
-    }, [styles.pinMessage, getMessageTextColor, getMessageText])
+        return <Text style={themedStyles.messageTextStyle}>{getMessageText}</Text>
+    }, [getMessageText, themedStyles.messageTextStyle])
 
     return (
-        <View style={styles.container}>
-            <View style={styles.innerContainer}>
+        <View style={themedStyles.container}>
+            <View style={themedStyles.pinsContainer}>
                 {Array.from(Array(digitNumber).keys()).map((digit, idx) => {
                     const digitExist = pin[idx]
                     return (
                         <View
                             key={digit}
-                            style={[styles.pinBase, ...(digitExist ? [styles.pressed] : [styles.notPressed])]}
+                            style={[
+                                themedStyles.pinBase,
+                                ...(digitExist ? [themedStyles.pressed] : [themedStyles.notPressed]),
+                            ]}
                         />
                     )
                 })}
@@ -78,42 +68,28 @@ export const StandalonePasswordPins: FC<Props> = memo(({ pin, digitNumber, isPIN
 const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
+            height: 48,
             alignItems: "center",
+            justifyContent: "space-between",
         },
-        innerContainer: {
+        pinsContainer: {
+            height: 8,
             flexDirection: "row",
             justifyContent: "center",
         },
-        messageContainer: {
-            justifyContent: "center",
-            alignItems: "center",
-            borderRadius: 16,
-            height: 16,
-            width: 16,
-            borderWidth: 1,
-            borderColor: theme.colors.danger,
-        },
-        messageText: {
-            color: theme.colors.danger,
-            fontSize: 10,
-        },
-        pinMessage: {
-            opacity: isMessageVisible ? 1 : 0,
-            fontSize: 16,
-            fontWeight: "normal",
-            alignItems: "center",
-            marginVertical: 18,
-        },
         pinBase: {
-            width: valueToHP[12],
-            height: valueToHP[12],
-            borderRadius: 6,
-            marginHorizontal: 10,
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            marginHorizontal: 8,
         },
         pressed: {
-            backgroundColor: theme.colors.text,
+            backgroundColor: theme.colors.pinFilled,
         },
         notPressed: {
-            backgroundColor: COLORS.DARK_PURPLE_DISABLED,
+            backgroundColor: theme.colors.pinEmpty,
+        },
+        messageTextStyle: {
+            opacity: isMessageVisible ? 1 : 0,
         },
     })
