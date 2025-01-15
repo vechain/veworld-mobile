@@ -35,7 +35,7 @@ type DAppsGridProps = {
 
 const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
     const flatListRef = useRef(null)
-    const { increaseDappCounter, featureEnabled } = useNotifications()
+    const { increaseDappCounter } = useNotifications()
     useScrollToTop(flatListRef)
     const columns = 4
     const columnsGap = 24
@@ -55,7 +55,7 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
                         columnsGap={24}
                         dapp={item}
                         onPress={() => {
-                            if (item.id && featureEnabled) {
+                            if (item.id) {
                                 increaseDappCounter(item.id)
                             }
                             onDAppPress({ href: item.href })
@@ -64,7 +64,7 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
                 </BaseView>
             )
         },
-        [dapps.length, featureEnabled, increaseDappCounter, onDAppPress],
+        [dapps.length, increaseDappCounter, onDAppPress],
     )
 
     return (

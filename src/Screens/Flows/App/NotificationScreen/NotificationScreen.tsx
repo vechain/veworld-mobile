@@ -47,6 +47,7 @@ export const NotificationScreen = () => {
     } = useNotifications()
 
     const areNotificationsEnabled = !!isUserOptedIn && !!isNotificationPermissionEnabled
+    const hasReachedSubscriptionLimit = Object.keys(tags).length === SUBSCRIPTION_LIMIT
 
     const updateTags = useCallback(() => {
         getTags().then(setTags)
@@ -90,76 +91,44 @@ export const NotificationScreen = () => {
         resetLastNotificationReminderTimestamp,
     ])
 
+    const showSubscriptionLimitReachedWarning = useCallback(() => {
+        showWarningToast({
+            text1: LL.PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE(),
+            text2: LL.PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_DESC(),
+        })
+    }, [LL])
+
+    const toogleSubscriptionSwitch = useCallback(
+        (tag: string) => (value: boolean) => {
+            if (value) {
+                if (hasReachedSubscriptionLimit) {
+                    showSubscriptionLimitReachedWarning()
+                    return
+                }
+
+                addTag(tag, "true")
+            } else {
+                removeTag(tag)
+            }
+
+            updateTags()
+        },
+        [addTag, hasReachedSubscriptionLimit, removeTag, showSubscriptionLimitReachedWarning, updateTags],
+    )
+
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<VeBetterDaoDapp>) => {
             const id = item.id
             const value = !!tags[id]
 
-            const onSwitchChange = (_value: boolean) => {
-                if (_value) {
-                    if (Object.keys(tags).length === SUBSCRIPTION_LIMIT) {
-                        showWarningToast({
-                            text1: LL.PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE(),
-                            text2: LL.PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_DESC(),
-                        })
-                        return
-                    }
-
-                    addTag(id, "true")
-                } else {
-                    removeTag(id)
-                }
-
-                updateTags()
-            }
-
-            return <EnableFeature title={item.name} onValueChange={onSwitchChange} value={value} />
+            return <EnableFeature title={item.name} onValueChange={toogleSubscriptionSwitch(id)} value={value} />
         },
-        [LL, addTag, removeTag, tags, updateTags],
+        [tags, toogleSubscriptionSwitch],
     )
 
     const renderSeparator = useCallback(() => {
         return <BaseSpacer height={16} />
     }, [])
-
-    const onVeWorldFeatureAndUpdatePress = useCallback(
-        (newValue: boolean) => {
-            if (newValue) {
-                addTag(veWorldFeatureUpdateTagKey, "true")
-            } else {
-                removeTag(veWorldFeatureUpdateTagKey)
-            }
-
-            updateTags()
-        },
-        [addTag, removeTag, updateTags],
-    )
-
-    const onNewDappsListedPress = useCallback(
-        (newValue: boolean) => {
-            if (newValue) {
-                addTag(newDappsListedTagKey, "true")
-            } else {
-                removeTag(newDappsListedTagKey)
-            }
-
-            updateTags()
-        },
-        [addTag, removeTag, updateTags],
-    )
-
-    const onVoteReminderPress = useCallback(
-        (newValue: boolean) => {
-            if (newValue) {
-                addTag(voteReminderTagKey, "true")
-            } else {
-                removeTag(voteReminderTagKey)
-            }
-
-            updateTags()
-        },
-        [addTag, removeTag, updateTags],
-    )
 
     const ListHeaderComponent = useMemo(() => {
         return (
@@ -183,13 +152,13 @@ export const NotificationScreen = () => {
                         <BaseSpacer height={16} />
                         <EnableFeature
                             title={LL.PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE()}
-                            onValueChange={onVeWorldFeatureAndUpdatePress}
+                            onValueChange={toogleSubscriptionSwitch(veWorldFeatureUpdateTagKey)}
                             value={!!tags[veWorldFeatureUpdateTagKey]}
                         />
                         <BaseSpacer height={16} />
                         <EnableFeature
                             title={LL.PUSH_NOTIFICATIONS_NEW_APP_LISTED()}
-                            onValueChange={onNewDappsListedPress}
+                            onValueChange={toogleSubscriptionSwitch(newDappsListedTagKey)}
                             value={!!tags[newDappsListedTagKey]}
                         />
                         <BaseSpacer height={40} />
@@ -198,7 +167,7 @@ export const NotificationScreen = () => {
                         <BaseSpacer height={16} />
                         <EnableFeature
                             title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()}
-                            onValueChange={onVoteReminderPress}
+                            onValueChange={toogleSubscriptionSwitch(voteReminderTagKey)}
                             value={!!tags[voteReminderTagKey]}
                         />
                         <BaseSpacer height={40} />
@@ -224,13 +193,11 @@ export const NotificationScreen = () => {
         LL,
         areNotificationsEnabled,
         isMainnet,
-        onNewDappsListedPress,
-        onVeWorldFeatureAndUpdatePress,
-        onVoteReminderPress,
         searchText,
         tags,
         theme.colors.primary,
         toggleNotificationsSwitch,
+        toogleSubscriptionSwitch,
     ])
 
     const Skeleton = useMemo(() => {

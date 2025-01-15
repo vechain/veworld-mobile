@@ -232,12 +232,15 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const increaseDappCounter = useCallback(
         (dappId: string) => {
-            if (isMainnet) {
-                const id = ecosystemDappIdToVeBetterDappId[dappId]
-                dispatch(increaseDappVisitCounter({ dappId: id ?? dappId }))
+            const id = Object.values(ecosystemDappIdToVeBetterDappId).includes(dappId)
+                ? dappId
+                : ecosystemDappIdToVeBetterDappId[dappId]
+
+            if (id && isMainnet && featureEnabled) {
+                dispatch(increaseDappVisitCounter({ dappId: id }))
             }
         },
-        [dispatch, isMainnet],
+        [dispatch, featureEnabled, isMainnet],
     )
 
     const contextValue = useMemo(() => {
