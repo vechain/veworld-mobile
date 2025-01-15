@@ -2,26 +2,26 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
 import Animated from "react-native-reanimated"
-import { TokenWithCompleteInfo, useTheme, useTokenWithCompleteInfo } from "~Hooks"
+import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { BigNutils } from "~Utils"
-import { COLORS, VOT3 } from "~Constants"
+import { B3TR, COLORS, VOT3 } from "~Constants"
 import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
-    b3trToken: TokenWithCompleteInfo
     isBalanceVisible: boolean
 }
 
-export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => {
+export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
+    const vot3Token = useTokenWithCompleteInfo(VOT3)
+    const b3trToken = useTokenWithCompleteInfo(B3TR)
+
     const { isTokensOwnedLoading, exchangeRate, isPositive24hChange, change24h, isLoading } =
         useTokenCardFiatInfo(b3trToken)
-
-    const vot3Token = useTokenWithCompleteInfo(VOT3)
 
     const veB3trBalance = BigNutils(vot3Token.tokenUnitFullBalance).plus(b3trToken.tokenUnitFullBalance)
     const veB3trFiat = BigNutils(veB3trBalance.toString).multiply(exchangeRate ?? 0)
