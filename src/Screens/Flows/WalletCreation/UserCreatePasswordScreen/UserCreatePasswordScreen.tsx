@@ -4,7 +4,7 @@ import { useI18nContext } from "~i18n"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
 import { useAnalyticTracking, useTheme } from "~Hooks"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, isSmallScreen } from "~Constants"
 import HapticsService from "~Services/HapticsService"
 
 const digitNumber = 6
@@ -79,14 +79,14 @@ export const UserCreatePasswordScreen: React.FC<UserCreatePasswordScreenProps> =
                     <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>
                         {LL.SB_USER_PASSWORD()}
                     </BaseText>
-                    <BaseSpacer height={80} />
+                    <BaseSpacer height={isSmallScreen ? 45 : 80} />
                     <PasswordPins
                         pin={pin}
                         digitNumber={digitNumber}
                         isPINRetype={isPinRetype}
                         isPinError={isConfirmationError}
                     />
-                    <BaseSpacer height={80} />
+                    <BaseSpacer height={isSmallScreen ? 32 : 80} />
                     <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={handleOnDigitDelete} />
                 </BaseView>
             }

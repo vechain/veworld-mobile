@@ -90,10 +90,10 @@ export const LockScreen: React.FC<Props> = memo(({ onSuccess, onClose }) => {
                 <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>
                     {subTitle}
                 </BaseText>
-                <BaseSpacer height={isSmallScreen ? 32 : 80} />
+                <BaseSpacer height={isSmallScreen ? 45 : 80} />
 
                 <PasswordPins _digitNumber={digitNumber} pin={pin} isPinError={isError} />
-                <BaseSpacer height={80} />
+                <BaseSpacer height={isSmallScreen ? 32 : 80} />
                 <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
             </BaseView>
         </BaseView>

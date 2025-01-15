@@ -82,9 +82,9 @@ export const StandaloneLockScreen: React.FC<Props> = memo(({ onPinInserted }) =>
             </View>
             <View style={styles.container}>
                 <Text style={styles.subTitle}>{subTitle}</Text>
-                <View style={{ marginTop: isSmallScreen ? 32 : 80 }} />
+                <View style={{ marginTop: isSmallScreen ? 45 : 80 }} />
                 <StandalonePasswordPins digitNumber={digitNumber} pin={pin} isPinError={isError} />
-                <View style={{ height: 80 }} />
+                <View style={{ marginTop: isSmallScreen ? 32 : 80 }} />
                 <StandaloneNumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
             </View>
         </SafeAreaView>

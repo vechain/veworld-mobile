@@ -4,7 +4,7 @@ import { BaseSpacer, BaseText, BaseView, NumPad, PasswordPins, StorageEncryption
 import { useI18nContext } from "~i18n"
 import { LOCKSCREEN_SCENARIO } from "./Enums"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, isSmallScreen } from "~Constants"
 
 type Props = {
     onSuccess: (password: string) => void
@@ -174,9 +174,9 @@ export const LockScreen: React.FC<Props> = memo(({ onSuccess, onBack, scenario, 
                     <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>
                         {subTitle}
                     </BaseText>
-                    <BaseSpacer height={80} />
+                    <BaseSpacer height={isSmallScreen ? 45 : 80} />
                     <PasswordPins digitNumber={digitNumber} pin={pin} isPinError={isError} />
-                    <BaseSpacer height={80} />
+                    <BaseSpacer height={isSmallScreen ? 32 : 80} />
                     <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
                 </BaseView>
             }
