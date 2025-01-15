@@ -34,7 +34,7 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
                 </BaseView>
             ) : (
                 <BaseText
-                    typographyFont="captionRegular"
+                    typographyFont="smallCaptionRegular"
                     color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
                     {change24h}
                 </BaseText>
@@ -45,6 +45,6 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
 
 const baseStyles = StyleSheet.create({
     container: {
-        alignItems: "flex-start",
+        alignItems: "flex-end",
     },
 })
