@@ -45,6 +45,6 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
 
 const baseStyles = StyleSheet.create({
     container: {
-        alignItems: "flex-end",
+        alignItems: "flex-start",
     },
 })
