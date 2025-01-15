@@ -1,6 +1,6 @@
-import React, { memo, useMemo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { useCopyClipboard, useThemedStyles, useVns } from "~Hooks"
+import { useCopyClipboard, useSetSelectedAccount, useThemedStyles, useVns } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import { BaseSpacer, BaseText, BaseView, BaseButton, BaseIcon, BaseTouchable } from "~Components"
 import { WalletAccount } from "~Model"
@@ -8,7 +8,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import { AccountFiatBalance } from "~Components/Reusable"
+import { AccountDetailFiatBalance } from "./components"
 
 type Props = {
     account: WalletAccount
@@ -24,6 +24,8 @@ export const AccountDetailBox: React.FC<Props> = memo(
         const { styles, theme } = useThemedStyles(baseStyles)
         const { LL } = useI18nContext()
         const nav = useNavigation()
+
+        const { onSetSelectedAccount } = useSetSelectedAccount()
 
         const { name: vnsName, address: vnsAddress } = useVns({
             name: "",
@@ -42,6 +44,11 @@ export const AccountDetailBox: React.FC<Props> = memo(
             () => vnsName || AddressUtils.humanAddress(vnsAddress || account.address, 4, 6),
             [account.address, vnsAddress, vnsName],
         )
+
+        const onClaimPress = useCallback(() => {
+            onSetSelectedAccount({ address: account.address })
+            nav.navigate(Routes.CLAIM_USERNAME)
+        }, [account.address, nav, onSetSelectedAccount])
 
         return (
             <BaseView
@@ -68,8 +75,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                         </BaseTouchable>
 
                         <BaseSpacer height={4} />
-                        {/* <BaseText typographyFont="captionRegular">{fiatBalance}</BaseText> */}
-                        <AccountFiatBalance typographyFont="captionRegular" isVisible={isBalanceVisible} />
+                        <AccountDetailFiatBalance account={account} isVisible={isBalanceVisible} isLoading={false} />
                     </BaseView>
                 </BaseView>
                 {/* Actions */}
@@ -77,9 +83,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                     {canClaimUsername && (
                         <BaseButton
                             title={LL.BTN_CLAIM()}
-                            action={() => {
-                                nav.navigate(Routes.CLAIM_USERNAME)
-                            }}
+                            action={onClaimPress}
                             bgColor={theme.colors.actionBanner.buttonBackground}
                             textColor={theme.colors.actionBanner.buttonText}
                             style={styles.claimBtn}

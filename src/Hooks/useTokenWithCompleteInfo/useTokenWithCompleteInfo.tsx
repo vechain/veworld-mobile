@@ -1,7 +1,7 @@
 import { TokenInfoResponse, getCoinGeckoIdBySymbol, useExchangeRate, useTokenInfo } from "~Api/Coingecko"
 import { useBalances } from "~Hooks/useBalances"
 import { FungibleToken } from "~Model"
-import { selectBalanceForToken, selectCurrency, useAppSelector } from "~Storage/Redux"
+import { selectBalanceForToken, selectBalanceForTokenByAccount, selectCurrency, useAppSelector } from "~Storage/Redux"
 
 export type TokenWithCompleteInfo = FungibleToken & {
     fiatBalance: string
@@ -18,8 +18,12 @@ export type TokenWithCompleteInfo = FungibleToken & {
  * @param token  token with balance (tokenAddress, symbol, balance, decimals)
  * @returns  token with complete info (fiatBalance, tokenUnitBalance, exchangeRate, exchangeRateCurrency, exchangeRateLoading, tokenInfo, tokenInfoLoading)
  */
-export const useTokenWithCompleteInfo = (token: FungibleToken): TokenWithCompleteInfo => {
-    const balance = useAppSelector(state => selectBalanceForToken(state, token.address))
+export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: string): TokenWithCompleteInfo => {
+    const balance = useAppSelector(state =>
+        accountAddress
+            ? selectBalanceForTokenByAccount(state, token.address, accountAddress)
+            : selectBalanceForToken(state, token.address),
+    )
 
     const currency = useAppSelector(selectCurrency)
     const { data: exchangeRate, isLoading: exchangeRateLoading } = useExchangeRate({

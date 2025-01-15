@@ -58,7 +58,6 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    //BUG: Do not reload automatically when domain is registered
     const claimableUsernames = useMemo(() => {
         if (!domains || domains.length === 0)
             return deviceAccounts
