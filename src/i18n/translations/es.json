@@ -643,6 +643,7 @@
   "SB_IMPORT_WALLET_TYPE_HARDWARE": "Cartera de hardware",
   "SB_IMPORT_WALLET_TYPE_SEED": "Cartera local",
   "SB_INSERT_KEYSTORE_PASSWORD": "Introduce tu contraseña de almacén de claves",
+  "SB_MY_TOKENS": "Mis tokens",
   "SB_NO_TRANSACTIONS": "Tus actividades aparecerán aquí",
   "SB_PASSWORD_AUTH": "Autorización por contraseña",
   "SB_RECOVERY_PHRASE": "Frase de recuperación",

@@ -643,6 +643,7 @@
   "SB_IMPORT_WALLET_TYPE_HARDWARE": "Donanım Cüzdanı",
   "SB_IMPORT_WALLET_TYPE_SEED": "Yerel cüzdan",
   "SB_INSERT_KEYSTORE_PASSWORD": "Anahtar mağaza şifrenizi girin",
+  "SB_MY_TOKENS": "Jetonlarım",
   "SB_NO_TRANSACTIONS": "Aktiviteleriniz burada görünecek",
   "SB_PASSWORD_AUTH": "Şifre yetkilendirmesi",
   "SB_RECOVERY_PHRASE": "Kurtarma ifadesi",

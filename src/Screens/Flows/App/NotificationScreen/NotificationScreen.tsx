@@ -14,10 +14,11 @@ import {
     showWarningToast,
     useNotifications,
 } from "~Components"
+import { newDappsListedTagKey, veWorldFeatureUpdateTagKey, voteReminderTagKey } from "~Constants"
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { VeBetterDaoDapp } from "~Model"
-import { updateLastNotificationReminder, useAppDispatch } from "~Storage/Redux"
+import { NETWORK_TYPE, VeBetterDaoDapp } from "~Model"
+import { selectSelectedNetwork, updateLastNotificationReminder, useAppDispatch, useAppSelector } from "~Storage/Redux"
 
 const SUBSCRIPTION_LIMIT = 10
 
@@ -25,6 +26,10 @@ export const NotificationScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const { styles, theme } = useThemedStyles(baseStyle)
+
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
+
     const { data = [], error, isPending } = useVeBetterDaoDapps()
     const { getTags, addTag, removeTag } = useNotifications()
 
@@ -117,6 +122,45 @@ export const NotificationScreen = () => {
         return <BaseSpacer height={16} />
     }, [])
 
+    const onVeWorldFeatureAndUpdatePress = useCallback(
+        (newValue: boolean) => {
+            if (newValue) {
+                addTag(veWorldFeatureUpdateTagKey, "true")
+            } else {
+                removeTag(veWorldFeatureUpdateTagKey)
+            }
+
+            updateTags()
+        },
+        [addTag, removeTag, updateTags],
+    )
+
+    const onNewDappsListedPress = useCallback(
+        (newValue: boolean) => {
+            if (newValue) {
+                addTag(newDappsListedTagKey, "true")
+            } else {
+                removeTag(newDappsListedTagKey)
+            }
+
+            updateTags()
+        },
+        [addTag, removeTag, updateTags],
+    )
+
+    const onVoteReminderPress = useCallback(
+        (newValue: boolean) => {
+            if (newValue) {
+                addTag(voteReminderTagKey, "true")
+            } else {
+                removeTag(voteReminderTagKey)
+            }
+
+            updateTags()
+        },
+        [addTag, removeTag, updateTags],
+    )
+
     const ListHeaderComponent = useMemo(() => {
         return (
             <>
@@ -132,45 +176,62 @@ export const NotificationScreen = () => {
                     </BaseView>
                 </BaseCard>
                 <BaseSpacer height={24} />
-                <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_TRANSACTION_AND_TOKENS()}</BaseText>
-                <BaseSpacer height={16} />
-                <EnableFeature
-                    title={LL.PUSH_NOTIFICATIONS_TRANSACTION_RECEIVED()}
-                    onValueChange={() => {}}
-                    value={false}
-                />
-                <BaseSpacer height={40} />
-                <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
-                <BaseSpacer height={16} />
-                <EnableFeature title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()} onValueChange={() => {}} value={false} />
-                <BaseSpacer height={40} />
-                <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
-                <BaseSpacer height={16} />
-                <EnableFeature
-                    title={LL.PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE()}
-                    onValueChange={() => {}}
-                    value={false}
-                />
-                <BaseSpacer height={16} />
-                <EnableFeature title={LL.PUSH_NOTIFICATIONS_NEW_APP_LISTED()} onValueChange={() => {}} value={false} />
-                <BaseSpacer height={40} />
 
                 {areNotificationsEnabled && (
                     <>
-                        <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_DAPPS()}</BaseText>
+                        <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
                         <BaseSpacer height={16} />
-                        <AnimatedSearchBar
-                            placeholder={LL.PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER()}
-                            value={searchText}
-                            iconColor={theme.colors.primary}
-                            onTextChange={setSearchText}
+                        <EnableFeature
+                            title={LL.PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE()}
+                            onValueChange={onVeWorldFeatureAndUpdatePress}
+                            value={!!tags[veWorldFeatureUpdateTagKey]}
                         />
+                        <BaseSpacer height={16} />
+                        <EnableFeature
+                            title={LL.PUSH_NOTIFICATIONS_NEW_APP_LISTED()}
+                            onValueChange={onNewDappsListedPress}
+                            value={!!tags[newDappsListedTagKey]}
+                        />
+                        <BaseSpacer height={40} />
+
+                        <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
+                        <BaseSpacer height={16} />
+                        <EnableFeature
+                            title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()}
+                            onValueChange={onVoteReminderPress}
+                            value={!!tags[voteReminderTagKey]}
+                        />
+                        <BaseSpacer height={40} />
+
+                        {isMainnet && (
+                            <>
+                                <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_DAPPS()}</BaseText>
+                                <BaseSpacer height={16} />
+                                <AnimatedSearchBar
+                                    placeholder={LL.PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER()}
+                                    value={searchText}
+                                    iconColor={theme.colors.primary}
+                                    onTextChange={setSearchText}
+                                />
+                            </>
+                        )}
                     </>
                 )}
                 <BaseSpacer height={12} />
             </>
         )
-    }, [LL, areNotificationsEnabled, searchText, theme.colors.primary, toggleNotificationsSwitch])
+    }, [
+        LL,
+        areNotificationsEnabled,
+        isMainnet,
+        onNewDappsListedPress,
+        onVeWorldFeatureAndUpdatePress,
+        onVoteReminderPress,
+        searchText,
+        tags,
+        theme.colors.primary,
+        toggleNotificationsSwitch,
+    ])
 
     const Skeleton = useMemo(() => {
         return (
@@ -194,7 +255,7 @@ export const NotificationScreen = () => {
     const DappsList = useMemo(() => {
         return !isPending && !error ? (
             <FlatList
-                data={areNotificationsEnabled ? dapps : []}
+                data={areNotificationsEnabled && isMainnet ? dapps : []}
                 keyExtractor={item => item.id}
                 ItemSeparatorComponent={renderSeparator}
                 ListFooterComponent={<BaseSpacer height={40} />}
@@ -206,7 +267,17 @@ export const NotificationScreen = () => {
         ) : (
             Skeleton
         )
-    }, [ListHeaderComponent, Skeleton, areNotificationsEnabled, dapps, error, isPending, renderItem, renderSeparator])
+    }, [
+        ListHeaderComponent,
+        Skeleton,
+        areNotificationsEnabled,
+        dapps,
+        error,
+        isMainnet,
+        isPending,
+        renderItem,
+        renderSeparator,
+    ])
 
     useEffect(() => {
         filterDapps(searchText)

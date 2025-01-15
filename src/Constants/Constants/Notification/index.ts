@@ -1,4 +1,7 @@
 export const veBetterDaoTagKey = "VeBetterDao"
+export const veWorldFeatureUpdateTagKey = "VeWorldFeatureUpdate"
+export const newDappsListedTagKey = "NewDappsListed"
+export const voteReminderTagKey = "VoteReminder"
 
 export const ecosystemDappIdToVeBetterDappId = {
     "vet.mugshot": "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",

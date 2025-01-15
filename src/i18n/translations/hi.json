@@ -643,6 +643,7 @@
   "SB_IMPORT_WALLET_TYPE_HARDWARE": "हार्डवेयर वॉलेट",
   "SB_IMPORT_WALLET_TYPE_SEED": "स्थानीय वॉलेट",
   "SB_INSERT_KEYSTORE_PASSWORD": "अपना कीस्टोर पासवर्ड दर्ज करें",
+  "SB_MY_TOKENS": "मेरे टोकन",
   "SB_NO_TRANSACTIONS": "आपकी गतिविधियाँ यहाँ दिखाई देंगी",
   "SB_PASSWORD_AUTH": "पासवर्ड प्रमाणीकरण",
   "SB_RECOVERY_PHRASE": "रिकवरी वाक्यांश",

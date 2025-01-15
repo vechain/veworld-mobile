@@ -643,6 +643,7 @@
   "SB_IMPORT_WALLET_TYPE_HARDWARE": "Hårdvaruplånbok",
   "SB_IMPORT_WALLET_TYPE_SEED": "Lokal plånbok",
   "SB_INSERT_KEYSTORE_PASSWORD": "Ange ditt keystore-lösenord",
+  "SB_MY_TOKENS": "Mina tokens",
   "SB_NO_TRANSACTIONS": "Dina aktiviteter kommer att visas här",
   "SB_PASSWORD_AUTH": "Lösenordsautentisering",
   "SB_RECOVERY_PHRASE": "Återställningsfras",

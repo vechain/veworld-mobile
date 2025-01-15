@@ -643,6 +643,7 @@
   "SB_IMPORT_WALLET_TYPE_HARDWARE": "硬體錢包",
   "SB_IMPORT_WALLET_TYPE_SEED": "本地錢包",
   "SB_INSERT_KEYSTORE_PASSWORD": "輸入您的金鑰庫密碼",
+  "SB_MY_TOKENS": "我的代幣",
   "SB_NO_TRANSACTIONS": "您的活動將出現在這裡",
   "SB_PASSWORD_AUTH": "密碼授權",
   "SB_RECOVERY_PHRASE": "恢復短語",

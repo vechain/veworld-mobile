@@ -643,6 +643,7 @@
   "SB_IMPORT_WALLET_TYPE_HARDWARE": "하드웨어 지갑",
   "SB_IMPORT_WALLET_TYPE_SEED": "로컬 지갑",
   "SB_INSERT_KEYSTORE_PASSWORD": "키스토어 비밀번호를 입력하세요",
+  "SB_MY_TOKENS": "내 토큰",
   "SB_NO_TRANSACTIONS": "여기에 활동이 표시됩니다",
   "SB_PASSWORD_AUTH": "비밀번호 인증",
   "SB_RECOVERY_PHRASE": "복구 문구",

@@ -1,14 +1,12 @@
 import React, { useCallback } from "react"
-import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout, useNotifications } from "~Components"
+import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
 import { useBottomSheetModal } from "~Hooks"
 import { Locales, useI18nContext } from "~i18n"
-import { NETWORK_TYPE } from "~Model"
 import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
 import {
     selectAreDevFeaturesEnabled,
     selectHideTokensWithNoBalance,
     selectLanguage,
-    selectSelectedNetwork,
     selectSentryTrackingEnabled,
     setHideTokensWithNoBalance,
     setLanguage,
@@ -16,13 +14,11 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { ChangeCurrency, ChangeLanguage, ChangeTheme, NotificationBox, SelectLanguageBottomSheet } from "./Components"
+import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
 import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {
     const { LL, setLocale } = useI18nContext()
-    const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
     const {
         ref: selectLanguageSheetRef,
@@ -36,8 +32,6 @@ export const GeneralScreen = () => {
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
     const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
-
-    const { featureEnabled } = useNotifications()
 
     const toggleSentryTrackingSwitch = useCallback(
         (newValue: boolean) => {
@@ -100,12 +94,6 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
                     <BaseSpacer height={20} />
                     <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
-                    {isMainnet && featureEnabled && (
-                        <>
-                            <BaseSpacer height={20} />
-                            <NotificationBox />
-                        </>
-                    )}
 
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="bodyMedium" my={8}>

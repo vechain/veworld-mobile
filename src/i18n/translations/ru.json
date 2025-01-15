@@ -643,6 +643,7 @@
   "SB_IMPORT_WALLET_TYPE_HARDWARE": "Аппаратный кошелек",
   "SB_IMPORT_WALLET_TYPE_SEED": "Локальный кошелек",
   "SB_INSERT_KEYSTORE_PASSWORD": "Введите пароль хранилища ключей",
+  "SB_MY_TOKENS": "Мои токены",
   "SB_NO_TRANSACTIONS": "Ваши действия появятся здесь",
   "SB_PASSWORD_AUTH": "Авторизация пароля",
   "SB_RECOVERY_PHRASE": "Фраза восстановления",

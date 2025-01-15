@@ -643,6 +643,7 @@
   "SB_IMPORT_WALLET_TYPE_HARDWARE": "ハードウェアウォレット",
   "SB_IMPORT_WALLET_TYPE_SEED": "ローカルウォレット",
   "SB_INSERT_KEYSTORE_PASSWORD": "キーストアパスワードを入力してください",
+  "SB_MY_TOKENS": "私のトークン",
   "SB_NO_TRANSACTIONS": "アクティビティがここに表示されます",
   "SB_PASSWORD_AUTH": "パスワード認証",
   "SB_RECOVERY_PHRASE": "リカバリフレーズ",

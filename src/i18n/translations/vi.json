@@ -643,6 +643,7 @@
   "SB_IMPORT_WALLET_TYPE_HARDWARE": "Ví phần cứng",
   "SB_IMPORT_WALLET_TYPE_SEED": "Ví cục bộ",
   "SB_INSERT_KEYSTORE_PASSWORD": "Nhập mật khẩu kho khóa của bạn",
+  "SB_MY_TOKENS": "Token của tôi",
   "SB_NO_TRANSACTIONS": "Hoạt động của bạn sẽ hiện ở đây",
   "SB_PASSWORD_AUTH": "Xác thực mật khẩu",
   "SB_RECOVERY_PHRASE": "Cụm từ khôi phục",
