@@ -45,7 +45,7 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
             <FiatBalance
                 typographyFont="captionRegular"
                 color={theme.colors.tokenCardText}
-                balances={[veB3trFiat.toString]}
+                balances={[veB3trFiat.toCurrencyFormat_string(2)]}
                 isVisible={isBalanceVisible}
             />
         )
