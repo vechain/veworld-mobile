@@ -35,10 +35,9 @@ export const useActivities = () => {
         page.current = page.current + 1
     }, [])
 
-    const sortByTimestamp = useCallback(
-        (_activities: Activity[]) => _activities.sort((a, b) => b.timestamp - a.timestamp),
-        [],
-    )
+    const sortByTimestamp = useCallback((_activities: Activity[]) => {
+        return _activities.sort((a, b) => b.timestamp - a.timestamp)
+    }, [])
 
     const updateActivitiesState = useCallback(
         (newActivities: Activity[], reset: boolean = false) => {
