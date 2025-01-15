@@ -18,16 +18,13 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
     const theme = useTheme()
     const { LL } = useI18nContext()
 
-    const {
-        isTokensOwnedLoading,
-        exchangeRate,
-        isPositive24hChange,
-        change24h,
-        isLoading,
-        fiatBalance: b3trFiatBalance,
-    } = useTokenCardFiatInfo(b3trToken)
+    const { isTokensOwnedLoading, exchangeRate, isPositive24hChange, change24h, isLoading } =
+        useTokenCardFiatInfo(b3trToken)
 
     const vot3Token = useTokenWithCompleteInfo(VOT3)
+
+    const veB3trBalance = BigNutils(vot3Token.tokenUnitFullBalance).plus(b3trToken.tokenUnitFullBalance)
+    const veB3trFiat = BigNutils(veB3trBalance.toString).multiply(exchangeRate ?? 0)
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -44,17 +41,24 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
             )
         if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
 
-        const vot3FiatBalance = BigNutils(vot3Token.tokenUnitBalance).multiply(exchangeRate).toString
-
         return (
             <FiatBalance
                 typographyFont="captionRegular"
                 color={theme.colors.tokenCardText}
-                balances={[b3trFiatBalance, vot3FiatBalance]}
+                balances={[veB3trFiat.toString]}
                 isVisible={isBalanceVisible}
             />
         )
-    }, [isTokensOwnedLoading, theme.colors, exchangeRate, LL, vot3Token, b3trFiatBalance, isBalanceVisible])
+    }, [
+        isTokensOwnedLoading,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        theme.colors.tokenCardText,
+        exchangeRate,
+        LL,
+        veB3trFiat,
+        isBalanceVisible,
+    ])
 
     const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
 
