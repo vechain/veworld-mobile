@@ -135,6 +135,16 @@ export const AccountSlice = createSlice({
                 account.vnsName = (AccountUtils.updateAccountVns(account, action.payload) as WalletAccount).vnsName
             })
         },
+        onAccountAttemptClaim: (state, action: PayloadAction<{ address: string }>) => {
+            const { address } = action.payload
+            const accountIdx = state.accounts.findIndex(account =>
+                AddressUtils.compareAddresses(account.address, address),
+            )
+
+            if (accountIdx !== -1) {
+                state.accounts[accountIdx].hasAttemptedClaim = true
+            }
+        },
         resetAccountState: () => initialAccountState,
     },
 })
@@ -149,4 +159,5 @@ export const {
     toggleAccountVisibility,
     resetAccountState,
     setAccountsVns,
+    onAccountAttemptClaim,
 } = AccountSlice.actions

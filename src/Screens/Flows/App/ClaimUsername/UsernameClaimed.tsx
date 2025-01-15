@@ -4,7 +4,7 @@ import { StyleSheet, Text } from "react-native"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useThemedStyles, useVns } from "~Hooks"
 import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+
 import { useI18nContext } from "~i18n"
 
 type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListSettings, Routes.USERNAME_CLAIMED>
@@ -13,13 +13,12 @@ export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
     const { username } = route.params
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyle)
-    const { address } = useAppSelector(selectSelectedAccount)
-    const { refetchVns } = useVns({ address })
+    const { resetVns } = useVns()
 
     const onPress = useCallback(async () => {
-        await refetchVns()
+        resetVns()
         navigation.goBack()
-    }, [navigation, refetchVns])
+    }, [navigation, resetVns])
 
     return (
         <BaseSafeArea>
@@ -33,7 +32,7 @@ export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
 
                     <BaseSpacer height={8} />
 
-                    <BaseText typographyFont="body" align="center" w={40}>
+                    <BaseText typographyFont="body" align="center" w={80}>
                         <Text style={styles.inlineBold}>{username} </Text>
                         {LL.SB_USERNAME_CLAIMED()}
                     </BaseText>

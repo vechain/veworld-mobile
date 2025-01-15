@@ -18,7 +18,7 @@ import {
     useBottomSheetModal,
     useCheckVersion,
     useMemoizedAnimation,
-    // usePrefetchAllVns,
+    usePrefetchAllVns,
     useSetSelectedAccount,
     useTheme,
 } from "~Hooks"
@@ -47,7 +47,7 @@ import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
-    // usePrefetchAllVns()
+    usePrefetchAllVns()
 
     const nav = useNavigation()
 
@@ -163,9 +163,8 @@ export const HomeScreen = () => {
                     }>
                     <BaseView>
                         <BaseView alignItems="center">
-                            <BaseSpacer height={20} />
                             <ClaimUsernameBanner />
-                            <BaseSpacer height={20} />
+                            <BaseSpacer height={8} />
                             <AccountCard
                                 balanceVisible={isBalanceVisible}
                                 openSelectAccountBottomSheet={openSelectAccountBottomSheet}

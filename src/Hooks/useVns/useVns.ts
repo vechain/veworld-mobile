@@ -9,7 +9,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { QueryObserverResult, RefetchOptions, useQuery, useQueryClient } from "@tanstack/react-query"
-import { AccountWithDevice, LocalDevice, Network, NETWORK_TYPE } from "~Model"
+import { LocalDevice, Network, NETWORK_TYPE } from "~Model"
 import { abi } from "thor-devkit"
 import { queryClient } from "~Api/QueryProvider"
 import {
@@ -45,8 +45,8 @@ type SubdomainClaimTransaction = TransactionBody & {
     simulateTransactionOptions: { caller: string }
 }
 
-export const getVnsName = async (thor: Connex.Thor, network: Network, address?: string) => {
-    if (!address) return ""
+export const getVnsNames = async (thor: Connex.Thor, network: Network, addresses?: string[]) => {
+    if (!addresses) return []
     const NETWORK_RESOLVER = VNS_RESOLVER[network.type]
 
     try {
@@ -55,14 +55,20 @@ export const getVnsName = async (thor: Connex.Thor, network: Network, address?: 
         } = await thor
             .account(NETWORK_RESOLVER ?? "")
             .method(abis.VetDomains.getNames)
-            .call([address])
+            .call(addresses)
 
-        // Add VNS to the react-query cache
-        queryClient.setQueryData([names?.[0], address, network.genesis.id], { name: names?.[0], address })
+        const states = (names as string[]).map((name, idx) => {
+            const address = addresses[idx] ?? ""
+            const state = { name, address: address }
 
-        return names?.[0] || ""
+            queryClient.setQueryData(["vns_name", name, address, network.genesis.id], state)
+
+            return state
+        })
+
+        return states
     } catch {
-        return ""
+        return []
     }
 }
 
@@ -78,48 +84,13 @@ export const getVnsAddress = async (thor: Connex.Thor, network: Network, name?: 
 
     if (!isEmpty) {
         // Add VNS to the react-query cache if address is not empty
-        queryClient.setQueryData([name, addresses?.[0], network.genesis.id], { name, address: addresses?.[0] })
+        queryClient.setQueryData(["vns_name", name, addresses?.[0], network.genesis.id], {
+            name,
+            address: addresses?.[0],
+        })
     }
 
     return isEmpty ? undefined : addresses?.[0] || undefined
-}
-
-const namesABi = new abi.Function(abis.VetDomains.getNames)
-
-const getAllAccoutsNameClauses = (addresses: string[], networkType: NETWORK_TYPE) => {
-    const NETWORK_RESOLVER = VNS_RESOLVER[networkType]
-    const clauses: Connex.VM.Clause[] = addresses.map(addr => {
-        return {
-            to: NETWORK_RESOLVER ?? "",
-            value: 0,
-            data: namesABi.encode([addr]),
-        }
-    })
-
-    return clauses
-}
-
-export const getAllVns = async (
-    thor: Connex.Thor,
-    network: Network,
-    accounts: AccountWithDevice[],
-    addresses: string[],
-) => {
-    const clauses = getAllAccoutsNameClauses(addresses, network.type)
-
-    const responses = await thor.explain(clauses).execute()
-
-    const states = responses.map((response, idx) => {
-        const decoded = namesABi.decode(response.data)
-        const address = accounts[idx]?.address ?? ""
-        const vnsName = decoded.names[0]
-        const state = { name: vnsName, address: address }
-
-        queryClient.setQueryData([vnsName, address, network.genesis.id], state)
-
-        return state
-    })
-    return states
 }
 
 export type Vns = {
@@ -131,15 +102,13 @@ type VnsHook = {
     name: string
     address: string
     isLoading: boolean
-    getVnsName: (address: string) => Promise<string | undefined>
+    hasDomain: boolean
+    getVnsName: (address: string) => Promise<Vns[]>
     getVnsAddress: (name: string) => Promise<string | undefined>
     refetchVns: (options?: RefetchOptions) => Promise<QueryObserverResult<Vns, Error>>
-    /**
-     * Get all the VNS name/addresses
-     */
-    getVns: () => Vns[] | undefined
     isSubdomainAvailable: (domainName: string) => Promise<boolean>
     registerSubdomain: (domainName: string, pin?: string) => Promise<boolean>
+    resetVns: () => void
 }
 
 export const useVns = (props?: Vns): VnsHook => {
@@ -148,15 +117,15 @@ export const useVns = (props?: Vns): VnsHook => {
     const network = useAppSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
     const device = useAppSelector(state => selectDevice(state, account.rootAddress))
-    const qc = useQueryClient()
     const trackEvent = useAnalyticTracking()
+    const qc = useQueryClient()
     const { name, address = account.address } = props || {}
 
     const thorClient = useMemo(() => ThorClient.at(network.currentUrl), [network.currentUrl])
 
     const fetchVns = useCallback(async () => {
-        const nameRes = await getVnsName(thor, network, address)
-        const vnsName = nameRes || name
+        const nameRes = await getVnsNames(thor, network, [address])
+        const vnsName = nameRes[0]?.name || name
 
         const addrRes = await getVnsAddress(thor, network, vnsName)
         const vnsAddr = addrRes || address
@@ -171,7 +140,7 @@ export const useVns = (props?: Vns): VnsHook => {
     }, [address, name, network.type])
 
     const queryRes = useQuery<Vns>({
-        queryKey: [name, address, network.genesis.id],
+        queryKey: ["vns_name", name, address, network.genesis.id],
         queryFn: () => fetchVns(),
         enabled: !isQueryDisabled,
         staleTime: 1000 * 60,
@@ -192,10 +161,6 @@ export const useVns = (props?: Vns): VnsHook => {
         },
         [thorClient],
     )
-
-    const getVns = useCallback(() => {
-        return qc.getQueryData<Vns[]>(["vns_names", network.genesis.id])
-    }, [network.genesis.id, qc])
 
     //#region  Subdomain registration
     const getSigner = useCallback(
@@ -400,20 +365,32 @@ export const useVns = (props?: Vns): VnsHook => {
         [LL, buildClaimTx, device, getSigner, signClaimTx, trackEvent],
     )
 
+    const domain = useMemo(() => queryRes.data?.name || name || "", [name, queryRes])
+    const hasDomain = useMemo(() => Boolean(domain), [domain])
+
+    const resetVns = useCallback(() => {
+        qc.invalidateQueries({ queryKey: ["vns_name"] })
+        qc.invalidateQueries({
+            queryKey: ["vns_names", network.genesis.id],
+            refetchType: "all",
+        })
+    }, [network.genesis.id, qc])
+
     return {
         name: queryRes.data?.name || name || "",
         address: queryRes.data?.address || address || "",
+        hasDomain,
         isLoading: queryRes?.isLoading,
-        getVnsName: addr => getVnsName(thor, network, addr),
+        getVnsName: addr => getVnsNames(thor, network, [addr]),
         getVnsAddress: n => getVnsAddress(thor, network, n),
         refetchVns: queryRes?.refetch,
-        getVns,
         registerSubdomain,
         isSubdomainAvailable,
+        resetVns,
     }
 }
 
-export const usePrefetchAllVns = async () => {
+export const usePrefetchAllVns = () => {
     const thor = useThor()
     const network = useAppSelector(selectSelectedNetwork)
     const accounts = useAppSelector(selectAccounts)
@@ -431,7 +408,7 @@ export const usePrefetchAllVns = async () => {
 
     const vnsResults = useQuery({
         queryKey: ["vns_names", network.genesis.id],
-        queryFn: () => getAllVns(thor, network, accounts, addresses),
+        queryFn: () => getVnsNames(thor, network, addresses),
         enabled: !isQueryDisabled,
         staleTime: 1000 * 60,
     })

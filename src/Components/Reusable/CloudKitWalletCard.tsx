@@ -35,9 +35,9 @@ export const CloudKitWalletCard = ({
     const [nameOrAddress, setNameOrAddress] = useState(wallet.firstAccountAddress)
     useEffect(() => {
         const init = async () => {
-            const vnsName = await getVnsName(wallet.firstAccountAddress)
+            const [{ name: vnsName }] = await getVnsName(wallet.firstAccountAddress)
             if (vnsName) {
-                setNameOrAddress(vnsName)
+                setNameOrAddress(vnsName ?? "")
             } else {
                 setNameOrAddress(AddressUtils.humanAddress(wallet.firstAccountAddress, 4, 6))
             }

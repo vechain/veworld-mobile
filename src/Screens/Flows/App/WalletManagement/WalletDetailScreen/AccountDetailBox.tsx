@@ -8,7 +8,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-import AccountFiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/AccountFiatBalance"
+import { AccountFiatBalance } from "~Components/Reusable"
 
 type Props = {
     account: WalletAccount
