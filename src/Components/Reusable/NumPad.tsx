@@ -22,11 +22,11 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
 
     return (
         <BaseView flexDirection="row" flexWrap="wrap" justifyContent="center">
-            {numPad.map((digit, index) => {
+            {numPad.map(digit => {
                 const isDeleteKey = digit === "canc"
                 const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(digit)
                 return (
-                    <BaseView style={baseStyles.width} key={index}>
+                    <BaseView style={baseStyles.width} key={digit}>
                         {digit !== "blank" ? (
                             <Pressable
                                 style={({ pressed }) => [baseStyles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
