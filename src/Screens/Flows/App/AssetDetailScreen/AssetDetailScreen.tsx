@@ -98,7 +98,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
             fixedBody={
                 <ScrollView>
                     <BaseView style={styles.assetDetailsHeader}>
-                        <BaseSpacer height={12} />
                         {token.symbol === B3TR.symbol && (
                             <AlertInline status="info" variant="inline" message={LL.ALERT_TITLE_INVALID_CHARTS()} />
                         )}
@@ -155,8 +154,9 @@ export const AssetDetailScreen = ({ route }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         assetDetailsHeader: {
-            paddingHorizontal: 16,
-            marginTop: 16,
+            marginHorizontal: 16,
+            marginTop: 24,
+            width: "85%",
         },
         assetDetailsBody: {
             paddingHorizontal: 16,
