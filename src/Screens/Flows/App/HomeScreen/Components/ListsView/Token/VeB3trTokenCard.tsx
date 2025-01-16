@@ -3,7 +3,7 @@ import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
 import Animated from "react-native-reanimated"
 import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import { BigNutils } from "~Utils"
+import { BalanceUtils, BigNutils } from "~Utils"
 import { B3TR, COLORS, VOT3 } from "~Constants"
 import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
@@ -20,11 +20,19 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
     const vot3Token = useTokenWithCompleteInfo(VOT3)
     const b3trToken = useTokenWithCompleteInfo(B3TR)
 
-    const { isTokensOwnedLoading, exchangeRate, isPositive24hChange, change24h, isLoading } =
-        useTokenCardFiatInfo(b3trToken)
+    const {
+        isTokensOwnedLoading,
+        exchangeRate,
+        isPositive24hChange,
+        change24h,
+        isLoading,
+        fiatBalance: b3trFiat,
+    } = useTokenCardFiatInfo(b3trToken)
 
-    const veB3trBalance = BigNutils(vot3Token.tokenUnitFullBalance).plus(b3trToken.tokenUnitFullBalance)
-    const veB3trFiat = BigNutils(veB3trBalance.toString).multiply(exchangeRate ?? 0)
+    const parseVot3Balance = BigNutils(vot3Token.tokenUnitFullBalance).addTrailingZeros(vot3Token.decimals).toString
+    const vot3FiatBalance = BalanceUtils.getFiatBalance(parseVot3Balance, exchangeRate ?? 0, 18)
+
+    const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trFiat)
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -45,7 +53,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
             <FiatBalance
                 typographyFont="captionRegular"
                 color={theme.colors.tokenCardText}
-                balances={[veB3trFiat.toCurrencyFormat_string(2)]}
+                balances={[veB3trFiatBalance.toString()]}
                 isVisible={isBalanceVisible}
             />
         )
@@ -56,7 +64,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
         theme.colors.tokenCardText,
         exchangeRate,
         LL,
-        veB3trFiat,
+        veB3trFiatBalance,
         isBalanceVisible,
     ])
 
