@@ -38,12 +38,16 @@ jobs:
       name: Build & Test Android Release
       runs-on: ubuntu-latest
       environment: android-release
-      if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }} && needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+      if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
       outputs:
         app: app/build/outputs/apk/release
       env:
         SENTRY_LOG_LEVEL: debug
       steps:
+        - name: Debug Output in Build Job
+          run: |
+            echo "Value of only_test_scripts_changed: ${{ needs.check-build-changes.outputs.only_test_scripts_changed }}"
+
         - name: Generate a token
           id: generate-token
           uses: actions/create-github-app-token@v1
