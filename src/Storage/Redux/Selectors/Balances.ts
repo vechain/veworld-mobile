@@ -191,18 +191,36 @@ export const selectB3trTokenWithBalance = createSelector(
         tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, B3TR.address)),
 )
 
+/**
+ * Get just vot3 balance for selected account
+ */
+export const selectVot3TokenWithBalance = createSelector(
+    selectSelectedAccount,
+    selectTokensWithBalances,
+    (account, tokensWithBalance) =>
+        tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, VOT3.address)),
+)
+
 export const selectSendableTokensWithBalance = createSelector(
     [
         selectVetTokenWithBalance,
         selectB3trTokenWithBalance,
         selectVthoTokenWithBalance,
+        selectVot3TokenWithBalance,
         selectNonVechainTokensWithBalances,
     ],
-    (vetTokenWithBalance, b3trTokenWithBalance, vthoTokenWithBalance, nonVechainTokensWithBalances) => {
+    (
+        vetTokenWithBalance,
+        b3trTokenWithBalance,
+        vthoTokenWithBalance,
+        vot3TokenWithBalance,
+        nonVechainTokensWithBalances,
+    ) => {
         const balances = [
             vetTokenWithBalance,
             b3trTokenWithBalance,
             vthoTokenWithBalance,
+            vot3TokenWithBalance,
             ...nonVechainTokensWithBalances,
         ]
         return balances.filter(

@@ -32,11 +32,11 @@ export const BaseTokenCard = ({
                     <Image source={{ uri: icon }} style={styles.image} />
                 </BaseView>
                 <BaseSpacer width={12} />
-                <BaseView>
+                <BaseView alignItems="flex-start" justifyContent="center">
                     <BaseText typographyFont="captionSemiBold">{symbol}</BaseText>
-                    <BaseView flexDirection="row" alignItems="baseline" justifyContent="flex-start">
+                    <BaseView flexDirection="row">
                         {isLoading ? (
-                            <BaseView flexDirection="row" alignItems="center">
+                            <BaseView flexDirection="row">
                                 <BaseSkeleton
                                     containerStyle={styles.skeletonBalance}
                                     animationDirection="horizontalLeft"
@@ -46,7 +46,7 @@ export const BaseTokenCard = ({
                                 />
                             </BaseView>
                         ) : (
-                            <BaseView flexDirection="row" alignItems="center">
+                            <BaseView flexDirection="row">
                                 <BaseText typographyFont="captionRegular" color={tokenValueLabelColor}>
                                     {isBalanceVisible ? tokenBalance : "•••••"}{" "}
                                 </BaseText>
