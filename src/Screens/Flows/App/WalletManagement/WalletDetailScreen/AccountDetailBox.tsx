@@ -113,7 +113,7 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         selected: {
             borderWidth: 2,
-            borderColor: theme.isDark ? COLORS.PURPLE_300 : theme.colors.primary,
+            borderColor: theme.isDark ? COLORS.PRIMARY_300 : theme.colors.primary,
         },
         notSelected: {
             borderWidth: 1,

@@ -69,7 +69,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 8,
         },
         selectedContainer: {
-            borderColor: theme.isDark ? COLORS.PURPLE_300 : theme.colors.primary,
+            borderColor: theme.isDark ? COLORS.PRIMARY_300 : theme.colors.primary,
             borderWidth: 2,
         },
         unselectedContainer: {
