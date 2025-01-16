@@ -1,7 +1,9 @@
-import { StyleSheet } from "react-native"
+import { Image, StyleSheet } from "react-native"
 import React from "react"
-import { BaseCard, BaseImage, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
+import { useTheme } from "~Hooks"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = {
     name: string
@@ -10,32 +12,45 @@ type Props = {
 }
 
 export const AssetHeader = ({ name, symbol, icon }: Props) => {
+    const theme = useTheme()
+    const nav = useNavigation()
+
     return (
-        <BaseView flexDirection="row">
-            <BaseCard
-                style={[baseStyles.card, { backgroundColor: COLORS.WHITE }]}
-                containerStyle={baseStyles.imageShadow}>
-                <BaseImage uri={icon} style={baseStyles.icon} />
-            </BaseCard>
-            <BaseSpacer width={16} />
-            <BaseView>
-                <BaseText typographyFont="title">{name}</BaseText>
-                <BaseText typographyFont="body">{symbol}</BaseText>
+        <BaseView style={baseStyles.headerContainer} flexDirection="row" w={100} justifyContent="space-between">
+            <BaseIcon haptics="Light" size={24} name="icon-arrow-left" color={theme.colors.text} action={nav.goBack} />
+            <BaseView style={[baseStyles.imageContainer]}>
+                <Image source={{ uri: icon }} style={baseStyles.image} />
+            </BaseView>
+            <BaseSpacer width={24} />
+            <BaseView style={baseStyles.rightElementContainer}>
+                {
+                    <BaseView alignItems="flex-end">
+                        <BaseText typographyFont="subSubTitleSemiBold">{name}</BaseText>
+                        <BaseText typographyFont="captionRegular">{symbol}</BaseText>
+                    </BaseView>
+                }
             </BaseView>
         </BaseView>
     )
 }
 
 const baseStyles = StyleSheet.create({
-    icon: {
-        width: 20,
-        height: 20,
-    },
-    imageShadow: {
-        width: "auto",
-    },
-    card: {
+    imageContainer: {
         borderRadius: 30,
-        padding: 10,
+        padding: 9,
+        backgroundColor: COLORS.GREY_50,
+    },
+    image: { width: 14, height: 14 },
+    rightElementContainer: {
+        position: "absolute",
+        right: 0,
+        top: -6,
+    },
+    headerContainer: {
+        height: 32,
+    },
+    assetDetailsHeader: {
+        paddingHorizontal: 16,
+        marginTop: 16,
     },
 })

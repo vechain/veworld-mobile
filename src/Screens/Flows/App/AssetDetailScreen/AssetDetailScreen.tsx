@@ -93,13 +93,12 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     return (
         <Layout
+            noBackButton
+            fixedHeader={<AssetHeader name={token.name} symbol={token.symbol} icon={token.icon} />}
             fixedBody={
                 <ScrollView>
                     <BaseView style={styles.assetDetailsHeader}>
-                        <AssetHeader name={token.name} symbol={token.symbol} icon={token.icon} />
-
                         <BaseSpacer height={12} />
-
                         {token.symbol === B3TR.symbol && (
                             <AlertInline status="info" variant="inline" message={LL.ALERT_TITLE_INVALID_CHARTS()} />
                         )}
