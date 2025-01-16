@@ -7,7 +7,12 @@ import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { RootStackParamListSettings, Routes } from "~Navigation"
 import { IconKey } from "~Model"
 
-type Excluded = Routes.WALLET_DETAILS | Routes.ICLOUD_MNEMONIC_BACKUP | Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD
+type Excluded =
+    | Routes.WALLET_DETAILS
+    | Routes.ICLOUD_MNEMONIC_BACKUP
+    | Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD
+    | Routes.CLAIM_USERNAME
+    | Routes.USERNAME_CLAIMED
 
 type ExcludedSettingRoutes = Excluded | Routes.SETTINGS_GET_SUPPORT | Routes.SETTINGS_GIVE_FEEDBACK
 

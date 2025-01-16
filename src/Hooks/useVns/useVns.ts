@@ -176,9 +176,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error("Either mnemonic or privateKey must be provided")
 
             try {
-                let privateKey: Uint8Array<ArrayBufferLike> = !wallet.mnemonic
-                    ? Hex.of(wallet.privateKey!).bytes
-                    : new Uint8Array()
+                let privateKey: Uint8Array = !wallet.mnemonic ? Hex.of(wallet.privateKey!).bytes : new Uint8Array()
 
                 if (wallet.mnemonic) {
                     const derivedPrivateKey = HDKey.fromMnemonic(wallet.mnemonic).deriveChild(account.index).privateKey
