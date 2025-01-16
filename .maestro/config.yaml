@@ -1,4 +1,4 @@
-# config.yaml
+# config.yaml - defines all the flows.
 flows:
   - observedWallet/*
   - send/*
