@@ -38,7 +38,6 @@ jobs:
       name: Build & Test Android Release
       runs-on: ubuntu-latest
       environment: android-release
-      if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
       outputs:
         app: app/build/outputs/apk/release
       env:
@@ -50,27 +49,34 @@ jobs:
 
         - name: Generate a token
           id: generate-token
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: actions/create-github-app-token@v1
           with:
             app-id: ${{ secrets.APP_ID }}
             private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
         - name: Set GH_TOKEN environment variable
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           run: echo "GH_TOKEN=${{ steps.generate-token.outputs.token }}" >> $GITHUB_ENV
 
         - name: Checkout repository
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+
           uses: actions/checkout@v3
 
         - name: Setup Node
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: actions/setup-node@v3
           with:
               node-version-file: .nvmrc
               cache: "yarn"
 
         - name: Install & Patch packages
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           run: yarn install
 
         - name: Setup Java
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: actions/setup-java@v3
           with:
               cache: gradle
@@ -79,6 +85,7 @@ jobs:
 
         # Install sentry properties
         - name: Sentry properties
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: mobiledevops/secret-to-file-action@v1
           with:
             base64-encoded-secret: ${{ secrets.ANDROID_SENTRY_PROPERTIES }}
@@ -88,6 +95,7 @@ jobs:
 
         # Decode key_alias 
         - name: Decode KEY_ALIAS
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: mobiledevops/secret-to-file-action@v1
           with:
             base64-encoded-secret: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -97,6 +105,7 @@ jobs:
 
           # Decode key_password
         - name: Decode STORE_PASSWORD
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: mobiledevops/secret-to-file-action@v1
           with:
             base64-encoded-secret: ${{ secrets.ANDROID_STORE_PASSWORD }}
@@ -106,6 +115,7 @@ jobs:
 
         # Install env.default 
         - name: Sentry properties
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: mobiledevops/secret-to-file-action@v1
           with:
             base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_SERVICE_ACCOUNT }}
@@ -115,6 +125,7 @@ jobs:
 
           # Install sentry properties
         - name: Sentry properties
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: mobiledevops/secret-to-file-action@v1
           with:
             base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_ENV }}
@@ -124,6 +135,7 @@ jobs:
 
         # Install keystore properties
         - name: Keystore properties
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: mobiledevops/secret-to-file-action@v1
           with:
             base64-encoded-secret: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
@@ -133,6 +145,7 @@ jobs:
 
         # Download Keystore
         - name: Keystore file
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: mobiledevops/secret-to-file-action@v1
           with:
             base64-encoded-secret: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
@@ -141,6 +154,7 @@ jobs:
             working-directory: "./android"
         
         - name: Decode prod env      
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: mobiledevops/secret-to-file-action@v1
           with:
               base64-encoded-secret: ${{ secrets.RN_ENV_PROD_E2E }}
@@ -149,6 +163,7 @@ jobs:
               working-directory: "."
         
         - name: datadog-ci decode
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: mobiledevops/secret-to-file-action@v1
           with:
               base64-encoded-secret: ${{ secrets.DATADOG_CI}}
@@ -157,6 +172,7 @@ jobs:
               working-directory: "."
 
         - name: Build apk 
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           id: build
           run: |
               cd android
@@ -170,12 +186,14 @@ jobs:
               ls -la
         
         - name: Upload apk 
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           uses: actions/upload-artifact@v4
           with:
             name: app-release.apk
             path: ${{ env.output_dir }}/app-release.apk
 
         - name: Upload run_id number
+          if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
           env:
             GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           run: |  
