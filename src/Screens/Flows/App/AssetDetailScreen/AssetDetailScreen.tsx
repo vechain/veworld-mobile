@@ -99,10 +99,11 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 <ScrollView>
                     <BaseView style={styles.assetDetailsHeader}>
                         {token.symbol === B3TR.symbol && (
-                            <AlertInline status="info" variant="inline" message={LL.ALERT_TITLE_INVALID_CHARTS()} />
+                            <>
+                                <AlertInline status="info" variant="inline" message={LL.ALERT_TITLE_INVALID_CHARTS()} />
+                                <BaseSpacer height={24} />
+                            </>
                         )}
-
-                        <BaseSpacer height={24} />
                     </BaseView>
                     <AssetChart token={token} />
 

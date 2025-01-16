@@ -33,7 +33,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
         if (chartData?.length) {
             return (
                 <BaseView flexDirection="row" w={100} alignItems="flex-end" style={[styles.container]}>
-                    <LineChart height={160} width={SCREEN_WIDTH - 32} yGutter={20}>
+                    <LineChart height={160} width={SCREEN_WIDTH - 32} yGutter={10}>
                         <LineChart.Path color={theme.colors.graphLine} width={2}>
                             <LineChart.Gradient color={theme.colors.graphGradient} lastGradientValue={0} />
                         </LineChart.Path>
@@ -80,7 +80,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
                 <AssetPriceBanner isChartDataLoading={isChartDataLoading} />
             </BaseView>
 
-            <BaseSpacer height={24} />
+            <BaseSpacer height={16} />
 
             {_chartView}
         </>
