@@ -351,7 +351,7 @@ const dark: Colors = {
         titleInline: COLORS.RED_200,
     },
     neutralVariant: {
-        background: COLORS.GREY_100,
+        background: COLORS.GREY_200,
         border: COLORS.GREY_300,
         borderLight: COLORS.GREY_300,
         icon: COLORS.GREY_500,
