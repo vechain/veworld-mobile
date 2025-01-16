@@ -55,8 +55,8 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
                         columnsGap={24}
                         dapp={item}
                         onPress={() => {
-                            if (item.id) {
-                                increaseDappCounter(item.id)
+                            if (item.veBetterDaoId) {
+                                increaseDappCounter(item.veBetterDaoId)
                             }
                             onDAppPress({ href: item.href })
                         }}

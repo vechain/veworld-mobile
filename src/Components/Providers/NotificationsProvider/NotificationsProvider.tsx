@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedState } from "react-native-onesignal"
-import { ecosystemDappIdToVeBetterDappId, veBetterDaoTagKey } from "~Constants"
+import { veBetterDaoTagKey } from "~Constants"
 import { useAppState } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
 import {
@@ -232,12 +232,8 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const increaseDappCounter = useCallback(
         (dappId: string) => {
-            const id = Object.values(ecosystemDappIdToVeBetterDappId).includes(dappId)
-                ? dappId
-                : ecosystemDappIdToVeBetterDappId[dappId]
-
-            if (id && isMainnet && featureEnabled) {
-                dispatch(increaseDappVisitCounter({ dappId: id }))
+            if (dappId && isMainnet && featureEnabled) {
+                dispatch(increaseDappVisitCounter({ dappId: dappId }))
             }
         },
         [dispatch, featureEnabled, isMainnet],
