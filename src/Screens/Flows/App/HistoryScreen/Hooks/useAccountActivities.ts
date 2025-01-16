@@ -23,7 +23,7 @@ export const useActivities = () => {
     const page = useRef(0)
     const currentNetwork = useRef(network)
 
-    const [isFetching, setIsFetching] = useState(false)
+    const [isFetching, setIsFetching] = useState(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
     const [activities, setActivities] = useState<Activity[]>([])
 
@@ -65,6 +65,7 @@ export const useActivities = () => {
     const getActivities = useCallback(
         async ({ refresh }: { refresh: boolean }) => {
             if (!selectedAccount) {
+                setIsFetching(false)
                 return
             }
 

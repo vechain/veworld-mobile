@@ -18,30 +18,22 @@ export const SkeletonActivityBox = () => {
                 {
                     flexDirection: "row",
                     alignItems: "center",
+                    width: "100%",
                     height: 68,
                     children: [
                         // Circle
-                        { width: 40, height: 40, borderRadius: 20 },
+                        {
+                            width: 40,
+                            height: 40,
+                            borderRadius: 20,
+                        },
                         // Lines
                         {
                             flexDirection: "column",
                             alignItems: "flex-start",
-                            width: "100%",
-                            children: [
-                                // Line
-                                {
-                                    width: "20%",
-                                    height: 10,
-                                    marginLeft: 12,
-                                },
-                                // Short line
-                                {
-                                    marginTop: 10,
-                                    width: "30%",
-                                    height: 8,
-                                    marginLeft: 12,
-                                },
-                            ],
+                            width: 150,
+                            marginLeft: 12,
+                            height: 30,
                         },
                     ],
                 },
