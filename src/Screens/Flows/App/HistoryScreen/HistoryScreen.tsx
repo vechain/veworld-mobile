@@ -48,7 +48,7 @@ import {
     SwapTransactionActivityBox,
     TypedDataActivityBox,
 } from "./Components"
-import { useActivities } from "./Hooks"
+import { useAccountActivities } from "./Hooks"
 
 const SKELETON_COUNT = 12
 
@@ -72,7 +72,7 @@ export const HistoryScreen = () => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const { activities, fetchActivities, isFetching, refreshActivities, isRefreshing } = useActivities()
+    const { activities, fetchActivities, isFetching, refreshActivities, isRefreshing } = useAccountActivities()
 
     const nav = useNavigation()
     const theme = useTheme()

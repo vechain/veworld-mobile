@@ -13,7 +13,7 @@ import {
 import { error, info } from "~Utils"
 import { useI18nContext } from "~i18n"
 
-export const useActivities = () => {
+export const useAccountActivities = () => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
 
