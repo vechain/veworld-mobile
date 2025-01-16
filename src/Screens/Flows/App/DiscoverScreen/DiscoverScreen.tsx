@@ -130,7 +130,7 @@ export const DiscoverScreen: React.FC = () => {
                     placeholder={LL.DISCOVER_SEARCH()}
                     value={filteredSearch}
                     iconName={"icon-history"}
-                    iconColor={visitedUrls.length > 0 ? theme.colors.primary : theme.colors.disabledButton}
+                    iconColor={visitedUrls.length > 0 ? theme.colors.text : theme.colors.disabledButton}
                     onTextChange={onTextChange}
                     onIconPress={onNavigateToBrowserHistory}
                 />
@@ -145,7 +145,7 @@ export const DiscoverScreen: React.FC = () => {
         onTextChange,
         styles.header,
         theme.colors.disabledButton,
-        theme.colors.primary,
+        theme.colors.text,
         visitedUrls.length,
     ])
 

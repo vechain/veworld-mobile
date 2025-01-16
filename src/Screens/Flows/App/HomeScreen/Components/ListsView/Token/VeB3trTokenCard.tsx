@@ -2,21 +2,23 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
 import Animated from "react-native-reanimated"
-import { TokenWithCompleteInfo, useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import { BigNutils } from "~Utils"
-import { COLORS, VOT3 } from "~Constants"
+import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
+import { BalanceUtils, BigNutils } from "~Utils"
+import { B3TR, COLORS, VOT3 } from "~Constants"
 import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
-    b3trToken: TokenWithCompleteInfo
     isBalanceVisible: boolean
 }
 
-export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => {
+export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+
+    const vot3Token = useTokenWithCompleteInfo(VOT3)
+    const b3trToken = useTokenWithCompleteInfo(B3TR)
 
     const {
         isTokensOwnedLoading,
@@ -24,10 +26,13 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
         isPositive24hChange,
         change24h,
         isLoading,
-        fiatBalance: b3trFiatBalance,
+        fiatBalance: b3trFiat,
     } = useTokenCardFiatInfo(b3trToken)
 
-    const vot3Token = useTokenWithCompleteInfo(VOT3)
+    const parseVot3Balance = BigNutils(vot3Token.tokenUnitFullBalance).addTrailingZeros(vot3Token.decimals).toString
+    const vot3FiatBalance = BalanceUtils.getFiatBalance(parseVot3Balance, exchangeRate ?? 0, 18)
+
+    const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trFiat)
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -44,17 +49,24 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
             )
         if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
 
-        const vot3FiatBalance = BigNutils(vot3Token.tokenUnitBalance).multiply(exchangeRate).toString
-
         return (
             <FiatBalance
                 typographyFont="captionRegular"
                 color={theme.colors.tokenCardText}
-                balances={[b3trFiatBalance, vot3FiatBalance]}
+                balances={[veB3trFiatBalance.toString()]}
                 isVisible={isBalanceVisible}
             />
         )
-    }, [isTokensOwnedLoading, theme.colors, exchangeRate, LL, vot3Token, b3trFiatBalance, isBalanceVisible])
+    }, [
+        isTokensOwnedLoading,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        theme.colors.tokenCardText,
+        exchangeRate,
+        LL,
+        veB3trFiatBalance,
+        isBalanceVisible,
+    ])
 
     const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
 

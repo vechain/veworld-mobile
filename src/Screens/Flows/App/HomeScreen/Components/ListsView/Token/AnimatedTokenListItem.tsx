@@ -32,7 +32,7 @@ export const AnimatedTokenListItem = (props: Props) => {
         return (
             <TokenContainer onPress={onPress}>
                 {isB3tr ? (
-                    <VeB3trTokenCard isBalanceVisible={isBalanceVisible} b3trToken={tokenWithInfo} />
+                    <VeB3trTokenCard isBalanceVisible={isBalanceVisible} />
                 ) : (
                     <VechainTokenCard isBalanceVisible={isBalanceVisible} tokenWithInfo={tokenWithInfo} />
                 )}
