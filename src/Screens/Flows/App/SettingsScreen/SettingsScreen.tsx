@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
 import { AlertCard, BaseSpacer, BaseText, BaseView, Layout, SelectedNetworkViewer } from "~Components"
 import { ColorThemeType, isSmallScreen } from "~Constants"
-import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
+import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles, useVnsUnclaimed } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -30,12 +30,24 @@ export const SettingsScreen = () => {
 
     const { settingsList } = useMemo(() => getLists(LL, devFeaturesEnabled), [devFeaturesEnabled, LL])
 
+    const { unclaimedAddresses } = useVnsUnclaimed()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const flatSettingListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
+
+    const renderBadge = useCallback(
+        (item: SettingsRowItem) => {
+            if (item.screenName === Routes.WALLET_MANAGEMENT) {
+                return Boolean(unclaimedAddresses.length > 0)
+            }
+
+            return false
+        },
+        [unclaimedAddresses],
+    )
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
@@ -59,8 +71,15 @@ export const SettingsScreen = () => {
 
             switch (item.element) {
                 case "settingsRow":
+                    const showBadge = renderBadge(item)
                     return (
-                        <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
+                        <SettingsRow
+                            title={item.title}
+                            screenName={item.screenName}
+                            icon={item.icon}
+                            url={item.url}
+                            showBadge={showBadge}
+                        />
                     )
 
                 case "divider":
@@ -73,7 +92,7 @@ export const SettingsScreen = () => {
                     return null
             }
         },
-        [isShowBackupModal, renderBackupWarning],
+        [isShowBackupModal, renderBackupWarning, renderBadge],
     )
 
     return (

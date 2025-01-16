@@ -20,6 +20,7 @@ import {
     useFeatureFlags,
     EditIconHeaderButton,
     PlusIconHeaderButton,
+    BaseText,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -148,7 +149,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
             setAccountToRemove(account)
             openRemoveAccountWarningBottomSheet()
         },
-        [setAccountToRemove, LL, isOnlyAccount, openRemoveAccountWarningBottomSheet],
+        [isOnlyAccount, LL, setAccountToRemove, openRemoveAccountWarningBottomSheet],
     )
 
     const confirmEditWalletAccount = useCallback(
@@ -212,12 +213,18 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                 <BaseView flex={1} flexGrow={1}>
                     <BaseView px={20} mb={16}>
                         <BaseSpacer height={16} />
+                        <BaseText typographyFont="body">
+                            {LL.WALLET_DETAIL_ACCOUNTS_NUMER({ count: deviceAccounts.length })}
+                        </BaseText>
                         {claimableUsernames.length > 0 && (
-                            <AlertInline
-                                variant="banner"
-                                status="info"
-                                message={`You have ${claimableUsernames.length} username claim available`}
-                            />
+                            <>
+                                <BaseSpacer height={16} />
+                                <AlertInline
+                                    variant="banner"
+                                    status="info"
+                                    message={`You have ${claimableUsernames.length} username claim available`}
+                                />
+                            </>
                         )}
                     </BaseView>
                     {device && !!deviceAccounts.length && (

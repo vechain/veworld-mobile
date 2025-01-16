@@ -15,10 +15,11 @@ export type RowProps = {
     title: LocalizedString
     screenName: keyof Omit<RootStackParamListSettings, Excluded>
     icon: IconKey
+    showBadge?: boolean
     url?: string
 }
 
-export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
+export const SettingsRow = ({ title, screenName, icon, url, showBadge }: RowProps) => {
     const nav = useNavigation()
 
     const theme = useTheme()
@@ -40,8 +41,10 @@ export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
                     {title}
                 </BaseText>
             </BaseView>
-
-            <BaseIcon color={theme.colors.text} name={"icon-chevron-right"} size={16} />
+            <BaseView flexDirection="row" style={baseStyles.actionContainer}>
+                {showBadge && <BaseView p={2} bg={theme.colors.errorVariant.icon} borderRadius={4} />}
+                <BaseIcon color={theme.colors.text} name={"icon-chevron-right"} size={16} />
+            </BaseView>
         </BaseTouchable>
     )
 }
@@ -52,5 +55,8 @@ const baseStyles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+    },
+    actionContainer: {
+        gap: 12,
     },
 })

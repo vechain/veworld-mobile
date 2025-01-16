@@ -33,6 +33,8 @@ import {
 import { error } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { isObservedAccount } from "~Utils/AccountUtils/AccountUtils"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -368,9 +370,9 @@ export const useVns = (props?: Vns): VnsHook => {
     const domain = useMemo(() => queryRes.data?.name || name || "", [name, queryRes])
     const hasDomain = useMemo(() => Boolean(domain), [domain])
 
-    const resetVns = useCallback(() => {
-        qc.invalidateQueries({ queryKey: ["vns_name"] })
-        qc.invalidateQueries({
+    const resetVns = useCallback(async () => {
+        await qc.invalidateQueries({ queryKey: ["vns_name"] })
+        await qc.invalidateQueries({
             queryKey: ["vns_names", network.genesis.id],
             refetchType: "all",
         })
@@ -410,8 +412,31 @@ export const usePrefetchAllVns = () => {
         queryKey: ["vns_names", network.genesis.id],
         queryFn: () => getVnsNames(thor, network, addresses),
         enabled: !isQueryDisabled,
-        staleTime: 1000 * 60,
+        staleTime: 0,
     })
 
     return vnsResults
+}
+
+export const useVnsUnclaimed = () => {
+    const qc = useQueryClient()
+    const network = useAppSelector(selectSelectedNetwork)
+    const contacts = useAppSelector(selectContacts)
+    const accounts = useAppSelector(selectAccounts)
+    const cachedAddresses = qc.getQueryData<Vns[]>(["vns_names", network.genesis.id])
+
+    const obeservedAccounts = accounts.filter(account => isObservedAccount(account))
+
+    const unclaimedAddresses = useMemo(() => {
+        if (!cachedAddresses) return []
+        return cachedAddresses.filter(
+            account =>
+                !account?.name &&
+                !contacts.some(contact => compareAddresses(contact.address, account.address)) &&
+                !obeservedAccounts.some(observedAcc => compareAddresses(account.address, observedAcc.address)) &&
+                accounts.some(acc => compareAddresses(acc.address, account.address)),
+        )
+    }, [accounts, cachedAddresses, contacts, obeservedAccounts])
+
+    return { unclaimedAddresses }
 }

@@ -3465,6 +3465,11 @@ type RootTranslation = {
 	 */
 	WALLETS_SAVED_ON_ICLOUD: string
 	/**
+	 * {​c​o​u​n​t​}​ ​a​c​c​o​u​n​t​s
+	 * @param {number} count
+	 */
+	WALLET_DETAIL_ACCOUNTS_NUMER: RequiredParams<'count'>
+	/**
 	 * A​c​c​o​u​n​t
 	 */
 	WALLET_LABEL_ACCOUNT: string
@@ -7034,6 +7039,10 @@ Try reconnect your device to the internet.
 	 * wallets saved on iCloud.
 	 */
 	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
+	/**
+	 * {count} accounts
+	 */
+	WALLET_DETAIL_ACCOUNTS_NUMER: (arg: { count: number }) => LocalizedString
 	/**
 	 * Account
 	 */
