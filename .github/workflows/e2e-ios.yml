@@ -177,7 +177,7 @@ jobs:
         - name: Download .app
           uses: actions/download-artifact@v4
           with:
-            name: VeWorld.app
+            name: VeWorld.zip
             run-id: ${{ env.RUN_ID }}
         - name: Debug .app
           run: |
@@ -188,4 +188,4 @@ jobs:
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
           with:
             api-key: ${{ secrets.DCD_API_KEY }}
-            app-file: ./VeWorld.app
+            app-file: ./VeWorld.zip
