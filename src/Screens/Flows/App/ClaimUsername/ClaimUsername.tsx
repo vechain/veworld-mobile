@@ -16,7 +16,6 @@ import { useAnalyticTracking, useDisclosure, useThemedStyles, useVns, useWalletS
 import { Routes, RootStackParamListHome, RootStackParamListSettings } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
-import { fetchOfficialTokensOwned } from "~Networking"
 
 type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListSettings, Routes.CLAIM_USERNAME>
 
@@ -52,7 +51,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
 
         if (!PATTERN.test(subdomain)) {
             setErrorMessage(LL.SETTINGS_LABEL_lowercase_num())
-            return fetchOfficialTokensOwned
+            return false
         }
 
         setErrorMessage("")
@@ -129,12 +128,6 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
         [subdomain, isAvailable, hasErrors, isChecking],
     )
 
-    const renderButtonLabel = useMemo(() => {
-        if (isLoading) return LL.BTN_CONFRIMING()
-        if (claimError) return LL.BTN_TRY_AGAIN()
-        return LL.BTN_CONFIRM()
-    }, [LL, claimError, isLoading])
-
     const renderSubdomainStatus = useMemo(() => {
         if (isChecking) {
             return (
@@ -176,6 +169,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     return (
         <Layout
             title={LL.TITLE_CLAIM_USERNAME()}
+            preventGoBack={isLoading}
             fixedBody={
                 <BaseView style={[styles.contentContainer]}>
                     {/* Body */}
@@ -200,7 +194,6 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                         <BaseTextInput
                             placeholder={LL.INPUT_PLACEHOLDER_USERNAME()}
                             value={subdomain}
-                            maxLength={20}
                             setValue={onSetSubdomain}
                             rightIcon={
                                 <BaseText typographyFont="body" style={[styles.inputLabel]}>
@@ -224,10 +217,11 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                         <BaseView flexDirection="row" w={100}>
                             <BaseButton
                                 flex={1}
-                                disabled={isLoading || !subdomain}
+                                isLoading={isLoading}
+                                disabled={isLoading || hasErrors}
                                 action={onSubmit}
                                 testID="ClaimUsername_Confirm_Btn">
-                                {renderButtonLabel}
+                                {claimError ? LL.BTN_TRY_AGAIN() : LL.BTN_CONFIRM()}
                             </BaseButton>
                         </BaseView>
                     </BaseView>
