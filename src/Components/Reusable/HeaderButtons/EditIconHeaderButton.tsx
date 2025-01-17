@@ -11,8 +11,8 @@ export const EditIconHeaderButton = ({ action, testID = "Edit-HeaderIcon" }: Pro
     const theme = useTheme()
 
     return (
-        <HeaderIconButton action={action}>
-            <BaseIcon size={16} name="icon-editBox" color={theme.colors.text} testID={testID} />
+        <HeaderIconButton testID={testID} action={action}>
+            <BaseIcon size={16} name="icon-editBox" color={theme.colors.text} />
         </HeaderIconButton>
     )
 }

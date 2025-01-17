@@ -127,6 +127,7 @@ export const WalletManagementScreen = () => {
         ({ item, drag, isActive }) => {
             return (
                 <SwipeableRow
+                    testID={item.alias}
                     item={item}
                     itemKey={item.rootAddress}
                     swipeableItemRefs={swipeableItemRefs}

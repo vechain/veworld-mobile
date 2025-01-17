@@ -1,79 +1,79 @@
 #transactions_url_delegation.yaml
 appId: org.vechain.veworld.app
 env:
-  URL_1: "https://sponsor-testnet.vechain.energy/by/282"
-  URL_2: "https://sponsor-testnet.vechain.energy/by/219"
+    URL_1: "https://sponsor-testnet.vechain.energy/by/282"
+    URL_2: "https://sponsor-testnet.vechain.energy/by/219"
 onFlowStart:
-  - runFlow: ../setup_reset/setupApp.yaml
+    - runFlow: ../setup_reset/setupApp.yaml
 onFlowComplete:
-  - runFlow: ../setup_reset/resetApp.yaml
+    - runFlow: ../setup_reset/resetApp.yaml
 ---
 ## User can select an URL as default delegation method for transactions
 - tapOn:
-    id: "settings-tab"
+      id: "settings-tab"
 - extendedWaitUntil:
-    visible:
-        id: "BackButtonHeader-BaseIcon-backButton-wrapper"
-    timeout: 10000
+      visible:
+          id: "BackButtonHeader-BaseIcon-backButton"
+      timeout: 10000
 - tapOn:
-    id: "BackButtonHeader-BaseIcon-backButton-wrapper"
+      id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-    id: "Transactions"
+      id: "Transactions"
 - tapOn:
-    id: "button-URL"
+      id: "button-URL"
 - tapOn:
-    id: "AddUrl_input"
+      id: "AddUrl_input"
 - inputText: "${URL_1}"
 # START ANDROID FLOW
 - runFlow:
-    when:
-      platform: Android
-    commands:
-        - hideKeyboard
-        - tapOn:
-            id: "Add_URL_Submit"
-        - assertVisible: "${URL_1}"
-        ## User can create multiple delegation URLs
-        - tapOn:
-            id: "button-URL"
-        - tapOn:
-            id: "UrlList_addUrlButton-wrapper"
-        - tapOn:
-            id: "AddUrl_input"
-        - inputText: "${URL_2}"
-        - hideKeyboard
-        - tapOn:
-            id: "Add_URL_Submit"
-        - assertVisible: "${URL_2}"
-       ## User can change delegation URL
-        - tapOn:
-            id: "button-URL"
-        - tapOn:
-            id: Delegation_URL_0
-        - assertVisible: "${URL_1}" 
+      when:
+          platform: Android
+      commands:
+          - hideKeyboard
+          - tapOn:
+                id: "Add_URL_Submit"
+          - assertVisible: "${URL_1}"
+          ## User can create multiple delegation URLs
+          - tapOn:
+                id: "button-URL"
+          - tapOn:
+                id: "UrlList_addUrlButton-wrapper"
+          - tapOn:
+                id: "AddUrl_input"
+          - inputText: "${URL_2}"
+          - hideKeyboard
+          - tapOn:
+                id: "Add_URL_Submit"
+          - assertVisible: "${URL_2}"
+          ## User can change delegation URL
+          - tapOn:
+                id: "button-URL"
+          - tapOn:
+                id: Delegation_URL_0
+          - assertVisible: "${URL_1}"
 # END FLOW
 # START iOS FLOW
 - runFlow:
-    when:
-      platform: iOS
-    commands:
-        - tapOn:
-            id: "Add_URL_Submit"
-        - assertVisible: "${URL_1}"
-        - assertVisible: "Select URL"
-        ## User can create multiple delegation URLs
-        - tapOn:
-            id: "UrlList_addUrlButton-wrapper"
-        - tapOn:
-            id: "AddUrl_input"
-        - inputText: "${URL_2}"
-        - tapOn:
-            id: "Add_URL_Submit"
-        - assertVisible: "${URL_2}"
-       ## User can change delegation URL
-        - tapOn:
-            id: "button-URL"
-        - tapOn:
-            id: Delegation_URL_0
-        - assertVisible: "${URL_1}" 
+      when:
+          platform: iOS
+      commands:
+          - tapOn:
+                id: "Add_URL_Submit"
+          - assertVisible: "${URL_1}"
+          - assertVisible: "Select URL"
+          ## User can create multiple delegation URLs
+          - tapOn:
+                id: "UrlList_addUrlButton-wrapper"
+          - tapOn:
+                id: "AddUrl_input"
+          - inputText: "${URL_2}"
+          - tapOn:
+                id: "Add_URL_Submit"
+          - assertVisible: "${URL_2}"
+          ## User can change delegation URL
+          - tapOn:
+                id: "button-URL"
+          - tapOn:
+                id: Delegation_URL_0
+          - assertVisible: "${URL_1}"
 # END FLOW
