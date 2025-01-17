@@ -191,7 +191,7 @@ jobs:
             uses: actions/download-artifact@v4
             with:
               name: app-release.apk
-              run-id: ${{ needs.build-test-android.outputs.run_id }}
+              run-id: ${{ env.RUN_ID }}
               
           - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
             with:

@@ -171,6 +171,12 @@ jobs:
           with:
             name: VeWorld.app
             run-id: ${{ env.RUN_ID }}
+        - name: Debug .app
+          run: |
+            pwd
+            ls -la
+            echo " Run ID: ${{ env.RUN_ID }}"
+            
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
           with:
             api-key: ${{ secrets.DCD_API_KEY }}
