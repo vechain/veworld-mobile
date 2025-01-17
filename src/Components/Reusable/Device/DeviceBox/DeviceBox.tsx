@@ -82,11 +82,11 @@ export const DeviceBox: React.FC<Props> = ({
                     )}
                     <BaseView flex={1}>
                         <BaseText
-                            typographyFont="bodyBold"
+                            typographyFont={isChildSelected ? "bodyBold" : "bodyMedium"}
                             ellipsizeMode="tail"
                             numberOfLines={1}
                             mb={6}
-                            color={isChildSelected ? theme.colors.textSelected : theme.colors.text}>
+                            color={theme.colors.text}>
                             {device?.alias}
                         </BaseText>
                         <BaseText typographyFont="captionRegular">{`${deviceAccounts.length} accounts`}</BaseText>

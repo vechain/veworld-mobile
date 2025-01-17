@@ -58,9 +58,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 style={[isSelected ? styles.selected : styles.notSelected, styles.container]}>
                 <BaseView style={styles.leftSubContainer} justifyContent="flex-start" alignItems="flex-start">
                     <BaseView style={styles.aliasContainer}>
-                        <BaseText
-                            typographyFont="bodyBold"
-                            color={isSelected ? theme.colors.textSelected : theme.colors.text}>
+                        <BaseText typographyFont={isSelected ? "bodyBold" : "bodyMedium"} color={theme.colors.text}>
                             {account.alias}
                         </BaseText>
                     </BaseView>
@@ -81,13 +79,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
                 {/* Actions */}
                 <BaseView flexDirection="row" style={styles.rightSubContainer}>
                     {canClaimUsername && (
-                        <BaseButton
-                            title={LL.BTN_CLAIM()}
-                            action={onClaimPress}
-                            bgColor={theme.colors.actionBanner.buttonBackground}
-                            textColor={theme.colors.actionBanner.buttonText}
-                            style={styles.claimBtn}
-                        />
+                        <BaseButton title={LL.BTN_CLAIM()} action={onClaimPress} style={styles.claimBtn} />
                     )}
                     {isEditable && (
                         <BaseTouchable action={() => onEditPress?.(account)}>
@@ -113,11 +105,11 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         selected: {
             borderWidth: 2,
-            borderColor: theme.isDark ? COLORS.PRIMARY_300 : theme.colors.primary,
+            borderColor: theme.isDark ? COLORS.WHITE : theme.colors.primary,
         },
         notSelected: {
-            borderWidth: 1,
-            borderColor: theme.colors.cardBorder,
+            borderWidth: 2,
+            borderColor: theme.colors.transparent,
         },
         alias: {
             flex: 1,

@@ -177,7 +177,6 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                         <BaseText typographyFont="subSubTitleLight">{LL.SB_CLAIM_USERNAME()}</BaseText>
                         <BaseSpacer height={40} />
                         {/* Input container */}
-                        {/* <BaseView> */}
                         <BaseView mb={8} flexDirection="row" justifyContent="space-between">
                             <BaseText typographyFont="subSubTitle" style={[styles.inputLabel]}>
                                 {LL.TITLE_CLAIM_USERNAME()}
@@ -186,12 +185,18 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                                 <BaseText typographyFont="caption" style={[styles.inputLabel]}>
                                     {"Powered by"}{" "}
                                 </BaseText>
-                                <BaseText typographyFont="captionSemiBold" style={[styles.inputLabel]}>
-                                    {"vet.domains"}
+                                <BaseText typographyFont="captionSemiBold" style={[styles.inputLabel, styles.vetTitle]}>
+                                    {".vet"}
+                                </BaseText>
+                                <BaseText
+                                    typographyFont="captionSemiBold"
+                                    style={[styles.inputLabel, styles.domainTitle]}>
+                                    {".domains"}
                                 </BaseText>
                             </BaseView>
                         </BaseView>
                         <BaseTextInput
+                            disabled={isLoading}
                             placeholder={LL.INPUT_PLACEHOLDER_USERNAME()}
                             value={subdomain}
                             setValue={onSetSubdomain}
@@ -202,7 +207,6 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                             }
                         />
                         {renderSubdomainStatus}
-                        {/* </BaseView> */}
                     </BaseView>
                     {/* Footer */}
                     <BaseView>
@@ -250,5 +254,11 @@ const baseStyles = (theme: ColorThemeType) =>
         inputMessage: {
             gap: 8,
             marginVertical: 8,
+        },
+        vetTitle: {
+            color: "#f97316",
+        },
+        domainTitle: {
+            color: theme.isDark ? "#969391" : "#78716c",
         },
     })

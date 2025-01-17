@@ -289,11 +289,11 @@ const light: Colors = {
     },
     actionBanner: {
         background: COLORS.PRIMARY_100,
-        border: COLORS.PRIMARY_200,
-        title: COLORS.PRIMARY_800,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        title: COLORS.PURPLE,
         buttonBackground: COLORS.WHITE,
         buttonBorder: COLORS.GREY_200,
-        buttonText: COLORS.GREY_600,
+        buttonText: COLORS.PURPLE,
     },
 }
 
@@ -393,12 +393,12 @@ const dark: Colors = {
         titleInline: COLORS.LIGHT_BLUE,
     },
     actionBanner: {
-        background: COLORS.PRIMARY_800,
-        border: COLORS.PRIMARY_600,
-        title: COLORS.PRIMARY_200,
-        buttonBackground: COLORS.PRIMARY_300,
+        background: COLORS.PURPLE,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        title: COLORS.WHITE,
+        buttonBackground: COLORS.DARK_PURPLE_DISABLED,
         buttonBorder: COLORS.TRANSPARENT,
-        buttonText: COLORS.PRIMARY_800,
+        buttonText: COLORS.GREY_50,
     },
 }
 

@@ -2,7 +2,8 @@ import React from "react"
 import { FiatBalance } from "~Components"
 import { WalletAccount } from "~Model"
 import { VET, VTHO, B3TR } from "~Constants"
-import { useNonVechainTokenFiat, useTokenWithCompleteInfo } from "~Hooks"
+import { useNonVechainTokenFiat, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { StyleSheet } from "react-native"
 
 type Props = {
     account: WalletAccount
@@ -11,6 +12,8 @@ type Props = {
 }
 
 export const AccountDetailFiatBalance: React.FC<Props> = ({ account, isVisible, isLoading }) => {
+    const { styles } = useThemedStyles(baseStyles)
+
     const vetWithInfo = useTokenWithCompleteInfo(VET, account.address)
     const vthoWithInfo = useTokenWithCompleteInfo(VTHO, account.address)
     const b3trWithInfo = useTokenWithCompleteInfo(B3TR, account.address)
@@ -26,7 +29,15 @@ export const AccountDetailFiatBalance: React.FC<Props> = ({ account, isVisible, 
             ]}
             isVisible={isVisible}
             isLoading={isLoading}
+            style={styles.balance}
             typographyFont="captionRegular"
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        balance: {
+            opacity: 0.7,
+        },
+    })

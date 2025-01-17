@@ -15,11 +15,11 @@ import { queryClient } from "~Api/QueryProvider"
 import {
     abis,
     DOMAIN_BASE,
-    DEFAULT_DELEGATOR_URL,
-    TESTNET_VNS_PUBLIC_RESOLVER,
-    TESTNET_VNS_REGISTRAR_CONTRACT,
-    TESTNET_VNS_SUBDOMAIN_CONTRACT,
+    DELEGATOR_URL,
     AnalyticsEvent,
+    VNS_PUBLIC_RESOLVER,
+    VNS_SUBDOMAIN_CONTRACT,
+    VNS_REGISTRAR_CONTRACT,
 } from "~Constants"
 import { HDKey, Hex, HexUInt, Secp256k1, Transaction, TransactionBody } from "@vechain/sdk-core"
 import {
@@ -193,7 +193,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 const provider = new VeChainProvider(
                     thorClient,
                     new ProviderInternalBaseWallet([{ privateKey, address: account.address }], {
-                        delegator: { delegatorUrl: DEFAULT_DELEGATOR_URL },
+                        delegator: { delegatorUrl: DELEGATOR_URL[network.type] },
                     }),
                     true,
                 )
@@ -202,7 +202,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [account, thorClient],
+        [account.address, account.index, network.type, thorClient],
     )
 
     const getTotalGas = useCallback(
@@ -228,7 +228,7 @@ export const useVns = (props?: Vns): VnsHook => {
             try {
                 const dataClaimer = new abi.Function(abis.VetDomains.claim).encode(
                     subdomain,
-                    TESTNET_VNS_PUBLIC_RESOLVER,
+                    VNS_PUBLIC_RESOLVER[network.type],
                 )
 
                 const fulldomain = `${subdomain}${DOMAIN_BASE}`
@@ -238,12 +238,12 @@ export const useVns = (props?: Vns): VnsHook => {
                 const clauses = [
                     {
                         data: dataClaimer,
-                        to: TESTNET_VNS_SUBDOMAIN_CONTRACT,
+                        to: VNS_SUBDOMAIN_CONTRACT[network.type],
                         value: "0x0",
                     },
                     {
                         data: dataRegistrar,
-                        to: TESTNET_VNS_REGISTRAR_CONTRACT,
+                        to: VNS_REGISTRAR_CONTRACT[network.type],
                         value: "0x0",
                     },
                 ]
@@ -283,7 +283,15 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [account.address, getTotalGas, network.genesis.id, thorClient],
+        [
+            account.address,
+            getTotalGas,
+            network.genesis.id,
+            network.type,
+            thorClient.blocks,
+            thorClient.gas,
+            thorClient.transactions,
+        ],
     )
 
     const signClaimTx = useCallback(

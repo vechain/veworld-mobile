@@ -69,11 +69,11 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 8,
         },
         selectedContainer: {
-            borderColor: theme.isDark ? COLORS.PRIMARY_300 : theme.colors.primary,
+            borderColor: theme.isDark ? COLORS.WHITE : theme.colors.primary,
             borderWidth: 2,
         },
         unselectedContainer: {
-            borderColor: theme.colors.cardBorder,
+            borderColor: theme.colors.transparent,
         },
         view: {
             flexDirection: "row",
