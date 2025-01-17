@@ -146,11 +146,9 @@ jobs:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           RUN_ID: ${{ github.run_id }}
         run: |  
-            RUN_ID=${{ github.run_id }}
-            RUN_ATTEMPT=${{ github.run_attempt }}
-            successful_run=$((RUN_ID + RUN_ATTEMPT))
-            echo "run_id=$successful_run" >> $GITHUB_ENV
-            gh variable set IOS_RUN_ID --body "$successful_run"
+              successful_run=$(( ${{github.run_id}} ))
+              echo "run_id=$successful_run" >> $GITHUB_ENV
+              gh variable set IOS_RUN_ID --body "$successful_run"
 
   test-ios:
     runs-on: macos-latest
