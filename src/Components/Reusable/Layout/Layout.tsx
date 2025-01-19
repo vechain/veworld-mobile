@@ -25,7 +25,6 @@ type Props = {
     noStaticBottomPadding?: boolean
     scrollViewRef?: Ref<ScrollView>
     onGoBack?: () => void
-    onBackButtonPress?: () => void
     preventGoBack?: boolean
     beforeNavigating?: () => Promise<void> | void
     hasSafeArea?: boolean
@@ -51,7 +50,6 @@ export const Layout = ({
     noStaticBottomPadding = false,
     scrollViewRef,
     onGoBack,
-    onBackButtonPress,
     preventGoBack = false,
     beforeNavigating,
     hasSafeArea = true,
@@ -76,12 +74,11 @@ export const Layout = ({
             <BaseView h={100}>
                 <BaseView>
                     {!noBackButton ? (
-                        <BaseView mx={noMargin ? 0 : 16}>
+                        <BaseView py={12} mx={noMargin ? 0 : 16}>
                             <BackButtonHeader
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}
                                 onGoBack={onGoBack}
-                                action={onBackButtonPress}
                                 preventGoBack={preventGoBack}
                                 title={title}
                                 rightElement={headerRightElement}
@@ -146,7 +143,6 @@ export const Layout = ({
             noMargin,
             beforeNavigating,
             onGoBack,
-            onBackButtonPress,
             preventGoBack,
             title,
             headerRightElement,

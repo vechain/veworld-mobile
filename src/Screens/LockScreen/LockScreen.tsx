@@ -1,6 +1,15 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { useAnalyticTracking, useOnDigitPress, useTheme } from "~Hooks"
-import { BaseSpacer, BaseText, BaseView, NumPad, PasswordPins, StorageEncryptionKeyHelper, Layout } from "~Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    NumPad,
+    PasswordPins,
+    StorageEncryptionKeyHelper,
+    Layout,
+    BackButtonHeader,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 import { LOCKSCREEN_SCENARIO } from "./Enums"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
@@ -167,8 +176,8 @@ export const LockScreen: React.FC<Props> = memo(({ onSuccess, onBack, scenario, 
     return (
         <Layout
             hasSafeArea={false}
-            title={title}
-            onBackButtonPress={onBack}
+            noBackButton
+            fixedHeader={<BackButtonHeader hasBottomSpacer={false} action={onBack} title={title} />}
             body={
                 <BaseView alignItems="center" justifyContent="flex-start">
                     <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>

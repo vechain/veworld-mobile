@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react"
-import { BaseSpacer, BaseText, BaseView, Layout, NumPad, PasswordPins } from "~Components"
+import { BackButtonHeader, BaseSpacer, BaseText, BaseView, Layout, NumPad, PasswordPins } from "~Components"
 import { useI18nContext } from "~i18n"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
 import { useOnDigitPressWithConfirmation } from "./useOnDigitPressWithConfirmation"
@@ -72,8 +72,8 @@ export const UserCreatePasswordScreen: React.FC<UserCreatePasswordScreenProps> =
     return (
         <Layout
             hasSafeArea={false}
-            title={LL.TITLE_USER_PASSWORD()}
-            onBackButtonPress={onBack}
+            noBackButton
+            fixedHeader={<BackButtonHeader action={onBack} title={LL.TITLE_USER_PASSWORD()} />}
             body={
                 <BaseView alignItems="center" justifyContent="flex-start">
                     <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>
