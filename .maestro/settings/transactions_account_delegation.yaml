@@ -19,16 +19,6 @@ onFlowComplete:
       id: "Transactions"
 - tapOn:
       id: "button-ACCOUNT"
-# - runFlow:
-#       when:
-#           platform: Android
-#       commands:
-#           - tapOn:
-#                 text: "Account 2"
-# - runFlow:
-#       when:
-#           platform: iOS
-#       commands:
 - tapOn:
       id: "selectAccount"
       index: 0

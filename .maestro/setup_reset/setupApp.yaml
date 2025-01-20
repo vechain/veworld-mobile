@@ -29,13 +29,13 @@ env:
       when:
           platform: Android
       commands:
-          - tapOn: "Wallet 1"
+          - tapOn: "Wallet_0"
 - runFlow:
       when:
           platform: iOS
       commands:
           - tapOn:
-                id: "Wallet 1"
+                id: "Wallet_0"
 - tapOn:
       id: "WalletDetailScreen_addAccountButton"
 - tapOn:

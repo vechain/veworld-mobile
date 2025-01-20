@@ -124,10 +124,10 @@ export const WalletManagementScreen = () => {
     )
 
     const renderItem: RenderItem<Device> = useCallback(
-        ({ item, drag, isActive }) => {
+        ({ item, drag, isActive, getIndex }) => {
             return (
                 <SwipeableRow
-                    testID={item.alias}
+                    testID={`Wallet_${getIndex()}`}
                     item={item}
                     itemKey={item.rootAddress}
                     swipeableItemRefs={swipeableItemRefs}
