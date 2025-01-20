@@ -13,7 +13,7 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import BigNumber from "bignumber.js"
 import { queryClient } from "~Api/QueryProvider"
 import { FeatureFlags } from "~Api/FeatureFlags"
-import { featureFlagsQueryKey } from "../../Components/Providers/FeatureFlagsProvider"
+import { featureFlagsQueryKey } from "~/Components/Providers/FeatureFlagsProvider"
 
 // Enable it if we are switching back to a direct call to coingecko instead of using the proxy
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
