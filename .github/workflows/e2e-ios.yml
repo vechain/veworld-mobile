@@ -133,6 +133,8 @@ jobs:
               echo "(find / -name 'VeWorld.app' 2>/dev/null)"
               echo "finished searching"
               SIMULATOR_APP_PATH=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app" -print -quit)
+              cd $SIMULATOR_APP_PATH
+              ls -la
               echo "APP_PATH=$SIMULATOR_APP_PATH" >> $GITHUB_ENV
               echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app.dSYM" -print -quit)" >> $GITHUB_ENV
               
@@ -151,11 +153,6 @@ jobs:
               echo "run_id=$successful_run" >> $GITHUB_ENV
               gh variable set IOS_RUN_ID --body "$successful_run"
 
-
-      - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
-        with:
-            api-key: ${{ secrets.DCD_API_KEY }}
-            app-file: ${{ env.APP_PATH }}
 
   test-ios:
     name: Test iOS Release
@@ -184,6 +181,8 @@ jobs:
             pwd
             ls -la
             echo " Run ID: ${{ env.RUN_ID }}"
+            cd VeWorld.app
+            ls -la
 
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
           with:
