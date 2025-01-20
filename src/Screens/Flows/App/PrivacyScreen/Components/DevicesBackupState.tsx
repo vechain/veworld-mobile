@@ -21,9 +21,9 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
     const { LL } = useI18nContext()
 
     const handlePress = useCallback(
-        (device: BaseDevice) => {
-            if (device.type !== DEVICE_TYPE.LEDGER) {
-                onPress(device as LocalDevice)
+        (item: BaseDevice) => {
+            if (item.type === DEVICE_TYPE.LOCAL_MNEMONIC) {
+                onPress(item as LocalDevice)
             }
         },
         [onPress],
@@ -31,7 +31,7 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
 
     const getStatusConfig = useCallback(
         (item: BaseDevice): StatusConfig => {
-            if (item.type === DEVICE_TYPE.LEDGER) {
+            if (item.type !== DEVICE_TYPE.LOCAL_MNEMONIC) {
                 return {
                     variant: "neutral",
                     statusText: LL.BD_CANT_BE_BACKED_UP(),

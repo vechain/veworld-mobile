@@ -1,12 +1,12 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
-import { StyleProp, View, ViewProps } from "react-native"
+import React, { useCallback, ReactNode } from "react"
+import { StyleProp, View, ViewProps, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
 
 type Props = {
     iconTestID?: string
-    text?: string
+    title?: string
     hasBottomSpacer?: boolean
     iconColor?: string
     beforeNavigating?: () => Promise<void> | void
@@ -14,18 +14,20 @@ type Props = {
     onGoBack?: () => void
     preventGoBack?: boolean
     iconStyle?: StyleProp<ViewProps>
+    rightElement?: ReactNode
 } & ViewProps
 
 export const BackButtonHeader = ({
     iconTestID = "BackButtonHeader-BaseIcon-backButton",
     hasBottomSpacer = true,
-    text,
+    title,
     iconColor,
     beforeNavigating,
     onGoBack,
     preventGoBack = false,
     action,
     iconStyle,
+    rightElement,
     ...otherProps
 }: Props) => {
     const nav = useNavigation()
@@ -45,20 +47,31 @@ export const BackButtonHeader = ({
 
     return (
         <View {...otherProps}>
-            <BaseView flexDirection="row" alignItems="center">
-                <BaseIcon
-                    haptics="Light"
-                    style={[iconStyle]}
-                    px={12}
-                    size={36}
-                    name="icon-chevron-left"
-                    color={iconColor || theme.colors.text}
-                    action={onActionPress}
-                    testID={iconTestID}
-                />
-                {!!text && <BaseText typographyFont="button">{text}</BaseText>}
+            <BaseView>
+                <BaseView flexDirection="row" w={100} py={12} justifyContent="space-between">
+                    <BaseIcon
+                        haptics="Light"
+                        style={[iconStyle]}
+                        size={24}
+                        name="icon-arrow-left"
+                        color={iconColor ?? theme.colors.text}
+                        action={onActionPress}
+                        testID={iconTestID}
+                    />
+                    <BaseText typographyFont="subSubTitleSemiBold">{title}</BaseText>
+                    <BaseSpacer width={24} />
+                    {rightElement && <BaseView style={styles.rightElementContainer}>{rightElement}</BaseView>}
+                </BaseView>
+                {hasBottomSpacer && <BaseSpacer height={24} />}
             </BaseView>
-            {hasBottomSpacer && <BaseSpacer height={16} />}
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    rightElementContainer: {
+        position: "absolute",
+        right: 0,
+        top: 8,
+    },
+})

@@ -2,17 +2,15 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { COLORS } from "~Constants"
 import { BaseCard, BaseCustomTokenIcon, BaseImage } from "~Components/Base"
-import { address } from "thor-devkit"
 
 type Props = {
     height: number
     width: number
     icon?: string
-    tokenAddress?: string
     symbol?: string
 }
 
-export const TokenImage = ({ height, width, icon, tokenAddress, symbol }: Props) => {
+export const TokenImage = ({ height, width, icon, symbol }: Props) => {
     return (
         <>
             {icon ? (
@@ -22,11 +20,7 @@ export const TokenImage = ({ height, width, icon, tokenAddress, symbol }: Props)
                     <BaseImage uri={icon} style={{ height: height, width: width }} />
                 </BaseCard>
             ) : (
-                <BaseCustomTokenIcon
-                    style={styles.icon}
-                    tokenAddress={address.toChecksumed(tokenAddress ?? "")}
-                    tokenSymbol={symbol ?? ""}
-                />
+                <BaseCustomTokenIcon style={styles.icon} tokenSymbol={symbol ?? ""} />
             )}
         </>
     )
@@ -38,6 +32,7 @@ const styles = StyleSheet.create({
     imageContainer: {
         borderRadius: 30,
         padding: 10,
+        justifyContent: "center",
     },
     icon: {
         width: 38,

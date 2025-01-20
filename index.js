@@ -13,6 +13,7 @@ import {
     ConnexContextProvider,
     TranslationProvider,
     WalletConnectContextProvider,
+    FeatureFlagsProvider,
 } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
@@ -22,6 +23,7 @@ import {
     Inter_Light,
     Inter_Medium,
     Inter_Regular,
+    Inter_SemiBold,
     Mono_Bold,
     Mono_Extra_Bold,
     Mono_Light,
@@ -68,6 +70,7 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
 const Main = () => {
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
+        [fontFamily["Inter-SemiBold"]]: Inter_SemiBold,
         [fontFamily["Inter-Regular"]]: Inter_Regular,
         [fontFamily["Inter-Light"]]: Inter_Light,
         [fontFamily["Inter-Medium"]]: Inter_Medium,
@@ -120,16 +123,18 @@ const Main = () => {
                     persistOptions={{
                         persister: clientPersister,
                     }}>
-                    <NavigationProvider>
-                        <WalletConnectContextProvider>
-                            <InAppBrowserProvider>
-                                <BottomSheetModalProvider>
-                                    <EntryPoint />
-                                </BottomSheetModalProvider>
-                            </InAppBrowserProvider>
-                        </WalletConnectContextProvider>
-                    </NavigationProvider>
-                    <BaseToast />
+                    <FeatureFlagsProvider>
+                        <NavigationProvider>
+                            <WalletConnectContextProvider>
+                                <InAppBrowserProvider>
+                                    <BottomSheetModalProvider>
+                                        <EntryPoint />
+                                    </BottomSheetModalProvider>
+                                </InAppBrowserProvider>
+                            </WalletConnectContextProvider>
+                        </NavigationProvider>
+                        <BaseToast />
+                    </FeatureFlagsProvider>
                 </PersistQueryClientProvider>
             </ConnexContextProvider>
         </GestureHandlerRootView>

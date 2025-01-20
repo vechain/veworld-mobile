@@ -134,10 +134,10 @@ export const BrowserHistoryScreen = () => {
         <Layout
             hasSafeArea={true}
             hasTopSafeAreaOnly={false}
+            title={LL.BROWSER_HISTORY_TITLE()}
             fixedHeader={
                 <>
-                    <BaseText typographyFont="title">{LL.BROWSER_HISTORY_TITLE()}</BaseText>
-                    <BaseSpacer height={12} />
+                    <BaseSpacer height={16} />
                     <BaseSearchInput
                         placeholder={LL.BROWSER_HISTORY_SEARCH_PLACEHOLDER()}
                         setValue={onTextChange}

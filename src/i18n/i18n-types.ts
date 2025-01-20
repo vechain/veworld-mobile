@@ -145,6 +145,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
 	/**
+	 * Y​o​u​ ​c​a​n​ ​o​n​l​y​ ​c​o​n​v​e​r​t​ ​V​O​T​3​ ​b​a​c​k​ ​t​o​ ​B​3​T​R​ ​f​r​o​m​ ​t​h​e​ ​w​a​l​l​e​t​ ​y​o​u​ ​c​o​m​p​l​e​t​e​d​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​B​3​T​R​ ​t​o​ ​V​O​T​3​ ​c​o​n​v​e​r​s​i​o​n
+	 */
+	ALERT_MSG_VOT3: string
+	/**
 	 * A​s​k​ ​m​e​ ​l​a​t​e​r
 	 */
 	ALERT_OPTION_ASK_ME_LATER: string
@@ -196,6 +200,10 @@ type RootTranslation = {
 	 * B​l​u​e​t​o​o​t​h​ ​i​s​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d
 	 */
 	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: string
+	/**
+	 * V​O​T​3
+	 */
+	ALERT_TITLE_VOT3: string
 	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
@@ -2561,6 +2569,10 @@ type RootTranslation = {
 	 */
 	SB_INSERT_KEYSTORE_PASSWORD: string
 	/**
+	 * M​y​ ​t​o​k​e​n​s
+	 */
+	SB_MY_TOKENS: string
+	/**
 	 * Y​o​u​r​ ​a​c​t​i​v​i​t​i​e​s​ ​w​i​l​l​ ​a​p​p​e​a​r​ ​h​e​r​e
 	 */
 	SB_NO_TRANSACTIONS: string
@@ -3193,6 +3205,10 @@ type RootTranslation = {
 	 */
 	TITLE_MANAGE_WALLET: string
 	/**
+	 * M​e​n​u
+	 */
+	TITLE_MENU: string
+	/**
 	 * Y​o​u​r​ ​M​n​e​m​o​n​i​c
 	 */
 	TITLE_MNEMONIC: string
@@ -3287,7 +3303,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
 	/**
-	 * W​a​l​l​e​t​s
+	 * M​a​n​a​g​e​ ​W​a​l​l​e​t​s
 	 */
 	TITLE_WALLET_MANAGEMENT: string
 	/**
@@ -3656,6 +3672,10 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: () => LocalizedString
 	/**
+	 * You can only convert VOT3 back to B3TR from the wallet you completed the original B3TR to VOT3 conversion
+	 */
+	ALERT_MSG_VOT3: () => LocalizedString
+	/**
 	 * Ask me later
 	 */
 	ALERT_OPTION_ASK_ME_LATER: () => LocalizedString
@@ -3707,6 +3727,10 @@ Try reconnect your device to the internet.
 	 * Bluetooth is not supported
 	 */
 	ALERT_TITLE_UNSUPPORTED_BLUETOOTH: () => LocalizedString
+	/**
+	 * VOT3
+	 */
+	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
 	 * Please confirm that you would like to process this request.
 	 */
@@ -6037,6 +6061,10 @@ Try reconnect your device to the internet.
 	 */
 	SB_INSERT_KEYSTORE_PASSWORD: () => LocalizedString
 	/**
+	 * My tokens
+	 */
+	SB_MY_TOKENS: () => LocalizedString
+	/**
 	 * Your activities will appear here
 	 */
 	SB_NO_TRANSACTIONS: () => LocalizedString
@@ -6665,6 +6693,10 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_MANAGE_WALLET: () => LocalizedString
 	/**
+	 * Menu
+	 */
+	TITLE_MENU: () => LocalizedString
+	/**
 	 * Your Mnemonic
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
@@ -6757,7 +6789,7 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
-	 * Wallets
+	 * Manage Wallets
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**

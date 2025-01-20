@@ -10,6 +10,7 @@ import {
     DismissKeyboardView,
     Layout,
     OfficialTokenCard,
+    PlusIconHeaderButton,
     useThor,
 } from "~Components"
 
@@ -121,27 +122,11 @@ export const ManageTokenScreen = () => {
         <DismissKeyboardView>
             <Layout
                 safeAreaTestID="Manage_Tokens_Screen"
+                title={LL.MANAGE_TOKEN_TITLE()}
+                headerRightElement={<PlusIconHeaderButton action={openAddCustomTokenSheet} />}
                 body={
                     <>
                         <BaseView>
-                            <BaseView
-                                flexDirection="row"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                w={100}
-                                pt={16}>
-                                <BaseText typographyFont="title" testID="contacts-screen-title">
-                                    {LL.MANAGE_TOKEN_TITLE()}
-                                </BaseText>
-                                <BaseIcon
-                                    haptics="Light"
-                                    name={"icon-plus"}
-                                    size={24}
-                                    bg={theme.colors.secondary}
-                                    action={openAddCustomTokenSheet}
-                                    testID="ManageTokenScreen_AddCustomToken_Button"
-                                />
-                            </BaseView>
                             <BaseSpacer height={8} />
                             <BaseText typographyFont="body">{LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}</BaseText>
                             <BaseSpacer height={16} />
@@ -175,8 +160,8 @@ export const ManageTokenScreen = () => {
                                         <BaseSpacer height={16} />
                                         {selectedTokens.map(token => (
                                             <OfficialTokenCard
-                                                iconHeight={20}
-                                                iconWidth={20}
+                                                iconHeight={25}
+                                                iconWidth={25}
                                                 selected
                                                 key={token.address}
                                                 token={token}
@@ -192,8 +177,8 @@ export const ManageTokenScreen = () => {
                                         <BaseSpacer height={16} />
                                         {unselectedTokens.map(token => (
                                             <OfficialTokenCard
-                                                iconHeight={20}
-                                                iconWidth={20}
+                                                iconHeight={25}
+                                                iconWidth={25}
                                                 key={token.address}
                                                 token={token}
                                                 action={handleClickToken(token)}

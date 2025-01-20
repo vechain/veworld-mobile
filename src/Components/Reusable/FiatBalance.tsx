@@ -13,7 +13,7 @@ type FiatBalanceProps = {
     color?: BaseTextProps["color"]
 } & BaseViewProps
 
-const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
+export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
     const {
         isLoading = false,
         isVisible = true,
@@ -45,7 +45,7 @@ const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
         <BaseView pt={4} {...baseviewProps}>
             <BaseSkeleton
                 animationDirection="horizontalLeft"
-                boneColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.DARK_PURPLE}
+                boneColor={theme.isDark ? COLORS.PURPLE : COLORS.DARK_PURPLE}
                 highlightColor={COLORS.LIGHT_PURPLE}
                 height={38.5}
                 width={140}
@@ -62,5 +62,3 @@ const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
         </BaseView>
     )
 }
-
-export default FiatBalance

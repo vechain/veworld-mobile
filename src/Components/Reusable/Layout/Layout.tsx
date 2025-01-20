@@ -1,18 +1,17 @@
-import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useCallback, useMemo, useState } from "react"
-import { BaseSafeArea, BaseScrollView, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useMemo, useState } from "react"
+import { BaseSafeArea, BaseScrollView, BaseView } from "~Components/Base"
 import { BackButtonHeader } from "../BackButtonHeader"
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
 import { useTabBarBottomMargin } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { SelectedNetworkViewer } from "~Components"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { BackButtonHeaderV2 } from "~Components/Reusable/BackButtonHeader/BackButtonHeaderV2"
+import { CenteredHeader } from "../CenteredHeader"
 
 type Props = {
     noBackButton?: boolean
     noMargin?: boolean
     title?: string
-    pageHeader?: string
     fixedHeader?: ReactNode
     body?: ReactNode
     fixedBody?: ReactNode
@@ -30,13 +29,13 @@ type Props = {
     beforeNavigating?: () => Promise<void> | void
     hasSafeArea?: boolean
     hasTopSafeAreaOnly?: boolean
+    headerRightElement?: ReactNode
 }
 
 export const Layout = ({
     noBackButton = false,
     noMargin = false,
     title,
-    pageHeader,
     fixedHeader,
     body,
     fixedBody,
@@ -55,6 +54,7 @@ export const Layout = ({
     beforeNavigating,
     hasSafeArea = true,
     hasTopSafeAreaOnly = false,
+    headerRightElement,
 }: Props) => {
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } = useTabBarBottomMargin()
 
@@ -66,15 +66,6 @@ export const Layout = ({
         return tabBarBottomMargin ? 24 : 40
     }, [noStaticBottomPadding, tabBarBottomMargin])
 
-    const Title = useCallback(
-        () => (
-            <BaseText typographyFont="title" mb={16}>
-                {title}
-            </BaseText>
-        ),
-        [title],
-    )
-
     const [scrollViewHeight, setScrollViewHeight] = useState(0)
     const [scrollViewContentHeight, setScrollViewContentHeight] = useState(0)
 
@@ -82,31 +73,27 @@ export const Layout = ({
         () => (
             <BaseView h={100}>
                 <BaseView>
-                    {!noBackButton && (
-                        <>
+                    {!noBackButton ? (
+                        <BaseView mx={noMargin ? 0 : 16}>
                             <BackButtonHeader
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}
                                 onGoBack={onGoBack}
                                 preventGoBack={preventGoBack}
+                                title={title}
+                                rightElement={headerRightElement}
                             />
-                            <BaseSpacer height={8} />
-                        </>
-                    )}
-                    {pageHeader && (
-                        <BaseView>
-                            <BaseView mx={noMargin ? 0 : 20}>
-                                <BackButtonHeaderV2 title={pageHeader} />
-                            </BaseView>
                         </BaseView>
+                    ) : (
+                        title && (
+                            <BaseView mx={noMargin ? 0 : 16}>
+                                <CenteredHeader title={title} rightElement={headerRightElement} />
+                            </BaseView>
+                        )
                     )}
                     {fixedHeader && (
-                        <BaseView>
-                            <BaseView mx={noMargin ? 0 : 20}>
-                                {title && <Title />}
-                                {<BaseView>{fixedHeader}</BaseView>}
-                            </BaseView>
-                            {!noMargin && <BaseSpacer height={16} />}
+                        <BaseView justifyContent="center" py={8} px={noMargin ? 0 : 16}>
+                            <BaseView>{fixedHeader}</BaseView>
                         </BaseView>
                     )}
                     {showSelectedNetwork && (
@@ -127,15 +114,12 @@ export const Layout = ({
                         }}
                         ref={scrollViewRef}
                         refreshControl={refreshControl}
-                        testID={scrollViewTestID || "Layout_ScrollView"}
+                        testID={scrollViewTestID ?? "Layout_ScrollView"}
                         scrollEnabled={scrollViewContentHeight > scrollViewHeight}
                         style={noMargin ? {} : styles.scrollView}
-                        // eslint-disable-next-line react-native/no-inline-styles
                         contentContainerStyle={{
                             paddingBottom: isAndroid() ? androidOnlyTabBarBottomMargin : _iosOnlyTabBarBottomMargin,
-                            paddingTop: noMargin ? 0 : 16,
                         }}>
-                        {!fixedHeader && title && <Title />}
                         {body}
                     </BaseScrollView>
                 )}
@@ -148,7 +132,7 @@ export const Layout = ({
                 {footer && (
                     <BaseView
                         mb={noMargin ? 0 : Number(androidOnlyTabBarBottomMargin) + STATIC_BOTTOM_PADDING}
-                        mx={noMargin ? 0 : 20}>
+                        mx={noMargin ? 0 : 16}>
                         {footer}
                     </BaseView>
                 )}
@@ -156,14 +140,13 @@ export const Layout = ({
         ),
         [
             noBackButton,
+            noMargin,
             beforeNavigating,
             onGoBack,
             preventGoBack,
-            pageHeader,
-            fixedHeader,
-            noMargin,
             title,
-            Title,
+            headerRightElement,
+            fixedHeader,
             showSelectedNetwork,
             body,
             scrollViewRef,
@@ -199,7 +182,8 @@ export const Layout = ({
 
 const styles = StyleSheet.create({
     scrollView: {
-        paddingHorizontal: 24,
+        paddingHorizontal: 16,
+        paddingVertical: 16,
     },
     selectedNetworkViewerView: {
         position: "absolute",

@@ -78,11 +78,11 @@ export const AddCustomNodeScreen = () => {
 
     return (
         <Layout
+            title={LL.BTN_ADD_CUSTOM_NODE()}
             body={
                 <BaseView flexGrow={1} justifyContent="space-between">
                     <BaseView>
-                        <BaseText typographyFont="title">{LL.BTN_ADD_CUSTOM_NODE()}</BaseText>
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={12} />
                         <BaseText typographyFont="button" pb={8}>
                             {LL.NETWORK_ADD_CUSTOM_NODE_SB()}
                         </BaseText>

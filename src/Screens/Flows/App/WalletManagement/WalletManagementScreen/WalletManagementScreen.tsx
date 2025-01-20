@@ -1,9 +1,17 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { BaseView, DeviceBox, Layout, RequireUserPassword, SwipeableRow, showWarningToast } from "~Components"
+import {
+    BaseView,
+    DeviceBox,
+    Layout,
+    RequireUserPassword,
+    SwipeableRow,
+    PlusIconHeaderButton,
+    showWarningToast,
+} from "~Components"
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
-import { CreateOrImportWalletBottomSheet, RemoveWalletWarningBottomSheet, WalletManagementHeader } from "./components"
+import { CreateOrImportWalletBottomSheet, RemoveWalletWarningBottomSheet } from "./components"
 import { useWalletDeletion } from "./hooks"
 import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useCheckIdentity, useTabBarBottomMargin } from "~Hooks"
@@ -82,18 +90,6 @@ export const WalletManagementScreen = () => {
         return allDevices
     }, [accounts, devices])
 
-    const setIsEdit = useCallback(
-        (_isEdit: boolean) => {
-            if (_isEdit) {
-                closeOtherSwipeableItems()
-                _setIsEdit(true)
-            } else {
-                _setIsEdit(false)
-            }
-        },
-        [closeOtherSwipeableItems],
-    )
-
     const nav = useNavigation()
     const onDeviceSelected = useCallback(
         (device: BaseDevice) => {
@@ -158,16 +154,16 @@ export const WalletManagementScreen = () => {
         )
     }
 
+    const headerRightElement = useMemo(
+        () => <PlusIconHeaderButton action={onOpenAddWalletBottomSheet} testID="Wallet_Management_AddWallet" />,
+        [onOpenAddWalletBottomSheet],
+    )
+
     return (
         <Layout
             safeAreaTestID="Wallet_Management_Screen"
-            fixedHeader={
-                <WalletManagementHeader
-                    goToCreateWalletFlow={onOpenAddWalletBottomSheet}
-                    isEdit={isEdit}
-                    setIsEdit={setIsEdit}
-                />
-            }
+            title={LL.TITLE_WALLET_MANAGEMENT()}
+            headerRightElement={headerRightElement}
             fixedBody={
                 <BaseView style={styles.view} mb={tabBarBottomMargin}>
                     <DraggableFlatList<Device>

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { getSdkError } from "@walletconnect/utils"
-import React, { FC, useCallback, useMemo } from "react"
+import React, { FC, useCallback, useMemo, useRef } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
@@ -13,6 +13,7 @@ import {
     getRpcError,
     RequireUserPassword,
     SignAndReject,
+    SignAndRejectRefInterface,
     useWalletConnect,
 } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
@@ -44,6 +45,8 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const dispatch = useAppDispatch()
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
+
+    const signAndRejectRef = useRef<SignAndRejectRefInterface>(null)
 
     const sessionContext = useAppSelector(state => selectVerifyContext(state, requestEvent.topic))
 
@@ -182,6 +185,8 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
+                scrollEventThrottle={16}
+                onScroll={signAndRejectRef.current?.onScroll}
                 style={styles.scrollView}>
                 <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
@@ -218,9 +223,11 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                         setConfirmed={setInvalidChecked}
                     />
                 </BaseView>
+                <BaseSpacer height={194} />
             </ScrollView>
 
             <SignAndReject
+                ref={signAndRejectRef}
                 onConfirmTitle={LL.COMMON_BTN_SIGN()}
                 onConfirm={checkIdentityBeforeOpening}
                 isConfirmLoading={isBiometricsEmpty}

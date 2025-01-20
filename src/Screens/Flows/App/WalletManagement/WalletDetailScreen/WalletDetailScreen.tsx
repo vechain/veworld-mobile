@@ -1,11 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from "react"
-import { useBottomSheetModal, useCheckIdentity, useRenameWallet, useSetSelectedAccount, useTheme } from "~Hooks"
+import { useBottomSheetModal, useCheckIdentity, useRenameWallet, useSetSelectedAccount } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
-    BaseButton,
-    BaseIcon,
     BaseSpacer,
-    BaseText,
     BaseTextInput,
     BaseView,
     Layout,
@@ -13,13 +10,13 @@ import {
     showSuccessToast,
     showWarningToast,
     SwipeableRow,
+    PlusIconHeaderButton,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { addAccountForDevice, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } from "~Storage/Redux/Selectors"
-import { COLORS } from "~Constants"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { useAccountDelete } from "./hooks"
@@ -31,7 +28,6 @@ type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAIL
 
 export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { device } = params
-    const theme = useTheme()
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const [walletAlias, setWalletAlias] = useState(device?.alias ?? "")
@@ -110,32 +106,10 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     return (
         <Layout
-            noMargin
+            title={walletAlias || device?.alias || ""}
+            headerRightElement={showButton && <PlusIconHeaderButton action={onAddAccountClicked} />}
             fixedHeader={
-                <BaseView px={20} pb={16}>
-                    <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                        <BaseView flex={1}>
-                            <BaseText typographyFont="subTitleBold" ellipsizeMode="tail" numberOfLines={1}>
-                                {walletAlias || device?.alias || ""}
-                            </BaseText>
-                        </BaseView>
-                        <BaseSpacer width={4} />
-                        {showButton && (
-                            <BaseButton
-                                testID="WalletDetailScreen_addAccountButton"
-                                haptics="Light"
-                                action={onAddAccountClicked}
-                                bgColor={theme.colors.secondary}
-                                textColor={COLORS.DARK_PURPLE}
-                                radius={30}
-                                py={10}
-                                leftIcon={<BaseIcon name="icon-plus" size={20} color={COLORS.DARK_PURPLE} />}>
-                                <BaseSpacer width={2} />
-                                {LL.ADD_ACCOUNT()}
-                            </BaseButton>
-                        )}
-                    </BaseView>
-                    <BaseSpacer height={16} />
+                <BaseView py={16}>
                     {!showWalletNameInput && (
                         <BaseTextInput
                             placeholder={device?.alias || LL.WALLET_MANAGEMENT_WALLET_NAME()}

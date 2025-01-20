@@ -1,3 +1,3 @@
 export * from "./AccountIcon"
 export * from "./AddressButton"
-export * from "./ChangeAccountButtonPill"
+export * from "../HeaderButtons/ChangeAccountButtonPill"
