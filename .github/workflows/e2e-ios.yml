@@ -181,8 +181,6 @@ jobs:
             pwd
             ls -la
             echo " Run ID: ${{ env.RUN_ID }}"
-            cd VeWorld
-            ls -la
 
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
           with:
