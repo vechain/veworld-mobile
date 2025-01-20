@@ -188,12 +188,9 @@ jobs:
             echo "PWD: $(pwd)"
             echo "ls -la: $(ls -la)"
             echo " Run ID: ${{ env.RUN_ID }}"
-            cd Release-iphonesimulator
-            echo "ls -la: $(ls -la)"
-            cd ..
 
 
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
           with:
             api-key: ${{ secrets.DCD_API_KEY }}
-            app-file: ./Release-iphonesimulator/VeWorld.app
+            app-file: ./VeWorld.app
