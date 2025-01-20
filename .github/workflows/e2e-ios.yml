@@ -194,6 +194,9 @@ jobs:
             echo "PWD: $(pwd)"
             echo "ls -la: $(ls -la)"
             echo " Run ID: ${{ env.RUN_ID }}"
+            mv VeWold VeWorld.app
+            echo "After mv ls -la: $(ls -la)"
+
 
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
           with:
