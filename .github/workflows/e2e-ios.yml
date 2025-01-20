@@ -133,8 +133,6 @@ jobs:
               echo "(find / -name 'VeWorld.app' 2>/dev/null)"
               echo "finished searching"
               SIMULATOR_APP_PATH=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app" -print -quit)
-              cd $SIMULATOR_APP_PATH
-              ls -la
               echo "APP_PATH=$SIMULATOR_APP_PATH" >> $GITHUB_ENV
               echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app.dSYM" -print -quit)" >> $GITHUB_ENV
               
@@ -194,7 +192,7 @@ jobs:
             echo "PWD: $(pwd)"
             echo "ls -la: $(ls -la)"
             echo " Run ID: ${{ env.RUN_ID }}"
-            mv VeWold VeWorld.app
+            mv VeWorld VeWorld.app
             echo "After mv ls -la: $(ls -la)"
 
 
