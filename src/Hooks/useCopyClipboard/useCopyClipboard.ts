@@ -23,7 +23,7 @@ export const useCopyClipboard = () => {
 
     const onCopyToClipboard = useCallback(
         (text: string, labelName: string) => {
-            Clipboard.setStringAsync(text)
+            Clipboard.setStringAsync(text.toUpperCase())
                 .then(async () => {
                     await HapticsService.triggerImpact({ level: "Light" })
                     showSuccessToast({
