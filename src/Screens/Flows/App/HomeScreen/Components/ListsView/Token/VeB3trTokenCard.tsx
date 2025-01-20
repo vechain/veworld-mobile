@@ -3,11 +3,12 @@ import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
 import Animated from "react-native-reanimated"
 import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import { BalanceUtils, BigNutils } from "~Utils"
+import { BalanceUtils } from "~Utils"
 import { B3TR, COLORS, VOT3 } from "~Constants"
 import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
+import { selectBalanceForToken, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     isBalanceVisible: boolean
@@ -20,6 +21,8 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
     const vot3Token = useTokenWithCompleteInfo(VOT3)
     const b3trToken = useTokenWithCompleteInfo(B3TR)
 
+    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
+
     const {
         isTokensOwnedLoading,
         exchangeRate,
@@ -29,8 +32,11 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
         fiatBalance: b3trFiat,
     } = useTokenCardFiatInfo(b3trToken)
 
-    const parseVot3Balance = BigNutils(vot3Token.tokenUnitFullBalance).addTrailingZeros(vot3Token.decimals).toString
-    const vot3FiatBalance = BalanceUtils.getFiatBalance(parseVot3Balance, exchangeRate ?? 0, 18)
+    const vot3FiatBalance = BalanceUtils.getFiatBalance(
+        vot3RawBalance?.balance ?? "0",
+        exchangeRate ?? 0,
+        VOT3.decimals,
+    )
 
     const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trFiat)
 
