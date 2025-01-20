@@ -11,18 +11,17 @@ import { marketChartTimeframes } from "./constants"
 import { VETHOR_COINGECKO_ID, VET_COINGECKO_ID } from "~Constants"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import BigNumber from "bignumber.js"
-import { queryClient } from "~Api/QueryProvider"
-import { FeatureFlags } from "~Api/FeatureFlags"
+import { useFeatureFlags } from "../../Components/Providers/FeatureFlagsProvider"
 
 // Enable it if we are switching back to a direct call to coingecko instead of using the proxy
 const EXCHANGE_RATE_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_EXCHANGE_RATE_SYNC_PERIOD ?? "120000").toNumber()
 const CHART_DATA_SYNC_PERIOD = new BigNumber(process.env.REACT_APP_CHART_DATA_SYNC_PERIOD ?? "300000").toNumber()
 
-const EXCHANGE_RATE_STALE_TIME = 1000 * 60 // Data considered staled after 1 min
-const EXCHANGE_RATE_REFETCH_INTERVAL = 1000 * 60 * 2 // Refetch every 2 mins
+const EXCHANGE_RATE_STALE_TIME = 1000 * 30 // Data considered staled after 1 min
+const EXCHANGE_RATE_REFETCH_INTERVAL = 1000 * 60 * 1 // Refetch every 2 mins
 
-const getQueryCacheTime = (isCharts?: boolean) => {
-    const { marketsProxyFeature } = queryClient.getQueryData<FeatureFlags>(["Feature", "Flags"]) || {}
+const useQueryCacheTime = (isCharts?: boolean) => {
+    const { marketsProxyFeature } = useFeatureFlags()
 
     if (!marketsProxyFeature) return EXCHANGE_RATE_STALE_TIME
 
@@ -32,12 +31,9 @@ const getQueryCacheTime = (isCharts?: boolean) => {
 
     return EXCHANGE_RATE_STALE_TIME
 }
-
-const getRefetchIntevaltTime = () => {
-    const { marketsProxyFeature } = queryClient.getQueryData<FeatureFlags>(["Feature", "Flags"]) || {}
-    if (!marketsProxyFeature) return false
-
-    if (!marketsProxyFeature.enabled) return false
+const useGetRefetchIntervalTime = () => {
+    const { marketsProxyFeature } = useFeatureFlags()
+    if (!marketsProxyFeature || !marketsProxyFeature.enabled) return false
 
     return EXCHANGE_RATE_REFETCH_INTERVAL
 }
@@ -54,8 +50,8 @@ export const useTokenInfo = ({ id }: { id?: string }) => {
         queryKey: getTokenInfoQueryKey({ id }),
         queryFn: () => getTokenInfo(id),
         enabled: !!id,
-        staleTime: getQueryCacheTime(),
-        refetchInterval: getRefetchIntevaltTime(),
+        staleTime: useQueryCacheTime(),
+        refetchInterval: useGetRefetchIntervalTime(),
     })
 }
 
@@ -76,7 +72,6 @@ export const getMarketChartQueryKey = ({
  * @param days  the number of days to get the market chart for
  * @returns  the market chart array of arrays of [timestamp, price]
  */
-
 export const useMarketChart = ({
     id,
     vs_currency,
@@ -125,7 +120,6 @@ export const useSmartMarketChart = ({
         vs_currency,
         days: highestResolutionTimeframeDays,
     })
-
     return useQuery({
         queryKey: getMarketChartQueryKey({ id, vs_currency, days }),
         queryFn: () =>
@@ -134,8 +128,8 @@ export const useSmartMarketChart = ({
                 : getMarketChart({ coinGeckoId: id, vs_currency, days }),
         enabled: !!highestResolutionMarketChartData,
         placeholderData,
-        staleTime: getQueryCacheTime(true),
-        refetchInterval: getRefetchIntevaltTime(),
+        staleTime: useQueryCacheTime(true),
+        refetchInterval: useGetRefetchIntervalTime(),
     })
 }
 
@@ -145,8 +139,8 @@ export const useVechainStatsTokensInfo = () => {
     return useQuery({
         queryKey: getVechainStatsTokensQueryKey(),
         queryFn: () => getVechainStatsTokensInfo(),
-        staleTime: getQueryCacheTime(),
-        refetchInterval: getRefetchIntevaltTime(),
+        staleTime: useQueryCacheTime(),
+        refetchInterval: useGetRefetchIntervalTime(),
     })
 }
 
@@ -163,8 +157,8 @@ export const useVechainStatsTokenInfo = (tokenSymbol: string) => {
             const exchageRates = data[tokenSymbol]
             return currency === "USD" ? exchageRates.price_usd : exchageRates.price_eur
         },
-        staleTime: getQueryCacheTime(),
-        refetchInterval: getRefetchIntevaltTime(),
+        staleTime: useQueryCacheTime(),
+        refetchInterval: useGetRefetchIntervalTime(),
     })
 }
 
@@ -189,8 +183,8 @@ export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency:
         queryKey: getExchangeRateQueryKey({ id, vs_currency }),
         queryFn: () => tokenInfo?.market_data.current_price[currency],
         enabled: !!tokenInfo,
-        staleTime: getQueryCacheTime(),
-        refetchInterval: getRefetchIntevaltTime(),
+        staleTime: useQueryCacheTime(),
+        refetchInterval: useGetRefetchIntervalTime(),
     })
 }
 
