@@ -3,6 +3,7 @@ import {
     TokenInfoResponse,
     getCoinGeckoIdBySymbol,
     useExchangeRate,
+    useMarketChart,
     useTokenInfo,
 } from "~Api/Coingecko"
 import { useBalances } from "~Hooks/useBalances"
@@ -42,6 +43,12 @@ export const useTokenWithCompleteInfo = (token: FungibleToken): TokenWithComplet
         id: getCoinGeckoIdBySymbol[token.symbol],
     })
 
+    const { data: chartData } = useMarketChart({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: currency,
+        days: 1,
+    })
+
     return {
         ...token,
         fiatBalance,
@@ -52,6 +59,6 @@ export const useTokenWithCompleteInfo = (token: FungibleToken): TokenWithComplet
         exchangeRateLoading,
         tokenInfo,
         tokenInfoLoading,
-        chartData: undefined,
+        chartData,
     }
 }
