@@ -14,7 +14,7 @@ type Props = {
 export const VechainTokenCard = memo(({ tokenWithInfo, isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-    const { isTokensOwnedLoading, fiatBalance, exchangeRate, isPositive24hChange, change24h, isLoading } =
+    const { change24h, isTokensOwnedLoading, fiatBalance, exchangeRate, isPositive24hChange, isLoading } =
         useTokenCardFiatInfo(tokenWithInfo)
 
     const renderFiatBalance = useMemo(() => {
