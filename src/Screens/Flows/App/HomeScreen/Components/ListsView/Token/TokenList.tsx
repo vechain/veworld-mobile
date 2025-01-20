@@ -90,19 +90,19 @@ export const TokenList = memo(({ isBalanceVisible, ...animatedViewProps }: Props
     return (
         <Animated.View {...animatedViewProps}>
             <AnimatedTokenListItem
-                isVechainToken
+                isVechainToken={true}
                 tokenWithInfo={tokenWithInfoVET}
                 isBalanceVisible={isBalanceVisible}
                 onPress={() => onVechainTokenPress(tokenWithInfoVET)}
             />
             <AnimatedTokenListItem
-                isVechainToken
+                isVechainToken={true}
                 tokenWithInfo={tokenWithInfoVTHO}
                 isBalanceVisible={isBalanceVisible}
                 onPress={() => onVechainTokenPress(tokenWithInfoVTHO)}
             />
             <AnimatedTokenListItem
-                isVechainToken
+                isVechainToken={true}
                 tokenWithInfo={tokenWithInfoB3TR}
                 isBalanceVisible={isBalanceVisible}
                 onPress={() => onVechainTokenPress(tokenWithInfoB3TR)}

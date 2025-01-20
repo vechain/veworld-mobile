@@ -49,6 +49,7 @@ export const selectNonVechainFungibleTokens = createSelector(selectOfficialToken
         (token: FungibleToken) =>
             !compareAddresses(token.address, VET.address) &&
             !compareAddresses(token.address, VTHO.address) &&
-            !compareAddresses(token.address, B3TR.address),
+            !compareAddresses(token.address, B3TR.address) &&
+            !compareAddresses(token.address, VOT3.address),
     ),
 )
