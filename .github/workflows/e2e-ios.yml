@@ -171,6 +171,19 @@ jobs:
           with:
             ref: ${{ github.ref }}
 
+        - name: Pre-Download machine state
+          run: |
+            echo "Downloading machine state"
+            echo "Run ID: ${{ env.RUN_ID }}"
+            echo "APP_PATH: ${{ env.APP_PATH }}"
+            echo "GH_TOKEN: ${{ env.GH_TOKEN }}"
+            echo "PWD: $(pwd)"
+            echo "ls -la: $(ls -la)"
+            mkdir artifact-download
+            cd artifact-download
+            echo "PWD: $(pwd)"
+            echo "ls -la: $(ls -la)"
+
         - name: Download .app
           uses: actions/download-artifact@v4
           with:
@@ -178,8 +191,8 @@ jobs:
             run-id: ${{ env.RUN_ID }}
         - name: Debug .app
           run: |
-            pwd
-            ls -la
+            echo "PWD: $(pwd)"
+            echo "ls -la: $(ls -la)"
             echo " Run ID: ${{ env.RUN_ID }}"
 
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
