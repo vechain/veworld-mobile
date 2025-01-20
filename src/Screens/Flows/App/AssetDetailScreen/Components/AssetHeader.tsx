@@ -36,11 +36,13 @@ export const AssetHeader = ({ name, symbol, icon }: Props) => {
 
 const baseStyles = StyleSheet.create({
     imageContainer: {
-        borderRadius: 30,
-        padding: 9,
+        height: 40,
+        width: 40,
+        borderRadius: 20,
+        padding: 10,
         backgroundColor: COLORS.GREY_50,
     },
-    image: { width: 14, height: 14 },
+    image: { width: 20, height: 20 },
     rightElementContainer: {
         position: "absolute",
         right: 0,
@@ -48,6 +50,7 @@ const baseStyles = StyleSheet.create({
     },
     headerContainer: {
         height: 32,
+        paddingVertical: 4,
     },
     assetDetailsHeader: {
         paddingHorizontal: 16,

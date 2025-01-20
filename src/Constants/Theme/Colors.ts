@@ -334,8 +334,8 @@ const dark: Colors = {
     pressableCardBackground: COLORS.PURPLE,
     pressableCardBorder: COLORS.DARK_PURPLE_DISABLED,
     tokenCardText: COLORS.PRIMARY_200,
-    graphLine: COLORS.PRIMARY_700,
-    graphGradient: COLORS.PRIMARY_400,
+    graphLine: COLORS.LIGHT_GREEN,
+    graphGradient: COLORS.LIME_GREEN,
     graphStatsText: COLORS.GREY_400,
     successVariant: {
         background: COLORS.GREEN_100,
