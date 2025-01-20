@@ -7,18 +7,29 @@ import { StyleSheet } from "react-native"
 type Props = {
     renderFiatBalance: React.ReactNode
     isLoading: boolean
-    isPositive24hChange: boolean
-    change24h: string
+    isPositive24hChange?: boolean
+    change24h?: string
 }
 
 export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive24hChange, change24h }: Props) => {
     const theme = useTheme()
-
     return (
         <Animated.View style={baseStyles.container}>
-            <BaseView flexDirection="row" alignItems="center">
-                {renderFiatBalance}
-            </BaseView>
+            {isLoading ? (
+                <BaseView flexDirection="row" alignItems="center">
+                    <BaseSkeleton
+                        animationDirection="horizontalLeft"
+                        boneColor={theme.colors.skeletonBoneColor}
+                        highlightColor={theme.colors.skeletonHighlightColor}
+                        height={14}
+                        width={60}
+                    />
+                </BaseView>
+            ) : (
+                <BaseView flexDirection="row" alignItems="center">
+                    {renderFiatBalance}
+                </BaseView>
+            )}
 
             <BaseSpacer height={3} />
 
@@ -34,7 +45,7 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
                 </BaseView>
             ) : (
                 <BaseText
-                    typographyFont="captionRegular"
+                    typographyFont="smallCaptionRegular"
                     color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
                     {change24h}
                 </BaseText>
@@ -45,6 +56,6 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
 
 const baseStyles = StyleSheet.create({
     container: {
-        alignItems: "flex-start",
+        alignItems: "flex-end",
     },
 })

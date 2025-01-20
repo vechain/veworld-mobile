@@ -1,36 +1,17 @@
 import React, { useEffect, useState } from "react"
 import { Modal, Pressable, StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { AlertCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 
 type NotEnoughGasModalProps = {
     isVisible: boolean
 }
 
-function NotEnoughGasMessage() {
-    const theme = useTheme()
-    const { LL } = useI18nContext()
-
-    return (
-        <BaseView flexDirection="column">
-            <BaseView flexDirection="row" alignItems="center">
-                <BaseIcon name="icon-alert-circle" color={theme.colors.danger} size={20} />
-                <BaseSpacer width={6} />
-                <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
-                    {LL.SEND_ACCEPT_NO_GAS_TITLE()}
-                </BaseText>
-            </BaseView>
-            <BaseSpacer height={16} />
-            <BaseText>{LL.SEND_ACCEPT_NO_GAS_MESSAGE()}</BaseText>
-        </BaseView>
-    )
-}
-
 export const NotEnoughGasModal: React.FC<NotEnoughGasModalProps> = ({ isVisible }) => {
     const [modalVisible, setModalVisible] = useState(false)
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
     useEffect(() => {
@@ -47,13 +28,19 @@ export const NotEnoughGasModal: React.FC<NotEnoughGasModalProps> = ({ isVisible 
                     setModalVisible(!modalVisible)
                 }}>
                 <BaseView style={styles.centeredView}>
-                    <BaseView style={styles.modalView}>
-                        <NotEnoughGasMessage />
-                        <BaseSpacer height={18} />
+                    <BaseView px={20} style={styles.modalView}>
+                        <AlertCard
+                            title={LL.SEND_ACCEPT_NO_GAS_TITLE()}
+                            message={LL.SEND_ACCEPT_NO_GAS_MESSAGE()}
+                            status="error"
+                        />
+                        <BaseSpacer height={12} />
                         <Pressable
                             style={[styles.button, styles.buttonClose]}
                             onPress={() => setModalVisible(!modalVisible)}>
-                            <BaseText style={styles.textStyle}>{LL.SEND_ACCEPT_NO_GAS_ACCEPT()}</BaseText>
+                            <BaseText typographyFont="buttonMedium" color={theme.colors.button}>
+                                {LL.SEND_ACCEPT_NO_GAS_ACCEPT()}
+                            </BaseText>
                         </Pressable>
                     </BaseView>
                 </BaseView>
@@ -68,16 +55,15 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "rgba(0, 0, 0, 0.5)", // Add this line
+            backgroundColor: "rgba(0, 0, 0, 0.6)", // Add this line
         },
         modalView: {
             flexDirection: "column",
             justifyContent: "space-between",
-            width: "80%",
-            margin: 20,
-            borderRadius: 20,
-            padding: 15,
-            alignItems: "center",
+            width: "85%",
+            borderRadius: 12,
+            paddingVertical: 16,
+            paddingHorizontal: 16,
             shadowColor: "#000",
             shadowOffset: {
                 width: 0,
@@ -89,17 +75,13 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.card,
         },
         button: {
-            borderRadius: 20,
-            padding: 10,
+            borderRadius: 8,
+            alignItems: "center",
+            padding: 14,
             elevation: 2,
-            width: "92%",
         },
         buttonClose: {
-            backgroundColor: theme.colors.primary,
-        },
-        textStyle: {
-            color: theme.colors.textReversed,
-            fontWeight: "bold",
-            textAlign: "center",
+            borderWidth: 1,
+            borderColor: theme.colors.button,
         },
     })
