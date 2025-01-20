@@ -1,9 +1,8 @@
 import React, { memo } from "react"
 import { ActivityDetail } from "../Type"
-import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseTouchable, BaseView, FiatBalance } from "~Components"
 import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 
 export type ActivityDetailContent = ActivityDetail
 

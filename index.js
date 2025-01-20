@@ -23,6 +23,7 @@ import {
     Inter_Light,
     Inter_Medium,
     Inter_Regular,
+    Inter_SemiBold,
     Mono_Bold,
     Mono_Extra_Bold,
     Mono_Light,
@@ -69,6 +70,7 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
 const Main = () => {
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
+        [fontFamily["Inter-SemiBold"]]: Inter_SemiBold,
         [fontFamily["Inter-Regular"]]: Inter_Regular,
         [fontFamily["Inter-Light"]]: Inter_Light,
         [fontFamily["Inter-Medium"]]: Inter_Medium,

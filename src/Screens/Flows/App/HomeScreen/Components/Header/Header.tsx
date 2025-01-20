@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
-import { useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
+import { useBlockchainNetwork, useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
 import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect } from "~Components"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes, TabStackParamList } from "~Navigation"
@@ -19,6 +19,7 @@ export const Header = memo(() => {
     const nav = useNavigation<Navigation>()
     const { LL } = useI18nContext()
     const { addVisitedUrl } = useVisitedUrls()
+    const { isMainnet } = useBlockchainNetwork()
 
     const { onPair } = useWalletConnect()
 
@@ -68,12 +69,16 @@ export const Header = memo(() => {
         nav.navigate(Routes.WALLET_MANAGEMENT)
     }, [nav])
 
+    const goToChooseNetwork = useCallback(() => {
+        nav.navigate(Routes.SETTINGS_NETWORK)
+    }, [nav])
+
     return (
-        <BaseView w={100} px={20} pb={4} flexDirection="row" alignItems="center" justifyContent="space-between">
-            <BaseView flexDirection="row" alignItems="center" alignSelf="flex-start">
+        <BaseView w={100} flexDirection="row" alignItems="center" justifyContent="space-between">
+            <BaseView flexDirection="row" alignItems="center" alignSelf="center">
                 <VeWorldLogoSVG height={32} width={32} />
                 <BaseSpacer width={8} />
-                <BaseText typographyFont="captionSemiBold" testID="veworld-homepage">
+                <BaseText typographyFont="bodySemiBold" testID="veworld-homepage">
                     {LL.VEWORLD()}
                 </BaseText>
             </BaseView>
@@ -98,6 +103,15 @@ export const Header = memo(() => {
                 />
                 <BaseSpacer width={16} />
                 <SelectedNetworkViewer />
+                {isMainnet && (
+                    <BaseIcon
+                        name={"icon-globe"}
+                        size={24}
+                        color={theme.colors.text}
+                        action={goToChooseNetwork}
+                        haptics="Light"
+                    />
+                )}
             </BaseView>
 
             {RenderCameraModal}

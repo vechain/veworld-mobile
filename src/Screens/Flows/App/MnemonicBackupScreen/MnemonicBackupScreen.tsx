@@ -19,8 +19,7 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
     return (
         <Layout
             noStaticBottomPadding
-            noBackButton
-            pageHeader={LL.SB_RECOVERY_PHRASE()}
+            title={LL.SB_RECOVERY_PHRASE()}
             body={
                 <BaseView>
                     {!manualOnlyBackup ? (

@@ -16,15 +16,16 @@ import {
     FadeoutButton,
     Layout,
     showErrorToast,
+    FiatBalance,
+    AlertCard,
 } from "~Components"
-import { B3TR, COLORS, CURRENCY_SYMBOLS, typography, VTHO } from "~Constants"
+import { COLORS, CURRENCY_SYMBOLS, typography, VOT3, VTHO } from "~Constants"
 import { useAmountInput, useTheme, useThemedStyles } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 import { useTotalTokenBalance, useUI } from "./Hooks"
 
 const { defaults: defaultTypography } = typography
@@ -41,9 +42,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const timer = useRef<NodeJS.Timeout | null>(null)
     const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
-
-    //TODO: to be removed when the we refactor the cards in home screen (need to be changed also in the token registry)
-    const icon = useMemo(() => (token.symbol === B3TR.symbol ? B3TR.icon : token.icon), [token.icon, token.symbol])
+    const isVOT3 = useMemo(() => token.symbol.toLowerCase() === VOT3.symbol.toLowerCase(), [token.symbol])
 
     const currency = useAppSelector(selectCurrency)
 
@@ -270,9 +269,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             body={
                 <DismissKeyboardView>
                     <BaseView>
+                        {isVOT3 && (
+                            <>
+                                <AlertCard title={LL.ALERT_TITLE_VOT3()} message={LL.ALERT_MSG_VOT3()} status="info" />
+                                <BaseSpacer height={16} />
+                            </>
+                        )}
                         <BaseText typographyFont="button">{LL.SEND_CURRENT_BALANCE()}</BaseText>
                         <BaseSpacer height={8} />
-
                         {/* [START] - HEADER */}
                         <BaseView flexDirection="row" alignItems="baseline" style={styles.budget}>
                             <BaseView flexDirection="row" mr={8}>
@@ -313,7 +317,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     </BaseText>
                                                 ) : (
                                                     // @ts-ignore
-                                                    <BaseImage uri={icon} style={styles.logoIcon} />
+                                                    <BaseImage uri={token.icon} style={styles.logoIcon} />
                                                 )}
                                             </BaseView>
                                             <BaseSpacer width={18} />
@@ -455,6 +459,7 @@ const baseStyles = (isExchangeRateAvailable: boolean) => () =>
         logoIcon: {
             height: 20,
             width: 20,
+            marginLeft: 4,
         },
         amountContainer: {
             overflow: "visible",

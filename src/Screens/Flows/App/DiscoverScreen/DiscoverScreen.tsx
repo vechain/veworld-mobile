@@ -2,7 +2,7 @@ import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Keyboard, Linking, StyleSheet } from "react-native"
 import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-reanimated"
-import { AnimatedFloatingButton, BaseSpacer, BaseView, Layout } from "~Components"
+import { AnimatedFloatingButton, BaseSpacer, BaseView, Layout, SelectedNetworkViewer } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls, useFetchFeaturedDApps } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -119,17 +119,22 @@ export const DiscoverScreen: React.FC = () => {
     const renderScreenHeader = useMemo(() => {
         return (
             <>
-                <AnimatedTitle title={LL.DISCOVER_TITLE()} scrollOffset={offset} />
-                <BaseSpacer height={16} />
+                <BaseView style={styles.header}>
+                    <AnimatedTitle title={LL.DISCOVER_TITLE()} scrollOffset={offset} />
+                    <BaseView flexDirection="row" justifyContent="space-between">
+                        <SelectedNetworkViewer />
+                    </BaseView>
+                </BaseView>
+                <BaseSpacer height={20} />
                 <AnimatedSearchBar
                     placeholder={LL.DISCOVER_SEARCH()}
                     value={filteredSearch}
                     iconName={"icon-history"}
-                    iconColor={visitedUrls.length > 0 ? theme.colors.primary : theme.colors.disabledButton}
+                    iconColor={visitedUrls.length > 0 ? theme.colors.text : theme.colors.disabledButton}
                     onTextChange={onTextChange}
                     onIconPress={onNavigateToBrowserHistory}
                 />
-                <BaseSpacer height={12} />
+                <BaseSpacer height={4} />
             </>
         )
     }, [
@@ -138,8 +143,9 @@ export const DiscoverScreen: React.FC = () => {
         offset,
         onNavigateToBrowserHistory,
         onTextChange,
+        styles.header,
         theme.colors.disabledButton,
-        theme.colors.primary,
+        theme.colors.text,
         visitedUrls.length,
     ])
 
@@ -147,7 +153,6 @@ export const DiscoverScreen: React.FC = () => {
         <Layout
             fixedHeader={renderScreenHeader}
             noBackButton
-            noMargin
             hasSafeArea
             fixedBody={
                 <BaseView style={styles.rootContainer}>
@@ -200,7 +205,8 @@ const baseStyles = () =>
             right: 0,
             zIndex: 2,
         },
-        paddingTop: {
-            paddingTop: 24,
+        header: {
+            flexDirection: "row",
+            justifyContent: "space-between",
         },
     })
