@@ -20,22 +20,22 @@ onFlowComplete:
     index: 0
 - tapOn: "NEXT"
 - inputText: ${AMOUNT}
-- tapOn: "Send"
-- tapOn: "NEXT"
+- tapOn:
+    id: "Select_Amount_Send_Screen"
+- tapOn:
+    id: "next-button"
 - runFlow:
     when:
       visible: "Select delegation"
     commands:
       - tapOn:
           id: "confirm-send-button"
-- tapOn: "Insert your 6-digit PIN"
-- assertVisible: "Insert your 6-digit PIN"
 - repeat:
-     while:
-       notVisible: "Your tokens"
-     commands:
-        - tapOn: "1"
-- assertVisible: "VeWorld"
+    while:
+      visible: "Insert your 6-digit PIN"
+    commands:
+      - tapOn: "1"
+- assertVisible: "My tokens"
 - evalScript: ${console.log('Send VET from Account 1 to Account 2')}
 
 ## User should be able to send tokens - Send VETHO from Account 1 to Account 2
@@ -56,19 +56,14 @@ onFlowComplete:
     id: "Layout_ScrollView"
 - tapOn:
     id: "next-button"
-- runFlow:
-    when:
-      visible: "Select delegation"
-    commands:
-      - tapOn:
-          id: "confirm-send-button"
-- assertVisible: "Insert your 6-digit PIN"
+- tapOn:
+    id: "confirm-send-button"
 - repeat:
-     while:
-       notVisible: "Your tokens"
-     commands:
-        - tapOn: "1"
-- assertVisible: "VeWorld"
+    while:
+      visible: "Insert your 6-digit PIN"
+    commands:
+      - tapOn: "1"
+- assertVisible: "My tokens"
 - evalScript: ${console.log('Send VETHO from Account 1 to Account 2')}
 
 ## User should be able to send tokens-Send VET from Account 2 to Account 1
@@ -96,17 +91,14 @@ onFlowComplete:
 - inputText: ${AMOUNT}
 - tapOn:
     id: "Layout_ScrollView"
-- tapOn: "NEXT"
-- runFlow:
-    when:
-      visible: "Select delegation"
-    commands:
-      - tapOn:
-          id: "confirm-send-button"
+- tapOn:
+    id: "next-button"
+- tapOn:
+    id: "confirm-send-button"
 - repeat:
-     while:
-       notVisible: "Your tokens"
-     commands:
-        - tapOn: "1"
-- assertVisible: "Your tokens"
+    while:
+      visible: "Insert your 6-digit PIN"
+    commands:
+      - tapOn: "1"
+- assertVisible: "My tokens"
 - evalScript: ${console.log('Send VET from Account 2 to Account 1')}
