@@ -56,8 +56,12 @@ onFlowComplete:
     id: "Layout_ScrollView"
 - tapOn:
     id: "next-button"
-- tapOn:
-    id: "confirm-send-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
 - repeat:
     while:
       visible: "Insert your 6-digit PIN"
@@ -93,8 +97,12 @@ onFlowComplete:
     id: "Layout_ScrollView"
 - tapOn:
     id: "next-button"
-- tapOn:
-    id: "confirm-send-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "confirm-send-button"
 - repeat:
     while:
       visible: "Insert your 6-digit PIN"

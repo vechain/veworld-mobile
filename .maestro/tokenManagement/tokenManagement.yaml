@@ -32,8 +32,10 @@ env:
 - runFlow:
       when:
           platform: Android
+          notVisible: "Selected" # Needed to avoid double click and deselect the token
       commands:
-          - tapOn: "Plair"
+          - tapOn:
+                text: "Plair"
 - runFlow:
       when:
           platform: iOS
@@ -52,7 +54,7 @@ env:
       when:
           platform: Android
       commands:
-          - assertVisible: "Plair"
+          - assertVisible: "PLA"
 - runFlow:
       when:
           platform: iOS
@@ -65,29 +67,30 @@ env:
       id: "EditTokensBar_BaseIcon_manageToken"
 - tapOn:
       id: "EditTokensBar_BaseIcon_manageToken"
-- runFlow:
-      when:
-          platform: iOS
-      commands:
-          - swipe:
-                from:
-                    id: "PLA"
-                direction: "UP"
-          - tapOn:
-                id: "JUR"
-          - tapOn:
-                id: "YEET"
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - swipe:
-                from: "Plair"
-                direction: "UP"
-          - tapOn:
-                text: "Jur"
-                index: 0
-          - tapOn: "Yeet Coin"
+# - runFlow:
+#       when:
+#           platform: iOS
+#       commands:
+#           - swipe:
+#                 from:
+#                     id: "PLA"
+#                 direction: "UP"
+#           - tapOn:
+#                 id: "JUR"
+#           - tapOn:
+#                 id: "YEET"
+# - runFlow:
+#       when:
+#           platform: Android
+#       commands:
+- swipe:
+      from:
+          id: "PLA"
+      direction: "UP"
+- tapOn:
+      id: "JUR"
+- tapOn:
+      id: "YEET"
 - repeat:
       while:
           notVisible:
@@ -115,10 +118,8 @@ env:
       when:
           platform: Android
       commands:
-          - assertVisible:
-                text: "Jur"
-                index: 0
-          - assertVisible: "Yeet Coin"
+          - assertVisible: "JUR"
+          - assertVisible: "YEET"
 - swipe:
       direction: "DOWN"
 ##User can unselect official tokens
@@ -130,19 +131,8 @@ env:
       from:
           id: "ManageTokenScreen_SearchInput_searchTokenInput"
       direction: "UP"
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - tapOn:
-                text: "Jur"
-                index: 0
-- runFlow:
-      when:
-          platform: iOS
-      commands:
-          - tapOn:
-                id: "JUR"
+- tapOn:
+      id: "JUR"
 - extendedWaitUntil:
       visible:
           id: "BackButtonHeader-BaseIcon-backButton"
@@ -162,9 +152,7 @@ env:
       when:
           platform: Android
       commands:
-          - assertNotVisible:
-                text: "Jur"
-                index: 0
+          - assertNotVisible: "JUR"
 ##User search for a token and only that token comes in the list
 - swipe:
       direction: "DOWN"
@@ -173,17 +161,8 @@ env:
 - tapOn:
       id: "ManageTokenScreen_SearchInput_searchTokenInput"
 - inputText: "PLAIR"
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - assertVisible: "Plair"
-- runFlow:
-      when:
-          platform: iOS
-      commands:
-          - assertVisible:
-                id: "PLA"
+- assertVisible:
+      id: "PLA"
 ##User add a custom token
 - extendedWaitUntil:
       visible:

@@ -29,7 +29,8 @@ env:
       when:
           platform: Android
       commands:
-          - tapOn: "Wallet_0"
+          - tapOn:
+                id: "DeviceBox"
 - runFlow:
       when:
           platform: iOS
