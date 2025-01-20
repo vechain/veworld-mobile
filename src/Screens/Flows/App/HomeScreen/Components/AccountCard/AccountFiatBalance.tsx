@@ -2,7 +2,8 @@ import React, { useMemo } from "react"
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { FiatBalance } from "~Components"
-import { BalanceUtils, BigNutils } from "~Utils"
+import { BalanceUtils } from "~Utils"
+import { selectBalanceForToken, useAppSelector } from "~Storage/Redux"
 
 type AccountFiatBalanceProps = {
     isVisible?: boolean
@@ -17,11 +18,13 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
 
     const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
-    const tokenWithInfoVOT3 = useTokenWithCompleteInfo(VOT3)
-    const parseVot3Balance = BigNutils(tokenWithInfoVOT3.tokenUnitFullBalance).addTrailingZeros(
-        tokenWithInfoVOT3.decimals,
-    ).toString
-    const vot3FiatBalance = BalanceUtils.getFiatBalance(parseVot3Balance, tokenWithInfoB3TR.exchangeRate ?? 0, 18)
+    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
+
+    const vot3FiatBalance = BalanceUtils.getFiatBalance(
+        vot3RawBalance?.balance ?? "0",
+        tokenWithInfoB3TR.exchangeRate ?? 0,
+        VOT3.decimals,
+    )
 
     const nonVechaiTokensFiat = useNonVechainTokenFiat()
 
