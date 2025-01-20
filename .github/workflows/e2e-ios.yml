@@ -132,14 +132,14 @@ jobs:
               echo "build finished searching for .app file"
               echo "(find / -name 'VeWorld.app' 2>/dev/null)"
               echo "finished searching"
-              SIMULATOR_APP_PATH=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app" -print -quit)
+              SIMULATOR_APP_PATH=$(find ~/ -path "*/Build/Products/Release-iphonesimulator" -print -quit)
               echo "APP_PATH=$SIMULATOR_APP_PATH" >> $GITHUB_ENV
-              echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator/VeWorld.app.dSYM" -print -quit)" >> $GITHUB_ENV
+              echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator" -print -quit)" >> $GITHUB_ENV
               
       - name: Upload .app 
         uses: actions/upload-artifact@v4
         with:
-          name: VeWorld.app
+          name: Release-iphonesimulator
           path: ${{ env.APP_PATH }}
 
       - name: Upload run_id number
@@ -177,26 +177,23 @@ jobs:
             echo "GH_TOKEN: ${{ env.GH_TOKEN }}"
             echo "PWD: $(pwd)"
             echo "ls -la: $(ls -la)"
-            mkdir artifact-download
-            cd artifact-download
-            echo "PWD: $(pwd)"
-            echo "ls -la: $(ls -la)"
 
         - name: Download .app
           uses: actions/download-artifact@v4
           with:
-            name: VeWorld.app
+            name: Release-iphonesimulator
             run-id: ${{ env.RUN_ID }}
         - name: Debug .app
           run: |
             echo "PWD: $(pwd)"
             echo "ls -la: $(ls -la)"
             echo " Run ID: ${{ env.RUN_ID }}"
-            mv VeWorld VeWorld.app
-            echo "After mv ls -la: $(ls -la)"
+            cd Release-iphonesimulator
+            echo "ls -la: $(ls -la)"
+            cd ..
 
 
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
           with:
             api-key: ${{ secrets.DCD_API_KEY }}
-            app-file: ./VeWorld.app
+            app-file: ./Release-iphonesimulator/VeWorld.app
