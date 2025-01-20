@@ -44,8 +44,6 @@ onFlowComplete:
                     visible: "Insert your 6-digit PIN"
                 commands:
                     - tapOn: "1"
-          - tapOn: "Back"
-          - tapOn: "Back"
           - tapOn:
                 id: "Copy_To_Clipboard_Btn"
           - tapOn:
