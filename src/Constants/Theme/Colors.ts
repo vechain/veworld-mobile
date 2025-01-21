@@ -65,6 +65,7 @@ export type Colors = {
     tokenCardText: string
     graphLine: string
     graphGradient: string
+    accountCard: string
     successVariant: {
         background: string
         border: string
@@ -161,6 +162,7 @@ export enum COLORS {
     MEDIUM_ORANGE = "#FA710E",
     DISABLED_GREY = "#E5E5E5",
     MEDIUM_GRAY = "#C4C4C4",
+    GREY_800 = "#202226",
     GREY_700 = "#363A3F",
     GREY_600 = "#525860",
     GREY_500 = "#747C89",
@@ -251,6 +253,7 @@ const light: Colors = {
     tokenCardText: COLORS.GREY_500,
     graphLine: COLORS.PURPLE,
     graphGradient: COLORS.GRAPH_GRADIENT_LIGHT,
+    accountCard: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -348,9 +351,10 @@ const dark: Colors = {
     toggleMnemonicButtonBackground: COLORS.PURPLE,
     pressableCardBackground: COLORS.PURPLE,
     pressableCardBorder: COLORS.DARK_PURPLE_DISABLED,
-    tokenCardText: COLORS.PRIMARY_200,
-    graphLine: COLORS.PRIMARY_700,
-    graphGradient: COLORS.PRIMARY_400,
+    tokenCardText: COLORS.GREY_300,
+    graphLine: COLORS.LIME_GREEN,
+    graphGradient: COLORS.LIME_GREEN,
+    accountCard: COLORS.LIME_GREEN,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
