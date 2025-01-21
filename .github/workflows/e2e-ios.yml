@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-e2e-ios:
-    name: Build & Test iOS Debug
+    name: Build & Test iOS
     runs-on: macos-latest
     environment: ios-release
     permissions:

@@ -7,7 +7,7 @@ on:
 
 jobs:
   build-test-android:
-      name: Build & Test Android Release
+      name: Build & Test Android 
       runs-on: ubuntu-latest
       environment: android-release
       if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
