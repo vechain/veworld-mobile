@@ -148,30 +148,3 @@ jobs:
           with:
             api-key: ${{ secrets.DCD_API_KEY }}
             app-file: ${{ env.output_dir }}/app-release.apk
-          
-            
-
-  test-android:
-      name: Test Android Release
-      needs:
-          - check-build-changes
-          - build-test-android
-      if: needs.check-build-changes.outputs.only_test_scripts_changed == 'true' || needs.build-test-android.result == 'success'
-      runs-on: ubuntu-latest
-      env:
-        RUN_ID: ${{ vars.android_run_id }}
-      steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
-
-          - name: Download apk
-            uses: actions/download-artifact@v4
-            with:
-              name: app-release.apk
-              run-id: ${{ needs.build-test-android.outputs.run_id }}
-              
-          - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
-            with:
-              api-key: ${{ secrets.DCD_API_KEY }}
-              app-file: ./app-release.apk
-              
