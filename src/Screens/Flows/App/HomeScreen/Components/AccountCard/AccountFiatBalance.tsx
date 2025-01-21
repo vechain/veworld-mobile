@@ -2,6 +2,8 @@ import React, { useMemo } from "react"
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { FiatBalance } from "~Components"
+import { BalanceUtils } from "~Utils"
+import { selectBalanceForToken, useAppSelector } from "~Storage/Redux"
 
 type AccountFiatBalanceProps = {
     isVisible?: boolean
@@ -14,9 +16,16 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
+
     const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
-    const tokenWithInfoVOT3 = useTokenWithCompleteInfo(VOT3)
-    const vot3Fiat = Number(tokenWithInfoVOT3.tokenUnitBalance) * (tokenWithInfoB3TR.exchangeRate ?? 0)
+    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
+
+    const vot3FiatBalance = BalanceUtils.getFiatBalance(
+        vot3RawBalance?.balance ?? "0",
+        tokenWithInfoB3TR.exchangeRate ?? 0,
+        VOT3.decimals,
+    )
+
     const nonVechaiTokensFiat = useNonVechainTokenFiat()
 
     const sum = useMemo(
@@ -24,13 +33,13 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
             Number(tokenWithInfoVET.fiatBalance) +
             Number(tokenWithInfoVTHO.fiatBalance) +
             Number(tokenWithInfoB3TR.fiatBalance) +
-            vot3Fiat +
+            Number(vot3FiatBalance) +
             Number(nonVechaiTokensFiat.reduce((a, b) => Number(a) + Number(b), 0)),
         [
             tokenWithInfoVET.fiatBalance,
             tokenWithInfoVTHO.fiatBalance,
             tokenWithInfoB3TR.fiatBalance,
-            vot3Fiat,
+            vot3FiatBalance,
             nonVechaiTokensFiat,
         ],
     )
@@ -47,7 +56,7 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
                 tokenWithInfoVET.fiatBalance,
                 tokenWithInfoVTHO.fiatBalance,
                 tokenWithInfoB3TR.fiatBalance,
-                vot3Fiat.toString(),
+                vot3FiatBalance,
                 ...nonVechaiTokensFiat,
             ]}
         />

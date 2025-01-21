@@ -1,12 +1,12 @@
 import React, { memo, useMemo } from "react"
-import { BaseView, FiatBalance } from "~Components"
 import { useBalances, useTheme } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 import { useVechainStatsTokenInfo } from "~Api/Coingecko"
 import { BalanceUtils } from "~Utils"
 import { BaseTokenCard } from "./BaseTokenCard"
-import { StyleSheet } from "react-native"
+import { TokenCardBalanceInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/TokenCardBalanceInfo"
+import { FiatBalance } from "~Components"
 
 type Props = {
     tokenWithBalance: FungibleTokenWithBalance
@@ -16,6 +16,7 @@ type Props = {
 export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { data: exchangeRate } = useVechainStatsTokenInfo(tokenWithBalance.symbol.toLowerCase())
+
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
     const { fiatBalance } = useBalances({
@@ -29,21 +30,8 @@ export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) =>
     )
 
     const showFiatBalance = useMemo(() => {
-        const numericBalance = Number(fiatBalance)
-        return numericBalance > 0
-    }, [fiatBalance])
-
-    const rightContent = showFiatBalance ? (
-        <BaseView style={styles.container}>
-            <FiatBalance
-                color={theme.colors.tokenCardText}
-                balances={[fiatBalance]}
-                typographyFont="captionRegular"
-                isVisible={isBalanceVisible}
-                isLoading={isTokensOwnedLoading}
-            />
-        </BaseView>
-    ) : null
+        return !!exchangeRate
+    }, [exchangeRate])
 
     return (
         <BaseTokenCard
@@ -52,13 +40,21 @@ export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) =>
             isLoading={isTokensOwnedLoading}
             isBalanceVisible={isBalanceVisible}
             tokenBalance={tokenBalance}
-            rightContent={rightContent}
+            rightContent={
+                showFiatBalance ? (
+                    <TokenCardBalanceInfo
+                        isLoading={isTokensOwnedLoading}
+                        renderFiatBalance={
+                            <FiatBalance
+                                typographyFont="captionRegular"
+                                color={theme.colors.tokenCardText}
+                                balances={[fiatBalance]}
+                                isVisible={isBalanceVisible}
+                            />
+                        }
+                    />
+                ) : null
+            }
         />
     )
-})
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: "flex-end",
-    },
 })

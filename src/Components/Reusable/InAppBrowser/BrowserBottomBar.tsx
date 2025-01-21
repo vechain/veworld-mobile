@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { BackHandler, StyleSheet } from "react-native"
 import { BaseIcon, useInAppBrowser } from "~Components"
 import { useBlockchainNetwork, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { useRoute } from "@react-navigation/native"
@@ -105,7 +105,7 @@ export const BrowserBottomBar: React.FC = () => {
                         name={config.name}
                         style={styles.icon}
                         size={32}
-                        color={theme.colors.text}
+                        color={isMainnet ? theme.colors.text : COLORS.WHITE}
                     />
                 )
             })}

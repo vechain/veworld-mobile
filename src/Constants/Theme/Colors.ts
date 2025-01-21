@@ -58,7 +58,8 @@ export type Colors = {
     pressableCardBorder: string
     pressableCardBackground: string
     tokenCardText: string
-    tokenCardGraphLine: string
+    graphLine: string
+    graphGradient: string
     successVariant: {
         background: string
         border: string
@@ -116,6 +117,7 @@ export enum COLORS {
     LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",
     DARK_PURPLE_DISABLED = "#59527F",
+    GRAPH_GRADIENT_LIGHT = "#2E0C86",
     LIGHT_RED = "#FFC7B3",
     PASTEL_RED = "#f7c4bc",
     DARK_RED = "#931536",
@@ -184,7 +186,7 @@ const light: Colors = {
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.LIME_GREEN,
     disabled: COLORS.WHITE_DISABLED,
-    disabledButton: COLORS.PURPLE_BLUR_TRANSPARENT,
+    disabledButton: COLORS.DARK_PURPLE_DISABLED,
     danger: COLORS.RED_400,
     success: COLORS.GREEN_400,
     successMedium: COLORS.WHITE,
@@ -235,7 +237,8 @@ const light: Colors = {
     pressableCardBackground: COLORS.WHITE,
     pressableCardBorder: COLORS.GREY_200,
     tokenCardText: COLORS.GREY_500,
-    tokenCardGraphLine: COLORS.PRIMARY_700,
+    graphLine: COLORS.PURPLE,
+    graphGradient: COLORS.GRAPH_GRADIENT_LIGHT,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -278,7 +281,7 @@ const dark: Colors = {
     secondary: COLORS.LIME_GREEN,
     tertiary: COLORS.DARK_PURPLE,
     disabled: COLORS.WHITE_DISABLED,
-    disabledButton: COLORS.LIME_GREEN_TRANSPARENT,
+    disabledButton: COLORS.LIME_GREEN_DISABLED,
     danger: COLORS.RED_400,
     success: COLORS.GREEN_400,
     successMedium: COLORS.MEDIUM_GREEN,
@@ -329,7 +332,8 @@ const dark: Colors = {
     pressableCardBackground: COLORS.PURPLE,
     pressableCardBorder: COLORS.DARK_PURPLE_DISABLED,
     tokenCardText: COLORS.PRIMARY_200,
-    tokenCardGraphLine: COLORS.PRIMARY_200,
+    graphLine: COLORS.PRIMARY_700,
+    graphGradient: COLORS.PRIMARY_400,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
@@ -347,7 +351,7 @@ const dark: Colors = {
         titleInline: COLORS.RED_200,
     },
     neutralVariant: {
-        background: COLORS.GREY_100,
+        background: COLORS.GREY_200,
         border: COLORS.GREY_300,
         borderLight: COLORS.GREY_300,
         icon: COLORS.GREY_500,
