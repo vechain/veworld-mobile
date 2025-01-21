@@ -15,18 +15,19 @@ const initialState: FeatureFlags = {
 
 const FeatureFlagsContex = React.createContext<FeatureFlags>(initialState)
 
-const queryKey = ["Feature", "Flags"]
+export const featureFlagsQueryKey = ["Feature", "Flags"]
 
 export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }) => {
-    const { data } = useQuery({
-        queryKey,
-        queryFn: () => getFeatureFlags(),
-        placeholderData: initialState,
-        staleTime: 0,
-        enabled: true,
+    // This query will override the default queryClient settings just for feature flags
+    const { data: featureFlags } = useQuery({
+        queryKey: featureFlagsQueryKey,
+        queryFn: getFeatureFlags,
+        initialData: initialState,
+        staleTime: 1000 * 60 * 5, // 5 minutes
+        refetchInterval: 1000 * 60 * 5, // 5 minutes
     })
 
-    return <FeatureFlagsContex.Provider value={data ?? initialState}>{children}</FeatureFlagsContex.Provider>
+    return <FeatureFlagsContex.Provider value={featureFlags}>{children}</FeatureFlagsContex.Provider>
 }
 
 export const useFeatureFlags = () => {

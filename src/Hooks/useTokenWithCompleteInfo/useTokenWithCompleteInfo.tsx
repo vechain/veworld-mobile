@@ -1,4 +1,11 @@
-import { TokenInfoResponse, getCoinGeckoIdBySymbol, useExchangeRate, useTokenInfo } from "~Api/Coingecko"
+import {
+    MarketChartResponse,
+    TokenInfoResponse,
+    getCoinGeckoIdBySymbol,
+    useExchangeRate,
+    useMarketChart,
+    useTokenInfo,
+} from "~Api/Coingecko"
 import { useBalances } from "~Hooks/useBalances"
 import { FungibleToken } from "~Model"
 import { selectBalanceForToken, selectBalanceForTokenByAccount, selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -12,6 +19,7 @@ export type TokenWithCompleteInfo = FungibleToken & {
     exchangeRateLoading: boolean
     tokenInfo?: TokenInfoResponse
     tokenInfoLoading: boolean
+    chartData?: MarketChartResponse
 }
 /**
  *  useTokenWithCompleteInfo is a hook that returns token with complete info (fiatBalance, tokenUnitBalance, exchangeRate, exchangeRateCurrency, exchangeRateLoading, tokenInfo, tokenInfoLoading)
@@ -39,6 +47,12 @@ export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: 
         id: getCoinGeckoIdBySymbol[token.symbol],
     })
 
+    const { data: chartData } = useMarketChart({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: currency,
+        days: 1,
+    })
+
     return {
         ...token,
         fiatBalance,
@@ -49,5 +63,6 @@ export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: 
         exchangeRateLoading,
         tokenInfo,
         tokenInfoLoading,
+        chartData,
     }
 }
