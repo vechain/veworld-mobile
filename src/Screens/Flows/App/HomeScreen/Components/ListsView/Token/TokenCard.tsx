@@ -7,7 +7,7 @@ import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 import { useVechainStatsTokenInfo } from "~Api/Coingecko"
 import { BaseTokenCard } from "./BaseTokenCard"
-import { TokenCardBalanceInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/TokenCardBalanceInfo"
+import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
     tokenWithBalance: FungibleTokenWithBalance

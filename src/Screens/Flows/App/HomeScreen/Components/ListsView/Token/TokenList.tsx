@@ -188,8 +188,4 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             backgroundColor: theme.colors.background,
         },
-        swippableRow: {
-            marginBottom: 10,
-            marginHorizontal: 0,
-        },
     })
