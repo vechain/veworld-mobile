@@ -1,7 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import React, { useCallback } from "react"
-import { ColorThemeType, valueToHP } from "~Constants"
-import { widthPercentageToDP as wp } from "react-native-responsive-screen"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { Icon } from "~Components"
 
@@ -52,26 +51,27 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             flexDirection: "row",
             flexWrap: "wrap",
+            justifyContent: "center",
             width: "100%",
         },
         width: {
-            width: "33%",
-            justifyContent: "center",
+            width: "30%",
+            paddingHorizontal: 16,
+            marginVertical: 8,
             alignItems: "center",
-            paddingVertical: valueToHP[22],
         },
         pressable: {
-            width: wp("18%"),
-            height: wp("18%"),
+            width: 80,
+            height: 80,
+            padding: 8,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: theme.colors.card,
-            borderRadius: wp("9%"),
+            borderRadius: 40,
         },
         digitText: {
-            fontSize: 32,
-            fontWeight: "bold",
+            fontSize: 24,
+            fontWeight: "medium",
             alignItems: "center",
-            color: theme.colors.text,
+            color: theme.colors.numberPad,
         },
     })

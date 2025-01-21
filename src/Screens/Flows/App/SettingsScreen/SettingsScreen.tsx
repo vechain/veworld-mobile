@@ -88,7 +88,7 @@ export const SettingsScreen = () => {
                 </BaseView>
             }
             body={
-                <BaseView mt={-8} style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
+                <BaseView mt={-16} style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
                     <FlatList
                         ref={flatSettingListRef}
                         data={settingsList}
