@@ -15,11 +15,11 @@ const initialState: FeatureFlags = {
 
 const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)
 
-const queryKey = ["Feature", "Flags"]
+export const featureFlagsQueryKey = ["Feature", "Flags"]
 
 export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }) => {
     const { data } = useQuery({
-        queryKey,
+        queryKey: featureFlagsQueryKey,
         queryFn: getFeatureFlags,
         staleTime: 0,
         enabled: true,
