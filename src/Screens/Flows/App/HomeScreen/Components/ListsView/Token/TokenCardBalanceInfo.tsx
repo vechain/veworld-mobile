@@ -26,12 +26,12 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
                     />
                 </BaseView>
             ) : (
-                <BaseView flexDirection="row" alignItems="center">
+                <BaseView flexDirection="row" alignItems="flex-start">
                     {renderFiatBalance}
                 </BaseView>
             )}
 
-            <BaseSpacer height={3} />
+            <BaseSpacer height={2} />
 
             {isLoading ? (
                 <BaseView flexDirection="row" alignItems="center">
@@ -45,7 +45,7 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
                 </BaseView>
             ) : (
                 <BaseText
-                    typographyFont="smallCaptionRegular"
+                    typographyFont="captionMedium"
                     color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
                     {change24h}
                 </BaseText>
@@ -57,5 +57,6 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
 const baseStyles = StyleSheet.create({
     container: {
         alignItems: "flex-end",
+        justifyContent: "flex-start",
     },
 })

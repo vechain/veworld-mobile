@@ -154,6 +154,7 @@ export enum COLORS {
     MEDIUM_ORANGE = "#FA710E",
     DISABLED_GREY = "#E5E5E5",
     MEDIUM_GRAY = "#C4C4C4",
+    GREY_800 = "#202226",
     GREY_700 = "#363A3F",
     GREY_600 = "#4A5568",
     GREY_500 = "#747C89",
@@ -332,8 +333,8 @@ const dark: Colors = {
     pressableCardBackground: COLORS.PURPLE,
     pressableCardBorder: COLORS.DARK_PURPLE_DISABLED,
     tokenCardText: COLORS.PRIMARY_200,
-    graphLine: COLORS.PRIMARY_700,
-    graphGradient: COLORS.PRIMARY_400,
+    graphLine: COLORS.LIME_GREEN,
+    graphGradient: COLORS.LIME_GREEN,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,

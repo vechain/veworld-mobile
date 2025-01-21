@@ -84,6 +84,7 @@ const lineHeight = {
     title: 28,
     subSubtitle: 24,
     subTitle: 20.8,
+    bodySubtitle: 20,
     body: 18.2,
     captionMedium: 16,
     caption: 15.6,
