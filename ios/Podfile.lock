@@ -142,9 +142,9 @@ PODS:
   - MixpanelReactNative (2.4.1):
     - Mixpanel-swift (= 4.2.0)
     - React-Core
-  - MMKV (2.0.0):
-    - MMKVCore (~> 2.0.0)
-  - MMKVCore (2.0.0)
+  - MMKV (2.0.2):
+    - MMKVCore (~> 2.0.2)
+  - MMKVCore (2.0.2)
   - MultiplatformBleAdapter (0.1.9)
   - OpenSSL-Universal (1.1.1100)
   - RCT-Folly (2021.07.22.00):
@@ -1077,8 +1077,8 @@ SPEC CHECKSUMS:
   lottie-react-native: 17547b2f3c7034e2ae8672833fdb63262164d18a
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 0101b8828c2f335c128850e71ab7d3b7adde089a
-  MMKV: f7d1d5945c8765f97f39c3d121f353d46735d801
-  MMKVCore: c04b296010fcb1d1638f2c69405096aac12f6390
+  MMKV: 3eacda84cd1c4fc95cf848d3ecb69d85ed56006c
+  MMKVCore: 508b4d3a8ce031f1b5c8bd235f0517fb3f4c73a9
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
