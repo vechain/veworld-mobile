@@ -20,7 +20,7 @@ jobs:
             LAST_COMMIT=$(git rev-parse HEAD)
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $LAST_COMMIT)
 
-            if echo "$CHANGED_FILES" | grep -qv "^maestro/"; then
+            if echo "$CHANGED_FILES" | grep -qvE '^(\.maestro/|\.github/)'; then
               echo "only_test_scripts_changed=false" >> $GITHUB_ENV
               echo "only_test_scripts_changed=false" >> $GITHUB_OUTPUT
             else
@@ -36,7 +36,7 @@ jobs:
           contents: read
 
     # Proceed only if it's either not a release event or it's a pre-release.
-    if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }} && needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+    if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }} 
 
     steps:
       - name: Generate a token
@@ -81,11 +81,13 @@ jobs:
           cache: "yarn"
   
       - name: Install CocoaPods
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         run: |
           yarn install:all
 
       # Install sentry properties
       - name: Sentry properties
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         uses: mobiledevops/secret-to-file-action@v1
         with:
             base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
@@ -94,6 +96,7 @@ jobs:
             working-directory: "./ios"
 
       - name: Env default decode
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         uses: mobiledevops/secret-to-file-action@v1
         with:
              base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
@@ -102,7 +105,8 @@ jobs:
              working-directory: "./ios/fastlane"
 
           
-      - name: Env decode 
+      - name: Env decode
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         uses: mobiledevops/secret-to-file-action@v1
         with:
              base64-encoded-secret: ${{ secrets.IOS_ENV}}
@@ -110,7 +114,8 @@ jobs:
              is-executable: false
              working-directory: "./ios/fastlane"
       
-      - name: Decode prod env      
+      - name: Decode prod env   
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'     
         uses: mobiledevops/secret-to-file-action@v1
         with:
             base64-encoded-secret: ${{ secrets.RN_ENV_PROD_E2E}}
@@ -119,6 +124,7 @@ jobs:
             working-directory: "."
 
       - name: Build apk with fastlane
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         env:
           MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
         run: |
@@ -137,12 +143,14 @@ jobs:
               echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator" -print -quit)" >> $GITHUB_ENV
               
       - name: Upload .app 
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         uses: actions/upload-artifact@v4
         with:
           name: Release-iphonesimulator
           path: ${{ env.APP_PATH }}
 
       - name: Upload run_id number
+        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           RUN_ID: ${{ github.run_id }}
@@ -158,9 +166,7 @@ jobs:
     needs:
         - check-build-changes
         - build-e2e-ios
-    if: needs.check-build-changes.outputs.only_test_scripts_changed == 'true' || needs.build-e2e-ios.result == 'success'
     env:
-      APP_PATH: ${{ needs.build-e2e-ios.outputs.APP_PATH }}
       GH_TOKEN: ${{ secrets.GH_TOKEN }}
       RUN_ID: ${{ vars.ios_run_id }}
     steps:
@@ -169,26 +175,11 @@ jobs:
           with:
             ref: ${{ github.ref }}
 
-        - name: Pre-Download machine state
-          run: |
-            echo "Downloading machine state"
-            echo "Run ID: ${{ env.RUN_ID }}"
-            echo "APP_PATH: ${{ env.APP_PATH }}"
-            echo "GH_TOKEN: ${{ env.GH_TOKEN }}"
-            echo "PWD: $(pwd)"
-            echo "ls -la: $(ls -la)"
-
         - name: Download .app
           uses: actions/download-artifact@v4
           with:
             name: Release-iphonesimulator
             run-id: ${{ env.RUN_ID }}
-        - name: Debug .app
-          run: |
-            echo "PWD: $(pwd)"
-            echo "ls -la: $(ls -la)"
-            echo " Run ID: ${{ env.RUN_ID }}"
-
 
         - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
           with:
