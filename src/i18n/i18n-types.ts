@@ -242,7 +242,7 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
-	 * C​l​a​i​m​ ​y​o​u​r​ ​u​s​e​r​n​a​m​e​ ​f​o​r​ ​f​r​e​e​ ​n​o​w
+	 * C​l​a​i​m​ ​y​o​u​r​ ​<​>​<​>​ ​f​o​r​ ​f​r​e​e​ ​n​o​w
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: string
 	/**
@@ -1333,6 +1333,10 @@ type RootTranslation = {
 	 * T​o​t​a​l​ ​S​u​p​p​l​y
 	 */
 	COMMON_TOTAL_SUPPLY: string
+	/**
+	 * U​s​e​r​n​a​m​e
+	 */
+	COMMON_USERNAME: string
 	/**
 	 * W​h​o​o​p​s​!
 	 */
@@ -3867,7 +3871,7 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
-	 * Claim your username for free now
+	 * Claim your <><> for free now
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: () => LocalizedString
 	/**
@@ -4950,6 +4954,10 @@ Try reconnect your device to the internet.
 	 * Total Supply
 	 */
 	COMMON_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * Username
+	 */
+	COMMON_USERNAME: () => LocalizedString
 	/**
 	 * Whoops!
 	 */

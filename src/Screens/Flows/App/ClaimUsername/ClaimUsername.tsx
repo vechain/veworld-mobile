@@ -222,7 +222,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                             <BaseButton
                                 flex={1}
                                 isLoading={isLoading}
-                                disabled={isLoading || hasErrors}
+                                disabled={isLoading || hasErrors || !subdomain}
                                 action={onSubmit}
                                 testID="ClaimUsername_Confirm_Btn">
                                 {claimError ? LL.BTN_TRY_AGAIN() : LL.BTN_CONFIRM()}

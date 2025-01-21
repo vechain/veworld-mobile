@@ -240,7 +240,6 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-SemiBold"],
         fontSize: 12,
         fontWeight: fontWeight[600],
-        lineHeight: lineHeight.captionSemiBold,
     },
     captionMedium: {
         fontFamily: fontFamily["Inter-Medium"],

@@ -1,8 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { ActionBanner, BaseText, BaseView, useFeatureFlags } from "~Components"
-import { useTheme, useVns } from "~Hooks"
+import { StyleSheet, Text } from "react-native"
+import { ActionBanner, BaseText, BaseView, useFeatureFlags, WrapTranslation } from "~Components"
+import { ColorThemeType } from "~Constants"
+import { useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { DEVICE_TYPE } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector, useAppDispatch, onAccountAttemptClaim } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
@@ -12,7 +15,7 @@ type Props = {
 }
 
 export const ClaimUsernameBanner = ({ noMarginTop = false }: Props) => {
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyle)
     const nav = useNavigation()
     const { LL } = useI18nContext()
     const { subdomainClaimFeature } = useFeatureFlags()
@@ -20,8 +23,8 @@ export const ClaimUsernameBanner = ({ noMarginTop = false }: Props) => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const bannerTitle = LL.BANNER_TITLE_CLAIM_USERNAME()
-    const [before, after] = bannerTitle.split("username")
+    // const bannerTitle = LL.BANNER_TITLE_CLAIM_USERNAME()
+    // const [before, after] = bannerTitle.split("username")
 
     const { name } = useVns({
         address: selectedAccount.address,
@@ -43,21 +46,33 @@ export const ClaimUsernameBanner = ({ noMarginTop = false }: Props) => {
         !subdomainClaimFeature.enabled ||
         selectedAccount.hasAttemptedClaim ||
         name ||
-        AccountUtils.isObservedAccount(selectedAccount)
+        AccountUtils.isObservedAccount(selectedAccount) ||
+        selectedAccount.device.type === DEVICE_TYPE.LEDGER
     )
         return <></>
 
     return (
         <BaseView w={100} mt={!noMarginTop ? 8 : 0}>
             <ActionBanner actionText={LL.BTN_CLAIM()} actionTestID="claimUsernameBtn" onPress={onClaimPress}>
-                <BaseText color={theme.colors.actionBanner.title} typographyFont="captionRegular">
-                    {before}
-                    <BaseText typographyFont="captionSemiBold" color={theme.colors.actionBanner.title}>
-                        {"username"}
-                    </BaseText>
-                    {after}
+                <BaseText mx={4} color={theme.colors.actionBanner.title} typographyFont="captionRegular">
+                    <WrapTranslation
+                        message={LL.BANNER_TITLE_CLAIM_USERNAME()}
+                        renderComponent={() => (
+                            <Text style={styles.inlineBold}>{LL.COMMON_USERNAME().toLocaleLowerCase()}</Text>
+                        )}
+                    />
                 </BaseText>
             </ActionBanner>
         </BaseView>
     )
 }
+
+const baseStyle = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        inlineBold: {
+            fontFamily: "Inter-SemiBold",
+            fontSize: 12,
+            fontWeight: "600",
+            color: theme.colors.actionBanner.title,
+        },
+    })

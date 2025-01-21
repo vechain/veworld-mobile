@@ -43,6 +43,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         childrenContainer: {
             flexWrap: "wrap",
+            flexBasis: 210,
         },
         buttonContainer: {
             borderColor: theme.colors.actionBanner.buttonBorder,
