@@ -21,10 +21,8 @@ jobs:
             CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $LAST_COMMIT)
 
             if echo "$CHANGED_FILES" | grep -qvE '^(\.maestro/|\.github/)'; then
-              echo "only_test_scripts_changed=false" >> $GITHUB_ENV
               echo "only_test_scripts_changed=false" >> $GITHUB_OUTPUT
             else
-              echo "only_test_scripts_changed=true" >> $GITHUB_ENV
               echo "only_test_scripts_changed=true" >> $GITHUB_OUTPUT
             fi
         - name: Print changes
@@ -71,12 +69,9 @@ jobs:
           echo "Current run id: $CURRENT_RUN_ID"
           if [ "$STORED_RUN_ID" = "$CURRENT_RUN_ID" ] && [ "$ONLY_TEST" = "true" ]; then
             echo "Build already exists. Skipping build."
-
-            echo "new_build=false" >> $GITHUB_ENV
             echo "new_build=false" >> $GITHUB_OUTPUT
           else
             echo "Build does not exist. Proceeding with build."
-            echo "new_build=true" >> $GITHUB_ENV
             echo "new_build=true" >> $GITHUB_OUTPUT
           fi
       # Install Homebrew and applesimutils for Detox
