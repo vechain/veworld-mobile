@@ -6,33 +6,11 @@ on:
     workflow_call:
 
 jobs:
-  check-build-changes:
-      runs-on: ubuntu-latest
-      outputs:
-        only_test_scripts_changed: ${{ steps.detect-changes.outputs.only_test_scripts_changed }}
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
-
-        - name: Detect Test Script Changes
-          id: detect-changes
-          run: |
-            LAST_COMMIT=$(git rev-parse HEAD)
-            CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $LAST_COMMIT)
-
-            if echo "$CHANGED_FILES" | grep -qv "^maestro/"; then
-              echo "only_test_scripts_changed=false" >> $GITHUB_ENV
-              echo "only_test_scripts_changed=false" >> $GITHUB_OUTPUT
-            else
-              echo "only_test_scripts_changed=true" >> $GITHUB_ENV
-              echo "only_test_scripts_changed=true" >> $GITHUB_OUTPUT
-            fi
-
   build-test-android:
-      name: Build & Test Android Release
+      name: Build & Test Android 
       runs-on: ubuntu-latest
       environment: android-release
-      if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }} && needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+      if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
       outputs:
         app: app/build/outputs/apk/release
       env:
@@ -165,36 +143,8 @@ jobs:
             name: app-release.apk
             path: ${{ env.output_dir }}/app-release.apk
 
-        - name: Upload run_id number
-          env:
-            GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-          run: |  
-              successful_run=$(( ${{github.run_id}} ))
-              echo "run_id=$successful_run" >> $GITHUB_ENV
-              gh variable set ANDROID_RUN_ID --body "$successful_run"
-            
-
-  test-android:
-      name: Test Android Release
-      needs:
-          - check-build-changes
-          - build-test-android
-      if: needs.check-build-changes.outputs.only_test_scripts_changed == 'true' || needs.build-test-android.result == 'success'
-      runs-on: ubuntu-latest
-      env:
-        RUN_ID: ${{ vars.android_run_id }}
-      steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
-
-          - name: Download apk
-            uses: actions/download-artifact@v4
-            with:
-              name: app-release.apk
-              run-id: ${{ needs.build-test-android.outputs.run_id }}
-              
-          - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
-            with:
-              api-key: ${{ secrets.DCD_API_KEY }}
-              app-file: ./app-release.apk
-              
+        - name: Test Android
+          uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
+          with:
+            api-key: ${{ secrets.DCD_API_KEY }}
+            app-file: ${{ env.output_dir }}/app-release.apk
