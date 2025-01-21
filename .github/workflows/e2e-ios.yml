@@ -27,6 +27,11 @@ jobs:
               echo "only_test_scripts_changed=true" >> $GITHUB_ENV
               echo "only_test_scripts_changed=true" >> $GITHUB_OUTPUT
             fi
+        - name: Print changes
+          run: |
+            echo "Changes: $CHANGED_FILES"
+            echo "Only test scripts changed: ${{ steps.detect-changes.outputs.only_test_scripts_changed }}"
+            
   build-e2e-ios:
     name: Build & Test iOS Debug
     runs-on: macos-latest
@@ -38,6 +43,8 @@ jobs:
     # Proceed only if it's either not a release event or it's a pre-release.
     if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }} 
 
+    outputs:
+      new_build: ${{ steps.check-build-exists.outputs.new_build }}
     steps:
       - name: Generate a token
         id: generate-token
@@ -55,7 +62,23 @@ jobs:
           # If it's a pre-release, check out the tag corresponding to the pre-release;
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
-    
+      - name: Check build exists
+        env:
+          GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+          STORED_RUN_ID: ${{ vars.ios_run_id }}
+          CURRENT_RUN_ID: ${{ github.run_id }}
+          ONLY_TEST: ${{ needs.check-build-changes.outputs.only_test_scripts_changed }}
+        run: |
+          if [ "$stored_run_id" == "$current_run_id" && $only_test ]; then
+              echo "Build already exists. Skipping build."
+              echo "new_build=false" >> $GITHUB_ENV
+              echo "new_build=false" >> $GITHUB_OUTPUT
+            fi
+            else
+              echo "Build does not exist. Proceeding with build."
+              echo "new_build=true" >> $GITHUB_ENV
+              echo "new_build=true" >> $GITHUB_OUTPUT
+            fi
       # Install Homebrew and applesimutils for Detox
       - name: Install macOS dependencies
         run: |
@@ -81,13 +104,13 @@ jobs:
           cache: "yarn"
   
       - name: Install CocoaPods
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+        if: needs.check-build-exists.outputs.new_build == 'true'
         run: |
           yarn install:all
 
       # Install sentry properties
       - name: Sentry properties
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+        if: needs.check-build-exists.outputs.new_build == 'true'
         uses: mobiledevops/secret-to-file-action@v1
         with:
             base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
@@ -96,7 +119,7 @@ jobs:
             working-directory: "./ios"
 
       - name: Env default decode
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+        if: needs.check-build-exists.outputs.new_build == 'true'
         uses: mobiledevops/secret-to-file-action@v1
         with:
              base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
@@ -106,7 +129,7 @@ jobs:
 
           
       - name: Env decode
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+        if: needs.check-build-exists.outputs.new_build == 'true'
         uses: mobiledevops/secret-to-file-action@v1
         with:
              base64-encoded-secret: ${{ secrets.IOS_ENV}}
@@ -115,7 +138,7 @@ jobs:
              working-directory: "./ios/fastlane"
       
       - name: Decode prod env   
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'     
+        if: needs.check-build-exists.outputs.new_build == 'true'     
         uses: mobiledevops/secret-to-file-action@v1
         with:
             base64-encoded-secret: ${{ secrets.RN_ENV_PROD_E2E}}
@@ -124,7 +147,7 @@ jobs:
             working-directory: "."
 
       - name: Build apk with fastlane
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+        if: needs.check-build-exists.outputs.new_build == 'true'
         env:
           MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
         run: |
@@ -143,14 +166,14 @@ jobs:
               echo "APP_PATH_DSYM=$(find ~/ -path "*/Build/Products/Release-iphonesimulator" -print -quit)" >> $GITHUB_ENV
               
       - name: Upload .app 
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+        if: needs.check-build-exists.outputs.new_build == 'true'
         uses: actions/upload-artifact@v4
         with:
           name: Release-iphonesimulator
           path: ${{ env.APP_PATH }}
 
       - name: Upload run_id number
-        if: needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
+        if: needs.check-build-exists.outputs.new_build == 'true'
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           RUN_ID: ${{ github.run_id }}
