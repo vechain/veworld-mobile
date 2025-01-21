@@ -1,20 +1,36 @@
 import React from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
-import Animated from "react-native-reanimated"
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
 
 type Props = {
     renderFiatBalance: React.ReactNode
+    isAnimation: boolean
     isLoading: boolean
     isPositive24hChange?: boolean
     change24h?: string
 }
 
-export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive24hChange, change24h }: Props) => {
+export const TokenCardBalanceInfo = ({
+    renderFiatBalance,
+    isLoading,
+    isPositive24hChange,
+    change24h,
+    isAnimation,
+}: Props) => {
     const theme = useTheme()
+
+    const animatedOpacityReverse = useAnimatedStyle(() => {
+        return {
+            opacity: withTiming(isAnimation ? 0 : 1, {
+                duration: 200,
+            }),
+        }
+    }, [isAnimation])
+
     return (
-        <Animated.View style={baseStyles.container}>
+        <Animated.View style={[animatedOpacityReverse, baseStyles.container]}>
             {isLoading ? (
                 <BaseView flexDirection="row" alignItems="center">
                     <BaseSkeleton

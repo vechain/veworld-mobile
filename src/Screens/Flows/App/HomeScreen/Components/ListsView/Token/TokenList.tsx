@@ -2,7 +2,7 @@ import React, { memo, useCallback, useRef, useState } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { NestableDraggableFlatList, RenderItem } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
-import { SwipeableRow } from "~Components"
+import { BaseView, SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { B3TR, ColorThemeType, VET, VTHO } from "~Constants"
@@ -114,29 +114,32 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
     const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
         ({ item, getIndex, isActive, drag }) => {
             return (
-                <SwipeableRow
-                    xMargins={0}
-                    item={item}
-                    itemKey={item.address}
-                    swipeableItemRefs={swipeableItemRefs}
-                    handleTrashIconPress={handleTrashIconPress(item)}
-                    setSelectedItem={() => (tokenToRemove.current = item)}
-                    swipeEnabled={!isEdit}
-                    onPress={onTokenPress}
-                    isDragMode={isEdit}
-                    isOpen={tokenToRemove.current?.address === item.address}>
-                    <AnimatedTokenCard
+                <BaseView mb={8}>
+                    <SwipeableRow
+                        xMargins={0}
+                        yMargins={0}
                         item={item}
-                        isActive={isActive}
-                        getIndex={getIndex}
-                        drag={drag}
-                        isEdit={isEdit}
-                        isBalanceVisible={isBalanceVisible}
-                    />
-                </SwipeableRow>
+                        itemKey={item.address}
+                        swipeableItemRefs={swipeableItemRefs}
+                        handleTrashIconPress={handleTrashIconPress(item)}
+                        setSelectedItem={() => (tokenToRemove.current = item)}
+                        swipeEnabled={!isEdit}
+                        onPress={onTokenPress}
+                        isDragMode={isEdit}
+                        isOpen={tokenToRemove.current?.address === item.address}>
+                        <AnimatedTokenCard
+                            item={item}
+                            isActive={isActive}
+                            getIndex={getIndex}
+                            drag={drag}
+                            isEdit={isEdit}
+                            isBalanceVisible={isBalanceVisible}
+                        />
+                    </SwipeableRow>
+                </BaseView>
             )
         },
-        [handleTrashIconPress, isBalanceVisible, isEdit, onTokenPress, tokenToRemove],
+        [handleTrashIconPress, isBalanceVisible, isEdit, onTokenPress],
     )
 
     return (
@@ -184,5 +187,9 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             backgroundColor: theme.colors.background,
+        },
+        swippableRow: {
+            marginBottom: 10,
+            marginHorizontal: 0,
         },
     })

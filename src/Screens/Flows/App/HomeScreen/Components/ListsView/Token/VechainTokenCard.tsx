@@ -1,13 +1,13 @@
-import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import { BaseText, BaseView, BaseSkeleton, FiatBalance } from "~Components"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
-import { BigNutils } from "~Utils"
 import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
 import { useAppSelector } from "~Storage/Redux"
 import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
+import { useTokenCardFiatInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/useTokenCardFiatInfo"
+import { TokenCardBalanceInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/TokenCardBalanceInfo"
+import { BaseTokenCard } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/BaseTokenCard"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -21,25 +21,15 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const { tokenInfo, tokenInfoLoading, fiatBalance, tokenUnitBalance, exchangeRate } = tokenWithInfo
+    const {
+        fiatBalance,
+        isPositive24hChange,
+        exchangeRate,
+        isLoading: isTokenInfoLoading,
+        change24h,
+    } = useTokenCardFiatInfo(tokenWithInfo)
 
-    const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
     const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
-
-    const change24h =
-        (isPositive24hChange ? "+" : "") +
-        BigNutils(tokenInfo?.market_data?.price_change_percentage_24h ?? 0)
-            .toHuman(0)
-            .decimals(2).toString +
-        "%"
-
-    const animatedOpacityReverse = useAnimatedStyle(() => {
-        return {
-            opacity: withTiming(isAnimation ? 0 : 1, {
-                duration: 200,
-            }),
-        }
-    }, [isAnimation])
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -75,95 +65,24 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
         isBalanceVisible,
     ])
 
-    const isLoading = tokenInfoLoading || isTokensOwnedLoading
+    const isLoading = isTokenInfoLoading || isTokensOwnedLoading
 
     return (
-        <Animated.View style={[baseStyles.innerRow]}>
-            <BaseView flexDirection="row">
-                <BaseView style={[baseStyles.imageContainer]}>
-                    <Image source={{ uri: tokenWithInfo.icon }} style={baseStyles.image} />
-                </BaseView>
-                <BaseSpacer width={16} />
-                <BaseView>
-                    <BaseText typographyFont="bodySemiBold">{tokenWithInfo.symbol}</BaseText>
-                    <BaseSpacer height={2} />
-                    <BaseView flexDirection="row" alignItems="baseline" justifyContent="flex-start">
-                        {isLoading ? (
-                            <BaseView flexDirection="row" alignItems="center">
-                                <BaseSkeleton
-                                    containerStyle={baseStyles.skeletonBalance}
-                                    animationDirection="horizontalLeft"
-                                    boneColor={theme.colors.skeletonBoneColor}
-                                    highlightColor={theme.colors.skeletonHighlightColor}
-                                    height={14}
-                                />
-                            </BaseView>
-                        ) : (
-                            <BaseView flexDirection="row" alignItems="center">
-                                <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
-                                    {isBalanceVisible ? tokenUnitBalance : "•••••"}{" "}
-                                </BaseText>
-                            </BaseView>
-                        )}
-                    </BaseView>
-                </BaseView>
-            </BaseView>
-            <Animated.View style={[animatedOpacityReverse, baseStyles.balancesContainer]}>
-                <BaseView flexDirection="row" alignItems="center">
-                    {renderFiatBalance}
-                </BaseView>
-
-                <BaseSpacer height={2} />
-
-                {isLoading ? (
-                    <BaseView flexDirection="row" alignItems="center">
-                        <BaseSkeleton
-                            animationDirection="horizontalLeft"
-                            boneColor={theme.colors.skeletonBoneColor}
-                            highlightColor={theme.colors.skeletonHighlightColor}
-                            height={14}
-                            width={60}
-                        />
-                    </BaseView>
-                ) : (
-                    <BaseText
-                        typographyFont="captionMedium"
-                        color={isPositive24hChange ? theme.colors.success : theme.colors.danger}>
-                        {change24h}
-                    </BaseText>
-                )}
-            </Animated.View>
-        </Animated.View>
+        <BaseTokenCard
+            icon={tokenWithInfo.icon}
+            symbol={tokenWithInfo.symbol}
+            isLoading={isLoading}
+            isBalanceVisible={isBalanceVisible}
+            tokenBalance={tokenWithInfo.tokenUnitBalance}
+            rightContent={
+                <TokenCardBalanceInfo
+                    isAnimation={isAnimation}
+                    renderFiatBalance={renderFiatBalance}
+                    isLoading={isLoading}
+                    isPositive24hChange={isPositive24hChange}
+                    change24h={change24h}
+                />
+            }
+        />
     )
-})
-
-const baseStyles = StyleSheet.create({
-    imageContainer: {
-        borderRadius: 30,
-        padding: 10,
-        backgroundColor: COLORS.GREY_50,
-    },
-    imageShadow: {
-        width: "auto",
-    },
-    image: { width: 20, height: 20 },
-    innerRow: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        alignItems: "center",
-        width: "100%",
-        paddingHorizontal: 16,
-    },
-    balancesContainer: {
-        alignItems: "flex-end",
-    },
-    skeletonBalance: { width: 50, paddingVertical: 2 },
-    skeletonPercentChange: {
-        width: 40,
-        paddingVertical: 1,
-    },
-    skeletonBalanceValue: {
-        width: 60,
-        paddingVertical: 2,
-    },
 })

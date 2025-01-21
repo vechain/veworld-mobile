@@ -36,12 +36,13 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                     {tokenBalances.length > 1 && (
                         <>
                             <BaseIcon
+                                disabled={true}
                                 haptics="Light"
                                 name="icon-list-end"
                                 action={onButtonPress}
                                 size={20}
                                 p={10}
-                                color={theme.colors.text}
+                                color={theme.colors.transparent}
                             />
                             <BaseSpacer width={8} />
                         </>
@@ -70,7 +71,15 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                 {LL.COMMON_BTN_SAVE()}
             </BaseButton>
         )
-    }, [isEdit, tokenBalances.length, onButtonPress, theme.colors.text, handleManageToken, LL])
+    }, [
+        isEdit,
+        tokenBalances.length,
+        onButtonPress,
+        theme.colors.transparent,
+        theme.colors.text,
+        handleManageToken,
+        LL,
+    ])
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">

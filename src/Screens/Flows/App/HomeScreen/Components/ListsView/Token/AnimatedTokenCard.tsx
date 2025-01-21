@@ -39,7 +39,7 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         animatedOuterContainer: {
             backgroundColor: theme.colors.card,
-            padding: 16,
+            paddingVertical: 16,
             flexDirection: "row",
             alignItems: "center",
             borderRadius: 12,

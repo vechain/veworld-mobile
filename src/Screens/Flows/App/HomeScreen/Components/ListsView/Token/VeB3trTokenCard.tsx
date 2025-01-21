@@ -12,9 +12,10 @@ import { selectBalanceForToken, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     isBalanceVisible: boolean
+    isAnimation: boolean
 }
 
-export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
+export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
@@ -132,6 +133,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
                 isLoading={isLoading}
                 isPositive24hChange={isPositive24hChange}
                 change24h={change24h}
+                isAnimation={isAnimation}
             />
         </Animated.View>
     )
@@ -146,9 +148,6 @@ const baseStyles = StyleSheet.create({
         padding: 10,
         backgroundColor: COLORS.GREY_50,
     },
-    imageShadow: {
-        width: "auto",
-    },
     image: { width: 20, height: 20 },
     innerRow: {
         flexDirection: "row",
@@ -156,8 +155,5 @@ const baseStyles = StyleSheet.create({
         alignItems: "center",
         width: "100%",
         paddingHorizontal: 16,
-    },
-    balancesContainer: {
-        alignItems: "flex-end",
     },
 })

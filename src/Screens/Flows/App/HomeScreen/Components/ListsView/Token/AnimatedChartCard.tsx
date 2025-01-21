@@ -13,7 +13,7 @@ import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } 
 import { B3TR } from "~Constants"
 import { VeB3trTokenCard } from "~Screens"
 
-const HEIGHT = 88
+const HEIGHT = 100
 
 export type NativeTokenProps = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -37,7 +37,7 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
 
     const animatedOuterCard = useAnimatedStyle(() => {
         return {
-            height: withTiming(isEdit || hideChart ? 62 : 162, {
+            height: withTiming(isEdit || hideChart ? 72 : 162, {
                 duration: 200,
             }),
 
@@ -75,16 +75,16 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
                             isAnimation={isEdit}
                         />
                     ) : (
-                        <VeB3trTokenCard isBalanceVisible={isBalanceVisible} />
+                        <VeB3trTokenCard isBalanceVisible={isBalanceVisible} isAnimation={isEdit} />
                     )}
                     {!hideChart && (
                         <Animated.View style={animatedInnerCard}>
                             <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
-                                <LineChart height={HEIGHT} yGutter={10}>
+                                <LineChart height={HEIGHT} yGutter={20}>
                                     <LineChart.Path color={theme.colors.graphLine} width={2}>
                                         <LineChart.Gradient
                                             color={theme.colors.graphGradient}
-                                            lastGradientValue={0.2}
+                                            lastGradientValue={0.3}
                                         />
                                     </LineChart.Path>
                                 </LineChart>
