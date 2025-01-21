@@ -1,28 +1,38 @@
 import { TokenWithCompleteInfo } from "~Hooks"
 import { useAppSelector, selectIsTokensOwnedLoading } from "~Storage/Redux"
-import { BigNutils } from "~Utils"
+import { ReanimatedUtils } from "~Utils"
 
 export const useTokenCardFiatInfo = (tokenWithInfo: TokenWithCompleteInfo) => {
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
+    const { chartData, tokenInfo, tokenInfoLoading, fiatBalance, exchangeRate } = tokenWithInfo
 
-    const { tokenInfo, tokenInfoLoading, fiatBalance, exchangeRate } = tokenWithInfo
+    const getPriceChange = () => {
+        // Use chart data if available so the change is sycned with the asset charts,
+        // otherwise fallback to the token info change
+        if (chartData?.length) {
+            const openPrice = chartData[0]?.value
+            const closePrice = chartData[chartData.length - 1]?.value
 
-    const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
+            if (openPrice && closePrice) {
+                return ((closePrice - openPrice) / openPrice) * 100
+            }
+        }
 
-    const change24h =
-        (isPositive24hChange ? "+" : "") +
-        BigNutils(tokenInfo?.market_data?.price_change_percentage_24h ?? 0)
-            .toHuman(0)
-            .decimals(2).toString +
-        "%"
+        return tokenInfo?.market_data?.price_change_percentage_24h ?? 0
+    }
 
+    const priceChange = getPriceChange()
+    const change24h = ReanimatedUtils.numberToPercentWorklet(priceChange, {
+        precision: 2,
+        absolute: true,
+    })
     const isLoading = tokenInfoLoading || isTokensOwnedLoading
 
     return {
         isTokensOwnedLoading,
         fiatBalance,
         exchangeRate,
-        isPositive24hChange,
+        isPositive24hChange: priceChange >= 0,
         change24h,
         isLoading,
     }

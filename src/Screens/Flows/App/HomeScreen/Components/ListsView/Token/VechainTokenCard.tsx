@@ -1,13 +1,11 @@
 import React, { memo, useMemo } from "react"
-import { BaseText, BaseView, BaseSkeleton, FiatBalance } from "~Components"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
-import { selectIsTokensOwnedLoading } from "~Storage/Redux/Selectors"
-import { useAppSelector } from "~Storage/Redux"
-import { COLORS } from "~Constants"
+import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
+import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
+import { BaseTokenCard } from "./BaseTokenCard"
+import { BaseView, BaseText, BaseSkeleton, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useTokenCardFiatInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/useTokenCardFiatInfo"
-import { TokenCardBalanceInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/TokenCardBalanceInfo"
-import { BaseTokenCard } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/BaseTokenCard"
+import { COLORS } from "~Constants"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -18,16 +16,8 @@ type Props = {
 export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
-
-    const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
-
-    const {
-        fiatBalance,
-        isPositive24hChange,
-        exchangeRate,
-        isLoading: isTokenInfoLoading,
-        change24h,
-    } = useTokenCardFiatInfo(tokenWithInfo)
+    const { change24h, isTokensOwnedLoading, fiatBalance, exchangeRate, isPositive24hChange, isLoading } =
+        useTokenCardFiatInfo(tokenWithInfo)
 
     const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
@@ -64,8 +54,6 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
         fiatBalance,
         isBalanceVisible,
     ])
-
-    const isLoading = isTokenInfoLoading || isTokensOwnedLoading
 
     return (
         <BaseTokenCard
