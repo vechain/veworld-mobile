@@ -60,6 +60,7 @@ jobs:
           # otherwise, use the triggering branch unless it's a non-pre-release event.
           ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
       - name: Check build exists
+        id: check-build-exists
         env:
           GH_TOKEN: ${{ steps.generate-token.outputs.token }}
           STORED_RUN_ID: ${{ vars.ios_run_id }}
