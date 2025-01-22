@@ -34,7 +34,7 @@ jobs:
                 if [ "$MERGED_OVERRIDE" ]; then
                   echo "should_release=true" >> $GITHUB_OUTPUT
                 else
-                  since_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ" --date="24 hours ago")
+                  since_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ" --date="22 hours ago")
                   repo=${GITHUB_REPOSITORY}
               
                   echo "Since date: $since_date"
