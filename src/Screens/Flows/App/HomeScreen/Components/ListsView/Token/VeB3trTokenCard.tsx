@@ -2,21 +2,29 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
 import Animated from "react-native-reanimated"
-import { TokenWithCompleteInfo, useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import { BigNutils } from "~Utils"
-import { COLORS, VOT3 } from "~Constants"
+import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
+import { BalanceUtils } from "~Utils"
+import { B3TR, COLORS, VOT3 } from "~Constants"
 import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
+import { selectBalanceForToken, useAppSelector } from "~Storage/Redux"
 
 type Props = {
-    b3trToken: TokenWithCompleteInfo
     isBalanceVisible: boolean
+    isAnimation: boolean
 }
 
-export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => {
+export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+
+    const vot3Token = useTokenWithCompleteInfo(VOT3)
+    const b3trToken = useTokenWithCompleteInfo(B3TR)
+
+    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
+
+    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
     const {
         isTokensOwnedLoading,
@@ -24,10 +32,16 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
         isPositive24hChange,
         change24h,
         isLoading,
-        fiatBalance: b3trFiatBalance,
+        fiatBalance: b3trFiat,
     } = useTokenCardFiatInfo(b3trToken)
 
-    const vot3Token = useTokenWithCompleteInfo(VOT3)
+    const vot3FiatBalance = BalanceUtils.getFiatBalance(
+        vot3RawBalance?.balance ?? "0",
+        exchangeRate ?? 0,
+        VOT3.decimals,
+    )
+
+    const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trFiat)
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -44,19 +58,24 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
             )
         if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
 
-        const vot3FiatBalance = BigNutils(vot3Token.tokenUnitBalance).multiply(exchangeRate).toString
-
         return (
             <FiatBalance
-                typographyFont="captionRegular"
-                color={theme.colors.tokenCardText}
-                balances={[b3trFiatBalance, vot3FiatBalance]}
+                typographyFont="bodySemiBold"
+                color={tokenValueLabelColor}
+                balances={[veB3trFiatBalance.toString()]}
                 isVisible={isBalanceVisible}
             />
         )
-    }, [isTokensOwnedLoading, theme.colors, exchangeRate, LL, vot3Token, b3trFiatBalance, isBalanceVisible])
-
-    const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
+    }, [
+        isTokensOwnedLoading,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        exchangeRate,
+        LL,
+        tokenValueLabelColor,
+        veB3trFiatBalance,
+        isBalanceVisible,
+    ])
 
     return (
         <Animated.View style={[baseStyles.innerRow]}>
@@ -64,14 +83,15 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
                 <BaseView style={[baseStyles.imageContainer]}>
                     <Image source={{ uri: b3trToken.icon }} style={baseStyles.image} />
                 </BaseView>
-                <BaseSpacer width={12} />
-                <BaseView flexDirection="row">
-                    <BaseView flexDirection="column" alignItems="center">
-                        <BaseText typographyFont="captionSemiBold">{b3trToken.symbol}</BaseText>
-                        <BaseText typographyFont="captionSemiBold">{vot3Token.symbol}</BaseText>
-                    </BaseView>
-                    <BaseSpacer height={2} />
-                    <BaseView flexDirection="column" alignItems="center" ml={8}>
+                <BaseSpacer width={16} />
+                <BaseView flexDirection="column" alignItems="flex-start">
+                    <BaseView flexDirection="row">
+                        <BaseView style={baseStyles.tokenSymbol}>
+                            <BaseText color={tokenValueLabelColor} typographyFont="bodySemiBold">
+                                {b3trToken.symbol}
+                            </BaseText>
+                        </BaseView>
+                        <BaseSpacer width={4} />
                         {isLoading ? (
                             <BaseSkeleton
                                 animationDirection="horizontalLeft"
@@ -81,10 +101,17 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
                                 width={40}
                             />
                         ) : (
-                            <BaseText typographyFont="captionRegular" color={tokenValueLabelColor}>
+                            <BaseText typographyFont="bodyMedium" align="right" color={theme.colors.tokenCardText}>
                                 {isBalanceVisible ? b3trToken.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
+                    </BaseView>
+                    <BaseSpacer height={2} />
+                    <BaseView flexDirection="row">
+                        <BaseView style={baseStyles.tokenSymbol}>
+                            <BaseText typographyFont="bodySemiBold">{vot3Token.symbol}</BaseText>
+                        </BaseView>
+                        <BaseSpacer width={4} />
                         {isLoading ? (
                             <BaseSkeleton
                                 animationDirection="horizontalLeft"
@@ -94,7 +121,7 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
                                 width={40}
                             />
                         ) : (
-                            <BaseText typographyFont="captionRegular" color={tokenValueLabelColor}>
+                            <BaseText typographyFont="bodyMedium" align="right" color={theme.colors.tokenCardText}>
                                 {isBalanceVisible ? vot3Token.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
@@ -106,29 +133,27 @@ export const VeB3trTokenCard = memo(({ b3trToken, isBalanceVisible }: Props) => 
                 isLoading={isLoading}
                 isPositive24hChange={isPositive24hChange}
                 change24h={change24h}
+                isAnimation={isAnimation}
             />
         </Animated.View>
     )
 })
 
 const baseStyles = StyleSheet.create({
+    tokenSymbol: {
+        width: 44,
+    },
     imageContainer: {
         borderRadius: 30,
-        padding: 9,
+        padding: 10,
         backgroundColor: COLORS.GREY_50,
     },
-    imageShadow: {
-        width: "auto",
-    },
-    image: { width: 14, height: 14 },
+    image: { width: 20, height: 20 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
-        flexGrow: 1,
-    },
-    balancesContainer: {
-        alignItems: "flex-end",
+        paddingHorizontal: 16,
     },
 })

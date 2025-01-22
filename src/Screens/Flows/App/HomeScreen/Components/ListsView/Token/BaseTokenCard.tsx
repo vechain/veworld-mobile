@@ -23,7 +23,7 @@ export const BaseTokenCard = ({
     rightContent,
 }: BaseTokenCardProps) => {
     const theme = useTheme()
-    const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
+    const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
 
     return (
         <Animated.View style={[styles.innerRow]}>
@@ -31,12 +31,14 @@ export const BaseTokenCard = ({
                 <BaseView style={[styles.imageContainer]}>
                     <Image source={{ uri: icon }} style={styles.image} />
                 </BaseView>
-                <BaseSpacer width={12} />
-                <BaseView>
-                    <BaseText typographyFont="captionSemiBold">{symbol}</BaseText>
-                    <BaseView flexDirection="row" alignItems="baseline" justifyContent="flex-start">
+                <BaseSpacer width={16} />
+                <BaseView alignItems="flex-start" justifyContent="center">
+                    <BaseText typographyFont="bodySemiBold">{symbol}</BaseText>
+                    <BaseSpacer height={2} />
+
+                    <BaseView flexDirection="row">
                         {isLoading ? (
-                            <BaseView flexDirection="row" alignItems="center">
+                            <BaseView flexDirection="row">
                                 <BaseSkeleton
                                     containerStyle={styles.skeletonBalance}
                                     animationDirection="horizontalLeft"
@@ -46,8 +48,8 @@ export const BaseTokenCard = ({
                                 />
                             </BaseView>
                         ) : (
-                            <BaseView flexDirection="row" alignItems="center">
-                                <BaseText typographyFont="captionRegular" color={tokenValueLabelColor}>
+                            <BaseView flexDirection="row">
+                                <BaseText typographyFont="bodyMedium" color={tokenValueLabelColor}>
                                     {isBalanceVisible ? tokenBalance : "•••••"}{" "}
                                 </BaseText>
                             </BaseView>
@@ -63,16 +65,19 @@ export const BaseTokenCard = ({
 const styles = StyleSheet.create({
     imageContainer: {
         borderRadius: 30,
-        padding: 9,
+        padding: 10,
         backgroundColor: COLORS.GREY_50,
     },
-    image: { width: 14, height: 14 },
+    imageShadow: {
+        width: "auto",
+    },
+    image: { width: 20, height: 20 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
-        flexGrow: 1,
+        paddingHorizontal: 16,
     },
     skeletonBalance: { width: 50, paddingVertical: 2 },
 })
