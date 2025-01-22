@@ -29,10 +29,10 @@ describe("useCopyClipboard", () => {
         const { result } = renderHook(() => useCopyClipboard())
 
         await act(async () => {
-            result.current.onCopyToClipboard(text, labelName)
+            result.current.onCopyToClipboard(text.toUpperCase(), labelName)
         })
 
-        expect(Clipboard.setStringAsync).toHaveBeenCalledWith(text)
+        expect(Clipboard.setStringAsync).toHaveBeenCalledWith(text.toUpperCase())
         expect(showSuccessToast).toHaveBeenCalled()
     })
 
