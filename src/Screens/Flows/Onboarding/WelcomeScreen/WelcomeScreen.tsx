@@ -12,6 +12,7 @@ import {
     BaseText,
     BaseTouchable,
     BaseView,
+    ChangeLanguage,
     CreatePasswordModal,
     ImportWalletBottomSheet,
     Layout,
@@ -115,10 +116,14 @@ export const WelcomeScreen = () => {
     }, [])
 
     useEffect(() => {
-        const currentLanguageCode = getAllLanguageCodes()
-        const newSelectedLanguageCode = languages.find(item => item.code === currentLanguageCode[0])
-        handleSelectLanguage((newSelectedLanguageCode?.code as Locales) ?? "en")
-    }, [getAllLanguageCodes, handleSelectLanguage])
+        const isDefaultLanguage = selectedLanguageCode === "en"
+
+        if (isDefaultLanguage) {
+            const currentLanguageCode = getAllLanguageCodes()
+            const newSelectedLanguageCode = languages.find(item => item.code === currentLanguageCode[0])
+            handleSelectLanguage((newSelectedLanguageCode?.code as Locales) ?? "en")
+        }
+    }, [getAllLanguageCodes, handleSelectLanguage, selectedLanguageCode])
 
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
@@ -208,6 +213,11 @@ export const WelcomeScreen = () => {
                         <BaseTouchable onPress={openSelectLanguageSheet}>
                             <BaseIcon name={"icon-globe"} color={theme.colors.text} size={24} />
                         </BaseTouchable>
+
+                        <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
+                        <BaseSpacer height={20} />
+                        <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
+                        <BaseSpacer height={24} />
 
                         <BaseView>{DEV_DEMO_BUTTON}</BaseView>
                     </BaseView>

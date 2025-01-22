@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import moment from "moment"
 import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
 import { Locales } from "~i18n"
+import lodash from "lodash"
 
 /**
  * @typedef {Object} UserPreferenceState
@@ -115,7 +116,16 @@ export const UserPreferencesSlice = createSlice({
             }
         },
 
-        resetUserPreferencesState: () => initialState,
+        resetUserPreferencesState: state => {
+            if (state.language !== "en") {
+                const selectedLanguage = state.language
+                state = lodash.cloneDeep(initialState)
+                state.language = selectedLanguage
+                return
+            }
+
+            return initialState
+        },
     },
 })
 
