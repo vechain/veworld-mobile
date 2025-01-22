@@ -18,7 +18,6 @@ export const SkeletonActivityBox = () => {
                 {
                     flexDirection: "row",
                     alignItems: "center",
-                    width: "100%",
                     height: 68,
                     children: [
                         // Circle
@@ -27,13 +26,26 @@ export const SkeletonActivityBox = () => {
                             height: 40,
                             borderRadius: 20,
                         },
-                        // Lines
+                    ],
+                },
+                // Lines
+                {
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    height: 60,
+                    children: [
                         {
                             flexDirection: "column",
                             alignItems: "flex-start",
-                            width: 150,
-                            marginLeft: 12,
-                            height: 30,
+                            width: 180,
+                            height: 20,
+                        },
+                        {
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                            width: 100,
+                            marginVertical: 6,
+                            height: 10,
                         },
                     ],
                 },
@@ -46,7 +58,9 @@ const baseStyles = StyleSheet.create({
     container: {
         flex: 1,
         width: "100%",
-        flexDirection: "column",
+        flexDirection: "row",
+        gap: 12,
+        alignItems: "center",
         marginLeft: -1,
     },
 })
