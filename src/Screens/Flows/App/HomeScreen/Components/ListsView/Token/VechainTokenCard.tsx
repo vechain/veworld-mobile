@@ -5,17 +5,21 @@ import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 import { BaseTokenCard } from "./BaseTokenCard"
 import { BaseView, BaseText, BaseSkeleton, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
+import { COLORS } from "~Constants"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
+    isAnimation: boolean
     isBalanceVisible: boolean
 }
 
-export const VechainTokenCard = memo(({ tokenWithInfo, isBalanceVisible }: Props) => {
+export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVisible }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
     const { change24h, isTokensOwnedLoading, fiatBalance, exchangeRate, isPositive24hChange, isLoading } =
         useTokenCardFiatInfo(tokenWithInfo)
+
+    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -30,16 +34,26 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isBalanceVisible }: Props
                     />
                 </BaseView>
             )
-        if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
+        if (!exchangeRate)
+            return <BaseText typographyFont="bodySemiBold">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
         return (
             <FiatBalance
-                typographyFont="captionRegular"
-                color={theme.colors.tokenCardText}
+                typographyFont="bodySemiBold"
+                color={tokenValueLabelColor}
                 balances={[fiatBalance]}
                 isVisible={isBalanceVisible}
             />
         )
-    }, [isTokensOwnedLoading, theme.colors, exchangeRate, LL, fiatBalance, isBalanceVisible])
+    }, [
+        isTokensOwnedLoading,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        exchangeRate,
+        LL,
+        tokenValueLabelColor,
+        fiatBalance,
+        isBalanceVisible,
+    ])
 
     return (
         <BaseTokenCard
@@ -50,6 +64,7 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isBalanceVisible }: Props
             tokenBalance={tokenWithInfo.tokenUnitBalance}
             rightContent={
                 <TokenCardBalanceInfo
+                    isAnimation={isAnimation}
                     renderFiatBalance={renderFiatBalance}
                     isLoading={isLoading}
                     isPositive24hChange={isPositive24hChange}

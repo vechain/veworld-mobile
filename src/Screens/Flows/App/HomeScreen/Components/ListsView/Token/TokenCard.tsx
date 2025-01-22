@@ -1,20 +1,24 @@
 import React, { memo, useMemo } from "react"
+import { FiatBalance } from "~Components"
+import { COLORS } from "~Constants"
 import { useBalances, useTheme } from "~Hooks"
+import { BalanceUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 import { useVechainStatsTokenInfo } from "~Api/Coingecko"
-import { BalanceUtils } from "~Utils"
 import { BaseTokenCard } from "./BaseTokenCard"
-import { TokenCardBalanceInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/TokenCardBalanceInfo"
-import { FiatBalance } from "~Components"
+import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
     tokenWithBalance: FungibleTokenWithBalance
+    isEdit: boolean
     isBalanceVisible: boolean
 }
 
-export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) => {
+export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: Props) => {
     const theme = useTheme()
+    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
+
     const { data: exchangeRate } = useVechainStatsTokenInfo(tokenWithBalance.symbol.toLowerCase())
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
@@ -43,11 +47,12 @@ export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) =>
             rightContent={
                 showFiatBalance ? (
                     <TokenCardBalanceInfo
+                        isAnimation={isEdit}
                         isLoading={isTokensOwnedLoading}
                         renderFiatBalance={
                             <FiatBalance
-                                typographyFont="captionRegular"
-                                color={theme.colors.tokenCardText}
+                                typographyFont="bodySemiBold"
+                                color={tokenValueLabelColor}
                                 balances={[fiatBalance]}
                                 isVisible={isBalanceVisible}
                             />

@@ -74,7 +74,7 @@ export const Layout = ({
             <BaseView h={100}>
                 <BaseView>
                     {!noBackButton ? (
-                        <BaseView mx={noMargin ? 0 : 16}>
+                        <BaseView py={12} mx={noMargin ? 0 : 16}>
                             <BackButtonHeader
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}

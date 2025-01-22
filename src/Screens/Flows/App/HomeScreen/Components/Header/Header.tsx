@@ -9,7 +9,7 @@ import { ERROR_EVENTS, ScanTarget } from "~Constants"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
 import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { VeWorldLogoSVG } from "~Assets"
+import { VeWorldLogoDarkSVG, VeWorldLogoSVG } from "~Assets"
 
 type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
     NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
@@ -76,7 +76,11 @@ export const Header = memo(() => {
     return (
         <BaseView w={100} flexDirection="row" alignItems="center" justifyContent="space-between">
             <BaseView flexDirection="row" alignItems="center" alignSelf="center">
-                <VeWorldLogoSVG height={32} width={32} />
+                {theme.isDark ? (
+                    <VeWorldLogoDarkSVG height={32} width={32} />
+                ) : (
+                    <VeWorldLogoSVG height={32} width={32} />
+                )}
                 <BaseSpacer width={8} />
                 <BaseText typographyFont="bodySemiBold" testID="veworld-homepage">
                     {LL.VEWORLD()}
