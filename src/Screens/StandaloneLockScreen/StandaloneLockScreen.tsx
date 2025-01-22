@@ -77,16 +77,14 @@ export const StandaloneLockScreen: React.FC<Props> = memo(({ onPinInserted }) =>
 
     return (
         <SafeAreaView style={[PlatformUtils.isAndroid() ? styles.androidTopPadding : {}, styles.safeArea]}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>{title}</Text>
+            </View>
             <View style={styles.container}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>{title}</Text>
-                    <Text style={styles.subTitle}>{subTitle}</Text>
-                </View>
-
-                <View style={{ marginTop: isSmallScreen ? 32 : 62 }} />
-
+                <Text style={styles.subTitle}>{subTitle}</Text>
+                <View style={{ marginTop: isSmallScreen ? 45 : 80 }} />
                 <StandalonePasswordPins digitNumber={digitNumber} pin={pin} isPinError={isError} />
-
+                <View style={{ marginTop: isSmallScreen ? 32 : 80 }} />
                 <StandaloneNumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
             </View>
         </SafeAreaView>
@@ -102,23 +100,26 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         container: {
             alignItems: "center",
-            marginHorizontal: 24,
-            marginTop: 20,
+            marginHorizontal: 16,
+            marginTop: 16,
         },
         titleContainer: {
-            alignSelf: "flex-start",
+            alignSelf: "center",
+            justifyContent: "center",
+            width: "100%",
+            height: 48,
         },
         title: {
-            fontSize: 22,
-            fontWeight: "700",
+            fontSize: 16,
+            fontWeight: "600",
             lineHeight: 28,
-            color: theme.colors.text,
+            textAlign: "center",
+            color: theme.colors.title,
         },
         subTitle: {
             fontSize: 14,
             fontWeight: "400",
-            marginVertical: 10,
-            color: theme.colors.text,
+            color: theme.colors.subtitle,
         },
         androidTopPadding: {
             paddingTop: 12,

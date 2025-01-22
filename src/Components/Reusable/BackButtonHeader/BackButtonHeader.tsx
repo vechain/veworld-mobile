@@ -48,17 +48,19 @@ export const BackButtonHeader = ({
     return (
         <View {...otherProps}>
             <BaseView>
-                <BaseView flexDirection="row" w={100} py={12} justifyContent="space-between">
+                <BaseView flexDirection="row" w={100} justifyContent="space-between">
                     <BaseIcon
                         haptics="Light"
                         style={[iconStyle]}
                         size={24}
                         name="icon-arrow-left"
-                        color={iconColor ?? theme.colors.text}
+                        color={iconColor ?? theme.colors.title}
                         action={onActionPress}
                         testID={iconTestID}
                     />
-                    <BaseText typographyFont="subSubTitleSemiBold">{title}</BaseText>
+                    <BaseText color={theme.colors.title} typographyFont="subSubTitleSemiBold">
+                        {title}
+                    </BaseText>
                     <BaseSpacer width={24} />
                     {rightElement && <BaseView style={styles.rightElementContainer}>{rightElement}</BaseView>}
                 </BaseView>

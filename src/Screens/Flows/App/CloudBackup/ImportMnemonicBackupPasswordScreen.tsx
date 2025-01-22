@@ -2,10 +2,8 @@ import { RouteProp, StackActions, useFocusEffect, useNavigation, useRoute } from
 import React, { useCallback, useRef, useState } from "react"
 import { Keyboard } from "react-native"
 import {
-    BackButtonHeader,
     BaseButton,
     BaseIcon,
-    BaseModal,
     BaseSpacer,
     BaseText,
     BaseTextInput,
@@ -13,6 +11,7 @@ import {
     Layout,
     RequireUserPassword,
     showErrorToast,
+    CreatePasswordModal,
 } from "~Components"
 import { COLORS, ERROR_EVENTS } from "~Constants"
 import { useCheckIdentity, useCloudBackup, useDeviceUtils, useThemedStyles } from "~Hooks"
@@ -20,7 +19,6 @@ import { useI18nContext } from "~i18n"
 import { DrivetWallet, IMPORT_TYPE } from "~Model"
 import { RootStackParamListOnboarding, Routes } from "~Navigation"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
-import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
 import { selectHasOnboarded, selectIsAppLoading, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { CryptoUtils, error, PasswordUtils, PlatformUtils } from "~Utils"
 import { cloudBackupPasswordStyle } from "./utils"
@@ -207,23 +205,18 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                     />
                     <BaseSpacer height={16} />
 
-                    <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
-                        <BaseView justifyContent="flex-start">
-                            <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
-                            <UserCreatePasswordScreen
-                                onSuccess={pin =>
-                                    onSuccess({
-                                        pin,
-                                        mnemonic: mnemonicCache.current,
-                                        importType: PlatformUtils.isIOS()
-                                            ? IMPORT_TYPE.ICLOUD
-                                            : IMPORT_TYPE.GOOGLE_DRIVE,
-                                        derivationPath: wallet.derivationPath,
-                                    })
-                                }
-                            />
-                        </BaseView>
-                    </BaseModal>
+                    <CreatePasswordModal
+                        isOpen={isOpen}
+                        onClose={onCloseCreateFlow}
+                        onSuccess={pin =>
+                            onSuccess({
+                                pin,
+                                mnemonic: mnemonicCache.current,
+                                importType: PlatformUtils.isIOS() ? IMPORT_TYPE.ICLOUD : IMPORT_TYPE.GOOGLE_DRIVE,
+                                derivationPath: wallet.derivationPath,
+                            })
+                        }
+                    />
 
                     <RequireUserPassword
                         isOpen={isPasswordPromptOpen}
