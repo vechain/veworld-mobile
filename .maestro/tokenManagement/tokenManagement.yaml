@@ -50,16 +50,8 @@ env:
       from:
           id: "sendButton"
       direction: "UP"
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - assertVisible: "PLA"
-- runFlow:
-      when:
-          platform: iOS
-      commands:
-          - assertVisible: "PLA 0.00 "
+- assertVisible:
+      id: "PLA"
 - swipe:
       direction: "DOWN"
 ##User selects multiple official tokens
@@ -67,22 +59,6 @@ env:
       id: "EditTokensBar_BaseIcon_manageToken"
 - tapOn:
       id: "EditTokensBar_BaseIcon_manageToken"
-# - runFlow:
-#       when:
-#           platform: iOS
-#       commands:
-#           - swipe:
-#                 from:
-#                     id: "PLA"
-#                 direction: "UP"
-#           - tapOn:
-#                 id: "JUR"
-#           - tapOn:
-#                 id: "YEET"
-# - runFlow:
-#       when:
-#           platform: Android
-#       commands:
 - swipe:
       from:
           id: "PLA"
@@ -106,20 +82,12 @@ env:
       direction: "UP"
 - swipe:
       direction: "UP"
-- runFlow:
-      when:
-          platform: iOS
-      commands:
-          - assertVisible: "JUR 0.00 "
-          - extendedWaitUntil:
-                visible: "YEET 0.00 "
-                timeout: 10000
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - assertVisible: "JUR"
-          - assertVisible: "YEET"
+- assertVisible:
+      id: "JUR"
+- extendedWaitUntil:
+      visible:
+          id: "YEET"
+      timeout: 10000
 - swipe:
       direction: "DOWN"
 ##User can unselect official tokens
@@ -143,16 +111,8 @@ env:
       from:
           id: "sendButton"
       direction: "UP"
-- runFlow:
-      when:
-          platform: iOS
-      commands:
-          - assertNotVisible: "JUR 0.00 "
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - assertNotVisible: "JUR"
+- assertNotVisible:
+      id: "JUR"
 ##User search for a token and only that token comes in the list
 - swipe:
       direction: "DOWN"
@@ -195,17 +155,9 @@ env:
       direction: "UP"
 - swipe:
       direction: "UP"
-- runFlow:
-      when:
-          platform: Android
-      commands:
-          - assertVisible: ".*CARP.*"
-- runFlow:
-      when:
-          platform: iOS
-      commands:
-          - assertVisible: ".*CARP.*"
-##User add multiple custom tokens
+- assertVisible:
+      id: "CARP"
+##User add multiple custom tokens and delete one of them
 - tapOn:
       id: "wallet-tab"
 - tapOn:
@@ -230,6 +182,25 @@ env:
       id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
       id: "BackButtonHeader-BaseIcon-backButton"
+- swipe:
+      from:
+          id: "sendButton"
+      direction: "UP"
+- swipe:
+      direction: "UP"
+- swipe:
+      from:
+          id: "PLA"
+      direction: "LEFT"
+- tapOn:
+      id: "DeleteUnderlay_DeleteIcon"
+- tapOn: "REMOVE"
+- swipe:
+      direction: "UP"
+- assertNotVisible:
+      id: "PLA"
+- swipe:
+      direction: "DOWN"
 ##When the user add an official token and then it change network it should not throw the error
 - tapOn:
       id: "settings-tab"
