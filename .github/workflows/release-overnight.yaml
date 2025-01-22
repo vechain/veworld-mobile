@@ -31,7 +31,7 @@ jobs:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 MERGED_OVERRIDE: ${{ github.event.inputs.merged_override }}
               run: |
-                if [ -z "$MERGED_OVERRIDE" ]; then
+                if [ "$MERGED_OVERRIDE" ]; then
                   echo "should_release=true" >> $GITHUB_OUTPUT
                 else
                   since_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ" --date="24 hours ago")
