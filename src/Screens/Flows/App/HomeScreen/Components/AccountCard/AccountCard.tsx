@@ -44,7 +44,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
     return (
         <BaseView w={100} flexDirection="row">
             <BaseView
-                bg={theme.colors.primary}
+                bg={theme.colors.accountCard}
                 borderRadius={12}
                 flexDirection="column"
                 justifyContent="space-between"
@@ -61,7 +61,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                 ellipsizeMode="tail"
                                 numberOfLines={1}
                                 typographyFont="buttonPrimary"
-                                color={theme.colors.textSecondary}>
+                                color={theme.colors.textReversed}>
                                 {account.alias}
                             </BaseText>
                             <BaseSpacer height={6} />
@@ -85,7 +85,7 @@ export const AccountCard: React.FC<Props> = memo(props => {
                                         ellipsizeMode="tail"
                                         numberOfLines={1}
                                         typographyFont="captionMedium"
-                                        color={theme.colors.textSecondary}>
+                                        color={theme.colors.textReversed}>
                                         {account.device?.alias}
                                     </BaseText>
                                 </BaseView>
