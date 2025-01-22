@@ -12,7 +12,6 @@ import {
     BaseText,
     BaseTouchable,
     BaseView,
-    ChangeLanguage,
     CreatePasswordModal,
     ImportWalletBottomSheet,
     Layout,
@@ -213,12 +212,6 @@ export const WelcomeScreen = () => {
                         <BaseTouchable onPress={openSelectLanguageSheet}>
                             <BaseIcon name={"icon-globe"} color={theme.colors.text} size={24} />
                         </BaseTouchable>
-
-                        <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
-                        <BaseSpacer height={20} />
-                        <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
-                        <BaseSpacer height={24} />
-
                         <BaseView>{DEV_DEMO_BUTTON}</BaseView>
                     </BaseView>
                 }
