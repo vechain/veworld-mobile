@@ -80,8 +80,8 @@ export const SettingsScreen = () => {
         <Layout
             noBackButton
             fixedHeader={
-                <BaseView flexDirection="row" justifyContent="space-between" py={4}>
-                    <BaseText typographyFont="subSubTitleSemiBold" testID="settings-screen">
+                <BaseView style={themedStyles.header}>
+                    <BaseText typographyFont="subTitleSemiBold" testID="settings-screen">
                         {LL.TITLE_MENU()}
                     </BaseText>
                     <SelectedNetworkViewer />
@@ -116,6 +116,12 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingTop: 0,
             paddingHorizontal: 8,
             flex: 1,
+        },
+        header: {
+            height: 48,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
         },
     })
 

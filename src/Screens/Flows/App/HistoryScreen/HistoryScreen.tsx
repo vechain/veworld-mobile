@@ -261,8 +261,8 @@ export const HistoryScreen = () => {
             safeAreaTestID="History_Screen"
             noBackButton
             fixedHeader={
-                <BaseView flexDirection="row" justifyContent="space-between">
-                    <BaseText typographyFont="subSubTitleSemiBold">{LL.BTN_HISTORY()}</BaseText>
+                <BaseView style={baseStyles.header}>
+                    <BaseText typographyFont="subTitleSemiBold">{LL.BTN_HISTORY()}</BaseText>
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                         <SelectedNetworkViewer />
                         <BaseSpacer width={8} />
@@ -307,5 +307,11 @@ const baseStyles = StyleSheet.create({
     noActivitiesButton: {
         position: "absolute",
         bottom: "50%",
+    },
+    header: {
+        height: 48,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
     },
 })

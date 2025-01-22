@@ -10,6 +10,7 @@ import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewe
 import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { VeWorldLogoDarkSVG, VeWorldLogoSVG } from "~Assets"
+import { StyleSheet } from "react-native"
 
 type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
     NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
@@ -74,7 +75,7 @@ export const Header = memo(() => {
     }, [nav])
 
     return (
-        <BaseView w={100} flexDirection="row" alignItems="center" justifyContent="space-between">
+        <BaseView w={100} style={baseStyles.header}>
             <BaseView flexDirection="row" alignItems="center" alignSelf="center">
                 {theme.isDark ? (
                     <VeWorldLogoDarkSVG height={32} width={32} />
@@ -89,15 +90,16 @@ export const Header = memo(() => {
 
             <BaseView flexDirection="row">
                 <BaseIcon
+                    p={4}
                     name={"icon-qr-code"}
                     size={22}
                     color={theme.colors.text}
                     action={handleOpenCamera}
-                    mx={14}
                     haptics="Light"
                 />
-
+                <BaseSpacer width={8} />
                 <BaseIcon
+                    p={4}
                     name={"icon-wallet"}
                     size={24}
                     color={theme.colors.text}
@@ -105,10 +107,11 @@ export const Header = memo(() => {
                     haptics="Light"
                     testID="HomeScreen_WalletManagementButton"
                 />
-                <BaseSpacer width={16} />
+                <BaseSpacer width={8} />
                 <SelectedNetworkViewer />
                 {isMainnet && (
                     <BaseIcon
+                        p={4}
                         name={"icon-globe"}
                         size={24}
                         color={theme.colors.text}
@@ -121,4 +124,13 @@ export const Header = memo(() => {
             {RenderCameraModal}
         </BaseView>
     )
+})
+
+const baseStyles = StyleSheet.create({
+    header: {
+        height: 48,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    },
 })

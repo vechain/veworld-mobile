@@ -92,7 +92,7 @@ export const Layout = ({
                         )
                     )}
                     {fixedHeader && (
-                        <BaseView justifyContent="center" py={8} px={noMargin ? 0 : 16}>
+                        <BaseView justifyContent="center" px={noMargin ? 0 : 16}>
                             <BaseView>{fixedHeader}</BaseView>
                         </BaseView>
                     )}
@@ -189,8 +189,5 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 22,
         top: 5,
-    },
-    headerContainer: {
-        height: 48,
     },
 })
