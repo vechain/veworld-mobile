@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react"
 import { View, ViewProps, StyleSheet } from "react-native"
 import { BaseText, BaseView, BaseSpacer } from "~Components/Base"
+import { useTheme } from "~Hooks"
 
 type Props = {
     title?: string
@@ -9,12 +10,19 @@ type Props = {
 } & ViewProps
 
 export const CenteredHeader = ({ title, rightElement, hasBottomSpacer = false, ...otherProps }: Props) => {
+    const theme = useTheme()
+
     return (
         <View {...otherProps}>
             <BaseView>
-                <BaseView flexDirection="row" w={100} py={12} justifyContent="center">
-                    <BaseText typographyFont="subSubTitleSemiBold">{title}</BaseText>
-                    {rightElement && <BaseView style={styles.rightElementContainer}>{rightElement}</BaseView>}
+                <BaseView flexDirection="row" w={100} style={styles.headerContainer} justifyContent="space-between">
+                    <BaseSpacer width={24} />
+                    <BaseText color={theme.colors.title} typographyFont="subTitleSemiBold">
+                        {title}
+                    </BaseText>
+                    <BaseView style={styles.rightContainer}>
+                        <BaseView style={styles.rightContent}>{rightElement}</BaseView>
+                    </BaseView>
                 </BaseView>
                 {hasBottomSpacer && <BaseSpacer height={24} />}
             </BaseView>
@@ -23,9 +31,16 @@ export const CenteredHeader = ({ title, rightElement, hasBottomSpacer = false, .
 }
 
 const styles = StyleSheet.create({
-    rightElementContainer: {
+    rightContainer: {
+        width: 24,
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        alignItems: "center",
+    },
+    rightContent: {
         position: "absolute",
-        right: 0,
-        top: 8,
+    },
+    headerContainer: {
+        height: 48,
     },
 })

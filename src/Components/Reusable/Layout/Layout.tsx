@@ -74,7 +74,7 @@ export const Layout = ({
             <BaseView h={100}>
                 <BaseView>
                     {!noBackButton ? (
-                        <BaseView py={12} mx={noMargin ? 0 : 16}>
+                        <BaseView mx={noMargin ? 0 : 16}>
                             <BackButtonHeader
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}
@@ -189,5 +189,8 @@ const styles = StyleSheet.create({
         position: "absolute",
         right: 22,
         top: 5,
+    },
+    headerContainer: {
+        height: 48,
     },
 })
