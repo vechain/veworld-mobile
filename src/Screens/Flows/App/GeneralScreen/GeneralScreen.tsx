@@ -1,8 +1,16 @@
 import React, { useCallback } from "react"
-import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
-import { Locales, useI18nContext } from "~i18n"
-import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    ChangeLanguage,
+    EnableFeature,
+    Layout,
+    SelectLanguageBottomSheet,
+} from "~Components"
 import { useBottomSheetModal } from "~Hooks"
+import { Locales, useI18nContext } from "~i18n"
+import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
 import {
     selectAreDevFeaturesEnabled,
     selectHideTokensWithNoBalance,
@@ -14,7 +22,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
+import { ChangeCurrency, ChangeTheme } from "./Components"
 import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {

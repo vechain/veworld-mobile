@@ -12,31 +12,59 @@ import {
     BaseText,
     BaseTouchable,
     BaseView,
+    CreatePasswordModal,
     ImportWalletBottomSheet,
     Layout,
-    CreatePasswordModal,
+    SelectLanguageBottomSheet,
 } from "~Components"
 import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useCloudBackup, useDisclosure, useTheme } from "~Hooks"
-import { useI18nContext } from "~i18n"
+import { Locales, useI18nContext } from "~i18n"
 import { useDemoWallet } from "./useDemoWallet"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 
+import * as RNLocalize from "react-native-localize"
+import { CloudKitWallet, DrivetWallet, languages } from "~Model"
 import { Routes } from "~Navigation"
-import { CloudKitWallet, DrivetWallet } from "~Model"
+import { selectLanguage, setLanguage, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
-    const { LL } = useI18nContext()
+    const { LL, setLocale } = useI18nContext()
     const nav = useNavigation()
     const theme = useTheme()
     const track = useAnalyticTracking()
+    const dispatch = useAppDispatch()
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
+    const selectedLanguageCode = useAppSelector(selectLanguage)
+
+    const {
+        ref: selectLanguageSheetRef,
+        onOpen: openSelectLanguageSheet,
+        onClose: closeSelectLanguageSheet,
+    } = useBottomSheetModal()
+
     const [isLoading, setIsLoading] = useState(false)
     const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
+
+    const getAllLanguageCodes = useCallback(() => {
+        const locales = RNLocalize.getLocales()
+        const languageCodes = locales.map(locale => locale.languageCode)
+        const uniqueLanguageCodes = Array.from(new Set(languageCodes)) // Remove duplicates
+        return uniqueLanguageCodes
+    }, [])
+
+    const handleSelectLanguage = useCallback(
+        (language: Locales) => {
+            dispatch(setLanguage(language))
+            setLocale(language)
+            closeSelectLanguageSheet()
+        },
+        [closeSelectLanguageSheet, dispatch, setLocale],
+    )
 
     const onImportWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
@@ -86,6 +114,12 @@ export const WelcomeScreen = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    useEffect(() => {
+        const currentLanguageCode = getAllLanguageCodes()
+        const newSelectedLanguageCode = languages.find(item => item.code === currentLanguageCode[0])
+        handleSelectLanguage((newSelectedLanguageCode?.code as Locales) ?? "en")
+    }, [getAllLanguageCodes, handleSelectLanguage])
+
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
 
@@ -99,12 +133,11 @@ export const WelcomeScreen = () => {
             <Layout
                 noBackButton
                 fixedBody={
-                    <BaseView alignItems="center" flex={1} mx={24}>
+                    <BaseView alignItems="center" flex={1} px={24}>
                         <BaseView flexDirection="row" mt={20}>
-                            <BaseText typographyFont="largeTitle" testID="welcome-title-id">
-                                {LL.TITLE_WELCOME_TO()}
+                            <BaseText typographyFont="largeTitle" testID="welcome-title-id" style={s.title}>
+                                {`${LL.TITLE_WELCOME_TO()} ${LL.VEWORLD()}`}
                             </BaseText>
-                            <BaseText typographyFont="largeTitle">{LL.VEWORLD()}</BaseText>
                         </BaseView>
 
                         <BaseView alignItems="center" w={100}>
@@ -171,7 +204,12 @@ export const WelcomeScreen = () => {
                             </BaseText>
                         </BaseView>
 
-                        {DEV_DEMO_BUTTON}
+                        <BaseSpacer height={12} />
+                        <BaseTouchable onPress={openSelectLanguageSheet}>
+                            <BaseIcon name={"icon-globe"} color={theme.colors.text} size={24} />
+                        </BaseTouchable>
+
+                        <BaseView>{DEV_DEMO_BUTTON}</BaseView>
                     </BaseView>
                 }
             />
@@ -206,6 +244,13 @@ export const WelcomeScreen = () => {
                         derivationPath: DerivationPath.VET,
                     })
                 }
+            />
+
+            <SelectLanguageBottomSheet
+                ref={selectLanguageSheetRef}
+                onClose={closeSelectLanguageSheet}
+                selectedLanguage={selectedLanguageCode}
+                handleSelectLanguage={handleSelectLanguage}
             />
         </>
     )
@@ -315,12 +360,10 @@ const s = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
-
     imageContainer: {
         borderRadius: 20,
         overflow: "hidden",
     },
-
     bgImage: {
         height: SCREEN_HEIGHT / 2,
         width: SCREEN_WIDTH - 24,
@@ -329,13 +372,14 @@ const s = StyleSheet.create({
         alignItems: "center",
         borderRadius: 16,
     },
-
     icon: {
         marginLeft: 6,
     },
-
     centerButtonContent: {
         justifyContent: "center",
         alignItems: "center",
+    },
+    title: {
+        textAlign: "center",
     },
 })
