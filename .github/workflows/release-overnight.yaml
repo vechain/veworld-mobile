@@ -20,7 +20,6 @@ env:
 jobs:
     check-merged-pr:
         runs-on: ubuntu-latest
-        if: ${{ github.event.inputs.merged_override == 'true' }}
         outputs:
           should_release: ${{ steps.check_merged_prs.outputs.should_release }}
         steps:
@@ -32,39 +31,42 @@ jobs:
                 GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                 MERGED_OVERRIDE: ${{ github.event.inputs.merged_override }}
               run: |
-                since_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ" --date="24 hours ago")
-                repo=${GITHUB_REPOSITORY}
-            
-                echo "Since date: $since_date"
-            
-                # Fetch the total count of merged PRs since the since_date
-                merged_prs_count=$(gh api \
-                  --header "Accept: application/vnd.github+json" \
-                  --method GET \
-                  "search/issues" \
-                  -f q="repo:$repo is:pr is:merged base:main merged:>=$since_date" \
-                  --jq '.total_count')
-            
-                echo "Merged PRs in the last 24 hours: $merged_prs_count"
-            
-                # Fetch the last 5 merged PRs and their merge dates
-                echo "Last 5 merged PRs:"
-                gh api \
-                  --header "Accept: application/vnd.github+json" \
-                  --method GET \
-                  "search/issues" \
-                  -f q="repo:$repo is:pr is:merged base:main" \
-                  -f sort="updated" \
-                  -f order="desc" \
-                  -f per_page=5 \
-                  --jq '.items[] | {number: .number, title: .title, merged_at: .closed_at}'
-            
-                if [ "$merged_prs_count" -gt 0 ] || [ "$MERGED_OVERRIDE" ]; then
+                if [ -z "$MERGED_OVERRIDE" ]; then
                   echo "should_release=true" >> $GITHUB_OUTPUT
                 else
-                  echo "should_release=false" >> $GITHUB_OUTPUT
+                  since_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ" --date="24 hours ago")
+                  repo=${GITHUB_REPOSITORY}
+              
+                  echo "Since date: $since_date"
+              
+                  # Fetch the total count of merged PRs since the since_date
+                  merged_prs_count=$(gh api \
+                    --header "Accept: application/vnd.github+json" \
+                    --method GET \
+                    "search/issues" \
+                    -f q="repo:$repo is:pr is:merged base:main merged:>=$since_date" \
+                    --jq '.total_count')
+              
+                  echo "Merged PRs in the last 24 hours: $merged_prs_count"
+              
+                  # Fetch the last 5 merged PRs and their merge dates
+                  echo "Last 5 merged PRs:"
+                  gh api \
+                    --header "Accept: application/vnd.github+json" \
+                    --method GET \
+                    "search/issues" \
+                    -f q="repo:$repo is:pr is:merged base:main" \
+                    -f sort="updated" \
+                    -f order="desc" \
+                    -f per_page=5 \
+                    --jq '.items[] | {number: .number, title: .title, merged_at: .closed_at}'
+              
+                  if [ "$merged_prs_count" -gt 0 ] || [ "$MERGED_OVERRIDE" ]; then
+                    echo "should_release=true" >> $GITHUB_OUTPUT
+                  else
+                    echo "should_release=false" >> $GITHUB_OUTPUT
+                  fi
                 fi
-
    
     setup-version-build:
         runs-on: ubuntu-latest
