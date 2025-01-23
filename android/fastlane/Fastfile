@@ -206,31 +206,11 @@ platform :android do
         }
       )
 
-      ci_value = false
-      sh("./set_ci_vars.sh #{ci_value}")
-      sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
-
-      # Stash the changes
-      sh("git stash save --keep-index --include-untracked")
-      # Drop the stash
-      sh("git stash drop")
-
       sh("echo 'Build successful'")
     rescue => exception
       puts exception
 
-      # Set the ci value to false
-      ci_value = false
-      sh("./set_ci_vars.sh #{ci_value}")
-
-      # Set the sentry auto upload to true
-      sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
-
-      # Stash the changes
-      sh("git stash save --keep-index --include-untracked")
-      # Drop the stash
-      sh("git stash drop")
+      sh("echo 'Build failed'")
     end
   end
-
-end  # Added this 'end' to close the 'platform :android do' block
+end  
