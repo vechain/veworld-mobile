@@ -29,10 +29,10 @@ describe("useCopyClipboard", () => {
         const { result } = renderHook(() => useCopyClipboard())
 
         await act(async () => {
-            result.current.onCopyToClipboard(text, labelName)
+            result.current.onCopyToClipboard(text.toLowerCase(), labelName)
         })
 
-        expect(Clipboard.setStringAsync).toHaveBeenCalledWith(text)
+        expect(Clipboard.setStringAsync).toHaveBeenCalledWith(text.toLowerCase())
         expect(showSuccessToast).toHaveBeenCalled()
     })
 
@@ -50,5 +50,18 @@ describe("useCopyClipboard", () => {
         })
 
         expect(debugSpy).toHaveBeenCalledTimes(1)
+    })
+
+    it("should copy text in uppercase", async () => {
+        const text = "0x740144c427beac6daab4b35ae1b10d3e3ca524b0"
+        const labelName = "address"
+
+        const { result } = renderHook(() => useCopyClipboard())
+
+        await act(async () => {
+            result.current.onCopyToClipboard(text, labelName)
+        })
+
+        expect(Clipboard.setStringAsync).toHaveBeenCalledWith(text.toLowerCase())
     })
 })
