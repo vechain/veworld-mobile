@@ -1,12 +1,10 @@
 import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useMemo, useState } from "react"
 import { BaseSafeArea, BaseScrollView, BaseView } from "~Components/Base"
-import { BackButtonHeader } from "../BackButtonHeader"
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
 import { useTabBarBottomMargin } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
-import { SelectedNetworkViewer } from "~Components"
+import { SelectedNetworkViewer, BackButtonHeader, CenteredHeader } from "~Components"
 import { SafeAreaView } from "react-native-safe-area-context"
-import { CenteredHeader } from "../CenteredHeader"
 
 type Props = {
     noBackButton?: boolean

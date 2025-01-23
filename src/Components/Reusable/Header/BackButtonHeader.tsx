@@ -1,8 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, ReactNode } from "react"
-import { StyleProp, View, ViewProps, StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { StyleProp, View, ViewProps } from "react-native"
+import { BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
+import { HeaderStyle } from "./utils/HeaderStyle"
+import { HeaderTitle } from "./HeaderTitle"
+import { HeaderRightIconGroup } from "./HeaderRightIconGroup"
 
 type Props = {
     iconTestID?: string
@@ -48,7 +51,11 @@ export const BackButtonHeader = ({
     return (
         <View {...otherProps}>
             <BaseView>
-                <BaseView flexDirection="row" w={100} style={styles.headerContainer} justifyContent="space-between">
+                <BaseView
+                    flexDirection="row"
+                    w={100}
+                    style={HeaderStyle.headerContainer}
+                    justifyContent="space-between">
                     <BaseIcon
                         haptics="Light"
                         style={[iconStyle]}
@@ -58,30 +65,11 @@ export const BackButtonHeader = ({
                         action={onActionPress}
                         testID={iconTestID}
                     />
-                    <BaseText color={theme.colors.title} typographyFont="subTitleSemiBold">
-                        {title}
-                    </BaseText>
-                    <BaseView style={styles.rightContainer}>
-                        <BaseView style={styles.rightContent}>{rightElement}</BaseView>
-                    </BaseView>
+                    {!!title && <HeaderTitle title={title} />}
+                    <HeaderRightIconGroup rightElement={rightElement} />
                 </BaseView>
                 {hasBottomSpacer && <BaseSpacer height={24} />}
             </BaseView>
         </View>
     )
 }
-
-const styles = StyleSheet.create({
-    rightContainer: {
-        width: 24,
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        alignItems: "center",
-    },
-    rightContent: {
-        position: "absolute",
-    },
-    headerContainer: {
-        height: 48,
-    },
-})

@@ -21,7 +21,6 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
         </BaseView>
     )
 }
-
 const styles = StyleSheet.create({
     header: {
         height: 48,
