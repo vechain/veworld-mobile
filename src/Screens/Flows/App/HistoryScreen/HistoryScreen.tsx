@@ -4,14 +4,14 @@ import React, { useCallback, useMemo, useRef } from "react"
 import { FlatList, RefreshControl, StyleSheet } from "react-native"
 import {
     BaseSpacer,
-    BaseText,
     BaseView,
     ChangeAccountButtonPill,
+    HeaderTitle,
     Layout,
     SelectAccountBottomSheet,
     SelectedNetworkViewer,
 } from "~Components"
-import { SCREEN_WIDTH } from "~Constants"
+import { HeaderStyle, SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import {
     AccountWithDevice,
@@ -263,8 +263,8 @@ export const HistoryScreen = () => {
             safeAreaTestID="History_Screen"
             noBackButton
             fixedHeader={
-                <BaseView style={baseStyles.header}>
-                    <BaseText typographyFont="subTitleSemiBold">{LL.BTN_HISTORY()}</BaseText>
+                <BaseView style={HeaderStyle}>
+                    <HeaderTitle title={LL.BTN_HISTORY()} />
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                         <SelectedNetworkViewer />
                         <BaseSpacer width={8} />
@@ -301,11 +301,5 @@ const baseStyles = StyleSheet.create({
     noActivitiesButton: {
         position: "absolute",
         bottom: "50%",
-    },
-    header: {
-        height: 48,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
     },
 })

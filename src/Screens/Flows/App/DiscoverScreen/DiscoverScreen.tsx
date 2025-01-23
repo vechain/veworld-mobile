@@ -134,7 +134,7 @@ export const DiscoverScreen: React.FC = () => {
                     onTextChange={onTextChange}
                     onIconPress={onNavigateToBrowserHistory}
                 />
-                <BaseSpacer height={16} />
+                <BaseSpacer height={12} />
             </BaseView>
         )
     }, [

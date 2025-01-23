@@ -137,7 +137,7 @@ export const BrowserHistoryScreen = () => {
             title={LL.BROWSER_HISTORY_TITLE()}
             fixedHeader={
                 <>
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={12} />
                     <BaseSearchInput
                         placeholder={LL.BROWSER_HISTORY_SEARCH_PLACEHOLDER()}
                         setValue={onTextChange}
@@ -147,7 +147,7 @@ export const BrowserHistoryScreen = () => {
                         iconSize={18}
                         onIconPress={() => setFilteredSearch("")}
                     />
-                    <BaseSpacer height={16} />
+                    <BaseSpacer height={12} />
                 </>
             }
             fixedBody={

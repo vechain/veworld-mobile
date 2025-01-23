@@ -5,12 +5,11 @@ import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect } from "~Com
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes, TabStackParamList } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
-import { ERROR_EVENTS, ScanTarget } from "~Constants"
+import { ERROR_EVENTS, HeaderStyle, ScanTarget } from "~Constants"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
 import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { VeWorldLogoDarkSVG, VeWorldLogoSVG } from "~Assets"
-import { StyleSheet } from "react-native"
 
 type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
     NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
@@ -75,7 +74,7 @@ export const Header = memo(() => {
     }, [nav])
 
     return (
-        <BaseView w={100} style={baseStyles.header}>
+        <BaseView w={100} style={HeaderStyle}>
             <BaseView flexDirection="row" alignItems="center" alignSelf="center">
                 {theme.isDark ? (
                     <VeWorldLogoDarkSVG height={32} width={32} />
@@ -124,13 +123,4 @@ export const Header = memo(() => {
             {RenderCameraModal}
         </BaseView>
     )
-})
-
-const baseStyles = StyleSheet.create({
-    header: {
-        height: 48,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-    },
 })
