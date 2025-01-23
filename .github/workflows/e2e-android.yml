@@ -72,8 +72,8 @@ jobs:
             is-executable: false
             working-directory: "./android"
 
-        # Install env.default 
-        - name: Sentry properties
+        # Android Service Account
+        - name: Android Service Account
           uses: mobiledevops/secret-to-file-action@v1
           with:
             base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_SERVICE_ACCOUNT }}
@@ -127,10 +127,19 @@ jobs:
         - name: Build apk 
           id: build
           run: |
+              echo "cat env.production"
+              cat .env.production
+              pwd
+              ls -la
               cd android
               export STORE_PASSWORD="$(<store_password.txt)"
               export KEY_PASSWORD="$(<store_password.txt)"
               export KEY_ALIAS="$(<key_alias.txt)"
+              echo "env.default:"
+              cat .env.default
+              echo "sentry.properties:"
+              cat sentry.properties
+              echo "run build"
               fastlane build_test_ci version_code:99 version_name:"9.9.9"
               cd app/build/outputs/apk/release
               OUTPUT_DIR=$(pwd)

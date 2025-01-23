@@ -102,10 +102,19 @@ jobs:
           MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
         run: |
               echo -e "\nIS_CI_BUILD_ENABLED=true" >> .env.production
+              cat .env.production
+              pwd
+              ls -la
               cd ios/fastlane
               git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
               pwd
               ls
+              echo "debugging env files"
+              cat .env
+              echo "env.default:"
+              cat env.default
+              echo "sentry.properties:"
+              cat sentry.properties
               fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:99 version_name:"9.9.9"
               cd ../build
               echo "build finished searching for .app file"
