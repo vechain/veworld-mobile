@@ -124,7 +124,7 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             title={LL.BTN_SEND()}
             noStaticBottomPadding
             fixedHeader={
-                <BaseView>
+                <BaseView mt={8}>
                     {isVOT3 && (
                         <>
                             <BaseSpacer height={8} />

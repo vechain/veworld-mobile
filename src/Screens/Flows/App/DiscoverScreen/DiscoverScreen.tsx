@@ -125,7 +125,7 @@ export const DiscoverScreen: React.FC = () => {
                         <SelectedNetworkViewer />
                     </BaseView>
                 </BaseView>
-                <BaseSpacer height={8} />
+                <BaseSpacer height={20} />
                 <AnimatedSearchBar
                     placeholder={LL.DISCOVER_SEARCH()}
                     value={filteredSearch}
@@ -134,7 +134,7 @@ export const DiscoverScreen: React.FC = () => {
                     onTextChange={onTextChange}
                     onIconPress={onNavigateToBrowserHistory}
                 />
-                <BaseSpacer height={10} />
+                <BaseSpacer height={16} />
             </BaseView>
         )
     }, [

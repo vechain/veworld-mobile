@@ -147,6 +147,7 @@ export const BrowserHistoryScreen = () => {
                         iconSize={18}
                         onIconPress={() => setFilteredSearch("")}
                     />
+                    <BaseSpacer height={16} />
                 </>
             }
             fixedBody={
