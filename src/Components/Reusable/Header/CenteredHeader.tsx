@@ -1,9 +1,9 @@
 import React, { ReactNode } from "react"
 import { View, ViewProps } from "react-native"
 import { BaseView, BaseSpacer } from "~Components/Base"
-import { HeaderStyle } from "./utils/HeaderStyle"
 import { HeaderTitle } from "./HeaderTitle"
 import { HeaderRightIconGroup } from "./HeaderRightIconGroup"
+import { HeaderStyle } from "~Constants"
 
 type Props = {
     title: string
@@ -15,7 +15,7 @@ export const CenteredHeader = ({ title, rightElement, hasBottomSpacer = false, .
     return (
         <View {...otherProps}>
             <BaseView>
-                <BaseView w={100} style={HeaderStyle.headerContainer}>
+                <BaseView w={100} style={HeaderStyle}>
                     <BaseSpacer width={24} />
                     <HeaderTitle title={title} />
                     <HeaderRightIconGroup rightElement={rightElement} />

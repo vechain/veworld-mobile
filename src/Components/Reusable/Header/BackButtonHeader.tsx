@@ -3,9 +3,9 @@ import React, { useCallback, ReactNode } from "react"
 import { StyleProp, View, ViewProps } from "react-native"
 import { BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
-import { HeaderStyle } from "./utils/HeaderStyle"
 import { HeaderTitle } from "./HeaderTitle"
 import { HeaderRightIconGroup } from "./HeaderRightIconGroup"
+import { HeaderStyle } from "~Constants"
 
 type Props = {
     iconTestID?: string
@@ -51,11 +51,7 @@ export const BackButtonHeader = ({
     return (
         <View {...otherProps}>
             <BaseView>
-                <BaseView
-                    flexDirection="row"
-                    w={100}
-                    style={HeaderStyle.headerContainer}
-                    justifyContent="space-between">
+                <BaseView flexDirection="row" w={100} style={HeaderStyle} justifyContent="space-between">
                     <BaseIcon
                         haptics="Light"
                         style={[iconStyle]}

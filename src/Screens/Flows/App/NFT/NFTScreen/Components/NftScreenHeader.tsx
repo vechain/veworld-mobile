@@ -1,7 +1,7 @@
 import React from "react"
-import { BaseSpacer, BaseText, BaseView, ChangeAccountButtonPill, SelectedNetworkViewer } from "~Components"
+import { BaseSpacer, BaseView, ChangeAccountButtonPill, HeaderTitle, SelectedNetworkViewer } from "~Components"
 import { useI18nContext } from "~i18n"
-import { StyleSheet } from "react-native"
+import { HeaderStyle } from "~Constants"
 
 type Props = {
     openSelectAccountBottomSheet: () => void
@@ -11,8 +11,8 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
     const { LL } = useI18nContext()
 
     return (
-        <BaseView style={styles.header}>
-            <BaseText typographyFont="subTitleSemiBold">{LL.TITLE_NFTS()}</BaseText>
+        <BaseView style={HeaderStyle}>
+            <HeaderTitle title={LL.TITLE_NFTS()} />
             <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                 <SelectedNetworkViewer />
                 <BaseSpacer width={8} />
@@ -21,11 +21,3 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
         </BaseView>
     )
 }
-const styles = StyleSheet.create({
-    header: {
-        height: 48,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-    },
-})
