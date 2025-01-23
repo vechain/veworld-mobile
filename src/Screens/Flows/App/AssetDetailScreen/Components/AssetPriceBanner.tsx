@@ -29,7 +29,7 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
         () => ({
             color: priceChangeValue.value > 0 ? theme.colors.positive : theme.colors.negative,
         }),
-        [priceChangeValue.value, theme.colors.success, theme.colors.danger],
+        [priceChangeValue.value, theme.colors.positive, theme.colors.negative],
     )
 
     const applyPriceContainerStyle = useMemo(() => {
