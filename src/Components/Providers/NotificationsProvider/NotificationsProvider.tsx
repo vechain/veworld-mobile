@@ -58,7 +58,8 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
     const initializeIneSignal = useCallback(() => {
-        OneSignal.initialize(process.env.ONE_SIGNAL_APP_ID as string)
+        const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
+        OneSignal.initialize(appId as string)
     }, [])
 
     const getOptInStatus = useCallback(async () => {
@@ -109,6 +110,12 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const onNotificationClicked = useCallback(
         (event: NotificationClickEvent) => {
+            const launchURL = event.notification.launchURL
+
+            if (launchURL) {
+                return
+            }
+
             if (event.notification.additionalData) {
                 const { route, navParams } = event.notification.additionalData as {
                     route?: string
