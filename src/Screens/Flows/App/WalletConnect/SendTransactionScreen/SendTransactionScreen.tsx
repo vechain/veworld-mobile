@@ -218,6 +218,14 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     return (
         <BaseSafeArea>
+            <BaseView style={styles.header}>
+                <BackButtonHeader
+                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
+                    title={LL.CONNECTED_APP_REQUEST()}
+                    action={onReject}
+                    hasBottomSpacer={false}
+                />
+            </BaseView>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -226,12 +234,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 scrollEventThrottle={16}
                 onScroll={signAndRejectRef.current?.onScroll}
                 style={styles.scrollView}>
-                <BackButtonHeader
-                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
-                    title={LL.CONNECTED_APP_REQUEST()}
-                    action={onReject}
-                />
                 <BaseView mx={4} style={styles.alignLeft}>
+                    <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>{LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION()}</BaseText>
@@ -330,5 +334,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingLeft: 20,
         paddingRight: 20,
+    },
+    header: {
+        paddingHorizontal: 16,
     },
 })

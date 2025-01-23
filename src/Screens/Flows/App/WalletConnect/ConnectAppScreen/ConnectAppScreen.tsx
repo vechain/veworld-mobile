@@ -266,6 +266,14 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
 
     return (
         <BaseSafeArea grow={1}>
+            <BaseView style={styles.header}>
+                <BackButtonHeader
+                    title={LL.CONNECTED_APP_TITLE()}
+                    action={onPressBack}
+                    hasBottomSpacer={false}
+                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
+                />
+            </BaseView>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -274,12 +282,8 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 scrollEventThrottle={16}
                 onScroll={signAndRejectRef.current?.onScroll}
                 style={styles.scrollView}>
-                <BackButtonHeader
-                    title={LL.CONNECTED_APP_TITLE()}
-                    action={onPressBack}
-                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
-                />
                 <BaseView mx={4} style={styles.alignLeft}>
+                    <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_REQUEST()}</BaseText>
 
                     <BaseSpacer height={16} />
@@ -341,5 +345,8 @@ const styles = StyleSheet.create({
     },
     scrollView: {
         width: "100%",
+    },
+    header: {
+        paddingHorizontal: 16,
     },
 })

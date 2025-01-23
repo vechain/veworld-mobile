@@ -226,6 +226,14 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     return (
         <BaseSafeArea>
+            <BaseView style={styles.header}>
+                <BackButtonHeader
+                    title={LL.CONNECTED_APP_REQUEST()}
+                    action={onPressBack}
+                    hasBottomSpacer={false}
+                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
+                />
+            </BaseView>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -234,12 +242,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 style={styles.scrollView}
                 scrollEventThrottle={16}
                 onScroll={signAndRejectRef.current?.onScroll}>
-                <BackButtonHeader
-                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
-                    title={LL.CONNECTED_APP_REQUEST()}
-                    action={onPressBack}
-                />
                 <BaseView mx={4} style={styles.alignLeft}>
+                    <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>{LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}</BaseText>
@@ -326,5 +330,8 @@ const baseStyles = () =>
             borderWidth: 0.5,
             borderColor: "#0B0043",
             opacity: 0.56,
+        },
+        header: {
+            paddingHorizontal: 16,
         },
     })
