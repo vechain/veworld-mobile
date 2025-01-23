@@ -5,11 +5,11 @@ import React, { FC, useCallback, useEffect, useMemo, useRef } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-    CloseModalButton,
     SelectAccountBottomSheet,
     showErrorToast,
     showInfoToast,
@@ -274,11 +274,12 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                 scrollEventThrottle={16}
                 onScroll={signAndRejectRef.current?.onScroll}
                 style={styles.scrollView}>
-                <CloseModalButton onPress={onPressBack} />
-                <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">{LL.CONNECTED_APP_TITLE()}</BaseText>
-
-                    <BaseSpacer height={24} />
+                <BackButtonHeader
+                    title={LL.CONNECTED_APP_TITLE()}
+                    action={onPressBack}
+                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
+                />
+                <BaseView mx={4} style={styles.alignLeft}>
                     <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_REQUEST()}</BaseText>
 
                     <BaseSpacer height={16} />
@@ -289,7 +290,7 @@ export const ConnectAppScreen: FC<Props> = ({ route }: Props) => {
                     <AppConnectionRequests name={appName} methods={methods} />
                 </BaseView>
 
-                <BaseView mx={20}>
+                <BaseView mx={4}>
                     <BaseSpacer height={24} />
                     <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
                     <BaseSpacer height={16} />
@@ -335,6 +336,7 @@ const styles = StyleSheet.create({
         alignSelf: "flex-start",
     },
     scrollViewContainer: {
+        paddingHorizontal: 16,
         width: "100%",
     },
     scrollView: {

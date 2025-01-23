@@ -5,11 +5,11 @@ import { ScrollView, StyleSheet } from "react-native"
 import { blake2b256, Certificate } from "thor-devkit"
 import {
     AccountCard,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-    CloseModalButton,
     getRpcError,
     RequireUserPassword,
     SelectAccountBottomSheet,
@@ -234,11 +234,12 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 style={styles.scrollView}
                 scrollEventThrottle={16}
                 onScroll={signAndRejectRef.current?.onScroll}>
-                <CloseModalButton onPress={onPressBack} />
-                <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
-
-                    <BaseSpacer height={32} />
+                <BackButtonHeader
+                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
+                    title={LL.CONNECTED_APP_REQUEST()}
+                    action={onPressBack}
+                />
+                <BaseView mx={4} style={styles.alignLeft}>
                     <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>{LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}</BaseText>
@@ -310,6 +311,7 @@ const baseStyles = () =>
         },
         scrollViewContainer: {
             width: "100%",
+            paddingHorizontal: 16,
         },
         scrollView: {
             width: "100%",
