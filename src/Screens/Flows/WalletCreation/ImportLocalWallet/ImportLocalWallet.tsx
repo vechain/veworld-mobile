@@ -3,10 +3,8 @@ import * as Clipboard from "expo-clipboard"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { Keyboard, StyleSheet } from "react-native"
 import {
-    BackButtonHeader,
     BaseButton,
     BaseIcon,
-    BaseModal,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
@@ -15,6 +13,7 @@ import {
     Layout,
     RequireUserPassword,
     SelectDerivationPathBottomSheet,
+    CreatePasswordModal,
 } from "~Components"
 import { AnalyticsEvent, DerivationPath } from "~Constants"
 import {
@@ -32,7 +31,6 @@ import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen
 import HapticsService from "~Services/HapticsService"
 import { selectAreDevFeaturesEnabled, selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import { CryptoUtils, PlatformUtils } from "~Utils"
-import { UserCreatePasswordScreen } from "../UserCreatePasswordScreen"
 import { ImportWalletInput } from "./Components/ImportWalletInput"
 import { UnlockKeystoreBottomSheet } from "./Components/UnlockKeystoreBottomSheet"
 
@@ -435,22 +433,19 @@ export const ImportLocalWallet = () => {
                             onClose={handleOnCloseDerivationPathSheet}
                         />
 
-                        <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
-                            <BaseView justifyContent="flex-start">
-                                <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
-                                <UserCreatePasswordScreen
-                                    onSuccess={pin =>
-                                        onSuccess({
-                                            pin,
-                                            mnemonic: mnemonicCache.current,
-                                            privateKey: privateKeyCache.current,
-                                            derivationPath: derivationPathCache.current ?? DerivationPath.VET,
-                                            importType,
-                                        })
-                                    }
-                                />
-                            </BaseView>
-                        </BaseModal>
+                        <CreatePasswordModal
+                            isOpen={isOpen}
+                            onClose={onCloseCreateFlow}
+                            onSuccess={pin =>
+                                onSuccess({
+                                    pin,
+                                    mnemonic: mnemonicCache.current,
+                                    privateKey: privateKeyCache.current,
+                                    derivationPath: derivationPathCache.current ?? DerivationPath.VET,
+                                    importType,
+                                })
+                            }
+                        />
                     </>
                 }
                 footer={

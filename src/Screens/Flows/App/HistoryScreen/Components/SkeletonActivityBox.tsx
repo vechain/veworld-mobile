@@ -21,27 +21,31 @@ export const SkeletonActivityBox = () => {
                     height: 68,
                     children: [
                         // Circle
-                        { width: 40, height: 40, borderRadius: 20 },
-                        // Lines
+                        {
+                            width: 40,
+                            height: 40,
+                            borderRadius: 20,
+                        },
+                    ],
+                },
+                // Lines
+                {
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    height: 60,
+                    children: [
                         {
                             flexDirection: "column",
                             alignItems: "flex-start",
-                            width: "100%",
-                            children: [
-                                // Line
-                                {
-                                    width: "20%",
-                                    height: 10,
-                                    marginLeft: 12,
-                                },
-                                // Short line
-                                {
-                                    marginTop: 10,
-                                    width: "30%",
-                                    height: 8,
-                                    marginLeft: 12,
-                                },
-                            ],
+                            width: 180,
+                            height: 20,
+                        },
+                        {
+                            flexDirection: "column",
+                            alignItems: "flex-start",
+                            width: 100,
+                            marginVertical: 6,
+                            height: 10,
                         },
                     ],
                 },
@@ -54,7 +58,9 @@ const baseStyles = StyleSheet.create({
     container: {
         flex: 1,
         width: "100%",
-        flexDirection: "column",
+        flexDirection: "row",
+        gap: 12,
+        alignItems: "center",
         marginLeft: -1,
     },
 })

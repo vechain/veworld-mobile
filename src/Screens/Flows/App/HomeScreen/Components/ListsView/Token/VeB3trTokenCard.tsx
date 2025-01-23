@@ -3,28 +3,45 @@ import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
 import Animated from "react-native-reanimated"
 import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import { BigNutils } from "~Utils"
+import { BalanceUtils } from "~Utils"
 import { B3TR, COLORS, VOT3 } from "~Constants"
 import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
+import { selectBalanceForToken, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     isBalanceVisible: boolean
+    isAnimation: boolean
 }
 
-export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
+export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
 
     const vot3Token = useTokenWithCompleteInfo(VOT3)
     const b3trToken = useTokenWithCompleteInfo(B3TR)
 
-    const { isTokensOwnedLoading, exchangeRate, isPositive24hChange, change24h, isLoading } =
-        useTokenCardFiatInfo(b3trToken)
+    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
 
-    const veB3trBalance = BigNutils(vot3Token.tokenUnitFullBalance).plus(b3trToken.tokenUnitFullBalance)
-    const veB3trFiat = BigNutils(veB3trBalance.toString).multiply(exchangeRate ?? 0)
+    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
+
+    const {
+        isTokensOwnedLoading,
+        exchangeRate,
+        isPositive24hChange,
+        change24h,
+        isLoading,
+        fiatBalance: b3trFiat,
+    } = useTokenCardFiatInfo(b3trToken)
+
+    const vot3FiatBalance = BalanceUtils.getFiatBalance(
+        vot3RawBalance?.balance ?? "0",
+        exchangeRate ?? 0,
+        VOT3.decimals,
+    )
+
+    const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trFiat)
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)
@@ -43,9 +60,9 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
 
         return (
             <FiatBalance
-                typographyFont="captionRegular"
-                color={theme.colors.tokenCardText}
-                balances={[veB3trFiat.toCurrencyFormat_string(2)]}
+                typographyFont="bodySemiBold"
+                color={tokenValueLabelColor}
+                balances={[veB3trFiatBalance.toString()]}
                 isVisible={isBalanceVisible}
             />
         )
@@ -53,14 +70,12 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
         isTokensOwnedLoading,
         theme.colors.skeletonBoneColor,
         theme.colors.skeletonHighlightColor,
-        theme.colors.tokenCardText,
         exchangeRate,
         LL,
-        veB3trFiat,
+        tokenValueLabelColor,
+        veB3trFiatBalance,
         isBalanceVisible,
     ])
-
-    const tokenValueLabelColor = theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_500
 
     return (
         <Animated.View style={[baseStyles.innerRow]}>
@@ -68,11 +83,13 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
                 <BaseView style={[baseStyles.imageContainer]}>
                     <Image source={{ uri: b3trToken.icon }} style={baseStyles.image} />
                 </BaseView>
-                <BaseSpacer width={12} />
+                <BaseSpacer width={16} />
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row">
                         <BaseView style={baseStyles.tokenSymbol}>
-                            <BaseText typographyFont="captionSemiBold">{b3trToken.symbol}</BaseText>
+                            <BaseText color={tokenValueLabelColor} typographyFont="bodySemiBold">
+                                {b3trToken.symbol}
+                            </BaseText>
                         </BaseView>
                         <BaseSpacer width={4} />
                         {isLoading ? (
@@ -84,7 +101,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
                                 width={40}
                             />
                         ) : (
-                            <BaseText typographyFont="captionRegular" align="left" color={tokenValueLabelColor}>
+                            <BaseText typographyFont="bodyMedium" align="right" color={theme.colors.tokenCardText}>
                                 {isBalanceVisible ? b3trToken.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
@@ -92,7 +109,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
                     <BaseSpacer height={2} />
                     <BaseView flexDirection="row">
                         <BaseView style={baseStyles.tokenSymbol}>
-                            <BaseText typographyFont="captionSemiBold">{vot3Token.symbol}</BaseText>
+                            <BaseText typographyFont="bodySemiBold">{vot3Token.symbol}</BaseText>
                         </BaseView>
                         <BaseSpacer width={4} />
                         {isLoading ? (
@@ -104,7 +121,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
                                 width={40}
                             />
                         ) : (
-                            <BaseText typographyFont="captionRegular" align="left" color={tokenValueLabelColor}>
+                            <BaseText typographyFont="bodyMedium" align="right" color={theme.colors.tokenCardText}>
                                 {isBalanceVisible ? vot3Token.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
@@ -116,6 +133,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
                 isLoading={isLoading}
                 isPositive24hChange={isPositive24hChange}
                 change24h={change24h}
+                isAnimation={isAnimation}
             />
         </Animated.View>
     )
@@ -123,25 +141,19 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible }: Props) => {
 
 const baseStyles = StyleSheet.create({
     tokenSymbol: {
-        width: 36,
+        width: 44,
     },
     imageContainer: {
         borderRadius: 30,
-        padding: 9,
+        padding: 10,
         backgroundColor: COLORS.GREY_50,
     },
-    imageShadow: {
-        width: "auto",
-    },
-    image: { width: 14, height: 14 },
+    image: { width: 20, height: 20 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
         width: "100%",
-        flexGrow: 1,
-    },
-    balancesContainer: {
-        alignItems: "flex-end",
+        paddingHorizontal: 16,
     },
 })

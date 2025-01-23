@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -228,7 +228,7 @@
     "jest": "^29.7.0",
     "jest-junit": "^16.0.0",
     "jest-transform-stub": "^2.0.0",
-    "lint-staged": "^13.1.0",
+    "lint-staged": "^15.0.0",
     "lokijs": "^1.5.12",
     "metro-react-native-babel-preset": "0.76.8",
     "prettier": "^2.4.1",
@@ -244,6 +244,9 @@
     "browserify-sign": "4.2.2",
     "semver": "7.5.4",
     "d3-color": "3.1.0",
+    "cross-spawn": "^6.0.6",
+    "elliptic": "^6.6.0",
+    "ethers/@ethersproject/providers/ws": "^7.5.10",
     "@vechain/connex-driver/axios": "0.28.0",
     "@walletconnect/types": "2.15.2"
   },

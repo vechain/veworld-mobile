@@ -1,21 +1,26 @@
 import React, { memo, useMemo } from "react"
-import { BaseView, FiatBalance } from "~Components"
+import { FiatBalance } from "~Components"
+import { COLORS } from "~Constants"
 import { useBalances, useTheme } from "~Hooks"
+import { BalanceUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 import { useVechainStatsTokenInfo } from "~Api/Coingecko"
-import { BalanceUtils } from "~Utils"
 import { BaseTokenCard } from "./BaseTokenCard"
-import { StyleSheet } from "react-native"
+import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
     tokenWithBalance: FungibleTokenWithBalance
+    isEdit: boolean
     isBalanceVisible: boolean
 }
 
-export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) => {
+export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: Props) => {
     const theme = useTheme()
+    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
+
     const { data: exchangeRate } = useVechainStatsTokenInfo(tokenWithBalance.symbol.toLowerCase())
+
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
     const { fiatBalance } = useBalances({
@@ -29,21 +34,8 @@ export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) =>
     )
 
     const showFiatBalance = useMemo(() => {
-        const numericBalance = Number(fiatBalance)
-        return numericBalance > 0
-    }, [fiatBalance])
-
-    const rightContent = showFiatBalance ? (
-        <BaseView style={styles.container}>
-            <FiatBalance
-                color={theme.colors.tokenCardText}
-                balances={[fiatBalance]}
-                typographyFont="captionRegular"
-                isVisible={isBalanceVisible}
-                isLoading={isTokensOwnedLoading}
-            />
-        </BaseView>
-    ) : null
+        return !!exchangeRate
+    }, [exchangeRate])
 
     return (
         <BaseTokenCard
@@ -52,13 +44,22 @@ export const TokenCard = memo(({ tokenWithBalance, isBalanceVisible }: Props) =>
             isLoading={isTokensOwnedLoading}
             isBalanceVisible={isBalanceVisible}
             tokenBalance={tokenBalance}
-            rightContent={rightContent}
+            rightContent={
+                showFiatBalance ? (
+                    <TokenCardBalanceInfo
+                        isAnimation={isEdit}
+                        isLoading={isTokensOwnedLoading}
+                        renderFiatBalance={
+                            <FiatBalance
+                                typographyFont="bodySemiBold"
+                                color={tokenValueLabelColor}
+                                balances={[fiatBalance]}
+                                isVisible={isBalanceVisible}
+                            />
+                        }
+                    />
+                ) : null
+            }
         />
     )
-})
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: "flex-end",
-    },
 })
