@@ -1,5 +1,12 @@
 
 
+## 2.0.7 (2025-01-23)
+
+
+### Bug Fixes
+
+* show end of chart on token card ([#2569](https://github.com/vechain/veworld-mobile/issues/2569)) ([8f0b4e3](https://github.com/vechain/veworld-mobile/commit/8f0b4e350d53cd583f79fd91865a88dc2846f116))
+
 ## 2.0.6 (2025-01-22)
 
 ## 2.0.4 (2024-12-23)
