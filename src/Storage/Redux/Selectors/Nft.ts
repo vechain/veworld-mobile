@@ -115,7 +115,7 @@ export const selectNFTWithAddressAndTokenId = createSelector(
     ],
     (state, account, contractAddress, tokenId) => {
         const normalizedAcct = HexUtils.normalize(account.address) // NFT_WHALE - replace here
-        if (state.nfts[normalizedAcct] !== undefined && state.nfts[normalizedAcct][contractAddress]?.nfts) {
+        if (state.nfts?.[normalizedAcct]?.[contractAddress]?.nfts) {
             return state.nfts[normalizedAcct][contractAddress].nfts.find(
                 nft => nft.tokenId === tokenId,
             ) as NonFungibleToken
