@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react"
-import { View, ViewProps } from "react-native"
+import { ViewProps } from "react-native"
 import { BaseView, BaseSpacer } from "~Components/Base"
 import { HeaderTitle } from "./HeaderTitle"
 import { HeaderRightIconGroup } from "./HeaderRightIconGroup"
@@ -13,15 +13,13 @@ type Props = {
 
 export const CenteredHeader = ({ title, rightElement, hasBottomSpacer = false, ...otherProps }: Props) => {
     return (
-        <View {...otherProps}>
-            <BaseView>
-                <BaseView w={100} style={HeaderStyle}>
-                    <BaseSpacer width={24} />
-                    <HeaderTitle title={title} />
-                    <HeaderRightIconGroup rightElement={rightElement} />
-                </BaseView>
-                {hasBottomSpacer && <BaseSpacer height={24} />}
+        <BaseView {...otherProps}>
+            <BaseView w={100} style={HeaderStyle}>
+                <BaseSpacer width={24} />
+                <HeaderTitle title={title} />
+                <HeaderRightIconGroup rightElement={rightElement} />
             </BaseView>
-        </View>
+            {hasBottomSpacer && <BaseSpacer height={24} />}
+        </BaseView>
     )
 }
