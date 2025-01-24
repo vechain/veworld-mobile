@@ -10,8 +10,9 @@ import {
     Layout,
     SelectAccountBottomSheet,
     SelectedNetworkViewer,
+    HeaderStyle,
 } from "~Components"
-import { HeaderStyle, SCREEN_WIDTH } from "~Constants"
+import { SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import {
     AccountWithDevice,

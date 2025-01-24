@@ -5,7 +5,7 @@ import { BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
 import { HeaderTitle } from "./HeaderTitle"
 import { HeaderRightIconGroup } from "./HeaderRightIconGroup"
-import { HeaderStyle } from "~Constants"
+import { HeaderStyle } from "./Constants"
 
 type Props = {
     iconTestID?: string

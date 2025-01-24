@@ -1,7 +1,13 @@
 import React from "react"
-import { BaseSpacer, BaseView, ChangeAccountButtonPill, HeaderTitle, SelectedNetworkViewer } from "~Components"
+import {
+    BaseSpacer,
+    BaseView,
+    ChangeAccountButtonPill,
+    HeaderTitle,
+    SelectedNetworkViewer,
+    HeaderStyle,
+} from "~Components"
 import { useI18nContext } from "~i18n"
-import { HeaderStyle } from "~Constants"
 
 type Props = {
     openSelectAccountBottomSheet: () => void

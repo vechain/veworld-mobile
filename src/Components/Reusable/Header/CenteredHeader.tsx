@@ -3,7 +3,7 @@ import { ViewProps } from "react-native"
 import { BaseView, BaseSpacer } from "~Components/Base"
 import { HeaderTitle } from "./HeaderTitle"
 import { HeaderRightIconGroup } from "./HeaderRightIconGroup"
-import { HeaderStyle } from "~Constants"
+import { HeaderStyle } from "./Constants"
 
 type Props = {
     title: string
