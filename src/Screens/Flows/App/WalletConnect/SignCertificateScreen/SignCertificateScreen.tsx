@@ -5,11 +5,11 @@ import { ScrollView, StyleSheet } from "react-native"
 import { blake2b256, Certificate } from "thor-devkit"
 import {
     AccountCard,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-    CloseModalButton,
     getRpcError,
     RequireUserPassword,
     SelectAccountBottomSheet,
@@ -226,6 +226,14 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     return (
         <BaseSafeArea>
+            <BaseView style={styles.header}>
+                <BackButtonHeader
+                    title={LL.CONNECTED_APP_REQUEST()}
+                    action={onPressBack}
+                    hasBottomSpacer={false}
+                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
+                />
+            </BaseView>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -234,11 +242,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                 style={styles.scrollView}
                 scrollEventThrottle={16}
                 onScroll={signAndRejectRef.current?.onScroll}>
-                <CloseModalButton onPress={onPressBack} />
-                <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
-
-                    <BaseSpacer height={32} />
+                <BaseView mx={4} style={styles.alignLeft}>
+                    <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>{LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}</BaseText>
@@ -310,6 +315,7 @@ const baseStyles = () =>
         },
         scrollViewContainer: {
             width: "100%",
+            paddingHorizontal: 16,
         },
         scrollView: {
             width: "100%",
@@ -324,5 +330,8 @@ const baseStyles = () =>
             borderWidth: 0.5,
             borderColor: "#0B0043",
             opacity: 0.56,
+        },
+        header: {
+            paddingHorizontal: 16,
         },
     })

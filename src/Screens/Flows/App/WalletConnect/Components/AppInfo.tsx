@@ -19,7 +19,7 @@ export const AppInfo = ({ name, description, url, icon, hanldeOnReadMore }: Prop
                     <BaseSpacer height={16} />
                 </>
             ) : (
-                <BaseSpacer height={60} />
+                <BaseSpacer height={20} />
             )}
 
             <BaseText typographyFont="subTitleBold">{name}</BaseText>
