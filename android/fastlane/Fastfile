@@ -188,7 +188,7 @@ platform :android do
 
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
-      sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
+      sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
 
       gradle(task: 'clean')
       gradle(

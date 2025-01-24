@@ -149,22 +149,21 @@ jobs:
               echo "PR Branch: ${{ steps.increment.outputs.pr_branch }}"
 
     
-    #release-ios:
-    #  uses: ./.github/workflows/release-ios.yml
-    #  needs: setup-version-build
-    #  secrets: inherit
-    #  with:
-    #    version: ${{ needs.setup-version-build.outputs.new_version_ios }}
-    #    build: ${{ needs.setup-version-build.outputs.new_build_ios }}
-#
-    #release-android:
-    #  uses: ./.github/workflows/release-andorid.yaml
-    #  needs: 
-    #    - setup-version-build
-    #    - release-ios
-    #  secrets: inherit
-    #  with:
-    #    version: ${{ needs.setup-version-build.outputs.new_version_android }}
-    #    build: ${{ needs.setup-version-build.outputs.new_build_android }}
-    #    pr_branch: ${{ needs.setup-version-build.outputs.pr_branch }}
-#
+    release-ios:
+      uses: ./.github/workflows/release-ios.yml
+      needs: setup-version-build
+      secrets: inherit
+      with:
+        version: ${{ needs.setup-version-build.outputs.new_version_ios }}
+        build: ${{ needs.setup-version-build.outputs.new_build_ios }}
+
+    release-android:
+      uses: ./.github/workflows/release-andorid.yaml
+      needs: 
+        - setup-version-build
+        - release-ios
+      secrets: inherit
+      with:
+        version: ${{ needs.setup-version-build.outputs.new_version_android }}
+        build: ${{ needs.setup-version-build.outputs.new_build_android }}
+        pr_branch: ${{ needs.setup-version-build.outputs.pr_branch }}

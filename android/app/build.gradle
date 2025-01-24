@@ -69,10 +69,6 @@ apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
 
 apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
 
-sentry {
-    autoUploadProguardMapping = shouldSentryAutoUpload()
-    uploadNativeSymbols = shouldSentryAutoUpload()
-}
 
 /**
  * The preferred build flavor of JavaScriptCore (JSC)
