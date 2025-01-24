@@ -36,7 +36,7 @@ export const PressableWithUnderline = (props: Props) => {
                     style={styles.buttonContainer}>
                     <BaseText
                         color={activeIndex === index ? theme.colors.text : theme.colors.graphStatsText}
-                        fontSize={14}>
+                        typographyFont={activeIndex === index ? "bodySemiBold" : "body"}>
                         {item.label}
                     </BaseText>
 

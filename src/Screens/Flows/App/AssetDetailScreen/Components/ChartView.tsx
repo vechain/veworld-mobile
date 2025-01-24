@@ -33,9 +33,9 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
         if (chartData?.length) {
             return (
                 <BaseView flexDirection="row" w={100} alignItems="flex-end" style={[styles.container]}>
-                    <LineChart height={160} width={SCREEN_WIDTH - 32} yGutter={10}>
+                    <LineChart height={180} width={SCREEN_WIDTH - 32} yGutter={30}>
                         <LineChart.Path color={theme.colors.graphLine} width={2}>
-                            <LineChart.Gradient color={theme.colors.graphGradient} lastGradientValue={0} />
+                            <LineChart.Gradient color={theme.colors.graphGradient} lastGradientValue={0.02} />
                         </LineChart.Path>
 
                         <LineChart.CursorCrosshair onActivated={invokeHaptic} onEnded={invokeHaptic} />
