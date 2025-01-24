@@ -10,7 +10,7 @@ import { Routes } from "~Navigation"
 import { BaseView } from "~Components"
 import HapticsService from "~Services/HapticsService"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
-import { B3TR } from "~Constants"
+import { B3TR, SCREEN_WIDTH } from "~Constants"
 import { VeB3trTokenCard } from "~Screens"
 
 const HEIGHT = 100
@@ -80,7 +80,7 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
                     {!hideChart && (
                         <Animated.View style={animatedInnerCard}>
                             <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
-                                <LineChart height={HEIGHT} yGutter={20}>
+                                <LineChart width={SCREEN_WIDTH - 32} height={HEIGHT} yGutter={20}>
                                     <LineChart.Path color={theme.colors.graphLine} width={2}>
                                         <LineChart.Gradient
                                             color={theme.colors.graphGradient}
