@@ -1,5 +1,7 @@
 #transactions_url_delegation.yaml
 appId: org.vechain.veworld.app
+tags:
+    - onlyAndroid
 env:
     URL_1: "https://sponsor-testnet.vechain.energy/by/282"
     URL_2: "https://sponsor-testnet.vechain.energy/by/219"
