@@ -1,71 +1,73 @@
 #createNewWalletAndBackupMenmonic
 appId: org.vechain.veworld.app
 onFlowComplete:
-  - runFlow: ../setup_reset/resetApp.yaml
+    - runFlow: ../setup_reset/resetApp.yaml
 ---
 - launchApp:
-    clearState: true
+      clearState: true
 - tapOn:
-    id: "CREATE_WALLET_BTN"
+      id: "CREATE_WALLET_BTN"
 #set wallet pin
 - repeat:
-    while:
-      visible: "Choose your 6-digit PIN"
-    commands:
-      - tapOn: "1"
+      while:
+          visible: "Choose your 6-digit PIN"
+      commands:
+          - tapOn: "1"
 #confirm wallet pin
 - repeat:
-    while:
-      visible: "Choose your 6-digit PIN"
-    commands:
-      - tapOn: "1"
+      while:
+          visible: "Choose your 6-digit PIN"
+      commands:
+          - tapOn: "1"
 #backup mnemonic on privacy and settings screen
 - runFlow:
-    when:
-      platform: Android
-    commands:
-        - tapOn:
-            id: "Backup_now_button"
+      when:
+          platform: Android
+      commands:
+          - tapOn:
+                id: "Backup_now_button"
 - runFlow:
-    when:
-      platform: iOS
-    commands:
-         - tapOn:
-               id: "Backup_now_button"
+      when:
+          platform: iOS
+      commands:
+          - tapOn:
+                id: "Backup_now_button"
 #view and copy mnemonic
 - runFlow:
-    when:
-      platform: Android
-    commands:
-         - tapOn: "󰅚, Wallet 1, 󰅂"
-         - repeat:
-             while:
-               visible: "Insert your 6-digit PIN"
-             commands:
-               - tapOn: "1"
-         - tapOn: "Back"
-         - tapOn: "Back"
-         - tapOn: ".*Copy to clipboard.*"
-         - tapOn:
-             id: "BackButtonHeader2-BaseIcon-backButton"
-         - tapOn:
-             id: "BackButtonHeader2-BaseIcon-backButton"
-         - tapOn:
-               id: "wallet-tab"
+      when:
+          platform: Android
+      commands:
+          - tapOn:
+                id: "deviceBackupStateRow_0"
+          - repeat:
+                while:
+                    visible: "Insert your 6-digit PIN"
+                commands:
+                    - tapOn: "1"
+          - tapOn:
+                id: "Copy_To_Clipboard_Btn"
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
+          - tapOn:
+                id: "wallet-tab"
 - runFlow:
-    when:
-      platform: iOS
-    commands:
-         - tapOn: "󰅚 Wallet 1 󰅂"
-         - repeat:
-              times: 6
-              commands:
-                 - tapOn: "1"
-         - tapOn: "Copy to clipboard 󰆏"
-         - tapOn:
-             id: "BackButtonHeader2-BaseIcon-backButton"
-         - tapOn:
-             id: "BackButtonHeader2-BaseIcon-backButton"
-         - tapOn:
-              id: "wallet-tab"
-- assertVisible: "Your tokens"
+      when:
+          platform: iOS
+      commands:
+          - tapOn:
+                id: "deviceBackupStateRow_0"
+          - repeat:
+                times: 6
+                commands:
+                    - tapOn: "1"
+          - tapOn:
+                id: "Copy_To_Clipboard_Btn"
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
+          - tapOn:
+                id: "wallet-tab"
+- assertVisible: "My tokens"

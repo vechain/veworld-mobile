@@ -25,3 +25,6 @@ d3f0b10a98096d0061d615f1a7c857302c62288a:.maestro/tokenManagement/tokenManagemen
 3d5633d53e618fd176e5200633c688fe77fa206d:android/pc-api-4895632399891248889-903-c30062a54347.json:private-key:5
 3d5633d53e618fd176e5200633c688fe77fa206d:android/pc-api-4895632399891248889-903-c30062a54347.json:generic-api-key:4
 3d5633d53e618fd176e5200633c688fe77fa206d:datadog-ci.json:generic-api-key:3
+badcf2fd0c9c1ce5345929a11842c0354da16b52:.maestro/tokenManagement/tokenManagement.yaml:generic-api-key:8
+badcf2fd0c9c1ce5345929a11842c0354da16b52:.maestro/tokenManagement/tokenManagement.yaml:generic-api-key:6
+badcf2fd0c9c1ce5345929a11842c0354da16b52:.maestro/tokenManagement/tokenManagement.yaml:generic-api-key:7

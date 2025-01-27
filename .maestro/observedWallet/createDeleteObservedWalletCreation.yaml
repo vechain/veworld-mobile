@@ -53,7 +53,8 @@ onFlowStart:
           platform: iOS
       commands:
           - swipe:
-                from: "Observed Wallet 1 󰲶"
+                from:
+                    id: "Wallet_1"
                 direction: "LEFT"
 - tapOn:
       id: "DeleteUnderlay_DeleteIcon_observable-wrapper"

@@ -1,135 +1,136 @@
 #contact Management
 appId: org.vechain.veworld.app
 env:
-  CONTACT_NAME_1: "My Contact 1"
-  CONTACT_ADDRESS_1: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791051"
-  CONTACT_NAME_2: "My Contact 2"
-  CONTACT_ADDRESS_2: "0xB6108eA355b04867A68F294d6197b667789361a12c"  
-  CONTACT_NAME_3: "My Contact 3"
-  CONTACT_ADDRESS_3: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791053"
-  CONTACT_NAME_4: "My Contact 4"
-  CONTACT_ADDRESS_4: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791054"
+    CONTACT_NAME_1: "My Contact 1"
+    CONTACT_ADDRESS_1: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791051"
+    CONTACT_NAME_2: "My Contact 2"
+    CONTACT_ADDRESS_2: "0xB6108eA355b04867A68F294d6197b667789361a12c"
+    CONTACT_NAME_3: "My Contact 3"
+    CONTACT_ADDRESS_3: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791053"
+    CONTACT_NAME_4: "My Contact 4"
+    CONTACT_ADDRESS_4: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791054"
 ---
 - launchApp:
-    clearState: true
+      clearState: true
 ## welcome screen
 - tapOn:
-     id: "dev_demo"
+      id: "dev_demo"
 - tapOn:
-     id: "settings-tab"
+      id: "settings-tab"
 - tapOn:
-     id: "Networks"
+      id: "Networks"
 - tapOn:
       id: "networks_box_mainnet"
 - tapOn:
-     id: "networks_box_testnet"
+      id: "networks_box_testnet"
 - tapOn:
-     id: "wallet-tab"
+      id: "wallet-tab"
 - tapOn:
-     id: "settings-tab"
+      id: "settings-tab"
 - tapOn:
-     id: "BackButtonHeader-BaseIcon-backButton"
+      id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-     id: "My Contacts"
+      id: "My Contacts"
 - tapOn:
-     id: "create-new-contact"
+      id: "create-new-contact"
 - tapOn:
-     id: "Contact-Name-Input"
+      id: "Contact-Name-Input"
 - inputText: ${CONTACT_NAME_1}
 - tapOn:
-     id: "Contact-Address-Input"
+      id: "Contact-Address-Input"
 - inputText: ${CONTACT_ADDRESS_1}
 - tapOn: "Contact name"
 - tapOn:
-     id: "Add_Contact_Button"
+      id: "Add_Contact_Button"
 
 #new contact with an invalid address
 - tapOn:
-     id: "Add_Contact_Button"
+      id: "Add_Contact_Button"
 - tapOn:
-     id: "Contact-Name-Input"
+      id: "Contact-Name-Input"
 - inputText: ${CONTACT_NAME_2}
 - tapOn:
-     id: "Contact-Address-Input"
+      id: "Contact-Address-Input"
 - inputText: ${CONTACT_ADDRESS_2}
 - assertVisible: "Please enter a valid Vechain address"
 - tapOn: "Contact name"
 - tapOn:
-     id: "BackButtonHeader-BaseIcon-backButton"
+      id: "BackButtonHeader-BaseIcon-backButton"
 
 #new contact with an existing address
 - tapOn:
-     id: "Add_Contact_Button"
+      id: "Add_Contact_Button"
 - tapOn:
-     id: "Contact-Name-Input"
+      id: "Contact-Name-Input"
 - inputText: ${CONTACT_NAME_3}
 - tapOn:
-     id: "Contact-Address-Input"
+      id: "Contact-Address-Input"
 - inputText: ${CONTACT_ADDRESS_1}
 - assertVisible: "Address already exists in contacts"
 - tapOn: "Contact name"
 - tapOn:
-     id: "BackButtonHeader-BaseIcon-backButton"
+      id: "BackButtonHeader-BaseIcon-backButton"
 
 #create a new contact and delete it
 - tapOn:
-     id: "Add_Contact_Button"
+      id: "Add_Contact_Button"
 - tapOn:
-     id: "Contact-Name-Input"
+      id: "Contact-Name-Input"
 - inputText: ${CONTACT_NAME_3}
 - tapOn:
-     id: Contact-Address-Input
+      id: Contact-Address-Input
 - inputText: ${CONTACT_ADDRESS_3}
 - tapOn: "Contact name"
 - tapOn:
-     id: "Add_Contact_Button"
+      id: "Add_Contact_Button"
 - runFlow:
-    when:
-      platform: iOS
-    commands:
-      - swipe:
-         from: "󰆴 My Contact 3 0x23…791053 󰏫"
-         direction: LEFT
+      when:
+          platform: iOS
+      commands:
+          - swipe:
+                from:
+                    id: "contact-row-1"
+                direction: LEFT
 - runFlow:
-    when:
-      platform: Android
-    commands:
-      - swipe:
-         from: 
-            id: "My Contact 3-contact-box"
-         direction: LEFT
+      when:
+          platform: Android
+      commands:
+          - swipe:
+                from:
+                    id: "My Contact 3-contact-box"
+                direction: LEFT
 - tapOn:
-     id: "DeleteUnderlay_DeleteIcon"
+      id: "DeleteUnderlay_DeleteIcon"
 - tapOn: "REMOVE"
 
 #creates a new contact and edit it
 - tapOn:
-     id: "Add_Contact_Button"
+      id: "Add_Contact_Button"
 - tapOn:
-     id: "Contact-Name-Input"
+      id: "Contact-Name-Input"
 - inputText: ${CONTACT_NAME_3}
 - tapOn:
-     id: Contact-Address-Input
+      id: Contact-Address-Input
 - inputText: ${CONTACT_ADDRESS_3}
 - tapOn: "Contact name"
 - tapOn:
-    id: "Add_Contact_Button"
+      id: "Add_Contact_Button"
 - tapOn:
-     id: "contact-row-1"
+      id: "contact-row-1"
 - tapOn:
-    id: "Contact-Name-Input"
+      id: "Contact-Name-Input"
 - longPressOn: ${CONTACT_NAME_3}
 - tapOn: "Select All"
 - eraseText
 - inputText: ${CONTACT_NAME_4}
 - tapOn:
-     id: "Contact-Address-Input"
+      id: "Contact-Address-Input"
 - tapOn:
-     id: clear-contact-address
+      id: clear-contact-address
 - tapOn:
-     id: "Contact-Address-Input"
+      id: "Contact-Address-Input"
 - inputText: ${CONTACT_ADDRESS_4}
 - tapOn:
-    id: "save-contact-btn"
+      id: "save-contact-btn"
 #Reset the app
 - runFlow: ../setup_reset/resetApp.yaml
