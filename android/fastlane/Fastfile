@@ -9,6 +9,28 @@ platform :android do
     )
   end
 
+  desc "Upload sorucemaps to sentry"
+  lane :upload_sourcemaps_sentry do
+    sh("echo 'Uploading sourcemaps to sentry - e2e andriod'")
+    sentry_check_cli_installed
+    #Generate React Native Packager (Metro) bundle and source maps
+    sh("npx react-native bundle --dev false --minify false --platform android --entry-file index.js --reset-cache --bundle-output index.android.bundle --sourcemap-output index.android.bundle.map")
+
+    #Compile hermes byte code
+    sh("node_modules/react-native/sdks/hermesc/osx-bin/hermesc -O -emit-binary -output-source-map -out=index.android.bundle.hbc index.android.bundle")
+    sh("rm -f index.android.bundle")
+    sh("mv index.android.bundle.hbc index.android.bundle")
+    #Compose Hermes bytecode and (React Native Packager) Metro source maps:
+    sh("mv index.android.bundle.map index.android.bundle.packager.map")
+    sh("node node_modules/react-native/scripts/compose-source-maps.js index.android.bundle.packager.map index.android.bundle.hbc.map -o index.android.bundle.map")
+    sh ("node node_modules/@sentry/react-native/scripts/copy-debugid.js index.android.bundle.packager.map index.android.bundle.map")
+    sh("rm -f index.android.bundle.packager.map")
+
+    #upload sourcemaps to sentry
+    sh("node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload --debug-id-reference --strip-prefix ../../ index.android.bundle index.android.bundle.map")
+
+  end
+
   # @param {object} options - The options for the build process.
   # @param {string} options.version_name - The version name of the build.
   # @param {string} options.version_code - The version code of the build.
@@ -188,7 +210,7 @@ platform :android do
 
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
-      sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
+      sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
 
       gradle(task: 'clean')
       gradle(
@@ -206,6 +228,8 @@ platform :android do
         }
       )
 
+      upload_sourcemaps_sentry()
+
       ci_value = false
       sh("./set_ci_vars.sh #{ci_value}")
       sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
@@ -219,17 +243,7 @@ platform :android do
     rescue => exception
       puts exception
 
-      # Set the ci value to false
-      ci_value = false
-      sh("./set_ci_vars.sh #{ci_value}")
-
-      # Set the sentry auto upload to true
-      sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
-
-      # Stash the changes
-      sh("git stash save --keep-index --include-untracked")
-      # Drop the stash
-      sh("git stash drop")
+      sh("echo 'Build failed'")
     end
   end
 
