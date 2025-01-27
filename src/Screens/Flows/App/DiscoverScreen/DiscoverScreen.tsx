@@ -124,7 +124,7 @@ export const DiscoverScreen: React.FC = () => {
 
     const renderScreenHeader = useMemo(() => {
         return (
-            <>
+            <BaseView px={16}>
                 <BaseView style={styles.header}>
                     <AnimatedTitle title={LL.DISCOVER_TITLE()} scrollOffset={offset} />
                     <BaseView flexDirection="row" justifyContent="space-between">
@@ -140,8 +140,8 @@ export const DiscoverScreen: React.FC = () => {
                     onTextChange={onTextChange}
                     onIconPress={onNavigateToBrowserHistory}
                 />
-                <BaseSpacer height={4} />
-            </>
+                <BaseSpacer height={12} />
+            </BaseView>
         )
     }, [
         LL,
@@ -159,6 +159,7 @@ export const DiscoverScreen: React.FC = () => {
         <Layout
             fixedHeader={renderScreenHeader}
             noBackButton
+            noMargin
             hasSafeArea
             fixedBody={
                 <BaseView style={styles.rootContainer}>

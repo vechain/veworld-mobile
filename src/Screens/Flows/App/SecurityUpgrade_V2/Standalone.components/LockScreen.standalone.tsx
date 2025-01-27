@@ -81,7 +81,7 @@ export const LockScreen: React.FC<Props> = memo(({ onSuccess, onClose }) => {
                     name="icon-arrow-left"
                     color={theme.colors.title}
                 />
-                <BaseText color={theme.colors.title} typographyFont="subSubTitleSemiBold">
+                <BaseText color={theme.colors.title} typographyFont="subTitleSemiBold">
                     {title}
                 </BaseText>
                 <BaseSpacer width={24} />

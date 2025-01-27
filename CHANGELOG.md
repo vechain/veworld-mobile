@@ -1,5 +1,14 @@
 
 
+## 2.0.7 (2025-01-24)
+
+
+### Bug Fixes
+
+* reset nft stack when account is changed ([#2560](https://github.com/vechain/veworld-mobile/issues/2560)) ([4d01bca](https://github.com/vechain/veworld-mobile/commit/4d01bcaad26cb3ad10932162f5d5439bfc79811a))
+
+## 2.0.6 (2025-01-22)
+
 ## 2.0.4 (2024-12-23)
 
 ## 2.0.4 (2024-12-02)

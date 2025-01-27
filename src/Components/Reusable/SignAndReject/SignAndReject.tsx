@@ -125,7 +125,7 @@ const baseStyles = () =>
         rootContainer: {
             height: 194,
             width: "100%",
-            padding: 24,
+            padding: 16,
             alignItems: "center",
         },
         buttonsContainer: {
