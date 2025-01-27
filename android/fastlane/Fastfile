@@ -11,6 +11,8 @@ platform :android do
 
   desc "Upload sourcemaps to sentry"
   lane :upload_sourcemaps_sentry do
+    |values|
+    build = values[:build]
     Dir.chdir "../.." do
 
     sh("echo 'Uploading sourcemaps to sentry - e2e android'")
@@ -65,6 +67,9 @@ platform :android do
       node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
         --debug-id-reference \
         --strip-prefix ../../ \
+        --org 'vechain-foundation' \
+        --project 'veworld-mobile' \
+        --dist #{build} \
         sourcemap-bundle/index.android.bundle \
         sourcemap-bundle/index.android.bundle.map
     })
@@ -239,7 +244,7 @@ platform :android do
 
     ci_value = true
     sh("./set_ci_vars.sh #{ci_value}")
-    sh("export SENTRY_DISABLE_AUTO_UPLOAD=true")
+    sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
 
     version_name = options[:version_name]
     version_code = options[:version_code]
@@ -252,7 +257,7 @@ platform :android do
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
-      upload_sourcemaps_sentry()
+      upload_sourcemaps_sentry(build:version_code)
       gradle(task: 'clean')
       gradle(
         task: 'assemble',
