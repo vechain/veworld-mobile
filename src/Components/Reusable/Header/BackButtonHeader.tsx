@@ -1,8 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, ReactNode } from "react"
-import { StyleProp, View, ViewProps, StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { StyleProp, ViewProps } from "react-native"
+import { BaseIcon, BaseSpacer, BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
+import { HeaderTitle } from "./HeaderTitle"
+import { HeaderRightIconGroup } from "./HeaderRightIconGroup"
+import { HeaderStyle } from "./Constants"
 
 type Props = {
     iconTestID?: string
@@ -46,32 +49,21 @@ export const BackButtonHeader = ({
     }, [preventGoBack, beforeNavigating, action, nav, onGoBack])
 
     return (
-        <View {...otherProps}>
-            <BaseView>
-                <BaseView flexDirection="row" w={100} py={12} justifyContent="space-between">
-                    <BaseIcon
-                        haptics="Light"
-                        style={[iconStyle]}
-                        size={24}
-                        name="icon-arrow-left"
-                        color={iconColor ?? theme.colors.text}
-                        action={onActionPress}
-                        testID={iconTestID}
-                    />
-                    <BaseText typographyFont="subSubTitleSemiBold">{title}</BaseText>
-                    <BaseSpacer width={24} />
-                    {rightElement && <BaseView style={styles.rightElementContainer}>{rightElement}</BaseView>}
-                </BaseView>
-                {hasBottomSpacer && <BaseSpacer height={24} />}
+        <BaseView {...otherProps}>
+            <BaseView flexDirection="row" w={100} style={HeaderStyle} justifyContent="space-between">
+                <BaseIcon
+                    haptics="Light"
+                    style={[iconStyle]}
+                    size={24}
+                    name="icon-arrow-left"
+                    color={iconColor ?? theme.colors.title}
+                    action={onActionPress}
+                    testID={iconTestID}
+                />
+                {!!title && <HeaderTitle title={title} />}
+                <HeaderRightIconGroup rightElement={rightElement} />
             </BaseView>
-        </View>
+            {hasBottomSpacer && <BaseSpacer height={24} />}
+        </BaseView>
     )
 }
-
-const styles = StyleSheet.create({
-    rightElementContainer: {
-        position: "absolute",
-        right: 0,
-        top: 8,
-    },
-})

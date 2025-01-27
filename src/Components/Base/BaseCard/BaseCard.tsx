@@ -66,7 +66,7 @@ const baseStyles = (theme: ColorThemeType) =>
             width: "100%",
             backgroundColor: theme.colors.card,
             borderWidth: 1,
-            borderRadius: 8,
+            borderRadius: 12,
         },
         selectedContainer: {
             borderColor: theme.isDark ? COLORS.WHITE : theme.colors.primary,

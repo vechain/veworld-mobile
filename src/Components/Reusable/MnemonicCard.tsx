@@ -77,7 +77,9 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
                     my={2}
                     w={24}
                     align="center"
-                    testID={`word-${index}`}>
+                    testID={`word-${index}`}
+                    adjustsFontSizeToFit
+                    numberOfLines={1}>
                     {word}
                 </BaseText>
             )

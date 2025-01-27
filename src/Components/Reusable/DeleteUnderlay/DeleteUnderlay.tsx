@@ -36,7 +36,7 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "flex-end",
             marginLeft: "auto",
-            borderRadius: 8,
+            borderRadius: 12,
             height: "100%",
             backgroundColor: theme.colors.danger,
         },

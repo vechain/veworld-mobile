@@ -142,15 +142,15 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         card: {
             justifyContent: "space-between",
-            borderRadius: 8,
+            borderRadius: 12,
         },
         touchableContainer: {
             backgroundColor: theme.colors.card,
-            borderRadius: 8,
+            borderRadius: 12,
         },
         deviceBoxPressable: {
             backgroundColor: theme.colors.card,
-            borderRadius: 8,
+            borderRadius: 12,
         },
         warningLabel: {
             width: 8,

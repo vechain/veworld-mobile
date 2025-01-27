@@ -22,14 +22,14 @@ export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible }) => {
     return (
         <BaseView>
             <BaseView flexDirection="row">
-                <BaseText color={theme.colors.textSecondary} typographyFont="body">
+                <BaseText color={theme.colors.textReversed} typographyFont="body">
                     {LL.BD_YOUR_BALANCE()}
                 </BaseText>
                 <BaseIcon
                     action={toggleVisible}
                     haptics="Light"
                     name={isVisible ? "icon-eye-off" : "icon-eye"}
-                    color={theme.colors.textSecondary}
+                    color={theme.colors.textReversed}
                     size={18}
                     style={baseStyles.marginLeft}
                 />

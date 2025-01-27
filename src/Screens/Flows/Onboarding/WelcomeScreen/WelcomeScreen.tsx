@@ -6,27 +6,25 @@ import LinearGradient from "react-native-linear-gradient"
 import Animated, { FadeInDown, FadeOutDown } from "react-native-reanimated"
 import { VeWorldLogoSVG } from "~Assets"
 import {
-    BackButtonHeader,
     BaseButton,
     BaseIcon,
-    BaseModal,
     BaseSpacer,
     BaseText,
     BaseTouchable,
     BaseView,
     ImportWalletBottomSheet,
     Layout,
+    CreatePasswordModal,
 } from "~Components"
 import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useCloudBackup, useDisclosure, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { UserCreatePasswordScreen } from "~Screens/Flows/WalletCreation"
-import { PlatformUtils } from "~Utils"
 import { useDemoWallet } from "./useDemoWallet"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 
 import { Routes } from "~Navigation"
 import { CloudKitWallet, DrivetWallet } from "~Model"
+import { PlatformUtils } from "~Utils"
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
@@ -203,14 +201,16 @@ export const WelcomeScreen = () => {
 
             <ImportWalletBottomSheet ref={ref} onClose={onClose} />
 
-            <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
-                <BaseView justifyContent="flex-start">
-                    <BackButtonHeader action={onCloseCreateFlow} hasBottomSpacer={false} />
-                    <UserCreatePasswordScreen
-                        onSuccess={pin => onSuccess({ pin, derivationPath: DerivationPath.VET })}
-                    />
-                </BaseView>
-            </BaseModal>
+            <CreatePasswordModal
+                isOpen={isOpen}
+                onClose={onCloseCreateFlow}
+                onSuccess={pin =>
+                    onSuccess({
+                        pin,
+                        derivationPath: DerivationPath.VET,
+                    })
+                }
+            />
         </>
     )
 }

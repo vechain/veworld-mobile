@@ -13,27 +13,28 @@ import {
     BaseSpacer,
     BaseView,
     Layout,
+    PlusIconHeaderButton,
     RequireUserPassword,
     showSuccessToast,
     showWarningToast,
     SwipeableRow,
     useFeatureFlags,
     EditIconHeaderButton,
-    PlusIconHeaderButton,
     BaseText,
+    HeaderRightIconGroup,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { AccountWithDevice, DEVICE_TYPE, WalletAccount } from "~Model"
 import { addAccountForDevice, renameAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } from "~Storage/Redux/Selectors"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListHome, Routes } from "~Navigation"
-import { useAccountDelete } from "./hooks"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { FlatList, StyleSheet } from "react-native"
 import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBottomSheet"
+import { RootStackParamListHome, Routes } from "~Navigation"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { useAccountDelete } from "./hooks"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 
@@ -194,20 +195,24 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         <Layout
             title={walletAlias || device?.alias || ""}
             headerRightElement={
-                <BaseView flexDirection="row" style={styles.headerActionsContainer}>
-                    {isEditable && (
-                        <EditIconHeaderButton
-                            testID="WalletDetailScreen_editWalletButton"
-                            action={openEditWalletAccountBottomSheet}
-                        />
-                    )}
-                    {showButton && (
-                        <PlusIconHeaderButton
-                            testID="WalletDetailScreen_addAccountButton"
-                            action={onAddAccountClicked}
-                        />
-                    )}
-                </BaseView>
+                <HeaderRightIconGroup
+                    rightElement={
+                        <BaseView flexDirection="row" style={styles.headerActionsContainer}>
+                            {isEditable && (
+                                <EditIconHeaderButton
+                                    testID="WalletDetailScreen_editWalletButton"
+                                    action={openEditWalletAccountBottomSheet}
+                                />
+                            )}
+                            {showButton && (
+                                <PlusIconHeaderButton
+                                    testID="WalletDetailScreen_addAccountButton"
+                                    action={onAddAccountClicked}
+                                />
+                            )}
+                        </BaseView>
+                    }
+                />
             }
             fixedBody={
                 <BaseView flex={1} flexGrow={1}>

@@ -69,8 +69,8 @@ const baseStyles = (theme: ColorThemeType) =>
         deleteUnderlay: {
             width: 70,
             backgroundColor: theme.colors.danger,
-            borderTopEndRadius: 8,
-            borderBottomEndRadius: 8,
+            borderTopEndRadius: 12,
+            borderBottomEndRadius: 12,
         },
         underlayItem: {
             flexDirection: "row",

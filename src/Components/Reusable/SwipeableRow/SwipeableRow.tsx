@@ -131,7 +131,7 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         touchableContainer: {
             backgroundColor: theme.colors.card,
-            borderRadius: 8,
+            borderRadius: 12,
             overflow: "hidden",
         },
     })

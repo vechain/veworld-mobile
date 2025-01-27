@@ -22,14 +22,19 @@ export type Colors = {
     textReversed: string
     textSelected: string
     alertDescription: string
+    numberPad: string
     background: string
     backgroundReversed: string
     backgroundTransparent: string
     splashBackground: string
     splashColorLayer: string
+    title: string
+    subtitle: string
     card: string
     icon: string
     button: string
+    pinFilled: string
+    pinEmpty: string
     rightIconHeaderBorder: string
     border: string
     notification: string
@@ -62,6 +67,7 @@ export type Colors = {
     tokenCardText: string
     graphLine: string
     graphGradient: string
+    accountCard: string
     successVariant: {
         background: string
         border: string
@@ -159,8 +165,9 @@ export enum COLORS {
     MEDIUM_ORANGE = "#FA710E",
     DISABLED_GREY = "#E5E5E5",
     MEDIUM_GRAY = "#C4C4C4",
+    GREY_800 = "#202226",
     GREY_700 = "#363A3F",
-    GREY_600 = "#4A5568",
+    GREY_600 = "#525860",
     GREY_500 = "#747C89",
     GREY_400 = "#AAAFB6",
     GREY_300 = "#CBD5E0",
@@ -216,14 +223,19 @@ const light: Colors = {
     textReversed: COLORS.WHITE,
     textSelected: COLORS.PRIMARY_700,
     alertDescription: COLORS.GREY_600,
+    numberPad: COLORS.GREY_600,
     textLight: COLORS.GREY_500,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
     splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
+    title: COLORS.PRIMARY_800,
+    subtitle: COLORS.GREY_600,
     card: COLORS.WHITE,
     icon: COLORS.PRIMARY_800,
+    pinEmpty: COLORS.GREY_400,
+    pinFilled: COLORS.PRIMARY_500,
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
@@ -256,6 +268,7 @@ const light: Colors = {
     tokenCardText: COLORS.GREY_500,
     graphLine: COLORS.PURPLE,
     graphGradient: COLORS.GRAPH_GRADIENT_LIGHT,
+    accountCard: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -278,7 +291,7 @@ const light: Colors = {
         borderLight: COLORS.GREY_200,
         icon: COLORS.GREY_500,
         title: COLORS.GREY_700,
-        titleInline: COLORS.GREY_700,
+        titleInline: COLORS.GREY_600,
     },
     infoVariant: {
         background: COLORS.BLUE_50,
@@ -321,12 +334,17 @@ const dark: Colors = {
     textReversed: COLORS.DARK_PURPLE,
     textSelected: COLORS.PRIMARY_300,
     alertDescription: COLORS.GREY_600,
+    numberPad: COLORS.GREY_300,
     textLight: COLORS.WHITE,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
     splashColorLayer: COLORS.LIME_GREEN,
     splashBackground: COLORS.DARK_PURPLE,
+    pinEmpty: COLORS.GREY_500,
+    pinFilled: COLORS.PRIMARY_300,
+    title: COLORS.WHITE,
+    subtitle: COLORS.GREY_300,
     card: COLORS.PURPLE,
     icon: COLORS.WHITE,
     button: COLORS.LIME_GREEN,
@@ -358,9 +376,10 @@ const dark: Colors = {
     toggleMnemonicButtonBackground: COLORS.PURPLE,
     pressableCardBackground: COLORS.PURPLE,
     pressableCardBorder: COLORS.DARK_PURPLE_DISABLED,
-    tokenCardText: COLORS.PRIMARY_200,
-    graphLine: COLORS.PRIMARY_700,
-    graphGradient: COLORS.PRIMARY_400,
+    tokenCardText: COLORS.GREY_300,
+    graphLine: COLORS.LIME_GREEN,
+    graphGradient: COLORS.LIME_GREEN,
+    accountCard: COLORS.LIME_GREEN,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
@@ -381,7 +400,7 @@ const dark: Colors = {
         background: COLORS.GREY_200,
         border: COLORS.GREY_300,
         borderLight: COLORS.GREY_300,
-        icon: COLORS.GREY_500,
+        icon: COLORS.GREY_400,
         title: COLORS.GREY_700,
         titleInline: COLORS.GREY_200,
     },

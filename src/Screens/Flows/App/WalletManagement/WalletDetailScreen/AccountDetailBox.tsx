@@ -129,7 +129,7 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             flexBasis: 80,
             flex: 1,
-            borderRadius: 8,
+            borderRadius: 12,
             paddingHorizontal: 16,
             paddingVertical: 12,
         },

@@ -1,20 +1,36 @@
 import React from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
-import Animated from "react-native-reanimated"
+import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
 
 type Props = {
     renderFiatBalance: React.ReactNode
+    isAnimation: boolean
     isLoading: boolean
     isPositive24hChange?: boolean
     change24h?: string
 }
 
-export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive24hChange, change24h }: Props) => {
+export const TokenCardBalanceInfo = ({
+    renderFiatBalance,
+    isLoading,
+    isPositive24hChange,
+    change24h,
+    isAnimation,
+}: Props) => {
     const theme = useTheme()
+
+    const animatedOpacityReverse = useAnimatedStyle(() => {
+        return {
+            opacity: withTiming(isAnimation ? 0 : 1, {
+                duration: 200,
+            }),
+        }
+    }, [isAnimation])
+
     return (
-        <Animated.View style={baseStyles.container}>
+        <Animated.View style={[animatedOpacityReverse, baseStyles.container]}>
             {isLoading ? (
                 <BaseView flexDirection="row" alignItems="center">
                     <BaseSkeleton
@@ -26,12 +42,12 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
                     />
                 </BaseView>
             ) : (
-                <BaseView flexDirection="row" alignItems="center">
+                <BaseView flexDirection="row" alignItems="flex-start">
                     {renderFiatBalance}
                 </BaseView>
             )}
 
-            <BaseSpacer height={3} />
+            <BaseSpacer height={2} />
 
             {isLoading ? (
                 <BaseView flexDirection="row" alignItems="center">
@@ -45,7 +61,7 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
                 </BaseView>
             ) : (
                 <BaseText
-                    typographyFont="smallCaptionRegular"
+                    typographyFont="captionMedium"
                     color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
                     {change24h}
                 </BaseText>
@@ -57,5 +73,6 @@ export const TokenCardBalanceInfo = ({ renderFiatBalance, isLoading, isPositive2
 const baseStyles = StyleSheet.create({
     container: {
         alignItems: "flex-end",
+        justifyContent: "flex-start",
     },
 })

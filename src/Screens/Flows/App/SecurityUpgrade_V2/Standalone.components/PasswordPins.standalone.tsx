@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseText, BaseView, WrapTranslation } from "~Components"
-import { COLORS, ColorThemeType, valueToHP } from "~Constants"
+import { AlertInline, BaseText, BaseView } from "~Components"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
@@ -18,59 +18,47 @@ const MESSAGE_FAKE_PLACEHOLDER = "placeholder"
 export const PasswordPins = memo(({ pin, _digitNumber, isPINRetype, isPinError }: PasswordPinsProps) => {
     const { value: errorValue, type: errorType } = isPinError
     const { LL } = useI18nContext()
-    const { styles, theme } = useThemedStyles(baseStyles)
+
+    const isMessageVisible = useMemo(() => {
+        return isPINRetype || errorValue
+    }, [errorValue, isPINRetype])
+
+    const { styles, theme } = useThemedStyles(baseStyles(isMessageVisible))
 
     const getMessageText = useMemo(() => {
-        if (isPINRetype) return LL.BD_USER_PASSWORD_CONFIRM()
+        if (isPINRetype)
+            return <AlertInline message={LL.BD_USER_PASSWORD_CONFIRM()} status={"neutral"} variant={"inline"} />
+
+        if (errorType === PinVerificationError.EDIT_PIN && errorValue)
+            return <AlertInline message={LL.BD_USER_EDIT_PASSWORD_ERROR()} status={"error"} variant={"inline"} />
 
         if (errorType === PinVerificationError.VALIDATE_PIN && errorValue)
-            return (
-                <WrapTranslation
-                    message={LL.BD_USER_PASSWORD_ERROR()}
-                    renderComponent={() => (
-                        <BaseView justifyContent="center" alignItems="center" style={styles.danferIcon}>
-                            <BaseText color={theme.colors.danger} fontSize={10}>
-                                !
-                            </BaseText>
-                        </BaseView>
-                    )}
-                />
-            )
-
-        if (errorType === PinVerificationError.EDIT_PIN && errorValue) return LL.BD_USER_EDIT_PASSWORD_ERROR()
+            return <AlertInline message={LL.BD_USER_PASSWORD_ERROR()} status={"error"} variant={"inline"} />
 
         return MESSAGE_FAKE_PLACEHOLDER
-    }, [isPINRetype, LL, errorType, errorValue, styles.danferIcon, theme.colors.danger])
-
-    const getMessageTextColor = useMemo(() => {
-        if (isPINRetype) return theme.colors.text
-        if (isPinError) return theme.colors.danger
-        return undefined
-    }, [isPINRetype, isPinError, theme.colors.danger, theme.colors.text])
+    }, [isPINRetype, LL, errorType, errorValue])
 
     const getPinMessage = useMemo(() => {
         return (
             <BaseText
-                // eslint-disable-next-line react-native/no-inline-styles
-                style={{ opacity: isPINRetype || errorValue ? 1 : 0 }}
-                typographyFont="bodyAccent"
+                style={styles.messageTextStyle}
+                typographyFont="body"
                 alignContainer="center"
-                color={getMessageTextColor}
-                my={18}>
+                color={theme.colors.subtitle}>
                 {getMessageText}
             </BaseText>
         )
-    }, [isPINRetype, errorValue, getMessageTextColor, getMessageText])
+    }, [styles.messageTextStyle, theme.colors.subtitle, getMessageText])
 
     return (
-        <BaseView alignItems="center">
+        <BaseView alignItems="center" h={8} justifyContent={"space-between"}>
             <BaseView flexDirection="row" justifyContent="center">
                 {Array.from(Array(_digitNumber).keys()).map((digit, idx) => {
                     const digitExist = pin[idx]
                     return (
                         <BaseView
                             key={digit}
-                            mx={10}
+                            mx={8}
                             style={[styles.pinBase, ...(digitExist ? [styles.pressed] : [styles.notPressed])]}
                         />
                     )
@@ -82,25 +70,18 @@ export const PasswordPins = memo(({ pin, _digitNumber, isPINRetype, isPinError }
     )
 })
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (isMessageVisible: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         pinBase: {
-            width: valueToHP[12],
-            height: valueToHP[12],
-            borderRadius: 6,
+            width: 8,
+            height: 8,
+            borderRadius: 4,
         },
         pressed: {
-            backgroundColor: theme.colors.text,
+            backgroundColor: theme.colors.pinFilled,
         },
         notPressed: {
-            backgroundColor: COLORS.DARK_PURPLE_DISABLED,
+            backgroundColor: theme.colors.pinEmpty,
         },
-        messageTextStyle: { opacity: 1 },
-        danferIcon: {
-            borderRadius: 16,
-            height: 16,
-            width: 16,
-            borderWidth: 1,
-            borderColor: theme.colors.danger,
-        },
+        messageTextStyle: { opacity: isMessageVisible ? 1 : 0 },
     })
