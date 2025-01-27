@@ -6,11 +6,11 @@ import {
     BaseSpacer,
     BaseView,
     ChangeAccountButtonPill,
+    HeaderStyle,
     HeaderTitle,
     Layout,
     SelectAccountBottomSheet,
     SelectedNetworkViewer,
-    HeaderStyle,
 } from "~Components"
 import { SCREEN_WIDTH } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
@@ -180,21 +180,23 @@ export const HistoryScreen = () => {
         [onActivityPress, tokens],
     )
 
+    const ActivityListFooterComponent = useMemo(() => {
+        return activities.length > 0 && isFetching ? (
+            <BaseView mx={20}>
+                <SkeletonActivityBox />
+            </BaseView>
+        ) : (
+            <BaseSpacer height={20} />
+        )
+    }, [activities.length, isFetching])
+
     const renderActivitiesList = useMemo(() => {
         return (
             <BaseView flexDirection="row" style={baseStyles.list}>
                 <FlashList
                     data={activities}
                     keyExtractor={activity => activity.id}
-                    ListFooterComponent={
-                        false ? (
-                            <BaseSpacer height={20} />
-                        ) : (
-                            <BaseView mx={20}>
-                                <SkeletonActivityBox />
-                            </BaseView>
-                        )
-                    }
+                    ListFooterComponent={ActivityListFooterComponent}
                     renderItem={({ item: activity }) => {
                         return <BaseView mx={20}>{renderActivity(activity)}</BaseView>
                     }}
@@ -218,7 +220,16 @@ export const HistoryScreen = () => {
                 />
             </BaseView>
         )
-    }, [activities, isRefreshing, onEndReached, onRefresh, onScroll, renderActivity, theme.colors.border])
+    }, [
+        ActivityListFooterComponent,
+        activities,
+        isRefreshing,
+        onEndReached,
+        onRefresh,
+        onScroll,
+        renderActivity,
+        theme.colors.border,
+    ])
 
     const renderSkeletonList = useMemo(() => {
         return (
