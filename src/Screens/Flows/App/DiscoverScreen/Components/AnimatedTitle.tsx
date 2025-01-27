@@ -15,7 +15,7 @@ export const AnimatedTitle = ({ title, scrollOffset }: AnimatedTitleProps) => {
     const animatedStylesHeader = useAnimatedStyle(() => {
         if (scrollOffset.value < 0) {
             return {
-                height: 40,
+                height: 48,
             }
         }
 
@@ -27,13 +27,13 @@ export const AnimatedTitle = ({ title, scrollOffset }: AnimatedTitleProps) => {
 
         return {
             opacity: interpolate(scrollOffset.value, [0, 100], [1, 0]),
-            height: interpolate(scrollOffset.value, [0, 200], [34, 0]),
+            height: interpolate(scrollOffset.value, [0, 200], [48, 0]),
         }
     })
 
     return (
         <Animated.View style={[styles.rootContainer, animatedStylesHeader]}>
-            <BaseText typographyFont="subSubTitleSemiBold" testID="settings-screen">
+            <BaseText typographyFont="subTitleSemiBold" testID="settings-screen">
                 {title}
             </BaseText>
         </Animated.View>

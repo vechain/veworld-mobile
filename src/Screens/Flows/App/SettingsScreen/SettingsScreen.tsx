@@ -2,7 +2,7 @@ import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import { AlertCard, BaseSpacer, BaseText, BaseView, Layout, SelectedNetworkViewer } from "~Components"
+import { AlertCard, BaseSpacer, BaseView, HeaderTitle, Layout, SelectedNetworkViewer, HeaderStyle } from "~Components"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
@@ -80,10 +80,8 @@ export const SettingsScreen = () => {
         <Layout
             noBackButton
             fixedHeader={
-                <BaseView flexDirection="row" justifyContent="space-between" py={4}>
-                    <BaseText typographyFont="subSubTitleSemiBold" testID="settings-screen">
-                        {LL.TITLE_MENU()}
-                    </BaseText>
+                <BaseView style={HeaderStyle}>
+                    <HeaderTitle title={LL.TITLE_MENU()} testID="settings-screen" />
                     <SelectedNetworkViewer />
                 </BaseView>
             }
@@ -116,6 +114,12 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingTop: 0,
             paddingHorizontal: 8,
             flex: 1,
+        },
+        header: {
+            height: 48,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
         },
     })
 

@@ -1,15 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import {
-    BaseSearchInput,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    FavoriteDAppCard,
-    Layout,
-    ListEmptyResults,
-} from "~Components"
+import { BaseSearchInput, BaseSpacer, BaseView, FavoriteDAppCard, Layout, ListEmptyResults } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -73,12 +65,11 @@ export const FavouritesScreen = () => {
 
     return (
         <Layout
-            noMargin
             hasSafeArea={true}
             hasTopSafeAreaOnly={false}
+            title={LL.FAVOURITES_DAPPS_TITLE()}
             fixedHeader={
-                <BaseView px={24}>
-                    <BaseText typographyFont="title">{LL.FAVOURITES_DAPPS_TITLE()}</BaseText>
+                <BaseView>
                     <BaseSpacer height={12} />
                     <BaseSearchInput
                         placeholder={LL.FAVOURITES_DAPPS_SEARCH_PLACEHOLDER()}
