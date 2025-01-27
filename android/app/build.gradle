@@ -177,11 +177,9 @@ dependencies {
 apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
 
 
-apply plugin: "io.sentry.android.gradle" version "4.14.1"
 
-plugins {
-    id "io.sentry.android.gradle" version "3.2.0"
-}
+apply plugin: "io.sentry.android.gradle"
+
 
 sentry {
     // Disables or enables debug log output, e.g. for for sentry-cli.
