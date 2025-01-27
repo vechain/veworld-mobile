@@ -96,7 +96,7 @@ jobs:
                   is-executable: false
                   working-directory: "."
 
-            - name: Build apk with fastlane
+            - name: Build app with fastlane
               env:
                   MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
               run: |
