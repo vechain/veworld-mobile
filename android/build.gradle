@@ -29,7 +29,7 @@ buildscript {
 
         // Sentry Android Gradle plugin
         // (3.14.1 or you can pick a newer 3.x or 4.x version)
-        classpath("io.sentry:sentry-android-gradle-plugin:3.14.1")
+        classpath("io.sentry:sentry-android-gradle-plugin:4.0.0")
     }
 }
 
