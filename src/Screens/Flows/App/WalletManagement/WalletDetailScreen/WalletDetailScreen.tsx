@@ -5,7 +5,6 @@ import {
     usePrefetchAllVns,
     useRenameWallet,
     useSetSelectedAccount,
-    useThemedStyles,
 } from "~Hooks"
 import { AccountUtils, AddressUtils } from "~Utils"
 import {
@@ -21,7 +20,6 @@ import {
     useFeatureFlags,
     EditIconHeaderButton,
     BaseText,
-    HeaderRightIconGroup,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
@@ -30,7 +28,7 @@ import { addAccountForDevice, renameAccount, useAppDispatch, useAppSelector } fr
 import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { FlatList, StyleSheet } from "react-native"
+import { FlatList } from "react-native"
 import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBottomSheet"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -41,7 +39,6 @@ type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAIL
 export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { device } = params
     const { LL } = useI18nContext()
-    const { styles } = useThemedStyles(baseStyles)
     const dispatch = useAppDispatch()
 
     const [walletAlias, setWalletAlias] = useState(device?.alias ?? "")
@@ -195,24 +192,20 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         <Layout
             title={walletAlias || device?.alias || ""}
             headerRightElement={
-                <HeaderRightIconGroup
-                    rightElement={
-                        <BaseView flexDirection="row" style={styles.headerActionsContainer}>
-                            {isEditable && (
-                                <EditIconHeaderButton
-                                    testID="WalletDetailScreen_editWalletButton"
-                                    action={openEditWalletAccountBottomSheet}
-                                />
-                            )}
-                            {showButton && (
-                                <PlusIconHeaderButton
-                                    testID="WalletDetailScreen_addAccountButton"
-                                    action={onAddAccountClicked}
-                                />
-                            )}
-                        </BaseView>
-                    }
-                />
+                <>
+                    {isEditable && (
+                        <EditIconHeaderButton
+                            testID="WalletDetailScreen_editWalletButton"
+                            action={openEditWalletAccountBottomSheet}
+                        />
+                    )}
+                    {showButton && (
+                        <PlusIconHeaderButton
+                            testID="WalletDetailScreen_addAccountButton"
+                            action={onAddAccountClicked}
+                        />
+                    )}
+                </>
             }
             fixedBody={
                 <BaseView flex={1} flexGrow={1}>
@@ -308,10 +301,3 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         />
     )
 }
-
-const baseStyles = () =>
-    StyleSheet.create({
-        headerActionsContainer: {
-            gap: 8,
-        },
-    })
