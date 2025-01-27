@@ -4,14 +4,15 @@ import { useTheme } from "~Hooks"
 import { COLORS } from "~Constants"
 
 type Props = {
+    testID?: string
     action: () => void
 }
 
-export const ChangeAccountButtonPill = ({ action }: Props) => {
+export const ChangeAccountButtonPill = ({ testID, action }: Props) => {
     const theme = useTheme()
 
     return (
-        <HeaderIconButton action={action}>
+        <HeaderIconButton testID={testID} action={action}>
             <BaseIcon
                 size={12}
                 name="icon-arrow-left-right"

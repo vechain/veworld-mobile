@@ -53,7 +53,7 @@ onFlowComplete:
             visible: "Insert your 6-digit PIN"
           commands:
             - tapOn: "1"
-- assertVisible: "Your tokens"
+- assertVisible: "My tokens"
 - runFlow:
     env:
       AMOUNT: 0.01

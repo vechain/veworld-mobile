@@ -49,7 +49,7 @@ export const AddUrlBottomSheet = React.forwardRef<BottomSheetModalMethods, Props
                     <BaseSpacer height={24} />
                     <BaseBottomSheetTextInput
                         value={newUrl}
-                        onChangeText={setNewUrl}
+                        onChangeText={newValue => setNewUrl(newValue)}
                         placeholder={LL.SEND_DELEGATION_ADD_URL_PLACEHOLDER()}
                         testID="AddUrl_input"
                     />
