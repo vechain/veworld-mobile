@@ -385,6 +385,8 @@
   "DETAILS": "Details",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Eén of meer herstelzinnen van je accounts zijn nog niet geback-upt. Zorg ervoor dat je een back-up maakt om nooit toegang tot je crypto te verliezen.",
   "DEVICE_BACKUP_MODAL_TITLE": "Nu backuppen",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "We hebben gedetecteerd dat uw apparaat is gejailbreakt, wat de veiligheid van uw wallet in gevaar kan brengen. We raden ten zeerste aan om uw herstelzin te back-uppen, VeWorld opnieuw in te stellen in Algemene Instellingen en uw wallet te importeren op een niet-gejailbreakt apparaat.",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "Gejailbreakt Apparaat Gedetecteerd",
   "DEVICE_PIN": "Apparaat-Pincode",
   "DISCOVER_CREATE_YOUR_DAPP": "Maak je eigen DApp op Vechain",
   "DISCOVER_DAPPS_TITLE": "VeBetterDAO DApps",

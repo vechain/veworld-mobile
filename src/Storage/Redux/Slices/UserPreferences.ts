@@ -32,6 +32,7 @@ export interface UserPreferenceState {
     appResetTimestamp?: string
     lastBackupRequestTimestamp?: { [key: string]: number | undefined }
     lastNotificationReminder: number | null
+    showJailbrokeWarning?: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -50,6 +51,7 @@ const initialState: UserPreferenceState = {
     lastVersionCheck: moment().toISOString(),
     appResetTimestamp: undefined,
     lastNotificationReminder: null,
+    showJailbrokeWarning: true,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -121,6 +123,10 @@ export const UserPreferencesSlice = createSlice({
             state.lastNotificationReminder = action.payload
         },
 
+        setShowJailbrokeDeviceWarning: (state, action: PayloadAction<boolean>) => {
+            state.showJailbrokeWarning = action.payload
+        },
+
         resetUserPreferencesState: () => initialState,
     },
 })
@@ -141,4 +147,5 @@ export const {
     setAppResetTimestamp,
     setLastBackupRequestTimestamp,
     updateLastNotificationReminder,
+    setShowJailbrokeDeviceWarning,
 } = UserPreferencesSlice.actions

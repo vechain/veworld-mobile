@@ -385,6 +385,8 @@
   "DETAILS": "Détails",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Une ou plusieurs phrases de récupération de vos comptes n'ont pas encore été sauvegardées. Assurez-vous de sauvegarder pour ne jamais perdre l'accès à votre crypto.",
   "DEVICE_BACKUP_MODAL_TITLE": "Sauvegardez maintenant",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Nous avons détecté que votre appareil est jailbreaké, ce qui peut compromettre la sécurité de votre portefeuille. Nous vous recommandons fortement de sauvegarder votre phrase de récupération, de réinitialiser VeWorld dans les paramètres généraux, et d'importer votre portefeuille sur un appareil non jailbreaké.",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "Appareil Jailbreaké Détecté",
   "DEVICE_PIN": "Code PIN de l'appareil",
   "DISCOVER_CREATE_YOUR_DAPP": "Créez votre propre DApp sur Vechain",
   "DISCOVER_DAPPS_TITLE": "DApps VeBetterDAO",

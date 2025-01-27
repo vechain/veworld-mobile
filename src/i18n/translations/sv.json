@@ -385,6 +385,8 @@
   "DETAILS": "Detaljer",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "En eller flera av dina kontons återställningsfras har inte säkerhetskopierats ännu. Se till att säkerhetskopiera så att du aldrig förlorar åtkomst till din krypto.",
   "DEVICE_BACKUP_MODAL_TITLE": "Säkerhetskopiera nu",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Vi har upptäckt att din enhet är jailbreakad, vilket kan äventyra säkerheten för din plånbok. Vi rekommenderar starkt att du säkerhetskopierar din återställningsfras, återställer VeWorld i Allmänna Inställningar och importerar din plånbok på en icke-jailbreakad enhet.",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "Jailbreakad Enhet Upptäckt",
   "DEVICE_PIN": "Enhetens PIN-kod",
   "DISCOVER_CREATE_YOUR_DAPP": "Skapa din egen DApp på Vechain",
   "DISCOVER_DAPPS_TITLE": "VeBetterDAO DApps",

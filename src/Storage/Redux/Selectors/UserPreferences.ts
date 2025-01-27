@@ -74,3 +74,7 @@ export const selectLastBackupRequestTimestamp = createSelector(reducer, state =>
 export const selectLastNotificationReminder = createSelector(reducer, state => {
     return state.lastNotificationReminder
 })
+
+export const selectShowJailbrokeDeviceWarning = createSelector(reducer, state => {
+    return state.showJailbrokeWarning
+})

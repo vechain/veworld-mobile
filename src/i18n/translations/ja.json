@@ -385,6 +385,8 @@
   "DETAILS": "詳細",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "あなたのアカウントのリカバリーフレーズの1つまたはそれ以上がまだバックアップされていません。暗号を失わないために必ずバックアップしてください。",
   "DEVICE_BACKUP_MODAL_TITLE": "今すぐバックアップ",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "お使いのデバイスがジェイルブレイクされていることを検出しました。これはウォレットのセキュリティに影響を及ぼす可能性があります。リカバリーフレーズをバックアップし、一般設定でVeWorldをリセットし、ジェイルブレイクされていないデバイスにウォレットをインポートすることを強くお勧めします。",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "ジェイルブレイクされたデバイスを検出",
   "DEVICE_PIN": "デバイスPIN",
   "DISCOVER_CREATE_YOUR_DAPP": "Vechainで自分のDAppを作成しましょう",
   "DISCOVER_DAPPS_TITLE": "VeBetterDAO DApps",

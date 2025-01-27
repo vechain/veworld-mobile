@@ -385,6 +385,8 @@
   "DETAILS": "Detalles",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Una o más de las frases de recuperación de sus cuentas no han sido respaldadas aún. Asegúrese de hacer una copia de seguridad para no perder el acceso a su criptomoneda.",
   "DEVICE_BACKUP_MODAL_TITLE": "Hacer copia de seguridad ahora",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Hemos detectado que su dispositivo está liberado, lo que puede comprometer la seguridad de su billetera. Recomendamos encarecidamente hacer una copia de seguridad de su frase de recuperación, restablecer VeWorld en Configuración General e importar su billetera en un dispositivo que no esté liberado.",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "Dispositivo Liberado Detectado",
   "DEVICE_PIN": "PIN del Dispositivo",
   "DISCOVER_CREATE_YOUR_DAPP": "Crea tu propio DApp en Vechain",
   "DISCOVER_DAPPS_TITLE": "DApps de VeBetterDAO",

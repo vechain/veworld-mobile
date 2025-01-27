@@ -385,6 +385,8 @@
   "DETAILS": "詳情",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "您有一個或多個帳戶的恢復短語尚未備份。請確保備份以免遺失加密貨幣的存取權。",
   "DEVICE_BACKUP_MODAL_TITLE": "立即備份",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "我們已偵測到您的設備已越獄，這可能會危及您錢包的安全。我們強烈建議您備份恢復短語，在常規設定中重置 VeWorld，並在未越獄的設備上導入您的錢包。",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "偵測到越獄設備",
   "DEVICE_PIN": "裝置 PIN",
   "DISCOVER_CREATE_YOUR_DAPP": "在 Vechain 上創建您自己的 DApp",
   "DISCOVER_DAPPS_TITLE": "VeBetterDAO DApps",

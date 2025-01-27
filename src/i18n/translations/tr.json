@@ -385,6 +385,8 @@
   "DETAILS": "Detaylar",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Bir veya daha fazla hesabınızın kurtarma cümlesi henüz yedeklenmedi. Kriptonuza erişimi asla kaybetmemek için yedeklediğinizden emin olun.",
   "DEVICE_BACKUP_MODAL_TITLE": "Şimdi yedekle",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Cihazınızın jailbreak yapıldığını tespit ettik, bu da cüzdanınızın güvenliğini tehlikeye atabilir. Kurtarma ifadenizi yedeklemenizi, Genel Ayarlar'da VeWorld'ü sıfırlamanızı ve cüzdanınızı jailbreak yapılmamış bir cihazda içe aktarmanızı şiddetle tavsiye ederiz.",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "Jailbreak Yapılmış Cihaz Tespit Edildi",
   "DEVICE_PIN": "Cihaz Pin'i",
   "DISCOVER_CREATE_YOUR_DAPP": "Vechain üzerinde kendi DApp'inizi yapın",
   "DISCOVER_DAPPS_TITLE": "VeBetterDAO DApp'leri",

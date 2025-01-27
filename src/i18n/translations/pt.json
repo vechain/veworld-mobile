@@ -385,6 +385,8 @@
   "DETAILS": "Detalhes",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Uma ou mais frases de recuperação das suas contas não foram ainda feitas backup. Certifique-se de fazer o backup para nunca perder o acesso às suas criptomoedas.",
   "DEVICE_BACKUP_MODAL_TITLE": "Fazer backup agora",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Detectamos que seu dispositivo está com jailbreak, o que pode comprometer a segurança da sua carteira. Recomendamos fortemente que você faça backup da sua frase de recuperação, redefina o VeWorld nas Configurações Gerais e importe sua carteira para um dispositivo sem jailbreak.",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "Dispositivo com Jailbreak Detectado",
   "DEVICE_PIN": "PIN do dispositivo",
   "DISCOVER_CREATE_YOUR_DAPP": "Crie seu próprio DApp no Vechain",
   "DISCOVER_DAPPS_TITLE": "DApps do VeBetterDAO",

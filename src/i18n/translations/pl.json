@@ -385,6 +385,8 @@
   "DETAILS": "Szczegóły",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Jedna lub więcej fraz odzyskiwania Twoich kont nie została jeszcze zarchiwizowana. Upewnij się, że wykonałeś kopię zapasową, aby nigdy nie stracić dostępu do kryptowalut.",
   "DEVICE_BACKUP_MODAL_TITLE": "Wykonaj kopię zapasową teraz",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Wykryliśmy, że Twoje urządzenie jest zrootowane, co może stanowić zagrożenie dla bezpieczeństwa Twojego portfela. Zalecamy wykonanie kopii zapasowej frazy odzyskiwania, zresetowanie VeWorld w Ustawieniach Ogólnych i zaimportowanie portfela na niezrootowanym urządzeniu.",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "Wykryto Zrootowane Urządzenie",
   "DEVICE_PIN": "Pin urządzenia",
   "DISCOVER_CREATE_YOUR_DAPP": "Stwórz własną DApp na Vechain",
   "DISCOVER_DAPPS_TITLE": "DApps VeBetterDAO",
