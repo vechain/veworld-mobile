@@ -1,4 +1,3 @@
-export * from "./AnimatedSearchBar"
 export * from "./AnimatedTitle"
 export * from "./Ecosystem"
 export * from "./Favourites"
