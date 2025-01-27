@@ -70,7 +70,7 @@ platform :android do
         --org 'vechain-foundation' \
         --project 'veworld-mobile' \
         --dist #{build} \
-        -config android/sentry.properties \
+        --config android/sentry.properties \
         sourcemap-bundle/index.android.bundle \
         sourcemap-bundle/index.android.bundle.map
     })
