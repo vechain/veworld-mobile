@@ -15,7 +15,7 @@ onFlowComplete:
       id: "settings-tab"
 - extendedWaitUntil:
       visible:
-      id: "BackButtonHeader-BaseIcon-backButton"
+          id: "BackButtonHeader-BaseIcon-backButton"
       timeout: 10000
 - tapOn:
       id: "BackButtonHeader-BaseIcon-backButton"
@@ -25,7 +25,7 @@ onFlowComplete:
       id: "Manage_Transactions_Urls"
 - extendedWaitUntil:
       visible:
-      id: "ManageUrls_addUrlButton-wrapper"
+          id: "ManageUrls_addUrlButton-wrapper"
       timeout: 10000
 - tapOn:
       id: "ManageUrls_addUrlButton-wrapper"
