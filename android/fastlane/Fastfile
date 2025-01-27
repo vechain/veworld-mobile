@@ -11,7 +11,6 @@ platform :android do
 
   desc "Upload sourcemaps to sentry"
   lane :upload_sourcemaps_sentry do
-  begin
     Dir.chdir "../.." do
 
     sh("echo 'Uploading sourcemaps to sentry - e2e android'")
