@@ -123,7 +123,12 @@ export const ManageTokenScreen = () => {
             <Layout
                 safeAreaTestID="Manage_Tokens_Screen"
                 title={LL.MANAGE_TOKEN_TITLE()}
-                headerRightElement={<PlusIconHeaderButton action={openAddCustomTokenSheet} />}
+                headerRightElement={
+                    <PlusIconHeaderButton
+                        action={openAddCustomTokenSheet}
+                        testID="ManageTokenScreen_AddCustomToken_Button"
+                    />
+                }
                 body={
                     <>
                         <BaseView>

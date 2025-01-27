@@ -10,10 +10,12 @@ import { isEmpty } from "lodash"
 import { NetworkErrorView } from "../NFTScreen/Components/NetworkErrorView"
 import { useCollectionSource } from "./Hooks/useCollectionSource"
 import { NftLoader } from "../NFTScreen/Components/NftLoader"
+import { useResetNFTStack } from "../hooks"
 
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_COLLECTION_DETAILS>
 
 export const NFTCollectionDetailScreen = ({ route }: Props) => {
+    useResetNFTStack()
     const [onEndReachedCalledDuringMomentum, setEndReachedCalledDuringMomentum] = useState(true)
 
     const { anyCollection } = useCollectionSource(route.params.collectionAddress)

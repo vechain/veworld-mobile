@@ -7,7 +7,6 @@ import {
     AnimatedFloatingButton,
     BaseSkeleton,
     BaseSpacer,
-    BaseText,
     BaseView,
     CloudKitWalletCard,
     DeleteCloudKitWalletBottomSheet,
@@ -127,11 +126,7 @@ export const ImportFromCloudScreen = () => {
 
     return (
         <Layout
-            fixedHeader={
-                <BaseText typographyFont="title">
-                    {PlatformUtils.isIOS() ? LL.TITLE_IMPORT_WALLET_FROM_ICLOUD() : LL.TITLE_IMPORT_WALLET_FROM_DRIVE()}
-                </BaseText>
-            }
+            title={PlatformUtils.isIOS() ? LL.TITLE_IMPORT_WALLET_FROM_ICLOUD() : LL.TITLE_IMPORT_WALLET_FROM_DRIVE()}
             fixedBody={
                 <BaseView flex={1}>
                     {isLoading ? (

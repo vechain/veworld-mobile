@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from "react"
-import { BaseToast, ConnexContext } from "~Components"
+import { BaseToast } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -19,6 +19,8 @@ import { SecurePersistedCache } from "~Storage/PersistedCache"
 import { ThemeEnum } from "~Constants"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
+import { NotificationsProvider } from "~Components/Providers/NotificationsProvider"
+import { ConnexContext } from "~Components/Providers/ConnexProvider"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -138,7 +140,9 @@ export const TestWrapper = ({
                     <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
                         <BottomSheetModalProvider>
                             <NavigationProvider>
-                                <TestTranslationProvider>{children}</TestTranslationProvider>
+                                <NotificationsProvider>
+                                    <TestTranslationProvider>{children}</TestTranslationProvider>
+                                </NotificationsProvider>
                             </NavigationProvider>
                         </BottomSheetModalProvider>
                         <BaseToast />

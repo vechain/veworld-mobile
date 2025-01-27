@@ -59,6 +59,7 @@ export enum Routes {
     SETTINGS_ABOUT = "Settings_About",
     SETTINGS_ADD_CUSTOM_NODE = "Settings_Add_Custom_Node",
     SETTINGS_MANAGE_CUSTOM_NODES = "Settings_Manage_custom_Nodes",
+    SETTINGS_NOTIFICATIONS = "Settings_Notifications",
     CAMERA = "Camera",
     DISCOVER = "Discover",
     HISTORY_STACK = "HistoryStack",

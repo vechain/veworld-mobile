@@ -1,9 +1,9 @@
 name: E2E Testing - iOS
 
 on:
-  workflow_dispatch:
+    workflow_dispatch:
 
-  workflow_call:
+    workflow_call:
 
 jobs:
   build-e2e-ios:
@@ -134,6 +134,4 @@ jobs:
         with:
           api-key: ${{ secrets.DCD_API_KEY }}
           app-file: ${{ env.APP_PATH }}
-
-
-
+          exclude-tags: onlyAndroid
