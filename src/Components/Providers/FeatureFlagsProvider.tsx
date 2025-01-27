@@ -1,5 +1,5 @@
-import React from "react"
 import { useQuery } from "@tanstack/react-query"
+import React from "react"
 import { FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
 
 const initialState: FeatureFlags = {
@@ -8,23 +8,25 @@ const initialState: FeatureFlags = {
         url: "https://coin-api.veworld.vechain.org",
         fallbackUrl: "https://api.coingecko.com/api/v3",
     },
+    pushNotificationFeature: {
+        enabled: false,
+    },
 }
 
-const FeatureFlagsContex = React.createContext<FeatureFlags>(initialState)
+const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)
 
 export const featureFlagsQueryKey = ["Feature", "Flags"]
 
 export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }) => {
-    // This query will override the default queryClient settings just for feature flags
-    const { data: featureFlags } = useQuery({
+    const { data } = useQuery({
         queryKey: featureFlagsQueryKey,
         queryFn: getFeatureFlags,
-        initialData: initialState,
-        staleTime: 1000 * 60 * 5, // 5 minutes
-        refetchInterval: 1000 * 60 * 5, // 5 minutes
+        staleTime: 0,
+        enabled: true,
+        placeholderData: initialState,
     })
 
-    return <FeatureFlagsContex.Provider value={featureFlags}>{children}</FeatureFlagsContex.Provider>
+    return <FeatureFlagsContex.Provider value={data ?? initialState}>{children}</FeatureFlagsContex.Provider>
 }
 
 export const useFeatureFlags = () => {

@@ -2,9 +2,16 @@ import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Keyboard, Linking, StyleSheet } from "react-native"
 import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-reanimated"
-import { AnimatedFloatingButton, BaseSpacer, BaseView, Layout, SelectedNetworkViewer } from "~Components"
+import {
+    AnimatedFloatingButton,
+    AnimatedSearchBar,
+    BaseSpacer,
+    BaseView,
+    Layout,
+    SelectedNetworkViewer,
+} from "~Components"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useBrowserSearch, useThemedStyles, useVisitedUrls, useFetchFeaturedDApps } from "~Hooks"
+import { useAnalyticTracking, useBrowserSearch, useFetchFeaturedDApps, useThemedStyles, useVisitedUrls } from "~Hooks"
 import { Routes } from "~Navigation"
 import {
     addNavigationToDApp,
@@ -19,7 +26,6 @@ import {
 import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import {
-    AnimatedSearchBar,
     AnimatedTitle,
     Ecosystem,
     Favourites,

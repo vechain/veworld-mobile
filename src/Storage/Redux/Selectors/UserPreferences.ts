@@ -70,3 +70,7 @@ export const selectAppResetTimestamp = createSelector(reducer, state => {
 export const selectLastBackupRequestTimestamp = createSelector(reducer, state => {
     return state.lastBackupRequestTimestamp
 })
+
+export const selectLastNotificationReminder = createSelector(reducer, state => {
+    return state.lastNotificationReminder
+})
