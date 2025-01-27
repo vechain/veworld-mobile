@@ -89,6 +89,11 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "org.vechain.veworld.app"
+
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
         applicationId "org.vechain.veworld.app"
         minSdkVersion rootProject.ext.minSdkVersion
