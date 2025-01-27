@@ -85,14 +85,13 @@ export const SettingsScreen = () => {
 
             switch (item.element) {
                 case "settingsRow":
-                    const showBadge = shouldShowBadge(item)
                     return (
                         <SettingsRow
                             title={item.title}
                             screenName={item.screenName}
                             icon={item.icon}
                             url={item.url}
-                            showBadge={showBadge}
+                            showBadge={shouldShowBadge(item)}
                         />
                     )
 
