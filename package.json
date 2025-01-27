@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.0.5",
+  "version": "2.0.7",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -145,6 +145,7 @@
     "react-native-localize": "3.0.4",
     "react-native-mmkv": "^2.10.2",
     "react-native-mmkv-flipper-plugin": "^1.0.0",
+    "react-native-onesignal": "^5.2.5",
     "react-native-progress": "^5.0.0",
     "react-native-qrcode-svg": "6.2.0",
     "react-native-quick-base64": "^2.0.7",

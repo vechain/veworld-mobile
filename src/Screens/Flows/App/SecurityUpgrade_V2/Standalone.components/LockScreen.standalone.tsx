@@ -1,5 +1,5 @@
 import React, { memo, useCallback, useMemo, useState } from "react"
-import { BaseSpacer, BaseText, BaseView, StorageEncryptionKeyHelper } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, StorageEncryptionKeyHelper } from "~Components"
 import { isSmallScreen } from "~Constants"
 import { useOnDigitPress, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -9,6 +9,7 @@ import { PasswordPins } from "./PasswordPins.standalone"
 
 export type Props = {
     onSuccess: (password: string) => void
+    onClose: () => void
 }
 
 export type Titles = {
@@ -18,7 +19,7 @@ export type Titles = {
 
 const digitNumber = 6
 
-export const LockScreen: React.FC<Props> = memo(({ onSuccess }) => {
+export const LockScreen: React.FC<Props> = memo(({ onSuccess, onClose }) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -71,21 +72,29 @@ export const LockScreen: React.FC<Props> = memo(({ onSuccess }) => {
     }, [LL])
 
     return (
-        <BaseView flexGrow={1} bg={theme.colors.background}>
-            <BaseSpacer height={20} />
-            <BaseView mx={24} alignItems="center">
-                <BaseView alignSelf="flex-start">
-                    <BaseText typographyFont="title">{title}</BaseText>
-                    <BaseText typographyFont="body" my={10}>
-                        {subTitle}
-                    </BaseText>
-                </BaseView>
-
-                <BaseSpacer height={isSmallScreen ? 32 : 62} />
+        <BaseView alignItems="center">
+            <BaseView w={100} py={12} justifyContent="space-between" flexDirection="row">
+                <BaseIcon
+                    action={onClose}
+                    haptics="Light"
+                    size={24}
+                    name="icon-arrow-left"
+                    color={theme.colors.title}
+                />
+                <BaseText color={theme.colors.title} typographyFont="subTitleSemiBold">
+                    {title}
+                </BaseText>
+                <BaseSpacer width={24} />
+            </BaseView>
+            <BaseView py={16}>
+                <BaseText w={100} align="left" typographyFont="body" color={theme.colors.subtitle}>
+                    {subTitle}
+                </BaseText>
+                <BaseSpacer height={isSmallScreen ? 45 : 80} />
 
                 <PasswordPins _digitNumber={digitNumber} pin={pin} isPinError={isError} />
+                <BaseSpacer height={isSmallScreen ? 32 : 80} />
                 <NumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
-                <BaseSpacer height={60} />
             </BaseView>
         </BaseView>
     )

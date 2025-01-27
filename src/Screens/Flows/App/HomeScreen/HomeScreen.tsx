@@ -37,6 +37,7 @@ import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AccountCard, DeviceBackupBottomSheet, EditTokensBar, Header, TokenList } from "./Components"
 import { useTokenBalances } from "./Hooks"
+import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -173,7 +174,7 @@ export const HomeScreen = () => {
                         <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                         <BaseSpacer height={8} />
 
-                        <TokenList isBalanceVisible={isBalanceVisible} entering={animateEntering} />
+                        <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
                         <BaseSpacer height={24} />
                     </BaseView>
 
@@ -189,6 +190,7 @@ export const HomeScreen = () => {
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
                     <DeviceBackupBottomSheet />
+                    <EnableNotificationsBottomSheet />
                 </NestableScrollContainer>
             }
         />

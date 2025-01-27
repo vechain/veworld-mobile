@@ -1,8 +1,8 @@
 import React, { useCallback } from "react"
 import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
-import { Locales, useI18nContext } from "~i18n"
-import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
 import { useBottomSheetModal } from "~Hooks"
+import { Locales, useI18nContext } from "~i18n"
+import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
 import {
     selectAreDevFeaturesEnabled,
     selectHideTokensWithNoBalance,
@@ -14,7 +14,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
+import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
 import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
 
 export const GeneralScreen = () => {
@@ -94,8 +94,8 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="caption">{LL.BD_APP_LANGUAGE_DISCLAIMER()}</BaseText>
                     <BaseSpacer height={20} />
                     <ChangeLanguage language={selectedLanguageCode} onPress={openSelectLanguageSheet} />
-                    <BaseSpacer height={24} />
 
+                    <BaseSpacer height={24} />
                     <BaseText typographyFont="bodyMedium" my={8}>
                         {LL.BD_RESET()}
                     </BaseText>

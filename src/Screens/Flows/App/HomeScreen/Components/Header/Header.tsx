@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { useBlockchainNetwork, useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
-import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect, HeaderStyle } from "~Components"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes, TabStackParamList } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
@@ -9,7 +9,7 @@ import { ERROR_EVENTS, ScanTarget } from "~Constants"
 import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewer"
 import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { VeWorldLogoSVG } from "~Assets"
+import { VeWorldLogoDarkSVG, VeWorldLogoSVG } from "~Assets"
 
 type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
     NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
@@ -74,9 +74,13 @@ export const Header = memo(() => {
     }, [nav])
 
     return (
-        <BaseView w={100} flexDirection="row" alignItems="center" justifyContent="space-between">
+        <BaseView w={100} style={HeaderStyle}>
             <BaseView flexDirection="row" alignItems="center" alignSelf="center">
-                <VeWorldLogoSVG height={32} width={32} />
+                {theme.isDark ? (
+                    <VeWorldLogoDarkSVG height={32} width={32} />
+                ) : (
+                    <VeWorldLogoSVG height={32} width={32} />
+                )}
                 <BaseSpacer width={8} />
                 <BaseText typographyFont="bodySemiBold" testID="veworld-homepage">
                     {LL.VEWORLD()}
@@ -85,15 +89,16 @@ export const Header = memo(() => {
 
             <BaseView flexDirection="row">
                 <BaseIcon
+                    p={4}
                     name={"icon-qr-code"}
                     size={22}
                     color={theme.colors.text}
                     action={handleOpenCamera}
-                    mx={14}
                     haptics="Light"
                 />
-
+                <BaseSpacer width={8} />
                 <BaseIcon
+                    p={4}
                     name={"icon-wallet"}
                     size={24}
                     color={theme.colors.text}
@@ -101,10 +106,11 @@ export const Header = memo(() => {
                     haptics="Light"
                     testID="HomeScreen_WalletManagementButton"
                 />
-                <BaseSpacer width={16} />
+                <BaseSpacer width={8} />
                 <SelectedNetworkViewer />
                 {isMainnet && (
                     <BaseIcon
+                        p={4}
                         name={"icon-globe"}
                         size={24}
                         color={theme.colors.text}

@@ -5,11 +5,11 @@ import { ScrollView, StyleSheet } from "react-native"
 import { Transaction } from "thor-devkit"
 import {
     AccountCard,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-    CloseModalButton,
     DelegationView,
     getRpcError,
     RequireUserPassword,
@@ -218,6 +218,14 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     return (
         <BaseSafeArea>
+            <BaseView style={styles.header}>
+                <BackButtonHeader
+                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
+                    title={LL.CONNECTED_APP_REQUEST()}
+                    action={onReject}
+                    hasBottomSpacer={false}
+                />
+            </BaseView>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -226,19 +234,15 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 scrollEventThrottle={16}
                 onScroll={signAndRejectRef.current?.onScroll}
                 style={styles.scrollView}>
-                <CloseModalButton onPress={onReject} />
-
-                <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
-
-                    <BaseSpacer height={32} />
+                <BaseView mx={4} style={styles.alignLeft}>
+                    <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>{LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION()}</BaseText>
                 </BaseView>
 
                 <BaseSpacer height={24} />
-                <BaseView mx={20}>
+                <BaseView mx={4}>
                     <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>
                     <BaseSpacer height={16} />
                     <AccountCard
@@ -249,7 +253,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 </BaseView>
 
                 <BaseSpacer height={24} />
-                <BaseView mx={20}>
+                <BaseView>
                     <DelegationView
                         setNoDelegation={resetDelegation}
                         selectedDelegationOption={selectedDelegationOption}
@@ -320,6 +324,7 @@ const styles = StyleSheet.create({
     },
     scrollViewContainer: {
         width: "100%",
+        paddingHorizontal: 16,
     },
     scrollView: {
         width: "100%",
@@ -329,5 +334,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingLeft: 20,
         paddingRight: 20,
+    },
+    header: {
+        paddingHorizontal: 16,
     },
 })

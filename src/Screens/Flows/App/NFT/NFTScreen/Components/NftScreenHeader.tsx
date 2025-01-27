@@ -1,5 +1,12 @@
 import React from "react"
-import { BaseSpacer, BaseText, BaseView, ChangeAccountButtonPill, SelectedNetworkViewer } from "~Components"
+import {
+    BaseSpacer,
+    BaseView,
+    ChangeAccountButtonPill,
+    HeaderTitle,
+    SelectedNetworkViewer,
+    HeaderStyle,
+} from "~Components"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -10,8 +17,8 @@ export const NftScreenHeader = ({ openSelectAccountBottomSheet }: Props) => {
     const { LL } = useI18nContext()
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between">
-            <BaseText typographyFont="subSubTitleSemiBold">{LL.TITLE_NFTS()}</BaseText>
+        <BaseView style={HeaderStyle}>
+            <HeaderTitle title={LL.TITLE_NFTS()} />
             <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                 <SelectedNetworkViewer />
                 <BaseSpacer width={8} />

@@ -2,199 +2,150 @@ name: E2E Testing - Android
 
 on:
     workflow_dispatch:
-    
+
     workflow_call:
 
 jobs:
-  check-build-changes:
-      runs-on: ubuntu-latest
-      outputs:
-        only_test_scripts_changed: ${{ steps.detect-changes.outputs.only_test_scripts_changed }}
-      steps:
-        - name: Checkout repository
-          uses: actions/checkout@v4
+    build-test-android:
+        name: Build & Test Android
+        runs-on: ubuntu-latest
+        environment: android-release
+        if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
+        outputs:
+            app: app/build/outputs/apk/release
+        env:
+            SENTRY_LOG_LEVEL: debug
+        steps:
+            - name: Generate a token
+              id: generate-token
+              uses: actions/create-github-app-token@v1
+              with:
+                  app-id: ${{ secrets.APP_ID }}
+                  private-key: ${{ secrets.APP_PRIVATE_KEY }}
 
-        - name: Detect Test Script Changes
-          id: detect-changes
-          run: |
-            LAST_COMMIT=$(git rev-parse HEAD)
-            CHANGED_FILES=$(git diff-tree --no-commit-id --name-only -r $LAST_COMMIT)
+            - name: Set GH_TOKEN environment variable
+              run: echo "GH_TOKEN=${{ steps.generate-token.outputs.token }}" >> $GITHUB_ENV
 
-            if echo "$CHANGED_FILES" | grep -qv "^maestro/"; then
-              echo "only_test_scripts_changed=false" >> $GITHUB_ENV
-              echo "only_test_scripts_changed=false" >> $GITHUB_OUTPUT
-            else
-              echo "only_test_scripts_changed=true" >> $GITHUB_ENV
-              echo "only_test_scripts_changed=true" >> $GITHUB_OUTPUT
-            fi
+            - name: Checkout repository
+              uses: actions/checkout@v3
 
-  build-test-android:
-      name: Build & Test Android Release
-      runs-on: ubuntu-latest
-      environment: android-release
-      if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }} && needs.check-build-changes.outputs.only_test_scripts_changed == 'false'
-      outputs:
-        app: app/build/outputs/apk/release
-      env:
-        SENTRY_LOG_LEVEL: debug
-      steps:
-        - name: Generate a token
-          id: generate-token
-          uses: actions/create-github-app-token@v1
-          with:
-            app-id: ${{ secrets.APP_ID }}
-            private-key: ${{ secrets.APP_PRIVATE_KEY }}
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version-file: .nvmrc
+                  cache: "yarn"
 
-        - name: Set GH_TOKEN environment variable
-          run: echo "GH_TOKEN=${{ steps.generate-token.outputs.token }}" >> $GITHUB_ENV
+            - name: Install & Patch packages
+              run: yarn install
 
-        - name: Checkout repository
-          uses: actions/checkout@v3
+            - name: Setup Java
+              uses: actions/setup-java@v3
+              with:
+                  cache: gradle
+                  distribution: "zulu"
+                  java-version: "11"
 
-        - name: Setup Node
-          uses: actions/setup-node@v3
-          with:
-              node-version-file: .nvmrc
-              cache: "yarn"
+            # Install sentry properties
+            - name: Sentry properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.ANDROID_SENTRY_PROPERTIES }}
+                  filename: "sentry.properties"
+                  is-executable: false
+                  working-directory: "./android"
 
-        - name: Install & Patch packages
-          run: yarn install
+            # Decode key_alias
+            - name: Decode KEY_ALIAS
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.ANDROID_KEY_ALIAS }}
+                  filename: "key_alias.txt"
+                  is-executable: false
+                  working-directory: "./android"
 
-        - name: Setup Java
-          uses: actions/setup-java@v3
-          with:
-              cache: gradle
-              distribution: "zulu"
-              java-version: "11"
+              # Decode key_password
+            - name: Decode STORE_PASSWORD
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.ANDROID_STORE_PASSWORD }}
+                  filename: "store_password.txt"
+                  is-executable: false
+                  working-directory: "./android"
 
-        # Install sentry properties
-        - name: Sentry properties
-          uses: mobiledevops/secret-to-file-action@v1
-          with:
-            base64-encoded-secret: ${{ secrets.ANDROID_SENTRY_PROPERTIES }}
-            filename: "sentry.properties"
-            is-executable: false
-            working-directory: "./android"
+            # Install env.default
+            - name: Sentry properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_SERVICE_ACCOUNT }}
+                  filename: "pc-api-4895632399891248889-903-41060cd0ba40.json"
+                  is-executable: false
+                  working-directory: "./android"
 
-        # Decode key_alias 
-        - name: Decode KEY_ALIAS
-          uses: mobiledevops/secret-to-file-action@v1
-          with:
-            base64-encoded-secret: ${{ secrets.ANDROID_KEY_ALIAS }}
-            filename: "key_alias.txt"
-            is-executable: false
-            working-directory: "./android"
+              # Install sentry properties
+            - name: Sentry properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_ENV }}
+                  filename: ".env.default"
+                  is-executable: false
+                  working-directory: "./android"
 
-          # Decode key_password
-        - name: Decode STORE_PASSWORD
-          uses: mobiledevops/secret-to-file-action@v1
-          with:
-            base64-encoded-secret: ${{ secrets.ANDROID_STORE_PASSWORD }}
-            filename: "store_password.txt"
-            is-executable: false
-            working-directory: "./android"
+            # Install keystore properties
+            - name: Keystore properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
+                  filename: "keystore.properties"
+                  is-executable: false
+                  working-directory: "./android"
 
-        # Install env.default 
-        - name: Sentry properties
-          uses: mobiledevops/secret-to-file-action@v1
-          with:
-            base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_SERVICE_ACCOUNT }}
-            filename: "pc-api-4895632399891248889-903-41060cd0ba40.json"
-            is-executable: false
-            working-directory: "./android"
+            # Download Keystore
+            - name: Keystore file
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
+                  filename: "release.keystore"
+                  is-executable: false
+                  working-directory: "./android"
 
-          # Install sentry properties
-        - name: Sentry properties
-          uses: mobiledevops/secret-to-file-action@v1
-          with:
-            base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_ENV }}
-            filename: ".env.default"
-            is-executable: false
-            working-directory: "./android"
+            - name: Decode prod env
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.RN_ENV_PROD_E2E }}
+                  filename: ".env.production"
+                  is-executable: false
+                  working-directory: "."
 
-        # Install keystore properties
-        - name: Keystore properties
-          uses: mobiledevops/secret-to-file-action@v1
-          with:
-            base64-encoded-secret: ${{ secrets.ANDROID_KEYSTORE_PROPERTIES }}
-            filename: "keystore.properties"
-            is-executable: false
-            working-directory: "./android"
+            - name: datadog-ci decode
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.DATADOG_CI}}
+                  filename: "datadog-ci.json"
+                  is-executable: false
+                  working-directory: "."
 
-        # Download Keystore
-        - name: Keystore file
-          uses: mobiledevops/secret-to-file-action@v1
-          with:
-            base64-encoded-secret: ${{ secrets.ANDROID_RELEASE_KEYSTORE }}
-            filename: "release.keystore"
-            is-executable: false
-            working-directory: "./android"
-        
-        - name: Decode prod env      
-          uses: mobiledevops/secret-to-file-action@v1
-          with:
-              base64-encoded-secret: ${{ secrets.RN_ENV_PROD_E2E }}
-              filename: ".env.production"
-              is-executable: false
-              working-directory: "."
-        
-        - name: datadog-ci decode
-          uses: mobiledevops/secret-to-file-action@v1
-          with:
-              base64-encoded-secret: ${{ secrets.DATADOG_CI}}
-              filename: "datadog-ci.json"
-              is-executable: false
-              working-directory: "."
+            - name: Build apk
+              id: build
+              run: |
+                  cd android
+                  export STORE_PASSWORD="$(<store_password.txt)"
+                  export KEY_PASSWORD="$(<store_password.txt)"
+                  export KEY_ALIAS="$(<key_alias.txt)"
+                  fastlane build_test_ci version_code:99 version_name:"9.9.9"
+                  cd app/build/outputs/apk/release
+                  OUTPUT_DIR=$(pwd)
+                  echo "output_dir=$OUTPUT_DIR" >> "$GITHUB_ENV"
+                  ls -la
 
-        - name: Build apk 
-          id: build
-          run: |
-              cd android
-              export STORE_PASSWORD="$(<store_password.txt)"
-              export KEY_PASSWORD="$(<store_password.txt)"
-              export KEY_ALIAS="$(<key_alias.txt)"
-              fastlane build_test_ci version_code:99 version_name:"9.9.9"
-              cd app/build/outputs/apk/release
-              OUTPUT_DIR=$(pwd)
-              echo "output_dir=$OUTPUT_DIR" >> "$GITHUB_ENV"
-              ls -la
-        
-        - name: Upload apk 
-          uses: actions/upload-artifact@v4
-          with:
-            name: app-release.apk
-            path: ${{ env.output_dir }}/app-release.apk
+            - name: Upload apk
+              uses: actions/upload-artifact@v4
+              with:
+                  name: app-release.apk
+                  path: ${{ env.output_dir }}/app-release.apk
 
-        - name: Upload run_id number
-          env:
-            GH_TOKEN: ${{ steps.generate-token.outputs.token }}
-          run: |  
-              successful_run=$(( ${{github.run_id}} ))
-              echo "run_id=$successful_run" >> $GITHUB_ENV
-              gh variable set ANDROID_RUN_ID --body "$successful_run"
-            
-
-  test-android:
-      name: Test Android Release
-      needs:
-          - check-build-changes
-          - build-test-android
-      if: needs.check-build-changes.outputs.only_test_scripts_changed == 'true' || needs.build-test-android.result == 'success'
-      runs-on: ubuntu-latest
-      env:
-        RUN_ID: ${{ vars.android_run_id }}
-      steps:
-          - name: Checkout repository
-            uses: actions/checkout@v4
-
-          - name: Download apk
-            uses: actions/download-artifact@v4
-            with:
-              name: app-release.apk
-              run-id: ${{ needs.build-test-android.outputs.run_id }}
-              
-          - uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
-            with:
-              api-key: ${{ secrets.DCD_API_KEY }}
-              app-file: ./app-release.apk
-              
+            - name: Test Android
+              uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
+              with:
+                  api-key: ${{ secrets.DCD_API_KEY }}
+                  app-file: ${{ env.output_dir }}/app-release.apk
+                  exclude-tags: onlyIOS
