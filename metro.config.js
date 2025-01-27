@@ -1,5 +1,9 @@
 const { getDefaultConfig, mergeConfig } = require("@react-native/metro-config")
 const defaultConfig = getDefaultConfig(__dirname)
+const { withSentryConfig } = require("@sentry/react-native/metro")
+
+const config = getDefaultConfig(__dirname)
+module.exports = withSentryConfig(config)
 
 const exts = process.env.RN_SRC_EXT
     ? process.env.RN_SRC_EXT.split(",").concat(defaultConfig.resolver.sourceExts)

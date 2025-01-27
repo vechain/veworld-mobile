@@ -183,7 +183,7 @@ platform :ios do
 
       # merge the two source maps
       sh("mv main.jsbundle.map main.jsbundle.packager.map")
-      sh("node node_modules/react-native/scripts/compose-source-maps.js main.jsbundle.packager.map main.jsbundle.hbc.map -o main.jsbundle.map")
+      sh("node node_modules/@sentry/react-native/scripts/copy-debugid.js main.jsbundle.packager.map main.jsbundle.map")
 
       # upload source maps to sentry with cli - handled by xcode build phase?
 
