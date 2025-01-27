@@ -4,5 +4,6 @@ import * as UniswapRouterV2 from "./UniswapRouterV2.abi"
 import * as RouterV2 from "./RouterV2VET.abi"
 import * as UniswapPairV2 from "./UniswapPairV2.abi"
 import * as VeBetterDao from "./VeBetterDao.abi"
+import * as VetDomains from "./VetDomains.abi"
 
-export { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2, VeBetterDao }
+export { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2, VeBetterDao, VetDomains }

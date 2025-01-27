@@ -1,10 +1,15 @@
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useEffect, useRef, useState } from "react"
-import { FlatList, ListRenderItemInfo } from "react-native"
-import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
+    useBottomSheetModal,
+    useCheckIdentity,
+    usePrefetchAllVns,
+    useRenameWallet,
+    useSetSelectedAccount,
+} from "~Hooks"
+import { AccountUtils, AddressUtils } from "~Utils"
+import {
+    AlertInline,
     BaseSpacer,
-    BaseTextInput,
     BaseView,
     Layout,
     PlusIconHeaderButton,
@@ -12,16 +17,21 @@ import {
     showSuccessToast,
     showWarningToast,
     SwipeableRow,
+    useFeatureFlags,
+    EditIconHeaderButton,
+    BaseText,
 } from "~Components"
-import { useBottomSheetModal, useCheckIdentity, useRenameWallet, useSetSelectedAccount } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, DEVICE_TYPE } from "~Model"
-import { RootStackParamListHome, Routes } from "~Navigation"
-import { addAccountForDevice, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } from "~Storage/Redux/Selectors"
-import { AddressUtils } from "~Utils"
 import { AccountDetailBox } from "./AccountDetailBox"
+import { AccountWithDevice, DEVICE_TYPE, WalletAccount } from "~Model"
+import { addAccountForDevice, renameAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { FlatList } from "react-native"
+import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBottomSheet"
+import { RootStackParamListHome, Routes } from "~Navigation"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAccountDelete } from "./hooks"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
@@ -30,10 +40,14 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { device } = params
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+
     const [walletAlias, setWalletAlias] = useState(device?.alias ?? "")
     const [openedAccount, setOpenedAccount] = useState<AccountWithDevice>()
+    const [editingAccount, setEditingAccount] = useState<WalletAccount>()
 
     const { changeDeviceAlias } = useRenameWallet(device)
+    const { data: domains } = usePrefetchAllVns()
+    const { subdomainClaimFeature } = useFeatureFlags()
 
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
@@ -43,10 +57,34 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
+    const claimableUsernames = useMemo(() => {
+        if (!domains || domains.length === 0)
+            return deviceAccounts
+                .filter(accounts => accounts.device.type !== DEVICE_TYPE.LEDGER)
+                .map(accounts => accounts.address)
+
+        const noVnsAccounts = deviceAccounts
+            .filter(account => {
+                const isLedger = "device" in account && account.device.type === DEVICE_TYPE.LEDGER
+                const isObservedAccount = AccountUtils.isObservedAccount(account)
+                const domain = domains.find(vns => AddressUtils.compareAddresses(vns.address, account.address))?.name
+                return !isObservedAccount && !domain && !isLedger
+            })
+            .map(accounts => accounts.address)
+
+        return noVnsAccounts
+    }, [deviceAccounts, domains])
+
     const {
         ref: removeAccountWarningBottomSheetRef,
         onOpen: openRemoveAccountWarningBottomSheet,
         onClose: closeRemoveAccountWarningBottomSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: editWalletAccountBottomSheetRef,
+        onOpen: openEditWalletAccountBottomSheet,
+        onClose: closeEditWalletAccountBottomSheet,
     } = useBottomSheetModal()
 
     const onAddAccountClicked = () => {
@@ -60,14 +98,42 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         })
     }
 
-    const onRenameWallet = (name: string) => {
-        setWalletAlias(name)
-        if (name === "") {
-            changeDeviceAlias({ newAlias: device?.alias ?? "" })
-        } else {
-            changeDeviceAlias({ newAlias: name })
-        }
-    }
+    const onRenameWallet = useCallback(
+        (name: string) => {
+            setWalletAlias(name)
+            if (name === "") {
+                changeDeviceAlias({ newAlias: device?.alias ?? "" })
+            } else {
+                changeDeviceAlias({ newAlias: name })
+            }
+        },
+        [changeDeviceAlias, device],
+    )
+
+    const changeAccountAlias = useCallback(
+        (name: string) => {
+            if (!editingAccount) throw new Error("Wallet account not provided")
+            dispatch(
+                renameAccount({
+                    address: editingAccount.address,
+                    alias: name,
+                }),
+            )
+        },
+        [dispatch, editingAccount],
+    )
+
+    const onRenameAccount = useCallback(
+        (name: string) => {
+            if (!editingAccount) throw new Error("Wallet account not provided")
+            if (name === "") {
+                changeAccountAlias(editingAccount.alias ?? "")
+            } else {
+                changeAccountAlias(name)
+            }
+        },
+        [changeAccountAlias, editingAccount],
+    )
 
     const { setAccountToRemove, deleteAccount, isOnlyAccount, accountToRemove } = useAccountDelete()
 
@@ -81,8 +147,26 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
             setAccountToRemove(account)
             openRemoveAccountWarningBottomSheet()
         },
-        [setAccountToRemove, LL, isOnlyAccount, openRemoveAccountWarningBottomSheet],
+        [isOnlyAccount, LL, setAccountToRemove, openRemoveAccountWarningBottomSheet],
     )
+
+    const confirmEditWalletAccount = useCallback(
+        (name: string) => {
+            if (editingAccount) {
+                onRenameAccount(name)
+                setEditingAccount(undefined)
+            } else {
+                onRenameWallet(name)
+            }
+            closeEditWalletAccountBottomSheet()
+        },
+        [closeEditWalletAccountBottomSheet, editingAccount, onRenameAccount, onRenameWallet],
+    )
+
+    const cancelEditWalletAccount = useCallback(() => {
+        if (editingAccount) setEditingAccount(undefined)
+        closeEditWalletAccountBottomSheet()
+    }, [closeEditWalletAccountBottomSheet, editingAccount])
 
     useEffect(() => {
         setWalletAlias(device?.alias ?? "")
@@ -102,84 +186,93 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     }, [checkIdentityBeforeOpening, closeRemoveAccountWarningBottomSheet])
 
     const showButton = device?.type === DEVICE_TYPE.LEDGER || device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
-    const showWalletNameInput = device?.type !== DEVICE_TYPE.LOCAL_MNEMONIC
-
-    const isItemSelected = useCallback(
-        (account: AccountWithDevice) => {
-            return AddressUtils.compareAddresses(selectedAccount.address, account.address)
-        },
-        [selectedAccount.address],
-    )
-
-    const renderItem = useCallback(
-        ({ item }: ListRenderItemInfo<AccountWithDevice>) => {
-            const isSelected = isItemSelected(item)
-
-            return (
-                <SwipeableRow<AccountWithDevice>
-                    testID={item.address}
-                    item={item}
-                    itemKey={item.address}
-                    swipeableItemRefs={swipeableItemRefs}
-                    handleTrashIconPress={() => confirmRemoveAccount(item)}
-                    setSelectedItem={setOpenedAccount}
-                    onPress={() => {
-                        item.visible &&
-                            onSetSelectedAccount({
-                                address: item.address,
-                            })
-                    }}
-                    isOpen={openedAccount?.address === item.address}
-                    customUnderlay={
-                        <AccountUnderlay
-                            confirmRemoveAccount={confirmRemoveAccount}
-                            account={item}
-                            isSelected={isSelected}
-                        />
-                    }
-                    snapPointsLeft={[140]}>
-                    <AccountDetailBox
-                        isBalanceVisible={isBalanceVisible}
-                        account={item}
-                        isSelected={isSelected}
-                        isDisabled={!item.visible}
-                    />
-                </SwipeableRow>
-            )
-        },
-        [confirmRemoveAccount, isBalanceVisible, isItemSelected, onSetSelectedAccount, openedAccount?.address],
-    )
+    const isEditable = device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
 
     return (
         <Layout
             title={walletAlias || device?.alias || ""}
             headerRightElement={
-                showButton && (
-                    <PlusIconHeaderButton testID="WalletDetailScreen_addAccountButton" action={onAddAccountClicked} />
-                )
-            }
-            fixedHeader={
-                <BaseView py={16}>
-                    {!showWalletNameInput && (
-                        <BaseTextInput
-                            placeholder={device?.alias || LL.WALLET_MANAGEMENT_WALLET_NAME()}
-                            value={walletAlias}
-                            setValue={onRenameWallet}
-                            maxLength={35}
+                <>
+                    {isEditable && (
+                        <EditIconHeaderButton
+                            testID="WalletDetailScreen_editWalletButton"
+                            action={openEditWalletAccountBottomSheet}
                         />
                     )}
-                </BaseView>
+                    {showButton && (
+                        <PlusIconHeaderButton
+                            testID="WalletDetailScreen_addAccountButton"
+                            action={onAddAccountClicked}
+                        />
+                    )}
+                </>
             }
             fixedBody={
                 <BaseView flex={1} flexGrow={1}>
+                    <BaseView px={20} mb={16}>
+                        <BaseSpacer height={16} />
+                        <BaseText typographyFont="body">
+                            {LL.WALLET_DETAIL_ACCOUNTS_NUMER({ count: deviceAccounts.length })}
+                        </BaseText>
+                        {claimableUsernames.length > 0 && (
+                            <>
+                                <BaseSpacer height={16} />
+                                <AlertInline
+                                    variant="banner"
+                                    status="info"
+                                    message={`You have ${claimableUsernames.length} username claim available`}
+                                />
+                            </>
+                        )}
+                    </BaseView>
                     {device && !!deviceAccounts.length && (
                         <FlatList
                             data={deviceAccounts}
                             keyExtractor={account => account.address}
                             extraData={openedAccount}
-                            ListHeaderComponent={<BaseSpacer height={20} />}
                             ListFooterComponent={<BaseSpacer height={20} />}
-                            renderItem={renderItem}
+                            renderItem={({ item }) => {
+                                const isSelected = AddressUtils.compareAddresses(selectedAccount.address, item.address)
+                                const canClaimUsername = claimableUsernames.some(address =>
+                                    AddressUtils.compareAddresses(address, item.address),
+                                )
+                                return (
+                                    <SwipeableRow<AccountWithDevice>
+                                        testID={item.address}
+                                        item={item}
+                                        itemKey={item.address}
+                                        swipeableItemRefs={swipeableItemRefs}
+                                        handleTrashIconPress={() => confirmRemoveAccount(item)}
+                                        setSelectedItem={setOpenedAccount}
+                                        onPress={() => {
+                                            item.visible &&
+                                                onSetSelectedAccount({
+                                                    address: item.address,
+                                                })
+                                        }}
+                                        isOpen={openedAccount?.address === item.address}
+                                        customUnderlay={
+                                            <AccountUnderlay
+                                                confirmRemoveAccount={confirmRemoveAccount}
+                                                account={item}
+                                                isSelected={isSelected}
+                                            />
+                                        }
+                                        snapPointsLeft={[140]}>
+                                        <AccountDetailBox
+                                            isBalanceVisible={isBalanceVisible}
+                                            account={item}
+                                            isSelected={isSelected}
+                                            isDisabled={!item.visible}
+                                            canClaimUsername={subdomainClaimFeature.enabled && canClaimUsername}
+                                            onEditPress={account => {
+                                                setEditingAccount(account)
+                                                openEditWalletAccountBottomSheet()
+                                            }}
+                                        />
+                                    </SwipeableRow>
+                                )
+                            }}
                         />
                     )}
                     <RemoveAccountWarningBottomSheet
@@ -188,6 +281,14 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                         onCancel={closeRemoveAccountWarningBottomSheet}
                         accountToRemove={accountToRemove}
                         isBalanceVisible={isBalanceVisible}
+                    />
+
+                    <EditWalletAccountBottomSheet
+                        ref={editWalletAccountBottomSheetRef}
+                        accountAlias={editingAccount ? editingAccount.alias : device.alias}
+                        type={editingAccount ? "account" : "wallet"}
+                        onConfirm={confirmEditWalletAccount}
+                        onCancel={cancelEditWalletAccount}
                     />
 
                     <RequireUserPassword

@@ -291,7 +291,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             updateSecurityType(type)
 
             const encryptionKeys = await StorageEncryptionKeyHelper.init(pinCode)
-
             try {
                 Onboarding.migrateState({
                     onboardingStorage: OnboardingStorage,

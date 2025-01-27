@@ -32,6 +32,23 @@ export const selectBalanceForToken = createSelector(
     },
 )
 
+export const selectBalanceForTokenByAccount = createSelector(
+    [
+        selectBalancesState,
+        selectSelectedNetwork,
+        (_: RootState, tokenAddress: string) => tokenAddress,
+        (_: RootState, __: string, accountAddress: string) => accountAddress,
+    ],
+    (balances, network, tokenAddress, accountAddress) => {
+        const netBalances = balances[network.type]
+        if (!netBalances) return undefined
+
+        const accountBalances = netBalances[accountAddress] ?? []
+
+        return accountBalances.find(balance => compareAddresses(balance.tokenAddress, tokenAddress))
+    },
+)
+
 export const selectVetBalance = createSelector([selectAllBalances], balances => {
     return balances.find(balance => compareAddresses(balance.tokenAddress, VET.address))
 })
@@ -88,10 +105,49 @@ export const selectTokensWithBalances = createSelector(
 )
 
 /**
+ * Get balances with related token data for selected account
+ */
+export const selectTokensWithBalancesByAccount = createSelector(
+    [selectBalancesForAccount, selectAllTokens],
+    (balances, tokens): FungibleTokenWithBalance[] => {
+        return balances
+            .filter(b => tokens.findIndex(t => compareAddresses(t.address, b.tokenAddress)) !== -1)
+            .map(balance => {
+                const balanceToken = tokens.find(token => compareAddresses(token.address, balance.tokenAddress))
+                if (!balanceToken) {
+                    throw new Error(`Unable to find token with this address: ${balance.tokenAddress}`)
+                }
+                return {
+                    ...balanceToken,
+                    balance,
+                }
+            })
+    },
+)
+
+/**
  * Get account token balances without vechain tokens
  */
 export const selectNonVechainTokensWithBalances = createSelector(
     [selectTokensWithBalances],
+    (tokensWithBalance): FungibleTokenWithBalance[] =>
+        sortBy(
+            tokensWithBalance.filter(
+                (tokenWithBalance: FungibleTokenWithBalance) =>
+                    !compareAddresses(tokenWithBalance.address, VET.address) &&
+                    !compareAddresses(tokenWithBalance.address, VTHO.address) &&
+                    !compareAddresses(tokenWithBalance.address, B3TR.address) &&
+                    !compareAddresses(tokenWithBalance.address, VOT3.address),
+            ),
+            balance => balance.balance.position,
+        ),
+)
+
+/**
+ * Get token balances without vechain tokens for a specific account
+ */
+export const selectNonVechainTokensBalancesByAccount = createSelector(
+    [selectTokensWithBalancesByAccount],
     (tokensWithBalance): FungibleTokenWithBalance[] =>
         sortBy(
             tokensWithBalance.filter(

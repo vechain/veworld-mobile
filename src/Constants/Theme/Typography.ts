@@ -12,6 +12,7 @@ export type TFonts =
     | "subSubTitle"
     | "subSubTitleSemiBold"
     | "subSubTitleMedium"
+    | "subSubTitleBold"
     | "subSubTitleLight"
     | "body"
     | "bodyBold"
@@ -86,9 +87,11 @@ const lineHeight = {
     subSubtitle: 24,
     subTitle: 20.8,
     body: 18.2,
+    bodySemiBold: 20,
     captionMedium: 16,
     caption: 15.6,
     captionSmall: 12,
+    captionSemiBold: 20,
 }
 
 export type TypographyObject = {
@@ -169,6 +172,12 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontWeight: fontWeight[500],
         lineHeight: lineHeight.subTitle,
     },
+    subSubTitleBold: {
+        fontFamily: fontFamily["Inter-Bold"],
+        fontSize: 16,
+        fontWeight: fontWeight[600],
+        lineHeight: lineHeight.subTitle,
+    },
     subSubTitleLight: {
         fontFamily: fontFamily["Inter-Regular"],
         fontSize: 16,
@@ -191,9 +200,10 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontWeight: fontWeight[700],
     },
     bodySemiBold: {
-        fontFamily: fontFamily["Inter-SemiBold"],
+        fontFamily: fontFamily["Inter-Bold"],
         fontSize: 14,
         fontWeight: fontWeight[600],
+        lineHeight: lineHeight.bodySemiBold,
     },
     bodyMedium: {
         fontFamily: fontFamily["Inter-Medium"],

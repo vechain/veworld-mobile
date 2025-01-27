@@ -7,6 +7,9 @@ export type FeatureFlags = {
     pushNotificationFeature: {
         enabled: boolean
     }
+    subdomainClaimFeature: {
+        enabled: boolean
+    }
 }
 
 export const getFeatureFlags = async () => {
