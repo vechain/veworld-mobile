@@ -46,6 +46,22 @@ type RootTranslation = {
 	 */
 	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: string
 	/**
+	 * E​n​a​b​l​e​ ​n​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_ENABLE_BTN: string
+	/**
+	 * I​’​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: string
+	/**
+	 * A​c​t​i​v​a​t​e​ ​t​h​e​ ​p​u​s​h​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​a​n​d​ ​c​u​s​t​o​m​i​z​e​ ​t​o​ ​g​e​t​ ​n​o​t​i​f​i​e​d​ ​t​o​ ​a​l​l​ ​t​h​e​ ​n​e​w​ ​d​e​t​a​i​l​s​ ​y​o​u​ ​d​o​n​’​t​ ​w​a​n​t​ ​t​o​ ​m​i​s​s​.
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: string
+	/**
+	 * A​c​t​i​v​a​t​e​ ​n​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_TITLE: string
+	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​i​n​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	ACTIVITIES_FAILED_DESCRIPTION: string
@@ -2397,6 +2413,62 @@ type RootTranslation = {
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
 	/**
+	 * P​u​s​h​ ​N​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	PUSH_NOTIFICATIONS: string
+	/**
+	 * A​l​l​o​w​ ​P​u​s​h​ ​N​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	PUSH_NOTIFICATIONS_ACTIVE: string
+	/**
+	 * D​A​p​p​s
+	 */
+	PUSH_NOTIFICATIONS_DAPPS: string
+	/**
+	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_DESC: string
+	/**
+	 * N​e​w​ ​A​p​p​ ​l​i​s​t​e​d
+	 */
+	PUSH_NOTIFICATIONS_NEW_APP_LISTED: string
+	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​l​o​a​d​ ​y​o​u​r​ ​p​r​e​f​e​r​e​n​c​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: string
+	/**
+	 * E​r​r​o​r
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: string
+	/**
+	 * S​e​a​r​c​h​ ​D​A​p​p​s
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: string
+	/**
+	 * Y​o​u​'​v​e​ ​r​e​a​c​h​e​d​ ​t​h​e​ ​m​a​x​i​m​u​m​ ​n​u​m​b​e​r​ ​o​f​ ​s​u​b​s​c​r​i​p​t​i​o​n​s​ ​a​l​l​o​w​e​d​.​ ​P​l​e​a​s​e​ ​u​n​s​u​b​s​c​r​i​b​e​ ​f​r​o​m​ ​a​n​o​t​h​e​r​ ​s​u​b​s​c​r​i​p​t​i​o​n​ ​b​e​f​o​r​e​ ​a​d​d​i​n​g​ ​a​ ​n​e​w​ ​o​n​e​.
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_DESC: string
+	/**
+	 * S​u​b​s​c​r​i​p​t​i​o​n​ ​L​i​m​i​t​ ​R​e​a​c​h​e​d
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: string
+	/**
+	 * G​e​n​e​r​a​l​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_UPDATES: string
+	/**
+	 * V​e​B​e​t​t​e​r​D​A​O
+	 */
+	PUSH_NOTIFICATIONS_VEBETTERDAO: string
+	/**
+	 * V​e​W​o​r​l​d​ ​f​e​a​t​u​r​e​s​ ​&​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: string
+	/**
+	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
+	 */
+	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
+	/**
 	 * R​e​c​a​p
 	 */
 	RECAP: string
@@ -3229,6 +3301,10 @@ type RootTranslation = {
 	 */
 	TITLE_NFTS: string
 	/**
+	 * N​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	TITLE_NOTIFICATIONS: string
+	/**
 	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
 	 */
 	TITLE_OBSERVE_WALLET: string
@@ -3574,6 +3650,22 @@ export type TranslationFunctions = {
 	 * What do you want to do?
 	 */
 	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: () => LocalizedString
+	/**
+	 * Enable notifications
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_ENABLE_BTN: () => LocalizedString
+	/**
+	 * I’ll do it later
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: () => LocalizedString
+	/**
+	 * Activate the push notifications and customize to get notified to all the new details you don’t want to miss.
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Activate notifications
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_TITLE: () => LocalizedString
 	/**
 	 * There was an error in executing the transaction
 	 */
@@ -5893,6 +5985,62 @@ Try reconnect your device to the internet.
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
 	/**
+	 * Push Notifications
+	 */
+	PUSH_NOTIFICATIONS: () => LocalizedString
+	/**
+	 * Allow Push Notifications
+	 */
+	PUSH_NOTIFICATIONS_ACTIVE: () => LocalizedString
+	/**
+	 * DApps
+	 */
+	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
+	/**
+	 * Keep up to date with the latest news and updates
+	 */
+	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
+	/**
+	 * New App listed
+	 */
+	PUSH_NOTIFICATIONS_NEW_APP_LISTED: () => LocalizedString
+	/**
+	 * An error occurred while trying to load your preferences. Please try again.
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: () => LocalizedString
+	/**
+	 * Error
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: () => LocalizedString
+	/**
+	 * Search DApps
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: () => LocalizedString
+	/**
+	 * You've reached the maximum number of subscriptions allowed. Please unsubscribe from another subscription before adding a new one.
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_DESC: () => LocalizedString
+	/**
+	 * Subscription Limit Reached
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: () => LocalizedString
+	/**
+	 * General updates
+	 */
+	PUSH_NOTIFICATIONS_UPDATES: () => LocalizedString
+	/**
+	 * VeBetterDAO
+	 */
+	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
+	/**
+	 * VeWorld features & updates
+	 */
+	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: () => LocalizedString
+	/**
+	 * Vote reminder
+	 */
+	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
+	/**
 	 * Recap
 	 */
 	RECAP: () => LocalizedString
@@ -6716,6 +6864,10 @@ Try reconnect your device to the internet.
 	 * NFTs
 	 */
 	TITLE_NFTS: () => LocalizedString
+	/**
+	 * Notifications
+	 */
+	TITLE_NOTIFICATIONS: () => LocalizedString
 	/**
 	 * Observe Wallet
 	 */

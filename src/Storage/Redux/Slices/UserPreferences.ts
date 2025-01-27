@@ -31,6 +31,7 @@ export interface UserPreferenceState {
     lastVersionCheck: string
     appResetTimestamp?: string
     lastBackupRequestTimestamp?: { [key: string]: number | undefined }
+    lastNotificationReminder: number | null
 }
 
 const initialState: UserPreferenceState = {
@@ -48,6 +49,7 @@ const initialState: UserPreferenceState = {
     lastReviewTimestamp: moment().subtract(3, "weeks").add(3, "days").toISOString(),
     lastVersionCheck: moment().toISOString(),
     appResetTimestamp: undefined,
+    lastNotificationReminder: null,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -115,6 +117,10 @@ export const UserPreferencesSlice = createSlice({
             }
         },
 
+        updateLastNotificationReminder: (state, action: PayloadAction<number | null>) => {
+            state.lastNotificationReminder = action.payload
+        },
+
         resetUserPreferencesState: () => initialState,
     },
 })
@@ -134,4 +140,5 @@ export const {
     setLastVersionCheck,
     setAppResetTimestamp,
     setLastBackupRequestTimestamp,
+    updateLastNotificationReminder,
 } = UserPreferencesSlice.actions

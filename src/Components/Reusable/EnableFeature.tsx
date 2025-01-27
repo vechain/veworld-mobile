@@ -13,12 +13,10 @@ export const EnableFeature = ({ title, subtitle, onValueChange, value }: Props) 
     const theme = useTheme()
     return (
         <BaseView flexDirection="row" alignItems="center">
-            <BaseView flexDirection="column" flex={1}>
-                <BaseText typographyFont="subSubTitleMedium" mb={8}>
-                    {title}
-                </BaseText>
+            <BaseView flexDirection="column" flex={1} justifyContent="center">
+                <BaseText typographyFont="subSubTitleMedium">{title}</BaseText>
                 {subtitle && (
-                    <BaseText color={theme.colors.textLight} typographyFont="captionRegular">
+                    <BaseText color={theme.colors.textLight} typographyFont="captionRegular" mt={8}>
                         {subtitle}
                     </BaseText>
                 )}
