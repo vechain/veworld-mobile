@@ -93,6 +93,23 @@ android {
     buildFeatures {
         buildConfig = true
     }
+    subprojects {
+        afterEvaluate { subproject ->
+            // Only apply if it's an Android library or application module
+            if (subproject.plugins.hasPlugin('com.android.library') 
+            || subproject.plugins.hasPlugin('com.android.application')) {
+                subproject.android {
+                    // Force each subproject (including Expo modules) to use the root project's compileSdkVersion
+                    compileSdkVersion rootProject.ext.compileSdkVersion
+
+                    buildFeatures {
+                        // If the library or module has custom BuildConfig fields, this ensures they're not disabled
+                        buildConfig = true
+                    }
+                }
+            }
+        }
+    }
 
     defaultConfig {
         applicationId "org.vechain.veworld.app"
