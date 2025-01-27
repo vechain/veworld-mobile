@@ -254,8 +254,6 @@ end
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
-      sh("npx react-native bundle --dev false --minify false --platform android --entry-file index.js --reset-cache --bundle-output index.android.bundle --sourcemap-output index.android.bundle.map")
-
       gradle(task: 'clean')
       gradle(
         task: 'assemble',
