@@ -10,7 +10,7 @@ platform :android do
   end
 
   desc "Upload sourcemaps to sentry"
-lane :upload_sourcemaps_sentry do
+  lane :upload_sourcemaps_sentry do
   begin
     Dir.chdir "../.." do
 
@@ -74,8 +74,9 @@ lane :upload_sourcemaps_sentry do
         sourcemap-bundle/index.android.bundle \
         sourcemap-bundle/index.android.bundle.map
     })
+    end
   end
-end
+
 
   # @param {object} options - The options for the build process.
   # @param {string} options.version_name - The version name of the build.
