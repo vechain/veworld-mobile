@@ -110,7 +110,7 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 48,
         },
         title: {
-            fontSize: 16,
+            fontSize: 18,
             fontWeight: "600",
             lineHeight: 28,
             textAlign: "center",
