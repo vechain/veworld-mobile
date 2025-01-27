@@ -9,27 +9,70 @@ platform :android do
     )
   end
 
-  desc "Upload sorucemaps to sentry"
-  lane :upload_sourcemaps_sentry do
-    sh("echo 'Uploading sourcemaps to sentry - e2e andriod'")
-    sentry_check_cli_installed
-    #Generate React Native Packager (Metro) bundle and source maps
-    sh("npx react-native bundle --dev false --minify false --platform android --entry-file index.js --reset-cache --bundle-output index.android.bundle --sourcemap-output index.android.bundle.map")
+  desc "Upload sourcemaps to sentry"
+lane :upload_sourcemaps_sentry do
+  sh("echo 'Uploading sourcemaps to sentry - e2e android'")
+  sentry_check_cli_installed
 
-    #Compile hermes byte code
-    sh("node_modules/react-native/sdks/hermesc/osx-bin/hermesc -O -emit-binary -output-source-map -out=index.android.bundle.hbc index.android.bundle")
-    sh("rm -f index.android.bundle")
-    sh("mv index.android.bundle.hbc index.android.bundle")
-    #Compose Hermes bytecode and (React Native Packager) Metro source maps:
-    sh("mv index.android.bundle.map index.android.bundle.packager.map")
-    sh("node node_modules/react-native/scripts/compose-source-maps.js index.android.bundle.packager.map index.android.bundle.hbc.map -o index.android.bundle.map")
-    sh ("node node_modules/@sentry/react-native/scripts/copy-debugid.js index.android.bundle.packager.map index.android.bundle.map")
-    sh("rm -f index.android.bundle.packager.map")
+  # 1. Generate the plain JS bundle & source map in ./sourcemap-bundle/
+  sh("mkdir -p sourcemap-bundle")
+  sh(%{
+    npx react-native bundle \
+      --platform android \
+      --entry-file index.js \
+      --bundle-output sourcemap-bundle/index.android.bundle \
+      --sourcemap-output sourcemap-bundle/index.android.bundle.map \
+      --dev false
+  })
 
-    #upload sourcemaps to sentry
-    sh("node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload --debug-id-reference --strip-prefix ../../ index.android.bundle index.android.bundle.map")
+  # 2. Compile Hermes bytecode (note the paths!)
+  #    You must pass the input JS bundle from sourcemap-bundle/ and output .hbc there too.
+  sh(%{
+    node_modules/react-native/sdks/hermesc/osx-bin/hermesc \
+      -O \
+      -emit-binary \
+      -output-source-map \
+      -out=sourcemap-bundle/index.android.bundle.hbc \
+      sourcemap-bundle/index.android.bundle
+  })
 
-  end
+  # 3. Remove the original JS bundle (we only want the .hbc from now on)
+  sh("rm -f sourcemap-bundle/index.android.bundle")
+
+  # 4. Rename the .hbc to be our final "index.android.bundle"
+  sh("mv sourcemap-bundle/index.android.bundle.hbc sourcemap-bundle/index.android.bundle")
+
+  # 5. Rename the packager map -> "index.android.bundle.packager.map"
+  sh("mv sourcemap-bundle/index.android.bundle.map sourcemap-bundle/index.android.bundle.packager.map")
+
+  # 6. Compose the Metro source map with the Hermes source map
+  #    hermesc produces a .hbc.map named `index.android.bundle.hbc.map`, so we need that path:
+  sh(%{
+    node node_modules/react-native/scripts/compose-source-maps.js \
+      sourcemap-bundle/index.android.bundle.packager.map \
+      sourcemap-bundle/index.android.bundle.hbc.map \
+      -o sourcemap-bundle/index.android.bundle.map
+  })
+
+  # 7. (Optional) The Sentry "copy-debugid" script. Make sure to pass the correct paths:
+  sh(%{
+    node node_modules/@sentry/react-native/scripts/copy-debugid.js \
+      sourcemap-bundle/index.android.bundle.packager.map \
+      sourcemap-bundle/index.android.bundle.map
+  })
+
+  # 8. Remove the temporary packager map
+  sh("rm -f sourcemap-bundle/index.android.bundle.packager.map")
+
+  # 9. Finally, upload to Sentry. Reference the final HBC + final map in `sourcemap-bundle`
+  sh(%{
+    node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
+      --debug-id-reference \
+      --strip-prefix ../../ \
+      sourcemap-bundle/index.android.bundle \
+      sourcemap-bundle/index.android.bundle.map
+  })
+end
 
   # @param {object} options - The options for the build process.
   # @param {string} options.version_name - The version name of the build.
@@ -211,6 +254,7 @@ platform :android do
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
+      sh("npx react-native bundle --dev false --minify false --platform android --entry-file index.js --reset-cache --bundle-output index.android.bundle --sourcemap-output index.android.bundle.map")
 
       gradle(task: 'clean')
       gradle(
@@ -246,5 +290,4 @@ platform :android do
       sh("echo 'Build failed'")
     end
   end
-
-end  # Added this 'end' to close the 'platform :android do' block
+end  
