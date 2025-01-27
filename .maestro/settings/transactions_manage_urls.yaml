@@ -67,7 +67,7 @@ onFlowComplete:
       from:
           id: "Delegation_Url_0"
           index: 0
-          direction: "LEFT"
+      direction: "LEFT"
 - tapOn:
       id: "DeleteUnderlay_DeleteIcon-wrapper"
 - assertNotVisible: "${URL_1}"
