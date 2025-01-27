@@ -29,7 +29,7 @@ platform :android do
     # 2. Compile Hermes bytecode (note the paths!)
     #    You must pass the input JS bundle from sourcemap-bundle/ and output .hbc there too.
     sh(%{
-     node_modules/react-native/sdks/hermesc/linux64-bin/hermesc -O -emit-binary -output-source-map -out=sourcemap-bundle/index.android.bundle.hbc ssourcemap-bundle/index.android.bundle
+     node_modules/react-native/sdks/hermesc/linux64-bin/hermesc -O -emit-binary -output-source-map -out=sourcemap-bundle/index.android.bundle.hbc sourcemap-bundle/index.android.bundle
     })
 
     # 3. Remove the original JS bundle (we only want the .hbc from now on)
