@@ -12,7 +12,6 @@ platform :android do
   desc "Upload sourcemaps to sentry"
 lane :upload_sourcemaps_sentry do
   sh("echo 'Uploading sourcemaps to sentry - e2e android'")
-  sentry_check_cli_installed
 
   # 1. Generate the plain JS bundle & source map in ./sourcemap-bundle/
   sh("mkdir -p sourcemap-bundle")
@@ -254,6 +253,7 @@ end
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
+      upload_sourcemaps_sentry()
       gradle(task: 'clean')
       gradle(
         task: 'assemble',
@@ -270,7 +270,7 @@ end
         }
       )
 
-      upload_sourcemaps_sentry()
+      
 
       ci_value = false
       sh("./set_ci_vars.sh #{ci_value}")
