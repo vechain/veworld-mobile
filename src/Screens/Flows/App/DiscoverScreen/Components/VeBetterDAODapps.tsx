@@ -9,7 +9,7 @@ import {
     useWindowDimensions,
 } from "react-native"
 import { localDaoDApps, localDaoDAppsMetadata, localDaoDAppsPlaceholder } from "~Assets"
-import { BaseSkeleton, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseSkeleton, BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
 import { useTheme, useVeBetterDaoDapps, useVeBetterDaoDAppsMetadata } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp } from "~Model"
@@ -25,6 +25,7 @@ type VeBetterDaoDAppCardProps = {
 type CardProps = {
     href: string
     source: ImageSourcePropType
+    isError?: boolean
 }
 
 const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }: VeBetterDaoDAppCardProps) => {
@@ -34,11 +35,26 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
     const { data, isPending, error } = useVeBetterDaoDAppsMetadata(`ipfs://${item.metadataURI}`)
     const showSkeleton = isPending || !data || areDappsLoading
     const localDApp = localDaoDAppsMetadata.find(metdata => metdata.name === item.name)
+    const { increaseDappCounter } = useNotifications()
+
+    const onCardPress = useCallback(
+        ({ href, dappId }: { href: string; custom?: boolean; dappId?: string }) => {
+            if (dappId) {
+                increaseDappCounter(dappId)
+            }
+            onPress({ href: href })
+        },
+        [increaseDappCounter, onPress],
+    )
 
     const Card = useCallback(
-        ({ href, source }: CardProps) => {
+        (props: CardProps) => {
+            const { href, source, isError = false } = props
+
             return (
-                <BaseTouchable style={containerStyle} action={() => onPress({ href: href })}>
+                <BaseTouchable
+                    style={containerStyle}
+                    action={() => onCardPress({ href: href, dappId: !isError ? item.id : undefined })}>
                     <Image
                         source={source}
                         style={[styles.image, { width: cardWidth, backgroundColor: theme.colors.card }]}
@@ -47,7 +63,7 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
                 </BaseTouchable>
             )
         },
-        [cardWidth, containerStyle, onPress, theme.colors.card],
+        [cardWidth, containerStyle, item.id, onCardPress, theme.colors.card],
     )
 
     const getImagerSource = useCallback((source: number | string): ImageSourcePropType => {
@@ -75,6 +91,7 @@ const VeBetterDaoDAppCard = ({ onPress, containerStyle, item, areDappsLoading }:
             <Card
                 href={localDApp.external_url}
                 source={getImagerSource(localDApp.ve_world?.banner ?? localDApp?.banner)}
+                isError={true}
             />
         ) : null
     }

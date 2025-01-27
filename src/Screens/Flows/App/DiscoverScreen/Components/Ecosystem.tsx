@@ -1,11 +1,11 @@
 import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { DAppCard } from "./DAppCard"
-import { DAppType } from "~Model"
 import { useI18nContext } from "~i18n"
+import { DAppType } from "~Model"
+import { DAppCard } from "./DAppCard"
 
 type Filter = {
     key: DAppType
@@ -35,6 +35,7 @@ type DAppsGridProps = {
 
 const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
     const flatListRef = useRef(null)
+    const { increaseDappCounter } = useNotifications()
     useScrollToTop(flatListRef)
     const columns = 4
     const columnsGap = 24
@@ -53,12 +54,17 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
                         columns={columns}
                         columnsGap={24}
                         dapp={item}
-                        onPress={() => onDAppPress({ href: item.href })}
+                        onPress={() => {
+                            if (item.veBetterDaoId) {
+                                increaseDappCounter(item.veBetterDaoId)
+                            }
+                            onDAppPress({ href: item.href })
+                        }}
                     />
                 </BaseView>
             )
         },
-        [dapps.length, onDAppPress],
+        [dapps.length, increaseDappCounter, onDAppPress],
     )
 
     return (

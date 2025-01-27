@@ -44,6 +44,7 @@ import {
     TokenList,
 } from "./Components"
 import { useTokenBalances } from "./Hooks"
+import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -197,6 +198,7 @@ export const HomeScreen = () => {
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
                     <DeviceBackupBottomSheet />
+                    <EnableNotificationsBottomSheet />
                 </NestableScrollContainer>
             }
         />

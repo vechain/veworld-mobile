@@ -30,6 +30,35 @@ jest.mock("react-native-quick-crypto", () => ({
     })),
 }))
 
+jest.mock("react-native-onesignal", () => ({
+    ...jest.requireActual("react-native-onesignal"),
+    OneSignal: {
+        ...jest.requireActual("react-native-onesignal").OneSignal,
+        initialize: jest.fn(),
+        Notifications: {
+            getPermissionAsync: jest.fn(),
+            requestPermission: jest.fn().mockResolvedValue(true),
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+        },
+        User: {
+            getTags: jest.fn().mockResolvedValue({}),
+            addTag: jest.fn(),
+            removeTag: jest.fn(),
+            pushSubscription: {
+                optIn: jest.fn(),
+                optOut: jest.fn(),
+                getOptedInAsync: jest.fn(),
+                addEventListener: jest.fn(),
+                removeEventListener: jest.fn(),
+            },
+        },
+        Debug: {
+            setLogLevel: jest.fn(),
+        },
+    },
+}))
+
 process.env = Object.assign(process.env, {
     REACT_APP_LOG_LEVEL: "debug",
 })

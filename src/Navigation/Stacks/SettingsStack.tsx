@@ -1,5 +1,8 @@
-import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import React from "react"
+import { useNavAnimation } from "~Hooks"
+import { Device, LocalDevice } from "~Model"
+import { Routes } from "~Navigation/Enums"
 import {
     AddContactScreen,
     AddCustomNodeScreen,
@@ -9,6 +12,7 @@ import {
     GeneralScreen,
     ManageCustomNodesScreen,
     ManageUrlsScreen,
+    NotificationScreen,
     PrivacyScreen,
     ResetAppScreen,
     SettingsScreen,
@@ -20,10 +24,7 @@ import {
     ClaimUsername,
     UsernameClaimed,
 } from "~Screens"
-import { Routes } from "~Navigation/Enums"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
-import { useNavAnimation } from "~Hooks"
-import { Device, LocalDevice } from "~Model"
 import { SettingsBrowserView } from "~Screens/Flows/App/SettingsScreen/Components/SettingsBrowserView"
 
 export type RootStackParamListSettings = {
@@ -47,6 +48,7 @@ export type RootStackParamListSettings = {
     [Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD]: { mnemonicArray: string[]; device: LocalDevice }
     [Routes.SETTINGS_GET_SUPPORT]: { url: string }
     [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
+    [Routes.SETTINGS_NOTIFICATIONS]: undefined
     [Routes.CLAIM_USERNAME]: undefined
     [Routes.USERNAME_CLAIMED]: {
         username: string
@@ -159,6 +161,12 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={Routes.SETTINGS_GIVE_FEEDBACK}
                 component={SettingsBrowserView}
+                options={{ headerShown: false }}
+            />
+
+            <Settings.Screen
+                name={Routes.SETTINGS_NOTIFICATIONS}
+                component={NotificationScreen}
                 options={{ headerShown: false }}
             />
 

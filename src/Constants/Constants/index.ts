@@ -13,6 +13,7 @@ export * from "./feature"
 export * from "./dapps"
 export * from "./derivationPaths"
 export * from "./DApp"
+export * from "./Notification"
 export * from "./vetDomains"
 
 export { SettingsConstants }

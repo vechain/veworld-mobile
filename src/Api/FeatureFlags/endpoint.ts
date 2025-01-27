@@ -4,13 +4,20 @@ export type FeatureFlags = {
         url: string
         fallbackUrl: string
     }
+    pushNotificationFeature: {
+        enabled: boolean
+    }
     subdomainClaimFeature: {
         enabled: boolean
     }
 }
 
 export const getFeatureFlags = async () => {
-    const req = await fetch("https://vechain.github.io/veworld-feature-flags/mobile-feature-flags.json", {
+    const featureFlagsUrl = __DEV__
+        ? "https://vechain.github.io/veworld-feature-flags/dev/mobile-feature-flags.json"
+        : "https://vechain.github.io/veworld-feature-flags/mobile-feature-flags.json"
+
+    const req = await fetch(featureFlagsUrl, {
         method: "GET",
         headers: {
             "Cache-Control": "no-cache",
@@ -20,6 +27,5 @@ export const getFeatureFlags = async () => {
     })
 
     const response: FeatureFlags = await req.json()
-
     return response
 }

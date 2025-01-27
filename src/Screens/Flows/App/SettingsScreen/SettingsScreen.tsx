@@ -2,7 +2,16 @@ import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import { AlertCard, BaseSpacer, BaseView, HeaderTitle, Layout, SelectedNetworkViewer, HeaderStyle } from "~Components"
+import {
+    AlertCard,
+    BaseSpacer,
+    BaseView,
+    HeaderTitle,
+    Layout,
+    SelectedNetworkViewer,
+    HeaderStyle,
+    useNotifications,
+} from "~Components"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles, useVnsUnclaimed } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
@@ -28,7 +37,7 @@ export const SettingsScreen = () => {
     const { LL } = useI18nContext()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
-    const { settingsList } = useMemo(() => getLists(LL, devFeaturesEnabled), [devFeaturesEnabled, LL])
+    const { featureEnabled: notificationFeatureEnabled } = useNotifications()
 
     const { unclaimedAddresses } = useVnsUnclaimed()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
@@ -51,6 +60,11 @@ export const SettingsScreen = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
+
+    const { settingsList } = useMemo(
+        () => getLists(LL, devFeaturesEnabled, notificationFeatureEnabled),
+        [LL, devFeaturesEnabled, notificationFeatureEnabled],
+    )
 
     const renderBackupWarning = useMemo(() => {
         return (
@@ -142,7 +156,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
     })
 
-const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
+const getLists = (LL: TranslationFunctions, devEnabled: boolean, notificationFeatureEnabled: boolean) => {
     const settingsList: (SettingsRowItem | DividerItem | BackupBannerItem)[] = [
         {
             element: "settingsRow",
@@ -216,6 +230,15 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
             icon: "icon-info",
         },
     ]
+
+    if (notificationFeatureEnabled) {
+        settingsList.splice(4, 0, {
+            element: "settingsRow",
+            title: LL.TITLE_NOTIFICATIONS(),
+            screenName: Routes.SETTINGS_NOTIFICATIONS,
+            icon: "icon-bell-ring",
+        })
+    }
 
     if (devEnabled) {
         settingsList.push({

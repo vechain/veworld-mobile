@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react"
 import { Transaction } from "thor-devkit"
 
 import { error, GasUtils } from "~Utils"
-import { useThor } from "~Components"
+import { useThor } from "~Components/Providers/ConnexProvider"
 import { EstimateGasResult } from "~Model"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ERROR_EVENTS } from "~Constants"
