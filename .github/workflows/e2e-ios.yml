@@ -123,4 +123,3 @@ jobs:
               with:
                   api-key: ${{ secrets.DCD_API_KEY }}
                   app-file: ${{ env.APP_PATH }}
-                  exclude-tags: onlyAndroid
