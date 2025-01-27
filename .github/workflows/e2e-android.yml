@@ -38,12 +38,12 @@ jobs:
         - name: Install & Patch packages
           run: yarn install
 
-        - name: Setup Java
+       # Ensure Java 17
+        - name: Set up JDK 17
           uses: actions/setup-java@v3
           with:
-              cache: gradle
-              distribution: "zulu"
-              java-version: "11"
+            distribution: 'temurin'
+            java-version: '17'
 
         # Install sentry properties
         - name: Sentry properties
