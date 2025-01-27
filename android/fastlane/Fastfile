@@ -64,13 +64,14 @@ platform :android do
 
     # 9. Finally, upload to Sentry. Reference the final HBC + final map in `sourcemap-bundle`
     sh(%{
-      node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
+      node_modules/@sentry/cli/bin/sentry-cli \
+        --config android/sentry.properties \
+        sourcemaps upload \
         --debug-id-reference \
         --strip-prefix ../../ \
         --org 'vechain-foundation' \
         --project 'veworld-mobile' \
         --dist #{build} \
-        --config android/sentry.properties \
         sourcemap-bundle/index.android.bundle \
         sourcemap-bundle/index.android.bundle.map
     })
