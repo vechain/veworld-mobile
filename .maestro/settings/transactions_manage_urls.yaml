@@ -1,72 +1,74 @@
 #transactions_manage_urls.yaml
 appId: org.vechain.veworld.app
+tags:
+    - onlyAndroid
 env:
-  URL_1: "https://sponsor-testnet.vechain.energy/by/282"
-  URL_2: "https://sponsor-testnet.vechain.energy/by/219"
+    URL_1: "https://sponsor-testnet.vechain.energy/by/282"
+    URL_2: "https://sponsor-testnet.vechain.energy/by/219"
 onFlowStart:
-  - runFlow: ../setup_reset/setupApp.yaml
+    - runFlow: ../setup_reset/setupApp.yaml
 onFlowComplete:
-  - runFlow: ../setup_reset/resetApp.yaml
+    - runFlow: ../setup_reset/resetApp.yaml
 ---
 ## User can add a delegation URL with the Manage URLs button
 - tapOn:
-    id: "settings-tab"
+      id: "settings-tab"
 - extendedWaitUntil:
-    visible:
-        id: "BackButtonHeader-BaseIcon-backButton-wrapper"
-    timeout: 10000
+      visible:
+          id: "BackButtonHeader-BaseIcon-backButton"
+      timeout: 10000
 - tapOn:
-    id: "BackButtonHeader-BaseIcon-backButton-wrapper"
+      id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-    id: "Transactions"
+      id: "Transactions"
 - tapOn:
-    id: "Manage_Transactions_Urls"
+      id: "Manage_Transactions_Urls"
 - extendedWaitUntil:
-    visible:
-        id: "ManageUrls_addUrlButton-wrapper"
-    timeout: 10000
+      visible:
+          id: "ManageUrls_addUrlButton-wrapper"
+      timeout: 10000
 - tapOn:
-    id: "ManageUrls_addUrlButton-wrapper"
+      id: "ManageUrls_addUrlButton-wrapper"
 - tapOn:
-    id: "AddUrl_input"
+      id: "AddUrl_input"
 - inputText: "${URL_1}"
 # START FLOW - hide keyboard to prevent errors
 - runFlow:
-    when:
-      platform: Android
-    commands:
-      - hideKeyboard
+      when:
+          platform: Android
+      commands:
+          - hideKeyboard
 # END FLOW
 - tapOn:
-    id: "Add_URL_Submit"
+      id: "Add_URL_Submit"
 ## User can add multiple delegation URLs with the Manage URLs button
 - extendedWaitUntil:
-    visible:
-        id: "ManageUrls_addUrlButton-wrapper"
-    timeout: 10000
+      visible:
+          id: "ManageUrls_addUrlButton-wrapper"
+      timeout: 10000
 - tapOn:
-    id: "ManageUrls_addUrlButton-wrapper"
+      id: "ManageUrls_addUrlButton-wrapper"
 - tapOn:
-    id: "AddUrl_input"
+      id: "AddUrl_input"
 - inputText: "${URL_2}"
 # START FLOW - hide keyboard to prevent errors
 - runFlow:
-    when:
-      platform: Android
-    commands:
-      - hideKeyboard
+      when:
+          platform: Android
+      commands:
+          - hideKeyboard
 # END FLOW
 - tapOn:
-    id: "Add_URL_Submit"
+      id: "Add_URL_Submit"
 - assertVisible: "${URL_1}"
 - assertVisible: "${URL_2}"
 ## User can delete delegation URLs
 - swipe:
-    from:
-      id: "Delegation_Url_0"
-      index: 0
-    direction: "LEFT"
+      from:
+          id: "Delegation_Url_0"
+          index: 0
+      direction: "LEFT"
 - tapOn:
-    id: "DeleteUnderlay_DeleteIcon-wrapper"
+      id: "DeleteUnderlay_DeleteIcon-wrapper"
 - assertNotVisible: "${URL_1}"
 - assertVisible: "${URL_2}"
