@@ -110,7 +110,7 @@ type VnsHook = {
     refetchVns: (options?: RefetchOptions) => Promise<QueryObserverResult<Vns, Error>>
     isSubdomainAvailable: (domainName: string) => Promise<boolean>
     registerSubdomain: (domainName: string, pin?: string) => Promise<boolean>
-    resetVns: () => void
+    resetVns: () => Promise<void>
 }
 
 export const useVns = (props?: Vns): VnsHook => {

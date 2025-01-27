@@ -47,7 +47,7 @@ export const SettingsScreen = () => {
 
     useScrollToTop(flatSettingListRef)
 
-    const renderBadge = useCallback(
+    const shouldShowBadge = useCallback(
         (item: SettingsRowItem) => {
             if (item.screenName === Routes.WALLET_MANAGEMENT) {
                 return Boolean(unclaimedAddresses.length > 0)
@@ -85,7 +85,7 @@ export const SettingsScreen = () => {
 
             switch (item.element) {
                 case "settingsRow":
-                    const showBadge = renderBadge(item)
+                    const showBadge = shouldShowBadge(item)
                     return (
                         <SettingsRow
                             title={item.title}
@@ -106,7 +106,7 @@ export const SettingsScreen = () => {
                     return null
             }
         },
-        [isShowBackupModal, renderBackupWarning, renderBadge],
+        [isShowBackupModal, renderBackupWarning, shouldShowBadge],
     )
 
     return (
