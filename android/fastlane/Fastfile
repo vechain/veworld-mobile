@@ -72,7 +72,6 @@ platform :android do
       --project veworld-mobile \
       --release 9.9.9 \
       --dist 99 \
-      sourcemap-bundle/index.android.bundle \
       sourcemap-bundle/index.android.bundle.map
     SHELL
     sh("echo 'upload via release files'")
