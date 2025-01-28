@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { useNetworkTokens, VET, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { FiatBalance } from "~Components"
 import { BalanceUtils } from "~Utils"
@@ -13,6 +13,7 @@ type AccountFiatBalanceProps = {
 const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFiatBalanceProps) => {
     const { isLoading = false, isVisible = true } = props
     const theme = useTheme()
+    const { B3TR, VOT3 } = useNetworkTokens()
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
