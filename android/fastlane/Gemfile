@@ -1,0 +1,5 @@
+# android/fastlane/Gemfile
+source 'https://rubygems.org'
+
+gem 'fastlane'
+gem 'fastlane-plugin-sentry'
