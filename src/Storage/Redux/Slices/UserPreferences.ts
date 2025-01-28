@@ -10,10 +10,16 @@ import { Locales } from "~i18n"
  * @property {boolean} isPinCodeRequired - whether the pin code is required to decrypt the wallets. Pin code will be stored in the PinCodeProvider if not.
  * @property {boolean} balanceVisible
  * @property {CURRENCY} currency
+ * @property {SYMBOL_POSITIONS} symbolPosition
  * @property {LANGUAGE} language
  * @property {boolean} isAnalyticsTrackingEnabled
  * @property {boolean} isSentryTrackingEnabled
- * @property {number} lastBackupRequestTimestamp
+ * @property {boolean} devFeaturesEnabled
+ * @property {string} lastReviewTimestamp
+ * @property {string} lastVersionCheck
+ * @property {string|number} appResetTimestamp
+ * @property {Object.<string, number>|undefined} lastBackupRequestTimestamp
+ * @property {number|null} lastNotificationReminder
  */
 
 export interface UserPreferenceState {
