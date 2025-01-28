@@ -34,7 +34,8 @@ jobs:
               with:
                   node-version-file: .nvmrc
                   cache: "yarn"
-
+            
+            - run: bundle config set frozen 'false'
             - uses: ruby/setup-ruby@v1
               with:
                 ruby-version: '2.7.5'    
