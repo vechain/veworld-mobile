@@ -62,7 +62,11 @@ platform :android do
 
     # 8. Remove the temporary packager map
     sh("rm -f sourcemap-bundle/index.android.bundle.packager.map")
-
+    
+    #debug current location and contents
+    sh("echo 'ls -la")
+    sh("pwd")
+    sh("ls -la ")
 
     # 9. Finally, upload to Sentry. Reference the final HBC + final map in `sourcemap-bundle`
     sh <<-SHELL
@@ -72,6 +76,8 @@ platform :android do
       --project veworld-mobile \
       --release 9.9.9 \
       --dist 99 \
+      --debug-id-reference \
+      sourcemap-bundle/index.android.bundle \
       sourcemap-bundle/index.android.bundle.map
     SHELL
     sh("echo 'upload via release files'")
