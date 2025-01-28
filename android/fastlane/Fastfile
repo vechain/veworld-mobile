@@ -126,8 +126,8 @@ platform :android do
       project_slug: "veworld-mobile",
       version: "9.9.9",        # e.g. version_code
       app_identifier: "org.vechain.veworld.app",
-      build: "999",          # optional build number
-      dist: "999",           # optional dist usually the same as build
+      build: "1000",          # optional build number
+      dist: "1000",           # optional dist usually the same as build
       sourcemap: [
       "../sourcemap-bundle/index.android.bundle",
       "../sourcemap-bundle/index.android.bundle.map"
