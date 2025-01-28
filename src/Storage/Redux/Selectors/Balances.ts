@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { BigNumber } from "bignumber.js"
 import sortBy from "lodash/sortBy"
-import { VET, VTHO } from "~Constants"
+import { B3TR, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS, VET, VOT3, VTHO } from "~Constants"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
@@ -135,15 +135,17 @@ export const selectTokensWithBalancesByAccount = createSelector(
  * Get account token balances without vechain tokens
  */
 export const selectNonVechainTokensWithBalances = createSelector(
-    [selectTokensWithBalances, selectB3trAddress, selectVot3Address],
-    (tokensWithBalance, b3trAddress, vot3Address): FungibleTokenWithBalance[] =>
+    [selectTokensWithBalances],
+    (tokensWithBalance): FungibleTokenWithBalance[] =>
         sortBy(
             tokensWithBalance.filter(
                 (tokenWithBalance: FungibleTokenWithBalance) =>
                     !compareAddresses(tokenWithBalance.address, VET.address) &&
                     !compareAddresses(tokenWithBalance.address, VTHO.address) &&
-                    !compareAddresses(tokenWithBalance.address, b3trAddress) &&
-                    !compareAddresses(tokenWithBalance.address, vot3Address),
+                    !compareAddresses(tokenWithBalance.address, B3TR.address) &&
+                    !compareAddresses(tokenWithBalance.address, VOT3.address) &&
+                    !compareAddresses(tokenWithBalance.address, TEST_B3TR_ADDRESS) &&
+                    !compareAddresses(tokenWithBalance.address, TEST_VOT3_ADDRESS),
             ),
             balance => balance.balance.position,
         ),
@@ -153,15 +155,17 @@ export const selectNonVechainTokensWithBalances = createSelector(
  * Get token balances without vechain tokens for a specific account
  */
 export const selectNonVechainTokensBalancesByAccount = createSelector(
-    [selectTokensWithBalancesByAccount, selectB3trAddress, selectVot3Address],
-    (tokensWithBalance, b3trAddress, vot3Address): FungibleTokenWithBalance[] =>
+    [selectTokensWithBalancesByAccount],
+    (tokensWithBalance): FungibleTokenWithBalance[] =>
         sortBy(
             tokensWithBalance.filter(
                 (tokenWithBalance: FungibleTokenWithBalance) =>
                     !compareAddresses(tokenWithBalance.address, VET.address) &&
                     !compareAddresses(tokenWithBalance.address, VTHO.address) &&
-                    !compareAddresses(tokenWithBalance.address, b3trAddress) &&
-                    !compareAddresses(tokenWithBalance.address, vot3Address),
+                    !compareAddresses(tokenWithBalance.address, B3TR.address) &&
+                    !compareAddresses(tokenWithBalance.address, VOT3.address) &&
+                    !compareAddresses(tokenWithBalance.address, TEST_B3TR_ADDRESS) &&
+                    !compareAddresses(tokenWithBalance.address, TEST_VOT3_ADDRESS),
             ),
             balance => balance.balance.position,
         ),
