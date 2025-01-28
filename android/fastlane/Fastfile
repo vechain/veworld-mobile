@@ -105,6 +105,8 @@ platform :android do
 
     end
     Dir.chdir "../.." do
+      sh("pwd")
+      sh("ls -la")
       sh("cd sourcemap-bundle")
       sh("pwd")
       sh("ls -la")
