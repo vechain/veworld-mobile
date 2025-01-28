@@ -297,7 +297,7 @@ platform :android do
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
       
-      #upload_sourcemaps_sentry(build:version_code)
+      upload_sourcemaps_sentry()
       gradle(task: 'clean')
       gradle(
         task: 'assemble',
