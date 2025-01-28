@@ -120,15 +120,15 @@ jobs:
                   filename: ".env.production"
                   is-executable: false
                   working-directory: "."
-
+            
+                  #export STORE_PASSWORD="$(<store_password.txt)"
+                  #export KEY_PASSWORD="$(<store_password.txt)"
+                  #export KEY_ALIAS="$(<key_alias.txt)"
             - name: Build apk
               id: build
               run: |
                   cd android/fastlane
                   bundle install
-                  export STORE_PASSWORD="$(<store_password.txt)"
-                  export KEY_PASSWORD="$(<store_password.txt)"
-                  export KEY_ALIAS="$(<key_alias.txt)"
                   bundle exec fastlane build_test_ci version_code:99 version_name:"9.9.9"
                   cd app/build/outputs/apk/release
                   OUTPUT_DIR=$(pwd)
