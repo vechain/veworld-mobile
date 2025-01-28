@@ -12,7 +12,7 @@ platform :android do
   desc "Upload source maps to Sentry using token from sentry.properties"
   lane :upload_sourcemaps_sentry do
     # 1. Read `android/sentry.properties` into a Ruby string
-    props = File.read("android/sentry.properties")
+    props = File.read("sentry.properties")
 
     # 2. Parse out the line that starts with `auth.token=`
     auth_token_line = props.each_line.find { |line| line.strip.start_with?("auth.token=") }
