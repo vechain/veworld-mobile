@@ -1,7 +1,6 @@
 /* eslint-disable max-len */
 import { FungibleToken, Network } from "~Model"
 import { defaultMainNetwork } from "../Thor/ThorConstants"
-import { useBlockchainNetwork } from "~Hooks"
 
 export const getDefaultSelectedNetwork = (): Network => {
     return defaultMainNetwork
@@ -46,12 +45,3 @@ export const VOT3: FungibleToken = {
 export const TEST_B3TR_ADDRESS = "0xbf64cf86894Ee0877C4e7d03936e35Ee8D8b864F"
 
 export const TEST_VOT3_ADDRESS = "0xa704c45971995467696ee9544da77dd42bc9706e"
-
-export const useNetworkTokens = () => {
-    const { isMainnet } = useBlockchainNetwork()
-
-    return {
-        VOT3: isMainnet ? VOT3 : { ...VOT3, address: TEST_VOT3_ADDRESS },
-        B3TR: isMainnet ? B3TR : { ...B3TR, address: TEST_B3TR_ADDRESS },
-    }
-}
