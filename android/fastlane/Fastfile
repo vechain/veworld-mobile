@@ -13,6 +13,7 @@ platform :android do
   lane :upload_sourcemaps_sentry do
     |values|
     build = values[:build]
+    version = values[:version]
     Dir.chdir "../.." do
 
     sh("echo 'Uploading sourcemaps to sentry - e2e android'")
@@ -69,6 +70,7 @@ platform :android do
     node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
       --org vechain-foundation \
       --project veworld-mobile \
+      --release 9.9.9 \
       --dist 99 \
       sourcemap-bundle/index.android.bundle \
       sourcemap-bundle/index.android.bundle.map
