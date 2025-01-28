@@ -104,8 +104,7 @@ platform :android do
 
 
     end
-  sh("ls -la")
-    sh("pwd")
+    sh(" cd .. && ls -la && pwd")
     # 1. Read `android/sentry.properties` into a Ruby string
     props = File.read("sentry.properties")
 
@@ -130,8 +129,8 @@ platform :android do
       build: "999",          # optional build number
       dist: "999",           # optional dist usually the same as build
       sourcemap: [
-      "../../sourcemap-bundle/index.android.bundle",
-      "../../sourcemap-bundle/index.android.bundle.map"
+      "../sourcemap-bundle/index.android.bundle",
+      "../sourcemap-bundle/index.android.bundle.map"
       ],
       rewrite: true
     )
