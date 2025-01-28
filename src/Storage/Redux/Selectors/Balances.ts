@@ -1,10 +1,10 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { BigNumber } from "bignumber.js"
 import sortBy from "lodash/sortBy"
-import { B3TR, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS, VET, VOT3, VTHO } from "~Constants"
+import { VET, VTHO } from "~Constants"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { compareAddresses, isVechainToken } from "~Utils/AddressUtils/AddressUtils"
 import { selectSelectedAccount } from "./Account"
 import { selectSelectedNetwork } from "./Network"
 import {
@@ -131,42 +131,20 @@ export const selectTokensWithBalancesByAccount = createSelector(
     },
 )
 
-/**
- * Get account token balances without vechain tokens
- */
 export const selectNonVechainTokensWithBalances = createSelector(
     [selectTokensWithBalances],
     (tokensWithBalance): FungibleTokenWithBalance[] =>
         sortBy(
-            tokensWithBalance.filter(
-                (tokenWithBalance: FungibleTokenWithBalance) =>
-                    !compareAddresses(tokenWithBalance.address, VET.address) &&
-                    !compareAddresses(tokenWithBalance.address, VTHO.address) &&
-                    !compareAddresses(tokenWithBalance.address, B3TR.address) &&
-                    !compareAddresses(tokenWithBalance.address, VOT3.address) &&
-                    !compareAddresses(tokenWithBalance.address, TEST_B3TR_ADDRESS) &&
-                    !compareAddresses(tokenWithBalance.address, TEST_VOT3_ADDRESS),
-            ),
+            tokensWithBalance.filter(token => !isVechainToken(token.address)),
             balance => balance.balance.position,
         ),
 )
 
-/**
- * Get token balances without vechain tokens for a specific account
- */
 export const selectNonVechainTokensBalancesByAccount = createSelector(
     [selectTokensWithBalancesByAccount],
     (tokensWithBalance): FungibleTokenWithBalance[] =>
         sortBy(
-            tokensWithBalance.filter(
-                (tokenWithBalance: FungibleTokenWithBalance) =>
-                    !compareAddresses(tokenWithBalance.address, VET.address) &&
-                    !compareAddresses(tokenWithBalance.address, VTHO.address) &&
-                    !compareAddresses(tokenWithBalance.address, B3TR.address) &&
-                    !compareAddresses(tokenWithBalance.address, VOT3.address) &&
-                    !compareAddresses(tokenWithBalance.address, TEST_B3TR_ADDRESS) &&
-                    !compareAddresses(tokenWithBalance.address, TEST_VOT3_ADDRESS),
-            ),
+            tokensWithBalance.filter(token => !isVechainToken(token.address)),
             balance => balance.balance.position,
         ),
 )

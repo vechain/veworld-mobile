@@ -5,7 +5,7 @@ import { B3TR, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS, VET, VOT3, VTHO } from "~Co
 import { HexUtils, TokenUtils } from "~Utils"
 import { selectSelectedNetwork } from "./Network"
 import { selectSelectedAccount } from "./Account"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { isVechainToken } from "~Utils/AddressUtils/AddressUtils"
 
 const selectTokenState = (state: RootState) => state.tokens
 
@@ -37,18 +37,8 @@ export const selectCustomTokens = createSelector(
     },
 )
 
-export const selectOfficialTokens = createSelector([selectTokensForNetwork, selectNetworkVBDTokens], state =>
-    TokenUtils.mergeTokens(
-        [
-            { ...VET },
-            { ...VTHO },
-            { ...B3TR },
-            { ...VOT3 },
-            { ...B3TR, address: TEST_B3TR_ADDRESS },
-            { ...VOT3, address: TEST_VOT3_ADDRESS },
-        ],
-        state.officialTokens,
-    ),
+export const selectOfficialTokens = createSelector([selectTokensForNetwork], state =>
+    TokenUtils.mergeTokens([{ ...VET }, { ...VTHO }, { ...B3TR }, { ...VOT3 }], state.officialTokens),
 )
 
 export const selectAllTokens = createSelector(
@@ -68,13 +58,5 @@ export const selectSuggestedTokens = createSelector(selectTokensForNetwork, stat
  * Get fungible tokens for the current network but remove default ones
  */
 export const selectNonVechainFungibleTokens = createSelector([selectOfficialTokens], tokens =>
-    tokens.filter(
-        (token: FungibleToken) =>
-            !compareAddresses(token.address, VET.address) &&
-            !compareAddresses(token.address, VTHO.address) &&
-            !compareAddresses(token.address, B3TR.address) &&
-            !compareAddresses(token.address, VOT3.address) &&
-            !compareAddresses(token.address, TEST_B3TR_ADDRESS) &&
-            !compareAddresses(token.address, TEST_VOT3_ADDRESS),
-    ),
+    tokens.filter((token: FungibleToken) => !isVechainToken(token.address)),
 )

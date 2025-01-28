@@ -11,9 +11,14 @@ import {
     updateSuggestedTokens,
     useAppDispatch,
     useAppSelector,
+    selectNetworkVBDTokens,
+    addTokenBalance,
+    addOrUpdateCustomTokens,
+    selectCustomTokens,
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useCallback, useEffect } from "react"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 /**
  * This hook is responsible for keeping the available tokens, balances and exchange rates data up to date.
@@ -33,12 +38,44 @@ export const useTokenBalances = () => {
 
     const thorClient = useThor()
 
+    const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
+
+    const customTokens = useAppSelector(selectCustomTokens)
+
     const updateBalances = useCallback(async () => {
         // Update balances
         if (balances.length > 0) {
             await dispatch(updateAccountBalances(thorClient, selectedAccount.address))
+            // Remove once vbd testnet tokens are in github token registery
+            if (network.type === "testnet") {
+                const vbdTokens = [B3TR, VOT3]
+                vbdTokens.forEach(token => {
+                    const existsInCustom = customTokens.some(t => compareAddresses(t.address, token.address))
+                    const existsInOfficial = officialTokens.some(t => compareAddresses(t.address, token.address))
+
+                    if (!existsInCustom && !existsInOfficial) {
+                        dispatch(
+                            addOrUpdateCustomTokens({
+                                network: network.type,
+                                accountAddress: selectedAccount.address,
+                                newTokens: vbdTokens,
+                            }),
+                        )
+                    }
+                })
+            }
         }
-    }, [balances.length, dispatch, selectedAccount.address, thorClient])
+    }, [
+        B3TR,
+        VOT3,
+        balances.length,
+        customTokens,
+        officialTokens,
+        dispatch,
+        network.type,
+        selectedAccount.address,
+        thorClient,
+    ])
 
     const updateSuggested = useCallback(async () => {
         await dispatch(updateSuggestedTokens(selectedAccount.address, officialTokens, network))
@@ -83,9 +120,28 @@ export const useTokenBalances = () => {
     useEffect(() => {
         if (balances.length === 0 && selectedAccount) {
             dispatch(resetTokenBalances)
+            // Initialize default token balances
             dispatch(updateAccountBalances(thorClient, selectedAccount.address))
+
+            // Initialize B3TR and VOT3 balances
+            const vbdTokens = [B3TR, VOT3]
+            vbdTokens.forEach(token => {
+                dispatch(
+                    addTokenBalance({
+                        network: network.type,
+                        accountAddress: selectedAccount.address,
+                        balance: {
+                            balance: "0",
+                            tokenAddress: token.address,
+                            timeUpdated: new Date().toISOString(),
+                            isCustomToken: false,
+                            isHidden: false,
+                        },
+                    }),
+                )
+            })
         }
-    }, [dispatch, thorClient, network, selectedAccount, balances.length])
+    }, [dispatch, thorClient, network, selectedAccount, balances.length, B3TR, VOT3])
 
     /**
      * keep balances up to date
