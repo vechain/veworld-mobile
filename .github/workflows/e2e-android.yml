@@ -45,14 +45,14 @@ jobs:
                   distribution: "zulu"
                   java-version: "11"
 
-            # Install sentry properties
+            # Decode sentry properties
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_SENTRY_PROPERTIES }}
                   filename: "sentry.properties"
                   is-executable: false
-                  working-directory: "./android"
+                  working-directory: "./android/fastlane"
 
             # Decode key_alias
             - name: Decode KEY_ALIAS
@@ -72,8 +72,8 @@ jobs:
                   is-executable: false
                   working-directory: "./android"
 
-            # Install env.default
-            - name: Sentry properties
+            # Decode Service Account
+            - name: Fastlane Service Account
               uses: mobiledevops/secret-to-file-action@v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_SERVICE_ACCOUNT }}
@@ -81,8 +81,8 @@ jobs:
                   is-executable: false
                   working-directory: "./android"
 
-              # Install sentry properties
-            - name: Sentry properties
+              # Decode env.default
+            - name: Env default
               uses: mobiledevops/secret-to-file-action@v1
               with:
                   base64-encoded-secret: ${{ secrets.ANDROID_FASTLANE_ENV }}
@@ -90,7 +90,7 @@ jobs:
                   is-executable: false
                   working-directory: "./android"
 
-            # Install keystore properties
+            # Decode keystore properties
             - name: Keystore properties
               uses: mobiledevops/secret-to-file-action@v1
               with:
@@ -116,20 +116,10 @@ jobs:
                   is-executable: false
                   working-directory: "."
 
-            - name: datadog-ci decode
-              uses: mobiledevops/secret-to-file-action@v1
-              with:
-                  base64-encoded-secret: ${{ secrets.DATADOG_CI}}
-                  filename: "datadog-ci.json"
-                  is-executable: false
-                  working-directory: "."
-
             - name: Build apk
               id: build
               run: |
                   cd android
-                  echo "sentry.properties:"
-                  cat sentry.properties
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
