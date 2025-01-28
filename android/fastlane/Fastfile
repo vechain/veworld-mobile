@@ -64,7 +64,7 @@ platform :android do
     sh("rm -f sourcemap-bundle/index.android.bundle.packager.map")
     
     #debug current location and contents
-    sh("echo 'ls -la")
+    sh("echo 'ls -la'")
     sh("pwd")
     sh("ls -la ")
 
