@@ -123,7 +123,7 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_test_ci version_code:99 version_name:"9.9.9"
+                  bundle exec fastlane build_test_ci version_code:99 version_name:"9.9.9"
                   cd app/build/outputs/apk/release
                   OUTPUT_DIR=$(pwd)
                   echo "output_dir=$OUTPUT_DIR" >> "$GITHUB_ENV"
