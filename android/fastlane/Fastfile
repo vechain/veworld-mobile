@@ -107,9 +107,10 @@ platform :android do
     Dir.chdir "../.." do
       sh("pwd")
       sh("ls -la")
-      sh("cd sourcemap-bundle")
-      sh("pwd")
-      sh("ls -la")
+      Dir.chdir "sourcemap-bundle" do
+        sh("pwd")
+        sh("ls -la")
+      end
     end
     # 1. Read `android/sentry.properties` into a Ruby string
     props = File.read("sentry.properties")
