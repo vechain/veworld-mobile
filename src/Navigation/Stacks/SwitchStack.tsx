@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { TabStack } from "~Navigation/Tabs"
+import { TabStack, TabStackParamList } from "~Navigation/Tabs"
 import { OnboardingStack } from "./OnboardingStack"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import {
@@ -25,10 +25,11 @@ import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageS
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
 import { TypeDataRequest, TransactionRequest } from "~Model/DApp"
 import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
+import { NavigatorScreenParams } from "@react-navigation/native"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
-    TabStack: undefined
+    TabStack: NavigatorScreenParams<TabStackParamList>
     ResetAppScreen: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined

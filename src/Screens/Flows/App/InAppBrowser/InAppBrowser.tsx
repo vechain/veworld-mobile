@@ -1,14 +1,14 @@
-import { Layout, useInAppBrowser, BrowserBottomBar, URLBar } from "~Components"
-import { StyleSheet, View } from "react-native"
-import React, { MutableRefObject, useEffect } from "react"
-import WebView from "react-native-webview"
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListBrowser, Routes } from "~Navigation"
+import React, { MutableRefObject, useEffect } from "react"
+import { StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
-import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import WebView from "react-native-webview"
+import { BrowserBottomBar, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
-import { useNavigation } from "@react-navigation/native"
+import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
@@ -25,6 +25,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         handleCloseChangeAccountNetworkBottomSheet,
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
+        onShouldStartLoadWithRequest,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -73,6 +74,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                             scalesPageToFit={true}
                             injectedJavaScriptBeforeContentLoaded={injectVechainScript}
                             allowsInlineMediaPlayback={true}
+                            onShouldStartLoadWithRequest={onShouldStartLoadWithRequest}
                         />
                     )}
                     <ChangeAccountNetworkBottomSheet

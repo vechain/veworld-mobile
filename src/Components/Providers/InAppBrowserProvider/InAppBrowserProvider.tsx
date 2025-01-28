@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
 import { NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent } from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
+import { OnShouldStartLoadWithRequest, ShouldStartLoadRequest } from "react-native-webview/lib/WebViewTypes"
 import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
@@ -12,8 +13,8 @@ import {
     CertificateRequest,
     InAppRequest,
     Network,
-    TypeDataRequest,
     TransactionRequest,
+    TypeDataRequest,
 } from "~Model"
 import { Routes } from "~Navigation"
 import {
@@ -59,6 +60,7 @@ type ContextType = {
     handleConfirmChangeAccountNetworkBottomSheet: () => void
     ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods>
     switchAccount: (request: WindowRequest) => void
+    onShouldStartLoadWithRequest?: OnShouldStartLoadWithRequest
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -673,6 +675,58 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         webviewRef.current = undefined
     }, [])
 
+    const onShouldStartLoadWithRequest = useCallback(
+        (request: ShouldStartLoadRequest) => {
+            const url = request.url
+
+            try {
+                const parsedUrl = new URL(url)
+                const baseUrl = "https://www.veworld.com"
+                if (!url.startsWith(baseUrl)) {
+                    return true
+                }
+
+                const pathSegments = parsedUrl.pathname.split("/").filter(Boolean)
+                const ulDestination = pathSegments[0]
+
+                if (ulDestination === "nfts") {
+                    nav.navigate("TabStack", {
+                        screen: "NFTStack",
+                        params: {
+                            screen: Routes.NFTS,
+                        },
+                    })
+
+                    return false
+                } else if (ulDestination === "discover") {
+                    const dappUrlEncoded = pathSegments.includes("redirect") ? pathSegments[4] : pathSegments[3]
+
+                    if (!dappUrlEncoded) {
+                        return true
+                    }
+
+                    const decodedAappUrl = decodeURIComponent(dappUrlEncoded)
+                    const dappUrl = new URL(decodedAappUrl).href
+
+                    webviewRef.current?.injectJavaScript(
+                        `
+                                (() => { 
+                                    window.location.href = "${dappUrl}"; 
+                                })(); 
+                                true;
+                                `,
+                    )
+                    return false
+                } else {
+                    return true
+                }
+            } catch (error) {
+                return true
+            }
+        },
+        [nav],
+    )
+
     const contextValue = React.useMemo(() => {
         return {
             webviewRef,
@@ -699,6 +753,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             handleConfirmChangeAccountNetworkBottomSheet,
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
+            onShouldStartLoadWithRequest,
         }
     }, [
         onMessage,
@@ -723,6 +778,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
         switchAccount,
+        onShouldStartLoadWithRequest,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
