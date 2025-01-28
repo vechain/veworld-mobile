@@ -128,6 +128,8 @@ jobs:
               id: build
               run: |
                   cd android
+                  echo "sentry.properties:"
+                  cat sentry.properties
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"

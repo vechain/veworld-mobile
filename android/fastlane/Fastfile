@@ -11,6 +11,8 @@ platform :android do
 
   desc "Upload source maps to Sentry using token from sentry.properties"
   lane :upload_sourcemaps_sentry do
+    sh("ls -la")
+    sh("pwd")
     # 1. Read `android/sentry.properties` into a Ruby string
     props = File.read("sentry.properties")
 
