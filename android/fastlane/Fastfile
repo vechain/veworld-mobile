@@ -62,25 +62,20 @@ platform :android do
     # 8. Remove the temporary packager map
     sh("rm -f sourcemap-bundle/index.android.bundle.packager.map")
 
-    sh("export SENTRY_PROPERTIES=./android/sentry.properties")
-    sh("echo 'upload via sourcempas upload'")
-    sh("echo 'SENTRY_PROPERTIES: $SENTRY_PROPERTIES'")
 
     # 9. Finally, upload to Sentry. Reference the final HBC + final map in `sourcemap-bundle`
-    sh(%{
-      node_modules/@sentry/cli/bin/sentry-cli \
-        sourcemaps upload \
-        --debug-id-reference \
-        --strip-prefix ../../ \
-        --org 'vechain-foundation' \
-        --project 'veworld-mobile' \
-        --dist #{build} \
-        sourcemap-bundle/index.android.bundle \
-        sourcemap-bundle/index.android.bundle.map
-    })
+    sh <<-SHELL
+    export SENTRY_PROPERTIES=./android/sentry.properties
+    node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
+      --org vechain-foundation \
+      --project veworld-mobile \
+      --dist 99 \
+      sourcemap-bundle/index.android.bundle \
+      sourcemap-bundle/index.android.bundle.map
+    SHELL
     sh("echo 'upload via release files'")
 
-    ("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{build} upload-sourcemaps --strip-prefix ../../ sourcemap-bundle/index.android.bundle sourcemap-bundle/index.android.bundle.map  --debug-id-reference")
+    #("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{build} upload-sourcemaps --strip-prefix ../../ sourcemap-bundle/index.android.bundle sourcemap-bundle/index.android.bundle.map  --debug-id-reference")
     end
   end
 
