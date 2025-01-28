@@ -9,9 +9,116 @@ platform :android do
     )
   end
 
-  desc "Upload source maps to Sentry using token from sentry.properties"
+  #desc "Upload source maps to Sentry using token from sentry.properties"
+  #lane :upload_sourcemaps_sentry do
+  #  sh("ls -la")
+  #  sh("pwd")
+  #  # 1. Read `android/sentry.properties` into a Ruby string
+  #  props = File.read("sentry.properties")
+#
+  #  # 2. Parse out the line that starts with `auth.token=`
+  #  auth_token_line = props.each_line.find { |line| line.strip.start_with?("auth.token=") }
+#
+  #  # 3. Extract the token value
+  #  #    e.g. from "auth.token=YOUR_TOKEN" => "YOUR_TOKEN"
+  #  auth_token = auth_token_line.split("auth.token=").last.strip if auth_token_line
+#
+  #  if auth_token.nil? || auth_token.empty?
+  #    UI.user_error!("No auth.token found in android/sentry.properties!")
+  #  end
+#
+  #  # 4. Now call `sentry_upload_sourcemap` with that token
+  #  sentry_upload_sourcemap(
+  #    auth_token: auth_token,
+  #    org_slug: "vechain-foundation",
+  #    project_slug: "veworld-mobile",
+  #    version: "9.9.9",        # e.g. version_code
+  #    app_identifier: "org.vechain.veworld.app",
+  #    build: "999",          # optional build number
+  #    dist: "999",           # optional dist usually the same as build
+  #    sourcemap: [
+  #    "sourcemap-bundle/index.android.bundle",
+  #    "sourcemap-bundle/index.android.bundle.map"
+  #    ],
+  #    rewrite: true
+  #  )
+  #end
+  desc "Upload sourcemaps to sentry"
   lane :upload_sourcemaps_sentry do
-    sh("ls -la")
+    |values|
+    build = values[:build]
+    version = values[:version]
+    Dir.chdir "../.." do
+
+    sh("echo 'Uploading sourcemaps to sentry - e2e android'")
+
+    # 1. Generate the plain JS bundle & source map in ./sourcemap-bundle/
+    sh("mkdir -p sourcemap-bundle")
+    sh(%{
+      npx react-native bundle \
+        --platform android \
+        --entry-file index.js \
+        --bundle-output sourcemap-bundle/index.android.bundle \
+        --sourcemap-output sourcemap-bundle/index.android.bundle.map \
+        --dev false
+    })
+
+    # 2. Compile Hermes bytecode (note the paths!)
+    #    You must pass the input JS bundle from sourcemap-bundle/ and output .hbc there too.
+    sh(%{
+     node_modules/react-native/sdks/hermesc/linux64-bin/hermesc -O -emit-binary -output-source-map -out=sourcemap-bundle/index.android.bundle.hbc sourcemap-bundle/index.android.bundle
+    })
+
+    # 3. Remove the original JS bundle (we only want the .hbc from now on)
+    sh("rm -f sourcemap-bundle/index.android.bundle")
+
+    # 4. Rename the .hbc to be our final "index.android.bundle"
+    sh("mv sourcemap-bundle/index.android.bundle.hbc sourcemap-bundle/index.android.bundle")
+
+    # 5. Rename the packager map -> "index.android.bundle.packager.map"
+    sh("mv sourcemap-bundle/index.android.bundle.map sourcemap-bundle/index.android.bundle.packager.map")
+
+    # 6. Compose the Metro source map with the Hermes source map
+    #    hermesc produces a .hbc.map named `index.android.bundle.hbc.map`, so we need that path:
+    sh(%{
+      node node_modules/react-native/scripts/compose-source-maps.js \
+        sourcemap-bundle/index.android.bundle.packager.map \
+        sourcemap-bundle/index.android.bundle.hbc.map \
+        -o sourcemap-bundle/index.android.bundle.map
+    })
+
+    # 7. (Optional) The Sentry "copy-debugid" script. Make sure to pass the correct paths:
+    sh(%{
+      node node_modules/@sentry/react-native/scripts/copy-debugid.js \
+        sourcemap-bundle/index.android.bundle.packager.map \
+        sourcemap-bundle/index.android.bundle.map
+    })
+
+    # 8. Remove the temporary packager map
+    sh("rm -f sourcemap-bundle/index.android.bundle.packager.map")
+    
+    #debug current location and contents
+    sh("echo 'ls -la'")
+    sh("pwd")
+    sh("ls -la ")
+
+    # 9. Finally, upload to Sentry. Reference the final HBC + final map in `sourcemap-bundle`
+    sh <<-SHELL
+    export SENTRY_PROPERTIES=./android/sentry.properties
+    node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
+      --org vechain-foundation \
+      --project veworld-mobile \
+      --release 9.9.9 \
+      --dist 99 \
+      --debug-id-reference \
+      sourcemap-bundle/index.android.bundle \
+      sourcemap-bundle/index.android.bundle.map
+    SHELL
+    sh("echo 'upload via release files'")
+
+    #("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{build} upload-sourcemaps --strip-prefix ../../ sourcemap-bundle/index.android.bundle sourcemap-bundle/index.android.bundle.map  --debug-id-reference")
+    end
+  sh("ls -la")
     sh("pwd")
     # 1. Read `android/sentry.properties` into a Ruby string
     props = File.read("sentry.properties")
@@ -36,86 +143,13 @@ platform :android do
       app_identifier: "org.vechain.veworld.app",
       build: "999",          # optional build number
       dist: "999",           # optional dist usually the same as build
-      sourcemap: ["index.android.bundle", "index.android.bundle.map"],
+      sourcemap: [
+      "sourcemap-bundle/index.android.bundle",
+      "sourcemap-bundle/index.android.bundle.map"
+      ],
       rewrite: true
     )
   end
-  #desc "Upload sourcemaps to sentry"
-  #lane :upload_sourcemaps_sentry do
-  #  |values|
-  #  build = values[:build]
-  #  version = values[:version]
-  #  Dir.chdir "../.." do
-#
-  #  sh("echo 'Uploading sourcemaps to sentry - e2e android'")
-#
-  #  # 1. Generate the plain JS bundle & source map in ./sourcemap-bundle/
-  #  sh("mkdir -p sourcemap-bundle")
-  #  sh(%{
-  #    npx react-native bundle \
-  #      --platform android \
-  #      --entry-file index.js \
-  #      --bundle-output sourcemap-bundle/index.android.bundle \
-  #      --sourcemap-output sourcemap-bundle/index.android.bundle.map \
-  #      --dev false
-  #  })
-#
-  #  # 2. Compile Hermes bytecode (note the paths!)
-  #  #    You must pass the input JS bundle from sourcemap-bundle/ and output .hbc there too.
-  #  sh(%{
-  #   node_modules/react-native/sdks/hermesc/linux64-bin/hermesc -O -emit-binary -output-source-map -out=sourcemap-bundle/index.android.bundle.hbc sourcemap-bundle/index.android.bundle
-  #  })
-#
-  #  # 3. Remove the original JS bundle (we only want the .hbc from now on)
-  #  sh("rm -f sourcemap-bundle/index.android.bundle")
-#
-  #  # 4. Rename the .hbc to be our final "index.android.bundle"
-  #  sh("mv sourcemap-bundle/index.android.bundle.hbc sourcemap-bundle/index.android.bundle")
-#
-  #  # 5. Rename the packager map -> "index.android.bundle.packager.map"
-  #  sh("mv sourcemap-bundle/index.android.bundle.map sourcemap-bundle/index.android.bundle.packager.map")
-#
-  #  # 6. Compose the Metro source map with the Hermes source map
-  #  #    hermesc produces a .hbc.map named `index.android.bundle.hbc.map`, so we need that path:
-  #  sh(%{
-  #    node node_modules/react-native/scripts/compose-source-maps.js \
-  #      sourcemap-bundle/index.android.bundle.packager.map \
-  #      sourcemap-bundle/index.android.bundle.hbc.map \
-  #      -o sourcemap-bundle/index.android.bundle.map
-  #  })
-#
-  #  # 7. (Optional) The Sentry "copy-debugid" script. Make sure to pass the correct paths:
-  #  sh(%{
-  #    node node_modules/@sentry/react-native/scripts/copy-debugid.js \
-  #      sourcemap-bundle/index.android.bundle.packager.map \
-  #      sourcemap-bundle/index.android.bundle.map
-  #  })
-#
-  #  # 8. Remove the temporary packager map
-  #  sh("rm -f sourcemap-bundle/index.android.bundle.packager.map")
-  #  
-  #  #debug current location and contents
-  #  sh("echo 'ls -la'")
-  #  sh("pwd")
-  #  sh("ls -la ")
-#
-  #  # 9. Finally, upload to Sentry. Reference the final HBC + final map in `sourcemap-bundle`
-  #  sh <<-SHELL
-  #  export SENTRY_PROPERTIES=./android/sentry.properties
-  #  node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
-  #    --org vechain-foundation \
-  #    --project veworld-mobile \
-  #    --release 9.9.9 \
-  #    --dist 99 \
-  #    --debug-id-reference \
-  #    sourcemap-bundle/index.android.bundle \
-  #    sourcemap-bundle/index.android.bundle.map
-  #  SHELL
-  #  sh("echo 'upload via release files'")
-#
-  #  #("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{build} upload-sourcemaps --strip-prefix ../../ sourcemap-bundle/index.android.bundle sourcemap-bundle/index.android.bundle.map  --debug-id-reference")
-  #  end
-  #end
 
 
   # @param {object} options - The options for the build process.
