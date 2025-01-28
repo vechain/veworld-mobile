@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView, BaseBottomSheetTextInput } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -18,6 +18,7 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
         const { LL } = useI18nContext()
         const [creationMode, setCreationMode] = useState(false)
         const [alias, setAlias] = useState<string>("")
+        const shouldInvokeOnSubmit = useRef(false)
 
         const contact: Contact = useMemo(() => {
             return createContact(alias, address, ContactType.KNOWN)
@@ -45,6 +46,7 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
             if (!isFormValid) return
             dispatch(insertContact(contact))
             Keyboard.dismiss()
+
             // this is a workaround to wait for keyboard to be dismissed before closing the bottom sheet, otherwise it won't close
             setTimeout(() => {
                 onClose()
@@ -54,12 +56,19 @@ export const CreateContactBottomSheet = React.forwardRef<BottomSheetModalMethods
         }, [isFormValid, dispatch, contact, onClose, onSubmit, backToChooseMode])
 
         const handleProceedAnywayButton = useCallback(() => {
+            shouldInvokeOnSubmit.current = true
             onClose()
-            onSubmit(address)
-        }, [address, onClose, onSubmit])
+        }, [onClose])
+
+        const onDismiss = useCallback(() => {
+            if (shouldInvokeOnSubmit.current) {
+                onSubmit(address)
+                shouldInvokeOnSubmit.current = false
+            }
+        }, [address, onSubmit])
 
         return (
-            <BaseBottomSheet ref={ref} dynamicHeight>
+            <BaseBottomSheet ref={ref} dynamicHeight onDismiss={onDismiss}>
                 {creationMode ? (
                     <BaseView>
                         <BaseView alignItems="stretch" w={100}>
