@@ -102,21 +102,7 @@ platform :android do
     sh("pwd")
     sh("ls -la ")
 
-    # 9. Finally, upload to Sentry. Reference the final HBC + final map in `sourcemap-bundle`
-    sh <<-SHELL
-    export SENTRY_PROPERTIES=./android/sentry.properties
-    node_modules/@sentry/cli/bin/sentry-cli sourcemaps upload \
-      --org vechain-foundation \
-      --project veworld-mobile \
-      --release 9.9.9 \
-      --dist 99 \
-      --debug-id-reference \
-      sourcemap-bundle/index.android.bundle \
-      sourcemap-bundle/index.android.bundle.map
-    SHELL
-    sh("echo 'upload via release files'")
 
-    #("node_modules/@sentry/cli/bin/sentry-cli releases files #{ENV["APP_IDENTIFIER"]}@#{build} upload-sourcemaps --strip-prefix ../../ sourcemap-bundle/index.android.bundle sourcemap-bundle/index.android.bundle.map  --debug-id-reference")
     end
   sh("ls -la")
     sh("pwd")
