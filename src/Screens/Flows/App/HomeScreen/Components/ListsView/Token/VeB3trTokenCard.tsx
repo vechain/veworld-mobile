@@ -4,7 +4,7 @@ import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Comp
 import Animated from "react-native-reanimated"
 import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { BalanceUtils } from "~Utils"
-import { B3TR, COLORS, VOT3 } from "~Constants"
+import { COLORS, useNetworkTokens } from "~Constants"
 import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
@@ -18,6 +18,8 @@ type Props = {
 export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+
+    const { B3TR, VOT3 } = useNetworkTokens()
 
     const vot3Token = useTokenWithCompleteInfo(VOT3)
     const b3trToken = useTokenWithCompleteInfo(B3TR)
