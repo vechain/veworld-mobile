@@ -28,21 +28,25 @@ jobs:
 
             - name: Checkout repository
               uses: actions/checkout@v3
+            
+            - uses: ruby/setup-ruby@v1
+              with:
+                ruby-version: '2.7.5'    
+                bundler-cache: true
+            
+            - name: Unfreeze Bundler
+              run: |
+                bundle config set frozen false
+                bundle config set deployment false
 
+            - name: Install dependencies
+              run: bundle install
+            
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
                   node-version-file: .nvmrc
                   cache: "yarn"
-            
-            - run: bundle config set frozen 'false'
-            - uses: ruby/setup-ruby@v1
-              with:
-                ruby-version: '2.7.5'    
-                bundler-cache: true
-
-            - name: Install dependencies
-              run: bundle install
 
             - name: Install & Patch packages
               run: yarn install
