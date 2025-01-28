@@ -9,6 +9,11 @@ import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 const selectTokenState = (state: RootState) => state.tokens
 
+export const selectNetworkVBDTokens = createSelector([selectSelectedNetwork], network => ({
+    VOT3: network.type === "mainnet" ? VOT3 : { ...VOT3, address: TEST_VOT3_ADDRESS },
+    B3TR: network.type === "mainnet" ? B3TR : { ...B3TR, address: TEST_B3TR_ADDRESS },
+}))
+
 export const selectB3trAddress = createSelector([selectSelectedNetwork], network =>
     network.type === "mainnet" ? B3TR.address : TEST_B3TR_ADDRESS,
 )
@@ -32,8 +37,18 @@ export const selectCustomTokens = createSelector(
     },
 )
 
-export const selectOfficialTokens = createSelector(selectTokensForNetwork, state =>
-    TokenUtils.mergeTokens([{ ...VET }, { ...B3TR }, { ...VTHO }, { ...VOT3 }], state.officialTokens),
+export const selectOfficialTokens = createSelector([selectTokensForNetwork, selectNetworkVBDTokens], state =>
+    TokenUtils.mergeTokens(
+        [
+            { ...VET },
+            { ...VTHO },
+            { ...B3TR },
+            { ...VOT3 },
+            { ...B3TR, address: TEST_B3TR_ADDRESS },
+            { ...VOT3, address: TEST_VOT3_ADDRESS },
+        ],
+        state.officialTokens,
+    ),
 )
 
 export const selectAllTokens = createSelector(
@@ -52,14 +67,14 @@ export const selectSuggestedTokens = createSelector(selectTokensForNetwork, stat
 /**
  * Get fungible tokens for the current network but remove default ones
  */
-export const selectNonVechainFungibleTokens = createSelector(
-    [selectOfficialTokens, selectB3trAddress, selectVot3Address],
-    (tokens, b3trAddress, vot3Address) =>
-        tokens.filter(
-            (token: FungibleToken) =>
-                !compareAddresses(token.address, VET.address) &&
-                !compareAddresses(token.address, VTHO.address) &&
-                !compareAddresses(token.address, b3trAddress) &&
-                !compareAddresses(token.address, vot3Address),
-        ),
+export const selectNonVechainFungibleTokens = createSelector([selectOfficialTokens], tokens =>
+    tokens.filter(
+        (token: FungibleToken) =>
+            !compareAddresses(token.address, VET.address) &&
+            !compareAddresses(token.address, VTHO.address) &&
+            !compareAddresses(token.address, B3TR.address) &&
+            !compareAddresses(token.address, VOT3.address) &&
+            !compareAddresses(token.address, TEST_B3TR_ADDRESS) &&
+            !compareAddresses(token.address, TEST_VOT3_ADDRESS),
+    ),
 )
