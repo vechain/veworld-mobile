@@ -65,6 +65,7 @@ export const useHandleWalletCreation = () => {
                     onError: onWalletCreationError,
                     derivationPath,
                 })
+
                 await migrateOnboarding(SecurityLevelType.BIOMETRIC)
                 dispatch(setIsAppLoading(false))
             } else {
@@ -100,10 +101,22 @@ export const useHandleWalletCreation = () => {
                 onError: onWalletCreationError,
                 derivationPath,
             })
+
             await migrateOnboarding(SecurityLevelType.SECRET, pin)
             dispatch(setIsAppLoading(false))
         },
         [createLocalWallet, dispatch, migrateOnboarding, onClose, onWalletCreationError],
+    )
+
+    const migrateFromOnboarding = useCallback(
+        async (pin?: string) => {
+            if (pin) {
+                await migrateOnboarding(SecurityLevelType.SECRET, pin)
+            } else {
+                await migrateOnboarding(SecurityLevelType.BIOMETRIC)
+            }
+        },
+        [migrateOnboarding],
     )
 
     const onCreateLedgerWallet = useCallback(
@@ -230,6 +243,7 @@ export const useHandleWalletCreation = () => {
 
     return {
         onCreateWallet,
+        migrateFromOnboarding,
         isOpen,
         isError,
         onSuccess,

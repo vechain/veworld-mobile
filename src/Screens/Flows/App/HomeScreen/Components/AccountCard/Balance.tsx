@@ -5,7 +5,7 @@ import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { WalletAccount } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import AccountFiatBalance from "./AccountFiatBalance"
+import { AccountFiatBalance } from "~Components/Reusable"
 
 type Props = {
     isVisible: boolean

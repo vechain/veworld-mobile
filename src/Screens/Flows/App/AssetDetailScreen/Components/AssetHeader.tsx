@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native"
 import React from "react"
-import { BaseCard, BaseImage, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseImage, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 
 type Props = {
@@ -12,11 +12,9 @@ type Props = {
 export const AssetHeader = ({ name, symbol, icon }: Props) => {
     return (
         <BaseView flexDirection="row">
-            <BaseCard
-                style={[baseStyles.card, { backgroundColor: COLORS.WHITE }]}
-                containerStyle={baseStyles.imageShadow}>
+            <BaseView style={[baseStyles.card, { backgroundColor: COLORS.WHITE }]}>
                 <BaseImage uri={icon} style={baseStyles.icon} />
-            </BaseCard>
+            </BaseView>
             <BaseSpacer width={16} />
             <BaseView>
                 <BaseText typographyFont="title">{name}</BaseText>

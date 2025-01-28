@@ -11,6 +11,9 @@ const initialState: FeatureFlags = {
     pushNotificationFeature: {
         enabled: false,
     },
+    subdomainClaimFeature: {
+        enabled: true,
+    },
 }
 
 const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)

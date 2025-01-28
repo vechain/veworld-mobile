@@ -2,7 +2,6 @@ import React, { MutableRefObject, ReactNode, useCallback } from "react"
 import { BaseView } from "~Components/Base"
 import SwipeableItem, { OpenDirection, SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { DeleteUnderlay } from "../DeleteUnderlay"
-import { TouchableOpacity } from "react-native-gesture-handler"
 import { Pressable, StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
@@ -94,8 +93,6 @@ export const SwipeableRow = <T,>({
         }
     }, [isOpen, itemKey, swipeableItemRefs])
 
-    const PressableComponent = isDragMode ? Pressable : TouchableOpacity
-
     return (
         <BaseView flexDirection="row" mx={xMargins} my={yMargins} testID={testID}>
             <SwipeableItem
@@ -115,7 +112,7 @@ export const SwipeableRow = <T,>({
                 snapPointsLeft={snapPointsLeft || [58]}
                 onChange={handleSwipe}>
                 <BaseView style={styles.touchableContainer}>
-                    <PressableComponent
+                    <Pressable
                         disabled={isDragMode}
                         onPress={() => onPress?.(item)}
                         onPressIn={() => {
@@ -123,7 +120,7 @@ export const SwipeableRow = <T,>({
                         }}
                         onLongPress={() => isLogPressEnabled && handleLongPress()}>
                         <BaseView>{children}</BaseView>
-                    </PressableComponent>
+                    </Pressable>
                 </BaseView>
             </SwipeableItem>
         </BaseView>

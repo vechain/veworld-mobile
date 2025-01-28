@@ -27,6 +27,7 @@ export const RemoveAccountWarningBottomSheet = React.forwardRef<BottomSheetModal
                     <BaseView>
                         <BaseText typographyFont="subTitleBold">{LL.BTN_REMOVE_ACCOUNT()}</BaseText>
                         <BaseSpacer height={16} />
+
                         {accountToRemove && (
                             <AccountDetailBox
                                 isBalanceVisible={isBalanceVisible}
@@ -36,6 +37,7 @@ export const RemoveAccountWarningBottomSheet = React.forwardRef<BottomSheetModal
                                 isEditable={false}
                             />
                         )}
+
                         <BaseSpacer height={16} />
                         <BaseText typographyFont="subSubTitleLight">{LL.BD_ACCOUNT_REMOVAL()}</BaseText>
 

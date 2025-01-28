@@ -116,6 +116,7 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
             return (
                 <BaseView mb={8}>
                     <SwipeableRow
+                        testID={item.symbol}
                         xMargins={0}
                         yMargins={0}
                         item={item}

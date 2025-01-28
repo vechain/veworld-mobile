@@ -9,6 +9,7 @@ import { DEVICE_TYPE } from "~Model/Wallet"
  * @field `index` - `(optional)` Required for `LOCAL_MNEMONIC` wallets. The index of the wallet
  * @field `path` - `(optional)` Required for `LEDGER` or `TREZOR` wallets. The path of the wallet
  * @field `visible` - Whether the account will be shown on the screens
+ * @field `hasAttemptedClaim` - `(optional)` Whether the account went throught the claim username flow at least once
  */
 
 export interface Account {
@@ -22,6 +23,7 @@ export interface WalletAccount extends Account {
     path?: string
     visible: boolean
     vnsName?: string
+    hasAttemptedClaim?: boolean
 }
 
 export interface WatchedAccount extends WalletAccount {

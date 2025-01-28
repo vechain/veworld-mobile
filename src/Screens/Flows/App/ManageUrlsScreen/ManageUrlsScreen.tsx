@@ -17,7 +17,10 @@ export const ManageUrlsScreen = () => {
         <Layout
             title={LL.SEND_DELEGATION_MANAGE_URL()}
             headerRightElement={
-                <PlusIconHeaderButton action={openSelectDelegationUrlBottomSheet} testID="add-delegation-url" />
+                <PlusIconHeaderButton
+                    action={openSelectDelegationUrlBottomSheet}
+                    testID="ManageUrls_addUrlButton-wrapper"
+                />
             }
             body={
                 <BaseSafeArea grow={1}>

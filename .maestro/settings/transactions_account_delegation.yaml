@@ -1,37 +1,27 @@
 #transactions_account_delegation.yaml
 appId: org.vechain.veworld.app
 onFlowStart:
-  - runFlow: ../setup_reset/setupApp.yaml
+    - runFlow: ../setup_reset/setupApp.yaml
 onFlowComplete:
-  - runFlow: ../setup_reset/resetApp.yaml
+    - runFlow: ../setup_reset/resetApp.yaml
 ---
 - tapOn:
-    id: "settings-tab"
+      id: "settings-tab"
 ## Use the repeat button to avoid that the back button on the header is
 ## temporary hidden by a notification snackbar and cause the flaw to fail
 - extendedWaitUntil:
-    visible:
-        id: "BackButtonHeader-BaseIcon-backButton-wrapper"
-    timeout: 10000
+      visible:
+          id: "BackButtonHeader-BaseIcon-backButton"
+      timeout: 10000
 - tapOn:
-    id: "BackButtonHeader-BaseIcon-backButton-wrapper"
+      id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-    id: "Transactions"
+      id: "Transactions"
 - tapOn:
-    id: "button-ACCOUNT"
-- runFlow:
-    when:
-      platform: Android
-    commands:
-      - tapOn:
-          text: "Account 2"
-- runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn:
-          id: "selectAccount"
-          index: 0
-- assertVisible: 
-    id: "Selected_Delegation_Account"
-    enabled: false
+      id: "button-ACCOUNT"
+- tapOn:
+      id: "selectAccount"
+      index: 0
+- assertVisible:
+      id: "Selected_Delegation_Account"
+      enabled: false

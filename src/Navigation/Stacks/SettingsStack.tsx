@@ -7,20 +7,22 @@ import {
     AddContactScreen,
     AddCustomNodeScreen,
     ChangeNetworkScreen,
-    ChooseMnemonicBackupPassword,
     ConnectedAppsScreen,
     ContactsScreen,
     GeneralScreen,
     ManageCustomNodesScreen,
     ManageUrlsScreen,
-    MnemonicBackupScreen,
     NotificationScreen,
     PrivacyScreen,
     ResetAppScreen,
     SettingsScreen,
     SettingsTransactionsScreen,
-    WalletDetailScreen,
     WalletManagementScreen,
+    WalletDetailScreen,
+    MnemonicBackupScreen,
+    ChooseMnemonicBackupPassword,
+    ClaimUsername,
+    UsernameClaimed,
 } from "~Screens"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
 import { SettingsBrowserView } from "~Screens/Flows/App/SettingsScreen/Components/SettingsBrowserView"
@@ -47,6 +49,10 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_GET_SUPPORT]: { url: string }
     [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
     [Routes.SETTINGS_NOTIFICATIONS]: undefined
+    [Routes.CLAIM_USERNAME]: undefined
+    [Routes.USERNAME_CLAIMED]: {
+        username: string
+    }
 }
 
 const Settings = createNativeStackNavigator<RootStackParamListSettings>()
@@ -161,6 +167,13 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={Routes.SETTINGS_NOTIFICATIONS}
                 component={NotificationScreen}
+                options={{ headerShown: false }}
+            />
+
+            <Settings.Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
+            <Settings.Screen
+                name={Routes.USERNAME_CLAIMED}
+                component={UsernameClaimed}
                 options={{ headerShown: false }}
             />
         </Settings.Navigator>

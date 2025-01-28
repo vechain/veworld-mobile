@@ -13,7 +13,7 @@ import {
     useNotifications,
 } from "~Components"
 import { ColorThemeType, isSmallScreen } from "~Constants"
-import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
+import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles, useVnsUnclaimed } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -39,12 +39,24 @@ export const SettingsScreen = () => {
 
     const { featureEnabled: notificationFeatureEnabled } = useNotifications()
 
+    const { unclaimedAddresses } = useVnsUnclaimed()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const flatSettingListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
+
+    const shouldShowBadge = useCallback(
+        (item: SettingsRowItem) => {
+            if (item.screenName === Routes.WALLET_MANAGEMENT) {
+                return Boolean(unclaimedAddresses.length > 0)
+            }
+
+            return false
+        },
+        [unclaimedAddresses],
+    )
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
@@ -74,7 +86,13 @@ export const SettingsScreen = () => {
             switch (item.element) {
                 case "settingsRow":
                     return (
-                        <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
+                        <SettingsRow
+                            title={item.title}
+                            screenName={item.screenName}
+                            icon={item.icon}
+                            url={item.url}
+                            showBadge={shouldShowBadge(item)}
+                        />
                     )
 
                 case "divider":
@@ -87,7 +105,7 @@ export const SettingsScreen = () => {
                     return null
             }
         },
-        [isShowBackupModal, renderBackupWarning],
+        [isShowBackupModal, renderBackupWarning, shouldShowBadge],
     )
 
     return (

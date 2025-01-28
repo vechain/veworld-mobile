@@ -21,7 +21,8 @@ export const useAccountActivities = () => {
     const network = useAppSelector(selectSelectedNetwork)
 
     const page = useRef(0)
-    const currentNetwork = useRef(network)
+    const prevNetwork = useRef(network)
+    const prevSelectedAccountAddress = useRef(selectedAccount.address)
 
     const [isFetching, setIsFetching] = useState(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
@@ -72,12 +73,14 @@ export const useAccountActivities = () => {
             info(ERROR_EVENTS.ACTIVITIES, "Fetching activities on page", page)
             setIsFetching(true)
             let shouldRefresh = refresh
-            const hasNetworkChanged = currentNetwork.current !== network
+            const hasNetworkChanged = prevNetwork.current !== network
+            const hasAccountChanged = prevSelectedAccountAddress.current !== selectedAccount.address
 
-            if (hasNetworkChanged) {
+            if (hasNetworkChanged || hasAccountChanged) {
                 resetPageNumber()
                 shouldRefresh = true
-                currentNetwork.current = network
+                prevNetwork.current = network
+                prevSelectedAccountAddress.current = selectedAccount.address
                 updateActivitiesState([], true)
             }
 
