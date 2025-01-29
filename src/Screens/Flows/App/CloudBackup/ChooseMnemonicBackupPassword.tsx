@@ -205,7 +205,6 @@ export const ChooseMnemonicBackupPassword = () => {
                                 name={secureText1 ? "icon-eye-off" : "icon-eye"}
                                 size={16}
                                 color={COLORS.GREY_500}
-                                style={styles.toggleIcon}
                             />
                         }
                         value={password1}
@@ -233,7 +232,6 @@ export const ChooseMnemonicBackupPassword = () => {
                                     name={secureText2 ? "icon-eye-off" : "icon-eye"}
                                     size={16}
                                     color={COLORS.GREY_500}
-                                    style={styles.toggleIcon}
                                 />
                             }
                             value={password2}
