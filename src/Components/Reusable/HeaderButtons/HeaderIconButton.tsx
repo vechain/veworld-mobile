@@ -27,7 +27,7 @@ export const HeaderIconButton = ({ children, testID, action }: Props) => {
 
 const styles = StyleSheet.create({
     container: {
-        width: 32,
+        minWidth: 32,
         borderWidth: 1,
         borderRadius: 6,
         alignContent: "space-between",
