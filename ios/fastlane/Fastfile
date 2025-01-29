@@ -45,9 +45,21 @@ platform :ios do
 
   desc "Generate new certificates"
   lane :generate_new_certificates do
+    # Generate App certs
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
       app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
+      force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
+      readonly: false, # If true, will only print out the commands it would run, without actually running them.
+      git_branch: "main", # The branch to commit the code signing files to.
+      skip_docs: true, # If true, will skip the creation of a README.md file.
+      verbose: true # If true, will print out extra information and debugging info.
+    )
+
+    # Generate Onesignal extension certs
+    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
+      type: "appstore", # The type of code signing identity to generate.
+      app_identifier: ENV["EXTENSION_IDENTIFIER"], # The app identifier of your app.
       force_for_new_devices: true, # If true, will revoke and recreate all provisioning profiles if there are new devices added to the account.
       readonly: false, # If true, will only print out the commands it would run, without actually running them.
       git_branch: "main", # The branch to commit the code signing files to.
@@ -58,9 +70,10 @@ platform :ios do
 
   desc "Get certificates"
   lane :fetch_certificates_from_gh do # Get the certificates from GitHub.
+    # Get Certificates for the App form GitHub
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
+      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
       git_branch: "main", # The branch to commit the code signing files to.
       verbose: true # If true, will print out extra information and debugging info.
@@ -70,9 +83,10 @@ platform :ios do
   desc "Get certificates"
   lane :fetch_certificates_from_gh_for_ci do # Get the certificates from GitHub.
     setup_ci
+    # Get Certificates for App from GitHub
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
+      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
       git_branch: "main", # The branch to commit the code signing files to.
       git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"], # The GitHub token for authentication.
@@ -411,7 +425,7 @@ platform :ios do
         version_number: version,
       )
 
-      fetch_certificates_from_gh
+      fetch_certificates_from_gh_for_ci
       
       begin
       
