@@ -425,7 +425,7 @@ platform :ios do
         version_number: version,
       )
 
-      fetch_certificates_from_gh
+      fetch_certificates_from_gh_for_ci
       
       begin
       
