@@ -20,6 +20,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { useFeatureFlags } from "../FeatureFlagsProvider"
+import { error } from "~Utils"
 
 type ContextType = {
     featureEnabled: boolean
@@ -59,7 +60,13 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const initializeIneSignal = useCallback(() => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
-        OneSignal.initialize(appId as string)
+
+        try {
+            OneSignal.initialize(appId as string)
+        } catch (err) {
+            error("ONE_SIGNAL", err)
+            throw err
+        }
     }, [])
 
     const getOptInStatus = useCallback(async () => {
@@ -67,7 +74,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
         try {
             _optInStatus = await OneSignal.User.pushSubscription.getOptedInAsync()
-        } catch (error) {
+        } catch {
             _optInStatus = false
         }
 
@@ -79,7 +86,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
         try {
             _permissionEnabled = await OneSignal.Notifications.getPermissionAsync()
-        } catch (error) {
+        } catch {
             _permissionEnabled = false
         }
 
