@@ -62,7 +62,7 @@ platform :android do
     # 8. Remove the temporary packager map
     sh("rm -f sourcemap-bundle/index.android.bundle.packager.map")
     end
-    Dir.chdir "../.." do1§
+    Dir.chdir "../.." do
       Dir.chdir "sourcemap-bundle" do
         sh("pwd")
         sh("ls -la")
