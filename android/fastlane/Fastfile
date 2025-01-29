@@ -9,40 +9,6 @@ platform :android do
     )
   end
 
-  #desc "Upload source maps to Sentry using token from sentry.properties"
-  #lane :upload_sourcemaps_sentry do
-  #  sh("ls -la")
-  #  sh("pwd")
-  #  # 1. Read `android/sentry.properties` into a Ruby string
-  #  props = File.read("sentry.properties")
-#
-  #  # 2. Parse out the line that starts with `auth.token=`
-  #  auth_token_line = props.each_line.find { |line| line.strip.start_with?("auth.token=") }
-#
-  #  # 3. Extract the token value
-  #  #    e.g. from "auth.token=YOUR_TOKEN" => "YOUR_TOKEN"
-  #  auth_token = auth_token_line.split("auth.token=").last.strip if auth_token_line
-#
-  #  if auth_token.nil? || auth_token.empty?
-  #    UI.user_error!("No auth.token found in android/sentry.properties!")
-  #  end
-#
-  #  # 4. Now call `sentry_upload_sourcemap` with that token
-  #  sentry_upload_sourcemap(
-  #    auth_token: auth_token,
-  #    org_slug: "vechain-foundation",
-  #    project_slug: "veworld-mobile",
-  #    version: "9.9.9",        # e.g. version_code
-  #    app_identifier: "org.vechain.veworld.app",
-  #    build: "999",          # optional build number
-  #    dist: "999",           # optional dist usually the same as build
-  #    sourcemap: [
-  #    "sourcemap-bundle/index.android.bundle",
-  #    "sourcemap-bundle/index.android.bundle.map"
-  #    ],
-  #    rewrite: true
-  #  )
-  #end
   desc "Upload sourcemaps to sentry"
   lane :upload_sourcemaps_sentry do
     |values|
@@ -63,8 +29,7 @@ platform :android do
         --dev false
     })
 
-    # 2. Compile Hermes bytecode (note the paths!)
-    #    You must pass the input JS bundle from sourcemap-bundle/ and output .hbc there too.
+    # 2. Compile Hermes bytecode
     sh(%{
      node_modules/react-native/sdks/hermesc/linux64-bin/hermesc -O -emit-binary -output-source-map -out=sourcemap-bundle/index.android.bundle.hbc sourcemap-bundle/index.android.bundle
     })
@@ -87,7 +52,7 @@ platform :android do
         -o sourcemap-bundle/index.android.bundle.map
     })
 
-    # 7. (Optional) The Sentry "copy-debugid" script. Make sure to pass the correct paths:
+    # 7.The Sentry "copy-debugid" script
     sh(%{
       node node_modules/@sentry/react-native/scripts/copy-debugid.js \
         sourcemap-bundle/index.android.bundle.packager.map \
@@ -96,45 +61,35 @@ platform :android do
 
     # 8. Remove the temporary packager map
     sh("rm -f sourcemap-bundle/index.android.bundle.packager.map")
-    
-    #debug current location and contents
-    sh("echo 'ls -la'")
-    sh("pwd")
-    sh("ls -la ")
-
-
     end
-    Dir.chdir "../.." do
-      sh("pwd")
-      sh("ls -la")
+    Dir.chdir "../.." do1§
       Dir.chdir "sourcemap-bundle" do
         sh("pwd")
         sh("ls -la")
       end
     end
-    # 1. Read `android/sentry.properties` into a Ruby string
+    # Read `android/sentry.properties` into a Ruby string
     props = File.read("sentry.properties")
 
-    # 2. Parse out the line that starts with `auth.token=`
+    # Parse out the line that starts with `auth.token=`
     auth_token_line = props.each_line.find { |line| line.strip.start_with?("auth.token=") }
 
-    # 3. Extract the token value
-    #    e.g. from "auth.token=YOUR_TOKEN" => "YOUR_TOKEN"
+    # Extract the token value
     auth_token = auth_token_line.split("auth.token=").last.strip if auth_token_line
 
     if auth_token.nil? || auth_token.empty?
       UI.user_error!("No auth.token found in android/sentry.properties!")
     end
-
-    # 4. Now call `sentry_upload_sourcemap` with that token
+    
+    # Now call `sentry_upload_sourcemap` with that token
     sentry_upload_sourcemap(
       auth_token: auth_token,
       org_slug: "vechain-foundation",
       project_slug: "veworld-mobile",
-      version: "9.9.9",        # e.g. version_code
+      version: version,
       app_identifier: "org.vechain.veworld.app",
-      build: "1000",          # optional build number
-      dist: "1000",           # optional dist usually the same as build
+      build: build,     
+      dist: build,        
       sourcemap: [
       "../sourcemap-bundle/index.android.bundle",
       "../sourcemap-bundle/index.android.bundle.map"
@@ -165,6 +120,7 @@ platform :android do
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
       sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
+      upload_sourcemaps_sentry(buid: version_code, version: version_name)
 
       gradle(task: 'clean')
       gradle(
@@ -254,6 +210,7 @@ platform :android do
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
+      upload_sourcemaps_sentry(buid: version_code, version: version_name)
 
       gradle(task: 'clean')
       gradle(
@@ -311,7 +268,7 @@ platform :android do
 
     ci_value = true
     sh("./set_ci_vars.sh #{ci_value}")
-    sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
+    sh("export SENTRY_DISABLE_AUTO_UPLOAD=true")
 
     version_name = options[:version_name]
     version_code = options[:version_code]
@@ -325,7 +282,7 @@ platform :android do
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
       
-      upload_sourcemaps_sentry()
+      upload_sourcemaps_sentry(buid: version_code, version: version_name)
       gradle(task: 'clean')
       gradle(
         task: 'assemble',
@@ -341,18 +298,6 @@ platform :android do
           "android.injected.signing.key.password" => key_password,
         }
       )
-
-      
-
-      ci_value = false
-      sh("./set_ci_vars.sh #{ci_value}")
-      sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
-
-      # Stash the changes
-      sh("git stash save --keep-index --include-untracked")
-      # Drop the stash
-      sh("git stash drop")
-
       sh("echo 'Build successful'")
     rescue => exception
       puts exception

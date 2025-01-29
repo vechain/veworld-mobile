@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Validate the keystore and credentials
 
+### android upload_sourcemaps_sentry
+
+```sh
+[bundle exec] fastlane android upload_sourcemaps_sentry
+```
+
+Upload source maps to Sentry using token from sentry.properties
+
 ### android build_android
 
 ```sh
