@@ -198,9 +198,6 @@ export const ChooseMnemonicBackupPassword = () => {
                         placeholder={LL.BTN_WRITE_RECOVERY_PASSWORD()}
                         placeholderTextColor={theme.colors.passwordPlaceholder}
                         secureTextEntry={secureText1}
-                        containerStyle={styles.containerPassword}
-                        inputContainerStyle={styles.inputPassword}
-                        style={styles.inputPassword}
                         rightIcon={
                             <BaseIcon
                                 haptics="Light"
@@ -229,9 +226,6 @@ export const ChooseMnemonicBackupPassword = () => {
                             placeholder={LL.BTN_REPEAT_PASSWORD()}
                             placeholderTextColor={theme.colors.passwordPlaceholder}
                             secureTextEntry={secureText2}
-                            containerStyle={styles.containerPassword}
-                            inputContainerStyle={styles.inputPassword}
-                            style={styles.inputPassword}
                             rightIcon={
                                 <BaseIcon
                                     haptics="Light"
