@@ -73,16 +73,7 @@ platform :ios do
     # Get Certificates for the App form GitHub
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
-      readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-
-    # Get OneSignal Extension Certificates from GitHub
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["EXTENSION_IDENTIFIER"], # The app identifier of your app.
+      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
       git_branch: "main", # The branch to commit the code signing files to.
       verbose: true # If true, will print out extra information and debugging info.
@@ -95,17 +86,7 @@ platform :ios do
     # Get Certificates for App from GitHub
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
-      readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"], # The GitHub token for authentication.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-
-    # Get Certificates for OneSignal Extension from GitHub
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["EXTENSION_IDENTIFIER"], # The app identifier of your app.
+      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
       git_branch: "main", # The branch to commit the code signing files to.
       git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"], # The GitHub token for authentication.
