@@ -514,9 +514,9 @@ platform :ios do
     store_password = ENV["STORE_PASSWORD"]
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
-  
-    version = options[:version]
-    build = options[:build]
+
+    version = options[:version_name]
+    build = options[:version_code]
     github_username = options[:username]
     github_token = options[:token]
   
