@@ -1,6 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useMemo, useRef, useState } from "react"
-import { useVns, Vns } from "~Hooks/useVns"
+import { Vns } from "~Hooks/useVns"
 import { AccountWithDevice, Contact, NETWORK_TYPE } from "~Model"
 import { selectKnownContacts, selectOtherAccounts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
@@ -56,7 +56,6 @@ export const useSearchContactsAndAccounts = ({
     )
 
     // START - [DOMAINS] we need to add the domain only for searching purposes
-    const { getVnsName } = useVns()
     const [contactsWithDomain, setContactsWithDomain] = useState<Contact[]>([])
     const [accountsWithDomain, setAccountsWithDomain] = useState<AccountWithDevice[]>([])
     const firstLoad = useRef(true)
@@ -88,7 +87,7 @@ export const useSearchContactsAndAccounts = ({
         }
 
         firstLoad.current && init()
-    }, [getVnsName, accounts, contacts, isOfficialNetwork, selectedNetwork, qc])
+    }, [accounts, contacts, isOfficialNetwork, selectedNetwork, qc])
     // END - [DOMAINS]
 
     const filteredContacts = useMemo(() => {

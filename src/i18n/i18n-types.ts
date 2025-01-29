@@ -46,6 +46,22 @@ type RootTranslation = {
 	 */
 	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: string
 	/**
+	 * E​n​a​b​l​e​ ​n​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_ENABLE_BTN: string
+	/**
+	 * I​’​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: string
+	/**
+	 * A​c​t​i​v​a​t​e​ ​t​h​e​ ​p​u​s​h​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​a​n​d​ ​c​u​s​t​o​m​i​z​e​ ​t​o​ ​g​e​t​ ​n​o​t​i​f​i​e​d​ ​t​o​ ​a​l​l​ ​t​h​e​ ​n​e​w​ ​d​e​t​a​i​l​s​ ​y​o​u​ ​d​o​n​’​t​ ​w​a​n​t​ ​t​o​ ​m​i​s​s​.
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: string
+	/**
+	 * A​c​t​i​v​a​t​e​ ​n​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_TITLE: string
+	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​i​n​ ​e​x​e​c​u​t​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	ACTIVITIES_FAILED_DESCRIPTION: string
@@ -241,6 +257,10 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
+	/**
+	 * C​l​a​i​m​ ​y​o​u​r​ ​<​>​<​>​ ​f​o​r​ ​f​r​e​e​ ​n​o​w
+	 */
+	BANNER_TITLE_CLAIM_USERNAME: string
 	/**
 	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​a​c​c​e​s​s​ ​i​t​ ​b​y​ ​a​d​d​i​n​g​ ​n​e​w​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​t​h​e​ ​w​a​l​l​e​t​.
 	 */
@@ -769,13 +789,25 @@ type RootTranslation = {
 	 */
 	BTN_CHOOSE_PASSWORD: string
 	/**
+	 * C​l​a​i​m
+	 */
+	BTN_CLAIM: string
+	/**
 	 * C​l​o​s​e​ ​A​p​p
 	 */
 	BTN_CLOSE_APP: string
 	/**
+	 * C​o​n​f​i​r​m
+	 */
+	BTN_CONFIRM: string
+	/**
 	 * C​o​n​f​i​r​m​ ​p​a​s​s​w​o​r​d
 	 */
 	BTN_CONFIRN_PASSWORD: string
+	/**
+	 * C​o​n​f​i​r​m​i​n​g​.​.​.
+	 */
+	BTN_CONFRIMING: string
 	/**
 	 * C​o​n​t​i​n​u​e
 	 */
@@ -995,9 +1027,17 @@ type RootTranslation = {
 	 */
 	BTN_SHOW_QR_CODE: string
 	/**
+	 * S​k​i​p
+	 */
+	BTN_SKIP: string
+	/**
 	 * S​w​a​p
 	 */
 	BTN_SWAP: string
+	/**
+	 * T​r​y​ ​a​g​a​i​n
+	 */
+	BTN_TRY_AGAIN: string
 	/**
 	 * V​e​r​i​f​y​ ​G​o​o​g​l​e​ ​D​r​i​v​e​ ​b​a​c​k​u​p
 	 */
@@ -1046,6 +1086,10 @@ type RootTranslation = {
 	 * W​e​ ​a​r​e​ ​s​i​g​n​i​n​g​ ​y​o​u​r​ ​c​e​r​t​i​f​i​c​a​t​e​ ​w​i​t​h​ ​y​o​u​r​ ​L​e​d​g​e​r​,​ ​p​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​e​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​w​h​e​n​ ​r​e​q​u​i​r​e​d
 	 */
 	CERT_LEDGER_SIGN_DATA_SB: string
+	/**
+	 * C​h​e​c​k​i​n​g​ ​i​f​ ​u​s​e​r​n​a​m​e​ ​i​s​ ​a​v​a​i​l​a​b​l​e​.​.​.
+	 */
+	CHECKING_USERNAME_AVAILABILITY: string
 	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​i​C​l​o​u​d​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
 	 */
@@ -1305,6 +1349,10 @@ type RootTranslation = {
 	 * T​o​t​a​l​ ​S​u​p​p​l​y
 	 */
 	COMMON_TOTAL_SUPPLY: string
+	/**
+	 * U​s​e​r​n​a​m​e
+	 */
+	COMMON_USERNAME: string
 	/**
 	 * W​h​o​o​p​s​!
 	 */
@@ -1662,6 +1710,10 @@ type RootTranslation = {
 	 */
 	ERROR_DECRYPTING_WALLET: string
 	/**
+	 * A​l​r​e​a​d​y​ ​t​a​k​e​n​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​o​n​e​.
+	 */
+	ERROR_DOMAIN_ALREADY_TAKEN: string
+	/**
 	 * E​n​t​e​r​ ​a​ ​v​a​l​i​d​ ​U​R​L
 	 */
 	ERROR_ENTER_VALID_URL: string
@@ -1685,6 +1737,10 @@ type RootTranslation = {
 	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​!
 	 */
 	ERROR_GENERIC_SUBTITLE: string
+	/**
+	 * S​o​m​e​t​h​i​n​g​ ​w​e​n​t​ ​w​r​o​n​g​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	ERROR_GENERIC_WITH_RETRY_SUBTITLE: string
 	/**
 	 * T​h​i​s​ ​a​p​p​e​a​r​s​ ​t​o​ ​b​e​ ​a​ ​d​u​p​l​i​c​a​t​e​ ​o​f​ ​a​n​ ​e​x​i​s​t​i​n​g​ ​w​a​l​l​e​t
 	 */
@@ -1881,6 +1937,10 @@ type RootTranslation = {
 	 * I​m​p​o​r​t​ ​N​F​T
 	 */
 	IMPORT_NFT: string
+	/**
+	 * W​r​i​t​e​ ​y​o​u​r​ ​u​s​e​r​n​a​m​e
+	 */
+	INPUT_PLACEHOLDER_USERNAME: string
 	/**
 	 * I​r​i​s
 	 */
@@ -2278,6 +2338,18 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: RequiredParams<'network'>
 	/**
+	 * W​e​'​v​e​ ​r​e​a​c​h​e​d​ ​o​u​r​ ​d​a​i​l​y​ ​l​i​m​i​t​ ​f​o​r​ ​f​r​e​e​ ​u​s​e​r​n​a​m​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​ ​l​a​t​e​r​.
+	 */
+	NOTIFICATION_failed_no_gas: string
+	/**
+	 * F​a​i​l​e​d​ ​t​o​ ​c​r​e​a​t​e​ ​u​s​e​r​n​a​m​e
+	 */
+	NOTIFICATION_failed_subdomain: string
+	/**
+	 * U​s​e​r​n​a​m​e​ ​a​l​r​e​a​d​y​ ​c​l​a​i​m​e​d
+	 */
+	NOTIFICATION_failed_subdomain_already: string
+	/**
 	 * T​r​a​n​s​f​e​r​ ​r​e​c​e​i​v​e​d​:​ ​{​a​m​o​u​n​t​}​ ​{​t​o​k​e​n​}
 	 * @param {string} amount
 	 * @param {string} token
@@ -2397,6 +2469,62 @@ type RootTranslation = {
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: string
 	/**
+	 * P​u​s​h​ ​N​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	PUSH_NOTIFICATIONS: string
+	/**
+	 * A​l​l​o​w​ ​P​u​s​h​ ​N​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	PUSH_NOTIFICATIONS_ACTIVE: string
+	/**
+	 * D​A​p​p​s
+	 */
+	PUSH_NOTIFICATIONS_DAPPS: string
+	/**
+	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_DESC: string
+	/**
+	 * N​e​w​ ​A​p​p​ ​l​i​s​t​e​d
+	 */
+	PUSH_NOTIFICATIONS_NEW_APP_LISTED: string
+	/**
+	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​l​o​a​d​ ​y​o​u​r​ ​p​r​e​f​e​r​e​n​c​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: string
+	/**
+	 * E​r​r​o​r
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: string
+	/**
+	 * S​e​a​r​c​h​ ​D​A​p​p​s
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: string
+	/**
+	 * Y​o​u​'​v​e​ ​r​e​a​c​h​e​d​ ​t​h​e​ ​m​a​x​i​m​u​m​ ​n​u​m​b​e​r​ ​o​f​ ​s​u​b​s​c​r​i​p​t​i​o​n​s​ ​a​l​l​o​w​e​d​.​ ​P​l​e​a​s​e​ ​u​n​s​u​b​s​c​r​i​b​e​ ​f​r​o​m​ ​a​n​o​t​h​e​r​ ​s​u​b​s​c​r​i​p​t​i​o​n​ ​b​e​f​o​r​e​ ​a​d​d​i​n​g​ ​a​ ​n​e​w​ ​o​n​e​.
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_DESC: string
+	/**
+	 * S​u​b​s​c​r​i​p​t​i​o​n​ ​L​i​m​i​t​ ​R​e​a​c​h​e​d
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: string
+	/**
+	 * G​e​n​e​r​a​l​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_UPDATES: string
+	/**
+	 * V​e​B​e​t​t​e​r​D​A​O
+	 */
+	PUSH_NOTIFICATIONS_VEBETTERDAO: string
+	/**
+	 * V​e​W​o​r​l​d​ ​f​e​a​t​u​r​e​s​ ​&​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: string
+	/**
+	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
+	 */
+	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
+	/**
 	 * R​e​c​a​p
 	 */
 	RECAP: string
@@ -2490,6 +2618,10 @@ type RootTranslation = {
 	 * C​h​o​o​s​e​ ​a​ ​w​a​l​l​e​t
 	 */
 	SB_CHOOSE_A_WALLET: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​c​l​a​i​m​ ​f​o​r​ ​f​r​e​e​ ​y​o​u​r​ ​u​n​i​q​u​e​ ​u​s​e​r​n​a​m​e​ ​f​o​r​ ​t​h​i​s​ ​w​a​l​l​e​t​:
+	 */
+	SB_CLAIM_USERNAME: string
 	/**
 	 * C​o​l​l​e​c​t​i​b​l​e​s
 	 */
@@ -2609,9 +2741,17 @@ type RootTranslation = {
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: string
 	/**
+	 * w​a​s​ ​c​l​a​i​m​e​d​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​f​o​r​ ​t​h​i​s​ ​a​c​c​o​u​n​t​.
+	 */
+	SB_USERNAME_CLAIMED: string
+	/**
 	 * T​h​i​s​ ​p​a​s​s​w​o​r​d​ ​w​i​l​l​ ​b​e​ ​u​s​e​d​ ​t​o​ ​a​u​t​h​o​r​i​z​e​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
 	 */
 	SB_USER_PASSWORD: string
+	/**
+	 * M​a​n​a​g​e​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​s​ ​a​n​d​ ​a​c​c​o​u​n​t​s​:
+	 */
+	SB_WALLETS_MANAGEMENT: string
 	/**
 	 * Y​o​u​r​ ​c​o​l​l​e​c​t​i​o​n​s
 	 */
@@ -2992,6 +3132,20 @@ type RootTranslation = {
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: string
 	/**
+	 * O​n​l​y​ ​l​o​w​e​r​c​a​s​e​ ​l​e​t​t​e​r​s​ ​o​r​ ​n​u​m​b​e​r​s​ ​a​r​e​ ​a​l​l​o​w​e​d
+	 */
+	SETTINGS_LABEL_lowercase_num: string
+	/**
+	 * M​a​x​i​m​u​m​ ​n​u​m​b​e​r​ ​o​f​ ​c​h​a​r​a​c​t​e​r​s​ ​i​s​ ​{​m​a​x​}
+	 * @param {unknown} max
+	 */
+	SETTINGS_LABEL_name_max_length: RequiredParams<'max'>
+	/**
+	 * M​i​n​i​m​u​m​ ​n​u​m​b​e​r​ ​o​f​ ​c​h​a​r​a​c​t​e​r​s​ ​i​s​ ​{​m​i​n​}
+	 * @param {unknown} min
+	 */
+	SETTINGS_LABEL_name_min_length: RequiredParams<'min'>
+	/**
 	 * D​e​f​a​u​l​t​ ​d​e​l​e​g​a​t​i​o​n
 	 */
 	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: string
@@ -3051,6 +3205,10 @@ type RootTranslation = {
 	 * S​t​a​t​u​s
 	 */
 	STATUS: string
+	/**
+	 * A​v​a​i​l​a​b​l​e​ ​t​o​ ​c​l​a​i​m
+	 */
+	SUCCESS_DOMAIN_AVAILABLE: string
 	/**
 	 * S​u​c​c​e​s​s​!
 	 */
@@ -3153,6 +3311,10 @@ type RootTranslation = {
 	 */
 	TITLE_BUY: string
 	/**
+	 * U​s​e​r​n​a​m​e
+	 */
+	TITLE_CLAIM_USERNAME: string
+	/**
 	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​m​n​e​m​o​n​i​c
 	 */
 	TITLE_CONFIRM_MNEMONIC: string
@@ -3229,6 +3391,10 @@ type RootTranslation = {
 	 */
 	TITLE_NFTS: string
 	/**
+	 * N​o​t​i​f​i​c​a​t​i​o​n​s
+	 */
+	TITLE_NOTIFICATIONS: string
+	/**
 	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
 	 */
 	TITLE_OBSERVE_WALLET: string
@@ -3291,6 +3457,10 @@ type RootTranslation = {
 	 */
 	TITLE_UNLOCK_KEYSTORE: string
 	/**
+	 * U​s​e​r​n​a​m​e​ ​c​l​a​i​m​e​d​!
+	 */
+	TITLE_USERNAME_CLAIMED: string
+	/**
 	 * C​h​o​o​s​e​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
 	 */
 	TITLE_USER_PASSWORD: string
@@ -3303,7 +3473,7 @@ type RootTranslation = {
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
 	/**
-	 * M​a​n​a​g​e​ ​W​a​l​l​e​t​s
+	 * M​a​n​a​g​e​ ​w​a​l​l​e​t​s
 	 */
 	TITLE_WALLET_MANAGEMENT: string
 	/**
@@ -3359,6 +3529,10 @@ type RootTranslation = {
 	 */
 	UNVERIFIED_APP_TITLE: string
 	/**
+	 * u​s​e​r​n​a​m​e
+	 */
+	USERNAME: string
+	/**
 	 * V​a​l​u​e
 	 */
 	VALUE_TITLE: string
@@ -3378,6 +3552,11 @@ type RootTranslation = {
 	 * w​a​l​l​e​t​s​ ​s​a​v​e​d​ ​o​n​ ​i​C​l​o​u​d​.
 	 */
 	WALLETS_SAVED_ON_ICLOUD: string
+	/**
+	 * {​c​o​u​n​t​}​ ​a​c​c​o​u​n​t​s
+	 * @param {number} count
+	 */
+	WALLET_DETAIL_ACCOUNTS_NUMER: RequiredParams<'count'>
 	/**
 	 * A​c​c​o​u​n​t
 	 */
@@ -3575,6 +3754,22 @@ export type TranslationFunctions = {
 	 */
 	ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
+	 * Enable notifications
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_ENABLE_BTN: () => LocalizedString
+	/**
+	 * I’ll do it later
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: () => LocalizedString
+	/**
+	 * Activate the push notifications and customize to get notified to all the new details you don’t want to miss.
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Activate notifications
+	 */
+	ACTIVATE_NOTIFICATION_MODAL_TITLE: () => LocalizedString
+	/**
 	 * There was an error in executing the transaction
 	 */
 	ACTIVITIES_FAILED_DESCRIPTION: () => LocalizedString
@@ -3767,6 +3962,10 @@ Try reconnect your device to the internet.
 	 * Backup your wallet
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
+	/**
+	 * Claim your <><> for free now
+	 */
+	BANNER_TITLE_CLAIM_USERNAME: () => LocalizedString
 	/**
 	 * Your account will be removed, but you can still access it by adding new accounts to the wallet.
 	 */
@@ -4292,13 +4491,25 @@ Try reconnect your device to the internet.
 	 */
 	BTN_CHOOSE_PASSWORD: () => LocalizedString
 	/**
+	 * Claim
+	 */
+	BTN_CLAIM: () => LocalizedString
+	/**
 	 * Close App
 	 */
 	BTN_CLOSE_APP: () => LocalizedString
 	/**
+	 * Confirm
+	 */
+	BTN_CONFIRM: () => LocalizedString
+	/**
 	 * Confirm password
 	 */
 	BTN_CONFIRN_PASSWORD: () => LocalizedString
+	/**
+	 * Confirming...
+	 */
+	BTN_CONFRIMING: () => LocalizedString
 	/**
 	 * Continue
 	 */
@@ -4516,9 +4727,17 @@ Try reconnect your device to the internet.
 	 */
 	BTN_SHOW_QR_CODE: () => LocalizedString
 	/**
+	 * Skip
+	 */
+	BTN_SKIP: () => LocalizedString
+	/**
 	 * Swap
 	 */
 	BTN_SWAP: () => LocalizedString
+	/**
+	 * Try again
+	 */
+	BTN_TRY_AGAIN: () => LocalizedString
 	/**
 	 * Verify Google Drive backup
 	 */
@@ -4567,6 +4786,10 @@ Try reconnect your device to the internet.
 	 * We are signing your certificate with your Ledger, please confirm the signature on your device when required
 	 */
 	CERT_LEDGER_SIGN_DATA_SB: () => LocalizedString
+	/**
+	 * Checking if username is available...
+	 */
+	CHECKING_USERNAME_AVAILABILITY: () => LocalizedString
 	/**
 	 * An error occurred while trying to connect to iCloud service. Try again!
 	 */
@@ -4823,6 +5046,10 @@ Try reconnect your device to the internet.
 	 * Total Supply
 	 */
 	COMMON_TOTAL_SUPPLY: () => LocalizedString
+	/**
+	 * Username
+	 */
+	COMMON_USERNAME: () => LocalizedString
 	/**
 	 * Whoops!
 	 */
@@ -5176,6 +5403,10 @@ Try reconnect your device to the internet.
 	 */
 	ERROR_DECRYPTING_WALLET: () => LocalizedString
 	/**
+	 * Already taken. Please try a different one.
+	 */
+	ERROR_DOMAIN_ALREADY_TAKEN: () => LocalizedString
+	/**
 	 * Enter a valid URL
 	 */
 	ERROR_ENTER_VALID_URL: () => LocalizedString
@@ -5199,6 +5430,10 @@ Try reconnect your device to the internet.
 	 * Something went wrong!
 	 */
 	ERROR_GENERIC_SUBTITLE: () => LocalizedString
+	/**
+	 * Something went wrong. Please try again.
+	 */
+	ERROR_GENERIC_WITH_RETRY_SUBTITLE: () => LocalizedString
 	/**
 	 * This appears to be a duplicate of an existing wallet
 	 */
@@ -5395,6 +5630,10 @@ Try reconnect your device to the internet.
 	 * Import NFT
 	 */
 	IMPORT_NFT: () => LocalizedString
+	/**
+	 * Write your username
+	 */
+	INPUT_PLACEHOLDER_USERNAME: () => LocalizedString
 	/**
 	 * Iris
 	 */
@@ -5781,6 +6020,18 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_WC_NETWORK_CHANGED: (arg: { network: string }) => LocalizedString
 	/**
+	 * We've reached our daily limit for free usernames. Please try again later.
+	 */
+	NOTIFICATION_failed_no_gas: () => LocalizedString
+	/**
+	 * Failed to create username
+	 */
+	NOTIFICATION_failed_subdomain: () => LocalizedString
+	/**
+	 * Username already claimed
+	 */
+	NOTIFICATION_failed_subdomain_already: () => LocalizedString
+	/**
 	 * Transfer received: {amount} {token}
 	 */
 	NOTIFICATION_received_token_transfer: (arg: { amount: string, token: string }) => LocalizedString
@@ -5893,6 +6144,62 @@ Try reconnect your device to the internet.
 	 */
 	PLACEHOLDER_SEARCH_TOKEN: () => LocalizedString
 	/**
+	 * Push Notifications
+	 */
+	PUSH_NOTIFICATIONS: () => LocalizedString
+	/**
+	 * Allow Push Notifications
+	 */
+	PUSH_NOTIFICATIONS_ACTIVE: () => LocalizedString
+	/**
+	 * DApps
+	 */
+	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
+	/**
+	 * Keep up to date with the latest news and updates
+	 */
+	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
+	/**
+	 * New App listed
+	 */
+	PUSH_NOTIFICATIONS_NEW_APP_LISTED: () => LocalizedString
+	/**
+	 * An error occurred while trying to load your preferences. Please try again.
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC: () => LocalizedString
+	/**
+	 * Error
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE: () => LocalizedString
+	/**
+	 * Search DApps
+	 */
+	PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER: () => LocalizedString
+	/**
+	 * You've reached the maximum number of subscriptions allowed. Please unsubscribe from another subscription before adding a new one.
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_DESC: () => LocalizedString
+	/**
+	 * Subscription Limit Reached
+	 */
+	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: () => LocalizedString
+	/**
+	 * General updates
+	 */
+	PUSH_NOTIFICATIONS_UPDATES: () => LocalizedString
+	/**
+	 * VeBetterDAO
+	 */
+	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
+	/**
+	 * VeWorld features & updates
+	 */
+	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: () => LocalizedString
+	/**
+	 * Vote reminder
+	 */
+	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
+	/**
 	 * Recap
 	 */
 	RECAP: () => LocalizedString
@@ -5984,6 +6291,10 @@ Try reconnect your device to the internet.
 	 * Choose a wallet
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
+	/**
+	 * You can claim for free your unique username for this wallet:
+	 */
+	SB_CLAIM_USERNAME: () => LocalizedString
 	/**
 	 * Collectibles
 	 */
@@ -6101,9 +6412,17 @@ Try reconnect your device to the internet.
 	 */
 	SB_UPGRADE_SECURITY_WARNING_ANDROID: () => LocalizedString
 	/**
+	 * was claimed successfully for this account.
+	 */
+	SB_USERNAME_CLAIMED: () => LocalizedString
+	/**
 	 * This password will be used to authorize transactions.
 	 */
 	SB_USER_PASSWORD: () => LocalizedString
+	/**
+	 * Manage all of your wallets and accounts:
+	 */
+	SB_WALLETS_MANAGEMENT: () => LocalizedString
 	/**
 	 * Your collections
 	 */
@@ -6481,6 +6800,18 @@ Try reconnect your device to the internet.
 	 */
 	SETTINGS_CURRENCIES_CONVERT_TO_FIAT: () => LocalizedString
 	/**
+	 * Only lowercase letters or numbers are allowed
+	 */
+	SETTINGS_LABEL_lowercase_num: () => LocalizedString
+	/**
+	 * Maximum number of characters is {max}
+	 */
+	SETTINGS_LABEL_name_max_length: (arg: { max: unknown }) => LocalizedString
+	/**
+	 * Minimum number of characters is {min}
+	 */
+	SETTINGS_LABEL_name_min_length: (arg: { min: unknown }) => LocalizedString
+	/**
 	 * Default delegation
 	 */
 	SETTINGS_TRANSACTIONS_DEFAULT_DELEGATION: () => LocalizedString
@@ -6540,6 +6871,10 @@ Try reconnect your device to the internet.
 	 * Status
 	 */
 	STATUS: () => LocalizedString
+	/**
+	 * Available to claim
+	 */
+	SUCCESS_DOMAIN_AVAILABLE: () => LocalizedString
 	/**
 	 * Success!
 	 */
@@ -6641,6 +6976,10 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_BUY: () => LocalizedString
 	/**
+	 * Username
+	 */
+	TITLE_CLAIM_USERNAME: () => LocalizedString
+	/**
 	 * Confirm your mnemonic
 	 */
 	TITLE_CONFIRM_MNEMONIC: () => LocalizedString
@@ -6717,6 +7056,10 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_NFTS: () => LocalizedString
 	/**
+	 * Notifications
+	 */
+	TITLE_NOTIFICATIONS: () => LocalizedString
+	/**
 	 * Observe Wallet
 	 */
 	TITLE_OBSERVE_WALLET: () => LocalizedString
@@ -6777,6 +7120,10 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_UNLOCK_KEYSTORE: () => LocalizedString
 	/**
+	 * Username claimed!
+	 */
+	TITLE_USERNAME_CLAIMED: () => LocalizedString
+	/**
 	 * Choose your 6-digit PIN
 	 */
 	TITLE_USER_PASSWORD: () => LocalizedString
@@ -6789,7 +7136,7 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: () => LocalizedString
 	/**
-	 * Manage Wallets
+	 * Manage wallets
 	 */
 	TITLE_WALLET_MANAGEMENT: () => LocalizedString
 	/**
@@ -6845,6 +7192,10 @@ Try reconnect your device to the internet.
 	 */
 	UNVERIFIED_APP_TITLE: () => LocalizedString
 	/**
+	 * username
+	 */
+	USERNAME: () => LocalizedString
+	/**
 	 * Value
 	 */
 	VALUE_TITLE: () => LocalizedString
@@ -6864,6 +7215,10 @@ Try reconnect your device to the internet.
 	 * wallets saved on iCloud.
 	 */
 	WALLETS_SAVED_ON_ICLOUD: () => LocalizedString
+	/**
+	 * {count} accounts
+	 */
+	WALLET_DETAIL_ACCOUNTS_NUMER: (arg: { count: number }) => LocalizedString
 	/**
 	 * Account
 	 */

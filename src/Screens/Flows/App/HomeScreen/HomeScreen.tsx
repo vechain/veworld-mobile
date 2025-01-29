@@ -35,8 +35,16 @@ import {
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AccountCard, DeviceBackupBottomSheet, EditTokensBar, Header, TokenList } from "./Components"
+import {
+    AccountCard,
+    ClaimUsernameBanner,
+    DeviceBackupBottomSheet,
+    EditTokensBar,
+    Header,
+    TokenList,
+} from "./Components"
 import { useTokenBalances } from "./Hooks"
+import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -156,6 +164,7 @@ export const HomeScreen = () => {
                     }>
                     <BaseView>
                         <BaseView alignItems="center">
+                            <ClaimUsernameBanner />
                             <BaseSpacer height={8} />
                             <AccountCard
                                 balanceVisible={isBalanceVisible}
@@ -189,6 +198,7 @@ export const HomeScreen = () => {
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
                     <DeviceBackupBottomSheet />
+                    <EnableNotificationsBottomSheet />
                 </NestableScrollContainer>
             }
         />

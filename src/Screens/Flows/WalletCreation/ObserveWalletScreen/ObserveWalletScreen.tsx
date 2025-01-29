@@ -147,7 +147,7 @@ export const ObserveWalletScreen = () => {
             }
 
             if (value.length === 42) {
-                const name = await getVnsName(value)
+                const [{ name }] = await getVnsName(value)
                 setUnderlyingAddress(value)
                 setInputValue(name || value)
             }

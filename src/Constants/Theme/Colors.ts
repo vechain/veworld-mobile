@@ -8,6 +8,7 @@ export type Colors = {
     tertiary: string
     disabled: string
     disabledButton: string
+    disabledInput: string
     danger: string
     success: string
     successMedium: string
@@ -19,6 +20,7 @@ export type Colors = {
     text: string
     textDisabled: string
     textReversed: string
+    textSelected: string
     alertDescription: string
     numberPad: string
     background: string
@@ -97,6 +99,14 @@ export type Colors = {
         title: string
         titleInline: string
     }
+    actionBanner: {
+        background: string
+        border: string
+        title: string
+        buttonBackground: string
+        buttonBorder: string
+        buttonText: string
+    }
 }
 
 export enum COLORS {
@@ -115,13 +125,6 @@ export enum COLORS {
     PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
     PURPLE = "#30265F",
-    PRIMARY_800 = "#261470",
-    PRIMARY_500 = "#6042DD",
-    PRIMARY_700 = "#351C9B",
-    PRIMARY_400 = "#836CE4",
-    PRIMARY_300 = "#A897EC",
-    PRIMARY_200 = "#CCC3F4",
-    PRIMARY_50 = "#F9F8FB",
     LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",
     DARK_PURPLE_DISABLED = "#59527F",
@@ -175,6 +178,16 @@ export enum COLORS {
     ORANGE_100 = "#FEEBCB",
     ORANGE_500 = "#DD6B20",
     ORANGE_700 = "#9C4221",
+    PRIMARY_50 = "#F9F8FB",
+    PRIMARY_100 = "#F0EEFC",
+    PRIMARY_200 = "#CCC3F4",
+    PRIMARY_300 = "#A897EC",
+    PRIMARY_400 = "#836CE4",
+    PRIMARY_500 = "#6042DD",
+    PRIMARY_600 = "#4324C6",
+    PRIMARY_700 = "#351C9B",
+    PRIMARY_800 = "#261470",
+    PRIMARY_900 = "#170D45",
     COINBASE_BACKGROUND_LIGHT = "#ffffff",
     COINBASE_BACKGROUND_DARK = "#0a0b0d",
     COINBASE_BACKGROUND_BLUE = "#0052FF",
@@ -196,6 +209,7 @@ const light: Colors = {
     tertiary: COLORS.LIME_GREEN,
     disabled: COLORS.WHITE_DISABLED,
     disabledButton: COLORS.DARK_PURPLE_DISABLED,
+    disabledInput: COLORS.WHITE_DISABLED,
     danger: COLORS.RED_400,
     success: COLORS.GREEN_400,
     successMedium: COLORS.WHITE,
@@ -205,8 +219,9 @@ const light: Colors = {
     warning: COLORS.WHITE,
     error: COLORS.WHITE,
     text: COLORS.DARK_PURPLE,
-    textDisabled: COLORS.DARK_PURPLE_DISABLED,
+    textDisabled: COLORS.PURPLE_DISABLED,
     textReversed: COLORS.WHITE,
+    textSelected: COLORS.PRIMARY_700,
     alertDescription: COLORS.GREY_600,
     numberPad: COLORS.GREY_600,
     textLight: COLORS.GREY_500,
@@ -285,6 +300,14 @@ const light: Colors = {
         title: COLORS.BLUE_700,
         titleInline: COLORS.BLUE_700,
     },
+    actionBanner: {
+        background: COLORS.PRIMARY_100,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        title: COLORS.PURPLE,
+        buttonBackground: COLORS.WHITE,
+        buttonBorder: COLORS.GREY_200,
+        buttonText: COLORS.PURPLE,
+    },
 }
 
 const dark: Colors = {
@@ -297,6 +320,7 @@ const dark: Colors = {
     tertiary: COLORS.DARK_PURPLE,
     disabled: COLORS.WHITE_DISABLED,
     disabledButton: COLORS.LIME_GREEN_DISABLED,
+    disabledInput: COLORS.PURPLE_DISABLED,
     danger: COLORS.RED_400,
     success: COLORS.GREEN_400,
     successMedium: COLORS.MEDIUM_GREEN,
@@ -308,6 +332,7 @@ const dark: Colors = {
     text: COLORS.WHITE,
     textDisabled: COLORS.WHITE_DISABLED,
     textReversed: COLORS.DARK_PURPLE,
+    textSelected: COLORS.PRIMARY_300,
     alertDescription: COLORS.GREY_600,
     numberPad: COLORS.GREY_300,
     textLight: COLORS.WHITE,
@@ -324,7 +349,7 @@ const dark: Colors = {
     icon: COLORS.WHITE,
     button: COLORS.LIME_GREEN,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
-    cardBorder: COLORS.DARK_PURPLE,
+    cardBorder: COLORS.DARK_PURPLE_DISABLED,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
     transparent: COLORS.TRANSPARENT,
@@ -385,6 +410,14 @@ const dark: Colors = {
         icon: COLORS.MEDIUM_BLUE,
         title: COLORS.BLUE_700,
         titleInline: COLORS.LIGHT_BLUE,
+    },
+    actionBanner: {
+        background: COLORS.PURPLE,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        title: COLORS.WHITE,
+        buttonBackground: COLORS.DARK_PURPLE_DISABLED,
+        buttonBorder: COLORS.TRANSPARENT,
+        buttonText: COLORS.GREY_50,
     },
 }
 

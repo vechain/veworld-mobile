@@ -41,8 +41,8 @@ export const useSearchOrScanInput = (
                 vnsAddress = addressFromVns ?? ""
                 vnsName = data
             } else {
-                const _name = await getVnsName(data)
-                vnsName = _name ?? ""
+                const [{ name }] = await getVnsName(data)
+                vnsName = name ?? ""
                 vnsAddress = data
             }
 

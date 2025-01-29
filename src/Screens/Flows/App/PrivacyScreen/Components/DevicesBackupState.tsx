@@ -48,8 +48,8 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
     const keyExtractor = useCallback((device: BaseDevice) => device.rootAddress, [])
 
     const renderDeviceItem = useCallback(
-        (props: { item: BaseDevice }) => {
-            const { item } = props
+        (props: { item: BaseDevice; index: number }) => {
+            const { item, index } = props
             const { variant, statusText } = getStatusConfig(item)
 
             const rightElement = statusText ? (
@@ -67,7 +67,7 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
                     rightElement={rightElement}
                     onPress={() => handlePress(item)}
                     disabled={variant === "neutral"}
-                    testID={`deviceBackupStateRow_${item.rootAddress}`}
+                    testID={`deviceBackupStateRow_${index}`}
                 />
             )
         },

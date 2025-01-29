@@ -5,14 +5,15 @@ import { useTheme } from "~Hooks"
 
 type Props = {
     children: ReactNode
+    testID?: string
     action: () => void
 }
 
-export const HeaderIconButton = ({ children, action }: Props) => {
+export const HeaderIconButton = ({ children, testID, action }: Props) => {
     const theme = useTheme()
 
     return (
-        <TouchableOpacity onPress={action} activeOpacity={0.7}>
+        <TouchableOpacity testID={testID} onPress={action} activeOpacity={0.7}>
             <BaseView
                 p={7}
                 bg={theme.colors.card}
@@ -26,6 +27,7 @@ export const HeaderIconButton = ({ children, action }: Props) => {
 
 const styles = StyleSheet.create({
     container: {
+        width: 32,
         borderWidth: 1,
         borderRadius: 6,
         alignContent: "space-between",

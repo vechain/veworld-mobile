@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import lodash from "lodash"
 import moment from "moment"
 import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
 import { Locales } from "~i18n"
-import lodash from "lodash"
 
 /**
  * @typedef {Object} UserPreferenceState
@@ -32,6 +32,7 @@ export interface UserPreferenceState {
     lastVersionCheck: string
     appResetTimestamp?: string
     lastBackupRequestTimestamp?: { [key: string]: number | undefined }
+    lastNotificationReminder: number | null
 }
 
 const initialState: UserPreferenceState = {
@@ -49,6 +50,7 @@ const initialState: UserPreferenceState = {
     lastReviewTimestamp: moment().subtract(3, "weeks").add(3, "days").toISOString(),
     lastVersionCheck: moment().toISOString(),
     appResetTimestamp: undefined,
+    lastNotificationReminder: null,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -126,6 +128,10 @@ export const UserPreferencesSlice = createSlice({
 
             return initialState
         },
+
+        updateLastNotificationReminder: (state, action: PayloadAction<number | null>) => {
+            state.lastNotificationReminder = action.payload
+        },
     },
 })
 
@@ -144,4 +150,5 @@ export const {
     setLastVersionCheck,
     setAppResetTimestamp,
     setLastBackupRequestTimestamp,
+    updateLastNotificationReminder,
 } = UserPreferencesSlice.actions

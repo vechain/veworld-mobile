@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { BaseView } from "../BaseView"
 import { TouchableOpacity } from "react-native-gesture-handler"
 
@@ -37,8 +37,8 @@ export const BaseCard = memo(
             <BaseView
                 {...otherProps}
                 style={[
-                    selected ? styles.selectedContainer : styles.unselectedContainer,
                     styles.container,
+                    selected ? styles.selectedContainer : styles.unselectedContainer,
                     containerStyle,
                 ]}>
                 {onPress ? (
@@ -59,20 +59,21 @@ export const BaseCard = memo(
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         touchableContainer: {
-            borderRadius: 16,
+            borderRadius: 8,
             overflow: "hidden",
         },
         container: {
             width: "100%",
             backgroundColor: theme.colors.card,
             borderWidth: 1,
-            borderRadius: 16,
+            borderRadius: 12,
         },
         selectedContainer: {
-            borderColor: theme.colors.text,
+            borderColor: theme.isDark ? COLORS.WHITE : theme.colors.primary,
+            borderWidth: 2,
         },
         unselectedContainer: {
-            borderColor: theme.colors.card,
+            borderColor: theme.colors.transparent,
         },
         view: {
             flexDirection: "row",
