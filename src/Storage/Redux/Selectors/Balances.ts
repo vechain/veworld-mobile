@@ -131,6 +131,9 @@ export const selectTokensWithBalancesByAccount = createSelector(
     },
 )
 
+/**
+ * Get account token balances without vechain tokens
+ */
 export const selectNonVechainTokensWithBalances = createSelector(
     [selectTokensWithBalances],
     (tokensWithBalance): FungibleTokenWithBalance[] =>
@@ -140,6 +143,9 @@ export const selectNonVechainTokensWithBalances = createSelector(
         ),
 )
 
+/**
+ * Get token balances without vechain tokens for a specific account
+ */
 export const selectNonVechainTokensBalancesByAccount = createSelector(
     [selectTokensWithBalancesByAccount],
     (tokensWithBalance): FungibleTokenWithBalance[] =>
