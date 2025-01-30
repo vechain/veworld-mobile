@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseTextInput, BaseView } from "~Components"
+import { BaseBottomSheet, BaseBottomSheetTextInput, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -31,7 +31,7 @@ export const EditWalletAccountBottomSheet = React.forwardRef<BottomSheetModalMet
 
                         <BaseSpacer height={8} />
 
-                        <BaseTextInput testID="ChangeAlias_Input" value={alias} setValue={onChangeText} />
+                        <BaseBottomSheetTextInput testID="ChangeAlias_Input" value={alias} setValue={onChangeText} />
 
                         <BaseSpacer height={40} />
 
