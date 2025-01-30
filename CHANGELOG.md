@@ -1,5 +1,12 @@
 
 
+## 2.0.8 (2025-01-30)
+
+
+### Bug Fixes
+
+* Error and inability to import wallet from iCloud ([#2610](https://github.com/vechain/veworld-mobile/issues/2610)) ([8151f99](https://github.com/vechain/veworld-mobile/commit/8151f99f4363068cfa5ea34e186e60522dabc0d9))
+
 ## 2.0.7 (2025-01-24)
 
 
