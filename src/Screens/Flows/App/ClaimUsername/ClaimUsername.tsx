@@ -16,6 +16,7 @@ import { useAnalyticTracking, useDisclosure, useThemedStyles, useVns, useWalletS
 import { Routes, RootStackParamListHome, RootStackParamListSettings } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListSettings, Routes.CLAIM_USERNAME>
 
@@ -37,6 +38,8 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     const { isSubdomainAvailable, registerSubdomain } = useVns()
     const { isWalletSecurityBiometrics } = useWalletSecurity()
     const trackEvent = useAnalyticTracking()
+
+    const currentAccount = useAppSelector(selectSelectedAccount)
 
     const isFieldValid = useMemo(() => {
         if (subdomain.length < MIN_CHARS) {
@@ -83,7 +86,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
         async (pin?: string) => {
             setIsLoading(true)
             const fullDomain = `${subdomain}${DOMAIN_BASE}`
-            const success = await registerSubdomain(subdomain, pin)
+            const success = await registerSubdomain(currentAccount, subdomain, pin)
 
             trackEvent(AnalyticsEvent.CLAIM_USERNAME_CREATED, {
                 subdomain: fullDomain,
@@ -96,7 +99,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                 navigation.replace(Routes.USERNAME_CLAIMED, { username: fullDomain })
             }
         },
-        [navigation, registerSubdomain, subdomain, trackEvent],
+        [currentAccount, navigation, registerSubdomain, subdomain, trackEvent],
     )
 
     const onSuccess = useCallback(
