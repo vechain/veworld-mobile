@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
     AlertInline,
-    BaseButton,
+    AnimatedFloatingButton,
+    BackButtonHeader,
     BaseIcon,
     BaseSpacer,
     BaseText,
@@ -115,6 +116,12 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
         }
     }, [isWalletSecurityBiometrics, onClaimUsername, openPasswordPrompt])
 
+    const onGoBack = useCallback(() => {
+        if (navigation.canGoBack()) {
+            navigation.goBack()
+        }
+    }, [navigation])
+
     const isNotAvailable = useMemo(() => isAvailable === false, [isAvailable])
 
     const hasErrors = useMemo(
@@ -168,8 +175,19 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
 
     return (
         <Layout
-            title={LL.TITLE_CLAIM_USERNAME()}
             preventGoBack={isLoading}
+            noMargin
+            noBackButton
+            fixedHeader={
+                <BaseView mx={16}>
+                    <BackButtonHeader
+                        hasBottomSpacer={false}
+                        onGoBack={onGoBack}
+                        preventGoBack={isLoading}
+                        title={LL.TITLE_CLAIM_USERNAME()}
+                    />
+                </BaseView>
+            }
             fixedBody={
                 <BaseView style={[styles.contentContainer]}>
                     {/* Body */}
@@ -218,22 +236,22 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                             />
                         )}
                         <BaseSpacer height={24} />
-                        <BaseView flexDirection="row" w={100}>
-                            <BaseButton
-                                flex={1}
-                                isLoading={isLoading}
-                                disabled={isLoading || hasErrors || !subdomain}
-                                action={onSubmit}
-                                testID="ClaimUsername_Confirm_Btn">
-                                {claimError ? LL.BTN_TRY_AGAIN() : LL.BTN_CONFIRM()}
-                            </BaseButton>
-                        </BaseView>
                     </BaseView>
-
                     <RequireUserPassword
                         isOpen={isPasswordPromptOpen}
                         onClose={closePasswordPrompt}
                         onSuccess={onSuccess}
+                    />
+                </BaseView>
+            }
+            footer={
+                <BaseView flexGrow={1}>
+                    <AnimatedFloatingButton
+                        isDisabled={isLoading || hasErrors || !subdomain}
+                        isLoading={isLoading}
+                        title={claimError ? LL.BTN_TRY_AGAIN() : LL.BTN_CONFIRM()}
+                        onPress={onSubmit}
+                        isVisible
                     />
                 </BaseView>
             }
