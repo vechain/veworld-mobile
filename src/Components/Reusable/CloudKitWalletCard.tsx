@@ -133,6 +133,9 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         container: {
             flex: 1,
+            pointerEvents: "none",
+            borderWidth: 1,
+            borderColor: theme.colors.transparent,
         },
         selectedContainer: {
             borderWidth: 1,
