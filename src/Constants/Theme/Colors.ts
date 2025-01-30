@@ -302,7 +302,7 @@ const light: Colors = {
     },
     actionBanner: {
         background: COLORS.PRIMARY_100,
-        border: COLORS.DARK_PURPLE_DISABLED,
+        border: COLORS.PRIMARY_200,
         title: COLORS.PURPLE,
         buttonBackground: COLORS.WHITE,
         buttonBorder: COLORS.GREY_200,

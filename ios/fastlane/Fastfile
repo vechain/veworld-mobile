@@ -73,16 +73,7 @@ platform :ios do
     # Get Certificates for the App form GitHub
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
-      readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-
-    # Get OneSignal Extension Certificates from GitHub
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["EXTENSION_IDENTIFIER"], # The app identifier of your app.
+      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
       git_branch: "main", # The branch to commit the code signing files to.
       verbose: true # If true, will print out extra information and debugging info.
@@ -95,17 +86,7 @@ platform :ios do
     # Get Certificates for App from GitHub
     sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
       type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["APP_IDENTIFIER"], # The app identifier of your app.
-      readonly: true, # If true, will only print out the commands it would run, without actually running them.
-      git_branch: "main", # The branch to commit the code signing files to.
-      git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"], # The GitHub token for authentication.
-      verbose: true # If true, will print out extra information and debugging info.
-    )
-
-    # Get Certificates for OneSignal Extension from GitHub
-    sync_code_signing( # https://docs.fastlane.tools/actions/sync_code_signing/
-      type: "appstore", # The type of code signing identity to generate.
-      app_identifier: ENV["EXTENSION_IDENTIFIER"], # The app identifier of your app.
+      app_identifier: [ENV["APP_IDENTIFIER"], ENV["EXTENSION_IDENTIFIER"]], # The app identifier of your app.
       readonly: true, # If true, will only print out the commands it would run, without actually running them.
       git_branch: "main", # The branch to commit the code signing files to.
       git_basic_authorization: ENV["MATCH_GIT_BASIC_AUTHORIZATION"], # The GitHub token for authentication.
@@ -444,7 +425,7 @@ platform :ios do
         version_number: version,
       )
 
-      fetch_certificates_from_gh
+      fetch_certificates_from_gh_for_ci
       
       begin
       
@@ -548,11 +529,36 @@ platform :ios do
     key_password = ENV["KEY_PASSWORD"]
     key_alias = ENV["KEY_ALIAS"]
   
-    version = options[:version]
-    build = options[:build]
+    version = options[:version_name]
+    build = options[:version_code]
     github_username = options[:username]
     github_token = options[:token]
-  
+
+    ci_value = true
+
+    setup_ci if ENV['CI']
+
+    if !build.nil? 
+      build = increment_build_number_in_plist(build_number: build, xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number_in_xcodeproj(build_number: build, xcodeproj: "VeWorld.xcodeproj")
+    else
+      build = increment_build_number_in_plist(xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number_in_xcodeproj(xcodeproj: "VeWorld.xcodeproj")
+    end
+
+    # check if spceicifed version number
+    if !version.nil? 
+      if version.downcase != "patch" && version.downcase != "minor" && version.downcase != "major"
+        version = increment_version_number_in_plist(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number_in_xcodeproj(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+      else 
+        version = increment_version_number_in_plist(bump_type: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number_in_xcodeproj(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+      end
+    else
+      version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
+    end
+    
     ci_value = true
     sh("./set_ci_vars.sh #{ci_value}")
     sh("export SENTRY_DISABLE_AUTO_UPLOAD=true")
