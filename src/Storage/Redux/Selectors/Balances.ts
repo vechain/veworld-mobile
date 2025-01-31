@@ -1,13 +1,19 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { BigNumber } from "bignumber.js"
 import sortBy from "lodash/sortBy"
-import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { VET, VTHO } from "~Constants"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { compareAddresses, isVechainToken } from "~Utils/AddressUtils/AddressUtils"
 import { selectSelectedAccount } from "./Account"
 import { selectSelectedNetwork } from "./Network"
-import { selectAllTokens, selectCustomTokens, selectSuggestedTokens } from "./Tokens"
+import {
+    selectAllTokens,
+    selectB3trAddress,
+    selectCustomTokens,
+    selectSuggestedTokens,
+    selectVot3Address,
+} from "./Tokens"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
@@ -132,13 +138,7 @@ export const selectNonVechainTokensWithBalances = createSelector(
     [selectTokensWithBalances],
     (tokensWithBalance): FungibleTokenWithBalance[] =>
         sortBy(
-            tokensWithBalance.filter(
-                (tokenWithBalance: FungibleTokenWithBalance) =>
-                    !compareAddresses(tokenWithBalance.address, VET.address) &&
-                    !compareAddresses(tokenWithBalance.address, VTHO.address) &&
-                    !compareAddresses(tokenWithBalance.address, B3TR.address) &&
-                    !compareAddresses(tokenWithBalance.address, VOT3.address),
-            ),
+            tokensWithBalance.filter(token => !isVechainToken(token.address)),
             balance => balance.balance.position,
         ),
 )
@@ -150,13 +150,7 @@ export const selectNonVechainTokensBalancesByAccount = createSelector(
     [selectTokensWithBalancesByAccount],
     (tokensWithBalance): FungibleTokenWithBalance[] =>
         sortBy(
-            tokensWithBalance.filter(
-                (tokenWithBalance: FungibleTokenWithBalance) =>
-                    !compareAddresses(tokenWithBalance.address, VET.address) &&
-                    !compareAddresses(tokenWithBalance.address, VTHO.address) &&
-                    !compareAddresses(tokenWithBalance.address, B3TR.address) &&
-                    !compareAddresses(tokenWithBalance.address, VOT3.address),
-            ),
+            tokensWithBalance.filter(token => !isVechainToken(token.address)),
             balance => balance.balance.position,
         ),
 )
@@ -187,8 +181,10 @@ export const selectVthoTokenWithBalance = createSelector(
 export const selectB3trTokenWithBalance = createSelector(
     selectSelectedAccount,
     selectTokensWithBalances,
-    (account, tokensWithBalance) =>
-        tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, B3TR.address)),
+    selectB3trAddress,
+    (account, tokensWithBalance, b3trAddress) => {
+        return tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, b3trAddress))
+    },
 )
 
 /**
@@ -197,8 +193,10 @@ export const selectB3trTokenWithBalance = createSelector(
 export const selectVot3TokenWithBalance = createSelector(
     selectSelectedAccount,
     selectTokensWithBalances,
-    (account, tokensWithBalance) =>
-        tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, VOT3.address)),
+    selectVot3Address,
+    (account, tokensWithBalance, vot3Address) => {
+        return tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, vot3Address))
+    },
 )
 
 export const selectSendableTokensWithBalance = createSelector(
