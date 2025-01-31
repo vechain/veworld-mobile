@@ -2,7 +2,8 @@ import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
     AlertInline,
-    BaseButton,
+    AnimatedFloatingButton,
+    BackButtonHeader,
     BaseIcon,
     BaseSpacer,
     BaseText,
@@ -16,6 +17,7 @@ import { useAnalyticTracking, useDisclosure, useThemedStyles, useVns, useWalletS
 import { Routes, RootStackParamListHome, RootStackParamListSettings } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
+import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 
 type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListSettings, Routes.CLAIM_USERNAME>
 
@@ -37,6 +39,8 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
     const { isSubdomainAvailable, registerSubdomain } = useVns()
     const { isWalletSecurityBiometrics } = useWalletSecurity()
     const trackEvent = useAnalyticTracking()
+
+    const currentAccount = useAppSelector(selectSelectedAccount)
 
     const isFieldValid = useMemo(() => {
         if (subdomain.length < MIN_CHARS) {
@@ -83,7 +87,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
         async (pin?: string) => {
             setIsLoading(true)
             const fullDomain = `${subdomain}${DOMAIN_BASE}`
-            const success = await registerSubdomain(subdomain, pin)
+            const success = await registerSubdomain(currentAccount, subdomain, pin)
 
             trackEvent(AnalyticsEvent.CLAIM_USERNAME_CREATED, {
                 subdomain: fullDomain,
@@ -96,7 +100,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                 navigation.replace(Routes.USERNAME_CLAIMED, { username: fullDomain })
             }
         },
-        [navigation, registerSubdomain, subdomain, trackEvent],
+        [currentAccount, navigation, registerSubdomain, subdomain, trackEvent],
     )
 
     const onSuccess = useCallback(
@@ -114,6 +118,12 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
             onClaimUsername()
         }
     }, [isWalletSecurityBiometrics, onClaimUsername, openPasswordPrompt])
+
+    const onGoBack = useCallback(() => {
+        if (navigation.canGoBack()) {
+            navigation.goBack()
+        }
+    }, [navigation])
 
     const isNotAvailable = useMemo(() => isAvailable === false, [isAvailable])
 
@@ -168,8 +178,19 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
 
     return (
         <Layout
-            title={LL.TITLE_CLAIM_USERNAME()}
             preventGoBack={isLoading}
+            noMargin
+            noBackButton
+            fixedHeader={
+                <BaseView mx={16}>
+                    <BackButtonHeader
+                        hasBottomSpacer={false}
+                        onGoBack={onGoBack}
+                        preventGoBack={isLoading}
+                        title={LL.TITLE_CLAIM_USERNAME()}
+                    />
+                </BaseView>
+            }
             fixedBody={
                 <BaseView style={[styles.contentContainer]}>
                     {/* Body */}
@@ -218,22 +239,22 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                             />
                         )}
                         <BaseSpacer height={24} />
-                        <BaseView flexDirection="row" w={100}>
-                            <BaseButton
-                                flex={1}
-                                isLoading={isLoading}
-                                disabled={isLoading || hasErrors || !subdomain}
-                                action={onSubmit}
-                                testID="ClaimUsername_Confirm_Btn">
-                                {claimError ? LL.BTN_TRY_AGAIN() : LL.BTN_CONFIRM()}
-                            </BaseButton>
-                        </BaseView>
                     </BaseView>
-
                     <RequireUserPassword
                         isOpen={isPasswordPromptOpen}
                         onClose={closePasswordPrompt}
                         onSuccess={onSuccess}
+                    />
+                </BaseView>
+            }
+            footer={
+                <BaseView flexGrow={1}>
+                    <AnimatedFloatingButton
+                        isDisabled={isLoading || hasErrors || !subdomain}
+                        isLoading={isLoading}
+                        title={claimError ? LL.BTN_TRY_AGAIN() : LL.BTN_CONFIRM()}
+                        onPress={onSubmit}
+                        isVisible
                     />
                 </BaseView>
             }
