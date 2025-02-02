@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { BigNumber } from "bignumber.js"
 import sortBy from "lodash/sortBy"
-import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, VeB3TR, VET, VOT3, VTHO } from "~Constants"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
@@ -199,6 +199,15 @@ export const selectVot3TokenWithBalance = createSelector(
     selectTokensWithBalances,
     (account, tokensWithBalance) =>
         tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, VOT3.address)),
+)
+
+export const selectVeB3TRTokenWithBalance = createSelector(
+    [selectTokensWithBalances],
+    (tokensWithBalance): FungibleTokenWithBalance | undefined => {
+        return tokensWithBalance.find(
+            tokenWithBalance => tokenWithBalance.symbol.toLowerCase() === VeB3TR.symbol.toLowerCase(),
+        )
+    },
 )
 
 export const selectSendableTokensWithBalance = createSelector(

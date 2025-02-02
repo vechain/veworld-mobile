@@ -1,14 +1,13 @@
-import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
+import { Image, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
-import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import { BalanceUtils } from "~Utils"
+import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
 import { B3TR, COLORS, VOT3 } from "~Constants"
-import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
+import { useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 import { selectBalanceForToken, useAppSelector } from "~Storage/Redux"
+import { BalanceUtils } from "~Utils"
+import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
     isBalanceVisible: boolean
