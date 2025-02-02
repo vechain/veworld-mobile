@@ -1,15 +1,8 @@
 import { showErrorToast, useThor, WalletEncryptionKeyHelper } from "~Components"
 import { useCallback, useMemo } from "react"
-import {
-    selectAccounts,
-    selectContacts,
-    selectDevice,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectAccounts, selectContacts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { QueryObserverResult, RefetchOptions, useQuery, useQueryClient } from "@tanstack/react-query"
-import { LocalDevice, Network, NETWORK_TYPE } from "~Model"
+import { AccountWithDevice, LocalDevice, Network, NETWORK_TYPE } from "~Model"
 import { abi } from "thor-devkit"
 import { queryClient } from "~Api/QueryProvider"
 import {
@@ -109,7 +102,7 @@ type VnsHook = {
     getVnsAddress: (name: string) => Promise<string | undefined>
     refetchVns: (options?: RefetchOptions) => Promise<QueryObserverResult<Vns, Error>>
     isSubdomainAvailable: (domainName: string) => Promise<boolean>
-    registerSubdomain: (domainName: string, pin?: string) => Promise<boolean>
+    registerSubdomain: (account: AccountWithDevice, domainName: string, pin?: string) => Promise<boolean>
     resetVns: () => Promise<void>
 }
 
@@ -117,16 +110,15 @@ export const useVns = (props?: Vns): VnsHook => {
     const thor = useThor()
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
-    const account = useAppSelector(selectSelectedAccount)
-    const device = useAppSelector(state => selectDevice(state, account.rootAddress))
     const trackEvent = useAnalyticTracking()
     const qc = useQueryClient()
-    const { name, address = account.address } = props || {}
+    const { name, address } = props || {}
 
     const thorClient = useMemo(() => ThorClient.at(network.currentUrl), [network.currentUrl])
 
     const fetchVns = useCallback(async () => {
-        const nameRes = await getVnsNames(thor, network, [address])
+        const _address = address ? [address] : undefined
+        const nameRes = await getVnsNames(thor, network, _address)
         const vnsName = nameRes[0]?.name || name
 
         const addrRes = await getVnsAddress(thor, network, vnsName)
@@ -166,9 +158,9 @@ export const useVns = (props?: Vns): VnsHook => {
 
     //#region  Subdomain registration
     const getSigner = useCallback(
-        async (_device: LocalDevice, password?: string) => {
+        async (device: LocalDevice, account: AccountWithDevice, password?: string) => {
             const wallet = await WalletEncryptionKeyHelper.decryptWallet({
-                encryptedWallet: _device.wallet,
+                encryptedWallet: device.wallet,
                 pinCode: password,
             })
 
@@ -202,7 +194,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [account.address, account.index, network.type, thorClient],
+        [network.type, thorClient],
     )
 
     const getTotalGas = useCallback(
@@ -224,7 +216,7 @@ export const useVns = (props?: Vns): VnsHook => {
     )
 
     const buildClaimTx = useCallback(
-        async (subdomain: string) => {
+        async (account: AccountWithDevice, subdomain: string) => {
             try {
                 const dataClaimer = new abi.Function(abis.VetDomains.claim).encode(
                     subdomain,
@@ -283,23 +275,15 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [
-            account.address,
-            getTotalGas,
-            network.genesis.id,
-            network.type,
-            thorClient.blocks,
-            thorClient.gas,
-            thorClient.transactions,
-        ],
+        [getTotalGas, network.genesis.id, network.type, thorClient.blocks, thorClient.gas, thorClient.transactions],
     )
 
     const signClaimTx = useCallback(
-        async (signer: VeChainSigner, txBody: TransactionBody) => {
+        async (signer: VeChainSigner, accountAddress: string, txBody: TransactionBody) => {
             try {
                 const rawDelegateSigned =
                     (await signer?.signTransaction(
-                        signerUtils.transactionBodyToTransactionRequestInput(txBody, account.address),
+                        signerUtils.transactionBodyToTransactionRequestInput(txBody, accountAddress),
                     )) || ""
 
                 const delegatedSignedTx = Transaction.decode(HexUInt.of(rawDelegateSigned.slice(2)).bytes, true)
@@ -319,21 +303,21 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [account.address, thorClient.transactions],
+        [thorClient.transactions],
     )
     //#endregion
 
     const registerSubdomain = useCallback(
-        async (domainName: string, password?: string) => {
-            if (!device) return false
+        async (account: AccountWithDevice, domainName: string, password?: string) => {
+            const device = account.device
             try {
                 if (!("wallet" in device)) throw new Error("Ledger device not supported")
-                const signer = await getSigner(device, password)
+                const signer = await getSigner(device, account, password)
 
                 if (!signer) throw new Error("No signer")
 
-                const txBody = await buildClaimTx(domainName)
-                await signClaimTx(signer, txBody)
+                const txBody = await buildClaimTx(account, domainName)
+                await signClaimTx(signer, account.address, txBody)
 
                 return true
             } catch (e) {
@@ -370,7 +354,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 return false
             }
         },
-        [LL, buildClaimTx, device, getSigner, signClaimTx, trackEvent],
+        [LL, buildClaimTx, getSigner, signClaimTx, trackEvent],
     )
 
     const domain = useMemo(() => queryRes.data?.name || name || "", [name, queryRes])

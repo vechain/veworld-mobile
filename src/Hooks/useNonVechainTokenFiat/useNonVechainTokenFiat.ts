@@ -33,7 +33,8 @@ export const useNonVechainTokenFiat = (accountAddress?: string) => {
                 const tokenExchangeRate = nonVeChainTokens[token.symbol.toLowerCase()]
                 if (!tokenExchangeRate) return "0"
 
-                const exchangeRate = currency === "USD" ? tokenExchangeRate.price_usd : tokenExchangeRate.price_eur
+                const exchangeRate =
+                    currency.toLowerCase() === "usd" ? tokenExchangeRate.price_usd : tokenExchangeRate.price_eur
 
                 return BalanceUtils.getFiatBalance(
                     token.balance.balance ?? 0,
