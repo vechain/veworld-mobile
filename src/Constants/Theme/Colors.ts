@@ -67,6 +67,7 @@ export type Colors = {
     tokenCardText: string
     graphLine: string
     graphGradient: string
+    graphStatsText: string
     accountCard: string
     successVariant: {
         background: string
@@ -269,6 +270,7 @@ const light: Colors = {
     graphLine: COLORS.PURPLE,
     graphGradient: COLORS.GRAPH_GRADIENT_LIGHT,
     accountCard: COLORS.PURPLE,
+    graphStatsText: COLORS.GREY_600,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -380,6 +382,7 @@ const dark: Colors = {
     graphLine: COLORS.LIME_GREEN,
     graphGradient: COLORS.LIME_GREEN,
     accountCard: COLORS.LIME_GREEN,
+    graphStatsText: COLORS.GREY_400,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
