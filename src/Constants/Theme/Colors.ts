@@ -69,6 +69,7 @@ export type Colors = {
     graphGradient: string
     graphStatsText: string
     accountCard: string
+    marketInfoBackground: string
     successVariant: {
         background: string
         border: string
@@ -178,7 +179,7 @@ export enum COLORS {
     GREY_500 = "#747C89",
     GREY_400 = "#AAAFB6",
     GREY_300 = "#D2D5D9",
-    GREY_200 = "#E2E8F0",
+    GREY_200 = "#E7E9EB",
     GREY_100 = "#F1F2F3",
     GREY_50 = "#F9F9FA",
     ORANGE_50 = "#FFFAF0",
@@ -277,6 +278,7 @@ const light: Colors = {
     graphGradient: COLORS.GRAPH_GRADIENT_LIGHT,
     accountCard: COLORS.PURPLE,
     graphStatsText: COLORS.GREY_600,
+    marketInfoBackground: COLORS.GREY_200,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -395,6 +397,7 @@ const dark: Colors = {
     graphGradient: COLORS.LIME_GREEN,
     accountCard: COLORS.LIME_GREEN,
     graphStatsText: COLORS.GREY_400,
+    marketInfoBackground: COLORS.PURPLE_DISABLED,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,

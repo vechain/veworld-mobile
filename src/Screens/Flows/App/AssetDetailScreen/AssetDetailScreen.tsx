@@ -27,8 +27,8 @@ import {
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 import { AccountUtils } from "~Utils"
-import { B3TR } from "~Constants"
-import { AssetBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components/AssetBalanceCard"
+import { B3TR, ColorThemeType } from "~Constants"
+import { AssetBalanceCard } from "./Components/AssetBalanceCard"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -51,13 +51,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
 
-    // render description based on locale. NB: at the moment only EN is supported
-    const description = useMemo(() => {
-        if (!token?.tokenInfo?.description) return ""
-
-        return token?.tokenInfo?.description[locale] ?? token?.tokenInfo?.description.en
-    }, [token?.tokenInfo?.description, locale])
-
     const Actions: FastAction[] = useMemo(
         () => [
             {
@@ -76,19 +69,31 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         })
                     }
                 },
-                icon: <BaseIcon size={19} color={theme.colors.text} name="icon-arrow-up" />,
+                icon: <BaseIcon size={20} color={theme.colors.text} name="icon-arrow-up" />,
                 testID: "sendButton",
             },
-
+            {
+                name: LL.BTN_SWAP(),
+                action: () => nav.navigate(Routes.SWAP),
+                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
+                testID: "swapButton",
+            },
             {
                 name: LL.COMMON_RECEIVE(),
                 action: openQRCodeSheet,
-                icon: <BaseIcon size={19} color={theme.colors.text} name="icon-qr-code" />,
+                icon: <BaseIcon size={20} color={theme.colors.text} name="icon-qr-code" />,
                 testID: "reciveButton",
             },
         ],
         [LL, foundToken, nav, openQRCodeSheet, theme.colors.text, token.symbol],
     )
+
+    // render description based on locale. NB: at the moment only EN is supported
+    const description = useMemo(() => {
+        if (!token?.tokenInfo?.description) return ""
+
+        return token?.tokenInfo?.description[locale] ?? token?.tokenInfo?.description.en
+    }, [token?.tokenInfo?.description, locale])
 
     const showActions = useMemo(() => !AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
@@ -110,14 +115,17 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     <BaseView alignItems="center" style={styles.assetDetailsBody}>
                         <BaseSpacer height={24} />
 
-                        {showActions && (
-                            <>
-                                <FastActionsBar actions={Actions} />
-                                <BaseSpacer height={24} />
-                            </>
-                        )}
-
-                        <AssetBalanceCard tokenWithInfo={token} isBalanceVisible={isBalanceVisible} />
+                        <AssetBalanceCard
+                            tokenWithInfo={token}
+                            isBalanceVisible={isBalanceVisible}
+                            FastActions={
+                                showActions && (
+                                    <>
+                                        <FastActionsBar actions={Actions} actionStyle={styles.actionStyle} />
+                                    </>
+                                )
+                            }
+                        />
 
                         <BaseSpacer height={24} />
 
@@ -152,7 +160,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         assetDetailsHeader: {
             marginHorizontal: 16,
@@ -161,5 +169,11 @@ const baseStyles = () =>
         },
         assetDetailsBody: {
             paddingHorizontal: 16,
+        },
+        actionStyle: {
+            backgroundColor: theme.colors.actionBanner.buttonBackground,
+            flex: 1,
+            paddingVertical: 11,
+            borderRadius: 8,
         },
     })
