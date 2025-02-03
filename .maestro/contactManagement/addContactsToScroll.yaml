@@ -1,45 +1,54 @@
 #adds many contacts and scroll to view all of them
 appId: org.vechain.veworld.app
 env:
-  CONTACT_NAME_1: "My Contact 1"
-  CONTACT_ADDRESS_1: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791051"
+    CONTACT_NAME_1: "My Contact 1"
+    CONTACT_ADDRESS_1: "0x231E70Cf27A2c44Eb9C00a3B1d2F7507Ae791051"
 ---
 - launchApp:
-    clearState: true
+      clearState: true
 ## welcome screen
 - tapOn:
-     id: "dev_demo"
+      id: "dev_demo"
+# Turn off push notification bottom sheet
+- runFlow:
+      when:
+          platform: iOS
+          visible:
+              id: "button_notifications_enable"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
 - tapOn:
-     id: "settings-tab"
+      id: "settings-tab"
 - tapOn:
-     id: "Networks"
+      id: "Networks"
 - tapOn:
       id: "networks_box_mainnet"
 - tapOn:
-     id: "networks_box_testnet"
+      id: "networks_box_testnet"
 - tapOn:
-     id: "wallet-tab"
+      id: "wallet-tab"
 - tapOn:
-     id: "settings-tab"
+      id: "settings-tab"
 - tapOn:
-     id: "BackButtonHeader-BaseIcon-backButton"
+      id: "BackButtonHeader-BaseIcon-backButton"
 - tapOn:
-     id: "My Contacts"
+      id: "My Contacts"
 - tapOn:
-     id: "create-new-contact"
+      id: "create-new-contact"
 - tapOn:
-     id: "Contact-Name-Input"
+      id: "Contact-Name-Input"
 - inputText: ${CONTACT_NAME_1}
 - tapOn:
-     id: "Contact-Address-Input"
+      id: "Contact-Address-Input"
 - inputText: ${CONTACT_ADDRESS_1}
 - tapOn: "Contact name"
 - tapOn:
-     id: "Add_Contact_Button"
+      id: "Add_Contact_Button"
 - runFlow: multipleContacts.yaml
 - scrollUntilVisible:
-    element:
-      id: "contact-row-9" # or any other selector
-    direction: DOWN # DOWN|UP|LEFT|RIGHT (optional, default: DOWN)
+      element:
+          id: "contact-row-9" # or any other selector
+      direction: DOWN # DOWN|UP|LEFT|RIGHT (optional, default: DOWN)
 #Reset the app
 - runFlow: ../setup_reset/resetApp.yaml
