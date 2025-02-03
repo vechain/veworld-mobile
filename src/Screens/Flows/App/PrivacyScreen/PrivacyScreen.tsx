@@ -56,7 +56,10 @@ export const PrivacyScreen = () => {
             if (!mnemonicArray.length) return
 
             setTimeout(() => {
-                nav.navigate(Routes.ICLOUD_MNEMONIC_BACKUP, { mnemonicArray, deviceToBackup })
+                nav.navigate(Routes.ICLOUD_CREDENTIALS_BACKUP, {
+                    credential: "99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36",
+                    deviceToBackup,
+                })
             }, delay)
         },
         [nav],
