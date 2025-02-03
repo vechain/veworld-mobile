@@ -3,6 +3,8 @@ import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
+import { Image, StyleSheet } from "react-native"
+import { COLORS } from "~Constants"
 
 export const BalanceView = ({
     tokenWithInfo,
@@ -39,8 +41,8 @@ export const BalanceView = ({
         return (
             <BaseView flexDirection="row">
                 <FiatBalance
-                    typographyFont={"subTitleBold"}
-                    color={theme.colors.text}
+                    typographyFont={"subSubTitleSemiBold"}
+                    color={theme.colors.assetDetailsCard.title}
                     balances={[fiatBalance]}
                     isVisible={isBalanceVisible}
                 />
@@ -50,14 +52,24 @@ export const BalanceView = ({
 
     return (
         <BaseView w={100}>
-            <BaseView flexDirection="row" alignItems="flex-end">
-                <BaseText typographyFont="bodyBold">{LL.BD_YOUR_BALANCE()}</BaseText>
+            <BaseView flexDirection="row" alignItems="center" justifyContent="flex-start">
+                <BaseText color={theme.colors.subtitle} typographyFont="smallCaptionSemiBold">
+                    {LL.BD_YOUR_BALANCE()}
+                </BaseText>
             </BaseView>
 
-            <BaseSpacer height={4} />
+            <BaseSpacer height={8} />
 
             <BaseView flexDirection="row" justifyContent="space-between">
                 <BaseView flexDirection="row">
+                    <BaseView style={[styles.imageContainer]}>
+                        <Image source={{ uri: tokenWithInfo.icon }} style={styles.image} />
+                    </BaseView>
+                    <BaseSpacer width={8} />
+                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="bodySemiBold">
+                        {symbol}
+                    </BaseText>
+                    <BaseSpacer width={4} />
                     {isTokensOwnedLoading ? (
                         <BaseSkeleton
                             animationDirection="horizontalLeft"
@@ -67,10 +79,10 @@ export const BalanceView = ({
                             width={60}
                         />
                     ) : (
-                        <BaseText typographyFont="bodyMedium">{isBalanceVisible ? tokenUnitBalance : "•••••"}</BaseText>
+                        <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="bodyMedium">
+                            {isBalanceVisible ? tokenUnitBalance : "•••••"}
+                        </BaseText>
                     )}
-                    <BaseSpacer width={4} />
-                    <BaseText typographyFont="captionRegular">{symbol}</BaseText>
                 </BaseView>
                 <BaseSpacer width={4} />
                 {renderFiatBalance()}
@@ -78,3 +90,15 @@ export const BalanceView = ({
         </BaseView>
     )
 }
+
+const styles = StyleSheet.create({
+    imageContainer: {
+        borderRadius: 30,
+        padding: 6,
+        backgroundColor: COLORS.GREY_100,
+    },
+    imageShadow: {
+        width: "auto",
+    },
+    image: { width: 12, height: 12 },
+})

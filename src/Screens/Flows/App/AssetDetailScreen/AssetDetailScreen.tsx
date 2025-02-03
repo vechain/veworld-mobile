@@ -14,7 +14,7 @@ import {
     showWarningToast,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { AssetChart, BalanceView, MarketInfoView } from "./Components"
+import { AssetChart, MarketInfoView } from "./Components"
 import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
 import { striptags } from "striptags"
@@ -28,6 +28,7 @@ import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 import { AccountUtils } from "~Utils"
 import { B3TR } from "~Constants"
+import { AssetBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components/AssetBalanceCard"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -116,7 +117,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             </>
                         )}
 
-                        <BalanceView tokenWithInfo={token} isBalanceVisible={isBalanceVisible} />
+                        <AssetBalanceCard tokenWithInfo={token} isBalanceVisible={isBalanceVisible} />
 
                         <BaseSpacer height={24} />
 
