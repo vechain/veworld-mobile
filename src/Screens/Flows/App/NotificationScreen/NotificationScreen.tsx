@@ -151,8 +151,6 @@ export const NotificationScreen = () => {
     const ListHeaderComponent = useMemo(() => {
         return (
             <>
-                <BaseText typographyFont="title">{LL.PUSH_NOTIFICATIONS()}</BaseText>
-                <BaseSpacer height={12} />
                 <BaseCard>
                     <BaseView flex={1} flexDirection="column">
                         <EnableFeature
@@ -285,6 +283,7 @@ export const NotificationScreen = () => {
 
     return (
         <Layout
+            title={LL.PUSH_NOTIFICATIONS()}
             body={
                 <BaseView pt={16} bg={theme.colors.background}>
                     {DappsList}
