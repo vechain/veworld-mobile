@@ -1,4 +1,4 @@
-export * from "./useBackupMnemonic"
+export * from "./useBackupCredential"
 export * from "./useEditPin"
 export * from "./useSecurityButtons"
 export * from "./useSecurityUpdate"

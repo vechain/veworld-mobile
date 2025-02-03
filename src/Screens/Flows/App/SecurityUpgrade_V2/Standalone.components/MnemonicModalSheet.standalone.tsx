@@ -7,7 +7,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    MnemonicAvoidScreenshotAlert,
+    CredentialAvoidScreenshotAlert,
 } from "~Components"
 import { useCopyClipboard, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -23,14 +23,17 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
         const theme = useTheme()
         const { LL } = useI18nContext()
         const { onCopyToClipboard } = useCopyClipboard()
-
+        const credential = selectedWallet?.privateKey ?? selectedWallet?.mnemonic
+        const isMnemonic = Array.isArray(credential)
         return (
             <BaseBottomSheet ref={ref}>
                 <BaseView w={100}>
                     <BaseText typographyFont="subTitleBold">{LL.BTN_BACKUP_MENMONIC()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center">
-                        <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_WARMNING()}</BaseText>
+                        <BaseText typographyFont="captionRegular">
+                            {isMnemonic ? LL.BD_MNEMONIC_WARMNING() : LL.BD_PRIVATE_KEY_WARMNING()}
+                        </BaseText>
 
                         <BaseSpacer height={24} />
                     </BaseView>
@@ -60,7 +63,7 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
                         />
 
                         <BaseSpacer height={16} />
-                        <MnemonicAvoidScreenshotAlert />
+                        {credential && <CredentialAvoidScreenshotAlert credential={credential} />}
                     </BaseView>
                 </BaseView>
             </BaseBottomSheet>

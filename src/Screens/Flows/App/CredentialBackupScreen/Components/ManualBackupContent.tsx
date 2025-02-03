@@ -1,5 +1,5 @@
 import React from "react"
-import { BaseSpacer, BaseView, CredentialAvoidScreenshotAlert, MnemonicCard } from "~Components"
+import { BaseSpacer, BaseView, CredentialAvoidScreenshotAlert, CredentialCard } from "~Components"
 import { LocalDevice } from "~Model"
 import { CopyCredentialButton } from "./CopyCredentialButton"
 import { DoNotShareAlert } from "./DoNotShareAlert"
@@ -17,7 +17,7 @@ export const ManualBackupContent = ({
             <DoNotShareAlert credential={credential} />
             <BaseSpacer height={12} />
             {!!credential.length && (
-                <MnemonicCard
+                <CredentialCard
                     credential={credential}
                     souceScreen="BackupMnemonicBottomSheet"
                     deviceToBackup={deviceToBackup}

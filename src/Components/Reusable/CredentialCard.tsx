@@ -18,7 +18,7 @@ type Props = {
     deviceToBackup?: LocalDevice
 }
 
-export const MnemonicCard: FC<Props> = ({ credential, souceScreen, deviceToBackup }) => {
+export const CredentialCard: FC<Props> = ({ credential, souceScreen, deviceToBackup }) => {
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
     const isMnemonic = Array.isArray(credential)
 

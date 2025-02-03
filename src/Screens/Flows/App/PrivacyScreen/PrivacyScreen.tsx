@@ -27,7 +27,7 @@ import {
 } from "~Storage/Redux"
 import { warn } from "~Utils"
 import { BackupWarningBottomSheet, DevicesBackupState, EnableBiometrics } from "./Components"
-import { useBackupMnemonic, useEditPin } from "./Hooks"
+import { useBackupCredential, useEditPin } from "./Hooks"
 
 export const PrivacyScreen = () => {
     // [START] - Hooks setup
@@ -52,17 +52,20 @@ export const PrivacyScreen = () => {
     const { isOpen: isPasswordPromptOpen, onOpen: openPasswordPrompt, onClose: closePasswordPrompt } = useDisclosure()
 
     const openBackupPhraseSheetWithDelay = useCallback(
-        (delay: number, mnemonicArray: string[], deviceToBackup: LocalDevice) => {
-            if (!mnemonicArray.length) return
+        (delay: number, credential: string[] | string, deviceToBackup: LocalDevice) => {
+            if (!credential.length) return
 
             setTimeout(() => {
-                nav.navigate(Routes.ICLOUD_MNEMONIC_BACKUP, { mnemonicArray, deviceToBackup })
+                nav.navigate(Routes.ICLOUD_CREDENTIAL_BACKUP, {
+                    credential,
+                    deviceToBackup,
+                })
             }, delay)
         },
         [nav],
     )
 
-    const { onPasswordSuccess, handleOnSelectedWallet } = useBackupMnemonic({
+    const { onPasswordSuccess, handleOnSelectedWallet } = useBackupCredential({
         closePasswordPrompt,
         openBackupPhraseSheetWithDelay,
         openWalletMgmtSheetWithDelay,

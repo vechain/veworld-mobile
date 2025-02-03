@@ -16,6 +16,7 @@ type Props = {
 export const CloudAndManualBackup: FC<Props> = ({ credential, deviceToBackup }) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
+    const isMnemonic = Array.isArray(credential)
 
     return (
         <BaseView>
@@ -33,7 +34,9 @@ export const CloudAndManualBackup: FC<Props> = ({ credential, deviceToBackup }) 
             <BaseSpacer height={16} />
             <CardWithHeader title={LL.TITLE_BACKUP_MANUALLY()} iconName="icon-pencil">
                 <BaseView>
-                    <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_PASSWORD_WARNING()}</BaseText>
+                    <BaseText typographyFont="captionRegular">
+                        {isMnemonic ? LL.BD_MNEMONIC_PASSWORD_WARNING() : LL.BD_PRIVATE_KEY_PASSWORD_WARNING()}
+                    </BaseText>
                     <BaseSpacer height={12} />
                     <ManualBackupContent credential={credential} deviceToBackup={deviceToBackup} />
                 </BaseView>
