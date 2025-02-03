@@ -1,0 +1,10 @@
+appId: org.vechain.veworld.app
+tags:
+    - onlyIOS
+---
+- runFlow:
+      when:
+          visible:
+              id: "button_notifications_enable"
+- tapOn:
+      id: "button_notifications_skip"
