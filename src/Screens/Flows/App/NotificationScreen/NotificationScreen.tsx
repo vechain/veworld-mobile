@@ -14,7 +14,7 @@ import {
     showWarningToast,
     useNotifications,
 } from "~Components"
-import { newDappsListedTagKey, veWorldFeatureUpdateTagKey, voteReminderTagKey } from "~Constants"
+import { vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE, VeBetterDaoDapp } from "~Model"
@@ -31,7 +31,7 @@ export const NotificationScreen = () => {
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
     const { data = [], error, isPending } = useVeBetterDaoDapps()
-    const { getTags, addTag, removeTag } = useNotifications()
+    const { getTags, addTag, addDAppTag, removeTag, removeDAppTag } = useNotifications()
 
     const [dapps, setDapps] = useState<VeBetterDaoDapp[]>([])
     const [tags, setTags] = useState<{ [key: string]: string }>({})
@@ -116,14 +116,32 @@ export const NotificationScreen = () => {
         [addTag, hasReachedSubscriptionLimit, removeTag, showSubscriptionLimitReachedWarning, updateTags],
     )
 
+    const toogleDAppSubscriptionSwitch = useCallback(
+        (dappId: string) => (value: boolean) => {
+            if (value) {
+                if (hasReachedSubscriptionLimit) {
+                    showSubscriptionLimitReachedWarning()
+                    return
+                }
+
+                addDAppTag(dappId)
+            } else {
+                removeDAppTag(dappId)
+            }
+
+            updateTags()
+        },
+        [addDAppTag, hasReachedSubscriptionLimit, removeDAppTag, showSubscriptionLimitReachedWarning, updateTags],
+    )
+
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<VeBetterDaoDapp>) => {
             const id = item.id
             const value = !!tags[id]
 
-            return <EnableFeature title={item.name} onValueChange={toogleSubscriptionSwitch(id)} value={value} />
+            return <EnableFeature title={item.name} onValueChange={toogleDAppSubscriptionSwitch(id)} value={value} />
         },
-        [tags, toogleSubscriptionSwitch],
+        [tags, toogleDAppSubscriptionSwitch],
     )
 
     const renderSeparator = useCallback(() => {
@@ -151,15 +169,9 @@ export const NotificationScreen = () => {
                         <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_UPDATES()}</BaseText>
                         <BaseSpacer height={16} />
                         <EnableFeature
-                            title={LL.PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE()}
-                            onValueChange={toogleSubscriptionSwitch(veWorldFeatureUpdateTagKey)}
-                            value={!!tags[veWorldFeatureUpdateTagKey]}
-                        />
-                        <BaseSpacer height={16} />
-                        <EnableFeature
-                            title={LL.PUSH_NOTIFICATIONS_NEW_APP_LISTED()}
-                            onValueChange={toogleSubscriptionSwitch(newDappsListedTagKey)}
-                            value={!!tags[newDappsListedTagKey]}
+                            title={LL.VECHAIN_NEWS_AND_UPDATES()}
+                            onValueChange={toogleSubscriptionSwitch(vechainNewsAndUpdates)}
+                            value={!!tags[vechainNewsAndUpdates]}
                         />
                         <BaseSpacer height={40} />
 
