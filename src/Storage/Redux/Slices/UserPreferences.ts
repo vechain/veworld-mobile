@@ -133,10 +133,8 @@ export const UserPreferencesSlice = createSlice({
         addRemovedNotificationTag: (state, action: PayloadAction<string>) => {
             if (!state.removedNotificationTags) {
                 state.removedNotificationTags = [action.payload]
-            } else {
-                if (!state.removedNotificationTags.includes(action.payload)) {
-                    state.removedNotificationTags.push(action.payload)
-                }
+            } else if (!state.removedNotificationTags.includes(action.payload)) {
+                state.removedNotificationTags.push(action.payload)
             }
         },
 
