@@ -2,10 +2,10 @@ import React, { memo, useMemo } from "react"
 import { Image, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
-import { B3TR, COLORS, VOT3 } from "~Constants"
+import { COLORS } from "~Constants"
 import { useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectBalanceForToken, useAppSelector } from "~Storage/Redux"
+import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
@@ -15,13 +15,14 @@ type Props = {
 }
 
 export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) => {
+    const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
+    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
+
     const theme = useTheme()
     const { LL } = useI18nContext()
 
     const vot3Token = useTokenWithCompleteInfo(VOT3)
     const b3trToken = useTokenWithCompleteInfo(B3TR)
-
-    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
 
     const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 

@@ -1,8 +1,8 @@
 import React, { useMemo } from "react"
 import { FiatBalance } from "~Components"
-import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { VET, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import { selectBalanceForToken, useAppSelector } from "~Storage/Redux"
+import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 
 type AccountFiatBalanceProps = {
@@ -12,6 +12,8 @@ type AccountFiatBalanceProps = {
 
 const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFiatBalanceProps) => {
     const { isLoading = false, isVisible = true } = props
+    const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
+
     const theme = useTheme()
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
