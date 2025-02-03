@@ -65,5 +65,6 @@ env:
           platform: iOS
           visible:
               id: "button_notifications_enable"
-- tapOn:
-      id: "button_notifications_skip"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"

@@ -23,7 +23,11 @@ onFlowComplete:
 - runFlow:
       when:
           platform: iOS
-      file: ../helpers/skipPushNotificationsIOS.yaml
+          visible:
+              id: "button_notifications_enable"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
 #backup mnemonic on privacy and settings screen
 - runFlow:
       when:
