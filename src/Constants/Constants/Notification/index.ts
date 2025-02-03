@@ -1,5 +1,4 @@
-export const veBetterDaoTagKey = "VeBetterDao"
-export const veWorldFeatureUpdateTagKey = "VeWorldFeatureUpdate"
+export const vechainNewsAndUpdates = "vechainNewsAndUpdates"
 export const newDappsListedTagKey = "NewDappsListed"
 export const voteReminderTagKey = "VoteReminder"
 

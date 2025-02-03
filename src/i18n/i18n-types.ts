@@ -637,11 +637,11 @@ type RootTranslation = {
 	 */
 	BD_USER_EDIT_PASSWORD_ERROR: string
 	/**
-	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N​ ​a​g​a​i​n
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 * <​>​<​>​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
+	 * P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
@@ -2477,17 +2477,13 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_ACTIVE: string
 	/**
-	 * D​A​p​p​s
+	 * x​2​E​a​r​n​ ​d​A​p​p​s
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: string
 	/**
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
-	/**
-	 * N​e​w​ ​A​p​p​ ​l​i​s​t​e​d
-	 */
-	PUSH_NOTIFICATIONS_NEW_APP_LISTED: string
 	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​l​o​a​d​ ​y​o​u​r​ ​p​r​e​f​e​r​e​n​c​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
@@ -2509,7 +2505,7 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: string
 	/**
-	 * G​e​n​e​r​a​l​ ​u​p​d​a​t​e​s
+	 * U​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: string
 	/**
@@ -2517,9 +2513,9 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
-	 * V​e​W​o​r​l​d​ ​f​e​a​t​u​r​e​s​ ​&​ ​u​p​d​a​t​e​s
+	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
-	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: string
+	VECHAIN_NEWS_AND_UPDATES: string
 	/**
 	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
 	 */
@@ -4339,11 +4335,11 @@ Try reconnect your device to the internet.
 	 */
 	BD_USER_EDIT_PASSWORD_ERROR: () => LocalizedString
 	/**
-	 * Confirm your PIN
+	 * Confirm your PIN again
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 * <><> PIN doesn't match.
+	 * PIN doesn't match.
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**
@@ -6152,17 +6148,13 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_ACTIVE: () => LocalizedString
 	/**
-	 * DApps
+	 * x2Earn dApps
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
 	/**
 	 * Keep up to date with the latest news and updates
 	 */
 	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
-	/**
-	 * New App listed
-	 */
-	PUSH_NOTIFICATIONS_NEW_APP_LISTED: () => LocalizedString
 	/**
 	 * An error occurred while trying to load your preferences. Please try again.
 	 */
@@ -6184,7 +6176,7 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: () => LocalizedString
 	/**
-	 * General updates
+	 * Updates
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: () => LocalizedString
 	/**
@@ -6192,9 +6184,9 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
 	/**
-	 * VeWorld features & updates
+	 * Vechain news & updates
 	 */
-	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: () => LocalizedString
+	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
 	/**
 	 * Vote reminder
 	 */
