@@ -15,8 +15,8 @@ export enum Routes {
 
     IMPORT_FROM_CLOUD = "Import_From_Cloud",
     IMPORT_MNEMONIC_BACKUP_PASSWORD = "Import_Mnemonic_Backup_Password",
-    ICLOUD_MNEMONIC_BACKUP = "Icloud_Mnemonic_Backup",
-    CHOOSE_MNEMONIC_BACKUP_PASSWORD = "Choose_Mnemonic_Backup_Password",
+    ICLOUD_CREDENTIALS_BACKUP = "Icloud_Credentials_Backup",
+    CHOOSE_MNEMONIC_OR_PK_BACKUP_PASSWORD = "Choose_Mnemonic_Or_Pk_Backup_Password",
     USER_CREATE_PASSWORD = "User_Create_Password",
     CLAIM_USERNAME = "Claim_Username",
     USERNAME_CLAIMED = "Username_Claimed",
