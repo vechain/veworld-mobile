@@ -5,8 +5,6 @@ env:
     AMOUNT: 0.01
     ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
 
-onFlowComplete:
-    - runFlow: ../helpers/skipPushNotificationsIOS.yaml
 ---
 - launchApp:
       clearState: true
@@ -61,3 +59,11 @@ onFlowComplete:
           - tapOn:
                 id: "selectAccount"
                 index: 0
+# Turn off push notification bottom sheet
+- runFlow:
+      when:
+          platform: iOS
+          visible:
+              id: "button_notifications_enable"
+- tapOn:
+      id: "button_notifications_skip"
