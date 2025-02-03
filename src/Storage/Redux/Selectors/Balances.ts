@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { BigNumber } from "bignumber.js"
 import sortBy from "lodash/sortBy"
-import { VET, VTHO } from "~Constants"
+import { VeB3TR, VET, VTHO } from "~Constants"
 import { FungibleToken, FungibleTokenWithBalance } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { compareAddresses, isVechainToken } from "~Utils/AddressUtils/AddressUtils"
@@ -183,7 +183,9 @@ export const selectB3trTokenWithBalance = createSelector(
     selectTokensWithBalances,
     selectB3trAddress,
     (account, tokensWithBalance, b3trAddress) => {
-        return tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, b3trAddress))
+        return tokensWithBalance.find((tokenWithBalance: FungibleTokenWithBalance) =>
+            compareAddresses(tokenWithBalance.address, b3trAddress),
+        )
     },
 )
 
@@ -195,7 +197,18 @@ export const selectVot3TokenWithBalance = createSelector(
     selectTokensWithBalances,
     selectVot3Address,
     (account, tokensWithBalance, vot3Address) => {
-        return tokensWithBalance.find(tokenWithBalance => compareAddresses(tokenWithBalance.address, vot3Address))
+        return tokensWithBalance.find((tokenWithBalance: FungibleTokenWithBalance) =>
+            compareAddresses(tokenWithBalance.address, vot3Address),
+        )
+    },
+)
+
+export const selectVeB3TRTokenWithBalance = createSelector(
+    [selectTokensWithBalances],
+    (tokensWithBalance): FungibleTokenWithBalance | undefined => {
+        return tokensWithBalance.find(
+            tokenWithBalance => tokenWithBalance.symbol.toLowerCase() === VeB3TR.symbol.toLowerCase(),
+        )
     },
 )
 

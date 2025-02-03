@@ -1,6 +1,5 @@
 import React, { memo, useMemo } from "react"
-import { TokenWithCompleteInfo, useTheme } from "~Hooks"
-import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
+import { TokenWithCompleteInfo, useTheme, useTokenCardFiatInfo } from "~Hooks"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 import { BaseTokenCard } from "./BaseTokenCard"
 import { BaseView, BaseText, BaseSkeleton, FiatBalance } from "~Components"

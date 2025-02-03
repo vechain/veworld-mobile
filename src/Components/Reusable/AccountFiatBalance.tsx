@@ -1,9 +1,9 @@
 import React, { useMemo } from "react"
+import { FiatBalance } from "~Components"
 import { VET, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import { FiatBalance } from "~Components"
-import { BalanceUtils } from "~Utils"
 import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { BalanceUtils } from "~Utils"
 
 type AccountFiatBalanceProps = {
     isVisible?: boolean
