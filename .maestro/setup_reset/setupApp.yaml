@@ -12,6 +12,15 @@ env:
 ## welcome screen
 - tapOn:
       id: "dev_demo"
+# Turn off push notification bottom sheet
+- runFlow:
+      when:
+          platform: iOS
+          visible:
+              id: "button_notifications_enable"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
 - tapOn:
       id: "settings-tab"
 - tapOn:
@@ -59,12 +68,3 @@ env:
           - tapOn:
                 id: "selectAccount"
                 index: 0
-# Turn off push notification bottom sheet
-- runFlow:
-      when:
-          platform: iOS
-          visible:
-              id: "button_notifications_enable"
-      commands:
-          - tapOn:
-                id: "button_notifications_skip"
