@@ -1,5 +1,12 @@
 
 
+## 2.0.8 (2025-02-03)
+
+
+### Bug Fixes
+
+* align ui to figam and introduce logic to avoid adding automatica… ([#2626](https://github.com/vechain/veworld-mobile/issues/2626)) ([6755a64](https://github.com/vechain/veworld-mobile/commit/6755a64332d6b743697d57ed1c524a23647b3b8b))
+
 ## 2.0.7 (2025-01-24)
 
 
