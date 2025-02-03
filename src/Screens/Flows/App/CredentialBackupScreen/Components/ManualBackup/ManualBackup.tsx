@@ -8,22 +8,25 @@ import { LocalDevice } from "~Model"
 import { ManualBackupContent } from "../ManualBackupContent"
 
 type Props = {
-    mnemonicArray: string[]
+    credential: string[] | string
     deviceToBackup?: LocalDevice
 }
 
-export const ManualBackup = ({ mnemonicArray, deviceToBackup }: Props) => {
+export const ManualBackup = ({ credential, deviceToBackup }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
+    const isMnemonic = Array.isArray(credential)
 
     return (
         <BaseView>
             <BaseText typographyFont="subSubTitleMedium">{deviceToBackup?.alias}</BaseText>
             <BaseSpacer height={16} />
-            <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_PASSWORD_WARNING()}</BaseText>
+            <BaseText typographyFont="captionRegular">
+                {isMnemonic ? LL.BD_MNEMONIC_PASSWORD_WARNING() : LL.BD_PRIVATE_KEY_PASSWORD_WARNING()}
+            </BaseText>
             <BaseSpacer height={16} />
             <BaseCard containerStyle={styles.cardContainer} style={styles.card}>
-                <ManualBackupContent mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+                <ManualBackupContent credential={credential} deviceToBackup={deviceToBackup} />
             </BaseCard>
         </BaseView>
     )

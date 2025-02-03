@@ -38,11 +38,11 @@ import { DateUtils, PlatformUtils } from "~Utils"
 import { getTimeZone } from "react-native-localize"
 
 type Props = {
-    mnemonicArray: string[]
+    credential: string[] | string
     deviceToBackup?: LocalDevice
 }
 
-export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) => {
+export const CloudBackupCard: FC<Props> = ({ credential, deviceToBackup }) => {
     const dispatch = useAppDispatch()
     const { LL, locale } = useI18nContext()
     const navigation = useNavigation()
@@ -127,12 +127,16 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 return
             }
 
+            if (!credential) {
+                return
+            }
+
             if (!accounts.find(account => account.rootAddress === deviceToBackup?.rootAddress)) {
                 navigation.goBack()
             } else {
                 getWallet()
             }
-        }, [accounts, deviceToBackup?.rootAddress, getWallet, isCloudAvailable, navigation]),
+        }, [accounts, deviceToBackup?.rootAddress, credential, getWallet, isCloudAvailable, navigation]),
     )
 
     const goToChoosePasswordScreen = useCallback(async () => {
@@ -144,9 +148,9 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
                 setIsWalletBackedUp(isBackuped)
                 setIsCloudError(false)
 
-                if (!isBackuped && deviceToBackup) {
-                    navigation.navigate(Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD, {
-                        mnemonicArray,
+                if (!isBackuped && deviceToBackup && credential) {
+                    navigation.navigate(Routes.CHOOSE_CREDENTIAL_BACKUP_PASSWORD, {
+                        credential,
                         device: deviceToBackup,
                     })
                 }
@@ -156,9 +160,9 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
             } finally {
                 dispatch(setIsAppLoading(false))
             }
-        } else if (deviceToBackup) {
-            navigation.navigate(Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD, {
-                mnemonicArray,
+        } else if (deviceToBackup && credential) {
+            navigation.navigate(Routes.CHOOSE_CREDENTIAL_BACKUP_PASSWORD, {
+                credential,
                 device: deviceToBackup,
             })
         }
@@ -167,7 +171,7 @@ export const CloudBackupCard: FC<Props> = ({ mnemonicArray, deviceToBackup }) =>
         dispatch,
         getWalletByRootAddress,
         isCloudError,
-        mnemonicArray,
+        credential,
         navigation,
         setIsCloudError,
         setIsWalletBackedUp,

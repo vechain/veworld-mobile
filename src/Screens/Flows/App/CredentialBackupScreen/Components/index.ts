@@ -1,5 +1,5 @@
 export * from "./CloudBackup"
-export * from "./CopyMnemonicButton"
+export * from "./CopyCredentialButton"
 export * from "./DoNotShareAlert"
 export * from "./ManualBackup"
 export * from "./ManualBackupDoneBanner"

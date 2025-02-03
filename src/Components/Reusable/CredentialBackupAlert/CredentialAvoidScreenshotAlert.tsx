@@ -5,13 +5,21 @@ import { AlertInline } from "~Components"
 import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 
-export const MnemonicAvoidScreenshotAlert = () => {
+type Props = {
+    credential: string[] | string
+}
+export const CredentialAvoidScreenshotAlert = ({ credential }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
 
+    const isMnemonic = Array.isArray(credential)
+
     return (
         <BaseView style={styles.container}>
-            <AlertInline message={LL.ALERT_DONT_SCREENSHOT_MNEMONIC()} status="info" />
+            <AlertInline
+                message={isMnemonic ? LL.ALERT_DONT_SCREENSHOT_MNEMONIC() : LL.ALERT_DONT_SCREENSHOT_PRIVATE_KEY()}
+                status="info"
+            />
         </BaseView>
     )
 }

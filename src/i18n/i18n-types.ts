@@ -4215,6 +4215,10 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
 	/**
+	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
+	 */
+	BD_PRIVATE_KEY_PASSWORD_WARNING: () => LocalizedString
+	/**
 	 * In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.
 	 */
 	BD_MNEMONIC_PASSWORD_WARNING: () => LocalizedString
@@ -4222,6 +4226,10 @@ Try reconnect your device to the internet.
 	 * Your Secret Recovery Phrase makes it easy to back up and restore your account.
 	 */
 	BD_MNEMONIC_SUBTITLE: () => LocalizedString
+	/**
+	 * Never share your Private key. Anyone who learns them can steal all of your crypto assets.
+	 */
+	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
@@ -4498,6 +4506,10 @@ Try reconnect your device to the internet.
 	 * Backup now
 	 */
 	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
+	/**
+	 * Backup private key
+	 */
+	BTN_BACKUP_PK: () => LocalizedString
 	/**
 	 * Backup phrase
 	 */

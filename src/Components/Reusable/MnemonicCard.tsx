@@ -13,13 +13,14 @@ import { DateUtils, error } from "~Utils"
 import { PlatformBlur } from "./PlatformBlur"
 
 type Props = {
-    mnemonicArray: string[]
+    credential: string[] | string
     souceScreen?: string
     deviceToBackup?: LocalDevice
 }
 
-export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBackup }) => {
+export const MnemonicCard: FC<Props> = ({ credential, souceScreen, deviceToBackup }) => {
     const { isOpen: isShow, onToggle: toggleShow } = useDisclosure()
+    const isMnemonic = Array.isArray(credential)
 
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -47,14 +48,16 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
     }, [deviceToBackup?.rootAddress, deviceToBackup?.isBuckedUp, dispatch, locale, toggleShow])
 
     const RenderWords = useMemo(() => {
-        if (mnemonicArray.length !== 12) {
+        if (!isMnemonic) return null
+
+        if (credential.length !== 12) {
             error(ERROR_EVENTS.MNEMONIC, `UI MnemonicCard Array has missing words from : ${souceScreen}`)
             setTimeout(() => {
                 if (nav.canGoBack() && souceScreen === "BackupMnemonicBottomSheet") nav.goBack()
             }, 400)
         }
 
-        return mnemonicArray.map((word, index) => {
+        return credential.map((word, index) => {
             if (word && word.length < 1) {
                 error(ERROR_EVENTS.MNEMONIC, `UI MnemonicCard Word is Empty from : ${souceScreen}`)
                 setTimeout(() => {
@@ -84,7 +87,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
                 </BaseText>
             )
         })
-    }, [mnemonicArray, nav, souceScreen, theme.colors])
+    }, [isMnemonic, credential, nav, souceScreen, theme.colors])
 
     return (
         <BaseView>
@@ -97,7 +100,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray, souceScreen, deviceToBa
                         flexDirection="row"
                         flexWrap="wrap"
                         justifyContent="space-between">
-                        {RenderWords}
+                        {isMnemonic ? RenderWords : <BaseText>{credential}</BaseText>}
                         {!isShow && (
                             <PlatformBlur
                                 backgroundColor={theme.colors.mnemonicCardBackground}

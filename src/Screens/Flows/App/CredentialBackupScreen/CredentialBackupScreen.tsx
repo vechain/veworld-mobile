@@ -7,14 +7,14 @@ import { CloudAndManualBackup, ManualBackup } from "./Components"
 import { PlatformUtils } from "~Utils"
 import { selectGoogleDriveBackupEnabled, useAppSelector } from "~Storage/Redux"
 
-type Props = NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_MNEMONIC_BACKUP>
+type Props = NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_CREDENTIAL_BACKUP>
 
-export const MnemonicBackupScreen = ({ route }: Props) => {
+export const CredentialBackupScreen = ({ route }: Props) => {
     const { LL } = useI18nContext()
     const googleDriveBackupEnabled = useAppSelector(selectGoogleDriveBackupEnabled)
     const manualOnlyBackup = !googleDriveBackupEnabled && PlatformUtils.isAndroid()
 
-    const { mnemonicArray, deviceToBackup } = route.params
+    const { credential, deviceToBackup } = route.params
 
     return (
         <Layout
@@ -23,9 +23,9 @@ export const MnemonicBackupScreen = ({ route }: Props) => {
             body={
                 <BaseView>
                     {!manualOnlyBackup ? (
-                        <CloudAndManualBackup mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+                        <CloudAndManualBackup credential={credential} deviceToBackup={deviceToBackup} />
                     ) : (
-                        <ManualBackup mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+                        <ManualBackup credential={credential} deviceToBackup={deviceToBackup} />
                     )}
                     <BaseSpacer height={24} />
                 </BaseView>

@@ -9,11 +9,11 @@ import { ManualBackupContent } from "../ManualBackupContent"
 import { CloudBackupCard } from "./CloudBackupCard"
 
 type Props = {
-    mnemonicArray: string[]
+    credential: string[] | string
     deviceToBackup?: LocalDevice
 }
 
-export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup }) => {
+export const CloudAndManualBackup: FC<Props> = ({ credential, deviceToBackup }) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
 
@@ -21,7 +21,7 @@ export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup 
         <BaseView>
             <BaseText typographyFont="subSubTitleMedium">{deviceToBackup?.alias}</BaseText>
             <BaseSpacer height={16} />
-            <CloudBackupCard mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+            <CloudBackupCard credential={credential} deviceToBackup={deviceToBackup} />
             <BaseSpacer height={16} />
             <BaseView flexDirection="row" w={100}>
                 <BaseSpacer style={styles.line} height={1} />
@@ -35,7 +35,7 @@ export const CloudAndManualBackup: FC<Props> = ({ mnemonicArray, deviceToBackup 
                 <BaseView>
                     <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_PASSWORD_WARNING()}</BaseText>
                     <BaseSpacer height={12} />
-                    <ManualBackupContent mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+                    <ManualBackupContent credential={credential} deviceToBackup={deviceToBackup} />
                 </BaseView>
             </CardWithHeader>
         </BaseView>

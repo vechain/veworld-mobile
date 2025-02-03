@@ -5,10 +5,10 @@ import { OnboardingStack } from "./OnboardingStack"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import {
     BlackListedCollectionsScreen,
-    ChooseMnemonicBackupPassword,
+    ChooseCredentialBackupPassword,
     ConnectAppScreen,
     DappChangeAccountScreen,
-    MnemonicBackupScreen,
+    CredentialBackupScreen,
     SendTransactionScreen,
     SignCertificateScreen,
     SignDataMessageScreen,
@@ -72,8 +72,8 @@ export type RootStackParamListSwitch = {
         request: WindowRequest
     }
 
-    [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
-    [Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD]: { mnemonicArray: string[]; device: LocalDevice }
+    [Routes.ICLOUD_CREDENTIAL_BACKUP]: { deviceToBackup?: LocalDevice; credential: string[] | string }
+    [Routes.CHOOSE_CREDENTIAL_BACKUP_PASSWORD]: { credential: string[] | string; device: LocalDevice }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -133,14 +133,14 @@ export const SwitchStack = () => {
                         <Switch.Screen name={Routes.DAPP_CHANGE_ACCOUNT_SCREEN} component={DappChangeAccountScreen} />
 
                         <Switch.Screen
-                            name={Routes.ICLOUD_MNEMONIC_BACKUP}
-                            component={MnemonicBackupScreen}
+                            name={Routes.ICLOUD_CREDENTIAL_BACKUP}
+                            component={CredentialBackupScreen}
                             options={{ headerShown: false }}
                         />
 
                         <Switch.Screen
-                            name={Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD}
-                            component={ChooseMnemonicBackupPassword}
+                            name={Routes.CHOOSE_CREDENTIAL_BACKUP_PASSWORD}
+                            component={ChooseCredentialBackupPassword}
                             options={{
                                 headerShown: false,
                             }}
