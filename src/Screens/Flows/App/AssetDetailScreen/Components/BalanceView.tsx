@@ -60,8 +60,8 @@ export const BalanceView = ({
 
             <BaseSpacer height={8} />
 
-            <BaseView flexDirection="row" justifyContent="space-between">
-                <BaseView flexDirection="row">
+            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
+                <BaseView flexDirection="row" alignItems="center" justifyContent="flex-start">
                     <BaseView style={[styles.imageContainer]}>
                         <Image source={{ uri: tokenWithInfo.icon }} style={styles.image} />
                     </BaseView>

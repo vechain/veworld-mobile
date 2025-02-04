@@ -7,7 +7,7 @@ import { ColorThemeType } from "~Constants"
 
 export const FastActionsBar = memo(
     ({ actions, actionStyle }: { actions: FastAction[]; actionStyle?: StyleProp<ViewStyle> }) => {
-        const { styles } = useThemedStyles(baseStyles)
+        const { styles, theme } = useThemedStyles(baseStyles)
 
         const renderAction = useCallback(
             (action: FastAction) => {
@@ -17,16 +17,21 @@ export const FastActionsBar = memo(
                         key={action.name}
                         action={action.action}
                         testID={action.testID}
+                        disabled={action.disabled}
                         style={actionStyle ?? styles.action}>
                         <BaseView flexDirection="column" alignItems="center">
                             {action.icon}
                             <BaseSpacer height={8} />
-                            <BaseText typographyFont="captionSemiBold">{action.name}</BaseText>
+                            <BaseText
+                                color={action.disabled ? theme.colors.primaryDisabled : theme.colors.text}
+                                typographyFont="captionSemiBold">
+                                {action.name}
+                            </BaseText>
                         </BaseView>
                     </BaseTouchable>
                 )
             },
-            [actionStyle, styles.action],
+            [actionStyle, styles.action, theme.colors.primaryDisabled, theme.colors.text],
         )
 
         return (

@@ -55,6 +55,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
         () => [
             {
                 name: LL.BTN_SEND(),
+                disabled: !foundToken,
                 action: () => {
                     if (foundToken) {
                         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
@@ -69,13 +70,37 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         })
                     }
                 },
-                icon: <BaseIcon size={20} color={theme.colors.text} name="icon-arrow-up" />,
+                icon: (
+                    <BaseIcon
+                        size={20}
+                        color={foundToken ? theme.colors.text : theme.colors.primaryDisabled}
+                        name="icon-arrow-up"
+                    />
+                ),
                 testID: "sendButton",
             },
             {
                 name: LL.BTN_SWAP(),
-                action: () => nav.navigate(Routes.SWAP),
-                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
+                disabled: !foundToken,
+                action: () => {
+                    if (foundToken) {
+                        nav.navigate(Routes.SWAP)
+                    } else {
+                        showWarningToast({
+                            text1: LL.HEADS_UP(),
+                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
+                                tokenName: token.symbol,
+                            }),
+                        })
+                    }
+                },
+                icon: (
+                    <BaseIcon
+                        color={foundToken ? theme.colors.text : theme.colors.primaryDisabled}
+                        name="icon-arrow-left-right"
+                        size={20}
+                    />
+                ),
                 testID: "swapButton",
             },
             {
@@ -85,7 +110,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 testID: "reciveButton",
             },
         ],
-        [LL, foundToken, nav, openQRCodeSheet, theme.colors.text, token.symbol],
+        [LL, foundToken, nav, openQRCodeSheet, theme.colors.primaryDisabled, theme.colors.text, token.symbol],
     )
 
     // render description based on locale. NB: at the moment only EN is supported
