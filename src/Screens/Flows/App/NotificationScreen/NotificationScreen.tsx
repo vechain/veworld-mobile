@@ -62,7 +62,8 @@ export const NotificationScreen = () => {
             setDapps(prev => {
                 const query = text.trim().toLowerCase()
                 const result = prev.filter(dapp => dapp.name.toLowerCase().includes(query))
-                return query.length > 0 ? result : data
+                const newData = query.length > 0 ? result : data
+                return newData.sort((a, b) => a.name.localeCompare(b.name))
             })
         },
         [data],
@@ -262,7 +263,7 @@ export const NotificationScreen = () => {
 
     useEffect(() => {
         if (data) {
-            setDapps(data)
+            setDapps(data.sort((a, b) => a.name.localeCompare(b.name)))
         }
     }, [data])
 

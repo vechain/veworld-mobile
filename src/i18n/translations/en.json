@@ -5,7 +5,7 @@
   "ACCOUNT_OR_WALLET_BOTTOM_SHEET_TITLE": "What do you want to do?",
   "ACTIVATE_NOTIFICATION_MODAL_ENABLE_BTN": "Enable notifications",
   "ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN": "I’ll do it later",
-  "ACTIVATE_NOTIFICATION_MODAL_SUBTITLE": "Activate the push notifications and customize to get notified to all the new details you don’t want to miss.",
+  "ACTIVATE_NOTIFICATION_MODAL_SUBTITLE": "Enable push notifications to get important updates and alerts about VeChain and the VeBetterDAO ecosystem.",
   "ACTIVATE_NOTIFICATION_MODAL_TITLE": "Activate notifications",
   "ACTIVITIES_FAILED_DESCRIPTION": "There was an error in executing the transaction",
   "ACTIVITIES_NOT_UP_TO_DATE": "Activities might not be up-to-date. Check your internet connection or try later",
