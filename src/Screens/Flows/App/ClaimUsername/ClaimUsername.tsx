@@ -119,12 +119,6 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
         }
     }, [isWalletSecurityBiometrics, onClaimUsername, openPasswordPrompt])
 
-    const onGoBack = useCallback(() => {
-        if (navigation.canGoBack()) {
-            navigation.goBack()
-        }
-    }, [navigation])
-
     const isNotAvailable = useMemo(() => isAvailable === false, [isAvailable])
 
     const hasErrors = useMemo(
@@ -185,7 +179,6 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                 <BaseView mx={16}>
                     <BackButtonHeader
                         hasBottomSpacer={false}
-                        onGoBack={onGoBack}
                         preventGoBack={isLoading}
                         title={LL.TITLE_CLAIM_USERNAME()}
                     />
