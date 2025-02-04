@@ -175,6 +175,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
             preventGoBack={isLoading}
             noMargin
             noBackButton
+            noStaticBottomPadding
             fixedHeader={
                 <BaseView mx={16}>
                     <BackButtonHeader
@@ -185,71 +186,73 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
                 </BaseView>
             }
             fixedBody={
-                <BaseView style={[styles.contentContainer]}>
-                    {/* Body */}
-                    <BaseView flexGrow={1}>
-                        <BaseText typographyFont="subSubTitleLight">{LL.SB_CLAIM_USERNAME()}</BaseText>
-                        <BaseSpacer height={40} />
-                        {/* Input container */}
-                        <BaseView mb={8} flexDirection="row" justifyContent="space-between">
-                            <BaseText typographyFont="subSubTitle" style={[styles.inputLabel]}>
-                                {LL.TITLE_CLAIM_USERNAME()}
-                            </BaseText>
-                            <BaseView flexDirection="row">
-                                <BaseText typographyFont="caption" style={[styles.inputLabel]}>
-                                    {"Powered by"}{" "}
+                <>
+                    <BaseView style={[styles.contentContainer]}>
+                        {/* Body */}
+                        <BaseView flexGrow={1}>
+                            <BaseText typographyFont="subSubTitleLight">{LL.SB_CLAIM_USERNAME()}</BaseText>
+                            <BaseSpacer height={40} />
+                            {/* Input container */}
+                            <BaseView mb={8} flexDirection="row" justifyContent="space-between">
+                                <BaseText typographyFont="subSubTitle" style={[styles.inputLabel]}>
+                                    {LL.TITLE_CLAIM_USERNAME()}
                                 </BaseText>
-                                <BaseText typographyFont="captionSemiBold" style={[styles.inputLabel, styles.vetTitle]}>
-                                    {".vet"}
-                                </BaseText>
-                                <BaseText
-                                    typographyFont="captionSemiBold"
-                                    style={[styles.inputLabel, styles.domainTitle]}>
-                                    {".domains"}
-                                </BaseText>
+                                <BaseView flexDirection="row">
+                                    <BaseText typographyFont="caption" style={[styles.inputLabel]}>
+                                        {"Powered by"}{" "}
+                                    </BaseText>
+                                    <BaseText
+                                        typographyFont="captionSemiBold"
+                                        style={[styles.inputLabel, styles.vetTitle]}>
+                                        {".vet"}
+                                    </BaseText>
+                                    <BaseText
+                                        typographyFont="captionSemiBold"
+                                        style={[styles.inputLabel, styles.domainTitle]}>
+                                        {".domains"}
+                                    </BaseText>
+                                </BaseView>
                             </BaseView>
-                        </BaseView>
-                        <BaseTextInput
-                            disabled={isLoading}
-                            placeholder={LL.INPUT_PLACEHOLDER_USERNAME()}
-                            value={subdomain}
-                            setValue={onSetSubdomain}
-                            rightIcon={
-                                <BaseText typographyFont="body" style={[styles.inputLabel]}>
-                                    {DOMAIN_BASE}
-                                </BaseText>
-                            }
-                        />
-                        {renderSubdomainStatus}
-                    </BaseView>
-                    {/* Footer */}
-                    <BaseView>
-                        {!isLoading && claimError && (
-                            <AlertInline
-                                status="error"
-                                variant="banner"
-                                message={LL.ERROR_GENERIC_WITH_RETRY_SUBTITLE()}
+                            <BaseTextInput
+                                disabled={isLoading}
+                                placeholder={LL.INPUT_PLACEHOLDER_USERNAME()}
+                                value={subdomain}
+                                setValue={onSetSubdomain}
+                                rightIcon={
+                                    <BaseText typographyFont="body" style={[styles.inputLabel]}>
+                                        {DOMAIN_BASE}
+                                    </BaseText>
+                                }
                             />
-                        )}
-                        <BaseSpacer height={24} />
+                            {renderSubdomainStatus}
+                        </BaseView>
+                        {/* Footer */}
+                        <BaseView>
+                            {!isLoading && claimError && (
+                                <AlertInline
+                                    status="error"
+                                    variant="banner"
+                                    message={LL.ERROR_GENERIC_WITH_RETRY_SUBTITLE()}
+                                />
+                            )}
+                            <BaseSpacer height={24} />
+                        </BaseView>
+                        <RequireUserPassword
+                            isOpen={isPasswordPromptOpen}
+                            onClose={closePasswordPrompt}
+                            onSuccess={onSuccess}
+                        />
                     </BaseView>
-                    <RequireUserPassword
-                        isOpen={isPasswordPromptOpen}
-                        onClose={closePasswordPrompt}
-                        onSuccess={onSuccess}
-                    />
-                </BaseView>
-            }
-            footer={
-                <BaseView flexGrow={1}>
-                    <AnimatedFloatingButton
-                        isDisabled={isLoading || hasErrors || !subdomain}
-                        isLoading={isLoading}
-                        title={claimError ? LL.BTN_TRY_AGAIN() : LL.BTN_CONFIRM()}
-                        onPress={onSubmit}
-                        isVisible
-                    />
-                </BaseView>
+                    <BaseView flexGrow={1}>
+                        <AnimatedFloatingButton
+                            isDisabled={isLoading || hasErrors || !subdomain}
+                            isLoading={isLoading}
+                            title={claimError ? LL.BTN_TRY_AGAIN() : LL.BTN_CONFIRM()}
+                            onPress={onSubmit}
+                            isVisible
+                        />
+                    </BaseView>
+                </>
             }
         />
     )

@@ -2497,7 +2497,7 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_ACTIVE: string
 	/**
-	 * x​2​E​a​r​n​ ​d​A​p​p​s
+	 * X​2​E​a​r​n​ ​d​A​p​p​s
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: string
 	/**
@@ -6196,7 +6196,7 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_ACTIVE: () => LocalizedString
 	/**
-	 * x2Earn dApps
+	 * X2Earn dApps
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
 	/**
