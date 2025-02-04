@@ -30,6 +30,12 @@ jobs:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
+            - name: Print app id
+              run: |
+                echo "APP_ID=${{ secrets.APP_ID }}"
+                echo "APP_PRIVATE_KEY=${{ secrets.APP_PRIVATE_KEY }}"
+                echo ${{ secrets.APP_ID }}
+                echo ${{ secrets.APP_PRIVATE_KEY }}
 
             - name: Setup Node.js
               uses: actions/setup-node@v4
