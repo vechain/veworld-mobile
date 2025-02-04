@@ -129,16 +129,18 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                 return
             }
 
-            if (event.notification.additionalData) {
-                const { route, navParams } = event.notification.additionalData as {
-                    route?: string
-                    navParams?: string
-                }
+            try {
+                if (event.notification.additionalData) {
+                    const { route, navParams } = event.notification.additionalData as {
+                        route?: string
+                        navParams?: string
+                    }
 
-                if (route) {
-                    navigation.navigate(route as any, navParams ? JSON.parse(navParams) : undefined)
+                    if (route) {
+                        navigation.navigate(route as any, navParams ? JSON.parse(navParams) : undefined)
+                    }
                 }
-            }
+            } catch {}
         },
         [navigation],
     )

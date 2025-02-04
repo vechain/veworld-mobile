@@ -54,7 +54,7 @@ type RootTranslation = {
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: string
 	/**
-	 * A​c​t​i​v​a​t​e​ ​t​h​e​ ​p​u​s​h​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​a​n​d​ ​c​u​s​t​o​m​i​z​e​ ​t​o​ ​g​e​t​ ​n​o​t​i​f​i​e​d​ ​t​o​ ​a​l​l​ ​t​h​e​ ​n​e​w​ ​d​e​t​a​i​l​s​ ​y​o​u​ ​d​o​n​’​t​ ​w​a​n​t​ ​t​o​ ​m​i​s​s​.
+	 * E​n​a​b​l​e​ ​p​u​s​h​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​t​o​ ​g​e​t​ ​i​m​p​o​r​t​a​n​t​ ​u​p​d​a​t​e​s​ ​a​n​d​ ​a​l​e​r​t​s​ ​a​b​o​u​t​ ​V​e​C​h​a​i​n​ ​a​n​d​ ​t​h​e​ ​V​e​B​e​t​t​e​r​D​A​O​ ​e​c​o​s​y​s​t​e​m​.
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: string
 	/**
@@ -2513,10 +2513,6 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
-	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
-	 */
-	VECHAIN_NEWS_AND_UPDATES: string
-	/**
 	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
@@ -3533,6 +3529,10 @@ type RootTranslation = {
 	 */
 	VALUE_TITLE: string
 	/**
+	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
+	 */
+	VECHAIN_NEWS_AND_UPDATES: string
+	/**
 	 * V​e​W​o​r​l​d
 	 */
 	VEWORLD: string
@@ -3758,7 +3758,7 @@ export type TranslationFunctions = {
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: () => LocalizedString
 	/**
-	 * Activate the push notifications and customize to get notified to all the new details you don’t want to miss.
+	 * Enable push notifications to get important updates and alerts about VeChain and the VeBetterDAO ecosystem.
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: () => LocalizedString
 	/**
@@ -6184,10 +6184,6 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
 	/**
-	 * Vechain news & updates
-	 */
-	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
-	/**
 	 * Vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
@@ -7191,6 +7187,10 @@ Try reconnect your device to the internet.
 	 * Value
 	 */
 	VALUE_TITLE: () => LocalizedString
+	/**
+	 * Vechain news & updates
+	 */
+	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
 	/**
 	 * VeWorld
 	 */
