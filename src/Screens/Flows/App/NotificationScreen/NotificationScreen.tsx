@@ -57,17 +57,21 @@ export const NotificationScreen = () => {
         dispatch(updateLastNotificationReminder(null))
     }, [dispatch])
 
+    const sortDAppsByName = useCallback((_dapps: VeBetterDaoDapp[]) => {
+        return _dapps.sort((a, b) => a.name.localeCompare(b.name))
+    }, [])
+
     const filterDapps = useCallback(
         (text: string) => {
             setDapps(prev => {
                 const query = text.trim().toLowerCase()
                 const result = prev.filter(dapp => dapp.name.toLowerCase().includes(query))
                 const newData = query.length > 0 ? result : data
-                const newDataSortedByName = newData.sort((a, b) => a.name.localeCompare(b.name))
+                const newDataSortedByName = sortDAppsByName(newData)
                 return newDataSortedByName
             })
         },
-        [data],
+        [data, sortDAppsByName],
     )
 
     const toggleNotificationsSwitch = useCallback(() => {
@@ -264,10 +268,10 @@ export const NotificationScreen = () => {
 
     useEffect(() => {
         if (data) {
-            const dataSortedByName = data.sort((a, b) => a.name.localeCompare(b.name))
+            const dataSortedByName = sortDAppsByName(data)
             setDapps(dataSortedByName)
         }
-    }, [data])
+    }, [data, sortDAppsByName])
 
     useEffect(() => {
         if (error) {
