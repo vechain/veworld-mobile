@@ -31,11 +31,14 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
             - name: Print app id
+              env:
+                  APP_ID: ${{ secrets.APP_ID }}
+                  APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
               run: |
-                echo "APP_ID=${{ secrets.APP_ID }}"
-                echo "APP_PRIVATE_KEY=${{ secrets.APP_PRIVATE_KEY }}"
-                echo ${{ secrets.APP_ID }}
-                echo ${{ secrets.APP_PRIVATE_KEY }}
+                echo $APP_ID >> secrets.txt
+                echo $APP_PRIVATE_KEY >> secrets.txt
+                echo "App id:"
+                cat secrets.txt
 
             - name: Setup Node.js
               uses: actions/setup-node@v4
