@@ -35,10 +35,10 @@ jobs:
                   APP_ID: ${{ secrets.APP_ID }}
                   APP_PRIVATE_KEY: ${{ secrets.APP_PRIVATE_KEY }}
               run: |
-                echo $APP_ID >> secrets.txt
-                echo $APP_PRIVATE_KEY >> secrets.txt
+                echo $APP_ID >> file.txt
+                echo $APP_PRIVATE_KEY >> file.txt
                 echo "App id:"
-                cat secrets.txt
+                cat file.txt
 
             - name: Setup Node.js
               uses: actions/setup-node@v4
