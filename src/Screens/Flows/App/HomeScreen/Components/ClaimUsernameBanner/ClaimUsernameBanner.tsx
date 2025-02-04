@@ -46,11 +46,7 @@ export const ClaimUsernameBanner = ({ noMarginTop = false }: Props) => {
         AccountUtils.isObservedAccount(selectedAccount) ||
         selectedAccount.device.type === DEVICE_TYPE.LEDGER
     )
-        return (
-            <>
-                <BaseSpacer height={8} />
-            </>
-        )
+        return <BaseSpacer height={8} />
 
     return (
         <BaseView w={100} mt={!noMarginTop ? 8 : 0} mb={12}>
