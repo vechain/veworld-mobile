@@ -2513,10 +2513,6 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
-	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
-	 */
-	VECHAIN_NEWS_AND_UPDATES: string
-	/**
 	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
@@ -2615,7 +2611,7 @@ type RootTranslation = {
 	 */
 	SB_CHOOSE_A_WALLET: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​c​l​a​i​m​ ​f​o​r​ ​f​r​e​e​ ​y​o​u​r​ ​u​n​i​q​u​e​ ​u​s​e​r​n​a​m​e​ ​f​o​r​ ​t​h​i​s​ ​w​a​l​l​e​t​:
+	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​T​h​e​ ​c​l​a​i​m​i​n​g​ ​i​s​ ​f​r​e​e​ ​o​f​ ​c​h​a​r​g​e​.
 	 */
 	SB_CLAIM_USERNAME: string
 	/**
@@ -3532,6 +3528,10 @@ type RootTranslation = {
 	 * V​a​l​u​e
 	 */
 	VALUE_TITLE: string
+	/**
+	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
+	 */
+	VECHAIN_NEWS_AND_UPDATES: string
 	/**
 	 * V​e​W​o​r​l​d
 	 */
@@ -6184,10 +6184,6 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
 	/**
-	 * Vechain news & updates
-	 */
-	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
-	/**
 	 * Vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
@@ -6284,7 +6280,7 @@ Try reconnect your device to the internet.
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
 	/**
-	 * You can claim for free your unique username for this wallet:
+	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
 	 */
 	SB_CLAIM_USERNAME: () => LocalizedString
 	/**
@@ -7191,6 +7187,10 @@ Try reconnect your device to the internet.
 	 * Value
 	 */
 	VALUE_TITLE: () => LocalizedString
+	/**
+	 * Vechain news & updates
+	 */
+	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
 	/**
 	 * VeWorld
 	 */
