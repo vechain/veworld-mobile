@@ -47,6 +47,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
 
         const onClaimPress = useCallback(() => {
             onSetSelectedAccount({ address: account.address })
+
             nav.navigate(Routes.CLAIM_USERNAME)
         }, [account.address, nav, onSetSelectedAccount])
 
