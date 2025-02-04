@@ -1,5 +1,5 @@
 import React from "react"
-import { BaseSpacer, BaseView } from "~Components"
+import { BaseView } from "~Components"
 import { TokenWithCompleteInfo, useThemedStyles } from "~Hooks"
 import { BalanceView } from "~Screens/Flows/App/AssetDetailScreen/Components/BalanceView"
 import { StyleSheet } from "react-native"
@@ -19,7 +19,6 @@ export const AssetBalanceCard = ({
     return (
         <BaseView w={100} style={styles.cardContainer}>
             <BalanceView tokenWithInfo={tokenWithInfo} isBalanceVisible={isBalanceVisible} />
-            <BaseSpacer height={16} />
             {FastActions}
         </BaseView>
     )
@@ -29,6 +28,7 @@ const baseStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
         cardContainer: {
             flexDirection: "column",
+            gap: 16,
             borderRadius: 12,
             borderWidth: 1,
             padding: 16,

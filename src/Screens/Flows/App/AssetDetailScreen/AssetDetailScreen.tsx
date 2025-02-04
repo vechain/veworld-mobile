@@ -144,11 +144,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             tokenWithInfo={token}
                             isBalanceVisible={isBalanceVisible}
                             FastActions={
-                                showActions && (
-                                    <>
-                                        <FastActionsBar actions={Actions} actionStyle={styles.actionStyle} />
-                                    </>
-                                )
+                                showActions && <FastActionsBar actions={Actions} actionStyle={styles.actionStyle} />
                             }
                         />
 
