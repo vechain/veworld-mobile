@@ -54,7 +54,7 @@ type RootTranslation = {
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: string
 	/**
-	 * A​c​t​i​v​a​t​e​ ​t​h​e​ ​p​u​s​h​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​a​n​d​ ​c​u​s​t​o​m​i​z​e​ ​t​o​ ​g​e​t​ ​n​o​t​i​f​i​e​d​ ​t​o​ ​a​l​l​ ​t​h​e​ ​n​e​w​ ​d​e​t​a​i​l​s​ ​y​o​u​ ​d​o​n​’​t​ ​w​a​n​t​ ​t​o​ ​m​i​s​s​.
+	 * E​n​a​b​l​e​ ​p​u​s​h​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​t​o​ ​g​e​t​ ​i​m​p​o​r​t​a​n​t​ ​u​p​d​a​t​e​s​ ​a​n​d​ ​a​l​e​r​t​s​ ​a​b​o​u​t​ ​V​e​C​h​a​i​n​ ​a​n​d​ ​t​h​e​ ​V​e​B​e​t​t​e​r​D​A​O​ ​e​c​o​s​y​s​t​e​m​.
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: string
 	/**
@@ -637,11 +637,11 @@ type RootTranslation = {
 	 */
 	BD_USER_EDIT_PASSWORD_ERROR: string
 	/**
-	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N​ ​a​g​a​i​n
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 * <​>​<​>​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
+	 * P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
@@ -2477,17 +2477,13 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_ACTIVE: string
 	/**
-	 * D​A​p​p​s
+	 * x​2​E​a​r​n​ ​d​A​p​p​s
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: string
 	/**
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
-	/**
-	 * N​e​w​ ​A​p​p​ ​l​i​s​t​e​d
-	 */
-	PUSH_NOTIFICATIONS_NEW_APP_LISTED: string
 	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​l​o​a​d​ ​y​o​u​r​ ​p​r​e​f​e​r​e​n​c​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
@@ -2509,17 +2505,13 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: string
 	/**
-	 * G​e​n​e​r​a​l​ ​u​p​d​a​t​e​s
+	 * U​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: string
 	/**
 	 * V​e​B​e​t​t​e​r​D​A​O
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
-	/**
-	 * V​e​W​o​r​l​d​ ​f​e​a​t​u​r​e​s​ ​&​ ​u​p​d​a​t​e​s
-	 */
-	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: string
 	/**
 	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
 	 */
@@ -2619,7 +2611,7 @@ type RootTranslation = {
 	 */
 	SB_CHOOSE_A_WALLET: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​c​l​a​i​m​ ​f​o​r​ ​f​r​e​e​ ​y​o​u​r​ ​u​n​i​q​u​e​ ​u​s​e​r​n​a​m​e​ ​f​o​r​ ​t​h​i​s​ ​w​a​l​l​e​t​:
+	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​T​h​e​ ​c​l​a​i​m​i​n​g​ ​i​s​ ​f​r​e​e​ ​o​f​ ​c​h​a​r​g​e​.
 	 */
 	SB_CLAIM_USERNAME: string
 	/**
@@ -3537,6 +3529,10 @@ type RootTranslation = {
 	 */
 	VALUE_TITLE: string
 	/**
+	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
+	 */
+	VECHAIN_NEWS_AND_UPDATES: string
+	/**
 	 * V​e​W​o​r​l​d
 	 */
 	VEWORLD: string
@@ -3762,7 +3758,7 @@ export type TranslationFunctions = {
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: () => LocalizedString
 	/**
-	 * Activate the push notifications and customize to get notified to all the new details you don’t want to miss.
+	 * Enable push notifications to get important updates and alerts about VeChain and the VeBetterDAO ecosystem.
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: () => LocalizedString
 	/**
@@ -4339,11 +4335,11 @@ Try reconnect your device to the internet.
 	 */
 	BD_USER_EDIT_PASSWORD_ERROR: () => LocalizedString
 	/**
-	 * Confirm your PIN
+	 * Confirm your PIN again
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 * <><> PIN doesn't match.
+	 * PIN doesn't match.
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**
@@ -6152,17 +6148,13 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_ACTIVE: () => LocalizedString
 	/**
-	 * DApps
+	 * x2Earn dApps
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
 	/**
 	 * Keep up to date with the latest news and updates
 	 */
 	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
-	/**
-	 * New App listed
-	 */
-	PUSH_NOTIFICATIONS_NEW_APP_LISTED: () => LocalizedString
 	/**
 	 * An error occurred while trying to load your preferences. Please try again.
 	 */
@@ -6184,17 +6176,13 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: () => LocalizedString
 	/**
-	 * General updates
+	 * Updates
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: () => LocalizedString
 	/**
 	 * VeBetterDAO
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
-	/**
-	 * VeWorld features & updates
-	 */
-	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: () => LocalizedString
 	/**
 	 * Vote reminder
 	 */
@@ -6292,7 +6280,7 @@ Try reconnect your device to the internet.
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
 	/**
-	 * You can claim for free your unique username for this wallet:
+	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
 	 */
 	SB_CLAIM_USERNAME: () => LocalizedString
 	/**
@@ -7199,6 +7187,10 @@ Try reconnect your device to the internet.
 	 * Value
 	 */
 	VALUE_TITLE: () => LocalizedString
+	/**
+	 * Vechain news & updates
+	 */
+	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
 	/**
 	 * VeWorld
 	 */
