@@ -6,13 +6,13 @@ import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 
 type Props = {
-    credential: string[] | string
+    backupDetails: string[] | string
 }
-export const CredentialAvoidScreenshotAlert = ({ credential }: Props) => {
+export const AvoidScreenshotAlert = ({ backupDetails }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
 
-    const isMnemonic = Array.isArray(credential)
+    const isMnemonic = Array.isArray(backupDetails)
 
     return (
         <BaseView style={styles.container}>
