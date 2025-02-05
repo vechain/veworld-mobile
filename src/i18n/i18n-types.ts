@@ -2609,6 +2609,10 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_MNEMONIC: string
 	/**
+	 * B​a​c​k​u​p​ ​“account​”
+	 */
+	SB_BACKUP_WALLET: string
+	/**
 	 * B​a​c​k​u​p​ ​“​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​”
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: string
@@ -2732,6 +2736,10 @@ type RootTranslation = {
 	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
 	 */
 	SB_PASSWORD_AUTH: string
+	/**
+	 * Private key
+	 */
+	SB_PRIVATE_KEY: string
 	/**
 	 * R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
 	 */
@@ -6300,6 +6308,14 @@ Try reconnect your device to the internet.
 	 */
 	SB_BACKUP_MNEMONIC: () => LocalizedString
 	/**
+	 * Backup “account”
+	 */
+	SB_BACKUP_WALLET: () => LocalizedString
+	/**
+	 * Backup “Private key”
+	 */
+	SB_BACKUP_PRIVATE_KEY: () => LocalizedString
+	/**
 	 * Backup “Recovery phrase”
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: () => LocalizedString
@@ -6419,6 +6435,10 @@ Try reconnect your device to the internet.
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
+	/**
+	 * Private key
+	 */
+	SB_PRIVATE_KEY: () => LocalizedString
 	/**
 	 * Recovery phrase
 	 */
