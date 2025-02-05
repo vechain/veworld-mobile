@@ -82,6 +82,7 @@ export const EnableNotificationsBottomSheet = () => {
                 </BaseText>
                 <BaseSpacer height={24} />
                 <BaseButton
+                    testID="button_notifications_enable"
                     w={100}
                     haptics="Light"
                     title={LL.ACTIVATE_NOTIFICATION_MODAL_ENABLE_BTN()}
@@ -89,6 +90,7 @@ export const EnableNotificationsBottomSheet = () => {
                 />
                 <BaseSpacer height={8} />
                 <BaseButton
+                    testID="button_notifications_skip"
                     w={100}
                     haptics="Light"
                     variant="outline"
