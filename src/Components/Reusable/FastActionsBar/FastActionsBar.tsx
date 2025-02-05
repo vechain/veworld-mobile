@@ -13,11 +13,11 @@ export const FastActionsBar = memo(
             (action: FastAction) => {
                 return (
                     <BaseTouchable
-                        haptics="Medium"
+                        haptics={action.disabled ? "Error" : "Medium"}
                         key={action.name}
                         action={action.action}
                         testID={action.testID}
-                        disabled={action.disabled}
+                        activeOpacity={action.disabled ? 0.9 : 0.2}
                         style={actionStyle ?? styles.action}>
                         <BaseView flexDirection="column" alignItems="center">
                             {action.icon}
