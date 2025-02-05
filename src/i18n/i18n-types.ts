@@ -484,10 +484,6 @@ type RootTranslation = {
 	 */
   	BD_PRIVATE_KEY_PASSWORD_WARNING: string
 	/**
-	 * Your Private key makes it easy to back up and restore your account.
-	 */
-  	BD_PRIVATE_KEY_SUBTITLE: string
-	/**
 	 * Never share your Private key. Anyone who gets access to it can steal all of your crypto assets.
 	 */
   	BD_PRIVATE_KEY_WARMNING: string
@@ -6435,6 +6431,10 @@ Try reconnect your device to the internet.
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
+	/**
+	 * Private key copied to clipboard
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
 	 * Private key
 	 */
