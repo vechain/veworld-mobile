@@ -2,12 +2,13 @@ import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useCopyClipboard, useSetSelectedAccount, useThemedStyles, useVns } from "~Hooks"
 import { AddressUtils } from "~Utils"
-import { BaseText, BaseView, BaseButton, BaseIcon, BaseTouchable } from "~Components"
+import { BaseText, BaseView, BaseButton, BaseIcon, BaseTouchable, BaseSpacer } from "~Components"
 import { WalletAccount } from "~Model"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { AccountDetailFiatBalance } from "./components"
 
 type Props = {
     account: WalletAccount
@@ -19,7 +20,7 @@ type Props = {
     onEditPress?: (account: WalletAccount) => void
 }
 export const AccountDetailBox: React.FC<Props> = memo(
-    ({ account, isSelected, isDisabled, canClaimUsername, isEditable = true, onEditPress }) => {
+    ({ account, isSelected, isDisabled, isBalanceVisible, canClaimUsername, isEditable = true, onEditPress }) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const { LL } = useI18nContext()
         const nav = useNavigation()
@@ -71,10 +72,9 @@ export const AccountDetailBox: React.FC<Props> = memo(
                             </BaseText>
                             <BaseIcon color={theme.colors.text} style={styles.address} size={12} name="icon-copy" />
                         </BaseTouchable>
-                        {/* 
+
                         <BaseSpacer height={4} />
-                        <AccountDetailFiatBalance account={account} isVisible={isBalanceVisible} isLoading={false} /> 
-                        */}
+                        <AccountDetailFiatBalance account={account} isVisible={isBalanceVisible} isLoading={false} />
                     </BaseView>
                 </BaseView>
                 {/* Actions */}
