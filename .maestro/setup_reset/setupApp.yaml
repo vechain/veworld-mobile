@@ -15,7 +15,6 @@ env:
 # Turn off push notification bottom sheet
 - runFlow:
       when:
-          platform: iOS
           visible:
               id: "button_notifications_enable"
       commands:

@@ -22,7 +22,6 @@ onFlowComplete:
 #skip notification bottom sheet
 - runFlow:
       when:
-          platform: iOS
           visible:
               id: "button_notifications_enable"
       commands:
