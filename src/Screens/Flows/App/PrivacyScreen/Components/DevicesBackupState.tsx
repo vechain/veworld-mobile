@@ -78,7 +78,7 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
         () => (
             <>
                 <BaseText mb={4} typographyFont="subSubTitleMedium">
-                    {LL.SB_BACKUP_RECOVERY_PHRASE()}
+                    {LL.SB_BACKUP_WALLET()}
                 </BaseText>
                 <BaseSpacer height={4} />
                 <BaseText typographyFont="captionRegular">{LL.BD_BACKUP_RECOVERY_PHRASE()}</BaseText>

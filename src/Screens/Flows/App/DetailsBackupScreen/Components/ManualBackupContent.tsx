@@ -1,32 +1,32 @@
 import React from "react"
-import { BaseSpacer, BaseView, CredentialAvoidScreenshotAlert, CredentialCard } from "~Components"
+import { BaseSpacer, BaseView, AvoidScreenshotAlert, BackupDetailsCard } from "~Components"
 import { LocalDevice } from "~Model"
-import { CopyCredentialButton } from "./CopyCredentialButton"
+import { CopyDetailsButton } from "./CopyDetailsButton"
 import { DoNotShareAlert } from "./DoNotShareAlert"
 import { ManualBackupDoneBanner } from "./ManualBackupDoneBanner"
 
 export const ManualBackupContent = ({
-    credential,
+    backupDetails,
     deviceToBackup,
 }: {
-    credential: string[] | string
+    backupDetails: string[] | string
     deviceToBackup?: LocalDevice
 }) => {
     return (
         <BaseView>
-            <DoNotShareAlert credential={credential} />
+            <DoNotShareAlert backupDetails={backupDetails} />
             <BaseSpacer height={12} />
-            {!!credential.length && (
-                <CredentialCard
-                    credential={credential}
+            {!!backupDetails.length && (
+                <BackupDetailsCard
+                    backupDetails={backupDetails}
                     souceScreen="BackupMnemonicBottomSheet"
                     deviceToBackup={deviceToBackup}
                 />
             )}
             <BaseSpacer height={8} />
-            <CopyCredentialButton credential={credential} deviceToBackup={deviceToBackup} />
+            <CopyDetailsButton backupDetails={backupDetails} deviceToBackup={deviceToBackup} />
             <BaseSpacer height={20} />
-            <CredentialAvoidScreenshotAlert credential={credential} />
+            <AvoidScreenshotAlert backupDetails={backupDetails} />
             {deviceToBackup?.isBackedUpManual && (
                 <>
                     <BaseSpacer height={12} />

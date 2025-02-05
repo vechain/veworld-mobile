@@ -5,14 +5,18 @@ import { LocalDevice } from "~Model"
 type Props = {
     closePasswordPrompt: () => void
     openWalletMgmtSheetWithDelay: (delay: number) => void
-    openBackupPhraseSheetWithDelay: (delay: number, credential: string[] | string, deviceToBackup: LocalDevice) => void
+    openBackupPhraseSheetWithDelay: (
+        delay: number,
+        backupDetails: string[] | string,
+        deviceToBackup: LocalDevice,
+    ) => void
     openPasswordPrompt: () => void
     closeWalletMgmtSheet: () => void
     devices: LocalDevice[]
     isWalletSecurityBiometrics: boolean
 }
 
-export const useBackupCredential = ({
+export const useBackupDetails = ({
     closePasswordPrompt,
     openWalletMgmtSheetWithDelay,
     openBackupPhraseSheetWithDelay,

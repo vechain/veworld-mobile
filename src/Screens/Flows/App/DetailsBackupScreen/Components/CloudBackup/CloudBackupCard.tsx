@@ -38,11 +38,11 @@ import { DateUtils, PlatformUtils } from "~Utils"
 import { getTimeZone } from "react-native-localize"
 
 type Props = {
-    credential: string[] | string
+    backupDetails: string[] | string
     deviceToBackup?: LocalDevice
 }
 
-export const CloudBackupCard: FC<Props> = ({ credential, deviceToBackup }) => {
+export const CloudBackupCard: FC<Props> = ({ backupDetails, deviceToBackup }) => {
     const dispatch = useAppDispatch()
     const { LL, locale } = useI18nContext()
     const navigation = useNavigation()
@@ -127,7 +127,7 @@ export const CloudBackupCard: FC<Props> = ({ credential, deviceToBackup }) => {
                 return
             }
 
-            if (!credential) {
+            if (!backupDetails) {
                 return
             }
 
@@ -136,7 +136,7 @@ export const CloudBackupCard: FC<Props> = ({ credential, deviceToBackup }) => {
             } else {
                 getWallet()
             }
-        }, [accounts, deviceToBackup?.rootAddress, credential, getWallet, isCloudAvailable, navigation]),
+        }, [accounts, deviceToBackup?.rootAddress, backupDetails, getWallet, isCloudAvailable, navigation]),
     )
 
     const goToChoosePasswordScreen = useCallback(async () => {
@@ -148,9 +148,9 @@ export const CloudBackupCard: FC<Props> = ({ credential, deviceToBackup }) => {
                 setIsWalletBackedUp(isBackuped)
                 setIsCloudError(false)
 
-                if (!isBackuped && deviceToBackup && credential) {
-                    navigation.navigate(Routes.CHOOSE_CREDENTIAL_BACKUP_PASSWORD, {
-                        credential,
+                if (!isBackuped && deviceToBackup && backupDetails) {
+                    navigation.navigate(Routes.CHOOSE_DETAILS_BACKUP_PASSWORD, {
+                        backupDetails,
                         device: deviceToBackup,
                     })
                 }
@@ -160,9 +160,9 @@ export const CloudBackupCard: FC<Props> = ({ credential, deviceToBackup }) => {
             } finally {
                 dispatch(setIsAppLoading(false))
             }
-        } else if (deviceToBackup && credential) {
-            navigation.navigate(Routes.CHOOSE_CREDENTIAL_BACKUP_PASSWORD, {
-                credential,
+        } else if (deviceToBackup && backupDetails) {
+            navigation.navigate(Routes.CHOOSE_DETAILS_BACKUP_PASSWORD, {
+                backupDetails,
                 device: deviceToBackup,
             })
         }
@@ -171,7 +171,7 @@ export const CloudBackupCard: FC<Props> = ({ credential, deviceToBackup }) => {
         dispatch,
         getWalletByRootAddress,
         isCloudError,
-        credential,
+        backupDetails,
         navigation,
         setIsCloudError,
         setIsWalletBackedUp,

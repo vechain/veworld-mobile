@@ -9,8 +9,8 @@ import { IconKey } from "~Model"
 
 type Excluded =
     | Routes.WALLET_DETAILS
-    | Routes.ICLOUD_MNEMONIC_BACKUP
-    | Routes.CHOOSE_CREDENTIAL_BACKUP_PASSWORD
+    | Routes.ICLOUD_DETAILS_BACKUP
+    | Routes.CHOOSE_DETAILS_BACKUP_PASSWORD
     | Routes.CLAIM_USERNAME
     | Routes.USERNAME_CLAIMED
 

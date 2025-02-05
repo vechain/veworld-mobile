@@ -8,14 +8,14 @@ import { LocalDevice } from "~Model"
 import { ManualBackupContent } from "../ManualBackupContent"
 
 type Props = {
-    credential: string[] | string
+    backupDetails: string[] | string
     deviceToBackup?: LocalDevice
 }
 
-export const ManualBackup = ({ credential, deviceToBackup }: Props) => {
+export const ManualBackup = ({ backupDetails, deviceToBackup }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
-    const isMnemonic = Array.isArray(credential)
+    const isMnemonic = Array.isArray(backupDetails)
 
     return (
         <BaseView>
@@ -26,7 +26,7 @@ export const ManualBackup = ({ credential, deviceToBackup }: Props) => {
             </BaseText>
             <BaseSpacer height={16} />
             <BaseCard containerStyle={styles.cardContainer} style={styles.card}>
-                <ManualBackupContent credential={credential} deviceToBackup={deviceToBackup} />
+                <ManualBackupContent backupDetails={backupDetails} deviceToBackup={deviceToBackup} />
             </BaseCard>
         </BaseView>
     )

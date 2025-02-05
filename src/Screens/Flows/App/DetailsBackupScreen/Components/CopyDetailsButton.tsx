@@ -10,20 +10,20 @@ import { useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
 
 type Props = {
-    credential: string[] | string
+    backupDetails: string[] | string
     deviceToBackup?: LocalDevice
 }
-export const CopyCredentialButton = memo(({ credential, deviceToBackup }: Props) => {
+export const CopyDetailsButton = memo(({ backupDetails, deviceToBackup }: Props) => {
     const { LL, locale } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { onCopyToClipboard } = useCopyClipboard()
     const dispatch = useAppDispatch()
 
-    const isMnemonic = Array.isArray(credential)
+    const isMnemonic = Array.isArray(backupDetails)
 
     const handleCopyToClipboard = useCallback(() => {
         onCopyToClipboard(
-            isMnemonic ? credential.join(" ") : credential,
+            isMnemonic ? backupDetails.join(" ") : backupDetails,
             isMnemonic ? LL.BTN_BACKUP_MENMONIC() : LL.BTN_BACKUP_PK(),
         )
         if (deviceToBackup?.rootAddress) {
@@ -42,7 +42,7 @@ export const CopyCredentialButton = memo(({ credential, deviceToBackup }: Props)
         deviceToBackup?.isBuckedUp,
         locale,
         isMnemonic,
-        credential,
+        backupDetails,
         dispatch,
         onCopyToClipboard,
         LL,
@@ -59,7 +59,7 @@ export const CopyCredentialButton = memo(({ credential, deviceToBackup }: Props)
             action={handleCopyToClipboard}
             title={LL.BTN_MNEMONIC_CLIPBOARD()}
             typographyFont="smallButtonPrimary"
-            disabled={!credential.length}
+            disabled={!backupDetails.length}
             textColor={theme.colors.text}
             rightIcon={<BaseIcon name="icon-copy" color={theme.colors.text} size={12} style={styles.icon} />}
         />

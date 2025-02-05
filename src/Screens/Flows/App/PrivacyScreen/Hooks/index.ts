@@ -1,4 +1,4 @@
-export * from "./useBackupCredential"
+export * from "./useBackupDetails"
 export * from "./useEditPin"
 export * from "./useSecurityButtons"
 export * from "./useSecurityUpdate"

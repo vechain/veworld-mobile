@@ -26,7 +26,7 @@ import { selectIsAppLoading, setDeviceIsBackup, setIsAppLoading, useAppDispatch,
 import { AddressUtils, CryptoUtils, DateUtils, HexUtils, PasswordUtils, PlatformUtils } from "~Utils"
 import { cloudBackupPasswordStyle } from "./utils"
 
-export const ChooseCredentialBackupPassword = () => {
+export const ChooseBackupDetailsPassword = () => {
     const { styles, theme } = useThemedStyles(cloudBackupPasswordStyle)
     const { LL, locale } = useI18nContext()
     const navigation = useNavigation()
@@ -34,8 +34,8 @@ export const ChooseCredentialBackupPassword = () => {
 
     const isAppLoading = useAppSelector(selectIsAppLoading)
 
-    const route = useRoute<RouteProp<RootStackParamListSettings, Routes.CHOOSE_CREDENTIAL_BACKUP_PASSWORD>>()
-    const { credential, device } = route.params
+    const route = useRoute<RouteProp<RootStackParamListSettings, Routes.CHOOSE_DETAILS_BACKUP_PASSWORD>>()
+    const { backupDetails, device } = route.params
 
     const inputRef = useRef<TextInput>(null)
 
@@ -68,7 +68,7 @@ export const ChooseCredentialBackupPassword = () => {
                 const firstAccountAddress = AddressUtils.getAddressFromXPub(device.xPub, 0)
                 const salt = HexUtils.generateRandom(256)
                 const iv = PasswordUtils.getRandomIV(16)
-                const mnemonic = await CryptoUtils.encrypt(credential, password, salt, iv)
+                const mnemonic = await CryptoUtils.encrypt(backupDetails, password, salt, iv)
                 const isOperationSuccessfull = await saveWalletToCloud({
                     mnemonic,
                     _rootAddress: device?.rootAddress,
@@ -108,7 +108,7 @@ export const ChooseCredentialBackupPassword = () => {
             device?.type,
             device?.derivationPath,
             device?.isBackedUpManual,
-            credential,
+            backupDetails,
             saveWalletToCloud,
             LL,
             locale,
