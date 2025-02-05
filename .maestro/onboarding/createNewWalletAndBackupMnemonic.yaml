@@ -19,6 +19,14 @@ onFlowComplete:
           visible: "Choose your 6-digit PIN"
       commands:
           - tapOn: "1"
+#skip notification bottom sheet
+- runFlow:
+      when:
+          visible:
+              id: "button_notifications_enable"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
 #backup mnemonic on privacy and settings screen
 - runFlow:
       when:
