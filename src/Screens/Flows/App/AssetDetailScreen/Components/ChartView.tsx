@@ -90,6 +90,6 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         priceText: { opacity: 0 },
-        container: { maxHeight: 160, paddingHorizontal: 16 },
+        container: { maxHeight: 160, paddingHorizontal: 16, overflow: "hidden" },
         opacity: { opacity: 0.4 },
     })
