@@ -1,9 +1,11 @@
 import React from "react"
 import { FiatBalance } from "~Components"
 import { WalletAccount } from "~Model"
-import { VET, VTHO, B3TR } from "~Constants"
+import { VET, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { StyleSheet } from "react-native"
+import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { BalanceUtils } from "~Utils"
 
 type Props = {
     account: WalletAccount
@@ -13,10 +15,19 @@ type Props = {
 
 export const AccountDetailFiatBalance: React.FC<Props> = ({ account, isVisible, isLoading }) => {
     const { styles } = useThemedStyles(baseStyles)
+    const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
 
     const vetWithInfo = useTokenWithCompleteInfo(VET, account.address)
     const vthoWithInfo = useTokenWithCompleteInfo(VTHO, account.address)
     const b3trWithInfo = useTokenWithCompleteInfo(B3TR, account.address)
+    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
+
+    const vot3FiatBalance = BalanceUtils.getFiatBalance(
+        vot3RawBalance?.balance ?? "0",
+        b3trWithInfo.exchangeRate ?? 0,
+        VOT3.decimals,
+    )
+
     const nonVechainTokens = useNonVechainTokenFiat(account.address)
 
     return (
@@ -25,6 +36,7 @@ export const AccountDetailFiatBalance: React.FC<Props> = ({ account, isVisible, 
                 vetWithInfo.fiatBalance,
                 vthoWithInfo.fiatBalance,
                 b3trWithInfo.fiatBalance,
+                vot3FiatBalance,
                 ...nonVechainTokens,
             ]}
             isVisible={isVisible}

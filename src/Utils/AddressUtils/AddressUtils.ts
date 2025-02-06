@@ -1,7 +1,7 @@
 import { address, HDNode } from "thor-devkit"
 import { Network, NETWORK_TYPE, XPub } from "~Model"
 import { error, warn } from "~Utils/Logger"
-import { ERROR_EVENTS, VET, VTHO } from "~Constants"
+import { ERROR_EVENTS, VET, VTHO, B3TR, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS, VOT3 } from "~Constants"
 import CryptoUtils from "../CryptoUtils"
 import HexUtils from "../HexUtils"
 import { Vns } from "~Hooks"
@@ -103,7 +103,14 @@ export const isValid = (addr: string | undefined | null): boolean => {
 }
 
 export const isVechainToken = (addr: string): boolean => {
-    return addr === VET.address || addr === VTHO.address
+    return (
+        compareAddresses(addr, VET.address) ||
+        compareAddresses(addr, VTHO.address) ||
+        compareAddresses(addr, B3TR.address) ||
+        compareAddresses(addr, VOT3.address) ||
+        compareAddresses(addr, TEST_B3TR_ADDRESS) ||
+        compareAddresses(addr, TEST_VOT3_ADDRESS)
+    )
 }
 
 export const leftPadWithZeros = (str: string, length: number): string => {
