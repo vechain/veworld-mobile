@@ -1,0 +1,25 @@
+#nftsAppStateActive
+appId: org.vechain.veworld.app
+onFlowComplete:
+    - runFlow: ../setup_reset/resetApp.yaml
+env:
+    NFTS_DEEPLINK: "https://www.veworld.com/nfts"
+---
+- launchApp:
+      clearState: true
+- tapOn:
+      id: "dev_demo"
+- runFlow:
+      when:
+          visible:
+              id: "button_notifications_enable"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
+- assertVisible:
+      id: "veworld-homepage"
+- assertVisible:
+      id: "buyButton"
+- openLink: ${NFTS_DEEPLINK}
+- assertVisible:
+      id: "nfts_title"

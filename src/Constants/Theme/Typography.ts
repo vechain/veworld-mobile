@@ -200,7 +200,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontWeight: fontWeight[700],
     },
     bodySemiBold: {
-        fontFamily: fontFamily["Inter-Bold"],
+        fontFamily: fontFamily["Inter-SemiBold"],
         fontSize: 14,
         fontWeight: fontWeight[600],
         lineHeight: lineHeight.bodySemiBold,

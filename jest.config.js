@@ -35,6 +35,7 @@ module.exports = {
             "|split-on-first" +
             "|filter-obj" +
             "|@transak/react-native-sdk" +
+            "|jail-monkey" +
             ")",
     ],
     moduleNameMapper: {
