@@ -1,7 +1,7 @@
 import { StyleSheet, View } from "react-native"
 import React, { useCallback, useState } from "react"
 import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
-import { useThemedStyles } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType } from "~Constants"
 import { MarketChartTimeFrame } from "~Api/Coingecko"
 
@@ -11,6 +11,7 @@ type Props = {
 }
 
 export const PressableWithUnderline = (props: Props) => {
+    const theme = useTheme()
     const { onPress, data } = props
     const { styles } = useThemedStyles(baseStyles)
     const [activeIndex, setActiveIndex] = useState(0)
@@ -33,7 +34,11 @@ export const PressableWithUnderline = (props: Props) => {
                     accessibilityRole="button"
                     action={() => onButtonPress(item, index)}
                     style={styles.buttonContainer}>
-                    <BaseText fontSize={18}>{item.label}</BaseText>
+                    <BaseText
+                        color={activeIndex === index ? theme.colors.text : theme.colors.graphStatsText}
+                        typographyFont={activeIndex === index ? "bodySemiBold" : "body"}>
+                        {item.label}
+                    </BaseText>
 
                     <View
                         style={[
@@ -56,9 +61,9 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         underline: {
             marginTop: 4,
-            backgroundColor: theme.isDark ? COLORS.GRAY : COLORS.DARK_PURPLE,
-            height: 4,
-            width: 12,
+            backgroundColor: theme.isDark ? COLORS.WHITE : COLORS.DARK_PURPLE,
+            height: 2,
+            width: 18,
             borderRadius: 2,
             overflow: "hidden",
         },
