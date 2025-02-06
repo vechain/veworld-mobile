@@ -1,0 +1,79 @@
+#userActivty.yaml
+appId: org.vechain.veworld.app
+env:
+  AMOUNT: 0.01
+  ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
+  ADDRESS: "0x8a9844e4750f5ce5f7988c4d1e04c278c718feea"
+onFlowStart:
+  - runFlow: ../setup_reset/setupApp.yaml
+onFlowComplete:
+    - runFlow: ../setup_reset/resetApp.yaml
+---
+## User should be able to send tokens delegating with account method
+- tapOn:
+    id: "AccountCard_changeAccountButton"
+- tapOn:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "sendButton"
+- runFlow:
+    commands:
+      - tapOn:
+          id: "VET"
+- tapOn:
+    id: "Layout_ScrollView"
+- assertVisible:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "selectAccount"
+    index: 0
+- tapOn:
+    id: "next-button"
+- tapOn:
+    id: "SendScreen_amountInput"
+- inputText: ${AMOUNT}
+- tapOn:
+    id: "Select_Amount_Send_Screen"
+- tapOn:
+    id: "next-button"
+- runFlow:
+    when:
+      visible: "Select delegation"
+    commands:
+      - tapOn:
+          id: "button-ACCOUNT"
+      - tapOn:
+          id: "selectAccount"
+          index: 0
+      - tapOn:
+          id: "confirm-send-button"
+      - repeat:
+          while:
+            visible: "Insert your 6-digit PIN"
+          commands:
+            - tapOn: "1"
+- assertVisible: "My tokens"
+## User should be able to see the transaction details on activity screen
+- tapOn:
+    id: "history-tab"
+- swipe:
+    direction: "down"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn: ".*Send.*"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn:
+          text: "Send"
+          index: 0
+- assertVisible: "Account 1"
+- assertVisible: "Account 2"
+- assertVisible: ".*0.01 VET.*"
+- assertNotVisible: "Failed"
+
