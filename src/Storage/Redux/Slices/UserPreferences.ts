@@ -21,6 +21,7 @@ import { Locales } from "~i18n"
  * @property {string|number} appResetTimestamp
  * @property {Object.<string, number>|undefined} lastBackupRequestTimestamp
  * @property {number|null} lastNotificationReminder
+ * @property {string[]} removedNotificationTags
  */
 
 export interface UserPreferenceState {
@@ -39,6 +40,7 @@ export interface UserPreferenceState {
     appResetTimestamp?: string
     lastBackupRequestTimestamp?: { [key: string]: number | undefined }
     lastNotificationReminder: number | null
+    removedNotificationTags?: string[]
 }
 
 const initialState: UserPreferenceState = {
@@ -57,6 +59,7 @@ const initialState: UserPreferenceState = {
     lastVersionCheck: moment().toISOString(),
     appResetTimestamp: undefined,
     lastNotificationReminder: null,
+    removedNotificationTags: undefined,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -138,6 +141,20 @@ export const UserPreferencesSlice = createSlice({
         updateLastNotificationReminder: (state, action: PayloadAction<number | null>) => {
             state.lastNotificationReminder = action.payload
         },
+
+        addRemovedNotificationTag: (state, action: PayloadAction<string>) => {
+            if (!state.removedNotificationTags) {
+                state.removedNotificationTags = [action.payload]
+            } else if (!state.removedNotificationTags.includes(action.payload)) {
+                state.removedNotificationTags.push(action.payload)
+            }
+        },
+
+        removeRemovedNotificationTag: (state, action: PayloadAction<string>) => {
+            if (state.removedNotificationTags?.includes(action.payload)) {
+                state.removedNotificationTags = state.removedNotificationTags.filter(tag => tag !== action.payload)
+            }
+        },
     },
 })
 
@@ -157,4 +174,6 @@ export const {
     setAppResetTimestamp,
     setLastBackupRequestTimestamp,
     updateLastNotificationReminder,
+    addRemovedNotificationTag,
+    removeRemovedNotificationTag,
 } = UserPreferencesSlice.actions

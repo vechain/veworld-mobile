@@ -198,9 +198,6 @@ export const ChooseMnemonicBackupPassword = () => {
                         placeholder={LL.BTN_WRITE_RECOVERY_PASSWORD()}
                         placeholderTextColor={theme.colors.passwordPlaceholder}
                         secureTextEntry={secureText1}
-                        containerStyle={styles.containerPassword}
-                        inputContainerStyle={styles.inputPassword}
-                        style={styles.inputPassword}
                         rightIcon={
                             <BaseIcon
                                 haptics="Light"
@@ -208,7 +205,6 @@ export const ChooseMnemonicBackupPassword = () => {
                                 name={secureText1 ? "icon-eye-off" : "icon-eye"}
                                 size={16}
                                 color={COLORS.GREY_500}
-                                style={styles.toggleIcon}
                             />
                         }
                         value={password1}
@@ -229,9 +225,6 @@ export const ChooseMnemonicBackupPassword = () => {
                             placeholder={LL.BTN_REPEAT_PASSWORD()}
                             placeholderTextColor={theme.colors.passwordPlaceholder}
                             secureTextEntry={secureText2}
-                            containerStyle={styles.containerPassword}
-                            inputContainerStyle={styles.inputPassword}
-                            style={styles.inputPassword}
                             rightIcon={
                                 <BaseIcon
                                     haptics="Light"
@@ -239,7 +232,6 @@ export const ChooseMnemonicBackupPassword = () => {
                                     name={secureText2 ? "icon-eye-off" : "icon-eye"}
                                     size={16}
                                     color={COLORS.GREY_500}
-                                    style={styles.toggleIcon}
                                 />
                             }
                             value={password2}

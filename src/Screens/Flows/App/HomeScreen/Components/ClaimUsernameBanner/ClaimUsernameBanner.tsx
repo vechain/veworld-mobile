@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet, Text } from "react-native"
-import { ActionBanner, BaseText, BaseView, useFeatureFlags, WrapTranslation } from "~Components"
+import { ActionBanner, BaseSpacer, BaseText, BaseView, useFeatureFlags, WrapTranslation } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -22,9 +22,6 @@ export const ClaimUsernameBanner = ({ noMarginTop = false }: Props) => {
     const dispatch = useAppDispatch()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
-
-    // const bannerTitle = LL.BANNER_TITLE_CLAIM_USERNAME()
-    // const [before, after] = bannerTitle.split("username")
 
     const { name } = useVns({
         address: selectedAccount.address,
@@ -49,10 +46,10 @@ export const ClaimUsernameBanner = ({ noMarginTop = false }: Props) => {
         AccountUtils.isObservedAccount(selectedAccount) ||
         selectedAccount.device.type === DEVICE_TYPE.LEDGER
     )
-        return <></>
+        return <BaseSpacer height={8} />
 
     return (
-        <BaseView w={100} mt={!noMarginTop ? 8 : 0}>
+        <BaseView w={100} mt={!noMarginTop ? 8 : 0} mb={12}>
             <ActionBanner actionText={LL.BTN_CLAIM()} actionTestID="claimUsernameBtn" onPress={onClaimPress}>
                 <BaseText mx={4} color={theme.colors.actionBanner.title} typographyFont="captionRegular">
                     <WrapTranslation
