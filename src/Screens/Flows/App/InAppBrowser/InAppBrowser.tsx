@@ -9,6 +9,7 @@ import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetwo
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
+import { useI18nContext } from "~i18n"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
@@ -29,6 +30,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     const track = useAnalyticTracking()
     const nav = useNavigation()
+    const { locale } = useI18nContext()
 
     useEffect(() => {
         if (route?.params?.ul) {
@@ -63,7 +65,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                     {userAgent && (
                         <WebView
                             ref={webviewRef as MutableRefObject<WebView>}
-                            source={{ uri: route.params.url }}
+                            source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
                             userAgent={userAgent}
                             onNavigationStateChange={onNavigationStateChange}
                             javaScriptEnabled={true}
