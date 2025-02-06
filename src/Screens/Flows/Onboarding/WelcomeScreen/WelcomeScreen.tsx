@@ -286,7 +286,6 @@ export const WelcomeScreen = () => {
 
             <SelectLanguageBottomSheet
                 ref={selectLanguageSheetRef}
-                onClose={closeSelectLanguageSheet}
                 selectedLanguage={selectedLanguageCode}
                 handleSelectLanguage={handleSelectLanguage}
             />

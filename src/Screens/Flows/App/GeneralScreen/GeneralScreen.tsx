@@ -139,7 +139,6 @@ export const GeneralScreen = () => {
 
                     <SelectLanguageBottomSheet
                         ref={selectLanguageSheetRef}
-                        onClose={closeSelectLanguageSheet}
                         selectedLanguage={selectedLanguageCode}
                         handleSelectLanguage={handleSelectLanguage}
                     />
