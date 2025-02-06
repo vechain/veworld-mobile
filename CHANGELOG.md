@@ -1,5 +1,12 @@
 
 
+## 2.0.8 (2025-02-06)
+
+
+### Features
+
+* added jailbreak/rooted device detection ([#2583](https://github.com/vechain/veworld-mobile/issues/2583)) ([e15ba5c](https://github.com/vechain/veworld-mobile/commit/e15ba5c2bf562b695a4c01d29a412b033f034bd5))
+
 ## 2.0.8 (2025-02-04)
 
 
