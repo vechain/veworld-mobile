@@ -5,15 +5,13 @@ import { BalanceView } from "~Screens/Flows/App/AssetDetailScreen/Components/Bal
 import { StyleSheet } from "react-native"
 import { ColorThemeType } from "~Constants"
 
-export const AssetBalanceCard = ({
-    tokenWithInfo,
-    isBalanceVisible,
-    FastActions,
-}: {
+type Props = {
     tokenWithInfo: TokenWithCompleteInfo
     isBalanceVisible: boolean
     FastActions: React.ReactNode
-}) => {
+}
+
+export const AssetBalanceCard = ({ tokenWithInfo, isBalanceVisible, FastActions }: Props) => {
     const { styles } = useThemedStyles(baseStyle)
 
     return (
