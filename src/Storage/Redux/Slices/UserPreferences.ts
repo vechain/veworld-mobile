@@ -1,4 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import lodash from "lodash"
 import moment from "moment"
 import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
 import { Locales } from "~i18n"
@@ -126,6 +127,17 @@ export const UserPreferencesSlice = createSlice({
             }
         },
 
+        resetUserPreferencesState: state => {
+            if (state.language !== "en") {
+                const selectedLanguage = state.language
+                state = lodash.cloneDeep(initialState)
+                state.language = selectedLanguage
+                return
+            }
+
+            return initialState
+        },
+
         updateLastNotificationReminder: (state, action: PayloadAction<number | null>) => {
             state.lastNotificationReminder = action.payload
         },
@@ -143,8 +155,6 @@ export const UserPreferencesSlice = createSlice({
                 state.removedNotificationTags = state.removedNotificationTags.filter(tag => tag !== action.payload)
             }
         },
-
-        resetUserPreferencesState: () => initialState,
     },
 })
 
