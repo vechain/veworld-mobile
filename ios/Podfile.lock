@@ -142,9 +142,9 @@ PODS:
   - MixpanelReactNative (2.4.1):
     - Mixpanel-swift (= 4.2.0)
     - React-Core
-  - MMKV (2.0.2):
-    - MMKVCore (~> 2.0.2)
-  - MMKVCore (2.0.2)
+  - MMKV (2.0.0):
+    - MMKVCore (~> 2.0.0)
+  - MMKVCore (2.0.0)
   - MultiplatformBleAdapter (0.1.9)
   - OneSignalXCFramework (5.2.9):
     - OneSignalXCFramework/OneSignalComplete (= 5.2.9)
@@ -1131,8 +1131,8 @@ SPEC CHECKSUMS:
   lottie-react-native: 17547b2f3c7034e2ae8672833fdb63262164d18a
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 0101b8828c2f335c128850e71ab7d3b7adde089a
-  MMKV: 3eacda84cd1c4fc95cf848d3ecb69d85ed56006c
-  MMKVCore: 508b4d3a8ce031f1b5c8bd235f0517fb3f4c73a9
+  MMKV: f7d1d5945c8765f97f39c3d121f353d46735d801
+  MMKVCore: c04b296010fcb1d1638f2c69405096aac12f6390
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
   OneSignalXCFramework: f5b2a3c4f130e4c910ead7bb25bed7455e976fbf
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
@@ -1215,4 +1215,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8be5fb3d40d2b14e7939d552f2185a0508cf9e59
 
-COCOAPODS: 1.15.2
+COCOAPODS: 1.14.3
