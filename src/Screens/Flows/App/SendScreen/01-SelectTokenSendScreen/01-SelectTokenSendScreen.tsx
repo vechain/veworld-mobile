@@ -2,11 +2,11 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useState } from "react"
 import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard } from "~Components"
-import { B3TR, VET, VTHO } from "~Constants"
+import { VET, VTHO } from "~Constants"
 import { useTokenWithCompleteInfo } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
+import { selectNetworkVBDTokens, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 
 type Props = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
@@ -15,21 +15,24 @@ export const SelectTokenSendScreen = () => {
     const { LL } = useI18nContext()
     const [tokenQuery, setTokenQuery] = useState<string>("")
     const tokens = useAppSelector(selectSendableTokensWithBalance)
+    const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
+
     const filteredTokens = tokens.filter(
         token =>
             token.name?.toLowerCase().includes(tokenQuery.toLowerCase()) ||
             token.symbol?.toLowerCase().includes(tokenQuery.toLowerCase()),
     )
+
     const nav = useNavigation<Props>()
     const handleClickToken = (token: FungibleTokenWithBalance) => async () => {
         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
             token,
         })
     }
-
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
     const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
+    const tokenWithInfoVOT3 = useTokenWithCompleteInfo(VOT3)
 
     return (
         <Layout
@@ -56,6 +59,7 @@ export const SelectTokenSendScreen = () => {
                             const isVET = token.symbol === VET.symbol
                             const isB3TR = token.symbol === B3TR.symbol
                             const isVTHO = token.symbol === VTHO.symbol
+                            const isVOT3 = token.symbol === VOT3.symbol
 
                             const getTokenWithInfo = () => {
                                 if (isVET) {
@@ -64,6 +68,8 @@ export const SelectTokenSendScreen = () => {
                                     return tokenWithInfoVTHO
                                 } else if (isB3TR) {
                                     return tokenWithInfoB3TR
+                                } else if (isVOT3) {
+                                    return tokenWithInfoVOT3
                                 }
                             }
 

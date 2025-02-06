@@ -25,7 +25,7 @@ export const AnimatedSearchBar = ({
 
     const dimensions = useRef(
         (() => {
-            const paddingRight = iconName ? 12 : 0
+            const paddingRight = 24
             const iconSize = 32
             const totalIconContainerSize = paddingRight + iconSize
             const fullWidthPercentage = 100
@@ -70,7 +70,7 @@ export const AnimatedSearchBar = ({
 
     return (
         <BaseView flexDirection="row" alignItems="center">
-            <Animated.View style={[animatedInputStyle, { paddingRight: dimensions.current.paddingRight }]}>
+            <Animated.View style={[animatedInputStyle]}>
                 <BaseSearchInput
                     placeholder={placeholder}
                     setValue={onTextChange}
@@ -82,7 +82,7 @@ export const AnimatedSearchBar = ({
                 />
             </Animated.View>
             {iconName && onIconPress && (
-                <BaseView justifyContent={"center"} alignItems={"center"}>
+                <BaseView justifyContent={"center"} alignItems={"center"} pl={16}>
                     <Icon name={iconName} size={dimensions.current.iconSize} color={iconColor} onPress={onIconPress} />
                 </BaseView>
             )}

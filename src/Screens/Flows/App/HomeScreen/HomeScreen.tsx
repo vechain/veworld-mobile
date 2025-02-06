@@ -168,7 +168,6 @@ export const HomeScreen = () => {
                         <BaseView alignItems="center">
                             <DeviceJailBrokenAlert />
                             <ClaimUsernameBanner />
-                            <BaseSpacer height={8} />
                             <AccountCard
                                 balanceVisible={isBalanceVisible}
                                 openSelectAccountBottomSheet={openSelectAccountBottomSheet}

@@ -75,6 +75,10 @@ export const selectLastNotificationReminder = createSelector(reducer, state => {
     return state.lastNotificationReminder
 })
 
+export const selectRemovedNotificationTags = createSelector(reducer, state => {
+    return state.removedNotificationTags ?? []
+})
+
 export const selectShowJailbrokeDeviceWarning = createSelector(reducer, state => {
     return state.showJailbrokeWarning
 })

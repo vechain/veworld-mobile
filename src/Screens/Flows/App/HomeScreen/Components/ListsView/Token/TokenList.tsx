@@ -5,8 +5,14 @@ import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseView, SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
-import { B3TR, ColorThemeType, VET, VTHO } from "~Constants"
-import { changeBalancePosition, removeTokenBalance, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { ColorThemeType, VET, VTHO } from "~Constants"
+import {
+    changeBalancePosition,
+    removeTokenBalance,
+    selectNetworkVBDTokens,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import {
     selectNonVechainTokensWithBalances,
     selectSelectedAccount,
@@ -29,6 +35,7 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
     const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+    const { B3TR } = useAppSelector(state => selectNetworkVBDTokens(state))
 
     // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())

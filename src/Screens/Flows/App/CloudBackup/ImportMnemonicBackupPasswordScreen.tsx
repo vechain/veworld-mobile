@@ -169,9 +169,6 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                         placeholder={LL.BTN_ENTER_PASSWORD()}
                         placeholderTextColor={theme.colors.passwordPlaceholder}
                         secureTextEntry={secureText}
-                        containerStyle={styles.containerPassword}
-                        inputContainerStyle={styles.inputPassword}
-                        style={styles.inputPassword}
                         rightIcon={
                             <BaseIcon
                                 haptics="Light"
@@ -179,7 +176,6 @@ export const ImportMnemonicBackupPasswordScreen = () => {
                                 name={secureText ? "icon-eye-off" : "icon-eye"}
                                 size={16}
                                 color={COLORS.GREY_500}
-                                style={styles.toggleIcon}
                             />
                         }
                         value={password}
