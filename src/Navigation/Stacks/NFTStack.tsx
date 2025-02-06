@@ -39,7 +39,7 @@ export const NFTStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator id="HomeStack" screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="NftStack" screenOptions={{ headerShown: false, animation }}>
             <Group>
                 <Screen name={Routes.NFTS} component={NFTScreen} options={{ headerShown: false }} />
 

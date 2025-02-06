@@ -2,7 +2,7 @@ import { showErrorToast, useThor, WalletEncryptionKeyHelper } from "~Components"
 import { useCallback, useMemo } from "react"
 import { selectAccounts, selectContacts, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { QueryObserverResult, RefetchOptions, useQuery, useQueryClient } from "@tanstack/react-query"
-import { AccountWithDevice, LocalDevice, Network, NETWORK_TYPE } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, LocalDevice, Network, NETWORK_TYPE } from "~Model"
 import { abi } from "thor-devkit"
 import { queryClient } from "~Api/QueryProvider"
 import {
@@ -23,11 +23,9 @@ import {
     VeChainSigner,
     vnsUtils,
 } from "@vechain/sdk-network"
-import { error } from "~Utils"
+import { AccountUtils, AddressUtils, error } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { isObservedAccount } from "~Utils/AccountUtils/AccountUtils"
 
 export const ZERO_ADDRESS = "0x0000000000000000000000000000000000000000"
 
@@ -408,25 +406,60 @@ export const usePrefetchAllVns = () => {
     return vnsResults
 }
 
-export const useVnsUnclaimed = () => {
+export const useClaimableUsernames = () => {
     const qc = useQueryClient()
     const network = useAppSelector(selectSelectedNetwork)
     const contacts = useAppSelector(selectContacts)
     const accounts = useAppSelector(selectAccounts)
     const cachedAddresses = qc.getQueryData<Vns[]>(["vns_names", network.genesis.id])
 
-    const obeservedAccounts = accounts.filter(account => isObservedAccount(account))
+    const obeservedAccounts = accounts.filter(account => AccountUtils.isObservedAccount(account))
 
     const unclaimedAddresses = useMemo(() => {
         if (!cachedAddresses) return []
         return cachedAddresses.filter(
             account =>
                 !account?.name &&
-                !contacts.some(contact => compareAddresses(contact.address, account.address)) &&
-                !obeservedAccounts.some(observedAcc => compareAddresses(account.address, observedAcc.address)) &&
-                accounts.some(acc => compareAddresses(acc.address, account.address)),
+                !contacts.some(contact => AddressUtils.compareAddresses(contact.address, account.address)) &&
+                !obeservedAccounts.find(observedAcc =>
+                    AddressUtils.compareAddresses(account.address, observedAcc.address),
+                ) &&
+                !!accounts.find(acc => AddressUtils.compareAddresses(acc.address, account.address)),
         )
     }, [accounts, cachedAddresses, contacts, obeservedAccounts])
 
     return { unclaimedAddresses }
+}
+
+export const getClaimableUsernames = (
+    domains: Vns[] | undefined,
+    deviceAccounts: AccountWithDevice[],
+): Promise<string[]> => {
+    if (!domains || domains.length === 0) {
+        const res = deviceAccounts.reduce((acc: string[], account) => {
+            const isLedger = "device" in account && account.device.type === DEVICE_TYPE.LEDGER
+            const isObservedAccount = AccountUtils.isObservedAccount(account)
+            const canClaimUsername = !isObservedAccount && !isLedger
+
+            if (canClaimUsername) {
+                acc.push(account.address)
+            }
+
+            return acc
+        }, [])
+        return Promise.resolve(res)
+    }
+    const noVnsAccounts = deviceAccounts.reduce((acc: string[], account) => {
+        const isLedger = "device" in account && account.device.type === DEVICE_TYPE.LEDGER
+        const isObservedAccount = AccountUtils.isObservedAccount(account)
+        const domain = domains.find(vns => AddressUtils.compareAddresses(vns.address, account.address))?.name
+        const canClaimUsername = !isObservedAccount && !domain && !isLedger
+
+        if (canClaimUsername) {
+            acc.push(account.address)
+        }
+
+        return acc
+    }, [])
+    return Promise.resolve(noVnsAccounts)
 }

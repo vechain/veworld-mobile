@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
+    getClaimableUsernames,
     useBottomSheetModal,
     useCheckIdentity,
     usePrefetchAllVns,
     useRenameWallet,
     useSetSelectedAccount,
 } from "~Hooks"
-import { AccountUtils, AddressUtils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import {
     AlertInline,
     BaseSpacer,
@@ -33,6 +34,8 @@ import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBott
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAccountDelete } from "./hooks"
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
+import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 
@@ -48,6 +51,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { changeDeviceAlias } = useRenameWallet(device)
     const { data: domains } = usePrefetchAllVns()
     const { subdomainClaimFeature } = useFeatureFlags()
+    const [claimableUsernames, setClaimableUsernames] = useState<string[]>([])
 
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
@@ -56,24 +60,6 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const deviceAccounts = useAppSelector(state => selectAccountsByDevice(state, device?.rootAddress))
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
-
-    const claimableUsernames = useMemo(() => {
-        if (!domains || domains.length === 0)
-            return deviceAccounts
-                .filter(accounts => accounts.device.type !== DEVICE_TYPE.LEDGER)
-                .map(accounts => accounts.address)
-
-        const noVnsAccounts = deviceAccounts
-            .filter(account => {
-                const isLedger = "device" in account && account.device.type === DEVICE_TYPE.LEDGER
-                const isObservedAccount = AccountUtils.isObservedAccount(account)
-                const domain = domains.find(vns => AddressUtils.compareAddresses(vns.address, account.address))?.name
-                return !isObservedAccount && !domain && !isLedger
-            })
-            .map(accounts => accounts.address)
-
-        return noVnsAccounts
-    }, [deviceAccounts, domains])
 
     const {
         ref: removeAccountWarningBottomSheetRef,
@@ -188,6 +174,35 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const showButton = device?.type === DEVICE_TYPE.LEDGER || device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
     const isEditable = device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
 
+    const bannerHeight = useSharedValue<DefaultStyle["height"]>(0)
+    const bannerOpacity = useSharedValue<number>(0)
+
+    const animatedStyles = useAnimatedStyle(() => {
+        return {
+            height: bannerHeight.value,
+            opacity: bannerOpacity.value,
+        }
+    })
+
+    useEffect(() => {
+        bannerHeight.value = withSpring(claimableUsernames.length > 0 ? 45 : 0, {
+            duration: 500,
+            dampingRatio: 1,
+            stiffness: 72,
+            overshootClamping: true,
+        })
+        bannerOpacity.value = withSpring(claimableUsernames.length > 0 ? 1 : 0, { duration: 100 })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [claimableUsernames])
+
+    useEffect(
+        () => {
+            getClaimableUsernames(domains, deviceAccounts).then(res => setClaimableUsernames(res))
+        },
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [domains],
+    )
+
     return (
         <Layout
             title={walletAlias || device?.alias || ""}
@@ -215,14 +230,14 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                             {LL.WALLET_DETAIL_ACCOUNTS_NUMER({ count: deviceAccounts.length })}
                         </BaseText>
                         {claimableUsernames.length > 0 && (
-                            <>
+                            <Animated.View style={[animatedStyles]}>
                                 <BaseSpacer height={16} />
                                 <AlertInline
                                     variant="banner"
                                     status="info"
                                     message={`You have ${claimableUsernames.length} username claim available`}
                                 />
-                            </>
+                            </Animated.View>
                         )}
                     </BaseView>
                     {device && !!deviceAccounts.length && (
@@ -233,7 +248,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                             ListFooterComponent={<BaseSpacer height={20} />}
                             renderItem={({ item }) => {
                                 const isSelected = AddressUtils.compareAddresses(selectedAccount.address, item.address)
-                                const canClaimUsername = claimableUsernames.some(address =>
+                                const canClaimUsername = claimableUsernames.find(address =>
                                     AddressUtils.compareAddresses(address, item.address),
                                 )
                                 return (
@@ -264,7 +279,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                             account={item}
                                             isSelected={isSelected}
                                             isDisabled={!item.visible}
-                                            canClaimUsername={subdomainClaimFeature.enabled && canClaimUsername}
+                                            canClaimUsername={subdomainClaimFeature.enabled && !!canClaimUsername}
                                             onEditPress={account => {
                                                 setEditingAccount(account)
                                                 openEditWalletAccountBottomSheet()
