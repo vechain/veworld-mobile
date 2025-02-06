@@ -385,6 +385,8 @@
   "DETAILS": "Einzelheiten",
   "DEVICE_BACKUP_MODAL_SUBTITLE": "Eine oder mehrere Ihrer Konto-Wiederherstellungsphrasen wurden noch nicht gesichert. Stellen Sie sicher, dass Sie ein Backup machen, um nie den Zugriff auf Ihr Krypto zu verlieren.",
   "DEVICE_BACKUP_MODAL_TITLE": "Jetzt sichern",
+  "DEVICE_JAILBROKE_MODAL_SUBTITLE": "Wir haben festgestellt, dass Ihr Gerät jailbroken ist, was die Sicherheit Ihrer Wallet gefährden kann. Wir empfehlen dringend, Ihre Wiederherstellungsphrase zu sichern, VeWorld in den allgemeinen Einstellungen zurückzusetzen und Ihre Wallet auf einem nicht jailbroken Gerät zu importieren.",
+  "DEVICE_JAILBROKE_MODAL_TITLE": "Jailbroken Gerät erkannt",
   "DEVICE_PIN": "Geräte-Pin",
   "DISCOVER_CREATE_YOUR_DAPP": "Erstellen Sie Ihre eigene DApp auf Vechain",
   "DISCOVER_DAPPS_TITLE": "VeBetterDAO DApps",

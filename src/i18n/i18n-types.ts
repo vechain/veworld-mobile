@@ -221,6 +221,14 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​i​s​ ​j​a​i​l​b​r​o​k​e​n​,
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_1: string
+	/**
+	 * <​>​<​>​ ​p​u​t​t​i​n​g​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​ ​o​f​ ​t​h​e​f​t​.
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_2: string
+	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
 	APP_VERIFICATION_CONFIRM: string
@@ -1589,6 +1597,14 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	DEVICE_BACKUP_MODAL_TITLE: string
+	/**
+	 * W​e​ ​h​a​v​e​ ​d​e​t​e​c​t​e​d​ ​t​h​a​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​i​s​ ​j​a​i​l​b​r​o​k​e​n​,​ ​w​h​i​c​h​ ​m​a​y​ ​c​o​m​p​r​o​m​i​s​e​ ​t​h​e​ ​s​e​c​u​r​i​t​y​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​W​e​ ​s​t​r​o​n​g​l​y​ ​r​e​c​o​m​m​e​n​d​ ​b​a​c​k​i​n​g​ ​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​r​e​s​e​t​t​i​n​g​ ​V​e​W​o​r​l​d​ ​i​n​ ​G​e​n​e​r​a​l​ ​S​e​t​t​i​n​g​s​,​ ​a​n​d​ ​i​m​p​o​r​t​i​n​g​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​o​n​ ​a​ ​n​o​n​-​j​a​i​l​b​r​o​k​e​n​ ​d​e​v​i​c​e​.
+	 */
+	DEVICE_JAILBROKE_MODAL_SUBTITLE: string
+	/**
+	 * J​a​i​l​b​r​o​k​e​n​ ​D​e​v​i​c​e​ ​D​e​t​e​c​t​e​d
+	 */
+	DEVICE_JAILBROKE_MODAL_TITLE: string
 	/**
 	 * D​e​v​i​c​e​ ​P​i​n
 	 */
@@ -3923,6 +3939,14 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
+	 * Your device is jailbroken,
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_1: () => LocalizedString
+	/**
+	 * <><> putting your assets at risk of theft.
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_2: () => LocalizedString
+	/**
 	 * Please confirm that you would like to process this request.
 	 */
 	APP_VERIFICATION_CONFIRM: () => LocalizedString
@@ -5278,6 +5302,14 @@ Try reconnect your device to the internet.
 	 * Backup now
 	 */
 	DEVICE_BACKUP_MODAL_TITLE: () => LocalizedString
+	/**
+	 * We have detected that your device is jailbroken, which may compromise the security of your wallet. We strongly recommend backing up your recovery phrase, resetting VeWorld in General Settings, and importing your wallet on a non-jailbroken device.
+	 */
+	DEVICE_JAILBROKE_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Jailbroken Device Detected
+	 */
+	DEVICE_JAILBROKE_MODAL_TITLE: () => LocalizedString
 	/**
 	 * Device Pin
 	 */
