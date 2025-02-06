@@ -1,0 +1,26 @@
+#dappMughshotAppStateActive
+appId: org.vechain.veworld.app
+onFlowComplete:
+    - runFlow: ../setup_reset/resetApp.yaml
+env:
+    MUGSHOT_DEEPLINK: "https://www.veworld.com/discover/browser/ul/https%3A%2F%2Fmugshot.vet"
+---
+- launchApp:
+      clearState: true
+- tapOn:
+      id: "dev_demo"
+- runFlow:
+      when:
+          visible:
+              id: "button_notifications_enable"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
+- assertVisible:
+      id: "veworld-homepage"
+- assertVisible:
+      id: "buyButton"
+- openLink: ${MUGSHOT_DEEPLINK}
+- assertVisible: "mugshot.vet"
+- tapOn:
+      id: "closeButton"
