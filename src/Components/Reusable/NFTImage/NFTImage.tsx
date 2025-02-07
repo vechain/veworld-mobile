@@ -20,63 +20,62 @@ export const NFTImage = memo((props: Props) => {
     }, [theme.isDark])
 
     const renderImageComponent = useMemo(() => {
-        switch (mime) {
-            case "image/svg+xml":
-                return (
-                    <BaseView
-                        style={[
-                            {
-                                backgroundColor: theme.colors.placeholder,
-                            },
-                            style,
-                        ]}>
-                        {uri ? (
-                            <SvgUri
-                                uri={uri}
-                                testID={testID}
-                                height={"100%"}
-                                width={"100%"}
-                                fallback={
-                                    <FastImage
-                                        fallback
-                                        defaultSource={placeholderImg}
-                                        style={[style]}
-                                        resizeMode={FastImage.resizeMode.cover}
-                                    />
-                                }
-                            />
-                        ) : (
-                            <FastImage
-                                fallback
-                                defaultSource={placeholderImg}
-                                style={[style]}
-                                resizeMode={FastImage.resizeMode.cover}
-                            />
-                        )}
-                    </BaseView>
-                )
-            default:
-                return (
-                    <FastImage
-                        testID={testID}
-                        style={[
-                            {
-                                backgroundColor: theme.colors.placeholder,
-                            },
-                            style,
-                        ]}
-                        fallback
-                        defaultSource={placeholderImg}
-                        source={{
-                            uri,
-                            priority: FastImage.priority.low,
-                            cache: FastImage.cacheControl.immutable,
-                        }}
-                        {...rest}
-                        resizeMode={FastImage.resizeMode.cover}
-                    />
-                )
+        if (mime && mime === "image/svg+xml") {
+            return (
+                <BaseView
+                    style={[
+                        {
+                            backgroundColor: theme.colors.placeholder,
+                        },
+                        style,
+                    ]}>
+                    {uri ? (
+                        <SvgUri
+                            uri={uri}
+                            testID={testID}
+                            height={"100%"}
+                            width={"100%"}
+                            fallback={
+                                <FastImage
+                                    fallback
+                                    defaultSource={placeholderImg}
+                                    style={[style]}
+                                    resizeMode={FastImage.resizeMode.cover}
+                                />
+                            }
+                        />
+                    ) : (
+                        <FastImage
+                            fallback
+                            defaultSource={placeholderImg}
+                            style={[style]}
+                            resizeMode={FastImage.resizeMode.cover}
+                        />
+                    )}
+                </BaseView>
+            )
         }
+
+        return (
+            <FastImage
+                testID={testID}
+                style={[
+                    {
+                        backgroundColor: theme.colors.placeholder,
+                    },
+                    style,
+                ]}
+                fallback
+                defaultSource={placeholderImg}
+                source={{
+                    uri,
+                    priority: FastImage.priority.low,
+                    cache: FastImage.cacheControl.immutable,
+                }}
+                {...rest}
+                resizeMode={FastImage.resizeMode.cover}
+            />
+        )
     }, [mime, placeholderImg, rest, style, testID, theme.colors.placeholder, uri])
 
     return <BaseView>{renderImageComponent}</BaseView>
