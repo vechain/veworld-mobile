@@ -30,7 +30,29 @@ export const NFTImage = memo((props: Props) => {
                             },
                             style,
                         ]}>
-                        <SvgUri uri={uri ?? ""} testID={testID} height={"100%"} width={"100%"} />
+                        {uri ? (
+                            <SvgUri
+                                uri={uri}
+                                testID={testID}
+                                height={"100%"}
+                                width={"100%"}
+                                fallback={
+                                    <FastImage
+                                        fallback
+                                        defaultSource={placeholderImg}
+                                        style={[style]}
+                                        resizeMode={FastImage.resizeMode.cover}
+                                    />
+                                }
+                            />
+                        ) : (
+                            <FastImage
+                                fallback
+                                defaultSource={placeholderImg}
+                                style={[style]}
+                                resizeMode={FastImage.resizeMode.cover}
+                            />
+                        )}
                     </BaseView>
                 )
             default:
