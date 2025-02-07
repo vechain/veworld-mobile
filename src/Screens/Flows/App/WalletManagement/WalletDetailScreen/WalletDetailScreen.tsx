@@ -195,13 +195,10 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [claimableUsernames])
 
-    useEffect(
-        () => {
-            getClaimableUsernames(domains, deviceAccounts).then(res => setClaimableUsernames(res))
-        },
+    useEffect(() => {
+        getClaimableUsernames(domains, deviceAccounts).then(res => setClaimableUsernames(res))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [domains],
-    )
+    }, [domains, deviceAccounts.length])
 
     return (
         <Layout
