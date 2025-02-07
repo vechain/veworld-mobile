@@ -96,6 +96,7 @@ export const NFTMedia = memo(
             ) : (
                 <NFTImage
                     {...restProps}
+                    mime={tokenMedia?.mime}
                     uri={tokenMedia?.image}
                     onLoadEnd={onLoadEnd}
                     onError={onError}
@@ -111,6 +112,7 @@ export const NFTMedia = memo(
             themedStyles.imageOpacity,
             tokenMedia?.image,
             tokenMedia?.mediaType,
+            tokenMedia?.mime,
             useNativeControls,
         ])
 
