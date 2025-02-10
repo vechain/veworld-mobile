@@ -1,5 +1,12 @@
 
 
+## 2.1.0 (2025-02-10)
+
+
+### Features
+
+* 2490 add backup pk ([#2630](https://github.com/vechain/veworld-mobile/issues/2630)) ([986a193](https://github.com/vechain/veworld-mobile/commit/986a193db91fb6138e716e9e7bb35eb32cdc1dbe))
+
 ## 2.0.8 (2025-02-04)
 
 
