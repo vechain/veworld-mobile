@@ -31,7 +31,7 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
 
     const getStatusConfig = useCallback(
         (item: BaseDevice): StatusConfig => {
-            if (item.type !== DEVICE_TYPE.LOCAL_MNEMONIC) {
+            if (item.type !== DEVICE_TYPE.LOCAL_MNEMONIC && item.type !== DEVICE_TYPE.LOCAL_PRIVATE_KEY) {
                 return {
                     variant: "neutral",
                     statusText: LL.BD_CANT_BE_BACKED_UP(),
@@ -78,7 +78,7 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
         () => (
             <>
                 <BaseText mb={4} typographyFont="subSubTitleMedium">
-                    {LL.SB_BACKUP_RECOVERY_PHRASE()}
+                    {LL.SB_BACKUP_WALLET()}
                 </BaseText>
                 <BaseSpacer height={4} />
                 <BaseText typographyFont="captionRegular">{LL.BD_BACKUP_RECOVERY_PHRASE()}</BaseText>

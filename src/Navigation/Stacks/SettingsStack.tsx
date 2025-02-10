@@ -19,8 +19,8 @@ import {
     SettingsTransactionsScreen,
     WalletManagementScreen,
     WalletDetailScreen,
-    MnemonicBackupScreen,
-    ChooseMnemonicBackupPassword,
+    DetailsBackupScreen,
+    ChooseBackupDetailsPassword,
     ClaimUsername,
     UsernameClaimed,
 } from "~Screens"
@@ -44,8 +44,8 @@ export type RootStackParamListSettings = {
     [Routes.MANAGE_DELEGATION_URLS]: undefined
     [Routes.RESET_APP]: undefined
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
-    [Routes.ICLOUD_MNEMONIC_BACKUP]: { deviceToBackup?: LocalDevice; mnemonicArray: string[] }
-    [Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD]: { mnemonicArray: string[]; device: LocalDevice }
+    [Routes.ICLOUD_DETAILS_BACKUP]: { deviceToBackup?: LocalDevice; backupDetails: string[] | string }
+    [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
     [Routes.SETTINGS_GET_SUPPORT]: { url: string }
     [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
     [Routes.SETTINGS_NOTIFICATIONS]: undefined
@@ -139,14 +139,14 @@ export const SettingsStack = () => {
             />
 
             <Settings.Screen
-                name={Routes.ICLOUD_MNEMONIC_BACKUP}
-                component={MnemonicBackupScreen}
+                name={Routes.ICLOUD_DETAILS_BACKUP}
+                component={DetailsBackupScreen}
                 options={{ headerShown: false }}
             />
 
             <Settings.Screen
-                name={Routes.CHOOSE_MNEMONIC_BACKUP_PASSWORD}
-                component={ChooseMnemonicBackupPassword}
+                name={Routes.CHOOSE_DETAILS_BACKUP_PASSWORD}
+                component={ChooseBackupDetailsPassword}
                 options={{
                     headerShown: false,
                 }}

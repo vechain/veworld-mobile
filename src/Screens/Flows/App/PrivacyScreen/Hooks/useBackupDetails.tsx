@@ -5,14 +5,18 @@ import { LocalDevice } from "~Model"
 type Props = {
     closePasswordPrompt: () => void
     openWalletMgmtSheetWithDelay: (delay: number) => void
-    openBackupPhraseSheetWithDelay: (delay: number, mnemonicArray: string[], deviceToBackup: LocalDevice) => void
+    openBackupPhraseSheetWithDelay: (
+        delay: number,
+        backupDetails: string[] | string,
+        deviceToBackup: LocalDevice,
+    ) => void
     openPasswordPrompt: () => void
     closeWalletMgmtSheet: () => void
     devices: LocalDevice[]
     isWalletSecurityBiometrics: boolean
 }
 
-export const useBackupMnemonic = ({
+export const useBackupDetails = ({
     closePasswordPrompt,
     openWalletMgmtSheetWithDelay,
     openBackupPhraseSheetWithDelay,
@@ -42,6 +46,9 @@ export const useBackupMnemonic = ({
                 if (wallet?.mnemonic) {
                     setDeviceToBackup(devices[0])
                     openBackupPhraseSheetWithDelay(300, wallet.mnemonic, devices[0])
+                } else if (wallet?.privateKey) {
+                    setDeviceToBackup(devices[0])
+                    openBackupPhraseSheetWithDelay(300, wallet.privateKey, devices[0])
                 }
             }
         } else {

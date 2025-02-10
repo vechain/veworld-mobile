@@ -480,6 +480,22 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: RequiredParams<'cloud'>
 	/**
+	 *  Private key copied to clipboard
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: string
+	/**
+	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
+	 */
+  	BD_PRIVATE_KEY_DISCLAIMER: string
+	/**
+	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
+	 */
+  	BD_PRIVATE_KEY_PASSWORD_WARNING: string
+	/**
+	 * Never share your Private key. Anyone who gets access to it can steal all of your crypto assets.
+	 */
+  	BD_PRIVATE_KEY_WARMNING: string
+	/**
 	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
 	 */
 	BD_MNEMONIC_BACKUP: string
@@ -772,6 +788,10 @@ type RootTranslation = {
 	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
 	 */
 	BTN_BACKUP_ALERT_CLOSE: string
+	/**
+	 * B​a​c​k​u​p​ private key
+	 */
+	BTN_BACKUP_PK: string
 	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
@@ -2597,6 +2617,10 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_MNEMONIC: string
 	/**
+	 * B​a​c​k​u​p​ ​“account​”
+	 */
+	SB_BACKUP_WALLET: string
+	/**
 	 * B​a​c​k​u​p​ ​“​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​”
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: string
@@ -2720,6 +2744,10 @@ type RootTranslation = {
 	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
 	 */
 	SB_PASSWORD_AUTH: string
+	/**
+	 * Private key
+	 */
+	SB_PRIVATE_KEY: string
 	/**
 	 * R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
 	 */
@@ -3826,6 +3854,10 @@ export type TranslationFunctions = {
 	 */
 	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
 	/**
+	 * Avoid screenshotting your private key. Store it offline or back it up securely online.
+	 */
+	ALERT_DONT_SCREENSHOT_PRIVATE_KEY: () => LocalizedString
+	/**
 	 * Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: () => LocalizedString
@@ -4203,9 +4235,17 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
+	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
+	 */
+	BD_PRIVATE_KEY_DISCLAIMER: () => LocalizedString
+	/**
 	 * Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.
 	 */
 	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
+	/**
+	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
+	 */
+	BD_PRIVATE_KEY_PASSWORD_WARNING: () => LocalizedString
 	/**
 	 * In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.
 	 */
@@ -4214,6 +4254,10 @@ Try reconnect your device to the internet.
 	 * Your Secret Recovery Phrase makes it easy to back up and restore your account.
 	 */
 	BD_MNEMONIC_SUBTITLE: () => LocalizedString
+	/**
+	 * Never share your Private key. Anyone who learns them can steal all of your crypto assets.
+	 */
+	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
@@ -4490,6 +4534,10 @@ Try reconnect your device to the internet.
 	 * Backup now
 	 */
 	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
+	/**
+	 * Backup private key
+	 */
+	BTN_BACKUP_PK: () => LocalizedString
 	/**
 	 * Backup phrase
 	 */
@@ -6284,6 +6332,14 @@ Try reconnect your device to the internet.
 	 */
 	SB_BACKUP_MNEMONIC: () => LocalizedString
 	/**
+	 * Backup “account”
+	 */
+	SB_BACKUP_WALLET: () => LocalizedString
+	/**
+	 * Backup “Private key”
+	 */
+	SB_BACKUP_PRIVATE_KEY: () => LocalizedString
+	/**
 	 * Backup “Recovery phrase”
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: () => LocalizedString
@@ -6403,6 +6459,14 @@ Try reconnect your device to the internet.
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
+	/**
+	 * Private key copied to clipboard
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: () => LocalizedString
+	/**
+	 * Private key
+	 */
+	SB_PRIVATE_KEY: () => LocalizedString
 	/**
 	 * Recovery phrase
 	 */

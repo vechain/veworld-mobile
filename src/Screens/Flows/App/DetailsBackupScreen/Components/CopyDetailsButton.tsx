@@ -10,17 +10,22 @@ import { useCopyClipboard, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
 
 type Props = {
-    mnemonicArray: string[]
+    backupDetails: string[] | string
     deviceToBackup?: LocalDevice
 }
-export const CopyMnemonicButton = memo(({ mnemonicArray, deviceToBackup }: Props) => {
+export const CopyDetailsButton = memo(({ backupDetails, deviceToBackup }: Props) => {
     const { LL, locale } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { onCopyToClipboard } = useCopyClipboard()
     const dispatch = useAppDispatch()
 
+    const isMnemonic = Array.isArray(backupDetails)
+
     const handleCopyToClipboard = useCallback(() => {
-        onCopyToClipboard(mnemonicArray.join(" "), LL.BTN_BACKUP_MENMONIC())
+        onCopyToClipboard(
+            isMnemonic ? backupDetails.join(" ") : backupDetails,
+            isMnemonic ? LL.BTN_BACKUP_MENMONIC() : LL.BTN_BACKUP_PK(),
+        )
         if (deviceToBackup?.rootAddress) {
             const formattedDate = formatDateTime(Date.now(), locale, getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE)
             dispatch(
@@ -36,7 +41,8 @@ export const CopyMnemonicButton = memo(({ mnemonicArray, deviceToBackup }: Props
         deviceToBackup?.rootAddress,
         deviceToBackup?.isBuckedUp,
         locale,
-        mnemonicArray,
+        isMnemonic,
+        backupDetails,
         dispatch,
         onCopyToClipboard,
         LL,
@@ -53,7 +59,7 @@ export const CopyMnemonicButton = memo(({ mnemonicArray, deviceToBackup }: Props
             action={handleCopyToClipboard}
             title={LL.BTN_MNEMONIC_CLIPBOARD()}
             typographyFont="smallButtonPrimary"
-            disabled={!mnemonicArray.length}
+            disabled={!backupDetails.length}
             textColor={theme.colors.text}
             rightIcon={<BaseIcon name="icon-copy" color={theme.colors.text} size={12} style={styles.icon} />}
         />

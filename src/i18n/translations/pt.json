@@ -660,6 +660,7 @@
   "SB_MY_TOKENS": "Meus tokens",
   "SB_NO_TRANSACTIONS": "Suas atividades aparecerão aqui",
   "SB_PASSWORD_AUTH": "Autorização por senha",
+  "SB_PRIVATE_KEY": "Chave privada",
   "SB_RECOVERY_PHRASE": "Frase de recuperação",
   "SB_RENAME_WALLET": "Renomear carteira",
   "SB_SECURITY": "Para proteger sua carteira, você pode usar a biometria do seu dispositivo (como impressão digital) ou configurar uma senha. Você pode alterar a senha a qualquer momento, se necessário.",

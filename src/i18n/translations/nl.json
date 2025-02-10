@@ -660,6 +660,7 @@
   "SB_MY_TOKENS": "Mijn tokens",
   "SB_NO_TRANSACTIONS": "Je activiteiten worden hier weergegeven",
   "SB_PASSWORD_AUTH": "Wachtwoord autorisatie",
+  "SB_PRIVATE_KEY": "Privésleutel",
   "SB_RECOVERY_PHRASE": "Herstelzin",
   "SB_RENAME_WALLET": "Portemonnee hernoemen",
   "SB_SECURITY": "Om je portemonnee te beveiligen, kun je ofwel de biometrische gegevens van je apparaat gebruiken (zoals een vingerafdruk) of een wachtwoord instellen. Je kunt het wachtwoord op elk moment aanpassen indien nodig.",

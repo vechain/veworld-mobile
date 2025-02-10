@@ -660,6 +660,7 @@
   "SB_MY_TOKENS": "我的代幣",
   "SB_NO_TRANSACTIONS": "您的活動會顯示在這裡",
   "SB_PASSWORD_AUTH": "密碼授權",
+  "SB_PRIVATE_KEY": "私鑰",
   "SB_RECOVERY_PHRASE": "恢復短語",
   "SB_RENAME_WALLET": "重新命名錢包",
   "SB_SECURITY": "為了保護您的錢包，您可以使用設備的生物識別功能（如指紋）或設定密碼。如有需要，您可以隨時更改密碼。",

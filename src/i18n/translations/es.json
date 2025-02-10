@@ -660,6 +660,7 @@
   "SB_MY_TOKENS": "Mis tokens",
   "SB_NO_TRANSACTIONS": "Tus actividades aparecerán aquí",
   "SB_PASSWORD_AUTH": "Autorización de contraseña",
+  "SB_PRIVATE_KEY": "Clave privada",
   "SB_RECOVERY_PHRASE": "Frase de recuperación",
   "SB_RENAME_WALLET": "Renombrar billetera",
   "SB_SECURITY": "Para asegurar su billetera, puede usar la biometría de su dispositivo (como una huella digital) o configurar una contraseña. Puede cambiar la contraseña en cualquier momento si es necesario.",
