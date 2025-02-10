@@ -194,7 +194,9 @@ export const CloudBackupCard: FC<Props> = ({ backupDetails, deviceToBackup }) =>
 
     const { onPasswordSuccess, checkIdentityBeforeOpening, isPasswordPromptOpen, handleClosePasswordModal } =
         useCheckIdentity({
-            onIdentityConfirmed: async () => await handleConfirmDelete(),
+            onIdentityConfirmed: async () => {
+                await handleConfirmDelete()
+            },
             allowAutoPassword: false,
         })
 
