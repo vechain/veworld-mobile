@@ -1,7 +1,8 @@
 import { useCallback, useMemo } from "react"
-import { CURRENCY, CURRENCY_SYMBOLS, SYMBOL_POSITIONS } from "~Constants"
+import { CURRENCY_FORMATS, CURRENCY_SYMBOLS, SYMBOL_POSITIONS } from "~Constants"
 import CurrencyConfig from "~Constants/Constants/CurrencyConfig/CurrencyConfig"
-import { selectCurrency, selectSymbolPosition, useAppSelector } from "~Storage/Redux"
+import { selectCurrency, selectCurrencyFormat, selectSymbolPosition, useAppSelector } from "~Storage/Redux"
+import { getLocales } from "react-native-localize"
 
 type FormatFiatConfig = Omit<Intl.NumberFormatOptions, "style" | "currency">
 type FormatFiatFuncArgs = {
@@ -11,68 +12,85 @@ type FormatFiatFuncArgs = {
 }
 
 export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
-    let local: string
-
     const c = useAppSelector(selectCurrency)
+    const currencyFormat = useAppSelector(selectCurrencyFormat)
     const mainSymbolPosition = useAppSelector(selectSymbolPosition)
     const { currency } = useMemo(
         () => CurrencyConfig.find(config => config.currency === c) || { currency: CurrencyConfig[0].currency },
         [c],
     )
+    const symbol = CURRENCY_SYMBOLS[currency]
 
-    // default currencies formatting, keep it like that
-    switch (currency) {
-        case CURRENCY.EUR:
-            local = "nl-BE"
-            break
-        case CURRENCY.USD:
-            local = "en-US"
-            break
-    }
+    const locale = useMemo(() => {
+        switch (currencyFormat) {
+            case CURRENCY_FORMATS.SYSTEM:
+                return getLocales()[0].languageCode
+            case CURRENCY_FORMATS.COMMA:
+                return "nl-BE"
+            case CURRENCY_FORMATS.DOT:
+                return "en-EN"
+            default:
+                return getLocales()[0].languageCode
+        }
+    }, [currencyFormat])
+
+    const renderCoveredBalances = useCallback((amount: string) => {
+        // each digit is replaced by a dot + add two dots at the end to fill size differences
+        return amount.replace(
+            amount,
+            amount
+                .split("")
+                .map(_l => "•")
+                .join("") + "••",
+        )
+    }, [])
 
     const formatFiat = useCallback(
         ({ amount = 0, cover, symbolPosition: _spOverride }: FormatFiatFuncArgs) => {
             "worklet"
 
             const symbolPosition = _spOverride ?? mainSymbolPosition
-
-            let formattedAmount = new Intl.NumberFormat(local, {
-                style: "currency",
+            let formattedAmount = new Intl.NumberFormat(locale, {
+                style: "decimal",
                 currency,
                 useGrouping: true,
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
                 ...intlOptions,
-            }).format(amount)
-
-            const symbol = CURRENCY_SYMBOLS[currency]
-            let amountWithoutSymbol = formattedAmount
-                .replace(symbol, "") // remove the symbol from string
+            })
+                .format(amount)
                 .trim()
 
             const isAfter = symbolPosition === SYMBOL_POSITIONS.AFTER
 
             if (cover) {
-                // each digit is replaced by a dot + add two dots at the end to fill size differences
-                formattedAmount = formattedAmount.replace(
-                    amountWithoutSymbol,
-                    amountWithoutSymbol
-                        .split("")
-                        .map(_l => "•")
-                        .join("") + "••",
-                )
+                formattedAmount = renderCoveredBalances(formattedAmount)
             }
 
             let res: string
             if (isAfter) {
                 // Move symbol after
-                res = `${amountWithoutSymbol} ${symbol}`
+                res = `${formattedAmount} ${symbol}`
             } else {
-                res = formattedAmount
+                res = `${symbol}${formattedAmount}`
             }
 
             return res
         },
-        [mainSymbolPosition, local, currency, intlOptions],
+        [mainSymbolPosition, locale, currency, intlOptions, symbol, renderCoveredBalances],
     )
 
-    return { formatFiat }
+    const formatValue = useCallback(
+        (amount: number) => {
+            return new Intl.NumberFormat(locale, {
+                style: "decimal",
+                maximumFractionDigits: 2,
+                minimumFractionDigits: 2,
+                useGrouping: true,
+            }).format(amount)
+        },
+        [locale],
+    )
+
+    return { formatLocale: locale, formatFiat, formatValue }
 }

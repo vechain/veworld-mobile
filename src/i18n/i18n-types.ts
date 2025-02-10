@@ -205,6 +205,14 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_INVALID_CHARTS: string
 	/**
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​i​s​ ​j​a​i​l​b​r​o​k​e​n​,
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_1: string
+	/**
+	 * <​>​<​>​ ​p​u​t​t​i​n​g​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​ ​o​f​ ​t​h​e​f​t​.
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_2: string
+	/**
 	 * N​e​w​ ​v​e​r​s​i​o​n
 	 */
 	ALERT_TITLE_NEW_VERSION: string
@@ -220,14 +228,6 @@ type RootTranslation = {
 	 * V​O​T​3
 	 */
 	ALERT_TITLE_VOT3: string
-	/**
-	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​i​s​ ​j​a​i​l​b​r​o​k​e​n​,
-	 */
-	ALERT_TITLE_JAILBROKEN_DEVICE_1: string
-	/**
-	 * <​>​<​>​ ​p​u​t​t​i​n​g​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​ ​o​f​ ​t​h​e​f​t​.
-	 */
-	ALERT_TITLE_JAILBROKEN_DEVICE_2: string
 	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
@@ -430,6 +430,26 @@ type RootTranslation = {
 	 * C​r​e​a​t​i​n​g​ ​t​h​e​ ​w​a​l​l​e​t​ ​t​h​e​ ​u​s​e​r​ ​a​c​c​e​p​t​s
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
+	/**
+	 * C​u​r​r​e​n​c​y​ ​f​o​r​m​a​t
+	 */
+	BD_CURRENCY_FORMAT: string
+	/**
+	 * P​i​c​k​ ​t​h​e​ ​f​o​r​m​a​t​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​f​o​r​ ​d​e​c​i​m​a​l​ ​s​e​p​a​r​a​t​o​r​.
+	 */
+	BD_CURRENCY_FORMAT_DISCLAIMER: string
+	/**
+	 * C​o​m​m​a
+	 */
+	BD_CURRENCY_FORMAT_OPTION_comma: string
+	/**
+	 * D​o​t
+	 */
+	BD_CURRENCY_FORMAT_OPTION_dot: string
+	/**
+	 * S​y​s​t​e​m
+	 */
+	BD_CURRENCY_FORMAT_OPTION_system: string
 	/**
 	 * C​u​s​t​o​m​ ​n​o​d​e​s
 	 */
@@ -3923,6 +3943,14 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_INVALID_CHARTS: () => LocalizedString
 	/**
+	 * Your device is jailbroken,
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_1: () => LocalizedString
+	/**
+	 * <><> putting your assets at risk of theft.
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_2: () => LocalizedString
+	/**
 	 * New version
 	 */
 	ALERT_TITLE_NEW_VERSION: () => LocalizedString
@@ -3938,14 +3966,6 @@ Try reconnect your device to the internet.
 	 * VOT3
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
-	/**
-	 * Your device is jailbroken,
-	 */
-	ALERT_TITLE_JAILBROKEN_DEVICE_1: () => LocalizedString
-	/**
-	 * <><> putting your assets at risk of theft.
-	 */
-	ALERT_TITLE_JAILBROKEN_DEVICE_2: () => LocalizedString
 	/**
 	 * Please confirm that you would like to process this request.
 	 */
@@ -4146,6 +4166,26 @@ Try reconnect your device to the internet.
 	 * Creating the wallet the user accepts
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
+	/**
+	 * Currency format
+	 */
+	BD_CURRENCY_FORMAT: () => LocalizedString
+	/**
+	 * Pick the format that you prefer for decimal separator.
+	 */
+	BD_CURRENCY_FORMAT_DISCLAIMER: () => LocalizedString
+	/**
+	 * Comma
+	 */
+	BD_CURRENCY_FORMAT_OPTION_comma: () => LocalizedString
+	/**
+	 * Dot
+	 */
+	BD_CURRENCY_FORMAT_OPTION_dot: () => LocalizedString
+	/**
+	 * System
+	 */
+	BD_CURRENCY_FORMAT_OPTION_system: () => LocalizedString
 	/**
 	 * Custom nodes
 	 */

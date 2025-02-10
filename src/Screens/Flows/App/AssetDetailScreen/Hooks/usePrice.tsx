@@ -91,6 +91,8 @@ export function useLineChartRelativeChange({
 }): ValueAndFormatted {
     const { currentIndex, data, isActive } = useLineChart()
 
+    const { formatLocale } = useFormatFiat()
+
     const relativeChange = useDerivedValue(() => {
         // when scrubbing, compute relative change from open price
         if (!data?.length) return 0
@@ -114,8 +116,9 @@ export function useLineChartRelativeChange({
         return ReanimatedUtils.numberToPercentWorklet(relativeChange.value, {
             precision: 2,
             absolute: true,
+            locale: formatLocale,
         })
-    }, [relativeChange.value])
+    }, [relativeChange.value, formatLocale])
 
     return { value: relativeChange, formatted: relativeChangeFormatted }
 }

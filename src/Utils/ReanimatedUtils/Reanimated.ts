@@ -21,6 +21,7 @@ export function numberToPercentWorklet(
     options: {
         precision: number
         absolute: boolean
+        locale?: Intl.LocalesArgument
     } = { precision: DEFAULT_PRECISION, absolute: DEFAULT_ABSOLUTE },
 ): string {
     "worklet"
@@ -30,8 +31,13 @@ export function numberToPercentWorklet(
         return Math.round(v * p) / p
     }
 
-    const { precision, absolute } = options
+    const { precision, absolute, locale } = options
 
+    const formatter = new Intl.NumberFormat(locale, {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: precision,
+    })
     if (precision < 0) {
         throw new Error("numberToPercentWorklet does not handle negative precision values")
     }
@@ -48,21 +54,8 @@ export function numberToPercentWorklet(
 
     // return raw value when precision is zero
     if (precision === 0) {
-        return `${shapedValue}%`
+        return `${formatter.format(shapedValue)}%`
     }
 
-    // Add trailing zeros when value has no decimal
-    if (Number.isInteger(shapedValue)) {
-        return `${shapedValue}.${"0".repeat(precision)}%`
-    }
-
-    let endingZeros = ""
-    const shiftedValue = shapedValue * Math.pow(10, precision)
-    for (let d = 0; d < precision; d++) {
-        if (shiftedValue % Math.pow(10, d + 1) === 0) {
-            endingZeros += "0"
-        }
-    }
-
-    return `${shapedValue}${endingZeros}%`
+    return `${formatter.format(shapedValue)}%`
 }

@@ -10,8 +10,10 @@ interface IBigNumberUtils {
     toCurrencyConversion(
         balance: string,
         rate?: number,
+        // locale?: Intl.LocalesArgument,
         callback?: (result: BN) => void,
-    ): { value: string; isLeesThan_0_01: boolean }
+        decimals?: number,
+    ): { value: string; preciseValue: string; isLeesThan_0_01: boolean }
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
 
@@ -141,31 +143,37 @@ class BigNumberUtils implements IBigNumberUtils {
         return this.data.isGreaterThan(value)
     }
 
-    toCurrencyFormat_string(decimals: number): string {
-        let format = { decimalSeparator: ".", groupSeparator: ",", suffix: "", groupSize: 3 }
-        BN.config({ FORMAT: format })
-
+    toCurrencyFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
+        const formatter = new Intl.NumberFormat(locale, {
+            style: "decimal",
+            useGrouping: true,
+            minimumFractionDigits: 2,
+        })
         let _data = ""
 
         if (this.data.isLessThan("0.01") && !this.data.isZero()) {
-            _data = "< 0.01"
+            _data = `< ${formatter.format(0.01)}`
         } else {
-            _data = this.data.toFormat(decimals, BN.ROUND_DOWN)
+            _data = formatter.format(this.data as unknown as bigint)
         }
 
         return _data
     }
 
-    toTokenFormat_string(decimals: number): string {
-        let format = { decimalSeparator: ".", groupSeparator: ",", suffix: "", groupSize: 3 }
-        BN.config({ FORMAT: format })
+    toTokenFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
+        const formatter = new Intl.NumberFormat(locale, {
+            style: "decimal",
+            useGrouping: true,
+            minimumFractionDigits: decimals,
+        })
 
         let _data = ""
 
         if (this.data.isLessThan("0.0001") && !this.data.isZero()) {
-            _data = "< 0.01"
+            _data = `< ${formatter.format(0.01)}`
         } else {
-            _data = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN)).toFormat(decimals, BN.ROUND_DOWN)
+            const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))
+            _data = formatter.format(tokenBalance as unknown as bigint)
         }
 
         return _data
@@ -181,7 +189,7 @@ class BigNumberUtils implements IBigNumberUtils {
         }
 
         return {
-            value: this.data.isLessThan("0.01") && !this.data.isZero() ? "0.01" : this.data.toFixed(2, BN.ROUND_DOWN),
+            value: this.data.isLessThan("0.01") && !this.data.isZero() ? "< 0.01" : this.data.toString(),
             preciseValue: this.data.toFixed(decimals ?? 8, BN.ROUND_DOWN),
             isLeesThan_0_01: this.data.isLessThan("0.01") && !this.data.isZero(),
         }
