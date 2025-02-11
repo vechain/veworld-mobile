@@ -407,26 +407,28 @@ export const usePrefetchAllVns = () => {
 }
 
 export const useClaimableUsernames = () => {
-    const qc = useQueryClient()
-    const network = useAppSelector(selectSelectedNetwork)
     const contacts = useAppSelector(selectContacts)
     const accounts = useAppSelector(selectAccounts)
-    const cachedAddresses = qc.getQueryData<Vns[]>(["vns_names", network.genesis.id])
+    const { data: cachedAddresses } = usePrefetchAllVns()
 
-    const obeservedAccounts = accounts.filter(account => AccountUtils.isObservedAccount(account))
+    const observed = accounts.filter(account => AccountUtils.isObservedAccount(account))
+
+    const contactAddresses = useMemo(() => new Set(contacts.map(c => c.address)), [contacts])
+    const observedAddresses = useMemo(() => new Set(observed.map(o => o.address)), [observed])
+    const accountAddresses = useMemo(() => new Set(accounts.map(a => a.address)), [accounts])
 
     const unclaimedAddresses = useMemo(() => {
         if (!cachedAddresses) return []
-        return cachedAddresses.filter(
-            account =>
-                !account?.name &&
-                !contacts.some(contact => AddressUtils.compareAddresses(contact.address, account.address)) &&
-                !obeservedAccounts.find(observedAcc =>
-                    AddressUtils.compareAddresses(account.address, observedAcc.address),
-                ) &&
-                !!accounts.find(acc => AddressUtils.compareAddresses(acc.address, account.address)),
-        )
-    }, [accounts, cachedAddresses, contacts, obeservedAccounts])
+        return cachedAddresses.filter(cachedAddr => {
+            const address = cachedAddr.address
+            if (!address) return false
+            if (cachedAddr.name) return false
+            if (!accountAddresses.has(address)) return false
+            if (contactAddresses.has(address)) return false
+            if (observedAddresses.has(address)) return false
+            return true
+        })
+    }, [accountAddresses, cachedAddresses, contactAddresses, observedAddresses])
 
     return { unclaimedAddresses }
 }

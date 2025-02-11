@@ -128,7 +128,7 @@ const baseStyles = (theme: ColorThemeType) =>
             opacity: 0.7,
         },
         container: {
-            flexBasis: 80,
+            flexBasis: 85,
             flex: 1,
             borderRadius: 12,
             paddingHorizontal: 16,
