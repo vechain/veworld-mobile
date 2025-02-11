@@ -110,6 +110,7 @@
     "https-browserify": "^1.0.0",
     "intl": "^1.2.5",
     "isomorphic-ws": "^5.0.0",
+    "jail-monkey": "^2.8.3",
     "jest-expo": "^49.0.0",
     "jsdoc": "^4.0.2",
     "json-stringify-safe": "^5.0.1",

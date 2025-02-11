@@ -67,7 +67,9 @@ export type Colors = {
     tokenCardText: string
     graphLine: string
     graphGradient: string
+    graphStatsText: string
     accountCard: string
+    marketInfoBackground: string
     successVariant: {
         background: string
         border: string
@@ -106,6 +108,12 @@ export type Colors = {
         buttonBackground: string
         buttonBorder: string
         buttonText: string
+    }
+    assetDetailsCard: {
+        background: string
+        border: string
+        title: string
+        text: string
     }
 }
 
@@ -170,8 +178,8 @@ export enum COLORS {
     GREY_600 = "#525860",
     GREY_500 = "#747C89",
     GREY_400 = "#AAAFB6",
-    GREY_300 = "#CBD5E0",
-    GREY_200 = "#E2E8F0",
+    GREY_300 = "#D2D5D9",
+    GREY_200 = "#E7E9EB",
     GREY_100 = "#F1F2F3",
     GREY_50 = "#F9F9FA",
     ORANGE_50 = "#FFFAF0",
@@ -269,6 +277,8 @@ const light: Colors = {
     graphLine: COLORS.PURPLE,
     graphGradient: COLORS.GRAPH_GRADIENT_LIGHT,
     accountCard: COLORS.PURPLE,
+    graphStatsText: COLORS.GREY_600,
+    marketInfoBackground: COLORS.GREY_200,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -307,6 +317,12 @@ const light: Colors = {
         buttonBackground: COLORS.WHITE,
         buttonBorder: COLORS.GREY_200,
         buttonText: COLORS.PURPLE,
+    },
+    assetDetailsCard: {
+        background: COLORS.GREY_50,
+        border: COLORS.GREY_200,
+        title: COLORS.GREY_800,
+        text: COLORS.GREY_500,
     },
 }
 
@@ -380,6 +396,8 @@ const dark: Colors = {
     graphLine: COLORS.LIME_GREEN,
     graphGradient: COLORS.LIME_GREEN,
     accountCard: COLORS.LIME_GREEN,
+    graphStatsText: COLORS.GREY_400,
+    marketInfoBackground: COLORS.PURPLE_DISABLED,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
@@ -418,6 +436,12 @@ const dark: Colors = {
         buttonBackground: COLORS.DARK_PURPLE_DISABLED,
         buttonBorder: COLORS.TRANSPARENT,
         buttonText: COLORS.GREY_50,
+    },
+    assetDetailsCard: {
+        background: COLORS.PURPLE,
+        border: COLORS.PURPLE,
+        title: COLORS.WHITE,
+        text: COLORS.GREY_300,
     },
 }
 

@@ -7,7 +7,7 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    MnemonicAvoidScreenshotAlert,
+    AvoidScreenshotAlert,
 } from "~Components"
 import { useCopyClipboard, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -23,20 +23,25 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
         const theme = useTheme()
         const { LL } = useI18nContext()
         const { onCopyToClipboard } = useCopyClipboard()
-
+        const backupDetails = selectedWallet?.privateKey ?? selectedWallet?.mnemonic
+        const isMnemonic = Array.isArray(backupDetails)
         return (
             <BaseBottomSheet ref={ref}>
                 <BaseView w={100}>
                     <BaseText typographyFont="subTitleBold">{LL.BTN_BACKUP_MENMONIC()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center">
-                        <BaseText typographyFont="captionRegular">{LL.BD_MNEMONIC_WARMNING()}</BaseText>
+                        <BaseText typographyFont="captionRegular">
+                            {isMnemonic ? LL.BD_MNEMONIC_WARMNING() : LL.BD_PRIVATE_KEY_WARMNING()}
+                        </BaseText>
 
                         <BaseSpacer height={24} />
                     </BaseView>
 
                     <BaseView alignItems="flex-start">
-                        <BaseText typographyFont="subSubTitle">{LL.SB_RECOVERY_PHRASE()}</BaseText>
+                        <BaseText typographyFont="subSubTitle">
+                            {isMnemonic ? LL.SB_RECOVERY_PHRASE() : LL.SB_PRIVATE_KEY()}
+                        </BaseText>
 
                         <BaseSpacer height={16} />
 
@@ -60,7 +65,7 @@ export const MnemonicModalSheetStandalone = React.forwardRef<BottomSheetModalMet
                         />
 
                         <BaseSpacer height={16} />
-                        <MnemonicAvoidScreenshotAlert />
+                        {backupDetails && <AvoidScreenshotAlert backupDetails={backupDetails} />}
                     </BaseView>
                 </BaseView>
             </BaseBottomSheet>

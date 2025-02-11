@@ -1,5 +1,5 @@
 import { useFocusEffect, useNavigation } from "@react-navigation/native"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { ImageBackground, Linking, Modal, StyleSheet, View } from "react-native"
 import DropShadow from "react-native-drop-shadow"
 import LinearGradient from "react-native-linear-gradient"
@@ -12,31 +12,66 @@ import {
     BaseText,
     BaseTouchable,
     BaseView,
+    CreatePasswordModal,
     ImportWalletBottomSheet,
     Layout,
-    CreatePasswordModal,
+    SelectLanguageBottomSheet,
 } from "~Components"
 import { AnalyticsEvent, COLORS, DerivationPath, SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useCloudBackup, useDisclosure, useTheme } from "~Hooks"
-import { useI18nContext } from "~i18n"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCloudBackup,
+    useDisclosure,
+    useTheme,
+    useThemedStyles,
+} from "~Hooks"
+import { Locales, useI18nContext } from "~i18n"
 import { useDemoWallet } from "./useDemoWallet"
 import { useHandleWalletCreation } from "./useHandleWalletCreation"
 
+import * as RNLocalize from "react-native-localize"
+import { CloudKitWallet, DrivetWallet, languages } from "~Model"
 import { Routes } from "~Navigation"
-import { CloudKitWallet, DrivetWallet } from "~Model"
+import { selectLanguage, setLanguage, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 const assetImage = require("~Assets/Img/Clouds.png")
 
 export const WelcomeScreen = () => {
-    const { LL } = useI18nContext()
+    const { LL, setLocale } = useI18nContext()
     const nav = useNavigation()
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyle)
     const track = useAnalyticTracking()
+    const dispatch = useAppDispatch()
 
     const { ref, onOpen, onClose } = useBottomSheetModal()
 
+    const selectedLanguageCode = useAppSelector(selectLanguage)
+
+    const {
+        ref: selectLanguageSheetRef,
+        onOpen: openSelectLanguageSheet,
+        onClose: closeSelectLanguageSheet,
+    } = useBottomSheetModal()
+
     const [isLoading, setIsLoading] = useState(false)
     const [wallets, setWallets] = useState<CloudKitWallet[] | DrivetWallet[]>([])
+
+    const getAllLanguageCodes = useCallback(() => {
+        const locales = RNLocalize.getLocales()
+        const languageCodes = locales.map(locale => locale.languageCode)
+        const uniqueLanguageCodes = Array.from(new Set(languageCodes)) // Remove duplicates
+        return uniqueLanguageCodes
+    }, [])
+
+    const handleSelectLanguage = useCallback(
+        (language: Locales) => {
+            dispatch(setLanguage(language))
+            setLocale(language)
+            closeSelectLanguageSheet()
+        },
+        [closeSelectLanguageSheet, dispatch, setLocale],
+    )
 
     const onImportWallet = useCallback(async () => {
         track(AnalyticsEvent.SELECT_WALLET_IMPORT_WALLET)
@@ -86,6 +121,16 @@ export const WelcomeScreen = () => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
+    useEffect(() => {
+        const isDefaultLanguage = selectedLanguageCode === "en"
+
+        if (isDefaultLanguage) {
+            const currentLanguageCode = getAllLanguageCodes()
+            const newSelectedLanguageCode = languages.find(item => item.code === currentLanguageCode[0])
+            handleSelectLanguage((newSelectedLanguageCode?.code as Locales) ?? "en")
+        }
+    }, [getAllLanguageCodes, handleSelectLanguage, selectedLanguageCode])
+
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
 
@@ -98,17 +143,25 @@ export const WelcomeScreen = () => {
         nav.navigate(Routes.IMPORT_FROM_CLOUD, { wallets })
     }, [nav, onQuickCloudModalClose, wallets])
 
+    const selectedLanguageName = useMemo(
+        () =>
+            languages
+                .find(_language => _language.code === selectedLanguageCode)
+                ?.name.substring(0, 3)
+                .toUpperCase(),
+        [selectedLanguageCode],
+    )
+
     return (
         <>
             <Layout
                 noBackButton
                 fixedBody={
-                    <BaseView alignItems="center" flex={1} mx={24}>
+                    <BaseView alignItems="center" flex={1} px={24}>
                         <BaseView flexDirection="row" mt={20}>
-                            <BaseText typographyFont="largeTitle" testID="welcome-title-id">
-                                {LL.TITLE_WELCOME_TO()}
+                            <BaseText typographyFont="largeTitle" testID="welcome-title-id" style={styles.title}>
+                                {`${LL.TITLE_WELCOME_TO()} ${LL.VEWORLD()}`}
                             </BaseText>
-                            <BaseText typographyFont="largeTitle">{LL.VEWORLD()}</BaseText>
                         </BaseView>
 
                         <BaseView alignItems="center" w={100}>
@@ -151,31 +204,50 @@ export const WelcomeScreen = () => {
 
                         <BaseSpacer height={42} />
 
-                        <BaseView
-                            alignSelf="center"
-                            flexDirection="row"
-                            justifyContent="center"
-                            alignItems="center"
-                            flexWrap="wrap">
-                            <BaseText typographyFont="body" align="center">
-                                {LL.BD_CREATE_WALLET_TYPE_USER_ACCEPTS()}
-                            </BaseText>
-                            <BaseText
+                        <BaseView flexDirection="row" justifyContent="space-between">
+                            <BaseView
+                                alignSelf="center"
+                                flexDirection="row"
+                                flex={1}
+                                alignItems="center"
+                                flexWrap="wrap">
+                                <BaseText typographyFont="body" align="center">
+                                    {LL.BD_CREATE_WALLET_TYPE_USER_ACCEPTS()}
+                                </BaseText>
+                                <BaseText
+                                    typographyFont="bodyMedium"
+                                    underline
+                                    align="center"
+                                    onPress={goToTermsAndConditions}>
+                                    {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
+                                </BaseText>
+                                <BaseText typographyFont="body" align="center">
+                                    {` ${LL.COMMON_LBL_AND()} `}
+                                </BaseText>
+                                <BaseText
+                                    typographyFont="bodyMedium"
+                                    underline
+                                    align="center"
+                                    onPress={goToPrivacyPolicy}>
+                                    {LL.COMMON_LBL_PRIVACY_POLICY()}
+                                </BaseText>
+                            </BaseView>
+
+                            <BaseButton
+                                variant="outline"
+                                size="sm"
+                                action={openSelectLanguageSheet}
+                                title={selectedLanguageName}
                                 typographyFont="bodyMedium"
-                                underline
-                                align="center"
-                                onPress={goToTermsAndConditions}>
-                                {LL.COMMON_LBL_TERMS_AND_CONDITIONS()}
-                            </BaseText>
-                            <BaseText typographyFont="body" align="center">
-                                {LL.COMMON_LBL_AND()}
-                            </BaseText>
-                            <BaseText typographyFont="bodyMedium" underline align="center" onPress={goToPrivacyPolicy}>
-                                {LL.COMMON_LBL_PRIVACY_POLICY()}
-                            </BaseText>
+                                rightIcon={
+                                    <BaseIcon name={"icon-chevron-down"} color={theme.colors.button} size={24} />
+                                }
+                            />
                         </BaseView>
 
-                        {DEV_DEMO_BUTTON}
+                        <BaseSpacer height={12} />
+
+                        <BaseView>{DEV_DEMO_BUTTON}</BaseView>
                     </BaseView>
                 }
             />
@@ -187,7 +259,7 @@ export const WelcomeScreen = () => {
                         height: SCREEN_HEIGHT,
                         width: SCREEN_WIDTH,
                     }}>
-                    <LinearGradient colors={theme.colors.gradientBackground} style={s.gradient}>
+                    <LinearGradient colors={theme.colors.gradientBackground} style={styles.gradient}>
                         <Animated.View entering={FadeInDown} exiting={FadeOutDown}>
                             <CloudKitModalReminder
                                 walletNumber={walletNumber}
@@ -211,6 +283,12 @@ export const WelcomeScreen = () => {
                     })
                 }
             />
+
+            <SelectLanguageBottomSheet
+                ref={selectLanguageSheetRef}
+                selectedLanguage={selectedLanguageCode}
+                handleSelectLanguage={handleSelectLanguage}
+            />
         </>
     )
 }
@@ -226,12 +304,13 @@ const CloudKitModalReminder = ({
 }) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+    const { styles } = useThemedStyles(baseStyle)
 
     return (
-        <View style={s.gradient}>
+        <View style={styles.gradient}>
             <DropShadow style={[theme.shadows.card]}>
-                <View style={s.imageContainer}>
-                    <ImageBackground source={assetImage} resizeMode="cover" style={s.bgImage}>
+                <View style={styles.imageContainer}>
+                    <ImageBackground source={assetImage} resizeMode="cover" style={styles.bgImage}>
                         <BaseView justifyContent="space-between" alignItems="center" flex={1} w={100} p={24} pt={42}>
                             <BaseView w={100} flex={1}>
                                 <BaseText typographyFont="hugeTitle" align="center" color={COLORS.DARK_PURPLE}>
@@ -288,10 +367,10 @@ const CloudKitModalReminder = ({
                                         name={PlatformUtils.isIOS() ? "icon-cloud" : "icon-google-drive"}
                                         size={22}
                                         color={theme.isDark ? theme.colors.text : theme.colors.textReversed}
-                                        style={s.icon}
+                                        style={styles.icon}
                                     />
                                 }
-                                style={s.centerButtonContent}
+                                style={styles.centerButtonContent}
                             />
 
                             <BaseSpacer height={12} />
@@ -311,35 +390,35 @@ const CloudKitModalReminder = ({
     )
 }
 
-const s = StyleSheet.create({
-    gradient: {
-        height: SCREEN_HEIGHT,
-        width: SCREEN_WIDTH,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-
-    imageContainer: {
-        borderRadius: 20,
-        overflow: "hidden",
-    },
-
-    bgImage: {
-        height: SCREEN_HEIGHT / 2,
-        width: SCREEN_WIDTH - 24,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 16,
-    },
-
-    icon: {
-        marginLeft: 6,
-    },
-
-    centerButtonContent: {
-        justifyContent: "center",
-        alignItems: "center",
-    },
-})
+const baseStyle = () =>
+    StyleSheet.create({
+        gradient: {
+            height: SCREEN_HEIGHT,
+            width: SCREEN_WIDTH,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        imageContainer: {
+            borderRadius: 20,
+            overflow: "hidden",
+        },
+        bgImage: {
+            height: SCREEN_HEIGHT / 2,
+            width: SCREEN_WIDTH - 24,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            borderRadius: 16,
+        },
+        icon: {
+            marginLeft: 6,
+        },
+        centerButtonContent: {
+            justifyContent: "center",
+            alignItems: "center",
+        },
+        title: {
+            textAlign: "center",
+        },
+    })

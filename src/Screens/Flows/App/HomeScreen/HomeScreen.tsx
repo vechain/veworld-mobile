@@ -39,6 +39,8 @@ import {
     AccountCard,
     ClaimUsernameBanner,
     DeviceBackupBottomSheet,
+    DeviceJailBrokenAlert,
+    DeviceJailBrokenWarningModal,
     EditTokensBar,
     Header,
     TokenList,
@@ -164,6 +166,7 @@ export const HomeScreen = () => {
                     }>
                     <BaseView>
                         <BaseView alignItems="center">
+                            <DeviceJailBrokenAlert />
                             <ClaimUsernameBanner />
                             <AccountCard
                                 balanceVisible={isBalanceVisible}
@@ -197,6 +200,7 @@ export const HomeScreen = () => {
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
                     <DeviceBackupBottomSheet />
+                    <DeviceJailBrokenWarningModal />
                     <EnableNotificationsBottomSheet />
                 </NestableScrollContainer>
             }

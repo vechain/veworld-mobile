@@ -1,2 +1,2 @@
-export * from "./ChooseMnemonicBackupPassword"
+export * from "./ChooseBackupDetailsPassword"
 export * from "./ImportMnemonicBackupPasswordScreen"

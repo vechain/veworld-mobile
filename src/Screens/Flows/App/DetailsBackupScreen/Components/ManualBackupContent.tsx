@@ -1,32 +1,32 @@
 import React from "react"
-import { BaseSpacer, BaseView, MnemonicAvoidScreenshotAlert, MnemonicCard } from "~Components"
+import { BaseSpacer, BaseView, AvoidScreenshotAlert, BackupDetailsCard } from "~Components"
 import { LocalDevice } from "~Model"
-import { CopyMnemonicButton } from "./CopyMnemonicButton"
+import { CopyDetailsButton } from "./CopyDetailsButton"
 import { DoNotShareAlert } from "./DoNotShareAlert"
 import { ManualBackupDoneBanner } from "./ManualBackupDoneBanner"
 
 export const ManualBackupContent = ({
-    mnemonicArray,
+    backupDetails,
     deviceToBackup,
 }: {
-    mnemonicArray: string[]
+    backupDetails: string[] | string
     deviceToBackup?: LocalDevice
 }) => {
     return (
         <BaseView>
-            <DoNotShareAlert />
+            <DoNotShareAlert backupDetails={backupDetails} />
             <BaseSpacer height={12} />
-            {!!mnemonicArray.length && (
-                <MnemonicCard
-                    mnemonicArray={mnemonicArray}
+            {!!backupDetails.length && (
+                <BackupDetailsCard
+                    backupDetails={backupDetails}
                     souceScreen="BackupMnemonicBottomSheet"
                     deviceToBackup={deviceToBackup}
                 />
             )}
             <BaseSpacer height={8} />
-            <CopyMnemonicButton mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+            <CopyDetailsButton backupDetails={backupDetails} deviceToBackup={deviceToBackup} />
             <BaseSpacer height={20} />
-            <MnemonicAvoidScreenshotAlert />
+            <AvoidScreenshotAlert backupDetails={backupDetails} />
             {deviceToBackup?.isBackedUpManual && (
                 <>
                     <BaseSpacer height={12} />
