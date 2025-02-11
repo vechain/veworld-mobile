@@ -10,6 +10,16 @@ export type FeatureFlags = {
     subdomainClaimFeature: {
         enabled: boolean
     }
+    paymentProvidersFeature: {
+        "coinbase-pay": {
+            android: boolean
+            iOS: boolean
+        }
+        transak: {
+            android: boolean
+            iOS: boolean
+        }
+    }
 }
 
 export const getFeatureFlags = async () => {
