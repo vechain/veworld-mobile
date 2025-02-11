@@ -98,6 +98,7 @@ export const CoinbasePayWebView = ({
                 onLoadEnd={handleLoadEnd}
                 onMessage={onMessage}
                 style={styles.webView}
+                originWhitelist={["http://", "https://", "about:*"]}
             />
         </BaseView>
     )

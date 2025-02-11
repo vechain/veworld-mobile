@@ -49,6 +49,7 @@ export const SettingsBrowserView: React.FC<Props> = ({ route }) => {
                             allowsInlineMediaPlayback={true}
                             onNavigationStateChange={onNavigationStateChange}
                             onScroll={onScroll}
+                            originWhitelist={["http://", "https://", "about:*"]}
                         />
                     )}
                 </View>

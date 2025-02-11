@@ -14,6 +14,16 @@ const initialState: FeatureFlags = {
     subdomainClaimFeature: {
         enabled: true,
     },
+    paymentProvidersFeature: {
+        "coinbase-pay": {
+            android: true,
+            iOS: true,
+        },
+        transak: {
+            android: true,
+            iOS: true,
+        },
+    },
 }
 
 const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)
