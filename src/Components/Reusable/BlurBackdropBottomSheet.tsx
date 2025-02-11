@@ -10,7 +10,7 @@ type Props = {
     animatedIndex: SharedValue<number>
 }
 
-export const BlurBackdromBottomSheet = ({ animatedIndex }: Props) => {
+export const BlurBackdropBottomSheet = ({ animatedIndex }: Props) => {
     const { close } = useBottomSheet()
 
     const containerAnimatedStyle = useAnimatedStyle(
