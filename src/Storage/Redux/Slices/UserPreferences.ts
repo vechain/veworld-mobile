@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import lodash from "lodash"
 import moment from "moment"
-import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
+import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
 import { Locales } from "~i18n"
 
 /**
@@ -30,6 +30,7 @@ export interface UserPreferenceState {
     isPinCodeRequired: boolean
     balanceVisible: boolean
     currency: CURRENCY
+    currencyFormat: CURRENCY_FORMATS
     symbolPosition: SYMBOL_POSITIONS
     language: Locales
     isAnalyticsTrackingEnabled: boolean
@@ -50,6 +51,7 @@ const initialState: UserPreferenceState = {
     isPinCodeRequired: true,
     balanceVisible: true,
     currency: CURRENCY.USD,
+    currencyFormat: CURRENCY_FORMATS.SYSTEM,
     symbolPosition: SYMBOL_POSITIONS.BEFORE,
     language: "en" as Locales,
     isAnalyticsTrackingEnabled: true, // this is enabled by default because otherwise onboarding events won't be tracked
@@ -86,6 +88,10 @@ export const UserPreferencesSlice = createSlice({
 
         setCurrency: (state, action: PayloadAction<CURRENCY>) => {
             state.currency = action.payload
+        },
+
+        setCurrencyFormat: (state, action: PayloadAction<CURRENCY_FORMATS>) => {
+            state.currencyFormat = action.payload
         },
 
         setSymbolPosition: (state, action: PayloadAction<SYMBOL_POSITIONS>) => {
@@ -170,6 +176,7 @@ export const {
     setIsPinCodeRequired,
     setBalanceVisible,
     setCurrency,
+    setCurrencyFormat,
     setSymbolPosition,
     setLanguage,
     setAnalyticsTrackingEnabled,

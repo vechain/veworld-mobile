@@ -179,18 +179,28 @@ describe("BigNumberUtils class", () => {
 
     // Test format methods
     test("toCurrencyFormat_string should format correctly", () => {
-        expect(bigNumUtils.toCurrencyFormat_string(2)).toMatch(/^\d+(\.\d{1,2})?$/)
-        expect(bigNumUtils.idiv(10).minus(0.998).toCurrencyFormat_string(2)).toBe("< 0.01")
+        expect(bigNumUtils.toCurrencyFormat_string(2, undefined)).toMatch(/^\d+(\.\d{1,2})?$/)
+        expect(bigNumUtils.idiv(10).minus(0.998).toCurrencyFormat_string(2, undefined)).toBe("< 0.01")
+    })
+
+    test("toCurrencyFormat_string should format correctly with different locale", () => {
+        expect(bigNumUtils.toCurrencyFormat_string(2, "nl-BE")).toMatch(/^\d+(,\d{1,2})?$/)
+        expect(bigNumUtils.idiv(10).minus(0.998).toCurrencyFormat_string(2, "nl-BE")).toBe("< 0,01")
     })
 
     test("toTokenFormat_string should format correctly", () => {
-        expect(bigNumUtils.toTokenFormat_string(2)).toMatch(/^\d+(\.\d{1,4})?$/)
-        expect(bigNumUtils.idiv(10).minus(0.99995).toTokenFormat_string(2)).toBe("< 0.01")
+        expect(bigNumUtils.toTokenFormat_string(2, undefined)).toMatch(/^\d+(\.\d{1,4})?$/)
+        expect(bigNumUtils.idiv(10).minus(0.99995).toTokenFormat_string(2, undefined)).toBe("< 0.01")
     })
 
     test("toTokenFormat_string should format correctly with small numbers", () => {
         const smallNumber = BigNutils("0.00005")
-        expect(smallNumber.toTokenFormat_string(4)).toBe("< 0.01")
+        expect(smallNumber.toTokenFormat_string(2, undefined)).toBe("< 0.01")
+    })
+
+    test("toTokenFormat_string should format correctly with different locale", () => {
+        const smallNumber = BigNutils("10000.10")
+        expect(smallNumber.toTokenFormat_string(2, "nl-BE")).toBe("10.000,10")
     })
 
     test("toCurrencyConversion should convert correctly with 0 balance", () => {

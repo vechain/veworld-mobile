@@ -234,9 +234,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(async () => {
-        const newValue = removeInvalidCharacters(
-            isInputInFiat ? BigNutils(fiatTotalBalance.value).toCurrencyFormat_string(2) : tokenTotalToHuman,
-        )
+        const newValue = removeInvalidCharacters(isInputInFiat ? fiatTotalBalance.value : tokenTotalToHuman)
 
         setInput(newValue)
         setTokenAmountFromFiat(tokenTotalToHuman)
