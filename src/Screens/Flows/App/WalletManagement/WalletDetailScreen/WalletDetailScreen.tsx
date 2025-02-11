@@ -49,7 +49,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const [editingAccount, setEditingAccount] = useState<WalletAccount>()
 
     const { changeDeviceAlias } = useRenameWallet(device)
-    const { data: domains } = usePrefetchAllVns()
+    const { data: domains, refetch: refetchVns } = usePrefetchAllVns()
     const { subdomainClaimFeature } = useFeatureFlags()
     const [claimableUsernames, setClaimableUsernames] = useState<string[]>([])
 
@@ -79,6 +79,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         }
 
         dispatch(addAccountForDevice(device))
+        refetchVns()
         showSuccessToast({
             text1: LL.WALLET_MANAGEMENT_NOTIFICATION_CREATE_ACCOUNT_SUCCESS(),
         })
@@ -196,9 +197,11 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     }, [claimableUsernames])
 
     useEffect(() => {
-        getClaimableUsernames(domains, deviceAccounts).then(res => setClaimableUsernames(res))
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [domains, deviceAccounts.length])
+        getClaimableUsernames(domains, deviceAccounts).then(res => {
+            setClaimableUsernames(res)
+            refetchVns()
+        })
+    }, [domains, deviceAccounts, refetchVns])
 
     return (
         <Layout
