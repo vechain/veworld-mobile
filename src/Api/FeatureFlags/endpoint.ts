@@ -1,3 +1,5 @@
+import { PaymentProvidersEnum } from "~Screens/Flows/App/BuyScreen/Hooks"
+
 export type FeatureFlags = {
     marketsProxyFeature: {
         enabled: boolean
@@ -11,11 +13,11 @@ export type FeatureFlags = {
         enabled: boolean
     }
     paymentProvidersFeature: {
-        "coinbase-pay": {
+        [PaymentProvidersEnum.CoinbasePay]: {
             android: boolean
             iOS: boolean
         }
-        transak: {
+        [PaymentProvidersEnum.Transak]: {
             android: boolean
             iOS: boolean
         }
