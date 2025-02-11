@@ -4,6 +4,7 @@ appId: org.vechain.veworld.app
 env:
     AMOUNT: 0.01
     ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
+
 ---
 - launchApp:
       clearState: true
@@ -11,6 +12,14 @@ env:
 ## welcome screen
 - tapOn:
       id: "dev_demo"
+# Turn off push notification bottom sheet
+- runFlow:
+      when:
+          visible:
+              id: "button_notifications_enable"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
 - tapOn:
       id: "settings-tab"
 - tapOn:

@@ -54,7 +54,7 @@ type RootTranslation = {
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: string
 	/**
-	 * A​c​t​i​v​a​t​e​ ​t​h​e​ ​p​u​s​h​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​a​n​d​ ​c​u​s​t​o​m​i​z​e​ ​t​o​ ​g​e​t​ ​n​o​t​i​f​i​e​d​ ​t​o​ ​a​l​l​ ​t​h​e​ ​n​e​w​ ​d​e​t​a​i​l​s​ ​y​o​u​ ​d​o​n​’​t​ ​w​a​n​t​ ​t​o​ ​m​i​s​s​.
+	 * E​n​a​b​l​e​ ​p​u​s​h​ ​n​o​t​i​f​i​c​a​t​i​o​n​s​ ​t​o​ ​g​e​t​ ​i​m​p​o​r​t​a​n​t​ ​u​p​d​a​t​e​s​ ​a​n​d​ ​a​l​e​r​t​s​ ​a​b​o​u​t​ ​V​e​C​h​a​i​n​ ​a​n​d​ ​t​h​e​ ​V​e​B​e​t​t​e​r​D​A​O​ ​e​c​o​s​y​s​t​e​m​.
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: string
 	/**
@@ -220,6 +220,14 @@ type RootTranslation = {
 	 * V​O​T​3
 	 */
 	ALERT_TITLE_VOT3: string
+	/**
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​i​s​ ​j​a​i​l​b​r​o​k​e​n​,
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_1: string
+	/**
+	 * <​>​<​>​ ​p​u​t​t​i​n​g​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​ ​o​f​ ​t​h​e​f​t​.
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_2: string
 	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
@@ -472,6 +480,22 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: RequiredParams<'cloud'>
 	/**
+	 *  Private key copied to clipboard
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: string
+	/**
+	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
+	 */
+  	BD_PRIVATE_KEY_DISCLAIMER: string
+	/**
+	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
+	 */
+  	BD_PRIVATE_KEY_PASSWORD_WARNING: string
+	/**
+	 * Never share your Private key. Anyone who gets access to it can steal all of your crypto assets.
+	 */
+  	BD_PRIVATE_KEY_WARMNING: string
+	/**
 	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
 	 */
 	BD_MNEMONIC_BACKUP: string
@@ -637,11 +661,11 @@ type RootTranslation = {
 	 */
 	BD_USER_EDIT_PASSWORD_ERROR: string
 	/**
-	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N
+	 * C​o​n​f​i​r​m​ ​y​o​u​r​ ​P​I​N​ ​a​g​a​i​n
 	 */
 	BD_USER_PASSWORD_CONFIRM: string
 	/**
-	 * <​>​<​>​ ​P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
+	 * P​I​N​ ​d​o​e​s​n​'​t​ ​m​a​t​c​h​.
 	 */
 	BD_USER_PASSWORD_ERROR: string
 	/**
@@ -764,6 +788,10 @@ type RootTranslation = {
 	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
 	 */
 	BTN_BACKUP_ALERT_CLOSE: string
+	/**
+	 * B​a​c​k​u​p​ private key
+	 */
+	BTN_BACKUP_PK: string
 	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
@@ -1589,6 +1617,14 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	DEVICE_BACKUP_MODAL_TITLE: string
+	/**
+	 * W​e​ ​h​a​v​e​ ​d​e​t​e​c​t​e​d​ ​t​h​a​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​i​s​ ​j​a​i​l​b​r​o​k​e​n​,​ ​w​h​i​c​h​ ​m​a​y​ ​c​o​m​p​r​o​m​i​s​e​ ​t​h​e​ ​s​e​c​u​r​i​t​y​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​W​e​ ​s​t​r​o​n​g​l​y​ ​r​e​c​o​m​m​e​n​d​ ​b​a​c​k​i​n​g​ ​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​r​e​s​e​t​t​i​n​g​ ​V​e​W​o​r​l​d​ ​i​n​ ​G​e​n​e​r​a​l​ ​S​e​t​t​i​n​g​s​,​ ​a​n​d​ ​i​m​p​o​r​t​i​n​g​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​o​n​ ​a​ ​n​o​n​-​j​a​i​l​b​r​o​k​e​n​ ​d​e​v​i​c​e​.
+	 */
+	DEVICE_JAILBROKE_MODAL_SUBTITLE: string
+	/**
+	 * J​a​i​l​b​r​o​k​e​n​ ​D​e​v​i​c​e​ ​D​e​t​e​c​t​e​d
+	 */
+	DEVICE_JAILBROKE_MODAL_TITLE: string
 	/**
 	 * D​e​v​i​c​e​ ​P​i​n
 	 */
@@ -2477,17 +2513,13 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_ACTIVE: string
 	/**
-	 * D​A​p​p​s
+	 * X​2​E​a​r​n​ ​d​A​p​p​s
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: string
 	/**
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
-	/**
-	 * N​e​w​ ​A​p​p​ ​l​i​s​t​e​d
-	 */
-	PUSH_NOTIFICATIONS_NEW_APP_LISTED: string
 	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​l​o​a​d​ ​y​o​u​r​ ​p​r​e​f​e​r​e​n​c​e​s​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
@@ -2509,17 +2541,13 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: string
 	/**
-	 * G​e​n​e​r​a​l​ ​u​p​d​a​t​e​s
+	 * U​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: string
 	/**
 	 * V​e​B​e​t​t​e​r​D​A​O
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
-	/**
-	 * V​e​W​o​r​l​d​ ​f​e​a​t​u​r​e​s​ ​&​ ​u​p​d​a​t​e​s
-	 */
-	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: string
 	/**
 	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
 	 */
@@ -2589,6 +2617,10 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_MNEMONIC: string
 	/**
+	 * B​a​c​k​u​p​ ​“account​”
+	 */
+	SB_BACKUP_WALLET: string
+	/**
 	 * B​a​c​k​u​p​ ​“​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​”
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: string
@@ -2619,7 +2651,7 @@ type RootTranslation = {
 	 */
 	SB_CHOOSE_A_WALLET: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​c​l​a​i​m​ ​f​o​r​ ​f​r​e​e​ ​y​o​u​r​ ​u​n​i​q​u​e​ ​u​s​e​r​n​a​m​e​ ​f​o​r​ ​t​h​i​s​ ​w​a​l​l​e​t​:
+	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​T​h​e​ ​c​l​a​i​m​i​n​g​ ​i​s​ ​f​r​e​e​ ​o​f​ ​c​h​a​r​g​e​.
 	 */
 	SB_CLAIM_USERNAME: string
 	/**
@@ -2712,6 +2744,10 @@ type RootTranslation = {
 	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
 	 */
 	SB_PASSWORD_AUTH: string
+	/**
+	 * Private key
+	 */
+	SB_PRIVATE_KEY: string
 	/**
 	 * R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
 	 */
@@ -3537,6 +3573,10 @@ type RootTranslation = {
 	 */
 	VALUE_TITLE: string
 	/**
+	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
+	 */
+	VECHAIN_NEWS_AND_UPDATES: string
+	/**
 	 * V​e​W​o​r​l​d
 	 */
 	VEWORLD: string
@@ -3762,7 +3802,7 @@ export type TranslationFunctions = {
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SKIP_BTN: () => LocalizedString
 	/**
-	 * Activate the push notifications and customize to get notified to all the new details you don’t want to miss.
+	 * Enable push notifications to get important updates and alerts about VeChain and the VeBetterDAO ecosystem.
 	 */
 	ACTIVATE_NOTIFICATION_MODAL_SUBTITLE: () => LocalizedString
 	/**
@@ -3813,6 +3853,10 @@ export type TranslationFunctions = {
 	 * You can't view a ledger mnemonic
 	 */
 	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
+	/**
+	 * Avoid screenshotting your private key. Store it offline or back it up securely online.
+	 */
+	ALERT_DONT_SCREENSHOT_PRIVATE_KEY: () => LocalizedString
 	/**
 	 * Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.
 	 */
@@ -3926,6 +3970,14 @@ Try reconnect your device to the internet.
 	 * VOT3
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
+	/**
+	 * Your device is jailbroken,
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_1: () => LocalizedString
+	/**
+	 * <><> putting your assets at risk of theft.
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_2: () => LocalizedString
 	/**
 	 * Please confirm that you would like to process this request.
 	 */
@@ -4183,9 +4235,17 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
+	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
+	 */
+	BD_PRIVATE_KEY_DISCLAIMER: () => LocalizedString
+	/**
 	 * Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.
 	 */
 	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
+	/**
+	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
+	 */
+	BD_PRIVATE_KEY_PASSWORD_WARNING: () => LocalizedString
 	/**
 	 * In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.
 	 */
@@ -4194,6 +4254,10 @@ Try reconnect your device to the internet.
 	 * Your Secret Recovery Phrase makes it easy to back up and restore your account.
 	 */
 	BD_MNEMONIC_SUBTITLE: () => LocalizedString
+	/**
+	 * Never share your Private key. Anyone who learns them can steal all of your crypto assets.
+	 */
+	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
@@ -4339,11 +4403,11 @@ Try reconnect your device to the internet.
 	 */
 	BD_USER_EDIT_PASSWORD_ERROR: () => LocalizedString
 	/**
-	 * Confirm your PIN
+	 * Confirm your PIN again
 	 */
 	BD_USER_PASSWORD_CONFIRM: () => LocalizedString
 	/**
-	 * <><> PIN doesn't match.
+	 * PIN doesn't match.
 	 */
 	BD_USER_PASSWORD_ERROR: () => LocalizedString
 	/**
@@ -4470,6 +4534,10 @@ Try reconnect your device to the internet.
 	 * Backup now
 	 */
 	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
+	/**
+	 * Backup private key
+	 */
+	BTN_BACKUP_PK: () => LocalizedString
 	/**
 	 * Backup phrase
 	 */
@@ -5282,6 +5350,14 @@ Try reconnect your device to the internet.
 	 * Backup now
 	 */
 	DEVICE_BACKUP_MODAL_TITLE: () => LocalizedString
+	/**
+	 * We have detected that your device is jailbroken, which may compromise the security of your wallet. We strongly recommend backing up your recovery phrase, resetting VeWorld in General Settings, and importing your wallet on a non-jailbroken device.
+	 */
+	DEVICE_JAILBROKE_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Jailbroken Device Detected
+	 */
+	DEVICE_JAILBROKE_MODAL_TITLE: () => LocalizedString
 	/**
 	 * Device Pin
 	 */
@@ -6152,17 +6228,13 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_ACTIVE: () => LocalizedString
 	/**
-	 * DApps
+	 * X2Earn dApps
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
 	/**
 	 * Keep up to date with the latest news and updates
 	 */
 	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
-	/**
-	 * New App listed
-	 */
-	PUSH_NOTIFICATIONS_NEW_APP_LISTED: () => LocalizedString
 	/**
 	 * An error occurred while trying to load your preferences. Please try again.
 	 */
@@ -6184,17 +6256,13 @@ Try reconnect your device to the internet.
 	 */
 	PUSH_NOTIFICATIONS_SUBSCRIPTION_LIMIT_REACHED_TITLE: () => LocalizedString
 	/**
-	 * General updates
+	 * Updates
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: () => LocalizedString
 	/**
 	 * VeBetterDAO
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
-	/**
-	 * VeWorld features & updates
-	 */
-	PUSH_NOTIFICATIONS_VEWORLD_FEATURE_AND_UPDATE: () => LocalizedString
 	/**
 	 * Vote reminder
 	 */
@@ -6264,6 +6332,14 @@ Try reconnect your device to the internet.
 	 */
 	SB_BACKUP_MNEMONIC: () => LocalizedString
 	/**
+	 * Backup “account”
+	 */
+	SB_BACKUP_WALLET: () => LocalizedString
+	/**
+	 * Backup “Private key”
+	 */
+	SB_BACKUP_PRIVATE_KEY: () => LocalizedString
+	/**
 	 * Backup “Recovery phrase”
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: () => LocalizedString
@@ -6292,7 +6368,7 @@ Try reconnect your device to the internet.
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
 	/**
-	 * You can claim for free your unique username for this wallet:
+	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
 	 */
 	SB_CLAIM_USERNAME: () => LocalizedString
 	/**
@@ -6383,6 +6459,14 @@ Try reconnect your device to the internet.
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
+	/**
+	 * Private key copied to clipboard
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: () => LocalizedString
+	/**
+	 * Private key
+	 */
+	SB_PRIVATE_KEY: () => LocalizedString
 	/**
 	 * Recovery phrase
 	 */
@@ -7199,6 +7283,10 @@ Try reconnect your device to the internet.
 	 * Value
 	 */
 	VALUE_TITLE: () => LocalizedString
+	/**
+	 * Vechain news & updates
+	 */
+	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
 	/**
 	 * VeWorld
 	 */

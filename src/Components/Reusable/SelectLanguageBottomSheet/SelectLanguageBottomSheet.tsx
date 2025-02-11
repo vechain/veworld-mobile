@@ -9,7 +9,6 @@ import { languages } from "~Model"
 
 type Props = {
     selectedLanguage: Locales
-    onClose: () => void
     handleSelectLanguage: (language: Locales) => void
 }
 

@@ -1,5 +1,12 @@
 
 
+## 2.0.8 (2025-02-04)
+
+
+### Bug Fixes
+
+* updated copy and removed fiat balance in wallet details accounts ([#2641](https://github.com/vechain/veworld-mobile/issues/2641)) ([ac051b3](https://github.com/vechain/veworld-mobile/commit/ac051b37eae52c73a05b7d2501fe1ce43960c0d3))
+
 ## 2.0.7 (2025-01-24)
 
 

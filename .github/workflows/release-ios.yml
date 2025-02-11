@@ -1,134 +1,128 @@
 name: Release - iOS
 
 on:
-  workflow_dispatch:
-    inputs:
-      version: 
-        description: 'Version to build'
-        type: string
-        required: true
-      build: 
-        description: 'Build number'
-        type: string
-        required: true
+    workflow_dispatch:
+        inputs:
+            version:
+                description: "Version to build"
+                type: string
+                required: true
+            build:
+                description: "Build number"
+                type: string
+                required: true
 
-  workflow_call:
-    inputs:
-      version: 
-        description: 'Version to build'
-        type: string
-        required: true
-      build: 
-        description: 'Build number'
-        type: string
-        required: true
-
-
+    workflow_call:
+        inputs:
+            version:
+                description: "Version to build"
+                type: string
+                required: true
+            build:
+                description: "Build number"
+                type: string
+                required: true
 
 jobs:
-  build-release-ios:
-    name: Build release for iOS
-    runs-on: macos-latest
-    environment: ios-release
+    build-release-ios:
+        name: Build release for iOS
+        runs-on: macos-latest
+        environment: ios-release
 
-    # Proceed only if it's either not a release event or it's a pre-release.
-    if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
+        # Proceed only if it's either not a release event or it's a pre-release.
+        if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          # If it's a pre-release, check out the tag corresponding to the pre-release;
-          # otherwise, use the triggering branch unless it's a non-pre-release event.
-          ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
-    
-      # Setup Node.js
-      - name: Setup Node
-        uses: actions/setup-node@v3
-        with:
-          node-version-file: .nvmrc
-          cache: "yarn"
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  # If it's a pre-release, check out the tag corresponding to the pre-release;
+                  # otherwise, use the triggering branch unless it's a non-pre-release event.
+                  ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
 
-      - name: Install Node.js dependencies
-        run: |
-          yarn install
+            # Setup Node.js
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version-file: .nvmrc
+                  cache: "yarn"
 
-      # Install Homebrew and applesimutils for Detox
-      - name: Install macOS dependencies
-        run: |
-          brew tap wix/brew
-          brew install applesimutils
-          brew install fastlane
-          gem install cocoapods # Install CocoaPods globally
+            - name: Install Node.js dependencies
+              run: |
+                  yarn install
 
-          bundle install
-        env:
-          HOMEBREW_NO_AUTO_UPDATE: 1
-          HOMEBREW_NO_INSTALL_CLEANUP: 1
-      
-      # Setup Ruby
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-      
-      # Update Bundler and Install Gems
-      - name: Update Bundler and Install Gems
-        run: |
-          gem install bundler -v 2.4.22 
-          bundle install --jobs 4 --retry 3 
-        env:
-          BUNDLE_GEMFILE: ${{ github.workspace }}/ios/Gemfile
+            # Install Homebrew and applesimutils for Detox
+            - name: Install macOS dependencies
+              run: |
+                  brew tap wix/brew
+                  brew install applesimutils
+                  brew install fastlane
+                  gem install cocoapods # Install CocoaPods globally
 
-      # Install CocoaPods dependencies
-      - name: Install CocoaPods
-        run: |
-          cd ios
-          bundle exec pod install
+                  bundle install
+              env:
+                  HOMEBREW_NO_AUTO_UPDATE: 1
+                  HOMEBREW_NO_INSTALL_CLEANUP: 1
 
+            # Setup Ruby
+            - name: Setup Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  bundler-cache: true
 
+            # Update Bundler and Install Gems
+            - name: Update Bundler and Install Gems
+              run: |
+                  gem install bundler -v 2.4.22 
+                  bundle install --jobs 4 --retry 3
+              env:
+                  BUNDLE_GEMFILE: ${{ github.workspace }}/ios/Gemfile
 
-      # Install sentry properties
-      - name: Sentry properties
-        uses: mobiledevops/secret-to-file-action@v1
-        with:
-            base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
-            filename: "sentry.properties"
-            is-executable: false
-            working-directory: "./ios"
+            # Install CocoaPods dependencies
+            - name: Install CocoaPods
+              run: |
+                  cd ios
+                  bundle exec pod install
 
-      - name: Env default decode
-        uses: mobiledevops/secret-to-file-action@v1
-        with:
-             base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
-             filename: "env.default"
-             is-executable: false
-             working-directory: "./ios/fastlane"
+            # Install sentry properties
+            - name: Sentry properties
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.IOS_SENTRY_PROPERTIES }}
+                  filename: "sentry.properties"
+                  is-executable: false
+                  working-directory: "./ios"
 
-          
-      - name: Env decode 
-        uses: mobiledevops/secret-to-file-action@v1
-        with:
-             base64-encoded-secret: ${{ secrets.IOS_ENV_RELEASE}}
-             filename: ".env"
-             is-executable: false
-             working-directory: "./ios/fastlane"
-             
-      - name: Decode prod env      
-        uses: mobiledevops/secret-to-file-action@v1
-        with:
-            base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
-            filename: ".env.production"
-            is-executable: false
-            working-directory: "."
+            - name: Env default decode
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.IOS_ENV_DEFAULT }}
+                  filename: "env.default"
+                  is-executable: false
+                  working-directory: "./ios/fastlane"
 
-      - name: Build ipa with fastlane
-        env:
-          MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
-        run: |
-              cd ios
-              git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
-              cd fastlane
-              fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}
-              
+            - name: Env decode
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.IOS_ENV_RELEASE}}
+                  filename: ".env"
+                  is-executable: false
+                  working-directory: "./ios/fastlane"
 
+            - name: Decode prod env
+              uses: mobiledevops/secret-to-file-action@v1
+              with:
+                  base64-encoded-secret: ${{ secrets.RN_ENV_PROD}}
+                  filename: ".env.production"
+                  is-executable: false
+                  working-directory: "."
+
+            - name: Build ipa with fastlane
+              env:
+                  MATCH_PASSWORD: ${{ secrets.IOS_MATCH_PASSWORD }}
+                  EXTENSION_IDENTIFIER: "org.vechain.veworld.app.OneSignalNotificationServiceExtension"
+              run: |
+                  cd ios
+                  git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
+                  cd fastlane
+                  fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}

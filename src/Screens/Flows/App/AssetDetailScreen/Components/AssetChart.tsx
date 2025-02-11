@@ -98,9 +98,9 @@ export const AssetChart = ({ token }: Props) => {
                 <ChartView chartData={chartData} token={token} isChartDataLoading={!isLoaded} />
             </LineChart.Provider>
 
-            <BaseSpacer height={8} />
+            <BaseSpacer height={12} />
 
-            <BaseView px={16}>
+            <BaseView px={32}>
                 <PressableWithUnderline onPress={onTimelineButtonPress} data={marketChartTimeframes} />
             </BaseView>
         </>

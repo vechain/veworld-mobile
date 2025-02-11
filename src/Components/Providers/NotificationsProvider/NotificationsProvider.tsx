@@ -1,16 +1,19 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedState } from "react-native-onesignal"
-import { veBetterDaoTagKey } from "~Constants"
+import { vechainNewsAndUpdates } from "~Constants"
 import { useAppState } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
 import {
+    addRemovedNotificationTag,
     increaseDappVisitCounter,
     removeDappVisitCounter,
+    removeRemovedNotificationTag,
     selectDappVisitCounter,
     selectNotificationFeautureEnabled,
     selectNotificationOptedIn,
     selectNotificationPermissionEnabled,
+    selectRemovedNotificationTags,
     selectSelectedNetwork,
     setDappVisitCounter,
     updateNotificationFeatureFlag,
@@ -34,7 +37,9 @@ type ContextType = {
         [key: string]: string
     }>
     addTag: (key: string, value: string) => void
+    addDAppTag: (key: string) => void
     removeTag: (key: string) => void
+    removeDAppTag: (key: string) => void
     removeAllTags: () => void
 }
 
@@ -50,6 +55,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const permissionEnabled = useAppSelector(selectNotificationPermissionEnabled)
     const optedIn = useAppSelector(selectNotificationOptedIn)
     const dappVisitCounter = useAppSelector(selectDappVisitCounter)
+    const removedNotificationTags = useAppSelector(selectRemovedNotificationTags)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
     const isFetcingTags = useRef(false)
@@ -123,16 +129,18 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                 return
             }
 
-            if (event.notification.additionalData) {
-                const { route, navParams } = event.notification.additionalData as {
-                    route?: string
-                    navParams?: string
-                }
+            try {
+                if (event.notification.additionalData) {
+                    const { route, navParams } = event.notification.additionalData as {
+                        route?: string
+                        navParams?: string
+                    }
 
-                if (route) {
-                    navigation.navigate(route as any, navParams ? JSON.parse(navParams) : undefined)
+                    if (route) {
+                        navigation.navigate(route as any, navParams ? JSON.parse(navParams) : undefined)
+                    }
                 }
-            }
+            } catch {}
         },
         [navigation],
     )
@@ -156,13 +164,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         [dispatch],
     )
 
-    const init = useCallback(async () => {
-        initializeIneSignal()
-        await getOptInStatus()
-        await getPermission()
-        OneSignal.User.addTag(veBetterDaoTagKey, "true")
-    }, [getOptInStatus, getPermission, initializeIneSignal])
-
     const getTags = useCallback(() => {
         return OneSignal.User.getTags()
     }, [])
@@ -170,26 +171,54 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const addTag = useCallback(
         (key: string, value: string) => {
             OneSignal.User.addTag(key, value)
-            dispatch(setDappVisitCounter({ dappId: key, counter: 2 }))
+            dispatch(removeRemovedNotificationTag(key))
         },
         [dispatch],
+    )
+
+    const addDAppTag = useCallback(
+        (key: string) => {
+            addTag(key, "true")
+            dispatch(setDappVisitCounter({ dappId: key, counter: 2 }))
+        },
+        [addTag, dispatch],
     )
 
     const removeTag = useCallback(
         (key: string) => {
             OneSignal.User.removeTag(key)
+
+            if (!removedNotificationTags?.includes(key)) {
+                dispatch(addRemovedNotificationTag(key))
+            }
+        },
+        [dispatch, removedNotificationTags],
+    )
+
+    const removeDAppTag = useCallback(
+        (key: string) => {
+            removeTag(key)
             dispatch(removeDappVisitCounter({ dappId: key }))
         },
-        [dispatch],
+        [dispatch, removeTag],
     )
 
     const removeAllTags = useCallback(() => {
         getTags()?.then(tags => {
             const tagKeys = Object.keys(tags)
-            const tagsToRemove = tagKeys.filter(tag => tag !== veBetterDaoTagKey)
-            OneSignal.User.removeTags(tagsToRemove)
+            OneSignal.User.removeTags(tagKeys)
         })
     }, [getTags])
+
+    const init = useCallback(async () => {
+        initializeIneSignal()
+        await getOptInStatus()
+        await getPermission()
+
+        if (!removedNotificationTags?.includes(vechainNewsAndUpdates)) {
+            addTag(vechainNewsAndUpdates, "true")
+        }
+    }, [addTag, getOptInStatus, getPermission, initializeIneSignal, removedNotificationTags])
 
     useEffect(() => {
         dispatch(updateNotificationFeatureFlag(pushNotificationFeature?.enabled))
@@ -233,7 +262,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                     Object.entries(dappVisitCounter).forEach(([dappId, counter]) => {
                         if (tags[dappId] && tags[dappId] === "true" && dappVisitCounter[dappId] !== 2) {
                             dispatch(setDappVisitCounter({ dappId: dappId, counter: 2 }))
-                        } else if (counter >= 2) {
+                        } else if (!removedNotificationTags?.includes(dappId) && counter >= 2) {
                             addTag(dappId, "true")
                         }
                     })
@@ -242,7 +271,17 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
                     isFetcingTags.current = false
                 })
         }
-    }, [dappVisitCounter, dispatch, currentState, previousState, isMainnet, addTag, getTags, featureEnabled])
+    }, [
+        dappVisitCounter,
+        dispatch,
+        currentState,
+        previousState,
+        isMainnet,
+        addTag,
+        getTags,
+        featureEnabled,
+        removedNotificationTags,
+    ])
 
     const increaseDappCounter = useCallback(
         (dappId: string) => {
@@ -266,8 +305,11 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
             removeTag: removeTag,
             getTags: getTags,
             removeAllTags: removeAllTags,
+            addDAppTag: addDAppTag,
+            removeDAppTag: removeDAppTag,
         }
     }, [
+        addDAppTag,
         addTag,
         featureEnabled,
         getTags,
@@ -277,6 +319,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         optedIn,
         permissionEnabled,
         removeAllTags,
+        removeDAppTag,
         removeTag,
         requestPermission,
     ])
