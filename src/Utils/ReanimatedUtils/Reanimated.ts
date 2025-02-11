@@ -22,7 +22,7 @@ export function numberToPercentWorklet(
         precision: number
         absolute: boolean
         locale?: Intl.LocalesArgument
-    } = { precision: DEFAULT_PRECISION, absolute: DEFAULT_ABSOLUTE },
+    } = { precision: DEFAULT_PRECISION, absolute: DEFAULT_ABSOLUTE, locale: "en-US" },
 ): string {
     "worklet"
 
@@ -33,14 +33,15 @@ export function numberToPercentWorklet(
 
     const { precision, absolute, locale } = options
 
-    const formatter = new Intl.NumberFormat(locale, {
+    if (precision < 0) {
+        throw new Error("numberToPercentWorklet does not handle negative precision values")
+    }
+
+    const formatter = new Intl.NumberFormat(locale?.toString(), {
         style: "decimal",
         useGrouping: true,
         minimumFractionDigits: precision,
     })
-    if (precision < 0) {
-        throw new Error("numberToPercentWorklet does not handle negative precision values")
-    }
 
     if (value === undefined || isNaN(value)) {
         return "-"

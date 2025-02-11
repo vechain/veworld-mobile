@@ -5,12 +5,11 @@ interface IBigNumberUtils {
     // utility Methods
     toHuman(decimals: number, callback?: (result: BN) => void): BigNumberUtils
     decimals(decimals: number, callback?: (result: BN) => void): BigNumberUtils
-    toCurrencyFormat_string(decimals: number): string
-    toTokenFormat_string(decimals: number): string
+    toCurrencyFormat_string(decimals: number, locale?: Intl.LocalesArgument): string
+    toTokenFormat_string(decimals: number, locale?: Intl.LocalesArgument): string
     toCurrencyConversion(
         balance: string,
         rate?: number,
-        // locale?: Intl.LocalesArgument,
         callback?: (result: BN) => void,
         decimals?: number,
     ): { value: string; preciseValue: string; isLeesThan_0_01: boolean }
@@ -144,10 +143,12 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     toCurrencyFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
-        const formatter = new Intl.NumberFormat(locale, {
+        const _locale = locale ?? "en-US"
+        const formatter = new Intl.NumberFormat(_locale.toString(), {
             style: "decimal",
             useGrouping: true,
-            minimumFractionDigits: 2,
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
         })
         let _data = ""
 
@@ -161,10 +162,12 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     toTokenFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
-        const formatter = new Intl.NumberFormat(locale, {
+        const _locale = locale ?? "en-US"
+        const formatter = new Intl.NumberFormat(_locale.toString(), {
             style: "decimal",
             useGrouping: true,
             minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
         })
 
         let _data = ""

@@ -28,7 +28,7 @@ export const useFormatFiat = (intlOptions?: FormatFiatConfig) => {
             case CURRENCY_FORMATS.COMMA:
                 return "nl-BE"
             case CURRENCY_FORMATS.DOT:
-                return "en-EN"
+                return "en-US"
             default:
                 return getLocales()[0].languageCode
         }
