@@ -41,6 +41,7 @@ type ContextType = {
     postMessage: (message: WindowResponse) => void
     onNavigationStateChange: (navState: WebViewNavigation) => void
     injectVechainScript: string
+    originWhitelist: string[]
     navigationCanGoBack: boolean
     canGoBack: boolean
     canGoForward: boolean
@@ -116,6 +117,8 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const webviewRef = useRef<WebView | undefined>()
 
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
+
+    const originWhitelist = useMemo(() => ["http://", "https://", "about:*", "blob:"], [])
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -683,6 +686,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             onNavigationStateChange,
             navigationCanGoBack: nav.canGoBack(),
             canGoBack,
+            originWhitelist,
             canGoForward,
             closeInAppBrowser,
             goBack,
@@ -707,6 +711,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         locale,
         onNavigationStateChange,
         nav,
+        originWhitelist,
         canGoBack,
         canGoForward,
         closeInAppBrowser,
