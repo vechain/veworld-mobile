@@ -122,14 +122,11 @@ export const WelcomeScreen = () => {
     }, [])
 
     useEffect(() => {
-        const isDefaultLanguage = selectedLanguageCode === "en"
-
-        if (isDefaultLanguage) {
-            const currentLanguageCode = getAllLanguageCodes()
-            const newSelectedLanguageCode = languages.find(item => item.code === currentLanguageCode[0])
-            handleSelectLanguage((newSelectedLanguageCode?.code as Locales) ?? "en")
-        }
-    }, [getAllLanguageCodes, handleSelectLanguage, selectedLanguageCode])
+        const currentLanguageCode = getAllLanguageCodes()
+        const newSelectedLanguageCode = languages.find(item => item.code === currentLanguageCode[0])
+        handleSelectLanguage((newSelectedLanguageCode?.code as Locales) ?? "en")
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const DEV_DEMO_BUTTON = useDemoWallet()
     const { onCreateWallet, isOpen, isError, onSuccess, onClose: onCloseCreateFlow } = useHandleWalletCreation()
