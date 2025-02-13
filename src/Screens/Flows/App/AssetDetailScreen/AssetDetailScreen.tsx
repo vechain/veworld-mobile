@@ -14,7 +14,7 @@ import {
     showWarningToast,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { AssetChart, MarketInfoView } from "./Components"
+import { AssetChart, ConvertBetterBottomSheet, MarketInfoView } from "./Components"
 import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
 import { striptags } from "striptags"
@@ -41,6 +41,11 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+    const {
+        ref: convertBetterBottmSheetRef,
+        onOpen: openConvertBetterSheet,
+        onClose: closeConvertBetterSheet,
+    } = useBottomSheetModal()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -109,8 +114,23 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 icon: <BaseIcon size={20} color={theme.colors.text} name="icon-qr-code" />,
                 testID: "reciveButton",
             },
+            {
+                name: "Convert B3TR/VOT3",
+                action: openConvertBetterSheet,
+                testID: "convertButton",
+                icon: <BaseIcon size={20} color={theme.colors.text} name="icon-loader-2" />,
+            },
         ],
-        [LL, foundToken, nav, openQRCodeSheet, theme.colors.primaryDisabled, theme.colors.text, token.symbol],
+        [
+            LL,
+            foundToken,
+            nav,
+            openConvertBetterSheet,
+            openQRCodeSheet,
+            theme.colors.primaryDisabled,
+            theme.colors.text,
+            token.symbol,
+        ],
     )
 
     // render description based on locale. NB: at the moment only EN is supported
@@ -175,6 +195,13 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         )}
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+
+                    <ConvertBetterBottomSheet
+                        ref={convertBetterBottmSheetRef}
+                        onConfirm={() => {
+                            closeConvertBetterSheet()
+                        }}
+                    />
                 </ScrollView>
             }
         />
