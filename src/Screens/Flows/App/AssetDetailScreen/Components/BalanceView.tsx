@@ -41,7 +41,7 @@ export const BalanceView = ({
         return (
             <BaseView flexDirection="row">
                 <FiatBalance
-                    typographyFont={"subSubTitleSemiBold"}
+                    typographyFont={"subTitleSemiBold"}
                     color={theme.colors.assetDetailsCard.title}
                     balances={[fiatBalance]}
                     isVisible={isBalanceVisible}
@@ -53,7 +53,7 @@ export const BalanceView = ({
     return (
         <BaseView w={100}>
             <BaseView flexDirection="row" alignItems="center" justifyContent="flex-start">
-                <BaseText color={theme.colors.subtitle} typographyFont="smallCaptionSemiBold">
+                <BaseText color={theme.colors.subtitle} typographyFont="captionSemiBold">
                     {LL.BD_YOUR_BALANCE()}
                 </BaseText>
             </BaseView>
@@ -66,7 +66,7 @@ export const BalanceView = ({
                         <Image source={{ uri: tokenWithInfo.icon }} style={styles.image} />
                     </BaseView>
                     <BaseSpacer width={8} />
-                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="bodySemiBold">
+                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                         {symbol}
                     </BaseText>
                     <BaseSpacer width={4} />
@@ -79,7 +79,7 @@ export const BalanceView = ({
                             width={60}
                         />
                     ) : (
-                        <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="bodyMedium">
+                        <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="subSubTitleMedium">
                             {isBalanceVisible ? tokenUnitBalance : "•••••"}
                         </BaseText>
                     )}
@@ -100,5 +100,5 @@ const styles = StyleSheet.create({
     imageShadow: {
         width: "auto",
     },
-    image: { width: 12, height: 12 },
+    image: { width: 14, height: 14 },
 })

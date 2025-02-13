@@ -33,7 +33,7 @@ export const BaseTokenCard = ({
                 </BaseView>
                 <BaseSpacer width={16} />
                 <BaseView alignItems="flex-start" justifyContent="center">
-                    <BaseText typographyFont="bodySemiBold">{symbol}</BaseText>
+                    <BaseText typographyFont="bodyBold">{symbol}</BaseText>
                     <BaseSpacer height={2} />
 
                     <BaseView flexDirection="row">

@@ -39,7 +39,7 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
             <BaseView style={applyPriceContainerStyle} justifyContent="space-between">
-                <BaseText color={theme.colors.graphStatsText} style={styles.textCaption}>
+                <BaseText color={theme.colors.graphStatsText} style={styles.textBody}>
                     {LL.COMMON_PRICE()}
                 </BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
@@ -60,7 +60,7 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
             <BaseView alignItems="flex-end" style={styles.textContainer} justifyContent="space-between">
                 <BaseAnimatedText
                     text={datetime.formatted}
-                    style={[styles.textCaption, { color: theme.colors.graphStatsText }]}
+                    style={[styles.textBody, { color: theme.colors.graphStatsText }]}
                 />
 
                 {isChartDataLoading ? (
@@ -98,6 +98,13 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         textCaption: {
             fontSize: otherTypography.fontSize[12],
+            fontWeight: "400",
+            fontFamily: otherTypography.fontFamily["Inter-Regular"],
+            height: 16,
+            padding: 0,
+        },
+        textBody: {
+            fontSize: otherTypography.fontSize[14],
             fontWeight: "400",
             fontFamily: otherTypography.fontFamily["Inter-Regular"],
             height: 16,

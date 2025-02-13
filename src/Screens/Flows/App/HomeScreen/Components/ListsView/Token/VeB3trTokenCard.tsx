@@ -61,7 +61,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
 
         return (
             <FiatBalance
-                typographyFont="bodySemiBold"
+                typographyFont="subSubTitleBold"
                 color={tokenValueLabelColor}
                 balances={[veB3trFiatBalance.toString()]}
                 isVisible={isBalanceVisible}
@@ -88,7 +88,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row">
                         <BaseView style={baseStyles.tokenSymbol}>
-                            <BaseText color={tokenValueLabelColor} typographyFont="bodySemiBold">
+                            <BaseText color={tokenValueLabelColor} typographyFont="bodyBold">
                                 {b3trToken.symbol}
                             </BaseText>
                         </BaseView>
@@ -110,7 +110,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                     <BaseSpacer height={2} />
                     <BaseView flexDirection="row">
                         <BaseView style={baseStyles.tokenSymbol}>
-                            <BaseText typographyFont="bodySemiBold">{vot3Token.symbol}</BaseText>
+                            <BaseText typographyFont="bodyBold">{vot3Token.symbol}</BaseText>
                         </BaseView>
                         <BaseSpacer width={4} />
                         {isLoading ? (
