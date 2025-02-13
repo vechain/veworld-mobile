@@ -41,6 +41,7 @@ type ContextType = {
     postMessage: (message: WindowResponse) => void
     onNavigationStateChange: (navState: WebViewNavigation) => void
     injectVechainScript: string
+    originWhitelist: string[]
     navigationCanGoBack: boolean
     canGoBack: boolean
     canGoForward: boolean
@@ -74,6 +75,8 @@ type Props = {
 }
 
 export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
+
+const ORIGIN_WHITELIST = ["http://", "https://", "about:*", "blob:"]
 
 export const InAppBrowserProvider = ({ children }: Props) => {
     const nav = useNavigation()
@@ -683,6 +686,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             onNavigationStateChange,
             navigationCanGoBack: nav.canGoBack(),
             canGoBack,
+            originWhitelist: ORIGIN_WHITELIST,
             canGoForward,
             closeInAppBrowser,
             goBack,

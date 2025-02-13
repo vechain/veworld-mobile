@@ -80,10 +80,12 @@ export const useBackupDetails = ({
 
                 if (wallet?.mnemonic?.length) {
                     openBackupPhraseSheetWithDelay(300, wallet.mnemonic, deviceToBackup)
+                } else if (wallet?.privateKey) {
+                    openBackupPhraseSheetWithDelay(300, wallet.privateKey, deviceToBackup)
                 }
             }
         },
-        [closePasswordPrompt, openBackupPhraseSheetWithDelay, deviceToBackup],
+        [closePasswordPrompt, deviceToBackup, openBackupPhraseSheetWithDelay],
     )
 
     /*
@@ -102,6 +104,8 @@ export const useBackupDetails = ({
 
                 if (wallet?.mnemonic) {
                     openBackupPhraseSheetWithDelay(300, wallet.mnemonic, device)
+                } else if (wallet?.privateKey) {
+                    openBackupPhraseSheetWithDelay(300, wallet.privateKey, device)
                 }
             } else {
                 openPasswordPrompt()

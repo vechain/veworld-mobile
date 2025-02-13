@@ -22,7 +22,7 @@ export const DevicesBackupState = ({ devices, onPress }: Props) => {
 
     const handlePress = useCallback(
         (item: BaseDevice) => {
-            if (item.type === DEVICE_TYPE.LOCAL_MNEMONIC) {
+            if (item.type !== DEVICE_TYPE.LEDGER && item.type !== DEVICE_TYPE.LOCAL_WATCHED) {
                 onPress(item as LocalDevice)
             }
         },
