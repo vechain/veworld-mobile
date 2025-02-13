@@ -1,5 +1,12 @@
 
 
+## 2.0.8 (2025-02-13)
+
+
+### Bug Fixes
+
+* show vot3 on account details card ([#2680](https://github.com/vechain/veworld-mobile/issues/2680)) ([178ea7f](https://github.com/vechain/veworld-mobile/commit/178ea7fd9cef5ca0b6b4dbc9ade152839ec8386a))
+
 ## 2.0.8 (2025-02-04)
 
 
