@@ -34,6 +34,10 @@ describe("Reanimated numberToPercentWorklet function", function () {
         expect(numberToPercentWorklet(10, { precision: 2, absolute: false })).toBe("10.00%")
     })
 
+    it("should change accordingly to the provided locale", function () {
+        expect(numberToPercentWorklet(10, { precision: 2, absolute: false, locale: "nl-BE" })).toBe("10,00%")
+    })
+
     it("should throw an error for negative precision values", function () {
         expect(() => numberToPercentWorklet(10, { precision: -1, absolute: false })).toThrow(
             "numberToPercentWorklet does not handle negative precision values",

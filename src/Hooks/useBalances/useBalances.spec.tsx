@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useBalances } from "./useBalances"
 import { Balance, FungibleToken } from "~Model"
+import { TestWrapper } from "~Test"
 
 const token: FungibleToken & { balance: Balance } = {
     address: "",
@@ -25,12 +26,12 @@ describe("useMarketInfo", () => {
     })
 
     it("should return the correct fiatBalance", async () => {
-        const { result } = renderHook(() => useBalances({ token, exchangeRate }))
-        expect(result.current.fiatBalance).toBe("23.72")
+        const { result } = renderHook(() => useBalances({ token, exchangeRate }), { wrapper: TestWrapper })
+        expect(result.current.fiatBalance).toBe("23.72358205408073966746")
     })
 
     it("should return the correct tokenUnitBalance", async () => {
-        const { result } = renderHook(() => useBalances({ token, exchangeRate }))
+        const { result } = renderHook(() => useBalances({ token, exchangeRate }), { wrapper: TestWrapper })
         expect(result.current.tokenUnitBalance).toBe("1,218.69")
     })
 })

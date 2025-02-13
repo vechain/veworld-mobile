@@ -3,13 +3,15 @@ import FastImage, { FastImageProps } from "react-native-fast-image"
 import { useTheme } from "~Hooks"
 import { BaseView } from "~Components/Base"
 import { NFTPlaceholderDark, NFTPlaceholderLight } from "~Assets"
+import { SvgUri } from "react-native-svg"
 
 type Props = {
     uri?: string
+    mime?: string
 } & FastImageProps
 
 export const NFTImage = memo((props: Props) => {
-    const { uri, style, testID, ...rest } = props
+    const { uri, style, testID, mime, ...rest } = props
 
     const theme = useTheme()
 
@@ -17,8 +19,44 @@ export const NFTImage = memo((props: Props) => {
         return theme.isDark ? NFTPlaceholderDark : NFTPlaceholderLight
     }, [theme.isDark])
 
-    return (
-        <BaseView>
+    const renderImageComponent = useMemo(() => {
+        if (mime && mime === "image/svg+xml") {
+            return (
+                <BaseView
+                    style={[
+                        {
+                            backgroundColor: theme.colors.placeholder,
+                        },
+                        style,
+                    ]}>
+                    {uri ? (
+                        <SvgUri
+                            uri={uri}
+                            testID={testID}
+                            height={"100%"}
+                            width={"100%"}
+                            fallback={
+                                <FastImage
+                                    fallback
+                                    defaultSource={placeholderImg}
+                                    style={[style]}
+                                    resizeMode={FastImage.resizeMode.cover}
+                                />
+                            }
+                        />
+                    ) : (
+                        <FastImage
+                            fallback
+                            defaultSource={placeholderImg}
+                            style={[style]}
+                            resizeMode={FastImage.resizeMode.cover}
+                        />
+                    )}
+                </BaseView>
+            )
+        }
+
+        return (
             <FastImage
                 testID={testID}
                 style={[
@@ -37,6 +75,8 @@ export const NFTImage = memo((props: Props) => {
                 {...rest}
                 resizeMode={FastImage.resizeMode.cover}
             />
-        </BaseView>
-    )
+        )
+    }, [mime, placeholderImg, rest, style, testID, theme.colors.placeholder, uri])
+
+    return <BaseView>{renderImageComponent}</BaseView>
 })

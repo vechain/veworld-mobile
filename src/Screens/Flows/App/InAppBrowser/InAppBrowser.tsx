@@ -75,6 +75,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                             scalesPageToFit={true}
                             injectedJavaScriptBeforeContentLoaded={injectVechainScript}
                             allowsInlineMediaPlayback={true}
+                            originWhitelist={["http://", "https://", "about:*"]}
                         />
                     )}
                     <ChangeAccountNetworkBottomSheet

@@ -37,6 +37,7 @@ import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import { NotEnoughGasModal } from "./Modal"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -330,6 +331,7 @@ function TotalSendAmountView({
 
     const theme = useTheme()
     const { LL } = useI18nContext()
+    const { formatLocale } = useFormatFiat()
 
     const totalTxAnimationProgress = useSharedValue(0)
 
@@ -370,8 +372,8 @@ function TotalSendAmountView({
     const formattedAmount = useMemo(() => BigNutils(amount).decimals(4).toString, [amount])
 
     const formattedTotalCost = useMemo(
-        () => BigNutils(txCostTotal).toHuman(token.decimals).decimals(4).toString,
-        [token.decimals, txCostTotal],
+        () => BigNutils(txCostTotal).toHuman(token.decimals).toTokenFormat_string(4, formatLocale),
+        [token.decimals, txCostTotal, formatLocale],
     )
     const isVTHO = useMemo(() => token.symbol.toLowerCase() === VTHO.symbol.toLowerCase(), [token.symbol])
 

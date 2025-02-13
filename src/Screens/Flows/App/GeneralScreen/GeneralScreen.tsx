@@ -24,6 +24,7 @@ import {
 } from "~Storage/Redux"
 import { ChangeCurrency, ChangeTheme } from "./Components"
 import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
+import { ChangeCurrencyFormat } from "./Components/ChangeCurrencyFormat"
 
 export const GeneralScreen = () => {
     const { LL, setLocale } = useI18nContext()
@@ -78,6 +79,15 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="caption">{LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}</BaseText>
                     <BaseSpacer height={20} />
                     <ChangeCurrency />
+                    <BaseSpacer height={20} />
+
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_CURRENCY_FORMAT()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_CURRENCY_FORMAT_DISCLAIMER()}</BaseText>
+                    <BaseSpacer height={20} />
+                    <ChangeCurrencyFormat />
+
                     <BaseSpacer height={20} />
 
                     <BaseText typographyFont="bodyMedium" my={8}>

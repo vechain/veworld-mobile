@@ -13,7 +13,7 @@ import {
     useNotifications,
 } from "~Components"
 import { ColorThemeType, isSmallScreen } from "~Constants"
-import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles, useVnsUnclaimed } from "~Hooks"
+import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles, useClaimableUsernames } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -39,7 +39,7 @@ export const SettingsScreen = () => {
 
     const { featureEnabled: notificationFeatureEnabled } = useNotifications()
 
-    const { unclaimedAddresses } = useVnsUnclaimed()
+    const { unclaimedAddresses } = useClaimableUsernames()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 

@@ -1,10 +1,12 @@
 import { TokenWithCompleteInfo } from "~Hooks"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useAppSelector, selectIsTokensOwnedLoading } from "~Storage/Redux"
 import { ReanimatedUtils } from "~Utils"
 
 export const useTokenCardFiatInfo = (tokenWithInfo: TokenWithCompleteInfo) => {
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
     const { chartData, tokenInfo, tokenInfoLoading, fiatBalance, exchangeRate } = tokenWithInfo
+    const { formatLocale } = useFormatFiat()
 
     const getPriceChange = () => {
         // Use chart data if available so the change is sycned with the asset charts,
@@ -22,17 +24,23 @@ export const useTokenCardFiatInfo = (tokenWithInfo: TokenWithCompleteInfo) => {
     }
 
     const priceChange = getPriceChange()
-    const change24h = ReanimatedUtils.numberToPercentWorklet(priceChange, {
-        precision: 2,
-        absolute: true,
-    })
+
+    const isPositive24hChange = priceChange >= 0
+
+    const change24h =
+        (isPositive24hChange ? "+" : "") +
+        ReanimatedUtils.numberToPercentWorklet(priceChange, {
+            precision: 2,
+            absolute: false,
+            locale: formatLocale,
+        })
     const isLoading = tokenInfoLoading || isTokensOwnedLoading
 
     return {
         isTokensOwnedLoading,
         fiatBalance,
         exchangeRate,
-        isPositive24hChange: priceChange >= 0,
+        isPositive24hChange,
         change24h,
         isLoading,
     }

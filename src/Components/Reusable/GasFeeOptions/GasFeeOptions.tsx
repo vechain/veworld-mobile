@@ -4,6 +4,7 @@ import Animated, { AnimatedProps, FadeIn, FadeInLeft, FadeInRight, FadeOut } fro
 import { BaseButtonGroupHorizontal, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { GasFeeOption, GasPriceCoefficient, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
 import { DelegationType } from "~Model/Delegation"
@@ -33,6 +34,8 @@ export const GasFeeOptions = ({
 }: Props) => {
     const theme = useTheme()
     const { LL } = useI18nContext()
+
+    const { formatValue } = useFormatFiat()
 
     const gasFeeButtons: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
         return [
@@ -124,7 +127,10 @@ export const GasFeeOptions = ({
                                     </BaseText>
                                     <BaseSpacer height={4} />
                                     <BaseText color={textColor} typographyFont="smallCaptionMedium">
-                                        {gasFeeOptions[Number(button.id) as GasPriceCoefficient].gasFee} {VTHO.symbol}
+                                        {formatValue(
+                                            parseFloat(gasFeeOptions[Number(button.id) as GasPriceCoefficient].gasFee),
+                                        )}{" "}
+                                        {VTHO.symbol}
                                     </BaseText>
                                 </BaseView>
                             </BaseView>

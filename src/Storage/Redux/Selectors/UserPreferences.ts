@@ -12,6 +12,10 @@ export const selectCurrency = createSelector(reducer, state => {
     return state.currency
 })
 
+export const selectCurrencyFormat = createSelector(reducer, state => {
+    return state.currencyFormat
+})
+
 export const selectSymbolPosition = createSelector(reducer, state => {
     return state.symbolPosition || SYMBOL_POSITIONS.BEFORE
 })

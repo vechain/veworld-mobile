@@ -12,7 +12,7 @@ import { BaseView } from "./BaseView"
 import { useBackHandler, useThemedStyles } from "~Hooks"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
-import { BaseSpacer, BaseText, BlurView } from "~Components"
+import { BaseSpacer, BaseText, BlurBackdropBottomSheet } from "~Components"
 import { LocalizedString } from "typesafe-i18n"
 import { useReducedMotion } from "react-native-reanimated"
 import { isFinite } from "lodash"
@@ -99,14 +99,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             [dynamicHeight],
         )
 
-        const renderBlurBackdrop = useCallback(() => {
-            return (
-                <BlurView
-                    style={[StyleSheet.absoluteFill, { backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT }]}
-                    blurAmount={4}
-                    blurType={"dark"}
-                />
-            )
+        const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
+            return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
         }, [])
 
         const renderBackdrop = useCallback(
@@ -115,7 +109,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                     <BottomSheetBackdrop
                         {...props_}
                         pressBehavior={onPressOutside}
-                        opacity={0.5}
+                        opacity={0.8}
                         disappearsOnIndex={-1}
                     />
                 )
