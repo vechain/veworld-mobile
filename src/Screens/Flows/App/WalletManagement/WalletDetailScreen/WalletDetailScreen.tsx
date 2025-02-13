@@ -310,7 +310,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
                     <EditWalletAccountBottomSheet
                         ref={editWalletAccountBottomSheetRef}
-                        accountAlias={editingAccount ? editingAccount.alias : device.alias}
+                        accountAlias={editingAccount ? editingAccount.alias : device?.alias}
                         type={editingAccount ? "account" : "wallet"}
                         onConfirm={confirmEditWalletAccount}
                         onCancel={cancelEditWalletAccount}
