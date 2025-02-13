@@ -20,7 +20,7 @@ export const AccountDetailFiatBalance: React.FC<Props> = ({ account, isVisible, 
     const vetWithInfo = useTokenWithCompleteInfo(VET, account.address)
     const vthoWithInfo = useTokenWithCompleteInfo(VTHO, account.address)
     const b3trWithInfo = useTokenWithCompleteInfo(B3TR, account.address)
-    const vot3RawBalance = useAppSelector(state => selectBalanceForTokenByAccount(state, account.address, VOT3.address))
+    const vot3RawBalance = useAppSelector(state => selectBalanceForTokenByAccount(state, VOT3.address, account.address))
 
     const vot3FiatBalance = BalanceUtils.getFiatBalance(
         vot3RawBalance?.balance ?? "0",
