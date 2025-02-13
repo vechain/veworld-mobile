@@ -17,6 +17,9 @@ export const BlurBackdropBottomSheet = ({ animatedIndex }: Props) => {
         () => ({
             opacity: interpolate(animatedIndex.value, [-1, 0, 1], [0, 1, 0.5], Extrapolation.CLAMP),
             flex: 1,
+            width: "100%",
+            height: "100%",
+            position: "absolute",
         }),
         [animatedIndex],
     )
@@ -30,7 +33,7 @@ export const BlurBackdropBottomSheet = ({ animatedIndex }: Props) => {
 
     return (
         <GestureDetector gesture={tapHandler}>
-            <Animated.View style={[StyleSheet.absoluteFill, containerAnimatedStyle]}>
+            <Animated.View style={[containerAnimatedStyle]}>
                 <BlurView
                     style={[StyleSheet.absoluteFill, { backgroundColor: COLORS.DARK_PURPLE_TRANSPARENT }]}
                     blurAmount={4}
