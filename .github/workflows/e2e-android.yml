@@ -136,3 +136,4 @@ jobs:
                   api-key: ${{ secrets.DCD_API_KEY }}
                   app-file: ${{ env.output_dir }}/app-release.apk
                   exclude-tags: onlyIOS
+                  retry: 2
