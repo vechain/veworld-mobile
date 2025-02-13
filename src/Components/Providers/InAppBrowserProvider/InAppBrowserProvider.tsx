@@ -76,6 +76,8 @@ type Props = {
 
 export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
 
+const ORIGIN_WHITELIST = ["http://", "https://", "about:*", "blob:"]
+
 export const InAppBrowserProvider = ({ children }: Props) => {
     const nav = useNavigation()
 
@@ -117,8 +119,6 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const webviewRef = useRef<WebView | undefined>()
 
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
-
-    const originWhitelist = useMemo(() => ["http://", "https://", "about:*", "blob:"], [])
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -686,7 +686,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             onNavigationStateChange,
             navigationCanGoBack: nav.canGoBack(),
             canGoBack,
-            originWhitelist,
+            originWhitelist: ORIGIN_WHITELIST,
             canGoForward,
             closeInAppBrowser,
             goBack,
@@ -711,7 +711,6 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         locale,
         onNavigationStateChange,
         nav,
-        originWhitelist,
         canGoBack,
         canGoForward,
         closeInAppBrowser,
