@@ -6,15 +6,18 @@ import { RootStackParamListSettings, Routes } from "~Navigation"
 import { CloudAndManualBackup, ManualBackup } from "./Components"
 import { PlatformUtils } from "~Utils"
 import { selectGoogleDriveBackupEnabled, useAppSelector } from "~Storage/Redux"
+import { DEVICE_TYPE } from "~Model"
 
 type Props = NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_DETAILS_BACKUP>
 
 export const DetailsBackupScreen = ({ route }: Props) => {
+    const { backupDetails, deviceToBackup } = route.params
     const { LL } = useI18nContext()
     const googleDriveBackupEnabled = useAppSelector(selectGoogleDriveBackupEnabled)
-    const manualOnlyBackup = !googleDriveBackupEnabled && PlatformUtils.isAndroid()
+    const manualOnlyBackup =
+        (!googleDriveBackupEnabled && PlatformUtils.isAndroid()) ||
+        deviceToBackup?.type === DEVICE_TYPE.LOCAL_PRIVATE_KEY
 
-    const { backupDetails, deviceToBackup } = route.params
     const isMnemonic = Array.isArray(backupDetails)
 
     return (
