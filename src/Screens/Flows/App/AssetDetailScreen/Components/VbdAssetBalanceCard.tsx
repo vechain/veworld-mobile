@@ -176,7 +176,7 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                     <BaseView />
                 </BaseView>
             </BaseView>
-            <BaseView>
+            <BaseView px={16} pt={16}>
                 <BalanceView tokenWithInfo={vot3BalanceProps} isBalanceVisible={isBalanceVisible} />
             </BaseView>
         </>

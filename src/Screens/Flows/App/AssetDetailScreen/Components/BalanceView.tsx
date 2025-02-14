@@ -1,17 +1,19 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { BaseSkeleton, BaseText, BaseView, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import { Image, StyleSheet } from "react-native"
-import { COLORS } from "~Constants"
+import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { B3TR, COLORS, VOT3 } from "~Constants"
 
 export const BalanceView = ({
     tokenWithInfo,
     isBalanceVisible,
+    containerStyle,
 }: {
     tokenWithInfo: TokenWithCompleteInfo
     isBalanceVisible: boolean
+    containerStyle?: StyleProp<ViewStyle>
 }) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
@@ -22,6 +24,11 @@ export const BalanceView = ({
 
     const isLoading = exchangeRateLoading || isTokensOwnedLoading
     const priceFeedNotAvailable = !exchangeRate || isLoading
+
+    const isVBDToken = useMemo(
+        () => tokenWithInfo.symbol === B3TR.symbol || tokenWithInfo.symbol === VOT3.symbol,
+        [tokenWithInfo.symbol],
+    )
 
     const renderFiatBalance = useCallback(() => {
         if (isLoading)
@@ -51,11 +58,14 @@ export const BalanceView = ({
     }, [fiatBalance, LL, isBalanceVisible, isLoading, priceFeedNotAvailable, theme.colors])
 
     return (
-        <BaseView w={100}>
+        <BaseView style={containerStyle}>
             <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                 <BaseView style={styles.balanceContainer}>
-                    <BaseView style={[styles.imageContainer]}>
-                        <Image source={{ uri: tokenWithInfo.icon }} style={styles.image} />
+                    <BaseView style={[!isVBDToken && styles.imageContainer]}>
+                        <Image
+                            source={{ uri: tokenWithInfo.icon }}
+                            style={isVBDToken ? styles.vbdImage : styles.image}
+                        />
                     </BaseView>
                     <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                         {symbol}
@@ -90,6 +100,7 @@ const styles = StyleSheet.create({
         width: "auto",
     },
     image: { width: 12, height: 12 },
+    vbdImage: { width: 24, height: 24 },
     balanceContainer: {
         flexDirection: "row",
         alignItems: "center",
