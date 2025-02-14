@@ -171,8 +171,13 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                 </BaseView>
             </BaseView>
             <BaseView style={styles.b3trRowContainer}>
-                <BaseView style={styles.b3trRowContent}>
-                    <BalanceView tokenWithInfo={b3trToken} isBalanceVisible={isBalanceVisible} />
+                <BaseView flexDirection="row">
+                    <BalanceView
+                        containerStyle={styles.b3trBalanceView}
+                        tokenWithInfo={b3trToken}
+                        isBalanceVisible={isBalanceVisible}
+                    />
+                    <BaseIcon name="icon-more-vertical" size={16} style={styles.moreActionsButton} />
                     <BaseView />
                 </BaseView>
             </BaseView>
@@ -194,18 +199,26 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingHorizontal: 16,
             gap: 12,
         },
-        totalBalance: {
-            minWidth: "40%",
-        },
         b3trRowContainer: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignSelf: "baseline",
             padding: 16,
             borderBottomWidth: 1,
+            flex: 1,
+            gap: 16,
             borderColor: theme.colors.cardDivider,
         },
-        b3trRowContent: {
+        b3trBalanceView: {
             flexDirection: "row",
-            justifyContent: "flex-start",
-            width: "45%",
-            flexBasis: "auto",
+        },
+        moreActionsButton: {
+            backgroundColor: theme.colors.actionBanner.buttonBackground,
+            borderColor: theme.colors.actionBanner.buttonBorder,
+            height: 32,
+            width: 32,
+            borderWidth: 1,
+            padding: 8,
+            borderRadius: 6,
         },
     })
