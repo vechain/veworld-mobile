@@ -106,8 +106,11 @@ export type Colors = {
         border: string
         title: string
         buttonBackground: string
+        buttonBackgroundDisabled: string
         buttonBorder: string
         buttonText: string
+        buttonTextSecondary: string
+        buttonTextDisabled: string
     }
     assetDetailsCard: {
         background: string
@@ -315,8 +318,11 @@ const light: Colors = {
         border: COLORS.PRIMARY_200,
         title: COLORS.PURPLE,
         buttonBackground: COLORS.WHITE,
+        buttonBackgroundDisabled: COLORS.GREY_100,
         buttonBorder: COLORS.GREY_200,
         buttonText: COLORS.PURPLE,
+        buttonTextSecondary: COLORS.PRIMARY_800,
+        buttonTextDisabled: COLORS.GREY_400,
     },
     assetDetailsCard: {
         background: COLORS.GREY_50,
@@ -436,6 +442,9 @@ const dark: Colors = {
         buttonBackground: COLORS.DARK_PURPLE_DISABLED,
         buttonBorder: COLORS.TRANSPARENT,
         buttonText: COLORS.GREY_50,
+        buttonTextSecondary: COLORS.LIME_GREEN,
+        buttonTextDisabled: COLORS.PURPLE,
+        buttonBackgroundDisabled: COLORS.DARK_PURPLE_DISABLED,
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,

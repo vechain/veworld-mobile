@@ -8,13 +8,12 @@ import {
     BaseSpacer,
     BaseText,
     BaseView,
-    FastActionsBar,
     Layout,
     QRCodeBottomSheet,
     showWarningToast,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { AssetChart, MarketInfoView } from "./Components"
+import { AssetActionsBar, AssetChart, MarketInfoView } from "./Components"
 import { useI18nContext } from "~i18n"
 import { FastAction } from "~Model"
 import { striptags } from "striptags"
@@ -27,7 +26,7 @@ import {
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 import { AccountUtils } from "~Utils"
-import { B3TR, ColorThemeType } from "~Constants"
+import { B3TR } from "~Constants"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
@@ -72,8 +71,12 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 },
                 icon: (
                     <BaseIcon
-                        size={20}
-                        color={foundToken ? theme.colors.text : theme.colors.primaryDisabled}
+                        size={16}
+                        color={
+                            foundToken
+                                ? theme.colors.actionBanner.buttonTextSecondary
+                                : theme.colors.actionBanner.buttonTextDisabled
+                        }
                         name="icon-arrow-up"
                     />
                 ),
@@ -96,9 +99,13 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 },
                 icon: (
                     <BaseIcon
-                        color={foundToken ? theme.colors.text : theme.colors.primaryDisabled}
+                        color={
+                            foundToken
+                                ? theme.colors.actionBanner.buttonTextSecondary
+                                : theme.colors.actionBanner.buttonTextDisabled
+                        }
                         name="icon-arrow-left-right"
-                        size={20}
+                        size={16}
                     />
                 ),
                 testID: "swapButton",
@@ -106,11 +113,21 @@ export const AssetDetailScreen = ({ route }: Props) => {
             {
                 name: LL.COMMON_RECEIVE(),
                 action: openQRCodeSheet,
-                icon: <BaseIcon size={20} color={theme.colors.text} name="icon-qr-code" />,
+                icon: (
+                    <BaseIcon size={16} color={theme.colors.actionBanner.buttonTextSecondary} name="icon-arrow-down" />
+                ),
                 testID: "reciveButton",
             },
         ],
-        [LL, foundToken, nav, openQRCodeSheet, theme.colors.primaryDisabled, theme.colors.text, token.symbol],
+        [
+            LL,
+            foundToken,
+            nav,
+            openQRCodeSheet,
+            theme.colors.actionBanner.buttonTextDisabled,
+            theme.colors.actionBanner.buttonTextSecondary,
+            token.symbol,
+        ],
     )
 
     // render description based on locale. NB: at the moment only EN is supported
@@ -138,21 +155,15 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     <AssetChart token={token} />
 
                     <BaseView alignItems="center" style={styles.assetDetailsBody}>
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={40} />
 
                         <AssetBalanceCard
                             tokenWithInfo={token}
                             isBalanceVisible={isBalanceVisible}
-                            FastActions={
-                                showActions && <FastActionsBar actions={Actions} actionStyle={styles.actionStyle} />
-                            }
+                            FastActions={showActions && <AssetActionsBar actions={Actions} />}
                         />
 
-                        <BaseSpacer height={24} />
-
-                        <MarketInfoView tokenSymbol={token.symbol} />
-
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={40} />
 
                         {/* TODO: handle loading/skeleton */}
                         {!!description && (
@@ -166,13 +177,18 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                     {LL.TITLE_ABOUT()} {token.name}
                                 </BaseText>
 
-                                <BaseText mb={25}>
+                                <BaseText>
                                     {striptags(description.trim(), {
                                         allowedTags: new Set(["strong"]),
                                     })}
                                 </BaseText>
                             </>
                         )}
+
+                        <BaseSpacer height={24} />
+
+                        <MarketInfoView tokenSymbol={token.symbol} />
+                        <BaseSpacer height={16} />
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
                 </ScrollView>
@@ -181,7 +197,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
         assetDetailsHeader: {
             marginHorizontal: 16,
@@ -190,11 +206,5 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         assetDetailsBody: {
             paddingHorizontal: 16,
-        },
-        actionStyle: {
-            backgroundColor: theme.colors.actionBanner.buttonBackground,
-            flex: 1,
-            paddingVertical: 11,
-            borderRadius: 8,
         },
     })

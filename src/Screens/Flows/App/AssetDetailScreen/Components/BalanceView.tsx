@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
-import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
+import { BaseSkeleton, BaseText, BaseView, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 import { Image, StyleSheet } from "react-native"
@@ -41,7 +41,7 @@ export const BalanceView = ({
         return (
             <BaseView flexDirection="row">
                 <FiatBalance
-                    typographyFont={"subTitleSemiBold"}
+                    typographyFont={"subSubTitleSemiBold"}
                     color={theme.colors.assetDetailsCard.title}
                     balances={[fiatBalance]}
                     isVisible={isBalanceVisible}
@@ -52,24 +52,14 @@ export const BalanceView = ({
 
     return (
         <BaseView w={100}>
-            <BaseView flexDirection="row" alignItems="center" justifyContent="flex-start">
-                <BaseText color={theme.colors.subtitle} typographyFont="captionSemiBold">
-                    {LL.BD_YOUR_BALANCE()}
-                </BaseText>
-            </BaseView>
-
-            <BaseSpacer height={8} />
-
             <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                <BaseView flexDirection="row" alignItems="center" justifyContent="flex-start">
+                <BaseView style={styles.balanceContainer}>
                     <BaseView style={[styles.imageContainer]}>
                         <Image source={{ uri: tokenWithInfo.icon }} style={styles.image} />
                     </BaseView>
-                    <BaseSpacer width={8} />
                     <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                         {symbol}
                     </BaseText>
-                    <BaseSpacer width={4} />
                     {isTokensOwnedLoading ? (
                         <BaseSkeleton
                             animationDirection="horizontalLeft"
@@ -84,7 +74,6 @@ export const BalanceView = ({
                         </BaseText>
                     )}
                 </BaseView>
-                <BaseSpacer width={4} />
                 {renderFiatBalance()}
             </BaseView>
         </BaseView>
@@ -100,5 +89,12 @@ const styles = StyleSheet.create({
     imageShadow: {
         width: "auto",
     },
-    image: { width: 14, height: 14 },
+    image: { width: 12, height: 12 },
+    balanceContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start",
+        gap: 12,
+        paddingVertical: 4,
+    },
 })
