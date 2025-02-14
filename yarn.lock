@@ -3,9 +3,9 @@
 
 
 "@0no-co/graphql.web@^1.0.5":
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.1.0.tgz#ed9e7a99b7c7158ef7e98c2db5ecbfbcfa75594b"
-  integrity sha512-Ey/+GWfTlbeHVLMFnoJIfwJMaik2fLhiRrNiGD0sEyISw6IlADs6Gcsk9N2Rl/gWrokiEivkIU2BjT3zChdqQQ==
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/@0no-co/graphql.web/-/graphql.web-1.1.1.tgz#6670b0897ee222e10f46c3b45fe5b43b90504fcd"
+  integrity sha512-F2i3xdycesw78QCOBHmpTn7eaD2iNXGwB2gkfwxcOfBbeauYpr8RBSyJOkDrFtKtVRMclg8Sg3n1ip0ACyUuag==
 
 "@adraffy/ens-normalize@1.10.1":
   version "1.10.1"
