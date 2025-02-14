@@ -1,60 +1,131 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ConvertBetterCard } from "./ConvertBetterCard"
-import Animated, { useAnimatedStyle, useSharedValue } from "react-native-reanimated"
-import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
-import { useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import {
+    selectB3trTokenWithBalance,
+    selectSelectedAccount,
+    selectVot3TokenWithBalance,
+    useAppSelector,
+} from "~Storage/Redux"
+import { useAmountInput, useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { StyleSheet } from "react-native"
-import { ColorThemeType } from "~Constants"
+import { B3TR, ColorThemeType } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { BigNutils } from "~Utils"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     onConfirm: () => void
 }
 
 export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onConfirm }, ref) => {
-    const [sendAmount, setSendAmount] = useState("0")
+    const { input, setInput, removeInvalidCharacters } = useAmountInput("")
+    const [isSwapped, setIsSwapped] = useState(false)
+    const [isSwapEnabled, setIsSwapEnable] = useState(true)
+    const [isError, setIsError] = useState(false)
+    // const [isFeeAmountError, setIsFeeAmountError] = useState(false)
+    // const [isFeeCalculationError, setIsFeeCalculationError] = useState(false)
 
     const { styles } = useThemedStyles(baseStyles)
+    const cardPosition = useSharedValue(0)
 
-    const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
+    const b3trWithBalance = useAppSelector(selectB3trTokenWithBalance)
+    const vot3WithBalance = useAppSelector(selectVot3TokenWithBalance)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const activeSender = useSharedValue<string>(B3TR.symbol)
-    const b3trToken = useTokenWithCompleteInfo(B3TR)
-    const vot3Token = useTokenWithCompleteInfo(VOT3)
+    const timer = useRef<NodeJS.Timeout | null>(null)
 
-    const animatedStyles = useAnimatedStyle(() => {
-        return {
-            flexDirection: activeSender.value === B3TR.symbol ? "column" : "column-reverse",
-        }
-    }, [activeSender])
+    const B3TRanimatedStyle = useAnimatedStyle(() => ({
+        transform: [{ translateY: withTiming(cardPosition.value ? 90 : 0, { duration: 300 }) }],
+    }))
 
-    const onSwitchCurrencyPress = () => {
-        if (activeSender.value === B3TR.symbol) {
-            activeSender.value = VOT3.symbol
-        } else {
-            activeSender.value = B3TR.symbol
-        }
+    const VOT3animatedStyle = useAnimatedStyle(() => ({
+        transform: [{ translateY: withTiming(cardPosition.value ? -98 : 0, { duration: 300 }) }],
+    }))
+
+    const { tokenTotalBalance: b3trTokenTotal } = useTotalTokenBalance(b3trWithBalance!, "1", selectedAccount.address)
+    const { tokenTotalBalance: vot3TokenTotal } = useTotalTokenBalance(vot3WithBalance!, "1", selectedAccount.address)
+
+    const isB3TRActive = !isSwapped
+
+    const submitDisabled = useMemo(() => isError || !input, [input, isError])
+
+    const onAnimationEnd = () => {
+        setIsSwapEnable(true)
     }
 
-    const isSender = useCallback(
-        (symbol: string) => {
-            return activeSender.value === symbol
+    const resetStates = useCallback(() => {
+        setIsSwapEnable(false)
+        setInput("")
+        cardPosition.value = withTiming(isSwapped ? 0 : 1, { duration: 10 }, () => {
+            runOnJS(onAnimationEnd)()
+        })
+        setIsSwapped(!isSwapped)
+        setIsError(false)
+    }, [cardPosition, isSwapped, setInput])
+
+    const onChangeText = useCallback(
+        (newValue: string) => {
+            const _newValue = removeInvalidCharacters(newValue)
+            setInput(_newValue)
+
+            if (_newValue === "" || BigNutils(_newValue).isZero) {
+                if (timer.current) {
+                    clearTimeout(timer.current)
+                    timer.current = null
+                }
+
+                setIsError(false)
+
+                return
+            }
+
+            const balanceToHuman = BigNutils((isB3TRActive ? b3trTokenTotal : vot3TokenTotal) ?? "1").toHuman(
+                B3TR.decimals,
+            )
+
+            const controlValue = BigNutils(_newValue).addTrailingZeros(B3TR.decimals).toHuman(B3TR.decimals)
+
+            if (controlValue.isBiggerThan(balanceToHuman.toString)) {
+                setIsError(true)
+                HapticsService.triggerNotification({ level: "Error" })
+            } else {
+                setIsError(false)
+            }
         },
-        [activeSender.value],
+        [b3trTokenTotal, isB3TRActive, removeInvalidCharacters, setInput, vot3TokenTotal],
     )
 
+    const onMaxAmountPress = useCallback(
+        (maxAmount: string) => {
+            const _newValue = removeInvalidCharacters(maxAmount)
+            setInput(_newValue)
+        },
+        [removeInvalidCharacters, setInput],
+    )
+
+    const onSwitchCurrencyPress = useCallback(() => {
+        resetStates()
+    }, [resetStates])
+
+    const onDismiss = useCallback(() => {
+        resetStates()
+    }, [resetStates])
+
     const onConvertPress = useCallback(() => {
-        setSendAmount("0")
         onConfirm()
-    }, [onConfirm])
+
+        resetStates()
+    }, [onConfirm, resetStates])
 
     return (
-        <BaseBottomSheet ref={ref} blurBackdrop dynamicHeight enablePanDownToClose>
+        <BaseBottomSheet ref={ref} blurBackdrop dynamicHeight enablePanDownToClose onDismiss={onDismiss}>
             <BaseView>
-                <BaseText>{"Convert your Better tokens"}</BaseText>
-                <BaseText>
+                <BaseText typographyFont="subSubTitleMedium">{"Convert your Better tokens"}</BaseText>
+                <BaseSpacer height={8} />
+                <BaseText typographyFont="captionRegular">
                     {
                         // eslint-disable-next-line max-len
                         "B3TR tokens can be converted into VOT3 tokens and back, allowing you get more voting power and participate actively on the voting rounds and governance proposals. "
@@ -64,16 +135,20 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                 <BaseSpacer height={24} />
 
                 {/* Animated Card View */}
-                <Animated.View style={[styles.betterCardContainer, animatedStyles]}>
+                <Animated.View style={[styles.betterCardContainer]}>
                     <ConvertBetterCard
-                        token={b3trToken}
-                        isSender={isSender(B3TR.symbol)}
-                        sendAmount={sendAmount}
-                        onSendAmountChange={amount => setSendAmount(amount)}
+                        token={b3trWithBalance!}
+                        isSender={!isSwapped}
+                        sendAmount={input}
+                        error={isError}
+                        animatedStyle={B3TRanimatedStyle}
+                        onSendAmountChange={onChangeText}
+                        onMaxAmountPress={onMaxAmountPress}
                     />
 
                     <BaseView style={[styles.switchButtonContainer]}>
                         <TouchableOpacity
+                            disabled={!isSwapEnabled}
                             style={[styles.switchButton]}
                             activeOpacity={0.5}
                             onPress={onSwitchCurrencyPress}>
@@ -82,23 +157,30 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                     </BaseView>
 
                     <ConvertBetterCard
-                        token={vot3Token}
-                        isSender={isSender(VOT3.symbol)}
-                        sendAmount={sendAmount}
-                        onSendAmountChange={amount => setSendAmount(amount)}
+                        token={vot3WithBalance!}
+                        isSender={isSwapped}
+                        sendAmount={input}
+                        error={isError}
+                        animatedStyle={VOT3animatedStyle}
+                        onSendAmountChange={onChangeText}
+                        onMaxAmountPress={onMaxAmountPress}
                     />
                 </Animated.View>
 
                 <BaseSpacer height={12} />
 
-                <BaseText>{"Convert your Better tokens"}</BaseText>
-                <BaseText>{"VTHO balance is required to pay for the conversion gas fees"}</BaseText>
+                <BaseText typographyFont="smallCaptionSemiBold">
+                    {"Convert your Better tokens 1 B3TR = 1 VOT3"}
+                </BaseText>
+                <BaseText typographyFont="smallCaption">
+                    {"VTHO balance is required to pay for the conversion gas fees"}
+                </BaseText>
 
                 <BaseSpacer height={24} />
                 <BaseButton
                     testID="Convert_Action_BTN"
                     title="Convert"
-                    disabled={sendAmount === "0"}
+                    disabled={submitDisabled}
                     action={onConvertPress}
                 />
             </BaseView>

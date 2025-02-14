@@ -6,7 +6,12 @@ import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { FungibleTokenWithBalance } from "~Model"
 import { BigNumberUtils, BigNutils, GasUtils, TransactionUtils, error } from "~Utils"
 
-export const useTotalTokenBalance = (token: FungibleTokenWithBalance, amount: string, address: string) => {
+export const useTotalTokenBalance = (
+    token: FungibleTokenWithBalance,
+    amount: string,
+    address: string,
+    decimals?: number,
+) => {
     const { formatLocale } = useFormatFiat()
 
     const clauses = useMemo(
@@ -50,8 +55,10 @@ export const useTotalTokenBalance = (token: FungibleTokenWithBalance, amount: st
     }, [token.balance.balance])
 
     const tokenTotalToHuman = useMemo(() => {
-        return BigNutils(tokenTotalBalance).toHuman(token.decimals).toTokenFormat_string(8, formatLocale)
-    }, [formatLocale, token.decimals, tokenTotalBalance])
+        return BigNutils(tokenTotalBalance)
+            .toHuman(token.decimals)
+            .toTokenFormat_string(decimals ?? 8, formatLocale)
+    }, [decimals, formatLocale, token.decimals, tokenTotalBalance])
 
     return { tokenTotalBalance, tokenTotalToHuman, getGasFees }
 }

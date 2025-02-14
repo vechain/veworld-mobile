@@ -20,13 +20,13 @@ import {
     AlertCard,
 } from "~Components"
 import { COLORS, CURRENCY_SYMBOLS, typography, VOT3, VTHO } from "~Constants"
-import { useAmountInput, useTheme, useThemedStyles } from "~Hooks"
+import { useAmountInput, useTheme, useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { useTotalTokenBalance, useUI } from "./Hooks"
+import { useUI } from "./Hooks"
 
 const { defaults: defaultTypography } = typography
 
