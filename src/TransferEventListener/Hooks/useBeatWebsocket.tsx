@@ -1,11 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from "react"
-import { URIUtils, debug, error, warn } from "~Utils"
-import WebSocket, { CloseEvent, ErrorEvent, MessageEvent } from "isomorphic-ws"
+import { URIUtils, debug, warn } from "~Utils"
+import WebSocket, { CloseEvent, MessageEvent } from "isomorphic-ws"
 import { handleChangeNode, updateNodeError, useAppDispatch } from "~Storage/Redux"
 import { useAppState, useCounter } from "~Hooks"
 import { AppStateType, Beat } from "~Model"
 import { ERROR_EVENTS } from "~Constants"
-import NetInfo from "@react-native-community/netinfo"
 
 interface LastMessage {
     networkUrl: string
@@ -23,7 +22,6 @@ export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Be
     const lastMessage = useRef<LastMessage>()
     const { count, increment } = useCounter()
     const [retryTimeoutId, setRetryTimeoutId] = useState<NodeJS.Timeout | null>(null)
-    const { isConnected } = NetInfo.useNetInfo()
 
     const onOpen = useCallback(() => {
         dispatch(updateNodeError(false))
@@ -53,21 +51,15 @@ export const useBeatWebsocket = (currentNetworkUrl: string, onMessage: (beat: Be
         [currentState],
     )
 
-    const onError = useCallback(
-        (ev: ErrorEvent) => {
-            // ONly send a sentry log if the websocket fails but it's not an internet connection issue
-            if (isConnected) error(ERROR_EVENTS.APP, "Error in Beat WebSocket ", ev)
-
-            if (count > 3) {
-                warn(ERROR_EVENTS.SEND, "Trouble connecting to useBeatWebsocket.")
-                dispatch(updateNodeError(true))
-                dispatch(handleChangeNode())
-            } else {
-                increment()
-            }
-        },
-        [count, dispatch, increment, isConnected],
-    )
+    const onError = useCallback(() => {
+        if (count > 3) {
+            warn(ERROR_EVENTS.SEND, "Trouble connecting to useBeatWebsocket.")
+            dispatch(updateNodeError(true))
+            dispatch(handleChangeNode())
+        } else {
+            increment()
+        }
+    }, [count, dispatch, increment])
 
     // Effect for opening and closing WebSocket connection
     useEffect(() => {

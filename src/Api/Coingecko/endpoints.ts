@@ -97,7 +97,6 @@ export const getTokenInfo = async (coinGeckoId?: string) => {
 
         return zodParsed
     } catch (e) {
-        error(ERROR_EVENTS.TOKENS, e)
         throw e
     }
 }
