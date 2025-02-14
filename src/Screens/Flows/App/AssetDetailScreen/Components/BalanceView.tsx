@@ -41,8 +41,8 @@ export const BalanceView = ({
         return (
             <BaseView flexDirection="row">
                 <FiatBalance
-                    typographyFont={"subSubTitleSemiBold"}
-                    color={theme.colors.assetDetailsCard.title}
+                    typographyFont={"bodySemiBold"}
+                    color={theme.colors.assetDetailsCard.text}
                     balances={[fiatBalance]}
                     isVisible={isBalanceVisible}
                 />
@@ -69,7 +69,7 @@ export const BalanceView = ({
                             width={60}
                         />
                     ) : (
-                        <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="subSubTitleMedium">
+                        <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleMedium">
                             {isBalanceVisible ? tokenUnitBalance : "•••••"}
                         </BaseText>
                     )}

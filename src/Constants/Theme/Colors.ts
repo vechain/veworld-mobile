@@ -53,6 +53,7 @@ export type Colors = {
     textSecondary: string
     horizontalButtonTextReversed: string
     cardBorder: string
+    cardDivider: string
     switchEnabled: string
     textLight: string
     checkboxFilledBackground: string
@@ -250,6 +251,7 @@ const light: Colors = {
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
+    cardDivider: COLORS.GREY_200,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
@@ -372,6 +374,7 @@ const dark: Colors = {
     button: COLORS.LIME_GREEN,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
     cardBorder: COLORS.DARK_PURPLE_DISABLED,
+    cardDivider: COLORS.PURPLE_DISABLED,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
     transparent: COLORS.TRANSPARENT,
