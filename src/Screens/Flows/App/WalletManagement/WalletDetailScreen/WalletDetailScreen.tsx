@@ -215,7 +215,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     return (
         <Layout
-            title={walletAlias || device?.alias || ""}
+            title={walletAlias ?? device?.alias ?? ""}
             headerRightElement={
                 <>
                     {isEditable && (
