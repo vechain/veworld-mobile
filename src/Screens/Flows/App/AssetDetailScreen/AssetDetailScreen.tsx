@@ -198,7 +198,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                     <ConvertBetterBottomSheet
                         ref={convertBetterBottmSheetRef}
-                        onConfirm={() => {
+                        onClose={() => {
                             closeConvertBetterSheet()
                         }}
                     />

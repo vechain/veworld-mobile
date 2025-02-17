@@ -45,3 +45,59 @@ export const X2EarnDapps: abi.Function.Definition = {
     stateMutability: "view",
     type: "function",
 }
+
+export const B3trAbis: abi.Function.Definition[] = [
+    {
+        inputs: [
+            {
+                internalType: "address",
+                name: "spender",
+                type: "address",
+            },
+            {
+                internalType: "uint256",
+                name: "value",
+                type: "uint256",
+            },
+        ],
+        name: "approve",
+        outputs: [
+            {
+                internalType: "bool",
+                name: "",
+                type: "bool",
+            },
+        ],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+]
+
+export const Vot3Abis: abi.Function.Definition[] = [
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "amount",
+                type: "uint256",
+            },
+        ],
+        name: "convertToB3TR",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+    {
+        inputs: [
+            {
+                internalType: "uint256",
+                name: "amount",
+                type: "uint256",
+            },
+        ],
+        name: "convertToVOT3",
+        outputs: [],
+        stateMutability: "nonpayable",
+        type: "function",
+    },
+]

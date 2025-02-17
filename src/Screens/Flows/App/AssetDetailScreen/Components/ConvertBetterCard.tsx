@@ -7,6 +7,7 @@ import { ColorThemeType, typography } from "~Constants"
 import { useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { BigNutils } from "~Utils"
 
 type Props = {
     token: FungibleTokenWithBalance
@@ -32,7 +33,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
-    const { tokenTotalToHuman } = useTotalTokenBalance(token, sendAmount, selectedAccount.address, 2)
+    const { tokenTotalToHuman, tokenTotalBalance } = useTotalTokenBalance(token, sendAmount, selectedAccount.address, 2)
 
     const computedTotalBalanceStyle = useMemo(() => {
         return error ? [styles.totalBalanceError] : []
@@ -63,14 +64,15 @@ export const ConvertBetterCard: React.FC<Props> = ({
                         </BaseView>
                     </BaseView>
 
-                    <BaseView flex={1} justifyContent="center" alignItems="flex-end">
+                    <BaseView flex={1} justifyContent="center" alignItems="flex-end" style={[styles.inputContainer]}>
                         {isSender && (
-                            <BaseView flexDirection="row" justifyContent="flex-end" style={[styles.balanceContainer]}>
+                            <BaseView style={[styles.balanceContainer]}>
                                 <BaseText typographyFont="captionMedium" style={computedTotalBalanceStyle}>
                                     {tokenTotalToHuman}
                                 </BaseText>
                                 <BaseButton
-                                    size="sm"
+                                    typographyFont="captionSemiBold"
+                                    disabled={BigNutils(tokenTotalBalance).isZero}
                                     variant="outline"
                                     textColor={theme.colors.actionBanner.buttonText}
                                     style={[styles.maxButton]}
@@ -79,18 +81,21 @@ export const ConvertBetterCard: React.FC<Props> = ({
                                 </BaseButton>
                             </BaseView>
                         )}
-                        <BottomSheetTextInput
-                            testID="ConvertBetter_input"
-                            placeholder={"0"}
-                            keyboardType="numeric"
-                            editable={isSender}
-                            contextMenuHidden
-                            value={sendAmount}
-                            textAlign="right"
-                            autoFocus={isSender}
-                            onChangeText={onSendAmountChange}
-                            style={computedInputStyle}
-                        />
+
+                        <BaseView flexDirection="row" flex={1}>
+                            <BottomSheetTextInput
+                                testID="ConvertBetter_input"
+                                placeholder={"0"}
+                                keyboardType="numeric"
+                                editable={isSender}
+                                contextMenuHidden
+                                value={sendAmount}
+                                textAlign="right"
+                                autoFocus={isSender}
+                                onChangeText={onSendAmountChange}
+                                style={computedInputStyle}
+                            />
+                        </BaseView>
                     </BaseView>
                 </BaseView>
             </BaseCard>
@@ -103,6 +108,10 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             paddingHorizontal: 24,
             paddingVertical: 16,
+            minHeight: 95,
+        },
+        inputContainer: {
+            gap: 12,
         },
         input: {
             ...defaultTypography.title,

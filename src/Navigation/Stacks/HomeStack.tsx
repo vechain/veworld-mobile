@@ -36,6 +36,7 @@ import {
     WalletManagementScreen,
     ClaimUsername,
     UsernameClaimed,
+    ConvertTransactionScreen,
 } from "~Screens"
 
 export type RootStackParamListHome = {
@@ -69,6 +70,9 @@ export type RootStackParamListHome = {
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
+    [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
+        transactionClauses: Transaction.Clause[]
+    }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
@@ -144,6 +148,11 @@ export const HomeStack = () => {
                 />
 
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN}
+                    component={ConvertTransactionScreen}
+                    options={{ headerShown: false }}
+                />
                 <Screen name={Routes.OBSERVE_WALLET} component={ObserveWalletScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.IMPORT_MNEMONIC} component={ImportLocalWallet} options={{ headerShown: false }} />
 

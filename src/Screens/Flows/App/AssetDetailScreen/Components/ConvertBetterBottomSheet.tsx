@@ -9,7 +9,7 @@ import {
     selectVot3TokenWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { useAmountInput, useThemedStyles, useTotalTokenBalance } from "~Hooks"
+import { useAmountInput, useConvertBetterTokens, useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { StyleSheet } from "react-native"
 import { B3TR, ColorThemeType } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
@@ -17,16 +17,14 @@ import { BigNutils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
 
 type Props = {
-    onConfirm: () => void
+    onClose: () => void
 }
 
-export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onConfirm }, ref) => {
+export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
     const { input, setInput, removeInvalidCharacters } = useAmountInput("")
     const [isSwapped, setIsSwapped] = useState(false)
     const [isSwapEnabled, setIsSwapEnable] = useState(true)
     const [isError, setIsError] = useState(false)
-    // const [isFeeAmountError, setIsFeeAmountError] = useState(false)
-    // const [isFeeCalculationError, setIsFeeCalculationError] = useState(false)
 
     const { styles } = useThemedStyles(baseStyles)
     const cardPosition = useSharedValue(0)
@@ -38,15 +36,17 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const timer = useRef<NodeJS.Timeout | null>(null)
 
     const B3TRanimatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: withTiming(cardPosition.value ? 90 : 0, { duration: 300 }) }],
+        transform: [{ translateY: withTiming(cardPosition.value ? 105 : 0, { duration: 300 }) }],
     }))
 
     const VOT3animatedStyle = useAnimatedStyle(() => ({
-        transform: [{ translateY: withTiming(cardPosition.value ? -98 : 0, { duration: 300 }) }],
+        transform: [{ translateY: withTiming(cardPosition.value ? -105 : 0, { duration: 300 }) }],
     }))
 
     const { tokenTotalBalance: b3trTokenTotal } = useTotalTokenBalance(b3trWithBalance!, "1", selectedAccount.address)
     const { tokenTotalBalance: vot3TokenTotal } = useTotalTokenBalance(vot3WithBalance!, "1", selectedAccount.address)
+
+    const { convertB3tr, convertVot3 } = useConvertBetterTokens()
 
     const isB3TRActive = !isSwapped
 
@@ -57,14 +57,12 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     }
 
     const resetStates = useCallback(() => {
-        setIsSwapEnable(false)
+        setIsSwapEnable(true)
         setInput("")
-        cardPosition.value = withTiming(isSwapped ? 0 : 1, { duration: 10 }, () => {
-            runOnJS(onAnimationEnd)()
-        })
-        setIsSwapped(!isSwapped)
+        cardPosition.value = 0
+        setIsSwapped(false)
         setIsError(false)
-    }, [cardPosition, isSwapped, setInput])
+    }, [cardPosition, setInput])
 
     const onChangeText = useCallback(
         (newValue: string) => {
@@ -107,18 +105,27 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     )
 
     const onSwitchCurrencyPress = useCallback(() => {
-        resetStates()
-    }, [resetStates])
+        setIsSwapped(!isSwapped)
+        cardPosition.value = withTiming(isSwapped ? 0 : 1, { duration: 10 }, () => {
+            runOnJS(onAnimationEnd)()
+        })
+        setInput("")
+        setIsError(false)
+    }, [cardPosition, isSwapped, setInput])
 
     const onDismiss = useCallback(() => {
         resetStates()
     }, [resetStates])
 
     const onConvertPress = useCallback(() => {
-        onConfirm()
-
-        resetStates()
-    }, [onConfirm, resetStates])
+        onClose()
+        if (isB3TRActive) {
+            convertB3tr(input)
+        } else {
+            convertVot3(input)
+        }
+        // resetStates()
+    }, [convertB3tr, convertVot3, input, isB3TRActive, onClose])
 
     return (
         <BaseBottomSheet ref={ref} blurBackdrop dynamicHeight enablePanDownToClose onDismiss={onDismiss}>
