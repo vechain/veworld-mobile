@@ -58,34 +58,29 @@ export const BalanceView = ({
     }, [fiatBalance, LL, isBalanceVisible, isLoading, priceFeedNotAvailable, theme.colors])
 
     return (
-        <BaseView style={containerStyle}>
-            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
-                <BaseView style={styles.balanceContainer}>
-                    <BaseView style={[!isVBDToken && styles.imageContainer]}>
-                        <Image
-                            source={{ uri: tokenWithInfo.icon }}
-                            style={isVBDToken ? styles.vbdImage : styles.image}
-                        />
-                    </BaseView>
-                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
-                        {symbol}
-                    </BaseText>
-                    {isTokensOwnedLoading ? (
-                        <BaseSkeleton
-                            animationDirection="horizontalLeft"
-                            boneColor={theme.colors.skeletonBoneColor}
-                            highlightColor={theme.colors.skeletonHighlightColor}
-                            height={14}
-                            width={60}
-                        />
-                    ) : (
-                        <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleMedium">
-                            {isBalanceVisible ? tokenUnitBalance : "•••••"}
-                        </BaseText>
-                    )}
+        <BaseView style={containerStyle ?? styles.layout}>
+            <BaseView style={styles.balanceContainer}>
+                <BaseView style={[!isVBDToken && styles.imageContainer]}>
+                    <Image source={{ uri: tokenWithInfo.icon }} style={isVBDToken ? styles.vbdImage : styles.image} />
                 </BaseView>
-                {renderFiatBalance()}
+                <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
+                    {symbol}
+                </BaseText>
+                {isTokensOwnedLoading ? (
+                    <BaseSkeleton
+                        animationDirection="horizontalLeft"
+                        boneColor={theme.colors.skeletonBoneColor}
+                        highlightColor={theme.colors.skeletonHighlightColor}
+                        height={14}
+                        width={60}
+                    />
+                ) : (
+                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleMedium">
+                        {isBalanceVisible ? tokenUnitBalance : "•••••"}
+                    </BaseText>
+                )}
             </BaseView>
+            {renderFiatBalance()}
         </BaseView>
     )
 }
@@ -104,8 +99,12 @@ const styles = StyleSheet.create({
     balanceContainer: {
         flexDirection: "row",
         alignItems: "center",
-        justifyContent: "flex-start",
         gap: 12,
         paddingVertical: 4,
+    },
+    layout: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
 })

@@ -171,18 +171,27 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                 </BaseView>
             </BaseView>
             <BaseView style={styles.b3trRowContainer}>
-                <BaseView flexDirection="row">
+                <BaseView flexDirection="row" flexGrow={1}>
                     <BalanceView
                         containerStyle={styles.b3trBalanceView}
                         tokenWithInfo={b3trToken}
                         isBalanceVisible={isBalanceVisible}
                     />
-                    <BaseIcon name="icon-more-vertical" size={16} style={styles.moreActionsButton} />
+                    <BaseIcon
+                        name="icon-more-vertical"
+                        size={16}
+                        color={theme.colors.actionBanner.buttonTextSecondary}
+                        style={styles.moreActionsButton}
+                    />
                     <BaseView />
                 </BaseView>
             </BaseView>
             <BaseView px={16} pt={16}>
-                <BalanceView tokenWithInfo={vot3BalanceProps} isBalanceVisible={isBalanceVisible} />
+                <BalanceView
+                    tokenWithInfo={vot3BalanceProps}
+                    isBalanceVisible={isBalanceVisible}
+                    containerStyle={styles.b3trBalanceView}
+                />
             </BaseView>
         </>
     )
@@ -202,7 +211,6 @@ const baseStyles = (theme: ColorThemeType) =>
         b3trRowContainer: {
             flexDirection: "row",
             justifyContent: "space-between",
-            alignSelf: "baseline",
             padding: 16,
             borderBottomWidth: 1,
             flex: 1,
@@ -211,6 +219,8 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         b3trBalanceView: {
             flexDirection: "row",
+            flex: 1,
+            gap: 12,
         },
         moreActionsButton: {
             backgroundColor: theme.colors.actionBanner.buttonBackground,
