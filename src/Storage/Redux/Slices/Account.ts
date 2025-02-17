@@ -146,22 +146,6 @@ export const AccountSlice = createSlice({
             }
         },
         resetAccountState: () => initialAccountState,
-        renameAccountsByDevice: (
-            state,
-            action: PayloadAction<{ rootAddress: string; alias: string; oldAlias: string }>,
-        ) => {
-            const { rootAddress, alias, oldAlias } = action.payload
-            state.accounts.forEach((account, index) => {
-                if (AddressUtils.compareAddresses(account.rootAddress, rootAddress)) {
-                    // Check if the account follows the default naming pattern "Account X"
-                    const isDefaultName = /^Account \d+$/.test(account.alias)
-                    const isOldAlias = account.alias.includes(oldAlias)
-                    if (isDefaultName || isOldAlias) {
-                        state.accounts[index].alias = alias + " " + index
-                    }
-                }
-            })
-        },
     },
 })
 
@@ -170,7 +154,6 @@ export const {
     setSelectedAccount,
     addAccount,
     renameAccount,
-    renameAccountsByDevice,
     removeAccountsByDevice,
     setAccountVisibility,
     toggleAccountVisibility,

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useRef, useState } from "react"
 import {
     getClaimableUsernames,
     useBottomSheetModal,
@@ -26,12 +26,7 @@ import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
 import { AccountWithDevice, DEVICE_TYPE, WalletAccount } from "~Model"
 import { addAccountForDevice, renameAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import {
-    selectAccountsByDevice,
-    selectBalanceVisible,
-    selectSelectedAccount,
-    selectDevices,
-} from "~Storage/Redux/Selectors"
+import { selectAccountsByDevice, selectBalanceVisible, selectSelectedAccount } from "~Storage/Redux/Selectors"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { FlatList } from "react-native"
@@ -45,14 +40,9 @@ import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 
 export const WalletDetailScreen = ({ route: { params } }: Props) => {
+    const { device } = params
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-
-    const devices = useAppSelector(selectDevices)
-    const device = useMemo(
-        () => devices.find(d => d.rootAddress === params.device.rootAddress),
-        [devices, params.device.rootAddress],
-    )
 
     const [walletAlias, setWalletAlias] = useState(device?.alias ?? "")
     const [openedAccount, setOpenedAccount] = useState<AccountWithDevice>()
@@ -215,7 +205,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     return (
         <Layout
-            title={walletAlias ?? device?.alias ?? ""}
+            title={walletAlias || device?.alias || ""}
             headerRightElement={
                 <>
                     {isEditable && (
@@ -310,7 +300,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
                     <EditWalletAccountBottomSheet
                         ref={editWalletAccountBottomSheetRef}
-                        accountAlias={editingAccount ? editingAccount.alias : device?.alias}
+                        accountAlias={editingAccount ? editingAccount.alias : device.alias}
                         type={editingAccount ? "account" : "wallet"}
                         onConfirm={confirmEditWalletAccount}
                         onCancel={cancelEditWalletAccount}
