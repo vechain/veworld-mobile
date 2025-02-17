@@ -10,6 +10,10 @@ env:
       clearState: true
 
 ## welcome screen
+- extendedWaitUntil:
+    visible:
+         id: "dev_demo"
+    timeout: 10000
 - tapOn:
       id: "dev_demo"
 # Turn off push notification bottom sheet
