@@ -5,10 +5,18 @@ import {
     selectNetworkVBDTokens,
     useAppSelector,
 } from "~Storage/Redux"
-import { TokenWithCompleteInfo, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { BalanceView } from "~Screens/Flows/App/AssetDetailScreen/Components/BalanceView"
-import { BaseIcon, BaseSkeleton, BaseText, BaseView, FiatBalance, showWarningToast } from "~Components"
+import {
+    BaseIcon,
+    BaseSkeleton,
+    BaseText,
+    BaseView,
+    FiatBalance,
+    QRCodeBottomSheet,
+    showWarningToast,
+} from "~Components"
 import { AssetActionsBar } from "~Screens/Flows/App/AssetDetailScreen/Components/AssetActionsBar"
 import { FastAction } from "~Model"
 import { Routes } from "~Navigation"
@@ -26,6 +34,8 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyles)
+
+    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
     const { VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
     const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
@@ -182,6 +192,7 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                         size={16}
                         color={theme.colors.actionBanner.buttonTextSecondary}
                         style={styles.moreActionsButton}
+                        action={() => openQRCodeSheet}
                     />
                     <BaseView />
                 </BaseView>
@@ -193,6 +204,7 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                     containerStyle={styles.b3trBalanceView}
                 />
             </BaseView>
+            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
         </>
     )
 })

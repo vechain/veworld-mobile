@@ -1224,6 +1224,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_LOADING: string
 	/**
+	 * M​o​r​e
+	 */
+	COMMON_BTN_MORE: string
+	/**
 	 * N​E​X​T
 	 */
 	COMMON_BTN_NEXT: string
@@ -4994,6 +4998,10 @@ Try reconnect your device to the internet.
 	 * Loading
 	 */
 	COMMON_BTN_LOADING: () => LocalizedString
+	/**
+	 * More
+	 */
+	COMMON_BTN_MORE: () => LocalizedString
 	/**
 	 * NEXT
 	 */

@@ -178,7 +178,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 ref={ref}
                 enablePanDownToClose={enablePanDownToClose}
                 index={0}
-                backgroundStyle={[styles.backgroundStyle]}
+                backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
                 backdropComponent={blurBackdrop ? renderBlurBackdrop : renderBackdrop}
                 handleComponent={renderHandle}
                 keyboardBehavior="interactive"
@@ -189,7 +189,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 <BaseView
                     w={100}
                     px={noMargins ? 0 : 24}
-                    py={noMargins ? 0 : 24}
+                    pt={noMargins ? 0 : 16}
+                    pb={noMargins ? 0 : 24}
                     flexGrow={1}
                     alignItems="stretch"
                     style={contentStyle}
@@ -225,8 +226,8 @@ const baseStyles = (theme: ColorThemeType) =>
             opacity: 0.5,
         },
         handleWrapper: {
-            marginTop: 4,
-            paddingTop: 4,
+            marginTop: 8,
+            paddingTop: 8,
             paddingBottom: 16,
             paddingHorizontal: 8,
         },

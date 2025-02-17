@@ -113,6 +113,18 @@ export type Colors = {
         buttonTextSecondary: string
         buttonTextDisabled: string
     }
+    actionBottomSheet: {
+        background: string
+        iconBackground: string
+        text: string
+        icon: string
+        activeIcon: string
+        activeIconBackground: string
+        activeText: string
+        disabledText: string
+        disabledIcon: string
+        disabledIconBackground: string
+    }
     assetDetailsCard: {
         background: string
         border: string
@@ -326,6 +338,18 @@ const light: Colors = {
         buttonTextSecondary: COLORS.PRIMARY_800,
         buttonTextDisabled: COLORS.GREY_400,
     },
+    actionBottomSheet: {
+        background: COLORS.GREY_50,
+        iconBackground: COLORS.GREY_100,
+        text: COLORS.PRIMARY_800,
+        icon: COLORS.GREY_600,
+        activeIcon: COLORS.GREY_600,
+        activeIconBackground: COLORS.WHITE,
+        activeText: COLORS.WHITE,
+        disabledText: COLORS.GREY_400,
+        disabledIcon: COLORS.GREY_400,
+        disabledIconBackground: COLORS.GREY_100,
+    },
     assetDetailsCard: {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
@@ -448,6 +472,18 @@ const dark: Colors = {
         buttonTextSecondary: COLORS.LIME_GREEN,
         buttonTextDisabled: COLORS.PURPLE,
         buttonBackgroundDisabled: COLORS.DARK_PURPLE_DISABLED,
+    },
+    actionBottomSheet: {
+        background: COLORS.PURPLE,
+        iconBackground: COLORS.PURPLE_DISABLED,
+        text: COLORS.WHITE,
+        icon: COLORS.GREY_100,
+        activeIcon: COLORS.GREY_100,
+        activeIconBackground: COLORS.DARK_PURPLE_DISABLED,
+        activeText: COLORS.DARK_PURPLE_DISABLED,
+        disabledText: COLORS.DARK_PURPLE_DISABLED,
+        disabledIcon: COLORS.DARK_PURPLE_DISABLED,
+        disabledIconBackground: COLORS.PURPLE_DISABLED,
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,

@@ -18,18 +18,22 @@ export const AssetActionsBar = memo(({ actions }: { actions: FastAction[] }) => 
                     haptics={action.disabled ? "Error" : "Medium"}
                     activeOpacity={action.disabled ? 0.9 : 0.2}
                     style={[styles.action, action.disabled && styles.disabled]}>
-                    <BaseView flexDirection="row" justifyContent={"center"}>
+                    <BaseView flexDirection="row" justifyContent={"center"} alignItems="center">
                         {action.icon}
-                        <BaseSpacer width={8} />
-                        <BaseText
-                            color={
-                                action.disabled
-                                    ? theme.colors.primaryDisabled
-                                    : theme.colors.actionBanner.buttonTextSecondary
-                            }
-                            typographyFont="captionSemiBold">
-                            {action.name}
-                        </BaseText>
+                        {!action.iconOnly && (
+                            <>
+                                <BaseSpacer width={8} />
+                                <BaseText
+                                    color={
+                                        action.disabled
+                                            ? theme.colors.primaryDisabled
+                                            : theme.colors.actionBanner.buttonTextSecondary
+                                    }
+                                    typographyFont="captionSemiBold">
+                                    {action.name}
+                                </BaseText>
+                            </>
+                        )}
                     </BaseView>
                 </BaseTouchable>
             )
@@ -49,10 +53,11 @@ const baseStyles = (theme: ColorThemeType) =>
         action: {
             backgroundColor: theme.colors.actionBanner.buttonBackground,
             borderColor: theme.colors.actionBanner.buttonBorder,
+            alignItems: "center",
             height: 40,
             borderWidth: 1,
             flexGrow: 1,
-            paddingVertical: 11,
+            paddingVertical: 12,
             paddingHorizontal: 4,
             borderRadius: 8,
         },

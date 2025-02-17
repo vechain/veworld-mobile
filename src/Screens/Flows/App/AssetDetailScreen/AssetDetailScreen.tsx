@@ -10,6 +10,7 @@ import {
     BaseView,
     Layout,
     QRCodeBottomSheet,
+    FastActionsBottomSheet,
     showWarningToast,
 } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -40,6 +41,11 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+    const {
+        ref: FastActionsBottomSheetRef,
+        onOpen: openFastActionsSheet,
+        onClose: closeFastActionsSheet,
+    } = useBottomSheetModal()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -118,11 +124,25 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 ),
                 testID: "reciveButton",
             },
+            {
+                name: LL.COMMON_BTN_MORE(),
+                action: openFastActionsSheet,
+                icon: (
+                    <BaseIcon
+                        size={16}
+                        color={theme.colors.actionBanner.buttonTextSecondary}
+                        name="icon-more-vertical"
+                    />
+                ),
+                iconOnly: true,
+                testID: "moreOptionsButton",
+            },
         ],
         [
             LL,
             foundToken,
             nav,
+            openFastActionsSheet,
             openQRCodeSheet,
             theme.colors.actionBanner.buttonTextDisabled,
             theme.colors.actionBanner.buttonTextSecondary,
@@ -191,6 +211,11 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <BaseSpacer height={16} />
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+                    <FastActionsBottomSheet
+                        ref={FastActionsBottomSheetRef}
+                        actions={Actions}
+                        closeBottomSheet={closeFastActionsSheet}
+                    />
                 </ScrollView>
             }
         />
