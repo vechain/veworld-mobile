@@ -1,5 +1,12 @@
 
 
+## 2.1.0 (2025-02-17)
+
+
+### Features
+
+* add CODEOWNERS file to require review from team ([#2701](https://github.com/vechain/veworld-mobile/issues/2701)) ([c78af83](https://github.com/vechain/veworld-mobile/commit/c78af837488bcd4cc62dd70e786224467093d240)), closes [#2700](https://github.com/vechain/veworld-mobile/issues/2700)
+
 ## 2.0.8 (2025-02-13)
 
 
