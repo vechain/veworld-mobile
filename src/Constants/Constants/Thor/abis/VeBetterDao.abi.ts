@@ -1,5 +1,7 @@
 import { abi } from "thor-devkit"
 
+type Vot3AbiKeys = "convertToB3TR" | "convertToVOT3"
+
 export const X2EarnDapps: abi.Function.Definition = {
     inputs: [],
     name: "apps",
@@ -46,8 +48,8 @@ export const X2EarnDapps: abi.Function.Definition = {
     type: "function",
 }
 
-export const B3trAbis: abi.Function.Definition[] = [
-    {
+export const B3trAbis: Record<"approve", abi.Function.Definition> = {
+    approve: {
         inputs: [
             {
                 internalType: "address",
@@ -71,10 +73,10 @@ export const B3trAbis: abi.Function.Definition[] = [
         stateMutability: "nonpayable",
         type: "function",
     },
-]
+}
 
-export const Vot3Abis: abi.Function.Definition[] = [
-    {
+export const Vot3Abis: Record<Vot3AbiKeys, abi.Function.Definition> = {
+    convertToB3TR: {
         inputs: [
             {
                 internalType: "uint256",
@@ -87,7 +89,7 @@ export const Vot3Abis: abi.Function.Definition[] = [
         stateMutability: "nonpayable",
         type: "function",
     },
-    {
+    convertToVOT3: {
         inputs: [
             {
                 internalType: "uint256",
@@ -100,4 +102,4 @@ export const Vot3Abis: abi.Function.Definition[] = [
         stateMutability: "nonpayable",
         type: "function",
     },
-]
+}

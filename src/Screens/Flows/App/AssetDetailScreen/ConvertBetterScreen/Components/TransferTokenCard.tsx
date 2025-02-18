@@ -12,8 +12,8 @@ enum PROVENANCE {
 }
 
 type TransferTokenCardGroupProps = {
-    fromToken: FungibleTokenWithBalance
-    toToken: FungibleTokenWithBalance
+    fromToken?: FungibleTokenWithBalance
+    toToken?: FungibleTokenWithBalance
 }
 
 export const TransferTokenCardGroup: React.FC<TransferTokenCardGroupProps> = ({ fromToken, toToken }) => {
@@ -57,6 +57,7 @@ const baseGroupStyles = (theme: ColorThemeType) =>
 
 type Props = {
     token?: FungibleTokenWithBalance
+
     provenance: PROVENANCE
 }
 
@@ -70,9 +71,11 @@ export const TransferTokenCard: React.FC<Props> = ({ token, provenance }) => {
         <BaseView py={12} px={16} style={{ width: SCREEN_WIDTH - 40 }} alignItems="flex-start">
             <BaseText typographyFont="buttonPrimary">{provenanceTitle}</BaseText>
 
-            <BaseView flexDirection="row" py={8} style={[styles.tokenContainer]}>
-                <Image source={{ uri: token?.icon }} width={36} height={36} />
-                <BaseText typographyFont="subSubTitleSemiBold">{token?.symbol}</BaseText>
+            <BaseView flexDirection="row" py={8} justifyContent="space-between">
+                <BaseView flex={1} flexDirection="row" style={[styles.tokenContainer]}>
+                    <Image source={{ uri: token?.icon }} width={36} height={36} />
+                    <BaseText typographyFont="subSubTitleSemiBold">{token?.symbol}</BaseText>
+                </BaseView>
             </BaseView>
         </BaseView>
     )

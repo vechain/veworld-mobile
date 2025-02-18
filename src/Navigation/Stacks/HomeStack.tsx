@@ -83,6 +83,7 @@ export type RootStackParamListHome = {
     }
     [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
         token: TokenWithCompleteInfo
+        amount: string
         transactionClauses: Transaction.Clause[]
     }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
