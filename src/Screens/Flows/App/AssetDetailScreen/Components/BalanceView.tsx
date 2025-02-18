@@ -48,7 +48,7 @@ export const BalanceView = ({
         return (
             <BaseView flexDirection="row">
                 <FiatBalance
-                    typographyFont={"bodySemiBold"}
+                    typographyFont={"bodyMedium"}
                     color={theme.colors.assetDetailsCard.text}
                     balances={[fiatBalance]}
                     isVisible={isBalanceVisible}

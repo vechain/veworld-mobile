@@ -17,11 +17,7 @@ export const AssetActionsBar = memo(({ actions }: { actions: FastAction[] }) => 
                     testID={action.testID}
                     haptics={action.disabled ? "Error" : "Medium"}
                     activeOpacity={action.disabled ? 0.9 : 0.2}
-                    style={[
-                        styles.common,
-                        action.iconOnly ? styles.onlyIcon : styles.withText,
-                        action.disabled && styles.disabled,
-                    ]}>
+                    style={[styles.common, action.iconOnly && styles.onlyIcon, action.disabled && styles.disabled]}>
                     <BaseView flexDirection="row" justifyContent={"center"} alignItems="center">
                         {action.icon}
                         {!action.iconOnly && (
@@ -46,7 +42,6 @@ export const AssetActionsBar = memo(({ actions }: { actions: FastAction[] }) => 
             styles.common,
             styles.disabled,
             styles.onlyIcon,
-            styles.withText,
             theme.colors.actionBanner.buttonTextSecondary,
             theme.colors.primaryDisabled,
         ],
@@ -64,20 +59,16 @@ const baseStyles = (theme: ColorThemeType) =>
         common: {
             backgroundColor: theme.colors.actionBanner.buttonBackground,
             borderColor: theme.colors.actionBanner.buttonBorder,
+            borderWidth: 1,
             borderRadius: 8,
             paddingVertical: 12,
-        },
-        withText: {
-            borderWidth: 1,
-            flex: 1,
             flexGrow: 1,
-            paddingVertical: 12,
+            flex: 1,
         },
         onlyIcon: {
-            width: 40,
+            maxWidth: 40,
             height: 40,
             paddingVertical: 8,
-            borderWidth: 1,
             justifyContent: "center",
         },
         actionsContainer: {

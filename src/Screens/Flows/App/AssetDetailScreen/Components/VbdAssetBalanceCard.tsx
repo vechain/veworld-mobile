@@ -175,18 +175,18 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
     return (
         <>
             <BaseView style={styles.topRow}>
-                <BaseView flexGrow={1}>{renderFiatBalance}</BaseView>
+                <BaseView w={40}>{renderFiatBalance}</BaseView>
                 <BaseView flexGrow={2}>
                     <AssetActionsBar actions={Actions} />
                 </BaseView>
             </BaseView>
-            <BaseView style={styles.b3trRowContainer}>
-                <BaseView flexDirection="row" flexGrow={1}>
-                    <BalanceView
-                        containerStyle={styles.b3trBalanceView}
-                        tokenWithInfo={b3trToken}
-                        isBalanceVisible={isBalanceVisible}
-                    />
+            <BaseView justifyContent={"space-between"} style={styles.b3trRowContainer}>
+                <BalanceView
+                    containerStyle={styles.b3trBalanceView}
+                    tokenWithInfo={b3trToken}
+                    isBalanceVisible={isBalanceVisible}
+                />
+                <BaseView>
                     <BaseIcon
                         name="icon-more-vertical"
                         size={16}
@@ -194,8 +194,8 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                         style={styles.moreActionsButton}
                         action={openQRCodeSheet}
                     />
-                    <BaseView />
                 </BaseView>
+                <BaseView />
             </BaseView>
             <BaseView px={16} pt={16}>
                 <BalanceView
@@ -226,11 +226,11 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 16,
             borderBottomWidth: 1,
             flex: 1,
-            gap: 16,
             borderColor: theme.colors.cardDivider,
         },
         b3trBalanceView: {
             flexDirection: "row",
+            flexGrow: 1,
             flex: 1,
             gap: 12,
         },
@@ -240,6 +240,7 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 32,
             width: 32,
             borderWidth: 1,
+            justifyContent: "flex-end",
             padding: 8,
             borderRadius: 6,
         },
