@@ -233,6 +233,14 @@ type RootTranslation = {
 	 */
 	APP_VERIFICATION_UNKNOWN: string
 	/**
+	 * A​p​r​i​l
+	 */
+	APRIL: string
+	/**
+	 * A​u​g​u​s​t
+	 */
+	AUGUST: string
+	/**
 	 * B​a​c​k​i​n​g​ ​u​p​.​.​.
 	 */
 	BACKING_UP: string
@@ -1477,6 +1485,38 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA: string
 	/**
+	 * N​F​T​ ​r​e​c​e​i​v​e​d
+	 */
+	NFT_TRANSFER_RECEIVED: string
+	/**
+	 * N​F​T​ ​s​e​n​t
+	 */
+	NFT_TRANSFER_SENT: string
+	/**
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	DAPP_SIGN_CERT: string
+	/**
+	 * T​o​k​e​n​ ​s​w​a​p
+	 */
+	DAPP_TRANSACTION_SWAP: string
+	/**
+	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
+	 */
+	DAPP_TRANSACTION_TITLE: string
+	/**
+	 * D​A​p​p​ ​C​o​n​n​e​c​t​i​o​n
+	 */
+	DAPP_CONNECTION: string
+	/**
+	 * R​e​c​e​i​v​e​d​ ​t​o​k​e​n​s
+	 */
+	TOKEN_TRANSFER_RECEIVED: string
+	/**
+	 * S​e​n​t​ ​t​o​k​e​n​s
+	 */
+	TOKEN_TRANSFER_SENT: string
+	/**
 	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: string
@@ -1577,6 +1617,10 @@ type RootTranslation = {
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	DATE_NOT_AVAILABLE: string
+	/**
+	 * D​e​c​e​m​b​e​r
+	 */
+	DECEMBER: string
 	/**
 	 * D​e​t​a​i​l​s
 	 */
@@ -1870,6 +1914,10 @@ type RootTranslation = {
 	 */
 	FAVOURITES_DAPPS_TITLE: string
 	/**
+	 * F​e​b​r​u​a​r​y
+	 */
+	FEBRUARY: string
+	/**
 	 * F​i​n​g​e​r​p​r​i​n​t
 	 */
 	FINGERPRINT: string
@@ -1945,6 +1993,18 @@ type RootTranslation = {
 	 * I​r​i​s
 	 */
 	IRIS: string
+	/**
+	 * J​a​n​u​a​r​y
+	 */
+	JANUARY: string
+	/**
+	 * J​u​l​y
+	 */
+	JULY: string
+	/**
+	 * J​u​n​e
+	 */
+	JUNE: string
 	/**
 	 * C​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y
 	 */
@@ -2113,6 +2173,14 @@ type RootTranslation = {
 	 * F​i​n​d​ ​m​y​ ​c​u​s​t​o​m​ ​t​o​k​e​n​s
 	 */
 	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: string
+	/**
+	 * M​a​r​c​h
+	 */
+	MARCH: string
+	/**
+	 * M​a​y
+	 */
+	MAY: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​m​e​s​s​a​g​e
 	 */
@@ -2428,6 +2496,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
 	/**
+	 * N​o​v​e​m​b​e​r
+	 */
+	NOVEMBER: string
+	/**
 	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
@@ -2440,6 +2512,10 @@ type RootTranslation = {
 	 * N​o​ ​t​h​a​n​k​s
 	 */
 	NO_THANKS: string
+	/**
+	 * O​c​t​o​b​e​r
+	 */
+	OCTOBER: string
 	/**
 	 * O​r​i​g​i​n
 	 */
@@ -3083,6 +3159,10 @@ type RootTranslation = {
 	 */
 	SEND_VTHO_WARNING_TOKEN: string
 	/**
+	 * S​e​p​t​e​m​b​e​r
+	 */
+	SEPTEMBER: string
+	/**
 	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
 	 * @param {unknown} version
 	 */
@@ -3489,6 +3569,10 @@ type RootTranslation = {
 	 */
 	TO: string
 	/**
+	 * T​o​d​a​y
+	 */
+	TODAY: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
@@ -3730,6 +3814,10 @@ type RootTranslation = {
 	 * W​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ 
 	 */
 	WOULD_YOU_LIKE_TO: string
+	/**
+	 * Y​e​s​t​e​r​d​a​y
+	 */
+	YESTERDAY: string
 }
 
 export type TranslationFunctions = {
@@ -3934,6 +4022,14 @@ Try reconnect your device to the internet.
 	 * The application that is making this request could not be verified. Proceed at your own risk.
 	 */
 	APP_VERIFICATION_UNKNOWN: () => LocalizedString
+	/**
+	 * April
+	 */
+	APRIL: () => LocalizedString
+	/**
+	 * August
+	 */
+	AUGUST: () => LocalizedString
 	/**
 	 * Backing up...
 	 */
@@ -5167,6 +5263,38 @@ Try reconnect your device to the internet.
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA: () => LocalizedString
 	/**
+	 * NFT received
+	 */
+	NFT_TRANSFER_RECEIVED: () => LocalizedString
+	/**
+	 * NFT sent
+	 */
+	NFT_TRANSFER_SENT: () => LocalizedString
+	/**
+	 * Sign certificate
+	 */
+	DAPP_SIGN_CERT: () => LocalizedString
+	/**
+	 * Token swap
+	 */
+	DAPP_TRANSACTION_SWAP: () => LocalizedString
+	/**
+	 * DApp Transaction
+	 */
+	DAPP_TRANSACTION_TITLE: () => LocalizedString
+	/**
+	 * DApp Connection
+	 */
+	DAPP_CONNECTION: () => LocalizedString
+	/**
+	 * Received tokens
+	 */
+	TOKEN_TRANSFER_RECEIVED: () => LocalizedString
+	/**
+	 * Sent tokens
+	 */
+	TOKEN_TRANSFER_SENT: () => LocalizedString
+	/**
 	 * Your Signature is being requested to sign typed data message
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: () => LocalizedString
@@ -5266,6 +5394,10 @@ Try reconnect your device to the internet.
 	 * Date not available
 	 */
 	DATE_NOT_AVAILABLE: () => LocalizedString
+	/**
+	 * December
+	 */
+	DECEMBER: () => LocalizedString
 	/**
 	 * Details
 	 */
@@ -5559,6 +5691,10 @@ Try reconnect your device to the internet.
 	 */
 	FAVOURITES_DAPPS_TITLE: () => LocalizedString
 	/**
+	 * February
+	 */
+	FEBRUARY: () => LocalizedString
+	/**
 	 * Fingerprint
 	 */
 	FINGERPRINT: () => LocalizedString
@@ -5634,6 +5770,18 @@ Try reconnect your device to the internet.
 	 * Iris
 	 */
 	IRIS: () => LocalizedString
+	/**
+	 * January
+	 */
+	JANUARY: () => LocalizedString
+	/**
+	 * July
+	 */
+	JULY: () => LocalizedString
+	/**
+	 * June
+	 */
+	JUNE: () => LocalizedString
 	/**
 	 * Certificate is ready
 	 */
@@ -5802,6 +5950,14 @@ Try reconnect your device to the internet.
 	 * Find my custom tokens
 	 */
 	MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED: () => LocalizedString
+	/**
+	 * March
+	 */
+	MARCH: () => LocalizedString
+	/**
+	 * May
+	 */
+	MAY: () => LocalizedString
 	/**
 	 * You have rejected the message
 	 */
@@ -6100,6 +6256,10 @@ Try reconnect your device to the internet.
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
 	/**
+	 * November
+	 */
+	NOVEMBER: () => LocalizedString
+	/**
 	 * You don't have any hidden {name}
 	 */
 	NO_HIDDEN_COLLECTIONS: (arg: { name: string }) => LocalizedString
@@ -6111,6 +6271,10 @@ Try reconnect your device to the internet.
 	 * No thanks
 	 */
 	NO_THANKS: () => LocalizedString
+	/**
+	 * October
+	 */
+	OCTOBER: () => LocalizedString
 	/**
 	 * Origin
 	 */
@@ -6748,6 +6912,10 @@ Try reconnect your device to the internet.
 	 */
 	SEND_VTHO_WARNING_TOKEN: () => LocalizedString
 	/**
+	 * September
+	 */
+	SEPTEMBER: () => LocalizedString
+	/**
 	 * Version {version}
 	 */
 	SETTINGS_ABOUT_APP_VERSION: (arg: { version: unknown }) => LocalizedString
@@ -7148,6 +7316,10 @@ Try reconnect your device to the internet.
 	 */
 	TO: () => LocalizedString
 	/**
+	 * Today
+	 */
+	TODAY: () => LocalizedString
+	/**
 	 * Token ID
 	 */
 	TOKEN_ID: () => LocalizedString
@@ -7387,6 +7559,10 @@ Try reconnect your device to the internet.
 	 * Would you like to 
 	 */
 	WOULD_YOU_LIKE_TO: () => LocalizedString
+	/**
+	 * Yesterday
+	 */
+	YESTERDAY: () => LocalizedString
 }
 
 export type Formatters = {}

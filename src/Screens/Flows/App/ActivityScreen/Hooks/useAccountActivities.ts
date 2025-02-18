@@ -10,7 +10,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, info } from "~Utils"
+import { AddressUtils, error, info } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 export const useAccountActivities = () => {
@@ -22,6 +22,7 @@ export const useAccountActivities = () => {
 
     const page = useRef(0)
     const prevNetwork = useRef(network)
+    const isFetchingActivities = useRef(false)
     const prevSelectedAccountAddress = useRef(selectedAccount.address)
 
     const [isFetching, setIsFetching] = useState(true)
@@ -72,17 +73,6 @@ export const useAccountActivities = () => {
 
             info(ERROR_EVENTS.ACTIVITIES, "Fetching activities on page", page)
             setIsFetching(true)
-            let shouldRefresh = refresh
-            const hasNetworkChanged = prevNetwork.current !== network
-            const hasAccountChanged = prevSelectedAccountAddress.current !== selectedAccount.address
-
-            if (hasNetworkChanged || hasAccountChanged) {
-                resetPageNumber()
-                shouldRefresh = true
-                prevNetwork.current = network
-                prevSelectedAccountAddress.current = selectedAccount.address
-                updateActivitiesState([], true)
-            }
 
             try {
                 const txActivities = await fetchAccountTransactionActivities(
@@ -95,8 +85,10 @@ export const useAccountActivities = () => {
                     dispatch(updateAccountTransactionActivities(txActivities))
                 }
 
-                updateActivitiesState(txActivities, shouldRefresh)
-                incrementPageNumber()
+                if (txActivities.length > 0) {
+                    updateActivitiesState(txActivities, refresh)
+                    incrementPageNumber()
+                }
             } catch (e) {
                 error(ERROR_EVENTS.ACTIVITIES, e)
 
@@ -108,7 +100,7 @@ export const useAccountActivities = () => {
                 setIsFetching(false)
             }
         },
-        [LL, dispatch, incrementPageNumber, network, resetPageNumber, selectedAccount, updateActivitiesState],
+        [LL, dispatch, incrementPageNumber, network, selectedAccount, updateActivitiesState],
     )
 
     const refreshActivities = useCallback(async () => {
@@ -119,12 +111,29 @@ export const useAccountActivities = () => {
     }, [getActivities, resetPageNumber])
 
     const fetchActivities = useCallback(async () => {
+        if (isFetchingActivities.current) {
+            return
+        }
+
         await getActivities({ refresh: false })
+        isFetchingActivities.current = false
     }, [getActivities])
 
     useEffect(() => {
-        getActivities({ refresh: false })
-    }, [getActivities])
+        const hasNetworkChanged = prevNetwork.current !== network
+        const hasAccountChanged = !AddressUtils.compareAddresses(
+            prevSelectedAccountAddress.current,
+            selectedAccount.address,
+        )
+
+        if (hasNetworkChanged || hasAccountChanged) {
+            resetPageNumber()
+            updateActivitiesState([], true)
+            prevNetwork.current = network
+            prevSelectedAccountAddress.current = selectedAccount.address
+            setIsFetching(true)
+        }
+    }, [network, resetPageNumber, selectedAccount.address, updateActivitiesState])
 
     return {
         isFetching,

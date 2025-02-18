@@ -1,6 +1,6 @@
 import React from "react"
 import { TestWrapper } from "~Test"
-import { HistoryScreen } from "./HistoryScreen"
+import { ActivityScreen } from "./ActivityScreen"
 import { render, screen } from "@testing-library/react-native"
 
 jest.mock("axios")
@@ -63,7 +63,7 @@ jest.mock("~Hooks/useVns/useVns", () => ({
 
 describe("HistoryScreen", () => {
     it("should render correctly", async () => {
-        render(<HistoryScreen />, {
+        render(<ActivityScreen />, {
             wrapper: TestWrapper,
         })
 
