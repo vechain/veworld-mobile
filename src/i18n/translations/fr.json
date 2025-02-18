@@ -33,6 +33,7 @@
   "ALERT_MSG_NOT_ENROLLED": "Vous n'avez pas inscrit de méthode d'authentification biométrique.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Votre appareil ne prend pas en charge le Bluetooth, ce qui est nécessaire pour utiliser cette fonctionnalité.",
   "ALERT_MSG_VOT3": "Vous pouvez uniquement convertir VOT3 en B3TR depuis le portefeuille où vous avez effectué la conversion initiale de B3TR en VOT3.",
+  "ALERT_MSG_VOT3_BALANCE": "Le solde VOT3 peut être augmenté en convertissant B3TR.",
   "ALERT_OPTION_ASK_ME_LATER": "Demandez-moi plus tard",
   "ALERT_OPTION_UPDATE_NOW": "Mettre à jour maintenant",
   "ALERT_TITLE_AUTHORIZE_BLUETOOTH": "Autoriser le Bluetooth",

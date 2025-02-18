@@ -33,6 +33,7 @@
   "ALERT_MSG_NOT_ENROLLED": "您尚未註冊任何生物識別驗證方法。",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "您的設備不支持藍牙，此功能需要藍牙支持。",
   "ALERT_MSG_VOT3": "您只能從完成原始 B3TR 到 VOT3 轉換的錢包中將 VOT3 轉換回 B3TR。",
+  "ALERT_MSG_VOT3_BALANCE": "可以通過轉換B3TR來增加VOT3餘額。",
   "ALERT_OPTION_ASK_ME_LATER": "以後再問我",
   "ALERT_OPTION_UPDATE_NOW": "現在更新",
   "ALERT_TITLE_AUTHORIZE_BLUETOOTH": "授權藍牙",

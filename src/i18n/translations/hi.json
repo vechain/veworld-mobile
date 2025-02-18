@@ -33,6 +33,7 @@
   "ALERT_MSG_NOT_ENROLLED": "आपने किसी बायोमेट्रिक प्रमाणीकरण विधि के लिए नामांकन नहीं किया है।",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "आपका डिवाइस ब्लूटूथ का समर्थन नहीं करता है, जो इस सुविधा का उपयोग करने के लिए आवश्यक है।",
   "ALERT_MSG_VOT3": "आप केवल VOT3 को उसी वॉलेट से B3TR में वापस बदल सकते हैं, जिसमें आपने मूल B3TR से VOT3 का परिवर्तन पूरा किया था।",
+  "ALERT_MSG_VOT3_BALANCE": "B3TR को परिवर्तित करके VOT3 बैलेंस बढ़ाया जा सकता है।",
   "ALERT_OPTION_ASK_ME_LATER": "मुझसे बाद में पूछें",
   "ALERT_OPTION_UPDATE_NOW": "अभी अपडेट करें",
   "ALERT_TITLE_AUTHORIZE_BLUETOOTH": "ब्लूटूथ को स्वीकृति दें",

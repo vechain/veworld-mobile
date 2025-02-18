@@ -33,6 +33,7 @@
   "ALERT_MSG_NOT_ENROLLED": "Du har inte registrerat någon biometrisk autentiseringsmetod.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Din enhet stöder inte Bluetooth, vilket krävs för att använda denna funktion.",
   "ALERT_MSG_VOT3": "Du kan bara konvertera VOT3 tillbaka till B3TR från den plånbok där du genomförde den ursprungliga B3TR till VOT3-konverteringen.",
+  "ALERT_MSG_VOT3_BALANCE": "VOT3-saldo kan ökas genom att konvertera B3TR.",
   "ALERT_OPTION_ASK_ME_LATER": "Fråga mig senare",
   "ALERT_OPTION_UPDATE_NOW": "Uppdatera nu",
   "ALERT_TITLE_AUTHORIZE_BLUETOOTH": "Tillåt Bluetooth",

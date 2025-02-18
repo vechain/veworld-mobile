@@ -169,6 +169,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_VOT3: string
 	/**
+	 * V​O​T​3​ ​b​a​l​a​n​c​e​ ​c​a​n​ ​b​e​ ​i​n​c​r​e​a​s​e​d​ ​b​y​ ​c​o​n​v​e​r​t​i​n​g​ ​B​3​T​R​.
+	 */
+	ALERT_MSG_VOT3_BALANCE: string
+	/**
 	 * A​s​k​ ​m​e​ ​l​a​t​e​r
 	 */
 	ALERT_OPTION_ASK_ME_LATER: string
@@ -3958,6 +3962,10 @@ Try reconnect your device to the internet.
 	 * You can only convert VOT3 back to B3TR from the wallet you completed the original B3TR to VOT3 conversion
 	 */
 	ALERT_MSG_VOT3: () => LocalizedString
+	/**
+	 * VOT3 balance can be increased by converting B3TR.
+	 */
+	ALERT_MSG_VOT3_BALANCE: () => LocalizedString
 	/**
 	 * Ask me later
 	 */

@@ -44,10 +44,8 @@ const baseStyle = (theme: ColorThemeType) =>
         cardContainer: {
             flexDirection: "column",
             borderRadius: 12,
-            borderWidth: 1,
             paddingVertical: 16,
             backgroundColor: theme.colors.assetDetailsCard.background,
-            borderColor: theme.colors.assetDetailsCard.border,
         },
         nonVbdContainer: {
             gap: 16,

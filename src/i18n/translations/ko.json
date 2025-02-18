@@ -33,6 +33,7 @@
   "ALERT_MSG_NOT_ENROLLED": "어떠한 생체 인증 수단도 등록되어 있지 않습니다.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "이 기능을 사용하려면 필요한 Bluetooth가 기기에서 지원되지 않습니다.",
   "ALERT_MSG_VOT3": "원래 B3TR를 VOT3로 변환을 완료한 지갑에서만 VOT3를 다시 B3TR로 변환할 수 있습니다.",
+  "ALERT_MSG_VOT3_BALANCE": "VOT3 잔고는 B3TR을 변환하여 증가시킬 수 있습니다.",
   "ALERT_OPTION_ASK_ME_LATER": "나중에 다시 묻기",
   "ALERT_OPTION_UPDATE_NOW": "지금 업데이트",
   "ALERT_TITLE_AUTHORIZE_BLUETOOTH": "블루투스 권한 부여",

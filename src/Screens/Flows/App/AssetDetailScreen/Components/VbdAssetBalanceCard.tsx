@@ -7,7 +7,7 @@ import {
 } from "~Storage/Redux"
 import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { BalanceUtils } from "~Utils"
-import { BalanceView } from "~Screens/Flows/App/AssetDetailScreen/Components/BalanceView"
+import { BalanceView } from "./BalanceView"
 import {
     BaseIcon,
     BaseSkeleton,
@@ -17,7 +17,7 @@ import {
     QRCodeBottomSheet,
     showWarningToast,
 } from "~Components"
-import { AssetActionsBar } from "~Screens/Flows/App/AssetDetailScreen/Components/AssetActionsBar"
+import { AssetActionsBar } from "./AssetActionsBar"
 import { FastAction } from "~Model"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
@@ -175,8 +175,8 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
     return (
         <>
             <BaseView style={styles.topRow}>
-                <BaseView flexGrow={2}>{renderFiatBalance}</BaseView>
-                <BaseView flexGrow={1}>
+                <BaseView flexGrow={1}>{renderFiatBalance}</BaseView>
+                <BaseView flexGrow={2}>
                     <AssetActionsBar actions={Actions} />
                 </BaseView>
             </BaseView>
@@ -192,7 +192,7 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                         size={16}
                         color={theme.colors.actionBanner.buttonTextSecondary}
                         style={styles.moreActionsButton}
-                        action={() => openQRCodeSheet}
+                        action={openQRCodeSheet}
                     />
                     <BaseView />
                 </BaseView>

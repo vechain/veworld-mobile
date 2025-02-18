@@ -33,6 +33,7 @@
   "ALERT_MSG_NOT_ENROLLED": "Herhangi bir biyometrik kimlik doğrulama yöntemi kaydınız bulunmuyor.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Cihazınız, bu özelliği kullanmak için gerekli olan Bluetooth'u desteklemiyor.",
   "ALERT_MSG_VOT3": "VOT3'i sadece orijinal B3TR'den VOT3'e dönüştürmeyi tamamladığınız cüzdandan tekrar B3TR'ye çevirebilirsiniz.",
+  "ALERT_MSG_VOT3_BALANCE": "VOT3 bakiyesi, B3TR çevirerek artırılabilir.",
   "ALERT_OPTION_ASK_ME_LATER": "Bana daha sonra sor",
   "ALERT_OPTION_UPDATE_NOW": "Şimdi güncelle",
   "ALERT_TITLE_AUTHORIZE_BLUETOOTH": "Bluetooth'u Yetkilendirin",

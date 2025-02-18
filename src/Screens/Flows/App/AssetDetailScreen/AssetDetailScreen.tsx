@@ -27,10 +27,12 @@ import {
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 import { AccountUtils } from "~Utils"
-import { B3TR } from "~Constants"
+import { B3TR, typography } from "~Constants"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
+
+const { defaults: defaultTypography } = typography
 
 export const AssetDetailScreen = ({ route }: Props) => {
     const token = route.params.token
@@ -134,7 +136,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 action: openFastActionsSheet,
                 icon: (
                     <BaseIcon
-                        size={16}
+                        size={20}
                         color={theme.colors.actionBanner.buttonTextSecondary}
                         name="icon-more-vertical"
                     />
@@ -244,16 +246,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
             title={tokenName}
             fixedBody={
                 <ScrollView>
-                    <BaseView style={styles.assetDetailsHeader}>
-                        {token.symbol === B3TR.symbol && (
-                            <>
-                                <AlertInline status="info" variant="inline" message={LL.ALERT_TITLE_INVALID_CHARTS()} />
-                                <BaseSpacer height={24} />
-                            </>
-                        )}
-                    </BaseView>
+                    <BaseSpacer height={16} />
                     <AssetChart token={token} />
-
                     <BaseView alignItems="center" style={styles.assetDetailsBody}>
                         <BaseSpacer height={40} />
 
@@ -262,6 +256,13 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             isBalanceVisible={isBalanceVisible}
                             FastActions={showActions && <AssetActionsBar actions={Actions} />}
                         />
+
+                        {token.symbol === B3TR.symbol && (
+                            <BaseView w={100}>
+                                <BaseSpacer height={16} />
+                                <AlertInline status="info" variant="inline" message={LL.ALERT_MSG_VOT3_BALANCE()} />
+                            </BaseView>
+                        )}
 
                         <BaseSpacer height={40} />
 
@@ -277,7 +278,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                     {LL.TITLE_ABOUT()} {token.name}
                                 </BaseText>
 
-                                <BaseText>
+                                <BaseText style={styles.tokenInfoText}>
                                     {striptags(description.trim(), {
                                         allowedTags: new Set(["strong"]),
                                     })}
@@ -304,12 +305,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        assetDetailsHeader: {
-            marginHorizontal: 16,
-            marginTop: 24,
-            width: "85%",
-        },
         assetDetailsBody: {
             paddingHorizontal: 16,
+        },
+        tokenInfoText: {
+            lineHeight: defaultTypography.bodySemiBold.lineHeight,
         },
     })

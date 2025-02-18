@@ -75,7 +75,7 @@ export const BalanceView = ({
                         width={60}
                     />
                 ) : (
-                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleMedium">
+                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                         {isBalanceVisible ? tokenUnitBalance : "•••••"}
                     </BaseText>
                 )}
