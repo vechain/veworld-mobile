@@ -3,14 +3,20 @@ import { ethers } from "ethers"
 import { useCallback } from "react"
 import { Transaction } from "thor-devkit"
 import { useThor } from "~Components"
-import { abis } from "~Constants"
+import { abis, AnalyticsEvent } from "~Constants"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
+import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { Routes } from "~Navigation"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 
 export const useConvertBetterTokens = () => {
     const nav = useNavigation()
     const thor = useThor()
+    const track = useAnalyticTracking()
+
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
+
+    const b3trWithCompleteInfo = useTokenWithCompleteInfo(B3TR)
 
     const buildB3trTxClauses = useCallback(
         (amount: string | number): Transaction.Clause[] => {
@@ -48,11 +54,13 @@ export const useConvertBetterTokens = () => {
     const convertB3tr = useCallback(
         (amount: string | number) => {
             const clauses = buildB3trTxClauses(amount)
+            track(AnalyticsEvent.CONVERT_B3TR_VOT3)
             nav.navigate(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
                 transactionClauses: clauses,
+                token: b3trWithCompleteInfo,
             })
         },
-        [buildB3trTxClauses, nav],
+        [b3trWithCompleteInfo, buildB3trTxClauses, nav, track],
     )
 
     /**
@@ -61,11 +69,13 @@ export const useConvertBetterTokens = () => {
     const convertVot3 = useCallback(
         (amount: string | number) => {
             const clauses = buildVot3TxClauses(amount)
+            track(AnalyticsEvent.CONVERT_B3TR_VOT3)
             nav.navigate(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
                 transactionClauses: clauses,
+                token: b3trWithCompleteInfo,
             })
         },
-        [buildVot3TxClauses, nav],
+        [b3trWithCompleteInfo, buildVot3TxClauses, nav, track],
     )
 
     return {

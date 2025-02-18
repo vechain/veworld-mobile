@@ -1,5 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
+import { Transaction } from "thor-devkit"
 import {
     BaseView,
     DelegationView,
@@ -8,22 +9,33 @@ import {
     GasFeeOptions,
     Layout,
     RequireUserPassword,
-    TransferCard,
 } from "~Components"
-import { useTransactionScreen } from "~Hooks"
+import { AnalyticsEvent } from "~Constants"
+import { useAnalyticTracking, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import {
+    selectB3trTokenWithBalance,
+    selectVot3TokenWithBalance,
+    setIsAppLoading,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
+import { TransferTokenCardGroup } from "./Components"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN>
 
-export const ConvertTransactionScreen: React.FC<Props> = ({ route }) => {
-    const { transactionClauses } = route.params
+export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation }) => {
+    const { transactionClauses, token } = route.params
 
     const { LL } = useI18nContext()
+    const dispatch = useAppDispatch()
+    const track = useAnalyticTracking()
 
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const b3trWithBalance = useAppSelector(selectB3trTokenWithBalance)
+    const vot3WithBalance = useAppSelector(selectVot3TokenWithBalance)
+    // const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const toAddresses = useMemo(() => {
         return transactionClauses.reduce((acc: string[], clause) => {
@@ -32,8 +44,29 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route }) => {
         }, [])
     }, [transactionClauses])
 
-    const onTransactionSuccess = useCallback(() => {}, [])
-    const onTransactionFailure = useCallback(() => {}, [])
+    const onTransactionSuccess = useCallback(
+        (transaction: Transaction, txId: string) => {
+            track(AnalyticsEvent.CONVERT_B3TR_VOT3_SUCCESS)
+
+            const convertTo = AddressUtils.compareAddresses(toAddresses[0], b3trWithBalance?.address) ? "VOT3" : "B3TR"
+
+            navigation.replace(Routes.TOKEN_DETAILS, {
+                token,
+                betterConversionResult: {
+                    txId,
+                    isSuccess: true,
+                    amount: "",
+                    to: convertTo,
+                },
+            })
+            dispatch(setIsAppLoading(false))
+        },
+        [b3trWithBalance?.address, dispatch, navigation, toAddresses, token, track],
+    )
+    const onTransactionFailure = useCallback(() => {
+        track(AnalyticsEvent.CONVERT_B3TR_VOT3_FAILED)
+        // console.log(error)
+    }, [track])
 
     const {
         selectedDelegationOption,
@@ -67,11 +100,7 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route }) => {
             noStaticBottomPadding
             body={
                 <BaseView mb={80} mt={8}>
-                    <TransferCard
-                        fromAddress={selectedAccount.address}
-                        toAddresses={toAddresses}
-                        isFromAccountLedger={selectedAccount.device?.type === DEVICE_TYPE.LEDGER}
-                    />
+                    <TransferTokenCardGroup fromToken={b3trWithBalance!} toToken={vot3WithBalance!} />
 
                     <RequireUserPassword
                         isOpen={isPasswordPromptOpen}

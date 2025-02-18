@@ -146,6 +146,13 @@ export enum AnalyticsEvent {
     CLAIM_USERNAME_PAGE_LOADED = "CLAIM_USERNAME_PAGE_LOADED",
     CLAIM_USERNAME_CREATED = "CLAIM_USERNAME_CREATED",
     CLAIM_USERNAME_FAILED = "CLAIM_USERNAME_FAILED",
+
+    /**
+     * VeBetterDao Events
+     */
+    CONVERT_B3TR_VOT3 = "CONVERT_B3TR_VOT3",
+    CONVERT_B3TR_VOT3_SUCCESS = "CONVERT_B3TR_VOT3_SUCCESS",
+    CONVERT_B3TR_VOT3_FAILED = "CONVERT_B3TR_VOT3_FAILED",
 }
 
 /**
@@ -157,6 +164,7 @@ type MixPanelEvent = {
     network: string
     subject?: AnalyticsEvent.NATIVE_TOKEN | AnalyticsEvent.TOKEN | AnalyticsEvent.NFT
     context?: AnalyticsEvent.IN_APP | AnalyticsEvent.WALLET_CONNECT | AnalyticsEvent.SEND
+
     failed?: boolean
     dappUrl?: string
 }

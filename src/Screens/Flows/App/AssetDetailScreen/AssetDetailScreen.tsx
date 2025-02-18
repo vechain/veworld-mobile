@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import {
     AlertInline,
@@ -29,11 +29,12 @@ import { StyleSheet } from "react-native"
 import { AccountUtils } from "~Utils"
 import { B3TR, ColorThemeType } from "~Constants"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
+import { ConvertBetterTokenSuccessBottomSheet } from "./ConvertBetterScreen/Components"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
 export const AssetDetailScreen = ({ route }: Props) => {
-    const token = route.params.token
+    const { token } = route.params
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { LL, locale } = useI18nContext()
@@ -42,9 +43,15 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
     const {
-        ref: convertBetterBottmSheetRef,
+        ref: convertBetterBottomSheetRef,
         onOpen: openConvertBetterSheet,
         onClose: closeConvertBetterSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: convertBetterSuccessBottomSheetRef,
+        onOpen: openConvertSuccessBetterSheet,
+        onClose: closeConvertSuccessBetterSheet,
     } = useBottomSheetModal()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
@@ -142,6 +149,12 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const showActions = useMemo(() => !AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
+    useEffect(() => {
+        if (true) {
+            openConvertSuccessBetterSheet()
+        }
+    }, [openConvertSuccessBetterSheet])
+
     return (
         <Layout
             title={token.name}
@@ -197,10 +210,15 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
 
                     <ConvertBetterBottomSheet
-                        ref={convertBetterBottmSheetRef}
+                        ref={convertBetterBottomSheetRef}
                         onClose={() => {
                             closeConvertBetterSheet()
                         }}
+                    />
+
+                    <ConvertBetterTokenSuccessBottomSheet
+                        ref={convertBetterSuccessBottomSheetRef}
+                        onClose={closeConvertSuccessBetterSheet}
                     />
                 </ScrollView>
             }

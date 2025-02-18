@@ -69,8 +69,20 @@ export type RootStackParamListHome = {
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
+    [Routes.TOKEN_DETAILS]: {
+        token: TokenWithCompleteInfo
+        /**
+         * Provided when user convert B3TR/VOT3 token to display bottom sheet result
+         */
+        betterConversionResult?: {
+            to: "B3TR" | "VOT3"
+            amount: string
+            txId: string
+            isSuccess: boolean
+        }
+    }
     [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
+        token: TokenWithCompleteInfo
         transactionClauses: Transaction.Clause[]
     }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
