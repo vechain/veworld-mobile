@@ -6,26 +6,30 @@ import { RootStackParamListSettings, Routes } from "~Navigation"
 import { CloudAndManualBackup, ManualBackup } from "./Components"
 import { PlatformUtils } from "~Utils"
 import { selectGoogleDriveBackupEnabled, useAppSelector } from "~Storage/Redux"
+import { DEVICE_TYPE } from "~Model"
 
-type Props = NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_MNEMONIC_BACKUP>
+type Props = NativeStackScreenProps<RootStackParamListSettings, Routes.ICLOUD_DETAILS_BACKUP>
 
-export const MnemonicBackupScreen = ({ route }: Props) => {
+export const DetailsBackupScreen = ({ route }: Props) => {
+    const { backupDetails, deviceToBackup } = route.params
     const { LL } = useI18nContext()
     const googleDriveBackupEnabled = useAppSelector(selectGoogleDriveBackupEnabled)
-    const manualOnlyBackup = !googleDriveBackupEnabled && PlatformUtils.isAndroid()
+    const manualOnlyBackup =
+        (!googleDriveBackupEnabled && PlatformUtils.isAndroid()) ||
+        deviceToBackup?.type === DEVICE_TYPE.LOCAL_PRIVATE_KEY
 
-    const { mnemonicArray, deviceToBackup } = route.params
+    const isMnemonic = Array.isArray(backupDetails)
 
     return (
         <Layout
             noStaticBottomPadding
-            title={LL.SB_RECOVERY_PHRASE()}
+            title={isMnemonic ? LL.SB_RECOVERY_PHRASE() : LL.SB_PRIVATE_KEY()}
             body={
                 <BaseView>
                     {!manualOnlyBackup ? (
-                        <CloudAndManualBackup mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+                        <CloudAndManualBackup backupDetails={backupDetails} deviceToBackup={deviceToBackup} />
                     ) : (
-                        <ManualBackup mnemonicArray={mnemonicArray} deviceToBackup={deviceToBackup} />
+                        <ManualBackup backupDetails={backupDetails} deviceToBackup={deviceToBackup} />
                     )}
                     <BaseSpacer height={24} />
                 </BaseView>

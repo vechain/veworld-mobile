@@ -2,10 +2,13 @@ import { useCallback, useMemo } from "react"
 import { Transaction } from "thor-devkit"
 import { ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import { useTransactionGas } from "~Hooks"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { FungibleTokenWithBalance } from "~Model"
 import { BigNumberUtils, BigNutils, GasUtils, TransactionUtils, error } from "~Utils"
 
 export const useTotalTokenBalance = (token: FungibleTokenWithBalance, amount: string, address: string) => {
+    const { formatLocale } = useFormatFiat()
+
     const clauses = useMemo(
         () => TransactionUtils.prepareFungibleClause(amount, token, address),
         [address, amount, token],
@@ -47,8 +50,8 @@ export const useTotalTokenBalance = (token: FungibleTokenWithBalance, amount: st
     }, [token.balance.balance])
 
     const tokenTotalToHuman = useMemo(() => {
-        return BigNutils(tokenTotalBalance).toHuman(token.decimals).decimals(8).toString
-    }, [token.decimals, tokenTotalBalance])
+        return BigNutils(tokenTotalBalance).toHuman(token.decimals).toTokenFormat_string(8, formatLocale)
+    }, [formatLocale, token.decimals, tokenTotalBalance])
 
     return { tokenTotalBalance, tokenTotalToHuman, getGasFees }
 }

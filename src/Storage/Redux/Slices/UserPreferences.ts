@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import lodash from "lodash"
 import moment from "moment"
-import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
+import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
 import { Locales } from "~i18n"
 
 /**
@@ -29,6 +30,7 @@ export interface UserPreferenceState {
     isPinCodeRequired: boolean
     balanceVisible: boolean
     currency: CURRENCY
+    currencyFormat: CURRENCY_FORMATS
     symbolPosition: SYMBOL_POSITIONS
     language: Locales
     isAnalyticsTrackingEnabled: boolean
@@ -40,6 +42,7 @@ export interface UserPreferenceState {
     lastBackupRequestTimestamp?: { [key: string]: number | undefined }
     lastNotificationReminder: number | null
     removedNotificationTags?: string[]
+    showJailbrokeWarning?: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -48,6 +51,7 @@ const initialState: UserPreferenceState = {
     isPinCodeRequired: true,
     balanceVisible: true,
     currency: CURRENCY.USD,
+    currencyFormat: CURRENCY_FORMATS.SYSTEM,
     symbolPosition: SYMBOL_POSITIONS.BEFORE,
     language: "en" as Locales,
     isAnalyticsTrackingEnabled: true, // this is enabled by default because otherwise onboarding events won't be tracked
@@ -59,6 +63,7 @@ const initialState: UserPreferenceState = {
     appResetTimestamp: undefined,
     lastNotificationReminder: null,
     removedNotificationTags: undefined,
+    showJailbrokeWarning: true,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -83,6 +88,10 @@ export const UserPreferencesSlice = createSlice({
 
         setCurrency: (state, action: PayloadAction<CURRENCY>) => {
             state.currency = action.payload
+        },
+
+        setCurrencyFormat: (state, action: PayloadAction<CURRENCY_FORMATS>) => {
+            state.currencyFormat = action.payload
         },
 
         setSymbolPosition: (state, action: PayloadAction<SYMBOL_POSITIONS>) => {
@@ -126,8 +135,23 @@ export const UserPreferencesSlice = createSlice({
             }
         },
 
+        resetUserPreferencesState: state => {
+            if (state.language !== "en") {
+                const selectedLanguage = state.language
+                state = lodash.cloneDeep(initialState)
+                state.language = selectedLanguage
+                return
+            }
+
+            return initialState
+        },
+
         updateLastNotificationReminder: (state, action: PayloadAction<number | null>) => {
             state.lastNotificationReminder = action.payload
+        },
+
+        setShowJailbrokeDeviceWarning: (state, action: PayloadAction<boolean>) => {
+            state.showJailbrokeWarning = action.payload
         },
 
         addRemovedNotificationTag: (state, action: PayloadAction<string>) => {
@@ -143,8 +167,6 @@ export const UserPreferencesSlice = createSlice({
                 state.removedNotificationTags = state.removedNotificationTags.filter(tag => tag !== action.payload)
             }
         },
-
-        resetUserPreferencesState: () => initialState,
     },
 })
 
@@ -154,6 +176,7 @@ export const {
     setIsPinCodeRequired,
     setBalanceVisible,
     setCurrency,
+    setCurrencyFormat,
     setSymbolPosition,
     setLanguage,
     setAnalyticsTrackingEnabled,
@@ -166,4 +189,5 @@ export const {
     updateLastNotificationReminder,
     addRemovedNotificationTag,
     removeRemovedNotificationTag,
+    setShowJailbrokeDeviceWarning,
 } = UserPreferencesSlice.actions

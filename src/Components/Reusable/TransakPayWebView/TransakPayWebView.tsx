@@ -119,6 +119,7 @@ export const TransakPayWebView = ({
                     transakConfig={transakConfig}
                     onTransakEvent={onTransakEventHandler}
                     style={styles.webView}
+                    originWhitelist={["http://", "https://", "about:*"]}
                 />
             </BaseView>
             {isProcessing && (

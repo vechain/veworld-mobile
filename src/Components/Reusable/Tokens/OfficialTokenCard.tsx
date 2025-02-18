@@ -4,10 +4,10 @@ import { BaseCard, BaseText, BaseView, FiatBalance } from "~Components"
 import { useTheme, useThemedStyles, TokenWithCompleteInfo, useBalances } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { TokenImage } from "../TokenImage"
-import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 
 type OfficialTokenCardProps = {
     token: FungibleToken
@@ -33,15 +33,14 @@ export const OfficialTokenCard = memo(
         const { LL } = useI18nContext()
 
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
+        const { formatValue } = useFormatFiat()
 
         const { tokenInfo } = tokenWithInfo
         const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
 
         const change24h =
             (isPositive24hChange ? "+" : "") +
-            BigNutils(tokenInfo?.market_data?.price_change_percentage_24h ?? 0)
-                .toHuman(0)
-                .decimals(2).toString +
+            formatValue(tokenInfo?.market_data?.price_change_percentage_24h ?? 0) +
             "%"
 
         const { tokenUnitBalance } = useBalances({ token, exchangeRate: tokenWithInfo.exchangeRate })

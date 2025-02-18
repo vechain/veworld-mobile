@@ -63,13 +63,11 @@ export const NotificationScreen = () => {
 
     const filterDapps = useCallback(
         (text: string) => {
-            setDapps(prev => {
-                const query = text.trim().toLowerCase()
-                const result = prev.filter(dapp => dapp.name.toLowerCase().includes(query))
-                const newData = query.length > 0 ? result : data
-                const newDataSortedByName = sortDAppsByName(newData)
-                return newDataSortedByName
-            })
+            const query = text.trim().toLowerCase()
+            const result = data.filter(dapp => dapp.name.toLowerCase().includes(query))
+            const newData = query.length > 0 ? result : data
+            const newDataSortedByName = sortDAppsByName(newData)
+            setDapps(newDataSortedByName)
         },
         [data, sortDAppsByName],
     )

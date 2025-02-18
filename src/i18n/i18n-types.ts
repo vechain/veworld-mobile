@@ -205,6 +205,14 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_INVALID_CHARTS: string
 	/**
+	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​i​s​ ​j​a​i​l​b​r​o​k​e​n​,
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_1: string
+	/**
+	 * <​>​<​>​ ​p​u​t​t​i​n​g​ ​y​o​u​r​ ​a​s​s​e​t​s​ ​a​t​ ​r​i​s​k​ ​o​f​ ​t​h​e​f​t​.
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_2: string
+	/**
 	 * N​e​w​ ​v​e​r​s​i​o​n
 	 */
 	ALERT_TITLE_NEW_VERSION: string
@@ -431,6 +439,26 @@ type RootTranslation = {
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: string
 	/**
+	 * C​u​r​r​e​n​c​y​ ​f​o​r​m​a​t
+	 */
+	BD_CURRENCY_FORMAT: string
+	/**
+	 * P​i​c​k​ ​t​h​e​ ​f​o​r​m​a​t​ ​t​h​a​t​ ​y​o​u​ ​p​r​e​f​e​r​ ​f​o​r​ ​d​e​c​i​m​a​l​ ​s​e​p​a​r​a​t​o​r​.
+	 */
+	BD_CURRENCY_FORMAT_DISCLAIMER: string
+	/**
+	 * C​o​m​m​a
+	 */
+	BD_CURRENCY_FORMAT_OPTION_comma: string
+	/**
+	 * D​o​t
+	 */
+	BD_CURRENCY_FORMAT_OPTION_dot: string
+	/**
+	 * S​y​s​t​e​m
+	 */
+	BD_CURRENCY_FORMAT_OPTION_system: string
+	/**
 	 * C​u​s​t​o​m​ ​n​o​d​e​s
 	 */
 	BD_CUSTOM_NODES: string
@@ -479,6 +507,22 @@ type RootTranslation = {
 	 * @param {string} cloud
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: RequiredParams<'cloud'>
+	/**
+	 *  Private key copied to clipboard
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: string
+	/**
+	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
+	 */
+  	BD_PRIVATE_KEY_DISCLAIMER: string
+	/**
+	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
+	 */
+  	BD_PRIVATE_KEY_PASSWORD_WARNING: string
+	/**
+	 * Never share your Private key. Anyone who gets access to it can steal all of your crypto assets.
+	 */
+  	BD_PRIVATE_KEY_WARMNING: string
 	/**
 	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
 	 */
@@ -772,6 +816,10 @@ type RootTranslation = {
 	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
 	 */
 	BTN_BACKUP_ALERT_CLOSE: string
+	/**
+	 * B​a​c​k​u​p​ private key
+	 */
+	BTN_BACKUP_PK: string
 	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
@@ -1633,6 +1681,14 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	DEVICE_BACKUP_MODAL_TITLE: string
+	/**
+	 * W​e​ ​h​a​v​e​ ​d​e​t​e​c​t​e​d​ ​t​h​a​t​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​i​s​ ​j​a​i​l​b​r​o​k​e​n​,​ ​w​h​i​c​h​ ​m​a​y​ ​c​o​m​p​r​o​m​i​s​e​ ​t​h​e​ ​s​e​c​u​r​i​t​y​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​.​ ​W​e​ ​s​t​r​o​n​g​l​y​ ​r​e​c​o​m​m​e​n​d​ ​b​a​c​k​i​n​g​ ​u​p​ ​y​o​u​r​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​,​ ​r​e​s​e​t​t​i​n​g​ ​V​e​W​o​r​l​d​ ​i​n​ ​G​e​n​e​r​a​l​ ​S​e​t​t​i​n​g​s​,​ ​a​n​d​ ​i​m​p​o​r​t​i​n​g​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​o​n​ ​a​ ​n​o​n​-​j​a​i​l​b​r​o​k​e​n​ ​d​e​v​i​c​e​.
+	 */
+	DEVICE_JAILBROKE_MODAL_SUBTITLE: string
+	/**
+	 * J​a​i​l​b​r​o​k​e​n​ ​D​e​v​i​c​e​ ​D​e​t​e​c​t​e​d
+	 */
+	DEVICE_JAILBROKE_MODAL_TITLE: string
 	/**
 	 * D​e​v​i​c​e​ ​P​i​n
 	 */
@@ -2657,6 +2713,10 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_MNEMONIC: string
 	/**
+	 * B​a​c​k​u​p​ ​“account​”
+	 */
+	SB_BACKUP_WALLET: string
+	/**
 	 * B​a​c​k​u​p​ ​“​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​”
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: string
@@ -2780,6 +2840,10 @@ type RootTranslation = {
 	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
 	 */
 	SB_PASSWORD_AUTH: string
+	/**
+	 * Private key
+	 */
+	SB_PRIVATE_KEY: string
 	/**
 	 * R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e
 	 */
@@ -3898,6 +3962,10 @@ export type TranslationFunctions = {
 	 */
 	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
 	/**
+	 * Avoid screenshotting your private key. Store it offline or back it up securely online.
+	 */
+	ALERT_DONT_SCREENSHOT_PRIVATE_KEY: () => LocalizedString
+	/**
 	 * Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: () => LocalizedString
@@ -3994,6 +4062,14 @@ Try reconnect your device to the internet.
 	 * The long-period charts are inaccurate as the token is too new to provide sufficient historical data.
 	 */
 	ALERT_TITLE_INVALID_CHARTS: () => LocalizedString
+	/**
+	 * Your device is jailbroken,
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_1: () => LocalizedString
+	/**
+	 * <><> putting your assets at risk of theft.
+	 */
+	ALERT_TITLE_JAILBROKEN_DEVICE_2: () => LocalizedString
 	/**
 	 * New version
 	 */
@@ -4219,6 +4295,26 @@ Try reconnect your device to the internet.
 	 */
 	BD_CREATE_WALLET_TYPE_USER_ACCEPTS: () => LocalizedString
 	/**
+	 * Currency format
+	 */
+	BD_CURRENCY_FORMAT: () => LocalizedString
+	/**
+	 * Pick the format that you prefer for decimal separator.
+	 */
+	BD_CURRENCY_FORMAT_DISCLAIMER: () => LocalizedString
+	/**
+	 * Comma
+	 */
+	BD_CURRENCY_FORMAT_OPTION_comma: () => LocalizedString
+	/**
+	 * Dot
+	 */
+	BD_CURRENCY_FORMAT_OPTION_dot: () => LocalizedString
+	/**
+	 * System
+	 */
+	BD_CURRENCY_FORMAT_OPTION_system: () => LocalizedString
+	/**
 	 * Custom nodes
 	 */
 	BD_CUSTOM_NODES: () => LocalizedString
@@ -4275,9 +4371,17 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
+	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
+	 */
+	BD_PRIVATE_KEY_DISCLAIMER: () => LocalizedString
+	/**
 	 * Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.
 	 */
 	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
+	/**
+	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
+	 */
+	BD_PRIVATE_KEY_PASSWORD_WARNING: () => LocalizedString
 	/**
 	 * In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.
 	 */
@@ -4286,6 +4390,10 @@ Try reconnect your device to the internet.
 	 * Your Secret Recovery Phrase makes it easy to back up and restore your account.
 	 */
 	BD_MNEMONIC_SUBTITLE: () => LocalizedString
+	/**
+	 * Never share your Private key. Anyone who learns them can steal all of your crypto assets.
+	 */
+	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
@@ -4562,6 +4670,10 @@ Try reconnect your device to the internet.
 	 * Backup now
 	 */
 	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
+	/**
+	 * Backup private key
+	 */
+	BTN_BACKUP_PK: () => LocalizedString
 	/**
 	 * Backup phrase
 	 */
@@ -5410,6 +5522,14 @@ Try reconnect your device to the internet.
 	 * Backup now
 	 */
 	DEVICE_BACKUP_MODAL_TITLE: () => LocalizedString
+	/**
+	 * We have detected that your device is jailbroken, which may compromise the security of your wallet. We strongly recommend backing up your recovery phrase, resetting VeWorld in General Settings, and importing your wallet on a non-jailbroken device.
+	 */
+	DEVICE_JAILBROKE_MODAL_SUBTITLE: () => LocalizedString
+	/**
+	 * Jailbroken Device Detected
+	 */
+	DEVICE_JAILBROKE_MODAL_TITLE: () => LocalizedString
 	/**
 	 * Device Pin
 	 */
@@ -6416,6 +6536,14 @@ Try reconnect your device to the internet.
 	 */
 	SB_BACKUP_MNEMONIC: () => LocalizedString
 	/**
+	 * Backup “account”
+	 */
+	SB_BACKUP_WALLET: () => LocalizedString
+	/**
+	 * Backup “Private key”
+	 */
+	SB_BACKUP_PRIVATE_KEY: () => LocalizedString
+	/**
 	 * Backup “Recovery phrase”
 	 */
 	SB_BACKUP_RECOVERY_PHRASE: () => LocalizedString
@@ -6535,6 +6663,14 @@ Try reconnect your device to the internet.
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
+	/**
+	 * Private key copied to clipboard
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: () => LocalizedString
+	/**
+	 * Private key
+	 */
+	SB_PRIVATE_KEY: () => LocalizedString
 	/**
 	 * Recovery phrase
 	 */

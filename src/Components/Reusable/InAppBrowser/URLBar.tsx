@@ -76,6 +76,7 @@ export const URLBar = () => {
                 </BaseView>
 
                 <BaseIcon
+                    testID="closeButton"
                     action={navBackToDiscover}
                     haptics="Light"
                     style={[styles.iconRight]}

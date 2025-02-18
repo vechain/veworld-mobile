@@ -1,5 +1,13 @@
 import React, { useCallback } from "react"
-import { BaseSpacer, BaseText, BaseView, EnableFeature, Layout } from "~Components"
+import {
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    ChangeLanguage,
+    EnableFeature,
+    Layout,
+    SelectLanguageBottomSheet,
+} from "~Components"
 import { useBottomSheetModal } from "~Hooks"
 import { Locales, useI18nContext } from "~i18n"
 import { Reset } from "~Screens/Flows/App/GeneralScreen/Components/Reset"
@@ -14,8 +22,9 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { ChangeCurrency, ChangeLanguage, ChangeTheme, SelectLanguageBottomSheet } from "./Components"
+import { ChangeCurrency, ChangeTheme } from "./Components"
 import { ChangeSymbolPosition } from "./Components/ChangeSymbolPosition"
+import { ChangeCurrencyFormat } from "./Components/ChangeCurrencyFormat"
 
 export const GeneralScreen = () => {
     const { LL, setLocale } = useI18nContext()
@@ -70,6 +79,15 @@ export const GeneralScreen = () => {
                     <BaseText typographyFont="caption">{LL.BD_CONVERSION_CURRENCY_DISCLAIMER()}</BaseText>
                     <BaseSpacer height={20} />
                     <ChangeCurrency />
+                    <BaseSpacer height={20} />
+
+                    <BaseText typographyFont="bodyMedium" my={8}>
+                        {LL.BD_CURRENCY_FORMAT()}
+                    </BaseText>
+                    <BaseText typographyFont="caption">{LL.BD_CURRENCY_FORMAT_DISCLAIMER()}</BaseText>
+                    <BaseSpacer height={20} />
+                    <ChangeCurrencyFormat />
+
                     <BaseSpacer height={20} />
 
                     <BaseText typographyFont="bodyMedium" my={8}>
@@ -131,7 +149,6 @@ export const GeneralScreen = () => {
 
                     <SelectLanguageBottomSheet
                         ref={selectLanguageSheetRef}
-                        onClose={closeSelectLanguageSheet}
                         selectedLanguage={selectedLanguageCode}
                         handleSelectLanguage={handleSelectLanguage}
                     />

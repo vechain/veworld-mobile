@@ -12,6 +12,10 @@ export const selectCurrency = createSelector(reducer, state => {
     return state.currency
 })
 
+export const selectCurrencyFormat = createSelector(reducer, state => {
+    return state.currencyFormat
+})
+
 export const selectSymbolPosition = createSelector(reducer, state => {
     return state.symbolPosition || SYMBOL_POSITIONS.BEFORE
 })
@@ -77,4 +81,8 @@ export const selectLastNotificationReminder = createSelector(reducer, state => {
 
 export const selectRemovedNotificationTags = createSelector(reducer, state => {
     return state.removedNotificationTags ?? []
+})
+
+export const selectShowJailbrokeDeviceWarning = createSelector(reducer, state => {
+    return state.showJailbrokeWarning
 })

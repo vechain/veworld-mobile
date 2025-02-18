@@ -2,6 +2,7 @@ import { CommonActions, useNavigation } from "@react-navigation/native"
 import { useEffect, useRef } from "react"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 
 export const useResetNFTStack = () => {
     const navigation = useNavigation()
@@ -9,7 +10,7 @@ export const useResetNFTStack = () => {
     const previousSelectedAccountAddress = useRef(selectedAccount?.address)
 
     useEffect(() => {
-        if (selectedAccount.address !== previousSelectedAccountAddress.current) {
+        if (!AddressUtils.compareAddresses(selectedAccount.address, previousSelectedAccountAddress.current)) {
             navigation.dispatch(state => {
                 const index = state.routes.findIndex(r => r.name === Routes.NFTS)
                 const routes = state.routes.slice(0, index + 1)
