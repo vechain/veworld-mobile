@@ -17,7 +17,7 @@ const initialState: FeatureFlags = {
     paymentProvidersFeature: {
         "coinbase-pay": {
             android: true,
-            iOS: true,
+            iOS: false,
         },
         transak: {
             android: true,
