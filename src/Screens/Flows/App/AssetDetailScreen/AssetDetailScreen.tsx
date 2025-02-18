@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import {
     AlertInline,
@@ -16,7 +16,7 @@ import {
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { AssetActionsBar, AssetChart, MarketInfoView } from "./Components"
 import { useI18nContext } from "~i18n"
-import { FastAction } from "~Model"
+import { FastAction, IconKey } from "~Model"
 import { striptags } from "striptags"
 import {
     selectBalanceVisible,
@@ -54,6 +54,11 @@ export const AssetDetailScreen = ({ route }: Props) => {
         t =>
             t.name?.toLowerCase().includes(token.name.toLowerCase()) ||
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
+    )
+
+    const tokenName = useMemo(
+        () => (token.symbol === B3TR.symbol ? LL.TITLE_VEBETTER() : token.name),
+        [LL, token.name, token.symbol],
     )
 
     const Actions: FastAction[] = useMemo(
@@ -159,9 +164,84 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const showActions = useMemo(() => !AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
+    const actionBottomSheetIcon = useCallback(
+        (iconName: IconKey, disabled?: boolean) => (
+            <BaseIcon
+                color={disabled ? theme.colors.actionBottomSheet.disabledIcon : theme.colors.actionBottomSheet.icon}
+                name={iconName}
+                size={18}
+            />
+        ),
+        [theme.colors.actionBottomSheet.disabledIcon, theme.colors.actionBottomSheet.icon],
+    )
+
+    const ActionsBottomSheet: FastAction[] = useMemo(
+        () => [
+            {
+                name: LL.BTN_BUY(),
+                action: () => {
+                    nav.navigate(Routes.BUY_FLOW)
+                },
+                icon: actionBottomSheetIcon("icon-plus-circle"),
+                testID: "buyButton",
+            },
+            {
+                name: LL.BTN_SEND(),
+                disabled: !foundToken,
+                action: () => {
+                    if (foundToken) {
+                        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+                            token: foundToken,
+                        })
+                    } else {
+                        showWarningToast({
+                            text1: LL.HEADS_UP(),
+                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
+                                tokenName: token.symbol,
+                            }),
+                        })
+                    }
+                },
+                icon: actionBottomSheetIcon("icon-arrow-up", !foundToken),
+                testID: "sendButton",
+            },
+            {
+                name: LL.BTN_SWAP(),
+                disabled: !foundToken,
+                action: () => {
+                    if (foundToken) {
+                        nav.navigate(Routes.SWAP)
+                    } else {
+                        showWarningToast({
+                            text1: LL.HEADS_UP(),
+                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
+                                tokenName: token.symbol,
+                            }),
+                        })
+                    }
+                },
+                icon: actionBottomSheetIcon("icon-arrow-left-right", !foundToken),
+                testID: "swapButton",
+            },
+            {
+                name: LL.COMMON_RECEIVE(),
+                action: openQRCodeSheet,
+                icon: actionBottomSheetIcon("icon-arrow-down"),
+                testID: "reciveButton",
+            },
+            {
+                name: LL.BTN_SELL(),
+                action: openQRCodeSheet,
+                icon: actionBottomSheetIcon("icon-minus-circle", !foundToken),
+                testID: "sellButton",
+            },
+        ],
+        [LL, actionBottomSheetIcon, foundToken, nav, openQRCodeSheet, token.symbol],
+    )
+
     return (
         <Layout
-            title={token.name}
+            title={tokenName}
             fixedBody={
                 <ScrollView>
                     <BaseView style={styles.assetDetailsHeader}>
@@ -213,7 +293,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
                     <FastActionsBottomSheet
                         ref={FastActionsBottomSheetRef}
-                        actions={Actions}
+                        actions={ActionsBottomSheet}
                         closeBottomSheet={closeFastActionsSheet}
                     />
                 </ScrollView>

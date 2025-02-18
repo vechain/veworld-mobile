@@ -16,7 +16,6 @@ type Props = {
 
 const ItemSeparatorComponent = () => <BaseSpacer height={16} />
 
-// component to select an account
 export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ closeBottomSheet, onDismiss, actions }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
@@ -32,19 +31,15 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
         )
 
         const computeSnappoints = useMemo(() => {
-            if (actions.length < 4) {
-                return ["40%"]
+            if (actions.length < 5) {
+                return ["50%"]
             }
 
-            if (actions.length > 7) {
-                return ["90%"]
+            if (actions.length > 6) {
+                return ["60%"]
             }
 
-            if (actions.length > 4) {
-                return ["75%", "90%"]
-            }
-
-            return ["40%", "75%", "90%"]
+            return ["50%", "60%"]
         }, [actions.length])
 
         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
@@ -63,7 +58,15 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                         activeOpacity={action.disabled ? 0.9 : 0.2}
                         style={[styles.action, action.disabled && styles.disabled]}>
                         <BaseView flexDirection="row" justifyContent={"center"} alignItems="center">
-                            <BaseView style={styles.actionIconBottomSheet}>{action.icon}</BaseView>
+                            <BaseView
+                                bg={
+                                    action.disabled
+                                        ? theme.colors.actionBottomSheet.disabledIconBackground
+                                        : theme.colors.actionBottomSheet.iconBackground
+                                }
+                                style={styles.actionIconBottomSheet}>
+                                {action.icon}
+                            </BaseView>
                             {!action.iconOnly && (
                                 <>
                                     <BaseSpacer width={24} />
@@ -82,14 +85,7 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                     </BaseTouchable>
                 )
             },
-            [
-                handlePress,
-                styles.action,
-                styles.actionIconBottomSheet,
-                styles.disabled,
-                theme.colors.actionBottomSheet.disabledText,
-                theme.colors.actionBottomSheet.text,
-            ],
+            [handlePress, styles.action, styles.actionIconBottomSheet, styles.disabled, theme.colors.actionBottomSheet],
         )
 
         return (
@@ -113,60 +109,6 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
     },
 )
 
-// export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-//     ({ closeBottomSheet, onDismiss, actions }, ref) => {
-//         const { styles, theme } = useThemedStyles(baseStyles)
-//
-//         const handlePress = useCallback(() => {
-//             if (closeBottomSheet) closeBottomSheet()
-//         }, [closeBottomSheet])
-//
-//         const computeSnappoints = useMemo(() => {
-//             if (actions.length < 6) {
-//                 return ["50%"]
-//             }
-//
-//             if (actions.length > 7) {
-//                 return ["90%"]
-//             }
-//
-//             if (actions.length > 6) {
-//                 return ["75%", "90%"]
-//             }
-//
-//             return ["50%", "75%", "90%"]
-//         }, [actions.length])
-//
-//         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
-//             data: actions,
-//             snapPoints: computeSnappoints,
-//         })
-//
-
-//
-//         return (
-//             <BaseBottomSheet
-//                 ref={ref}
-//                 backgroundStyle={styles.layout}
-//                 onChange={handleSheetChangePosition}
-//                 blurBackdrop
-//                 enablePanDownToClose
-//                 onDismiss={onDismiss}>
-//                 {/*<BaseView flexDirection="column" style={styles.actionsContainer}>*/}
-//                 {/*    {actions.map(renderAction)}*/}
-//                 {/*</BaseView>*/}
-//                 <BottomSheetFlatList
-//                     data={actions}
-//                     keyExtractor={action => action.name}
-//                     ItemSeparatorComponent={ItemSeparatorComponent}
-//                     renderItem={({ item }) => renderAction(item)}
-//                     {...flatListScrollProps}
-//                 />
-//             </BaseBottomSheet>
-//         )
-//     },
-// )
-//
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         layout: {

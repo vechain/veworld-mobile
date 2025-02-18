@@ -1075,6 +1075,10 @@ type RootTranslation = {
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: string
 	/**
+	 * S​e​l​l
+	 */
+	BTN_SELL: string
+	/**
 	 * S​e​n​d
 	 */
 	BTN_SEND: string
@@ -3541,6 +3545,10 @@ type RootTranslation = {
 	 */
 	TITLE_USER_PIN: string
 	/**
+	 * V​e​B​e​t​t​e​r
+	 */
+	TITLE_VEBETTER: string
+	/**
 	 * I​m​p​o​r​t​ ​L​o​c​a​l​ ​W​a​l​l​e​t
 	 */
 	TITLE_WALLET_IMPORT_LOCAL: string
@@ -4850,6 +4858,10 @@ Try reconnect your device to the internet.
 	 * Derivation Path for VeChain
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: () => LocalizedString
+	/**
+	 * Sell
+	 */
+	BTN_SELL: () => LocalizedString
 	/**
 	 * Send
 	 */
@@ -7279,6 +7291,10 @@ Try reconnect your device to the internet.
 	 * Insert your 6-digit PIN
 	 */
 	TITLE_USER_PIN: () => LocalizedString
+	/**
+	 * VeBetter
+	 */
+	TITLE_VEBETTER: () => LocalizedString
 	/**
 	 * Import Local Wallet
 	 */
