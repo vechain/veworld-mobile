@@ -1,11 +1,11 @@
 import React from "react"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { TokenWithCompleteInfo, useThemedStyles } from "~Hooks"
-import { BalanceView } from "~Screens/Flows/App/AssetDetailScreen/Components/BalanceView"
 import { StyleSheet } from "react-native"
 import { B3TR, ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
-import { VbdAssetBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components/VbdAssetBalanceCard"
+import { VbdBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components/VbdBalanceCard"
+import { VetBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components/VetBalanceCard"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -27,12 +27,13 @@ export const AssetBalanceCard = ({ tokenWithInfo, isBalanceVisible, FastActions 
 
             <BaseView w={100} style={styles.cardContainer}>
                 {tokenWithInfo.symbol === B3TR.symbol ? (
-                    <VbdAssetBalanceCard b3trToken={tokenWithInfo} isBalanceVisible={isBalanceVisible} />
+                    <VbdBalanceCard isBalanceVisible={isBalanceVisible} />
                 ) : (
-                    <BaseView style={styles.nonVbdContainer}>
-                        <BalanceView tokenWithInfo={tokenWithInfo} isBalanceVisible={isBalanceVisible} />
-                        {FastActions}
-                    </BaseView>
+                    <VetBalanceCard
+                        tokenWithInfo={tokenWithInfo}
+                        isBalanceVisible={isBalanceVisible}
+                        FastActions={FastActions}
+                    />
                 )}
             </BaseView>
         </BaseView>
@@ -48,7 +49,6 @@ const baseStyle = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.assetDetailsCard.background,
         },
         nonVbdContainer: {
-            gap: 16,
             paddingHorizontal: 16,
         },
     })

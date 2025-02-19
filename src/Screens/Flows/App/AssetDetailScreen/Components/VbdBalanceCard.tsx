@@ -1,22 +1,9 @@
 import React, { memo, useMemo } from "react"
-import {
-    selectB3trTokenWithBalance,
-    selectBalanceForToken,
-    selectNetworkVBDTokens,
-    useAppSelector,
-} from "~Storage/Redux"
-import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { selectNetworkVBDTokens, selectVot3TokenWithBalance, useAppSelector } from "~Storage/Redux"
+import { useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { BalanceView } from "./BalanceView"
-import {
-    BaseIcon,
-    BaseSkeleton,
-    BaseText,
-    BaseView,
-    FiatBalance,
-    QRCodeBottomSheet,
-    showWarningToast,
-} from "~Components"
+import { BaseIcon, BaseSkeleton, BaseText, BaseView, FiatBalance, showWarningToast } from "~Components"
 import { AssetActionsBar } from "./AssetActionsBar"
 import { FastAction } from "~Model"
 import { Routes } from "~Navigation"
@@ -24,35 +11,39 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { StyleSheet } from "react-native"
 import { ColorThemeType } from "~Constants"
+import { useTokenCardFiatInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/useTokenCardFiatInfo"
 
 type Props = {
-    b3trToken: TokenWithCompleteInfo
     isBalanceVisible: boolean
 }
 
-export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props) => {
+export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
+    const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
+    const vot3TokenWithBalance = useAppSelector(state => selectVot3TokenWithBalance(state))
+    const b3trTokenWithBalance = useAppSelector(state => selectVot3TokenWithBalance(state))
 
-    const { VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
-    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
-    const b3trWithBalance = useAppSelector(state => selectB3trTokenWithBalance(state))
     const vot3Token = useTokenWithCompleteInfo(VOT3)
+    const b3trToken = useTokenWithCompleteInfo(B3TR)
+
+    const {
+        exchangeRate,
+        isPositive24hChange,
+        change24h,
+        isLoading,
+        fiatBalance: b3trFiat,
+    } = useTokenCardFiatInfo(b3trToken)
+
     const vot3FiatBalance = BalanceUtils.getFiatBalance(
-        vot3RawBalance?.balance ?? "0",
-        b3trToken.exchangeRate ?? 0,
+        vot3TokenWithBalance?.balance.balance ?? "0",
+        exchangeRate ?? 0,
         VOT3.decimals,
     )
-    const isLoading =
-        b3trToken.exchangeRateLoading ||
-        b3trToken.tokenInfoLoading ||
-        vot3Token.exchangeRateLoading ||
-        vot3Token.tokenInfoLoading
 
-    const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trToken.fiatBalance)
+    const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trFiat)
 
     const Actions: FastAction[] = useMemo(
         () => [
@@ -62,7 +53,7 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                 action: () => {
                     if (veB3trFiatBalance) {
                         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
-                            token: b3trWithBalance,
+                            token: b3trTokenWithBalance,
                         })
                     } else {
                         showWarningToast({
@@ -77,7 +68,7 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                     <BaseIcon
                         size={16}
                         color={
-                            b3trWithBalance
+                            b3trTokenWithBalance
                                 ? theme.colors.actionBanner.buttonTextSecondary
                                 : theme.colors.actionBanner.buttonTextDisabled
                         }
@@ -104,7 +95,7 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                 icon: (
                     <BaseIcon
                         color={
-                            b3trWithBalance
+                            b3trTokenWithBalance
                                 ? theme.colors.actionBanner.buttonTextSecondary
                                 : theme.colors.actionBanner.buttonTextDisabled
                         }
@@ -118,7 +109,7 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
         [
             LL,
             b3trToken.symbol,
-            b3trWithBalance,
+            b3trTokenWithBalance,
             nav,
             theme.colors.actionBanner.buttonTextDisabled,
             theme.colors.actionBanner.buttonTextSecondary,
@@ -143,22 +134,33 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
             return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
 
         return (
-            <FiatBalance
-                typographyFont={"subSubTitleSemiBold"}
-                color={theme.colors.assetDetailsCard.title}
-                balances={[veB3trFiatBalance.toString()]}
-                isVisible={isBalanceVisible}
-            />
+            <>
+                <FiatBalance
+                    typographyFont={"subSubTitleSemiBold"}
+                    color={theme.colors.assetDetailsCard.title}
+                    balances={[veB3trFiatBalance.toString()]}
+                    isVisible={isBalanceVisible}
+                />
+                <BaseText
+                    typographyFont="captionMedium"
+                    color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
+                    {change24h}
+                </BaseText>
+            </>
         )
     }, [
         isLoading,
         theme.colors.skeletonBoneColor,
         theme.colors.skeletonHighlightColor,
         theme.colors.assetDetailsCard.title,
+        theme.colors.positive,
+        theme.colors.negative,
         b3trToken.exchangeRate,
         LL,
         veB3trFiatBalance,
         isBalanceVisible,
+        isPositive24hChange,
+        change24h,
     ])
 
     const vot3BalanceProps = useMemo(
@@ -192,7 +194,7 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                         size={16}
                         color={theme.colors.actionBanner.buttonTextSecondary}
                         style={styles.moreActionsButton}
-                        action={openQRCodeSheet}
+                        action={() => {}}
                     />
                 </BaseView>
                 <BaseView />
@@ -204,7 +206,6 @@ export const VbdAssetBalanceCard = memo(({ b3trToken, isBalanceVisible }: Props)
                     containerStyle={styles.b3trBalanceView}
                 />
             </BaseView>
-            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
         </>
     )
 })
