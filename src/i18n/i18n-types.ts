@@ -110,6 +110,10 @@ type RootTranslation = {
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: string
 	/**
+	 * A​v​o​i​d​ ​s​c​r​e​e​n​s​h​o​t​t​i​n​g​ ​y​o​u​r​ ​p​r​i​v​a​t​e​ ​k​e​y​.​ ​S​t​o​r​e​ ​i​t​ ​o​f​f​l​i​n​e​ ​o​r​ ​b​a​c​k​ ​i​t​ ​u​p​ ​s​e​c​u​r​e​l​y​ ​o​n​l​i​n​e​.
+	 */
+	ALERT_DONT_SCREENSHOT_PRIVATE_KEY: string
+	/**
 	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​a​p​p​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h​ ​t​o​ ​c​o​n​t​i​n​u​e​.
 	 */
 	ALERT_MSG_AUTHORIZE_BLUETOOTH: string
@@ -347,7 +351,7 @@ type RootTranslation = {
 	 */
 	BD_BACKUP_PASSWORD_TO_KEYCHAIN: string
 	/**
-	 * T​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​s​ ​b​a​c​k​u​p​ ​e​n​s​u​r​e​ ​y​o​u​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​n​ ​c​a​s​e​ ​o​f​ ​a​p​p​ ​r​e​s​e​t​ ​o​r​ ​l​o​s​t​ ​d​e​v​i​c​e​.
+	 * T​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​s​ ​o​r​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​b​a​c​k​u​p​ ​e​n​s​u​r​e​ ​y​o​u​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​n​ ​c​a​s​e​ ​o​f​ ​a​p​p​ ​r​e​s​e​t​ ​o​r​ ​l​o​s​t​ ​d​e​v​i​c​e​.
 	 */
 	BD_BACKUP_RECOVERY_PHRASE: string
 	/**
@@ -508,22 +512,6 @@ type RootTranslation = {
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: RequiredParams<'cloud'>
 	/**
-	 *  Private key copied to clipboard
-	 */
-	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: string
-	/**
-	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
-	 */
-  	BD_PRIVATE_KEY_DISCLAIMER: string
-	/**
-	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
-	 */
-  	BD_PRIVATE_KEY_PASSWORD_WARNING: string
-	/**
-	 * Never share your Private key. Anyone who gets access to it can steal all of your crypto assets.
-	 */
-  	BD_PRIVATE_KEY_WARMNING: string
-	/**
 	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
 	 */
 	BD_MNEMONIC_BACKUP: string
@@ -603,6 +591,22 @@ type RootTranslation = {
 	 * M​i​n​ ​6​ ​c​h​a​r​a​c​t​e​r​s​,​ ​1​ ​n​u​m​b​e​r​,​ ​1​ ​s​p​e​c​i​a​l​ ​c​h​a​r​a​c​t​e​r
 	 */
 	BD_PASSWORD_NOT_STRONG: string
+	/**
+	 * P​r​i​v​a​t​e​ ​k​e​y​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: string
+	/**
+	 * N​e​v​e​r​ ​d​i​s​c​l​o​s​e​ ​y​o​u​r​ ​P​r​i​v​a​t​e​ ​k​e​y​.​ ​A​n​y​o​n​e​ ​w​i​t​h​ ​t​h​i​s​ ​i​n​f​o​r​m​a​t​i​o​n​ ​c​a​n​ ​t​a​k​e​ ​y​o​u​r​ ​V​e​C​h​a​i​n​ ​c​r​y​p​t​o​s​ ​f​o​r​e​v​e​r​.
+	 */
+	BD_PRIVATE_KEY_DISCLAIMER: string
+	/**
+	 * I​n​ ​c​a​s​e​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​o​r​ ​t​h​e​ ​a​p​p​ ​i​s​ ​u​n​i​n​s​t​a​l​l​e​d​,​ ​y​o​u​ ​c​a​n​ ​u​s​e​ ​t​h​e​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​b​e​l​o​w​ ​t​o​ ​r​e​c​o​v​e​r​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​a​s​s​e​t​s​.
+	 */
+	BD_PRIVATE_KEY_PASSWORD_WARNING: string
+	/**
+	 * N​e​v​e​r​ ​s​h​a​r​e​ ​y​o​u​r​ ​p​r​i​v​a​t​e​ ​k​e​y​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​a​c​c​e​s​s​ ​i​t​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​.
+	 */
+	BD_PRIVATE_KEY_WARMNING: string
 	/**
 	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
 	 */
@@ -817,10 +821,6 @@ type RootTranslation = {
 	 */
 	BTN_BACKUP_ALERT_CLOSE: string
 	/**
-	 * B​a​c​k​u​p​ private key
-	 */
-	BTN_BACKUP_PK: string
-	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	BTN_BACKUP_ALERT_CONFIRM: string
@@ -828,6 +828,10 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
 	 */
 	BTN_BACKUP_MENMONIC: string
+	/**
+	 * B​a​c​k​u​p​ ​p​r​i​v​a​t​e​ ​k​e​y
+	 */
+	BTN_BACKUP_PK: string
 	/**
 	 * B​a​c​k​u​p​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
@@ -946,7 +950,7 @@ type RootTranslation = {
 	 */
 	BTN_GO_TO_SETTINGS: string
 	/**
-	 * H​i​s​t​o​r​y
+	 * A​c​t​i​v​i​t​y
 	 */
 	BTN_HISTORY: string
 	/**
@@ -1533,38 +1537,6 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA: string
 	/**
-	 * N​F​T​ ​r​e​c​e​i​v​e​d
-	 */
-	NFT_TRANSFER_RECEIVED: string
-	/**
-	 * N​F​T​ ​s​e​n​t
-	 */
-	NFT_TRANSFER_SENT: string
-	/**
-	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	DAPP_SIGN_CERT: string
-	/**
-	 * T​o​k​e​n​ ​s​w​a​p
-	 */
-	DAPP_TRANSACTION_SWAP: string
-	/**
-	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
-	 */
-	DAPP_TRANSACTION_TITLE: string
-	/**
-	 * D​A​p​p​ ​C​o​n​n​e​c​t​i​o​n
-	 */
-	DAPP_CONNECTION: string
-	/**
-	 * R​e​c​e​i​v​e​d​ ​t​o​k​e​n​s
-	 */
-	TOKEN_TRANSFER_RECEIVED: string
-	/**
-	 * S​e​n​t​ ​t​o​k​e​n​s
-	 */
-	TOKEN_TRANSFER_SENT: string
-	/**
 	 * Y​o​u​r​ ​S​i​g​n​a​t​u​r​e​ ​i​s​ ​b​e​i​n​g​ ​r​e​q​u​e​s​t​e​d​ ​t​o​ ​s​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a​ ​m​e​s​s​a​g​e
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: string
@@ -1654,9 +1626,25 @@ type RootTranslation = {
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: string
 	/**
+	 * D​A​p​p​ ​C​o​n​n​e​c​t​i​o​n
+	 */
+	DAPP_CONNECTION: string
+	/**
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	DAPP_SIGN_CERT: string
+	/**
 	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
 	 */
 	DAPP_TRANSACTION: string
+	/**
+	 * T​o​k​e​n​ ​s​w​a​p
+	 */
+	DAPP_TRANSACTION_SWAP: string
+	/**
+	 * D​A​p​p​ ​T​r​a​n​s​a​c​t​i​o​n
+	 */
+	DAPP_TRANSACTION_TITLE: string
 	/**
 	 * D​a​r​k
 	 */
@@ -2367,6 +2355,14 @@ type RootTranslation = {
 	 */
 	NFT_SEND: string
 	/**
+	 * N​F​T​ ​r​e​c​e​i​v​e​d
+	 */
+	NFT_TRANSFER_RECEIVED: string
+	/**
+	 * N​F​T​ ​s​e​n​t
+	 */
+	NFT_TRANSFER_SENT: string
+	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: string
@@ -2713,9 +2709,9 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_MNEMONIC: string
 	/**
-	 * B​a​c​k​u​p​ ​“account​”
+	 * B​a​c​k​u​p​ ​“​P​r​i​v​a​t​e​ ​k​e​y​”
 	 */
-	SB_BACKUP_WALLET: string
+	SB_BACKUP_PRIVATE_KEY: string
 	/**
 	 * B​a​c​k​u​p​ ​“​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​”
 	 */
@@ -2730,6 +2726,10 @@ type RootTranslation = {
 	 * @param {string} repeatCloudType
 	 */
 	SB_BACKUP_VERIFIED_DESCRIPTION: RequiredParams<'cloudType' | 'repeatCloudType'>
+	/**
+	 * B​a​c​k​u​p​ ​w​a​l​l​e​t
+	 */
+	SB_BACKUP_WALLET: string
 	/**
 	 * B​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​p​h​r​a​s​e​.​ ​I​n​ ​c​a​s​e​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​f​a​i​l​s​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​f​o​r​c​e​d​ ​t​o
 	 */
@@ -2841,7 +2841,7 @@ type RootTranslation = {
 	 */
 	SB_PASSWORD_AUTH: string
 	/**
-	 * Private key
+	 * P​r​i​v​a​t​e​ ​k​e​y
 	 */
 	SB_PRIVATE_KEY: string
 	/**
@@ -3645,6 +3645,14 @@ type RootTranslation = {
 	 */
 	TOKEN_SYMBOL: string
 	/**
+	 * R​e​c​e​i​v​e​d​ ​t​o​k​e​n​s
+	 */
+	TOKEN_TRANSFER_RECEIVED: string
+	/**
+	 * S​e​n​t​ ​t​o​k​e​n​s
+	 */
+	TOKEN_TRANSFER_SENT: string
+	/**
 	 * T​o​u​c​h​ ​I​D
 	 */
 	TOUCH_ID: string
@@ -3962,13 +3970,13 @@ export type TranslationFunctions = {
 	 */
 	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
 	/**
-	 * Avoid screenshotting your private key. Store it offline or back it up securely online.
-	 */
-	ALERT_DONT_SCREENSHOT_PRIVATE_KEY: () => LocalizedString
-	/**
 	 * Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: () => LocalizedString
+	/**
+	 * Avoid screenshotting your private key. Store it offline or back it up securely online.
+	 */
+	ALERT_DONT_SCREENSHOT_PRIVATE_KEY: () => LocalizedString
 	/**
 	 * Please, open app settings and authorize Bluetooth to continue.
 	 */
@@ -4203,7 +4211,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_BACKUP_PASSWORD_TO_KEYCHAIN: () => LocalizedString
 	/**
-	 * The recovery phrases backup ensure you never lose access to your wallet in case of app reset or lost device.
+	 * The recovery phrases or private key backup ensure you never lose access to your wallet in case of app reset or lost device.
 	 */
 	BD_BACKUP_RECOVERY_PHRASE: () => LocalizedString
 	/**
@@ -4371,17 +4379,9 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
-	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
-	 */
-	BD_PRIVATE_KEY_DISCLAIMER: () => LocalizedString
-	/**
 	 * Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.
 	 */
 	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
-	/**
-	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
-	 */
-	BD_PRIVATE_KEY_PASSWORD_WARNING: () => LocalizedString
 	/**
 	 * In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.
 	 */
@@ -4390,10 +4390,6 @@ Try reconnect your device to the internet.
 	 * Your Secret Recovery Phrase makes it easy to back up and restore your account.
 	 */
 	BD_MNEMONIC_SUBTITLE: () => LocalizedString
-	/**
-	 * Never share your Private key. Anyone who learns them can steal all of your crypto assets.
-	 */
-	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
@@ -4454,6 +4450,22 @@ Try reconnect your device to the internet.
 	 * Min 6 characters, 1 number, 1 special character
 	 */
 	BD_PASSWORD_NOT_STRONG: () => LocalizedString
+	/**
+	 * Private key copied to clipboard
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: () => LocalizedString
+	/**
+	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
+	 */
+	BD_PRIVATE_KEY_DISCLAIMER: () => LocalizedString
+	/**
+	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
+	 */
+	BD_PRIVATE_KEY_PASSWORD_WARNING: () => LocalizedString
+	/**
+	 * Never share your private key. Anyone who access it can steal all of your crypto assets.
+	 */
+	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
 	 * VeWorld reset
 	 */
@@ -4671,13 +4683,13 @@ Try reconnect your device to the internet.
 	 */
 	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
 	/**
-	 * Backup private key
-	 */
-	BTN_BACKUP_PK: () => LocalizedString
-	/**
 	 * Backup phrase
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
+	/**
+	 * Backup private key
+	 */
+	BTN_BACKUP_PK: () => LocalizedString
 	/**
 	 * Backup to Google Drive
 	 */
@@ -4795,7 +4807,7 @@ Try reconnect your device to the internet.
 	 */
 	BTN_GO_TO_SETTINGS: () => LocalizedString
 	/**
-	 * History
+	 * Activity
 	 */
 	BTN_HISTORY: () => LocalizedString
 	/**
@@ -5375,38 +5387,6 @@ Try reconnect your device to the internet.
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA: () => LocalizedString
 	/**
-	 * NFT received
-	 */
-	NFT_TRANSFER_RECEIVED: () => LocalizedString
-	/**
-	 * NFT sent
-	 */
-	NFT_TRANSFER_SENT: () => LocalizedString
-	/**
-	 * Sign certificate
-	 */
-	DAPP_SIGN_CERT: () => LocalizedString
-	/**
-	 * Token swap
-	 */
-	DAPP_TRANSACTION_SWAP: () => LocalizedString
-	/**
-	 * DApp Transaction
-	 */
-	DAPP_TRANSACTION_TITLE: () => LocalizedString
-	/**
-	 * DApp Connection
-	 */
-	DAPP_CONNECTION: () => LocalizedString
-	/**
-	 * Received tokens
-	 */
-	TOKEN_TRANSFER_RECEIVED: () => LocalizedString
-	/**
-	 * Sent tokens
-	 */
-	TOKEN_TRANSFER_SENT: () => LocalizedString
-	/**
 	 * Your Signature is being requested to sign typed data message
 	 */
 	CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION: () => LocalizedString
@@ -5495,9 +5475,25 @@ Try reconnect your device to the internet.
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: () => LocalizedString
 	/**
+	 * DApp Connection
+	 */
+	DAPP_CONNECTION: () => LocalizedString
+	/**
+	 * Sign certificate
+	 */
+	DAPP_SIGN_CERT: () => LocalizedString
+	/**
 	 * DApp Transaction
 	 */
 	DAPP_TRANSACTION: () => LocalizedString
+	/**
+	 * Token swap
+	 */
+	DAPP_TRANSACTION_SWAP: () => LocalizedString
+	/**
+	 * DApp Transaction
+	 */
+	DAPP_TRANSACTION_TITLE: () => LocalizedString
 	/**
 	 * Dark
 	 */
@@ -6208,6 +6204,14 @@ Try reconnect your device to the internet.
 	 */
 	NFT_SEND: () => LocalizedString
 	/**
+	 * NFT received
+	 */
+	NFT_TRANSFER_RECEIVED: () => LocalizedString
+	/**
+	 * NFT sent
+	 */
+	NFT_TRANSFER_SENT: () => LocalizedString
+	/**
 	 * Go to NFTs
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: () => LocalizedString
@@ -6536,10 +6540,6 @@ Try reconnect your device to the internet.
 	 */
 	SB_BACKUP_MNEMONIC: () => LocalizedString
 	/**
-	 * Backup “account”
-	 */
-	SB_BACKUP_WALLET: () => LocalizedString
-	/**
 	 * Backup “Private key”
 	 */
 	SB_BACKUP_PRIVATE_KEY: () => LocalizedString
@@ -6555,6 +6555,10 @@ Try reconnect your device to the internet.
 	 * All of your wallet’s recovery phrase were backed up to {cloudType}. If you need to recover your wallet, you can import from {repeatCloudType} with your recovery password.
 	 */
 	SB_BACKUP_VERIFIED_DESCRIPTION: (arg: { cloudType: string, repeatCloudType: string }) => LocalizedString
+	/**
+	 * Backup wallet
+	 */
+	SB_BACKUP_WALLET: () => LocalizedString
 	/**
 	 * Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to
 	 */
@@ -6663,10 +6667,6 @@ Try reconnect your device to the internet.
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
-	/**
-	 * Private key copied to clipboard
-	 */
-	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
 	 * Private key
 	 */
@@ -7463,6 +7463,14 @@ Try reconnect your device to the internet.
 	 * Token symbol
 	 */
 	TOKEN_SYMBOL: () => LocalizedString
+	/**
+	 * Received tokens
+	 */
+	TOKEN_TRANSFER_RECEIVED: () => LocalizedString
+	/**
+	 * Sent tokens
+	 */
+	TOKEN_TRANSFER_SENT: () => LocalizedString
 	/**
 	 * Touch ID
 	 */

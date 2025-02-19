@@ -329,7 +329,7 @@ type NFTTransferActivityBoxProps = {
 
 const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
-    const { tokenMetadata, collectionName } = useNFTInfo(activity.tokenId, activity.contractAddress)
+    const { collectionName } = useNFTInfo(activity.tokenId, activity.contractAddress)
     const isReceived = activity.direction === DIRECTIONS.DOWN
     const title = isReceived ? LL.NFT_TRANSFER_RECEIVED() : LL.NFT_TRANSFER_SENT()
     const time = moment(activity.timestamp).format("HH:mm")
@@ -350,7 +350,7 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
             title={title}
             description={validatedCollectionName()}
             activityStatus={activity.status}
-            nftImage={tokenMetadata?.image}
+            // nftImage={tokenMetadata?.image}
             onPress={onPressHandler}
         />
     )
