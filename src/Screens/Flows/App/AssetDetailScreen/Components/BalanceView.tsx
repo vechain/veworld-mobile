@@ -9,10 +9,14 @@ import { B3TR, COLORS, VOT3 } from "~Constants"
 export const BalanceView = ({
     tokenWithInfo,
     isBalanceVisible,
+    change24h,
+    isPositiveChange,
     containerStyle,
 }: {
     tokenWithInfo: TokenWithCompleteInfo
     isBalanceVisible: boolean
+    change24h?: string
+    isPositiveChange?: boolean
     containerStyle?: StyleProp<ViewStyle>
 }) => {
     const { LL } = useI18nContext()
@@ -30,6 +34,8 @@ export const BalanceView = ({
         [tokenWithInfo.symbol],
     )
 
+    const show24hChange = useMemo(() => !!(Number(fiatBalance) && change24h), [change24h, fiatBalance])
+
     const renderFiatBalance = useCallback(() => {
         if (isLoading)
             return (
@@ -46,16 +52,38 @@ export const BalanceView = ({
         if (priceFeedNotAvailable)
             return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
         return (
-            <BaseView flexDirection="row">
+            <BaseView flexDirection="column" alignItems={isVBDToken ? "center" : "flex-end"}>
                 <FiatBalance
                     typographyFont={"bodyMedium"}
                     color={theme.colors.assetDetailsCard.text}
                     balances={[fiatBalance]}
                     isVisible={isBalanceVisible}
                 />
+                {show24hChange && (
+                    <BaseText
+                        typographyFont="captionMedium"
+                        color={isPositiveChange ? theme.colors.positive : theme.colors.negative}>
+                        {change24h}
+                    </BaseText>
+                )}
             </BaseView>
         )
-    }, [fiatBalance, LL, isBalanceVisible, isLoading, priceFeedNotAvailable, theme.colors])
+    }, [
+        isLoading,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        theme.colors.assetDetailsCard.text,
+        theme.colors.positive,
+        theme.colors.negative,
+        priceFeedNotAvailable,
+        LL,
+        isVBDToken,
+        fiatBalance,
+        isBalanceVisible,
+        show24hChange,
+        isPositiveChange,
+        change24h,
+    ])
 
     return (
         <BaseView style={containerStyle ?? styles.layout}>
@@ -106,5 +134,8 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
+    },
+    vbdFiat: {
+        justifyContent: "flex-start",
     },
 })

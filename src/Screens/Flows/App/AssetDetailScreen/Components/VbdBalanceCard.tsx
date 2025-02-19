@@ -141,11 +141,13 @@ export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
                     balances={[veB3trFiatBalance.toString()]}
                     isVisible={isBalanceVisible}
                 />
-                <BaseText
-                    typographyFont="captionMedium"
-                    color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
-                    {change24h}
-                </BaseText>
+                {!!veB3trFiatBalance && (
+                    <BaseText
+                        typographyFont="captionMedium"
+                        color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
+                        {change24h}
+                    </BaseText>
+                )}
             </>
         )
     }, [
@@ -231,6 +233,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         b3trBalanceView: {
             flexDirection: "row",
+            alignItems: "center",
             flexGrow: 1,
             flex: 1,
             gap: 12,
