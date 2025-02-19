@@ -44,7 +44,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
     const {
         ref: convertBetterBottomSheetRef,
-        onOpen: openConvertBetterSheet,
+        // onOpen: openConvertBetterSheet,
         onClose: closeConvertBetterSheet,
     } = useBottomSheetModal()
 
@@ -121,23 +121,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
                 icon: <BaseIcon size={20} color={theme.colors.text} name="icon-qr-code" />,
                 testID: "reciveButton",
             },
-            {
-                name: "Convert B3TR/VOT3",
-                action: openConvertBetterSheet,
-                testID: "convertButton",
-                icon: <BaseIcon size={20} color={theme.colors.text} name="icon-loader-2" />,
-            },
         ],
-        [
-            LL,
-            foundToken,
-            nav,
-            openConvertBetterSheet,
-            openQRCodeSheet,
-            theme.colors.primaryDisabled,
-            theme.colors.text,
-            token.symbol,
-        ],
+        [LL, foundToken, nav, openQRCodeSheet, theme.colors.primaryDisabled, theme.colors.text, token.symbol],
     )
 
     // render description based on locale. NB: at the moment only EN is supported
