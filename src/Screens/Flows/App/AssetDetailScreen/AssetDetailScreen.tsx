@@ -34,7 +34,7 @@ import { ConvertBetterTokenSuccessBottomSheet } from "./ConvertBetterScreen/Comp
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
 export const AssetDetailScreen = ({ route }: Props) => {
-    const { token } = route.params
+    const { token, betterConversionResult } = route.params
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const { LL, locale } = useI18nContext()
@@ -150,10 +150,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const showActions = useMemo(() => !AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
     useEffect(() => {
-        if (true) {
+        if (betterConversionResult && betterConversionResult.isSuccess) {
             openConvertSuccessBetterSheet()
         }
-    }, [openConvertSuccessBetterSheet])
+    }, [betterConversionResult, openConvertSuccessBetterSheet])
 
     return (
         <Layout
@@ -219,6 +219,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     <ConvertBetterTokenSuccessBottomSheet
                         ref={convertBetterSuccessBottomSheetRef}
                         onClose={closeConvertSuccessBetterSheet}
+                        {...betterConversionResult}
                     />
                 </ScrollView>
             }

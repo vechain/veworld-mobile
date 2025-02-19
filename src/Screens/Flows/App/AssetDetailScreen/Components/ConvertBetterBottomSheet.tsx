@@ -15,6 +15,7 @@ import { B3TR, ColorThemeType } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { BigNutils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     onClose: () => void
@@ -26,6 +27,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const [isSwapEnabled, setIsSwapEnable] = useState(true)
     const [isError, setIsError] = useState(false)
 
+    const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const cardPosition = useSharedValue(0)
 
@@ -130,14 +132,9 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     return (
         <BaseBottomSheet ref={ref} blurBackdrop dynamicHeight enablePanDownToClose onDismiss={onDismiss}>
             <BaseView>
-                <BaseText typographyFont="subSubTitleMedium">{"Convert your Better tokens"}</BaseText>
+                <BaseText typographyFont="subSubTitleMedium">{LL.TITLE_CONVERT_BETTER_TOKENS()}</BaseText>
                 <BaseSpacer height={8} />
-                <BaseText typographyFont="captionRegular">
-                    {
-                        // eslint-disable-next-line max-len
-                        "B3TR tokens can be converted into VOT3 tokens and back, allowing you get more voting power and participate actively on the voting rounds and governance proposals. "
-                    }
-                </BaseText>
+                <BaseText typographyFont="captionRegular">{LL.BD_BETTER_TOKEN_CONVERSION()}</BaseText>
 
                 <BaseSpacer height={24} />
 
@@ -176,17 +173,13 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                 <BaseSpacer height={12} />
 
-                <BaseText typographyFont="smallCaptionSemiBold">
-                    {"Convert your Better tokens 1 B3TR = 1 VOT3"}
-                </BaseText>
-                <BaseText typographyFont="smallCaption">
-                    {"VTHO balance is required to pay for the conversion gas fees"}
-                </BaseText>
+                <BaseText typographyFont="smallCaptionSemiBold">{LL.BD_BETTER_TOKEN_CONVERSION_RATIO()}</BaseText>
+                <BaseText typographyFont="smallCaption">{LL.BD_GAS_REQUIRED_FOR_CONVERSION()}</BaseText>
 
                 <BaseSpacer height={24} />
                 <BaseButton
                     testID="Convert_Action_BTN"
-                    title="Convert"
+                    title={LL.BTN_CONVERT()}
                     disabled={submitDisabled}
                     action={onConvertPress}
                 />

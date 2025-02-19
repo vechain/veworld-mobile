@@ -75,7 +75,8 @@ export type RootStackParamListHome = {
          * Provided when user convert B3TR/VOT3 token to display bottom sheet result
          */
         betterConversionResult?: {
-            to: "B3TR" | "VOT3"
+            from?: FungibleTokenWithBalance
+            to?: FungibleTokenWithBalance
             amount: string
             txId: string
             isSuccess: boolean

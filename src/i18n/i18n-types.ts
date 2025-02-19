@@ -110,6 +110,10 @@ type RootTranslation = {
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: string
 	/**
+	 * A​v​o​i​d​ ​s​c​r​e​e​n​s​h​o​t​t​i​n​g​ ​y​o​u​r​ ​p​r​i​v​a​t​e​ ​k​e​y​.​ ​S​t​o​r​e​ ​i​t​ ​o​f​f​l​i​n​e​ ​o​r​ ​b​a​c​k​ ​i​t​ ​u​p​ ​s​e​c​u​r​e​l​y​ ​o​n​l​i​n​e​.
+	 */
+	ALERT_DONT_SCREENSHOT_PRIVATE_KEY: string
+	/**
 	 * P​l​e​a​s​e​,​ ​o​p​e​n​ ​a​p​p​ ​s​e​t​t​i​n​g​s​ ​a​n​d​ ​a​u​t​h​o​r​i​z​e​ ​B​l​u​e​t​o​o​t​h​ ​t​o​ ​c​o​n​t​i​n​u​e​.
 	 */
 	ALERT_MSG_AUTHORIZE_BLUETOOTH: string
@@ -339,13 +343,21 @@ type RootTranslation = {
 	 */
 	BD_BACKUP_PASSWORD_TO_KEYCHAIN: string
 	/**
-	 * T​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​s​ ​b​a​c​k​u​p​ ​e​n​s​u​r​e​ ​y​o​u​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​n​ ​c​a​s​e​ ​o​f​ ​a​p​p​ ​r​e​s​e​t​ ​o​r​ ​l​o​s​t​ ​d​e​v​i​c​e​.
+	 * T​h​e​ ​r​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​s​ ​o​r​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​b​a​c​k​u​p​ ​e​n​s​u​r​e​ ​y​o​u​ ​n​e​v​e​r​ ​l​o​s​e​ ​a​c​c​e​s​s​ ​t​o​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​i​n​ ​c​a​s​e​ ​o​f​ ​a​p​p​ ​r​e​s​e​t​ ​o​r​ ​l​o​s​t​ ​d​e​v​i​c​e​.
 	 */
 	BD_BACKUP_RECOVERY_PHRASE: string
 	/**
 	 * G​O​ ​B​A​C​K​ ​T​O​ ​A​P​P
 	 */
 	BD_BACK_TO_APP: string
+	/**
+	 * B​3​T​R​ ​t​o​k​e​n​s​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​i​n​t​o​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​a​n​d​ ​b​a​c​k​,​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​g​e​t​ ​m​o​r​e​ ​v​o​t​i​n​g​ ​p​o​w​e​r​ ​a​n​d​ ​p​a​r​t​i​c​i​p​a​t​e​ ​a​c​t​i​v​e​l​y​ ​o​n​ ​t​h​e​ ​v​o​t​i​n​g​ ​r​o​u​n​d​s​ ​a​n​d​ ​g​o​v​e​r​n​a​n​c​e​ ​p​r​o​p​o​s​a​l​s​.
+	 */
+	BD_BETTER_TOKEN_CONVERSION: string
+	/**
+	 * C​o​n​v​e​r​t​ ​y​o​u​r​ ​B​e​t​t​e​r​ ​t​o​k​e​n​s​ ​1​ ​B​3​T​R​ ​=​ ​1​ ​V​O​T​3
+	 */
+	BD_BETTER_TOKEN_CONVERSION_RATIO: string
 	/**
 	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
 	 */
@@ -467,6 +479,10 @@ type RootTranslation = {
 	 */
 	BD_EUR: string
 	/**
+	 * V​T​H​O​ ​b​a​l​a​n​c​e​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​p​a​y​ ​f​o​r​ ​t​h​e​ ​c​o​n​v​e​r​s​i​o​n​ ​g​a​s​ ​f​e​e​s
+	 */
+	BD_GAS_REQUIRED_FOR_CONVERSION: string
+	/**
 	 * G​o​ ​b​a​c​k​ ​t​o​ ​V​e​W​o​r​l​d​ ​a​p​p
 	 */
 	BD_GO_BACK: string
@@ -499,22 +515,6 @@ type RootTranslation = {
 	 * @param {string} cloud
 	 */
 	BD_IMPORT_WALLET_TYPE_SEED: RequiredParams<'cloud'>
-	/**
-	 *  Private key copied to clipboard
-	 */
-	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: string
-	/**
-	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
-	 */
-  	BD_PRIVATE_KEY_DISCLAIMER: string
-	/**
-	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
-	 */
-  	BD_PRIVATE_KEY_PASSWORD_WARNING: string
-	/**
-	 * Never share your Private key. Anyone who gets access to it can steal all of your crypto assets.
-	 */
-  	BD_PRIVATE_KEY_WARMNING: string
 	/**
 	 * S​t​o​r​e​ ​t​h​i​s​ ​p​h​r​a​s​e​ ​i​n​ ​a​ ​p​a​s​s​w​o​r​d​ ​m​a​n​a​g​e​r​,​ ​w​r​i​t​e​ ​i​t​ ​d​o​w​n​ ​o​r​ ​m​e​m​o​r​i​z​e​ ​i​t​.
 	 */
@@ -596,6 +596,22 @@ type RootTranslation = {
 	 */
 	BD_PASSWORD_NOT_STRONG: string
 	/**
+	 * P​r​i​v​a​t​e​ ​k​e​y​ ​c​o​p​i​e​d​ ​t​o​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: string
+	/**
+	 * N​e​v​e​r​ ​d​i​s​c​l​o​s​e​ ​y​o​u​r​ ​P​r​i​v​a​t​e​ ​k​e​y​.​ ​A​n​y​o​n​e​ ​w​i​t​h​ ​t​h​i​s​ ​i​n​f​o​r​m​a​t​i​o​n​ ​c​a​n​ ​t​a​k​e​ ​y​o​u​r​ ​V​e​C​h​a​i​n​ ​c​r​y​p​t​o​s​ ​f​o​r​e​v​e​r​.
+	 */
+	BD_PRIVATE_KEY_DISCLAIMER: string
+	/**
+	 * I​n​ ​c​a​s​e​ ​y​o​u​ ​l​o​s​e​ ​y​o​u​r​ ​d​e​v​i​c​e​ ​o​r​ ​t​h​e​ ​a​p​p​ ​i​s​ ​u​n​i​n​s​t​a​l​l​e​d​,​ ​y​o​u​ ​c​a​n​ ​u​s​e​ ​t​h​e​ ​p​r​i​v​a​t​e​ ​k​e​y​ ​b​e​l​o​w​ ​t​o​ ​r​e​c​o​v​e​r​ ​t​h​i​s​ ​w​a​l​l​e​t​ ​a​n​d​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​a​s​s​e​t​s​.
+	 */
+	BD_PRIVATE_KEY_PASSWORD_WARNING: string
+	/**
+	 * N​e​v​e​r​ ​s​h​a​r​e​ ​y​o​u​r​ ​p​r​i​v​a​t​e​ ​k​e​y​.​ ​A​n​y​o​n​e​ ​w​h​o​ ​a​c​c​e​s​s​ ​i​t​ ​c​a​n​ ​s​t​e​a​l​ ​a​l​l​ ​o​f​ ​y​o​u​r​ ​c​r​y​p​t​o​ ​a​s​s​e​t​s​.
+	 */
+	BD_PRIVATE_KEY_WARMNING: string
+	/**
 	 * V​e​W​o​r​l​d​ ​r​e​s​e​t
 	 */
 	BD_RESET: string
@@ -672,6 +688,14 @@ type RootTranslation = {
 	 * F​i​a​t​ ​b​a​l​a​n​c​e​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​e​s​t​n​e​t
 	 */
 	BD_TESTNET_NO_FIAT: string
+	/**
+	 * T​o​k​e​n​s​ ​c​o​n​v​e​r​t​e​d​ ​s​u​c​c​e​s​f​u​l​l​y​!
+	 */
+	BD_TOKEN_CONVERTED_SUCCESS: string
+	/**
+	 * S​e​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​d​e​t​a​i​l​s
+	 */
+	BD_TRANSACTION_DETAILS: string
 	/**
 	 * U​S​D
 	 */
@@ -809,10 +833,6 @@ type RootTranslation = {
 	 */
 	BTN_BACKUP_ALERT_CLOSE: string
 	/**
-	 * B​a​c​k​u​p​ private key
-	 */
-	BTN_BACKUP_PK: string
-	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	BTN_BACKUP_ALERT_CONFIRM: string
@@ -820,6 +840,10 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​p​h​r​a​s​e
 	 */
 	BTN_BACKUP_MENMONIC: string
+	/**
+	 * B​a​c​k​u​p​ ​p​r​i​v​a​t​e​ ​k​e​y
+	 */
+	BTN_BACKUP_PK: string
 	/**
 	 * B​a​c​k​u​p​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
@@ -860,6 +884,10 @@ type RootTranslation = {
 	 * C​o​n​t​i​n​u​e
 	 */
 	BTN_CONTINUE: string
+	/**
+	 * C​o​n​v​e​r​t
+	 */
+	BTN_CONVERT: string
 	/**
 	 * C​o​p​y​ ​p​u​b​l​i​c​ ​a​d​d​r​e​s​s
 	 */
@@ -2637,9 +2665,9 @@ type RootTranslation = {
 	 */
 	SB_BACKUP_MNEMONIC: string
 	/**
-	 * B​a​c​k​u​p​ ​“account​”
+	 * B​a​c​k​u​p​ ​“​P​r​i​v​a​t​e​ ​k​e​y​”
 	 */
-	SB_BACKUP_WALLET: string
+	SB_BACKUP_PRIVATE_KEY: string
 	/**
 	 * B​a​c​k​u​p​ ​“​R​e​c​o​v​e​r​y​ ​p​h​r​a​s​e​”
 	 */
@@ -2654,6 +2682,10 @@ type RootTranslation = {
 	 * @param {string} repeatCloudType
 	 */
 	SB_BACKUP_VERIFIED_DESCRIPTION: RequiredParams<'cloudType' | 'repeatCloudType'>
+	/**
+	 * B​a​c​k​u​p​ ​w​a​l​l​e​t
+	 */
+	SB_BACKUP_WALLET: string
 	/**
 	 * B​e​f​o​r​e​ ​u​p​d​a​t​i​n​g​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​m​e​t​h​o​d​ ​y​o​u​ ​n​e​e​d​ ​t​o​ ​b​a​c​k​u​p​ ​y​o​u​r​ ​s​e​c​u​r​i​t​y​ ​p​h​r​a​s​e​.​ ​I​n​ ​c​a​s​e​ ​t​h​e​ ​o​p​e​r​a​t​i​o​n​ ​f​a​i​l​s​ ​y​o​u​ ​w​i​l​l​ ​b​e​ ​f​o​r​c​e​d​ ​t​o
 	 */
@@ -2765,7 +2797,7 @@ type RootTranslation = {
 	 */
 	SB_PASSWORD_AUTH: string
 	/**
-	 * Private key
+	 * P​r​i​v​a​t​e​ ​k​e​y
 	 */
 	SB_PRIVATE_KEY: string
 	/**
@@ -3383,6 +3415,10 @@ type RootTranslation = {
 	 */
 	TITLE_CONTACTS: string
 	/**
+	 * C​o​n​v​e​r​t​ ​y​o​u​r​ ​B​e​t​t​e​r​ ​t​o​k​e​n​s
+	 */
+	TITLE_CONVERT_BETTER_TOKENS: string
+	/**
 	 * Y​o​u​r​ ​v​e​c​h​a​i​n​ ​w​a​l​l​e​t​ ​i​s​ ​r​e​a​d​y​!
 	 */
 	TITLE_CREATE_WALLET_SUCCESS: string
@@ -3874,13 +3910,13 @@ export type TranslationFunctions = {
 	 */
 	ALERT_CANT_BACKUP_LEDGER: () => LocalizedString
 	/**
-	 * Avoid screenshotting your private key. Store it offline or back it up securely online.
-	 */
-	ALERT_DONT_SCREENSHOT_PRIVATE_KEY: () => LocalizedString
-	/**
 	 * Avoid screenshotting your recovery phrase. Store it offline or back it up securely online.
 	 */
 	ALERT_DONT_SCREENSHOT_MNEMONIC: () => LocalizedString
+	/**
+	 * Avoid screenshotting your private key. Store it offline or back it up securely online.
+	 */
+	ALERT_DONT_SCREENSHOT_PRIVATE_KEY: () => LocalizedString
 	/**
 	 * Please, open app settings and authorize Bluetooth to continue.
 	 */
@@ -4107,13 +4143,21 @@ Try reconnect your device to the internet.
 	 */
 	BD_BACKUP_PASSWORD_TO_KEYCHAIN: () => LocalizedString
 	/**
-	 * The recovery phrases backup ensure you never lose access to your wallet in case of app reset or lost device.
+	 * The recovery phrases or private key backup ensure you never lose access to your wallet in case of app reset or lost device.
 	 */
 	BD_BACKUP_RECOVERY_PHRASE: () => LocalizedString
 	/**
 	 * GO BACK TO APP
 	 */
 	BD_BACK_TO_APP: () => LocalizedString
+	/**
+	 * B3TR tokens can be converted into VOT3 tokens and back, allowing you get more voting power and participate actively on the voting rounds and governance proposals.
+	 */
+	BD_BETTER_TOKEN_CONVERSION: () => LocalizedString
+	/**
+	 * Convert your Better tokens 1 B3TR = 1 VOT3
+	 */
+	BD_BETTER_TOKEN_CONVERSION_RATIO: () => LocalizedString
 	/**
 	 * Buy with Coinbase and receive the tokens directly in VeWorld.
 	 */
@@ -4235,6 +4279,10 @@ Try reconnect your device to the internet.
 	 */
 	BD_EUR: () => LocalizedString
 	/**
+	 * VTHO balance is required to pay for the conversion gas fees
+	 */
+	BD_GAS_REQUIRED_FOR_CONVERSION: () => LocalizedString
+	/**
 	 * Go back to VeWorld app
 	 */
 	BD_GO_BACK: () => LocalizedString
@@ -4275,17 +4323,9 @@ Try reconnect your device to the internet.
 	 */
 	BD_MNEMONIC_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
-	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
-	 */
-	BD_PRIVATE_KEY_DISCLAIMER: () => LocalizedString
-	/**
 	 * Never disclose your Secret Recovery Phrase. Anyone with this phrase can take your VeChain cryptos forever.
 	 */
 	BD_MNEMONIC_DISCLAIMER: () => LocalizedString
-	/**
-	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
-	 */
-	BD_PRIVATE_KEY_PASSWORD_WARNING: () => LocalizedString
 	/**
 	 * In case you lose your device or the app is uninstalled, you can use the 12 words below to recover this wallet and all of your assets.
 	 */
@@ -4294,10 +4334,6 @@ Try reconnect your device to the internet.
 	 * Your Secret Recovery Phrase makes it easy to back up and restore your account.
 	 */
 	BD_MNEMONIC_SUBTITLE: () => LocalizedString
-	/**
-	 * Never share your Private key. Anyone who learns them can steal all of your crypto assets.
-	 */
-	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
 	 * Never share the words and specific order. Anyone who learns them can steal all of your crypto assets.
 	 */
@@ -4358,6 +4394,22 @@ Try reconnect your device to the internet.
 	 * Min 6 characters, 1 number, 1 special character
 	 */
 	BD_PASSWORD_NOT_STRONG: () => LocalizedString
+	/**
+	 * Private key copied to clipboard
+	 */
+	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: () => LocalizedString
+	/**
+	 * Never disclose your Private key. Anyone with this information can take your VeChain cryptos forever.
+	 */
+	BD_PRIVATE_KEY_DISCLAIMER: () => LocalizedString
+	/**
+	 * In case you lose your device or the app is uninstalled, you can use the private key below to recover this wallet and all of your assets.
+	 */
+	BD_PRIVATE_KEY_PASSWORD_WARNING: () => LocalizedString
+	/**
+	 * Never share your private key. Anyone who access it can steal all of your crypto assets.
+	 */
+	BD_PRIVATE_KEY_WARMNING: () => LocalizedString
 	/**
 	 * VeWorld reset
 	 */
@@ -4434,6 +4486,14 @@ Try reconnect your device to the internet.
 	 * Fiat balance is not available on testnet
 	 */
 	BD_TESTNET_NO_FIAT: () => LocalizedString
+	/**
+	 * Tokens converted succesfully!
+	 */
+	BD_TOKEN_CONVERTED_SUCCESS: () => LocalizedString
+	/**
+	 * See transaction details
+	 */
+	BD_TRANSACTION_DETAILS: () => LocalizedString
 	/**
 	 * USD
 	 */
@@ -4575,13 +4635,13 @@ Try reconnect your device to the internet.
 	 */
 	BTN_BACKUP_ALERT_CONFIRM: () => LocalizedString
 	/**
-	 * Backup private key
-	 */
-	BTN_BACKUP_PK: () => LocalizedString
-	/**
 	 * Backup phrase
 	 */
 	BTN_BACKUP_MENMONIC: () => LocalizedString
+	/**
+	 * Backup private key
+	 */
+	BTN_BACKUP_PK: () => LocalizedString
 	/**
 	 * Backup to Google Drive
 	 */
@@ -4622,6 +4682,10 @@ Try reconnect your device to the internet.
 	 * Continue
 	 */
 	BTN_CONTINUE: () => LocalizedString
+	/**
+	 * Convert
+	 */
+	BTN_CONVERT: () => LocalizedString
 	/**
 	 * Copy public address
 	 */
@@ -6372,10 +6436,6 @@ Try reconnect your device to the internet.
 	 */
 	SB_BACKUP_MNEMONIC: () => LocalizedString
 	/**
-	 * Backup “account”
-	 */
-	SB_BACKUP_WALLET: () => LocalizedString
-	/**
 	 * Backup “Private key”
 	 */
 	SB_BACKUP_PRIVATE_KEY: () => LocalizedString
@@ -6391,6 +6451,10 @@ Try reconnect your device to the internet.
 	 * All of your wallet’s recovery phrase were backed up to {cloudType}. If you need to recover your wallet, you can import from {repeatCloudType} with your recovery password.
 	 */
 	SB_BACKUP_VERIFIED_DESCRIPTION: (arg: { cloudType: string, repeatCloudType: string }) => LocalizedString
+	/**
+	 * Backup wallet
+	 */
+	SB_BACKUP_WALLET: () => LocalizedString
 	/**
 	 * Before updating your security method you need to backup your security phrase. In case the operation fails you will be forced to
 	 */
@@ -6499,10 +6563,6 @@ Try reconnect your device to the internet.
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
-	/**
-	 * Private key copied to clipboard
-	 */
-	BD_PRIVATE_KEY_COPIED_TO_CLIPBOARD: () => LocalizedString
 	/**
 	 * Private key
 	 */
@@ -7115,6 +7175,10 @@ Try reconnect your device to the internet.
 	 * My Contacts
 	 */
 	TITLE_CONTACTS: () => LocalizedString
+	/**
+	 * Convert your Better tokens
+	 */
+	TITLE_CONVERT_BETTER_TOKENS: () => LocalizedString
 	/**
 	 * Your vechain wallet is ready!
 	 */

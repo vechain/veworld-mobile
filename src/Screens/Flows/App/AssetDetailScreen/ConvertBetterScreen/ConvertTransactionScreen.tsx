@@ -83,27 +83,34 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
 
     const onTransactionSuccess = useCallback(
         (transaction: Transaction, txId: string) => {
-            track(AnalyticsEvent.CONVERT_B3TR_VOT3_SUCCESS)
-
-            const convertTo = AddressUtils.compareAddresses(toAddresses[0], b3trWithBalance?.address) ? "VOT3" : "B3TR"
+            track(AnalyticsEvent.CONVERT_B3TR_VOT3_SUCCESS, {
+                from: convertFromTo.fromToken?.symbol,
+                to: convertFromTo.toToken?.symbol,
+                amount: formattedAmount,
+            })
 
             navigation.replace(Routes.TOKEN_DETAILS, {
                 token,
                 betterConversionResult: {
                     txId,
                     isSuccess: true,
-                    amount: "",
-                    to: convertTo,
+                    amount: formattedAmount,
+                    from: convertFromTo.fromToken,
+                    to: convertFromTo.toToken,
                 },
             })
             dispatch(setIsAppLoading(false))
         },
-        [b3trWithBalance?.address, dispatch, navigation, toAddresses, token, track],
+        [track, convertFromTo.fromToken, convertFromTo.toToken, formattedAmount, navigation, token, dispatch],
     )
     const onTransactionFailure = useCallback(() => {
-        track(AnalyticsEvent.CONVERT_B3TR_VOT3_FAILED)
+        track(AnalyticsEvent.CONVERT_B3TR_VOT3_FAILED, {
+            from: convertFromTo.fromToken?.symbol,
+            to: convertFromTo.toToken?.symbol,
+            amount: formattedAmount,
+        })
         // console.log(error)
-    }, [track])
+    }, [formattedAmount, convertFromTo.fromToken?.symbol, convertFromTo.toToken?.symbol, track])
 
     const {
         selectedDelegationOption,

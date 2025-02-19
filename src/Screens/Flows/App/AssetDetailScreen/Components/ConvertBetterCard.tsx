@@ -5,6 +5,7 @@ import Animated, { AnimatedStyle } from "react-native-reanimated"
 import { BaseButton, BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType, typography } from "~Constants"
 import { useThemedStyles, useTotalTokenBalance } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
@@ -30,6 +31,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
     onSendAmountChange,
     onMaxAmountPress,
 }) => {
+    const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
@@ -55,7 +57,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
             <BaseCard style={[styles.container]}>
                 <BaseView flexDirection="row" flex={1} justifyContent="space-between">
                     <BaseView flex={1}>
-                        <BaseText typographyFont="captionSemiBold">{isSender ? "From" : "To"}</BaseText>
+                        <BaseText typographyFont="captionSemiBold">{isSender ? LL.FROM() : LL.TO()}</BaseText>
                         <BaseSpacer height={12} />
                         <BaseView flexDirection="row" justifyContent="flex-start">
                             <Image source={{ uri: token.icon }} width={24} height={24} />

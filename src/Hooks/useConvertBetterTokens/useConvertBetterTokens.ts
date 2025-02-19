@@ -73,7 +73,10 @@ export const useConvertBetterTokens = () => {
     const convertB3tr = useCallback(
         (amount: string | number) => {
             const clauses = buildB3trTxClauses(amount)
-            track(AnalyticsEvent.CONVERT_B3TR_VOT3)
+            track(AnalyticsEvent.CONVERT_B3TR_VOT3, {
+                from: "B3TR",
+                to: "VOT3",
+            })
             nav.navigate(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
                 amount: BigNutils(amount).toString,
                 transactionClauses: clauses,
@@ -89,7 +92,10 @@ export const useConvertBetterTokens = () => {
     const convertVot3 = useCallback(
         (amount: string | number) => {
             const clauses = buildVot3TxClauses(amount)
-            track(AnalyticsEvent.CONVERT_B3TR_VOT3)
+            track(AnalyticsEvent.CONVERT_B3TR_VOT3, {
+                from: "VOT3",
+                to: "B3TR",
+            })
             nav.navigate(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
                 amount: BigNutils(amount).toString,
                 transactionClauses: clauses,
