@@ -1,5 +1,12 @@
 
 
+## 2.1.0 (2025-02-19)
+
+
+### Features
+
+* changing wallet name changes sub account names ([#2699](https://github.com/vechain/veworld-mobile/issues/2699)) ([2e489d8](https://github.com/vechain/veworld-mobile/commit/2e489d8ab719260dfc0537ad757526ce022a0ce9)), closes [#2665](https://github.com/vechain/veworld-mobile/issues/2665)
+
 ## 2.0.9 (2025-02-18)
 
 
