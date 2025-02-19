@@ -262,7 +262,8 @@ export const ActivitySectionList = ({
     }, [])
 
     const renderListFooter = useCallback(() => {
-        return activities.length > 0 && isFetching ? <SkeletonActivityBox /> : <BaseSpacer height={50} />
+        const showSkeleton = activities.length > 0 && isFetching
+        return showSkeleton ? <SkeletonActivityBox /> : <BaseSpacer height={50} />
     }, [activities.length, isFetching])
 
     const renderItem = useCallback(

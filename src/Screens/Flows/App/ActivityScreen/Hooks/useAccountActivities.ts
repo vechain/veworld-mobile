@@ -22,7 +22,6 @@ export const useAccountActivities = () => {
 
     const page = useRef(0)
     const prevNetwork = useRef(network)
-    const isFetchingActivities = useRef(false)
     const prevSelectedAccountAddress = useRef(selectedAccount.address)
 
     const [isFetching, setIsFetching] = useState(true)
@@ -111,12 +110,7 @@ export const useAccountActivities = () => {
     }, [getActivities, resetPageNumber])
 
     const fetchActivities = useCallback(async () => {
-        if (isFetchingActivities.current) {
-            return
-        }
-
         await getActivities({ refresh: false })
-        isFetchingActivities.current = false
     }, [getActivities])
 
     useEffect(() => {

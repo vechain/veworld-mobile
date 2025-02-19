@@ -233,7 +233,7 @@ const DAppTransaction = ({ activity, tokens, onPress }: DAppTransactionProps) =>
 
     const getSwapResult = () => {
         if (!isSwap || !decodedClauses || activity.type !== ActivityType.DAPP_TRANSACTION) return undefined
-        return TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activity as DappTxActivity)
+        return TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activity)
     }
 
     const swapResult = getSwapResult()
@@ -350,7 +350,6 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
             title={title}
             description={validatedCollectionName()}
             activityStatus={activity.status}
-            // nftImage={tokenMetadata?.image}
             onPress={onPressHandler}
         />
     )
