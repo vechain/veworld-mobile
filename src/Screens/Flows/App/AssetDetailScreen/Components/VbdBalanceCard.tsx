@@ -193,7 +193,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
                 <BaseView>
                     <BaseIcon
                         name="icon-more-vertical"
-                        size={16}
+                        size={18}
                         color={theme.colors.actionBanner.buttonTextSecondary}
                         style={styles.moreActionsButton}
                         action={() => {}}
@@ -244,8 +244,6 @@ const baseStyles = (theme: ColorThemeType) =>
             height: 32,
             width: 32,
             borderWidth: 1,
-            justifyContent: "flex-end",
-            padding: 8,
             borderRadius: 6,
         },
     })

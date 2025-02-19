@@ -233,6 +233,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
             },
             {
                 name: LL.BTN_SELL(),
+                disabled: !foundToken,
                 action: openQRCodeSheet,
                 icon: actionBottomSheetIcon("icon-minus-circle", !foundToken),
                 testID: "sellButton",
