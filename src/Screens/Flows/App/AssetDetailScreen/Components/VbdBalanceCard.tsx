@@ -112,7 +112,19 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             {
                 name: LL.BTN_CONVERT(),
                 disabled: !veB3trFiatBalance || isObserved,
-                action: openQRCodeSheet,
+                action: () => {
+                    if (veB3trFiatBalance) {
+                        //handle convert
+                    } else {
+                        showWarningToast({
+                            text1: LL.HEADS_UP(),
+                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
+                                tokenName: b3trToken.symbol,
+                            }),
+                        })
+                    }
+                },
+
                 icon: (
                     <BaseIcon
                         color={
@@ -133,7 +145,6 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             b3trTokenWithBalance,
             isObserved,
             nav,
-            openQRCodeSheet,
             theme.colors.actionBanner.buttonTextDisabled,
             theme.colors.actionBanner.buttonTextSecondary,
             veB3trFiatBalance,
@@ -144,7 +155,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
         () => [
             {
                 name: LL.BTN_SEND(),
-                disabled: !veB3trFiatBalance || isObserved,
+                disabled: !b3trTokenWithBalance || isObserved,
                 action: () => {
                     if (veB3trFiatBalance) {
                         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
@@ -159,18 +170,19 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                         })
                     }
                 },
-                icon: actionBottomSheetIcon("icon-arrow-up", !veB3trFiatBalance),
+                icon: actionBottomSheetIcon("icon-arrow-up", !b3trTokenWithBalance),
                 testID: "sendButton",
             },
             {
                 name: LL.BTN_CONVERT(),
+                disabled: !b3trTokenWithBalance || isObserved,
                 action: openQRCodeSheet,
-                icon: actionBottomSheetIcon("icon-refresh-cw"),
+                icon: actionBottomSheetIcon("icon-refresh-cw", !b3trTokenWithBalance),
                 testID: "convertButton",
             },
             {
                 name: LL.BTN_SWAP(),
-                disabled: !veB3trFiatBalance || isObserved,
+                disabled: !b3trTokenWithBalance || isObserved,
                 action: () => {
                     if (veB3trFiatBalance) {
                         nav.navigate(Routes.SWAP)
@@ -183,7 +195,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                         })
                     }
                 },
-                icon: actionBottomSheetIcon("icon-arrow-left-right", !veB3trFiatBalance),
+                icon: actionBottomSheetIcon("icon-arrow-left-right", !b3trTokenWithBalance),
                 testID: "swapButton",
             },
             {

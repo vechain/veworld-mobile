@@ -14,7 +14,7 @@ type Props = {
     actions: FastAction[]
 }
 
-const ItemSeparatorComponent = () => <BaseSpacer height={16} />
+const ItemSeparatorComponent = () => <BaseSpacer height={14} />
 
 export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ closeBottomSheet, onDismiss, actions }, ref) => {
@@ -33,17 +33,17 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
 
         const computeSnappoints = useMemo(() => {
             if (actions.length < 5) {
-                return ["42%"]
+                return ["45%"]
             }
             if (actions.length < 6) {
-                return ["50%"]
+                return ["55%"]
             }
 
             if (actions.length > 6) {
                 return ["75%"]
             }
 
-            return ["42%", "50%", "75%"]
+            return ["45%", "55%", "75%"]
         }, [actions.length])
 
         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
