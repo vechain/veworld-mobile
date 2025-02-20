@@ -4,16 +4,24 @@ import { TokenWithCompleteInfo, useThemedStyles } from "~Hooks"
 import { StyleSheet } from "react-native"
 import { B3TR, ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
-import { VbdBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components/VbdBalanceCard"
-import { VetBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components/VetBalanceCard"
+import { VbdBalanceCard, VetBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components"
+import { FungibleTokenWithBalance } from "~Model"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
     isBalanceVisible: boolean
-    FastActions: React.ReactNode
+    isObserved: boolean
+    openQRCodeSheet: () => void
+    foundToken?: FungibleTokenWithBalance
 }
 
-export const AssetBalanceCard = ({ tokenWithInfo, isBalanceVisible, FastActions }: Props) => {
+export const AssetBalanceCard = ({
+    tokenWithInfo,
+    isBalanceVisible,
+    openQRCodeSheet,
+    foundToken,
+    isObserved,
+}: Props) => {
     const { styles, theme } = useThemedStyles(baseStyle)
     const { LL } = useI18nContext()
 
@@ -27,12 +35,18 @@ export const AssetBalanceCard = ({ tokenWithInfo, isBalanceVisible, FastActions 
 
             <BaseView w={100} style={styles.cardContainer}>
                 {tokenWithInfo.symbol === B3TR.symbol ? (
-                    <VbdBalanceCard isBalanceVisible={isBalanceVisible} />
+                    <VbdBalanceCard
+                        isBalanceVisible={isBalanceVisible}
+                        openQRCodeSheet={openQRCodeSheet}
+                        isObserved={isObserved}
+                    />
                 ) : (
                     <VetBalanceCard
-                        tokenWithInfo={tokenWithInfo}
+                        token={tokenWithInfo}
+                        foundToken={foundToken}
+                        isObserved={isObserved}
                         isBalanceVisible={isBalanceVisible}
-                        FastActions={FastActions}
+                        openQRCodeSheet={openQRCodeSheet}
                     />
                 )}
             </BaseView>

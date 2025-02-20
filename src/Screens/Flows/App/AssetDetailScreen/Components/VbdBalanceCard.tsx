@@ -1,11 +1,19 @@
-import React, { memo, useMemo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { selectNetworkVBDTokens, selectVot3TokenWithBalance, useAppSelector } from "~Storage/Redux"
-import { useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { BalanceView } from "./BalanceView"
-import { BaseIcon, BaseSkeleton, BaseText, BaseView, FiatBalance, showWarningToast } from "~Components"
+import {
+    BaseIcon,
+    BaseSkeleton,
+    BaseText,
+    BaseView,
+    FastActionsBottomSheet,
+    FiatBalance,
+    showWarningToast,
+} from "~Components"
 import { AssetActionsBar } from "./AssetActionsBar"
-import { FastAction } from "~Model"
+import { FastAction, IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
@@ -15,9 +23,11 @@ import { useTokenCardFiatInfo } from "~Screens/Flows/App/HomeScreen/Components/L
 
 type Props = {
     isBalanceVisible: boolean
+    isObserved: boolean
+    openQRCodeSheet: () => void
 }
 
-export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
+export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObserved }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -25,6 +35,12 @@ export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
     const vot3TokenWithBalance = useAppSelector(state => selectVot3TokenWithBalance(state))
     const b3trTokenWithBalance = useAppSelector(state => selectVot3TokenWithBalance(state))
+
+    const {
+        ref: FastActionsBottomSheetRef,
+        onOpen: openFastActionsSheet,
+        onClose: closeFastActionsSheet,
+    } = useBottomSheetModal()
 
     const vot3Token = useTokenWithCompleteInfo(VOT3)
     const b3trToken = useTokenWithCompleteInfo(B3TR)
@@ -45,11 +61,22 @@ export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
 
     const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trFiat)
 
+    const actionBottomSheetIcon = useCallback(
+        (iconName: IconKey, disabled?: boolean) => (
+            <BaseIcon
+                color={disabled ? theme.colors.actionBottomSheet.disabledIcon : theme.colors.actionBottomSheet.icon}
+                name={iconName}
+                size={18}
+            />
+        ),
+        [theme.colors.actionBottomSheet.disabledIcon, theme.colors.actionBottomSheet.icon],
+    )
+
     const Actions: FastAction[] = useMemo(
         () => [
             {
                 name: LL.BTN_SEND(),
-                disabled: !veB3trFiatBalance,
+                disabled: !veB3trFiatBalance || isObserved,
                 action: () => {
                     if (veB3trFiatBalance) {
                         nav.navigate(Routes.INSERT_ADDRESS_SEND, {
@@ -68,7 +95,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
                     <BaseIcon
                         size={16}
                         color={
-                            b3trTokenWithBalance
+                            veB3trFiatBalance
                                 ? theme.colors.actionBanner.buttonTextSecondary
                                 : theme.colors.actionBanner.buttonTextDisabled
                         }
@@ -79,23 +106,12 @@ export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
             },
             {
                 name: LL.BTN_CONVERT(),
-                disabled: !veB3trFiatBalance,
-                action: () => {
-                    if (veB3trFiatBalance) {
-                        nav.navigate(Routes.SWAP)
-                    } else {
-                        showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
-                        })
-                    }
-                },
+                disabled: !veB3trFiatBalance || isObserved,
+                action: openQRCodeSheet,
                 icon: (
                     <BaseIcon
                         color={
-                            b3trTokenWithBalance
+                            veB3trFiatBalance
                                 ? theme.colors.actionBanner.buttonTextSecondary
                                 : theme.colors.actionBanner.buttonTextDisabled
                         }
@@ -110,10 +126,77 @@ export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
             LL,
             b3trToken.symbol,
             b3trTokenWithBalance,
+            isObserved,
             nav,
+            openQRCodeSheet,
             theme.colors.actionBanner.buttonTextDisabled,
             theme.colors.actionBanner.buttonTextSecondary,
             veB3trFiatBalance,
+        ],
+    )
+
+    const ActionsBottomSheet: FastAction[] = useMemo(
+        () => [
+            {
+                name: LL.BTN_SEND(),
+                disabled: !veB3trFiatBalance || isObserved,
+                action: () => {
+                    if (veB3trFiatBalance) {
+                        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+                            token: b3trTokenWithBalance,
+                        })
+                    } else {
+                        showWarningToast({
+                            text1: LL.HEADS_UP(),
+                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
+                                tokenName: b3trToken.symbol,
+                            }),
+                        })
+                    }
+                },
+                icon: actionBottomSheetIcon("icon-arrow-up", !veB3trFiatBalance),
+                testID: "sendButton",
+            },
+            {
+                name: LL.BTN_CONVERT(),
+                action: openQRCodeSheet,
+                icon: actionBottomSheetIcon("icon-refresh-cw"),
+                testID: "convertButton",
+            },
+            {
+                name: LL.BTN_SWAP(),
+                disabled: !veB3trFiatBalance || isObserved,
+                action: () => {
+                    if (veB3trFiatBalance) {
+                        nav.navigate(Routes.SWAP)
+                    } else {
+                        showWarningToast({
+                            text1: LL.HEADS_UP(),
+                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
+                                tokenName: b3trToken.symbol,
+                            }),
+                        })
+                    }
+                },
+                icon: actionBottomSheetIcon("icon-arrow-left-right", !veB3trFiatBalance),
+                testID: "swapButton",
+            },
+            {
+                name: LL.COMMON_RECEIVE(),
+                action: openQRCodeSheet,
+                icon: actionBottomSheetIcon("icon-arrow-down"),
+                testID: "reciveButton",
+            },
+        ],
+        [
+            LL,
+            veB3trFiatBalance,
+            isObserved,
+            actionBottomSheetIcon,
+            openQRCodeSheet,
+            nav,
+            b3trTokenWithBalance,
+            b3trToken.symbol,
         ],
     )
 
@@ -196,7 +279,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
                         size={18}
                         color={theme.colors.actionBanner.buttonTextSecondary}
                         style={styles.moreActionsButton}
-                        action={() => {}}
+                        action={openFastActionsSheet}
                     />
                 </BaseView>
                 <BaseView />
@@ -208,6 +291,11 @@ export const VbdBalanceCard = memo(({ isBalanceVisible }: Props) => {
                     containerStyle={styles.b3trBalanceView}
                 />
             </BaseView>
+            <FastActionsBottomSheet
+                ref={FastActionsBottomSheetRef}
+                actions={ActionsBottomSheet}
+                closeBottomSheet={closeFastActionsSheet}
+            />
         </>
     )
 })
