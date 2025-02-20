@@ -124,7 +124,6 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                         })
                     }
                 },
-
                 icon: (
                     <BaseIcon
                         color={
