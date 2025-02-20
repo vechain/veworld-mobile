@@ -36,6 +36,7 @@ import {
     WalletManagementScreen,
     ClaimUsername,
     UsernameClaimed,
+    ConvertTransactionScreen,
 } from "~Screens"
 
 export type RootStackParamListHome = {
@@ -68,7 +69,24 @@ export type RootStackParamListHome = {
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
+    [Routes.TOKEN_DETAILS]: {
+        token: TokenWithCompleteInfo
+        /**
+         * Provided when user convert B3TR/VOT3 token to display bottom sheet result
+         */
+        betterConversionResult?: {
+            from?: FungibleTokenWithBalance
+            to?: FungibleTokenWithBalance
+            amount: string
+            txId: string
+            isSuccess: boolean
+        }
+    }
+    [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
+        token: TokenWithCompleteInfo
+        amount: string
+        transactionClauses: Transaction.Clause[]
+    }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
@@ -144,6 +162,11 @@ export const HomeStack = () => {
                 />
 
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN}
+                    component={ConvertTransactionScreen}
+                    options={{ headerShown: false }}
+                />
                 <Screen name={Routes.OBSERVE_WALLET} component={ObserveWalletScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.IMPORT_MNEMONIC} component={ImportLocalWallet} options={{ headerShown: false }} />
 
