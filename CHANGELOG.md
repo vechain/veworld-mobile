@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-02-20)
+
+
+### Bug Fixes
+
+* readme ([#2716](https://github.com/vechain/veworld-mobile/issues/2716)) ([102443b](https://github.com/vechain/veworld-mobile/commit/102443b62a3fe34af2ba49a7bf0719ef7207b38b))
+
 ## 2.0.9 (2025-02-18)
 
 
