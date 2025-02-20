@@ -77,6 +77,7 @@ export const useConvertBetterTokens = () => {
                 from: "B3TR",
                 to: "VOT3",
             })
+
             nav.navigate(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
                 amount: BigNutils(amount).toString,
                 transactionClauses: clauses,

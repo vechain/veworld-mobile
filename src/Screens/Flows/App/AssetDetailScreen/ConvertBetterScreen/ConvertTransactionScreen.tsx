@@ -140,7 +140,7 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
 
     return (
         <Layout
-            title={LL.SEND_TOKEN_TITLE()}
+            title={LL.BTN_CONVERT()}
             noStaticBottomPadding
             body={
                 <BaseView mb={80} mt={8}>
