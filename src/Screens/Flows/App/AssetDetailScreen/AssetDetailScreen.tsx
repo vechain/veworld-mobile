@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from "react"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import { AssetChart, ConvertBetterBottomSheet, MarketInfoView } from "./Components"
+import { AssetChart, MarketInfoView } from "./Components"
 import { useI18nContext } from "~i18n"
 import { striptags } from "striptags"
 import {
@@ -31,11 +31,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
-    const {
-        ref: convertBetterBottomSheetRef,
-        // onOpen: openConvertBetterSheet,
-        onClose: closeConvertBetterSheet,
-    } = useBottomSheetModal()
 
     const {
         ref: convertBetterSuccessBottomSheetRef,
@@ -126,13 +121,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <BaseSpacer height={16} />
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-
-                    <ConvertBetterBottomSheet
-                        ref={convertBetterBottomSheetRef}
-                        onClose={() => {
-                            closeConvertBetterSheet()
-                        }}
-                    />
 
                     <ConvertBetterTokenSuccessBottomSheet
                         ref={convertBetterSuccessBottomSheetRef}

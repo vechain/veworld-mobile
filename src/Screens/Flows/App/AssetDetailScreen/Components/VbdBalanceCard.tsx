@@ -25,6 +25,7 @@ import { useNavigation } from "@react-navigation/native"
 import { StyleSheet } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useTokenCardFiatInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/useTokenCardFiatInfo"
+import { ConvertBetterBottomSheet } from "~Screens/Flows/App/AssetDetailScreen/Components/ConvertBetterBottomSheet"
 
 type Props = {
     isBalanceVisible: boolean
@@ -45,6 +46,12 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
         ref: FastActionsBottomSheetRef,
         onOpen: openFastActionsSheet,
         onClose: closeFastActionsSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: convertBetterBottomSheetRef,
+        onOpen: openConvertBetterSheet,
+        onClose: closeConvertBetterSheet,
     } = useBottomSheetModal()
 
     const vot3Token = useTokenWithCompleteInfo(VOT3)
@@ -112,18 +119,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             {
                 name: LL.BTN_CONVERT(),
                 disabled: !veB3trFiatBalance || isObserved,
-                action: () => {
-                    if (veB3trFiatBalance) {
-                        //handle convert
-                    } else {
-                        showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
-                        })
-                    }
-                },
+                action: openConvertBetterSheet,
                 icon: (
                     <BaseIcon
                         color={
@@ -144,6 +140,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             b3trTokenWithBalance,
             isObserved,
             nav,
+            openConvertBetterSheet,
             theme.colors.actionBanner.buttonTextDisabled,
             theme.colors.actionBanner.buttonTextSecondary,
             veB3trFiatBalance,
@@ -312,6 +309,12 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                 ref={FastActionsBottomSheetRef}
                 actions={ActionsBottomSheet}
                 closeBottomSheet={closeFastActionsSheet}
+            />
+            <ConvertBetterBottomSheet
+                ref={convertBetterBottomSheetRef}
+                onClose={() => {
+                    closeConvertBetterSheet()
+                }}
             />
         </>
     )
