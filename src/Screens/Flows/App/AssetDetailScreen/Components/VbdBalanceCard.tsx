@@ -1,5 +1,10 @@
 import React, { memo, useCallback, useMemo } from "react"
-import { selectNetworkVBDTokens, selectVot3TokenWithBalance, useAppSelector } from "~Storage/Redux"
+import {
+    selectB3trTokenWithBalance,
+    selectNetworkVBDTokens,
+    selectVot3TokenWithBalance,
+    useAppSelector,
+} from "~Storage/Redux"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { BalanceView } from "./BalanceView"
@@ -34,7 +39,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
 
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
     const vot3TokenWithBalance = useAppSelector(state => selectVot3TokenWithBalance(state))
-    const b3trTokenWithBalance = useAppSelector(state => selectVot3TokenWithBalance(state))
+    const b3trTokenWithBalance = useAppSelector(state => selectB3trTokenWithBalance(state))
 
     const {
         ref: FastActionsBottomSheetRef,
