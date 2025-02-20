@@ -135,7 +135,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const showActions = useMemo(() => !AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
     useEffect(() => {
-        if (betterConversionResult && betterConversionResult.isSuccess) {
+        if (betterConversionResult?.isSuccess) {
             openConvertSuccessBetterSheet()
         }
     }, [betterConversionResult, openConvertSuccessBetterSheet])

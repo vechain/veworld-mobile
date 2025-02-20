@@ -24,7 +24,7 @@ type Props = {
 export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
     const { input, setInput, removeInvalidCharacters } = useAmountInput("")
     const [isSwapped, setIsSwapped] = useState(false)
-    const [isSwapEnabled, setIsSwapEnable] = useState(true)
+    const [isSwapEnabled, setIsSwapEnabled] = useState(true)
     const [isError, setIsError] = useState(false)
 
     const { LL } = useI18nContext()
@@ -55,11 +55,11 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const submitDisabled = useMemo(() => isError || !input, [input, isError])
 
     const onAnimationEnd = () => {
-        setIsSwapEnable(true)
+        setIsSwapEnabled(true)
     }
 
     const resetStates = useCallback(() => {
-        setIsSwapEnable(true)
+        setIsSwapEnabled(true)
         setInput("")
         cardPosition.value = 0
         setIsSwapped(false)
