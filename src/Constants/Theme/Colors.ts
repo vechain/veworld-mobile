@@ -53,6 +53,7 @@ export type Colors = {
     textSecondary: string
     horizontalButtonTextReversed: string
     cardBorder: string
+    cardDivider: string
     switchEnabled: string
     textLight: string
     checkboxFilledBackground: string
@@ -106,8 +107,23 @@ export type Colors = {
         border: string
         title: string
         buttonBackground: string
+        buttonBackgroundDisabled: string
         buttonBorder: string
         buttonText: string
+        buttonTextSecondary: string
+        buttonTextDisabled: string
+    }
+    actionBottomSheet: {
+        background: string
+        iconBackground: string
+        text: string
+        icon: string
+        activeIcon: string
+        activeIconBackground: string
+        activeText: string
+        disabledText: string
+        disabledIcon: string
+        disabledIconBackground: string
     }
     assetDetailsCard: {
         background: string
@@ -247,6 +263,7 @@ const light: Colors = {
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
+    cardDivider: COLORS.GREY_200,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
@@ -315,8 +332,23 @@ const light: Colors = {
         border: COLORS.PRIMARY_200,
         title: COLORS.PURPLE,
         buttonBackground: COLORS.WHITE,
+        buttonBackgroundDisabled: COLORS.GREY_100,
         buttonBorder: COLORS.GREY_200,
         buttonText: COLORS.PURPLE,
+        buttonTextSecondary: COLORS.PRIMARY_800,
+        buttonTextDisabled: COLORS.GREY_400,
+    },
+    actionBottomSheet: {
+        background: COLORS.GREY_50,
+        iconBackground: COLORS.GREY_100,
+        text: COLORS.PRIMARY_800,
+        icon: COLORS.GREY_600,
+        activeIcon: COLORS.GREY_600,
+        activeIconBackground: COLORS.WHITE,
+        activeText: COLORS.WHITE,
+        disabledText: COLORS.GREY_400,
+        disabledIcon: COLORS.GREY_400,
+        disabledIconBackground: COLORS.GREY_100,
     },
     assetDetailsCard: {
         background: COLORS.GREY_50,
@@ -366,6 +398,7 @@ const dark: Colors = {
     button: COLORS.LIME_GREEN,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
     cardBorder: COLORS.DARK_PURPLE_DISABLED,
+    cardDivider: COLORS.PURPLE_DISABLED,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
     transparent: COLORS.TRANSPARENT,
@@ -436,6 +469,21 @@ const dark: Colors = {
         buttonBackground: COLORS.DARK_PURPLE_DISABLED,
         buttonBorder: COLORS.TRANSPARENT,
         buttonText: COLORS.GREY_50,
+        buttonTextSecondary: COLORS.LIME_GREEN,
+        buttonTextDisabled: COLORS.PURPLE,
+        buttonBackgroundDisabled: COLORS.DARK_PURPLE_DISABLED,
+    },
+    actionBottomSheet: {
+        background: COLORS.PURPLE,
+        iconBackground: COLORS.PURPLE_DISABLED,
+        text: COLORS.WHITE,
+        icon: COLORS.GREY_100,
+        activeIcon: COLORS.GREY_100,
+        activeIconBackground: COLORS.DARK_PURPLE_DISABLED,
+        activeText: COLORS.DARK_PURPLE_DISABLED,
+        disabledText: COLORS.DARK_PURPLE_DISABLED,
+        disabledIcon: COLORS.DARK_PURPLE_DISABLED,
+        disabledIconBackground: COLORS.PURPLE_DISABLED,
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,

@@ -4,7 +4,7 @@ import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Comp
 import Animated from "react-native-reanimated"
 import { useTheme, useTokenWithCompleteInfo } from "~Hooks"
 import { BalanceUtils } from "~Utils"
-import { COLORS } from "~Constants"
+import { COLORS, VBD_ICON } from "~Constants"
 import { useTokenCardFiatInfo } from "./useTokenCardFiatInfo"
 import { useI18nContext } from "~i18n"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
@@ -82,7 +82,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row">
                 <BaseView style={[baseStyles.imageContainer]}>
-                    <Image source={{ uri: b3trToken.icon }} style={baseStyles.image} />
+                    <Image source={{ uri: VBD_ICON }} style={baseStyles.image} />
                 </BaseView>
                 <BaseSpacer width={16} />
                 <BaseView flexDirection="column" alignItems="flex-start">

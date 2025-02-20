@@ -1,23 +1,55 @@
 import React from "react"
-import { BaseView } from "~Components"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { TokenWithCompleteInfo, useThemedStyles } from "~Hooks"
-import { BalanceView } from "~Screens/Flows/App/AssetDetailScreen/Components/BalanceView"
 import { StyleSheet } from "react-native"
-import { ColorThemeType } from "~Constants"
+import { B3TR, ColorThemeType } from "~Constants"
+import { useI18nContext } from "~i18n"
+import { VbdBalanceCard, VetBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components"
+import { FungibleTokenWithBalance } from "~Model"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
     isBalanceVisible: boolean
-    FastActions: React.ReactNode
+    isObserved: boolean
+    openQRCodeSheet: () => void
+    foundToken?: FungibleTokenWithBalance
 }
 
-export const AssetBalanceCard = ({ tokenWithInfo, isBalanceVisible, FastActions }: Props) => {
-    const { styles } = useThemedStyles(baseStyle)
+export const AssetBalanceCard = ({
+    tokenWithInfo,
+    isBalanceVisible,
+    openQRCodeSheet,
+    foundToken,
+    isObserved,
+}: Props) => {
+    const { styles, theme } = useThemedStyles(baseStyle)
+    const { LL } = useI18nContext()
 
     return (
-        <BaseView w={100} style={styles.cardContainer}>
-            <BalanceView tokenWithInfo={tokenWithInfo} isBalanceVisible={isBalanceVisible} />
-            {FastActions}
+        <BaseView w={100}>
+            <BaseText color={theme.colors.text} typographyFont="bodySemiBold">
+                {LL.BD_YOUR_BALANCE()}
+            </BaseText>
+
+            <BaseSpacer height={12} />
+
+            <BaseView w={100} style={styles.cardContainer}>
+                {tokenWithInfo.symbol === B3TR.symbol ? (
+                    <VbdBalanceCard
+                        isBalanceVisible={isBalanceVisible}
+                        openQRCodeSheet={openQRCodeSheet}
+                        isObserved={isObserved}
+                    />
+                ) : (
+                    <VetBalanceCard
+                        token={tokenWithInfo}
+                        foundToken={foundToken}
+                        isObserved={isObserved}
+                        isBalanceVisible={isBalanceVisible}
+                        openQRCodeSheet={openQRCodeSheet}
+                    />
+                )}
+            </BaseView>
         </BaseView>
     )
 }
@@ -26,11 +58,11 @@ const baseStyle = (theme: ColorThemeType) =>
     StyleSheet.create({
         cardContainer: {
             flexDirection: "column",
-            gap: 16,
             borderRadius: 12,
-            borderWidth: 1,
-            padding: 16,
+            paddingVertical: 16,
             backgroundColor: theme.colors.assetDetailsCard.background,
-            borderColor: theme.colors.assetDetailsCard.border,
+        },
+        nonVbdContainer: {
+            paddingHorizontal: 16,
         },
     })

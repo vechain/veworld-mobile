@@ -33,7 +33,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
         if (chartData?.length) {
             return (
                 <BaseView flexDirection="row" w={100} alignItems="flex-end" style={[styles.container]}>
-                    <LineChart height={180} width={SCREEN_WIDTH - 32} yGutter={30}>
+                    <LineChart height={200} width={SCREEN_WIDTH - 32} yGutter={30}>
                         <LineChart.Path color={theme.colors.graphLine} width={2}>
                             <LineChart.Gradient color={theme.colors.graphGradient} lastGradientValue={0.02} />
                         </LineChart.Path>
@@ -48,7 +48,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
             return (
                 <BaseView justifyContent="center" alignItems="center" style={[styles.container]}>
                     <BaseView>
-                        <LineChart height={160} style={styles.opacity}>
+                        <LineChart height={200} style={styles.opacity}>
                             <LineChart.Path color={theme.colors.graphLine} width={0}>
                                 <LineChart.Gradient color={theme.colors.graphGradient} lastGradientValue={0} />
                             </LineChart.Path>
@@ -80,7 +80,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
                 <AssetPriceBanner isChartDataLoading={isChartDataLoading} />
             </BaseView>
 
-            <BaseSpacer height={16} />
+            <BaseSpacer height={6} />
 
             {_chartView}
         </>
@@ -90,6 +90,6 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         priceText: { opacity: 0 },
-        container: { maxHeight: 160, paddingHorizontal: 16, overflow: "hidden" },
+        container: { height: 200, paddingHorizontal: 16, overflow: "hidden" },
         opacity: { opacity: 0.4 },
     })
