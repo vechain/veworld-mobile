@@ -106,11 +106,7 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                     action={() => onCopyAddress(selectedAccount.address, LL.COMMON_LBL_ADDRESS())}
                     leftIcon={
                         showAddressCheckIcon ? (
-                            <BaseIcon
-                                name="icon-check"
-                                color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                                style={styles.checkIcon}
-                            />
+                            <BaseIcon name="icon-check" color={theme.colors.card} style={styles.checkIcon} />
                         ) : null
                     }
                     rightIcon={
@@ -127,28 +123,18 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                             haptics="Light"
                             px={28}
                             size="md"
-                            bgColor={theme.colors.secondary}
                             w={100}
                             style={styles.button}
-                            textColor={theme.isDark ? theme.colors.textReversed : theme.colors.text}
                             title={username}
                             action={() => onCopyUsername(nameOrAddress, LL.COMMON_LBL_ADDRESS())}
                             leftIcon={
                                 showUsernameCheckIcon ? (
-                                    <BaseIcon
-                                        name="icon-check"
-                                        color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                                        style={styles.checkIcon}
-                                    />
+                                    <BaseIcon name="icon-check" color={theme.colors.card} style={styles.checkIcon} />
                                 ) : null
                             }
                             rightIcon={
                                 !showUsernameCheckIcon ? (
-                                    <BaseIcon
-                                        name="icon-copy"
-                                        color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                                        style={styles.icon}
-                                    />
+                                    <BaseIcon name="icon-copy" color={theme.colors.card} style={styles.icon} />
                                 ) : null
                             }
                         />
