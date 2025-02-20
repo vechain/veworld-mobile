@@ -238,9 +238,9 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
     ])
 
     return (
-        <BaseView style={styles.nonVbdContainer}>
+        <BaseView style={styles.container}>
             {renderFiatBalance}
-            <ActionsButtonGroup actions={Actions} />
+            <ActionsButtonGroup actions={Actions} isVet />
             <FastActionsBottomSheet
                 ref={FastActionsBottomSheetRef}
                 actions={ActionsBottomSheet}
@@ -252,7 +252,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
 
 const baseStyle = () =>
     StyleSheet.create({
-        nonVbdContainer: {
+        container: {
             paddingHorizontal: 16,
             gap: 16,
         },

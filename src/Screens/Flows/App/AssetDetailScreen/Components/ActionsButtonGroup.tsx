@@ -5,11 +5,18 @@ import { useThemedStyles } from "~Hooks"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 
-export const ActionsButtonGroup = memo(({ actions }: { actions: FastAction[] }) => {
+export const ActionsButtonGroup = memo(({ actions, isVet }: { actions: FastAction[]; isVet?: boolean }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const renderAction = useCallback(
         (action: FastAction) => {
+            const actionButtonStyle = [
+                styles.common,
+                isVet && styles.vetGroup,
+                action.iconOnly && styles.onlyIcon,
+                action.disabled && styles.disabled,
+            ]
+
             return (
                 <BaseTouchable
                     key={action.name}
@@ -17,7 +24,7 @@ export const ActionsButtonGroup = memo(({ actions }: { actions: FastAction[] }) 
                     testID={action.testID}
                     haptics={action.disabled ? "Error" : "Medium"}
                     activeOpacity={action.disabled ? 0.9 : 0.2}
-                    style={[styles.common, action.iconOnly && styles.onlyIcon, action.disabled && styles.disabled]}>
+                    style={actionButtonStyle}>
                     <BaseView flexDirection="row" justifyContent={"center"} alignItems="center">
                         {action.icon}
                         {!action.iconOnly && (
@@ -39,9 +46,11 @@ export const ActionsButtonGroup = memo(({ actions }: { actions: FastAction[] }) 
             )
         },
         [
+            isVet,
             styles.common,
             styles.disabled,
             styles.onlyIcon,
+            styles.vetGroup,
             theme.colors.actionBanner.buttonTextSecondary,
             theme.colors.primaryDisabled,
         ],
@@ -63,6 +72,8 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 8,
             paddingVertical: 12,
             flexGrow: 1,
+        },
+        vetGroup: {
             flex: 1,
         },
         onlyIcon: {
