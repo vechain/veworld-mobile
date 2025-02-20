@@ -5,7 +5,7 @@ import { useThemedStyles } from "~Hooks"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 
-export const AssetActionsBar = memo(({ actions }: { actions: FastAction[] }) => {
+export const ActionsButtonGroup = memo(({ actions }: { actions: FastAction[] }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const renderAction = useCallback(
@@ -66,14 +66,14 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
         },
         onlyIcon: {
-            maxWidth: 40,
-            height: 40,
+            maxWidth: 42,
+            height: 42,
             paddingVertical: 8,
             justifyContent: "center",
         },
         actionsContainer: {
             gap: 8,
-            height: 40,
+            height: 42,
         },
         disabled: {
             backgroundColor: theme.colors.actionBanner.buttonBackgroundDisabled,

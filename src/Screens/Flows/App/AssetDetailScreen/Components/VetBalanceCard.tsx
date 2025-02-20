@@ -8,7 +8,7 @@ import { BalanceView } from "./BalanceView"
 import { FastAction, FungibleTokenWithBalance, IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
-import { AssetActionsBar } from "./AssetActionsBar"
+import { ActionsButtonGroup } from "./ActionsButtonGroup"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -240,7 +240,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
     return (
         <BaseView style={styles.nonVbdContainer}>
             {renderFiatBalance}
-            <AssetActionsBar actions={Actions} />
+            <ActionsButtonGroup actions={Actions} />
             <FastActionsBottomSheet
                 ref={FastActionsBottomSheetRef}
                 actions={ActionsBottomSheet}

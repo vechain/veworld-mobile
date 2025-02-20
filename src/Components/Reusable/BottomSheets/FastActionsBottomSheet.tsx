@@ -19,6 +19,7 @@ const ItemSeparatorComponent = () => <BaseSpacer height={16} />
 export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ closeBottomSheet, onDismiss, actions }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
+        const iconColor = theme.colors.actionBottomSheet
 
         const handlePress = useCallback(
             (action: FastAction) => {
@@ -32,14 +33,17 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
 
         const computeSnappoints = useMemo(() => {
             if (actions.length < 5) {
+                return ["42%"]
+            }
+            if (actions.length < 6) {
                 return ["50%"]
             }
 
             if (actions.length > 6) {
-                return ["60%"]
+                return ["75%"]
             }
 
-            return ["50%", "60%"]
+            return ["42%", "50%", "75%"]
         }, [actions.length])
 
         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
@@ -56,14 +60,10 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                         testID={action.testID}
                         haptics={action.disabled ? "Error" : "Medium"}
                         activeOpacity={action.disabled ? 0.9 : 0.2}
-                        style={[styles.action, action.disabled && styles.disabled]}>
+                        style={[styles.action]}>
                         <BaseView flexDirection="row" justifyContent={"center"} alignItems="center">
                             <BaseView
-                                bg={
-                                    action.disabled
-                                        ? theme.colors.actionBottomSheet.disabledIconBackground
-                                        : theme.colors.actionBottomSheet.iconBackground
-                                }
+                                bg={action.disabled ? iconColor.disabledIconBackground : iconColor.iconBackground}
                                 style={styles.actionIconBottomSheet}>
                                 {action.icon}
                             </BaseView>
@@ -71,11 +71,7 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                                 <>
                                     <BaseSpacer width={24} />
                                     <BaseText
-                                        color={
-                                            action.disabled
-                                                ? theme.colors.actionBottomSheet.disabledText
-                                                : theme.colors.actionBottomSheet.text
-                                        }
+                                        color={action.disabled ? iconColor.disabledText : iconColor.text}
                                         typographyFont="subSubTitleSemiBold">
                                         {action.name}
                                     </BaseText>
@@ -85,7 +81,15 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                     </BaseTouchable>
                 )
             },
-            [handlePress, styles.action, styles.actionIconBottomSheet, styles.disabled, theme.colors.actionBottomSheet],
+            [
+                handlePress,
+                iconColor.disabledIconBackground,
+                iconColor.disabledText,
+                iconColor.iconBackground,
+                iconColor.text,
+                styles.action,
+                styles.actionIconBottomSheet,
+            ],
         )
 
         return (
@@ -103,7 +107,6 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                     renderItem={({ item }) => renderAction(item)}
                     {...flatListScrollProps}
                 />
-                <BaseSpacer height={6} />
             </BaseBottomSheet>
         )
     },
@@ -118,17 +121,14 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         action: {
             flexDirection: "row",
-            height: 48,
             flexGrow: 1,
-            paddingVertical: 6,
+            paddingVertical: 8,
             borderRadius: 8,
         },
-        disabled: {},
         actionIconBottomSheet: {
-            backgroundColor: theme.colors.actionBottomSheet.iconBackground,
-            width: 34,
-            height: 34,
-            borderRadius: 34,
+            width: 38,
+            height: 38,
+            borderRadius: 38,
             justifyContent: "center",
             alignItems: "center",
         },

@@ -12,7 +12,7 @@ import {
     FiatBalance,
     showWarningToast,
 } from "~Components"
-import { AssetActionsBar } from "./AssetActionsBar"
+import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { FastAction, IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
@@ -226,6 +226,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                 />
                 {!!veB3trFiatBalance && (
                     <BaseText
+                        mt={2}
                         typographyFont="captionMedium"
                         color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
                         {change24h}
@@ -264,7 +265,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             <BaseView style={styles.topRow}>
                 <BaseView w={40}>{renderFiatBalance}</BaseView>
                 <BaseView flexGrow={2}>
-                    <AssetActionsBar actions={Actions} />
+                    <ActionsButtonGroup actions={Actions} />
                 </BaseView>
             </BaseView>
             <BaseView justifyContent={"space-between"} style={styles.b3trRowContainer}>
@@ -329,8 +330,8 @@ const baseStyles = (theme: ColorThemeType) =>
         moreActionsButton: {
             backgroundColor: theme.colors.actionBanner.buttonBackground,
             borderColor: theme.colors.actionBanner.buttonBorder,
-            height: 32,
-            width: 32,
+            height: 34,
+            width: 34,
             borderWidth: 1,
             borderRadius: 6,
         },

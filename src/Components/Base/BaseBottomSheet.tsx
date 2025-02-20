@@ -232,7 +232,7 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingHorizontal: 8,
         },
         handleStyle: {
-            width: 60,
+            width: 70,
             height: 4,
             borderRadius: 8,
             backgroundColor: theme.colors.text,

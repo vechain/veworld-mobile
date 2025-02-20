@@ -89,7 +89,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                     alignContainer="flex-start"
                                     w={100}
                                     mb={12}>
-                                    {LL.TITLE_ABOUT()} {token.name}
+                                    {LL.TITLE_ABOUT()} {tokenName}
                                 </BaseText>
 
                                 <BaseText style={styles.tokenInfoText}>

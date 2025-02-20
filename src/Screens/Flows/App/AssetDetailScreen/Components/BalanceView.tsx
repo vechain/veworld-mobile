@@ -61,6 +61,7 @@ export const BalanceView = ({
                 />
                 {show24hChange && (
                     <BaseText
+                        mt={2}
                         typographyFont="captionMedium"
                         color={isPositiveChange ? theme.colors.positive : theme.colors.negative}>
                         {change24h}
@@ -122,8 +123,8 @@ const styles = StyleSheet.create({
     imageShadow: {
         width: "auto",
     },
-    image: { width: 12, height: 12 },
-    vbdImage: { width: 24, height: 24 },
+    image: { width: 14, height: 14 },
+    vbdImage: { width: 26, height: 26 },
     balanceContainer: {
         flexDirection: "row",
         alignItems: "center",
