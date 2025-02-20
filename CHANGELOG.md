@@ -1,5 +1,19 @@
 
 
+## 2.0.9 (2025-02-18)
+
+
+### Bug Fixes
+
+* disable coinbase for ios devices ([#2705](https://github.com/vechain/veworld-mobile/issues/2705)) ([80016b3](https://github.com/vechain/veworld-mobile/commit/80016b3a6e5f4f5af3786ef320091629c6bb59e9))
+
+## 2.0.8 (2025-02-13)
+
+
+### Bug Fixes
+
+* fontsize and weight on token cards and assets detail page ([#2685](https://github.com/vechain/veworld-mobile/issues/2685)) ([20373da](https://github.com/vechain/veworld-mobile/commit/20373da32fb116c8fe1f79a1f6554b1becdc395e))
+
 ## 2.0.8 (2025-02-04)
 
 
