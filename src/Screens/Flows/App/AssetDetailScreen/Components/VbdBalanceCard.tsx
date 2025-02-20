@@ -171,9 +171,9 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             },
             {
                 name: LL.BTN_CONVERT(),
-                disabled: !b3trTokenWithBalance || isObserved,
-                action: openQRCodeSheet,
-                icon: actionBottomSheetIcon("icon-refresh-cw", !b3trTokenWithBalance),
+                disabled: !veB3trFiatBalance || isObserved,
+                action: openConvertBetterSheet,
+                icon: actionBottomSheetIcon("icon-refresh-cw", !veB3trFiatBalance),
                 testID: "convertButton",
             },
             {
@@ -203,12 +203,13 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
         ],
         [
             LL,
-            veB3trFiatBalance,
+            b3trTokenWithBalance,
             isObserved,
             actionBottomSheetIcon,
+            openConvertBetterSheet,
             openQRCodeSheet,
+            veB3trFiatBalance,
             nav,
-            b3trTokenWithBalance,
             b3trToken.symbol,
         ],
     )

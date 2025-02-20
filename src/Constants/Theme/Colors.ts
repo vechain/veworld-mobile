@@ -131,6 +131,12 @@ export type Colors = {
         title: string
         text: string
     }
+    convertBetterCard: {
+        inputBg: string
+        inputText: string
+        convertValueText: string
+        swapIcon: string
+    }
 }
 
 export enum COLORS {
@@ -163,6 +169,7 @@ export enum COLORS {
     RED_600 = "#C53030",
     RED_500 = "#E53E3E",
     RED_400 = "#F56565",
+    RED_300 = "#FC8181",
     RED_200 = "#FEB2B2",
     RED_100 = "#FED7D7",
     RED_50 = "#FFF5F5",
@@ -356,6 +363,12 @@ const light: Colors = {
         title: COLORS.GREY_800,
         text: COLORS.GREY_500,
     },
+    convertBetterCard: {
+        inputBg: COLORS.WHITE,
+        inputText: COLORS.GREY_800,
+        convertValueText: COLORS.GREY_500,
+        swapIcon: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -490,6 +503,12 @@ const dark: Colors = {
         border: COLORS.PURPLE,
         title: COLORS.WHITE,
         text: COLORS.GREY_300,
+    },
+    convertBetterCard: {
+        inputBg: COLORS.PURPLE_DISABLED,
+        inputText: COLORS.WHITE,
+        convertValueText: COLORS.GREY_300,
+        swapIcon: COLORS.WHITE,
     },
 }
 

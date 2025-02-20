@@ -108,8 +108,10 @@ export const ConvertBetterCard: React.FC<Props> = ({
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
+            backgroundColor: theme.colors.convertBetterCard.inputBg,
             paddingHorizontal: 24,
             paddingVertical: 16,
+            borderRadius: 12,
             minHeight: 95,
         },
         inputContainer: {
@@ -118,11 +120,12 @@ const baseStyles = (theme: ColorThemeType) =>
         input: {
             ...defaultTypography.title,
             flex: 1,
+            color: theme.colors.convertBetterCard.inputText,
             fontWeight: 600,
             fontSize: 20,
         },
         disabledInput: {
-            opacity: 0.5,
+            color: theme.colors.convertBetterCard.convertValueText,
         },
         inputError: {
             color: theme.colors.errorVariant.title,

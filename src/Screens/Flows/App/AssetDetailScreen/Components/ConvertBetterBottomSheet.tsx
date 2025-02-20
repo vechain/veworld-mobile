@@ -28,7 +28,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const [isError, setIsError] = useState(false)
 
     const { LL } = useI18nContext()
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const cardPosition = useSharedValue(0)
 
     const b3trWithBalance = useAppSelector(selectB3trTokenWithBalance)
@@ -130,7 +130,13 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     }, [convertB3tr, convertVot3, input, isB3TRActive, onClose])
 
     return (
-        <BaseBottomSheet ref={ref} blurBackdrop dynamicHeight enablePanDownToClose onDismiss={onDismiss}>
+        <BaseBottomSheet
+            ref={ref}
+            backgroundStyle={styles.bottomSheetStyle}
+            blurBackdrop
+            dynamicHeight
+            enablePanDownToClose
+            onDismiss={onDismiss}>
             <BaseView>
                 <BaseText typographyFont="subSubTitleMedium">{LL.TITLE_CONVERT_BETTER_TOKENS()}</BaseText>
                 <BaseSpacer height={8} />
@@ -156,7 +162,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                             style={[styles.switchButton]}
                             activeOpacity={0.5}
                             onPress={onSwitchCurrencyPress}>
-                            <BaseIcon name="icon-arrow-up-down" />
+                            <BaseIcon color={theme.colors.convertBetterCard.swapIcon} name="icon-arrow-up-down" />
                         </TouchableOpacity>
                     </BaseView>
 
@@ -190,6 +196,11 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        bottomSheetStyle: {
+            backgroundColor: theme.colors.actionBottomSheet.background,
+            borderTopRightRadius: 24,
+            borderTopLeftRadius: 24,
+        },
         betterCardContainer: {
             gap: 8,
             flexDirection: "column",
@@ -209,6 +220,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderColor: theme.colors.actionBanner.buttonBorder,
             borderWidth: 1,
             backgroundColor: theme.colors.actionBanner.buttonBackground,
+            color: theme.colors.convertBetterCard.swapIcon,
             padding: 8,
             borderRadius: 6,
         },

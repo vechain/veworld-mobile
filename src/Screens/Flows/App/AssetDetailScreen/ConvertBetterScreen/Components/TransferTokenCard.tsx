@@ -20,7 +20,7 @@ export const TransferTokenCardGroup: React.FC<TransferTokenCardGroupProps> = ({ 
     const { styles, theme } = useThemedStyles(baseGroupStyles)
     return (
         <BaseView style={[styles.container]}>
-            <BaseView borderRadius={16} bg="white">
+            <BaseView borderRadius={16} bg={theme.colors.convertBetterCard.inputBg}>
                 <TransferTokenCard provenance={PROVENANCE.FROM} token={fromToken} />
                 <BaseView style={[styles.separator]} />
                 <BaseIcon
