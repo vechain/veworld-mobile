@@ -355,7 +355,7 @@ type RootTranslation = {
 	 */
 	BD_BACK_TO_APP: string
 	/**
-	 * B​3​T​R​ ​t​o​k​e​n​s​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​i​n​t​o​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​a​n​d​ ​b​a​c​k​,​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​g​e​t​ ​m​o​r​e​ ​v​o​t​i​n​g​ ​p​o​w​e​r​ ​a​n​d​ ​p​a​r​t​i​c​i​p​a​t​e​ ​a​c​t​i​v​e​l​y​ ​o​n​ ​t​h​e​ ​v​o​t​i​n​g​ ​r​o​u​n​d​s​ ​a​n​d​ ​g​o​v​e​r​n​a​n​c​e​ ​p​r​o​p​o​s​a​l​s​.
+	 * B​3​T​R​ ​t​o​k​e​n​s​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​i​n​t​o​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​a​n​d​ ​b​a​c​k​,​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​g​e​t​ ​m​o​r​e​ ​v​o​t​i​n​g​ ​p​o​w​e​r​ ​a​n​d​ ​p​a​r​t​i​c​i​p​a​t​e​ ​a​c​t​i​v​e​l​y​ ​i​n​ ​t​h​e​ ​v​o​t​i​n​g​ ​r​o​u​n​d​s​ ​a​n​d​ ​g​o​v​e​r​n​a​n​c​e​ ​p​r​o​p​o​s​a​l​s​.
 	 */
 	BD_BETTER_TOKEN_CONVERSION: string
 	/**
@@ -4182,7 +4182,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_BACK_TO_APP: () => LocalizedString
 	/**
-	 * B3TR tokens can be converted into VOT3 tokens and back, allowing you get more voting power and participate actively on the voting rounds and governance proposals.
+	 * B3TR tokens can be converted into VOT3 tokens and back, allowing you to get more voting power and participate actively in the voting rounds and governance proposals.
 	 */
 	BD_BETTER_TOKEN_CONVERSION: () => LocalizedString
 	/**

@@ -79,7 +79,7 @@
   "BD_BACKUP_PASSWORD_TO_KEYCHAIN": "パスワードをキーチェーンにバックアップ",
   "BD_BACKUP_RECOVERY_PHRASE": "回復フレーズのバックアップは、アプリのリセットやデバイスの紛失の場合でもウォレットへのアクセスを失うことがないようにします。",
   "BD_BACK_TO_APP": "アプリに戻る",
-  "BD_BETTER_TOKEN_CONVERSION": "B3TRトークンはVOT3トークンに変換可能で、逆も同様です。これにより、より多くの投票権を得て、投票ラウンドやガバナンス提案に積極的に参加できます。",
+  "BD_BETTER_TOKEN_CONVERSION": "B3TR トークンは VOT3 トークンに変換でき、その逆も可能です。これにより、より多くの投票権を獲得し、投票ラウンドやガバナンス提案に積極的に参加することができます。",
   "BD_BETTER_TOKEN_CONVERSION_RATIO": "Betterトークンを変換: 1 B3TR = 1 VOT3",
   "BD_BUY_DESCRIPTION_COINBASE": "Coinbaseで購入し、トークンをVeWorldに直接受け取ります。",
   "BD_BUY_DESCRIPTION_TRANSAK": "Transakで購入し、トークンをVeWorldに直接受け取ります。",

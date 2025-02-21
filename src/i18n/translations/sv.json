@@ -79,7 +79,7 @@
   "BD_BACKUP_PASSWORD_TO_KEYCHAIN": "Säkerhetskopiera lösenord till nyckelring",
   "BD_BACKUP_RECOVERY_PHRASE": "Säkerhetskopiering av återställningsfraserna garanterar att du aldrig förlorar tillgången till din plånbok vid appåterställning eller borttappad enhet.",
   "BD_BACK_TO_APP": "GÅ TILLBAKA TILL APPEN",
-  "BD_BETTER_TOKEN_CONVERSION": "B3TR-tokens kan konverteras till VOT3-tokens och tillbaka, vilket ger dig mer röstmakt och möjlighet att delta aktivt i röstomgångar och styrningsförslag.",
+  "BD_BETTER_TOKEN_CONVERSION": "B3TR-tokens kan konverteras till VOT3-tokens och tillbaka, vilket ger dig mer rösträtt och möjlighet att delta aktivt i omröstningar och styrningsförslag.",
   "BD_BETTER_TOKEN_CONVERSION_RATIO": "Konvertera dina Better-tokens 1 B3TR = 1 VOT3",
   "BD_BUY_DESCRIPTION_COINBASE": "Köp med Coinbase och ta emot token direkt i VeWorld.",
   "BD_BUY_DESCRIPTION_TRANSAK": "Köp med Transak och ta emot token direkt i VeWorld.",

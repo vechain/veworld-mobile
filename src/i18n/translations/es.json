@@ -79,7 +79,7 @@
   "BD_BACKUP_PASSWORD_TO_KEYCHAIN": "Respaldar contraseña en el llavero",
   "BD_BACKUP_RECOVERY_PHRASE": "El respaldo de las frases de recuperación garantiza que nunca pierdas el acceso a tu cartera en caso de un reinicio de la aplicación o pérdida de dispositivo.",
   "BD_BACK_TO_APP": "REGRESAR A LA APP",
-  "BD_BETTER_TOKEN_CONVERSION": "Los tokens B3TR se pueden convertir en tokens VOT3 y viceversa, lo que te permite obtener más poder de votación y participar activamente en las rondas de votación y propuestas de gobernanza.",
+  "BD_BETTER_TOKEN_CONVERSION": "Los tokens B3TR se pueden convertir en tokens VOT3 y viceversa, lo que te permite obtener más poder de voto y participar activamente en las rondas de votación y propuestas de gobernanza.",
   "BD_BETTER_TOKEN_CONVERSION_RATIO": "Convierte tus tokens Better 1 B3TR = 1 VOT3",
   "BD_BUY_DESCRIPTION_COINBASE": "Compra con Coinbase y recibe los tokens directamente en VeWorld.",
   "BD_BUY_DESCRIPTION_TRANSAK": "Compra con Transak y recibe los tokens directamente en VeWorld.",
