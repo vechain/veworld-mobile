@@ -1,16 +1,17 @@
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { ethers } from "ethers"
 import { useCallback } from "react"
 import { abi, Transaction } from "thor-devkit"
 import { abis, AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
-import { Routes } from "~Navigation"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 
 export const useConvertBetterTokens = () => {
-    const nav = useNavigation()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
     const track = useAnalyticTracking()
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
 
@@ -77,8 +78,7 @@ export const useConvertBetterTokens = () => {
                 from: "B3TR",
                 to: "VOT3",
             })
-
-            nav.navigate(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
+            nav.replace(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
                 amount: BigNutils(amount).toString,
                 transactionClauses: clauses,
                 token: b3trWithCompleteInfo,
@@ -97,7 +97,7 @@ export const useConvertBetterTokens = () => {
                 from: "VOT3",
                 to: "B3TR",
             })
-            nav.navigate(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
+            nav.replace(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
                 amount: BigNutils(amount).toString,
                 transactionClauses: clauses,
                 token: b3trWithCompleteInfo,

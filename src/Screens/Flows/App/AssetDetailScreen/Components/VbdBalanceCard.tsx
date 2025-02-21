@@ -49,6 +49,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
 
     const {
         ref: convertBetterBottomSheetRef,
+        openWithDelay: openDelayConvertBetterSheet,
         onOpen: openConvertBetterSheet,
         onClose: closeConvertBetterSheet,
     } = useBottomSheetModal()
@@ -172,8 +173,8 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                 name: LL.BTN_CONVERT(),
                 disabled: !veB3trFiatBalance || isObserved,
                 action: () => {
-                    closeFastActionsSheet()
-                    openConvertBetterSheet()
+                    FastActionsBottomSheetRef.current?.forceClose()
+                    openDelayConvertBetterSheet(350)
                 },
                 icon: actionBottomSheetIcon("icon-refresh-cw", !veB3trFiatBalance),
                 testID: "convertButton",
@@ -212,8 +213,8 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             openQRCodeSheet,
             nav,
             b3trToken.symbol,
-            closeFastActionsSheet,
-            openConvertBetterSheet,
+            FastActionsBottomSheetRef,
+            openDelayConvertBetterSheet,
         ],
     )
 
@@ -309,6 +310,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                     containerStyle={styles.b3trBalanceView}
                 />
             </BaseView>
+
             <FastActionsBottomSheet
                 ref={FastActionsBottomSheetRef}
                 actions={ActionsBottomSheet}
@@ -316,13 +318,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             />
 
             {veB3trFiatBalance ? (
-                <ConvertBetterBottomSheet
-                    ref={convertBetterBottomSheetRef}
-                    onClose={() => {
-                        closeConvertBetterSheet()
-                        closeFastActionsSheet()
-                    }}
-                />
+                <ConvertBetterBottomSheet ref={convertBetterBottomSheetRef} onClose={closeConvertBetterSheet} />
             ) : null}
         </>
     )
