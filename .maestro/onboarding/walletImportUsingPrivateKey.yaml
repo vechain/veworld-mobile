@@ -1,0 +1,96 @@
+#walletImportUsingPrivateKey
+appId: org.vechain.veworld.app
+env:
+   PK: "0x99F0500549792796C14fED62011A51081DC5B5E68FE8BD8A13B86BE829c4FD36"
+onFlowComplete:
+    - runFlow: ../setup_reset/resetApp.yaml
+---
+- launchApp:
+      clearState: true
+- tapOn:
+      id: "CREATE_WALLET_BTN"
+#set wallet pin
+- repeat:
+      while:
+          visible: "Choose your 6-digit PIN"
+      commands:
+          - tapOn: "1"
+#confirm wallet pin
+- repeat:
+      while:
+          visible: "Choose your 6-digit PIN"
+      commands:
+          - tapOn: "1"
+#skip notification bottom sheet
+- runFlow:
+      when:
+          visible:
+              id: "Backup_later_button"
+      commands:
+          - tapOn:
+                id: "Backup_later_button"
+- runFlow:
+      when:
+          visible:
+              id: "button_notifications_skip"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
+- runFlow:
+      when:
+          visible:
+              id: "Backup_later_button"
+      commands:
+          - tapOn:
+                id: "Backup_later_button"
+- tapOn:
+    id: "HomeScreen_WalletManagementButton-wrapper"
+- tapOn:
+    id: "Wallet_Management_AddWallet"
+- runFlow:
+     when:
+       platform: iOS
+     commands:
+            - tapOn:
+                 id: "undefined-wrapper"
+                 index: 2
+- runFlow:
+     when:
+       platform: Android
+     commands:
+            - tapOn: "Local wallet"
+- tapOn:
+    id: "import-input"
+- inputText: ${PK}
+- runFlow:
+     when:
+       platform: iOS
+     commands:
+            - tapOn: "Derivation Path "
+- runFlow:
+     when:
+       platform: Android
+     commands:
+            - tapOn: "Back"
+- tapOn: "Verify"
+#Insert wallet pin
+- repeat:
+      while:
+          visible: "Insert your 6-digit PIN"
+      commands:
+          - tapOn: "1"
+- runFlow:
+     when:
+       platform: iOS
+     commands:
+            - assertVisible:
+                  id: "Wallet_1"
+- runFlow:
+     when:
+       platform: Android
+     commands:
+            - assertVisible: "Wallet 2"
+- tapOn:
+    id: "wallet-tab"
+- assertVisible: "My tokens"
+
