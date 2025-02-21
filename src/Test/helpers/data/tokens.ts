@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 import { FungibleTokenWithBalance, NFTMediaType, NonFungibleToken, Token } from "~Model"
-import { VET, VTHO } from "~Constants"
+import { B3TR, VET, VOT3, VTHO } from "~Constants"
+import { TokenWithCompleteInfo } from "~Hooks"
 
 export const VETWithBalance: FungibleTokenWithBalance = {
     ...VET,
@@ -20,6 +21,52 @@ export const VTHOWithBalance: FungibleTokenWithBalance = {
         timeUpdated: Date.now().toString(),
         isHidden: false,
     },
+}
+
+export const B3TRWithBalance: FungibleTokenWithBalance = {
+    ...B3TR,
+    balance: {
+        balance: "113575916294516129032255",
+        tokenAddress: B3TR.address,
+        timeUpdated: Date.now().toString(),
+        isHidden: false,
+    },
+}
+
+export const VOT3WithBalance: FungibleTokenWithBalance = {
+    ...VOT3,
+    balance: {
+        balance: "10259472020000000000000",
+        tokenAddress: VOT3.address,
+        timeUpdated: Date.now().toString(),
+        isHidden: false,
+    },
+}
+
+export const B3TRWithCompleteInfo: TokenWithCompleteInfo = {
+    ...B3TR,
+    exchangeRateCurrency: "USD",
+    exchangeRateLoading: false,
+    fiatBalance: "0",
+    tokenInfoLoading: true,
+    tokenUnitBalance: "113,575.91",
+    tokenUnitFullBalance: "113,575.9162945161",
+    chartData: undefined,
+    exchangeRate: undefined,
+    tokenInfo: undefined,
+}
+
+export const VOT3WithCompleteInfo: TokenWithCompleteInfo = {
+    ...VOT3,
+    exchangeRateCurrency: "USD",
+    exchangeRateLoading: false,
+    fiatBalance: "0",
+    tokenInfoLoading: false,
+    tokenUnitBalance: "10,259.47",
+    tokenUnitFullBalance: "10,259.4720200000",
+    chartData: undefined,
+    exchangeRate: undefined,
+    tokenInfo: undefined,
 }
 
 const icon =

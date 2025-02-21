@@ -30,6 +30,7 @@ export type Colors = {
     splashColorLayer: string
     title: string
     subtitle: string
+    subSubtitle: string
     card: string
     icon: string
     button: string
@@ -53,6 +54,7 @@ export type Colors = {
     textSecondary: string
     horizontalButtonTextReversed: string
     cardBorder: string
+    cardDivider: string
     switchEnabled: string
     textLight: string
     checkboxFilledBackground: string
@@ -106,14 +108,35 @@ export type Colors = {
         border: string
         title: string
         buttonBackground: string
+        buttonBackgroundDisabled: string
         buttonBorder: string
         buttonText: string
+        buttonTextSecondary: string
+        buttonTextDisabled: string
+    }
+    actionBottomSheet: {
+        background: string
+        iconBackground: string
+        text: string
+        icon: string
+        activeIcon: string
+        activeIconBackground: string
+        activeText: string
+        disabledText: string
+        disabledIcon: string
+        disabledIconBackground: string
     }
     assetDetailsCard: {
         background: string
         border: string
         title: string
         text: string
+    }
+    convertBetterCard: {
+        inputBg: string
+        inputText: string
+        convertValueText: string
+        swapIcon: string
     }
 }
 
@@ -147,6 +170,7 @@ export enum COLORS {
     RED_600 = "#C53030",
     RED_500 = "#E53E3E",
     RED_400 = "#F56565",
+    RED_300 = "#FC8181",
     RED_200 = "#FEB2B2",
     RED_100 = "#FED7D7",
     RED_50 = "#FFF5F5",
@@ -240,6 +264,7 @@ const light: Colors = {
     splashBackground: COLORS.DARK_PURPLE,
     title: COLORS.PRIMARY_800,
     subtitle: COLORS.GREY_600,
+    subSubtitle: COLORS.GREY_700,
     card: COLORS.WHITE,
     icon: COLORS.PRIMARY_800,
     pinEmpty: COLORS.GREY_400,
@@ -247,6 +272,7 @@ const light: Colors = {
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
+    cardDivider: COLORS.GREY_200,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
@@ -315,14 +341,35 @@ const light: Colors = {
         border: COLORS.PRIMARY_200,
         title: COLORS.PURPLE,
         buttonBackground: COLORS.WHITE,
+        buttonBackgroundDisabled: COLORS.GREY_100,
         buttonBorder: COLORS.GREY_200,
         buttonText: COLORS.PURPLE,
+        buttonTextSecondary: COLORS.PRIMARY_800,
+        buttonTextDisabled: COLORS.GREY_400,
+    },
+    actionBottomSheet: {
+        background: COLORS.GREY_50,
+        iconBackground: COLORS.GREY_100,
+        text: COLORS.PRIMARY_800,
+        icon: COLORS.GREY_600,
+        activeIcon: COLORS.GREY_600,
+        activeIconBackground: COLORS.WHITE,
+        activeText: COLORS.WHITE,
+        disabledText: COLORS.GREY_400,
+        disabledIcon: COLORS.GREY_400,
+        disabledIconBackground: COLORS.GREY_100,
     },
     assetDetailsCard: {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
         title: COLORS.GREY_800,
         text: COLORS.GREY_500,
+    },
+    convertBetterCard: {
+        inputBg: COLORS.WHITE,
+        inputText: COLORS.GREY_800,
+        convertValueText: COLORS.GREY_500,
+        swapIcon: COLORS.GREY_600,
     },
 }
 
@@ -361,11 +408,13 @@ const dark: Colors = {
     pinFilled: COLORS.PRIMARY_300,
     title: COLORS.WHITE,
     subtitle: COLORS.GREY_300,
+    subSubtitle: COLORS.GREY_200,
     card: COLORS.PURPLE,
     icon: COLORS.WHITE,
     button: COLORS.LIME_GREEN,
     rightIconHeaderBorder: COLORS.TRANSPARENT,
     cardBorder: COLORS.DARK_PURPLE_DISABLED,
+    cardDivider: COLORS.PURPLE_DISABLED,
     border: COLORS.WHITE,
     notification: COLORS.WHITE,
     transparent: COLORS.TRANSPARENT,
@@ -436,12 +485,33 @@ const dark: Colors = {
         buttonBackground: COLORS.DARK_PURPLE_DISABLED,
         buttonBorder: COLORS.TRANSPARENT,
         buttonText: COLORS.GREY_50,
+        buttonTextSecondary: COLORS.LIME_GREEN,
+        buttonTextDisabled: COLORS.PURPLE,
+        buttonBackgroundDisabled: COLORS.DARK_PURPLE_DISABLED,
+    },
+    actionBottomSheet: {
+        background: COLORS.PURPLE,
+        iconBackground: COLORS.PURPLE_DISABLED,
+        text: COLORS.WHITE,
+        icon: COLORS.GREY_100,
+        activeIcon: COLORS.GREY_100,
+        activeIconBackground: COLORS.DARK_PURPLE_DISABLED,
+        activeText: COLORS.DARK_PURPLE_DISABLED,
+        disabledText: COLORS.DARK_PURPLE_DISABLED,
+        disabledIcon: COLORS.DARK_PURPLE_DISABLED,
+        disabledIconBackground: COLORS.PURPLE_DISABLED,
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,
         border: COLORS.PURPLE,
         title: COLORS.WHITE,
         text: COLORS.GREY_300,
+    },
+    convertBetterCard: {
+        inputBg: COLORS.PURPLE_DISABLED,
+        inputText: COLORS.WHITE,
+        convertValueText: COLORS.GREY_300,
+        swapIcon: COLORS.WHITE,
     },
 }
 
