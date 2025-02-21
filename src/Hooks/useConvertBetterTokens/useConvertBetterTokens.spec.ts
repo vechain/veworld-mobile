@@ -8,6 +8,7 @@ import { abis, B3TR, VOT3 } from "~Constants"
 import { ethers } from "ethers"
 
 const mockedNavigate = jest.fn()
+const mockedReplace = jest.fn()
 
 jest.mock("@react-navigation/native", () => {
     const actualNav = jest.requireActual("@react-navigation/native")
@@ -15,6 +16,7 @@ jest.mock("@react-navigation/native", () => {
         ...actualNav,
         useNavigation: () => ({
             navigate: mockedNavigate,
+            replace: mockedReplace,
         }),
     }
 })
@@ -49,7 +51,7 @@ describe("useConvertBetterTokens", () => {
             },
         ]
 
-        expect(mockedNavigate).toHaveBeenCalledWith(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
+        expect(mockedReplace).toHaveBeenCalledWith(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
             amount: BigNutils(amount).toString,
             transactionClauses: b3trMockedClauses,
             token: TestHelpers.data.B3TRWithCompleteInfo,
@@ -75,7 +77,7 @@ describe("useConvertBetterTokens", () => {
             },
         ]
 
-        expect(mockedNavigate).toHaveBeenCalledWith(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
+        expect(mockedReplace).toHaveBeenCalledWith(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
             amount: BigNutils(amount).toString,
             transactionClauses: vot3MockedClauses,
             //Sending B3TR here because VOT3 doesn't have exchange rate since is the same of B3TR
