@@ -1618,6 +1618,10 @@ type RootTranslation = {
 	 */
 	CONTRACT_DATA: string
 	/**
+	 * C​o​p​i​e​d
+	 */
+	COPIED_QR_CODE_FOR_ACCOUNT: string
+	/**
 	 * C​l​i​c​k​ ​t​o​ ​c​o​p​y​ ​A​B​I
 	 */
 	COPY_ABI: string
@@ -1657,6 +1661,10 @@ type RootTranslation = {
 	 * D​e​c​e​m​b​e​r
 	 */
 	DECEMBER: string
+	/**
+	 * S​c​a​n​ ​t​h​e​ ​Q​R​ ​c​o​d​e​ ​o​r​ ​u​s​e​ ​t​h​e​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​N​F​T​s​.
+	 */
+	DESCRIPTION_QR_CODE_FOR_ACCOUNT: string
 	/**
 	 * D​e​t​a​i​l​s
 	 */
@@ -2297,6 +2305,10 @@ type RootTranslation = {
 	 * M​a​n​a​g​e​ ​n​o​d​e​s
 	 */
 	NETWORK_MANAGE_NODES: string
+	/**
+	 * O​n​l​y​ ​V​e​c​h​a​i​n​ ​n​e​t​w​o​r​k​ ​s​u​p​p​o​r​t​e​d
+	 */
+	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: string
 	/**
 	 * Y​o​u​ ​h​a​v​e​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​s​a​v​e​d​ ​t​h​e​ ​N​F​T​ ​i​m​a​g​e​ ​t​o​ ​y​o​u​r​ ​p​h​o​t​o​ ​a​l​b​u​m
 	 */
@@ -3551,10 +3563,9 @@ type RootTranslation = {
 	 */
 	TITLE_PRIVACY: string
 	/**
-	 * Y​o​u​r​ ​Q​R​ ​C​o​d​e​ ​f​o​r​ ​{​a​c​c​o​u​n​t​A​l​i​a​s​}
-	 * @param {string} accountAlias
+	 * R​e​c​e​i​v​e
 	 */
-	TITLE_QR_CODE_FOR_ACCOUNT: RequiredParams<'accountAlias'>
+	TITLE_QR_CODE_FOR_ACCOUNT: string
 	/**
 	 * R​e​n​a​m​e​ ​{​t​y​p​e​}
 	 * @param {string} type
@@ -5467,6 +5478,10 @@ Try reconnect your device to the internet.
 	 */
 	CONTRACT_DATA: () => LocalizedString
 	/**
+	 * Copied
+	 */
+	COPIED_QR_CODE_FOR_ACCOUNT: () => LocalizedString
+	/**
 	 * Click to copy ABI
 	 */
 	COPY_ABI: () => LocalizedString
@@ -5506,6 +5521,10 @@ Try reconnect your device to the internet.
 	 * December
 	 */
 	DECEMBER: () => LocalizedString
+	/**
+	 * Scan the QR code or use the wallet address to receive tokens and NFTs.
+	 */
+	DESCRIPTION_QR_CODE_FOR_ACCOUNT: () => LocalizedString
 	/**
 	 * Details
 	 */
@@ -6146,6 +6165,10 @@ Try reconnect your device to the internet.
 	 * Manage nodes
 	 */
 	NETWORK_MANAGE_NODES: () => LocalizedString
+	/**
+	 * Only Vechain network supported
+	 */
+	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: () => LocalizedString
 	/**
 	 * You have successfully saved the NFT image to your photo album
 	 */
@@ -7372,9 +7395,9 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_PRIVACY: () => LocalizedString
 	/**
-	 * Your QR Code for {accountAlias}
+	 * Receive
 	 */
-	TITLE_QR_CODE_FOR_ACCOUNT: (arg: { accountAlias: string }) => LocalizedString
+	TITLE_QR_CODE_FOR_ACCOUNT: () => LocalizedString
 	/**
 	 * Rename {type}
 	 */

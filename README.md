@@ -14,7 +14,7 @@
 #
 
 <div align="center">
-    <h1>VeWorld - Vechain's Mobile Crypro Wallet</h1>
+    <h1>VeWorld - Vechain's Mobile Crypto Wallet</h1>
     <p>
         <a href="https://sonarcloud.io/summary/new_code?id=vechain_veworld-mobile">
         <img src="https://sonarcloud.io/api/project_badges/measure?project=vechain_veworld-mobile&metric=alert_status&token=2336ef9bce4fb960e3727ebb94acfbbfc4229d6b" alt="Quality Gate Status"></a>
