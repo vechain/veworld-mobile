@@ -3519,10 +3519,21 @@ type RootTranslation = {
 	 */
 	TITLE_PRIVACY: string
 	/**
-	 * Y​o​u​r​ ​Q​R​ ​C​o​d​e​ ​f​o​r​ ​{​a​c​c​o​u​n​t​A​l​i​a​s​}
-	 * @param {string} accountAlias
+	 * R​e​c​e​i​v​e
 	 */
-	TITLE_QR_CODE_FOR_ACCOUNT: RequiredParams<'accountAlias'>
+	TITLE_QR_CODE_FOR_ACCOUNT: string
+	/**
+	 * C​o​p​i​e​d
+	 */
+	COPIED_QR_CODE_FOR_ACCOUNT: string
+	/**
+	 * S​c​a​n​ ​t​h​e​ ​Q​R​ ​c​o​d​e​ ​o​r​ ​u​s​e​ ​t​h​e​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​N​F​T​s​.
+	 */
+	DESCRIPTION_QR_CODE_FOR_ACCOUNT: string
+	/**
+	 * O​n​l​y​ ​V​e​c​h​a​i​n​ ​n​e​t​w​o​r​k​ ​s​u​p​p​o​r​t​e​d
+	 */
+	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: string
 	/**
 	 * R​e​n​a​m​e​ ​{​t​y​p​e​}
 	 * @param {string} type
@@ -7296,9 +7307,21 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_PRIVACY: () => LocalizedString
 	/**
-	 * Your QR Code for {accountAlias}
+	 * Receive
 	 */
-	TITLE_QR_CODE_FOR_ACCOUNT: (arg: { accountAlias: string }) => LocalizedString
+	TITLE_QR_CODE_FOR_ACCOUNT: () => LocalizedString
+	/**
+	 * Copied
+	 */
+	COPIED_QR_CODE_FOR_ACCOUNT: () => LocalizedString
+	/**
+	 * Scan the QR code or use the wallet address to receive tokens and NFTs.
+	 */
+	DESCRIPTION_QR_CODE_FOR_ACCOUNT: () => LocalizedString
+	/**
+	 * Only Vechain network supported
+	 */
+	NETWORK_WARNING_QR_CODE_FOR_ACCOUNT: () => LocalizedString
 	/**
 	 * Rename {type}
 	 */
