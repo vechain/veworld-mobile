@@ -1,8 +1,8 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Image, Linking, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { ColorThemeType, defaultMainNetwork, DIRECTIONS } from "~Constants"
+import { B3TR, ColorThemeType, defaultMainNetwork, DIRECTIONS, VOT3 } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
@@ -75,6 +75,13 @@ const ConvertionCard: React.FC<ConvertionCardProps> = ({ direction, token, amoun
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(cardBaseStyles)
 
+    const renderIcon = useMemo(() => {
+        if (token?.symbol === B3TR.symbol) return B3TR.icon
+        if (token?.symbol === VOT3.symbol) return VOT3.icon
+
+        return token?.icon
+    }, [token?.icon, token?.symbol])
+
     return (
         <BaseView flex={1} style={[styles.container]}>
             <BaseText typographyFont="captionSemiBold" color={theme.colors.textLight}>
@@ -82,7 +89,7 @@ const ConvertionCard: React.FC<ConvertionCardProps> = ({ direction, token, amoun
             </BaseText>
 
             <BaseView flexDirection="row" mb={2}>
-                <Image source={{ uri: token?.icon }} width={24} height={24} />
+                <Image source={{ uri: renderIcon }} width={24} height={24} />
                 <BaseText pl={8} typographyFont="bodySemiBold" color={theme.colors.assetDetailsCard.title}>
                     {token?.symbol}
                 </BaseText>

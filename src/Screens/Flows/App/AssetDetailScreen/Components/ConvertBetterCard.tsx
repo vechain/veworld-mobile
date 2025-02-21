@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react"
 import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { AnimatedStyle } from "react-native-reanimated"
 import { BaseButton, BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
-import { ColorThemeType, typography } from "~Constants"
+import { B3TR, ColorThemeType, typography, VOT3 } from "~Constants"
 import { useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
@@ -48,6 +48,13 @@ export const ConvertBetterCard: React.FC<Props> = ({
         return inputStyles
     }, [styles, isSender, error])
 
+    const renderIcon = useMemo(() => {
+        if (token.symbol === B3TR.symbol) return B3TR.icon
+        if (token.symbol === VOT3.symbol) return VOT3.icon
+
+        return token.icon
+    }, [token.icon, token.symbol])
+
     const handleOnMaxPress = useCallback(() => {
         onMaxAmountPress?.(tokenTotalToHuman)
     }, [onMaxAmountPress, tokenTotalToHuman])
@@ -60,7 +67,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
                         <BaseText typographyFont="captionSemiBold">{isSender ? LL.FROM() : LL.TO()}</BaseText>
                         <BaseSpacer height={12} />
                         <BaseView flexDirection="row" justifyContent="flex-start">
-                            <Image source={{ uri: token.icon }} width={24} height={24} />
+                            <Image source={{ uri: renderIcon }} width={24} height={24} />
                             <BaseSpacer width={12} />
                             <BaseText typographyFont="bodySemiBold">{token.name}</BaseText>
                         </BaseView>

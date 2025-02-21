@@ -129,6 +129,8 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
         // resetStates()
     }, [convertB3tr, convertVot3, input, isB3TRActive, onClose])
 
+    if (!b3trWithBalance || !vot3WithBalance) return <></>
+
     return (
         <BaseBottomSheet
             ref={ref}
@@ -149,7 +151,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                 {/* Animated Card View */}
                 <Animated.View style={[styles.betterCardContainer]}>
                     <ConvertBetterCard
-                        token={b3trWithBalance!}
+                        token={b3trWithBalance}
                         isSender={!isSwapped}
                         sendAmount={input}
                         error={isError}
@@ -169,7 +171,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                     </BaseView>
 
                     <ConvertBetterCard
-                        token={vot3WithBalance!}
+                        token={vot3WithBalance}
                         isSender={isSwapped}
                         sendAmount={input}
                         error={isError}
