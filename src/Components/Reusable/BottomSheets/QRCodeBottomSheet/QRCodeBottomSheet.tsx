@@ -1,19 +1,19 @@
-import React, { useMemo } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useCopyClipboard, useTheme, useVns } from "~Hooks"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { useCopyClipboard, useThemedStyles, useVns } from "~Hooks"
 
+import { StyleSheet } from "react-native"
+import QRCode from "react-native-qrcode-svg"
+import { veworldLogo } from "~Assets"
+import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { useAppSelector } from "~Storage/Redux"
 import { selectSelectedAccount } from "~Storage/Redux/Selectors"
-import QRCode from "react-native-qrcode-svg"
-import { COLORS } from "~Constants"
-import { StyleSheet } from "react-native"
 import { AddressUtils } from "~Utils"
-import { veworldLogo } from "~Assets"
 
 export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, ref) => {
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -22,34 +22,71 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
         address: selectedAccount.address,
     })
 
+    const humanAddress = useRef(AddressUtils.humanAddress(selectedAccount.address, 8, 7))
+    const [address, setAddress] = useState(humanAddress.current)
+
     const { onCopyToClipboard } = useCopyClipboard()
 
     const nameOrAddress = useMemo(() => {
         return vnsName || AddressUtils.humanAddress(vnsAddress || selectedAccount.address, 4, 3)
     }, [selectedAccount.address, vnsAddress, vnsName])
 
+    const [username, setUsername] = useState(nameOrAddress)
+
+    const showAddressCheckIcon = address === LL.COPIED_QR_CODE_FOR_ACCOUNT()
+    const showUsernameCheckIcon = username === LL.COPIED_QR_CODE_FOR_ACCOUNT()
+    const showUsername = nameOrAddress.includes(".vet")
+
+    const onCopyAddress = useCallback(
+        (text: string, labelName: string) => {
+            if (showAddressCheckIcon) return
+
+            onCopyToClipboard(text, labelName, false)
+            setAddress(LL.COPIED_QR_CODE_FOR_ACCOUNT())
+            setTimeout(() => {
+                setAddress(humanAddress.current)
+            }, 1500)
+        },
+        [LL, onCopyToClipboard, showAddressCheckIcon],
+    )
+
+    const onCopyUsername = useCallback(
+        (text: string, labelName: string) => {
+            if (showUsernameCheckIcon) return
+
+            onCopyToClipboard(text, labelName, false)
+            setUsername(LL.COPIED_QR_CODE_FOR_ACCOUNT())
+            setTimeout(() => {
+                setUsername(nameOrAddress)
+            }, 1500)
+        },
+        [LL, nameOrAddress, onCopyToClipboard, showUsernameCheckIcon],
+    )
+
+    useEffect(() => {
+        setUsername(nameOrAddress)
+    }, [nameOrAddress])
+
     return (
         <BaseBottomSheet dynamicHeight ref={ref}>
-            <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                <BaseText typographyFont="subTitleBold">
-                    {LL.TITLE_QR_CODE_FOR_ACCOUNT({
-                        accountAlias: selectedAccount.alias,
-                    })}
+            <BaseView flexDirection="row" w={100} justifyContent="center">
+                <BaseText typographyFont="subTitleSemiBold">{LL.TITLE_QR_CODE_FOR_ACCOUNT()}</BaseText>
+            </BaseView>
+            <BaseSpacer height={8} />
+            <BaseView flexDirection="row" w={100} justifyContent="center">
+                <BaseText style={styles.description} typographyFont="subSubTitleLight">
+                    {LL.DESCRIPTION_QR_CODE_FOR_ACCOUNT()}
                 </BaseText>
             </BaseView>
 
-            <BaseSpacer height={24} />
+            <BaseSpacer height={40} />
 
             <BaseView justifyContent="center" alignItems="center">
-                <BaseView
-                    bg={COLORS.WHITE}
-                    style={baseStyles.qrCodeWrapper}
-                    justifyContent="center"
-                    alignItems="center">
+                <BaseView bg={COLORS.WHITE} style={styles.qrCodeWrapper} justifyContent="center" alignItems="center">
                     <QRCode
                         ecl="H"
                         value={selectedAccount.address}
-                        size={172}
+                        size={200}
                         quietZone={10}
                         logo={{ uri: veworldLogo }}
                         logoSize={52}
@@ -63,45 +100,78 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
                     haptics="Light"
                     px={28}
                     size="md"
-                    title={AddressUtils.humanAddress(selectedAccount.address, 8, 7)}
-                    action={() => onCopyToClipboard(selectedAccount.address, LL.COMMON_LBL_ADDRESS())}
-                    rightIcon={<BaseIcon name="icon-copy" color={theme.colors.card} style={baseStyles.icon} />}
-                    m={16}
+                    w={100}
+                    style={styles.button}
+                    title={address}
+                    action={() => onCopyAddress(selectedAccount.address, LL.COMMON_LBL_ADDRESS())}
+                    leftIcon={
+                        showAddressCheckIcon ? (
+                            <BaseIcon name="icon-check" color={theme.colors.card} style={styles.checkIcon} />
+                        ) : null
+                    }
+                    rightIcon={
+                        !showAddressCheckIcon ? (
+                            <BaseIcon name="icon-copy" color={theme.colors.card} style={styles.icon} />
+                        ) : null
+                    }
                 />
 
-                {nameOrAddress.includes(".vet") && (
+                {showUsername && (
                     <>
+                        <BaseSpacer height={16} />
                         <BaseButton
                             haptics="Light"
                             px={28}
                             size="md"
-                            bgColor={theme.colors.secondary}
-                            textColor={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                            title={nameOrAddress}
-                            action={() => onCopyToClipboard(nameOrAddress, LL.COMMON_LBL_ADDRESS())}
+                            w={100}
+                            style={styles.button}
+                            title={username}
+                            action={() => onCopyUsername(nameOrAddress, LL.COMMON_LBL_ADDRESS())}
+                            leftIcon={
+                                showUsernameCheckIcon ? (
+                                    <BaseIcon name="icon-check" color={theme.colors.card} style={styles.checkIcon} />
+                                ) : null
+                            }
                             rightIcon={
-                                <BaseIcon
-                                    name="icon-copy"
-                                    color={theme.isDark ? theme.colors.textReversed : theme.colors.text}
-                                    style={baseStyles.icon}
-                                />
+                                !showUsernameCheckIcon ? (
+                                    <BaseIcon name="icon-copy" color={theme.colors.card} style={styles.icon} />
+                                ) : null
                             }
                         />
-                        <BaseSpacer height={16} />
                     </>
                 )}
+                <BaseSpacer height={40} />
+                <BaseView flexDirection="row" w={100} px={20} justifyContent="center" alignItems="center">
+                    <BaseIcon name="icon-info" size={20} color={theme.colors.text} />
+                    <BaseSpacer width={8} />
+                    <BaseText typographyFont="body">{LL.NETWORK_WARNING_QR_CODE_FOR_ACCOUNT()}</BaseText>
+                </BaseView>
+                <BaseSpacer height={16} />
             </BaseView>
         </BaseBottomSheet>
     )
 })
 
-const baseStyles = StyleSheet.create({
-    qrCodeWrapper: {
-        width: 182,
-        height: 182,
-        borderRadius: 12,
-    },
-    icon: {
-        marginLeft: 16,
-    },
-})
+const baseStyles = () =>
+    StyleSheet.create({
+        qrCodeWrapper: {
+            width: 200,
+            height: 200,
+            borderRadius: 21.44,
+            overflow: "hidden",
+        },
+        icon: {
+            marginLeft: 16,
+        },
+        checkIcon: {
+            marginRight: 8,
+        },
+        button: {
+            justifyContent: "center",
+            alignItems: "center",
+            height: 48,
+        },
+        description: {
+            textAlign: "center",
+        },
+    })

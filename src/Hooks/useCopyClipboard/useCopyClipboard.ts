@@ -22,15 +22,17 @@ export const useCopyClipboard = () => {
     const { LL } = useI18nContext()
 
     const onCopyToClipboard = useCallback(
-        (text: string, labelName: string) => {
+        (text: string, labelName: string, showNotification = true) => {
             Clipboard.setStringAsync(text.toLowerCase())
                 .then(async () => {
                     await HapticsService.triggerImpact({ level: "Light" })
-                    showSuccessToast({
-                        text1: LL.NOTIFICATION_COPIED_CLIPBOARD({
-                            name: labelName,
-                        }),
-                    })
+                    if (showNotification) {
+                        showSuccessToast({
+                            text1: LL.NOTIFICATION_COPIED_CLIPBOARD({
+                                name: labelName,
+                            }),
+                        })
+                    }
                 })
                 .catch(error => {
                     debug(ERROR_EVENTS.APP, error)

@@ -190,13 +190,14 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 icon: actionBottomSheetIcon("icon-arrow-down"),
                 testID: "reciveButton",
             },
-            {
-                name: LL.BTN_SELL(),
-                disabled: !foundToken || isObserved,
-                action: openQRCodeSheet,
-                icon: actionBottomSheetIcon("icon-minus-circle", !foundToken),
-                testID: "sellButton",
-            },
+            // TODO: Implement sell flow when ready
+            // {
+            //     name: LL.BTN_SELL(),
+            //     disabled: !foundToken || isObserved,
+            //     action: openQRCodeSheet,
+            //     icon: actionBottomSheetIcon("icon-minus-circle", !foundToken),
+            //     testID: "sellButton",
+            // },
         ],
         [LL, actionBottomSheetIcon, foundToken, isObserved, nav, openQRCodeSheet, token.symbol],
     )
