@@ -94,6 +94,11 @@ export const ConvertBetterCard: React.FC<Props> = ({
                                 value={sendAmount}
                                 textAlign="right"
                                 autoFocus={isSender}
+                                placeholderTextColor={
+                                    isSender
+                                        ? theme.colors.convertBetterCard.inputText
+                                        : theme.colors.convertBetterCard.convertValueText
+                                }
                                 onChangeText={onSendAmountChange}
                                 style={computedInputStyle}
                             />

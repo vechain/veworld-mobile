@@ -30,6 +30,7 @@ export type Colors = {
     splashColorLayer: string
     title: string
     subtitle: string
+    subSubtitle: string
     card: string
     icon: string
     button: string
@@ -263,6 +264,7 @@ const light: Colors = {
     splashBackground: COLORS.DARK_PURPLE,
     title: COLORS.PRIMARY_800,
     subtitle: COLORS.GREY_600,
+    subSubtitle: COLORS.GREY_700,
     card: COLORS.WHITE,
     icon: COLORS.PRIMARY_800,
     pinEmpty: COLORS.GREY_400,
@@ -406,6 +408,7 @@ const dark: Colors = {
     pinFilled: COLORS.PRIMARY_300,
     title: COLORS.WHITE,
     subtitle: COLORS.GREY_300,
+    subSubtitle: COLORS.GREY_200,
     card: COLORS.PURPLE,
     icon: COLORS.WHITE,
     button: COLORS.LIME_GREEN,

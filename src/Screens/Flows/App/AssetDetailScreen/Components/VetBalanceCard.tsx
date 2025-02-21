@@ -1,6 +1,5 @@
-import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenCardFiatInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useTokenCardFiatInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/useTokenCardFiatInfo"
 import React, { useCallback, useMemo } from "react"
 import { BaseIcon, BaseSkeleton, BaseText, BaseView, FastActionsBottomSheet, showWarningToast } from "~Components"
 import { StyleSheet } from "react-native"

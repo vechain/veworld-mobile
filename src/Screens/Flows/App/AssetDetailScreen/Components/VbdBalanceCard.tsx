@@ -5,7 +5,7 @@ import {
     selectVot3TokenWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { BalanceView } from "./BalanceView"
 import {
@@ -24,8 +24,7 @@ import { useI18nContext } from "~i18n"
 import { useNavigation } from "@react-navigation/native"
 import { StyleSheet } from "react-native"
 import { ColorThemeType } from "~Constants"
-import { useTokenCardFiatInfo } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/useTokenCardFiatInfo"
-import { ConvertBetterBottomSheet } from "~Screens/Flows/App/AssetDetailScreen/Components/ConvertBetterBottomSheet"
+import { ConvertBetterBottomSheet } from "./ConvertBetterBottomSheet"
 
 type Props = {
     isBalanceVisible: boolean

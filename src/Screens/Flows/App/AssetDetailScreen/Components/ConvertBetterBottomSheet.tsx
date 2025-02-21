@@ -140,7 +140,9 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
             <BaseView>
                 <BaseText typographyFont="subSubTitleMedium">{LL.TITLE_CONVERT_BETTER_TOKENS()}</BaseText>
                 <BaseSpacer height={8} />
-                <BaseText typographyFont="captionRegular">{LL.BD_BETTER_TOKEN_CONVERSION()}</BaseText>
+                <BaseText typographyFont="captionRegular" color={theme.colors.subtitle}>
+                    {LL.BD_BETTER_TOKEN_CONVERSION()}
+                </BaseText>
 
                 <BaseSpacer height={24} />
 
@@ -179,8 +181,12 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                 <BaseSpacer height={12} />
 
-                <BaseText typographyFont="smallCaptionSemiBold">{LL.BD_BETTER_TOKEN_CONVERSION_RATIO()}</BaseText>
-                <BaseText typographyFont="smallCaption">{LL.BD_GAS_REQUIRED_FOR_CONVERSION()}</BaseText>
+                <BaseText typographyFont="smallCaptionSemiBold" color={theme.colors.subSubtitle}>
+                    {LL.BD_BETTER_TOKEN_CONVERSION_RATIO()}
+                </BaseText>
+                <BaseText typographyFont="smallCaption" color={theme.colors.subtitle}>
+                    {LL.BD_GAS_REQUIRED_FOR_CONVERSION()}
+                </BaseText>
 
                 <BaseSpacer height={24} />
                 <BaseButton
