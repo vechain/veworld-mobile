@@ -4,14 +4,14 @@ import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { AnimatedStyle } from "react-native-reanimated"
 import { BaseButton, BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { B3TR, ColorThemeType, typography, VOT3 } from "~Constants"
-import { useThemedStyles, useTotalTokenBalance } from "~Hooks"
+import { TokenWithCompleteInfo, useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { FungibleTokenWithBalance } from "~Model"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { Balance } from "~Model"
 import { BigNutils } from "~Utils"
 
 type Props = {
-    token: FungibleTokenWithBalance
+    token?: TokenWithCompleteInfo
+    balance?: Balance
     isSender: boolean
     sendAmount: string
     animatedStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
@@ -24,6 +24,7 @@ const { defaults: defaultTypography } = typography
 
 export const ConvertBetterCard: React.FC<Props> = ({
     token,
+    balance,
     isSender,
     sendAmount,
     animatedStyle,
@@ -33,9 +34,17 @@ export const ConvertBetterCard: React.FC<Props> = ({
 }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const { formatLocale } = useFormatFiat()
 
-    const { tokenTotalToHuman, tokenTotalBalance } = useTotalTokenBalance(token, sendAmount, selectedAccount.address, 2)
+    const tokenTotalBalance = useMemo(() => {
+        return BigNutils(balance?.balance).toString
+    }, [balance?.balance])
+
+    const tokenTotalToHuman = useMemo(() => {
+        return BigNutils(tokenTotalBalance)
+            .toHuman(token?.decimals ?? 18)
+            .toTokenFormat_string(2, formatLocale)
+    }, [formatLocale, token?.decimals, tokenTotalBalance])
 
     const computedTotalBalanceStyle = useMemo(() => {
         return error ? [styles.totalBalanceError] : []
@@ -49,11 +58,11 @@ export const ConvertBetterCard: React.FC<Props> = ({
     }, [styles, isSender, error])
 
     const renderIcon = useMemo(() => {
-        if (token.symbol === B3TR.symbol) return B3TR.icon
-        if (token.symbol === VOT3.symbol) return VOT3.icon
+        if (token?.symbol === B3TR.symbol) return B3TR.icon
+        if (token?.symbol === VOT3.symbol) return VOT3.icon
 
-        return token.icon
-    }, [token.icon, token.symbol])
+        return token?.icon
+    }, [token?.icon, token?.symbol])
 
     const handleOnMaxPress = useCallback(() => {
         onMaxAmountPress?.(tokenTotalToHuman)
@@ -69,7 +78,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
                         <BaseView flexDirection="row" justifyContent="flex-start">
                             <Image source={{ uri: renderIcon }} width={24} height={24} />
                             <BaseSpacer width={12} />
-                            <BaseText typographyFont="bodySemiBold">{token.name}</BaseText>
+                            <BaseText typographyFont="bodySemiBold">{token?.name}</BaseText>
                         </BaseView>
                     </BaseView>
 
