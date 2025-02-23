@@ -30,6 +30,7 @@ enum SectionName {
 }
 
 type ActivitySection = {
+    showYear: boolean
     title: string
     data: Activity[]
 }
@@ -143,6 +144,7 @@ export const ActivitySectionList = ({
     const onEndReachedCalledDuringMomentum = useRef(false)
     const prevSelectedAccountAddress = useRef(selectedAccount.address)
     const previousSectionsState = useRef<ActivitySection[]>([])
+    const years = useRef<string[]>([])
 
     const { getMonthNamebyNumber } = useMonthTranslation()
 
@@ -172,7 +174,20 @@ export const ActivitySectionList = ({
         const sectionExist = sections.find(section => section.title === sectionName)
 
         if (!sectionExist) {
+            let showYear = false
+
+            if (sectionName !== SectionName.TODAY && sectionName !== SectionName.YESTERDAY) {
+                const date = moment(sectionName)
+                const year = date.format("YYYY")
+
+                if (!years.current.includes(year)) {
+                    showYear = true
+                    years.current.push(year)
+                }
+            }
+
             sections.push({
+                showYear: showYear,
                 title: sectionName,
                 data: [activity],
             })
@@ -193,6 +208,7 @@ export const ActivitySectionList = ({
             !AddressUtils.compareAddresses(prevSelectedAccountAddress.current, selectedAccount.address)
         ) {
             previousSectionsState.current = []
+            years.current = []
         }
 
         const result = activities.reduce((acc: ActivitySection[], activity) => {
@@ -228,6 +244,7 @@ export const ActivitySectionList = ({
     const onRefresh = useCallback(async () => {
         await refreshActivities()
         previousSectionsState.current = []
+        years.current = []
         hasScrolled.current = false
     }, [refreshActivities])
 
@@ -245,7 +262,7 @@ export const ActivitySectionList = ({
 
                 return (
                     <>
-                        <BaseText typographyFont="captionSemiBold">{year}</BaseText>
+                        {section.showYear && <BaseText typographyFont="captionSemiBold">{year}</BaseText>}
                         <BaseSpacer height={2} />
                         <BaseText typographyFont="bodySemiBold">{`${month} ${day}`}</BaseText>
                     </>
