@@ -54,10 +54,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                         })
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: token.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -82,10 +79,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                         nav.navigate(Routes.SWAP)
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: token.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -143,7 +137,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             openQRCodeSheet,
             theme.colors.actionBanner.buttonTextDisabled,
             theme.colors.actionBanner.buttonTextSecondary,
-            token.symbol,
         ],
     )
 
@@ -167,10 +160,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                         })
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: token.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -185,10 +175,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                         nav.navigate(Routes.SWAP)
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: token.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -202,7 +189,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 testID: "reciveButton",
             },
         }),
-        [LL, actionBottomSheetIcon, foundToken, isObserved, nav, openQRCodeSheet, token.symbol],
+        [LL, actionBottomSheetIcon, foundToken, isObserved, nav, openQRCodeSheet],
     )
 
     const vetActions = useMemo(() => [Actions.send, Actions.receive, Actions.buy, Actions.more], [Actions])
