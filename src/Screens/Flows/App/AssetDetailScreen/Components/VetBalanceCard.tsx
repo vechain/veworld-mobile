@@ -23,7 +23,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
 
     const { change24h, exchangeRate, isPositive24hChange, isLoading } = useTokenCardFiatInfo(token)
 
-    const isActionDisabled = useMemo(() => !foundToken || isObserved, [foundToken, isObserved])
     const isVet = useMemo(() => token.symbol === VET.symbol, [token.symbol])
 
     const {
@@ -34,7 +33,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
 
     const { bottomSheetActions, barActions } = useAssetActions({
         foundToken,
-        isActionDisabled,
+        isObserved,
         openQRCodeSheet,
         openFastActionsSheet,
     })

@@ -120,7 +120,13 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             {
                 name: LL.BTN_CONVERT(),
                 disabled: !veB3trFiatBalance || isObserved,
-                action: openConvertBetterSheet,
+                action: () => {
+                    if (veB3trFiatBalance) {
+                        openConvertBetterSheet()
+                    } else {
+                        showNoFundsError()
+                    }
+                },
                 icon: (
                     <BaseIcon
                         color={

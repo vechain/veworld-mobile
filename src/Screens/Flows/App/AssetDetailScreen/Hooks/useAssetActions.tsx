@@ -8,12 +8,12 @@ import { useTheme } from "~Hooks"
 
 type Props = {
     foundToken?: FungibleTokenWithBalance
-    isActionDisabled: boolean
+    isObserved: boolean
     openQRCodeSheet: () => void
     openFastActionsSheet: () => void
 }
 
-export const useAssetActions = ({ foundToken, isActionDisabled, openQRCodeSheet, openFastActionsSheet }: Props) => {
+export const useAssetActions = ({ foundToken, isObserved, openQRCodeSheet, openFastActionsSheet }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const theme = useTheme()
@@ -59,12 +59,12 @@ export const useAssetActions = ({ foundToken, isActionDisabled, openQRCodeSheet,
     }, [foundToken, nav, showNoFundsError])
 
     const navigateToSwap = useCallback(() => {
-        if (!isActionDisabled) {
+        if (!isObserved && foundToken) {
             nav.navigate(Routes.SWAP)
         } else {
             showNoFundsError()
         }
-    }, [isActionDisabled, nav, showNoFundsError])
+    }, [isObserved, foundToken, nav, showNoFundsError])
 
     const navigateToBuy = useCallback(() => nav.navigate(Routes.BUY_FLOW), [nav])
 
@@ -86,9 +86,9 @@ export const useAssetActions = ({ foundToken, isActionDisabled, openQRCodeSheet,
             send: {
                 name: LL.BTN_SEND(),
                 action: navigateToSend,
-                icon: actionBarIcon("icon-arrow-up", isActionDisabled),
+                icon: actionBarIcon("icon-arrow-up", isObserved || !foundToken),
                 testID: "sendButton",
-                disabled: isActionDisabled,
+                disabled: isObserved || !foundToken,
             },
             receive: {
                 name: LL.COMMON_RECEIVE(),
@@ -107,9 +107,9 @@ export const useAssetActions = ({ foundToken, isActionDisabled, openQRCodeSheet,
             swap: {
                 name: LL.BTN_SWAP(),
                 action: navigateToSwap,
-                icon: actionBarIcon("icon-arrow-left-right", isActionDisabled),
+                icon: actionBarIcon("icon-arrow-left-right", isObserved || !foundToken),
                 testID: "swapButton",
-                disabled: isActionDisabled,
+                disabled: isObserved || !foundToken,
             },
             more: moreAction,
         }),
@@ -118,7 +118,8 @@ export const useAssetActions = ({ foundToken, isActionDisabled, openQRCodeSheet,
             navigateToSend,
             navigateToBuy,
             navigateToSwap,
-            isActionDisabled,
+            isObserved,
+            foundToken,
             openQRCodeSheet,
             actionBarIcon,
             moreAction,
@@ -130,9 +131,9 @@ export const useAssetActions = ({ foundToken, isActionDisabled, openQRCodeSheet,
             send: {
                 name: LL.BTN_SEND(),
                 action: navigateToSend,
-                icon: actionBottomSheetIcon("icon-arrow-up", isActionDisabled),
+                icon: actionBottomSheetIcon("icon-arrow-up", isObserved || !foundToken),
                 testID: "sendButton",
-                disabled: isActionDisabled,
+                disabled: isObserved || !foundToken,
             },
             receive: {
                 name: LL.COMMON_RECEIVE(),
@@ -151,12 +152,21 @@ export const useAssetActions = ({ foundToken, isActionDisabled, openQRCodeSheet,
             swap: {
                 name: LL.BTN_SWAP(),
                 action: navigateToSwap,
-                icon: actionBottomSheetIcon("icon-arrow-left-right", isActionDisabled),
+                icon: actionBottomSheetIcon("icon-arrow-left-right", isObserved || !foundToken),
                 testID: "swapButton",
-                disabled: isActionDisabled,
+                disabled: isObserved || !foundToken,
             },
         }),
-        [LL, navigateToSend, navigateToSwap, navigateToBuy, isActionDisabled, openQRCodeSheet, actionBottomSheetIcon],
+        [
+            LL,
+            navigateToSend,
+            navigateToSwap,
+            navigateToBuy,
+            isObserved,
+            foundToken,
+            openQRCodeSheet,
+            actionBottomSheetIcon,
+        ],
     )
 
     return { bottomSheetActions, barActions }
