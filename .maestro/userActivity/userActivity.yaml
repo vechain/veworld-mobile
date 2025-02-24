@@ -64,13 +64,13 @@ onFlowComplete:
     when:
       platform: iOS
     commands:
-      - tapOn: ".*Send.*"
+      - tapOn: ".*Sent tokens.*"
 - runFlow:
     when:
       platform: Android
     commands:
       - tapOn:
-          text: "Send"
+          text: "Sent tokens"
           index: 0
 - assertVisible: "Account 1"
 - assertVisible: "Account 2"
