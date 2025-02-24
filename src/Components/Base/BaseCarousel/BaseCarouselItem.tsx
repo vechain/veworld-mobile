@@ -22,7 +22,7 @@ export const BaseCarouselItem: React.FC<Props> = ({ source, href, style, imageSt
 
     return (
         <Animated.View testID={testID} style={[style, styles.container]}>
-            <TouchableOpacity onPress={onPress}>
+            <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
                 <Animated.Image source={source} resizeMode="contain" style={[imageStyle, styles.image as ImageStyle]} />
             </TouchableOpacity>
         </Animated.View>
