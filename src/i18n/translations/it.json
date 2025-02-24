@@ -31,6 +31,7 @@
   "ALERT_MSG_MANUAL_BACKUP_DONE": "Backup manuale completato!",
   "ALERT_MSG_NEW_VERSION": "È disponibile una nuova versione {version: string}. Si prega di aggiornare all'ultima versione.",
   "ALERT_MSG_NOT_ENROLLED": "Non hai registrato alcun metodo di autenticazione biometrica.",
+  "ALERT_MSG_NO_FUNDS_FOR_ACTION": "Non hai fondi disponibili per continuare con questa azione.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Il tuo dispositivo non supporta il Bluetooth, che è necessario per utilizzare questa funzione.",
   "ALERT_MSG_VOT3": "Puoi solo riconvertire VOT3 in B3TR dal portafoglio con cui hai completato la conversione originale da B3TR a VOT3.",
   "ALERT_MSG_VOT3_BALANCE": "Il saldo VOT3 può essere aumentato convertendo B3TR.",

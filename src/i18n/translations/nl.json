@@ -31,6 +31,7 @@
   "ALERT_MSG_MANUAL_BACKUP_DONE": "Handmatige back-up voltooid!",
   "ALERT_MSG_NEW_VERSION": "Een nieuwe versie {version: string} is nu beschikbaar. Update naar de nieuwste versie.",
   "ALERT_MSG_NOT_ENROLLED": "Je hebt geen biometrische authenticatiemethode ingeschakeld.",
+  "ALERT_MSG_NO_FUNDS_FOR_ACTION": "U heeft geen beschikbare middelen om door te gaan met deze actie.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Je apparaat ondersteunt geen Bluetooth, wat vereist is om deze functie te gebruiken.",
   "ALERT_MSG_VOT3": "Je kunt VOT3 alleen terugzetten naar B3TR vanaf de wallet waarmee je de oorspronkelijke B3TR naar VOT3 conversie hebt voltooid.",
   "ALERT_MSG_VOT3_BALANCE": "VOT3-saldo kan worden verhoogd door B3TR om te zetten.",

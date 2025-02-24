@@ -31,6 +31,7 @@
   "ALERT_MSG_MANUAL_BACKUP_DONE": "手动备份完成！",
   "ALERT_MSG_NEW_VERSION": "新版本 {version: string} 已发布。请更新到最新版本",
   "ALERT_MSG_NOT_ENROLLED": "您尚未注册任何生物识别身份验证方法。",
+  "ALERT_MSG_NO_FUNDS_FOR_ACTION": "您没有可用资金来继续此操作。",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "您的设备不支持 Bluetooth，无法使用此功能。",
   "ALERT_MSG_VOT3": "您只能从完成原始 B3TR 到 VOT3 转换的钱包中将 VOT3 转回 B3TR。",
   "ALERT_MSG_VOT3_BALANCE": "可以通过转换B3TR来增加VOT3余额。",

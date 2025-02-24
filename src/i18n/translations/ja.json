@@ -31,6 +31,7 @@
   "ALERT_MSG_MANUAL_BACKUP_DONE": "手動バックアップ完了!",
   "ALERT_MSG_NEW_VERSION": "新しいバージョン {version: string} が登場しました。最新バージョンにアップデートしてください。",
   "ALERT_MSG_NOT_ENROLLED": "生体認証メソッドが登録されていません。",
+  "ALERT_MSG_NO_FUNDS_FOR_ACTION": "このアクションを続行するための資金がありません。",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "この機能を使用するにはBluetoothが必要ですが、お使いのデバイスはサポートしていません。",
   "ALERT_MSG_VOT3": "VOT3を元のB3TRに戻せるのは、B3TRからVOT3への変換を行ったウォレットのみです。",
   "ALERT_MSG_VOT3_BALANCE": "VOT3残高はB3TRを変換することで増やすことができます。",

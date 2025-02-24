@@ -31,6 +31,7 @@
   "ALERT_MSG_MANUAL_BACKUP_DONE": "Sao lưu thủ công hoàn tất!",
   "ALERT_MSG_NEW_VERSION": "Phiên bản mới {version: string} đã có mặt. Vui lòng cập nhật lên phiên bản mới nhất",
   "ALERT_MSG_NOT_ENROLLED": "Bạn chưa đăng ký phương thức xác thực sinh trắc học nào.",
+  "ALERT_MSG_NO_FUNDS_FOR_ACTION": "Bạn không có đủ tiền để tiếp tục thực hiện hành động này.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Thiết bị của bạn không hỗ trợ Bluetooth, cần thiết để sử dụng tính năng này.",
   "ALERT_MSG_VOT3": "Bạn chỉ có thể chuyển đổi VOT3 trở lại B3TR từ ví mà bạn đã hoàn tất chuyển đổi B3TR sang VOT3 ban đầu.",
   "ALERT_MSG_VOT3_BALANCE": "Số dư VOT3 có thể được tăng lên bằng cách chuyển đổi B3TR.",

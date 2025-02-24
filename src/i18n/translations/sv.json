@@ -31,6 +31,7 @@
   "ALERT_MSG_MANUAL_BACKUP_DONE": "Manuell backup klar!",
   "ALERT_MSG_NEW_VERSION": "En ny version {version: string} finns nu. Uppdatera till den senaste versionen.",
   "ALERT_MSG_NOT_ENROLLED": "Du har inte registrerat någon biometrisk autentiseringsmetod.",
+  "ALERT_MSG_NO_FUNDS_FOR_ACTION": "Du har inga tillgängliga medel för att fortsätta med denna åtgärd.",
   "ALERT_MSG_UNSUPPORTED_BLUETOOTH": "Din enhet stöder inte Bluetooth, vilket krävs för att använda denna funktion.",
   "ALERT_MSG_VOT3": "Du kan bara konvertera VOT3 tillbaka till B3TR från den plånbok där du genomförde den ursprungliga B3TR till VOT3-konverteringen.",
   "ALERT_MSG_VOT3_BALANCE": "VOT3-saldo kan ökas genom att konvertera B3TR.",
