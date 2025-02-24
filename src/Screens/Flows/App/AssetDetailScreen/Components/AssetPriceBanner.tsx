@@ -83,6 +83,7 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         textContainer: {
             height: 44,
+            gap: 3,
         },
         textBigTitle: {
             color: theme.colors.text,

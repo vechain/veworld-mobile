@@ -63,6 +63,5 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopRightRadius: 24,
             borderTopLeftRadius: 24,
             paddingHorizontal: 24,
-            paddingTop: 8,
         },
     })

@@ -169,6 +169,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_VOT3: string
 	/**
+	 * V​O​T​3​ ​b​a​l​a​n​c​e​ ​c​a​n​ ​b​e​ ​i​n​c​r​e​a​s​e​d​ ​b​y​ ​c​o​n​v​e​r​t​i​n​g​ ​B​3​T​R​.
+	 */
+	ALERT_MSG_VOT3_BALANCE: string
+	/**
 	 * A​s​k​ ​m​e​ ​l​a​t​e​r
 	 */
 	ALERT_OPTION_ASK_ME_LATER: string
@@ -359,6 +363,14 @@ type RootTranslation = {
 	 */
 	BD_BACK_TO_APP: string
 	/**
+	 * B​3​T​R​ ​t​o​k​e​n​s​ ​c​a​n​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​i​n​t​o​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​a​n​d​ ​b​a​c​k​,​ ​a​l​l​o​w​i​n​g​ ​y​o​u​ ​t​o​ ​g​e​t​ ​m​o​r​e​ ​v​o​t​i​n​g​ ​p​o​w​e​r​ ​a​n​d​ ​p​a​r​t​i​c​i​p​a​t​e​ ​a​c​t​i​v​e​l​y​ ​i​n​ ​t​h​e​ ​v​o​t​i​n​g​ ​r​o​u​n​d​s​ ​a​n​d​ ​g​o​v​e​r​n​a​n​c​e​ ​p​r​o​p​o​s​a​l​s​.
+	 */
+	BD_BETTER_TOKEN_CONVERSION: string
+	/**
+	 * C​o​n​v​e​r​t​ ​y​o​u​r​ ​B​e​t​t​e​r​ ​t​o​k​e​n​s​ ​1​ ​B​3​T​R​ ​=​ ​1​ ​V​O​T​3
+	 */
+	BD_BETTER_TOKEN_CONVERSION_RATIO: string
+	/**
 	 * B​u​y​ ​w​i​t​h​ ​C​o​i​n​b​a​s​e​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​h​e​ ​t​o​k​e​n​s​ ​d​i​r​e​c​t​l​y​ ​i​n​ ​V​e​W​o​r​l​d​.
 	 */
 	BD_BUY_DESCRIPTION_COINBASE: string
@@ -478,6 +490,10 @@ type RootTranslation = {
 	 * E​U​R
 	 */
 	BD_EUR: string
+	/**
+	 * V​T​H​O​ ​b​a​l​a​n​c​e​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​p​a​y​ ​f​o​r​ ​t​h​e​ ​c​o​n​v​e​r​s​i​o​n​ ​g​a​s​ ​f​e​e​s
+	 */
+	BD_GAS_REQUIRED_FOR_CONVERSION: string
 	/**
 	 * G​o​ ​b​a​c​k​ ​t​o​ ​V​e​W​o​r​l​d​ ​a​p​p
 	 */
@@ -685,6 +701,14 @@ type RootTranslation = {
 	 */
 	BD_TESTNET_NO_FIAT: string
 	/**
+	 * T​o​k​e​n​s​ ​c​o​n​v​e​r​t​e​d​ ​s​u​c​c​e​s​f​u​l​l​y​!
+	 */
+	BD_TOKEN_CONVERTED_SUCCESS: string
+	/**
+	 * S​e​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​d​e​t​a​i​l​s
+	 */
+	BD_TRANSACTION_DETAILS: string
+	/**
 	 * U​S​D
 	 */
 	BD_USD: string
@@ -872,6 +896,10 @@ type RootTranslation = {
 	 * C​o​n​t​i​n​u​e
 	 */
 	BTN_CONTINUE: string
+	/**
+	 * C​o​n​v​e​r​t
+	 */
+	BTN_CONVERT: string
 	/**
 	 * C​o​p​y​ ​p​u​b​l​i​c​ ​a​d​d​r​e​s​s
 	 */
@@ -1079,6 +1107,10 @@ type RootTranslation = {
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: string
 	/**
+	 * S​e​l​l
+	 */
+	BTN_SELL: string
+	/**
 	 * S​e​n​d
 	 */
 	BTN_SEND: string
@@ -1227,6 +1259,10 @@ type RootTranslation = {
 	 * L​o​a​d​i​n​g
 	 */
 	COMMON_BTN_LOADING: string
+	/**
+	 * M​o​r​e
+	 */
+	COMMON_BTN_MORE: string
 	/**
 	 * N​E​X​T
 	 */
@@ -3475,6 +3511,10 @@ type RootTranslation = {
 	 */
 	TITLE_CONTACTS: string
 	/**
+	 * C​o​n​v​e​r​t​ ​y​o​u​r​ ​B​e​t​t​e​r​ ​t​o​k​e​n​s
+	 */
+	TITLE_CONVERT_BETTER_TOKENS: string
+	/**
 	 * Y​o​u​r​ ​v​e​c​h​a​i​n​ ​w​a​l​l​e​t​ ​i​s​ ​r​e​a​d​y​!
 	 */
 	TITLE_CREATE_WALLET_SUCCESS: string
@@ -3615,6 +3655,10 @@ type RootTranslation = {
 	 * I​n​s​e​r​t​ ​y​o​u​r​ ​6​-​d​i​g​i​t​ ​P​I​N
 	 */
 	TITLE_USER_PIN: string
+	/**
+	 * V​e​B​e​t​t​e​r
+	 */
+	TITLE_VEBETTER: string
 	/**
 	 * I​m​p​o​r​t​ ​L​o​c​a​l​ ​W​a​l​l​e​t
 	 */
@@ -4042,6 +4086,10 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_MSG_VOT3: () => LocalizedString
 	/**
+	 * VOT3 balance can be increased by converting B3TR.
+	 */
+	ALERT_MSG_VOT3_BALANCE: () => LocalizedString
+	/**
 	 * Ask me later
 	 */
 	ALERT_OPTION_ASK_ME_LATER: () => LocalizedString
@@ -4230,6 +4278,14 @@ Try reconnect your device to the internet.
 	 */
 	BD_BACK_TO_APP: () => LocalizedString
 	/**
+	 * B3TR tokens can be converted into VOT3 tokens and back, allowing you to get more voting power and participate actively in the voting rounds and governance proposals.
+	 */
+	BD_BETTER_TOKEN_CONVERSION: () => LocalizedString
+	/**
+	 * Convert your Better tokens 1 B3TR = 1 VOT3
+	 */
+	BD_BETTER_TOKEN_CONVERSION_RATIO: () => LocalizedString
+	/**
 	 * Buy with Coinbase and receive the tokens directly in VeWorld.
 	 */
 	BD_BUY_DESCRIPTION_COINBASE: () => LocalizedString
@@ -4349,6 +4405,10 @@ Try reconnect your device to the internet.
 	 * EUR
 	 */
 	BD_EUR: () => LocalizedString
+	/**
+	 * VTHO balance is required to pay for the conversion gas fees
+	 */
+	BD_GAS_REQUIRED_FOR_CONVERSION: () => LocalizedString
 	/**
 	 * Go back to VeWorld app
 	 */
@@ -4554,6 +4614,14 @@ Try reconnect your device to the internet.
 	 */
 	BD_TESTNET_NO_FIAT: () => LocalizedString
 	/**
+	 * Tokens converted succesfully!
+	 */
+	BD_TOKEN_CONVERTED_SUCCESS: () => LocalizedString
+	/**
+	 * See transaction details
+	 */
+	BD_TRANSACTION_DETAILS: () => LocalizedString
+	/**
 	 * USD
 	 */
 	BD_USD: () => LocalizedString
@@ -4741,6 +4809,10 @@ Try reconnect your device to the internet.
 	 * Continue
 	 */
 	BTN_CONTINUE: () => LocalizedString
+	/**
+	 * Convert
+	 */
+	BTN_CONVERT: () => LocalizedString
 	/**
 	 * Copy public address
 	 */
@@ -4946,6 +5018,10 @@ Try reconnect your device to the internet.
 	 */
 	BTN_SELECT_DERIVATION_PATH_VET: () => LocalizedString
 	/**
+	 * Sell
+	 */
+	BTN_SELL: () => LocalizedString
+	/**
 	 * Send
 	 */
 	BTN_SEND: () => LocalizedString
@@ -5093,6 +5169,10 @@ Try reconnect your device to the internet.
 	 * Loading
 	 */
 	COMMON_BTN_LOADING: () => LocalizedString
+	/**
+	 * More
+	 */
+	COMMON_BTN_MORE: () => LocalizedString
 	/**
 	 * NEXT
 	 */
@@ -7307,6 +7387,10 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_CONTACTS: () => LocalizedString
 	/**
+	 * Convert your Better tokens
+	 */
+	TITLE_CONVERT_BETTER_TOKENS: () => LocalizedString
+	/**
 	 * Your vechain wallet is ready!
 	 */
 	TITLE_CREATE_WALLET_SUCCESS: () => LocalizedString
@@ -7446,6 +7530,10 @@ Try reconnect your device to the internet.
 	 * Insert your 6-digit PIN
 	 */
 	TITLE_USER_PIN: () => LocalizedString
+	/**
+	 * VeBetter
+	 */
+	TITLE_VEBETTER: () => LocalizedString
 	/**
 	 * Import Local Wallet
 	 */
