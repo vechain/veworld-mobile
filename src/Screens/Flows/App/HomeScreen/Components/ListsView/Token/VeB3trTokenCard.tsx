@@ -2,7 +2,7 @@ import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
 import Animated from "react-native-reanimated"
-import { useTheme, useTokenWithCompleteInfo, useTokenCardFiatInfo } from "~Hooks"
+import { useTheme, useTokenWithCompleteInfo, useTokenCardFiatInfo, useCombineFiatBalances } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { COLORS, VBD_ICON } from "~Constants"
 import { useI18nContext } from "~i18n"
@@ -24,6 +24,8 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
     const vot3Token = useTokenWithCompleteInfo(VOT3)
     const b3trToken = useTokenWithCompleteInfo(B3TR)
 
+    const { combineFiatBalances } = useCombineFiatBalances()
+
     const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
     const {
@@ -41,7 +43,10 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
         VOT3.decimals,
     )
 
-    const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trFiat)
+    const { amount: veB3trFiatBalance } = useMemo(
+        () => combineFiatBalances([b3trFiat, vot3FiatBalance]),
+        [b3trFiat, combineFiatBalances, vot3FiatBalance],
+    )
 
     const renderFiatBalance = useMemo(() => {
         if (isTokensOwnedLoading)

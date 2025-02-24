@@ -24,6 +24,7 @@ export const ActionsButtonGroup = memo(({ actions, isVet }: { actions: FastActio
                     testID={action.testID}
                     haptics={action.disabled ? "Error" : "Medium"}
                     activeOpacity={action.disabled ? 0.9 : 0.2}
+                    disabled={action.disabled}
                     style={actionButtonStyle}>
                     <BaseView flexDirection="row" justifyContent={"center"} alignItems="center">
                         {action.icon}
