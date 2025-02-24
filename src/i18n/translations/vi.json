@@ -666,6 +666,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "ĐẶT LẠI ứng dụng!",
   "SB_CAMERA_ANAVAILABILITY": "Thiết bị của bạn không hỗ trợ thao tác này.",
   "SB_CHOOSE_A_WALLET": "Chọn một ví",
+  "SB_CLAIMABLE_ACCOUNTS": "Bạn có {usernames: number} tên người dùng có thể yêu cầu",
   "SB_CLAIM_USERNAME": "Tên người dùng này có thể được sử dụng thay cho địa chỉ ví của bạn để gửi và nhận token và kết nối với dApps. Việc xác nhận là miễn phí.",
   "SB_COLLECTIBLES": "Bộ sưu tập",
   "SB_CONFIRM_DELETE": "Xác nhận xóa",

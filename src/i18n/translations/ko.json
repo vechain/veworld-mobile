@@ -666,6 +666,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "앱을 초기화해야 합니다!",
   "SB_CAMERA_ANAVAILABILITY": "해당 기기는 이 작업을 지원하지 않습니다.",
   "SB_CHOOSE_A_WALLET": "지갑 선택",
+  "SB_CLAIMABLE_ACCOUNTS": "{usernames: number}개의 사용자 이름을 주장할 수 있습니다.",
   "SB_CLAIM_USERNAME": "사용자 이름은 지갑 주소 대신에 토큰을 보내고 받거나 dApp에 연결할 때 사용할 수 있습니다. 클레임은 무료입니다.",
   "SB_COLLECTIBLES": "수집품",
   "SB_CONFIRM_DELETE": "삭제 확인",

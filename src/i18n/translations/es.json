@@ -666,6 +666,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "¡RESTABLECER la aplicación!",
   "SB_CAMERA_ANAVAILABILITY": "Tu dispositivo no admite esta operación.",
   "SB_CHOOSE_A_WALLET": "Elige una billetera",
+  "SB_CLAIMABLE_ACCOUNTS": "Tienes {usernames: number} nombre de usuario disponible para reclamar",
   "SB_CLAIM_USERNAME": "Este nombre de usuario se puede usar en lugar de tu dirección de billetera para enviar y recibir tokens y conectarte a dApps. La reclamación es gratuita.",
   "SB_COLLECTIBLES": "Coleccionables",
   "SB_CONFIRM_DELETE": "Confirmar eliminación",

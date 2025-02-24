@@ -666,6 +666,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "reset de app!",
   "SB_CAMERA_ANAVAILABILITY": "Uw apparaat ondersteunt deze operatie niet.",
   "SB_CHOOSE_A_WALLET": "Kies een wallet",
+  "SB_CLAIMABLE_ACCOUNTS": "Je hebt {usernames: number} gebruikersnaam claim beschikbaar",
   "SB_CLAIM_USERNAME": "Deze gebruikersnaam kan in plaats van uw walletadres worden gebruikt om tokens te verzenden en ontvangen en verbinding te maken met dApps. Het claimen is gratis.",
   "SB_COLLECTIBLES": "Verzamelobjecten",
   "SB_CONFIRM_DELETE": "Bevestig verwijdering",

@@ -664,6 +664,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "RESET the App!",
   "SB_CAMERA_ANAVAILABILITY": "Your device does not support this operation.",
   "SB_CHOOSE_A_WALLET": "Choose a wallet",
+  "SB_CLAIMABLE_ACCOUNTS": "You have {usernames: number} username claim available",
   "SB_CLAIM_USERNAME": "This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.",
   "SB_COLLECTIBLES": "Collectibles",
   "SB_CONFIRM_DELETE": "Confirm delete",

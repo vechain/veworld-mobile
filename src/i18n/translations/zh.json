@@ -666,6 +666,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "重置应用程序！",
   "SB_CAMERA_ANAVAILABILITY": "您的设备不支持此操作。",
   "SB_CHOOSE_A_WALLET": "选择一个钱包",
+  "SB_CLAIMABLE_ACCOUNTS": "您有 {usernames: number} 个可供索取的用户名",
   "SB_CLAIM_USERNAME": "此用户名可替代您的钱包地址用于发送和接收代币以及连接到dApps。申领不收取费用。",
   "SB_COLLECTIBLES": "藏品",
   "SB_CONFIRM_DELETE": "确认删除",
