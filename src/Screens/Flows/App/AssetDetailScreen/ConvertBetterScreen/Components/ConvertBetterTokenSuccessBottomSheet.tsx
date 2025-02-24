@@ -59,6 +59,7 @@ export const ConvertBetterTokenSuccessBottomSheet = React.forwardRef<BottomSheet
                         </>
                     )}
                     <BaseButton action={onClose}>{LL.COMMON_BTN_OK()}</BaseButton>
+                    <BaseSpacer height={20} />
                 </BaseView>
             </BaseBottomSheet>
         )
@@ -95,7 +96,11 @@ const ConvertionCard: React.FC<ConvertionCardProps> = ({ direction, token, amoun
                 </BaseText>
             </BaseView>
 
-            <BaseText typographyFont="subTitleSemiBold" color={theme.colors.assetDetailsCard.title}>
+            <BaseText
+                fontFamily="Inter-SemiBold"
+                fontSize={20}
+                fontWeight="600"
+                color={theme.colors.assetDetailsCard.title}>
                 {amount}
             </BaseText>
         </BaseView>

@@ -1,6 +1,7 @@
 import { BottomSheetTextInput } from "@gorhom/bottom-sheet"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo, useRef } from "react"
 import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { TextInput } from "react-native-gesture-handler"
 import Animated, { AnimatedStyle } from "react-native-reanimated"
 import { BaseButton, BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { B3TR, ColorThemeType, typography, VOT3 } from "~Constants"
@@ -36,6 +37,8 @@ export const ConvertBetterCard: React.FC<Props> = ({
     const { styles, theme } = useThemedStyles(baseStyles)
     const { formatLocale } = useFormatFiat()
 
+    const inputRef = useRef<TextInput | null>(null)
+
     const tokenTotalBalance = useMemo(() => {
         return BigNutils(balance?.balance).toString
     }, [balance?.balance])
@@ -68,12 +71,22 @@ export const ConvertBetterCard: React.FC<Props> = ({
         onMaxAmountPress?.(tokenTotalToHuman)
     }, [onMaxAmountPress, tokenTotalToHuman])
 
+    useEffect(() => {
+        if (isSender) {
+            inputRef.current?.focus()
+        }
+    }, [isSender])
+
     return (
         <Animated.View style={animatedStyle}>
             <BaseCard style={[styles.container]}>
                 <BaseView flexDirection="row" flex={1} justifyContent="space-between">
                     <BaseView flex={1}>
-                        <BaseText typographyFont="captionSemiBold">{isSender ? LL.FROM() : LL.TO()}</BaseText>
+                        <BaseText
+                            typographyFont="captionSemiBold"
+                            color={theme.colors.convertBetterCard.convertValueText}>
+                            {isSender ? LL.FROM() : LL.TO()}
+                        </BaseText>
                         <BaseSpacer height={12} />
                         <BaseView flexDirection="row" justifyContent="flex-start">
                             <Image source={{ uri: renderIcon }} width={24} height={24} />
@@ -85,7 +98,10 @@ export const ConvertBetterCard: React.FC<Props> = ({
                     <BaseView flex={1} justifyContent="center" alignItems="flex-end" style={[styles.inputContainer]}>
                         {isSender && (
                             <BaseView style={[styles.balanceContainer]}>
-                                <BaseText typographyFont="captionMedium" style={computedTotalBalanceStyle}>
+                                <BaseText
+                                    typographyFont="captionMedium"
+                                    color={theme.colors.convertBetterCard.convertValueText}
+                                    style={computedTotalBalanceStyle}>
                                     {tokenTotalToHuman}
                                 </BaseText>
                                 <BaseButton
@@ -94,7 +110,9 @@ export const ConvertBetterCard: React.FC<Props> = ({
                                     variant="outline"
                                     textColor={theme.colors.actionBanner.buttonText}
                                     style={[styles.maxButton]}
-                                    action={handleOnMaxPress}>
+                                    radius={4}
+                                    action={handleOnMaxPress}
+                                    p={0}>
                                     {"Max"}
                                 </BaseButton>
                             </BaseView>
@@ -102,6 +120,7 @@ export const ConvertBetterCard: React.FC<Props> = ({
 
                         <BaseView flexDirection="row" flex={1}>
                             <BottomSheetTextInput
+                                ref={inputRef}
                                 testID="ConvertBetter_input"
                                 placeholder={"0"}
                                 keyboardType="numeric"
@@ -166,5 +185,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderWidth: 1,
             backgroundColor: theme.colors.actionBanner.buttonBackground,
             paddingVertical: 4,
+            paddingHorizontal: 0,
+            width: 44,
         },
     })
