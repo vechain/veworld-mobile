@@ -317,9 +317,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                 closeBottomSheet={closeFastActionsSheet}
             />
 
-            {veB3trFiatBalance ? (
-                <ConvertBetterBottomSheet ref={convertBetterBottomSheetRef} onClose={closeConvertBetterSheet} />
-            ) : null}
+            <ConvertBetterBottomSheet ref={convertBetterBottomSheetRef} onClose={closeConvertBetterSheet} />
         </>
     )
 })
