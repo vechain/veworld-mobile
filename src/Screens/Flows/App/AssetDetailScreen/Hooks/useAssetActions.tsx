@@ -13,7 +13,7 @@ type Props = {
     openFastActionsSheet: () => void
 }
 
-export const useVetActions = ({ foundToken, isActionDisabled, openQRCodeSheet, openFastActionsSheet }: Props) => {
+export const useAssetActions = ({ foundToken, isActionDisabled, openQRCodeSheet, openFastActionsSheet }: Props) => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const theme = useTheme()
@@ -46,8 +46,7 @@ export const useVetActions = ({ foundToken, isActionDisabled, openQRCodeSheet, o
 
     const showNoFundsError = useCallback(() => {
         showWarningToast({
-            text1: LL.HEADS_UP(),
-            text2: LL.ALERT_MSG_NO_FUNDS_FOR_ACTION(),
+            text1: LL.ALERT_MSG_NO_FUNDS_FOR_ACTION(),
         })
     }, [LL])
 

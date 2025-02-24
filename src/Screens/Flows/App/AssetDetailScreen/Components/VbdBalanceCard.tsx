@@ -84,6 +84,12 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
         [theme.colors.actionBottomSheet.disabledIcon, theme.colors.actionBottomSheet.icon],
     )
 
+    const showNoFundsError = useCallback(() => {
+        showWarningToast({
+            text1: LL.ALERT_MSG_NO_FUNDS_FOR_ACTION(),
+        })
+    }, [LL])
+
     const Actions: FastAction[] = useMemo(
         () => [
             {
@@ -95,12 +101,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                             token: b3trTokenWithBalance,
                         })
                     } else {
-                        showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
-                        })
+                        showNoFundsError()
                     }
                 },
                 icon: (
@@ -136,11 +137,11 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
         ],
         [
             LL,
-            b3trToken.symbol,
             b3trTokenWithBalance,
             isObserved,
             nav,
             openConvertBetterSheet,
+            showNoFundsError,
             theme.colors.actionBanner.buttonTextDisabled,
             theme.colors.actionBanner.buttonTextSecondary,
             veB3trFiatBalance,
@@ -158,12 +159,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                             token: b3trTokenWithBalance,
                         })
                     } else {
-                        showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
-                        })
+                        showNoFundsError()
                     }
                 },
                 icon: actionBottomSheetIcon("icon-arrow-up", !b3trTokenWithBalance),
@@ -181,20 +177,15 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             },
             {
                 name: LL.BTN_SWAP(),
-                disabled: !b3trTokenWithBalance || isObserved,
+                disabled: !veB3trFiatBalance || isObserved,
                 action: () => {
                     if (veB3trFiatBalance) {
                         nav.navigate(Routes.SWAP)
                     } else {
-                        showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
-                        })
+                        showNoFundsError()
                     }
                 },
-                icon: actionBottomSheetIcon("icon-arrow-left-right", !b3trTokenWithBalance),
+                icon: actionBottomSheetIcon("icon-arrow-left-right", !veB3trFiatBalance),
                 testID: "swapButton",
             },
             {
@@ -212,7 +203,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             veB3trFiatBalance,
             openQRCodeSheet,
             nav,
-            b3trToken.symbol,
+            showNoFundsError,
             FastActionsBottomSheetRef,
             openDelayConvertBetterSheet,
         ],

@@ -7,7 +7,7 @@ import { BalanceView } from "./BalanceView"
 import { FungibleTokenWithBalance } from "~Model"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { VET } from "~Constants"
-import { useVetActions } from "../Hooks/useVetActions"
+import { useAssetActions } from "../Hooks/useAssetActions"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -32,7 +32,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
         onClose: closeFastActionsSheet,
     } = useBottomSheetModal()
 
-    const { bottomSheetActions, barActions } = useVetActions({
+    const { bottomSheetActions, barActions } = useAssetActions({
         foundToken,
         isActionDisabled,
         openQRCodeSheet,
@@ -94,7 +94,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
     return (
         <BaseView style={styles.container}>
             {renderFiatBalance}
-            <ActionsButtonGroup actions={isVet ? VetActions : VthoActions} isVet={isVet} />
+            <ActionsButtonGroup actions={isVet ? VetActions : VthoActions} isVet />
             <FastActionsBottomSheet
                 ref={FastActionsBottomSheetRef}
                 actions={VetBottomSheetActions}
