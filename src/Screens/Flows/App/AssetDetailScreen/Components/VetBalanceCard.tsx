@@ -55,7 +55,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
     ]
 
     const renderFiatBalance = useMemo(() => {
-        if (isLoading) {
+        if (isLoading)
             return (
                 <BaseView flexDirection="row">
                     <BaseSkeleton
@@ -67,10 +67,8 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                     />
                 </BaseView>
             )
-        }
-        if (!exchangeRate) {
-            return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
-        }
+        if (!exchangeRate) return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
+
         return (
             <BalanceView
                 isBalanceVisible={isBalanceVisible}

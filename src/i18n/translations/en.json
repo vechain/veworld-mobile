@@ -80,7 +80,7 @@
   "BD_BACKUP_PASSWORD_TO_KEYCHAIN": "Backup Password to Keychain",
   "BD_BACKUP_RECOVERY_PHRASE": "The recovery phrases or private key backup ensure you never lose access to your wallet in case of app reset or lost device.",
   "BD_BACK_TO_APP": "GO BACK TO APP",
-  "BD_BETTER_TOKEN_CONVERSION": "B3TR tokens can be converted into VOT3 tokens and back, allowing you get more voting power and participate actively on the voting rounds and governance proposals.",
+  "BD_BETTER_TOKEN_CONVERSION": "B3TR tokens can be converted into VOT3 tokens and back, allowing you to get more voting power and participate actively in the voting rounds and governance proposals.",
   "BD_BETTER_TOKEN_CONVERSION_RATIO": "Convert your Better tokens 1 B3TR = 1 VOT3",
   "BD_BUY_DESCRIPTION_COINBASE": "Buy with Coinbase and receive the tokens directly in VeWorld.",
   "BD_BUY_DESCRIPTION_TRANSAK": "Buy with Transak and receive the tokens directly in VeWorld.",

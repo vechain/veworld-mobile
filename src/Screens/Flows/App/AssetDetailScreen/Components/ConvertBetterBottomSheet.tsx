@@ -5,13 +5,13 @@ import { ConvertBetterCard } from "./ConvertBetterCard"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import {
     selectB3trTokenWithBalance,
-    selectSelectedAccount,
+    selectNetworkVBDTokens,
     selectVot3TokenWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { useAmountInput, useConvertBetterTokens, useThemedStyles, useTotalTokenBalance } from "~Hooks"
+import { useAmountInput, useConvertBetterTokens, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { StyleSheet } from "react-native"
-import { B3TR, ColorThemeType } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { BigNutils } from "~Utils"
 import HapticsService from "~Services/HapticsService"
@@ -31,9 +31,12 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const { styles, theme } = useThemedStyles(baseStyles)
     const cardPosition = useSharedValue(0)
 
+    const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
     const b3trWithBalance = useAppSelector(selectB3trTokenWithBalance)
     const vot3WithBalance = useAppSelector(selectVot3TokenWithBalance)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const b3tr = useTokenWithCompleteInfo(B3TR)
+    const vot3 = useTokenWithCompleteInfo(VOT3)
 
     const timer = useRef<NodeJS.Timeout | null>(null)
 
@@ -45,8 +48,8 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
         transform: [{ translateY: withTiming(cardPosition.value ? -105 : 0, { duration: 300 }) }],
     }))
 
-    const { tokenTotalBalance: b3trTokenTotal } = useTotalTokenBalance(b3trWithBalance!, "1", selectedAccount.address)
-    const { tokenTotalBalance: vot3TokenTotal } = useTotalTokenBalance(vot3WithBalance!, "1", selectedAccount.address)
+    const b3trTokenTotal = BigNutils(b3trWithBalance?.balance?.balance).toString
+    const vot3TokenTotal = BigNutils(vot3WithBalance?.balance?.balance).toString
 
     const { convertB3tr, convertVot3 } = useConvertBetterTokens()
 
@@ -95,7 +98,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                 setIsError(false)
             }
         },
-        [b3trTokenTotal, isB3TRActive, removeInvalidCharacters, setInput, vot3TokenTotal],
+        [B3TR.decimals, b3trTokenTotal, isB3TRActive, removeInvalidCharacters, setInput, vot3TokenTotal],
     )
 
     const onMaxAmountPress = useCallback(
@@ -126,10 +129,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
         } else {
             convertVot3(input)
         }
-        // resetStates()
     }, [convertB3tr, convertVot3, input, isB3TRActive, onClose])
-
-    if (!b3trWithBalance || !vot3WithBalance) return <></>
 
     return (
         <BaseBottomSheet
@@ -151,7 +151,8 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                 {/* Animated Card View */}
                 <Animated.View style={[styles.betterCardContainer]}>
                     <ConvertBetterCard
-                        token={b3trWithBalance}
+                        token={b3tr}
+                        balance={b3trWithBalance?.balance}
                         isSender={!isSwapped}
                         sendAmount={input}
                         error={isError}
@@ -171,7 +172,8 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                     </BaseView>
 
                     <ConvertBetterCard
-                        token={vot3WithBalance}
+                        token={vot3}
+                        balance={vot3WithBalance?.balance}
                         isSender={isSwapped}
                         sendAmount={input}
                         error={isError}
