@@ -215,9 +215,9 @@ export const ActivitySectionList = ({
             const date = moment(activity.timestamp)
 
             if (isToday(date)) {
-                addItemToSection(acc, activity, LL.TODAY())
+                addItemToSection(acc, activity, SectionName.TODAY)
             } else if (isYesterday(date)) {
-                addItemToSection(acc, activity, LL.YESTERDAY())
+                addItemToSection(acc, activity, SectionName.YESTERDAY)
             } else {
                 const dateStartOfDay = date.startOf("day")
                 addItemToSection(acc, activity, dateStartOfDay.toISOString())
@@ -228,7 +228,7 @@ export const ActivitySectionList = ({
         }, previousSectionsState.current)
 
         return result
-    }, [LL, activities, addItemToSection, isToday, isYesterday, network, selectedAccount.address])
+    }, [activities, addItemToSection, isToday, isYesterday, network, selectedAccount.address])
 
     const onMomentumScrollBegin = useCallback(() => {
         onEndReachedCalledDuringMomentum.current = false
@@ -253,7 +253,11 @@ export const ActivitySectionList = ({
             const isTodaySection = section.title === SectionName.TODAY
             const isYesterdaySection = section.title === SectionName.YESTERDAY
 
-            if (!isTodaySection && !isYesterdaySection) {
+            if (isTodaySection) {
+                return <BaseText typographyFont="bodySemiBold">{LL.TODAY()}</BaseText>
+            } else if (isYesterdaySection) {
+                return <BaseText typographyFont="bodySemiBold">{LL.YESTERDAY()}</BaseText>
+            } else {
                 const date = moment(section.title)
                 const year = date.format("YYYY")
                 const monthNumber = date.month()
@@ -267,11 +271,9 @@ export const ActivitySectionList = ({
                         <BaseText typographyFont="bodySemiBold">{`${month} ${day}`}</BaseText>
                     </>
                 )
-            } else {
-                return <BaseText typographyFont="bodySemiBold">{section.title}</BaseText>
             }
         },
-        [getMonthNamebyNumber],
+        [LL, getMonthNamebyNumber],
     )
 
     const renderSectionFooter = useCallback(() => {
