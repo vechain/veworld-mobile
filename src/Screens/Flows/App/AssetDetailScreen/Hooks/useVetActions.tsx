@@ -1,27 +1,21 @@
 import React, { useCallback, useMemo } from "react"
 import { useNavigation } from "@react-navigation/native"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
 import { BaseIcon, showWarningToast } from "~Components"
-import { FastAction, FungibleTokenWithBalance, IconKey } from "~Model"
-import { Routes, RootStackParamListHome, RootStackParamListSwitch } from "~Navigation"
+import { FungibleTokenWithBalance, IconKey } from "~Model"
+import { Routes } from "~Navigation"
 import { useTheme } from "~Hooks"
 
-type UseVetActionsProps = {
+type Props = {
     foundToken?: FungibleTokenWithBalance
-    isObserved: boolean
+    isActionDisabled: boolean
     openQRCodeSheet: () => void
     openFastActionsSheet: () => void
 }
 
-export const useVetActions = ({
-    foundToken,
-    isObserved,
-    openQRCodeSheet,
-    openFastActionsSheet,
-}: UseVetActionsProps) => {
+export const useVetActions = ({ foundToken, isActionDisabled, openQRCodeSheet, openFastActionsSheet }: Props) => {
     const { LL } = useI18nContext()
-    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome & RootStackParamListSwitch>>()
+    const nav = useNavigation()
     const theme = useTheme()
 
     const actionBarIcon = useCallback(
@@ -50,38 +44,30 @@ export const useVetActions = ({
         [theme.colors.actionBottomSheet],
     )
 
-    const createBarAction = useCallback(
-        (name: string, action: () => void, iconName: IconKey, testID: string, disabled?: boolean): FastAction => ({
-            name,
-            disabled,
-            action,
-            icon: actionBarIcon(iconName, disabled),
-            testID,
-        }),
-        [actionBarIcon],
-    )
+    const showNoFundsError = useCallback(() => {
+        showWarningToast({
+            text1: LL.HEADS_UP(),
+            text2: LL.ALERT_MSG_NO_FUNDS_FOR_ACTION(),
+        })
+    }, [LL])
 
-    const createBottomSheetAction = useCallback(
-        (name: string, action: () => void, iconName: IconKey, testID: string, disabled?: boolean): FastAction => ({
-            name,
-            disabled,
-            action,
-            icon: actionBottomSheetIcon(iconName, disabled),
-            testID,
-        }),
-        [actionBottomSheetIcon],
-    )
-
-    const sendAction = useCallback(() => {
+    const navigateToSend = useCallback(() => {
         if (foundToken) {
             nav.navigate(Routes.INSERT_ADDRESS_SEND, { token: foundToken })
         } else {
-            showWarningToast({
-                text1: LL.HEADS_UP(),
-                text2: LL.ALERT_MSG_NO_FUNDS_FOR_ACTION(),
-            })
+            showNoFundsError()
         }
-    }, [foundToken, LL, nav])
+    }, [foundToken, nav, showNoFundsError])
+
+    const navigateToSwap = useCallback(() => {
+        if (!isActionDisabled) {
+            nav.navigate(Routes.SWAP)
+        } else {
+            showNoFundsError()
+        }
+    }, [isActionDisabled, nav, showNoFundsError])
+
+    const navigateToBuy = useCallback(() => nav.navigate(Routes.BUY_FLOW), [nav])
 
     const moreAction = useMemo(
         () => ({
@@ -98,94 +84,81 @@ export const useVetActions = ({
 
     const barActions = useMemo(
         () => ({
-            send: createBarAction(LL.BTN_SEND(), sendAction, "icon-arrow-up", "sendButton", !foundToken || isObserved),
-            receive: createBarAction(LL.COMMON_RECEIVE(), openQRCodeSheet, "icon-arrow-down", "receiveButton", false),
-            buy: createBarAction(
-                LL.BTN_BUY(),
-                () => nav.navigate(Routes.BUY_FLOW),
-                "icon-plus-circle",
-                "buyButton",
-                false,
-            ),
-            swap: createBarAction(
-                LL.BTN_SWAP(),
-                () => {
-                    if (foundToken && !isObserved) {
-                        nav.navigate(Routes.SWAP)
-                    } else {
-                        showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.ALERT_MSG_NO_FUNDS_FOR_ACTION(),
-                        })
-                    }
-                },
-                "icon-arrow-left-right",
-                "swapButton",
-                !foundToken || isObserved,
-            ),
+            send: {
+                name: LL.BTN_SEND(),
+                action: navigateToSend,
+                icon: actionBarIcon("icon-arrow-up", isActionDisabled),
+                testID: "sendButton",
+                disabled: isActionDisabled,
+            },
+            receive: {
+                name: LL.COMMON_RECEIVE(),
+                action: openQRCodeSheet,
+                icon: actionBarIcon("icon-arrow-down", false),
+                testID: "receiveButton",
+                disabled: false,
+            },
+            buy: {
+                name: LL.BTN_BUY(),
+                action: navigateToBuy,
+                icon: actionBarIcon("icon-plus-circle", false),
+                testID: "buyButton",
+                disabled: false,
+            },
+            swap: {
+                name: LL.BTN_SWAP(),
+                action: navigateToSwap,
+                icon: actionBarIcon("icon-arrow-left-right", isActionDisabled),
+                testID: "swapButton",
+                disabled: isActionDisabled,
+            },
             more: moreAction,
         }),
-        [LL, createBarAction, foundToken, isObserved, nav, openQRCodeSheet, sendAction, moreAction],
+        [
+            LL,
+            navigateToSend,
+            navigateToBuy,
+            navigateToSwap,
+            isActionDisabled,
+            openQRCodeSheet,
+            actionBarIcon,
+            moreAction,
+        ],
     )
 
     const bottomSheetActions = useMemo(
         () => ({
-            send: createBottomSheetAction(
-                LL.BTN_SEND(),
-                sendAction,
-                "icon-arrow-up",
-                "sendButton",
-                !foundToken || isObserved,
-            ),
-            receive: createBottomSheetAction(
-                LL.COMMON_RECEIVE(),
-                openQRCodeSheet,
-                "icon-arrow-down",
-                "receiveButton",
-                false,
-            ),
-            buy: createBottomSheetAction(
-                LL.BTN_BUY(),
-                () => nav.navigate(Routes.BUY_FLOW),
-                "icon-plus-circle",
-                "buyButton",
-                false,
-            ),
-            swap: createBottomSheetAction(
-                LL.BTN_SWAP(),
-                () => {
-                    if (foundToken && !isObserved) {
-                        nav.navigate(Routes.SWAP)
-                    } else {
-                        showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.ALERT_MSG_NO_FUNDS_FOR_ACTION(),
-                        })
-                    }
-                },
-                "icon-arrow-left-right",
-                "swapButton",
-                !foundToken || isObserved,
-            ),
+            send: {
+                name: LL.BTN_SEND(),
+                action: navigateToSend,
+                icon: actionBottomSheetIcon("icon-arrow-up", isActionDisabled),
+                testID: "sendButton",
+                disabled: isActionDisabled,
+            },
+            receive: {
+                name: LL.COMMON_RECEIVE(),
+                action: openQRCodeSheet,
+                icon: actionBottomSheetIcon("icon-arrow-down", false),
+                testID: "receiveButton",
+                disabled: false,
+            },
+            buy: {
+                name: LL.BTN_BUY(),
+                action: navigateToBuy,
+                icon: actionBottomSheetIcon("icon-plus-circle", false),
+                testID: "buyButton",
+                disabled: false,
+            },
+            swap: {
+                name: LL.BTN_SWAP(),
+                action: navigateToSwap,
+                icon: actionBottomSheetIcon("icon-arrow-left-right", isActionDisabled),
+                testID: "swapButton",
+                disabled: isActionDisabled,
+            },
         }),
-        [LL, createBottomSheetAction, foundToken, isObserved, nav, openQRCodeSheet, sendAction],
+        [LL, navigateToSend, navigateToSwap, navigateToBuy, isActionDisabled, openQRCodeSheet, actionBottomSheetIcon],
     )
 
-    const VetActions = useMemo(
-        () => [barActions.send, barActions.receive, barActions.buy, barActions.more],
-        [barActions],
-    )
-
-    const VthoActions = useMemo(() => [barActions.send, barActions.swap, barActions.receive], [barActions])
-
-    const VetBottomSheetActions = useMemo(
-        () => [bottomSheetActions.buy, bottomSheetActions.send, bottomSheetActions.swap, bottomSheetActions.receive],
-        [bottomSheetActions],
-    )
-
-    return {
-        VetActions,
-        VthoActions,
-        VetBottomSheetActions,
-    }
+    return { bottomSheetActions, barActions }
 }

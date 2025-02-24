@@ -1,13 +1,13 @@
-import React, { useMemo } from "react"
-import { StyleSheet } from "react-native"
 import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenCardFiatInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import React, { useMemo } from "react"
 import { BaseSkeleton, BaseText, BaseView, FastActionsBottomSheet } from "~Components"
+import { StyleSheet } from "react-native"
+import { BalanceView } from "./BalanceView"
 import { FungibleTokenWithBalance } from "~Model"
+import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { VET } from "~Constants"
 import { useVetActions } from "../Hooks/useVetActions"
-import { ActionsButtonGroup } from "./ActionsButtonGroup"
-import { BalanceView } from "./BalanceView"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -20,19 +20,39 @@ type Props = {
 export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCodeSheet, isObserved }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyle)
     const { LL } = useI18nContext()
+
     const { change24h, exchangeRate, isPositive24hChange, isLoading } = useTokenCardFiatInfo(token)
+
+    const isActionDisabled = useMemo(() => !foundToken || isObserved, [foundToken, isObserved])
+    const isVet = useMemo(() => token.symbol === VET.symbol, [token.symbol])
+
     const {
         ref: FastActionsBottomSheetRef,
         onOpen: openFastActionsSheet,
         onClose: closeFastActionsSheet,
     } = useBottomSheetModal()
 
-    const { VetActions, VthoActions, VetBottomSheetActions } = useVetActions({
+    const { bottomSheetActions, barActions } = useVetActions({
         foundToken,
-        isObserved,
+        isActionDisabled,
         openQRCodeSheet,
         openFastActionsSheet,
     })
+
+    const VetActions = useMemo(
+        () => [barActions.send, barActions.receive, barActions.buy, barActions.more],
+        [barActions.buy, barActions.more, barActions.receive, barActions.send],
+    )
+    const VthoActions = useMemo(
+        () => [barActions.send, barActions.swap, barActions.receive],
+        [barActions.receive, barActions.send, barActions.swap],
+    )
+    const VetBottomSheetActions = [
+        bottomSheetActions.buy,
+        bottomSheetActions.send,
+        bottomSheetActions.swap,
+        bottomSheetActions.receive,
+    ]
 
     const renderFiatBalance = useMemo(() => {
         if (isLoading) {
@@ -59,12 +79,22 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 isPositiveChange={isPositive24hChange}
             />
         )
-    }, [isLoading, theme.colors, exchangeRate, LL, isBalanceVisible, token, change24h, isPositive24hChange])
+    }, [
+        isLoading,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        exchangeRate,
+        LL,
+        isBalanceVisible,
+        token,
+        change24h,
+        isPositive24hChange,
+    ])
 
     return (
         <BaseView style={styles.container}>
             {renderFiatBalance}
-            <ActionsButtonGroup actions={token.symbol === VET.symbol ? VetActions : VthoActions} isVet />
+            <ActionsButtonGroup actions={isVet ? VetActions : VthoActions} isVet={isVet} />
             <FastActionsBottomSheet
                 ref={FastActionsBottomSheetRef}
                 actions={VetBottomSheetActions}
