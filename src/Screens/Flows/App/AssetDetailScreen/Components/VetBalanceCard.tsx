@@ -27,7 +27,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
         onClose: closeFastActionsSheet,
     } = useBottomSheetModal()
 
-    const { VetActions, VthoActions, ActionsBottomSheet } = useVetActions({
+    const { VetActions, VthoActions, VetBottomSheetActions } = useVetActions({
         foundToken,
         isObserved,
         openQRCodeSheet,
@@ -67,7 +67,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             <ActionsButtonGroup actions={token.symbol === VET.symbol ? VetActions : VthoActions} isVet />
             <FastActionsBottomSheet
                 ref={FastActionsBottomSheetRef}
-                actions={ActionsBottomSheet}
+                actions={VetBottomSheetActions}
                 closeBottomSheet={closeFastActionsSheet}
             />
         </BaseView>

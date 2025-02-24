@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo } from "react"
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { useI18nContext } from "~i18n"
 import { BaseIcon, showWarningToast } from "~Components"
 import { FastAction, FungibleTokenWithBalance, IconKey } from "~Model"
-import { Routes } from "~Navigation"
+import { Routes, RootStackParamListHome, RootStackParamListSwitch } from "~Navigation"
 import { useTheme } from "~Hooks"
 
 type UseVetActionsProps = {
@@ -20,7 +21,7 @@ export const useVetActions = ({
     openFastActionsSheet,
 }: UseVetActionsProps) => {
     const { LL } = useI18nContext()
-    const nav = useNavigation()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome & RootStackParamListSwitch>>()
     const theme = useTheme()
 
     const actionBarIcon = useCallback(
@@ -82,6 +83,19 @@ export const useVetActions = ({
         }
     }, [foundToken, LL, nav])
 
+    const moreAction = useMemo(
+        () => ({
+            name: LL.COMMON_BTN_MORE(),
+            action: openFastActionsSheet,
+            icon: (
+                <BaseIcon size={20} color={theme.colors.actionBanner.buttonTextSecondary} name="icon-more-vertical" />
+            ),
+            iconOnly: true,
+            testID: "moreOptionsButton",
+        }),
+        [LL, openFastActionsSheet, theme.colors.actionBanner.buttonTextSecondary],
+    )
+
     const barActions = useMemo(
         () => ({
             send: createBarAction(LL.BTN_SEND(), sendAction, "icon-arrow-up", "sendButton", !foundToken || isObserved),
@@ -109,8 +123,9 @@ export const useVetActions = ({
                 "swapButton",
                 !foundToken || isObserved,
             ),
+            more: moreAction,
         }),
-        [LL, createBarAction, foundToken, isObserved, nav, openQRCodeSheet, sendAction],
+        [LL, createBarAction, foundToken, isObserved, nav, openQRCodeSheet, sendAction, moreAction],
     )
 
     const bottomSheetActions = useMemo(
@@ -156,27 +171,14 @@ export const useVetActions = ({
         [LL, createBottomSheetAction, foundToken, isObserved, nav, openQRCodeSheet, sendAction],
     )
 
-    const moreAction = useMemo(
-        () => ({
-            name: LL.COMMON_BTN_MORE(),
-            action: openFastActionsSheet,
-            icon: (
-                <BaseIcon size={20} color={theme.colors.actionBanner.buttonTextSecondary} name="icon-more-vertical" />
-            ),
-            iconOnly: true,
-            testID: "moreOptionsButton",
-        }),
-        [LL, openFastActionsSheet, theme.colors.actionBanner.buttonTextSecondary],
-    )
-
     const VetActions = useMemo(
-        () => [barActions.send, barActions.receive, barActions.buy, moreAction],
-        [barActions, moreAction],
+        () => [barActions.send, barActions.receive, barActions.buy, barActions.more],
+        [barActions],
     )
 
     const VthoActions = useMemo(() => [barActions.send, barActions.swap, barActions.receive], [barActions])
 
-    const ActionsBottomSheet = useMemo(
+    const VetBottomSheetActions = useMemo(
         () => [bottomSheetActions.buy, bottomSheetActions.send, bottomSheetActions.swap, bottomSheetActions.receive],
         [bottomSheetActions],
     )
@@ -184,6 +186,6 @@ export const useVetActions = ({
     return {
         VetActions,
         VthoActions,
-        ActionsBottomSheet,
+        VetBottomSheetActions,
     }
 }
