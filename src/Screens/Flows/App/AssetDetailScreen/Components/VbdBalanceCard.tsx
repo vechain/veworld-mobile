@@ -106,10 +106,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                         })
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -146,7 +143,6 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
         ],
         [
             LL,
-            b3trToken.symbol,
             b3trTokenWithBalance,
             isObserved,
             nav,
@@ -169,10 +165,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                         })
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -197,10 +190,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                         nav.navigate(Routes.SWAP)
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -222,7 +212,6 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             veB3trFiatBalance,
             openQRCodeSheet,
             nav,
-            b3trToken.symbol,
             FastActionsBottomSheetRef,
             openDelayConvertBetterSheet,
         ],

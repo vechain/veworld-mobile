@@ -161,6 +161,10 @@ type RootTranslation = {
 	 */
 	ALERT_MSG_NOT_ENROLLED: string
 	/**
+	 * Y​o​u​ ​d​o​n​’​t​ ​h​a​v​e​ ​f​u​n​d​s​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​c​o​n​t​i​n​u​e​ ​w​i​t​h​ ​t​h​i​s​ ​a​c​t​i​o​n​.
+	 */
+	ALERT_MSG_NO_FUNDS: string
+	/**
 	 * Y​o​u​r​ ​d​e​v​i​c​e​ ​d​o​e​s​ ​n​o​t​ ​s​u​p​p​o​r​t​ ​B​l​u​e​t​o​o​t​h​,​ ​w​h​i​c​h​ ​i​s​ ​r​e​q​u​i​r​e​d​ ​t​o​ ​u​s​e​ ​t​h​i​s​ ​f​e​a​t​u​r​e​.
 	 */
 	ALERT_MSG_UNSUPPORTED_BLUETOOTH: string
@@ -4077,6 +4081,10 @@ Try reconnect your device to the internet.
 	 * You have not enrolled any biometric authentication method.
 	 */
 	ALERT_MSG_NOT_ENROLLED: () => LocalizedString
+	/**
+	 * You don’t have funds available to continue with this action.
+	 */
+	ALERT_MSG_NO_FUNDS: () => LocalizedString
 	/**
 	 * Your device does not support Bluetooth, which is required to use this feature.
 	 */

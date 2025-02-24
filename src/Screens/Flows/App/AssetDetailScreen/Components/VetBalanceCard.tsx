@@ -8,6 +8,7 @@ import { FastAction, FungibleTokenWithBalance, IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
+import { VET } from "~Constants"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -41,9 +42,9 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
         [theme.colors.actionBottomSheet.disabledIcon, theme.colors.actionBottomSheet.icon],
     )
 
-    const Actions: FastAction[] = useMemo(
-        () => [
-            {
+    const Actions: Record<string, FastAction> = useMemo(
+        () => ({
+            send: {
                 name: LL.BTN_SEND(),
                 disabled: !foundToken || isObserved,
                 action: () => {
@@ -53,10 +54,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                         })
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: token.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -73,7 +71,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 ),
                 testID: "sendButton",
             },
-            {
+            swap: {
                 name: LL.BTN_SWAP(),
                 disabled: !foundToken || isObserved,
                 action: () => {
@@ -81,10 +79,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                         nav.navigate(Routes.SWAP)
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: token.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -101,7 +96,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 ),
                 testID: "swapButton",
             },
-            {
+            receive: {
                 name: LL.COMMON_RECEIVE(),
                 action: openQRCodeSheet,
                 icon: (
@@ -109,7 +104,17 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 ),
                 testID: "reciveButton",
             },
-            {
+            buy: {
+                name: LL.BTN_BUY(),
+                action: () => {
+                    nav.navigate(Routes.BUY_FLOW)
+                },
+                icon: (
+                    <BaseIcon size={16} color={theme.colors.actionBanner.buttonTextSecondary} name="icon-plus-circle" />
+                ),
+                testID: "buyButton",
+            },
+            more: {
                 name: LL.COMMON_BTN_MORE(),
                 action: openFastActionsSheet,
                 icon: (
@@ -122,7 +127,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 iconOnly: true,
                 testID: "moreOptionsButton",
             },
-        ],
+        }),
         [
             LL,
             foundToken,
@@ -132,13 +137,12 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             openQRCodeSheet,
             theme.colors.actionBanner.buttonTextDisabled,
             theme.colors.actionBanner.buttonTextSecondary,
-            token.symbol,
         ],
     )
 
-    const ActionsBottomSheet: FastAction[] = useMemo(
-        () => [
-            {
+    const ActionsBottomSheet: Record<string, FastAction> = useMemo(
+        () => ({
+            buy: {
                 name: LL.BTN_BUY(),
                 action: () => {
                     nav.navigate(Routes.BUY_FLOW)
@@ -146,7 +150,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 icon: actionBottomSheetIcon("icon-plus-circle"),
                 testID: "buyButton",
             },
-            {
+            send: {
                 name: LL.BTN_SEND(),
                 disabled: !foundToken || isObserved,
                 action: () => {
@@ -156,17 +160,14 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                         })
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: token.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
                 icon: actionBottomSheetIcon("icon-arrow-up", !foundToken),
                 testID: "sendButton",
             },
-            {
+            swap: {
                 name: LL.BTN_SWAP(),
                 disabled: !foundToken || isObserved,
                 action: () => {
@@ -174,32 +175,28 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                         nav.navigate(Routes.SWAP)
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: token.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
                 icon: actionBottomSheetIcon("icon-arrow-left-right", !foundToken),
                 testID: "swapButton",
             },
-            {
+            receive: {
                 name: LL.COMMON_RECEIVE(),
                 action: openQRCodeSheet,
                 icon: actionBottomSheetIcon("icon-arrow-down"),
                 testID: "reciveButton",
             },
-            // TODO: Implement sell flow when ready
-            // {
-            //     name: LL.BTN_SELL(),
-            //     disabled: !foundToken || isObserved,
-            //     action: openQRCodeSheet,
-            //     icon: actionBottomSheetIcon("icon-minus-circle", !foundToken),
-            //     testID: "sellButton",
-            // },
-        ],
-        [LL, actionBottomSheetIcon, foundToken, isObserved, nav, openQRCodeSheet, token.symbol],
+        }),
+        [LL, actionBottomSheetIcon, foundToken, isObserved, nav, openQRCodeSheet],
+    )
+
+    const vetActions = useMemo(() => [Actions.send, Actions.receive, Actions.buy, Actions.more], [Actions])
+    const vthoActions = useMemo(() => [Actions.send, Actions.swap, Actions.buy], [Actions])
+    const vetBottomSheet = useMemo(
+        () => [ActionsBottomSheet.buy, ActionsBottomSheet.send, ActionsBottomSheet.swap, ActionsBottomSheet.receive],
+        [ActionsBottomSheet],
     )
 
     const renderFiatBalance = useMemo(() => {
@@ -240,10 +237,10 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
     return (
         <BaseView style={styles.container}>
             {renderFiatBalance}
-            <ActionsButtonGroup actions={Actions} isVet />
+            <ActionsButtonGroup actions={token.symbol === VET.symbol ? vetActions : vthoActions} isVet />
             <FastActionsBottomSheet
                 ref={FastActionsBottomSheetRef}
-                actions={ActionsBottomSheet}
+                actions={vetBottomSheet}
                 closeBottomSheet={closeFastActionsSheet}
             />
         </BaseView>
