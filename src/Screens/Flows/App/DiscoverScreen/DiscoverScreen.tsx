@@ -25,17 +25,9 @@ import {
 } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import {
-    AnimatedTitle,
-    Ecosystem,
-    Favourites,
-    MakeYourOwnDApp,
-    VeBetterDAODApps,
-    VeBetterDAOMainCard,
-} from "./Components"
+import { AnimatedTitle, Ecosystem, Favourites, MakeYourOwnDApp, VeBetterDAODApps } from "./Components"
 import { groupFavoritesByBaseUrl } from "./utils"
-
-const DAO_URL = "https://governance.vebetterdao.org/"
+import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 
 export const DiscoverScreen: React.FC = () => {
     const { LL } = useI18nContext()
@@ -169,7 +161,7 @@ export const DiscoverScreen: React.FC = () => {
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}>
                         <BaseSpacer height={24} />
-                        <VeBetterDAOMainCard href={DAO_URL} onDAppPress={onDAppPress} />
+                        <VeBetterDAOCarousel />
                         <BaseSpacer height={36} />
                         <VeBetterDAODApps onDAppPress={onDAppPress} />
                         <BaseSpacer height={42} />
