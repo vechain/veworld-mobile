@@ -377,7 +377,7 @@ const light: Colors = {
     },
     defaultCarousel: {
         dotBg: COLORS.GREY_300,
-        activeDotBg: COLORS.PRIMARY_800,
+        activeDotBg: COLORS.GREY_500,
     },
 }
 
@@ -522,8 +522,8 @@ const dark: Colors = {
         swapIcon: COLORS.WHITE,
     },
     defaultCarousel: {
-        dotBg: COLORS.LIME_GREEN,
-        activeDotBg: COLORS.DARK_PURPLE_DISABLED,
+        dotBg: COLORS.DARK_PURPLE_DISABLED,
+        activeDotBg: COLORS.LIME_GREEN,
     },
 }
 
