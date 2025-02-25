@@ -23,6 +23,10 @@ const initialState: FeatureFlags = {
             android: true,
             iOS: true,
         },
+        coinify: {
+            android: true,
+            iOS: true,
+        },
     },
 }
 

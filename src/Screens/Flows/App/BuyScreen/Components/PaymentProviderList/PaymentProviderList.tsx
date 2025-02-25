@@ -22,7 +22,7 @@ export const PaymentProviderList = () => {
             }
             return (
                 <TouchableOpacity key={item.id} onPress={handleBuyClick}>
-                    <BaseView flexDirection="row" borderRadius={12} mb={20} style={styles.card}>
+                    <BaseView flexDirection="row" borderRadius={16} mb={20} style={styles.card}>
                         <BaseView
                             flexDirection="column"
                             alignItems="flex-start"
@@ -49,14 +49,14 @@ export const PaymentProviderList = () => {
                                 {item.description}
                             </BaseText>
                         </BaseView>
-                        <BaseView style={styles.arrowBackground} flex={1} flexDirection="row" justifyContent="center">
-                            <BaseIcon color={theme.colors.textReversed} name="icon-chevron-right" />
+                        <BaseView flex={1} flexDirection="row" justifyContent="center">
+                            <BaseIcon color={theme.colors.textLight} name="icon-chevron-right" />
                         </BaseView>
                     </BaseView>
                 </TouchableOpacity>
             )
         },
-        [nav, styles.arrowBackground, styles.card, theme.colors.text, theme.colors.textReversed, track],
+        [nav, styles.card, theme.colors.text, theme.colors.textLight, track],
     )
 
     return (
@@ -72,7 +72,9 @@ export const PaymentProviderList = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         card: {
-            backgroundColor: theme.colors.card,
+            backgroundColor: theme.colors.background,
+            borderColor: theme.colors.cardBorder,
+            borderWidth: 1,
         },
         button: {
             backgroundColor: theme.colors.primary,
