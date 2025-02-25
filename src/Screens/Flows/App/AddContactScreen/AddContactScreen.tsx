@@ -29,9 +29,16 @@ export const AddContactScreen = () => {
 
     const { validateName, validateAddress } = useContactValidation(false)
 
+    const isValidAddress = useMemo(() => {
+        if (address.length === 0) return LL.ERROR_REQUIRED_FIELD()
+        if (address.length >= 42) return validateAddress(address)
+
+        return ""
+    }, [LL, address, validateAddress])
+
     const { nameError, addressError } = {
         nameError: validateName(name),
-        addressError: address.length >= 42 ? validateAddress(address) : "",
+        addressError: isValidAddress,
     }
 
     const isFormValid = useMemo(() => {
@@ -91,7 +98,7 @@ export const AddContactScreen = () => {
                     px={20}
                     title={LL.BTN_ADD_CONTACT().toUpperCase()}
                     disabled={!isFormValid}
-                    bgColor={theme.colors.primary}
+                    bgColor={theme.colors.button}
                     style={styles.baseButtonBottomPadding}
                     testID="Add_Contact_Button"
                 />
