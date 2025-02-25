@@ -5,7 +5,13 @@ import {
     selectVot3TokenWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { useBottomSheetModal, useThemedStyles, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
+import {
+    useBottomSheetModal,
+    useCombineFiatBalances,
+    useThemedStyles,
+    useTokenCardFiatInfo,
+    useTokenWithCompleteInfo,
+} from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { BalanceView } from "./BalanceView"
 import {
@@ -57,6 +63,8 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
     const vot3Token = useTokenWithCompleteInfo(VOT3)
     const b3trToken = useTokenWithCompleteInfo(B3TR)
 
+    const { combineFiatBalances } = useCombineFiatBalances()
+
     const {
         exchangeRate,
         isPositive24hChange,
@@ -71,7 +79,9 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
         VOT3.decimals,
     )
 
-    const veB3trFiatBalance = Number(vot3FiatBalance) + Number(b3trFiat)
+    const balances = useMemo(() => [b3trFiat, vot3FiatBalance], [b3trFiat, vot3FiatBalance])
+
+    const { amount: veB3trFiatBalance } = useMemo(() => combineFiatBalances(balances), [balances, combineFiatBalances])
 
     const actionBottomSheetIcon = useCallback(
         (iconName: IconKey, disabled?: boolean) => (
@@ -96,10 +106,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                         })
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -107,7 +114,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                     <BaseIcon
                         size={16}
                         color={
-                            veB3trFiatBalance
+                            veB3trFiatBalance && !isObserved
                                 ? theme.colors.actionBanner.buttonTextSecondary
                                 : theme.colors.actionBanner.buttonTextDisabled
                         }
@@ -123,7 +130,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                 icon: (
                     <BaseIcon
                         color={
-                            veB3trFiatBalance
+                            veB3trFiatBalance && !isObserved
                                 ? theme.colors.actionBanner.buttonTextSecondary
                                 : theme.colors.actionBanner.buttonTextDisabled
                         }
@@ -136,7 +143,6 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
         ],
         [
             LL,
-            b3trToken.symbol,
             b3trTokenWithBalance,
             isObserved,
             nav,
@@ -159,10 +165,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                         })
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -187,10 +190,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                         nav.navigate(Routes.SWAP)
                     } else {
                         showWarningToast({
-                            text1: LL.HEADS_UP(),
-                            text2: LL.SEND_ERROR_TOKEN_NOT_FOUND({
-                                tokenName: b3trToken.symbol,
-                            }),
+                            text1: LL.ALERT_MSG_NO_FUNDS(),
                         })
                     }
                 },
@@ -212,7 +212,6 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
             veB3trFiatBalance,
             openQRCodeSheet,
             nav,
-            b3trToken.symbol,
             FastActionsBottomSheetRef,
             openDelayConvertBetterSheet,
         ],
@@ -239,7 +238,7 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
                 <FiatBalance
                     typographyFont={"subSubTitleSemiBold"}
                     color={theme.colors.assetDetailsCard.title}
-                    balances={[veB3trFiatBalance.toString()]}
+                    balances={balances}
                     isVisible={isBalanceVisible}
                 />
                 {!!veB3trFiatBalance && (
@@ -261,8 +260,9 @@ export const VbdBalanceCard = memo(({ isBalanceVisible, openQRCodeSheet, isObser
         theme.colors.negative,
         b3trToken.exchangeRate,
         LL,
-        veB3trFiatBalance,
+        balances,
         isBalanceVisible,
+        veB3trFiatBalance,
         isPositive24hChange,
         change24h,
     ])

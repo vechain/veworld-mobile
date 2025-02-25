@@ -57,6 +57,7 @@ export const TabStack = () => {
             case Routes.SETTINGS_GET_SUPPORT:
             case Routes.SETTINGS_GIVE_FEEDBACK:
             case Routes.BROWSER:
+            case Routes.TOKEN_DETAILS:
                 return "none"
 
             case "":

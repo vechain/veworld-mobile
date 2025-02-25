@@ -93,10 +93,10 @@ export const fetchAccountTransactionActivities = async (
     page: number,
     network: Network,
 ): Promise<Activity[]> => {
-    // Fetch transactions for the account address
-    const transactions: FetchTransactionsResponse = await fetchTransactions(address, page, network.type)
-
-    const incomingTransfers: FetchIncomingTransfersResponse = await fetchIncomingTransfers(address, page, network.type)
+    const [transactions, incomingTransfers] = await Promise.all([
+        fetchTransactions(address, page, network.type),
+        fetchIncomingTransfers(address, page, network.type),
+    ])
 
     let activitiesFetched: Activity[] = []
 
@@ -106,5 +106,5 @@ export const fetchAccountTransactionActivities = async (
 
     activitiesFetched = [...incomingTransferActivities, ...transactionActivities]
 
-    return activitiesFetched.sort((a, b) => b.timestamp - a.timestamp)
+    return activitiesFetched
 }

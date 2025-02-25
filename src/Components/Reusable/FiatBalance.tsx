@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo } from "react"
+import React, { useMemo } from "react"
 import { BaseSkeleton, BaseText, BaseTextProps, BaseView, BaseViewProps } from "~Components"
 import { COLORS } from "~Constants"
-import { useTheme } from "~Hooks"
+import { useCombineFiatBalances, useTheme } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 
 type FiatBalanceProps = {
@@ -25,21 +25,12 @@ export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps)
     } = props
     const theme = useTheme()
 
-    const isAlmostZero = useCallback((b: string) => b?.includes("<"), [])
-    const areAlmostZero = useMemo(() => balances?.every(isAlmostZero), [balances, isAlmostZero])
-    const preSum = useMemo(
-        () => balances?.map(b => (isAlmostZero(b) ? 0 : Number(b)))?.reduce((sum, current) => sum + current, 0),
-        [balances, isAlmostZero],
-    )
-    const amount = useMemo(() => (areAlmostZero ? 0.01 : preSum), [areAlmostZero, preSum])
+    const { combineFiatBalances } = useCombineFiatBalances()
 
-    const isNAN = useMemo(() => Number.isNaN(amount), [amount])
+    const { amount, areAlmostZero } = useMemo(() => combineFiatBalances(balances), [balances, combineFiatBalances])
 
     const { formatFiat } = useFormatFiat()
-    const renderBalance = useMemo(
-        () => formatFiat({ amount: isNAN ? 0 : amount, cover: !isVisible }),
-        [formatFiat, isNAN, amount, isVisible],
-    )
+    const renderBalance = useMemo(() => formatFiat({ amount, cover: !isVisible }), [formatFiat, amount, isVisible])
 
     return isLoading ? (
         <BaseView pt={4} {...baseviewProps}>

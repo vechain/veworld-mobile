@@ -137,6 +137,7 @@ export type Colors = {
         inputText: string
         convertValueText: string
         swapIcon: string
+        borderColor: string
     }
 }
 
@@ -246,7 +247,7 @@ const light: Colors = {
     success: COLORS.GREEN_400,
     successMedium: COLORS.WHITE,
     positive: COLORS.GREEN_600,
-    negative: COLORS.RED_400,
+    negative: COLORS.RED_600,
     info: COLORS.WHITE,
     warning: COLORS.WHITE,
     error: COLORS.WHITE,
@@ -370,6 +371,7 @@ const light: Colors = {
         inputText: COLORS.GREY_800,
         convertValueText: COLORS.GREY_500,
         swapIcon: COLORS.GREY_600,
+        borderColor: COLORS.GREY_200,
     },
 }
 
@@ -512,6 +514,7 @@ const dark: Colors = {
         inputText: COLORS.WHITE,
         convertValueText: COLORS.GREY_300,
         swapIcon: COLORS.WHITE,
+        borderColor: COLORS.DARK_PURPLE_DISABLED,
     },
 }
 

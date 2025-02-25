@@ -42,10 +42,18 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
 
     const B3TRanimatedStyle = useAnimatedStyle(() => ({
         transform: [{ translateY: withTiming(cardPosition.value ? 105 : 0, { duration: 300 }) }],
+        borderColor: withTiming(
+            !cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
+            { duration: 300 },
+        ),
     }))
 
     const VOT3animatedStyle = useAnimatedStyle(() => ({
         transform: [{ translateY: withTiming(cardPosition.value ? -105 : 0, { duration: 300 }) }],
+        borderColor: withTiming(
+            cardPosition.value ? theme.colors.convertBetterCard.borderColor : theme.colors.transparent,
+            { duration: 300 },
+        ),
     }))
 
     const b3trTokenTotal = BigNutils(b3trWithBalance?.balance?.balance).toString
@@ -156,7 +164,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                         isSender={!isSwapped}
                         sendAmount={input}
                         error={isError}
-                        animatedStyle={B3TRanimatedStyle}
+                        animatedStyle={[B3TRanimatedStyle, styles.betterCard]}
                         onSendAmountChange={onChangeText}
                         onMaxAmountPress={onMaxAmountPress}
                     />
@@ -164,10 +172,16 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                     <BaseView style={[styles.switchButtonContainer]}>
                         <TouchableOpacity
                             disabled={!isSwapEnabled}
-                            style={[styles.switchButton]}
+                            style={styles.switchButtonTapArea}
                             activeOpacity={0.5}
                             onPress={onSwitchCurrencyPress}>
-                            <BaseIcon color={theme.colors.convertBetterCard.swapIcon} name="icon-arrow-up-down" />
+                            <BaseView style={[styles.switchButton]}>
+                                <BaseIcon
+                                    color={theme.colors.convertBetterCard.swapIcon}
+                                    name="icon-arrow-up-down"
+                                    size={16}
+                                />
+                            </BaseView>
                         </TouchableOpacity>
                     </BaseView>
 
@@ -177,7 +191,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                         isSender={isSwapped}
                         sendAmount={input}
                         error={isError}
-                        animatedStyle={VOT3animatedStyle}
+                        animatedStyle={[VOT3animatedStyle, styles.betterCard]}
                         onSendAmountChange={onChangeText}
                         onMaxAmountPress={onMaxAmountPress}
                     />
@@ -215,6 +229,10 @@ const baseStyles = (theme: ColorThemeType) =>
             gap: 8,
             flexDirection: "column",
         },
+        betterCard: {
+            borderWidth: 1,
+            borderRadius: 12,
+        },
         switchButtonContainer: {
             position: "absolute",
             top: 0,
@@ -226,6 +244,9 @@ const baseStyles = (theme: ColorThemeType) =>
             pointerEvents: "box-none",
             zIndex: 1,
         },
+        switchButtonTapArea: {
+            padding: 12,
+        },
         switchButton: {
             borderColor: theme.colors.actionBanner.buttonBorder,
             borderWidth: 1,
@@ -233,5 +254,7 @@ const baseStyles = (theme: ColorThemeType) =>
             color: theme.colors.convertBetterCard.swapIcon,
             padding: 8,
             borderRadius: 6,
+            width: 32,
+            height: 32,
         },
     })

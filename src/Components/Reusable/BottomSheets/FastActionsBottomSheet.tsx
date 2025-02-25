@@ -60,6 +60,7 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                         testID={action.testID}
                         haptics={action.disabled ? "Error" : "Medium"}
                         activeOpacity={action.disabled ? 0.9 : 0.2}
+                        disabled={action.disabled}
                         style={[styles.action]}>
                         <BaseView flexDirection="row" justifyContent={"center"} alignItems="center">
                             <BaseView
