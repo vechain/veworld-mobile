@@ -685,6 +685,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "ZRESETOWANIA aplikacji!",
   "SB_CAMERA_ANAVAILABILITY": "Twoje urządzenie nie obsługuje tej operacji.",
   "SB_CHOOSE_A_WALLET": "Wybierz portfel",
+  "SB_CLAIMABLE_ACCOUNTS": "Masz dostępne {usernames: number} zarejestrowanie nazwy użytkownika",
   "SB_CLAIM_USERNAME": "Tej nazwy użytkownika można używać zamiast adresu portfela do wysyłania i odbierania tokenów oraz łączenia się z dApps. Rezerwacja jest bezpłatna.",
   "SB_COLLECTIBLES": "Kolekcje",
   "SB_CONFIRM_DELETE": "Potwierdź usunięcie",

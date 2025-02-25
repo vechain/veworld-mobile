@@ -7,7 +7,7 @@ import {
     useRenameWallet,
     useSetSelectedAccount,
 } from "~Hooks"
-import { AddressUtils } from "~Utils"
+import { AccountUtils, AddressUtils } from "~Utils"
 import {
     AlertInline,
     BaseSpacer,
@@ -24,7 +24,7 @@ import {
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { AccountDetailBox } from "./AccountDetailBox"
-import { AccountWithDevice, DEVICE_TYPE, WalletAccount } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, WalletAccount, WatchedAccount } from "~Model"
 import { addAccountForDevice, renameAccount, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectAccountsByDevice,
@@ -54,9 +54,17 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         [devices, params.device.rootAddress],
     )
 
-    const [walletAlias, setWalletAlias] = useState(device?.alias ?? "")
+    const isObservedWallet = !device && AccountUtils.isObservedAccount(params.device)
+
+    const initialWalletAlias = useMemo(() => {
+        if (isObservedWallet) return params.device.alias
+
+        return device?.alias ?? ""
+    }, [device?.alias, isObservedWallet, params.device.alias])
+
+    const [walletAlias, setWalletAlias] = useState(initialWalletAlias)
     const [openedAccount, setOpenedAccount] = useState<AccountWithDevice>()
-    const [editingAccount, setEditingAccount] = useState<WalletAccount>()
+    const [editingAccount, setEditingAccount] = useState<WalletAccount | WatchedAccount>()
 
     const { changeDeviceAlias } = useRenameWallet(device)
     const { data: domains, refetch: refetchVns } = usePrefetchAllVns()
@@ -99,17 +107,18 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
         (name: string) => {
             setWalletAlias(name)
             if (name === "") {
-                changeDeviceAlias({ newAlias: device?.alias ?? "" })
+                changeDeviceAlias({ newAlias: initialWalletAlias })
             } else {
                 changeDeviceAlias({ newAlias: name })
             }
         },
-        [changeDeviceAlias, device],
+        [changeDeviceAlias, initialWalletAlias],
     )
 
     const changeAccountAlias = useCallback(
         (name: string) => {
             if (!editingAccount) throw new Error("Wallet account not provided")
+            if (isObservedWallet) setWalletAlias(name)
             dispatch(
                 renameAccount({
                     address: editingAccount.address,
@@ -117,7 +126,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                 }),
             )
         },
-        [dispatch, editingAccount],
+        [dispatch, editingAccount, isObservedWallet],
     )
 
     const onRenameAccount = useCallback(
@@ -166,8 +175,8 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     }, [closeEditWalletAccountBottomSheet, editingAccount])
 
     useEffect(() => {
-        setWalletAlias(device?.alias ?? "")
-    }, [device?.alias])
+        setWalletAlias(initialWalletAlias)
+    }, [initialWalletAlias])
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -183,7 +192,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     }, [checkIdentityBeforeOpening, closeRemoveAccountWarningBottomSheet])
 
     const showButton = device?.type === DEVICE_TYPE.LEDGER || device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
-    const isEditable = device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
+    const isEditable = device?.type !== DEVICE_TYPE.LEDGER
 
     const bannerHeight = useSharedValue<DefaultStyle["height"]>(0)
     const bannerOpacity = useSharedValue<number>(0)
@@ -215,13 +224,16 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     return (
         <Layout
-            title={walletAlias ?? device?.alias ?? ""}
+            title={walletAlias ?? device?.alias ?? params.device.alias}
             headerRightElement={
                 <>
                     {isEditable && (
                         <EditIconHeaderButton
                             testID="WalletDetailScreen_editWalletButton"
-                            action={openEditWalletAccountBottomSheet}
+                            action={() => {
+                                if (isObservedWallet) setEditingAccount(params.device)
+                                openEditWalletAccountBottomSheet()
+                            }}
                         />
                     )}
                     {showButton && (
@@ -245,7 +257,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                                 <AlertInline
                                     variant="banner"
                                     status="info"
-                                    message={`You have ${claimableUsernames.length} username claim available`}
+                                    message={LL.SB_CLAIMABLE_ACCOUNTS({ usernames: claimableUsernames.length })}
                                 />
                             </Animated.View>
                         )}
@@ -310,7 +322,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
                     <EditWalletAccountBottomSheet
                         ref={editWalletAccountBottomSheetRef}
-                        accountAlias={editingAccount ? editingAccount.alias : device?.alias}
+                        accountAlias={editingAccount ? editingAccount.alias : initialWalletAlias}
                         type={editingAccount ? "account" : "wallet"}
                         onConfirm={confirmEditWalletAccount}
                         onCancel={cancelEditWalletAccount}

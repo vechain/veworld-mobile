@@ -685,6 +685,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "uygulamayı SIFIRLAMAYA zorlanacaksınız!",
   "SB_CAMERA_ANAVAILABILITY": "Cihazınız bu işlemi desteklemiyor.",
   "SB_CHOOSE_A_WALLET": "Bir cüzdan seçin",
+  "SB_CLAIMABLE_ACCOUNTS": "{usernames: number} kullanıcı adı talebiniz mevcut",
   "SB_CLAIM_USERNAME": "Bu kullanıcı adı, cüzdan adresiniz yerine token göndermek ve almak ve dApp'lere bağlanmak için kullanılabilir. Talep etmek ücretsizdir.",
   "SB_COLLECTIBLES": "Koleksiyonlar",
   "SB_CONFIRM_DELETE": "Silme işlemini onaylayın",

@@ -685,6 +685,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "REDEFINIR o App!",
   "SB_CAMERA_ANAVAILABILITY": "Seu dispositivo não suporta esta operação.",
   "SB_CHOOSE_A_WALLET": "Escolha uma carteira",
+  "SB_CLAIMABLE_ACCOUNTS": "Você tem {usernames: number} nome de usuário disponível para reivindicar",
   "SB_CLAIM_USERNAME": "Este nome de usuário pode ser usado no lugar do seu endereço de carteira para enviar e receber tokens e se conectar a dApps. A reivindicação é gratuita.",
   "SB_COLLECTIBLES": "Colecionáveis",
   "SB_CONFIRM_DELETE": "Confirmar exclusão",
