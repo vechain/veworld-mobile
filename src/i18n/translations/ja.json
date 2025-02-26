@@ -685,6 +685,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "アプリをリセットすることを余儀なくされます！",
   "SB_CAMERA_ANAVAILABILITY": "お使いのデバイスはこの操作をサポートしていません。",
   "SB_CHOOSE_A_WALLET": "ウォレットを選択",
+  "SB_CLAIMABLE_ACCOUNTS": "{usernames: number} 件のユーザー名を申請可能です",
   "SB_CLAIM_USERNAME": "このユーザー名は、トークンを送受信したりdAppsに接続したりする際、ウォレットアドレスの代わりに使用できます。要求は無料です。",
   "SB_COLLECTIBLES": "コレクティブル",
   "SB_CONFIRM_DELETE": "削除を確認",

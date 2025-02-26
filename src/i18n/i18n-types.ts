@@ -2799,6 +2799,11 @@ type RootTranslation = {
 	 */
 	SB_CHOOSE_A_WALLET: string
 	/**
+	 * Y​o​u​ ​h​a​v​e​ ​{​u​s​e​r​n​a​m​e​s​}​ ​u​s​e​r​n​a​m​e​ ​c​l​a​i​m​ ​a​v​a​i​l​a​b​l​e
+	 * @param {number} usernames
+	 */
+	SB_CLAIMABLE_ACCOUNTS: RequiredParams<'usernames'>
+	/**
 	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​T​h​e​ ​c​l​a​i​m​i​n​g​ ​i​s​ ​f​r​e​e​ ​o​f​ ​c​h​a​r​g​e​.
 	 */
 	SB_CLAIM_USERNAME: string
@@ -6686,6 +6691,10 @@ Try reconnect your device to the internet.
 	 * Choose a wallet
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
+	/**
+	 * You have {usernames} username claim available
+	 */
+	SB_CLAIMABLE_ACCOUNTS: (arg: { usernames: number }) => LocalizedString
 	/**
 	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
 	 */
