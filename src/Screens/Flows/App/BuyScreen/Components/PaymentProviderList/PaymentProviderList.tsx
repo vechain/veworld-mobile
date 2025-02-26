@@ -8,7 +8,7 @@ import { Routes } from "~Navigation"
 import { PaymentProvider, usePaymentProviderList } from "../../Hooks"
 import { useI18nContext } from "~i18n"
 import { PaymentMethodsIds } from "../../Hooks/constants"
-import { ApplePaySVG } from "~Assets"
+import { ApplePaySVG, GooglePaySVG } from "~Assets"
 
 export const PaymentProviderList = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -24,6 +24,18 @@ export const PaymentProviderList = () => {
                 nav.navigate(Routes.BUY_WEBVIEW, { provider: item.id, providerName: item.name })
                 track(AnalyticsEvent.BUY_CRYPTO_PROVIDER_SELECTED, { provider: item.id })
             }
+
+            const renderPaymentIcon = (paymentMethod: PaymentMethodsIds) => {
+                if (paymentMethod === PaymentMethodsIds.ApplePay) return <ApplePaySVG />
+                if (paymentMethod === PaymentMethodsIds.GoolePay) return <GooglePaySVG />
+                if (paymentMethod === PaymentMethodsIds.BankAccount)
+                    return <BaseIcon name="icon-landmark" size={12} color={theme.colors.text} />
+                if (paymentMethod === PaymentMethodsIds.CreditCard)
+                    return <BaseIcon name="icon-credit-card" size={12} color={theme.colors.text} />
+
+                return <></>
+            }
+
             return (
                 <TouchableOpacity key={item.id} onPress={handleBuyClick}>
                     <BaseView flexDirection="row" borderRadius={16} mb={20} py={24} px={16} style={styles.card}>
@@ -47,13 +59,9 @@ export const PaymentProviderList = () => {
                                         {LL.SB_PAY_WITH()}
                                     </BaseText>
                                     {item.paymentMethods.map(method => (
-                                        <React.Fragment key={method.id}>
+                                        <React.Fragment key={method}>
                                             <BaseSpacer width={8} />
-                                            {method.id === PaymentMethodsIds.ApplePay ? (
-                                                <ApplePaySVG />
-                                            ) : (
-                                                <BaseIcon name={method.icon} size={12} color={theme.colors.text} />
-                                            )}
+                                            {renderPaymentIcon(method)}
                                         </React.Fragment>
                                     ))}
                                 </BaseView>
@@ -100,7 +108,7 @@ export const PaymentProviderList = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         card: {
-            backgroundColor: theme.colors.background,
+            backgroundColor: theme.colors.transparent,
             borderColor: theme.colors.cardBorder,
             borderWidth: 1,
             gap: 16,

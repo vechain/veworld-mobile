@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { COLORS } from "~Constants"
-import { PaymentMethod, PaymentMethodsIds, PaymentMethodsList } from "./constants"
+import { PaymentMethodsIds } from "./constants"
 import { CoinbaseLogoSmallSvg, CoinifyLogo } from "~Assets"
 import { TransakLogoSmallSvg } from "~Assets/Img/TransakLogoSmallSvg"
 import { useFeatureFlags } from "~Components"
@@ -19,7 +19,7 @@ export type PaymentProvider = {
     name: string
     description: string
     img: React.ReactNode
-    paymentMethods: PaymentMethod[]
+    paymentMethods: PaymentMethodsIds[]
     fees: string
 }
 
@@ -40,7 +40,7 @@ export const usePaymentProviderList = () => {
                         width={32}
                     />
                 ),
-                paymentMethods: [PaymentMethodsList[PaymentMethodsIds.ApplePay]],
+                paymentMethods: [isIOS() ? PaymentMethodsIds.ApplePay : PaymentMethodsIds.GoolePay],
                 fees: "1.0%",
             },
             {
@@ -53,10 +53,7 @@ export const usePaymentProviderList = () => {
                         width={32}
                     />
                 ),
-                paymentMethods: [
-                    PaymentMethodsList[PaymentMethodsIds.CreditCard],
-                    PaymentMethodsList[PaymentMethodsIds.BankAccount],
-                ],
+                paymentMethods: [PaymentMethodsIds.CreditCard, PaymentMethodsIds.BankAccount],
                 fees: "0.5 - 2.85%",
             },
             {
@@ -64,10 +61,7 @@ export const usePaymentProviderList = () => {
                 name: "Coinify",
                 description: LL.BD_BUY_DESCRIPTION_COINBASE(),
                 img: <Image source={CoinifyLogo} style={[styles.coinifyImg as ImageStyle]} />,
-                paymentMethods: [
-                    PaymentMethodsList[PaymentMethodsIds.CreditCard],
-                    PaymentMethodsList[PaymentMethodsIds.BankAccount],
-                ],
+                paymentMethods: [PaymentMethodsIds.CreditCard, PaymentMethodsIds.BankAccount],
                 fees: "1.0 - 5.0%",
             },
         ]

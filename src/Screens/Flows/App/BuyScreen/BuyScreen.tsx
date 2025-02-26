@@ -16,6 +16,7 @@ export const BuyScreen = () => {
         <Layout
             hasSafeArea={isAndroid}
             title={LL.TITLE_BUY()}
+            bg={theme.isDark ? theme.colors.background : "white"}
             fixedBody={
                 <BaseView
                     flex={1}

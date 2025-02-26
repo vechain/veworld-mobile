@@ -11,6 +11,7 @@ const VeBetterDaoLight = require("./vebetterdao_light.svg")
 const SecurityIconLight = require("./SecurityAlertIcon_light.svg")
 const SecurityIconDark = require("./SecurityAlertIcon_dark.svg")
 const ApplePayIcon = require("./applePay.svg")
+const GooglePayIcon = require("./googlePay.svg")
 
 export {
     VeChainVetLogo,
@@ -26,4 +27,5 @@ export {
     SecurityIconLight,
     SecurityIconDark,
     ApplePayIcon,
+    GooglePayIcon,
 }
