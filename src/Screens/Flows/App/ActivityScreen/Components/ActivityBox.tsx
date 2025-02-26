@@ -21,7 +21,7 @@ import {
     TypedDataActivity,
 } from "~Model"
 import { selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
-import { BigNutils, TransactionUtils } from "~Utils"
+import { AddressUtils, BigNutils, TransactionUtils } from "~Utils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
 type ActivityBoxProps = {
@@ -165,7 +165,11 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
     const { amount, timestamp, tokenAddress, direction, status, to, from } = activity
 
     const type = direction === DIRECTIONS.UP ? "sent" : "received"
-    const addressOrUsername = direction === DIRECTIONS.UP ? to?.[0] ?? "" : from
+
+    const addressOrUsername =
+        direction === DIRECTIONS.UP
+            ? AddressUtils.humanAddress(to?.[0] ?? "", 6, 8)
+            : AddressUtils.humanAddress(from, 6, 8)
 
     const customTokens = useAppSelector(selectCustomTokens)
     const officialTokens = useAppSelector(selectOfficialTokens)
@@ -278,7 +282,9 @@ const DAppTransaction = ({ activity, tokens, onPress }: DAppTransactionProps) =>
         )
     } else {
         const title = activity.isTransaction ? LL.DAPP_TRANSACTION_TITLE() : LL.DAPP_CONNECTION()
-        const description = activity.isTransaction ? `from ${activity.from}` : `to ${activity.name}`
+        const description = activity.isTransaction
+            ? `from ${AddressUtils.humanAddress(activity.from, 6, 8)}`
+            : `to ${activity.name}`
 
         const onPressHandler = () => {
             onPress(activity)

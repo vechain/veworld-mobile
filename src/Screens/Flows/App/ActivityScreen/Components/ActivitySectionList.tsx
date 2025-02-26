@@ -144,7 +144,7 @@ export const ActivitySectionList = ({
     const onEndReachedCalledDuringMomentum = useRef(false)
     const prevSelectedAccountAddress = useRef(selectedAccount.address)
     const previousSectionsState = useRef<ActivitySection[]>([])
-    const years = useRef<string[]>([])
+    const years = useRef<string[]>([moment().format("YYYY")])
 
     const { getMonthNamebyNumber } = useMonthTranslation()
 
