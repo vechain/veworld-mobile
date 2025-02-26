@@ -73,8 +73,8 @@ export const HomeScreen = () => {
     useFocusEffect(
         useCallback(() => {
             updateBalances()
-            updateSuggested()
-        }, [updateBalances, updateSuggested]),
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []),
     )
 
     const { LL } = useI18nContext()
