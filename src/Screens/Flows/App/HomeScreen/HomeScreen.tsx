@@ -1,4 +1,4 @@
-import { useNavigation, useScrollToTop } from "@react-navigation/native"
+import { useNavigation, useScrollToTop, useFocusEffect } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { RefreshControl, StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
@@ -70,6 +70,13 @@ export const HomeScreen = () => {
         dispatch(setAppResetTimestamp())
     }, [dispatch])
 
+    useFocusEffect(
+        useCallback(() => {
+            updateBalances()
+            updateSuggested()
+        }, [updateBalances, updateSuggested]),
+    )
+
     const { LL } = useI18nContext()
     // Pull down to refresh
     const [refreshing, setRefreshing] = React.useState(false)
@@ -87,7 +94,6 @@ export const HomeScreen = () => {
 
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
-
     const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
