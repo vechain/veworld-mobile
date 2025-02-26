@@ -20,6 +20,7 @@ export type PaymentProvider = {
     description: string
     img: React.ReactNode
     paymentMethods: PaymentMethod[]
+    fees: string
 }
 
 export const usePaymentProviderList = () => {
@@ -28,7 +29,7 @@ export const usePaymentProviderList = () => {
     const { paymentProvidersFeature } = useFeatureFlags()
 
     const providers = useMemo(() => {
-        const availableProviders = [
+        const availableProviders: PaymentProvider[] = [
             {
                 id: PaymentProvidersEnum.Transak,
                 name: "Transak",
@@ -40,6 +41,7 @@ export const usePaymentProviderList = () => {
                     />
                 ),
                 paymentMethods: [PaymentMethodsList[PaymentMethodsIds.ApplePay]],
+                fees: "1.0%",
             },
             {
                 id: PaymentProvidersEnum.CoinbasePay,
@@ -55,6 +57,7 @@ export const usePaymentProviderList = () => {
                     PaymentMethodsList[PaymentMethodsIds.CreditCard],
                     PaymentMethodsList[PaymentMethodsIds.BankAccount],
                 ],
+                fees: "0.5 - 2.85%",
             },
             {
                 id: PaymentProvidersEnum.Coinify,
@@ -65,6 +68,7 @@ export const usePaymentProviderList = () => {
                     PaymentMethodsList[PaymentMethodsIds.CreditCard],
                     PaymentMethodsList[PaymentMethodsIds.BankAccount],
                 ],
+                fees: "1.0 - 5.0%",
             },
         ]
 

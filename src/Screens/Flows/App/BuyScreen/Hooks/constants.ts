@@ -22,6 +22,6 @@ export const PaymentMethodsList: Record<PaymentMethodsIds, PaymentMethod> = {
     },
     [PaymentMethodsIds.ApplePay]: {
         id: PaymentMethodsIds.ApplePay,
-        icon: "icon-apple",
+        icon: "icon-credit-card",
     },
 }
