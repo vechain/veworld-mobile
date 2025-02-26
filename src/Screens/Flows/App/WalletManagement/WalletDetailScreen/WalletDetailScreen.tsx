@@ -6,6 +6,7 @@ import {
     usePrefetchAllVns,
     useRenameWallet,
     useSetSelectedAccount,
+    useTheme,
 } from "~Hooks"
 import { AccountUtils, AddressUtils } from "~Utils"
 import {
@@ -31,10 +32,11 @@ import {
     selectBalanceVisible,
     selectSelectedAccount,
     selectDevices,
+    selectAccountByAddress,
 } from "~Storage/Redux/Selectors"
 import { AccountUnderlay, RemoveAccountWarningBottomSheet } from "./components"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { FlatList } from "react-native"
+import { FlatList, Pressable } from "react-native"
 import { EditWalletAccountBottomSheet } from "./components/EditWalletAccountBottomSheet"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -47,6 +49,7 @@ type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAIL
 export const WalletDetailScreen = ({ route: { params } }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
+    const theme = useTheme()
 
     const devices = useAppSelector(selectDevices)
     const device = useMemo(
@@ -56,11 +59,13 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
 
     const isObservedWallet = !device && AccountUtils.isObservedAccount(params.device)
 
+    const observedWallet = useAppSelector(state => selectAccountByAddress(state, params.device.rootAddress))
+
     const initialWalletAlias = useMemo(() => {
-        if (isObservedWallet) return params.device.alias
+        if (isObservedWallet) return observedWallet?.alias ?? ""
 
         return device?.alias ?? ""
-    }, [device?.alias, isObservedWallet, params.device.alias])
+    }, [device?.alias, isObservedWallet, observedWallet?.alias])
 
     const [walletAlias, setWalletAlias] = useState(initialWalletAlias)
     const [openedAccount, setOpenedAccount] = useState<AccountWithDevice>()
@@ -192,7 +197,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
     }, [checkIdentityBeforeOpening, closeRemoveAccountWarningBottomSheet])
 
     const showButton = device?.type === DEVICE_TYPE.LEDGER || device?.type === DEVICE_TYPE.LOCAL_MNEMONIC
-    const isEditable = device?.type !== DEVICE_TYPE.LEDGER
+    const isEditable = device && device?.type !== DEVICE_TYPE.LEDGER
 
     const bannerHeight = useSharedValue<DefaultStyle["height"]>(0)
     const bannerOpacity = useSharedValue<number>(0)
@@ -212,8 +217,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
             overshootClamping: true,
         })
         bannerOpacity.value = withSpring(claimableUsernames.length > 0 ? 1 : 0, { duration: 100 })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [claimableUsernames])
+    }, [bannerHeight, bannerOpacity, claimableUsernames])
 
     useEffect(() => {
         getClaimableUsernames(domains, deviceAccounts).then(res => {
@@ -230,10 +234,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                     {isEditable && (
                         <EditIconHeaderButton
                             testID="WalletDetailScreen_editWalletButton"
-                            action={() => {
-                                if (isObservedWallet) setEditingAccount(params.device)
-                                openEditWalletAccountBottomSheet()
-                            }}
+                            action={openEditWalletAccountBottomSheet}
                         />
                     )}
                     {showButton && (
@@ -249,7 +250,7 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                     <BaseView px={20} mb={16}>
                         <BaseSpacer height={16} />
                         <BaseText typographyFont="body">
-                            {LL.WALLET_DETAIL_ACCOUNTS_NUMER({ count: deviceAccounts.length })}
+                            {LL.WALLET_DETAIL_ACCOUNTS_NUMER({ count: isObservedWallet ? 1 : deviceAccounts.length })}
                         </BaseText>
                         {claimableUsernames.length > 0 && (
                             <Animated.View style={[animatedStyles]}>
@@ -312,6 +313,37 @@ export const WalletDetailScreen = ({ route: { params } }: Props) => {
                             }}
                         />
                     )}
+
+                    {/* Account observed wallet account */}
+                    {isObservedWallet && observedWallet && (
+                        <BaseView px={20}>
+                            <BaseView testID={observedWallet.address} bg={theme.colors.card} borderRadius={12}>
+                                <Pressable
+                                    onPress={() => {
+                                        onSetSelectedAccount({
+                                            address: observedWallet.rootAddress,
+                                        })
+                                    }}>
+                                    <BaseView>
+                                        <AccountDetailBox
+                                            isBalanceVisible={isBalanceVisible}
+                                            account={observedWallet}
+                                            isSelected={AddressUtils.compareAddresses(
+                                                selectedAccount.address,
+                                                observedWallet.address,
+                                            )}
+                                            isDisabled={!observedWallet.visible}
+                                            onEditPress={account => {
+                                                setEditingAccount(account)
+                                                openEditWalletAccountBottomSheet()
+                                            }}
+                                        />
+                                    </BaseView>
+                                </Pressable>
+                            </BaseView>
+                        </BaseView>
+                    )}
+
                     <RemoveAccountWarningBottomSheet
                         onConfirm={closeWarningAndAskForPassword}
                         ref={removeAccountWarningBottomSheetRef}
