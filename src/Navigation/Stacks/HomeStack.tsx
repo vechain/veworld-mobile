@@ -7,6 +7,7 @@ import {
     ConnectedLedgerDevice,
     Device,
     DrivetWallet,
+    FungibleToken,
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
 } from "~Model"
@@ -75,8 +76,8 @@ export type RootStackParamListHome = {
          * Provided when user convert B3TR/VOT3 token to display bottom sheet result
          */
         betterConversionResult?: {
-            from?: FungibleTokenWithBalance
-            to?: FungibleTokenWithBalance
+            from?: FungibleToken
+            to?: FungibleToken
             amount: string
             txId: string
             isSuccess: boolean
