@@ -5,14 +5,14 @@ import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView }
 import { B3TR, ColorThemeType, defaultMainNetwork, DIRECTIONS, VOT3 } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { FungibleTokenWithBalance } from "~Model"
+import { FungibleToken } from "~Model"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     txId?: string
     amount?: string
-    from?: FungibleTokenWithBalance
-    to?: FungibleTokenWithBalance
+    from?: FungibleToken
+    to?: FungibleToken
     onClose: () => void
 }
 
@@ -68,7 +68,7 @@ export const ConvertBetterTokenSuccessBottomSheet = React.forwardRef<BottomSheet
 
 type ConvertionCardProps = {
     direction: DIRECTIONS
-    token?: FungibleTokenWithBalance
+    token?: FungibleToken
     amount?: string
 }
 

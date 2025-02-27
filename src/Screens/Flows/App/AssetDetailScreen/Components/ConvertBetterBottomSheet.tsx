@@ -213,6 +213,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                     disabled={submitDisabled}
                     action={onConvertPress}
                 />
+                <BaseSpacer height={24} />
             </BaseView>
         </BaseBottomSheet>
     )
