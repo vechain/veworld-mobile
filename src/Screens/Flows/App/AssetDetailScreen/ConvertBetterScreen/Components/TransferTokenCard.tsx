@@ -4,7 +4,7 @@ import { BaseView, BaseText, BaseIcon } from "~Components"
 import { B3TR, COLORS, ColorThemeType, SCREEN_WIDTH, VOT3 } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { FungibleTokenWithBalance } from "~Model"
+import { FungibleToken } from "~Model"
 
 enum PROVENANCE {
     FROM = "FROM",
@@ -12,8 +12,8 @@ enum PROVENANCE {
 }
 
 type TransferTokenCardGroupProps = {
-    fromToken?: FungibleTokenWithBalance
-    toToken?: FungibleTokenWithBalance
+    fromToken?: FungibleToken
+    toToken?: FungibleToken
 }
 
 export const TransferTokenCardGroup: React.FC<TransferTokenCardGroupProps> = ({ fromToken, toToken }) => {
@@ -57,7 +57,7 @@ const baseGroupStyles = (theme: ColorThemeType) =>
     })
 
 type Props = {
-    token?: FungibleTokenWithBalance
+    token?: FungibleToken
 
     provenance: PROVENANCE
 }
