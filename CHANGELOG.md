@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-02-27)
+
+
+### Bug Fixes
+
+* navigation error in custom network screens ([#2744](https://github.com/vechain/veworld-mobile/issues/2744)) ([d9950a0](https://github.com/vechain/veworld-mobile/commit/d9950a0ace87ad02790b5fa77e9982bd9797cbe3))
+
 ## 2.0.9 (2025-02-18)
 
 
