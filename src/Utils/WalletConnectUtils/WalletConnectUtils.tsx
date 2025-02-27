@@ -36,6 +36,9 @@ export async function getWeb3Wallet(): Promise<IWalletKit> {
                     description: "Manage your VeChain assets with VeWorld",
                     url: "https://veworld.com",
                     icons: ["https://avatars.githubusercontent.com/u/37784886"],
+                    redirect: {
+                        native: "veworld://",
+                    },
                 },
             })
 
