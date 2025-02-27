@@ -7887,9 +7887,9 @@ ejs@^3.1.10:
     jake "^10.8.5"
 
 electron-to-chromium@^1.5.73:
-  version "1.5.107"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.107.tgz#0a12a0b50e6f925cde8bf9c16c13d514c54c694b"
-  integrity sha512-dJr1o6yCntRkXElnhsHh1bAV19bo/hKyFf7tCcWgpXbuFIF0Lakjgqv5LRfSDaNzAII8Fnxg2tqgHkgCvxdbxw==
+  version "1.5.108"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.5.108.tgz#5a83c99d01d391a6d6b5bb658cb645985a717f53"
+  integrity sha512-tiGxpQmvXBEzrfU5ertmbCV/nG5yqCkC1G4T1SIKP335Y5rjXzPWmijR6XcoGXZvVoo4dknfdNe4Tl7lcIROLg==
 
 elliptic@6.5.4, elliptic@6.6.1, elliptic@^6.5.3, elliptic@^6.5.4, elliptic@^6.5.7, elliptic@^6.6.0:
   version "6.6.1"
@@ -13259,9 +13259,9 @@ open@^8.0.4, open@^8.3.0:
     is-wsl "^2.2.0"
 
 openai@^4.53.0:
-  version "4.85.4"
-  resolved "https://registry.yarnpkg.com/openai/-/openai-4.85.4.tgz#fdf9d3228967b87221a112993501fa33a98f5d18"
-  integrity sha512-Nki51PBSu+Aryo7WKbdXvfm0X/iKkQS2fq3O0Uqb/O3b4exOZFid2te1BZ52bbO5UwxQZ5eeHJDCTqtrJLPw0w==
+  version "4.86.1"
+  resolved "https://registry.yarnpkg.com/openai/-/openai-4.86.1.tgz#4147252d5e6255e2ae716ea59b1d4e54a1c1472a"
+  integrity sha512-x3iCLyaC3yegFVZaxOmrYJjitKxZ9hpVbLi+ZlT5UHuHTMlEQEbKXkGOM78z9qm2T5GF+XRUZCP2/aV4UPFPJQ==
   dependencies:
     "@types/node" "^18.11.18"
     "@types/node-fetch" "^2.6.4"
