@@ -61,8 +61,8 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
             }
         } else {
             return {
-                fromToken: B3TR,
-                toToken: VOT3,
+                fromToken: VOT3,
+                toToken: B3TR,
             }
         }
     }, [B3TR, VOT3, toAddresses])
