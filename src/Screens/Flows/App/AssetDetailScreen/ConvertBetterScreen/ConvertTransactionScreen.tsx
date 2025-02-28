@@ -17,14 +17,7 @@ import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useFormatFiat, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import {
-    selectB3trTokenWithBalance,
-    selectCurrency,
-    selectVot3TokenWithBalance,
-    setIsAppLoading,
-    useAppDispatch,
-    useAppSelector,
-} from "~Storage/Redux"
+import { selectCurrency, selectNetworkVBDTokens, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 import { TransferTokenCardGroup } from "./Components"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
@@ -39,8 +32,8 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
     const track = useAnalyticTracking()
     const { formatLocale } = useFormatFiat()
 
-    const b3trWithBalance = useAppSelector(selectB3trTokenWithBalance)
-    const vot3WithBalance = useAppSelector(selectVot3TokenWithBalance)
+    const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
+
     const currency = useAppSelector(selectCurrency)
 
     const { data: exchangeRate } = useExchangeRate({
@@ -61,18 +54,18 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
         // a call to the B3TR contract in order to approve the transaction
         // here I'm checking if the first clause is to the B3TR address then
         // we are converting B3TR --> VOT3 otherwise is VOT3 --> B3TR
-        if (AddressUtils.compareAddresses(toAddresses[0], b3trWithBalance?.address)) {
+        if (AddressUtils.compareAddresses(toAddresses[0], B3TR.address)) {
             return {
-                fromToken: b3trWithBalance,
-                toToken: vot3WithBalance,
+                fromToken: B3TR,
+                toToken: VOT3,
             }
         } else {
             return {
-                fromToken: vot3WithBalance,
-                toToken: b3trWithBalance,
+                fromToken: VOT3,
+                toToken: B3TR,
             }
         }
-    }, [b3trWithBalance, toAddresses, vot3WithBalance])
+    }, [B3TR, VOT3, toAddresses])
 
     const formattedAmount = useMemo(
         () => BigNutils(amount).toTokenFormat_string(2, formatLocale),

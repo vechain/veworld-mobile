@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
 import { StyleSheet, Text } from "react-native"
 import { BaseButton, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useThemedStyles, useVns } from "~Hooks"
+import { useTabBarBottomMargin, useThemedStyles, useVns } from "~Hooks"
 import { RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 
 import { useI18nContext } from "~i18n"
@@ -14,6 +14,7 @@ export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyle)
     const { resetVns } = useVns()
+    const { tabBarBottomMargin } = useTabBarBottomMargin()
 
     const onPress = useCallback(async () => {
         resetVns()
@@ -37,7 +38,7 @@ export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
                         {LL.SB_USERNAME_CLAIMED()}
                     </BaseText>
                 </BaseView>
-                <BaseView mb={12} flexDirection="row">
+                <BaseView mb={tabBarBottomMargin} flexDirection="row">
                     <BaseButton w={100} action={onPress} selfAlign="flex-end" testID="UsernameClaimed_Btn">
                         {LL.BTN_CONTINUE()}
                     </BaseButton>

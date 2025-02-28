@@ -5,14 +5,14 @@ import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView }
 import { B3TR, ColorThemeType, defaultMainNetwork, DIRECTIONS, VOT3 } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { FungibleTokenWithBalance } from "~Model"
+import { FungibleToken } from "~Model"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     txId?: string
     amount?: string
-    from?: FungibleTokenWithBalance
-    to?: FungibleTokenWithBalance
+    from?: FungibleToken
+    to?: FungibleToken
     onClose: () => void
 }
 
@@ -59,6 +59,7 @@ export const ConvertBetterTokenSuccessBottomSheet = React.forwardRef<BottomSheet
                         </>
                     )}
                     <BaseButton action={onClose}>{LL.COMMON_BTN_OK()}</BaseButton>
+                    <BaseSpacer height={20} />
                 </BaseView>
             </BaseBottomSheet>
         )
@@ -67,7 +68,7 @@ export const ConvertBetterTokenSuccessBottomSheet = React.forwardRef<BottomSheet
 
 type ConvertionCardProps = {
     direction: DIRECTIONS
-    token?: FungibleTokenWithBalance
+    token?: FungibleToken
     amount?: string
 }
 
@@ -95,7 +96,11 @@ const ConvertionCard: React.FC<ConvertionCardProps> = ({ direction, token, amoun
                 </BaseText>
             </BaseView>
 
-            <BaseText typographyFont="subTitleSemiBold" color={theme.colors.assetDetailsCard.title}>
+            <BaseText
+                fontFamily="Inter-SemiBold"
+                fontSize={20}
+                fontWeight="600"
+                color={theme.colors.assetDetailsCard.title}>
                 {amount}
             </BaseText>
         </BaseView>

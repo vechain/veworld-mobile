@@ -7,6 +7,7 @@ import {
     ConnectedLedgerDevice,
     Device,
     DrivetWallet,
+    FungibleToken,
     FungibleTokenWithBalance,
     LedgerAccountWithDevice,
 } from "~Model"
@@ -37,6 +38,8 @@ import {
     ClaimUsername,
     UsernameClaimed,
     ConvertTransactionScreen,
+    AddCustomNodeScreen,
+    ManageCustomNodesScreen,
 } from "~Screens"
 
 export type RootStackParamListHome = {
@@ -75,8 +78,8 @@ export type RootStackParamListHome = {
          * Provided when user convert B3TR/VOT3 token to display bottom sheet result
          */
         betterConversionResult?: {
-            from?: FungibleTokenWithBalance
-            to?: FungibleTokenWithBalance
+            from?: FungibleToken
+            to?: FungibleToken
             amount: string
             txId: string
             isSuccess: boolean
@@ -108,6 +111,8 @@ export type RootStackParamListHome = {
         ul?: boolean
     }
     [Routes.SETTINGS_NETWORK]: undefined
+    [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
+    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
     [Routes.CLAIM_USERNAME]: undefined
     [Routes.USERNAME_CLAIMED]: {
         username: string
@@ -203,6 +208,17 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.SETTINGS_NETWORK}
                     component={ChangeNetworkScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.SETTINGS_ADD_CUSTOM_NODE}
+                    component={AddCustomNodeScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
+                    component={ManageCustomNodesScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

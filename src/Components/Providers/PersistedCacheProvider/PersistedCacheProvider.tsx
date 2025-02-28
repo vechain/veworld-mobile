@@ -44,8 +44,7 @@ const PersistedCacheProvider = ({ children }: PersistedCacheProviderProps) => {
 
     useEffect(() => {
         init()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [init])
 
     const value = useMemo(() => {
         if (metadataCache && mediaCache)

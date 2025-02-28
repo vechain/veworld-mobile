@@ -99,7 +99,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         {!!description && (
                             <>
                                 <BaseText
-                                    typographyFont="bodyBold"
+                                    typographyFont="bodySemiBold"
                                     align="left"
                                     alignContainer="flex-start"
                                     w={100}
