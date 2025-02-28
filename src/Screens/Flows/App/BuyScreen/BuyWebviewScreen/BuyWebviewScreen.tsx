@@ -1,10 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useMemo } from "react"
-import { BaseText, CoinbasePayWebView, Layout, TransakPayWebView } from "~Components"
+import { CoinbasePayWebView, Layout, TransakPayWebView } from "~Components"
 import { RootStackParamListBuy, Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 import { PaymentProvidersEnum } from "../Hooks"
+import { CoinifyPayWebView } from "~Components/Reusable/CoinifyPayWebView"
 
 type Props = NativeStackScreenProps<RootStackParamListBuy, Routes.BUY_WEBVIEW>
 const isProd = process.env.NODE_ENV === "production"
@@ -31,7 +32,9 @@ export const BuyWebviewScreen: React.FC<Props> = ({ route }) => {
                     {provider === PaymentProvidersEnum.Transak && (
                         <TransakPayWebView currentAmount={0} destinationAddress={selectedAccountAddress} />
                     )}
-                    {provider === PaymentProvidersEnum.Coinify && <BaseText>{"Coinify"}</BaseText>}
+                    {provider === PaymentProvidersEnum.Coinify && (
+                        <CoinifyPayWebView currentAmount={0} destinationAddress={selectedAccountAddress} target="buy" />
+                    )}
                 </>
             }
         />
