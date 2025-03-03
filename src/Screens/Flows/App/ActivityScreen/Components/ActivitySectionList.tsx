@@ -14,6 +14,7 @@ import {
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
+    SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
 } from "~Model"
@@ -65,6 +66,8 @@ const Item = React.memo(
         const activityToRender = activity
 
         switch (activity.type) {
+            case ActivityType.TRANSFER_FT:
+            case ActivityType.TRANSFER_VET:
             case ActivityType.FUNGIBLE_TOKEN:
             case ActivityType.VET_TRANSFER: {
                 return (
@@ -75,6 +78,7 @@ const Item = React.memo(
                     />
                 )
             }
+            case ActivityType.TRANSFER_NFT:
             case ActivityType.NFT_TRANSFER:
                 return (
                     <ActivityBox.NFTTransfer
@@ -83,6 +87,10 @@ const Item = React.memo(
                         onPress={onPress}
                     />
                 )
+            case ActivityType.SWAP_FT_TO_FT:
+            case ActivityType.SWAP_FT_TO_VET:
+            case ActivityType.SWAP_VET_TO_FT:
+                return <ActivityBox.TokenSwap activity={activity as SwapActivity} onPress={onPress} />
             case ActivityType.DAPP_TRANSACTION: {
                 return (
                     <ActivityBox.DAppTransaction
@@ -145,6 +153,7 @@ export const ActivitySectionList = ({
     const prevSelectedAccountAddress = useRef(selectedAccount.address)
     const previousSectionsState = useRef<ActivitySection[]>([])
     const years = useRef<string[]>([moment().format("YYYY")])
+    const sectionListRef = useRef<SectionList<Activity, ActivitySection>>(null)
 
     const { getMonthNamebyNumber } = useMonthTranslation()
 
@@ -308,6 +317,7 @@ export const ActivitySectionList = ({
     return (
         <BaseView style={styles.rootContainer}>
             <SectionList
+                ref={sectionListRef}
                 contentContainerStyle={styles.listContainer}
                 sections={sections}
                 initialNumToRender={10}

@@ -1,51 +1,52 @@
-import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import React, { useCallback, useMemo, useState } from "react"
+import { Linking } from "react-native"
+import { getTimeZone } from "react-native-localize"
 import {
     BaseSpacer,
     BaseText,
-    SwapCard,
     FadeoutButton,
-    TransferCard,
-    TransactionStatusBox,
-    NFTTransferCard,
     Layout,
+    NFTTransferCard,
+    SwapCard,
+    TransactionStatusBox,
+    TransferCard,
 } from "~Components"
-import { HistoryStackParamList, Routes } from "~Navigation"
-import { Linking } from "react-native"
 import { useBottomSheetModal, useTransferAddContact } from "~Hooks"
-import { DateUtils, HexUtils, TransactionUtils } from "~Utils"
+import { HistoryStackParamList, Routes } from "~Navigation"
+import { DateUtils, HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityTitle } from "./util"
-import { getTimeZone } from "react-native-localize"
 
 import {
     ActivityStatus,
     ActivityType,
-    DappTxActivity,
+    ConnectedAppActivity,
     ContactType,
+    DappTxActivity,
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
-    ConnectedAppActivity,
+    SwapActivity,
     TypedDataActivity,
 } from "~Model"
-import {
-    FungibleTokenTransferDetails,
-    SignCertificateDetails,
-    DappTransactionDetails,
-    NonFungibleTokenTransferDetails,
-    ConnectedAppDetails,
-} from "./Components"
-import { ContactManagementBottomSheet } from "../ContactsScreen"
 import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
+import { ContactManagementBottomSheet } from "../ContactsScreen"
+import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
+import {
+    ConnectedAppDetails,
+    DappTransactionDetails,
+    FungibleTokenTransferDetails,
+    NonFungibleTokenTransferDetails,
+    SignCertificateDetails,
+} from "./Components"
 import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
 export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
-    const { activity, token, isSwap, decodedClauses } = route.params
+    const { activity, token, isSwap } = route.params
 
     const network = useAppSelector(selectSelectedNetwork)
 
@@ -65,10 +66,17 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
         useTransferAddContact()
 
     const swapResult = useMemo(() => {
-        if (!isSwap || !decodedClauses || activity.type !== ActivityType.DAPP_TRANSACTION) return undefined
+        if (!isSwap) return undefined
 
-        return TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activity as DappTxActivity)
-    }, [activity, decodedClauses, isSwap])
+        const { inputToken, inputValue, outputToken, outputValue } = activity as SwapActivity
+
+        return {
+            paidTokenAddress: outputToken,
+            paidAmount: outputValue,
+            receivedTokenAddress: inputToken,
+            receivedAmount: inputValue,
+        }
+    }, [activity, isSwap])
 
     const dateTimeActivity = useMemo(() => {
         return DateUtils.formatDateTime(activity.timestamp ?? 0, locale, getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE)
@@ -81,7 +89,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     }, [activity, activityFromStore])
 
     const isNFTtransfer = useMemo(() => {
-        return activity.type === ActivityType.NFT_TRANSFER
+        return activity.type === ActivityType.NFT_TRANSFER || activity.type === ActivityType.TRANSFER_NFT
     }, [activity.type])
 
     const explorerUrl = useMemo(() => {
@@ -91,6 +99,9 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
 
     const renderActivityDetails = useMemo(() => {
         switch (activity.type) {
+            case ActivityType.TRANSFER_FT:
+            case ActivityType.TRANSFER_VET:
+            case ActivityType.TRANSFER_SF:
             case ActivityType.FUNGIBLE_TOKEN:
             case ActivityType.VET_TRANSFER: {
                 return (
@@ -100,12 +111,13 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                     />
                 )
             }
-            case ActivityType.SIGN_CERT: {
-                return <SignCertificateDetails activity={(activityFromStore ?? activity) as SignCertActivity} />
-            }
+            case ActivityType.SWAP_FT_TO_FT:
+            case ActivityType.SWAP_FT_TO_VET:
+            case ActivityType.SWAP_VET_TO_FT:
             case ActivityType.DAPP_TRANSACTION: {
                 return <DappTransactionDetails activity={(activityFromStore ?? activity) as DappTxActivity} />
             }
+            case ActivityType.TRANSFER_NFT:
             case ActivityType.NFT_TRANSFER: {
                 return (
                     <NonFungibleTokenTransferDetails
@@ -115,6 +127,9 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             }
             case ActivityType.CONNECTED_APP_TRANSACTION: {
                 return <ConnectedAppDetails activity={(activityFromStore ?? activity) as ConnectedAppActivity} />
+            }
+            case ActivityType.SIGN_CERT: {
+                return <SignCertificateDetails activity={(activityFromStore ?? activity) as SignCertActivity} />
             }
             case ActivityType.SIGN_TYPED_DATA: {
                 return <TypedDataTransactionDetails activity={(activityFromStore ?? activity) as TypedDataActivity} />

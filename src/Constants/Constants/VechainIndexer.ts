@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
+import moment from "moment"
 import { genesises } from "~Constants"
-import { Network, NETWORK_TYPE } from "~Model"
+import { ActivityEvent, ActivitySearchBy, Network, NETWORK_TYPE } from "~Model"
 
 const isMainGenesis = (thor: Connex.Thor) => thor.genesis.id === genesises.main.id
 
@@ -103,6 +104,66 @@ export const getIncomingTransfersOrigin = (
     return networkType === NETWORK_TYPE.MAIN
         ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transfers/to?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
         : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transfers/to?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
+}
+
+/**
+ * Retrieve all activities associated with a specified address
+ *
+ * @param networkType - Mainnet or Testnet
+ * @param address - Address to get transfers for
+ * @param page - Page number
+ * @param pageSize - Number of results per page
+ * @param direction - Direction of results
+ * @param eventName - Optional filter by specific transaction names
+ * @param searchBy - Optional array of fields to search by
+ * @param contractAddress - Optional contract address filter
+ * @param before - Optional timestamp filter for transactions before this time
+ * @param after - Optional timestamp filter for transactions after this time
+ *
+ * @returns URL to fetch all activities associated with a specified address
+ */
+export const getIndexedHistoryEventOrigin = (
+    networkType: NETWORK_TYPE,
+    address: string,
+    page: number,
+    pageSize: number = 20,
+    direction: ORDER = ORDER.DESC,
+    eventName: ActivityEvent[] = [],
+    searchBy: ActivitySearchBy[] = [],
+    contractAddress: string = "",
+    before: number = 0,
+    after: number = 0,
+) => {
+    const baseUrl =
+        networkType === NETWORK_TYPE.MAIN
+            ? process.env.REACT_APP_INDEXER_MAINNET_URL
+            : process.env.REACT_APP_INDEXER_TESTNET_URL
+
+    let url = `${baseUrl}/history/${address}?page=${page}&size=${pageSize}&direction=${direction}`
+
+    if (eventName.length > 0) {
+        const uniqueEventNames = Array.from(new Set(eventName))
+        url += `&eventName=${uniqueEventNames.join(",")}`
+    }
+
+    if (searchBy.length > 0) {
+        const uniqueSearchBy = Array.from(new Set(searchBy))
+        url += `&searchBy=${uniqueSearchBy.join(",")}`
+    }
+
+    if (contractAddress.length > 0) {
+        url += `&contractAddress=${contractAddress}`
+    }
+
+    if (before > 0 && moment(before).isValid()) {
+        url += `&before=${before}`
+    }
+
+    if (after > 0 && moment(after).isValid()) {
+        url += `&after=${after}`
+    }
+
+    return url
 }
 
 /**

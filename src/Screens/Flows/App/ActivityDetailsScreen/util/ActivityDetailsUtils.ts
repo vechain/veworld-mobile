@@ -5,6 +5,9 @@ import { TranslationFunctions } from "~i18n"
 
 export const getActivityTitle = (activity: Activity, LL: TranslationFunctions, isSwap?: boolean) => {
     switch (activity.type) {
+        case ActivityType.TRANSFER_FT:
+        case ActivityType.TRANSFER_VET:
+        case ActivityType.TRANSFER_SF:
         case ActivityType.FUNGIBLE_TOKEN:
         case ActivityType.VET_TRANSFER: {
             return (activity as FungibleTokenActivity).direction === DIRECTIONS.UP
@@ -13,8 +16,12 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions, i
         }
         case ActivityType.SIGN_CERT:
             return LL.SIGNED_CERTIFICATE()
+        case ActivityType.SWAP_FT_TO_FT:
+        case ActivityType.SWAP_FT_TO_VET:
+        case ActivityType.SWAP_VET_TO_FT:
         case ActivityType.DAPP_TRANSACTION:
             return isSwap ? LL.SWAP() : LL.DAPP_TRANSACTION()
+        case ActivityType.TRANSFER_NFT:
         case ActivityType.NFT_TRANSFER:
             return (activity as NonFungibleTokenActivity).direction === DIRECTIONS.UP ? LL.NFT_SEND() : LL.NFT_RECEIVE()
         case ActivityType.CONNECTED_APP_TRANSACTION:

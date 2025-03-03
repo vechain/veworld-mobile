@@ -1,4 +1,4 @@
-import { useFocusEffect, useNavigation } from "@react-navigation/native"
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import {
@@ -71,10 +71,10 @@ export const ActivityScreen = () => {
                 }}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
-                scrollEnabled={!isFetching || activities.length > 0}
+                scrollEnabled={!isFetching || activities?.length > 0}
             />
         )
-    }, [activities.length, isFetching])
+    }, [activities?.length, isFetching])
 
     const renderNoActivitiesButton = useMemo(() => {
         return (
@@ -93,14 +93,6 @@ export const ActivityScreen = () => {
             return renderNoActivitiesButton
         }
     }, [activities.length, isFetching, renderActivitiesList, renderNoActivitiesButton, renderSkeletonList])
-
-    useFocusEffect(
-        useCallback(() => {
-            if (activities.length === 0) {
-                fetchActivities()
-            }
-        }, [activities.length, fetchActivities]),
-    )
 
     return (
         <Layout

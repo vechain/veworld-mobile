@@ -1,4 +1,4 @@
-import { OutputResponse } from "~Model"
+import { IndexedHistoryEvent, OutputResponse } from "~Model"
 import { PaginationResponse } from "~Networking"
 
 export interface BaseTransactionResponse {
@@ -52,6 +52,11 @@ export interface IncomingTransferResponse extends BaseTransactionResponse {
 
 export interface FetchIncomingTransfersResponse {
     data: IncomingTransferResponse[]
+    pagination: PaginationResponse
+}
+
+export interface FetchActivitiesResponse {
+    data: IndexedHistoryEvent[]
     pagination: PaginationResponse
 }
 

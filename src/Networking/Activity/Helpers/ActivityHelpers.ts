@@ -1,6 +1,6 @@
 import uuid from "react-native-uuid"
+import { Transaction } from "thor-devkit"
 import { chainTagToGenesisId, DIRECTIONS, ERROR_EVENTS, VET } from "~Constants"
-import { ActivityUtils, debug, TransactionUtils } from "~Utils"
 import {
     Activity,
     ActivityStatus,
@@ -11,11 +11,11 @@ import {
     Network,
     NonFungibleTokenActivity,
     SignCertActivity,
-    TypedDataActivity,
     TypedData,
+    TypedDataActivity,
 } from "~Model"
 import { EventTypeResponse, IncomingTransferResponse, TransactionsResponse } from "~Networking"
-import { Transaction } from "thor-devkit"
+import { ActivityUtils, debug, TransactionUtils } from "~Utils"
 
 /**
  * Creates a base activity from a given transaction.

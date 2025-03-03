@@ -10,6 +10,7 @@ import {
     Activity,
     ActivityStatus,
     ActivityType,
+    ClauseType,
     ConnectedAppActivity,
     DappTxActivity,
     FungibleToken,
@@ -17,6 +18,7 @@ import {
     IconKey,
     NonFungibleTokenActivity,
     SignCertActivity,
+    SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
 } from "~Model"
@@ -224,6 +226,59 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
     return <BaseActivityBox time={time} activityStatus={status} onPress={onPressHandler} {...getActivityProps()} />
 }
 
+type TokenSwapProps = {
+    activity: SwapActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
+    const { LL } = useI18nContext()
+
+    const title = LL.DAPP_TRANSACTION_SWAP()
+    const icon = "icon-arrow-left-right"
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const customTokens = useAppSelector(selectCustomTokens)
+    const officialTokens = useAppSelector(selectOfficialTokens)
+
+    const allTokens = [customTokens, officialTokens].flat()
+    const outputToken = allTokens.find(_token => _token.address === activity.outputToken)
+    const inputToken = allTokens.find(_token => _token.address === activity.inputToken)
+
+    const paidAmount = BigNutils(activity.outputValue)
+        .toHuman(outputToken?.decimals ?? 0)
+        .toTokenFormat_string(2)
+
+    const receivedAmount = BigNutils(activity.inputValue)
+        .toHuman(inputToken?.decimals ?? 0)
+        .toTokenFormat_string(2)
+
+    const rightAmount = `${DIRECTIONS.UP} ${paidAmount} ${outputToken?.symbol ?? ""}`
+    const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${receivedAmount} ${inputToken?.symbol ?? ""}`
+
+    const onSwapPressHandler = () => {
+        onPress(activity, undefined, true, [
+            {
+                type: ClauseType.SWAP_TOKENS_FOR_TOKENS,
+                to: activity.to[0],
+                value: activity.outputValue,
+                data: activity.outputToken,
+            },
+        ])
+    }
+
+    return (
+        <BaseActivityBox
+            icon={icon}
+            time={time}
+            title={title}
+            rightAmount={rightAmount}
+            rigthAmountDescription={rigthAmountDescription}
+            onPress={onSwapPressHandler}
+        />
+    )
+}
+
 type DAppTransactionProps = {
     activity: DappTxActivity
     tokens: FungibleToken[]
@@ -335,7 +390,7 @@ type NFTTransferActivityBoxProps = {
 
 const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
-    const { collectionName } = useNFTInfo(activity.tokenId, activity.contractAddress)
+    const { collectionName } = useNFTInfo(activity?.tokenId, activity.contractAddress)
     const isReceived = activity.direction === DIRECTIONS.DOWN
     const title = isReceived ? LL.NFT_TRANSFER_RECEIVED() : LL.NFT_TRANSFER_SENT()
     const time = moment(activity.timestamp).format("HH:mm")
@@ -416,4 +471,5 @@ export const ActivityBox = {
     DAppSignCert: DAppSignCertBox,
     ConnectedAppActivity: ConnectedAppActivityBox,
     SignedTypedData: SignedTypedData,
+    TokenSwap: TokenSwap,
 }

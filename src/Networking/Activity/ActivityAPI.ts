@@ -1,9 +1,16 @@
 import { debug } from "~Utils"
 import { getActivitiesFromIncomingTransfers, getActivitiesFromTransactions } from "./Helpers"
 import { Activity, NETWORK_TYPE, Network } from "~Model"
-import { ERROR_EVENTS, ORDER, getIncomingTransfersOrigin, getTransactionsOrigin } from "~Constants"
+import {
+    ERROR_EVENTS,
+    ORDER,
+    getIndexedHistoryEventOrigin,
+    getIncomingTransfersOrigin,
+    getTransactionsOrigin,
+} from "~Constants"
 import {
     DEFAULT_PAGE_SIZE,
+    FetchActivitiesResponse,
     FetchIncomingTransfersResponse,
     FetchTransactionsResponse,
     fetchFromEndpoint,
@@ -63,6 +70,17 @@ export const fetchIncomingTransfers = async (
     }
 }
 
+export const fetchIndexedHistoryEvent = async (address: string, page: number, networkType: Network) => {
+    debug(ERROR_EVENTS.ACTIVITIES, `Fetching activities for ${address}`)
+
+    try {
+        const endpoint = getIndexedHistoryEventOrigin(networkType.type, address, page, DEFAULT_PAGE_SIZE, ORDER.DESC)
+        return await fetchFromEndpoint<FetchActivitiesResponse>(endpoint)
+    } catch (error) {
+        throw new Error(`Failed to fetch activities: ${error}`)
+    }
+}
+
 /**
  * Fetches a block from the Thor blockchain.
  *
@@ -92,7 +110,7 @@ export const fetchAccountTransactionActivities = async (
     address: string,
     page: number,
     network: Network,
-): Promise<Activity[]> => {
+): Promise<{ nextCursor: number | null; data: Activity[] }> => {
     const [transactions, incomingTransfers] = await Promise.all([
         fetchTransactions(address, page, network.type),
         fetchIncomingTransfers(address, page, network.type),
@@ -106,5 +124,7 @@ export const fetchAccountTransactionActivities = async (
 
     activitiesFetched = [...incomingTransferActivities, ...transactionActivities]
 
-    return activitiesFetched
+    const hasNext = transactions.pagination.hasNext || incomingTransfers.pagination.hasNext
+    const nextCursor = hasNext ? page + 1 : null
+    return { nextCursor: nextCursor, data: activitiesFetched }
 }

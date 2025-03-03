@@ -1,139 +1,107 @@
-import { useCallback, useEffect, useRef, useState } from "react"
-import { showWarningToast } from "~Components"
-import { ERROR_EVENTS } from "~Constants"
-import { Activity } from "~Model"
-import { fetchAccountTransactionActivities } from "~Networking"
+import { useIsFocused } from "@react-navigation/native"
+import { InfiniteData, useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
+import { useCallback, useMemo, useState } from "react"
+import { createActivityFromIndexedHistoryEvent } from "~Model"
+import { fetchIndexedHistoryEvent } from "~Networking"
 import {
+    selectAllLocalActivitiesByAccountAddressAndCurrentNetwork,
     selectSelectedAccount,
     selectSelectedNetwork,
-    updateAccountTransactionActivities,
-    useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AddressUtils, error, info } from "~Utils"
-import { useI18nContext } from "~i18n"
 
 export const useAccountActivities = () => {
-    const dispatch = useAppDispatch()
-    const { LL } = useI18nContext()
-
+    const queryClient = useQueryClient()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
+    const localActivities = useAppSelector(selectAllLocalActivitiesByAccountAddressAndCurrentNetwork)
 
-    const page = useRef(0)
-    const prevNetwork = useRef(network)
-    const prevSelectedAccountAddress = useRef(selectedAccount.address)
+    const isFocused = useIsFocused()
 
-    const [isFetching, setIsFetching] = useState(true)
     const [isRefreshing, setIsRefreshing] = useState(false)
-    const [activities, setActivities] = useState<Activity[]>([])
 
-    const resetPageNumber = useCallback(() => {
-        page.current = 0
-    }, [])
-
-    const incrementPageNumber = useCallback(() => {
-        page.current = page.current + 1
-    }, [])
-
-    const sortByTimestamp = useCallback((_activities: Activity[]) => {
-        return _activities.sort((a, b) => b.timestamp - a.timestamp)
-    }, [])
-
-    const updateActivitiesState = useCallback(
-        (newActivities: Activity[], reset: boolean = false) => {
-            const getNewActivities = (prevActivities: Activity[]) => {
-                let result: Activity[] = []
-
-                if (reset) {
-                    result = newActivities
-                } else {
-                    const activitiesById = new Map<string, Activity>()
-                    prevActivities.forEach(activity => activitiesById.set(activity.id, activity))
-                    newActivities.forEach(activity => activitiesById.set(activity.id, activity))
-                    const mergedActivities = Array.from(activitiesById.values())
-                    result = mergedActivities
-                }
-
-                return sortByTimestamp(result)
-            }
-
-            setActivities(getNewActivities)
+    const fetchActivities = useCallback(
+        async ({ pageParam = 0 }: { pageParam: number }) => {
+            return await fetchIndexedHistoryEvent(selectedAccount.address, pageParam, network)
         },
-        [sortByTimestamp],
+        [network, selectedAccount.address],
     )
 
-    const getActivities = useCallback(
-        async ({ refresh }: { refresh: boolean }) => {
-            if (!selectedAccount) {
-                setIsFetching(false)
-                return
-            }
-
-            info(ERROR_EVENTS.ACTIVITIES, "Fetching activities on page", page)
-            setIsFetching(true)
-
-            try {
-                const txActivities = await fetchAccountTransactionActivities(
-                    selectedAccount.address,
-                    page.current,
-                    network,
-                )
-
-                if (page.current === 0) {
-                    dispatch(updateAccountTransactionActivities(txActivities))
-                }
-
-                if (txActivities.length > 0) {
-                    updateActivitiesState(txActivities, refresh)
-                    incrementPageNumber()
-                }
-            } catch (e) {
-                error(ERROR_EVENTS.ACTIVITIES, e)
-
-                showWarningToast({
-                    text1: LL.HEADS_UP(),
-                    text2: LL.ACTIVITIES_NOT_UP_TO_DATE(),
-                })
-            } finally {
-                setIsFetching(false)
-            }
+    const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, isLoading } = useInfiniteQuery({
+        queryKey: [["accountActivities", selectedAccount.address, network.type]],
+        queryFn: fetchActivities,
+        initialPageParam: 0,
+        getNextPageParam: (lastPage, pages) => {
+            return lastPage.pagination.hasNext ? pages.length + 1 : undefined
         },
-        [LL, dispatch, incrementPageNumber, network, selectedAccount, updateActivitiesState],
-    )
+        enabled: isFocused,
+    })
 
     const refreshActivities = useCallback(async () => {
-        resetPageNumber()
         setIsRefreshing(true)
-        await getActivities({ refresh: true })
+        queryClient.setQueryData<InfiniteData<any>>(["accountActivities", selectedAccount.address, network.type], {
+            pages: [],
+            pageParams: [undefined], // Reset page params as well
+        })
+
+        // Invalidate and refetch
+        await queryClient.invalidateQueries({
+            queryKey: ["accountActivities", selectedAccount.address, network.type],
+            refetchActive: true, // Ensures active queries are refetched immediately
+            refetchInactive: false, // Set to true if you need to refetch even inactive queries
+        })
         setIsRefreshing(false)
-    }, [getActivities, resetPageNumber])
+    }, [network.type, queryClient, selectedAccount.address])
 
-    const fetchActivities = useCallback(async () => {
-        await getActivities({ refresh: false })
-    }, [getActivities])
-
-    useEffect(() => {
-        const hasNetworkChanged = prevNetwork.current !== network
-        const hasAccountChanged = !AddressUtils.compareAddresses(
-            prevSelectedAccountAddress.current,
-            selectedAccount.address,
-        )
-
-        if (hasNetworkChanged || hasAccountChanged) {
-            resetPageNumber()
-            updateActivitiesState([], true)
-            prevNetwork.current = network
-            prevSelectedAccountAddress.current = selectedAccount.address
-            setIsFetching(true)
+    const getActivities = useCallback(async () => {
+        if (hasNextPage) {
+            await fetchNextPage()
         }
-    }, [network, resetPageNumber, selectedAccount.address, updateActivitiesState])
+    }, [fetchNextPage, hasNextPage])
 
-    return {
-        isFetching,
-        isRefreshing,
-        fetchActivities,
-        refreshActivities,
-        activities,
-    }
+    const activities = useMemo(() => {
+        if (data?.pages) {
+            const remoteActivities =
+                data.pages
+                    .flatMap(page => page.data)
+                    .map(event => createActivityFromIndexedHistoryEvent(event, selectedAccount.address, network)) || []
+
+            if (localActivities.length > 0 && remoteActivities.length > 0) {
+                const startingTimestamp =
+                    remoteActivities.length > 0
+                        ? remoteActivities[remoteActivities.length - 1].timestamp
+                        : Number.MAX_SAFE_INTEGER
+
+                const endingTimestano = remoteActivities.length > 0 ? remoteActivities[0].timestamp : 0
+
+                const localActivitiesByTimsstamp = localActivities.filter(
+                    act => act.timestamp >= startingTimestamp && act.timestamp <= endingTimestano,
+                )
+
+                const allActivities = remoteActivities.concat(localActivitiesByTimsstamp)
+                const allActivitiesctivitiesSortedByTimestamp = allActivities.sort((a, b) => b.timestamp - a.timestamp)
+                return allActivitiesctivitiesSortedByTimestamp
+            }
+
+            return remoteActivities
+        } else if (!isFetching && !isLoading && !isFetchingNextPage) {
+            return localActivities
+        }
+
+        return []
+    }, [data?.pages, isFetching, isFetchingNextPage, isLoading, localActivities, network, selectedAccount.address])
+
+    const result = useMemo(
+        () => ({
+            isFetching: isFetching || isFetchingNextPage || isLoading,
+            isRefreshing,
+            fetchActivities: getActivities,
+            refreshActivities,
+            activities: activities,
+            error: error,
+        }),
+        [activities, error, getActivities, isFetching, isFetchingNextPage, isLoading, isRefreshing, refreshActivities],
+    )
+
+    return result
 }
