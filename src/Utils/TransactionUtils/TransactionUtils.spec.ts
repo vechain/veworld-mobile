@@ -1066,6 +1066,15 @@ describe("TransactionUtils", () => {
                             data: "0x00000000000000000000000000000000000000000000008cf23f909c0fa00000",
                         },
                         {
+                            address: "0xae4c53b120cba91a44832f875107cbc8fbee185c",
+                            topics: [
+                                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                                "0x0000000000000000000000003ca506f873e5819388aa3ce0b1c4fc77b6db0048",
+                                "0x000000000000000000000000516eca119f673f6747c81189bef4f14367c0c2b7",
+                            ],
+                            data: "0x00000000000000000000000000000000000000000000008cf23f909c0fa00000",
+                        },
+                        {
                             address: "0x516eCA119f673f6747c81189Bef4F14367c0c2B7",
                             topics: [
                                 "0xd78ad95fa46c994b6551d0da85fc275fe613ce37657fb8d5e3d130840159d822",
@@ -1084,6 +1093,19 @@ describe("TransactionUtils", () => {
                             data: "0x000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000c376359de5100467800000000000000000000000000000000000000000000018ee9b2bf88f5dfda830000000000000000000000000000000000000000000000000000000000000000",
                         },
                     ],
+                    transfers: [],
+                },
+            ],
+        }
+
+        const activitySwapNoEvents: DappTxActivity = {
+            ...BASE_SAMPLE_ACTIVITY,
+            type: ActivityType.DAPP_TRANSACTION,
+            clauses: decodedClauses,
+            outputs: [
+                {
+                    contractAddress: "0x0000000000000000000000000000456e65726779",
+                    events: [],
                     transfers: [],
                 },
             ],
@@ -1209,9 +1231,9 @@ describe("TransactionUtils", () => {
         })
 
         it("should throw an error if decodedSwaps length is invalid", () => {
-            expect(() =>
-                TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activitySwapTokensForTokens),
-            ).toThrow("Invalid swap event count, expected 1")
+            expect(() => TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activitySwapNoEvents)).toThrow(
+                "Could not find or decode swap events",
+            )
         })
         // Add more test cases for other edge cases and error cases...
     })
