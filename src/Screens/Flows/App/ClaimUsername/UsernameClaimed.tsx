@@ -14,7 +14,7 @@ export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyle)
     const { resetVns } = useVns()
-    const { tabBarBottomMargin } = useTabBarBottomMargin()
+    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const onPress = useCallback(async () => {
         resetVns()
@@ -23,7 +23,7 @@ export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
 
     return (
         <BaseSafeArea>
-            <BaseView flexGrow={1} p={24} pb={12}>
+            <BaseView flexGrow={1} p={24} justifyContent="space-between">
                 <BaseView flexGrow={1} alignItems="center" justifyContent="center">
                     <BaseIcon name="icon-check-circle" size={64} color={theme.colors.text} />
 
@@ -38,7 +38,7 @@ export const UsernameClaimed: React.FC<Props> = ({ route, navigation }) => {
                         {LL.SB_USERNAME_CLAIMED()}
                     </BaseText>
                 </BaseView>
-                <BaseView mb={tabBarBottomMargin} flexDirection="row">
+                <BaseView pb={androidOnlyTabBarBottomMargin} flexDirection="row">
                     <BaseButton w={100} action={onPress} selfAlign="flex-end" testID="UsernameClaimed_Btn">
                         {LL.BTN_CONTINUE()}
                     </BaseButton>
