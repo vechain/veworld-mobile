@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-03-03)
+
+
+### Bug Fixes
+
+* handled swap activities with 1 event to avoid sapp crash ([#2754](https://github.com/vechain/veworld-mobile/issues/2754)) ([bff188e](https://github.com/vechain/veworld-mobile/commit/bff188ef0f0b558388b50d586d844810fbc6c125))
+
 ## 2.0.9 (2025-02-18)
 
 
