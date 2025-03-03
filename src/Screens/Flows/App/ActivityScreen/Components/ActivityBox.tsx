@@ -3,7 +3,7 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { useSwappedTokens } from "~Components/Reusable/SwapCard/Hooks"
-import { COLORS, DIRECTIONS, VET } from "~Constants"
+import { COLORS, DIRECTIONS, ERROR_EVENTS, VET } from "~Constants"
 import { useFungibleTokenInfo, useNFTInfo, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
@@ -21,7 +21,7 @@ import {
     TypedDataActivity,
 } from "~Model"
 import { selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BigNutils, TransactionUtils } from "~Utils"
+import { AddressUtils, BigNutils, error, TransactionUtils } from "~Utils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
 type ActivityBoxProps = {
@@ -144,6 +144,7 @@ const baseStyles = () =>
         rightTextContainer: {
             alignItems: "flex-end",
             flex: 1,
+            flexBasis: 60,
         },
         rightImageContainer: {
             alignItems: "center",
@@ -237,7 +238,18 @@ const DAppTransaction = ({ activity, tokens, onPress }: DAppTransactionProps) =>
 
     const getSwapResult = () => {
         if (!isSwap || !decodedClauses || activity.type !== ActivityType.DAPP_TRANSACTION) return undefined
-        return TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activity)
+
+        try {
+            return TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activity)
+        } catch (err) {
+            error(
+                ERROR_EVENTS.ACTIVITIES,
+                (err as Error)?.message,
+                "Activity id: " + activity.id,
+                JSON.stringify(activity),
+            )
+            return undefined
+        }
     }
 
     const swapResult = getSwapResult()
@@ -249,6 +261,10 @@ const DAppTransaction = ({ activity, tokens, onPress }: DAppTransactionProps) =>
 
     const time = moment(activity.timestamp).format("HH:mm")
     const status = activity.status
+
+    if (isSwap && !swapResult) {
+        return null
+    }
 
     if (isSwap && swapResult) {
         const title = LL.DAPP_TRANSACTION_SWAP()
@@ -266,8 +282,8 @@ const DAppTransaction = ({ activity, tokens, onPress }: DAppTransactionProps) =>
             .toHuman(receivedToken?.decimals ?? 0)
             .toTokenFormat_string(2)
 
-        const rightAmount = `${DIRECTIONS.UP} ${paidAmount} ${paidToken?.symbol ?? ""}`
-        const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${receivedAmount} ${receivedToken?.symbol ?? ""}`
+        const rightAmount = `${DIRECTIONS.UP} ${receivedAmount} ${receivedToken?.symbol ?? ""}`
+        const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${paidAmount} ${paidToken?.symbol ?? ""}`
 
         return (
             <BaseActivityBox
