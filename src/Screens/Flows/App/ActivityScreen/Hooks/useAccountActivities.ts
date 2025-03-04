@@ -47,8 +47,6 @@ export const useAccountActivities = () => {
         // Invalidate and refetch
         await queryClient.invalidateQueries({
             queryKey: ["accountActivities", selectedAccount.address, network.type],
-            refetchActive: true, // Ensures active queries are refetched immediately
-            refetchInactive: false, // Set to true if you need to refetch even inactive queries
         })
         setIsRefreshing(false)
     }, [network.type, queryClient, selectedAccount.address])

@@ -61,52 +61,6 @@ export const NFTS_OWNED_PER_CONTRACT = (
     }/nfts?address=${ownerAddress}&contractAddress=${contractAddress}&size=${resultsPerPage}&page=${page}&direction=${direction}`
 
 /**
- * Get all transactions performed by a given address
- *
- * @param networkType - Mainnet or Testnet
- * @param address - Address to get transactions for
- * @param page - Page number
- * @param pageSize - Number of results per page
- * @param direction - Direction of results
- *
- * @returns URL to fetch all transactions performed by a given address
- */
-export const getTransactionsOrigin = (
-    networkType: NETWORK_TYPE,
-    address: string,
-    page: number,
-    pageSize: number,
-    direction: ORDER,
-) => {
-    return networkType === NETWORK_TYPE.MAIN
-        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transactions?origin=${address}&size=${pageSize}&page=${page}&direction=${direction}&expanded=true`
-        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transactions?origin=${address}&size=${pageSize}&page=${page}&direction=${direction}&expanded=true`
-}
-
-/**
- * Get all transfers a given address has received
- *
- * @param networkType - Mainnet or Testnet
- * @param address - Address to get transfers for
- * @param page - Page number
- * @param pageSize - Number of results per page
- * @param direction - Direction of results
- *
- * @returns URL to fetch all transfers a given address has received
- */
-export const getIncomingTransfersOrigin = (
-    networkType: NETWORK_TYPE,
-    address: string,
-    page: number,
-    pageSize: number,
-    direction: ORDER,
-) => {
-    return networkType === NETWORK_TYPE.MAIN
-        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transfers/to?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
-        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transfers/to?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
-}
-
-/**
  * Retrieve all activities associated with a specified address
  *
  * @param networkType - Mainnet or Testnet
