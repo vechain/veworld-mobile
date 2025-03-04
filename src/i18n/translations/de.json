@@ -683,6 +683,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "die App ZURÜCKZUSETZEN!",
   "SB_CAMERA_ANAVAILABILITY": "Ihr Gerät unterstützt diesen Vorgang nicht.",
   "SB_CHOOSE_A_WALLET": "Wählen Sie eine Wallet",
+  "SB_CLAIMABLE_ACCOUNTS": "Sie haben {usernames: number} Benutzername zur Verfügung",
   "SB_CLAIM_USERNAME": "Dieser Benutzername kann anstelle Ihrer Wallet-Adresse verwendet werden, um Token zu senden und zu empfangen sowie sich mit dApps zu verbinden. Die Inanspruchnahme ist kostenlos.",
   "SB_COLLECTIBLES": "Sammlerstücke",
   "SB_CONFIRM_DELETE": "Löschen bestätigen",

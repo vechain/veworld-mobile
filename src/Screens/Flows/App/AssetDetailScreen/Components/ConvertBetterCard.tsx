@@ -4,7 +4,7 @@ import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import Animated, { AnimatedStyle } from "react-native-reanimated"
 import { BaseButton, BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
-import { B3TR, ColorThemeType, typography, VOT3 } from "~Constants"
+import { B3TR, ColorThemeType, VOT3 } from "~Constants"
 import { TokenWithCompleteInfo, useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Balance } from "~Model"
@@ -20,8 +20,6 @@ type Props = {
     onSendAmountChange?: (amount: string) => void
     onMaxAmountPress?: (maxAmount: string) => void
 }
-
-const { defaults: defaultTypography } = typography
 
 export const ConvertBetterCard: React.FC<Props> = ({
     token,
@@ -158,11 +156,11 @@ const baseStyles = (theme: ColorThemeType) =>
             gap: 12,
         },
         input: {
-            ...defaultTypography.title,
             flex: 1,
             color: theme.colors.convertBetterCard.inputText,
-            fontWeight: 600,
+            fontWeight: String("600"),
             fontSize: 20,
+            padding: 0,
         },
         disabledInput: {
             color: theme.colors.convertBetterCard.convertValueText,

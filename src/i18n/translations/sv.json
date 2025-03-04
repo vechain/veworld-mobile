@@ -685,6 +685,7 @@
   "SB_BACKUP_YOUR_PHRASE_2": "ÅTERSTÄLL appen!",
   "SB_CAMERA_ANAVAILABILITY": "Din enhet stöder inte denna funktion.",
   "SB_CHOOSE_A_WALLET": "Välj en plånbok",
+  "SB_CLAIMABLE_ACCOUNTS": "Du har {usernames: number} användarnamnsanspråk tillgängligt",
   "SB_CLAIM_USERNAME": "Detta användarnamn kan användas i stället för din plånbokadress för att skicka och ta emot tokens och ansluta till dApps. Hämtningen är kostnadsfri.",
   "SB_COLLECTIBLES": "Samlarobjekt",
   "SB_CONFIRM_DELETE": "Bekräfta radering",

@@ -1,6 +1,6 @@
 import { Core } from "@walletconnect/core"
 import { ICore, PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
-import { IWeb3Wallet, Web3Wallet } from "@walletconnect/web3wallet"
+import { IWalletKit, WalletKit } from "@reown/walletkit"
 import { Network } from "~Model"
 import { debug, error, warn } from "~Utils/Logger"
 import { NavigationState } from "@react-navigation/native"
@@ -10,7 +10,7 @@ import { ErrorMessageUtils } from "~Utils"
 import { Mutex } from "async-mutex"
 import { ERROR_EVENTS } from "~Constants"
 
-let _web3wallet: IWeb3Wallet
+let _web3wallet: IWalletKit
 
 export const core: ICore = new Core({
     projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
@@ -20,7 +20,7 @@ export const core: ICore = new Core({
 
 const walletInitializer = new Mutex()
 
-export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
+export async function getWeb3Wallet(): Promise<IWalletKit> {
     return await walletInitializer.runExclusive(async () => {
         if (_web3wallet) {
             return _web3wallet
@@ -29,13 +29,16 @@ export async function getWeb3Wallet(): Promise<IWeb3Wallet> {
         debug(ERROR_EVENTS.WALLET_CONNECT, "Initializing Web3Wallet")
 
         try {
-            _web3wallet = await Web3Wallet.init({
+            _web3wallet = await WalletKit.init({
                 core,
                 metadata: {
                     name: "VeWorld Mobile Wallet",
                     description: "Manage your VeChain assets with VeWorld",
                     url: "https://veworld.com",
                     icons: ["https://avatars.githubusercontent.com/u/37784886"],
+                    redirect: {
+                        native: "veworld://",
+                    },
                 },
             })
 

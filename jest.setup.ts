@@ -164,7 +164,7 @@ jest.mock("react-native-ble-plx", () => ({
     BleError: jest.fn(),
 }))
 
-jest.mock("@walletconnect/web3wallet", () => ({
+jest.mock("@reown/walletkit", () => ({
     __esModule: true,
     init: jest.fn(),
     on: jest.fn(),
