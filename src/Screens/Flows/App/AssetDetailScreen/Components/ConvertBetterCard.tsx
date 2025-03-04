@@ -158,7 +158,7 @@ const baseStyles = (theme: ColorThemeType) =>
         input: {
             flex: 1,
             color: theme.colors.convertBetterCard.inputText,
-            fontWeight: String("600"),
+            fontWeight: "600",
             fontSize: 20,
             padding: 0,
         },

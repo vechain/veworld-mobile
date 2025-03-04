@@ -23,8 +23,6 @@ class MainApplication : Application(), ReactApplication {
                             // add(MyReactNativePackage())
 
                             add(VeWorldPackage())
-
-                            add(RCTMinimizerPackage())
                         }
 
                 override fun getJSMainModuleName(): String = "index"

@@ -67,7 +67,7 @@ target 'VeWorld' do
     # :flipper_configuration => flipper_config,
     # An absolute path to your application root.
 
-    :flipper_configuration => FlipperConfiguration.enabled(["Debug"], {'Flipper' => '0.163.0'}),
+    :flipper_configuration => FlipperConfiguration.enabled(["Debug"], {'Flipper' => '0.200.0'}),
 
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )

@@ -8,6 +8,7 @@ import { ReactNode } from "react"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { MMKV } from "react-native-mmkv"
 import localizeMock from "react-native-localize/mock"
+import { WebViewProps } from "react-native-webview"
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 const componentMock = ({ children }: { children: ReactNode }) => children
@@ -100,6 +101,15 @@ jest.mock("expo-font", () => ({
 }))
 
 jest.mock("react-native-localize", () => localizeMock)
+
+jest.mock("react-native-webview", () => {
+    const React = require("react")
+    const { View } = require("react-native")
+
+    return {
+        WebView: (props: WebViewProps) => React.createElement(View, props),
+    }
+})
 
 jest.mock("expo-clipboard", () => {})
 jest.mock("react-native-linear-gradient", () => "LinearGradient")

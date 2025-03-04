@@ -8,15 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		00E356F31AD99517003FC87E /* VeWorldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* VeWorldTests.m */; };
-		0501F7585276AFFF2C6361F3 /* libPods-VeWorld.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D13A32DAE8CE0D18A5D7D5C6 /* libPods-VeWorld.a */; };
+		1042B6653DA928C2FF6ADB4B /* libPods-VeWorld-VeWorldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F4B80830584A612329BC99F2 /* libPods-VeWorld-VeWorldTests.a */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.mm */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
+		22893CE98A8CA7A32D69F503 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 53F26CA8EF1400A91C34A3C8 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		B96607240FA3A4253357B621 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3740BCB7E6F73B4D78E5967E /* ExpoModulesProvider.swift */; };
 		C91BF0D20A06D0FF10773F4B /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = D9ACA8B6F97D14F803EDAE97 /* PrivacyInfo.xcprivacy */; };
-		CBD9EF21B804241303D757F6 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 01AEDAA1FA22D1F5873A45C1 /* libPods-OneSignalNotificationServiceExtension.a */; };
-		E5BAC8481C3C227C5D2DA439 /* libPods-VeWorld-VeWorldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 41C292086C6C0B975245523E /* libPods-VeWorld-VeWorldTests.a */; };
+		E1C3301187D5A6CA6F2BB0F0 /* libPods-VeWorld.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A25AE263C52C1612F3705DCE /* libPods-VeWorld.a */; };
 		EA3BDF922AD5720B00C5E65A /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3BDF902AD5720B00C5E65A /* MaterialCommunityIcons.ttf */; };
 		EA3BDF932AD5720B00C5E65A /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA3BDF912AD5720B00C5E65A /* MaterialIcons.ttf */; };
 		EA3BDF952AD5B16100C5E65A /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = EA3BDF942AD5B16000C5E65A /* BootSplash.storyboard */; };
@@ -68,23 +68,21 @@
 		00E356EE1AD99517003FC87E /* VeWorldTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VeWorldTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* VeWorldTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = VeWorldTests.m; sourceTree = "<group>"; };
-		01AEDAA1FA22D1F5873A45C1 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		0B079F55B714A582A0A861E4 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
+		0D9E9C28837F9ECB3A357B32 /* Pods-VeWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld.release.xcconfig"; path = "Target Support Files/Pods-VeWorld/Pods-VeWorld.release.xcconfig"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* VeWorld.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VeWorld.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = VeWorld/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = AppDelegate.mm; path = VeWorld/AppDelegate.mm; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = VeWorld/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = VeWorld/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = VeWorld/main.m; sourceTree = "<group>"; };
-		24A87D38502E84C357DAA01F /* Pods-VeWorld-VeWorldTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld-VeWorldTests.release.xcconfig"; path = "Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests.release.xcconfig"; sourceTree = "<group>"; };
-		288454630C29BBDDF3C911F0 /* Pods-VeWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld.debug.xcconfig"; path = "Target Support Files/Pods-VeWorld/Pods-VeWorld.debug.xcconfig"; sourceTree = "<group>"; };
 		3740BCB7E6F73B4D78E5967E /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-VeWorld-VeWorldTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		41C292086C6C0B975245523E /* libPods-VeWorld-VeWorldTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VeWorld-VeWorldTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		4E67FE58AE4FBBDA5A44B9B6 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		53F26CA8EF1400A91C34A3C8 /* libPods-OneSignalNotificationServiceExtension.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-OneSignalNotificationServiceExtension.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = VeWorld/LaunchScreen.storyboard; sourceTree = "<group>"; };
-		AB84B961CB47BF1A36364B0B /* Pods-VeWorld.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld.release.xcconfig"; path = "Target Support Files/Pods-VeWorld/Pods-VeWorld.release.xcconfig"; sourceTree = "<group>"; };
+		A25AE263C52C1612F3705DCE /* libPods-VeWorld.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VeWorld.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AEB05F0F3DEED64ABA37A2EA /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.release.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.release.xcconfig"; sourceTree = "<group>"; };
 		B7F90587FAC801D5C71E5B75 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-VeWorld/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
-		C2B0844919B171C2C3E52FDB /* Pods-VeWorld-VeWorldTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld-VeWorldTests.debug.xcconfig"; path = "Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests.debug.xcconfig"; sourceTree = "<group>"; };
-		D13A32DAE8CE0D18A5D7D5C6 /* libPods-VeWorld.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VeWorld.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D6075E8A6496EA19D4FE7715 /* Pods-VeWorld-VeWorldTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld-VeWorldTests.debug.xcconfig"; path = "Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests.debug.xcconfig"; sourceTree = "<group>"; };
 		D9ACA8B6F97D14F803EDAE97 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xml; name = PrivacyInfo.xcprivacy; path = VeWorld/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		EA3BDF902AD5720B00C5E65A /* MaterialCommunityIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialCommunityIcons.ttf; sourceTree = "<group>"; };
 		EA3BDF912AD5720B00C5E65A /* MaterialIcons.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = MaterialIcons.ttf; sourceTree = "<group>"; };
@@ -99,12 +97,14 @@
 		EAB2E3932BED003A0008F719 /* ScreenShieldRN.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ScreenShieldRN.m; sourceTree = "<group>"; };
 		EACA73AB2C24278E00D3D207 /* CloudKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CloudKitManager.m; sourceTree = "<group>"; };
 		EACA73AD2C24286C00D3D207 /* CloudKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CloudKitManager.swift; sourceTree = "<group>"; };
+		EC8B9C38E28690FA0D2B60A6 /* Pods-VeWorld-VeWorldTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld-VeWorldTests.release.xcconfig"; path = "Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F350EC5291A79852D7D709C8 /* Pods-VeWorld.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VeWorld.debug.xcconfig"; path = "Target Support Files/Pods-VeWorld/Pods-VeWorld.debug.xcconfig"; sourceTree = "<group>"; };
+		F4B80830584A612329BC99F2 /* libPods-VeWorld-VeWorldTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VeWorld-VeWorldTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4D2CAA52CD392FE00A2C1E9 /* OneSignalNotificationServiceExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = OneSignalNotificationServiceExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F4D2CAB82CD395F500A2C1E9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F4D2CAB92CD395F500A2C1E9 /* NotificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationService.swift; sourceTree = "<group>"; };
 		F4D2CABA2CD395F500A2C1E9 /* OneSignalNotificationServiceExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = OneSignalNotificationServiceExtension.entitlements; sourceTree = "<group>"; };
-		F779F172979AE61F27032291 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -112,7 +112,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E5BAC8481C3C227C5D2DA439 /* libPods-VeWorld-VeWorldTests.a in Frameworks */,
+				1042B6653DA928C2FF6ADB4B /* libPods-VeWorld-VeWorldTests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,7 +120,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				0501F7585276AFFF2C6361F3 /* libPods-VeWorld.a in Frameworks */,
+				E1C3301187D5A6CA6F2BB0F0 /* libPods-VeWorld.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -128,7 +128,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CBD9EF21B804241303D757F6 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
+				22893CE98A8CA7A32D69F503 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -189,9 +189,9 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				01AEDAA1FA22D1F5873A45C1 /* libPods-OneSignalNotificationServiceExtension.a */,
-				D13A32DAE8CE0D18A5D7D5C6 /* libPods-VeWorld.a */,
-				41C292086C6C0B975245523E /* libPods-VeWorld-VeWorldTests.a */,
+				53F26CA8EF1400A91C34A3C8 /* libPods-OneSignalNotificationServiceExtension.a */,
+				A25AE263C52C1612F3705DCE /* libPods-VeWorld.a */,
+				F4B80830584A612329BC99F2 /* libPods-VeWorld-VeWorldTests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -242,12 +242,12 @@
 		BBD78D7AC51CEA395F1C20DB /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				F779F172979AE61F27032291 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
-				0B079F55B714A582A0A861E4 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
-				288454630C29BBDDF3C911F0 /* Pods-VeWorld.debug.xcconfig */,
-				AB84B961CB47BF1A36364B0B /* Pods-VeWorld.release.xcconfig */,
-				C2B0844919B171C2C3E52FDB /* Pods-VeWorld-VeWorldTests.debug.xcconfig */,
-				24A87D38502E84C357DAA01F /* Pods-VeWorld-VeWorldTests.release.xcconfig */,
+				4E67FE58AE4FBBDA5A44B9B6 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */,
+				AEB05F0F3DEED64ABA37A2EA /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */,
+				F350EC5291A79852D7D709C8 /* Pods-VeWorld.debug.xcconfig */,
+				0D9E9C28837F9ECB3A357B32 /* Pods-VeWorld.release.xcconfig */,
+				D6075E8A6496EA19D4FE7715 /* Pods-VeWorld-VeWorldTests.debug.xcconfig */,
+				EC8B9C38E28690FA0D2B60A6 /* Pods-VeWorld-VeWorldTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -295,13 +295,13 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 00E357021AD99517003FC87E /* Build configuration list for PBXNativeTarget "VeWorldTests" */;
 			buildPhases = (
-				5E12C57B74B618D222A460DC /* [CP] Check Pods Manifest.lock */,
+				18B48FD6AFEBCB01783E4111 /* [CP] Check Pods Manifest.lock */,
 				CFDBA8BB22DBADDABBE8BB9E /* [Expo] Configure project */,
 				00E356EA1AD99517003FC87E /* Sources */,
 				00E356EB1AD99517003FC87E /* Frameworks */,
 				00E356EC1AD99517003FC87E /* Resources */,
-				E52D8AE1E307A74E58BFD8B3 /* [CP] Embed Pods Frameworks */,
-				C5B12C1914C3919E0343B885 /* [CP] Copy Pods Resources */,
+				F0573329328E3E96DB79CC08 /* [CP] Embed Pods Frameworks */,
+				47EE837173046B49E89F1F69 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -317,15 +317,15 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "VeWorld" */;
 			buildPhases = (
-				79399D239B98B70C5237D401 /* [CP] Check Pods Manifest.lock */,
+				8DA905673517F30D9AE681A6 /* [CP] Check Pods Manifest.lock */,
 				07CEEC66AB3308BADBCD7DDF /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				F4D2CAAD2CD392FE00A2C1E9 /* Embed Foundation Extensions */,
-				AA6337BE27B4629BAD84156F /* [CP] Embed Pods Frameworks */,
-				E872E590BC506AF042A747D6 /* [CP] Copy Pods Resources */,
+				CC572B6B2358CCD01C8DF0D1 /* [CP] Embed Pods Frameworks */,
+				162A210CCAAD2B7256D103A9 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -341,7 +341,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = F4D2CAB12CD392FE00A2C1E9 /* Build configuration list for PBXNativeTarget "OneSignalNotificationServiceExtension" */;
 			buildPhases = (
-				DB4A5F28D136D3341D5DEA69 /* [CP] Check Pods Manifest.lock */,
+				D29EAF60A9CAAFA035A53A0E /* [CP] Check Pods Manifest.lock */,
 				F4D2CAA12CD392FE00A2C1E9 /* Sources */,
 				F4D2CAA22CD392FE00A2C1E9 /* Frameworks */,
 				F4D2CAA32CD392FE00A2C1E9 /* Resources */,
@@ -462,7 +462,24 @@
 			shellPath = /bin/sh;
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-VeWorld/expo-configure-project.sh\"\n";
 		};
-		5E12C57B74B618D222A460DC /* [CP] Check Pods Manifest.lock */ = {
+		162A210CCAAD2B7256D103A9 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		18B48FD6AFEBCB01783E4111 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -484,7 +501,24 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		79399D239B98B70C5237D401 /* [CP] Check Pods Manifest.lock */ = {
+		47EE837173046B49E89F1F69 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8DA905673517F30D9AE681A6 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -506,7 +540,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		AA6337BE27B4629BAD84156F /* [CP] Embed Pods Frameworks */ = {
+		CC572B6B2358CCD01C8DF0D1 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -521,23 +555,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		C5B12C1914C3919E0343B885 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		CFDBA8BB22DBADDABBE8BB9E /* [Expo] Configure project */ = {
@@ -559,7 +576,7 @@
 			shellScript = "# This script configures Expo modules and generates the modules provider file.\nbash -l -c \"./Pods/Target\\ Support\\ Files/Pods-VeWorld-VeWorldTests/expo-configure-project.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		DB4A5F28D136D3341D5DEA69 /* [CP] Check Pods Manifest.lock */ = {
+		D29EAF60A9CAAFA035A53A0E /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -581,7 +598,7 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E52D8AE1E307A74E58BFD8B3 /* [CP] Embed Pods Frameworks */ = {
+		F0573329328E3E96DB79CC08 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -596,23 +613,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld-VeWorldTests/Pods-VeWorld-VeWorldTests-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		E872E590BC506AF042A747D6 /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Copy Pods Resources";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VeWorld/Pods-VeWorld-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -671,7 +671,7 @@
 /* Begin XCBuildConfiguration section */
 		00E356F61AD99517003FC87E /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C2B0844919B171C2C3E52FDB /* Pods-VeWorld-VeWorldTests.debug.xcconfig */;
+			baseConfigurationReference = D6075E8A6496EA19D4FE7715 /* Pods-VeWorld-VeWorldTests.debug.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CURRENT_PROJECT_VERSION = 294;
@@ -681,7 +681,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = VeWorldTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -703,14 +703,14 @@
 		};
 		00E356F71AD99517003FC87E /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 24A87D38502E84C357DAA01F /* Pods-VeWorld-VeWorldTests.release.xcconfig */;
+			baseConfigurationReference = EC8B9C38E28690FA0D2B60A6 /* Pods-VeWorld-VeWorldTests.release.xcconfig */;
 			buildSettings = {
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 294;
 				DEVELOPMENT_TEAM = RKZMX8AZ6P;
 				INFOPLIST_FILE = VeWorldTests/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -732,7 +732,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 288454630C29BBDDF3C911F0 /* Pods-VeWorld.debug.xcconfig */;
+			baseConfigurationReference = F350EC5291A79852D7D709C8 /* Pods-VeWorld.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -747,6 +747,7 @@
 				INFOPLIST_FILE = VeWorld/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = VeWorld;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -770,7 +771,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AB84B961CB47BF1A36364B0B /* Pods-VeWorld.release.xcconfig */;
+			baseConfigurationReference = 0D9E9C28837F9ECB3A357B32 /* Pods-VeWorld.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_INCLUDE_ALL_APPICON_ASSETS = NO;
@@ -785,6 +786,7 @@
 				INFOPLIST_FILE = VeWorld/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = VeWorld;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -956,7 +958,7 @@
 		};
 		F4D2CAAE2CD392FE00A2C1E9 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F779F172979AE61F27032291 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
+			baseConfigurationReference = 4E67FE58AE4FBBDA5A44B9B6 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -981,7 +983,7 @@
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = OneSignalNotificationServiceExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1006,7 +1008,7 @@
 		};
 		F4D2CAAF2CD392FE00A2C1E9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0B079F55B714A582A0A861E4 /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
+			baseConfigurationReference = AEB05F0F3DEED64ABA37A2EA /* Pods-OneSignalNotificationServiceExtension.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -1029,7 +1031,7 @@
 				INFOPLIST_FILE = OneSignalNotificationServiceExtension/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = OneSignalNotificationServiceExtension;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
-				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
