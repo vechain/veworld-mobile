@@ -31,5 +31,11 @@ module.exports = {
                 "max-len": "off",
             },
         },
+        {
+            files: ["./scripts/*.ts"],
+            rules: {
+                "no-console": "off",
+            },
+        },
     ],
 }
