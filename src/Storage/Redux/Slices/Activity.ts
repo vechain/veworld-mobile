@@ -12,7 +12,7 @@ type ActivityKeyType = "transactionActivitiesMainnet" | "transactionActivitiesTe
  *
  * Mapping account address => AccountActivities
  */
-type ActivitiesSliceState = Record<string, AccountActivities>
+export type ActivitiesSliceState = Record<string, AccountActivities>
 
 export const initialActivitiesState: ActivitiesSliceState = {}
 

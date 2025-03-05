@@ -1,9 +1,9 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { RootState } from "../Types"
-import { Activity, ActivityStatus, ActivityType } from "~Model"
-import { selectSelectedNetwork } from "./Network"
-import { selectSelectedAccount } from "./Account"
 import { genesisesId } from "~Constants"
+import { Activity, ActivityStatus, NETWORK_TYPE } from "~Model"
+import { RootState } from "../Types"
+import { selectSelectedAccount } from "./Account"
+import { selectSelectedNetwork } from "./Network"
 
 export const selectActivitiesState = (state: RootState) => state.activities
 
@@ -37,18 +37,6 @@ export const selectActivity = createSelector(
         return activities.find(
             act => act.id.toLowerCase() === txId.toLowerCase() && act.genesisId === network.genesis.id,
         )
-    },
-)
-
-/**
- * Gets all activities for the current network
- * @param state
- */
-export const selectCurrentNetworkActivities = createSelector(
-    selectAllActivities,
-    selectSelectedNetwork,
-    (activities, network) => {
-        return activities.filter(act => act.genesisId === network.genesis.id)
     },
 )
 
@@ -94,18 +82,37 @@ export const selectCurrentActivities = createSelector(
     },
 )
 
+export const selectAllLocalActivitiesByAccountAddressAndCurrentNetwork = createSelector(
+    selectActivitiesState,
+    selectSelectedNetwork,
+    selectSelectedAccount,
+    (activitiesState, network, account) => {
+        const address = account?.address?.toLowerCase()
+
+        if (address && activitiesState[address]) {
+            const activities = activitiesState[address]
+
+            const transactionActivities =
+                network.type === NETWORK_TYPE.MAIN
+                    ? activities.transactionActivitiesMainnet
+                    : activities.transactionActivitiesTestnet
+
+            const nonTransacitonActivitesByCurrentNetwork = activities.nonTransactionActivities.filter(
+                act => act.genesisId === network.genesis.id,
+            )
+
+            const allActivities = transactionActivities.concat(nonTransacitonActivitesByCurrentNetwork)
+            const allActivitiesctivitiesByTimestamp = allActivities.sort((a, b) => b.timestamp - a.timestamp)
+            return allActivitiesctivitiesByTimestamp
+        }
+
+        return []
+    },
+)
+
 /**
  * Get all activities that aren't finalised
  */
 export const selectActivitiesWithoutFinality = createSelector(selectCurrentActivities, activities =>
     activities.filter(activity => activity.isTransaction && activity.status === ActivityStatus.PENDING),
-)
-
-/**
- * Get all activities with type ActivityType.FUNGIBLE_TOKEN or ActivityType.VET_TRANSFER for current account
- */
-export const selectCurrentFungibleTokenActivities = createSelector(selectCurrentActivities, currentActivities =>
-    currentActivities.filter(
-        activity => activity.type === ActivityType.VET_TRANSFER || activity.type === ActivityType.FUNGIBLE_TOKEN,
-    ),
 )

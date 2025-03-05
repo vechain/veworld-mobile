@@ -4,7 +4,7 @@ import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
-export const useResetNFTStack = () => {
+export const useResetActivityStack = () => {
     const navigation = useNavigation()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
@@ -21,7 +21,7 @@ export const useResetNFTStack = () => {
     useEffect(() => {
         if (hasAccountChanged || hasNetworkChanged) {
             navigation.dispatch(state => {
-                const index = state.routes.findIndex(r => r.name === Routes.NFTS)
+                const index = state.routes.findIndex(r => r.name === Routes.HISTORY)
                 const routes = state.routes.slice(0, index + 1)
 
                 return CommonActions.reset({

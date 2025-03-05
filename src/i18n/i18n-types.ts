@@ -261,6 +261,30 @@ type RootTranslation = {
 	 */
 	AUGUST: string
 	/**
+	 * B​e​t​t​e​r​ ​a​c​t​i​o​n​ ​o​n
+	 */
+	B3TR_ACTION: string
+	/**
+	 * C​l​a​i​m​e​d​ ​v​o​t​i​n​g​ ​r​e​w​a​r​d​s
+	 */
+	B3TR_CLAIM_REWARD: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​p​r​o​p​o​s​a​l
+	 */
+	B3TR_PROPOSAL_VOTE: string
+	/**
+	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​e​b​e​r​ ​l​e​v​e​l
+	 */
+	B3TR_UPGRADE_GM: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d
+	 */
+	B3TR_XALLOCATION_VOTE: string
+	/**
+	 * P​r​o​p​o​s​a​l​ ​s​u​p​p​o​r​t​ ​o​n
+	 */
+	B3TR_PROPSAL_SUPPORT: string
+	/**
 	 * B​a​c​k​i​n​g​ ​u​p​.​.​.
 	 */
 	BACKING_UP: string
@@ -3701,6 +3725,10 @@ type RootTranslation = {
 	 */
 	TODAY: string
 	/**
+	 * T​o​k​e​n​ ​C​o​n​v​e​r​s​i​o​n
+	 */
+	TOKEN_CONVERSION: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
@@ -4186,6 +4214,30 @@ Try reconnect your device to the internet.
 	 * August
 	 */
 	AUGUST: () => LocalizedString
+	/**
+	 * Better action on
+	 */
+	B3TR_ACTION: () => LocalizedString
+	/**
+	 * Claimed voting rewards
+	 */
+	B3TR_CLAIM_REWARD: () => LocalizedString
+	/**
+	 * Vote on proposal
+	 */
+	B3TR_PROPOSAL_VOTE: () => LocalizedString
+	/**
+	 * New galaxy memeber level
+	 */
+	B3TR_UPGRADE_GM: () => LocalizedString
+	/**
+	 * Vote on round
+	 */
+	B3TR_XALLOCATION_VOTE: () => LocalizedString
+	/**
+	 * Proposal support on
+	 */
+	B3TR_PROPSAL_SUPPORT: () => LocalizedString
 	/**
 	 * Backing up...
 	 */
@@ -7583,6 +7635,10 @@ Try reconnect your device to the internet.
 	 * Today
 	 */
 	TODAY: () => LocalizedString
+	/**
+	 * Token Conversion
+	 */
+	TOKEN_CONVERSION: () => LocalizedString
 	/**
 	 * Token ID
 	 */
