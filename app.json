@@ -1,4 +1,8 @@
 {
-    "name": "VeWorld",
-    "displayName": "VeWorld"
+  "name": "VeWorld",
+  "displayName": "VeWorld",
+  "plugins": [
+    "expo-font",
+    "expo-secure-store"
+  ]
 }

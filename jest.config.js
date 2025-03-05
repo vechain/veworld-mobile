@@ -36,6 +36,7 @@ module.exports = {
             "|filter-obj" +
             "|@transak/react-native-sdk" +
             "|jail-monkey" +
+            "|expo/*" +
             ")",
     ],
     moduleNameMapper: {

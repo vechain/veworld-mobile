@@ -70,7 +70,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         digitText: {
             fontSize: 24,
-            fontWeight: "medium",
+            fontWeight: "600",
             alignItems: "center",
             color: theme.colors.numberPad,
         },
