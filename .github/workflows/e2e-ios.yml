@@ -105,7 +105,7 @@ jobs:
                   git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
                   pwd
                   ls
-                  fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} build:99 version:9.9.9
+                  fastlane build_test_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version_code:99 version_name:9.9.9
                   cd ../build
                   echo "build finished searching for .app file"
                   echo "(find / -name 'VeWorld.app' 2>/dev/null)"
