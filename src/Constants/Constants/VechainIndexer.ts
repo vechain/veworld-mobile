@@ -120,6 +120,15 @@ export const getIndexedHistoryEventOrigin = (
     return url
 }
 
+export const getTransactionOrigin = (txId: string, networkType: NETWORK_TYPE) => {
+    const baseUrl =
+        networkType === NETWORK_TYPE.MAIN
+            ? process.env.REACT_APP_INDEXER_MAINNET_URL
+            : process.env.REACT_APP_INDEXER_TESTNET_URL
+
+    return `${baseUrl}/transactions/${txId}?expanded=true`
+}
+
 /**
  * Get all transfers that have been performed given a specific block number
  *

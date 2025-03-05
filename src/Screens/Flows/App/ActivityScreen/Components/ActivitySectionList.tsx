@@ -8,6 +8,14 @@ import { useI18nContext } from "~i18n"
 import {
     Activity,
     ActivityType,
+    B3trActionActivity,
+    B3trClaimRewardActivity,
+    B3trProposalSupportActivity,
+    B3trProposalVoteActivity,
+    B3trSwapB3trToVot3Activity,
+    B3trSwapVot3ToB3trActivity,
+    B3trUpgradeGmActivity,
+    B3trXAllocationVoteActivity,
     ConnectedAppActivity,
     DappTxActivity,
     FungibleToken,
@@ -17,6 +25,7 @@ import {
     SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
+    VeBetterDaoDapp,
 } from "~Model"
 import { Routes } from "~Navigation"
 import { selectOfficialTokens, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -42,97 +51,117 @@ type ActivitySectionListProps = {
     refreshActivities: () => Promise<void>
     isFetching: boolean
     isRefreshing: boolean
+    veBetterDaoDapps: VeBetterDaoDapp[]
 }
 
 const ItemSeparatorComponent = () => {
     return <BaseSpacer height={8} />
 }
 
-const Item = React.memo(
-    ({
-        activity,
-        onPress,
-    }: {
-        activity: Activity
-        onPress: (
-            activity: Activity,
-            token?: FungibleToken,
-            isSwap?: boolean,
-            decodedClauses?: TransactionOutcomes,
-        ) => void
-    }) => {
-        const tokens = useAppSelector(selectOfficialTokens)
+const Item = ({
+    activity,
+    onPress,
+    veBetterDaoDapps = [],
+}: {
+    activity: Activity
+    veBetterDaoDapps: VeBetterDaoDapp[]
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}) => {
+    const tokens = useAppSelector(selectOfficialTokens)
 
-        const activityToRender = activity
+    const activityToRender = activity
 
-        switch (activity.type) {
-            case ActivityType.TRANSFER_FT:
-            case ActivityType.TRANSFER_VET:
-            case ActivityType.FUNGIBLE_TOKEN:
-            case ActivityType.VET_TRANSFER: {
-                return (
-                    <ActivityBox.TokenTransfer
-                        key={activityToRender.id}
-                        activity={activityToRender as FungibleTokenActivity}
-                        onPress={onPress}
-                    />
-                )
-            }
-            case ActivityType.TRANSFER_NFT:
-            case ActivityType.NFT_TRANSFER:
-                return (
-                    <ActivityBox.NFTTransfer
-                        key={activityToRender.id}
-                        activity={activity as NonFungibleTokenActivity}
-                        onPress={onPress}
-                    />
-                )
-            case ActivityType.SWAP_FT_TO_FT:
-            case ActivityType.SWAP_FT_TO_VET:
-            case ActivityType.SWAP_VET_TO_FT:
-                return <ActivityBox.TokenSwap activity={activity as SwapActivity} onPress={onPress} />
-            case ActivityType.DAPP_TRANSACTION: {
-                return (
-                    <ActivityBox.DAppTransaction
-                        key={activityToRender.id}
-                        activity={activityToRender as DappTxActivity}
-                        tokens={tokens}
-                        onPress={onPress}
-                    />
-                )
-            }
-            case ActivityType.SIGN_CERT:
-                return (
-                    <ActivityBox.DAppSignCert
-                        key={activityToRender.id}
-                        activity={activityToRender as SignCertActivity}
-                        onPress={onPress}
-                    />
-                )
-            case ActivityType.CONNECTED_APP_TRANSACTION:
-                return (
-                    <ActivityBox.ConnectedAppActivity
-                        key={activityToRender.id}
-                        activity={activity as ConnectedAppActivity}
-                        onPress={onPress}
-                    />
-                )
-            case ActivityType.SIGN_TYPED_DATA:
-                return (
-                    <ActivityBox.SignedTypedData
-                        key={activityToRender.id}
-                        activity={activity as TypedDataActivity}
-                        onPress={onPress}
-                    />
-                )
-            default:
-                return null
+    switch (activity.type) {
+        case ActivityType.TRANSFER_FT:
+        case ActivityType.TRANSFER_VET: {
+            return (
+                <ActivityBox.TokenTransfer
+                    key={activityToRender.id}
+                    activity={activityToRender as FungibleTokenActivity}
+                    onPress={onPress}
+                />
+            )
         }
-    },
-    (prev, next) => {
-        return prev.activity.id === next.activity.id
-    },
-)
+        case ActivityType.TRANSFER_NFT:
+            return (
+                <ActivityBox.NFTTransfer
+                    key={activityToRender.id}
+                    activity={activity as NonFungibleTokenActivity}
+                    onPress={onPress}
+                />
+            )
+        case ActivityType.SWAP_FT_TO_FT:
+        case ActivityType.SWAP_FT_TO_VET:
+        case ActivityType.SWAP_VET_TO_FT:
+            return <ActivityBox.TokenSwap activity={activity as SwapActivity} onPress={onPress} />
+        case ActivityType.DAPP_TRANSACTION: {
+            return (
+                <ActivityBox.DAppTransaction
+                    key={activityToRender.id}
+                    activity={activityToRender as DappTxActivity}
+                    tokens={tokens}
+                    onPress={onPress}
+                />
+            )
+        }
+        case ActivityType.SIGN_CERT:
+            return (
+                <ActivityBox.DAppSignCert
+                    key={activityToRender.id}
+                    activity={activityToRender as SignCertActivity}
+                    onPress={onPress}
+                />
+            )
+        case ActivityType.CONNECTED_APP_TRANSACTION:
+            return (
+                <ActivityBox.ConnectedAppActivity
+                    key={activityToRender.id}
+                    activity={activity as ConnectedAppActivity}
+                    onPress={onPress}
+                />
+            )
+        case ActivityType.SIGN_TYPED_DATA:
+            return (
+                <ActivityBox.SignedTypedData
+                    key={activityToRender.id}
+                    activity={activity as TypedDataActivity}
+                    onPress={onPress}
+                />
+            )
+        case ActivityType.B3TR_ACTION:
+            return (
+                <ActivityBox.B3trAction
+                    activity={activity as B3trActionActivity}
+                    onPress={onPress}
+                    veBetterDaoDapps={veBetterDaoDapps}
+                />
+            )
+        case ActivityType.B3TR_PROPOSAL_VOTE:
+            return <ActivityBox.B3trProposalVote activity={activity as B3trProposalVoteActivity} onPress={onPress} />
+        case ActivityType.B3TR_XALLOCATION_VOTE:
+            return (
+                <ActivityBox.B3trXAllocationVote activity={activity as B3trXAllocationVoteActivity} onPress={onPress} />
+            )
+        case ActivityType.B3TR_CLAIM_REWARD:
+            return <ActivityBox.B3trClaimReward activity={activity as B3trClaimRewardActivity} onPress={onPress} />
+        case ActivityType.B3TR_UPGRADE_GM:
+            return <ActivityBox.B3trUpgradeGM activity={activity as B3trUpgradeGmActivity} onPress={onPress} />
+        case ActivityType.B3TR_SWAP_B3TR_TO_VOT3:
+            return (
+                <ActivityBox.B3trSwapB3trToVot3 activity={activity as B3trSwapB3trToVot3Activity} onPress={onPress} />
+            )
+        case ActivityType.B3TR_SWAP_VOT3_TO_B3TR:
+            return (
+                <ActivityBox.B3trSwapVot3ToB3tr activity={activity as B3trSwapVot3ToB3trActivity} onPress={onPress} />
+            )
+        case ActivityType.B3TR_PROPOSAL_SUPPORT:
+            return (
+                <ActivityBox.B3trProposalSupport activity={activity as B3trProposalSupportActivity} onPress={onPress} />
+            )
+        default:
+            return null
+    }
+}
 
 export const ActivitySectionList = ({
     activities,
@@ -140,6 +169,7 @@ export const ActivitySectionList = ({
     refreshActivities,
     isFetching,
     isRefreshing,
+    veBetterDaoDapps,
 }: ActivitySectionListProps) => {
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyle)
@@ -299,11 +329,11 @@ export const ActivitySectionList = ({
             return (
                 <>
                     {index === 0 && <BaseSpacer height={8} />}
-                    <Item activity={activity} onPress={onActivityPress} />
+                    <Item activity={activity} onPress={onActivityPress} veBetterDaoDapps={veBetterDaoDapps} />
                 </>
             )
         },
-        [onActivityPress],
+        [onActivityPress, veBetterDaoDapps],
     )
 
     const refreshControl = useMemo(() => {

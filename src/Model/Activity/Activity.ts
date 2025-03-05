@@ -22,13 +22,12 @@ export interface Activity {
     to?: string[]
     from: string
     isTransaction: boolean
-
-    genesisId?: string // no
-    status?: ActivityStatus // no
-    clauses?: Connex.VM.Clause[] // no
-    gasUsed?: number // no
+    genesisId?: string
+    status?: ActivityStatus
+    clauses?: Connex.VM.Clause[]
+    gasUsed?: number
     delegated?: boolean
-    outputs?: OutputResponse[] // no
+    outputs?: OutputResponse[]
 }
 
 export interface IndexedHistoryEvent {
@@ -75,7 +74,7 @@ export interface NonTransactionalActivity {
 export interface FungibleTokenActivity extends Activity {
     amount: string | number
     tokenAddress: string
-    type: ActivityType.FUNGIBLE_TOKEN | ActivityType.VET_TRANSFER
+    type: ActivityType.TRANSFER_FT | ActivityType.TRANSFER_VET
     direction: DIRECTIONS
 }
 
@@ -85,7 +84,7 @@ export interface FungibleTokenActivity extends Activity {
 export interface NonFungibleTokenActivity extends Activity {
     tokenId: string
     contractAddress: string
-    type: ActivityType.NFT_TRANSFER
+    type: ActivityType.TRANSFER_NFT
     direction: DIRECTIONS
 }
 
@@ -138,12 +137,53 @@ export interface TypedDataActivity extends Activity {
     typedData: TypedData
     sender: string
 }
+export interface B3trActionActivity extends Activity {
+    type: ActivityType.B3TR_ACTION
+    value: string
+    appId: string
+    proof: string
+}
 
-/**
- * The DelegatedTransactionActivity interface represents a blockchain activity related to delegated transactions.
- */
-export interface DelegatedTransactionActivity extends Activity {
-    type: ActivityType.DELEGATED_TRANSACTION
+export interface B3trProposalVoteActivity extends Activity {
+    type: ActivityType.B3TR_PROPOSAL_VOTE
+    support: ActivitySupport
+    votePower: string
+    voteWeight: string
+    prposalId: string
+}
+
+export interface B3trXAllocationVoteActivity extends Activity {
+    eventName: ActivityEvent.B3TR_XALLOCATION_VOTE
+    roundId: string
+    appVotes: {
+        appId: string
+        voteWeight: string
+    }[]
+}
+export interface B3trUpgradeGmActivity extends Activity {
+    eventName: ActivityEvent.B3TR_XALLOCATION_VOTE
+    oldLevel: string
+    newLevel: string
+}
+
+export interface B3trClaimRewardActivity extends Activity {
+    type: ActivityType.B3TR_CLAIM_REWARD
+    value: string
+    roundId: string
+}
+
+export interface B3trSwapB3trToVot3Activity extends Activity {
+    eventName: ActivityEvent.B3TR_SWAP_B3TR_TO_VOT3
+    value: string
+}
+export interface B3trSwapVot3ToB3trActivity extends Activity {
+    eventName: ActivityEvent.B3TR_SWAP_VOT3_TO_B3TR
+    value: string
+}
+export interface B3trProposalSupportActivity extends Activity {
+    eventName: ActivityEvent.B3TR_PROPOSAL_SUPPORT
+    value: string
+    proposalId: string
 }
 
 export const createActivityFromIndexedHistoryEvent = (
@@ -167,6 +207,16 @@ export const createActivityFromIndexedHistoryEvent = (
         value,
         inputToken,
         outputToken,
+        appId,
+        proof,
+        support,
+        votePower,
+        voteWeight,
+        proposalId,
+        roundId,
+        appVotes,
+        oldLevel,
+        newLevel,
     } = event
 
     const isTransaction =
@@ -221,6 +271,7 @@ export const createActivityFromIndexedHistoryEvent = (
         case ActivityEvent.SWAP_FT_TO_VET: {
             return {
                 ...baseActivity,
+                isTransaction: true,
                 outputToken: VET.address,
                 inputToken: inputToken,
                 inputValue: inputValue,
@@ -230,6 +281,7 @@ export const createActivityFromIndexedHistoryEvent = (
         case ActivityEvent.SWAP_VET_TO_FT: {
             return {
                 ...baseActivity,
+                isTransaction: true,
                 inputToken: inputToken,
                 outputToken: VET.address,
                 inputValue: inputValue,
@@ -239,11 +291,72 @@ export const createActivityFromIndexedHistoryEvent = (
         case ActivityEvent.SWAP_FT_TO_FT: {
             return {
                 ...baseActivity,
+                isTransaction: true,
                 inputToken: inputToken,
                 outputToken: outputToken,
                 inputValue: inputValue,
                 outputValue: outputValue,
             } as SwapActivity
+        }
+        case ActivityEvent.B3TR_ACTION: {
+            return {
+                ...baseActivity,
+                to: to ? [to] : [],
+                value: value ?? "0x0",
+                appId: appId,
+                proof: proof,
+            } as B3trActionActivity
+        }
+        case ActivityEvent.B3TR_PROPOSAL_VOTE: {
+            return {
+                ...baseActivity,
+                prposalId: proposalId,
+                support: support,
+                votePower: votePower,
+                voteWeight: voteWeight,
+            } as B3trProposalVoteActivity
+        }
+        case ActivityEvent.B3TR_XALLOCATION_VOTE: {
+            return {
+                ...baseActivity,
+                eventName: ActivityEvent.B3TR_XALLOCATION_VOTE,
+                roundId: roundId,
+                appVotes: appVotes,
+            } as B3trXAllocationVoteActivity
+        }
+        case ActivityEvent.B3TR_CLAIM_REWARD: {
+            return {
+                ...baseActivity,
+                eventName: ActivityEvent.B3TR_XALLOCATION_VOTE,
+                value: value ?? "0x0",
+                roundId: roundId,
+            } as B3trClaimRewardActivity
+        }
+        case ActivityEvent.B3TR_UPGRADE_GM: {
+            return {
+                ...baseActivity,
+                oldLevel: oldLevel,
+                newLevel: newLevel,
+            } as B3trUpgradeGmActivity
+        }
+        case ActivityEvent.B3TR_SWAP_B3TR_TO_VOT3: {
+            return {
+                ...baseActivity,
+                value: value,
+            } as B3trSwapB3trToVot3Activity
+        }
+        case ActivityEvent.B3TR_SWAP_VOT3_TO_B3TR: {
+            return {
+                ...baseActivity,
+                value: value,
+            } as B3trSwapVot3ToB3trActivity
+        }
+        case ActivityEvent.B3TR_PROPOSAL_SUPPORT: {
+            return {
+                ...baseActivity,
+                value: value,
+                proposalId: proposalId,
+            } as B3trProposalSupportActivity
         }
         case ActivityEvent.UNKNOWN_TX:
         default: {

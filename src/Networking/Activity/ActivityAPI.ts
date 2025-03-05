@@ -1,6 +1,6 @@
-import { ERROR_EVENTS, ORDER, getIndexedHistoryEventOrigin } from "~Constants"
+import { ERROR_EVENTS, ORDER, getIndexedHistoryEventOrigin, getTransactionOrigin } from "~Constants"
 import { Network } from "~Model"
-import { DEFAULT_PAGE_SIZE, FetchActivitiesResponse, fetchFromEndpoint } from "~Networking"
+import { DEFAULT_PAGE_SIZE, FetchActivitiesResponse, fetchFromEndpoint, TransactionsResponse } from "~Networking"
 import { debug } from "~Utils"
 
 export const fetchIndexedHistoryEvent = async (address: string, page: number, networkType: Network) => {
@@ -11,5 +11,14 @@ export const fetchIndexedHistoryEvent = async (address: string, page: number, ne
         return await fetchFromEndpoint<FetchActivitiesResponse>(endpoint)
     } catch (error) {
         throw new Error(`Failed to fetch activities: ${error}`)
+    }
+}
+
+export const getTransaction = async (txId: string, network: Network) => {
+    try {
+        const endpoint = getTransactionOrigin(txId, network.type)
+        return await fetchFromEndpoint<TransactionsResponse>(endpoint)
+    } catch (error) {
+        throw new Error(`Failed to fetch transaction: ${error}`)
     }
 }

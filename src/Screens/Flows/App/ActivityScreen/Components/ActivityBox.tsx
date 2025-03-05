@@ -2,15 +2,20 @@ import moment from "moment"
 import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
-import { useSwappedTokens } from "~Components/Reusable/SwapCard/Hooks"
-import { COLORS, DIRECTIONS, ERROR_EVENTS, VET } from "~Constants"
+import { B3TR, COLORS, DIRECTIONS, VOT3 } from "~Constants"
 import { useFungibleTokenInfo, useNFTInfo, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
     Activity,
     ActivityStatus,
-    ActivityType,
-    ClauseType,
+    B3trActionActivity,
+    B3trClaimRewardActivity,
+    B3trProposalSupportActivity,
+    B3trProposalVoteActivity,
+    B3trSwapB3trToVot3Activity,
+    B3trSwapVot3ToB3trActivity,
+    B3trUpgradeGmActivity,
+    B3trXAllocationVoteActivity,
     ConnectedAppActivity,
     DappTxActivity,
     FungibleToken,
@@ -21,12 +26,14 @@ import {
     SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
+    VeBetterDaoDapp,
 } from "~Model"
 import { selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BigNutils, error, TransactionUtils } from "~Utils"
+import { AddressUtils, BigNutils } from "~Utils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
 type ActivityBoxProps = {
+    txId?: string
     icon: IconKey
     time: string
     title: string
@@ -35,6 +42,7 @@ type ActivityBoxProps = {
     rigthAmountDescription?: string
     nftImage?: string
     activityStatus?: ActivityStatus
+    iconBackgroungColor?: string
     onPress: () => void
 }
 
@@ -45,8 +53,9 @@ const BaseActivityBox = ({
     title,
     rightAmount,
     rigthAmountDescription,
-    activityStatus,
     nftImage,
+    iconBackgroungColor = COLORS.GREY_100,
+    activityStatus,
     onPress,
 }: ActivityBoxProps) => {
     const { styles } = useThemedStyles(baseStyles)
@@ -85,8 +94,8 @@ const BaseActivityBox = ({
 
     return (
         <BaseCard style={styles.rootContainer} onPress={onPress}>
-            <BaseView style={styles.iconContainer}>
-                <BaseIcon name={icon} size={16} color={COLORS.DARK_PURPLE} testID="magnify" bg={COLORS.GREY_100} />
+            <BaseView style={[styles.iconContainer, { backgroundColor: iconBackgroungColor }]}>
+                <BaseIcon name={icon} size={16} color={COLORS.DARK_PURPLE} testID="magnify" bg={iconBackgroungColor} />
             </BaseView>
 
             <BaseSpacer width={16} />
@@ -98,7 +107,7 @@ const BaseActivityBox = ({
                     <BaseText typographyFont="bodySemiBold" numberOfLines={1}>
                         {title}
                     </BaseText>
-                    {showActivityStatus && <ActivityStatusIndicator activityStatus={activityStatus} />}
+                    {showActivityStatus && <ActivityStatusIndicator activityStatus={ActivityStatus.REVERTED} />}
                 </BaseView>
                 <BaseSpacer height={2} />
                 {showDescription && (
@@ -130,7 +139,6 @@ const baseStyles = () =>
             height: 32,
             width: 32,
             borderRadius: 16,
-            backgroundColor: COLORS.GREY_100,
         },
         titleContainer: {
             flexDirection: "row",
@@ -146,7 +154,7 @@ const baseStyles = () =>
         rightTextContainer: {
             alignItems: "flex-end",
             flex: 1,
-            flexBasis: 60,
+            flexBasis: 40,
         },
         rightImageContainer: {
             alignItems: "center",
@@ -165,7 +173,7 @@ type TokenTransferActivityBoxProps = {
 const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
 
-    const { amount, timestamp, tokenAddress, direction, status, to, from } = activity
+    const { amount, timestamp, tokenAddress, direction, to, from, txId } = activity
 
     const type = direction === DIRECTIONS.UP ? "sent" : "received"
 
@@ -224,7 +232,7 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
         onPress(activity, token)
     }
 
-    return <BaseActivityBox time={time} activityStatus={status} onPress={onPressHandler} {...getActivityProps()} />
+    return <BaseActivityBox txId={txId} time={time} onPress={onPressHandler} {...getActivityProps()} />
 }
 
 type TokenSwapProps = {
@@ -258,18 +266,12 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
     const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${receivedAmount} ${inputToken?.symbol ?? ""}`
 
     const onSwapPressHandler = () => {
-        onPress(activity, undefined, true, [
-            {
-                type: ClauseType.SWAP_TOKENS_FOR_TOKENS,
-                to: activity.to[0],
-                value: activity.outputValue,
-                data: activity.outputToken,
-            },
-        ])
+        onPress(activity, undefined, true)
     }
 
     return (
         <BaseActivityBox
+            txId={activity.txId}
             icon={icon}
             time={time}
             title={title}
@@ -286,91 +288,32 @@ type DAppTransactionProps = {
     onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
 }
 
-const DAppTransaction = ({ activity, tokens, onPress }: DAppTransactionProps) => {
+const DAppTransaction = ({ activity, onPress }: DAppTransactionProps) => {
     const { LL } = useI18nContext()
-    const decodedClauses = TransactionUtils.interpretClauses(activity.clauses ?? [], tokens)
-    const isSwap = TransactionUtils.isSwapTransaction(decodedClauses)
-
-    const getSwapResult = () => {
-        if (!isSwap || !decodedClauses || activity.type !== ActivityType.DAPP_TRANSACTION) return undefined
-
-        try {
-            return TransactionUtils.decodeSwapTransferAmounts(decodedClauses, activity)
-        } catch (err) {
-            error(
-                ERROR_EVENTS.ACTIVITIES,
-                (err as Error)?.message,
-                "Activity id: " + activity.id,
-                JSON.stringify(activity),
-            )
-            return undefined
-        }
-    }
-
-    const swapResult = getSwapResult()
-
-    const { paidToken, receivedToken } = useSwappedTokens(
-        swapResult?.receivedTokenAddress ?? VET.address,
-        swapResult?.paidTokenAddress ?? VET.address,
-    )
 
     const time = moment(activity.timestamp).format("HH:mm")
-    const status = activity.status
 
-    if (isSwap && !swapResult) {
-        return null
+    const title = activity.isTransaction ? LL.DAPP_TRANSACTION_TITLE() : LL.DAPP_CONNECTION()
+    const description = activity.isTransaction
+        ? `from ${AddressUtils.humanAddress(activity.from, 6, 8)}`
+        : activity.name
+        ? `to ${activity.name}`
+        : undefined
+
+    const onPressHandler = () => {
+        onPress(activity)
     }
 
-    if (isSwap && swapResult) {
-        const title = LL.DAPP_TRANSACTION_SWAP()
-        const icon = "icon-arrow-left-right"
-
-        const onSwapPressHandler = () => {
-            onPress(activity, undefined, true, decodedClauses)
-        }
-
-        const paidAmount = BigNutils(swapResult?.paidAmount)
-            .toHuman(paidToken?.decimals ?? 0)
-            .toTokenFormat_string(2)
-
-        const receivedAmount = BigNutils(swapResult?.receivedAmount)
-            .toHuman(receivedToken?.decimals ?? 0)
-            .toTokenFormat_string(2)
-
-        const rightAmount = `${DIRECTIONS.UP} ${receivedAmount} ${receivedToken?.symbol ?? ""}`
-        const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${paidAmount} ${paidToken?.symbol ?? ""}`
-
-        return (
-            <BaseActivityBox
-                icon={icon}
-                time={time}
-                activityStatus={status}
-                title={title}
-                rightAmount={rightAmount}
-                rigthAmountDescription={rigthAmountDescription}
-                onPress={onSwapPressHandler}
-            />
-        )
-    } else {
-        const title = activity.isTransaction ? LL.DAPP_TRANSACTION_TITLE() : LL.DAPP_CONNECTION()
-        const description = activity.isTransaction
-            ? `from ${AddressUtils.humanAddress(activity.from, 6, 8)}`
-            : `to ${activity.name}`
-
-        const onPressHandler = () => {
-            onPress(activity)
-        }
-
-        return (
-            <BaseActivityBox
-                icon="icon-layout-grid"
-                time={time}
-                title={title}
-                description={description}
-                onPress={onPressHandler}
-            />
-        )
-    }
+    return (
+        <BaseActivityBox
+            txId={activity.txId}
+            icon="icon-layout-grid"
+            time={time}
+            title={title}
+            description={description}
+            onPress={onPressHandler}
+        />
+    )
 }
 
 type DAppSignCert = {
@@ -390,6 +333,7 @@ const DAppSignCertBox = ({ activity, onPress }: DAppSignCert) => {
 
     return (
         <BaseActivityBox
+            txId={activity.txId}
             icon="icon-edit-2"
             time={time}
             title={title}
@@ -422,11 +366,11 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
 
     return (
         <BaseActivityBox
+            txId={activity.txId}
             icon="icon-image"
             time={time}
             title={title}
             description={validatedCollectionName()}
-            activityStatus={activity.status}
             onPress={onPressHandler}
         />
     )
@@ -447,10 +391,10 @@ const ConnectedAppActivityBox = ({ activity, onPress }: ConnectedAppActivityProp
 
     return (
         <BaseActivityBox
+            txId={activity.txId}
             icon="icon-laptop"
             time={time}
             title={LL.CONNECTED_APP_TITLE()}
-            activityStatus={activity.status}
             onPress={onPressHandler}
         />
     )
@@ -471,10 +415,247 @@ const SignedTypedData = ({ activity, onPress }: SignedTypedDataProps) => {
 
     return (
         <BaseActivityBox
+            txId={activity.txId}
             icon="icon-check-check"
             time={time}
             title={LL.CONNECTED_APP_SIGN_TYPED_DATA()}
-            activityStatus={activity.status}
+            onPress={onPressHandler}
+        />
+    )
+}
+
+type B3trActionProps = {
+    activity: B3trActionActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+    veBetterDaoDapps: VeBetterDaoDapp[]
+}
+
+const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    const dapp = veBetterDaoDapps.find(d => d.id === activity.appId)
+    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2)
+
+    return (
+        <BaseActivityBox
+            txId={activity.txId}
+            icon="icon-leaf"
+            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            time={time}
+            title={LL.B3TR_ACTION()}
+            description={dapp?.name}
+            onPress={onPressHandler}
+            rightAmount={`${DIRECTIONS.UP} ${rewardValue}`}
+            rigthAmountDescription={B3TR.symbol}
+        />
+    )
+}
+
+type B3trPrpoposalVoteProps = {
+    activity: B3trProposalVoteActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const B3trProposalVote = ({ activity, onPress }: B3trPrpoposalVoteProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    return (
+        <BaseActivityBox
+            txId={activity.txId}
+            icon="icon-vote"
+            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            time={time}
+            title={LL.B3TR_PROPOSAL_VOTE()}
+            description={activity.prposalId}
+            onPress={onPressHandler}
+        />
+    )
+}
+
+type B3trXAllocartionVoteProps = {
+    activity: B3trXAllocationVoteActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const B3trXAllocationVote = ({ activity, onPress }: B3trXAllocartionVoteProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    return (
+        <BaseActivityBox
+            txId={activity.txId}
+            icon="icon-vote"
+            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            time={time}
+            title={LL.B3TR_XALLOCATION_VOTE()}
+            description={activity.roundId}
+            onPress={onPressHandler}
+        />
+    )
+}
+
+type B3trClaimRewardProps = {
+    activity: B3trClaimRewardActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const B3trClaimReward = ({ activity, onPress }: B3trClaimRewardProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2)
+
+    return (
+        <BaseActivityBox
+            txId={activity.txId}
+            icon="icon-leaf"
+            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            time={time}
+            title={LL.B3TR_CLAIM_REWARD()}
+            onPress={onPressHandler}
+            rightAmount={`${DIRECTIONS.UP} ${rewardValue}`}
+            rigthAmountDescription={B3TR.symbol}
+        />
+    )
+}
+
+type B3trUpgradeGMProps = {
+    activity: B3trUpgradeGmActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const B3trUpgradeGM = ({ activity, onPress }: B3trUpgradeGMProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    return (
+        <BaseActivityBox
+            txId={activity.txId}
+            icon="icon-vote"
+            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            time={time}
+            title={LL.B3TR_UPGRADE_GM()}
+            description={activity.newLevel}
+            onPress={onPressHandler}
+        />
+    )
+}
+
+type B3trSwapB3trToVot3Props = {
+    activity: B3trSwapB3trToVot3Activity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
+    const { LL } = useI18nContext()
+
+    const title = LL.TOKEN_CONVERSION()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const amount = BigNutils(activity.value)
+        .toHuman(B3TR.decimals ?? 0)
+        .toTokenFormat_string(2)
+
+    const rightAmount = `${DIRECTIONS.UP} ${amount} ${VOT3.symbol}`
+    const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${B3TR.symbol}`
+
+    const onSwapPressHandler = () => {
+        onPress(activity, undefined, true)
+    }
+
+    return (
+        <BaseActivityBox
+            txId={activity.txId}
+            icon={"icon-convert"}
+            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            time={time}
+            title={title}
+            rightAmount={rightAmount}
+            rigthAmountDescription={rigthAmountDescription}
+            onPress={onSwapPressHandler}
+        />
+    )
+}
+
+type B3trSwapVot3ToB3trProps = {
+    activity: B3trSwapVot3ToB3trActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
+    const { LL } = useI18nContext()
+
+    const title = LL.TOKEN_CONVERSION()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const amount = BigNutils(activity.value)
+        .toHuman(B3TR.decimals ?? 0)
+        .toTokenFormat_string(2)
+
+    const rightAmount = `${DIRECTIONS.UP} ${amount} ${B3TR.symbol}`
+    const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${VOT3.symbol}`
+
+    const onSwapPressHandler = () => {
+        onPress(activity, undefined, true)
+    }
+
+    return (
+        <BaseActivityBox
+            txId={activity.txId}
+            icon={"icon-convert"}
+            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            time={time}
+            title={title}
+            rightAmount={rightAmount}
+            rigthAmountDescription={rigthAmountDescription}
+            onPress={onSwapPressHandler}
+        />
+    )
+}
+
+type B3trProposalSupportProps = {
+    activity: B3trProposalSupportActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const B3trProposalSupport = ({ activity, onPress }: B3trProposalSupportProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    return (
+        <BaseActivityBox
+            txId={activity.txId}
+            icon="icon-vote"
+            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            time={time}
+            title={LL.B3TR_PROPSAL_SUPPORT()}
+            description={activity.proposalId}
             onPress={onPressHandler}
         />
     )
@@ -488,4 +669,12 @@ export const ActivityBox = {
     ConnectedAppActivity: ConnectedAppActivityBox,
     SignedTypedData: SignedTypedData,
     TokenSwap: TokenSwap,
+    B3trAction: B3trAction,
+    B3trProposalVote: B3trProposalVote,
+    B3trXAllocationVote: B3trXAllocationVote,
+    B3trClaimReward: B3trClaimReward,
+    B3trUpgradeGM: B3trUpgradeGM,
+    B3trSwapB3trToVot3: B3trSwapB3trToVot3,
+    B3trSwapVot3ToB3tr: B3trSwapVot3ToB3tr,
+    B3trProposalSupport: B3trProposalSupport,
 }

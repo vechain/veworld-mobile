@@ -11,18 +11,19 @@ import {
     SelectAccountBottomSheet,
     SelectedNetworkViewer,
 } from "~Components"
-import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useVeBetterDaoDapps } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
 import { selectBalanceVisible, selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { ActivitySectionList, NoActivitiesButton, SkeletonActivityBox } from "./Components"
-import { useAccountActivities } from "./Hooks"
+import { useAccountActivities, useResetActivityStack } from "./Hooks"
 
 const SKELETON_COUNT = 6
 
 export const ActivityScreen = () => {
     const { LL } = useI18nContext()
+    useResetActivityStack()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -42,6 +43,7 @@ export const ActivityScreen = () => {
     } = useBottomSheetModal()
 
     const { activities, fetchActivities, isFetching, refreshActivities, isRefreshing } = useAccountActivities()
+    const { data: daoDapps, isPending } = useVeBetterDaoDapps()
 
     const nav = useNavigation()
 
@@ -53,11 +55,12 @@ export const ActivityScreen = () => {
                 activities={activities}
                 fetchActivities={fetchActivities}
                 refreshActivities={refreshActivities}
-                isFetching={isFetching}
+                isFetching={isFetching || isPending}
                 isRefreshing={isRefreshing}
+                veBetterDaoDapps={daoDapps ?? []}
             />
         )
-    }, [activities, fetchActivities, isFetching, isRefreshing, refreshActivities])
+    }, [activities, daoDapps, fetchActivities, isFetching, isPending, isRefreshing, refreshActivities])
 
     const renderSkeletonList = useMemo(() => {
         return (

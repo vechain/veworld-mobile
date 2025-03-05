@@ -10,14 +10,16 @@ import { ActivityDetailItem } from "./ActivityDetailItem"
 
 type Props = {
     activity: NonFungibleTokenActivity
+    gasUsed?: number
+    isLoading?: boolean
 }
 
-export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(({ activity }) => {
+export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, gasUsed, isLoading = false }) => {
     const { LL } = useI18nContext()
 
     const { onCopyToClipboard } = useCopyClipboard()
 
-    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
+    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(gasUsed)
 
     const transactionIDshort = useMemo(() => {
         return AddressUtils.humanAddress(activity.txId ?? "", 7, 9)
@@ -40,6 +42,7 @@ export const NonFungibleTokenTransferDetails: React.FC<Props> = memo(({ activity
             typographyFont: "subSubTitle",
             underline: false,
             valueAdditional: fiatValueGasFeeSpent ?? "",
+            isLoading: isLoading,
         },
         {
             id: 3,

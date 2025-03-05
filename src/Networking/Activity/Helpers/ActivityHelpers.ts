@@ -62,7 +62,7 @@ const getAddressFromClause = (clause: Transaction.Clause) => {
 /**
  * Creates a new pending FungibleTokenActivity from a given transaction.
  *
- * The transaction clauses are analyzed to determine the activity type (VET_TRANSFER or FUNGIBLE_TOKEN).
+ * The transaction clauses are analyzed to determine the activity type (TRANSFER_VET or TRANSFER_FT).
  * In case the transaction type is different, an error is thrown.
  *
  * The method also extracts the token address and amount from the first transaction clause.
@@ -70,14 +70,14 @@ const getAddressFromClause = (clause: Transaction.Clause) => {
  *
  * @param tx - The transaction from which to create the activity.
  * @returns A new FungibleTokenActivity object based on the given transaction.
- * @throws {Error} If the transaction type is neither VET_TRANSFER nor FUNGIBLE_TOKEN.
+ * @throws {Error} If the transaction type is neither TRANSFER_VET nor TRANSFER_FT.
  * @throws {Error} If the token address cannot be extracted from the transaction.
  * @throws {Error} If the amount cannot be extracted from the transaction.
  */
 export const createPendingTransferActivityFromTx = (tx: Transaction): FungibleTokenActivity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
-    if (baseActivity.type !== ActivityType.VET_TRANSFER && baseActivity.type !== ActivityType.FUNGIBLE_TOKEN)
+    if (baseActivity.type !== ActivityType.TRANSFER_VET && baseActivity.type !== ActivityType.TRANSFER_FT)
         throw new Error("Invalid transaction type")
 
     const tokenAddress = getAddressFromClause(baseActivity.clauses[0])
@@ -97,19 +97,19 @@ export const createPendingTransferActivityFromTx = (tx: Transaction): FungibleTo
 /**
  * Creates a new pending Non-Fungible Token (NFT) activity from a given transaction.
  *
- * The function creates a base activity from the transaction and then checks the activity type. If the type is not 'NFT_TRANSFER',
+ * The function creates a base activity from the transaction and then checks the activity type. If the type is not 'TRANSFER_NFT',
  * an error is thrown. It also extracts the contract address and the decoded NFT token id from the first transaction clause.
  *
  * @param tx - The transaction from which to create the NFT activity.
  * @returns A new NonFungibleTokenActivity object based on the given transaction.
- * @throws {Error} If the transaction type is not 'NFT_TRANSFER'.
+ * @throws {Error} If the transaction type is not 'TRANSFER_NFT'.
  * @throws {Error} If the contract address cannot be extracted from the transaction.
  * @throws {Error} If the NFT token Id cannot be decoded from the transaction clause.
  */
 export const createPendingNFTTransferActivityFromTx = (tx: Transaction): NonFungibleTokenActivity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
-    if (baseActivity.type !== ActivityType.NFT_TRANSFER) throw new Error("Invalid transaction type")
+    if (baseActivity.type !== ActivityType.TRANSFER_NFT) throw new Error("Invalid transaction type")
 
     const contractAddress = getAddressFromClause(baseActivity.clauses[0])
 
@@ -150,7 +150,7 @@ export const createIncomingTransfer = (
     tokenAddress: string,
     thor: Connex.Thor,
 ): FungibleTokenActivity => {
-    const activityType = tokenAddress === VET.address ? ActivityType.VET_TRANSFER : ActivityType.FUNGIBLE_TOKEN
+    const activityType = tokenAddress === VET.address ? ActivityType.TRANSFER_VET : ActivityType.TRANSFER_FT
 
     const encodedClause = createTransferClauseFromIncomingTransfer(recipient, amount, tokenAddress, activityType)
 
@@ -281,7 +281,7 @@ export const createPendingDappTransactionActivity = (tx: Transaction, name?: str
  * @param to - The recipient's address.
  * @param value - The number of tokens to transfer.
  * @param tokenAddress - The contract address of the token.
- * @param type - The type of activity, either a VET_TRANSFER or a FUNGIBLE_TOKEN transfer.
+ * @param type - The type of activity, either a TRANSFER_VET or a TRANSFER_FT transfer.
  *
  * @returns A Connex.VM.Clause object for a transfer, or undefined if the activity type does not match known types.
  */
@@ -293,15 +293,15 @@ export const createTransferClauseFromIncomingTransfer = (
     from?: string,
     tokenId?: number,
 ): Connex.VM.Clause | undefined => {
-    if (type === ActivityType.VET_TRANSFER) {
+    if (type === ActivityType.TRANSFER_VET) {
         return TransactionUtils.encodeTransferFungibleTokenClause(to, value, VET.address)
     }
 
-    if (type === ActivityType.FUNGIBLE_TOKEN) {
+    if (type === ActivityType.TRANSFER_FT) {
         return TransactionUtils.encodeTransferFungibleTokenClause(to, value, contractAddress)
     }
 
-    if (type === ActivityType.NFT_TRANSFER && from && tokenId) {
+    if (type === ActivityType.TRANSFER_NFT && from && tokenId) {
         return TransactionUtils.encodeTransferNonFungibleTokenClause(from, to, contractAddress, tokenId)
     }
 }
@@ -316,13 +316,13 @@ export const createTransferClauseFromIncomingTransfer = (
 export const eventTypeToActivityType = (eventType: EventTypeResponse): ActivityType | undefined => {
     switch (eventType) {
         case EventTypeResponse.VET:
-            return ActivityType.VET_TRANSFER
+            return ActivityType.TRANSFER_VET
 
         case EventTypeResponse.FUNGIBLE_TOKEN:
-            return ActivityType.FUNGIBLE_TOKEN
+            return ActivityType.TRANSFER_FT
 
         case EventTypeResponse.NFT:
-            return ActivityType.NFT_TRANSFER
+            return ActivityType.TRANSFER_NFT
 
         default:
             debug(ERROR_EVENTS.ACTIVITIES, "Received not yet supported incoming transfer event type: ", eventType)
@@ -475,11 +475,11 @@ const processActivity = (
     appUrl?: string,
 ): Activity => {
     switch (activity.type) {
-        case ActivityType.FUNGIBLE_TOKEN:
+        case ActivityType.TRANSFER_FT:
             return enrichActivityWithTokenData(activity, clause, direction)
-        case ActivityType.VET_TRANSFER:
+        case ActivityType.TRANSFER_VET:
             return enrichActivityWithVetTransfer(activity, clause, direction)
-        case ActivityType.NFT_TRANSFER:
+        case ActivityType.TRANSFER_NFT:
             return enrichActivityWithNFTData(activity, clause, direction)
         default:
             return enrichActivityWithDappData(activity, appName, appUrl)
