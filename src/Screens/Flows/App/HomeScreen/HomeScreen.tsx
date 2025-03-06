@@ -45,8 +45,8 @@ import {
     Header,
     TokenList,
 } from "./Components"
-import { useTokenBalances } from "./Hooks"
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
+import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -115,11 +115,23 @@ export const HomeScreen = () => {
     useCheckVersion()
 
     const Actions: FastAction[] = useMemo(() => {
-        let actions: FastAction[] = []
+        // If the account is observed, we don't want to show the send button as it's not possible to send from an observed account
+        if (AccountUtils.isObservedAccount(selectedAccount)) return []
 
-        // account must not be observed to show the buy button
-        if (!AccountUtils.isObservedAccount(selectedAccount)) {
-            actions.push({
+        return [
+            {
+                name: LL.BTN_SEND(),
+                action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
+                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-up" size={20} />,
+                testID: "sendButton",
+            },
+            {
+                name: LL.BTN_SWAP(),
+                action: () => nav.navigate(Routes.SWAP),
+                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
+                testID: "swapButton",
+            },
+            {
                 name: LL.BTN_BUY(),
                 action: () => {
                     nav.navigate(Routes.BUY_FLOW)
@@ -127,29 +139,17 @@ export const HomeScreen = () => {
                 },
                 icon: <BaseIcon color={theme.colors.text} name="icon-plus-circle" size={20} />,
                 testID: "buyButton",
-            })
-        }
-
-        // If the account is observed, we don't want to show the send button as it's not possible to send from an observed account
-        if (!AccountUtils.isObservedAccount(selectedAccount)) {
-            actions.push({
-                name: LL.BTN_SEND(),
-                action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
-                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-up" size={20} />,
-                testID: "sendButton",
-            })
-        }
-
-        if (!AccountUtils.isObservedAccount(selectedAccount)) {
-            actions.push({
-                name: LL.BTN_SWAP(),
-                action: () => nav.navigate(Routes.SWAP),
-                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
-                testID: "swapButton",
-            })
-        }
-
-        return actions
+            },
+            {
+                name: LL.BTN_SELL(),
+                action: () => {
+                    nav.navigate(Routes.SELL_FLOW)
+                    track(AnalyticsEvent.SELL_CRYPTO_BUTTON_CLICKED)
+                },
+                icon: <BaseIcon color={theme.colors.text} name="icon-minus-circle" size={20} />,
+                testID: "sellButton",
+            },
+        ] as FastAction[]
     }, [LL, nav, selectedAccount, theme.colors.text, track])
 
     return (

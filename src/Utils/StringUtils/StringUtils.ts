@@ -5,3 +5,6 @@ export const capitalize = (text: string) => {
 export function truncateTextIfSizeIsGreaterThan(maximumSize: number, text: string) {
     return text.length > maximumSize ? text.slice(0, maximumSize).trim() + "..." : text
 }
+
+export const toUppercase = <TText extends string>(text: TText): Uppercase<TText> =>
+    text.toUpperCase() as Uppercase<TText>
