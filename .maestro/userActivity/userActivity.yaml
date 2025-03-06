@@ -64,14 +64,14 @@ onFlowComplete:
     when:
       platform: iOS
     commands:
-      - tapOn: ".*Sent tokens.*"
+      - tapOn: ".*Sent tokens.*- 0.01 VET"
 - runFlow:
     when:
       platform: Android
     commands:
       - tapOn:
-          text: "Sent tokens"
-          index: 0
+           id: "magnify"
+           index: 0
 - assertVisible: "Account 1"
 - assertVisible: "Account 2"
 - assertVisible: ".*0.01 VET.*"
