@@ -58,6 +58,20 @@ export const useAccountActivities = () => {
         }
     }, [fetchNextPage, hasNextPage])
 
+    const mergeActivities = useCallback((arr1: Activity[], arr2: Activity[]): Activity[] => {
+        const map = new Map<string, Activity>()
+
+        const addActivity = (activity: Activity) => {
+            const key = ActivityUtils.isTransactionActivity(activity) && activity.txId ? activity.txId : activity.id
+            map.set(key, activity)
+        }
+
+        arr1.forEach(addActivity)
+        arr2.forEach(addActivity)
+
+        return Array.from(map.values())
+    }, [])
+
     const activities = useMemo(() => {
         if (data && data.pages?.length > 0) {
             const remoteActivities =
@@ -73,26 +87,7 @@ export const useAccountActivities = () => {
                     return act.timestamp >= startingTimestamp
                 })
 
-                const remoteActivitiesByTxId = remoteActivities.map(act => act.txId)
-                const localActivitiesNotListed: Activity[] = []
-                const localActivitiesTxIdToBeRemoved: string[] = []
-
-                localActivitiesByTimsstamp.forEach(act => {
-                    if (
-                        ActivityUtils.isTransactionActivity(act) &&
-                        act.txId &&
-                        !remoteActivitiesByTxId.includes(act.txId)
-                    ) {
-                        localActivitiesNotListed.push(act)
-                        localActivitiesTxIdToBeRemoved.push(act.txId)
-                    }
-
-                    if (!ActivityUtils.isTransactionActivity(act)) {
-                        localActivitiesNotListed.push(act)
-                    }
-                })
-
-                const allActivities = remoteActivities.concat(localActivitiesNotListed)
+                const allActivities = mergeActivities(remoteActivities, localActivitiesByTimsstamp)
                 sortActivitiesByTimestamp(allActivities)
                 return allActivities
             }
@@ -104,7 +99,16 @@ export const useAccountActivities = () => {
         }
 
         return []
-    }, [data, isFetching, isFetchingNextPage, isLoading, localActivities, network, selectedAccount.address])
+    }, [
+        data,
+        isFetching,
+        isFetchingNextPage,
+        isLoading,
+        localActivities,
+        network,
+        selectedAccount.address,
+        mergeActivities,
+    ])
 
     const result = useMemo(
         () => ({
