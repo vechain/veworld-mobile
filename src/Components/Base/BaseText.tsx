@@ -2,7 +2,7 @@
 import React, { useMemo } from "react"
 import { FlexAlignType, Text, TextProps } from "react-native"
 import { useTheme } from "~Hooks"
-import { typography } from "~Constants"
+import { typography } from "~Constants/Theme"
 import { BaseView } from "./BaseView"
 
 const { defaults: defaultTypography, ...otherTypography } = typography

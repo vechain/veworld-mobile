@@ -19,7 +19,8 @@ import {
     FiatBalance,
     AlertCard,
 } from "~Components"
-import { COLORS, CURRENCY_SYMBOLS, typography, VOT3, VTHO } from "~Constants"
+import { COLORS, CURRENCY_SYMBOLS, VOT3, VTHO } from "~Constants"
+import { typography } from "~Constants/Theme"
 import { useAmountInput, useTheme, useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"

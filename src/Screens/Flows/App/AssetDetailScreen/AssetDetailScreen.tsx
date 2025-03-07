@@ -15,7 +15,8 @@ import {
 import { ScrollView } from "react-native-gesture-handler"
 import { StyleSheet } from "react-native"
 import { AccountUtils } from "~Utils"
-import { B3TR, typography } from "~Constants"
+import { B3TR } from "~Constants"
+import { typography } from "~Constants/Theme"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
 import { ConvertBetterTokenSuccessBottomSheet } from "./ConvertBetterScreen/Components"
 

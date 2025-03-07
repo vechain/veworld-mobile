@@ -4,7 +4,8 @@ import { BaseSkeleton, BaseText, BaseView, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { B3TR, COLORS, VOT3 } from "~Constants"
+import { B3TR, VOT3 } from "~Constants"
+import { COLORS } from "~Constants/Theme"
 
 export const BalanceView = ({
     tokenWithInfo,

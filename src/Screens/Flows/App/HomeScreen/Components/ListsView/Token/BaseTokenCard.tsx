@@ -3,7 +3,7 @@ import React from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated from "react-native-reanimated"
 import { useTheme } from "~Hooks"
-import { COLORS } from "~Constants"
+import { COLORS } from "~Constants/Theme"
 
 type BaseTokenCardProps = {
     icon: string
