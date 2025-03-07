@@ -28,10 +28,14 @@ const mapOldActivityTypeToNewActivityType = (activity: Activity) => {
 
 export const Migration11 = (state: PersistedState): PersistedState => {
     // @ts-ignore
-    const currentState: Record<string, AccountActivities> = state.activities
+    const currentState = state.activities
 
     //We don't have any state, so return immediately
-    if (Object.keys(currentState).length === 0) {
+    if (
+        Object.keys(currentState).length > 0 &&
+        !!(currentState as ActivityState)?.activities &&
+        Array.isArray((currentState as ActivityState)?.activities)
+    ) {
         debug(ERROR_EVENTS.SECURITY, "================= **** No state to migrate **** =================")
         return state
     }
@@ -40,23 +44,32 @@ export const Migration11 = (state: PersistedState): PersistedState => {
         activities: [],
     }
 
+    // if previous state is empty, just return the new state
+    if (Object.keys(currentState).length === 0) {
+        return {
+            ...state,
+            activities: newState,
+        } as PersistedState
+    }
+
+    const oldState = currentState as Record<string, AccountActivities>
     const addresses = Object.keys(currentState)
 
     addresses.forEach(address => {
-        const transactionActivitiesMainnet = currentState[address].transactionActivitiesMainnet
-        transactionActivitiesMainnet.map(activity => {
+        const transactionActivitiesMainnet = oldState[address].transactionActivitiesMainnet
+        transactionActivitiesMainnet.forEach(activity => {
             mapOldActivityTypeToNewActivityType(activity)
             newState.activities.push(activity)
         })
 
-        const transactionActivitiesTestnet = currentState[address].transactionActivitiesTestnet
-        transactionActivitiesTestnet.map(activity => {
+        const transactionActivitiesTestnet = oldState[address].transactionActivitiesTestnet
+        transactionActivitiesTestnet.forEach(activity => {
             mapOldActivityTypeToNewActivityType(activity)
             newState.activities.push(activity)
         })
 
-        const nonTransactionActivities = currentState[address].nonTransactionActivities
-        nonTransactionActivities.map(activity => {
+        const nonTransactionActivities = oldState[address].nonTransactionActivities
+        nonTransactionActivities.forEach(activity => {
             mapOldActivityTypeToNewActivityType(activity)
             newState.activities.push(activity)
         })
