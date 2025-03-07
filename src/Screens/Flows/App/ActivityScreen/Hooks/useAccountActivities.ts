@@ -1,20 +1,21 @@
 import { useIsFocused } from "@react-navigation/native"
 import { InfiniteData, useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo, useState } from "react"
-import { Activity, createActivityFromIndexedHistoryEvent } from "~Model"
-import { fetchIndexedHistoryEvent, sortActivitiesByTimestamp } from "~Networking"
+import { Activity } from "~Model"
+import { createActivityFromIndexedHistoryEvent, fetchIndexedHistoryEvent, sortActivitiesByTimestamp } from "~Networking"
 import {
-    selectAllLocalActivitiesByAccountAddressAndCurrentNetwork,
+    selectAllActivitiesByAccountAddressAndNetwork,
     selectSelectedAccount,
     selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
+import { ActivityUtils } from "~Utils"
 
 export const useAccountActivities = () => {
     const queryClient = useQueryClient()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
-    const localActivities = useAppSelector(selectAllLocalActivitiesByAccountAddressAndCurrentNetwork)
+    const localActivities = useAppSelector(selectAllActivitiesByAccountAddressAndNetwork)
 
     const isFocused = useIsFocused()
 
@@ -58,29 +59,35 @@ export const useAccountActivities = () => {
     }, [fetchNextPage, hasNextPage])
 
     const activities = useMemo(() => {
-        if (data?.pages) {
+        if (data && data.pages?.length > 0) {
             const remoteActivities =
                 data.pages
                     .flatMap(page => page.data)
                     .map(event => createActivityFromIndexedHistoryEvent(event, selectedAccount.address, network)) || []
 
             if (localActivities.length > 0 && remoteActivities.length > 0) {
-                const startingTimestamp =
-                    remoteActivities.length > 0
-                        ? remoteActivities[remoteActivities.length - 1].timestamp
-                        : Number.MAX_SAFE_INTEGER
+                const remoteTimestamps = remoteActivities.map(act => act.timestamp)
+                const startingTimestamp = Math.min(...remoteTimestamps)
 
-                const endingTimestano = remoteActivities.length > 0 ? remoteActivities[0].timestamp : 0
+                const localActivitiesByTimsstamp = localActivities.filter(act => {
+                    return act.timestamp >= startingTimestamp
+                })
 
-                const localActivitiesByTimsstamp = localActivities.filter(
-                    act => act.timestamp >= startingTimestamp && act.timestamp <= endingTimestano,
-                )
-
-                const localActivitiesByTxId = localActivitiesByTimsstamp.map(act => act.txId)
+                const remoteActivitiesByTxId = remoteActivities.map(act => act.txId)
                 const localActivitiesNotListed: Activity[] = []
+                const localActivitiesTxIdToBeRemoved: string[] = []
 
-                remoteActivities.forEach(act => {
-                    if (!localActivitiesByTxId.includes(act.txId)) {
+                localActivitiesByTimsstamp.forEach(act => {
+                    if (
+                        ActivityUtils.isTransactionActivity(act) &&
+                        act.txId &&
+                        !remoteActivitiesByTxId.includes(act.txId)
+                    ) {
+                        localActivitiesNotListed.push(act)
+                        localActivitiesTxIdToBeRemoved.push(act.txId)
+                    }
+
+                    if (!ActivityUtils.isTransactionActivity(act)) {
                         localActivitiesNotListed.push(act)
                     }
                 })
@@ -92,11 +99,12 @@ export const useAccountActivities = () => {
 
             return remoteActivities
         } else if (!isFetching && !isLoading && !isFetchingNextPage) {
+            sortActivitiesByTimestamp(localActivities)
             return localActivities
         }
 
         return []
-    }, [data?.pages, isFetching, isFetchingNextPage, isLoading, localActivities, network, selectedAccount.address])
+    }, [data, isFetching, isFetchingNextPage, isLoading, localActivities, network, selectedAccount.address])
 
     const result = useMemo(
         () => ({

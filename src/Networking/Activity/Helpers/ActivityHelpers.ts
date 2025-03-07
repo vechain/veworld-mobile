@@ -3,18 +3,30 @@ import { Transaction } from "thor-devkit"
 import { chainTagToGenesisId, DIRECTIONS, ERROR_EVENTS, VET } from "~Constants"
 import {
     Activity,
+    ActivityEvent,
     ActivityStatus,
     ActivityType,
+    B3trActionActivity,
+    B3trClaimRewardActivity,
+    B3trProposalSupportActivity,
+    B3trProposalVoteActivity,
+    B3trSwapB3trToVot3Activity,
+    B3trSwapVot3ToB3trActivity,
+    B3trUpgradeGmActivity,
+    B3trXAllocationVoteActivity,
     ConnectedAppActivity,
     DappTxActivity,
     FungibleTokenActivity,
+    IndexedHistoryEvent,
+    Network,
     NonFungibleTokenActivity,
     SignCertActivity,
+    SwapActivity,
     TypedData,
     TypedDataActivity,
 } from "~Model"
 import { EventTypeResponse } from "~Networking"
-import { ActivityUtils, debug, TransactionUtils } from "~Utils"
+import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
 
 /**
  * Creates a base activity from a given transaction.
@@ -190,6 +202,7 @@ export const createIncomingTransfer = (
  * @returns A new connected app activity object.
  */
 export const createConnectedAppActivity = (
+    network: Network,
     from: string,
     name?: string,
     linkUrl?: string,
@@ -206,6 +219,7 @@ export const createConnectedAppActivity = (
         linkUrl,
         description,
         methods,
+        genesisId: network.genesis.id,
     }
 }
 
@@ -220,6 +234,7 @@ export const createConnectedAppActivity = (
  * @returns A new sign certificate activity object.
  */
 export const createSignCertificateActivity = (
+    network: Network,
     from: string,
     name?: string,
     linkUrl?: string,
@@ -236,6 +251,7 @@ export const createSignCertificateActivity = (
         linkUrl,
         content,
         purpose,
+        genesisId: network.genesis.id,
     }
 }
 
@@ -247,7 +263,12 @@ export const createSignCertificateActivity = (
  * @param content - The typed data
  * @returns A new sign typed data activity object.
  */
-export const createSingTypedDataActivity = (from: string, sender: string, content: TypedData): TypedDataActivity => {
+export const createSingTypedDataActivity = (
+    network: Network,
+    from: string,
+    sender: string,
+    content: TypedData,
+): TypedDataActivity => {
     return {
         from,
         id: uuid.v4().toString(),
@@ -257,6 +278,7 @@ export const createSingTypedDataActivity = (from: string, sender: string, conten
         typedData: content,
         sender,
         clauses: [],
+        genesisId: network.genesis.id,
     }
 }
 
@@ -488,4 +510,188 @@ const processActivity = (
 
 export const sortActivitiesByTimestamp = (activities: Activity[]) => {
     return activities.sort((a, b) => b.timestamp - a.timestamp)
+}
+
+export const createActivityFromIndexedHistoryEvent = (
+    event: IndexedHistoryEvent,
+    selectedAccountAddress: string,
+    network: Network,
+): Activity => {
+    const {
+        origin,
+        to,
+        id,
+        txId,
+        blockNumber,
+        eventName,
+        blockTimestamp,
+        gasPayer,
+        inputValue,
+        outputValue,
+        contractAddress,
+        tokenId,
+        value,
+        inputToken,
+        outputToken,
+        appId,
+        proof,
+        support,
+        votePower,
+        voteWeight,
+        proposalId,
+        roundId,
+        appVotes,
+        oldLevel,
+        newLevel,
+    } = event
+
+    const isTransaction =
+        eventName === ActivityEvent.TRANSFER_FT ||
+        eventName === ActivityEvent.TRANSFER_VET ||
+        eventName === ActivityEvent.TRANSFER_SF
+
+    const baseActivity: Activity = {
+        from: origin ?? "",
+        to: to ? [to] : [],
+        id: id,
+        txId: txId,
+        blockNumber: blockNumber,
+        genesisId: network.genesis.id,
+        isTransaction: isTransaction,
+        type: eventName,
+        timestamp: blockTimestamp * 1000,
+        gasPayer: gasPayer,
+        delegated: origin !== gasPayer,
+    }
+
+    const direction = AddressUtils.compareAddresses(origin, selectedAccountAddress) ? DIRECTIONS.UP : DIRECTIONS.DOWN
+
+    switch (eventName) {
+        case ActivityEvent.TRANSFER_SF:
+        case ActivityEvent.TRANSFER_FT: {
+            return {
+                ...baseActivity,
+                amount: value ?? "0x0",
+                tokenAddress: contractAddress,
+                direction: direction,
+            } as FungibleTokenActivity
+        }
+        case ActivityEvent.TRANSFER_VET: {
+            const amount = direction === DIRECTIONS.UP ? outputValue : inputValue
+
+            return {
+                ...baseActivity,
+                amount: amount ?? "0x0",
+                tokenAddress: VET.address,
+                direction: direction,
+            } as FungibleTokenActivity
+        }
+        case ActivityEvent.TRANSFER_NFT: {
+            return {
+                ...baseActivity,
+                tokenId: tokenId,
+                contractAddress: contractAddress,
+                direction: direction,
+            } as NonFungibleTokenActivity
+        }
+        case ActivityEvent.SWAP_FT_TO_VET: {
+            return {
+                ...baseActivity,
+                isTransaction: true,
+                outputToken: VET.address,
+                inputToken: inputToken,
+                inputValue: inputValue,
+                outputValue: outputValue,
+            } as SwapActivity
+        }
+        case ActivityEvent.SWAP_VET_TO_FT: {
+            return {
+                ...baseActivity,
+                isTransaction: true,
+                inputToken: inputToken,
+                outputToken: VET.address,
+                inputValue: inputValue,
+                outputValue: outputValue,
+            } as SwapActivity
+        }
+        case ActivityEvent.SWAP_FT_TO_FT: {
+            return {
+                ...baseActivity,
+                isTransaction: true,
+                inputToken: inputToken,
+                outputToken: outputToken,
+                inputValue: inputValue,
+                outputValue: outputValue,
+            } as SwapActivity
+        }
+        case ActivityEvent.B3TR_ACTION: {
+            return {
+                ...baseActivity,
+                to: to ? [to] : [],
+                value: value ?? "0x0",
+                appId: appId,
+                proof: proof,
+            } as B3trActionActivity
+        }
+        case ActivityEvent.B3TR_PROPOSAL_VOTE: {
+            return {
+                ...baseActivity,
+                prposalId: proposalId,
+                support: support,
+                votePower: votePower,
+                voteWeight: voteWeight,
+            } as B3trProposalVoteActivity
+        }
+        case ActivityEvent.B3TR_XALLOCATION_VOTE: {
+            return {
+                ...baseActivity,
+                eventName: ActivityEvent.B3TR_XALLOCATION_VOTE,
+                roundId: roundId,
+                appVotes: appVotes,
+            } as B3trXAllocationVoteActivity
+        }
+        case ActivityEvent.B3TR_CLAIM_REWARD: {
+            return {
+                ...baseActivity,
+                eventName: ActivityEvent.B3TR_XALLOCATION_VOTE,
+                value: value ?? "0x0",
+                roundId: roundId,
+            } as B3trClaimRewardActivity
+        }
+        case ActivityEvent.B3TR_UPGRADE_GM: {
+            return {
+                ...baseActivity,
+                oldLevel: oldLevel,
+                newLevel: newLevel,
+            } as B3trUpgradeGmActivity
+        }
+        case ActivityEvent.B3TR_SWAP_B3TR_TO_VOT3: {
+            return {
+                ...baseActivity,
+                value: value,
+            } as B3trSwapB3trToVot3Activity
+        }
+        case ActivityEvent.B3TR_SWAP_VOT3_TO_B3TR: {
+            return {
+                ...baseActivity,
+                value: value,
+            } as B3trSwapVot3ToB3trActivity
+        }
+        case ActivityEvent.B3TR_PROPOSAL_SUPPORT: {
+            return {
+                ...baseActivity,
+                value: value,
+                proposalId: proposalId,
+            } as B3trProposalSupportActivity
+        }
+        case ActivityEvent.UNKNOWN_TX:
+        default: {
+            return {
+                ...baseActivity,
+                type: ActivityType.DAPP_TRANSACTION,
+                name: "",
+                linkUrl: "",
+            } as DappTxActivity
+        }
+    }
 }

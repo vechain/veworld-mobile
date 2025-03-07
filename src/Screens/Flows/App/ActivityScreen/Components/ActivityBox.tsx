@@ -322,7 +322,7 @@ const DAppSignCertBox = ({ activity, onPress }: DAppSignCert) => {
     const { LL } = useI18nContext()
     const time = moment(activity.timestamp).format("HH:mm")
     const title = LL.DAPP_SIGN_CERT()
-    const description = activity.name
+    const description = activity?.name
 
     const onPressHandler = () => {
         onPress(activity)

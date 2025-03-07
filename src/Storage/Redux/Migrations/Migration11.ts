@@ -2,7 +2,7 @@ import { PersistedState } from "redux-persist/es/types"
 import { ERROR_EVENTS } from "~Constants"
 import { Activity, ActivityType } from "~Model"
 import { debug } from "~Utils"
-import { ActivitiesSliceState } from "../Slices"
+import { AccountActivities, ActivityState } from "../Types"
 
 const OldActivityType = {
     VET_TRANSFER: "VET_TRANSFER",
@@ -28,7 +28,7 @@ const mapOldActivityTypeToNewActivityType = (activity: Activity) => {
 
 export const Migration11 = (state: PersistedState): PersistedState => {
     // @ts-ignore
-    const currentState: ActivitiesSliceState = state.activities
+    const currentState: Record<string, AccountActivities> = state.activities
 
     //We don't have any state, so return immediately
     if (Object.keys(currentState).length === 0) {
@@ -36,33 +36,31 @@ export const Migration11 = (state: PersistedState): PersistedState => {
         return state
     }
 
-    const newState: ActivitiesSliceState = {}
+    const newState: ActivityState = {
+        activities: [],
+    }
 
     const addresses = Object.keys(currentState)
 
     addresses.forEach(address => {
-        const transactionActivitiesMainnet = currentState[address].transactionActivitiesMainnet.map(
-            mapOldActivityTypeToNewActivityType,
-        )
+        const transactionActivitiesMainnet = currentState[address].transactionActivitiesMainnet
+        transactionActivitiesMainnet.map(activity => {
+            mapOldActivityTypeToNewActivityType(activity)
+            newState.activities.push(activity)
+        })
 
-        const transactionActivitiesTestnet = currentState[address].transactionActivitiesTestnet.map(
-            mapOldActivityTypeToNewActivityType,
-        )
+        const transactionActivitiesTestnet = currentState[address].transactionActivitiesTestnet
+        transactionActivitiesTestnet.map(activity => {
+            mapOldActivityTypeToNewActivityType(activity)
+            newState.activities.push(activity)
+        })
 
-        const nonTransactionActivities = currentState[address].nonTransactionActivities.map(
-            mapOldActivityTypeToNewActivityType,
-        )
-
-        if (!newState[address]) {
-            newState[address] = {
-                transactionActivitiesMainnet,
-                transactionActivitiesTestnet,
-                nonTransactionActivities,
-            }
-        }
+        const nonTransactionActivities = currentState[address].nonTransactionActivities
+        nonTransactionActivities.map(activity => {
+            mapOldActivityTypeToNewActivityType(activity)
+            newState.activities.push(activity)
+        })
     })
-
-    debug(ERROR_EVENTS.SECURITY, "=== ** Migrated State ** ===", newState.showJailbrokeWarning)
 
     return {
         ...state,
