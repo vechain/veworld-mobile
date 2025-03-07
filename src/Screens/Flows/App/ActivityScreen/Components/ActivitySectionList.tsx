@@ -28,7 +28,7 @@ import {
     VeBetterDaoDapp,
 } from "~Model"
 import { Routes } from "~Navigation"
-import { selectOfficialTokens, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { useMonthTranslation } from "../Hooks"
 import { ActivityBox } from "./ActivityBox"
@@ -67,8 +67,6 @@ const Item = ({
     veBetterDaoDapps: VeBetterDaoDapp[]
     onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
 }) => {
-    const tokens = useAppSelector(selectOfficialTokens)
-
     const activityToRender = activity
 
     switch (activity.type) {
@@ -99,7 +97,6 @@ const Item = ({
                 <ActivityBox.DAppTransaction
                     key={activityToRender.id}
                     activity={activityToRender as DappTxActivity}
-                    tokens={tokens}
                     onPress={onPress}
                 />
             )

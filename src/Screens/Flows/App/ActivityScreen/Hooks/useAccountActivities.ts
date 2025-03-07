@@ -1,8 +1,8 @@
 import { useIsFocused } from "@react-navigation/native"
 import { InfiniteData, useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo, useState } from "react"
-import { createActivityFromIndexedHistoryEvent } from "~Model"
-import { fetchIndexedHistoryEvent } from "~Networking"
+import { Activity, createActivityFromIndexedHistoryEvent } from "~Model"
+import { fetchIndexedHistoryEvent, sortActivitiesByTimestamp } from "~Networking"
 import {
     selectAllLocalActivitiesByAccountAddressAndCurrentNetwork,
     selectSelectedAccount,
@@ -76,9 +76,18 @@ export const useAccountActivities = () => {
                     act => act.timestamp >= startingTimestamp && act.timestamp <= endingTimestano,
                 )
 
-                const allActivities = remoteActivities.concat(localActivitiesByTimsstamp)
-                const allActivitiesctivitiesSortedByTimestamp = allActivities.sort((a, b) => b.timestamp - a.timestamp)
-                return allActivitiesctivitiesSortedByTimestamp
+                const localActivitiesByTxId = localActivitiesByTimsstamp.map(act => act.txId)
+                const localActivitiesNotListed: Activity[] = []
+
+                remoteActivities.forEach(act => {
+                    if (!localActivitiesByTxId.includes(act.txId)) {
+                        localActivitiesNotListed.push(act)
+                    }
+                })
+
+                const allActivities = remoteActivities.concat(localActivitiesNotListed)
+                sortActivitiesByTimestamp(allActivities)
+                return allActivities
             }
 
             return remoteActivities

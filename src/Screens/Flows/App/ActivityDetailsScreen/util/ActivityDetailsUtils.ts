@@ -22,7 +22,7 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
         case ActivityType.B3TR_SWAP_VOT3_TO_B3TR:
             return LL.TOKEN_CONVERSION()
         case ActivityType.DAPP_TRANSACTION:
-            return LL.DAPP_TRANSACTION()
+            return activity.isTransaction ? LL.DAPP_TRANSACTION() : LL.DAPP_CONNECTION()
         case ActivityType.B3TR_ACTION:
             return LL.B3TR_ACTION()
         case ActivityType.B3TR_CLAIM_REWARD:

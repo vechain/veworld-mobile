@@ -7,7 +7,13 @@ export const fetchIndexedHistoryEvent = async (address: string, page: number, ne
     debug(ERROR_EVENTS.ACTIVITIES, `Fetching activities for ${address}`)
 
     try {
-        const endpoint = getIndexedHistoryEventOrigin(networkType.type, address, page, DEFAULT_PAGE_SIZE, ORDER.DESC)
+        const endpoint = getIndexedHistoryEventOrigin({
+            networkType: networkType.type,
+            address,
+            page,
+            pageSize: DEFAULT_PAGE_SIZE,
+            direction: ORDER.DESC,
+        })
         return await fetchFromEndpoint<FetchActivitiesResponse>(endpoint)
     } catch (error) {
         throw new Error(`Failed to fetch activities: ${error}`)

@@ -4,6 +4,7 @@ import { Activity, ActivityStatus, NETWORK_TYPE } from "~Model"
 import { RootState } from "../Types"
 import { selectSelectedAccount } from "./Account"
 import { selectSelectedNetwork } from "./Network"
+import { sortActivitiesByTimestamp } from "~Networking"
 
 export const selectActivitiesState = (state: RootState) => state.activities
 
@@ -102,8 +103,8 @@ export const selectAllLocalActivitiesByAccountAddressAndCurrentNetwork = createS
             )
 
             const allActivities = transactionActivities.concat(nonTransacitonActivitesByCurrentNetwork)
-            const allActivitiesctivitiesByTimestamp = allActivities.sort((a, b) => b.timestamp - a.timestamp)
-            return allActivitiesctivitiesByTimestamp
+            sortActivitiesByTimestamp(allActivities)
+            return allActivities
         }
 
         return []

@@ -76,18 +76,29 @@ export const NFTS_OWNED_PER_CONTRACT = (
  *
  * @returns URL to fetch all activities associated with a specified address
  */
-export const getIndexedHistoryEventOrigin = (
-    networkType: NETWORK_TYPE,
-    address: string,
-    page: number,
-    pageSize: number = 20,
-    direction: ORDER = ORDER.DESC,
-    eventName: ActivityEvent[] = [],
-    searchBy: ActivitySearchBy[] = [],
-    contractAddress: string = "",
-    before: number = 0,
-    after: number = 0,
-) => {
+export const getIndexedHistoryEventOrigin = ({
+    networkType,
+    address,
+    page,
+    pageSize = 20,
+    direction = ORDER.DESC,
+    eventName = [],
+    searchBy = [],
+    contractAddress = "",
+    before = 0,
+    after = 0,
+}: {
+    networkType: NETWORK_TYPE
+    address: string
+    page: number
+    pageSize?: number
+    direction?: ORDER
+    eventName?: ActivityEvent[]
+    searchBy?: ActivitySearchBy[]
+    contractAddress?: string
+    before?: number
+    after?: number
+}) => {
     const baseUrl =
         networkType === NETWORK_TYPE.MAIN
             ? process.env.REACT_APP_INDEXER_MAINNET_URL

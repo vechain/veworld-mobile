@@ -485,3 +485,7 @@ const processActivity = (
             return enrichActivityWithDappData(activity, appName, appUrl)
     }
 }
+
+export const sortActivitiesByTimestamp = (activities: Activity[]) => {
+    return activities.sort((a, b) => b.timestamp - a.timestamp)
+}
