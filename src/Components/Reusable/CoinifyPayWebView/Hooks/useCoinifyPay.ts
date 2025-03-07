@@ -22,7 +22,7 @@ export const useCoinifyPay = ({ target }: { target: "sell" | "buy" }) => {
         else return { transferInMedia: "blockchain", transferOut: "bank" }
     }, [target])
 
-    const objToQueryString = useCallback((params: GenerateOnRampUrlParams) => {
+    const objToQueryString = useCallback((params: Record<string, string | number | undefined>) => {
         return Object.keys(params)
             .filter(key => !!key) // Remove undefined keys
             .map(
@@ -43,7 +43,23 @@ export const useCoinifyPay = ({ target }: { target: "sell" | "buy" }) => {
         [coinifyBaseUrl, generatePaymentTypes, objToQueryString],
     )
 
+    const generateOffRampURL = useCallback(
+        ({ cryptoCurrencies = "VET", fiatCurrencies = "EUR,USD", ...params }: GenerateOnRampUrlParams) => {
+            const paymentTypes = generatePaymentTypes()
+            const searchParams = objToQueryString({
+                fiatCurrencies,
+                cryptoCurrencies,
+                ...paymentTypes,
+                ...params,
+                targetPage: "sell",
+            })
+            return coinifyBaseUrl + `?partnerId=${process.env.REACT_APP_COINIFY_PARTNER_ID}&` + searchParams
+        },
+        [coinifyBaseUrl, generatePaymentTypes, objToQueryString],
+    )
+
     return {
         generateOnRampURL,
+        generateOffRampURL,
     }
 }

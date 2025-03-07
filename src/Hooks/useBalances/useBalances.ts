@@ -1,7 +1,7 @@
 import { useMemo } from "react"
-import { BalanceUtils } from "~Utils"
-import { Balance, FungibleToken } from "~Model"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
+import { Balance, FungibleToken } from "~Model"
+import { BalanceUtils } from "~Utils"
 
 type Props = {
     token: FungibleToken & { balance?: Balance }

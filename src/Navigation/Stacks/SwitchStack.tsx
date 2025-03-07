@@ -1,8 +1,13 @@
-import React, { useMemo } from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { TabStack } from "~Navigation/Tabs"
-import { OnboardingStack } from "./OnboardingStack"
+import { PendingRequestTypes } from "@walletconnect/types"
+import React, { useMemo } from "react"
+import { Certificate, Transaction } from "thor-devkit"
+import { useWalletStatus } from "~Components"
+import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
+import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
+import { TransactionRequest, TypeDataRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
+import { TabStack } from "~Navigation/Tabs"
 import {
     BlackListedCollectionsScreen,
     ChooseBackupDetailsPassword,
@@ -13,18 +18,14 @@ import {
     SignCertificateScreen,
     SignDataMessageScreen,
 } from "~Screens"
-import { PendingRequestTypes } from "@walletconnect/types"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
-import { TransferEventListener } from "../../TransferEventListener"
-import { Certificate, Transaction } from "thor-devkit"
-import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
 import { LedgerSignCertificate, LedgerSignTransaction } from "~Screens/Flows/App/LedgerScreen"
-import { useWalletStatus } from "~Components"
-import { BuyStack } from "./BuyStack"
-import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
 import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMessage"
-import { TypeDataRequest, TransactionRequest } from "~Model/DApp"
-import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
+import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
+import { TransferEventListener } from "../../TransferEventListener"
+import { BuyStack } from "./BuyStack"
+import { OnboardingStack } from "./OnboardingStack"
+import { SellStack } from "./SellStack"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
@@ -74,6 +75,7 @@ export type RootStackParamListSwitch = {
 
     [Routes.ICLOUD_DETAILS_BACKUP]: { deviceToBackup?: LocalDevice; backupDetails: string[] | string }
     [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
+    [Routes.SELL_FLOW]: undefined
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -149,6 +151,14 @@ export const SwitchStack = () => {
                         <Switch.Screen
                             name={Routes.BUY_FLOW}
                             component={BuyStack}
+                            options={{
+                                presentation: "modal",
+                            }}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.SELL_FLOW}
+                            component={SellStack}
                             options={{
                                 presentation: "modal",
                             }}

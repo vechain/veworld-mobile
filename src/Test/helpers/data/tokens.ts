@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
-import { FungibleTokenWithBalance, NFTMediaType, NonFungibleToken, Token } from "~Model"
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { TokenWithCompleteInfo } from "~Hooks"
+import { FungibleTokenWithBalance, NFTMediaType, NonFungibleToken, Token } from "~Model"
 
 export const VETWithBalance: FungibleTokenWithBalance = {
     ...VET,
@@ -54,6 +54,7 @@ export const B3TRWithCompleteInfo: TokenWithCompleteInfo = {
     chartData: undefined,
     exchangeRate: undefined,
     tokenInfo: undefined,
+    balance: B3TRWithBalance.balance,
 }
 
 export const VOT3WithCompleteInfo: TokenWithCompleteInfo = {
@@ -67,6 +68,7 @@ export const VOT3WithCompleteInfo: TokenWithCompleteInfo = {
     chartData: undefined,
     exchangeRate: undefined,
     tokenInfo: undefined,
+    balance: VOT3WithBalance.balance,
 }
 
 const icon =
