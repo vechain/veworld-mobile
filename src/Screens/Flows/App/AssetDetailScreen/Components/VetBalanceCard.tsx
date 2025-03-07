@@ -138,20 +138,6 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 iconOnly: true,
                 testID: "moreOptionsButton",
             },
-            sell: {
-                name: LL.BTN_SELL(),
-                action: () => {
-                    nav.navigate(Routes.SELL_FLOW)
-                },
-                icon: (
-                    <BaseIcon
-                        size={16}
-                        color={theme.colors.actionBanner.buttonTextSecondary}
-                        name="icon-minus-circle"
-                    />
-                ),
-                testID: "sellButton",
-            },
         }),
         [
             LL,

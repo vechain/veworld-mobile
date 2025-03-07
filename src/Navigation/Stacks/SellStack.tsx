@@ -17,7 +17,7 @@ export const SellStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator screenOptions={{ headerShown: false, animation }}>
+        <Navigator screenOptions={{ headerShown: false, animation }} initialRouteName={Routes.SELL_WEBVIEW}>
             <Group>
                 <Screen
                     name={Routes.SELL_WEBVIEW}
