@@ -43,7 +43,7 @@ export const URLBar = () => {
 
     const animatedStyles = useAnimatedStyle(() => ({
         transform: [{ translateY: showToolbars ? withTiming(0) : withTiming(-50) }],
-        height: showToolbars ? withTiming(40) : withTiming(0),
+        height: showToolbars ? withTiming(48) : withTiming(0),
         opacity: showToolbars ? withTiming(1) : withTiming(0),
     }))
 
@@ -54,8 +54,8 @@ export const URLBar = () => {
                 <BaseIcon
                     haptics="Light"
                     size={20}
-                    style={[styles.icon]}
-                    name={isSecure ? "lock-check-outline" : "lock-open-outline"}
+                    style={styles.iconLeft}
+                    name={isSecure ? "icon-lock" : "icon-unlock"}
                     color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
                 />
 
@@ -76,10 +76,11 @@ export const URLBar = () => {
                 </BaseView>
 
                 <BaseIcon
+                    testID="closeButton"
                     action={navBackToDiscover}
                     haptics="Light"
-                    style={[styles.icon]}
-                    name="close"
+                    style={[styles.iconRight]}
+                    name="icon-x"
                     color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
                 />
             </BaseView>
@@ -90,11 +91,12 @@ export const URLBar = () => {
 const styles = StyleSheet.create({
     animatedContainer: {
         opacity: 1,
+        alignItems: "center",
     },
     inputContainer: {
         width: "100%",
-        height: 40,
-        paddingHorizontal: 20,
+        height: 48,
+        paddingHorizontal: 16,
         alignItems: "center",
         flexDirection: "row",
         justifyContent: "space-between",
@@ -104,10 +106,10 @@ const styles = StyleSheet.create({
         marginHorizontal: 10, // adds space around the text
         marginVertical: 10,
     },
-    pressableIcon: {
-        margin: 10,
+    iconLeft: {
+        marginRight: 10,
     },
-    icon: {
-        marginHorizontal: 10,
+    iconRight: {
+        marginLeft: 10,
     },
 })

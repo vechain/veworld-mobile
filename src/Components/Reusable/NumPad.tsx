@@ -1,9 +1,7 @@
 import { Pressable, StyleSheet } from "react-native"
 import React, { useCallback } from "react"
 import { BaseIcon, BaseText, BaseView } from "~Components"
-import { useTheme, useThemedStyles } from "~Hooks"
-import { ColorThemeType, valueToHP } from "~Constants"
-import { widthPercentageToDP as wp } from "react-native-responsive-screen"
+import { useTheme } from "~Hooks"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
 
@@ -13,8 +11,6 @@ type Props = {
 }
 
 export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
-
     const handleOnDigitPress = useCallback(
         (digit: string) => () => {
             onDigitPress(digit)
@@ -25,22 +21,25 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
     const theme = useTheme()
 
     return (
-        <BaseView flexDirection="row" flexWrap="wrap" w={100}>
-            {numPad.map((digit, index) => {
+        <BaseView flexDirection="row" flexWrap="wrap" justifyContent="center">
+            {numPad.map(digit => {
                 const isDeleteKey = digit === "canc"
                 const onPress = isDeleteKey ? onDigitDelete : handleOnDigitPress(digit)
                 return (
-                    <BaseView style={styles.width} key={index}>
+                    <BaseView style={baseStyles.width} key={digit}>
                         {digit !== "blank" ? (
                             <Pressable
-                                style={({ pressed }) => [styles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
+                                style={({ pressed }) => [baseStyles.pressable, { opacity: pressed ? 0.5 : 1.0 }]}
                                 onPress={onPress}>
                                 {digit !== "canc" ? (
-                                    <BaseText typographyFont="largeTitleAccent" alignContainer="center">
+                                    <BaseText
+                                        color={theme.colors.numberPad}
+                                        typographyFont="biggerTitleMedium"
+                                        alignContainer="center">
                                         {digit}
                                     </BaseText>
                                 ) : (
-                                    <BaseIcon name="backspace-outline" color={theme.colors.text} />
+                                    <BaseIcon name="icon-delete" color={theme.colors.text} />
                                 )}
                             </Pressable>
                         ) : null}
@@ -51,20 +50,19 @@ export const NumPad = ({ onDigitPress, onDigitDelete }: Props) => {
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        width: {
-            width: "33%",
-            justifyContent: "center",
-            alignItems: "center",
-            paddingVertical: valueToHP[22],
-        },
-        pressable: {
-            width: wp("18%"),
-            height: wp("18%"),
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: theme.colors.card,
-            borderRadius: wp("9%"),
-        },
-    })
+const baseStyles = StyleSheet.create({
+    width: {
+        width: "30%",
+        paddingHorizontal: 16,
+        marginVertical: 8,
+        alignItems: "center",
+    },
+    pressable: {
+        width: 80,
+        height: 80,
+        padding: 8,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 40,
+    },
+})

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseSpacer, BaseText, BaseView, BaseBottomSheet, BaseIcon, BaseTouchableBox } from "~Components"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useTheme, useThemedStyles } from "~Hooks"
 import { AnalyticsEvent, ColorThemeType, DerivationPath } from "~Constants"
@@ -56,7 +56,9 @@ export const SelectDerivationPathBottomSheet = React.forwardRef<BottomSheetModal
                         {DerivationPath.VET}
                     </BaseText>
                 </BaseView>
-                {derivationPath === DerivationPath.VET && <BaseIcon name="check" size={24} color={theme.colors.text} />}
+                {derivationPath === DerivationPath.VET && (
+                    <BaseIcon name="icon-check" size={24} color={theme.colors.text} />
+                )}
             </BaseTouchableBox>
 
             <BaseSpacer height={16} />
@@ -74,7 +76,9 @@ export const SelectDerivationPathBottomSheet = React.forwardRef<BottomSheetModal
                         {DerivationPath.ETH}
                     </BaseText>
                 </BaseView>
-                {derivationPath === DerivationPath.ETH && <BaseIcon name="check" size={24} color={theme.colors.text} />}
+                {derivationPath === DerivationPath.ETH && (
+                    <BaseIcon name="icon-check" size={24} color={theme.colors.text} />
+                )}
             </BaseTouchableBox>
             <BaseSpacer height={16} />
         </BaseBottomSheet>

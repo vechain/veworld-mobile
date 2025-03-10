@@ -6,7 +6,7 @@ import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-we
 import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
-import { useI18nContext } from "~i18n"
+import { Locales, useI18nContext } from "~i18n"
 import {
     AccountWithDevice,
     CertificateRequest,
@@ -41,6 +41,7 @@ type ContextType = {
     postMessage: (message: WindowResponse) => void
     onNavigationStateChange: (navState: WebViewNavigation) => void
     injectVechainScript: string
+    originWhitelist: string[]
     navigationCanGoBack: boolean
     canGoBack: boolean
     canGoForward: boolean
@@ -75,6 +76,8 @@ type Props = {
 
 export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
 
+const ORIGIN_WHITELIST = ["http://", "https://", "about:*", "blob:"]
+
 export const InAppBrowserProvider = ({ children }: Props) => {
     const nav = useNavigation()
 
@@ -82,7 +85,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
     const networks = useAppSelector(selectNetworks)
     const accounts = useAppSelector(selectAccounts)
     const { onSetSelectedAccount } = useSetSelectedAccount()
-    const { LL } = useI18nContext()
+    const { LL, locale } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
     const {
@@ -679,10 +682,11 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             onMessage,
             onScroll,
             postMessage,
-            injectVechainScript: injectedJs,
+            injectVechainScript: injectedJs({ locale }),
             onNavigationStateChange,
             navigationCanGoBack: nav.canGoBack(),
             canGoBack,
+            originWhitelist: ORIGIN_WHITELIST,
             canGoForward,
             closeInAppBrowser,
             goBack,
@@ -704,6 +708,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         onMessage,
         onScroll,
         postMessage,
+        locale,
         onNavigationStateChange,
         nav,
         canGoBack,
@@ -751,7 +756,7 @@ export const useInAppBrowser = () => {
 //     error: (log, data1, data2) => consoleLog('error', log, data1, data2),
 // };
 
-const injectedJs = `
+const injectedJs = ({ locale }: { locale: Locales }) => `
 
 function newResponseHandler(id) {
     return new Promise((resolve, reject) => {
@@ -779,6 +784,7 @@ function generateRandomId() {
 window.vechain = {
     isVeWorld: true,
     isInAppBrowser: true,
+    acceptLanguage: "${locale}",
     
     newConnexSigner: function (genesisId) {
         return {

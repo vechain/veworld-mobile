@@ -1,14 +1,13 @@
 import { Dimensions, StyleSheet, ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseCard, BaseText, BaseView } from "~Components"
+import { BaseCard, BaseText, BaseView, FiatBalance } from "~Components"
 import { useTheme, useThemedStyles, TokenWithCompleteInfo, useBalances } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { TokenImage } from "../TokenImage"
-import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 
 type OfficialTokenCardProps = {
     token: FungibleToken
@@ -34,15 +33,14 @@ export const OfficialTokenCard = memo(
         const { LL } = useI18nContext()
 
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
+        const { formatValue } = useFormatFiat()
 
         const { tokenInfo } = tokenWithInfo
         const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
 
         const change24h =
             (isPositive24hChange ? "+" : "") +
-            BigNutils(tokenInfo?.market_data?.price_change_percentage_24h ?? 0)
-                .toHuman(0)
-                .decimals(2).toString +
+            formatValue(tokenInfo?.market_data?.price_change_percentage_24h ?? 0) +
             "%"
 
         const { tokenUnitBalance } = useBalances({ token, exchangeRate: tokenWithInfo.exchangeRate })
@@ -57,13 +55,7 @@ export const OfficialTokenCard = memo(
             <BaseCard onPress={action} containerStyle={[styles.container, style]} testID={symbol}>
                 <BaseView flexDirection="row" justifyContent="space-between">
                     <BaseView w={14}>
-                        <TokenImage
-                            icon={token.icon}
-                            height={iconHeight}
-                            width={iconWidth}
-                            tokenAddress={token.address}
-                            symbol={token.symbol}
-                        />
+                        <TokenImage icon={token.icon} height={iconHeight} width={iconWidth} symbol={token.symbol} />
                     </BaseView>
                     <BaseView w={42}>
                         <BaseText typographyFont="buttonPrimary" ellipsizeMode="tail" numberOfLines={1}>

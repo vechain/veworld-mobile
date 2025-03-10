@@ -12,6 +12,7 @@ import { LongPressProvider } from "../LongPressProvider"
 import ProgressBar from "react-native-progress/Bar"
 import { useSaveMediaToPhotos } from "./Hooks"
 import { ERROR_EVENTS } from "~Constants"
+import { useFocusEffect } from "@react-navigation/native"
 
 type Props = {
     uri?: string
@@ -55,14 +56,16 @@ export const NFTMedia = memo(
             if (!isLoading) return
         }, [isLoading])
 
-        useEffect(() => {
-            if (!uri) return
-            fetchMedia(uri)
-                .then(media => {
-                    setTokenMedia(media)
-                })
-                .catch(e => warn(ERROR_EVENTS.NFT, e))
-        }, [fetchMedia, uri])
+        useFocusEffect(
+            useCallback(() => {
+                if (!uri) return
+                fetchMedia(uri)
+                    .then(media => {
+                        setTokenMedia(media)
+                    })
+                    .catch(e => warn(ERROR_EVENTS.NFT, e))
+            }, [fetchMedia, uri]),
+        )
 
         useEffect(() => {
             if (!isLoading && timeoutRef?.current) {
@@ -93,6 +96,7 @@ export const NFTMedia = memo(
             ) : (
                 <NFTImage
                     {...restProps}
+                    mime={tokenMedia?.mime}
                     uri={tokenMedia?.image}
                     onLoadEnd={onLoadEnd}
                     onError={onError}
@@ -108,6 +112,7 @@ export const NFTMedia = memo(
             themedStyles.imageOpacity,
             tokenMedia?.image,
             tokenMedia?.mediaType,
+            tokenMedia?.mime,
             useNativeControls,
         ])
 

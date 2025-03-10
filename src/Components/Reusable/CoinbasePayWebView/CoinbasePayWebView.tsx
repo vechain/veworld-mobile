@@ -4,7 +4,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import "react-native-url-polyfill/auto"
 import { WebView, WebViewMessageEvent } from "react-native-webview"
-import { BaseActivityIndicator, BaseStatusBar, BaseView } from "~Components"
+import { BaseActivityIndicator, BaseStatusBar, BaseView, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -26,6 +26,7 @@ export const CoinbasePayWebView = ({
     const [isLoading, setIsLoading] = useState(true)
     const styles = baseStyles(isLoading)
     const track = useAnalyticTracking()
+    const { originWhitelist } = useInAppBrowser()
 
     const coinbaseURL = useMemo(() => {
         const options: GenerateOnRampURLOptions = {
@@ -98,6 +99,7 @@ export const CoinbasePayWebView = ({
                 onLoadEnd={handleLoadEnd}
                 onMessage={onMessage}
                 style={styles.webView}
+                originWhitelist={originWhitelist}
             />
         </BaseView>
     )

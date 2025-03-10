@@ -10,9 +10,9 @@ import {
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseView } from "./BaseView"
 import { useBackHandler, useThemedStyles } from "~Hooks"
-import { ColorThemeType, isSmallScreen } from "~Constants"
+import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
-import { BaseSpacer, BaseText } from "~Components"
+import { BaseSpacer, BaseText, BlurBackdropBottomSheet } from "~Components"
 import { LocalizedString } from "typesafe-i18n"
 import { useReducedMotion } from "react-native-reanimated"
 import { isFinite } from "lodash"
@@ -37,6 +37,7 @@ type Props = Omit<BottomSheetModalProps, "snapPoints"> & {
     backHandlerEvent?: BackHandlerEvent
     bottomSafeArea?: boolean
     enablePanDownToClose?: boolean
+    blurBackdrop?: boolean
 }
 
 /**
@@ -73,6 +74,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             backHandlerEvent = BackHandlerEvent.DONT_BLOCK,
             bottomSafeArea = true,
             enablePanDownToClose = true,
+            blurBackdrop = false,
             ...props
         },
         ref,
@@ -97,13 +99,17 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             [dynamicHeight],
         )
 
+        const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
+            return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
+        }, [])
+
         const renderBackdrop = useCallback(
             (props_: BottomSheetBackdropProps) => {
                 return (
                     <BottomSheetBackdrop
                         {...props_}
                         pressBehavior={onPressOutside}
-                        opacity={0.5}
+                        opacity={0.8}
                         disappearsOnIndex={-1}
                     />
                 )
@@ -113,7 +119,11 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         )
 
         const renderHandle = useCallback(
-            (props_: BottomSheetHandleProps) => <BaseView {...props_} style={styles.handleStyle} />,
+            (props_: BottomSheetHandleProps) => (
+                <BaseView style={styles.handleWrapper}>
+                    <BaseView {...props_} style={styles.handleStyle} />
+                </BaseView>
+            ),
             [styles],
         )
 
@@ -168,8 +178,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 ref={ref}
                 enablePanDownToClose={enablePanDownToClose}
                 index={0}
-                backgroundStyle={[styles.backgroundStyle]}
-                backdropComponent={renderBackdrop}
+                backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
+                backdropComponent={blurBackdrop ? renderBlurBackdrop : renderBackdrop}
                 handleComponent={renderHandle}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
@@ -179,7 +189,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 <BaseView
                     w={100}
                     px={noMargins ? 0 : 24}
-                    py={noMargins ? 0 : 24}
+                    pt={noMargins ? 0 : 16}
+                    pb={noMargins ? 0 : 24}
                     flexGrow={1}
                     alignItems="stretch"
                     style={contentStyle}
@@ -206,13 +217,26 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
         },
+        blurBackdrop: {
+            backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT,
+            top: 0,
+            left: 0,
+            justifyContent: "center",
+            alignItems: "center",
+            opacity: 0.5,
+        },
+        handleWrapper: {
+            marginTop: 8,
+            paddingTop: 8,
+            paddingBottom: 16,
+            paddingHorizontal: 8,
+        },
         handleStyle: {
-            width: 60,
+            width: 70,
             height: 4,
             borderRadius: 8,
             backgroundColor: theme.colors.text,
             alignSelf: "center",
-            marginTop: 24,
         },
     })
 

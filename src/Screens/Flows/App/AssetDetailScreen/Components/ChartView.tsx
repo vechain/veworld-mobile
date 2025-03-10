@@ -32,14 +32,10 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
     const _chartView = useMemo(() => {
         if (chartData?.length) {
             return (
-                <BaseView
-                    flexDirection="row"
-                    w={100}
-                    alignItems="flex-end"
-                    style={[styles.container, styles.negativeMargin]}>
-                    <LineChart height={180} width={SCREEN_WIDTH} yGutter={20}>
-                        <LineChart.Path color={theme.colors.primary} width={2}>
-                            <LineChart.Gradient lastGradientValue={0} />
+                <BaseView flexDirection="row" w={100} alignItems="flex-end" style={[styles.container]}>
+                    <LineChart height={150} width={SCREEN_WIDTH - 32} yGutter={30}>
+                        <LineChart.Path color={theme.colors.graphLine} width={2}>
+                            <LineChart.Gradient color={theme.colors.graphGradient} lastGradientValue={0.02} />
                         </LineChart.Path>
 
                         <LineChart.CursorCrosshair onActivated={invokeHaptic} onEnded={invokeHaptic} />
@@ -50,14 +46,14 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
             )
         } else {
             return (
-                <BaseView justifyContent="center" alignItems="center" style={[styles.negativeMargin, styles.container]}>
+                <BaseView justifyContent="center" alignItems="center" style={[styles.container]}>
                     <BaseView>
-                        <LineChart height={180} style={styles.opacity}>
-                            <LineChart.Path color={theme.colors.primary} width={0}>
-                                <LineChart.Gradient lastGradientValue={0} />
+                        <LineChart height={150} style={styles.opacity}>
+                            <LineChart.Path color={theme.colors.graphLine} width={0}>
+                                <LineChart.Gradient color={theme.colors.graphGradient} lastGradientValue={0} />
                             </LineChart.Path>
                         </LineChart>
-                        <BaseView style={styles.absolutePosition} justifyContent="center" alignItems="center">
+                        <BaseView justifyContent="center" alignItems="center">
                             <BaseText typographyFont="bodyBold">
                                 {LL.COMMON_LBL_NO_TOKEN_DATA({
                                     tokenName: token.name,
@@ -71,21 +67,20 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
     }, [
         LL,
         chartData?.length,
-        styles.absolutePosition,
         styles.container,
-        styles.negativeMargin,
         styles.opacity,
-        theme.colors.primary,
+        theme.colors.graphGradient,
+        theme.colors.graphLine,
         token.name,
     ])
 
     return (
         <>
-            <BaseView flexDirection="row" justifyContent="space-between" w={100}>
+            <BaseView flexDirection="row" justifyContent="space-between" w={100} px={16}>
                 <AssetPriceBanner isChartDataLoading={isChartDataLoading} />
             </BaseView>
 
-            <BaseSpacer height={24} />
+            <BaseSpacer height={6} />
 
             {_chartView}
         </>
@@ -95,15 +90,6 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         priceText: { opacity: 0 },
-        container: { maxHeight: 180 },
-        negativeMargin: { marginLeft: -24 },
-        fullWidth: { width: SCREEN_WIDTH - 20 * 2 },
-        absolutePosition: {
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-        },
+        container: { height: 150, paddingHorizontal: 16, overflow: "hidden" },
         opacity: { opacity: 0.4 },
     })

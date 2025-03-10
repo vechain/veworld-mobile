@@ -4,6 +4,7 @@ import Animated, { AnimatedProps, FadeIn, FadeInLeft, FadeInRight, FadeOut } fro
 import { BaseButtonGroupHorizontal, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { GasFeeOption, GasPriceCoefficient, VTHO } from "~Constants"
 import { useTheme } from "~Hooks"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
 import { DelegationType } from "~Model/Delegation"
@@ -34,22 +35,24 @@ export const GasFeeOptions = ({
     const theme = useTheme()
     const { LL } = useI18nContext()
 
+    const { formatValue } = useFormatFiat()
+
     const gasFeeButtons: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
         return [
             {
                 id: String(GasPriceCoefficient.REGULAR),
                 label: LL.SEND_FEE_REGULAR(),
-                icon: "walk",
+                icon: "icon-person-standing",
             },
             {
                 id: String(GasPriceCoefficient.MEDIUM),
                 label: LL.SEND_FEE_MEDIUM(),
-                icon: "car-outline",
+                icon: "icon-car",
             },
             {
                 id: String(GasPriceCoefficient.HIGH),
                 label: LL.SEND_FEE_HIGH(),
-                icon: "airplane",
+                icon: "icon-airplay",
             },
         ]
     }, [LL])
@@ -124,7 +127,10 @@ export const GasFeeOptions = ({
                                     </BaseText>
                                     <BaseSpacer height={4} />
                                     <BaseText color={textColor} typographyFont="smallCaptionMedium">
-                                        {gasFeeOptions[Number(button.id) as GasPriceCoefficient].gasFee} {VTHO.symbol}
+                                        {formatValue(
+                                            parseFloat(gasFeeOptions[Number(button.id) as GasPriceCoefficient].gasFee),
+                                        )}{" "}
+                                        {VTHO.symbol}
                                     </BaseText>
                                 </BaseView>
                             </BaseView>
@@ -160,7 +166,7 @@ function GasWarningView(props: IGasWarningView) {
         <Animated.View {...animatedViewProps}>
             <BaseView flexDirection="row">
                 <BaseIcon
-                    name="alert-circle-outline"
+                    name="icon-alert-circle"
                     color={props.isDelegattion ? theme.colors.success : theme.colors.danger}
                     size={16}
                 />

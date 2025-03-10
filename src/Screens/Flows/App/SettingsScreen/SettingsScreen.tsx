@@ -1,14 +1,23 @@
+import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef } from "react"
-import { BaseCard, BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseView, SelectedNetworkViewer } from "~Components"
+import { StyleSheet } from "react-native"
+import { FlatList } from "react-native-gesture-handler"
+import {
+    AlertCard,
+    BaseSpacer,
+    BaseView,
+    HeaderTitle,
+    Layout,
+    SelectedNetworkViewer,
+    HeaderStyle,
+    useNotifications,
+} from "~Components"
+import { ColorThemeType, isSmallScreen } from "~Constants"
+import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles, useClaimableUsernames } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { StyleSheet } from "react-native"
-import { RowProps, SettingsRow } from "./Components/SettingsRow"
-import { useCheckWalletBackup, useTabBarBottomMargin, useTheme, useThemedStyles } from "~Hooks"
-import { ColorThemeType, isSmallScreen } from "~Constants"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
-import { useScrollToTop } from "@react-navigation/native"
-import { FlatList } from "react-native-gesture-handler"
+import { RowProps, SettingsRow } from "./Components/SettingsRow"
 import SettingsRowDivider, { RowDividerProps } from "./Components/SettingsRowDivider"
 
 type SettingsRowItem = {
@@ -28,38 +37,47 @@ export const SettingsScreen = () => {
     const { LL } = useI18nContext()
     const devFeaturesEnabled = useAppSelector(selectAreDevFeaturesEnabled)
 
-    const { settingsList } = useMemo(() => getLists(LL, devFeaturesEnabled), [devFeaturesEnabled, LL])
+    const { featureEnabled: notificationFeatureEnabled } = useNotifications()
 
+    const { unclaimedAddresses } = useClaimableUsernames()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
     const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const flatSettingListRef = useRef(null)
 
     useScrollToTop(flatSettingListRef)
-    const theme = useTheme()
+
+    const shouldShowBadge = useCallback(
+        (item: SettingsRowItem) => {
+            if (item.screenName === Routes.WALLET_MANAGEMENT) {
+                return Boolean(unclaimedAddresses.length > 0)
+            }
+
+            return false
+        },
+        [unclaimedAddresses],
+    )
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
 
+    const { settingsList } = useMemo(
+        () => getLists(LL, devFeaturesEnabled, notificationFeatureEnabled),
+        [LL, devFeaturesEnabled, notificationFeatureEnabled],
+    )
+
     const renderBackupWarning = useMemo(() => {
         return (
-            <BaseCard containerStyle={themedStyles.cardContainer}>
-                <BaseView w={100}>
-                    <BaseView flexDirection="row">
-                        <BaseIcon name="alert-outline" size={16} color={theme.colors.alertCards.error.icon} />
-                        <BaseSpacer width={8} />
-                        <BaseText typographyFont="bodyMedium" color={theme.colors.alertCards.error.title}>
-                            {"Backup your wallet"}
-                        </BaseText>
-                    </BaseView>
-                    <BaseSpacer height={4} />
-                    <BaseText typographyFont="captionRegular" color={theme.colors.alertDescription} pl={24}>
-                        {"Make sure to backup your recovery phrase and never lose access to your account."}
-                    </BaseText>
-                </BaseView>
-            </BaseCard>
+            <>
+                <AlertCard
+                    title={LL.ALERT_TITLE_BACKUP_YOUR_WALLET()}
+                    message={LL.ALERT_MSG_BACKUP_YOUR_WALLET()}
+                    status={"error"}
+                />
+                <BaseSpacer height={8} />
+            </>
         )
-    }, [themedStyles.cardContainer, theme.colors.alertCards.error, theme.colors.alertDescription])
+    }, [LL])
 
     const renderItem = useCallback(
         (props: { item: SettingsRowItem | DividerItem | BackupBannerItem }) => {
@@ -68,7 +86,13 @@ export const SettingsScreen = () => {
             switch (item.element) {
                 case "settingsRow":
                     return (
-                        <SettingsRow title={item.title} screenName={item.screenName} icon={item.icon} url={item.url} />
+                        <SettingsRow
+                            title={item.title}
+                            screenName={item.screenName}
+                            icon={item.icon}
+                            url={item.url}
+                            showBadge={shouldShowBadge(item)}
+                        />
                     )
 
                 case "divider":
@@ -81,101 +105,99 @@ export const SettingsScreen = () => {
                     return null
             }
         },
-        [isShowBackupModal, renderBackupWarning],
+        [isShowBackupModal, renderBackupWarning, shouldShowBadge],
     )
 
     return (
-        <BaseSafeArea>
-            <BaseView flexDirection="row" justifyContent="space-between" mx={24} pb={16}>
-                <BaseText typographyFont="subTitleBold" testID="settings-screen">
-                    {LL.TITLE_SETTINGS()}
-                </BaseText>
-                <SelectedNetworkViewer />
-            </BaseView>
-
-            <BaseView style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
-                <FlatList
-                    ref={flatSettingListRef}
-                    data={settingsList}
-                    contentContainerStyle={[themedStyles.contentContainerStyle]}
-                    scrollEnabled={isShowBackupModal || isSmallScreen}
-                    keyExtractor={(item, index) =>
-                        item.element === "settingsRow" ? item.screenName : `${item.element}-${index}`
-                    }
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={renderItem}
-                />
-            </BaseView>
-        </BaseSafeArea>
+        <Layout
+            noBackButton
+            fixedHeader={
+                <BaseView style={HeaderStyle}>
+                    <HeaderTitle title={LL.TITLE_MENU()} testID="settings-screen" />
+                    <SelectedNetworkViewer />
+                </BaseView>
+            }
+            body={
+                <BaseView mt={-16} style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
+                    <FlatList
+                        ref={flatSettingListRef}
+                        data={settingsList}
+                        scrollEnabled={isShowBackupModal || isSmallScreen}
+                        keyExtractor={(item, index) =>
+                            item.element === "settingsRow" ? item.screenName : `${item.element}-${index}`
+                        }
+                        showsVerticalScrollIndicator={false}
+                        showsHorizontalScrollIndicator={false}
+                        renderItem={renderItem}
+                    />
+                </BaseView>
+            }
+        />
     )
 }
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        contentContainerStyle: {
-            paddingHorizontal: 24,
-        },
         separator: {
             backgroundColor: theme.colors.text,
             height: 0.5,
         },
         list: {
+            paddingTop: 0,
+            paddingHorizontal: 8,
             flex: 1,
         },
-        cardContainer: {
-            backgroundColor: theme.colors.alertCards.error.background,
-            borderColor: theme.colors.alertCards.error.border,
-            borderRadius: 8,
-            paddingLeft: 2,
-            paddingRight: 4,
-            marginBottom: 8,
+        header: {
+            height: 48,
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
         },
     })
 
-const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
+const getLists = (LL: TranslationFunctions, devEnabled: boolean, notificationFeatureEnabled: boolean) => {
     const settingsList: (SettingsRowItem | DividerItem | BackupBannerItem)[] = [
         {
             element: "settingsRow",
             title: LL.TITLE_GENERAL_SETTINGS(),
             screenName: Routes.SETTINGS_GENERAL,
-            icon: "cog-outline",
+            icon: "icon-settings",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_MANAGE_WALLET(),
             screenName: Routes.WALLET_MANAGEMENT,
-            icon: "wallet-outline",
+            icon: "icon-wallet",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_TRANSACTIONS(),
             screenName: Routes.SETTINGS_TRANSACTIONS,
-            icon: "currency-usd",
+            icon: "icon-transaction",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_NETWORKS(),
             screenName: Routes.SETTINGS_NETWORK,
-            icon: "web",
+            icon: "icon-globe",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_CONNECTED_APPS(),
             screenName: Routes.SETTINGS_CONNECTED_APPS,
-            icon: "widgets-outline",
+            icon: "icon-apps",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_CONTACTS(),
             screenName: Routes.SETTINGS_CONTACTS,
-            icon: "account-multiple-outline",
+            icon: "icon-users",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_PRIVACY(),
             screenName: Routes.SETTINGS_PRIVACY,
-            icon: "shield-check-outline",
+            icon: "icon-shield-check",
         },
         {
             element: "backupBanner",
@@ -190,30 +212,39 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean) => {
             element: "settingsRow",
             title: LL.TITLE_GET_SUPPORT(),
             screenName: Routes.SETTINGS_GET_SUPPORT,
-            icon: "help-circle-outline",
+            icon: "icon-help-circle",
             url: "https://support.veworld.com",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_GIVE_FEEDBACK(),
             screenName: Routes.SETTINGS_GIVE_FEEDBACK,
-            icon: "message-outline",
+            icon: "icon-message-square",
             url: "https://forms.office.com/e/Vq1CUJD9Vy",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_ABOUT(),
             screenName: Routes.SETTINGS_ABOUT,
-            icon: "information-outline",
+            icon: "icon-info",
         },
     ]
+
+    if (notificationFeatureEnabled) {
+        settingsList.splice(4, 0, {
+            element: "settingsRow",
+            title: LL.TITLE_NOTIFICATIONS(),
+            screenName: Routes.SETTINGS_NOTIFICATIONS,
+            icon: "icon-bell-ring",
+        })
+    }
 
     if (devEnabled) {
         settingsList.push({
             element: "settingsRow",
             title: LL.TITLE_ALERTS(),
             screenName: Routes.SETTINGS_ALERTS,
-            icon: "bell-outline",
+            icon: "icon-bell",
         })
     }
 

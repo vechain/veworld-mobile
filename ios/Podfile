@@ -72,3 +72,7 @@ target 'VeWorld' do
      __apply_Xcode_14_3_RC_post_install_workaround(installer)
    end
 end
+
+target 'OneSignalNotificationServiceExtension' do
+  pod 'OneSignalXCFramework', '>= 5.0.0', '< 6.0'
+end

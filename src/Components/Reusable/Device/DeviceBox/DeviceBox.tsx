@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { useThemedStyles } from "~Hooks"
 
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, LedgerBadge, WatchedAccountBadge } from "~Components"
@@ -6,6 +6,8 @@ import { BaseDevice, DEVICE_TYPE } from "~Model"
 import { Pressable, StyleSheet, ViewStyle } from "react-native"
 import { ColorThemeType, DerivationPath } from "~Constants"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { selectAccountsByDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 
 type Props = {
     device?: BaseDevice
@@ -32,6 +34,13 @@ export const DeviceBox: React.FC<Props> = ({
 }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
+    const deviceAccounts = useAppSelector(state => selectAccountsByDevice(state, device?.rootAddress))
+    const currentAccount = useAppSelector(selectSelectedAccount)
+
+    const isChildSelected = useMemo(() => {
+        return deviceAccounts.some(account => AddressUtils.compareAddresses(account.address, currentAccount.address))
+    }, [currentAccount, deviceAccounts])
+
     /**
      * this is workaround for draggable flatlist
      * TouchableOpacity is not draggable in edit mode
@@ -41,12 +50,12 @@ export const DeviceBox: React.FC<Props> = ({
 
     const deviceBoxBody = useCallback(
         () => (
-            <BaseCard style={[styles.card, cardStyle]} testID="DeviceBox">
+            <BaseCard style={[styles.card, cardStyle]} testID="DeviceBox" selected={isChildSelected}>
                 <BaseView flexDirection="row" flex={1}>
                     {isEdit && (
                         <>
                             <Pressable onPressIn={isEdit ? drag : undefined} disabled={isActive}>
-                                <BaseIcon name="drag" color={theme.colors.text} size={24} />
+                                <BaseIcon name="icon-grip-vertical" color={theme.colors.text} size={24} />
                             </Pressable>
                             <BaseSpacer width={8} />
                         </>
@@ -60,7 +69,7 @@ export const DeviceBox: React.FC<Props> = ({
 
                     {device?.derivationPath === DerivationPath.ETH && (
                         <>
-                            <BaseIcon name="ethereum" size={20} color={theme.colors.textDisabled} />
+                            <BaseIcon name="icon-ethereum" size={20} color={theme.colors.textDisabled} />
                             <BaseSpacer width={8} />
                         </>
                     )}
@@ -72,14 +81,20 @@ export const DeviceBox: React.FC<Props> = ({
                         </>
                     )}
                     <BaseView flex={1}>
-                        <BaseText typographyFont="subTitleBold" ellipsizeMode="tail" numberOfLines={1}>
+                        <BaseText
+                            typographyFont={isChildSelected ? "bodyBold" : "bodyMedium"}
+                            ellipsizeMode="tail"
+                            numberOfLines={1}
+                            mb={6}
+                            color={theme.colors.text}>
                             {device?.alias}
                         </BaseText>
+                        <BaseText typographyFont="captionRegular">{`${deviceAccounts.length} accounts`}</BaseText>
                     </BaseView>
                 </BaseView>
                 <BaseSpacer width={12} />
 
-                {isIconVisible && !isEdit && <BaseIcon name="pencil-outline" color={theme.colors.text} size={24} />}
+                {isIconVisible && <BaseIcon name="icon-chevron-right" color={theme.colors.text} size={16} />}
 
                 {showWarningLabel && (
                     <BaseView flexDirection="row">
@@ -96,15 +111,15 @@ export const DeviceBox: React.FC<Props> = ({
             device?.alias,
             device?.derivationPath,
             device?.type,
+            deviceAccounts.length,
             drag,
             isActive,
+            isChildSelected,
             isEdit,
             isIconVisible,
             showWarningLabel,
-            styles.card,
-            styles.warningLabel,
-            theme.colors.text,
-            theme.colors.textDisabled,
+            styles,
+            theme,
         ],
     )
 
@@ -127,19 +142,20 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         card: {
             justifyContent: "space-between",
+            borderRadius: 12,
         },
         touchableContainer: {
             backgroundColor: theme.colors.card,
-            borderRadius: 16,
+            borderRadius: 12,
         },
         deviceBoxPressable: {
             backgroundColor: theme.colors.card,
-            borderRadius: 16,
+            borderRadius: 12,
         },
         warningLabel: {
             width: 8,
             height: 8,
-            borderRadius: 4,
+            borderRadius: 2,
             backgroundColor: theme.colors.danger,
         },
     })

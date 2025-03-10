@@ -16,16 +16,17 @@ import {
     FadeoutButton,
     Layout,
     showErrorToast,
+    FiatBalance,
+    AlertCard,
 } from "~Components"
-import { COLORS, CURRENCY_SYMBOLS, typography, VTHO } from "~Constants"
-import { useAmountInput, useTheme, useThemedStyles } from "~Hooks"
+import { COLORS, CURRENCY_SYMBOLS, typography, VOT3, VTHO } from "~Constants"
+import { useAmountInput, useTheme, useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
-import { useTotalTokenBalance, useUI } from "./Hooks"
+import { useUI } from "./Hooks"
 
 const { defaults: defaultTypography } = typography
 
@@ -41,6 +42,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const timer = useRef<NodeJS.Timeout | null>(null)
     const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
+    const isVOT3 = useMemo(() => token.symbol.toLowerCase() === VOT3.symbol.toLowerCase(), [token.symbol])
 
     const currency = useAppSelector(selectCurrency)
 
@@ -232,9 +234,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(async () => {
-        const newValue = removeInvalidCharacters(
-            isInputInFiat ? BigNutils(fiatTotalBalance.value).toCurrencyFormat_string(2) : tokenTotalToHuman,
-        )
+        const newValue = removeInvalidCharacters(isInputInFiat ? fiatTotalBalance.value : tokenTotalToHuman)
 
         setInput(newValue)
         setTokenAmountFromFiat(tokenTotalToHuman)
@@ -267,9 +267,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             body={
                 <DismissKeyboardView>
                     <BaseView>
+                        {isVOT3 && (
+                            <>
+                                <AlertCard title={LL.ALERT_TITLE_VOT3()} message={LL.ALERT_MSG_VOT3()} status="info" />
+                                <BaseSpacer height={16} />
+                            </>
+                        )}
                         <BaseText typographyFont="button">{LL.SEND_CURRENT_BALANCE()}</BaseText>
                         <BaseSpacer height={8} />
-
                         {/* [START] - HEADER */}
                         <BaseView flexDirection="row" alignItems="baseline" style={styles.budget}>
                             <BaseView flexDirection="row" mr={8}>
@@ -343,7 +348,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                                             {isExchangeRateAvailable && (
                                                 <BaseIcon
-                                                    name={"autorenew"}
+                                                    name={"icon-refresh-cw"}
                                                     size={20}
                                                     disabled={areFeesLoading}
                                                     color={COLORS.DARK_PURPLE}
@@ -452,6 +457,7 @@ const baseStyles = (isExchangeRateAvailable: boolean) => () =>
         logoIcon: {
             height: 20,
             width: 20,
+            marginLeft: 4,
         },
         amountContainer: {
             overflow: "visible",
@@ -498,7 +504,7 @@ function BalanceWarningView(props: Readonly<IBalanceWarningView>) {
     return (
         <Animated.View {...animatedViewProps}>
             <BaseView flexDirection="row">
-                <BaseIcon name={"alert-circle-outline"} size={20} color={theme.colors.danger} />
+                <BaseIcon name={"icon-alert-circle"} size={20} color={theme.colors.danger} />
                 <BaseSpacer width={8} />
                 <BaseText typographyFont="body" fontSize={12} color={theme.colors.danger}>
                     {text}

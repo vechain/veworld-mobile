@@ -1,5 +1,51 @@
 
 
+## 2.0.9 (2025-02-18)
+
+
+### Bug Fixes
+
+* disable coinbase for ios devices ([#2705](https://github.com/vechain/veworld-mobile/issues/2705)) ([80016b3](https://github.com/vechain/veworld-mobile/commit/80016b3a6e5f4f5af3786ef320091629c6bb59e9))
+
+## 2.0.8 (2025-02-13)
+
+
+### Bug Fixes
+
+* fontsize and weight on token cards and assets detail page ([#2685](https://github.com/vechain/veworld-mobile/issues/2685)) ([20373da](https://github.com/vechain/veworld-mobile/commit/20373da32fb116c8fe1f79a1f6554b1becdc395e))
+
+## 2.0.8 (2025-02-04)
+
+
+### Bug Fixes
+
+* updated copy and removed fiat balance in wallet details accounts ([#2641](https://github.com/vechain/veworld-mobile/issues/2641)) ([ac051b3](https://github.com/vechain/veworld-mobile/commit/ac051b37eae52c73a05b7d2501fe1ce43960c0d3))
+
+## 2.0.7 (2025-01-24)
+
+
+### Bug Fixes
+
+* reset nft stack when account is changed ([#2560](https://github.com/vechain/veworld-mobile/issues/2560)) ([4d01bca](https://github.com/vechain/veworld-mobile/commit/4d01bcaad26cb3ad10932162f5d5439bfc79811a))
+
+## 2.0.6 (2025-01-22)
+
+## 2.0.4 (2024-12-23)
+
+## 2.0.4 (2024-12-02)
+
+## 2.0.4 (2024-11-27)
+
+## 2.0.4 (2024-11-25)
+
+## 2.0.4 (2024-11-22)
+
+## 2.0.4 (2024-11-21)
+
+## 2.0.4 (2024-11-19)
+
+## 2.0.3 (2024-11-14)
+
 ## [1.10.0](https://github.com/vechain/veworld-mobile/compare/v1.5.3-52...v1.10.0) (2024-09-20)
 
 

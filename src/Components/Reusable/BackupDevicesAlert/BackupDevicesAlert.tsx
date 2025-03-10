@@ -26,7 +26,7 @@ export const BackupDevicesAlert = () => {
     return isBackupNeeded ? (
         <BaseView style={styles.rootContainer}>
             <BaseView style={styles.cardContainer}>
-                <BaseIcon name="alert-outline" color={"#E53E3E"} />
+                <BaseIcon name="icon-alert-triangle" color={"#E53E3E"} />
                 <BaseSpacer width={8} />
                 <BaseView style={styles.cardTextContainer}>
                     <BaseText typographyFont="bodyMedium" color="#9B2C2C">

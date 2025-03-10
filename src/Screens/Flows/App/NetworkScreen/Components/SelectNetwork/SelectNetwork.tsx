@@ -11,8 +11,6 @@ export const SelectNetwork: React.FC<Props> = ({ selectedNetwork, openBottomShee
     const { LL } = useI18nContext()
     return (
         <>
-            <BaseText typographyFont="title">{LL.TITLE_NETWORKS()}</BaseText>
-            <BaseSpacer height={24} />
             <BaseText typographyFont="bodyMedium">{LL.BD_SELECT_NETWORK()}</BaseText>
             <BaseSpacer height={8} />
 
@@ -20,7 +18,7 @@ export const SelectNetwork: React.FC<Props> = ({ selectedNetwork, openBottomShee
 
             <BaseSpacer height={16} />
 
-            <NetworkBox network={selectedNetwork} onPress={openBottomSheet} rightIcon="magnify" flex={1} />
+            <NetworkBox network={selectedNetwork} onPress={openBottomSheet} rightIcon="icon-search" flex={1} />
         </>
     )
 }

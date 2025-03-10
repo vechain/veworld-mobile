@@ -14,7 +14,6 @@ import FormattingUtils from "./FormattingUtils"
 import FormUtils from "./FormUtils"
 import AccountUtils from "./AccountUtils"
 import GasUtils from "./GasUtils"
-import LanguageUtils from "./LanguageUtils"
 import LedgerUtils from "./LedgerUtils"
 import DeviceUtils from "./DeviceUtils"
 
@@ -57,7 +56,6 @@ export {
     FormUtils,
     GasUtils,
     AccountUtils,
-    LanguageUtils,
     LedgerUtils,
     LocaleUtils,
     LockScreenUtils,

@@ -6,6 +6,9 @@ import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ReactShadowNode
 import com.facebook.react.uimanager.ViewManager
+import org.vechain.veworld.app.googleDrive.GoogleDrivePackage
+
+// import Native modules
 
 class VeWorldPackage : ReactPackage {
 
@@ -15,5 +18,6 @@ class VeWorldPackage : ReactPackage {
 
     override fun createNativeModules(
         reactContext: ReactApplicationContext,
-    ): MutableList<NativeModule> = mutableListOf()
+    ): MutableList<NativeModule> =
+        listOf(GetTextPackage(reactContext), GoogleDrivePackage(reactContext)).toMutableList()
 }

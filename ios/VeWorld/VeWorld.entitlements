@@ -19,5 +19,9 @@
 	<array>
 		<string>CloudKit</string>
 	</array>
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.org.vechain.veworld.app.onesignal</string>
+	</array>
 </dict>
 </plist>

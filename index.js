@@ -5,7 +5,7 @@ import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
 import { NavigationContainer, useNavigationContainerRef } from "@react-navigation/native"
-import { SafeAreaProvider, initialWindowMetrics } from "react-native-safe-area-context"
+import { initialWindowMetrics, SafeAreaProvider } from "react-native-safe-area-context"
 import { useTheme } from "~Hooks"
 import {
     ApplicationSecurityProvider,
@@ -13,14 +13,17 @@ import {
     ConnexContextProvider,
     TranslationProvider,
     WalletConnectContextProvider,
+    FeatureFlagsProvider,
 } from "~Components"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import {
+    DesignSystemIcons,
     Inter_Bold,
     Inter_Light,
     Inter_Medium,
     Inter_Regular,
+    Inter_SemiBold,
     Mono_Bold,
     Mono_Extra_Bold,
     Mono_Light,
@@ -29,13 +32,14 @@ import {
 import { ERROR_EVENTS, typography } from "~Constants"
 import { AnalyticsUtils, info, URIUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
+import { NotificationsProvider, PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
+    selectLanguage,
     selectSentryTrackingEnabled,
-    useAppSelector,
-    useAppDispatch,
     setCurrentMountedScreen,
+    useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
 import "react-native-url-polyfill/auto"
@@ -45,6 +49,8 @@ import { clientPersister, queryClient } from "~Api/QueryProvider"
 import NetInfo from "@react-native-community/netinfo"
 import { onlineManager } from "@tanstack/react-query"
 import { Routes } from "~Navigation"
+import { isLocale, useI18nContext } from "~i18n"
+import { getLocales } from "react-native-localize"
 
 const { fontFamily } = typography
 
@@ -59,6 +65,7 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
 const Main = () => {
     const [fontsLoaded] = useFonts({
         [fontFamily["Inter-Bold"]]: Inter_Bold,
+        [fontFamily["Inter-SemiBold"]]: Inter_SemiBold,
         [fontFamily["Inter-Regular"]]: Inter_Regular,
         [fontFamily["Inter-Light"]]: Inter_Light,
         [fontFamily["Inter-Medium"]]: Inter_Medium,
@@ -66,6 +73,7 @@ const Main = () => {
         [fontFamily["Mono-Bold"]]: Mono_Bold,
         [fontFamily["Mono-Regular"]]: Mono_Regular,
         [fontFamily["Mono-Light"]]: Mono_Light,
+        [fontFamily.DesignSystemIcons]: DesignSystemIcons,
     })
 
     // Online status management
@@ -78,6 +86,21 @@ const Main = () => {
 
     const isAnalyticsEnabled = useAppSelector(selectAnalyticsTrackingEnabled)
 
+    const { setLocale } = useI18nContext()
+    const language = useAppSelector(selectLanguage)
+
+    // set the locale based on the language
+    useEffect(() => {
+        setLocale(
+            language ??
+                getLocales()
+                    .map(loc => loc.languageCode)
+                    .find(isLocale) ??
+                "en",
+        )
+    }, [setLocale, language])
+
+    // init analytics
     useEffect(() => {
         if (isAnalyticsEnabled) {
             // init mixpanel analytics
@@ -95,16 +118,20 @@ const Main = () => {
                     persistOptions={{
                         persister: clientPersister,
                     }}>
-                    <NavigationProvider>
-                        <WalletConnectContextProvider>
-                            <InAppBrowserProvider>
-                                <BottomSheetModalProvider>
-                                    <EntryPoint />
-                                </BottomSheetModalProvider>
-                            </InAppBrowserProvider>
-                        </WalletConnectContextProvider>
-                    </NavigationProvider>
-                    <BaseToast />
+                    <FeatureFlagsProvider>
+                        <NavigationProvider>
+                            <WalletConnectContextProvider>
+                                <InAppBrowserProvider>
+                                    <BottomSheetModalProvider>
+                                        <NotificationsProvider>
+                                            <EntryPoint />
+                                        </NotificationsProvider>
+                                    </BottomSheetModalProvider>
+                                </InAppBrowserProvider>
+                            </WalletConnectContextProvider>
+                        </NavigationProvider>
+                        <BaseToast />
+                    </FeatureFlagsProvider>
                 </PersistQueryClientProvider>
             </ConnexContextProvider>
         </GestureHandlerRootView>

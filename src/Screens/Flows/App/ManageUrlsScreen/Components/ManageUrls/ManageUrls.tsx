@@ -1,18 +1,10 @@
 import React, { useCallback, useRef } from "react"
 import { FlatList, ListRenderItem, StyleSheet, View } from "react-native"
-import { useTheme } from "~Hooks"
-import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, SwipeableRow, useThor } from "~Components"
+import { BaseCard, BaseText, BaseView, SwipeableRow, useThor } from "~Components"
 import { deleteDelegationUrl, selectDelegationUrls, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { useI18nContext } from "~i18n"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
-type Props = {
-    openAddUrl: () => void
-}
-
-export const ManageUrls = ({ openAddUrl }: Props) => {
-    const theme = useTheme()
-    const { LL } = useI18nContext()
+export const ManageUrls = () => {
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const dispatch = useAppDispatch()
     const thor = useThor()
@@ -51,17 +43,6 @@ export const ManageUrls = ({ openAddUrl }: Props) => {
 
     return (
         <BaseView h={100}>
-            <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" mx={20}>
-                <BaseText typographyFont="subTitleBold">{LL.SEND_DELEGATION_MANAGE_URL()}</BaseText>
-                <BaseIcon
-                    haptics="Light"
-                    name={"plus"}
-                    bg={theme.colors.secondary}
-                    action={openAddUrl}
-                    testID="ManageUrls_addUrlButton"
-                />
-            </BaseView>
-            <BaseSpacer height={16} />
             <View style={styles.flatListContainer}>
                 <FlatList keyExtractor={url => url} data={delegationUrls} renderItem={renderItem} />
             </View>

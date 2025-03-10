@@ -14,14 +14,7 @@ export const AssetPriceBannerSkeleton = () => {
                 {
                     alignItems: "center",
                     opacity: 0.3,
-                    marginTop: 15,
-                    marginBottom: 10,
-                    children: [
-                        {
-                            width: 148,
-                            height: 38,
-                        },
-                    ],
+                    children: [{ width: 102, height: 24 }],
                 },
             ]}
         />

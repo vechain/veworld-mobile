@@ -1,10 +1,13 @@
-import React from "react"
-import { StyleSheet } from "react-native"
+import React, { useCallback } from "react"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles, useBlockchainNetwork } from "~Hooks"
 
 import { capitalize, truncateTextIfSizeIsGreaterThan } from "~Utils/StringUtils/StringUtils"
+import { useNavigation } from "@react-navigation/native"
+import HapticsService from "~Services/HapticsService"
+import { Routes } from "~Navigation"
 
 type Props = {
     showEvenIfMainnet?: boolean
@@ -12,21 +15,23 @@ type Props = {
 
 export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
     const { network, isMainnet } = useBlockchainNetwork()
+    const nav = useNavigation()
     const { styles, theme } = useThemedStyles(selectedNetworkViewerStyle(isMainnet))
 
+    const onNetworkLabelPress = useCallback(() => {
+        HapticsService.triggerImpact({ level: "Light" })
+        nav.navigate(Routes.SETTINGS_NETWORK)
+    }, [nav])
+
     return showEvenIfMainnet || !isMainnet ? (
-        <BaseView style={styles.networkViewer}>
+        <TouchableOpacity style={styles.networkViewer} onPress={onNetworkLabelPress}>
             <BaseView style={styles.networkViewerIconText}>
-                <BaseIcon
-                    name="web"
-                    color={theme.colors.text}
-                    size={15}
-                    testID="web"
-                    style={styles.networkViewerNetworkIcon}
-                />
-                <BaseText pl={5}>{network.name.length > 0 && formatNetworkName(network.name)}</BaseText>
+                <BaseIcon name="icon-globe" color={theme.colors.testnetText} size={16} testID="web" />
+                <BaseText pl={5} typographyFont="smallCaptionSemiBold" color={theme.colors.testnetText}>
+                    {network.name.length > 0 && formatNetworkName(network.name).toLowerCase()}
+                </BaseText>
             </BaseView>
-        </BaseView>
+        </TouchableOpacity>
     ) : null
 }
 
@@ -37,18 +42,16 @@ const formatNetworkName = (networkName: string) => {
 const selectedNetworkViewerStyle = (isMainnet: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         networkViewer: {
-            height: 25,
-            borderRadius: 10,
+            borderRadius: 6,
+            padding: 8,
             backgroundColor: isMainnet ? theme.colors.card : theme.colors.testnetBackground,
             justifyContent: "center",
+            flexShrink: 1,
         },
         networkViewerIconText: {
             flexDirection: "row",
             justifyContent: "center",
-            paddingLeft: 10,
-            paddingRight: 10,
-        },
-        networkViewerNetworkIcon: {
-            paddingTop: 1,
+            alignItems: "center",
+            alignContent: "center",
         },
     })

@@ -5,19 +5,26 @@ import { LocalizedString } from "typesafe-i18n"
 import { useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { RootStackParamListSettings, Routes } from "~Navigation"
+import { IconKey } from "~Model"
 
-type Excluded = Routes.WALLET_DETAILS | Routes.ICLOUD_MNEMONIC_BACKUP
+type Excluded =
+    | Routes.WALLET_DETAILS
+    | Routes.ICLOUD_DETAILS_BACKUP
+    | Routes.CHOOSE_DETAILS_BACKUP_PASSWORD
+    | Routes.CLAIM_USERNAME
+    | Routes.USERNAME_CLAIMED
 
 type ExcludedSettingRoutes = Excluded | Routes.SETTINGS_GET_SUPPORT | Routes.SETTINGS_GIVE_FEEDBACK
 
 export type RowProps = {
     title: LocalizedString
     screenName: keyof Omit<RootStackParamListSettings, Excluded>
-    icon: string
+    icon: IconKey
+    showBadge?: boolean
     url?: string
 }
 
-export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
+export const SettingsRow = ({ title, screenName, icon, url, showBadge }: RowProps) => {
     const nav = useNavigation()
 
     const theme = useTheme()
@@ -39,8 +46,10 @@ export const SettingsRow = ({ title, screenName, icon, url }: RowProps) => {
                     {title}
                 </BaseText>
             </BaseView>
-
-            <BaseIcon color={theme.colors.text} name={"chevron-right"} size={24} />
+            <BaseView flexDirection="row" style={baseStyles.actionContainer}>
+                {showBadge && <BaseView p={2} bg={theme.colors.errorVariant.icon} borderRadius={4} />}
+                <BaseIcon color={theme.colors.text} name={"icon-chevron-right"} size={16} />
+            </BaseView>
         </BaseTouchable>
     )
 }
@@ -51,5 +60,8 @@ const baseStyles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "space-between",
+    },
+    actionContainer: {
+        gap: 12,
     },
 })

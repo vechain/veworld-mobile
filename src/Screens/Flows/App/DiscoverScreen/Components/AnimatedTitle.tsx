@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import Animated, { SharedValue, interpolate, useAnimatedStyle } from "react-native-reanimated"
-import { BaseText, SelectedNetworkViewer } from "~Components"
+import { BaseText } from "~Components"
 import { useThemedStyles } from "~Hooks"
 
 type AnimatedTitleProps = {
@@ -15,7 +15,7 @@ export const AnimatedTitle = ({ title, scrollOffset }: AnimatedTitleProps) => {
     const animatedStylesHeader = useAnimatedStyle(() => {
         if (scrollOffset.value < 0) {
             return {
-                height: 40,
+                height: 48,
             }
         }
 
@@ -27,16 +27,15 @@ export const AnimatedTitle = ({ title, scrollOffset }: AnimatedTitleProps) => {
 
         return {
             opacity: interpolate(scrollOffset.value, [0, 100], [1, 0]),
-            height: interpolate(scrollOffset.value, [0, 200], [40, 0]),
+            height: interpolate(scrollOffset.value, [0, 200], [48, 0]),
         }
     })
 
     return (
         <Animated.View style={[styles.rootContainer, animatedStylesHeader]}>
-            <BaseText typographyFont="largeTitle" testID="settings-screen">
+            <BaseText typographyFont="subTitleSemiBold" testID="settings-screen">
                 {title}
             </BaseText>
-            <SelectedNetworkViewer />
         </Animated.View>
     )
 }
@@ -44,9 +43,6 @@ export const AnimatedTitle = ({ title, scrollOffset }: AnimatedTitleProps) => {
 const baseStyles = () =>
     StyleSheet.create({
         rootContainer: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginHorizontal: 24,
+            justifyContent: "center",
         },
     })

@@ -7,6 +7,7 @@ import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-
 import { ReactNode } from "react"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { MMKV } from "react-native-mmkv"
+import localizeMock from "react-native-localize/mock"
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 const componentMock = ({ children }: { children: ReactNode }) => children
@@ -27,6 +28,35 @@ jest.mock("react-native-quick-crypto", () => ({
             digest: (first: string) => first,
         }),
     })),
+}))
+
+jest.mock("react-native-onesignal", () => ({
+    ...jest.requireActual("react-native-onesignal"),
+    OneSignal: {
+        ...jest.requireActual("react-native-onesignal").OneSignal,
+        initialize: jest.fn(),
+        Notifications: {
+            getPermissionAsync: jest.fn(),
+            requestPermission: jest.fn().mockResolvedValue(true),
+            addEventListener: jest.fn(),
+            removeEventListener: jest.fn(),
+        },
+        User: {
+            getTags: jest.fn().mockResolvedValue({}),
+            addTag: jest.fn(),
+            removeTag: jest.fn(),
+            pushSubscription: {
+                optIn: jest.fn(),
+                optOut: jest.fn(),
+                getOptedInAsync: jest.fn(),
+                addEventListener: jest.fn(),
+                removeEventListener: jest.fn(),
+            },
+        },
+        Debug: {
+            setLogLevel: jest.fn(),
+        },
+    },
 }))
 
 process.env = Object.assign(process.env, {
@@ -64,8 +94,10 @@ jest.mock("expo-haptics", () => ({
     },
     impactAsync: jest.fn(),
 }))
-
-import localizeMock from "react-native-localize/mock"
+jest.mock("expo-font", () => ({
+    ...jest.requireActual("expo-font"),
+    loadAsync: jest.fn().mockResolvedValue(true),
+}))
 
 jest.mock("react-native-localize", () => localizeMock)
 
@@ -132,7 +164,7 @@ jest.mock("react-native-ble-plx", () => ({
     BleError: jest.fn(),
 }))
 
-jest.mock("@walletconnect/web3wallet", () => ({
+jest.mock("@reown/walletkit", () => ({
     __esModule: true,
     init: jest.fn(),
     on: jest.fn(),

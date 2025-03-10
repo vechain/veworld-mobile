@@ -1,9 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
-    BackButtonHeader,
     BaseActivityIndicator,
     BaseButton,
-    BaseModal,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
@@ -12,6 +10,7 @@ import {
     Layout,
     RequireUserPassword,
     showErrorToast,
+    CreatePasswordModal,
 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useLedgerDevice, useThemedStyles } from "~Hooks"
@@ -25,7 +24,6 @@ import { FlashList, ViewToken } from "@shopify/flash-list"
 import * as Haptics from "expo-haptics"
 import { LedgerAccount, NewLedgerDevice } from "~Model"
 import { useHandleWalletCreation } from "~Screens/Flows/Onboarding/WelcomeScreen/useHandleWalletCreation"
-import { UserCreatePasswordScreen } from "../../UserCreatePasswordScreen"
 import { StackActions, useNavigation } from "@react-navigation/native"
 
 type Props = {} & NativeStackScreenProps<
@@ -220,12 +218,10 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
     return (
         <Layout
             beforeNavigating={disconnectLedger}
+            title={LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}
             fixedHeader={
                 <BaseView>
-                    <BaseView flexDirection="row" w={100}>
-                        <BaseText typographyFont="title">{LL.WALLET_LEDGER_SELECT_DEVICE_TITLE()}</BaseText>
-                    </BaseView>
-                    <BaseText typographyFont="body" my={10}>
+                    <BaseText typographyFont="body" my={16}>
                         {LL.WALLET_LEDGER_SELECT_DEVICE_SB()}
                     </BaseText>
 
@@ -270,16 +266,11 @@ export const SelectLedgerAccounts: React.FC<Props> = ({ route }) => {
                         onSuccess={onPasswordSuccess_1}
                     />
 
-                    <BaseModal isOpen={isOpen} onClose={onCloseCreateFlow}>
-                        <BaseView justifyContent="flex-start">
-                            <BackButtonHeader action={onClose} hasBottomSpacer={false} />
-                            <UserCreatePasswordScreen
-                                onSuccess={pin =>
-                                    onLedgerPinSuccess({ pin, newLedger: ledgerCache.current, disconnectLedger })
-                                }
-                            />
-                        </BaseView>
-                    </BaseModal>
+                    <CreatePasswordModal
+                        isOpen={isOpen}
+                        onClose={onCloseCreateFlow}
+                        onSuccess={pin => onLedgerPinSuccess({ pin, newLedger: ledgerCache.current, disconnectLedger })}
+                    />
                 </>
             }
         />

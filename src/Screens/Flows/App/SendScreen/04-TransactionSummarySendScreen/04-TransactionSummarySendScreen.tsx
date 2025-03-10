@@ -16,6 +16,8 @@ import {
     Layout,
     RequireUserPassword,
     TransferCard,
+    FiatBalance,
+    EstimatedTimeDetailsView,
 } from "~Components"
 import { AnalyticsEvent, COLORS, GasPriceCoefficient, VET, VTHO, creteAnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
@@ -35,8 +37,8 @@ import {
 import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
 import { NotEnoughGasModal } from "./Modal"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -275,35 +277,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     )
 }
 
-function EstimatedTimeDetailsView({ selectedFeeOption }: Readonly<{ selectedFeeOption: string }>) {
-    const { LL } = useI18nContext()
-    const theme = useTheme()
-
-    const computeEstimatedTime = useMemo(() => {
-        switch (selectedFeeOption) {
-            case GasPriceCoefficient.REGULAR.toString():
-                return LL.SEND_LESS_THAN_1_MIN()
-            case GasPriceCoefficient.MEDIUM.toString():
-                return LL.SEND_LESS_THAN_30_SECONDS()
-            case GasPriceCoefficient.HIGH.toString():
-                return LL.SEND_LESS_THAN_A_MOMENT()
-            default:
-                return LL.SEND_LESS_THAN_1_MIN()
-        }
-    }, [LL, selectedFeeOption])
-
-    return (
-        <>
-            <BaseSpacer height={12} />
-            <BaseSpacer height={0.5} width={"100%"} background={theme.colors.textDisabled} />
-            <BaseSpacer height={12} />
-            <BaseText typographyFont="buttonSecondary">{LL.SEND_ESTIMATED_TIME()}</BaseText>
-            <BaseSpacer height={6} />
-            <BaseText typographyFont="subSubTitle">{computeEstimatedTime}</BaseText>
-        </>
-    )
-}
-
 interface ITotalSendAmountView {
     amount: string
     symbol: string
@@ -330,6 +303,7 @@ function TotalSendAmountView({
 
     const theme = useTheme()
     const { LL } = useI18nContext()
+    const { formatLocale } = useFormatFiat()
 
     const totalTxAnimationProgress = useSharedValue(0)
 
@@ -370,8 +344,8 @@ function TotalSendAmountView({
     const formattedAmount = useMemo(() => BigNutils(amount).decimals(4).toString, [amount])
 
     const formattedTotalCost = useMemo(
-        () => BigNutils(txCostTotal).toHuman(token.decimals).decimals(4).toString,
-        [token.decimals, txCostTotal],
+        () => BigNutils(txCostTotal).toHuman(token.decimals).toTokenFormat_string(4, formatLocale),
+        [token.decimals, txCostTotal, formatLocale],
     )
     const isVTHO = useMemo(() => token.symbol.toLowerCase() === VTHO.symbol.toLowerCase(), [token.symbol])
 

@@ -13,7 +13,7 @@ import {
     SelectAccountBottomSheet,
 } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useThemedStyles } from "~Hooks"
 import { useFetchFeaturedDApps } from "~Hooks/useFetchFeaturedDApps"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -24,7 +24,6 @@ import {
     selectSelectedAccount,
     selectSwapFeaturedDapps,
     selectVisibleAccounts,
-    setSelectedAccount,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -44,6 +43,8 @@ export const SwapScreen = () => {
     const accounts = useAppSelector(selectVisibleAccounts)
     const swappDApps = useAppSelector(selectSwapFeaturedDapps)
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+
+    const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const { isFetching } = useFetchFeaturedDApps()
 
@@ -97,23 +98,10 @@ export const SwapScreen = () => {
     return (
         <Layout
             safeAreaTestID="Swap_Screen"
-            noMargin
             hasSafeArea={true}
             hasTopSafeAreaOnly={false}
-            fixedHeader={
-                <BaseView px={20}>
-                    <BaseView flexDirection="row" justifyContent="space-between">
-                        <BaseText typographyFont="title">{LL.SWAP_TITLE()}</BaseText>
-
-                        <ChangeAccountButtonPill
-                            title={selectedAccount.alias ?? LL.WALLET_LABEL_ACCOUNT()}
-                            text={selectedAccount.address}
-                            action={openSelectAccountBottomSheet}
-                        />
-                    </BaseView>
-                    <BaseSpacer height={16} />
-                </BaseView>
-            }
+            title={LL.SWAP_TITLE()}
+            headerRightElement={<ChangeAccountButtonPill action={openSelectAccountBottomSheet} />}
             fixedBody={
                 <BaseView flex={1} px={20}>
                     <BaseSpacer height={24} />
@@ -133,14 +121,14 @@ export const SwapScreen = () => {
                             ItemSeparatorComponent={renderSeparator}
                             showsVerticalScrollIndicator={false}
                             ListEmptyComponent={
-                                <ListEmptyResults subtitle={LL.SWAP_EMPTY_LIST()} icon={"search-web"} />
+                                <ListEmptyResults subtitle={LL.SWAP_EMPTY_LIST()} icon={"icon-search"} />
                             }
                         />
                     )}
                     <SelectAccountBottomSheet
                         closeBottomSheet={closeSelectAccountBottonSheet}
                         accounts={accounts}
-                        setSelectedAccount={setSelectedAccount}
+                        setSelectedAccount={onSetSelectedAccount}
                         selectedAccount={selectedAccount}
                         isBalanceVisible={isBalanceVisible}
                         ref={selectAccountBottomSheetRef}

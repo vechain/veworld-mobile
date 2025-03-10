@@ -35,8 +35,8 @@ describe("BaseButton", () => {
                 action={mockAction}
                 title={buttonTitle}
                 textColor="#FF0000"
-                leftIcon={<BaseIcon name="ab-testing" />}
-                rightIcon={<BaseIcon name="abacus" />}
+                leftIcon={<BaseIcon name="icon-tent" />}
+                rightIcon={<BaseIcon name="icon-tv" />}
             />,
             { wrapper: TestWrapper },
         )

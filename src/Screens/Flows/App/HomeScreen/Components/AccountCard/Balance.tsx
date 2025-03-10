@@ -5,7 +5,7 @@ import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { WalletAccount } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import AccountFiatBalance from "./AccountFiatBalance"
+import { AccountFiatBalance } from "~Components/Reusable"
 
 type Props = {
     isVisible: boolean
@@ -28,7 +28,7 @@ export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible }) => {
                 <BaseIcon
                     action={toggleVisible}
                     haptics="Light"
-                    name={isVisible ? "eye-off" : "eye"}
+                    name={isVisible ? "icon-eye-off" : "icon-eye"}
                     color={theme.colors.textReversed}
                     size={18}
                     style={baseStyles.marginLeft}

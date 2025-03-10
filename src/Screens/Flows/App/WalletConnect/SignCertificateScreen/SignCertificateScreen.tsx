@@ -1,20 +1,36 @@
-import React, { FC, useCallback, useMemo } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import React, { FC, useCallback, useMemo, useRef } from "react"
 import { ScrollView, StyleSheet } from "react-native"
+import { blake2b256, Certificate } from "thor-devkit"
 import {
     AccountCard,
-    BaseButton,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-    CloseModalButton,
     getRpcError,
     RequireUserPassword,
     SelectAccountBottomSheet,
-    useWalletConnect,
+    SignAndReject,
+    SignAndRejectRefInterface,
     useInAppBrowser,
+    useWalletConnect,
 } from "~Components"
-import { blake2b256, Certificate } from "thor-devkit"
+import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckIdentity,
+    useSetSelectedAccount,
+    useSignMessage,
+    useThemedStyles,
+} from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, WatchedAccount } from "~Model"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { MessageDetails, UnknownAppMessage } from "~Screens"
 import {
     addSignCertificateActivity,
     selectVerifyContext,
@@ -23,20 +39,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { error, HexUtils } from "~Utils"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckIdentity,
-    useSetSelectedAccount,
-    useSignMessage,
-} from "~Hooks"
-import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, WatchedAccount } from "~Model"
-import { useI18nContext } from "~i18n"
-import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
-import { MessageDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useObservedAccountExclusion } from "../Hooks"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN>
@@ -47,6 +49,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const { processRequest, failRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
     const { LL } = useI18nContext()
+    const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
 
     const {
@@ -72,6 +75,8 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
     )
+
+    const signAndRejectRef = useRef<SignAndRejectRefInterface>(null)
 
     const validConnectedApp = useMemo(() => {
         if (!sessionContext) return true
@@ -221,17 +226,24 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     return (
         <BaseSafeArea>
+            <BaseView style={styles.header}>
+                <BackButtonHeader
+                    title={LL.CONNECTED_APP_REQUEST()}
+                    action={onPressBack}
+                    hasBottomSpacer={false}
+                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
+                />
+            </BaseView>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
-                style={styles.scrollView}>
-                <CloseModalButton onPress={onPressBack} />
-                <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
-
-                    <BaseSpacer height={32} />
+                style={styles.scrollView}
+                scrollEventThrottle={16}
+                onScroll={signAndRejectRef.current?.onScroll}>
+                <BaseView mx={4} style={styles.alignLeft}>
+                    <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>{LL.CONNECTED_APP_SIGN_REQUEST_DESCRIPTION()}</BaseText>
@@ -260,29 +272,18 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
                         />
                     )}
                 </BaseView>
-
-                <BaseSpacer height={30} />
-
-                <BaseView style={styles.footer}>
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        title={LL.COMMON_BTN_SIGN()}
-                        action={() => onSubmit(checkIdentityBeforeOpening)}
-                        /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
-                        isLoading={isBiometricsEmpty}
-                        disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
-                    />
-                    <BaseSpacer height={16} />
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        variant="outline"
-                        title={LL.COMMON_BTN_REJECT()}
-                        action={onReject}
-                    />
-                </BaseView>
+                <BaseSpacer height={194} />
             </ScrollView>
+
+            <SignAndReject
+                ref={signAndRejectRef}
+                onConfirmTitle={LL.COMMON_BTN_SIGN()}
+                onRejectTitle={LL.COMMON_BTN_REJECT()}
+                onConfirm={() => onSubmit(checkIdentityBeforeOpening)}
+                onReject={onReject}
+                isConfirmLoading={isBiometricsEmpty}
+                confirmButtonDisabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
+            />
 
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}
@@ -301,31 +302,36 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
     )
 }
 
-const styles = StyleSheet.create({
-    dappLogo: {
-        width: 100,
-        height: 100,
-        borderRadius: 8,
-        marginVertical: 4,
-    },
-    alignLeft: {
-        alignSelf: "flex-start",
-    },
-    scrollViewContainer: {
-        width: "100%",
-    },
-    scrollView: {
-        width: "100%",
-    },
-    footer: {
-        width: "100%",
-        alignItems: "center",
-        paddingLeft: 20,
-        paddingRight: 20,
-    },
-    separator: {
-        borderWidth: 0.5,
-        borderColor: "#0B0043",
-        opacity: 0.56,
-    },
-})
+const baseStyles = () =>
+    StyleSheet.create({
+        dappLogo: {
+            width: 100,
+            height: 100,
+            borderRadius: 8,
+            marginVertical: 4,
+        },
+        alignLeft: {
+            alignSelf: "flex-start",
+        },
+        scrollViewContainer: {
+            width: "100%",
+            paddingHorizontal: 16,
+        },
+        scrollView: {
+            width: "100%",
+        },
+        footer: {
+            width: "100%",
+            alignItems: "center",
+            paddingLeft: 20,
+            paddingRight: 20,
+        },
+        separator: {
+            borderWidth: 0.5,
+            borderColor: "#0B0043",
+            opacity: 0.56,
+        },
+        header: {
+            paddingHorizontal: 16,
+        },
+    })

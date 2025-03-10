@@ -1,10 +1,9 @@
-import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useCallback, useMemo, useState } from "react"
-import { BaseSafeArea, BaseScrollView, BaseSpacer, BaseText, BaseView } from "~Components/Base"
-import { BackButtonHeader } from "../BackButtonHeader"
+import React, { JSXElementConstructor, ReactElement, ReactNode, Ref, useMemo, useState } from "react"
+import { BaseSafeArea, BaseScrollView, BaseView } from "~Components/Base"
 import { RefreshControlProps, ScrollView, StyleSheet } from "react-native"
-import { useTabBarBottomMargin, useTheme } from "~Hooks"
+import { useTabBarBottomMargin } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
-import { SelectedNetworkViewer } from "~Components"
+import { SelectedNetworkViewer, BackButtonHeader, CenteredHeader } from "~Components"
 import { SafeAreaView } from "react-native-safe-area-context"
 
 type Props = {
@@ -24,9 +23,11 @@ type Props = {
     noStaticBottomPadding?: boolean
     scrollViewRef?: Ref<ScrollView>
     onGoBack?: () => void
+    preventGoBack?: boolean
     beforeNavigating?: () => Promise<void> | void
     hasSafeArea?: boolean
     hasTopSafeAreaOnly?: boolean
+    headerRightElement?: ReactNode
 }
 
 export const Layout = ({
@@ -47,11 +48,12 @@ export const Layout = ({
     noStaticBottomPadding = false,
     scrollViewRef,
     onGoBack,
+    preventGoBack = false,
     beforeNavigating,
     hasSafeArea = true,
     hasTopSafeAreaOnly = false,
+    headerRightElement,
 }: Props) => {
-    const theme = useTheme()
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } = useTabBarBottomMargin()
 
     // this value is for automate bottom padding instead of having to set a custom padding
@@ -62,15 +64,6 @@ export const Layout = ({
         return tabBarBottomMargin ? 24 : 40
     }, [noStaticBottomPadding, tabBarBottomMargin])
 
-    const Title = useCallback(
-        () => (
-            <BaseText typographyFont="title" mb={16}>
-                {title}
-            </BaseText>
-        ),
-        [title],
-    )
-
     const [scrollViewHeight, setScrollViewHeight] = useState(0)
     const [scrollViewContentHeight, setScrollViewContentHeight] = useState(0)
 
@@ -78,23 +71,27 @@ export const Layout = ({
         () => (
             <BaseView h={100}>
                 <BaseView>
-                    {!noBackButton && (
-                        <>
+                    {!noBackButton ? (
+                        <BaseView mx={noMargin ? 0 : 16}>
                             <BackButtonHeader
                                 beforeNavigating={beforeNavigating}
                                 hasBottomSpacer={false}
                                 onGoBack={onGoBack}
+                                preventGoBack={preventGoBack}
+                                title={title}
+                                rightElement={headerRightElement}
                             />
-                            <BaseSpacer height={8} />
-                        </>
+                        </BaseView>
+                    ) : (
+                        title && (
+                            <BaseView mx={noMargin ? 0 : 16}>
+                                <CenteredHeader title={title} rightElement={headerRightElement} />
+                            </BaseView>
+                        )
                     )}
                     {fixedHeader && (
-                        <BaseView>
-                            <BaseView mx={noMargin ? 0 : 20}>
-                                {title && <Title />}
-                                {<BaseView>{fixedHeader}</BaseView>}
-                            </BaseView>
-                            {!noMargin && <BaseSpacer height={16} />}
+                        <BaseView justifyContent="center" px={noMargin ? 0 : 16}>
+                            <BaseView>{fixedHeader}</BaseView>
                         </BaseView>
                     )}
                     {showSelectedNetwork && (
@@ -103,8 +100,6 @@ export const Layout = ({
                         </BaseView>
                     )}
                 </BaseView>
-                {/* Separator from header to body */}
-                {(!noBackButton || fixedHeader) && <BaseSpacer height={1} background={theme.colors.card} />}
 
                 {body && (
                     <BaseScrollView
@@ -117,15 +112,12 @@ export const Layout = ({
                         }}
                         ref={scrollViewRef}
                         refreshControl={refreshControl}
-                        testID={scrollViewTestID || "Layout_ScrollView"}
+                        testID={scrollViewTestID ?? "Layout_ScrollView"}
                         scrollEnabled={scrollViewContentHeight > scrollViewHeight}
                         style={noMargin ? {} : styles.scrollView}
-                        // eslint-disable-next-line react-native/no-inline-styles
                         contentContainerStyle={{
                             paddingBottom: isAndroid() ? androidOnlyTabBarBottomMargin : _iosOnlyTabBarBottomMargin,
-                            paddingTop: noMargin ? 0 : 16,
                         }}>
-                        {!fixedHeader && title && <Title />}
                         {body}
                     </BaseScrollView>
                 )}
@@ -138,7 +130,7 @@ export const Layout = ({
                 {footer && (
                     <BaseView
                         mb={noMargin ? 0 : Number(androidOnlyTabBarBottomMargin) + STATIC_BOTTOM_PADDING}
-                        mx={noMargin ? 0 : 20}>
+                        mx={noMargin ? 0 : 16}>
                         {footer}
                     </BaseView>
                 )}
@@ -146,14 +138,14 @@ export const Layout = ({
         ),
         [
             noBackButton,
+            noMargin,
             beforeNavigating,
             onGoBack,
-            fixedHeader,
-            noMargin,
+            preventGoBack,
             title,
-            Title,
+            headerRightElement,
+            fixedHeader,
             showSelectedNetwork,
-            theme.colors.card,
             body,
             scrollViewRef,
             refreshControl,
@@ -188,7 +180,8 @@ export const Layout = ({
 
 const styles = StyleSheet.create({
     scrollView: {
-        paddingHorizontal: 24,
+        paddingHorizontal: 16,
+        paddingVertical: 16,
     },
     selectedNetworkViewerView: {
         position: "absolute",

@@ -3,8 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import moment from "moment"
 import React, { useEffect } from "react"
 import { StyleSheet } from "react-native"
-import { SecurityAlertLight } from "~Assets"
-import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBottomSheetModal, useCheckWalletBackup, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes, TabStackParamList } from "~Navigation"
@@ -18,7 +17,7 @@ import {
 
 export const DeviceBackupBottomSheet = () => {
     const dispatch = useAppDispatch()
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const navigation = useNavigation<NativeStackNavigationProp<TabStackParamList>>()
 
@@ -93,15 +92,16 @@ export const DeviceBackupBottomSheet = () => {
     }
 
     return (
-        <BaseBottomSheet style={styles.contentContainer} bottomSafeArea dynamicHeight ref={ref}>
+        <BaseBottomSheet bottomSafeArea dynamicHeight ref={ref}>
             <BaseView style={styles.contentContainer}>
-                <SecurityAlertLight />
+                <BaseIcon name="icon-shield-alert" size={65} color={theme.colors.text} />
                 <BaseSpacer height={24} />
                 <BaseText typographyFont="button">{LL.DEVICE_BACKUP_MODAL_TITLE()}</BaseText>
                 <BaseSpacer height={8} />
                 <BaseText typographyFont="body">{LL.DEVICE_BACKUP_MODAL_SUBTITLE()}</BaseText>
                 <BaseSpacer height={24} />
                 <BaseButton
+                    testID="Backup_now_button"
                     accessible
                     variant="solid"
                     size="lg"
@@ -113,6 +113,7 @@ export const DeviceBackupBottomSheet = () => {
                 />
                 <BaseSpacer height={16} />
                 <BaseButton
+                    testID="Backup_later_button"
                     accessible
                     variant="outline"
                     size="lg"

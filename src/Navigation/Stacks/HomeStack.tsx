@@ -2,15 +2,25 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { Transaction } from "thor-devkit"
 import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
-import { ConnectedLedgerDevice, Device, FungibleTokenWithBalance, LedgerAccountWithDevice } from "~Model"
+import {
+    CloudKitWallet,
+    ConnectedLedgerDevice,
+    Device,
+    DrivetWallet,
+    FungibleToken,
+    FungibleTokenWithBalance,
+    LedgerAccountWithDevice,
+} from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
     AssetDetailScreen,
+    ChangeNetworkScreen,
     ConnectedAppsScreen,
     EnableAdditionalSettings,
     HomeScreen,
     ImportFromCloudScreen,
     ImportLocalWallet,
+    ImportMnemonicBackupPasswordScreen,
     InAppBrowser,
     InsertAddressSendScreen,
     LedgerSignTransaction,
@@ -25,6 +35,11 @@ import {
     TransactionSummarySendScreen,
     WalletDetailScreen,
     WalletManagementScreen,
+    ClaimUsername,
+    UsernameClaimed,
+    ConvertTransactionScreen,
+    AddCustomNodeScreen,
+    ManageCustomNodesScreen,
 } from "~Screens"
 
 export type RootStackParamListHome = {
@@ -57,7 +72,24 @@ export type RootStackParamListHome = {
     [Routes.WALLET_MANAGEMENT]: undefined
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
-    [Routes.TOKEN_DETAILS]: { token: TokenWithCompleteInfo }
+    [Routes.TOKEN_DETAILS]: {
+        token: TokenWithCompleteInfo
+        /**
+         * Provided when user convert B3TR/VOT3 token to display bottom sheet result
+         */
+        betterConversionResult?: {
+            from?: FungibleToken
+            to?: FungibleToken
+            amount: string
+            txId: string
+            isSuccess: boolean
+        }
+    }
+    [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
+        token: TokenWithCompleteInfo
+        amount: string
+        transactionClauses: Transaction.Clause[]
+    }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
@@ -68,10 +100,22 @@ export type RootStackParamListHome = {
     [Routes.IMPORT_HW_LEDGER_SELECT_ACCOUNTS]: {
         device: ConnectedLedgerDevice
     }
-    [Routes.IMPORT_FROM_CLOUD]: undefined
+    [Routes.IMPORT_FROM_CLOUD]: {
+        wallets: CloudKitWallet[] | DrivetWallet[]
+    }
+    [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
+        wallet: CloudKitWallet | DrivetWallet
+    }
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
+    }
+    [Routes.SETTINGS_NETWORK]: undefined
+    [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
+    [Routes.SETTINGS_MANAGE_CUSTOM_NODES]: undefined
+    [Routes.CLAIM_USERNAME]: undefined
+    [Routes.USERNAME_CLAIMED]: {
+        username: string
     }
 }
 
@@ -123,6 +167,11 @@ export const HomeStack = () => {
                 />
 
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN}
+                    component={ConvertTransactionScreen}
+                    options={{ headerShown: false }}
+                />
                 <Screen name={Routes.OBSERVE_WALLET} component={ObserveWalletScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.IMPORT_MNEMONIC} component={ImportLocalWallet} options={{ headerShown: false }} />
 
@@ -147,7 +196,31 @@ export const HomeStack = () => {
                     component={ImportFromCloudScreen}
                     options={{ headerShown: false }}
                 />
+
+                <Screen
+                    name={Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD}
+                    component={ImportMnemonicBackupPasswordScreen}
+                    options={{
+                        headerShown: false,
+                    }}
+                />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.SETTINGS_NETWORK}
+                    component={ChangeNetworkScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.SETTINGS_ADD_CUSTOM_NODE}
+                    component={AddCustomNodeScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
+                    component={ManageCustomNodesScreen}
+                    options={{ headerShown: false }}
+                />
             </Group>
 
             <Group>
@@ -157,6 +230,10 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
+            </Group>
+            <Group>
+                <Screen name={Routes.CLAIM_USERNAME} component={ClaimUsername} options={{ headerShown: false }} />
+                <Screen name={Routes.USERNAME_CLAIMED} component={UsernameClaimed} options={{ headerShown: false }} />
             </Group>
         </Navigator>
     )

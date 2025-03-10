@@ -9,7 +9,7 @@ const findIconWrapper = async () => await screen.findByTestId(`${testId}-wrapper
 
 describe("BaseIcon", () => {
     it("renders the icon with default values", async () => {
-        render(<BaseIcon testID={testId} name="star" />, {
+        render(<BaseIcon testID={testId} name="icon-star" />, {
             wrapper: TestWrapper,
         })
         const icon = await findIcon()
@@ -19,7 +19,7 @@ describe("BaseIcon", () => {
 
     it("calls the action prop when clicked", async () => {
         const mockAction = jest.fn()
-        render(<BaseIcon testID={testId} name="star" action={mockAction} />, {
+        render(<BaseIcon testID={testId} name="icon-star" action={mockAction} />, {
             wrapper: TestWrapper,
         })
         const icon = await findIcon()
@@ -33,9 +33,12 @@ describe("BaseIcon", () => {
     it("render correctly with corner case props", async () => {
         const mockAction = jest.fn()
 
-        render(<BaseIcon testID={testId} name="star" bg="red" size={32} m={10} p={10} action={mockAction} disabled />, {
-            wrapper: TestWrapper,
-        })
+        render(
+            <BaseIcon testID={testId} name="icon-star" bg="red" size={32} m={10} p={10} action={mockAction} disabled />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
         const iconWrapper = await findIconWrapper()
         expect(iconWrapper).toBeVisible()
         expect(iconWrapper).toHaveStyle({
@@ -51,7 +54,7 @@ describe("BaseIcon", () => {
     it("renders correctly when disabled", async () => {
         const mockAction = jest.fn()
 
-        render(<BaseIcon testID={testId} color="green" name="star" size={32} action={mockAction} disabled />, {
+        render(<BaseIcon testID={testId} color="green" name="icon-star" size={32} action={mockAction} disabled />, {
             wrapper: TestWrapper,
         })
 

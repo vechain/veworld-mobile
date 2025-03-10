@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { StyleSheet, Pressable } from "react-native"
+import { Pressable, StyleSheet } from "react-native"
 import { RenderItemParams } from "react-native-draggable-flatlist"
 import { BaseIcon, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
@@ -27,7 +27,7 @@ export const AnimatedTokenCard = ({ item, drag, isActive, isEdit, isBalanceVisib
                     disabled={isActive}
                     style={[styles.animatedInnerContainer]}
                     onPressIn={isEdit ? drag : undefined}>
-                    <BaseIcon color={theme.colors.text} name={"drag"} size={30} />
+                    <BaseIcon color={theme.colors.text} name={"icon-grip-vertical"} size={30} />
                 </Pressable>
             )}
             <TokenCard tokenWithBalance={item} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
@@ -39,11 +39,11 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         animatedOuterContainer: {
             backgroundColor: theme.colors.card,
+            paddingVertical: 16,
             flexDirection: "row",
             alignItems: "center",
-            borderRadius: 16,
+            borderRadius: 12,
             opacity: isActive ? 0.6 : 1,
-            height: 62,
         },
         animatedInnerContainer: {
             position: "relative",

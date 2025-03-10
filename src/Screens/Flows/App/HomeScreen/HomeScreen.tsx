@@ -1,6 +1,6 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { RefreshControl } from "react-native"
+import { RefreshControl, StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
 import { FadeInRight } from "react-native-reanimated"
 import {
@@ -35,8 +35,18 @@ import {
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AccountCard, DeviceBackupBottomSheet, EditTokensBar, Header, TokenList } from "./Components"
+import {
+    AccountCard,
+    ClaimUsernameBanner,
+    DeviceBackupBottomSheet,
+    DeviceJailBrokenAlert,
+    DeviceJailBrokenWarningModal,
+    EditTokensBar,
+    Header,
+    TokenList,
+} from "./Components"
 import { useTokenBalances } from "./Hooks"
+import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -115,7 +125,7 @@ export const HomeScreen = () => {
                     nav.navigate(Routes.BUY_FLOW)
                     track(AnalyticsEvent.BUY_CRYPTO_BUTTON_CLICKED)
                 },
-                icon: <BaseIcon color={theme.colors.text} name="plus-circle-outline" size={21} />,
+                icon: <BaseIcon color={theme.colors.text} name="icon-plus-circle" size={20} />,
                 testID: "buyButton",
             })
         }
@@ -125,7 +135,7 @@ export const HomeScreen = () => {
             actions.push({
                 name: LL.BTN_SEND(),
                 action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
-                icon: <BaseIcon color={theme.colors.text} name="arrow-up" />,
+                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-up" size={20} />,
                 testID: "sendButton",
             })
         }
@@ -134,7 +144,7 @@ export const HomeScreen = () => {
             actions.push({
                 name: LL.BTN_SWAP(),
                 action: () => nav.navigate(Routes.SWAP),
-                icon: <BaseIcon color={theme.colors.text} name="swap-horizontal" />,
+                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
                 testID: "swapButton",
             })
         }
@@ -146,9 +156,9 @@ export const HomeScreen = () => {
         <Layout
             fixedHeader={<Header />}
             noBackButton
-            noMargin
             fixedBody={
                 <NestableScrollContainer
+                    style={styles.container}
                     ref={scrollViewRef}
                     testID="HomeScreen_ScrollView"
                     refreshControl={
@@ -156,7 +166,8 @@ export const HomeScreen = () => {
                     }>
                     <BaseView>
                         <BaseView alignItems="center">
-                            <BaseSpacer height={20} />
+                            <DeviceJailBrokenAlert />
+                            <ClaimUsernameBanner />
                             <AccountCard
                                 balanceVisible={isBalanceVisible}
                                 openSelectAccountBottomSheet={openSelectAccountBottomSheet}
@@ -165,13 +176,13 @@ export const HomeScreen = () => {
                                 openQRCodeSheet={openQRCodeSheet}
                             />
                         </BaseView>
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={16} />
 
                         <FastActionsBar actions={Actions} />
 
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={16} />
                         <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-                        <BaseSpacer height={24} />
+                        <BaseSpacer height={8} />
 
                         <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
                         <BaseSpacer height={24} />
@@ -189,8 +200,16 @@ export const HomeScreen = () => {
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
                     <DeviceBackupBottomSheet />
+                    <DeviceJailBrokenWarningModal />
+                    <EnableNotificationsBottomSheet />
                 </NestableScrollContainer>
             }
         />
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        paddingHorizontal: 16,
+    },
+})

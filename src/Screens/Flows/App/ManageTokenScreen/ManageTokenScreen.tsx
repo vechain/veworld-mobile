@@ -10,6 +10,7 @@ import {
     DismissKeyboardView,
     Layout,
     OfficialTokenCard,
+    PlusIconHeaderButton,
     useThor,
 } from "~Components"
 
@@ -17,8 +18,8 @@ import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
 import {
     selectNonVechainFungibleTokens,
-    selectSelectedAccount,
     selectNonVechainTokensWithBalances,
+    selectSelectedAccount,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance, setIsAppLoading } from "~Storage/Redux/Slices"
@@ -121,27 +122,16 @@ export const ManageTokenScreen = () => {
         <DismissKeyboardView>
             <Layout
                 safeAreaTestID="Manage_Tokens_Screen"
+                title={LL.MANAGE_TOKEN_TITLE()}
+                headerRightElement={
+                    <PlusIconHeaderButton
+                        action={openAddCustomTokenSheet}
+                        testID="ManageTokenScreen_AddCustomToken_Button"
+                    />
+                }
                 body={
                     <>
                         <BaseView>
-                            <BaseView
-                                flexDirection="row"
-                                justifyContent="space-between"
-                                alignItems="center"
-                                w={100}
-                                pt={16}>
-                                <BaseText typographyFont="title" testID="contacts-screen-title">
-                                    {LL.MANAGE_TOKEN_TITLE()}
-                                </BaseText>
-                                <BaseIcon
-                                    haptics="Light"
-                                    name={"plus"}
-                                    size={24}
-                                    bg={theme.colors.secondary}
-                                    action={openAddCustomTokenSheet}
-                                    testID="ManageTokenScreen_AddCustomToken_Button"
-                                />
-                            </BaseView>
                             <BaseSpacer height={8} />
                             <BaseText typographyFont="body">{LL.MANAGE_TOKEN_SELECT_YOUR_TOKEN_BODY()}</BaseText>
                             <BaseSpacer height={16} />
@@ -150,7 +140,7 @@ export const ManageTokenScreen = () => {
                                 haptics="Light"
                                 action={navigateManageCustomTokenScreen}
                                 justifyContent="center">
-                                <BaseIcon name="tune" color={theme.colors.primary} />
+                                <BaseIcon name="icon-settings-2" color={theme.colors.primary} />
                                 <BaseSpacer width={8} />
                                 <BaseText typographyFont="bodyMedium">
                                     {LL.MANAGE_TOKEN_VIEW_CUSTOM_TOKENS_OWNED()}
@@ -175,8 +165,8 @@ export const ManageTokenScreen = () => {
                                         <BaseSpacer height={16} />
                                         {selectedTokens.map(token => (
                                             <OfficialTokenCard
-                                                iconHeight={20}
-                                                iconWidth={20}
+                                                iconHeight={25}
+                                                iconWidth={25}
                                                 selected
                                                 key={token.address}
                                                 token={token}
@@ -192,8 +182,8 @@ export const ManageTokenScreen = () => {
                                         <BaseSpacer height={16} />
                                         {unselectedTokens.map(token => (
                                             <OfficialTokenCard
-                                                iconHeight={20}
-                                                iconWidth={20}
+                                                iconHeight={25}
+                                                iconWidth={25}
                                                 key={token.address}
                                                 token={token}
                                                 action={handleClickToken(token)}

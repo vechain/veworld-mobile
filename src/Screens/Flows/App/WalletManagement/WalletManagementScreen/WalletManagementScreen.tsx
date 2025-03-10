@@ -1,9 +1,18 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { BaseView, DeviceBox, Layout, RequireUserPassword, SwipeableRow, showWarningToast } from "~Components"
+import {
+    BaseText,
+    BaseView,
+    DeviceBox,
+    Layout,
+    RequireUserPassword,
+    SwipeableRow,
+    PlusIconHeaderButton,
+    showWarningToast,
+} from "~Components"
 import { BaseDevice, Device } from "~Model"
 import { setDeviceState, useAppSelector } from "~Storage/Redux"
 import { selectAccounts, selectDevices } from "~Storage/Redux/Selectors"
-import { CreateOrImportWalletBottomSheet, RemoveWalletWarningBottomSheet, WalletManagementHeader } from "./components"
+import { CreateOrImportWalletBottomSheet, RemoveWalletWarningBottomSheet } from "./components"
 import { useWalletDeletion } from "./hooks"
 import { StyleSheet } from "react-native"
 import { useBottomSheetModal, useCheckIdentity, useTabBarBottomMargin } from "~Hooks"
@@ -62,7 +71,7 @@ export const WalletManagementScreen = () => {
         await checkIdentityBeforeOpening_1()
     }, [onCloseAddWalletBottomSheet, checkIdentityBeforeOpening_1])
 
-    const [isEdit, _setIsEdit] = useState(false)
+    const [isEdit] = useState(false)
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
     const closeOtherSwipeableItems = useCallback(() => {
         swipeableItemRefs?.current.forEach(ref => {
@@ -81,18 +90,6 @@ export const WalletManagementScreen = () => {
 
         return allDevices
     }, [accounts, devices])
-
-    const setIsEdit = useCallback(
-        (_isEdit: boolean) => {
-            if (_isEdit) {
-                closeOtherSwipeableItems()
-                _setIsEdit(true)
-            } else {
-                _setIsEdit(false)
-            }
-        },
-        [closeOtherSwipeableItems],
-    )
 
     const nav = useNavigation()
     const onDeviceSelected = useCallback(
@@ -128,9 +125,10 @@ export const WalletManagementScreen = () => {
     )
 
     const renderItem: RenderItem<Device> = useCallback(
-        ({ item, drag, isActive }) => {
+        ({ item, drag, isActive, getIndex }) => {
             return (
                 <SwipeableRow
+                    testID={`Wallet_${getIndex()}`}
                     item={item}
                     itemKey={item.rootAddress}
                     swipeableItemRefs={swipeableItemRefs}
@@ -138,7 +136,6 @@ export const WalletManagementScreen = () => {
                     setSelectedItem={setDeviceToRemove}
                     swipeEnabled={!isEdit}
                     onPress={onDeviceSelected}
-                    isDragMode={isEdit}
                     isOpen={deviceToRemove === item}>
                     <DeviceBox device={item} isEdit={isEdit} drag={drag} isActive={isActive} />
                 </SwipeableRow>
@@ -158,18 +155,21 @@ export const WalletManagementScreen = () => {
         )
     }
 
+    const headerRightElement = useMemo(
+        () => <PlusIconHeaderButton action={onOpenAddWalletBottomSheet} testID="Wallet_Management_AddWallet" />,
+        [onOpenAddWalletBottomSheet],
+    )
+
     return (
         <Layout
             safeAreaTestID="Wallet_Management_Screen"
-            fixedHeader={
-                <WalletManagementHeader
-                    goToCreateWalletFlow={onOpenAddWalletBottomSheet}
-                    isEdit={isEdit}
-                    setIsEdit={setIsEdit}
-                />
-            }
+            title={LL.TITLE_WALLET_MANAGEMENT()}
+            headerRightElement={headerRightElement}
             fixedBody={
                 <BaseView style={styles.view} mb={tabBarBottomMargin}>
+                    <BaseView style={styles.subTitleContainer}>
+                        <BaseText typographyFont="body">{LL.SB_WALLETS_MANAGEMENT()}</BaseText>
+                    </BaseView>
                     <DraggableFlatList<Device>
                         data={allDevicesAndObservedAccounts}
                         extraData={isEdit}
@@ -213,11 +213,13 @@ export const WalletManagementScreen = () => {
 }
 
 const styles = StyleSheet.create({
-    view: { flexGrow: 1 },
+    view: { flexGrow: 1, paddingTop: 16 },
+    subTitleContainer: {
+        paddingBottom: 24,
+        paddingHorizontal: 24,
+    },
     draggableFlatListContainer: { flexGrow: 1 },
-
     contentContainerStyle: {
-        paddingTop: 8,
         paddingBottom: 24,
     },
 })

@@ -20,6 +20,7 @@ import { striptags } from "striptags"
 import { useNavigation } from "@react-navigation/native"
 import { getTimeZone } from "react-native-localize"
 import { ActivityStatus } from "~Model"
+import { useResetNFTStack } from "../hooks"
 
 interface NFTAttributeData {
     trait_type: string
@@ -33,6 +34,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
     const nav = useNavigation()
     const { onCopyToClipboard } = useCopyClipboard()
     const { iosOnlyTabBarBottomMargin } = useTabBarBottomMargin()
+    useResetNFTStack()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
 

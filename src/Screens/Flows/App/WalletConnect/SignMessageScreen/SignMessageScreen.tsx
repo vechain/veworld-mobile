@@ -1,8 +1,10 @@
-import React, { FC, useCallback, useMemo } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { getSdkError } from "@walletconnect/utils"
+import React, { FC, useCallback, useMemo, useRef } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
-    BaseButton,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
@@ -10,8 +12,16 @@ import {
     CloseModalButton,
     getRpcError,
     RequireUserPassword,
+    SignAndReject,
+    SignAndRejectRefInterface,
     useWalletConnect,
 } from "~Components"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
+import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { AppInfo, UnknownAppMessage } from "~Screens"
 import {
     selectSelectedAccount,
     selectVerifyContext,
@@ -20,15 +30,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { error, HexUtils, SignMessageUtils, warn } from "~Utils"
-import { useAnalyticTracking, useCheckIdentity, useSignMessage } from "~Hooks"
-import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
-import { useI18nContext } from "~i18n"
-import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
-import { AppInfo, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
-import { getSdkError } from "@walletconnect/utils"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN>
 
@@ -44,6 +45,8 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     const dispatch = useAppDispatch()
 
     const [isInvalidChecked, setInvalidChecked] = React.useState(false)
+
+    const signAndRejectRef = useRef<SignAndRejectRefInterface>(null)
 
     const sessionContext = useAppSelector(state => selectVerifyContext(state, requestEvent.topic))
 
@@ -182,6 +185,8 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
+                scrollEventThrottle={16}
+                onScroll={signAndRejectRef.current?.onScroll}
                 style={styles.scrollView}>
                 <CloseModalButton onPress={onPressBack} />
                 <BaseView mx={20} style={styles.alignLeft}>
@@ -218,29 +223,18 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                         setConfirmed={setInvalidChecked}
                     />
                 </BaseView>
-
-                <BaseSpacer height={30} />
-
-                <BaseView style={styles.footer}>
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        title={LL.COMMON_BTN_SIGN()}
-                        action={checkIdentityBeforeOpening}
-                        /* We must assert that `biometrics` is not empty otherwise we don't know if the user has set biometrics or passcode, thus failing to decrypt the wallet when signing */
-                        isLoading={isBiometricsEmpty}
-                        disabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
-                    />
-                    <BaseSpacer height={16} />
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        variant="outline"
-                        title={LL.COMMON_BTN_REJECT()}
-                        action={onReject}
-                    />
-                </BaseView>
+                <BaseSpacer height={194} />
             </ScrollView>
+
+            <SignAndReject
+                ref={signAndRejectRef}
+                onConfirmTitle={LL.COMMON_BTN_SIGN()}
+                onConfirm={checkIdentityBeforeOpening}
+                isConfirmLoading={isBiometricsEmpty}
+                confirmButtonDisabled={isBiometricsEmpty || (!validConnectedApp && !isInvalidChecked)}
+                onRejectTitle={LL.COMMON_BTN_REJECT()}
+                onReject={onReject}
+            />
 
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}

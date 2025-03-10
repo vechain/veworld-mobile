@@ -3,4 +3,6 @@ export type FastAction = {
     action: () => void
     icon: React.ReactNode
     testID: string
+    disabled?: boolean
+    iconOnly?: boolean
 }

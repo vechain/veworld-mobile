@@ -1,12 +1,11 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import { BaseCard, BaseIcon, BaseImage, BaseText, BaseView } from "~Components/Base"
+import { BaseCard, BaseIcon, BaseImage, BaseText, BaseView, FiatBalance } from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Token } from "~Model"
-import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 import { selectOfficialTokens, selectVisibleCustomTokens, useAppSelector } from "~Storage/Redux"
 import { SWAP_SIDE } from "../SwapCard"
 
@@ -53,7 +52,13 @@ export const TokenBox = ({
                         <BaseImage source={{ uri: token.icon }} style={baseStyles.tokenIcon} />
                     </BaseCard>
                 ) : (
-                    <BaseIcon name="help" size={22} color={COLORS.DARK_PURPLE} bg={COLORS.WHITE} iconPadding={4} />
+                    <BaseIcon
+                        name="icon-help-circle"
+                        size={22}
+                        color={COLORS.DARK_PURPLE}
+                        bg={COLORS.WHITE}
+                        iconPadding={4}
+                    />
                 )}
             </BaseView>
         </DropShadow>
@@ -90,7 +95,7 @@ export const TokenBox = ({
                 {!isTokenAdded && (
                     <BaseView pl={12}>
                         <BaseIcon
-                            name="plus"
+                            name="icon-plus"
                             size={20}
                             bg={COLORS.LIME_GREEN}
                             iconPadding={3}

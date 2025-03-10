@@ -1,7 +1,8 @@
-import { LANGUAGE } from "../../../Constants/Enums/LanguageEnum"
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import lodash from "lodash"
 import moment from "moment"
-import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
+import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
+import { Locales } from "~i18n"
 
 /**
  * @typedef {Object} UserPreferenceState
@@ -10,10 +11,17 @@ import { CURRENCY, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
  * @property {boolean} isPinCodeRequired - whether the pin code is required to decrypt the wallets. Pin code will be stored in the PinCodeProvider if not.
  * @property {boolean} balanceVisible
  * @property {CURRENCY} currency
+ * @property {SYMBOL_POSITIONS} symbolPosition
  * @property {LANGUAGE} language
  * @property {boolean} isAnalyticsTrackingEnabled
  * @property {boolean} isSentryTrackingEnabled
- * @property {number} lastBackupRequestTimestamp
+ * @property {boolean} devFeaturesEnabled
+ * @property {string} lastReviewTimestamp
+ * @property {string} lastVersionCheck
+ * @property {string|number} appResetTimestamp
+ * @property {Object.<string, number>|undefined} lastBackupRequestTimestamp
+ * @property {number|null} lastNotificationReminder
+ * @property {string[]} removedNotificationTags
  */
 
 export interface UserPreferenceState {
@@ -22,8 +30,9 @@ export interface UserPreferenceState {
     isPinCodeRequired: boolean
     balanceVisible: boolean
     currency: CURRENCY
+    currencyFormat: CURRENCY_FORMATS
     symbolPosition: SYMBOL_POSITIONS
-    language: LANGUAGE
+    language: Locales
     isAnalyticsTrackingEnabled: boolean
     isSentryTrackingEnabled: boolean
     devFeaturesEnabled: boolean
@@ -31,6 +40,9 @@ export interface UserPreferenceState {
     lastVersionCheck: string
     appResetTimestamp?: string
     lastBackupRequestTimestamp?: { [key: string]: number | undefined }
+    lastNotificationReminder: number | null
+    removedNotificationTags?: string[]
+    showJailbrokeWarning?: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -39,8 +51,9 @@ const initialState: UserPreferenceState = {
     isPinCodeRequired: true,
     balanceVisible: true,
     currency: CURRENCY.USD,
+    currencyFormat: CURRENCY_FORMATS.SYSTEM,
     symbolPosition: SYMBOL_POSITIONS.BEFORE,
-    language: LANGUAGE.ENGLISH,
+    language: "en" as Locales,
     isAnalyticsTrackingEnabled: true, // this is enabled by default because otherwise onboarding events won't be tracked
     isSentryTrackingEnabled: true,
     devFeaturesEnabled: __DEV__,
@@ -48,6 +61,9 @@ const initialState: UserPreferenceState = {
     lastReviewTimestamp: moment().subtract(3, "weeks").add(3, "days").toISOString(),
     lastVersionCheck: moment().toISOString(),
     appResetTimestamp: undefined,
+    lastNotificationReminder: null,
+    removedNotificationTags: undefined,
+    showJailbrokeWarning: true,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -74,11 +90,15 @@ export const UserPreferencesSlice = createSlice({
             state.currency = action.payload
         },
 
+        setCurrencyFormat: (state, action: PayloadAction<CURRENCY_FORMATS>) => {
+            state.currencyFormat = action.payload
+        },
+
         setSymbolPosition: (state, action: PayloadAction<SYMBOL_POSITIONS>) => {
             state.symbolPosition = action.payload
         },
 
-        setLanguage: (state, action: PayloadAction<LANGUAGE>) => {
+        setLanguage: (state, action: PayloadAction<Locales>) => {
             state.language = action.payload
         },
 
@@ -115,7 +135,38 @@ export const UserPreferencesSlice = createSlice({
             }
         },
 
-        resetUserPreferencesState: () => initialState,
+        resetUserPreferencesState: state => {
+            if (state.language !== "en") {
+                const selectedLanguage = state.language
+                state = lodash.cloneDeep(initialState)
+                state.language = selectedLanguage
+                return
+            }
+
+            return initialState
+        },
+
+        updateLastNotificationReminder: (state, action: PayloadAction<number | null>) => {
+            state.lastNotificationReminder = action.payload
+        },
+
+        setShowJailbrokeDeviceWarning: (state, action: PayloadAction<boolean>) => {
+            state.showJailbrokeWarning = action.payload
+        },
+
+        addRemovedNotificationTag: (state, action: PayloadAction<string>) => {
+            if (!state.removedNotificationTags) {
+                state.removedNotificationTags = [action.payload]
+            } else if (!state.removedNotificationTags.includes(action.payload)) {
+                state.removedNotificationTags.push(action.payload)
+            }
+        },
+
+        removeRemovedNotificationTag: (state, action: PayloadAction<string>) => {
+            if (state.removedNotificationTags?.includes(action.payload)) {
+                state.removedNotificationTags = state.removedNotificationTags.filter(tag => tag !== action.payload)
+            }
+        },
     },
 })
 
@@ -125,6 +176,7 @@ export const {
     setIsPinCodeRequired,
     setBalanceVisible,
     setCurrency,
+    setCurrencyFormat,
     setSymbolPosition,
     setLanguage,
     setAnalyticsTrackingEnabled,
@@ -134,4 +186,8 @@ export const {
     setLastVersionCheck,
     setAppResetTimestamp,
     setLastBackupRequestTimestamp,
+    updateLastNotificationReminder,
+    addRemovedNotificationTag,
+    removeRemovedNotificationTag,
+    setShowJailbrokeDeviceWarning,
 } = UserPreferencesSlice.actions

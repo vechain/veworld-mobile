@@ -1,15 +1,15 @@
+import { useNavigation } from "@react-navigation/native"
+import { isEmpty, isUndefined } from "lodash"
 import React, { useCallback, useRef, useState } from "react"
+import { Modal, StyleSheet, View } from "react-native"
 import { SafeAreaView } from "react-native-safe-area-context"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, MigrationToSecurity_v2 } from "~Components"
 import { useBackHandler, useDisclosure, useTheme } from "~Hooks"
 import { BackHandlerEvent, BackupWallet, SecurityLevelType } from "~Model"
-import { useWalletSecurity } from "./Helpers.standalone"
-import { BaseModalWithChildren, LockScreen } from "./Standalone.components"
-import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { useI18nContext } from "~i18n"
-import { isEmpty, isUndefined } from "lodash"
-import { Modal, StyleSheet, View } from "react-native"
+import { useWalletSecurity } from "./Helpers.standalone"
+import { BaseModalWithChildren, LockScreen } from "./Standalone.components"
 
 export const SecurityUpgrade_V2 = ({
     oldPersistedState,
@@ -140,7 +140,7 @@ export const SecurityUpgrade_V2 = ({
         <SafeAreaView style={{ backgroundColor: theme.colors.background }}>
             <BaseView justifyContent="space-between" alignItems="center" h={100} w={100} p={24}>
                 <BaseView alignItems="center">
-                    <BaseIcon name="shield-alert-outline" size={72} color={theme.colors.text} />
+                    <BaseIcon name="icon-shield-alert" size={72} color={theme.colors.text} />
                     <BaseSpacer height={24} />
                     <BaseText align="center" typographyFont="title">
                         {LL.SECURITY_ENHANCEMENT_TITLE()}
@@ -207,6 +207,7 @@ export const SecurityUpgrade_V2 = ({
                     onSuccess={(pin: string) =>
                         isUpgrade.current ? onPasswordUpgradeSuccess(pin) : onPasswordSuccess(pin)
                     }
+                    onClose={closePasswordPrompt}
                 />
             </BaseModalWithChildren>
 

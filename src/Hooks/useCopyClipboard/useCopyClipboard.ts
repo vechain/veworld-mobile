@@ -2,7 +2,7 @@ import { useCallback } from "react"
 import { useI18nContext } from "~i18n"
 import * as Clipboard from "expo-clipboard"
 import { debug } from "~Utils"
-import { showInfoToast } from "~Components"
+import { showSuccessToast } from "~Components"
 import HapticsService from "~Services/HapticsService"
 import { ERROR_EVENTS } from "~Constants"
 
@@ -22,16 +22,17 @@ export const useCopyClipboard = () => {
     const { LL } = useI18nContext()
 
     const onCopyToClipboard = useCallback(
-        (text: string, labelName: string) => {
-            Clipboard.setStringAsync(text)
+        (text: string, labelName: string, showNotification = true) => {
+            Clipboard.setStringAsync(text.toLowerCase())
                 .then(async () => {
                     await HapticsService.triggerImpact({ level: "Light" })
-                    showInfoToast({
-                        text1: LL.SUCCESS_GENERIC(),
-                        text2: LL.NOTIFICATION_COPIED_CLIPBOARD({
-                            name: labelName,
-                        }),
-                    })
+                    if (showNotification) {
+                        showSuccessToast({
+                            text1: LL.NOTIFICATION_COPIED_CLIPBOARD({
+                                name: labelName,
+                            }),
+                        })
+                    }
                 })
                 .catch(error => {
                     debug(ERROR_EVENTS.APP, error)

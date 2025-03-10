@@ -1,4 +1,4 @@
-import { BaseIcon, BaseSpacer, BaseText, BaseView, CompressAndExpandBaseText } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, CompressAndExpandBaseText, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
 import React, { useMemo } from "react"
 import { DelegationType } from "~Model/Delegation"
@@ -10,7 +10,6 @@ import { Network, TransactionRequest } from "~Model"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNumber } from "bignumber.js"
 import { useExchangeRate } from "~Api/Coingecko"
-import FiatBalance from "~Screens/Flows/App/HomeScreen/Components/AccountCard/FiatBalance"
 
 type Props = {
     selectedDelegationOption: DelegationType
@@ -112,7 +111,7 @@ export const TransactionDetails = ({
                         <>
                             <BaseSpacer height={8} />
                             <BaseView flexDirection="row">
-                                <BaseIcon name="alert-circle-outline" color={theme.colors.danger} size={16} />
+                                <BaseIcon name="icon-alert-circle" color={theme.colors.danger} size={16} />
                                 <BaseSpacer width={4} />
                                 <BaseText typographyFont="buttonSecondary" color={theme.colors.danger}>
                                     {LL.SEND_INSUFFICIENT_VTHO()} {vthoBalance} {VTHO.symbol}

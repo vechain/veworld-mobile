@@ -1,0 +1,340 @@
+import { useNavigation } from "@react-navigation/native"
+import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef } from "react"
+import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedState } from "react-native-onesignal"
+import { vechainNewsAndUpdates } from "~Constants"
+import { useAppState } from "~Hooks"
+import { AppStateType, NETWORK_TYPE } from "~Model"
+import {
+    addRemovedNotificationTag,
+    increaseDappVisitCounter,
+    removeDappVisitCounter,
+    removeRemovedNotificationTag,
+    selectDappVisitCounter,
+    selectNotificationFeautureEnabled,
+    selectNotificationOptedIn,
+    selectNotificationPermissionEnabled,
+    selectRemovedNotificationTags,
+    selectSelectedNetwork,
+    setDappVisitCounter,
+    updateNotificationFeatureFlag,
+    updateNotificationOptedIn,
+    updateNotificationPermission,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { useFeatureFlags } from "../FeatureFlagsProvider"
+import { error } from "~Utils"
+
+type ContextType = {
+    featureEnabled: boolean
+    optIn: typeof OneSignal.User.pushSubscription.optIn
+    optOut: typeof OneSignal.User.pushSubscription.optOut
+    requestNotficationPermission: () => void
+    isNotificationPermissionEnabled: boolean | null
+    isUserOptedIn: boolean | null
+    increaseDappCounter: (dappId: string) => void
+    getTags: () => Promise<{
+        [key: string]: string
+    }>
+    addTag: (key: string, value: string) => void
+    addDAppTag: (key: string) => void
+    removeTag: (key: string) => void
+    removeDAppTag: (key: string) => void
+    removeAllTags: () => void
+}
+
+const Context = createContext<ContextType | undefined>(undefined)
+const logLevel = __DEV__ ? LogLevel.Debug : LogLevel.None
+OneSignal.Debug.setLogLevel(logLevel)
+
+const NotificationsProvider = ({ children }: PropsWithChildren) => {
+    const dispatch = useAppDispatch()
+    const navigation = useNavigation()
+    const { pushNotificationFeature } = useFeatureFlags()
+
+    const permissionEnabled = useAppSelector(selectNotificationPermissionEnabled)
+    const optedIn = useAppSelector(selectNotificationOptedIn)
+    const dappVisitCounter = useAppSelector(selectDappVisitCounter)
+    const removedNotificationTags = useAppSelector(selectRemovedNotificationTags)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
+    const isFetcingTags = useRef(false)
+
+    const { currentState, previousState } = useAppState()
+
+    const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
+
+    const initializeIneSignal = useCallback(() => {
+        const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
+
+        try {
+            OneSignal.initialize(appId as string)
+        } catch (err) {
+            error("ONE_SIGNAL", err)
+            throw err
+        }
+    }, [])
+
+    const getOptInStatus = useCallback(async () => {
+        let _optInStatus = false
+
+        try {
+            _optInStatus = await OneSignal.User.pushSubscription.getOptedInAsync()
+        } catch {
+            _optInStatus = false
+        }
+
+        dispatch(updateNotificationOptedIn(_optInStatus))
+    }, [dispatch])
+
+    const getPermission = useCallback(async () => {
+        let _permissionEnabled = false
+
+        try {
+            _permissionEnabled = await OneSignal.Notifications.getPermissionAsync()
+        } catch {
+            _permissionEnabled = false
+        }
+
+        dispatch(updateNotificationPermission(_permissionEnabled))
+    }, [dispatch])
+
+    const requestPermission = useCallback(() => {
+        dispatch(updateNotificationPermission(!permissionEnabled))
+
+        OneSignal.Notifications.requestPermission(true)
+            .then(result => {
+                dispatch(updateNotificationPermission(result))
+            })
+            .catch(() => {
+                dispatch(updateNotificationPermission(false))
+            })
+    }, [dispatch, permissionEnabled])
+
+    const optInUser = useCallback(() => {
+        OneSignal.User.pushSubscription.optIn()
+        dispatch(updateNotificationOptedIn(true))
+    }, [dispatch])
+
+    const optOutUser = useCallback(() => {
+        OneSignal.User.pushSubscription.optOut()
+        dispatch(updateNotificationOptedIn(false))
+    }, [dispatch])
+
+    const onNotificationClicked = useCallback(
+        (event: NotificationClickEvent) => {
+            const launchURL = event.notification.launchURL
+
+            if (launchURL) {
+                return
+            }
+
+            try {
+                if (event.notification.additionalData) {
+                    const { route, navParams } = event.notification.additionalData as {
+                        route?: string
+                        navParams?: string
+                    }
+
+                    if (route) {
+                        navigation.navigate(route as any, navParams ? JSON.parse(navParams) : undefined)
+                    }
+                }
+            } catch {}
+        },
+        [navigation],
+    )
+
+    const onPermissionChanged = useCallback(
+        (_permissionEnabled: boolean) => {
+            dispatch(updateNotificationPermission(_permissionEnabled))
+        },
+        [dispatch],
+    )
+
+    const onOptInStatusChanged = useCallback(
+        (event: PushSubscriptionChangedState) => {
+            const { optedIn: previousOptedInStatuse } = event.previous
+            const { optedIn: currentOptedInStatuse } = event.current
+
+            if (previousOptedInStatuse !== currentOptedInStatuse) {
+                dispatch(updateNotificationOptedIn(currentOptedInStatuse))
+            }
+        },
+        [dispatch],
+    )
+
+    const getTags = useCallback(() => {
+        return OneSignal.User.getTags()
+    }, [])
+
+    const addTag = useCallback(
+        (key: string, value: string) => {
+            OneSignal.User.addTag(key, value)
+            dispatch(removeRemovedNotificationTag(key))
+        },
+        [dispatch],
+    )
+
+    const addDAppTag = useCallback(
+        (key: string) => {
+            addTag(key, "true")
+            dispatch(setDappVisitCounter({ dappId: key, counter: 2 }))
+        },
+        [addTag, dispatch],
+    )
+
+    const removeTag = useCallback(
+        (key: string) => {
+            OneSignal.User.removeTag(key)
+
+            if (!removedNotificationTags?.includes(key)) {
+                dispatch(addRemovedNotificationTag(key))
+            }
+        },
+        [dispatch, removedNotificationTags],
+    )
+
+    const removeDAppTag = useCallback(
+        (key: string) => {
+            removeTag(key)
+            dispatch(removeDappVisitCounter({ dappId: key }))
+        },
+        [dispatch, removeTag],
+    )
+
+    const removeAllTags = useCallback(() => {
+        getTags()?.then(tags => {
+            const tagKeys = Object.keys(tags)
+            OneSignal.User.removeTags(tagKeys)
+        })
+    }, [getTags])
+
+    const init = useCallback(async () => {
+        initializeIneSignal()
+        await getOptInStatus()
+        await getPermission()
+
+        if (!removedNotificationTags?.includes(vechainNewsAndUpdates)) {
+            addTag(vechainNewsAndUpdates, "true")
+        }
+    }, [addTag, getOptInStatus, getPermission, initializeIneSignal, removedNotificationTags])
+
+    useEffect(() => {
+        dispatch(updateNotificationFeatureFlag(pushNotificationFeature?.enabled))
+    }, [dispatch, pushNotificationFeature?.enabled])
+
+    useEffect(() => {
+        featureEnabled && init()
+    }, [init, featureEnabled])
+
+    useEffect(() => {
+        if (!featureEnabled) {
+            return
+        }
+
+        OneSignal.Notifications.addEventListener("click", onNotificationClicked)
+        OneSignal.Notifications.addEventListener("permissionChange", onPermissionChanged)
+        OneSignal.User.pushSubscription.addEventListener("change", onOptInStatusChanged)
+
+        return () => {
+            if (!featureEnabled) {
+                return
+            }
+
+            OneSignal.Notifications.removeEventListener("click", onNotificationClicked)
+            OneSignal.Notifications.removeEventListener("permissionChange", onPermissionChanged)
+            OneSignal.User.pushSubscription.removeEventListener("change", onOptInStatusChanged)
+        }
+    }, [featureEnabled, onNotificationClicked, onOptInStatusChanged, onPermissionChanged])
+
+    useEffect(() => {
+        if (
+            currentState === AppStateType.ACTIVE &&
+            currentState !== previousState &&
+            !isFetcingTags.current &&
+            isMainnet &&
+            featureEnabled
+        ) {
+            isFetcingTags.current = true
+            getTags()
+                ?.then(tags => {
+                    Object.entries(dappVisitCounter).forEach(([dappId, counter]) => {
+                        if (tags[dappId] && tags[dappId] === "true" && dappVisitCounter[dappId] !== 2) {
+                            dispatch(setDappVisitCounter({ dappId: dappId, counter: 2 }))
+                        } else if (!removedNotificationTags?.includes(dappId) && counter >= 2) {
+                            addTag(dappId, "true")
+                        }
+                    })
+                })
+                .finally(() => {
+                    isFetcingTags.current = false
+                })
+        }
+    }, [
+        dappVisitCounter,
+        dispatch,
+        currentState,
+        previousState,
+        isMainnet,
+        addTag,
+        getTags,
+        featureEnabled,
+        removedNotificationTags,
+    ])
+
+    const increaseDappCounter = useCallback(
+        (dappId: string) => {
+            if (dappId && isMainnet && featureEnabled) {
+                dispatch(increaseDappVisitCounter({ dappId: dappId }))
+            }
+        },
+        [dispatch, featureEnabled, isMainnet],
+    )
+
+    const contextValue = useMemo(() => {
+        return {
+            featureEnabled: featureEnabled,
+            optIn: optInUser,
+            optOut: optOutUser,
+            requestNotficationPermission: requestPermission,
+            isNotificationPermissionEnabled: permissionEnabled,
+            isUserOptedIn: optedIn,
+            increaseDappCounter: increaseDappCounter,
+            addTag: addTag,
+            removeTag: removeTag,
+            getTags: getTags,
+            removeAllTags: removeAllTags,
+            addDAppTag: addDAppTag,
+            removeDAppTag: removeDAppTag,
+        }
+    }, [
+        addDAppTag,
+        addTag,
+        featureEnabled,
+        getTags,
+        increaseDappCounter,
+        optInUser,
+        optOutUser,
+        optedIn,
+        permissionEnabled,
+        removeAllTags,
+        removeDAppTag,
+        removeTag,
+        requestPermission,
+    ])
+
+    return <Context.Provider value={contextValue}>{children}</Context.Provider>
+}
+
+const useNotifications = () => {
+    const context = useContext(Context)
+
+    if (!context) {
+        throw new Error("useNotifications must be used within a NotificationsProvider")
+    }
+
+    return context
+}
+
+export { NotificationsProvider, useNotifications }

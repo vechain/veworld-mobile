@@ -43,7 +43,7 @@ export const AboutScreen = () => {
                             <BaseText typographyFont="captionRegular">{link.subtitle}</BaseText>
                         </BaseView>
                         <BaseView>
-                            <BaseIcon name="chevron-right" size={25} color={theme.colors.text} />
+                            <BaseIcon name="icon-chevron-right" size={25} color={theme.colors.text} />
                         </BaseView>
                     </BaseView>
                 </BaseCard>
@@ -54,32 +54,28 @@ export const AboutScreen = () => {
 
     return (
         <Layout
+            title={LL.TITLE_ABOUT()}
             body={
-                <>
-                    <BaseText typographyFont="title" pt={16}>
-                        {LL.TITLE_ABOUT()}
+                <BaseView h={100} alignItems="center">
+                    <BaseSpacer height={24} />
+                    <BaseCard
+                        containerStyle={styles.logoCardContainer}
+                        // @ts-ignore
+                        style={styles.logoCard}>
+                        <VeWorldLogoSVG width={90} height={62} />
+                    </BaseCard>
+                    <BaseSpacer height={16} />
+                    <BaseText typographyFont="subTitleBold">{LL.VEWORLD()}</BaseText>
+                    <BaseSpacer height={8} />
+                    <BaseText typographyFont="captionRegular">
+                        {LL.SETTINGS_ABOUT_APP_VERSION({
+                            // NOTE: this can be taken from package.json too, but this seems more reliable
+                            version: DeviceInfo.getVersion(),
+                        })}
                     </BaseText>
-                    <BaseView h={100} alignItems="center">
-                        <BaseSpacer height={24} />
-                        <BaseCard
-                            containerStyle={styles.logoCardContainer}
-                            // @ts-ignore
-                            style={styles.logoCard}>
-                            <VeWorldLogoSVG width={90} height={62} />
-                        </BaseCard>
-                        <BaseSpacer height={16} />
-                        <BaseText typographyFont="subTitleBold">{LL.VEWORLD()}</BaseText>
-                        <BaseSpacer height={8} />
-                        <BaseText typographyFont="captionRegular">
-                            {LL.SETTINGS_ABOUT_APP_VERSION({
-                                // NOTE: this can be taken from package.json too, but this seems more reliable
-                                version: DeviceInfo.getVersion(),
-                            })}
-                        </BaseText>
-                        <BaseSpacer height={48} />
-                        {links.map(link => renderLinks(link))}
-                    </BaseView>
-                </>
+                    <BaseSpacer height={48} />
+                    {links.map(link => renderLinks(link))}
+                </BaseView>
             }
         />
     )

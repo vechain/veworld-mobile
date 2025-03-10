@@ -3,7 +3,6 @@ import { StyleProp, ViewStyle, StyleSheet } from "react-native"
 import { COLORS } from "~Constants"
 import { BaseText, BaseCard, BaseSpacer, BaseView, BaseCustomTokenIcon, BaseImage } from "~Components"
 import { FungibleToken } from "~Model"
-import { address } from "thor-devkit"
 
 type Props = {
     token?: FungibleToken
@@ -27,13 +26,7 @@ export const CustomTokenCard = memo(({ token, containerStyle }: Props) => {
                     <BaseImage source={{ uri: token?.icon }} style={styles.image} />
                 </BaseCard>
             )}
-            {!hasIcon && (
-                <BaseCustomTokenIcon
-                    style={styles.icon}
-                    tokenSymbol={token?.symbol ?? ""}
-                    tokenAddress={address.toChecksumed(token?.address ?? "")}
-                />
-            )}
+            {!hasIcon && <BaseCustomTokenIcon style={styles.icon} tokenSymbol={token?.symbol ?? ""} />}
             <BaseSpacer width={8} />
             <BaseView flexDirection="column" justifyContent="center" w={75}>
                 <BaseText typographyFont="buttonPrimary" numberOfLines={1} ellipsizeMode="tail">

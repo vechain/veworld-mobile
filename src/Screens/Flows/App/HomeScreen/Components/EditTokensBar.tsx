@@ -5,7 +5,6 @@ import { COLORS } from "~Constants"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { StyleSheet } from "react-native"
 import { selectNonVechainTokensWithBalances, useAppSelector } from "~Storage/Redux"
 
 type Props = {
@@ -37,25 +36,25 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                     {tokenBalances.length > 1 && (
                         <>
                             <BaseIcon
+                                disabled={true}
                                 haptics="Light"
-                                name="priority-low"
+                                name="icon-list-end"
                                 action={onButtonPress}
-                                size={24}
-                                color={theme.colors.text}
-                                style={styles.icon}
+                                size={20}
+                                p={10}
+                                color={theme.colors.transparent}
                             />
                             <BaseSpacer width={8} />
                         </>
                     )}
                     <BaseIcon
+                        p={10}
                         haptics="Light"
-                        name="pencil-outline"
-                        bg={COLORS.LIME_GREEN}
-                        color={COLORS.DARK_PURPLE}
+                        name="icon-settings-2"
+                        color={theme.colors.text}
                         action={handleManageToken}
-                        size={24}
+                        size={20}
                         testID="EditTokensBar_BaseIcon_manageToken"
-                        style={styles.icon}
                     />
                 </BaseView>
             )
@@ -67,24 +66,26 @@ export const EditTokensBar = memo(({ isEdit, setIsEdit }: Props) => {
                 textColor={COLORS.DARK_PURPLE}
                 radius={30}
                 py={10}
-                leftIcon={<BaseIcon name="check" size={20} color={COLORS.DARK_PURPLE} />}>
+                leftIcon={<BaseIcon name="icon-check" size={20} color={COLORS.DARK_PURPLE} />}>
                 <BaseSpacer width={8} />
                 {LL.COMMON_BTN_SAVE()}
             </BaseButton>
         )
-    }, [isEdit, tokenBalances.length, onButtonPress, theme.colors.text, handleManageToken, LL])
+    }, [
+        isEdit,
+        tokenBalances.length,
+        onButtonPress,
+        theme.colors.transparent,
+        theme.colors.text,
+        handleManageToken,
+        LL,
+    ])
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" px={20}>
-            <BaseText typographyFont="subTitleBold">{LL.SB_YOUR_TOKENS()}</BaseText>
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
+            <BaseText typographyFont="bodySemiBold">{LL.SB_MY_TOKENS()}</BaseText>
 
             {getActionsButtons()}
         </BaseView>
     )
-})
-
-const styles = StyleSheet.create({
-    icon: {
-        padding: 8,
-    },
 })

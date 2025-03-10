@@ -6,3 +6,6 @@ flows:
   - contactManagement/contactManagement.yaml
   - contactManagement/addContactsToScroll.yaml
   - tokenManagement/tokenManagement.yaml
+  - onboarding/*
+  - userActivity/userActivity.yaml
+  - universal_link/*

@@ -3,7 +3,7 @@ import { useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 
-import { BaseAnimatedText, BaseText, BaseView } from "~Components"
+import { BaseAnimatedText, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useLineChartDatetime, useLineChartPrice, useLineChartRelativeChange } from "../Hooks/usePrice"
 import { typography, ColorThemeType } from "~Constants"
@@ -27,18 +27,10 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
     const icon = useDerivedValue(() => (priceChangeValue.value > 0 ? "+" : "-"), [priceChangeValue.value])
     const changeStyles = useAnimatedStyle(
         () => ({
-            color: priceChangeValue.value > 0 ? theme.colors.success : theme.colors.danger,
+            color: priceChangeValue.value > 0 ? theme.colors.positive : theme.colors.negative,
         }),
-        [priceChangeValue.value, theme.colors.success, theme.colors.danger],
+        [priceChangeValue.value, theme.colors.positive, theme.colors.negative],
     )
-
-    const responsiveFontSize = useDerivedValue(() => {
-        if (formattedPrice.value.length < 10) {
-            return 32
-        } else {
-            return 24
-        }
-    }, [formattedPrice.value.length])
 
     const applyPriceContainerStyle = useMemo(() => {
         return isIOS() ? styles.textContainer : undefined
@@ -47,29 +39,35 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
     return (
         <BaseView flexDirection="row" justifyContent="space-between" w={100}>
             <BaseView style={applyPriceContainerStyle} justifyContent="space-between">
-                <BaseText typographyFont="body">{LL.COMMON_PRICE()}</BaseText>
+                <BaseText color={theme.colors.graphStatsText} style={styles.textBody}>
+                    {LL.COMMON_PRICE()}
+                </BaseText>
                 <BaseView flexDirection="row" alignItems="baseline">
                     {isChartDataLoading ? (
-                        <AssetPriceBannerSkeleton />
+                        <>
+                            <BaseSpacer height={4} />
+                            <AssetPriceBannerSkeleton />
+                        </>
                     ) : (
                         <BaseAnimatedText
                             text={formattedPrice}
-                            style={[
-                                styles.textBigTitle,
-                                {
-                                    fontSize: otherTypography.fontSize[responsiveFontSize.value],
-                                },
-                            ]}
+                            style={[styles.textTitle, { color: theme.colors.text }]}
                         />
                     )}
                 </BaseView>
             </BaseView>
 
             <BaseView alignItems="flex-end" style={styles.textContainer} justifyContent="space-between">
-                <BaseAnimatedText text={datetime.formatted} style={{ color: theme.colors.text }} />
+                <BaseAnimatedText
+                    text={datetime.formatted}
+                    style={[styles.textBody, { color: theme.colors.graphStatsText }]}
+                />
 
                 {isChartDataLoading ? (
-                    <AssetTrendBannerSkeleton />
+                    <>
+                        <BaseSpacer height={4} />
+                        <AssetTrendBannerSkeleton />
+                    </>
                 ) : (
                     <BaseView flexDirection="row">
                         <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle, styles.icon]} />
@@ -84,17 +82,33 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         textContainer: {
-            height: 56,
+            height: 44,
+            gap: 3,
         },
         textBigTitle: {
-            color: theme.colors.primary,
+            color: theme.colors.text,
             fontWeight: "700",
             fontFamily: otherTypography.fontFamily["Inter-Bold"],
         },
         textTitle: {
-            fontSize: otherTypography.fontSize[22],
-            fontWeight: "700",
-            fontFamily: otherTypography.fontFamily["Inter-Bold"],
+            fontSize: otherTypography.fontSize[18],
+            fontWeight: "600",
+            fontFamily: otherTypography.fontFamily["Inter-SemiBold"],
+            height: 28,
+            padding: 0,
+        },
+        textCaption: {
+            fontSize: otherTypography.fontSize[12],
+            fontWeight: "400",
+            fontFamily: otherTypography.fontFamily["Inter-Regular"],
+            height: 16,
+            padding: 0,
+        },
+        textBody: {
+            fontSize: otherTypography.fontSize[14],
+            fontWeight: "400",
+            fontFamily: otherTypography.fontFamily["Inter-Regular"],
+            height: 16,
             padding: 0,
         },
         icon: {

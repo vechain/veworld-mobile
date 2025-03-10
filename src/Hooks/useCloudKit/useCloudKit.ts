@@ -1,18 +1,18 @@
-import { useCallback, useEffect, useState } from "react"
+import { useCallback } from "react"
 import { NativeModules } from "react-native"
-import { showErrorToast } from "~Components"
-import { DerivationPath, ERROR_EVENTS } from "~Constants"
+import { showErrorToast, showInfoToast } from "~Components"
+import { AnalyticsEvent, DerivationPath, ERROR_EVENTS } from "~Constants"
+import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
-import { PasswordUtils, PlatformUtils, error } from "~Utils"
+import { error, PasswordUtils } from "~Utils"
 import { CKError, handleCloudKitErrors } from "./ErrorModel"
+
 const { CloudKitManager } = NativeModules
 
 export const useCloudKit = () => {
     const { LL } = useI18nContext()
-    const [isAvailable, setisAvailable] = useState(false)
-    const [isWalletBackedUp, setIsWalletBackedUp] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
+    const track = useAnalyticTracking()
 
     const getCloudKitAvailability = useCallback(async () => {
         try {
@@ -27,14 +27,26 @@ export const useCloudKit = () => {
         }
     }, [])
 
-    const deleteWallet = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
-        const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
-        const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
-        const delIV = await CloudKitManager.deleteIV(_rootAddress)
-        setIsLoading(false)
-        return delWAllet && delSalt && delIV
-    }, [])
+    const deleteWallet = useCallback(
+        async (_rootAddress: string) => {
+            try {
+                track(AnalyticsEvent.DELETE_BACKUP)
+                const delWAllet = await CloudKitManager.deleteWallet(_rootAddress)
+                const delSalt = await CloudKitManager.deleteSalt(_rootAddress)
+                const delIV = await CloudKitManager.deleteIV(_rootAddress)
+                delWAllet && delSalt && delIV && track(AnalyticsEvent.DELETE_BACKUP_SUCCESS)
+                return delWAllet && delSalt && delIV
+            } catch (_error) {
+                let er = _error as CKError
+                error(ERROR_EVENTS.CLOUDKIT, er, er.message)
+                showErrorToast({
+                    text1: er.message,
+                    text2: handleCloudKitErrors(er),
+                })
+            }
+        },
+        [track],
+    )
 
     const saveWalletToCloudKit = useCallback(
         async ({
@@ -54,14 +66,14 @@ export const useCloudKit = () => {
             iv: Uint8Array
             derivationPath: DerivationPath
         }) => {
+            track(AnalyticsEvent.SAVE_BACKUP_TO_CLOUD_START)
             if (!mnemonic || !_rootAddress || !deviceType || !salt || !iv || !firstAccountAddress) {
                 showErrorToast({
                     text1: LL.CLOUDKIT_ERROR_GENERIC(),
                 })
-                return
+                error(ERROR_EVENTS.CLOUDKIT, "Validation failed: Missing required fields.")
+                return false
             }
-
-            setIsLoading(true)
 
             try {
                 const result = await CloudKitManager.saveToCloudKit(
@@ -81,71 +93,85 @@ export const useCloudKit = () => {
                         showErrorToast({
                             text1: LL.CLOUDKIT_ERROR_GENERIC(),
                         })
-                        setIsLoading(false)
-                        return
+                        error(ERROR_EVENTS.CLOUDKIT, "Failed to save salt or iv to CloudKit.")
+                        return false
                     }
+
+                    track(AnalyticsEvent.SAVE_BACKUP_TO_CLOUD_SUCCESS)
+                    return true
                 }
+                error(ERROR_EVENTS.CLOUDKIT, "CloudKit save operation returned an invalid result.")
+                return false
             } catch (_error: unknown) {
                 await deleteWallet(_rootAddress)
-                setIsLoading(false)
                 let er = _error as CKError
                 error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
                     text1: er.message,
                     text2: handleCloudKitErrors(er),
                 })
+                return false
             }
         },
-        [LL, deleteWallet],
+        [LL, deleteWallet, track],
     )
 
     const getAllWalletsFromCloudKit = useCallback(async () => {
-        setIsLoading(true)
+        track(AnalyticsEvent.IMPORT_ALL_BACKUPS_FROM_WALLET_START)
         try {
             const result = await CloudKitManager.getAllFromCloudKit()
-            setIsLoading(false)
+            if (Array.isArray(result) && result.length === 0) {
+                showInfoToast({
+                    text1: LL.CLOUD_NO_WALLETS_AVAILABLE_TITLE(),
+                    text2: LL.CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION({
+                        cloud: "ICloud",
+                    }),
+                })
+            }
+            track(AnalyticsEvent.IMPORT_ALL_BACKUPS_FROM_WALLET_SUCCESS)
             return result
         } catch (_error) {
-            setIsLoading(false)
             let er = _error as CKError
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
                 text1: er.message,
                 text2: handleCloudKitErrors(er),
             })
+            return []
         }
-    }, [])
+    }, [LL, track])
 
     const getWalletByRootAddress = useCallback(
-        async (_rootAddress: string) => {
-            if (!isAvailable) return
-            setIsLoading(true)
+        async (_rootAddress?: string) => {
+            track(AnalyticsEvent.IMPORT_FROM_CLOUD_START)
+
+            if (!_rootAddress) {
+                error(ERROR_EVENTS.CLOUDKIT, "Root address is required.")
+                throw new Error("Root address is required")
+            }
+
             try {
                 const selectedWallet = await CloudKitManager.getWallet(_rootAddress)
-                setIsWalletBackedUp(!!selectedWallet?.rootAddress)
-                setIsLoading(false)
+                track(AnalyticsEvent.IMPORT_FROM_CLOUD_SUCCESS)
                 return selectedWallet
             } catch (_error) {
-                setIsLoading(false)
                 let er = _error as CKError
                 error(ERROR_EVENTS.CLOUDKIT, er, er.message)
                 showErrorToast({
                     text1: er.message,
                     text2: handleCloudKitErrors(er),
                 })
+                throw er
             }
         },
-        [isAvailable],
+        [track],
     )
 
     const getSalt = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
         try {
             const salt = await CloudKitManager.getSalt(_rootAddress)
-            setIsLoading(false)
             return salt
         } catch (_error) {
-            setIsLoading(false)
             let er = _error as CKError
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
@@ -156,13 +182,10 @@ export const useCloudKit = () => {
     }, [])
 
     const getIV = useCallback(async (_rootAddress: string) => {
-        setIsLoading(true)
         try {
             const iv = await CloudKitManager.getIV(_rootAddress)
-            setIsLoading(false)
             return iv
         } catch (_error) {
-            setIsLoading(false)
             let er = _error as CKError
             error(ERROR_EVENTS.CLOUDKIT, er, er.message)
             showErrorToast({
@@ -172,22 +195,11 @@ export const useCloudKit = () => {
         }
     }, [])
 
-    useEffect(() => {
-        if (PlatformUtils.isIOS()) {
-            getCloudKitAvailability().then(_isAvailable => setisAvailable(_isAvailable))
-        } else {
-            setisAvailable(false)
-        }
-    }, [getCloudKitAvailability])
-
     return {
         getCloudKitAvailability,
         saveWalletToCloudKit,
         getAllWalletsFromCloudKit,
-        isCloudKitAvailable: isAvailable,
-        isWalletBackedUp,
         getWalletByRootAddress,
-        isLoading,
         getSalt,
         getIV,
         deleteWallet,

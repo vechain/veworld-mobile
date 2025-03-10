@@ -12,7 +12,7 @@ type Props = NativeStackScreenProps<
 >
 
 export const SettingsBrowserView: React.FC<Props> = ({ route }) => {
-    const { webviewRef, resetWebViewState, onScroll, onNavigationStateChange } = useInAppBrowser()
+    const { webviewRef, resetWebViewState, onScroll, onNavigationStateChange, originWhitelist } = useInAppBrowser()
 
     const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
 
@@ -49,6 +49,7 @@ export const SettingsBrowserView: React.FC<Props> = ({ route }) => {
                             allowsInlineMediaPlayback={true}
                             onNavigationStateChange={onNavigationStateChange}
                             onScroll={onScroll}
+                            originWhitelist={originWhitelist}
                         />
                     )}
                 </View>

@@ -1,9 +1,8 @@
 import { Pressable, StyleSheet, Text, View } from "react-native"
 import React, { useCallback } from "react"
-import { ColorThemeType, valueToHP } from "~Constants"
-import { widthPercentageToDP as wp } from "react-native-responsive-screen"
-import Icon from "react-native-vector-icons/MaterialCommunityIcons"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { Icon } from "~Components"
 
 const numPad = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "blank", "0", "canc"]
 
@@ -36,7 +35,7 @@ export const StandaloneNumPad = ({ onDigitPress, onDigitDelete }: Props) => {
                                 {digit !== "canc" ? (
                                     <Text style={styles.digitText}>{digit}</Text>
                                 ) : (
-                                    <Icon size={22} name="backspace-outline" color={theme.colors.text} />
+                                    <Icon size={22} name="icon-delete" color={theme.colors.text} />
                                 )}
                             </Pressable>
                         ) : null}
@@ -52,26 +51,27 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             flexDirection: "row",
             flexWrap: "wrap",
+            justifyContent: "center",
             width: "100%",
         },
         width: {
-            width: "33%",
-            justifyContent: "center",
+            width: "30%",
+            paddingHorizontal: 16,
+            marginVertical: 8,
             alignItems: "center",
-            paddingVertical: valueToHP[22],
         },
         pressable: {
-            width: wp("18%"),
-            height: wp("18%"),
+            width: 80,
+            height: 80,
+            padding: 8,
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: theme.colors.card,
-            borderRadius: wp("9%"),
+            borderRadius: 40,
         },
         digitText: {
-            fontSize: 32,
-            fontWeight: "bold",
+            fontSize: 24,
+            fontWeight: "medium",
             alignItems: "center",
-            color: theme.colors.text,
+            color: theme.colors.numberPad,
         },
     })

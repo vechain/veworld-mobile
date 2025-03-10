@@ -1,16 +1,23 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { TokenWithCompleteInfo, useTheme } from "~Hooks"
-import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseSkeleton, BaseText, BaseView, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import FiatBalance from "../../HomeScreen/Components/AccountCard/FiatBalance"
+import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { B3TR, COLORS, VOT3 } from "~Constants"
 
 export const BalanceView = ({
     tokenWithInfo,
     isBalanceVisible,
+    change24h,
+    isPositiveChange,
+    containerStyle,
 }: {
     tokenWithInfo: TokenWithCompleteInfo
     isBalanceVisible: boolean
+    change24h?: string
+    isPositiveChange?: boolean
+    containerStyle?: StyleProp<ViewStyle>
 }) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
@@ -21,6 +28,13 @@ export const BalanceView = ({
 
     const isLoading = exchangeRateLoading || isTokensOwnedLoading
     const priceFeedNotAvailable = !exchangeRate || isLoading
+
+    const isVBDToken = useMemo(
+        () => tokenWithInfo.symbol === B3TR.symbol || tokenWithInfo.symbol === VOT3.symbol,
+        [tokenWithInfo.symbol],
+    )
+
+    const show24hChange = useMemo(() => !!(Number(fiatBalance) && change24h), [change24h, fiatBalance])
 
     const renderFiatBalance = useCallback(() => {
         if (isLoading)
@@ -38,44 +52,91 @@ export const BalanceView = ({
         if (priceFeedNotAvailable)
             return <BaseText typographyFont="bodyMedium">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
         return (
-            <BaseView flexDirection="row">
+            <BaseView flexDirection="column" alignItems={isVBDToken ? "center" : "flex-end"}>
                 <FiatBalance
-                    typographyFont={"subTitleBold"}
-                    color={theme.colors.text}
+                    typographyFont={"bodyMedium"}
+                    color={theme.colors.assetDetailsCard.text}
                     balances={[fiatBalance]}
                     isVisible={isBalanceVisible}
                 />
+                {show24hChange && (
+                    <BaseText
+                        mt={2}
+                        typographyFont="captionMedium"
+                        color={isPositiveChange ? theme.colors.positive : theme.colors.negative}>
+                        {change24h}
+                    </BaseText>
+                )}
             </BaseView>
         )
-    }, [fiatBalance, LL, isBalanceVisible, isLoading, priceFeedNotAvailable, theme.colors])
+    }, [
+        isLoading,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        theme.colors.assetDetailsCard.text,
+        theme.colors.positive,
+        theme.colors.negative,
+        priceFeedNotAvailable,
+        LL,
+        isVBDToken,
+        fiatBalance,
+        isBalanceVisible,
+        show24hChange,
+        isPositiveChange,
+        change24h,
+    ])
 
     return (
-        <BaseView w={100}>
-            <BaseView flexDirection="row" alignItems="flex-end">
-                <BaseText typographyFont="bodyBold">{LL.BD_YOUR_BALANCE()}</BaseText>
-            </BaseView>
-
-            <BaseSpacer height={4} />
-
-            <BaseView flexDirection="row" justifyContent="space-between">
-                <BaseView flexDirection="row">
-                    {isTokensOwnedLoading ? (
-                        <BaseSkeleton
-                            animationDirection="horizontalLeft"
-                            boneColor={theme.colors.skeletonBoneColor}
-                            highlightColor={theme.colors.skeletonHighlightColor}
-                            height={14}
-                            width={60}
-                        />
-                    ) : (
-                        <BaseText typographyFont="bodyMedium">{isBalanceVisible ? tokenUnitBalance : "•••••"}</BaseText>
-                    )}
-                    <BaseSpacer width={4} />
-                    <BaseText typographyFont="captionRegular">{symbol}</BaseText>
+        <BaseView style={containerStyle ?? styles.layout}>
+            <BaseView style={styles.balanceContainer}>
+                <BaseView style={[!isVBDToken && styles.imageContainer]}>
+                    <Image source={{ uri: tokenWithInfo.icon }} style={isVBDToken ? styles.vbdImage : styles.image} />
                 </BaseView>
-                <BaseSpacer width={4} />
-                {renderFiatBalance()}
+                <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
+                    {symbol}
+                </BaseText>
+                {isTokensOwnedLoading ? (
+                    <BaseSkeleton
+                        animationDirection="horizontalLeft"
+                        boneColor={theme.colors.skeletonBoneColor}
+                        highlightColor={theme.colors.skeletonHighlightColor}
+                        height={14}
+                        width={60}
+                    />
+                ) : (
+                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
+                        {isBalanceVisible ? tokenUnitBalance : "•••••"}
+                    </BaseText>
+                )}
             </BaseView>
+            {renderFiatBalance()}
         </BaseView>
     )
 }
+
+const styles = StyleSheet.create({
+    imageContainer: {
+        borderRadius: 30,
+        padding: 6,
+        backgroundColor: COLORS.GREY_100,
+    },
+    imageShadow: {
+        width: "auto",
+    },
+    image: { width: 14, height: 14 },
+    vbdImage: { width: 26, height: 26 },
+    balanceContainer: {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 12,
+        paddingVertical: 4,
+    },
+    layout: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+    },
+    vbdFiat: {
+        justifyContent: "flex-start",
+    },
+})

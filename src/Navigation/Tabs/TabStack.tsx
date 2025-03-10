@@ -4,7 +4,7 @@ import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { TabIcon } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
-import { NETWORK_TYPE } from "~Model"
+import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
     DiscoverStack,
@@ -16,7 +16,7 @@ import {
 } from "~Navigation/Stacks"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { selectCurrentScreen, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import PlatformUtils from "~Utils/PlatformUtils"
 
 export type TabStackParamList = {
@@ -32,14 +32,13 @@ const Tab = createBottomTabNavigator<TabStackParamList>()
 export const TabStack = () => {
     const theme = useTheme()
     const currentScreen = useAppSelector(selectCurrentScreen)
-    const network = useAppSelector(selectSelectedNetwork)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
 
     const renderTabBarIcon = useCallback(
-        (focused: boolean, iconName: string) => {
-            const isSettings = iconName === "menu"
+        (focused: boolean, iconName: IconKey) => {
+            const isSettings = iconName === "icon-menu"
 
             return (
                 <TabIcon
@@ -58,6 +57,7 @@ export const TabStack = () => {
             case Routes.SETTINGS_GET_SUPPORT:
             case Routes.SETTINGS_GIVE_FEEDBACK:
             case Routes.BROWSER:
+            case Routes.TOKEN_DETAILS:
                 return "none"
 
             case "":
@@ -75,8 +75,7 @@ export const TabStack = () => {
                 tabBarShowLabel: false,
                 tabBarStyle: {
                     display,
-                    backgroundColor:
-                        network.type === NETWORK_TYPE.MAIN ? theme.colors.card : theme.colors.testnetBackground,
+                    backgroundColor: theme.colors.card,
                     ...tabbarBaseStyles.tabbar,
                     ...tabbarBaseStyles.shadow,
                 },
@@ -87,7 +86,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Wallet",
                     tabBarTestID: "wallet-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "home" : "home-outline"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home"),
                 }}
             />
 
@@ -97,8 +96,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "NFT",
                     tabBarTestID: "nft-tab",
-                    tabBarIcon: ({ focused }) =>
-                        renderTabBarIcon(focused, focused ? "image-multiple" : "image-multiple-outline"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image"),
                 }}
             />
 
@@ -108,7 +106,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Discover",
                     tabBarTestID: "discover-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, focused ? "compass" : "compass-outline"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer"),
                 }}
             />
 
@@ -118,7 +116,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: Routes.HISTORY,
                     tabBarTestID: "history-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "history"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history"),
                 }}
             />
 
@@ -128,7 +126,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Settings",
                     tabBarTestID: "settings-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "menu"),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu"),
                 }}
             />
         </Tab.Navigator>
@@ -142,8 +140,7 @@ export const tabbarBaseStyles = StyleSheet.create({
         left: 0,
         right: 0,
         borderTopWidth: 0,
-        borderTopLeftRadius: 20,
-        borderTopRightRadius: 20,
+        padding: 8,
         height: PlatformUtils.isIOS() ? 86 : 68,
     },
     shadow: {

@@ -71,7 +71,7 @@ const ListEmptyComponent = () => {
 
     return (
         <BaseView flex={1} justifyContent="center" alignItems="center">
-            <ListEmptyResults subtitle={LL.BROWSER_HISTORY_No_RECORDS()} icon={"search-web"} />
+            <ListEmptyResults subtitle={LL.BROWSER_HISTORY_No_RECORDS()} icon={"icon-search"} />
         </BaseView>
     )
 }
@@ -134,19 +134,20 @@ export const BrowserHistoryScreen = () => {
         <Layout
             hasSafeArea={true}
             hasTopSafeAreaOnly={false}
+            title={LL.BROWSER_HISTORY_TITLE()}
             fixedHeader={
                 <>
-                    <BaseText typographyFont="title">{LL.BROWSER_HISTORY_TITLE()}</BaseText>
                     <BaseSpacer height={12} />
                     <BaseSearchInput
                         placeholder={LL.BROWSER_HISTORY_SEARCH_PLACEHOLDER()}
                         setValue={onTextChange}
                         value={filteredSearch}
                         showIcon={filteredSearch.length > 0}
-                        iconName="close"
+                        iconName="icon-x"
                         iconSize={18}
                         onIconPress={() => setFilteredSearch("")}
                     />
+                    <BaseSpacer height={12} />
                 </>
             }
             fixedBody={

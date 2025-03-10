@@ -35,7 +35,7 @@ export const AccountUnderlay: React.FC<Props> = ({ confirmRemoveAccount, account
                     color={theme.colors.card}
                     testID="AccountUnderlay_DeleteIcon"
                     haptics="Light"
-                    name={account.visible ? "eye-outline" : "eye-off-outline"}
+                    name={account.visible ? "icon-eye" : "icon-eye-off"}
                     bg={theme.colors.secondary}
                 />
             </BaseTouchable>
@@ -44,7 +44,7 @@ export const AccountUnderlay: React.FC<Props> = ({ confirmRemoveAccount, account
                 style={[styles.underlayItem, styles.deleteUnderlay, isSelected ? styles.disabledButton : {}]}
                 disabled={isSelected}>
                 <BaseIcon
-                    name={"delete"}
+                    name={"icon-trash-2"}
                     size={24}
                     bg={theme.colors.danger}
                     color={theme.colors.card}
@@ -69,8 +69,8 @@ const baseStyles = (theme: ColorThemeType) =>
         deleteUnderlay: {
             width: 70,
             backgroundColor: theme.colors.danger,
-            borderTopEndRadius: 16,
-            borderBottomEndRadius: 16,
+            borderTopEndRadius: 12,
+            borderBottomEndRadius: 12,
         },
         underlayItem: {
             flexDirection: "row",

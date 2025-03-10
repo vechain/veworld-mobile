@@ -1,15 +1,15 @@
 import { act, renderHook } from "@testing-library/react-hooks"
-import { useCopyClipboard } from "./useCopyClipboard"
 import * as Clipboard from "expo-clipboard"
-import { showInfoToast } from "~Components"
+import { showSuccessToast } from "~Components"
 import * as logger from "~Utils/Logger/Logger"
+import { useCopyClipboard } from "./useCopyClipboard"
 
 jest.mock("expo-clipboard", () => ({
     setStringAsync: jest.fn(() => Promise.resolve()),
 }))
 
 jest.mock("~Components", () => ({
-    showInfoToast: jest.fn(),
+    showSuccessToast: jest.fn(),
 }))
 
 jest.mock("~i18n", () => ({
@@ -29,11 +29,11 @@ describe("useCopyClipboard", () => {
         const { result } = renderHook(() => useCopyClipboard())
 
         await act(async () => {
-            result.current.onCopyToClipboard(text, labelName)
+            result.current.onCopyToClipboard(text.toLowerCase(), labelName)
         })
 
-        expect(Clipboard.setStringAsync).toHaveBeenCalledWith(text)
-        expect(showInfoToast).toHaveBeenCalled()
+        expect(Clipboard.setStringAsync).toHaveBeenCalledWith(text.toLowerCase())
+        expect(showSuccessToast).toHaveBeenCalled()
     })
 
     it("should handle error when copying to clipboard fails", async () => {
@@ -50,5 +50,18 @@ describe("useCopyClipboard", () => {
         })
 
         expect(debugSpy).toHaveBeenCalledTimes(1)
+    })
+
+    it("should copy text in uppercase", async () => {
+        const text = "0x740144c427beac6daab4b35ae1b10d3e3ca524b0"
+        const labelName = "address"
+
+        const { result } = renderHook(() => useCopyClipboard())
+
+        await act(async () => {
+            result.current.onCopyToClipboard(text, labelName)
+        })
+
+        expect(Clipboard.setStringAsync).toHaveBeenCalledWith(text.toLowerCase())
     })
 })

@@ -12,6 +12,10 @@ export const selectCurrency = createSelector(reducer, state => {
     return state.currency
 })
 
+export const selectCurrencyFormat = createSelector(reducer, state => {
+    return state.currencyFormat
+})
+
 export const selectSymbolPosition = createSelector(reducer, state => {
     return state.symbolPosition || SYMBOL_POSITIONS.BEFORE
 })
@@ -27,7 +31,7 @@ export const selectCurrencySymbol = createSelector(selectCurrency, currency => {
     }
 })
 
-export const selectLangauge = createSelector(reducer, state => {
+export const selectLanguage = createSelector(reducer, state => {
     return state.language
 })
 
@@ -69,4 +73,16 @@ export const selectAppResetTimestamp = createSelector(reducer, state => {
 
 export const selectLastBackupRequestTimestamp = createSelector(reducer, state => {
     return state.lastBackupRequestTimestamp
+})
+
+export const selectLastNotificationReminder = createSelector(reducer, state => {
+    return state.lastNotificationReminder
+})
+
+export const selectRemovedNotificationTags = createSelector(reducer, state => {
+    return state.removedNotificationTags ?? []
+})
+
+export const selectShowJailbrokeDeviceWarning = createSelector(reducer, state => {
+    return state.showJailbrokeWarning
 })

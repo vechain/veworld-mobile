@@ -72,6 +72,34 @@ static void ClearKeychainIfNecessary() {
 
 @implementation AppDelegate
 
+// Handle the app entering the background state
+- (void)applicationDidEnterBackground:(UIApplication *)application {
+  UIView *secureView = [[UIView alloc] initWithFrame:self.window.bounds]; 
+  secureView.tag = 9824684;
+  secureView.backgroundColor = [UIColor colorWithRed:(0.0352941176470588) green:(0.00784313725490196) blue:(0.184313725490196) alpha:(1)];
+
+  CGFloat imageViewWidth = 100;
+  CGFloat imageViewHeight = 91;
+  CGFloat xPosition = (secureView.frame.size.width - imageViewWidth) / 2;
+  CGFloat yPosition = (secureView.frame.size.height - imageViewHeight) / 2;
+      
+  UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(xPosition, yPosition, imageViewWidth, imageViewHeight)];
+  imageView.contentMode = UIViewContentModeScaleAspectFit;
+
+  imageView.image = [UIImage imageNamed:@"BootSplashLogo"];
+  imageView.contentMode = UIViewContentModeScaleAspectFit;
+  
+  [secureView addSubview:imageView];
+  [self.window addSubview:secureView];
+}
+
+// Handle the app entering in the foreground state
+- (void)applicationWillEnterForeground:(UIApplication *)application {
+  // Remove the blank view when the app returns to the foreground
+  UIView *secureView = [self.window viewWithTag:9824684];
+  [secureView removeFromSuperview];
+}
+
 - (BOOL)application:(UIApplication *)application continueUserActivity:(nonnull NSUserActivity *)userActivity
  restorationHandler:(nonnull void (^)(NSArray<id<UIUserActivityRestoring>> * _Nullable))restorationHandler
 {

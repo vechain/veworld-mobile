@@ -52,7 +52,7 @@ export const BaseButton = ({
     textColor,
     variant = "solid",
     size = "lg",
-    radius = 16,
+    radius = 8,
     disabled = false,
     isDisabledTextOnly = false,
     leftIcon,
@@ -103,7 +103,7 @@ export const BaseButton = ({
 
     const backgroundColor = useMemo(() => {
         if (bgColor) return bgColor
-        return theme.colors.primary
+        return theme.colors.button
     }, [theme, bgColor])
 
     const isSolidButton = useMemo(() => variant === "solid", [variant])
@@ -120,7 +120,7 @@ export const BaseButton = ({
         if (Number.isFinite(py)) return py
         if (size === "sm") return 3.5
         if (size === "md") return 9.5
-        if (size === "lg") return 15
+        if (size === "lg") return 14
     }, [py, size])
 
     const computedTypographyFont: TFonts | undefined = useMemo(() => {

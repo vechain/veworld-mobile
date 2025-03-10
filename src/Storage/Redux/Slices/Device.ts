@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { AddressUtils } from "~Utils"
 import { BaseDevice, LedgerDevice, LocalDevice } from "~Model"
+import { AddressUtils } from "~Utils"
 
 type Device = LedgerDevice | LocalDevice
 export const initialDeviceState: Device[] = []
@@ -70,14 +70,19 @@ export const DeviceSlice = createSlice({
                     }),
             )
         },
-        setDeviceIsBackup: (state, action: PayloadAction<{ rootAddress: string; isBackup: boolean }>) => {
-            const { rootAddress, isBackup } = action.payload
+        setDeviceIsBackup: (
+            state,
+            action: PayloadAction<{ rootAddress: string; isBackup: boolean; isBackupManual: boolean; date: string }>,
+        ) => {
+            const { rootAddress, isBackup, isBackupManual, date } = action.payload
             const deviceExistsIndex = state.findIndex(device =>
                 AddressUtils.compareAddresses(device.rootAddress, rootAddress),
             )
             if (deviceExistsIndex === -1) throw new Error(`Device with root address ${rootAddress} does not exist`)
 
             state[deviceExistsIndex].isBuckedUp = isBackup
+            state[deviceExistsIndex].lastBackupDate = date
+            state[deviceExistsIndex].isBackedUpManual = isBackupManual
         },
         resetDeviceState: () => initialDeviceState,
         setDeviceState: (

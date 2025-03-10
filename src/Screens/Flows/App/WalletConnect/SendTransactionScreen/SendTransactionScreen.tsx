@@ -1,21 +1,31 @@
-import React, { FC, useCallback, useMemo } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import React, { FC, useCallback, useMemo, useRef } from "react"
 import { ScrollView, StyleSheet } from "react-native"
+import { Transaction } from "thor-devkit"
 import {
     AccountCard,
-    BaseButton,
+    BackButtonHeader,
     BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
-    CloseModalButton,
     DelegationView,
     getRpcError,
     RequireUserPassword,
     SelectAccountBottomSheet,
     showErrorToast,
-    useWalletConnect,
+    SignAndReject,
+    SignAndRejectRefInterface,
     useInAppBrowser,
+    useWalletConnect,
 } from "~Components"
+import { AnalyticsEvent, creteAnalyticsEvent, RequestMethods } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTransactionScreen } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { AccountWithDevice, WatchedAccount } from "~Model"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import {
     addPendingDappTransactionActivity,
     selectOfficialTokens,
@@ -28,16 +38,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { TransactionUtils } from "~Utils"
-import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTransactionScreen } from "~Hooks"
-import { useI18nContext } from "~i18n"
-import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
 import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
-import { Transaction } from "thor-devkit"
-import { TransactionDetails, UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent, RequestMethods, creteAnalyticsEvent } from "~Constants"
-import { AccountWithDevice, WatchedAccount } from "~Model"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
 
@@ -57,6 +58,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const tokens = useAppSelector(selectOfficialTokens)
+
+    const signAndRejectRef = useRef<SignAndRejectRefInterface>(null)
 
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
@@ -215,25 +218,31 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     return (
         <BaseSafeArea>
+            <BaseView style={styles.header}>
+                <BackButtonHeader
+                    iconTestID={"CloseModalButton-BaseIcon-closeModal"}
+                    title={LL.CONNECTED_APP_REQUEST()}
+                    action={onReject}
+                    hasBottomSpacer={false}
+                />
+            </BaseView>
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
                 contentInsetAdjustmentBehavior="automatic"
                 contentContainerStyle={[styles.scrollViewContainer]}
+                scrollEventThrottle={16}
+                onScroll={signAndRejectRef.current?.onScroll}
                 style={styles.scrollView}>
-                <CloseModalButton onPress={onReject} />
-
-                <BaseView mx={20} style={styles.alignLeft}>
-                    <BaseText typographyFont="title">{LL.CONNECTED_APP_REQUEST()}</BaseText>
-
-                    <BaseSpacer height={32} />
+                <BaseView mx={4} style={styles.alignLeft}>
+                    <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitle">{LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_TITLE()}</BaseText>
                     <BaseSpacer height={16} />
                     <BaseText>{LL.CONNECTED_APP_SIGN_TRANSACTION_REQUEST_DESCRIPTION()}</BaseText>
                 </BaseView>
 
                 <BaseSpacer height={24} />
-                <BaseView mx={20}>
+                <BaseView mx={4}>
                     <BaseText typographyFont="subTitleBold">{LL.CONNECTED_APP_SELECTED_ACCOUNT_LABEL()}</BaseText>
                     <BaseSpacer height={16} />
                     <AccountCard
@@ -244,7 +253,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 </BaseView>
 
                 <BaseSpacer height={24} />
-                <BaseView mx={20}>
+                <BaseView>
                     <DelegationView
                         setNoDelegation={resetDelegation}
                         selectedDelegationOption={selectedDelegationOption}
@@ -279,29 +288,18 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                         />
                     )}
                 </BaseView>
-
-                <BaseSpacer height={40} />
-                <BaseView style={styles.footer}>
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        title={LL.COMMON_BTN_SIGN_AND_SEND()}
-                        action={onSubmit}
-                        disabled={isLoading || isDisabledButtonState || (!validConnectedApp && !isInvalidChecked)}
-                        isLoading={isLoading}
-                    />
-                    <BaseSpacer height={16} />
-                    <BaseButton
-                        w={100}
-                        haptics="Light"
-                        variant="outline"
-                        title={LL.COMMON_BTN_REJECT()}
-                        action={onReject}
-                    />
-                </BaseView>
-
-                <BaseSpacer height={16} />
+                <BaseSpacer height={194} />
             </ScrollView>
+
+            <SignAndReject
+                ref={signAndRejectRef}
+                onConfirmTitle={LL.COMMON_BTN_SIGN_AND_SEND()}
+                onConfirm={onSubmit}
+                confirmButtonDisabled={isLoading || isDisabledButtonState || (!validConnectedApp && !isInvalidChecked)}
+                isConfirmLoading={isLoading}
+                onRejectTitle={LL.COMMON_BTN_REJECT()}
+                onReject={onReject}
+            />
 
             <SelectAccountBottomSheet
                 closeBottomSheet={closeSelectAccountBottonSheet}
@@ -326,6 +324,7 @@ const styles = StyleSheet.create({
     },
     scrollViewContainer: {
         width: "100%",
+        paddingHorizontal: 16,
     },
     scrollView: {
         width: "100%",
@@ -335,5 +334,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         paddingLeft: 20,
         paddingRight: 20,
+    },
+    header: {
+        paddingHorizontal: 16,
     },
 })

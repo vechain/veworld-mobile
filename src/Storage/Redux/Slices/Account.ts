@@ -135,7 +135,33 @@ export const AccountSlice = createSlice({
                 account.vnsName = (AccountUtils.updateAccountVns(account, action.payload) as WalletAccount).vnsName
             })
         },
+        onAccountAttemptClaim: (state, action: PayloadAction<{ address: string }>) => {
+            const { address } = action.payload
+            const accountIdx = state.accounts.findIndex(account =>
+                AddressUtils.compareAddresses(account.address, address),
+            )
+
+            if (accountIdx !== -1) {
+                state.accounts[accountIdx].hasAttemptedClaim = true
+            }
+        },
         resetAccountState: () => initialAccountState,
+        renameAccountsByDevice: (
+            state,
+            action: PayloadAction<{ rootAddress: string; alias: string; oldAlias: string }>,
+        ) => {
+            const { rootAddress, alias, oldAlias } = action.payload
+            state.accounts.forEach((account, index) => {
+                if (AddressUtils.compareAddresses(account.rootAddress, rootAddress)) {
+                    // Check if the account follows the default naming pattern "Account X"
+                    const isDefaultName = /^Account \d+$/.test(account.alias)
+                    const isOldAlias = account.alias.includes(oldAlias)
+                    if (isDefaultName || isOldAlias) {
+                        state.accounts[index].alias = alias + " " + index
+                    }
+                }
+            })
+        },
     },
 })
 
@@ -144,9 +170,11 @@ export const {
     setSelectedAccount,
     addAccount,
     renameAccount,
+    renameAccountsByDevice,
     removeAccountsByDevice,
     setAccountVisibility,
     toggleAccountVisibility,
     resetAccountState,
     setAccountsVns,
+    onAccountAttemptClaim,
 } = AccountSlice.actions

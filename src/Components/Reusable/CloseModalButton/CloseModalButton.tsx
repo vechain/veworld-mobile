@@ -25,7 +25,7 @@ export const CloseModalButton = ({
             <BaseIcon
                 style={style.backButton}
                 size={36}
-                name="chevron-left"
+                name="icon-chevron-left"
                 color={theme.colors.text}
                 action={() => onPress(false)}
                 testID={iconTestID}

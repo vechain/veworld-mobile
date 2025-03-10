@@ -4,6 +4,10 @@ import { Migration4 } from "./Migration4"
 import { Migration5 } from "./Migration5"
 import { MigrationManifest } from "redux-persist/es/types"
 import { Migration6 } from "./Migration6"
+import { Migration7 } from "./Migration7"
+import { Migration8 } from "./Migration8"
+import { Migration9 } from "./Migration9"
+import { Migration10 } from "./Migration10"
 
 export const migrationUpdates: MigrationManifest = {
     2: state => Migration2(state),
@@ -11,4 +15,8 @@ export const migrationUpdates: MigrationManifest = {
     4: state => Migration4(state),
     5: state => Migration5(state),
     6: state => Migration6(state),
+    7: state => Migration7(state),
+    8: state => Migration8(state),
+    9: state => Migration9(state),
+    10: state => Migration10(state),
 }

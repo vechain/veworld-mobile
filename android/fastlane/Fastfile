@@ -1,6 +1,3 @@
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:android)
 
 platform :android do
@@ -13,7 +10,7 @@ platform :android do
   end
 
   # @param {object} options - The options for the build process.
-  # @param {string} options.version_name - The version name of the build. Possible values: "patch", "minor", "major" or specific version "1.0.0".
+  # @param {string} options.version_name - The version name of the build.
   # @param {string} options.version_code - The version code of the build.
   desc "Submit a new Beta Build to Play Store"
   lane :build_android do |options|
@@ -25,14 +22,11 @@ platform :android do
     version_name = options[:version_name]
     version_code = options[:version_code]
 
-
     Dir.chdir "../.." do
       sh("yarn purge:android && yarn install:android")
     end
 
-
     begin
-
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
       sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
@@ -43,34 +37,32 @@ platform :android do
         build_type: 'Release',
         print_command: true,
         print_command_output: true,
-
         properties: {
-          "android.injected.version.code" => version_code, # Manually increment this value before each release
-          "android.injected.version.name" => version_name, # Manually increment this value before each release
-          "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
-          "android.injected.signing.store.password" => store_password, # Keystore password
-          "android.injected.signing.key.alias" => key_alias, # Key alias
-          "android.injected.signing.key.password" => key_password, # Key password
+          "android.injected.version.code" => version_code,
+          "android.injected.version.name" => version_name,
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => store_password,
+          "android.injected.signing.key.alias" => key_alias,
+          "android.injected.signing.key.password" => key_password,
         }
       )
-
 
       gradle(
         task: 'bundle',
         build_type: 'Release',
         print_command: true,
         print_command_output: true,
-
         properties: {
-          "android.injected.version.code" => version_code, # Manually increment this value before each release
-          "android.injected.version.name" => version_name, # Manually increment this value before each release
-          "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
-          "android.injected.signing.store.password" => store_password, # Keystore password
-          "android.injected.signing.key.alias" => key_alias, # Key alias
-          "android.injected.signing.key.password" => key_password, # Key password
+          "android.injected.version.code" => version_code,
+          "android.injected.version.name" => version_name,
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => store_password,
+          "android.injected.signing.key.alias" => key_alias,
+          "android.injected.signing.key.password" => key_password,
         }
       )
-      #upload .aab to the play store as internal track
+
+      # Upload .aab to the Play Store as internal track
       upload_to_play_store(
         track: 'internal',
         skip_upload_changelogs: true,
@@ -88,7 +80,6 @@ platform :android do
       )
 
     rescue => exception
-
       puts exception
 
       slack(
@@ -102,10 +93,9 @@ platform :android do
       )
     end
   end
-end
 
   # @param {object} options - The options for the build process.
-  # @param {string} options.version_name - The version name of the build. Possible values: "patch", "minor", "major" or specific version "1.0.0".
+  # @param {string} options.version_name - The version name of the build.
   # @param {string} options.version_code - The version code of the build.
   desc "Submit a new Beta Build to Play Store"
   lane :build_android_ci do |options|
@@ -116,7 +106,7 @@ end
     github_username = options[:github_username]
     version_name = options[:version_name]
     version_code = options[:version_code]
-    
+
     setup_ci if ENV['CI']
 
     sh("chmod +x ./ci_bump_gradle_app_versions.sh")
@@ -125,9 +115,7 @@ end
       sh("yarn purge:android && yarn install:android")
     end
 
-
     begin
-
       releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
 
       sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
@@ -138,14 +126,13 @@ end
         build_type: 'Release',
         print_command: true,
         print_command_output: true,
-
         properties: {
-          "android.injected.version.code" => version_code, # Manually increment this value before each release
-          "android.injected.version.name" => version_name, # Manually increment this value before each release
-          "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
-          "android.injected.signing.store.password" => store_password, # Keystore password
-          "android.injected.signing.key.alias" => key_alias, # Key alias
-          "android.injected.signing.key.password" => key_password, # Key password
+          "android.injected.version.code" => version_code,
+          "android.injected.version.name" => version_name,
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => store_password,
+          "android.injected.signing.key.alias" => key_alias,
+          "android.injected.signing.key.password" => key_password,
         }
       )
 
@@ -155,96 +142,95 @@ end
         skip_upload_metadata: true
       )
 
-
-      slack(
-        message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
+     
+       slack(
+         message: "VeWorld version number: #{version_name} build number: #{version_code} was successfully released! [Android]",
+         slack_url: ENV["SLACK_WEBHOOK"],
+         success: true,
+         payload: {
+           "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+           "Built by" => github_username,
+         },
+       )
 
     rescue => exception
-
       puts exception
 
-      slack(
-        message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: false,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
+      
+       slack(
+         message: "Error releasing VeWorld version number: #{version_name} build number: #{version_code} [Android]",
+         slack_url: ENV["SLACK_WEBHOOK"],
+         success: false,
+         payload: {
+           "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+           "Built by" => github_username,
+         },
+       )
+    end
+  end
+
+  lane :build_test_ci do |options|
+    store_password = ENV["STORE_PASSWORD"]
+    key_password = ENV["KEY_PASSWORD"]
+    key_alias = ENV["KEY_ALIAS"]
+
+    ci_value = true
+    sh("./set_ci_vars.sh #{ci_value}")
+    sh("export SENTRY_DISABLE_AUTO_UPLOAD=true")
+
+    version_name = options[:version_name]
+    version_code = options[:version_code]
+
+    begin
+      Dir.chdir "../.." do
+        sh("yarn purge:android && yarn install:android")
+      end
+
+      releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
+
+      sh("./ci_bump_gradle_app_versions.sh #{version_code} #{version_name}")
+      
+      gradle(task: 'clean')
+      gradle(
+        task: 'assemble',
+        build_type: 'Release',
+        print_command: true,
+        print_command_output: true,
+        properties: {
+          "android.injected.version.code" => version_code,
+          "android.injected.version.name" => version_name,
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => store_password,
+          "android.injected.signing.key.alias" => key_alias,
+          "android.injected.signing.key.password" => key_password,
+        }
       )
+
+      ci_value = false
+      sh("./set_ci_vars.sh #{ci_value}")
+      sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
+
+      # Stash the changes
+      sh("git stash save --keep-index --include-untracked")
+      # Drop the stash
+      sh("git stash drop")
+
+      sh("echo 'Build successful'")
+    rescue => exception
+      puts exception
+
+      # Set the ci value to false
+      ci_value = false
+      sh("./set_ci_vars.sh #{ci_value}")
+
+      # Set the sentry auto upload to true
+      sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
+
+      # Stash the changes
+      sh("git stash save --keep-index --include-untracked")
+      # Drop the stash
+      sh("git stash drop")
     end
   end
 
-
-
-lane :build_test_ci do |options|
-  store_password = ENV["STORE_PASSWORD"]
-  key_password = ENV["KEY_PASSWORD"]
-  key_alias = ENV["KEY_ALIAS"]
-
-  ci_value = true
-  sh("./set_ci_vars.sh #{ci_value}")
-  sh("export SENTRY_DISABLE_AUTO_UPLOAD=true")
-
-  version_name = options[:version_name]
-  version_code = options[:version_code]
-
-  begin
-    Dir.chdir "../.." do
-      sh("yarn purge:android && yarn install:android")
-    end
-
-    releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
-
-    sh("./bump_gradle_app_versions.sh #{version_code} #{version_name}")
-
-    gradle(task: 'clean')
-    gradle(
-      task: 'assemble',
-      build_type: 'Release',
-      print_command: true,
-      print_command_output: true,
-
-      properties: {
-        "android.injected.version.code" => version_code,
-        "android.injected.version.name" => version_name,
-        "android.injected.signing.store.file" => releaseFilePath, # Path to the release keystore
-        "android.injected.signing.store.password" => store_password, # Keystore password
-        "android.injected.signing.key.alias" => key_alias, # Key alias
-        "android.injected.signing.key.password" => key_password, # Key password
-      }
-    )
-
-    ci_value = false
-    sh("./set_ci_vars.sh #{ci_value}")
-    sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
-
-    # Stash the changes
-    sh("git stash save --keep-index --include-untracked")
-    # Drop the stash
-    sh("git stash drop")
-
-    sh("echo 'Build successful'")
-  rescue => exception
-    puts exception
-
-    # Set the ci value to false
-    ci_value = false
-    sh("./set_ci_vars.sh #{ci_value}")
-
-    # Set the sentry auto upload to true
-    sh("export SENTRY_DISABLE_AUTO_UPLOAD=false")
-
-    # Stash the changes
-    sh("git stash save --keep-index --include-untracked")
-    # Drop the stash
-    sh("git stash drop")
-  end
-end
+end  # Added this 'end' to close the 'platform :android do' block

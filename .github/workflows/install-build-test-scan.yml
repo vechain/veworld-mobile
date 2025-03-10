@@ -16,14 +16,13 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
+
     build-and-test-ios:
         uses: ./.github/workflows/e2e-ios.yml
-        needs: scan
         secrets: inherit
 
     build-and-test-android:
         uses: ./.github/workflows/e2e-android.yml
-        needs: scan
         secrets: inherit
 
     scan:
@@ -76,7 +75,7 @@ jobs:
                   fi
 
             - name: SonarCloud Scan
-              uses: sonarsource/sonarcloud-github-action@master
+              uses: SonarSource/sonarqube-scan-action@v4.2.1
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}

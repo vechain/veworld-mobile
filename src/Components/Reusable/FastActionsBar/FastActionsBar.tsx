@@ -1,64 +1,56 @@
 import React, { memo, useCallback } from "react"
-import { StyleSheet } from "react-native"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { useThemedStyles } from "~Hooks"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { FastAction } from "~Model"
+import { ColorThemeType } from "~Constants"
 
 export const FastActionsBar = memo(
-    ({ actions, actionItemWidth = 60 }: { actions: FastAction[]; actionItemWidth?: number }) => {
-        const theme = useTheme()
-
-        const { styles } = useThemedStyles(baseStyles(actionItemWidth))
+    ({ actions, actionStyle }: { actions: FastAction[]; actionStyle?: StyleProp<ViewStyle> }) => {
+        const { styles, theme } = useThemedStyles(baseStyles)
 
         const renderAction = useCallback(
             (action: FastAction) => {
                 return (
                     <BaseTouchable
-                        haptics="Medium"
+                        haptics={action.disabled ? "Error" : "Medium"}
                         key={action.name}
                         action={action.action}
                         testID={action.testID}
-                        style={styles.action}>
+                        activeOpacity={action.disabled ? 0.9 : 0.2}
+                        style={actionStyle ?? styles.action}>
                         <BaseView flexDirection="column" alignItems="center">
                             {action.icon}
-                            <BaseSpacer height={6} />
-                            <BaseText typographyFont="smallButtonPrimary">{action.name}</BaseText>
+                            <BaseSpacer height={8} />
+                            <BaseText
+                                color={action.disabled ? theme.colors.primaryDisabled : theme.colors.text}
+                                typographyFont="captionSemiBold">
+                                {action.name}
+                            </BaseText>
                         </BaseView>
                     </BaseTouchable>
                 )
             },
-            [styles.action],
+            [actionStyle, styles.action, theme.colors.primaryDisabled, theme.colors.text],
         )
 
         return (
-            <BaseView style={styles.container}>
-                <BaseView
-                    flexDirection="row"
-                    alignItems="center"
-                    justifyContent="center"
-                    bg={theme.colors.card}
-                    borderRadius={34}
-                    style={styles.actionsContainer}>
-                    {actions.map(renderAction)}
-                </BaseView>
+            <BaseView flexDirection="row" alignItems="center" style={styles.actionsContainer}>
+                {actions.map(renderAction)}
             </BaseView>
         )
     },
 )
 
-const baseStyles = (actionItemWidth: number) => () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        container: {
-            paddingHorizontal: 20,
-            justifyContent: "center",
-            alignItems: "center",
-        },
         action: {
-            paddingVertical: 12,
-            minWidth: actionItemWidth,
-            paddingHorizontal: 6,
+            flex: 1,
+            paddingVertical: 11,
+            backgroundColor: theme.colors.card,
+            borderRadius: 8,
         },
         actionsContainer: {
-            paddingHorizontal: 16,
+            gap: 8,
         },
     })

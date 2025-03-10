@@ -1,8 +1,9 @@
 import React from "react"
-import { BackButtonHeader, BaseSafeArea } from "~Components"
+import { BaseSafeArea, Layout, PlusIconHeaderButton } from "~Components"
 import { ManageUrls } from "./Components/ManageUrls/ManageUrls"
 import { AddUrlBottomSheet } from "./Components/AddUrlBottomSheet"
 import { useBottomSheetModal } from "~Hooks"
+import { useI18nContext } from "~i18n"
 
 export const ManageUrlsScreen = () => {
     const {
@@ -10,14 +11,26 @@ export const ManageUrlsScreen = () => {
         onOpen: openSelectDelegationUrlBottomSheet,
         onClose: closeSelectDelegationUrlBottonSheet,
     } = useBottomSheetModal()
+    const { LL } = useI18nContext()
+
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <ManageUrls openAddUrl={openSelectDelegationUrlBottomSheet} />
-            <AddUrlBottomSheet
-                ref={refSelectDelegationUrlBottomSheet}
-                handleClose={closeSelectDelegationUrlBottonSheet}
-            />
-        </BaseSafeArea>
+        <Layout
+            title={LL.SEND_DELEGATION_MANAGE_URL()}
+            headerRightElement={
+                <PlusIconHeaderButton
+                    action={openSelectDelegationUrlBottomSheet}
+                    testID="ManageUrls_addUrlButton-wrapper"
+                />
+            }
+            body={
+                <BaseSafeArea grow={1}>
+                    <ManageUrls />
+                    <AddUrlBottomSheet
+                        ref={refSelectDelegationUrlBottomSheet}
+                        handleClose={closeSelectDelegationUrlBottonSheet}
+                    />
+                </BaseSafeArea>
+            }
+        />
     )
 }

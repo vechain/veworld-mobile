@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from "react"
-import { BaseToast, ConnexContext, usePersistedTheme } from "~Components"
+import { BaseToast } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -18,6 +18,10 @@ import { MMKV } from "react-native-mmkv"
 import { SecurePersistedCache } from "~Storage/PersistedCache"
 import { ThemeEnum } from "~Constants"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
+import { NotificationsProvider } from "~Components/Providers/NotificationsProvider"
+import { ConnexContext } from "~Components/Providers/ConnexProvider"
+import { B3TRWithBalance, VOT3WithBalance } from "./helpers/data"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -102,6 +106,16 @@ const getStore = (preloadedState: Partial<RootState>) =>
                     position: 0,
                 },
             ],
+            balances: {
+                mainnet: {
+                    "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957": [B3TRWithBalance.balance, VOT3WithBalance.balance],
+                },
+                testnet: {
+                    "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957": [B3TRWithBalance.balance, VOT3WithBalance.balance],
+                },
+                solo: {},
+                other: {},
+            },
             ...preloadedState,
         },
     })
@@ -137,7 +151,9 @@ export const TestWrapper = ({
                     <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
                         <BottomSheetModalProvider>
                             <NavigationProvider>
-                                <TestTranslationProvider>{children}</TestTranslationProvider>
+                                <NotificationsProvider>
+                                    <TestTranslationProvider>{children}</TestTranslationProvider>
+                                </NotificationsProvider>
                             </NavigationProvider>
                         </BottomSheetModalProvider>
                         <BaseToast />

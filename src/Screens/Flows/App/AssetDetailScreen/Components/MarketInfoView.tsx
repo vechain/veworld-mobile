@@ -36,48 +36,48 @@ export const MarketInfoView = ({ tokenSymbol }: { tokenSymbol: string }) => {
         <BaseView>
             <BaseView flexDirection="row" flexWrap="wrap" style={styles.container}>
                 <BaseView w={50} p={12} style={styles.borderMarketCap}>
-                    <BaseText>{LL.COMMON_MARKET_CAP()}</BaseText>
+                    <BaseText typographyFont="captionRegular">{LL.COMMON_MARKET_CAP()}</BaseText>
                     <BaseView flexDirection="row">
-                        <BaseText typographyFont="bodyBold" py={4} numberOfLines={1}>
+                        <BaseText typographyFont="captionBold" py={4} numberOfLines={1}>
                             {marketCap ?? "N/A"}
                         </BaseText>
                     </BaseView>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderTotalSupply}>
-                    <BaseText>{LL.COMMON_TOTAL_SUPPLY()}</BaseText>
+                    <BaseText typographyFont="captionRegular">{LL.COMMON_TOTAL_SUPPLY()}</BaseText>
                     <BaseView flexDirection="row">
-                        <BaseText typographyFont="bodyBold" py={4} numberOfLines={1}>
+                        <BaseText typographyFont="captionBold" py={4} numberOfLines={1}>
                             {totalSupply ?? "N/A"}
                         </BaseText>
                         {!!totalSupply && (
                             <>
                                 <BaseSpacer width={4} />
-                                <BaseText typographyFont="captionRegular">{tokenSymbol}</BaseText>
+                                <BaseText typographyFont="captionBold">{tokenSymbol}</BaseText>
                             </>
                         )}
                     </BaseView>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderTotalVolume}>
-                    <BaseText>{LL.COMMON_24H_VOLUME()}</BaseText>
+                    <BaseText typographyFont="captionRegular">{LL.COMMON_24H_VOLUME()}</BaseText>
                     <BaseView flexDirection="row">
-                        <BaseText typographyFont="bodyBold" py={4} numberOfLines={1}>
+                        <BaseText typographyFont="captionBold" py={4} numberOfLines={1}>
                             {totalVolume ?? "N/A"}
                         </BaseText>
                     </BaseView>
                 </BaseView>
 
                 <BaseView w={50} p={12} style={styles.borderCirculatingSupply}>
-                    <BaseText>{LL.COMMON_CIRCULATING_SUPPLY()}</BaseText>
+                    <BaseText typographyFont="captionRegular">{LL.COMMON_CIRCULATING_SUPPLY()}</BaseText>
                     <BaseView flexDirection="row">
-                        <BaseText typographyFont="bodyBold" py={4} numberOfLines={1}>
+                        <BaseText typographyFont="captionBold" py={4} numberOfLines={1}>
                             {circulatingSupply ?? "N/A"}
                         </BaseText>
                         {!!circulatingSupply && (
                             <>
                                 <BaseSpacer width={4} />
-                                <BaseText typographyFont="captionRegular">{tokenSymbol}</BaseText>
+                                <BaseText typographyFont="captionBold">{tokenSymbol}</BaseText>
                             </>
                         )}
                     </BaseView>
@@ -92,7 +92,7 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             borderRadius: 12,
             overflow: "hidden",
-            backgroundColor: theme.colors.card,
+            backgroundColor: theme.colors.marketInfoBackground,
         },
         borderMarketCap: {
             borderBottomWidth: 1,

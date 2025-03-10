@@ -10,6 +10,8 @@ import { Routes } from "~Navigation"
 import { BaseView } from "~Components"
 import HapticsService from "~Services/HapticsService"
 import { DEFAULT_LINE_CHART_DATA, getCoinGeckoIdBySymbol, useSmartMarketChart } from "~Api/Coingecko"
+import { B3TR, SCREEN_WIDTH } from "~Constants"
+import { VeB3trTokenCard } from "~Screens"
 
 const HEIGHT = 100
 
@@ -17,9 +19,10 @@ export type NativeTokenProps = {
     tokenWithInfo: TokenWithCompleteInfo
     isEdit: boolean
     isBalanceVisible: boolean
+    hideChart?: boolean
 }
 
-export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible }: NativeTokenProps) => {
+export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible, hideChart }: NativeTokenProps) => {
     const nav = useNavigation()
     const theme = useTheme()
 
@@ -28,13 +31,13 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
     const { data: chartData } = useSmartMarketChart({
         id: getCoinGeckoIdBySymbol[tokenWithInfo.symbol],
         vs_currency: currency,
-        days: 7,
+        days: 1,
         placeholderData: DEFAULT_LINE_CHART_DATA,
     })
 
     const animatedOuterCard = useAnimatedStyle(() => {
         return {
-            height: withTiming(isEdit ? 62 : 162, {
+            height: withTiming(isEdit || hideChart ? 72 : 162, {
                 duration: 200,
             }),
 
@@ -46,7 +49,7 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
 
     const animatedInnerCard = useAnimatedStyle(() => {
         return {
-            height: withTiming(isEdit ? 0 : HEIGHT, {
+            height: withTiming(isEdit || hideChart ? 0 : HEIGHT, {
                 duration: 200,
             }),
 
@@ -65,20 +68,29 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
         <BaseView>
             <TouchableOpacity activeOpacity={isEdit ? 1 : 0.6} onPress={onVechainTokenPress}>
                 <Animated.View style={[styles.nativeTokenContainer, animatedOuterCard]}>
-                    <VechainTokenCard
-                        isBalanceVisible={isBalanceVisible}
-                        tokenWithInfo={tokenWithInfo}
-                        isAnimation={isEdit}
-                    />
-                    <Animated.View style={animatedInnerCard}>
-                        <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
-                            <LineChart height={HEIGHT}>
-                                <LineChart.Path color={theme.colors.primary} width={2}>
-                                    <LineChart.Gradient />
-                                </LineChart.Path>
-                            </LineChart>
-                        </LineChart.Provider>
-                    </Animated.View>
+                    {tokenWithInfo.symbol !== B3TR.symbol ? (
+                        <VechainTokenCard
+                            isBalanceVisible={isBalanceVisible}
+                            tokenWithInfo={tokenWithInfo}
+                            isAnimation={isEdit}
+                        />
+                    ) : (
+                        <VeB3trTokenCard isBalanceVisible={isBalanceVisible} isAnimation={isEdit} />
+                    )}
+                    {!hideChart && (
+                        <Animated.View style={animatedInnerCard}>
+                            <LineChart.Provider data={chartData ?? DEFAULT_LINE_CHART_DATA}>
+                                <LineChart width={SCREEN_WIDTH - 32} height={HEIGHT} yGutter={20}>
+                                    <LineChart.Path color={theme.colors.graphLine} width={2}>
+                                        <LineChart.Gradient
+                                            color={theme.colors.graphGradient}
+                                            lastGradientValue={0.3}
+                                        />
+                                    </LineChart.Path>
+                                </LineChart>
+                            </LineChart.Provider>
+                        </Animated.View>
+                    )}
                 </Animated.View>
             </TouchableOpacity>
         </BaseView>
@@ -87,11 +99,10 @@ export const AnimatedChartCard = memo(({ tokenWithInfo, isEdit, isBalanceVisible
 
 const styles = StyleSheet.create({
     nativeTokenContainer: {
-        justifyContent: "flex-end",
-        alignItems: "center",
-        marginBottom: 10,
-        borderRadius: 16,
+        justifyContent: "space-between",
+        paddingTop: 16,
+        marginBottom: 8,
+        borderRadius: 12,
         overflow: "hidden",
-        marginHorizontal: 20,
     },
 })

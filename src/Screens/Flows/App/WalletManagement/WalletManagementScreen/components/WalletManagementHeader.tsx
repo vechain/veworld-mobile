@@ -1,6 +1,6 @@
 import React from "react"
 import { useTheme } from "~Hooks"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { COLORS } from "~Constants"
 import { selectDevices, useAppSelector } from "~Storage/Redux"
@@ -16,8 +16,7 @@ export const WalletManagementHeader = ({ isEdit, setIsEdit, goToCreateWalletFlow
     const devices = useAppSelector(selectDevices)
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-            <BaseText typographyFont="title">{LL.TITLE_WALLET_MANAGEMENT()}</BaseText>
+        <BaseView flexDirection="row" justifyContent="flex-end" mt={20} w={100}>
             <BaseView flexDirection="row">
                 {isEdit ? (
                     <BaseButton
@@ -27,7 +26,7 @@ export const WalletManagementHeader = ({ isEdit, setIsEdit, goToCreateWalletFlow
                         textColor={COLORS.DARK_PURPLE}
                         radius={30}
                         py={10}
-                        leftIcon={<BaseIcon name="check" size={20} color={COLORS.DARK_PURPLE} />}>
+                        leftIcon={<BaseIcon name="icon-check" size={20} color={COLORS.DARK_PURPLE} />}>
                         <BaseSpacer width={8} />
                         {LL.COMMON_BTN_SAVE()}
                     </BaseButton>
@@ -37,7 +36,7 @@ export const WalletManagementHeader = ({ isEdit, setIsEdit, goToCreateWalletFlow
                             <>
                                 <BaseIcon
                                     haptics="Light"
-                                    name="priority-low"
+                                    name="icon-list-end"
                                     action={() => setIsEdit(true)}
                                     size={24}
                                     color={theme.colors.text}
@@ -54,7 +53,7 @@ export const WalletManagementHeader = ({ isEdit, setIsEdit, goToCreateWalletFlow
                             textColor={COLORS.DARK_PURPLE}
                             radius={30}
                             py={10}
-                            leftIcon={<BaseIcon name="plus" size={20} color={COLORS.DARK_PURPLE} />}>
+                            leftIcon={<BaseIcon name="icon-plus" size={20} color={COLORS.DARK_PURPLE} />}>
                             <BaseSpacer width={2} />
                             {LL.ADD_WALLET()}
                         </BaseButton>

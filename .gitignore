@@ -119,3 +119,7 @@ android/sentry.properties
 
 # keystore
 android/keystore.properties
+
+# Android release build artifacts
+android/key_alias.txt
+android/store_password.txt

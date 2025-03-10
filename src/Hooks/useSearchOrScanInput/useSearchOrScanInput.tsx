@@ -41,8 +41,8 @@ export const useSearchOrScanInput = (
                 vnsAddress = addressFromVns ?? ""
                 vnsName = data
             } else {
-                const _name = await getVnsName(data)
-                vnsName = _name ?? ""
+                const [{ name }] = await getVnsName(data)
+                vnsName = name ?? ""
                 vnsAddress = data
             }
 
@@ -109,7 +109,7 @@ export const useSearchOrScanInput = (
                 placeholder={LL.SEND_ENTER_AN_ADDRESS()}
                 errorMessage={errorMessage}
                 testID="InsertAddressSendScreen_addressInput"
-                rightIcon={searchText ? "close" : "qrcode-scan"}
+                rightIcon={searchText ? "icon-x" : "icon-qr-code"}
                 onIconPress={searchText ? onTextReset : handleOnIconPress}
             />
         ),

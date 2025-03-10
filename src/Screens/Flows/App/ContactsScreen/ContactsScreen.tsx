@@ -2,16 +2,16 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList, ListRenderItem } from "@shopify/flash-list"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useScrollableList, useTheme } from "~Hooks"
+import { useBottomSheetModal, useScrollableList } from "~Hooks"
 import { AddressUtils } from "~Utils"
 import {
-    BaseIcon,
     BaseSpacer,
     BaseText,
     BaseTouchableBox,
     BaseView,
     DeleteConfirmationBottomSheet,
     Layout,
+    PlusIconHeaderButton,
     SwipeableRow,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -26,8 +26,6 @@ import { Contact } from "~Model"
 export const ContactsScreen = () => {
     // [Start] Hooks
     const nav = useNavigation()
-
-    const theme = useTheme()
 
     const { LL } = useI18nContext()
 
@@ -151,33 +149,16 @@ export const ContactsScreen = () => {
     return (
         <Layout
             safeAreaTestID="ContactsScreen"
-            fixedHeader={
-                <BaseView pb={16}>
-                    <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" w={100}>
-                        <BaseText typographyFont="title" testID="contacts-screen-title">
-                            {LL.TITLE_CONTACTS()}
-                        </BaseText>
-                        {contacts.length > 0 && (
-                            <BaseIcon
-                                haptics="Light"
-                                name={"plus"}
-                                size={24}
-                                bg={theme.colors.secondary}
-                                action={onAddContactPress}
-                                testID="Add_Contact_Button"
-                            />
-                        )}
-                    </BaseView>
-                    <BaseSpacer height={20} />
-
-                    <BaseText typographyFont="bodyMedium" my={8}>
-                        {LL.BD_CONTACTS_LIST()}
-                    </BaseText>
-                    <BaseText typographyFont="caption">{LL.BD_CONTACTS_LIST_DISCLAIMER()}</BaseText>
-                </BaseView>
-            }
+            title={LL.TITLE_CONTACTS()}
+            headerRightElement={<PlusIconHeaderButton action={onAddContactPress} testID="Add_Contact_Button" />}
             fixedBody={
                 <>
+                    <BaseView py={16} px={16}>
+                        <BaseText typographyFont="bodyMedium" my={8}>
+                            {LL.BD_CONTACTS_LIST()}
+                        </BaseText>
+                        <BaseText typographyFont="caption">{LL.BD_CONTACTS_LIST_DISCLAIMER()}</BaseText>
+                    </BaseView>
                     {/* Add contact button if contacts list is empty */}
                     {!contacts.length && renderAddContactButton}
 

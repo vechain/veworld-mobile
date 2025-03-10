@@ -2,7 +2,7 @@ import React, { useCallback } from "react"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { BaseView } from "./BaseView"
-import { BaseIcon, BaseText, BaseTextProps } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTextProps } from "~Components"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { BaseButtonGroupHorizontalType } from "~Model"
 import HapticsService from "~Services/HapticsService"
@@ -47,24 +47,24 @@ export const BaseButtonGroupHorizontal = ({
                 return theme.colors.disabled
             }
             if (selected) {
-                return theme.colors.primary
+                return theme.colors.horizontalButtonSelected
             }
             return theme.colors.card
         },
-        [theme.colors.card, theme.colors.disabled, theme.colors.primary],
+        [theme.colors.card, theme.colors.disabled, theme.colors.horizontalButtonSelected],
     )
 
     const calculateTextColor = useCallback(
         (selected: boolean, disabledStatus: boolean | undefined) => {
             if (disabledStatus) {
-                return theme.colors.textDisabled
+                return theme.colors.horizontalButtonTextReversed
             }
             if (selected) {
-                return theme.colors.card
+                return theme.colors.textSecondary
             }
             return theme.colors.text
         },
-        [theme.colors.card, theme.colors.text, theme.colors.textDisabled],
+        [theme.colors.textSecondary, theme.colors.horizontalButtonTextReversed, theme.colors.text],
     )
 
     return (
@@ -87,8 +87,13 @@ export const BaseButtonGroupHorizontal = ({
                                 renderButton(button, textColor)
                             ) : (
                                 <BaseView justifyContent="center" alignItems="center" flexDirection="row">
-                                    {icon && <BaseIcon size={18} name={icon} color={textColor} />}
-                                    <BaseText color={textColor} typographyFont={typographyFont} px={5} align="center">
+                                    {icon && (
+                                        <>
+                                            <BaseIcon size={18} name={icon} color={textColor} />
+                                            <BaseSpacer width={12} />
+                                        </>
+                                    )}
+                                    <BaseText color={textColor} typographyFont={typographyFont} align="center">
                                         {label}
                                     </BaseText>
                                 </BaseView>
@@ -105,10 +110,11 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         backgroundStyle: {
             backgroundColor: theme.colors.card,
-            borderRadius: 16,
+            borderRadius: 8,
+            padding: 4,
         },
         buttonStyle: {
-            borderRadius: 16,
+            borderRadius: 6,
         },
         pressable: {
             padding: 10,

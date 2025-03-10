@@ -1,0 +1,81 @@
+#createNewWalletAndBackupMenmonic
+appId: org.vechain.veworld.app
+onFlowComplete:
+    - runFlow: ../setup_reset/resetApp.yaml
+---
+- launchApp:
+      clearState: true
+- tapOn:
+      id: "CREATE_WALLET_BTN"
+#set wallet pin
+- repeat:
+      while:
+          visible: "Choose your 6-digit PIN"
+      commands:
+          - tapOn: "1"
+#confirm wallet pin
+- repeat:
+      while:
+          visible: "Choose your 6-digit PIN"
+      commands:
+          - tapOn: "1"
+#skip notification bottom sheet
+- runFlow:
+      when:
+          visible:
+              id: "button_notifications_enable"
+      commands:
+          - tapOn:
+                id: "button_notifications_skip"
+#backup mnemonic on privacy and settings screen
+- runFlow:
+      when:
+          platform: Android
+      commands:
+          - tapOn:
+                id: "Backup_now_button"
+- runFlow:
+      when:
+          platform: iOS
+      commands:
+          - tapOn:
+                id: "Backup_now_button"
+#view and copy mnemonic
+- runFlow:
+      when:
+          platform: Android
+      commands:
+          - tapOn:
+                id: "deviceBackupStateRow_0"
+          - repeat:
+                while:
+                    visible: "Insert your 6-digit PIN"
+                commands:
+                    - tapOn: "1"
+          - tapOn:
+                id: "Copy_To_Clipboard_Btn"
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
+          - tapOn:
+                id: "wallet-tab"
+- runFlow:
+      when:
+          platform: iOS
+      commands:
+          - tapOn:
+                id: "deviceBackupStateRow_0"
+          - repeat:
+                times: 6
+                commands:
+                    - tapOn: "1"
+          - tapOn:
+                id: "Copy_To_Clipboard_Btn"
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
+          - tapOn:
+                id: "BackButtonHeader-BaseIcon-backButton"
+          - tapOn:
+                id: "wallet-tab"
+- assertVisible: "My tokens"
