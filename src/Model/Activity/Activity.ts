@@ -1,6 +1,6 @@
 import { DIRECTIONS } from "~Constants"
-import { ActivityStatus, ActivityType } from "./enum"
 import { TypedData } from "~Model"
+import { ActivityEvent, ActivityStatus, ActivitySupport, ActivityType } from "./enum"
 
 export type OutputResponse = {
     contractAddress: string
@@ -12,23 +12,56 @@ export type OutputResponse = {
  * The Activity interface represents a blockchain activity with necessary transaction metadata.
  */
 export interface Activity {
-    isTransaction: boolean
-    timestamp: number
-    type: ActivityType
     id: string
-    txId?: string
-    from: string
-    to?: string[]
     blockNumber?: number
+    timestamp: number
+    txId?: string
+    gasPayer?: string
+    type: ActivityType | ActivityEvent
+    to?: string[]
+    from: string
+    isTransaction: boolean
     genesisId?: string
     status?: ActivityStatus
     clauses?: Connex.VM.Clause[]
     gasUsed?: number
-    gasPayer?: string
     delegated?: boolean
     outputs?: OutputResponse[]
 }
 
+export interface IndexedHistoryEvent {
+    id: string
+    blockId: string
+    blockNumber: number
+    blockTimestamp: number
+    txId: string
+    origin?: string
+    gasPayer?: string
+    tokenId?: string
+    contractAddress?: string
+    eventName: ActivityEvent
+    to?: string
+    from?: string
+    value?: string
+    appId?: string
+    proof?: string
+    roundId?: string
+    appVotes: {
+        appId: string
+        voteWeight: string
+    }[]
+    support?: ActivitySupport
+    votePower?: string
+    voteWeight?: string
+    reason?: string
+    proposalId?: string
+    oldLevel?: string
+    newLevel?: string
+    inputToken?: string
+    outputToken?: string
+    inputValue?: string
+    outputValue?: string
+}
 export interface NonTransactionalActivity {
     type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
     timestamp: number
@@ -40,7 +73,7 @@ export interface NonTransactionalActivity {
 export interface FungibleTokenActivity extends Activity {
     amount: string | number
     tokenAddress: string
-    type: ActivityType.FUNGIBLE_TOKEN | ActivityType.VET_TRANSFER
+    type: ActivityType.TRANSFER_FT | ActivityType.TRANSFER_VET
     direction: DIRECTIONS
 }
 
@@ -50,8 +83,18 @@ export interface FungibleTokenActivity extends Activity {
 export interface NonFungibleTokenActivity extends Activity {
     tokenId: string
     contractAddress: string
-    type: ActivityType.NFT_TRANSFER
+    type: ActivityType.TRANSFER_NFT
     direction: DIRECTIONS
+}
+
+export interface SwapActivity extends Activity {
+    eventName: ActivityEvent.SWAP_FT_TO_FT
+    to: string[]
+    from: string
+    inputToken: string
+    outputToken: string
+    inputValue: string
+    outputValue: string
 }
 
 /**
@@ -93,10 +136,175 @@ export interface TypedDataActivity extends Activity {
     typedData: TypedData
     sender: string
 }
+export interface B3trActionActivity extends Activity {
+    type: ActivityType.B3TR_ACTION
+    value: string
+    appId: string
+    proof: string
+}
 
-/**
- * The DelegatedTransactionActivity interface represents a blockchain activity related to delegated transactions.
- */
-export interface DelegatedTransactionActivity extends Activity {
-    type: ActivityType.DELEGATED_TRANSACTION
+export interface B3trProposalVoteActivity extends Activity {
+    type: ActivityType.B3TR_PROPOSAL_VOTE
+    support: ActivitySupport
+    votePower: string
+    voteWeight: string
+    prposalId: string
+}
+
+export interface B3trXAllocationVoteActivity extends Activity {
+    eventName: ActivityEvent.B3TR_XALLOCATION_VOTE
+    roundId: string
+    appVotes: {
+        appId: string
+        voteWeight: string
+    }[]
+}
+export interface B3trUpgradeGmActivity extends Activity {
+    eventName: ActivityEvent.B3TR_XALLOCATION_VOTE
+    oldLevel: string
+    newLevel: string
+}
+
+export interface B3trClaimRewardActivity extends Activity {
+    type: ActivityType.B3TR_CLAIM_REWARD
+    value: string
+    roundId: string
+}
+
+export interface B3trSwapB3trToVot3Activity extends Activity {
+    eventName: ActivityEvent.B3TR_SWAP_B3TR_TO_VOT3
+    value: string
+}
+export interface B3trSwapVot3ToB3trActivity extends Activity {
+    eventName: ActivityEvent.B3TR_SWAP_VOT3_TO_B3TR
+    value: string
+}
+export interface B3trProposalSupportActivity extends Activity {
+    eventName: ActivityEvent.B3TR_PROPOSAL_SUPPORT
+    value: string
+    proposalId: string
+}
+
+export interface UknownTxEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.UNKNOWN_TX
+}
+
+export interface TransferFtEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.TRANSFER_FT
+    to: string
+    from: string
+    value: string
+}
+
+export interface B3trActionEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_ACTION
+    to: string
+    from: string
+    value: string
+    appId: string
+    proof: string
+}
+
+export interface TransferVetEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.TRANSFER_VET
+    to: string
+    from: string
+}
+
+export interface TransferNftEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.TRANSFER_NFT
+    tokendId: string
+    to: string
+    from: string
+}
+
+export interface B3trSwapVot3ToB3trEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_SWAP_VOT3_TO_B3TR
+    to: string
+    from: string
+    value: string
+}
+
+export interface B3trSwapB3trToVot3Event extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_SWAP_B3TR_TO_VOT3
+    to: string
+    from: string
+    value: string
+}
+
+export interface SwapFtToVetEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.SWAP_FT_TO_VET
+    to: string
+    from: string
+    inputToken: string
+    inputValue: string
+    outputValue: string
+}
+
+export interface SwapVetToFtEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.SWAP_VET_TO_FT
+    to: string
+    from: string
+    outputToken: string
+    inputValue: string
+    outputValue: string
+}
+
+export interface SwapFtToFtEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.SWAP_FT_TO_FT
+    to: string
+    from: string
+    inputToken: string
+    outputToken: string
+    inputValue: string
+    outputValue: string
+}
+
+export interface TransferSfEvent extends IndexedHistoryEvent {
+    tokenId: string
+    eventName: ActivityEvent.TRANSFER_SF
+    to: string
+    from: string
+    value: string
+}
+
+export interface B3trXAllocationVote extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_XALLOCATION_VOTE
+    from: string
+    roundId: string
+    appVotes: {
+        appId: string
+        voteWeight: string
+    }[]
+}
+
+export interface B3trProposalVoteEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_PROPOSAL_VOTE
+    from: string
+    support: ActivitySupport
+    votePower: string
+    voteWeight: string
+    prposalId: string
+}
+
+export interface B3trClaimRewardEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_CLAIM_REWARD
+    to: string
+    from: string
+    value: string
+    roundId: string
+}
+
+export interface B3trUpgradeGmEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_UPGRADE_GM
+    oldLevel: string
+    newLevel: string
+}
+
+export interface B3trProposalSupportEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_PROPOSAL_SUPPORT
+    to: string
+    from: string
+    value: string
+    proposalId: string
 }

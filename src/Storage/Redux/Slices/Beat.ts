@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { BeatState } from "../Types/Beat"
 import { Beat } from "~Model"
-import { genesisesId } from "~Constants"
+import { genesisesId } from "~Constants/Constants"
 
 export const initialBeatState: BeatState = {
     latestBeat: {

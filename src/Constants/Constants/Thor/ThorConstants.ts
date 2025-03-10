@@ -2,7 +2,8 @@ import type { abi } from "thor-devkit"
 import { BigNumber } from "bignumber.js"
 
 import { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2, VeBetterDao, VetDomains } from "./abis"
-import { Network, NETWORK_TYPE } from "~Model"
+import { Network } from "~Model"
+import { NETWORK_TYPE } from "~Model/Network/enums"
 
 const THOR_MAIN_URLS = [
     "https://mainnet.vechain.org",

@@ -1,5 +1,6 @@
 import { StyleSheet } from "react-native"
-import { COLORS, ColorThemeType, typography } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
+import { typography } from "~Constants/Theme"
 
 const { defaults: defaultTypography } = typography
 

@@ -83,22 +83,22 @@ describe("getActivityTypeFromClause", () => {
         expect(type).toBe(ActivityType.DAPP_TRANSACTION)
     })
 
-    test("should return FUNGIBLE_TOKEN when the clause is token transfer", () => {
+    test("should return TRANSFER_FT when the clause is token transfer", () => {
         const clauses = [tokenTransferClause1]
         const type = ActivityUtils.getActivityTypeFromClause(clauses)
-        expect(type).toBe(ActivityType.FUNGIBLE_TOKEN)
+        expect(type).toBe(ActivityType.TRANSFER_FT)
     })
 
-    test("should return VET_TRANSFER when the clause is vet transfer", () => {
+    test("should return TRANSFER_VET when the clause is vet transfer", () => {
         const clauses = [vetTransferClause]
         const type = ActivityUtils.getActivityTypeFromClause(clauses)
-        expect(type).toBe(ActivityType.VET_TRANSFER)
+        expect(type).toBe(ActivityType.TRANSFER_VET)
     })
 
-    test("should return NFT_TRANSFER when the clause is a NFT transfer", () => {
+    test("should return TRANSFER_NFT when the clause is a NFT transfer", () => {
         const clauses = [nftTransferClause]
         const type = ActivityUtils.getActivityTypeFromClause(clauses)
-        expect(type).toBe(ActivityType.NFT_TRANSFER)
+        expect(type).toBe(ActivityType.TRANSFER_NFT)
     })
 
     test("should return DAPP_TRANSACTION when the clause is not vet transfer or token transfer", () => {
@@ -147,7 +147,7 @@ describe("isTransactionActivity", () => {
     test("should return true for a fungible token activity", () => {
         const activity: Activity = {
             ...BASE_SAMPLE_ACTIVITY,
-            type: ActivityType.FUNGIBLE_TOKEN,
+            type: ActivityType.TRANSFER_FT,
         }
         const isTransaction = ActivityUtils.isTransactionActivity(activity)
         expect(isTransaction).toBe(true)
@@ -156,16 +156,7 @@ describe("isTransactionActivity", () => {
     test("should return true for a vet transfer activity", () => {
         const activity: Activity = {
             ...BASE_SAMPLE_ACTIVITY,
-            type: ActivityType.VET_TRANSFER,
-        }
-        const isTransaction = ActivityUtils.isTransactionActivity(activity)
-        expect(isTransaction).toBe(true)
-    })
-
-    test("should return true for a delegated transaction activity", () => {
-        const activity: Activity = {
-            ...BASE_SAMPLE_ACTIVITY,
-            type: ActivityType.DELEGATED_TRANSACTION,
+            type: ActivityType.TRANSFER_VET,
         }
         const isTransaction = ActivityUtils.isTransactionActivity(activity)
         expect(isTransaction).toBe(true)
