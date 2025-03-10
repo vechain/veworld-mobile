@@ -167,6 +167,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "Efter belopp",
   "BD_SYMBOL_POSITION_OPTION_before": "Före belopp",
   "BD_TESTNET_NO_FIAT": "Fiatbalans är inte tillgänglig på testnät",
+  "BD_TOKEN_CONVERTED_ERROR": "Konverteringen misslyckades. Försök igen.",
+  "BD_TOKEN_CONVERTED_LOADING": "Konverterar...",
   "BD_TOKEN_CONVERTED_SUCCESS": "Tokens konverterade framgångsrikt!",
   "BD_TRANSACTION_DETAILS": "Se transaktionsdetaljer",
   "BD_USD": "USD",

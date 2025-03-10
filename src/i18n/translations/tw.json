@@ -167,6 +167,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "金額之後",
   "BD_SYMBOL_POSITION_OPTION_before": "金額之前",
   "BD_TESTNET_NO_FIAT": "測試網無法顯示法幣餘額",
+  "BD_TOKEN_CONVERTED_ERROR": "轉換失敗。請再試一次。",
+  "BD_TOKEN_CONVERTED_LOADING": "正在轉換...",
   "BD_TOKEN_CONVERTED_SUCCESS": "代幣成功轉換！",
   "BD_TRANSACTION_DETAILS": "查看交易詳情",
   "BD_USD": "美元",

@@ -167,6 +167,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "Dopo l'importo",
   "BD_SYMBOL_POSITION_OPTION_before": "Prima dell'importo",
   "BD_TESTNET_NO_FIAT": "Il saldo in valuta fiat non è disponibile su testnet",
+  "BD_TOKEN_CONVERTED_ERROR": "Conversione fallita. Riprova.",
+  "BD_TOKEN_CONVERTED_LOADING": "Conversione in corso...",
   "BD_TOKEN_CONVERTED_SUCCESS": "Token convertiti con successo!",
   "BD_TRANSACTION_DETAILS": "Vedi i dettagli della transazione",
   "BD_USD": "USD",

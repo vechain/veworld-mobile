@@ -166,6 +166,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "After amount",
   "BD_SYMBOL_POSITION_OPTION_before": "Before amount",
   "BD_TESTNET_NO_FIAT": "Fiat balance is not available on testnet",
+  "BD_TOKEN_CONVERTED_ERROR": "Conversion failed. Please try again.",
+  "BD_TOKEN_CONVERTED_LOADING": "Converting...",
   "BD_TOKEN_CONVERTED_SUCCESS": "Tokens converted succesfully!",
   "BD_TRANSACTION_DETAILS": "See transaction details",
   "BD_USD": "USD",

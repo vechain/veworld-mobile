@@ -167,6 +167,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "金额后",
   "BD_SYMBOL_POSITION_OPTION_before": "金额前",
   "BD_TESTNET_NO_FIAT": "法定货币余额在测试网上不可用",
+  "BD_TOKEN_CONVERTED_ERROR": "转换失败。请再试一次。",
+  "BD_TOKEN_CONVERTED_LOADING": "正在转换...",
   "BD_TOKEN_CONVERTED_SUCCESS": "代币转换成功！",
   "BD_TRANSACTION_DETAILS": "查看交易详情",
   "BD_USD": "美元",

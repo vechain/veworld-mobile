@@ -167,6 +167,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "金額の後",
   "BD_SYMBOL_POSITION_OPTION_before": "金額の前",
   "BD_TESTNET_NO_FIAT": "テストネットでは法定通貨残高は利用できません",
+  "BD_TOKEN_CONVERTED_ERROR": "変換に失敗しました。もう一度お試しください。",
+  "BD_TOKEN_CONVERTED_LOADING": "変換中...",
   "BD_TOKEN_CONVERTED_SUCCESS": "トークンは正常に変換されました！",
   "BD_TRANSACTION_DETAILS": "取引の詳細を見る",
   "BD_USD": "USD",

@@ -167,6 +167,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "Sau số tiền",
   "BD_SYMBOL_POSITION_OPTION_before": "Trước số tiền",
   "BD_TESTNET_NO_FIAT": "Số dư fiat không có sẵn trên testnet",
+  "BD_TOKEN_CONVERTED_ERROR": "Chuyển đổi thất bại. Vui lòng thử lại.",
+  "BD_TOKEN_CONVERTED_LOADING": "Đang chuyển đổi...",
   "BD_TOKEN_CONVERTED_SUCCESS": "Chuyển đổi token thành công!",
   "BD_TRANSACTION_DETAILS": "Xem chi tiết giao dịch",
   "BD_USD": "USD",

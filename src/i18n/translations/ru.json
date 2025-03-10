@@ -167,6 +167,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "После суммы",
   "BD_SYMBOL_POSITION_OPTION_before": "До суммы",
   "BD_TESTNET_NO_FIAT": "Баланс в фиате недоступен в тестовой сети",
+  "BD_TOKEN_CONVERTED_ERROR": "Преобразование не удалось. Пожалуйста, попробуйте еще раз.",
+  "BD_TOKEN_CONVERTED_LOADING": "Преобразование...",
   "BD_TOKEN_CONVERTED_SUCCESS": "Токены успешно конвертированы!",
   "BD_TRANSACTION_DETAILS": "Посмотреть детали транзакции",
   "BD_USD": "Доллар США",

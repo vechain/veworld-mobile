@@ -167,6 +167,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "Nach Betrag",
   "BD_SYMBOL_POSITION_OPTION_before": "Vor Betrag",
   "BD_TESTNET_NO_FIAT": "Fiat-Saldo ist im Testnetz nicht verfügbar",
+  "BD_TOKEN_CONVERTED_ERROR": "Umwandlung fehlgeschlagen. Bitte versuche es erneut.",
+  "BD_TOKEN_CONVERTED_LOADING": "Wird umgewandelt...",
   "BD_TOKEN_CONVERTED_SUCCESS": "Tokens erfolgreich umgewandelt!",
   "BD_TRANSACTION_DETAILS": "Transaktionsdetails anzeigen",
   "BD_USD": "USD",

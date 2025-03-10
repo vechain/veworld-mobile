@@ -167,6 +167,8 @@
   "BD_SYMBOL_POSITION_OPTION_after": "Tutarın ardından",
   "BD_SYMBOL_POSITION_OPTION_before": "Tutarın öncesinde",
   "BD_TESTNET_NO_FIAT": "Testnet üzerinde fiat bakiyesi mevcut değil",
+  "BD_TOKEN_CONVERTED_ERROR": "Dönüştürme başarısız oldu. Lütfen tekrar deneyin.",
+  "BD_TOKEN_CONVERTED_LOADING": "Dönüştürülüyor...",
   "BD_TOKEN_CONVERTED_SUCCESS": "Jetonlar başarıyla dönüştürüldü!",
   "BD_TRANSACTION_DETAILS": "İşlem detaylarını görüntüle",
   "BD_USD": "USD",
