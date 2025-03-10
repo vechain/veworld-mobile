@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native"
 import { InfiniteData, useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo, useState } from "react"
-import { Activity } from "~Model"
+import { Activity, ActivityEvent } from "~Model"
 import { createActivityFromIndexedHistoryEvent, fetchIndexedHistoryEvent, sortActivitiesByTimestamp } from "~Networking"
 import {
     selectAllActivitiesByAccountAddressAndNetwork,
@@ -11,7 +11,7 @@ import {
 } from "~Storage/Redux"
 import { ActivityUtils } from "~Utils"
 
-export const useAccountActivities = () => {
+export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = []) => {
     const queryClient = useQueryClient()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
@@ -23,13 +23,13 @@ export const useAccountActivities = () => {
 
     const fetchActivities = useCallback(
         async ({ pageParam = 0 }: { pageParam: number }) => {
-            return await fetchIndexedHistoryEvent(selectedAccount.address, pageParam, network)
+            return await fetchIndexedHistoryEvent(selectedAccount.address, pageParam, network, filters)
         },
-        [network, selectedAccount.address],
+        [filters, network, selectedAccount.address],
     )
 
     const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, isLoading } = useInfiniteQuery({
-        queryKey: [["accountActivities", selectedAccount.address, network.type]],
+        queryKey: ["accountActivities", selectedAccount.address, network.type, filters.join(",")],
         queryFn: fetchActivities,
         initialPageParam: 0,
         getNextPageParam: (lastPage, pages) => {
@@ -79,7 +79,7 @@ export const useAccountActivities = () => {
                     .flatMap(page => page.data)
                     .map(event => createActivityFromIndexedHistoryEvent(event, selectedAccount.address, network)) || []
 
-            if (localActivities.length > 0 && remoteActivities.length > 0) {
+            if (localActivities.length > 0 && remoteActivities.length > 0 && filters.length === 0) {
                 const remoteTimestamps = remoteActivities.map(act => act.timestamp)
                 const startingTimestamp = Math.min(...remoteTimestamps)
 
@@ -102,11 +102,12 @@ export const useAccountActivities = () => {
     }, [
         data,
         isFetching,
-        isFetchingNextPage,
         isLoading,
+        isFetchingNextPage,
         localActivities,
-        network,
+        filters.length,
         selectedAccount.address,
+        network,
         mergeActivities,
     ])
 

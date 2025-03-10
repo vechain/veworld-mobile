@@ -1,6 +1,5 @@
-import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
-import { FlatList, StyleSheet } from "react-native"
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs"
+import React from "react"
 import {
     BaseSpacer,
     BaseView,
@@ -11,15 +10,22 @@ import {
     SelectAccountBottomSheet,
     SelectedNetworkViewer,
 } from "~Components"
-import { useBottomSheetModal, useSetSelectedAccount, useVeBetterDaoDapps } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
-import { Routes } from "~Navigation"
 import { selectBalanceVisible, selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { ActivitySectionList, NoActivitiesButton, SkeletonActivityBox } from "./Components"
-import { useAccountActivities, useResetActivityStack } from "./Hooks"
+import { useResetActivityStack } from "./Hooks"
+import { ActivityTabBar } from "./navigation"
+import {
+    ActivityAllScreen,
+    ActivityB3trScreen,
+    ActivityNftScreen,
+    ActivitySwapScreen,
+    ActivityTransferScreen,
+} from "./screens"
+import { Routes } from "~Navigation"
 
-const SKELETON_COUNT = 6
+const Tab = createMaterialTopTabNavigator()
 
 export const ActivityScreen = () => {
     const { LL } = useI18nContext()
@@ -42,61 +48,6 @@ export const ActivityScreen = () => {
         onClose: closeSelectAccountBottonSheet,
     } = useBottomSheetModal()
 
-    const { activities, fetchActivities, isFetching, refreshActivities, isRefreshing } = useAccountActivities()
-    const { data: daoDapps, isPending } = useVeBetterDaoDapps()
-
-    const nav = useNavigation()
-
-    const onStartTransactingPress = useCallback(() => nav.navigate(Routes.SELECT_TOKEN_SEND), [nav])
-
-    const renderActivitiesList = useMemo(() => {
-        return (
-            <ActivitySectionList
-                activities={activities}
-                fetchActivities={fetchActivities}
-                refreshActivities={refreshActivities}
-                isFetching={isFetching || isPending}
-                isRefreshing={isRefreshing}
-                veBetterDaoDapps={daoDapps ?? []}
-            />
-        )
-    }, [activities, daoDapps, fetchActivities, isFetching, isPending, isRefreshing, refreshActivities])
-
-    const renderSkeletonList = useMemo(() => {
-        return (
-            <FlatList
-                data={[...Array(SKELETON_COUNT)]}
-                keyExtractor={(_, index) => `skeleton-${index}`}
-                contentContainerStyle={baseStyles.list}
-                ListFooterComponent={<BaseSpacer height={20} />}
-                renderItem={() => {
-                    return <SkeletonActivityBox />
-                }}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                scrollEnabled={!isFetching || activities?.length > 0}
-            />
-        )
-    }, [activities?.length, isFetching])
-
-    const renderNoActivitiesButton = useMemo(() => {
-        return (
-            <BaseView justifyContent="center" alignItems="center" w={100} style={baseStyles.noActivitiesButton}>
-                <NoActivitiesButton onPress={onStartTransactingPress} />
-            </BaseView>
-        )
-    }, [onStartTransactingPress])
-
-    const renderList = useCallback(() => {
-        if (activities.length > 0) {
-            return renderActivitiesList
-        } else if (isFetching && activities.length === 0) {
-            return renderSkeletonList
-        } else {
-            return renderNoActivitiesButton
-        }
-    }, [activities.length, isFetching, renderActivitiesList, renderNoActivitiesButton, renderSkeletonList])
-
     return (
         <Layout
             safeAreaTestID="History_Screen"
@@ -113,7 +64,38 @@ export const ActivityScreen = () => {
             }
             fixedBody={
                 <>
-                    {renderList()}
+                    <Tab.Navigator
+                        screenOptions={{
+                            animationEnabled: false,
+                            lazy: true,
+                        }}
+                        tabBar={ActivityTabBar}>
+                        <Tab.Screen
+                            name={Routes.ACTIVITY_ALL}
+                            component={ActivityAllScreen}
+                            options={{ title: LL.ACTIVITY_ALL_LABEL() }}
+                        />
+                        <Tab.Screen
+                            name={Routes.ACTIVITY_B3TR}
+                            component={ActivityB3trScreen}
+                            options={{ title: LL.ACTIVITY_B3TR_LABEL() }}
+                        />
+                        <Tab.Screen
+                            name={Routes.ACTIVITY_TRANSFER}
+                            component={ActivityTransferScreen}
+                            options={{ title: LL.ACTIVITY_TRANSFER_LABEL() }}
+                        />
+                        <Tab.Screen
+                            name={Routes.ACTIVITY_SWAP}
+                            component={ActivitySwapScreen}
+                            options={{ title: LL.ACTIVITY_SWAP_LABEL() }}
+                        />
+                        <Tab.Screen
+                            name={Routes.ACTIVITY_NFT}
+                            component={ActivityNftScreen}
+                            options={{ title: LL.ACTIVITY_NFT_LABEL() }}
+                        />
+                    </Tab.Navigator>
                     <SelectAccountBottomSheet
                         closeBottomSheet={closeSelectAccountBottonSheet}
                         accounts={accounts}
@@ -127,18 +109,3 @@ export const ActivityScreen = () => {
         />
     )
 }
-
-const baseStyles = StyleSheet.create({
-    backIcon: {
-        marginHorizontal: 8,
-        alignSelf: "flex-start",
-    },
-    list: {
-        flexGrow: 1,
-        paddingHorizontal: 16,
-    },
-    noActivitiesButton: {
-        position: "absolute",
-        bottom: "50%",
-    },
-})

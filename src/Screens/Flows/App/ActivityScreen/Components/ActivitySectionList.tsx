@@ -178,7 +178,6 @@ export const ActivitySectionList = ({
     const hasScrolled = useRef(false)
     const onEndReachedCalledDuringMomentum = useRef(false)
     const prevSelectedAccountAddress = useRef(selectedAccount.address)
-    const previousSectionsState = useRef<ActivitySection[]>([])
     const years = useRef<string[]>([moment().format("YYYY")])
     const sectionListRef = useRef<SectionList<Activity, ActivitySection>>(null)
 
@@ -243,7 +242,6 @@ export const ActivitySectionList = ({
             previousNetwork.current !== network ||
             !AddressUtils.compareAddresses(prevSelectedAccountAddress.current, selectedAccount.address)
         ) {
-            previousSectionsState.current = []
             years.current = []
         }
 
@@ -259,9 +257,8 @@ export const ActivitySectionList = ({
                 addItemToSection(acc, activity, dateStartOfDay.toISOString())
             }
 
-            previousSectionsState.current = acc
             return acc
-        }, previousSectionsState.current)
+        }, [])
 
         return result
     }, [activities, addItemToSection, isToday, isYesterday, network, selectedAccount.address])
@@ -279,7 +276,6 @@ export const ActivitySectionList = ({
 
     const onRefresh = useCallback(async () => {
         await refreshActivities()
-        previousSectionsState.current = []
         years.current = []
         hasScrolled.current = false
     }, [refreshActivities])

@@ -93,7 +93,7 @@ export const getIndexedHistoryEventOrigin = ({
     page: number
     pageSize?: number
     direction?: ORDER
-    eventName?: ActivityEvent[]
+    eventName?: Readonly<ActivityEvent[]>
     searchBy?: ActivitySearchBy[]
     contractAddress?: string
     before?: number

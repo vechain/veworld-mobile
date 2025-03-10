@@ -273,6 +273,10 @@ type RootTranslation = {
 	 */
 	B3TR_PROPOSAL_VOTE: string
 	/**
+	 * P​r​o​p​o​s​a​l​ ​s​u​p​p​o​r​t​ ​o​n
+	 */
+	B3TR_PROPSAL_SUPPORT: string
+	/**
 	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​e​b​e​r​ ​l​e​v​e​l
 	 */
 	B3TR_UPGRADE_GM: string
@@ -280,10 +284,6 @@ type RootTranslation = {
 	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d
 	 */
 	B3TR_XALLOCATION_VOTE: string
-	/**
-	 * P​r​o​p​o​s​a​l​ ​s​u​p​p​o​r​t​ ​o​n
-	 */
-	B3TR_PROPSAL_SUPPORT: string
 	/**
 	 * B​a​c​k​i​n​g​ ​u​p​.​.​.
 	 */
@@ -3982,6 +3982,26 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * A​l​l
+	 */
+	ACTIVITY_ALL_LABEL: string
+	/**
+	 * B​3​t​r
+	 */
+	ACTIVITY_B3TR_LABEL: string
+	/**
+	 * T​r​a​n​s​f​e​r
+	 */
+	ACTIVITY_TRANSFER_LABEL: string
+	/**
+	 * S​w​a​p
+	 */
+	ACTIVITY_SWAP_LABEL: string
+	/**
+	 * N​F​T
+	 */
+	ACTIVITY_NFT_LABEL: string
 }
 
 export type TranslationFunctions = {
@@ -4227,6 +4247,10 @@ Try reconnect your device to the internet.
 	 */
 	B3TR_PROPOSAL_VOTE: () => LocalizedString
 	/**
+	 * Proposal support on
+	 */
+	B3TR_PROPSAL_SUPPORT: () => LocalizedString
+	/**
 	 * New galaxy memeber level
 	 */
 	B3TR_UPGRADE_GM: () => LocalizedString
@@ -4234,10 +4258,6 @@ Try reconnect your device to the internet.
 	 * Vote on round
 	 */
 	B3TR_XALLOCATION_VOTE: () => LocalizedString
-	/**
-	 * Proposal support on
-	 */
-	B3TR_PROPSAL_SUPPORT: () => LocalizedString
 	/**
 	 * Backing up...
 	 */
@@ -7891,6 +7911,26 @@ Try reconnect your device to the internet.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * All
+	 */
+	ACTIVITY_ALL_LABEL: () => LocalizedString
+	/**
+	 * B3tr
+	 */
+	ACTIVITY_B3TR_LABEL: () => LocalizedString
+	/**
+	 * Transfer
+	 */
+	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	ACTIVITY_SWAP_LABEL: () => LocalizedString
+	/**
+	 * NFT
+	 */
+	ACTIVITY_NFT_LABEL: () => LocalizedString
 }
 
 export type Formatters = {}
