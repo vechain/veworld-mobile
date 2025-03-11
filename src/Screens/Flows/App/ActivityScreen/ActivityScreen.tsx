@@ -68,6 +68,7 @@ export const ActivityScreen = () => {
                         screenOptions={{
                             animationEnabled: false,
                             lazy: true,
+                            swipeEnabled: false,
                         }}
                         tabBar={ActivityTabBar}>
                         <Tab.Screen
