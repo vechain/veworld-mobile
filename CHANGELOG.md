@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-03-11)
+
+
+### Bug Fixes
+
+* better token convert keyboard issue ([#2766](https://github.com/vechain/veworld-mobile/issues/2766)) ([04f137a](https://github.com/vechain/veworld-mobile/commit/04f137a28f3deae18340a9b660ccc23429b78dba))
+
 ## 2.0.9 (2025-02-18)
 
 
