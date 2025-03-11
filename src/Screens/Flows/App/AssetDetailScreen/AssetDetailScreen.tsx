@@ -1,11 +1,11 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useEffect, useMemo } from "react"
+import React, { useCallback, useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { striptags } from "striptags"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { B3TR, typography } from "~Constants"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useBottomSheetRef, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
@@ -38,6 +38,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
         onClose: closeConvertSuccessBetterSheet,
     } = useBottomSheetModal()
 
+    const convertB3trBsRef = useBottomSheetRef()
+
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const tokens = useAppSelector(selectSendableTokensWithBalance)
@@ -60,6 +62,11 @@ export const AssetDetailScreen = ({ route }: Props) => {
     }, [token?.tokenInfo?.description, locale])
 
     const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
+
+    const onFailedConversion = useCallback(() => {
+        closeConvertSuccessBetterSheet()
+        convertB3trBsRef.current?.present()
+    }, [closeConvertSuccessBetterSheet, convertB3trBsRef])
 
     useEffect(() => {
         if (betterConversionResult) {
@@ -84,6 +91,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             isBalanceVisible={isBalanceVisible}
                             openQRCodeSheet={openQRCodeSheet}
                             isObserved={isObserved}
+                            convertB3trBottomSheetRef={convertB3trBsRef}
                         />
 
                         {token.symbol === B3TR.symbol && (
@@ -125,6 +133,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     <ConvertedBetterBottomSheet
                         ref={convertBetterSuccessBottomSheetRef}
                         onClose={closeConvertSuccessBetterSheet}
+                        onFailure={onFailedConversion}
                         {...betterConversionResult}
                     />
                 </ScrollView>

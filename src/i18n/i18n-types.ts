@@ -1316,6 +1316,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_SIGN_OUT: string
 	/**
+	 * T​r​y​ ​a​g​a​i​n
+	 */
+	COMMON_BTN_TRY_AGAIN: string
+	/**
 	 * U​n​l​o​c​k
 	 */
 	COMMON_BTN_UNLOCK: string
@@ -5242,6 +5246,10 @@ Try reconnect your device to the internet.
 	 * Sign out
 	 */
 	COMMON_BTN_SIGN_OUT: () => LocalizedString
+	/**
+	 * Try again
+	 */
+	COMMON_BTN_TRY_AGAIN: () => LocalizedString
 	/**
 	 * Unlock
 	 */
