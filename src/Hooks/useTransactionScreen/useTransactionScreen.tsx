@@ -119,7 +119,6 @@ export const useTransactionScreen = ({
      */
     const signAndSendTransaction = useCallback(
         async (password?: string) => {
-            // Set loading state immediately to prevent multiple clicks
             setLoading(true)
 
             try {
