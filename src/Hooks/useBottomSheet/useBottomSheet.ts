@@ -30,7 +30,8 @@ export const useBottomSheetModal = ({ externalRef }: UseBottomSheetModalOpts = {
     const openWithDelay = useCallback(
         (delay: number) => {
             setTimeout(() => {
-                externalRef ? externalRef.current?.present() : ref.current?.present()
+                if (externalRef) externalRef.current?.present()
+                else ref.current?.present()
             }, delay)
         },
         [externalRef],
