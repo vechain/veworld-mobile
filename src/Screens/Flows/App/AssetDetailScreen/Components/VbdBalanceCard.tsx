@@ -1,19 +1,6 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback, useMemo } from "react"
-import {
-    selectB3trTokenWithBalance,
-    selectNetworkVBDTokens,
-    selectVot3TokenWithBalance,
-    useAppSelector,
-} from "~Storage/Redux"
-import {
-    useBottomSheetModal,
-    useCombineFiatBalances,
-    useThemedStyles,
-    useTokenCardFiatInfo,
-    useTokenWithCompleteInfo,
-} from "~Hooks"
-import { BalanceUtils } from "~Utils"
-import { BalanceView } from "./BalanceView"
+import { StyleSheet } from "react-native"
 import {
     BaseIcon,
     BaseSkeleton,
@@ -23,14 +10,27 @@ import {
     FiatBalance,
     showWarningToast,
 } from "~Components"
-import { ActionsButtonGroup } from "./ActionsButtonGroup"
+import { ColorThemeType } from "~Constants"
+import {
+    useBottomSheetModal,
+    useCombineFiatBalances,
+    useThemedStyles,
+    useTokenCardFiatInfo,
+    useTokenWithCompleteInfo,
+} from "~Hooks"
 import { FastAction, IconKey } from "~Model"
 import { Routes } from "~Navigation"
+import {
+    selectB3trTokenWithBalance,
+    selectNetworkVBDTokens,
+    selectVot3TokenWithBalance,
+    useAppSelector,
+} from "~Storage/Redux"
+import { BalanceUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { useNavigation } from "@react-navigation/native"
-import { StyleSheet } from "react-native"
-import { ColorThemeType } from "~Constants"
-import { ConvertBetterBottomSheet } from "./ConvertBetterBottomSheet"
+import { ConvertBetterBottomSheet } from "../../ConvertBetterBottomSheet/ConvertBetterBottomSheet"
+import { ActionsButtonGroup } from "./ActionsButtonGroup"
+import { BalanceView } from "./BalanceView"
 
 type Props = {
     isBalanceVisible: boolean

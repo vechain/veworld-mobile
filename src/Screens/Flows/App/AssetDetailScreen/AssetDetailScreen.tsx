@@ -1,23 +1,23 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useEffect, useMemo } from "react"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
-import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
-import { AssetChart, MarketInfoView } from "./Components"
-import { useI18nContext } from "~i18n"
+import { StyleSheet } from "react-native"
+import { ScrollView } from "react-native-gesture-handler"
 import { striptags } from "striptags"
+import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
+import { B3TR, typography } from "~Constants"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     selectBalanceVisible,
     selectSelectedAccount,
     selectSendableTokensWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { ScrollView } from "react-native-gesture-handler"
-import { StyleSheet } from "react-native"
 import { AccountUtils } from "~Utils"
-import { B3TR, typography } from "~Constants"
+import { ConvertedBetterBottomSheet } from "../ConvertBetterBottomSheet/ConvertedBetterBottomSheet"
+import { AssetChart, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
-import { ConvertBetterTokenSuccessBottomSheet } from "./ConvertBetterScreen/Components"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -62,7 +62,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
     useEffect(() => {
-        if (betterConversionResult?.isSuccess) {
+        if (betterConversionResult) {
             openConvertSuccessBetterSheet()
         }
     }, [betterConversionResult, openConvertSuccessBetterSheet])
@@ -122,7 +122,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
 
-                    <ConvertBetterTokenSuccessBottomSheet
+                    <ConvertedBetterBottomSheet
                         ref={convertBetterSuccessBottomSheetRef}
                         onClose={closeConvertSuccessBetterSheet}
                         {...betterConversionResult}

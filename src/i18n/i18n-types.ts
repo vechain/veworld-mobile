@@ -705,6 +705,14 @@ type RootTranslation = {
 	 */
 	BD_TESTNET_NO_FIAT: string
 	/**
+	 * C​o​n​v​e​r​s​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	BD_TOKEN_CONVERTED_ERROR: string
+	/**
+	 * C​o​n​v​e​r​t​i​n​g​.​.​.
+	 */
+	BD_TOKEN_CONVERTED_LOADING: string
+	/**
 	 * T​o​k​e​n​s​ ​c​o​n​v​e​r​t​e​d​ ​s​u​c​c​e​s​f​u​l​l​y​!
 	 */
 	BD_TOKEN_CONVERTED_SUCCESS: string
@@ -4626,6 +4634,14 @@ Try reconnect your device to the internet.
 	 * Fiat balance is not available on testnet
 	 */
 	BD_TESTNET_NO_FIAT: () => LocalizedString
+	/**
+	 * Conversion failed. Please try again.
+	 */
+	BD_TOKEN_CONVERTED_ERROR: () => LocalizedString
+	/**
+	 * Converting...
+	 */
+	BD_TOKEN_CONVERTED_LOADING: () => LocalizedString
 	/**
 	 * Tokens converted succesfully!
 	 */

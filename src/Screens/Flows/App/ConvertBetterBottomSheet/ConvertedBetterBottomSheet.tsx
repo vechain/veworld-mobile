@@ -1,9 +1,11 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useMemo } from "react"
+import { useQuery } from "@tanstack/react-query"
+import { default as React, useCallback, useMemo } from "react"
 import { Image, Linking, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { B3TR, ColorThemeType, defaultMainNetwork, DIRECTIONS, VOT3 } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
+import { useWaitTransaction } from "~Hooks/useWaitTransaction/useWaitTransaction"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -16,8 +18,17 @@ type Props = {
     onClose: () => void
 }
 
-export const ConvertBetterTokenSuccessBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ txId, amount, from, to, onClose }, ref) => {
+export const ConvertedBetterBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
+    ({ txId, amount, from, to, onClose }: Props, ref) => {
+        const { waitTransaction } = useWaitTransaction()
+
+        const { data, isFetching } = useQuery({
+            queryKey: ["TransactionReceipt", txId],
+            queryFn: () => waitTransaction(txId!),
+            enabled: Boolean(txId),
+            retry: false,
+        })
+
         const { LL } = useI18nContext()
         const theme = useTheme()
         const selectedNetwork = useAppSelector(selectSelectedNetwork)
@@ -28,14 +39,29 @@ export const ConvertBetterTokenSuccessBottomSheet = React.forwardRef<BottomSheet
             )
         }, [selectedNetwork.explorerUrl, txId])
 
+        const title = useMemo(() => {
+            if (isFetching) return LL.BD_TOKEN_CONVERTED_LOADING()
+            if (data === null) return LL.BD_TOKEN_CONVERTED_ERROR()
+            return LL.BD_TOKEN_CONVERTED_SUCCESS()
+        }, [LL, data, isFetching])
+
         return (
             <BaseBottomSheet ref={ref} blurBackdrop enablePanDownToClose dynamicHeight>
                 <BaseView>
                     <BaseView alignItems="center" px={24}>
-                        <BaseIcon name="icon-check-circle" size={32} color={theme.colors.title} />
+                        {isFetching ? (
+                            <BaseIcon name="icon-check-circle" size={32} color={theme.colors.title} />
+                        ) : (
+                            <BaseIcon
+                                name={data === null ? "icon-alert-triangle" : "icon-check-circle"}
+                                size={32}
+                                color={theme.colors.title}
+                            />
+                        )}
+
                         <BaseSpacer height={16} />
                         <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.title}>
-                            {LL.BD_TOKEN_CONVERTED_SUCCESS()}
+                            {title}
                         </BaseText>
                         <BaseSpacer height={32} />
                     </BaseView>
@@ -72,7 +98,7 @@ type ConvertionCardProps = {
     amount?: string
 }
 
-const ConvertionCard: React.FC<ConvertionCardProps> = ({ direction, token, amount }) => {
+const ConvertionCard = ({ direction, token, amount }: ConvertionCardProps) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(cardBaseStyles)
 
