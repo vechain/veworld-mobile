@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { forwardRef, memo, useCallback, useMemo } from "react"
+import React, { forwardRef, memo, RefObject, useCallback, useMemo } from "react"
 import { OpaqueColorValue, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native"
 import { IconProps } from "react-native-vector-icons/Icon"
-import { Icon } from "~Components"
+import { Icon } from "~Components/Reusable"
 import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import HapticsService from "~Services/HapticsService"
@@ -27,7 +27,7 @@ type Props =
           TouchableOpacityProps &
           ViewProps
 
-const BaseIconWithRef = forwardRef<View, Props>((props, ref) => {
+const BaseIconWithRef = forwardRef<View | TouchableOpacity, Props>(function BaseIconWithRef(props, ref) {
     const { color, style, borderRadius, testID, haptics, name, ...otherProps } = props
     const theme = useTheme()
 
@@ -58,12 +58,12 @@ const BaseIconWithRef = forwardRef<View, Props>((props, ref) => {
     )
 })
 
-export const BaseIcon: React.FC<Props> = memo(BaseIconWithRef)
+export const BaseIcon = memo(BaseIconWithRef)
 
 type BaseIconWrapperProps = Props & { children: React.ReactNode }
 
-const BaseIconWrapperWithRef = forwardRef<View, BaseIconWrapperProps>(
-    ({ style, bg, borderRadius, size, children, action, haptics, ...props }, ref) => {
+const BaseIconWrapperWithRef = forwardRef<View | TouchableOpacity, BaseIconWrapperProps>(
+    function BaseIconWrapperWithRef({ style, bg, borderRadius, size, children, action, haptics, ...props }, ref) {
         const onButtonPress = useCallback(() => {
             if (!action) return
             action()
@@ -74,6 +74,7 @@ const BaseIconWrapperWithRef = forwardRef<View, BaseIconWrapperProps>(
             return (
                 <TouchableOpacity
                     onPress={onButtonPress}
+                    ref={ref as RefObject<TouchableOpacity>}
                     style={[
                         {
                             justifyContent: "center",
@@ -107,7 +108,7 @@ const BaseIconWrapperWithRef = forwardRef<View, BaseIconWrapperProps>(
                     },
                     style,
                 ]}
-                ref={ref}
+                ref={ref as RefObject<View>}
                 {...props}>
                 {children}
             </View>

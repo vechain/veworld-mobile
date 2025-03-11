@@ -9,6 +9,7 @@ import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { MMKV } from "react-native-mmkv"
 import localizeMock from "react-native-localize/mock"
 
+// jest.mock("~Components/Base/BaseIcon", () => jest.requireActual("~Components/Base/BaseIcon"))
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 const componentMock = ({ children }: { children: ReactNode }) => children
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
