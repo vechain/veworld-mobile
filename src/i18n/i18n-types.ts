@@ -90,6 +90,26 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_success: string
 	/**
+	 * A​l​l
+	 */
+	ACTIVITY_ALL_LABEL: string
+	/**
+	 * B​3​t​r
+	 */
+	ACTIVITY_B3TR_LABEL: string
+	/**
+	 * N​F​T
+	 */
+	ACTIVITY_NFT_LABEL: string
+	/**
+	 * S​w​a​p
+	 */
+	ACTIVITY_SWAP_LABEL: string
+	/**
+	 * T​r​a​n​s​f​e​r
+	 */
+	ACTIVITY_TRANSFER_LABEL: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -1009,6 +1029,34 @@ type RootTranslation = {
 	 * A​c​t​i​v​i​t​y
 	 */
 	BTN_HISTORY: string
+	/**
+	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_ALL_EMPTY_LABEL: string
+	/**
+	 * N​o​ ​B​3​T​R​ ​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​.
+	 */
+	ACTIVITY_B3TR_EMPTY_LABEL: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​y​o​u​r​ ​b​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​e​v​e​r​y​ ​d​a​y​!
+	 */
+	ACTIVITY_B3TR_EMPTY_DESCRIPTION: string
+	/**
+	 * D​i​s​c​o​v​e​r​ ​V​e​B​e​t​t​e​r​D​A​O
+	 */
+	ACTIVITY_B3TR_EMPTY_BUTTON: string
+	/**
+	 * N​o​ ​T​r​a​n​s​f​e​r​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_TRANSFERS_EMPTY_LABEL: string
+	/**
+	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​t
+	 */
+	ACTIVITY_SWAP_EMPTY_LABEL: string
+	/**
+	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: string
 	/**
 	 * I​m​p​o​r​t
 	 */
@@ -3982,26 +4030,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * A​l​l
-	 */
-	ACTIVITY_ALL_LABEL: string
-	/**
-	 * B​3​t​r
-	 */
-	ACTIVITY_B3TR_LABEL: string
-	/**
-	 * T​r​a​n​s​f​e​r
-	 */
-	ACTIVITY_TRANSFER_LABEL: string
-	/**
-	 * S​w​a​p
-	 */
-	ACTIVITY_SWAP_LABEL: string
-	/**
-	 * N​F​T
-	 */
-	ACTIVITY_NFT_LABEL: string
 }
 
 export type TranslationFunctions = {
@@ -4065,6 +4093,26 @@ export type TranslationFunctions = {
 	 * Success
 	 */
 	ACTIVITIES_STATUS_success: () => LocalizedString
+	/**
+	 * All
+	 */
+	ACTIVITY_ALL_LABEL: () => LocalizedString
+	/**
+	 * B3tr
+	 */
+	ACTIVITY_B3TR_LABEL: () => LocalizedString
+	/**
+	 * NFT
+	 */
+	ACTIVITY_NFT_LABEL: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	ACTIVITY_SWAP_LABEL: () => LocalizedString
+	/**
+	 * Transfer
+	 */
+	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -4978,6 +5026,34 @@ Try reconnect your device to the internet.
 	 * Activity
 	 */
 	BTN_HISTORY: () => LocalizedString
+	/**
+	 * No Activities to show yet
+	 */
+	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * No B3TR actions to show yet.
+	 */
+	ACTIVITY_B3TR_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Start earning B3TR tokens with your better actions every day!
+	 */
+	ACTIVITY_B3TR_EMPTY_DESCRIPTION: () => LocalizedString
+	/**
+	 * Discover VeBetterDAO
+	 */
+	ACTIVITY_B3TR_EMPTY_BUTTON: () => LocalizedString
+	/**
+	 * No Transfers to show yet
+	 */
+	ACTIVITY_TRANSFERS_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * No Swaps to show yett
+	 */
+	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * No NFTs to show yet
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
 	/**
 	 * Import
 	 */
@@ -7911,26 +7987,6 @@ Try reconnect your device to the internet.
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * All
-	 */
-	ACTIVITY_ALL_LABEL: () => LocalizedString
-	/**
-	 * B3tr
-	 */
-	ACTIVITY_B3TR_LABEL: () => LocalizedString
-	/**
-	 * Transfer
-	 */
-	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
-	/**
-	 * Swap
-	 */
-	ACTIVITY_SWAP_LABEL: () => LocalizedString
-	/**
-	 * NFT
-	 */
-	ACTIVITY_NFT_LABEL: () => LocalizedString
 }
 
 export type Formatters = {}

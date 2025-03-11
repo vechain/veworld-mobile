@@ -1,14 +1,11 @@
-import React, { useCallback, useMemo } from "react"
-import { useAccountActivities } from "../Hooks"
-import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
-import { BaseSpacer, BaseView } from "~Components"
-import { NoActivitiesButton } from "./NoActivitiesButton"
+import React, { useMemo } from "react"
 import { FlatList, StyleSheet } from "react-native"
-import { SkeletonActivityBox } from "./SkeletonActivityBox"
-import { ActivitySectionList } from "./ActivitySectionList"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
+import { BaseSpacer } from "~Components"
+import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { filterValues } from "../constants"
+import { useAccountActivities } from "../Hooks"
+import { ActivitySectionList } from "./ActivitySectionList"
+import { SkeletonActivityBox } from "./SkeletonActivityBox"
 
 type ActivitiesProps = {
     filter?:
@@ -16,17 +13,15 @@ type ActivitiesProps = {
         | typeof filterValues.swap
         | typeof filterValues.transfer
         | typeof filterValues.nfts
+    emptyComponent: React.JSX.Element
 }
 
 const SKELETON_COUNT = 6
 
-export const Activities = ({ filter }: ActivitiesProps) => {
-    const nav = useNavigation()
+export const Activities = ({ filter, emptyComponent }: ActivitiesProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const { activities, fetchActivities, isFetching, refreshActivities, isRefreshing } = useAccountActivities(filter)
     const { data: daoDapps, isPending } = useVeBetterDaoDapps()
-
-    const onStartTransactingPress = useCallback(() => nav.navigate(Routes.SELECT_TOKEN_SEND), [nav])
 
     const renderActivitiesList = useMemo(() => {
         return (
@@ -58,20 +53,12 @@ export const Activities = ({ filter }: ActivitiesProps) => {
         )
     }, [activities?.length, isFetching, styles.list])
 
-    const renderNoActivitiesButton = useMemo(() => {
-        return (
-            <BaseView justifyContent="center" alignItems="center" w={100} style={styles.noActivitiesButton}>
-                <NoActivitiesButton onPress={onStartTransactingPress} />
-            </BaseView>
-        )
-    }, [onStartTransactingPress, styles.noActivitiesButton])
-
     if (activities.length > 0) {
         return renderActivitiesList
     } else if (isFetching && activities.length === 0) {
         return renderSkeletonList
     } else {
-        return renderNoActivitiesButton
+        return emptyComponent
     }
 }
 
