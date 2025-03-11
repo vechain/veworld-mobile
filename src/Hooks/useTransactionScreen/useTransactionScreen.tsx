@@ -119,6 +119,7 @@ export const useTransactionScreen = ({
      */
     const signAndSendTransaction = useCallback(
         async (password?: string) => {
+            // Set loading state immediately to prevent multiple clicks
             setLoading(true)
 
             try {
@@ -147,7 +148,9 @@ export const useTransactionScreen = ({
                 dispatch(setIsAppLoading(false))
                 onTransactionFailure(e)
             }
+            setLoading(false)
         },
+
         [signTransaction, resetDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
     )
 
@@ -164,6 +167,12 @@ export const useTransactionScreen = ({
     })
 
     const onSubmit = useCallback(async () => {
+        // Immediately prevent multiple clicks by checking loading state
+        if (loading) return
+
+        // Set loading state BEFORE any async operations
+        setLoading(true)
+
         if (selectedAccount.device.type === DEVICE_TYPE.LEDGER && selectedDelegationOption !== DelegationType.ACCOUNT) {
             const tx = buildTransaction()
 
@@ -172,9 +181,16 @@ export const useTransactionScreen = ({
             } catch (e) {
                 error(ERROR_EVENTS.SEND, e)
                 onTransactionFailure(e)
+                // Ensure loading is set to false when there's an error
+                setLoading(false)
             }
         } else {
-            await checkIdentityBeforeOpening()
+            try {
+                await checkIdentityBeforeOpening()
+            } catch (e) {
+                // Ensure loading is set to false if identity check fails
+                setLoading(false)
+            }
         }
     }, [
         onTransactionFailure,
@@ -183,6 +199,7 @@ export const useTransactionScreen = ({
         selectedDelegationOption,
         navigateToLedger,
         checkIdentityBeforeOpening,
+        loading,
     ])
 
     const isLoading = useMemo(
@@ -206,7 +223,10 @@ export const useTransactionScreen = ({
         setTxCostTotal(_txCostTotal.toString)
     }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, priorityFees])
 
-    const isDisabledButtonState = useMemo(() => !isEnoughGas && !isDelegated, [isEnoughGas, isDelegated])
+    const isDisabledButtonState = useMemo(
+        () => (!isEnoughGas && !isDelegated) || loading,
+        [isEnoughGas, isDelegated, loading],
+    )
 
     return {
         selectedDelegationOption,
