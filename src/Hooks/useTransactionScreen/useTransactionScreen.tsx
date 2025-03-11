@@ -40,7 +40,6 @@ export const useTransactionScreen = ({
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [loading, setLoading] = useState(false)
-
     const [selectedFeeOption, setSelectedFeeOption] = useState(String(GasPriceCoefficient.REGULAR))
     const [isEnoughGas, setIsEnoughGas] = useState(true)
     const [txCostTotal, setTxCostTotal] = useState("0")
@@ -149,7 +148,6 @@ export const useTransactionScreen = ({
                 onTransactionFailure(e)
             }
         },
-
         [signTransaction, resetDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
     )
 
@@ -186,7 +184,6 @@ export const useTransactionScreen = ({
             onTransactionFailure(e)
         } finally {
             isSubmitting.current = false
-            // Don't setLoading(false) here if that's handled elsewhere
         }
     }, [
         selectedAccount,
