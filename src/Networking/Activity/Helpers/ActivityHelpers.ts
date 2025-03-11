@@ -516,7 +516,7 @@ export const createActivityFromIndexedHistoryEvent = (
     event: IndexedHistoryEvent,
     selectedAccountAddress: string,
     network: Network,
-): Activity => {
+): Activity | null => {
     const {
         origin,
         to,
@@ -577,11 +577,9 @@ export const createActivityFromIndexedHistoryEvent = (
             } as FungibleTokenActivity
         }
         case ActivityEvent.TRANSFER_VET: {
-            const amount = direction === DIRECTIONS.UP ? outputValue : inputValue
-
             return {
                 ...baseActivity,
-                amount: amount ?? "0x0",
+                amount: value ?? "0x0",
                 tokenAddress: VET.address,
                 direction: direction,
             } as FungibleTokenActivity
@@ -685,13 +683,7 @@ export const createActivityFromIndexedHistoryEvent = (
             } as B3trProposalSupportActivity
         }
         case ActivityEvent.UNKNOWN_TX:
-        default: {
-            return {
-                ...baseActivity,
-                type: ActivityType.DAPP_TRANSACTION,
-                name: "",
-                linkUrl: "",
-            } as DappTxActivity
-        }
+        default:
+            return null
     }
 }

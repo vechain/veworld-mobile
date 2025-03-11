@@ -77,7 +77,8 @@ export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = []) =>
             const remoteActivities =
                 data.pages
                     .flatMap(page => page.data)
-                    .map(event => createActivityFromIndexedHistoryEvent(event, selectedAccount.address, network)) || []
+                    .map(event => createActivityFromIndexedHistoryEvent(event, selectedAccount.address, network))
+                    .filter(activity => activity !== null) || []
 
             if (localActivities.length > 0 && remoteActivities.length > 0 && filters.length === 0) {
                 const remoteTimestamps = remoteActivities.map(act => act.timestamp)

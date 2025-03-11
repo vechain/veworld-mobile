@@ -1,7 +1,7 @@
 import { ActivityEvent } from "~Model"
 
 export const filterValues = {
-    all: "all",
+    all: Object.values(ActivityEvent).filter(value => value !== ActivityEvent.UNKNOWN_TX),
     b3tr: [
         ActivityEvent.B3TR_ACTION,
         ActivityEvent.B3TR_CLAIM_REWARD,

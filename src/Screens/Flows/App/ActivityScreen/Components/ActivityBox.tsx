@@ -2,7 +2,7 @@ import moment from "moment"
 import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
-import { B3TR, COLORS, DIRECTIONS, VOT3 } from "~Constants"
+import { B3TR, COLORS, DIRECTIONS, VET, VOT3 } from "~Constants"
 import { useNFTInfo, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
@@ -185,11 +185,17 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
     const officialTokens = useAppSelector(selectOfficialTokens)
 
     const allTokens = [customTokens, officialTokens].flat()
-    const token = allTokens.find(_token => _token.address === tokenAddress)
+
+    const token = AddressUtils.compareAddresses(tokenAddress, VET.address)
+        ? VET
+        : allTokens.find(_token => _token.address === tokenAddress)
+
     const time = moment(timestamp).format("HH:mm")
 
     const getAmountTransferred = () => {
-        if (!token?.decimals) return ""
+        if (!token?.decimals) {
+            return "0"
+        }
 
         return BigNutils(amount)
             .toHuman(token?.decimals ?? 0)
