@@ -38,7 +38,7 @@ export const ActivityTabBar = ({ state, descriptors, navigation }: MaterialTopTa
                 showsHorizontalScrollIndicator={false}>
                 {state.routes.map((route, index) => {
                     const { options } = descriptors[route.key]
-                    const label = options.title !== undefined ? options.title : route.name
+                    const label = options?.title ?? route.name
 
                     const isFocused = state.index === index
 
