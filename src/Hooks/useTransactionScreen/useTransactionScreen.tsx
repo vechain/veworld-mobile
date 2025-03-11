@@ -1,5 +1,5 @@
 import { Transaction } from "thor-devkit"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useState, useRef } from "react"
 import {
     SignStatus,
     SignTransactionResponse,
@@ -40,6 +40,7 @@ export const useTransactionScreen = ({
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [loading, setLoading] = useState(false)
+
     const [selectedFeeOption, setSelectedFeeOption] = useState(String(GasPriceCoefficient.REGULAR))
     const [isEnoughGas, setIsEnoughGas] = useState(true)
     const [txCostTotal, setTxCostTotal] = useState("0")
@@ -147,7 +148,6 @@ export const useTransactionScreen = ({
                 dispatch(setIsAppLoading(false))
                 onTransactionFailure(e)
             }
-            setLoading(false)
         },
 
         [signTransaction, resetDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
@@ -165,40 +165,36 @@ export const useTransactionScreen = ({
         allowAutoPassword: true,
     })
 
+    const isSubmitting = useRef(false)
+
     const onSubmit = useCallback(async () => {
-        // Immediately prevent multiple clicks by checking loading state
-        if (loading) return
+        if (isSubmitting.current) return
+        isSubmitting.current = true
 
-        // Set loading state BEFORE any async operations
-        setLoading(true)
-
-        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER && selectedDelegationOption !== DelegationType.ACCOUNT) {
-            const tx = buildTransaction()
-
-            try {
+        try {
+            if (
+                selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
+                selectedDelegationOption !== DelegationType.ACCOUNT
+            ) {
+                const tx = buildTransaction()
                 await navigateToLedger(tx, selectedAccount as LedgerAccountWithDevice, undefined)
-            } catch (e) {
-                error(ERROR_EVENTS.SEND, e)
-                onTransactionFailure(e)
-                // Ensure loading is set to false when there's an error
-                setLoading(false)
-            }
-        } else {
-            try {
+            } else {
                 await checkIdentityBeforeOpening()
-            } catch (e) {
-                // Ensure loading is set to false if identity check fails
-                setLoading(false)
             }
+        } catch (e) {
+            error(ERROR_EVENTS.SEND, e)
+            onTransactionFailure(e)
+        } finally {
+            isSubmitting.current = false
+            // Don't setLoading(false) here if that's handled elsewhere
         }
     }, [
-        onTransactionFailure,
-        buildTransaction,
         selectedAccount,
         selectedDelegationOption,
+        buildTransaction,
         navigateToLedger,
         checkIdentityBeforeOpening,
-        loading,
+        onTransactionFailure,
     ])
 
     const isLoading = useMemo(
@@ -223,8 +219,8 @@ export const useTransactionScreen = ({
     }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, priorityFees])
 
     const isDisabledButtonState = useMemo(
-        () => (!isEnoughGas && !isDelegated) || loading,
-        [isEnoughGas, isDelegated, loading],
+        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current,
+        [isEnoughGas, isDelegated, loading, isSubmitting],
     )
 
     return {
