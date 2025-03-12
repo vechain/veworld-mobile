@@ -23,7 +23,10 @@ export const useWaitTransaction = (opts: UseWaitTransactionOptions) => {
         retry: false,
     })
 
-    const isSuccess = useMemo(() => data != null && !data.reverted, [data])
+    const isSuccess = useMemo(() => {
+        if (typeof data === "undefined") return false
+        return data != null && !data.reverted
+    }, [data])
 
     return { receipt: data, isFetching, isSuccess }
 }
