@@ -10,8 +10,7 @@ type GenerateOnRampUrlParams = {
     defaultCryptoCurrency: CryptoCurrency
     cryptoCurrencies?: string
     fiatCurrencies?: string
-    sellAmount?: number
-    buyAmount?: number
+    amount?: number
 }
 
 export const useCoinifyPay = ({ target }: { target: "sell" | "buy" }) => {
@@ -35,22 +34,29 @@ export const useCoinifyPay = ({ target }: { target: "sell" | "buy" }) => {
     }, [])
 
     const generateOnRampURL = useCallback(
-        ({ cryptoCurrencies = "VET", fiatCurrencies = "EUR,USD", ...params }: GenerateOnRampUrlParams) => {
-            const paymentTypes = generatePaymentTypes()
-            const searchParams = objToQueryString({ fiatCurrencies, cryptoCurrencies, ...paymentTypes, ...params })
-            return coinifyBaseUrl + `?partnerId=${process.env.REACT_APP_COINIFY_PARTNER_ID}&` + searchParams
-        },
-        [coinifyBaseUrl, generatePaymentTypes, objToQueryString],
-    )
-
-    const generateOffRampURL = useCallback(
-        ({ cryptoCurrencies = "VET", fiatCurrencies = "EUR,USD", ...params }: GenerateOnRampUrlParams) => {
+        ({ cryptoCurrencies = "VET", fiatCurrencies = "EUR,USD", amount, ...params }: GenerateOnRampUrlParams) => {
             const paymentTypes = generatePaymentTypes()
             const searchParams = objToQueryString({
                 fiatCurrencies,
                 cryptoCurrencies,
                 ...paymentTypes,
                 ...params,
+                buyAmount: amount,
+            })
+            return coinifyBaseUrl + `?partnerId=${process.env.REACT_APP_COINIFY_PARTNER_ID}&` + searchParams
+        },
+        [coinifyBaseUrl, generatePaymentTypes, objToQueryString],
+    )
+
+    const generateOffRampURL = useCallback(
+        ({ cryptoCurrencies = "VET", fiatCurrencies = "EUR,USD", amount, ...params }: GenerateOnRampUrlParams) => {
+            const paymentTypes = generatePaymentTypes()
+            const searchParams = objToQueryString({
+                fiatCurrencies,
+                cryptoCurrencies,
+                ...paymentTypes,
+                ...params,
+                sellAmount: amount,
                 targetPage: "sell",
             })
             return coinifyBaseUrl + `?partnerId=${process.env.REACT_APP_COINIFY_PARTNER_ID}&` + searchParams
