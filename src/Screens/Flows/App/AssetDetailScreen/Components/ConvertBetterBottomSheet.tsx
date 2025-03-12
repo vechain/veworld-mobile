@@ -15,7 +15,7 @@ import {
 } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { ConvertBetterCard } from "../AssetDetailScreen/Components/ConvertBetterCard"
+import { ConvertBetterCard } from "./ConvertBetterCard"
 
 type Props = {
     onClose: () => void

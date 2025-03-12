@@ -29,9 +29,9 @@ import {
 } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { ConvertBetterBottomSheet } from "../../ConvertBetterBottomSheet/ConvertBetterBottomSheet"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { BalanceView } from "./BalanceView"
+import { ConvertBetterBottomSheet } from "./ConvertBetterBottomSheet"
 
 type Props = {
     isBalanceVisible: boolean

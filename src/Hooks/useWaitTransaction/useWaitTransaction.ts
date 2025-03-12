@@ -14,7 +14,10 @@ export const WAIT_TRANSACTION_DEFAULT_INTERVAL = 3000
  */
 export const WAIT_TRANSACTION_DEFAULT_TIMEOUT = 50000
 
-export const useWaitTransaction = ({ intervalMs = 3000, timeoutMs = 50000 }: WaitForTransactionOptions = {}) => {
+export const useWaitTransaction = ({
+    intervalMs = WAIT_TRANSACTION_DEFAULT_INTERVAL,
+    timeoutMs = WAIT_TRANSACTION_DEFAULT_TIMEOUT,
+}: WaitForTransactionOptions = {}) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const waitTransaction = useCallback(

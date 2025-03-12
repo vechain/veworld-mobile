@@ -15,8 +15,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
-import { ConvertedBetterBottomSheet } from "../ConvertBetterBottomSheet/ConvertedBetterBottomSheet"
-import { AssetChart, MarketInfoView } from "./Components"
+import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
