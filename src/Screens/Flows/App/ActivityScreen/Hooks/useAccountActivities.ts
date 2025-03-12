@@ -74,11 +74,16 @@ export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = []) =>
 
     const activities = useMemo(() => {
         if (data && data.pages?.length > 0) {
-            const remoteActivities =
-                data.pages
-                    .flatMap(page => page.data)
-                    .map(event => createActivityFromIndexedHistoryEvent(event, selectedAccount.address, network))
-                    .filter(activity => activity !== null) || []
+            const remoteActivities: Activity[] = []
+
+            data.pages
+                .flatMap(page => page.data)
+                .forEach(event => {
+                    const activity = createActivityFromIndexedHistoryEvent(event, selectedAccount.address, network)
+                    if (activity) {
+                        remoteActivities.push(activity)
+                    }
+                })
 
             if (localActivities.length > 0 && remoteActivities.length > 0 && filters.length === 0) {
                 const remoteTimestamps = remoteActivities.map(act => act.timestamp)
