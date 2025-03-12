@@ -4,6 +4,7 @@ import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { Activities, EmptyActivityList } from "../Components"
 import { useI18nContext } from "~i18n"
+import { filterValues } from "../constants"
 
 export const ActivityAllScreen = () => {
     const { LL } = useI18nContext()
@@ -19,7 +20,7 @@ export const ActivityAllScreen = () => {
 
     return (
         <BaseView style={styles.rootContainer}>
-            <Activities filter={undefined} emptyComponent={emptyList} />
+            <Activities filter={filterValues.all} emptyComponent={emptyList} />
         </BaseView>
     )
 }

@@ -1,5 +1,6 @@
 import React from "react"
 import { StyleSheet } from "react-native"
+import { B3trLogoSVG, VeBetterSVG } from "~Assets"
 import { BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -17,6 +18,11 @@ export const EmptyB3trActivities = ({ onPress }: EmptyB3trActivitiesProps) => {
 
     return (
         <BaseView style={[styles.rootContainer, { backgroundColor: theme.colors.card, borderColor: borderColor }]}>
+            <BaseView flexDirection="row" justifyContent="center" alignItems="center">
+                <B3trLogoSVG />
+                <BaseSpacer width={10} />
+                <VeBetterSVG />
+            </BaseView>
             <BaseSpacer height={24} />
             <BaseText style={styles.description} typographyFont="bodySemiBold" color={theme.colors.text}>
                 {LL.ACTIVITY_B3TR_EMPTY_LABEL()}

@@ -1,5 +1,5 @@
 import { useIsFocused } from "@react-navigation/native"
-import { InfiniteData, useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
+import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo, useState } from "react"
 import { Activity, ActivityEvent } from "~Model"
 import { createActivityFromIndexedHistoryEvent, fetchIndexedHistoryEvent, sortActivitiesByTimestamp } from "~Networking"
@@ -10,8 +10,9 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { ActivityUtils } from "~Utils"
+import { FilterType } from "../constants"
 
-export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = []) => {
+export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = [], filterType: FilterType) => {
     const queryClient = useQueryClient()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
@@ -29,7 +30,7 @@ export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = []) =>
     )
 
     const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, isLoading } = useInfiniteQuery({
-        queryKey: ["accountActivities", selectedAccount.address, network.type, filters.join(",")],
+        queryKey: ["accountActivities", filterType, selectedAccount.address, network.genesis.id],
         queryFn: fetchActivities,
         initialPageParam: 0,
         getNextPageParam: (lastPage, pages) => {
@@ -40,17 +41,11 @@ export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = []) =>
 
     const refreshActivities = useCallback(async () => {
         setIsRefreshing(true)
-        queryClient.setQueryData<InfiniteData<any>>(["accountActivities", selectedAccount.address, network.type], {
-            pages: [],
-            pageParams: [undefined], // Reset page params as well
-        })
-
-        // Invalidate and refetch
         await queryClient.invalidateQueries({
-            queryKey: ["accountActivities", selectedAccount.address, network.type],
+            queryKey: ["accountActivities", filterType, selectedAccount.address, network.genesis.id],
         })
         setIsRefreshing(false)
-    }, [network.type, queryClient, selectedAccount.address])
+    }, [filterType, network.genesis.id, queryClient, selectedAccount.address])
 
     const getActivities = useCallback(async () => {
         if (hasNextPage) {

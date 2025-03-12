@@ -8,7 +8,8 @@ import { ActivitySectionList } from "./ActivitySectionList"
 import { SkeletonActivityBox } from "./SkeletonActivityBox"
 
 type ActivitiesProps = {
-    filter?:
+    filter:
+        | typeof filterValues.all
         | typeof filterValues.b3tr
         | typeof filterValues.swap
         | typeof filterValues.transfer
@@ -20,7 +21,10 @@ const SKELETON_COUNT = 6
 
 export const Activities = ({ filter, emptyComponent }: ActivitiesProps) => {
     const { styles } = useThemedStyles(baseStyles)
-    const { activities, fetchActivities, isFetching, refreshActivities, isRefreshing } = useAccountActivities(filter)
+    const { activities, fetchActivities, isFetching, refreshActivities, isRefreshing } = useAccountActivities(
+        filter.value,
+        filter.type,
+    )
     const { data: daoDapps, isPending } = useVeBetterDaoDapps()
 
     const renderActivitiesList = useMemo(() => {
