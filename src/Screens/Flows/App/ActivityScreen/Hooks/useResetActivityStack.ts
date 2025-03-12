@@ -20,6 +20,9 @@ export const useResetActivityStack = () => {
 
     useEffect(() => {
         if (hasAccountChanged || hasNetworkChanged) {
+            previousSelectedAccountAddress.current = selectedAccount.address
+            previousSelectedNetwork.current = selectedNetwork
+
             navigation.dispatch(state => {
                 const index = state.routes.findIndex(r => r.name === Routes.HISTORY)
                 const routes = state.routes.slice(0, index + 1)
@@ -31,5 +34,5 @@ export const useResetActivityStack = () => {
                 })
             })
         }
-    }, [hasAccountChanged, hasNetworkChanged, navigation, selectedAccount.address])
+    }, [hasAccountChanged, hasNetworkChanged, navigation, selectedAccount.address, selectedNetwork])
 }

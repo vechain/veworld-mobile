@@ -57,13 +57,12 @@ export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = [], fi
         const map = new Map<string, Activity>()
 
         const addActivity = (activity: Activity) => {
-            const key = ActivityUtils.isTransactionActivity(activity) && activity.txId ? activity.txId : activity.id
-            map.set(key, activity)
+            const id = ActivityUtils.isTransactionActivity(activity) && activity.txId ? activity.txId : activity.id
+            map.set(id, activity)
         }
 
         arr1.forEach(addActivity)
         arr2.forEach(addActivity)
-
         return Array.from(map.values())
     }, [])
 
@@ -80,7 +79,9 @@ export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = [], fi
                     }
                 })
 
-            if (localActivities.length > 0 && remoteActivities.length > 0 && filters.length === 0) {
+            if (localActivities.length > 0 && remoteActivities.length > 0 && filterType === FilterType.ALL) {
+                // Ensure that the `localActivitiesByTimsstamp` array contains only local activities that
+                // occurred from the earliest remote activity timestamp onwards.
                 const remoteTimestamps = remoteActivities.map(act => act.timestamp)
                 const startingTimestamp = Math.min(...remoteTimestamps)
 
@@ -106,7 +107,7 @@ export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = [], fi
         isLoading,
         isFetchingNextPage,
         localActivities,
-        filters.length,
+        filterType,
         selectedAccount.address,
         network,
         mergeActivities,

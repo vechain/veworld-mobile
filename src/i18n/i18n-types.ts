@@ -90,21 +90,49 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_success: string
 	/**
+	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_ALL_EMPTY_LABEL: string
+	/**
 	 * A​l​l
 	 */
 	ACTIVITY_ALL_LABEL: string
 	/**
-	 * B​3​t​r
+	 * D​i​s​c​o​v​e​r​ ​V​e​B​e​t​t​e​r​D​A​O
+	 */
+	ACTIVITY_B3TR_EMPTY_BUTTON: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​y​o​u​r​ ​b​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​e​v​e​r​y​ ​d​a​y​!
+	 */
+	ACTIVITY_B3TR_EMPTY_DESCRIPTION: string
+	/**
+	 * N​o​ ​B​3​T​R​ ​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​.
+	 */
+	ACTIVITY_B3TR_EMPTY_LABEL: string
+	/**
+	 * B​e​t​t​e​r
 	 */
 	ACTIVITY_B3TR_LABEL: string
+	/**
+	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: string
 	/**
 	 * N​F​T
 	 */
 	ACTIVITY_NFT_LABEL: string
 	/**
+	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​t
+	 */
+	ACTIVITY_SWAP_EMPTY_LABEL: string
+	/**
 	 * S​w​a​p
 	 */
 	ACTIVITY_SWAP_LABEL: string
+	/**
+	 * N​o​ ​T​r​a​n​s​f​e​r​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_TRANSFERS_EMPTY_LABEL: string
 	/**
 	 * T​r​a​n​s​f​e​r
 	 */
@@ -1029,34 +1057,6 @@ type RootTranslation = {
 	 * A​c​t​i​v​i​t​y
 	 */
 	BTN_HISTORY: string
-	/**
-	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
-	 */
-	ACTIVITY_ALL_EMPTY_LABEL: string
-	/**
-	 * N​o​ ​B​3​T​R​ ​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​.
-	 */
-	ACTIVITY_B3TR_EMPTY_LABEL: string
-	/**
-	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​y​o​u​r​ ​b​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​e​v​e​r​y​ ​d​a​y​!
-	 */
-	ACTIVITY_B3TR_EMPTY_DESCRIPTION: string
-	/**
-	 * D​i​s​c​o​v​e​r​ ​V​e​B​e​t​t​e​r​D​A​O
-	 */
-	ACTIVITY_B3TR_EMPTY_BUTTON: string
-	/**
-	 * N​o​ ​T​r​a​n​s​f​e​r​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
-	 */
-	ACTIVITY_TRANSFERS_EMPTY_LABEL: string
-	/**
-	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​t
-	 */
-	ACTIVITY_SWAP_EMPTY_LABEL: string
-	/**
-	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
-	 */
-	ACTIVITY_NFT_EMPTY_LABEL: string
 	/**
 	 * I​m​p​o​r​t
 	 */
@@ -4094,21 +4094,49 @@ export type TranslationFunctions = {
 	 */
 	ACTIVITIES_STATUS_success: () => LocalizedString
 	/**
+	 * No Activities to show yet
+	 */
+	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
+	/**
 	 * All
 	 */
 	ACTIVITY_ALL_LABEL: () => LocalizedString
 	/**
-	 * B3tr
+	 * Discover VeBetterDAO
+	 */
+	ACTIVITY_B3TR_EMPTY_BUTTON: () => LocalizedString
+	/**
+	 * Start earning B3TR tokens with your better actions every day!
+	 */
+	ACTIVITY_B3TR_EMPTY_DESCRIPTION: () => LocalizedString
+	/**
+	 * No B3TR actions to show yet.
+	 */
+	ACTIVITY_B3TR_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Better
 	 */
 	ACTIVITY_B3TR_LABEL: () => LocalizedString
+	/**
+	 * No NFTs to show yet
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
 	/**
 	 * NFT
 	 */
 	ACTIVITY_NFT_LABEL: () => LocalizedString
 	/**
+	 * No Swaps to show yett
+	 */
+	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
+	/**
 	 * Swap
 	 */
 	ACTIVITY_SWAP_LABEL: () => LocalizedString
+	/**
+	 * No Transfers to show yet
+	 */
+	ACTIVITY_TRANSFERS_EMPTY_LABEL: () => LocalizedString
 	/**
 	 * Transfer
 	 */
@@ -5026,34 +5054,6 @@ Try reconnect your device to the internet.
 	 * Activity
 	 */
 	BTN_HISTORY: () => LocalizedString
-	/**
-	 * No Activities to show yet
-	 */
-	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
-	/**
-	 * No B3TR actions to show yet.
-	 */
-	ACTIVITY_B3TR_EMPTY_LABEL: () => LocalizedString
-	/**
-	 * Start earning B3TR tokens with your better actions every day!
-	 */
-	ACTIVITY_B3TR_EMPTY_DESCRIPTION: () => LocalizedString
-	/**
-	 * Discover VeBetterDAO
-	 */
-	ACTIVITY_B3TR_EMPTY_BUTTON: () => LocalizedString
-	/**
-	 * No Transfers to show yet
-	 */
-	ACTIVITY_TRANSFERS_EMPTY_LABEL: () => LocalizedString
-	/**
-	 * No Swaps to show yett
-	 */
-	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
-	/**
-	 * No NFTs to show yet
-	 */
-	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
 	/**
 	 * Import
 	 */
