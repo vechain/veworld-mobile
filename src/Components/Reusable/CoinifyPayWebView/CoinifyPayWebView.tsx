@@ -47,7 +47,7 @@ export const CoinifyPayWebView = ({
 
         return generateOffRampURL({
             address: destinationAddress,
-            buyAmount: currentAmount,
+            sellAmount: currentAmount,
             defaultCryptoCurrency: "VET",
             defaultFiatCurrency: currency,
             primaryColor: "red",
