@@ -2,7 +2,7 @@
 import React, { forwardRef, memo, RefObject, useCallback, useMemo } from "react"
 import { OpaqueColorValue, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native"
 import { IconProps } from "react-native-vector-icons/Icon"
-import { Icon } from "~Components/Reusable"
+import { Icon } from "~Components/Reusable/DesignSystemIconSet"
 import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import HapticsService from "~Services/HapticsService"
