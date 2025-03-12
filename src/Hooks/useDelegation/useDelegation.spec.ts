@@ -1,8 +1,8 @@
-import { renderHook } from "@testing-library/react-hooks"
+import { act, renderHook } from "@testing-library/react-hooks"
 import { useDelegation } from "~Hooks"
-import { TestHelpers, TestWrapper } from "~Test"
 import { DelegationType } from "~Model/Delegation"
 import { getDefaultDelegationAccount, getDefaultDelegationOption, getDefaultDelegationUrl } from "~Storage/Redux"
+import { TestHelpers, TestWrapper } from "~Test"
 
 const { account1D1, device1 } = TestHelpers.data
 const setGasPayer = jest.fn()
@@ -49,7 +49,9 @@ describe("useDelegation", () => {
             wrapper: TestWrapper,
         })
 
-        await result.current.setSelectedDelegationUrl(url)
+        await act(async () => {
+            await result.current.setSelectedDelegationUrl(url)
+        })
 
         expect(result.current.isDelegated).toBeTruthy()
         expect(result.current.selectedDelegationOption).toEqual(DelegationType.URL)
@@ -66,9 +68,11 @@ describe("useDelegation", () => {
             wrapper: TestWrapper,
         })
 
-        await result.current.setSelectedDelegationAccount({
-            ...account1D1,
-            device: device1,
+        await act(async () => {
+            await result.current.setSelectedDelegationAccount({
+                ...account1D1,
+                device: device1,
+            })
         })
 
         expect(result.current.isDelegated).toBeTruthy()
@@ -87,8 +91,10 @@ describe("useDelegation", () => {
             wrapper: TestWrapper,
         })
 
-        await result.current.setSelectedDelegationUrl(url)
-        await result.current.setSelectedDelegationAccount(account)
+        await act(async () => {
+            await result.current.setSelectedDelegationUrl(url)
+            await result.current.setSelectedDelegationAccount(account)
+        })
 
         expect(result.current.isDelegated).toBeTruthy()
         expect(result.current.selectedDelegationOption).toEqual(DelegationType.ACCOUNT)
@@ -113,12 +119,16 @@ describe("useDelegation", () => {
             wrapper: TestWrapper,
         })
 
-        result.current.setSelectedDelegationUrl("https://test.com")
+        act(() => {
+            result.current.setSelectedDelegationUrl("https://test.com")
+        })
 
         expect(result.current.isDelegated).toBeTruthy()
         expect(result.current.selectedDelegationUrl).toEqual("https://test.com")
 
-        result.current.resetDelegation()
+        act(() => {
+            result.current.resetDelegation()
+        })
 
         expect(result.current.isDelegated).toBeFalsy()
         expect(result.current.selectedDelegationOption).toEqual(DelegationType.NONE)

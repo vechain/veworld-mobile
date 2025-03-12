@@ -1,7 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import { TouchableOpacity, TouchableOpacityProps, FlexAlignType, StyleSheet } from "react-native"
 import React, { useCallback, useMemo } from "react"
-import { ColorThemeType, typography, TFonts } from "~Constants"
+import { ColorThemeType, TFonts } from "~Constants"
+import { typography } from "~Constants/Theme"
 import { useThemedStyles } from "~Hooks"
 import { BaseText } from "./BaseText"
 import Lottie from "lottie-react-native"

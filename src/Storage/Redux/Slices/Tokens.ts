@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { FungibleToken, NETWORK_TYPE, TokenWithCompleteInfo } from "~Model"
+import { FungibleToken, TokenWithCompleteInfo } from "~Model"
+import { NETWORK_TYPE } from "~Model/Network/enums"
 import { TokensState } from "../Types"
 import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
 import { HexUtils } from "~Utils"

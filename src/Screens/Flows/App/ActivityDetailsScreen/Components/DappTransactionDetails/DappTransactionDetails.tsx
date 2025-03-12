@@ -14,125 +14,134 @@ import { Linking } from "react-native"
 
 type Props = {
     activity: DappTxActivity
+    clauses?: Connex.VM.Clause[]
+    status?: ActivityStatus
+    gasUsed?: number
+    isLoading?: boolean
 }
 
-export const DappTransactionDetails: React.FC<Props> = memo(({ activity }) => {
-    const { LL } = useI18nContext()
+export const DappTransactionDetails: React.FC<Props> = memo(
+    ({ activity, clauses, status, gasUsed, isLoading = false }) => {
+        const { LL } = useI18nContext()
 
-    const network = useMemo(() => {
-        return activity.genesisId === genesisesId.main ? LL.NETWORK_LABEL_MAINNET() : LL.NETWORK_LABEL_TESTNET()
-    }, [LL, activity.genesisId])
+        const network = useMemo(() => {
+            return activity.genesisId === genesisesId.main ? LL.NETWORK_LABEL_MAINNET() : LL.NETWORK_LABEL_TESTNET()
+        }, [LL, activity.genesisId])
 
-    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
+        const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(gasUsed)
 
-    const tokens = useAppSelector(selectOfficialTokens)
+        const tokens = useAppSelector(selectOfficialTokens)
 
-    const clausesMetadata = TransactionUtils.interpretClauses(activity.clauses ?? [], tokens)
+        const clausesMetadata = TransactionUtils.interpretClauses(clauses ?? [], tokens)
 
-    const transactionIDshort = useMemo(() => {
-        return AddressUtils.humanAddress(activity.txId ?? "", 7, 9)
-    }, [activity.txId])
+        const transactionIDshort = useMemo(() => {
+            return AddressUtils.humanAddress(activity.txId ?? "", 7, 9)
+        }, [activity.txId])
 
-    const txStatus = useMemo(() => {
-        switch (activity.status) {
-            case ActivityStatus.PENDING:
-                return LL.ACTIVITIES_STATUS_pending()
-            case ActivityStatus.REVERTED:
-                return LL.ACTIVITIES_STATUS_reverted()
-            case ActivityStatus.SUCCESS:
-                return LL.ACTIVITIES_STATUS_success()
-        }
-    }, [LL, activity.status])
+        const txStatus = useMemo(() => {
+            switch (status) {
+                case ActivityStatus.PENDING:
+                    return LL.ACTIVITIES_STATUS_pending()
+                case ActivityStatus.REVERTED:
+                    return LL.ACTIVITIES_STATUS_reverted()
+                case ActivityStatus.SUCCESS:
+                    return LL.ACTIVITIES_STATUS_success()
+            }
+        }, [LL, status])
 
-    const { onCopyToClipboard } = useCopyClipboard()
+        const { onCopyToClipboard } = useCopyClipboard()
 
-    const blockNumber = useMemo(() => {
-        return activity.blockNumber
-    }, [activity.blockNumber])
+        const blockNumber = useMemo(() => {
+            return activity.blockNumber
+        }, [activity.blockNumber])
 
-    // Details List
-    const details: Array<ActivityDetail> = [
-        {
-            id: 1,
-            title: LL.COMMON_LBL_NAME(),
-            value: activity.name ?? "",
-            typographyFont: "subSubTitleLight",
-            underline: false,
-        },
-        {
-            id: 2,
-            title: LL.ORIGIN(),
-            value: activity.linkUrl ?? "",
-            typographyFont: "subSubTitleLight",
-            underline: true,
-            onValuePress: async () => await Linking.openURL(activity.linkUrl ?? ""),
-        },
-        {
-            id: 3,
-            title: LL.STATUS(),
-            value: `${txStatus}`,
-            typographyFont: "subSubTitle",
-            underline: true,
-        },
-        {
-            id: 4,
-            title: LL.ORIGIN(),
-            value: activity.linkUrl || "",
-            typographyFont: "subSubTitleLight",
-            underline: true,
-            // TODO(Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/755) onValuePress opens browser or in-app browser
-        },
-        {
-            id: 5,
-            title: LL.GAS_FEE(),
-            value: `${vthoGasFee} ${VTHO.symbol}`,
-            typographyFont: "subSubTitle",
-            underline: false,
-            valueAdditional: fiatValueGasFeeSpent ?? "",
-        },
-        {
-            id: 6,
-            title: LL.TRANSACTION_ID(),
-            value: `${transactionIDshort}`,
-            typographyFont: "subSubTitle",
-            underline: false,
-            icon: "icon-copy",
-            onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
-        },
-        {
-            id: 7,
-            title: LL.BLOCK_NUMBER(),
-            value: blockNumber ? `${blockNumber}` : "",
-            typographyFont: "subSubTitle",
-            underline: false,
-        },
-        {
-            id: 8,
-            title: LL.TITLE_NETWORK(),
-            value: network.toUpperCase(),
-            typographyFont: "subSubTitle",
-            underline: false,
-        },
-    ]
+        // Details List
+        const details: Array<ActivityDetail> = [
+            {
+                id: 1,
+                title: LL.COMMON_LBL_NAME(),
+                value: activity.name ?? "",
+                typographyFont: "subSubTitleLight",
+                underline: false,
+            },
+            {
+                id: 2,
+                title: LL.ORIGIN(),
+                value: activity.linkUrl ?? "",
+                typographyFont: "subSubTitleLight",
+                underline: true,
+                onValuePress: async () => await Linking.openURL(activity.linkUrl ?? ""),
+            },
+            {
+                id: 3,
+                title: LL.STATUS(),
+                value: `${txStatus}`,
+                typographyFont: "subSubTitle",
+                underline: true,
+                isLoading: isLoading,
+            },
+            {
+                id: 4,
+                title: LL.ORIGIN(),
+                value: activity.linkUrl || "",
+                typographyFont: "subSubTitleLight",
+                underline: true,
+                // TODO(Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/755) onValuePress opens browser or in-app browser
+            },
+            {
+                id: 5,
+                title: LL.GAS_FEE(),
+                value: `${vthoGasFee} ${VTHO.symbol}`,
+                typographyFont: "subSubTitle",
+                underline: false,
+                valueAdditional: fiatValueGasFeeSpent ?? "",
+                isLoading: isLoading,
+            },
+            {
+                id: 6,
+                title: LL.TRANSACTION_ID(),
+                value: `${transactionIDshort}`,
+                typographyFont: "subSubTitle",
+                underline: false,
+                icon: "icon-copy",
+                onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
+            },
+            {
+                id: 7,
+                title: LL.BLOCK_NUMBER(),
+                value: blockNumber ? `${blockNumber}` : "",
+                typographyFont: "subSubTitle",
+                underline: false,
+            },
+            {
+                id: 8,
+                title: LL.TITLE_NETWORK(),
+                value: network.toUpperCase(),
+                typographyFont: "subSubTitle",
+                underline: false,
+            },
+        ]
 
-    return (
-        <>
-            {details.map(
-                (detail: ActivityDetail, index: number) =>
-                    detail.value && (
-                        <ActivityDetailItem
-                            key={detail.id}
-                            activityDetail={detail}
-                            border={index !== details.length - 1}
-                        />
-                    ),
-            )}
+        return (
+            <>
+                {details.map(
+                    (detail: ActivityDetail, index: number) =>
+                        detail.value && (
+                            <ActivityDetailItem
+                                key={detail.id}
+                                activityDetail={detail}
+                                border={index !== details.length - 1}
+                                isLoading={detail.isLoading}
+                            />
+                        ),
+                )}
 
-            <BaseSpacer height={16} />
+                <BaseSpacer height={16} />
 
-            {!!clausesMetadata.length && <ClausesCarousel clausesMetadata={clausesMetadata} />}
+                {!!clausesMetadata.length && <ClausesCarousel clausesMetadata={clausesMetadata} />}
 
-            <BaseSpacer height={16} />
-        </>
-    )
-})
+                <BaseSpacer height={16} />
+            </>
+        )
+    },
+)

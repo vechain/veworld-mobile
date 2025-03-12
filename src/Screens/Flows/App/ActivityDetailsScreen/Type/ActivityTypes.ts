@@ -9,5 +9,6 @@ export type ActivityDetail = {
     underline: boolean
     valueAdditional?: string
     icon?: IconKey
+    isLoading?: boolean
     onValuePress?: () => void
 }

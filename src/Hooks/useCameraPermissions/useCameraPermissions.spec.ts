@@ -2,7 +2,7 @@ import { renderHook, act } from "@testing-library/react-hooks"
 import { Linking } from "react-native"
 import { useCameraPermissions } from "./useCameraPermissions"
 import { Camera } from "expo-camera"
-import { AppStateType } from "~Model"
+import { AppStateType } from "~Model/AppState"
 import { AlertUtils } from "~Utils"
 
 jest.mock("../useAppState", () => ({

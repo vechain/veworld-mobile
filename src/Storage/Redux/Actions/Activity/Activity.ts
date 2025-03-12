@@ -1,37 +1,16 @@
-import {
-    Activity,
-    ActivityStatus,
-    ConnectedAppActivity,
-    FungibleTokenActivity,
-    NETWORK_TYPE,
-    NonFungibleTokenActivity,
-    SignCertActivity,
-    TypedData,
-} from "~Model"
-import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
-import {
-    updateTransactionActivitiesMainnet,
-    updateTransactionActivitiesTestnet,
-    upsertActivityMainnet,
-    upsertActivityTestnet,
-} from "~Storage/Redux/Slices"
-import {
-    selectCurrentTransactionActivities,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-} from "~Storage/Redux/Selectors"
+import { Transaction } from "thor-devkit"
+import { Activity, ActivityStatus, FungibleTokenActivity, NonFungibleTokenActivity, TypedData } from "~Model"
 import {
     createConnectedAppActivity,
-    createIncomingTransfer,
     createPendingDappTransactionActivity,
     createPendingNFTTransferActivityFromTx,
     createPendingTransferActivityFromTx,
     createSignCertificateActivity,
     createSingTypedDataActivity,
-    DEFAULT_PAGE_SIZE,
 } from "~Networking"
-import { Transaction } from "thor-devkit"
-import { genesisesId } from "~Constants"
+import { selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { addActivity } from "~Storage/Redux/Slices"
+import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
 
 /**
  * This method upserts an activity to the store fetching the transaction details from the chain
@@ -55,7 +34,6 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
             if (!txReceipt) updatedActivity.status = ActivityStatus.PENDING
             else {
                 updatedActivity.timestamp = !txReceipt ? Date.now() : txReceipt.meta.blockTimestamp * 1000
-
                 updatedActivity.status = txReceipt.reverted ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS
             }
         }
@@ -64,20 +42,7 @@ export const validateAndUpsertActivity = createAppAsyncThunk(
         if (Date.now() - updatedActivity.timestamp > 120000 && updatedActivity.status === ActivityStatus.PENDING)
             updatedActivity.status = ActivityStatus.REVERTED
 
-        thor.genesis.id === genesisesId.main
-            ? dispatch(
-                  upsertActivityMainnet({
-                      address: updatedActivity.from?.toLowerCase(),
-                      activity: updatedActivity,
-                  }),
-              )
-            : dispatch(
-                  upsertActivityTestnet({
-                      address: updatedActivity.from?.toLowerCase(),
-                      activity: updatedActivity,
-                  }),
-              )
-
+        dispatch(addActivity(updatedActivity))
         return updatedActivity
     },
 )
@@ -93,26 +58,11 @@ export const addPendingTransferTransactionActivity =
     (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
-        const selectedNetwork = selectSelectedNetwork(getState())
 
-        // Ensure selectedAccount is not undefined and outgoingTx has a transaction ID
         if (!selectedAccount || !outgoingTx.id) return
 
         const pendingActivity: FungibleTokenActivity = createPendingTransferActivityFromTx(outgoingTx)
-
-        selectedNetwork.type === NETWORK_TYPE.MAIN
-            ? dispatch(
-                  upsertActivityMainnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: pendingActivity,
-                  }),
-              )
-            : dispatch(
-                  upsertActivityTestnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: pendingActivity,
-                  }),
-              )
+        dispatch(addActivity(pendingActivity))
     }
 
 /**
@@ -130,78 +80,10 @@ export const addPendingNFTtransferTransactionActivity =
     (outgoingTx: Transaction): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
-        const selectedNetwork = selectSelectedNetwork(getState())
-
-        // Ensure selectedAccount is not undefined and outgoingTx has a transaction ID
         if (!selectedAccount || !outgoingTx.id) return
 
         const pendingActivity: NonFungibleTokenActivity = createPendingNFTTransferActivityFromTx(outgoingTx)
-
-        selectedNetwork.type === NETWORK_TYPE.MAIN
-            ? dispatch(
-                  upsertActivityMainnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: pendingActivity,
-                  }),
-              )
-            : dispatch(
-                  upsertActivityTestnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: pendingActivity,
-                  }),
-              )
-    }
-
-/**
- * Adds an incoming transfer activity to the Redux store.
- *
- * @param meta - Metadata about the transaction, which includes the transaction ID, block number, and block timestamp.
- * @param amount - The amount of tokens involved in the transaction.
- * @param recipient - The address of the recipient of the tokens.
- * @param sender - The address of the sender of the tokens.
- * @param tokenAddress - The address of the token contract.
- * @param thor - The Connex.Thor instance used for querying the chain.
- *
- * @returns An asynchronous thunk action that, when dispatched, upserts an incoming transfer activity to the Redux store.
- */
-export const addIncomingTokenTransfer =
-    (
-        txID: string,
-        blockNumber: number,
-        blockTimestamp: number,
-        amount: string,
-        recipient: string,
-        sender: string,
-        tokenAddress: string,
-        thor: Connex.Thor,
-    ): AppThunk<void> =>
-    (dispatch, getState) => {
-        const selectedNetwork = selectSelectedNetwork(getState())
-
-        const incomingTransferActivity = createIncomingTransfer(
-            txID,
-            blockNumber,
-            blockTimestamp,
-            amount,
-            recipient,
-            sender,
-            tokenAddress,
-            thor,
-        )
-
-        selectedNetwork.type === NETWORK_TYPE.MAIN
-            ? dispatch(
-                  upsertActivityMainnet({
-                      address: recipient.toLowerCase(),
-                      activity: incomingTransferActivity,
-                  }),
-              )
-            : dispatch(
-                  upsertActivityTestnet({
-                      address: recipient.toLowerCase(),
-                      activity: incomingTransferActivity,
-                  }),
-              )
+        dispatch(addActivity(pendingActivity))
     }
 
 /**
@@ -220,10 +102,10 @@ export const addConnectedAppActivity =
         const selectedAccount = selectSelectedAccount(getState())
         const selectedNetwork = selectSelectedNetwork(getState())
 
-        // Ensure selectedAccount is not undefined
         if (!selectedAccount) return
 
-        const connectedAppActivity: ConnectedAppActivity = createConnectedAppActivity(
+        const connectedAppActivity = createConnectedAppActivity(
+            selectedNetwork,
             selectedAccount.address,
             name,
             linkUrl,
@@ -231,19 +113,7 @@ export const addConnectedAppActivity =
             methods,
         )
 
-        selectedNetwork.type === NETWORK_TYPE.MAIN
-            ? dispatch(
-                  upsertActivityMainnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: connectedAppActivity,
-                  }),
-              )
-            : dispatch(
-                  upsertActivityTestnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: connectedAppActivity,
-                  }),
-              )
+        dispatch(addActivity(connectedAppActivity))
     }
 
 /**
@@ -262,10 +132,10 @@ export const addSignCertificateActivity =
         const selectedAccount = selectSelectedAccount(getState())
         const selectedNetwork = selectSelectedNetwork(getState())
 
-        // Ensure selectedAccount is not undefined
         if (!selectedAccount) return
 
-        const connectedAppActivity: SignCertActivity = createSignCertificateActivity(
+        const signedCertificateActivity = createSignCertificateActivity(
+            selectedNetwork,
             selectedAccount.address,
             name,
             linkUrl,
@@ -273,45 +143,19 @@ export const addSignCertificateActivity =
             purpose,
         )
 
-        selectedNetwork.type === NETWORK_TYPE.MAIN
-            ? dispatch(
-                  upsertActivityMainnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: connectedAppActivity,
-                  }),
-              )
-            : dispatch(
-                  upsertActivityTestnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: connectedAppActivity,
-                  }),
-              )
+        dispatch(addActivity(signedCertificateActivity))
     }
 
 export const addSignTypedDataActivity =
-    (from: string, sender: string, typedData: TypedData): AppThunk<void> =>
+    (sender: string, typedData: TypedData): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
         const selectedNetwork = selectSelectedNetwork(getState())
 
-        // Ensure selectedAccount is not undefined
         if (!selectedAccount) return
 
-        const typedDataActivity = createSingTypedDataActivity(from, sender, typedData)
-
-        selectedNetwork.type === NETWORK_TYPE.MAIN
-            ? dispatch(
-                  upsertActivityMainnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: typedDataActivity,
-                  }),
-              )
-            : dispatch(
-                  upsertActivityTestnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: typedDataActivity,
-                  }),
-              )
+        const typedDataActivity = createSingTypedDataActivity(selectedNetwork, typedData.signer, sender, typedData)
+        dispatch(addActivity(typedDataActivity))
     }
 
 /**
@@ -327,74 +171,9 @@ export const addPendingDappTransactionActivity =
     (tx: Transaction, name?: string, linkUrl?: string): AppThunk<void> =>
     (dispatch, getState) => {
         const selectedAccount = selectSelectedAccount(getState())
-        const selectedNetwork = selectSelectedNetwork(getState())
 
-        // Ensure selectedAccount is not undefined
         if (!selectedAccount) return
 
         const pendingDappActivity: Activity = createPendingDappTransactionActivity(tx, name, linkUrl)
-
-        selectedNetwork.type === NETWORK_TYPE.MAIN
-            ? dispatch(
-                  upsertActivityMainnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: pendingDappActivity,
-                  }),
-              )
-            : dispatch(
-                  upsertActivityTestnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activity: pendingDappActivity,
-                  }),
-              )
-    }
-
-/**
- * This method updates account transaction activities.
- * It fetches the current activities from the state, adds new activities,
- * sorts them based on timestamp, and limits them to DEFAULT_PAGE_SIZE.
- *
- * @param transactionActivities - The new transaction activities to be added.
- * @returns A ThunkAction, which dispatches the updateTransactionActivities action.
- */
-export const updateAccountTransactionActivities =
-    (transactionActivities: Activity[]): AppThunk<void> =>
-    async (dispatch, getState) => {
-        const selectedAccount = selectSelectedAccount(getState())
-        const selectedNetwork = selectSelectedNetwork(getState())
-
-        // Ensure selectedAccount is not undefined
-        if (!selectedAccount) return
-
-        // Existing transaction activities for the account
-        const existingActivities = selectCurrentTransactionActivities(getState())
-
-        let newTransactionActivities = existingActivities
-
-        transactionActivities.forEach(activity => {
-            const existingActivityIndex = newTransactionActivities.findIndex(
-                act => act.id.toLowerCase() === activity.id.toLowerCase(),
-            )
-
-            if (existingActivityIndex !== -1) newTransactionActivities[existingActivityIndex] = activity
-            else newTransactionActivities.push(activity)
-        })
-
-        // Sort the activities and slice to the default page size
-        newTransactionActivities.sort((a, b) => b.timestamp - a.timestamp)
-        newTransactionActivities = newTransactionActivities.slice(0, DEFAULT_PAGE_SIZE * 2)
-
-        selectedNetwork.type === NETWORK_TYPE.MAIN
-            ? dispatch(
-                  updateTransactionActivitiesMainnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activities: newTransactionActivities,
-                  }),
-              )
-            : dispatch(
-                  updateTransactionActivitiesTestnet({
-                      address: selectedAccount.address.toLowerCase(),
-                      activities: newTransactionActivities,
-                  }),
-              )
+        dispatch(addActivity(pendingDappActivity))
     }

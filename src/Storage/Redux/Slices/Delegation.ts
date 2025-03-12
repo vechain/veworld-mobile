@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants/Constants"
 
 /**
  * Delegation State

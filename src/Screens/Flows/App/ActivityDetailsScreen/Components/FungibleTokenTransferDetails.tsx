@@ -13,9 +13,11 @@ import { ActivityDetailContent, ActivityDetailItem } from "./ActivityDetailItem"
 type Props = {
     activity: FungibleTokenActivity
     token?: FungibleToken
+    gasUsed?: number
+    isLoading?: boolean
 }
 
-export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, token }) => {
+export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, token, gasUsed, isLoading = false }) => {
     const { LL } = useI18nContext()
 
     const network = useMemo(() => {
@@ -26,7 +28,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
 
     const { onCopyToClipboard } = useCopyClipboard()
 
-    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
+    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(gasUsed)
 
     const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
 
@@ -77,6 +79,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 typographyFont: "subSubTitle",
                 underline: false,
                 valueAdditional: fiatValueGasFeeSpent ?? "",
+                isLoading: isLoading,
             },
             {
                 id: 3,
@@ -109,6 +112,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
             blockNumber,
             fiatValueGasFeeSpent,
             fiatValueTransferred,
+            isLoading,
             network,
             onCopyToClipboard,
             symbol,
