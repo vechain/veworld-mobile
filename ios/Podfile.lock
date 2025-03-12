@@ -527,7 +527,7 @@ PODS:
   - react-native-onesignal (5.2.9):
     - OneSignalXCFramework (= 5.2.10)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-pager-view (6.7.0):
+  - react-native-pager-view (6.4.1):
     - RCT-Folly (= 2021.07.22.00)
     - React-Core
   - react-native-quick-base64 (2.1.2):
@@ -1175,7 +1175,7 @@ SPEC CHECKSUMS:
   react-native-mmkv: 38d484ccd8f5760fe0e46d206ed07add5ddda1fc
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
   react-native-onesignal: 33ade92bd91578374c31c5a5a91f45f49c2d6614
-  react-native-pager-view: a0b697c75e73ced98733e27f857a2c1fc3c6011c
+  react-native-pager-view: d1e43158dd108b1b7377d7972157317e06dcc579
   react-native-quick-base64: 61228d753294ae643294a75fece8e0e80b7558a6
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162

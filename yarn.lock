@@ -11538,9 +11538,9 @@ linkify-it@^5.0.0:
     uc.micro "^2.0.0"
 
 lint-staged@^15.0.0:
-  version "15.4.3"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-15.4.3.tgz#e73587cc857f580c99f907abefe9ac8d8d5e74c1"
-  integrity sha512-FoH1vOeouNh1pw+90S+cnuoFwRfUD9ijY2GKy5h7HS3OR7JVir2N2xrsa0+Twc1B7cW72L+88geG5cW4wIhn7g==
+  version "15.5.0"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-15.5.0.tgz#fa6464cfb06e0faf5bb167f83186e952ff6e569e"
+  integrity sha512-WyCzSbfYGhK7cU+UuDDkzUiytbfbi0ZdPy2orwtM75P3WTtQBzmG40cCxIa8Ii2+XjfxzLH6Be46tUfWS85Xfg==
   dependencies:
     chalk "^5.4.1"
     commander "^13.1.0"
@@ -14399,10 +14399,10 @@ react-native-onesignal@^5.2.5:
   dependencies:
     invariant "^2.2.2"
 
-react-native-pager-view@^6.7.0:
-  version "6.7.0"
-  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.7.0.tgz#88f2520e85f07ce55f3f56c57d6637249a215160"
-  integrity sha512-sutxKiMqBuQrEyt4mLaLNzy8taIC7IuYpxfcwQBXfSYBSSpAa0qE9G1FXlP/iXqTSlFgBXyK7BESsl9umOjECQ==
+react-native-pager-view@6.4.1:
+  version "6.4.1"
+  resolved "https://registry.yarnpkg.com/react-native-pager-view/-/react-native-pager-view-6.4.1.tgz#82d04107229c19967a503de53a231dd95fcccd10"
+  integrity sha512-HnDxXTRHnR6WJ/vnOitv0C32KG9MJjxLnxswuQlBJmQ7RxF2GWOHSPIRAdZ9fLxdLstV38z9Oz1C95+t+yXkcg==
 
 react-native-progress@^5.0.0:
   version "5.0.1"
