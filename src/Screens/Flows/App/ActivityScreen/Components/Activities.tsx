@@ -22,8 +22,8 @@ const SKELETON_COUNT = 6
 export const Activities = ({ filter, emptyComponent }: ActivitiesProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const { activities, fetchActivities, isFetching, refreshActivities, isRefreshing } = useAccountActivities(
-        filter.value,
         filter.type,
+        filter.value,
     )
     const { data: daoDapps, isPending } = useVeBetterDaoDapps()
 

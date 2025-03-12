@@ -12,7 +12,7 @@ import {
 import { ActivityUtils } from "~Utils"
 import { FilterType } from "../constants"
 
-export const useAccountActivities = (filters: Readonly<ActivityEvent[]> = [], filterType: FilterType) => {
+export const useAccountActivities = (filterType: FilterType, filters: Readonly<ActivityEvent[]> = []) => {
     const queryClient = useQueryClient()
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const network = useAppSelector(selectSelectedNetwork)
