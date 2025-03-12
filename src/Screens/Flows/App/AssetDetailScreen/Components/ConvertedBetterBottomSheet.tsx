@@ -1,5 +1,4 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useQuery } from "@tanstack/react-query"
 import { default as React, useCallback, useEffect, useMemo } from "react"
 import { Image, Linking, StyleSheet } from "react-native"
 import Animated, { Easing, useAnimatedStyle, useSharedValue, withRepeat, withTiming } from "react-native-reanimated"
@@ -24,16 +23,9 @@ const AnimatedIcon = Animated.createAnimatedComponent(BaseIcon)
 
 export const ConvertedBetterBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ txId, amount, from, to, onClose, onFailure }: Props, ref) => {
-        const { waitTransaction } = useWaitTransaction()
+        const { isFetching, isSuccess } = useWaitTransaction({ txId })
 
         const spinRotationValue = useSharedValue(0)
-
-        const { data, isFetching } = useQuery({
-            queryKey: ["TransactionReceipt", txId],
-            queryFn: () => waitTransaction(txId!),
-            enabled: Boolean(txId),
-            retry: false,
-        })
 
         const { LL } = useI18nContext()
         const theme = useTheme()
@@ -44,8 +36,6 @@ export const ConvertedBetterBottomSheet = React.forwardRef<BottomSheetModalMetho
                 `${selectedNetwork.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${txId}`,
             )
         }, [selectedNetwork.explorerUrl, txId])
-
-        const isSuccess = useMemo(() => data != null && !data.reverted, [data])
 
         const title = useMemo(() => {
             if (isFetching) return LL.BD_TOKEN_CONVERTED_LOADING()
