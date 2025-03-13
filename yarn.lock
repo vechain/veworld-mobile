@@ -13423,10 +13423,10 @@ react-native-draggable-flatlist@^4.0.1:
   dependencies:
     "@babel/preset-typescript" "^7.17.12"
 
-react-native-drop-shadow@^1.0.0:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/react-native-drop-shadow/-/react-native-drop-shadow-1.0.3.tgz#a9c06b1a41c3a3ca17e01c4e743eb0360e45bb2f"
-  integrity sha512-R5AVDT2/8uRrNbcnkwvmCsW2qzVdvPOSx/81B8fHsTQdcYazsHAPtXW3IlBZnNf658NupfBr+o2ABWy5mFCfoQ==
+react-native-drop-shadow@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-drop-shadow/-/react-native-drop-shadow-1.0.0.tgz#a77b206424603eb87eaaf7aa215d1ebb2d4cac2d"
+  integrity sha512-om6oMDDn90ClFa+tEGMsFcACKlea5TO4jYur8PJKRpzfz+SnDIJlddhzp2kbOLpRTe7lleq6Md5QqC3u7RfOow==
 
 react-native-fast-image@^8.6.3:
   version "8.6.3"

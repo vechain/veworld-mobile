@@ -1177,8 +1177,6 @@ PODS:
     - Yoga
   - react-native-context-menu-view (1.17.0):
     - React
-  - react-native-drop-shadow (1.0.3):
-    - React
   - react-native-get-random-values (1.11.0):
     - React-Core
   - react-native-in-app-review (4.3.5):
@@ -1722,7 +1720,6 @@ DEPENDENCIES:
   - "react-native-cameraroll (from `../node_modules/@react-native-camera-roll/camera-roll`)"
   - "react-native-compat (from `../node_modules/@walletconnect/react-native-compat`)"
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
-  - react-native-drop-shadow (from `../node_modules/react-native-drop-shadow`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
@@ -1907,8 +1904,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@walletconnect/react-native-compat"
   react-native-context-menu-view:
     :path: "../node_modules/react-native-context-menu-view"
-  react-native-drop-shadow:
-    :path: "../node_modules/react-native-drop-shadow"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-in-app-review:
@@ -2081,7 +2076,6 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 290930c44aa621c5bd2379c45e7b2590c73b211b
   react-native-compat: 480399574fd82075838ab3da5ed7cfdc31574dad
   react-native-context-menu-view: 4a4de8bc59bc3fc4215f041881cbc6b2aeac31fe
-  react-native-drop-shadow: a30a971eed0b9ef1a3656492b82f12ebe93de120
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-in-app-review: cf4a29c5a1d6bb28dd0d15f1fb1faa25e265bfb5
   react-native-mmkv: 8c9a677e64a1ac89b0c6cf240feea528318b3074

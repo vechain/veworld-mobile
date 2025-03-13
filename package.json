@@ -128,7 +128,7 @@
     "react-native-context-menu-view": "^1.16.0",
     "react-native-device-info": "^13.1.0",
     "react-native-draggable-flatlist": "^4.0.1",
-    "react-native-drop-shadow": "^1.0.0",
+    "react-native-drop-shadow": "1.0.0",
     "react-native-fast-image": "^8.6.3",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-get-random-values": "^1.11.0",
