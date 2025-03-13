@@ -105,6 +105,7 @@
     "expo-font": "~12.0.10",
     "expo-haptics": "~13.0.1",
     "expo-local-authentication": "~14.0.1",
+    "expo-modules-core": "^2.2.3",
     "expo-secure-store": "~13.0.2",
     "https-browserify": "^1.0.0",
     "intl": "^1.2.5",
