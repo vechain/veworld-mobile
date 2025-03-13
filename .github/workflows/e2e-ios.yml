@@ -48,7 +48,7 @@ jobs:
 
             # Setup Ruby
             - name: Setup Ruby
-              uses: ruby/setup-ruby@v1.207.0
+              uses: ruby/setup-ruby@v1.224.0
               with:
                   bundler-cache: true
 
@@ -118,7 +118,7 @@ jobs:
               with:
                   name: VeWorld.app
                   path: ${{ env.APP_PATH }}
-                  
+
             #Speifying version and device + retry on a temporary basis while devicecloud work on higher spec vm options.
             - name: Test iOS
               uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
@@ -129,4 +129,3 @@ jobs:
                   ios-device: iphone-16
                   ios-version: 18
                   retry: 2
-
