@@ -32,7 +32,7 @@ end
 
 target 'VeWorld' do
   use_expo_modules!
-    post_integrate do |installer|
+  post_integrate do |installer|
     begin
       expo_patch_react_imports!(installer)
     rescue => e
@@ -53,7 +53,7 @@ target 'VeWorld' do
       rescue => e
         Pod::UI.warn e
       end
-    end
+  end
   config = use_native_modules!
 
   use_react_native!(
