@@ -254,7 +254,7 @@
     "ethers/@ethersproject/providers/ws": "^7.5.10",
     "@vechain/connex-driver/axios": "0.28.0",
     "@walletconnect/types": "2.15.2",
-    "expo-modules-core": "^1.12.11"
+    "expo-modules-core": "^2.2.3"
   },
   "peerDependencies": {
     "expo": "*"
