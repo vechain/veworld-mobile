@@ -7,7 +7,7 @@ import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-
 import { ReactNode } from "react"
 import { SecurityLevelType, WALLET_STATUS } from "~Model"
 import { MMKV } from "react-native-mmkv"
-import localizeMock from "react-native-localize/mock"
+import * as localizeMock from "react-native-localize/mock"
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 const componentMock = ({ children }: { children: ReactNode }) => children
@@ -78,14 +78,41 @@ jest.mock("@sentry/react-native", () => ({
     captureException: jest.fn(),
 }))
 
-jest.mock("react-native-bootsplash", () => {})
+jest.mock("react-native-bootsplash", () => ({
+    hide: jest.fn().mockImplementation(() => Promise.resolve()),
+}))
 
 jest.mock("@react-native-camera-roll/camera-roll", () => {})
+
+jest.mock("expo-modules-core", () => ({
+    EventEmitter: jest.fn().mockImplementation(() => ({
+        addListener: jest.fn(),
+        removeListeners: jest.fn(),
+    })),
+    requireNativeModule: jest.fn().mockReturnValue({}), // Mock native modules
+    Platform: {
+        OS: "ios",
+    },
+}))
 
 jest.mock("expo-secure-store", () => ({
     getItemAsync: jest.fn(),
     setItemAsync: jest.fn(),
 }))
+
+jest.mock("expo-local-authentication", () => ({
+    hasHardwareAsync: jest.fn().mockResolvedValue(true),
+    isEnrolledAsync: jest.fn().mockResolvedValue(true),
+    authenticateAsync: jest.fn().mockResolvedValue({ success: true }),
+    supportedAuthenticationTypesAsync: jest.fn().mockResolvedValue([1]),
+    getEnrolledLevelAsync: jest.fn().mockResolvedValue(1),
+    SecurityLevel: jest.requireActual("expo-local-authentication").SecurityLevel,
+    AuthenticationType: jest.requireActual("expo-local-authentication").AuthenticationType,
+}))
+
+jest.mock("expo-av", () => {})
+jest.mock("expo-background-fetch", () => {})
+
 jest.mock("expo-haptics", () => ({
     ImpactFeedbackStyle: {
         Light: "light",
@@ -94,12 +121,17 @@ jest.mock("expo-haptics", () => ({
     },
     impactAsync: jest.fn(),
 }))
+
 jest.mock("expo-font", () => ({
-    ...jest.requireActual("expo-font"),
     loadAsync: jest.fn().mockResolvedValue(true),
+    isLoaded: jest.fn(() => true),
 }))
 
 jest.mock("react-native-localize", () => localizeMock)
+
+jest.mock("react-native-webview", () => ({
+    ...jest.requireActual("react-native-webview").WebView,
+}))
 
 jest.mock("expo-clipboard", () => {})
 jest.mock("react-native-linear-gradient", () => "LinearGradient")
@@ -126,21 +158,18 @@ jest.mock("expo-camera", () => ({
         back: "back",
     },
 }))
-jest.mock("expo-barcode-scanner", () => ({
-    BarCodeScanner: {
-        Constants: {
-            BarCodeType: {
-                qr: "qr",
-            },
-        },
-    },
-}))
 
 jest.mock("@react-navigation/bottom-tabs", () => ({
     ...jest.requireActual("@react-navigation/bottom-tabs"),
     useBottomTabBarHeight: jest.fn(() => 10),
 }))
-;(global as typeof globalThis & { ReanimatedDataMock: { now: () => number } }).ReanimatedDataMock = {
+;(
+    global as typeof globalThis & {
+        ReanimatedDataMock: {
+            now: () => number
+        }
+    }
+).ReanimatedDataMock = {
     now: () => 0,
 }
 

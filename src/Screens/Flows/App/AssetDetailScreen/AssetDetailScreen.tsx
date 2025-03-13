@@ -5,7 +5,7 @@ import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet 
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { AssetChart, MarketInfoView } from "./Components"
 import { useI18nContext } from "~i18n"
-import { striptags } from "striptags"
+import striptags from "striptags"
 import {
     selectBalanceVisible,
     selectSelectedAccount,
@@ -108,9 +108,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                 </BaseText>
 
                                 <BaseText style={styles.tokenInfoText}>
-                                    {striptags(description.trim(), {
-                                        allowedTags: new Set(["strong"]),
-                                    })}
+                                    {striptags(description.trim(), ["strong"])}
                                 </BaseText>
                             </>
                         )}

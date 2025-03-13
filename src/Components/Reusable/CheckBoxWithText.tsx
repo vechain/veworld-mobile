@@ -32,7 +32,7 @@ export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, 
         <BouncyCheckbox
             onPress={onPress}
             size={checkSize ?? 16}
-            unfillColor={COLORS.TRANSPARENT}
+            unFillColor={COLORS.TRANSPARENT}
             fillColor={theme.colors.checkboxFilledBackground}
             innerIconStyle={styles.innerIcon}
             iconStyle={styles.icon}

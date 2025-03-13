@@ -33,6 +33,21 @@ end
 target 'VeWorld' do
   use_expo_modules!
     post_integrate do |installer|
+    begin
+      expo_patch_react_imports!(installer)
+    rescue => e
+      Pod::UI.warn e
+    end
+    begin
+      expo_patch_react_imports!(installer)
+    rescue => e
+      Pod::UI.warn e
+    end
+    begin
+      expo_patch_react_imports!(installer)
+    rescue => e
+      Pod::UI.warn e
+    end
       begin
         expo_patch_react_imports!(installer)
       rescue => e
@@ -47,7 +62,8 @@ target 'VeWorld' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  # pod 'OpenSSL-Universal', :modular_headers => true, :configurations => ['Release']
+  # Force OpenSSL version for react-native-quick-crypto
+  pod 'OpenSSL-Universal', '~> 1.1.1100'
   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
 
   target 'VeWorldTests' do

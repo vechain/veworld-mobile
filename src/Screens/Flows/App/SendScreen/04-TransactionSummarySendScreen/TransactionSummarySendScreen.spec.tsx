@@ -6,6 +6,10 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { RouteProp } from "@react-navigation/native"
 
+jest.mock("@gorhom/bottom-sheet", () => ({
+    ...jest.requireActual("@gorhom/bottom-sheet"),
+}))
+
 type NavigationScreenPropAlias = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
 type NavigationType = NativeStackNavigationProp<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND, undefined>
