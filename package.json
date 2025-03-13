@@ -256,6 +256,14 @@
     "@walletconnect/types": "2.15.2",
     "expo-modules-core": "~1.5.0"
   },
+  "peerDependencies": {
+    "expo": "*"
+  },
+  "peerDependenciesMeta": {
+    "expo": {
+      "optional": true
+    }
+  },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
       "eslint --fix",
