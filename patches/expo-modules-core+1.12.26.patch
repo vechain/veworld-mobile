@@ -1,25 +1,13 @@
 diff --git a/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt b/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt
-index ae0a811..d7f781f 100644
+index ae0a811..75a183c 100644
 --- a/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt
 +++ b/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt
-@@ -12,36 +12,40 @@ import androidx.core.app.ActivityCompat
- import androidx.core.content.ContextCompat
- import com.facebook.react.modules.core.PermissionAwareActivity
- import com.facebook.react.modules.core.PermissionListener
--import expo.modules.interfaces.permissions.Permissions
--import expo.modules.interfaces.permissions.PermissionsResponse
--import expo.modules.interfaces.permissions.PermissionsResponseListener
--import expo.modules.interfaces.permissions.PermissionsStatus
+@@ -17,7 +17,7 @@ import expo.modules.interfaces.permissions.PermissionsResponse
+ import expo.modules.interfaces.permissions.PermissionsResponseListener
+ import expo.modules.interfaces.permissions.PermissionsStatus
  import expo.modules.core.ModuleRegistry
 -import expo.modules.core.Promise
 +import expo.modules.kotlin.Promise
  import expo.modules.core.interfaces.ActivityProvider
  import expo.modules.core.interfaces.InternalModule
  import expo.modules.core.interfaces.LifecycleEventListener
- import expo.modules.core.interfaces.services.UIManager
-+import expo.modules.interfaces.permissions.Permissions
-+import expo.modules.interfaces.permissions.PermissionsResponse
-+import expo.modules.interfaces.permissions.PermissionsResponseListener
-+import expo.modules.interfaces.permissions.PermissionsStatus
- import java.util.*
- import kotlin.collections.HashMap
