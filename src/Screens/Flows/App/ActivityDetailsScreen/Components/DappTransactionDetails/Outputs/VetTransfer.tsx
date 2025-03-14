@@ -18,12 +18,17 @@ export const VetTransfer = memo(({ output }: Props) => {
     return (
         <BaseView style={{ width: SCREEN_WIDTH - 80 }}>
             <ClauseDetail title={LL.TYPE()} value={LL.CONNECTED_APP_token_transfer()} />
+            <ClauseDetail
+                title={LL.VALUE_TITLE()}
+                value={`${BigNutils(output.amount).toHuman(VET.decimals).toString} ${VET.symbol}`}
+            />
             {output.transferType === TransferType.RECEIVE ? (
                 <ClauseDetail
                     title={LL.FROM()}
                     value={AddressUtils.humanAddress(output.sender, 7, 9)}
                     onValuePress={() => onCopyToClipboard(output.sender, LL.COMMON_LBL_ADDRESS())}
                     valueIcon="icon-copy"
+                    border={false}
                 />
             ) : (
                 <ClauseDetail
@@ -31,14 +36,9 @@ export const VetTransfer = memo(({ output }: Props) => {
                     value={AddressUtils.humanAddress(output.recipient, 7, 9)}
                     onValuePress={() => onCopyToClipboard(output.recipient ?? "", LL.COMMON_LBL_ADDRESS())}
                     valueIcon="icon-copy"
+                    border={false}
                 />
             )}
-            <ClauseDetail title={LL.TOKEN_SYMBOL()} value={VET.symbol} />
-            <ClauseDetail
-                title={LL.VALUE_TITLE()}
-                value={BigNutils(output.amount).toHuman(VET.decimals).toString}
-                border={false}
-            />
         </BaseView>
     )
 })

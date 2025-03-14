@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from "react"
+import { memo, default as React, useMemo } from "react"
 import { BaseView } from "~Components"
 import { SCREEN_WIDTH } from "~Constants"
 import { TokenTransferActivity, TransferType, useCopyClipboard } from "~Hooks"
@@ -26,12 +26,19 @@ export const TokenTransfer = memo(({ output }: Props) => {
     return (
         <BaseView style={{ width: SCREEN_WIDTH - 80 }}>
             <ClauseDetail title={LL.TYPE()} value={LL.CONNECTED_APP_token_transfer()} />
+            <ClauseDetail
+                title={LL.VALUE_TITLE()}
+                value={`${BigNutils(output.amount).toHuman(token?.decimals ?? 18).toString} ${
+                    token?.symbol ?? token?.name ?? LL.UNKNOWN_ACCOUNT()
+                }`}
+            />
             {output.transferType === TransferType.RECEIVE ? (
                 <ClauseDetail
                     title={LL.FROM()}
                     value={AddressUtils.humanAddress(output.sender, 7, 9)}
                     onValuePress={() => onCopyToClipboard(output.sender, LL.COMMON_LBL_ADDRESS())}
                     valueIcon="icon-copy"
+                    border={false}
                 />
             ) : (
                 <ClauseDetail
@@ -39,14 +46,9 @@ export const TokenTransfer = memo(({ output }: Props) => {
                     value={AddressUtils.humanAddress(output.recipient, 7, 9)}
                     onValuePress={() => onCopyToClipboard(output.recipient ?? "", LL.COMMON_LBL_ADDRESS())}
                     valueIcon="icon-copy"
+                    border={false}
                 />
             )}
-            <ClauseDetail title={LL.TOKEN_SYMBOL()} value={token?.symbol ?? token?.name ?? LL.UNKNOWN_ACCOUNT()} />
-            <ClauseDetail
-                title={LL.VALUE_TITLE()}
-                value={BigNutils(output.amount).toHuman(token?.decimals ?? 18).toString}
-                border={false}
-            />
         </BaseView>
     )
 })

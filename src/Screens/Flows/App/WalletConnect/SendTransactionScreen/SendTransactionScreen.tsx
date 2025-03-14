@@ -207,6 +207,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         isDisabledButtonState,
         isLoading,
         priorityFees,
+        isSimulationLoading,
         transactionSimulationResult,
     } = useTransactionScreen({
         clauses,
@@ -295,7 +296,12 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                 ref={signAndRejectRef}
                 onConfirmTitle={LL.COMMON_BTN_SIGN_AND_SEND()}
                 onConfirm={onSubmit}
-                confirmButtonDisabled={isLoading || isDisabledButtonState || (!validConnectedApp && !isInvalidChecked)}
+                confirmButtonDisabled={
+                    isLoading ||
+                    isDisabledButtonState ||
+                    (!validConnectedApp && !isInvalidChecked) ||
+                    isSimulationLoading
+                }
                 isConfirmLoading={isLoading}
                 onRejectTitle={LL.COMMON_BTN_REJECT()}
                 onReject={onReject}
