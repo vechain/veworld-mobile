@@ -13,6 +13,7 @@ import com.facebook.react.bridge.WritableNativeArray
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.Drive
 import expo.modules.kotlin.Promise
+import java.lang.Exception
 import java.util.Date
 import org.vechain.veworld.app.googleDrive.data.GoogleDrive
 import org.vechain.veworld.app.googleDrive.domain.DerivationPath
@@ -161,7 +162,8 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
                     currentActivity?.startActivityForResult(intent, Request.GOOGLE_SIGN_IN.code)
                             ?: promise.reject(
                                     DataError.Android.ACTIVITY_NOT_FOUND.code,
-                                    DataError.Android.ACTIVITY_NOT_FOUND.name
+                                    DataError.Android.ACTIVITY_NOT_FOUND.name,
+                                    Exception(DataError.Android.ACTIVITY_NOT_FOUND.name)
                             )
                 }
             }
@@ -190,7 +192,8 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
         currentActivity?.startActivityForResult(intent, Request.USER_RECOVERABLE_AUTH.code)
                 ?: promise.reject(
                         DataError.Android.ACTIVITY_NOT_FOUND.code,
-                        DataError.Android.ACTIVITY_NOT_FOUND.name
+                        DataError.Android.ACTIVITY_NOT_FOUND.name,
+                        Exception(DataError.Android.ACTIVITY_NOT_FOUND.name)
                 )
     }
 
@@ -240,7 +243,12 @@ class GoogleDrivePackage(private val reactContext: ReactApplicationContext) :
         val transformedDerivationPath =
                 when (val result = DerivationPath.fromType(derivationPath)) {
                     is Result.Success -> result.data
-                    is Result.Error -> return promise.reject(result.error.code, result.error.name)
+                    is Result.Error ->
+                            return promise.reject(
+                                    result.error.code,
+                                    result.error.name,
+                                    Exception(result.error.name)
+                            )
                 }
 
         val transformedDeviceType =

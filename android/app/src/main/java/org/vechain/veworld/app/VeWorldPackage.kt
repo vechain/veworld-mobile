@@ -1,10 +1,8 @@
 package org.vechain.veworld.app
 
-import android.view.View
 import com.facebook.react.ReactPackage
 import com.facebook.react.bridge.NativeModule
 import com.facebook.react.bridge.ReactApplicationContext
-import com.facebook.react.uimanager.ReactShadowNode
 import com.facebook.react.uimanager.ViewManager
 import org.vechain.veworld.app.googleDrive.GoogleDrivePackage
 
@@ -13,11 +11,19 @@ import org.vechain.veworld.app.googleDrive.GoogleDrivePackage
 class VeWorldPackage : ReactPackage {
 
     override fun createViewManagers(
-        reactContext: ReactApplicationContext,
-    ): MutableList<ViewManager<View, ReactShadowNode<*>>> = mutableListOf()
+            reactContext: ReactApplicationContext,
+    ): List<ViewManager<*, *>> {
+        return emptyList()
+    }
 
     override fun createNativeModules(
-        reactContext: ReactApplicationContext,
-    ): MutableList<NativeModule> =
-        listOf(GetTextPackage(reactContext), GoogleDrivePackage(reactContext)).toMutableList()
+            reactContext: ReactApplicationContext,
+    ): MutableList<NativeModule> {
+        val modules = mutableListOf<NativeModule>()
+
+        // Add GoogleDrivePackage
+        modules.add(GoogleDrivePackage(reactContext))
+
+        return modules
+    }
 }
