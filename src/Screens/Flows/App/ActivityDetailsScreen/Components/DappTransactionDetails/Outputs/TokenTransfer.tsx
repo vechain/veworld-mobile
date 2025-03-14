@@ -3,7 +3,7 @@ import { BaseView } from "~Components"
 import { SCREEN_WIDTH } from "~Constants"
 import { TokenTransferActivity, TransferType, useCopyClipboard } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectTokensWithBalances, useAppSelector } from "~Storage/Redux"
+import { selectAllTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 import { ClauseDetail } from "../ClauseDetail"
 
@@ -16,11 +16,11 @@ export const TokenTransfer = memo(({ output }: Props) => {
 
     const { onCopyToClipboard } = useCopyClipboard()
 
-    const tokenBalances = useAppSelector(selectTokensWithBalances)
+    const tokens = useAppSelector(selectAllTokens)
 
     const token = useMemo(
-        () => tokenBalances.find(tk => AddressUtils.compareAddresses(tk.address, output.tokenAddress)),
-        [output.tokenAddress, tokenBalances],
+        () => tokens.find(tk => AddressUtils.compareAddresses(tk.address, output.tokenAddress)),
+        [output.tokenAddress, tokens],
     )
 
     return (

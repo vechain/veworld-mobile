@@ -395,6 +395,7 @@
   "CONNECTED_APP_token_allowance": "Token allowance",
   "CONNECTED_APP_token_allowance_spender": "Spender",
   "CONNECTED_APP_token_transfer": "Token transfer",
+  "CONNECTED_APP_token_swap": "Swap",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Request your signature on certificates or identification and agreements",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Request your signature on typed data message",
   "CONNECTION_REQUEST_SUBTITLE": "{name} is asking for access to:",

@@ -534,7 +534,7 @@ export const interpretContractCall = (clause: ConnexClause, tokens: Token[]) => 
  * @param clause - The contract call clause to be decoded.
  * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded as any of the specified swap actions.
  */
-export const decodeContractCall = (clause: ConnexClause) => {
+export const decodeContractCallAsSwap = (clause: ConnexClause) => {
     let decodedClause =
         decodeSwapExactVETForTokensClause(clause) ??
         decodeSwapVETForExactTokensClause(clause) ??
@@ -546,6 +546,14 @@ export const decodeContractCall = (clause: ConnexClause) => {
 
     return decodedClause
 }
+
+/**
+ * Does exactly the same as `TransactionUtils.decodeContractCallAsSwap`
+ * @see {@link decodeContractCallAsSwap}
+ * @param clause - The contract call clause to be decoded.
+ * @returns The decoded clause as a ClauseWithMetadata object, or null if the clause cannot be decoded as any of the specified swap actions.
+ */
+export const decodeContractCall = (clause: ConnexClause) => decodeContractCallAsSwap(clause)
 
 /**
  * Checks if a clause is of type "swap".
