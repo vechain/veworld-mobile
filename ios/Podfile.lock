@@ -30,29 +30,10 @@ PODS:
     - ExpoModulesCore
   - ExpoLocalAuthentication (14.0.1):
     - ExpoModulesCore
-  - ExpoModulesCore (1.12.26):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.01.01.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Codegen
+  - ExpoModulesCore (1.2.0):
     - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-jsinspector
-    - React-NativeModulesApple
     - React-RCTAppDelegate
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - Yoga
   - ExpoSecureStore (13.0.2):
     - ExpoModulesCore
   - EXTaskManager (11.8.2):
@@ -2027,7 +2008,7 @@ SPEC CHECKSUMS:
   ExpoHaptics: 5a3a88971af384255baf2504f38b41189cec6984
   ExpoKeepAwake: 3b8815d9dd1d419ee474df004021c69fdd316d08
   ExpoLocalAuthentication: 9e02a56a4cf9868f0052656a93d4c94101a42ed7
-  ExpoModulesCore: 831ece8311a489418746925820bbffdda587d6f4
+  ExpoModulesCore: af0f8b2d482bcce96ef95ad2e6f7b167b6867ee0
   ExpoSecureStore: 060cebcb956b80ddae09821610ac1aa9e1ac74cd
   EXTaskManager: 9c3520305c3aa1b4a12a7c6d1e3f85f2779c06e9
   FBLazyVector: ac12dc084d1c8ec4cc4d7b3cf1b0ebda6dab85af
