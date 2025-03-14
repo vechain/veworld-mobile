@@ -1,5 +1,5 @@
 diff --git a/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt b/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt
-index ae0a811..0333258 100644
+index ae0a811..351638a 100644
 --- a/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt
 +++ b/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt
 @@ -17,7 +17,7 @@ import expo.modules.interfaces.permissions.PermissionsResponse
@@ -20,3 +20,21 @@ index ae0a811..0333258 100644
    private var mActivityProvider: ActivityProvider? = null
  
    // state holders for asking for writing permissions
+@@ -60,7 +60,7 @@ open class PermissionsService(val context: Context) : InternalModule, Permission
+     mAskedPermissionsCache = context.applicationContext.getSharedPreferences(PREFERENCE_FILENAME, Context.MODE_PRIVATE)
+   }
+ 
+-  override fun getPermissionsWithPromise(promise: Promise, vararg permissions: String) {
++  fun getPermissionsWithPromise(promise: Promise, vararg permissions: String) {
+     getPermissions(
+       PermissionsResponseListener { permissionsMap: MutableMap<String, PermissionsResponse> ->
+         val areAllGranted = permissionsMap.all { (_, response) -> response.status == PermissionsStatus.GRANTED }
+@@ -87,7 +87,7 @@ open class PermissionsService(val context: Context) : InternalModule, Permission
+     )
+   }
+ 
+-  override fun askForPermissionsWithPromise(promise: Promise, vararg permissions: String) {
++  fun askForPermissionsWithPromise(promise: Promise, vararg permissions: String) {
+     askForPermissions(
+       PermissionsResponseListener {
+         getPermissionsWithPromise(promise, *permissions)
