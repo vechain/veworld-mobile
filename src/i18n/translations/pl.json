@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "Zamień tokeny na tokeny",
   "CONNECTED_APP_swap_tokens_for_vet": "Zamień tokeny na VET",
   "CONNECTED_APP_swap_vet_for_tokens": "Zamień VET na tokeny",
+  "CONNECTED_APP_token_allowance": "Limit tokenów",
+  "CONNECTED_APP_token_allowance_spender": "Wydawca",
   "CONNECTED_APP_token_transfer": "Transfer tokenów",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Zażądaj podpisu na certyfikatach lub w identyfikacjach i umowach",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Zażądaj podpisu na wiadomości z danymi wpisanymi",

@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "Hoán đổi token lấy token",
   "CONNECTED_APP_swap_tokens_for_vet": "Hoán đổi token lấy VET",
   "CONNECTED_APP_swap_vet_for_tokens": "Hoán đổi VET lấy token",
+  "CONNECTED_APP_token_allowance": "Cho phép token",
+  "CONNECTED_APP_token_allowance_spender": "Người chi tiêu",
   "CONNECTED_APP_token_transfer": "Chuyển token",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Yêu cầu chữ ký của bạn trên chứng chỉ hoặc nhận diện và thoả thuận",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Yêu cầu chữ ký của bạn trên thông điệp dữ liệu có kiểu",

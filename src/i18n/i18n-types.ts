@@ -1621,6 +1621,14 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_token_transfer: string
 	/**
+	 * T​o​k​e​n​ ​a​l​l​o​w​a​n​c​e
+	 */
+	CONNECTED_APP_token_allowance: string
+	/**
+	 * S​p​e​n​d​e​r
+	 */
+	CONNECTED_APP_token_allowance_spender: string
+	/**
 	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
@@ -5534,6 +5542,14 @@ Try reconnect your device to the internet.
 	 * Token transfer
 	 */
 	CONNECTED_APP_token_transfer: () => LocalizedString
+	/**
+	 * Token allowance
+	 */
+	CONNECTED_APP_token_allowance: () => LocalizedString
+	/**
+	 * Spender
+	 */
+	CONNECTED_APP_token_allowance_spender: () => LocalizedString
 	/**
 	 * ● Request your signature on certificates or identification and agreements
 	 */

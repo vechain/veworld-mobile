@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "토큰 간 교환",
   "CONNECTED_APP_swap_tokens_for_vet": "토큰을 VET로 교환",
   "CONNECTED_APP_swap_vet_for_tokens": "VET를 토큰으로 교환",
+  "CONNECTED_APP_token_allowance": "토큰 허용량",
+  "CONNECTED_APP_token_allowance_spender": "지출자",
   "CONNECTED_APP_token_transfer": "토큰 전송",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● 증명서나 신원 및 계약서에 서명을 요청합니다",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "타입된 데이터 메시지에 대한 서명 요청",

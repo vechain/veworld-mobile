@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "代币交换代币",
   "CONNECTED_APP_swap_tokens_for_vet": "代币交换为 VET",
   "CONNECTED_APP_swap_vet_for_tokens": "VET 交换为代币",
+  "CONNECTED_APP_token_allowance": "代币额度",
+  "CONNECTED_APP_token_allowance_spender": "使用者",
   "CONNECTED_APP_token_transfer": "代币转移",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● 请求您在证书或身份认证和协议上签字",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "请求在输入的数据消息上签字",

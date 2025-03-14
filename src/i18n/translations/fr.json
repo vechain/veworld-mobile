@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "Échanger des jetons contre des jetons",
   "CONNECTED_APP_swap_tokens_for_vet": "Échanger des jetons contre VET",
   "CONNECTED_APP_swap_vet_for_tokens": "Échanger VET contre des jetons",
+  "CONNECTED_APP_token_allowance": "Autorisation de jeton",
+  "CONNECTED_APP_token_allowance_spender": "Dépensier",
   "CONNECTED_APP_token_transfer": "Transfert de jetons",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Demande votre signature sur des certificats ou des identifications et des accords",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Demande votre signature sur des données typées",

@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "トークンをトークンにスワップ",
   "CONNECTED_APP_swap_tokens_for_vet": "トークンをVETにスワップ",
   "CONNECTED_APP_swap_vet_for_tokens": "VETをトークンにスワップ",
+  "CONNECTED_APP_token_allowance": "トークン許可",
+  "CONNECTED_APP_token_allowance_spender": "使用者",
   "CONNECTED_APP_token_transfer": "トークン転送",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● 証明書、識別、契約への署名を要求",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "型付データメッセージへの署名を要求",

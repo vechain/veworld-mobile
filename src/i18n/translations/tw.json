@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "代幣兌換代幣",
   "CONNECTED_APP_swap_tokens_for_vet": "代幣兌換 VET",
   "CONNECTED_APP_swap_vet_for_tokens": "VET 兌換代幣",
+  "CONNECTED_APP_token_allowance": "代幣允許額",
+  "CONNECTED_APP_token_allowance_spender": "支出者",
   "CONNECTED_APP_token_transfer": "代幣轉移",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● 要求在證書、身份或協議上簽署",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "要求對類型化資料訊息簽名",

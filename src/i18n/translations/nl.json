@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "Ruil tokens voor tokens",
   "CONNECTED_APP_swap_tokens_for_vet": "Ruil tokens voor VET",
   "CONNECTED_APP_swap_vet_for_tokens": "Ruil VET voor tokens",
+  "CONNECTED_APP_token_allowance": "Token toelating",
+  "CONNECTED_APP_token_allowance_spender": "Uitgever",
   "CONNECTED_APP_token_transfer": "Tokenoverdracht",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Vraag om uw handtekening op certificaten of identificatie en overeenkomsten",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Vraag om uw handtekening op getypte databericht",

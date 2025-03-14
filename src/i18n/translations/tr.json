@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "Tokenleri tokenlerle değiştir",
   "CONNECTED_APP_swap_tokens_for_vet": "Tokenleri VET ile değiştir",
   "CONNECTED_APP_swap_vet_for_tokens": "VET'i tokenlerle değiştir",
+  "CONNECTED_APP_token_allowance": "Token izni",
+  "CONNECTED_APP_token_allowance_spender": "Harcayan",
   "CONNECTED_APP_token_transfer": "Token transferi",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Sertifikalara veya kimlik belgelerine ve anlaşmalara imzanızı talep edin",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Yazılı veri mesajı üzerinde imzanızı talep edin",

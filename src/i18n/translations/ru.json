@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "Обмен токенов на токены",
   "CONNECTED_APP_swap_tokens_for_vet": "Обмен токенов на VET",
   "CONNECTED_APP_swap_vet_for_tokens": "Обмен VET на токены",
+  "CONNECTED_APP_token_allowance": "Разрешение токена",
+  "CONNECTED_APP_token_allowance_spender": "Тратящий",
   "CONNECTED_APP_token_transfer": "Перевод токенов",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Запрос вашей подписи на сертификатах или идентификации и соглашениях",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Запрос вашей подписи на сообщении с вводимыми данными",

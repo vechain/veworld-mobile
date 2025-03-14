@@ -393,6 +393,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "Token gegen Token tauschen",
   "CONNECTED_APP_swap_tokens_for_vet": "Token gegen VET tauschen",
   "CONNECTED_APP_swap_vet_for_tokens": "VET gegen Token tauschen",
+  "CONNECTED_APP_token_allowance": "Token-Berechtigung",
+  "CONNECTED_APP_token_allowance_spender": "Ausgeber",
   "CONNECTED_APP_token_transfer": "Token-Transfer",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Bitten Sie um Ihre Unterschrift auf Zertifikaten oder Identifikationen und Vereinbarungen",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Bitten Sie um Ihre Unterschrift auf einer typisierten Datenmeldung",

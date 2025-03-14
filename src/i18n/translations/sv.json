@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "Byt tokens mot tokens",
   "CONNECTED_APP_swap_tokens_for_vet": "Byt tokens mot VET",
   "CONNECTED_APP_swap_vet_for_tokens": "Byt VET mot tokens",
+  "CONNECTED_APP_token_allowance": "Token tilldelning",
+  "CONNECTED_APP_token_allowance_spender": "Spendera",
   "CONNECTED_APP_token_transfer": "Tokenöverföring",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Begär din signatur på certifikat eller identifiering och avtal",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Begär din signatur på ett meddelande med typad data",

@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "Scambiare token per token",
   "CONNECTED_APP_swap_tokens_for_vet": "Scambiare token per VET",
   "CONNECTED_APP_swap_vet_for_tokens": "Scambiare VET per token",
+  "CONNECTED_APP_token_allowance": "Indennità di token",
+  "CONNECTED_APP_token_allowance_spender": "Spendi",
   "CONNECTED_APP_token_transfer": "Trasferimento di token",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● Richiedi la tua firma su certificati o identificazioni e accordi",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "Richiedi la tua firma su messaggi di dati digitati",

@@ -395,6 +395,8 @@
   "CONNECTED_APP_swap_tokens_for_tokens": "टोकन के लिए टोकन की अदला-बदली करें",
   "CONNECTED_APP_swap_tokens_for_vet": "वीईटी के लिए टोकन की अदला-बदली करें",
   "CONNECTED_APP_swap_vet_for_tokens": "टोकन के लिए वीईटी की अदला-बदली करें",
+  "CONNECTED_APP_token_allowance": "टोकन भत्ता",
+  "CONNECTED_APP_token_allowance_spender": "खर्च करने वाला",
   "CONNECTED_APP_token_transfer": "टोकन हस्तांतरण",
   "CONNECTION_REQUEST_SIGN_DESCRIPTION": "● प्रमाणपत्रों या पहचान और अनुबंधों पर आपके हस्ताक्षर की अनुरोध करें",
   "CONNECTION_REQUEST_SIGN_TYPED_DATA_DESCRIPTION": "टाइप किए गए डेटा संदेश पर आपके हस्ताक्षर की अनुरोध करें",
