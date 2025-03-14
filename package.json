@@ -253,8 +253,7 @@
     "elliptic": "^6.6.0",
     "ethers/@ethersproject/providers/ws": "^7.5.10",
     "@vechain/connex-driver/axios": "0.28.0",
-    "@walletconnect/types": "2.15.2",
-    "expo-modules-core":"1.2.0"
+    "@walletconnect/types": "2.15.2"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
