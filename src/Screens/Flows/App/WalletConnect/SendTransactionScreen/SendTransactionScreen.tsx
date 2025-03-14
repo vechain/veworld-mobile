@@ -28,7 +28,6 @@ import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import {
     addPendingDappTransactionActivity,
-    selectOfficialTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
     selectVerifyContext,
@@ -37,8 +36,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { TransactionUtils } from "~Utils"
-import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
+import { OutputsCarousel } from "../../ActivityDetailsScreen/Components"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
 
@@ -57,7 +55,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
-    const tokens = useAppSelector(selectOfficialTokens)
+    // const tokens = useAppSelector(selectOfficialTokens)
 
     const signAndRejectRef = useRef<SignAndRejectRefInterface>(null)
 
@@ -71,10 +69,10 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         return sessionContext.verifyContext.validation === "VALID"
     }, [sessionContext])
 
-    const clausesMetadata = useMemo(
-        () => TransactionUtils.interpretClauses(request.message, tokens),
-        [request.message, tokens],
-    )
+    // const clausesMetadata = useMemo(
+    //     () => TransactionUtils.interpretClauses(request.message, tokens),
+    //     [request.message, tokens],
+    // )
 
     const clauses = useMemo(() => {
         return request.message.map(clause => ({
@@ -209,6 +207,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         isDisabledButtonState,
         isLoading,
         priorityFees,
+        transactionSimulationResult,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -276,7 +275,8 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={44} />
-                    {!!clausesMetadata.length && <ClausesCarousel clausesMetadata={clausesMetadata} />}
+                    {/* {!!clausesMetadata.length && <ClausesCarousel clausesMetadata={clausesMetadata} />} */}
+                    {transactionSimulationResult && <OutputsCarousel outputs={transactionSimulationResult} />}
 
                     <BaseSpacer height={30} />
 

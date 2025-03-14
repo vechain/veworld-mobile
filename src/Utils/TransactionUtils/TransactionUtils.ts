@@ -18,6 +18,7 @@ import { abis, ERROR_EVENTS, VET } from "~Constants"
 import HexUtils from "~Utils/HexUtils"
 import axios from "axios"
 import BigNutils from "~Utils/BigNumberUtils"
+import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
 
 export const TRANSFER_SIG = new abi.Function(abis.VIP180.transfer).signature
 
@@ -811,4 +812,54 @@ export const decodeTransferEvent = (event: Connex.VM.Event): TransferEventResult
     }
 
     return null
+}
+
+type SimulateTransactionArgs = {
+    url: string
+    clauses: Connex.VM.Clause[]
+    providedGas: number
+    caller: string
+    gasPayer?: string
+}
+
+export const simulateTransaction = async ({ url, clauses, providedGas, caller, gasPayer }: SimulateTransactionArgs) => {
+    const intrinsicGas = Transaction.intrinsicGas(
+        clauses.map(item => {
+            return {
+                to: item.to,
+                value: item.value || "0x0",
+                data: item.data || "0x",
+            }
+        }),
+    )
+
+    const genesis = await axios.get<Connex.Thor.Block>(`${url}/blocks/best`)
+
+    let revision = "best"
+
+    if (genesis.headers.get && typeof genesis.headers.get === "function") {
+        const thorVersion = genesis.headers.get("x-thorest-ver")
+
+        if (typeof thorVersion === "string" && SemanticVersionUtils.moreThanOrEqual(thorVersion, "2.1.3")) {
+            revision = "next"
+        }
+    }
+
+    const offeredGas = providedGas ? Math.max(providedGas - intrinsicGas, 1) : 2000 * 10000
+
+    const { data } = await axios.post<Connex.VM.Output[]>(`${url}/accounts/*?revision=${revision}`, {
+        clauses,
+        caller,
+        gas: offeredGas,
+        gasPayer,
+    })
+
+    const lastOutput = data[data.length - 1]
+
+    return {
+        caller,
+        reverted: lastOutput ? lastOutput.reverted : false,
+        vmError: lastOutput ? lastOutput.vmError : "",
+        outputs: data,
+    }
 }

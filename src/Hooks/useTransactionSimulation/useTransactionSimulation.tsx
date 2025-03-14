@@ -1,0 +1,43 @@
+import { useQuery } from "@tanstack/react-query"
+import { useCallback, useMemo } from "react"
+import { useSelector } from "react-redux"
+import { Transaction } from "thor-devkit"
+import { selectSelectedAccount, selectSelectedNetwork, selectTokensWithBalances, useAppSelector } from "~Storage/Redux"
+import { TransactionUtils } from "~Utils"
+import { retrieveActivityFromTransactionSimulation } from "./useTransactionSimulation.functions"
+
+export type Props = {
+    clauses: Transaction.Body["clauses"]
+    providedGasPayer?: string
+    providedGas?: number
+}
+
+export const useTransactionSimulation = ({ clauses, providedGas, providedGasPayer }: Props) => {
+    const selectedNetwork = useSelector(selectSelectedNetwork)
+    const account = useAppSelector(selectSelectedAccount)
+    const tokenBalances = useAppSelector(selectTokensWithBalances)
+
+    const fungibleAddresses = useMemo(() => tokenBalances.map(token => token.address), [tokenBalances])
+
+    const simulate = useCallback(async () => {
+        const result = await TransactionUtils.simulateTransaction({
+            url: selectedNetwork.currentUrl,
+            clauses,
+            providedGas: providedGas ?? 0,
+            gasPayer: providedGasPayer ?? account.address,
+            caller: account.address,
+        })
+
+        if (result.reverted) return
+
+        return retrieveActivityFromTransactionSimulation(result.outputs, fungibleAddresses, account.address)
+    }, [account.address, clauses, fungibleAddresses, providedGas, providedGasPayer, selectedNetwork.currentUrl])
+
+    const { data, isFetching } = useQuery({
+        queryKey: ["SimulateTransaction"],
+        queryFn: simulate,
+        enabled: clauses.length > 0,
+    })
+
+    return { result: data, isLoading: isFetching }
+}
