@@ -92,10 +92,11 @@ android {
         applicationId "org.vechain.veworld.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-versionCode 276
-versionName "2.2.0"
+        versionCode 276
+        versionName "2.2.0"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
+        buildConfigField "String", "PUBLIC_KEY", publicKey
     }
     signingConfigs {
         debug {

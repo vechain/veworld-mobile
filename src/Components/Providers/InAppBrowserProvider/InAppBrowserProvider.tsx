@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useContext, useMemo, useRef, useState } from "react"
-import { NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent } from "react-native"
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
+import { NativeModules, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent } from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
@@ -31,6 +31,15 @@ import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
+const { PackageInfo } = NativeModules
+
+interface PackageInfoResponse {
+    packageName: string
+    versionName: string
+    versionCode: number
+    verificationFailed: boolean
+}
+
 // Resolve an issue with types for the WebView component
 type EnhancedScrollEvent = Omit<NativeScrollEvent, "zoomScale"> & { zoomScale?: number }
 
@@ -40,7 +49,7 @@ type ContextType = {
     onScroll: (event: NativeSyntheticEvent<Readonly<EnhancedScrollEvent>>) => void
     postMessage: (message: WindowResponse) => void
     onNavigationStateChange: (navState: WebViewNavigation) => void
-    injectVechainScript: string
+    injectVechainScript: () => string
     originWhitelist: string[]
     navigationCanGoBack: boolean
     canGoBack: boolean
@@ -60,6 +69,7 @@ type ContextType = {
     handleConfirmChangeAccountNetworkBottomSheet: () => void
     ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods>
     switchAccount: (request: WindowRequest) => void
+    isLoading: boolean
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -72,6 +82,7 @@ enum ScrollDirection {
 
 type Props = {
     children: React.ReactNode
+    packageInfo: any | null
 }
 
 export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
@@ -80,6 +91,18 @@ const ORIGIN_WHITELIST = ["http://", "https://", "about:*", "blob:"]
 
 export const InAppBrowserProvider = ({ children }: Props) => {
     const nav = useNavigation()
+
+    const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
+    const [isLoading, setIsLoading] = React.useState(true)
+    useEffect(() => {
+        if (!isLoading) return
+        console.log("packageInfo", isLoading)
+        PackageInfo.getPackageInfo().then(info => {
+            console.log("Got package info", info)
+            setPackageInfo(info)
+            setIsLoading(false)
+        })
+    }, [isLoading])
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const networks = useAppSelector(selectNetworks)
@@ -678,11 +701,12 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
     const contextValue = React.useMemo(() => {
         return {
+            isLoading,
             webviewRef,
             onMessage,
             onScroll,
             postMessage,
-            injectVechainScript: injectedJs({ locale }),
+            injectVechainScript: () => injectedJs({ locale, packageInfo }),
             onNavigationStateChange,
             navigationCanGoBack: nav.canGoBack(),
             canGoBack,
@@ -705,6 +729,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
             switchAccount,
         }
     }, [
+        isLoading,
         onMessage,
         onScroll,
         postMessage,
@@ -728,6 +753,7 @@ export const InAppBrowserProvider = ({ children }: Props) => {
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
         switchAccount,
+        packageInfo,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
@@ -756,8 +782,8 @@ export const useInAppBrowser = () => {
 //     error: (log, data1, data2) => consoleLog('error', log, data1, data2),
 // };
 
-const injectedJs = ({ locale }: { locale: Locales }) => `
-
+const injectedJs = ({ locale, packageInfo }: { locale: Locales; packageInfo: any | null }) => {
+    const script = `
 function newResponseHandler(id) {
     return new Promise((resolve, reject) => {
         addEventListener("message", event => {
@@ -785,6 +811,7 @@ window.vechain = {
     isVeWorld: true,
     isInAppBrowser: true,
     acceptLanguage: "${locale}",
+    appInfo: ${JSON.stringify(packageInfo || {})},
     
     newConnexSigner: function (genesisId) {
         return {
@@ -840,3 +867,6 @@ window.vechain = {
 
 true
 `
+    console.log("script", script)
+    return script
+}

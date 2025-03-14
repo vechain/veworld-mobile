@@ -1,5 +1,5 @@
 import { Layout, useInAppBrowser, BrowserBottomBar, URLBar } from "~Components"
-import { StyleSheet, View } from "react-native"
+import { NativeModules, StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -27,6 +27,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
+        isLoading,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -39,7 +40,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         }
     }, [nav, route.params?.ul, route.params.url, track])
 
-    const [userAgent, setUserAgent] = React.useState<string | undefined>(undefined)
+    const [userAgent, setUserAgent] = React.useState<string | null>(null)
 
     useEffect(() => {
         DeviceInfo.getUserAgent().then(setUserAgent)
@@ -63,7 +64,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
             footer={<BrowserBottomBar />}
             fixedBody={
                 <View style={styles.container}>
-                    {userAgent && (
+                    {userAgent && !isLoading && (
                         <WebView
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
@@ -74,7 +75,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                             onScroll={onScroll}
                             style={styles.loginWebView}
                             scalesPageToFit={true}
-                            injectedJavaScriptBeforeContentLoaded={injectVechainScript}
+                            injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
                             allowsInlineMediaPlayback={true}
                             originWhitelist={originWhitelist}
                         />
