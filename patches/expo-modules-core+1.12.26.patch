@@ -1,5 +1,5 @@
 diff --git a/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt b/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt
-index ae0a811..75a183c 100644
+index ae0a811..0333258 100644
 --- a/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt
 +++ b/node_modules/expo-modules-core/android/src/main/java/expo/modules/adapters/react/permissions/PermissionsService.kt
 @@ -17,7 +17,7 @@ import expo.modules.interfaces.permissions.PermissionsResponse
@@ -11,3 +11,12 @@ index ae0a811..75a183c 100644
  import expo.modules.core.interfaces.ActivityProvider
  import expo.modules.core.interfaces.InternalModule
  import expo.modules.core.interfaces.LifecycleEventListener
+@@ -28,7 +28,7 @@ import kotlin.collections.HashMap
+ private const val PERMISSIONS_REQUEST: Int = 13
+ private const val PREFERENCE_FILENAME = "expo.modules.permissions.asked"
+ 
+-open class PermissionsService(val context: Context) : InternalModule, Permissions, LifecycleEventListener {
++abstract class PermissionsService(val context: Context) : InternalModule, Permissions, LifecycleEventListener {
+   private var mActivityProvider: ActivityProvider? = null
+ 
+   // state holders for asking for writing permissions
