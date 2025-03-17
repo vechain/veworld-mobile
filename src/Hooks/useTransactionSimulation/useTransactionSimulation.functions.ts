@@ -3,20 +3,20 @@ import { abis } from "~Constants"
 import { AddressUtils, BigNutils } from "~Utils"
 import {
     ActivityType,
-    SwapActivity,
+    SwapOutput,
     SwapType,
-    TokenAllowanceActivity,
-    TokenTransferActivity,
+    TokenAllowanceOutput,
+    TokenTransferOutput,
     TransactionSimulationOutputType,
     TransferType,
-    VetTransferActivity,
+    VetTransferOutput,
 } from "./useTransactionSimulation.types"
 
 const APPROVAL_EVENT = new abi.Event(abis.VIP180.ApprovalEvent)
 const TRANSFER_EVENT = new abi.Event(abis.VIP180.TransferEvent)
 const SWAP_EVENT = new abi.Event(abis.UniswapPairV2.SwapEvent)
 
-const parseTokenTransferEvent = (evt: Connex.VM.Event, userAddress: string): TokenTransferActivity => {
+const parseTokenTransferEvent = (evt: Connex.VM.Event, userAddress: string): TokenTransferOutput => {
     const decoded = TRANSFER_EVENT.decode(evt.data, evt.topics)
     return {
         kind: TransactionSimulationOutputType.TOKEN_TRANSFER,
@@ -28,7 +28,7 @@ const parseTokenTransferEvent = (evt: Connex.VM.Event, userAddress: string): Tok
     }
 }
 
-const parseTokenApprovalEvent = (evt: Connex.VM.Event): TokenAllowanceActivity => {
+const parseTokenApprovalEvent = (evt: Connex.VM.Event): TokenAllowanceOutput => {
     const decoded = APPROVAL_EVENT.decode(evt.data, evt.topics)
     return {
         kind: TransactionSimulationOutputType.TOKEN_ALLOWANCE,
@@ -39,7 +39,7 @@ const parseTokenApprovalEvent = (evt: Connex.VM.Event): TokenAllowanceActivity =
     }
 }
 
-const parseVetTransfer = (transfer: Connex.VM.Transfer, userAddress: string): VetTransferActivity => {
+const parseVetTransfer = (transfer: Connex.VM.Transfer, userAddress: string): VetTransferOutput => {
     return {
         kind: TransactionSimulationOutputType.VET_TRANSFER,
         amount: BigNutils(transfer.amount).bn,
@@ -55,7 +55,7 @@ type SwapParser = (
     events: Connex.VM.Event[],
     transfers: Connex.VM.Transfer[],
     userAddress: string,
-) => (SwapActivity & { transfersToRemove: Connex.VM.Transfer[]; eventsToRemove: Connex.VM.Event[] }) | null
+) => (SwapOutput & { transfersToRemove: Connex.VM.Transfer[]; eventsToRemove: Connex.VM.Event[] }) | null
 
 const parseSwapVETForTokens: SwapParser = (events, transfers, userAddress) => {
     const inputTransfer = transfers.find(tsf => AddressUtils.compareAddresses(tsf.sender, userAddress))
@@ -174,8 +174,8 @@ const filterUserVetTransfers = (userAddress: string) => {
 
 const filterUserEvents = (userAddress: string) => {
     return (
-        activity: Exclude<ActivityType, VetTransferActivity | SwapActivity> | null,
-    ): activity is Exclude<ActivityType, VetTransferActivity | SwapActivity> => {
+        activity: Exclude<ActivityType, VetTransferOutput | SwapOutput> | null,
+    ): activity is Exclude<ActivityType, VetTransferOutput | SwapOutput> => {
         if (!activity) return false
         switch (activity.kind) {
             case TransactionSimulationOutputType.TOKEN_TRANSFER:

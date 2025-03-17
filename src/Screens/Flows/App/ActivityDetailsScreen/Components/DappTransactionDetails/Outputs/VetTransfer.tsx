@@ -1,13 +1,13 @@
 import React, { memo } from "react"
 import { BaseView } from "~Components"
 import { SCREEN_WIDTH, VET } from "~Constants"
-import { TransferType, useCopyClipboard, VetTransferActivity } from "~Hooks"
+import { TransferType, useCopyClipboard, VetTransferOutput } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AddressUtils, BigNutils } from "~Utils"
 import { ClauseDetail } from "../ClauseDetail"
 
 type Props = {
-    output: VetTransferActivity
+    output: VetTransferOutput
 }
 
 export const VetTransfer = memo(({ output }: Props) => {

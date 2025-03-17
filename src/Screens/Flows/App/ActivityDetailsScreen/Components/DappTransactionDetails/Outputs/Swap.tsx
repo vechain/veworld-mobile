@@ -2,7 +2,7 @@ import { BigNumber as BN } from "bignumber.js"
 import { memo, default as React, useCallback } from "react"
 import { BaseView } from "~Components"
 import { SCREEN_WIDTH, VET } from "~Constants"
-import { SwapActivity, SwapType } from "~Hooks"
+import { SwapOutput, SwapType } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
 import { selectAllTokens, useAppSelector } from "~Storage/Redux"
@@ -10,7 +10,7 @@ import { AddressUtils, BigNutils } from "~Utils"
 import { ClauseDetail } from "../ClauseDetail"
 
 type Props = {
-    output: SwapActivity
+    output: SwapOutput
 }
 
 const renderTokenValue = (value: BN, token: FungibleToken | undefined, unknownTokenName: string) => {

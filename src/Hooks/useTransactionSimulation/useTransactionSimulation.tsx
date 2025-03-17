@@ -34,7 +34,7 @@ export const useTransactionSimulation = ({ clauses, providedGas, providedGasPaye
     }, [account.address, clauses, fungibleAddresses, providedGas, providedGasPayer, selectedNetwork.currentUrl])
 
     const { data, isFetching } = useQuery({
-        queryKey: ["SimulateTransaction"],
+        queryKey: ["SimulateTransaction", clauses],
         queryFn: simulate,
         enabled: clauses.length > 0,
     })

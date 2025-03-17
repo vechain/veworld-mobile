@@ -1,14 +1,14 @@
 import { memo, default as React, useMemo } from "react"
 import { BaseView } from "~Components"
 import { SCREEN_WIDTH } from "~Constants"
-import { TokenAllowanceActivity, useCopyClipboard } from "~Hooks"
+import { TokenAllowanceOutput, useCopyClipboard } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectAllTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 import { ClauseDetail } from "../ClauseDetail"
 
 type Props = {
-    output: TokenAllowanceActivity
+    output: TokenAllowanceOutput
 }
 
 export const TokenAllowance = memo(({ output }: Props) => {

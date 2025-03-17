@@ -12,7 +12,7 @@ export enum TransferType {
     SEND,
 }
 
-export type VetTransferActivity = {
+export type VetTransferOutput = {
     kind: TransactionSimulationOutputType.VET_TRANSFER
     transferType: TransferType
     sender: string
@@ -20,12 +20,12 @@ export type VetTransferActivity = {
     amount: BN
 }
 
-export type TokenTransferActivity = Omit<VetTransferActivity, "kind"> & {
+export type TokenTransferOutput = Omit<VetTransferOutput, "kind"> & {
     kind: TransactionSimulationOutputType.TOKEN_TRANSFER
     tokenAddress: string
 }
 
-export type TokenAllowanceActivity = {
+export type TokenAllowanceOutput = {
     kind: TransactionSimulationOutputType.TOKEN_ALLOWANCE
     tokenAddress: string
     owner: string
@@ -39,30 +39,29 @@ export enum SwapType {
     FT_TO_FT,
 }
 
-type SwapActivityBase = {
+type SwapOutputBase = {
     kind: TransactionSimulationOutputType.SWAP
     amountIn: BN
     amountOut: BN
     wallet: string
 }
 
-type SwapActivityVetFungible = {
+type SwapOutputVetFungible = {
     swapType: SwapType.VET_TO_FT
     toToken: string
 }
 
-type SwapActivityFungibleVet = {
+type SwapOutputFungibleVet = {
     swapType: SwapType.FT_TO_VET
     fromToken: string
 }
 
-type SwapActivityFungibleFungible = {
+type SwapOutputFungibleFungible = {
     swapType: SwapType.FT_TO_FT
     fromToken: string
     toToken: string
 }
 
-export type SwapActivity = SwapActivityBase &
-    (SwapActivityVetFungible | SwapActivityFungibleVet | SwapActivityFungibleFungible)
+export type SwapOutput = SwapOutputBase & (SwapOutputVetFungible | SwapOutputFungibleVet | SwapOutputFungibleFungible)
 
-export type ActivityType = VetTransferActivity | TokenTransferActivity | TokenAllowanceActivity | SwapActivity
+export type ActivityType = VetTransferOutput | TokenTransferOutput | TokenAllowanceOutput | SwapOutput
