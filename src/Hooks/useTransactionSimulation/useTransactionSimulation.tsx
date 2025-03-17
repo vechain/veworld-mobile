@@ -30,7 +30,7 @@ export const useTransactionSimulation = ({ clauses, providedGas, providedGasPaye
 
         if (result.reverted) return
 
-        return retrieveActivityFromTransactionSimulation(result.outputs, fungibleAddresses, account.address, clauses)
+        return retrieveActivityFromTransactionSimulation(result.outputs, fungibleAddresses, account.address)
     }, [account.address, clauses, fungibleAddresses, providedGas, providedGasPayer, selectedNetwork.currentUrl])
 
     const { data, isFetching } = useQuery({

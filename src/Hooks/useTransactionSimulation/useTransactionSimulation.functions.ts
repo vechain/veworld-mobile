@@ -1,6 +1,6 @@
 import { abi } from "thor-devkit"
 import { abis } from "~Constants"
-import { AddressUtils, BigNutils, TransactionUtils } from "~Utils"
+import { AddressUtils, BigNutils } from "~Utils"
 import {
     ActivityType,
     SwapActivity,
@@ -11,11 +11,13 @@ import {
     TransferType,
     VetTransferActivity,
 } from "./useTransactionSimulation.types"
-import { ClauseType } from "~Model"
+
+const APPROVAL_EVENT = new abi.Event(abis.VIP180.ApprovalEvent)
+const TRANSFER_EVENT = new abi.Event(abis.VIP180.TransferEvent)
+const SWAP_EVENT = new abi.Event(abis.UniswapPairV2.SwapEvent)
 
 const parseTokenTransferEvent = (evt: Connex.VM.Event, userAddress: string): TokenTransferActivity => {
-    const transferAbi = new abi.Event(abis.VIP180.TransferEvent)
-    const decoded = transferAbi.decode(evt.data, evt.topics)
+    const decoded = TRANSFER_EVENT.decode(evt.data, evt.topics)
     return {
         kind: TransactionSimulationOutputType.TOKEN_TRANSFER,
         amount: BigNutils(decoded.value).bn,
@@ -27,8 +29,7 @@ const parseTokenTransferEvent = (evt: Connex.VM.Event, userAddress: string): Tok
 }
 
 const parseTokenApprovalEvent = (evt: Connex.VM.Event): TokenAllowanceActivity => {
-    const transferAbi = new abi.Event(abis.VIP180.ApprovalEvent)
-    const decoded = transferAbi.decode(evt.data, evt.topics)
+    const decoded = APPROVAL_EVENT.decode(evt.data, evt.topics)
     return {
         kind: TransactionSimulationOutputType.TOKEN_ALLOWANCE,
         amount: BigNutils(decoded.value).bn,
@@ -50,134 +51,119 @@ const parseVetTransfer = (transfer: Connex.VM.Transfer, userAddress: string): Ve
     }
 }
 
-const parseSwapEvent = (
+type SwapParser = (
     events: Connex.VM.Event[],
     transfers: Connex.VM.Transfer[],
-    clause: Connex.VM.Clause,
     userAddress: string,
-): (SwapActivity & { transfersToRemove: Connex.VM.Transfer[]; eventsToRemove: Connex.VM.Event[] }) | null => {
-    const swapEventAbi = new abi.Event(abis.UniswapPairV2.SwapEvent)
-    //TODO: This can be simplified by just trying all the combinations in order
-    const decodedClause = TransactionUtils.decodeContractCall(clause)
-    if (!decodedClause) return null
+) => (SwapActivity & { transfersToRemove: Connex.VM.Transfer[]; eventsToRemove: Connex.VM.Event[] }) | null
 
-    const transferEventAbi = new abi.Event(abis.VIP180.TransferEvent)
+const parseSwapVETForTokens: SwapParser = (events, transfers, userAddress) => {
+    const inputTransfer = transfers.find(tsf => AddressUtils.compareAddresses(tsf.sender, userAddress))
+    if (!inputTransfer) return null
+    const outputTransferEvent = events.find(event => {
+        return (
+            event.topics[0].toLowerCase() === TRANSFER_EVENT.signature.toLowerCase() &&
+            AddressUtils.compareAddresses(TRANSFER_EVENT.decode(event.data, event.topics).to, userAddress)
+        )
+    })
+    if (!outputTransferEvent) return null
+    const decodedOutputTransferEvent = TRANSFER_EVENT.decode(outputTransferEvent.data, outputTransferEvent.topics)
+    const swapEvent = events.find(event => {
+        return (
+            event.topics[0].toLowerCase() === SWAP_EVENT.signature.toLowerCase() &&
+            AddressUtils.compareAddresses(SWAP_EVENT.decode(event.data, event.topics).to, userAddress)
+        )
+    })
+    if (!swapEvent) return null
+    if (!AddressUtils.compareAddresses(inputTransfer.sender, decodedOutputTransferEvent.to)) return null
 
-    switch (decodedClause.type) {
-        case ClauseType.SWAP_VET_FOR_TOKENS: {
-            const inputTransfer = transfers.find(tsf => AddressUtils.compareAddresses(tsf.sender, userAddress))
-            if (!inputTransfer) return null
-            const outputTransferEvent = events.find(event => {
-                return (
-                    event.topics[0].toLowerCase() === transferEventAbi.signature.toLowerCase() &&
-                    AddressUtils.compareAddresses(transferEventAbi.decode(event.data, event.topics).to, userAddress)
-                )
-            })
-            if (!outputTransferEvent) return null
-            const decodedOutputTransferEvent = transferEventAbi.decode(
-                outputTransferEvent.data,
-                outputTransferEvent.topics,
-            )
-            const swapEvent = events.find(event => {
-                return (
-                    event.topics[0].toLowerCase() === swapEventAbi.signature.toLowerCase() &&
-                    AddressUtils.compareAddresses(swapEventAbi.decode(event.data, event.topics).to, userAddress)
-                )
-            })
-            if (!swapEvent) return null
-            if (!AddressUtils.compareAddresses(inputTransfer.sender, decodedOutputTransferEvent.to)) return null
-
-            return {
-                amountIn: BigNutils(inputTransfer.amount).bn,
-                amountOut: BigNutils(decodedOutputTransferEvent.value).bn,
-                kind: TransactionSimulationOutputType.SWAP,
-                wallet: inputTransfer.sender,
-                swapType: SwapType.VET_TO_FT,
-                toToken: outputTransferEvent.address,
-                transfersToRemove: [inputTransfer],
-                eventsToRemove: [outputTransferEvent],
-            }
-        }
-        case ClauseType.SWAP_TOKENS_FOR_VET: {
-            const outputTransfer = transfers.find(tsf => AddressUtils.compareAddresses(tsf.recipient, userAddress))
-            if (!outputTransfer) return null
-            const inputTransferEvent = events.find(event => {
-                return (
-                    event.topics[0].toLowerCase() === transferEventAbi.signature.toLowerCase() &&
-                    AddressUtils.compareAddresses(transferEventAbi.decode(event.data, event.topics).from, userAddress)
-                )
-            })
-            if (!inputTransferEvent) return null
-            const decodedInputTransferEvent = transferEventAbi.decode(
-                inputTransferEvent.data,
-                inputTransferEvent.topics,
-            )
-            const swapEvent = events.find(event => {
-                return event.topics[0].toLowerCase() === swapEventAbi.signature.toLowerCase()
-            })
-            if (!swapEvent) return null
-            if (!AddressUtils.compareAddresses(outputTransfer.recipient, decodedInputTransferEvent.from)) return null
-
-            return {
-                amountIn: BigNutils(decodedInputTransferEvent.value).bn,
-                amountOut: BigNutils(outputTransfer.amount).bn,
-                kind: TransactionSimulationOutputType.SWAP,
-                wallet: decodedInputTransferEvent.from,
-                swapType: SwapType.FT_TO_VET,
-                fromToken: inputTransferEvent.address,
-                transfersToRemove: [outputTransfer],
-                eventsToRemove: [inputTransferEvent],
-            }
-        }
-        case ClauseType.SWAP_TOKENS_FOR_TOKENS: {
-            const inputTransferEvent = events.find(event => {
-                return (
-                    event.topics[0].toLowerCase() === transferEventAbi.signature.toLowerCase() &&
-                    AddressUtils.compareAddresses(transferEventAbi.decode(event.data, event.topics).from, userAddress)
-                )
-            })
-            if (!inputTransferEvent) return null
-            const decodedInputTransferEvent = transferEventAbi.decode(
-                inputTransferEvent.data,
-                inputTransferEvent.topics,
-            )
-            const outputTransferEvent = events.find(event => {
-                return (
-                    event.topics[0].toLowerCase() === transferEventAbi.signature.toLowerCase() &&
-                    AddressUtils.compareAddresses(transferEventAbi.decode(event.data, event.topics).to, userAddress)
-                )
-            })
-            if (!outputTransferEvent) return null
-            const decodedOutputTransferEvent = transferEventAbi.decode(
-                outputTransferEvent.data,
-                outputTransferEvent.topics,
-            )
-            const swapEvent = events.find(event => {
-                return (
-                    event.topics[0].toLowerCase() === swapEventAbi.signature.toLowerCase() &&
-                    AddressUtils.compareAddresses(swapEventAbi.decode(event.data, event.topics).to, userAddress)
-                )
-            })
-            if (!swapEvent) return null
-            if (!AddressUtils.compareAddresses(decodedInputTransferEvent.from, decodedOutputTransferEvent.to))
-                return null
-            if (AddressUtils.compareAddresses(inputTransferEvent.address, outputTransferEvent.address)) return null
-
-            return {
-                amountIn: BigNutils(decodedInputTransferEvent.value).bn,
-                amountOut: BigNutils(decodedOutputTransferEvent.value).bn,
-                kind: TransactionSimulationOutputType.SWAP,
-                wallet: decodedInputTransferEvent.from,
-                swapType: SwapType.FT_TO_FT,
-                fromToken: inputTransferEvent.address,
-                toToken: outputTransferEvent.address,
-                transfersToRemove: [],
-                eventsToRemove: [inputTransferEvent, outputTransferEvent],
-            }
-        }
-        default:
-            return null
+    return {
+        amountIn: BigNutils(inputTransfer.amount).bn,
+        amountOut: BigNutils(decodedOutputTransferEvent.value).bn,
+        kind: TransactionSimulationOutputType.SWAP,
+        wallet: inputTransfer.sender,
+        swapType: SwapType.VET_TO_FT,
+        toToken: outputTransferEvent.address,
+        transfersToRemove: [inputTransfer],
+        eventsToRemove: [outputTransferEvent],
     }
+}
+
+const parseSwapTokensForVET: SwapParser = (events, transfers, userAddress) => {
+    const outputTransfer = transfers.find(tsf => AddressUtils.compareAddresses(tsf.recipient, userAddress))
+    if (!outputTransfer) return null
+    const inputTransferEvent = events.find(event => {
+        return (
+            event.topics[0].toLowerCase() === TRANSFER_EVENT.signature.toLowerCase() &&
+            AddressUtils.compareAddresses(TRANSFER_EVENT.decode(event.data, event.topics).from, userAddress)
+        )
+    })
+    if (!inputTransferEvent) return null
+    const decodedInputTransferEvent = TRANSFER_EVENT.decode(inputTransferEvent.data, inputTransferEvent.topics)
+    const swapEvent = events.find(event => {
+        return event.topics[0].toLowerCase() === SWAP_EVENT.signature.toLowerCase()
+    })
+    if (!swapEvent) return null
+    if (!AddressUtils.compareAddresses(outputTransfer.recipient, decodedInputTransferEvent.from)) return null
+
+    return {
+        amountIn: BigNutils(decodedInputTransferEvent.value).bn,
+        amountOut: BigNutils(outputTransfer.amount).bn,
+        kind: TransactionSimulationOutputType.SWAP,
+        wallet: decodedInputTransferEvent.from,
+        swapType: SwapType.FT_TO_VET,
+        fromToken: inputTransferEvent.address,
+        transfersToRemove: [outputTransfer],
+        eventsToRemove: [inputTransferEvent],
+    }
+}
+
+const parseSwapTokensForTokens: SwapParser = (events, transfers, userAddress) => {
+    const inputTransferEvent = events.find(event => {
+        return (
+            event.topics[0].toLowerCase() === TRANSFER_EVENT.signature.toLowerCase() &&
+            AddressUtils.compareAddresses(TRANSFER_EVENT.decode(event.data, event.topics).from, userAddress)
+        )
+    })
+    if (!inputTransferEvent) return null
+    const decodedInputTransferEvent = TRANSFER_EVENT.decode(inputTransferEvent.data, inputTransferEvent.topics)
+    const outputTransferEvent = events.find(event => {
+        return (
+            event.topics[0].toLowerCase() === TRANSFER_EVENT.signature.toLowerCase() &&
+            AddressUtils.compareAddresses(TRANSFER_EVENT.decode(event.data, event.topics).to, userAddress)
+        )
+    })
+    if (!outputTransferEvent) return null
+    const decodedOutputTransferEvent = TRANSFER_EVENT.decode(outputTransferEvent.data, outputTransferEvent.topics)
+    const swapEvent = events.find(event => {
+        return (
+            event.topics[0].toLowerCase() === SWAP_EVENT.signature.toLowerCase() &&
+            AddressUtils.compareAddresses(SWAP_EVENT.decode(event.data, event.topics).to, userAddress)
+        )
+    })
+    if (!swapEvent) return null
+    if (!AddressUtils.compareAddresses(decodedInputTransferEvent.from, decodedOutputTransferEvent.to)) return null
+    if (AddressUtils.compareAddresses(inputTransferEvent.address, outputTransferEvent.address)) return null
+
+    return {
+        amountIn: BigNutils(decodedInputTransferEvent.value).bn,
+        amountOut: BigNutils(decodedOutputTransferEvent.value).bn,
+        kind: TransactionSimulationOutputType.SWAP,
+        wallet: decodedInputTransferEvent.from,
+        swapType: SwapType.FT_TO_FT,
+        fromToken: inputTransferEvent.address,
+        toToken: outputTransferEvent.address,
+        transfersToRemove: [],
+        eventsToRemove: [inputTransferEvent, outputTransferEvent],
+    }
+}
+
+const parseSwapEvent = (events: Connex.VM.Event[], transfers: Connex.VM.Transfer[], userAddress: string) => {
+    const vetToTokensSwap = parseSwapVETForTokens(events, transfers, userAddress)
+    if (vetToTokensSwap !== null) return vetToTokensSwap
+    const tokensToVetSwap = parseSwapTokensForVET(events, transfers, userAddress)
+    if (tokensToVetSwap !== null) return tokensToVetSwap
+    return parseSwapTokensForTokens(events, transfers, userAddress)
 }
 
 const filterUserVetTransfers = (userAddress: string) => {
@@ -207,10 +193,9 @@ export const retrieveActivityFromTransactionSimulation = (
     outputs: Connex.VM.Output[],
     fungibleTokenAddresses: string[],
     userAddress: string,
-    clauses: Connex.VM.Clause[],
 ) => {
-    return outputs.flatMap((output, outputIdx) => {
-        const swapEvent = parseSwapEvent(output.events, output.transfers, clauses[outputIdx], userAddress)
+    return outputs.flatMap(output => {
+        const swapEvent = parseSwapEvent(output.events, output.transfers, userAddress)
         let eventsToProcess = [...output.events]
         let transfersToProcess = [...output.transfers]
         if (swapEvent && AddressUtils.compareAddresses(swapEvent.wallet, userAddress)) {
