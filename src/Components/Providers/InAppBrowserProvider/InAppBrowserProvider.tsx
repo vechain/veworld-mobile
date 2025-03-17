@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
-import { NativeModules, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent } from "react-native"
+import { NativeModules, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent, Platform } from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
@@ -31,7 +31,7 @@ import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
-const { PackageInfo } = NativeModules
+const { PackageDetails } = NativeModules
 
 interface PackageInfoResponse {
     packageName: string
@@ -94,10 +94,15 @@ export const InAppBrowserProvider = ({ children }: Props) => {
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
     const [isLoading, setIsLoading] = React.useState(true)
+
     useEffect(() => {
+        if (Platform.OS === "ios") {
+            setIsLoading(false)
+        }
+
         if (!isLoading) return
         console.log("packageInfo", isLoading)
-        PackageInfo.getPackageInfo().then(info => {
+        PackageDetails.getPackageInfo().then(info => {
             console.log("Got package info", info)
             setPackageInfo(info)
             setIsLoading(false)
@@ -811,7 +816,7 @@ window.vechain = {
     isVeWorld: true,
     isInAppBrowser: true,
     acceptLanguage: "${locale}",
-    appInfo: ${JSON.stringify(packageInfo || {})},
+    integrity: ${JSON.stringify(packageInfo || {})},
     
     newConnexSigner: function (genesisId) {
         return {

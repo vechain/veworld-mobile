@@ -41,7 +41,7 @@ public class PackageDetails extends ReactContextBaseJavaModule {
     private String packageName;
     private String versionName;
     private int versionCode;
-    private boolean verificationFailed = true;
+    private boolean isOfficial = false;
 
     public PackageDetails(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -65,7 +65,7 @@ public class PackageDetails extends ReactContextBaseJavaModule {
             this.versionCode = pInfo.versionCode;
 
             // Verify signature
-            this.verificationFailed = true; // Default to failed
+            this.isOfficial = false; // Default to failed
 
             Signature[] sigs;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -81,26 +81,26 @@ public class PackageDetails extends ReactContextBaseJavaModule {
                 // If any cert passes verification, we'll consider it verified
                 for (Signature sig : sigs) {
                     if (verifySignatureAgainstPublicKey(sig)) {
-                        this.verificationFailed = false;
+                        this.isOfficial = true;
                         break;
                     }
                 }
             }
             
-            Log.i(TAG, "Package verification completed during initialization. Verification failed: " + this.verificationFailed);
+            Log.i(TAG, "Package verification completed during initialization. isOfficial: " + this.isOfficial);
 
         } catch (NameNotFoundException e) {
             Log.e(TAG, "Package name not found during initialization", e);
-            this.verificationFailed = true;
+            this.isOfficial = false;
         } catch (Exception e) {
             Log.e(TAG, "Error verifying package during initialization", e);
-            this.verificationFailed = true;
+            this.isOfficial = false;
         }
     }
 
     @Override
     public String getName() {
-        return "PackageInfo";
+        return "PackageDetails";
     }
 
     @ReactMethod
@@ -111,7 +111,7 @@ public class PackageDetails extends ReactContextBaseJavaModule {
             info.putString("packageName", this.packageName);
             info.putString("versionName", this.versionName);
             info.putInt("versionCode", this.versionCode);
-            info.putBoolean("verificationFailed", this.verificationFailed);
+            info.putBoolean("isOfficial", this.isOfficial);
             
             promise.resolve(info);
         } catch (Exception e) {
