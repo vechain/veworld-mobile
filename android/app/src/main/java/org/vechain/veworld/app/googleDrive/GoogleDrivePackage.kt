@@ -12,7 +12,7 @@ import com.facebook.react.bridge.ReactMethod
 import com.facebook.react.bridge.WritableNativeArray
 import com.google.api.client.googleapis.extensions.android.gms.auth.UserRecoverableAuthIOException
 import com.google.api.services.drive.Drive
-import expo.modules.kotlin.Promise
+import com.facebook.react.bridge.Promise
 import java.lang.Exception
 import java.util.Date
 import org.vechain.veworld.app.googleDrive.data.GoogleDrive

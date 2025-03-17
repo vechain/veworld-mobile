@@ -6,33 +6,22 @@ import com.facebook.react.ReactActivityDelegate
 import com.facebook.react.defaults.DefaultNewArchitectureEntryPoint.fabricEnabled
 import com.facebook.react.defaults.DefaultReactActivityDelegate
 import com.zoontek.rnbootsplash.RNBootSplash
-import expo.modules.ReactActivityDelegateWrapper
 
 class MainActivity : ReactActivity() {
 
-    /**
-     * Returns the name of the main component registered from JavaScript. This is used to schedule
-     * rendering of the component.
-     */
     override fun getMainComponentName(): String = "VeWorld"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         RNBootSplash.init(this, R.style.BootTheme)
         super.onCreate(null)
-        // ATTENTION: This was auto-generated to handle app links.
-        val appLinkIntent = intent
-        val appLinkAction = appLinkIntent.action
-        val appLinkData = appLinkIntent.data
+
+        // Handle app links (deep linking)
+        intent?.data?.let { appLinkData ->
+            val appLinkAction = intent.action
+            // Process deep links here if needed
+        }
     }
 
-    /**
-     * Returns the instance of the [ReactActivityDelegate]. We use [DefaultReactActivityDelegate]
-     * which allows you to enable New Architecture with a single boolean flags [fabricEnabled]
-     */
     override fun createReactActivityDelegate(): ReactActivityDelegate =
-            ReactActivityDelegateWrapper(
-                    this,
-                    BuildConfig.IS_NEW_ARCHITECTURE_ENABLED,
-                    DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
-            )
+            DefaultReactActivityDelegate(this, mainComponentName, fabricEnabled)
 }
