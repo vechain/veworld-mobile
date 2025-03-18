@@ -87,8 +87,10 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 value: `${transactionIDshort}`,
                 typographyFont: "subSubTitle",
                 underline: false,
-                icon: "icon-copy",
-                onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
+                icon: activity.txId ? "icon-copy" : undefined,
+                onValuePress: () => {
+                    if (activity.txId) onCopyToClipboard(activity.txId, LL.TRANSACTION_ID())
+                },
             },
             {
                 id: 4,
@@ -107,7 +109,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
         ],
         [
             LL,
-            activity.id,
+            activity.txId,
             amountTransferred,
             blockNumber,
             fiatValueGasFeeSpent,

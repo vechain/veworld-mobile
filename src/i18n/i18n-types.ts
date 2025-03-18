@@ -329,9 +329,10 @@ type RootTranslation = {
 	 */
 	B3TR_UPGRADE_GM: string
 	/**
-	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d
+	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d​ ​#​{​n​u​m​b​e​r​}
+	 * @param {number} number
 	 */
-	B3TR_XALLOCATION_VOTE: string
+	B3TR_XALLOCATION_VOTE: RequiredParams<'number'>
 	/**
 	 * B​a​c​k​i​n​g​ ​u​p​.​.​.
 	 */
@@ -4331,9 +4332,9 @@ Try reconnect your device to the internet.
 	 */
 	B3TR_UPGRADE_GM: () => LocalizedString
 	/**
-	 * Vote on round
+	 * Vote on round #{number}
 	 */
-	B3TR_XALLOCATION_VOTE: () => LocalizedString
+	B3TR_XALLOCATION_VOTE: (arg: { number: number }) => LocalizedString
 	/**
 	 * Backing up...
 	 */

@@ -69,7 +69,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
         isLoading,
         isFetching,
     } = useQuery({
-        queryKey: ["acitivityBox", activity.txId, network.type],
+        queryKey: ["activityBox", activity.txId, network.type],
         queryFn: queryFn,
         enabled: !!activity.txId,
     })

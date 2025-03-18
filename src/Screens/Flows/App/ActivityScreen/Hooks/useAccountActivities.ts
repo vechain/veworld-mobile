@@ -9,7 +9,7 @@ import {
     selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
-import { ActivityUtils } from "~Utils"
+// import { ActivityUtils } from "~Utils"
 import { FilterType } from "../constants"
 
 export const useAccountActivities = (filterType: FilterType, filters: Readonly<ActivityEvent[]> = []) => {
@@ -53,18 +53,18 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         }
     }, [fetchNextPage, hasNextPage])
 
-    const mergeActivities = useCallback((arr1: Activity[], arr2: Activity[]): Activity[] => {
-        const map = new Map<string, Activity>()
+    // const mergeActivities = useCallback((arr1: Activity[], arr2: Activity[]): Activity[] => {
+    //     const map = new Map<string, Activity>()
 
-        const addActivity = (activity: Activity) => {
-            const id = ActivityUtils.isTransactionActivity(activity) && activity.txId ? activity.txId : activity.id
-            map.set(id, activity)
-        }
+    //     const addActivity = (activity: Activity) => {
+    //         const id = ActivityUtils.isTransactionActivity(activity) && activity.txId ? activity.txId : activity.id
+    //         map.set(id, activity)
+    //     }
 
-        arr1.forEach(addActivity)
-        arr2.forEach(addActivity)
-        return Array.from(map.values())
-    }, [])
+    //     arr1.forEach(addActivity)
+    //     arr2.forEach(addActivity)
+    //     return Array.from(map.values())
+    // }, [])
 
     const activities = useMemo(() => {
         if (data && data.pages?.length > 0) {
@@ -89,7 +89,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
                     return act.timestamp >= startingTimestamp
                 })
 
-                const allActivities = mergeActivities(remoteActivities, localActivitiesByTimsstamp)
+                const allActivities = [...remoteActivities, ...localActivitiesByTimsstamp]
                 sortActivitiesByTimestamp(allActivities)
                 return allActivities
             }
@@ -101,17 +101,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         }
 
         return []
-    }, [
-        data,
-        isFetching,
-        isLoading,
-        isFetchingNextPage,
-        localActivities,
-        filterType,
-        selectedAccount.address,
-        network,
-        mergeActivities,
-    ])
+    }, [data, isFetching, isLoading, isFetchingNextPage, localActivities, filterType, selectedAccount.address, network])
 
     const result = useMemo(
         () => ({

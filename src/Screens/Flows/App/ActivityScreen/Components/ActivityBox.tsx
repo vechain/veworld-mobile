@@ -43,6 +43,10 @@ type ActivityBoxProps = {
     activityStatus?: ActivityStatus
     iconBackgroungColor?: string
     onPress: () => void
+    /**
+     * If set to true, the title will be lighter than the description. Default is `false`
+     */
+    invertedStyles?: boolean
 }
 
 const BaseActivityBox = ({
@@ -56,6 +60,7 @@ const BaseActivityBox = ({
     iconBackgroungColor = COLORS.GREY_100,
     activityStatus,
     onPress,
+    invertedStyles,
 }: ActivityBoxProps) => {
     const { styles } = useThemedStyles(baseStyles)
 
@@ -65,7 +70,7 @@ const BaseActivityBox = ({
     const showRigthAmountDescription = !!rigthAmountDescription
     const showNftImage = !!nftImage
 
-    const renderRigthElement = () => {
+    const renderRightElement = () => {
         if (!nftImage && !rightAmount && !rigthAmountDescription) {
             return null
         }
@@ -103,14 +108,14 @@ const BaseActivityBox = ({
                 <BaseText typographyFont="captionRegular">{time}</BaseText>
                 <BaseSpacer height={2} />
                 <BaseView style={styles.titleContainer}>
-                    <BaseText typographyFont="bodySemiBold" numberOfLines={1}>
+                    <BaseText typographyFont={invertedStyles ? "captionRegular" : "captionSemiBold"} numberOfLines={1}>
                         {title}
                     </BaseText>
                     {showActivityStatus && <ActivityStatusIndicator activityStatus={ActivityStatus.REVERTED} />}
                 </BaseView>
                 <BaseSpacer height={2} />
                 {showDescription && (
-                    <BaseText typographyFont="captionRegular" numberOfLines={1}>
+                    <BaseText typographyFont={invertedStyles ? "captionSemiBold" : "captionRegular"} numberOfLines={1}>
                         {description}
                     </BaseText>
                 )}
@@ -118,7 +123,7 @@ const BaseActivityBox = ({
 
             <BaseSpacer width={8} />
 
-            {renderRigthElement()}
+            {renderRightElement()}
         </BaseCard>
     )
 }
@@ -315,6 +320,7 @@ const DAppTransaction = ({ activity, onPress }: DAppTransactionProps) => {
             title={title}
             description={getDescription()}
             onPress={onPressHandler}
+            activityStatus={activity.status}
         />
     )
 }
@@ -443,6 +449,7 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) =>
             onPress={onPressHandler}
             rightAmount={`${DIRECTIONS.UP} ${rewardValue}`}
             rigthAmountDescription={B3TR.symbol}
+            invertedStyles
         />
     )
 }
@@ -466,7 +473,6 @@ const B3trProposalVote = ({ activity, onPress }: B3trPrpoposalVoteProps) => {
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_PROPOSAL_VOTE()}
-            description={activity.prposalId}
             onPress={onPressHandler}
         />
     )
@@ -490,8 +496,8 @@ const B3trXAllocationVote = ({ activity, onPress }: B3trXAllocartionVoteProps) =
             icon="icon-vote"
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
-            title={LL.B3TR_XALLOCATION_VOTE()}
-            description={activity.roundId}
+            title={LL.B3TR_XALLOCATION_VOTE({ number: parseInt(activity.roundId, 10) })}
+            // description={activity.roundId}
             onPress={onPressHandler}
         />
     )

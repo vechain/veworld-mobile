@@ -73,7 +73,7 @@
   "B3TR_PROPOSAL_VOTE": "Vote on proposal",
   "B3TR_PROPSAL_SUPPORT": "Proposal support on",
   "B3TR_UPGRADE_GM": "New galaxy memeber level",
-  "B3TR_XALLOCATION_VOTE": "Vote on round",
+  "B3TR_XALLOCATION_VOTE": "Vote on round #{number:number}",
   "BACKING_UP": "Backing up...",
   "BACKUP_SUCCESSFUL_DESCRIPTION": "Your recovery phrase is now backed up and safe on {cloudType: string}",
   "BACKUP_SUCCESSFUL_TITLE": "Backup successful!",

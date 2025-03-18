@@ -1,6 +1,12 @@
 import { DIRECTIONS, ERROR_EVENTS } from "~Constants"
 import { warn } from "~Utils"
-import { Activity, ActivityType, FungibleTokenActivity, NonFungibleTokenActivity } from "~Model"
+import {
+    Activity,
+    ActivityType,
+    B3trXAllocationVoteActivity,
+    FungibleTokenActivity,
+    NonFungibleTokenActivity,
+} from "~Model"
 import { TranslationFunctions } from "~i18n"
 
 export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) => {
@@ -30,7 +36,7 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
         case ActivityType.B3TR_PROPOSAL_VOTE:
             return LL.B3TR_PROPOSAL_VOTE()
         case ActivityType.B3TR_XALLOCATION_VOTE:
-            return LL.B3TR_XALLOCATION_VOTE()
+            return LL.B3TR_XALLOCATION_VOTE({ number: parseInt((activity as B3trXAllocationVoteActivity).roundId, 10) })
         case ActivityType.B3TR_UPGRADE_GM:
             return LL.B3TR_UPGRADE_GM()
         case ActivityType.TRANSFER_NFT:
