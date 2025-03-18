@@ -1,17 +1,22 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import WebView, { WebViewMessageEvent } from "react-native-webview"
 import { BaseActivityIndicator, BaseStatusBar, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
-import { debug, ErrorMessageUtils, PlatformUtils } from "~Utils"
-import { useCoinifyPay } from "./Hooks"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { debug, ErrorMessageUtils, PlatformUtils } from "~Utils"
+import { toUppercase } from "~Utils/StringUtils/StringUtils"
+import { useCoinifyPay } from "./Hooks"
 
 const isAndroid = PlatformUtils.isAndroid()
+
+const injectedJs = `
+window.postMessage = function(data) {
+       window.ReactNativeWebView.postMessage(JSON.stringify(data));
+}
+`.trim()
 
 export const CoinifyPayWebView = ({
     currentAmount,
@@ -25,19 +30,29 @@ export const CoinifyPayWebView = ({
     const [isLoading, setIsLoading] = useState(true)
     const { styles } = useThemedStyles(() => baseStyles(isLoading))
     const track = useAnalyticTracking()
-    const nav = useNavigation()
     const { originWhitelist } = useInAppBrowser()
-    const { generateOnRampURL } = useCoinifyPay({ target })
+    const { generateOnRampURL, generateOffRampURL } = useCoinifyPay({ target })
 
     const currency = useAppSelector(selectCurrency)
 
-    const coinifyUrl = generateOnRampURL({
-        address: destinationAddress,
-        buyAmount: currentAmount,
-        defaultCryptoCurrency: "VET",
-        defaultFiatCurrency: currency,
-        primaryColor: "red",
-    })
+    const url = useMemo(() => {
+        if (target === "buy")
+            return generateOnRampURL({
+                address: destinationAddress,
+                amount: currentAmount,
+                defaultCryptoCurrency: "VET",
+                defaultFiatCurrency: currency,
+                primaryColor: "red",
+            })
+
+        return generateOffRampURL({
+            address: destinationAddress,
+            amount: currentAmount,
+            defaultCryptoCurrency: "VET",
+            defaultFiatCurrency: currency,
+            primaryColor: "red",
+        })
+    }, [currency, currentAmount, destinationAddress, generateOffRampURL, generateOnRampURL, target])
 
     const handleLoadEnd = useCallback(() => {
         setTimeout(() => {
@@ -48,33 +63,19 @@ export const CoinifyPayWebView = ({
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
             try {
-                const { data } = JSON.parse(event.nativeEvent.data)
+                const data = JSON.parse(event.nativeEvent.data)
 
                 // if successfully completed buy process
-                if (data.eventName === "success") {
-                    track(AnalyticsEvent.BUY_CRYPTO_SUCCESSFULLY_COMPLETED, {
-                        provider: "coinify",
-                    })
-                }
-
-                if (data.eventName === "exit") {
-                    setIsLoading(true)
-                    track(AnalyticsEvent.BUY_CRYPTO_CLOSED, {
-                        provider: "coinify",
-                    })
-                    nav.navigate(Routes.HOME)
-                }
-
-                if (data.eventName === "error") {
-                    track(AnalyticsEvent.BUY_CRYPTO_FAILED, {
+                if (data.event === "trade.trade-placed") {
+                    track(AnalyticsEvent[`${toUppercase(target)}_CRYPTO_SUCCESSFULLY_COMPLETED`], {
                         provider: "coinify",
                     })
                 }
             } catch (error) {
-                debug(ERROR_EVENTS.BUY, ErrorMessageUtils.getErrorMessage(error))
+                if (error) debug(ERROR_EVENTS[toUppercase(target)], ErrorMessageUtils.getErrorMessage(error))
             }
         },
-        [nav, track],
+        [target, track],
     )
 
     return (
@@ -82,11 +83,12 @@ export const CoinifyPayWebView = ({
             {!isLoading && isAndroid && <BaseStatusBar />}
             <BaseActivityIndicator isVisible={isLoading} />
             <WebView
-                source={{ uri: coinifyUrl }}
+                source={{ uri: url }}
                 onLoadEnd={handleLoadEnd}
                 onMessage={onMessage}
                 style={styles.webView}
                 originWhitelist={originWhitelist}
+                injectedJavaScript={injectedJs}
             />
         </BaseView>
     )

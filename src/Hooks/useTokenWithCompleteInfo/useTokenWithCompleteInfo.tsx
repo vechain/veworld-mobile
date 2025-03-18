@@ -7,7 +7,7 @@ import {
     useTokenInfo,
 } from "~Api/Coingecko"
 import { useBalances } from "~Hooks/useBalances"
-import { FungibleToken } from "~Model"
+import { Balance, FungibleToken } from "~Model"
 import { selectBalanceForToken, selectBalanceForTokenByAccount, selectCurrency, useAppSelector } from "~Storage/Redux"
 
 export type TokenWithCompleteInfo = FungibleToken & {
@@ -20,6 +20,7 @@ export type TokenWithCompleteInfo = FungibleToken & {
     tokenInfo?: TokenInfoResponse
     tokenInfoLoading: boolean
     chartData?: MarketChartResponse
+    balance?: Balance
 }
 /**
  *  useTokenWithCompleteInfo is a hook that returns token with complete info (fiatBalance, tokenUnitBalance, exchangeRate, exchangeRateCurrency, exchangeRateLoading, tokenInfo, tokenInfoLoading)
@@ -58,6 +59,7 @@ export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: 
         fiatBalance,
         tokenUnitBalance,
         tokenUnitFullBalance,
+        balance,
         exchangeRate,
         exchangeRateCurrency: currency,
         exchangeRateLoading,
