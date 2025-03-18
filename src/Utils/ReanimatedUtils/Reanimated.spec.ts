@@ -23,15 +23,15 @@ describe("Reanimated convertSmallSciNotationToDecimal function", function () {
 
 describe("Reanimated numberToPercentWorklet function", function () {
     it("should handle different precision levels correctly", function () {
-        expect(numberToPercentWorklet(0.56789, { precision: 4, absolute: false })).toBe("0.5679%")
+        expect(numberToPercentWorklet(0.56789, { precision: 4, absolute: false, locale: "en" })).toBe("0.5679%")
     })
 
     it("should apply absolute value correctly", function () {
-        expect(numberToPercentWorklet(-23.456, { precision: 2, absolute: true })).toBe("23.46%")
+        expect(numberToPercentWorklet(-23.456, { precision: 2, absolute: true, locale: "en" })).toBe("23.46%")
     })
 
     it("should add trailing zeros for integer values with precision", function () {
-        expect(numberToPercentWorklet(10, { precision: 2, absolute: false })).toBe("10.00%")
+        expect(numberToPercentWorklet(10, { precision: 2, absolute: false, locale: "en" })).toBe("10.00%")
     })
 
     it("should change accordingly to the provided locale", function () {
