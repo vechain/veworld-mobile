@@ -543,6 +543,7 @@ export const createActivityFromIndexedHistoryEvent = (
         appVotes,
         oldLevel,
         newLevel,
+        from,
     } = event
 
     const isTransaction =
@@ -551,7 +552,7 @@ export const createActivityFromIndexedHistoryEvent = (
         eventName === ActivityEvent.TRANSFER_SF
 
     const baseActivity: Activity = {
-        from: origin ?? "",
+        from: from ?? origin ?? "",
         to: to ? [to] : [],
         id: id,
         txId: txId,
@@ -564,11 +565,12 @@ export const createActivityFromIndexedHistoryEvent = (
         delegated: origin !== gasPayer,
     }
 
-    const direction = AddressUtils.compareAddresses(origin, selectedAccountAddress) ? DIRECTIONS.UP : DIRECTIONS.DOWN
-
     switch (eventName) {
         case ActivityEvent.TRANSFER_SF:
         case ActivityEvent.TRANSFER_FT: {
+            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+                ? DIRECTIONS.UP
+                : DIRECTIONS.DOWN
             return {
                 ...baseActivity,
                 amount: value ?? "0x0",
@@ -577,6 +579,9 @@ export const createActivityFromIndexedHistoryEvent = (
             } as FungibleTokenActivity
         }
         case ActivityEvent.TRANSFER_VET: {
+            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+                ? DIRECTIONS.UP
+                : DIRECTIONS.DOWN
             return {
                 ...baseActivity,
                 amount: value ?? "0x0",
@@ -585,6 +590,9 @@ export const createActivityFromIndexedHistoryEvent = (
             } as FungibleTokenActivity
         }
         case ActivityEvent.TRANSFER_NFT: {
+            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+                ? DIRECTIONS.UP
+                : DIRECTIONS.DOWN
             return {
                 ...baseActivity,
                 tokenId: tokenId,

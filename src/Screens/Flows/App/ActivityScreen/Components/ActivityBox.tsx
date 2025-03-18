@@ -497,7 +497,6 @@ const B3trXAllocationVote = ({ activity, onPress }: B3trXAllocartionVoteProps) =
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_XALLOCATION_VOTE({ number: parseInt(activity.roundId, 10) })}
-            // description={activity.roundId}
             onPress={onPressHandler}
         />
     )

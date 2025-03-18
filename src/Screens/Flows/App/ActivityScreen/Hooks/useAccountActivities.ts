@@ -9,7 +9,6 @@ import {
     selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
-// import { ActivityUtils } from "~Utils"
 import { FilterType } from "../constants"
 
 export const useAccountActivities = (filterType: FilterType, filters: Readonly<ActivityEvent[]> = []) => {
@@ -53,19 +52,6 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         }
     }, [fetchNextPage, hasNextPage])
 
-    // const mergeActivities = useCallback((arr1: Activity[], arr2: Activity[]): Activity[] => {
-    //     const map = new Map<string, Activity>()
-
-    //     const addActivity = (activity: Activity) => {
-    //         const id = ActivityUtils.isTransactionActivity(activity) && activity.txId ? activity.txId : activity.id
-    //         map.set(id, activity)
-    //     }
-
-    //     arr1.forEach(addActivity)
-    //     arr2.forEach(addActivity)
-    //     return Array.from(map.values())
-    // }, [])
-
     const activities = useMemo(() => {
         if (data && data.pages?.length > 0) {
             const remoteActivities: Activity[] = []
@@ -89,7 +75,15 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
                     return act.timestamp >= startingTimestamp
                 })
 
-                const allActivities = [...remoteActivities, ...localActivitiesByTimsstamp]
+                //Show `Dapp Transaction` only if there are no events associated to that transaction
+                const uniqueRemoteIds = new Set(remoteActivities.map(ra => ra.txId).filter(Boolean))
+                const filteredLocalActivities = localActivitiesByTimsstamp.filter(activity => {
+                    if (!activity.txId) return true
+                    if (uniqueRemoteIds.has(activity.txId)) return false
+                    return true
+                })
+
+                const allActivities = [...remoteActivities, ...filteredLocalActivities]
                 sortActivitiesByTimestamp(allActivities)
                 return allActivities
             }
