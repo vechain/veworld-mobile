@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
-import { NativeModules, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent, Platform } from "react-native"
+import { NativeModules, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent, PlatformOSType } from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
@@ -33,7 +33,7 @@ import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowRespons
 
 const { PackageDetails } = NativeModules
 
-interface PackageInfoResponse {
+export interface PackageInfoResponse {
     packageName: string
     versionName: string
     versionCode: number
@@ -82,32 +82,32 @@ enum ScrollDirection {
 
 type Props = {
     children: React.ReactNode
-    packageInfo: any | null
+    platform: PlatformOSType
 }
 
 export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
 
 const ORIGIN_WHITELIST = ["http://", "https://", "about:*", "blob:"]
 
-export const InAppBrowserProvider = ({ children }: Props) => {
+export const InAppBrowserProvider = ({ children, platform }: Props) => {
     const nav = useNavigation()
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
     const [isLoading, setIsLoading] = React.useState(true)
 
     useEffect(() => {
-        if (Platform.OS === "ios") {
+        if (platform === "ios") {
             setIsLoading(false)
+            return
         }
 
         if (!isLoading) return
-        console.log("packageInfo", isLoading)
-        PackageDetails.getPackageInfo().then(info => {
-            console.log("Got package info", info)
+
+        PackageDetails.getPackageInfo().then((info: PackageInfoResponse) => {
             setPackageInfo(info)
             setIsLoading(false)
         })
-    }, [isLoading])
+    }, [isLoading, platform])
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const networks = useAppSelector(selectNetworks)
@@ -872,6 +872,5 @@ window.vechain = {
 
 true
 `
-    console.log("script", script)
     return script
 }

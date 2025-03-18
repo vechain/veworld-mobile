@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from "react"
-import { BaseToast } from "~Components"
+import { BaseToast, InAppBrowserProvider } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { configureStore } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
-import { Platform } from "react-native"
+import { Platform, PlatformOSType } from "react-native"
 import TestHelpers from "./helpers"
 import { PersistConfig } from "redux-persist/es/types"
 import { MMKV } from "react-native-mmkv"
@@ -123,9 +123,11 @@ const getStore = (preloadedState: Partial<RootState>) =>
 export const TestWrapper = ({
     children,
     preloadedState,
+    platform = Platform.OS,
 }: {
     children: React.ReactNode
     preloadedState: Partial<RootState>
+    platform: PlatformOSType
 }) => {
     ;(usePersistedTheme as jest.Mock<ReturnType<typeof usePersistedTheme>>).mockReturnValue({
         themeCache: new SecurePersistedCache<ThemeEnum>("test-theme-key", "test-theme"),
@@ -149,14 +151,16 @@ export const TestWrapper = ({
             <QueryClientProvider client={queryClient}>
                 <GestureHandlerRootView>
                     <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
-                        <BottomSheetModalProvider>
-                            <NavigationProvider>
-                                <NotificationsProvider>
-                                    <TestTranslationProvider>{children}</TestTranslationProvider>
-                                </NotificationsProvider>
-                            </NavigationProvider>
-                        </BottomSheetModalProvider>
-                        <BaseToast />
+                        <InAppBrowserProvider platform={platform}>
+                            <BottomSheetModalProvider>
+                                <NavigationProvider>
+                                    <NotificationsProvider>
+                                        <TestTranslationProvider>{children}</TestTranslationProvider>
+                                    </NotificationsProvider>
+                                </NavigationProvider>
+                            </BottomSheetModalProvider>
+                            <BaseToast />
+                        </InAppBrowserProvider>
                     </ConnexContext.Provider>
                 </GestureHandlerRootView>
             </QueryClientProvider>

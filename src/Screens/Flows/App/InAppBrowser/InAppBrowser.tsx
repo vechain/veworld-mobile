@@ -1,5 +1,5 @@
 import { Layout, useInAppBrowser, BrowserBottomBar, URLBar } from "~Components"
-import { NativeModules, StyleSheet, View } from "react-native"
+import { StyleSheet, View } from "react-native"
 import React, { MutableRefObject, useEffect } from "react"
 import WebView from "react-native-webview"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
@@ -66,6 +66,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {userAgent && !isLoading && (
                         <WebView
+                            testID="webview"
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
                             userAgent={userAgent}
