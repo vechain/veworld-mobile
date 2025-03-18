@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-03-18)
+
+
+### Bug Fixes
+
+* prevent multiple transactions when pressing confirm multiple times ([#2768](https://github.com/vechain/veworld-mobile/issues/2768)) ([8d97c70](https://github.com/vechain/veworld-mobile/commit/8d97c70ad8b1276b1939df6538323db3429df6fb))
+
 ## 2.0.9 (2025-02-18)
 
 
