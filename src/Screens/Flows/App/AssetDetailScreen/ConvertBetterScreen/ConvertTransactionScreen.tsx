@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { Transaction } from "thor-devkit"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import {
     BaseSpacer,
     BaseText,
@@ -20,7 +21,6 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectCurrency, selectNetworkVBDTokens, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 import { TransferTokenCardGroup } from "./Components"
-import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN>
 
@@ -86,7 +86,6 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                 token,
                 betterConversionResult: {
                     txId,
-                    isSuccess: true,
                     amount: formattedAmount,
                     from: convertFromTo.fromToken,
                     to: convertFromTo.toToken,
