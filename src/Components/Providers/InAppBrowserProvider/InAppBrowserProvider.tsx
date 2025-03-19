@@ -1,7 +1,14 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
-import { NativeModules, NativeScrollEvent, NativeScrollPoint, NativeSyntheticEvent, PlatformOSType } from "react-native"
+import {
+    NativeModules,
+    NativeScrollEvent,
+    NativeScrollPoint,
+    NativeSyntheticEvent,
+    Platform,
+    PlatformOSType,
+} from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
@@ -89,7 +96,7 @@ export const DISCOVER_HOME_URL = "https://apps.vechain.org/#all"
 
 const ORIGIN_WHITELIST = ["http://", "https://", "about:*", "blob:"]
 
-export const InAppBrowserProvider = ({ children, platform }: Props) => {
+export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props) => {
     const nav = useNavigation()
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)

@@ -1,8 +1,11 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { useInAppBrowser } from "./InAppBrowserProvider"
+import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
 import React from "react"
-import { TestWrapper } from "../../.."
 import { act } from "@testing-library/react-native"
+import { RootState } from "../../../Storage/Redux/Types"
+import { Provider } from "react-redux"
+import { BaseToast } from "react-native-toast-message"
+import { getStore } from "../../../Test"
 import { PlatformOSType } from "react-native"
 
 jest.mock("react-native", () => ({
@@ -48,17 +51,20 @@ jest.mock("@react-navigation/native", () => {
 })
 
 const createWrapper = (platform: PlatformOSType) => {
-    return ({ children }: { children: React.ReactNode }) => (
-        <TestWrapper preloadedState={{}} platform={platform}>
-            {children}
-        </TestWrapper>
+    return ({ children, preloadedState }: { children: React.ReactNode; preloadedState: Partial<RootState> }) => (
+        <Provider store={getStore(preloadedState)}>
+            <InAppBrowserProvider platform={platform}>
+                {children}
+                <BaseToast />
+            </InAppBrowserProvider>
+        </Provider>
     )
 }
 
 describe("useInAppBrowser hook", () => {
     // This test is to ensure that the browser injects the integrity script on Android.
     // This is to inform Dapps that the app is officialy signed and not a clone.
-    it("should inject integrity script on Android informing if the app is officialy signed", async () => {
+    it("should inject integrity script on Android informing if the app is officially signed", async () => {
         const { result, waitForNextUpdate } = renderHook(() => useInAppBrowser(), {
             wrapper: createWrapper("android"),
         })

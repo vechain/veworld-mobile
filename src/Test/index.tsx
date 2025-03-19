@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 import React, { useEffect, useMemo, useState } from "react"
-import { BaseToast, InAppBrowserProvider } from "~Components"
+import { BaseToast } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
 import { useTheme } from "~Hooks"
@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { configureStore } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
-import { Platform, PlatformOSType } from "react-native"
+import { Platform } from "react-native"
 import TestHelpers from "./helpers"
 import { PersistConfig } from "redux-persist/es/types"
 import { MMKV } from "react-native-mmkv"
@@ -68,7 +68,7 @@ const nftPersistence: PersistConfig<NftSliceState> = {
     whitelist: ["blackListedCollections"],
 }
 
-const getStore = (preloadedState: Partial<RootState>) =>
+export const getStore = (preloadedState: Partial<RootState>) =>
     configureStore({
         reducer: reducer(nftPersistence),
         middleware: getDefaultMiddleware => getDefaultMiddleware(),
@@ -123,11 +123,9 @@ const getStore = (preloadedState: Partial<RootState>) =>
 export const TestWrapper = ({
     children,
     preloadedState,
-    platform = Platform.OS,
 }: {
     children: React.ReactNode
     preloadedState: Partial<RootState>
-    platform: PlatformOSType
 }) => {
     ;(usePersistedTheme as jest.Mock<ReturnType<typeof usePersistedTheme>>).mockReturnValue({
         themeCache: new SecurePersistedCache<ThemeEnum>("test-theme-key", "test-theme"),
@@ -151,16 +149,14 @@ export const TestWrapper = ({
             <QueryClientProvider client={queryClient}>
                 <GestureHandlerRootView>
                     <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
-                        <InAppBrowserProvider platform={platform}>
-                            <BottomSheetModalProvider>
-                                <NavigationProvider>
-                                    <NotificationsProvider>
-                                        <TestTranslationProvider>{children}</TestTranslationProvider>
-                                    </NotificationsProvider>
-                                </NavigationProvider>
-                            </BottomSheetModalProvider>
-                            <BaseToast />
-                        </InAppBrowserProvider>
+                        <BottomSheetModalProvider>
+                            <NavigationProvider>
+                                <NotificationsProvider>
+                                    <TestTranslationProvider>{children}</TestTranslationProvider>
+                                </NotificationsProvider>
+                            </NavigationProvider>
+                        </BottomSheetModalProvider>
+                        <BaseToast />
                     </ConnexContext.Provider>
                 </GestureHandlerRootView>
             </QueryClientProvider>
