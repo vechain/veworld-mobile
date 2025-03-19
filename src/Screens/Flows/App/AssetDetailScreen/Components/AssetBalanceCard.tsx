@@ -1,11 +1,12 @@
-import React from "react"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
-import { TokenWithCompleteInfo, useThemedStyles } from "~Hooks"
+import { BottomSheetModal } from "@gorhom/bottom-sheet"
+import React, { RefObject } from "react"
 import { StyleSheet } from "react-native"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { B3TR, ColorThemeType } from "~Constants"
+import { TokenWithCompleteInfo, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { VbdBalanceCard, VetBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components"
 import { FungibleTokenWithBalance } from "~Model"
+import { VbdBalanceCard, VetBalanceCard } from "~Screens/Flows/App/AssetDetailScreen/Components"
 
 type Props = {
     tokenWithInfo: TokenWithCompleteInfo
@@ -13,6 +14,7 @@ type Props = {
     isObserved: boolean
     openQRCodeSheet: () => void
     foundToken?: FungibleTokenWithBalance
+    convertB3trBottomSheetRef?: RefObject<BottomSheetModal>
 }
 
 export const AssetBalanceCard = ({
@@ -21,6 +23,7 @@ export const AssetBalanceCard = ({
     openQRCodeSheet,
     foundToken,
     isObserved,
+    convertB3trBottomSheetRef,
 }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyle)
     const { LL } = useI18nContext()
@@ -39,6 +42,7 @@ export const AssetBalanceCard = ({
                         isBalanceVisible={isBalanceVisible}
                         openQRCodeSheet={openQRCodeSheet}
                         isObserved={isObserved}
+                        convertB3trBottomSheetRef={convertB3trBottomSheetRef}
                     />
                 ) : (
                     <VetBalanceCard
