@@ -95,7 +95,7 @@ public class PackageDetails extends ReactContextBaseJavaModule {
                 }
             }
             
-            Log.i(TAG, "Package verification completed during initialization. isOfficial: " + this.isOfficial);
+            Log.i(TAG, "Package verification completed during initialization. isOfficial: " + this.isOfficial + ", packageName: " + this.packageName);
 
         } catch (NameNotFoundException e) {
             Log.e(TAG, "Package name not found during initialization", e);
