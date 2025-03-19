@@ -64,6 +64,10 @@ class BigNumberUtils implements IBigNumberUtils {
         return this.data.isZero()
     }
 
+    get bn(): BN {
+        return new BN(this.data)
+    }
+
     // Methods
     toHuman(decimals: number, callback?: (result: BN) => void): this {
         this.data = this.data.dividedBy(new BN(10).pow(decimals))

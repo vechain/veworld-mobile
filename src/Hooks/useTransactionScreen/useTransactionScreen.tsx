@@ -1,5 +1,7 @@
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { Transaction } from "thor-devkit"
-import { useCallback, useEffect, useMemo, useState, useRef } from "react"
+import { showErrorToast, showWarningToast } from "~Components"
+import { ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import {
     SignStatus,
     SignTransactionResponse,
@@ -10,14 +12,13 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
+import { useTransactionSimulation } from "~Hooks/useTransactionSimulation/useTransactionSimulation"
 import { useI18nContext } from "~i18n"
-import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { showErrorToast, showWarningToast } from "~Components"
-import { error, GasUtils } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import { Routes } from "~Navigation"
+import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { error, GasUtils } from "~Utils"
 import { useVTHO_HACK } from "./useVTHO_HACK"
 
 type Props = {
@@ -111,6 +112,13 @@ export const useTransactionScreen = ({
         },
         [sendTransaction, onTransactionFailure, LL],
     )
+
+    // 7. Retrieve transaction outputs
+
+    const { isLoading: isSimulationLoading, result: transactionSimulationResult } = useTransactionSimulation({
+        clauses,
+        providedGas: dappRequest?.options?.gas,
+    })
 
     const vtho = useVTHO_HACK(selectedDelegationAccount?.address ?? selectedAccount.address)
 
@@ -242,5 +250,7 @@ export const useTransactionScreen = ({
         vtho,
         isDisabledButtonState,
         priorityFees,
+        isSimulationLoading,
+        transactionSimulationResult,
     }
 }
