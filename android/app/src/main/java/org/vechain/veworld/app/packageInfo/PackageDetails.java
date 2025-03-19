@@ -139,8 +139,6 @@ public class PackageDetails extends ReactContextBaseJavaModule {
             X509Certificate x509Cert = (X509Certificate) certFactory.generateCertificate(
                 new ByteArrayInputStream(signature.toByteArray())
             );
-    
-            Log.i(TAG, "PUBLIC KEY: " + PUBLIC_KEY_PEM_BODY);
             
             // Parse PUBLIC_KEY_PEM_BODY as a certificate first, then get the public key
             X509Certificate trustedCert = (X509Certificate) certFactory.generateCertificate(
