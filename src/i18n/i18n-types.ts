@@ -705,6 +705,14 @@ type RootTranslation = {
 	 */
 	BD_TESTNET_NO_FIAT: string
 	/**
+	 * C​o​n​v​e​r​s​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	BD_TOKEN_CONVERTED_ERROR: string
+	/**
+	 * C​o​n​v​e​r​t​i​n​g​.​.​.
+	 */
+	BD_TOKEN_CONVERTED_LOADING: string
+	/**
 	 * T​o​k​e​n​s​ ​c​o​n​v​e​r​t​e​d​ ​s​u​c​c​e​s​f​u​l​l​y​!
 	 */
 	BD_TOKEN_CONVERTED_SUCCESS: string
@@ -1307,6 +1315,10 @@ type RootTranslation = {
 	 * S​i​g​n​ ​o​u​t
 	 */
 	COMMON_BTN_SIGN_OUT: string
+	/**
+	 * T​r​y​ ​a​g​a​i​n
+	 */
+	COMMON_BTN_TRY_AGAIN: string
 	/**
 	 * U​n​l​o​c​k
 	 */
@@ -2798,6 +2810,11 @@ type RootTranslation = {
 	 * C​h​o​o​s​e​ ​a​ ​w​a​l​l​e​t
 	 */
 	SB_CHOOSE_A_WALLET: string
+	/**
+	 * Y​o​u​ ​h​a​v​e​ ​{​u​s​e​r​n​a​m​e​s​}​ ​u​s​e​r​n​a​m​e​ ​c​l​a​i​m​ ​a​v​a​i​l​a​b​l​e
+	 * @param {number} usernames
+	 */
+	SB_CLAIMABLE_ACCOUNTS: RequiredParams<'usernames'>
 	/**
 	 * T​h​i​s​ ​u​s​e​r​n​a​m​e​ ​c​a​n​ ​b​e​ ​u​s​e​d​ ​i​n​s​t​e​a​d​ ​o​f​ ​y​o​u​r​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​s​e​n​d​ ​a​n​d​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​c​o​n​n​e​c​t​ ​t​o​ ​d​A​p​p​s​.​ ​T​h​e​ ​c​l​a​i​m​i​n​g​ ​i​s​ ​f​r​e​e​ ​o​f​ ​c​h​a​r​g​e​.
 	 */
@@ -4630,6 +4647,14 @@ Try reconnect your device to the internet.
 	 */
 	BD_TESTNET_NO_FIAT: () => LocalizedString
 	/**
+	 * Conversion failed. Please try again.
+	 */
+	BD_TOKEN_CONVERTED_ERROR: () => LocalizedString
+	/**
+	 * Converting...
+	 */
+	BD_TOKEN_CONVERTED_LOADING: () => LocalizedString
+	/**
 	 * Tokens converted succesfully!
 	 */
 	BD_TOKEN_CONVERTED_SUCCESS: () => LocalizedString
@@ -5229,6 +5254,10 @@ Try reconnect your device to the internet.
 	 * Sign out
 	 */
 	COMMON_BTN_SIGN_OUT: () => LocalizedString
+	/**
+	 * Try again
+	 */
+	COMMON_BTN_TRY_AGAIN: () => LocalizedString
 	/**
 	 * Unlock
 	 */
@@ -6694,6 +6723,10 @@ Try reconnect your device to the internet.
 	 * Choose a wallet
 	 */
 	SB_CHOOSE_A_WALLET: () => LocalizedString
+	/**
+	 * You have {usernames} username claim available
+	 */
+	SB_CLAIMABLE_ACCOUNTS: (arg: { usernames: number }) => LocalizedString
 	/**
 	 * This username can be used instead of your wallet address to send and receive tokens and connect to dApps. The claiming is free of charge.
 	 */

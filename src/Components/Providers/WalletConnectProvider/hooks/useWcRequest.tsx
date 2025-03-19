@@ -17,7 +17,7 @@ import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { useI18nContext } from "~i18n"
 import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
-import { IWeb3Wallet } from "@walletconnect/web3wallet"
+import { IWalletKit } from "@reown/walletkit"
 import { ErrorResponse } from "@walletconnect/jsonrpc-types"
 
 type PendingRequests = Record<string, PendingRequestTypes.Struct>
@@ -242,7 +242,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
     )
 
     const switchAccount = useCallback(
-        async (session: SessionTypes.Struct, web3Wallet: IWeb3Wallet) => {
+        async (session: SessionTypes.Struct, web3Wallet: IWalletKit) => {
             // Switch to the requested account
 
             const namespace = Object.keys(session.namespaces)[0]

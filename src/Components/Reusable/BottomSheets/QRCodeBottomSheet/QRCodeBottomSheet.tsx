@@ -1,5 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useCopyClipboard, useThemedStyles, useVns } from "~Hooks"
 
@@ -22,8 +22,11 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
         address: selectedAccount.address,
     })
 
-    const humanAddress = useRef(AddressUtils.humanAddress(selectedAccount.address, 8, 7))
-    const [address, setAddress] = useState(humanAddress.current)
+    const humanAddress = useMemo(
+        () => AddressUtils.humanAddress(selectedAccount.address, 8, 7),
+        [selectedAccount.address],
+    )
+    const [address, setAddress] = useState(humanAddress)
 
     const { onCopyToClipboard } = useCopyClipboard()
 
@@ -44,10 +47,10 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
             onCopyToClipboard(text, labelName, false)
             setAddress(LL.COPIED_QR_CODE_FOR_ACCOUNT())
             setTimeout(() => {
-                setAddress(humanAddress.current)
+                setAddress(humanAddress)
             }, 1500)
         },
-        [LL, onCopyToClipboard, showAddressCheckIcon],
+        [LL, humanAddress, onCopyToClipboard, showAddressCheckIcon],
     )
 
     const onCopyUsername = useCallback(
@@ -65,7 +68,8 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
 
     useEffect(() => {
         setUsername(nameOrAddress)
-    }, [nameOrAddress])
+        setAddress(humanAddress)
+    }, [nameOrAddress, humanAddress])
 
     return (
         <BaseBottomSheet dynamicHeight ref={ref}>

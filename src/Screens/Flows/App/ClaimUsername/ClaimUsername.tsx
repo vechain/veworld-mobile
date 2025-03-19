@@ -176,6 +176,7 @@ export const ClaimUsername: React.FC<Props> = ({ navigation }) => {
             noMargin
             noBackButton
             noStaticBottomPadding
+            hasSafeArea
             fixedHeader={
                 <BaseView mx={16}>
                     <BackButtonHeader

@@ -1,21 +1,21 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { ConvertBetterCard } from "./ConvertBetterCard"
+import { StyleSheet } from "react-native"
+import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { ColorThemeType } from "~Constants"
+import { useAmountInput, useConvertBetterTokens, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import HapticsService from "~Services/HapticsService"
 import {
     selectB3trTokenWithBalance,
     selectNetworkVBDTokens,
     selectVot3TokenWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { useAmountInput, useConvertBetterTokens, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
-import { StyleSheet } from "react-native"
-import { ColorThemeType } from "~Constants"
-import { TouchableOpacity } from "react-native-gesture-handler"
 import { BigNutils } from "~Utils"
-import HapticsService from "~Services/HapticsService"
 import { useI18nContext } from "~i18n"
+import { ConvertBetterCard } from "./ConvertBetterCard"
 
 type Props = {
     onClose: () => void
@@ -213,6 +213,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                     disabled={submitDisabled}
                     action={onConvertPress}
                 />
+                <BaseSpacer height={20} />
             </BaseView>
         </BaseBottomSheet>
     )

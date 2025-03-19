@@ -122,17 +122,17 @@ PODS:
   - jail-monkey (2.8.3):
     - React-Core
   - libevent (2.1.12)
-  - libwebp (1.3.2):
-    - libwebp/demux (= 1.3.2)
-    - libwebp/mux (= 1.3.2)
-    - libwebp/sharpyuv (= 1.3.2)
-    - libwebp/webp (= 1.3.2)
-  - libwebp/demux (1.3.2):
+  - libwebp (1.5.0):
+    - libwebp/demux (= 1.5.0)
+    - libwebp/mux (= 1.5.0)
+    - libwebp/sharpyuv (= 1.5.0)
+    - libwebp/webp (= 1.5.0)
+  - libwebp/demux (1.5.0):
     - libwebp/webp
-  - libwebp/mux (1.3.2):
+  - libwebp/mux (1.5.0):
     - libwebp/demux
-  - libwebp/sharpyuv (1.3.2)
-  - libwebp/webp (1.3.2):
+  - libwebp/sharpyuv (1.5.0)
+  - libwebp/webp (1.5.0):
     - libwebp/sharpyuv
   - lottie-ios (4.4.1)
   - lottie-react-native (6.7.2):
@@ -144,13 +144,13 @@ PODS:
   - MixpanelReactNative (2.4.1):
     - Mixpanel-swift (= 4.2.0)
     - React-Core
-  - MMKV (2.0.0):
-    - MMKVCore (~> 2.0.0)
-  - MMKVCore (2.0.0)
+  - MMKV (2.1.0):
+    - MMKVCore (~> 2.1.0)
+  - MMKVCore (2.1.1)
   - MultiplatformBleAdapter (0.1.9)
-  - OneSignalXCFramework (5.2.9):
-    - OneSignalXCFramework/OneSignalComplete (= 5.2.9)
-  - OneSignalXCFramework/OneSignal (5.2.9):
+  - OneSignalXCFramework (5.2.10):
+    - OneSignalXCFramework/OneSignalComplete (= 5.2.10)
+  - OneSignalXCFramework/OneSignal (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalLiveActivities
@@ -158,38 +158,38 @@ PODS:
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalComplete (5.2.9):
+  - OneSignalXCFramework/OneSignalComplete (5.2.10):
     - OneSignalXCFramework/OneSignal
     - OneSignalXCFramework/OneSignalInAppMessages
     - OneSignalXCFramework/OneSignalLocation
-  - OneSignalXCFramework/OneSignalCore (5.2.9)
-  - OneSignalXCFramework/OneSignalExtension (5.2.9):
+  - OneSignalXCFramework/OneSignalCore (5.2.10)
+  - OneSignalXCFramework/OneSignalExtension (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalInAppMessages (5.2.9):
+  - OneSignalXCFramework/OneSignalInAppMessages (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalOutcomes
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLiveActivities (5.2.9):
+  - OneSignalXCFramework/OneSignalLiveActivities (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalLocation (5.2.9):
+  - OneSignalXCFramework/OneSignalLocation (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
     - OneSignalXCFramework/OneSignalUser
-  - OneSignalXCFramework/OneSignalNotifications (5.2.9):
+  - OneSignalXCFramework/OneSignalNotifications (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalExtension
     - OneSignalXCFramework/OneSignalOutcomes
-  - OneSignalXCFramework/OneSignalOSCore (5.2.9):
+  - OneSignalXCFramework/OneSignalOSCore (5.2.10):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalOutcomes (5.2.9):
+  - OneSignalXCFramework/OneSignalOutcomes (5.2.10):
     - OneSignalXCFramework/OneSignalCore
-  - OneSignalXCFramework/OneSignalUser (5.2.9):
+  - OneSignalXCFramework/OneSignalUser (5.2.10):
     - OneSignalXCFramework/OneSignalCore
     - OneSignalXCFramework/OneSignalNotifications
     - OneSignalXCFramework/OneSignalOSCore
@@ -524,8 +524,8 @@ PODS:
     - React-Core
   - react-native-netinfo (9.5.0):
     - React-Core
-  - react-native-onesignal (5.2.8):
-    - OneSignalXCFramework (= 5.2.9)
+  - react-native-onesignal (5.2.9):
+    - OneSignalXCFramework (= 5.2.10)
     - React (< 1.0.0, >= 0.13.0)
   - react-native-quick-base64 (2.1.2):
     - RCT-Folly (= 2021.07.22.00)
@@ -711,8 +711,7 @@ PODS:
     - React-RCTText
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (3.35.0):
-    - RCT-Folly (= 2021.07.22.00)
+  - RNScreens (3.25.0):
     - React-Core
     - React-RCTImage
   - RNScreenshotPrevent (1.2.0):
@@ -1132,15 +1131,15 @@ SPEC CHECKSUMS:
   hermes-engine: 8057e75cfc1437b178ac86c8654b24e7fead7f60
   jail-monkey: 066e0af74e67cbf432fbb4d214b046ef6dccf910
   libevent: 4049cae6c81cdb3654a443be001fb9bdceff7913
-  libwebp: 1786c9f4ff8a279e4dac1e8f385004d5fc253009
+  libwebp: 02b23773aedb6ff1fd38cec7a77b81414c6842a8
   lottie-ios: e047b1d2e6239b787cc5e9755b988869cf190494
   lottie-react-native: 17547b2f3c7034e2ae8672833fdb63262164d18a
   Mixpanel-swift: e5dd85295923e6a875acf17ccbab8d2ecb10ea65
   MixpanelReactNative: 0101b8828c2f335c128850e71ab7d3b7adde089a
-  MMKV: f7d1d5945c8765f97f39c3d121f353d46735d801
-  MMKVCore: c04b296010fcb1d1638f2c69405096aac12f6390
+  MMKV: ce484c1ac40bf76d5f09a0195d2ec5b3d3840d55
+  MMKVCore: 1eb661c6c498ab88e3df9ce5d8ff94d05fcc0567
   MultiplatformBleAdapter: 5a6a897b006764392f9cef785e4360f54fb9477d
-  OneSignalXCFramework: f5b2a3c4f130e4c910ead7bb25bed7455e976fbf
+  OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
   OpenSSL-Universal: ebc357f1e6bc71fa463ccb2fe676756aff50e88c
   RCT-Folly: 424b8c9a7a0b9ab2886ffe9c3b041ef628fd4fb1
   RCTRequired: 28469809442eb4eb5528462705f7d852948c8a74
@@ -1169,7 +1168,7 @@ SPEC CHECKSUMS:
   react-native-in-app-review: db8bb167a5f238e7ceca5c242d6b36ce8c4404a4
   react-native-mmkv: 38d484ccd8f5760fe0e46d206ed07add5ddda1fc
   react-native-netinfo: 48c5f79a84fbc3ba1d28a8b0d04adeda72885fa8
-  react-native-onesignal: 1795c532f8bd86c3307a032621c17d85998402d0
+  react-native-onesignal: 33ade92bd91578374c31c5a5a91f45f49c2d6614
   react-native-quick-base64: 61228d753294ae643294a75fece8e0e80b7558a6
   react-native-quick-crypto: 455c1b411db006dba1026a30681ececb19180187
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
@@ -1205,7 +1204,7 @@ SPEC CHECKSUMS:
   RNLocalize: 1ce4263770515f53d3de442ce7657b3661b16a37
   RNReactNativeHapticFeedback: 35ab91df9e7a1e4513806e3c091293c97fe38c83
   RNReanimated: ab2e96c6d5591c3dfbb38a464f54c8d17fb34a87
-  RNScreens: 50ad6e3dbea9023272b3aa753e3ee2720b0c9b8f
+  RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
   RNScreenshotPrevent: dc9741e416ba80c3739418f112ac4093188315e9
   RNScrypt: 95fdef077b482e9fdf8a761120cb69d129ef4016
   RNSentry: f655b42e3d102f66a475a6588b92fa6d2fc359f1
@@ -1221,4 +1220,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 8be5fb3d40d2b14e7939d552f2185a0508cf9e59
 
-COCOAPODS: 1.14.3
+COCOAPODS: 1.15.2
