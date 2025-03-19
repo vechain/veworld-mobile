@@ -3,7 +3,7 @@ import { useCallback } from "react"
 import { useSelector } from "react-redux"
 import { Transaction } from "thor-devkit"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { debug, TransactionUtils } from "~Utils"
+import { TransactionUtils } from "~Utils"
 import { retrieveActivityFromTransactionSimulation } from "./useTransactionSimulation.functions"
 
 export type Props = {
@@ -27,12 +27,7 @@ export const useTransactionSimulation = ({ clauses, providedGas, providedGasPaye
 
         if (result.reverted) return
 
-        try {
-            return retrieveActivityFromTransactionSimulation(result.outputs, account.address)
-        } catch (error) {
-            debug("SEND", error)
-            throw error
-        }
+        return retrieveActivityFromTransactionSimulation(result.outputs, account.address)
     }, [account.address, clauses, providedGas, providedGasPayer, selectedNetwork.currentUrl])
 
     const { data, isFetching } = useQuery({
