@@ -4,7 +4,7 @@ import { BaseText, BaseView, PaginatedDot } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { ActivityType, TransactionSimulationOutputType, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { Swap, TokenAllowance, TokenTransfer, VetTransfer } from "./Outputs"
+import { NftTransfer, Swap, TokenAllowance, TokenTransfer, VetTransfer } from "./Outputs"
 
 type Props = {
     outputs: ActivityType[]
@@ -27,6 +27,8 @@ export const OutputsCarousel: React.FC<Props> = memo(({ outputs }) => {
                 return <TokenAllowance output={item} />
             case TransactionSimulationOutputType.SWAP:
                 return <Swap output={item} />
+            case TransactionSimulationOutputType.NFT_TRANSFER:
+                return <NftTransfer output={item} />
             default:
                 return <></>
         }

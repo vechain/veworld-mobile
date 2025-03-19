@@ -3,6 +3,7 @@ import { abis } from "~Constants"
 import { AddressUtils, BigNutils } from "~Utils"
 import {
     ActivityType,
+    NFTTransferOutput,
     SwapOutput,
     SwapType,
     TokenAllowanceOutput,
@@ -14,6 +15,7 @@ import {
 
 const APPROVAL_EVENT = new abi.Event(abis.VIP180.ApprovalEvent)
 const TRANSFER_EVENT = new abi.Event(abis.VIP180.TransferEvent)
+const NFT_TRANSFER_EVENT = new abi.Event(abis.VIP181.TransferEvent)
 const SWAP_EVENT = new abi.Event(abis.UniswapPairV2.SwapEvent)
 
 const parseTokenTransferEvent = (evt: Connex.VM.Event, userAddress: string): TokenTransferOutput => {
@@ -26,6 +28,23 @@ const parseTokenTransferEvent = (evt: Connex.VM.Event, userAddress: string): Tok
         tokenAddress: evt.address,
         transferType: AddressUtils.compareAddresses(decoded.to, userAddress) ? TransferType.RECEIVE : TransferType.SEND,
     }
+}
+
+const parseNFTTransferEvent = (evt: Connex.VM.Event, userAddress: string): NFTTransferOutput => {
+    const decoded = NFT_TRANSFER_EVENT.decode(evt.data, evt.topics)
+    return {
+        kind: TransactionSimulationOutputType.NFT_TRANSFER,
+        tokenId: BigNutils(decoded.tokenId).bn,
+        recipient: decoded.to,
+        sender: decoded.from,
+        tokenAddress: evt.address,
+        transferType: AddressUtils.compareAddresses(decoded.to, userAddress) ? TransferType.RECEIVE : TransferType.SEND,
+    }
+}
+
+const parseTransferEvent = (evt: Connex.VM.Event, userAddress: string) => {
+    if (evt.topics.length === 3) return parseTokenTransferEvent(evt, userAddress)
+    return parseNFTTransferEvent(evt, userAddress)
 }
 
 const parseTokenApprovalEvent = (evt: Connex.VM.Event): TokenAllowanceOutput => {
@@ -57,12 +76,21 @@ type SwapParser = (
     userAddress: string,
 ) => (SwapOutput & { transfersToRemove: Connex.VM.Transfer[]; eventsToRemove: Connex.VM.Event[] }) | null
 
+/**
+ * Check if an event is an ERC-20 Transfer event. Checks the number of topics to differentiate it from ERC-721 Transfer
+ * @param event Event
+ * @returns True if it's an ERC-20 Transfer event, false otherwise
+ */
+const isFungibleTransferEvent = (event: Connex.VM.Event) => {
+    return event.topics[0].toLowerCase() === TRANSFER_EVENT.signature.toLowerCase() && event.topics.length === 3
+}
+
 const parseSwapVETForTokens: SwapParser = (events, transfers, userAddress) => {
     const inputTransfer = transfers.find(tsf => AddressUtils.compareAddresses(tsf.sender, userAddress))
     if (!inputTransfer) return null
     const outputTransferEvent = events.find(event => {
         return (
-            event.topics[0].toLowerCase() === TRANSFER_EVENT.signature.toLowerCase() &&
+            isFungibleTransferEvent(event) &&
             AddressUtils.compareAddresses(TRANSFER_EVENT.decode(event.data, event.topics).to, userAddress)
         )
     })
@@ -94,7 +122,7 @@ const parseSwapTokensForVET: SwapParser = (events, transfers, userAddress) => {
     if (!outputTransfer) return null
     const inputTransferEvent = events.find(event => {
         return (
-            event.topics[0].toLowerCase() === TRANSFER_EVENT.signature.toLowerCase() &&
+            isFungibleTransferEvent(event) &&
             AddressUtils.compareAddresses(TRANSFER_EVENT.decode(event.data, event.topics).from, userAddress)
         )
     })
@@ -121,7 +149,7 @@ const parseSwapTokensForVET: SwapParser = (events, transfers, userAddress) => {
 const parseSwapTokensForTokens: SwapParser = (events, transfers, userAddress) => {
     const inputTransferEvent = events.find(event => {
         return (
-            event.topics[0].toLowerCase() === TRANSFER_EVENT.signature.toLowerCase() &&
+            isFungibleTransferEvent(event) &&
             AddressUtils.compareAddresses(TRANSFER_EVENT.decode(event.data, event.topics).from, userAddress)
         )
     })
@@ -129,7 +157,7 @@ const parseSwapTokensForTokens: SwapParser = (events, transfers, userAddress) =>
     const decodedInputTransferEvent = TRANSFER_EVENT.decode(inputTransferEvent.data, inputTransferEvent.topics)
     const outputTransferEvent = events.find(event => {
         return (
-            event.topics[0].toLowerCase() === TRANSFER_EVENT.signature.toLowerCase() &&
+            isFungibleTransferEvent(event) &&
             AddressUtils.compareAddresses(TRANSFER_EVENT.decode(event.data, event.topics).to, userAddress)
         )
     })
@@ -179,6 +207,7 @@ const filterUserEvents = (userAddress: string) => {
         if (!activity) return false
         switch (activity.kind) {
             case TransactionSimulationOutputType.TOKEN_TRANSFER:
+            case TransactionSimulationOutputType.NFT_TRANSFER:
                 return (
                     AddressUtils.compareAddresses(activity.recipient, userAddress) ||
                     AddressUtils.compareAddresses(activity.sender, userAddress)
@@ -189,11 +218,7 @@ const filterUserEvents = (userAddress: string) => {
     }
 }
 
-export const retrieveActivityFromTransactionSimulation = (
-    outputs: Connex.VM.Output[],
-    fungibleTokenAddresses: string[],
-    userAddress: string,
-) => {
+export const retrieveActivityFromTransactionSimulation = (outputs: Connex.VM.Output[], userAddress: string) => {
     return outputs.flatMap(output => {
         const swapEvent = parseSwapEvent(output.events, output.transfers, userAddress)
         let eventsToProcess = [...output.events]
@@ -206,18 +231,13 @@ export const retrieveActivityFromTransactionSimulation = (
             .filter(filterUserVetTransfers(userAddress))
             .map(transfer => parseVetTransfer(transfer, userAddress))
         const parsedEvents: ActivityType[] = eventsToProcess
-            .filter(evt =>
-                fungibleTokenAddresses.find(fungibleAddress =>
-                    AddressUtils.compareAddresses(fungibleAddress, evt.address),
-                ),
-            )
             .map(event => {
                 const transferEvent = new abi.Event(abis.VIP180.TransferEvent)
                 const approvalEvent = new abi.Event(abis.VIP180.ApprovalEvent)
 
                 switch (event.topics[0].toLowerCase()) {
                     case transferEvent.signature.toLowerCase():
-                        return parseTokenTransferEvent(event, userAddress)
+                        return parseTransferEvent(event, userAddress)
                     case approvalEvent.signature.toLowerCase():
                         return parseTokenApprovalEvent(event)
                     default:

@@ -1414,6 +1414,10 @@ type RootTranslation = {
 	 */
 	COMMON_MARKET_CAP: string
 	/**
+	 * N​F​T
+	 */
+	COMMON_NFT: string
+	/**
 	 * N​.​A​.
 	 */
 	COMMON_NOT_AVAILABLE: string
@@ -1640,6 +1644,10 @@ type RootTranslation = {
 	 * T​o​k​e​n​ ​t​r​a​n​s​f​e​r
 	 */
 	CONNECTED_APP_token_transfer: string
+	/**
+	 * N​F​T​ ​t​r​a​n​s​f​e​r
+	 */
+	CONNECTED_APP_nft_transfer: string
 	/**
 	 * S​w​a​p
 	 */
@@ -5355,6 +5363,10 @@ Try reconnect your device to the internet.
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
 	/**
+	 * NFT
+	 */
+	COMMON_NFT: () => LocalizedString
+	/**
 	 * N.A.
 	 */
 	COMMON_NOT_AVAILABLE: () => LocalizedString
@@ -5578,6 +5590,10 @@ Try reconnect your device to the internet.
 	 * Token transfer
 	 */
 	CONNECTED_APP_token_transfer: () => LocalizedString
+	/**
+	 * NFT transfer
+	 */
+	CONNECTED_APP_nft_transfer: () => LocalizedString
 	/**
 	 * Swap
 	 */
