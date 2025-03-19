@@ -63,7 +63,7 @@ const createWrapper = (platform: PlatformOSType) => {
 
 describe("useInAppBrowser hook", () => {
     // This test is to ensure that the browser injects the integrity script on Android.
-    // This is to inform Dapps that the app is officialy signed and not a clone.
+    // This is to inform Dapps that the app is officialy signed.
     it("should inject integrity script on Android informing if the app is officially signed", async () => {
         const { result, waitForNextUpdate } = renderHook(() => useInAppBrowser(), {
             wrapper: createWrapper("android"),
