@@ -26,7 +26,8 @@
             "~Networking/*": ["./src/Networking/*"],
             "~Events/*": ["./src/Events/*"],
             "~Test": ["./src/Test/index.tsx"],
-            "~Logging/*": ["./src/Logging/*"]
+            "~Logging/*": ["./src/Logging/*"],
+            "~Specs/*": ["./specs/*"]
         }
     }
 }

@@ -1,6 +1,6 @@
 module.exports = {
     root: true,
-    extends: ["@react-native/eslint-config", "plugin:prettier/recommended"],
+    extends: ["@react-native/eslint-config"],
     parser: "@typescript-eslint/parser",
     plugins: ["@typescript-eslint", "i18next", "es"],
     ignorePatterns: ["src/i18n/*", "coverage/*"],
@@ -8,7 +8,7 @@ module.exports = {
         {
             files: ["*.ts", "*.tsx", "*.js", "*.jsx"],
             rules: {
-                "prettier/prettier": ["error", { semi: false }],
+                // "prettier/prettier": ["error", { semi: false }],
                 "@typescript-eslint/no-shadow": ["error"],
                 "no-shadow": "off",
                 "no-undef": "off",

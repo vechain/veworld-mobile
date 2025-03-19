@@ -7,6 +7,7 @@ import com.facebook.react.bridge.ReactApplicationContext
 import com.facebook.react.uimanager.ReactShadowNode
 import com.facebook.react.uimanager.ViewManager
 import org.vechain.veworld.app.googleDrive.GoogleDrivePackage
+import org.vechain.veworld.app.secureBackground.SecureBackgroundModule
 
 // import Native modules
 
@@ -18,5 +19,5 @@ class VeWorldPackage : ReactPackage {
 
     override fun createNativeModules(
             reactContext: ReactApplicationContext,
-    ): MutableList<NativeModule> = listOf(GoogleDrivePackage(reactContext)).toMutableList()
+    ): MutableList<NativeModule> = listOf(GoogleDrivePackage(reactContext), SecureBackgroundModule(reactContext)).toMutableList()
 }

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import { AppStateStatus, NativeEventSubscription, AppState as _Appstate } from "react-native"
-import { blockScreen, unblockScreen } from "react-native-background-secure"
+import SecureBackground from "~Specs/SecureBackground"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 /**
@@ -31,11 +31,11 @@ export const useAppState = () => {
         if (isAndroid()) {
             //Add black screen on android when app goes to background state
             blurSubscription = _Appstate.addEventListener("blur", () => {
-                blockScreen()
+                SecureBackground?.blockScreen()
             })
             //Restore app screen on android when app goes in foreground state
             focusSubscription = _Appstate.addEventListener("focus", () => {
-                unblockScreen()
+                SecureBackground?.unblockScreen()
             })
         }
 

@@ -16,7 +16,7 @@ def __apply_Xcode_14_3_RC_post_install_workaround(installer)
   installer.pods_project.targets.each do |target|
     target.build_configurations.each do |config|
       current_target = config.build_settings['IPHONEOS_DEPLOYMENT_TARGET']
-      minimum_target = '13.0'
+      minimum_target = '15.1'
       if current_target.to_f < minimum_target.to_f
         config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = minimum_target
       end
@@ -59,17 +59,14 @@ target 'VeWorld' do
   use_react_native!(
     :path => config[:reactNativePath],
     # An absolute path to your application root.
-    :app_path => "#{Pod::Config.instance.installation_root}/.."
+    :app_path => "#{Pod::Config.instance.installation_root}/..",
+    :hermes_enabled => true
   )
 
   # Force OpenSSL version for react-native-quick-crypto
   pod 'OpenSSL-Universal', '~> 1.1.1100'
   pod 'react-native-blob-util', :path => '../node_modules/react-native-blob-util'
-
-  target 'VeWorldTests' do
-    inherit! :complete
-    # Pods for testing
-  end
+  # pod 'React-RCTAppSetupUtils', :path => '../node_modules/react-native/ReactCommon/react/setuputils'
   
   post_install do |installer|
      installer.pods_project.targets.each do |target|

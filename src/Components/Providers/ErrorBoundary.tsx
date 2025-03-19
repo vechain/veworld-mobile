@@ -7,7 +7,8 @@ import * as Sentry from "@sentry/react-native"
 import { ERROR_EVENTS } from "~Constants"
 import { selectAppResetTimestamp, setAppResetTimestamp, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import moment from "moment"
-import RNRestart from "react-native-restart"
+//@ts-ignore
+import RNRestart from "react-native-restart-newarch"
 import { useQueryClient } from "@tanstack/react-query"
 
 const ErrorView = ({ resetErrorState }: { resetErrorState: () => void }) => {
