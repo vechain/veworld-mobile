@@ -3,8 +3,8 @@
   "version": "2.0.9",
   "private": true,
   "scripts": {
-    "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
-    "purge:android": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build",
+    "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
+    "purge:android": "rm -rf node_modules && rm -rf android/app/build",
     "install:all": "yarn install && npx pod-install",
     "install:android": "yarn install",
     "reinstall": "yarn purge && yarn install:all",
@@ -49,7 +49,8 @@
     "e2e.android.d": "yarn e2e.android.build.d && yarn e2e.android.test.d",
     "e2e.android.build.r": "detox build --configuration android.emu.release.33",
     "e2e.android.test.r": "detox test --configuration android.emu.release.33",
-    "e2e.android.r": "yarn e2e.android.build.r && yarn e2e.android.test.r"
+    "e2e.android.r": "yarn e2e.android.build.r && yarn e2e.android.test.r",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@coinbase/cbpay-js": "^2.2.1",
@@ -110,8 +111,8 @@
     "intl": "^1.2.5",
     "isomorphic-ws": "^5.0.0",
     "jail-monkey": "^2.8.3",
-    "jest-expo": "^49.0.0",
-    "jsdoc": "^4.0.2",
+    "jest-expo": "^51.0.4",
+    "jsdoc": "^4.0.3",
     "json-stringify-safe": "^5.0.1",
     "lodash": "^4.17.21",
     "lottie-react-native": "6.7.0",

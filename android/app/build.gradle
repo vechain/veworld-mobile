@@ -134,6 +134,11 @@ versionName "2.2.0"
         pickFirst 'lib/x86_64/libcrypto.so'
         pickFirst 'lib/armeabi-v7a/libcrypto.so'
         pickFirst 'lib/arm64-v8a/libcrypto.so'
+
+        pickFirst 'lib/x86/liblog.so'
+        pickFirst 'lib/x86_64/liblog.so'
+        pickFirst 'lib/armeabi-v7a/liblog.so'
+        pickFirst 'lib/arm64-v8a/liblog.so'
     }
 
     applicationVariants.all { variant ->
