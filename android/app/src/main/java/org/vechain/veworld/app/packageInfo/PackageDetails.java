@@ -54,9 +54,17 @@ public class PackageDetails extends ReactContextBaseJavaModule {
 
     private void initializePackageInfo() {
         try {
+            // Choose the appropriate flag based on Android version
+            int signatureFlag;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                signatureFlag = PackageManager.GET_SIGNING_CERTIFICATES;
+            } else {
+                signatureFlag = PackageManager.GET_SIGNATURES;
+            }
+            
             PackageInfo pInfo = context.getPackageManager().getPackageInfo(
                     context.getPackageName(),
-                    PackageManager.GET_SIGNING_CERTIFICATES // or GET_SIGNATURES on older devices
+                    signatureFlag
             );
 
             // Store basic package info in state variables
