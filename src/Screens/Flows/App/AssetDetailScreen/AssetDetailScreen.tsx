@@ -2,12 +2,12 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
-import { striptags } from "striptags"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { B3TR, typography } from "~Constants"
 import { useBottomSheetModal, useBottomSheetRef, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
+import striptags from "striptags"
 import {
     selectBalanceVisible,
     selectSelectedAccount,
@@ -115,9 +115,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                                 </BaseText>
 
                                 <BaseText style={styles.tokenInfoText}>
-                                    {striptags(description.trim(), {
-                                        allowedTags: new Set(["strong"]),
-                                    })}
+                                    {striptags(description.trim(), ["strong"])}
                                 </BaseText>
                             </>
                         )}

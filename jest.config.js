@@ -3,7 +3,7 @@ const { defaults: tsjPreset } = require("ts-jest/presets")
 
 module.exports = {
     ...tsjPreset,
-    preset: "jest-expo",
+    preset: "react-native",
     setupFiles: ["./node_modules/react-native-gesture-handler/jestSetup.js"],
     setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
     coverageReporters: ["json", "lcov", "text", "text-summary", "clover", "json-summary"],
@@ -36,6 +36,7 @@ module.exports = {
             "|filter-obj" +
             "|@transak/react-native-sdk" +
             "|jail-monkey" +
+            "|expo/.*" +
             ")",
     ],
     moduleNameMapper: {
@@ -66,7 +67,6 @@ module.exports = {
         "index.ts",
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
         "<rootDir>/src/Utils/AnalyticsUtils/AnalyticsUtils.ts",
-        "<rootDir>/src/Utils/MinimizerUtils/MinimizerUtils.ts",
     ],
     coverageThreshold: {
         global: {
