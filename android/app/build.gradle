@@ -6,10 +6,10 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
-def keyFileName = BuildConfig.DEBUG ? 'debug.keystore' : 'release.keystore'
+def isDebug = gradle.startParameter.taskNames.any { it.contains('Debug') }
+def keyFileName = isDebug ? 'debug.keystore' : 'release.keystore'
 def keyFile = file(keyFileName)
 def debugPublicKey = "\"DEBUG_KEY_NOT_FOUND\""
-
 
 if (keyFile.exists()) {
     def stdout = new ByteArrayOutputStream()
@@ -70,8 +70,8 @@ android {
         applicationId "org.vechain.veworld.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-versionCode 276
-versionName "2.2.0"
+        versionCode 99
+        versionName "9.9.9"
         testBuildType System.getProperty('testBuildType', 'debug')
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
     }
