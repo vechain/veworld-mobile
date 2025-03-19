@@ -66,7 +66,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {userAgent && !isLoading && (
                         <WebView
-                            testID="webview"
                             ref={webviewRef as MutableRefObject<WebView>}
                             source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
                             userAgent={userAgent}

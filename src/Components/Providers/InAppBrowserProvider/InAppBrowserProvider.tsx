@@ -787,7 +787,7 @@ export const useInAppBrowser = () => {
 //     error: (log, data1, data2) => consoleLog('error', log, data1, data2),
 // };
 
-const injectedJs = ({ locale, packageInfo }: { locale: Locales; packageInfo: any | null }) => {
+const injectedJs = ({ locale, packageInfo }: { locale: Locales; packageInfo: PackageInfoResponse | null }) => {
     const script = `
 function newResponseHandler(id) {
     return new Promise((resolve, reject) => {

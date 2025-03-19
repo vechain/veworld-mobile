@@ -221,46 +221,6 @@ describe("useTransactionScreen", () => {
             expect(transaction).toBeInstanceOf(Transaction)
         }, 20000)
 
-        it("should only allow submitting one transaction at a time", async () => {
-            const { result } = renderHook(
-                () =>
-                    useTransactionScreen({
-                        clauses: vetTransaction1.body.clauses,
-                        onTransactionSuccess,
-                        onTransactionFailure,
-                        dappRequest: {
-                            isFirstRequest: true,
-                            method: "thor_sendTransaction",
-                            id: "1234",
-                            type: "in-app",
-                            message: [],
-                            options: {
-                                gas: 210000,
-                            },
-                            appUrl: "https://example.com",
-                            appName: "Example",
-                        },
-                    }),
-                {
-                    wrapper: TestWrapper,
-                },
-            )
-
-            await act(async () => {
-                result.current.onSubmit()
-                // The button should be disabled immediately after the first submission
-                expect(result.current.isDisabledButtonState).toBe(true)
-                result.current.onSubmit()
-            })
-
-            await waitFor(
-                () => {
-                    expect(onTransactionSuccess).toHaveBeenCalled()
-                },
-                { timeout: 10000 },
-            )
-        }, 20000)
-
         it("using ledger account should navigate", async () => {
             const accWithDevice = {
                 ...firstLedgerAccount,

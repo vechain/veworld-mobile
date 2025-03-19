@@ -1,5 +1,5 @@
 import { Transaction } from "thor-devkit"
-import { useCallback, useEffect, useMemo, useState, useRef } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import {
     SignStatus,
     SignTransactionResponse,
@@ -163,35 +163,26 @@ export const useTransactionScreen = ({
         allowAutoPassword: true,
     })
 
-    const isSubmitting = useRef(false)
-
     const onSubmit = useCallback(async () => {
-        if (isSubmitting.current) return
-        isSubmitting.current = true
+        if (selectedAccount.device.type === DEVICE_TYPE.LEDGER && selectedDelegationOption !== DelegationType.ACCOUNT) {
+            const tx = buildTransaction()
 
-        try {
-            if (
-                selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
-                selectedDelegationOption !== DelegationType.ACCOUNT
-            ) {
-                const tx = buildTransaction()
+            try {
                 await navigateToLedger(tx, selectedAccount as LedgerAccountWithDevice, undefined)
-            } else {
-                await checkIdentityBeforeOpening()
+            } catch (e) {
+                error(ERROR_EVENTS.SEND, e)
+                onTransactionFailure(e)
             }
-        } catch (e) {
-            error(ERROR_EVENTS.SEND, e)
-            onTransactionFailure(e)
-        } finally {
-            isSubmitting.current = false
+        } else {
+            await checkIdentityBeforeOpening()
         }
     }, [
+        onTransactionFailure,
+        buildTransaction,
         selectedAccount,
         selectedDelegationOption,
-        buildTransaction,
         navigateToLedger,
         checkIdentityBeforeOpening,
-        onTransactionFailure,
     ])
 
     const isLoading = useMemo(
@@ -215,10 +206,7 @@ export const useTransactionScreen = ({
         setTxCostTotal(_txCostTotal.toString)
     }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, priorityFees])
 
-    const isDisabledButtonState = useMemo(
-        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current,
-        [isEnoughGas, isDelegated, loading, isSubmitting],
-    )
+    const isDisabledButtonState = useMemo(() => !isEnoughGas && !isDelegated, [isEnoughGas, isDelegated])
 
     return {
         selectedDelegationOption,
