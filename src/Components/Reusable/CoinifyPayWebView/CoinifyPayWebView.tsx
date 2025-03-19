@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native"
 import WebView, { WebViewMessageEvent } from "react-native-webview"
 import { BaseActivityIndicator, BaseStatusBar, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers"
-import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
+import { AnalyticsEvent, COLORS, ERROR_EVENTS } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { debug, ErrorMessageUtils, PlatformUtils } from "~Utils"
@@ -42,7 +42,7 @@ export const CoinifyPayWebView = ({
                 amount: currentAmount,
                 defaultCryptoCurrency: "VET",
                 defaultFiatCurrency: currency,
-                primaryColor: "red",
+                primaryColor: COLORS.PURPLE,
             })
 
         return generateOffRampURL({
@@ -50,7 +50,7 @@ export const CoinifyPayWebView = ({
             amount: currentAmount,
             defaultCryptoCurrency: "VET",
             defaultFiatCurrency: currency,
-            primaryColor: "red",
+            primaryColor: COLORS.PURPLE,
         })
     }, [currency, currentAmount, destinationAddress, generateOffRampURL, generateOnRampURL, target])
 
