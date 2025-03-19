@@ -6,16 +6,18 @@ def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
-def debugKeyFile = file('debug.keystore')
+def keyFileName = BuildConfig.DEBUG ? 'debug.keystore' : 'release.keystore'
+def keyFile = file(keyFileName)
 def debugPublicKey = "\"DEBUG_KEY_NOT_FOUND\""
 
-if (debugKeyFile.exists()) {
+
+if (keyFile.exists()) {
     def stdout = new ByteArrayOutputStream()
     exec {
         commandLine 'keytool',
                 '-exportcert',
                 '-alias', 'androiddebugkey',
-                '-keystore', debugKeyFile,
+                '-keystore', keyFile,
                 '-storepass', 'android',
                 '-rfc'
         standardOutput = stdout
