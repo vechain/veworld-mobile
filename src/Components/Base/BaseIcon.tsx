@@ -1,11 +1,11 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { memo, useCallback, useMemo } from "react"
+import React, { forwardRef, memo, RefObject, useCallback, useMemo } from "react"
 import { OpaqueColorValue, TouchableOpacity, TouchableOpacityProps, View, ViewProps } from "react-native"
-import { useTheme } from "~Hooks"
-import HapticsService from "~Services/HapticsService"
-import { Icon } from "~Components"
 import { IconProps } from "react-native-vector-icons/Icon"
+import { Icon } from "~Components/Reusable/DesignSystemIconSet"
+import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
+import HapticsService from "~Services/HapticsService"
 
 type Props =
     | {
@@ -27,7 +27,7 @@ type Props =
           TouchableOpacityProps &
           ViewProps
 
-export const BaseIcon: React.FC<Props> = memo(props => {
+const BaseIconWithRef = forwardRef<View | TouchableOpacity, Props>(function BaseIconWithRef(props, ref) {
     const { color, style, borderRadius, testID, haptics, name, ...otherProps } = props
     const theme = useTheme()
 
@@ -44,6 +44,7 @@ export const BaseIcon: React.FC<Props> = memo(props => {
             haptics={haptics}
             borderRadius={borderRadius}
             name={name}
+            ref={ref}
             {...otherProps}>
             <Icon
                 size={props.size ?? 22}
@@ -57,9 +58,12 @@ export const BaseIcon: React.FC<Props> = memo(props => {
     )
 })
 
+export const BaseIcon = memo(BaseIconWithRef)
+
 type BaseIconWrapperProps = Props & { children: React.ReactNode }
-const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
-    ({ style, bg, borderRadius, size, children, action, haptics, ...props }) => {
+
+const BaseIconWrapperWithRef = forwardRef<View | TouchableOpacity, BaseIconWrapperProps>(
+    function BaseIconWrapperWithRef({ style, bg, borderRadius, size, children, action, haptics, ...props }, ref) {
         const onButtonPress = useCallback(() => {
             if (!action) return
             action()
@@ -70,6 +74,7 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
             return (
                 <TouchableOpacity
                     onPress={onButtonPress}
+                    ref={ref as RefObject<TouchableOpacity>}
                     style={[
                         {
                             justifyContent: "center",
@@ -103,9 +108,11 @@ const BaseIconWrapper: React.FC<BaseIconWrapperProps> = memo(
                     },
                     style,
                 ]}
+                ref={ref as RefObject<View>}
                 {...props}>
                 {children}
             </View>
         )
     },
 )
+const BaseIconWrapper = memo(BaseIconWrapperWithRef)
