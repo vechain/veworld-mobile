@@ -14441,6 +14441,11 @@ react-native-quick-crypto@^0.6.1:
     stream-browserify "^3.0.0"
     string_decoder "^1.3.0"
 
+react-native-reanimated-carousel@^4.0.2:
+  version "4.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-reanimated-carousel/-/react-native-reanimated-carousel-4.0.2.tgz#4d719afd18c2007e7809f2849ccbee17a2dbd811"
+  integrity sha512-vNpCfPlFoOVKHd+oB7B0luoJswp+nyz0NdJD8+LCrf25JiNQXfM22RSJhLaksBHqk3fm8R4fKWPNcfy5w7wL1Q==
+
 react-native-reanimated-skeleton@1.3.2:
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/react-native-reanimated-skeleton/-/react-native-reanimated-skeleton-1.3.2.tgz#494e58dcb69b1b8c8b9d18962a1e2d427f339437"

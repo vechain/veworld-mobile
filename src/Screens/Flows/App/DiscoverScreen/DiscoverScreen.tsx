@@ -27,8 +27,7 @@ import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { Ecosystem, Favourites, Header } from "./Components"
 import { groupFavoritesByBaseUrl } from "./utils"
-
-// const DAO_URL = "https://governance.vebetterdao.org/"
+import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 
 export const DiscoverScreen: React.FC = () => {
     const { LL } = useI18nContext()
@@ -161,6 +160,9 @@ export const DiscoverScreen: React.FC = () => {
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}>
                         <BaseSpacer height={24} />
+                        <VeBetterDAOCarousel />
+
+                        <BaseSpacer height={18} />
                         {showFavorites && (
                             <Favourites
                                 bookmarkedDApps={groupedbookmarkedDApps}

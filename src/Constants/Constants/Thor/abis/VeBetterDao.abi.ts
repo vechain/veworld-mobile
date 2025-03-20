@@ -103,3 +103,19 @@ export const Vot3Abis: Record<Vot3AbiKeys, abi.Function.Definition> = {
         type: "function",
     },
 }
+
+export const XAllocationVoting: Record<"currentRoundId", abi.Function.Definition> = {
+    currentRoundId: {
+        inputs: [],
+        name: "currentRoundId",
+        outputs: [
+            {
+                internalType: "uint256",
+                name: "",
+                type: "uint256",
+            },
+        ],
+        stateMutability: "view",
+        type: "function",
+    },
+}
