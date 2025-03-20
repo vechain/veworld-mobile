@@ -21,7 +21,7 @@ env:
 
 jobs:
     run-e2e-tests:
-        runs-on: macos-latest-xl
+        runs-on: macos-latest-xlarge
         steps:
 
             # Checkout repository
