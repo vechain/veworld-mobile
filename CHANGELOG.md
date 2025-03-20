@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-03-20)
+
+
+### Bug Fixes
+
+* validation for signed typed data tx ([#2791](https://github.com/vechain/veworld-mobile/issues/2791)) ([faa03cb](https://github.com/vechain/veworld-mobile/commit/faa03cbba432e8f903ed1f6b62fdb606a9ece633))
+
 ## 2.0.9 (2025-02-18)
 
 
