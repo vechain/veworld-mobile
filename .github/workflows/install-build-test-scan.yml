@@ -11,6 +11,10 @@ on:
         branches:
             - main
 
+    schedule:
+        # Runs at 22:00 UTC every Monday to Friday
+        - cron: '0 22 * * 1-5'
+
 concurrency:
     group: ${{ github.head_ref || github.ref_name }}-build-test-scan
     cancel-in-progress: true
