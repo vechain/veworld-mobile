@@ -3,7 +3,7 @@ import React from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated from "react-native-reanimated"
 import { useTheme } from "~Hooks"
-import { COLORS } from "~Constants"
+import { COLORS, VET } from "~Constants"
 
 type BaseTokenCardProps = {
     icon: string
@@ -25,16 +25,18 @@ export const BaseTokenCard = ({
     const theme = useTheme()
     const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
 
+    const alignTokenBalance = symbol === VET.symbol ? "flex-start" : "center"
+
     return (
-        <Animated.View style={[styles.innerRow]}>
+        <Animated.View style={[styles.innerRow, { alignItems: alignTokenBalance }]}>
             <BaseView flexDirection="row">
                 <BaseView style={[styles.imageContainer]}>
                     <Image source={{ uri: icon }} style={styles.image} />
                 </BaseView>
-                <BaseSpacer width={16} />
-                <BaseView alignItems="flex-start" justifyContent="center">
+                <BaseSpacer width={14} />
+                <BaseView alignItems="center" justifyContent="center" flexDirection="row">
                     <BaseText typographyFont="bodyBold">{symbol}</BaseText>
-                    <BaseSpacer height={2} />
+                    <BaseSpacer width={4} />
 
                     <BaseView flexDirection="row">
                         {isLoading ? (
@@ -65,17 +67,16 @@ export const BaseTokenCard = ({
 const styles = StyleSheet.create({
     imageContainer: {
         borderRadius: 30,
-        padding: 10,
+        padding: 5,
         backgroundColor: COLORS.GREY_50,
     },
     imageShadow: {
         width: "auto",
     },
-    image: { width: 20, height: 20 },
+    image: { width: 16, height: 16 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
         width: "100%",
         paddingHorizontal: 16,
     },

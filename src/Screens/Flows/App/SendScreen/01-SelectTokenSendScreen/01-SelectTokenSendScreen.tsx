@@ -75,8 +75,6 @@ export const SelectTokenSendScreen = () => {
 
                             return (
                                 <OfficialTokenCard
-                                    iconHeight={20}
-                                    iconWidth={20}
                                     key={token.address}
                                     token={token}
                                     tokenWithInfo={getTokenWithInfo()}

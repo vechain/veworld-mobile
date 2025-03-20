@@ -1,38 +1,29 @@
-import { Dimensions, StyleSheet, ViewProps } from "react-native"
+import { StyleSheet, ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseCard, BaseText, BaseView, FiatBalance } from "~Components"
-import { useTheme, useThemedStyles, TokenWithCompleteInfo, useBalances } from "~Hooks"
-import { ColorThemeType } from "~Constants"
+import { BaseCard, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
+import { TokenWithCompleteInfo, useBalances, useTheme, useThemedStyles } from "~Hooks"
+import { B3TR, ColorThemeType, VOT3 } from "~Constants"
 import { TokenImage } from "../TokenImage"
-import { useI18nContext } from "~i18n"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
+import { useVechainStatsTokenInfo } from "~Api/Coingecko"
 
 type OfficialTokenCardProps = {
     token: FungibleToken
     tokenWithInfo?: Partial<TokenWithCompleteInfo>
     action: () => void
-    iconHeight: number
-    iconWidth: number
     selected?: boolean
 }
 
 export const OfficialTokenCard = memo(
-    ({
-        token,
-        tokenWithInfo = {},
-        style,
-        action,
-        iconHeight,
-        iconWidth,
-        selected,
-    }: OfficialTokenCardProps & ViewProps) => {
+    ({ token, tokenWithInfo = {}, style, action, selected }: OfficialTokenCardProps & ViewProps) => {
         const { styles } = useThemedStyles(baseStyles(selected))
         const theme = useTheme()
-        const { LL } = useI18nContext()
 
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
+        const { data: exchangeRate } = useVechainStatsTokenInfo(token.symbol.toLowerCase())
+
         const { formatValue } = useFormatFiat()
 
         const { tokenInfo } = tokenWithInfo
@@ -43,52 +34,62 @@ export const OfficialTokenCard = memo(
             formatValue(tokenInfo?.market_data?.price_change_percentage_24h ?? 0) +
             "%"
 
-        const { tokenUnitBalance } = useBalances({ token, exchangeRate: tokenWithInfo.exchangeRate })
+        const { tokenUnitBalance, fiatBalance: tokenFiatBalance } = useBalances({
+            token,
+            exchangeRate: tokenWithInfo?.exchangeRate ?? parseFloat(exchangeRate ?? ""),
+        })
 
         const unitBalance = useMemo(
             () => tokenWithInfo.tokenUnitBalance ?? tokenUnitBalance,
             [tokenWithInfo.tokenUnitBalance, tokenUnitBalance],
         )
+
         const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
+
+        const fiatBalance = useMemo(
+            () => tokenWithInfo.fiatBalance ?? tokenFiatBalance,
+            [tokenWithInfo.fiatBalance, tokenFiatBalance],
+        )
+
+        const isVeB3tr = token.symbol === B3TR.symbol || token.symbol === VOT3.symbol
 
         return (
             <BaseCard onPress={action} containerStyle={[styles.container, style]} testID={symbol}>
-                <BaseView flexDirection="row" justifyContent="space-between">
-                    <BaseView w={14}>
-                        <TokenImage icon={token.icon} height={iconHeight} width={iconWidth} symbol={token.symbol} />
-                    </BaseView>
-                    <BaseView w={42}>
-                        <BaseText typographyFont="buttonPrimary" ellipsizeMode="tail" numberOfLines={1}>
-                            {token.name}
-                        </BaseText>
+                <BaseView flexDirection="row" justifyContent="space-between" w={100}>
+                    <BaseView flexDirection="row" justifyContent="flex-start">
+                        <TokenImage icon={token.icon} symbol={token.symbol} isLogoRound={isVeB3tr} />
+                        <BaseSpacer width={14} />
+                        <BaseView flexDirection="row">
+                            <BaseText typographyFont="bodyBold" ellipsizeMode="tail" numberOfLines={1}>
+                                {token.symbol}
+                            </BaseText>
+                            <BaseSpacer width={4} />
 
-                        {tokenWithInfo.fiatBalance && (
-                            <BaseView flexDirection="row">
-                                <BaseText
-                                    typographyFont="captionBold"
-                                    color={isPositive24hChange ? theme.colors.success : theme.colors.danger}>
-                                    {change24h}
-                                </BaseText>
-                                <BaseText typographyFont="smallCaption" mx={2} mt={4}>
-                                    ({LL.COMMON_24H()})
-                                </BaseText>
-                            </BaseView>
-                        )}
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
+                                {isBalanceVisible ? unitBalance : "•••••"}
+                            </BaseText>
+                        </BaseView>
                     </BaseView>
 
-                    {Boolean(change24h) && (
-                        <BaseView alignItems="flex-end" w={42}>
-                            {tokenWithInfo.fiatBalance && (
+                    {!!exchangeRate && (
+                        <BaseView style={styles.balanceInfo}>
+                            {!!exchangeRate && (
                                 <FiatBalance
-                                    typographyFont={"buttonPrimary"}
-                                    color={theme.colors.text}
-                                    balances={[tokenWithInfo.fiatBalance]}
+                                    typographyFont="bodyBold"
+                                    color={theme.colors.assetDetailsCard.title}
+                                    balances={[fiatBalance]}
                                     isVisible={isBalanceVisible}
                                 />
                             )}
-                            <BaseText typographyFont="captionRegular">
-                                {isBalanceVisible ? unitBalance : "•••••"} {symbol}
-                            </BaseText>
+                            {!!tokenInfo && (
+                                <BaseView flexDirection="row">
+                                    <BaseText
+                                        typographyFont="captionMedium"
+                                        color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
+                                        {change24h}
+                                    </BaseText>
+                                </BaseView>
+                            )}
                         </BaseView>
                     )}
                 </BaseView>
@@ -100,10 +101,17 @@ export const OfficialTokenCard = memo(
 const baseStyles = (selected?: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            minWidth: Dimensions.get("window").width - 48,
-            marginVertical: 7,
+            height: 72,
+            justifyContent: "center",
+            marginBottom: 8,
+            paddingHorizontal: 4,
             borderWidth: selected ? 1 : 0,
-            borderRadius: 16,
+            borderRadius: 12,
+            backgroundColor: theme.colors.card,
             borderColor: theme.colors.text,
+        },
+        balanceInfo: {
+            alignItems: "flex-end",
+            justifyContent: "center",
         },
     })

@@ -84,11 +84,11 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
 
     return (
         <Animated.View style={[baseStyles.innerRow]}>
-            <BaseView flexDirection="row">
+            <BaseView flexDirection="row" alignItems="flex-start">
                 <BaseView style={[baseStyles.imageContainer]}>
                     <Image source={{ uri: VBD_ICON }} style={baseStyles.image} />
                 </BaseView>
-                <BaseSpacer width={16} />
+                <BaseSpacer width={14} />
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row">
                         <BaseView style={baseStyles.tokenSymbol}>
@@ -96,7 +96,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                                 {b3trToken.symbol}
                             </BaseText>
                         </BaseView>
-                        <BaseSpacer width={4} />
+                        <BaseSpacer width={2} />
                         {isLoading ? (
                             <BaseSkeleton
                                 animationDirection="horizontalLeft"
@@ -116,7 +116,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                         <BaseView style={baseStyles.tokenSymbol}>
                             <BaseText typographyFont="bodyBold">{vot3Token.symbol}</BaseText>
                         </BaseView>
-                        <BaseSpacer width={4} />
+                        <BaseSpacer width={2} />
                         {isLoading ? (
                             <BaseSkeleton
                                 animationDirection="horizontalLeft"
@@ -150,10 +150,10 @@ const baseStyles = StyleSheet.create({
     },
     imageContainer: {
         borderRadius: 30,
-        padding: 10,
+        padding: 5,
         backgroundColor: COLORS.GREY_50,
     },
-    image: { width: 20, height: 20 },
+    image: { width: 16, height: 16 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",
