@@ -24,6 +24,7 @@ import {
     ActivityTransferScreen,
 } from "./screens"
 import { Routes } from "~Navigation"
+import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -95,6 +96,11 @@ export const ActivityScreen = () => {
                             name={Routes.ACTIVITY_NFT}
                             component={ActivityNftScreen}
                             options={{ title: LL.ACTIVITY_NFT_LABEL() }}
+                        />
+                        <Tab.Screen
+                            name={Routes.ACTIVITY_DAPPS}
+                            component={ActivityDappsScreen}
+                            options={{ title: LL.ACTIVITY_DAPPS_LABEL() }}
                         />
                     </Tab.Navigator>
                     <SelectAccountBottomSheet

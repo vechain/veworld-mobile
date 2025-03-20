@@ -35,7 +35,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         getNextPageParam: (lastPage, pages) => {
             return lastPage.pagination.hasNext ? pages.length + 1 : undefined
         },
-        enabled: isFocused,
+        enabled: isFocused && filters.length > 0,
     })
 
     const refreshActivities = useCallback(async () => {

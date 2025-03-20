@@ -122,6 +122,14 @@ type RootTranslation = {
 	 */
 	ACTIVITY_NFT_LABEL: string
 	/**
+	 * N​o​ ​d​A​p​p​ ​i​n​t​e​r​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_DAPPS_EMPTY_LABEL: string
+	/**
+	 * d​A​p​p​s
+	 */
+	ACTIVITY_DAPPS_LABEL: string
+	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​t
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: string
@@ -4126,6 +4134,14 @@ export type TranslationFunctions = {
 	 * NFT
 	 */
 	ACTIVITY_NFT_LABEL: () => LocalizedString
+	/**
+	 * No dApp interactions to show yet
+	 */
+	ACTIVITY_DAPPS_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * dApps
+	 */
+	ACTIVITY_DAPPS_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yett
 	 */

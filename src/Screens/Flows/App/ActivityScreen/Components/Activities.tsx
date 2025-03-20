@@ -14,6 +14,7 @@ type ActivitiesProps = {
         | typeof filterValues.swap
         | typeof filterValues.transfer
         | typeof filterValues.nfts
+        | typeof filterValues.dapps
     emptyComponent: React.JSX.Element
 }
 

@@ -20,6 +20,8 @@
   "ACTIVITY_B3TR_EMPTY_DESCRIPTION": "Her gün daha iyi eylemlerinizle B3TR tokenleri kazanmaya başlayın!",
   "ACTIVITY_B3TR_EMPTY_LABEL": "Gösterilecek B3TR eylemi yok.",
   "ACTIVITY_B3TR_LABEL": "B3tr",
+  "ACTIVITY_DAPPS_EMPTY_LABEL": "Henüz gösterilecek dApp etkileşimi yok",
+  "ACTIVITY_DAPPS_LABEL": "dApp'ler",
   "ACTIVITY_NFT_EMPTY_LABEL": "Gösterilecek NFT yok",
   "ACTIVITY_NFT_LABEL": "NFT",
   "ACTIVITY_SWAP_EMPTY_LABEL": "Gösterilecek takas yok",
