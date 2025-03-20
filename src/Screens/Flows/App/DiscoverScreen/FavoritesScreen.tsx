@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseSearchInput, BaseSpacer, BaseView, FavoriteDAppCard, Layout, ListEmptyResults } from "~Components"
+import { BaseSpacer, BaseView, DescSortIconHeaderButton, FavoriteDAppCard, Layout, ListEmptyResults } from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -19,14 +19,8 @@ export const FavouritesScreen = () => {
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
 
-    const [filteredSearch, setFilteredSearch] = useState("")
-
     const renderSeparator = useCallback(() => <BaseSpacer height={12} />, [])
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
-
-    const onTextChange = useCallback((text: string) => {
-        setFilteredSearch(text)
-    }, [])
 
     const onDAppPress = useCallback(
         ({ href, custom }: { href: string; custom?: boolean }) => {
@@ -43,14 +37,7 @@ export const FavouritesScreen = () => {
         [track, dispatch, nav],
     )
 
-    const dappToShow = useMemo(() => {
-        const dapps =
-            filteredSearch === ""
-                ? bookmarkedDApps
-                : bookmarkedDApps.filter(dapp => dapp.name.toLowerCase().includes(filteredSearch.toLowerCase()))
-
-        return groupFavoritesByBaseUrl(dapps)
-    }, [bookmarkedDApps, filteredSearch])
+    const dappToShow = useMemo(() => groupFavoritesByBaseUrl(bookmarkedDApps), [bookmarkedDApps])
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<DiscoveryDApp[]>) => {
@@ -68,21 +55,7 @@ export const FavouritesScreen = () => {
             hasSafeArea={true}
             hasTopSafeAreaOnly={false}
             title={LL.FAVOURITES_DAPPS_TITLE()}
-            fixedHeader={
-                <BaseView>
-                    <BaseSpacer height={12} />
-                    <BaseSearchInput
-                        placeholder={LL.FAVOURITES_DAPPS_SEARCH_PLACEHOLDER()}
-                        setValue={onTextChange}
-                        value={filteredSearch}
-                        showIcon={filteredSearch.length > 0}
-                        iconName="icon-x"
-                        iconSize={18}
-                        onIconPress={() => setFilteredSearch("")}
-                    />
-                    <BaseSpacer height={12} />
-                </BaseView>
-            }
+            headerRightElement={<DescSortIconHeaderButton action={() => {}} />}
             fixedBody={
                 <BaseView flex={1} px={24}>
                     <FlatList

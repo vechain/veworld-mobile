@@ -1,14 +1,14 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Keyboard, Linking, StyleSheet } from "react-native"
-import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-reanimated"
+import { Keyboard, StyleSheet } from "react-native"
+import Animated, { useAnimatedRef } from "react-native-reanimated"
 import {
     AnimatedFloatingButton,
-    AnimatedSearchBar,
+    // AnimatedSearchBar,
     BaseSpacer,
     BaseView,
     Layout,
-    SelectedNetworkViewer,
+    // SelectedNetworkViewer,
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useFetchFeaturedDApps, useThemedStyles, useVisitedUrls } from "~Hooks"
@@ -18,31 +18,24 @@ import {
     selectBookmarkedDapps,
     selectFeaturedDapps,
     selectHasUserOpenedDiscovery,
-    selectVisitedUrls,
+    // selectVisitedUrls,
     setDiscoverySectionOpened,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import {
-    AnimatedTitle,
-    Ecosystem,
-    Favourites,
-    MakeYourOwnDApp,
-    VeBetterDAODApps,
-    VeBetterDAOMainCard,
-} from "./Components"
+import { Ecosystem, Favourites, Header } from "./Components"
 import { groupFavoritesByBaseUrl } from "./utils"
 
-const DAO_URL = "https://governance.vebetterdao.org/"
+// const DAO_URL = "https://governance.vebetterdao.org/"
 
 export const DiscoverScreen: React.FC = () => {
     const { LL } = useI18nContext()
     const track = useAnalyticTracking()
     const nav = useNavigation()
     const dispatch = useAppDispatch()
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
 
     const { addVisitedUrl } = useVisitedUrls()
 
@@ -50,12 +43,12 @@ export const DiscoverScreen: React.FC = () => {
     const { navigateToBrowser } = useBrowserSearch()
 
     const animatedRef = useAnimatedRef<Animated.ScrollView>()
-    const offset = useScrollViewOffset(animatedRef)
+    // const offset = useScrollViewOffset(animatedRef)
 
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
 
-    const visitedUrls = useAppSelector(selectVisitedUrls)
+    // const visitedUrls = useAppSelector(selectVisitedUrls)
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const dapps = useAppSelector(selectFeaturedDapps)
@@ -88,9 +81,9 @@ export const DiscoverScreen: React.FC = () => {
         [nav, addVisitedUrl, track, dispatch],
     )
 
-    const onTextChange = useCallback((_text: string) => {
-        setFilteredSearch(_text)
-    }, [])
+    // const onTextChange = useCallback((_text: string) => {
+    //     setFilteredSearch(_text)
+    // }, [])
 
     const isWebSearchFloatingButtonVisible = useMemo(() => {
         return !!filteredSearch.length
@@ -109,57 +102,56 @@ export const DiscoverScreen: React.FC = () => {
         setFilteredSearch("")
     }, [dapps, filteredSearch, navigateToBrowser])
 
-    const onMakeYourOwnDAppPress = useCallback(async () => {
-        const url = process.env.REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL
-        if (url && (await Linking.canOpenURL(url))) {
-            Linking.openURL(url)
-        }
-    }, [])
+    // const onMakeYourOwnDAppPress = useCallback(async () => {
+    //     const url = process.env.REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL
+    //     if (url && (await Linking.canOpenURL(url))) {
+    //         Linking.openURL(url)
+    //     }
+    // }, [])
 
-    const onNavigateToBrowserHistory = useCallback(() => {
-        nav.navigate(Routes.DISCOVER_BROWSER_HISTORY)
-    }, [nav])
+    // const onNavigateToBrowserHistory = useCallback(() => {
+    //     nav.navigate(Routes.DISCOVER_BROWSER_HISTORY)
+    // }, [nav])
 
     const onSeeAllPress = useCallback(() => nav.navigate(Routes.DISCOVER_FAVOURITES), [nav])
 
-    const renderScreenHeader = useMemo(() => {
-        return (
-            <BaseView px={16}>
-                <BaseView style={styles.header}>
-                    <AnimatedTitle title={LL.DISCOVER_TITLE()} scrollOffset={offset} />
-                    <BaseView flexDirection="row" justifyContent="space-between">
-                        <SelectedNetworkViewer />
-                    </BaseView>
-                </BaseView>
-                <BaseSpacer height={20} />
-                <AnimatedSearchBar
-                    placeholder={LL.DISCOVER_SEARCH()}
-                    value={filteredSearch}
-                    iconName={"icon-history"}
-                    iconColor={visitedUrls.length > 0 ? theme.colors.text : theme.colors.disabledButton}
-                    onTextChange={onTextChange}
-                    onIconPress={onNavigateToBrowserHistory}
-                />
-                <BaseSpacer height={12} />
-            </BaseView>
-        )
-    }, [
-        LL,
-        filteredSearch,
-        offset,
-        onNavigateToBrowserHistory,
-        onTextChange,
-        styles.header,
-        theme.colors.disabledButton,
-        theme.colors.text,
-        visitedUrls.length,
-    ])
+    // const renderScreenHeader = useMemo(() => {
+    //     return (
+    //         <BaseView px={16}>
+    //             <BaseView style={styles.header}>
+    //                 <AnimatedTitle title={LL.DISCOVER_TITLE()} scrollOffset={offset} />
+    //                 <BaseView flexDirection="row" justifyContent="space-between">
+    //                     <SelectedNetworkViewer />
+    //                 </BaseView>
+    //             </BaseView>
+    //             <BaseSpacer height={20} />
+    //             <AnimatedSearchBar
+    //                 placeholder={LL.DISCOVER_SEARCH()}
+    //                 value={filteredSearch}
+    //                 iconName={"icon-history"}
+    //                 iconColor={visitedUrls.length > 0 ? theme.colors.text : theme.colors.disabledButton}
+    //                 onTextChange={onTextChange}
+    //                 onIconPress={onNavigateToBrowserHistory}
+    //             />
+    //             <BaseSpacer height={12} />
+    //         </BaseView>
+    //     )
+    // }, [
+    //     LL,
+    //     filteredSearch,
+    //     offset,
+    //     onNavigateToBrowserHistory,
+    //     onTextChange,
+    //     styles.header,
+    //     theme.colors.disabledButton,
+    //     theme.colors.text,
+    //     visitedUrls.length,
+    // ])
 
     return (
         <Layout
-            fixedHeader={renderScreenHeader}
+            fixedHeader={<Header />}
             noBackButton
-            noMargin
             hasSafeArea
             fixedBody={
                 <BaseView style={styles.rootContainer}>
@@ -169,12 +161,6 @@ export const DiscoverScreen: React.FC = () => {
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}>
                         <BaseSpacer height={24} />
-                        <VeBetterDAOMainCard href={DAO_URL} onDAppPress={onDAppPress} />
-                        <BaseSpacer height={36} />
-                        <VeBetterDAODApps onDAppPress={onDAppPress} />
-                        <BaseSpacer height={42} />
-                        <MakeYourOwnDApp label={LL.DISCOVER_CREATE_YOUR_DAPP()} onPress={onMakeYourOwnDAppPress} />
-                        <BaseSpacer height={18} />
                         {showFavorites && (
                             <Favourites
                                 bookmarkedDApps={groupedbookmarkedDApps}
