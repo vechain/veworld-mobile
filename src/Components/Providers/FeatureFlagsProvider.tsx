@@ -25,7 +25,7 @@ const initialState: FeatureFlags = {
         },
         coinify: {
             android: true,
-            iOS: true,
+            iOS: false,
         },
     },
 }
