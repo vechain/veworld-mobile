@@ -3,6 +3,10 @@ name: Build, Test & Scan
 on:
     workflow_call:
 
+    schedule:
+        # Runs at 22:00 UTC every Sunday to Thursday
+        - cron: '0 22 * * 0-4'
+
     workflow_dispatch:
     pull_request:
         branches:
@@ -11,9 +15,6 @@ on:
         branches:
             - main
 
-    schedule:
-        # Runs at 22:00 UTC every Sunday to Thursday
-        - cron: '0 22 * * 0-4'
 
 concurrency:
     group: ${{ github.head_ref || github.ref_name }}-build-test-scan
@@ -93,13 +94,12 @@ jobs:
             - name: ReportE2E2Slack
               uses: slackapi/slack-github-action@v2.0.0
               with:
-                webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
-                webhook-type: incoming-webhook
-                payload: |
-                  text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
-                  blocks:
-                    - type: "section"
-                      text:
-                        type: "mrkdwn"
-                        text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
-
+                  webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
+                  webhook-type: incoming-webhook
+                  payload: |
+                      text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
+                      blocks:
+                            - type: "section"
+                              text:
+                                type: "mrkdwn"
+                                text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
