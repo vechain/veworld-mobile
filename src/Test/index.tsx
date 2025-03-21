@@ -68,7 +68,7 @@ const nftPersistence: PersistConfig<NftSliceState> = {
     whitelist: ["blackListedCollections"],
 }
 
-const getStore = (preloadedState: Partial<RootState>) =>
+export const getStore = (preloadedState: Partial<RootState>) =>
     configureStore({
         reducer: reducer(nftPersistence),
         middleware: getDefaultMiddleware => getDefaultMiddleware(),

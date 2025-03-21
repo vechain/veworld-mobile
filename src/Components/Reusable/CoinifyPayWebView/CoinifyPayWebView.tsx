@@ -54,11 +54,11 @@ export const CoinifyPayWebView = ({
         })
     }, [currency, currentAmount, destinationAddress, generateOffRampURL, generateOnRampURL, target])
 
-    const handleLoadEnd = useCallback(() => {
+    const handleLoadEnd = () => {
         setTimeout(() => {
             setIsLoading(false)
         }, 400)
-    }, [])
+    }
 
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
@@ -83,6 +83,7 @@ export const CoinifyPayWebView = ({
             {!isLoading && isAndroid && <BaseStatusBar />}
             <BaseActivityIndicator isVisible={isLoading} />
             <WebView
+                testID="CoinifyPayWebView"
                 source={{ uri: url }}
                 onLoadEnd={handleLoadEnd}
                 onMessage={onMessage}
