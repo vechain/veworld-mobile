@@ -2,9 +2,9 @@ name: E2E Testing Overnight
 
 on:
     workflow_dispatch:
-    #schedule:
-        # Runs at 00:00 UTC every Monday to Friday
-        # - cron: '0 0 * * 1-5'
+    schedule:
+        # Runs at 22:00 UTC every Monday to Friday
+        # - cron: '0 22 * * 1-5'
         
 jobs:
     e2e-ios:
