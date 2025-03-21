@@ -65,9 +65,7 @@ export const isValidSignedDataMessage = (message: unknown): message is SignedDat
     if (message === null || message === undefined || typeof message !== "object" || Array.isArray(message)) {
         return false
     }
-
     const _message: Partial<SignedDataRequest> = message
-
     if (
         !_message.domain ||
         !_message.genesisId ||
@@ -79,40 +77,29 @@ export const isValidSignedDataMessage = (message: unknown): message is SignedDat
     ) {
         return false
     }
-
-    if (
-        typeof _message.domain.chainId !== "string" ||
-        typeof _message.domain.name !== "string" ||
-        typeof _message.domain.verifyingContract !== "string" ||
-        typeof _message.domain.version !== "string"
-    ) {
+    if (!["string", "number"].includes(typeof _message.domain.chainId)) return false
+    if (!["string", "undefined"].includes(typeof _message.domain.verifyingContract)) return false
+    if (typeof _message.domain.name !== "string" || typeof _message.domain.version !== "string") {
         return false
     }
-
     if (typeof _message.genesisId !== "string") {
         return false
     }
-
     if (typeof _message.id !== "string") {
         return false
     }
-
     if (_message.method !== RequestMethods.SIGN_TYPED_DATA) {
         return false
     }
-
     if (typeof _message.origin !== "string") {
         return false
     }
-
     if (typeof _message.types !== "object") {
         return false
     }
-
     if (typeof _message.value !== "object") {
         return false
     }
-
     return true
 }
 
