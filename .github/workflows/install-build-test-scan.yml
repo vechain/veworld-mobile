@@ -12,8 +12,8 @@ on:
             - main
 
     schedule:
-        # Runs at 22:00 UTC every Monday to Friday
-        - cron: '0 22 * * 1-5'
+        # Runs at 22:00 UTC every Sunday to Thursday
+        - cron: '0 22 * * 0-4'
 
 concurrency:
     group: ${{ github.head_ref || github.ref_name }}-build-test-scan
@@ -39,6 +39,10 @@ jobs:
               uses: actions/setup-node@v4
               with:
                   node-version: 20.17
+
+            - name: label
+              id: label
+              run: echo "label: ${{ github.event }} "
 
             - name: Install & Patch packages
               run: yarn install
