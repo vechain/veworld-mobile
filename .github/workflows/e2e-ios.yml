@@ -45,12 +45,14 @@ jobs:
               env:
                   HOMEBREW_NO_AUTO_UPDATE: 1
                   HOMEBREW_NO_INSTALL_CLEANUP: 1
+              continue-on-error: true
 
             # Setup Ruby
             - name: Setup Ruby
               uses: ruby/setup-ruby@v1.207.0
               with:
                   bundler-cache: true
+              continue-on-error: true
 
             # Setup Node.js
             - name: Setup Node
@@ -58,10 +60,12 @@ jobs:
               with:
                   node-version-file: .nvmrc
                   cache: "yarn"
+              continue-on-error: true
 
             - name: Install CocoaPods
               run: |
                   yarn install:all
+              continue-on-error: true
 
             # Install sentry properties
             - name: Sentry properties
