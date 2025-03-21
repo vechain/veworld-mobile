@@ -69,7 +69,11 @@ export const SelectTokenSendScreen = () => {
                                 } else if (isB3TR) {
                                     return tokenWithInfoB3TR
                                 } else if (isVOT3) {
-                                    return tokenWithInfoVOT3
+                                    return {
+                                        ...tokenWithInfoVOT3,
+                                        exchangeRate: tokenWithInfoB3TR.exchangeRate,
+                                        tokenInfo: tokenWithInfoB3TR.tokenInfo,
+                                    }
                                 }
                             }
 

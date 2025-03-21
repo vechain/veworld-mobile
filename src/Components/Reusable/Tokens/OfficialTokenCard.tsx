@@ -20,12 +20,13 @@ export const OfficialTokenCard = memo(
     ({ token, tokenWithInfo = {}, style, action, selected }: OfficialTokenCardProps & ViewProps) => {
         const { styles } = useThemedStyles(baseStyles(selected))
         const theme = useTheme()
+        const isVOT3 = token.symbol === VOT3.symbol
+        const isVeB3tr = token.symbol === B3TR.symbol || token.symbol === VOT3.symbol
 
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
         const { data: exchangeRate } = useVechainStatsTokenInfo(token.symbol.toLowerCase())
 
         const { formatValue } = useFormatFiat()
-
         const { tokenInfo } = tokenWithInfo
         const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
 
@@ -39,19 +40,12 @@ export const OfficialTokenCard = memo(
             exchangeRate: tokenWithInfo?.exchangeRate ?? parseFloat(exchangeRate ?? ""),
         })
 
-        const unitBalance = useMemo(
-            () => tokenWithInfo.tokenUnitBalance ?? tokenUnitBalance,
-            [tokenWithInfo.tokenUnitBalance, tokenUnitBalance],
-        )
-
         const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
 
-        const fiatBalance = useMemo(
-            () => tokenWithInfo.fiatBalance ?? tokenFiatBalance,
-            [tokenWithInfo.fiatBalance, tokenFiatBalance],
-        )
-
-        const isVeB3tr = token.symbol === B3TR.symbol || token.symbol === VOT3.symbol
+        const fiatBalance = useMemo(() => {
+            if (tokenWithInfo?.fiatBalance && !isVOT3) return tokenWithInfo.fiatBalance
+            return tokenFiatBalance
+        }, [isVOT3, tokenFiatBalance, tokenWithInfo.fiatBalance])
 
         return (
             <BaseCard onPress={action} containerStyle={[styles.container, style]} testID={symbol}>
@@ -63,10 +57,10 @@ export const OfficialTokenCard = memo(
                             <BaseText typographyFont="bodyBold" ellipsizeMode="tail" numberOfLines={1}>
                                 {token.symbol}
                             </BaseText>
-                            <BaseSpacer width={4} />
+                            <BaseSpacer width={6} />
 
                             <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
-                                {isBalanceVisible ? unitBalance : "•••••"}
+                                {isBalanceVisible ? tokenUnitBalance : "•••••"}
                             </BaseText>
                         </BaseView>
                     </BaseView>
@@ -113,5 +107,6 @@ const baseStyles = (selected?: boolean) => (theme: ColorThemeType) =>
         balanceInfo: {
             alignItems: "flex-end",
             justifyContent: "center",
+            gap: 2,
         },
     })

@@ -21,7 +21,9 @@ export const TokenImage = ({ icon, symbol, isLogoRound = false }: Props) => {
                     <Image source={{ uri: icon }} style={styles.image} />
                 </BaseView>
             ) : (
-                <BaseCustomTokenIcon style={styles.icon} tokenSymbol={symbol ?? ""} />
+                <BaseView style={[styles.imageContainer]}>
+                    <BaseCustomTokenIcon style={styles.icon} tokenSymbol={symbol ?? ""} />
+                </BaseView>
             )}
         </>
     )
@@ -33,7 +35,6 @@ const styles = StyleSheet.create({
     icon: {
         width: 16,
         height: 16,
-        borderRadius: 16,
         alignItems: "center",
         justifyContent: "center",
     },
