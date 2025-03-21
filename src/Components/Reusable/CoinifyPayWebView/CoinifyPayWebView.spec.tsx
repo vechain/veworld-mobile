@@ -11,6 +11,33 @@ import { SecurePersistedCache } from "~Storage/PersistedCache"
 const { account1D1, account2D1 } = TestHelpers.data
 const amount = 100
 
+jest.mock("react-native", () => ({
+    ...jest.requireActual("react-native"),
+}))
+
+jest.mock("react-native/Libraries/Settings/Settings", () => ({
+    get: jest.fn(),
+    set: jest.fn(),
+}))
+
+jest.mock("react-native", () => {
+    const RN = jest.requireActual("react-native")
+    return {
+        ...RN,
+        NativeModules: {
+            ...RN.NativeModules,
+            PackageDetails: {
+                getPackageInfo: jest.fn().mockResolvedValue({
+                    packageName: "com.veworld.app",
+                    versionName: "1.0.0",
+                    versionCode: 1,
+                    isOfficial: true,
+                }),
+            },
+        },
+    }
+})
+
 const mockedNavigate = jest.fn()
 const mockedReplace = jest.fn()
 
@@ -43,7 +70,7 @@ const createWrapper = ({
     })
     return (
         <Provider store={getStore(preloadedState)}>
-            <InAppBrowserProvider>{children}</InAppBrowserProvider>
+            <InAppBrowserProvider platform={"android"}>{children}</InAppBrowserProvider>
         </Provider>
     )
 }
