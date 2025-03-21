@@ -674,13 +674,13 @@ export const createActivityFromIndexedHistoryEvent = (
         case ActivityEvent.B3TR_SWAP_B3TR_TO_VOT3: {
             return {
                 ...baseActivity,
-                value: value,
+                value: inputValue,
             } as B3trSwapB3trToVot3Activity
         }
         case ActivityEvent.B3TR_SWAP_VOT3_TO_B3TR: {
             return {
                 ...baseActivity,
-                value: value,
+                value: inputValue,
             } as B3trSwapVot3ToB3trActivity
         }
         case ActivityEvent.B3TR_PROPOSAL_SUPPORT: {

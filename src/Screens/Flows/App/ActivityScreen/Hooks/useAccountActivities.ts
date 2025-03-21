@@ -1,7 +1,7 @@
 import { useIsFocused } from "@react-navigation/native"
 import { useInfiniteQuery, useQueryClient } from "@tanstack/react-query"
 import { useCallback, useMemo, useState } from "react"
-import { Activity, ActivityEvent } from "~Model"
+import { Activity, ActivityEvent, ActivityType } from "~Model"
 import { createActivityFromIndexedHistoryEvent, fetchIndexedHistoryEvent, sortActivitiesByTimestamp } from "~Networking"
 import {
     selectAllActivitiesByAccountAddressAndNetwork,
@@ -90,8 +90,16 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
 
             return remoteActivities
         } else if (!isFetching && !isLoading && !isFetchingNextPage) {
-            sortActivitiesByTimestamp(localActivities)
-            return localActivities
+            const returnValue = localActivities.filter(activity =>
+                [
+                    ActivityType.DAPP_TRANSACTION,
+                    ActivityType.SIGN_CERT,
+                    ActivityType.SIGN_TYPED_DATA,
+                    ActivityType.CONNECTED_APP_TRANSACTION,
+                ].includes(activity.type as ActivityType),
+            )
+            sortActivitiesByTimestamp(returnValue)
+            return returnValue
         }
 
         return []
