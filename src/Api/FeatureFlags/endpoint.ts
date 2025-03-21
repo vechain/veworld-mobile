@@ -21,6 +21,10 @@ export type FeatureFlags = {
             android: boolean
             iOS: boolean
         }
+        [PaymentProvidersEnum.Coinify]: {
+            android: boolean
+            iOS: boolean
+        }
     }
 }
 

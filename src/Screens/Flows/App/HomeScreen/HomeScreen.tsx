@@ -11,6 +11,7 @@ import {
     Layout,
     QRCodeBottomSheet,
     SelectAccountBottomSheet,
+    useFeatureFlags,
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import {
@@ -33,7 +34,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils } from "~Utils"
+import { AccountUtils, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import {
     AccountCard,
@@ -45,8 +46,8 @@ import {
     Header,
     TokenList,
 } from "./Components"
-import { useTokenBalances } from "./Hooks"
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
+import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -120,12 +121,26 @@ export const HomeScreen = () => {
 
     useCheckVersion()
 
-    const Actions: FastAction[] = useMemo(() => {
-        let actions: FastAction[] = []
+    const featureFlags = useFeatureFlags()
 
-        // account must not be observed to show the buy button
-        if (!AccountUtils.isObservedAccount(selectedAccount)) {
-            actions.push({
+    const Actions: FastAction[] = useMemo(() => {
+        // If the account is observed, we don't want to show the send button as it's not possible to send from an observed account
+        if (AccountUtils.isObservedAccount(selectedAccount)) return []
+
+        const sharedActions: FastAction[] = [
+            {
+                name: LL.BTN_SEND(),
+                action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
+                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-up" size={20} />,
+                testID: "sendButton",
+            },
+            {
+                name: LL.BTN_SWAP(),
+                action: () => nav.navigate(Routes.SWAP),
+                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
+                testID: "swapButton",
+            },
+            {
                 name: LL.BTN_BUY(),
                 action: () => {
                     nav.navigate(Routes.BUY_FLOW)
@@ -133,30 +148,34 @@ export const HomeScreen = () => {
                 },
                 icon: <BaseIcon color={theme.colors.text} name="icon-plus-circle" size={20} />,
                 testID: "buyButton",
-            })
+            },
+        ]
+
+        const sellAction = {
+            name: LL.BTN_SELL(),
+            action: () => {
+                nav.navigate(Routes.SELL_FLOW)
+                track(AnalyticsEvent.SELL_CRYPTO_BUTTON_CLICKED)
+            },
+            icon: <BaseIcon color={theme.colors.text} name="icon-minus-circle" size={20} />,
+            testID: "sellButton",
         }
 
-        // If the account is observed, we don't want to show the send button as it's not possible to send from an observed account
-        if (!AccountUtils.isObservedAccount(selectedAccount)) {
-            actions.push({
-                name: LL.BTN_SEND(),
-                action: () => nav.navigate(Routes.SELECT_TOKEN_SEND),
-                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-up" size={20} />,
-                testID: "sendButton",
-            })
-        }
+        if (PlatformUtils.isAndroid() && featureFlags.paymentProvidersFeature.coinify.android)
+            return [...sharedActions, sellAction]
+        if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
+            return [...sharedActions, sellAction]
 
-        if (!AccountUtils.isObservedAccount(selectedAccount)) {
-            actions.push({
-                name: LL.BTN_SWAP(),
-                action: () => nav.navigate(Routes.SWAP),
-                icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
-                testID: "swapButton",
-            })
-        }
-
-        return actions
-    }, [LL, nav, selectedAccount, theme.colors.text, track])
+        return sharedActions
+    }, [
+        LL,
+        featureFlags.paymentProvidersFeature.coinify.android,
+        featureFlags.paymentProvidersFeature.coinify.iOS,
+        nav,
+        selectedAccount,
+        theme.colors.text,
+        track,
+    ])
 
     return (
         <Layout

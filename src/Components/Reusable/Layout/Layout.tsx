@@ -28,6 +28,7 @@ type Props = {
     hasSafeArea?: boolean
     hasTopSafeAreaOnly?: boolean
     headerRightElement?: ReactNode
+    bg?: string
 }
 
 export const Layout = ({
@@ -53,6 +54,7 @@ export const Layout = ({
     hasSafeArea = true,
     hasTopSafeAreaOnly = false,
     headerRightElement,
+    bg,
 }: Props) => {
     const { androidOnlyTabBarBottomMargin, tabBarBottomMargin } = useTabBarBottomMargin()
 
@@ -69,7 +71,7 @@ export const Layout = ({
 
     const renderContent = useMemo(
         () => (
-            <BaseView h={100}>
+            <BaseView h={100} bg={bg}>
                 <BaseView>
                     {!noBackButton ? (
                         <BaseView mx={noMargin ? 0 : 16}>
@@ -137,6 +139,7 @@ export const Layout = ({
             </BaseView>
         ),
         [
+            bg,
             noBackButton,
             noMargin,
             beforeNavigating,
