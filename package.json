@@ -116,7 +116,7 @@
     "jest-expo": "^49.0.0",
     "jsdoc": "^4.0.2",
     "json-stringify-safe": "^5.0.1",
-    "jspdf": "^3.0.0",
+    "jspdf": "^3.0.1",
     "lodash": "^4.17.21",
     "lottie-react-native": "^6.3.1",
     "mixpanel-react-native": "^2.3.1",
