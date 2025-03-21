@@ -42,7 +42,7 @@ jobs:
 
             - name: label
               id: label
-              run: echo "label: ${{ github.event }} "
+              run: echo "label, ${{ github.event }}"
 
             - name: Install & Patch packages
               run: yarn install
