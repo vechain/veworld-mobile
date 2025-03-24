@@ -3264,13 +3264,14 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​f​e​r
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
-	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
+	 * {​t​o​k​e​n​C​o​u​n​t​}​ ​t​o​k​e​n​s
+	 * @param {number} tokenCount
 	 */
-	SEND_TOKEN_SUBTITLE: string
+	SEND_TOKEN_SUBTITLE: RequiredParams<'tokenCount'>
 	/**
 	 * S​e​n​d
 	 */
@@ -7164,13 +7165,13 @@ Try reconnect your device to the internet.
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select the asset that you want to transfer
+	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
 	/**
-	 * Send your token
+	 * {tokenCount} tokens
 	 */
-	SEND_TOKEN_SUBTITLE: () => LocalizedString
+	SEND_TOKEN_SUBTITLE: (arg: { tokenCount: number }) => LocalizedString
 	/**
 	 * Send
 	 */

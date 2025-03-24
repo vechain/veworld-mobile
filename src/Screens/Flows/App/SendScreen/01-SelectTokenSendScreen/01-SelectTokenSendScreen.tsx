@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { useState } from "react"
-import { BaseSearchInput, BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard } from "~Components"
+import React from "react"
+import { BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard } from "~Components"
 import { VET, VTHO } from "~Constants"
 import { useTokenWithCompleteInfo } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
@@ -13,15 +13,8 @@ type Props = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOK
 
 export const SelectTokenSendScreen = () => {
     const { LL } = useI18nContext()
-    const [tokenQuery, setTokenQuery] = useState<string>("")
     const tokens = useAppSelector(selectSendableTokensWithBalance)
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
-
-    const filteredTokens = tokens.filter(
-        token =>
-            token.name?.toLowerCase().includes(tokenQuery.toLowerCase()) ||
-            token.symbol?.toLowerCase().includes(tokenQuery.toLowerCase()),
-    )
 
     const nav = useNavigation<Props>()
     const handleClickToken = (token: FungibleTokenWithBalance) => async () => {
@@ -38,24 +31,19 @@ export const SelectTokenSendScreen = () => {
         <Layout
             safeAreaTestID="Select_Token_Send_Screen"
             title={LL.SEND_TOKEN_TITLE()}
-            fixedHeader={
-                <BaseView>
-                    <BaseSpacer height={24} />
-                    <BaseText typographyFont="button">{LL.SEND_TOKEN_SUBTITLE()}</BaseText>
-                    <BaseSpacer height={8} />
-                    <BaseText typographyFont="body">{LL.SEND_TOKEN_SELECT_ASSET()}</BaseText>
-                    <BaseSpacer height={16} />
-                    <BaseSearchInput
-                        value={tokenQuery}
-                        setValue={setTokenQuery}
-                        placeholder={LL.MANAGE_TOKEN_SEARCH_TOKEN()}
-                    />
-                </BaseView>
-            }
             body={
                 <BaseView>
-                    {filteredTokens.length ? (
-                        filteredTokens.map(token => {
+                    <BaseView>
+                        <BaseSpacer height={8} />
+                        <BaseText typographyFont="subTitle">
+                            {LL.SEND_TOKEN_SUBTITLE({ tokenCount: tokens.length })}
+                        </BaseText>
+                        <BaseSpacer height={8} />
+                        <BaseText typographyFont="subSubTitleLight">{LL.SEND_TOKEN_SELECT_ASSET()}</BaseText>
+                        <BaseSpacer height={24} />
+                    </BaseView>
+                    {tokens.length ? (
+                        tokens.map(token => {
                             const isVET = token.symbol === VET.symbol
                             const isB3TR = token.symbol === B3TR.symbol
                             const isVTHO = token.symbol === VTHO.symbol

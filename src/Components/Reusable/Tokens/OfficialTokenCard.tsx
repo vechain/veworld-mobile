@@ -1,6 +1,6 @@
-import { StyleSheet, ViewProps } from "react-native"
+import { StyleSheet, TouchableOpacity, ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseCard, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
+import { BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
 import { TokenWithCompleteInfo, useBalances, useTheme, useThemedStyles } from "~Hooks"
 import { B3TR, ColorThemeType, VOT3 } from "~Constants"
 import { TokenImage } from "../TokenImage"
@@ -48,7 +48,7 @@ export const OfficialTokenCard = memo(
         }, [isVOT3, tokenFiatBalance, tokenWithInfo.fiatBalance])
 
         return (
-            <BaseCard onPress={action} containerStyle={[styles.container, style]} testID={symbol}>
+            <TouchableOpacity onPress={action} style={[styles.container, style]} testID={symbol}>
                 <BaseView flexDirection="row" justifyContent="space-between" w={100}>
                     <BaseView flexDirection="row" justifyContent="flex-start">
                         <TokenImage icon={token.icon} symbol={token.symbol} isLogoRound={isVeB3tr} />
@@ -87,7 +87,7 @@ export const OfficialTokenCard = memo(
                         </BaseView>
                     )}
                 </BaseView>
-            </BaseCard>
+            </TouchableOpacity>
         )
     },
 )
@@ -98,7 +98,7 @@ const baseStyles = (selected?: boolean) => (theme: ColorThemeType) =>
             height: 72,
             justifyContent: "center",
             marginBottom: 8,
-            paddingHorizontal: 4,
+            paddingHorizontal: 16,
             borderWidth: selected ? 1 : 0,
             borderRadius: 12,
             backgroundColor: theme.colors.card,
