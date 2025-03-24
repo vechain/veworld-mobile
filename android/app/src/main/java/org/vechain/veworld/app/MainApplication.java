@@ -14,6 +14,7 @@ import com.facebook.soloader.SoLoader;
 import java.util.List;
 
 import org.vechain.veworld.app.minimizer.RCTMinimizerPackage;
+import org.vechain.veworld.app.packageInfo.PackageDetailsPackage;
 import org.vechain.veworld.app.VeWorldPackage;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -32,6 +33,7 @@ public class MainApplication extends Application implements ReactApplication {
           // packages.add(new MyReactNativePackage());
           packages.add(new VeWorldPackage());
           packages.add(new RCTMinimizerPackage());
+          packages.add(new PackageDetailsPackage());
           return packages;
         }
 
