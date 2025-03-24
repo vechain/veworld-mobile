@@ -17,9 +17,8 @@ import {
     Layout,
     showErrorToast,
     FiatBalance,
-    AlertCard,
 } from "~Components"
-import { COLORS, CURRENCY_SYMBOLS, typography, VOT3, VTHO } from "~Constants"
+import { COLORS, CURRENCY_SYMBOLS, typography, VTHO } from "~Constants"
 import { useAmountInput, useTheme, useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
@@ -42,7 +41,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const timer = useRef<NodeJS.Timeout | null>(null)
     const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
-    const isVOT3 = useMemo(() => token.symbol.toLowerCase() === VOT3.symbol.toLowerCase(), [token.symbol])
 
     const currency = useAppSelector(selectCurrency)
 
@@ -267,12 +265,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             body={
                 <DismissKeyboardView>
                     <BaseView>
-                        {isVOT3 && (
-                            <>
-                                <AlertCard title={LL.ALERT_TITLE_VOT3()} message={LL.ALERT_MSG_VOT3()} status="info" />
-                                <BaseSpacer height={16} />
-                            </>
-                        )}
                         <BaseText typographyFont="button">{LL.SEND_CURRENT_BALANCE()}</BaseText>
                         <BaseSpacer height={8} />
                         {/* [START] - HEADER */}
