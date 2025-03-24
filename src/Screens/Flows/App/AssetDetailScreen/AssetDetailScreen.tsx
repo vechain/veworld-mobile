@@ -24,7 +24,7 @@ const { defaults: defaultTypography } = typography
 
 const B3TR_DESC =
     // eslint-disable-next-line max-len
-    'VeBetterDAO is a blockchain-based ecosystem built on the VeChainThor platform, designed to incentivize sustainable actions and democratize access to the "sustainability economy." It utilizes a decentralized governance model to empower individuals, enterprises, and developers to contribute toward sustainability goals. The project incorporates Web3 principles of ownership and rewards users with its B3TR token for participating in sustainability-focused activities. Users can convert B3TR tokens to VOT3 at a 1:1 ratio, allowing users to participate in DAO governance.'
+    'VeBetterDAO is a blockchain-based ecosystem built on the VeChainThor platform, designed to incentivize sustainable actions and democratize access to the "sustainability economy". It utilizes a decentralized governance model to empower individuals, enterprises, and developers to contribute toward sustainability goals. The project incorporates Web3 principles of ownership and rewards users with its B3TR token for participating in sustainability-focused activities. Users can convert B3TR tokens to VOT3 at a 1:1 ratio, allowing users to participate in DAO governance.'
 
 export const AssetDetailScreen = ({ route }: Props) => {
     const { token, betterConversionResult } = route.params
