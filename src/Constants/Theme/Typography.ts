@@ -15,6 +15,7 @@ export type TFonts =
     | "subSubTitleBold"
     | "subSubTitleLight"
     | "body"
+    | "bodyTall"
     | "bodyBold"
     | "bodySemiBold"
     | "bodyMedium"
@@ -193,6 +194,12 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontSize: 14,
         fontWeight: fontWeight[400],
         lineHeight: lineHeight.body,
+    },
+    bodyTall: {
+        fontFamily: fontFamily["Inter-Regular"],
+        fontSize: 14,
+        fontWeight: fontWeight[400],
+        lineHeight: lineHeight.bodySemiBold,
     },
     bodyBold: {
         fontFamily: fontFamily["Inter-Bold"],

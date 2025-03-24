@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React from "react"
-import { BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard } from "~Components"
+import { BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard, SendVot3WarningBottomSheet } from "~Components"
 import { VET, VTHO } from "~Constants"
-import { useTokenWithCompleteInfo } from "~Hooks"
+import { useTokenWithCompleteInfo, useBottomSheetModal } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectNetworkVBDTokens, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
@@ -15,17 +15,34 @@ export const SelectTokenSendScreen = () => {
     const { LL } = useI18nContext()
     const tokens = useAppSelector(selectSendableTokensWithBalance)
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
+    const { ref: vot3WarningRef, onOpen: openVot3Warning, onClose: closeVot3Warning } = useBottomSheetModal()
 
     const nav = useNavigation<Props>()
-    const handleClickToken = (token: FungibleTokenWithBalance) => async () => {
-        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
-            token,
-        })
-    }
+
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
     const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
     const tokenWithInfoVOT3 = useTokenWithCompleteInfo(VOT3)
+
+    const handleClickToken = (token: FungibleTokenWithBalance) => async () => {
+        if (token.address === VOT3.address) {
+            openVot3Warning()
+            return
+        }
+        nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+            token,
+        })
+    }
+
+    const handleVot3Confirm = () => {
+        const vot3Token = tokens.find(token => token.address === VOT3.address)
+        closeVot3Warning()
+        if (vot3Token) {
+            nav.navigate(Routes.INSERT_ADDRESS_SEND, {
+                token: vot3Token,
+            })
+        }
+    }
 
     return (
         <Layout
@@ -77,6 +94,11 @@ export const SelectTokenSendScreen = () => {
                     ) : (
                         <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
                     )}
+                    <SendVot3WarningBottomSheet
+                        ref={vot3WarningRef}
+                        onConfirm={handleVot3Confirm}
+                        onClose={closeVot3Warning}
+                    />
                 </BaseView>
             }
         />
