@@ -22,6 +22,10 @@ type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS
 
 const { defaults: defaultTypography } = typography
 
+const B3TR_DESC =
+    // eslint-disable-next-line max-len
+    'VeBetterDAO is a blockchain-based ecosystem built on the VeChainThor platform, designed to incentivize sustainable actions and democratize access to the "sustainability economy." It utilizes a decentralized governance model to empower individuals, enterprises, and developers to contribute toward sustainability goals. The project incorporates Web3 principles of ownership and rewards users with its B3TR token for participating in sustainability-focused activities. Users can convert B3TR tokens to VOT3 at a 1:1 ratio, allowing users to participate in DAO governance.'
+
 export const AssetDetailScreen = ({ route }: Props) => {
     const { token, betterConversionResult } = route.params
     const { styles } = useThemedStyles(baseStyles)
@@ -55,10 +59,11 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     // render description based on locale. NB: at the moment only EN is supported
     const description = useMemo(() => {
+        if (token?.symbol === B3TR.symbol) return B3TR_DESC
         if (!token?.tokenInfo?.description) return ""
 
         return token?.tokenInfo?.description[locale] ?? token?.tokenInfo?.description.en
-    }, [token?.tokenInfo?.description, locale])
+    }, [token?.symbol, token?.tokenInfo?.description, locale])
 
     const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
@@ -124,7 +129,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={24} />
 
-                        <MarketInfoView tokenSymbol={token.symbol} />
+                        {token.symbol !== B3TR.symbol && <MarketInfoView tokenSymbol={token.symbol} />}
                         <BaseSpacer height={16} />
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />

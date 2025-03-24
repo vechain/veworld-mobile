@@ -31,8 +31,8 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
     const {
         isTokensOwnedLoading,
         exchangeRate,
-        isPositive24hChange,
-        change24h,
+        // isPositive24hChange,
+        // change24h,
         isLoading,
         fiatBalance: b3trFiat,
     } = useTokenCardFiatInfo(b3trToken)
@@ -136,8 +136,8 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
             <TokenCardBalanceInfo
                 renderFiatBalance={renderFiatBalance}
                 isLoading={isLoading}
-                isPositive24hChange={isPositive24hChange}
-                change24h={change24h}
+                // isPositive24hChange={isPositive24hChange}
+                // change24h={change24h}
                 isAnimation={isAnimation}
             />
         </Animated.View>
