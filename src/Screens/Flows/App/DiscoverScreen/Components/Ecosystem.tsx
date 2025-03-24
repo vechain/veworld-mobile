@@ -1,7 +1,7 @@
 import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
@@ -40,16 +40,16 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
     const columns = 4
     const columnsGap = 24
 
-    const renderSeparator = useCallback(() => {
-        return <BaseSpacer height={columnsGap} />
-    }, [columnsGap])
-
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
             const isLast = index === dapps.length - 1
 
             return (
-                <BaseView pl={columnsGap} pr={isLast ? columnsGap : 0} justifyContent="center" alignItems="center">
+                <BaseView
+                    pl={columnsGap}
+                    pr={isLast ? columnsGap : 0}
+                    justifyContent="flex-start"
+                    alignItems="flex-start">
                     <DAppCard
                         columns={columns}
                         columnsGap={24}
@@ -73,12 +73,10 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
             data={dapps}
             scrollEnabled={true}
             keyExtractor={item => item.href}
-            ItemSeparatorComponent={renderSeparator}
             contentContainerStyle={styles.flatListPadding}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}
-            numColumns={columns}
         />
     )
 }
@@ -159,9 +157,12 @@ export const Ecosystem = React.memo(({ title, dapps, onDAppPress }: EcosystemPro
 
     return (
         <BaseView>
-            <BaseText typographyFont="title" px={24}>
-                {title}
-            </BaseText>
+            <BaseView flexDirection={"row"} justifyContent="space-between" px={20}>
+                <BaseText typographyFont="bodySemiBold">{title}</BaseText>
+                <BaseTouchable>
+                    <BaseIcon name="icon-sort-desc" size={20} />
+                </BaseTouchable>
+            </BaseView>
             <BaseSpacer height={24} />
             <TopFilters filters={filterOptions} />
             <BaseSpacer height={24} />

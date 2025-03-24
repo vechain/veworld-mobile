@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { FlatList, ListRenderItemInfo } from "react-native"
-import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -83,11 +83,16 @@ export const Favourites = React.memo(({ bookmarkedDApps, onActionLabelPress, onD
     return (
         <BaseView py={24}>
             <BaseView flexDirection="row" justifyContent="space-between" px={24}>
-                <BaseText typographyFont="bodyBold">{LL.DISCOVER_TAB_FAVOURITES()}</BaseText>
+                <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_TAB_FAVOURITES()}</BaseText>
 
                 {showBookmarkedDAppsList && (
                     <BaseTouchable action={onActionLabelPress}>
-                        <BaseText typographyFont="body">{LL.DISCOVER_SEE_ALL_BOOKMARKS()}</BaseText>
+                        <BaseView flexDirection="row">
+                            <BaseText typographyFont="captionMedium" mx={2}>
+                                {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
+                            </BaseText>
+                            <BaseIcon name="icon-chevron-right" size={12} />
+                        </BaseView>
                     </BaseTouchable>
                 )}
             </BaseView>

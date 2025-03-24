@@ -1,5 +1,5 @@
 import React, { useState } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet, useWindowDimensions } from "react-native"
+import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseSpacer, BaseText, BaseTouchable } from "~Components"
 import { DiscoveryDApp } from "~Constants"
@@ -13,14 +13,12 @@ type DAppCardProps = {
     onPress: () => void
 }
 
-export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) => {
-    const { width: windowWidth } = useWindowDimensions()
+export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
 
-    const gapsNumber = columns + 1
-    const cardDimension = (windowWidth - columnsGap * gapsNumber) / columns
-    const imageDimension = cardDimension - 16
+    const cardDimension = 96
+    const imageDimension = 96
     const iconUri = dapp.id
         ? DAppUtils.getAppHubIconUrl(dapp.id)
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
@@ -51,8 +49,11 @@ export const DAppCard = ({ columns, columnsGap, dapp, onPress }: DAppCardProps) 
                     resizeMode="contain"
                 />
                 <BaseSpacer height={8} />
-                <BaseText numberOfLines={1} fontSize={10} style={styles.text}>
+                <BaseText numberOfLines={1} typographyFont="bodySemiBold" style={styles.text}>
                     {dapp.name.length > 9 ? dapp.name.slice(0, 9) + "..." : dapp.name}
+                </BaseText>
+                <BaseText numberOfLines={1} typographyFont="captionMedium" color={theme.colors.subtitle}>
+                    {dapp.tags?.[0]}
                 </BaseText>
             </BaseTouchable>
         </Animated.View>
@@ -63,7 +64,7 @@ const baseStyles = () =>
     StyleSheet.create({
         rootContainer: {
             justifyContent: "center",
-            alignItems: "center",
+            alignItems: "flex-start",
         },
         icon: {
             borderRadius: 12,

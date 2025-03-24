@@ -1,6 +1,7 @@
 export * from "./AnimatedTitle"
 export * from "./Ecosystem"
 export * from "./Favourites"
+export * from "./NewDapps"
 export * from "./MakeYourOwnDApp"
 export * from "./VeBetterDAODapps"
 export * from "./VeBetterDAOMainCard"

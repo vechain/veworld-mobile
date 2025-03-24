@@ -25,7 +25,7 @@ import {
 } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { Ecosystem, Favourites, Header } from "./Components"
+import { Ecosystem, Favourites, Header, NewDapps } from "./Components"
 import { groupFavoritesByBaseUrl } from "./utils"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 
@@ -170,6 +170,9 @@ export const DiscoverScreen: React.FC = () => {
                                 onDAppPress={onDAppPress}
                             />
                         )}
+                        {/* New Dapps */}
+                        <NewDapps />
+                        {/* Trending & Popular */}
                         <BaseSpacer height={12} />
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} onDAppPress={onDAppPress} />
                         {isWebSearchFloatingButtonVisible && <BaseSpacer height={70} />}

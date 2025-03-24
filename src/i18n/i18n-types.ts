@@ -1806,9 +1806,13 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​u​r​i​t​e​s​ ​d​A​p​p​s
 	 */
 	DISCOVER_TAB_FAVOURITES: string
+	/**
+	 * N​e​w​ ​d​A​p​p​s
+	 */
+	DISCOVER_TAB_NEW_DAPPS: string
 	/**
 	 * F​e​a​t​u​r​e​d
 	 */
@@ -5731,9 +5735,13 @@ Try reconnect your device to the internet.
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favourites dApps
 	 */
 	DISCOVER_TAB_FAVOURITES: () => LocalizedString
+	/**
+	 * New dApps
+	 */
+	DISCOVER_TAB_NEW_DAPPS: () => LocalizedString
 	/**
 	 * Featured
 	 */
