@@ -1088,7 +1088,7 @@ PODS:
     - React-debug
   - react-native-background-secure (0.2.0):
     - React-Core
-  - react-native-ble-plx (3.5.0):
+  - react-native-ble-plx (3.2.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2070,7 +2070,7 @@ SPEC CHECKSUMS:
   React-logger: 87cddd161bd9784d60fc5528f21c57ca07d2962a
   React-Mapbuffer: b6e208217a18044f0f1a183be8f6756ad67b42d7
   react-native-background-secure: ae3e182ad7c5bcff6064aa6c7e508c75413e25bd
-  react-native-ble-plx: 9b023071f1893fd8d39e1be6dd18bddf1ce56122
+  react-native-ble-plx: 08539040709361221aa9f8cada60dc730b9168c5
   react-native-blob-util: 39a20f2ef11556d958dc4beb0aa07d1ef2690745
   react-native-blur: 30d91a67da86a4d4d924b0c7c36f6e01479a246b
   react-native-cameraroll: 290930c44aa621c5bd2379c45e7b2590c73b211b
