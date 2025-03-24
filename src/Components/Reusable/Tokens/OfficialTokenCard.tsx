@@ -42,6 +42,10 @@ export const OfficialTokenCard = memo(
 
         const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
 
+        const isBetterToken = useMemo(() => {
+            return token.symbol === B3TR.symbol || token.symbol === VOT3.symbol
+        }, [token.symbol])
+
         const fiatBalance = useMemo(() => {
             if (tokenWithInfo?.fiatBalance && !isVOT3) return tokenWithInfo.fiatBalance
             return tokenFiatBalance
@@ -75,7 +79,7 @@ export const OfficialTokenCard = memo(
                                     isVisible={isBalanceVisible}
                                 />
                             )}
-                            {!!tokenInfo && (
+                            {!!tokenInfo && !isBetterToken && (
                                 <BaseView flexDirection="row">
                                     <BaseText
                                         typographyFont="captionMedium"
