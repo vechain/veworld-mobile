@@ -122,7 +122,7 @@
     "react-native": "0.74.7",
     "react-native-android-location-enabler": "^2.0.1",
     "react-native-background-secure": "^0.2.0",
-    "react-native-ble-plx": "^3.2.1",
+    "react-native-ble-plx": "3.2.1",
     "react-native-blob-util": "^0.19.11",
     "react-native-bootsplash": "^6.2.0",
     "react-native-bouncy-checkbox": "^4.1.2",
