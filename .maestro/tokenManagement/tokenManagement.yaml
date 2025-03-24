@@ -37,7 +37,7 @@ env:
           notVisible: "Selected" # Needed to avoid double click and deselect the token
       commands:
           - tapOn:
-                text: "Plair"
+                text: "PLA"
 - runFlow:
       when:
           platform: iOS

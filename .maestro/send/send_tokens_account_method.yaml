@@ -62,7 +62,7 @@ onFlowComplete:
           id: "sendButton"
       - runFlow:
             commands:
-              - tapOn: "VeThor"
+              - tapOn: "VTHO"
       - tapOn:
           id: "Layout_ScrollView"      
       - assertVisible:
