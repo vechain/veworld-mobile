@@ -1,0 +1,35 @@
+name: Generate Dapps index
+
+on:
+    workflow_dispatch:
+
+    workflow_call:
+
+jobs:
+    generate-index:
+        name: Generate index
+        runs-on: ubuntu-latest
+        steps:
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version-file: .nvmrc
+                  cache: "yarn"
+
+            - name: Install Packages
+              run: |
+                  yarn install
+
+            - name: Run generation script
+              run: |
+                  yarn dapps-index:generate
+                  cd docs
+                  OUTPUT_DIR=$(pwd)
+                  echo "output_dir=$OUTPUT_DIR" >> "$GITHUB_ENV"
+                  ls -la
+
+            - name: Upload artifact
+              uses: actions/upload-artifact@v4
+              with:
+                  name: apps-index.pdf
+                  path: ${{ env.output_dir }}/app-index.pdf

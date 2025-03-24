@@ -4,6 +4,7 @@ export enum ERROR_EVENTS {
     NFT = "NFT",
     DAPP = "DAPP",
     BUY = "BUY",
+    SELL = "SELL",
     BOUNDARY = "BOUNDARY",
     LEDGER = "LEDGER",
     SETTINGS = "SETTINGS",
