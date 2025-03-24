@@ -131,7 +131,7 @@ export const VbdBalanceCard = memo(
                 },
                 {
                     name: LL.BTN_CONVERT(),
-                    disabled: !veB3trFiatBalance || isObserved,
+                    disabled: isObserved,
                     action: openConvertBetterSheet,
                     icon: (
                         <BaseIcon
