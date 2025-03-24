@@ -219,6 +219,18 @@ const NavigationProvider = ({ children }) => {
 
 const SentryWrappedMain = Sentry.wrap(Main)
 
+/**
+ *  The network errors are extremly noisy and not actionable. If the phone does not have internet connection,
+ *  it will throw a network error which is a standard failure case.
+ *
+ * @see https://docs.sentry.io/platforms/javascript/configuration/filtering/#ignore-errors
+ */
+const sentryIgnoreErrors = [
+    "WebSocket connection failed for host: wss://relay.walletconnect.org",
+    "AxiosError:",
+    "Error in Beat WebSocket",
+    "Error: Cannot find module 'react-native-localize'",
+]
 const SentryInitialedMain = () => {
     const sentryTrackingEnabled = useAppSelector(selectSentryTrackingEnabled)
     const [initializedSentry, setInitializedSentry] = React.useState(false)
@@ -231,6 +243,7 @@ const SentryInitialedMain = () => {
                 // We recommend adjusting this value in production.
                 tracesSampleRate: 1.0,
                 environment: process.env.NODE_ENV,
+                ignoreErrors: sentryIgnoreErrors,
             })
             setInitializedSentry(true)
         } else {

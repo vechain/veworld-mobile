@@ -6,11 +6,15 @@ import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { PaymentProvider, usePaymentProviderList } from "../../Hooks"
+import { useI18nContext } from "~i18n"
+import { PaymentMethodsIds } from "../../Hooks/constants"
+import { ApplePaySVG, GooglePaySVG } from "~Assets"
 
 export const PaymentProviderList = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
     const track = useAnalyticTracking()
+    const { LL } = useI18nContext()
 
     const paymentsProviders = usePaymentProviderList()
 
@@ -20,43 +24,75 @@ export const PaymentProviderList = () => {
                 nav.navigate(Routes.BUY_WEBVIEW, { provider: item.id, providerName: item.name })
                 track(AnalyticsEvent.BUY_CRYPTO_PROVIDER_SELECTED, { provider: item.id })
             }
+
+            const renderPaymentIcon = (paymentMethod: PaymentMethodsIds) => {
+                if (paymentMethod === PaymentMethodsIds.ApplePay) return <ApplePaySVG />
+                if (paymentMethod === PaymentMethodsIds.GoolePay) return <GooglePaySVG />
+                if (paymentMethod === PaymentMethodsIds.BankAccount)
+                    return <BaseIcon name="icon-landmark" size={12} color={theme.colors.text} />
+                if (paymentMethod === PaymentMethodsIds.CreditCard)
+                    return <BaseIcon name="icon-credit-card" size={12} color={theme.colors.text} />
+
+                return <></>
+            }
+
             return (
                 <TouchableOpacity key={item.id} onPress={handleBuyClick}>
-                    <BaseView flexDirection="row" borderRadius={12} mb={20} style={styles.card}>
+                    <BaseView flexDirection="row" borderRadius={16} mb={20} py={24} px={16} style={styles.card}>
+                        {item.img}
                         <BaseView
                             flexDirection="column"
                             alignItems="flex-start"
                             justifyContent="flex-start"
-                            p={20}
-                            w={90}>
-                            <BaseView flexDirection="row" justifyContent="space-between">
-                                <BaseView flex={1} flexDirection="row">
-                                    {item.img}
-                                    <BaseText fontSize={18} pl={10} color={theme.colors.text}>
-                                        {item.name}
-                                    </BaseText>
-                                </BaseView>
-                                {item.paymentMethods.map(method => (
-                                    <React.Fragment key={method.id}>
-                                        <BaseSpacer width={10} />
-                                        <BaseIcon name={method.icon} size={23} color={theme.colors.text} />
-                                    </React.Fragment>
-                                ))}
-                            </BaseView>
-
-                            <BaseSpacer height={10} />
-                            <BaseText fontSize={14} color={theme.colors.text} py={10}>
-                                {item.description}
+                            flex={1}
+                            style={[styles.container]}>
+                            <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.text}>
+                                {item.name}
                             </BaseText>
+                            <BaseView
+                                flexDirection="row"
+                                justifyContent="space-between"
+                                flex={1}
+                                style={[styles.subTitlesContainer]}>
+                                <BaseView flexDirection="row" justifyContent="flex-start">
+                                    <BaseText typographyFont="captionSemiBold" color={theme.colors.subtitle}>
+                                        {LL.SB_PAY_WITH()}
+                                    </BaseText>
+                                    {item.paymentMethods.map(method => (
+                                        <React.Fragment key={method}>
+                                            <BaseSpacer width={8} />
+                                            {renderPaymentIcon(method)}
+                                        </React.Fragment>
+                                    ))}
+                                </BaseView>
+                                <BaseSpacer width={12} />
+                                <BaseView flexDirection="row">
+                                    <BaseText typographyFont="captionSemiBold" color={theme.colors.subtitle}>
+                                        {LL.SB_FEES()}
+                                    </BaseText>
+                                    <BaseSpacer width={8} />
+                                    <BaseText typographyFont="captionSemiBold">{item.fees}</BaseText>
+                                </BaseView>
+                            </BaseView>
                         </BaseView>
-                        <BaseView style={styles.arrowBackground} flex={1} flexDirection="row" justifyContent="center">
-                            <BaseIcon color={theme.colors.textReversed} name="icon-chevron-right" />
+                        <BaseView flex={1} flexDirection="row" justifyContent="flex-end">
+                            <BaseIcon color={theme.colors.textLight} name="icon-chevron-right" />
                         </BaseView>
                     </BaseView>
                 </TouchableOpacity>
             )
         },
-        [nav, styles.arrowBackground, styles.card, theme.colors.text, theme.colors.textReversed, track],
+        [
+            LL,
+            nav,
+            styles.card,
+            styles.container,
+            styles.subTitlesContainer,
+            theme.colors.subtitle,
+            theme.colors.text,
+            theme.colors.textLight,
+            track,
+        ],
     )
 
     return (
@@ -72,7 +108,17 @@ export const PaymentProviderList = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         card: {
-            backgroundColor: theme.colors.card,
+            backgroundColor: theme.colors.transparent,
+            borderColor: theme.colors.cardBorder,
+            borderWidth: 1,
+            gap: 16,
+            flex: 1,
+        },
+        container: {
+            gap: 8,
+        },
+        subTitlesContainer: {
+            gap: 8,
         },
         button: {
             backgroundColor: theme.colors.primary,
@@ -84,5 +130,6 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopRightRadius: 12,
             borderBottomRightRadius: 12,
             backgroundColor: theme.colors.primary,
+            alignSelf: "flex-end",
         },
     })

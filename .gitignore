@@ -108,7 +108,7 @@ cucumber.log
 .env.production.local
 ios/fastlane/env
 ios/fastlane/env.default
-
+docs/app-index.pdf
 # datadog
 datadog-ci.json
 
