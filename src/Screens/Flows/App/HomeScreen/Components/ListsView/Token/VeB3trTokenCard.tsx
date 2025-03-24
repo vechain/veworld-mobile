@@ -84,7 +84,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
 
     return (
         <Animated.View style={[baseStyles.innerRow]}>
-            <BaseView flexDirection="row" alignItems="flex-start">
+            <BaseView flexDirection="row" alignItems="center">
                 <BaseView style={[baseStyles.imageContainer]}>
                     <Image source={{ uri: VBD_ICON }} style={baseStyles.image} />
                 </BaseView>
