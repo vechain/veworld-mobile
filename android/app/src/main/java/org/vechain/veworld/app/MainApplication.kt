@@ -11,13 +11,17 @@ import com.facebook.react.defaults.DefaultReactHost.getDefaultReactHost
 import com.facebook.react.defaults.DefaultReactNativeHost
 import com.facebook.soloader.SoLoader
 import expo.modules.ApplicationLifecycleDispatcher
+import org.vechain.veworld.app.packageInfo.PackageDetailsPackage
 
 class MainApplication : Application(), ReactApplication {
 
     override val reactNativeHost: ReactNativeHost =
             object : DefaultReactNativeHost(this) {
                 override fun getPackages(): List<ReactPackage> =
-                        PackageList(this).packages.apply { add(VeWorldPackage()) }
+                        PackageList(this).packages.apply {
+                            add(VeWorldPackage())
+                            add(PackageDetailsPackage())
+                        }
 
                 override fun getJSMainModuleName(): String = "index"
                 override fun getUseDeveloperSupport(): Boolean = BuildConfig.DEBUG
