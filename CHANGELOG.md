@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-03-24)
+
+
+### Bug Fixes
+
+* temporary removed fetch better tokens price from coingecko ([#2801](https://github.com/vechain/veworld-mobile/issues/2801)) ([88d249f](https://github.com/vechain/veworld-mobile/commit/88d249fb54fb6375364390bea7ed6d7312104e50))
+
 ## 2.0.9 (2025-02-18)
 
 
