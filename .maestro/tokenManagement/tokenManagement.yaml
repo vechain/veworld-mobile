@@ -230,7 +230,7 @@ env:
       when:
           platform: Android
       commands:
-          - tapOn: "Safe Haven Token"
+          - tapOn: "SHA"
 - runFlow:
       when:
           platform: iOS
