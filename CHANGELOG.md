@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-03-25)
+
+
+### Bug Fixes
+
+* useExchangeRate hook availability ([#2806](https://github.com/vechain/veworld-mobile/issues/2806)) ([5613500](https://github.com/vechain/veworld-mobile/commit/5613500564b2aba350bd1ad7e516454ab512ea2c))
+
 ## 2.0.9 (2025-02-18)
 
 
