@@ -27,7 +27,7 @@ export const AnimatedFloatingButton = React.memo(
             return {
                 bottom: bottom.value,
             }
-        })
+        }, [bottom])
 
         useEffect(() => {
             let newValue = bottomInitialValue
