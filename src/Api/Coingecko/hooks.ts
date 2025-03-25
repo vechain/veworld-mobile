@@ -185,10 +185,12 @@ export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency:
     const { data: b3trInfo } = useVechainStatsTokenInfo("b3tr")
     const currency = vs_currency.toLowerCase()
 
+    const isEnabled = id === "vebetterdao" ? !!b3trInfo : !!tokenInfo
+
     return useQuery({
         queryKey: getExchangeRateQueryKey({ id, vs_currency }),
         queryFn: () => (id === "vebetterdao" ? Number(b3trInfo) : tokenInfo?.market_data.current_price[currency]),
-        enabled: Boolean(!!tokenInfo && !!b3trInfo),
+        enabled: isEnabled,
         staleTime: getQueryCacheTime(),
         refetchInterval: getRefetchIntevalTime(),
     })
