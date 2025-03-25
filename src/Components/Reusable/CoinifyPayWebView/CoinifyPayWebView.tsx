@@ -32,14 +32,14 @@ export const CoinifyPayWebView = ({
 }: {
     currentAmount: number
     destinationAddress: string
-    target: "buy" | "sell"
+    target: "buy" | "sell" | "trade-history"
 }) => {
     const { LL } = useI18nContext()
     const [isLoading, setIsLoading] = useState(true)
     const { styles } = useThemedStyles(() => baseStyles(isLoading))
     const track = useAnalyticTracking()
     const { originWhitelist } = useInAppBrowser()
-    const { generateOnRampURL, generateOffRampURL } = useCoinifyPay({ target })
+    const { generateOnRampURL, generateOffRampURL, generateTradeHistoryURL } = useCoinifyPay({ target })
     const [floatingTxData, setFloatingTxData] = useState<FloatingTxData>()
 
     const nav = useNavigation()
@@ -51,23 +51,35 @@ export const CoinifyPayWebView = ({
     const currency = useAppSelector(selectCurrency)
 
     const url = useMemo(() => {
-        if (target === "buy")
-            return generateOnRampURL({
-                address: destinationAddress,
-                amount: currentAmount,
-                defaultCryptoCurrency: "VET",
-                defaultFiatCurrency: currency,
-                primaryColor: COLORS.PURPLE,
-            })
-
-        return generateOffRampURL({
-            address: destinationAddress,
-            amount: currentAmount,
-            defaultCryptoCurrency: "VET",
-            defaultFiatCurrency: currency,
-            primaryColor: COLORS.PURPLE,
-        })
-    }, [currency, currentAmount, destinationAddress, generateOffRampURL, generateOnRampURL, target])
+        switch (target) {
+            case "buy":
+                return generateOnRampURL({
+                    address: destinationAddress,
+                    amount: currentAmount,
+                    defaultCryptoCurrency: "VET",
+                    defaultFiatCurrency: currency,
+                    primaryColor: COLORS.PURPLE,
+                })
+            case "sell":
+                return generateOffRampURL({
+                    address: destinationAddress,
+                    amount: currentAmount,
+                    defaultCryptoCurrency: "VET",
+                    defaultFiatCurrency: currency,
+                    primaryColor: COLORS.PURPLE,
+                })
+            case "trade-history":
+                return generateTradeHistoryURL({ primaryColor: COLORS.PURPLE })
+        }
+    }, [
+        currency,
+        currentAmount,
+        destinationAddress,
+        generateOffRampURL,
+        generateOnRampURL,
+        generateTradeHistoryURL,
+        target,
+    ])
 
     const handleLoadEnd = () => {
         setTimeout(() => {
@@ -82,6 +94,7 @@ export const CoinifyPayWebView = ({
 
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
+            if (target === "trade-history") return
             try {
                 const data = JSON.parse(event.nativeEvent.data)
 
