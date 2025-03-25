@@ -1,13 +1,18 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import WebView, { WebViewMessageEvent } from "react-native-webview"
 import { BaseActivityIndicator, BaseStatusBar, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers"
-import { AnalyticsEvent, COLORS, ERROR_EVENTS } from "~Constants"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { AnalyticsEvent, COLORS, ERROR_EVENTS, VET } from "~Constants"
+import { useAnalyticTracking, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { FungibleTokenWithBalance } from "~Model"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { debug, ErrorMessageUtils, PlatformUtils } from "~Utils"
+import { BigNutils, debug, ErrorMessageUtils, PlatformUtils } from "~Utils"
 import { toUppercase } from "~Utils/StringUtils/StringUtils"
+import { AnimatedFloatingButton } from "../AnimatedFloatingButton"
 import { useCoinifyPay } from "./Hooks"
 
 const isAndroid = PlatformUtils.isAndroid()
@@ -18,6 +23,8 @@ window.postMessage = function(data) {
 }
 `.trim()
 
+type FloatingTxData = RootStackParamListHome[Routes.TRANSACTION_SUMMARY_SEND]
+
 export const CoinifyPayWebView = ({
     currentAmount,
     destinationAddress,
@@ -27,11 +34,19 @@ export const CoinifyPayWebView = ({
     destinationAddress: string
     target: "buy" | "sell"
 }) => {
+    const { LL } = useI18nContext()
     const [isLoading, setIsLoading] = useState(true)
     const { styles } = useThemedStyles(() => baseStyles(isLoading))
     const track = useAnalyticTracking()
     const { originWhitelist } = useInAppBrowser()
     const { generateOnRampURL, generateOffRampURL } = useCoinifyPay({ target })
+    const [floatingTxData, setFloatingTxData] = useState<FloatingTxData>()
+
+    const nav = useNavigation()
+
+    const VET_FULL = useTokenWithCompleteInfo(VET)
+
+    const showFloatingSign = useMemo(() => typeof floatingTxData !== "undefined", [floatingTxData])
 
     const currency = useAppSelector(selectCurrency)
 
@@ -60,13 +75,27 @@ export const CoinifyPayWebView = ({
         }, 400)
     }
 
+    const onFloatingActionPressed = useCallback(() => {
+        if (!floatingTxData) return
+        nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, floatingTxData)
+    }, [floatingTxData, nav])
+
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
             try {
                 const data = JSON.parse(event.nativeEvent.data)
 
+                if (target === "sell" && data.event === "trade.trade-created") {
+                    setFloatingTxData({
+                        address: data.context.transferIn.details.account,
+                        amount: BigNutils(data.context.transferIn.sendAmount).toString,
+                        token: VET_FULL as FungibleTokenWithBalance,
+                    })
+                }
+
                 // if successfully completed buy process
                 if (data.event === "trade.trade-placed") {
+                    setFloatingTxData(undefined)
                     track(AnalyticsEvent[`${toUppercase(target)}_CRYPTO_SUCCESSFULLY_COMPLETED`], {
                         provider: "coinify",
                     })
@@ -75,7 +104,7 @@ export const CoinifyPayWebView = ({
                 if (error) debug(ERROR_EVENTS[toUppercase(target)], ErrorMessageUtils.getErrorMessage(error))
             }
         },
-        [target, track],
+        [VET_FULL, target, track],
     )
 
     return (
@@ -90,6 +119,12 @@ export const CoinifyPayWebView = ({
                 style={styles.webView}
                 originWhitelist={originWhitelist}
                 injectedJavaScript={injectedJs}
+            />
+
+            <AnimatedFloatingButton
+                isVisible={showFloatingSign}
+                title={LL.SIGN_TRANSACTION()}
+                onPress={onFloatingActionPressed}
             />
         </BaseView>
     )

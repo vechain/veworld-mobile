@@ -834,6 +834,7 @@
   "SIGNED_CERTIFICATE": "Signed certificate",
   "SIGN_CERTIFICATE": "Sign certificate",
   "SIGN_TRANSACTION_ERROR": "Error signing transaction",
+  "SIGN_TRANSACTION": "Sign transaction",
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Available to claim",
   "SUCCESS_GENERIC": "Success!",
