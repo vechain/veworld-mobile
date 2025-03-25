@@ -132,7 +132,7 @@ export const useSmartMarketChart = ({
             days > 1
                 ? getSmartMarketChart({ highestResolutionMarketChartData, days })
                 : getMarketChart({ coinGeckoId: id, vs_currency, days }),
-        enabled: true,
+        enabled: !!highestResolutionMarketChartData,
         placeholderData,
         staleTime: getQueryCacheTime(true),
         refetchInterval: getRefetchIntevalTime(),
