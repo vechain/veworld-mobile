@@ -11,16 +11,17 @@ import {
     BaseText,
     BaseView,
     DelegationView,
+    EstimatedTimeDetailsView,
     FadeoutButton,
+    FiatBalance,
     GasFeeOptions,
     Layout,
     RequireUserPassword,
     TransferCard,
-    FiatBalance,
-    EstimatedTimeDetailsView,
 } from "~Components"
-import { AnalyticsEvent, COLORS, GasPriceCoefficient, VET, VTHO, creteAnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, COLORS, creteAnalyticsEvent, GasPriceCoefficient, VET, VTHO } from "~Constants"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
+import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
@@ -38,12 +39,11 @@ import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import { NotEnoughGasModal } from "./Modal"
-import { useFormatFiat } from "~Hooks/useFormatFiat"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
 export const TransactionSummarySendScreen = ({ route }: Props) => {
-    const { token, amount, address } = route.params
+    const { token, amount, address, navigation } = route.params
 
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -80,10 +80,15 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                 })
             }
 
-            nav.navigate(Routes.HOME)
+            if (navigation)
+                nav.navigate(navigation.route, {
+                    screen: navigation.screen,
+                    params: navigation.params,
+                })
+            else nav.navigate(Routes.HOME)
             dispatch(setIsAppLoading(false))
         },
-        [token.symbol, nav, dispatch, track, network.name],
+        [token.symbol, navigation, nav, dispatch, track, network.name],
     )
 
     const onTransactionSuccess = useCallback(

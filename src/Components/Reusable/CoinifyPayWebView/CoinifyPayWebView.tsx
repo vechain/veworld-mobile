@@ -89,7 +89,16 @@ export const CoinifyPayWebView = ({
 
     const onFloatingActionPressed = useCallback(() => {
         if (!floatingTxData) return
-        nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, floatingTxData)
+        nav.navigate(Routes.TRANSACTION_SUMMARY_SEND, {
+            ...floatingTxData,
+            navigation: {
+                route: Routes.SELL_FLOW,
+                params: {
+                    provider: "coinify",
+                },
+                screen: Routes.SELL_TRADE_HISTORY,
+            },
+        })
     }, [floatingTxData, nav])
 
     const onMessage = useCallback(
