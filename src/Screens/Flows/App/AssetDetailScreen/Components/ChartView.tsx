@@ -77,7 +77,7 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
     return (
         <>
             <BaseView flexDirection="row" justifyContent="space-between" w={100} px={16}>
-                <AssetPriceBanner isChartDataLoading={isChartDataLoading} />
+                <AssetPriceBanner token={token} isChartDataLoading={isChartDataLoading} />
             </BaseView>
 
             <BaseSpacer height={6} />
