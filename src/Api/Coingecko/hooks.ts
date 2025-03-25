@@ -132,7 +132,7 @@ export const useSmartMarketChart = ({
             days > 1
                 ? getSmartMarketChart({ highestResolutionMarketChartData, days })
                 : getMarketChart({ coinGeckoId: id, vs_currency, days }),
-        enabled: !!highestResolutionMarketChartData,
+        enabled: true,
         placeholderData,
         staleTime: getQueryCacheTime(true),
         refetchInterval: getRefetchIntevalTime(),
@@ -182,15 +182,12 @@ const getExchangeRateQueryKey = ({ id, vs_currency }: { id?: string; vs_currency
  */
 export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency: string }) => {
     const { data: tokenInfo } = useTokenInfo({ id })
-    const { data: b3trInfo } = useVechainStatsTokenInfo("b3tr")
     const currency = vs_currency.toLowerCase()
-
-    const isEnabled = id === "vebetterdao" ? !!b3trInfo : !!tokenInfo
 
     return useQuery({
         queryKey: getExchangeRateQueryKey({ id, vs_currency }),
-        queryFn: () => (id === "vebetterdao" ? Number(b3trInfo) : tokenInfo?.market_data.current_price[currency]),
-        enabled: isEnabled,
+        queryFn: () => tokenInfo?.market_data.current_price[currency],
+        enabled: !!tokenInfo,
         staleTime: getQueryCacheTime(),
         refetchInterval: getRefetchIntevalTime(),
     })
