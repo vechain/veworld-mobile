@@ -20,7 +20,6 @@ concurrency:
     cancel-in-progress: true
 
 jobs:
-
     build-and-test-ios:
         if: ${{ startsWith(github.ref, 'refs/heads/release') || github.ref == 'refs/heads/main' }}
         uses: ./.github/workflows/e2e-ios.yml
@@ -108,7 +107,7 @@ jobs:
             echo "env ${{ env }}"
             env
             echo "IT ${{ jobs.build-and-test-ios.result }}"
-            echo "AT ${{ jobs.build-and-test-ios.result }}"
+            echo "AT ${{ jobs.build-and-test-android.result }}"
             echo "SC ${{ jobs.scan.result }}"
 
         - name: ReportE2E2Slack
