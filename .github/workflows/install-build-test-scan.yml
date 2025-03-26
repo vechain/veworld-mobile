@@ -100,7 +100,7 @@ jobs:
       steps:
         - name: statuslabel
           id: statuslabel
-          run:|
+          run: |
             echo "statuslabel, ${{ toJSON(github.event) }}"
             echo "action ${{ github.action }}"
             echo "actor ${{ github.actor }}"
