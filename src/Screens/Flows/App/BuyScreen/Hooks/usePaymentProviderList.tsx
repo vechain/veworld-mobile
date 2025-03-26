@@ -1,47 +1,35 @@
 import React, { useMemo } from "react"
-import { useTheme } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { COLORS } from "~Constants"
-import { PaymentMethod, PaymentMethodsIds, PaymentMethodsList } from "./constants"
-import { CoinbaseLogoSmallSvg } from "~Assets"
+import { PaymentMethodsIds } from "./constants"
+import { CoinbaseLogoSmallSvg, CoinifyLogo } from "~Assets"
 import { TransakLogoSmallSvg } from "~Assets/Img/TransakLogoSmallSvg"
 import { useFeatureFlags } from "~Components"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { Image, ImageStyle, StyleSheet } from "react-native"
 
 export enum PaymentProvidersEnum {
     CoinbasePay = "coinbase-pay",
     Transak = "transak",
+    Coinify = "coinify",
 }
 export type PaymentProvider = {
     id: PaymentProvidersEnum
     name: string
     description: string
     img: React.ReactNode
-    paymentMethods: PaymentMethod[]
+    paymentMethods: PaymentMethodsIds[]
+    fees: string
 }
 
 export const usePaymentProviderList = () => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { paymentProvidersFeature } = useFeatureFlags()
 
     const providers = useMemo(() => {
-        const availableProviders = [
-            {
-                id: PaymentProvidersEnum.CoinbasePay,
-                name: "Coinbase",
-                description: LL.BD_BUY_DESCRIPTION_COINBASE(),
-                img: (
-                    <CoinbaseLogoSmallSvg
-                        fill={theme.isDark ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_BLUE}
-                        width={22}
-                    />
-                ),
-                paymentMethods: [
-                    PaymentMethodsList[PaymentMethodsIds.CreditCard],
-                    PaymentMethodsList[PaymentMethodsIds.BankAccount],
-                ],
-            },
+        const availableProviders: PaymentProvider[] = [
             {
                 id: PaymentProvidersEnum.Transak,
                 name: "Transak",
@@ -49,10 +37,32 @@ export const usePaymentProviderList = () => {
                 img: (
                     <TransakLogoSmallSvg
                         fill={theme.isDark ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_BLUE}
-                        width={22}
+                        width={32}
                     />
                 ),
-                paymentMethods: [PaymentMethodsList[PaymentMethodsIds.CreditCard]],
+                paymentMethods: [isIOS() ? PaymentMethodsIds.ApplePay : PaymentMethodsIds.GoolePay],
+                fees: "1.0%",
+            },
+            {
+                id: PaymentProvidersEnum.CoinbasePay,
+                name: "Coinbase",
+                description: LL.BD_BUY_DESCRIPTION_COINBASE(),
+                img: (
+                    <CoinbaseLogoSmallSvg
+                        fill={theme.isDark ? COLORS.COINBASE_BACKGROUND_DARK : COLORS.COINBASE_BACKGROUND_BLUE}
+                        width={32}
+                    />
+                ),
+                paymentMethods: [PaymentMethodsIds.CreditCard, PaymentMethodsIds.BankAccount],
+                fees: "0.5 - 2.85%",
+            },
+            {
+                id: PaymentProvidersEnum.Coinify,
+                name: "Coinify",
+                description: LL.BD_BUY_DESCRIPTION_COINBASE(),
+                img: <Image source={CoinifyLogo} style={[styles.coinifyImg as ImageStyle]} />,
+                paymentMethods: [PaymentMethodsIds.CreditCard, PaymentMethodsIds.BankAccount],
+                fees: "1.0 - 5.0%",
             },
         ]
 
@@ -60,7 +70,15 @@ export const usePaymentProviderList = () => {
             const featureFlagProvider = paymentProvidersFeature[provider.id]
             return isIOS() ? featureFlagProvider.iOS : featureFlagProvider.android
         })
-    }, [LL, paymentProvidersFeature, theme.isDark])
+    }, [LL, paymentProvidersFeature, styles.coinifyImg, theme.isDark])
 
     return providers
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        coinifyImg: {
+            width: 32,
+            height: 32,
+        },
+    })

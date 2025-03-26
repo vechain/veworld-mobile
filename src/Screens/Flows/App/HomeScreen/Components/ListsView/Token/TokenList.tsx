@@ -161,6 +161,7 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
                 <AnimatedChartCard
                     tokenWithInfo={tokenWithInfoB3TR}
                     isEdit={isEdit}
+                    hideChart={true}
                     isBalanceVisible={isBalanceVisible}
                 />
                 <AnimatedChartCard
