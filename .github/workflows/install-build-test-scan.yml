@@ -109,7 +109,8 @@ jobs:
             echo "ST ${{ needs.*.result }}"
 
         - name: ReportE2E2Slack
-          if: github.event.schedule = '0 22 * * 0-4'
+          # if: github.event.schedule = '0 22 * * 0-4'
+          if: always()
           uses: slackapi/slack-github-action@v2.0.0
           with:
             webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
