@@ -5,7 +5,7 @@ import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useNotificatio
 import { DiscoveryDApp } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
-import { DAppCard } from "./DAppCard"
+import { DAppHorizontalCard } from "./DAppHorizontalCard"
 
 type Filter = {
     key: DAppType
@@ -37,35 +37,27 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
     const flatListRef = useRef(null)
     const { increaseDappCounter } = useNotifications()
     useScrollToTop(flatListRef)
-    const columns = 4
-    const columnsGap = 24
 
     const renderItem = useCallback(
-        ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
-            const isLast = index === dapps.length - 1
-
+        ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
             return (
-                <BaseView
-                    pl={columnsGap}
-                    pr={isLast ? columnsGap : 0}
-                    justifyContent="flex-start"
-                    alignItems="flex-start">
-                    <DAppCard
-                        columns={columns}
-                        columnsGap={24}
-                        dapp={item}
-                        onPress={() => {
-                            if (item.veBetterDaoId) {
-                                increaseDappCounter(item.veBetterDaoId)
-                            }
-                            onDAppPress({ href: item.href })
-                        }}
-                    />
-                </BaseView>
+                <DAppHorizontalCard
+                    dapp={item}
+                    onPress={() => {
+                        if (item.veBetterDaoId) {
+                            increaseDappCounter(item.veBetterDaoId)
+                        }
+                        onDAppPress({ href: item.href })
+                    }}
+                />
             )
         },
-        [dapps.length, increaseDappCounter, onDAppPress],
+        [increaseDappCounter, onDAppPress],
     )
+
+    const renderItemSeparator = useCallback(() => {
+        return <BaseSpacer height={16} />
+    }, [])
 
     return (
         <FlatList
@@ -74,6 +66,7 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
             scrollEnabled={true}
             keyExtractor={item => item.href}
             contentContainerStyle={styles.flatListPadding}
+            ItemSeparatorComponent={renderItemSeparator}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}
@@ -156,8 +149,8 @@ export const Ecosystem = React.memo(({ title, dapps, onDAppPress }: EcosystemPro
     }, [dapps, selectedDappsType])
 
     return (
-        <BaseView>
-            <BaseView flexDirection={"row"} justifyContent="space-between" px={20}>
+        <BaseView px={20}>
+            <BaseView flexDirection={"row"} justifyContent="space-between">
                 <BaseText typographyFont="bodySemiBold">{title}</BaseText>
                 <BaseTouchable>
                     <BaseIcon name="icon-sort-desc" size={20} />

@@ -67,7 +67,7 @@ const baseStyles = () =>
             alignItems: "flex-start",
         },
         icon: {
-            borderRadius: 12,
+            borderRadius: 8,
             overflow: "hidden",
         },
         text: {
