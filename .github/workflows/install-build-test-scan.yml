@@ -94,6 +94,7 @@ jobs:
       needs: [ build-and-test-ios, build-and-test-android, scan]
       secrets: inherit
       if: ${{ always() }}
+      runs-on: ubuntu-latest
       steps:
         - name: statuslabel
           id: statuslabel
