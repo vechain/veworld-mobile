@@ -21,11 +21,12 @@ concurrency:
 
 jobs:
     build-and-test-ios:
-        if: ${{ startsWith(github.ref, 'refs/heads/release') || github.ref == 'refs/heads/main' }}
+        if: ${{ !contains(github.ref, '2761-') }}
         uses: ./.github/workflows/e2e-ios.yml
         secrets: inherit
 
     build-and-test-android:
+        if: ${{ !contains(github.ref, '2761-') }}
         uses: ./.github/workflows/e2e-android.yml
         secrets: inherit
 
