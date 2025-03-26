@@ -104,10 +104,9 @@ jobs:
             echo "statuslabel, ${{ toJSON(github.event) }}"
             echo "action ${{ github.action }}"
             echo "actor ${{ github.actor }}"
-            echo "inputs ${{ toJSON(inputs) }}"
-            echo "env ${{ toJSON(env) }}"
-            env
-            echo "ST ${{ needs.*.result }}"
+            echo "ST ${{ needs.scan.result }}"
+            echo "SA ${{ needs.build-and-test-android.result }}"
+            echo "SI ${{ needs.build-and-test-ios.result }}"
 
         - name: ReportE2E2Slack
           # if: github.event.schedule = '0 22 * * 0-4'
@@ -120,10 +119,8 @@ jobs:
             webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
             webhook-type: incoming-webhook
             payload: |
-              channel: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}"
-              text: "*E2E result*: ${{ job.status }}\n$ref\n$head"
-              blocks:
-                - type: "section"
-                  text:
-                    type: "mrkdwn"
-                    text: "*E2E result*: ${{ job.status }}\n$ref\n$head"
+              {
+                "text": "*E2E result*: ${{ job.status }}\n$ref\n$head\n scan - ${{needs.scan.result}}\n iOS - ${{needs.build-and-test-ios.result\n Android - ${{ build-and-test-android.result }}",
+                "payload": "payload result",
+                "blocks": "--"
+              }
