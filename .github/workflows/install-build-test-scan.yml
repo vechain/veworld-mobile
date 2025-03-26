@@ -91,20 +91,25 @@ jobs:
               with:
                   args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
     report:
-        name: ReportE2E2Slack
-        uses: slackapi/slack-github-action@v2.0.0
-        secrets: inherit
-        if: ${{ always() }}
-        needs: [ build-and-test-ios, build-and-test-android, scan]
-        with:
+      steps:
+        - name: statuslabel
+          id: statuslabel
+          run: echo "statuslabel, ${{ github.event }}"
+
+        - name: ReportE2E2Slack
+          uses: slackapi/slack-github-action@v2.0.0
+          secrets: inherit
+          if: ${{ always() }}
+          needs: [ build-and-test-ios, build-and-test-android, scan]
+          with:
             webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
             webhook-type: incoming-webhook
             token: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
             payload: |
-                channel: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}"
-                text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
-                blocks:
-                      - type: "section"
-                        text:
-                          type: "mrkdwn"
-                          text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
+              channel: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}"
+              text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
+              blocks:
+                - type: "section"
+                  text:
+                    type: "mrkdwn"
+                    text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
