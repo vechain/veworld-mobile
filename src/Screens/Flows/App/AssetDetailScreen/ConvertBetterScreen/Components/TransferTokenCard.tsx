@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { Image, StyleSheet } from "react-native"
-import { BaseView, BaseText, BaseIcon } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { B3TR, COLORS, ColorThemeType, SCREEN_WIDTH, VOT3 } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -81,7 +81,9 @@ export const TransferTokenCard: React.FC<Props> = ({ token, provenance }) => {
 
             <BaseView flexDirection="row" py={8} justifyContent="space-between">
                 <BaseView flex={1} flexDirection="row" style={[styles.tokenContainer]}>
-                    <Image source={{ uri: renderIcon }} width={36} height={36} />
+                    <BaseView overflow="hidden" borderRadius={30}>
+                        <Image source={{ uri: renderIcon }} width={36} height={36} />
+                    </BaseView>
                     <BaseText typographyFont="subSubTitleSemiBold">{token?.symbol}</BaseText>
                 </BaseView>
             </BaseView>
