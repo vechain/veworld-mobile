@@ -106,9 +106,7 @@ jobs:
             echo "inputs ${{ toJSON(inputs) }}"
             echo "env ${{ env }}"
             env
-            echo "IT ${{ jobs.build-and-test-ios.result }}"
-            echo "AT ${{ jobs.build-and-test-android.result }}"
-            echo "SC ${{ jobs.scan.result }}"
+            echo "ST ${{ needs.*.result }}"
 
         - name: ReportE2E2Slack
           if: github.event.schedule = '0 22 * * 0-4'
