@@ -7,6 +7,7 @@ import {
     BaseIcon,
     BaseSpacer,
     BaseView,
+    DisabledBuySwapIosBottomSheet,
     FastActionsBar,
     Layout,
     QRCodeBottomSheet,
@@ -93,6 +94,12 @@ export const HomeScreen = () => {
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
+    const {
+        ref: blockedFeaturesIOSBottomSheetRef,
+        onOpen: openBlockedFeaturesIOSBottomSheet,
+        onClose: closeBlockedFeaturesIOSBottomSheet,
+    } = useBottomSheetModal()
+
     const accounts = useAppSelector(selectVisibleAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
@@ -136,13 +143,23 @@ export const HomeScreen = () => {
             },
             {
                 name: LL.BTN_SWAP(),
-                action: () => nav.navigate(Routes.SWAP),
+                action: () => {
+                    if (PlatformUtils.isIOS()) {
+                        openBlockedFeaturesIOSBottomSheet()
+                        return
+                    }
+                    nav.navigate(Routes.SWAP)
+                },
                 icon: <BaseIcon color={theme.colors.text} name="icon-arrow-left-right" size={20} />,
                 testID: "swapButton",
             },
             {
                 name: LL.BTN_BUY(),
                 action: () => {
+                    if (PlatformUtils.isIOS()) {
+                        openBlockedFeaturesIOSBottomSheet()
+                        return
+                    }
                     nav.navigate(Routes.BUY_FLOW)
                     track(AnalyticsEvent.BUY_CRYPTO_BUTTON_CLICKED)
                 },
@@ -172,6 +189,7 @@ export const HomeScreen = () => {
         featureFlags.paymentProvidersFeature.coinify.android,
         featureFlags.paymentProvidersFeature.coinify.iOS,
         nav,
+        openBlockedFeaturesIOSBottomSheet,
         selectedAccount,
         theme.colors.text,
         track,
@@ -227,6 +245,10 @@ export const HomeScreen = () => {
                     <DeviceBackupBottomSheet />
                     <DeviceJailBrokenWarningModal />
                     <EnableNotificationsBottomSheet />
+                    <DisabledBuySwapIosBottomSheet
+                        ref={blockedFeaturesIOSBottomSheetRef}
+                        onConfirm={closeBlockedFeaturesIOSBottomSheet}
+                    />
                 </NestableScrollContainer>
             }
         />
