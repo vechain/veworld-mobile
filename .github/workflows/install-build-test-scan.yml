@@ -115,7 +115,6 @@ jobs:
           with:
             webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
             webhook-type: incoming-webhook
-            token: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
             payload: |
               channel: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}"
               text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
