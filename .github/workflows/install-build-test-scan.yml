@@ -96,7 +96,9 @@ jobs:
       steps:
         - name: statuslabel
           id: statuslabel
-          run: echo "statuslabel, ${{ github.event }}"
+          run: |
+            echo "statuslabel, ${{ github.event }}"
+            env
 
         - name: ReportE2E2Slack
           uses: slackapi/slack-github-action@v2.0.0
