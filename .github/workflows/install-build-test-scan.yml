@@ -91,10 +91,8 @@ jobs:
               with:
                   args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
     report:
-      needs: [ build-and-test-ios, build-and-test-android, scan]
-      secrets: inherit
-      if: ${{ always() }}
       runs-on: ubuntu-latest
+      needs: [ build-and-test-ios, build-and-test-android, scan]
       steps:
         - name: statuslabel
           id: statuslabel
