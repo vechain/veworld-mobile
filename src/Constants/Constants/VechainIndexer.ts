@@ -1,7 +1,9 @@
 /* eslint-disable max-len */
 import moment from "moment"
 import { genesises } from "~Constants"
+import { ZERO_ADDRESS } from "~Hooks"
 import { ActivityEvent, ActivitySearchBy, Network, NETWORK_TYPE } from "~Model"
+import { AddressUtils } from "~Utils"
 
 const isMainGenesis = (thor: Connex.Thor) => thor.genesis.id === genesises.main.id
 
@@ -116,7 +118,7 @@ export const getIndexedHistoryEventOrigin = ({
         url += `&searchBy=${uniqueSearchBy.join(",")}`
     }
 
-    if (contractAddress.length > 0) {
+    if (contractAddress.length > 0 && !AddressUtils.compareAddresses(contractAddress, ZERO_ADDRESS)) {
         url += `&contractAddress=${contractAddress}`
     }
 

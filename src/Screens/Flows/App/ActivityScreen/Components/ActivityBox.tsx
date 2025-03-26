@@ -28,7 +28,7 @@ import {
     TypedDataActivity,
     VeBetterDaoDapp,
 } from "~Model"
-import { selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
+import { selectAllTokens, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
@@ -255,10 +255,7 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
     const icon = "icon-arrow-left-right"
     const time = moment(activity.timestamp).format("HH:mm")
 
-    const customTokens = useAppSelector(selectCustomTokens)
-    const officialTokens = useAppSelector(selectOfficialTokens)
-
-    const allTokens = [customTokens, officialTokens].flat()
+    const allTokens = useAppSelector(selectAllTokens)
     const outputToken = allTokens.find(_token => _token.address === activity.outputToken)
     const inputToken = allTokens.find(_token => _token.address === activity.inputToken)
 
@@ -271,7 +268,7 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
         .toTokenFormat_string(2)
 
     const rightAmount = `${DIRECTIONS.UP} ${paidAmount} ${outputToken?.symbol ?? ""}`
-    const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${receivedAmount} ${inputToken?.symbol ?? ""}`
+    const rigthAmountDescription = `${DIRECTIONS.DOWN} ${receivedAmount} ${inputToken?.symbol ?? ""}`
 
     const onSwapPressHandler = () => {
         onPress(activity, undefined, true)

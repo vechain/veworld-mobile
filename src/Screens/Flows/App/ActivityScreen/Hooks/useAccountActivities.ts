@@ -42,6 +42,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         setIsRefreshing(true)
         await queryClient.invalidateQueries({
             queryKey: ["accountActivities", filterType, selectedAccount.address, network.genesis.id],
+            type: "all",
         })
         setIsRefreshing(false)
     }, [filterType, network.genesis.id, queryClient, selectedAccount.address])
