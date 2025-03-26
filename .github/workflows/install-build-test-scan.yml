@@ -91,6 +91,9 @@ jobs:
               with:
                   args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
     report:
+      needs: [ build-and-test-ios, build-and-test-android, scan]
+      secrets: inherit
+      if: ${{ always() }}
       steps:
         - name: statuslabel
           id: statuslabel
@@ -98,9 +101,6 @@ jobs:
 
         - name: ReportE2E2Slack
           uses: slackapi/slack-github-action@v2.0.0
-          secrets: inherit
-          if: ${{ always() }}
-          needs: [ build-and-test-ios, build-and-test-android, scan]
           with:
             webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
             webhook-type: incoming-webhook
