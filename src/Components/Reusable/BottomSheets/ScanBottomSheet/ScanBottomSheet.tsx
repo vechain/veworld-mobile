@@ -1,17 +1,16 @@
-import React, { useCallback, useEffect } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet, BaseView, showWarningToast } from "~Components"
-import { useI18nContext } from "~i18n"
-import { useDisclosure } from "~Hooks"
-import { BarCodeScanningResult, Camera, CameraType } from "expo-camera"
-import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
-import { BarCodeScanner } from "expo-barcode-scanner"
+import { BarcodeScanningResult, CameraView } from "expo-camera"
+import React, { useCallback, useEffect } from "react"
 import { StyleSheet } from "react-native"
-import { AddressUtils, URIUtils, WalletConnectUtils } from "~Utils"
-import { CameraHeader } from "./components/CameraHeader"
-import { CameraFooter } from "./components/CameraFooter"
-import HapticsService from "~Services/HapticsService"
+import { BaseBottomSheet, BaseView, showWarningToast } from "~Components"
+import { COLORS, ScanTarget, SCREEN_WIDTH } from "~Constants"
+import { useDisclosure } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { BackHandlerEvent } from "~Model"
+import HapticsService from "~Services/HapticsService"
+import { AddressUtils, URIUtils, WalletConnectUtils } from "~Utils"
+import { CameraFooter } from "./components/CameraFooter"
+import { CameraHeader } from "./components/CameraHeader"
 
 const QR_SCAN_SQUARE_SIZE = SCREEN_WIDTH - 80
 type Props = {
@@ -88,7 +87,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     )
 
     const onQrScanned = useCallback(
-        (result: BarCodeScanningResult) => {
+        (result: BarcodeScanningResult) => {
             handleScan(result.data)
         },
         [handleScan],
@@ -117,14 +116,13 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             ref={ref}
             backHandlerEvent={BackHandlerEvent.BLOCK}>
             {isOpen && (
-                <Camera
+                <CameraView
                     style={baseStyles.camera}
-                    type={CameraType.back}
                     onCameraReady={onCameraReady}
-                    barCodeScannerSettings={{
-                        barCodeTypes: [BarCodeScanner.Constants.BarCodeType.qr],
+                    barcodeScannerSettings={{
+                        barcodeTypes: ["qr"],
                     }}
-                    onBarCodeScanned={onQrScanned}
+                    onBarcodeScanned={onQrScanned}
                     onMountError={onClose}
                     ratio="16:9">
                     <BaseView style={baseStyles.container} w={100} h={100}>
@@ -134,7 +132,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
 
                         {target.includes(ScanTarget.WALLET_CONNECT) && <CameraFooter onPaste={onPasteFromClipboard} />}
                     </BaseView>
-                </Camera>
+                </CameraView>
             )}
         </BaseBottomSheet>
     )

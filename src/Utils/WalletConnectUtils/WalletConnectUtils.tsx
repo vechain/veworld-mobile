@@ -1,5 +1,5 @@
 import { Core } from "@walletconnect/core"
-import { ICore, PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
+import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { IWalletKit, WalletKit } from "@reown/walletkit"
 import { Network } from "~Model"
 import { debug, error, warn } from "~Utils/Logger"
@@ -12,7 +12,7 @@ import { ERROR_EVENTS } from "~Constants"
 
 let _web3wallet: IWalletKit
 
-export const core: ICore = new Core({
+export const core = new Core({
     projectId: process.env.REACT_APP_WALLET_CONNECT_PROJECT_ID,
     // TODO: use a custom storage so we can wipe app state
     logger: "info",

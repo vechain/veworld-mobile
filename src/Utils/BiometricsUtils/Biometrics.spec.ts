@@ -17,7 +17,7 @@ jest.mock("../PlatformUtils")
 describe("authentication functions", () => {
     describe("getDeviceEnrolledLevel", () => {
         it("should return the enrolled security level of the device", async () => {
-            const mockLevel = LocalAuthentication.SecurityLevel.BIOMETRIC
+            const mockLevel = LocalAuthentication.SecurityLevel.BIOMETRIC_STRONG
 
             jest.spyOn(LocalAuthentication, "getEnrolledLevelAsync").mockResolvedValueOnce(mockLevel)
 

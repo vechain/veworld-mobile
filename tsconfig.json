@@ -1,5 +1,5 @@
 {
-    "extends": "@tsconfig/react-native/tsconfig.json",
+    "extends": "@react-native/typescript-config/tsconfig.json",
     "compilerOptions": {
         "resolveJsonModule": true,
         "strict": true,
@@ -26,7 +26,7 @@
             "~Networking/*": ["./src/Networking/*"],
             "~Events/*": ["./src/Events/*"],
             "~Test": ["./src/Test/index.tsx"],
-            "~Logging/*": ["./src/Logging/*"],
+            "~Logging/*": ["./src/Logging/*"]
         }
     }
 }
