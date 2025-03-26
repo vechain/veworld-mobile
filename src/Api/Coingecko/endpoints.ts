@@ -28,7 +28,7 @@ const TokenInfoMarketDataSchema = z.object({
     max_supply: z.nullable(z.number()),
     circulating_supply: z.number(),
     last_updated: z.string(),
-    price_change_percentage_24h: z.number(),
+    price_change_percentage_24h: z.nullable(z.number()),
     current_price: z.record(z.string(), z.number()),
     market_cap: z.record(z.string(), z.number()),
     total_volume: z.record(z.string(), z.number()),
@@ -97,6 +97,7 @@ export const getTokenInfo = async (coinGeckoId?: string) => {
 
         return zodParsed
     } catch (e) {
+        error(ERROR_EVENTS.TOKENS, e)
         throw e
     }
 }
