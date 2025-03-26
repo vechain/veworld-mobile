@@ -92,6 +92,7 @@ jobs:
                   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               with:
                   args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
+
     report:
       runs-on: ubuntu-latest
       needs: [ build-and-test-ios, build-and-test-android, scan]
@@ -112,14 +113,17 @@ jobs:
           # if: github.event.schedule = '0 22 * * 0-4'
           if: always()
           uses: slackapi/slack-github-action@v2.0.0
+          env:
+            ref: "${{ github.ref }}"
+            head: "${{ github.head_ref }}"
           with:
             webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
             webhook-type: incoming-webhook
             payload: |
               channel: ${{ secrets.SLACK_VEWORLD_CHANNEL_ID }}"
-              text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
+              text: "*E2E result*: ${{ job.status }}\n$ref\n$head"
               blocks:
                 - type: "section"
                   text:
                     type: "mrkdwn"
-                    text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
+                    text: "*E2E result*: ${{ job.status }}\n$ref\n$head"
