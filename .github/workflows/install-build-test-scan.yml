@@ -1,5 +1,4 @@
 name: Build, Test & Scan
-
 on:
     workflow_call:
 
@@ -23,6 +22,7 @@ concurrency:
 jobs:
 
     build-and-test-ios:
+        if: ${{ startsWith(github.ref, 'refs/heads/release') || github.ref == 'refs/heads/main' }}
         uses: ./.github/workflows/e2e-ios.yml
         secrets: inherit
 
@@ -43,7 +43,7 @@ jobs:
 
             - name: label
               id: label
-              run: echo "label, ${{ github.event }}"
+              run: echo "label, ${{ toJSON(github.event) }}"
 
             - name: Install & Patch packages
               run: yarn install
@@ -76,11 +76,14 @@ jobs:
 
             - name: Sonar Args
               id: sonar-args
+              env: 
+                  ref: "${{ github.ref }}"
+                  head: "${{ github.head_ref }}"
               run: |
-                  if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
+                  if [[ $ref == 'refs/heads/main' ]]; then
                     echo "SONAR_ARGS=-Dsonar.branch.name=main" >> $GITHUB_OUTPUT
                   else
-                    echo "SONAR_ARGS=-Dsonar.branch.target=main -Dsonar.branch.name=${{ github.head_ref }}" >> $GITHUB_OUTPUT
+                    echo "SONAR_ARGS=-Dsonar.branch.target=main -Dsonar.branch.name=$head" >> $GITHUB_OUTPUT
                   fi
 
             - name: SonarCloud Scan
@@ -93,14 +96,23 @@ jobs:
     report:
       runs-on: ubuntu-latest
       needs: [ build-and-test-ios, build-and-test-android, scan]
+      if: always()
       steps:
         - name: statuslabel
           id: statuslabel
-          run: |
-            echo "statuslabel, ${{ github.event }}"
+          run:|
+            echo "statuslabel, ${{ toJSON(github.event) }}"
+            echo "action ${{ github.action }}"
+            echo "actor ${{ github.actor }}"
+            echo "inputs ${{ toJSON(inputs) }}"
+            echo "env ${{ env }}"
             env
+            echo "IT ${{ jobs.build-and-test-ios.result }}"
+            echo "AT ${{ jobs.build-and-test-ios.result }}"
+            echo "SC ${{ jobs.scan.result }}"
 
         - name: ReportE2E2Slack
+          if: github.event.schedule = '0 22 * * 0-4'
           uses: slackapi/slack-github-action@v2.0.0
           with:
             webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
