@@ -77,7 +77,7 @@ jobs:
               id: sonar-args
               env: 
                   ref: "${{ github.ref }}"
-                  head: "${{ github.head_ref }}"
+                  head: "${{ github.head_ref || 'main' }}"
               run: |
                   if [[ $ref == 'refs/heads/main' ]]; then
                     echo "SONAR_ARGS=-Dsonar.branch.name=main" >> $GITHUB_OUTPUT
@@ -105,7 +105,7 @@ jobs:
             echo "action ${{ github.action }}"
             echo "actor ${{ github.actor }}"
             echo "inputs ${{ toJSON(inputs) }}"
-            echo "env ${{ env }}"
+            echo "env ${{ toJSON(env) }}"
             env
             echo "ST ${{ needs.*.result }}"
 
