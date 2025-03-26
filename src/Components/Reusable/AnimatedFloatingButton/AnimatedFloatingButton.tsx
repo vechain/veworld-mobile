@@ -1,5 +1,5 @@
 import React, { useEffect } from "react"
-import { StyleSheet, useWindowDimensions } from "react-native"
+import { StyleProp, StyleSheet, useWindowDimensions, ViewStyle } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import Animated, { ReduceMotion, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
 import { BaseButton, BaseView } from "~Components"
@@ -12,10 +12,11 @@ type Props = {
     extraBottom?: number
     isDisabled?: boolean
     isLoading?: boolean
+    style?: StyleProp<ViewStyle>
 }
 
 export const AnimatedFloatingButton = React.memo(
-    ({ title, isVisible, onPress, extraBottom = 0, isDisabled = false, isLoading = false }: Props) => {
+    ({ title, isVisible, onPress, extraBottom = 0, isDisabled = false, isLoading = false, style }: Props) => {
         const { visible: keyboardVisible, bottomStyle } = useKeyboard()
         const { width: windowWidth } = useWindowDimensions()
         const { styles, theme } = useThemedStyles(baseStyles)
@@ -63,6 +64,7 @@ export const AnimatedFloatingButton = React.memo(
                             disabled={isDisabled}
                             isLoading={isLoading}
                             my={extraBottom}
+                            style={style}
                         />
                     </BaseView>
                 </LinearGradient>

@@ -147,6 +147,7 @@ export const CoinifyPayWebView = ({
                 isVisible={showFloatingSign}
                 title={LL.SIGN_TRANSACTION()}
                 onPress={onFloatingActionPressed}
+                style={styles.floatingButton}
             />
         </BaseView>
     )
@@ -157,5 +158,8 @@ const baseStyles = (isLoading: boolean) =>
         webView: {
             flex: 1,
             opacity: isLoading ? 0 : 1,
+        },
+        floatingButton: {
+            textTransform: "uppercase",
         },
     })
