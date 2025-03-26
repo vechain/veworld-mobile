@@ -7,7 +7,7 @@ import { DAppUtils } from "~Utils"
 
 type Props = {
     dapp: DiscoveryDApp
-    onPress: () => void
+    onPress: (dapp: DiscoveryDApp) => void
 }
 
 const IMAGE_SIZE = 48
@@ -49,7 +49,7 @@ export const DAppHorizontalCard = ({ dapp, onPress }: Props) => {
                 </BaseText>
             </BaseView>
             {/* Action Btn */}
-            <BaseTouchable style={[styles.touchableArea]} onPress={onPress}>
+            <BaseTouchable style={[styles.touchableArea]} onPress={() => onPress(dapp)}>
                 <BaseIcon name="icon-more-vertical" />
             </BaseTouchable>
         </BaseView>
