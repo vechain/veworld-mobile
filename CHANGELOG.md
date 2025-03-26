@@ -1,5 +1,12 @@
 
 
+## 2.1.0 (2025-03-26)
+
+
+### Features
+
+* added disabled feature warn on ios bottom sheet ([#2811](https://github.com/vechain/veworld-mobile/issues/2811)) ([bef5637](https://github.com/vechain/veworld-mobile/commit/bef5637ff8a90d483eba930b10c66c7ac1a48948))
+
 ## 2.0.9 (2025-02-18)
 
 
