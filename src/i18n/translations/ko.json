@@ -833,6 +833,7 @@
   "SHOW_NFT": "NFT 보기",
   "SIGNED_CERTIFICATE": "서명된 증명서",
   "SIGN_CERTIFICATE": "증명서 서명",
+  "SIGN_TRANSACTION": "거래 서명",
   "SIGN_TRANSACTION_ERROR": "거래 서명 오류",
   "STATUS": "상태",
   "SUCCESS_DOMAIN_AVAILABLE": "청구 가능",

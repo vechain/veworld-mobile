@@ -833,6 +833,7 @@
   "SHOW_NFT": "Mostrar NFT",
   "SIGNED_CERTIFICATE": "Certificado firmado",
   "SIGN_CERTIFICATE": "Firmar certificado",
+  "SIGN_TRANSACTION": "Firmar transacción",
   "SIGN_TRANSACTION_ERROR": "Error al firmar la transacción",
   "STATUS": "Estado",
   "SUCCESS_DOMAIN_AVAILABLE": "Disponible para reclamar",

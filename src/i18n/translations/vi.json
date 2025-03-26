@@ -833,6 +833,7 @@
   "SHOW_NFT": "Hiển thị NFT",
   "SIGNED_CERTIFICATE": "Chứng chỉ đã ký",
   "SIGN_CERTIFICATE": "Ký chứng chỉ",
+  "SIGN_TRANSACTION": "Ký giao dịch",
   "SIGN_TRANSACTION_ERROR": "Lỗi ký giao dịch",
   "STATUS": "Trạng thái",
   "SUCCESS_DOMAIN_AVAILABLE": "Có sẵn để yêu cầu",

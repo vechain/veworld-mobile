@@ -833,6 +833,7 @@
   "SHOW_NFT": "NFTを表示",
   "SIGNED_CERTIFICATE": "署名された証明書",
   "SIGN_CERTIFICATE": "証明書に署名する",
+  "SIGN_TRANSACTION": "取引に署名",
   "SIGN_TRANSACTION_ERROR": "取引の署名エラー",
   "STATUS": "ステータス",
   "SUCCESS_DOMAIN_AVAILABLE": "請求可能",

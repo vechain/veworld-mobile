@@ -833,6 +833,7 @@
   "SHOW_NFT": "显示NFT",
   "SIGNED_CERTIFICATE": "签名证书",
   "SIGN_CERTIFICATE": "签署证书",
+  "SIGN_TRANSACTION": "签署交易",
   "SIGN_TRANSACTION_ERROR": "签署交易错误",
   "STATUS": "状态",
   "SUCCESS_DOMAIN_AVAILABLE": "可认领",
