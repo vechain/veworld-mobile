@@ -749,7 +749,7 @@ type RootTranslation = {
 	 */
 	BD_SELECT_NETWORK_DESC: string
 	/**
-	 * C​h​o​o​s​e​ ​a​ ​p​r​o​v​i​d​e​r​:
+	 * C​h​o​o​s​e​ ​a​ ​p​a​y​m​e​n​t​ ​o​p​t​i​o​n​ ​t​o​ ​b​u​y​:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: string
 	/**
@@ -785,6 +785,14 @@ type RootTranslation = {
 	 * F​i​a​t​ ​b​a​l​a​n​c​e​ ​i​s​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e​ ​o​n​ ​t​e​s​t​n​e​t
 	 */
 	BD_TESTNET_NO_FIAT: string
+	/**
+	 * C​o​n​v​e​r​s​i​o​n​ ​f​a​i​l​e​d​.​ ​P​l​e​a​s​e​ ​t​r​y​ ​a​g​a​i​n​.
+	 */
+	BD_TOKEN_CONVERTED_ERROR: string
+	/**
+	 * C​o​n​v​e​r​t​i​n​g​.​.​.
+	 */
+	BD_TOKEN_CONVERTED_LOADING: string
 	/**
 	 * T​o​k​e​n​s​ ​c​o​n​v​e​r​t​e​d​ ​s​u​c​c​e​s​f​u​l​l​y​!
 	 */
@@ -1388,6 +1396,10 @@ type RootTranslation = {
 	 * S​i​g​n​ ​o​u​t
 	 */
 	COMMON_BTN_SIGN_OUT: string
+	/**
+	 * T​r​y​ ​a​g​a​i​n
+	 */
+	COMMON_BTN_TRY_AGAIN: string
 	/**
 	 * U​n​l​o​c​k
 	 */
@@ -2951,6 +2963,10 @@ type RootTranslation = {
 	 */
 	SB_ENTER_LANGUAGE: string
 	/**
+	 * F​e​e​s
+	 */
+	SB_FEES: string
+	/**
 	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
 	 */
 	SB_IMPORT_WALLET_TYPE: string
@@ -2978,6 +2994,10 @@ type RootTranslation = {
 	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
 	 */
 	SB_PASSWORD_AUTH: string
+	/**
+	 * P​a​y​ ​w​i​t​h
+	 */
+	SB_PAY_WITH: string
 	/**
 	 * P​r​i​v​a​t​e​ ​k​e​y
 	 */
@@ -3581,7 +3601,7 @@ type RootTranslation = {
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: string
 	/**
-	 * B​u​y​ ​V​e​c​h​a​i​n​T​h​o​r​ ​t​o​k​e​n​s
+	 * B​u​y
 	 */
 	TITLE_BUY: string
 	/**
@@ -4756,7 +4776,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_SELECT_NETWORK_DESC: () => LocalizedString
 	/**
-	 * Choose a provider:
+	 * Choose a payment option to buy:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
 	/**
@@ -4791,6 +4811,14 @@ Try reconnect your device to the internet.
 	 * Fiat balance is not available on testnet
 	 */
 	BD_TESTNET_NO_FIAT: () => LocalizedString
+	/**
+	 * Conversion failed. Please try again.
+	 */
+	BD_TOKEN_CONVERTED_ERROR: () => LocalizedString
+	/**
+	 * Converting...
+	 */
+	BD_TOKEN_CONVERTED_LOADING: () => LocalizedString
 	/**
 	 * Tokens converted succesfully!
 	 */
@@ -5391,6 +5419,10 @@ Try reconnect your device to the internet.
 	 * Sign out
 	 */
 	COMMON_BTN_SIGN_OUT: () => LocalizedString
+	/**
+	 * Try again
+	 */
+	COMMON_BTN_TRY_AGAIN: () => LocalizedString
 	/**
 	 * Unlock
 	 */
@@ -6925,6 +6957,10 @@ Try reconnect your device to the internet.
 	 */
 	SB_ENTER_LANGUAGE: () => LocalizedString
 	/**
+	 * Fees
+	 */
+	SB_FEES: () => LocalizedString
+	/**
 	 * Which kind of wallet do you want to import?
 	 */
 	SB_IMPORT_WALLET_TYPE: () => LocalizedString
@@ -6952,6 +6988,10 @@ Try reconnect your device to the internet.
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
+	/**
+	 * Pay with
+	 */
+	SB_PAY_WITH: () => LocalizedString
 	/**
 	 * Private key
 	 */
@@ -7549,7 +7589,7 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
 	/**
-	 * Buy VechainThor tokens
+	 * Buy
 	 */
 	TITLE_BUY: () => LocalizedString
 	/**

@@ -1,11 +1,11 @@
 import { act, renderHook } from "@testing-library/react-hooks"
-import { useConvertBetterTokens } from "./useConvertBetterTokens"
-import { Routes } from "~Navigation"
-import { BigNutils } from "~Utils"
-import { TestWrapper, TestHelpers } from "~Test"
+import { ethers } from "ethers"
 import { abi, Transaction } from "thor-devkit"
 import { abis, B3TR, VOT3 } from "~Constants"
-import { ethers } from "ethers"
+import { Routes } from "~Navigation"
+import { TestHelpers, TestWrapper } from "~Test"
+import { BigNutils } from "~Utils"
+import { useConvertBetterTokens } from "./useConvertBetterTokens"
 
 const mockedNavigate = jest.fn()
 const mockedReplace = jest.fn()
