@@ -777,6 +777,16 @@ type RootTranslation = {
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: string
 	/**
+	 * T​h​e​s​e​ ​f​e​a​t​u​r​e​s​ ​a​r​e​ ​c​u​r​r​e​n​t​l​y​ ​u​n​a​v​a​i​l​a​b​l​e​ ​o​n​ ​i​O​S​ ​d​u​e​ ​t​o​ ​c​o​m​p​l​i​a​n​c​e​ ​r​e​q​u​i​r​e​m​e​n​t​s​.​
+​W​e​'​r​e​ ​w​o​r​k​i​n​g​ ​t​o​ ​b​r​i​n​g​ ​t​h​e​m​ ​b​a​c​k​ ​s​o​o​n​.​
+​T​h​a​n​k​s​ ​f​o​r​ ​y​o​u​r​ ​p​a​t​i​e​n​c​e​!
+	 */
+	BLOCKED_BUY_SWAP_IOS_SUBTITLE: string
+	/**
+	 * B​u​y​ ​&​ ​S​w​a​p​ ​o​n​ ​i​O​S
+	 */
+	BLOCKED_BUY_SWAP_IOS_TITLE: string
+	/**
 	 * B​l​o​c​k​ ​n​u​m​b​e​r
 	 */
 	BLOCK_NUMBER: string
@@ -957,6 +967,10 @@ type RootTranslation = {
 	 * Y​e​s​,​ ​d​e​l​e​t​e​ ​b​a​c​k​u​p
 	 */
 	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: string
+	/**
+	 * D​i​s​m​i​s​s
+	 */
+	BTN_DISMISS: string
 	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
@@ -4719,6 +4733,16 @@ Try reconnect your device to the internet.
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: () => LocalizedString
 	/**
+	 * These features are currently unavailable on iOS due to compliance requirements.
+We're working to bring them back soon.
+Thanks for your patience!
+	 */
+	BLOCKED_BUY_SWAP_IOS_SUBTITLE: () => LocalizedString
+	/**
+	 * Buy & Swap on iOS
+	 */
+	BLOCKED_BUY_SWAP_IOS_TITLE: () => LocalizedString
+	/**
 	 * Block number
 	 */
 	BLOCK_NUMBER: () => LocalizedString
@@ -4898,6 +4922,10 @@ Try reconnect your device to the internet.
 	 * Yes, delete backup
 	 */
 	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: () => LocalizedString
+	/**
+	 * Dismiss
+	 */
+	BTN_DISMISS: () => LocalizedString
 	/**
 	 * Download logs
 	 */
