@@ -92,7 +92,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
             }
 
             return remoteActivities
-        } else if (!isFetching && !isLoading && !isFetchingNextPage) {
+        } else if (!isFetching && !isLoading && !isFetchingNextPage && !error) {
             const returnValue = localActivities.filter(activity =>
                 [
                     ActivityType.DAPP_TRANSACTION,
@@ -106,7 +106,17 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         }
 
         return []
-    }, [data, isFetching, isLoading, isFetchingNextPage, localActivities, filterType, selectedAccount.address, network])
+    }, [
+        data,
+        isFetching,
+        isLoading,
+        isFetchingNextPage,
+        localActivities,
+        filterType,
+        selectedAccount.address,
+        network,
+        error,
+    ])
 
     const result = useMemo(
         () => ({
