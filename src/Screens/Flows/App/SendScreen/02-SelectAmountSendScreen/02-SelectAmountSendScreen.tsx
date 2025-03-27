@@ -387,7 +387,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                       {isInputInFiat ? (
                                                           <BaseView flexDirection="row" alignItems="center">
                                                               {/* @ts-ignore */}
-                                                              <BaseImage uri={token.icon} style={styles.logoIcon} />
+                                                              <BaseImage uri={computedIcon} style={styles.logoIcon} />
                                                               <BaseSpacer width={8} />
                                                               <BaseText
                                                                   typographyFont="captionBold"
