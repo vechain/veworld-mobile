@@ -839,6 +839,7 @@
   "SHOW_NFT": "Visa NFT",
   "SIGNED_CERTIFICATE": "Signerad certifikat",
   "SIGN_CERTIFICATE": "Signera certifikat",
+  "SIGN_TRANSACTION": "Signera transaktion",
   "SIGN_TRANSACTION_ERROR": "Fel vid signering av transaktion",
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Tillgänglig att hävda",

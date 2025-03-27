@@ -839,6 +839,7 @@
   "SHOW_NFT": "顯示 NFT",
   "SIGNED_CERTIFICATE": "已簽署證書",
   "SIGN_CERTIFICATE": "簽署證書",
+  "SIGN_TRANSACTION": "簽署交易",
   "SIGN_TRANSACTION_ERROR": "簽署交易錯誤",
   "STATUS": "狀態",
   "SUCCESS_DOMAIN_AVAILABLE": "可領取",

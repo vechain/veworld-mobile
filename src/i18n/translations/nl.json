@@ -839,6 +839,7 @@
   "SHOW_NFT": "NFT tonen",
   "SIGNED_CERTIFICATE": "Ondertekend certificaat",
   "SIGN_CERTIFICATE": "Certificaat ondertekenen",
+  "SIGN_TRANSACTION": "Onderteken transactie",
   "SIGN_TRANSACTION_ERROR": "Fout bij het ondertekenen van transactie",
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Beschikbaar om op te eisen",
