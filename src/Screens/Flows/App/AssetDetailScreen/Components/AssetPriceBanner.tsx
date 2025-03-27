@@ -1,27 +1,40 @@
 import React, { useMemo } from "react"
-import { useAnimatedStyle, useDerivedValue } from "react-native-reanimated"
+import { useAnimatedStyle, useDerivedValue, useSharedValue } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { useFormatFiat, useThemedStyles } from "~Hooks"
 
 import { BaseAnimatedText, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useLineChartDatetime, useLineChartPrice, useLineChartRelativeChange } from "../Hooks/usePrice"
-import { ColorThemeType } from "~Constants"
+import { ColorThemeType, B3TR } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { AssetTrendBannerSkeleton } from "./AssetTrendBannerSkeleton"
 import { AssetPriceBannerSkeleton } from "./AssetPriceBannerSkeleton"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { PlatformUtils } from "~Utils"
+import { TokenWithCompleteInfo } from "~Model"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 const { ...otherTypography } = typography
 
 type Props = {
+    token: TokenWithCompleteInfo
     isChartDataLoading: boolean
 }
-export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
+export const AssetPriceBanner = ({ token, isChartDataLoading }: Props) => {
     const { LL } = useI18nContext()
     const datetime = useLineChartDatetime(LL.COMMON_OVERALL())
     const { formatted: formattedPrice } = useLineChartPrice()
     const { value: priceChangeValue, formatted: formattedPriceChange } = useLineChartRelativeChange({})
+
+    //TODO: remove from here to line 36 this when revert to coingecko's service to get fiat price
+    const currency = useAppSelector(selectCurrency)
+    const { data: exchangeRate } = useExchangeRate({
+        id: getCoinGeckoIdBySymbol[token.symbol],
+        vs_currency: currency,
+    })
+    const { formatFiat } = useFormatFiat({ maximumFractionDigits: 5, minimumFractionDigits: 5 })
+    const change = useSharedValue(formatFiat({ amount: exchangeRate }) ?? "0")
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -51,31 +64,32 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
                         </>
                     ) : (
                         <BaseAnimatedText
-                            text={formattedPrice}
+                            text={token.symbol === B3TR.symbol ? change : formattedPrice}
                             style={[styles.textTitle, { color: theme.colors.text }]}
                         />
                     )}
                 </BaseView>
             </BaseView>
+            {token.symbol !== B3TR.symbol && (
+                <BaseView alignItems="flex-end" style={styles.textContainer} justifyContent="space-between">
+                    <BaseAnimatedText
+                        text={datetime.formatted}
+                        style={[styles.textBody, { color: theme.colors.graphStatsText }]}
+                    />
 
-            <BaseView alignItems="flex-end" style={styles.textContainer} justifyContent="space-between">
-                <BaseAnimatedText
-                    text={datetime.formatted}
-                    style={[styles.textBody, { color: theme.colors.graphStatsText }]}
-                />
-
-                {isChartDataLoading ? (
-                    <>
-                        <BaseSpacer height={4} />
-                        <AssetTrendBannerSkeleton />
-                    </>
-                ) : (
-                    <BaseView flexDirection="row">
-                        <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle, styles.icon]} />
-                        <BaseAnimatedText text={formattedPriceChange} style={[changeStyles, styles.textTitle]} />
-                    </BaseView>
-                )}
-            </BaseView>
+                    {isChartDataLoading ? (
+                        <>
+                            <BaseSpacer height={4} />
+                            <AssetTrendBannerSkeleton />
+                        </>
+                    ) : (
+                        <BaseView flexDirection="row">
+                            <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle, styles.icon]} />
+                            <BaseAnimatedText text={formattedPriceChange} style={[changeStyles, styles.textTitle]} />
+                        </BaseView>
+                    )}
+                </BaseView>
+            )}
         </BaseView>
     )
 }

@@ -1,7 +1,7 @@
 import { StyleSheet } from "react-native"
 import React, { useMemo } from "react"
 import { LineChart } from "react-native-wagmi-charts"
-import { SCREEN_WIDTH } from "~Constants"
+import { B3TR, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import * as haptics from "expo-haptics"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
@@ -77,12 +77,12 @@ export const ChartView = ({ chartData, token, isChartDataLoading }: Props) => {
     return (
         <>
             <BaseView flexDirection="row" justifyContent="space-between" w={100} px={16}>
-                <AssetPriceBanner isChartDataLoading={isChartDataLoading} />
+                <AssetPriceBanner token={token} isChartDataLoading={isChartDataLoading} />
             </BaseView>
 
             <BaseSpacer height={6} />
 
-            {_chartView}
+            {token.symbol !== B3TR.symbol && _chartView}
         </>
     )
 }

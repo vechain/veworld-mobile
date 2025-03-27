@@ -1,14 +1,13 @@
-import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
+import { Image, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
-import { useTheme, useTokenWithCompleteInfo, useTokenCardFiatInfo, useCombineFiatBalances } from "~Hooks"
-import { BalanceUtils } from "~Utils"
-import { VBD_ICON } from "~Constants"
+import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
 import { COLORS } from "~Constants/Theme"
+import { useCombineFiatBalances, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { BalanceUtils } from "~Utils"
+import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
     isBalanceVisible: boolean
@@ -32,8 +31,8 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
     const {
         isTokensOwnedLoading,
         exchangeRate,
-        isPositive24hChange,
-        change24h,
+        // isPositive24hChange,
+        // change24h,
         isLoading,
         fiatBalance: b3trFiat,
     } = useTokenCardFiatInfo(b3trToken)
@@ -87,7 +86,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row">
                 <BaseView style={[baseStyles.imageContainer]}>
-                    <Image source={{ uri: VBD_ICON }} style={baseStyles.image} />
+                    <Image source={{ uri: B3TR.icon }} style={baseStyles.image} />
                 </BaseView>
                 <BaseSpacer width={16} />
                 <BaseView flexDirection="column" alignItems="flex-start">
@@ -137,8 +136,8 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
             <TokenCardBalanceInfo
                 renderFiatBalance={renderFiatBalance}
                 isLoading={isLoading}
-                isPositive24hChange={isPositive24hChange}
-                change24h={change24h}
+                // isPositive24hChange={isPositive24hChange}
+                // change24h={change24h}
                 isAnimation={isAnimation}
             />
         </Animated.View>
@@ -151,10 +150,9 @@ const baseStyles = StyleSheet.create({
     },
     imageContainer: {
         borderRadius: 30,
-        padding: 10,
-        backgroundColor: COLORS.GREY_50,
+        overflow: "hidden",
     },
-    image: { width: 20, height: 20 },
+    image: { width: 24, height: 24 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",
