@@ -114,14 +114,6 @@ type RootTranslation = {
 	 */
 	ACTIVITY_B3TR_LABEL: string
 	/**
-	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
-	 */
-	ACTIVITY_NFT_EMPTY_LABEL: string
-	/**
-	 * N​F​T
-	 */
-	ACTIVITY_NFT_LABEL: string
-	/**
 	 * N​o​ ​d​A​p​p​ ​i​n​t​e​r​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_DAPPS_EMPTY_LABEL: string
@@ -130,7 +122,15 @@ type RootTranslation = {
 	 */
 	ACTIVITY_DAPPS_LABEL: string
 	/**
-	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​t
+	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: string
+	/**
+	 * N​F​T
+	 */
+	ACTIVITY_NFT_LABEL: string
+	/**
+	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: string
 	/**
@@ -320,6 +320,10 @@ type RootTranslation = {
 	 * B​e​t​t​e​r​ ​a​c​t​i​o​n​ ​o​n
 	 */
 	B3TR_ACTION: string
+	/**
+	 * B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 */
+	B3TR_ACTION_MODAL_TITLE: string
 	/**
 	 * C​l​a​i​m​e​d​ ​v​o​t​i​n​g​ ​r​e​w​a​r​d​s
 	 */
@@ -4161,14 +4165,6 @@ export type TranslationFunctions = {
 	 */
 	ACTIVITY_B3TR_LABEL: () => LocalizedString
 	/**
-	 * No NFTs to show yet
-	 */
-	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
-	/**
-	 * NFT
-	 */
-	ACTIVITY_NFT_LABEL: () => LocalizedString
-	/**
 	 * No dApp interactions to show yet
 	 */
 	ACTIVITY_DAPPS_EMPTY_LABEL: () => LocalizedString
@@ -4177,7 +4173,15 @@ export type TranslationFunctions = {
 	 */
 	ACTIVITY_DAPPS_LABEL: () => LocalizedString
 	/**
-	 * No Swaps to show yett
+	 * No NFTs to show yet
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * NFT
+	 */
+	ACTIVITY_NFT_LABEL: () => LocalizedString
+	/**
+	 * No Swaps to show yet
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
 	/**
@@ -4365,6 +4369,10 @@ Try reconnect your device to the internet.
 	 * Better action on
 	 */
 	B3TR_ACTION: () => LocalizedString
+	/**
+	 * Better action
+	 */
+	B3TR_ACTION_MODAL_TITLE: () => LocalizedString
 	/**
 	 * Claimed voting rewards
 	 */
