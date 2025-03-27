@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react"
-import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 import {
     BaseIcon,
     BaseSearchInput,
@@ -13,9 +12,14 @@ import {
     PlusIconHeaderButton,
     useThor,
 } from "~Components"
+import { useAnalyticTracking, useBottomSheetModal, useTheme } from "~Hooks"
 
+import { useNavigation } from "@react-navigation/native"
+import { AnalyticsEvent } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { FungibleToken } from "~Model"
+import { Routes } from "~Navigation"
+import { updateAccountBalances, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import {
     selectNonVechainFungibleTokens,
     selectNonVechainTokensWithBalances,
@@ -23,11 +27,7 @@ import {
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
 import { addTokenBalance, removeTokenBalance, setIsAppLoading } from "~Storage/Redux/Slices"
-import { updateAccountBalances, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
 import { AddCustomTokenBottomSheet } from "../ManageCustomTokenScreen/BottomSheets"
-import { AnalyticsEvent } from "~Constants"
 
 export const ManageTokenScreen = () => {
     const theme = useTheme()
@@ -165,8 +165,8 @@ export const ManageTokenScreen = () => {
                                         <BaseSpacer height={16} />
                                         {selectedTokens.map(token => (
                                             <OfficialTokenCard
-                                                iconHeight={25}
-                                                iconWidth={25}
+                                                iconHeight={24}
+                                                iconWidth={24}
                                                 selected
                                                 key={token.address}
                                                 token={token}
@@ -182,8 +182,8 @@ export const ManageTokenScreen = () => {
                                         <BaseSpacer height={16} />
                                         {unselectedTokens.map(token => (
                                             <OfficialTokenCard
-                                                iconHeight={25}
-                                                iconWidth={25}
+                                                iconHeight={24}
+                                                iconWidth={24}
                                                 key={token.address}
                                                 token={token}
                                                 action={handleClickToken(token)}

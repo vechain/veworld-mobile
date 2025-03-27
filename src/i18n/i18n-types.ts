@@ -668,7 +668,7 @@ type RootTranslation = {
 	 */
 	BD_SELECT_NETWORK_DESC: string
 	/**
-	 * C​h​o​o​s​e​ ​a​ ​p​r​o​v​i​d​e​r​:
+	 * C​h​o​o​s​e​ ​a​ ​p​a​y​m​e​n​t​ ​o​p​t​i​o​n​ ​t​o​ ​b​u​y​:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: string
 	/**
@@ -776,6 +776,16 @@ type RootTranslation = {
 	 * U​n​l​o​c​k​ ​V​e​W​o​r​l​d​ ​u​s​i​n​g​ ​B​i​o​m​e​t​r​i​c​ ​A​u​t​h​e​n​t​i​c​a​t​i​o​n​.
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: string
+	/**
+	 * T​h​e​s​e​ ​f​e​a​t​u​r​e​s​ ​a​r​e​ ​c​u​r​r​e​n​t​l​y​ ​u​n​a​v​a​i​l​a​b​l​e​ ​o​n​ ​i​O​S​ ​d​u​e​ ​t​o​ ​c​o​m​p​l​i​a​n​c​e​ ​r​e​q​u​i​r​e​m​e​n​t​s​.​
+​W​e​'​r​e​ ​w​o​r​k​i​n​g​ ​t​o​ ​b​r​i​n​g​ ​t​h​e​m​ ​b​a​c​k​ ​s​o​o​n​.​
+​T​h​a​n​k​s​ ​f​o​r​ ​y​o​u​r​ ​p​a​t​i​e​n​c​e​!
+	 */
+	BLOCKED_BUY_SWAP_IOS_SUBTITLE: string
+	/**
+	 * B​u​y​ ​&​ ​S​w​a​p​ ​o​n​ ​i​O​S
+	 */
+	BLOCKED_BUY_SWAP_IOS_TITLE: string
 	/**
 	 * B​l​o​c​k​ ​n​u​m​b​e​r
 	 */
@@ -957,6 +967,10 @@ type RootTranslation = {
 	 * Y​e​s​,​ ​d​e​l​e​t​e​ ​b​a​c​k​u​p
 	 */
 	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: string
+	/**
+	 * D​i​s​m​i​s​s
+	 */
+	BTN_DISMISS: string
 	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
@@ -2886,6 +2900,10 @@ type RootTranslation = {
 	 */
 	SB_ENTER_LANGUAGE: string
 	/**
+	 * F​e​e​s
+	 */
+	SB_FEES: string
+	/**
 	 * W​h​i​c​h​ ​k​i​n​d​ ​o​f​ ​w​a​l​l​e​t​ ​d​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​i​m​p​o​r​t​?
 	 */
 	SB_IMPORT_WALLET_TYPE: string
@@ -2913,6 +2931,10 @@ type RootTranslation = {
 	 * P​a​s​s​w​o​r​d​ ​a​u​t​h​o​r​i​z​a​t​i​o​n
 	 */
 	SB_PASSWORD_AUTH: string
+	/**
+	 * P​a​y​ ​w​i​t​h
+	 */
+	SB_PAY_WITH: string
 	/**
 	 * P​r​i​v​a​t​e​ ​k​e​y
 	 */
@@ -3516,7 +3538,7 @@ type RootTranslation = {
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: string
 	/**
-	 * B​u​y​ ​V​e​c​h​a​i​n​T​h​o​r​ ​t​o​k​e​n​s
+	 * B​u​y
 	 */
 	TITLE_BUY: string
 	/**
@@ -4607,7 +4629,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_SELECT_NETWORK_DESC: () => LocalizedString
 	/**
-	 * Choose a provider:
+	 * Choose a payment option to buy:
 	 */
 	BD_SELECT_PAYMENT_PROVIDER: () => LocalizedString
 	/**
@@ -4714,6 +4736,16 @@ Try reconnect your device to the internet.
 	 * Unlock VeWorld using Biometric Authentication.
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: () => LocalizedString
+	/**
+	 * These features are currently unavailable on iOS due to compliance requirements.
+We're working to bring them back soon.
+Thanks for your patience!
+	 */
+	BLOCKED_BUY_SWAP_IOS_SUBTITLE: () => LocalizedString
+	/**
+	 * Buy & Swap on iOS
+	 */
+	BLOCKED_BUY_SWAP_IOS_TITLE: () => LocalizedString
 	/**
 	 * Block number
 	 */
@@ -4894,6 +4926,10 @@ Try reconnect your device to the internet.
 	 * Yes, delete backup
 	 */
 	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: () => LocalizedString
+	/**
+	 * Dismiss
+	 */
+	BTN_DISMISS: () => LocalizedString
 	/**
 	 * Download logs
 	 */
@@ -6792,6 +6828,10 @@ Try reconnect your device to the internet.
 	 */
 	SB_ENTER_LANGUAGE: () => LocalizedString
 	/**
+	 * Fees
+	 */
+	SB_FEES: () => LocalizedString
+	/**
 	 * Which kind of wallet do you want to import?
 	 */
 	SB_IMPORT_WALLET_TYPE: () => LocalizedString
@@ -6819,6 +6859,10 @@ Try reconnect your device to the internet.
 	 * Password authorization
 	 */
 	SB_PASSWORD_AUTH: () => LocalizedString
+	/**
+	 * Pay with
+	 */
+	SB_PAY_WITH: () => LocalizedString
 	/**
 	 * Private key
 	 */
@@ -7416,7 +7460,7 @@ Try reconnect your device to the internet.
 	 */
 	TITLE_BACKUP_YOUR_PHRASE: () => LocalizedString
 	/**
-	 * Buy VechainThor tokens
+	 * Buy
 	 */
 	TITLE_BUY: () => LocalizedString
 	/**

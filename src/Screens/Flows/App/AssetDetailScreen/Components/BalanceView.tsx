@@ -1,10 +1,10 @@
 import React, { useCallback, useMemo } from "react"
-import { TokenWithCompleteInfo, useTheme } from "~Hooks"
+import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { BaseSkeleton, BaseText, BaseView, FiatBalance } from "~Components"
+import { B3TR, VOT3 } from "~Constants"
+import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { B3TR, COLORS, VOT3 } from "~Constants"
 
 export const BalanceView = ({
     tokenWithInfo,
@@ -89,8 +89,8 @@ export const BalanceView = ({
     return (
         <BaseView style={containerStyle ?? styles.layout}>
             <BaseView style={styles.balanceContainer}>
-                <BaseView style={[!isVBDToken && styles.imageContainer]}>
-                    <Image source={{ uri: tokenWithInfo.icon }} style={isVBDToken ? styles.vbdImage : styles.image} />
+                <BaseView style={[styles.imageContainer]}>
+                    <Image source={{ uri: tokenWithInfo.icon }} style={styles.image} />
                 </BaseView>
                 <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                     {symbol}
@@ -117,14 +117,12 @@ export const BalanceView = ({
 const styles = StyleSheet.create({
     imageContainer: {
         borderRadius: 30,
-        padding: 6,
-        backgroundColor: COLORS.GREY_100,
+        overflow: "hidden",
     },
     imageShadow: {
         width: "auto",
     },
-    image: { width: 14, height: 14 },
-    vbdImage: { width: 26, height: 26 },
+    image: { width: 24, height: 24 },
     balanceContainer: {
         flexDirection: "row",
         alignItems: "center",

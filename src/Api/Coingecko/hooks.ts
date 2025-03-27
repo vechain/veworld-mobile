@@ -182,7 +182,6 @@ const getExchangeRateQueryKey = ({ id, vs_currency }: { id?: string; vs_currency
  */
 export const useExchangeRate = ({ id, vs_currency }: { id?: string; vs_currency: string }) => {
     const { data: tokenInfo } = useTokenInfo({ id })
-
     const currency = vs_currency.toLowerCase()
 
     return useQuery({

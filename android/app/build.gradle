@@ -1,11 +1,36 @@
 apply plugin: "com.android.application"
 apply plugin: "com.facebook.react"
-
 apply plugin: "kotlin-android"
 
 def keystorePropertiesFile = rootProject.file("keystore.properties")
 def keystoreProperties = new Properties()
 keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+
+def isDebug = gradle.startParameter.taskNames.any { it.contains('Debug') }
+def keyFileName = isDebug ? 'debug.keystore' : 'release.keystore'
+def keyFile = file(keyFileName)
+def debugPublicKey = "\"DEBUG_KEY_NOT_FOUND\""
+
+if (keyFile.exists()) {
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'keytool',
+                '-exportcert',
+                '-alias', 'androiddebugkey',
+                '-keystore', keyFile,
+                '-storepass', 'android',
+                '-rfc'
+        standardOutput = stdout
+    }
+
+    def certContent = stdout.toString().trim()
+            .replaceAll("-----BEGIN CERTIFICATE-----", "")
+            .replaceAll("-----END CERTIFICATE-----", "")
+            .replaceAll("\\s+", "")
+    debugPublicKey = "\"${certContent}\""
+} else {
+    println "Debug keystore not found. Using placeholder."
+}
 
 /**
  * This is the configuration block to customize your React Native Android app.
@@ -57,8 +82,8 @@ react {
 }
 
 /**
- * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
- */
+  * Set this to true to Run Proguard on Release builds to minify the Java bytecode.
+  */
 def enableProguardInReleaseBuilds = false
 
 project.ext.vectoricons = [
@@ -66,7 +91,6 @@ project.ext.vectoricons = [
 ]
 
 apply from: file("../../node_modules/react-native-vector-icons/fonts.gradle")
-
 apply from: "../../node_modules/@sentry/react-native/sentry.gradle"
 
 /**
@@ -84,7 +108,6 @@ def jscFlavor = 'org.webkit:android-jsc:+'
 
 android {
     ndkVersion rootProject.ext.ndkVersion
-
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     namespace "org.vechain.veworld.app"
@@ -114,6 +137,7 @@ versionName "2.2.0"
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
+            buildConfigField "String", "PUBLIC_KEY", debugPublicKey
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -122,6 +146,7 @@ versionName "2.2.0"
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
+            buildConfigField "String", "PUBLIC_KEY", System.getenv('PUBLIC_KEY') ?: (keystoreProperties['publicKey'] ?: "null")
         }
     }
 
@@ -169,7 +194,6 @@ dependencies {
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {
         exclude group: 'com.squareup.okhttp3', module: 'okhttp'
     }
-
     debugImplementation("com.facebook.flipper:flipper-fresco-plugin:${FLIPPER_VERSION}")
     if (hermesEnabled.toBoolean()) {
         implementation("com.facebook.react:hermes-android")
@@ -178,4 +202,5 @@ dependencies {
     }
 }
 
-apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle"); applyNativeModulesAppBuildGradle(project)
+apply from: file("../../node_modules/@react-native-community/cli-platform-android/native_modules.gradle")
+applyNativeModulesAppBuildGradle(project)
