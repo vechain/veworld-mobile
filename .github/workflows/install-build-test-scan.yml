@@ -107,9 +107,5 @@ jobs:
           with:
             webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
             webhook-type: incoming-webhook
-            payload: '{ "text": "*E2E result: ${{ job.status }}\n
-                    scan ${{ needs.scan.result }}\n
-                    iOS ${{ needs.build-and-test-ios.result }}\n
-                    Android ${{needs.build-and-test-android.result}}\n",
-              "payload": "${{ github.ref }} - ${{ github.head_ref }}",
-              "blocks": "--" }'
+            payload: '{ "text": "${{ job.status }}\nscan ${{ needs.scan.result }}\niOS ${{ needs.build-and-test-ios.result }}\nAndroid ${{needs.build-and-test-android.result}}\n" }'
+              
