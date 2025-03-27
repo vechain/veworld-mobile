@@ -38,7 +38,7 @@ export const BaseTokenCard = ({
                 <BaseSpacer width={12} />
                 <BaseView alignItems="center" justifyContent="center" flexDirection="row">
                     <BaseText typographyFont="bodyBold">{symbol}</BaseText>
-                    <BaseSpacer width={6} />
+                    <BaseSpacer width={8} />
 
                     <BaseView flexDirection="row">
                         {isLoading ? (

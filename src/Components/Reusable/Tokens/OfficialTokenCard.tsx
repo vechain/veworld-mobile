@@ -59,12 +59,12 @@ export const OfficialTokenCard = memo(
                             isVechainToken={isVetToken}
                             iconSize={iconSize ?? 26}
                         />
-                        <BaseSpacer width={14} />
+                        <BaseSpacer width={12} />
                         <BaseView flexDirection="row">
                             <BaseText typographyFont="bodyBold" ellipsizeMode="tail" numberOfLines={1}>
                                 {token.symbol}
                             </BaseText>
-                            <BaseSpacer width={6} />
+                            <BaseSpacer width={8} />
 
                             <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
                                 {isBalanceVisible ? tokenUnitBalance : "•••••"}
