@@ -1,9 +1,11 @@
-import { Image, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import React from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import Animated from "react-native-reanimated"
 import { useTheme } from "~Hooks"
 import { COLORS, VET } from "~Constants"
+import { TokenImage } from "~Components/Reusable/TokenImage"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 type BaseTokenCardProps = {
     icon: string
@@ -27,16 +29,16 @@ export const BaseTokenCard = ({
 
     const alignTokenBalance = symbol === VET.symbol ? "flex-start" : "center"
 
+    const isVetToken = isVechainToken(symbol)
+
     return (
         <Animated.View style={[styles.innerRow, { alignItems: alignTokenBalance }]}>
             <BaseView flexDirection="row">
-                <BaseView style={[styles.imageContainer]}>
-                    <Image source={{ uri: icon }} style={styles.image} />
-                </BaseView>
+                <TokenImage icon={icon} isVechainToken={isVetToken} iconSize={26} />
                 <BaseSpacer width={14} />
                 <BaseView alignItems="center" justifyContent="center" flexDirection="row">
                     <BaseText typographyFont="bodyBold">{symbol}</BaseText>
-                    <BaseSpacer width={4} />
+                    <BaseSpacer width={6} />
 
                     <BaseView flexDirection="row">
                         {isLoading ? (

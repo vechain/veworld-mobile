@@ -8,6 +8,7 @@ import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useVechainStatsTokenInfo } from "~Api/Coingecko"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 type OfficialTokenCardProps = {
     token: FungibleToken
@@ -21,7 +22,7 @@ export const OfficialTokenCard = memo(
         const { styles } = useThemedStyles(baseStyles(selected))
         const theme = useTheme()
         const isVOT3 = token.symbol === VOT3.symbol
-        const isVeB3tr = token.symbol === B3TR.symbol || token.symbol === VOT3.symbol
+        const isVetToken = isVechainToken(token.symbol)
 
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
         const { data: exchangeRate } = useVechainStatsTokenInfo(token.symbol.toLowerCase())
@@ -55,7 +56,12 @@ export const OfficialTokenCard = memo(
             <TouchableOpacity onPress={action} style={[styles.container, style]} testID={symbol}>
                 <BaseView flexDirection="row" justifyContent="space-between" w={100}>
                     <BaseView flexDirection="row" justifyContent="flex-start">
-                        <TokenImage icon={token.icon} symbol={token.symbol} isLogoRound={isVeB3tr} />
+                        <TokenImage
+                            icon={tokenWithInfo?.icon ?? token.icon}
+                            symbol={token.symbol}
+                            isVechainToken={isVetToken}
+                            iconSize={26}
+                        />
                         <BaseSpacer width={14} />
                         <BaseView flexDirection="row">
                             <BaseText typographyFont="bodyBold" ellipsizeMode="tail" numberOfLines={1}>

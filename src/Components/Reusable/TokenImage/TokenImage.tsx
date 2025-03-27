@@ -6,12 +6,13 @@ import { BaseCustomTokenIcon, BaseView } from "~Components/Base"
 type Props = {
     icon?: string
     symbol?: string
-    isLogoRound?: boolean
+    isVechainToken?: boolean
+    iconSize?: number
 }
 
-export const TokenImage = ({ icon, symbol, isLogoRound = false }: Props) => {
-    if (isLogoRound) {
-        return <Image source={{ uri: icon }} height={26} width={26} />
+export const TokenImage = ({ icon, symbol, isVechainToken = false, iconSize = 24 }: Props) => {
+    if (isVechainToken) {
+        return <Image source={{ uri: icon }} height={iconSize} width={iconSize} />
     }
 
     return (
@@ -33,15 +34,15 @@ const styles = StyleSheet.create({
         width: "auto",
     },
     icon: {
-        width: 16,
-        height: 16,
+        width: 20,
+        height: 20,
         alignItems: "center",
         justifyContent: "center",
     },
     imageContainer: {
         borderRadius: 30,
-        padding: 5,
+        padding: 4,
         backgroundColor: COLORS.GREY_50,
     },
-    image: { width: 16, height: 16 },
+    image: { width: 18, height: 18 },
 })
