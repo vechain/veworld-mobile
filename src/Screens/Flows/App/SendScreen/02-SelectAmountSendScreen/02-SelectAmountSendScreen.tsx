@@ -18,7 +18,7 @@ import {
     showErrorToast,
     FiatBalance,
 } from "~Components"
-import { COLORS, CURRENCY_SYMBOLS, typography, VTHO } from "~Constants"
+import { B3TR, COLORS, CURRENCY_SYMBOLS, typography, VET, VOT3, VTHO } from "~Constants"
 import { useAmountInput, useTheme, useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
@@ -64,6 +64,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         id: getCoinGeckoIdBySymbol[token.symbol],
         vs_currency: currency,
     })
+
+    const computedIcon = useMemo(() => {
+        if (token.symbol === VET.symbol) return VET.icon
+        if (token.symbol === VTHO.symbol) return VTHO.icon
+        if (token.symbol === B3TR.symbol) return B3TR.icon
+        if (token.symbol === VOT3.symbol) return VOT3.icon
+        return token.icon
+    }, [token.icon, token.symbol])
 
     const isExchangeRateAvailable = !!exchangeRate
 
@@ -314,7 +322,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     <>
                                                         {/*@ts-ignore*/}
                                                         <TokenImage
-                                                            icon={token.icon}
+                                                            icon={computedIcon}
                                                             symbol={token.symbol}
                                                             isVechainToken={isVechainToken(token.symbol)}
                                                             iconSize={24}
