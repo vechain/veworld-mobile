@@ -31,9 +31,9 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 <BaseView>
                     <BaseSpacer height={16} />
                     <BaseView justifyContent="center" alignItems="center">
-                        <BaseIcon name={icon} style={styles.icon} size={40} color={theme.colors.text} />
+                        <BaseIcon name={icon} style={styles.icon} size={50} color={theme.colors.text} />
                         <BaseSpacer height={24} />
-                        <BaseText align="center" typographyFont="subSubTitleMedium">
+                        <BaseText align="center" typographyFont="subSubTitleSemiBold">
                             {title}
                         </BaseText>
                         <BaseSpacer height={8} />
