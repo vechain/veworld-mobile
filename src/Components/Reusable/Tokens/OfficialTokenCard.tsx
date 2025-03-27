@@ -2,7 +2,7 @@ import { StyleSheet, TouchableOpacity, ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
 import { TokenWithCompleteInfo, useBalances, useTheme, useThemedStyles } from "~Hooks"
-import { B3TR, ColorThemeType, VOT3 } from "~Constants"
+import { ColorThemeType, VOT3 } from "~Constants"
 import { TokenImage } from "../TokenImage"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
@@ -44,10 +44,6 @@ export const OfficialTokenCard = memo(
 
         const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
 
-        const isBetterToken = useMemo(() => {
-            return token.symbol === B3TR.symbol || token.symbol === VOT3.symbol
-        }, [token.symbol])
-
         const fiatBalance = useMemo(() => {
             if (tokenWithInfo?.fiatBalance && !isVOT3) return tokenWithInfo.fiatBalance
             return tokenFiatBalance
@@ -86,7 +82,7 @@ export const OfficialTokenCard = memo(
                                     isVisible={isBalanceVisible}
                                 />
                             )}
-                            {!!tokenInfo && !isBetterToken && (
+                            {!!tokenInfo && (
                                 <BaseView flexDirection="row">
                                     <BaseText
                                         typographyFont="captionMedium"
