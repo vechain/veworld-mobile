@@ -15,10 +15,11 @@ type OfficialTokenCardProps = {
     tokenWithInfo?: Partial<TokenWithCompleteInfo>
     action: () => void
     selected?: boolean
+    iconSize?: number
 }
 
 export const OfficialTokenCard = memo(
-    ({ token, tokenWithInfo = {}, style, action, selected }: OfficialTokenCardProps & ViewProps) => {
+    ({ token, tokenWithInfo = {}, style, action, selected, iconSize }: OfficialTokenCardProps & ViewProps) => {
         const { styles } = useThemedStyles(baseStyles(selected))
         const theme = useTheme()
         const isVOT3 = token.symbol === VOT3.symbol
@@ -60,7 +61,7 @@ export const OfficialTokenCard = memo(
                             icon={tokenWithInfo?.icon ?? token.icon}
                             symbol={token.symbol}
                             isVechainToken={isVetToken}
-                            iconSize={26}
+                            iconSize={iconSize ?? 26}
                         />
                         <BaseSpacer width={14} />
                         <BaseView flexDirection="row">
