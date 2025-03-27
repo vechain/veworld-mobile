@@ -378,14 +378,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                   <>
                                                       {isInputInFiat ? (
                                                           <BaseView flexDirection="row" alignItems="center">
+                                                              {/* @ts-ignore */}
+                                                              <BaseImage uri={token.icon} style={styles.logoIcon} />
+                                                              <BaseSpacer width={8} />
                                                               <BaseText
                                                                   typographyFont="captionBold"
                                                                   color={inputColorNotAnimated}>
                                                                   {computeconvertedAmountInFooter}
                                                               </BaseText>
-                                                              <BaseSpacer width={4} />
-                                                              {/* @ts-ignore */}
-                                                              <BaseImage uri={token.icon} style={styles.logoIcon} />
                                                           </BaseView>
                                                       ) : (
                                                           <FiatBalance
@@ -465,7 +465,6 @@ const baseStyles = (isExchangeRateAvailable: boolean) => () =>
         logoIcon: {
             height: 20,
             width: 20,
-            marginLeft: 4,
         },
         amountContainer: {
             overflow: "visible",
