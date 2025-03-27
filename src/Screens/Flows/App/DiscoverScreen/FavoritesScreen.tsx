@@ -1,7 +1,15 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { BaseSpacer, BaseView, FavoriteDAppCard, Layout, ListEmptyResults, ReorderIconHeaderButton } from "~Components"
+import {
+    AnimatedSaveHeaderButton,
+    BaseSpacer,
+    BaseView,
+    FavoriteDAppCard,
+    Layout,
+    ListEmptyResults,
+    ReorderIconHeaderButton,
+} from "~Components"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -71,11 +79,19 @@ export const FavouritesScreen = () => {
             hasTopSafeAreaOnly={false}
             title={LL.FAVOURITES_DAPPS_TITLE()}
             headerRightElement={
-                <ReorderIconHeaderButton
-                    action={() => {
-                        setIsEditingMode(true)
-                    }}
-                />
+                isEditingMode ? (
+                    <AnimatedSaveHeaderButton
+                        action={() => {
+                            setIsEditingMode(false)
+                        }}
+                    />
+                ) : (
+                    <ReorderIconHeaderButton
+                        action={() => {
+                            setIsEditingMode(true)
+                        }}
+                    />
+                )
             }
             fixedBody={
                 <BaseView flex={1} px={24}>
