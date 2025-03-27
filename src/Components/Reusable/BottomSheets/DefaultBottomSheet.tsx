@@ -38,7 +38,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                             {title}
                         </BaseText>
                         <BaseSpacer height={12} />
-                        <BaseText align="center" typographyFont="body">
+                        <BaseText align="center" typographyFont="body" lineHeight={20}>
                             {description}
                         </BaseText>
                     </BaseView>

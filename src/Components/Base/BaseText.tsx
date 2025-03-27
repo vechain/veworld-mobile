@@ -12,6 +12,7 @@ export type BaseTextProps = {
     fontSize?: keyof typeof otherTypography.fontSize
     fontWeight?: keyof typeof otherTypography.fontWeight
     fontFamily?: keyof typeof otherTypography.fontFamily
+    lineHeight?: number
     align?: "left" | "center" | "right"
     italic?: boolean
     underline?: boolean
@@ -38,7 +39,7 @@ export type BaseTextProps = {
 } & TextProps
 
 export const BaseText = (props: BaseTextProps) => {
-    const { style, typographyFont, fontSize, fontWeight, fontFamily, ...otherProps } = props
+    const { style, typographyFont, fontSize, fontWeight, fontFamily, lineHeight, ...otherProps } = props
     const theme = useTheme()
 
     const computedFontSize = useMemo(
@@ -98,7 +99,8 @@ export const BaseText = (props: BaseTextProps) => {
                         textAlign: props.align,
                         fontStyle: props.italic ? "italic" : "normal",
                         textDecorationLine: props.underline ? "underline" : "none",
-                        lineHeight: typographyFont ? defaultTypography[typographyFont].lineHeight : undefined,
+                        lineHeight:
+                            lineHeight ?? (typographyFont ? defaultTypography[typographyFont].lineHeight : undefined),
                     },
                     style,
                 ]}

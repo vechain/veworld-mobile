@@ -1141,6 +1141,10 @@ type RootTranslation = {
 	 */
 	BTN_SEND: string
 	/**
+	 * Y​e​s​,​ ​s​e​n​d​ ​a​n​y​w​a​y
+	 */
+	BTN_SEND_ANYWAY: string
+	/**
 	 * S​h​o​w​ ​Q​R​ ​c​o​d​e
 	 */
 	BTN_SHOW_QR_CODE: string
@@ -3286,13 +3290,14 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​f​e​r
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
-	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
+	 * {​t​o​k​e​n​C​o​u​n​t​}​ ​t​o​k​e​n​s
+	 * @param {number} tokenCount
 	 */
-	SEND_TOKEN_SUBTITLE: string
+	SEND_TOKEN_SUBTITLE: RequiredParams<'tokenCount'>
 	/**
 	 * S​e​n​d
 	 */
@@ -3305,6 +3310,15 @@ type RootTranslation = {
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​s​e​n​d​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.​ ​T​h​i​s​ ​m​a​y​ ​b​e​ ​d​u​e​ ​t​o​ ​a​ ​l​a​c​k​ ​o​f​ ​f​u​n​d​s
 	 */
 	SEND_TRANSACTION_ERROR: string
+	/**
+	 * Y​o​u​r​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​b​a​c​k​ ​t​o​ ​B​3​T​R​ ​i​n​ ​t​h​i​s​ ​s​p​e​c​i​f​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​.​ ​B​y​ ​s​e​n​d​i​n​g​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​o​n​’​t​ ​b​e​ ​a​b​l​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​t​o​ ​a​n​y​ ​o​t​h​e​r​ ​a​s​s​e​t​.​
+​A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​c​o​n​t​i​n​u​e​?
+	 */
+	SEND_VOT3_DESCRIPTION: string
+	/**
+	 * S​e​n​d​i​n​g​ ​V​O​T​3
+	 */
+	SEND_VOT3_TITLE: string
 	/**
 	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​w​i​l​l​ ​d​e​d​u​c​t​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s
 	 */
@@ -5098,6 +5112,10 @@ Thanks for your patience!
 	 * Send
 	 */
 	BTN_SEND: () => LocalizedString
+	/**
+	 * Yes, send anyway
+	 */
+	BTN_SEND_ANYWAY: () => LocalizedString
 	/**
 	 * Show QR code
 	 */
@@ -7212,13 +7230,13 @@ Thanks for your patience!
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select the asset that you want to transfer
+	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
 	/**
-	 * Send your token
+	 * {tokenCount} tokens
 	 */
-	SEND_TOKEN_SUBTITLE: () => LocalizedString
+	SEND_TOKEN_SUBTITLE: (arg: { tokenCount: number }) => LocalizedString
 	/**
 	 * Send
 	 */
@@ -7231,6 +7249,15 @@ Thanks for your patience!
 	 * There was an error sending the transaction. This may be due to a lack of funds
 	 */
 	SEND_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * Your VOT3 tokens can only be converted back to B3TR in this specific wallet address. By sending to another wallet you won’t be able to convert to any other asset.
+Are you sure you want to continue?
+	 */
+	SEND_VOT3_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sending VOT3
+	 */
+	SEND_VOT3_TITLE: () => LocalizedString
 	/**
 	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas
 	 */
