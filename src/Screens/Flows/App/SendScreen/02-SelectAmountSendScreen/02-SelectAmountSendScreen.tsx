@@ -73,8 +73,12 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         address,
     )
 
-    const { inputColorNotAnimated, placeholderColor, shortenedTokenName, animatedFontStyle, animatedStyleInputColor } =
-        useUI({ isError, input, token, theme })
+    const { inputColorNotAnimated, placeholderColor, animatedFontStyle, animatedStyleInputColor } = useUI({
+        isError,
+        input,
+        token,
+        theme,
+    })
 
     /**
      * TOKEN total balance in FIAT in raw-ish format (with decimals)
@@ -298,7 +302,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                         <BaseView flex={1} style={styles.amountContainer}>
                                             <BaseView flexDirection="row" style={styles.inputHeader} p={6}>
                                                 <BaseText typographyFont="captionBold">
-                                                    {isInputInFiat ? currency : shortenedTokenName}
+                                                    {isInputInFiat ? currency : token.symbol}
                                                 </BaseText>
 
                                                 {isInputInFiat ? (
