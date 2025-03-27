@@ -317,6 +317,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                             icon={token.icon}
                                                             symbol={token.symbol}
                                                             isVechainToken={isVechainToken(token.symbol)}
+                                                            iconSize={24}
                                                         />
                                                         <BaseSpacer width={12} />
                                                         <BaseText typographyFont="bodySemiBold">
