@@ -1,9 +1,9 @@
-import { Image, StyleSheet } from "react-native"
 import React from "react"
-import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
+import { Image, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
+import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
+import { COLORS, GENERIC_TOKEN_ICON } from "~Constants"
 import { useTheme } from "~Hooks"
-import { COLORS } from "~Constants"
 
 type BaseTokenCardProps = {
     icon: string
@@ -29,7 +29,7 @@ export const BaseTokenCard = ({
         <Animated.View style={[styles.innerRow]}>
             <BaseView flexDirection="row">
                 <BaseView style={[styles.imageContainer]}>
-                    <Image source={{ uri: icon }} style={styles.image} />
+                    <Image source={{ uri: icon || GENERIC_TOKEN_ICON }} style={styles.image} />
                 </BaseView>
                 <BaseSpacer width={16} />
                 <BaseView alignItems="flex-start" justifyContent="center">
@@ -65,13 +65,12 @@ export const BaseTokenCard = ({
 const styles = StyleSheet.create({
     imageContainer: {
         borderRadius: 30,
-        padding: 10,
-        backgroundColor: COLORS.GREY_50,
+        overflow: "hidden",
     },
     imageShadow: {
         width: "auto",
     },
-    image: { width: 20, height: 20 },
+    image: { width: 24, height: 24 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",
