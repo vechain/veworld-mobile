@@ -119,10 +119,13 @@ jobs:
             scan: "${{ needs.scan.result}}"
             ios: "${{ needs.build-and-test-ios.result}}"
             android: "${{ needs.build-and-test-android.result}}"
+            text: 
           with:
             webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
             webhook-type: incoming-webhook
             payload: |
-              blocks: "--"
+              text: "*E2E result*: ${{ job.status }}\n${{ github.ref }}\n${{ github.head_ref }}\n" +
+                    "scan ${{ needs.scan.result }}\niOS${{ needs.build-and-test-ios.result }}\n" +
+                    "Android ${{needs.build-and-test-android.result}}\n"
               payload: "payload result"
-              text: "*E2E result*: ${{ job.status }}\n$ref\n$head\n scan - $scan\n iOS - $ios \n Android - $android"
+              blocks: "--"
