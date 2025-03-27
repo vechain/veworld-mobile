@@ -836,6 +836,7 @@
   "SHOW_NFT": "Показать NFT",
   "SIGNED_CERTIFICATE": "Подписанный сертификат",
   "SIGN_CERTIFICATE": "Подписать сертификат",
+  "SIGN_TRANSACTION": "Подписать транзакцию",
   "SIGN_TRANSACTION_ERROR": "Ошибка при подписании транзакции",
   "STATUS": "Статус",
   "SUCCESS_DOMAIN_AVAILABLE": "Доступен для получения",

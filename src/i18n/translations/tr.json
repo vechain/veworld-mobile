@@ -836,6 +836,7 @@
   "SHOW_NFT": "NFT'yi Göster",
   "SIGNED_CERTIFICATE": "İmzalı sertifika",
   "SIGN_CERTIFICATE": "Sertifika imzala",
+  "SIGN_TRANSACTION": "İşlemi imzala",
   "SIGN_TRANSACTION_ERROR": "İşlem imzalama hatası",
   "STATUS": "Durum",
   "SUCCESS_DOMAIN_AVAILABLE": "Talep edilebilir",

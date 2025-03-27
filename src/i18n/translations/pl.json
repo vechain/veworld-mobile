@@ -836,6 +836,7 @@
   "SHOW_NFT": "Pokaż NFT",
   "SIGNED_CERTIFICATE": "Podpisany certyfikat",
   "SIGN_CERTIFICATE": "Podpisz certyfikat",
+  "SIGN_TRANSACTION": "Podpisz transakcję",
   "SIGN_TRANSACTION_ERROR": "Błąd podczas podpisywania transakcji",
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Dostępny do przejęcia",

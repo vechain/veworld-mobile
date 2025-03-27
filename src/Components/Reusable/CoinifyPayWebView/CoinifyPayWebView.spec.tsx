@@ -1,12 +1,9 @@
-import React from "react"
 import { render, screen } from "@testing-library/react-native"
-import { CoinifyPayWebView } from "./CoinifyPayWebView"
-import { getStore, TestHelpers } from "~Test"
-import { InAppBrowserProvider, usePersistedTheme } from "~Components/Providers"
+import React from "react"
+import { InAppBrowserProvider } from "~Components/Providers"
 import { RootState } from "~Storage/Redux/Types"
-import { Provider } from "react-redux"
-import { ThemeEnum } from "~Constants"
-import { SecurePersistedCache } from "~Storage/PersistedCache"
+import { TestHelpers, TestWrapper } from "~Test"
+import { CoinifyPayWebView } from "./CoinifyPayWebView"
 
 const { account1D1, account2D1 } = TestHelpers.data
 const amount = 100
@@ -61,17 +58,10 @@ const createWrapper = ({
     children: React.ReactNode
     preloadedState: Partial<RootState>
 }) => {
-    ;(usePersistedTheme as jest.Mock<ReturnType<typeof usePersistedTheme>>).mockReturnValue({
-        themeCache: new SecurePersistedCache<ThemeEnum>("test-theme-key", "test-theme"),
-        theme: ThemeEnum.DARK,
-        initThemeCache: jest.fn(),
-        resetThemeCache: jest.fn(),
-        changeTheme: jest.fn(),
-    })
     return (
-        <Provider store={getStore(preloadedState)}>
+        <TestWrapper preloadedState={preloadedState}>
             <InAppBrowserProvider platform={"android"}>{children}</InAppBrowserProvider>
-        </Provider>
+        </TestWrapper>
     )
 }
 
@@ -88,6 +78,17 @@ describe("CoinifyPayWebView component", () => {
         render(<CoinifyPayWebView currentAmount={amount} destinationAddress={account2D1.address} target="sell" />, {
             wrapper: createWrapper,
         })
+
+        const webview = screen.getByTestId("CoinifyPayWebView")
+        expect(webview).toBeOnTheScreen()
+    })
+    it("render correct trade-history view", async () => {
+        render(
+            <CoinifyPayWebView currentAmount={amount} destinationAddress={account2D1.address} target="trade-history" />,
+            {
+                wrapper: createWrapper,
+            },
+        )
 
         const webview = screen.getByTestId("CoinifyPayWebView")
         expect(webview).toBeOnTheScreen()

@@ -836,6 +836,7 @@
   "SHOW_NFT": "NFT दिखाएँ",
   "SIGNED_CERTIFICATE": "हस्ताक्षरित प्रमाणपत्र",
   "SIGN_CERTIFICATE": "प्रमाणपत्र पर हस्ताक्षर करें",
+  "SIGN_TRANSACTION": "लेन-देन पर हस्ताक्षर करें",
   "SIGN_TRANSACTION_ERROR": "लेनदेन पर हस्ताक्षर करने में त्रुटि",
   "STATUS": "स्थिति",
   "SUCCESS_DOMAIN_AVAILABLE": "दावा करने के लिए उपलब्ध",

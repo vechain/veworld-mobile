@@ -42,6 +42,12 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 
+type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
+    route: RouteName
+    params: RootStackParamListHome[RouteName]
+    screen?: Routes
+}
+
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
     [Routes.SELECT_TOKEN_SEND]: undefined
@@ -58,6 +64,7 @@ export type RootStackParamListHome = {
         token: FungibleTokenWithBalance
         amount: string
         address: string
+        navigation?: NavigationMetadata<any>
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice

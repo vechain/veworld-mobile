@@ -836,6 +836,7 @@
   "SHOW_NFT": "Show NFT",
   "SIGNED_CERTIFICATE": "Signed certificate",
   "SIGN_CERTIFICATE": "Sign certificate",
+  "SIGN_TRANSACTION": "Sign transaction",
   "SIGN_TRANSACTION_ERROR": "Error signing transaction",
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Available to claim",

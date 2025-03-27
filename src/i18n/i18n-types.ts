@@ -3429,6 +3429,10 @@ type RootTranslation = {
 	 */
 	SIGN_TRANSACTION_ERROR: string
 	/**
+	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SIGN_TRANSACTION: string
+	/**
 	 * S​t​a​t​u​s
 	 */
 	STATUS: string
@@ -7347,6 +7351,10 @@ Thanks for your patience!
 	 * Error signing transaction
 	 */
 	SIGN_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * Sign transaction
+	 */
+	SIGN_TRANSACTION: () => LocalizedString
 	/**
 	 * Status
 	 */
