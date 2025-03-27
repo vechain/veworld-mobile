@@ -1,11 +1,11 @@
-import { StyleSheet } from "react-native"
 import React from "react"
-import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
+import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { useTheme } from "~Hooks"
 import { COLORS, VET } from "~Constants"
-import { TokenImage } from "~Components/Reusable/TokenImage"
+import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
 import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
+import { TokenImage } from "~Components/Reusable/TokenImage"
 
 type BaseTokenCardProps = {
     icon: string
@@ -67,15 +67,6 @@ export const BaseTokenCard = ({
 }
 
 const styles = StyleSheet.create({
-    imageContainer: {
-        borderRadius: 30,
-        padding: 5,
-        backgroundColor: COLORS.GREY_50,
-    },
-    imageShadow: {
-        width: "auto",
-    },
-    image: { width: 16, height: 16 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",

@@ -134,7 +134,10 @@ const ConvertionCard = ({ direction, token, amount }: ConvertionCardProps) => {
             </BaseText>
 
             <BaseView flexDirection="row" mb={2}>
-                <Image source={{ uri: renderIcon }} width={24} height={24} />
+                <BaseView borderRadius={30} overflow="hidden">
+                    <Image source={{ uri: renderIcon }} width={24} height={24} />
+                </BaseView>
+
                 <BaseText pl={8} typographyFont="bodySemiBold" color={theme.colors.assetDetailsCard.title}>
                     {token?.symbol}
                 </BaseText>

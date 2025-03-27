@@ -4,7 +4,7 @@ import { BaseSkeleton, BaseText, BaseView, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { B3TR, COLORS, VOT3 } from "~Constants"
+import { B3TR, VOT3 } from "~Constants"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
@@ -117,16 +117,6 @@ export const BalanceView = ({
 }
 
 const styles = StyleSheet.create({
-    imageContainer: {
-        borderRadius: 30,
-        padding: 6,
-        backgroundColor: COLORS.GREY_100,
-    },
-    imageShadow: {
-        width: "auto",
-    },
-    image: { width: 14, height: 14 },
-    vbdImage: { width: 26, height: 26 },
     balanceContainer: {
         flexDirection: "row",
         alignItems: "center",
@@ -137,8 +127,5 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
         alignItems: "center",
-    },
-    vbdFiat: {
-        justifyContent: "flex-start",
     },
 })
