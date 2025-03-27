@@ -26,6 +26,8 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useUI } from "./Hooks"
+import { TokenImage } from "~Components/Reusable/TokenImage"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 const { defaults: defaultTypography } = typography
 
@@ -300,21 +302,30 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                 {
                                     children: (
                                         <BaseView flex={1} style={styles.amountContainer}>
-                                            <BaseView flexDirection="row" style={styles.inputHeader} p={6}>
-                                                <BaseText typographyFont="captionBold">
-                                                    {isInputInFiat ? currency : token.symbol}
-                                                </BaseText>
-
+                                            <BaseView flexDirection="row" style={styles.inputHeader}>
                                                 {isInputInFiat ? (
-                                                    <BaseText typographyFont="subTitleBold" mx={4}>
-                                                        {CURRENCY_SYMBOLS[currency]}
-                                                    </BaseText>
+                                                    <>
+                                                        <BaseText typographyFont="bodySemiBold">{currency}</BaseText>
+                                                        <BaseText typographyFont="bodySemiBold" mx={4}>
+                                                            {CURRENCY_SYMBOLS[currency]}
+                                                        </BaseText>
+                                                    </>
                                                 ) : (
-                                                    // @ts-ignore
-                                                    <BaseImage uri={token.icon} style={styles.logoIcon} />
+                                                    <>
+                                                        {/*@ts-ignore*/}
+                                                        <TokenImage
+                                                            icon={token.icon}
+                                                            symbol={token.symbol}
+                                                            isVechainToken={isVechainToken(token.symbol)}
+                                                        />
+                                                        <BaseSpacer width={12} />
+                                                        <BaseText typographyFont="bodySemiBold">
+                                                            {token.symbol}
+                                                        </BaseText>
+                                                    </>
                                                 )}
                                             </BaseView>
-                                            <BaseSpacer width={18} />
+                                            <BaseSpacer height={8} />
                                             <AnimatedTextInput
                                                 contextMenuHidden
                                                 cursorColor={theme.colors.secondary}

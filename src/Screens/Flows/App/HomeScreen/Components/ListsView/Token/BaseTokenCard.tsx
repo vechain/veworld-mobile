@@ -35,7 +35,7 @@ export const BaseTokenCard = ({
         <Animated.View style={[styles.innerRow, { alignItems: alignTokenBalance }]}>
             <BaseView flexDirection="row">
                 <TokenImage icon={icon} isVechainToken={isVetToken} iconSize={26} />
-                <BaseSpacer width={14} />
+                <BaseSpacer width={12} />
                 <BaseView alignItems="center" justifyContent="center" flexDirection="row">
                     <BaseText typographyFont="bodyBold">{symbol}</BaseText>
                     <BaseSpacer width={6} />

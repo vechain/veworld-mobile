@@ -1,13 +1,14 @@
-import { Image, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
 import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
 import Animated from "react-native-reanimated"
 import { useTheme, useTokenWithCompleteInfo, useTokenCardFiatInfo, useCombineFiatBalances } from "~Hooks"
 import { BalanceUtils } from "~Utils"
-import { COLORS, VBD_ICON } from "~Constants"
+import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { TokenImage } from "~Components/Reusable/TokenImage"
 
 type Props = {
     isBalanceVisible: boolean
@@ -85,9 +86,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
     return (
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row" alignItems="center">
-                <BaseView style={[baseStyles.imageContainer]}>
-                    <Image source={{ uri: VBD_ICON }} style={baseStyles.image} />
-                </BaseView>
+                <TokenImage isVechainToken iconSize={26} icon={b3trToken.icon} />
                 <BaseSpacer width={14} />
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row">
