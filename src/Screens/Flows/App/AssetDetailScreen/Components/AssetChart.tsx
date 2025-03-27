@@ -17,7 +17,6 @@ import {
 } from "~Api/Coingecko"
 import { useQueryClient } from "@tanstack/react-query"
 import { max } from "lodash"
-import { B3TR } from "~Constants"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -99,14 +98,10 @@ export const AssetChart = ({ token }: Props) => {
                 <ChartView chartData={chartData} token={token} isChartDataLoading={!isLoaded} />
             </LineChart.Provider>
 
-            {token.symbol !== B3TR.symbol && (
-                <>
-                    <BaseSpacer height={12} />
-                    <BaseView px={32}>
-                        <PressableWithUnderline onPress={onTimelineButtonPress} data={marketChartTimeframes} />
-                    </BaseView>
-                </>
-            )}
+            <BaseSpacer height={12} />
+            <BaseView px={32}>
+                <PressableWithUnderline onPress={onTimelineButtonPress} data={marketChartTimeframes} />
+            </BaseView>
         </>
     )
 }
