@@ -37,7 +37,7 @@ export const OfficialTokenCard = memo(
 
         const { tokenUnitBalance, fiatBalance: tokenFiatBalance } = useBalances({
             token,
-            exchangeRate: tokenWithInfo?.exchangeRate ?? parseFloat(exchangeRate ?? ""),
+            exchangeRate: tokenWithInfo?.exchangeRate ?? parseFloat(exchangeRate ?? "0"),
         })
 
         const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
