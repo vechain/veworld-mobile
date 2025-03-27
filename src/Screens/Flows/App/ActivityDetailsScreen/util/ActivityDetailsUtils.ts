@@ -49,3 +49,30 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
             warn(ERROR_EVENTS.ACTIVITIES, "Unknown activity type")
     }
 }
+
+export const getActivityModalTitle = (activity: Activity, LL: TranslationFunctions) => {
+    switch (activity.type) {
+        case ActivityType.TRANSFER_FT:
+        case ActivityType.TRANSFER_VET:
+        case ActivityType.TRANSFER_SF:
+        case ActivityType.SIGN_CERT:
+        case ActivityType.SWAP_FT_TO_FT:
+        case ActivityType.SWAP_FT_TO_VET:
+        case ActivityType.SWAP_VET_TO_FT:
+        case ActivityType.B3TR_SWAP_B3TR_TO_VOT3:
+        case ActivityType.B3TR_SWAP_VOT3_TO_B3TR:
+        case ActivityType.DAPP_TRANSACTION:
+        case ActivityType.B3TR_CLAIM_REWARD:
+        case ActivityType.B3TR_PROPOSAL_VOTE:
+        case ActivityType.B3TR_XALLOCATION_VOTE:
+        case ActivityType.B3TR_UPGRADE_GM:
+        case ActivityType.TRANSFER_NFT:
+        case ActivityType.CONNECTED_APP_TRANSACTION:
+        case ActivityType.SIGN_TYPED_DATA:
+            return getActivityTitle(activity, LL)
+        case ActivityType.B3TR_ACTION:
+            return LL.B3TR_ACTION_MODAL_TITLE()
+        default:
+            warn(ERROR_EVENTS.ACTIVITIES, "Unknown activity type")
+    }
+}

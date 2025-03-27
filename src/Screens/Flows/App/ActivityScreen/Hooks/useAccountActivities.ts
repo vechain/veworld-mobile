@@ -81,6 +81,8 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
                 const filteredLocalActivities = localActivitiesByTimsstamp.filter(activity => {
                     if (!activity.txId) return true
                     if (uniqueRemoteIds.has(activity.txId)) return false
+                    if ((activity.type as ActivityType) === ActivityType.SIGN_CERT) return false
+                    if ((activity.type as ActivityType) === ActivityType.SIGN_TYPED_DATA) return false
                     return true
                 })
 

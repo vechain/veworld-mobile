@@ -16,7 +16,7 @@ import { useBottomSheetModal, useTransferAddContact } from "~Hooks"
 import { HistoryStackParamList, Routes } from "~Navigation"
 import { DateUtils, HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { getActivityTitle } from "./util"
+import { getActivityModalTitle } from "./util"
 
 import {
     ActivityStatus,
@@ -224,7 +224,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             <Layout
                 safeAreaTestID="Activity_Details_Screen"
                 noStaticBottomPadding
-                title={getActivityTitle(activity, LL)}
+                title={getActivityModalTitle(activity, LL)}
                 onGoBack={onGoBack}
                 body={
                     <>
