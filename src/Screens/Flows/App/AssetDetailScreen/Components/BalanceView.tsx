@@ -3,8 +3,10 @@ import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import { BaseSkeleton, BaseText, BaseView, FiatBalance } from "~Components"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { B3TR, COLORS, VOT3 } from "~Constants"
+import { TokenImage } from "~Components/Reusable/TokenImage"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 export const BalanceView = ({
     tokenWithInfo,
@@ -33,6 +35,8 @@ export const BalanceView = ({
         () => tokenWithInfo.symbol === B3TR.symbol || tokenWithInfo.symbol === VOT3.symbol,
         [tokenWithInfo.symbol],
     )
+
+    const isVetToken = isVechainToken(tokenWithInfo.symbol)
 
     const show24hChange = useMemo(() => !!(Number(fiatBalance) && change24h), [change24h, fiatBalance])
 
@@ -89,9 +93,7 @@ export const BalanceView = ({
     return (
         <BaseView style={containerStyle ?? styles.layout}>
             <BaseView style={styles.balanceContainer}>
-                <BaseView style={[!isVBDToken && styles.imageContainer]}>
-                    <Image source={{ uri: tokenWithInfo.icon }} style={isVBDToken ? styles.vbdImage : styles.image} />
-                </BaseView>
+                <TokenImage icon={tokenWithInfo.icon} isVechainToken={isVetToken} iconSize={26} />
                 <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                     {symbol}
                 </BaseText>
