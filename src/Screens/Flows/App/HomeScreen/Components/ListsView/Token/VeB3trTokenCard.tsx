@@ -87,7 +87,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
         <Animated.View style={[baseStyles.innerRow]}>
             <BaseView flexDirection="row" alignItems="center">
                 <TokenImage isVechainToken iconSize={26} icon={b3trToken.icon} />
-                <BaseSpacer width={14} />
+                <BaseSpacer width={12} />
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row">
                         <BaseView style={baseStyles.tokenSymbol}>
