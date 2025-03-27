@@ -1,9 +1,9 @@
 /* eslint-disable max-len */
 import moment from "moment"
-import { genesises } from "~Constants"
-import { ZERO_ADDRESS } from "~Hooks"
+import { genesises } from "./Thor"
 import { ActivityEvent, ActivitySearchBy, Network, NETWORK_TYPE } from "~Model"
-import { AddressUtils } from "~Utils"
+import AddressUtils from "~Utils/AddressUtils"
+import { ZERO_ADDRESS } from "@vechain/sdk-core"
 
 const isMainGenesis = (thor: Connex.Thor) => thor.genesis.id === genesises.main.id
 
