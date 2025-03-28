@@ -1,12 +1,18 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet, View, ViewProps } from "react-native"
 
-import { AlignItems, AlignSelf, FlexWrap, FlexDirection, JustifyContent, ColorThemeType, Overflow } from "~Constants"
+import { AlignItems, AlignSelf, ColorThemeType, FlexDirection, FlexWrap, JustifyContent, Overflow } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 export type BaseViewProps = {
-    w?: number // NOTE: this is a number in percentage
-    h?: number // NOTE: this is a number in percentage
+    /**
+     * Width percentage
+     */
+    w?: number
+    /**
+     * Height percentage
+     */
+    h?: number
     bg?: string
     flexDirection?: FlexDirection
     justifyContent?: JustifyContent

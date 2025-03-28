@@ -70,6 +70,7 @@ export enum Routes {
     DISCOVER_FEATURED = "Discover_Featured",
     DISCOVER_FAVOURITES = "Discover_Favourites",
     DISCOVER_BROWSER_HISTORY = "Discover_Browser_History",
+    DISCOVER_SEARCH = "Discover_Search",
     TOKEN_DETAILS = "Token_Details",
     CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN = "Convert_Better_Token_Transaction_Screen",
     ACTIVITY_DETAILS = "Activity_Details",

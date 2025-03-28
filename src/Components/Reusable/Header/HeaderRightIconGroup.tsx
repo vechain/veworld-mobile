@@ -22,7 +22,6 @@ const baseStyle = () =>
         rightContainer: {
             flexBasis: 24,
             flexShrink: 0,
-            flexGrow: 1,
             gap: 8,
             flexDirection: "row",
             justifyContent: "flex-end",

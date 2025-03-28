@@ -8,7 +8,6 @@ import {
     BaseSpacer,
     BaseView,
     Layout,
-    // SelectedNetworkViewer,
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useBrowserSearch, useFetchFeaturedDApps, useThemedStyles, useVisitedUrls } from "~Hooks"
@@ -26,8 +25,8 @@ import {
 import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { Ecosystem, Favourites, Header, NewDapps } from "./Components"
-import { groupFavoritesByBaseUrl } from "./utils"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
+import { groupFavoritesByBaseUrl } from "./utils"
 
 export const DiscoverScreen: React.FC = () => {
     const { LL } = useI18nContext()
@@ -188,7 +187,7 @@ export const DiscoverScreen: React.FC = () => {
     )
 }
 
-const baseStyles = () =>
+export const baseStyles = () =>
     StyleSheet.create({
         rootContainer: {
             flexGrow: 1,
