@@ -66,7 +66,7 @@ const baseStyle = () =>
         rootContainer: {
             minWidth: 64,
             paddingHorizontal: 12,
-            paddingVertical: 4,
+            paddingVertical: 8,
             borderRadius: 20,
             alignItems: "center",
         },
