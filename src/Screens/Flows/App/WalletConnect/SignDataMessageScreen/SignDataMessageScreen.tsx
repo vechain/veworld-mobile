@@ -136,7 +136,7 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
                     })
                 }
 
-                dispatch(addSignTypedDataActivity(signedTypedData.signer, request.origin, signedTypedData))
+                dispatch(addSignTypedDataActivity(request.origin, signedTypedData))
 
                 track(AnalyticsEvent.DAPP_TYPED_DATA_SUCCESS)
 

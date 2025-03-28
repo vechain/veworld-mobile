@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { ActivityDetail } from "../Type"
-import { BaseIcon, BaseText, BaseTouchable, BaseView, FiatBalance } from "~Components"
+import { BaseIcon, BaseSkeleton, BaseText, BaseTouchable, BaseView, FiatBalance } from "~Components"
 import { useTheme } from "~Hooks"
 import { StyleSheet } from "react-native"
 
@@ -9,9 +9,31 @@ export type ActivityDetailContent = ActivityDetail
 type Props = {
     activityDetail: ActivityDetailContent
     border?: boolean
+    isLoading?: boolean
 }
 
-export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, border = true }) => {
+const ActivityDetailItemSkeleton = () => {
+    const theme = useTheme()
+
+    return (
+        <BaseSkeleton
+            containerStyle={baseStyles.skeletonContainer}
+            animationDirection="horizontalLeft"
+            boneColor={theme.colors.skeletonBoneColor}
+            highlightColor={theme.colors.skeletonHighlightColor}
+            layout={[
+                {
+                    flexDirection: "column",
+                    width: 80,
+                    height: 22,
+                    borderRadius: 12,
+                },
+            ]}
+        />
+    )
+}
+
+export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, border = true, isLoading = false }) => {
     const theme = useTheme()
 
     return (
@@ -37,9 +59,13 @@ export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, borde
                     action={activityDetail.onValuePress}
                     disabled={!activityDetail.onValuePress}
                     style={baseStyles.valueContainer}>
-                    <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
-                        {activityDetail.value}
-                    </BaseText>
+                    {isLoading ? (
+                        <ActivityDetailItemSkeleton />
+                    ) : (
+                        <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
+                            {activityDetail.value ?? ""}
+                        </BaseText>
+                    )}
 
                     {activityDetail.valueAdditional && (
                         <FiatBalance
@@ -68,5 +94,9 @@ const baseStyles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         paddingBottom: 12,
+    },
+    skeletonContainer: {
+        width: "100%",
+        flexDirection: "column",
     },
 })

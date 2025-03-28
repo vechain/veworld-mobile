@@ -1,3 +1,4 @@
+import { NavigatorScreenParams } from "@react-navigation/native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { PendingRequestTypes } from "@walletconnect/types"
 import React, { useMemo } from "react"
@@ -7,7 +8,7 @@ import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
 import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
 import { TransactionRequest, TypeDataRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
-import { TabStack } from "~Navigation/Tabs"
+import { TabStack, TabStackParamList } from "~Navigation/Tabs"
 import {
     BlackListedCollectionsScreen,
     ChooseBackupDetailsPassword,
@@ -29,7 +30,7 @@ import { SellStack } from "./SellStack"
 
 export type RootStackParamListSwitch = {
     OnboardingStack: undefined
-    TabStack: undefined
+    TabStack: NavigatorScreenParams<TabStackParamList>
     ResetAppScreen: undefined
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined

@@ -1,11 +1,12 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
-import { useTheme } from "~Hooks"
-import { COLORS, VET } from "~Constants"
-import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
-import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
+import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
+import { VET } from "~Constants"
+import { COLORS } from "~Constants/Theme"
+import { useTheme } from "~Hooks"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 type BaseTokenCardProps = {
     icon: string

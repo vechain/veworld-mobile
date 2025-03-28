@@ -7,3 +7,7 @@ export interface AccountActivities {
     //Activities that don't involve a transaction on-chain, thus no differentiating between mainnet and testnet
     nonTransactionActivities: Activity[]
 }
+
+export interface ActivityState {
+    activities: Activity[]
+}

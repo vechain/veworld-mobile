@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { DerivationPath } from "~Constants"
+import { DerivationPath } from "~Constants/Constants/derivationPaths"
 import { NewLedgerDevice } from "~Model"
 
 /**

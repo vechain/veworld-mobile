@@ -18,7 +18,8 @@ import {
     showErrorToast,
     FiatBalance,
 } from "~Components"
-import { B3TR, COLORS, CURRENCY_SYMBOLS, typography, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, CURRENCY_SYMBOLS, VET, VOT3, VTHO } from "~Constants"
+import { typography } from "~Constants/Theme"
 import { useAmountInput, useTheme, useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"

@@ -5,12 +5,14 @@ import mockSafeAreaContext from "react-native-safe-area-context/jest/mock"
 // @ts-ignore
 import mockRNDeviceInfo from "react-native-device-info/jest/react-native-device-info-mock"
 import { ReactNode } from "react"
-import { SecurityLevelType, WALLET_STATUS } from "~Model"
+import { SecurityLevelType } from "~Model/Biometrics"
+import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import localizeMock from "react-native-localize/mock"
 
-jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 const componentMock = ({ children }: { children: ReactNode }) => children
+
+jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
@@ -154,10 +156,9 @@ jest.mock("@gorhom/bottom-sheet", () => ({
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
 
-const mockDefaultLedgerTransport = Object.assign(jest.fn(), { open: jest.fn() })
 jest.mock("@ledgerhq/react-native-hw-transport-ble", () => ({
     __esModule: true,
-    default: mockDefaultLedgerTransport,
+    default: Object.assign(jest.fn(), { open: jest.fn() }),
 }))
 
 jest.mock("react-native-ble-plx", () => ({
