@@ -12,24 +12,33 @@ export type HistoryDappItem = {
 export type HistoryUrlItem = {
     type: HistoryUrlKind.URL
     url: string
+    name: string
+    image?: string
 }
 
 export type HistoryItem = HistoryDappItem | HistoryUrlItem
 
-export const mapHistoryUrls = (urls: string[], dapps: DiscoveryDApp[]): HistoryItem[] => {
-    const mappedUrls = urls
-        .map((url, idx) => {
-            const baseURL = new URL(url).origin
+export const mapHistoryUrls = (allDapps: DiscoveryDApp[], dapps: DiscoveryDApp[]): HistoryItem[] => {
+    const mappedUrls = allDapps
+        .map((sourceDapp, idx) => {
+            const baseURL = new URL(sourceDapp.href).origin
             const foundDapp = dapps.find(dapp => new URL(dapp.href).origin === baseURL)
             if (foundDapp) return { type: HistoryUrlKind.DAPP, dapp: foundDapp, origin: baseURL, index: idx }
-            return { type: HistoryUrlKind.URL, url: baseURL, origin: baseURL, index: idx }
+            return {
+                type: HistoryUrlKind.URL,
+                url: baseURL,
+                origin: baseURL,
+                index: idx,
+                name: sourceDapp.name,
+                image: sourceDapp.image,
+            }
         })
         .sort((a, b) => b.index - a.index)
     return [
         ...mappedUrls
             .reduce((acc, curr) => {
                 if (acc.has(curr.origin)) return acc
-                acc.set(curr.origin, { type: curr.type, dapp: curr.dapp, url: curr.url } as HistoryItem)
+                acc.set(curr.origin, curr as HistoryItem)
                 return acc
             }, new Map<string, HistoryItem>())
             .values(),
