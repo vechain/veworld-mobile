@@ -11,8 +11,6 @@ type Props = {
     filteredSearch?: string
 }
 
-// forwardRef<BottomSheetModalMethods, Props>(({onTextChange, filteredSearch}: Props, ref) => {})
-
 export const SearchBar = ({ onTextChange, filteredSearch }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
@@ -26,6 +24,9 @@ export const SearchBar = ({ onTextChange, filteredSearch }: Props) => {
                         onChangeText={onTextChange}
                         value={filteredSearch}
                         style={styles.searchBar}
+                        leftIcon="icon-search"
+                        leftIconStyle={styles.searchBarIcon}
+                        leftIconSize={16}
                     />
                 </Animated.View>
             </BaseView>
@@ -37,8 +38,11 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         searchBar: {
             paddingVertical: 10,
-            paddingRight: 35,
+            paddingLeft: 0,
             height: 40,
+        },
+        searchBarIcon: {
+            color: theme.colors.searchIcon.active,
         },
         searchIconContainer: {
             borderColor: theme.colors.text,

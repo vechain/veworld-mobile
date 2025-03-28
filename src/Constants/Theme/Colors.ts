@@ -143,6 +143,11 @@ export type Colors = {
         dotBg: string
         activeDotBg: string
     }
+    searchIcon: {
+        default: string
+        active: string
+        disabled: string
+    }
 }
 
 export enum COLORS {
@@ -381,6 +386,11 @@ const light: Colors = {
         dotBg: COLORS.GREY_300,
         activeDotBg: COLORS.PRIMARY_800,
     },
+    searchIcon: {
+        default: COLORS.GREY_500,
+        active: COLORS.GREY_600,
+        disabled: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -527,6 +537,11 @@ const dark: Colors = {
     defaultCarousel: {
         dotBg: COLORS.LIME_GREEN,
         activeDotBg: COLORS.DARK_PURPLE_DISABLED,
+    },
+    searchIcon: {
+        default: COLORS.GREY_300,
+        active: COLORS.GREY_300,
+        disabled: COLORS.GREY_500,
     },
 }
 
