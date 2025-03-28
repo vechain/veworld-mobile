@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-03-28)
+
+
+### Bug Fixes
+
+* vote send bottom sheet ([#2816](https://github.com/vechain/veworld-mobile/issues/2816)) ([22cb321](https://github.com/vechain/veworld-mobile/commit/22cb3214d99872154a8a0aa3410438a3f96bb799))
+
 ## 2.0.9 (2025-02-18)
 
 
