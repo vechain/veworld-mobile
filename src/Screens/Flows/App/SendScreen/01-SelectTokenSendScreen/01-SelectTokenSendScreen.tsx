@@ -3,11 +3,12 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React from "react"
 import { BaseSpacer, BaseText, BaseView, Layout, OfficialTokenCard, SendVot3WarningBottomSheet } from "~Components"
 import { VET, VTHO } from "~Constants"
-import { useTokenWithCompleteInfo, useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useTokenWithCompleteInfo } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectNetworkVBDTokens, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 
 type Props = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
 
@@ -25,7 +26,7 @@ export const SelectTokenSendScreen = () => {
     const tokenWithInfoVOT3 = useTokenWithCompleteInfo(VOT3)
 
     const handleClickToken = (token: FungibleTokenWithBalance) => async () => {
-        if (token.address === VOT3.address) {
+        if (compareAddresses(VOT3.address, token.address)) {
             openVot3Warning()
             return
         }
@@ -35,7 +36,7 @@ export const SelectTokenSendScreen = () => {
     }
 
     const handleVot3Confirm = () => {
-        const vot3Token = tokens.find(token => token.address === VOT3.address)
+        const vot3Token = tokens.find(token => compareAddresses(VOT3.address, token.address))
         closeVot3Warning()
         if (vot3Token) {
             nav.navigate(Routes.INSERT_ADDRESS_SEND, {
