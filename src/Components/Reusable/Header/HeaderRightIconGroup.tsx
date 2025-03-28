@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
-import { BaseView } from "~Components"
 import { StyleSheet } from "react-native"
+import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 
 type HeaderRightButtonsProps = {
@@ -22,6 +22,7 @@ const baseStyle = () =>
         rightContainer: {
             flexBasis: 24,
             flexShrink: 0,
+            flexGrow: 1,
             gap: 8,
             flexDirection: "row",
             justifyContent: "flex-end",
