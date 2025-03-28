@@ -40,6 +40,7 @@ const baseStyles = (isActive: boolean) => (theme: ColorThemeType) =>
         animatedOuterContainer: {
             backgroundColor: theme.colors.card,
             paddingVertical: 16,
+            height: 72,
             flexDirection: "row",
             alignItems: "center",
             borderRadius: 12,

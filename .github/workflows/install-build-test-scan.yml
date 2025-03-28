@@ -1,105 +1,108 @@
 name: Build, Test & Scan
-
 on:
-    workflow_call:
+  workflow_call:
 
-    schedule:
-        # Runs at 22:00 UTC every Sunday to Thursday
-        - cron: '0 22 * * 0-4'
+  schedule:
+    # Runs at 22:00 UTC every Sunday to Thursday
+    - cron: '0 22 * * 0-4'
 
-    workflow_dispatch:
-    pull_request:
-        branches:
-            - "*"
-    push:
-        branches:
-            - main
-
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - "*"
+  push:
+    branches:
+      - main
 
 concurrency:
-    group: ${{ github.head_ref || github.ref_name }}-build-test-scan
-    cancel-in-progress: true
+  group: ${{ github.head_ref || github.ref_name }}-build-test-scan
+  cancel-in-progress: true
 
 jobs:
+  build-and-test-ios:
+    uses: ./.github/workflows/e2e-ios.yml
+    secrets: inherit
 
-    build-and-test-ios:
-        uses: ./.github/workflows/e2e-ios.yml
-        secrets: inherit
+  build-and-test-android:
+    uses: ./.github/workflows/e2e-android.yml
+    secrets: inherit
 
-    build-and-test-android:
-        uses: ./.github/workflows/e2e-android.yml
-        secrets: inherit
+  scan:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    scan:
-        runs-on: ubuntu-latest
-        steps:
-            - name: Checkout repository
-              uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20.17
 
-            - name: Setup Node.js
-              uses: actions/setup-node@v4
-              with:
-                  node-version: 20.17
+      - name: label
+        id: label
+        run: echo "label, ${{ toJSON(github.event) }}"
 
-            - name: label
-              id: label
-              run: echo "label, ${{ github.event }}"
+      - name: Install & Patch packages
+        run: yarn install
 
-            - name: Install & Patch packages
-              run: yarn install
+      - name: Lint & Format Check
+        run: yarn lint && yarn format:check
 
-            - name: Lint & Format Check
-              run: yarn lint && yarn format:check
+      - name: Tests with Coverage
+        env:
+          NODE_OPTIONS: "--max_old_space_size=8192"
+          REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
+        run: yarn test:coverage --reporter=json-summary | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
 
-            - name: Tests with Coverage
-              env:
-                  NODE_OPTIONS: "--max_old_space_size=8192"
-                  REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
-              run: yarn test:coverage --reporter=json-summary | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
+      - name: Jest Coverage Comment
+        if: always()
+        uses: MishaKav/jest-coverage-comment@main
+        with:
+          coverage-summary-path: ./coverage/coverage-summary.json
+          title: Jest Report
+          summary-title: Summary
+          badge-title: Coverage
+          hide-comment: false
+          create-new-comment: false
+          hide-summary: false
+          coverage-title: Coverage
+          coverage-path: ./coverage.txt
+          coverage-path-prefix: ./src/
+          junitxml-title: Tests
+          junitxml-path: junit.xml
 
-            - name: Jest Coverage Comment
-              if: always()
-              uses: MishaKav/jest-coverage-comment@main
-              with:
-                  coverage-summary-path: ./coverage/coverage-summary.json
-                  title: Jest Report
-                  summary-title: Summary
-                  badge-title: Coverage
-                  hide-comment: false
-                  create-new-comment: false
-                  hide-summary: false
-                  coverage-title: Coverage
-                  coverage-path: ./coverage.txt
-                  coverage-path-prefix: ./src/
-                  junitxml-title: Tests
-                  junitxml-path: junit.xml
+      - name: Sonar Args
+        id: sonar-args
+        env:
+          ref: "${{ github.ref }}"
+          head: "${{ github.head_ref || 'main' }}"
+        run: |
+          if [[ $ref == 'refs/heads/main' ]]; then
+            echo "SONAR_ARGS=-Dsonar.branch.name=main" >> $GITHUB_OUTPUT
+          else
+            echo "SONAR_ARGS=-Dsonar.branch.target=main -Dsonar.branch.name=$head" >> $GITHUB_OUTPUT
+          fi
 
-            - name: Sonar Args
-              id: sonar-args
-              run: |
-                  if [[ ${{ github.ref }} == 'refs/heads/main' ]]; then
-                    echo "SONAR_ARGS=-Dsonar.branch.name=main" >> $GITHUB_OUTPUT
-                  else
-                    echo "SONAR_ARGS=-Dsonar.branch.target=main -Dsonar.branch.name=${{ github.head_ref }}" >> $GITHUB_OUTPUT
-                  fi
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarqube-scan-action@v4.2.1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
 
-            - name: SonarCloud Scan
-              uses: SonarSource/sonarqube-scan-action@v4.2.1
-              env:
-                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-              with:
-                  args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
-
-            - name: ReportE2E2Slack
-              uses: slackapi/slack-github-action@v2.0.0
-              with:
-                  webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
-                  webhook-type: incoming-webhook
-                  payload: |
-                      text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
-                      blocks:
-                            - type: "section"
-                              text:
-                                type: "mrkdwn"
-                                text: "*E2E result*: ${{ job.status }}\n${{ github.head_ref }}"
+  report:
+    runs-on: ubuntu-latest
+    needs: [build-and-test-ios, build-and-test-android, scan]
+    if: always()
+    steps:
+      - name: ReportE2E2Slack
+        if: github.event.schedule = '0 22 * * 0-4'
+        uses: slackapi/slack-github-action@v2.0.0
+        with:
+          webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
+          webhook-type: incoming-webhook
+          payload: |
+            {
+              "text": "${{ job.status }} scan ${{ needs.scan.result }}, iOS ${{ needs.build-and-test-ios.result }}, Android ${{needs.build-and-test-android.result}}"
+            }
