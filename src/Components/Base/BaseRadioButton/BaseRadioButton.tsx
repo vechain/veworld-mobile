@@ -49,7 +49,7 @@ export const BaseRadioButton = ({ id, label, isSelected, disabled, testID, isBot
     const Touchable = isBottomSheet ? BottomSheetTouchable : TouchableOpacity
 
     return (
-        <Touchable testID={testID} style={computeContainerStyles} onPress={() => onPress(id)}>
+        <Touchable testID={testID} disabled={disabled} style={computeContainerStyles} onPress={() => onPress(id)}>
             <BaseView flexDirection={"row"} justifyContent={"space-between"}>
                 <BaseText typographyFont="bodyMedium" style={computedTextStyles}>
                     {label}
