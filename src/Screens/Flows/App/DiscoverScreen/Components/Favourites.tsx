@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react"
 import { FlatList, ListRenderItemInfo } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DAppCard } from "./DAppCard"
 import { StackDAppCard } from "./StackDAppCard"
@@ -79,6 +79,7 @@ type FavouritesProps = {
 export const Favourites = React.memo(({ bookmarkedDApps, onActionLabelPress, onDAppPress }: FavouritesProps) => {
     const { LL } = useI18nContext()
     const showBookmarkedDAppsList = bookmarkedDApps.length > 0
+    const theme = useTheme()
 
     return (
         <BaseView py={24}>
@@ -91,7 +92,7 @@ export const Favourites = React.memo(({ bookmarkedDApps, onActionLabelPress, onD
                             <BaseText typographyFont="captionMedium" mx={2}>
                                 {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
                             </BaseText>
-                            <BaseIcon name="icon-chevron-right" size={12} />
+                            <BaseIcon name="icon-chevron-right" size={12} color={theme.colors.text} />
                         </BaseView>
                     </BaseTouchable>
                 )}

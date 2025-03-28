@@ -1,4 +1,4 @@
-import { useScrollToTop } from "@react-navigation/native"
+import { useScrollToTop, useTheme } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
@@ -6,7 +6,7 @@ import { DiscoveryDApp } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
 import { DAppHorizontalCard } from "./DAppHorizontalCard"
-import { DAppOptionsBottomSheet, SortDAppsBottomSheet } from "./Bottomsheets"
+import { DAppOptionsBottomSheet, SortableKeys, SortDAppsBottomSheet } from "./Bottomsheets"
 import { useBottomSheetModal } from "~Hooks"
 
 type Filter = {
@@ -87,8 +87,11 @@ type EcosystemProps = {
 
 export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
+
     const [selectedDappsType, setSelectedDappsType] = useState(DAppType.ALL)
     const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>(undefined)
+    const [sortedBy, setSortedBy] = useState<SortableKeys>("asc")
 
     const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
     const {
@@ -175,7 +178,7 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
             <BaseView flexDirection={"row"} justifyContent="space-between">
                 <BaseText typographyFont="bodySemiBold">{title}</BaseText>
                 <BaseTouchable onPress={onOpenSortBottomSheet}>
-                    <BaseIcon name="icon-sort-desc" size={20} />
+                    <BaseIcon name="icon-sort-desc" size={20} color={theme.colors.text} />
                 </BaseTouchable>
             </BaseView>
             <BaseSpacer height={24} />
@@ -185,8 +188,9 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
             <DAppOptionsBottomSheet ref={dappOptionsRef} selectedDApp={selectedDApp} onClose={onDAppModalClose} />
             <SortDAppsBottomSheet
                 ref={sortBottomSheetRef}
-                sortBy="asc"
-                onSortChange={() => {
+                sortedBy={sortedBy}
+                onSortChange={sort => {
+                    setSortedBy(sort)
                     onCloseSortBottomSheet()
                 }}
             />

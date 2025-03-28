@@ -2,22 +2,20 @@ import React, { memo } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { useDappBookmarking, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { DAppUtils } from "~Utils"
 
 type Props = {
     dapp: DiscoveryDApp
     isEditMode: boolean
     isActive: boolean
-    onDAppPress: ({ href }: { href: string; custom?: boolean }) => void
+    onDAppPress: (dapp: DiscoveryDApp) => void
 }
 
 const IMAGE_SIZE = 48
 
-export const FavoriteDAppCard: React.FC<Props> = memo(({ dapp, isEditMode, isActive }: Props) => {
+export const FavoriteDAppCard: React.FC<Props> = memo(({ dapp, isEditMode, isActive, onDAppPress }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
-
-    const { toggleBookmark } = useDappBookmarking(dapp.href, dapp?.name)
 
     const getIconName = () => {
         return !isEditMode ? "icon-more-vertical" : "icon-grip-horizontal"
@@ -54,7 +52,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(({ dapp, isEditMode, isAct
             <BaseSpacer width={12} />
             <BaseIcon
                 disabled={isActive}
-                onPress={toggleBookmark}
+                onPress={() => onDAppPress(dapp)}
                 name={getIconName()}
                 color={theme.colors.text}
                 size={24}

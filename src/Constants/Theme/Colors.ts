@@ -544,17 +544,17 @@ const dark: Colors = {
         borderColor: COLORS.DARK_PURPLE_DISABLED,
     },
     defaultCarousel: {
-        dotBg: COLORS.LIME_GREEN,
-        activeDotBg: COLORS.DARK_PURPLE_DISABLED,
+        dotBg: COLORS.DARK_PURPLE_DISABLED,
+        activeDotBg: COLORS.LIME_GREEN,
     },
     radioButton: {
-        textColor: COLORS.WHITE,
-        activeTextColor: COLORS.GREY_300,
-        disabledTextColor: COLORS.GREY_400,
-        borderColor: COLORS.WHITE,
+        textColor: COLORS.GREY_300,
+        activeTextColor: COLORS.WHITE,
+        disabledTextColor: COLORS.DARK_PURPLE_DISABLED,
+        borderColor: COLORS.TRANSPARENT,
         activeBorderColor: COLORS.WHITE,
         backgroudColor: COLORS.PURPLE_DISABLED,
-        disabledBackgroudColor: COLORS.GREY_100,
+        disabledBackgroudColor: COLORS.PURPLE_DISABLED,
     },
 }
 
