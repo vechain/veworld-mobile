@@ -2,7 +2,8 @@ import { StyleSheet, TextInput } from "react-native"
 import React from "react"
 
 import { useThemedStyles } from "~Hooks"
-import { ColorThemeType, typography } from "~Constants"
+import { ColorThemeType } from "~Constants"
+import { typography } from "~Constants/Theme"
 
 const { defaults: defaultTypography } = typography
 type Props = {

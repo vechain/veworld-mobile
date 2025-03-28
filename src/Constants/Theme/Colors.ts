@@ -234,6 +234,7 @@ export enum COLORS {
     GRADIENT_BACKGROUND_LIGHT_BOTTOM = "rgba(93, 93, 93, 0.95)",
     GRADIENT_BACKGROUND_DARK_TOP = "rgba(11, 0, 67, 0.7)",
     GRADIENT_BACKGROUND_DARK_BOTTOM = "rgba(11, 0, 67, 0.95)",
+    B3TR_ICON_BACKGROUND = "#74E291",
 }
 
 const light: Colors = {

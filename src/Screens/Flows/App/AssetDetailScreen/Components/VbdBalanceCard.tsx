@@ -77,8 +77,8 @@ export const VbdBalanceCard = memo(
 
         const {
             exchangeRate,
-            // isPositive24hChange,
-            // change24h,
+            isPositive24hChange,
+            change24h,
             isLoading,
             fiatBalance: b3trFiat,
         } = useTokenCardFiatInfo(b3trToken)
@@ -260,14 +260,14 @@ export const VbdBalanceCard = memo(
                         balances={balances}
                         isVisible={isBalanceVisible}
                     />
-                    {/* {!!veB3trFiatBalance && (
+                    {!!veB3trFiatBalance && (
                         <BaseText
                             mt={2}
                             typographyFont="captionMedium"
                             color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
                             {change24h}
                         </BaseText>
-                    )} */}
+                    )}
                 </>
             )
         }, [
@@ -275,10 +275,15 @@ export const VbdBalanceCard = memo(
             theme.colors.skeletonBoneColor,
             theme.colors.skeletonHighlightColor,
             theme.colors.assetDetailsCard.title,
+            theme.colors.positive,
+            theme.colors.negative,
             b3trToken.exchangeRate,
             LL,
             balances,
             isBalanceVisible,
+            veB3trFiatBalance,
+            isPositive24hChange,
+            change24h,
         ])
 
         const vot3BalanceProps = useMemo(

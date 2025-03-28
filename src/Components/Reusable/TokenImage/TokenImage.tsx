@@ -1,26 +1,30 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { Image, StyleSheet } from "react-native"
 import { COLORS } from "~Constants"
-import { BaseCard, BaseCustomTokenIcon, BaseImage } from "~Components/Base"
+import { BaseCustomTokenIcon, BaseView } from "~Components/Base"
 
 type Props = {
-    height: number
-    width: number
     icon?: string
     symbol?: string
+    isVechainToken?: boolean
+    iconSize?: number
 }
 
-export const TokenImage = ({ height, width, icon, symbol }: Props) => {
+export const TokenImage = ({ icon, symbol, isVechainToken = false, iconSize = 24 }: Props) => {
+    if (isVechainToken) {
+        return <Image source={{ uri: icon }} height={iconSize} width={iconSize} />
+    }
+
     return (
         <>
             {icon ? (
-                <BaseCard
-                    style={[styles.imageContainer, { backgroundColor: COLORS.WHITE }]}
-                    containerStyle={styles.imageShadow}>
-                    <BaseImage uri={icon} style={{ height: height, width: width }} />
-                </BaseCard>
+                <BaseView style={[styles.imageContainer]}>
+                    <Image source={{ uri: icon }} style={styles.image} />
+                </BaseView>
             ) : (
-                <BaseCustomTokenIcon style={styles.icon} tokenSymbol={symbol ?? ""} />
+                <BaseView style={[styles.imageContainer]}>
+                    <BaseCustomTokenIcon style={styles.icon} tokenSymbol={symbol ?? ""} />
+                </BaseView>
             )}
         </>
     )
@@ -29,16 +33,16 @@ const styles = StyleSheet.create({
     imageShadow: {
         width: "auto",
     },
-    imageContainer: {
-        borderRadius: 30,
-        padding: 10,
-        justifyContent: "center",
-    },
     icon: {
-        width: 38,
-        height: 38,
-        borderRadius: 38 / 2,
+        width: 20,
+        height: 20,
         alignItems: "center",
         justifyContent: "center",
     },
+    imageContainer: {
+        borderRadius: 30,
+        padding: 4,
+        backgroundColor: COLORS.GREY_50,
+    },
+    image: { width: 18, height: 18 },
 })
