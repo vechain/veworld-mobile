@@ -1,5 +1,12 @@
 
 
+## 2.0.10 (2025-03-28)
+
+
+### Bug Fixes
+
+* fix activity chip size ([#2820](https://github.com/vechain/veworld-mobile/issues/2820)) ([f942fa1](https://github.com/vechain/veworld-mobile/commit/f942fa19d2841d35b2839687c8d364ca379a3f56))
+
 ## 2.0.9 (2025-02-18)
 
 
