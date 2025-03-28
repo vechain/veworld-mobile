@@ -174,7 +174,7 @@ export const DiscoverScreen: React.FC = () => {
                         <NewDapps />
                         {/* Trending & Popular */}
                         <BaseSpacer height={12} />
-                        <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} onDAppPress={onDAppPress} />
+                        <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} />
                         {isWebSearchFloatingButtonVisible && <BaseSpacer height={70} />}
                     </Animated.ScrollView>
                     <AnimatedFloatingButton

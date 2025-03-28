@@ -6,6 +6,8 @@ import { DiscoveryDApp } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
 import { DAppHorizontalCard } from "./DAppHorizontalCard"
+import { DAppOptionsBottomSheet, SortDAppsBottomSheet } from "./Bottomsheets"
+import { useBottomSheetModal } from "~Hooks"
 
 type Filter = {
     key: DAppType
@@ -28,12 +30,12 @@ const TopFilters = ({ filters }: TopFiltersProps) => {
     )
 }
 
-type DAppsGridProps = {
+type DAppsListProps = {
     dapps: DiscoveryDApp[]
-    onDAppPress: ({ href, custom }: { href: string; custom?: boolean }) => void
+    onDAppPress: (dapp: DiscoveryDApp) => void
 }
 
-const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
+const DAppsList = ({ dapps, onDAppPress }: DAppsListProps) => {
     const flatListRef = useRef(null)
     const { increaseDappCounter } = useNotifications()
     useScrollToTop(flatListRef)
@@ -47,7 +49,7 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
                         if (item.veBetterDaoId) {
                             increaseDappCounter(item.veBetterDaoId)
                         }
-                        onDAppPress({ href: item.href })
+                        onDAppPress(item)
                     }}
                 />
             )
@@ -81,12 +83,32 @@ const styles = StyleSheet.create({
 type EcosystemProps = {
     title: string
     dapps: DiscoveryDApp[]
-    onDAppPress: ({ href, custom }: { href: string; custom?: boolean }) => void
 }
 
-export const Ecosystem = React.memo(({ title, dapps, onDAppPress }: EcosystemProps) => {
+export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
     const { LL } = useI18nContext()
     const [selectedDappsType, setSelectedDappsType] = useState(DAppType.ALL)
+    const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>(undefined)
+
+    const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
+    const {
+        ref: sortBottomSheetRef,
+        onOpen: onOpenSortBottomSheet,
+        onClose: onCloseSortBottomSheet,
+    } = useBottomSheetModal()
+
+    const onDAppPress = useCallback(
+        (dapp: DiscoveryDApp) => {
+            setSelectedDApp(dapp)
+            onOpenDAppOptions()
+        },
+        [onOpenDAppOptions],
+    )
+
+    const onDAppModalClose = useCallback(() => {
+        setSelectedDApp(undefined)
+        onCloseDAppOptions()
+    }, [onCloseDAppOptions])
 
     const filterOptions = useMemo(() => {
         const _all = DAppType.ALL
@@ -152,14 +174,22 @@ export const Ecosystem = React.memo(({ title, dapps, onDAppPress }: EcosystemPro
         <BaseView px={20}>
             <BaseView flexDirection={"row"} justifyContent="space-between">
                 <BaseText typographyFont="bodySemiBold">{title}</BaseText>
-                <BaseTouchable>
+                <BaseTouchable onPress={onOpenSortBottomSheet}>
                     <BaseIcon name="icon-sort-desc" size={20} />
                 </BaseTouchable>
             </BaseView>
             <BaseSpacer height={24} />
             <TopFilters filters={filterOptions} />
             <BaseSpacer height={24} />
-            <DAppsGrid dapps={dappsToShow} onDAppPress={onDAppPress} />
+            <DAppsList dapps={dappsToShow} onDAppPress={onDAppPress} />
+            <DAppOptionsBottomSheet ref={dappOptionsRef} selectedDApp={selectedDApp} onClose={onDAppModalClose} />
+            <SortDAppsBottomSheet
+                ref={sortBottomSheetRef}
+                sortBy="asc"
+                onSortChange={() => {
+                    onCloseSortBottomSheet()
+                }}
+            />
         </BaseView>
     )
 })

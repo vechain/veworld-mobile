@@ -22,7 +22,7 @@ export const DAppHorizontalCard = ({ dapp, onPress }: Props) => {
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" style={[styles.rootContainer]}>
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" style={[styles.rootContainer]}>
             {/* Image */}
             <Image
                 source={

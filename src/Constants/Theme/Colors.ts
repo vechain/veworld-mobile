@@ -143,6 +143,15 @@ export type Colors = {
         dotBg: string
         activeDotBg: string
     }
+    radioButton: {
+        textColor: string
+        activeTextColor: string
+        disabledTextColor: string
+        borderColor: string
+        activeBorderColor: string
+        backgroudColor: string
+        disabledBackgroudColor: string
+    }
 }
 
 export enum COLORS {
@@ -382,6 +391,15 @@ const light: Colors = {
         dotBg: COLORS.GREY_300,
         activeDotBg: COLORS.PRIMARY_800,
     },
+    radioButton: {
+        textColor: COLORS.GREY_600,
+        activeTextColor: COLORS.PRIMARY_800,
+        disabledTextColor: COLORS.GREY_400,
+        borderColor: COLORS.GREY_200,
+        activeBorderColor: COLORS.PRIMARY_800,
+        backgroudColor: COLORS.WHITE,
+        disabledBackgroudColor: COLORS.GREY_100,
+    },
 }
 
 const dark: Colors = {
@@ -528,6 +546,15 @@ const dark: Colors = {
     defaultCarousel: {
         dotBg: COLORS.LIME_GREEN,
         activeDotBg: COLORS.DARK_PURPLE_DISABLED,
+    },
+    radioButton: {
+        textColor: COLORS.WHITE,
+        activeTextColor: COLORS.GREY_300,
+        disabledTextColor: COLORS.GREY_400,
+        borderColor: COLORS.WHITE,
+        activeBorderColor: COLORS.WHITE,
+        backgroudColor: COLORS.PURPLE_DISABLED,
+        disabledBackgroudColor: COLORS.GREY_100,
     },
 }
 
