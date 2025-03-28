@@ -38,10 +38,6 @@ jobs:
         with:
           node-version: 20.17
 
-      - name: label
-        id: label
-        run: echo "label, ${{ toJSON(github.event) }}"
-
       - name: Install & Patch packages
         run: yarn install
 
@@ -97,7 +93,7 @@ jobs:
     if: always()
     steps:
       - name: ReportE2E2Slack
-        if: github.event.schedule = '0 22 * * 0-4'
+        if: ${{ github.event_name == 'schedule' }}
         uses: slackapi/slack-github-action@v2.0.0
         with:
           webhook: ${{ secrets.SLACK_VEWORLD_E2E_WEBHOOK }}
