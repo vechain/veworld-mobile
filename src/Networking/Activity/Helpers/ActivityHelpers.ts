@@ -614,8 +614,8 @@ export const createActivityFromIndexedHistoryEvent = (
             return {
                 ...baseActivity,
                 isTransaction: true,
-                inputToken: inputToken,
-                outputToken: VET.address,
+                inputToken: VET.address,
+                outputToken: outputToken,
                 inputValue: inputValue,
                 outputValue: outputValue,
             } as SwapActivity

@@ -256,19 +256,19 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
     const time = moment(activity.timestamp).format("HH:mm")
 
     const allTokens = useAppSelector(selectAllTokens)
-    const outputToken = allTokens.find(_token => _token.address === activity.outputToken)
-    const inputToken = allTokens.find(_token => _token.address === activity.inputToken)
+    const outputToken = allTokens.find(_token => AddressUtils.compareAddresses(_token.address, activity.outputToken))
+    const inputToken = allTokens.find(_token => AddressUtils.compareAddresses(_token.address, activity.inputToken))
 
-    const paidAmount = BigNutils(activity.outputValue)
-        .toHuman(outputToken?.decimals ?? 0)
-        .toTokenFormat_string(2)
-
-    const receivedAmount = BigNutils(activity.inputValue)
+    const paidAmount = BigNutils(activity.inputValue)
         .toHuman(inputToken?.decimals ?? 0)
         .toTokenFormat_string(2)
 
-    const rightAmount = `${DIRECTIONS.UP} ${paidAmount} ${outputToken?.symbol ?? ""}`
-    const rigthAmountDescription = `${DIRECTIONS.DOWN} ${receivedAmount} ${inputToken?.symbol ?? ""}`
+    const receivedAmount = BigNutils(activity.outputValue)
+        .toHuman(outputToken?.decimals ?? 0)
+        .toTokenFormat_string(2)
+
+    const rightAmount = `${DIRECTIONS.UP} ${receivedAmount} ${outputToken?.symbol ?? ""}`
+    const rigthAmountDescription = `${DIRECTIONS.DOWN} ${paidAmount} ${inputToken?.symbol ?? ""}`
 
     const onSwapPressHandler = () => {
         onPress(activity, undefined, true)
