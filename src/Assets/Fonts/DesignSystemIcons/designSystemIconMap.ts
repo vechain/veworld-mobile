@@ -905,4 +905,5 @@ export const designSystemIconMap = {
     "icon-google-drive": 60809,
     "icon-pincode": 60810,
     "icon-x-circle": 60811,
+    "icon-star-on": 60812,
 }
