@@ -79,10 +79,11 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
                 //Show `Dapp Transaction` only if there are no events associated to that transaction
                 const uniqueRemoteIds = new Set(remoteActivities.map(ra => ra.txId).filter(Boolean))
                 const filteredLocalActivities = localActivitiesByTimsstamp.filter(activity => {
-                    if (!activity.txId) return true
-                    if (uniqueRemoteIds.has(activity.txId)) return false
                     if ((activity.type as ActivityType) === ActivityType.SIGN_CERT) return false
                     if ((activity.type as ActivityType) === ActivityType.SIGN_TYPED_DATA) return false
+                    if (!activity.txId) return true
+                    if (uniqueRemoteIds.has(activity.txId)) return false
+
                     return true
                 })
 
