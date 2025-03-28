@@ -148,6 +148,10 @@ export type Colors = {
         active: string
         disabled: string
     }
+    emptyStateIcon: {
+        background: string
+        foreground: string
+    }
 }
 
 export enum COLORS {
@@ -391,6 +395,10 @@ const light: Colors = {
         active: COLORS.GREY_600,
         disabled: COLORS.GREY_600,
     },
+    emptyStateIcon: {
+        background: COLORS.GREY_50,
+        foreground: COLORS.GREY_400,
+    },
 }
 
 const dark: Colors = {
@@ -542,6 +550,10 @@ const dark: Colors = {
         default: COLORS.GREY_300,
         active: COLORS.GREY_300,
         disabled: COLORS.GREY_500,
+    },
+    emptyStateIcon: {
+        background: COLORS.PURPLE,
+        foreground: COLORS.GREY_200,
     },
 }
 

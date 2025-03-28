@@ -2,13 +2,12 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { useNavAnimation } from "~Hooks"
 import { Routes } from "~Navigation/Enums"
-import { BrowserHistoryScreen, DiscoverScreen, FavouritesScreen, InAppBrowser, SearchScreen } from "~Screens"
+import { DiscoverScreen, FavouritesScreen, InAppBrowser, SearchScreen } from "~Screens"
 
 export type RootStackParamListBrowser = {
     [Routes.DISCOVER]: undefined
     [Routes.DISCOVER_FAVOURITES]: undefined
     [Routes.DISCOVER_FEATURED]: undefined
-    [Routes.DISCOVER_BROWSER_HISTORY]: undefined
     [Routes.DISCOVER_SEARCH]: undefined
     [Routes.BROWSER]: {
         url: string
@@ -30,12 +29,6 @@ export const DiscoverStack = () => {
 
             <Screen name={Routes.DISCOVER_FAVOURITES} component={FavouritesScreen} options={{ headerShown: false }} />
             <Screen name={Routes.DISCOVER_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
-
-            <Screen
-                name={Routes.DISCOVER_BROWSER_HISTORY}
-                component={BrowserHistoryScreen}
-                options={{ headerShown: false }}
-            />
         </Navigator>
     )
 }

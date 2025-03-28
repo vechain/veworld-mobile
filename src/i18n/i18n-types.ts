@@ -839,6 +839,23 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_TITLE: string
 	/**
+	 * H​i​s​t​o​r​y
+	 */
+	BROWSER_HISTORY_DEFAULT_TITLE: string
+	/**
+	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
+	 * @param {number} amount
+	 */
+	BROWSER_HISTORY_RESULTS: RequiredParams<'amount'>
+	/**
+	 * C​l​e​a​r
+	 */
+	BROWSER_HISTORY_CLEAR: string
+	/**
+	 * N​o​ ​h​i​s​t​o​r​y​ ​t​o​ ​s​h​o​w
+	 */
+	BROWSER_HISTORY_EMPTY: string
+	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​a​c​c​e​s​ ​t​h​i​s​ ​l​i​n​k​.​ ​M​a​k​e​ ​s​u​r​e​ ​i​t​'​s​ ​c​o​r​r​e​c​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	BROWSER_INVALID_DEEP_LINK: string
@@ -1804,7 +1821,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_NO_DAPPS_FOUND: string
 	/**
-	 * S​e​a​r​c​h​ ​t​h​e​ ​W​e​b
+	 * S​e​a​r​c​h​ ​o​r​ ​t​y​p​e​ ​U​R​L​.​.​.
 	 */
 	DISCOVER_SEARCH: string
 	/**
@@ -4799,6 +4816,22 @@ Thanks for your patience!
 	 */
 	BROWSER_HISTORY_TITLE: () => LocalizedString
 	/**
+	 * History
+	 */
+	BROWSER_HISTORY_DEFAULT_TITLE: () => LocalizedString
+	/**
+	 * {amount} Results
+	 */
+	BROWSER_HISTORY_RESULTS: (arg: { amount: number }) => LocalizedString
+	/**
+	 * Clear
+	 */
+	BROWSER_HISTORY_CLEAR: () => LocalizedString
+	/**
+	 * No history to show
+	 */
+	BROWSER_HISTORY_EMPTY: () => LocalizedString
+	/**
 	 * There was an error trying to acces this link. Make sure it's correct and try again.
 	 */
 	BROWSER_INVALID_DEEP_LINK: () => LocalizedString
@@ -5755,7 +5788,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_NO_DAPPS_FOUND: () => LocalizedString
 	/**
-	 * Search the Web
+	 * Search or type URL...
 	 */
 	DISCOVER_SEARCH: () => LocalizedString
 	/**

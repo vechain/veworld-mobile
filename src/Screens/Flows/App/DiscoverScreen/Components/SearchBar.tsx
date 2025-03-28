@@ -1,5 +1,5 @@
-import React from "react"
-import { StyleSheet } from "react-native"
+import React, { useCallback } from "react"
+import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseTextInput, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
@@ -8,12 +8,20 @@ import { useI18nContext } from "~i18n"
 
 type Props = {
     onTextChange: (text: string) => void
+    onReturnClicked?: (text: string) => void
     filteredSearch?: string
 }
 
-export const SearchBar = ({ onTextChange, filteredSearch }: Props) => {
+export const SearchBar = ({ onTextChange, filteredSearch, onReturnClicked }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
+
+    const handleOnSubmitEditing = useCallback(
+        (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+            onReturnClicked?.(e.nativeEvent.text)
+        },
+        [onReturnClicked],
+    )
 
     return (
         <BaseView w={100} flexDirection="row" px={24} py={12}>
@@ -22,6 +30,7 @@ export const SearchBar = ({ onTextChange, filteredSearch }: Props) => {
                     <BaseTextInput
                         placeholder={LL.DISCOVER_SEARCH()}
                         onChangeText={onTextChange}
+                        onSubmitEditing={handleOnSubmitEditing}
                         value={filteredSearch}
                         style={styles.searchBar}
                         leftIcon="icon-search"
