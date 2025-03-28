@@ -1,5 +1,5 @@
 import { ProposalTypes } from "@walletconnect/types/dist/types/sign-client/proposal"
-import { RequestMethods } from "~Constants"
+import { RequestMethods } from "~Constants/Enums"
 import { getSdkError } from "@walletconnect/utils"
 import { ErrorResponse } from "@walletconnect/jsonrpc-types"
 

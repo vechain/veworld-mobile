@@ -90,6 +90,62 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_success: string
 	/**
+	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_ALL_EMPTY_LABEL: string
+	/**
+	 * A​l​l
+	 */
+	ACTIVITY_ALL_LABEL: string
+	/**
+	 * D​i​s​c​o​v​e​r​ ​V​e​B​e​t​t​e​r​D​A​O
+	 */
+	ACTIVITY_B3TR_EMPTY_BUTTON: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​y​o​u​r​ ​b​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​e​v​e​r​y​ ​d​a​y​!
+	 */
+	ACTIVITY_B3TR_EMPTY_DESCRIPTION: string
+	/**
+	 * N​o​ ​B​3​T​R​ ​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​.
+	 */
+	ACTIVITY_B3TR_EMPTY_LABEL: string
+	/**
+	 * B​e​t​t​e​r
+	 */
+	ACTIVITY_B3TR_LABEL: string
+	/**
+	 * N​o​ ​d​A​p​p​ ​i​n​t​e​r​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_DAPPS_EMPTY_LABEL: string
+	/**
+	 * d​A​p​p​s
+	 */
+	ACTIVITY_DAPPS_LABEL: string
+	/**
+	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: string
+	/**
+	 * N​F​T
+	 */
+	ACTIVITY_NFT_LABEL: string
+	/**
+	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_SWAP_EMPTY_LABEL: string
+	/**
+	 * S​w​a​p
+	 */
+	ACTIVITY_SWAP_LABEL: string
+	/**
+	 * N​o​ ​T​r​a​n​s​f​e​r​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_TRANSFERS_EMPTY_LABEL: string
+	/**
+	 * T​r​a​n​s​f​e​r
+	 */
+	ACTIVITY_TRANSFER_LABEL: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -260,6 +316,35 @@ type RootTranslation = {
 	 * A​u​g​u​s​t
 	 */
 	AUGUST: string
+	/**
+	 * B​e​t​t​e​r​ ​a​c​t​i​o​n​ ​o​n
+	 */
+	B3TR_ACTION: string
+	/**
+	 * B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 */
+	B3TR_ACTION_MODAL_TITLE: string
+	/**
+	 * C​l​a​i​m​e​d​ ​v​o​t​i​n​g​ ​r​e​w​a​r​d​s
+	 */
+	B3TR_CLAIM_REWARD: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​p​r​o​p​o​s​a​l
+	 */
+	B3TR_PROPOSAL_VOTE: string
+	/**
+	 * P​r​o​p​o​s​a​l​ ​s​u​p​p​o​r​t​ ​o​n
+	 */
+	B3TR_PROPSAL_SUPPORT: string
+	/**
+	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​e​b​e​r​ ​l​e​v​e​l
+	 */
+	B3TR_UPGRADE_GM: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d​ ​#​{​n​u​m​b​e​r​}
+	 * @param {number} number
+	 */
+	B3TR_XALLOCATION_VOTE: RequiredParams<'number'>
 	/**
 	 * B​a​c​k​i​n​g​ ​u​p​.​.​.
 	 */
@@ -3753,6 +3838,10 @@ type RootTranslation = {
 	 */
 	TODAY: string
 	/**
+	 * T​o​k​e​n​ ​C​o​n​v​e​r​s​i​o​n
+	 */
+	TOKEN_CONVERSION: string
+	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
 	TOKEN_ID: string
@@ -4070,6 +4159,62 @@ export type TranslationFunctions = {
 	 */
 	ACTIVITIES_STATUS_success: () => LocalizedString
 	/**
+	 * No Activities to show yet
+	 */
+	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * All
+	 */
+	ACTIVITY_ALL_LABEL: () => LocalizedString
+	/**
+	 * Discover VeBetterDAO
+	 */
+	ACTIVITY_B3TR_EMPTY_BUTTON: () => LocalizedString
+	/**
+	 * Start earning B3TR tokens with your better actions every day!
+	 */
+	ACTIVITY_B3TR_EMPTY_DESCRIPTION: () => LocalizedString
+	/**
+	 * No B3TR actions to show yet.
+	 */
+	ACTIVITY_B3TR_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Better
+	 */
+	ACTIVITY_B3TR_LABEL: () => LocalizedString
+	/**
+	 * No dApp interactions to show yet
+	 */
+	ACTIVITY_DAPPS_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * dApps
+	 */
+	ACTIVITY_DAPPS_LABEL: () => LocalizedString
+	/**
+	 * No NFTs to show yet
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * NFT
+	 */
+	ACTIVITY_NFT_LABEL: () => LocalizedString
+	/**
+	 * No Swaps to show yet
+	 */
+	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	ACTIVITY_SWAP_LABEL: () => LocalizedString
+	/**
+	 * No Transfers to show yet
+	 */
+	ACTIVITY_TRANSFERS_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Transfer
+	 */
+	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
+	/**
 	 * Add Account
 	 */
 	ADD_ACCOUNT: () => LocalizedString
@@ -4238,6 +4383,34 @@ Try reconnect your device to the internet.
 	 * August
 	 */
 	AUGUST: () => LocalizedString
+	/**
+	 * Better action on
+	 */
+	B3TR_ACTION: () => LocalizedString
+	/**
+	 * Better action
+	 */
+	B3TR_ACTION_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Claimed voting rewards
+	 */
+	B3TR_CLAIM_REWARD: () => LocalizedString
+	/**
+	 * Vote on proposal
+	 */
+	B3TR_PROPOSAL_VOTE: () => LocalizedString
+	/**
+	 * Proposal support on
+	 */
+	B3TR_PROPSAL_SUPPORT: () => LocalizedString
+	/**
+	 * New galaxy memeber level
+	 */
+	B3TR_UPGRADE_GM: () => LocalizedString
+	/**
+	 * Vote on round #{number}
+	 */
+	B3TR_XALLOCATION_VOTE: (arg: { number: number }) => LocalizedString
 	/**
 	 * Backing up...
 	 */
@@ -7686,6 +7859,10 @@ Are you sure you want to continue?
 	 * Today
 	 */
 	TODAY: () => LocalizedString
+	/**
+	 * Token Conversion
+	 */
+	TOKEN_CONVERSION: () => LocalizedString
 	/**
 	 * Token ID
 	 */

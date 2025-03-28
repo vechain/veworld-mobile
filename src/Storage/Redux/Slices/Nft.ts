@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { NETWORK_TYPE, NonFungibleToken, NftCollection } from "~Model"
+import { NonFungibleToken, NftCollection } from "~Model"
+import { NETWORK_TYPE } from "~Model/Network/enums"
 import {
     BlackListedCollections,
     CollectionRegistryInfo,

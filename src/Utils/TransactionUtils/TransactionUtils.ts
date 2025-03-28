@@ -14,7 +14,8 @@ import {
     TransferEventResult,
 } from "~Model"
 import { BigNumber } from "bignumber.js"
-import { abis, ERROR_EVENTS, VET } from "~Constants"
+import { ERROR_EVENTS, VET } from "~Constants"
+import { abis } from "~Constants/Constants"
 import HexUtils from "~Utils/HexUtils"
 import axios from "axios"
 import BigNutils from "~Utils/BigNumberUtils"
