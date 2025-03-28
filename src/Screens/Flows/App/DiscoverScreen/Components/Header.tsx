@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { BaseIcon, BaseSpacer, BaseView, HeaderStyle, HeaderTitle, PlusIconHeaderButton } from "~Components"
+import { BaseIcon, BaseView, HeaderStyle, HeaderTitle } from "~Components"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 
@@ -22,8 +22,8 @@ export const Header = memo(() => {
                     action={() => {}}
                     haptics="Light"
                 />
-                <BaseSpacer width={8} />
-                <PlusIconHeaderButton action={() => {}} />
+                {/* <BaseSpacer width={8} />
+                <PlusIconHeaderButton action={() => {}} /> */}
             </BaseView>
         </BaseView>
     )
