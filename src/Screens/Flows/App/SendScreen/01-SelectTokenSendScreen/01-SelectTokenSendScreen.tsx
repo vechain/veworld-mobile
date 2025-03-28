@@ -36,7 +36,7 @@ export const SelectTokenSendScreen = () => {
     }
 
     const handleVot3Confirm = () => {
-        const vot3Token = tokens.find(token => token.address === VOT3.address)
+        const vot3Token = tokens.find(token => compareAddresses(VOT3.address, token.address))
         closeVot3Warning()
         if (vot3Token) {
             nav.navigate(Routes.INSERT_ADDRESS_SEND, {
