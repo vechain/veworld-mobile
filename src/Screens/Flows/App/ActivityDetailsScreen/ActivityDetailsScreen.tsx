@@ -107,10 +107,10 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             }
             default: {
                 const { inputToken, inputValue, outputToken, outputValue } = activity as SwapActivity
-                paidTokenAddress = outputToken
-                paidAmount = outputValue
-                receivedTokenAddress = inputToken
-                receivedAmount = inputValue
+                paidTokenAddress = inputToken
+                paidAmount = inputValue
+                receivedTokenAddress = outputToken
+                receivedAmount = outputValue
             }
         }
 
