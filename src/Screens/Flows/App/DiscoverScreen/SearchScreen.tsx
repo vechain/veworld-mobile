@@ -21,11 +21,12 @@ export const SearchScreen = () => {
 
     const onSearchReturn = useCallback(
         async (value: string) => {
-            const isValid = await URIUtils.isValidBrowserUrl(value.toLowerCase())
-
+            const valueLower = value.toLowerCase()
+            const isValid = await URIUtils.isValidBrowserUrl(valueLower)
             if (isValid) {
-                nav.navigate(Routes.BROWSER, { url: value.toLowerCase() })
-                addVisitedUrl(value.toLowerCase())
+                const url = valueLower.startsWith("https://") ? valueLower : `https://${valueLower}`
+                nav.navigate(Routes.BROWSER, { url })
+                addVisitedUrl(url)
                 return
             }
             //TODO: Add error state

@@ -31,7 +31,7 @@ export const SearchResults = ({ query }: Props) => {
                     url.dapp.name.toLowerCase().includes(lowerQuery) ||
                     url.dapp.desc?.toLowerCase()?.includes(lowerQuery)
                 )
-            return url.name.toLowerCase().includes(lowerQuery)
+            return url.name.toLowerCase().includes(lowerQuery) || url.url.includes(lowerQuery)
         })
     }, [mappedUrls, query])
 
