@@ -1,11 +1,13 @@
-import { useScrollToTop } from "@react-navigation/native"
+import { useScrollToTop, useTheme } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
+import { BaseChip, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
 import { DAppHorizontalCard } from "./DAppHorizontalCard"
+import { DAppOptionsBottomSheet, SortableKeys, SortDAppsBottomSheet } from "./Bottomsheets"
+import { useBottomSheetModal } from "~Hooks"
 
 type Filter = {
     key: DAppType
@@ -20,20 +22,20 @@ type TopFiltersProps = {
 
 const TopFilters = ({ filters }: TopFiltersProps) => {
     return (
-        <BaseView flexDirection="row" justifyContent="space-evenly">
+        <BaseView flexDirection="row" justifyContent="space-between">
             {filters.map(({ key, isSelected, title, onPress }) => (
-                <BaseTouchable key={key} underlined={isSelected} font="bodyBold" title={title} action={onPress} />
+                <BaseChip key={key} label={title} active={isSelected} onPress={onPress} />
             ))}
         </BaseView>
     )
 }
 
-type DAppsGridProps = {
+type DAppsListProps = {
     dapps: DiscoveryDApp[]
-    onDAppPress: ({ href, custom }: { href: string; custom?: boolean }) => void
+    onDAppPress: (dapp: DiscoveryDApp) => void
 }
 
-const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
+const DAppsList = ({ dapps, onDAppPress }: DAppsListProps) => {
     const flatListRef = useRef(null)
     const { increaseDappCounter } = useNotifications()
     useScrollToTop(flatListRef)
@@ -47,7 +49,7 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
                         if (item.veBetterDaoId) {
                             increaseDappCounter(item.veBetterDaoId)
                         }
-                        onDAppPress({ href: item.href })
+                        onDAppPress(item)
                     }}
                 />
             )
@@ -81,12 +83,35 @@ const styles = StyleSheet.create({
 type EcosystemProps = {
     title: string
     dapps: DiscoveryDApp[]
-    onDAppPress: ({ href, custom }: { href: string; custom?: boolean }) => void
 }
 
-export const Ecosystem = React.memo(({ title, dapps, onDAppPress }: EcosystemProps) => {
+export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
+
     const [selectedDappsType, setSelectedDappsType] = useState(DAppType.ALL)
+    const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>(undefined)
+    const [sortedBy, setSortedBy] = useState<SortableKeys>("asc")
+
+    const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
+    const {
+        ref: sortBottomSheetRef,
+        onOpen: onOpenSortBottomSheet,
+        onClose: onCloseSortBottomSheet,
+    } = useBottomSheetModal()
+
+    const onDAppPress = useCallback(
+        (dapp: DiscoveryDApp) => {
+            setSelectedDApp(dapp)
+            onOpenDAppOptions()
+        },
+        [onOpenDAppOptions],
+    )
+
+    const onDAppModalClose = useCallback(() => {
+        setSelectedDApp(undefined)
+        onCloseDAppOptions()
+    }, [onCloseDAppOptions])
 
     const filterOptions = useMemo(() => {
         const _all = DAppType.ALL
@@ -149,17 +174,26 @@ export const Ecosystem = React.memo(({ title, dapps, onDAppPress }: EcosystemPro
     }, [dapps, selectedDappsType])
 
     return (
-        <BaseView px={20}>
+        <BaseView px={16}>
             <BaseView flexDirection={"row"} justifyContent="space-between">
                 <BaseText typographyFont="bodySemiBold">{title}</BaseText>
-                <BaseTouchable>
-                    <BaseIcon name="icon-sort-desc" size={20} />
+                <BaseTouchable onPress={onOpenSortBottomSheet}>
+                    <BaseIcon name="icon-sort-desc" size={20} color={theme.colors.text} />
                 </BaseTouchable>
             </BaseView>
             <BaseSpacer height={24} />
             <TopFilters filters={filterOptions} />
             <BaseSpacer height={24} />
-            <DAppsGrid dapps={dappsToShow} onDAppPress={onDAppPress} />
+            <DAppsList dapps={dappsToShow} onDAppPress={onDAppPress} />
+            <DAppOptionsBottomSheet ref={dappOptionsRef} selectedDApp={selectedDApp} onClose={onDAppModalClose} />
+            <SortDAppsBottomSheet
+                ref={sortBottomSheetRef}
+                sortedBy={sortedBy}
+                onSortChange={sort => {
+                    setSortedBy(sort)
+                    onCloseSortBottomSheet()
+                }}
+            />
         </BaseView>
     )
 })

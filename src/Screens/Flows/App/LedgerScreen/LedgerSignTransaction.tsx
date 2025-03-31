@@ -96,7 +96,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
             const activity = ActivityUtils.getActivityTypeFromClause(tx.body.clauses)
 
             switch (activity) {
-                case ActivityType.VET_TRANSFER:
+                case ActivityType.TRANSFER_VET:
                     dispatch(addPendingTransferTransactionActivity(tx))
 
                     track(AnalyticsEvent.WALLET_OPERATION, {
@@ -109,7 +109,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         }),
                     })
                     break
-                case ActivityType.FUNGIBLE_TOKEN:
+                case ActivityType.TRANSFER_FT:
                     dispatch(addPendingTransferTransactionActivity(tx))
 
                     track(AnalyticsEvent.WALLET_OPERATION, {
@@ -122,7 +122,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
                         }),
                     })
                     break
-                case ActivityType.NFT_TRANSFER:
+                case ActivityType.TRANSFER_NFT:
                     dispatch(addPendingNFTtransferTransactionActivity(tx))
 
                     track(AnalyticsEvent.WALLET_OPERATION, {

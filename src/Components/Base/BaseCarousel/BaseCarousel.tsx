@@ -93,7 +93,7 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             gap: 16,
-            paddingHorizontal: 24,
+            paddingHorizontal: 16,
         },
         carousel: {
             width: SCREEN_WIDTH,

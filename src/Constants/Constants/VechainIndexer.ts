@@ -1,6 +1,9 @@
 /* eslint-disable max-len */
-import { genesises } from "~Constants"
-import { Network, NETWORK_TYPE } from "~Model"
+import moment from "moment"
+import { genesises } from "./Thor"
+import { ActivityEvent, ActivitySearchBy, Network, NETWORK_TYPE } from "~Model"
+import AddressUtils from "~Utils/AddressUtils"
+import { ZERO_ADDRESS } from "@vechain/sdk-core"
 
 const isMainGenesis = (thor: Connex.Thor) => thor.genesis.id === genesises.main.id
 
@@ -60,49 +63,83 @@ export const NFTS_OWNED_PER_CONTRACT = (
     }/nfts?address=${ownerAddress}&contractAddress=${contractAddress}&size=${resultsPerPage}&page=${page}&direction=${direction}`
 
 /**
- * Get all transactions performed by a given address
- *
- * @param networkType - Mainnet or Testnet
- * @param address - Address to get transactions for
- * @param page - Page number
- * @param pageSize - Number of results per page
- * @param direction - Direction of results
- *
- * @returns URL to fetch all transactions performed by a given address
- */
-export const getTransactionsOrigin = (
-    networkType: NETWORK_TYPE,
-    address: string,
-    page: number,
-    pageSize: number,
-    direction: ORDER,
-) => {
-    return networkType === NETWORK_TYPE.MAIN
-        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transactions?origin=${address}&size=${pageSize}&page=${page}&direction=${direction}&expanded=true`
-        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transactions?origin=${address}&size=${pageSize}&page=${page}&direction=${direction}&expanded=true`
-}
-
-/**
- * Get all transfers a given address has received
+ * Retrieve all activities associated with a specified address
  *
  * @param networkType - Mainnet or Testnet
  * @param address - Address to get transfers for
  * @param page - Page number
  * @param pageSize - Number of results per page
  * @param direction - Direction of results
+ * @param eventName - Optional filter by specific transaction names
+ * @param searchBy - Optional array of fields to search by
+ * @param contractAddress - Optional contract address filter
+ * @param before - Optional timestamp filter for transactions before this time
+ * @param after - Optional timestamp filter for transactions after this time
  *
- * @returns URL to fetch all transfers a given address has received
+ * @returns URL to fetch all activities associated with a specified address
  */
-export const getIncomingTransfersOrigin = (
-    networkType: NETWORK_TYPE,
-    address: string,
-    page: number,
-    pageSize: number,
-    direction: ORDER,
-) => {
-    return networkType === NETWORK_TYPE.MAIN
-        ? `${process.env.REACT_APP_INDEXER_MAINNET_URL}/transfers/to?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
-        : `${process.env.REACT_APP_INDEXER_TESTNET_URL}/transfers/to?address=${address}&size=${pageSize}&page=${page}&direction=${direction}`
+export const getIndexedHistoryEventOrigin = ({
+    networkType,
+    address,
+    page,
+    pageSize = 20,
+    direction = ORDER.DESC,
+    eventName = [],
+    searchBy = [],
+    contractAddress = "",
+    before = 0,
+    after = 0,
+}: {
+    networkType: NETWORK_TYPE
+    address: string
+    page: number
+    pageSize?: number
+    direction?: ORDER
+    eventName?: Readonly<ActivityEvent[]>
+    searchBy?: ActivitySearchBy[]
+    contractAddress?: string
+    before?: number
+    after?: number
+}) => {
+    const baseUrl =
+        networkType === NETWORK_TYPE.MAIN
+            ? process.env.REACT_APP_INDEXER_MAINNET_URL
+            : process.env.REACT_APP_INDEXER_TESTNET_URL
+
+    let url = `${baseUrl}/history/${address}?page=${page}&size=${pageSize}&direction=${direction}`
+
+    if (eventName.length > 0) {
+        const uniqueEventNames = Array.from(new Set(eventName))
+        url += `&eventName=${uniqueEventNames.join(",")}`
+    }
+
+    if (searchBy.length > 0) {
+        const uniqueSearchBy = Array.from(new Set(searchBy))
+        url += `&searchBy=${uniqueSearchBy.join(",")}`
+    }
+
+    if (contractAddress.length > 0 && !AddressUtils.compareAddresses(contractAddress, ZERO_ADDRESS)) {
+        url += `&contractAddress=${contractAddress}`
+    }
+
+    if (before > 0 && moment(before).isValid()) {
+        url += `&before=${before}`
+    }
+
+    if (after > 0 && moment(after).isValid()) {
+        url += `&after=${after}`
+    }
+
+    return url
+}
+
+export const getTransactionOrigin = (txId: string, networkType: NETWORK_TYPE) => {
+    const baseUrl =
+        networkType === NETWORK_TYPE.MAIN
+            ? process.env.REACT_APP_INDEXER_MAINNET_URL
+            : process.env.REACT_APP_INDEXER_TESTNET_URL
+
+    return `${baseUrl}/transactions/${txId}?expanded=true`
 }
 
 /**

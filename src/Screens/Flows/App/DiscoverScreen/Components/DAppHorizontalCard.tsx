@@ -22,7 +22,7 @@ export const DAppHorizontalCard = ({ dapp, onPress }: Props) => {
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" style={[styles.rootContainer]}>
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" style={[styles.rootContainer]}>
             {/* Image */}
             <Image
                 source={
@@ -50,7 +50,7 @@ export const DAppHorizontalCard = ({ dapp, onPress }: Props) => {
             </BaseView>
             {/* Action Btn */}
             <BaseTouchable style={[styles.touchableArea]} onPress={() => onPress(dapp)}>
-                <BaseIcon name="icon-more-vertical" />
+                <BaseIcon name="icon-more-vertical" color={theme.colors.text} size={20} />
             </BaseTouchable>
         </BaseView>
     )
@@ -65,5 +65,5 @@ const baseStyles = () =>
             borderRadius: 4,
             overflow: "hidden",
         },
-        touchableArea: { width: 40, height: 40 },
+        touchableArea: { flexDirection: "row", alignItems: "center", justifyContent: "center", width: 40, height: 40 },
     })

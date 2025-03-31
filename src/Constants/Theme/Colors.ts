@@ -152,6 +152,15 @@ export type Colors = {
         background: string
         foreground: string
     }
+    radioButton: {
+        textColor: string
+        activeTextColor: string
+        disabledTextColor: string
+        borderColor: string
+        activeBorderColor: string
+        backgroudColor: string
+        disabledBackgroudColor: string
+    }
 }
 
 export enum COLORS {
@@ -243,6 +252,7 @@ export enum COLORS {
     GRADIENT_BACKGROUND_LIGHT_BOTTOM = "rgba(93, 93, 93, 0.95)",
     GRADIENT_BACKGROUND_DARK_TOP = "rgba(11, 0, 67, 0.7)",
     GRADIENT_BACKGROUND_DARK_BOTTOM = "rgba(11, 0, 67, 0.95)",
+    B3TR_ICON_BACKGROUND = "#74E291",
 }
 
 const light: Colors = {
@@ -399,6 +409,15 @@ const light: Colors = {
         background: COLORS.GREY_50,
         foreground: COLORS.GREY_400,
     },
+    radioButton: {
+        textColor: COLORS.GREY_600,
+        activeTextColor: COLORS.PRIMARY_800,
+        disabledTextColor: COLORS.GREY_400,
+        borderColor: COLORS.GREY_200,
+        activeBorderColor: COLORS.PRIMARY_800,
+        backgroudColor: COLORS.WHITE,
+        disabledBackgroudColor: COLORS.GREY_100,
+    },
 }
 
 const dark: Colors = {
@@ -543,8 +562,17 @@ const dark: Colors = {
         borderColor: COLORS.DARK_PURPLE_DISABLED,
     },
     defaultCarousel: {
-        dotBg: COLORS.LIME_GREEN,
-        activeDotBg: COLORS.DARK_PURPLE_DISABLED,
+        dotBg: COLORS.DARK_PURPLE_DISABLED,
+        activeDotBg: COLORS.LIME_GREEN,
+    },
+    radioButton: {
+        textColor: COLORS.GREY_300,
+        activeTextColor: COLORS.WHITE,
+        disabledTextColor: COLORS.DARK_PURPLE_DISABLED,
+        borderColor: COLORS.TRANSPARENT,
+        activeBorderColor: COLORS.WHITE,
+        backgroudColor: COLORS.PURPLE_DISABLED,
+        disabledBackgroudColor: COLORS.PURPLE_DISABLED,
     },
     searchIcon: {
         default: COLORS.GREY_300,

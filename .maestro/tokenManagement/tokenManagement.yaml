@@ -37,7 +37,7 @@ env:
           notVisible: "Selected" # Needed to avoid double click and deselect the token
       commands:
           - tapOn:
-                text: "Plair"
+                text: "PLA"
 - runFlow:
       when:
           platform: iOS
@@ -230,7 +230,7 @@ env:
       when:
           platform: Android
       commands:
-          - tapOn: "Safe Haven Token"
+          - tapOn: "SHA"
 - runFlow:
       when:
           platform: iOS

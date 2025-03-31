@@ -1,4 +1,3 @@
-import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
@@ -10,12 +9,10 @@ import {
     ListEmptyResults,
     ReorderIconHeaderButton,
 } from "~Components"
-import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
-import { Routes } from "~Navigation"
-import { addNavigationToDApp, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { DiscoveryDApp } from "~Constants"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { selectBookmarkedDapps, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { FavoritesStackCard } from "./Components"
 import { groupFavoritesByBaseUrl } from "./utils"
 import {
     NestableScrollContainer,
@@ -23,15 +20,16 @@ import {
     RenderItem,
     DragEndParams,
 } from "react-native-draggable-flatlist"
+import { DAppOptionsBottomSheet } from "./Components/Bottomsheets"
 
 export const FavouritesScreen = () => {
     const [isEditingMode, setIsEditingMode] = useState(false)
+    const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>()
 
-    const nav = useNavigation()
-    const track = useAnalyticTracking()
-    const dispatch = useAppDispatch()
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
+
+    const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
 
@@ -39,33 +37,24 @@ export const FavouritesScreen = () => {
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
     const onDAppPress = useCallback(
-        ({ href, custom }: { href: string; custom?: boolean }) => {
-            nav.navigate(Routes.BROWSER, { url: href })
-
-            track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-                url: href,
-            })
-
-            setTimeout(() => {
-                dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))
-            }, 1000)
+        (dapp: DiscoveryDApp) => {
+            setSelectedDApp(dapp)
+            onOpenDAppOptions()
         },
-        [track, dispatch, nav],
+        [onOpenDAppOptions],
     )
 
     const dappToShow = useMemo(() => groupFavoritesByBaseUrl(bookmarkedDApps), [bookmarkedDApps])
 
     const renderItem: RenderItem<DiscoveryDApp[]> = useCallback(
         ({ item, isActive, drag }) => {
-            return item.length === 1 ? (
+            return (
                 <FavoriteDAppCard
                     dapp={item[0]}
                     isActive={isActive}
                     isEditMode={isEditingMode}
                     onDAppPress={isEditingMode ? drag : onDAppPress}
                 />
-            ) : (
-                <FavoritesStackCard dapps={item} onDAppPress={onDAppPress} />
             )
         },
         [isEditingMode, onDAppPress],
@@ -94,7 +83,7 @@ export const FavouritesScreen = () => {
                 )
             }
             fixedBody={
-                <BaseView flex={1} px={24}>
+                <BaseView flex={1} px={16}>
                     <NestableScrollContainer>
                         <NestableDraggableFlatList
                             contentContainerStyle={styles.listContentContainer}
@@ -111,6 +100,14 @@ export const FavouritesScreen = () => {
                             }
                         />
                     </NestableScrollContainer>
+                    <DAppOptionsBottomSheet
+                        ref={dappOptionsRef}
+                        onClose={() => {
+                            setSelectedDApp(undefined)
+                            onCloseDAppOptions()
+                        }}
+                        selectedDApp={selectedDApp}
+                    />
                 </BaseView>
             }
         />

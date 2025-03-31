@@ -124,4 +124,19 @@ describe("useCoinifyPay", () => {
             &targetPage=sell".replaceAll(" ", ""), //To make it more readable I added new lines and the remove them
         )
     })
+
+    it("Trade History - Generale URL", async () => {
+        const { result } = renderHook(() => useCoinifyPay({ target: "trade-history" }))
+        const { generateTradeHistoryURL } = result.current
+
+        const url = generateTradeHistoryURL({
+            primaryColor: COLORS.PURPLE,
+        })
+
+        expect(url).toBe(
+            "https://trade-ui.sandbox.coinify.com?partnerId=xcdet51e-421d-gc3d-bd90-68570fcl10e4\
+            &primaryColor=%2330265F\
+            &targetPage=trade-history".replaceAll(" ", ""),
+        )
+    })
 })

@@ -1,5 +1,6 @@
 import React, { useCallback } from "react"
-import { CURRENCY, currencyConfig } from "~Constants"
+import { CURRENCY } from "~Constants"
+import { currencyConfig } from "~Constants/Constants"
 import { BaseButtonGroupHorizontal } from "~Components"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { selectCurrency } from "~Storage/Redux/Selectors"

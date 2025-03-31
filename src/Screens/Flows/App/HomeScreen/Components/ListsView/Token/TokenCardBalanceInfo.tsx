@@ -46,25 +46,27 @@ export const TokenCardBalanceInfo = ({
                     {renderFiatBalance}
                 </BaseView>
             )}
-
-            <BaseSpacer height={2} />
-
-            {isLoading ? (
-                <BaseView flexDirection="row" alignItems="center">
-                    <BaseSkeleton
-                        animationDirection="horizontalLeft"
-                        boneColor={theme.colors.skeletonBoneColor}
-                        highlightColor={theme.colors.skeletonHighlightColor}
-                        height={14}
-                        width={60}
-                    />
+            {change24h && (
+                <BaseView>
+                    <BaseSpacer height={2} />
+                    {isLoading ? (
+                        <BaseView flexDirection="row" alignItems="center">
+                            <BaseSkeleton
+                                animationDirection="horizontalLeft"
+                                boneColor={theme.colors.skeletonBoneColor}
+                                highlightColor={theme.colors.skeletonHighlightColor}
+                                height={14}
+                                width={60}
+                            />
+                        </BaseView>
+                    ) : (
+                        <BaseText
+                            typographyFont="captionMedium"
+                            color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
+                            {change24h}
+                        </BaseText>
+                    )}
                 </BaseView>
-            ) : (
-                <BaseText
-                    typographyFont="captionMedium"
-                    color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
-                    {change24h}
-                </BaseText>
             )}
         </Animated.View>
     )
@@ -73,6 +75,6 @@ export const TokenCardBalanceInfo = ({
 const baseStyles = StyleSheet.create({
     container: {
         alignItems: "flex-end",
-        justifyContent: "flex-start",
+        justifyContent: "center",
     },
 })
