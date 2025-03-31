@@ -1,5 +1,7 @@
 #walletImportUsingPrivateKey
 appId: org.vechain.veworld.app
+tags:
+  - pull-request
 env:
    PK: "0x99F0500549792796C14fED62011A51081DC5B5E68FE8BD8A13B86BE829c4FD36"
 onFlowComplete:
@@ -66,13 +68,21 @@ onFlowComplete:
      when:
        platform: iOS
      commands:
-            - tapOn: "Derivation Path "
+            - runFlow:
+                when:
+                  visible: "Derivation Path for VeChain.*"
+                commands:
+                  - tapOn: "Derivation Path for VeChain.*"
 - runFlow:
      when:
        platform: Android
      commands:
             - tapOn: "Back"
-- tapOn: "Verify"
+- runFlow:
+     when:
+       visible: "Verify"
+     commands:
+            - tapOn: "Verify"
 #Insert wallet pin
 - repeat:
       while:
