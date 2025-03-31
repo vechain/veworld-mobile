@@ -1,8 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useThor } from "~Components"
-import { abis } from "~Constants"
-
-const XALLOCATIONVOTING_CONTRACT = "0x89A00Bb0947a30FF95BEeF77a66AEdE3842Fe5B7"
+import { abis, VEBETTER_DAO_XALLOCATION_VOTING_CONTRACT } from "~Constants"
 
 /**
  *
@@ -14,7 +12,7 @@ export const getCurrentAllocationsRoundId = async (thor: Connex.Thor): Promise<s
     const currentRoundAbi = abis.VeBetterDao.XAllocationVoting.currentRoundId
 
     if (!currentRoundAbi) throw new Error("currentRoundId function not found")
-    const res = await thor.account(XALLOCATIONVOTING_CONTRACT).method(currentRoundAbi).call()
+    const res = await thor.account(VEBETTER_DAO_XALLOCATION_VOTING_CONTRACT).method(currentRoundAbi).call()
 
     if (res.vmError) return Promise.reject(new Error(res.vmError))
 

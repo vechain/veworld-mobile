@@ -1299,6 +1299,38 @@ type RootTranslation = {
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: string
 	/**
+	 * A​l​p​h​a​b​e​t​i​c​ ​(​A​-​Z​)
+	 */
+	BTN_ALPHABETIC_ASC: string
+	/**
+	 * A​l​p​h​a​b​e​t​i​c​ ​(​Z​-​A​)
+	 */
+	BTN_ALPHABETIC_DESC: string
+	/**
+	 * R​e​c​e​n​t​l​y​ ​a​d​d​e​d
+	 */
+	BTN_NEWEST: string
+	/**
+	 * P​o​p​u​l​a​r​i​t​y
+	 */
+	BTN_POPULAR: string
+	/**
+	 * O​p​e​n​ ​d​A​p​p
+	 */
+	BTN_OPEN_DAPP: string
+	/**
+	 * S​e​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O
+	 */
+	BTN_SEE_ON_VBD: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BTN_REMOVE_FROM_FAVORITES: string
+	/**
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BTN_ADD_TO_FAVORITES: string
+	/**
 	 * Y​o​u​ ​h​a​v​e​ ​r​e​j​e​c​t​e​d​ ​t​h​e​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	CERT_LEDGER_REJECTED: string
@@ -1938,6 +1970,10 @@ type RootTranslation = {
 	 */
 	DISCOVER_TAB_NEW_DAPPS: string
 	/**
+	 * T​r​e​n​d​i​n​g​ ​&​ ​P​o​p​u​l​a​r
+	 */
+	DISCOVER_TAB_TRENDING_AND_POPULAR: string
+	/**
 	 * F​e​a​t​u​r​e​d
 	 */
 	DISCOVER_TAB_FEATURED: string
@@ -1949,6 +1985,10 @@ type RootTranslation = {
 	 * S​E​A​R​C​H​ ​T​H​E​ ​W​E​B
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
+	/**
+	 * S​o​r​t​ ​b​y
+	 */
+	DISCOVER_SORT_BY: string
 	/**
 	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
 	 */
@@ -3549,13 +3589,13 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	SIGN_TRANSACTION_ERROR: string
-	/**
 	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SIGN_TRANSACTION: string
+	/**
+	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SIGN_TRANSACTION_ERROR: string
 	/**
 	 * S​t​a​t​u​s
 	 */
@@ -5383,6 +5423,38 @@ Thanks for your patience!
 	 */
 	BTN_WRITE_RECOVERY_PASSWORD: () => LocalizedString
 	/**
+	 * Alphabetic (A-Z)
+	 */
+	BTN_ALPHABETIC_ASC: () => LocalizedString
+	/**
+	 * Alphabetic (Z-A)
+	 */
+	BTN_ALPHABETIC_DESC: () => LocalizedString
+	/**
+	 * Recently added
+	 */
+	BTN_NEWEST: () => LocalizedString
+	/**
+	 * Popularity
+	 */
+	BTN_POPULAR: () => LocalizedString
+	/**
+	 * Open dApp
+	 */
+	BTN_OPEN_DAPP: () => LocalizedString
+	/**
+	 * See on VeBetterDAO
+	 */
+	BTN_SEE_ON_VBD: () => LocalizedString
+	/**
+	 * Remove from Favorite dApps
+	 */
+	BTN_REMOVE_FROM_FAVORITES: () => LocalizedString
+	/**
+	 * Add to Favorite dApps
+	 */
+	BTN_ADD_TO_FAVORITES: () => LocalizedString
+	/**
 	 * You have rejected the certificate
 	 */
 	CERT_LEDGER_REJECTED: () => LocalizedString
@@ -6015,6 +6087,10 @@ Thanks for your patience!
 	 */
 	DISCOVER_TAB_NEW_DAPPS: () => LocalizedString
 	/**
+	 * Trending & Popular
+	 */
+	DISCOVER_TAB_TRENDING_AND_POPULAR: () => LocalizedString
+	/**
 	 * Featured
 	 */
 	DISCOVER_TAB_FEATURED: () => LocalizedString
@@ -6026,6 +6102,10 @@ Thanks for your patience!
 	 * SEARCH THE WEB
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
+	/**
+	 * Sort by
+	 */
+	DISCOVER_SORT_BY: () => LocalizedString
 	/**
 	 * Don't see your NFTs?
 	 */
@@ -7597,13 +7677,13 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Error signing transaction
-	 */
-	SIGN_TRANSACTION_ERROR: () => LocalizedString
-	/**
 	 * Sign transaction
 	 */
 	SIGN_TRANSACTION: () => LocalizedString
+	/**
+	 * Error signing transaction
+	 */
+	SIGN_TRANSACTION_ERROR: () => LocalizedString
 	/**
 	 * Status
 	 */

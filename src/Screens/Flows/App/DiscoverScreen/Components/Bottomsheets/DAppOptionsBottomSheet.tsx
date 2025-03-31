@@ -9,6 +9,7 @@ import { Routes } from "~Navigation"
 import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { FastAction } from "~Model"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     selectedDApp?: DiscoveryDApp
@@ -23,7 +24,7 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
         const bookmarkedDApps = useDappBookmarking(selectedDApp?.href, selectedDApp?.name)
         const nav = useNavigation()
         const track = useAnalyticTracking()
-
+        const { LL } = useI18nContext()
         const dispatch = useAppDispatch()
 
         const onOpenDAppPress = useCallback(() => {
@@ -49,21 +50,21 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
         const Actions: FastAction[] = useMemo(
             () => [
                 {
-                    name: "Open dApp",
+                    name: LL.BTN_OPEN_DAPP(),
                     action: onOpenDAppPress,
                     icon: <BaseIcon name="icon-arrow-link" size={16} color={theme.colors.actionBottomSheet.icon} />,
                     testID: "Open_Dapp_Link",
                     disabled: false,
                 },
                 {
-                    name: "See on VeBetterDAO",
+                    name: LL.BTN_SEE_ON_VBD(),
                     action: onSeeOnVBDPress,
                     icon: <BaseIcon name="icon-arrow-link" size={16} color={theme.colors.actionBottomSheet.icon} />,
                     testID: "Open_VBD_Link",
                     disabled: false,
                 },
                 {
-                    name: bookmarkedDApps.isBookMarked ? "Remove from Favorite dApps" : "Add to Favorite dApps",
+                    name: bookmarkedDApps.isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITES() : LL.BTN_ADD_TO_FAVORITES(),
                     action: () => {
                         onClose?.()
                         bookmarkedDApps.toggleBookmark()
@@ -79,7 +80,7 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                     disabled: false,
                 },
             ],
-            [bookmarkedDApps, onClose, onOpenDAppPress, onSeeOnVBDPress, theme.colors.actionBottomSheet.icon],
+            [LL, bookmarkedDApps, onClose, onOpenDAppPress, onSeeOnVBDPress, theme.colors.actionBottomSheet.icon],
         )
 
         const computeSnappoints = useMemo(() => {

@@ -17,6 +17,7 @@ import {
 } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { Ecosystem, Favourites, Header, NewDapps } from "./Components"
+import { PopularTrendingDApps } from "./Components/PopularTrendingDApps"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 import { groupFavoritesByBaseUrl } from "./utils"
 
@@ -119,7 +120,7 @@ export const DiscoverScreen: React.FC = () => {
                         <BaseSpacer height={24} />
                         <VeBetterDAOCarousel />
 
-                        <BaseSpacer height={18} />
+                        <BaseSpacer height={40} />
                         {showFavorites && (
                             <Favourites
                                 bookmarkedDApps={groupedbookmarkedDApps}
@@ -127,10 +128,16 @@ export const DiscoverScreen: React.FC = () => {
                                 onDAppPress={onDAppPress}
                             />
                         )}
+                        <BaseSpacer height={48} />
+
                         {/* New Dapps */}
                         <NewDapps />
+                        <BaseSpacer height={48} />
+
                         {/* Trending & Popular */}
-                        <BaseSpacer height={12} />
+                        <PopularTrendingDApps />
+                        <BaseSpacer height={48} />
+
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} />
                     </Animated.ScrollView>
                 </BaseView>

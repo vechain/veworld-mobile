@@ -54,7 +54,7 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps
 
     return (
         <BaseView>
-            <BaseSpacer height={12} />
+            <BaseSpacer height={16} />
             <FlatList
                 data={bookmarkedDApps}
                 horizontal
@@ -80,7 +80,7 @@ export const Favourites = React.memo(({ bookmarkedDApps, onActionLabelPress, onD
     const theme = useTheme()
 
     return (
-        <BaseView py={24}>
+        <BaseView>
             <BaseView flexDirection="row" justifyContent="space-between" px={16}>
                 <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_TAB_FAVOURITES()}</BaseText>
 
