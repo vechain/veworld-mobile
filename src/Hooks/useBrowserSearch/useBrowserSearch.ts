@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import { URIUtils } from "~Utils"
+import URIUtils from "~Utils/URIUtils"
 import { Routes } from "~Navigation"
 import { useVisitedUrls } from "./useVisitedUrls"
 import { useCallback, useMemo } from "react"
