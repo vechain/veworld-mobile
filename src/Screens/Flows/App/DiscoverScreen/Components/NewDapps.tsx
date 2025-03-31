@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { BaseView, BaseText } from "~Components"
+import { BaseView, BaseText, BaseSpacer } from "~Components"
 import { useI18nContext } from "~i18n"
 import { useNewDApps } from "~Hooks"
 import { DAppCard } from "./DAppCard"
@@ -25,10 +25,11 @@ export const NewDapps = () => {
     )
 
     return (
-        <BaseView py={24}>
+        <BaseView>
             <BaseView flexDirection="row" justifyContent="space-between" px={16}>
                 <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_TAB_NEW_DAPPS()}</BaseText>
             </BaseView>
+            <BaseSpacer height={16} />
 
             <FlatList data={newDapps} horizontal showsHorizontalScrollIndicator={false} renderItem={renderItem} />
         </BaseView>

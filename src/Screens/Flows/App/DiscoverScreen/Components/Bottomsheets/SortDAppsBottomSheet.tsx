@@ -4,7 +4,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-
+import { useI18nContext } from "~i18n"
 export type SortableKeys = "asc" | "desc" | "newest" | "popular"
 
 type Props = {
@@ -15,26 +15,26 @@ type Props = {
 export const SortDAppsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ sortedBy, onSortChange }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
-
+        const { LL } = useI18nContext()
         const buttons: RadioButton[] = [
             {
                 id: "asc",
-                label: "Alphabetic (A-Z)",
+                label: LL.BTN_ALPHABETIC_ASC(),
                 disabled: false,
             },
             {
                 id: "desc",
-                label: "Alphabetic (Z-A)",
+                label: LL.BTN_ALPHABETIC_DESC(),
                 disabled: false,
             },
             {
                 id: "newest",
-                label: "Recently added",
+                label: LL.BTN_NEWEST(),
                 disabled: false,
             },
             {
                 id: "popular",
-                label: "Popularity",
+                label: LL.BTN_POPULAR(),
                 disabled: true,
             },
         ]
@@ -50,7 +50,7 @@ export const SortDAppsBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 <BaseView style={[styles.container]}>
                     <BaseView flexDirection="row" style={[styles.titleContainer]}>
                         <BaseIcon name="icon-sort-desc" size={18} color={theme.colors.text} />
-                        <BaseText typographyFont="bodySemiBold">{"Sort by"}</BaseText>
+                        <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_SORT_BY()}</BaseText>
                     </BaseView>
                     <BaseRadioGroup
                         buttons={buttons}

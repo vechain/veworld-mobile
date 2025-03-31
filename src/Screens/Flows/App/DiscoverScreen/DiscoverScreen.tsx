@@ -28,6 +28,7 @@ import { useI18nContext } from "~i18n"
 import { Ecosystem, Favourites, Header, NewDapps } from "./Components"
 import { groupFavoritesByBaseUrl } from "./utils"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
+import { PopularTrendingDApps } from "./Components/PopularTrendingDApps"
 
 export const DiscoverScreen: React.FC = () => {
     const { LL } = useI18nContext()
@@ -162,7 +163,7 @@ export const DiscoverScreen: React.FC = () => {
                         <BaseSpacer height={24} />
                         <VeBetterDAOCarousel />
 
-                        <BaseSpacer height={18} />
+                        <BaseSpacer height={40} />
                         {showFavorites && (
                             <Favourites
                                 bookmarkedDApps={groupedbookmarkedDApps}
@@ -170,10 +171,16 @@ export const DiscoverScreen: React.FC = () => {
                                 onDAppPress={onDAppPress}
                             />
                         )}
+                        <BaseSpacer height={48} />
+
                         {/* New Dapps */}
                         <NewDapps />
+                        <BaseSpacer height={48} />
+
                         {/* Trending & Popular */}
-                        <BaseSpacer height={12} />
+                        <PopularTrendingDApps />
+                        <BaseSpacer height={48} />
+
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} />
                         {isWebSearchFloatingButtonVisible && <BaseSpacer height={70} />}
                     </Animated.ScrollView>
