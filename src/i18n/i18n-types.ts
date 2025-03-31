@@ -856,6 +856,10 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_EMPTY: string
 	/**
+	 * T​h​i​s​ ​a​d​d​r​e​s​s​ ​c​a​n​'​t​ ​b​e​ ​r​e​a​c​h​e​d
+	 */
+	BROWSER_HISTORY_ADDRESS_ERROR: string
+	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​a​c​c​e​s​ ​t​h​i​s​ ​l​i​n​k​.​ ​M​a​k​e​ ​s​u​r​e​ ​i​t​'​s​ ​c​o​r​r​e​c​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	BROWSER_INVALID_DEEP_LINK: string
@@ -4831,6 +4835,10 @@ Thanks for your patience!
 	 * No history to show
 	 */
 	BROWSER_HISTORY_EMPTY: () => LocalizedString
+	/**
+	 * This address can't be reached
+	 */
+	BROWSER_HISTORY_ADDRESS_ERROR: () => LocalizedString
 	/**
 	 * There was an error trying to acces this link. Make sure it's correct and try again.
 	 */

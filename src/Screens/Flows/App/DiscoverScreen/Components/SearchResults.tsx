@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { SearchError, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { resetBrowserState, selectAllDapps, selectVisitedUrls, useAppSelector } from "~Storage/Redux"
 import { HistoryItem, HistoryUrlKind, mapHistoryUrls } from "~Utils/HistoryUtils"
@@ -12,9 +12,10 @@ import { SearchResultItem } from "./SearchResultItem"
 
 type Props = {
     query: string
+    error?: SearchError
 }
 
-export const SearchResults = ({ query }: Props) => {
+export const SearchResults = ({ query, error }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const visitedUrls = useAppSelector(selectVisitedUrls)
@@ -39,20 +40,23 @@ export const SearchResults = ({ query }: Props) => {
         resetBrowserState()
     }, [])
 
+    const isQueryEmpty = useMemo(() => query.trim() === "", [query])
+
     const isQueryEmptyButWithResults = useMemo(
-        () => query.trim() === "" && results.length !== 0,
-        [query, results.length],
+        () => isQueryEmpty && results.length !== 0,
+        [isQueryEmpty, results.length],
     )
 
     const isQueryEmptyWithNoResults = useMemo(
-        () => query.trim() === "" && results.length === 0,
-        [query, results.length],
+        () => isQueryEmpty && results.length === 0,
+        [isQueryEmpty, results.length],
     )
 
     const rootStyles = useMemo(() => {
-        if (isQueryEmptyWithNoResults) return [styles.rootContainer, styles.rootContainerEmpty]
+        if (isQueryEmptyWithNoResults || error === SearchError.ADDRESS_CANNOT_BE_REACHED)
+            return [styles.rootContainer, styles.rootContainerEmpty]
         return [styles.rootContainer]
-    }, [isQueryEmptyWithNoResults, styles.rootContainer, styles.rootContainerEmpty])
+    }, [error, isQueryEmptyWithNoResults, styles.rootContainer, styles.rootContainerEmpty])
 
     const renderItemSeparator = useCallback(() => {
         return <BaseSpacer height={24} />
@@ -62,27 +66,53 @@ export const SearchResults = ({ query }: Props) => {
         return <SearchResultItem item={item} />
     }, [])
 
+    if (error === SearchError.ADDRESS_CANNOT_BE_REACHED)
+        return (
+            <Animated.ScrollView contentContainerStyle={rootStyles}>
+                <BaseView alignItems="center" justifyContent="center" flexDirection="row" flexGrow={1}>
+                    <BaseView style={styles.errorContainer}>
+                        <BaseIcon
+                            name="icon-disconnect"
+                            style={styles.errorIcon}
+                            size={32}
+                            color={theme.colors.emptyStateIcon.foreground}
+                        />
+                        <BaseText>{LL.BROWSER_HISTORY_ADDRESS_ERROR()}</BaseText>
+                    </BaseView>
+                </BaseView>
+            </Animated.ScrollView>
+        )
+
     return (
         <Animated.ScrollView contentContainerStyle={rootStyles}>
             {isQueryEmptyButWithResults && (
-                <BaseView justifyContent="space-between" flexDirection="row" alignItems="center">
+                <BaseView justifyContent="space-between" flexDirection="row" alignItems="center" mb={24}>
                     <BaseText typographyFont="bodyMedium">{LL.BROWSER_HISTORY_DEFAULT_TITLE()}</BaseText>
                     <BaseButton
                         action={onClear}
                         rightIcon={<BaseIcon size={12} name="icon-retry" style={styles.clearIcon} />}
                         variant="ghost"
-                        px={0}>
+                        px={0}
+                        py={0}>
                         {LL.BROWSER_HISTORY_CLEAR()}
                     </BaseButton>
                 </BaseView>
             )}
 
+            {!isQueryEmpty && (
+                <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={24}>
+                    <BaseText typographyFont="bodyMedium">
+                        {LL.BROWSER_HISTORY_RESULTS({ amount: results.length })}
+                    </BaseText>
+                </BaseView>
+            )}
+
             {isQueryEmptyWithNoResults ? (
                 <BaseView alignItems="center" justifyContent="center" flexGrow={1}>
-                    <BaseView style={styles.noHistoryContainer}>
+                    <BaseView style={styles.errorContainer}>
                         <BaseIcon
                             name="icon-history"
-                            style={styles.noHistoryIcon}
+                            style={styles.errorIcon}
                             size={32}
                             color={theme.colors.emptyStateIcon.foreground}
                         />
@@ -118,11 +148,11 @@ const baseStyles = (theme: ColorThemeType) => {
         clearIcon: {
             marginLeft: 4,
         },
-        noHistoryContainer: {
+        errorContainer: {
             gap: 24,
             flexDirection: "column",
         },
-        noHistoryIcon: {
+        errorIcon: {
             borderRadius: 999,
             padding: 16,
             backgroundColor: theme.colors.emptyStateIcon.background,

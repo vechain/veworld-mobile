@@ -4,6 +4,10 @@ import { Routes } from "~Navigation"
 import { useVisitedUrls } from "./useVisitedUrls"
 import { useCallback } from "react"
 
+export enum SearchError {
+    ADDRESS_CANNOT_BE_REACHED,
+}
+
 export const useBrowserSearch = () => {
     const nav = useNavigation()
     const { addVisitedUrl } = useVisitedUrls()
