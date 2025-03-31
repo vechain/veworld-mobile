@@ -6,7 +6,7 @@ import { Vns } from "~Hooks"
 
 export const rootAlias = "Root Account"
 
-export const nextAlias = (accountId: number) => `Account ${accountId}`
+export const nextAlias = (accountId: number, deviceName: string) => `${deviceName} ${accountId}`
 
 /**
  *  Find the next index for a new account based on the current accounts
