@@ -83,7 +83,7 @@ export const FavouritesScreen = () => {
                 )
             }
             fixedBody={
-                <BaseView flex={1} px={24}>
+                <BaseView flex={1} px={16}>
                     <NestableScrollContainer>
                         <NestableDraggableFlatList
                             contentContainerStyle={styles.listContentContainer}

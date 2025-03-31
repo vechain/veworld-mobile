@@ -7,8 +7,6 @@ import { useThemedStyles } from "~Hooks"
 import { DAppUtils } from "~Utils"
 
 type DAppCardProps = {
-    columns: number
-    columnsGap: number
     dapp: DiscoveryDApp
     onPress: () => void
 }

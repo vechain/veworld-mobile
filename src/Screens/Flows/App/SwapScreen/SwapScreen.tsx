@@ -90,7 +90,7 @@ export const SwapScreen = () => {
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
-            return <FavoriteDAppCard dapp={item} onDAppPress={onDAppPress} />
+            return <FavoriteDAppCard dapp={item} isEditMode={false} isActive={false} onDAppPress={onDAppPress} />
         },
         [onDAppPress],
     )

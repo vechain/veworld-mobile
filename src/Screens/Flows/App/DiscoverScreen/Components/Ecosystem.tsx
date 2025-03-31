@@ -1,7 +1,7 @@
 import { useScrollToTop, useTheme } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
+import { BaseChip, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
@@ -22,9 +22,9 @@ type TopFiltersProps = {
 
 const TopFilters = ({ filters }: TopFiltersProps) => {
     return (
-        <BaseView flexDirection="row" justifyContent="space-evenly">
+        <BaseView flexDirection="row" justifyContent="space-between">
             {filters.map(({ key, isSelected, title, onPress }) => (
-                <BaseTouchable key={key} underlined={isSelected} font="bodyBold" title={title} action={onPress} />
+                <BaseChip key={key} label={title} active={isSelected} onPress={onPress} />
             ))}
         </BaseView>
     )
@@ -174,7 +174,7 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
     }, [dapps, selectedDappsType])
 
     return (
-        <BaseView px={20}>
+        <BaseView px={16}>
             <BaseView flexDirection={"row"} justifyContent="space-between">
                 <BaseText typographyFont="bodySemiBold">{title}</BaseText>
                 <BaseTouchable onPress={onOpenSortBottomSheet}>

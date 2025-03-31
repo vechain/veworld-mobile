@@ -29,14 +29,12 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp[]>) => {
             const isLast = index === bookmarkedDApps.length - 1
-            const columnsGap = 24
+            const columnsGap = 16
 
             return (
                 <BaseView pl={columnsGap} pr={isLast ? columnsGap : 0} justifyContent="center" alignItems="center">
                     {item.length === 1 ? (
                         <DAppCard
-                            columns={4}
-                            columnsGap={columnsGap}
                             dapp={item[0]}
                             onPress={() => onDAppPress({ href: item[0].href, custom: item[0].isCustom })}
                         />
@@ -83,7 +81,7 @@ export const Favourites = React.memo(({ bookmarkedDApps, onActionLabelPress, onD
 
     return (
         <BaseView py={24}>
-            <BaseView flexDirection="row" justifyContent="space-between" px={24}>
+            <BaseView flexDirection="row" justifyContent="space-between" px={16}>
                 <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_TAB_FAVOURITES()}</BaseText>
 
                 {showBookmarkedDAppsList && (
