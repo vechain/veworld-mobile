@@ -1,6 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles, useVisitedUrls } from "~Hooks"
 import { DAppUtils } from "~Utils"
 import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
@@ -45,24 +46,25 @@ export const SearchResultItem = ({ item }: Props) => {
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" style={[styles.rootContainer]}>
-            {/* Image */}
-            <Image
-                source={
-                    loadFallback
-                        ? require("~Assets/Img/dapp-fallback.png")
-                        : {
-                              uri: iconUri,
-                          }
-                }
-                style={
-                    [
-                        { height: IMAGE_SIZE, width: IMAGE_SIZE, backgroundColor: theme.colors.card },
-                        styles.icon,
-                    ] as StyleProp<ImageStyle>
-                }
-                onError={() => setLoadFallback(true)}
-                resizeMode="contain"
-            />
+            <BaseView style={styles.iconContainer}>
+                {loadFallback ? (
+                    <BaseIcon
+                        name={item.type === HistoryUrlKind.DAPP ? "icon-image" : "icon-globe"}
+                        size={16}
+                        color={theme.colors.emptyStateIcon.foreground}
+                    />
+                ) : (
+                    <Image
+                        source={{
+                            uri: iconUri,
+                        }}
+                        style={styles.dappImage as StyleProp<ImageStyle>}
+                        onError={() => setLoadFallback(true)}
+                        resizeMode="contain"
+                    />
+                )}
+            </BaseView>
+
             {/* Title & Desc */}
             <BaseView flex={1} justifyContent="center">
                 <BaseText typographyFont="bodySemiBold">{name}</BaseText>
@@ -78,7 +80,7 @@ export const SearchResultItem = ({ item }: Props) => {
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         rootContainer: {
             gap: 12,
@@ -87,5 +89,18 @@ const baseStyles = () =>
         icon: {
             borderRadius: 4,
             overflow: "hidden",
+        },
+        dappImage: {
+            width: IMAGE_SIZE,
+            height: IMAGE_SIZE,
+        },
+        iconContainer: {
+            borderRadius: 4,
+            overflow: "hidden",
+            alignItems: "center",
+            justifyContent: "center",
+            backgroundColor: theme.colors.card,
+            width: IMAGE_SIZE,
+            height: IMAGE_SIZE,
         },
     })
