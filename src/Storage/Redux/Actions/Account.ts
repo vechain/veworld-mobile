@@ -23,8 +23,12 @@ const addAccountForDevice =
 
         const newAccountAddress = AddressUtils.getAddressFromXPub(device.xPub, nextIndex)
 
+        const isDefaultName = /^Wallet \d+$/.test(device.alias)
+        const alias = isDefaultName
+            ? AccountUtils.nextAlias(nextIndex + 1, "Account")
+            : AccountUtils.nextAlias(nextIndex + 1, device.alias)
         const newAccount: WalletAccount = {
-            alias: AccountUtils.nextAlias(nextIndex + 1, device.alias),
+            alias,
             address: newAccountAddress,
             rootAddress: device.rootAddress,
             index: nextIndex,
