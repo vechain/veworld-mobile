@@ -1,37 +1,31 @@
-import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BackButtonGenericHeader, BaseView, Layout } from "~Components"
-import { useThemedStyles, useVisitedUrls } from "~Hooks"
-import { Routes } from "~Navigation"
-import { URIUtils } from "~Utils"
+import { SearchError, useBrowserSearch, useThemedStyles } from "~Hooks"
 import { SearchBar } from "./Components/SearchBar"
 import { SearchResults } from "./Components/SearchResults"
 
 export const SearchScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
-    const nav = useNavigation()
-    const { addVisitedUrl } = useVisitedUrls()
 
     const [search, setSearch] = useState("")
+    const [error, setError] = useState<SearchError>()
+    const { navigateToBrowser, results } = useBrowserSearch(search)
 
-    const onSearchUpdated = useCallback((value: string) => {
-        setSearch(value)
-    }, [])
+    const onSearchUpdated = useCallback(
+        (value: string) => {
+            if (typeof error !== "undefined") setError(undefined)
+            setSearch(value)
+        },
+        [error],
+    )
 
     const onSearchReturn = useCallback(
         async (value: string) => {
-            const valueLower = value.toLowerCase()
-            const isValid = await URIUtils.isValidBrowserUrl(valueLower)
-            if (isValid) {
-                const url = valueLower.startsWith("https://") ? valueLower : `https://${valueLower}`
-                nav.navigate(Routes.BROWSER, { url })
-                addVisitedUrl(url)
-                return
-            }
-            //TODO: Add error state
+            const result = await navigateToBrowser(value)
+            if (typeof result !== "undefined") setError(result)
         },
-        [addVisitedUrl, nav],
+        [navigateToBrowser],
     )
 
     const renderHeader = useMemo(() => {
@@ -50,7 +44,7 @@ export const SearchScreen = () => {
             fixedHeader={renderHeader}
             fixedBody={
                 <BaseView style={[styles.rootContainer]}>
-                    <SearchResults query={search} />
+                    <SearchResults query={search} error={error} results={results} />
                 </BaseView>
             }
         />

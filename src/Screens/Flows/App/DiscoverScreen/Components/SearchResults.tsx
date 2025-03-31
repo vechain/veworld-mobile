@@ -6,39 +6,24 @@ import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Component
 import { ColorThemeType } from "~Constants"
 import { SearchError, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { resetBrowserState, selectAllDapps, selectVisitedUrls, useAppSelector } from "~Storage/Redux"
-import { HistoryItem, HistoryUrlKind, mapHistoryUrls } from "~Utils/HistoryUtils"
+import { resetBrowserState, useAppDispatch } from "~Storage/Redux"
+import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
 import { SearchResultItem } from "./SearchResultItem"
 
 type Props = {
     query: string
     error?: SearchError
+    results: HistoryItem[]
 }
 
-export const SearchResults = ({ query, error }: Props) => {
+export const SearchResults = ({ query, error, results }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const visitedUrls = useAppSelector(selectVisitedUrls)
-    const apps = useAppSelector(selectAllDapps)
-
-    const mappedUrls = useMemo(() => mapHistoryUrls(visitedUrls, apps), [apps, visitedUrls])
-
-    const results = useMemo(() => {
-        if (query.trim() === "") return mappedUrls
-        const lowerQuery = query.toLowerCase()
-        return mappedUrls.filter(url => {
-            if (url.type === HistoryUrlKind.DAPP)
-                return (
-                    url.dapp.name.toLowerCase().includes(lowerQuery) ||
-                    url.dapp.desc?.toLowerCase()?.includes(lowerQuery)
-                )
-            return url.name.toLowerCase().includes(lowerQuery) || url.url.includes(lowerQuery)
-        })
-    }, [mappedUrls, query])
+    const dispatch = useAppDispatch()
 
     const onClear = useCallback(() => {
-        resetBrowserState()
-    }, [])
+        dispatch(resetBrowserState())
+    }, [dispatch])
 
     const isQueryEmpty = useMemo(() => query.trim() === "", [query])
 
