@@ -139,7 +139,22 @@ describe("useBrowserSearch", () => {
             initialProps: {
                 preloadedState: {
                     browser: {
-                        visitedUrls: [],
+                        visitedUrls: [
+                            {
+                                amountOfNavigations: 0,
+                                createAt: Date.now(),
+                                href: new URL("https://testnet.vechain.org").origin,
+                                isCustom: false,
+                                name: "TEST",
+                            },
+                            {
+                                amountOfNavigations: 0,
+                                createAt: Date.now(),
+                                href: new URL("https://google.com").origin,
+                                isCustom: false,
+                                name: "TEST 2",
+                            },
+                        ],
                     },
                     discovery: {
                         custom: [

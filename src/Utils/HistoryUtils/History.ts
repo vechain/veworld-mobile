@@ -20,7 +20,6 @@ export type HistoryItem = HistoryDappItem | HistoryUrlItem
 
 export const mapHistoryUrls = (allDapps: DiscoveryDApp[], dapps: DiscoveryDApp[]): HistoryItem[] => {
     const mappedUrls = allDapps
-        .concat(dapps)
         .map((sourceDapp, idx) => {
             const baseURL = new URL(sourceDapp.href).origin
             const foundDapp = dapps.find(dapp => new URL(dapp.href).origin === baseURL)
