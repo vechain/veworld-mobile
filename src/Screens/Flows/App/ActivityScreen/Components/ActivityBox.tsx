@@ -108,14 +108,14 @@ const BaseActivityBox = ({
                 <BaseText typographyFont="captionRegular">{time}</BaseText>
                 <BaseSpacer height={2} />
                 <BaseView style={styles.titleContainer}>
-                    <BaseText typographyFont={invertedStyles ? "captionRegular" : "captionSemiBold"} numberOfLines={1}>
+                    <BaseText typographyFont={invertedStyles ? "body" : "bodySemiBold"} numberOfLines={1}>
                         {title}
                     </BaseText>
                     {showActivityStatus && <ActivityStatusIndicator activityStatus={ActivityStatus.REVERTED} />}
                 </BaseView>
                 <BaseSpacer height={2} />
                 {showDescription && (
-                    <BaseText typographyFont={invertedStyles ? "captionSemiBold" : "captionRegular"} numberOfLines={1}>
+                    <BaseText typographyFont={invertedStyles ? "bodySemiBold" : "body"} numberOfLines={1}>
                         {description}
                     </BaseText>
                 )}
