@@ -19,10 +19,18 @@ export type BaseTextInputProps = {
     rightIconTestID?: string
     rightIconStyle?: StyleProp<ViewStyle>
     rightIconSize?: number
+    /**
+     * Use adornment styles for the right icon. (Adds some default styles to the wrapper container)
+     */
+    rightIconAdornment?: boolean
     leftIcon?: IconKey | React.ReactElement
     leftIconTestID?: string
     leftIconStyle?: StyleProp<ViewStyle>
     leftIconSize?: number
+    /**
+     * Use adornment styles for the left icon. (Adds some default styles to the wrapper container)
+     */
+    leftIconAdornment?: boolean
     onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
     inputContainerStyle?: StyleProp<ViewStyle>
@@ -57,6 +65,8 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             leftIconStyle,
             leftIconSize = 24,
             rightIconSize = 24,
+            rightIconAdornment = true,
+            leftIconAdornment = true,
             ...otherProps
         },
         ref,
@@ -84,10 +94,10 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         }, [disabled, otherProps.editable, style, styles, theme])
 
         const computedRightAdornmentStyles = useMemo(() => {
-            const _styles = [styles.rightIconContainer]
+            const _styles = rightIconAdornment ? [styles.rightIconContainer] : []
             if (disabled) return [..._styles, styles.disabledInput]
             return _styles
-        }, [disabled, styles])
+        }, [disabled, rightIconAdornment, styles.disabledInput, styles.rightIconContainer])
 
         const renderRightIcon = useMemo(() => {
             if (!rightIcon) return null
@@ -121,10 +131,10 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         ])
 
         const computedLeftAdornmentStyles = useMemo(() => {
-            const _styles = [styles.leftIconContainer]
+            const _styles = leftIconAdornment ? [styles.leftIconContainer] : []
             if (disabled) return [..._styles, styles.disabledInput]
             return _styles
-        }, [disabled, styles])
+        }, [disabled, leftIconAdornment, styles.disabledInput, styles.leftIconContainer])
 
         const renderLeftIcon = useMemo(() => {
             if (!leftIcon) return null
@@ -141,7 +151,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             ) : (
                 <BaseView style={computedLeftAdornmentStyles}>
                     <BaseView style={[styles.leftIconStyle, styles.leftElementStyle, leftIconStyle]}>
-                        {rightIcon}
+                        {leftIcon}
                     </BaseView>
                 </BaseView>
             )
@@ -152,7 +162,6 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             leftIconStyle,
             leftIconTestID,
             onIconPress,
-            rightIcon,
             styles.leftElementStyle,
             styles.leftIconStyle,
             theme.colors.text,
