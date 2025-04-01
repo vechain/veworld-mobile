@@ -63,7 +63,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
     }, [LL, isBookMarked, isDapp, navigationState?.title, navigationState?.url, onCopyToClipboard, toggleBookmark])
 
     return (
-        <BaseBottomSheet dynamicHeight ref={ref}>
+        <BaseBottomSheet dynamicHeight ref={ref} blurBackdrop>
             <BaseView w={100} style={styles.actionContainer}>
                 {actions.map(action => (
                     <BaseTouchable key={action.id} style={styles.actionItemContainer} action={action.onPress}>
