@@ -47,8 +47,8 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
             Linking.openURL(`https://governance.vebetterdao.org/apps/${selectedDApp?.veBetterDaoId}`)
         }, [onClose, selectedDApp?.veBetterDaoId])
 
-        const Actions: FastAction[] = useMemo(
-            () => [
+        const Actions: FastAction[] = useMemo(() => {
+            const actionList = [
                 {
                     name: LL.BTN_OPEN_DAPP(),
                     action: onOpenDAppPress,
@@ -56,39 +56,52 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                     testID: "Open_Dapp_Link",
                     disabled: false,
                 },
-                {
+            ]
+            if (selectedDApp?.veBetterDaoId) {
+                actionList.push({
                     name: LL.BTN_SEE_ON_VBD(),
                     action: onSeeOnVBDPress,
                     icon: <BaseIcon name="icon-arrow-link" size={16} color={theme.colors.actionBottomSheet.icon} />,
                     testID: "Open_VBD_Link",
                     disabled: false,
+                })
+            }
+            actionList.push({
+                name: bookmarkedDApps.isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITES() : LL.BTN_ADD_TO_FAVORITES(),
+                action: () => {
+                    onClose?.()
+                    bookmarkedDApps.toggleBookmark()
                 },
-                {
-                    name: bookmarkedDApps.isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITES() : LL.BTN_ADD_TO_FAVORITES(),
-                    action: () => {
-                        onClose?.()
-                        bookmarkedDApps.toggleBookmark()
-                    },
-                    icon: (
-                        <BaseIcon
-                            name={bookmarkedDApps.isBookMarked ? "icon-star-on" : "icon-star"}
-                            size={16}
-                            color={theme.colors.actionBottomSheet.icon}
-                        />
-                    ),
-                    testID: bookmarkedDApps.isBookMarked ? "Remove_Favorite_Btn" : "Add_Favorite_Btn",
-                    disabled: false,
-                },
-            ],
-            [LL, bookmarkedDApps, onClose, onOpenDAppPress, onSeeOnVBDPress, theme.colors.actionBottomSheet.icon],
-        )
+                icon: (
+                    <BaseIcon
+                        name={bookmarkedDApps.isBookMarked ? "icon-star-on" : "icon-star"}
+                        size={16}
+                        color={theme.colors.actionBottomSheet.icon}
+                    />
+                ),
+                testID: bookmarkedDApps.isBookMarked ? "Remove_Favorite_Btn" : "Add_Favorite_Btn",
+                disabled: false,
+            })
+            return actionList
+        }, [
+            LL,
+            bookmarkedDApps,
+            onClose,
+            onOpenDAppPress,
+            onSeeOnVBDPress,
+            selectedDApp?.veBetterDaoId,
+            theme.colors.actionBottomSheet.icon,
+        ])
 
         const computeSnappoints = useMemo(() => {
+            if (Actions.length < 3) {
+                return ["25%"]
+            }
             if (Actions.length < 5) {
                 return ["35%"]
             }
 
-            return ["35%", "45%", "55%", "75%"]
+            return ["25%", "35%"]
         }, [Actions.length])
 
         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
