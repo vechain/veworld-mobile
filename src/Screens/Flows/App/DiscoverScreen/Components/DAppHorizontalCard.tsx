@@ -32,12 +32,7 @@ export const DAppHorizontalCard = ({ dapp, onPress }: Props) => {
                               uri: iconUri,
                           }
                 }
-                style={
-                    [
-                        { height: IMAGE_SIZE, width: IMAGE_SIZE, backgroundColor: theme.colors.card },
-                        styles.icon,
-                    ] as StyleProp<ImageStyle>
-                }
+                style={[{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>}
                 onError={() => setLoadFallback(true)}
                 resizeMode="contain"
             />

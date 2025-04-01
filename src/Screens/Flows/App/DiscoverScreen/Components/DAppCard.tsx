@@ -37,12 +37,7 @@ export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
                                   uri: iconUri,
                               }
                     }
-                    style={
-                        [
-                            { height: imageDimension, width: imageDimension, backgroundColor: theme.colors.card },
-                            styles.icon,
-                        ] as StyleProp<ImageStyle>
-                    }
+                    style={[{ height: imageDimension, width: imageDimension }, styles.icon] as StyleProp<ImageStyle>}
                     onError={() => setLoadFallback(true)}
                     resizeMode="contain"
                 />
