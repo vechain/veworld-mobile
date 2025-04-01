@@ -24,6 +24,7 @@ export const BaseRadioGroup = ({ buttons, selectedId, isBottomSheet, action }: P
             {buttons.map(button => {
                 return (
                     <BaseRadioButton
+                        key={button.id}
                         testID={`RadioButton-${button.id}`}
                         isSelected={selectedId === button.id}
                         {...button}

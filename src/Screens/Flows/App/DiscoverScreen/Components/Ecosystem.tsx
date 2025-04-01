@@ -148,10 +148,24 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
     }, [LL, selectedDappsType])
 
     const dappsToShow = useMemo(() => {
-        const dappsWithLowercaseTags = dapps.map(dapp => ({
-            ...dapp,
-            tags: dapp.tags?.map(tag => tag.toLowerCase()),
-        }))
+        const sortDapps = (a: DiscoveryDApp, b: DiscoveryDApp) => {
+            switch (sortedBy) {
+                case "desc":
+                    return b.name.localeCompare(a.name)
+                case "newest":
+                    return b.createAt - a.createAt
+                case "asc":
+                default:
+                    return a.name.localeCompare(b.name)
+            }
+        }
+
+        const dappsWithLowercaseTags = dapps
+            .map(dapp => ({
+                ...dapp,
+                tags: dapp.tags?.map(tag => tag.toLowerCase()),
+            }))
+            .sort(sortDapps)
 
         switch (selectedDappsType) {
             case DAppType.SUSTAINABILTY:
@@ -169,9 +183,9 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
 
             case DAppType.ALL:
             default:
-                return dapps
+                return dappsWithLowercaseTags
         }
-    }, [dapps, selectedDappsType])
+    }, [dapps, selectedDappsType, sortedBy])
 
     return (
         <BaseView px={16}>
