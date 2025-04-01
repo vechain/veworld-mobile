@@ -906,4 +906,6 @@ export const designSystemIconMap = {
     "icon-pincode": 60810,
     "icon-x-circle": 60811,
     "icon-star-on": 60812,
+    "icon-radio-default": 60813,
+    "icon-radio-selected": 60814,
 }
