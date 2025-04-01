@@ -1,13 +1,14 @@
 import { useScrollToTop, useTheme } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseChip, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
+import { BaseChip, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
 import { DAppHorizontalCard } from "./DAppHorizontalCard"
 import { DAppOptionsBottomSheet, SortableKeys, SortDAppsBottomSheet } from "./Bottomsheets"
 import { useBottomSheetModal } from "~Hooks"
+import { useDAppActions } from "../Hooks"
 
 type Filter = {
     key: DAppType
@@ -32,12 +33,12 @@ const TopFilters = ({ filters }: TopFiltersProps) => {
 
 type DAppsListProps = {
     dapps: DiscoveryDApp[]
-    onDAppPress: (dapp: DiscoveryDApp) => void
+    onOpenDApp: (dapp: DiscoveryDApp) => void
+    onMorePress: (dapp: DiscoveryDApp) => void
 }
 
-const DAppsList = ({ dapps, onDAppPress }: DAppsListProps) => {
+const DAppsList = ({ dapps, onMorePress, onOpenDApp }: DAppsListProps) => {
     const flatListRef = useRef(null)
-    const { increaseDappCounter } = useNotifications()
     useScrollToTop(flatListRef)
 
     const renderItem = useCallback(
@@ -45,16 +46,14 @@ const DAppsList = ({ dapps, onDAppPress }: DAppsListProps) => {
             return (
                 <DAppHorizontalCard
                     dapp={item}
+                    onOpenDApp={onOpenDApp}
                     onPress={() => {
-                        if (item.veBetterDaoId) {
-                            increaseDappCounter(item.veBetterDaoId)
-                        }
-                        onDAppPress(item)
+                        onMorePress(item)
                     }}
                 />
             )
         },
-        [increaseDappCounter, onDAppPress],
+        [onMorePress, onOpenDApp],
     )
 
     const renderItemSeparator = useCallback(() => {
@@ -89,6 +88,8 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
+    const { onDAppPress } = useDAppActions()
+
     const [selectedDappsType, setSelectedDappsType] = useState(DAppType.ALL)
     const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>(undefined)
     const [sortedBy, setSortedBy] = useState<SortableKeys>("asc")
@@ -100,7 +101,7 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
         onClose: onCloseSortBottomSheet,
     } = useBottomSheetModal()
 
-    const onDAppPress = useCallback(
+    const onMorePress = useCallback(
         (dapp: DiscoveryDApp) => {
             setSelectedDApp(dapp)
             onOpenDAppOptions()
@@ -148,10 +149,24 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
     }, [LL, selectedDappsType])
 
     const dappsToShow = useMemo(() => {
-        const dappsWithLowercaseTags = dapps.map(dapp => ({
-            ...dapp,
-            tags: dapp.tags?.map(tag => tag.toLowerCase()),
-        }))
+        const sortDapps = (a: DiscoveryDApp, b: DiscoveryDApp) => {
+            switch (sortedBy) {
+                case "desc":
+                    return b.name.localeCompare(a.name)
+                case "newest":
+                    return b.createAt - a.createAt
+                case "asc":
+                default:
+                    return a.name.localeCompare(b.name)
+            }
+        }
+
+        const dappsWithLowercaseTags = dapps
+            .map(dapp => ({
+                ...dapp,
+                tags: dapp.tags?.map(tag => tag.toLowerCase()),
+            }))
+            .sort(sortDapps)
 
         switch (selectedDappsType) {
             case DAppType.SUSTAINABILTY:
@@ -169,9 +184,9 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
 
             case DAppType.ALL:
             default:
-                return dapps
+                return dappsWithLowercaseTags
         }
-    }, [dapps, selectedDappsType])
+    }, [dapps, selectedDappsType, sortedBy])
 
     return (
         <BaseView px={16}>
@@ -184,7 +199,7 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
             <BaseSpacer height={24} />
             <TopFilters filters={filterOptions} />
             <BaseSpacer height={24} />
-            <DAppsList dapps={dappsToShow} onDAppPress={onDAppPress} />
+            <DAppsList dapps={dappsToShow} onMorePress={onMorePress} onOpenDApp={onDAppPress} />
             <DAppOptionsBottomSheet ref={dappOptionsRef} selectedDApp={selectedDApp} onClose={onDAppModalClose} />
             <SortDAppsBottomSheet
                 ref={sortBottomSheetRef}

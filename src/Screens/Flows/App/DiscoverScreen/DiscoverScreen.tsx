@@ -4,10 +4,9 @@ import { StyleSheet } from "react-native"
 import Animated, { useAnimatedRef } from "react-native-reanimated"
 import { BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useFetchFeaturedDApps, useThemedStyles, useVisitedUrls } from "~Hooks"
+import { useAnalyticTracking, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
 import {
-    addNavigationToDApp,
     selectBookmarkedDapps,
     selectFeaturedDapps,
     selectHasUserOpenedDiscovery,
@@ -21,14 +20,14 @@ import { PopularTrendingDApps } from "./Components/PopularTrendingDApps"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 import { groupFavoritesByBaseUrl } from "./utils"
 
+import { useDAppActions } from "./Hooks"
+
 export const DiscoverScreen: React.FC = () => {
     const { LL } = useI18nContext()
     const track = useAnalyticTracking()
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { styles } = useThemedStyles(baseStyles)
-
-    const { addVisitedUrl } = useVisitedUrls()
 
     useFetchFeaturedDApps()
 
@@ -40,6 +39,7 @@ export const DiscoverScreen: React.FC = () => {
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const dapps = useAppSelector(selectFeaturedDapps)
+    const { onDAppPress } = useDAppActions()
 
     const groupedbookmarkedDApps = useMemo(() => groupFavoritesByBaseUrl(bookmarkedDApps), [bookmarkedDApps])
     const showFavorites = groupedbookmarkedDApps.length > 0
@@ -50,23 +50,6 @@ export const DiscoverScreen: React.FC = () => {
             dispatch(setDiscoverySectionOpened())
         }
     }, [track, hasOpenedDiscovery, dispatch])
-
-    const onDAppPress = useCallback(
-        ({ href, custom }: { href: string; custom?: boolean }) => {
-            nav.navigate(Routes.BROWSER, { url: href })
-
-            addVisitedUrl(href)
-
-            track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-                url: href,
-            })
-
-            setTimeout(() => {
-                dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))
-            }, 1000)
-        },
-        [nav, addVisitedUrl, track, dispatch],
-    )
 
     const onSeeAllPress = useCallback(() => nav.navigate(Routes.DISCOVER_FAVOURITES), [nav])
 
