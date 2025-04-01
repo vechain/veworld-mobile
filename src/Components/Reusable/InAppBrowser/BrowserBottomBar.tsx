@@ -144,11 +144,12 @@ const baseStyles = (isMainnet: boolean) => (theme: ColorThemeType) =>
         bottomBar: {
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-evenly",
+            justifyContent: "space-between",
             alignItems: "center",
             backgroundColor: isMainnet ? theme.colors.background : theme.colors.testnetBackground,
             borderTopColor: isMainnet ? theme.colors.card : theme.colors.testnetBackground,
             borderTopWidth: 1,
+            paddingHorizontal: 16,
         },
         icon: {
             borderRadius: 10,

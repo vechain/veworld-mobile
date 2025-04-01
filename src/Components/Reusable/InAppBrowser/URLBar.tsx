@@ -63,6 +63,7 @@ export const URLBar = () => {
                             onSubmitEditing={onSubmit}
                             style={styles.textInput}
                             inputContainerStyle={styles.textInputContainer}
+                            containerStyle={styles.textInputContainerRoot}
                         />
                     )}
                 </BaseView>
@@ -131,5 +132,9 @@ const styles = StyleSheet.create({
     textInputContainer: {
         height: 32,
         paddingVertical: 0,
+        width: "100%",
+    },
+    textInputContainerRoot: {
+        width: "100%",
     },
 })

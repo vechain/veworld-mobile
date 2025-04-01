@@ -70,7 +70,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                         <BaseIcon
                             name={action.icon}
                             size={16}
-                            p={8}
+                            iconPadding={8}
                             bg={theme.colors.actionBottomSheet.iconBackground}
                             color={theme.colors.actionBottomSheet.icon}
                         />
@@ -94,7 +94,6 @@ const baseStyles = () => {
             gap: 24,
             flexDirection: "row",
             alignItems: "center",
-            justifyContent: "space-between",
             width: "100%",
             paddingVertical: 8,
         },
