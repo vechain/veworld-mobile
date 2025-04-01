@@ -6,8 +6,10 @@ import { Vns } from "~Hooks"
 
 export const rootAlias = "Root Account"
 
-export const nextAlias = (accountId: number, deviceName: string) => `${deviceName} ${accountId}`
-
+export const nextAlias = (accountId: number, deviceName?: string) => {
+    if (!deviceName) return `Account ${accountId}`
+    return `${deviceName} ${accountId}`
+}
 /**
  *  Find the next index for a new account based on the current accounts
  * @param accounts
@@ -29,7 +31,7 @@ export const getAccountForIndex = (walletIndex: number, device: BaseDevice, acco
     const accountAddress = AddressUtils.getAddressFromXPub(device.xPub, walletIndex)
 
     return {
-        alias: nextAlias(accountId),
+        alias: nextAlias(accountId, device.alias),
         address: accountAddress,
         rootAddress: device.rootAddress,
         index: walletIndex,
