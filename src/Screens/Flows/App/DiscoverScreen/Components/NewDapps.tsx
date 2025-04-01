@@ -1,17 +1,22 @@
 import React, { useCallback } from "react"
-import { BaseView, BaseText, BaseSpacer } from "~Components"
+import { BaseView, BaseText, BaseSpacer, useNotifications } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useNewDApps } from "~Hooks"
+import { useAnalyticTracking, useNewDApps } from "~Hooks"
 import { DAppCard } from "./DAppCard"
 import { FlatList, ListRenderItemInfo } from "react-native"
-import { DiscoveryDApp } from "~Constants"
+import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
+import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
 
 export const NewDapps = () => {
     const { LL } = useI18nContext()
-    const newDapps = useNewDApps()
+    const { isLoading, newDapps } = useNewDApps()
     const nav = useNavigation()
+    const track = useAnalyticTracking()
+    const dispatch = useAppDispatch()
+    const { increaseDappCounter } = useNotifications()
 
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
@@ -20,6 +25,17 @@ export const NewDapps = () => {
 
             const onPress = () => {
                 nav.navigate(Routes.BROWSER, { url: item.href })
+                track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
+                    url: item.href,
+                })
+
+                if (item.veBetterDaoId) {
+                    increaseDappCounter(item.veBetterDaoId)
+                }
+
+                setTimeout(() => {
+                    dispatch(addNavigationToDApp({ href: item.href, isCustom: item.isCustom ?? false }))
+                }, 1000)
             }
 
             return (
@@ -28,7 +44,7 @@ export const NewDapps = () => {
                 </BaseView>
             )
         },
-        [nav, newDapps.length],
+        [newDapps.length, nav, track, increaseDappCounter, dispatch],
     )
 
     return (
@@ -38,7 +54,11 @@ export const NewDapps = () => {
             </BaseView>
             <BaseSpacer height={16} />
 
-            <FlatList data={newDapps} horizontal showsHorizontalScrollIndicator={false} renderItem={renderItem} />
+            {isLoading ? (
+                <DAppsLoadingSkeleton />
+            ) : (
+                <FlatList data={newDapps} horizontal showsHorizontalScrollIndicator={false} renderItem={renderItem} />
+            )}
         </BaseView>
     )
 }
