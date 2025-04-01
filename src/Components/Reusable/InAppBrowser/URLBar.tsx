@@ -48,9 +48,15 @@ export const URLBar = () => {
                 />
 
                 {/* URL Text centered */}
-                <BaseView flex={1}>
+                <BaseView flex={1} alignItems="center" flexDirection="row">
                     {isDapp ? (
-                        <BaseView />
+                        <BaseView flexDirection="row" alignItems="center" style={styles.dappContainer}>
+                            <BaseIcon name="icon-lock" color={theme.colors.textLight} size={12} />
+
+                            <BaseText typographyFont="captionRegular" color={theme.colors.subtitle}>
+                                {navigationState?.url}
+                            </BaseText>
+                        </BaseView>
                     ) : (
                         <BaseTextInput
                             defaultValue={navigationState?.url}
@@ -62,7 +68,15 @@ export const URLBar = () => {
                 </BaseView>
             </BaseView>
         )
-    }, [isDapp, navBackToDiscover, navigationState, onSubmit, theme.colors.text])
+    }, [
+        isDapp,
+        navBackToDiscover,
+        navigationState?.url,
+        onSubmit,
+        theme.colors.subtitle,
+        theme.colors.text,
+        theme.colors.textLight,
+    ])
 
     const renderWithoutToolbar = useMemo(() => {
         return (
@@ -101,6 +115,9 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flex: 1,
+    },
+    dappContainer: {
+        gap: 8,
     },
     urlText: {
         textAlign: "center", // centers the text
