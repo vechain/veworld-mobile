@@ -21,6 +21,7 @@ import {
     DragEndParams,
 } from "react-native-draggable-flatlist"
 import { DAppOptionsBottomSheet } from "./Components/Bottomsheets"
+import { useDAppActions } from "./Hooks"
 
 export const FavouritesScreen = () => {
     const [isEditingMode, setIsEditingMode] = useState(false)
@@ -28,6 +29,7 @@ export const FavouritesScreen = () => {
 
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
+    const { onDAppPress } = useDAppActions()
 
     const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
 
@@ -36,7 +38,7 @@ export const FavouritesScreen = () => {
     const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
-    const onDAppPress = useCallback(
+    const onMorePress = useCallback(
         (dapp: DiscoveryDApp) => {
             setSelectedDApp(dapp)
             onOpenDAppOptions()
@@ -53,11 +55,12 @@ export const FavouritesScreen = () => {
                     dapp={item[0]}
                     isActive={isActive}
                     isEditMode={isEditingMode}
-                    onDAppPress={isEditingMode ? drag : onDAppPress}
+                    onDAppPress={onDAppPress}
+                    onMorePress={isEditingMode ? drag : onMorePress}
                 />
             )
         },
-        [isEditingMode, onDAppPress],
+        [isEditingMode, onDAppPress, onMorePress],
     )
 
     const onDragEnd = useCallback((_: DragEndParams<DiscoveryDApp[]>) => {}, [])

@@ -7,12 +7,13 @@ import { DAppUtils } from "~Utils"
 
 type Props = {
     dapp: DiscoveryDApp
+    onOpenDApp: (dapp: DiscoveryDApp) => void
     onPress: (dapp: DiscoveryDApp) => void
 }
 
 const IMAGE_SIZE = 48
 
-export const DAppHorizontalCard = ({ dapp, onPress }: Props) => {
+export const DAppHorizontalCard = ({ dapp, onOpenDApp, onPress }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
 
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -22,13 +23,9 @@ export const DAppHorizontalCard = ({ dapp, onPress }: Props) => {
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
 
     return (
-        <BaseTouchable onPress={() => onPress(dapp)}>
-            <BaseView
-                flexDirection="row"
-                justifyContent="space-between"
-                alignItems="center"
-                style={[styles.rootContainer]}>
-                {/* Image */}
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" style={[styles.rootContainer]}>
+            {/* Image */}
+            <BaseTouchable style={styles.touchableContainer} onPress={() => onOpenDApp(dapp)}>
                 <Image
                     source={
                         loadFallback
@@ -48,12 +45,12 @@ export const DAppHorizontalCard = ({ dapp, onPress }: Props) => {
                         {dapp.desc}
                     </BaseText>
                 </BaseView>
-                {/* Action Btn */}
-                <BaseView style={[styles.iconContainer]}>
-                    <BaseIcon name="icon-more-vertical" color={theme.colors.text} size={20} />
-                </BaseView>
-            </BaseView>
-        </BaseTouchable>
+            </BaseTouchable>
+            {/* Action Btn */}
+            <BaseTouchable style={[styles.iconContainer]} onPress={() => onPress(dapp)}>
+                <BaseIcon name="icon-more-vertical" color={theme.colors.text} size={20} />
+            </BaseTouchable>
+        </BaseView>
     )
 }
 
@@ -62,7 +59,20 @@ const baseStyles = () =>
         rootContainer: {
             gap: 12,
         },
-        iconContainer: { flexDirection: "row", alignItems: "center", justifyContent: "center" },
+        touchableContainer: {
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "space-between",
+            flex: 1,
+            gap: 12,
+        },
+        iconContainer: {
+            flexDirection: "row",
+            alignItems: "center",
+            justifyContent: "center",
+            width: 40,
+            height: 40,
+        },
         icon: {
             borderRadius: 4,
             overflow: "hidden",

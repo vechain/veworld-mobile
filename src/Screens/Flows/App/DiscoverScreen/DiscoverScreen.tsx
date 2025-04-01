@@ -4,10 +4,9 @@ import { Keyboard, StyleSheet } from "react-native"
 import Animated, { useAnimatedRef } from "react-native-reanimated"
 import { AnimatedFloatingButton, BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useBrowserSearch, useFetchFeaturedDApps, useThemedStyles, useVisitedUrls } from "~Hooks"
+import { useAnalyticTracking, useBrowserSearch, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
 import {
-    addNavigationToDApp,
     selectBookmarkedDapps,
     selectFeaturedDapps,
     selectHasUserOpenedDiscovery,
@@ -21,15 +20,13 @@ import { Ecosystem, Favourites, Header, NewDapps } from "./Components"
 import { groupFavoritesByBaseUrl } from "./utils"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 import { PopularTrendingDApps } from "./Components/PopularTrendingDApps"
-
+import { useDAppActions } from "./Hooks"
 export const DiscoverScreen: React.FC = () => {
     const { LL } = useI18nContext()
     const track = useAnalyticTracking()
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { styles } = useThemedStyles(baseStyles)
-
-    const { addVisitedUrl } = useVisitedUrls()
 
     useFetchFeaturedDApps()
     const { navigateToBrowser } = useBrowserSearch()
@@ -42,6 +39,7 @@ export const DiscoverScreen: React.FC = () => {
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const dapps = useAppSelector(selectFeaturedDapps)
+    const { onDAppPress } = useDAppActions()
 
     const [filteredSearch, setFilteredSearch] = useState("")
     const groupedbookmarkedDApps = useMemo(() => groupFavoritesByBaseUrl(bookmarkedDApps), [bookmarkedDApps])
@@ -53,23 +51,6 @@ export const DiscoverScreen: React.FC = () => {
             dispatch(setDiscoverySectionOpened())
         }
     }, [track, hasOpenedDiscovery, dispatch])
-
-    const onDAppPress = useCallback(
-        ({ href, custom }: { href: string; custom?: boolean }) => {
-            nav.navigate(Routes.BROWSER, { url: href })
-
-            addVisitedUrl(href)
-
-            track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-                url: href,
-            })
-
-            setTimeout(() => {
-                dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))
-            }, 1000)
-        },
-        [nav, addVisitedUrl, track, dispatch],
-    )
 
     const isWebSearchFloatingButtonVisible = useMemo(() => {
         return !!filteredSearch.length
