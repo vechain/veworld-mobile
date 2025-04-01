@@ -73,6 +73,10 @@ onFlowComplete:
                   visible: "Derivation Path "
                 commands:
                   - tapOn: "Derivation Path "
+            - runFlow:
+                when:
+                  visible: "Derivation Path for VeChain m/44'/818'/0'/0 "
+                commands:
                   - tapOn: "Derivation Path for VeChain m/44'/818'/0'/0 "
 - runFlow:
      when:
