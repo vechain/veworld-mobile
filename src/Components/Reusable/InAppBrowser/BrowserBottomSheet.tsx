@@ -1,6 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { default as React, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers"
 import { useCopyClipboard, useDappBookmarking, useThemedStyles } from "~Hooks"
@@ -51,11 +51,16 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 id: "share",
                 icon: "icon-share",
                 label: LL.BROWSER_SHARE(),
-                onPress: () => {},
+                onPress: () => {
+                    Share.share({
+                        message: navigationState?.title || new URL(navigationState?.url || "").href,
+                        url: navigationState?.url ?? "",
+                    })
+                },
             },
             ...(isDapp ? [favoriteItem] : []),
         ]
-    }, [LL, isBookMarked, isDapp, navigationState?.url, onCopyToClipboard, toggleBookmark])
+    }, [LL, isBookMarked, isDapp, navigationState?.title, navigationState?.url, onCopyToClipboard, toggleBookmark])
 
     return (
         <BaseBottomSheet dynamicHeight ref={ref}>
@@ -89,6 +94,7 @@ const baseStyles = () => {
             gap: 24,
             flexDirection: "row",
             alignItems: "center",
+            justifyContent: "space-between",
             width: "100%",
             paddingVertical: 8,
         },
