@@ -1,15 +1,37 @@
 import { useMemo } from "react"
+import { useVeBetterDaoDapps } from "../useFetchFeaturedDApps/useVeBetterDaoDapps"
 import { useAppSelector, selectFeaturedDapps } from "~Storage/Redux"
+import moment from "moment"
 
 export const useNewDApps = () => {
     const dapps = useAppSelector(selectFeaturedDapps)
+    const { data: veBetterDaoDapps, isLoading } = useVeBetterDaoDapps()
 
-    const reorderedDapps = useMemo(() => {
-        const threeMonthsAgo = Date.now() - 90 * 24 * 60 * 60 * 1000 // 90 days in milliseconds
+    const newDapps = useMemo(() => {
+        const threeMonthsAgo = moment().subtract(3, "months")
 
         // Sort from newest to oldest
-        return dapps.filter(dapp => dapp.createAt >= threeMonthsAgo).sort((a, b) => b.createAt - a.createAt)
-    }, [dapps])
+        const filteredDapps = dapps
+            .filter(dapp =>
+                veBetterDaoDapps?.find(
+                    vbdDapp =>
+                        dapp.veBetterDaoId === vbdDapp.id &&
+                        moment(dapp.createAt).isAfter(threeMonthsAgo) &&
+                        vbdDapp.appAvailableForAllocationVoting, // Filter out dapps that aren't endorsed
+                ),
+            )
+            .sort((a, b) => b.createAt - a.createAt)
 
-    return reorderedDapps.slice(0, 15)
+        // If there are no new dapps, return the 10 newest dapps
+        if (filteredDapps.length === 0) {
+            return dapps
+                .filter(dapp => veBetterDaoDapps?.find(vbdDapp => vbdDapp.id === dapp.veBetterDaoId))
+                .sort((a, b) => b.createAt - a.createAt)
+                .slice(0, 10)
+        }
+
+        return filteredDapps.slice(0, 15)
+    }, [dapps, veBetterDaoDapps])
+
+    return { isLoading, newDapps: newDapps ?? [] }
 }

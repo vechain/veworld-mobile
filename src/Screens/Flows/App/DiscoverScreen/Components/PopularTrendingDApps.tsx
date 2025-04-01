@@ -1,52 +1,22 @@
 import React, { useCallback } from "react"
-import { BaseView, BaseText, BaseSpacer, BaseSkeleton } from "~Components"
+import { BaseView, BaseText, BaseSpacer, useNotifications } from "~Components"
 import { FlatList, ListRenderItemInfo } from "react-native"
 import { useI18nContext } from "~i18n"
-import { useTheme, useTrendingDApps } from "~Hooks"
+import { useAnalyticTracking, useTrendingDApps } from "~Hooks"
 import { DAppCard } from "./DAppCard"
-import { DiscoveryDApp } from "~Constants"
+import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
-
-const LoadingSkeleton = () => {
-    const theme = useTheme()
-    return (
-        <BaseView px={16}>
-            <FlatList
-                data={[1, 2, 3, 4, 5]}
-                keyExtractor={item => item.toString()}
-                scrollEnabled={false}
-                horizontal
-                shouldRasterizeIOS
-                renderItem={() => (
-                    <BaseSkeleton
-                        animationDirection="horizontalLeft"
-                        boneColor={theme.colors.skeletonBoneColor}
-                        highlightColor={theme.colors.skeletonHighlightColor}
-                        layout={[
-                            {
-                                flexDirection: "column",
-                                gap: 8,
-                                alignItems: "flex-start",
-                                justifyContent: "space-between",
-                                children: [
-                                    { width: 96, height: 96, borderRadius: 8, marginRight: 16 },
-                                    { width: 80, height: 10 },
-                                    { width: 40, height: 8 },
-                                ],
-                            },
-                        ]}
-                    />
-                )}
-            />
-        </BaseView>
-    )
-}
+import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
+import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
 
 export const PopularTrendingDApps = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
+    const track = useAnalyticTracking()
+    const dispatch = useAppDispatch()
     const { isLoading, trendingDapps } = useTrendingDApps()
+    const { increaseDappCounter } = useNotifications()
 
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
@@ -55,6 +25,17 @@ export const PopularTrendingDApps = () => {
 
             const onPress = () => {
                 nav.navigate(Routes.BROWSER, { url: item.href })
+                track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
+                    url: item.href,
+                })
+
+                if (item.id) {
+                    increaseDappCounter(item.id)
+                }
+
+                setTimeout(() => {
+                    dispatch(addNavigationToDApp({ href: item.href, isCustom: item.isCustom ?? false }))
+                }, 1000)
             }
 
             return (
@@ -63,7 +44,7 @@ export const PopularTrendingDApps = () => {
                 </BaseView>
             )
         },
-        [nav, trendingDapps.length],
+        [trendingDapps.length, nav, track, dispatch, increaseDappCounter],
     )
 
     return (
@@ -74,7 +55,7 @@ export const PopularTrendingDApps = () => {
             <BaseSpacer height={16} />
 
             {isLoading ? (
-                <LoadingSkeleton />
+                <DAppsLoadingSkeleton />
             ) : (
                 <FlatList
                     data={trendingDapps}

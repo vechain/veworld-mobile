@@ -29,9 +29,6 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
 
         const onOpenDAppPress = useCallback(() => {
             if (selectedDApp) {
-                onClose?.()
-                nav.navigate(Routes.BROWSER, { url: selectedDApp.href })
-
                 track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
                     url: selectedDApp.href,
                 })
@@ -39,6 +36,9 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                 setTimeout(() => {
                     dispatch(addNavigationToDApp({ href: selectedDApp.href, isCustom: selectedDApp.isCustom ?? false }))
                 }, 1000)
+
+                onClose?.()
+                nav.navigate(Routes.BROWSER, { url: selectedDApp.href })
             }
         }, [selectedDApp, onClose, nav, track, dispatch])
 
