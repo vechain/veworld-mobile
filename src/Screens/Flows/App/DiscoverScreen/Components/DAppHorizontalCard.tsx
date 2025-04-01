@@ -22,32 +22,38 @@ export const DAppHorizontalCard = ({ dapp, onPress }: Props) => {
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" style={[styles.rootContainer]}>
-            {/* Image */}
-            <Image
-                source={
-                    loadFallback
-                        ? require("~Assets/Img/dapp-fallback.png")
-                        : {
-                              uri: iconUri,
-                          }
-                }
-                style={[{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>}
-                onError={() => setLoadFallback(true)}
-                resizeMode="contain"
-            />
-            {/* Title & Desc */}
-            <BaseView flex={1} justifyContent="center">
-                <BaseText typographyFont="bodySemiBold">{dapp.name}</BaseText>
-                <BaseText typographyFont="caption" numberOfLines={1}>
-                    {dapp.desc}
-                </BaseText>
+        <BaseTouchable onPress={() => onPress(dapp)}>
+            <BaseView
+                flexDirection="row"
+                justifyContent="space-between"
+                alignItems="center"
+                style={[styles.rootContainer]}>
+                {/* Image */}
+                <Image
+                    source={
+                        loadFallback
+                            ? require("~Assets/Img/dapp-fallback.png")
+                            : {
+                                  uri: iconUri,
+                              }
+                    }
+                    style={[{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>}
+                    onError={() => setLoadFallback(true)}
+                    resizeMode="contain"
+                />
+                {/* Title & Desc */}
+                <BaseView flex={1} justifyContent="center">
+                    <BaseText typographyFont="bodySemiBold">{dapp.name}</BaseText>
+                    <BaseText typographyFont="caption" numberOfLines={1}>
+                        {dapp.desc}
+                    </BaseText>
+                </BaseView>
+                {/* Action Btn */}
+                <BaseView style={[styles.iconContainer]}>
+                    <BaseIcon name="icon-more-vertical" color={theme.colors.text} size={20} />
+                </BaseView>
             </BaseView>
-            {/* Action Btn */}
-            <BaseTouchable style={[styles.touchableArea]} onPress={() => onPress(dapp)}>
-                <BaseIcon name="icon-more-vertical" color={theme.colors.text} size={20} />
-            </BaseTouchable>
-        </BaseView>
+        </BaseTouchable>
     )
 }
 
@@ -56,9 +62,9 @@ const baseStyles = () =>
         rootContainer: {
             gap: 12,
         },
+        iconContainer: { flexDirection: "row", alignItems: "center", justifyContent: "center" },
         icon: {
             borderRadius: 4,
             overflow: "hidden",
         },
-        touchableArea: { flexDirection: "row", alignItems: "center", justifyContent: "center", width: 40, height: 40 },
     })
