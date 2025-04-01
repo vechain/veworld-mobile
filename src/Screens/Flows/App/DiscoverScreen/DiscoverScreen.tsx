@@ -33,12 +33,10 @@ export const DiscoverScreen: React.FC = () => {
     useFetchFeaturedDApps()
 
     const animatedRef = useAnimatedRef<Animated.ScrollView>()
-    // const offset = useScrollViewOffset(animatedRef)
 
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
 
-    // const visitedUrls = useAppSelector(selectVisitedUrls)
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const dapps = useAppSelector(selectFeaturedDapps)
@@ -71,39 +69,6 @@ export const DiscoverScreen: React.FC = () => {
     )
 
     const onSeeAllPress = useCallback(() => nav.navigate(Routes.DISCOVER_FAVOURITES), [nav])
-
-    // const renderScreenHeader = useMemo(() => {
-    //     return (
-    //         <BaseView px={16}>
-    //             <BaseView style={styles.header}>
-    //                 <AnimatedTitle title={LL.DISCOVER_TITLE()} scrollOffset={offset} />
-    //                 <BaseView flexDirection="row" justifyContent="space-between">
-    //                     <SelectedNetworkViewer />
-    //                 </BaseView>
-    //             </BaseView>
-    //             <BaseSpacer height={20} />
-    //             <AnimatedSearchBar
-    //                 placeholder={LL.DISCOVER_SEARCH()}
-    //                 value={filteredSearch}
-    //                 iconName={"icon-history"}
-    //                 iconColor={visitedUrls.length > 0 ? theme.colors.text : theme.colors.disabledButton}
-    //                 onTextChange={onTextChange}
-    //                 onIconPress={onNavigateToBrowserHistory}
-    //             />
-    //             <BaseSpacer height={12} />
-    //         </BaseView>
-    //     )
-    // }, [
-    //     LL,
-    //     filteredSearch,
-    //     offset,
-    //     onNavigateToBrowserHistory,
-    //     onTextChange,
-    //     styles.header,
-    //     theme.colors.disabledButton,
-    //     theme.colors.text,
-    //     visitedUrls.length,
-    // ])
 
     return (
         <Layout
