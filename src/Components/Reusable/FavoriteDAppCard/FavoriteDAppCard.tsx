@@ -33,12 +33,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                                     ? DAppUtils.getAppHubIconUrl(dapp.id)
                                     : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
                             }}
-                            style={
-                                [
-                                    { height: IMAGE_SIZE, width: IMAGE_SIZE, backgroundColor: theme.colors.card },
-                                    styles.icon,
-                                ] as StyleProp<ImageStyle>
-                            }
+                            style={[{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>}
                             resizeMode="contain"
                         />
                         <BaseSpacer width={12} />
@@ -53,14 +48,9 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         </BaseView>
                     </BaseView>
                 </BaseTouchable>
-                <BaseSpacer width={12} />
-                <BaseIcon
-                    disabled={isActive}
-                    onPress={() => onMorePress(dapp)}
-                    name={getIconName()}
-                    color={theme.colors.text}
-                    size={24}
-                />
+                <BaseTouchable disabled={isActive} onPress={() => onMorePress(dapp)} style={styles.touchableContainer}>
+                    <BaseIcon name={getIconName()} color={theme.colors.text} size={20} />
+                </BaseTouchable>
             </BaseView>
         )
     },
@@ -77,6 +67,12 @@ const baseStyles = () =>
             alignItems: "center",
             justifyContent: "space-between",
             height: 60,
+        },
+        touchableContainer: {
+            width: 40,
+            height: 40,
+            alignItems: "center",
+            justifyContent: "center",
         },
         icon: {
             borderRadius: 4,

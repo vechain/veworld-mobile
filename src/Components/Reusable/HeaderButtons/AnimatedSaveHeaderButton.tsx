@@ -1,7 +1,7 @@
-import React from "react"
+import React, { useCallback, useState } from "react"
 import { useThemedStyles } from "~Hooks"
 import { AnimatedHeaderButton } from "./AnimatedHeaderButton"
-import Animated, { useAnimatedStyle } from "react-native-reanimated"
+import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
 import { typography } from "~Constants"
 
@@ -12,19 +12,52 @@ type Props = {
 
 const { fontFamily } = typography
 
+const animationDuration = 350
+
 export const AnimatedSaveHeaderButton = ({ action, testID = "Reorder-HeaderIcon" }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
+    const hasBeenClicked = useSharedValue(0)
+    const [buttonText, setButtonText] = useState("Save")
+
+    const handlePress = () => {
+        hasBeenClicked.value = 1
+        setButtonText("Saved!")
+    }
+
+    const onPress = useCallback(() => {
+        hasBeenClicked.value = 0
+        setButtonText("Save")
+        action()
+    }, [hasBeenClicked, action])
+
     const containerAnimatedStyles = useAnimatedStyle(() => {
         return {
-            backgroundColor: theme.colors.card,
-            borderColor: "transparent",
+            backgroundColor: withTiming(
+                hasBeenClicked.value ? theme.colors.successVariant.background : theme.colors.card,
+                {
+                    duration: animationDuration,
+                },
+                hasBeenClicked.value === 1
+                    ? () => {
+                          runOnJS(onPress)()
+                      }
+                    : undefined,
+            ),
+            borderColor: withTiming(
+                hasBeenClicked.value ? theme.colors.transparent : theme.colors.rightIconHeaderBorder,
+                {
+                    duration: animationDuration,
+                },
+            ),
         }
     })
 
     const animatedStyles = useAnimatedStyle(() => {
         return {
-            color: theme.colors.text,
+            color: withTiming(hasBeenClicked.value ? theme.colors.successVariant.title : theme.colors.text, {
+                duration: animationDuration,
+            }),
             flex: 1,
         }
     })
@@ -32,9 +65,9 @@ export const AnimatedSaveHeaderButton = ({ action, testID = "Reorder-HeaderIcon"
     return (
         <AnimatedHeaderButton
             testID={testID}
-            action={action}
+            action={handlePress}
             animatedStyles={[containerAnimatedStyles, styles.buttonContainer]}>
-            <Animated.Text style={[animatedStyles, styles.buttonLabel]}>{"Save"}</Animated.Text>
+            <Animated.Text style={[animatedStyles, styles.buttonLabel]}>{buttonText}</Animated.Text>
         </AnimatedHeaderButton>
     )
 }
