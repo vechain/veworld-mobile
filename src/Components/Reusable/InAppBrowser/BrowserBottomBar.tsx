@@ -32,7 +32,7 @@ export const BrowserBottomBar: React.FC = () => {
     const theme = useTheme()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { isMainnet } = useBlockchainNetwork()
-    const { styles } = useThemedStyles(baseStyles(isMainnet))
+    const { styles } = useThemedStyles(baseStyles)
     const isIOSPlatform = isIOS()
     const route = useRoute()
     const { onClose: closeBottomSheet, onOpen: openBottomSheet, ref: bottomSheetRef } = useBottomSheetModal()
@@ -45,12 +45,12 @@ export const BrowserBottomBar: React.FC = () => {
         const parsedPadding = isIOSPlatform ? 40 : 8
 
         return {
-            transform: [{ translateY: showToolbars ? withTiming(0) : withTiming(56) }],
             opacity: showToolbars ? withTiming(1) : withTiming(0),
+            height: showToolbars ? withTiming(56) : withTiming(0),
             paddingTop: showToolbars ? withTiming(8) : withTiming(0),
             paddingBottom: showToolbars ? withTiming(parsedPadding) : withTiming(0),
         }
-    })
+    }, [isIOSPlatform, showToolbars])
 
     const onBackHandler = useCallback(() => {
         if (canGoBack) {
@@ -136,18 +136,16 @@ export const BrowserBottomBar: React.FC = () => {
     ) : null
 }
 
-const baseStyles = (isMainnet: boolean) => (theme: ColorThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        animatedContainer: {
-            opacity: 1,
-        },
+        animatedContainer: {},
         bottomBar: {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: isMainnet ? theme.colors.background : theme.colors.testnetBackground,
-            borderTopColor: isMainnet ? theme.colors.card : theme.colors.testnetBackground,
+            backgroundColor: theme.colors.background,
+            borderTopColor: theme.colors.card,
             borderTopWidth: 1,
             paddingHorizontal: 16,
         },
