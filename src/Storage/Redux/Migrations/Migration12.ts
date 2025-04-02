@@ -6,7 +6,14 @@ import { ActivityState } from "../Types"
 
 const filterLocalActivities = (activity: Activity, index: number, self: Activity[]) => {
     // Return true only for the first occurrence of an activity with this txId or id
-    return index === self.findIndex(a => (a.txId ? a.txId === activity.txId : a.id === activity.id))
+    return (
+        index ===
+        self.findIndex(a =>
+            a.txId
+                ? a.txId.toLowerCase() === activity.txId?.toLowerCase()
+                : a.id.toLowerCase() === activity.id.toLowerCase(),
+        )
+    )
 }
 
 export const Migration12 = (state: PersistedState): PersistedState => {
