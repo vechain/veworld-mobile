@@ -139,6 +139,13 @@ export type Colors = {
         swapIcon: string
         borderColor: string
     }
+    activityCard: {
+        time: string
+        title: string
+        subtitleLight: string
+        subtitleBold: string
+        swap: string
+    }
 }
 
 export enum COLORS {
@@ -374,6 +381,13 @@ const light: Colors = {
         swapIcon: COLORS.GREY_600,
         borderColor: COLORS.GREY_200,
     },
+    activityCard: {
+        time: COLORS.GREY_600,
+        title: COLORS.GREY_800,
+        subtitleLight: COLORS.GREY_500,
+        subtitleBold: COLORS.GREY_600,
+        swap: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -516,6 +530,13 @@ const dark: Colors = {
         convertValueText: COLORS.GREY_300,
         swapIcon: COLORS.WHITE,
         borderColor: COLORS.DARK_PURPLE_DISABLED,
+    },
+    activityCard: {
+        time: COLORS.GREY_200,
+        title: COLORS.WHITE,
+        subtitleLight: COLORS.GREY_400,
+        subtitleBold: COLORS.GREY_200,
+        swap: COLORS.GREY_300,
     },
 }
 
