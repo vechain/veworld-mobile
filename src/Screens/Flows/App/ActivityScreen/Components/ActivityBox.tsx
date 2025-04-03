@@ -1,9 +1,9 @@
 import moment from "moment"
-import React from "react"
+import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, VET, VOT3 } from "~Constants"
-import { useNFTInfo, useThemedStyles } from "~Hooks"
+import { useNFTInfo, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
     Activity,
@@ -179,10 +179,14 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
 
     const type = direction === DIRECTIONS.UP ? "sent" : "received"
 
-    const addressOrUsername =
-        direction === DIRECTIONS.UP
-            ? AddressUtils.humanAddress(to?.[0] ?? "", 6, 8)
-            : AddressUtils.humanAddress(from, 6, 8)
+    const { name, address } = useVns({
+        address: DIRECTIONS.UP ? to?.[0] ?? "" : from,
+    })
+
+    const addressOrUsername = useMemo(() => {
+        if (name) return name
+        return AddressUtils.humanAddress(address)
+    }, [address, name])
 
     const customTokens = useAppSelector(selectCustomTokens)
     const officialTokens = useAppSelector(selectOfficialTokens)
