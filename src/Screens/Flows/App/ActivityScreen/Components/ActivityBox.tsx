@@ -360,7 +360,7 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
 
     const validatedCollectionName = () => {
         if (!collectionName) return LL.UNKNOWN_COLLECTION()
-        return collectionName.length > 13 ? `${collectionName.slice(0, 12)}...` : collectionName
+        return collectionName
     }
 
     const onPressHandler = () => {
