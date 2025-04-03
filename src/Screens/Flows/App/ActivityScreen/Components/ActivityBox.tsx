@@ -220,7 +220,7 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
                     description: (
                         <>
                             <BaseText typographyFont="body" color={theme.colors.textLight} textTransform="lowercase">
-                                {LL.FROM()}
+                                {LL.FROM()}{" "}
                             </BaseText>
                             <BaseText typographyFont="bodyMedium" color={theme.colors.subtitle}>
                                 {addressOrUsername}
@@ -237,7 +237,7 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
                     description: (
                         <>
                             <BaseText typographyFont="body" color={theme.colors.textLight} textTransform="lowercase">
-                                {LL.TO()}
+                                {LL.TO()}{" "}
                             </BaseText>
                             <BaseText typographyFont="bodyMedium" color={theme.colors.subtitle}>
                                 {addressOrUsername}
@@ -313,13 +313,13 @@ const DAppTransaction = ({ activity, onPress }: DAppTransactionProps) => {
 
     const title = activity.isTransaction ? LL.DAPP_TRANSACTION_TITLE() : LL.DAPP_CONNECTION()
 
-    const getDescription = () => {
-        if (activity.isTransaction) {
-            return `from ${AddressUtils.humanAddress(activity.from, 6, 8)}`
-        }
+    const theme = useTheme()
 
-        return activity.name ? `to ${activity.name}` : undefined
-    }
+    const description = useMemo(() => {
+        if (activity.linkUrl) return activity.linkUrl
+        if (activity.isTransaction) return AddressUtils.humanAddress(activity.to?.[0] ?? "")
+        return activity.name
+    }, [activity.isTransaction, activity.linkUrl, activity.name, activity.to])
 
     const onPressHandler = () => {
         onPress(activity)
@@ -330,7 +330,16 @@ const DAppTransaction = ({ activity, onPress }: DAppTransactionProps) => {
             icon="icon-layout-grid"
             time={time}
             title={title}
-            description={getDescription()}
+            description={
+                <>
+                    <BaseText typographyFont="body" color={theme.colors.textLight} textTransform="lowercase">
+                        {LL.TO()}{" "}
+                    </BaseText>
+                    <BaseText typographyFont="bodyMedium" color={theme.colors.subtitle}>
+                        {description}
+                    </BaseText>
+                </>
+            }
             onPress={onPressHandler}
             activityStatus={activity.status}
         />
