@@ -3,7 +3,7 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, VET, VOT3 } from "~Constants"
-import { useNFTInfo, useThemedStyles, useVns } from "~Hooks"
+import { useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
     Activity,
@@ -36,7 +36,7 @@ type ActivityBoxProps = {
     icon: IconKey
     time: string
     title: string
-    description?: string
+    description?: string | React.ReactNode
     rightAmount?: string
     rigthAmountDescription?: string
     nftImage?: string
@@ -174,6 +174,7 @@ type TokenTransferActivityBoxProps = {
 
 const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
 
     const { amount, timestamp, tokenAddress, direction, to, from } = activity
 
@@ -209,20 +210,23 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
             .toTokenFormat_string(2)
     }
 
-    const getActivityProps = (): {
-        title: string
-        description?: string
-        rightAmount: string
-        rigthAmountDescription: string
-        icon: IconKey
-    } => {
+    const getActivityProps = (): Omit<ActivityBoxProps, "time" | "onPress"> => {
         const amountToDisplay = getAmountTransferred()
 
         switch (type) {
             case "received":
                 return {
                     title: LL.TOKEN_TRANSFER_RECEIVED(),
-                    description: `from ${addressOrUsername}`,
+                    description: (
+                        <>
+                            <BaseText typographyFont="body" color={theme.colors.textLight} textTransform="lowercase">
+                                {LL.FROM()}
+                            </BaseText>
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.subtitle}>
+                                {addressOrUsername}
+                            </BaseText>
+                        </>
+                    ),
                     rightAmount: `${DIRECTIONS.UP} ${amountToDisplay}`,
                     rigthAmountDescription: token?.symbol ?? "",
                     icon: "icon-arrow-down",
@@ -230,7 +234,16 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
             case "sent":
                 return {
                     title: LL.TOKEN_TRANSFER_SENT(),
-                    description: `to ${addressOrUsername}`,
+                    description: (
+                        <>
+                            <BaseText typographyFont="body" color={theme.colors.textLight} textTransform="lowercase">
+                                {LL.TO()}
+                            </BaseText>
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.subtitle}>
+                                {addressOrUsername}
+                            </BaseText>
+                        </>
+                    ),
                     rightAmount: `${DIRECTIONS.DOWN} ${amountToDisplay}`,
                     rigthAmountDescription: token?.symbol ?? "",
                     icon: "icon-arrow-up",
