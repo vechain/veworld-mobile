@@ -26,6 +26,9 @@ export type FeatureFlags = {
             iOS: boolean
         }
     }
+    discoveryFeature: {
+        showStellaPayBanner: boolean
+    }
 }
 
 export const getFeatureFlags = async () => {

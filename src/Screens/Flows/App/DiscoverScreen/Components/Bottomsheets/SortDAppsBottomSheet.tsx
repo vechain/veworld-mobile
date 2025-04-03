@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
 import { useI18nContext } from "~i18n"
-export type SortableKeys = "asc" | "desc" | "newest" | "popular"
+export type SortableKeys = "asc" | "desc" | "newest"
 
 type Props = {
     sortedBy: SortableKeys
@@ -31,11 +31,6 @@ export const SortDAppsBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 id: "newest",
                 label: LL.BTN_NEWEST(),
                 disabled: false,
-            },
-            {
-                id: "popular",
-                label: LL.BTN_POPULAR(),
-                disabled: true,
             },
         ]
 

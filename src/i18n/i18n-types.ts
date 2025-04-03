@@ -1926,7 +1926,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_DAPPS_TITLE: string
 	/**
-	 * E​c​o​s​y​s​t​e​m
+	 * E​c​o​s​y​s​t​e​m​ ​d​A​p​p​s
 	 */
 	DISCOVER_ECOSYSTEM: string
 	/**
@@ -6063,7 +6063,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_DAPPS_TITLE: () => LocalizedString
 	/**
-	 * Ecosystem
+	 * Ecosystem dApps
 	 */
 	DISCOVER_ECOSYSTEM: () => LocalizedString
 	/**

@@ -23,6 +23,7 @@ type Props = {
     autoPlay?: boolean
     autoPlayInterval?: number
     loop?: boolean
+    paginationAlignment?: "flex-start" | "center" | "flex-end"
 }
 
 export const BaseCarousel = ({
@@ -32,10 +33,11 @@ export const BaseCarousel = ({
     autoPlay = true,
     autoPlayInterval = 5000,
     loop = true,
+    paginationAlignment = "center",
 }: Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
     const progress = useSharedValue<number>(0)
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles(paginationAlignment))
 
     const onPressPagination = (index: number) => {
         ref.current?.scrollTo({
@@ -89,10 +91,10 @@ export const BaseCarousel = ({
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            gap: 16,
+            gap: 8,
             paddingHorizontal: 16,
         },
         carousel: {
@@ -100,6 +102,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         paginatioContainer: {
             gap: 6,
+            alignSelf: paginationAlignment,
         },
         dots: {
             backgroundColor: theme.colors.defaultCarousel.dotBg,

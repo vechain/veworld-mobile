@@ -28,6 +28,9 @@ const initialState: FeatureFlags = {
             iOS: false,
         },
     },
+    discoveryFeature: {
+        showStellaPayBanner: false,
+    },
 }
 
 const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)
