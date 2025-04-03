@@ -80,13 +80,12 @@ const BaseActivityBox = ({
         }
 
         return (
-            <BaseView style={styles.rightTextContainer}>
+            <BaseView flexDirection="column" gap={2} style={styles.rightTextContainer}>
                 {showRightAmount && (
                     <BaseText typographyFont="bodySemiBold" numberOfLines={1}>
                         {rightAmount}
                     </BaseText>
                 )}
-                <BaseSpacer height={2} />
                 {showRigthAmountDescription && (
                     <BaseText typographyFont="smallCaptionRegular" numberOfLines={1}>
                         {rigthAmountDescription}
@@ -151,14 +150,13 @@ const baseStyles = () =>
             width: "100%",
         },
         textContainer: {
-            flex: 2,
+            flex: 1,
             height: "100%",
             alignContent: "center",
         },
         rightTextContainer: {
             alignItems: "flex-end",
-            flex: 1,
-            flexBasis: 40,
+            flexShrink: 0,
         },
         rightImageContainer: {
             alignItems: "center",
