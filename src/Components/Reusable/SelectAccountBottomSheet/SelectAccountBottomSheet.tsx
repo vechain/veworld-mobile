@@ -55,12 +55,12 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 return ["50%"]
             }
 
-            if (accounts.length > 7) {
-                return ["90%"]
+            if (accounts.length < 6) {
+                return ["75%"]
             }
 
-            if (accounts.length > 4) {
-                return ["75%", "90%"]
+            if (accounts.length >= 6) {
+                return ["90%"]
             }
 
             return ["50%", "75%", "90%"]
@@ -80,6 +80,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
                 <BaseSpacer height={12} />
                 <BottomSheetFlatList
+                    snapToAlignment={"end"}
                     data={accounts}
                     keyExtractor={account => account.address}
                     ItemSeparatorComponent={ItemSeparatorComponent}
