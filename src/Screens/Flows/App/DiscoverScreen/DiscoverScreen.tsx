@@ -70,13 +70,15 @@ export const DiscoverScreen: React.FC = () => {
 
                         <BaseSpacer height={40} />
                         {showFavorites && (
-                            <Favourites
-                                bookmarkedDApps={groupedbookmarkedDApps}
-                                onActionLabelPress={onSeeAllPress}
-                                onDAppPress={onDAppPress}
-                            />
+                            <>
+                                <Favourites
+                                    bookmarkedDApps={groupedbookmarkedDApps}
+                                    onActionLabelPress={onSeeAllPress}
+                                    onDAppPress={onDAppPress}
+                                />
+                                <BaseSpacer height={48} />
+                            </>
                         )}
-                        <BaseSpacer height={48} />
 
                         {/* New Dapps */}
                         <NewDapps />
