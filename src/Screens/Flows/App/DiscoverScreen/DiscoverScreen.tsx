@@ -1,6 +1,6 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Keyboard, Linking, StyleSheet } from "react-native"
+import { Keyboard, StyleSheet } from "react-native"
 import Animated, { useAnimatedRef, useScrollViewOffset } from "react-native-reanimated"
 import {
     AnimatedFloatingButton,
@@ -25,7 +25,7 @@ import {
 } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { AnimatedTitle, Ecosystem, Favourites, MakeYourOwnDApp, VeBetterDAODApps } from "./Components"
+import { AnimatedTitle, Ecosystem, Favourites, VeBetterDAODApps } from "./Components"
 import { groupFavoritesByBaseUrl } from "./utils"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 
@@ -101,13 +101,6 @@ export const DiscoverScreen: React.FC = () => {
         setFilteredSearch("")
     }, [dapps, filteredSearch, navigateToBrowser])
 
-    const onMakeYourOwnDAppPress = useCallback(async () => {
-        const url = process.env.REACT_APP_CREATE_YOUR_VECHAIN_DAPP_URL
-        if (url && (await Linking.canOpenURL(url))) {
-            Linking.openURL(url)
-        }
-    }, [])
-
     const onNavigateToBrowserHistory = useCallback(() => {
         nav.navigate(Routes.DISCOVER_BROWSER_HISTORY)
     }, [nav])
@@ -164,8 +157,6 @@ export const DiscoverScreen: React.FC = () => {
                         <VeBetterDAOCarousel />
                         <BaseSpacer height={36} />
                         <VeBetterDAODApps onDAppPress={onDAppPress} />
-                        <BaseSpacer height={42} />
-                        <MakeYourOwnDApp label={LL.DISCOVER_CREATE_YOUR_DAPP()} onPress={onMakeYourOwnDAppPress} />
                         <BaseSpacer height={18} />
                         {showFavorites && (
                             <Favourites

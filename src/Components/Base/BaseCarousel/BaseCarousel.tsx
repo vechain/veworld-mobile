@@ -13,6 +13,7 @@ export type CarouselSlideItem = {
     testID?: string
     href?: string
     source: ImageSourcePropType
+    isExternalLink?: boolean
 }
 
 type Props = {
@@ -22,6 +23,7 @@ type Props = {
     autoPlay?: boolean
     autoPlayInterval?: number
     loop?: boolean
+    paginationAlignment?: "flex-start" | "center" | "flex-end"
 }
 
 export const BaseCarousel = ({
@@ -31,10 +33,11 @@ export const BaseCarousel = ({
     autoPlay = true,
     autoPlayInterval = 5000,
     loop = true,
+    paginationAlignment = "center",
 }: Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
     const progress = useSharedValue<number>(0)
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles(paginationAlignment))
 
     const onPressPagination = (index: number) => {
         ref.current?.scrollTo({
@@ -64,7 +67,14 @@ export const BaseCarousel = ({
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
                 renderItem={({ item }) => {
-                    return <BaseCarouselItem testID={item.testID} source={item.source} href={item.href} />
+                    return (
+                        <BaseCarouselItem
+                            testID={item.testID}
+                            source={item.source}
+                            href={item.href}
+                            isExternalLink={item.isExternalLink}
+                        />
+                    )
                 }}
             />
 
@@ -81,10 +91,10 @@ export const BaseCarousel = ({
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            gap: 16,
+            gap: 8,
             paddingHorizontal: 20,
         },
         carousel: {
@@ -92,6 +102,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         paginatioContainer: {
             gap: 6,
+            alignSelf: paginationAlignment,
         },
         dots: {
             backgroundColor: theme.colors.defaultCarousel.dotBg,

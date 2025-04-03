@@ -2,23 +2,30 @@ import React, { useCallback } from "react"
 import { Animated, ImageSourcePropType, ImageStyle, Linking, StyleSheet, ViewStyle } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { useThemedStyles } from "~Hooks"
-
+import { Routes } from "~Navigation"
+import { useNavigation } from "@react-navigation/native"
 type Props = {
     testID?: string
     href?: string
     source: ImageSourcePropType
     style?: ViewStyle
     imageStyle?: ImageStyle
+    isExternalLink?: boolean
 }
 
-export const BaseCarouselItem: React.FC<Props> = ({ source, href, style, imageStyle, testID }) => {
+export const BaseCarouselItem: React.FC<Props> = ({ source, href, style, imageStyle, testID, isExternalLink }) => {
     const { styles } = useThemedStyles(baseStyles)
+    const nav = useNavigation()
 
     const onPress = useCallback(() => {
         if (href) {
-            Linking.openURL(href)
+            if (isExternalLink) {
+                Linking.openURL(href)
+            } else {
+                nav.navigate(Routes.BROWSER, { url: href })
+            }
         }
-    }, [href])
+    }, [href, isExternalLink, nav])
 
     return (
         <Animated.View testID={testID} style={[style, styles.container]}>
