@@ -80,7 +80,6 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
                 <BaseSpacer height={12} />
                 <BottomSheetFlatList
-                    snapToAlignment={"end"}
                     data={accounts}
                     keyExtractor={account => account.address}
                     ItemSeparatorComponent={ItemSeparatorComponent}
