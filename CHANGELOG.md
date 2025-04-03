@@ -1,5 +1,12 @@
 
 
+## 2.1.2 (2025-04-03)
+
+
+### Bug Fixes
+
+* directory to look for signing key for release build ([#2838](https://github.com/vechain/veworld-mobile/issues/2838)) ([8872b5b](https://github.com/vechain/veworld-mobile/commit/8872b5b19ebe0fc472190f64e9d643e7911c6787))
+
 ## 2.1.1 (2025-04-02)
 
 ## 2.0.10 (2025-03-31)
