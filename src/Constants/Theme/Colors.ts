@@ -139,6 +139,10 @@ export type Colors = {
         swapIcon: string
         borderColor: string
     }
+    defaultCarousel: {
+        dotBg: string
+        activeDotBg: string
+    }
 }
 
 export enum COLORS {
@@ -374,6 +378,10 @@ const light: Colors = {
         swapIcon: COLORS.GREY_600,
         borderColor: COLORS.GREY_200,
     },
+    defaultCarousel: {
+        dotBg: COLORS.GREY_300,
+        activeDotBg: COLORS.GREY_500,
+    },
 }
 
 const dark: Colors = {
@@ -516,6 +524,10 @@ const dark: Colors = {
         convertValueText: COLORS.GREY_300,
         swapIcon: COLORS.WHITE,
         borderColor: COLORS.DARK_PURPLE_DISABLED,
+    },
+    defaultCarousel: {
+        dotBg: COLORS.DARK_PURPLE_DISABLED,
+        activeDotBg: COLORS.LIME_GREEN,
     },
 }
 
