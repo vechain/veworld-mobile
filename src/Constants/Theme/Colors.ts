@@ -146,6 +146,10 @@ export type Colors = {
         subtitleBold: string
         swap: string
     }
+    defaultCarousel: {
+        dotBg: string
+        activeDotBg: string
+    }
 }
 
 export enum COLORS {
@@ -388,6 +392,10 @@ const light: Colors = {
         subtitleBold: COLORS.GREY_600,
         swap: COLORS.GREY_600,
     },
+    defaultCarousel: {
+        dotBg: COLORS.GREY_300,
+        activeDotBg: COLORS.GREY_500,
+    },
 }
 
 const dark: Colors = {
@@ -537,6 +545,10 @@ const dark: Colors = {
         subtitleLight: COLORS.GREY_400,
         subtitleBold: COLORS.GREY_200,
         swap: COLORS.GREY_300,
+    },
+    defaultCarousel: {
+        dotBg: COLORS.DARK_PURPLE_DISABLED,
+        activeDotBg: COLORS.LIME_GREEN,
     },
 }
 
