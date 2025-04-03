@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet, View, ViewProps } from "react-native"
 
-import { AlignItems, AlignSelf, FlexWrap, FlexDirection, JustifyContent, ColorThemeType, Overflow } from "~Constants"
+import { AlignItems, AlignSelf, ColorThemeType, FlexDirection, FlexWrap, JustifyContent, Overflow } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 export type BaseViewProps = {
@@ -31,6 +31,7 @@ export type BaseViewProps = {
     pr?: number
     py?: number
     borderRadius?: number
+    gap?: number
 } & ViewProps
 
 export const BaseView = memo(
@@ -62,6 +63,7 @@ export const BaseView = memo(
         mr,
         mb,
         mt,
+        gap,
         ...otherProps
     }: BaseViewProps) => {
         const computedAlignItems = useMemo(() => {
@@ -104,6 +106,7 @@ export const BaseView = memo(
                 mr,
                 mb,
                 mt,
+                gap,
             }),
         )
 
@@ -138,6 +141,7 @@ type BaseStyles = {
     pr?: number
     py?: number
     borderRadius?: number
+    gap?: number
 }
 
 const baseStyles = (props: BaseStyles) => (theme: ColorThemeType) =>
@@ -169,5 +173,6 @@ const baseStyles = (props: BaseStyles) => (theme: ColorThemeType) =>
             paddingBottom: props.pb,
             paddingTop: props.pt,
             borderRadius: props.borderRadius,
+            gap: props.gap,
         },
     })
