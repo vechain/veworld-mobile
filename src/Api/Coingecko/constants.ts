@@ -1,4 +1,4 @@
-import { B3TR, VET, VTHO } from "~Constants"
+import { B3TR, VET, VTHO } from "~Constants/Constants"
 
 export type MarketChartTimeFrame = {
     label: string

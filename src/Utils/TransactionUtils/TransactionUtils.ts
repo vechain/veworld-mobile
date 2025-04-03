@@ -14,7 +14,8 @@ import {
     TransferEventResult,
 } from "~Model"
 import { BigNumber } from "bignumber.js"
-import { abis, ERROR_EVENTS, VET } from "~Constants"
+import { ERROR_EVENTS, VET } from "~Constants"
+import { abis } from "~Constants/Constants"
 import HexUtils from "~Utils/HexUtils"
 import axios from "axios"
 import BigNutils from "~Utils/BigNumberUtils"
@@ -615,8 +616,9 @@ export const extractEventAmounts = (decodedSwapEvent: SwapEvent) => {
  * @throws Will throw an error if the length of decodedSwapEvents does not match the expectedLength.
  */
 export const validateSwapEvents = (decodedSwapEvents: SwapEvent[], expectedLength: number) => {
-    if (decodedSwapEvents.length !== expectedLength)
+    if (decodedSwapEvents.length < expectedLength) {
         throw new Error(`Invalid swap event count, expected ${expectedLength}`)
+    }
 }
 
 /**
@@ -669,11 +671,17 @@ export const decodeSwapTransferAmounts = (
 
             break
         case ClauseType.SWAP_TOKENS_FOR_TOKENS:
-            validateSwapEvents(decodedSwapEvents, 2)
+            validateSwapEvents(decodedSwapEvents, 1)
 
-            paidAmount = extractEventAmounts(decodedSwapEvents[0]).paidAmount
-
-            receivedAmount = extractEventAmounts(decodedSwapEvents[1]).receivedAmount
+            if (decodedSwapEvents.length === 2) {
+                paidAmount = extractEventAmounts(decodedSwapEvents[0]).paidAmount
+                receivedAmount = extractEventAmounts(decodedSwapEvents[1]).receivedAmount
+            } else {
+                // Used to handle swap clauses with one swap event
+                const eventAmount = extractEventAmounts(decodedSwapEvents[0])
+                paidAmount = eventAmount.paidAmount
+                receivedAmount = eventAmount.receivedAmount
+            }
 
             paidTokenAddress = firstTokenAddress
             receivedTokenAddress = secondTokenAddress

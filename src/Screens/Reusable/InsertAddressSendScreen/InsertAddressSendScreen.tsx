@@ -6,7 +6,6 @@ import { useBottomSheetModal, useSearchOrScanInput, useVns, ZERO_ADDRESS } from 
 import { AddressUtils } from "~Utils"
 import {
     AccountCard,
-    AlertCard,
     BaseAccordion,
     BaseSpacer,
     BaseText,
@@ -20,7 +19,6 @@ import { RootStackParamListHome, RootStackParamListNFT, Routes } from "~Navigati
 import { useI18nContext } from "~i18n"
 import { CreateContactBottomSheet } from "./Components"
 import { address as addressThor } from "thor-devkit"
-import { VOT3 } from "~Constants"
 
 type Props = NativeStackScreenProps<RootStackParamListHome | RootStackParamListNFT, Routes.INSERT_ADDRESS_SEND>
 
@@ -37,8 +35,6 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
         onOpen: openCreateContactSheet,
         onClose: closeCreateContactSheet,
     } = useBottomSheetModal()
-
-    const isVOT3 = useMemo(() => route.params.token?.symbol.toLowerCase() === VOT3.symbol.toLowerCase(), [route.params])
 
     const navigateNext = useCallback(
         (address: string) => {
@@ -124,14 +120,8 @@ export const InsertAddressSendScreen = ({ route }: Props) => {
             title={LL.BTN_SEND()}
             noStaticBottomPadding
             fixedHeader={
-                <BaseView mt={8}>
-                    {isVOT3 && (
-                        <>
-                            <BaseSpacer height={8} />
-                            <AlertCard title={LL.ALERT_TITLE_VOT3()} message={LL.ALERT_MSG_VOT3()} status="info" />
-                            <BaseSpacer height={16} />
-                        </>
-                    )}
+                <BaseView>
+                    <BaseSpacer height={24} />
                     <BaseView flexDirection="row" w={100}>
                         {BaseTextInputElement}
                     </BaseView>

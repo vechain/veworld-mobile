@@ -1,14 +1,24 @@
+import { useNavigation } from "@react-navigation/native"
+import { default as React, useCallback, useMemo } from "react"
+import { StyleSheet } from "react-native"
+import {
+    BaseIcon,
+    BaseSkeleton,
+    BaseText,
+    BaseView,
+    DisabledBuySwapIosBottomSheet,
+    FastActionsBottomSheet,
+    showWarningToast,
+    useFeatureFlags,
+} from "~Components"
+import { VET } from "~Constants"
 import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenCardFiatInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import React, { useCallback, useMemo } from "react"
-import { BaseIcon, BaseSkeleton, BaseText, BaseView, FastActionsBottomSheet, showWarningToast } from "~Components"
-import { StyleSheet } from "react-native"
-import { BalanceView } from "./BalanceView"
 import { FastAction, FungibleTokenWithBalance, IconKey } from "~Model"
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
+import { BigNutils, PlatformUtils } from "~Utils"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
-import { VET } from "~Constants"
+import { BalanceView } from "./BalanceView"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -25,10 +35,18 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
 
     const { change24h, exchangeRate, isPositive24hChange, isLoading } = useTokenCardFiatInfo(token)
 
+    const featureFlags = useFeatureFlags()
+
     const {
         ref: FastActionsBottomSheetRef,
         onOpen: openFastActionsSheet,
         onClose: closeFastActionsSheet,
+    } = useBottomSheetModal()
+
+    const {
+        ref: blockedFeaturesIOSBottomSheetRef,
+        onOpen: openBlockedFeaturesIOSBottomSheet,
+        onClose: closeBlockedFeaturesIOSBottomSheet,
     } = useBottomSheetModal()
 
     const actionBottomSheetIcon = useCallback(
@@ -75,6 +93,11 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 name: LL.BTN_SWAP(),
                 disabled: !foundToken || isObserved,
                 action: () => {
+                    if (PlatformUtils.isIOS()) {
+                        openBlockedFeaturesIOSBottomSheet()
+                        return
+                    }
+
                     if (foundToken) {
                         nav.navigate(Routes.SWAP)
                     } else {
@@ -107,6 +130,10 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             buy: {
                 name: LL.BTN_BUY(),
                 action: () => {
+                    if (PlatformUtils.isIOS()) {
+                        openBlockedFeaturesIOSBottomSheet()
+                        return
+                    }
                     nav.navigate(Routes.BUY_FLOW)
                 },
                 icon: (
@@ -133,6 +160,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             foundToken,
             isObserved,
             nav,
+            openBlockedFeaturesIOSBottomSheet,
             openFastActionsSheet,
             openQRCodeSheet,
             theme.colors.actionBanner.buttonTextDisabled,
@@ -145,6 +173,10 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             buy: {
                 name: LL.BTN_BUY(),
                 action: () => {
+                    if (PlatformUtils.isIOS()) {
+                        openBlockedFeaturesIOSBottomSheet()
+                        return
+                    }
                     nav.navigate(Routes.BUY_FLOW)
                 },
                 icon: actionBottomSheetIcon("icon-plus-circle"),
@@ -171,6 +203,10 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 name: LL.BTN_SWAP(),
                 disabled: !foundToken || isObserved,
                 action: () => {
+                    if (PlatformUtils.isIOS()) {
+                        openBlockedFeaturesIOSBottomSheet()
+                        return
+                    }
                     if (foundToken) {
                         nav.navigate(Routes.SWAP)
                     } else {
@@ -188,16 +224,49 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 icon: actionBottomSheetIcon("icon-arrow-down"),
                 testID: "reciveButton",
             },
+            sell: {
+                name: LL.BTN_SELL(),
+                action: () => {
+                    nav.navigate(Routes.SELL_FLOW)
+                },
+                icon: actionBottomSheetIcon("icon-minus-circle"),
+                testID: "sellButton",
+                disabled: BigNutils(token.balance?.balance || "0").isZero,
+            },
         }),
-        [LL, actionBottomSheetIcon, foundToken, isObserved, nav, openQRCodeSheet],
+        [
+            LL,
+            actionBottomSheetIcon,
+            foundToken,
+            isObserved,
+            nav,
+            openBlockedFeaturesIOSBottomSheet,
+            openQRCodeSheet,
+            token.balance?.balance,
+        ],
     )
 
     const vetActions = useMemo(() => [Actions.send, Actions.receive, Actions.buy, Actions.more], [Actions])
     const vthoActions = useMemo(() => [Actions.send, Actions.swap, Actions.buy], [Actions])
-    const vetBottomSheet = useMemo(
-        () => [ActionsBottomSheet.buy, ActionsBottomSheet.send, ActionsBottomSheet.swap, ActionsBottomSheet.receive],
-        [ActionsBottomSheet],
-    )
+    const vetBottomSheet = useMemo(() => {
+        const commonActions = [
+            ActionsBottomSheet.buy,
+            ActionsBottomSheet.send,
+            ActionsBottomSheet.swap,
+            ActionsBottomSheet.receive,
+        ]
+
+        if (PlatformUtils.isAndroid() && featureFlags.paymentProvidersFeature.coinify.android)
+            return [...commonActions, ActionsBottomSheet.sell]
+        if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
+            return [...commonActions, ActionsBottomSheet.sell]
+
+        return commonActions
+    }, [
+        ActionsBottomSheet,
+        featureFlags.paymentProvidersFeature.coinify.android,
+        featureFlags.paymentProvidersFeature.coinify.iOS,
+    ])
 
     const renderFiatBalance = useMemo(() => {
         if (isLoading)
@@ -242,6 +311,10 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 ref={FastActionsBottomSheetRef}
                 actions={vetBottomSheet}
                 closeBottomSheet={closeFastActionsSheet}
+            />
+            <DisabledBuySwapIosBottomSheet
+                ref={blockedFeaturesIOSBottomSheetRef}
+                onConfirm={closeBlockedFeaturesIOSBottomSheet}
             />
         </BaseView>
     )

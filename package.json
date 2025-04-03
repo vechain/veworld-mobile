@@ -1,10 +1,10 @@
 {
   "name": "veworld",
-  "version": "2.0.9",
+  "version": "2.1.0",
   "private": true,
   "scripts": {
-    "purge": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
-    "purge:android": "rm -rf node_modules && rm -rf yarn.lock && rm -rf android/app/build",
+    "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
+    "purge:android": "rm -rf node_modules && rm -rf android/app/build",
     "install:all": "yarn install && npx pod-install",
     "install:android": "yarn install",
     "reinstall": "yarn purge && yarn install:all",
@@ -28,6 +28,7 @@
     "format:check": "yarn prettier --check src",
     "postinstall": "patch-package --exclude 'nothing'",
     "check-circular-dependencies": "npx madge --circular --warning --extensions js,jsx,ts,tsx .",
+    "dapps-index:generate": "ts-node scripts/generate-dapps-index.ts",
     "i18n:types": "typesafe-i18n",
     "i18n:generate": "dotenv -e .env.local translo-cli",
     "release:ci": "release-it --ci",
@@ -49,7 +50,8 @@
     "e2e.android.d": "yarn e2e.android.build.d && yarn e2e.android.test.d",
     "e2e.android.build.r": "detox build --configuration android.emu.release.33",
     "e2e.android.test.r": "detox test --configuration android.emu.release.33",
-    "e2e.android.r": "yarn e2e.android.build.r && yarn e2e.android.test.r"
+    "e2e.android.r": "yarn e2e.android.build.r && yarn e2e.android.test.r",
+    "lint-staged": "lint-staged"
   },
   "dependencies": {
     "@coinbase/cbpay-js": "2.2.0",
@@ -67,6 +69,7 @@
     "@react-native-masked-view/masked-view": "^0.3.0",
     "@react-navigation/bottom-tabs": "6.5.9",
     "@react-navigation/devtools": "^6.0.25",
+    "@react-navigation/material-top-tabs": "^6.x",
     "@react-navigation/native": "6.1.8",
     "@react-navigation/native-stack": "6.9.14",
     "@reduxjs/toolkit": "^1.9.7",
@@ -114,6 +117,7 @@
     "jest-expo": "^49.0.0",
     "jsdoc": "^4.0.2",
     "json-stringify-safe": "^5.0.1",
+    "jspdf": "^3.0.1",
     "lodash": "^4.17.21",
     "lottie-react-native": "^6.3.1",
     "mixpanel-react-native": "^2.3.1",
@@ -147,6 +151,7 @@
     "react-native-mmkv": "^2.10.2",
     "react-native-mmkv-flipper-plugin": "^1.0.0",
     "react-native-onesignal": "^5.2.5",
+    "react-native-pager-view": "6.4.1",
     "react-native-progress": "^5.0.0",
     "react-native-qrcode-svg": "6.2.0",
     "react-native-quick-base64": "^2.0.7",
@@ -164,6 +169,7 @@
     "react-native-store-version": "^1.4.1",
     "react-native-svg": "^13.14.0",
     "react-native-swipeable-item": "^2.0.9",
+    "react-native-tab-view": "^4.0.5",
     "react-native-toast-message": "^2.1.6",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-uuid": "^2.0.1",

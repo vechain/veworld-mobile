@@ -1,23 +1,23 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useEffect, useMemo } from "react"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
-import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
-import { RootStackParamListHome, Routes } from "~Navigation"
-import { AssetChart, MarketInfoView } from "./Components"
-import { useI18nContext } from "~i18n"
+import React, { useCallback, useEffect, useMemo } from "react"
+import { StyleSheet } from "react-native"
+import { ScrollView } from "react-native-gesture-handler"
 import { striptags } from "striptags"
+import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
+import { B3TR } from "~Constants"
+import { typography } from "~Constants/Theme"
+import { useBottomSheetModal, useBottomSheetRef, useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { RootStackParamListHome, Routes } from "~Navigation"
 import {
     selectBalanceVisible,
     selectSelectedAccount,
     selectSendableTokensWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { ScrollView } from "react-native-gesture-handler"
-import { StyleSheet } from "react-native"
 import { AccountUtils } from "~Utils"
-import { B3TR, typography } from "~Constants"
+import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
-import { ConvertBetterTokenSuccessBottomSheet } from "./ConvertBetterScreen/Components"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -37,6 +37,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
         onOpen: openConvertSuccessBetterSheet,
         onClose: closeConvertSuccessBetterSheet,
     } = useBottomSheetModal()
+
+    const convertB3trBsRef = useBottomSheetRef()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -61,8 +63,13 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
+    const onFailedConversion = useCallback(() => {
+        closeConvertSuccessBetterSheet()
+        convertB3trBsRef.current?.present()
+    }, [closeConvertSuccessBetterSheet, convertB3trBsRef])
+
     useEffect(() => {
-        if (betterConversionResult?.isSuccess) {
+        if (betterConversionResult) {
             openConvertSuccessBetterSheet()
         }
     }, [betterConversionResult, openConvertSuccessBetterSheet])
@@ -84,6 +91,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             isBalanceVisible={isBalanceVisible}
                             openQRCodeSheet={openQRCodeSheet}
                             isObserved={isObserved}
+                            convertB3trBottomSheetRef={convertB3trBsRef}
                         />
 
                         {token.symbol === B3TR.symbol && (
@@ -122,9 +130,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
 
-                    <ConvertBetterTokenSuccessBottomSheet
+                    <ConvertedBetterBottomSheet
                         ref={convertBetterSuccessBottomSheetRef}
                         onClose={closeConvertSuccessBetterSheet}
+                        onFailure={onFailedConversion}
                         {...betterConversionResult}
                     />
                 </ScrollView>

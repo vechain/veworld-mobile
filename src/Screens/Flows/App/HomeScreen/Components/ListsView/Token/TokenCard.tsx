@@ -51,7 +51,7 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
                         isLoading={isTokensOwnedLoading}
                         renderFiatBalance={
                             <FiatBalance
-                                typographyFont="bodyBold"
+                                typographyFont="subSubTitleBold"
                                 color={tokenValueLabelColor}
                                 balances={[fiatBalance]}
                                 isVisible={isBalanceVisible}

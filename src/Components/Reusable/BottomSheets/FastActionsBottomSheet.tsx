@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from "react"
-import { FastAction } from "~Model"
 import { StyleSheet } from "react-native"
-import { useScrollableBottomSheet, useThemedStyles } from "~Hooks"
 import { BaseBottomSheet, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
+import { useScrollableBottomSheet, useThemedStyles } from "~Hooks"
+import { FastAction } from "~Model"
 
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 type Props = {
     onDismiss?: () => void
@@ -99,7 +99,7 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                 snapPoints={computeSnappoints}
                 backgroundStyle={styles.layout}
                 onChange={handleSheetChangePosition}
-                blurBackdrop
+                blurBackdrop={false}
                 onDismiss={onDismiss}>
                 <BottomSheetFlatList
                     data={actions}

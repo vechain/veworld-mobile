@@ -99,7 +99,6 @@ export const AssetChart = ({ token }: Props) => {
             </LineChart.Provider>
 
             <BaseSpacer height={12} />
-
             <BaseView px={32}>
                 <PressableWithUnderline onPress={onTimelineButtonPress} data={marketChartTimeframes} />
             </BaseView>

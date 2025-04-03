@@ -13,9 +13,12 @@ import {
 } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import {
+    AddCustomNodeScreen,
     AssetDetailScreen,
     ChangeNetworkScreen,
+    ClaimUsername,
     ConnectedAppsScreen,
+    ConvertTransactionScreen,
     EnableAdditionalSettings,
     HomeScreen,
     ImportFromCloudScreen,
@@ -24,6 +27,7 @@ import {
     InAppBrowser,
     InsertAddressSendScreen,
     LedgerSignTransaction,
+    ManageCustomNodesScreen,
     ManageCustomTokenScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
@@ -33,14 +37,16 @@ import {
     SelectTokenSendScreen,
     SwapScreen,
     TransactionSummarySendScreen,
+    UsernameClaimed,
     WalletDetailScreen,
     WalletManagementScreen,
-    ClaimUsername,
-    UsernameClaimed,
-    ConvertTransactionScreen,
-    AddCustomNodeScreen,
-    ManageCustomNodesScreen,
 } from "~Screens"
+
+type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
+    route: RouteName
+    params: RootStackParamListHome[RouteName]
+    screen?: Routes
+}
 
 export type RootStackParamListHome = {
     [Routes.HOME]: undefined
@@ -58,6 +64,7 @@ export type RootStackParamListHome = {
         token: FungibleTokenWithBalance
         amount: string
         address: string
+        navigation?: NavigationMetadata<any>
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice
@@ -82,7 +89,6 @@ export type RootStackParamListHome = {
             to?: FungibleToken
             amount: string
             txId: string
-            isSuccess: boolean
         }
     }
     [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {

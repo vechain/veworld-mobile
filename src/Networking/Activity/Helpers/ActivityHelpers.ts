@@ -1,21 +1,32 @@
 import uuid from "react-native-uuid"
+import { Transaction } from "thor-devkit"
 import { chainTagToGenesisId, DIRECTIONS, ERROR_EVENTS, VET } from "~Constants"
-import { ActivityUtils, debug, TransactionUtils } from "~Utils"
 import {
     Activity,
+    ActivityEvent,
     ActivityStatus,
     ActivityType,
+    B3trActionActivity,
+    B3trClaimRewardActivity,
+    B3trProposalSupportActivity,
+    B3trProposalVoteActivity,
+    B3trSwapB3trToVot3Activity,
+    B3trSwapVot3ToB3trActivity,
+    B3trUpgradeGmActivity,
+    B3trXAllocationVoteActivity,
     ConnectedAppActivity,
     DappTxActivity,
     FungibleTokenActivity,
+    IndexedHistoryEvent,
     Network,
     NonFungibleTokenActivity,
     SignCertActivity,
-    TypedDataActivity,
+    SwapActivity,
     TypedData,
+    TypedDataActivity,
 } from "~Model"
-import { EventTypeResponse, IncomingTransferResponse, TransactionsResponse } from "~Networking"
-import { Transaction } from "thor-devkit"
+import { EventTypeResponse } from "~Networking"
+import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
 
 /**
  * Creates a base activity from a given transaction.
@@ -63,7 +74,7 @@ const getAddressFromClause = (clause: Transaction.Clause) => {
 /**
  * Creates a new pending FungibleTokenActivity from a given transaction.
  *
- * The transaction clauses are analyzed to determine the activity type (VET_TRANSFER or FUNGIBLE_TOKEN).
+ * The transaction clauses are analyzed to determine the activity type (TRANSFER_VET or TRANSFER_FT).
  * In case the transaction type is different, an error is thrown.
  *
  * The method also extracts the token address and amount from the first transaction clause.
@@ -71,14 +82,14 @@ const getAddressFromClause = (clause: Transaction.Clause) => {
  *
  * @param tx - The transaction from which to create the activity.
  * @returns A new FungibleTokenActivity object based on the given transaction.
- * @throws {Error} If the transaction type is neither VET_TRANSFER nor FUNGIBLE_TOKEN.
+ * @throws {Error} If the transaction type is neither TRANSFER_VET nor TRANSFER_FT.
  * @throws {Error} If the token address cannot be extracted from the transaction.
  * @throws {Error} If the amount cannot be extracted from the transaction.
  */
 export const createPendingTransferActivityFromTx = (tx: Transaction): FungibleTokenActivity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
-    if (baseActivity.type !== ActivityType.VET_TRANSFER && baseActivity.type !== ActivityType.FUNGIBLE_TOKEN)
+    if (baseActivity.type !== ActivityType.TRANSFER_VET && baseActivity.type !== ActivityType.TRANSFER_FT)
         throw new Error("Invalid transaction type")
 
     const tokenAddress = getAddressFromClause(baseActivity.clauses[0])
@@ -98,19 +109,19 @@ export const createPendingTransferActivityFromTx = (tx: Transaction): FungibleTo
 /**
  * Creates a new pending Non-Fungible Token (NFT) activity from a given transaction.
  *
- * The function creates a base activity from the transaction and then checks the activity type. If the type is not 'NFT_TRANSFER',
+ * The function creates a base activity from the transaction and then checks the activity type. If the type is not 'TRANSFER_NFT',
  * an error is thrown. It also extracts the contract address and the decoded NFT token id from the first transaction clause.
  *
  * @param tx - The transaction from which to create the NFT activity.
  * @returns A new NonFungibleTokenActivity object based on the given transaction.
- * @throws {Error} If the transaction type is not 'NFT_TRANSFER'.
+ * @throws {Error} If the transaction type is not 'TRANSFER_NFT'.
  * @throws {Error} If the contract address cannot be extracted from the transaction.
  * @throws {Error} If the NFT token Id cannot be decoded from the transaction clause.
  */
 export const createPendingNFTTransferActivityFromTx = (tx: Transaction): NonFungibleTokenActivity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
-    if (baseActivity.type !== ActivityType.NFT_TRANSFER) throw new Error("Invalid transaction type")
+    if (baseActivity.type !== ActivityType.TRANSFER_NFT) throw new Error("Invalid transaction type")
 
     const contractAddress = getAddressFromClause(baseActivity.clauses[0])
 
@@ -151,7 +162,7 @@ export const createIncomingTransfer = (
     tokenAddress: string,
     thor: Connex.Thor,
 ): FungibleTokenActivity => {
-    const activityType = tokenAddress === VET.address ? ActivityType.VET_TRANSFER : ActivityType.FUNGIBLE_TOKEN
+    const activityType = tokenAddress === VET.address ? ActivityType.TRANSFER_VET : ActivityType.TRANSFER_FT
 
     const encodedClause = createTransferClauseFromIncomingTransfer(recipient, amount, tokenAddress, activityType)
 
@@ -191,6 +202,7 @@ export const createIncomingTransfer = (
  * @returns A new connected app activity object.
  */
 export const createConnectedAppActivity = (
+    network: Network,
     from: string,
     name?: string,
     linkUrl?: string,
@@ -207,6 +219,7 @@ export const createConnectedAppActivity = (
         linkUrl,
         description,
         methods,
+        genesisId: network.genesis.id,
     }
 }
 
@@ -221,6 +234,7 @@ export const createConnectedAppActivity = (
  * @returns A new sign certificate activity object.
  */
 export const createSignCertificateActivity = (
+    network: Network,
     from: string,
     name?: string,
     linkUrl?: string,
@@ -237,6 +251,7 @@ export const createSignCertificateActivity = (
         linkUrl,
         content,
         purpose,
+        genesisId: network.genesis.id,
     }
 }
 
@@ -248,7 +263,12 @@ export const createSignCertificateActivity = (
  * @param content - The typed data
  * @returns A new sign typed data activity object.
  */
-export const createSingTypedDataActivity = (from: string, sender: string, content: TypedData): TypedDataActivity => {
+export const createSingTypedDataActivity = (
+    network: Network,
+    from: string,
+    sender: string,
+    content: TypedData,
+): TypedDataActivity => {
     return {
         from,
         id: uuid.v4().toString(),
@@ -258,6 +278,7 @@ export const createSingTypedDataActivity = (from: string, sender: string, conten
         typedData: content,
         sender,
         clauses: [],
+        genesisId: network.genesis.id,
     }
 }
 
@@ -277,42 +298,12 @@ export const createPendingDappTransactionActivity = (tx: Transaction, name?: str
 }
 
 /**
- * Function to create a base activity from a transaction response.
- * This function extracts the needed properties from the transaction response to create the base activity.
- *
- * @param transaction - The transaction response from which to create the activity.
- * @returns An activity created from the transaction response.
- */
-export const createBaseActivityFromTransactionResponse = (transaction: TransactionsResponse): Activity => {
-    // Destructure needed properties from transaction
-    const { origin, id, blockNumber, chainTag, gasUsed, gasPayer, clauses, blockTimestamp } = transaction
-
-    return {
-        from: origin,
-        to: clauses.map((clause: Connex.VM.Clause) => ActivityUtils.getDestinationAddressFromClause(clause) ?? ""),
-        id,
-        txId: id,
-        blockNumber,
-        isTransaction: true,
-        genesisId: chainTagToGenesisId[chainTag],
-        type: ActivityUtils.getActivityTypeFromClause(clauses),
-        timestamp: blockTimestamp * 1000, // Convert to milliseconds
-        gasUsed,
-        gasPayer,
-        delegated: gasPayer !== origin,
-        status: transaction.reverted ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS,
-        clauses,
-        outputs: transaction.outputs,
-    }
-}
-
-/**
  * Creates a transfer clause from an incoming transfer.
  *
  * @param to - The recipient's address.
  * @param value - The number of tokens to transfer.
  * @param tokenAddress - The contract address of the token.
- * @param type - The type of activity, either a VET_TRANSFER or a FUNGIBLE_TOKEN transfer.
+ * @param type - The type of activity, either a TRANSFER_VET or a TRANSFER_FT transfer.
  *
  * @returns A Connex.VM.Clause object for a transfer, or undefined if the activity type does not match known types.
  */
@@ -324,15 +315,15 @@ export const createTransferClauseFromIncomingTransfer = (
     from?: string,
     tokenId?: number,
 ): Connex.VM.Clause | undefined => {
-    if (type === ActivityType.VET_TRANSFER) {
+    if (type === ActivityType.TRANSFER_VET) {
         return TransactionUtils.encodeTransferFungibleTokenClause(to, value, VET.address)
     }
 
-    if (type === ActivityType.FUNGIBLE_TOKEN) {
+    if (type === ActivityType.TRANSFER_FT) {
         return TransactionUtils.encodeTransferFungibleTokenClause(to, value, contractAddress)
     }
 
-    if (type === ActivityType.NFT_TRANSFER && from && tokenId) {
+    if (type === ActivityType.TRANSFER_NFT && from && tokenId) {
         return TransactionUtils.encodeTransferNonFungibleTokenClause(from, to, contractAddress, tokenId)
     }
 }
@@ -347,58 +338,16 @@ export const createTransferClauseFromIncomingTransfer = (
 export const eventTypeToActivityType = (eventType: EventTypeResponse): ActivityType | undefined => {
     switch (eventType) {
         case EventTypeResponse.VET:
-            return ActivityType.VET_TRANSFER
+            return ActivityType.TRANSFER_VET
 
         case EventTypeResponse.FUNGIBLE_TOKEN:
-            return ActivityType.FUNGIBLE_TOKEN
+            return ActivityType.TRANSFER_FT
 
         case EventTypeResponse.NFT:
-            return ActivityType.NFT_TRANSFER
+            return ActivityType.TRANSFER_NFT
 
         default:
             debug(ERROR_EVENTS.ACTIVITIES, "Received not yet supported incoming transfer event type: ", eventType)
-    }
-}
-
-/**
- * Creates a base activity from an incoming transfer.
- *
- * @param incomingTransfer - The incoming transfer from which to create the activity.
- * @param thor - An instance of the Connex.Thor blockchain interface.
- *
- * @returns The Activity created from the incoming transfer, or null if unable to create activity.
- */
-export const createBaseActivityFromIncomingTransfer = (
-    incomingTransfer: IncomingTransferResponse,
-    network: Network,
-): Activity | null => {
-    // Destructure needed properties from transaction
-
-    const { blockNumber, blockTimestamp, from, id, txId, to, value, tokenAddress, eventType, tokenId } =
-        incomingTransfer
-
-    const activityType = eventTypeToActivityType(eventType)
-
-    if (!activityType) return null
-
-    const encodedClause = createTransferClauseFromIncomingTransfer(to, value, tokenAddress, activityType, from, tokenId)
-
-    if (!encodedClause) return null
-
-    const clauses: Connex.VM.Clause[] = [encodedClause]
-
-    return {
-        from,
-        to: [to],
-        id,
-        txId,
-        blockNumber,
-        isTransaction: true,
-        genesisId: network.genesis.id,
-        type: ActivityUtils.getActivityTypeFromClause(clauses),
-        timestamp: blockTimestamp * 1000, // Convert to milliseconds
-        status: ActivityStatus.SUCCESS,
-        clauses,
     }
 }
 
@@ -548,51 +497,201 @@ const processActivity = (
     appUrl?: string,
 ): Activity => {
     switch (activity.type) {
-        case ActivityType.FUNGIBLE_TOKEN:
+        case ActivityType.TRANSFER_FT:
             return enrichActivityWithTokenData(activity, clause, direction)
-        case ActivityType.VET_TRANSFER:
+        case ActivityType.TRANSFER_VET:
             return enrichActivityWithVetTransfer(activity, clause, direction)
-        case ActivityType.NFT_TRANSFER:
+        case ActivityType.TRANSFER_NFT:
             return enrichActivityWithNFTData(activity, clause, direction)
         default:
             return enrichActivityWithDappData(activity, appName, appUrl)
     }
 }
 
-/**
- * Retrieves activities from given transactions.
- * It creates a base activity from the transaction and processes the activity based on its type.
- *
- * @param transactions - An array of transactions from which to create activities.
- * @returns An array of activities created from the transactions.
- */
-export const getActivitiesFromTransactions = (transactions: TransactionsResponse[]): Activity[] => {
-    return transactions.map(transaction => {
-        let activity: Activity = createBaseActivityFromTransactionResponse(transaction)
-
-        return processActivity(activity, transaction.clauses[0], DIRECTIONS.UP)
-    })
+export const sortActivitiesByTimestamp = (activities: Activity[]) => {
+    return activities.sort((a, b) => b.timestamp - a.timestamp)
 }
 
-/**
- * Retrieves activities from incoming transfers.
- * It creates a base activity from the incoming transfer and processes the activity based on its type.
- * @param incomingTransfers - An array of incoming transfers from which to create activities.
- *
- * @param thor - The thor instance for creating activities from incoming transfers.
- * @returns An array of activities created from the incoming transfers.
- */
-export const getActivitiesFromIncomingTransfers = (
-    incomingTransfers: IncomingTransferResponse[],
+export const createActivityFromIndexedHistoryEvent = (
+    event: IndexedHistoryEvent,
+    selectedAccountAddress: string,
     network: Network,
-): Activity[] => {
-    return incomingTransfers.reduce((activities: Activity[], incomingTransfer) => {
-        let activity: Activity | null = createBaseActivityFromIncomingTransfer(incomingTransfer, network)
+): Activity | null => {
+    const {
+        origin,
+        to,
+        id,
+        txId,
+        blockNumber,
+        eventName,
+        blockTimestamp,
+        gasPayer,
+        inputValue,
+        outputValue,
+        contractAddress,
+        tokenId,
+        value,
+        inputToken,
+        outputToken,
+        appId,
+        proof,
+        support,
+        votePower,
+        voteWeight,
+        proposalId,
+        roundId,
+        appVotes,
+        oldLevel,
+        newLevel,
+        from,
+    } = event
 
-        if (activity?.clauses) {
-            activities.push(processActivity(activity, activity.clauses[0], DIRECTIONS.DOWN))
+    const isTransaction =
+        eventName === ActivityEvent.TRANSFER_FT ||
+        eventName === ActivityEvent.TRANSFER_VET ||
+        eventName === ActivityEvent.TRANSFER_SF
+
+    const baseActivity: Activity = {
+        from: from ?? origin ?? "",
+        to: to ? [to] : [],
+        id: id,
+        txId: txId,
+        blockNumber: blockNumber,
+        genesisId: network.genesis.id,
+        isTransaction: isTransaction,
+        type: eventName,
+        timestamp: blockTimestamp * 1000,
+        gasPayer: gasPayer,
+        delegated: origin !== gasPayer,
+    }
+
+    switch (eventName) {
+        case ActivityEvent.TRANSFER_SF:
+        case ActivityEvent.TRANSFER_FT: {
+            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+                ? DIRECTIONS.UP
+                : DIRECTIONS.DOWN
+            return {
+                ...baseActivity,
+                amount: value ?? "0x0",
+                tokenAddress: contractAddress,
+                direction: direction,
+            } as FungibleTokenActivity
         }
-
-        return activities
-    }, [])
+        case ActivityEvent.TRANSFER_VET: {
+            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+                ? DIRECTIONS.UP
+                : DIRECTIONS.DOWN
+            return {
+                ...baseActivity,
+                amount: value ?? "0x0",
+                tokenAddress: VET.address,
+                direction: direction,
+            } as FungibleTokenActivity
+        }
+        case ActivityEvent.TRANSFER_NFT: {
+            const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
+                ? DIRECTIONS.UP
+                : DIRECTIONS.DOWN
+            return {
+                ...baseActivity,
+                tokenId: tokenId,
+                contractAddress: contractAddress,
+                direction: direction,
+            } as NonFungibleTokenActivity
+        }
+        case ActivityEvent.SWAP_FT_TO_VET: {
+            return {
+                ...baseActivity,
+                isTransaction: true,
+                outputToken: VET.address,
+                inputToken: inputToken,
+                inputValue: inputValue,
+                outputValue: outputValue,
+            } as SwapActivity
+        }
+        case ActivityEvent.SWAP_VET_TO_FT: {
+            return {
+                ...baseActivity,
+                isTransaction: true,
+                inputToken: VET.address,
+                outputToken: outputToken,
+                inputValue: inputValue,
+                outputValue: outputValue,
+            } as SwapActivity
+        }
+        case ActivityEvent.SWAP_FT_TO_FT: {
+            return {
+                ...baseActivity,
+                isTransaction: true,
+                inputToken: inputToken,
+                outputToken: outputToken,
+                inputValue: inputValue,
+                outputValue: outputValue,
+            } as SwapActivity
+        }
+        case ActivityEvent.B3TR_ACTION: {
+            return {
+                ...baseActivity,
+                to: to ? [to] : [],
+                value: value ?? "0x0",
+                appId: appId,
+                proof: proof,
+            } as B3trActionActivity
+        }
+        case ActivityEvent.B3TR_PROPOSAL_VOTE: {
+            return {
+                ...baseActivity,
+                prposalId: proposalId,
+                support: support,
+                votePower: votePower,
+                voteWeight: voteWeight,
+            } as B3trProposalVoteActivity
+        }
+        case ActivityEvent.B3TR_XALLOCATION_VOTE: {
+            return {
+                ...baseActivity,
+                eventName: ActivityEvent.B3TR_XALLOCATION_VOTE,
+                roundId: roundId,
+                appVotes: appVotes,
+            } as B3trXAllocationVoteActivity
+        }
+        case ActivityEvent.B3TR_CLAIM_REWARD: {
+            return {
+                ...baseActivity,
+                eventName: ActivityEvent.B3TR_XALLOCATION_VOTE,
+                value: value ?? "0x0",
+                roundId: roundId,
+            } as B3trClaimRewardActivity
+        }
+        case ActivityEvent.B3TR_UPGRADE_GM: {
+            return {
+                ...baseActivity,
+                oldLevel: oldLevel,
+                newLevel: newLevel,
+            } as B3trUpgradeGmActivity
+        }
+        case ActivityEvent.B3TR_SWAP_B3TR_TO_VOT3: {
+            return {
+                ...baseActivity,
+                value: inputValue,
+            } as B3trSwapB3trToVot3Activity
+        }
+        case ActivityEvent.B3TR_SWAP_VOT3_TO_B3TR: {
+            return {
+                ...baseActivity,
+                value: inputValue,
+            } as B3trSwapVot3ToB3trActivity
+        }
+        case ActivityEvent.B3TR_PROPOSAL_SUPPORT: {
+            return {
+                ...baseActivity,
+                value: value,
+                proposalId: proposalId,
+            } as B3trProposalSupportActivity
+        }
+        case ActivityEvent.UNKNOWN_TX:
+        default:
+            return null
+    }
 }

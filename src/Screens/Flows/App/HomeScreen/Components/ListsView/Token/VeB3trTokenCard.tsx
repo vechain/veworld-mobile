@@ -1,13 +1,14 @@
-import { Image, StyleSheet } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseText, BaseView, BaseSpacer, BaseSkeleton, FiatBalance } from "~Components"
+import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
-import { useTheme, useTokenWithCompleteInfo, useTokenCardFiatInfo, useCombineFiatBalances } from "~Hooks"
-import { BalanceUtils } from "~Utils"
-import { COLORS, VBD_ICON } from "~Constants"
+import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
+import { TokenImage } from "~Components/Reusable/TokenImage"
+import { COLORS } from "~Constants/Theme"
+import { useCombineFiatBalances, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { BalanceUtils } from "~Utils"
+import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
 type Props = {
     isBalanceVisible: boolean
@@ -84,11 +85,9 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
 
     return (
         <Animated.View style={[baseStyles.innerRow]}>
-            <BaseView flexDirection="row">
-                <BaseView style={[baseStyles.imageContainer]}>
-                    <Image source={{ uri: VBD_ICON }} style={baseStyles.image} />
-                </BaseView>
-                <BaseSpacer width={16} />
+            <BaseView flexDirection="row" alignItems="flex-start">
+                <TokenImage isVechainToken iconSize={26} icon={B3TR.icon} />
+                <BaseSpacer width={12} />
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row">
                         <BaseView style={baseStyles.tokenSymbol}>
@@ -96,7 +95,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                                 {b3trToken.symbol}
                             </BaseText>
                         </BaseView>
-                        <BaseSpacer width={4} />
+                        <BaseSpacer width={2} />
                         {isLoading ? (
                             <BaseSkeleton
                                 animationDirection="horizontalLeft"
@@ -116,7 +115,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                         <BaseView style={baseStyles.tokenSymbol}>
                             <BaseText typographyFont="bodyBold">{vot3Token.symbol}</BaseText>
                         </BaseView>
-                        <BaseSpacer width={4} />
+                        <BaseSpacer width={2} />
                         {isLoading ? (
                             <BaseSkeleton
                                 animationDirection="horizontalLeft"
@@ -148,12 +147,6 @@ const baseStyles = StyleSheet.create({
     tokenSymbol: {
         width: 44,
     },
-    imageContainer: {
-        borderRadius: 30,
-        padding: 10,
-        backgroundColor: COLORS.GREY_50,
-    },
-    image: { width: 20, height: 20 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",

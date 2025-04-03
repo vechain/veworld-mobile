@@ -1,7 +1,6 @@
 import { BottomSheetTextInput } from "@gorhom/bottom-sheet"
-import React, { useCallback, useEffect, useMemo, useRef } from "react"
+import React, { useCallback, useMemo } from "react"
 import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { TextInput } from "react-native-gesture-handler"
 import Animated, { AnimatedStyle } from "react-native-reanimated"
 import { BaseButton, BaseCard, BaseSpacer, BaseText, BaseView } from "~Components"
 import { B3TR, ColorThemeType, VOT3 } from "~Constants"
@@ -35,8 +34,6 @@ export const ConvertBetterCard: React.FC<Props> = ({
     const { styles, theme } = useThemedStyles(baseStyles)
     const { formatLocale } = useFormatFiat()
 
-    const inputRef = useRef<TextInput | null>(null)
-
     const tokenTotalBalance = useMemo(() => {
         return BigNutils(balance?.balance).toString
     }, [balance?.balance])
@@ -69,12 +66,6 @@ export const ConvertBetterCard: React.FC<Props> = ({
         onMaxAmountPress?.(tokenTotalToHuman)
     }, [onMaxAmountPress, tokenTotalToHuman])
 
-    useEffect(() => {
-        if (isSender) {
-            inputRef.current?.focus()
-        }
-    }, [isSender])
-
     return (
         <Animated.View style={animatedStyle}>
             <BaseCard style={[styles.container]}>
@@ -87,7 +78,10 @@ export const ConvertBetterCard: React.FC<Props> = ({
                         </BaseText>
                         <BaseSpacer height={12} />
                         <BaseView flexDirection="row" justifyContent="flex-start">
-                            <Image source={{ uri: renderIcon }} width={24} height={24} />
+                            <BaseView borderRadius={30} overflow="hidden">
+                                <Image source={{ uri: renderIcon }} width={24} height={24} />
+                            </BaseView>
+
                             <BaseSpacer width={12} />
                             <BaseText typographyFont="bodySemiBold">{token?.name}</BaseText>
                         </BaseView>
@@ -118,7 +112,6 @@ export const ConvertBetterCard: React.FC<Props> = ({
 
                         <BaseView flexDirection="row" flex={1}>
                             <BottomSheetTextInput
-                                ref={inputRef}
                                 testID="ConvertBetter_input"
                                 placeholder={"0"}
                                 keyboardType="numeric"

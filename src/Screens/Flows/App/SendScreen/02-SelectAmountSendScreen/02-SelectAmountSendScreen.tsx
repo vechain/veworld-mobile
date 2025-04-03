@@ -17,9 +17,9 @@ import {
     Layout,
     showErrorToast,
     FiatBalance,
-    AlertCard,
 } from "~Components"
-import { COLORS, CURRENCY_SYMBOLS, typography, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, CURRENCY_SYMBOLS, VET, VOT3, VTHO } from "~Constants"
+import { typography } from "~Constants/Theme"
 import { useAmountInput, useTheme, useThemedStyles, useTotalTokenBalance } from "~Hooks"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
@@ -27,6 +27,8 @@ import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useUI } from "./Hooks"
+import { TokenImage } from "~Components/Reusable/TokenImage"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 const { defaults: defaultTypography } = typography
 
@@ -42,7 +44,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const timer = useRef<NodeJS.Timeout | null>(null)
     const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
-    const isVOT3 = useMemo(() => token.symbol.toLowerCase() === VOT3.symbol.toLowerCase(), [token.symbol])
 
     const currency = useAppSelector(selectCurrency)
 
@@ -65,6 +66,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         vs_currency: currency,
     })
 
+    const computedIcon = useMemo(() => {
+        if (token.symbol === VET.symbol) return VET.icon
+        if (token.symbol === VTHO.symbol) return VTHO.icon
+        if (token.symbol === B3TR.symbol) return B3TR.icon
+        if (token.symbol === VOT3.symbol) return VOT3.icon
+        return token.icon
+    }, [token.icon, token.symbol])
+
     const isExchangeRateAvailable = !!exchangeRate
 
     const { styles, theme } = useThemedStyles(baseStyles(isExchangeRateAvailable))
@@ -75,8 +84,12 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         address,
     )
 
-    const { inputColorNotAnimated, placeholderColor, shortenedTokenName, animatedFontStyle, animatedStyleInputColor } =
-        useUI({ isError, input, token, theme })
+    const { inputColorNotAnimated, placeholderColor, animatedFontStyle, animatedStyleInputColor } = useUI({
+        isError,
+        input,
+        token,
+        theme,
+    })
 
     /**
      * TOKEN total balance in FIAT in raw-ish format (with decimals)
@@ -267,12 +280,6 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
             body={
                 <DismissKeyboardView>
                     <BaseView>
-                        {isVOT3 && (
-                            <>
-                                <AlertCard title={LL.ALERT_TITLE_VOT3()} message={LL.ALERT_MSG_VOT3()} status="info" />
-                                <BaseSpacer height={16} />
-                            </>
-                        )}
                         <BaseText typographyFont="button">{LL.SEND_CURRENT_BALANCE()}</BaseText>
                         <BaseSpacer height={8} />
                         {/* [START] - HEADER */}
@@ -304,21 +311,31 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                 {
                                     children: (
                                         <BaseView flex={1} style={styles.amountContainer}>
-                                            <BaseView flexDirection="row" style={styles.inputHeader} p={6}>
-                                                <BaseText typographyFont="captionBold">
-                                                    {isInputInFiat ? currency : shortenedTokenName}
-                                                </BaseText>
-
+                                            <BaseView flexDirection="row" style={styles.inputHeader}>
                                                 {isInputInFiat ? (
-                                                    <BaseText typographyFont="subTitleBold" mx={4}>
-                                                        {CURRENCY_SYMBOLS[currency]}
-                                                    </BaseText>
+                                                    <>
+                                                        <BaseText typographyFont="bodySemiBold">{currency}</BaseText>
+                                                        <BaseText typographyFont="bodySemiBold" mx={4}>
+                                                            {CURRENCY_SYMBOLS[currency]}
+                                                        </BaseText>
+                                                    </>
                                                 ) : (
-                                                    // @ts-ignore
-                                                    <BaseImage uri={token.icon} style={styles.logoIcon} />
+                                                    <>
+                                                        {/*@ts-ignore*/}
+                                                        <TokenImage
+                                                            icon={computedIcon}
+                                                            symbol={token.symbol}
+                                                            isVechainToken={isVechainToken(token.symbol)}
+                                                            iconSize={24}
+                                                        />
+                                                        <BaseSpacer width={12} />
+                                                        <BaseText typographyFont="bodySemiBold">
+                                                            {token.symbol}
+                                                        </BaseText>
+                                                    </>
                                                 )}
                                             </BaseView>
-                                            <BaseSpacer width={18} />
+                                            <BaseSpacer height={8} />
                                             <AnimatedTextInput
                                                 contextMenuHidden
                                                 cursorColor={theme.colors.secondary}
@@ -370,14 +387,14 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                   <>
                                                       {isInputInFiat ? (
                                                           <BaseView flexDirection="row" alignItems="center">
+                                                              {/* @ts-ignore */}
+                                                              <BaseImage uri={computedIcon} style={styles.logoIcon} />
+                                                              <BaseSpacer width={8} />
                                                               <BaseText
                                                                   typographyFont="captionBold"
                                                                   color={inputColorNotAnimated}>
                                                                   {computeconvertedAmountInFooter}
                                                               </BaseText>
-                                                              <BaseSpacer width={4} />
-                                                              {/* @ts-ignore */}
-                                                              <BaseImage uri={token.icon} style={styles.logoIcon} />
                                                           </BaseView>
                                                       ) : (
                                                           <FiatBalance
@@ -457,7 +474,6 @@ const baseStyles = (isExchangeRateAvailable: boolean) => () =>
         logoIcon: {
             height: 20,
             width: 20,
-            marginLeft: 4,
         },
         amountContainer: {
             overflow: "visible",

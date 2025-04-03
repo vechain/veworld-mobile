@@ -1,6 +1,7 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
 import { AddressUtils, debug, HexUtils } from "~Utils"
-import { Balance, NETWORK_TYPE } from "~Model"
+import { Balance } from "~Model"
+import { NETWORK_TYPE } from "~Model/Network/enums"
 import { mergeArrays } from "~Utils/MergeUtils/MergeUtils"
 import { ERROR_EVENTS } from "~Constants"
 

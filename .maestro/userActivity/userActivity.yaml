@@ -1,5 +1,7 @@
 #userActivty.yaml
 appId: org.vechain.veworld.app
+tags:
+  - pull-request
 env:
   AMOUNT: 0.01
   ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"
@@ -64,14 +66,14 @@ onFlowComplete:
     when:
       platform: iOS
     commands:
-      - tapOn: ".*Sent tokens.*"
+      - tapOn: ".*Sent tokens.*- 0.01 VET"
 - runFlow:
     when:
       platform: Android
     commands:
       - tapOn:
-          text: "Sent tokens"
-          index: 0
+           id: "magnify"
+           index: 0
 - assertVisible: "Account 1"
 - assertVisible: "Account 2"
 - assertVisible: ".*0.01 VET.*"

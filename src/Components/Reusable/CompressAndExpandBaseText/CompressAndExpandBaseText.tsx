@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react"
 import { BaseText } from "~Components/Base"
-import { typography } from "~Constants"
+import { typography } from "~Constants/Theme"
 import { useI18nContext } from "~i18n"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
