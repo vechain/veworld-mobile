@@ -62,22 +62,22 @@ platform :android do
         }
       )
 
-      # Upload .aab to the Play Store as internal track
-      upload_to_play_store(
-        track: 'internal',
-        skip_upload_changelogs: true,
-        skip_upload_metadata: true
-      )
+      # # Upload .aab to the Play Store as internal track
+      # upload_to_play_store(
+      #   track: 'internal',
+      #   skip_upload_changelogs: true,
+      #   skip_upload_metadata: true
+      # )
 
-      slack(
-        message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
-        slack_url: ENV["SLACK_WEBHOOK"],
-        success: true,
-        payload: {
-          "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
-          "Built by" => github_username,
-        },
-      )
+      # slack(
+      #   message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
+      #   slack_url: ENV["SLACK_WEBHOOK"],
+      #   success: true,
+      #   payload: {
+      #     "Build Date" => Time.new.strftime("%d/%m/%Y %H:%M"),
+      #     "Built by" => github_username,
+      #   },
+      # )
 
     rescue => exception
       puts exception
