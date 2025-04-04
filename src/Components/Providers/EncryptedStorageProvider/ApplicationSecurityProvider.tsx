@@ -1,16 +1,17 @@
+import NetInfo from "@react-native-community/netinfo"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
+import RNBootSplash from "react-native-bootsplash"
 import { MMKV } from "react-native-mmkv"
+import { initializeMMKVFlipper } from "react-native-mmkv-flipper-plugin"
 import {
-    BiometricsUtils,
-    CryptoUtils,
-    CryptoUtils_Legacy,
-    debug,
-    error,
-    HexUtils,
-    info,
-    PasswordUtils,
-    AnalyticsUtils,
-} from "~Utils"
+    PreviousInstallation,
+    SecurityConfig,
+    SecurityUpgradeBackup,
+    StorageEncryptionKeyHelper,
+    WalletEncryptionKeyHelper,
+} from "~Components/Providers"
+import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
+import { useAppState, useBiometrics } from "~Hooks"
 import {
     BiometricState,
     DEVICE_TYPE,
@@ -20,25 +21,24 @@ import {
     Wallet,
     WALLET_STATUS,
 } from "~Model"
+import { InternetDownScreen, StandaloneAppBlockedScreen, StandaloneLockScreen } from "~Screens"
+import { BackupWalletStack } from "~Screens/Flows/App/SecurityUpgrade_V2/Navigation.standalone"
 import {
-    PreviousInstallation,
-    SecurityConfig,
-    SecurityUpgradeBackup,
-    StorageEncryptionKeyHelper,
-    WalletEncryptionKeyHelper,
-} from "~Components/Providers"
-import { useAppState, useBiometrics } from "~Hooks"
-import { StandaloneAppBlockedScreen, StandaloneLockScreen, InternetDownScreen } from "~Screens"
+    AnalyticsUtils,
+    BiometricsUtils,
+    CryptoUtils,
+    CryptoUtils_Legacy,
+    debug,
+    error,
+    HexUtils,
+    info,
+    PasswordUtils,
+} from "~Utils"
+import { mixpanel } from "~Utils/AnalyticsUtils"
 import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
-import NetInfo from "@react-native-community/netinfo"
-import { AnalyticsEvent, ERROR_EVENTS } from "~Constants"
-import { initializeMMKVFlipper } from "react-native-mmkv-flipper-plugin"
-import RNBootSplash from "react-native-bootsplash"
-import { BackupWalletStack } from "~Screens/Flows/App/SecurityUpgrade_V2/Navigation.standalone"
 import SaltHelper from "./Helpers/SaltHelper"
 import { StorageEncryptionKeys } from "./Model"
-import { mixpanel } from "~Utils/AnalyticsUtils"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",

@@ -1,4 +1,4 @@
-import { useNavigation, useScrollToTop, useFocusEffect } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { RefreshControl, StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
@@ -62,6 +62,8 @@ export const HomeScreen = () => {
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
+    // const fullState = useAppSelector(state => state)
+
     /*
         This is used to reset the state of the app when the user presses the reload button
         on the error boundary. This is needed because the error boundary will not unmount
@@ -78,6 +80,15 @@ export const HomeScreen = () => {
             // eslint-disable-next-line react-hooks/exhaustive-deps
         }, []),
     )
+
+    // const written = useRef(false)
+
+    // useEffect(() => {
+    //     if (!written.current) {
+    //         written.current = true
+    //         RNFS.writeFile(`${RNFS.DocumentDirectoryPath}/output.json`, JSON.stringify(fullState))
+    //     }
+    // }, [fullState])
 
     const { LL } = useI18nContext()
     // Pull down to refresh

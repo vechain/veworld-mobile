@@ -1,9 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useMemo, useState } from "react"
 import { FlatList, StyleSheet, ViewToken } from "react-native"
-import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
-import { AddressUtils } from "~Utils"
-import { useThemedStyles, useVns } from "~Hooks"
 import {
     BaseIcon,
     BaseSpacer,
@@ -14,6 +11,8 @@ import {
     PicassoAddressIcon,
     WatchedAccountBadge,
 } from "~Components"
+import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
+import { useThemedStyles, useVns } from "~Hooks"
 import { Contact, WalletAccount } from "~Model"
 import {
     selectContactByAddress,
@@ -21,6 +20,7 @@ import {
     selectVisibleAccounts,
     useAppSelector,
 } from "~Storage/Redux"
+import { AddressUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -95,7 +95,7 @@ export const TransferCard = memo(
         const toAddressesShort = useMemo(() => {
             const shortenedAddresses: Array<string> = []
             toAddresses?.map((_address: string) => {
-                shortenedAddresses.push(AddressUtils.humanAddress(_address, 4, 6))
+                shortenedAddresses.push(AddressUtils.humanAddress(_address))
             })
 
             return shortenedAddresses

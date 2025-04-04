@@ -115,3 +115,6 @@ docs/app-index.pdf
 # Android release build artifacts
 android/key_alias.txt
 android/store_password.txt
+
+test.js
+user_encrypted_storage_V2

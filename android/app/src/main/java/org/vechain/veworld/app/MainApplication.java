@@ -16,6 +16,7 @@ import java.util.List;
 import org.vechain.veworld.app.minimizer.RCTMinimizerPackage;
 import org.vechain.veworld.app.packageInfo.PackageDetailsPackage;
 import org.vechain.veworld.app.VeWorldPackage;
+import com.rnfs.RNFSPackage;
 
 public class MainApplication extends Application implements ReactApplication {
 
