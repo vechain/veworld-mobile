@@ -1,11 +1,14 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { memo } from "react"
 import { BaseIcon, BaseView, HeaderStyle, HeaderTitle } from "~Components"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
 
 export const Header = memo(() => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const nav = useNavigation()
 
     return (
         <BaseView w={100} style={HeaderStyle}>
@@ -19,11 +22,9 @@ export const Header = memo(() => {
                     name={"icon-search"}
                     size={22}
                     color={theme.colors.text}
-                    action={() => {}}
+                    action={() => nav.navigate(Routes.DISCOVER_SEARCH)}
                     haptics="Light"
                 />
-                {/* <BaseSpacer width={8} />
-                <PlusIconHeaderButton action={() => {}} /> */}
             </BaseView>
         </BaseView>
     )

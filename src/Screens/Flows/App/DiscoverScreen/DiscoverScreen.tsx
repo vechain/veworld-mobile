@@ -1,10 +1,10 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { Keyboard, StyleSheet } from "react-native"
+import React, { useCallback, useEffect, useMemo, useRef } from "react"
+import { StyleSheet } from "react-native"
 import Animated, { useAnimatedRef } from "react-native-reanimated"
-import { AnimatedFloatingButton, BaseSpacer, BaseView, Layout } from "~Components"
+import { BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useBrowserSearch, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
 import {
     selectBookmarkedDapps,
@@ -14,13 +14,14 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { Ecosystem, Favourites, Header, NewDapps } from "./Components"
-import { groupFavoritesByBaseUrl } from "./utils"
-import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
 import { PopularTrendingDApps } from "./Components/PopularTrendingDApps"
+import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
+import { groupFavoritesByBaseUrl } from "./utils"
+
 import { useDAppActions } from "./Hooks"
+
 export const DiscoverScreen: React.FC = () => {
     const { LL } = useI18nContext()
     const track = useAnalyticTracking()
@@ -29,7 +30,6 @@ export const DiscoverScreen: React.FC = () => {
     const { styles } = useThemedStyles(baseStyles)
 
     useFetchFeaturedDApps()
-    const { navigateToBrowser } = useBrowserSearch()
 
     const animatedRef = useAnimatedRef<Animated.ScrollView>()
 
@@ -41,7 +41,6 @@ export const DiscoverScreen: React.FC = () => {
     const dapps = useAppSelector(selectFeaturedDapps)
     const { onDAppPress } = useDAppActions()
 
-    const [filteredSearch, setFilteredSearch] = useState("")
     const groupedbookmarkedDApps = useMemo(() => groupFavoritesByBaseUrl(bookmarkedDApps), [bookmarkedDApps])
     const showFavorites = groupedbookmarkedDApps.length > 0
 
@@ -51,23 +50,6 @@ export const DiscoverScreen: React.FC = () => {
             dispatch(setDiscoverySectionOpened())
         }
     }, [track, hasOpenedDiscovery, dispatch])
-
-    const isWebSearchFloatingButtonVisible = useMemo(() => {
-        return !!filteredSearch.length
-    }, [filteredSearch.length])
-
-    const onSearch = useCallback(() => {
-        if (!filteredSearch.length) return
-
-        Keyboard.dismiss()
-
-        const dapp = dapps.find(item => {
-            return URIUtils.getHostName(item.href)?.toLowerCase() === filteredSearch.toLowerCase()
-        })
-
-        navigateToBrowser(dapp?.href ?? filteredSearch)
-        setFilteredSearch("")
-    }, [dapps, filteredSearch, navigateToBrowser])
 
     const onSeeAllPress = useCallback(() => nav.navigate(Routes.DISCOVER_FAVOURITES), [nav])
 
@@ -107,20 +89,14 @@ export const DiscoverScreen: React.FC = () => {
                         <BaseSpacer height={48} />
 
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} />
-                        {isWebSearchFloatingButtonVisible && <BaseSpacer height={70} />}
                     </Animated.ScrollView>
-                    <AnimatedFloatingButton
-                        title={LL.DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL()}
-                        isVisible={isWebSearchFloatingButtonVisible}
-                        onPress={onSearch}
-                    />
                 </BaseView>
             }
         />
     )
 }
 
-const baseStyles = () =>
+export const baseStyles = () =>
     StyleSheet.create({
         rootContainer: {
             flexGrow: 1,

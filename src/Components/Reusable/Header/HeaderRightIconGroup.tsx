@@ -1,6 +1,6 @@
 import React, { ReactNode } from "react"
-import { BaseView } from "~Components"
 import { StyleSheet } from "react-native"
+import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 
 type HeaderRightButtonsProps = {
