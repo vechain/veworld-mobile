@@ -5,6 +5,8 @@ import { useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 type Props = {
+    w?: number
+    h?: number
     testID?: string
     href?: string
     source: ImageSourcePropType
@@ -13,8 +15,17 @@ type Props = {
     isExternalLink?: boolean
 }
 
-export const BaseCarouselItem: React.FC<Props> = ({ source, href, style, imageStyle, testID, isExternalLink }) => {
-    const { styles } = useThemedStyles(baseStyles)
+export const BaseCarouselItem: React.FC<Props> = ({
+    source,
+    href,
+    style,
+    imageStyle,
+    testID,
+    isExternalLink,
+    w = 360,
+    h = 120,
+}) => {
+    const { styles } = useThemedStyles(baseStyles(w, h))
     const nav = useNavigation()
 
     const onPress = useCallback(() => {
@@ -30,16 +41,18 @@ export const BaseCarouselItem: React.FC<Props> = ({ source, href, style, imageSt
     return (
         <Animated.View testID={testID} style={[style, styles.container]}>
             <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
-                <Animated.Image source={source} resizeMode="contain" style={[imageStyle, styles.image as ImageStyle]} />
+                <Animated.Image source={source} resizeMode="stretch" style={[imageStyle, styles.image as ImageStyle]} />
             </TouchableOpacity>
         </Animated.View>
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (w: number, h: number) => () =>
     StyleSheet.create({
         container: {
             flex: 1,
+            width: w,
+            height: h,
         },
         image: {
             width: "100%",

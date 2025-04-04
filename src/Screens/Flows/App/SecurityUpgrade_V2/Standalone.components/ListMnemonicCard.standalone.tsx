@@ -36,7 +36,7 @@ export const ListMnemonicCard = ({ onSelected, wallet }: Props) => {
                         <BaseText typographyFont="bodyBold" pb={4}>
                             {wallet.alias}
                         </BaseText>
-                        <BaseText>{AddressUtils.humanAddress(wallet.rootAddress, 4, 4)}</BaseText>
+                        <BaseText>{AddressUtils.humanAddress(wallet.rootAddress)}</BaseText>
                     </BaseView>
 
                     <BaseView alignItems="flex-end">
