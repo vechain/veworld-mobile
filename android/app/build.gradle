@@ -14,31 +14,27 @@ def signingPublicKey = "\"KEY_NOT_FOUND\""
 if (keyFile.exists()) {
     def stdout = new ByteArrayOutputStream()
     def stderr = new ByteArrayOutputStream()
-    def result = exec {
+    exec {
         commandLine 'keytool',
                 '-exportcert',
-                '-alias', 'androiddebugkey',
+                '-alias', keystoreProperties['keyAlias'] ?: 'androiddebugkey',
                 '-keystore', keyFile,
-                '-storepass', 'android',
+                '-storepass', keystoreProperties['storePassword'] ?: 'android',
                 '-rfc'
         standardOutput = stdout
-        errorOutput = stderr
-        ignoreExitValue true
     }
 
-    if (result.exitValue != 0) {
-        println "Error running keytool: ${stderr.toString().trim()}"
-        exitProcess(1)
-    } else {
-        def certContent = stdout.toString().trim()
-                .replaceAll("-----BEGIN CERTIFICATE-----", "")
-                .replaceAll("-----END CERTIFICATE-----", "")
-                .replaceAll("\\s+", "")
-        signingPublicKey = "\"${certContent}\""
-    }
+    def certContent = stdout.toString().trim()
+            .replaceAll("-----BEGIN CERTIFICATE-----", "")
+            .replaceAll("-----END CERTIFICATE-----", "")
+            .replaceAll("\\s+", "")
+    signingPublicKey = "\"${certContent}\""
+        
 } else {
     println "keystore not found. Using placeholder."
 }
+
+println "signingPublicKey for ${keyFileName}: ${signingPublicKey}"
 
 /**
  * This is the configuration block to customize your React Native Android app.
