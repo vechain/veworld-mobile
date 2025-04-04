@@ -9,10 +9,11 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 def isDebug = gradle.startParameter.taskNames.any { it.contains('Debug') }
 def keyFileName = isDebug ? 'debug.keystore' : 'release.keystore'
 def keyFile = isDebug ? file(keyFileName) : file("../${keyFileName}")
-def debugPublicKey = "\"DEBUG_KEY_NOT_FOUND\""
+def signingPublicKey = "\"KEY_NOT_FOUND\""
 
 if (keyFile.exists()) {
     def stdout = new ByteArrayOutputStream()
+    def stderr = new ByteArrayOutputStream()
     exec {
         commandLine 'keytool',
                 '-exportcert',
@@ -21,15 +22,23 @@ if (keyFile.exists()) {
                 '-storepass', 'android',
                 '-rfc'
         standardOutput = stdout
+        errorOutput = stderr
+        ignoreExitValue true
     }
 
-    def certContent = stdout.toString().trim()
-            .replaceAll("-----BEGIN CERTIFICATE-----", "")
-            .replaceAll("-----END CERTIFICATE-----", "")
-            .replaceAll("\\s+", "")
-    debugPublicKey = "\"${certContent}\""
+    if (execResult.exitValue != 0) {
+        println "Error running keytool: ${stderr.toString().trim()}"
+        exitProcess(1)
+        
+    } else {
+        def certContent = stdout.toString().trim()
+                .replaceAll("-----BEGIN CERTIFICATE-----", "")
+                .replaceAll("-----END CERTIFICATE-----", "")
+                .replaceAll("\\s+", "")
+        signingPublicKey = "\"${certContent}\""
+    }
 } else {
-    println "Debug keystore not found. Using placeholder."
+    println "keystore not found. Using placeholder."
 }
 
 /**
@@ -137,7 +146,7 @@ versionName "2.2.2"
     buildTypes {
         debug {
             signingConfig signingConfigs.debug
-            buildConfigField "String", "PUBLIC_KEY", debugPublicKey
+            buildConfigField "String", "PUBLIC_KEY", signingPublicKey
         }
         release {
             // Caution! In production, you need to generate your own keystore file.
@@ -146,7 +155,7 @@ versionName "2.2.2"
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
             proguardFile "${rootProject.projectDir}/../node_modules/detox/android/detox/proguard-rules-app.pro"
-            buildConfigField "String", "PUBLIC_KEY", System.getenv('PUBLIC_KEY') ?: (keystoreProperties['publicKey'] ?: "null")
+            buildConfigField "String", "PUBLIC_KEY", signingPublicKey
         }
     }
 
