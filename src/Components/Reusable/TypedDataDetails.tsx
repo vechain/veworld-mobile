@@ -1,6 +1,6 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { BaseView, BaseText, BaseSpacer } from "~Components/Base"
+import { BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { TypedData } from "~Model"
@@ -53,7 +53,7 @@ export const TypedDataDetails: React.FC<Props> = ({ typedData, origin }) => {
                     </BaseText>
 
                     {/* Contract value */}
-                    <CopyToClipboardAddress address={typedData.domain?.verifyingContract ?? ""} lenghtBefore={12} />
+                    <CopyToClipboardAddress address={typedData.domain?.verifyingContract ?? ""} />
                 </BaseView>
             </BaseView>
 

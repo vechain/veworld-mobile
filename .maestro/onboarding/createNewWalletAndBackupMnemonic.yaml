@@ -1,5 +1,7 @@
 #createNewWalletAndBackupMenmonic
 appId: org.vechain.veworld.app
+tags:
+  - pull-request
 onFlowComplete:
     - runFlow: ../setup_reset/resetApp.yaml
 ---

@@ -25,7 +25,7 @@ export const informUserForIncomingNFT = ({
 }: InformUserForIncomingNFTProps) => {
     const locale = i18n.detectLocale()
 
-    const formattedFrom = AddressUtils.humanAddress(from, 4, 5)
+    const formattedFrom = AddressUtils.humanAddress(from)
 
     showSuccessToast({
         text1: i18n.i18n()[locale].NOTIFICATION_INCOMING_NFT_TITLE(),
@@ -59,7 +59,7 @@ export const informUserForOutgoingNFT = ({
 }: InformUserForOutgoingNFTProps) => {
     const locale = i18n.detectLocale()
 
-    const formattedTo = AddressUtils.humanAddress(to, 4, 5)
+    const formattedTo = AddressUtils.humanAddress(to)
 
     showSuccessToast({
         addresses: {
@@ -215,7 +215,7 @@ export const InformUserForOutgoingVET = ({ txId, amount, to, from, informUser }:
 // ~ REVERTED TRANSACTION
 export const informUserforRevertedTransaction = ({ txId, network }: { txId: string; network: Network }) => {
     const locale = i18n.detectLocale()
-    const formattedTxId = AddressUtils.humanAddress(txId, 4, 5)
+    const formattedTxId = AddressUtils.humanAddress(txId)
 
     showErrorToast({
         text1: i18n.i18n()[locale].ERROR(),

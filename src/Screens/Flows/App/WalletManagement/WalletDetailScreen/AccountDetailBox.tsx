@@ -1,13 +1,13 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { useCopyClipboard, useSetSelectedAccount, useThemedStyles, useVns } from "~Hooks"
-import { AddressUtils } from "~Utils"
-import { BaseText, BaseView, BaseButton, BaseIcon, BaseTouchable, BaseSpacer } from "~Components"
-import { WalletAccount } from "~Model"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
+import { useCopyClipboard, useSetSelectedAccount, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { useNavigation } from "@react-navigation/native"
+import { WalletAccount } from "~Model"
 import { Routes } from "~Navigation"
+import { AddressUtils } from "~Utils"
 import { AccountDetailFiatBalance } from "./components"
 
 type Props = {
@@ -41,7 +41,7 @@ export const AccountDetailBox: React.FC<Props> = memo(
         const cardOpacity = useMemo(() => (isDisabled ? 0.7 : undefined), [isDisabled])
 
         const nameOrAddressFrom = useMemo(
-            () => vnsName || AddressUtils.humanAddress(vnsAddress || account.address, 4, 6),
+            () => vnsName || AddressUtils.humanAddress(vnsAddress || account.address),
             [account.address, vnsAddress, vnsName],
         )
 

@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react"
+import { StyleSheet } from "react-native"
 import { getTimeZone } from "react-native-localize"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components/Base"
 import { ColorThemeType, DerivationPath, VET } from "~Constants"
@@ -8,7 +9,6 @@ import { CloudKitWallet } from "~Model"
 import { selectDevices, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BalanceUtils, BigNutils, DateUtils, PlatformUtils } from "~Utils"
 import { AccountIcon } from "./Account"
-import { StyleSheet } from "react-native"
 
 export const CloudKitWalletCard = ({
     wallet,
@@ -39,7 +39,7 @@ export const CloudKitWalletCard = ({
             if (vnsName) {
                 setNameOrAddress(vnsName ?? "")
             } else {
-                setNameOrAddress(AddressUtils.humanAddress(wallet.firstAccountAddress, 4, 6))
+                setNameOrAddress(AddressUtils.humanAddress(wallet.firstAccountAddress))
             }
         }
         init()

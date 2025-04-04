@@ -1,5 +1,8 @@
 #send_token_account_method.yaml
 appId: org.vechain.veworld.app
+tags:
+  - pull-request
+  - onlyAndroid
 env:
   AMOUNT: 0.01
   ACCOUNT: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"

@@ -2,8 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { FlashList, ListRenderItem } from "@shopify/flash-list"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useBottomSheetModal, useScrollableList } from "~Hooks"
-import { AddressUtils } from "~Utils"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import {
     BaseSpacer,
     BaseText,
@@ -14,14 +13,15 @@ import {
     PlusIconHeaderButton,
     SwipeableRow,
 } from "~Components"
+import { useBottomSheetModal, useScrollableList } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { Contact } from "~Model"
 import { Routes } from "~Navigation"
 import { useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { editContact, removeContact } from "~Storage/Redux/Actions/Contacts"
 import { selectContactByAddress, selectContacts } from "~Storage/Redux/Selectors"
-import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { AddressUtils } from "~Utils"
 import { AddContactButton, ContactDetailBox, ContactManagementBottomSheet } from "./Components"
-import { Contact } from "~Model"
 
 export const ContactsScreen = () => {
     // [Start] Hooks
@@ -100,7 +100,7 @@ export const ContactsScreen = () => {
     )
 
     const formattedAddress = useMemo(() => {
-        return AddressUtils.humanAddress(selectedContactAddress ?? "", 4, 6)
+        return AddressUtils.humanAddress(selectedContactAddress ?? "")
     }, [selectedContactAddress])
 
     // [End] Methods

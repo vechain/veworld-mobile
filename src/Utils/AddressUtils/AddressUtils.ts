@@ -152,7 +152,7 @@ export const getExplorerLink = (network?: Network, type?: ExplorerLinkType) => {
  * @param lengthAfter - (optional, default 4) the characters to show after the dots
  * @returns the formatted address
  */
-export const humanAddress = (_address: string, lengthBefore = 4, lengthAfter = 10) => {
+export const humanAddress = (_address: string, lengthBefore = 6, lengthAfter = 4) => {
     const before = _address.substring(0, lengthBefore)
     const after = _address.substring(_address.length - lengthAfter)
     return `${before}…${after}`
