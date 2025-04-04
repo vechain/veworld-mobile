@@ -28,8 +28,8 @@ type Props = {
 
 export const BaseCarousel = ({
     data,
-    w = 320,
-    h = 80,
+    w = SCREEN_WIDTH,
+    h = 90,
     autoPlay = true,
     autoPlayInterval = 5000,
     loop = true,
@@ -63,7 +63,7 @@ export const BaseCarousel = ({
                 pagingEnabled
                 snapEnabled={true}
                 mode="parallax"
-                modeConfig={{ parallaxScrollingOffset: -8, parallaxScrollingScale: 1 }}
+                modeConfig={{ parallaxScrollingOffset: 29, parallaxScrollingScale: 1 }}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
                 renderItem={({ item }) => {
