@@ -5,8 +5,13 @@ import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseTextInput, BaseView, useInAppBrowser } from "~Components"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
+import { URIUtils } from "~Utils"
 
-export const URLBar = () => {
+type Props = {
+    onNavigation: (error: boolean) => void
+}
+
+export const URLBar = ({ onNavigation }: Props) => {
     const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
     const nav = useNavigation()
 
@@ -25,11 +30,18 @@ export const URLBar = () => {
     }))
 
     const onSubmit = useCallback(
-        (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-            //TODO: Add error state
-            navigateToUrl(e.nativeEvent.text)
+        async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+            const value = e.nativeEvent.text.toLowerCase()
+            const isValid = await URIUtils.isValidBrowserUrl(value)
+            if (isValid) {
+                const url = value.startsWith("https://") ? value : `https://${value}`
+                onNavigation(false)
+                navigateToUrl(url)
+                return
+            }
+            onNavigation(true)
         },
-        [navigateToUrl],
+        [navigateToUrl, onNavigation],
     )
 
     const renderWithToolbar = useMemo(() => {
