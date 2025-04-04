@@ -17,7 +17,7 @@ const vnsData: Vns[] = [
 
 describe("AccountUtils", () => {
     it("nextAlias - should return the next alias", () => {
-        expect(AccountUtils.nextAlias(1)).toEqual("Account 1")
+        expect(AccountUtils.nextAlias(1, "Device")).toEqual("Device 1")
     })
 
     it("getNextIndex - should return the next index", () => {

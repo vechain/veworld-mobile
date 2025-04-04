@@ -106,10 +106,6 @@ export const AccountSlice = createSlice({
             const accountExistsIndex = state.accounts.findIndex(account =>
                 AddressUtils.compareAddresses(account.address, address),
             )
-            if (accountExistsIndex !== -1) {
-                state.accounts[accountExistsIndex].alias = alias
-            }
-
             state.accounts[accountExistsIndex].alias = alias
         },
         setAccountVisibility: (state, action: PayloadAction<{ address: string; visibile: boolean }>) => {
@@ -157,7 +153,8 @@ export const AccountSlice = createSlice({
                     const isDefaultName = /^Account \d+$/.test(account.alias)
                     const isOldAlias = account.alias.includes(oldAlias)
                     if (isDefaultName || isOldAlias) {
-                        state.accounts[index].alias = alias + " " + index
+                        // Adding 1 to the index for user-friendly display (1-based instead of 0-based)
+                        state.accounts[index].alias = `${alias} ${Number(state.accounts[index].index) + 1}`
                     }
                 }
             })
