@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { BackHandler, StyleSheet } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, useInAppBrowser } from "~Components"
-import { COLORS, ColorThemeType } from "~Constants"
-import { useBlockchainNetwork, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
+import { useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
@@ -31,7 +31,6 @@ export const BrowserBottomBar: React.FC = () => {
     } = useInAppBrowser()
     const theme = useTheme()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
-    const { isMainnet } = useBlockchainNetwork()
     const { styles } = useThemedStyles(baseStyles)
     const isIOSPlatform = isIOS()
     const route = useRoute()
@@ -86,7 +85,7 @@ export const BrowserBottomBar: React.FC = () => {
             ...(isDapp
                 ? [
                       {
-                          name: isBookMarked ? ("icon-star-on" as const) : ("icon-star-off" as const),
+                          name: isBookMarked ? ("icon-star-on" as const) : ("icon-star" as const),
                           onPress: () => {
                               toggleBookmark()
                           },
@@ -127,7 +126,7 @@ export const BrowserBottomBar: React.FC = () => {
                         name={config.name}
                         style={styles.icon}
                         size={20}
-                        color={isMainnet ? theme.colors.text : COLORS.WHITE}
+                        color={theme.colors.text}
                     />
                 )
             })}

@@ -21,9 +21,7 @@ export const URLBar = () => {
     const theme = useTheme()
 
     const animatedStyles = useAnimatedStyle(() => ({
-        // transform: [{ translateY: showToolbars ? withTiming(0) : withTiming(-56) }],
         height: showToolbars ? withTiming(56) : withTiming(24),
-        // opacity: showToolbars ? withTiming(1) : withTiming(0),
     }))
 
     const onSubmit = useCallback(

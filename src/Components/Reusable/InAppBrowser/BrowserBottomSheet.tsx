@@ -3,6 +3,7 @@ import { default as React, useMemo } from "react"
 import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers"
+import { ColorThemeType } from "~Constants"
 import { useCopyClipboard, useDappBookmarking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
@@ -35,7 +36,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
               }
             : {
                   id: "favorite",
-                  icon: "icon-star-off" as const,
+                  icon: "icon-star" as const,
                   label: LL.BROWSER_ADD_FAVORITE_DAPPS(),
                   onPress: toggleBookmark,
               }
@@ -49,7 +50,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             },
             {
                 id: "share",
-                icon: "icon-share",
+                icon: "icon-share-2",
                 label: LL.BROWSER_SHARE(),
                 onPress: () => {
                     Share.share({
@@ -63,7 +64,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
     }, [LL, isBookMarked, isDapp, navigationState?.title, navigationState?.url, onCopyToClipboard, toggleBookmark])
 
     return (
-        <BaseBottomSheet dynamicHeight ref={ref} blurBackdrop>
+        <BaseBottomSheet dynamicHeight ref={ref} blurBackdrop backgroundStyle={styles.rootSheet}>
             <BaseView w={100} style={styles.actionContainer}>
                 {actions.map(action => (
                     <BaseTouchable key={action.id} style={styles.actionItemContainer} action={action.onPress}>
@@ -84,7 +85,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
     )
 })
 
-const baseStyles = () => {
+const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
         actionContainer: {
             flexDirection: "column",
@@ -96,6 +97,11 @@ const baseStyles = () => {
             alignItems: "center",
             width: "100%",
             paddingVertical: 8,
+        },
+        rootSheet: {
+            backgroundColor: theme.colors.actionBottomSheet.background,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
         },
     })
 }
