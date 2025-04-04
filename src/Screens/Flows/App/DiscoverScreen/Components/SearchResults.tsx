@@ -1,6 +1,5 @@
-import { FlashList, ListRenderItemInfo } from "@shopify/flash-list"
 import { default as React, useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
@@ -105,7 +104,7 @@ export const SearchResults = ({ query, error, results }: Props) => {
                     </BaseView>
                 </BaseView>
             ) : (
-                <FlashList
+                <FlatList
                     renderItem={renderItem}
                     keyExtractor={item => (item.type === HistoryUrlKind.DAPP ? item.dapp.href : item.url)}
                     ItemSeparatorComponent={renderItemSeparator}
@@ -114,7 +113,6 @@ export const SearchResults = ({ query, error, results }: Props) => {
                     showsHorizontalScrollIndicator={false}
                     scrollEnabled={true}
                     data={results}
-                    estimatedItemSize={80}
                 />
             )}
         </Animated.ScrollView>

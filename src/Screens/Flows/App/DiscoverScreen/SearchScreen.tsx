@@ -31,7 +31,7 @@ export const SearchScreen = () => {
     const renderHeader = useMemo(() => {
         return (
             <BackButtonGenericHeader
-                rightElement={<SearchBar onTextChange={onSearchUpdated} onReturnClicked={onSearchReturn} />}
+                rightElement={<SearchBar onTextChange={onSearchUpdated} onSubmit={onSearchReturn} />}
                 style={styles.headerContainer}
             />
         )
