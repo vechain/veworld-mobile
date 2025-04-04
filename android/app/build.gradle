@@ -17,9 +17,9 @@ if (keyFile.exists()) {
     exec {
         commandLine 'keytool',
                 '-exportcert',
-                '-alias', keystoreProperties['keyAlias'] ?: 'androiddebugkey',
+                '-alias', isDebug ? 'androiddebugkey' : keystoreProperties['keyAlias'],
                 '-keystore', keyFile,
-                '-storepass', keystoreProperties['storePassword'] ?: 'android',
+                '-storepass', isDebug ? 'android' : keystoreProperties['storePassword'],
                 '-rfc'
         standardOutput = stdout
     }
@@ -29,7 +29,8 @@ if (keyFile.exists()) {
             .replaceAll("-----END CERTIFICATE-----", "")
             .replaceAll("\\s+", "")
     signingPublicKey = "\"${certContent}\""
-        
+
+    println "Successfully extracted signing public key for ${keyFileName}"
 } else {
     println "keystore not found. Using placeholder."
 }
