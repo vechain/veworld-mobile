@@ -9,20 +9,20 @@ import { useI18nContext } from "~i18n"
 
 type Props = {
     onTextChange: (text: string) => void
-    onReturnClicked?: (text: string) => void
+    onSubmit?: (text: string) => void
     filteredSearch?: string
 }
 
-export const SearchBar = ({ onTextChange, filteredSearch, onReturnClicked }: Props) => {
+export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const inputRef = useRef<TextInput | null>(null)
 
     const handleOnSubmitEditing = useCallback(
         (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-            onReturnClicked?.(e.nativeEvent.text)
+            onSubmit?.(e.nativeEvent.text)
         },
-        [onReturnClicked],
+        [onSubmit],
     )
 
     const onClear = useCallback(() => {
