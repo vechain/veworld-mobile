@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from "react"
+import React, { memo, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
@@ -18,6 +18,7 @@ type Props = {
 export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) => {
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
     const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
+    const [width, setWidth] = useState<"auto" | number>("auto")
 
     const theme = useTheme()
     const { LL } = useI18nContext()
@@ -85,47 +86,54 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
 
     return (
         <Animated.View style={[baseStyles.innerRow]}>
-            <BaseView flexDirection="row" alignItems="flex-start">
+            <BaseView flexDirection="row" alignItems="flex-start" gap={12}>
                 <TokenImage isVechainToken iconSize={26} icon={B3TR.icon} />
-                <BaseSpacer width={12} />
                 <BaseView flexDirection="column" alignItems="flex-start">
-                    <BaseView flexDirection="row">
-                        <BaseView style={baseStyles.tokenSymbol}>
-                            <BaseText color={tokenValueLabelColor} typographyFont="bodyBold">
-                                {b3trToken.symbol}
-                            </BaseText>
-                        </BaseView>
-                        <BaseSpacer width={2} />
+                    <BaseView flexDirection="row" gap={4}>
+                        <BaseText color={tokenValueLabelColor} typographyFont="bodySemiBold" style={{ width }}>
+                            {b3trToken.symbol}
+                        </BaseText>
                         {isLoading ? (
                             <BaseSkeleton
                                 animationDirection="horizontalLeft"
                                 boneColor={theme.colors.skeletonBoneColor}
                                 highlightColor={theme.colors.skeletonHighlightColor}
-                                height={12}
+                                height={14}
                                 width={40}
                             />
                         ) : (
-                            <BaseText typographyFont="bodyMedium" align="right" color={theme.colors.tokenCardText}>
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                align="right"
+                                color={theme.colors.tokenCardText}
+                                lineHeight={20}>
                                 {isBalanceVisible ? b3trToken.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
                     </BaseView>
                     <BaseSpacer height={2} />
-                    <BaseView flexDirection="row">
-                        <BaseView style={baseStyles.tokenSymbol}>
-                            <BaseText typographyFont="bodyBold">{vot3Token.symbol}</BaseText>
-                        </BaseView>
-                        <BaseSpacer width={2} />
+                    <BaseView flexDirection="row" gap={4}>
+                        <BaseText
+                            typographyFont="bodySemiBold"
+                            onLayout={e => {
+                                setWidth(e.nativeEvent.layout.width)
+                            }}>
+                            {vot3Token.symbol}
+                        </BaseText>
                         {isLoading ? (
                             <BaseSkeleton
                                 animationDirection="horizontalLeft"
                                 boneColor={theme.colors.skeletonBoneColor}
                                 highlightColor={theme.colors.skeletonHighlightColor}
-                                height={12}
+                                height={14}
                                 width={40}
                             />
                         ) : (
-                            <BaseText typographyFont="bodyMedium" align="right" color={theme.colors.tokenCardText}>
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                align="right"
+                                color={theme.colors.tokenCardText}
+                                lineHeight={20}>
                                 {isBalanceVisible ? vot3Token.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}

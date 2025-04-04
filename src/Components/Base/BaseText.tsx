@@ -1,8 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
-import { FlexAlignType, Text, TextProps } from "react-native"
-import { useTheme } from "~Hooks"
+import { FlexAlignType, Text, TextProps, TextStyle } from "react-native"
 import { typography } from "~Constants/Theme"
+import { useTheme } from "~Hooks"
 import { BaseView } from "./BaseView"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
@@ -36,10 +36,11 @@ export type BaseTextProps = {
     borderRadius?: number
     alignContainer?: FlexAlignType
     justifyContainer?: "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly"
+    textTransform?: TextStyle["textTransform"]
 } & TextProps
 
 export const BaseText = (props: BaseTextProps) => {
-    const { style, typographyFont, fontSize, fontWeight, fontFamily, lineHeight, ...otherProps } = props
+    const { style, typographyFont, fontSize, fontWeight, fontFamily, lineHeight, textTransform, ...otherProps } = props
     const theme = useTheme()
 
     const computedFontSize = useMemo(
@@ -99,6 +100,7 @@ export const BaseText = (props: BaseTextProps) => {
                         textAlign: props.align,
                         fontStyle: props.italic ? "italic" : "normal",
                         textDecorationLine: props.underline ? "underline" : "none",
+                        textTransform,
                         lineHeight:
                             lineHeight ?? (typographyFont ? defaultTypography[typographyFont].lineHeight : undefined),
                     },

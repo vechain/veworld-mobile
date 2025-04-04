@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
-import { BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseSkeleton, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { VET } from "~Constants"
 import { COLORS } from "~Constants/Theme"
@@ -34,12 +34,10 @@ export const BaseTokenCard = ({
 
     return (
         <Animated.View style={[styles.innerRow, { alignItems: alignTokenBalance }]}>
-            <BaseView flexDirection="row">
+            <BaseView flexDirection="row" gap={12}>
                 <TokenImage icon={icon} isVechainToken={isVetToken} iconSize={26} />
-                <BaseSpacer width={12} />
-                <BaseView alignItems="center" justifyContent="center" flexDirection="row">
-                    <BaseText typographyFont="bodyBold">{symbol}</BaseText>
-                    <BaseSpacer width={8} />
+                <BaseView alignItems="center" justifyContent="center" flexDirection="row" gap={4}>
+                    <BaseText typographyFont="bodySemiBold">{symbol}</BaseText>
 
                     <BaseView flexDirection="row">
                         {isLoading ? (
@@ -54,7 +52,7 @@ export const BaseTokenCard = ({
                             </BaseView>
                         ) : (
                             <BaseView flexDirection="row">
-                                <BaseText typographyFont="bodyMedium" color={tokenValueLabelColor}>
+                                <BaseText typographyFont="bodyMedium" color={tokenValueLabelColor} lineHeight={20}>
                                     {isBalanceVisible ? tokenBalance : "•••••"}{" "}
                                 </BaseText>
                             </BaseView>
