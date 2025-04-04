@@ -912,9 +912,30 @@ type RootTranslation = {
 	 */
 	BROWSER_FAVOURITES_TITLE: string
 	/**
+	 * T​h​i​s​ ​a​d​d​r​e​s​s​ ​c​a​n​'​t​ ​b​e​ ​r​e​a​c​h​e​d
+	 */
+	BROWSER_HISTORY_ADDRESS_ERROR: string
+	/**
+	 * C​l​e​a​r
+	 */
+	BROWSER_HISTORY_CLEAR: string
+	/**
+	 * H​i​s​t​o​r​y
+	 */
+	BROWSER_HISTORY_DEFAULT_TITLE: string
+	/**
+	 * N​o​ ​h​i​s​t​o​r​y​ ​t​o​ ​s​h​o​w
+	 */
+	BROWSER_HISTORY_EMPTY: string
+	/**
 	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
 	 */
 	BROWSER_HISTORY_No_RECORDS: string
+	/**
+	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
+	 * @param {number} amount
+	 */
+	BROWSER_HISTORY_RESULTS: RequiredParams<'amount'>
 	/**
 	 * S​e​a​r​c​h
 	 */
@@ -923,27 +944,6 @@ type RootTranslation = {
 	 * B​r​o​w​s​e​r​ ​H​i​s​t​o​r​y
 	 */
 	BROWSER_HISTORY_TITLE: string
-	/**
-	 * H​i​s​t​o​r​y
-	 */
-	BROWSER_HISTORY_DEFAULT_TITLE: string
-	/**
-	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
-	 * @param {number} amount
-	 */
-	BROWSER_HISTORY_RESULTS: RequiredParams<'amount'>
-	/**
-	 * C​l​e​a​r
-	 */
-	BROWSER_HISTORY_CLEAR: string
-	/**
-	 * N​o​ ​h​i​s​t​o​r​y​ ​t​o​ ​s​h​o​w
-	 */
-	BROWSER_HISTORY_EMPTY: string
-	/**
-	 * T​h​i​s​ ​a​d​d​r​e​s​s​ ​c​a​n​'​t​ ​b​e​ ​r​e​a​c​h​e​d
-	 */
-	BROWSER_HISTORY_ADDRESS_ERROR: string
 	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​a​c​c​e​s​ ​t​h​i​s​ ​l​i​n​k​.​ ​M​a​k​e​ ​s​u​r​e​ ​i​t​'​s​ ​c​o​r​r​e​c​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
@@ -956,6 +956,26 @@ type RootTranslation = {
 	 * T​a​b​s
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: string
+	/**
+	 * C​o​p​y​ ​p​a​g​e​ ​l​i​n​k
+	 */
+	BROWSER_COPY_LINK: string
+	/**
+	 * S​h​a​r​e
+	 */
+	BROWSER_SHARE: string
+	/**
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BROWSER_ADD_FAVORITE_DAPPS: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BROWSER_REMOVE_FAVORITE_DAPPS: string
+	/**
+	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BROWSER_COPY_LINK_SUCCESS: string
 	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
@@ -5039,9 +5059,29 @@ Thanks for your patience!
 	 */
 	BROWSER_FAVOURITES_TITLE: () => LocalizedString
 	/**
+	 * This address can't be reached
+	 */
+	BROWSER_HISTORY_ADDRESS_ERROR: () => LocalizedString
+	/**
+	 * Clear
+	 */
+	BROWSER_HISTORY_CLEAR: () => LocalizedString
+	/**
+	 * History
+	 */
+	BROWSER_HISTORY_DEFAULT_TITLE: () => LocalizedString
+	/**
+	 * No history to show
+	 */
+	BROWSER_HISTORY_EMPTY: () => LocalizedString
+	/**
 	 * No History Available
 	 */
 	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
+	/**
+	 * {amount} Results
+	 */
+	BROWSER_HISTORY_RESULTS: (arg: { amount: number }) => LocalizedString
 	/**
 	 * Search
 	 */
@@ -5050,26 +5090,6 @@ Thanks for your patience!
 	 * Browser History
 	 */
 	BROWSER_HISTORY_TITLE: () => LocalizedString
-	/**
-	 * History
-	 */
-	BROWSER_HISTORY_DEFAULT_TITLE: () => LocalizedString
-	/**
-	 * {amount} Results
-	 */
-	BROWSER_HISTORY_RESULTS: (arg: { amount: number }) => LocalizedString
-	/**
-	 * Clear
-	 */
-	BROWSER_HISTORY_CLEAR: () => LocalizedString
-	/**
-	 * No history to show
-	 */
-	BROWSER_HISTORY_EMPTY: () => LocalizedString
-	/**
-	 * This address can't be reached
-	 */
-	BROWSER_HISTORY_ADDRESS_ERROR: () => LocalizedString
 	/**
 	 * There was an error trying to acces this link. Make sure it's correct and try again.
 	 */
@@ -5082,6 +5102,26 @@ Thanks for your patience!
 	 * Tabs
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
+	/**
+	 * Copy page link
+	 */
+	BROWSER_COPY_LINK: () => LocalizedString
+	/**
+	 * Share
+	 */
+	BROWSER_SHARE: () => LocalizedString
+	/**
+	 * Add to Favorite dApps
+	 */
+	BROWSER_ADD_FAVORITE_DAPPS: () => LocalizedString
+	/**
+	 * Remove from Favorite dApps
+	 */
+	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
+	/**
+	 * Link successfully copied to the clipboard
+	 */
+	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
 	/**
 	 * ADD ACCOUNT
 	 */
