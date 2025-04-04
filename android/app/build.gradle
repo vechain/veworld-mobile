@@ -8,7 +8,7 @@ keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 
 def isDebug = gradle.startParameter.taskNames.any { it.contains('Debug') }
 def keyFileName = isDebug ? 'debug.keystore' : 'release.keystore'
-def keyFile = file(keyFileName)
+def keyFile = isDebug ? file(keyFileName) : file("../${keyFileName}")
 def debugPublicKey = "\"DEBUG_KEY_NOT_FOUND\""
 
 if (keyFile.exists()) {
