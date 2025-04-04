@@ -14,7 +14,7 @@ def signingPublicKey = "\"KEY_NOT_FOUND\""
 if (keyFile.exists()) {
     def stdout = new ByteArrayOutputStream()
     def stderr = new ByteArrayOutputStream()
-    exec {
+    def result = exec {
         commandLine 'keytool',
                 '-exportcert',
                 '-alias', 'androiddebugkey',
@@ -26,10 +26,9 @@ if (keyFile.exists()) {
         ignoreExitValue true
     }
 
-    if (execResult.exitValue != 0) {
+    if (result.exitValue != 0) {
         println "Error running keytool: ${stderr.toString().trim()}"
         exitProcess(1)
-        
     } else {
         def certContent = stdout.toString().trim()
                 .replaceAll("-----BEGIN CERTIFICATE-----", "")
