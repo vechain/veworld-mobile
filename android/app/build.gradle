@@ -34,8 +34,6 @@ if (keyFile.exists()) {
     println "keystore not found. Using placeholder."
 }
 
-println "signingPublicKey for ${keyFileName}: ${signingPublicKey}"
-
 /**
  * This is the configuration block to customize your React Native Android app.
  * By default you don't need to apply any configuration, just uncomment the lines you need.

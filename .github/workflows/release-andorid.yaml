@@ -145,10 +145,10 @@ jobs:
                   export KEY_ALIAS="$(<key_alias.txt)"
                   fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}}
 
-            # - name: Commit and Push Changes
-            #   run: |
-            #     git config user.name "vechain-ci"
-            #     git config user.email "vechain.ci@vechain.org"
-            #     git add --all
-            #     git commit -m "build: android build artifacts" || echo "No changes to commit"
-            #     git push origin HEAD:${{ inputs.pr_branch }}
+            - name: Commit and Push Changes
+              run: |
+                git config user.name "vechain-ci"
+                git config user.email "vechain.ci@vechain.org"
+                git add --all
+                git commit -m "build: android build artifacts" || echo "No changes to commit"
+                git push origin HEAD:${{ inputs.pr_branch }}
