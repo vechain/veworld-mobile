@@ -51,5 +51,11 @@ export const VeBetterDAOCarousel = () => {
         })
     }, [featureFlags.discoveryFeature.showStellaPayBanner, slides])
 
-    return <BaseCarousel data={activeSlides} paginationAlignment="flex-start" />
+    return (
+        <BaseCarousel
+            data={activeSlides}
+            paginationAlignment="flex-start"
+            autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
+        />
+    )
 }
