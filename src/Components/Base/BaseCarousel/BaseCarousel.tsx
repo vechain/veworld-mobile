@@ -29,7 +29,7 @@ type Props = {
 export const BaseCarousel = ({
     data,
     w = SCREEN_WIDTH,
-    h = 90,
+    h = 100,
     autoPlay = true,
     autoPlayInterval = 10000,
     loop = true,
