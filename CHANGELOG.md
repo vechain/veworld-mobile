@@ -1,5 +1,12 @@
 
 
+## 2.1.2 (2025-04-07)
+
+
+### Bug Fixes
+
+* Banner image size and in app slides dimensions  ([#2849](https://github.com/vechain/veworld-mobile/issues/2849)) ([f1857ec](https://github.com/vechain/veworld-mobile/commit/f1857ec496a0f86643ec82298b944eb6ea510d57))
+
 ## 2.1.1 (2025-04-02)
 
 ## 2.0.10 (2025-03-31)
