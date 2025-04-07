@@ -23,7 +23,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
     testID,
     isExternalLink,
     w = 360,
-    h = 120,
+    h = 128,
 }) => {
     const { styles } = useThemedStyles(baseStyles(w, h))
     const nav = useNavigation()
@@ -41,7 +41,11 @@ export const BaseCarouselItem: React.FC<Props> = ({
     return (
         <Animated.View testID={testID} style={[style, styles.container]}>
             <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
-                <Animated.Image source={source} resizeMode="stretch" style={[imageStyle, styles.image as ImageStyle]} />
+                <Animated.Image
+                    source={source}
+                    resizeMode={"contain"}
+                    style={[imageStyle, styles.image as ImageStyle]}
+                />
             </TouchableOpacity>
         </Animated.View>
     )
