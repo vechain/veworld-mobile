@@ -22,7 +22,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
     imageStyle,
     testID,
     isExternalLink,
-    w = 360,
+    w = 340,
     h = 128,
 }) => {
     const { styles } = useThemedStyles(baseStyles(w, h))

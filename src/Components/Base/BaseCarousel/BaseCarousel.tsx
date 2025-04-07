@@ -2,11 +2,12 @@ import React from "react"
 import { BaseView } from "../BaseView"
 import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
 import { useSharedValue } from "react-native-reanimated"
-import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
+import { ColorThemeType, isSmallScreen, SCREEN_WIDTH } from "~Constants"
 import { ImageSourcePropType, StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { DotStyle } from "react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom/PaginationItem"
 import { BaseCarouselItem } from "./BaseCarouselItem"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type CarouselSlideItem = {
     title?: string
@@ -50,6 +51,12 @@ export const BaseCarousel = ({
         })
     }
 
+    const calculateParallaxOffset = () => {
+        if (isAndroid()) return 90
+        if (isSmallScreen) return 25
+        return 45
+    }
+
     return (
         <BaseView flex={1} style={[styles.container]}>
             <Carousel
@@ -58,12 +65,16 @@ export const BaseCarousel = ({
                 autoPlay={autoPlay}
                 loop={loop}
                 width={w}
-                style={styles.carousel}
                 height={h}
+                style={styles.carousel}
                 pagingEnabled
+                containerStyle={styles.carouselContainer}
                 snapEnabled={true}
                 mode="parallax"
-                modeConfig={{ parallaxScrollingOffset: 25, parallaxScrollingScale: 1 }}
+                modeConfig={{
+                    parallaxScrollingScale: 1,
+                    parallaxScrollingOffset: calculateParallaxOffset(),
+                }}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
                 renderItem={({ item }) => {
@@ -95,7 +106,10 @@ const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") =
     StyleSheet.create({
         container: {
             gap: 8,
+        },
+        carouselContainer: {
             paddingHorizontal: 20,
+            width: "100%",
         },
         carousel: {
             width: SCREEN_WIDTH,
@@ -103,6 +117,7 @@ const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") =
         paginatioContainer: {
             gap: 6,
             alignSelf: paginationAlignment,
+            paddingHorizontal: 20,
         },
         dots: {
             backgroundColor: theme.colors.defaultCarousel.dotBg,
