@@ -28,7 +28,7 @@ type Props = {
 
 export const BaseCarousel = ({
     data,
-    w = SCREEN_WIDTH,
+    w = 360,
     h = 100,
     autoPlay = true,
     autoPlayInterval = 10000,
@@ -58,12 +58,16 @@ export const BaseCarousel = ({
                 autoPlay={autoPlay}
                 loop={loop}
                 width={w}
-                style={styles.carousel}
                 height={h}
+                style={styles.carousel}
                 pagingEnabled
+                containerStyle={styles.carouselContainer}
                 snapEnabled={true}
                 mode="parallax"
-                modeConfig={{ parallaxScrollingOffset: 25, parallaxScrollingScale: 1 }}
+                modeConfig={{
+                    parallaxScrollingScale: 1,
+                    parallaxScrollingOffset: -10,
+                }}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
                 renderItem={({ item }) => {
@@ -95,7 +99,10 @@ const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") =
     StyleSheet.create({
         container: {
             gap: 8,
+        },
+        carouselContainer: {
             paddingHorizontal: 20,
+            width: "100%",
         },
         carousel: {
             width: SCREEN_WIDTH,
@@ -103,6 +110,7 @@ const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") =
         paginatioContainer: {
             gap: 6,
             alignSelf: paginationAlignment,
+            paddingHorizontal: 20,
         },
         dots: {
             backgroundColor: theme.colors.defaultCarousel.dotBg,
