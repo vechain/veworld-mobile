@@ -48,7 +48,7 @@ export const VeBetterDAOCarousel = () => {
         <BaseCarousel
             data={activeSlides}
             paginationAlignment="flex-start"
-            autoPlay={activeSlides.length > 2 ? true : false}
+            autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
         />
     )
 }
