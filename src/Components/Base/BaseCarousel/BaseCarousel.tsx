@@ -14,6 +14,8 @@ export type CarouselSlideItem = {
     href?: string
     source: ImageSourcePropType
     isExternalLink?: boolean
+    w?: number
+    h?: number
 }
 
 type Props = {
@@ -29,7 +31,7 @@ type Props = {
 export const BaseCarousel = ({
     data,
     w = SCREEN_WIDTH,
-    h = 90,
+    h = 100,
     autoPlay = true,
     autoPlayInterval = 10000,
     loop = true,
@@ -73,6 +75,8 @@ export const BaseCarousel = ({
                             source={item.source}
                             href={item.href}
                             isExternalLink={item.isExternalLink}
+                            w={item.w}
+                            h={item.h}
                         />
                     )
                 }}
