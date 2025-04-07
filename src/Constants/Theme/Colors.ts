@@ -394,7 +394,7 @@ const light: Colors = {
     },
     defaultCarousel: {
         dotBg: COLORS.GREY_300,
-        activeDotBg: COLORS.GREY_500,
+        activeDotBg: COLORS.PRIMARY_800,
     },
 }
 
