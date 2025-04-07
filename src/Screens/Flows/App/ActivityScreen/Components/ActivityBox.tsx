@@ -38,7 +38,7 @@ type ActivityBoxProps = {
     title: string
     description?: string | React.ReactNode
     rightAmount?: string
-    rigthAmountDescription?: string | React.ReactNode
+    rightAmountDescription?: string | React.ReactNode
     nftImage?: string
     activityStatus?: ActivityStatus
     iconBackgroungColor?: string
@@ -55,7 +55,7 @@ const BaseActivityBox = ({
     time,
     title,
     rightAmount,
-    rigthAmountDescription,
+    rightAmountDescription,
     nftImage,
     iconBackgroungColor = COLORS.GREY_100,
     activityStatus,
@@ -67,11 +67,11 @@ const BaseActivityBox = ({
     const showDescription = !!description
     const showActivityStatus = !!activityStatus && activityStatus !== ActivityStatus.SUCCESS
     const showRightAmount = !!rightAmount
-    const showRigthAmountDescription = !!rigthAmountDescription
+    const showrightAmountDescription = !!rightAmountDescription
     const showNftImage = !!nftImage
 
     const renderRightElement = () => {
-        if (!nftImage && !rightAmount && !rigthAmountDescription) {
+        if (!nftImage && !rightAmount && !rightAmountDescription) {
             return null
         }
 
@@ -86,16 +86,16 @@ const BaseActivityBox = ({
                         {rightAmount}
                     </BaseText>
                 )}
-                {showRigthAmountDescription &&
-                    (typeof rigthAmountDescription === "string" ? (
+                {showrightAmountDescription &&
+                    (typeof rightAmountDescription === "string" ? (
                         <BaseText
                             typographyFont="smallCaptionMedium"
                             numberOfLines={1}
                             color={theme.colors.activityCard.title}>
-                            {rigthAmountDescription}
+                            {rightAmountDescription}
                         </BaseText>
                     ) : (
-                        rigthAmountDescription
+                        rightAmountDescription
                     ))}
             </BaseView>
         )
@@ -109,7 +109,7 @@ const BaseActivityBox = ({
 
             <BaseSpacer width={16} />
 
-            <BaseView style={styles.textContainer}>
+            <BaseView style={styles.textContainer} flexDirection="column">
                 <BaseText typographyFont="captionRegular" color={theme.colors.activityCard.time}>
                     {time}
                 </BaseText>
@@ -126,16 +126,20 @@ const BaseActivityBox = ({
                     {showActivityStatus && <ActivityStatusIndicator activityStatus={ActivityStatus.REVERTED} />}
                 </BaseView>
                 <BaseSpacer height={2} />
-                {showDescription && (
-                    <BaseText
-                        typographyFont={invertedStyles ? "bodySemiBold" : "body"}
-                        numberOfLines={1}
-                        color={
-                            invertedStyles ? theme.colors.activityCard.title : theme.colors.activityCard.subtitleBold
-                        }>
-                        {description}
-                    </BaseText>
-                )}
+                {showDescription &&
+                    (typeof description === "string" ? (
+                        <BaseText
+                            typographyFont={invertedStyles ? "bodySemiBold" : "body"}
+                            color={
+                                invertedStyles
+                                    ? theme.colors.activityCard.title
+                                    : theme.colors.activityCard.subtitleBold
+                            }>
+                            {description}
+                        </BaseText>
+                    ) : (
+                        description
+                    ))}
             </BaseView>
 
             <BaseSpacer width={8} />
@@ -199,7 +203,7 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
     const type = direction === DIRECTIONS.UP ? "sent" : "received"
 
     const { name, address } = useVns({
-        address: DIRECTIONS.UP ? to?.[0] ?? "" : from,
+        address: direction === DIRECTIONS.UP ? to?.[0] ?? "" : from,
     })
 
     const addressOrUsername = useMemo(() => {
@@ -236,40 +240,50 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
                 return {
                     title: LL.TOKEN_TRANSFER_RECEIVED(),
                     description: (
-                        <>
+                        <BaseView flexDirection="row" gap={4}>
                             <BaseText
                                 typographyFont="body"
                                 color={theme.colors.activityCard.subtitleLight}
-                                textTransform="lowercase">
-                                {LL.FROM()}{" "}
+                                textTransform="lowercase"
+                                flexShrink={0}>
+                                {LL.FROM()}
                             </BaseText>
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.activityCard.subtitleBold}>
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                color={theme.colors.activityCard.subtitleBold}
+                                numberOfLines={1}
+                                flex={1}>
                                 {addressOrUsername}
                             </BaseText>
-                        </>
+                        </BaseView>
                     ),
                     rightAmount: `${DIRECTIONS.UP} ${amountToDisplay}`,
-                    rigthAmountDescription: token?.symbol ?? "",
+                    rightAmountDescription: token?.symbol ?? "",
                     icon: "icon-arrow-down",
                 }
             case "sent":
                 return {
                     title: LL.TOKEN_TRANSFER_SENT(),
                     description: (
-                        <>
+                        <BaseView flexDirection="row" gap={4}>
                             <BaseText
                                 typographyFont="body"
                                 color={theme.colors.activityCard.subtitleLight}
-                                textTransform="lowercase">
-                                {LL.TO()}{" "}
+                                textTransform="lowercase"
+                                flexShrink={0}>
+                                {LL.TO()}
                             </BaseText>
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.activityCard.subtitleBold}>
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                color={theme.colors.activityCard.subtitleBold}
+                                numberOfLines={1}
+                                flex={1}>
                                 {addressOrUsername}
                             </BaseText>
-                        </>
+                        </BaseView>
                     ),
                     rightAmount: `${DIRECTIONS.DOWN} ${amountToDisplay}`,
-                    rigthAmountDescription: token?.symbol ?? "",
+                    rightAmountDescription: token?.symbol ?? "",
                     icon: "icon-arrow-up",
                 }
         }
@@ -308,7 +322,7 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
         .toTokenFormat_string(2)
 
     const rightAmount = `${DIRECTIONS.UP} ${receivedAmount} ${outputToken?.symbol ?? ""}`
-    const rigthAmountDescription = `${DIRECTIONS.DOWN} ${paidAmount} ${inputToken?.symbol ?? ""}`
+    const rightAmountDescription = `${DIRECTIONS.DOWN} ${paidAmount} ${inputToken?.symbol ?? ""}`
 
     const onSwapPressHandler = () => {
         onPress(activity, undefined, true)
@@ -320,9 +334,9 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
             time={time}
             title={title}
             rightAmount={rightAmount}
-            rigthAmountDescription={
+            rightAmountDescription={
                 <BaseText typographyFont="smallCaptionMedium" numberOfLines={1} color={theme.colors.activityCard.swap}>
-                    {rigthAmountDescription}
+                    {rightAmountDescription}
                 </BaseText>
             }
             onPress={onSwapPressHandler}
@@ -360,17 +374,22 @@ const DAppTransaction = ({ activity, onPress }: DAppTransactionProps) => {
             time={time}
             title={title}
             description={
-                <>
+                <BaseView flexDirection="row" gap={4}>
                     <BaseText
                         typographyFont="body"
                         color={theme.colors.activityCard.subtitleLight}
-                        textTransform="lowercase">
-                        {LL.TO()}{" "}
+                        textTransform="lowercase"
+                        flexShrink={0}>
+                        {LL.TO()}
                     </BaseText>
-                    <BaseText typographyFont="bodyMedium" color={theme.colors.activityCard.subtitleBold}>
+                    <BaseText
+                        typographyFont="bodyMedium"
+                        color={theme.colors.activityCard.subtitleBold}
+                        numberOfLines={1}
+                        flex={1}>
                         {description}
                     </BaseText>
-                </>
+                </BaseView>
             }
             onPress={onPressHandler}
             activityStatus={activity.status}
@@ -501,7 +520,7 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) =>
             description={dapp?.name}
             onPress={onPressHandler}
             rightAmount={`${DIRECTIONS.UP} ${rewardValue}`}
-            rigthAmountDescription={B3TR.symbol}
+            rightAmountDescription={B3TR.symbol}
             invertedStyles
         />
     )
@@ -578,7 +597,7 @@ const B3trClaimReward = ({ activity, onPress }: B3trClaimRewardProps) => {
             title={LL.B3TR_CLAIM_REWARD()}
             onPress={onPressHandler}
             rightAmount={`${DIRECTIONS.UP} ${rewardValue}`}
-            rigthAmountDescription={B3TR.symbol}
+            rightAmountDescription={B3TR.symbol}
         />
     )
 }
@@ -625,7 +644,7 @@ const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
         .toTokenFormat_string(2)
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${VOT3.symbol}`
-    const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${B3TR.symbol}`
+    const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${B3TR.symbol}`
 
     const onSwapPressHandler = () => {
         onPress(activity, undefined, true)
@@ -638,9 +657,9 @@ const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
             time={time}
             title={title}
             rightAmount={rightAmount}
-            rigthAmountDescription={
+            rightAmountDescription={
                 <BaseText typographyFont="smallCaptionMedium" numberOfLines={1} color={theme.colors.activityCard.swap}>
-                    {rigthAmountDescription}
+                    {rightAmountDescription}
                 </BaseText>
             }
             onPress={onSwapPressHandler}
@@ -665,7 +684,7 @@ const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
         .toTokenFormat_string(2)
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${B3TR.symbol}`
-    const rigthAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${VOT3.symbol}`
+    const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${VOT3.symbol}`
 
     const onSwapPressHandler = () => {
         onPress(activity, undefined, true)
@@ -678,9 +697,9 @@ const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
             time={time}
             title={title}
             rightAmount={rightAmount}
-            rigthAmountDescription={
+            rightAmountDescription={
                 <BaseText typographyFont="smallCaptionMedium" numberOfLines={1} color={theme.colors.activityCard.swap}>
-                    {rigthAmountDescription}
+                    {rightAmountDescription}
                 </BaseText>
             }
             onPress={onSwapPressHandler}
