@@ -3,8 +3,7 @@ import {
     VeBetterDaoLightBanner,
     VeBetterDaoDarkBanner,
     VeBetterDaoStellaBanner,
-    VeBetterDaoMakeDappDarkBanner,
-    VeBetterDaoMakeDappLightBanner,
+    VeBetterDaoMakeDappBanner,
 } from "~Assets/Banners"
 import { BaseCarousel, CarouselSlideItem } from "~Components"
 import { useTheme } from "~Hooks"
@@ -26,10 +25,9 @@ export const VeBetterDAOCarousel = () => {
                 source: theme.isDark ? VeBetterDaoDarkBanner : VeBetterDaoLightBanner,
                 href: DAO_URL,
             },
-
             {
                 testID: "VeBetterDao_make_app_banner",
-                source: theme.isDark ? VeBetterDaoMakeDappDarkBanner : VeBetterDaoMakeDappLightBanner,
+                source: VeBetterDaoMakeDappBanner,
                 href: DAO_MAKE_APP_URL,
                 isExternalLink: true,
             },
@@ -46,5 +44,11 @@ export const VeBetterDAOCarousel = () => {
         })
     }, [featureFlags.discoveryFeature.showStellaPayBanner, slides])
 
-    return <BaseCarousel data={activeSlides} paginationAlignment="flex-start" />
+    return (
+        <BaseCarousel
+            data={activeSlides}
+            paginationAlignment="flex-start"
+            autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
+        />
+    )
 }
