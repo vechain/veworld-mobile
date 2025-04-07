@@ -2,12 +2,11 @@ import React from "react"
 import { BaseView } from "../BaseView"
 import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
 import { useSharedValue } from "react-native-reanimated"
-import { ColorThemeType, isSmallScreen, SCREEN_WIDTH } from "~Constants"
+import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import { ImageSourcePropType, StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { DotStyle } from "react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom/PaginationItem"
 import { BaseCarouselItem } from "./BaseCarouselItem"
-import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type CarouselSlideItem = {
     title?: string
@@ -29,7 +28,7 @@ type Props = {
 
 export const BaseCarousel = ({
     data,
-    w = SCREEN_WIDTH,
+    w = 360,
     h = 100,
     autoPlay = true,
     autoPlayInterval = 10000,
@@ -51,12 +50,6 @@ export const BaseCarousel = ({
         })
     }
 
-    const calculateParallaxOffset = () => {
-        if (isAndroid()) return 90
-        if (isSmallScreen) return 25
-        return 45
-    }
-
     return (
         <BaseView flex={1} style={[styles.container]}>
             <Carousel
@@ -73,7 +66,7 @@ export const BaseCarousel = ({
                 mode="parallax"
                 modeConfig={{
                     parallaxScrollingScale: 1,
-                    parallaxScrollingOffset: calculateParallaxOffset(),
+                    parallaxScrollingOffset: -10,
                 }}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
