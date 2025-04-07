@@ -31,7 +31,7 @@ export const BaseCarousel = ({
     w = SCREEN_WIDTH,
     h = 90,
     autoPlay = true,
-    autoPlayInterval = 5000,
+    autoPlayInterval = 10000,
     loop = true,
     paginationAlignment = "center",
 }: Props) => {
@@ -63,7 +63,7 @@ export const BaseCarousel = ({
                 pagingEnabled
                 snapEnabled={true}
                 mode="parallax"
-                modeConfig={{ parallaxScrollingOffset: 30, parallaxScrollingScale: 1 }}
+                modeConfig={{ parallaxScrollingOffset: 25, parallaxScrollingScale: 1 }}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
                 renderItem={({ item }) => {
