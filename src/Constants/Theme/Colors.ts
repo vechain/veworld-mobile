@@ -150,6 +150,15 @@ export type Colors = {
         dotBg: string
         activeDotBg: string
     }
+    searchIcon: {
+        default: string
+        active: string
+        disabled: string
+    }
+    emptyStateIcon: {
+        background: string
+        foreground: string
+    }
     radioButton: {
         textColor: string
         activeTextColor: string
@@ -405,6 +414,15 @@ const light: Colors = {
         dotBg: COLORS.GREY_300,
         activeDotBg: COLORS.PRIMARY_800,
     },
+    searchIcon: {
+        default: COLORS.GREY_500,
+        active: COLORS.GREY_600,
+        disabled: COLORS.GREY_600,
+    },
+    emptyStateIcon: {
+        background: COLORS.GREY_50,
+        foreground: COLORS.GREY_400,
+    },
     radioButton: {
         textColor: COLORS.GREY_600,
         activeTextColor: COLORS.PRIMARY_800,
@@ -576,6 +594,15 @@ const dark: Colors = {
         activeBorderColor: COLORS.WHITE,
         backgroudColor: COLORS.PURPLE_DISABLED,
         disabledBackgroudColor: COLORS.PURPLE_DISABLED,
+    },
+    searchIcon: {
+        default: COLORS.GREY_300,
+        active: COLORS.GREY_300,
+        disabled: COLORS.GREY_500,
+    },
+    emptyStateIcon: {
+        background: COLORS.PURPLE,
+        foreground: COLORS.GREY_200,
     },
 }
 

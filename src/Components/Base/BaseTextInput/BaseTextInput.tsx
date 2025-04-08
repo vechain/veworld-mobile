@@ -1,12 +1,12 @@
 import React, { forwardRef, memo, useMemo } from "react"
 import { KeyboardTypeOptions, StyleProp, StyleSheet, TextInputProps, ViewStyle } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { TextInput } from "react-native-gesture-handler"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { typography } from "~Constants/Theme"
-import { BaseIcon, BaseText, BaseView } from "~Components"
-import { TextInput } from "react-native-gesture-handler"
-import { PlatformUtils } from "~Utils"
+import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
+import { PlatformUtils } from "~Utils"
 
 const { defaults: defaultTypography } = typography
 
@@ -18,6 +18,20 @@ export type BaseTextInputProps = {
     testID?: string
     rightIcon?: IconKey | React.ReactElement
     rightIconTestID?: string
+    rightIconStyle?: StyleProp<ViewStyle>
+    rightIconSize?: number
+    /**
+     * Use adornment styles for the right icon. (Adds some default styles to the wrapper container)
+     */
+    rightIconAdornment?: boolean
+    leftIcon?: IconKey | React.ReactElement
+    leftIconTestID?: string
+    leftIconStyle?: StyleProp<ViewStyle>
+    leftIconSize?: number
+    /**
+     * Use adornment styles for the left icon. (Adds some default styles to the wrapper container)
+     */
+    leftIconAdornment?: boolean
     onIconPress?: () => void
     containerStyle?: StyleProp<ViewStyle>
     inputContainerStyle?: StyleProp<ViewStyle>
@@ -38,6 +52,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             testID,
             rightIcon,
             rightIconTestID,
+            rightIconStyle,
             onIconPress,
             setValue,
             containerStyle,
@@ -46,6 +61,13 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             style,
             handleFocus,
             handleBlur,
+            leftIcon,
+            leftIconTestID,
+            leftIconStyle,
+            leftIconSize = 24,
+            rightIconSize = 24,
+            rightIconAdornment = true,
+            leftIconAdornment = true,
             ...otherProps
         },
         ref,
@@ -73,10 +95,10 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
         }, [disabled, otherProps.editable, style, styles, theme])
 
         const computedRightAdornmentStyles = useMemo(() => {
-            const _styles = [styles.rightIconContainer]
+            const _styles = rightIconAdornment ? [styles.rightIconContainer] : []
             if (disabled) return [..._styles, styles.disabledInput]
             return _styles
-        }, [disabled, styles])
+        }, [disabled, rightIconAdornment, styles.disabledInput, styles.rightIconContainer])
 
         const renderRightIcon = useMemo(() => {
             if (!rightIcon) return null
@@ -85,23 +107,64 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                     haptics="Light"
                     action={onIconPress}
                     name={rightIcon}
-                    size={24}
+                    size={rightIconSize}
                     color={theme.colors.text}
-                    style={styles.rightIconStyle}
+                    style={[styles.rightIconStyle, rightIconStyle]}
                     testID={rightIconTestID}
                 />
             ) : (
                 <BaseView style={computedRightAdornmentStyles}>
-                    <BaseView style={[styles.rightIconStyle, styles.rightElementStyle]}>{rightIcon}</BaseView>
+                    <BaseView style={[styles.rightIconStyle, styles.rightElementStyle, rightIconStyle]}>
+                        {rightIcon}
+                    </BaseView>
                 </BaseView>
             )
         }, [
             computedRightAdornmentStyles,
             onIconPress,
             rightIcon,
+            rightIconSize,
+            rightIconStyle,
             rightIconTestID,
             styles.rightElementStyle,
             styles.rightIconStyle,
+            theme.colors.text,
+        ])
+
+        const computedLeftAdornmentStyles = useMemo(() => {
+            const _styles = leftIconAdornment ? [styles.leftIconContainer] : []
+            if (disabled) return [..._styles, styles.disabledInput]
+            return _styles
+        }, [disabled, leftIconAdornment, styles.disabledInput, styles.leftIconContainer])
+
+        const renderLeftIcon = useMemo(() => {
+            if (!leftIcon) return null
+            return typeof leftIcon === "string" ? (
+                <BaseIcon
+                    haptics="Light"
+                    action={onIconPress}
+                    name={leftIcon}
+                    size={leftIconSize}
+                    color={theme.colors.text}
+                    style={[styles.leftIconStyle, leftIconStyle]}
+                    testID={leftIconTestID}
+                />
+            ) : (
+                <BaseView style={computedLeftAdornmentStyles}>
+                    <BaseView style={[styles.leftIconStyle, styles.leftElementStyle, leftIconStyle]}>
+                        {leftIcon}
+                    </BaseView>
+                </BaseView>
+            )
+        }, [
+            computedLeftAdornmentStyles,
+            leftIcon,
+            leftIconSize,
+            leftIconStyle,
+            leftIconTestID,
+            onIconPress,
+            styles.leftElementStyle,
+            styles.leftIconStyle,
             theme.colors.text,
         ])
 
@@ -127,6 +190,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                     </BaseText>
                 )}
                 <BaseView style={[computedInputContainerStyles]}>
+                    {renderLeftIcon}
                     <TextInput
                         ref={ref}
                         style={[computedInputStyles]}
@@ -193,6 +257,11 @@ const baseStyles = (isError: boolean) => (theme: ColorThemeType) =>
         },
         rightIconStyle: { justifyContent: "center", paddingHorizontal: 12 },
         rightElementStyle: { flex: 1 },
+        leftIconContainer: {
+            maxWidth: 150,
+        },
+        leftIconStyle: { justifyContent: "center", paddingRight: 12, paddingLeft: 16 },
+        leftElementStyle: { flex: 1 },
         disabledInput: {
             backgroundColor: theme.colors.disabledInput,
         },

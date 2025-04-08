@@ -1,4 +1,4 @@
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { validateIpfsUri } from "~Utils/IPFSUtils/IPFSUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
@@ -112,7 +112,8 @@ const convertUriToUrl = (uri: string) => {
 
 async function isValidBrowserUrl(url: string): Promise<boolean> {
     let navInput: string | undefined
-    const regex = new RegExp("^www\\.[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$")
+    const regexWww = new RegExp("^www\\.[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$")
+    const regexWithoutWww = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/
 
     try {
         if (isHttps(url)) {
@@ -123,7 +124,11 @@ async function isValidBrowserUrl(url: string): Promise<boolean> {
             navInput = `https://${url.slice(7)}`
         }
 
-        if (regex.test(url)) {
+        if (regexWww.test(url)) {
+            navInput = `https://${url}`
+        }
+
+        if (regexWithoutWww.test(url)) {
             navInput = `https://${url}`
         }
 
@@ -134,6 +139,9 @@ async function isValidBrowserUrl(url: string): Promise<boolean> {
             return false
         }
     } catch (e) {
+        if (e instanceof AxiosError && e.response && e.response?.status !== 404) {
+            return true
+        }
         return false
     }
 }

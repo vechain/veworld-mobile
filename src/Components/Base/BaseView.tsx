@@ -5,8 +5,14 @@ import { AlignItems, AlignSelf, ColorThemeType, FlexDirection, FlexWrap, Justify
 import { useThemedStyles } from "~Hooks"
 
 export type BaseViewProps = {
-    w?: number // NOTE: this is a number in percentage
-    h?: number // NOTE: this is a number in percentage
+    /**
+     * Width percentage
+     */
+    w?: number
+    /**
+     * Height percentage
+     */
+    h?: number
     bg?: string
     flexDirection?: FlexDirection
     justifyContent?: JustifyContent

@@ -30,8 +30,8 @@ export const useVisitedUrls = () => {
     )
 
     const removeVisitedUrl = useCallback(
-        (dapp: DiscoveryDApp) => {
-            dispatch(deleteVisitedUrl(dapp.href))
+        (href: string) => {
+            dispatch(deleteVisitedUrl(href))
         },
         [dispatch],
     )
