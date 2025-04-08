@@ -4,6 +4,7 @@ import { TouchableOpacity } from "react-native-gesture-handler"
 import { useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import { SCREEN_WIDTH } from "~Constants"
 type Props = {
     w?: number
     h?: number
@@ -22,7 +23,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
     imageStyle,
     testID,
     isExternalLink,
-    w = 360,
+    w = SCREEN_WIDTH - 40,
     h = 128,
 }) => {
     const { styles } = useThemedStyles(baseStyles(w, h))
