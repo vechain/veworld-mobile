@@ -29,6 +29,7 @@ const initialState: FeatureFlags = {
         },
     },
     discoveryFeature: {
+        bannersAutoplay: true,
         showStellaPayBanner: false,
     },
 }

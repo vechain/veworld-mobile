@@ -52,6 +52,9 @@ export const DiscoverySlice = createSlice({
                 state.favorites = state.favorites.filter(dapp => !URIUtils.compareURLs(dapp.href, href))
             }
         },
+        reorderBookmarks: (state, action: PayloadAction<DiscoveryDApp[]>) => {
+            state.favorites = action.payload
+        },
         setFeaturedDApps: (state, action: PayloadAction<DiscoveryDApp[]>) => {
             state.featured = action.payload
         },
@@ -104,6 +107,7 @@ export const DiscoverySlice = createSlice({
 export const {
     addBookmark,
     removeBookmark,
+    reorderBookmarks,
     resetDiscoveryState,
     addNavigationToDApp,
     setDiscoverySectionOpened,

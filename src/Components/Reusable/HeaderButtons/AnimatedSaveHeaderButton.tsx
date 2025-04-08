@@ -65,6 +65,7 @@ export const AnimatedSaveHeaderButton = ({ action, testID = "Reorder-HeaderIcon"
     return (
         <AnimatedHeaderButton
             testID={testID}
+            disabled={hasBeenClicked.value === 1}
             action={handlePress}
             animatedStyles={[containerAnimatedStyles, styles.buttonContainer]}>
             <Animated.Text style={[animatedStyles, styles.buttonLabel]}>{buttonText}</Animated.Text>

@@ -22,6 +22,7 @@ export type BaseViewProps = {
     flexWrap?: FlexWrap
     flex?: number
     flexGrow?: number
+    flexShrink?: number
     m?: number
     ml?: number
     mr?: number
@@ -49,6 +50,7 @@ export const BaseView = memo(
         alignItems,
         flexWrap,
         flexGrow,
+        flexShrink,
         alignSelf,
         overflow,
         bg,
@@ -88,6 +90,7 @@ export const BaseView = memo(
             baseStyles({
                 flex,
                 flexGrow,
+                flexShrink,
                 alignSelf,
                 overflow,
                 flexDirection,
@@ -123,6 +126,7 @@ export const BaseView = memo(
 type BaseStyles = {
     flex: number
     flexGrow?: number
+    flexShrink?: number
     flexDirection: FlexDirection
     justifyContent: JustifyContent
     alignItems: AlignItems
@@ -159,6 +163,7 @@ const baseStyles = (props: BaseStyles) => (theme: ColorThemeType) =>
             justifyContent: props.justifyContent,
             alignItems: props.alignItems,
             flexGrow: props.flexGrow,
+            flexShrink: props.flexShrink,
             alignSelf: props.alignSelf,
             overflow: props.overflow,
             backgroundColor: props.bg || theme.colors.transparent,

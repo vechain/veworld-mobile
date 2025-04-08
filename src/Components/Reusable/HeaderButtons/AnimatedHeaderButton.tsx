@@ -7,15 +7,16 @@ import { useTheme } from "~Hooks"
 type Props = {
     children: ReactNode
     testID?: string
+    disabled?: boolean
     animatedStyles?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
     action: () => void
 }
 
-export const AnimatedHeaderButton = ({ children, testID, animatedStyles, action }: Props) => {
+export const AnimatedHeaderButton = ({ children, testID, animatedStyles, action, disabled }: Props) => {
     const theme = useTheme()
 
     return (
-        <TouchableOpacity testID={testID} onPress={action} activeOpacity={0.7}>
+        <TouchableOpacity testID={testID} onPress={action} activeOpacity={0.7} disabled={disabled}>
             <BaseView flexDirection="row">
                 <Animated.View
                     style={[

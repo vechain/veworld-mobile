@@ -27,6 +27,7 @@ export type FeatureFlags = {
         }
     }
     discoveryFeature: {
+        bannersAutoplay: boolean
         showStellaPayBanner: boolean
     }
 }

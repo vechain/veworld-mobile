@@ -3,10 +3,8 @@ import {
     VeBetterDaoLightBanner,
     VeBetterDaoDarkBanner,
     VeBetterDaoStellaBanner,
-    VeBetterDaoVoteDarkBanner,
-    VeBetterDaoVoteLightBanner,
-    VeBetterDaoMakeDappDarkBanner,
-    VeBetterDaoMakeDappLightBanner,
+    VeBetterDaoVoteBanner,
+    VeBetterDaoMakeDappBanner,
 } from "~Assets/Banners"
 import { BaseCarousel, CarouselSlideItem, useFeatureFlags } from "~Components"
 import { useCurrentAllocationsRoundId, useTheme } from "~Hooks"
@@ -31,12 +29,12 @@ export const VeBetterDAOCarousel = () => {
             },
             {
                 testID: "VeBetterDao_vote_banner",
-                source: theme.isDark ? VeBetterDaoVoteDarkBanner : VeBetterDaoVoteLightBanner,
+                source: VeBetterDaoVoteBanner,
                 href: `${DAO_VOTE_URL}${data ?? ""}`,
             },
             {
                 testID: "VeBetterDao_make_app_banner",
-                source: theme.isDark ? VeBetterDaoMakeDappDarkBanner : VeBetterDaoMakeDappLightBanner,
+                source: VeBetterDaoMakeDappBanner,
                 href: DAO_MAKE_APP_URL,
                 isExternalLink: true,
             },
@@ -53,5 +51,11 @@ export const VeBetterDAOCarousel = () => {
         })
     }, [featureFlags.discoveryFeature.showStellaPayBanner, slides])
 
-    return <BaseCarousel data={activeSlides} paginationAlignment="flex-start" />
+    return (
+        <BaseCarousel
+            data={activeSlides}
+            paginationAlignment="flex-start"
+            autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
+        />
+    )
 }

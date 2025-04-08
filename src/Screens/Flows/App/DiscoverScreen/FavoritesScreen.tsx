@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
     AnimatedSaveHeaderButton,
@@ -11,9 +11,8 @@ import {
 } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
-import { selectBookmarkedDapps, useAppSelector } from "~Storage/Redux"
+import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { groupFavoritesByBaseUrl } from "./utils"
 import {
     NestableScrollContainer,
     NestableDraggableFlatList,
@@ -30,12 +29,14 @@ export const FavouritesScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { onDAppPress } = useDAppActions()
+    const dispatch = useAppDispatch()
 
     const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
 
-    const renderSeparator = useCallback(() => <BaseSpacer height={16} />, [])
+    const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
+
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
     const onMorePress = useCallback(
@@ -46,24 +47,30 @@ export const FavouritesScreen = () => {
         [onOpenDAppOptions],
     )
 
-    const dappToShow = useMemo(() => groupFavoritesByBaseUrl(bookmarkedDApps), [bookmarkedDApps])
-
-    const renderItem: RenderItem<DiscoveryDApp[]> = useCallback(
+    const renderItem: RenderItem<DiscoveryDApp> = useCallback(
         ({ item, isActive, drag }) => {
             return (
                 <FavoriteDAppCard
-                    dapp={item[0]}
+                    dapp={item}
                     isActive={isActive}
                     isEditMode={isEditingMode}
                     onDAppPress={onDAppPress}
-                    onMorePress={isEditingMode ? drag : onMorePress}
+                    onMorePress={onMorePress}
+                    onLongPress={isEditingMode ? drag : undefined}
                 />
             )
         },
         [isEditingMode, onDAppPress, onMorePress],
     )
 
-    const onDragEnd = useCallback((_: DragEndParams<DiscoveryDApp[]>) => {}, [])
+    const onDragEnd = useCallback(({ data }: DragEndParams<DiscoveryDApp>) => {
+        setReorderedDapps(data)
+    }, [])
+
+    const onSaveReorderedDapps = useCallback(() => {
+        setIsEditingMode(false)
+        dispatch(reorderBookmarks(reorderedDapps))
+    }, [dispatch, reorderedDapps])
 
     return (
         <Layout
@@ -72,11 +79,7 @@ export const FavouritesScreen = () => {
             title={LL.FAVOURITES_DAPPS_TITLE()}
             headerRightElement={
                 isEditingMode ? (
-                    <AnimatedSaveHeaderButton
-                        action={() => {
-                            setIsEditingMode(false)
-                        }}
-                    />
+                    <AnimatedSaveHeaderButton action={onSaveReorderedDapps} />
                 ) : (
                     <ReorderIconHeaderButton
                         action={() => {
@@ -86,17 +89,17 @@ export const FavouritesScreen = () => {
                 )
             }
             fixedBody={
-                <BaseView flex={1} px={16}>
+                <BaseView flex={1}>
                     <NestableScrollContainer>
                         <NestableDraggableFlatList
+                            scrollEnabled={!isEditingMode}
                             contentContainerStyle={styles.listContentContainer}
                             extraData={isEditingMode}
-                            data={dappToShow}
+                            data={reorderedDapps}
                             onDragEnd={onDragEnd}
-                            keyExtractor={(item, index) => item[0]?.href ?? index.toString()}
+                            keyExtractor={(item, index) => item?.href ?? index.toString()}
                             renderItem={renderItem}
                             ListFooterComponent={renderFooter}
-                            ItemSeparatorComponent={renderSeparator}
                             showsVerticalScrollIndicator={false}
                             ListEmptyComponent={
                                 <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />

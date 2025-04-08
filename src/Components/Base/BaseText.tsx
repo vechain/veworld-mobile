@@ -3,7 +3,7 @@ import React, { useMemo } from "react"
 import { FlexAlignType, Text, TextProps, TextStyle } from "react-native"
 import { typography } from "~Constants/Theme"
 import { useTheme } from "~Hooks"
-import { BaseView } from "./BaseView"
+import { BaseView, BaseViewProps } from "./BaseView"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -37,7 +37,8 @@ export type BaseTextProps = {
     alignContainer?: FlexAlignType
     justifyContainer?: "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly"
     textTransform?: TextStyle["textTransform"]
-} & TextProps
+} & TextProps &
+    Pick<BaseViewProps, "flex" | "flexGrow" | "flexShrink">
 
 export const BaseText = (props: BaseTextProps) => {
     const { style, typographyFont, fontSize, fontWeight, fontFamily, lineHeight, textTransform, ...otherProps } = props
@@ -89,7 +90,10 @@ export const BaseText = (props: BaseTextProps) => {
             w={props.w}
             borderRadius={props.borderRadius}
             bg={props.bg}
-            h={props.h}>
+            h={props.h}
+            flex={props.flex}
+            flexGrow={props.flexGrow}
+            flexShrink={props.flexShrink}>
             <Text
                 style={[
                     {
