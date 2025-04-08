@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
-import { ShadowDecorator } from "react-native-draggable-flatlist"
+import { ScaleDecorator, ShadowDecorator } from "react-native-draggable-flatlist"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -26,45 +26,58 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
         }
 
         return (
-            <ShadowDecorator>
-                <BaseView flexDirection="row" flex={1} bg={theme.colors.background} px={16} mb={16}>
-                    <BaseTouchable
-                        disabled={isEditMode || isActive}
-                        style={[styles.card]}
-                        onPress={() => onDAppPress(dapp)}>
-                        <BaseView flexDirection="row" flex={1} pr={10}>
-                            <Image
-                                source={{
-                                    uri: dapp.id
-                                        ? DAppUtils.getAppHubIconUrl(dapp.id)
-                                        : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
-                                }}
-                                style={
-                                    [{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>
-                                }
-                                resizeMode="contain"
-                            />
-                            <BaseSpacer width={12} />
-                            <BaseView flex={1}>
-                                <BaseText ellipsizeMode="tail" numberOfLines={1} style={styles.nameText}>
-                                    {dapp.name}
-                                </BaseText>
-                                <BaseSpacer height={4} />
-                                <BaseText ellipsizeMode="tail" numberOfLines={1} style={styles.description}>
-                                    {dapp.desc ? dapp.desc : dapp.href}
-                                </BaseText>
+            <ScaleDecorator activeScale={1.05}>
+                <ShadowDecorator elevation={1} radius={4} opacity={0.2} color={theme.colors.backgroundReversed}>
+                    <BaseView flexDirection="row" flex={1} bg={theme.colors.background} px={16} mb={16}>
+                        <BaseTouchable
+                            disabled={isEditMode || isActive}
+                            style={[styles.card]}
+                            onPress={() => onDAppPress(dapp)}>
+                            <BaseView flexDirection="row" flex={1} pr={10}>
+                                <Image
+                                    source={{
+                                        uri: dapp.id
+                                            ? DAppUtils.getAppHubIconUrl(dapp.id)
+                                            : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
+                                    }}
+                                    style={
+                                        [
+                                            { height: IMAGE_SIZE, width: IMAGE_SIZE },
+                                            styles.icon,
+                                        ] as StyleProp<ImageStyle>
+                                    }
+                                    resizeMode="contain"
+                                />
+                                <BaseSpacer width={12} />
+                                <BaseView flex={1}>
+                                    <BaseText
+                                        ellipsizeMode="tail"
+                                        numberOfLines={1}
+                                        typographyFont="bodySemiBold"
+                                        color={theme.colors.assetDetailsCard.title}>
+                                        {dapp.name}
+                                    </BaseText>
+                                    <BaseSpacer height={4} />
+                                    <BaseText
+                                        ellipsizeMode="tail"
+                                        numberOfLines={1}
+                                        typographyFont="caption"
+                                        color={theme.colors.assetDetailsCard.text}>
+                                        {dapp.desc ? dapp.desc : dapp.href}
+                                    </BaseText>
+                                </BaseView>
                             </BaseView>
-                        </BaseView>
-                    </BaseTouchable>
-                    <BaseTouchable
-                        disabled={isActive}
-                        onLongPress={() => onLongPress?.(dapp)}
-                        onPress={() => onMorePress(dapp)}
-                        style={styles.touchableContainer}>
-                        <BaseIcon name={getIconName()} color={theme.colors.text} size={20} />
-                    </BaseTouchable>
-                </BaseView>
-            </ShadowDecorator>
+                        </BaseTouchable>
+                        <BaseTouchable
+                            disabled={isActive}
+                            onLongPress={() => onLongPress?.(dapp)}
+                            onPress={() => onMorePress(dapp)}
+                            style={styles.touchableContainer}>
+                            <BaseIcon name={getIconName()} color={theme.colors.text} size={20} />
+                        </BaseTouchable>
+                    </BaseView>
+                </ShadowDecorator>
+            </ScaleDecorator>
         )
     },
 )

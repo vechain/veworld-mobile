@@ -2,7 +2,7 @@ import React from "react"
 import { BaseView } from "../BaseView"
 import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
 import { useSharedValue } from "react-native-reanimated"
-import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
+import { ColorThemeType, isSmallScreen, SCREEN_WIDTH } from "~Constants"
 import { ImageSourcePropType, StyleSheet } from "react-native"
 import { useThemedStyles } from "~Hooks"
 import { DotStyle } from "react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom/PaginationItem"
@@ -68,7 +68,7 @@ export const BaseCarousel = ({
                 mode="parallax"
                 modeConfig={{
                     parallaxScrollingScale: 1,
-                    parallaxScrollingOffset: -10,
+                    parallaxScrollingOffset: isSmallScreen ? 15 : -10,
                 }}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}

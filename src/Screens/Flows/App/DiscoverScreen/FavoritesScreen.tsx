@@ -3,6 +3,7 @@ import { StyleSheet } from "react-native"
 import {
     AnimatedSaveHeaderButton,
     BaseSpacer,
+    BaseText,
     BaseView,
     FavoriteDAppCard,
     Layout,
@@ -90,6 +91,9 @@ export const FavouritesScreen = () => {
             }
             fixedBody={
                 <BaseView flex={1}>
+                    <BaseView px={16} py={12}>
+                        <BaseText typographyFont="bodySemiBold">{`${bookmarkedDApps.length} dApps`}</BaseText>
+                    </BaseView>
                     <NestableScrollContainer>
                         <NestableDraggableFlatList
                             scrollEnabled={!isEditingMode}
