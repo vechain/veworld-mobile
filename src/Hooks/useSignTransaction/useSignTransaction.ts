@@ -1,9 +1,17 @@
 import { HDNode, secp256k1, Transaction } from "thor-devkit"
+import { HexUInt, Transaction as SdkTransaction, TransactionBody } from "@vechain/sdk-core"
 import { HexUtils, warn } from "~Utils"
 import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest, Wallet } from "~Model"
+import {
+    AccountWithDevice,
+    DEVICE_TYPE,
+    LedgerAccountWithDevice,
+    TransactionRequest,
+    Wallet,
+    LocalDevice,
+} from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
@@ -15,7 +23,7 @@ type Props = {
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
     initialRoute?: Routes.NFTS | Routes.HOME
-    buildTransaction: () => Transaction
+    buildTransaction: () => TransactionBody
     dappRequest?: TransactionRequest
     resetDelegation: () => void
 }
@@ -50,12 +58,12 @@ export const useSignTransaction = ({
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const nav = useNavigation()
 
-    const getSignature = async (
-        transaction: Transaction,
+    const getPrivateKey = (
         wallet: Wallet,
+        transaction: SdkTransaction,
         delegateFor?: string,
         signatureAccount: AccountWithDevice = account,
-    ): Promise<Buffer> => {
+    ): Buffer => {
         if (!wallet.mnemonic && !wallet.privateKey) throw new Error("Either mnemonic or privateKey must be provided")
 
         if (wallet.mnemonic) {
@@ -66,14 +74,37 @@ export const useSignTransaction = ({
             const derivedNode = hdNode.derive(signatureAccount.index)
 
             const privateKey = derivedNode.privateKey as Buffer
-            const hash = transaction.signingHash(delegateFor?.toLowerCase())
-            return secp256k1.sign(hash, privateKey)
+            return privateKey
         } else {
             const privateKey = Buffer.from(HexUtils.removePrefix(wallet.privateKey!), "hex")
-            const hash = transaction.signingHash(delegateFor?.toLowerCase())
-            return secp256k1.sign(hash, privateKey)
+            return privateKey
         }
     }
+
+    // const getSignature = async (
+    //     transaction: SdkTransaction,
+    //     wallet: Wallet,
+    //     delegateFor?: string,
+    //     signatureAccount: AccountWithDevice = account,
+    // ): Promise<Buffer> => {
+    //     if (!wallet.mnemonic && !wallet.privateKey) throw new Error("Either mnemonic or privateKey must be provided")
+
+    //     if (wallet.mnemonic) {
+    //         if (!signatureAccount.index && signatureAccount.index !== 0)
+    //             throw new Error("signatureAccount index is empty")
+
+    //         const hdNode = HDNode.fromMnemonic(wallet.mnemonic, wallet.derivationPath)
+    //         const derivedNode = hdNode.derive(signatureAccount.index)
+
+    //         const privateKey = derivedNode.privateKey as Buffer
+    //         const hash = transaction.signingHash(delegateFor?.toLowerCase())
+    //         return secp256k1.sign(hash, privateKey)
+    //     } else {
+    //         const privateKey = Buffer.from(HexUtils.removePrefix(wallet.privateKey!), "hex")
+    //         const hash = transaction.signingHash(delegateFor?.toLowerCase())
+    //         return secp256k1.sign(hash, privateKey)
+    //     }
+    // }
 
     const getUrlDelegationSignature = async (
         transaction: Transaction,
@@ -173,34 +204,45 @@ export const useSignTransaction = ({
     /**
      * sign transaction with user's wallet
      */
-    const signTransaction = async (password?: string): Promise<SignTransactionResponse> => {
+    const signTransaction = async (password?: string): Promise<SdkTransaction> => {
         if (!senderDevice) throw new Error("Sender device not found")
 
-        const transaction = buildTransaction()
+        const transactionBody: TransactionBody = buildTransaction()
+        console.log("transactionBody", transactionBody)
+        // if (senderDevice.type === DEVICE_TYPE.LEDGER) {
+        //     // await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
+        //     return SignStatus.NAVIGATE_TO_LEDGER
+        // }
 
-        if (senderDevice.type === DEVICE_TYPE.LEDGER) {
-            await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
-            return SignStatus.NAVIGATE_TO_LEDGER
-        }
-
-        //local mnemonic, identity already verified via useCheckIdentity
-        if (!senderDevice.wallet) {
+        const transaction = SdkTransaction.of(transactionBody)
+        console.log("transaction", transaction)
+        // local mnemonic, identity already verified via useCheckIdentity
+        if (!(senderDevice as LocalDevice).wallet) {
             throw new Error("Hardware wallet not supported yet")
         }
 
         const senderWallet = await WalletEncryptionKeyHelper.decryptWallet({
-            encryptedWallet: senderDevice.wallet,
+            encryptedWallet: (senderDevice as LocalDevice).wallet,
             pinCode: password,
         })
 
-        const senderSignature = await getSignature(transaction, senderWallet)
-        const delegationResult = await getDelegationSignature(transaction, password)
+        const privateKey = getPrivateKey(senderWallet, transaction)
+        // const senderSignature = await getSignature(transaction, senderWallet)
+        // const delegationResult = await getDelegationSignature(transaction, password)
 
-        if (delegationResult === SignStatus.DELEGATION_FAILURE) return delegationResult
+        // if (delegationResult === SignStatus.DELEGATION_FAILURE) return delegationResult
 
-        transaction.signature = delegationResult ? Buffer.concat([senderSignature, delegationResult]) : senderSignature
+        // transaction.signature = delegationResult ? Buffer.concat([senderSignature, delegationResult]) : senderSignature
 
-        return transaction
+        // conver privatekey from buffer to hex
+        const uint8Array = new Uint8Array(privateKey)
+        
+        // convert buffer to uint8array
+        const signedTransaction = transaction.sign(uint8Array)
+
+        console.log("signedTransaction after sig", signedTransaction)
+
+        return signedTransaction
     }
 
     return {

@@ -1,6 +1,6 @@
-import { useCallback } from "react"
-import { HexUtils, TransactionUtils } from "~Utils"
+import { HexUtils } from "~Utils"
 import { Transaction } from "thor-devkit"
+import { networkInfo, TransactionBody } from "@vechain/sdk-core"
 import { EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
@@ -22,26 +22,44 @@ export const useTransactionBuilder = ({
     gasPriceCoef = GasPriceCoefficient.REGULAR,
 }: Props) => {
     const thor = useThor()
-
-    const buildTransaction = useCallback(() => {
-        const nonce = HexUtils.generateRandom(8)
-
-        const txGas = gas?.gas ?? 0
-
-        const txBody: Transaction.Body = {
-            chainTag: parseInt(thor.genesis.id.slice(-2), 16),
+    const buildTransaction: () => TransactionBody = () => {
+        const body: TransactionBody = {
+            chainTag: networkInfo.testnet.chainTag,
             blockRef: thor.status.head.id.slice(0, 18),
-            // 5 minutes
             expiration: 30,
-            clauses: clauses,
+            clauses,
             gasPriceCoef,
-            gas: txGas,
+            gas: gas?.gas ?? 0,
             dependsOn: dependsOn ?? null,
-            nonce: nonce,
+            nonce: HexUtils.generateRandom(8),
+        }
+        if (isDelegated) {
+            body.reserved = { features: 1 }
         }
 
-        return TransactionUtils.fromBody(txBody, isDelegated)
-    }, [gas?.gas, thor.genesis.id, thor.status.head.id, clauses, gasPriceCoef, dependsOn, isDelegated])
+        return body
+    }
+
+    // const bu
+    // const buildTransaction = useCallback(() => {
+    //     const nonce = HexUtils.generateRandom(8)
+
+    //     const txGas = gas?.gas ?? 0
+
+    //     const txBody: Transaction.Body = {
+    //         chainTag: parseInt(thor.genesis.id.slice(-2), 16),
+    //         blockRef: thor.status.head.id.slice(0, 18),
+    //         // 5 minutes
+    //         expiration: 30,
+    //         clauses: clauses,
+    //         gasPriceCoef,
+    //         gas: txGas,
+    //         dependsOn: dependsOn ?? null,
+    //         nonce: nonce,
+    //     }
+
+    //     return TransactionUtils.fromBody(txBody, isDelegated)
+    // }, [gas?.gas, thor.genesis.id, thor.status.head.id, clauses, gasPriceCoef, dependsOn, isDelegated])
 
     return {
         buildTransaction,

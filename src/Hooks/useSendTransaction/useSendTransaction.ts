@@ -1,4 +1,5 @@
 import { Transaction } from "thor-devkit"
+import { Transaction as SdkTransaction } from "@vechain/sdk-core"
 import { showSuccessToast, useThor } from "~Components"
 import {
     selectLastReviewTimestamp,
@@ -22,7 +23,7 @@ import moment from "moment"
  * @param onSuccess the function to handle success
  * @returns {sendTransactionAndPerformUpdates} the function to send the transaction and perform updates
  */
-export const useSendTransaction = (onSuccess: (transaction: Transaction, id: string) => Promise<void> | void) => {
+export const useSendTransaction = (onSuccess: (transaction: SdkTransaction, id: string) => Promise<void> | void) => {
     const dispatch = useAppDispatch()
     const thorClient = useThor()
     const { LL } = useI18nContext()
@@ -30,18 +31,22 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const lastReviewTimestamp = useAppSelector(selectLastReviewTimestamp)
 
-    const sendTransaction = async (signedTransaction: Transaction): Promise<string> => {
+    const sendTransaction = async (signedTransaction: SdkTransaction): Promise<string> => {
         dispatch(setIsAppLoading(true))
 
-        const encodedRawTx = {
-            raw: HexUtils.addPrefix(signedTransaction.encode().toString("hex")),
+        // Convert Uint8Array to hex string first
+        const encodedHexString = Buffer.from(signedTransaction.encoded).toString("hex")
+
+        const payload = {
+            raw: HexUtils.addPrefix(encodedHexString),
         }
 
         let response: AxiosResponse
 
         try {
-            response = await axios.post(`${selectedNetwork.currentUrl}/transactions`, encodedRawTx)
+            response = await axios.post(`${selectedNetwork.currentUrl}/transactions`, payload)
         } catch (e) {
+            console.log("error sending tx", e)
             if (e instanceof AxiosError) {
                 const axiosError = e as AxiosError
 
