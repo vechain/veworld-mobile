@@ -11,7 +11,7 @@ import { useCurrentAllocationsRoundId, useTheme } from "~Hooks"
 
 const DAO_URL = "https://governance.vebetterdao.org/"
 const DAO_VOTE_URL = "https://governance.vebetterdao.org/rounds/"
-const DAO_MAKE_APP_URL = "https://docs.vechain.org/"
+const DAO_MAKE_APP_URL = "https://docs.vebetterdao.org/developer-guides/get-started"
 const STELLA_URL = "https://www.stellapay.io/b/WGWV"
 
 export const VeBetterDAOCarousel = () => {
