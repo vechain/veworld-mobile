@@ -61,6 +61,7 @@ export const BaseCarousel = ({
                 loop={loop}
                 width={w}
                 height={h}
+                autoFillData={false}
                 style={styles.carousel}
                 pagingEnabled
                 containerStyle={styles.carouselContainer}
@@ -105,7 +106,6 @@ const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") =
             gap: 8,
         },
         carouselContainer: {
-            //paddingHorizontal: 20,
             width: "100%",
         },
         carousel: {
