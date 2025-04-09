@@ -183,7 +183,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 const provider = new VeChainProvider(
                     thorClient,
                     new ProviderInternalBaseWallet([{ privateKey, address: account.address }], {
-                        delegator: { delegatorUrl: DELEGATOR_URL[network.type] },
+                        gasPayer: { gasPayerServiceUrl: DELEGATOR_URL[network.type] },
                     }),
                     true,
                 )
