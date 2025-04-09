@@ -23,8 +23,6 @@ const AnimatedIcon = Animated.createAnimatedComponent(BaseIcon)
 
 export const ConvertedBetterBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ txId, amount, from, to, onClose, onFailure }: Props, ref) => {
-        const { styles } = useThemedStyles(cardBaseStyles)
-
         const { isFetching, isSuccess } = useWaitTransaction({ txId })
 
         const spinRotationValue = useSharedValue(0)
@@ -92,7 +90,7 @@ export const ConvertedBetterBottomSheet = React.forwardRef<BottomSheetModalMetho
 
                     {isSuccess && (
                         <>
-                            <BaseView style={styles.detailsLinkContainer}>
+                            <BaseView flexDirection="row" alignSelf="center" alignItems="center" gap={2}>
                                 <BaseText align="center" onPress={onSeeDetailsPress}>
                                     {LL.BD_TRANSACTION_DETAILS()}{" "}
                                 </BaseText>
@@ -166,11 +164,5 @@ const cardBaseStyles = (theme: ColorThemeType) =>
             padding: 16,
             gap: 10,
             overflow: "hidden",
-        },
-        detailsLinkContainer: {
-            alignSelf: "center",
-            flexDirection: "row",
-            alignItems: "center",
-            gap: 2,
         },
     })
