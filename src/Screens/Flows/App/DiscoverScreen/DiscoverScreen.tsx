@@ -1,5 +1,5 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
-import React, { useCallback, useEffect, useMemo, useRef } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { useAnimatedRef } from "react-native-reanimated"
 import { BaseSpacer, BaseView, Layout } from "~Components"
@@ -18,7 +18,6 @@ import { useI18nContext } from "~i18n"
 import { Ecosystem, Favourites, Header, NewDapps } from "./Components"
 import { PopularTrendingDApps } from "./Components/PopularTrendingDApps"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
-import { groupFavoritesByBaseUrl } from "./utils"
 
 import { useDAppActions } from "./Hooks"
 
@@ -41,8 +40,7 @@ export const DiscoverScreen: React.FC = () => {
     const dapps = useAppSelector(selectFeaturedDapps)
     const { onDAppPress } = useDAppActions()
 
-    const groupedbookmarkedDApps = useMemo(() => groupFavoritesByBaseUrl(bookmarkedDApps), [bookmarkedDApps])
-    const showFavorites = groupedbookmarkedDApps.length > 0
+    const showFavorites = bookmarkedDApps.length > 0
 
     useEffect(() => {
         if (!hasOpenedDiscovery) {
@@ -72,7 +70,7 @@ export const DiscoverScreen: React.FC = () => {
                         {showFavorites && (
                             <>
                                 <Favourites
-                                    bookmarkedDApps={groupedbookmarkedDApps}
+                                    bookmarkedDApps={bookmarkedDApps}
                                     onActionLabelPress={onSeeAllPress}
                                     onDAppPress={onDAppPress}
                                 />

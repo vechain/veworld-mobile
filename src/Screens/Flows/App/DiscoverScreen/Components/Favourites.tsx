@@ -7,19 +7,19 @@ import { useI18nContext } from "~i18n"
 import { DAppCard } from "./DAppCard"
 
 type BookmarkListProps = {
-    bookmarkedDApps: DiscoveryDApp[][]
+    bookmarkedDApps: DiscoveryDApp[]
     onDAppPress: (dapp: DiscoveryDApp) => void
 }
 
 const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps) => {
     const renderItem = useCallback(
-        ({ item, index }: ListRenderItemInfo<DiscoveryDApp[]>) => {
+        ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
             const isLast = index === bookmarkedDApps.length - 1
             const columnsGap = 16
 
             return (
                 <BaseView pl={columnsGap} pr={isLast ? columnsGap : 0} justifyContent="center" alignItems="center">
-                    <DAppCard dapp={item[0]} onPress={() => onDAppPress(item[0])} />
+                    <DAppCard dapp={item} onPress={() => onDAppPress(item)} />
                 </BaseView>
             )
         },
@@ -32,7 +32,7 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps
             <FlatList
                 data={bookmarkedDApps}
                 horizontal
-                keyExtractor={(_item, index) => _item[0]?.href ?? index.toString()}
+                keyExtractor={(_item, index) => _item?.href ?? index.toString()}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
@@ -42,7 +42,7 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps
 }
 
 type FavouritesProps = {
-    bookmarkedDApps: DiscoveryDApp[][]
+    bookmarkedDApps: DiscoveryDApp[]
     onActionLabelPress: () => void
     onDAppPress: (dapp: DiscoveryDApp) => void
 }

@@ -69,8 +69,8 @@ export const FavouritesScreen = () => {
     }, [])
 
     const onSaveReorderedDapps = useCallback(() => {
-        setIsEditingMode(false)
         dispatch(reorderBookmarks(reorderedDapps))
+        setIsEditingMode(false)
     }, [dispatch, reorderedDapps])
 
     return (
