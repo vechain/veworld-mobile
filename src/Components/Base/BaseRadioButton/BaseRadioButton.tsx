@@ -54,7 +54,11 @@ export const BaseRadioButton = ({ id, label, isSelected, disabled, testID, isBot
                 <BaseText typographyFont="bodyMedium" style={computedTextStyles}>
                     {label}
                 </BaseText>
-                <BaseIcon name={isSelected ? "icon-circle-dot" : "icon-circle"} color={iconColor} size={16} />
+                <BaseIcon
+                    name={isSelected ? "icon-radio-selected" : "icon-radio-default"}
+                    color={iconColor}
+                    size={16}
+                />
             </BaseView>
         </Touchable>
     )
