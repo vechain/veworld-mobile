@@ -1,13 +1,14 @@
 import React from "react"
-import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import { BaseCard, BaseIcon, BaseImage, BaseText, BaseView, FiatBalance } from "~Components"
+import { BaseIcon, BaseText, BaseView, FiatBalance } from "~Components"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Token } from "~Model"
 import { selectOfficialTokens, selectVisibleCustomTokens, useAppSelector } from "~Storage/Redux"
 import { SWAP_SIDE } from "../SwapCard"
+import { TokenImage } from "~Components/Reusable/TokenImage"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 type Props = {
     provenance: SWAP_SIDE
@@ -46,11 +47,7 @@ export const TokenBox = ({
         <DropShadow style={[theme.shadows.card]}>
             <BaseView flexDirection="column" alignItems="center">
                 {token?.icon ? (
-                    <BaseCard
-                        style={[baseStyles.imageContainer, { backgroundColor: COLORS.WHITE }]}
-                        containerStyle={baseStyles.imageShadow}>
-                        <BaseImage source={{ uri: token.icon }} style={baseStyles.tokenIcon} />
-                    </BaseCard>
+                    <TokenImage icon={token.icon} isVechainToken={isVechainToken(token.symbol)} iconSize={30} />
                 ) : (
                     <BaseIcon
                         name="icon-help-circle"
@@ -108,17 +105,3 @@ export const TokenBox = ({
         </BaseView>
     )
 }
-
-const baseStyles = StyleSheet.create({
-    tokenIcon: {
-        width: 20,
-        height: 20,
-    },
-    imageContainer: {
-        borderRadius: 30,
-        padding: 10,
-    },
-    imageShadow: {
-        width: "auto",
-    },
-})
