@@ -31,11 +31,13 @@ export const SearchScreen = () => {
     const renderHeader = useMemo(() => {
         return (
             <BackButtonGenericHeader
-                rightElement={<SearchBar onTextChange={onSearchUpdated} onSubmit={onSearchReturn} />}
+                rightElement={
+                    <SearchBar filteredSearch={search} onTextChange={onSearchUpdated} onSubmit={onSearchReturn} />
+                }
                 style={styles.headerContainer}
             />
         )
-    }, [onSearchUpdated, onSearchReturn, styles.headerContainer])
+    }, [onSearchUpdated, onSearchReturn, search, styles.headerContainer])
 
     return (
         <Layout

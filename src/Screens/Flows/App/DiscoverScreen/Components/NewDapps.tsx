@@ -1,22 +1,17 @@
 import React, { useCallback } from "react"
-import { BaseView, BaseText, BaseSpacer, useNotifications } from "~Components"
+import { BaseView, BaseText, BaseSpacer } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useAnalyticTracking, useNewDApps } from "~Hooks"
+import { useNewDApps } from "~Hooks"
 import { DAppCard } from "./DAppCard"
 import { FlatList, ListRenderItemInfo } from "react-native"
-import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
-import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
+import { DiscoveryDApp } from "~Constants"
 import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
+import { useDAppActions } from "../Hooks"
 
 export const NewDapps = () => {
     const { LL } = useI18nContext()
     const { isLoading, newDapps } = useNewDApps()
-    const nav = useNavigation()
-    const track = useAnalyticTracking()
-    const dispatch = useAppDispatch()
-    const { increaseDappCounter } = useNotifications()
+    const { onDAppPress } = useDAppActions()
 
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
@@ -24,18 +19,7 @@ export const NewDapps = () => {
             const columnsGap = 16
 
             const onPress = () => {
-                nav.navigate(Routes.BROWSER, { url: item.href })
-                track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-                    url: item.href,
-                })
-
-                if (item.veBetterDaoId) {
-                    increaseDappCounter(item.veBetterDaoId)
-                }
-
-                setTimeout(() => {
-                    dispatch(addNavigationToDApp({ href: item.href, isCustom: item.isCustom ?? false }))
-                }, 1000)
+                onDAppPress(item)
             }
 
             return (
@@ -44,7 +28,7 @@ export const NewDapps = () => {
                 </BaseView>
             )
         },
-        [newDapps.length, nav, track, increaseDappCounter, dispatch],
+        [onDAppPress, newDapps.length],
     )
 
     return (

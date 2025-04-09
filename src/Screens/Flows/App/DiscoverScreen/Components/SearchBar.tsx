@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from "react"
+import React, { useCallback, useMemo, useRef } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import Animated from "react-native-reanimated"
@@ -30,6 +30,19 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
         inputRef.current?.clear()
     }, [onTextChange])
 
+    const renderRightIcon = useMemo(() => {
+        if (!filteredSearch) return undefined
+        if (filteredSearch.length === 0) return undefined
+        return (
+            <BaseButton
+                size="sm"
+                variant="ghost"
+                leftIcon={<BaseIcon name="icon-x" size={16} color={theme.colors.text} />}
+                action={onClear}
+            />
+        )
+    }, [filteredSearch, onClear, theme.colors.text])
+
     return (
         <BaseView w={100} flexDirection="row" px={24} py={12}>
             <BaseView flex={1}>
@@ -43,14 +56,7 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
                         leftIcon="icon-search"
                         leftIconStyle={styles.searchBarIcon}
                         leftIconSize={16}
-                        rightIcon={
-                            <BaseButton
-                                size="sm"
-                                variant="ghost"
-                                leftIcon={<BaseIcon name="icon-x" size={16} color={theme.colors.text} />}
-                                action={onClear}
-                            />
-                        }
+                        rightIcon={renderRightIcon}
                         rightIconSize={16}
                         rightIconStyle={styles.clearIcon}
                         rightIconAdornment={false}
