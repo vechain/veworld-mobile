@@ -1,14 +1,14 @@
 import { useCallback } from "react"
-import { HexUtils, TransactionUtils } from "~Utils"
-import { Transaction } from "thor-devkit"
+import { HexUtils } from "~Utils"
 import { EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
+import { Transaction, TransactionClause } from "@vechain/sdk-core"
 
 type Props = {
     providedGas?: number
     gas?: EstimateGasResult
-    clauses: Transaction.Body["clauses"]
+    clauses: TransactionClause[]
     isDelegated: boolean
     dependsOn?: string
     gasPriceCoef?: number
@@ -28,7 +28,7 @@ export const useTransactionBuilder = ({
 
         const txGas = gas?.gas ?? 0
 
-        const txBody: Transaction.Body = {
+        return Transaction.of({
             chainTag: parseInt(thor.genesis.id.slice(-2), 16),
             blockRef: thor.status.head.id.slice(0, 18),
             // 5 minutes
@@ -38,9 +38,12 @@ export const useTransactionBuilder = ({
             gas: txGas,
             dependsOn: dependsOn ?? null,
             nonce: nonce,
-        }
-
-        return TransactionUtils.fromBody(txBody, isDelegated)
+            ...(isDelegated && {
+                reserved: {
+                    features: 1,
+                },
+            }),
+        })
     }, [gas?.gas, thor.genesis.id, thor.status.head.id, clauses, gasPriceCoef, dependsOn, isDelegated])
 
     return {

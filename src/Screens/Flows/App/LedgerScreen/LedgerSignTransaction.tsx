@@ -1,9 +1,12 @@
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { Transaction } from "@vechain/sdk-core"
+import { Buffer } from "buffer"
+import * as Haptics from "expo-haptics"
 import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
-import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
 import {
     BaseButton,
     BaseSpacer,
@@ -15,9 +18,12 @@ import {
     showErrorToast,
     Step,
     StepsProgressBar,
-    useWalletConnect,
     useInAppBrowser,
+    useWalletConnect,
 } from "~Components"
+import { AnalyticsEvent, creteAnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useLedgerDevice, useSendTransaction } from "~Hooks"
+import { ActivityType } from "~Model"
 import { RootStackParamListHome, RootStackParamListSwitch, Routes } from "~Navigation"
 import {
     addPendingDappTransactionActivity,
@@ -29,14 +35,8 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { ActivityUtils, debug, error, LedgerUtils } from "~Utils"
-import { useI18nContext } from "~i18n"
-import { useNavigation } from "@react-navigation/native"
-import * as Haptics from "expo-haptics"
-import { AnalyticsEvent, ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods, creteAnalyticsEvent } from "~Constants"
-import { Buffer } from "buffer"
-import { Transaction } from "thor-devkit"
-import { ActivityType } from "~Model"
 import { LedgerConfig } from "~Utils/LedgerUtils/LedgerUtils"
+import { useI18nContext } from "~i18n"
 
 const MUTEX_TIMEOUT = 1000
 
@@ -313,11 +313,14 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
             dispatch(setIsAppLoading(true))
 
-            transaction.signature = delegationSignature
-                ? Buffer.concat([signature, Buffer.from(delegationSignature, "hex")])
-                : signature
-
-            const txId = await sendTransaction(transaction)
+            const txId = await sendTransaction(
+                Transaction.of(
+                    transaction.body,
+                    delegationSignature
+                        ? Buffer.concat([signature, Buffer.from(delegationSignature, "hex")])
+                        : signature,
+                ),
+            )
             await Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success)
 
             await disconnectLedger()

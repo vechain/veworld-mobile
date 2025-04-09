@@ -1,9 +1,10 @@
 import { LedgerDevice, Network, Response } from "~Model"
-import { Certificate, HDNode, Transaction } from "thor-devkit"
+import { Certificate, HDNode } from "thor-devkit"
 import { AddressUtils, BalanceUtils } from "~Utils"
 import { DerivationPath, ERROR_EVENTS, LEDGER_ERROR_CODES, VETLedgerAccount, VETLedgerApp } from "~Constants"
 import { debug, error } from "~Utils/Logger"
 import { Buffer } from "buffer"
+import { Transaction as SDKTransaction } from "@vechain/sdk-core"
 
 import BleTransport from "@ledgerhq/react-native-hw-transport-ble"
 
@@ -213,7 +214,7 @@ type TxResponse = Promise<Response<Buffer>>
 
 const signTransaction = async (
     index: number,
-    transaction: Transaction,
+    transaction: SDKTransaction,
     device: LedgerDevice,
     withTransport: (func: (t: BleTransport) => TxResponse) => TxResponse,
     onIsAwaitingForSignature: () => void,
@@ -229,7 +230,7 @@ const signTransaction = async (
             const path = `${DerivationPath.VET}/${index}`
             const signature = await vetLedger.signTransaction(
                 path,
-                transaction.encode(),
+                Buffer.from(transaction.encoded),
                 onIsAwaitingForSignature,
                 onProgressUpdate,
             )

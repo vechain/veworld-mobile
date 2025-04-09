@@ -1,5 +1,6 @@
 import uuid from "react-native-uuid"
 import { Transaction } from "thor-devkit"
+import { Transaction as SDKTransaction } from "@vechain/sdk-core"
 import { chainTagToGenesisId, DIRECTIONS, ERROR_EVENTS, VET } from "~Constants"
 import {
     Activity,
@@ -37,24 +38,24 @@ import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
  * @param tx - The transaction from which to create the base activity.
  * @returns A new activity object based on the given transaction.
  */
-const createBaseActivityFromTx = (tx: Transaction) => {
-    const { id, origin, delegated, delegator, body } = tx
+const createBaseActivityFromTx = (tx: SDKTransaction) => {
+    const { id, origin, isDelegated, delegator, body } = tx
     const { clauses, gas, chainTag } = body
     const type = ActivityUtils.getActivityTypeFromClause(clauses)
 
     return {
-        from: origin ?? "",
+        from: origin?.toString() ?? "",
         to: clauses.map((clause: Transaction.Clause) => ActivityUtils.getDestinationAddressFromClause(clause) ?? ""),
-        id: id ?? "",
-        txId: id ?? "",
+        id: id.toString() ?? "",
+        txId: id.toString() ?? "",
         genesisId: chainTagToGenesisId[chainTag],
         gasUsed: Number(gas),
         clauses,
-        delegated,
+        delegated: isDelegated,
         status: ActivityStatus.PENDING,
         isTransaction: true,
         timestamp: Date.now(),
-        gasPayer: (delegated ? delegator : origin) ?? "",
+        gasPayer: (isDelegated ? delegator?.toString() : origin?.toString()) ?? "",
         blockNumber: 0,
         type,
         direction: DIRECTIONS.UP,
@@ -86,7 +87,7 @@ const getAddressFromClause = (clause: Transaction.Clause) => {
  * @throws {Error} If the token address cannot be extracted from the transaction.
  * @throws {Error} If the amount cannot be extracted from the transaction.
  */
-export const createPendingTransferActivityFromTx = (tx: Transaction): FungibleTokenActivity => {
+export const createPendingTransferActivityFromTx = (tx: SDKTransaction): FungibleTokenActivity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
     if (baseActivity.type !== ActivityType.TRANSFER_VET && baseActivity.type !== ActivityType.TRANSFER_FT)
@@ -118,7 +119,7 @@ export const createPendingTransferActivityFromTx = (tx: Transaction): FungibleTo
  * @throws {Error} If the contract address cannot be extracted from the transaction.
  * @throws {Error} If the NFT token Id cannot be decoded from the transaction clause.
  */
-export const createPendingNFTTransferActivityFromTx = (tx: Transaction): NonFungibleTokenActivity => {
+export const createPendingNFTTransferActivityFromTx = (tx: SDKTransaction): NonFungibleTokenActivity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
     if (baseActivity.type !== ActivityType.TRANSFER_NFT) throw new Error("Invalid transaction type")
@@ -291,7 +292,7 @@ export const createSingTypedDataActivity = (
  *
  * @returns A new pending DApp transaction activity object.
  */
-export const createPendingDappTransactionActivity = (tx: Transaction, name?: string, linkUrl?: string): Activity => {
+export const createPendingDappTransactionActivity = (tx: SDKTransaction, name?: string, linkUrl?: string): Activity => {
     const baseActivity = createBaseActivityFromTx(tx)
 
     return processActivity(baseActivity, tx.body.clauses[0], DIRECTIONS.UP, name, linkUrl)

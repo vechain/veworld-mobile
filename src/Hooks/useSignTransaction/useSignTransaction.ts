@@ -1,4 +1,4 @@
-import { HDNode, secp256k1, Transaction } from "thor-devkit"
+import { HDNode } from "thor-devkit"
 import { HexUtils, warn } from "~Utils"
 import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -9,6 +9,7 @@ import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ERROR_EVENTS } from "~Constants"
+import { Address, Transaction } from "@vechain/sdk-core"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -66,12 +67,14 @@ export const useSignTransaction = ({
             const derivedNode = hdNode.derive(signatureAccount.index)
 
             const privateKey = derivedNode.privateKey as Buffer
-            const hash = transaction.signingHash(delegateFor?.toLowerCase())
-            return secp256k1.sign(hash, privateKey)
+            if (delegateFor)
+                return Buffer.from(transaction.signAsDelegator(Address.of(delegateFor), privateKey).signature!)
+            return Buffer.from(transaction.sign(privateKey).signature!)
         } else {
             const privateKey = Buffer.from(HexUtils.removePrefix(wallet.privateKey!), "hex")
-            const hash = transaction.signingHash(delegateFor?.toLowerCase())
-            return secp256k1.sign(hash, privateKey)
+            if (delegateFor)
+                return Buffer.from(transaction.signAsDelegator(Address.of(delegateFor), privateKey).signature!)
+            return Buffer.from(transaction.sign(privateKey).signature!)
         }
     }
 
@@ -84,7 +87,7 @@ export const useSignTransaction = ({
             }
 
             // build hex encoded version of the transaction for signing request
-            const rawTransaction = HexUtils.addPrefix(transaction.encode().toString("hex"))
+            const rawTransaction = HexUtils.addPrefix(Buffer.from(transaction.encoded).toString("hex"))
 
             // request to send for sponsorship/fee delegation
             const sponsorRequest = {
@@ -198,9 +201,10 @@ export const useSignTransaction = ({
 
         if (delegationResult === SignStatus.DELEGATION_FAILURE) return delegationResult
 
-        transaction.signature = delegationResult ? Buffer.concat([senderSignature, delegationResult]) : senderSignature
-
-        return transaction
+        return Transaction.of(
+            transaction.body,
+            delegationResult ? Buffer.concat([senderSignature, delegationResult]) : senderSignature,
+        )
     }
 
     return {
