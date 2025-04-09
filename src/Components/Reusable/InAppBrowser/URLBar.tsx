@@ -1,35 +1,19 @@
-import React, { useCallback, useMemo } from "react"
-import { BaseIcon, BaseText, BaseView, SelectedNetworkViewer, useInAppBrowser } from "~Components"
-import { StyleSheet } from "react-native"
-import { useBlockchainNetwork, useTheme } from "~Hooks"
-import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
+import React, { useCallback, useMemo } from "react"
+import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import { BaseIcon, BaseText, BaseTextInput, BaseView, useInAppBrowser } from "~Components"
+import { useTheme } from "~Hooks"
+import { Routes } from "~Navigation"
+import { URIUtils } from "~Utils"
 
-export const URLBar = () => {
-    const { showToolbars, navigationState } = useInAppBrowser()
+type Props = {
+    onNavigation: (error: boolean) => void
+}
+
+export const URLBar = ({ onNavigation }: Props) => {
+    const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
     const nav = useNavigation()
-    const { isMainnet } = useBlockchainNetwork()
-
-    const urlText = useMemo(() => {
-        if (!navigationState?.url) return ""
-
-        try {
-            return new URL(navigationState.url).hostname
-        } catch {
-            return ""
-        }
-    }, [navigationState?.url])
-
-    const isSecure = useMemo(() => {
-        if (!navigationState?.url) return false
-
-        try {
-            return new URL(navigationState.url).protocol === "https:"
-        } catch {
-            return false
-        }
-    }, [navigationState?.url])
 
     const navBackToDiscover = useCallback(() => {
         if (nav.canGoBack()) {
@@ -42,48 +26,82 @@ export const URLBar = () => {
     const theme = useTheme()
 
     const animatedStyles = useAnimatedStyle(() => ({
-        transform: [{ translateY: showToolbars ? withTiming(0) : withTiming(-50) }],
-        height: showToolbars ? withTiming(48) : withTiming(0),
-        opacity: showToolbars ? withTiming(1) : withTiming(0),
+        height: showToolbars ? withTiming(56) : withTiming(24),
     }))
 
-    return navigationState?.url ? (
-        <Animated.View style={[styles.animatedContainer, animatedStyles]}>
+    const onSubmit = useCallback(
+        async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+            const value = e.nativeEvent.text.toLowerCase()
+            const isValid = await URIUtils.isValidBrowserUrl(value)
+            if (isValid) {
+                const url = value.startsWith("https://") ? value : `https://${value}`
+                onNavigation(false)
+                navigateToUrl(url)
+                return
+            }
+            onNavigation(true)
+        },
+        [navigateToUrl, onNavigation],
+    )
+
+    const renderWithToolbar = useMemo(() => {
+        return (
             <BaseView style={styles.inputContainer}>
                 {/* Icon on the left */}
                 <BaseIcon
+                    name="icon-arrow-left"
+                    color={theme.colors.text}
+                    action={navBackToDiscover}
                     haptics="Light"
-                    size={20}
-                    style={styles.iconLeft}
-                    name={isSecure ? "icon-lock" : "icon-unlock"}
-                    color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
+                    size={24}
+                    p={8}
                 />
 
                 {/* URL Text centered */}
-                <BaseView flex={1} flexDirection="row" justifyContent="space-between">
-                    <BaseText
-                        w={isMainnet ? 100 : 65}
-                        color={theme.colors.text}
-                        fontSize={14}
-                        fontWeight="500"
-                        style={[styles.urlText]}
-                        numberOfLines={1}
-                        ellipsizeMode="tail">
-                        {urlText}
-                    </BaseText>
+                <BaseView flex={1} alignItems="center" flexDirection="row">
+                    {isDapp ? (
+                        <BaseView flexDirection="row" alignItems="center" style={styles.dappContainer}>
+                            <BaseIcon name="icon-lock" color={theme.colors.textLight} size={12} />
 
-                    {!isMainnet && <SelectedNetworkViewer />}
+                            <BaseText typographyFont="captionRegular" color={theme.colors.subtitle}>
+                                {navigationState?.url}
+                            </BaseText>
+                        </BaseView>
+                    ) : (
+                        <BaseTextInput
+                            defaultValue={navigationState?.url}
+                            onSubmitEditing={onSubmit}
+                            style={styles.textInput}
+                            inputContainerStyle={styles.textInputContainer}
+                            containerStyle={styles.textInputContainerRoot}
+                        />
+                    )}
                 </BaseView>
-
-                <BaseIcon
-                    testID="closeButton"
-                    action={navBackToDiscover}
-                    haptics="Light"
-                    style={[styles.iconRight]}
-                    name="icon-x"
-                    color={isSecure ? theme.colors.text : theme.colors.alertRedMedium}
-                />
             </BaseView>
+        )
+    }, [
+        isDapp,
+        navBackToDiscover,
+        navigationState?.url,
+        onSubmit,
+        theme.colors.subtitle,
+        theme.colors.text,
+        theme.colors.textLight,
+    ])
+
+    const renderWithoutToolbar = useMemo(() => {
+        return (
+            <BaseView style={styles.noToolbarContainer}>
+                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.subtitle}>
+                    {navigationState?.url}
+                </BaseText>
+            </BaseView>
+        )
+    }, [navigationState?.url, theme.colors.subtitle])
+
+    return navigationState?.url ? (
+        <Animated.View style={[styles.animatedContainer, animatedStyles]}>
+            {showToolbars ? renderWithToolbar : renderWithoutToolbar}
         </Animated.View>
     ) : null
 }
@@ -92,24 +110,41 @@ const styles = StyleSheet.create({
     animatedContainer: {
         opacity: 1,
         alignItems: "center",
+        flexDirection: "row",
     },
     inputContainer: {
         width: "100%",
-        height: 48,
+        height: 40,
         paddingHorizontal: 16,
         alignItems: "center",
         flexDirection: "row",
-        justifyContent: "space-between",
+        gap: 16,
+    },
+    noToolbarContainer: {
+        height: 24,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
+        flex: 1,
+    },
+    dappContainer: {
+        gap: 8,
     },
     urlText: {
         textAlign: "center", // centers the text
         marginHorizontal: 10, // adds space around the text
         marginVertical: 10,
     },
-    iconLeft: {
-        marginRight: 10,
+    textInput: {
+        fontSize: 12,
+        paddingVertical: 8,
     },
-    iconRight: {
-        marginLeft: 10,
+    textInputContainer: {
+        height: 32,
+        paddingVertical: 0,
+        width: "100%",
+    },
+    textInputContainerRoot: {
+        width: "100%",
     },
 })

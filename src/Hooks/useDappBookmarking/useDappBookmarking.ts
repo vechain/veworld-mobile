@@ -23,7 +23,7 @@ export const useDappBookmarking = (url?: string, title?: string) => {
 
         try {
             return bookmarkedDapps.find(bookmark =>
-                URIUtils.compareURLs(URIUtils.clean(bookmark.href), URIUtils.clean(url)),
+                URIUtils.compareURLs(new URL(bookmark.href.trim()).origin, new URL(url.trim()).origin),
             )
         } catch {
             return undefined

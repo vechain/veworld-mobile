@@ -1,13 +1,14 @@
+import { useRoute } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo } from "react"
 import { BackHandler, StyleSheet } from "react-native"
-import { BaseIcon, useInAppBrowser } from "~Components"
-import { useBlockchainNetwork, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
-import { COLORS, ColorThemeType } from "~Constants"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { useRoute } from "@react-navigation/native"
-import { Routes } from "~Navigation"
+import { BaseIcon, useInAppBrowser } from "~Components"
+import { ColorThemeType } from "~Constants"
+import { useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
+import { Routes } from "~Navigation"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { BrowserBottomSheet } from "./BrowserBottomSheet"
 
 type IconProps = {
     name: IconKey
@@ -26,28 +27,29 @@ export const BrowserBottomBar: React.FC = () => {
         goForward,
         navigationState,
         webviewRef,
+        isDapp,
     } = useInAppBrowser()
     const theme = useTheme()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
-    const { isMainnet } = useBlockchainNetwork()
-    const { styles } = useThemedStyles(baseStyles(isMainnet))
+    const { styles } = useThemedStyles(baseStyles)
     const isIOSPlatform = isIOS()
     const route = useRoute()
+    const { onClose: closeBottomSheet, onOpen: openBottomSheet, ref: bottomSheetRef } = useBottomSheetModal()
 
     const fromDiscovery = useMemo(() => {
         return route.name !== Routes.SETTINGS_GET_SUPPORT && route.name !== Routes.SETTINGS_GIVE_FEEDBACK
     }, [route.name])
 
     const animatedStyles = useAnimatedStyle(() => {
-        const parsedPadding = isIOSPlatform ? 42 : 10
+        const parsedPadding = isIOSPlatform ? 40 : 8
 
         return {
-            transform: [{ translateY: showToolbars ? withTiming(0) : withTiming(40) }],
             opacity: showToolbars ? withTiming(1) : withTiming(0),
-            paddingTop: showToolbars ? withTiming(10) : withTiming(0),
+            height: showToolbars ? withTiming(56) : withTiming(0),
+            paddingTop: showToolbars ? withTiming(8) : withTiming(0),
             paddingBottom: showToolbars ? withTiming(parsedPadding) : withTiming(0),
         }
-    })
+    }, [isIOSPlatform, showToolbars])
 
     const onBackHandler = useCallback(() => {
         if (canGoBack) {
@@ -80,19 +82,38 @@ export const BrowserBottomBar: React.FC = () => {
                 onPress: goForward,
                 disabled: !canGoForward,
             },
+            ...(isDapp
+                ? [
+                      {
+                          name: isBookMarked ? ("icon-star-on" as const) : ("icon-star" as const),
+                          onPress: () => {
+                              toggleBookmark()
+                          },
+                          disabled: !fromDiscovery,
+                      },
+                  ]
+                : []),
             {
-                name: isBookMarked ? "icon-bookmark-minus" : "icon-bookmark-plus",
-                onPress: () => {
-                    toggleBookmark()
-                },
-                disabled: !fromDiscovery,
-            },
-            {
-                name: "icon-refresh-cw",
+                name: "icon-retry",
                 onPress: () => webviewRef.current?.reload(),
             },
+            {
+                name: "icon-more-vertical",
+                onPress: openBottomSheet,
+            },
         ]
-    }, [canGoBack, canGoForward, fromDiscovery, goForward, isBookMarked, onBackHandler, toggleBookmark, webviewRef])
+    }, [
+        canGoBack,
+        canGoForward,
+        fromDiscovery,
+        goForward,
+        isBookMarked,
+        isDapp,
+        onBackHandler,
+        openBottomSheet,
+        toggleBookmark,
+        webviewRef,
+    ])
 
     return navigationState?.url ? (
         <Animated.View style={[styles.bottomBar, styles.animatedContainer, animatedStyles]}>
@@ -104,39 +125,31 @@ export const BrowserBottomBar: React.FC = () => {
                         disabled={config.disabled}
                         name={config.name}
                         style={styles.icon}
-                        size={32}
-                        color={isMainnet ? theme.colors.text : COLORS.WHITE}
+                        size={20}
+                        color={theme.colors.text}
                     />
                 )
             })}
+            <BrowserBottomSheet onClose={closeBottomSheet} ref={bottomSheetRef} />
         </Animated.View>
     ) : null
 }
 
-const baseStyles = (isMainnet: boolean) => (theme: ColorThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        animatedContainer: {
-            opacity: 1,
-        },
+        animatedContainer: {},
         bottomBar: {
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-evenly",
+            justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: isMainnet ? theme.colors.background : theme.colors.testnetBackground,
-            borderTopColor: isMainnet ? theme.colors.card : theme.colors.testnetBackground,
+            backgroundColor: theme.colors.background,
+            borderTopColor: theme.colors.card,
             borderTopWidth: 1,
-            paddingTop: 10,
-            paddingBottom: isIOS() ? 42 : 10,
+            paddingHorizontal: 16,
         },
         icon: {
-            fontSize: 40,
             borderRadius: 10,
-            paddingHorizontal: 12,
-        },
-        disabledIcon: {
-            fontSize: 40,
-            color: theme.colors.disabled,
-            opacity: 0.5,
+            padding: 10,
         },
     })
