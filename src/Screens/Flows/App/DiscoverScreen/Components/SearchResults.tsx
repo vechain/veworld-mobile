@@ -1,8 +1,8 @@
 import { default as React, useCallback, useMemo } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import { FlatList, ListRenderItemInfo, StyleSheet, Text } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { ColorThemeType } from "~Constants"
+import { ColorThemeType, typography } from "~Constants"
 import { SearchError, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { resetBrowserState, useAppDispatch } from "~Storage/Redux"
@@ -78,7 +78,7 @@ export const SearchResults = ({ query, error, results }: Props) => {
                         variant="ghost"
                         px={0}
                         py={0}>
-                        {LL.BROWSER_HISTORY_CLEAR()}
+                        <Text style={styles.clearText}>{LL.BROWSER_HISTORY_CLEAR()}</Text>
                     </BaseButton>
                 </BaseView>
             )}
@@ -127,6 +127,10 @@ const baseStyles = (theme: ColorThemeType) => {
         },
         rootContainerEmpty: {
             justifyContent: "center",
+        },
+        clearText: {
+            ...typography.defaults.body,
+            fontWeight: "500",
         },
         clearIcon: {
             marginLeft: 4,
