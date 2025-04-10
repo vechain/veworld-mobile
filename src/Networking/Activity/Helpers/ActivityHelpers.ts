@@ -39,7 +39,7 @@ import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
  * @returns A new activity object based on the given transaction.
  */
 const createBaseActivityFromTx = (tx: SDKTransaction) => {
-    const { id, origin, isDelegated, gasPayer, body } = tx
+    const { id, origin, isDelegated, body } = tx
     const { clauses, gas, chainTag } = body
     const type = ActivityUtils.getActivityTypeFromClause(clauses)
 
@@ -55,7 +55,7 @@ const createBaseActivityFromTx = (tx: SDKTransaction) => {
         status: ActivityStatus.PENDING,
         isTransaction: true,
         timestamp: Date.now(),
-        gasPayer: (isDelegated ? gasPayer?.toString() : origin?.toString()) ?? "",
+        gasPayer: (isDelegated ? tx.gasPayer?.toString() : origin?.toString()) ?? "",
         blockNumber: 0,
         type,
         direction: DIRECTIONS.UP,
