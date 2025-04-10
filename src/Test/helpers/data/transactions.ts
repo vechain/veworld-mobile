@@ -1,5 +1,6 @@
 /* eslint-disable max-len */
-import { Transaction } from "thor-devkit"
+
+import { Transaction, TransactionBody } from "@vechain/sdk-core"
 
 export const connexTransactioReceiptStub: Connex.Thor.Transaction.Receipt = {
     gasUsed: 51462,
@@ -74,7 +75,7 @@ export const connexTransactionStub: Connex.Thor.Transaction = {
     },
 }
 
-const vetTransactionBody1: Transaction.Body = {
+const vetTransactionBody1: TransactionBody = {
     chainTag: 39,
     blockRef: "0x00cfde3b1f486b72",
     expiration: 18,
@@ -91,7 +92,7 @@ const vetTransactionBody1: Transaction.Body = {
     nonce: "0xc64a13b1",
 }
 
-const nftTransactionBody1: Transaction.Body = {
+const nftTransactionBody1: TransactionBody = {
     blockRef: "0x00f48ca6ad3dbcd2",
     chainTag: 74,
     clauses: [
@@ -108,9 +109,9 @@ const nftTransactionBody1: Transaction.Body = {
     nonce: "0xc7d8dc04",
 }
 
-export const vetTransaction1: Transaction = new Transaction(vetTransactionBody1)
+export const vetTransaction1 = Transaction.of(vetTransactionBody1)
 
-export const dappTransaction1: Transaction = new Transaction({
+export const dappTransaction1 = Transaction.of({
     chainTag: 39,
     blockRef: "0x00cfde3b1f486b72",
     expiration: 18,
@@ -121,4 +122,4 @@ export const dappTransaction1: Transaction = new Transaction({
     nonce: "0xc64a13b1",
 })
 
-export const nftTransaction1: Transaction = new Transaction(nftTransactionBody1)
+export const nftTransaction1 = Transaction.of(nftTransactionBody1)
