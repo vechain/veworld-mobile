@@ -90,10 +90,12 @@ export const ConvertedBetterBottomSheet = React.forwardRef<BottomSheetModalMetho
 
                     {isSuccess && (
                         <>
-                            <BaseText align="center" onPress={onSeeDetailsPress}>
-                                {LL.BD_TRANSACTION_DETAILS()}{" "}
+                            <BaseView flexDirection="row" alignSelf="center" alignItems="center" gap={2}>
+                                <BaseText align="center" onPress={onSeeDetailsPress}>
+                                    {LL.BD_TRANSACTION_DETAILS()}{" "}
+                                </BaseText>
                                 <BaseIcon name="icon-arrow-link" color={theme.colors.text} size={12} />
-                            </BaseText>
+                            </BaseView>
                             <BaseSpacer height={24} />
                             <BaseButton action={onClose}>{LL.COMMON_BTN_OK()}</BaseButton>
                         </>
