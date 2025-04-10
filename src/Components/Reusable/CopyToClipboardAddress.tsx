@@ -12,7 +12,7 @@ type Props = {
     lenghtAfter?: number
 }
 
-export const CopyToClipboardAddress: React.FC<Props> = ({ address, lenghtBefore = 8, lenghtAfter = 6 }) => {
+export const CopyToClipboardAddress: React.FC<Props> = ({ address, lenghtBefore, lenghtAfter }) => {
     const { onCopyToClipboard } = useCopyClipboard()
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)

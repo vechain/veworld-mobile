@@ -1,16 +1,25 @@
 import { CommonActions, useNavigation } from "@react-navigation/native"
 import { useEffect, useRef } from "react"
 import { Routes } from "~Navigation"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
 export const useResetNFTStack = () => {
     const navigation = useNavigation()
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const previousSelectedAccountAddress = useRef(selectedAccount?.address)
+    const previousSelectedNetwork = useRef(selectedNetwork)
+
+    const hasAccountChanged = !AddressUtils.compareAddresses(
+        selectedAccount.address,
+        previousSelectedAccountAddress.current,
+    )
+
+    const hasNetworkChanged = selectedNetwork.id !== previousSelectedNetwork.current.id
 
     useEffect(() => {
-        if (!AddressUtils.compareAddresses(selectedAccount.address, previousSelectedAccountAddress.current)) {
+        if (hasAccountChanged || hasNetworkChanged) {
             navigation.dispatch(state => {
                 const index = state.routes.findIndex(r => r.name === Routes.NFTS)
                 const routes = state.routes.slice(0, index + 1)
@@ -22,5 +31,5 @@ export const useResetNFTStack = () => {
                 })
             })
         }
-    }, [navigation, selectedAccount.address])
+    }, [hasAccountChanged, hasNetworkChanged, navigation, selectedAccount.address])
 }

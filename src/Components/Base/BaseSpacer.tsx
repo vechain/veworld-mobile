@@ -1,13 +1,13 @@
 import React, { FC, memo } from "react"
-import { DimensionValue, ViewProps } from "react-native"
+import { DimensionValue } from "react-native"
 import { useTheme } from "~Hooks"
-import { BaseView } from "./BaseView"
+import { BaseView, BaseViewProps } from "./BaseView"
 
 type Props = {
     height?: DimensionValue
     width?: DimensionValue
     background?: string
-} & ViewProps
+} & BaseViewProps
 
 export const BaseSpacer: FC<Props> = memo((props: Props) => {
     const { style, ...otherProps } = props

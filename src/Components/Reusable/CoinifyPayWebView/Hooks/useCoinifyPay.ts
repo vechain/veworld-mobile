@@ -13,7 +13,9 @@ type GenerateOnRampUrlParams = {
     amount?: number
 }
 
-export const useCoinifyPay = ({ target }: { target: "sell" | "buy" }) => {
+type GenerateTradeHistoryUrlParams = Pick<GenerateOnRampUrlParams, "primaryColor">
+
+export const useCoinifyPay = ({ target }: { target: "sell" | "buy" | "trade-history" }) => {
     const coinifyBaseUrl = __DEV__ ? process.env.REACT_APP_COINIFY_DEV_URL : process.env.REACT_APP_COINIFY_PROD_URL
 
     const generatePaymentTypes = useCallback(() => {
@@ -64,8 +66,20 @@ export const useCoinifyPay = ({ target }: { target: "sell" | "buy" }) => {
         [coinifyBaseUrl, generatePaymentTypes, objToQueryString],
     )
 
+    const generateTradeHistoryURL = useCallback(
+        ({ primaryColor }: GenerateTradeHistoryUrlParams) => {
+            const searchParams = objToQueryString({
+                primaryColor,
+                targetPage: "trade-history",
+            })
+            return coinifyBaseUrl + `?partnerId=${process.env.REACT_APP_COINIFY_PARTNER_ID}&` + searchParams
+        },
+        [coinifyBaseUrl, objToQueryString],
+    )
+
     return {
         generateOnRampURL,
         generateOffRampURL,
+        generateTradeHistoryURL,
     }
 }

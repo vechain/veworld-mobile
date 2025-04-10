@@ -1,13 +1,15 @@
-import React, { useCallback, useMemo } from "react"
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { Routes } from "~Navigation"
-import { BaseSpacer, BaseView, FadeoutButton, Layout, TransactionStatusBox, showErrorToast } from "~Components"
+import React, { useCallback, useMemo } from "react"
 import { Linking } from "react-native"
+import { getTimeZone } from "react-native-localize"
+import { striptags } from "striptags"
+import { BaseSpacer, BaseView, FadeoutButton, Layout, TransactionStatusBox, showErrorToast } from "~Components"
 import { useCopyClipboard, useTabBarBottomMargin } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { AccountUtils, DateUtils, AddressUtils } from "~Utils"
-import { InfoSectionView, NFTDetailImage } from "./Components"
+import { ActivityStatus } from "~Model"
+import { Routes } from "~Navigation"
+import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import {
     isBlacklistedCollection,
     selectCollectionWithContractAddress,
@@ -16,11 +18,9 @@ import {
     selectSelectedAccount,
     useAppSelector,
 } from "~Storage/Redux"
-import striptags from "striptags"
-import { useNavigation } from "@react-navigation/native"
-import { getTimeZone } from "react-native-localize"
-import { ActivityStatus } from "~Model"
+import { AccountUtils, AddressUtils, DateUtils } from "~Utils"
 import { useResetNFTStack } from "../hooks"
+import { InfoSectionView, NFTDetailImage } from "./Components"
 
 interface NFTAttributeData {
     trait_type: string
@@ -132,7 +132,9 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     {derivedDescription && (
                         <InfoSectionView<string>
                             title={LL.SB_DESCRIPTION()}
-                            data={striptags(derivedDescription.trim(), ["strong"])}
+                            data={striptags(derivedDescription.trim(), {
+                                allowedTags: new Set(["strong"]),
+                            })}
                         />
                     )}
 
@@ -178,7 +180,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                             action={() => onCopyToClipboardPress(collection.address)}
                             isLastInList
                             title={LL.CONTRACT_ADDRESS()}
-                            data={AddressUtils.humanAddress(collection?.address ?? "", 5, 4)}
+                            data={AddressUtils.humanAddress(collection?.address ?? "")}
                         />
                     )}
                 </BaseView>

@@ -1,9 +1,12 @@
-import { Image, StyleSheet } from "react-native"
 import React from "react"
-import { BaseText, BaseView, BaseSpacer, BaseSkeleton } from "~Components"
+import { StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
+import { BaseSkeleton, BaseText, BaseView } from "~Components"
+import { TokenImage } from "~Components/Reusable/TokenImage"
+import { VET } from "~Constants"
+import { COLORS } from "~Constants/Theme"
 import { useTheme } from "~Hooks"
-import { COLORS } from "~Constants"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 type BaseTokenCardProps = {
     icon: string
@@ -25,16 +28,16 @@ export const BaseTokenCard = ({
     const theme = useTheme()
     const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
 
+    const alignTokenBalance = symbol === VET.symbol ? "flex-start" : "center"
+
+    const isVetToken = isVechainToken(symbol)
+
     return (
-        <Animated.View style={[styles.innerRow]}>
-            <BaseView flexDirection="row">
-                <BaseView style={[styles.imageContainer]}>
-                    <Image source={{ uri: icon }} style={styles.image} />
-                </BaseView>
-                <BaseSpacer width={16} />
-                <BaseView alignItems="flex-start" justifyContent="center">
-                    <BaseText typographyFont="bodyBold">{symbol}</BaseText>
-                    <BaseSpacer height={2} />
+        <Animated.View style={[styles.innerRow, { alignItems: alignTokenBalance }]}>
+            <BaseView flexDirection="row" gap={12}>
+                <TokenImage icon={icon} isVechainToken={isVetToken} iconSize={26} />
+                <BaseView alignItems="center" justifyContent="center" flexDirection="row" gap={4}>
+                    <BaseText typographyFont="bodySemiBold">{symbol}</BaseText>
 
                     <BaseView flexDirection="row">
                         {isLoading ? (
@@ -49,7 +52,7 @@ export const BaseTokenCard = ({
                             </BaseView>
                         ) : (
                             <BaseView flexDirection="row">
-                                <BaseText typographyFont="bodyMedium" color={tokenValueLabelColor}>
+                                <BaseText typographyFont="bodyMedium" color={tokenValueLabelColor} lineHeight={20}>
                                     {isBalanceVisible ? tokenBalance : "•••••"}{" "}
                                 </BaseText>
                             </BaseView>
@@ -63,19 +66,9 @@ export const BaseTokenCard = ({
 }
 
 const styles = StyleSheet.create({
-    imageContainer: {
-        borderRadius: 30,
-        padding: 10,
-        backgroundColor: COLORS.GREY_50,
-    },
-    imageShadow: {
-        width: "auto",
-    },
-    image: { width: 20, height: 20 },
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
         width: "100%",
         paddingHorizontal: 16,
     },

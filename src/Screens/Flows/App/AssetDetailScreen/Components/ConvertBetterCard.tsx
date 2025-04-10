@@ -78,7 +78,10 @@ export const ConvertBetterCard: React.FC<Props> = ({
                         </BaseText>
                         <BaseSpacer height={12} />
                         <BaseView flexDirection="row" justifyContent="flex-start">
-                            <Image source={{ uri: renderIcon }} width={24} height={24} />
+                            <BaseView borderRadius={30} overflow="hidden">
+                                <Image source={{ uri: renderIcon }} width={24} height={24} />
+                            </BaseView>
+
                             <BaseSpacer width={12} />
                             <BaseText typographyFont="bodySemiBold">{token?.name}</BaseText>
                         </BaseView>

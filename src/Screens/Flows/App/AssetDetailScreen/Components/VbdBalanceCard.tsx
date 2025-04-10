@@ -7,6 +7,7 @@ import {
     BaseSkeleton,
     BaseText,
     BaseView,
+    DisabledBuySwapIosBottomSheet,
     FastActionsBottomSheet,
     FiatBalance,
     showWarningToast,
@@ -27,7 +28,7 @@ import {
     selectVot3TokenWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { BalanceUtils } from "~Utils"
+import { BalanceUtils, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { BalanceView } from "./BalanceView"
@@ -63,6 +64,12 @@ export const VbdBalanceCard = memo(
             onClose: closeConvertBetterSheet,
         } = useBottomSheetModal({ externalRef: convertB3trBottomSheetRef })
 
+        const {
+            ref: blockedFeaturesIOSBottomSheetRef,
+            onOpen: openBlockedFeaturesIOSBottomSheet,
+            onClose: closeBlockedFeaturesIOSBottomSheet,
+        } = useBottomSheetModal()
+
         const vot3Token = useTokenWithCompleteInfo(VOT3)
         const b3trToken = useTokenWithCompleteInfo(B3TR)
 
@@ -70,8 +77,8 @@ export const VbdBalanceCard = memo(
 
         const {
             exchangeRate,
-            // isPositive24hChange,
-            // change24h,
+            isPositive24hChange,
+            change24h,
             isLoading,
             fiatBalance: b3trFiat,
         } = useTokenCardFiatInfo(b3trToken)
@@ -192,6 +199,11 @@ export const VbdBalanceCard = memo(
                     name: LL.BTN_SWAP(),
                     disabled: !b3trTokenWithBalance || isObserved,
                     action: () => {
+                        if (PlatformUtils.isIOS()) {
+                            openBlockedFeaturesIOSBottomSheet()
+                            return
+                        }
+
                         if (veB3trFiatBalance) {
                             nav.navigate(Routes.SWAP)
                         } else {
@@ -220,6 +232,7 @@ export const VbdBalanceCard = memo(
                 nav,
                 FastActionsBottomSheetRef,
                 openDelayConvertBetterSheet,
+                openBlockedFeaturesIOSBottomSheet,
             ],
         )
 
@@ -247,14 +260,14 @@ export const VbdBalanceCard = memo(
                         balances={balances}
                         isVisible={isBalanceVisible}
                     />
-                    {/* {!!veB3trFiatBalance && (
+                    {!!veB3trFiatBalance && (
                         <BaseText
                             mt={2}
                             typographyFont="captionMedium"
                             color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
                             {change24h}
                         </BaseText>
-                    )} */}
+                    )}
                 </>
             )
         }, [
@@ -262,10 +275,15 @@ export const VbdBalanceCard = memo(
             theme.colors.skeletonBoneColor,
             theme.colors.skeletonHighlightColor,
             theme.colors.assetDetailsCard.title,
+            theme.colors.positive,
+            theme.colors.negative,
             b3trToken.exchangeRate,
             LL,
             balances,
             isBalanceVisible,
+            veB3trFiatBalance,
+            isPositive24hChange,
+            change24h,
         ])
 
         const vot3BalanceProps = useMemo(
@@ -319,6 +337,10 @@ export const VbdBalanceCard = memo(
                 />
 
                 <ConvertBetterBottomSheet ref={convertBetterBottomSheetRef} onClose={closeConvertBetterSheet} />
+                <DisabledBuySwapIosBottomSheet
+                    ref={blockedFeaturesIOSBottomSheetRef}
+                    onConfirm={closeBlockedFeaturesIOSBottomSheet}
+                />
             </>
         )
     },

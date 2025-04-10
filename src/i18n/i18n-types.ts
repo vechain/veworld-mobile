@@ -90,6 +90,62 @@ type RootTranslation = {
 	 */
 	ACTIVITIES_STATUS_success: string
 	/**
+	 * N​o​ ​A​c​t​i​v​i​t​i​e​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_ALL_EMPTY_LABEL: string
+	/**
+	 * A​l​l
+	 */
+	ACTIVITY_ALL_LABEL: string
+	/**
+	 * D​i​s​c​o​v​e​r​ ​V​e​B​e​t​t​e​r​D​A​O
+	 */
+	ACTIVITY_B3TR_EMPTY_BUTTON: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​y​o​u​r​ ​b​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​e​v​e​r​y​ ​d​a​y​!
+	 */
+	ACTIVITY_B3TR_EMPTY_DESCRIPTION: string
+	/**
+	 * N​o​ ​B​3​T​R​ ​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​.
+	 */
+	ACTIVITY_B3TR_EMPTY_LABEL: string
+	/**
+	 * B​e​t​t​e​r
+	 */
+	ACTIVITY_B3TR_LABEL: string
+	/**
+	 * N​o​ ​d​A​p​p​ ​i​n​t​e​r​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_DAPPS_EMPTY_LABEL: string
+	/**
+	 * d​A​p​p​s
+	 */
+	ACTIVITY_DAPPS_LABEL: string
+	/**
+	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: string
+	/**
+	 * N​F​T
+	 */
+	ACTIVITY_NFT_LABEL: string
+	/**
+	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_SWAP_EMPTY_LABEL: string
+	/**
+	 * S​w​a​p
+	 */
+	ACTIVITY_SWAP_LABEL: string
+	/**
+	 * N​o​ ​T​r​a​n​s​f​e​r​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
+	 */
+	ACTIVITY_TRANSFERS_EMPTY_LABEL: string
+	/**
+	 * T​r​a​n​s​f​e​r
+	 */
+	ACTIVITY_TRANSFER_LABEL: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -260,6 +316,35 @@ type RootTranslation = {
 	 * A​u​g​u​s​t
 	 */
 	AUGUST: string
+	/**
+	 * B​e​t​t​e​r​ ​a​c​t​i​o​n​ ​o​n
+	 */
+	B3TR_ACTION: string
+	/**
+	 * B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 */
+	B3TR_ACTION_MODAL_TITLE: string
+	/**
+	 * C​l​a​i​m​e​d​ ​v​o​t​i​n​g​ ​r​e​w​a​r​d​s
+	 */
+	B3TR_CLAIM_REWARD: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​p​r​o​p​o​s​a​l
+	 */
+	B3TR_PROPOSAL_VOTE: string
+	/**
+	 * P​r​o​p​o​s​a​l​ ​s​u​p​p​o​r​t​ ​o​n
+	 */
+	B3TR_PROPSAL_SUPPORT: string
+	/**
+	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​e​b​e​r​ ​l​e​v​e​l
+	 */
+	B3TR_UPGRADE_GM: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d​ ​#​{​n​u​m​b​e​r​}
+	 * @param {number} number
+	 */
+	B3TR_XALLOCATION_VOTE: RequiredParams<'number'>
 	/**
 	 * B​a​c​k​i​n​g​ ​u​p​.​.​.
 	 */
@@ -777,6 +862,16 @@ type RootTranslation = {
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: string
 	/**
+	 * T​h​e​s​e​ ​f​e​a​t​u​r​e​s​ ​a​r​e​ ​c​u​r​r​e​n​t​l​y​ ​u​n​a​v​a​i​l​a​b​l​e​ ​o​n​ ​i​O​S​ ​d​u​e​ ​t​o​ ​c​o​m​p​l​i​a​n​c​e​ ​r​e​q​u​i​r​e​m​e​n​t​s​.​
+​W​e​'​r​e​ ​w​o​r​k​i​n​g​ ​t​o​ ​b​r​i​n​g​ ​t​h​e​m​ ​b​a​c​k​ ​s​o​o​n​.​
+​T​h​a​n​k​s​ ​f​o​r​ ​y​o​u​r​ ​p​a​t​i​e​n​c​e​!
+	 */
+	BLOCKED_BUY_SWAP_IOS_SUBTITLE: string
+	/**
+	 * B​u​y​ ​&​ ​S​w​a​p​ ​o​n​ ​i​O​S
+	 */
+	BLOCKED_BUY_SWAP_IOS_TITLE: string
+	/**
 	 * B​l​o​c​k​ ​n​u​m​b​e​r
 	 */
 	BLOCK_NUMBER: string
@@ -958,6 +1053,10 @@ type RootTranslation = {
 	 */
 	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: string
 	/**
+	 * D​i​s​m​i​s​s
+	 */
+	BTN_DISMISS: string
+	/**
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
 	BTN_DOWNLOAD_LOGS: string
@@ -1126,6 +1225,10 @@ type RootTranslation = {
 	 * S​e​n​d
 	 */
 	BTN_SEND: string
+	/**
+	 * Y​e​s​,​ ​s​e​n​d​ ​a​n​y​w​a​y
+	 */
+	BTN_SEND_ANYWAY: string
 	/**
 	 * S​h​o​w​ ​Q​R​ ​c​o​d​e
 	 */
@@ -3272,13 +3375,14 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​a​s​s​e​t​ ​t​h​a​t​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​t​r​a​n​s​f​e​r
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
-	 * S​e​n​d​ ​y​o​u​r​ ​t​o​k​e​n
+	 * {​t​o​k​e​n​C​o​u​n​t​}​ ​t​o​k​e​n​s
+	 * @param {number} tokenCount
 	 */
-	SEND_TOKEN_SUBTITLE: string
+	SEND_TOKEN_SUBTITLE: RequiredParams<'tokenCount'>
 	/**
 	 * S​e​n​d
 	 */
@@ -3291,6 +3395,15 @@ type RootTranslation = {
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​s​e​n​d​i​n​g​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​.​ ​T​h​i​s​ ​m​a​y​ ​b​e​ ​d​u​e​ ​t​o​ ​a​ ​l​a​c​k​ ​o​f​ ​f​u​n​d​s
 	 */
 	SEND_TRANSACTION_ERROR: string
+	/**
+	 * Y​o​u​r​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​b​a​c​k​ ​t​o​ ​B​3​T​R​ ​i​n​ ​t​h​i​s​ ​s​p​e​c​i​f​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​.​ ​B​y​ ​s​e​n​d​i​n​g​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​o​n​’​t​ ​b​e​ ​a​b​l​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​t​o​ ​a​n​y​ ​o​t​h​e​r​ ​a​s​s​e​t​.​
+​A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​c​o​n​t​i​n​u​e​?
+	 */
+	SEND_VOT3_DESCRIPTION: string
+	/**
+	 * S​e​n​d​i​n​g​ ​V​O​T​3
+	 */
+	SEND_VOT3_TITLE: string
 	/**
 	 * V​e​c​h​a​i​n​ ​f​a​c​i​l​i​t​a​t​e​s​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​u​s​i​n​g​ ​V​T​H​O​ ​a​s​ ​t​h​e​ ​p​a​y​m​e​n​t​ ​m​e​d​i​u​m​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​s​.​ ​O​u​r​ ​M​A​X​ ​c​a​l​c​u​l​a​t​i​o​n​ ​m​e​t​h​o​d​ ​w​i​l​l​ ​d​e​d​u​c​t​ ​a​ ​p​r​e​d​e​f​i​n​e​d​ ​b​a​s​e​ ​f​e​e​ ​f​o​r​ ​t​r​a​n​s​a​c​t​i​o​n​ ​g​a​s
 	 */
@@ -3410,6 +3523,10 @@ type RootTranslation = {
 	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	SIGN_CERTIFICATE: string
+	/**
+	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SIGN_TRANSACTION: string
 	/**
 	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
@@ -3720,6 +3837,10 @@ type RootTranslation = {
 	 * T​o​d​a​y
 	 */
 	TODAY: string
+	/**
+	 * T​o​k​e​n​ ​C​o​n​v​e​r​s​i​o​n
+	 */
+	TOKEN_CONVERSION: string
 	/**
 	 * T​o​k​e​n​ ​I​D
 	 */
@@ -4038,6 +4159,62 @@ export type TranslationFunctions = {
 	 */
 	ACTIVITIES_STATUS_success: () => LocalizedString
 	/**
+	 * No Activities to show yet
+	 */
+	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * All
+	 */
+	ACTIVITY_ALL_LABEL: () => LocalizedString
+	/**
+	 * Discover VeBetterDAO
+	 */
+	ACTIVITY_B3TR_EMPTY_BUTTON: () => LocalizedString
+	/**
+	 * Start earning B3TR tokens with your better actions every day!
+	 */
+	ACTIVITY_B3TR_EMPTY_DESCRIPTION: () => LocalizedString
+	/**
+	 * No B3TR actions to show yet.
+	 */
+	ACTIVITY_B3TR_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Better
+	 */
+	ACTIVITY_B3TR_LABEL: () => LocalizedString
+	/**
+	 * No dApp interactions to show yet
+	 */
+	ACTIVITY_DAPPS_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * dApps
+	 */
+	ACTIVITY_DAPPS_LABEL: () => LocalizedString
+	/**
+	 * No NFTs to show yet
+	 */
+	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * NFT
+	 */
+	ACTIVITY_NFT_LABEL: () => LocalizedString
+	/**
+	 * No Swaps to show yet
+	 */
+	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	ACTIVITY_SWAP_LABEL: () => LocalizedString
+	/**
+	 * No Transfers to show yet
+	 */
+	ACTIVITY_TRANSFERS_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Transfer
+	 */
+	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
+	/**
 	 * Add Account
 	 */
 	ADD_ACCOUNT: () => LocalizedString
@@ -4206,6 +4383,34 @@ Try reconnect your device to the internet.
 	 * August
 	 */
 	AUGUST: () => LocalizedString
+	/**
+	 * Better action on
+	 */
+	B3TR_ACTION: () => LocalizedString
+	/**
+	 * Better action
+	 */
+	B3TR_ACTION_MODAL_TITLE: () => LocalizedString
+	/**
+	 * Claimed voting rewards
+	 */
+	B3TR_CLAIM_REWARD: () => LocalizedString
+	/**
+	 * Vote on proposal
+	 */
+	B3TR_PROPOSAL_VOTE: () => LocalizedString
+	/**
+	 * Proposal support on
+	 */
+	B3TR_PROPSAL_SUPPORT: () => LocalizedString
+	/**
+	 * New galaxy memeber level
+	 */
+	B3TR_UPGRADE_GM: () => LocalizedString
+	/**
+	 * Vote on round #{number}
+	 */
+	B3TR_XALLOCATION_VOTE: (arg: { number: number }) => LocalizedString
 	/**
 	 * Backing up...
 	 */
@@ -4719,6 +4924,16 @@ Try reconnect your device to the internet.
 	 */
 	BIOMETRICS_PROMPT_UNLOCK: () => LocalizedString
 	/**
+	 * These features are currently unavailable on iOS due to compliance requirements.
+We're working to bring them back soon.
+Thanks for your patience!
+	 */
+	BLOCKED_BUY_SWAP_IOS_SUBTITLE: () => LocalizedString
+	/**
+	 * Buy & Swap on iOS
+	 */
+	BLOCKED_BUY_SWAP_IOS_TITLE: () => LocalizedString
+	/**
 	 * Block number
 	 */
 	BLOCK_NUMBER: () => LocalizedString
@@ -4899,6 +5114,10 @@ Try reconnect your device to the internet.
 	 */
 	BTN_DELETE_BACKUP_FROM_CLOUD_CONFIRM: () => LocalizedString
 	/**
+	 * Dismiss
+	 */
+	BTN_DISMISS: () => LocalizedString
+	/**
 	 * Download logs
 	 */
 	BTN_DOWNLOAD_LOGS: () => LocalizedString
@@ -5066,6 +5285,10 @@ Try reconnect your device to the internet.
 	 * Send
 	 */
 	BTN_SEND: () => LocalizedString
+	/**
+	 * Yes, send anyway
+	 */
+	BTN_SEND_ANYWAY: () => LocalizedString
 	/**
 	 * Show QR code
 	 */
@@ -7180,13 +7403,13 @@ Try reconnect your device to the internet.
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select the asset that you want to transfer
+	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
 	/**
-	 * Send your token
+	 * {tokenCount} tokens
 	 */
-	SEND_TOKEN_SUBTITLE: () => LocalizedString
+	SEND_TOKEN_SUBTITLE: (arg: { tokenCount: number }) => LocalizedString
 	/**
 	 * Send
 	 */
@@ -7199,6 +7422,15 @@ Try reconnect your device to the internet.
 	 * There was an error sending the transaction. This may be due to a lack of funds
 	 */
 	SEND_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * Your VOT3 tokens can only be converted back to B3TR in this specific wallet address. By sending to another wallet you won’t be able to convert to any other asset.
+Are you sure you want to continue?
+	 */
+	SEND_VOT3_DESCRIPTION: () => LocalizedString
+	/**
+	 * Sending VOT3
+	 */
+	SEND_VOT3_TITLE: () => LocalizedString
 	/**
 	 * Vechain facilitates transactions using VTHO as the payment medium for transaction fees. Our MAX calculation method will deduct a predefined base fee for transaction gas
 	 */
@@ -7315,6 +7547,10 @@ Try reconnect your device to the internet.
 	 * Sign certificate
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
+	/**
+	 * Sign transaction
+	 */
+	SIGN_TRANSACTION: () => LocalizedString
 	/**
 	 * Error signing transaction
 	 */
@@ -7623,6 +7859,10 @@ Try reconnect your device to the internet.
 	 * Today
 	 */
 	TODAY: () => LocalizedString
+	/**
+	 * Token Conversion
+	 */
+	TOKEN_CONVERSION: () => LocalizedString
 	/**
 	 * Token ID
 	 */

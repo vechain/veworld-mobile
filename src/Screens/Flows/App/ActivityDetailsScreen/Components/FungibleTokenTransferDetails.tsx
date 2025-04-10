@@ -13,9 +13,11 @@ import { ActivityDetailContent, ActivityDetailItem } from "./ActivityDetailItem"
 type Props = {
     activity: FungibleTokenActivity
     token?: FungibleToken
+    gasUsed?: number
+    isLoading?: boolean
 }
 
-export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, token }) => {
+export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, token, gasUsed, isLoading = false }) => {
     const { LL } = useI18nContext()
 
     const network = useMemo(() => {
@@ -26,7 +28,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
 
     const { onCopyToClipboard } = useCopyClipboard()
 
-    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(activity)
+    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(gasUsed)
 
     const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
 
@@ -77,6 +79,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 typographyFont: "subSubTitle",
                 underline: false,
                 valueAdditional: fiatValueGasFeeSpent ?? "",
+                isLoading: isLoading,
             },
             {
                 id: 3,
@@ -84,8 +87,10 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
                 value: `${transactionIDshort}`,
                 typographyFont: "subSubTitle",
                 underline: false,
-                icon: "icon-copy",
-                onValuePress: () => onCopyToClipboard(activity.id, LL.COMMON_LBL_ADDRESS()),
+                icon: activity.txId ? "icon-copy" : undefined,
+                onValuePress: () => {
+                    if (activity.txId) onCopyToClipboard(activity.txId, LL.TRANSACTION_ID())
+                },
             },
             {
                 id: 4,
@@ -104,11 +109,12 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
         ],
         [
             LL,
-            activity.id,
+            activity.txId,
             amountTransferred,
             blockNumber,
             fiatValueGasFeeSpent,
             fiatValueTransferred,
+            isLoading,
             network,
             onCopyToClipboard,
             symbol,

@@ -1,4 +1,4 @@
-import { OutputResponse } from "~Model"
+import { IndexedHistoryEvent, OutputResponse } from "~Model"
 import { PaginationResponse } from "~Networking"
 
 export interface BaseTransactionResponse {
@@ -27,11 +27,6 @@ export interface TransactionsResponse extends BaseTransactionResponse {
     outputs: OutputResponse[]
 }
 
-export interface FetchTransactionsResponse {
-    data: TransactionsResponse[]
-    pagination: PaginationResponse
-}
-
 export enum EventTypeResponse {
     FUNGIBLE_TOKEN = "FUNGIBLE_TOKEN",
     VET = "VET",
@@ -55,25 +50,9 @@ export interface FetchIncomingTransfersResponse {
     pagination: PaginationResponse
 }
 
-export type FetchBlockResponse = {
-    blockId: string
-    number: number
-    size: number
-    parentID: string
-    timestamp: number
-    gasLimit: number
-    beneficiary: string
-    gasUsed: number
-    totalScore: number
-    txsRoot: string
-    txsFeatures: number
-    stateRoot: string
-    receiptsRoot: string
-    com: boolean
-    signer: string
-    isTrunk: boolean
-    isFinalized: boolean
-    transactions: FetchTransactionsResponse[]
+export interface FetchActivitiesResponse {
+    data: IndexedHistoryEvent[]
+    pagination: PaginationResponse
 }
 
 export type FetchFungibleTokensContractsResponse = {

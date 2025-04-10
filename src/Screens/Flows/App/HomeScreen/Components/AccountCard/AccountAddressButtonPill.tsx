@@ -1,8 +1,8 @@
 import React from "react"
 import { StyleSheet, View } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
-import { useThemedStyles, useVns } from "~Hooks"
 import { ColorThemeType } from "~Constants"
+import { useThemedStyles, useVns } from "~Hooks"
 import { AddressUtils } from "~Utils"
 
 type Props = {
@@ -23,7 +23,7 @@ export const AccountAddressButtonPill = ({ text, openQRCodeSheet, switchAccount 
             <BaseTouchable action={openQRCodeSheet} haptics="Light" style={themedStyles.pressable}>
                 <BaseView flexDirection="row" px={8}>
                     <BaseText color={theme.colors.text} typographyFont="smallCaptionRegular">
-                        {vnsName || AddressUtils.humanAddress(address || text, 6, 3)}
+                        {vnsName || AddressUtils.humanAddress(address || text)}
                     </BaseText>
                     <BaseSpacer width={4} />
                     <BaseIcon name="icon-copy" color={theme.colors.text} size={12} />

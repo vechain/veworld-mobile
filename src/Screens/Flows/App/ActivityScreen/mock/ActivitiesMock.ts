@@ -1,14 +1,6 @@
 /* eslint-disable max-len */
 import { VET, VTHO, DIRECTIONS } from "~Constants"
-import {
-    Activity,
-    ActivityStatus,
-    ActivityType,
-    DappTxActivity,
-    DelegatedTransactionActivity,
-    FungibleTokenActivity,
-    SignCertActivity,
-} from "~Model"
+import { Activity, ActivityStatus, ActivityType, DappTxActivity, FungibleTokenActivity, SignCertActivity } from "~Model"
 
 const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
     {
@@ -23,7 +15,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         blockNumber: 123456,
         isTransaction: true,
         genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.VET_TRANSFER,
+        type: ActivityType.TRANSFER_VET,
         timestamp: 1382337919000,
         gasUsed: 21000,
         gasPayer: "0xC8049b4003b29AA478758911cE1FEB6A05CeC5F8",
@@ -50,7 +42,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         blockNumber: 123456,
         isTransaction: true,
         genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.FUNGIBLE_TOKEN,
+        type: ActivityType.TRANSFER_FT,
         timestamp: 1482337919000,
         gasUsed: 36518,
         gasPayer: "0xf6EDf674a43F725EBa52915f0a3A49A2AF4580E6",
@@ -77,7 +69,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         blockNumber: 15181772,
         isTransaction: true,
         genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.FUNGIBLE_TOKEN,
+        type: ActivityType.TRANSFER_FT,
         timestamp: 1482337912000,
         gasUsed: 36518,
         gasPayer: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD65",
@@ -104,7 +96,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         blockNumber: 15181772,
         isTransaction: true,
         genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.VET_TRANSFER,
+        type: ActivityType.TRANSFER_VET,
         timestamp: 1382337919000,
         gasUsed: 21000,
         gasPayer: "0xaa1c3EF9BD8B18d5B59120649Ccf3648432C4aFD",
@@ -131,7 +123,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         blockNumber: 15181772,
         isTransaction: true,
         genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.VET_TRANSFER,
+        type: ActivityType.TRANSFER_VET,
         timestamp: 1482337912000,
         gasUsed: 36518,
         gasPayer: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD65",
@@ -158,7 +150,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         blockNumber: 15181775,
         isTransaction: true,
         genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.VET_TRANSFER,
+        type: ActivityType.TRANSFER_VET,
         timestamp: 1382337919000,
         gasUsed: 67435,
         gasPayer: "0xaa1c3EF9BD8B18d5B59120649Ccf3648432C4aFD",
@@ -185,7 +177,7 @@ const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
         blockNumber: 15181775,
         isTransaction: true,
         genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.VET_TRANSFER,
+        type: ActivityType.TRANSFER_VET,
         timestamp: 1382337919000,
         gasUsed: 67435,
         gasPayer: "0xaa1c3EF9BD8B18d5B59120649Ccf3648432C4aFD",
@@ -370,46 +362,8 @@ const SIGN_CERT_ACTIVITIES: SignCertActivity[] = [
     },
 ]
 
-const DELEGATED_TRANSACTION_ACTIVITIES: DelegatedTransactionActivity[] = [
-    {
-        // Delegated transaction
-        from: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
-        to: ["0x67C0F9A8eD050253694bbE5E156D92Acd1023889"],
-        id: "0x56189da678b222a32e26510kfn537ef4de83370aa9d49b08a98b51e9ef15f0bb",
-        blockNumber: 15181775,
-        isTransaction: true,
-        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.DELEGATED_TRANSACTION,
-        timestamp: 1382337919000,
-        gasUsed: 154645,
-        gasPayer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
-        delegated: false,
-        status: ActivityStatus.SUCCESS,
-        clauses: [],
-        outputs: [],
-    },
-    {
-        // Delegated transaction
-        from: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
-        to: ["0x67C0F9A8eD050253694bbE5E156D92Acd1023889"],
-        id: "0x56189da678b222a32e26510kfn537ef4de83370jg1149b08a98b51e9ef15f0bb",
-        blockNumber: 15181775,
-        isTransaction: true,
-        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.DELEGATED_TRANSACTION,
-        timestamp: 1382337919000,
-        gasUsed: 154645,
-        gasPayer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
-        delegated: false,
-        status: ActivityStatus.SUCCESS,
-        clauses: [],
-        outputs: [],
-    },
-]
-
 export const ACTIVITIES_MOCK: Activity[] = [
     FUNGIBLE_TOKEN_ACTIVITIES,
     CONNECTED_APP_ACTIVITIES,
     SIGN_CERT_ACTIVITIES,
-    DELEGATED_TRANSACTION_ACTIVITIES,
 ].flat()

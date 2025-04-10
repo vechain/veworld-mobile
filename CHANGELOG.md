@@ -1,5 +1,21 @@
 
 
+## 2.1.2 (2025-04-08)
+
+
+### Bug Fixes
+
+* update BaseCarousel and BaseCarouselItem for responsive design adjustments ([#2853](https://github.com/vechain/veworld-mobile/issues/2853)) ([ba0cd7d](https://github.com/vechain/veworld-mobile/commit/ba0cd7deab3b028040f4a7ac92d38a2d1ef12533))
+
+## 2.1.1 (2025-04-02)
+
+## 2.0.10 (2025-03-31)
+
+
+### Bug Fixes
+
+* fontsize on activity box ([#2825](https://github.com/vechain/veworld-mobile/issues/2825)) ([38a41ce](https://github.com/vechain/veworld-mobile/commit/38a41ce30d47e2b92642879e4440ec770a82130d))
+
 ## 2.0.9 (2025-02-18)
 
 
