@@ -26,7 +26,7 @@ export const selectBookmarkedDapps = createSelector(
             }
         }
 
-        return dapps.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+        return dapps
     },
 )
 

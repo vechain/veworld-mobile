@@ -1,93 +1,70 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback } from "react"
 import { FlatList, ListRenderItemInfo } from "react-native"
-import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { useBottomSheetModal } from "~Hooks"
+import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { DAppCard } from "./DAppCard"
-import { StackDAppCard } from "./StackDAppCard"
-import { StackedDappsBottomSheet } from "./StackedDappsBottomSheet"
 
 type BookmarkListProps = {
-    bookmarkedDApps: DiscoveryDApp[][]
-    onDAppPress: ({ href, custom }: { href: string; custom?: boolean }) => void
+    bookmarkedDApps: DiscoveryDApp[]
+    onDAppPress: (dapp: DiscoveryDApp) => void
 }
 
 const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps) => {
-    const [bottomSheetDApps, setBottomSheetDApps] = useState<DiscoveryDApp[]>([])
-
-    const { ref, onOpen, onClose } = useBottomSheetModal()
-
-    const onStackDAppPress = useCallback(
-        (dapps: DiscoveryDApp[]) => {
-            setBottomSheetDApps(dapps)
-            onOpen()
-        },
-        [onOpen],
-    )
-
     const renderItem = useCallback(
-        ({ item, index }: ListRenderItemInfo<DiscoveryDApp[]>) => {
+        ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
             const isLast = index === bookmarkedDApps.length - 1
-            const columnsGap = 24
+            const columnsGap = 16
 
             return (
                 <BaseView pl={columnsGap} pr={isLast ? columnsGap : 0} justifyContent="center" alignItems="center">
-                    {item.length === 1 ? (
-                        <DAppCard
-                            columns={4}
-                            columnsGap={columnsGap}
-                            dapp={item[0]}
-                            onPress={() => onDAppPress({ href: item[0].href, custom: item[0].isCustom })}
-                        />
-                    ) : (
-                        <StackDAppCard
-                            columns={4}
-                            columnsGap={columnsGap}
-                            dapp={item}
-                            onPress={() => onStackDAppPress(item)}
-                        />
-                    )}
+                    <DAppCard dapp={item} onPress={() => onDAppPress(item)} />
                 </BaseView>
             )
         },
-        [bookmarkedDApps.length, onDAppPress, onStackDAppPress],
+        [bookmarkedDApps.length, onDAppPress],
     )
 
     return (
         <BaseView>
-            <BaseSpacer height={12} />
+            <BaseSpacer height={16} />
             <FlatList
                 data={bookmarkedDApps}
                 horizontal
-                keyExtractor={(_item, index) => _item[0]?.href ?? index.toString()}
+                keyExtractor={(_item, index) => _item?.href ?? index.toString()}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
             />
-            <StackedDappsBottomSheet ref={ref} dapps={bottomSheetDApps} onDAppPress={onDAppPress} onClose={onClose} />
         </BaseView>
     )
 }
 
 type FavouritesProps = {
-    bookmarkedDApps: DiscoveryDApp[][]
+    bookmarkedDApps: DiscoveryDApp[]
     onActionLabelPress: () => void
-    onDAppPress: ({ href }: { href: string; custom?: boolean }) => void
+    onDAppPress: (dapp: DiscoveryDApp) => void
 }
 
 export const Favourites = React.memo(({ bookmarkedDApps, onActionLabelPress, onDAppPress }: FavouritesProps) => {
     const { LL } = useI18nContext()
     const showBookmarkedDAppsList = bookmarkedDApps.length > 0
+    const theme = useTheme()
 
     return (
-        <BaseView py={24}>
-            <BaseView flexDirection="row" justifyContent="space-between" px={24}>
-                <BaseText typographyFont="bodyBold">{LL.DISCOVER_TAB_FAVOURITES()}</BaseText>
+        <BaseView>
+            <BaseView flexDirection="row" justifyContent="space-between" px={16}>
+                <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_TAB_FAVOURITES()}</BaseText>
 
                 {showBookmarkedDAppsList && (
                     <BaseTouchable action={onActionLabelPress}>
-                        <BaseText typographyFont="body">{LL.DISCOVER_SEE_ALL_BOOKMARKS()}</BaseText>
+                        <BaseView flexDirection="row">
+                            <BaseText typographyFont="captionMedium" mx={2}>
+                                {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
+                            </BaseText>
+                            <BaseIcon name="icon-chevron-right" size={12} color={theme.colors.text} />
+                        </BaseView>
                     </BaseTouchable>
                 )}
             </BaseView>

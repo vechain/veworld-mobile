@@ -1,26 +1,26 @@
 /* eslint-disable max-len */
-import React, { useEffect, useMemo, useState } from "react"
-import { BaseToast } from "~Components"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NavigationContainer } from "@react-navigation/native"
+import { configureStore } from "@reduxjs/toolkit"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import React, { useEffect, useMemo, useState } from "react"
+import { Platform } from "react-native"
+import { GestureHandlerRootView } from "react-native-gesture-handler"
+import { MMKV } from "react-native-mmkv"
+import { Provider } from "react-redux"
+import { PersistConfig } from "redux-persist/es/types"
+import { BaseToast } from "~Components"
+import { ConnexContext } from "~Components/Providers/ConnexProvider"
+import { NotificationsProvider } from "~Components/Providers/NotificationsProvider"
+import { ThemeEnum } from "~Constants"
 import { useTheme } from "~Hooks"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
-import { Provider } from "react-redux"
-import { newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
-import { GestureHandlerRootView } from "react-native-gesture-handler"
-import { configureStore } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
-import { RootState } from "~Storage/Redux/Types"
-import { Platform } from "react-native"
-import TestHelpers from "./helpers"
-import { PersistConfig } from "redux-persist/es/types"
-import { MMKV } from "react-native-mmkv"
 import { SecurePersistedCache } from "~Storage/PersistedCache"
-import { ThemeEnum } from "~Constants"
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
+import { RootState } from "~Storage/Redux/Types"
 import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
-import { NotificationsProvider } from "~Components/Providers/NotificationsProvider"
-import { ConnexContext } from "~Components/Providers/ConnexProvider"
+import TestHelpers from "./helpers"
 import { B3TRWithBalance, VOT3WithBalance } from "./helpers/data"
 
 export { default as TestHelpers } from "./helpers"
@@ -124,7 +124,7 @@ export const TestWrapper = ({
     children,
     preloadedState,
 }: {
-    children: React.ReactNode
+    children?: React.ReactNode
     preloadedState: Partial<RootState>
 }) => {
     ;(usePersistedTheme as jest.Mock<ReturnType<typeof usePersistedTheme>>).mockReturnValue({

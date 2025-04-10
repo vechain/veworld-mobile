@@ -912,9 +912,30 @@ type RootTranslation = {
 	 */
 	BROWSER_FAVOURITES_TITLE: string
 	/**
+	 * T​h​i​s​ ​a​d​d​r​e​s​s​ ​c​a​n​'​t​ ​b​e​ ​r​e​a​c​h​e​d
+	 */
+	BROWSER_HISTORY_ADDRESS_ERROR: string
+	/**
+	 * C​l​e​a​r
+	 */
+	BROWSER_HISTORY_CLEAR: string
+	/**
+	 * H​i​s​t​o​r​y
+	 */
+	BROWSER_HISTORY_DEFAULT_TITLE: string
+	/**
+	 * N​o​ ​h​i​s​t​o​r​y​ ​t​o​ ​s​h​o​w
+	 */
+	BROWSER_HISTORY_EMPTY: string
+	/**
 	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
 	 */
 	BROWSER_HISTORY_No_RECORDS: string
+	/**
+	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
+	 * @param {number} amount
+	 */
+	BROWSER_HISTORY_RESULTS: RequiredParams<'amount'>
 	/**
 	 * S​e​a​r​c​h
 	 */
@@ -936,6 +957,26 @@ type RootTranslation = {
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: string
 	/**
+	 * C​o​p​y​ ​p​a​g​e​ ​l​i​n​k
+	 */
+	BROWSER_COPY_LINK: string
+	/**
+	 * S​h​a​r​e
+	 */
+	BROWSER_SHARE: string
+	/**
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BROWSER_ADD_FAVORITE_DAPPS: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BROWSER_REMOVE_FAVORITE_DAPPS: string
+	/**
+	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BROWSER_COPY_LINK_SUCCESS: string
+	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
 	BTN_ADD_ACCOUNT: string
@@ -947,6 +988,18 @@ type RootTranslation = {
 	 * A​d​d​ ​a​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	BTN_ADD_CUSTOM_NODE: string
+	/**
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BTN_ADD_TO_FAVORITES: string
+	/**
+	 * A​l​p​h​a​b​e​t​i​c​ ​(​A​-​Z​)
+	 */
+	BTN_ALPHABETIC_ASC: string
+	/**
+	 * A​l​p​h​a​b​e​t​i​c​ ​(​Z​-​A​)
+	 */
+	BTN_ALPHABETIC_DESC: string
 	/**
 	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
 	 */
@@ -1121,6 +1174,10 @@ type RootTranslation = {
 	 */
 	BTN_MNEMONIC_CLIPBOARD: string
 	/**
+	 * R​e​c​e​n​t​l​y​ ​a​d​d​e​d
+	 */
+	BTN_NEWEST: string
+	/**
 	 * N​o​,​ ​g​o​ ​b​a​c​k
 	 */
 	BTN_NO_GO_BACK: string
@@ -1153,13 +1210,25 @@ type RootTranslation = {
 	 */
 	BTN_ONBOARDING_SLIDE_03: string
 	/**
+	 * O​p​e​n​ ​d​A​p​p
+	 */
+	BTN_OPEN_DAPP: string
+	/**
 	 * P​a​s​t​e​ ​A​d​d​r​e​s​s
 	 */
 	BTN_PASTE_ADDRESS: string
 	/**
+	 * P​o​p​u​l​a​r​i​t​y
+	 */
+	BTN_POPULAR: string
+	/**
 	 * R​e​m​o​v​e​ ​a​c​c​o​u​n​t
 	 */
 	BTN_REMOVE_ACCOUNT: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BTN_REMOVE_FROM_FAVORITES: string
 	/**
 	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
 	 */
@@ -1205,6 +1274,10 @@ type RootTranslation = {
 	 * @param {string} type
 	 */
 	BTN_SECURTY_USE_TYPE: RequiredParams<'type'>
+	/**
+	 * S​e​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O
+	 */
+	BTN_SEE_ON_VBD: string
 	/**
 	 * S​e​l​e​c​t​ ​d​e​r​i​v​a​t​i​o​n​ ​p​a​t​h​ ​f​o​r​ ​y​o​u​r​ ​w​a​l​l​e​t
 	 */
@@ -1853,7 +1926,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_DAPPS_TITLE: string
 	/**
-	 * E​c​o​s​y​s​t​e​m
+	 * E​c​o​s​y​s​t​e​m​ ​d​A​p​p​s
 	 */
 	DISCOVER_ECOSYSTEM: string
 	/**
@@ -1893,7 +1966,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_NO_DAPPS_FOUND: string
 	/**
-	 * S​e​a​r​c​h​ ​t​h​e​ ​W​e​b
+	 * S​e​a​r​c​h​ ​o​r​ ​t​y​p​e​ ​U​R​L​.​.​.
 	 */
 	DISCOVER_SEARCH: string
 	/**
@@ -1905,17 +1978,29 @@ type RootTranslation = {
 	 */
 	DISCOVER_SEE_ALL_BOOKMARKS: string
 	/**
+	 * S​o​r​t​ ​b​y
+	 */
+	DISCOVER_SORT_BY: string
+	/**
 	 * D​i​s​c​o​v​e​r​ ​a​p​p​l​i​c​a​t​i​o​n​s​ ​i​n​ ​t​h​e​ ​v​e​c​h​a​i​n​ ​e​c​o​s​y​s​t​e​m
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​u​r​i​t​e​s​ ​d​A​p​p​s
 	 */
 	DISCOVER_TAB_FAVOURITES: string
 	/**
 	 * F​e​a​t​u​r​e​d
 	 */
 	DISCOVER_TAB_FEATURED: string
+	/**
+	 * N​e​w​ ​d​A​p​p​s
+	 */
+	DISCOVER_TAB_NEW_DAPPS: string
+	/**
+	 * T​r​e​n​d​i​n​g​ ​&​ ​P​o​p​u​l​a​r
+	 */
+	DISCOVER_TAB_TRENDING_AND_POPULAR: string
 	/**
 	 * D​i​s​c​o​v​e​r
 	 */
@@ -4974,9 +5059,29 @@ Thanks for your patience!
 	 */
 	BROWSER_FAVOURITES_TITLE: () => LocalizedString
 	/**
+	 * This address can't be reached
+	 */
+	BROWSER_HISTORY_ADDRESS_ERROR: () => LocalizedString
+	/**
+	 * Clear
+	 */
+	BROWSER_HISTORY_CLEAR: () => LocalizedString
+	/**
+	 * History
+	 */
+	BROWSER_HISTORY_DEFAULT_TITLE: () => LocalizedString
+	/**
+	 * No history to show
+	 */
+	BROWSER_HISTORY_EMPTY: () => LocalizedString
+	/**
 	 * No History Available
 	 */
 	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
+	/**
+	 * {amount} Results
+	 */
+	BROWSER_HISTORY_RESULTS: (arg: { amount: number }) => LocalizedString
 	/**
 	 * Search
 	 */
@@ -4998,6 +5103,26 @@ Thanks for your patience!
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
 	/**
+	 * Copy page link
+	 */
+	BROWSER_COPY_LINK: () => LocalizedString
+	/**
+	 * Share
+	 */
+	BROWSER_SHARE: () => LocalizedString
+	/**
+	 * Add to Favorite dApps
+	 */
+	BROWSER_ADD_FAVORITE_DAPPS: () => LocalizedString
+	/**
+	 * Remove from Favorite dApps
+	 */
+	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
+	/**
+	 * Link successfully copied to the clipboard
+	 */
+	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
+	/**
 	 * ADD ACCOUNT
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
@@ -5009,6 +5134,18 @@ Thanks for your patience!
 	 * Add a custom node
 	 */
 	BTN_ADD_CUSTOM_NODE: () => LocalizedString
+	/**
+	 * Add to Favorite dApps
+	 */
+	BTN_ADD_TO_FAVORITES: () => LocalizedString
+	/**
+	 * Alphabetic (A-Z)
+	 */
+	BTN_ALPHABETIC_ASC: () => LocalizedString
+	/**
+	 * Alphabetic (Z-A)
+	 */
+	BTN_ALPHABETIC_DESC: () => LocalizedString
 	/**
 	 * I'll do it later
 	 */
@@ -5182,6 +5319,10 @@ Thanks for your patience!
 	 */
 	BTN_MNEMONIC_CLIPBOARD: () => LocalizedString
 	/**
+	 * Recently added
+	 */
+	BTN_NEWEST: () => LocalizedString
+	/**
 	 * No, go back
 	 */
 	BTN_NO_GO_BACK: () => LocalizedString
@@ -5214,13 +5355,25 @@ Thanks for your patience!
 	 */
 	BTN_ONBOARDING_SLIDE_03: () => LocalizedString
 	/**
+	 * Open dApp
+	 */
+	BTN_OPEN_DAPP: () => LocalizedString
+	/**
 	 * Paste Address
 	 */
 	BTN_PASTE_ADDRESS: () => LocalizedString
 	/**
+	 * Popularity
+	 */
+	BTN_POPULAR: () => LocalizedString
+	/**
 	 * Remove account
 	 */
 	BTN_REMOVE_ACCOUNT: () => LocalizedString
+	/**
+	 * Remove from Favorite dApps
+	 */
+	BTN_REMOVE_FROM_FAVORITES: () => LocalizedString
 	/**
 	 * Remove wallet
 	 */
@@ -5265,6 +5418,10 @@ Thanks for your patience!
 	 * Use {type}
 	 */
 	BTN_SECURTY_USE_TYPE: (arg: { type: string }) => LocalizedString
+	/**
+	 * See on VeBetterDAO
+	 */
+	BTN_SEE_ON_VBD: () => LocalizedString
 	/**
 	 * Select derivation path for your wallet
 	 */
@@ -5906,7 +6063,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_DAPPS_TITLE: () => LocalizedString
 	/**
-	 * Ecosystem
+	 * Ecosystem dApps
 	 */
 	DISCOVER_ECOSYSTEM: () => LocalizedString
 	/**
@@ -5946,7 +6103,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_NO_DAPPS_FOUND: () => LocalizedString
 	/**
-	 * Search the Web
+	 * Search or type URL...
 	 */
 	DISCOVER_SEARCH: () => LocalizedString
 	/**
@@ -5958,17 +6115,29 @@ Thanks for your patience!
 	 */
 	DISCOVER_SEE_ALL_BOOKMARKS: () => LocalizedString
 	/**
+	 * Sort by
+	 */
+	DISCOVER_SORT_BY: () => LocalizedString
+	/**
 	 * Discover applications in the vechain ecosystem
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favourites dApps
 	 */
 	DISCOVER_TAB_FAVOURITES: () => LocalizedString
 	/**
 	 * Featured
 	 */
 	DISCOVER_TAB_FEATURED: () => LocalizedString
+	/**
+	 * New dApps
+	 */
+	DISCOVER_TAB_NEW_DAPPS: () => LocalizedString
+	/**
+	 * Trending & Popular
+	 */
+	DISCOVER_TAB_TRENDING_AND_POPULAR: () => LocalizedString
 	/**
 	 * Discover
 	 */

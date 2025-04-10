@@ -38,7 +38,14 @@ export const StackedDappsBottomSheet = React.forwardRef<BottomSheetModalMethods,
 
         const renderItem = useCallback(
             ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
-                return <FavoriteDAppCard dapp={item} onDAppPress={onCardPressHandler} />
+                return (
+                    <FavoriteDAppCard
+                        dapp={item}
+                        isEditMode={false}
+                        isActive={false}
+                        onDAppPress={onCardPressHandler}
+                    />
+                )
             },
             [onCardPressHandler],
         )

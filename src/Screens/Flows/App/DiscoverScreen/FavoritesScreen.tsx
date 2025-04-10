@@ -1,101 +1,122 @@
-import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo, useState } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseSearchInput, BaseSpacer, BaseView, FavoriteDAppCard, Layout, ListEmptyResults } from "~Components"
-import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
-import { Routes } from "~Navigation"
-import { addNavigationToDApp, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import React, { useCallback, useState } from "react"
+import { StyleSheet } from "react-native"
+import {
+    AnimatedSaveHeaderButton,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    FavoriteDAppCard,
+    Layout,
+    ListEmptyResults,
+    ReorderIconHeaderButton,
+} from "~Components"
+import { DiscoveryDApp } from "~Constants"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { FavoritesStackCard } from "./Components"
-import { groupFavoritesByBaseUrl } from "./utils"
+import {
+    NestableScrollContainer,
+    NestableDraggableFlatList,
+    RenderItem,
+    DragEndParams,
+} from "react-native-draggable-flatlist"
+import { useDAppActions } from "./Hooks"
+import { DAppOptionsBottomSheet } from "./Components/Bottomsheets"
 
 export const FavouritesScreen = () => {
-    const nav = useNavigation()
-    const track = useAnalyticTracking()
-    const dispatch = useAppDispatch()
+    const [isEditingMode, setIsEditingMode] = useState(false)
+    const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>()
+
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
+    const { onDAppPress } = useDAppActions()
+    const dispatch = useAppDispatch()
+
+    const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
 
-    const [filteredSearch, setFilteredSearch] = useState("")
+    const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
 
-    const renderSeparator = useCallback(() => <BaseSpacer height={12} />, [])
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
-    const onTextChange = useCallback((text: string) => {
-        setFilteredSearch(text)
-    }, [])
-
-    const onDAppPress = useCallback(
-        ({ href, custom }: { href: string; custom?: boolean }) => {
-            nav.navigate(Routes.BROWSER, { url: href })
-
-            track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-                url: href,
-            })
-
-            setTimeout(() => {
-                dispatch(addNavigationToDApp({ href: href, isCustom: custom ?? false }))
-            }, 1000)
+    const onMorePress = useCallback(
+        (dapp: DiscoveryDApp) => {
+            setSelectedDApp(dapp)
+            onOpenDAppOptions()
         },
-        [track, dispatch, nav],
+        [onOpenDAppOptions],
     )
 
-    const dappToShow = useMemo(() => {
-        const dapps =
-            filteredSearch === ""
-                ? bookmarkedDApps
-                : bookmarkedDApps.filter(dapp => dapp.name.toLowerCase().includes(filteredSearch.toLowerCase()))
-
-        return groupFavoritesByBaseUrl(dapps)
-    }, [bookmarkedDApps, filteredSearch])
-
-    const renderItem = useCallback(
-        ({ item }: ListRenderItemInfo<DiscoveryDApp[]>) => {
-            return item.length === 1 ? (
-                <FavoriteDAppCard dapp={item[0]} onDAppPress={onDAppPress} />
-            ) : (
-                <FavoritesStackCard dapps={item} onDAppPress={onDAppPress} />
+    const renderItem: RenderItem<DiscoveryDApp> = useCallback(
+        ({ item, isActive, drag }) => {
+            return (
+                <FavoriteDAppCard
+                    dapp={item}
+                    isActive={isActive}
+                    isEditMode={isEditingMode}
+                    onDAppPress={onDAppPress}
+                    onMorePress={onMorePress}
+                    onLongPress={isEditingMode ? drag : undefined}
+                />
             )
         },
-        [onDAppPress],
+        [isEditingMode, onDAppPress, onMorePress],
     )
+
+    const onDragEnd = useCallback(({ data }: DragEndParams<DiscoveryDApp>) => {
+        setReorderedDapps(data)
+    }, [])
+
+    const onSaveReorderedDapps = useCallback(() => {
+        dispatch(reorderBookmarks(reorderedDapps))
+        setIsEditingMode(false)
+    }, [dispatch, reorderedDapps])
 
     return (
         <Layout
             hasSafeArea={true}
             hasTopSafeAreaOnly={false}
             title={LL.FAVOURITES_DAPPS_TITLE()}
-            fixedHeader={
-                <BaseView>
-                    <BaseSpacer height={12} />
-                    <BaseSearchInput
-                        placeholder={LL.FAVOURITES_DAPPS_SEARCH_PLACEHOLDER()}
-                        setValue={onTextChange}
-                        value={filteredSearch}
-                        showIcon={filteredSearch.length > 0}
-                        iconName="icon-x"
-                        iconSize={18}
-                        onIconPress={() => setFilteredSearch("")}
+            headerRightElement={
+                isEditingMode ? (
+                    <AnimatedSaveHeaderButton action={onSaveReorderedDapps} />
+                ) : (
+                    <ReorderIconHeaderButton
+                        action={() => {
+                            setIsEditingMode(true)
+                        }}
                     />
-                    <BaseSpacer height={12} />
-                </BaseView>
+                )
             }
             fixedBody={
-                <BaseView flex={1} px={24}>
-                    <FlatList
-                        contentContainerStyle={styles.listContentContainer}
-                        data={dappToShow}
-                        keyExtractor={(item, index) => item[0]?.href ?? index.toString()}
-                        renderItem={renderItem}
-                        ListFooterComponent={renderFooter}
-                        ItemSeparatorComponent={renderSeparator}
-                        showsVerticalScrollIndicator={false}
-                        ListEmptyComponent={
-                            <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
-                        }
+                <BaseView flex={1}>
+                    <BaseView px={16} py={12}>
+                        <BaseText typographyFont="bodySemiBold">{`${bookmarkedDApps.length} dApps`}</BaseText>
+                    </BaseView>
+                    <NestableScrollContainer>
+                        <NestableDraggableFlatList
+                            scrollEnabled={!isEditingMode}
+                            contentContainerStyle={styles.listContentContainer}
+                            extraData={isEditingMode}
+                            data={reorderedDapps}
+                            onDragEnd={onDragEnd}
+                            keyExtractor={(item, index) => item?.href ?? index.toString()}
+                            renderItem={renderItem}
+                            ListFooterComponent={renderFooter}
+                            showsVerticalScrollIndicator={false}
+                            ListEmptyComponent={
+                                <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
+                            }
+                        />
+                    </NestableScrollContainer>
+                    <DAppOptionsBottomSheet
+                        ref={dappOptionsRef}
+                        onClose={() => {
+                            setSelectedDApp(undefined)
+                            onCloseDAppOptions()
+                        }}
+                        selectedDApp={selectedDApp}
                     />
                 </BaseView>
             }

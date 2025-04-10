@@ -14,11 +14,19 @@ export type CarouselSlideItem = {
     href?: string
     source: ImageSourcePropType
     isExternalLink?: boolean
+    w?: number
+    h?: number
 }
 
 type Props = {
     data: CarouselSlideItem[]
+    /**
+     * This should be the desired width of the carousel item
+     */
     w?: number
+    /**
+     * This should be the desired height of the carousel item
+     */
     h?: number
     autoPlay?: boolean
     autoPlayInterval?: number
@@ -77,6 +85,8 @@ export const BaseCarousel = ({
                             source={item.source}
                             href={item.href}
                             isExternalLink={item.isExternalLink}
+                            w={item.w}
+                            h={item.h}
                         />
                     )
                 }}
@@ -101,7 +111,6 @@ const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") =
             gap: 8,
         },
         carouselContainer: {
-            paddingHorizontal: 20,
             width: "100%",
         },
         carousel: {

@@ -19,14 +19,15 @@ import {
     CertificateRequest,
     InAppRequest,
     Network,
-    TypeDataRequest,
     TransactionRequest,
+    TypeDataRequest,
 } from "~Model"
 import { Routes } from "~Navigation"
 import {
     addConnectedDiscoveryApp,
     changeSelectedNetwork,
     selectAccounts,
+    selectAllDapps,
     selectConnectedDiscoverDApps,
     selectNetworks,
     selectSelectedAccountAddress,
@@ -77,6 +78,7 @@ type ContextType = {
     ChangeAccountNetworkBottomSheetRef: React.RefObject<BottomSheetModalMethods>
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
+    isDapp: boolean
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -123,6 +125,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const { LL, locale } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
+    const allDapps = useAppSelector(selectAllDapps)
     const {
         ref: ChangeAccountNetworkBottomSheetRef,
         onOpen: openChangeAccountNetworkBottomSheet,
@@ -711,6 +714,17 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         webviewRef.current = undefined
     }, [])
 
+    const isDapp = useMemo(() => {
+        if (!navigationState) return false
+        return Boolean(
+            allDapps.find(dapp => {
+                const navStateRoot = new URL(navigationState.url).origin
+                const dappRoot = new URL(dapp.href).origin
+                return navStateRoot === dappRoot
+            }),
+        )
+    }, [allDapps, navigationState])
+
     const contextValue = React.useMemo(() => {
         return {
             isLoading,
@@ -739,6 +753,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             handleConfirmChangeAccountNetworkBottomSheet,
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
+            isDapp,
         }
     }, [
         isLoading,
@@ -766,6 +781,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         ChangeAccountNetworkBottomSheetRef,
         switchAccount,
         packageInfo,
+        isDapp,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
