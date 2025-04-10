@@ -20,8 +20,8 @@ import {
     RenderItem,
     DragEndParams,
 } from "react-native-draggable-flatlist"
-import { DAppOptionsBottomSheet } from "./Components/Bottomsheets"
 import { useDAppActions } from "./Hooks"
+import { DAppOptionsBottomSheet } from "./Components/Bottomsheets"
 
 export const FavouritesScreen = () => {
     const [isEditingMode, setIsEditingMode] = useState(false)

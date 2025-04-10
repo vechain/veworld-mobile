@@ -13,14 +13,9 @@ export const useDAppTags = ({ dapp }: Props) => {
         if (tags?.includes(DAppType.SUSTAINABILTY.toLowerCase())) {
             return DAppType.SUSTAINABILTY
         } else if (tags?.includes(DAppType.NFT.toLowerCase())) {
-            return "NFT"
-        } else if (
-            !tags?.includes(DAppType.NFT.toLowerCase()) &&
-            !tags?.includes(DAppType.SUSTAINABILTY.toLowerCase())
-        ) {
-            return DAppType.DAPPS.toLowerCase()
+            return DAppType.NFT
         } else {
-            return tags?.[0]
+            return DAppType.DAPPS
         }
     }, [dapp.tags])
     return { getTag }

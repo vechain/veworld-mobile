@@ -7,7 +7,6 @@ import {
     BaseText,
     BaseView,
     ChangeAccountButtonPill,
-    FavoriteDAppCard,
     Layout,
     ListEmptyResults,
     SelectAccountBottomSheet,
@@ -27,7 +26,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { ListSkeleton } from "./components"
+import { ListSkeleton, SwapDAppCard } from "./components"
 
 type NavigationProps = NativeStackNavigationProp<RootStackParamListHome, Routes.SWAP>
 
@@ -90,7 +89,7 @@ export const SwapScreen = () => {
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
-            return <FavoriteDAppCard dapp={item} isEditMode={false} isActive={false} onDAppPress={onDAppPress} />
+            return <SwapDAppCard dapp={item} onDAppPress={onDAppPress} />
         },
         [onDAppPress],
     )
@@ -103,12 +102,17 @@ export const SwapScreen = () => {
             title={LL.SWAP_TITLE()}
             headerRightElement={<ChangeAccountButtonPill action={openSelectAccountBottomSheet} />}
             fixedBody={
-                <BaseView flex={1} px={20}>
-                    <BaseSpacer height={24} />
-                    <BaseText typographyFont="body">{LL.SWAP_DESCRIPTION()}</BaseText>
-                    <BaseSpacer height={24} />
-                    <BaseText typographyFont="body">{LL.SWAP_DAPP_NUMBER({ total: dAppsToShow.length })}</BaseText>
-                    <BaseSpacer height={16} />
+                <BaseView flex={1}>
+                    <BaseView px={16}>
+                        <BaseSpacer height={24} />
+                        <BaseText typographyFont="body">{LL.SWAP_DESCRIPTION()}</BaseText>
+                        <BaseSpacer height={24} />
+                        <BaseText typographyFont="bodyMedium">
+                            {LL.SWAP_DAPP_NUMBER({ total: dAppsToShow.length })}
+                        </BaseText>
+                        <BaseSpacer height={16} />
+                    </BaseView>
+
                     {isFetching ? (
                         <ListSkeleton />
                     ) : (

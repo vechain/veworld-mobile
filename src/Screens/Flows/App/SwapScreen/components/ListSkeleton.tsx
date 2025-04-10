@@ -8,7 +8,6 @@ const items = [{ key: 1 }, { key: 2 }, { key: 3 }, { key: 4 }, { key: 5 }, { key
 export const ListSkeleton = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const renderSeparator = useCallback(() => <BaseSpacer height={12} />, [])
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
     const renderItem = useCallback(() => {
@@ -20,8 +19,23 @@ export const ListSkeleton = () => {
                 highlightColor={theme.colors.skeletonHighlightColor}
                 layout={[
                     {
-                        flex: 1,
+                        width: 48,
+                        height: 48,
+                    },
+                    {
                         width: "100%",
+                        flexDirection: "column",
+                        gap: 8,
+                        children: [
+                            {
+                                width: "40%",
+                                height: 20,
+                            },
+                            {
+                                width: "20%",
+                                height: 10,
+                            },
+                        ],
                     },
                 ]}
             />
@@ -36,7 +50,6 @@ export const ListSkeleton = () => {
             keyExtractor={item => item.key.toString()}
             renderItem={renderItem}
             ListFooterComponent={renderFooter}
-            ItemSeparatorComponent={renderSeparator}
             showsVerticalScrollIndicator={false}
         />
     )
@@ -50,8 +63,12 @@ const baseStyles = () =>
         card: {
             height: 84,
             flex: 1,
+            flexDirection: "row",
+            gap: 16,
+            alignItems: "center",
             width: "100%",
             borderRadius: 16,
             overflow: "hidden",
+            paddingHorizontal: 16,
         },
     })
