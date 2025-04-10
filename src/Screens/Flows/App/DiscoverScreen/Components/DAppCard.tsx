@@ -5,6 +5,7 @@ import { BaseSpacer, BaseText, BaseTouchable } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { DAppUtils } from "~Utils"
+import { useDAppTags } from "../Hooks/useDAppTags"
 
 type DAppCardProps = {
     dapp: DiscoveryDApp
@@ -14,6 +15,8 @@ type DAppCardProps = {
 export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
+
+    const { getTag } = useDAppTags({ dapp })
 
     const cardDimension = 96
     const imageDimension = 96
@@ -45,8 +48,12 @@ export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
                 <BaseText numberOfLines={1} typographyFont="bodySemiBold" style={styles.text}>
                     {dapp.name.length > 9 ? dapp.name.slice(0, 9) + "..." : dapp.name}
                 </BaseText>
-                <BaseText numberOfLines={1} typographyFont="captionMedium" color={theme.colors.subtitle}>
-                    {dapp.tags?.[0]}
+                <BaseText
+                    numberOfLines={1}
+                    typographyFont="captionMedium"
+                    color={theme.colors.subtitle}
+                    style={styles.tag}>
+                    {getTag()}
                 </BaseText>
             </BaseTouchable>
         </Animated.View>
@@ -65,5 +72,8 @@ const baseStyles = () =>
         },
         text: {
             width: "100%",
+        },
+        tag: {
+            textTransform: "capitalize",
         },
     })

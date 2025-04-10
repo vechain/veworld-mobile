@@ -20,7 +20,13 @@ export type CarouselSlideItem = {
 
 type Props = {
     data: CarouselSlideItem[]
+    /**
+     * This should be the desired width of the carousel item
+     */
     w?: number
+    /**
+     * This should be the desired height of the carousel item
+     */
     h?: number
     autoPlay?: boolean
     autoPlayInterval?: number
@@ -61,7 +67,6 @@ export const BaseCarousel = ({
                 loop={loop}
                 width={w}
                 height={h}
-                autoFillData={false}
                 style={styles.carousel}
                 pagingEnabled
                 containerStyle={styles.carouselContainer}

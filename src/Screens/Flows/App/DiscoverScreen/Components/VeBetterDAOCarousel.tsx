@@ -36,7 +36,6 @@ export const VeBetterDAOCarousel = () => {
                 testID: "VeBetterDao_make_app_banner",
                 source: VeBetterDaoMakeDappBanner,
                 href: DAO_MAKE_APP_URL,
-                isExternalLink: true,
             },
         ],
         [data, theme.isDark],
@@ -54,6 +53,8 @@ export const VeBetterDAOCarousel = () => {
     return (
         <BaseCarousel
             data={activeSlides}
+            w={360}
+            h={100}
             paginationAlignment="flex-start"
             autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
         />
