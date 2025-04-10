@@ -70,7 +70,7 @@ export const TokenBox = ({
                     {token ? (
                         <>
                             <BaseView flexDirection="row">
-                                <BaseText typographyFont="subSubTitle">{token.name}</BaseText>
+                                <BaseText typographyFont="subSubTitle">{token.symbol}</BaseText>
                             </BaseView>
                             <BaseView pt={3} flexDirection="row">
                                 <BaseText typographyFont="captionBold">{amount}</BaseText>
