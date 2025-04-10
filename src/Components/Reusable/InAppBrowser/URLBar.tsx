@@ -8,7 +8,7 @@ import { Routes } from "~Navigation"
 import { URIUtils } from "~Utils"
 
 type Props = {
-    onNavigation: (error: boolean) => void
+    onNavigation?: (error: boolean) => void
 }
 
 export const URLBar = ({ onNavigation }: Props) => {
@@ -35,11 +35,11 @@ export const URLBar = ({ onNavigation }: Props) => {
             const isValid = await URIUtils.isValidBrowserUrl(value)
             if (isValid) {
                 const url = value.startsWith("https://") ? value : `https://${value}`
-                onNavigation(false)
+                onNavigation?.(false)
                 navigateToUrl(url)
                 return
             }
-            onNavigation(true)
+            onNavigation?.(true)
         },
         [navigateToUrl, onNavigation],
     )
@@ -49,6 +49,7 @@ export const URLBar = ({ onNavigation }: Props) => {
             <BaseView style={styles.inputContainer}>
                 {/* Icon on the left */}
                 <BaseIcon
+                    testID="URL-bar-back-button"
                     name="icon-arrow-left"
                     color={theme.colors.text}
                     action={navBackToDiscover}
@@ -63,12 +64,16 @@ export const URLBar = ({ onNavigation }: Props) => {
                         <BaseView flexDirection="row" alignItems="center" style={styles.dappContainer}>
                             <BaseIcon name="icon-lock" color={theme.colors.textLight} size={12} />
 
-                            <BaseText typographyFont="captionRegular" color={theme.colors.subtitle}>
+                            <BaseText
+                                testID="URL-bar-dapp-name"
+                                typographyFont="captionRegular"
+                                color={theme.colors.subtitle}>
                                 {navigationState?.url}
                             </BaseText>
                         </BaseView>
                     ) : (
                         <BaseTextInput
+                            testID="URL-bar-input"
                             defaultValue={navigationState?.url}
                             onSubmitEditing={onSubmit}
                             style={styles.textInput}
