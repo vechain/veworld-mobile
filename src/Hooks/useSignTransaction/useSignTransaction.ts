@@ -8,7 +8,7 @@ import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ERROR_EVENTS } from "~Constants"
-import { Hex, HexUInt, Secp256k1, Transaction } from "@vechain/sdk-core"
+import { Blake2b256, Hex, HexUInt, Secp256k1, Transaction } from "@vechain/sdk-core"
 import {
     ProviderInternalBaseWallet,
     signerUtils,
@@ -17,6 +17,7 @@ import {
     VeChainProvider,
 } from "@vechain/sdk-network"
 import { useCallback, useMemo } from "react"
+import { sponsorTransaction } from "~Networking"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -122,6 +123,90 @@ export const useSignTransaction = ({
             true,
         )
         return await provider.getSigner()
+    }
+
+    const getSignature = async (
+        transaction: Transaction,
+        wallet: Wallet,
+        delegateFor: string,
+        signatureAccount: AccountWithDevice = account,
+    ): Promise<Buffer> => {
+        const privateKey = getPrivateKey(wallet, signatureAccount)
+        const hash = transaction.encoded
+        const signingHash = Blake2b256.of(
+            Buffer.concat([Blake2b256.of(hash).bytes, Buffer.from(delegateFor.slice(2), "hex")]),
+        )
+        return Buffer.from(Secp256k1.sign(signingHash.bytes, privateKey))
+    }
+
+    const getUrlDelegationSignature = async (
+        transaction: Transaction,
+    ): Promise<Buffer | SignStatus.DELEGATION_FAILURE> => {
+        try {
+            if (!selectedDelegationUrl) {
+                throw new Error("Delegation url not found when requesting delegation signature")
+            }
+
+            // build hex encoded version of the transaction for signing request
+            const rawTransaction = HexUtils.addPrefix(Buffer.from(transaction.encoded).toString("hex"))
+
+            // request to send for sponsorship/fee delegation
+            const sponsorRequest = {
+                origin: account.address.toLowerCase(),
+                raw: rawTransaction,
+            }
+
+            const signature = await sponsorTransaction(selectedDelegationUrl, sponsorRequest)
+
+            if (!signature) {
+                throw new Error("Error getting delegator signature")
+            }
+
+            return Buffer.from(signature.substr(2), "hex")
+        } catch (e) {
+            warn(ERROR_EVENTS.SIGN, "Error getting URL delegator signature", e)
+            return SignStatus.DELEGATION_FAILURE
+        }
+    }
+
+    const getAccountDelegationSignature = async (
+        transaction: Transaction,
+        password?: string,
+    ): Promise<Buffer | SignStatus.DELEGATION_FAILURE> => {
+        try {
+            const delegationDevice = selectedDelegationAccount?.device
+            if (!delegationDevice) throw new Error("Delegation device not found when sending transaction")
+
+            if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
+                showWarningToast({
+                    text1: LL.HEADS_UP(),
+                    text2: LL.LEDGER_DELEGATION_NOT_SUPPORTED(),
+                })
+                throw new Error("Delegated hardware wallet not supported yet")
+            }
+
+            const delegationWallet = await WalletEncryptionKeyHelper.decryptWallet({
+                encryptedWallet: delegationDevice.wallet,
+                pinCode: password,
+            })
+
+            return await getSignature(transaction, delegationWallet, account.address, selectedDelegationAccount)
+        } catch (e) {
+            warn(ERROR_EVENTS.SIGN, "Error getting account delegator signature", e)
+            return SignStatus.DELEGATION_FAILURE
+        }
+    }
+
+    const getDelegationSignature = async (
+        transaction: Transaction,
+        password?: string,
+    ): Promise<Buffer | SignStatus.DELEGATION_FAILURE | undefined> => {
+        switch (selectedDelegationOption) {
+            case DelegationType.URL:
+                return await getUrlDelegationSignature(transaction)
+            case DelegationType.ACCOUNT:
+                return await getAccountDelegationSignature(transaction, password)
+        }
     }
 
     const navigateToLedger = async (
