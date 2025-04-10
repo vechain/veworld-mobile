@@ -8,7 +8,7 @@ import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 import { useNavigation } from "@react-navigation/native"
 import { ERROR_EVENTS } from "~Constants"
-import { Blake2b256, Hex, HexUInt, Secp256k1, Transaction } from "@vechain/sdk-core"
+import { Address, Hex, HexUInt, Secp256k1, Transaction } from "@vechain/sdk-core"
 import {
     ProviderInternalBaseWallet,
     signerUtils,
@@ -132,11 +132,8 @@ export const useSignTransaction = ({
         signatureAccount: AccountWithDevice = account,
     ): Promise<Buffer> => {
         const privateKey = getPrivateKey(wallet, signatureAccount)
-        const hash = transaction.encoded
-        const signingHash = Blake2b256.of(
-            Buffer.concat([Blake2b256.of(hash).bytes, Buffer.from(delegateFor.slice(2), "hex")]),
-        )
-        return Buffer.from(Secp256k1.sign(signingHash.bytes, privateKey))
+        const hash = transaction.getTransactionHash(Address.of(delegateFor)).bytes
+        return Buffer.from(Secp256k1.sign(hash, privateKey))
     }
 
     const getUrlDelegationSignature = async (
