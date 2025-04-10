@@ -67,7 +67,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
 
         return (
             <FiatBalance
-                typographyFont="subSubTitleBold"
+                typographyFont="subSubTitleSemiBold"
                 color={tokenValueLabelColor}
                 balances={[veB3trFiatBalance.toString()]}
                 isVisible={isBalanceVisible}
@@ -90,7 +90,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                 <TokenImage isVechainToken iconSize={26} icon={B3TR.icon} />
                 <BaseView flexDirection="column" alignItems="flex-start">
                     <BaseView flexDirection="row" gap={4}>
-                        <BaseText color={tokenValueLabelColor} typographyFont="bodySemiBold" style={{ width }}>
+                        <BaseText color={tokenValueLabelColor} typographyFont="subSubTitleSemiBold" style={{ width }}>
                             {b3trToken.symbol}
                         </BaseText>
                         {isLoading ? (
@@ -103,7 +103,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                             />
                         ) : (
                             <BaseText
-                                typographyFont="bodyMedium"
+                                typographyFont="subSubTitleMedium"
                                 align="right"
                                 color={theme.colors.tokenCardText}
                                 lineHeight={20}>
@@ -114,7 +114,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                     <BaseSpacer height={2} />
                     <BaseView flexDirection="row" gap={4}>
                         <BaseText
-                            typographyFont="bodySemiBold"
+                            typographyFont="subSubTitleSemiBold"
                             onLayout={e => {
                                 setWidth(e.nativeEvent.layout.width)
                             }}>
@@ -130,7 +130,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                             />
                         ) : (
                             <BaseText
-                                typographyFont="bodyMedium"
+                                typographyFont="subSubTitleMedium"
                                 align="right"
                                 color={theme.colors.tokenCardText}
                                 lineHeight={20}>
@@ -158,7 +158,7 @@ const baseStyles = StyleSheet.create({
     innerRow: {
         flexDirection: "row",
         justifyContent: "space-between",
-        alignItems: "center",
+        alignItems: "flex-start",
         width: "100%",
         paddingHorizontal: 16,
     },
