@@ -1,23 +1,15 @@
+import { useNavigation } from "@react-navigation/native"
+import { Address, Hex, Secp256k1, Transaction } from "@vechain/sdk-core"
 import { HDNode } from "thor-devkit"
-import { HexUtils, warn } from "~Utils"
 import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
-import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
-import { ERROR_EVENTS } from "~Constants"
-import { Address, Hex, HexUInt, Secp256k1, Transaction } from "@vechain/sdk-core"
-import {
-    ProviderInternalBaseWallet,
-    signerUtils,
-    SignTransactionOptions,
-    ThorClient,
-    VeChainProvider,
-} from "@vechain/sdk-network"
-import { useCallback, useMemo } from "react"
 import { sponsorTransaction } from "~Networking"
+import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { HexUtils, warn } from "~Utils"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -64,75 +56,16 @@ export const useSignTransaction = ({
     const { LL } = useI18nContext()
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
-    const network = useAppSelector(selectSelectedNetwork)
     const nav = useNavigation()
-    const thorClient = useMemo(() => ThorClient.at(network.currentUrl), [network.currentUrl])
-
-    const getGasPayerPrivateKey = useCallback(
-        async (acc: AccountWithDevice, password?: string) => {
-            try {
-                const delegationDevice = acc?.device
-                if (!delegationDevice) throw new Error("Delegation device not found when sending transaction")
-
-                if (delegationDevice.type === DEVICE_TYPE.LEDGER) {
-                    showWarningToast({
-                        text1: LL.HEADS_UP(),
-                        text2: LL.LEDGER_DELEGATION_NOT_SUPPORTED(),
-                    })
-                    throw new Error("Delegated hardware wallet not supported yet")
-                }
-
-                const delegationWallet = await WalletEncryptionKeyHelper.decryptWallet({
-                    encryptedWallet: delegationDevice.wallet,
-                    pinCode: password,
-                })
-
-                return getPrivateKey(delegationWallet, acc)
-            } catch (e) {
-                warn(ERROR_EVENTS.SIGN, "Error getting account delegator signature", e)
-                return SignStatus.DELEGATION_FAILURE
-            }
-        },
-        [LL],
-    )
-
-    const getSignTxOptions = useCallback(
-        async (password?: string): Promise<SignTransactionOptions | SignStatus.DELEGATION_FAILURE | undefined> => {
-            if (selectedDelegationOption === DelegationType.URL) return { gasPayerServiceUrl: selectedDelegationUrl! }
-            if (selectedDelegationOption === DelegationType.ACCOUNT) {
-                const result = await getGasPayerPrivateKey(selectedDelegationAccount!, password)
-                if (!result || result === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
-                return { gasPayerPrivateKey: HexUtils.addPrefix(result.toString("hex")) }
-            }
-        },
-        [getGasPayerPrivateKey, selectedDelegationAccount, selectedDelegationOption, selectedDelegationUrl],
-    )
-
-    const getSigner = async (wallet: Wallet, password?: string) => {
-        const privateKey = getPrivateKey(wallet, account)
-        const isValidPrivateKey = Secp256k1.isValidPrivateKey(privateKey)
-
-        if (!isValidPrivateKey) throw new Error("Invalid private key")
-        const txOptions = await getSignTxOptions(password)
-        if (txOptions === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
-        const provider = new VeChainProvider(
-            thorClient,
-            new ProviderInternalBaseWallet([{ privateKey, address: account.address }], {
-                ...(txOptions && { gasPayer: txOptions }),
-            }),
-            true,
-        )
-        return await provider.getSigner()
-    }
 
     const getSignature = async (
         transaction: Transaction,
         wallet: Wallet,
-        delegateFor: string,
+        delegateFor?: string,
         signatureAccount: AccountWithDevice = account,
     ): Promise<Buffer> => {
         const privateKey = getPrivateKey(wallet, signatureAccount)
-        const hash = transaction.getTransactionHash(Address.of(delegateFor)).bytes
+        const hash = transaction.getTransactionHash(delegateFor ? Address.of(delegateFor) : undefined).bytes
         return Buffer.from(Secp256k1.sign(hash, privateKey))
     }
 
@@ -254,14 +187,15 @@ export const useSignTransaction = ({
             pinCode: password,
         })
 
-        const signer = await getSigner(senderWallet, password)
+        const senderSignature = await getSignature(transaction, senderWallet)
+        const delegationSignature = await getDelegationSignature(transaction, password)
 
-        if (signer === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
+        if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
 
-        const senderAddress = await signer?.getAddress()
-        const txBody = signerUtils.transactionBodyToTransactionRequestInput(transaction.body, senderAddress!)
-        const rawTx = await signer!.signTransaction(txBody)
-        return Transaction.decode(HexUInt.of(rawTx.slice(2)).bytes, true)
+        return Transaction.of(
+            transaction.body,
+            delegationSignature ? Buffer.concat([senderSignature, delegationSignature]) : senderSignature,
+        )
     }
 
     return {
