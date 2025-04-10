@@ -6,10 +6,10 @@ import { AccountWithDevice, BaseDevice, SecurityLevelType, TransactionRequest } 
 import crypto from "react-native-quick-crypto"
 import axios from "axios"
 import { waitFor } from "@testing-library/react-native"
-import { Transaction } from "thor-devkit"
 import { selectDevice, selectSelectedAccount, selectVthoTokenWithBalanceByAccount } from "~Storage/Redux"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { BigNutils } from "~Utils"
+import { Transaction } from "@vechain/sdk-core"
 
 const { vetTransaction1, account1D1, device1, firstLedgerAccount, ledgerDevice, wallet1 } = TestHelpers.data
 
