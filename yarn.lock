@@ -12508,11 +12508,6 @@ openai@^4.53.0:
     formdata-node "^4.3.2"
     node-fetch "^2.6.7"
 
-opencollective-postinstall@^2.0.3:
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/opencollective-postinstall/-/opencollective-postinstall-2.0.3.tgz#7a0fff978f6dbfa4d006238fbac98ed4198c3259"
-  integrity sha512-8AV/sCtuzUeTo8gQK5qDZzARrulB3egtLzFgteqB2tcT4Mw7B8Kt7JcDHmltjz6FOAHsvTevk70gZEbhM4ZS9Q==
-
 optionator@^0.9.3:
   version "0.9.4"
   resolved "https://registry.yarnpkg.com/optionator/-/optionator-0.9.4.tgz#7ea1c1a5d91d764fb282139c88fe11e182a3a734"
@@ -13567,14 +13562,6 @@ react-native-in-app-review@^4.3.3:
   version "4.3.5"
   resolved "https://registry.yarnpkg.com/react-native-in-app-review/-/react-native-in-app-review-4.3.5.tgz#8de11288f4bf69a7bc14cd6f1cfd59129ae7ec65"
   integrity sha512-ooqAqV0ghz5WrTtXS2WShON0aP4oOnHG2hCgL8p+TWOFIYyTpaCcLgMYC82XXZoAl9+ip2r1/F8l5i4VcyEWhg==
-
-react-native-inappbrowser-reborn@^3.7.0:
-  version "3.7.0"
-  resolved "https://registry.yarnpkg.com/react-native-inappbrowser-reborn/-/react-native-inappbrowser-reborn-3.7.0.tgz#849a43c3c7da22b65147649fe596836bcb494083"
-  integrity sha512-Ia53jYNtFcbNaX5W3QfOmN25I7bcvuDiQmSY5zABXjy4+WI20bPc9ua09li55F8yDCjv3C99jX6vKms68mBV7g==
-  dependencies:
-    invariant "^2.2.4"
-    opencollective-postinstall "^2.0.3"
 
 react-native-is-edge-to-edge@^1.1.6:
   version "1.1.6"
