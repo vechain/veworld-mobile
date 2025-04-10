@@ -71,15 +71,9 @@ export const TokenBox = ({
                         <>
                             <BaseView flexDirection="row">
                                 <BaseText typographyFont="subSubTitle">{token.name}</BaseText>
-                                <BaseText typographyFont="subSubTitleLight">
-                                    {" ("}
-                                    {token.symbol}
-                                    {")"}
-                                </BaseText>
                             </BaseView>
                             <BaseView pt={3} flexDirection="row">
                                 <BaseText typographyFont="captionBold">{amount}</BaseText>
-                                <BaseText typographyFont="captionBold"> {token.symbol}</BaseText>
                                 {fiatValue && (
                                     <FiatBalance typographyFont="captionRegular" balances={[fiatValue]} prefix=" ≈ " />
                                 )}
