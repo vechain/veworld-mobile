@@ -1,5 +1,12 @@
 
 
+## 2.1.3 (2025-04-11)
+
+
+### Bug Fixes
+
+* update URLs and enhance slide item properties in VeBetterDAOCarousel component ([#2863](https://github.com/vechain/veworld-mobile/issues/2863)) ([540fe97](https://github.com/vechain/veworld-mobile/commit/540fe979d6239b2fa879270855e2ebe8cf302ce4))
+
 ## 2.1.2 (2025-04-08)
 
 
