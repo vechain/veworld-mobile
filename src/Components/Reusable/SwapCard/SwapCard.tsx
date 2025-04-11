@@ -2,14 +2,14 @@
 import React, { memo, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import DropShadow from "react-native-drop-shadow"
-import { useThemedStyles } from "~Hooks"
-import { AddressUtils, BigNutils } from "~Utils"
-import { COLORS, ColorThemeType, getCoinGeckoIdBySymbol } from "~Constants"
-import { BaseIcon, BaseView } from "~Components"
-import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { useSwappedTokens } from "./Hooks"
-import { TokenBox } from "./Components"
 import { useExchangeRate } from "~Api/Coingecko"
+import { BaseIcon, BaseView } from "~Components"
+import { COLORS, ColorThemeType, getCoinGeckoIdBySymbol } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
+import { AddressUtils, BigNutils } from "~Utils"
+import { TokenBox } from "./Components"
+import { useSwappedTokens } from "./Hooks"
 
 type Props = {
     paidTokenAddress: string
@@ -43,11 +43,11 @@ export const SwapCard = memo(
         })
 
         const paidTokenAddressShort = useMemo(() => {
-            return AddressUtils.humanAddress(paidTokenAddress, 4, 6)
+            return AddressUtils.humanAddress(paidTokenAddress)
         }, [paidTokenAddress])
 
         const receivedTokenAddressShort = useMemo(() => {
-            return AddressUtils.humanAddress(receivedTokenAddress, 4, 6)
+            return AddressUtils.humanAddress(receivedTokenAddress)
         }, [receivedTokenAddress])
 
         const paidAmount = useMemo(

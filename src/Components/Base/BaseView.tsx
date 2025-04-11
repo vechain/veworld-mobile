@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { StyleSheet, View, ViewProps } from "react-native"
 
-import { AlignItems, AlignSelf, FlexWrap, FlexDirection, JustifyContent, ColorThemeType, Overflow } from "~Constants"
+import { AlignItems, AlignSelf, ColorThemeType, FlexDirection, FlexWrap, JustifyContent, Overflow } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 
 export type BaseViewProps = {
@@ -16,6 +16,7 @@ export type BaseViewProps = {
     flexWrap?: FlexWrap
     flex?: number
     flexGrow?: number
+    flexShrink?: number
     m?: number
     ml?: number
     mr?: number
@@ -31,6 +32,7 @@ export type BaseViewProps = {
     pr?: number
     py?: number
     borderRadius?: number
+    gap?: number
 } & ViewProps
 
 export const BaseView = memo(
@@ -42,6 +44,7 @@ export const BaseView = memo(
         alignItems,
         flexWrap,
         flexGrow,
+        flexShrink,
         alignSelf,
         overflow,
         bg,
@@ -62,6 +65,7 @@ export const BaseView = memo(
         mr,
         mb,
         mt,
+        gap,
         ...otherProps
     }: BaseViewProps) => {
         const computedAlignItems = useMemo(() => {
@@ -80,6 +84,7 @@ export const BaseView = memo(
             baseStyles({
                 flex,
                 flexGrow,
+                flexShrink,
                 alignSelf,
                 overflow,
                 flexDirection,
@@ -104,6 +109,7 @@ export const BaseView = memo(
                 mr,
                 mb,
                 mt,
+                gap,
             }),
         )
 
@@ -114,6 +120,7 @@ export const BaseView = memo(
 type BaseStyles = {
     flex: number
     flexGrow?: number
+    flexShrink?: number
     flexDirection: FlexDirection
     justifyContent: JustifyContent
     alignItems: AlignItems
@@ -138,6 +145,7 @@ type BaseStyles = {
     pr?: number
     py?: number
     borderRadius?: number
+    gap?: number
 }
 
 const baseStyles = (props: BaseStyles) => (theme: ColorThemeType) =>
@@ -149,6 +157,7 @@ const baseStyles = (props: BaseStyles) => (theme: ColorThemeType) =>
             justifyContent: props.justifyContent,
             alignItems: props.alignItems,
             flexGrow: props.flexGrow,
+            flexShrink: props.flexShrink,
             alignSelf: props.alignSelf,
             overflow: props.overflow,
             backgroundColor: props.bg || theme.colors.transparent,
@@ -169,5 +178,6 @@ const baseStyles = (props: BaseStyles) => (theme: ColorThemeType) =>
             paddingBottom: props.pb,
             paddingTop: props.pt,
             borderRadius: props.borderRadius,
+            gap: props.gap,
         },
     })

@@ -55,5 +55,8 @@ export const selectCurrentTransactionActivities = createSelector(
  */
 export const selectActivitiesWithoutFinality = createSelector(
     selectAllActivitiesByAccountAddressAndNetwork,
-    activities => activities.filter(activity => activity.isTransaction && activity.status === ActivityStatus.PENDING),
+    activities =>
+        activities.filter(
+            activity => ActivityUtils.isTransactionActivity(activity) && activity.status === ActivityStatus.PENDING,
+        ),
 )

@@ -1,0 +1,83 @@
+#send_max_funds
+appId: org.vechain.veworld.app
+tags:
+  - pull-request
+onFlowStart:
+  - runFlow: ../setup_reset/setupApp.yaml
+onFlowComplete:
+  - runFlow: ../setup_reset/resetApp.yaml
+---
+## User should be able to send max tokens - Send VET from Account 3 to Account 4
+- tapOn:
+    id: "HomeScreen_WalletManagementButton"
+- runFlow:
+      when:
+          platform: Android
+      commands:
+          - tapOn:
+                id: "DeviceBox"
+- runFlow:
+      when:
+          platform: iOS
+      commands:
+          - tapOn:
+                id: "Wallet_0"
+- tapOn:
+    id: "WalletDetailScreen_addAccountButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "BackButtonHeader-BaseIcon-backButton"
+- tapOn:
+    id: "AccountCard_changeAccountButton"
+- tapOn:
+    id: "selectAccount"
+    index: 2
+- tapOn:
+    id: "sendButton"
+- tapOn:
+    id: "VET"
+- tapOn:
+    id: "selectAccount"
+    index: 2
+- tapOn:
+    id: "next-button"
+- tapOn: "MAX"
+- tapOn: "MAX"
+- tapOn:
+    id: "next-button"
+- tapOn:
+    id: "confirm-send-button"
+- repeat:
+    while:
+      visible: "Insert your 6-digit PIN"
+    commands:
+      - tapOn: "1"
+- assertVisible: "My tokens"
+#Send VET back from Account 4 to Account 3
+- tapOn:
+    id: "AccountCard_changeAccountButton"
+- tapOn:
+    id: "selectAccount"
+    index: 3
+- tapOn:
+    id: "sendButton"
+- tapOn:
+    id: "VET"
+- tapOn:
+    id: "selectAccount"
+    index: 2
+- tapOn:
+    id: "next-button"
+- tapOn: "MAX"
+- tapOn: "MAX"
+- tapOn:
+    id: "next-button"
+- tapOn:
+    id: "confirm-send-button"
+- repeat:
+    while:
+      visible: "Insert your 6-digit PIN"
+    commands:
+      - tapOn: "1"
+- assertVisible: "My tokens"

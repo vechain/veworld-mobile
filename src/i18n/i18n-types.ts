@@ -3524,13 +3524,13 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	SIGN_TRANSACTION_ERROR: string
-	/**
 	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SIGN_TRANSACTION: string
+	/**
+	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SIGN_TRANSACTION_ERROR: string
 	/**
 	 * S​t​a​t​u​s
 	 */
@@ -7548,13 +7548,13 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Error signing transaction
-	 */
-	SIGN_TRANSACTION_ERROR: () => LocalizedString
-	/**
 	 * Sign transaction
 	 */
 	SIGN_TRANSACTION: () => LocalizedString
+	/**
+	 * Error signing transaction
+	 */
+	SIGN_TRANSACTION_ERROR: () => LocalizedString
 	/**
 	 * Status
 	 */

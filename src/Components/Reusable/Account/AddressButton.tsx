@@ -1,9 +1,9 @@
 import React, { memo, useMemo } from "react"
-import { useCopyClipboard, useTheme } from "~Hooks"
-import { AddressUtils } from "~Utils"
-import { BaseButton, BaseIcon } from "~Components/Base"
 import { StyleSheet } from "react-native"
+import { BaseButton, BaseIcon } from "~Components/Base"
+import { useCopyClipboard, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { AddressUtils } from "~Utils"
 
 type Props = {
     address: string
@@ -22,7 +22,7 @@ export const AddressButton: React.FC<Props> = memo(({ address }) => {
             radius={1000}
             fontSize={10}
             bgColor={theme.colors.primaryReversed}
-            title={AddressUtils.humanAddress(address, 5, 4)}
+            title={AddressUtils.humanAddress(address)}
             action={() => onCopyToClipboard(address, LL.COMMON_LBL_ADDRESS())}
             rightIcon={<BaseIcon name="icon-copy" color={color} size={12} style={baseStyles.marginLeft} />}
         />

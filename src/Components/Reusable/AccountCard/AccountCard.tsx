@@ -1,8 +1,5 @@
 import React, { memo, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
-import { useThemedStyles, useVns } from "~Hooks"
-import { ColorThemeType, VET, VTHO } from "~Constants"
-import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
 import {
     AccountIcon,
     BaseIcon,
@@ -13,8 +10,11 @@ import {
     LedgerBadge,
     WatchedAccountBadge,
 } from "~Components"
+import { ColorThemeType, VET, VTHO } from "~Constants"
+import { useThemedStyles, useVns } from "~Hooks"
 import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
 import { selectVetBalanceByAccount, selectVthoBalanceByAccount, useAppSelector } from "~Storage/Redux"
+import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
 
 type Props = {
     account: AccountWithDevice | WatchedAccount
@@ -114,7 +114,7 @@ export const AccountCard: React.FC<Props> = memo(
                     ) : (
                         <BaseView style={styles.rightSubContainer}>
                             <BaseText style={styles.address} fontSize={10}>
-                                {vnsName || AddressUtils.humanAddress(vnsAddress || account.address, 4, 6)}
+                                {vnsName || AddressUtils.humanAddress(vnsAddress || account.address)}
                             </BaseText>
 
                             <BaseSpacer height={4} />

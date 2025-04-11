@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { Activity } from "~Model"
 import { ActivityState } from "../Types"
+import { ActivityUtils } from "~Utils"
 
 export const initialActivitiesState: ActivityState = {
     activities: [],
@@ -11,7 +12,28 @@ export const ActivitiesSlice = createSlice({
     initialState: initialActivitiesState,
     reducers: {
         addActivity: (state, action: PayloadAction<Activity>) => {
-            state.activities.push(action.payload)
+            const activity = action.payload
+
+            if (ActivityUtils.isTransactionActivity(activity)) {
+                const activityIndex = state.activities.findIndex(
+                    existingActivity => existingActivity.txId === activity.txId,
+                )
+                if (activityIndex !== -1) {
+                    state.activities[activityIndex] = activity
+                } else {
+                    state.activities.unshift(activity)
+                }
+            } else {
+                const activityIndex = state.activities.findIndex(
+                    existingActivity => existingActivity.id.toLowerCase() === activity.id.toLowerCase(),
+                )
+
+                if (activityIndex !== -1) {
+                    state.activities[activityIndex] = activity
+                } else {
+                    state.activities.unshift(activity)
+                }
+            }
         },
         removeActivity: (state, action: PayloadAction<string[]>) => {
             const newActivities: Activity[] = [...state.activities]

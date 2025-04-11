@@ -22,16 +22,13 @@ export const QRCodeBottomSheet = React.forwardRef<BottomSheetModalMethods>(({}, 
         address: selectedAccount.address,
     })
 
-    const humanAddress = useMemo(
-        () => AddressUtils.humanAddress(selectedAccount.address, 8, 7),
-        [selectedAccount.address],
-    )
+    const humanAddress = useMemo(() => AddressUtils.humanAddress(selectedAccount.address), [selectedAccount.address])
     const [address, setAddress] = useState(humanAddress)
 
     const { onCopyToClipboard } = useCopyClipboard()
 
     const nameOrAddress = useMemo(() => {
-        return vnsName || AddressUtils.humanAddress(vnsAddress || selectedAccount.address, 4, 3)
+        return vnsName || AddressUtils.humanAddress(vnsAddress || selectedAccount.address)
     }, [selectedAccount.address, vnsAddress, vnsName])
 
     const [username, setUsername] = useState(nameOrAddress)
