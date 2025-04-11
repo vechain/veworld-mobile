@@ -3,7 +3,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { Linking } from "react-native"
 import { getTimeZone } from "react-native-localize"
-import { striptags } from "striptags"
+import striptags from "striptags"
 import { BaseSpacer, BaseView, FadeoutButton, Layout, TransactionStatusBox, showErrorToast } from "~Components"
 import { useCopyClipboard, useTabBarBottomMargin } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -132,9 +132,7 @@ export const NFTDetailScreen = ({ route }: Props) => {
                     {derivedDescription && (
                         <InfoSectionView<string>
                             title={LL.SB_DESCRIPTION()}
-                            data={striptags(derivedDescription.trim(), {
-                                allowedTags: new Set(["strong"]),
-                            })}
+                            data={striptags(derivedDescription.trim(), ["strong"])}
                         />
                     )}
 

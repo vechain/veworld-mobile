@@ -1,12 +1,7 @@
 #import "AppDelegate.h"
 #import "RNBootSplash.h"
-
-#import <React/RCTRootView.h>
-
 #import <React/RCTBundleURLProvider.h>
-
 #import <React/RCTLinkingManager.h>
-
 
 // MARK: REMOVE ANY POSSIBLE KESYS LEFT IN KEYCHAIN FROM PREVIOUS INSTALLATIONS ON NEW APP INSTALL
 static void ClearKeychainIfNecessary() {
@@ -30,7 +25,6 @@ static void ClearKeychainIfNecessary() {
         }
     }
 }
-
 
 /*
 // MARK: REMOVE ANY POSSIBLE KESYS LEFT IN KEYCHAIN FROM PREVIOUS INSTALLATIONS ON NEW APP INSTALL EXCLUDING KEYS WITH "CLOUD_WALLET_"
@@ -75,10 +69,6 @@ static void ClearKeychainIfNecessary() {
     }
 }
 */
-
-
-
-
 
 @implementation AppDelegate
 
@@ -130,31 +120,26 @@ return [RCTLinkingManager application:application openURL:url options:options];
   // They will be passed down to the ViewController used by React Native.
   self.initialProps = @{};
 
-  ClearKeychainIfNecessary();
-
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
 - (NSURL *)sourceURLForBridge:(RCTBridge *)bridge
 {
+  return [self bundleURL];
+}
+
+- (NSURL *)bundleURL
+{
 #if DEBUG
-  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"];
+  return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@".expo/.virtual-metro-entry"];
 #else
   return [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
 #endif
 }
 
-
-- (UIView *)createRootViewWithBridge:(RCTBridge *)bridge
-                          moduleName:(NSString *)moduleName
-                           initProps:(NSDictionary *)initProps {
-  UIView *rootView = [super createRootViewWithBridge:bridge
-                                          moduleName:moduleName
-                                           initProps:initProps];
-
+- (void)customizeRootView:(RCTRootView *)rootView {
+  [super customizeRootView:rootView];
   [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView]; // ⬅️ initialize the splash screen
-
-  return rootView;
 }
 
 @end
