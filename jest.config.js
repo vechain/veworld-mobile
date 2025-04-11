@@ -81,15 +81,7 @@ module.exports = {
         "<rootDir>/src/Utils/AnalyticsUtils/AnalyticsUtils.ts",
         "<rootDir>/src/Utils/MinimizerUtils/MinimizerUtils.ts",
     ],
-    // coverageThreshold: {
-    //     global: {
-    //         statements: 90,
-    //         branches: 80,
-    //         functions: 90,
-    //         lines: 89.85,
-    //     },
-    // },
-    maxWorkers: 10,
+    maxWorkers: 2,
     workerIdleMemoryLimit: "1GB",
     reporters: ["default", "jest-junit"],
 }
