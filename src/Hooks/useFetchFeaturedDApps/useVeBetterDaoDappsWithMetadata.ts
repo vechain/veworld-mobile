@@ -57,7 +57,7 @@ export const useVeBetterDaoDappsWithMetadata = ({ sort = "alphabetic_asc", enabl
             const returnPage = sliced.map((vbdDapp, idx) => mapVBDDappToDiscoveryDapp({ ...vbdDapp, ...metadata[idx] }))
             return {
                 page: returnPage,
-                hasMore: page + 1 * PAGE_SIZE < data.length,
+                hasMore: (page + 1) * PAGE_SIZE < data.length,
             }
         },
         [data, sort],

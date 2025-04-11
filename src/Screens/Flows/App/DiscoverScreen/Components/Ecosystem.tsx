@@ -2,6 +2,7 @@ import { useScrollToTop, useTheme } from "@react-navigation/native"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseChip, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { Spinner } from "~Components/Reusable/Spinner"
 import { DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useVeBetterDaoDappsWithMetadata, VeBetterDaoDappsSortKey } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -65,7 +66,14 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading 
 
     const renderListFooter = useCallback(() => {
         const showSkeleton = dapps.length > 0 && isLoading
-        return showSkeleton ? <BaseText py={8}>{LL.COMMON_BTN_LOADING()}</BaseText> : <BaseSpacer height={50} />
+        return showSkeleton ? (
+            <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={48}>
+                <Spinner />
+                <BaseText typographyFont="bodySemiBold">{LL.LOADING_MORE()}</BaseText>
+            </BaseView>
+        ) : (
+            <BaseSpacer height={0} />
+        )
     }, [LL, dapps.length, isLoading])
 
     return (
