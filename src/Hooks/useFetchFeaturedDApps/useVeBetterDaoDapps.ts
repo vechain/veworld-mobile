@@ -6,7 +6,7 @@ import { NETWORK_TYPE } from "~Model"
 import { getVeBetterDaoDapps } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
-export const useVeBetterDaoDapps = () => {
+export const useVeBetterDaoDapps = (enabled = true) => {
     const thor = useThor()
     const queryClient = useQueryClient()
     const { type } = useAppSelector(selectSelectedNetwork)
@@ -21,7 +21,7 @@ export const useVeBetterDaoDapps = () => {
     return useQuery({
         queryKey: ["VeBetterDao", type],
         queryFn: () => getVeBetterDaoDapps(thor, address),
-        enabled: !!thor && !!type,
+        enabled: !!thor && !!type && enabled,
         placeholderData: [],
         staleTime: 1000 * 60 * 60,
         gcTime: 1000 * 60 * 60,
