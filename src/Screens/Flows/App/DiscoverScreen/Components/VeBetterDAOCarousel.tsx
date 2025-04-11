@@ -9,8 +9,8 @@ import { BaseCarousel, CarouselSlideItem } from "~Components"
 import { useTheme } from "~Hooks"
 import { useFeatureFlags } from "~Components/Providers"
 
-const DAO_URL = "https://governance.vebetterdao.org/"
-const DAO_MAKE_APP_URL = "https://docs.vechain.org/"
+const DAO_URL = "https://governance.vebetterdao.org/apps"
+const DAO_MAKE_APP_URL = "https://docs.vebetterdao.org"
 const STELLA_URL = "https://www.stellapay.io/b/WGWV"
 
 export const VeBetterDAOCarousel = () => {
@@ -19,7 +19,12 @@ export const VeBetterDAOCarousel = () => {
 
     const slides: CarouselSlideItem[] = useMemo(
         () => [
-            { testID: "VeBetterDao_stella_banner", source: VeBetterDaoStellaBanner, href: STELLA_URL },
+            {
+                testID: "VeBetterDao_stella_banner",
+                source: VeBetterDaoStellaBanner,
+                href: STELLA_URL,
+                isExternalLink: true,
+            },
             {
                 testID: "VeBetterDao_banner",
                 source: theme.isDark ? VeBetterDaoDarkBanner : VeBetterDaoLightBanner,
