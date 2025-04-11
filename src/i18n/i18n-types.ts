@@ -884,6 +884,10 @@ type RootTranslation = {
 	 */
 	BROWSER_ADD_BOOKMARK_TITLE: string
 	/**
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BROWSER_ADD_FAVORITE_DAPPS: string
+	/**
 	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​c​h​a​n​g​e​ ​t​o​:
 	 */
 	BROWSER_CHANGE_ACCOUNT_DESC: string
@@ -907,6 +911,14 @@ type RootTranslation = {
 	 * N​e​t​w​o​r​k​ ​c​h​a​n​g​e
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: string
+	/**
+	 * C​o​p​y​ ​p​a​g​e​ ​l​i​n​k
+	 */
+	BROWSER_COPY_LINK: string
+	/**
+	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
+	 */
+	BROWSER_COPY_LINK_SUCCESS: string
 	/**
 	 * F​a​v​o​u​r​i​t​e​s
 	 */
@@ -953,29 +965,17 @@ type RootTranslation = {
 	 */
 	BROWSER_NETWORK_NOT_FOUND: string
 	/**
-	 * T​a​b​s
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
 	 */
-	BROWSER_TAB_MANAGEMENT_TITLE: string
-	/**
-	 * C​o​p​y​ ​p​a​g​e​ ​l​i​n​k
-	 */
-	BROWSER_COPY_LINK: string
+	BROWSER_REMOVE_FAVORITE_DAPPS: string
 	/**
 	 * S​h​a​r​e
 	 */
 	BROWSER_SHARE: string
 	/**
-	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 * T​a​b​s
 	 */
-	BROWSER_ADD_FAVORITE_DAPPS: string
-	/**
-	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
-	 */
-	BROWSER_REMOVE_FAVORITE_DAPPS: string
-	/**
-	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
-	 */
-	BROWSER_COPY_LINK_SUCCESS: string
+	BROWSER_TAB_MANAGEMENT_TITLE: string
 	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
@@ -2365,6 +2365,10 @@ type RootTranslation = {
 	 * L​i​g​h​t
 	 */
 	LIGHT_THEME: string
+	/**
+	 * L​o​a​d​i​n​g​ ​m​o​r​e
+	 */
+	LOADING_MORE: string
 	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
@@ -5031,6 +5035,10 @@ Thanks for your patience!
 	 */
 	BROWSER_ADD_BOOKMARK_TITLE: () => LocalizedString
 	/**
+	 * Add to Favorite dApps
+	 */
+	BROWSER_ADD_FAVORITE_DAPPS: () => LocalizedString
+	/**
 	 * Your account will change to:
 	 */
 	BROWSER_CHANGE_ACCOUNT_DESC: () => LocalizedString
@@ -5054,6 +5062,14 @@ Thanks for your patience!
 	 * Network change
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
+	/**
+	 * Copy page link
+	 */
+	BROWSER_COPY_LINK: () => LocalizedString
+	/**
+	 * Link successfully copied to the clipboard
+	 */
+	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
 	/**
 	 * Favourites
 	 */
@@ -5099,29 +5115,17 @@ Thanks for your patience!
 	 */
 	BROWSER_NETWORK_NOT_FOUND: () => LocalizedString
 	/**
-	 * Tabs
+	 * Remove from Favorite dApps
 	 */
-	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
-	/**
-	 * Copy page link
-	 */
-	BROWSER_COPY_LINK: () => LocalizedString
+	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
 	/**
 	 * Share
 	 */
 	BROWSER_SHARE: () => LocalizedString
 	/**
-	 * Add to Favorite dApps
+	 * Tabs
 	 */
-	BROWSER_ADD_FAVORITE_DAPPS: () => LocalizedString
-	/**
-	 * Remove from Favorite dApps
-	 */
-	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
-	/**
-	 * Link successfully copied to the clipboard
-	 */
-	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
+	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
 	/**
 	 * ADD ACCOUNT
 	 */
@@ -6502,6 +6506,10 @@ Thanks for your patience!
 	 * Light
 	 */
 	LIGHT_THEME: () => LocalizedString
+	/**
+	 * Loading more
+	 */
+	LOADING_MORE: () => LocalizedString
 	/**
 	 * Are you sure you want to add the selected token?
 	 */
