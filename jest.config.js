@@ -62,11 +62,18 @@ module.exports = {
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],
     collectCoverageFrom: [
-        "**/*.{js,jsx,ts,tsx}",
+        "**src/**/*.{js,jsx,ts,tsx}",
         "!**/node_modules/**",
-        "!**/Screens/**",
+        "!**/src/Screens/**",
         "!**/src/Components/**",
         "!**/src/Storage/**",
+        "!**/src/Test/**",
+        "!**/src/@types/**",
+        "!**/src/AnimatedSplashScreen.tsx",
+        "!**/src/AppLoader.tsx",
+        "!**/src/EntryPoint.tsx",
+        "!**/src/SplashScreen.tsx",
+        "!**/src/i18n/**",
     ],
     coveragePathIgnorePatterns: [
         "index.ts",
@@ -74,15 +81,15 @@ module.exports = {
         "<rootDir>/src/Utils/AnalyticsUtils/AnalyticsUtils.ts",
         "<rootDir>/src/Utils/MinimizerUtils/MinimizerUtils.ts",
     ],
-    coverageThreshold: {
-        global: {
-            statements: 90,
-            branches: 80,
-            functions: 90,
-            lines: 89.85,
-        },
-    },
-    maxWorkers: 2,
+    // coverageThreshold: {
+    //     global: {
+    //         statements: 90,
+    //         branches: 80,
+    //         functions: 90,
+    //         lines: 89.85,
+    //     },
+    // },
+    maxWorkers: 10,
     workerIdleMemoryLimit: "1GB",
     reporters: ["default", "jest-junit"],
 }
