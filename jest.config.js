@@ -61,7 +61,7 @@ module.exports = {
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
     testMatch: ["**/*.(spec|test).(ts|tsx|js|jsx)"],
-    collectCoverageFrom: ["src/Utils/**/*.{js,jsx,ts,tsx}"],
+    collectCoverageFrom: ["**/*.{js,jsx,ts,tsx}", "!**/node_modules/**", "!**/Screens/**"],
     coveragePathIgnorePatterns: [
         "index.ts",
         "<rootDir>/src/Utils/ConnectionUtils/ConnectionUtils.ts",
