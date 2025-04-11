@@ -1,8 +1,8 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { Transaction } from "@vechain/sdk-core"
 import React, { FC, useCallback, useMemo, useRef } from "react"
 import { ScrollView, StyleSheet } from "react-native"
-import { Transaction } from "thor-devkit"
 import {
     AccountCard,
     BackButtonHeader,

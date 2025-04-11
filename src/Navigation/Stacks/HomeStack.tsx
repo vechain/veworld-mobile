@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
-import { Transaction } from "thor-devkit"
 import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
 import {
     CloudKitWallet,
@@ -94,7 +94,7 @@ export type RootStackParamListHome = {
     [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
         token: TokenWithCompleteInfo
         amount: string
-        transactionClauses: Transaction.Clause[]
+        transactionClauses: TransactionClause[]
     }
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined

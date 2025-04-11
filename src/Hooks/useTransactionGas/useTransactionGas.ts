@@ -7,6 +7,7 @@ import { EstimateGasResult } from "~Model"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ERROR_EVENTS } from "~Constants"
 import { useSelector } from "react-redux"
+import { TransactionClause } from "@vechain/sdk-core"
 
 type UseTransactionReturnProps = {
     gas?: EstimateGasResult
@@ -17,7 +18,7 @@ type UseTransactionReturnProps = {
 }
 
 type Props = {
-    clauses: Transaction.Body["clauses"]
+    clauses: TransactionClause[]
     providedGasPayer?: string
     dependsOn?: string
     providedGas?: number

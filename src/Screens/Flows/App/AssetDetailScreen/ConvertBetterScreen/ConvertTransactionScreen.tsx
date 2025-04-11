@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { Transaction } from "@vechain/sdk-core"
 import React, { useCallback, useMemo } from "react"
-import { Transaction } from "thor-devkit"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import {
     BaseSpacer,
@@ -75,7 +75,7 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
     const fiatHumanAmount = BigNutils().toCurrencyConversion(amount, exchangeRate)
 
     const onTransactionSuccess = useCallback(
-        (transaction: Transaction, txId: string) => {
+        (_transaction: Transaction, txId: string) => {
             track(AnalyticsEvent.CONVERT_B3TR_VOT3_SUCCESS, {
                 from: convertFromTo.fromToken?.symbol,
                 to: convertFromTo.toToken?.symbol,

@@ -2,10 +2,18 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useSendTransaction } from "./useSendTransaction"
 import { TestHelpers, TestWrapper } from "~Test"
 import axios, { AxiosError } from "axios"
+import { Transaction } from "@vechain/sdk-core"
+import { ethers } from "ethers"
 
 jest.mock("axios")
 
 const { vetTransaction1, dappTransaction1, nftTransaction1 } = TestHelpers.data
+
+const toSignedTx = (tx: Transaction) => {
+    const randomWallet = ethers.Wallet.createRandom()
+    return tx.sign(Buffer.from(randomWallet.privateKey.slice(2), "hex"))
+}
+
 describe("useSendTransaction", () => {
     it("should render correctly", async () => {
         const { result } = renderHook(() => useSendTransaction(jest.fn()), {
@@ -24,11 +32,12 @@ describe("useSendTransaction", () => {
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
         })
+        const signedTx = toSignedTx(vetTransaction1)
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
-            data: { id: vetTransaction1.id },
+            data: { id: signedTx.id },
             status: 200,
         })
-        await result.current.sendTransaction(vetTransaction1)
+        await result.current.sendTransaction(signedTx)
     })
 
     it("should handle dapp tx", async () => {
@@ -38,10 +47,11 @@ describe("useSendTransaction", () => {
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
         })
+        const signedTx = toSignedTx(dappTransaction1)
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
-            data: { id: dappTransaction1.id },
+            data: { id: signedTx.id },
         })
-        await result.current.sendTransaction(dappTransaction1)
+        await result.current.sendTransaction(signedTx)
     })
 
     it("should handle NFT tx", async () => {
@@ -51,10 +61,11 @@ describe("useSendTransaction", () => {
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
         })
+        const signedTx = toSignedTx(nftTransaction1)
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
-            data: { id: nftTransaction1.id },
+            data: { id: signedTx.id },
         })
-        await result.current.sendTransaction(nftTransaction1)
+        await result.current.sendTransaction(signedTx)
     })
 
     it("axios throws 403", async () => {

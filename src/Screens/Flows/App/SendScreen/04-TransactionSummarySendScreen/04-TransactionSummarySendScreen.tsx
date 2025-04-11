@@ -1,9 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import { Transaction } from "@vechain/sdk-core"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
-import { Transaction } from "thor-devkit"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import {
     BackupDevicesAlert,

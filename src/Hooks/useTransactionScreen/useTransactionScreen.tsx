@@ -1,5 +1,7 @@
-import { Transaction } from "thor-devkit"
-import { useCallback, useEffect, useMemo, useState, useRef } from "react"
+import { Transaction, TransactionClause } from "@vechain/sdk-core"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { showErrorToast, showWarningToast } from "~Components"
+import { ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import {
     SignStatus,
     SignTransactionResponse,
@@ -11,17 +13,15 @@ import {
     useTransactionGas,
 } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { showErrorToast, showWarningToast } from "~Components"
-import { error, GasUtils } from "~Utils"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import { Routes } from "~Navigation"
+import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { error, GasUtils } from "~Utils"
 import { useVTHO_HACK } from "./useVTHO_HACK"
 
 type Props = {
-    clauses: Transaction.Body["clauses"]
+    clauses: TransactionClause[]
     onTransactionSuccess: (transaction: Transaction, txId: string) => void
     onTransactionFailure: (error: unknown) => void
     initialRoute?: Routes.HOME | Routes.NFTS

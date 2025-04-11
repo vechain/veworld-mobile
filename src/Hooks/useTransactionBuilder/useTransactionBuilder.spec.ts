@@ -49,6 +49,7 @@ describe("useTransactionBuilder", () => {
         const tx = result.current.buildTransaction()
         expect(tx).toBeDefined()
         expect(tx.body.clauses).toEqual(vetTransaction1.body.clauses)
+        expect(tx.body.gas).toEqual(21000)
     })
 
     it("should build with gas from estimate", async () => {
@@ -72,6 +73,7 @@ describe("useTransactionBuilder", () => {
         const tx = result.current.buildTransaction()
         expect(tx).toBeDefined()
         expect(tx.body.clauses).toEqual(vetTransaction1.body.clauses)
+        expect(tx.body.gas).toEqual(21000)
     })
 
     it("dependsOn should be defined", async () => {
@@ -121,6 +123,7 @@ describe("useTransactionBuilder", () => {
 
         const tx = result.current.buildTransaction()
 
+        expect(tx.body.reserved).toBeDefined()
         expect(tx.body.reserved).toEqual({ features: 1 })
     })
 })
