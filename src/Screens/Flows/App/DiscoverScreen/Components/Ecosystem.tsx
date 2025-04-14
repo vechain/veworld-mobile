@@ -4,7 +4,8 @@ import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseChip, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { Spinner } from "~Components/Reusable/Spinner"
 import { DiscoveryDApp } from "~Constants"
-import { useBottomSheetModal, useVeBetterDaoDappsWithMetadata, VeBetterDaoDappsSortKey } from "~Hooks"
+import { useBottomSheetModal } from "~Hooks"
+import { useDappsWithPagination, UseDappsWithPaginationSortKey } from "~Hooks/useDappsWithPagination"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
 import { useDAppActions } from "../Hooks"
@@ -65,16 +66,15 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading 
     }, [])
 
     const renderListFooter = useCallback(() => {
-        const showSkeleton = dapps.length > 0 && isLoading
-        return showSkeleton ? (
-            <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={48}>
+        return isLoading ? (
+            <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={20}>
                 <Spinner />
                 <BaseText typographyFont="bodySemiBold">{LL.LOADING_MORE()}</BaseText>
             </BaseView>
         ) : (
             <BaseSpacer height={0} />
         )
-    }, [LL, dapps.length, isLoading])
+    }, [LL, isLoading])
 
     return (
         <FlatList
@@ -89,6 +89,7 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading 
             renderItem={renderItem}
             onEndReached={onFetchNextPage}
             ListFooterComponent={renderListFooter}
+            onEndReachedThreshold={0.5}
         />
     )
 }
@@ -99,10 +100,9 @@ const styles = StyleSheet.create({
 
 type EcosystemProps = {
     title: string
-    dapps: DiscoveryDApp[]
 }
 
-export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
+export const Ecosystem = React.memo(({ title }: EcosystemProps) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -119,7 +119,7 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
         onClose: onCloseSortBottomSheet,
     } = useBottomSheetModal()
 
-    const vbdSort: VeBetterDaoDappsSortKey = useMemo<VeBetterDaoDappsSortKey>(() => {
+    const vbdSort = useMemo<UseDappsWithPaginationSortKey>(() => {
         switch (sortedBy) {
             case "asc":
                 return "alphabetic_asc"
@@ -131,10 +131,10 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
     }, [sortedBy])
 
     const {
-        data: vbdDapps,
-        fetchNextPage: fetchNextVbdDapps,
-        isLoading: isLoadingVbdDapps,
-    } = useVeBetterDaoDappsWithMetadata({ sort: vbdSort, enabled: selectedDappsType === DAppType.SUSTAINABILTY })
+        data: dappsToShow,
+        fetchNextPage,
+        isLoading,
+    } = useDappsWithPagination({ sort: vbdSort, filter: selectedDappsType })
 
     const onMorePress = useCallback(
         (dapp: DiscoveryDApp) => {
@@ -183,56 +183,9 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
         ]
     }, [LL, selectedDappsType])
 
-    const dappsToShow = useMemo(() => {
-        const sortDapps = (a: DiscoveryDApp, b: DiscoveryDApp) => {
-            switch (sortedBy) {
-                case "desc":
-                    return b.name.localeCompare(a.name)
-                case "newest":
-                    return b.createAt - a.createAt
-                case "asc":
-                default:
-                    return a.name.localeCompare(b.name)
-            }
-        }
-
-        const dappsWithLowercaseTags = dapps
-            .map(dapp => ({
-                ...dapp,
-                tags: dapp.tags?.map(tag => tag.toLowerCase()),
-            }))
-            .sort(sortDapps)
-
-        switch (selectedDappsType) {
-            case DAppType.SUSTAINABILTY: {
-                return vbdDapps ?? []
-            }
-
-            case DAppType.NFT:
-                return dappsWithLowercaseTags.filter(dapp => dapp.tags?.includes(DAppType.NFT.toLowerCase()))
-
-            case DAppType.DAPPS:
-                return dappsWithLowercaseTags.filter(
-                    dapp =>
-                        !dapp.tags?.includes(DAppType.NFT.toLowerCase()) &&
-                        !dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()),
-                )
-
-            case DAppType.ALL:
-            default:
-                return dappsWithLowercaseTags
-        }
-    }, [dapps, selectedDappsType, sortedBy, vbdDapps])
-
     const onFetchNextPage = useCallback(async () => {
-        if (selectedDappsType !== DAppType.SUSTAINABILTY) return
-        fetchNextVbdDapps()
-    }, [fetchNextVbdDapps, selectedDappsType])
-
-    const isLoading = useMemo(() => {
-        if (selectedDappsType === DAppType.SUSTAINABILTY) return isLoadingVbdDapps
-        return false
-    }, [isLoadingVbdDapps, selectedDappsType])
+        fetchNextPage()
+    }, [fetchNextPage])
 
     return (
         <BaseView px={16}>
@@ -246,7 +199,7 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
             <TopFilters filters={filterOptions} />
             <BaseSpacer height={24} />
             <DAppsList
-                dapps={dappsToShow}
+                dapps={dappsToShow || []}
                 onMorePress={onMorePress}
                 onOpenDApp={onDAppPress}
                 isLoading={isLoading}
