@@ -47,12 +47,6 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         if (store.current) {
             store.current.replaceReducer(persistedReducer)
         } else {
-            let middlewares: any[] = []
-            if (process.env.NODE_ENV !== "production") {
-                const createDebugger = require("redux-flipper").default
-                middlewares.push(createDebugger())
-            }
-
             store.current = configureStore({
                 reducer: persistedReducer,
                 middleware: getDefaultMiddleware =>
@@ -67,7 +61,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
                         thunk: {
                             extraArgument: {},
                         },
-                    }).concat(middlewares),
+                    }),
                 enhancers: [reduxReset()],
                 devTools: process.env.NODE_ENV !== "production",
             })

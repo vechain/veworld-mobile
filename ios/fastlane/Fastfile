@@ -238,21 +238,21 @@ platform :ios do
 
     # check if spceicifed build number
     if !buildNumber.nil? 
-      build = increment_build_number_in_plist(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number_in_xcodeproj(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
+      build = increment_build_number(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number(build_number: buildNumber, xcodeproj: "VeWorld.xcodeproj")
     else
-      build = increment_build_number_in_plist(xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number_in_xcodeproj(xcodeproj: "VeWorld.xcodeproj")
+      build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number(xcodeproj: "VeWorld.xcodeproj")
     end
 
     # check if spceicifed version number
     if !versionType.nil? 
       if versionType.downcase != "patch" && versionType.downcase != "minor" && versionType.downcase != "major"
-        version = increment_version_number_in_plist(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number_in_xcodeproj(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+        version = increment_version_number(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
       else 
-        version = increment_version_number_in_plist(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number_in_xcodeproj(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+        version = increment_version_number(bump_type: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number(version_number: versionType.downcase, xcodeproj: "VeWorld.xcodeproj")
       end
     else
       version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
@@ -381,21 +381,21 @@ platform :ios do
     setup_ci if ENV['CI']
 
     if !build.nil? 
-      build = increment_build_number_in_plist(build_number: build, xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number_in_xcodeproj(build_number: build, xcodeproj: "VeWorld.xcodeproj")
+      build = increment_build_number(build_number: build, xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number(build_number: build, xcodeproj: "VeWorld.xcodeproj")
     else
-      build = increment_build_number_in_plist(xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number_in_xcodeproj(xcodeproj: "VeWorld.xcodeproj")
+      build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number(xcodeproj: "VeWorld.xcodeproj")
     end
 
     # check if spceicifed version number
     if !version.nil? 
       if version.downcase != "patch" && version.downcase != "minor" && version.downcase != "major"
-        version = increment_version_number_in_plist(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number_in_xcodeproj(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+        version = increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
       else 
-        version = increment_version_number_in_plist(bump_type: version.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number_in_xcodeproj(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+        version = increment_version_number(bump_type: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
       end
     else
       version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
@@ -539,21 +539,21 @@ platform :ios do
     setup_ci if ENV['CI']
 
     if !build.nil? 
-      build = increment_build_number_in_plist(build_number: build, xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number_in_xcodeproj(build_number: build, xcodeproj: "VeWorld.xcodeproj")
+      build = increment_build_number(build_number: build, xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number(build_number: build, xcodeproj: "VeWorld.xcodeproj")
     else
-      build = increment_build_number_in_plist(xcodeproj: "VeWorld.xcodeproj")
-              increment_build_number_in_xcodeproj(xcodeproj: "VeWorld.xcodeproj")
+      build = increment_build_number(xcodeproj: "VeWorld.xcodeproj")
+              increment_build_number(xcodeproj: "VeWorld.xcodeproj")
     end
 
     # check if spceicifed version number
     if !version.nil? 
       if version.downcase != "patch" && version.downcase != "minor" && version.downcase != "major"
-        version = increment_version_number_in_plist(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number_in_xcodeproj(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+        version = increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
       else 
-        version = increment_version_number_in_plist(bump_type: version.downcase, xcodeproj: "VeWorld.xcodeproj")
-                  increment_version_number_in_xcodeproj(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+        version = increment_version_number(bump_type: version.downcase, xcodeproj: "VeWorld.xcodeproj")
+                  increment_version_number(version_number: version.downcase, xcodeproj: "VeWorld.xcodeproj")
       end
     else
       version = get_version_number(xcodeproj: "VeWorld.xcodeproj")
