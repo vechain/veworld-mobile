@@ -3,6 +3,7 @@ import { DiscoveryDApp } from "~Constants"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
 import { getVeBetterDaoDAppMetadata } from "~Networking"
 import { UseDappsWithPaginationSortKey } from "./types"
+import { URIUtils } from "~Utils"
 
 export const sortVBDDapps = (sort: UseDappsWithPaginationSortKey) => (a: VeBetterDaoDapp, b: VeBetterDaoDapp) => {
     switch (sort) {
@@ -32,5 +33,7 @@ export const mapVBDDappToDiscoveryDapp = (dapp: VeBetterDaoDapp & VeBetterDaoDAp
         amountOfNavigations: 0,
         isVeWorldSupported: true,
         veBetterDaoId: dapp.id,
+        tags: ["__vebetterdao__internal"],
+        iconUri: URIUtils.convertUriToUrl(dapp.logo),
     }
 }

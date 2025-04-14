@@ -2,7 +2,7 @@ import { useInfiniteQuery } from "@tanstack/react-query"
 import { useCallback, useMemo } from "react"
 import { DAppType } from "~Model"
 import { UseDappsWithPaginationFetchReturn, UseDappsWithPaginationSortKey } from "./types"
-import { useAppHubDapps } from "./useAppHubDapps"
+import { sortAppHubDapps, useAppHubDapps } from "./useAppHubDapps"
 import { useVbdDapps } from "./useVbdDapps"
 
 type Args = {
@@ -47,7 +47,10 @@ export const useDappsWithPagination = ({ sort, filter }: Args) => {
         return appHubDependencyLoading
     }, [appHubDependencyLoading, filter, isFetching, vbdDependencyLoading])
 
-    const flattedData = useMemo(() => pages?.pages?.flatMap(({ page }) => page), [pages?.pages])
+    const flattedData = useMemo(
+        () => pages?.pages?.flatMap(({ page }) => page).sort(sortAppHubDapps(sort)),
+        [pages?.pages, sort],
+    )
 
     return {
         isLoading,

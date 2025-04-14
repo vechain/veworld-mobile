@@ -11,6 +11,7 @@ import { DAppType } from "~Model"
 import { useDAppActions } from "../Hooks"
 import { DAppOptionsBottomSheet, SortableKeys, SortDAppsBottomSheet } from "./Bottomsheets"
 import { DAppHorizontalCard } from "./DAppHorizontalCard"
+import { DappHorizontalCardSkeleton } from "./DappHorizontalCardSkeleton"
 
 type Filter = {
     key: DAppType
@@ -66,7 +67,7 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading 
     }, [])
 
     const renderListFooter = useCallback(() => {
-        return isLoading ? (
+        return isLoading && dapps.length > 0 ? (
             <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={20}>
                 <Spinner />
                 <BaseText typographyFont="bodySemiBold">{LL.LOADING_MORE()}</BaseText>
@@ -74,7 +75,25 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading 
         ) : (
             <BaseSpacer height={0} />
         )
-    }, [LL, isLoading])
+    }, [LL, dapps.length, isLoading])
+
+    const renderSkeletonItem = useCallback(() => {
+        return <DappHorizontalCardSkeleton />
+    }, [])
+
+    if (isLoading && dapps.length === 0) {
+        return (
+            <FlatList
+                renderItem={renderSkeletonItem}
+                data={[1, 2, 3, 4, 5, 6, 7]}
+                keyExtractor={item => item.toString()}
+                scrollEnabled={false}
+                shouldRasterizeIOS
+                ItemSeparatorComponent={renderItemSeparator}
+                contentContainerStyle={styles.flatListPadding}
+            />
+        )
+    }
 
     return (
         <FlatList

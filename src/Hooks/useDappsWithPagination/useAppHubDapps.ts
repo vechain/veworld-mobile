@@ -5,7 +5,7 @@ import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
 import { PAGE_SIZE } from "./constants"
 import { UseDappsWithPaginationFetch, UseDappsWithPaginationSortKey } from "./types"
 
-const sortAppHubDapps = (sort: UseDappsWithPaginationSortKey) => (a: DiscoveryDApp, b: DiscoveryDApp) => {
+export const sortAppHubDapps = (sort: UseDappsWithPaginationSortKey) => (a: DiscoveryDApp, b: DiscoveryDApp) => {
     switch (sort) {
         case "alphabetic_asc":
             return a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1
