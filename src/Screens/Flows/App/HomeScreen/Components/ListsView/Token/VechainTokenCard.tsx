@@ -36,7 +36,7 @@ export const VechainTokenCard = memo(({ tokenWithInfo, isAnimation, isBalanceVis
         if (!exchangeRate) return <BaseText typographyFont="bodyBold">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
         return (
             <FiatBalance
-                typographyFont="subSubTitleBold"
+                typographyFont="subSubTitleSemiBold"
                 color={tokenValueLabelColor}
                 balances={[fiatBalance]}
                 isVisible={isBalanceVisible}
