@@ -1,4 +1,9 @@
+# Changelog
 
+## <small>2.1.4 (2025-04-14)</small>
+
+* build: init ([2236d23](https://github.com/vechain/veworld-mobile/commit/2236d23))
+* chore: add Gemfile and Gemfile.lock for CocoaPods and Fastlane setup (#2867) ([7bdda05](https://github.com/vechain/veworld-mobile/commit/7bdda05)), closes [#2867](https://github.com/vechain/veworld-mobile/issues/2867)
 
 ## 2.1.3 (2025-04-11)
 
