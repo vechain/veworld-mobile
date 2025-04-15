@@ -32,6 +32,7 @@ type Props = {
     autoPlayInterval?: number
     loop?: boolean
     paginationAlignment?: "flex-start" | "center" | "flex-end"
+    testID?: string
 }
 
 export const BaseCarousel = ({
@@ -42,6 +43,7 @@ export const BaseCarousel = ({
     autoPlayInterval = 10000,
     loop = true,
     paginationAlignment = "center",
+    testID,
 }: Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
     const progress = useSharedValue<number>(0)
@@ -59,7 +61,7 @@ export const BaseCarousel = ({
     }
 
     return (
-        <BaseView flex={1} style={[styles.container]}>
+        <BaseView flex={1} style={[styles.container]} testID={testID}>
             <Carousel
                 ref={ref}
                 data={data}

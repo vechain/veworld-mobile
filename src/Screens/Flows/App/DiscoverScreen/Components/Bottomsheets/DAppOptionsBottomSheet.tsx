@@ -121,7 +121,7 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                     data={Actions}
                     keyExtractor={action => action.name}
                     ItemSeparatorComponent={ItemSeparatorComponent}
-                    renderItem={({ item }) => <BottomSheetAction {...item} />}
+                    renderItem={({ item }) => <BottomSheetAction key={item.testID} {...item} />}
                     {...flatListScrollProps}
                 />
             </BaseBottomSheet>

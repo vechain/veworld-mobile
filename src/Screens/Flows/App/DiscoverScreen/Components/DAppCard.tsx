@@ -27,6 +27,7 @@ export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
     return (
         <Animated.View entering={ZoomIn} exiting={ZoomOut}>
             <BaseTouchable
+                testID={`dapp-card-${dapp.id}`}
                 style={[styles.rootContainer, { width: cardDimension }]}
                 onPress={onPress}
                 // Workaround -> https://github.com/mpiannucci/react-native-context-menu-view/issues/60#issuecomment-1453864955

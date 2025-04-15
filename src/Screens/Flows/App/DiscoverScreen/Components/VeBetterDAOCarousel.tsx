@@ -57,6 +57,7 @@ export const VeBetterDAOCarousel = () => {
 
     return (
         <BaseCarousel
+            testID="VeBetterDao_carousel"
             data={activeSlides}
             w={360}
             h={100}
