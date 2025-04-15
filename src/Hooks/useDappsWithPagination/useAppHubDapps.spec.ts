@@ -53,11 +53,13 @@ describe("useAppHubDapps", () => {
         expect(res.page).toHaveLength(1)
     })
 
-    it("should return hasMore = false if there are > 10 items", async () => {
+    it("should return hasMore = true if there are > 10 items", async () => {
         const { result } = renderHook(() => useAppHubDapps(DAppType.ALL), {
             wrapper: TestWrapper,
             initialProps: createInitialProps(
-                ...Array.from({ length: 11 }, (_, idx) => buildDapp({ name: `TEST DAPP #${idx}` })),
+                ...Array.from({ length: 11 }, (_, idx) =>
+                    buildDapp({ name: `TEST DAPP #${idx.toString().padStart(2, "0")}` }),
+                ),
             ),
         })
 
@@ -70,6 +72,7 @@ describe("useAppHubDapps", () => {
 
         expect(res2.hasMore).toBe(false)
         expect(res2.page).toHaveLength(1)
+        expect(res2.page[0].name).toBe("TEST DAPP #10")
     })
 
     it("Should sort by alphabetic_asc correctly", async () => {
