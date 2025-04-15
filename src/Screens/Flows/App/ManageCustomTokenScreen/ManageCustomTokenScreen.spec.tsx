@@ -36,6 +36,10 @@ jest.mock("~Hooks/useVns/useVns", () => ({
     }),
 }))
 
+jest.mock("@gorhom/bottom-sheet", () => ({
+    ...jest.requireActual("@gorhom/bottom-sheet"),
+}))
+
 describe("ManageCustomTokenScreen", () => {
     afterEach(() => {
         driver.close()

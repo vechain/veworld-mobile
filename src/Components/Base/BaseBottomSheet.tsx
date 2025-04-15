@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
+import { LayoutChangeEvent, Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import {
     BottomSheetBackdrop,
     BottomSheetBackdropProps,
@@ -130,7 +130,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const onSheetPositionChange = useCallback(
             (index: number) => {
                 setSheetState(index)
-                onChange && onChange(index)
+                onChange?.(index)
             },
             [onChange],
         )
@@ -183,6 +183,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 handleComponent={renderHandle}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
+                //Workaround for run tests on Maestro take a look at this https://github.com/software-mansion/react-native-reanimated/issues/6648
+                accessible={Platform.select({ ios: false })}
                 snapPoints={snappoints}
                 onChange={onSheetPositionChange}
                 {...sheetProps}>
