@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { useVeBetterDaoDapps } from "../useFetchFeaturedDApps/useVeBetterDaoDapps"
+import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import { useAppSelector, selectFeaturedDapps } from "~Storage/Redux"
 import moment from "moment"
 

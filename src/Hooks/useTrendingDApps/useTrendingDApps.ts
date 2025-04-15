@@ -1,5 +1,5 @@
 import { useMemo } from "react"
-import { useCurrentAllocationsRoundId, useRoundXApps, useXAppsShares } from "../VeBetterDao"
+import { useCurrentAllocationsRoundId, useRoundXApps, useXAppsShares } from "~Hooks/VeBetterDao"
 import { useAppSelector, selectFeaturedDapps } from "~Storage/Redux"
 import { DiscoveryDApp } from "~Constants"
 
