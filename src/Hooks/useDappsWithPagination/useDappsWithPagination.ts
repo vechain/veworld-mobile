@@ -37,6 +37,7 @@ export const useDappsWithPagination = ({ sort, filter }: Args) => {
             return _lastPage.hasMore ? _lastPageParam + 1 : null
         },
         initialPageParam: 0,
+        enabled: filter === DAppType.SUSTAINABILTY ? !vbdDependencyLoading : !appHubDependencyLoading,
     })
 
     const isLoading = useMemo(() => {
