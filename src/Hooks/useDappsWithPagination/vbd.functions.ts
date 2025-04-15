@@ -26,7 +26,7 @@ export const fetchVBDMetadata = (dapp: VeBetterDaoDapp) => {
 export const mapVBDDappToDiscoveryDapp = (dapp: VeBetterDaoDapp & VeBetterDaoDAppMetadata): DiscoveryDApp => {
     return {
         name: dapp.name,
-        href: new URL(dapp.external_url).href,
+        href: new URL(dapp.external_url).origin,
         desc: dapp.description,
         createAt: new Date(dapp.createdAtTimestamp).getTime(),
         isCustom: false,
