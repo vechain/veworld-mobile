@@ -7,6 +7,14 @@ export { BiometricErrors }
 
 export const getDeviceEnrolledLevel = async () => {
     const level = await LocalAuthentication.getEnrolledLevelAsync()
+    // In newer version of local auth BIOMETRIC type is deprecated so
+    // I'm remapping it to keep the code linear
+    if (
+        level === LocalAuthentication.SecurityLevel.BIOMETRIC_WEAK ||
+        level === LocalAuthentication.SecurityLevel.BIOMETRIC_STRONG
+    )
+        return SecurityLevelType.BIOMETRIC
+
     return LocalAuthentication.SecurityLevel[level] as SecurityLevelType
 }
 

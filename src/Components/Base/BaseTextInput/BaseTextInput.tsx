@@ -1,5 +1,6 @@
 import React, { forwardRef, memo, useMemo } from "react"
-import { KeyboardTypeOptions, StyleProp, StyleSheet, TextInputProps, ViewStyle } from "react-native"
+
+import { Insets, KeyboardTypeOptions, StyleProp, StyleSheet, TextInputProps, ViewStyle } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -7,6 +8,7 @@ import { typography } from "~Constants/Theme"
 import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { PlatformUtils } from "~Utils"
+import { HitSlop } from "react-native-gesture-handler/lib/typescript/handlers/gestureHandlerCommon"
 
 const { defaults: defaultTypography } = typography
 
@@ -40,6 +42,7 @@ export type BaseTextInputProps = {
     inBottomSheet?: boolean
     handleFocus?: () => void
     handleBlur?: () => void
+    hitSlop?: (number | Insets | null) & HitSlop
 } & TextInputProps
 
 export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
@@ -68,6 +71,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
             rightIconSize = 24,
             rightIconAdornment = true,
             leftIconAdornment = true,
+            hitSlop,
             ...otherProps
         },
         ref,
@@ -207,6 +211,7 @@ export const BaseTextInputComponent = forwardRef<TextInput, BaseTextInputProps>(
                         selectTextOnFocus={disabled}
                         onFocus={handleFocus}
                         onBlur={handleBlur}
+                        hitSlop={hitSlop}
                         {...otherProps}
                     />
                     {renderRightIcon}
