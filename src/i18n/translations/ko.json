@@ -578,6 +578,7 @@
   "LEDGER_SIGN_DATA": "데이터 서명",
   "LEDGER_STATUS_OK": "상태 양호",
   "LIGHT_THEME": "밝은 테마",
+  "LOADING_MORE": "더 불러오는 중",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "선택한 토큰을 추가하시겠습니까?",
   "MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE": "사용자 지정 토큰 추가",
   "MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE": "사용자 지정 토큰 확인",
