@@ -1,13 +1,13 @@
-import { StyleSheet } from "react-native"
-import React, { memo, useMemo } from "react"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { isEmpty } from "lodash"
+import React, { memo, useMemo } from "react"
+import { StyleSheet } from "react-native"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { useI18nContext } from "~i18n"
 import { NFTMediaType, NftCollection } from "~Model"
 
 import { COLORS } from "~Constants"
-import { useToggleCollection } from "./Hooks/useToggleCollection"
 import { useTheme } from "~Hooks"
+import { useToggleCollection } from "./Hooks/useToggleCollection"
 
 export const HeaderComponent = memo(({ collection }: { collection: NftCollection }) => {
     const { LL } = useI18nContext()
@@ -37,7 +37,7 @@ export const HeaderComponent = memo(({ collection }: { collection: NftCollection
                         {collection.name}
                     </BaseText>
 
-                    <BaseView style={baseStyles.buttonWidth} mt={4}>
+                    <BaseView style={baseStyles.buttonWidth} mt={4} alignSelf="flex-start">
                         <BaseButton
                             haptics="Light"
                             action={onToggleCollection}
@@ -85,7 +85,7 @@ const baseStyles = StyleSheet.create({
         marginRight: 12,
     },
     buttonWidth: {
-        width: 134,
+        width: "auto",
         height: 32,
     },
 })
