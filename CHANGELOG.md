@@ -1,4 +1,9 @@
+# Changelog
 
+## <small>2.1.4 (2025-04-14)</small>
+
+* build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))
+* build(deps): bump axios from 1.8.1 to 1.8.2 (#2785) ([e691d69](https://github.com/vechain/veworld-mobile/commit/e691d69)), closes [#2785](https://github.com/vechain/veworld-mobile/issues/2785)
 
 ## 2.1.3 (2025-04-11)
 

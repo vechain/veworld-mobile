@@ -98,9 +98,86 @@ Then open a new instance of the terminal on the project root and type:
 
 to select an android emulator to run the app (you need to have at least once active emulator on your android studio).
 
+# React Native 0.74 Migration
+
+This project has been upgraded from React Native 0.72 to 0.74 to improve application performance and take advantage of the latest features. The following guide will help you update your development environment to work with the new version.
+
+## Environment Setup Requirements
+
+To work with React Native 0.74, you'll need to update your development environment with the following requirements:
+
+### Node.js
+
+- **Upgrade from Node 18 to Node 20**
+- You can use nvm to manage Node versions:
+  ```bash
+  nvm install 20
+  nvm use 20
+  ```
+- Verify installation: `node --version`
+
+### Java (for Android)
+
+- **Upgrade from Java 11 to Java 17**
+- Download and install Azul Zulu JDK 17:
+  - Visit [Azul Zulu Downloads](https://www.azul.com/downloads/?package=jdk#download-openjdk)
+  - Select JDK 17 (LTS)
+- Update your JAVA_HOME environment variable to point to the new JDK
+- Verify installation: `java -version`
+
+### Ruby (for iOS)
+
+- **Upgrade from Ruby 2.6.1 to 2.7.5**
+- Using rbenv:
+  ```bash
+  rbenv install 2.7.5
+  rbenv global 2.7.5
+  ```
+- Using rvm:
+  ```bash
+  rvm install 2.7.5
+  rvm use 2.7.5
+  ```
+- Verify installation: `ruby -v`
+
+### Flipper Removal
+
+- Flipper has been completely removed from the project
+- If you were using Flipper for debugging, consider alternatives like:
+  - React Native Debugger
+  - Chrome DevTools
+  - React Developer Tools
+
+### Clean Project Steps
+
+After updating your environment, clean your project thoroughly:
+
+1. Remove node_modules and reinstall dependencies:
+   ```bash
+   yarn reinstall
+   ```
+
+2. Reset Metro bundler cache:
+   ```bash
+   yarn start
+   ```
+
+3. Rebuild the app:
+   ```bash
+   # For iOS
+   yarn ios
+   
+   # For Android
+   yarn android:emus
+   ```
+
+If you encounter any issues during the migration process, please reach out for assistance.
+
+
+
 # How to contribute
 
-## Merge Request Accpetance Criteria
+## Merge Request Acceptance Criteria
 
 In order to submitng a merge request please do the following:
 
