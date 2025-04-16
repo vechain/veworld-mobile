@@ -82,7 +82,11 @@ export const SelectTokenSendScreen = () => {
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<FungibleTokenWithBalance>) => {
             return (
-                <TouchableOpacity onPress={handleClickToken(item)} key={item.address} style={styles.tokenContainer}>
+                <TouchableOpacity
+                    onPress={handleClickToken(item)}
+                    key={item.address}
+                    style={styles.tokenContainer}
+                    testID={item.symbol}>
                     {renderTokenCard(item)}
                 </TouchableOpacity>
             )
