@@ -1,8 +1,7 @@
-import React from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseButton, BaseSpacer, BaseText, BaseView, BaseBottomSheet } from "~Components"
+import React from "react"
+import { BaseBottomSheet, BaseButton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { useTheme } from "~Hooks"
 
 type Props = {
     title: string
@@ -15,8 +14,6 @@ type Props = {
 export const DeleteConfirmationBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onClose, onConfirm, title, description, deletingElement }, ref) => {
         const { LL } = useI18nContext()
-
-        const theme = useTheme()
 
         return (
             <BaseBottomSheet dynamicHeight ref={ref}>
@@ -39,7 +36,6 @@ export const DeleteConfirmationBottomSheet = React.forwardRef<BottomSheetModalMe
                                 w={100}
                                 px={20}
                                 title={LL.COMMON_BTN_REMOVE().toUpperCase()}
-                                bgColor={theme.colors.primary}
                             />
                             <BaseSpacer height={10} />
                             <BaseButton
