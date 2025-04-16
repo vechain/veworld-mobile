@@ -22,9 +22,9 @@ jobs:
               run: yarn --frozen-lockfile
             - name: Generate translations
               env:
-                OPENAI_API_KEY: ${{ secrets.OPENAPI_KEY }}
+                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
-                yarn i18n:generate
+                yarn translo-cli
             - name: Push to repo
               run: |
                 git config user.name "github-actions-language-translator"
