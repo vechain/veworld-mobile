@@ -201,6 +201,7 @@
     "@formatjs/intl-locale": "^4.0.2",
     "@formatjs/intl-pluralrules": "^5.2.16",
     "@ledgerhq/hw-transport-mocker": "^6.29.4",
+    "@react-native-community/cli": "^18.0.0",
     "@react-native/babel-preset": "0.76.9",
     "@react-native/eslint-config": "0.76.9",
     "@react-native/metro-config": "0.76.9",
