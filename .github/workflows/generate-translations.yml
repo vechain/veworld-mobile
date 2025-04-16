@@ -1,0 +1,35 @@
+on:
+    push:
+        branches-ignore: [main]
+        paths: 
+            - src/i18n/translations/en.json
+
+jobs:
+    build-push-translations:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20.17
+            - name: Install
+              run: yarn --frozen-lockfile
+            - name: Generate translations
+              env:
+                OPENAI_API_KEY: ${{ secrets.OPENAPI_KEY }}
+              run: |
+                yarn i18n:generate
+            - name: Push to repo
+              run: |
+                git config user.name "github-actions-language-translator"
+                git config user.emal "github-actions-language-translator@github.com"
+                git add .
+                git commit -m "feat: add translations"
+                git push
+            
