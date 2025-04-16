@@ -34,7 +34,7 @@ export const BrowserBottomBar: React.FC = () => {
     const { styles } = useThemedStyles(baseStyles)
     const isIOSPlatform = isIOS()
     const route = useRoute()
-    const { onClose: closeBottomSheet, onOpen: openBottomSheet, ref: bottomSheetRef } = useBottomSheetModal()
+    const { onOpen: openBottomSheet, ref: bottomSheetRef } = useBottomSheetModal()
 
     const fromDiscovery = useMemo(() => {
         return route.name !== Routes.SETTINGS_GET_SUPPORT && route.name !== Routes.SETTINGS_GIVE_FEEDBACK
@@ -129,7 +129,7 @@ export const BrowserBottomBar: React.FC = () => {
                     />
                 )
             })}
-            <BrowserBottomSheet onClose={closeBottomSheet} ref={bottomSheetRef} />
+            <BrowserBottomSheet ref={bottomSheetRef} />
         </Animated.View>
     ) : null
 }
