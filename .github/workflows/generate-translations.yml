@@ -28,7 +28,7 @@ jobs:
             - name: Push to repo
               run: |
                 git config user.name "github-actions-language-translator"
-                git config user.emal "github-actions-language-translator@github.com"
+                git config user.email "github-actions-language-translator@github.com"
                 git add .
                 git commit -m "feat: add translations"
                 git push
