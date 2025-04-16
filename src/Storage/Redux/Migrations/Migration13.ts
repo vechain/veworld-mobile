@@ -1,7 +1,7 @@
 import { PersistedState } from "redux-persist/es/types"
 import { DiscoveryDApp, ERROR_EVENTS } from "~Constants"
 import { debug } from "~Utils"
-import { DiscoveryState } from "../Slices/Discovery"
+import { DiscoveryState } from "~Storage/Redux"
 
 const filterFavorites = (favorite: DiscoveryDApp, index: number, self: DiscoveryDApp[]) => {
     // Return true only for the first occurrence of a favorite with the same base URL
