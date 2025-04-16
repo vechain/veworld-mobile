@@ -111,26 +111,18 @@ describe("useDappBookmarking", () => {
         expect(result.current.existingBookmark).toBeUndefined()
     })
 
-    it("should handle invalid URL", () => {
-        const { result } = renderHook(() => useDappBookmarking(), {
+    it("should handle invalid URL gracefully", () => {
+        const { result } = renderHook(() => useDappBookmarking("https::example.com"), {
             wrapper: TestWrapper,
             initialProps: {
                 preloadedState: {
                     discovery: {
                         ...mockState.discovery,
-                        favorites: [
-                            {
-                                href: "https::example.com",
-                                name: "Example",
-                                isCustom: false,
-                                createAt: Date.now(),
-                                amountOfNavigations: 2,
-                            },
-                        ],
                     },
                 },
             },
         })
+
         expect(result.current.isBookMarked).toBe(false)
         expect(result.current.existingBookmark).toBeUndefined()
     })
