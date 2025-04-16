@@ -67,7 +67,7 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading 
     }, [])
 
     const renderListFooter = useCallback(() => {
-        return isLoading && dapps.length > 0 ? (
+        return isLoading ? (
             <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={20}>
                 <Spinner />
                 <BaseText typographyFont="bodySemiBold">{LL.LOADING_MORE()}</BaseText>
@@ -75,7 +75,7 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading 
         ) : (
             <BaseSpacer height={0} />
         )
-    }, [LL, dapps.length, isLoading])
+    }, [LL, isLoading])
 
     const renderSkeletonItem = useCallback(() => {
         return <DappHorizontalCardSkeleton />
