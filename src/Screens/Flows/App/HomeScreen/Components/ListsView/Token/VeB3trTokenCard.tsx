@@ -106,7 +106,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                                 typographyFont="subSubTitleMedium"
                                 align="right"
                                 color={theme.colors.tokenCardText}
-                                lineHeight={20}>
+                                lineHeight={24}>
                                 {isBalanceVisible ? b3trToken.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
@@ -133,7 +133,7 @@ export const VeB3trTokenCard = memo(({ isBalanceVisible, isAnimation }: Props) =
                                 typographyFont="subSubTitleMedium"
                                 align="right"
                                 color={theme.colors.tokenCardText}
-                                lineHeight={20}>
+                                lineHeight={24}>
                                 {isBalanceVisible ? vot3Token.tokenUnitBalance : "•••••"}
                             </BaseText>
                         )}
