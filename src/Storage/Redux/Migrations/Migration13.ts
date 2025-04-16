@@ -11,7 +11,7 @@ const filterFavorites = (favorite: DiscoveryDApp, index: number, self: Discovery
         self.findIndex(f => {
             try {
                 const otherBaseUrl = new URL(f.href).origin
-                return otherBaseUrl === baseUrl
+                return otherBaseUrl === baseUrl && !f.isCustom
             } catch (error) {
                 return false
             }
