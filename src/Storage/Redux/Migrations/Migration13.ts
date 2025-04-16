@@ -5,17 +5,22 @@ import { DiscoveryState } from "~Storage/Redux"
 
 const filterFavorites = (favorite: DiscoveryDApp, index: number, self: DiscoveryDApp[]) => {
     // Return true only for the first occurrence of a favorite with the same base URL
+    // and only if it's not a custom dApp
+    if (favorite.isCustom) {
+        return false
+    }
+
     const baseUrl = new URL(favorite.href).origin
     return (
         index ===
-            self.findIndex(f => {
-                try {
-                    const otherBaseUrl = new URL(f.href).origin
-                    return otherBaseUrl === baseUrl
-                } catch (error) {
-                    return false
-                }
-            }) && !favorite.isCustom
+        self.findIndex(f => {
+            try {
+                const otherBaseUrl = new URL(f.href).origin
+                return otherBaseUrl === baseUrl
+            } catch (error) {
+                return false
+            }
+        })
     )
 }
 
