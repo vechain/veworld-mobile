@@ -21,10 +21,6 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
     ({ dapp, isEditMode, isActive, onDAppPress, onMorePress, onLongPress }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
-        const getIconName = () => {
-            return !isEditMode ? "icon-more-vertical" : "icon-grip-horizontal"
-        }
-
         return (
             <ScaleDecorator activeScale={1.05}>
                 <ShadowDecorator elevation={1} radius={4} opacity={0.2} color={theme.colors.backgroundReversed}>
@@ -73,7 +69,11 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                             onLongPress={() => onLongPress?.(dapp)}
                             onPress={() => onMorePress(dapp)}
                             style={styles.touchableContainer}>
-                            <BaseIcon name={getIconName()} color={theme.colors.text} size={20} />
+                            {isEditMode ? (
+                                <BaseIcon name="icon-grip-horizontal" color={theme.colors.text} size={20} />
+                            ) : (
+                                <BaseIcon name="icon-more-vertical" color={theme.colors.text} size={20} />
+                            )}
                         </BaseTouchable>
                     </BaseView>
                 </ShadowDecorator>

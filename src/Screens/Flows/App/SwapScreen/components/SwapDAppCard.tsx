@@ -42,7 +42,7 @@ export const SwapDAppCard = ({ dapp, onDAppPress }: Props) => {
                             numberOfLines={1}
                             typographyFont="caption"
                             color={theme.colors.assetDetailsCard.text}>
-                            {dapp.desc ? dapp.desc : dapp.href}
+                            {dapp.desc || dapp.href}
                         </BaseText>
                     </BaseView>
                 </BaseView>

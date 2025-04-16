@@ -47,7 +47,7 @@ export const useXAppsShares = (apps: string[], roundId?: string) => {
                 const decoded = functionAbi.decode(r.data)
 
                 return {
-                    app: apps[index] as string,
+                    app: apps[index],
                     share: Number(decoded[0]) / 100,
                     unallocatedShare: Number(decoded[1]) / 100,
                 }

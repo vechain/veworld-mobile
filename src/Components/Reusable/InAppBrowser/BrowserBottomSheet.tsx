@@ -8,9 +8,7 @@ import { useCopyClipboard, useDappBookmarking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 
-type Props = {
-    onClose: () => void
-}
+type Props = {}
 
 type BottomSheetAction = {
     id: string
@@ -19,7 +17,7 @@ type BottomSheetAction = {
     onPress: () => void
 }
 
-export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>((props, ref) => {
+export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>((_, ref) => {
     const { LL } = useI18nContext()
     const { isDapp, navigationState } = useInAppBrowser()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
