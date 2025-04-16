@@ -1,9 +1,8 @@
 import React, { useMemo } from "react"
-import { TouchableOpacity } from "react-native-gesture-handler"
 import { BaseText } from "../BaseText"
 import { BaseIcon } from "../BaseIcon"
 import { BaseView } from "../BaseView"
-import { StyleSheet } from "react-native"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { TouchableOpacity as BottomSheetTouchable } from "@gorhom/bottom-sheet"
@@ -49,7 +48,12 @@ export const BaseRadioButton = ({ id, label, isSelected, disabled, testID, isBot
     const Touchable = isBottomSheet ? BottomSheetTouchable : TouchableOpacity
 
     return (
-        <Touchable testID={testID} disabled={disabled} style={computeContainerStyles} onPress={() => onPress(id)}>
+        <Touchable
+            testID={testID}
+            disabled={disabled}
+            style={computeContainerStyles}
+            accessibilityValue={{ text: isSelected ? "selected" : "not selected" }}
+            onPress={() => onPress(id)}>
             <BaseView flexDirection={"row"} justifyContent={"space-between"}>
                 <BaseText typographyFont="bodyMedium" style={computedTextStyles}>
                     {label}
