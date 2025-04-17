@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.1.5 (2025-04-17)</small>
+
+* build: init ([2fb1ef3](https://github.com/vechain/veworld-mobile/commit/2fb1ef3))
+* refactor: added scenario for discover screen connecting to VeBetterDao (#2860) ([4612ab0](https://github.com/vechain/veworld-mobile/commit/4612ab0)), closes [#2860](https://github.com/vechain/veworld-mobile/issues/2860)
+
 ## <small>2.1.4 (2025-04-14)</small>
 
 * build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))
