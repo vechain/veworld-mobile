@@ -154,18 +154,7 @@ describe("useVbdDapps", () => {
             },
         }
 
-        ;(axios.get as jest.Mock)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
-            .mockResolvedValueOnce(mockData)
+        ;(axios.get as jest.Mock).mockResolvedValue(mockData)
 
         const res1 = await result.current.fetchWithPage({ page: 0, sort: "alphabetic_asc" })
 
