@@ -3,34 +3,34 @@ PODS:
   - BVLinearGradient (2.8.3):
     - React-Core
   - DoubleConversion (1.1.6)
-  - EXAV (14.0.7):
+  - EXAV (15.0.2):
     - ExpoModulesCore
     - ReactCommon/turbomodule/core
-  - EXConstants (16.0.2):
+  - EXConstants (17.0.8):
     - ExpoModulesCore
-  - Expo (51.0.39):
+  - Expo (52.0.46):
     - ExpoModulesCore
-  - ExpoAsset (10.0.10):
+  - ExpoAsset (11.0.5):
     - ExpoModulesCore
-  - ExpoBackgroundFetch (12.0.1):
+  - ExpoBackgroundFetch (13.0.6):
     - ExpoModulesCore
-  - ExpoCamera (15.0.16):
+  - ExpoCamera (16.0.18):
     - ExpoModulesCore
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
-  - ExpoClipboard (6.0.3):
+  - ExpoClipboard (7.0.1):
     - ExpoModulesCore
-  - ExpoFileSystem (17.0.1):
+  - ExpoFileSystem (18.0.12):
     - ExpoModulesCore
   - ExpoFont (12.0.10):
     - ExpoModulesCore
-  - ExpoHaptics (13.0.1):
+  - ExpoHaptics (14.0.1):
     - ExpoModulesCore
-  - ExpoKeepAwake (13.0.2):
+  - ExpoKeepAwake (14.0.3):
     - ExpoModulesCore
-  - ExpoLocalAuthentication (14.0.1):
+  - ExpoLocalAuthentication (15.0.2):
     - ExpoModulesCore
-  - ExpoModulesCore (1.12.26):
+  - ExpoModulesCore (2.2.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -53,9 +53,31 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - ExpoSecureStore (13.0.2):
+  - ExpoSecureStore (14.0.1):
     - ExpoModulesCore
-  - EXTaskManager (11.8.2):
+  - EXSplashScreen (1.0.0-canary-20241021-c4b5a93):
+    - DoubleConversion
+    - ExpoModulesCore
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.10.14.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCodegen
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
+  - EXTaskManager (12.0.6):
     - ExpoModulesCore
     - UMAppLoader
   - fast_float (6.1.4)
@@ -2290,7 +2312,7 @@ PODS:
     - SDWebImage/Core (~> 5.10)
   - Sentry/HybridSDK (8.45.0)
   - SocketRocket (0.7.1)
-  - UMAppLoader (4.6.0)
+  - UMAppLoader (5.0.1)
   - Yoga (0.0.0)
   - ZXingObjC/Core (3.6.9)
   - ZXingObjC/OneD (3.6.9):
@@ -2316,6 +2338,7 @@ DEPENDENCIES:
   - ExpoLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
   - ExpoSecureStore (from `../node_modules/expo-secure-store/ios`)
+  - EXSplashScreen (from `../node_modules/expo-splash-screen/ios`)
   - EXTaskManager (from `../node_modules/expo-task-manager/ios`)
   - fast_float (from `../node_modules/react-native/third-party-podspecs/fast_float.podspec`)
   - FBLazyVector (from `../node_modules/react-native/Libraries/FBLazyVector`)
@@ -2474,6 +2497,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-modules-core"
   ExpoSecureStore:
     :path: "../node_modules/expo-secure-store/ios"
+  EXSplashScreen:
+    :path: "../node_modules/expo-splash-screen/ios"
   EXTaskManager:
     :path: "../node_modules/expo-task-manager/ios"
   fast_float:
@@ -2684,21 +2709,22 @@ SPEC CHECKSUMS:
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   BVLinearGradient: cb006ba232a1f3e4f341bb62c42d1098c284da70
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
-  EXAV: 64e72329d2f8c2ba13608fed4a713af4e793242d
-  EXConstants: 89d35611505a8ce02550e64e43cd05565da35f9a
-  Expo: ed0a748eb6be0efd2c3df7f6de3f3158a14464c9
-  ExpoAsset: 286fee7ba711ce66bf20b315e68106b13b8629fc
-  ExpoBackgroundFetch: 2988b27bc95f322e856dbd44060b6951fdfe8950
-  ExpoCamera: cf49d2d121a9f883be0f98dde15a2185a1dd42be
-  ExpoClipboard: 243e22ff4161bbffcd3d2db469ae860ddc1156be
-  ExpoFileSystem: 2988caaf68b7cb706e36d382829d99811d9d76a5
+  EXAV: 4c41f0a6ae54a0b96597abc90e37962ab2ee0d85
+  EXConstants: fcfc75800824ac2d5c592b5bc74130bad17b146b
+  Expo: a6ff273c618506b12129a0d06f2a08201bfbcf43
+  ExpoAsset: 48386d40d53a8c1738929b3ed509bcad595b5516
+  ExpoBackgroundFetch: 72d9978cf6addacc6fb5e211ef99f74146a52d76
+  ExpoCamera: 0a3e78de7b1ca8c438ee6784fa6f22c5b1b36966
+  ExpoClipboard: 44fd1c8959ee8f6175d059dc011b154c9709a969
+  ExpoFileSystem: 42d363d3b96f9afab980dcef60d5657a4443c655
   ExpoFont: 38dddf823e32740c2a9f37c926a33aeca736b5c4
-  ExpoHaptics: 9f47be324f691b6291c17c216189ab832d1a4d69
-  ExpoKeepAwake: dd02e65d49f1cfd9194640028ae2857e536eb1c9
-  ExpoLocalAuthentication: b94db59f55df95350223200c746b4ddf0cb7cfc0
-  ExpoModulesCore: 2e8f3554a481af70e70b775e30cb87a883c02532
-  ExpoSecureStore: 6506992a9f53c94ea716c54d4a63144965945c2c
-  EXTaskManager: b515b853fd97286a25cb643978ff7fa456f3139a
+  ExpoHaptics: 8d199b2f33245ea85289ff6c954c7ee7c00a5b5d
+  ExpoKeepAwake: b0171a73665bfcefcfcc311742a72a956e6aa680
+  ExpoLocalAuthentication: eb2be9c7bcdc68e9434d4be4bb5aa5cf7943e816
+  ExpoModulesCore: c25d77625038b1968ea1afefc719862c0d8dd993
+  ExpoSecureStore: 9a3665d7161dd1031be386e278bffd623658f316
+  EXSplashScreen: 53b3f1faaa04a18af6e2c0b10f891442ca67f278
+  EXTaskManager: 0dcaa9b4b058b435f4e5bff4919c863f4f46badc
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 7605ea4810e0e10ae4815292433c09bf4324ba45
   fmt: 01b82d4ca6470831d1cc0852a1af644be019e8f6
@@ -2810,7 +2836,7 @@ SPEC CHECKSUMS:
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
   Sentry: f7c0c4b82e2f7e5909a660544dfaff84e35d5e03
   SocketRocket: d4aabe649be1e368d1318fdf28a022d714d65748
-  UMAppLoader: f17a5ee8e85b536ace0fc254b447a37ed198d57e
+  UMAppLoader: 7e7e0eaa7854ffd652c00a68c443afb28c3bedba
   Yoga: feb4910aba9742cfedc059e2b2902e22ffe9954a
   ZXingObjC: 8898711ab495761b2dbbdec76d90164a6d7e14c5
 
