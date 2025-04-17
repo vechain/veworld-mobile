@@ -3,18 +3,20 @@ import {
     VeBetterDaoLightBanner,
     VeBetterDaoDarkBanner,
     VeBetterDaoStellaBanner,
+    VeBetterDaoVoteBanner,
     VeBetterDaoMakeDappBanner,
 } from "~Assets/Banners"
-import { BaseCarousel, CarouselSlideItem } from "~Components"
-import { useTheme } from "~Hooks"
-import { useFeatureFlags } from "~Components/Providers"
+import { BaseCarousel, CarouselSlideItem, useFeatureFlags } from "~Components"
+import { useCurrentAllocationsRoundId, useTheme } from "~Hooks"
 
 const DAO_URL = "https://governance.vebetterdao.org/apps"
+const DAO_VOTE_URL = "https://governance.vebetterdao.org/rounds/"
 const DAO_MAKE_APP_URL = "https://docs.vebetterdao.org"
 const STELLA_URL = "https://www.stellapay.io/b/WGWV"
 
 export const VeBetterDAOCarousel = () => {
     const theme = useTheme()
+    const { data } = useCurrentAllocationsRoundId()
     const featureFlags = useFeatureFlags()
 
     const slides: CarouselSlideItem[] = useMemo(
@@ -31,13 +33,17 @@ export const VeBetterDAOCarousel = () => {
                 href: DAO_URL,
             },
             {
+                testID: "VeBetterDao_vote_banner",
+                source: VeBetterDaoVoteBanner,
+                href: `${DAO_VOTE_URL}${data ?? ""}`,
+            },
+            {
                 testID: "VeBetterDao_make_app_banner",
                 source: VeBetterDaoMakeDappBanner,
                 href: DAO_MAKE_APP_URL,
-                isExternalLink: true,
             },
         ],
-        [theme.isDark],
+        [data, theme.isDark],
     )
 
     const activeSlides = useMemo(() => {
@@ -51,7 +57,10 @@ export const VeBetterDAOCarousel = () => {
 
     return (
         <BaseCarousel
+            testID="VeBetterDao_carousel"
             data={activeSlides}
+            w={360}
+            h={100}
             paginationAlignment="flex-start"
             autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
         />
