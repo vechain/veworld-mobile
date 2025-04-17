@@ -5,7 +5,7 @@ import React, { useCallback } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import { BaseSpacer, BaseText, BaseView, Layout, SendVot3WarningBottomSheet } from "~Components"
-import { B3TR, ColorThemeType, VET, VTHO } from "~Constants"
+import { ColorThemeType, VET, VTHO } from "~Constants"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
@@ -19,7 +19,7 @@ type Props = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOK
 export const SelectTokenSendScreen = () => {
     const { LL } = useI18nContext()
     const tokens = useAppSelector(selectSendableTokensWithBalance)
-    const { VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
+    const { VOT3, B3TR } = useAppSelector(state => selectNetworkVBDTokens(state))
     const { ref: vot3WarningRef, onOpen: openVot3Warning, onClose: closeVot3Warning } = useBottomSheetModal()
 
     const nav = useNavigation<Props>()
@@ -76,7 +76,7 @@ export const SelectTokenSendScreen = () => {
                     return <TokenCard tokenWithBalance={item} isEdit={false} isBalanceVisible />
             }
         },
-        [VOT3.address, tokenWithInfoB3TR, tokenWithInfoVET, tokenWithInfoVOT3, tokenWithInfoVTHO],
+        [B3TR.address, VOT3.address, tokenWithInfoB3TR, tokenWithInfoVET, tokenWithInfoVOT3, tokenWithInfoVTHO],
     )
 
     const renderItem = useCallback(
