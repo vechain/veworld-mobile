@@ -3,10 +3,12 @@ import React, { useCallback, useMemo, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
-import { useThemedStyles, useVisitedUrls } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
+import { useVisitedUrls } from "~Hooks/useBrowserSearch"
 import { Routes } from "~Navigation"
 import { DAppUtils } from "~Utils"
 import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
+import { useDAppActions } from "../Hooks"
 
 type Props = {
     item: HistoryItem
@@ -26,11 +28,16 @@ export const SearchResultItem = ({ item }: Props) => {
     const { removeVisitedUrl } = useVisitedUrls()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+    const { onDAppPress } = useDAppActions()
 
     const iconUri = useMemo(() => {
-        if (item.type === HistoryUrlKind.DAPP && item.dapp.id) return DAppUtils.getAppHubIconUrl(item.dapp.id)
-        if (item.type === HistoryUrlKind.DAPP) return generateFaviconUrl(item.dapp.href)
-        return generateFaviconUrl(item.url)
+        try {
+            if (item.type === HistoryUrlKind.DAPP && item.dapp.id) return DAppUtils.getAppHubIconUrl(item.dapp.id)
+            if (item.type === HistoryUrlKind.DAPP) return generateFaviconUrl(item.dapp.href)
+            return generateFaviconUrl(item.url)
+        } catch {
+            return undefined
+        }
     }, [item])
 
     const websiteUrl = useMemo(() => {
@@ -56,20 +63,26 @@ export const SearchResultItem = ({ item }: Props) => {
     }, [removeVisitedUrl, url])
 
     const handleNavigate = useCallback(() => {
-        nav.navigate(Routes.BROWSER, {
-            url: websiteUrl,
-        })
-    }, [websiteUrl, nav])
+        if (item.type === HistoryUrlKind.DAPP) onDAppPress(item.dapp)
+        else
+            nav.navigate(Routes.BROWSER, {
+                url: websiteUrl,
+            })
+    }, [item, onDAppPress, nav, websiteUrl])
 
     return (
         <BaseView flexDirection="row" style={[styles.rootContainer]}>
-            <TouchableOpacity style={styles.touchableContainer} onPress={handleNavigate}>
+            <TouchableOpacity
+                style={styles.touchableContainer}
+                onPress={handleNavigate}
+                testID="SEARCH_RESULT_ITEM_CONTAINER">
                 <BaseView style={styles.iconContainer}>
-                    {loadFallback ? (
+                    {loadFallback || !iconUri ? (
                         <BaseIcon
                             name={item.type === HistoryUrlKind.DAPP ? "icon-image" : "icon-globe"}
                             size={16}
                             color={theme.colors.emptyStateIcon.foreground}
+                            testID="SEARCH_RESULT_ITEM_FALLBACK_ICON"
                         />
                     ) : (
                         <Image
@@ -79,21 +92,24 @@ export const SearchResultItem = ({ item }: Props) => {
                             style={styles.dappImage as StyleProp<ImageStyle>}
                             onError={() => setLoadFallback(true)}
                             resizeMode="contain"
+                            testID="SEARCH_RESULT_ITEM_IMAGE"
                         />
                     )}
                 </BaseView>
 
                 {/* Title & Desc */}
                 <BaseView flex={1} justifyContent="center">
-                    <BaseText typographyFont="bodySemiBold">{name}</BaseText>
-                    <BaseText typographyFont="caption" numberOfLines={1}>
+                    <BaseText typographyFont="bodySemiBold" testID="SEARCH_RESULT_ITEM_NAME">
+                        {name}
+                    </BaseText>
+                    <BaseText typographyFont="caption" numberOfLines={1} testID="SEARCH_RESULT_ITEM_DESCRIPTION">
                         {description}
                     </BaseText>
                 </BaseView>
             </TouchableOpacity>
 
             {/* Action Btn */}
-            <BaseTouchable onPress={handleRemoveClick}>
+            <BaseTouchable onPress={handleRemoveClick} testID="SEARCH_RESULT_ITEM_REMOVE">
                 <BaseIcon name="icon-x" size={20} />
             </BaseTouchable>
         </BaseView>
