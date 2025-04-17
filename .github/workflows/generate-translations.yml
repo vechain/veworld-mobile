@@ -26,7 +26,6 @@ jobs:
               env:
                 OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
-                find src/i18n/translations/ ! -name 'en.json' -type f -exec rm -f {} +
                 yarn translo-cli
             - name: Push to repo
               run: |
