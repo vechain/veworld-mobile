@@ -4,8 +4,8 @@ import { renderHook } from "@testing-library/react-hooks"
 import { DelegationType } from "~Model/Delegation"
 import axios from "axios"
 import { Routes } from "~Navigation"
-import { Transaction } from "thor-devkit"
 import { WalletEncryptionKeyHelper } from "~Components"
+import { Transaction } from "@vechain/sdk-core"
 
 jest.mock("axios")
 
@@ -50,8 +50,6 @@ describe("useSignTransaction", () => {
         })
 
         expect(result.current).toEqual({
-            getUrlDelegationSignature: expect.any(Function),
-            getAccountDelegationSignature: expect.any(Function),
             signTransaction: expect.any(Function),
             navigateToLedger: expect.any(Function),
         })
@@ -66,8 +64,6 @@ describe("useSignTransaction", () => {
             wrapper: TestWrapper,
         })
         expect(result.current).toEqual({
-            getUrlDelegationSignature: expect.any(Function),
-            getAccountDelegationSignature: expect.any(Function),
             signTransaction: expect.any(Function),
             navigateToLedger: expect.any(Function),
         })
@@ -81,8 +77,6 @@ describe("useSignTransaction", () => {
         })
 
         expect(result.current).toEqual({
-            getUrlDelegationSignature: expect.any(Function),
-            getAccountDelegationSignature: expect.any(Function),
             signTransaction: expect.any(Function),
             navigateToLedger: expect.any(Function),
         })
@@ -111,8 +105,6 @@ describe("useSignTransaction", () => {
             )
 
             expect(result.current).toEqual({
-                getUrlDelegationSignature: expect.any(Function),
-                getAccountDelegationSignature: expect.any(Function),
                 signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
             })
@@ -135,8 +127,6 @@ describe("useSignTransaction", () => {
                 { wrapper: TestWrapper },
             )
             expect(result.current).toEqual({
-                getUrlDelegationSignature: expect.any(Function),
-                getAccountDelegationSignature: expect.any(Function),
                 signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
             })
@@ -160,8 +150,6 @@ describe("useSignTransaction", () => {
             )
 
             expect(result.current).toEqual({
-                getUrlDelegationSignature: expect.any(Function),
-                getAccountDelegationSignature: expect.any(Function),
                 signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
             })
@@ -192,8 +180,6 @@ describe("useSignTransaction", () => {
             )
 
             expect(result.current).toEqual({
-                getUrlDelegationSignature: expect.any(Function),
-                getAccountDelegationSignature: expect.any(Function),
                 signTransaction: expect.any(Function),
                 navigateToLedger: expect.any(Function),
             })

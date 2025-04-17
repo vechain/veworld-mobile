@@ -16,9 +16,8 @@ export const selectCustomDapps = createSelector(getDiscoveryState, (discovery): 
 
 export const selectBookmarkedDapps = createSelector(
     selectFavoritesDapps,
-    selectCustomDapps,
-    (favorites, custom): DiscoveryDApp[] => {
-        const dapps = [...custom]
+    (favorites: DiscoveryDApp[]): DiscoveryDApp[] => {
+        const dapps: DiscoveryDApp[] = []
 
         for (const dapp of favorites) {
             if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
@@ -26,7 +25,7 @@ export const selectBookmarkedDapps = createSelector(
             }
         }
 
-        return dapps.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+        return dapps
     },
 )
 

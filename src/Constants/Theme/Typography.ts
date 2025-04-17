@@ -273,7 +273,7 @@ export const defaults: Record<TFonts, TypographyObject> = {
     smallCaptionMedium: {
         fontFamily: fontFamily["Inter-Medium"],
         fontSize: 10,
-        fontWeight: fontWeight.normal,
+        fontWeight: fontWeight[500],
         lineHeight: lineHeight.caption,
     },
     smallCaptionSemiBold: {

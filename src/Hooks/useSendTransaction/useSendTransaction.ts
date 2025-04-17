@@ -1,4 +1,3 @@
-import { Transaction } from "thor-devkit"
 import { showSuccessToast, useThor } from "~Components"
 import {
     selectLastReviewTimestamp,
@@ -17,6 +16,7 @@ import { ERROR_EVENTS, defaultMainNetwork } from "~Constants"
 import { useI18nContext } from "~i18n"
 import InAppReview from "react-native-in-app-review"
 import moment from "moment"
+import { Transaction } from "@vechain/sdk-core"
 /**
  * Hooks that expose a function to send a transaction and perform updates, showing a toast on success
  * @param onSuccess the function to handle success
@@ -34,7 +34,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
         dispatch(setIsAppLoading(true))
 
         const encodedRawTx = {
-            raw: HexUtils.addPrefix(signedTransaction.encode().toString("hex")),
+            raw: HexUtils.addPrefix(Buffer.from(signedTransaction.encoded).toString("hex")),
         }
 
         let response: AxiosResponse

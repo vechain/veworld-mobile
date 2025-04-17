@@ -150,6 +150,24 @@ export type Colors = {
         dotBg: string
         activeDotBg: string
     }
+    searchIcon: {
+        default: string
+        active: string
+        disabled: string
+    }
+    emptyStateIcon: {
+        background: string
+        foreground: string
+    }
+    radioButton: {
+        textColor: string
+        activeTextColor: string
+        disabledTextColor: string
+        borderColor: string
+        activeBorderColor: string
+        backgroudColor: string
+        disabledBackgroudColor: string
+    }
 }
 
 export enum COLORS {
@@ -396,6 +414,24 @@ const light: Colors = {
         dotBg: COLORS.GREY_300,
         activeDotBg: COLORS.PRIMARY_800,
     },
+    searchIcon: {
+        default: COLORS.GREY_500,
+        active: COLORS.GREY_600,
+        disabled: COLORS.GREY_600,
+    },
+    emptyStateIcon: {
+        background: COLORS.GREY_50,
+        foreground: COLORS.GREY_400,
+    },
+    radioButton: {
+        textColor: COLORS.GREY_600,
+        activeTextColor: COLORS.PRIMARY_800,
+        disabledTextColor: COLORS.GREY_400,
+        borderColor: COLORS.GREY_200,
+        activeBorderColor: COLORS.PRIMARY_800,
+        backgroudColor: COLORS.WHITE,
+        disabledBackgroudColor: COLORS.GREY_100,
+    },
 }
 
 const dark: Colors = {
@@ -549,6 +585,24 @@ const dark: Colors = {
     defaultCarousel: {
         dotBg: COLORS.DARK_PURPLE_DISABLED,
         activeDotBg: COLORS.LIME_GREEN,
+    },
+    radioButton: {
+        textColor: COLORS.GREY_300,
+        activeTextColor: COLORS.WHITE,
+        disabledTextColor: COLORS.DARK_PURPLE_DISABLED,
+        borderColor: COLORS.TRANSPARENT,
+        activeBorderColor: COLORS.WHITE,
+        backgroudColor: COLORS.PURPLE_DISABLED,
+        disabledBackgroudColor: COLORS.PURPLE_DISABLED,
+    },
+    searchIcon: {
+        default: COLORS.GREY_300,
+        active: COLORS.GREY_300,
+        disabled: COLORS.GREY_500,
+    },
+    emptyStateIcon: {
+        background: COLORS.PURPLE,
+        foreground: COLORS.GREY_200,
     },
 }
 

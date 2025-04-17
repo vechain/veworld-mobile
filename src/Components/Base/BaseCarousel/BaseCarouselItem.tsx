@@ -58,6 +58,7 @@ const baseStyles = (w: number, h: number) => () =>
             flex: 1,
             width: w,
             height: h,
+            marginLeft: 20,
         },
         image: {
             width: "100%",

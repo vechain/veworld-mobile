@@ -1,4 +1,4 @@
-import { Transaction } from "thor-devkit"
+import { Transaction } from "@vechain/sdk-core"
 import { Activity, ActivityStatus, FungibleTokenActivity, NonFungibleTokenActivity, TypedData } from "~Model"
 import {
     createConnectedAppActivity,

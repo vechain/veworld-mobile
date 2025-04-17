@@ -36,6 +36,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
             return lastPage.pagination.hasNext ? pages.length + 1 : undefined
         },
         enabled: isFocused && filters.length > 0,
+        gcTime: 1000 * 60 * 2, // 2 minutes
     })
 
     const refreshActivities = useCallback(async () => {
@@ -43,6 +44,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         await queryClient.invalidateQueries({
             queryKey: ["accountActivities", filterType, selectedAccount.address, network.genesis.id],
             type: "all",
+            refetchType: "all",
         })
         setIsRefreshing(false)
     }, [filterType, network.genesis.id, queryClient, selectedAccount.address])
