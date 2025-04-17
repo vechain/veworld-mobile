@@ -42,8 +42,21 @@ type DAppsListProps = {
     isLoading: boolean
 }
 
-const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading }: DAppsListProps) => {
+const LoadingMoreFooter = ({ isLoading }: { isLoading: boolean }) => {
     const { LL } = useI18nContext()
+
+    if (isLoading)
+        return (
+            <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={20}>
+                <Spinner />
+                <BaseText typographyFont="bodySemiBold">{LL.LOADING_MORE()}</BaseText>
+            </BaseView>
+        )
+
+    return <BaseSpacer height={0} />
+}
+
+const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading }: DAppsListProps) => {
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
 
@@ -67,15 +80,8 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading 
     }, [])
 
     const renderListFooter = useCallback(() => {
-        return isLoading ? (
-            <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={20}>
-                <Spinner />
-                <BaseText typographyFont="bodySemiBold">{LL.LOADING_MORE()}</BaseText>
-            </BaseView>
-        ) : (
-            <BaseSpacer height={0} />
-        )
-    }, [LL, isLoading])
+        return <LoadingMoreFooter isLoading={isLoading} />
+    }, [isLoading])
 
     const renderSkeletonItem = useCallback(() => {
         return <DappHorizontalCardSkeleton />
