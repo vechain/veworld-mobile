@@ -3,7 +3,6 @@ import { useCallback, useMemo } from "react"
 import { DAppType } from "~Model"
 import { UseDappsWithPaginationFetchReturn, UseDappsWithPaginationSortKey } from "./types"
 import { sortAppHubDapps, useAppHubDapps } from "./useAppHubDapps"
-import { useVbdDapps } from "./useVbdDapps"
 
 type Args = {
     sort: UseDappsWithPaginationSortKey
@@ -14,16 +13,12 @@ type PageFn = (args: { pageParam: number; queryKey: QueryKey }) => Promise<UseDa
 
 export const useDappsWithPagination = ({ sort, filter }: Args) => {
     const { fetchWithPage: fetchAppHubWithPage, dependencyLoading: appHubDependencyLoading } = useAppHubDapps(filter)
-    const { fetchWithPage: fetchVbdWithPage, dependencyLoading: vbdDependencyLoading } = useVbdDapps(
-        filter === DAppType.SUSTAINABILTY,
-    )
 
     const pageFunction: PageFn = useCallback(
         async ({ pageParam, queryKey: [_, _sort, _filter] }) => {
-            if (_filter === DAppType.SUSTAINABILTY) return fetchVbdWithPage({ page: pageParam, sort: _sort })
             return fetchAppHubWithPage({ page: pageParam, sort: _sort })
         },
-        [fetchAppHubWithPage, fetchVbdWithPage],
+        [fetchAppHubWithPage],
     )
 
     const {
@@ -37,14 +32,13 @@ export const useDappsWithPagination = ({ sort, filter }: Args) => {
             return _lastPage.hasMore ? _lastPageParam + 1 : null
         },
         initialPageParam: 0,
-        enabled: filter === DAppType.SUSTAINABILTY ? !vbdDependencyLoading : !appHubDependencyLoading,
+        enabled: appHubDependencyLoading,
     })
 
     const isLoading = useMemo(() => {
         if (isFetching) return true
-        if (filter === DAppType.SUSTAINABILTY) return vbdDependencyLoading
         return appHubDependencyLoading
-    }, [appHubDependencyLoading, filter, isFetching, vbdDependencyLoading])
+    }, [appHubDependencyLoading, isFetching])
 
     const flattedData = useMemo(
         () => pages?.pages?.flatMap(({ page }) => page).sort(sortAppHubDapps(sort)),

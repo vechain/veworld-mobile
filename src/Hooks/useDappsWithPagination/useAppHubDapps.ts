@@ -21,7 +21,7 @@ const filterDapps = (filter: DAppType) => (dapp: DiscoveryDApp) => {
         case DAppType.ALL:
             return true
         case DAppType.SUSTAINABILTY:
-            return false
+            return dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase())
         case DAppType.NFT:
             return dapp.tags?.includes(DAppType.NFT.toLowerCase())
 
