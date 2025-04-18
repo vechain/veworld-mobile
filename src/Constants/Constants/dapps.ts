@@ -13,6 +13,7 @@ export type DiscoveryDApp = {
     amountOfNavigations: number
     isVeWorldSupported?: boolean
     veBetterDaoId?: string
+    iconUri?: string
 }
 
 export const AppHubUrl = process.env.REACT_APP_HUB_URL

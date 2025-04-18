@@ -8,7 +8,6 @@ import { useAnalyticTracking, useFetchFeaturedDApps, useThemedStyles } from "~Ho
 import { Routes } from "~Navigation"
 import {
     selectBookmarkedDapps,
-    selectFeaturedDapps,
     selectHasUserOpenedDiscovery,
     setDiscoverySectionOpened,
     useAppDispatch,
@@ -37,7 +36,6 @@ export const DiscoverScreen: React.FC = () => {
 
     const hasOpenedDiscovery = useAppSelector(selectHasUserOpenedDiscovery)
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
-    const dapps = useAppSelector(selectFeaturedDapps)
     const { onDAppPress } = useDAppActions()
 
     const showFavorites = bookmarkedDApps.length > 0
@@ -86,7 +84,7 @@ export const DiscoverScreen: React.FC = () => {
                         <PopularTrendingDApps />
                         <BaseSpacer height={48} />
 
-                        <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} dapps={dapps} />
+                        <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} />
                     </Animated.ScrollView>
                 </BaseView>
             }

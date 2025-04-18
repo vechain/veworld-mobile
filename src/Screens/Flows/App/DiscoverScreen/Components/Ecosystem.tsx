@@ -1,14 +1,17 @@
 import { useScrollToTop, useTheme } from "@react-navigation/native"
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseChip, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { Spinner } from "~Components/Reusable/Spinner"
 import { DiscoveryDApp } from "~Constants"
+import { useBottomSheetModal } from "~Hooks"
+import { useDappsWithPagination, UseDappsWithPaginationSortKey } from "~Hooks/useDappsWithPagination"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
-import { DAppHorizontalCard } from "./DAppHorizontalCard"
-import { DAppOptionsBottomSheet, SortableKeys, SortDAppsBottomSheet } from "./Bottomsheets"
-import { useBottomSheetModal } from "~Hooks"
 import { useDAppActions } from "../Hooks"
+import { DAppOptionsBottomSheet, SortableKeys, SortDAppsBottomSheet } from "./Bottomsheets"
+import { DAppHorizontalCard } from "./DAppHorizontalCard"
+import { DappHorizontalCardSkeleton } from "./DappHorizontalCardSkeleton"
 
 type Filter = {
     key: DAppType
@@ -35,9 +38,25 @@ type DAppsListProps = {
     dapps: DiscoveryDApp[]
     onOpenDApp: (dapp: DiscoveryDApp) => void
     onMorePress: (dapp: DiscoveryDApp) => void
+    onFetchNextPage: () => void
+    isLoading: boolean
 }
 
-const DAppsList = ({ dapps, onMorePress, onOpenDApp }: DAppsListProps) => {
+const LoadingMoreFooter = ({ isLoading }: { isLoading: boolean }) => {
+    const { LL } = useI18nContext()
+
+    if (isLoading)
+        return (
+            <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={20}>
+                <Spinner />
+                <BaseText typographyFont="bodySemiBold">{LL.LOADING_MORE()}</BaseText>
+            </BaseView>
+        )
+
+    return <BaseSpacer height={0} />
+}
+
+const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading }: DAppsListProps) => {
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
 
@@ -60,6 +79,28 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp }: DAppsListProps) => {
         return <BaseSpacer height={16} />
     }, [])
 
+    const renderListFooter = useCallback(() => {
+        return <LoadingMoreFooter isLoading={isLoading} />
+    }, [isLoading])
+
+    const renderSkeletonItem = useCallback(() => {
+        return <DappHorizontalCardSkeleton />
+    }, [])
+
+    if (isLoading && dapps.length === 0) {
+        return (
+            <FlatList
+                renderItem={renderSkeletonItem}
+                data={[1, 2, 3, 4, 5, 6, 7]}
+                keyExtractor={item => item.toString()}
+                scrollEnabled={false}
+                shouldRasterizeIOS
+                ItemSeparatorComponent={renderItemSeparator}
+                contentContainerStyle={styles.flatListPadding}
+            />
+        )
+    }
+
     return (
         <FlatList
             ref={flatListRef}
@@ -71,6 +112,9 @@ const DAppsList = ({ dapps, onMorePress, onOpenDApp }: DAppsListProps) => {
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}
+            onEndReached={onFetchNextPage}
+            ListFooterComponent={renderListFooter}
+            onEndReachedThreshold={0.5}
         />
     )
 }
@@ -81,10 +125,9 @@ const styles = StyleSheet.create({
 
 type EcosystemProps = {
     title: string
-    dapps: DiscoveryDApp[]
 }
 
-export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
+export const Ecosystem = React.memo(({ title }: EcosystemProps) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -100,6 +143,23 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
         onOpen: onOpenSortBottomSheet,
         onClose: onCloseSortBottomSheet,
     } = useBottomSheetModal()
+
+    const vbdSort = useMemo<UseDappsWithPaginationSortKey>(() => {
+        switch (sortedBy) {
+            case "asc":
+                return "alphabetic_asc"
+            case "desc":
+                return "alphabetic_desc"
+            case "newest":
+                return "newest"
+        }
+    }, [sortedBy])
+
+    const {
+        data: dappsToShow,
+        fetchNextPage,
+        isLoading,
+    } = useDappsWithPagination({ sort: vbdSort, filter: selectedDappsType })
 
     const onMorePress = useCallback(
         (dapp: DiscoveryDApp) => {
@@ -148,45 +208,9 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
         ]
     }, [LL, selectedDappsType])
 
-    const dappsToShow = useMemo(() => {
-        const sortDapps = (a: DiscoveryDApp, b: DiscoveryDApp) => {
-            switch (sortedBy) {
-                case "desc":
-                    return b.name.localeCompare(a.name)
-                case "newest":
-                    return b.createAt - a.createAt
-                case "asc":
-                default:
-                    return a.name.localeCompare(b.name)
-            }
-        }
-
-        const dappsWithLowercaseTags = dapps
-            .map(dapp => ({
-                ...dapp,
-                tags: dapp.tags?.map(tag => tag.toLowerCase()),
-            }))
-            .sort(sortDapps)
-
-        switch (selectedDappsType) {
-            case DAppType.SUSTAINABILTY:
-                return dappsWithLowercaseTags.filter(dapp => dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()))
-
-            case DAppType.NFT:
-                return dappsWithLowercaseTags.filter(dapp => dapp.tags?.includes(DAppType.NFT.toLowerCase()))
-
-            case DAppType.DAPPS:
-                return dappsWithLowercaseTags.filter(
-                    dapp =>
-                        !dapp.tags?.includes(DAppType.NFT.toLowerCase()) &&
-                        !dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()),
-                )
-
-            case DAppType.ALL:
-            default:
-                return dappsWithLowercaseTags
-        }
-    }, [dapps, selectedDappsType, sortedBy])
+    const onFetchNextPage = useCallback(async () => {
+        fetchNextPage()
+    }, [fetchNextPage])
 
     return (
         <BaseView px={16}>
@@ -199,7 +223,13 @@ export const Ecosystem = React.memo(({ title, dapps }: EcosystemProps) => {
             <BaseSpacer height={24} />
             <TopFilters filters={filterOptions} />
             <BaseSpacer height={24} />
-            <DAppsList dapps={dappsToShow} onMorePress={onMorePress} onOpenDApp={onDAppPress} />
+            <DAppsList
+                dapps={dappsToShow || []}
+                onMorePress={onMorePress}
+                onOpenDApp={onDAppPress}
+                isLoading={isLoading}
+                onFetchNextPage={onFetchNextPage}
+            />
             <DAppOptionsBottomSheet ref={dappOptionsRef} selectedDApp={selectedDApp} onClose={onDAppModalClose} />
             <SortDAppsBottomSheet
                 ref={sortBottomSheetRef}
