@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.1.5 (2025-04-18)</small>
+
+* build: init ([f48b28a](https://github.com/vechain/veworld-mobile/commit/f48b28a))
+* Hide unendorsed apps from VBD + add fake pagination (#2871) ([120f5f0](https://github.com/vechain/veworld-mobile/commit/120f5f0)), closes [#2871](https://github.com/vechain/veworld-mobile/issues/2871)
+
 ## <small>2.1.4 (2025-04-14)</small>
 
 * build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))
