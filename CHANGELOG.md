@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.1.5 (2025-04-18)</small>
+
+* build: init ([4ddf627](https://github.com/vechain/veworld-mobile/commit/4ddf627))
+* fix: fix visited urls (#2881) ([ad5fcc3](https://github.com/vechain/veworld-mobile/commit/ad5fcc3)), closes [#2881](https://github.com/vechain/veworld-mobile/issues/2881)
+
 ## <small>2.1.4 (2025-04-14)</small>
 
 * build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))
