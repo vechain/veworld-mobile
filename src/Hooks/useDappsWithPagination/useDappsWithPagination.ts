@@ -32,7 +32,7 @@ export const useDappsWithPagination = ({ sort, filter }: Args) => {
             return _lastPage.hasMore ? _lastPageParam + 1 : null
         },
         initialPageParam: 0,
-        enabled: appHubDependencyLoading,
+        enabled: !appHubDependencyLoading,
     })
 
     const isLoading = useMemo(() => {

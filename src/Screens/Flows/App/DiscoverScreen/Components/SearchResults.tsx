@@ -74,7 +74,9 @@ export const SearchResults = ({ query, error, results }: Props) => {
                     <BaseText typographyFont="bodyMedium">{LL.BROWSER_HISTORY_DEFAULT_TITLE()}</BaseText>
                     <BaseButton
                         action={onClear}
-                        rightIcon={<BaseIcon size={12} name="icon-retry" style={styles.clearIcon} />}
+                        rightIcon={
+                            <BaseIcon size={12} name="icon-retry" style={styles.clearIcon} color={theme.colors.text} />
+                        }
                         variant="ghost"
                         px={0}
                         py={0}>
@@ -131,6 +133,7 @@ const baseStyles = (theme: ColorThemeType) => {
         clearText: {
             ...typography.defaults.body,
             fontWeight: "500",
+            color: theme.colors.text,
         },
         clearIcon: {
             marginLeft: 4,

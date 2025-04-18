@@ -110,7 +110,7 @@ export const SearchResultItem = ({ item }: Props) => {
 
             {/* Action Btn */}
             <BaseTouchable onPress={handleRemoveClick} testID="SEARCH_RESULT_ITEM_REMOVE">
-                <BaseIcon name="icon-x" size={20} />
+                <BaseIcon name="icon-x" size={20} color={theme.colors.text} />
             </BaseTouchable>
         </BaseView>
     )
