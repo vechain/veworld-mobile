@@ -39,6 +39,7 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
                 variant="ghost"
                 leftIcon={<BaseIcon name="icon-x" size={16} color={theme.colors.text} />}
                 action={onClear}
+                py={0}
             />
         )
     }, [filteredSearch, onClear, theme.colors.text])
@@ -75,12 +76,12 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingLeft: 0,
             paddingRight: 0,
             height: 40,
+            alignItems: "center",
         },
         searchBarIcon: {
             color: theme.colors.searchIcon.active,
         },
         clearIcon: {
-            backgroundColor: theme.colors.transparent,
             borderColor: theme.colors.transparent,
             paddingHorizontal: 0,
         },
