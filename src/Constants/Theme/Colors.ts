@@ -168,6 +168,12 @@ export type Colors = {
         backgroudColor: string
         disabledBackgroudColor: string
     }
+    tab: {
+        default: string
+        defaultBorder: string
+        activeBorder: string
+        active: string
+    }
 }
 
 export enum COLORS {
@@ -432,6 +438,12 @@ const light: Colors = {
         backgroudColor: COLORS.WHITE,
         disabledBackgroudColor: COLORS.GREY_100,
     },
+    tab: {
+        default: COLORS.GREY_600,
+        defaultBorder: COLORS.GREY_200,
+        activeBorder: COLORS.PRIMARY_800,
+        active: COLORS.PRIMARY_800,
+    },
 }
 
 const dark: Colors = {
@@ -603,6 +615,12 @@ const dark: Colors = {
     emptyStateIcon: {
         background: COLORS.PURPLE,
         foreground: COLORS.GREY_200,
+    },
+    tab: {
+        default: COLORS.GREY_300,
+        defaultBorder: COLORS.PURPLE,
+        activeBorder: COLORS.LIME_GREEN,
+        active: COLORS.LIME_GREEN,
     },
 }
 
