@@ -18,7 +18,7 @@ import { AnalyticsEvent } from "~Constants"
 import {
     useAnalyticTracking,
     useBottomSheetModal,
-    useCheckVersion,
+    useCheckAppVersion,
     useMemoizedAnimation,
     usePrefetchAllVns,
     useSetSelectedAccount,
@@ -126,7 +126,7 @@ export const HomeScreen = () => {
 
     useScrollToTop(scrollViewRef)
 
-    useCheckVersion()
+    useCheckAppVersion()
 
     const featureFlags = useFeatureFlags()
 

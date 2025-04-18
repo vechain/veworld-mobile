@@ -1093,6 +1093,10 @@ type RootTranslation = {
 	 */
 	BTN_HISTORY: string
 	/**
+	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
+	 */
+	BTN_ILL_DO_IT_LATER: string
+	/**
 	 * I​m​p​o​r​t
 	 */
 	BTN_IMPORT: string
@@ -3882,6 +3886,16 @@ type RootTranslation = {
 	 */
 	UNVERIFIED_APP_TITLE: string
 	/**
+	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
+	 */
+	UPDATE_VERSION_AVAILABLE: string
+	/**
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
+	 * @param {string} version
+	 */
+	UPDATE_VERSION_AVAILABLE_MESSAGE: RequiredParams<'version'>
+	UPDATE_VERSION_BTN: string
+	/**
 	 * u​s​e​r​n​a​m​e
 	 */
 	USERNAME: string
@@ -5153,6 +5167,10 @@ Thanks for your patience!
 	 * Activity
 	 */
 	BTN_HISTORY: () => LocalizedString
+	/**
+	 * I'll do it later
+	 */
+	BTN_ILL_DO_IT_LATER: () => LocalizedString
 	/**
 	 * Import
 	 */
@@ -7903,6 +7921,15 @@ Are you sure you want to continue?
 	 * Unverified app
 	 */
 	UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * Update available
+	 */
+	UPDATE_VERSION_AVAILABLE: () => LocalizedString
+	/**
+	 * Version {version} is now available to update with new features and improvements.
+	 */
+	UPDATE_VERSION_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
+	UPDATE_VERSION_BTN: () => LocalizedString
 	/**
 	 * username
 	 */
