@@ -2,18 +2,24 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseIcon, BaseText, BaseTextInput, BaseView, useInAppBrowser } from "~Components"
+import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
 import { useTheme } from "~Hooks"
-import { Routes } from "~Navigation"
+import { Routes, RootStackParamListBrowser } from "~Navigation"
 import { URIUtils } from "~Utils"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { selectTabs, useAppSelector } from "~Storage/Redux"
+import { TabsIconSVG } from "~Assets"
 
 type Props = {
     onNavigation?: (error: boolean) => void
+    onGoBack?: () => void
 }
 
-export const URLBar = ({ onNavigation }: Props) => {
+export const URLBar = ({ onNavigation, onGoBack }: Props) => {
     const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
-    const nav = useNavigation()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
+
+    const tabs = useAppSelector(selectTabs)
 
     const navBackToDiscover = useCallback(() => {
         if (nav.canGoBack()) {
@@ -21,7 +27,8 @@ export const URLBar = ({ onNavigation }: Props) => {
         } else {
             nav.navigate(Routes.DISCOVER)
         }
-    }, [nav])
+        onGoBack?.()
+    }, [nav, onGoBack])
 
     const theme = useTheme()
 
@@ -82,13 +89,22 @@ export const URLBar = ({ onNavigation }: Props) => {
                         />
                     )}
                 </BaseView>
+
+                <BaseTouchable
+                    onPress={() => {
+                        nav.replace(Routes.DISCOVER_TABS_MANAGER)
+                    }}>
+                    <TabsIconSVG count={tabs.length} textColor={theme.colors.text} />
+                </BaseTouchable>
             </BaseView>
         )
     }, [
         isDapp,
+        nav,
         navBackToDiscover,
         navigationState?.url,
         onSubmit,
+        tabs.length,
         theme.colors.subtitle,
         theme.colors.text,
         theme.colors.textLight,

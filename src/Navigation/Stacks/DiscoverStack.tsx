@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { useNavAnimation } from "~Hooks"
 import { Routes } from "~Navigation/Enums"
-import { DiscoverScreen, FavouritesScreen, InAppBrowser, SearchScreen } from "~Screens"
+import { DiscoverScreen, FavouritesScreen, InAppBrowser, SearchScreen, TabsManagerScreen } from "~Screens"
 
 export type RootStackParamListBrowser = {
     [Routes.DISCOVER]: undefined
@@ -13,6 +13,7 @@ export type RootStackParamListBrowser = {
         url: string
         ul?: boolean
     }
+    [Routes.DISCOVER_TABS_MANAGER]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListBrowser>()
@@ -29,6 +30,11 @@ export const DiscoverStack = () => {
 
             <Screen name={Routes.DISCOVER_FAVOURITES} component={FavouritesScreen} options={{ headerShown: false }} />
             <Screen name={Routes.DISCOVER_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
+            <Screen
+                name={Routes.DISCOVER_TABS_MANAGER}
+                component={TabsManagerScreen}
+                options={{ headerShown: false }}
+            />
         </Navigator>
     )
 }

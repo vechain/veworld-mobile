@@ -8,12 +8,23 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
+export type Tab = {
+    id: string
+    href: string
+    preview?: string
+    title: string
+}
+
 export type DiscoveryState = {
     featured: DiscoveryDApp[]
     favorites: DiscoveryDApp[]
     custom: DiscoveryDApp[]
     hasOpenedDiscovery: boolean
     connectedApps: ConnectedDiscoveryApp[]
+    tabsManager: {
+        currentTabId: string | null
+        tabs: Tab[]
+    }
 }
 
 export const initialDiscoverState: DiscoveryState = {
@@ -22,6 +33,10 @@ export const initialDiscoverState: DiscoveryState = {
     custom: [],
     hasOpenedDiscovery: false,
     connectedApps: [],
+    tabsManager: {
+        currentTabId: null,
+        tabs: [],
+    },
 }
 
 const sortByAmountOfNavigations = (dapps: DiscoveryDApp[]) => {
@@ -100,6 +115,29 @@ export const DiscoverySlice = createSlice({
         setDiscoverySectionOpened: state => {
             state.hasOpenedDiscovery = true
         },
+        openTab: (state, action: PayloadAction<Tab>) => {
+            state.tabsManager.tabs.push(action.payload)
+            state.tabsManager.currentTabId = action.payload.id
+        },
+        updateTab: (state, action: PayloadAction<Tab>) => {
+            const { id, href, title, preview } = action.payload
+            const tabIndex = state.tabsManager.tabs.findIndex(tab => tab.id === id)
+            if (tabIndex !== -1) {
+                state.tabsManager.tabs[tabIndex].href = href
+                state.tabsManager.tabs[tabIndex].title = title
+                state.tabsManager.tabs[tabIndex].preview = preview
+            }
+        },
+        setCurrentTab: (state, action: PayloadAction<string>) => {
+            state.tabsManager.currentTabId = action.payload
+        },
+        closeTab: (state, action: PayloadAction<string>) => {
+            state.tabsManager.tabs = state.tabsManager.tabs.filter(tab => tab.id !== action.payload)
+        },
+        closeAllTabs: state => {
+            state.tabsManager.tabs = []
+            state.tabsManager.currentTabId = null
+        },
         resetDiscoveryState: () => initialDiscoverState,
     },
 })
@@ -114,4 +152,9 @@ export const {
     addConnectedDiscoveryApp,
     removeConnectedDiscoveryApp,
     setFeaturedDApps,
+    openTab,
+    updateTab,
+    setCurrentTab,
+    closeTab,
+    closeAllTabs,
 } = DiscoverySlice.actions
