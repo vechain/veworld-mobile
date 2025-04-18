@@ -56,7 +56,7 @@ export const MnemonicCard: FC<Props> = ({ mnemonicArray }) => {
                         alignItems="center"
                         bg={theme.colors.primary}>
                         <BaseIcon
-                            name={isShow ? "icon-eye-off" : "icon-eye"}
+                            name={isShow ? "icon-eye" : "icon-eye-off"}
                             size={18}
                             color={iconColor}
                             style={styles.icon}

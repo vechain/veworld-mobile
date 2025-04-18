@@ -1,5 +1,5 @@
-import React from "react"
-import { StyleSheet } from "react-native"
+import React, { useMemo } from "react"
+import { FlexAlignType, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseSkeleton, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
@@ -15,6 +15,7 @@ type BaseTokenCardProps = {
     isBalanceVisible: boolean
     tokenBalance: string
     rightContent: React.ReactNode
+    alignWithFiatBalance?: FlexAlignType
 }
 
 export const BaseTokenCard = ({
@@ -24,11 +25,15 @@ export const BaseTokenCard = ({
     isBalanceVisible,
     tokenBalance,
     rightContent,
+    alignWithFiatBalance,
 }: BaseTokenCardProps) => {
     const theme = useTheme()
     const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
 
-    const alignTokenBalance = symbol === VET.symbol ? "flex-start" : "center"
+    const alignTokenBalance = useMemo(() => {
+        if (alignWithFiatBalance) return alignWithFiatBalance
+        return symbol === VET.symbol ? "flex-start" : "center"
+    }, [alignWithFiatBalance, symbol])
 
     const isVetToken = isVechainToken(symbol)
 
@@ -55,7 +60,7 @@ export const BaseTokenCard = ({
                                 <BaseText
                                     typographyFont="subSubTitleMedium"
                                     color={tokenValueLabelColor}
-                                    lineHeight={20}>
+                                    lineHeight={24}>
                                     {isBalanceVisible ? tokenBalance : "•••••"}{" "}
                                 </BaseText>
                             </BaseView>

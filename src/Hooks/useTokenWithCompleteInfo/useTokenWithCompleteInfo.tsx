@@ -1,3 +1,4 @@
+import { useMemo } from "react"
 import {
     MarketChartResponse,
     TokenInfoResponse,
@@ -6,6 +7,7 @@ import {
     useMarketChart,
     useTokenInfo,
 } from "~Api/Coingecko"
+import { B3TR, VOT3 } from "~Constants"
 import { useBalances } from "~Hooks/useBalances"
 import { Balance, FungibleToken } from "~Model"
 import { selectBalanceForToken, selectBalanceForTokenByAccount, selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -34,9 +36,14 @@ export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: 
             : selectBalanceForToken(state, token.address),
     )
 
+    const parsedSymbol = useMemo(() => {
+        if (token.symbol === VOT3.symbol) return B3TR.symbol
+        return token.symbol
+    }, [token.symbol])
+
     const currency = useAppSelector(selectCurrency)
     const { data: exchangeRate, isLoading: exchangeRateLoading } = useExchangeRate({
-        id: getCoinGeckoIdBySymbol[token.symbol],
+        id: getCoinGeckoIdBySymbol[parsedSymbol],
         vs_currency: currency,
     })
 
@@ -45,11 +52,11 @@ export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: 
         exchangeRate,
     })
     const { data: tokenInfo, isLoading: tokenInfoLoading } = useTokenInfo({
-        id: getCoinGeckoIdBySymbol[token.symbol],
+        id: getCoinGeckoIdBySymbol[parsedSymbol],
     })
 
     const { data: chartData } = useMarketChart({
-        id: getCoinGeckoIdBySymbol[token.symbol],
+        id: getCoinGeckoIdBySymbol[parsedSymbol],
         vs_currency: currency,
         days: 1,
     })
