@@ -77,6 +77,8 @@ export enum Routes {
     DISCOVER_FEATURED = "Discover_Featured",
     DISCOVER_FAVOURITES = "Discover_Favourites",
     DISCOVER_SEARCH = "Discover_Search",
+    DISCOVER_DAPPS_SECTION = "Discover_Dapps_Section",
+    DISCOVER_VEBETTER_SECTION = "Discover_VeBetter_Section",
     TOKEN_DETAILS = "Token_Details",
     CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN = "Convert_Better_Token_Transaction_Screen",
     ACTIVITY_DETAILS = "Activity_Details",

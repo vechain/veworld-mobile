@@ -2010,6 +2010,14 @@ type RootTranslation = {
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
 	/**
+	 * d​A​p​p​s
+	 */
+	DISCOVER_DAPPS_SECTION: string
+	/**
+	 * V​e​B​e​t​t​e​r
+	 */
+	DISCOVER_VEBETTER_SECTION: string
+	/**
 	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
 	 */
 	DONT_SEE_NFTS_1: string
@@ -3464,7 +3472,7 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
+	 * S​e​l​e​c​t​ ​o​n​e​ ​o​f​ ​y​o​u​r​ ​t​o​k​e​n​s​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
@@ -6151,6 +6159,14 @@ Thanks for your patience!
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
 	/**
+	 * dApps
+	 */
+	DISCOVER_DAPPS_SECTION: () => LocalizedString
+	/**
+	 * VeBetter
+	 */
+	DISCOVER_VEBETTER_SECTION: () => LocalizedString
+	/**
 	 * Don't see your NFTs?
 	 */
 	DONT_SEE_NFTS_1: () => LocalizedString
@@ -7580,7 +7596,7 @@ Thanks for your patience!
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select the token asset you wish to send:
+	 * Select one of your tokens to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
 	/**
