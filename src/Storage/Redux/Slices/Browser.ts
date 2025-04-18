@@ -19,7 +19,7 @@ export const BrowserSlice = createSlice({
         deleteVisitedUrl: (state, action: PayloadAction<string>) => {
             state.visitedUrls = state.visitedUrls.filter(dapp => {
                 try {
-                    return new URL(dapp.href).origin === new URL(action.payload).origin
+                    return new URL(dapp.href).origin !== new URL(action.payload).origin
                 } catch {
                     return false
                 }
