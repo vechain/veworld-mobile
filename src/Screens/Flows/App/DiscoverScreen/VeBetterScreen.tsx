@@ -1,10 +1,11 @@
 import React from "react"
-import { BaseText, BaseView } from "~Components"
+import { BaseView } from "~Components"
+import { BetterStats } from "./Components/BetterStats"
 
 export const VeBetterScreen = () => {
     return (
-        <BaseView>
-            <BaseText>TEST</BaseText>
+        <BaseView px={16} flexDirection="column" mt={40}>
+            <BetterStats />
         </BaseView>
     )
 }

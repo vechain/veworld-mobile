@@ -174,6 +174,10 @@ export type Colors = {
         activeBorder: string
         active: string
     }
+    b3trStatsCard: {
+        bg: string
+        divider: string
+    }
 }
 
 export enum COLORS {
@@ -444,6 +448,10 @@ const light: Colors = {
         activeBorder: COLORS.PRIMARY_800,
         active: COLORS.PRIMARY_800,
     },
+    b3trStatsCard: {
+        divider: COLORS.GREY_100,
+        bg: COLORS.GREY_50,
+    },
 }
 
 const dark: Colors = {
@@ -621,6 +629,10 @@ const dark: Colors = {
         defaultBorder: COLORS.PURPLE,
         activeBorder: COLORS.LIME_GREEN,
         active: COLORS.LIME_GREEN,
+    },
+    b3trStatsCard: {
+        divider: COLORS.PURPLE,
+        bg: COLORS.PURPLE_DISABLED,
     },
 }
 

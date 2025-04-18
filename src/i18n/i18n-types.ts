@@ -1396,6 +1396,10 @@ type RootTranslation = {
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: string
 	/**
+	 * C​O​2​ ​o​f​f​s​e​t
+	 */
+	CO2_OFFSET: string
+	/**
 	 * C​o​l​l​e​c​t​i​o​n​s
 	 */
 	COLLECTIONS: string
@@ -3222,6 +3226,10 @@ type RootTranslation = {
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: string
 	/**
+	 * S​e​e​ ​p​r​o​f​i​l​e
+	 */
+	SEE_PROFILE: string
+	/**
 	 * I​ ​U​N​D​E​R​S​T​A​N​D
 	 */
 	SEND_ACCEPT_NO_GAS_ACCEPT: string
@@ -3955,6 +3963,18 @@ type RootTranslation = {
 	 */
 	TOKEN_TRANSFER_SENT: string
 	/**
+	 * T​o​t​a​l​ ​B​3​T​R​ ​e​a​r​n​e​d
+	 */
+	TOTAL_B3TR_EARNED: string
+	/**
+	 * T​o​t​a​l​ ​B​e​t​t​e​r​ ​A​c​t​i​o​n​s
+	 */
+	TOTAL_BETTER_ACTIONS: string
+	/**
+	 * T​o​t​a​l​ ​V​o​t​e​s
+	 */
+	TOTAL_VOTES: string
+	/**
 	 * T​o​u​c​h​ ​I​D
 	 */
 	TOUCH_ID: string
@@ -4192,6 +4212,10 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * Y​o​u​r​ ​B​e​t​t​e​r​ ​s​t​a​t​s
+	 */
+	YOUR_BETTER_STATS: string
 }
 
 export type TranslationFunctions = {
@@ -5550,6 +5574,10 @@ Thanks for your patience!
 	 * No wallets available
 	 */
 	CLOUD_NO_WALLETS_AVAILABLE_TITLE: () => LocalizedString
+	/**
+	 * CO2 offset
+	 */
+	CO2_OFFSET: () => LocalizedString
 	/**
 	 * Collections
 	 */
@@ -7348,6 +7376,10 @@ Thanks for your patience!
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: () => LocalizedString
 	/**
+	 * See profile
+	 */
+	SEE_PROFILE: () => LocalizedString
+	/**
 	 * I UNDERSTAND
 	 */
 	SEND_ACCEPT_NO_GAS_ACCEPT: () => LocalizedString
@@ -8073,6 +8105,18 @@ Are you sure you want to continue?
 	 */
 	TOKEN_TRANSFER_SENT: () => LocalizedString
 	/**
+	 * Total B3TR earned
+	 */
+	TOTAL_B3TR_EARNED: () => LocalizedString
+	/**
+	 * Total Better Actions
+	 */
+	TOTAL_BETTER_ACTIONS: () => LocalizedString
+	/**
+	 * Total Votes
+	 */
+	TOTAL_VOTES: () => LocalizedString
+	/**
 	 * Touch ID
 	 */
 	TOUCH_ID: () => LocalizedString
@@ -8308,6 +8352,10 @@ Are you sure you want to continue?
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Your Better stats
+	 */
+	YOUR_BETTER_STATS: () => LocalizedString
 }
 
 export type Formatters = {}

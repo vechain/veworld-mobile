@@ -337,6 +337,7 @@
   "CLOUD_ERR_WALLET_OPERATION": "There was an error performing this iCloud wallet operation. Please try again.",
   "CLOUD_NO_WALLETS_AVAILABLE_DESCRIPTION": "We couldn't find any backed-up wallets in your {cloud: string}. Try again or use your recovery phrase.",
   "CLOUD_NO_WALLETS_AVAILABLE_TITLE": "No wallets available",
+  "CO2_OFFSET": "CO2 offset",
   "COLLECTIONS": "Collections",
   "COLLECTION_NAME": "Collection name",
   "COMMON_24H": "24 HRs",
@@ -786,6 +787,7 @@
   "SECURITY_UPGRADE_ONLY_PK": "It looks like you only have a private key wallet connected to VeWorld. You can upgrade security level without backing up",
   "SECURITY_UPGRADE_REMINDER": "Important Reminder",
   "SECURITY_UPGRADE_REMINDER_DESC": "Please, make sure you have backed up your recovery phrase before proceeding with the upgrade.",
+  "SEE_PROFILE": "See profile",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "I UNDERSTAND",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO is the gas token (not VET). Buy or transfer some VTHO into your account to perform this transaction.",
   "SEND_ACCEPT_NO_GAS_TITLE": "INSUFFICIENT GAS",
@@ -967,6 +969,9 @@
   "TOKEN_SYMBOL": "Token symbol",
   "TOKEN_TRANSFER_RECEIVED": "Received tokens",
   "TOKEN_TRANSFER_SENT": "Sent tokens",
+  "TOTAL_B3TR_EARNED": "Total B3TR earned",
+  "TOTAL_BETTER_ACTIONS": "Total Better Actions",
+  "TOTAL_VOTES": "Total Votes",
   "TOUCH_ID": "Touch ID",
   "TRANSACTION_ID": "Transaction ID",
   "TYPE": "Type",
@@ -1025,5 +1030,6 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "YOUR_BETTER_STATS": "Your Better stats"
 }
