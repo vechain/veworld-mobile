@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.1.5 (2025-04-18)</small>
+
+* build: init ([14c2660](https://github.com/vechain/veworld-mobile/commit/14c2660))
+* 91 UI bugs 2.2.0 (#2879) ([a4056ed](https://github.com/vechain/veworld-mobile/commit/a4056ed)), closes [#2879](https://github.com/vechain/veworld-mobile/issues/2879)
+
 ## <small>2.1.4 (2025-04-14)</small>
 
 * build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))
