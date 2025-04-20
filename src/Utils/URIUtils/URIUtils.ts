@@ -110,25 +110,30 @@ const convertUriToUrl = (uri: string) => {
     }
 }
 
+function parseUrl(url: string) {
+    const regexWww = new RegExp("^www\\.[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}(:[0-9]+)?$")
+    const regexWithoutWww = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(:[0-9]+)?$/
+
+    if (isHttps(url)) return url
+    if (isHttp(url)) return `http://${url.slice(7)}`
+    if (regexWww.test(url)) return `https://${url}`
+    if (regexWithoutWww.test(url)) return `https://${url}`
+    throw new Error("IT SHOULD NOT HAPPEN")
+}
+
 async function isValidBrowserUrl(url: string): Promise<boolean> {
     let navInput: string | undefined
-    const regexWww = new RegExp("^www\\.[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}$")
-    const regexWithoutWww = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}$/
+    const regexWww = new RegExp("^www\\.[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}(:[0-9]+)?$")
+    const regexWithoutWww = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(:[0-9]+)?$/
 
     try {
         if (isHttps(url)) {
             navInput = url
-        }
-
-        if (isHttp(url)) {
-            navInput = `https://${url.slice(7)}`
-        }
-
-        if (regexWww.test(url)) {
+        } else if (isHttp(url)) {
+            navInput = `http://${url.slice(7)}`
+        } else if (regexWww.test(url)) {
             navInput = `https://${url}`
-        }
-
-        if (regexWithoutWww.test(url)) {
+        } else if (regexWithoutWww.test(url)) {
             navInput = `https://${url}`
         }
 
@@ -194,4 +199,5 @@ export default {
     getHostName,
     getBaseURL,
     convertHttpToHttps,
+    parseUrl,
 }
