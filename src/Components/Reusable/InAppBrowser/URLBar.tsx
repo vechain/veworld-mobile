@@ -34,7 +34,7 @@ export const URLBar = ({ onNavigation }: Props) => {
             const value = e.nativeEvent.text.toLowerCase()
             const isValid = await URIUtils.isValidBrowserUrl(value)
             if (isValid) {
-                const url = value.startsWith("https://") ? value : `https://${value}`
+                const url = URIUtils.parseUrl(value)
                 onNavigation?.(false)
                 navigateToUrl(url)
                 return

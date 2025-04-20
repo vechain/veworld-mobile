@@ -35,7 +35,7 @@ export const useBrowserSearch = (query: string) => {
             const valueLower = value.toLowerCase()
             const isValid = await URIUtils.isValidBrowserUrl(valueLower)
             if (isValid) {
-                const url = valueLower.startsWith("https://") ? valueLower : `https://${valueLower}`
+                const url = URIUtils.parseUrl(valueLower)
                 nav.navigate(Routes.BROWSER, { url })
                 addVisitedUrl(url)
                 return
