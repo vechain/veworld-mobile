@@ -52,9 +52,9 @@ async function encrypt<T>(data: T, encryptionKey: string, salt: string, iv: Uint
     }
 
     const cipher = crypto.createCipheriv("aes-256-cbc", trimmedKey, iv as BinaryLike)
-    let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
-    ciph += cipher.final("hex")
-    return ciph as string
+    let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex") as string
+    ciph += cipher.final("hex") as string
+    return ciph
 }
 
 async function decrypt<T>(data: string, encryptionKey: string, salt: string, iv: Uint8Array): Promise<T> {
@@ -70,8 +70,8 @@ async function decrypt<T>(data: string, encryptionKey: string, salt: string, iv:
     }
 
     const decipher = crypto.createDecipheriv("aes-256-cbc", trimmedKey, iv as BinaryLike)
-    let txt = decipher.update(data, "hex", "utf-8")
-    txt += decipher.final("utf-8")
+    let txt = decipher.update(data, "hex", "utf-8") as string
+    txt += decipher.final("utf-8") as string
     let txtToString = txt.toString()
     let parsed = JSON.parse(txtToString)
     return parsed
@@ -79,15 +79,15 @@ async function decrypt<T>(data: string, encryptionKey: string, salt: string, iv:
 
 function encryptState<T>(data: T, key: string): string {
     const cipher = crypto.createCipheriv("aes256", key, null)
-    let ciph = cipher.update(stringify(data), "utf-8", "hex")
-    ciph += cipher.final("hex")
-    return ciph as string
+    let ciph = cipher.update(stringify(data), "utf-8", "hex") as string
+    ciph += cipher.final("hex") as string
+    return ciph
 }
 
 function decryptState(data: string, key: string) {
     const decipher = crypto.createDecipheriv("aes256", key, null)
-    let txt = decipher.update(data, "hex", "utf-8")
-    txt += decipher.final("utf-8")
+    let txt = decipher.update(data, "hex", "utf-8") as string
+    txt += decipher.final("utf-8") as string
     let txtToString = txt.toString()
     return txtToString
 }
