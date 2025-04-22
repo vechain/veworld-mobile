@@ -2,7 +2,8 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseIcon, BaseText, BaseTextInput, BaseView, useInAppBrowser } from "~Components"
+import { BaseIcon, BaseText, BaseTextInput, BaseView } from "~Components"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
 import { URIUtils } from "~Utils"
@@ -25,9 +26,12 @@ export const URLBar = ({ onNavigation }: Props) => {
 
     const theme = useTheme()
 
-    const animatedStyles = useAnimatedStyle(() => ({
-        height: showToolbars ? withTiming(56) : withTiming(24),
-    }))
+    const animatedStyles = useAnimatedStyle(
+        () => ({
+            height: showToolbars ? withTiming(56) : withTiming(24),
+        }),
+        [showToolbars],
+    )
 
     const onSubmit = useCallback(
         async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
