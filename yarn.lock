@@ -14081,10 +14081,10 @@ react-native-quick-base64@2.1.2, react-native-quick-base64@^2.0.5:
   dependencies:
     base64-js "^1.5.1"
 
-react-native-quick-crypto@0.7.11:
-  version "0.7.11"
-  resolved "https://registry.yarnpkg.com/react-native-quick-crypto/-/react-native-quick-crypto-0.7.11.tgz#e1b521d6c365373c959e47ac3eafa0fff317c54a"
-  integrity sha512-6YwX/APUf21gKO2R9arB8PFZhPcw+28IHsmwYZuucLDIjgY+8gAPLNny51i9Ov83z2ZFNUinh0ykhy0Pw6bBWA==
+react-native-quick-crypto@0.7.13:
+  version "0.7.13"
+  resolved "https://registry.yarnpkg.com/react-native-quick-crypto/-/react-native-quick-crypto-0.7.13.tgz#e6ceacf84042cedcd0094f7cb72dbffb063c9b96"
+  integrity sha512-9EmXvvBW64gt/hUgeDUGl6KHjDVmtEdC/CbmlyLOTNXxvkOhNI/LhLK9ss6jDqRX3tYTM/DL0uk/+kXSTZQeKA==
   dependencies:
     "@craftzdog/react-native-buffer" "^6.0.5"
     events "^3.3.0"
@@ -14219,7 +14219,7 @@ react-native-vector-icons@^10.2.0:
     prop-types "^15.7.2"
     yargs "^16.1.1"
 
-react-native-wagmi-charts@^2.5.3:
+react-native-wagmi-charts@^2.6.0:
   version "2.6.0"
   resolved "https://registry.yarnpkg.com/react-native-wagmi-charts/-/react-native-wagmi-charts-2.6.0.tgz#3e58477c73908e54d5e6274a27d16b96bb80ca66"
   integrity sha512-IITGLDjZWcESZaoDqTWQxIo+JDFERqFD85dJlCFUqtN/Arzkl4OhWHSsIb5p0x5bNxN3rGHhLdU19cU/rqAvww==

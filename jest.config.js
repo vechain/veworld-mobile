@@ -37,6 +37,7 @@ module.exports = {
             "|@transak/react-native-sdk" +
             "|jail-monkey" +
             "|expo/.*" +
+            "|react-redux" +
             ")",
     ],
     moduleNameMapper: {

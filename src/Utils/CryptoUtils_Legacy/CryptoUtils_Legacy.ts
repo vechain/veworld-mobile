@@ -7,20 +7,41 @@ import fastKeystoreDecrypt from "./Helpers/fastKeystoreDecrypt"
 import HexUtils from "~Utils/HexUtils"
 import { ERROR_EVENTS } from "~Constants"
 
+const ALGORITHM_STATE = "aes256"
+const ENCRYPT_OUTPUT_ENCODING = "hex"
+const DECRYPT_INPUT_ENCODING = ENCRYPT_OUTPUT_ENCODING
+const UTF8 = "utf8"
+
 // [START] - Used for testing purposes ONLY
 function encrypt<T>(data: T, encryptionKey: string, salt?: string): string {
     const key = PasswordUtils.hash(encryptionKey, salt)
     const iv = PasswordUtils.getIV()
-    const cipher = crypto.createCipheriv("aes256", key, iv)
-    let ciph = cipher.update(JSON.stringify(data), "utf-8", "hex")
-    ciph += cipher.final("hex")
+    const cipher = crypto.createCipheriv(ALGORITHM_STATE, key, iv)
+    let ciph = cipher.update(
+        JSON.stringify(data),
+        // @ts-ignore
+        UTF8,
+        ENCRYPT_OUTPUT_ENCODING,
+    )
+    if (typeof ciph !== "string") {
+        throw new Error("Cipher is not a string")
+    }
+    ciph += cipher.final(ENCRYPT_OUTPUT_ENCODING)
     return ciph as string
 }
 
 function encryptState<T>(data: T, key: string): string {
-    const cipher = crypto.createCipheriv("aes256", key, null)
-    let ciph = cipher.update(stringify(data), "utf-8", "hex")
-    ciph += cipher.final("hex")
+    const cipher = crypto.createCipheriv(ALGORITHM_STATE, key, null)
+    let ciph = cipher.update(
+        stringify(data),
+        // @ts-ignore
+        UTF8,
+        ENCRYPT_OUTPUT_ENCODING,
+    )
+    if (typeof ciph !== "string") {
+        throw new Error("Cipher is not a string")
+    }
+    ciph += cipher.final(ENCRYPT_OUTPUT_ENCODING)
     return ciph as string
 }
 // [END] - Used for testing purposes ONLY
@@ -28,18 +49,34 @@ function encryptState<T>(data: T, key: string): string {
 function decrypt<T>(data: string, encryptionKey: string, salt?: string): T {
     const key = PasswordUtils.hash(encryptionKey, salt)
     const iv = PasswordUtils.getIV()
-    const decipher = crypto.createDecipheriv("aes256", key, iv)
-    let txt = decipher.update(data, "hex", "utf-8")
-    txt += decipher.final("utf-8")
+    const decipher = crypto.createDecipheriv(ALGORITHM_STATE, key, iv)
+    let txt = decipher.update(
+        data,
+        // @ts-ignore
+        DECRYPT_INPUT_ENCODING,
+        UTF8,
+    )
+    if (typeof txt !== "string") {
+        throw new Error("Decrypted text is not a string")
+    }
+    txt += decipher.final(UTF8)
     let txtToString = txt.toString()
     let parsed = JSON.parse(txtToString)
     return parsed
 }
 
 function decryptState(data: string, key: string) {
-    const decipher = crypto.createDecipheriv("aes256", key, null)
-    let txt = decipher.update(data, "hex", "utf-8")
-    txt += decipher.final("utf-8")
+    const decipher = crypto.createDecipheriv(ALGORITHM_STATE, key, null)
+    let txt = decipher.update(
+        data,
+        // @ts-ignore
+        DECRYPT_INPUT_ENCODING,
+        UTF8,
+    )
+    if (typeof txt !== "string") {
+        throw new Error("Decrypted text is not a string")
+    }
+    txt += decipher.final(UTF8)
     let txtToString = txt.toString()
     return txtToString
 }

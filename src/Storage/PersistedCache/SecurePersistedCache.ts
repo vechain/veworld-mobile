@@ -1,8 +1,42 @@
-import { MMKV, MMKVConfiguration } from "react-native-mmkv"
+import { MMKV } from "react-native-mmkv"
 import { SynchronousCache } from "./interface"
 import { createKey } from "~Utils/CacheKeyUtils/CacheKeyUtils"
 import { CryptoUtils, error } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
+
+export interface MMKVConfiguration {
+    /**
+     * The MMKV instance's ID. If you want to use multiple instances, make sure to use different IDs!
+     *
+     * @example
+     * ```ts
+     * const userStorage = new MMKV({ id: `user-${userId}-storage` })
+     * const globalStorage = new MMKV({ id: 'global-app-storage' })
+     * ```
+     *
+     * @default 'mmkv.default'
+     */
+    id: string
+    /**
+     * The MMKV instance's root path. By default, MMKV stores file inside `$(Documents)/mmkv/`. You can customize MMKV's root directory on MMKV initialization:
+     *
+     * @example
+     * ```ts
+     * const temporaryStorage = new MMKV({ path: '/tmp/' })
+     * ```
+     */
+    path?: string
+    /**
+     * The MMKV instance's encryption/decryption key. By default, MMKV stores all key-values in plain text on file, relying on iOS's sandbox to make sure the file is encrypted.
+     * Should you worry about information leaking, you can choose to encrypt MMKV.
+     *
+     * @example
+     * ```ts
+     * const secureStorage = new MMKV({ encryptionKey: 'my-encryption-key!' })
+     * ```
+     */
+    encryptionKey?: string
+}
 
 export default class SecurePersistedCache<T> implements SynchronousCache<T> {
     readonly _cache: MMKV
