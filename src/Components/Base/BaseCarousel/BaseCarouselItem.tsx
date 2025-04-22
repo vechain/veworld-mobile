@@ -1,10 +1,10 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { Animated, ImageSourcePropType, ImageStyle, Linking, StyleSheet, ViewStyle } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
+import { SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
-import { SCREEN_WIDTH } from "~Constants"
 type Props = {
     w?: number
     h?: number
@@ -14,6 +14,12 @@ type Props = {
     style?: ViewStyle
     imageStyle?: ImageStyle
     isExternalLink?: boolean
+    onPress?: (name: string) => void
+    /**
+     * Decide when `onPress` is called. Default is `after
+     */
+    onPressActivation?: "before" | "after"
+    name?: string
 }
 
 export const BaseCarouselItem: React.FC<Props> = ({
@@ -25,19 +31,25 @@ export const BaseCarouselItem: React.FC<Props> = ({
     isExternalLink,
     w = SCREEN_WIDTH - 40,
     h = 128,
+    onPress: propsOnPress,
+    onPressActivation = "after",
+    name,
 }) => {
     const { styles } = useThemedStyles(baseStyles(w, h))
     const nav = useNavigation()
 
-    const onPress = useCallback(() => {
-        if (href) {
-            if (isExternalLink) {
-                Linking.openURL(href)
-            } else {
-                nav.navigate(Routes.BROWSER, { url: href })
-            }
+    const onPress = useCallback(async () => {
+        if (!href) return
+        if (isExternalLink) {
+            if (onPressActivation === "before") propsOnPress?.(name ?? "")
+            await Linking.openURL(href)
+            if (onPressActivation === "after") propsOnPress?.(name ?? "")
+        } else {
+            if (onPressActivation === "before") propsOnPress?.(name ?? "")
+            nav.navigate(Routes.BROWSER, { url: href })
+            if (onPressActivation === "after") propsOnPress?.(name ?? "")
         }
-    }, [href, isExternalLink, nav])
+    }, [href, isExternalLink, name, nav, onPressActivation, propsOnPress])
 
     return (
         <Animated.View testID={testID} style={[style, styles.container]}>

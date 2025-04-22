@@ -8,12 +8,19 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
+export type BannerInteractionDetails = {
+    amountOfInteractions: number
+}
+
 export type DiscoveryState = {
     featured: DiscoveryDApp[]
     favorites: DiscoveryDApp[]
     custom: DiscoveryDApp[]
     hasOpenedDiscovery: boolean
     connectedApps: ConnectedDiscoveryApp[]
+    bannerInteractions: {
+        [bannerName: string]: BannerInteractionDetails
+    }
 }
 
 export const initialDiscoverState: DiscoveryState = {
@@ -22,6 +29,7 @@ export const initialDiscoverState: DiscoveryState = {
     custom: [],
     hasOpenedDiscovery: false,
     connectedApps: [],
+    bannerInteractions: {},
 }
 
 const sortByAmountOfNavigations = (dapps: DiscoveryDApp[]) => {
@@ -101,6 +109,11 @@ export const DiscoverySlice = createSlice({
             state.hasOpenedDiscovery = true
         },
         resetDiscoveryState: () => initialDiscoverState,
+        incrementBannerInteractions: (state, action: PayloadAction<string>) => {
+            state.bannerInteractions[action.payload] = {
+                amountOfInteractions: (state.bannerInteractions[action.payload]?.amountOfInteractions ?? 0) + 1,
+            }
+        },
     },
 })
 
@@ -114,4 +127,5 @@ export const {
     addConnectedDiscoveryApp,
     removeConnectedDiscoveryApp,
     setFeaturedDApps,
+    incrementBannerInteractions,
 } = DiscoverySlice.actions

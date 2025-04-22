@@ -77,3 +77,5 @@ export const selectFeaturedImages = createSelector(getDiscoveryState, discovery 
 export const selectSwapFeaturedDapps = createSelector(selectFeaturedDapps, dapps =>
     dapps.filter(dapp => dapp?.tags?.map(t => t.toLowerCase())?.includes("swap")),
 )
+
+export const selectBannerInteractions = createSelector(getDiscoveryState, discovery => discovery.bannerInteractions)
