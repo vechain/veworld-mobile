@@ -3,6 +3,7 @@ import { useCallback, useMemo } from "react"
 import { DAppType } from "~Model"
 import { UseDappsWithPaginationFetchReturn, UseDappsWithPaginationSortKey } from "./types"
 import { sortAppHubDapps, useAppHubDapps } from "./useAppHubDapps"
+import { uniqBy } from "lodash"
 
 type Args = {
     sort: UseDappsWithPaginationSortKey
@@ -41,7 +42,7 @@ export const useDappsWithPagination = ({ sort, filter }: Args) => {
     }, [appHubDependencyLoading, isFetching])
 
     const flattedData = useMemo(
-        () => pages?.pages?.flatMap(({ page }) => page).sort(sortAppHubDapps(sort)),
+        () => uniqBy(pages?.pages?.flatMap(({ page }) => page).sort(sortAppHubDapps(sort)), "href"),
         [pages?.pages, sort],
     )
 
