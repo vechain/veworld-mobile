@@ -8,6 +8,7 @@ export const Migration14 = (state: PersistedState): PersistedState => {
     const newState: DiscoveryState = {
         ...currentState,
         bannerInteractions: {},
+        custom: [],
     }
 
     return {
