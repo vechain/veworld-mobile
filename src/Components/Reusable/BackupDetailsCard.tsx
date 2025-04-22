@@ -112,7 +112,7 @@ export const BackupDetailsCard: FC<Props> = ({ backupDetails, souceScreen, devic
 
                     <BaseView style={styles.button} justifyContent="center" alignItems="center">
                         <BaseIcon
-                            name={isShow ? "icon-eye-off" : "icon-eye"}
+                            name={isShow ? "icon-eye" : "icon-eye-off"}
                             size={16}
                             style={styles.icon}
                             color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}

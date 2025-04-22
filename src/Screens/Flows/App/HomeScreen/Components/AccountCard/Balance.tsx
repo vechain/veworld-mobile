@@ -1,11 +1,11 @@
 import React, { memo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseView } from "~Components"
+import { AccountFiatBalance } from "~Components/Reusable"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { WalletAccount } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import { AccountFiatBalance } from "~Components/Reusable"
 
 type Props = {
     isVisible: boolean
@@ -28,7 +28,7 @@ export const Balance: React.FC<Props> = memo(({ isVisible, toggleVisible }) => {
                 <BaseIcon
                     action={toggleVisible}
                     haptics="Light"
-                    name={isVisible ? "icon-eye-off" : "icon-eye"}
+                    name={isVisible ? "icon-eye" : "icon-eye-off"}
                     color={theme.colors.textReversed}
                     size={18}
                     style={baseStyles.marginLeft}

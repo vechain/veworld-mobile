@@ -1,11 +1,17 @@
-import { useScrollToTop } from "@react-navigation/native"
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import { useScrollToTop, useTheme } from "@react-navigation/native"
+import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseSpacer, BaseText, BaseTouchable, BaseView, useNotifications } from "~Components"
+import { BaseChip, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { Spinner } from "~Components/Reusable/Spinner"
 import { DiscoveryDApp } from "~Constants"
+import { useBottomSheetModal } from "~Hooks"
+import { useDappsWithPagination, UseDappsWithPaginationSortKey } from "~Hooks/useDappsWithPagination"
 import { useI18nContext } from "~i18n"
 import { DAppType } from "~Model"
-import { DAppCard } from "./DAppCard"
+import { useDAppActions } from "../Hooks"
+import { DAppOptionsBottomSheet, SortableKeys, SortDAppsBottomSheet } from "./Bottomsheets"
+import { DAppHorizontalCard } from "./DAppHorizontalCard"
+import { DappHorizontalCardSkeleton } from "./DappHorizontalCardSkeleton"
 
 type Filter = {
     key: DAppType
@@ -20,52 +26,80 @@ type TopFiltersProps = {
 
 const TopFilters = ({ filters }: TopFiltersProps) => {
     return (
-        <BaseView flexDirection="row" justifyContent="space-evenly">
+        <BaseView flexDirection="row" justifyContent="space-between">
             {filters.map(({ key, isSelected, title, onPress }) => (
-                <BaseTouchable key={key} underlined={isSelected} font="bodyBold" title={title} action={onPress} />
+                <BaseChip key={key} label={title} active={isSelected} onPress={onPress} />
             ))}
         </BaseView>
     )
 }
 
-type DAppsGridProps = {
+type DAppsListProps = {
     dapps: DiscoveryDApp[]
-    onDAppPress: ({ href, custom }: { href: string; custom?: boolean }) => void
+    onOpenDApp: (dapp: DiscoveryDApp) => void
+    onMorePress: (dapp: DiscoveryDApp) => void
+    onFetchNextPage: () => void
+    isLoading: boolean
 }
 
-const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
-    const flatListRef = useRef(null)
-    const { increaseDappCounter } = useNotifications()
-    useScrollToTop(flatListRef)
-    const columns = 4
-    const columnsGap = 24
+const LoadingMoreFooter = ({ isLoading }: { isLoading: boolean }) => {
+    const { LL } = useI18nContext()
 
-    const renderSeparator = useCallback(() => {
-        return <BaseSpacer height={columnsGap} />
-    }, [columnsGap])
+    if (isLoading)
+        return (
+            <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={20}>
+                <Spinner />
+                <BaseText typographyFont="bodySemiBold">{LL.LOADING_MORE()}</BaseText>
+            </BaseView>
+        )
+
+    return <BaseSpacer height={0} />
+}
+
+const DAppsList = ({ dapps, onMorePress, onOpenDApp, onFetchNextPage, isLoading }: DAppsListProps) => {
+    const flatListRef = useRef(null)
+    useScrollToTop(flatListRef)
 
     const renderItem = useCallback(
-        ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
-            const isLast = index === dapps.length - 1
-
+        ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
             return (
-                <BaseView pl={columnsGap} pr={isLast ? columnsGap : 0} justifyContent="center" alignItems="center">
-                    <DAppCard
-                        columns={columns}
-                        columnsGap={24}
-                        dapp={item}
-                        onPress={() => {
-                            if (item.veBetterDaoId) {
-                                increaseDappCounter(item.veBetterDaoId)
-                            }
-                            onDAppPress({ href: item.href })
-                        }}
-                    />
-                </BaseView>
+                <DAppHorizontalCard
+                    dapp={item}
+                    onOpenDApp={onOpenDApp}
+                    onPress={() => {
+                        onMorePress(item)
+                    }}
+                />
             )
         },
-        [dapps.length, increaseDappCounter, onDAppPress],
+        [onMorePress, onOpenDApp],
     )
+
+    const renderItemSeparator = useCallback(() => {
+        return <BaseSpacer height={16} />
+    }, [])
+
+    const renderListFooter = useCallback(() => {
+        return <LoadingMoreFooter isLoading={isLoading} />
+    }, [isLoading])
+
+    const renderSkeletonItem = useCallback(() => {
+        return <DappHorizontalCardSkeleton />
+    }, [])
+
+    if (isLoading && dapps.length === 0) {
+        return (
+            <FlatList
+                renderItem={renderSkeletonItem}
+                data={[1, 2, 3, 4, 5, 6, 7]}
+                keyExtractor={item => item.toString()}
+                scrollEnabled={false}
+                shouldRasterizeIOS
+                ItemSeparatorComponent={renderItemSeparator}
+                contentContainerStyle={styles.flatListPadding}
+            />
+        )
+    }
 
     return (
         <FlatList
@@ -73,12 +107,14 @@ const DAppsGrid = ({ dapps, onDAppPress }: DAppsGridProps) => {
             data={dapps}
             scrollEnabled={true}
             keyExtractor={item => item.href}
-            ItemSeparatorComponent={renderSeparator}
             contentContainerStyle={styles.flatListPadding}
+            ItemSeparatorComponent={renderItemSeparator}
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}
-            numColumns={columns}
+            onEndReached={onFetchNextPage}
+            ListFooterComponent={renderListFooter}
+            onEndReachedThreshold={0.5}
         />
     )
 }
@@ -89,13 +125,54 @@ const styles = StyleSheet.create({
 
 type EcosystemProps = {
     title: string
-    dapps: DiscoveryDApp[]
-    onDAppPress: ({ href, custom }: { href: string; custom?: boolean }) => void
 }
 
-export const Ecosystem = React.memo(({ title, dapps, onDAppPress }: EcosystemProps) => {
+export const Ecosystem = React.memo(({ title }: EcosystemProps) => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
+
+    const { onDAppPress } = useDAppActions()
+
     const [selectedDappsType, setSelectedDappsType] = useState(DAppType.ALL)
+    const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>(undefined)
+    const [sortedBy, setSortedBy] = useState<SortableKeys>("asc")
+
+    const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
+    const {
+        ref: sortBottomSheetRef,
+        onOpen: onOpenSortBottomSheet,
+        onClose: onCloseSortBottomSheet,
+    } = useBottomSheetModal()
+
+    const vbdSort = useMemo<UseDappsWithPaginationSortKey>(() => {
+        switch (sortedBy) {
+            case "asc":
+                return "alphabetic_asc"
+            case "desc":
+                return "alphabetic_desc"
+            case "newest":
+                return "newest"
+        }
+    }, [sortedBy])
+
+    const {
+        data: dappsToShow,
+        fetchNextPage,
+        isLoading,
+    } = useDappsWithPagination({ sort: vbdSort, filter: selectedDappsType })
+
+    const onMorePress = useCallback(
+        (dapp: DiscoveryDApp) => {
+            setSelectedDApp(dapp)
+            onOpenDAppOptions()
+        },
+        [onOpenDAppOptions],
+    )
+
+    const onDAppModalClose = useCallback(() => {
+        setSelectedDApp(undefined)
+        onCloseDAppOptions()
+    }, [onCloseDAppOptions])
 
     const filterOptions = useMemo(() => {
         const _all = DAppType.ALL
@@ -131,41 +208,37 @@ export const Ecosystem = React.memo(({ title, dapps, onDAppPress }: EcosystemPro
         ]
     }, [LL, selectedDappsType])
 
-    const dappsToShow = useMemo(() => {
-        const dappsWithLowercaseTags = dapps.map(dapp => ({
-            ...dapp,
-            tags: dapp.tags?.map(tag => tag.toLowerCase()),
-        }))
-
-        switch (selectedDappsType) {
-            case DAppType.SUSTAINABILTY:
-                return dappsWithLowercaseTags.filter(dapp => dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()))
-
-            case DAppType.NFT:
-                return dappsWithLowercaseTags.filter(dapp => dapp.tags?.includes(DAppType.NFT.toLowerCase()))
-
-            case DAppType.DAPPS:
-                return dappsWithLowercaseTags.filter(
-                    dapp =>
-                        !dapp.tags?.includes(DAppType.NFT.toLowerCase()) &&
-                        !dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()),
-                )
-
-            case DAppType.ALL:
-            default:
-                return dapps
-        }
-    }, [dapps, selectedDappsType])
+    const onFetchNextPage = useCallback(async () => {
+        fetchNextPage()
+    }, [fetchNextPage])
 
     return (
-        <BaseView>
-            <BaseText typographyFont="title" px={24}>
-                {title}
-            </BaseText>
+        <BaseView px={16}>
+            <BaseView flexDirection={"row"} justifyContent="space-between">
+                <BaseText typographyFont="bodySemiBold">{title}</BaseText>
+                <BaseTouchable onPress={onOpenSortBottomSheet}>
+                    <BaseIcon name="icon-sort-desc" size={20} color={theme.colors.text} />
+                </BaseTouchable>
+            </BaseView>
             <BaseSpacer height={24} />
             <TopFilters filters={filterOptions} />
             <BaseSpacer height={24} />
-            <DAppsGrid dapps={dappsToShow} onDAppPress={onDAppPress} />
+            <DAppsList
+                dapps={dappsToShow || []}
+                onMorePress={onMorePress}
+                onOpenDApp={onDAppPress}
+                isLoading={isLoading}
+                onFetchNextPage={onFetchNextPage}
+            />
+            <DAppOptionsBottomSheet ref={dappOptionsRef} selectedDApp={selectedDApp} onClose={onDAppModalClose} />
+            <SortDAppsBottomSheet
+                ref={sortBottomSheetRef}
+                sortedBy={sortedBy}
+                onSortChange={sort => {
+                    setSortedBy(sort)
+                    onCloseSortBottomSheet()
+                }}
+            />
         </BaseView>
     )
 })

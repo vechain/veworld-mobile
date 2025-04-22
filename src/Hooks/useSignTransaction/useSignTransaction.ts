@@ -1,14 +1,15 @@
-import { HDNode, secp256k1, Transaction } from "thor-devkit"
-import { HexUtils, warn } from "~Utils"
+import { useNavigation } from "@react-navigation/native"
+import { Address, Hex, Secp256k1, Transaction } from "@vechain/sdk-core"
+import { HDNode } from "thor-devkit"
 import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
-import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { sponsorTransaction } from "~Networking"
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
-import { ERROR_EVENTS } from "~Constants"
+import { sponsorTransaction } from "~Networking"
+import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { HexUtils, warn } from "~Utils"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -27,6 +28,14 @@ export enum SignStatus {
 
 export type SignTransactionResponse = Transaction | SignStatus
 
+const getPrivateKey = (wallet: Wallet, account: AccountWithDevice) => {
+    if (!wallet.mnemonic && !wallet.privateKey) throw new Error("Either mnemonic or privateKey must be provided")
+    if (!wallet.mnemonic) return Buffer.from(Hex.of(wallet.privateKey!).bytes)
+    const hdNode = HDNode.fromMnemonic(wallet.mnemonic, wallet.derivationPath)
+    const derivedNode = hdNode.derive(account.index)
+    return derivedNode.privateKey!
+}
+
 /**
  * Hooks that expose a function to sign and send a transaction performing updates on success
  * @param buildTransaction the function to build the transaction
@@ -35,7 +44,6 @@ export type SignTransactionResponse = Transaction | SignStatus
  * @param selectedDelegationUrl the delegation url
  * @param initialRoute the initial route to navigate to
  */
-
 export const useSignTransaction = ({
     selectedDelegationAccount,
     selectedDelegationOption,
@@ -56,23 +64,9 @@ export const useSignTransaction = ({
         delegateFor?: string,
         signatureAccount: AccountWithDevice = account,
     ): Promise<Buffer> => {
-        if (!wallet.mnemonic && !wallet.privateKey) throw new Error("Either mnemonic or privateKey must be provided")
-
-        if (wallet.mnemonic) {
-            if (!signatureAccount.index && signatureAccount.index !== 0)
-                throw new Error("signatureAccount index is empty")
-
-            const hdNode = HDNode.fromMnemonic(wallet.mnemonic, wallet.derivationPath)
-            const derivedNode = hdNode.derive(signatureAccount.index)
-
-            const privateKey = derivedNode.privateKey as Buffer
-            const hash = transaction.signingHash(delegateFor?.toLowerCase())
-            return secp256k1.sign(hash, privateKey)
-        } else {
-            const privateKey = Buffer.from(HexUtils.removePrefix(wallet.privateKey!), "hex")
-            const hash = transaction.signingHash(delegateFor?.toLowerCase())
-            return secp256k1.sign(hash, privateKey)
-        }
+        const privateKey = getPrivateKey(wallet, signatureAccount)
+        const hash = transaction.getTransactionHash(delegateFor ? Address.of(delegateFor) : undefined).bytes
+        return Buffer.from(Secp256k1.sign(hash, privateKey))
     }
 
     const getUrlDelegationSignature = async (
@@ -84,7 +78,7 @@ export const useSignTransaction = ({
             }
 
             // build hex encoded version of the transaction for signing request
-            const rawTransaction = HexUtils.addPrefix(transaction.encode().toString("hex"))
+            const rawTransaction = HexUtils.addPrefix(Buffer.from(transaction.encoded).toString("hex"))
 
             // request to send for sponsorship/fee delegation
             const sponsorRequest = {
@@ -194,18 +188,17 @@ export const useSignTransaction = ({
         })
 
         const senderSignature = await getSignature(transaction, senderWallet)
-        const delegationResult = await getDelegationSignature(transaction, password)
+        const delegationSignature = await getDelegationSignature(transaction, password)
 
-        if (delegationResult === SignStatus.DELEGATION_FAILURE) return delegationResult
+        if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
 
-        transaction.signature = delegationResult ? Buffer.concat([senderSignature, delegationResult]) : senderSignature
-
-        return transaction
+        return Transaction.of(
+            transaction.body,
+            delegationSignature ? Buffer.concat([senderSignature, delegationSignature]) : senderSignature,
+        )
     }
 
     return {
-        getUrlDelegationSignature,
-        getAccountDelegationSignature,
         signTransaction,
         navigateToLedger,
     }

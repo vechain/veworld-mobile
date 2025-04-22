@@ -1,7 +1,7 @@
-import React, { useCallback, useMemo } from "react"
+import { StackActions, useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { Routes } from "~Navigation"
+import { Transaction } from "@vechain/sdk-core"
+import React, { useCallback, useMemo } from "react"
 import {
     BaseSpacer,
     BaseView,
@@ -13,7 +13,12 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
+import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
+import { useAnalyticTracking, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { ContactType, DEVICE_TYPE } from "~Model"
+import { Routes } from "~Navigation"
+import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import {
     addPendingNFTtransferTransactionActivity,
     selectAccounts,
@@ -24,15 +29,10 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { InfoSectionView } from "../NFTDetailScreen/Components"
-import { useAnalyticTracking, useTransactionScreen, useTransferAddContact } from "~Hooks"
-import { StackActions, useNavigation } from "@react-navigation/native"
-import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
-import { Transaction } from "thor-devkit"
-import { AnalyticsEvent, creteAnalyticsEvent } from "~Constants"
-import { ContactType, DEVICE_TYPE } from "~Model"
-import { ContactManagementBottomSheet } from "../../ContactsScreen"
 import { AccountUtils, AddressUtils } from "~Utils"
+import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
+import { ContactManagementBottomSheet } from "../../ContactsScreen"
+import { InfoSectionView } from "../NFTDetailScreen/Components"
 
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.SEND_NFT_RECAP>
 
