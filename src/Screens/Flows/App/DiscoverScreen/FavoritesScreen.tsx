@@ -48,6 +48,12 @@ export const FavouritesScreen = () => {
         [onOpenDAppOptions],
     )
 
+    const onLongPress = useCallback(() => {
+        if (!isEditingMode) {
+            setIsEditingMode(true)
+        }
+    }, [isEditingMode])
+
     const renderItem: RenderItem<DiscoveryDApp> = useCallback(
         ({ item, isActive, drag }) => {
             return (
@@ -55,13 +61,14 @@ export const FavouritesScreen = () => {
                     dapp={item}
                     isActive={isActive}
                     isEditMode={isEditingMode}
-                    onDAppPress={onDAppPress}
-                    onMorePress={onMorePress}
-                    onLongPress={isEditingMode ? drag : undefined}
+                    onPress={onDAppPress}
+                    onRightActionPress={onMorePress}
+                    onLongPress={onLongPress}
+                    onRightActionLongPress={isEditingMode ? drag : undefined}
                 />
             )
         },
-        [isEditingMode, onDAppPress, onMorePress],
+        [isEditingMode, onDAppPress, onLongPress, onMorePress],
     )
 
     const onDragEnd = useCallback(({ data }: DragEndParams<DiscoveryDApp>) => {
