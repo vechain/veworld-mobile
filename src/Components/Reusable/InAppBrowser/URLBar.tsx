@@ -71,7 +71,8 @@ export const URLBar = ({ onNavigation }: Props) => {
                             <BaseText
                                 testID="URL-bar-dapp-name"
                                 typographyFont="captionRegular"
-                                color={theme.colors.subtitle}>
+                                color={theme.colors.subtitle}
+                                numberOfLines={1}>
                                 {navigationState?.url}
                             </BaseText>
                         </BaseView>
