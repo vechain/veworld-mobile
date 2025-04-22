@@ -1,5 +1,11 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
+import {
+    DragEndParams,
+    NestableDraggableFlatList,
+    NestableScrollContainer,
+    RenderItem,
+} from "react-native-draggable-flatlist"
 import {
     AnimatedSaveHeaderButton,
     BaseSpacer,
@@ -14,14 +20,8 @@ import { DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import {
-    NestableScrollContainer,
-    NestableDraggableFlatList,
-    RenderItem,
-    DragEndParams,
-} from "react-native-draggable-flatlist"
-import { useDAppActions } from "./Hooks"
 import { DAppOptionsBottomSheet } from "./Components/Bottomsheets"
+import { useDAppActions } from "./Hooks"
 
 export const FavouritesScreen = () => {
     const [isEditingMode, setIsEditingMode] = useState(false)
@@ -79,6 +79,10 @@ export const FavouritesScreen = () => {
         dispatch(reorderBookmarks(reorderedDapps))
         setIsEditingMode(false)
     }, [dispatch, reorderedDapps])
+
+    useEffect(() => {
+        if (reorderedDapps.length !== bookmarkedDApps.length) setReorderedDapps(bookmarkedDApps)
+    }, [bookmarkedDApps, reorderedDapps.length])
 
     return (
         <Layout
