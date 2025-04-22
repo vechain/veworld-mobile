@@ -126,6 +126,7 @@ export const BrowserBottomBar: React.FC = () => {
                         name={config.name}
                         size={20}
                         color={theme.colors.text}
+                        style={styles.icon}
                     />
                 )
             })}
