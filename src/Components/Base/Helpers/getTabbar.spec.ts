@@ -40,8 +40,8 @@ describe("getTabbar", () => {
                             getState: () => ({
                                 type: "tab",
                             }),
-                        } as NavProps),
-                } as NavProps),
+                        }) as NavProps,
+                }) as NavProps,
             getState: () => ({
                 type: "stack",
             }),

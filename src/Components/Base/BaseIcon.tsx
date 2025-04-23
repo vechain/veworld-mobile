@@ -7,25 +7,24 @@ import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import HapticsService from "~Services/HapticsService"
 
-type Props =
-    | {
-          size?: number
-          bg?: string
-          action?: () => void
-          m?: number
-          mx?: number
-          my?: number
-          p?: number
-          px?: number
-          py?: number
-          borderRadius?: number
-          iconPadding?: number
-          name: IconKey
-          color?: string | OpaqueColorValue
-          haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
-      } & IconProps &
-          TouchableOpacityProps &
-          ViewProps
+type Props = {
+    size?: number
+    bg?: string
+    action?: () => void
+    m?: number
+    mx?: number
+    my?: number
+    p?: number
+    px?: number
+    py?: number
+    borderRadius?: number
+    iconPadding?: number
+    name: IconKey
+    color?: string | OpaqueColorValue
+    haptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
+} & IconProps &
+    TouchableOpacityProps &
+    ViewProps
 
 const BaseIconWithRef = forwardRef<View | TouchableOpacity, Props>(function BaseIconWithRef(props, ref) {
     const { color, style, borderRadius, testID, haptics, name, ...otherProps } = props

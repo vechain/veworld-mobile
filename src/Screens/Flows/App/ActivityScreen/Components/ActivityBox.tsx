@@ -203,7 +203,7 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
     const type = direction === DIRECTIONS.UP ? "sent" : "received"
 
     const { name, address } = useVns({
-        address: direction === DIRECTIONS.UP ? to?.[0] ?? "" : from,
+        address: direction === DIRECTIONS.UP ? (to?.[0] ?? "") : from,
     })
 
     const addressOrUsername = useMemo(() => {
