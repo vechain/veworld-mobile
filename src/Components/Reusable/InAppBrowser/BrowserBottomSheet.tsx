@@ -88,6 +88,7 @@ const baseStyles = (theme: ColorThemeType) => {
         actionContainer: {
             flexDirection: "column",
             gap: 16,
+            paddingVertical: 16,
         },
         actionItemContainer: {
             gap: 24,
