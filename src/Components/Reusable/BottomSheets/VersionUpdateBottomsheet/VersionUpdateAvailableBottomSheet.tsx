@@ -3,7 +3,7 @@ import { Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import { getCountry } from "react-native-localize"
 import { BaseButton, DefaultBottomSheet } from "~Components"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, APPLE_STORE_URL, GOOGLE_STORE_URL } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useCheckAppVersion } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { PlatformUtils } from "~Utils"
@@ -19,13 +19,10 @@ export const VersionUpdateAvailableBottomSheet = () => {
     const { LL } = useI18nContext()
     const countryCode = getCountry()?.toLowerCase()
     const dispatch = useAppDispatch()
-    const advisedVersion = useAppSelector(state => selectAdvisedAppVersion(state))
-    const dismissCount = useAppSelector(state => selectUpdateDismissCount(state))
+    const advisedVersion = useAppSelector(selectAdvisedAppVersion)
+    const dismissCount = useAppSelector(selectUpdateDismissCount)
     const { shouldShowUpdatePrompt } = useCheckAppVersion()
     const { ref, onOpen, onClose } = useBottomSheetModal()
-
-    const APPLE_STORE_URL = `https://apps.apple.com/${countryCode}/app/veworld/id6446854569`
-    const GOOGLE_STORE_URL = "https://play.google.com/store/apps/details?id=org.vechain.veworld.app"
 
     const track = useAnalyticTracking()
 
@@ -46,8 +43,8 @@ export const VersionUpdateAvailableBottomSheet = () => {
             requestCount: dismissCount,
         })
         onClose()
-        Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL : GOOGLE_STORE_URL)
-    }, [track, advisedVersion, dismissCount, onClose, APPLE_STORE_URL])
+        Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL(countryCode) : GOOGLE_STORE_URL)
+    }, [track, advisedVersion, dismissCount, onClose, countryCode])
 
     const handleUpdateLater = useCallback(async () => {
         dispatch(VersionUpdateSlice.actions.incrementDismissCount())
