@@ -1,6 +1,7 @@
 appId: org.vechain.veworld.app
 tags:
   - pull-request
+  - onlyAndroid
 onFlowStart:
   - runFlow: ../setup_reset/setupApp.yaml
 onFlowComplete:
@@ -38,8 +39,18 @@ onFlowComplete:
       visible: "Insert your 6-digit PIN"
     commands:
       - tapOn: "1"
-- tapOn:
-    id: "closeButton"
+- runFlow:
+    when:
+      platform: Android
+    commands:
+      - tapOn:
+          id: "URL-bar-back-button-wrapper"
+- runFlow:
+    when:
+      platform: iOS
+    commands:
+      - tapOn:
+          id: "URL-bar-back-button"
 - tapOn:
     id: "wallet-tab"
 - assertVisible:
