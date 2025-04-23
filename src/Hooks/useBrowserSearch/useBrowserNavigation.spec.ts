@@ -5,12 +5,14 @@ import { TestWrapper } from "~Test"
 import { waitFor } from "@testing-library/react-native"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import axios from "axios"
 
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: jest.fn(),
 }))
 jest.mock("./useVisitedUrls")
+jest.mock("axios")
 
 describe("useBrowserNavigation", () => {
     beforeEach(() => {
@@ -24,6 +26,9 @@ describe("useBrowserNavigation", () => {
         })
         ;(useNavigation as jest.Mock).mockReturnValue({
             navigate,
+        })
+        ;(axios.get as jest.Mock).mockResolvedValue({
+            status: 200,
         })
 
         const { result } = renderHook(() => useBrowserNavigation(), {
@@ -55,7 +60,7 @@ describe("useBrowserNavigation", () => {
         let fnResult: Awaited<ReturnType<typeof result.current.navigateToBrowser>>
 
         await act(async () => {
-            fnResult = await result.current.navigateToBrowser("https://vechainùùùùù.org")
+            fnResult = await result.current.navigateToBrowser("ùùùùùààààà")
         })
 
         await waitFor(() => {
