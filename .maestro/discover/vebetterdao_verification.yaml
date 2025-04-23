@@ -1,6 +1,7 @@
 appId: org.vechain.veworld.app
 tags:
   - pull-request
+  - onlyAndroid
 onFlowStart:
   - runFlow: ../setup_reset/setupApp.yaml
 onFlowComplete:
