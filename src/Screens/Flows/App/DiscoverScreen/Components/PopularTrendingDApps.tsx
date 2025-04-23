@@ -1,12 +1,12 @@
 import React, { useCallback } from "react"
-import { BaseView, BaseText, BaseSpacer } from "~Components"
 import { FlatList, ListRenderItemInfo } from "react-native"
-import { useI18nContext } from "~i18n"
-import { useTrendingDApps } from "~Hooks"
-import { DAppCard } from "./DAppCard"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
+import { useTrendingDApps } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../Hooks"
+import { DAppCard } from "./DAppCard"
+import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
 
 export const PopularTrendingDApps = () => {
     const { LL } = useI18nContext()
@@ -34,7 +34,7 @@ export const PopularTrendingDApps = () => {
     return (
         <BaseView>
             <BaseView flexDirection="row" justifyContent="space-between" px={16}>
-                <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_TAB_TRENDING_AND_POPULAR()}</BaseText>
+                <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_TAB_TRENDING_AND_POPULAR()}</BaseText>
             </BaseView>
             <BaseSpacer height={16} />
 

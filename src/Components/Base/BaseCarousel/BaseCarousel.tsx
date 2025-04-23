@@ -1,15 +1,15 @@
 import React from "react"
-import { BaseView } from "../BaseView"
-import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
-import { useSharedValue } from "react-native-reanimated"
-import { ColorThemeType, isSmallScreen, SCREEN_WIDTH } from "~Constants"
 import { ImageSourcePropType, StyleSheet } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { useSharedValue } from "react-native-reanimated"
+import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
 import { DotStyle } from "react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom/PaginationItem"
+import { ColorThemeType, isSmallScreen, SCREEN_WIDTH } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { BaseView } from "../BaseView"
 import { BaseCarouselItem } from "./BaseCarouselItem"
 
 export type CarouselSlideItem = {
-    title?: string
+    name?: string
     testID?: string
     href?: string
     source: ImageSourcePropType
@@ -33,6 +33,11 @@ type Props = {
     loop?: boolean
     paginationAlignment?: "flex-start" | "center" | "flex-end"
     testID?: string
+    onSlidePress?: (name: string) => void
+    /**
+     * Decide when `onSlidePress` is called. Default is `after
+     */
+    onSlidePressActivation?: "before" | "after"
 }
 
 export const BaseCarousel = ({
@@ -44,6 +49,8 @@ export const BaseCarousel = ({
     loop = true,
     paginationAlignment = "center",
     testID,
+    onSlidePress,
+    onSlidePressActivation,
 }: Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
     const progress = useSharedValue<number>(0)
@@ -89,6 +96,9 @@ export const BaseCarousel = ({
                             isExternalLink={item.isExternalLink}
                             w={item.w}
                             h={item.h}
+                            name={item.name}
+                            onPress={onSlidePress}
+                            onPressActivation={onSlidePressActivation}
                         />
                     )
                 }}

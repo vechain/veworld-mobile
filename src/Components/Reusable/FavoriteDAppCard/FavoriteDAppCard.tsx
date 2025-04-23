@@ -10,15 +10,16 @@ type Props = {
     dapp: DiscoveryDApp
     isEditMode: boolean
     isActive: boolean
-    onDAppPress: (dapp: DiscoveryDApp) => void
-    onMorePress: (dapp: DiscoveryDApp) => void
-    onLongPress?: (dapp: DiscoveryDApp) => void
+    onPress: (dapp: DiscoveryDApp) => void
+    onLongPress: (dapp: DiscoveryDApp) => void
+    onRightActionPress: (dapp: DiscoveryDApp) => void
+    onRightActionLongPress?: (dapp: DiscoveryDApp) => void
 }
 
 const IMAGE_SIZE = 48
 
 export const FavoriteDAppCard: React.FC<Props> = memo(
-    ({ dapp, isEditMode, isActive, onDAppPress, onMorePress, onLongPress }: Props) => {
+    ({ dapp, isEditMode, isActive, onPress, onLongPress, onRightActionPress, onRightActionLongPress }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
@@ -28,7 +29,8 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         <BaseTouchable
                             disabled={isEditMode || isActive}
                             style={[styles.card]}
-                            onPress={() => onDAppPress(dapp)}>
+                            onPress={() => onPress(dapp)}
+                            onLongPress={() => onLongPress?.(dapp)}>
                             <BaseView flexDirection="row" flex={1} pr={10}>
                                 <Image
                                     source={{
@@ -66,8 +68,8 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         </BaseTouchable>
                         <BaseTouchable
                             disabled={isActive}
-                            onLongPress={() => onLongPress?.(dapp)}
-                            onPress={() => onMorePress(dapp)}
+                            onLongPress={() => onRightActionLongPress?.(dapp)}
+                            onPress={() => onRightActionPress(dapp)}
                             style={styles.touchableContainer}>
                             {isEditMode ? (
                                 <BaseIcon name="icon-grip-horizontal" color={theme.colors.text} size={20} />

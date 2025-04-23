@@ -61,6 +61,7 @@ const mockState = {
         custom: customDapps,
         hasOpenedDiscovery: true,
         connectedApps: [],
+        bannerInteractions: {},
     },
 }
 

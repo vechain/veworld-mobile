@@ -1,14 +1,14 @@
+import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { Linking, StyleSheet } from "react-native"
-import { BaseBottomSheet, BaseIcon, BottomSheetAction, BaseSpacer } from "~Components"
+import { StyleSheet } from "react-native"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BottomSheetAction } from "~Components"
 import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useDappBookmarking, useThemedStyles, useScrollableBottomSheet } from "~Hooks"
+import { useAnalyticTracking, useDappBookmarking, useScrollableBottomSheet, useThemedStyles } from "~Hooks"
+import { FastAction } from "~Model"
 import { Routes } from "~Navigation"
 import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
-import { FastAction } from "~Model"
 import { useI18nContext } from "~i18n"
 
 type Props = {
@@ -44,8 +44,10 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
 
         const onSeeOnVBDPress = useCallback(() => {
             onClose?.()
-            Linking.openURL(`https://governance.vebetterdao.org/apps/${selectedDApp?.veBetterDaoId}`)
-        }, [onClose, selectedDApp?.veBetterDaoId])
+            nav.navigate(Routes.BROWSER, {
+                url: `https://governance.vebetterdao.org/apps/${selectedDApp?.veBetterDaoId}`,
+            })
+        }, [nav, onClose, selectedDApp?.veBetterDaoId])
 
         const Actions: FastAction[] = useMemo(() => {
             const actionList = [
@@ -69,7 +71,6 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
             actionList.push({
                 name: bookmarkedDApps.isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITES() : LL.BTN_ADD_TO_FAVORITES(),
                 action: () => {
-                    onClose?.()
                     bookmarkedDApps.toggleBookmark()
                 },
                 icon: (
@@ -86,7 +87,6 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
         }, [
             LL,
             bookmarkedDApps,
-            onClose,
             onOpenDAppPress,
             onSeeOnVBDPress,
             selectedDApp?.veBetterDaoId,
@@ -95,7 +95,7 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
 
         const computeSnappoints = useMemo(() => {
             if (Actions.length < 3) {
-                return ["25%"]
+                return ["30%"]
             }
             if (Actions.length < 5) {
                 return ["35%"]
@@ -115,7 +115,6 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                 snapPoints={computeSnappoints}
                 onDismiss={onClose}
                 onChange={handleSheetChangePosition}
-                blurBackdrop
                 backgroundStyle={styles.layout}>
                 <BottomSheetFlatList
                     data={Actions}
