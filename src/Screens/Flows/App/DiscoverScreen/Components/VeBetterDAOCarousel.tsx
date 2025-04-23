@@ -17,6 +17,9 @@ const STELLA_URL = "https://www.stellapay.io/b/WGWV"
 
 const defaultSorting = ["vbd_vote", "vbd_main", "stella", "vbd_make_dapp"]
 
+const applyDefaultSorting = (a: CarouselSlideItem, b: CarouselSlideItem) =>
+    defaultSorting.indexOf(a.name || "") - defaultSorting.indexOf(b.name || "")
+
 export const VeBetterDAOCarousel = () => {
     const theme = useTheme()
     const { data } = useCurrentAllocationsRoundId()
@@ -65,14 +68,12 @@ export const VeBetterDAOCarousel = () => {
     }, [featureFlags.discoveryFeature.showStellaPayBanner, slides])
 
     const sortedSlides = useMemo(() => {
-        return activeSlides
-            .sort((a, b) => defaultSorting.indexOf(a.name || "") - defaultSorting.indexOf(b.name || ""))
-            .sort((a, b) => {
-                return (
-                    (bannerInteractions[b.name || ""]?.amountOfInteractions || 0) -
-                    (bannerInteractions[a.name || ""]?.amountOfInteractions || 0)
-                )
-            })
+        return activeSlides.sort(applyDefaultSorting).sort((a, b) => {
+            return (
+                (bannerInteractions[b.name ?? ""]?.amountOfInteractions ?? 0) -
+                (bannerInteractions[a.name ?? ""]?.amountOfInteractions ?? 0)
+            )
+        })
     }, [activeSlides, bannerInteractions])
 
     const onSlidePress = useCallback(

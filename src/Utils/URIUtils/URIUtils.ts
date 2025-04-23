@@ -2,6 +2,9 @@ import axios, { AxiosError } from "axios"
 import { validateIpfsUri } from "~Utils/IPFSUtils/IPFSUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
+const REGEX_WWW = /^www\.[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(:\d+)?$/
+const REGEX_NOT_WWW = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(:\d+)?$/
+
 // A helper function to normalize the URL by removing 'www.'
 const normalizeURL = (url: string) => {
     const parsedURL = new URL(url.toLowerCase())
@@ -111,29 +114,24 @@ const convertUriToUrl = (uri: string) => {
 }
 
 function parseUrl(url: string) {
-    const regexWww = new RegExp("^www\\.[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}(:[0-9]+)?$")
-    const regexWithoutWww = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(:[0-9]+)?$/
-
     if (isHttps(url)) return url
     if (isHttp(url)) return `http://${url.slice(7)}`
-    if (regexWww.test(url)) return `https://${url}`
-    if (regexWithoutWww.test(url)) return `https://${url}`
+    if (REGEX_WWW.test(url)) return `https://${url}`
+    if (REGEX_NOT_WWW.test(url)) return `https://${url}`
     throw new Error("IT SHOULD NOT HAPPEN")
 }
 
 async function isValidBrowserUrl(url: string): Promise<boolean> {
     let navInput: string | undefined
-    const regexWww = new RegExp("^www\\.[a-zA-Z0-9-]+(\\.[a-zA-Z0-9-]+)*\\.[a-zA-Z]{2,}(:[0-9]+)?$")
-    const regexWithoutWww = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(:[0-9]+)?$/
 
     try {
         if (isHttps(url)) {
             navInput = url
         } else if (isHttp(url)) {
             navInput = `http://${url.slice(7)}`
-        } else if (regexWww.test(url)) {
+        } else if (REGEX_WWW.test(url)) {
             navInput = `https://${url}`
-        } else if (regexWithoutWww.test(url)) {
+        } else if (REGEX_NOT_WWW.test(url)) {
             navInput = `https://${url}`
         }
 
