@@ -71,7 +71,7 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
             actionList.push({
                 name: bookmarkedDApps.isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITES() : LL.BTN_ADD_TO_FAVORITES(),
                 action: () => {
-                    onClose?.()
+                    if (bookmarkedDApps.isBookMarked) onClose?.()
                     bookmarkedDApps.toggleBookmark()
                 },
                 icon: (
