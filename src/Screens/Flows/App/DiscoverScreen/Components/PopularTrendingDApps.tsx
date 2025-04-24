@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo } from "react-native"
 import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
@@ -13,9 +13,11 @@ export const PopularTrendingDApps = () => {
     const { isLoading, trendingDapps } = useTrendingDApps()
     const { onDAppPress } = useDAppActions()
 
+    const slicedData = useMemo(() => trendingDapps.slice(0, 10), [trendingDapps])
+
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
-            const isLast = index === trendingDapps.length - 1
+            const isLast = index === slicedData.length - 1
             const columnsGap = 16
 
             const onPress = () => {
@@ -28,7 +30,7 @@ export const PopularTrendingDApps = () => {
                 </BaseView>
             )
         },
-        [onDAppPress, trendingDapps.length],
+        [onDAppPress, slicedData.length],
     )
 
     return (
@@ -41,12 +43,7 @@ export const PopularTrendingDApps = () => {
             {isLoading ? (
                 <DAppsLoadingSkeleton />
             ) : (
-                <FlatList
-                    data={trendingDapps}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={renderItem}
-                />
+                <FlatList data={slicedData} horizontal showsHorizontalScrollIndicator={false} renderItem={renderItem} />
             )}
         </BaseView>
     )
