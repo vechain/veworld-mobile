@@ -34,6 +34,11 @@ export const useDappsWithPagination = ({ sort, filter }: Args) => {
         },
         initialPageParam: 0,
         enabled: !appHubDependencyLoading,
+        retry(failureCount, error) {
+            if (error.message === "FEATURED_DAPPS_NOT_LOADED_YET") return true
+            return false
+        },
+        retryDelay: 500,
     })
 
     const isLoading = useMemo(() => {
