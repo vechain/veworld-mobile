@@ -1,11 +1,11 @@
+import { TouchableOpacity as BottomSheetTouchable } from "@gorhom/bottom-sheet"
 import React, { useMemo } from "react"
-import { BaseText } from "../BaseText"
-import { BaseIcon } from "../BaseIcon"
-import { BaseView } from "../BaseView"
 import { StyleSheet, TouchableOpacity } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { TouchableOpacity as BottomSheetTouchable } from "@gorhom/bottom-sheet"
+import { BaseIcon } from "../BaseIcon"
+import { BaseText } from "../BaseText"
+import { BaseView } from "../BaseView"
 
 type Props = {
     id: string
@@ -55,13 +55,16 @@ export const BaseRadioButton = ({ id, label, isSelected, disabled, testID, isBot
             accessibilityValue={{ text: isSelected ? "selected" : "not selected" }}
             onPress={() => onPress(id)}>
             <BaseView flexDirection={"row"} justifyContent={"space-between"}>
-                <BaseText typographyFont="bodyMedium" style={computedTextStyles}>
+                <BaseText typographyFont="bodyMedium" style={computedTextStyles} lineHeight={20}>
                     {label}
                 </BaseText>
                 <BaseIcon
                     name={isSelected ? "icon-radio-selected" : "icon-radio-default"}
                     color={iconColor}
                     size={16}
+                    px={0}
+                    py={0}
+                    p={0}
                 />
             </BaseView>
         </Touchable>
@@ -71,7 +74,7 @@ export const BaseRadioButton = ({ id, label, isSelected, disabled, testID, isBot
 const baseStyles = (theme: ColorThemeType, isSelected: boolean) =>
     StyleSheet.create({
         rootContainer: {
-            paddingVertical: 12,
+            paddingVertical: 14,
             paddingHorizontal: 16,
             borderWidth: isSelected ? 2 : 1,
             borderRadius: 8,

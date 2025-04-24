@@ -2,7 +2,8 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseIcon, BaseText, BaseTextInput, BaseView, useInAppBrowser } from "~Components"
+import { BaseIcon, BaseText, BaseTextInput, BaseView } from "~Components"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useTheme } from "~Hooks"
 import { Routes } from "~Navigation"
 import { URIUtils } from "~Utils"
@@ -25,16 +26,19 @@ export const URLBar = ({ onNavigation }: Props) => {
 
     const theme = useTheme()
 
-    const animatedStyles = useAnimatedStyle(() => ({
-        height: showToolbars ? withTiming(56) : withTiming(24),
-    }))
+    const animatedStyles = useAnimatedStyle(
+        () => ({
+            height: showToolbars ? withTiming(56) : withTiming(24),
+        }),
+        [showToolbars],
+    )
 
     const onSubmit = useCallback(
         async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
             const value = e.nativeEvent.text.toLowerCase()
             const isValid = await URIUtils.isValidBrowserUrl(value)
             if (isValid) {
-                const url = value.startsWith("https://") ? value : `https://${value}`
+                const url = URIUtils.parseUrl(value)
                 onNavigation?.(false)
                 navigateToUrl(url)
                 return
@@ -67,7 +71,8 @@ export const URLBar = ({ onNavigation }: Props) => {
                             <BaseText
                                 testID="URL-bar-dapp-name"
                                 typographyFont="captionRegular"
-                                color={theme.colors.subtitle}>
+                                color={theme.colors.subtitle}
+                                numberOfLines={1}>
                                 {navigationState?.url}
                             </BaseText>
                         </BaseView>

@@ -4,8 +4,6 @@ import { TestWrapper } from "~Test"
 import { useVisitedUrls } from "./useVisitedUrls"
 import { HistoryDappItem, HistoryUrlItem, HistoryUrlKind } from "~Utils/HistoryUtils"
 
-jest.mock("~Utils/URIUtils")
-jest.mock("~Navigation")
 jest.mock("./useVisitedUrls")
 
 describe("useBrowserSearch", () => {
@@ -34,6 +32,7 @@ describe("useBrowserSearch", () => {
                         favorites: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
+                        bannerInteractions: {},
                     },
                 },
             },
@@ -75,6 +74,7 @@ describe("useBrowserSearch", () => {
                         favorites: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
+                        bannerInteractions: {},
                     },
                 },
             },
@@ -118,6 +118,7 @@ describe("useBrowserSearch", () => {
                         favorites: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
+                        bannerInteractions: {},
                     },
                 },
             },
@@ -178,6 +179,7 @@ describe("useBrowserSearch", () => {
                         favorites: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
+                        bannerInteractions: {},
                     },
                 },
             },

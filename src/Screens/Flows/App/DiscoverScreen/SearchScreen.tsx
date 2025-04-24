@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BackButtonGenericHeader, BaseView, Layout } from "~Components"
-import { SearchError, useBrowserSearch, useThemedStyles } from "~Hooks"
+import { SearchError, useBrowserNavigation, useBrowserSearch, useThemedStyles } from "~Hooks"
 import { SearchBar } from "./Components/SearchBar"
 import { SearchResults } from "./Components/SearchResults"
 
@@ -10,7 +10,8 @@ export const SearchScreen = () => {
 
     const [search, setSearch] = useState("")
     const [error, setError] = useState<SearchError>()
-    const { navigateToBrowser, results } = useBrowserSearch(search)
+    const { results } = useBrowserSearch(search)
+    const { navigateToBrowser } = useBrowserNavigation()
 
     const onSearchUpdated = useCallback(
         (value: string) => {

@@ -218,7 +218,7 @@
   "BROWSER_CHANGE_NETWORK_DESC": "The network will change to:",
   "BROWSER_CHANGE_NETWORK_TITLE": "Network change",
   "BROWSER_COPY_LINK": "Copy page link",
-  "BROWSER_COPY_LINK_SUCCESS": "Link successfully copied to the clipboard",
+  "BROWSER_COPY_LINK_SUCCESS": "Link successfully",
   "BROWSER_FAVOURITES_TITLE": "Favourites",
   "BROWSER_HISTORY_ADDRESS_ERROR": "This address can't be reached",
   "BROWSER_HISTORY_CLEAR": "Clear",

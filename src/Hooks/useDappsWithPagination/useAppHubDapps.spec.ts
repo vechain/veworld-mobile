@@ -24,6 +24,7 @@ const createInitialProps = (...dapps: DiscoveryDApp[]) => ({
             favorites: [],
             hasOpenedDiscovery: false,
             connectedApps: [],
+            bannerInteractions: {},
         },
     },
 })

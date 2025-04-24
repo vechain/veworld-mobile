@@ -215,7 +215,7 @@ export const Ecosystem = React.memo(({ title }: EcosystemProps) => {
     return (
         <BaseView px={16}>
             <BaseView flexDirection={"row"} justifyContent="space-between">
-                <BaseText typographyFont="bodySemiBold">{title}</BaseText>
+                <BaseText typographyFont="subSubTitleSemiBold">{title}</BaseText>
                 <BaseTouchable onPress={onOpenSortBottomSheet}>
                     <BaseIcon name="icon-sort-desc" size={20} color={theme.colors.text} />
                 </BaseTouchable>
