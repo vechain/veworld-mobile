@@ -26,7 +26,7 @@ on:
 jobs:
     build-release-ios:
         name: Build release for iOS
-        runs-on: macos-latest
+        runs-on: macos-15
         environment: ios-release
 
         # Proceed only if it's either not a release event or it's a pre-release.
