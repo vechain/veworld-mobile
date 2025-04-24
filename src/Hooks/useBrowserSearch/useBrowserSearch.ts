@@ -32,7 +32,7 @@ export const useBrowserSearch = (query: string) => {
         return [...urls, ...allDapps]
             .filter(url => {
                 if (url.type === HistoryUrlKind.DAPP) return url.dapp.name.toLowerCase().includes(lowerQuery)
-                return url.name.toLowerCase().includes(lowerQuery)
+                return url.name.toLowerCase().includes(lowerQuery) || url.url.toLowerCase().includes(lowerQuery)
             })
             .sort(sortHistoryItem)
     }, [isValidQuery, mappedApps, mappedUrls, query])
