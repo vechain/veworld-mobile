@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.1.5 (2025-04-24)</small>
+
+* build: init ([c0fba55](https://github.com/vechain/veworld-mobile/commit/c0fba55))
+* Reduce trending dapps to 10 + remove sustainability tag (#2888) ([5a99b3d](https://github.com/vechain/veworld-mobile/commit/5a99b3d)), closes [#2888](https://github.com/vechain/veworld-mobile/issues/2888)
+
 ## <small>2.1.4 (2025-04-14)</small>
 
 * build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))
