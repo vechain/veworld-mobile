@@ -49,7 +49,7 @@ export const useAppHubDapps = (filter: DAppType) => {
 
     const _fetchWithPage: UseDappsWithPaginationFetch = useCallback(
         async ({ page, sort }) => {
-            if (!mappedDapps) throw new Error("FEATURED_DAPPS_NOT_LOADED_YET")
+            if (!mappedDapps) return { page: [], hasMore: false }
             const filteredDapps = [...mappedDapps].sort(sortAppHubDapps(sort))
             const sliced = filteredDapps.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE)
             return {
@@ -72,7 +72,7 @@ export const useAppHubDapps = (filter: DAppType) => {
     )
 
     return {
-        dependencyLoading: false,
+        dependencyLoading: mappedDapps.length === 0,
         fetchWithPage,
     }
 }
