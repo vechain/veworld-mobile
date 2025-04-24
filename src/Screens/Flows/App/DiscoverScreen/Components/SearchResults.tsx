@@ -13,9 +13,10 @@ type Props = {
     query: string
     error?: SearchError
     results: HistoryItem[]
+    isValidQuery: boolean
 }
 
-export const SearchResults = ({ query, error, results }: Props) => {
+export const SearchResults = ({ error, results, isValidQuery }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const dispatch = useAppDispatch()
@@ -24,16 +25,14 @@ export const SearchResults = ({ query, error, results }: Props) => {
         dispatch(resetBrowserState())
     }, [dispatch])
 
-    const isQueryEmpty = useMemo(() => query.trim() === "", [query])
-
     const isQueryEmptyButWithResults = useMemo(
-        () => isQueryEmpty && results.length !== 0,
-        [isQueryEmpty, results.length],
+        () => !isValidQuery && results.length !== 0,
+        [isValidQuery, results.length],
     )
 
     const isQueryEmptyWithNoResults = useMemo(
-        () => isQueryEmpty && results.length === 0,
-        [isQueryEmpty, results.length],
+        () => !isValidQuery && results.length === 0,
+        [isValidQuery, results.length],
     )
 
     const rootStyles = useMemo(() => {
@@ -46,9 +45,12 @@ export const SearchResults = ({ query, error, results }: Props) => {
         return <BaseSpacer height={24} />
     }, [])
 
-    const renderItem = useCallback(({ item }: ListRenderItemInfo<HistoryItem>) => {
-        return <SearchResultItem item={item} />
-    }, [])
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<HistoryItem>) => {
+            return <SearchResultItem item={item} isValidQuery={isValidQuery} />
+        },
+        [isValidQuery],
+    )
 
     if (error === SearchError.ADDRESS_CANNOT_BE_REACHED)
         return (
@@ -85,7 +87,7 @@ export const SearchResults = ({ query, error, results }: Props) => {
                 </BaseView>
             )}
 
-            {!isQueryEmpty && (
+            {isValidQuery && (
                 <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={24}>
                     <BaseText typographyFont="bodyMedium">
                         {LL.BROWSER_HISTORY_RESULTS({ amount: results.length })}

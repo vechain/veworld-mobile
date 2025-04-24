@@ -10,7 +10,7 @@ export const SearchScreen = () => {
 
     const [search, setSearch] = useState("")
     const [error, setError] = useState<SearchError>()
-    const { results } = useBrowserSearch(search)
+    const { results, isValidQuery } = useBrowserSearch(search)
     const { navigateToBrowser } = useBrowserNavigation()
 
     const onSearchUpdated = useCallback(
@@ -47,7 +47,7 @@ export const SearchScreen = () => {
             fixedHeader={renderHeader}
             fixedBody={
                 <BaseView style={[styles.rootContainer]}>
-                    <SearchResults query={search} error={error} results={results} />
+                    <SearchResults query={search} error={error} results={results} isValidQuery={isValidQuery} />
                 </BaseView>
             }
         />
