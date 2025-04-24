@@ -60,10 +60,10 @@ export const Favourites = React.memo(({ bookmarkedDApps, onActionLabelPress, onD
                 {showBookmarkedDAppsList && (
                     <BaseTouchable action={onActionLabelPress}>
                         <BaseView flexDirection="row">
-                            <BaseText typographyFont="captionMedium" mx={2}>
+                            <BaseText typographyFont="buttonMedium" mx={2}>
                                 {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
                             </BaseText>
-                            <BaseIcon name="icon-chevron-right" size={12} color={theme.colors.text} />
+                            <BaseIcon name="icon-chevron-right" size={16} color={theme.colors.text} />
                         </BaseView>
                     </BaseTouchable>
                 )}
