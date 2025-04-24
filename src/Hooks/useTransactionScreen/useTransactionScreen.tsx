@@ -12,6 +12,7 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
+import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
@@ -40,7 +41,7 @@ export const useTransactionScreen = ({
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [loading, setLoading] = useState(false)
-    const [selectedFeeOption, setSelectedFeeOption] = useState(String(GasPriceCoefficient.REGULAR))
+    const [selectedFeeOption, setSelectedFeeOption] = useState(GasPriceCoefficient.REGULAR)
     const [isEnoughGas, setIsEnoughGas] = useState(true)
     const [txCostTotal, setTxCostTotal] = useState("0")
 
@@ -65,14 +66,7 @@ export const useTransactionScreen = ({
     })
 
     // 3. Priority fees
-    const { gasPriceCoef, priorityFees, gasFeeOptions } = useMemo(
-        () =>
-            GasUtils.getGasByCoefficient({
-                gas,
-                selectedFeeOption,
-            }),
-        [gas, selectedFeeOption],
-    )
+    const { gasPriceCoef } = useTransactionFees({ coefficient: selectedFeeOption, gas })
 
     // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({

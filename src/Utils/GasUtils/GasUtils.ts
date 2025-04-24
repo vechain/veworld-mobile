@@ -4,7 +4,7 @@ import { Transaction } from "thor-devkit"
 import { abis, BASE_GAS_PRICE, GasFeeOption, GasPriceCoefficient, VTHO } from "~Constants"
 import { EstimateGasResult } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
-import BigNutils from "~Utils/BigNumberUtils"
+import BigNutils, { BigNumberUtils } from "~Utils/BigNumberUtils"
 import TransactionUtils from "~Utils/TransactionUtils"
 import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
 
@@ -174,18 +174,18 @@ type Props = {
     clauses: Transaction.Clause[]
     isDelegated: boolean
     vtho: any
-    priorityFees?: GasFeeOption
+    priorityFee?: BigNumberUtils
     userSelectedAmount?: string
 }
 
-export const calculateIsEnoughGas = ({ clauses, isDelegated, vtho, priorityFees }: Props) =>
-    calculateVthoGas(clauses, isDelegated, vtho, priorityFees)
+export const calculateIsEnoughGas = ({ clauses, isDelegated, vtho, priorityFee }: Props) =>
+    calculateVthoGas(clauses, isDelegated, vtho, priorityFee)
 
 const calculateVthoGas = (
     clauses: Transaction.Clause[],
     isDelegated: boolean,
     vtho: any,
-    priorityFees?: GasFeeOption,
+    priorityFee?: BigNumberUtils,
 ) => {
     const vthoTransferClauses = clauses.filter(
         clause =>
@@ -194,7 +194,7 @@ const calculateVthoGas = (
             TransactionUtils.isTokenTransferClause(clause),
     )
 
-    let txCostTotal = BigNutils(isDelegated ? "0" : priorityFees?.gasRaw.toString ?? "0")
+    let txCostTotal = BigNutils(isDelegated ? "0" : priorityFee?.toString ?? "0")
     let isEnoughGas = true
 
     for (const clause of vthoTransferClauses) {
