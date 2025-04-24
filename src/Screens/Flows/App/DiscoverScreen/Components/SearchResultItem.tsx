@@ -102,7 +102,7 @@ export const SearchResultItem = ({ item }: Props) => {
                     <BaseText typographyFont="bodySemiBold" testID="SEARCH_RESULT_ITEM_NAME">
                         {name}
                     </BaseText>
-                    <BaseText typographyFont="caption" numberOfLines={1} testID="SEARCH_RESULT_ITEM_DESCRIPTION">
+                    <BaseText typographyFont="captionMedium" numberOfLines={1} testID="SEARCH_RESULT_ITEM_DESCRIPTION">
                         {description}
                     </BaseText>
                 </BaseView>
