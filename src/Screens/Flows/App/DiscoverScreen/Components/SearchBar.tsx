@@ -1,15 +1,16 @@
-import React, { useCallback, useMemo, useRef } from "react"
+import React, { useCallback, useMemo, useRef, useState } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
 import { TextInput } from "react-native-gesture-handler"
 import Animated from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseTextInput, BaseView } from "~Components"
+import { Spinner } from "~Components/Reusable/Spinner"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 
 type Props = {
     onTextChange: (text: string) => void
-    onSubmit?: (text: string) => void
+    onSubmit?: (text: string) => void | Promise<void>
     filteredSearch?: string
 }
 
@@ -17,10 +18,16 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const inputRef = useRef<TextInput | null>(null)
+    const [loading, setLoading] = useState(false)
 
     const handleOnSubmitEditing = useCallback(
-        (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-            onSubmit?.(e.nativeEvent.text)
+        async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
+            try {
+                setLoading(true)
+                await onSubmit?.(e.nativeEvent.text)
+            } finally {
+                setLoading(false)
+            }
         },
         [onSubmit],
     )
@@ -44,6 +51,11 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
         )
     }, [filteredSearch, onClear, theme.colors.text])
 
+    const renderLeftIcon = useMemo(() => {
+        if (loading) return <Spinner color={theme.colors.searchIcon.active} />
+        return <BaseIcon name="icon-search" size={16} color={theme.colors.searchIcon.active} />
+    }, [loading, theme.colors.searchIcon.active])
+
     return (
         <BaseView w={100} flexDirection="row" px={24} py={12}>
             <BaseView flex={1}>
@@ -54,8 +66,9 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
                         onSubmitEditing={handleOnSubmitEditing}
                         value={filteredSearch}
                         style={styles.searchBar}
-                        leftIcon="icon-search"
-                        leftIconStyle={styles.searchBarIcon}
+                        leftIcon={renderLeftIcon}
+                        leftIconStyle={styles.clearIcon}
+                        leftIconAdornment={false}
                         leftIconSize={16}
                         rightIcon={renderRightIcon}
                         rightIconSize={16}

@@ -72,7 +72,7 @@ export const useAppHubDapps = (filter: DAppType) => {
     )
 
     return {
-        dependencyLoading: false,
+        dependencyLoading: mappedDapps.length === 0,
         fetchWithPage,
     }
 }
