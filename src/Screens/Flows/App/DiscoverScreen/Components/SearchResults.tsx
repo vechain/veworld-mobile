@@ -10,7 +10,6 @@ import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
 import { SearchResultItem } from "./SearchResultItem"
 
 type Props = {
-    query: string
     error?: SearchError
     results: HistoryItem[]
     isValidQuery: boolean
