@@ -916,7 +916,7 @@ type RootTranslation = {
 	 */
 	BROWSER_COPY_LINK: string
 	/**
-	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y
+	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
 	 */
 	BROWSER_COPY_LINK_SUCCESS: string
 	/**
@@ -1994,7 +1994,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_TAB_FEATURED: string
 	/**
-	 * R​e​c​e​n​t​l​y​ ​a​d​d​e​d
+	 * R​e​c​e​n​t​l​y​ ​A​d​d​e​d
 	 */
 	DISCOVER_TAB_RECENTLY_ADDED: string
 	/**
@@ -3464,7 +3464,7 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​o​n​e​ ​o​f​ ​y​o​u​r​ ​t​o​k​e​n​s​ ​t​o​ ​s​e​n​d​:
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
@@ -5067,7 +5067,7 @@ Thanks for your patience!
 	 */
 	BROWSER_COPY_LINK: () => LocalizedString
 	/**
-	 * Link successfully
+	 * Link successfully copied to the clipboard
 	 */
 	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
 	/**
@@ -6135,7 +6135,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_TAB_FEATURED: () => LocalizedString
 	/**
-	 * Recently added
+	 * Recently Added
 	 */
 	DISCOVER_TAB_RECENTLY_ADDED: () => LocalizedString
 	/**
@@ -7580,7 +7580,7 @@ Thanks for your patience!
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select one of your tokens to send:
+	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
 	/**
