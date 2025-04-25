@@ -97,7 +97,7 @@ describe("DiscoverScreen", () => {
             wrapper: createWrapper("ios"),
         })
 
-        const newDapps = await screen.findByText("New dApps")
+        const newDapps = await screen.findByText("Recently Added")
         expect(newDapps).toBeOnTheScreen()
     })
 
