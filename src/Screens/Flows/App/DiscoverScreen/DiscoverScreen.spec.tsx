@@ -115,7 +115,7 @@ describe("DiscoverScreen", () => {
             wrapper: createWrapper("ios"),
         })
 
-        const ecosystemDapps = await screen.findByText("Ecosystem dApps")
+        const ecosystemDapps = await screen.findByText("Ecosystem")
         expect(ecosystemDapps).toBeOnTheScreen()
     })
 })
