@@ -916,7 +916,7 @@ type RootTranslation = {
 	 */
 	BROWSER_COPY_LINK: string
 	/**
-	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
+	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y
 	 */
 	BROWSER_COPY_LINK_SUCCESS: string
 	/**
@@ -1926,7 +1926,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_DAPPS_TITLE: string
 	/**
-	 * E​c​o​s​y​s​t​e​m​ ​d​A​p​p​s
+	 * E​c​o​s​y​s​t​e​m
 	 */
 	DISCOVER_ECOSYSTEM: string
 	/**
@@ -1986,7 +1986,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s​ ​d​A​p​p​s
+	 * F​a​v​o​u​r​i​t​e​s
 	 */
 	DISCOVER_TAB_FAVOURITES: string
 	/**
@@ -1994,9 +1994,9 @@ type RootTranslation = {
 	 */
 	DISCOVER_TAB_FEATURED: string
 	/**
-	 * N​e​w​ ​d​A​p​p​s
+	 * R​e​c​e​n​t​l​y​ ​a​d​d​e​d
 	 */
-	DISCOVER_TAB_NEW_DAPPS: string
+	DISCOVER_TAB_RECENTLY_ADDED: string
 	/**
 	 * T​r​e​n​d​i​n​g​ ​&​ ​P​o​p​u​l​a​r
 	 */
@@ -3464,7 +3464,7 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
+	 * S​e​l​e​c​t​ ​o​n​e​ ​o​f​ ​y​o​u​r​ ​t​o​k​e​n​s​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
@@ -5067,7 +5067,7 @@ Thanks for your patience!
 	 */
 	BROWSER_COPY_LINK: () => LocalizedString
 	/**
-	 * Link successfully copied to the clipboard
+	 * Link successfully
 	 */
 	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
 	/**
@@ -6067,7 +6067,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_DAPPS_TITLE: () => LocalizedString
 	/**
-	 * Ecosystem dApps
+	 * Ecosystem
 	 */
 	DISCOVER_ECOSYSTEM: () => LocalizedString
 	/**
@@ -6127,7 +6127,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Favourites dApps
+	 * Favourites
 	 */
 	DISCOVER_TAB_FAVOURITES: () => LocalizedString
 	/**
@@ -6135,9 +6135,9 @@ Thanks for your patience!
 	 */
 	DISCOVER_TAB_FEATURED: () => LocalizedString
 	/**
-	 * New dApps
+	 * Recently added
 	 */
-	DISCOVER_TAB_NEW_DAPPS: () => LocalizedString
+	DISCOVER_TAB_RECENTLY_ADDED: () => LocalizedString
 	/**
 	 * Trending & Popular
 	 */
@@ -7580,7 +7580,7 @@ Thanks for your patience!
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select the token asset you wish to send:
+	 * Select one of your tokens to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
 	/**
