@@ -105,7 +105,6 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
 
     const {
         selectedDelegationOption,
-        loadingGas,
         onSubmit,
         isPasswordPromptOpen,
         handleClosePasswordModal,

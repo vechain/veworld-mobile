@@ -1,5 +1,5 @@
 import { ethers } from "ethers"
-import { default as React, useEffect, useMemo } from "react"
+import React, { useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { useCountdown } from "usehooks-ts"
 import { useExchangeRate } from "~Api/Coingecko"
@@ -25,7 +25,7 @@ export const GasFeeSpeed = ({ options, setSelectedFeeOption, selectedFeeOption, 
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
 
-    const { formatValue } = useFormatFiat()
+    const { formatValue, formatFiat } = useFormatFiat()
 
     const { onClose, onOpen, ref } = useBottomSheetModal()
 
@@ -47,6 +47,11 @@ export const GasFeeSpeed = ({ options, setSelectedFeeOption, selectedFeeOption, 
     const estimatedFeeFiat = useMemo(() => {
         return BigNutils().toCurrencyConversion(estimatedFeeVtho.toString() || "0", exchangeRate ?? 1)
     }, [exchangeRate, estimatedFeeVtho])
+
+    const estimatedFormattedFiat = useMemo(() => {
+        if (estimatedFeeFiat.isLeesThan_0_01) return formatFiat({ amount: 0.01 })
+        return formatFiat({ amount: parseInt(estimatedFeeFiat.preciseValue, 10) })
+    }, [estimatedFeeFiat.isLeesThan_0_01, estimatedFeeFiat.preciseValue, formatFiat])
 
     const [secondsRemaining, { startCountdown }] = useCountdown({ intervalMs: 1000, countStart: 10 })
 
@@ -118,7 +123,9 @@ export const GasFeeSpeed = ({ options, setSelectedFeeOption, selectedFeeOption, 
                                 {formatValue(estimatedFeeVtho)}
                             </BaseText>
                             <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                                {estimatedFeeFiat.value}
+                                {estimatedFeeFiat.isLeesThan_0_01
+                                    ? `< ${estimatedFormattedFiat}`
+                                    : estimatedFormattedFiat}
                             </BaseText>
                         </BaseView>
                         <BaseText typographyFont="subSubTitleBold" color={theme.colors.textLight}>

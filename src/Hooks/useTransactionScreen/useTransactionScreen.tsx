@@ -189,8 +189,8 @@ export const useTransactionScreen = ({
     ])
 
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty,
-        [loading, loadingGas, isBiometricsEmpty],
+        () => loading || loadingGas || isBiometricsEmpty || transactionFeesResponse.isLoading,
+        [loading, loadingGas, isBiometricsEmpty, transactionFeesResponse.isLoading],
     )
 
     /**
@@ -210,8 +210,8 @@ export const useTransactionScreen = ({
     }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, transactionFeesResponse.maxFee])
 
     const isDisabledButtonState = useMemo(
-        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current,
-        [isEnoughGas, isDelegated, loading, isSubmitting],
+        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current || transactionFeesResponse.isLoading,
+        [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading],
     )
 
     return {

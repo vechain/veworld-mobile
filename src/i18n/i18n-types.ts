@@ -3361,6 +3361,18 @@ type RootTranslation = {
 	 */
 	SEND_FEE_SLOW: string
 	/**
+	 * R​E​G​U​L​A​R
+	 */
+	SEND_FEE_REGULAR: string
+	/**
+	 * M​E​D​I​U​M
+	 */
+	SEND_FEE_MEDIUM: string
+	/**
+	 * H​I​G​H
+	 */
+	SEND_FEE_HIGH: string
+	/**
 	 * F​r​o​m
 	 */
 	SEND_FROM: string
@@ -7509,6 +7521,18 @@ Thanks for your patience!
 	 * Slow
 	 */
 	SEND_FEE_SLOW: () => LocalizedString
+	/**
+	 * REGULAR
+	 */
+	SEND_FEE_REGULAR: () => LocalizedString
+	/**
+	 * MEDIUM
+	 */
+	SEND_FEE_MEDIUM: () => LocalizedString
+	/**
+	 * HIGH
+	 */
+	SEND_FEE_HIGH: () => LocalizedString
 	/**
 	 * From
 	 */
