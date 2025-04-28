@@ -34,7 +34,7 @@ export const NewDapps = () => {
     return (
         <BaseView>
             <BaseView flexDirection="row" justifyContent="space-between" px={16}>
-                <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_TAB_NEW_DAPPS()}</BaseText>
+                <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_TAB_RECENTLY_ADDED()}</BaseText>
             </BaseView>
             <BaseSpacer height={16} />
 
