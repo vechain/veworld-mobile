@@ -1,26 +1,61 @@
 import { useMemo, useState } from "react"
 import { GasPriceCoefficient } from "~Constants"
 import { EstimateGasResult } from "~Model"
-import { GasUtils } from "~Utils"
+import { BigNumberUtils, GasUtils } from "~Utils"
 
 type Props = {
     coefficient: GasPriceCoefficient
     gas: EstimateGasResult | undefined
 }
 
+export type TransactionFeesResult = Record<
+    GasPriceCoefficient,
+    {
+        estimatedFee: BigNumberUtils
+        maxFee: BigNumberUtils
+        priorityFee: BigNumberUtils
+    }
+>
+
 export const useTransactionFees = (props: Props) => {
     const [isLoading, _] = useState(false)
+
+    const gasResult = useMemo(
+        () => GasUtils.getGasByCoefficient({ gas: props.gas, selectedFeeOption: props.coefficient.toString() }),
+        [props.coefficient, props.gas],
+    )
+
+    const options = useMemo(() => {
+        return {
+            [GasPriceCoefficient.REGULAR]: {
+                estimatedFee: gasResult.gasFeeOptions[GasPriceCoefficient.REGULAR].gasRaw,
+                maxFee: gasResult.gasFeeOptions[GasPriceCoefficient.REGULAR].gasRaw,
+                priorityFee: gasResult.priorityFees.gasRaw,
+            },
+            [GasPriceCoefficient.MEDIUM]: {
+                estimatedFee: gasResult.gasFeeOptions[GasPriceCoefficient.MEDIUM].gasRaw,
+                maxFee: gasResult.gasFeeOptions[GasPriceCoefficient.MEDIUM].gasRaw,
+                priorityFee: gasResult.priorityFees.gasRaw,
+            },
+            [GasPriceCoefficient.HIGH]: {
+                estimatedFee: gasResult.gasFeeOptions[GasPriceCoefficient.HIGH].gasRaw,
+                maxFee: gasResult.gasFeeOptions[GasPriceCoefficient.HIGH].gasRaw,
+                priorityFee: gasResult.priorityFees.gasRaw,
+            },
+        }
+    }, [gasResult.gasFeeOptions, gasResult.priorityFees.gasRaw])
+
     const result = useMemo(() => {
         const r = GasUtils.getGasByCoefficient({ gas: props.gas, selectedFeeOption: props.coefficient.toString() })
         return {
             estimatedFee: r.gasFeeOptions[props.coefficient],
-            maxFee: r.gasFeeOptions[props.coefficient],
+            maxFee: r.gasFeeOptions[props.coefficient].gasRaw,
             gasPriceCoef: r.gasPriceCoef,
             priorityFee: r.priorityFees.gasRaw,
         }
     }, [props.coefficient, props.gas])
 
-    const memoized = useMemo(() => ({ ...result, isLoading }), [isLoading, result])
+    const memoized = useMemo(() => ({ ...result, options, isLoading }), [isLoading, result, options])
 
     return memoized
 }

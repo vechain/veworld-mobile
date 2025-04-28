@@ -66,7 +66,7 @@ export const useTransactionScreen = ({
     })
 
     // 3. Priority fees
-    const { gasPriceCoef } = useTransactionFees({ coefficient: selectedFeeOption, gas })
+    const transactionFeesResponse = useTransactionFees({ coefficient: selectedFeeOption, gas })
 
     // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
@@ -74,7 +74,7 @@ export const useTransactionScreen = ({
         gas,
         isDelegated,
         dependsOn: dappRequest?.options?.dependsOn,
-        gasPriceCoef,
+        gasPriceCoef: transactionFeesResponse.gasPriceCoef,
     })
 
     // 5. Sign transaction
@@ -202,12 +202,12 @@ export const useTransactionScreen = ({
             clauses,
             isDelegated,
             vtho,
-            priorityFees,
+            txFee: transactionFeesResponse.maxFee,
         })
 
         setIsEnoughGas(isGas)
         setTxCostTotal(_txCostTotal.toString)
-    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, priorityFees])
+    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, transactionFeesResponse.maxFee])
 
     const isDisabledButtonState = useMemo(
         () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current,
@@ -224,7 +224,6 @@ export const useTransactionScreen = ({
         onPasswordSuccess,
         setSelectedFeeOption,
         selectedFeeOption,
-        gasFeeOptions,
         resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
@@ -235,6 +234,9 @@ export const useTransactionScreen = ({
         selectedDelegationUrl,
         vtho,
         isDisabledButtonState,
-        priorityFees,
+        priorityFee: transactionFeesResponse.priorityFee,
+        estimatedFee: transactionFeesResponse.estimatedFee,
+        maxFee: transactionFeesResponse.maxFee,
+        gasOptions: transactionFeesResponse.options,
     }
 }

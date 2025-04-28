@@ -168,6 +168,20 @@ export type Colors = {
         backgroudColor: string
         disabledBackgroudColor: string
     }
+    cardButton: {
+        border: string
+        background: string
+        text: string
+    }
+    editSpeedBs: {
+        title: string
+        background: string
+        subtitle: string
+        result: {
+            background: string
+            border: string
+        }
+    }
 }
 
 export enum COLORS {
@@ -432,6 +446,20 @@ const light: Colors = {
         backgroudColor: COLORS.WHITE,
         disabledBackgroudColor: COLORS.GREY_100,
     },
+    cardButton: {
+        background: COLORS.WHITE,
+        border: COLORS.GREY_200,
+        text: COLORS.PRIMARY_800,
+    },
+    editSpeedBs: {
+        background: COLORS.GREY_50,
+        title: COLORS.PRIMARY_900,
+        subtitle: COLORS.GREY_600,
+        result: {
+            background: COLORS.GREY_100,
+            border: COLORS.GREY_200,
+        },
+    },
 }
 
 const dark: Colors = {
@@ -603,6 +631,22 @@ const dark: Colors = {
     emptyStateIcon: {
         background: COLORS.PURPLE,
         foreground: COLORS.GREY_200,
+    },
+    //TODO: Fix these colors
+    cardButton: {
+        background: COLORS.WHITE,
+        border: COLORS.GREY_200,
+        text: COLORS.PRIMARY_800,
+    },
+    //TODO: Fix these colors
+    editSpeedBs: {
+        background: COLORS.GREY_50,
+        title: COLORS.PRIMARY_900,
+        subtitle: COLORS.GREY_600,
+        result: {
+            background: COLORS.GREY_100,
+            border: COLORS.GREY_200,
+        },
     },
 }
 
