@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.1.5 (2025-04-28)</small>
+
+* build: init ([947c188](https://github.com/vechain/veworld-mobile/commit/947c188))
+* Feature flag debug feature (#2896) ([8eff59f](https://github.com/vechain/veworld-mobile/commit/8eff59f)), closes [#2896](https://github.com/vechain/veworld-mobile/issues/2896)
+
 ## <small>2.1.4 (2025-04-14)</small>
 
 * build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))
