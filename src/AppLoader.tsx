@@ -96,13 +96,11 @@ export const AppLoader = ({ children }: Props) => {
             {children}
             <Animated.View
                 ref={loaderRef}
-                testID="app-loader-overlay"
                 style={[styles.overlay, animatedStyle]}
                 pointerEvents={isAppLoading ? "auto" : "none"}>
                 {RenderBackdrop}
                 <LottieView
                     // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
-                    testID="loader-lottie-animation"
                     source={AppLoaderAnimation}
                     autoPlay={isAppLoading} // Prevent the animation from playing when it's not visible
                     loop
