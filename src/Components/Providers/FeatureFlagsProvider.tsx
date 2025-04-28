@@ -32,6 +32,9 @@ const initialState: FeatureFlags = {
         bannersAutoplay: true,
         showStellaPayBanner: false,
     },
+    debugFeature: {
+        loadingScreen: true,
+    },
 }
 
 const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)
