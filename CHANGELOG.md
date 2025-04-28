@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.1.5 (2025-04-28)</small>
+
+* build: init ([ec5b3cf](https://github.com/vechain/veworld-mobile/commit/ec5b3cf))
+* chore: add debug feature flag (#2894) ([d2cd2f5](https://github.com/vechain/veworld-mobile/commit/d2cd2f5)), closes [#2894](https://github.com/vechain/veworld-mobile/issues/2894)
+
 ## <small>2.1.4 (2025-04-14)</small>
 
 * build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))
