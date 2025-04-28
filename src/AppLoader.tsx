@@ -2,12 +2,13 @@ import React, { useEffect, useMemo } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
 import { AppLoader as AppLoaderAnimation } from "~Assets"
-import { BaseView, BlurView } from "~Components"
-import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
+import { BaseView, BlurView, useFeatureFlags } from "~Components"
+import { SCREEN_HEIGHT, SCREEN_WIDTH, ERROR_EVENTS } from "~Constants"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { useAppSelector, selectIsAppLoading } from "~Storage/Redux"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { useTheme } from "~Hooks"
+import { error } from "~Utils/Logger/Logger"
 
 type Props = {
     children: React.ReactNode
@@ -50,12 +51,19 @@ type Props = {
 export const AppLoader = ({ children }: Props) => {
     const isAppLoading = useAppSelector(selectIsAppLoading)
     const theme = useTheme()
+    const featureFlags = useFeatureFlags()
 
     const opacity = useSharedValue(isAppLoading ? 1 : 0)
 
     useEffect(() => {
         opacity.value = withTiming(isAppLoading ? 1 : 0)
-    }, [isAppLoading, opacity])
+        if (featureFlags.debugFeature.loadingScreen) {
+            error(
+                ERROR_EVENTS.APP,
+                `AppLoader ${isAppLoading ? "SHOWN" : "HIDDEN"} - Stack trace:\n${new Error().stack}`,
+            )
+        }
+    }, [featureFlags.debugFeature.loadingScreen, isAppLoading, opacity])
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
