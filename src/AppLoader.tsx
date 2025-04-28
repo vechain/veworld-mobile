@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useRef } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
 import { AppLoader as AppLoaderAnimation } from "~Assets"
@@ -52,6 +52,7 @@ export const AppLoader = ({ children }: Props) => {
     const isAppLoading = useAppSelector(selectIsAppLoading)
     const theme = useTheme()
     const featureFlags = useFeatureFlags()
+    const loaderRef = useRef<Animated.View>(null)
 
     const opacity = useSharedValue(isAppLoading ? 1 : 0)
 
@@ -60,7 +61,9 @@ export const AppLoader = ({ children }: Props) => {
         if (featureFlags.debugFeature.loadingScreen) {
             error(
                 ERROR_EVENTS.APP,
-                `AppLoader ${isAppLoading ? "SHOWN" : "HIDDEN"} - Stack trace:\n${new Error().stack}`,
+                `AppLoader ${isAppLoading ? "SHOWN" : "HIDDEN"} - Stack trace:\n${new Error().stack}\nLoader mounted: ${
+                    loaderRef.current ? "yes" : "no"
+                }`,
             )
         }
     }, [featureFlags.debugFeature.loadingScreen, isAppLoading, opacity])
@@ -91,7 +94,10 @@ export const AppLoader = ({ children }: Props) => {
     return (
         <View style={StyleSheet.absoluteFill}>
             {children}
-            <Animated.View style={[styles.overlay, animatedStyle]} pointerEvents={isAppLoading ? "auto" : "none"}>
+            <Animated.View
+                ref={loaderRef}
+                style={[styles.overlay, animatedStyle]}
+                pointerEvents={isAppLoading ? "auto" : "none"}>
                 {RenderBackdrop}
                 <LottieView
                     // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
