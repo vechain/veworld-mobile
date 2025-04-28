@@ -1926,7 +1926,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_DAPPS_TITLE: string
 	/**
-	 * E​c​o​s​y​s​t​e​m​ ​d​A​p​p​s
+	 * E​c​o​s​y​s​t​e​m
 	 */
 	DISCOVER_ECOSYSTEM: string
 	/**
@@ -1986,7 +1986,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s​ ​d​A​p​p​s
+	 * F​a​v​o​u​r​i​t​e​s
 	 */
 	DISCOVER_TAB_FAVOURITES: string
 	/**
@@ -1994,9 +1994,9 @@ type RootTranslation = {
 	 */
 	DISCOVER_TAB_FEATURED: string
 	/**
-	 * N​e​w​ ​d​A​p​p​s
+	 * R​e​c​e​n​t​l​y​ ​A​d​d​e​d
 	 */
-	DISCOVER_TAB_NEW_DAPPS: string
+	DISCOVER_TAB_RECENTLY_ADDED: string
 	/**
 	 * T​r​e​n​d​i​n​g​ ​&​ ​P​o​p​u​l​a​r
 	 */
@@ -6067,7 +6067,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_DAPPS_TITLE: () => LocalizedString
 	/**
-	 * Ecosystem dApps
+	 * Ecosystem
 	 */
 	DISCOVER_ECOSYSTEM: () => LocalizedString
 	/**
@@ -6127,7 +6127,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Favourites dApps
+	 * Favourites
 	 */
 	DISCOVER_TAB_FAVOURITES: () => LocalizedString
 	/**
@@ -6135,9 +6135,9 @@ Thanks for your patience!
 	 */
 	DISCOVER_TAB_FEATURED: () => LocalizedString
 	/**
-	 * New dApps
+	 * Recently Added
 	 */
-	DISCOVER_TAB_NEW_DAPPS: () => LocalizedString
+	DISCOVER_TAB_RECENTLY_ADDED: () => LocalizedString
 	/**
 	 * Trending & Popular
 	 */
