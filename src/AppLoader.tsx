@@ -61,8 +61,8 @@ export const AppLoader = ({ children }: Props) => {
         if (featureFlags.debugFeature.loadingScreen) {
             error(
                 ERROR_EVENTS.APP,
-                `AppLoader ${isAppLoading ? "SHOWN" : "HIDDEN"} - Stack trace:\n${new Error().stack}\nLoader mounted: ${
-                    loaderRef.current ? "yes" : "no"
+                `AppLoader: ${isAppLoading ? "Visible" : "Hidden"} \nLoader mounted: ${
+                    loaderRef.current ? "Yes" : "No"
                 }`,
             )
         }
