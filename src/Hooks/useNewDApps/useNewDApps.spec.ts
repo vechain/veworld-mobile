@@ -179,6 +179,10 @@ const initialStateMock = {
         custom: [],
         hasOpenedDiscovery: true,
         connectedApps: [],
+        tabsManager: {
+            currentTabId: null,
+            tabs: [],
+        },
     },
 }
 
