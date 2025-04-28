@@ -61,8 +61,8 @@ export const AppLoader = ({ children }: Props) => {
         if (featureFlags.debugFeature.loadingScreen) {
             error(
                 ERROR_EVENTS.APP,
-                `AppLoader ${isAppLoading ? "SHOWN" : "HIDDEN"} - Stack trace:\n${new Error().stack}\nLoader mounted: ${
-                    loaderRef.current ? "yes" : "no"
+                `AppLoader: ${isAppLoading ? "Visible" : "Hidden"} \nLoader mounted: ${
+                    loaderRef.current ? "Yes" : "No"
                 }`,
             )
         }
@@ -96,11 +96,13 @@ export const AppLoader = ({ children }: Props) => {
             {children}
             <Animated.View
                 ref={loaderRef}
+                testID="app-loader-overlay"
                 style={[styles.overlay, animatedStyle]}
                 pointerEvents={isAppLoading ? "auto" : "none"}>
                 {RenderBackdrop}
                 <LottieView
                     // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
+                    testID="loader-lottie-animation"
                     source={AppLoaderAnimation}
                     autoPlay={isAppLoading} // Prevent the animation from playing when it's not visible
                     loop
