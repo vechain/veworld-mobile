@@ -33,12 +33,4 @@ allprojects {
     }
 }
 
-subprojects {
-    afterEvaluate { project ->
-        if (project.name == 'react-native-quick-crypto') {
-            project.android.defaultConfig.minSdkVersion = 23
-        }
-    }
-}
-
 apply plugin: "com.facebook.react.rootproject"
