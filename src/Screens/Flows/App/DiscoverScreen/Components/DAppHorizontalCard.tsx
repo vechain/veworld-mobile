@@ -41,7 +41,7 @@ export const DAppHorizontalCard = ({ dapp, onOpenDApp, onPress }: Props) => {
                 {/* Title & Desc */}
                 <BaseView flex={1} justifyContent="center">
                     <BaseText typographyFont="bodySemiBold">{dapp.name}</BaseText>
-                    <BaseText typographyFont="caption" numberOfLines={1}>
+                    <BaseText typographyFont="captionMedium" numberOfLines={1}>
                         {dapp.desc}
                     </BaseText>
                 </BaseView>

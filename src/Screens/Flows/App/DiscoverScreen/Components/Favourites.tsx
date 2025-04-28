@@ -54,16 +54,16 @@ export const Favourites = React.memo(({ bookmarkedDApps, onActionLabelPress, onD
 
     return (
         <BaseView>
-            <BaseView flexDirection="row" justifyContent="space-between" px={16}>
-                <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_TAB_FAVOURITES()}</BaseText>
+            <BaseView flexDirection="row" justifyContent="space-between" px={16} alignItems="center">
+                <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_TAB_FAVOURITES()}</BaseText>
 
                 {showBookmarkedDAppsList && (
                     <BaseTouchable action={onActionLabelPress}>
                         <BaseView flexDirection="row">
-                            <BaseText typographyFont="captionMedium" mx={2}>
+                            <BaseText typographyFont="buttonMedium" mx={2}>
                                 {LL.DISCOVER_SEE_ALL_BOOKMARKS()}
                             </BaseText>
-                            <BaseIcon name="icon-chevron-right" size={12} color={theme.colors.text} />
+                            <BaseIcon name="icon-chevron-right" size={16} color={theme.colors.text} />
                         </BaseView>
                     </BaseTouchable>
                 )}

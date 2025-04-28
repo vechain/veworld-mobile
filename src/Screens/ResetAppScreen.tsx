@@ -1,6 +1,6 @@
 import React, { useState } from "react"
-import { useAppReset, useTheme } from "~Hooks"
 import { BaseButton, BaseText, BaseView, CheckBoxWithText, Layout } from "~Components"
+import { useAppReset, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 
 export const ResetAppScreen = () => {
@@ -51,7 +51,6 @@ export const ResetAppScreen = () => {
                         px={20}
                         title={LL.BTN_RESET_APP().toUpperCase()}
                         disabled={!isChecked}
-                        bgColor={theme.colors.primary}
                     />
                 </BaseView>
             }

@@ -12,6 +12,7 @@ import { useDAppActions } from "../Hooks"
 
 type Props = {
     item: HistoryItem
+    isValidQuery: boolean
 }
 
 const IMAGE_SIZE = 48
@@ -23,7 +24,7 @@ const generateFaviconUrl = (url: string) => {
     return generatedUrl.href
 }
 
-export const SearchResultItem = ({ item }: Props) => {
+export const SearchResultItem = ({ item, isValidQuery }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
     const { removeVisitedUrl } = useVisitedUrls()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -102,15 +103,17 @@ export const SearchResultItem = ({ item }: Props) => {
                     <BaseText typographyFont="bodySemiBold" testID="SEARCH_RESULT_ITEM_NAME">
                         {name}
                     </BaseText>
-                    <BaseText typographyFont="caption" numberOfLines={1} testID="SEARCH_RESULT_ITEM_DESCRIPTION">
+                    <BaseText typographyFont="captionMedium" numberOfLines={1} testID="SEARCH_RESULT_ITEM_DESCRIPTION">
                         {description}
                     </BaseText>
                 </BaseView>
             </TouchableOpacity>
 
             {/* Action Btn */}
-            <BaseTouchable onPress={handleRemoveClick} testID="SEARCH_RESULT_ITEM_REMOVE">
-                <BaseIcon name="icon-x" size={20} color={theme.colors.text} />
+            <BaseTouchable
+                onPress={isValidQuery ? handleNavigate : handleRemoveClick}
+                testID="SEARCH_RESULT_ITEM_REMOVE">
+                <BaseIcon name={isValidQuery ? "icon-arrow-link" : "icon-x"} size={20} color={theme.colors.text} />
             </BaseTouchable>
         </BaseView>
     )
