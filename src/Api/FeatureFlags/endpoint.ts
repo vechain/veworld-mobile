@@ -30,9 +30,6 @@ export type FeatureFlags = {
         bannersAutoplay: boolean
         showStellaPayBanner: boolean
     }
-    debugFeature: {
-        loadingScreen: boolean
-    }
 }
 
 export const getFeatureFlags = async () => {
