@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
 import { AppLoader as AppLoaderAnimation } from "~Assets"
@@ -50,8 +50,6 @@ type Props = {
 export const AppLoader = ({ children }: Props) => {
     const isAppLoading = useAppSelector(selectIsAppLoading)
     const theme = useTheme()
-    const loaderRef = useRef<Animated.View>(null)
-    const lottieRef = useRef<LottieView>(null)
     const [shouldRenderLoader, setShouldRenderLoader] = useState(false)
 
     const opacity = useSharedValue(0)
@@ -109,13 +107,9 @@ export const AppLoader = ({ children }: Props) => {
         <View style={StyleSheet.absoluteFill}>
             {children}
             {shouldRenderLoader && (
-                <Animated.View
-                    ref={loaderRef}
-                    style={[styles.overlay, animatedStyle]}
-                    pointerEvents={isAppLoading ? "auto" : "none"}>
+                <Animated.View style={[styles.overlay, animatedStyle]} pointerEvents={isAppLoading ? "auto" : "none"}>
                     {RenderBackdrop}
                     <LottieView
-                        ref={lottieRef}
                         source={AppLoaderAnimation}
                         autoPlay={isAppLoading}
                         loop={isAppLoading}
