@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseText, BaseTouchable } from "~Components"
-import { DiscoveryDApp } from "~Constants"
+import { DiscoveryDApp, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { DAppUtils } from "~Utils"
 
@@ -15,8 +15,8 @@ export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
 
-    const cardDimension = 96
-    const imageDimension = 96
+    const cardDimension = SCREEN_WIDTH * 0.15
+    const imageDimension = SCREEN_WIDTH * 0.15
     const iconUri = dapp.id
         ? DAppUtils.getAppHubIconUrl(dapp.id)
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
