@@ -2,7 +2,7 @@ import type { FormattersInitializer } from 'typesafe-i18n'
 import type { Locales, Formatters } from './i18n-types'
 import moment from 'moment'
 
-moment.relativeTimeThreshold('ss', 0)
+moment.relativeTimeThreshold('ss', -1)
 
 export const initFormatters: FormattersInitializer<Locales, Formatters> = (locale: Locales) => {
 
