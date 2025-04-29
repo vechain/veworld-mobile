@@ -12,9 +12,10 @@ export const useBlinkStyles = ({ enabled, duration = 1000 }: Args) => {
             opacity: withRepeat(
                 withSequence(
                     withTiming(1, { duration: Math.ceil(duration / 2) }),
-                    withTiming(0, { duration: Math.ceil(duration / 2) }),
+                    withTiming(0.25, { duration: Math.ceil(duration / 2) }),
                 ),
                 -1,
+                true,
             ),
         }
     }, [enabled])
