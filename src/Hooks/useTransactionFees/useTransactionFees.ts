@@ -1,3 +1,4 @@
+import moment from "moment"
 import { useMemo, useState } from "react"
 import { GasPriceCoefficient } from "~Constants"
 import { EstimateGasResult } from "~Model"
@@ -55,7 +56,10 @@ export const useTransactionFees = (props: Props) => {
         }
     }, [props.coefficient, props.gas])
 
-    const memoized = useMemo(() => ({ ...result, options, isLoading }), [isLoading, result, options])
+    const memoized = useMemo(
+        () => ({ ...result, options, isLoading, dataUpdatedAt: moment().valueOf() }),
+        [isLoading, result, options],
+    )
 
     return memoized
 }

@@ -118,6 +118,7 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
         selectedDelegationUrl,
         isDisabledButtonState,
         gasOptions,
+        gasUpdatedAt,
     } = useTransactionScreen({
         clauses: transactionClauses,
         onTransactionSuccess,
@@ -169,6 +170,7 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                     </BaseView>
 
                     <GasFeeSpeed
+                        gasUpdatedAt={gasUpdatedAt}
                         options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
                         setSelectedFeeOption={setSelectedFeeOption}

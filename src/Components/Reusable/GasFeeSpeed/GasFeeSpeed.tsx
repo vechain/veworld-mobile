@@ -1,11 +1,13 @@
 import { ethers } from "ethers"
-import React, { useEffect, useMemo } from "react"
+import moment from "moment"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import { useCountdown } from "usehooks-ts"
+import Animated from "react-native-reanimated"
+import { useInterval } from "usehooks-ts"
 import { useExchangeRate } from "~Api/Coingecko"
 import { BaseButton, BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { ColorThemeType, GasPriceCoefficient, getCoinGeckoIdBySymbol, VTHO } from "~Constants"
-import { useBottomSheetModal, useFormatFiat, useThemedStyles } from "~Hooks"
+import { useBlinkStyles, useBottomSheetModal, useFormatFiat, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
@@ -19,9 +21,16 @@ type Props = {
     setSelectedFeeOption: (value: GasPriceCoefficient) => void
     selectedFeeOption: GasPriceCoefficient
     onRefreshFee: () => void
+    gasUpdatedAt: number
 }
 
-export const GasFeeSpeed = ({ options, setSelectedFeeOption, selectedFeeOption, onRefreshFee }: Props) => {
+export const GasFeeSpeed = ({
+    options,
+    setSelectedFeeOption,
+    selectedFeeOption,
+    onRefreshFee,
+    gasUpdatedAt,
+}: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
 
@@ -30,6 +39,8 @@ export const GasFeeSpeed = ({ options, setSelectedFeeOption, selectedFeeOption, 
     const { onClose, onOpen, ref } = useBottomSheetModal()
 
     const currency = useAppSelector(selectCurrency)
+
+    const [secondsRemaining, setSecondsRemaining] = useState(10)
 
     const { data: exchangeRate } = useExchangeRate({
         id: getCoinGeckoIdBySymbol[VTHO.symbol],
@@ -53,15 +64,17 @@ export const GasFeeSpeed = ({ options, setSelectedFeeOption, selectedFeeOption, 
         return formatFiat({ amount: parseInt(estimatedFeeFiat.preciseValue, 10) })
     }, [estimatedFeeFiat.isLeesThan_0_01, estimatedFeeFiat.preciseValue, formatFiat])
 
-    const [secondsRemaining, { startCountdown }] = useCountdown({ intervalMs: 1000, countStart: 10 })
+    const intervalFn = useCallback(() => {
+        setSecondsRemaining(Math.floor(moment(gasUpdatedAt).add(10, "seconds").diff(moment(), "seconds")))
+    }, [gasUpdatedAt])
 
-    useEffect(() => {
-        startCountdown()
-    }, [startCountdown])
+    useInterval(intervalFn, 1000)
 
     useEffect(() => {
         if (secondsRemaining === 0) onRefreshFee()
     }, [onRefreshFee, secondsRemaining])
+
+    const animatedStyles = useBlinkStyles({ enabled: secondsRemaining <= 3 })
 
     return (
         <BaseView flexDirection="column" gap={16} mt={16}>
@@ -79,60 +92,69 @@ export const GasFeeSpeed = ({ options, setSelectedFeeOption, selectedFeeOption, 
                 </BaseView>
             </BaseView>
             <BaseCard containerStyle={styles.cardContainer} style={styles.card}>
-                <BaseView flexDirection="row" gap={12} justifyContent="space-between" w={100} style={styles.section}>
-                    <BaseView flexDirection="column" gap={4}>
-                        <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
-                            {LL.SEND_ESTIMATED_TIME()}
-                        </BaseText>
-                        <BaseView flexDirection="row" gap={8}>
-                            <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />
-                            <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
-                                {LL.UNDER_SECONDS({ seconds: SPEED_MAP[selectedFeeOption].asSeconds() })}
+                <Animated.View style={animatedStyles}>
+                    <BaseView
+                        flexDirection="row"
+                        gap={12}
+                        justifyContent="space-between"
+                        w={100}
+                        style={styles.section}>
+                        <BaseView flexDirection="column" gap={4}>
+                            <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
+                                {LL.SEND_ESTIMATED_TIME()}
+                            </BaseText>
+                            <BaseView flexDirection="row" gap={8}>
+                                <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />
+                                <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
+                                    {LL.UNDER_SECONDS({ seconds: SPEED_MAP[selectedFeeOption].asSeconds() })}
+                                </BaseText>
+                            </BaseView>
+                        </BaseView>
+                        <BaseButton
+                            leftIcon={
+                                <BaseIcon name="icon-thunder" color={theme.colors.primary} size={16} px={0} py={0} />
+                            }
+                            action={onOpen}
+                            variant="solid"
+                            bgColor={theme.colors.cardButton.background}
+                            style={styles.cardButton}
+                            px={12}
+                            py={8}
+                            textColor={theme.colors.cardButton.text}>
+                            {LL.EDIT_SPEED()}
+                        </BaseButton>
+                    </BaseView>
+                    <BaseSpacer height={1} background={theme.colors.pressableCardBorder} />
+                    <BaseView flexDirection="column" style={styles.section} gap={4}>
+                        <BaseView flexDirection="row" justifyContent="space-between" w={100}>
+                            <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
+                                {LL.ESTIMATED_FEE()}
+                            </BaseText>
+                            <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
+                                {LL.MAX_FEE()}
+                            </BaseText>
+                        </BaseView>
+                        <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
+                            <BaseView flexDirection="row" gap={8}>
+                                <TokenImage icon={VTHO.icon} isVechainToken iconSize={16} />
+                                <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
+                                    {VTHO.symbol}
+                                </BaseText>
+                                <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
+                                    {formatValue(estimatedFeeVtho)}
+                                </BaseText>
+                                <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                                    {estimatedFeeFiat.isLeesThan_0_01
+                                        ? `< ${estimatedFormattedFiat}`
+                                        : estimatedFormattedFiat}
+                                </BaseText>
+                            </BaseView>
+                            <BaseText typographyFont="subSubTitleBold" color={theme.colors.textLight}>
+                                {formatValue(maxFeeVtho)} {VTHO.symbol}
                             </BaseText>
                         </BaseView>
                     </BaseView>
-                    <BaseButton
-                        leftIcon={<BaseIcon name="icon-thunder" color={theme.colors.primary} size={16} px={0} py={0} />}
-                        action={onOpen}
-                        variant="solid"
-                        bgColor={theme.colors.cardButton.background}
-                        style={styles.cardButton}
-                        px={12}
-                        py={8}
-                        textColor={theme.colors.cardButton.text}>
-                        {LL.EDIT_SPEED()}
-                    </BaseButton>
-                </BaseView>
-                <BaseSpacer height={1} background={theme.colors.pressableCardBorder} />
-                <BaseView flexDirection="column" style={styles.section} gap={4}>
-                    <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-                        <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
-                            {LL.ESTIMATED_FEE()}
-                        </BaseText>
-                        <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
-                            {LL.MAX_FEE()}
-                        </BaseText>
-                    </BaseView>
-                    <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
-                        <BaseView flexDirection="row" gap={8}>
-                            <TokenImage icon={VTHO.icon} isVechainToken iconSize={16} />
-                            <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
-                                {VTHO.symbol}
-                            </BaseText>
-                            <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
-                                {formatValue(estimatedFeeVtho)}
-                            </BaseText>
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                                {estimatedFeeFiat.isLeesThan_0_01
-                                    ? `< ${estimatedFormattedFiat}`
-                                    : estimatedFormattedFiat}
-                            </BaseText>
-                        </BaseView>
-                        <BaseText typographyFont="subSubTitleBold" color={theme.colors.textLight}>
-                            {formatValue(maxFeeVtho)} {VTHO.symbol}
-                        </BaseText>
-                    </BaseView>
-                </BaseView>
+                </Animated.View>
                 <GasFeeSpeedBottomSheet
                     ref={ref}
                     estimatedFee={estimatedFee}

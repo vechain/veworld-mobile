@@ -238,5 +238,6 @@ export const useTransactionScreen = ({
         estimatedFee: transactionFeesResponse.estimatedFee,
         maxFee: transactionFeesResponse.maxFee,
         gasOptions: transactionFeesResponse.options,
+        gasUpdatedAt: transactionFeesResponse.dataUpdatedAt,
     }
 }
