@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
 import { AppLoader as AppLoaderAnimation } from "~Assets"
@@ -50,16 +50,9 @@ type Props = {
 export const AppLoader = ({ children }: Props) => {
     const isAppLoading = useAppSelector(selectIsAppLoading)
     const theme = useTheme()
-    const [shouldRenderLoader, setShouldRenderLoader] = useState(false)
+    const [shouldRenderLoader, setShouldRenderLoader] = useState(isAppLoading)
 
-    const opacity = useSharedValue(0)
-
-    useLayoutEffect(() => {
-        if (isAppLoading) {
-            setShouldRenderLoader(true)
-            opacity.value = 1
-        }
-    }, [isAppLoading, opacity])
+    const opacity = useSharedValue(isAppLoading ? 1 : 0)
 
     const handleRemoveLoader = () => {
         setShouldRenderLoader(false)
@@ -71,14 +64,14 @@ export const AppLoader = ({ children }: Props) => {
             requestAnimationFrame(() => {
                 opacity.value = withTiming(1)
             })
-        } else {
+        } else if (shouldRenderLoader) {
             opacity.value = withTiming(0, { duration: 200 }, finished => {
                 if (finished) {
                     runOnJS(handleRemoveLoader)()
                 }
             })
         }
-    }, [isAppLoading, opacity])
+    }, [isAppLoading, opacity, shouldRenderLoader])
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
