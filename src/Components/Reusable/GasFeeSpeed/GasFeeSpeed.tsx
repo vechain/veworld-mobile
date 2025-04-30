@@ -111,6 +111,7 @@ export const GasFeeSpeed = ({
                     selectedFeeOption={selectedFeeOption}
                     setSelectedFeeOption={setSelectedFeeOption}
                     onClose={onClose}
+                    isGalactica={isGalactica}
                 />
             </BaseCard>
         </BaseView>

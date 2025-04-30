@@ -24,10 +24,11 @@ type Props = {
     setSelectedFeeOption: (value: GasPriceCoefficient) => void
     selectedFeeOption: GasPriceCoefficient
     onClose: () => void
+    isGalactica?: boolean
 }
 
 export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
-    { estimatedFee, maxFee, setSelectedFeeOption, selectedFeeOption, onClose },
+    { estimatedFee, maxFee, setSelectedFeeOption, selectedFeeOption, onClose, isGalactica },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -101,22 +102,35 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                         <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />
                     </BaseView>
                 </BaseView>
-                <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                    <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                        {LL.ESTIMATED_FEE()}
-                    </BaseText>
-                    <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                        {formatValue(estimatedFeeVtho)} {VTHO.symbol}
-                    </BaseText>
-                </BaseView>
-                <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                    <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                        {LL.MAX_FEE()}
-                    </BaseText>
-                    <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                        {formatValue(maxFeeVtho)} {VTHO.symbol}
-                    </BaseText>
-                </BaseView>
+                {isGalactica ? (
+                    <>
+                        <BaseView flexDirection="row" w={100} justifyContent="space-between">
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                                {LL.ESTIMATED_FEE()}
+                            </BaseText>
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                                {formatValue(estimatedFeeVtho)} {VTHO.symbol}
+                            </BaseText>
+                        </BaseView>
+                        <BaseView flexDirection="row" w={100} justifyContent="space-between">
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                                {LL.MAX_FEE()}
+                            </BaseText>
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                                {formatValue(maxFeeVtho)} {VTHO.symbol}
+                            </BaseText>
+                        </BaseView>
+                    </>
+                ) : (
+                    <BaseView flexDirection="row" w={100} justifyContent="space-between">
+                        <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                            {LL.GAS_FEE()}
+                        </BaseText>
+                        <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                            {formatValue(estimatedFeeVtho)} {VTHO.symbol}
+                        </BaseText>
+                    </BaseView>
+                )}
             </BaseView>
             <BaseSpacer height={24} />
             <BaseView gap={16} flexDirection="row" w={100}>
