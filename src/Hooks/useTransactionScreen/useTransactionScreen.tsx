@@ -214,6 +214,8 @@ export const useTransactionScreen = ({
         [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading],
     )
 
+    const onRefreshFee = useCallback(() => {}, [])
+
     return {
         selectedDelegationOption,
         loadingGas,
@@ -239,5 +241,6 @@ export const useTransactionScreen = ({
         maxFee: transactionFeesResponse.maxFee,
         gasOptions: transactionFeesResponse.options,
         gasUpdatedAt: transactionFeesResponse.dataUpdatedAt,
+        onRefreshFee,
     }
 }

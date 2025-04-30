@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Transaction } from "@vechain/sdk-core"
-import React, { FC, useCallback, useMemo, useRef } from "react"
+import React, { useCallback, useMemo, useRef } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
@@ -11,6 +11,7 @@ import {
     BaseText,
     BaseView,
     DelegationView,
+    GasFeeSpeed,
     getRpcError,
     RequireUserPassword,
     SelectAccountBottomSheet,
@@ -42,7 +43,7 @@ import { ClausesCarousel } from "../../ActivityDetailsScreen/Components"
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN>
 
-export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
+export const SendTransactionScreen = ({ route }: Props) => {
     const { request, isInjectedWallet } = route.params
 
     const dispatch = useAppDispatch()
@@ -202,13 +203,15 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
         resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
-        isEnoughGas,
         selectedDelegationAccount,
         selectedDelegationUrl,
-        vtho,
         isDisabledButtonState,
         isLoading,
-        priorityFees,
+        gasOptions,
+        gasUpdatedAt,
+        selectedFeeOption,
+        onRefreshFee,
+        setSelectedFeeOption,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -264,11 +267,16 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={44} />
+                    <GasFeeSpeed
+                        gasUpdatedAt={gasUpdatedAt}
+                        options={gasOptions}
+                        selectedFeeOption={selectedFeeOption}
+                        setSelectedFeeOption={setSelectedFeeOption}
+                        onRefreshFee={onRefreshFee}
+                    />
+
+                    <BaseSpacer height={44} />
                     <TransactionDetails
-                        selectedDelegationOption={selectedDelegationOption}
-                        vthoGas={priorityFees.gasFee}
-                        isThereEnoughGas={isEnoughGas || false}
-                        vtho={vtho}
                         request={request}
                         network={network}
                         message={request.message}

@@ -119,13 +119,12 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
         isDisabledButtonState,
         gasOptions,
         gasUpdatedAt,
+        onRefreshFee,
     } = useTransactionScreen({
         clauses: transactionClauses,
         onTransactionSuccess,
         onTransactionFailure,
     })
-
-    const onRefreshFee = useCallback(() => {}, [])
 
     return (
         <Layout
