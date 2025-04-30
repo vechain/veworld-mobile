@@ -7,7 +7,7 @@ import { useScrollableBottomSheet, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, BaseButtonGroupHorizontalType, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { selectDelegationAccounts, useAppSelector } from "~Storage/Redux"
+import { selectDelegationAccounts, selectDelegationUrls, useAppSelector } from "~Storage/Redux"
 import { RenderedOption } from "./Components/RenderedOption"
 
 type Props = {
@@ -34,6 +34,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
     const accounts = useAppSelector(selectDelegationAccounts)
+    const delegationUrls = useAppSelector(selectDelegationUrls)
     const [selectedOption, setSelectedOption] = useState(selectedDelegationOption)
 
     const options: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
@@ -60,35 +61,34 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     }, [])
 
     const computeSnappoints = useMemo(() => {
-        if (selectedDelegationOption !== DelegationType.ACCOUNT) return ["50%", "75%", "90%"]
-        if (accounts.length < 4) {
-            return ["50%"]
-        }
+        if (selectedOption === DelegationType.NONE) return ["50%", "75%", "90%"]
+        if (selectedOption === DelegationType.ACCOUNT) {
+            if (accounts.length < 4) {
+                return ["75%"]
+            }
 
-        if (accounts.length < 6) {
+            return ["90%"]
+        }
+        if (delegationUrls.length < 4) {
             return ["75%"]
         }
 
-        if (accounts.length >= 6) {
-            return ["90%"]
-        }
-
-        return ["50%", "75%", "90%"]
-    }, [accounts.length, selectedDelegationOption])
+        return ["90%"]
+    }, [accounts.length, delegationUrls.length, selectedOption])
 
     const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
-        data: accounts,
+        data: selectedOption === DelegationType.ACCOUNT ? accounts : delegationUrls,
         snapPoints: computeSnappoints,
     })
 
     return (
         <BaseBottomSheet
             style={styles.root}
-            dynamicHeight={selectedOption !== DelegationType.ACCOUNT}
+            dynamicHeight={selectedOption === DelegationType.NONE}
             ref={ref}
             contentStyle={styles.rootContent}
-            snapPoints={selectedOption === DelegationType.ACCOUNT ? computeSnappoints : undefined}
-            onChange={selectedOption === DelegationType.ACCOUNT ? handleSheetChangePosition : undefined}>
+            snapPoints={selectedOption === DelegationType.NONE ? undefined : computeSnappoints}
+            onChange={selectedOption === DelegationType.NONE ? undefined : handleSheetChangePosition}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-arrow-link" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -113,21 +113,21 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
                 )}
             />
             <BaseSpacer height={24} />
-            <BaseView style={styles.result} gap={16} flexDirection="column">
-                <RenderedOption
-                    flatListScrollProps={flatListScrollProps}
-                    onReset={() => {
-                        setSelectedOption(selectedDelegationOption)
-                    }}
-                    selectedOption={selectedOption}
-                    setNoDelegation={setNoDelegation}
-                    setSelectedDelegationAccount={setSelectedDelegationAccount}
-                    setSelectedDelegationUrl={setSelectedDelegationUrl}
-                    selectedDelegationAccount={selectedDelegationAccount}
-                    selectedDelegationUrl={selectedDelegationUrl}
-                    onClose={onCloseBottomSheet}
-                />
-            </BaseView>
+            <RenderedOption
+                flatListScrollProps={flatListScrollProps}
+                onReset={() => {
+                    setSelectedOption(selectedDelegationOption)
+                }}
+                selectedOption={selectedOption}
+                setNoDelegation={setNoDelegation}
+                setSelectedDelegationAccount={setSelectedDelegationAccount}
+                setSelectedDelegationUrl={setSelectedDelegationUrl}
+                selectedDelegationAccount={selectedDelegationAccount}
+                selectedDelegationUrl={selectedDelegationUrl}
+                onClose={onCloseBottomSheet}
+                accounts={accounts}
+                delegationUrls={delegationUrls}
+            />
         </BaseBottomSheet>
     )
 })
@@ -141,12 +141,5 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         rootContent: {
             paddingBottom: 40,
-        },
-        result: {
-            borderWidth: 1,
-            borderColor: theme.colors.editSpeedBs.result.border,
-            backgroundColor: theme.colors.editSpeedBs.result.background,
-            padding: 24,
-            borderRadius: 12,
         },
     })

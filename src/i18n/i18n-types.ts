@@ -1898,6 +1898,10 @@ type RootTranslation = {
 	 */
 	DELEGATE: string
 	/**
+	 * S​e​l​e​c​t​ ​a​n​ ​a​c​c​o​u​n​t
+	 */
+	DELEGATE_ACCOUNT: string
+	/**
 	 * C​h​a​n​g​e​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​ ​d​e​l​e​g​a​t​i​o​n​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​,​ ​a​c​c​o​u​n​t​ ​o​r​ ​U​R​L
 	 */
 	DELEGATE_DESCRIPTION: string
@@ -1910,13 +1914,13 @@ type RootTranslation = {
 	 */
 	DELEGATE_SELF: string
 	/**
-	 * S​e​l​e​c​t​ ​a​n​ ​a​c​c​o​u​n​t
-	 */
-	DELEGATE_ACCOUNT: string
-	/**
 	 * I​n​s​e​r​t​ ​a​n​ ​U​R​L​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​e​ ​f​e​e​:
 	 */
 	DELEGATE_URL: string
+	/**
+	 * O​r​ ​s​e​l​e​c​t​ ​a​ ​r​e​c​e​n​t​:
+	 */
+	DELEGATE_URL_SELECT: string
 	/**
 	 * I​n​s​e​r​t​ ​U​R​L​.​.​.
 	 */
@@ -6117,6 +6121,10 @@ Thanks for your patience!
 	 */
 	DELEGATE: () => LocalizedString
 	/**
+	 * Select an account
+	 */
+	DELEGATE_ACCOUNT: () => LocalizedString
+	/**
 	 * Change the transaction fee delegation to another wallet, account or URL
 	 */
 	DELEGATE_DESCRIPTION: () => LocalizedString
@@ -6129,13 +6137,13 @@ Thanks for your patience!
 	 */
 	DELEGATE_SELF: () => LocalizedString
 	/**
-	 * Select an account
-	 */
-	DELEGATE_ACCOUNT: () => LocalizedString
-	/**
 	 * Insert an URL to delegate the fee:
 	 */
 	DELEGATE_URL: () => LocalizedString
+	/**
+	 * Or select a recent:
+	 */
+	DELEGATE_URL_SELECT: () => LocalizedString
 	/**
 	 * Insert URL...
 	 */

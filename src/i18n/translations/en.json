@@ -466,6 +466,7 @@
   "DELEGATE_FEE": "Delegate fee",
   "DELEGATE_SELF": "By default the transaction fee cost will be paid by the active account:",
   "DELEGATE_URL": "Insert an URL to delegate the fee:",
+  "DELEGATE_URL_SELECT": "Or select a recent:",
   "DELEGATE_URL_PLACEHOLDER": "Insert URL...",
   "DELEGATION_NO_FEE": "Fee not delegated",
   "DESCRIPTION_QR_CODE_FOR_ACCOUNT": "Scan the QR code or use the wallet address to receive tokens and NFTs.",
