@@ -1,27 +1,22 @@
 import { ethers } from "ethers"
 import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import Animated from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseText, BaseView } from "~Components/Base"
 import { GasPriceCoefficient, VTHO } from "~Constants"
-import { useBlinkStyles, useFormatFiat, useThemedStyles } from "~Hooks"
+import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { TokenImage } from "../TokenImage"
 
 type Props = {
     options: TransactionFeesResult
     selectedFeeOption: GasPriceCoefficient
-    secondsRemaining: number
 }
 
-export const AnimatedText = Animated.createAnimatedComponent(wrapFunctionComponent(BaseText))
-
-export const LegacyEstimation = ({ options, selectedFeeOption, secondsRemaining }: Props) => {
+export const LegacyEstimation = ({ options, selectedFeeOption }: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
 
@@ -50,8 +45,6 @@ export const LegacyEstimation = ({ options, selectedFeeOption, secondsRemaining 
         return formatFiat({ amount: parseInt(estimatedFeeFiat.preciseValue, 10) })
     }, [estimatedFeeFiat.isLeesThan_0_01, estimatedFeeFiat.preciseValue, formatFiat])
 
-    const blinkStyles = useBlinkStyles({ enabled: secondsRemaining <= 3, duration: 1000 })
-
     return (
         <BaseView flexDirection="column" style={styles.section} gap={4}>
             <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
@@ -59,21 +52,15 @@ export const LegacyEstimation = ({ options, selectedFeeOption, secondsRemaining 
             </BaseText>
             <BaseView flexDirection="row" gap={8}>
                 <TokenImage icon={VTHO.icon} isVechainToken iconSize={16} />
-                <AnimatedText
-                    typographyFont="subSubTitleBold"
-                    color={theme.colors.assetDetailsCard.title}
-                    style={blinkStyles}>
+                <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
                     {VTHO.symbol}
-                </AnimatedText>
-                <AnimatedText
-                    typographyFont="subSubTitleBold"
-                    color={theme.colors.assetDetailsCard.title}
-                    style={blinkStyles}>
+                </BaseText>
+                <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
                     {formatValue(estimatedFeeVtho)}
-                </AnimatedText>
-                <AnimatedText typographyFont="bodyMedium" color={theme.colors.textLight} style={blinkStyles}>
+                </BaseText>
+                <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
                     {estimatedFeeFiat.isLeesThan_0_01 ? `< ${estimatedFormattedFiat}` : estimatedFormattedFiat}
-                </AnimatedText>
+                </BaseText>
             </BaseView>
         </BaseView>
     )

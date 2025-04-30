@@ -50,11 +50,15 @@ export const GasFeeSpeed = ({
 
     return (
         <BaseView flexDirection="column" gap={16} mt={16}>
-            <BaseView w={100} justifyContent="space-between" alignItems="center" flexDirection="row">
+            <BaseView
+                w={100}
+                justifyContent={isGalactica ? "space-between" : "flex-start"}
+                alignItems="center"
+                flexDirection="row">
                 <BaseText typographyFont="subSubTitleBold" color={theme.colors.primary}>
                     {LL.TRANSACTION_FEE()}
                 </BaseText>
-                {secondsRemaining <= 3 && (
+                {secondsRemaining <= 3 && isGalactica && (
                     <BaseView flexDirection="row" gap={4} alignItems="center">
                         <BaseText typographyFont="bodyMedium" color={theme.colors.textLight} lineHeight={20}>
                             {LL.UPDATING_IN()}
@@ -98,11 +102,7 @@ export const GasFeeSpeed = ({
                         secondsRemaining={secondsRemaining}
                     />
                 ) : (
-                    <LegacyEstimation
-                        options={options}
-                        selectedFeeOption={selectedFeeOption}
-                        secondsRemaining={secondsRemaining}
-                    />
+                    <LegacyEstimation options={options} selectedFeeOption={selectedFeeOption} />
                 )}
                 <GasFeeSpeedBottomSheet
                     ref={ref}

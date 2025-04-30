@@ -1,7 +1,6 @@
 import { ethers } from "ethers"
 import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import Animated from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseText, BaseView } from "~Components/Base"
 import { GasPriceCoefficient, VTHO } from "~Constants"
@@ -10,7 +9,7 @@ import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionF
 import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { BaseAnimatedText } from "../BaseAnimatedText"
 import { TokenImage } from "../TokenImage"
 
 type Props = {
@@ -18,8 +17,6 @@ type Props = {
     selectedFeeOption: GasPriceCoefficient
     secondsRemaining: number
 }
-
-export const AnimatedText = Animated.createAnimatedComponent(wrapFunctionComponent(BaseText))
 
 export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaining }: Props) => {
     const { LL } = useI18nContext()
@@ -66,25 +63,25 @@ export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaini
             <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
                 <BaseView flexDirection="row" gap={8}>
                     <TokenImage icon={VTHO.icon} isVechainToken iconSize={16} />
-                    <AnimatedText
+                    <BaseAnimatedText
                         typographyFont="subSubTitleBold"
                         color={theme.colors.assetDetailsCard.title}
                         style={blinkStyles}>
                         {VTHO.symbol}
-                    </AnimatedText>
-                    <AnimatedText
+                    </BaseAnimatedText>
+                    <BaseAnimatedText
                         typographyFont="subSubTitleBold"
                         color={theme.colors.assetDetailsCard.title}
                         style={blinkStyles}>
                         {formatValue(estimatedFeeVtho)}
-                    </AnimatedText>
-                    <AnimatedText typographyFont="bodyMedium" color={theme.colors.textLight} style={blinkStyles}>
+                    </BaseAnimatedText>
+                    <BaseAnimatedText typographyFont="bodyMedium" color={theme.colors.textLight} style={blinkStyles}>
                         {estimatedFeeFiat.isLeesThan_0_01 ? `< ${estimatedFormattedFiat}` : estimatedFormattedFiat}
-                    </AnimatedText>
+                    </BaseAnimatedText>
                 </BaseView>
-                <AnimatedText typographyFont="subSubTitleBold" color={theme.colors.textLight} style={blinkStyles}>
+                <BaseAnimatedText typographyFont="subSubTitleBold" color={theme.colors.textLight} style={blinkStyles}>
                     {formatValue(maxFeeVtho)} {VTHO.symbol}
-                </AnimatedText>
+                </BaseAnimatedText>
             </BaseView>
         </BaseView>
     )

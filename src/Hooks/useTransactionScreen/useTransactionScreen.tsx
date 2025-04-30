@@ -41,7 +41,7 @@ export const useTransactionScreen = ({
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [loading, setLoading] = useState(false)
-    const [selectedFeeOption, setSelectedFeeOption] = useState(GasPriceCoefficient.REGULAR)
+    const [selectedFeeOption, setSelectedFeeOption] = useState(GasPriceCoefficient.MEDIUM)
     const [isEnoughGas, setIsEnoughGas] = useState(true)
     const [txCostTotal, setTxCostTotal] = useState("0")
 
