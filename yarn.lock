@@ -13944,6 +13944,11 @@ react-native-bouncy-checkbox@^4.1.2:
   dependencies:
     "@freakycoder/react-native-bounceable" "^1.0.3"
 
+react-native-capture-protection@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-capture-protection/-/react-native-capture-protection-2.0.2.tgz#df5583b28c7ea0a7c82c81d0655cf591c434256a"
+  integrity sha512-fT95qVv7vInlW+fQZwhUCJ4gm61tIVLylk4VO32LPH02eW3hWk5nD5Yw9X5sq4e4gE1DtH0g8k8ICjRLx/DdWA==
+
 react-native-context-menu-view@^1.16.0:
   version "1.18.0"
   resolved "https://registry.yarnpkg.com/react-native-context-menu-view/-/react-native-context-menu-view-1.18.0.tgz#3e997cd389f1cee4324c0ef827ab70f15f758d8c"
@@ -14150,11 +14155,6 @@ react-native-screens@~4.4.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
-
-react-native-screenshot-prevent@^1.2.1:
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/react-native-screenshot-prevent/-/react-native-screenshot-prevent-1.2.1.tgz#f784a3303139690b9e8c1ef00f69839810941016"
-  integrity sha512-zY6U3xNlFrquCJJVNoyR6DcAv2c6tOHQIcleBUQo4OrbSKz5a94Y3MkuzVwpE+IMlxCASymenDwfMtnWopSiVA==
 
 react-native-scrypt@^1.2.1:
   version "1.2.1"
