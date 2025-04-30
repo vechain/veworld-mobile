@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo } from "react"
+import React, { useEffect, useMemo, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
 import { AppLoader as AppLoaderAnimation } from "~Assets"
 import { BaseView, BlurView } from "~Components"
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
-import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming, runOnJS } from "react-native-reanimated"
 import { useAppSelector, selectIsAppLoading } from "~Storage/Redux"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { useTheme } from "~Hooks"
@@ -50,12 +50,28 @@ type Props = {
 export const AppLoader = ({ children }: Props) => {
     const isAppLoading = useAppSelector(selectIsAppLoading)
     const theme = useTheme()
+    const [shouldRenderLoader, setShouldRenderLoader] = useState(isAppLoading)
 
     const opacity = useSharedValue(isAppLoading ? 1 : 0)
 
+    const handleRemoveLoader = () => {
+        setShouldRenderLoader(false)
+    }
+
     useEffect(() => {
-        opacity.value = withTiming(isAppLoading ? 1 : 0)
-    }, [isAppLoading, opacity])
+        if (isAppLoading) {
+            setShouldRenderLoader(true)
+            requestAnimationFrame(() => {
+                opacity.value = withTiming(1)
+            })
+        } else if (shouldRenderLoader) {
+            opacity.value = withTiming(0, { duration: 200 }, finished => {
+                if (finished) {
+                    runOnJS(handleRemoveLoader)()
+                }
+            })
+        }
+    }, [isAppLoading, opacity, shouldRenderLoader])
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
@@ -83,16 +99,17 @@ export const AppLoader = ({ children }: Props) => {
     return (
         <View style={StyleSheet.absoluteFill}>
             {children}
-            <Animated.View style={[styles.overlay, animatedStyle]} pointerEvents={isAppLoading ? "auto" : "none"}>
-                {RenderBackdrop}
-                <LottieView
-                    // TODO: Replace with the actual animation once it's ready (https://github.com/vechainfoundation/veworld-mobile/issues/999)
-                    source={AppLoaderAnimation}
-                    autoPlay={isAppLoading} // Prevent the animation from playing when it's not visible
-                    loop
-                    style={styles.lottie}
-                />
-            </Animated.View>
+            {shouldRenderLoader && (
+                <Animated.View style={[styles.overlay, animatedStyle]} pointerEvents={isAppLoading ? "auto" : "none"}>
+                    {RenderBackdrop}
+                    <LottieView
+                        source={AppLoaderAnimation}
+                        autoPlay={isAppLoading}
+                        loop={isAppLoading}
+                        style={styles.lottie}
+                    />
+                </Animated.View>
+            )}
         </View>
     )
 }

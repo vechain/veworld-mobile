@@ -1,7 +1,7 @@
 import React from "react"
-import { useTheme } from "~Hooks"
-import { BaseView, BaseSkeleton } from "~Components"
 import { FlatList } from "react-native"
+import { BaseSkeleton, BaseView } from "~Components"
+import { useTheme } from "~Hooks"
 
 export const DAppsLoadingSkeleton = () => {
     const theme = useTheme()
@@ -28,7 +28,6 @@ export const DAppsLoadingSkeleton = () => {
                                 children: [
                                     { width: 96, height: 96, borderRadius: 8, marginRight: 16 },
                                     { width: 80, height: 10 },
-                                    { width: 40, height: 8 },
                                 ],
                             },
                         ]}
