@@ -62,7 +62,7 @@ export const AccountOption = ({ selectedDelegationAccount, flatListProps, childr
     )
 }
 
-const baseStyles = () =>
+export const baseStyles = () =>
     StyleSheet.create({
         list: {
             flex: 1,
