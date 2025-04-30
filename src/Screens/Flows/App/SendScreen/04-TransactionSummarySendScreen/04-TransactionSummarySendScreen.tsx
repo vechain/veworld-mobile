@@ -216,15 +216,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         onSuccess={onPasswordSuccess}
                     />
 
-                    <DelegationView
-                        setNoDelegation={resetDelegation}
-                        selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationAccount={setSelectedDelegationAccount}
-                        selectedDelegationAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                    />
-
                     <TotalSendAmountView
                         amount={finalAmount}
                         symbol={token.symbol}
@@ -239,8 +230,16 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
                         setSelectedFeeOption={setSelectedFeeOption}
-                        onRefreshFee={onRefreshFee}
-                    />
+                        onRefreshFee={onRefreshFee}>
+                        <DelegationView
+                            setNoDelegation={resetDelegation}
+                            selectedDelegationOption={selectedDelegationOption}
+                            setSelectedDelegationAccount={setSelectedDelegationAccount}
+                            selectedDelegationAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        />
+                    </GasFeeSpeed>
 
                     <ContactManagementBottomSheet
                         ref={addContactSheet}

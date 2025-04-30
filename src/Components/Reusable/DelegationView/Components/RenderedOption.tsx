@@ -6,6 +6,7 @@ import { AccountWithDevice, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { AccountOption } from "./AccountOption"
 import { NoneOption } from "./NoneOption"
+import { UrlOption } from "./UrlOption"
 
 type Props = {
     setNoDelegation: () => void
@@ -18,16 +19,18 @@ type Props = {
     onReset: () => void
     onClose: () => void
     flatListScrollProps: FlatListScrollPropsType
+    accounts: LocalAccountWithDevice[]
+    delegationUrls: string[]
 }
 
 const ButtonBar = ({ onCancel, onApply }: { onCancel: () => void; onApply: () => void }) => {
     const { LL } = useI18nContext()
     return (
-        <BaseView flexDirection="row" gap={16}>
-            <BaseButton variant="outline" action={onCancel}>
+        <BaseView flexDirection="row" gap={16} w={100} justifyContent="space-between" alignItems="center" mt={24}>
+            <BaseButton variant="outline" action={onCancel} flex={1}>
                 {LL.COMMON_BTN_CANCEL()}
             </BaseButton>
-            <BaseButton variant="solid" action={onApply}>
+            <BaseButton variant="solid" action={onApply} flex={1}>
                 {LL.COMMON_BTN_APPLY()}
             </BaseButton>
         </BaseView>
@@ -38,10 +41,14 @@ export const RenderedOption = ({
     selectedOption,
     flatListScrollProps,
     selectedDelegationAccount,
+    selectedDelegationUrl,
     onReset,
     onClose,
     setNoDelegation,
     setSelectedDelegationAccount,
+    setSelectedDelegationUrl,
+    accounts,
+    delegationUrls,
 }: Props) => {
     const handleCancel = useCallback(() => {
         onReset()
@@ -55,14 +62,17 @@ export const RenderedOption = ({
 
     if (selectedOption === DelegationType.NONE)
         return (
-            <BaseView flexDirection="column" gap={24}>
+            <>
                 <NoneOption />
                 <ButtonBar onCancel={handleCancel} onApply={handleNoDelegation} />
-            </BaseView>
+            </>
         )
     if (selectedOption === DelegationType.ACCOUNT)
         return (
-            <AccountOption selectedDelegationAccount={selectedDelegationAccount} flatListProps={flatListScrollProps}>
+            <AccountOption
+                selectedDelegationAccount={selectedDelegationAccount}
+                flatListProps={flatListScrollProps}
+                accounts={accounts}>
                 {({ onCancel, selectedAccount }) => (
                     <ButtonBar
                         onCancel={() => {
@@ -76,5 +86,25 @@ export const RenderedOption = ({
                     />
                 )}
             </AccountOption>
+        )
+    if (selectedOption === DelegationType.URL)
+        return (
+            <UrlOption
+                selectedDelegationUrl={selectedDelegationUrl}
+                flatListProps={flatListScrollProps}
+                delegationUrls={delegationUrls}>
+                {({ onCancel, selectedUrl }) => (
+                    <ButtonBar
+                        onCancel={() => {
+                            onCancel()
+                            handleCancel()
+                        }}
+                        onApply={() => {
+                            setSelectedDelegationUrl(selectedUrl!)
+                            onClose()
+                        }}
+                    />
+                )}
+            </UrlOption>
         )
 }
