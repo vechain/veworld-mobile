@@ -1,5 +1,5 @@
 import moment from "moment"
-import React, { useCallback, useEffect, useState } from "react"
+import { PropsWithChildren, default as React, useCallback, useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useInterval } from "usehooks-ts"
 import { BaseButton, BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -28,7 +28,8 @@ export const GasFeeSpeed = ({
     onRefreshFee,
     gasUpdatedAt,
     isGalactica,
-}: Props) => {
+    children,
+}: PropsWithChildren<Props>) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
 
@@ -123,6 +124,7 @@ export const GasFeeSpeed = ({
                 ) : (
                     <LegacyEstimation options={options} selectedFeeOption={selectedFeeOption} />
                 )}
+                {children}
                 <GasFeeSpeedBottomSheet
                     ref={ref}
                     options={options}

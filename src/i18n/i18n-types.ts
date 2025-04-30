@@ -916,7 +916,7 @@ type RootTranslation = {
 	 */
 	BROWSER_COPY_LINK: string
 	/**
-	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y
+	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
 	 */
 	BROWSER_COPY_LINK_SUCCESS: string
 	/**
@@ -1894,6 +1894,38 @@ type RootTranslation = {
 	 */
 	DECEMBER: string
 	/**
+	 * D​e​l​e​g​a​t​e
+	 */
+	DELEGATE: string
+	/**
+	 * C​h​a​n​g​e​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​ ​d​e​l​e​g​a​t​i​o​n​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​,​ ​a​c​c​o​u​n​t​ ​o​r​ ​U​R​L
+	 */
+	DELEGATE_DESCRIPTION: string
+	/**
+	 * D​e​l​e​g​a​t​e​ ​f​e​e
+	 */
+	DELEGATE_FEE: string
+	/**
+	 * B​y​ ​d​e​f​a​u​l​t​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​ ​c​o​s​t​ ​w​i​l​l​ ​b​e​ ​p​a​i​d​ ​b​y​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t​:
+	 */
+	DELEGATE_SELF: string
+	/**
+	 * S​e​l​e​c​t​ ​a​n​ ​a​c​c​o​u​n​t
+	 */
+	DELEGATE_ACCOUNT: string
+	/**
+	 * I​n​s​e​r​t​ ​a​n​ ​U​R​L​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​e​ ​f​e​e​:
+	 */
+	DELEGATE_URL: string
+	/**
+	 * I​n​s​e​r​t​ ​U​R​L​.​.​.
+	 */
+	DELEGATE_URL_PLACEHOLDER: string
+	/**
+	 * F​e​e​ ​n​o​t​ ​d​e​l​e​g​a​t​e​d
+	 */
+	DELEGATION_NO_FEE: string
+	/**
 	 * S​c​a​n​ ​t​h​e​ ​Q​R​ ​c​o​d​e​ ​o​r​ ​u​s​e​ ​t​h​e​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​N​F​T​s​.
 	 */
 	DESCRIPTION_QR_CODE_FOR_ACCOUNT: string
@@ -2190,13 +2222,13 @@ type RootTranslation = {
 	 */
 	ERROR_WRONG_WORDS_COMBINATION_DESC: string
 	/**
-	 * E​s​t​i​m​a​t​e​d​ ​g​a​s​ ​f​e​e
-	 */
-	ESTIMATED_GAS_FEE: string
-	/**
 	 * E​s​t​i​m​a​t​e​d​ ​f​e​e
 	 */
 	ESTIMATED_FEE: string
+	/**
+	 * E​s​t​i​m​a​t​e​d​ ​g​a​s​ ​f​e​e
+	 */
+	ESTIMATED_GAS_FEE: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -2841,6 +2873,11 @@ type RootTranslation = {
 	 */
 	OCTOBER: string
 	/**
+	 * {​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
+	 * @param {number} seconds
+	 */
+	ONLY_SECONDS: RequiredParams<'seconds|toSecondsDuration'>
+	/**
 	 * O​r​i​g​i​n
 	 */
 	ORIGIN: string
@@ -3186,11 +3223,6 @@ type RootTranslation = {
 	 */
 	SB_YOUR_WALLETS: string
 	/**
-	 * {​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
-	 * @param {number} seconds
-	 */
-	ONLY_SECONDS: RequiredParams<'seconds|toSecondsDuration'>
-	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	SECURITY_BACKUP_BTN: string
@@ -3353,25 +3385,25 @@ type RootTranslation = {
 	 */
 	SEND_FEE_FAST: string
 	/**
-	 * N​o​r​m​a​l
+	 * H​I​G​H
 	 */
-	SEND_FEE_NORMAL: string
-	/**
-	 * S​l​o​w
-	 */
-	SEND_FEE_SLOW: string
-	/**
-	 * R​E​G​U​L​A​R
-	 */
-	SEND_FEE_REGULAR: string
+	SEND_FEE_HIGH: string
 	/**
 	 * M​E​D​I​U​M
 	 */
 	SEND_FEE_MEDIUM: string
 	/**
-	 * H​I​G​H
+	 * N​o​r​m​a​l
 	 */
-	SEND_FEE_HIGH: string
+	SEND_FEE_NORMAL: string
+	/**
+	 * R​E​G​U​L​A​R
+	 */
+	SEND_FEE_REGULAR: string
+	/**
+	 * S​l​o​w
+	 */
+	SEND_FEE_SLOW: string
 	/**
 	 * F​r​o​m
 	 */
@@ -3497,7 +3529,7 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​o​n​e​ ​o​f​ ​y​o​u​r​ ​t​o​k​e​n​s​ ​t​o​ ​s​e​n​d​:
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
@@ -4013,7 +4045,7 @@ type RootTranslation = {
 	 */
 	UNVERIFIED_APP_TITLE: string
 	/**
-	 * U​p​d​a​t​i​n​g​ ​i​n
+	 * F​e​e​s​ ​u​p​d​a​t​i​n​g​ ​i​n
 	 */
 	UPDATING_IN: string
 	/**
@@ -5113,7 +5145,7 @@ Thanks for your patience!
 	 */
 	BROWSER_COPY_LINK: () => LocalizedString
 	/**
-	 * Link successfully
+	 * Link successfully copied to the clipboard
 	 */
 	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
 	/**
@@ -6081,6 +6113,38 @@ Thanks for your patience!
 	 */
 	DECEMBER: () => LocalizedString
 	/**
+	 * Delegate
+	 */
+	DELEGATE: () => LocalizedString
+	/**
+	 * Change the transaction fee delegation to another wallet, account or URL
+	 */
+	DELEGATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * Delegate fee
+	 */
+	DELEGATE_FEE: () => LocalizedString
+	/**
+	 * By default the transaction fee cost will be paid by the active account:
+	 */
+	DELEGATE_SELF: () => LocalizedString
+	/**
+	 * Select an account
+	 */
+	DELEGATE_ACCOUNT: () => LocalizedString
+	/**
+	 * Insert an URL to delegate the fee:
+	 */
+	DELEGATE_URL: () => LocalizedString
+	/**
+	 * Insert URL...
+	 */
+	DELEGATE_URL_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Fee not delegated
+	 */
+	DELEGATION_NO_FEE: () => LocalizedString
+	/**
 	 * Scan the QR code or use the wallet address to receive tokens and NFTs.
 	 */
 	DESCRIPTION_QR_CODE_FOR_ACCOUNT: () => LocalizedString
@@ -6377,13 +6441,13 @@ Thanks for your patience!
 	 */
 	ERROR_WRONG_WORDS_COMBINATION_DESC: () => LocalizedString
 	/**
-	 * Estimated gas fee
-	 */
-	ESTIMATED_GAS_FEE: () => LocalizedString
-	/**
 	 * Estimated fee
 	 */
 	ESTIMATED_FEE: () => LocalizedString
+	/**
+	 * Estimated gas fee
+	 */
+	ESTIMATED_GAS_FEE: () => LocalizedString
 	/**
 	 * Face ID
 	 */
@@ -7010,6 +7074,10 @@ Thanks for your patience!
 	 */
 	OCTOBER: () => LocalizedString
 	/**
+	 * {seconds|toSecondsDuration}
+	 */
+	ONLY_SECONDS: (arg: { seconds: number }) => LocalizedString
+	/**
 	 * Origin
 	 */
 	ORIGIN: () => LocalizedString
@@ -7350,10 +7418,6 @@ Thanks for your patience!
 	 */
 	SB_YOUR_WALLETS: () => LocalizedString
 	/**
-	 * {seconds|toSecondsDuration}
-	 */
-	ONLY_SECONDS: (arg: { seconds: number }) => LocalizedString
-	/**
 	 * Backup now
 	 */
 	SECURITY_BACKUP_BTN: () => LocalizedString
@@ -7514,25 +7578,25 @@ Thanks for your patience!
 	 */
 	SEND_FEE_FAST: () => LocalizedString
 	/**
-	 * Normal
+	 * HIGH
 	 */
-	SEND_FEE_NORMAL: () => LocalizedString
-	/**
-	 * Slow
-	 */
-	SEND_FEE_SLOW: () => LocalizedString
-	/**
-	 * REGULAR
-	 */
-	SEND_FEE_REGULAR: () => LocalizedString
+	SEND_FEE_HIGH: () => LocalizedString
 	/**
 	 * MEDIUM
 	 */
 	SEND_FEE_MEDIUM: () => LocalizedString
 	/**
-	 * HIGH
+	 * Normal
 	 */
-	SEND_FEE_HIGH: () => LocalizedString
+	SEND_FEE_NORMAL: () => LocalizedString
+	/**
+	 * REGULAR
+	 */
+	SEND_FEE_REGULAR: () => LocalizedString
+	/**
+	 * Slow
+	 */
+	SEND_FEE_SLOW: () => LocalizedString
 	/**
 	 * From
 	 */
@@ -7658,7 +7722,7 @@ Thanks for your patience!
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select one of your tokens to send:
+	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
 	/**
@@ -8167,7 +8231,7 @@ Are you sure you want to continue?
 	 */
 	UNVERIFIED_APP_TITLE: () => LocalizedString
 	/**
-	 * Updating in
+	 * Fees updating in
 	 */
 	UPDATING_IN: () => LocalizedString
 	/**
