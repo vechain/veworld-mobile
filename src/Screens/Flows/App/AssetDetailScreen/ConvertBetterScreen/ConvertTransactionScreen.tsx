@@ -140,15 +140,6 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                         onSuccess={onPasswordSuccess}
                     />
 
-                    <DelegationView
-                        setNoDelegation={resetDelegation}
-                        selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationAccount={setSelectedDelegationAccount}
-                        selectedDelegationAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                    />
-
                     <BaseSpacer height={24} />
 
                     <BaseText typographyFont="subSubTitleSemiBold">{LL.DETAILS()}</BaseText>
@@ -173,8 +164,16 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                         options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
                         setSelectedFeeOption={setSelectedFeeOption}
-                        onRefreshFee={onRefreshFee}
-                    />
+                        onRefreshFee={onRefreshFee}>
+                        <DelegationView
+                            setNoDelegation={resetDelegation}
+                            selectedDelegationOption={selectedDelegationOption}
+                            setSelectedDelegationAccount={setSelectedDelegationAccount}
+                            selectedDelegationAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        />
+                    </GasFeeSpeed>
                 </BaseView>
             }
             footer={
