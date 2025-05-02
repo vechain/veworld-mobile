@@ -63,11 +63,10 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     const computeSnappoints = useMemo(() => {
         if (selectedOption === DelegationType.NONE) return ["50%", "75%", "90%"]
         if (selectedOption === DelegationType.ACCOUNT) {
-            if (accounts.length < 4) {
-                return ["75%"]
-            }
-
-            return ["90%"]
+            if (accounts.length === 1) return ["60%"]
+            if (accounts.length === 2) return ["71%"]
+            if (accounts.length === 3) return ["82%"]
+            return ["93%"]
         }
         if (delegationUrls.length < 4) {
             return ["75%"]
@@ -140,6 +139,6 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopRightRadius: 24,
         },
         rootContent: {
-            paddingBottom: 40,
+            paddingBottom: 16,
         },
     })
