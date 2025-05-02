@@ -1,6 +1,6 @@
 import { TouchableOpacity as BottomSheetTouchable } from "@gorhom/bottom-sheet"
 import React, { useMemo } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from "react-native"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseIcon } from "../BaseIcon"
@@ -15,9 +15,23 @@ type Props = {
     disabled?: boolean
     isBottomSheet?: boolean
     onPress: (id: string) => void
+    contentStyle?: ViewStyle
+    labelStyle?: TextStyle
+    numberOfLines?: number
 }
 
-export const BaseRadioButton = ({ id, label, isSelected, disabled, testID, isBottomSheet, onPress }: Props) => {
+export const BaseRadioButton = ({
+    id,
+    label,
+    isSelected,
+    disabled,
+    testID,
+    isBottomSheet,
+    onPress,
+    contentStyle,
+    labelStyle,
+    numberOfLines,
+}: Props) => {
     const { styles, theme } = useThemedStyles(_theme => baseStyles(_theme, isSelected))
 
     const computeContainerStyles = useMemo(() => {
@@ -54,8 +68,12 @@ export const BaseRadioButton = ({ id, label, isSelected, disabled, testID, isBot
             style={computeContainerStyles}
             accessibilityValue={{ text: isSelected ? "selected" : "not selected" }}
             onPress={() => onPress(id)}>
-            <BaseView flexDirection={"row"} justifyContent={"space-between"}>
-                <BaseText typographyFont="bodyMedium" style={computedTextStyles} lineHeight={20}>
+            <BaseView flexDirection={"row"} justifyContent={"space-between"} style={contentStyle}>
+                <BaseText
+                    typographyFont="bodyMedium"
+                    style={[computedTextStyles, labelStyle]}
+                    lineHeight={20}
+                    numberOfLines={numberOfLines}>
                     {label}
                 </BaseText>
                 <BaseIcon

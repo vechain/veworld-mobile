@@ -2,6 +2,7 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { default as React, ReactNode, useCallback, useState } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
 import { BaseIcon, BaseRadioButton, BaseSpacer, BaseTextInput } from "~Components/Base"
+import { ColorThemeType } from "~Constants"
 import { FlatListScrollPropsType, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Option, OptionText } from "./Option"
@@ -38,11 +39,13 @@ export const UrlOption = ({ selectedDelegationUrl, children, flatListProps, dele
 
     return (
         <>
-            <Option label={LL.DELEGATE_URL()}>
+            <Option label={LL.DELEGATE_URL()} style={styles.list}>
                 <BaseTextInput
                     value={url}
                     onChange={onChange}
                     leftIcon={<BaseIcon haptics="Light" name={"icon-link"} size={20} color={theme.colors.textLight} />}
+                    leftIconStyle={styles.linkIconStyle}
+                    leftIconAdornment={false}
                     placeholder={LL.DELEGATE_URL_PLACEHOLDER()}
                 />
                 {delegationUrls.length > 0 && (
@@ -59,6 +62,7 @@ export const UrlOption = ({ selectedDelegationUrl, children, flatListProps, dele
                                         label={item}
                                         isSelected={selectedUrl === item}
                                         onPress={onSelectedUrlChange}
+                                        numberOfLines={1}
                                     />
                                 )
                             }}
@@ -73,9 +77,17 @@ export const UrlOption = ({ selectedDelegationUrl, children, flatListProps, dele
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         list: {
             flex: 1,
+        },
+        linkIconStyle: {
+            backgroundColor: theme.colors.neutralVariant.background,
+            borderRightWidth: 1,
+            borderRightColor: theme.colors.neutralVariant.border,
+            borderTopLeftRadius: 7,
+            borderBottomLeftRadius: 7,
+            padding: 14,
         },
     })

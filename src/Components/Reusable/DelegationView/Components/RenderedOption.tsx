@@ -58,13 +58,13 @@ export const RenderedOption = ({
     const thor = useThor()
     const dispatch = useAppDispatch()
     const handleCancel = useCallback(() => {
-        onReset()
         onClose()
+        onReset()
     }, [onClose, onReset])
 
     const handleNoDelegation = useCallback(() => {
-        setNoDelegation()
         onClose()
+        setNoDelegation()
     }, [onClose, setNoDelegation])
 
     if (selectedOption === DelegationType.NONE)
@@ -108,7 +108,7 @@ export const RenderedOption = ({
                         }}
                         onApply={() => {
                             const parsed = URIUtils.parseUrlSafe(selectedUrl!)
-                            setSelectedDelegationUrl(URIUtils.parseUrlSafe(selectedUrl!))
+                            setSelectedDelegationUrl(parsed)
                             dispatch(
                                 addDelegationUrl({
                                     url: parsed,
