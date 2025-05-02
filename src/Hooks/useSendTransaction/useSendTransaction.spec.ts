@@ -22,7 +22,27 @@ const mockedUpdateAccountBalances = ReduxActions.updateAccountBalances as jest.M
 
 jest.mock("axios")
 
-const { vetTransaction1, dappTransaction1 } = TestHelpers.data
+jest.mock("react-native-toast-message", () => {
+    // Mock Toast component that renders null
+    const Toast = () => null
+
+    // Mock Toast static methods
+    Toast.show = jest.fn()
+    Toast.hide = jest.fn()
+    Toast.setRef = jest.fn()
+
+    // Create a BaseToast component mock that renders null
+    const BaseToast = () => null
+
+    // Export both the default Toast and named BaseToast
+    return {
+        __esModule: true,
+        default: Toast,
+        BaseToast,
+    }
+})
+
+const { vetTransaction1, dappTransaction1, nftTransaction1 } = TestHelpers.data
 
 const toSignedTx = (tx: Transaction) => {
     const randomWallet = ethers.Wallet.createRandom()
@@ -93,7 +113,7 @@ describe("useSendTransaction", () => {
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
         })
-        const signedTx = toSignedTx(vetTransaction1)
+        const signedTx = toSignedTx(nftTransaction1)
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: signedTx.id },
         })

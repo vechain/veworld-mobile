@@ -56,6 +56,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
                     error(ERROR_EVENTS.SEND, e)
                 }
             }
+
             throw e
         }
 
