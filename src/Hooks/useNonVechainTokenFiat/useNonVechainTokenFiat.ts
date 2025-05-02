@@ -1,5 +1,7 @@
 import { useMemo } from "react"
 import { useVechainStatsTokensInfo } from "~Api/Coingecko"
+import { B3TR, VeB3TR } from "~Constants/Constants"
+import { useGetVeDelegateBalance } from "~Hooks"
 import {
     selectCurrency,
     selectNonVechainTokensBalancesByAccount,
@@ -17,12 +19,19 @@ export const useNonVechainTokenFiat = (accountAddress?: string) => {
     const currency = useAppSelector(selectCurrency).toLowerCase()
 
     const { data: nonVeChainTokens } = useVechainStatsTokensInfo()
+    const { data: veDelegateBalance } = useGetVeDelegateBalance()
 
     const nonVechainTokensFiat = useMemo(() => {
         if (!nonVeChainTokens) return []
 
         return visibleTokens.map(token => {
-            const tokenExchangeRate = nonVeChainTokens[token.symbol.toLowerCase()]
+            let tokenExchangeRate = nonVeChainTokens[token.symbol.toLowerCase()]
+
+            if (token.symbol.toLowerCase() === VeB3TR.symbol) {
+                token.balance.balance = veDelegateBalance?.formatted ?? "0"
+                tokenExchangeRate = nonVeChainTokens[B3TR.symbol.toLowerCase()]
+            }
+
             if (!tokenExchangeRate) return "0"
 
             const exchangeRate =
@@ -30,7 +39,7 @@ export const useNonVechainTokenFiat = (accountAddress?: string) => {
 
             return BalanceUtils.getFiatBalance(token.balance.balance ?? 0, Number(exchangeRate ?? 0), token.decimals)
         })
-    }, [currency, nonVeChainTokens, visibleTokens])
+    }, [currency, nonVeChainTokens, visibleTokens, veDelegateBalance])
 
     return nonVechainTokensFiat
 }
