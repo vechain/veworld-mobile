@@ -53,7 +53,6 @@ export const AccountOption = ({ selectedDelegationAccount, flatListProps, childr
                             />
                         )
                     }}
-                    style={styles.list}
                     {...flatListProps}
                 />
             </Option>
@@ -66,5 +65,6 @@ export const baseStyles = () =>
     StyleSheet.create({
         list: {
             flex: 1,
+            flexBasis: 160,
         },
     })
