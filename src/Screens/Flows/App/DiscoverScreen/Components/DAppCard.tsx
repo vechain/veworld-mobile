@@ -15,8 +15,8 @@ export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
 
-    const cardDimension = SCREEN_WIDTH * 0.15
-    const imageDimension = SCREEN_WIDTH * 0.15
+    const cardDimension = SCREEN_WIDTH * 0.2
+    const imageDimension = SCREEN_WIDTH * 0.2
     const iconUri = dapp.id
         ? DAppUtils.getAppHubIconUrl(dapp.id)
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
