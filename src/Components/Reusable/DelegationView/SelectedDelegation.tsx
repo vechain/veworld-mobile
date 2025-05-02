@@ -5,6 +5,7 @@ import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalAccountWithDevice } from "~Model"
+import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { AccountCard } from "../AccountCard"
 
 type Props = {
@@ -16,12 +17,18 @@ type Props = {
 export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegationUrl, onDelegateClicked }: Props) => {
     const { theme, styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
+    const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     if (selectedDelegationAccount)
         return (
             <>
                 <BaseSpacer height={16} />
-                <AccountCard account={selectedDelegationAccount} />
+                <AccountCard
+                    account={selectedDelegationAccount}
+                    isVthoBalance
+                    isBalanceVisible={isBalanceVisible}
+                    showOpacityWhenDisabled={false}
+                />
             </>
         )
 
