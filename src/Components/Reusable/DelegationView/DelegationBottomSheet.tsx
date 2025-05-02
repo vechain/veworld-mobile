@@ -32,10 +32,11 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     ref,
 ) {
     const { LL } = useI18nContext()
-    const { theme, styles } = useThemedStyles(baseStyles)
+
     const accounts = useAppSelector(selectDelegationAccounts)
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const [selectedOption, setSelectedOption] = useState(selectedDelegationOption)
+    const { theme, styles } = useThemedStyles(baseStyles(selectedOption))
 
     const options: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
         return [
@@ -85,7 +86,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
             style={styles.root}
             dynamicHeight={selectedOption === DelegationType.NONE}
             ref={ref}
-            contentStyle={styles.rootContent}
+            contentStyle={[styles.rootContent]}
             snapPoints={selectedOption === DelegationType.NONE ? undefined : computeSnappoints}
             onChange={selectedOption === DelegationType.NONE ? undefined : handleSheetChangePosition}>
             <BaseView flexDirection="row" gap={12}>
@@ -131,7 +132,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     )
 })
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (opt: DelegationType) => (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
             backgroundColor: theme.colors.editSpeedBs.background,
@@ -139,6 +140,6 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopRightRadius: 24,
         },
         rootContent: {
-            paddingBottom: 16,
+            paddingBottom: opt === DelegationType.NONE ? 40 : 16,
         },
     })
