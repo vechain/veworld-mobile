@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.1 (2025-05-02)</small>
+
+* build: init ([3652a5d](https://github.com/vechain/veworld-mobile/commit/3652a5d))
+* 109 fix dapp card size (#2901) ([7d51efc](https://github.com/vechain/veworld-mobile/commit/7d51efc)), closes [#2901](https://github.com/vechain/veworld-mobile/issues/2901)
+
 ## <small>2.1.5 (2025-04-30)</small>
 
 * build: init ([e7d48cf](https://github.com/vechain/veworld-mobile/commit/e7d48cf))
