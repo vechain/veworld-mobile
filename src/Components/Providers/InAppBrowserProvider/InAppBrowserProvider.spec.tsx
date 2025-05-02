@@ -18,7 +18,7 @@ jest.mock("react-native/Libraries/Settings/Settings", () => ({
 }))
 
 jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
-    BaseToast: () => null,
+    BaseToast: () => jest.fn(),
 }))
 
 const mockedNavigate = jest.fn()

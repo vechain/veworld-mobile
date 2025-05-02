@@ -6,20 +6,12 @@ import { Transaction } from "@vechain/sdk-core"
 import { ethers } from "ethers"
 import * as ReduxActions from "~Storage/Redux" // Import the module
 
-// Mock the specific module path used in the hook
 jest.mock("~Storage/Redux", () => ({
-    // Keep original exports for things you don't want to mock
     ...jest.requireActual("~Storage/Redux"),
-    // Mock the specific action creator we need to control
     updateAccountBalances: jest.fn(),
-    // Mock useAppDispatch to return a Jest function if needed
     useAppDispatch: () => jest.fn(),
-    // Add mocks for any other selectors used if they cause issues,
-    // otherwise `requireActual` should handle them.
-    // e.g., selectSelectedAccount: jest.fn().mockReturnValue(TestHelpers.data.account1),
 }))
 
-// Mock showSuccessToast to avoid React updates in tests
 jest.mock("~Components", () => ({
     ...jest.requireActual("~Components"),
     showSuccessToast: jest.fn(),
@@ -30,7 +22,7 @@ const mockedUpdateAccountBalances = ReduxActions.updateAccountBalances as jest.M
 
 jest.mock("axios")
 
-const { vetTransaction1, dappTransaction1, nftTransaction1 } = TestHelpers.data
+const { vetTransaction1, dappTransaction1 } = TestHelpers.data
 
 const toSignedTx = (tx: Transaction) => {
     const randomWallet = ethers.Wallet.createRandom()
@@ -46,6 +38,21 @@ describe("useSendTransaction", () => {
             sendTransaction: expect.any(Function),
         })
         // gas is undefined for some reasons: maybe we don't have selectedAccount yet
+    })
+
+    it("sendTransactionAndPerformUpdates should works as expected", async () => {
+        const { result } = renderHook(() => useSendTransaction(jest.fn()), {
+            wrapper: TestWrapper,
+        })
+        expect(result.current).toEqual({
+            sendTransaction: expect.any(Function),
+        })
+        const signedTx = toSignedTx(vetTransaction1)
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({
+            data: { id: signedTx.id },
+            status: 200,
+        })
+        await result.current.sendTransaction(signedTx)
     })
 
     it("should handle dapp tx", async () => {
@@ -86,7 +93,7 @@ describe("useSendTransaction", () => {
         expect(result.current).toEqual({
             sendTransaction: expect.any(Function),
         })
-        const signedTx = toSignedTx(nftTransaction1)
+        const signedTx = toSignedTx(vetTransaction1)
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: signedTx.id },
         })
