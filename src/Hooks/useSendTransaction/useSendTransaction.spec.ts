@@ -17,9 +17,6 @@ jest.mock("~Components", () => ({
     showSuccessToast: jest.fn(),
 }))
 
-// Create a typed reference to the mocked function
-const mockedUpdateAccountBalances = ReduxActions.updateAccountBalances as jest.Mock
-
 jest.mock("axios")
 
 jest.mock("react-native-toast-message", () => {
@@ -41,6 +38,9 @@ jest.mock("react-native-toast-message", () => {
         BaseToast,
     }
 })
+
+// Create a typed reference to the mocked function
+const mockedUpdateAccountBalances = ReduxActions.updateAccountBalances as jest.Mock
 
 const { vetTransaction1, dappTransaction1, nftTransaction1 } = TestHelpers.data
 
