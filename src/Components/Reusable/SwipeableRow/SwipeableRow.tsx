@@ -20,6 +20,7 @@ type Props<T> = {
     yMargins?: number
     onPress?: (item: T) => void
     isDragMode?: boolean
+    isDisabled?: boolean
     isOpen?: boolean
     customUnderlay?: ReactNode
     snapPointsLeft?: number[]
@@ -41,6 +42,7 @@ export const SwipeableRow = <T,>({
     onPress,
     isDragMode,
     isOpen,
+    isDisabled,
     customUnderlay,
     snapPointsLeft,
     isLogPressEnabled = true,
@@ -113,7 +115,7 @@ export const SwipeableRow = <T,>({
                 onChange={handleSwipe}>
                 <BaseView style={styles.touchableContainer}>
                     <Pressable
-                        disabled={isDragMode}
+                        disabled={isDragMode || isDisabled}
                         onPress={() => onPress?.(item)}
                         onPressIn={() => {
                             closeSwipeableItems(false)
