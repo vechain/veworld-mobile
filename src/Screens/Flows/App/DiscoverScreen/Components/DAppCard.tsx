@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseText, BaseTouchable } from "~Components"
-import { DiscoveryDApp, SCREEN_WIDTH } from "~Constants"
+import { COLORS, DiscoveryDApp, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { DAppUtils } from "~Utils"
 
@@ -12,11 +12,13 @@ type DAppCardProps = {
 }
 
 export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
 
-    const cardDimension = SCREEN_WIDTH * 0.2
-    const imageDimension = SCREEN_WIDTH * 0.2
+    const cardDimension = Math.min(SCREEN_WIDTH * 0.2, 64)
+    const imageDimension = Math.min(SCREEN_WIDTH * 0.2, 64)
+    const textColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
+
     const iconUri = dapp.id
         ? DAppUtils.getAppHubIconUrl(dapp.id)
         : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
@@ -41,7 +43,7 @@ export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
                     onError={() => setLoadFallback(true)}
                     resizeMode="contain"
                 />
-                <BaseText numberOfLines={1} typographyFont="bodySemiBold">
+                <BaseText numberOfLines={1} typographyFont="bodyMedium" color={textColor}>
                     {dapp.name}
                 </BaseText>
             </BaseTouchable>
