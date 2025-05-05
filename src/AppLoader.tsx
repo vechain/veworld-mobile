@@ -1,10 +1,10 @@
-import React, { useEffect, useMemo, useState } from "react"
+import React, { useEffect, useMemo, useRef, useCallback } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
 import { AppLoader as AppLoaderAnimation } from "~Assets"
 import { BaseView, BlurView } from "~Components"
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
-import Animated, { useAnimatedStyle, useSharedValue, withTiming, runOnJS } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { useAppSelector, selectIsAppLoading } from "~Storage/Redux"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { useTheme } from "~Hooks"
@@ -48,30 +48,41 @@ type Props = {
  * ```
  */
 export const AppLoader = ({ children }: Props) => {
+    const lottieRef = useRef<LottieView>(null)
     const isAppLoading = useAppSelector(selectIsAppLoading)
     const theme = useTheme()
-    const [shouldRenderLoader, setShouldRenderLoader] = useState(isAppLoading)
-
     const opacity = useSharedValue(isAppLoading ? 1 : 0)
+    const animationTimeout = useRef<NodeJS.Timeout>()
 
-    const handleRemoveLoader = () => {
-        setShouldRenderLoader(false)
-    }
+    const handleAnimationState = useCallback(
+        (shouldShow: boolean) => {
+            if (animationTimeout.current) {
+                clearTimeout(animationTimeout.current)
+            }
+
+            opacity.value = withTiming(shouldShow ? 1 : 0, { duration: 200 })
+
+            if (!shouldShow) {
+                animationTimeout.current = setTimeout(() => {
+                    if (lottieRef.current) {
+                        lottieRef.current.reset()
+                    }
+                    opacity.value = 0
+                }, 250)
+            }
+        },
+        [opacity],
+    )
 
     useEffect(() => {
-        if (isAppLoading) {
-            setShouldRenderLoader(true)
-            requestAnimationFrame(() => {
-                opacity.value = withTiming(1)
-            })
-        } else if (shouldRenderLoader) {
-            opacity.value = withTiming(0, { duration: 200 }, finished => {
-                if (finished) {
-                    runOnJS(handleRemoveLoader)()
-                }
-            })
+        handleAnimationState(isAppLoading)
+
+        return () => {
+            if (animationTimeout.current) {
+                clearTimeout(animationTimeout.current)
+            }
         }
-    }, [isAppLoading, opacity, shouldRenderLoader])
+    }, [isAppLoading, handleAnimationState])
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
@@ -99,17 +110,16 @@ export const AppLoader = ({ children }: Props) => {
     return (
         <View style={StyleSheet.absoluteFill}>
             {children}
-            {shouldRenderLoader && (
-                <Animated.View style={[styles.overlay, animatedStyle]} pointerEvents={isAppLoading ? "auto" : "none"}>
-                    {RenderBackdrop}
-                    <LottieView
-                        source={AppLoaderAnimation}
-                        autoPlay={isAppLoading}
-                        loop={isAppLoading}
-                        style={styles.lottie}
-                    />
-                </Animated.View>
-            )}
+            <Animated.View style={[styles.overlay, animatedStyle]} pointerEvents={isAppLoading ? "auto" : "none"}>
+                {RenderBackdrop}
+                <LottieView
+                    ref={lottieRef}
+                    source={AppLoaderAnimation}
+                    autoPlay={isAppLoading}
+                    loop
+                    style={styles.lottie}
+                />
+            </Animated.View>
         </View>
     )
 }
