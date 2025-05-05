@@ -65,9 +65,9 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
         if (selectedOption === DelegationType.NONE) return ["50%", "75%", "90%"]
         if (selectedOption === DelegationType.ACCOUNT) {
             if (accounts.length === 1) return ["60%"]
-            if (accounts.length === 2) return ["71%"]
-            if (accounts.length === 3) return ["82%"]
-            return ["93%"]
+            if (accounts.length === 2) return ["70%"]
+            if (accounts.length === 3) return ["80%"]
+            return ["85%"]
         }
         if (delegationUrls.length < 4) {
             return ["75%"]
