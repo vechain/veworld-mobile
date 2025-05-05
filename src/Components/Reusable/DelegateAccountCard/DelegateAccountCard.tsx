@@ -58,7 +58,7 @@ export const DelegateAccountCard = memo(({ account, onPress, selected, container
                     <BaseText color={theme.colors.subtitle} typographyFont="captionMedium" align="right">
                         {balance}
                     </BaseText>
-                    <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
+                    <BaseText color={theme.colors.textLight} typographyFont="captionMedium" align="right">
                         {VTHO.symbol}
                     </BaseText>
                 </BaseView>

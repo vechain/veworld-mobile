@@ -7,7 +7,7 @@ import { useScrollableBottomSheet, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, BaseButtonGroupHorizontalType, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { selectDelegationAccounts, selectDelegationUrls, useAppSelector } from "~Storage/Redux"
+import { selectDelegationAccountsWithVtho, selectDelegationUrls, useAppSelector } from "~Storage/Redux"
 import { RenderedOption } from "./Components/RenderedOption"
 
 type Props = {
@@ -33,7 +33,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
 ) {
     const { LL } = useI18nContext()
 
-    const accounts = useAppSelector(selectDelegationAccounts)
+    const accounts = useAppSelector(selectDelegationAccountsWithVtho)
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const [selectedOption, setSelectedOption] = useState(selectedDelegationOption)
     const { theme, styles } = useThemedStyles(baseStyles(selectedOption))
