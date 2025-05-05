@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import Animated, { useAnimatedRef } from "react-native-reanimated"
 import { BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useCameraPermissions, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
 import {
     selectBookmarkedDapps,
@@ -17,7 +17,6 @@ import { useI18nContext } from "~i18n"
 import { Ecosystem, Favourites, Header, NewDapps } from "./Components"
 import { PopularTrendingDApps } from "./Components/PopularTrendingDApps"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
-
 import { useDAppActions } from "./Hooks"
 
 export const DiscoverScreen: React.FC = () => {
@@ -29,6 +28,10 @@ export const DiscoverScreen: React.FC = () => {
 
     useFetchFeaturedDApps()
 
+    const { checkPermissions } = useCameraPermissions({
+        onCanceled: () => {},
+    })
+
     const animatedRef = useAnimatedRef<Animated.ScrollView>()
 
     const flatListRef = useRef(null)
@@ -39,6 +42,10 @@ export const DiscoverScreen: React.FC = () => {
     const { onDAppPress } = useDAppActions()
 
     const showFavorites = bookmarkedDApps.length > 0
+
+    useEffect(() => {
+        checkPermissions()
+    }, [checkPermissions])
 
     useEffect(() => {
         if (!hasOpenedDiscovery) {
