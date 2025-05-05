@@ -198,7 +198,7 @@ export const useVns = (props?: Vns): VnsHook => {
     const getTotalGas = useCallback(
         async (transaction: SubdomainClaimTransaction) => {
             try {
-                const gasResult = await thorClient.gas.estimateGas(transaction.clauses, address)
+                const gasResult = await thorClient.transactions.estimateGas(transaction.clauses, address)
 
                 const { totalGas, reverted, vmErrors, revertReasons } = gasResult
 
@@ -210,7 +210,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [address, thorClient.gas],
+        [address, thorClient.transactions],
     )
 
     const buildClaimTx = useCallback(
@@ -238,7 +238,7 @@ export const useVns = (props?: Vns): VnsHook => {
                     },
                 ]
 
-                const gas = await thorClient.gas.estimateGas(clauses, account.address)
+                const gas = await thorClient.transactions.estimateGas(clauses, account.address)
                 const blockRef = await thorClient.blocks.getBestBlockRef()
                 if (!blockRef) throw new Error("Failed to get block ref")
 
@@ -273,7 +273,7 @@ export const useVns = (props?: Vns): VnsHook => {
                 throw new Error((e as Error)?.message)
             }
         },
-        [getTotalGas, network.genesis.id, network.type, thorClient.blocks, thorClient.gas, thorClient.transactions],
+        [getTotalGas, network.genesis.id, network.type, thorClient.blocks, thorClient.transactions],
     )
 
     const signClaimTx = useCallback(

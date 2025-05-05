@@ -47,14 +47,13 @@ export const useTransactionFees = (props: Props) => {
     }, [gasResult.gasFeeOptions, gasResult.priorityFees.gasRaw])
 
     const result = useMemo(() => {
-        const r = GasUtils.getGasByCoefficient({ gas: props.gas, selectedFeeOption: props.coefficient.toString() })
         return {
-            estimatedFee: r.gasFeeOptions[props.coefficient],
-            maxFee: r.gasFeeOptions[props.coefficient].gasRaw,
-            gasPriceCoef: r.gasPriceCoef,
-            priorityFee: r.priorityFees.gasRaw,
+            estimatedFee: gasResult.gasFeeOptions[props.coefficient].gasRaw,
+            maxFee: gasResult.gasFeeOptions[props.coefficient].gasRaw,
+            gasPriceCoef: gasResult.gasPriceCoef,
+            priorityFee: gasResult.priorityFees.gasRaw,
         }
-    }, [props.coefficient, props.gas])
+    }, [gasResult, props.coefficient])
 
     const memoized = useMemo(
         () => ({ ...result, options, isLoading, dataUpdatedAt: moment().valueOf() }),
