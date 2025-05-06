@@ -4,13 +4,19 @@ import { TestHelpers, TestWrapper } from "~Test"
 import axios, { AxiosError } from "axios"
 import { Transaction } from "@vechain/sdk-core"
 import { ethers } from "ethers"
-import * as ReduxActions from "~Storage/Redux" // Import the module
 
-jest.mock("~Storage/Redux", () => ({
-    ...jest.requireActual("~Storage/Redux"),
-    updateAccountBalances: jest.fn(),
-    useAppDispatch: () => jest.fn(),
-}))
+const mockDispatch = jest.fn()
+
+const mockUpdateAccountBalances = jest.fn()
+
+jest.mock("~Storage/Redux", () => {
+    const originalModule = jest.requireActual("~Storage/Redux")
+    return {
+        ...originalModule,
+        updateAccountBalances: () => mockUpdateAccountBalances,
+        useAppDispatch: () => mockDispatch,
+    }
+})
 
 jest.mock("~Components", () => ({
     ...jest.requireActual("~Components"),
@@ -39,9 +45,6 @@ jest.mock("react-native-toast-message", () => {
     }
 })
 
-// Create a typed reference to the mocked function
-const mockedUpdateAccountBalances = ReduxActions.updateAccountBalances as jest.Mock
-
 const { vetTransaction1, dappTransaction1, nftTransaction1 } = TestHelpers.data
 
 const toSignedTx = (tx: Transaction) => {
@@ -50,6 +53,11 @@ const toSignedTx = (tx: Transaction) => {
 }
 
 describe("useSendTransaction", () => {
+    beforeEach(() => {
+        mockDispatch.mockClear()
+        mockUpdateAccountBalances.mockClear()
+    })
+
     it("should render correctly", async () => {
         const { result } = renderHook(() => useSendTransaction(jest.fn()), {
             wrapper: TestWrapper,
@@ -90,6 +98,17 @@ describe("useSendTransaction", () => {
     })
 
     it("should return transaction ID even if update balances fails", async () => {
+        mockUpdateAccountBalances.mockImplementationOnce(() => {
+            throw new Error("Balance update failed")
+        })
+        // Setup mock dispatch to actually execute the thunk action
+        mockDispatch.mockImplementation(action => {
+            if (typeof action === "function") {
+                return action()
+            }
+            return action
+        })
+
         const { result } = renderHook(() => useSendTransaction(jest.fn()), {
             wrapper: TestWrapper,
         })
@@ -101,9 +120,11 @@ describe("useSendTransaction", () => {
             data: { id: signedTx.id },
         })
 
-        mockedUpdateAccountBalances.mockReturnValueOnce(new Error("Balance update failed huhgh"))
-
+        // Test should pass since the hook catches the error and returns the transaction ID
         await expect(result.current.sendTransaction(signedTx)).resolves.toEqual(signedTx.id)
+        // Verify dispatch was called
+        expect(mockDispatch).toHaveBeenCalled()
+        expect(mockUpdateAccountBalances).toHaveBeenCalled()
     })
 
     it("should handle NFT tx", async () => {
