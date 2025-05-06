@@ -21,14 +21,7 @@ import { newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
 import TestHelpers from "./helpers"
-import {
-    B3TRWithBalance,
-    B3TRWithCompleteInfo,
-    token1WithBalance,
-    token2WithBalance,
-    VOT3WithBalance,
-    VOT3WithCompleteInfo,
-} from "./helpers/data"
+import { B3TRWithBalance, token1WithBalance, token2WithBalance, VOT3WithBalance } from "./helpers/data"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -132,30 +125,6 @@ export const getStore = (preloadedState: Partial<RootState>) =>
                 },
                 solo: {},
                 other: {},
-            },
-            tokens: {
-                tokens: {
-                    mainnet: {
-                        custom: {},
-                        officialTokens: [B3TRWithCompleteInfo, VOT3WithCompleteInfo],
-                        suggestedTokens: [],
-                    },
-                    testnet: {
-                        custom: {},
-                        officialTokens: [B3TRWithCompleteInfo, VOT3WithCompleteInfo],
-                        suggestedTokens: [],
-                    },
-                    solo: {
-                        custom: {},
-                        officialTokens: [],
-                        suggestedTokens: [],
-                    },
-                    other: {
-                        custom: {},
-                        officialTokens: [],
-                        suggestedTokens: [],
-                    },
-                },
             },
             ...preloadedState,
         },
