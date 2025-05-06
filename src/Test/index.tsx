@@ -21,7 +21,14 @@ import { newStorage, NftSlice, NftSliceState, reducer } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
 import TestHelpers from "./helpers"
-import { B3TRWithBalance, VOT3WithBalance } from "./helpers/data"
+import {
+    B3TRWithBalance,
+    B3TRWithCompleteInfo,
+    token1WithBalance,
+    token2WithBalance,
+    VOT3WithBalance,
+    VOT3WithCompleteInfo,
+} from "./helpers/data"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -108,13 +115,47 @@ export const getStore = (preloadedState: Partial<RootState>) =>
             ],
             balances: {
                 mainnet: {
-                    "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957": [B3TRWithBalance.balance, VOT3WithBalance.balance],
+                    "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957": [
+                        B3TRWithBalance.balance,
+                        VOT3WithBalance.balance,
+                        token1WithBalance.balance,
+                        token2WithBalance.balance,
+                    ],
                 },
                 testnet: {
-                    "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957": [B3TRWithBalance.balance, VOT3WithBalance.balance],
+                    "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957": [
+                        B3TRWithBalance.balance,
+                        VOT3WithBalance.balance,
+                        token1WithBalance.balance,
+                        token2WithBalance.balance,
+                    ],
                 },
                 solo: {},
                 other: {},
+            },
+            tokens: {
+                tokens: {
+                    mainnet: {
+                        custom: {},
+                        officialTokens: [B3TRWithCompleteInfo, VOT3WithCompleteInfo],
+                        suggestedTokens: [],
+                    },
+                    testnet: {
+                        custom: {},
+                        officialTokens: [B3TRWithCompleteInfo, VOT3WithCompleteInfo],
+                        suggestedTokens: [],
+                    },
+                    solo: {
+                        custom: {},
+                        officialTokens: [],
+                        suggestedTokens: [],
+                    },
+                    other: {
+                        custom: {},
+                        officialTokens: [],
+                        suggestedTokens: [],
+                    },
+                },
             },
             ...preloadedState,
         },

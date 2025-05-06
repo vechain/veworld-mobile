@@ -82,12 +82,64 @@ export const token1: Token = {
     custom: false,
 }
 
+export const token1WithBalance: FungibleTokenWithBalance = {
+    ...token1,
+    decimals: 18,
+    balance: {
+        balance: "100",
+        tokenAddress: token1.address,
+        timeUpdated: Date.now().toString(),
+        isHidden: false,
+    },
+}
+
+export const token1WithCompleteInfo: TokenWithCompleteInfo = {
+    ...token1,
+    decimals: 18,
+    exchangeRateCurrency: "USD",
+    exchangeRateLoading: false,
+    fiatBalance: "0",
+    tokenInfoLoading: false,
+    tokenUnitBalance: "100",
+    tokenUnitFullBalance: "100",
+    chartData: undefined,
+    exchangeRate: undefined,
+    tokenInfo: undefined,
+    balance: token1WithBalance.balance,
+}
+
 export const token2: Token = {
     name: "Safe Haven",
     symbol: "SHA",
     address: "0x5db3c8a942333f6468176a870db36eef120a34dc",
     icon,
     custom: false,
+}
+
+export const token2WithBalance: FungibleTokenWithBalance = {
+    ...token2,
+    decimals: 18,
+    balance: {
+        balance: "10000000000000000000000",
+        tokenAddress: token2.address,
+        timeUpdated: Date.now().toString(),
+        isHidden: false,
+    },
+}
+
+export const token2WithCompleteInfo: TokenWithCompleteInfo = {
+    ...token2,
+    decimals: 18,
+    exchangeRateCurrency: "USD",
+    exchangeRateLoading: false,
+    fiatBalance: "0",
+    tokenInfoLoading: false,
+    tokenUnitBalance: "10000000000000000000000",
+    tokenUnitFullBalance: "10000000000000000000000",
+    chartData: undefined,
+    exchangeRate: undefined,
+    tokenInfo: undefined,
+    balance: token2WithBalance.balance,
 }
 
 export const customToken: Token = {
