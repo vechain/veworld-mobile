@@ -1,5 +1,5 @@
 import React, { MutableRefObject, ReactNode, useCallback } from "react"
-import { BaseView } from "~Components/Base"
+import { BaseView } from "~Components"
 import SwipeableItem, { OpenDirection, SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { DeleteUnderlay } from "../DeleteUnderlay"
 import { Pressable, StyleSheet } from "react-native"
