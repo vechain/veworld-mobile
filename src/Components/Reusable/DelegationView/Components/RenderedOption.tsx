@@ -96,10 +96,7 @@ export const RenderedOption = ({
         )
     if (selectedOption === DelegationType.URL)
         return (
-            <UrlOption
-                selectedDelegationUrl={selectedDelegationUrl}
-                flatListProps={flatListScrollProps}
-                delegationUrls={delegationUrls}>
+            <UrlOption selectedDelegationUrl={selectedDelegationUrl} delegationUrls={delegationUrls}>
                 {({ onCancel, selectedUrl }) => (
                     <ButtonBar
                         onCancel={() => {
