@@ -69,26 +69,34 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
             if (accounts.length === 3) return ["80%"]
             return ["85%"]
         }
-        if (delegationUrls.length < 4) {
-            return ["75%"]
-        }
 
         return ["90%"]
-    }, [accounts.length, delegationUrls.length, selectedOption])
+    }, [accounts.length, selectedOption])
 
     const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
-        data: selectedOption === DelegationType.ACCOUNT ? accounts : delegationUrls,
+        data: selectedOption === DelegationType.ACCOUNT ? accounts : [],
         snapPoints: computeSnappoints,
     })
+
+    const hasDynamicHeight = useMemo(() => {
+        switch (selectedOption) {
+            case DelegationType.NONE:
+                return true
+            case DelegationType.ACCOUNT:
+                return false
+            case DelegationType.URL:
+                return true
+        }
+    }, [selectedOption])
 
     return (
         <BaseBottomSheet
             style={styles.root}
-            dynamicHeight={selectedOption === DelegationType.NONE}
+            dynamicHeight={hasDynamicHeight}
             ref={ref}
             contentStyle={[styles.rootContent]}
-            snapPoints={selectedOption === DelegationType.NONE ? undefined : computeSnappoints}
-            onChange={selectedOption === DelegationType.NONE ? undefined : handleSheetChangePosition}>
+            snapPoints={hasDynamicHeight ? undefined : computeSnappoints}
+            onChange={hasDynamicHeight ? undefined : handleSheetChangePosition}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-arrow-link" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>

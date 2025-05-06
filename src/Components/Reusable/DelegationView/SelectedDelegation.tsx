@@ -70,7 +70,7 @@ export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegati
                                     .fontWeight as keyof typeof typography.fontWeight,
                                 lineHeight: typography.defaults.bodySemiBold.lineHeight,
                                 flexShrink: 1,
-                            }}>{`${delegationUrlParsed?.hostname}${delegationUrlParsed?.pathname}`}</Text>
+                            }}>{`${delegationUrlParsed?.host}${delegationUrlParsed?.pathname}`}</Text>
                     </BaseView>
                 </BaseView>
             )
@@ -81,7 +81,7 @@ export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegati
         )
     }, [
         LL,
-        delegationUrlParsed?.hostname,
+        delegationUrlParsed?.host,
         delegationUrlParsed?.pathname,
         delegationUrlParsed?.protocol,
         name,

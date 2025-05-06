@@ -1,22 +1,18 @@
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { default as React, ReactNode, useCallback, useState } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
-import { BaseIcon, BaseRadioButton, BaseSpacer, BaseTextInput } from "~Components/Base"
+import { BaseIcon, BaseRadioButton, BaseTextInput, BaseView } from "~Components/Base"
 import { ColorThemeType } from "~Constants"
-import { FlatListScrollPropsType, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Option, OptionText } from "./Option"
 
 type Props = {
     selectedDelegationUrl?: string | undefined
     children: (args: { onCancel: () => void; selectedUrl: string | undefined }) => ReactNode
-    flatListProps: FlatListScrollPropsType
     delegationUrls: string[]
 }
 
-const ItemSeparatorComponent = () => <BaseSpacer height={8} />
-
-export const UrlOption = ({ selectedDelegationUrl, children, flatListProps, delegationUrls }: Props) => {
+export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -39,7 +35,7 @@ export const UrlOption = ({ selectedDelegationUrl, children, flatListProps, dele
 
     return (
         <>
-            <Option label={LL.DELEGATE_URL()} style={styles.list}>
+            <Option label={LL.DELEGATE_URL()}>
                 <BaseTextInput
                     value={url}
                     onChange={onChange}
@@ -51,24 +47,18 @@ export const UrlOption = ({ selectedDelegationUrl, children, flatListProps, dele
                 {delegationUrls.length > 0 && (
                     <>
                         <OptionText>{LL.DELEGATE_URL_SELECT()}</OptionText>
-                        <BottomSheetFlatList
-                            data={delegationUrls.slice(0, 3)}
-                            keyExtractor={delUrl => delUrl}
-                            ItemSeparatorComponent={ItemSeparatorComponent}
-                            renderItem={({ item }) => {
-                                return (
-                                    <BaseRadioButton
-                                        id={item}
-                                        label={item}
-                                        isSelected={selectedUrl === item}
-                                        onPress={onSelectedUrlChange}
-                                        numberOfLines={1}
-                                    />
-                                )
-                            }}
-                            style={styles.list}
-                            {...flatListProps}
-                        />
+                        <BaseView flexDirection="column" gap={8}>
+                            {delegationUrls.slice(0, 3).map(delUrl => (
+                                <BaseRadioButton
+                                    id={delUrl}
+                                    label={delUrl.slice(`${new URL(delUrl).protocol}//`.length)}
+                                    isSelected={selectedUrl === delUrl}
+                                    onPress={onSelectedUrlChange}
+                                    numberOfLines={1}
+                                    key={delUrl}
+                                />
+                            ))}
+                        </BaseView>
                     </>
                 )}
             </Option>
