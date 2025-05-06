@@ -1918,13 +1918,17 @@ type RootTranslation = {
 	 */
 	DELEGATE_URL: string
 	/**
+	 * I​n​s​e​r​t​ ​U​R​L​.​.​.
+	 */
+	DELEGATE_URL_PLACEHOLDER: string
+	/**
 	 * O​r​ ​s​e​l​e​c​t​ ​a​ ​r​e​c​e​n​t​:
 	 */
 	DELEGATE_URL_SELECT: string
 	/**
-	 * I​n​s​e​r​t​ ​U​R​L​.​.​.
+	 * F​e​e​ ​d​e​l​e​g​a​t​e​d​ ​t​o
 	 */
-	DELEGATE_URL_PLACEHOLDER: string
+	DELEGATION_FEE: string
 	/**
 	 * F​e​e​ ​n​o​t​ ​d​e​l​e​g​a​t​e​d
 	 */
@@ -6141,13 +6145,17 @@ Thanks for your patience!
 	 */
 	DELEGATE_URL: () => LocalizedString
 	/**
+	 * Insert URL...
+	 */
+	DELEGATE_URL_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Or select a recent:
 	 */
 	DELEGATE_URL_SELECT: () => LocalizedString
 	/**
-	 * Insert URL...
+	 * Fee delegated to
 	 */
-	DELEGATE_URL_PLACEHOLDER: () => LocalizedString
+	DELEGATION_FEE: () => LocalizedString
 	/**
 	 * Fee not delegated
 	 */
