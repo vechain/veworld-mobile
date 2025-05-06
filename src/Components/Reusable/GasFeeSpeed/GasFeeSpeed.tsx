@@ -1,5 +1,5 @@
 import moment from "moment"
-import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react"
+import React, { PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useInterval } from "usehooks-ts"
 import { BaseButton, BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -25,7 +25,6 @@ export const GasFeeSpeed = ({
     options,
     setSelectedFeeOption,
     selectedFeeOption,
-    onRefreshFee,
     gasUpdatedAt,
     isGalactica,
     children,
@@ -45,9 +44,15 @@ export const GasFeeSpeed = ({
 
     useInterval(intervalFn, 1000)
 
-    useEffect(() => {
-        if (secondsRemaining === 0) onRefreshFee()
-    }, [onRefreshFee, secondsRemaining])
+    // useEffect(() => {
+    //     console.log(
+    //         "FEES",
+    //         Object.entries(options).map(([coefficient, value]) => [
+    //             coefficient,
+    //             Object.fromEntries(Object.entries(value).map(([key, v]) => [key, v.toBigInt.toString()])),
+    //         ]),
+    //     )
+    // }, [options])
 
     return (
         <BaseView flexDirection="column" gap={16} mt={16}>

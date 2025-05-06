@@ -12,6 +12,7 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
+import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
@@ -65,8 +66,15 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
+    const { isGalactica, loading: isGalacticaLoading, blockId } = useIsGalactica()
+
     // 3. Priority fees
-    const transactionFeesResponse = useTransactionFees({ coefficient: selectedFeeOption, gas })
+    const transactionFeesResponse = useTransactionFees({
+        coefficient: selectedFeeOption,
+        gas,
+        isGalactica,
+        blockId,
+    })
 
     // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
@@ -74,7 +82,7 @@ export const useTransactionScreen = ({
         gas,
         isDelegated,
         dependsOn: dappRequest?.options?.dependsOn,
-        gasPriceCoef: transactionFeesResponse.gasPriceCoef,
+        //TODO: Add tx options
     })
 
     // 5. Sign transaction
@@ -189,8 +197,8 @@ export const useTransactionScreen = ({
     ])
 
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty || transactionFeesResponse.isLoading,
-        [loading, loadingGas, isBiometricsEmpty, transactionFeesResponse.isLoading],
+        () => loading || loadingGas || isBiometricsEmpty || transactionFeesResponse.isLoading || isGalacticaLoading,
+        [loading, loadingGas, isBiometricsEmpty, transactionFeesResponse.isLoading, isGalacticaLoading],
     )
 
     /**
@@ -236,11 +244,11 @@ export const useTransactionScreen = ({
         selectedDelegationUrl,
         vtho,
         isDisabledButtonState,
-        priorityFee: transactionFeesResponse.priorityFee,
         estimatedFee: transactionFeesResponse.estimatedFee,
         maxFee: transactionFeesResponse.maxFee,
         gasOptions: transactionFeesResponse.options,
         gasUpdatedAt: transactionFeesResponse.dataUpdatedAt,
         onRefreshFee,
+        isGalactica,
     }
 }

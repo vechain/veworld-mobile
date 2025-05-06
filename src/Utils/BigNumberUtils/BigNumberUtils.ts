@@ -60,6 +60,10 @@ class BigNumberUtils implements IBigNumberUtils {
         return this.data.toString(16)
     }
 
+    get toBigInt(): bigint {
+        return BigInt(this.data.decimalPlaces(0).toString())
+    }
+
     get isZero(): boolean {
         return this.data.isZero()
     }
