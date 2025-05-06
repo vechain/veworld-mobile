@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.1 (2025-05-06)</small>
+
+* build: init ([c968102](https://github.com/vechain/veworld-mobile/commit/c968102))
+* (fix) - Add dApp card size max and color/weight adjustments (#2911) ([5bea003](https://github.com/vechain/veworld-mobile/commit/5bea003)), closes [#2911](https://github.com/vechain/veworld-mobile/issues/2911)
+
 ## <small>2.1.5 (2025-04-30)</small>
 
 * build: init ([e7d48cf](https://github.com/vechain/veworld-mobile/commit/e7d48cf))
