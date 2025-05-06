@@ -98,6 +98,17 @@ export const customToken: Token = {
     custom: true,
 }
 
+export const CustomTokenWithBalance: FungibleTokenWithBalance = {
+    ...customToken,
+    decimals: 18,
+    balance: {
+        balance: "10459472020000000000000",
+        tokenAddress: customToken.address,
+        timeUpdated: Date.now().toString(),
+        isHidden: false,
+    },
+}
+
 export const tokensMock = [token1, token2]
 
 export const NFT_Mock: NonFungibleToken = {

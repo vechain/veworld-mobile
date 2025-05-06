@@ -33,7 +33,7 @@ export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps)
     const renderBalance = useMemo(() => formatFiat({ amount, cover: !isVisible }), [formatFiat, amount, isVisible])
 
     return isLoading ? (
-        <BaseView pt={4} {...baseviewProps}>
+        <BaseView testID="fiat-balance-skeleton" pt={4} {...baseviewProps}>
             <BaseSkeleton
                 animationDirection="horizontalLeft"
                 boneColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.DARK_PURPLE}
@@ -43,7 +43,7 @@ export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps)
             />
         </BaseView>
     ) : (
-        <BaseView {...baseviewProps}>
+        <BaseView testID="fiat-balance" {...baseviewProps}>
             <BaseView flexDirection="row">
                 <BaseText typographyFont={typographyFont} color={color}>
                     {areAlmostZero && isVisible ? "< " : prefix}
