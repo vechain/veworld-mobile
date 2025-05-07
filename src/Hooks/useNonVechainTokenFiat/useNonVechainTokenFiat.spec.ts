@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useNonVechainTokenFiat } from "./useNonVechainTokenFiat"
 import { TestHelpers, TestWrapper } from "~Test"
+import { useVechainStatsTokensInfo } from "~Api/Coingecko"
 
 const { token1WithCompleteInfo, token2WithCompleteInfo } = TestHelpers.data
 
@@ -311,9 +312,7 @@ const mockedState = {
 
 jest.mock("~Api/Coingecko", () => ({
     ...jest.requireActual("~Api/Coingecko"),
-    useVechainStatsTokensInfo: () => ({
-        data: mockNonVeChainTokensFiat,
-    }),
+    useVechainStatsTokensInfo: jest.fn(),
 }))
 
 describe("useNonVechainTokenFiat", () => {
@@ -322,6 +321,10 @@ describe("useNonVechainTokenFiat", () => {
     })
 
     it("returns the correct fiat balance", () => {
+        ;(useVechainStatsTokensInfo as jest.Mock).mockReturnValue({
+            data: mockNonVeChainTokensFiat,
+        })
+
         const { result } = renderHook(() => useNonVechainTokenFiat(), {
             wrapper: TestWrapper,
             initialProps: mockedState,
