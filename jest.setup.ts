@@ -251,3 +251,5 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
         },
     }
 })
+
+require("react-native-reanimated").setUpTests()

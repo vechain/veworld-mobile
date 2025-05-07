@@ -88,7 +88,7 @@ export const AppLoader = ({ children }: Props) => {
         return {
             opacity: opacity.value,
         }
-    })
+    }, [opacity])
 
     const RenderBackdrop = useMemo(() => {
         if (isAndroid())
@@ -110,7 +110,10 @@ export const AppLoader = ({ children }: Props) => {
     return (
         <View style={StyleSheet.absoluteFill}>
             {children}
-            <Animated.View style={[styles.overlay, animatedStyle]} pointerEvents={isAppLoading ? "auto" : "none"}>
+            <Animated.View
+                testID="app-loader-overlay"
+                style={[styles.overlay, animatedStyle]}
+                pointerEvents={isAppLoading ? "auto" : "none"}>
                 {RenderBackdrop}
                 <LottieView
                     ref={lottieRef}
