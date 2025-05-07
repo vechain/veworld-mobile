@@ -73,7 +73,6 @@ module.exports = {
         "<rootDir>/src/Test",
         "<rootDir>/src/@types",
         "<rootDir>/src/AnimatedSplashScreen.tsx",
-        "<rootDir>/src/AppLoader.tsx",
         "<rootDir>/src/EntryPoint.tsx",
         "<rootDir>/src/SplashScreen.tsx",
     ],
