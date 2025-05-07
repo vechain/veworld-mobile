@@ -65,7 +65,7 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     }, [internalFeeOption, onClose, setSelectedFeeOption])
 
     return (
-        <BaseBottomSheet backgroundStyle={styles.root} ref={ref} dynamicHeight contentStyle={styles.rootContent}>
+        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-thunder" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -88,7 +88,6 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                         </BaseText>
                     </BaseView>
                 )}
-                style={styles.buttonGroup}
             />
             <BaseSpacer height={24} />
             <BaseView style={styles.result} gap={8} flexDirection="column">
@@ -148,24 +147,14 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        root: {
-            backgroundColor: theme.colors.editSpeedBs.background,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-        },
         rootContent: {
             paddingBottom: 40,
         },
         result: {
-            ...(!theme.isDark && {
-                borderWidth: 1,
-                borderColor: theme.colors.editSpeedBs.result.border,
-            }),
+            borderWidth: 1,
+            borderColor: theme.colors.editSpeedBs.result.border,
             backgroundColor: theme.colors.editSpeedBs.result.background,
             padding: 24,
             borderRadius: 12,
-        },
-        buttonGroup: {
-            backgroundColor: theme.isDark ? theme.colors.primaryReversed : theme.colors.card,
         },
     })

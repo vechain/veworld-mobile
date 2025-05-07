@@ -182,32 +182,6 @@ export type Colors = {
             border: string
         }
     }
-    horizontalButtonGroup: {
-        background: {
-            default: {
-                disabled: string
-                selected: string
-                unselected: string
-            }
-            reversed: {
-                disabled: string
-                selected: string
-                unselected: string
-            }
-        }
-        text: {
-            default: {
-                disabled: string
-                selected: string
-                unselected: string
-            }
-            reversed: {
-                disabled: string
-                selected: string
-                unselected: string
-            }
-        }
-    }
 }
 
 export enum COLORS {
@@ -486,32 +460,6 @@ const light: Colors = {
             border: COLORS.GREY_200,
         },
     },
-    horizontalButtonGroup: {
-        background: {
-            default: {
-                disabled: COLORS.WHITE_DISABLED,
-                selected: COLORS.DARK_PURPLE,
-                unselected: COLORS.WHITE,
-            },
-            reversed: {
-                disabled: "",
-                selected: "",
-                unselected: "",
-            },
-        },
-        text: {
-            default: {
-                disabled: COLORS.DARK_PURPLE,
-                selected: COLORS.WHITE,
-                unselected: COLORS.DARK_PURPLE,
-            },
-            reversed: {
-                disabled: "",
-                selected: "",
-                unselected: "",
-            },
-        },
-    },
 }
 
 const dark: Colors = {
@@ -686,7 +634,7 @@ const dark: Colors = {
     },
     cardButton: {
         background: COLORS.DARK_PURPLE_DISABLED,
-        border: COLORS.GREY_200,
+        border: COLORS.TRANSPARENT,
         text: COLORS.LIME_GREEN,
     },
     editSpeedBs: {
@@ -695,33 +643,7 @@ const dark: Colors = {
         subtitle: COLORS.GREY_300,
         result: {
             background: COLORS.PURPLE_DISABLED,
-            border: COLORS.GREY_200,
-        },
-    },
-    horizontalButtonGroup: {
-        background: {
-            default: {
-                disabled: COLORS.WHITE_DISABLED,
-                selected: COLORS.DARK_PURPLE,
-                unselected: COLORS.WHITE,
-            },
-            reversed: {
-                disabled: "",
-                selected: "",
-                unselected: "",
-            },
-        },
-        text: {
-            default: {
-                disabled: COLORS.DARK_PURPLE,
-                selected: COLORS.WHITE,
-                unselected: COLORS.DARK_PURPLE,
-            },
-            reversed: {
-                disabled: "",
-                selected: "",
-                unselected: "",
-            },
+            border: COLORS.TRANSPARENT,
         },
     },
 }

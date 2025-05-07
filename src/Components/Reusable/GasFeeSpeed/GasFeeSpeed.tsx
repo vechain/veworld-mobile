@@ -139,10 +139,8 @@ const baseStyles = (theme: ColorThemeType) => {
             padding: 0,
         },
         cardButton: {
-            ...(!theme.isDark && {
-                borderColor: theme.colors.cardButton.border,
-                borderWidth: 1,
-            }),
+            borderColor: theme.colors.cardButton.border,
+            borderWidth: 1,
             backgroundColor: theme.colors.cardButton.background,
             gap: 8,
         },
