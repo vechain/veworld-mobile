@@ -317,6 +317,10 @@ jest.mock("~Api/Coingecko", () => ({
 }))
 
 describe("useNonVechainTokenFiat", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+    })
+
     it("returns the correct fiat balance", () => {
         const { result } = renderHook(() => useNonVechainTokenFiat(), {
             wrapper: TestWrapper,
