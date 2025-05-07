@@ -182,6 +182,32 @@ export type Colors = {
             border: string
         }
     }
+    horizontalButtonGroup: {
+        background: {
+            default: {
+                disabled: string
+                selected: string
+                unselected: string
+            }
+            reversed: {
+                disabled: string
+                selected: string
+                unselected: string
+            }
+        }
+        text: {
+            default: {
+                disabled: string
+                selected: string
+                unselected: string
+            }
+            reversed: {
+                disabled: string
+                selected: string
+                unselected: string
+            }
+        }
+    }
 }
 
 export enum COLORS {
@@ -460,6 +486,32 @@ const light: Colors = {
             border: COLORS.GREY_200,
         },
     },
+    horizontalButtonGroup: {
+        background: {
+            default: {
+                disabled: COLORS.WHITE_DISABLED,
+                selected: COLORS.DARK_PURPLE,
+                unselected: COLORS.WHITE,
+            },
+            reversed: {
+                disabled: "",
+                selected: "",
+                unselected: "",
+            },
+        },
+        text: {
+            default: {
+                disabled: COLORS.DARK_PURPLE,
+                selected: COLORS.WHITE,
+                unselected: COLORS.DARK_PURPLE,
+            },
+            reversed: {
+                disabled: "",
+                selected: "",
+                unselected: "",
+            },
+        },
+    },
 }
 
 const dark: Colors = {
@@ -632,20 +684,44 @@ const dark: Colors = {
         background: COLORS.PURPLE,
         foreground: COLORS.GREY_200,
     },
-    //TODO: Fix these colors
     cardButton: {
-        background: COLORS.WHITE,
+        background: COLORS.DARK_PURPLE_DISABLED,
         border: COLORS.GREY_200,
-        text: COLORS.PRIMARY_800,
+        text: COLORS.LIME_GREEN,
     },
-    //TODO: Fix these colors
     editSpeedBs: {
-        background: COLORS.GREY_50,
-        title: COLORS.PRIMARY_900,
-        subtitle: COLORS.GREY_600,
+        background: COLORS.PURPLE,
+        title: COLORS.WHITE,
+        subtitle: COLORS.GREY_300,
         result: {
-            background: COLORS.GREY_100,
+            background: COLORS.PURPLE_DISABLED,
             border: COLORS.GREY_200,
+        },
+    },
+    horizontalButtonGroup: {
+        background: {
+            default: {
+                disabled: COLORS.WHITE_DISABLED,
+                selected: COLORS.DARK_PURPLE,
+                unselected: COLORS.WHITE,
+            },
+            reversed: {
+                disabled: "",
+                selected: "",
+                unselected: "",
+            },
+        },
+        text: {
+            default: {
+                disabled: COLORS.DARK_PURPLE,
+                selected: COLORS.WHITE,
+                unselected: COLORS.DARK_PURPLE,
+            },
+            reversed: {
+                disabled: "",
+                selected: "",
+                unselected: "",
+            },
         },
     },
 }

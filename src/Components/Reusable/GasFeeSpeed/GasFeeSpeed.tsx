@@ -55,7 +55,7 @@ export const GasFeeSpeed = ({
                 justifyContent={isGalactica ? "space-between" : "flex-start"}
                 alignItems="center"
                 flexDirection="row">
-                <BaseText typographyFont="subSubTitleBold" color={theme.colors.primary}>
+                <BaseText typographyFont="subSubTitleBold" color={theme.colors.text}>
                     {LL.TRANSACTION_FEE()}
                 </BaseText>
                 {secondsRemaining <= 3 && isGalactica && (
@@ -83,7 +83,15 @@ export const GasFeeSpeed = ({
                         </BaseView>
                     </BaseView>
                     <BaseButton
-                        leftIcon={<BaseIcon name="icon-thunder" color={theme.colors.primary} size={16} px={0} py={0} />}
+                        leftIcon={
+                            <BaseIcon
+                                name="icon-thunder"
+                                color={theme.colors.cardButton.text}
+                                size={16}
+                                px={0}
+                                py={0}
+                            />
+                        }
                         action={onOpen}
                         variant="solid"
                         bgColor={theme.colors.cardButton.background}
@@ -131,8 +139,10 @@ const baseStyles = (theme: ColorThemeType) => {
             padding: 0,
         },
         cardButton: {
-            borderColor: theme.colors.cardButton.border,
-            borderWidth: 1,
+            ...(!theme.isDark && {
+                borderColor: theme.colors.cardButton.border,
+                borderWidth: 1,
+            }),
             backgroundColor: theme.colors.cardButton.background,
             gap: 8,
         },
