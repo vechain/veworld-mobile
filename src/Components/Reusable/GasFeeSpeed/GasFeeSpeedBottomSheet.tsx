@@ -25,10 +25,11 @@ type Props = {
     selectedFeeOption: GasPriceCoefficient
     onClose: () => void
     isGalactica?: boolean
+    isBaseFeeRampingUp: boolean
 }
 
 export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
-    { estimatedFee, maxFee, setSelectedFeeOption, selectedFeeOption, onClose, isGalactica },
+    { estimatedFee, maxFee, setSelectedFeeOption, selectedFeeOption, onClose, isGalactica, isBaseFeeRampingUp },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -120,6 +121,21 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                                 {formatValue(maxFeeVtho)} {VTHO.symbol}
                             </BaseText>
                         </BaseView>
+                        {isBaseFeeRampingUp && (
+                            <BaseView
+                                flexDirection="row"
+                                w={100}
+                                justifyContent="space-between"
+                                bg={theme.colors.warningAlert.background}
+                                gap={12}>
+                                <BaseIcon size={16} color={theme.colors.warningAlert.icon} name="icon-alert-triangle">
+                                    {LL.BASE_FEE_RAMPING_UP()}
+                                </BaseIcon>
+                                <BaseText typographyFont="bodyMedium" color={theme.colors.warningAlert.text}>
+                                    {LL.BASE_FEE_RAMPING_UP()}
+                                </BaseText>
+                            </BaseView>
+                        )}
                     </>
                 ) : (
                     <BaseView flexDirection="row" w={100} justifyContent="space-between">
@@ -161,5 +177,8 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.editSpeedBs.result.background,
             padding: 24,
             borderRadius: 12,
+        },
+        alert: {
+            backgroundColor: theme.colors.warningAlert.background,
         },
     })

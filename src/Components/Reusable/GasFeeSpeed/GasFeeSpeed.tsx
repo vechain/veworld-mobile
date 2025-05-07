@@ -19,6 +19,7 @@ type Props = {
     onRefreshFee: () => void
     gasUpdatedAt: number
     isGalactica?: boolean
+    isBaseFeeRampingUp: boolean
 }
 
 export const GasFeeSpeed = ({
@@ -28,6 +29,7 @@ export const GasFeeSpeed = ({
     gasUpdatedAt,
     isGalactica,
     children,
+    isBaseFeeRampingUp,
 }: PropsWithChildren<Props>) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -109,6 +111,7 @@ export const GasFeeSpeed = ({
                     setSelectedFeeOption={setSelectedFeeOption}
                     onClose={onClose}
                     isGalactica={isGalactica}
+                    isBaseFeeRampingUp={isBaseFeeRampingUp}
                 />
             </BaseCard>
         </BaseView>

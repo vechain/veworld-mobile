@@ -375,6 +375,10 @@ type RootTranslation = {
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: string
 	/**
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​t​a​k​e​ ​l​o​n​g​e​r​ ​t​o​ ​p​r​o​c​e​s​s​.
+	 */
+	BASE_FEE_RAMPING_UP: string
+	/**
 	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​a​c​c​e​s​s​ ​i​t​ ​b​y​ ​a​d​d​i​n​g​ ​n​e​w​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​t​h​e​ ​w​a​l​l​e​t​.
 	 */
 	BD_ACCOUNT_REMOVAL: string
@@ -4614,6 +4618,10 @@ Try reconnect your device to the internet.
 	 * Claim your <><> for free now
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: () => LocalizedString
+	/**
+	 * The transaction may take longer to process.
+	 */
+	BASE_FEE_RAMPING_UP: () => LocalizedString
 	/**
 	 * Your account will be removed, but you can still access it by adding new accounts to the wallet.
 	 */

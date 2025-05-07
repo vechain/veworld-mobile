@@ -131,6 +131,14 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
         }
     }, [gas?.gas, options])
 
+    const isBaseFeeRampingUp = useMemo(() => {
+        if (typeof feeHistory === "undefined") return false
+        const baseFees = feeHistory.baseFeePerGas.map(bFee => HexUInt.of(bFee).bi)
+        return BigNutils((baseFees[baseFees.length - 1] - baseFees[0]).toString())
+            .div(baseFees[0].toString())
+            .isBiggerThan("0.05")
+    }, [feeHistory])
+
     const memoized = useMemo(
         () => ({
             isLoading,
@@ -138,8 +146,9 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
             txOptions: txOptions,
             maxPriorityFee: maxPriorityFee ? BigNutils(HexUInt.of(maxPriorityFee).bi.toString()) : BigNutils("0"),
             dataUpdatedAt,
+            isBaseFeeRampingUp,
         }),
-        [dataUpdatedAt, gasOptions, isLoading, maxPriorityFee, txOptions],
+        [dataUpdatedAt, gasOptions, isBaseFeeRampingUp, isLoading, maxPriorityFee, txOptions],
     )
 
     return memoized

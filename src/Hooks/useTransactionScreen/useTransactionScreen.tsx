@@ -255,5 +255,6 @@ export const useTransactionScreen = ({
         gasUpdatedAt: transactionFeesResponse.dataUpdatedAt,
         onRefreshFee,
         isGalactica,
+        isBaseFeeRampingUp: transactionFeesResponse.isBaseFeeRampingUp,
     }
 }

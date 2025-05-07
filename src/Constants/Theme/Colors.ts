@@ -182,6 +182,11 @@ export type Colors = {
             border: string
         }
     }
+    warningAlert: {
+        background: string
+        text: string
+        icon: string
+    }
 }
 
 export enum COLORS {
@@ -460,6 +465,11 @@ const light: Colors = {
             border: COLORS.GREY_200,
         },
     },
+    warningAlert: {
+        background: COLORS.ORANGE_50,
+        text: COLORS.ORANGE_700,
+        icon: COLORS.ORANGE_500,
+    },
 }
 
 const dark: Colors = {
@@ -647,6 +657,11 @@ const dark: Colors = {
             background: COLORS.GREY_100,
             border: COLORS.GREY_200,
         },
+    },
+    warningAlert: {
+        background: COLORS.ORANGE_50,
+        text: COLORS.ORANGE_700,
+        icon: COLORS.ORANGE_500,
     },
 }
 

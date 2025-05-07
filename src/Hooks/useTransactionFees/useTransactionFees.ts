@@ -29,6 +29,7 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: P
         txOptions: galacticaTxOptions,
         maxPriorityFee: galacticaMaxPriorityFee,
         dataUpdatedAt,
+        isBaseFeeRampingUp: galacticaBaseFeeRampingUp,
     } = useGalacticaFees({ isGalactica, blockId, gas })
 
     const {
@@ -53,6 +54,10 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: P
         }
     }, [options, coefficient, txOptions])
 
+    const isBaseFeeRampingUp = useMemo(() => {
+        return isGalactica ? galacticaBaseFeeRampingUp : false
+    }, [galacticaBaseFeeRampingUp, isGalactica])
+
     const memoized = useMemo(
         () => ({
             ...result,
@@ -60,8 +65,17 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: P
             isLoading: isLegacyFeesLoading || isGalacticaFeesLoading,
             dataUpdatedAt: dataUpdatedAt || moment().valueOf(),
             maxPriorityFee: galacticaMaxPriorityFee,
+            isBaseFeeRampingUp,
         }),
-        [result, options, isLegacyFeesLoading, isGalacticaFeesLoading, dataUpdatedAt, galacticaMaxPriorityFee],
+        [
+            result,
+            options,
+            isLegacyFeesLoading,
+            isGalacticaFeesLoading,
+            dataUpdatedAt,
+            galacticaMaxPriorityFee,
+            isBaseFeeRampingUp,
+        ],
     )
 
     return memoized

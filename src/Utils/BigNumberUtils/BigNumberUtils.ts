@@ -138,6 +138,16 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
+    div(value: string | number | BN, callback?: (result: BN) => void): this {
+        this.data = this.data.div(value)
+
+        if (callback) {
+            callback(this.data)
+        }
+
+        return this
+    }
+
     isLessThan(value: string | number | BN): boolean {
         return this.data.isLessThan(value)
     }
