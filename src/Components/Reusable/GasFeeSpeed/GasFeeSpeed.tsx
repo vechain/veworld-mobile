@@ -42,17 +42,7 @@ export const GasFeeSpeed = ({
         setSecondsRemaining(Math.floor(moment(gasUpdatedAt).add(10, "seconds").diff(moment(), "seconds")))
     }, [gasUpdatedAt])
 
-    useInterval(intervalFn, 1000)
-
-    // useEffect(() => {
-    //     console.log(
-    //         "FEES",
-    //         Object.entries(options).map(([coefficient, value]) => [
-    //             coefficient,
-    //             Object.fromEntries(Object.entries(value).map(([key, v]) => [key, v.toBigInt.toString()])),
-    //         ]),
-    //     )
-    // }, [options])
+    useInterval(intervalFn, 500)
 
     return (
         <BaseView flexDirection="column" gap={16} mt={16}>

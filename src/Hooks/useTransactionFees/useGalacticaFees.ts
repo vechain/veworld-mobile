@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query"
+import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
 import { GasPriceCoefficient } from "~Constants"
 import { useThorClient } from "~Hooks/useThorClient"
@@ -67,6 +67,7 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
         queryKey: ["MaxPriorityFeePerGas", blockId],
         queryFn: () => thorClient.gas.getMaxPriorityFeePerGas(),
         enabled: isGalactica,
+        placeholderData: keepPreviousData,
     })
 
     const { isLoading: isLoadingFeeHistory, data: feeHistory } = useQuery({
@@ -78,6 +79,7 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
                 rewardPercentiles: [10, 40, 75],
             }),
         enabled: isGalactica,
+        placeholderData: keepPreviousData,
     })
 
     const isLoading = useMemo(

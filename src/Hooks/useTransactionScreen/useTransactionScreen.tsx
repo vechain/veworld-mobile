@@ -82,7 +82,7 @@ export const useTransactionScreen = ({
         gas,
         isDelegated,
         dependsOn: dappRequest?.options?.dependsOn,
-        //TODO: Add tx options
+        ...transactionFeesResponse.txOptions[selectedFeeOption],
     })
 
     // 5. Sign transaction
@@ -218,8 +218,13 @@ export const useTransactionScreen = ({
     }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, transactionFeesResponse.maxFee])
 
     const isDisabledButtonState = useMemo(
-        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current || transactionFeesResponse.isLoading,
-        [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading],
+        () =>
+            (!isEnoughGas && !isDelegated) ||
+            loading ||
+            isSubmitting.current ||
+            transactionFeesResponse.isLoading ||
+            isGalacticaLoading,
+        [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading, isGalacticaLoading],
     )
 
     const onRefreshFee = useCallback(() => {}, [])
