@@ -1,5 +1,5 @@
 import React, { MutableRefObject, ReactNode, useCallback } from "react"
-import { BaseView } from "~Components/Base"
+import { BaseView } from "~Components"
 import SwipeableItem, { OpenDirection, SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { DeleteUnderlay } from "../DeleteUnderlay"
 import { Pressable, StyleSheet } from "react-native"
@@ -20,6 +20,7 @@ type Props<T> = {
     yMargins?: number
     onPress?: (item: T) => void
     isDragMode?: boolean
+    isDisabled?: boolean
     isOpen?: boolean
     customUnderlay?: ReactNode
     snapPointsLeft?: number[]
@@ -41,6 +42,7 @@ export const SwipeableRow = <T,>({
     onPress,
     isDragMode,
     isOpen,
+    isDisabled,
     customUnderlay,
     snapPointsLeft,
     isLogPressEnabled = true,
@@ -113,7 +115,7 @@ export const SwipeableRow = <T,>({
                 onChange={handleSwipe}>
                 <BaseView style={styles.touchableContainer}>
                     <Pressable
-                        disabled={isDragMode}
+                        disabled={isDragMode || isDisabled}
                         onPress={() => onPress?.(item)}
                         onPressIn={() => {
                             closeSwipeableItems(false)
