@@ -14,6 +14,9 @@ import {
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useCallback, useEffect } from "react"
+import { useGetVeDelegateBalance } from "~Hooks"
+import { BigNutils } from "~Utils"
+import { VeDelegate } from "~Constants"
 
 /**
  * This hook is responsible for keeping the available tokens, balances and exchange rates data up to date.
@@ -32,6 +35,8 @@ export const useTokenBalances = () => {
     const balances = useAppSelector(selectVisibleBalances)
 
     const thorClient = useThor()
+
+    const { data: veDelegateBalance } = useGetVeDelegateBalance(selectedAccount.address)
 
     const updateBalances = useCallback(async () => {
         // Update balances
@@ -66,7 +71,13 @@ export const useTokenBalances = () => {
         )
             return
 
-        dispatch(autoSelectSuggestTokens(selectedAccount.address, missingSuggestedTokens, network, thorClient))
+        const suggestedTokens = [...missingSuggestedTokens]
+
+        if (!BigNutils(veDelegateBalance?.formatted ?? "0").isZero && !suggestedTokens.includes(VeDelegate.address)) {
+            suggestedTokens.push(VeDelegate.address)
+        }
+
+        dispatch(autoSelectSuggestTokens(selectedAccount.address, suggestedTokens, network, thorClient))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         dispatch,
@@ -75,6 +86,7 @@ export const useTokenBalances = () => {
         thorClient.genesis.id,
         network.genesis.id,
         balances.length,
+        veDelegateBalance,
     ])
 
     /**

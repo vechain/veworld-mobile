@@ -10,7 +10,7 @@ import { debug, error } from "~Utils/Logger"
 import { BalanceUtils } from "~Utils"
 import { setIsTokensOwnedLoading, updateTokenBalances } from "~Storage/Redux/Slices"
 import { Balance, NETWORK_TYPE, Network } from "~Model"
-import { ERROR_EVENTS, VeDelegate, VET, VTHO } from "~Constants"
+import { ERROR_EVENTS, VET, VTHO } from "~Constants"
 
 export const upsertTokenBalance =
     (thorClient: Connex.Thor, accountAddress: string, tokenAddress: string) =>
@@ -129,18 +129,16 @@ export const updateAccountBalances =
 export const autoSelectSuggestTokens =
     (accountAddress: string, suggestedTokens: string[], network: Network, thorClient: Connex.Thor) =>
     async (dispatch: Dispatch) => {
-        const tokens = [...suggestedTokens, ...VeDelegate.address] //Adding VeDelegate token to be auto discoverable
         const officialTokensBalances: Balance[] = []
 
         try {
-            for (const tokenAddress of tokens) {
+            for (const tokenAddress of suggestedTokens) {
                 const balance = await BalanceUtils.getBalanceFromBlockchain(
                     tokenAddress,
                     accountAddress,
                     network,
                     thorClient,
                 )
-
                 if (!balance || balance.balance === "0") continue
 
                 officialTokensBalances.push(balance)
