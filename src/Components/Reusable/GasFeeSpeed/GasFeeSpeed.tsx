@@ -100,7 +100,10 @@ export const GasFeeSpeed = ({
                         {LL.EDIT_SPEED()}
                     </BaseButton>
                 </BaseView>
-                <BaseSpacer height={1} background={theme.colors.pressableCardBorder} />
+                <BaseSpacer
+                    height={1}
+                    background={theme.isDark ? theme.colors.background : theme.colors.pressableCardBorder}
+                />
                 {isGalactica ? (
                     <GalacticaEstimation
                         options={options}

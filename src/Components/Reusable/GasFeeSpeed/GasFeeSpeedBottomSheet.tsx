@@ -156,6 +156,6 @@ const baseStyles = (theme: ColorThemeType) =>
             borderColor: theme.colors.editSpeedBs.result.border,
             backgroundColor: theme.colors.editSpeedBs.result.background,
             padding: 24,
-            borderRadius: 12,
+            borderRadius: 8,
         },
     })
