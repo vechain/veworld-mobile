@@ -36,7 +36,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     const accounts = useAppSelector(selectDelegationAccountsWithVtho)
     const delegationUrls = useAppSelector(selectDelegationUrls)
     const [selectedOption, setSelectedOption] = useState(selectedDelegationOption)
-    const { theme, styles } = useThemedStyles(baseStyles(selectedOption))
+    const { theme, styles } = useThemedStyles(baseStyles)
 
     const options: Array<BaseButtonGroupHorizontalType> = useMemo(() => {
         return [
@@ -64,7 +64,7 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     const computeSnappoints = useMemo(() => {
         if (selectedOption === DelegationType.NONE) return ["50%", "75%", "90%"]
         if (selectedOption === DelegationType.ACCOUNT) {
-            if (accounts.length === 1) return ["60%"]
+            if (accounts.length === 1) return ["63%"]
             if (accounts.length === 2) return ["70%"]
             if (accounts.length === 3) return ["80%"]
             return ["85%"]
@@ -94,7 +94,6 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
             style={styles.root}
             dynamicHeight={hasDynamicHeight}
             ref={ref}
-            contentStyle={[styles.rootContent]}
             snapPoints={hasDynamicHeight ? undefined : computeSnappoints}
             onChange={hasDynamicHeight ? undefined : handleSheetChangePosition}>
             <BaseView flexDirection="row" gap={12}>
@@ -140,14 +139,11 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
     )
 })
 
-const baseStyles = (opt: DelegationType) => (theme: ColorThemeType) =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
             backgroundColor: theme.colors.editSpeedBs.background,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
-        },
-        rootContent: {
-            paddingBottom: opt === DelegationType.NONE ? 40 : 16,
         },
     })

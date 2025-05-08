@@ -31,7 +31,14 @@ type ButtonBarProps = { onCancel: () => void; onApply: () => void; disabled?: bo
 const ButtonBar = ({ onCancel, onApply, disabled }: ButtonBarProps) => {
     const { LL } = useI18nContext()
     return (
-        <BaseView flexDirection="row" gap={16} w={100} justifyContent="space-between" alignItems="center" mt={24}>
+        <BaseView
+            flexDirection="row"
+            gap={16}
+            w={100}
+            justifyContent="space-between"
+            alignItems="center"
+            mt={24}
+            mb={24}>
             <BaseButton variant="outline" action={onCancel} flex={1}>
                 {LL.COMMON_BTN_CANCEL()}
             </BaseButton>
