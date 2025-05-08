@@ -42,8 +42,8 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
     }, [exchangeRate])
 
     const isCrossChainToken = useMemo(() => {
-        return tokenWithBalance.name.toLowerCase().endsWith("@vechain")
-    }, [tokenWithBalance.name])
+        return !!tokenWithBalance.crossChainProvider
+    }, [tokenWithBalance.crossChainProvider])
 
     return (
         <BaseTokenCard

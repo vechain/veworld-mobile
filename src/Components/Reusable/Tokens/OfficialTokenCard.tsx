@@ -49,6 +49,10 @@ export const OfficialTokenCard = memo(
             return tokenFiatBalance
         }, [isVOT3, tokenFiatBalance, tokenWithInfo.fiatBalance])
 
+        const isCrossChainToken = useMemo(() => {
+            return !!tokenWithInfo?.crossChainProvider
+        }, [tokenWithInfo?.crossChainProvider])
+
         return (
             <TouchableOpacity onPress={action} style={[styles.container, style]} testID={symbol}>
                 <BaseView flexDirection="row" justifyContent="space-between" w={100}>
@@ -58,7 +62,7 @@ export const OfficialTokenCard = memo(
                             symbol={token.symbol}
                             isVechainToken={isVetToken}
                             iconSize={iconSize ?? 26}
-                            isCrossChainToken={token.name.toLowerCase().endsWith("@vechain")}
+                            isCrossChainToken={isCrossChainToken}
                         />
                         <BaseSpacer width={12} />
                         <BaseView flexDirection="row">
