@@ -1,11 +1,11 @@
 import React, { useCallback } from "react"
-import { useTheme, useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
-import { BaseView } from "./BaseView"
+import { StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTextProps } from "~Components"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { ColorThemeType } from "~Constants"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { BaseButtonGroupHorizontalType } from "~Model"
 import HapticsService from "~Services/HapticsService"
+import { BaseView } from "./BaseView"
 
 type Props = {
     action: (button: BaseButtonGroupHorizontalType) => void
@@ -17,6 +17,7 @@ type Props = {
     disabled?: boolean
     typographyFont?: BaseTextProps["typographyFont"]
     renderButton?: (button: BaseButtonGroupHorizontalType, textColor: string) => React.ReactNode
+    style?: ViewStyle
 }
 
 export const BaseButtonGroupHorizontal = ({
@@ -26,6 +27,7 @@ export const BaseButtonGroupHorizontal = ({
     disabled: disableAllButtons,
     typographyFont = "buttonPrimary",
     renderButton,
+    style,
 }: Props) => {
     const theme = useTheme()
 
@@ -68,7 +70,7 @@ export const BaseButtonGroupHorizontal = ({
     )
 
     return (
-        <BaseView flexDirection="row" alignItems="stretch" style={styles.backgroundStyle}>
+        <BaseView flexDirection="row" alignItems="stretch" style={[styles.backgroundStyle, style]}>
             {buttons.map((button, _) => {
                 const { id, label, disabled, icon } = button
                 const disabledStatus = disableAllButtons || disabled

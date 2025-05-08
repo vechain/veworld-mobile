@@ -13,22 +13,21 @@ import {
 } from "~Components/Base"
 import { ColorThemeType, GasPriceCoefficient, VTHO } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
+import { TransactionFeesResult } from "~Hooks/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
-import { BigNumberUtils } from "~Utils"
 import { SPEED_MAP } from "./constants"
 
 type Props = {
-    estimatedFee: BigNumberUtils
-    maxFee: BigNumberUtils
     setSelectedFeeOption: (value: GasPriceCoefficient) => void
     selectedFeeOption: GasPriceCoefficient
     onClose: () => void
     isGalactica?: boolean
+    options: TransactionFeesResult
 }
 
 export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
-    { estimatedFee, maxFee, setSelectedFeeOption, selectedFeeOption, onClose, isGalactica },
+    { setSelectedFeeOption, selectedFeeOption, onClose, isGalactica, options },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -53,6 +52,8 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
         ]
     }, [LL])
 
+    const { estimatedFee, maxFee } = useMemo(() => options[internalFeeOption], [internalFeeOption, options])
+
     const estimatedFeeVtho = useMemo(
         () => parseFloat(ethers.utils.formatEther(estimatedFee.toString)),
         [estimatedFee.toString],
@@ -65,7 +66,7 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     }, [internalFeeOption, onClose, setSelectedFeeOption])
 
     return (
-        <BaseBottomSheet style={styles.root} ref={ref} dynamicHeight contentStyle={styles.rootContent}>
+        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-thunder" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -147,11 +148,6 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        root: {
-            backgroundColor: theme.colors.editSpeedBs.background,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-        },
         rootContent: {
             paddingBottom: 40,
         },
@@ -160,6 +156,6 @@ const baseStyles = (theme: ColorThemeType) =>
             borderColor: theme.colors.editSpeedBs.result.border,
             backgroundColor: theme.colors.editSpeedBs.result.background,
             padding: 24,
-            borderRadius: 12,
+            borderRadius: 8,
         },
     })
