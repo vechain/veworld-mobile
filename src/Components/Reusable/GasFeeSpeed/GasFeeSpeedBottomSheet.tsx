@@ -13,22 +13,21 @@ import {
 } from "~Components/Base"
 import { ColorThemeType, GasPriceCoefficient, VTHO } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
+import { TransactionFeesResult } from "~Hooks/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
-import { BigNumberUtils } from "~Utils"
 import { SPEED_MAP } from "./constants"
 
 type Props = {
-    estimatedFee: BigNumberUtils
-    maxFee: BigNumberUtils
     setSelectedFeeOption: (value: GasPriceCoefficient) => void
     selectedFeeOption: GasPriceCoefficient
     onClose: () => void
     isGalactica?: boolean
+    options: TransactionFeesResult
 }
 
 export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
-    { estimatedFee, maxFee, setSelectedFeeOption, selectedFeeOption, onClose, isGalactica },
+    { setSelectedFeeOption, selectedFeeOption, onClose, isGalactica, options },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -52,6 +51,8 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             },
         ]
     }, [LL])
+
+    const { estimatedFee, maxFee } = useMemo(() => options[internalFeeOption], [internalFeeOption, options])
 
     const estimatedFeeVtho = useMemo(
         () => parseFloat(ethers.utils.formatEther(estimatedFee.toString)),

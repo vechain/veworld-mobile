@@ -1,5 +1,5 @@
 import moment from "moment"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useInterval } from "usehooks-ts"
 import { BaseButton, BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -35,8 +35,6 @@ export const GasFeeSpeed = ({
     const { onClose, onOpen, ref } = useBottomSheetModal()
 
     const [secondsRemaining, setSecondsRemaining] = useState(10)
-
-    const { estimatedFee, maxFee } = useMemo(() => options[selectedFeeOption], [options, selectedFeeOption])
 
     const intervalFn = useCallback(() => {
         setSecondsRemaining(Math.floor(moment(gasUpdatedAt).add(10, "seconds").diff(moment(), "seconds")))
@@ -114,8 +112,7 @@ export const GasFeeSpeed = ({
                 )}
                 <GasFeeSpeedBottomSheet
                     ref={ref}
-                    estimatedFee={estimatedFee}
-                    maxFee={maxFee}
+                    options={options}
                     selectedFeeOption={selectedFeeOption}
                     setSelectedFeeOption={setSelectedFeeOption}
                     onClose={onClose}

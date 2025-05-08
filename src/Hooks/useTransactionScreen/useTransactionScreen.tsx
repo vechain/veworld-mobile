@@ -233,8 +233,13 @@ export const useTransactionScreen = ({
     }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, transactionFeesResponse.maxFee])
 
     const isDisabledButtonState = useMemo(
-        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current || transactionFeesResponse.isLoading,
-        [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading],
+        () =>
+            (!isEnoughGas && !isDelegated) ||
+            loading ||
+            isSubmitting.current ||
+            transactionFeesResponse.isLoading ||
+            (gas?.gas ?? 0) === 0,
+        [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading, gas?.gas],
     )
 
     const onRefreshFee = useCallback(() => {}, [])
