@@ -32,10 +32,6 @@ export const initialDiscoverState: DiscoveryState = {
     bannerInteractions: {},
 }
 
-const sortByAmountOfNavigations = (dapps: DiscoveryDApp[]) => {
-    return dapps.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
-}
-
 const findByHref = (dapps: DiscoveryDApp[], href: string) => {
     return dapps.find(dapp => URIUtils.compareURLs(dapp.href, href))
 }
@@ -75,22 +71,17 @@ export const DiscoverySlice = createSlice({
                 if (existingDApp) {
                     existingDApp.amountOfNavigations += 1
                 }
-
-                //sort by amount of navigations
-                state.custom = sortByAmountOfNavigations(state.custom)
             } else {
                 const favourite = findByHref(state.favorites, payload.href)
 
                 if (favourite) {
                     favourite.amountOfNavigations += 1
-                    state.favorites = sortByAmountOfNavigations(state.favorites)
                 }
 
                 const featured = findByHref(state.featured, payload.href)
 
                 if (featured) {
                     featured.amountOfNavigations += 1
-                    state.featured = sortByAmountOfNavigations(state.featured)
                 }
             }
         },
