@@ -16,6 +16,7 @@ type BaseTokenCardProps = {
     tokenBalance: string
     rightContent: React.ReactNode
     alignWithFiatBalance?: FlexAlignType
+    isCrossChainToken?: boolean
 }
 
 export const BaseTokenCard = ({
@@ -26,6 +27,7 @@ export const BaseTokenCard = ({
     tokenBalance,
     rightContent,
     alignWithFiatBalance,
+    isCrossChainToken,
 }: BaseTokenCardProps) => {
     const theme = useTheme()
     const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
@@ -40,7 +42,12 @@ export const BaseTokenCard = ({
     return (
         <Animated.View style={[styles.innerRow, { alignItems: alignTokenBalance }]}>
             <BaseView flexDirection="row" gap={12}>
-                <TokenImage icon={icon} isVechainToken={isVetToken} iconSize={26} />
+                <TokenImage
+                    icon={icon}
+                    isVechainToken={isVetToken}
+                    iconSize={26}
+                    isCrossChainToken={isCrossChainToken}
+                />
                 <BaseView alignItems="center" justifyContent="center" flexDirection="row" gap={4}>
                     <BaseText typographyFont="subSubTitleSemiBold">{symbol}</BaseText>
 
