@@ -41,6 +41,10 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
         return !!exchangeRate
     }, [exchangeRate])
 
+    const isCrossChainToken = useMemo(() => {
+        return tokenWithBalance.name.toLowerCase().endsWith("@vechain")
+    }, [tokenWithBalance.name])
+
     return (
         <BaseTokenCard
             icon={tokenWithBalance.icon}
@@ -48,6 +52,7 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
             isLoading={isTokensOwnedLoading}
             isBalanceVisible={isBalanceVisible}
             tokenBalance={tokenBalance}
+            isCrossChainToken={isCrossChainToken}
             rightContent={
                 showFiatBalance ? (
                     <TokenCardBalanceInfo
