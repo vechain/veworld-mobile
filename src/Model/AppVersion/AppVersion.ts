@@ -1,9 +1,16 @@
 export interface AppVersion {
     installedVersion: string
-    advisedVersion: string
+    breakingVersion: string
     isUpToDate: boolean | null
+    lastManifestCheck: number | null
     updateRequest: {
         dismissCount: number
-        lastDismissedDate: string
+        lastDismissedDate: number | null
     }
+}
+
+export interface VersionManifest {
+    lastBreaking: string
+    latest: string
+    history: string[]
 }

@@ -1,60 +1,66 @@
 import moment from "moment"
 import { useEffect, useMemo } from "react"
 import DeviceInfo from "react-native-device-info"
+import { useQuery } from "@tanstack/react-query"
 import { selectUpdatePromptStatus, useAppDispatch, useAppSelector, VersionUpdateSlice } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
+import { VersionManifest } from "~Model/AppVersion"
 
-const UPGRADE_PROMPT_DELAYS = {
+const TWENTY_FOUR_HOURS = 1000 * 60 * 60 * 24
+
+const UPGRADE_PROMPT_DELAY_DAYS = {
     FIRST_PROMPT: 5,
     SECOND_PROMPT: 10,
     THIRD_PROMPT: 20,
 }
 
-interface VersionInfo {
-    updated: string
-    version: string
-    description: {
-        changes: string[]
-    }
-}
-
 const S3_BASE_URL = "UPDATE_S3_BASE_URL"
 
-const fetchVersionInfo = async (): Promise<VersionInfo | null> => {
-    try {
-        const platform = PlatformUtils.isIOS() ? "ios" : "android"
-        const url = `${S3_BASE_URL}/${platform}/latest`
+const fetchVersionInfo = async (): Promise<VersionManifest> => {
+    const platform = PlatformUtils.isIOS() ? "ios" : "android"
+    const url = `${S3_BASE_URL}/${platform}/manifest.json`
+    const response = await fetch(url)
 
-        const response = await fetch(url)
-        const data = await response.json()
-        return data as VersionInfo
-    } catch (error) {
-        throw new Error(`Failed to fetch version info: ${error}`)
+    if (!response.ok) {
+        throw new Error(`Manifest fetch failed (status ${response.status})`)
     }
+
+    return response.json()
 }
 
 export const useCheckAppVersion = () => {
     const versionUpdateStatus = useAppSelector(selectUpdatePromptStatus)
     const dispatch = useAppDispatch()
 
+    const { data: breakingVersion } = useQuery({
+        queryKey: ["versionManifest"],
+        queryFn: fetchVersionInfo,
+        select: data => data.lastBreaking,
+        staleTime: TWENTY_FOUR_HOURS,
+        gcTime: TWENTY_FOUR_HOURS,
+        retry: 3,
+    })
+
     useEffect(() => {
-        const checkVersion = async () => {
-            const versionInfo = await fetchVersionInfo()
-            if (versionInfo) {
-                const installedVersion = DeviceInfo.getVersion()
-                dispatch(VersionUpdateSlice.actions.setAdvisedVersion("10"))
+        if (breakingVersion) {
+            const installedVersion = DeviceInfo.getVersion()
+
+            if (installedVersion !== versionUpdateStatus.installedVersion) {
                 dispatch(VersionUpdateSlice.actions.setInstalledVersion(installedVersion))
-                const needsUpdate = SemanticVersionUtils.moreThan("10", installedVersion)
-                dispatch(VersionUpdateSlice.actions.setIsUpToDate(!needsUpdate))
+            }
+
+            const needsUpdate = SemanticVersionUtils.moreThan(breakingVersion, installedVersion)
+            dispatch(VersionUpdateSlice.actions.setIsUpToDate(!needsUpdate))
+
+            if (needsUpdate && breakingVersion !== versionUpdateStatus.breakingVersion) {
+                dispatch(VersionUpdateSlice.actions.setBreakingVersion(breakingVersion))
             }
         }
-
-        checkVersion()
-    }, [dispatch])
+    }, [dispatch, breakingVersion, versionUpdateStatus.installedVersion, versionUpdateStatus.breakingVersion])
 
     const shouldShowUpdatePrompt = useMemo(() => {
-        if (!versionUpdateStatus.advisedVersion || !versionUpdateStatus.installedVersion) {
+        if (!versionUpdateStatus.breakingVersion || !versionUpdateStatus.installedVersion) {
             return false
         }
 
@@ -74,15 +80,17 @@ export const useCheckAppVersion = () => {
             return false
         }
 
-        const daysSinceLastDismiss = moment().diff(moment(versionUpdateStatus.updateRequest.lastDismissedDate), "days")
+        const now = moment()
+        const lastDismiss = moment.unix(versionUpdateStatus.updateRequest.lastDismissedDate)
+        const daysSinceLastDismiss = now.diff(lastDismiss, "days")
 
         switch (versionUpdateStatus.updateRequest.dismissCount) {
             case 1:
-                return daysSinceLastDismiss >= UPGRADE_PROMPT_DELAYS.FIRST_PROMPT
+                return daysSinceLastDismiss >= UPGRADE_PROMPT_DELAY_DAYS.FIRST_PROMPT
             case 2:
-                return daysSinceLastDismiss >= UPGRADE_PROMPT_DELAYS.SECOND_PROMPT
+                return daysSinceLastDismiss >= UPGRADE_PROMPT_DELAY_DAYS.SECOND_PROMPT
             case 3:
-                return daysSinceLastDismiss >= UPGRADE_PROMPT_DELAYS.THIRD_PROMPT
+                return daysSinceLastDismiss >= UPGRADE_PROMPT_DELAY_DAYS.THIRD_PROMPT
             default:
                 return false
         }
@@ -91,9 +99,9 @@ export const useCheckAppVersion = () => {
     const hasPermanentlyDismissed = useMemo(() => {
         return (
             versionUpdateStatus.updateRequest.dismissCount > 3 &&
-            !!versionUpdateStatus.advisedVersion &&
+            !!versionUpdateStatus.breakingVersion &&
             !!versionUpdateStatus.installedVersion &&
-            SemanticVersionUtils.moreThan(versionUpdateStatus.advisedVersion, versionUpdateStatus.installedVersion)
+            SemanticVersionUtils.moreThan(versionUpdateStatus.breakingVersion, versionUpdateStatus.installedVersion)
         )
     }, [versionUpdateStatus])
 

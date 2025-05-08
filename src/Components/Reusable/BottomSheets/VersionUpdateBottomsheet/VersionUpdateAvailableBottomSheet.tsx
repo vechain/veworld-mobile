@@ -10,16 +10,17 @@ import { PlatformUtils } from "~Utils"
 import {
     VersionUpdateSlice,
     useAppDispatch,
-    selectAdvisedAppVersion,
+    selectBreakingAppVersion,
     useAppSelector,
     selectUpdateDismissCount,
 } from "~Storage/Redux"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils.ts"
 
 export const VersionUpdateAvailableBottomSheet = () => {
     const { LL } = useI18nContext()
     const countryCode = getCountry()?.toLowerCase()
     const dispatch = useAppDispatch()
-    const advisedVersion = useAppSelector(selectAdvisedAppVersion)
+    const breakingVersion = useAppSelector(selectBreakingAppVersion)
     const dismissCount = useAppSelector(selectUpdateDismissCount)
     const { shouldShowUpdatePrompt } = useCheckAppVersion()
     const { ref, onOpen, onClose } = useBottomSheetModal()
@@ -29,31 +30,34 @@ export const VersionUpdateAvailableBottomSheet = () => {
     useEffect(() => {
         if (shouldShowUpdatePrompt) {
             track(AnalyticsEvent.VERSION_UPGRADE_MODAL_OPENED, {
+                platform: isIOS() ? "iOS" : "Android",
                 currentVersion: DeviceInfo.getVersion(),
-                advisedVersion: advisedVersion,
+                breakingVersion: breakingVersion,
                 count: dismissCount + 1,
             })
             onOpen()
         }
-    }, [shouldShowUpdatePrompt, advisedVersion, track, onOpen, dismissCount])
+    }, [shouldShowUpdatePrompt, breakingVersion, track, onOpen, dismissCount])
 
     const handleUpdateApp = useCallback(async () => {
         track(AnalyticsEvent.VERSION_UPGRADE_MODAL_SUCCESS, {
-            advisedVersion: advisedVersion,
+            platform: isIOS() ? "iOS" : "Android",
+            breakingVersion: breakingVersion,
             requestCount: dismissCount,
         })
         onClose()
-        Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL(countryCode) : GOOGLE_STORE_URL)
-    }, [track, advisedVersion, dismissCount, onClose, countryCode])
+        await Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL(countryCode) : GOOGLE_STORE_URL)
+    }, [track, breakingVersion, dismissCount, onClose, countryCode])
 
-    const handleUpdateLater = useCallback(async () => {
+    const handleUpdateLater = useCallback(() => {
         dispatch(VersionUpdateSlice.actions.incrementDismissCount())
         track(AnalyticsEvent.VERSION_UPGRADE_MODAL_DISMISSED, {
-            advisedVersion: advisedVersion,
+            platform: isIOS() ? "iOS" : "Android",
+            breakingVersion: breakingVersion,
             requestCount: dismissCount,
         })
         onClose()
-    }, [advisedVersion, dismissCount, dispatch, onClose, track])
+    }, [breakingVersion, dismissCount, dispatch, onClose, track])
 
     const mainButton = (
         <BaseButton
@@ -88,7 +92,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
             ref={ref}
             title={LL.UPDATE_VERSION_AVAILABLE()}
             description={LL.UPDATE_VERSION_AVAILABLE_MESSAGE({
-                version: advisedVersion,
+                version: breakingVersion,
             })}
             mainButton={mainButton}
             secondaryButton={secondaryButton}

@@ -11,8 +11,8 @@ export const selectLastUpdateDismissTime = createSelector(selectVersionUpdateSta
     return state.updateRequest.lastDismissedDate
 })
 
-export const selectAdvisedAppVersion = createSelector(selectVersionUpdateState, state => {
-    return state.advisedVersion
+export const selectBreakingAppVersion = createSelector(selectVersionUpdateState, state => {
+    return state.breakingVersion
 })
 
 export const selectInstalledAppVersion = createSelector(selectVersionUpdateState, state => {

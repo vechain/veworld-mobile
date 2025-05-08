@@ -4,11 +4,12 @@ import { AppVersion } from "~Model/AppVersion"
 
 const initialVersionUpdateState: AppVersion = {
     installedVersion: "",
-    advisedVersion: "",
+    breakingVersion: "",
     isUpToDate: null,
+    lastManifestCheck: null,
     updateRequest: {
         dismissCount: 0,
-        lastDismissedDate: "",
+        lastDismissedDate: null,
     },
 }
 
@@ -18,19 +19,19 @@ export const VersionUpdateSlice = createSlice({
     reducers: {
         incrementDismissCount: state => {
             state.updateRequest.dismissCount += 1
-            state.updateRequest.lastDismissedDate = moment().toISOString()
+            state.updateRequest.lastDismissedDate = moment().unix()
         },
 
         resetDismissCount: state => {
             state.updateRequest.dismissCount = 0
-            state.updateRequest.lastDismissedDate = ""
+            state.updateRequest.lastDismissedDate = null
         },
 
-        setAdvisedVersion: (state, action: PayloadAction<string>) => {
-            if (state.advisedVersion !== action.payload) {
-                state.advisedVersion = action.payload
+        setBreakingVersion: (state, action: PayloadAction<string>) => {
+            if (state.breakingVersion !== action.payload) {
+                state.breakingVersion = action.payload
                 state.updateRequest.dismissCount = 0
-                state.updateRequest.lastDismissedDate = ""
+                state.updateRequest.lastDismissedDate = null
             }
         },
 
@@ -42,6 +43,10 @@ export const VersionUpdateSlice = createSlice({
             state.isUpToDate = action.payload
         },
 
+        setLastManifestCheck: (state, action: PayloadAction<number>) => {
+            state.lastManifestCheck = action.payload
+        },
+
         resetVersionUpdateState: () => initialVersionUpdateState,
     },
 })
@@ -49,8 +54,9 @@ export const VersionUpdateSlice = createSlice({
 export const {
     incrementDismissCount,
     resetDismissCount,
-    setAdvisedVersion,
+    setBreakingVersion,
     setInstalledVersion,
     setIsUpToDate,
+    setLastManifestCheck,
     resetVersionUpdateState,
 } = VersionUpdateSlice.actions
