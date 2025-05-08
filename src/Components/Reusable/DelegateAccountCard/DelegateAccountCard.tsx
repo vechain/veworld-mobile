@@ -38,18 +38,20 @@ export const DelegateAccountCard = memo(({ account, onPress, selected, container
                 haptics="Light"
                 action={() => onPress?.(account)}
                 justifyContent="space-between"
-                containerStyle={[styles.container, selected ? styles.selectedContainer : {}]}
-                accessibilityValue={{ text: selected ? "selected" : "not selected" }}>
+                containerStyle={[styles.container, selected ? styles.selectedContainer : {}, containerStyle]}
+                accessibilityValue={{ text: selected ? "selected" : "not selected" }}
+                px={12}
+                py={12}>
                 <BaseView flexDirection="row" gap={12} alignItems="center" flex={1}>
                     <AccountIcon address={account.address} size={32} />
                     <BaseView flexDirection="column" gap={4}>
                         <BaseText numberOfLines={1} color={theme.colors.title} typographyFont="captionBold">
-                            {vnsName || account.alias}
+                            {account.alias}
                         </BaseText>
                         <BaseView flexDirection="row" gap={8}>
                             {account?.device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge mr={8} />}
                             <BaseText typographyFont="captionMedium" color={theme.colors.textLight}>
-                                {AddressUtils.humanAddress(vnsAddress || account.address)}
+                                {vnsName || AddressUtils.humanAddress(vnsAddress || account.address)}
                             </BaseText>
                         </BaseView>
                     </BaseView>
