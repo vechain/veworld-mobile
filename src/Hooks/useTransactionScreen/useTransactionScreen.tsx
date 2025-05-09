@@ -1,10 +1,11 @@
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { showErrorToast, showWarningToast } from "~Components"
-import { ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import {
     SignStatus,
     SignTransactionResponse,
+    useAnalyticTracking,
     useCheckIdentity,
     useDelegation,
     useSendTransaction,
@@ -12,6 +13,7 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
+import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
@@ -28,9 +30,20 @@ type Props = {
     dappRequest?: TransactionRequest
 }
 
+const mapGasPriceCoefficient = (value: GasPriceCoefficient) => {
+    switch (value) {
+        case GasPriceCoefficient.REGULAR:
+            return "SLOW"
+        case GasPriceCoefficient.MEDIUM:
+            return "NORMAL"
+        case GasPriceCoefficient.HIGH:
+            return "FAST"
+    }
+}
+
 export const useTransactionScreen = ({
     clauses,
-    onTransactionSuccess,
+    onTransactionSuccess: propsOnTransactionSuccess,
     onTransactionFailure,
     dappRequest,
     initialRoute,
@@ -40,9 +53,11 @@ export const useTransactionScreen = ({
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [loading, setLoading] = useState(false)
-    const [selectedFeeOption, setSelectedFeeOption] = useState(String(GasPriceCoefficient.REGULAR))
+    const [selectedFeeOption, setSelectedFeeOption] = useState(GasPriceCoefficient.MEDIUM)
     const [isEnoughGas, setIsEnoughGas] = useState(true)
     const [txCostTotal, setTxCostTotal] = useState("0")
+
+    const track = useAnalyticTracking()
 
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
@@ -64,15 +79,17 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
-    // 3. Priority fees
-    const { gasPriceCoef, priorityFees, gasFeeOptions } = useMemo(
-        () =>
-            GasUtils.getGasByCoefficient({
-                gas,
-                selectedFeeOption,
-            }),
-        [gas, selectedFeeOption],
+    const onTransactionSuccess: typeof propsOnTransactionSuccess = useCallback(
+        (tx, id) => {
+            track(AnalyticsEvent.TRANSACTION_SEND_GAS, { gasOption: mapGasPriceCoefficient(selectedFeeOption) })
+            track(AnalyticsEvent.TRANSACTION_SEND_DELEGATION, { delegationOption: selectedDelegationOption })
+            propsOnTransactionSuccess(tx, id)
+        },
+        [propsOnTransactionSuccess, selectedDelegationOption, selectedFeeOption, track],
     )
+
+    // 3. Priority fees
+    const transactionFeesResponse = useTransactionFees({ coefficient: selectedFeeOption, gas })
 
     // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
@@ -80,7 +97,7 @@ export const useTransactionScreen = ({
         gas,
         isDelegated,
         dependsOn: dappRequest?.options?.dependsOn,
-        gasPriceCoef,
+        gasPriceCoef: transactionFeesResponse.gasPriceCoef,
     })
 
     // 5. Sign transaction
@@ -195,8 +212,8 @@ export const useTransactionScreen = ({
     ])
 
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty,
-        [loading, loadingGas, isBiometricsEmpty],
+        () => loading || loadingGas || isBiometricsEmpty || transactionFeesResponse.isLoading,
+        [loading, loadingGas, isBiometricsEmpty, transactionFeesResponse.isLoading],
     )
 
     /**
@@ -208,17 +225,24 @@ export const useTransactionScreen = ({
             clauses,
             isDelegated,
             vtho,
-            priorityFees,
+            txFee: transactionFeesResponse.maxFee,
         })
 
         setIsEnoughGas(isGas)
         setTxCostTotal(_txCostTotal.toString)
-    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, priorityFees])
+    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, transactionFeesResponse.maxFee])
 
     const isDisabledButtonState = useMemo(
-        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current,
-        [isEnoughGas, isDelegated, loading, isSubmitting],
+        () =>
+            (!isEnoughGas && !isDelegated) ||
+            loading ||
+            isSubmitting.current ||
+            transactionFeesResponse.isLoading ||
+            (gas?.gas ?? 0) === 0,
+        [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading, gas?.gas],
     )
+
+    const onRefreshFee = useCallback(() => {}, [])
 
     return {
         selectedDelegationOption,
@@ -230,7 +254,6 @@ export const useTransactionScreen = ({
         onPasswordSuccess,
         setSelectedFeeOption,
         selectedFeeOption,
-        gasFeeOptions,
         resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
@@ -241,6 +264,11 @@ export const useTransactionScreen = ({
         selectedDelegationUrl,
         vtho,
         isDisabledButtonState,
-        priorityFees,
+        priorityFee: transactionFeesResponse.priorityFee,
+        estimatedFee: transactionFeesResponse.estimatedFee,
+        maxFee: transactionFeesResponse.maxFee,
+        gasOptions: transactionFeesResponse.options,
+        gasUpdatedAt: transactionFeesResponse.dataUpdatedAt,
+        onRefreshFee,
     }
 }

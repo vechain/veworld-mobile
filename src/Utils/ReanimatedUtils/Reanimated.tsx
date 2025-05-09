@@ -1,3 +1,5 @@
+import React, { ComponentClass, FC } from "react"
+
 // need this function because JS will auto convert very small numbers to scientific notation
 export function convertSmallSciNotationToDecimal(value: number): string {
     "worklet"
@@ -60,3 +62,14 @@ export function numberToPercentWorklet(
 
     return `${formatter.format(shapedValue)}%`
 }
+
+export const wrapFunctionComponent = <TProps,>(Component: FC<TProps>): ComponentClass<TProps> =>
+    class extends React.Component<TProps> {
+        constructor(props: TProps) {
+            super(props)
+        }
+
+        render() {
+            return <Component {...this.props} />
+        }
+    }

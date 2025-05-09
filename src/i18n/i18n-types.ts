@@ -916,7 +916,7 @@ type RootTranslation = {
 	 */
 	BROWSER_COPY_LINK: string
 	/**
-	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
+	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y
 	 */
 	BROWSER_COPY_LINK_SUCCESS: string
 	/**
@@ -1419,6 +1419,10 @@ type RootTranslation = {
 	 * A​d​d
 	 */
 	COMMON_BTN_ADD: string
+	/**
+	 * A​p​p​l​y
+	 */
+	COMMON_BTN_APPLY: string
 	/**
 	 * C​a​n​c​e​l
 	 */
@@ -2018,6 +2022,14 @@ type RootTranslation = {
 	 */
 	DONT_SEE_NFTS_2: string
 	/**
+	 * E​d​i​t​ ​s​p​e​e​d
+	 */
+	EDIT_SPEED: string
+	/**
+	 * C​h​a​n​g​e​ ​t​h​e​ ​s​p​e​e​d​ ​o​f​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	EDIT_SPEED_DESC: string
+	/**
 	 * E​r​r​o​r​!
 	 */
 	ERROR: string
@@ -2182,9 +2194,9 @@ type RootTranslation = {
 	 */
 	ESTIMATED_GAS_FEE: string
 	/**
-	 * E​s​t​i​m​a​t​e​d​ ​t​i​m​e
+	 * E​s​t​i​m​a​t​e​d​ ​f​e​e
 	 */
-	ESTIMATED_TIME: string
+	ESTIMATED_FEE: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -2473,6 +2485,10 @@ type RootTranslation = {
 	 * M​a​r​c​h
 	 */
 	MARCH: string
+	/**
+	 * M​a​x​ ​f​e​e
+	 */
+	MAX_FEE: string
 	/**
 	 * M​a​y
 	 */
@@ -3170,6 +3186,11 @@ type RootTranslation = {
 	 */
 	SB_YOUR_WALLETS: string
 	/**
+	 * {​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
+	 * @param {number} seconds
+	 */
+	ONLY_SECONDS: RequiredParams<'seconds|toSecondsDuration'>
+	/**
 	 * B​a​c​k​u​p​ ​n​o​w
 	 */
 	SECURITY_BACKUP_BTN: string
@@ -3328,17 +3349,29 @@ type RootTranslation = {
 	 */
 	SEND_ESTIMATED_TIME: string
 	/**
-	 * H​I​G​H
+	 * F​a​s​t
 	 */
-	SEND_FEE_HIGH: string
+	SEND_FEE_FAST: string
+	/**
+	 * N​o​r​m​a​l
+	 */
+	SEND_FEE_NORMAL: string
+	/**
+	 * S​l​o​w
+	 */
+	SEND_FEE_SLOW: string
+	/**
+	 * R​E​G​U​L​A​R
+	 */
+	SEND_FEE_REGULAR: string
 	/**
 	 * M​E​D​I​U​M
 	 */
 	SEND_FEE_MEDIUM: string
 	/**
-	 * R​E​G​U​L​A​R
+	 * H​I​G​H
 	 */
-	SEND_FEE_REGULAR: string
+	SEND_FEE_HIGH: string
 	/**
 	 * F​r​o​m
 	 */
@@ -3464,7 +3497,7 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
+	 * S​e​l​e​c​t​ ​o​n​e​ ​o​f​ ​y​o​u​r​ ​t​o​k​e​n​s​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
@@ -3951,6 +3984,10 @@ type RootTranslation = {
 	 */
 	TOUCH_ID: string
 	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​e​e
+	 */
+	TRANSACTION_FEE: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
 	 */
 	TRANSACTION_ID: string
@@ -3958,6 +3995,11 @@ type RootTranslation = {
 	 * T​y​p​e
 	 */
 	TYPE: string
+	/**
+	 * ~​ ​{​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
+	 * @param {number} seconds
+	 */
+	UNDER_SECONDS: RequiredParams<'seconds|toSecondsDuration'>
 	/**
 	 * U​n​k​n​o​w​n​ ​A​c​c​o​u​n​t
 	 */
@@ -3970,6 +4012,10 @@ type RootTranslation = {
 	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p
 	 */
 	UNVERIFIED_APP_TITLE: string
+	/**
+	 * U​p​d​a​t​i​n​g​ ​i​n
+	 */
+	UPDATING_IN: string
 	/**
 	 * u​s​e​r​n​a​m​e
 	 */
@@ -5067,7 +5113,7 @@ Thanks for your patience!
 	 */
 	BROWSER_COPY_LINK: () => LocalizedString
 	/**
-	 * Link successfully copied to the clipboard
+	 * Link successfully
 	 */
 	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
 	/**
@@ -5566,6 +5612,10 @@ Thanks for your patience!
 	 * Add
 	 */
 	COMMON_BTN_ADD: () => LocalizedString
+	/**
+	 * Apply
+	 */
+	COMMON_BTN_APPLY: () => LocalizedString
 	/**
 	 * Cancel
 	 */
@@ -6159,6 +6209,14 @@ Thanks for your patience!
 	 */
 	DONT_SEE_NFTS_2: () => LocalizedString
 	/**
+	 * Edit speed
+	 */
+	EDIT_SPEED: () => LocalizedString
+	/**
+	 * Change the speed of the transaction
+	 */
+	EDIT_SPEED_DESC: () => LocalizedString
+	/**
 	 * Error!
 	 */
 	ERROR: () => LocalizedString
@@ -6323,9 +6381,9 @@ Thanks for your patience!
 	 */
 	ESTIMATED_GAS_FEE: () => LocalizedString
 	/**
-	 * Estimated time
+	 * Estimated fee
 	 */
-	ESTIMATED_TIME: () => LocalizedString
+	ESTIMATED_FEE: () => LocalizedString
 	/**
 	 * Face ID
 	 */
@@ -6614,6 +6672,10 @@ Thanks for your patience!
 	 * March
 	 */
 	MARCH: () => LocalizedString
+	/**
+	 * Max fee
+	 */
+	MAX_FEE: () => LocalizedString
 	/**
 	 * May
 	 */
@@ -7288,6 +7350,10 @@ Thanks for your patience!
 	 */
 	SB_YOUR_WALLETS: () => LocalizedString
 	/**
+	 * {seconds|toSecondsDuration}
+	 */
+	ONLY_SECONDS: (arg: { seconds: number }) => LocalizedString
+	/**
 	 * Backup now
 	 */
 	SECURITY_BACKUP_BTN: () => LocalizedString
@@ -7444,17 +7510,29 @@ Thanks for your patience!
 	 */
 	SEND_ESTIMATED_TIME: () => LocalizedString
 	/**
-	 * HIGH
+	 * Fast
 	 */
-	SEND_FEE_HIGH: () => LocalizedString
+	SEND_FEE_FAST: () => LocalizedString
+	/**
+	 * Normal
+	 */
+	SEND_FEE_NORMAL: () => LocalizedString
+	/**
+	 * Slow
+	 */
+	SEND_FEE_SLOW: () => LocalizedString
+	/**
+	 * REGULAR
+	 */
+	SEND_FEE_REGULAR: () => LocalizedString
 	/**
 	 * MEDIUM
 	 */
 	SEND_FEE_MEDIUM: () => LocalizedString
 	/**
-	 * REGULAR
+	 * HIGH
 	 */
-	SEND_FEE_REGULAR: () => LocalizedString
+	SEND_FEE_HIGH: () => LocalizedString
 	/**
 	 * From
 	 */
@@ -7580,7 +7658,7 @@ Thanks for your patience!
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select the token asset you wish to send:
+	 * Select one of your tokens to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
 	/**
@@ -8061,6 +8139,10 @@ Are you sure you want to continue?
 	 */
 	TOUCH_ID: () => LocalizedString
 	/**
+	 * Transaction fee
+	 */
+	TRANSACTION_FEE: () => LocalizedString
+	/**
 	 * Transaction ID
 	 */
 	TRANSACTION_ID: () => LocalizedString
@@ -8068,6 +8150,10 @@ Are you sure you want to continue?
 	 * Type
 	 */
 	TYPE: () => LocalizedString
+	/**
+	 * ~ {seconds|toSecondsDuration}
+	 */
+	UNDER_SECONDS: (arg: { seconds: number }) => LocalizedString
 	/**
 	 * Unknown Account
 	 */
@@ -8080,6 +8166,10 @@ Are you sure you want to continue?
 	 * Unverified app
 	 */
 	UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * Updating in
+	 */
+	UPDATING_IN: () => LocalizedString
 	/**
 	 * username
 	 */
@@ -8294,4 +8384,6 @@ Are you sure you want to continue?
 	YESTERDAY: () => LocalizedString
 }
 
-export type Formatters = {}
+export type Formatters = {
+	toSecondsDuration: (value: number) => unknown
+}

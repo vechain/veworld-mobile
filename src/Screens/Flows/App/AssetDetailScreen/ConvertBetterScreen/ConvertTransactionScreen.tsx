@@ -7,10 +7,9 @@ import {
     BaseText,
     BaseView,
     DelegationView,
-    EstimatedTimeDetailsView,
     FadeoutButton,
     FiatBalance,
-    GasFeeOptions,
+    GasFeeSpeed,
     Layout,
     RequireUserPassword,
 } from "~Components"
@@ -106,24 +105,21 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
 
     const {
         selectedDelegationOption,
-        loadingGas,
         onSubmit,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
         setSelectedFeeOption,
         selectedFeeOption,
-        gasFeeOptions,
         resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
-        isEnoughGas,
-        txCostTotal,
-        isDelegated,
         selectedDelegationAccount,
         selectedDelegationUrl,
-        vtho,
         isDisabledButtonState,
+        gasOptions,
+        gasUpdatedAt,
+        onRefreshFee,
     } = useTransactionScreen({
         clauses: transactionClauses,
         onTransactionSuccess,
@@ -172,19 +168,13 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                         )}
                     </BaseView>
 
-                    <GasFeeOptions
-                        setSelectedFeeOption={setSelectedFeeOption}
-                        selectedDelegationOption={selectedDelegationOption}
-                        loadingGas={loadingGas}
+                    <GasFeeSpeed
+                        gasUpdatedAt={gasUpdatedAt}
+                        options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
-                        gasFeeOptions={gasFeeOptions}
-                        isThereEnoughGas={isEnoughGas}
-                        totalBalance={vtho.balance.balance}
-                        txCostTotal={txCostTotal}
-                        isDelegated={isDelegated}
+                        setSelectedFeeOption={setSelectedFeeOption}
+                        onRefreshFee={onRefreshFee}
                     />
-
-                    <EstimatedTimeDetailsView selectedFeeOption={selectedFeeOption} />
                 </BaseView>
             }
             footer={

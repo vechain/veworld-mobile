@@ -1,13 +1,13 @@
 import { StackActions, useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Transaction } from "@vechain/sdk-core"
-import React, { useCallback, useMemo } from "react"
+import { default as React, useCallback, useMemo } from "react"
 import {
     BaseSpacer,
     BaseView,
     DelegationView,
     FadeoutButton,
-    GasFeeOptions,
+    GasFeeSpeed,
     Layout,
     NFTTransferCard,
     RequireUserPassword,
@@ -86,23 +86,21 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
     const {
         selectedDelegationOption,
-        loadingGas,
         onSubmit,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
         setSelectedFeeOption,
         selectedFeeOption,
-        gasFeeOptions,
         resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
-        isEnoughGas,
-        txCostTotal,
         selectedDelegationAccount,
         selectedDelegationUrl,
-        vtho,
         isDisabledButtonState,
+        gasOptions,
+        gasUpdatedAt,
+        onRefreshFee,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -159,23 +157,14 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             isFontReverse
                             title={LL.ESTIMATED_GAS_FEE()}
                             data={
-                                <GasFeeOptions
-                                    setSelectedFeeOption={setSelectedFeeOption}
-                                    selectedDelegationOption={selectedDelegationOption}
-                                    loadingGas={loadingGas}
+                                <GasFeeSpeed
+                                    gasUpdatedAt={gasUpdatedAt}
+                                    options={gasOptions}
                                     selectedFeeOption={selectedFeeOption}
-                                    gasFeeOptions={gasFeeOptions}
-                                    isThereEnoughGas={isEnoughGas}
-                                    totalBalance={vtho.balance.balance}
-                                    txCostTotal={txCostTotal}
+                                    setSelectedFeeOption={setSelectedFeeOption}
+                                    onRefreshFee={onRefreshFee}
                                 />
                             }
-                        />
-
-                        <InfoSectionView<string>
-                            isFontReverse
-                            title={LL.ESTIMATED_TIME()}
-                            data={LL.SEND_LESS_THAN_1_MIN()}
                         />
                     </BaseView>
                     <RequireUserPassword
