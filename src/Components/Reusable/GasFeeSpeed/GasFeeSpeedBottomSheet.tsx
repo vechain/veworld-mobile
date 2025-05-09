@@ -109,7 +109,10 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                             <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
                                 {LL.ESTIMATED_FEE()}
                             </BaseText>
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                color={theme.colors.textLight}
+                                testID="GALACTICA_ESTIMATED_FEE_BS">
                                 {formatValue(estimatedFeeVtho)} {VTHO.symbol}
                             </BaseText>
                         </BaseView>
@@ -117,7 +120,10 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                             <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
                                 {LL.MAX_FEE()}
                             </BaseText>
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                color={theme.colors.textLight}
+                                testID="GALACTICA_MAX_FEE_BS">
                                 {formatValue(maxFeeVtho)} {VTHO.symbol}
                             </BaseText>
                         </BaseView>
@@ -127,7 +133,10 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                         <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
                             {LL.GAS_FEE()}
                         </BaseText>
-                        <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                        <BaseText
+                            typographyFont="bodyMedium"
+                            color={theme.colors.textLight}
+                            testID="LEGACY_ESTIMATED_FEE_BS">
                             {formatValue(estimatedFeeVtho)} {VTHO.symbol}
                         </BaseText>
                     </BaseView>
@@ -135,10 +144,10 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             </BaseView>
             <BaseSpacer height={24} />
             <BaseView gap={16} flexDirection="row" w={100}>
-                <BaseButton variant="outline" action={onClose} flex={1}>
+                <BaseButton variant="outline" action={onClose} flex={1} testID="GAS_FEE_BOTTOM_SHEET_CANCEL">
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
-                <BaseButton action={onApply} flex={1}>
+                <BaseButton action={onApply} flex={1} testID="GAS_FEE_BOTTOM_SHEET_APPLY">
                     {LL.COMMON_BTN_APPLY()}
                 </BaseButton>
             </BaseView>

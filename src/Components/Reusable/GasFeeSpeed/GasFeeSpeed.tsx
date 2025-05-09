@@ -96,7 +96,8 @@ export const GasFeeSpeed = ({
                         style={styles.cardButton}
                         px={12}
                         py={8}
-                        textColor={theme.colors.cardButton.text}>
+                        textColor={theme.colors.cardButton.text}
+                        testID="GAS_FEE_SPEED_EDIT">
                         {LL.EDIT_SPEED()}
                     </BaseButton>
                 </BaseView>
