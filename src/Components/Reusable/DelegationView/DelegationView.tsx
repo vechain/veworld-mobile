@@ -1,11 +1,11 @@
-import React, { useMemo } from "react"
+import React from "react"
+import { useBottomSheetModal } from "~Hooks"
 import { AccountWithDevice, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { DelegationOptions } from "../DelegationOptions"
-import { BaseCard, BaseSpacer, BaseText } from "~Components/Base"
-import { AccountCard } from "../AccountCard"
+import { DelegationBottomSheet } from "./DelegationBottomSheet"
+import { SelectedDelegation } from "./SelectedDelegation"
 
-interface IDelegationView {
+type Props = {
     setNoDelegation: () => void
     selectedDelegationOption: DelegationType
     setSelectedDelegationAccount: (account: AccountWithDevice) => void
@@ -21,38 +21,27 @@ export function DelegationView({
     selectedDelegationAccount,
     selectedDelegationUrl,
     setSelectedDelegationUrl,
-}: Readonly<IDelegationView>) {
-    const RenderDelegationTypeViews = useMemo(() => {
-        if (selectedDelegationAccount)
-            return (
-                <>
-                    <BaseSpacer height={16} />
-                    <AccountCard account={selectedDelegationAccount} />
-                </>
-            )
-
-        if (selectedDelegationUrl)
-            return (
-                <>
-                    <BaseSpacer height={16} />
-                    <BaseCard>
-                        <BaseText py={8}>{selectedDelegationUrl}</BaseText>
-                    </BaseCard>
-                </>
-            )
-    }, [selectedDelegationAccount, selectedDelegationUrl])
+}: Readonly<Props>) {
+    const { onOpen, ref, onClose } = useBottomSheetModal()
 
     return (
         <>
-            <DelegationOptions
-                setNoDelegation={setNoDelegation}
-                selectedDelegationOption={selectedDelegationOption}
-                setSelectedDelegationAccount={setSelectedDelegationAccount}
+            <SelectedDelegation
+                onDelegateClicked={onOpen}
                 selectedDelegationAccount={selectedDelegationAccount}
                 selectedDelegationUrl={selectedDelegationUrl}
-                setSelectedDelegationUrl={setSelectedDelegationUrl}
             />
-            {RenderDelegationTypeViews}
+
+            <DelegationBottomSheet
+                ref={ref}
+                selectedDelegationOption={selectedDelegationOption}
+                setNoDelegation={setNoDelegation}
+                setSelectedDelegationAccount={setSelectedDelegationAccount}
+                setSelectedDelegationUrl={setSelectedDelegationUrl}
+                selectedDelegationAccount={selectedDelegationAccount}
+                selectedDelegationUrl={selectedDelegationUrl}
+                onCloseBottomSheet={onClose}
+            />
         </>
     )
 }

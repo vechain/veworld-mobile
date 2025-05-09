@@ -121,6 +121,14 @@ function parseUrl(url: string) {
     throw new Error("IT SHOULD NOT HAPPEN")
 }
 
+function parseUrlSafe(url: string) {
+    try {
+        return parseUrl(url)
+    } catch {
+        return ""
+    }
+}
+
 async function isValidBrowserUrl(url: string): Promise<boolean> {
     let navInput: string | undefined
 
@@ -198,4 +206,5 @@ export default {
     getBaseURL,
     convertHttpToHttps,
     parseUrl,
+    parseUrlSafe,
 }

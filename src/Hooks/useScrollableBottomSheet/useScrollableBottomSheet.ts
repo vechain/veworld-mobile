@@ -12,23 +12,14 @@ export type FlatListScrollPropsType = {
     showsHorizontalScrollIndicator: boolean
 }
 
-export const useScrollableBottomSheet = ({
-    snapPoints,
-    data,
-}: {
-    snapPoints: string[]
-    data: any[]
-}): {
-    handleSheetChangePosition: (index: number) => void
-    flatListScrollProps: FlatListScrollPropsType
-} => {
+export const useScrollableBottomSheet = ({ snapPoints, data }: { snapPoints: string[]; data: any[] }) => {
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
     const handleSheetChangePosition = useCallback((index: number) => {
         setSnapIndex(index)
     }, [])
 
-    const { isListScrollable, viewabilityConfig, onViewableItemsChanged } = useScrollableList(
+    const { isListScrollable, viewabilityConfig, onViewableItemsChanged, visibleItemsCount } = useScrollableList(
         data,
         snapIndex,
         snapPoints.length,
@@ -36,6 +27,7 @@ export const useScrollableBottomSheet = ({
 
     return {
         handleSheetChangePosition,
+        visibleItemsCount,
         flatListScrollProps: {
             onViewableItemsChanged,
             viewabilityConfig,
