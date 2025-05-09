@@ -20,7 +20,7 @@ export const DAppHorizontalCard = ({ dapp, onOpenDApp, onPress }: Props) => {
 
     const iconUri = dapp.id
         ? DAppUtils.getAppHubIconUrl(dapp.id)
-        : dapp.iconUri ?? `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
+        : (dapp.iconUri ?? `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`)
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" style={[styles.rootContainer]}>

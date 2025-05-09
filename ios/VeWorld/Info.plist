@@ -27,14 +27,10 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>org.vechain.veworld.app</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>wc</string>
-				<string>veworld</string>
+				<string>VeWorld</string>
+				<string>com.anonymous.veworld</string>
 			</array>
 		</dict>
 	</array>
@@ -67,7 +63,7 @@
 	<string>$(PRODUCT_NAME) needs camera access to scan QR codes for VeChain addresses and
 			connecting to dApps.</string>
 	<key>NSFaceIDUsageDescription</key>
-	<string>$(PRODUCT_NAME) uses Face ID to enhance the security of your wallet on this device.</string>
+	<string>Allow $(PRODUCT_NAME) to use Face ID.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>$(PRODUCT_NAME) requires your location when in use to ensure a secure connection
 			with your Ledger device.</string>
@@ -94,19 +90,26 @@
 		<string>remote-notification</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
-	<string>BootSplash.storyboard</string>
+	<string>SplashScreen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array>
 		<string>arm64</string>
 	</array>
+	<key>UIRequiresFullScreen</key>
+	<false/>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
 		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
 	</array>
+	<key>UIUserInterfaceStyle</key>
+	<string>Light</string>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
 </dict>
