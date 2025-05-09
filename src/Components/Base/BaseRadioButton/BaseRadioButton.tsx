@@ -18,6 +18,7 @@ type Props = {
     contentStyle?: ViewStyle
     labelStyle?: TextStyle
     numberOfLines?: number
+    rootStyle?: ViewStyle
 }
 
 export const BaseRadioButton = ({
@@ -31,14 +32,15 @@ export const BaseRadioButton = ({
     contentStyle,
     labelStyle,
     numberOfLines,
+    rootStyle,
 }: Props) => {
     const { styles, theme } = useThemedStyles(_theme => baseStyles(_theme, isSelected))
 
     const computeContainerStyles = useMemo(() => {
-        if (disabled) return [styles.rootContainer, styles.disabledContainer]
+        if (disabled) return [styles.rootContainer, rootStyle, styles.disabledContainer]
 
-        return [styles.rootContainer]
-    }, [disabled, styles.disabledContainer, styles.rootContainer])
+        return [styles.rootContainer, rootStyle]
+    }, [disabled, rootStyle, styles.disabledContainer, styles.rootContainer])
 
     const computedTextStyles = useMemo(() => {
         if (disabled) return [styles.text, styles.textDisabled]
