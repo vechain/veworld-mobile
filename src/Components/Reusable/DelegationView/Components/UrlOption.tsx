@@ -57,6 +57,7 @@ export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: P
                                     numberOfLines={1}
                                     key={delUrl}
                                     rootStyle={styles.radio}
+                                    ellipsizeMode="middle"
                                 />
                             ))}
                         </BaseView>

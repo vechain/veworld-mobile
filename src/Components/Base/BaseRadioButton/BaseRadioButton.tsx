@@ -4,7 +4,7 @@ import { StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from "react-native
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseIcon } from "../BaseIcon"
-import { BaseText } from "../BaseText"
+import { BaseText, BaseTextProps } from "../BaseText"
 import { BaseView } from "../BaseView"
 
 type Props = {
@@ -19,6 +19,7 @@ type Props = {
     labelStyle?: TextStyle
     numberOfLines?: number
     rootStyle?: ViewStyle
+    ellipsizeMode?: BaseTextProps["ellipsizeMode"]
 }
 
 export const BaseRadioButton = ({
@@ -33,6 +34,7 @@ export const BaseRadioButton = ({
     labelStyle,
     numberOfLines,
     rootStyle,
+    ellipsizeMode,
 }: Props) => {
     const { styles, theme } = useThemedStyles(_theme => baseStyles(_theme, isSelected))
 
@@ -75,7 +77,8 @@ export const BaseRadioButton = ({
                     typographyFont="bodyMedium"
                     style={[computedTextStyles, labelStyle]}
                     lineHeight={20}
-                    numberOfLines={numberOfLines}>
+                    numberOfLines={numberOfLines}
+                    ellipsizeMode={ellipsizeMode}>
                     {label}
                 </BaseText>
                 <BaseIcon
