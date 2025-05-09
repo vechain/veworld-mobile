@@ -72,14 +72,19 @@ export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaini
                     <BaseAnimatedText
                         typographyFont="subSubTitleBold"
                         color={theme.colors.assetDetailsCard.title}
-                        style={blinkStyles}>
+                        style={blinkStyles}
+                        testID="GALACTICA_ESTIMATED_FEE">
                         {formatValue(estimatedFeeVtho)}
                     </BaseAnimatedText>
                     <BaseAnimatedText typographyFont="bodyMedium" color={theme.colors.textLight} style={blinkStyles}>
                         {estimatedFeeFiat.isLeesThan_0_01 ? `< ${estimatedFormattedFiat}` : estimatedFormattedFiat}
                     </BaseAnimatedText>
                 </BaseView>
-                <BaseAnimatedText typographyFont="subSubTitleBold" color={theme.colors.textLight} style={blinkStyles}>
+                <BaseAnimatedText
+                    typographyFont="subSubTitleBold"
+                    color={theme.colors.textLight}
+                    style={blinkStyles}
+                    testID="GALACTICA_MAX_FEE">
                     {formatValue(maxFeeVtho)} {VTHO.symbol}
                 </BaseAnimatedText>
             </BaseView>
