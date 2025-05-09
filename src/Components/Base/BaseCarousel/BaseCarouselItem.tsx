@@ -29,7 +29,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
     imageStyle,
     testID,
     isExternalLink,
-    w = SCREEN_WIDTH - 40,
+    w = SCREEN_WIDTH - 32,
     h = 128,
     onPress: propsOnPress,
     onPressActivation = "after",
@@ -70,7 +70,7 @@ const baseStyles = (w: number, h: number) => () =>
             flex: 1,
             width: w,
             height: h,
-            marginLeft: 20,
+            marginLeft: 12,
         },
         image: {
             width: "100%",

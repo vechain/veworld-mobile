@@ -131,7 +131,7 @@ const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") =
         paginatioContainer: {
             gap: 6,
             alignSelf: paginationAlignment,
-            paddingHorizontal: 20,
+            paddingHorizontal: 16,
         },
         dots: {
             backgroundColor: theme.colors.defaultCarousel.dotBg,
