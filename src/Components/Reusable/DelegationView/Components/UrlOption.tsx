@@ -43,6 +43,7 @@ export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: P
                     leftIconStyle={styles.linkIconStyle}
                     leftIconAdornment={false}
                     placeholder={LL.DELEGATE_URL_PLACEHOLDER()}
+                    testID="URL_OPTION_INPUT"
                 />
                 {delegationUrls.length > 0 && (
                     <>
@@ -58,6 +59,7 @@ export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: P
                                     key={delUrl}
                                     rootStyle={styles.radio}
                                     ellipsizeMode="middle"
+                                    testID={`URL_OPTION_${new URL(delUrl).hostname}_${new URL(delUrl).pathname}`}
                                 />
                             ))}
                         </BaseView>
