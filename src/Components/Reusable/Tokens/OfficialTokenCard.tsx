@@ -66,13 +66,15 @@ export const OfficialTokenCard = memo(
                             </BaseText>
                             <BaseSpacer width={8} />
 
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
-                                {isBalanceVisible ? tokenUnitBalance : "•••••"}
-                            </BaseText>
+                            {tokenWithInfo.balance && (
+                                <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
+                                    {isBalanceVisible ? tokenUnitBalance : "•••••"}
+                                </BaseText>
+                            )}
                         </BaseView>
                     </BaseView>
 
-                    {!!exchangeRate && (
+                    {!!exchangeRate && tokenWithInfo.balance && (
                         <BaseView style={styles.balanceInfo}>
                             {!!exchangeRate && (
                                 <FiatBalance

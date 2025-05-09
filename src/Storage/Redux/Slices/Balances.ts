@@ -118,7 +118,6 @@ export const BalanceSlice = createSlice({
                 return balance
             })
         },
-
         changeBalancePosition: (
             state: Draft<BalanceState>,
             action: PayloadAction<{
@@ -139,10 +138,37 @@ export const BalanceSlice = createSlice({
                 return updatedBalance ? updatedBalance : balance
             })
         },
+        removeBalancesByAddress: (
+            state: Draft<BalanceState>,
+            action: PayloadAction<{
+                network: NETWORK_TYPE
+                accountAddress: string | string[]
+            }>,
+        ) => {
+            const { network, accountAddress } = action.payload
+            if (Array.isArray(accountAddress)) {
+                accountAddress.forEach(address => {
+                    const normAccountAddress = HexUtils.normalize(address)
+                    ensureBalanceSlotExists(state, network, normAccountAddress)
+                    delete state[network][normAccountAddress]
+                })
+            } else {
+                const normAccountAddress = HexUtils.normalize(accountAddress)
+                ensureBalanceSlotExists(state, network, normAccountAddress)
+
+                delete state[network][normAccountAddress]
+            }
+        },
 
         resetBalancesState: () => initialState,
     },
 })
 
-export const { addTokenBalance, updateTokenBalances, removeTokenBalance, changeBalancePosition, resetBalancesState } =
-    BalanceSlice.actions
+export const {
+    addTokenBalance,
+    updateTokenBalances,
+    removeTokenBalance,
+    changeBalancePosition,
+    resetBalancesState,
+    removeBalancesByAddress,
+} = BalanceSlice.actions

@@ -1,5 +1,5 @@
 // Devices
-import { hdnode1, hdnode2, keystoreWallet, wallet1 } from "./wallets"
+import { hdnode1, hdnode2, keystoreWallet, wallet1, wallet2 } from "./wallets"
 import { mockLedgerAccount } from "./ledger"
 import { DEVICE_TYPE, LedgerDevice, LocalDevice } from "~Model"
 import { CryptoUtils } from "~Utils"
@@ -34,11 +34,13 @@ export const keystoreDevice: LocalDevice = {
     position: 0,
 }
 
-export const device2 = {
+export const device2: LocalDevice = {
     alias: "Device 2",
     rootAddress: hdnode2.address,
     type: DEVICE_TYPE.LOCAL_MNEMONIC,
     xPub: CryptoUtils.xPubFromHdNode(hdnode2),
+    index: 0,
+    wallet: JSON.stringify(wallet2),
     position: 0,
 }
 

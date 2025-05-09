@@ -3,10 +3,13 @@ import { useCallback } from "react"
 import { useDispatch } from "react-redux"
 import {
     removeAccountsByDevice,
+    removeBalancesByAddress,
     removeDevice,
     selectAccounts,
+    selectAccountsByDevice,
     selectDevices,
     selectSelectedAccount,
+    selectSelectedNetwork,
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils, AddressUtils } from "~Utils"
@@ -16,6 +19,9 @@ export const useWalletDeletion = (device?: BaseDevice) => {
     const devices = useAppSelector(selectDevices)
     const allAccounts = useAppSelector(selectAccounts)
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    const accountsByDevice = useAppSelector(state => selectAccountsByDevice(state, device?.rootAddress))
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const dispatch = useDispatch()
 
@@ -36,7 +42,22 @@ export const useWalletDeletion = (device?: BaseDevice) => {
         dispatch(removeAccountsByDevice({ rootAddress }))
 
         dispatch(removeDevice(device))
-    }, [allAccounts, device, dispatch, onSetSelectedAccount, selectedAccount.rootAddress])
+        // Remove balances for all accounts in the device
+        dispatch(
+            removeBalancesByAddress({
+                network: selectedNetwork.type,
+                accountAddress: accountsByDevice.map(account => account.address),
+            }),
+        )
+    }, [
+        allAccounts,
+        device,
+        dispatch,
+        onSetSelectedAccount,
+        selectedAccount.rootAddress,
+        accountsByDevice,
+        selectedNetwork.type,
+    ])
 
     const deleteWallet = useCallback(() => {
         if (!device?.rootAddress) return

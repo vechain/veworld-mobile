@@ -139,7 +139,6 @@ export const autoSelectSuggestTokens =
                     network,
                     thorClient,
                 )
-
                 if (!balance || balance.balance === "0") continue
 
                 officialTokensBalances.push(balance)
