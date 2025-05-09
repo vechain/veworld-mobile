@@ -86,7 +86,7 @@ export const useTokenBalances = () => {
         thorClient.genesis.id,
         network.genesis.id,
         balances.length,
-        veDelegateBalance,
+        veDelegateBalance?.formatted,
     ])
 
     /**
