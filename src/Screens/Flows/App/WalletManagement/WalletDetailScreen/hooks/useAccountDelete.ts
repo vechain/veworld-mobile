@@ -7,6 +7,7 @@ import {
     removeAccount,
     removeBalancesByAddress,
     selectAccounts,
+    selectSelectedAccount,
     selectSelectedNetwork,
     useAppDispatch,
     useAppSelector,
@@ -15,6 +16,7 @@ import {
 export const useAccountDelete = () => {
     const { LL } = useI18nContext()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const allAccounts = useAppSelector(selectAccounts)
     const dispatch = useAppDispatch()
@@ -44,11 +46,14 @@ export const useAccountDelete = () => {
                 visibilityTime: 10000,
             })
 
+        if (AddressUtils.compareAddresses(selectedAccount.address, accountToRemove.address)) {
+            throw new Error("Cannot delete the selected account")
+        }
         // [START] - Remove account
         dispatch(removeAccount(accountToRemove))
         // Remove balances for the account
         dispatch(removeBalancesByAddress({ network: selectedNetwork.type, accountAddress: accountToRemove.address }))
-    }, [LL, isOnlyAccount, accountToRemove, dispatch, selectedNetwork])
+    }, [LL, isOnlyAccount, accountToRemove, dispatch, selectedNetwork, selectedAccount])
 
     const handleAccountToRemove = useCallback(
         (account: AccountWithDevice) => {
