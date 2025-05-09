@@ -1,8 +1,7 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
-import { StyleSheet, Text } from "react-native"
+import { StyleSheet } from "react-native"
 import { BaseButton, BaseText, BaseView } from "~Components/Base"
-import { ColorThemeType, typography } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalAccountWithDevice } from "~Model"
@@ -47,31 +46,14 @@ export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegati
                     <BaseText typographyFont="captionMedium" color={theme.colors.textLight}>
                         {LL.DELEGATION_FEE()}
                     </BaseText>
-                    <BaseView flexWrap="nowrap" flexDirection="row" alignItems="center">
-                        <Text
-                            style={{
-                                color: theme.colors.passwordPlaceholder,
-                                fontSize: typography.defaults.captionMedium.fontSize,
-                                fontFamily: typography.defaults.captionMedium.fontFamily || "Inter-Regular",
-                                fontWeight: typography.defaults.captionMedium
-                                    .fontWeight as keyof typeof typography.fontWeight,
-                                lineHeight: typography.defaults.captionMedium.lineHeight,
-                            }}>
-                            {delegationUrlParsed?.protocol}
-                            {"//"}
-                        </Text>
-                        <Text
-                            numberOfLines={1}
-                            style={{
-                                color: theme.colors.subtitle,
-                                fontSize: typography.defaults.bodySemiBold.fontSize,
-                                fontFamily: typography.defaults.bodySemiBold.fontFamily || "Inter-Regular",
-                                fontWeight: typography.defaults.bodySemiBold
-                                    .fontWeight as keyof typeof typography.fontWeight,
-                                lineHeight: typography.defaults.bodySemiBold.lineHeight,
-                                flexShrink: 1,
-                            }}>{`${delegationUrlParsed?.host}${delegationUrlParsed?.pathname}`}</Text>
-                    </BaseView>
+                    <BaseText
+                        numberOfLines={1}
+                        color={theme.colors.subtitle}
+                        typographyFont="bodySemiBold"
+                        flexShrink={1}
+                        ellipsizeMode="middle">
+                        {`${delegationUrlParsed?.host}${delegationUrlParsed?.pathname}`}
+                    </BaseText>
                 </BaseView>
             )
         return (
@@ -83,11 +65,9 @@ export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegati
         LL,
         delegationUrlParsed?.host,
         delegationUrlParsed?.pathname,
-        delegationUrlParsed?.protocol,
         name,
         selectedDelegationAccount,
         selectedDelegationUrl,
-        theme.colors.passwordPlaceholder,
         theme.colors.subtitle,
         theme.colors.textLight,
     ])
