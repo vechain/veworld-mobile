@@ -39,10 +39,15 @@ const ButtonBar = ({ onCancel, onApply, disabled }: ButtonBarProps) => {
             alignItems="center"
             mt={24}
             mb={24}>
-            <BaseButton variant="outline" action={onCancel} flex={1}>
+            <BaseButton variant="outline" action={onCancel} flex={1} testID="RENDERED_OPTION_BUTTON_BAR_CANCEL">
                 {LL.COMMON_BTN_CANCEL()}
             </BaseButton>
-            <BaseButton variant="solid" action={onApply} flex={1} disabled={disabled}>
+            <BaseButton
+                variant="solid"
+                action={onApply}
+                flex={1}
+                disabled={disabled}
+                testID="RENDERED_OPTION_BUTTON_BAR_APPLY">
                 {LL.COMMON_BTN_APPLY()}
             </BaseButton>
         </BaseView>
@@ -94,9 +99,11 @@ export const RenderedOption = ({
                             handleCancel()
                         }}
                         onApply={() => {
+                            if (!selectedAccount) return
                             setSelectedDelegationAccount(selectedAccount!)
                             onClose()
                         }}
+                        disabled={!selectedAccount}
                     />
                 )}
             </AccountOption>
@@ -111,7 +118,9 @@ export const RenderedOption = ({
                             handleCancel()
                         }}
                         onApply={() => {
+                            if (!selectedUrl) return
                             const parsed = URIUtils.parseUrlSafe(selectedUrl!)
+                            if (!parsed) return
                             setSelectedDelegationUrl(parsed)
                             dispatch(
                                 addDelegationUrl({
