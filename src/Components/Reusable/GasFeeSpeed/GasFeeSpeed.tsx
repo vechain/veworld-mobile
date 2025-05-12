@@ -68,49 +68,58 @@ export const GasFeeSpeed = ({
                 )}
             </BaseView>
             <BaseCard containerStyle={styles.cardContainer} style={styles.card}>
-                <BaseView flexDirection="row" gap={12} justifyContent="space-between" w={100} style={styles.section}>
-                    <BaseView flexDirection="column" gap={4}>
-                        <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
-                            {LL.SEND_ESTIMATED_TIME()}
-                        </BaseText>
-                        <BaseView flexDirection="row" gap={8}>
-                            <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />
-                            <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
-                                {LL.UNDER_SECONDS({ seconds: SPEED_MAP[selectedFeeOption].asSeconds() })}
-                            </BaseText>
-                        </BaseView>
-                    </BaseView>
-                    <BaseButton
-                        leftIcon={
-                            <BaseIcon
-                                name="icon-thunder"
-                                color={theme.colors.cardButton.text}
-                                size={16}
-                                px={0}
-                                py={0}
-                            />
-                        }
-                        action={onOpen}
-                        variant="solid"
-                        bgColor={theme.colors.cardButton.background}
-                        style={styles.cardButton}
-                        px={12}
-                        py={8}
-                        textColor={theme.colors.cardButton.text}
-                        testID="GAS_FEE_SPEED_EDIT">
-                        {LL.EDIT_SPEED()}
-                    </BaseButton>
-                </BaseView>
-                <BaseSpacer
-                    height={1}
-                    background={theme.isDark ? theme.colors.background : theme.colors.pressableCardBorder}
-                />
                 {isGalactica ? (
-                    <GalacticaEstimation
-                        options={options}
-                        selectedFeeOption={selectedFeeOption}
-                        secondsRemaining={secondsRemaining}
-                    />
+                    <>
+                        <BaseView
+                            flexDirection="row"
+                            gap={12}
+                            justifyContent="space-between"
+                            w={100}
+                            style={styles.section}>
+                            <BaseView flexDirection="column" gap={4}>
+                                <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
+                                    {LL.SEND_ESTIMATED_TIME()}
+                                </BaseText>
+                                <BaseView flexDirection="row" gap={8}>
+                                    <BaseIcon name="icon-timer" size={16} color={theme.colors.textLight} />
+                                    <BaseText
+                                        typographyFont="subSubTitleBold"
+                                        color={theme.colors.assetDetailsCard.title}>
+                                        {LL.UNDER_SECONDS({ seconds: SPEED_MAP[selectedFeeOption].asSeconds() })}
+                                    </BaseText>
+                                </BaseView>
+                            </BaseView>
+                            <BaseButton
+                                leftIcon={
+                                    <BaseIcon
+                                        name="icon-thunder"
+                                        color={theme.colors.cardButton.text}
+                                        size={16}
+                                        px={0}
+                                        py={0}
+                                    />
+                                }
+                                action={onOpen}
+                                variant="solid"
+                                bgColor={theme.colors.cardButton.background}
+                                style={styles.cardButton}
+                                px={12}
+                                py={8}
+                                textColor={theme.colors.cardButton.text}
+                                testID="GAS_FEE_SPEED_EDIT">
+                                {LL.EDIT_SPEED()}
+                            </BaseButton>
+                        </BaseView>
+                        <BaseSpacer
+                            height={1}
+                            background={theme.isDark ? theme.colors.background : theme.colors.pressableCardBorder}
+                        />
+                        <GalacticaEstimation
+                            options={options}
+                            selectedFeeOption={selectedFeeOption}
+                            secondsRemaining={secondsRemaining}
+                        />
+                    </>
                 ) : (
                     <LegacyEstimation options={options} selectedFeeOption={selectedFeeOption} />
                 )}
