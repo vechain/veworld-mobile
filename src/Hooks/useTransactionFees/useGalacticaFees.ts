@@ -60,7 +60,7 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
     const thorClient = useThorClient()
 
     const {
-        isLoading: isLoadingMaxPriorityFeePerGas,
+        isFetching: isLoadingMaxPriorityFeePerGas,
         data: maxPriorityFee,
         dataUpdatedAt,
     } = useQuery({
@@ -70,7 +70,7 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
         placeholderData: keepPreviousData,
     })
 
-    const { isLoading: isLoadingFeeHistory, data: feeHistory } = useQuery({
+    const { isFetching: isLoadingFeeHistory, data: feeHistory } = useQuery({
         queryKey: ["FeeHistory", blockId],
         queryFn: () =>
             thorClient.gas.getFeeHistory({
