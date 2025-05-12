@@ -1,12 +1,14 @@
 import moment from "moment"
 import { PropsWithChildren, default as React, useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { useInterval } from "usehooks-ts"
 import { BaseCard, BaseText, BaseView } from "~Components/Base"
 import { ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { EditSpeedSection } from "./EditSpeedSection"
 import { GalacticaEstimation } from "./GalacticaEstimation"
 import { GasFeeSpeedBottomSheet } from "./GasFeeSpeedBottomSheet"
@@ -22,6 +24,8 @@ type Props = {
     isBaseFeeRampingUp: boolean
     speedChangeEnabled: boolean
 }
+
+const AnimatedBaseCard = Animated.createAnimatedComponent(wrapFunctionComponent(BaseCard))
 
 export const GasFeeSpeed = ({
     options,
@@ -68,7 +72,10 @@ export const GasFeeSpeed = ({
                     </BaseView>
                 )}
             </BaseView>
-            <BaseCard containerStyle={styles.cardContainer} style={styles.card}>
+            <AnimatedBaseCard
+                containerStyle={styles.cardContainer}
+                style={styles.card}
+                layout={LinearTransition.duration(300)}>
                 {isGalactica ? (
                     <>
                         <EditSpeedSection
@@ -95,7 +102,7 @@ export const GasFeeSpeed = ({
                     isGalactica={isGalactica}
                     isBaseFeeRampingUp={isBaseFeeRampingUp}
                 />
-            </BaseCard>
+            </AnimatedBaseCard>
         </BaseView>
     )
 }

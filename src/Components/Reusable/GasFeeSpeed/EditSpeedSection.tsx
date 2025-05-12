@@ -1,9 +1,11 @@
 import React from "react"
 import { StyleSheet } from "react-native"
+import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { SPEED_MAP } from "./constants"
 
 type Props = {
@@ -12,14 +14,29 @@ type Props = {
     onOpen: () => void
 }
 
+const AnimatedBaseSpacer = Animated.createAnimatedComponent(wrapFunctionComponent(BaseSpacer))
+
 export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen }: Props) => {
     const { LL } = useI18nContext()
-    const { theme, styles } = useThemedStyles(baseStyles)
-    if (!speedChangeEnabled) return null
+    const { theme, styles } = useThemedStyles(baseStyles(speedChangeEnabled))
+
+    const opacityStyles = useAnimatedStyle(() => {
+        return {
+            opacity: speedChangeEnabled ? withTiming(1, { duration: 300 }) : withTiming(0, { duration: 300 }),
+        }
+    }, [speedChangeEnabled])
+
+    const animatedStyles = useAnimatedStyle(() => {
+        return {
+            padding: speedChangeEnabled ? 16 : 0,
+        }
+    }, [speedChangeEnabled])
 
     return (
         <>
-            <BaseView flexDirection="row" gap={12} justifyContent="space-between" w={100} style={styles.section}>
+            <Animated.View
+                style={[styles.section, animatedStyles, opacityStyles]}
+                layout={LinearTransition.duration(300)}>
                 <BaseView flexDirection="column" gap={4}>
                     <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
                         {LL.SEND_ESTIMATED_TIME()}
@@ -45,19 +62,30 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
                     testID="GAS_FEE_SPEED_EDIT">
                     {LL.EDIT_SPEED()}
                 </BaseButton>
-            </BaseView>
-            <BaseSpacer
-                height={1}
-                background={theme.isDark ? theme.colors.background : theme.colors.pressableCardBorder}
-            />
+            </Animated.View>
+            {speedChangeEnabled && (
+                <>
+                    <AnimatedBaseSpacer
+                        height={1}
+                        background={theme.isDark ? theme.colors.background : theme.colors.pressableCardBorder}
+                        layout={LinearTransition.duration(300)}
+                        style={opacityStyles}
+                    />
+                </>
+            )}
         </>
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = (speedChangeEnabled: boolean) => (theme: ColorThemeType) =>
     StyleSheet.create({
         section: {
-            padding: 16,
+            flexDirection: "row",
+            gap: 12,
+            justifyContent: "space-between",
+            width: "100%",
+            padding: speedChangeEnabled ? 16 : 0,
+            height: speedChangeEnabled ? "auto" : 0,
         },
         cardButton: {
             borderColor: theme.colors.cardButton.border,

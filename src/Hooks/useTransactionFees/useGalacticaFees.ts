@@ -17,52 +17,6 @@ const average = (values: string[]) =>
     BigNutils(values.reduce((acc, v) => acc + HexUInt.of(v).bi, 0n).toString()).div(values.length).toBigInt
 
 type FeeHistoryResponse = Awaited<ReturnType<typeof ethFeeHistory>>
-/**
- *
- * @param res History response
- * @param offset Offset from the length of the array (defaults to -1)
- * @returns
- */
-const calculateFeeOfBlock = (res: FeeHistoryResponse, offset: number = 1) => {
-    //It should never happen
-    if (!res.reward) return
-    const blockRewards = res.reward[res.reward.length - offset]
-    const baseFee = HexUInt.of(res.baseFeePerGas[res.baseFeePerGas.length - offset]).bi
-
-    const rewardRegular = HexUInt.of(blockRewards[0]).bi
-    const rewardMedium = HexUInt.of(blockRewards[1]).bi
-    const rewardHigh = HexUInt.of(blockRewards[2]).bi
-
-    const baseFeeRegular = BigNutils(baseFee.toString()).multiply(1.02).toBigInt
-    const baseFeeMedium = BigNutils(baseFee.toString()).multiply(1.03).toBigInt
-    const baseFeeHigh = BigNutils(baseFee.toString()).multiply(1.046).toBigInt
-
-    return {
-        [GasPriceCoefficient.REGULAR]: {
-            estimatedFee: BigNutils((baseFee + rewardRegular).toString()),
-            maxFee: BigNutils((baseFeeRegular + rewardRegular).toString()),
-            priorityFee: BigNutils(rewardRegular.toString()),
-        },
-        [GasPriceCoefficient.MEDIUM]: {
-            estimatedFee: BigNutils((baseFee + rewardMedium).toString()),
-            maxFee: BigNutils((baseFeeMedium + rewardMedium).toString()),
-            priorityFee: BigNutils(rewardMedium.toString()),
-        },
-        [GasPriceCoefficient.HIGH]: {
-            estimatedFee: BigNutils((baseFee + rewardHigh).toString()),
-            maxFee: BigNutils((baseFeeHigh + rewardHigh).toString()),
-            priorityFee: BigNutils(rewardHigh.toString()),
-        },
-    }
-}
-
-const calculateFeeBlockDelta = (res: ReturnType<typeof calculateFeeOfBlock>) => {
-    if (!res) return BigNutils("0")
-    const fast = res[GasPriceCoefficient.HIGH].maxFee.clone()
-    const slow = res[GasPriceCoefficient.REGULAR].maxFee.clone()
-
-    return fast.minus(slow.toString).div(slow.toString)
-}
 
 const calculateFeeHistory = (res: FeeHistoryResponse) => {
     //It should never happen
@@ -189,14 +143,17 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
 
     const speedChangeEnabled = useMemo(() => {
         if (typeof feeHistory === "undefined") return false
-        const [lastBlockDelta, secondLastBlockDelta, thirdLastBlockDelta] = [
-            calculateFeeBlockDelta(calculateFeeOfBlock(feeHistory, 1)),
-            calculateFeeBlockDelta(calculateFeeOfBlock(feeHistory, 2)),
-            calculateFeeBlockDelta(calculateFeeOfBlock(feeHistory, 3)),
-        ]
-        if (lastBlockDelta.isBiggerThan("0.05")) return true
-        if (secondLastBlockDelta.isLessThan("0.05") && thirdLastBlockDelta.isLessThan("0.05")) return false
-        return true
+        const baseFees = feeHistory.baseFeePerGas.map(bFee => HexUInt.of(bFee).bi)
+        const last4Fees = baseFees.slice(-4)
+        if (
+            BigNutils((last4Fees[last4Fees.length - 1] - last4Fees[0]).toString())
+                .div(last4Fees[0].toString())
+                .isLessThan("-0.02")
+        )
+            return false
+        return BigNutils((baseFees[baseFees.length - 1] - baseFees[0]).toString())
+            .div(baseFees[0].toString())
+            .isBiggerThan("0.05")
     }, [feeHistory])
 
     const memoized = useMemo(
