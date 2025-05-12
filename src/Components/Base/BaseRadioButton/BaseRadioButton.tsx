@@ -4,7 +4,7 @@ import { StyleSheet, TextStyle, TouchableOpacity, ViewStyle } from "react-native
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { BaseIcon } from "../BaseIcon"
-import { BaseText } from "../BaseText"
+import { BaseText, BaseTextProps } from "../BaseText"
 import { BaseView } from "../BaseView"
 
 type Props = {
@@ -18,6 +18,8 @@ type Props = {
     contentStyle?: ViewStyle
     labelStyle?: TextStyle
     numberOfLines?: number
+    rootStyle?: ViewStyle
+    ellipsizeMode?: BaseTextProps["ellipsizeMode"]
 }
 
 export const BaseRadioButton = ({
@@ -31,14 +33,16 @@ export const BaseRadioButton = ({
     contentStyle,
     labelStyle,
     numberOfLines,
+    rootStyle,
+    ellipsizeMode,
 }: Props) => {
     const { styles, theme } = useThemedStyles(_theme => baseStyles(_theme, isSelected))
 
     const computeContainerStyles = useMemo(() => {
-        if (disabled) return [styles.rootContainer, styles.disabledContainer]
+        if (disabled) return [styles.rootContainer, rootStyle, styles.disabledContainer]
 
-        return [styles.rootContainer]
-    }, [disabled, styles.disabledContainer, styles.rootContainer])
+        return [styles.rootContainer, rootStyle]
+    }, [disabled, rootStyle, styles.disabledContainer, styles.rootContainer])
 
     const computedTextStyles = useMemo(() => {
         if (disabled) return [styles.text, styles.textDisabled]
@@ -73,7 +77,8 @@ export const BaseRadioButton = ({
                     typographyFont="bodyMedium"
                     style={[computedTextStyles, labelStyle]}
                     lineHeight={20}
-                    numberOfLines={numberOfLines}>
+                    numberOfLines={numberOfLines}
+                    ellipsizeMode={ellipsizeMode}>
                     {label}
                 </BaseText>
                 <BaseIcon

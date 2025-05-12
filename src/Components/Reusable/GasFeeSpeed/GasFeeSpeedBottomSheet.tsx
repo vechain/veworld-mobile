@@ -13,23 +13,22 @@ import {
 } from "~Components/Base"
 import { ColorThemeType, GasPriceCoefficient, VTHO } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
+import { TransactionFeesResult } from "~Hooks/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { BaseButtonGroupHorizontalType } from "~Model"
-import { BigNumberUtils } from "~Utils"
 import { SPEED_MAP } from "./constants"
 
 type Props = {
-    estimatedFee: BigNumberUtils
-    maxFee: BigNumberUtils
     setSelectedFeeOption: (value: GasPriceCoefficient) => void
     selectedFeeOption: GasPriceCoefficient
     onClose: () => void
     isGalactica?: boolean
+    options: TransactionFeesResult
     isBaseFeeRampingUp: boolean
 }
 
 export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
-    { estimatedFee, maxFee, setSelectedFeeOption, selectedFeeOption, onClose, isGalactica, isBaseFeeRampingUp },
+    { setSelectedFeeOption, selectedFeeOption, onClose, isGalactica, options, isBaseFeeRampingUp },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -54,6 +53,8 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
         ]
     }, [LL])
 
+    const { estimatedFee, maxFee } = useMemo(() => options[internalFeeOption], [internalFeeOption, options])
+
     const estimatedFeeVtho = useMemo(
         () => parseFloat(ethers.utils.formatEther(estimatedFee.toString)),
         [estimatedFee.toString],
@@ -66,7 +67,7 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     }, [internalFeeOption, onClose, setSelectedFeeOption])
 
     return (
-        <BaseBottomSheet style={styles.root} ref={ref} dynamicHeight contentStyle={styles.rootContent}>
+        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-thunder" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -109,7 +110,10 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                             <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
                                 {LL.ESTIMATED_FEE()}
                             </BaseText>
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                color={theme.colors.textLight}
+                                testID="GALACTICA_ESTIMATED_FEE_BS">
                                 {formatValue(estimatedFeeVtho)} {VTHO.symbol}
                             </BaseText>
                         </BaseView>
@@ -117,7 +121,10 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                             <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
                                 {LL.MAX_FEE()}
                             </BaseText>
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                            <BaseText
+                                typographyFont="bodyMedium"
+                                color={theme.colors.textLight}
+                                testID="GALACTICA_MAX_FEE_BS">
                                 {formatValue(maxFeeVtho)} {VTHO.symbol}
                             </BaseText>
                         </BaseView>
@@ -142,7 +149,10 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                         <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
                             {LL.GAS_FEE()}
                         </BaseText>
-                        <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                        <BaseText
+                            typographyFont="bodyMedium"
+                            color={theme.colors.textLight}
+                            testID="LEGACY_ESTIMATED_FEE_BS">
                             {formatValue(estimatedFeeVtho)} {VTHO.symbol}
                         </BaseText>
                     </BaseView>
@@ -150,10 +160,10 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             </BaseView>
             <BaseSpacer height={24} />
             <BaseView gap={16} flexDirection="row" w={100}>
-                <BaseButton variant="outline" action={onClose} flex={1}>
+                <BaseButton variant="outline" action={onClose} flex={1} testID="GAS_FEE_BOTTOM_SHEET_CANCEL">
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
-                <BaseButton action={onApply} flex={1}>
+                <BaseButton action={onApply} flex={1} testID="GAS_FEE_BOTTOM_SHEET_APPLY">
                     {LL.COMMON_BTN_APPLY()}
                 </BaseButton>
             </BaseView>
@@ -163,11 +173,6 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        root: {
-            backgroundColor: theme.colors.editSpeedBs.background,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-        },
         rootContent: {
             paddingBottom: 40,
         },
@@ -176,7 +181,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderColor: theme.colors.editSpeedBs.result.border,
             backgroundColor: theme.colors.editSpeedBs.result.background,
             padding: 24,
-            borderRadius: 12,
+            borderRadius: 8,
         },
         alert: {
             backgroundColor: theme.colors.warningAlert.background,

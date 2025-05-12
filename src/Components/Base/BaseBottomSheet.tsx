@@ -188,6 +188,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 accessible={Platform.select({ ios: false })}
                 snapPoints={snappoints}
                 onChange={onSheetPositionChange}
+                bottomInset={bottomSafeArea ? bottomSafeAreaSize : undefined}
                 {...sheetProps}>
                 <BaseView
                     w={100}
@@ -207,7 +208,6 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                         {footer}
                     </BaseView>
                 )}
-                {bottomSafeArea && <BaseSpacer height={bottomSafeAreaSize} />}
             </BottomSheetModal>
         )
     },

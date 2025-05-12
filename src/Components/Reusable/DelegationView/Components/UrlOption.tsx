@@ -1,13 +1,13 @@
 import { default as React, ReactNode, useCallback, useState } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
 import { BaseIcon, BaseRadioButton, BaseTextInput, BaseView } from "~Components/Base"
-import { ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Option, OptionText } from "./Option"
 
 type Props = {
-    selectedDelegationUrl?: string | undefined
+    selectedDelegationUrl?: string
     children: (args: { onCancel: () => void; selectedUrl: string | undefined }) => ReactNode
     delegationUrls: string[]
 }
@@ -43,6 +43,7 @@ export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: P
                     leftIconStyle={styles.linkIconStyle}
                     leftIconAdornment={false}
                     placeholder={LL.DELEGATE_URL_PLACEHOLDER()}
+                    testID="URL_OPTION_INPUT"
                 />
                 {delegationUrls.length > 0 && (
                     <>
@@ -56,13 +57,16 @@ export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: P
                                     onPress={onSelectedUrlChange}
                                     numberOfLines={1}
                                     key={delUrl}
+                                    rootStyle={styles.radio}
+                                    ellipsizeMode="middle"
+                                    testID={`URL_OPTION_${new URL(delUrl).hostname}_${new URL(delUrl).pathname}`}
                                 />
                             ))}
                         </BaseView>
                     </>
                 )}
             </Option>
-            {children({ onCancel, selectedUrl: selectedUrl ? selectedUrl : url })}
+            {children({ onCancel, selectedUrl: selectedUrl ?? url })}
         </>
     )
 }
@@ -73,11 +77,14 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
         },
         linkIconStyle: {
-            backgroundColor: theme.colors.neutralVariant.background,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : theme.colors.neutralVariant.background,
             borderRightWidth: 1,
-            borderRightColor: theme.colors.neutralVariant.border,
+            borderRightColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : theme.colors.neutralVariant.border,
             borderTopLeftRadius: 7,
             borderBottomLeftRadius: 7,
             padding: 14,
+        },
+        radio: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE : theme.colors.radioButton.backgroudColor,
         },
     })

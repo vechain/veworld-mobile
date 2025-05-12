@@ -31,11 +31,23 @@ type ButtonBarProps = { onCancel: () => void; onApply: () => void; disabled?: bo
 const ButtonBar = ({ onCancel, onApply, disabled }: ButtonBarProps) => {
     const { LL } = useI18nContext()
     return (
-        <BaseView flexDirection="row" gap={16} w={100} justifyContent="space-between" alignItems="center" mt={24}>
-            <BaseButton variant="outline" action={onCancel} flex={1}>
+        <BaseView
+            flexDirection="row"
+            gap={16}
+            w={100}
+            justifyContent="space-between"
+            alignItems="center"
+            mt={24}
+            mb={24}>
+            <BaseButton variant="outline" action={onCancel} flex={1} testID="RENDERED_OPTION_BUTTON_BAR_CANCEL">
                 {LL.COMMON_BTN_CANCEL()}
             </BaseButton>
-            <BaseButton variant="solid" action={onApply} flex={1} disabled={disabled}>
+            <BaseButton
+                variant="solid"
+                action={onApply}
+                flex={1}
+                disabled={disabled}
+                testID="RENDERED_OPTION_BUTTON_BAR_APPLY">
                 {LL.COMMON_BTN_APPLY()}
             </BaseButton>
         </BaseView>
@@ -87,9 +99,11 @@ export const RenderedOption = ({
                             handleCancel()
                         }}
                         onApply={() => {
-                            setSelectedDelegationAccount(selectedAccount!)
+                            if (!selectedAccount) return
+                            setSelectedDelegationAccount(selectedAccount)
                             onClose()
                         }}
+                        disabled={!selectedAccount}
                     />
                 )}
             </AccountOption>
@@ -104,7 +118,9 @@ export const RenderedOption = ({
                             handleCancel()
                         }}
                         onApply={() => {
-                            const parsed = URIUtils.parseUrlSafe(selectedUrl!)
+                            if (!selectedUrl) return
+                            const parsed = URIUtils.parseUrlSafe(selectedUrl)
+                            if (!parsed) return
                             setSelectedDelegationUrl(parsed)
                             dispatch(
                                 addDelegationUrl({

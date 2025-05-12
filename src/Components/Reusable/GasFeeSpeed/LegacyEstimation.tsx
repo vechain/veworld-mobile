@@ -55,7 +55,10 @@ export const LegacyEstimation = ({ options, selectedFeeOption }: Props) => {
                 <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
                     {VTHO.symbol}
                 </BaseText>
-                <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
+                <BaseText
+                    typographyFont="subSubTitleBold"
+                    color={theme.colors.assetDetailsCard.title}
+                    testID="LEGACY_ESTIMATED_FEE">
                     {formatValue(estimatedFeeVtho)}
                 </BaseText>
                 <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>

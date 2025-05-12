@@ -642,20 +642,18 @@ const dark: Colors = {
         background: COLORS.PURPLE,
         foreground: COLORS.GREY_200,
     },
-    //TODO: Fix these colors
     cardButton: {
-        background: COLORS.WHITE,
-        border: COLORS.GREY_200,
-        text: COLORS.PRIMARY_800,
+        background: COLORS.DARK_PURPLE_DISABLED,
+        border: COLORS.TRANSPARENT,
+        text: COLORS.LIME_GREEN,
     },
-    //TODO: Fix these colors
     editSpeedBs: {
-        background: COLORS.GREY_50,
-        title: COLORS.PRIMARY_900,
-        subtitle: COLORS.GREY_600,
+        background: COLORS.PURPLE,
+        title: COLORS.WHITE,
+        subtitle: COLORS.GREY_300,
         result: {
-            background: COLORS.GREY_100,
-            border: COLORS.GREY_200,
+            background: COLORS.PURPLE_DISABLED,
+            border: COLORS.TRANSPARENT,
         },
     },
     warningAlert: {

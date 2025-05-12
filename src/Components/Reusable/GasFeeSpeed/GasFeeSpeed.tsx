@@ -1,5 +1,5 @@
 import moment from "moment"
-import React, { PropsWithChildren, useCallback, useMemo, useState } from "react"
+import { PropsWithChildren, default as React, useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { useInterval } from "usehooks-ts"
 import { BaseButton, BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
@@ -38,8 +38,6 @@ export const GasFeeSpeed = ({
 
     const [secondsRemaining, setSecondsRemaining] = useState(10)
 
-    const { estimatedFee, maxFee } = useMemo(() => options[selectedFeeOption], [options, selectedFeeOption])
-
     const intervalFn = useCallback(() => {
         setSecondsRemaining(Math.floor(moment(gasUpdatedAt).add(10, "seconds").diff(moment(), "seconds")))
     }, [gasUpdatedAt])
@@ -53,7 +51,7 @@ export const GasFeeSpeed = ({
                 justifyContent={isGalactica ? "space-between" : "flex-start"}
                 alignItems="center"
                 flexDirection="row">
-                <BaseText typographyFont="subSubTitleBold" color={theme.colors.primary}>
+                <BaseText typographyFont="subSubTitleBold" color={theme.colors.text}>
                     {LL.TRANSACTION_FEE()}
                 </BaseText>
                 {secondsRemaining <= 3 && isGalactica && (
@@ -81,18 +79,30 @@ export const GasFeeSpeed = ({
                         </BaseView>
                     </BaseView>
                     <BaseButton
-                        leftIcon={<BaseIcon name="icon-thunder" color={theme.colors.primary} size={16} px={0} py={0} />}
+                        leftIcon={
+                            <BaseIcon
+                                name="icon-thunder"
+                                color={theme.colors.cardButton.text}
+                                size={16}
+                                px={0}
+                                py={0}
+                            />
+                        }
                         action={onOpen}
                         variant="solid"
                         bgColor={theme.colors.cardButton.background}
                         style={styles.cardButton}
                         px={12}
                         py={8}
-                        textColor={theme.colors.cardButton.text}>
+                        textColor={theme.colors.cardButton.text}
+                        testID="GAS_FEE_SPEED_EDIT">
                         {LL.EDIT_SPEED()}
                     </BaseButton>
                 </BaseView>
-                <BaseSpacer height={1} background={theme.colors.pressableCardBorder} />
+                <BaseSpacer
+                    height={1}
+                    background={theme.isDark ? theme.colors.background : theme.colors.pressableCardBorder}
+                />
                 {isGalactica ? (
                     <GalacticaEstimation
                         options={options}
@@ -105,8 +115,7 @@ export const GasFeeSpeed = ({
                 {children}
                 <GasFeeSpeedBottomSheet
                     ref={ref}
-                    estimatedFee={estimatedFee}
-                    maxFee={maxFee}
+                    options={options}
                     selectedFeeOption={selectedFeeOption}
                     setSelectedFeeOption={setSelectedFeeOption}
                     onClose={onClose}
