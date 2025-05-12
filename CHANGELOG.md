@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.1 (2025-05-12)</small>
+
+* build: init ([b989c5c](https://github.com/vechain/veworld-mobile/commit/b989c5c))
+* fix: app loader (#2927) ([2dffb9f](https://github.com/vechain/veworld-mobile/commit/2dffb9f)), closes [#2927](https://github.com/vechain/veworld-mobile/issues/2927)
+
 ## <small>2.1.5 (2025-04-30)</small>
 
 * build: init ([e7d48cf](https://github.com/vechain/veworld-mobile/commit/e7d48cf))
