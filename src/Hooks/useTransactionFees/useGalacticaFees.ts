@@ -13,8 +13,8 @@ type Props = {
     gas: EstimateGasResult | undefined
 }
 
-//TODO: Check if we need to use BigInts here
-const average = (values: string[]) => Math.floor(values.reduce((acc, v) => acc + HexUInt.of(v).n, 0) / values.length)
+const average = (values: string[]) =>
+    BigNutils(values.reduce((acc, v) => acc + HexUInt.of(v).bi, 0n).toString()).div(values.length).toBigInt
 
 const calculateFeeHistory = (res: Awaited<ReturnType<typeof ethFeeHistory>>) => {
     //It should never happen
@@ -25,16 +25,16 @@ const calculateFeeHistory = (res: Awaited<ReturnType<typeof ethFeeHistory>>) => 
 
     const rewardRegular = equalRewardsOnLastBlock
         ? HexUInt.of(latestBlockRewards[0]).bi
-        : BigInt(average(res.reward.map(rewards => rewards[0])))
+        : average(res.reward.map(rewards => rewards[0]))
     const rewardMedium = equalRewardsOnLastBlock
         ? HexUInt.of(latestBlockRewards[1]).bi
-        : BigInt(average(res.reward.map(rewards => rewards[1])))
+        : average(res.reward.map(rewards => rewards[1]))
     const rewardHigh = equalRewardsOnLastBlock
         ? HexUInt.of(latestBlockRewards[2]).bi
-        : BigInt(average(res.reward.map(rewards => rewards[2])))
+        : average(res.reward.map(rewards => rewards[2]))
 
-    const baseFeeRegular = latestBaseFee
-    const baseFeeMedium = BigNutils(latestBaseFee.toString()).multiply(1.026).toBigInt
+    const baseFeeRegular = BigNutils(latestBaseFee.toString()).multiply(1.02).toBigInt
+    const baseFeeMedium = BigNutils(latestBaseFee.toString()).multiply(1.03).toBigInt
     const baseFeeHigh = BigNutils(latestBaseFee.toString()).multiply(1.046).toBigInt
 
     return {
@@ -75,8 +75,8 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
         queryFn: () =>
             thorClient.gas.getFeeHistory({
                 blockCount: 5,
-                newestBlock: "next",
-                rewardPercentiles: [10, 40, 75],
+                newestBlock: "best",
+                rewardPercentiles: [20, 40, 75],
             }),
         enabled: isGalactica,
         placeholderData: keepPreviousData,
