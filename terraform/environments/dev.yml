@@ -1,0 +1,8 @@
+region:                          eu-west-1
+project:                         veworld-dev
+environment:                     dev
+# dev.veworld.vechain.org as hosted zone
+zone_id:                         Z05174081HJUXVROTDH6I
+domain_name:                     versioninfo.dev.veworld.vechain.org
+vpc_id:                          vpc-0daa29265a506d7cd
+bucket_prefix:                   dev-ver
