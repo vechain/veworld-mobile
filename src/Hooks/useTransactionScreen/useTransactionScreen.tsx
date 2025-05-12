@@ -279,5 +279,6 @@ export const useTransactionScreen = ({
         onRefreshFee,
         isGalactica,
         isBaseFeeRampingUp: transactionFeesResponse.isBaseFeeRampingUp,
+        speedChangeEnabled: transactionFeesResponse.speedChangeEnabled,
     }
 }

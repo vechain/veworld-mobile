@@ -30,6 +30,7 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: P
         maxPriorityFee: galacticaMaxPriorityFee,
         dataUpdatedAt,
         isBaseFeeRampingUp: galacticaBaseFeeRampingUp,
+        speedChangeEnabled,
     } = useGalacticaFees({ isGalactica, blockId, gas })
 
     const {
@@ -66,6 +67,7 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: P
             dataUpdatedAt: dataUpdatedAt || moment().valueOf(),
             maxPriorityFee: galacticaMaxPriorityFee,
             isBaseFeeRampingUp,
+            speedChangeEnabled,
         }),
         [
             result,
@@ -75,6 +77,7 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: P
             dataUpdatedAt,
             galacticaMaxPriorityFee,
             isBaseFeeRampingUp,
+            speedChangeEnabled,
         ],
     )
 

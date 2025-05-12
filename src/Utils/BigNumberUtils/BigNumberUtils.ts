@@ -233,6 +233,10 @@ class BigNumberUtils implements IBigNumberUtils {
 
         return this
     }
+
+    clone() {
+        return new BigNumberUtils(this.data)
+    }
 }
 
 function BigNutils(input?: string | number | BN): BigNumberUtils {

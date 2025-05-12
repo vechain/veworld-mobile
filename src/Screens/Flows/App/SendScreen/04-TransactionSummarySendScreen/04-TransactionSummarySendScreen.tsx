@@ -129,6 +129,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         onRefreshFee,
         isGalactica,
         isBaseFeeRampingUp,
+        speedChangeEnabled,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -234,7 +235,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         setSelectedFeeOption={setSelectedFeeOption}
                         onRefreshFee={onRefreshFee}
                         isGalactica={isGalactica}
-                        isBaseFeeRampingUp={isBaseFeeRampingUp}>
+                        isBaseFeeRampingUp={isBaseFeeRampingUp}
+                        speedChangeEnabled={speedChangeEnabled}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
