@@ -100,7 +100,7 @@ export const RenderedOption = ({
                         }}
                         onApply={() => {
                             if (!selectedAccount) return
-                            setSelectedDelegationAccount(selectedAccount!)
+                            setSelectedDelegationAccount(selectedAccount)
                             onClose()
                         }}
                         disabled={!selectedAccount}
@@ -119,7 +119,7 @@ export const RenderedOption = ({
                         }}
                         onApply={() => {
                             if (!selectedUrl) return
-                            const parsed = URIUtils.parseUrlSafe(selectedUrl!)
+                            const parsed = URIUtils.parseUrlSafe(selectedUrl)
                             if (!parsed) return
                             setSelectedDelegationUrl(parsed)
                             dispatch(
