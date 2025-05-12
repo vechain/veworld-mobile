@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.1 (2025-05-12)</small>
+
+* build: init ([17d483b](https://github.com/vechain/veworld-mobile/commit/17d483b))
+* Fix veDelegate token auto discover (#2923) ([53b554b](https://github.com/vechain/veworld-mobile/commit/53b554b)), closes [#2923](https://github.com/vechain/veworld-mobile/issues/2923)
+
 ## <small>2.1.5 (2025-04-30)</small>
 
 * build: init ([e7d48cf](https://github.com/vechain/veworld-mobile/commit/e7d48cf))
