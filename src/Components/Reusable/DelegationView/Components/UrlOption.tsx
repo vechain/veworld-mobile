@@ -7,7 +7,7 @@ import { useI18nContext } from "~i18n"
 import { Option, OptionText } from "./Option"
 
 type Props = {
-    selectedDelegationUrl?: string | undefined
+    selectedDelegationUrl?: string
     children: (args: { onCancel: () => void; selectedUrl: string | undefined }) => ReactNode
     delegationUrls: string[]
 }
@@ -66,7 +66,7 @@ export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: P
                     </>
                 )}
             </Option>
-            {children({ onCancel, selectedUrl: selectedUrl ? selectedUrl : url })}
+            {children({ onCancel, selectedUrl: selectedUrl ?? url })}
         </>
     )
 }
