@@ -39,7 +39,8 @@ export const GasFeeSpeed = ({
     const [secondsRemaining, setSecondsRemaining] = useState(10)
 
     const intervalFn = useCallback(() => {
-        setSecondsRemaining(Math.floor(moment(gasUpdatedAt).add(10, "seconds").diff(moment(), "seconds")))
+        const seconds = Math.floor(moment(gasUpdatedAt).add(10, "seconds").diff(moment(), "seconds"))
+        setSecondsRemaining(seconds <= 0 ? 0 : seconds)
     }, [gasUpdatedAt])
 
     useInterval(intervalFn, 500)
