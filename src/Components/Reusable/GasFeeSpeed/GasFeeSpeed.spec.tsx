@@ -47,7 +47,7 @@ describe("GasFeeSpeed", () => {
     )
 
     it.each([GasPriceCoefficient.REGULAR, GasPriceCoefficient.MEDIUM, GasPriceCoefficient.HIGH])(
-        "should select option correctly: %d",
+        "should select option correctly on galactica: %d",
         opt => {
             const setSelectedFeeOption = jest.fn()
             render(
@@ -57,7 +57,7 @@ describe("GasFeeSpeed", () => {
                     gasUpdatedAt={Date.now()}
                     onRefreshFee={jest.fn()}
                     setSelectedFeeOption={setSelectedFeeOption}
-                    isGalactica={false}
+                    isGalactica={true}
                 />,
                 { wrapper: TestWrapper },
             )
@@ -70,7 +70,7 @@ describe("GasFeeSpeed", () => {
                 fireEvent.press(screen.getByTestId(`button-${opt}`))
             })
 
-            expect(screen.getByTestId("LEGACY_ESTIMATED_FEE_BS")).toHaveTextContent(
+            expect(screen.getByTestId("GALACTICA_ESTIMATED_FEE_BS")).toHaveTextContent(
                 `${ethers.utils.formatEther(options[opt].estimatedFee.toString)} VTHO`,
             )
 
@@ -81,4 +81,21 @@ describe("GasFeeSpeed", () => {
             expect(setSelectedFeeOption).toHaveBeenCalledWith(opt)
         },
     )
+
+    it("should not see edit speed on legacy txs", () => {
+        const setSelectedFeeOption = jest.fn()
+        render(
+            <GasFeeSpeed
+                options={options}
+                selectedFeeOption={GasPriceCoefficient.REGULAR}
+                gasUpdatedAt={Date.now()}
+                onRefreshFee={jest.fn()}
+                setSelectedFeeOption={setSelectedFeeOption}
+                isGalactica={false}
+            />,
+            { wrapper: TestWrapper },
+        )
+
+        expect(screen.queryByTestId("GAS_FEE_SPEED_EDIT")).toBeNull()
+    })
 })
