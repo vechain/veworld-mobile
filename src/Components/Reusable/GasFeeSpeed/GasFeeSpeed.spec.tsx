@@ -59,7 +59,7 @@ describe("GasFeeSpeed", () => {
                     setSelectedFeeOption={setSelectedFeeOption}
                     isGalactica={true}
                     isBaseFeeRampingUp={false}
-                    speedChangeEnabled={false}
+                    speedChangeEnabled={true}
                 />,
                 { wrapper: TestWrapper },
             )
@@ -85,13 +85,12 @@ describe("GasFeeSpeed", () => {
     )
 
     it("should not see edit speed on legacy txs", () => {
-        const setSelectedFeeOption = jest.fn()
         render(
             <GasFeeSpeed
                 options={options}
                 selectedFeeOption={GasPriceCoefficient.REGULAR}
                 gasUpdatedAt={Date.now()}
-                setSelectedFeeOption={setSelectedFeeOption}
+                setSelectedFeeOption={jest.fn()}
                 isGalactica={false}
                 isBaseFeeRampingUp={false}
                 speedChangeEnabled={false}
@@ -103,13 +102,12 @@ describe("GasFeeSpeed", () => {
     })
 
     it("should not see edit speed on galactica txs with speed change enabled set to false", () => {
-        const setSelectedFeeOption = jest.fn()
         render(
             <GasFeeSpeed
                 options={options}
                 selectedFeeOption={GasPriceCoefficient.REGULAR}
                 gasUpdatedAt={Date.now()}
-                setSelectedFeeOption={setSelectedFeeOption}
+                setSelectedFeeOption={jest.fn()}
                 isGalactica={true}
                 isBaseFeeRampingUp={false}
                 speedChangeEnabled={false}
@@ -121,13 +119,12 @@ describe("GasFeeSpeed", () => {
     })
 
     it("should not see edit speed on galactica txs with speed change enabled set to true", () => {
-        const setSelectedFeeOption = jest.fn()
         render(
             <GasFeeSpeed
                 options={options}
                 selectedFeeOption={GasPriceCoefficient.REGULAR}
                 gasUpdatedAt={Date.now()}
-                setSelectedFeeOption={setSelectedFeeOption}
+                setSelectedFeeOption={jest.fn()}
                 isGalactica={true}
                 isBaseFeeRampingUp={false}
                 speedChangeEnabled={true}
