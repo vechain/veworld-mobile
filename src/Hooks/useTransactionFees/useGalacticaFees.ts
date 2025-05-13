@@ -103,16 +103,16 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
         if (!options) return
         return {
             [GasPriceCoefficient.REGULAR]: {
-                maxFeePerGas: options[GasPriceCoefficient.REGULAR].maxFee.toString,
-                maxPriorityFeePerGas: options[GasPriceCoefficient.REGULAR].priorityFee.toString,
+                maxFeePerGas: options[GasPriceCoefficient.REGULAR].maxFee.clone().toString,
+                maxPriorityFeePerGas: options[GasPriceCoefficient.REGULAR].priorityFee.clone().toString,
             },
             [GasPriceCoefficient.MEDIUM]: {
-                maxFeePerGas: options[GasPriceCoefficient.MEDIUM].maxFee.toString,
-                maxPriorityFeePerGas: options[GasPriceCoefficient.MEDIUM].priorityFee.toString,
+                maxFeePerGas: options[GasPriceCoefficient.MEDIUM].maxFee.clone().toString,
+                maxPriorityFeePerGas: options[GasPriceCoefficient.MEDIUM].priorityFee.clone().toString,
             },
             [GasPriceCoefficient.HIGH]: {
-                maxFeePerGas: options[GasPriceCoefficient.HIGH].maxFee.toString,
-                maxPriorityFeePerGas: options[GasPriceCoefficient.HIGH].priorityFee.toString,
+                maxFeePerGas: options[GasPriceCoefficient.HIGH].maxFee.clone().toString,
+                maxPriorityFeePerGas: options[GasPriceCoefficient.HIGH].priorityFee.clone().toString,
             },
         }
     }, [options])
@@ -121,19 +121,19 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
         if (!options) return
         return {
             [GasPriceCoefficient.REGULAR]: {
-                estimatedFee: options[GasPriceCoefficient.REGULAR].estimatedFee.multiply(gas?.gas ?? 0),
-                maxFee: options[GasPriceCoefficient.REGULAR].maxFee.multiply(gas?.gas ?? 0),
-                priorityFee: options[GasPriceCoefficient.REGULAR].priorityFee.multiply(gas?.gas ?? 0),
+                estimatedFee: options[GasPriceCoefficient.REGULAR].estimatedFee.clone().multiply(gas?.gas ?? 0),
+                maxFee: options[GasPriceCoefficient.REGULAR].maxFee.clone().multiply(gas?.gas ?? 0),
+                priorityFee: options[GasPriceCoefficient.REGULAR].priorityFee.clone().multiply(gas?.gas ?? 0),
             },
             [GasPriceCoefficient.MEDIUM]: {
-                estimatedFee: options[GasPriceCoefficient.MEDIUM].estimatedFee.multiply(gas?.gas ?? 0),
-                maxFee: options[GasPriceCoefficient.MEDIUM].maxFee.multiply(gas?.gas ?? 0),
-                priorityFee: options[GasPriceCoefficient.MEDIUM].priorityFee.multiply(gas?.gas ?? 0),
+                estimatedFee: options[GasPriceCoefficient.MEDIUM].estimatedFee.clone().multiply(gas?.gas ?? 0),
+                maxFee: options[GasPriceCoefficient.MEDIUM].maxFee.clone().multiply(gas?.gas ?? 0),
+                priorityFee: options[GasPriceCoefficient.MEDIUM].priorityFee.clone().multiply(gas?.gas ?? 0),
             },
             [GasPriceCoefficient.HIGH]: {
-                estimatedFee: options[GasPriceCoefficient.HIGH].estimatedFee.multiply(gas?.gas ?? 0),
-                maxFee: options[GasPriceCoefficient.HIGH].maxFee.multiply(gas?.gas ?? 0),
-                priorityFee: options[GasPriceCoefficient.HIGH].priorityFee.multiply(gas?.gas ?? 0),
+                estimatedFee: options[GasPriceCoefficient.HIGH].estimatedFee.clone().multiply(gas?.gas ?? 0),
+                maxFee: options[GasPriceCoefficient.HIGH].maxFee.clone().multiply(gas?.gas ?? 0),
+                priorityFee: options[GasPriceCoefficient.HIGH].priorityFee.clone().multiply(gas?.gas ?? 0),
             },
         }
     }, [gas?.gas, options])
