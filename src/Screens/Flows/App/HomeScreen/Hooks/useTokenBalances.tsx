@@ -46,7 +46,7 @@ export const useTokenBalances = () => {
     }, [balances.length, dispatch, selectedAccount.address, thorClient])
 
     const updateSuggested = useCallback(async () => {
-        await dispatch(updateSuggestedTokens(selectedAccount.address, officialTokens, network))
+        await dispatch(updateSuggestedTokens(selectedAccount.address, [...officialTokens, VeDelegate], network))
     }, [dispatch, network, officialTokens, selectedAccount.address])
 
     // fetch official tokens from github
@@ -64,20 +64,15 @@ export const useTokenBalances = () => {
 
     // auto select suggested tokens if they don't exist already
     useEffect(() => {
-        if (
-            balances.length === 0 ||
-            missingSuggestedTokens.length === 0 ||
-            thorClient.genesis.id !== network.genesis.id
-        )
-            return
+        const missingTokens = [...missingSuggestedTokens]
 
-        const suggestedTokens = [...missingSuggestedTokens]
-
-        if (!BigNutils(veDelegateBalance?.formatted ?? "0").isZero && !suggestedTokens.includes(VeDelegate.address)) {
-            suggestedTokens.push(VeDelegate.address)
+        if (!BigNutils(veDelegateBalance?.formatted ?? "0").isZero && !missingTokens.includes(VeDelegate.address)) {
+            missingTokens.push(VeDelegate.address)
         }
 
-        dispatch(autoSelectSuggestTokens(selectedAccount.address, suggestedTokens, network, thorClient))
+        if (balances.length === 0 || missingTokens.length === 0 || thorClient.genesis.id !== network.genesis.id) return
+
+        dispatch(autoSelectSuggestTokens(selectedAccount.address, missingTokens, network, thorClient))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         dispatch,
@@ -86,7 +81,7 @@ export const useTokenBalances = () => {
         thorClient.genesis.id,
         network.genesis.id,
         balances.length,
-        veDelegateBalance?.formatted,
+        veDelegateBalance,
     ])
 
     /**
