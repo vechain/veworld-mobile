@@ -55,6 +55,15 @@ const mockedGalacticaTxOptions = {
     },
 }
 
+const gasObj = {
+    baseGasPrice: "0",
+    caller: ethers.Wallet.createRandom().address,
+    gas: 1000,
+    reverted: false,
+    revertReason: "",
+    vmError: "",
+}
+
 describe("useTransactionFees", () => {
     beforeEach(() => {
         jest.resetAllMocks()
@@ -79,14 +88,7 @@ describe("useTransactionFees", () => {
             () =>
                 useTransactionFees({
                     coefficient: GasPriceCoefficient.MEDIUM,
-                    gas: {
-                        baseGasPrice: "0",
-                        caller: ethers.Wallet.createRandom().address,
-                        gas: 1000,
-                        reverted: false,
-                        revertReason: "",
-                        vmError: "",
-                    },
+                    gas: gasObj,
                     isGalactica: false,
                 }),
             { wrapper: TestWrapper },
@@ -125,14 +127,7 @@ describe("useTransactionFees", () => {
             () =>
                 useTransactionFees({
                     coefficient: GasPriceCoefficient.MEDIUM,
-                    gas: {
-                        baseGasPrice: "0",
-                        caller: ethers.Wallet.createRandom().address,
-                        gas: 1000,
-                        reverted: false,
-                        revertReason: "",
-                        vmError: "",
-                    },
+                    gas: gasObj,
                     isGalactica: true,
                 }),
             { wrapper: TestWrapper },

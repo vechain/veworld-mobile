@@ -59,7 +59,7 @@ export const useLegacyFees = ({ gas }: Args) => {
         [],
     )
 
-    const memoized = useMemo(() => ({ options, txOptions: txOptions, isLoading: false }), [options, txOptions])
+    const memoized = useMemo(() => ({ options, txOptions, isLoading: false }), [options, txOptions])
 
     return memoized
 }
