@@ -33,9 +33,10 @@ describe("GasFeeSpeed", () => {
                     options={options}
                     selectedFeeOption={opt}
                     gasUpdatedAt={Date.now()}
-                    onRefreshFee={jest.fn()}
                     setSelectedFeeOption={jest.fn()}
                     isGalactica={false}
+                    isBaseFeeRampingUp={false}
+                    speedChangeEnabled={false}
                 />,
                 { wrapper: TestWrapper },
             )
@@ -55,9 +56,10 @@ describe("GasFeeSpeed", () => {
                     options={options}
                     selectedFeeOption={GasPriceCoefficient.REGULAR}
                     gasUpdatedAt={Date.now()}
-                    onRefreshFee={jest.fn()}
                     setSelectedFeeOption={setSelectedFeeOption}
                     isGalactica={true}
+                    isBaseFeeRampingUp={false}
+                    speedChangeEnabled={false}
                 />,
                 { wrapper: TestWrapper },
             )
@@ -89,13 +91,50 @@ describe("GasFeeSpeed", () => {
                 options={options}
                 selectedFeeOption={GasPriceCoefficient.REGULAR}
                 gasUpdatedAt={Date.now()}
-                onRefreshFee={jest.fn()}
                 setSelectedFeeOption={setSelectedFeeOption}
                 isGalactica={false}
+                isBaseFeeRampingUp={false}
+                speedChangeEnabled={false}
             />,
             { wrapper: TestWrapper },
         )
 
         expect(screen.queryByTestId("GAS_FEE_SPEED_EDIT")).toBeNull()
+    })
+
+    it("should not see edit speed on galactica txs with speed change enabled set to false", () => {
+        const setSelectedFeeOption = jest.fn()
+        render(
+            <GasFeeSpeed
+                options={options}
+                selectedFeeOption={GasPriceCoefficient.REGULAR}
+                gasUpdatedAt={Date.now()}
+                setSelectedFeeOption={setSelectedFeeOption}
+                isGalactica={true}
+                isBaseFeeRampingUp={false}
+                speedChangeEnabled={false}
+            />,
+            { wrapper: TestWrapper },
+        )
+
+        expect(screen.getByTestId("GAS_FEE_SPEED_EDIT")).not.toBeVisible()
+    })
+
+    it("should not see edit speed on galactica txs with speed change enabled set to true", () => {
+        const setSelectedFeeOption = jest.fn()
+        render(
+            <GasFeeSpeed
+                options={options}
+                selectedFeeOption={GasPriceCoefficient.REGULAR}
+                gasUpdatedAt={Date.now()}
+                setSelectedFeeOption={setSelectedFeeOption}
+                isGalactica={true}
+                isBaseFeeRampingUp={false}
+                speedChangeEnabled={true}
+            />,
+            { wrapper: TestWrapper },
+        )
+
+        expect(screen.queryByTestId("GAS_FEE_SPEED_EDIT")).toBeVisible()
     })
 })
