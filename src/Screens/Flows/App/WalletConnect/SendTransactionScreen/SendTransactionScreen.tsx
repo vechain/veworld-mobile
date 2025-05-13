@@ -257,23 +257,21 @@ export const SendTransactionScreen = ({ route }: Props) => {
 
                 <BaseSpacer height={24} />
                 <BaseView>
-                    <DelegationView
-                        setNoDelegation={resetDelegation}
-                        selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationAccount={setSelectedDelegationAccount}
-                        selectedDelegationAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                    />
-
-                    <BaseSpacer height={44} />
                     <GasFeeSpeed
                         gasUpdatedAt={gasUpdatedAt}
                         options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
                         setSelectedFeeOption={setSelectedFeeOption}
-                        onRefreshFee={onRefreshFee}
-                    />
+                        onRefreshFee={onRefreshFee}>
+                        <DelegationView
+                            setNoDelegation={resetDelegation}
+                            selectedDelegationOption={selectedDelegationOption}
+                            setSelectedDelegationAccount={setSelectedDelegationAccount}
+                            selectedDelegationAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        />
+                    </GasFeeSpeed>
 
                     <BaseSpacer height={44} />
                     <TransactionDetails
