@@ -1,6 +1,14 @@
 import { BigNumber as BN } from "bignumber.js"
 import { isEmpty } from "lodash"
 
+export type BigNumberable = string | number | BN | bigint | BigNumberUtils
+
+const parseBigNumberable = (value: BigNumberable): BN.Value => {
+    if (typeof value === "bigint") return value.toString()
+    if (value instanceof BigNumberUtils) return value.toBN
+    return value
+}
+
 interface IBigNumberUtils {
     // utility Methods
     toHuman(decimals: number, callback?: (result: BN) => void): BigNumberUtils
@@ -15,6 +23,7 @@ interface IBigNumberUtils {
     ): { value: string; preciseValue: string; isLeesThan_0_01: boolean }
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
+    clone(): BigNumberUtils
 
     // Math Methods
     minus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
@@ -32,6 +41,8 @@ interface IBigNumberUtils {
     toNumber: number
     toHex: string
     isZero: boolean
+    toBigInt: bigint
+    toBN: BN
 }
 
 class BigNumberUtils implements IBigNumberUtils {
@@ -66,6 +77,10 @@ class BigNumberUtils implements IBigNumberUtils {
 
     get isZero(): boolean {
         return this.data.isZero()
+    }
+
+    get toBN(): BN {
+        return new BN(this.data)
     }
 
     // Methods
@@ -236,6 +251,19 @@ class BigNumberUtils implements IBigNumberUtils {
 
     clone() {
         return new BigNumberUtils(this.data)
+    }
+
+    static min(val1: BigNumberable, val2: BigNumberable) {
+        return new BigNumberUtils(BN.min(parseBigNumberable(val1), parseBigNumberable(val2)))
+    }
+
+    static average(values: BigNumberable[]) {
+        return values
+            .reduce<BigNumberUtils>((acc, v) => {
+                const u = acc.plus(parseBigNumberable(v))
+                return u
+            }, BigNutils("0"))
+            .div(values.length)
     }
 }
 
