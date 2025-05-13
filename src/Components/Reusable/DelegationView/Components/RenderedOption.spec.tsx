@@ -96,7 +96,7 @@ describe("RenderedOption", () => {
         expect(onReset).toHaveBeenCalled()
 
         act(() => {
-            fireEvent.press(screen.getByTestId(`DELEGATE_ACCOUNT_CARD_RADIO_${accounts[0].address}`))
+            fireEvent.press(screen.getByTestId("DELEGATE_ACCOUNT_CARD_RADIO"))
         })
 
         act(() => {

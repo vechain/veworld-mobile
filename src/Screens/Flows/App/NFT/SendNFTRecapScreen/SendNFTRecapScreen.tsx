@@ -142,15 +142,6 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                         {nft && <NFTTransferCard collectionAddress={nft.address} tokenId={nft.tokenId} />}
 
-                        <DelegationView
-                            setNoDelegation={resetDelegation}
-                            selectedDelegationOption={selectedDelegationOption}
-                            setSelectedDelegationAccount={setSelectedDelegationAccount}
-                            selectedDelegationAccount={selectedDelegationAccount}
-                            selectedDelegationUrl={selectedDelegationUrl}
-                            setSelectedDelegationUrl={setSelectedDelegationUrl}
-                        />
-
                         <BaseSpacer height={24} />
 
                         <InfoSectionView<React.JSX.Element>
@@ -162,8 +153,16 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                                     options={gasOptions}
                                     selectedFeeOption={selectedFeeOption}
                                     setSelectedFeeOption={setSelectedFeeOption}
-                                    onRefreshFee={onRefreshFee}
-                                />
+                                    onRefreshFee={onRefreshFee}>
+                                    <DelegationView
+                                        setNoDelegation={resetDelegation}
+                                        selectedDelegationOption={selectedDelegationOption}
+                                        setSelectedDelegationAccount={setSelectedDelegationAccount}
+                                        selectedDelegationAccount={selectedDelegationAccount}
+                                        selectedDelegationUrl={selectedDelegationUrl}
+                                        setSelectedDelegationUrl={setSelectedDelegationUrl}
+                                    />
+                                </GasFeeSpeed>
                             }
                         />
                     </BaseView>

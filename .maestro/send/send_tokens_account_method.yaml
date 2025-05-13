@@ -41,7 +41,7 @@ onFlowComplete:
     id: "next-button"
 - runFlow:
     when:
-      visible: "Select delegation"
+      visible: "Fee not delegated"
     commands:
       - tapOn:
           id: "button-ACCOUNT"
