@@ -141,6 +141,10 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
             .isBiggerThan("0.05")
     }, [feeHistory])
 
+    /**
+     * Enable Speed Change modal only if there's at least 5% increase in the base fee over the last 5 blocks.
+     * Disable Speed Change modal only if there's at least a 2% decrease in the base fee over the last 4 blocks.
+     */
     const speedChangeEnabled = useMemo(() => {
         if (typeof feeHistory === "undefined") return false
         const baseFees = feeHistory.baseFeePerGas.map(bFee => HexUInt.of(bFee).bi)
