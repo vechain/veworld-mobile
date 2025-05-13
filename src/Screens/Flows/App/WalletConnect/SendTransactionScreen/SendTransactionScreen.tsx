@@ -210,8 +210,10 @@ export const SendTransactionScreen = ({ route }: Props) => {
         gasOptions,
         gasUpdatedAt,
         selectedFeeOption,
-        onRefreshFee,
         setSelectedFeeOption,
+        isGalactica,
+        isBaseFeeRampingUp,
+        speedChangeEnabled,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -257,23 +259,23 @@ export const SendTransactionScreen = ({ route }: Props) => {
 
                 <BaseSpacer height={24} />
                 <BaseView>
-                    <DelegationView
-                        setNoDelegation={resetDelegation}
-                        selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationAccount={setSelectedDelegationAccount}
-                        selectedDelegationAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                    />
-
-                    <BaseSpacer height={44} />
                     <GasFeeSpeed
                         gasUpdatedAt={gasUpdatedAt}
                         options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
                         setSelectedFeeOption={setSelectedFeeOption}
-                        onRefreshFee={onRefreshFee}
-                    />
+                        isGalactica={isGalactica}
+                        isBaseFeeRampingUp={isBaseFeeRampingUp}
+                        speedChangeEnabled={speedChangeEnabled}>
+                        <DelegationView
+                            setNoDelegation={resetDelegation}
+                            selectedDelegationOption={selectedDelegationOption}
+                            setSelectedDelegationAccount={setSelectedDelegationAccount}
+                            selectedDelegationAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        />
+                    </GasFeeSpeed>
 
                     <BaseSpacer height={44} />
                     <TransactionDetails

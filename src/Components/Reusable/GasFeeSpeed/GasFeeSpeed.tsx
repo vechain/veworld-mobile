@@ -18,7 +18,6 @@ type Props = {
     options: TransactionFeesResult
     setSelectedFeeOption: (value: GasPriceCoefficient) => void
     selectedFeeOption: GasPriceCoefficient
-    onRefreshFee: () => void
     gasUpdatedAt: number
     isGalactica?: boolean
     isBaseFeeRampingUp: boolean

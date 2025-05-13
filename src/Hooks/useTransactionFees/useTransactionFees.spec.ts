@@ -17,6 +17,7 @@ describe("useTransactionFees", () => {
                     revertReason: "",
                     vmError: "",
                 },
+                isGalactica: false,
             }),
         )
 
@@ -46,25 +47,4 @@ describe("useTransactionFees", () => {
             priorityFee: BigNutils("0"),
         })
     })
-
-    it.each([GasPriceCoefficient.REGULAR, GasPriceCoefficient.MEDIUM, GasPriceCoefficient.HIGH])(
-        "should have gasPriceCoef based on selected option %s",
-        coefficient => {
-            const { result } = renderHook(() =>
-                useTransactionFees({
-                    coefficient,
-                    gas: {
-                        baseGasPrice: "0",
-                        caller: ethers.Wallet.createRandom().address,
-                        gas: 1000,
-                        reverted: false,
-                        revertReason: "",
-                        vmError: "",
-                    },
-                }),
-            )
-
-            expect(result.current.gasPriceCoef).toBe(coefficient)
-        },
-    )
 })

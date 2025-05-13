@@ -126,7 +126,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         gasOptions,
         gasUpdatedAt,
         selectedFeeOption,
-        onRefreshFee,
         isGalactica,
         isBaseFeeRampingUp,
         speedChangeEnabled,
@@ -233,7 +232,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
                         setSelectedFeeOption={setSelectedFeeOption}
-                        onRefreshFee={onRefreshFee}
                         isGalactica={isGalactica}
                         isBaseFeeRampingUp={isBaseFeeRampingUp}
                         speedChangeEnabled={speedChangeEnabled}>

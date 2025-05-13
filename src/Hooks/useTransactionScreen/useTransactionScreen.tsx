@@ -250,8 +250,6 @@ export const useTransactionScreen = ({
         [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading, gas?.gas, isGalacticaLoading],
     )
 
-    const onRefreshFee = useCallback(() => {}, [])
-
     return {
         selectedDelegationOption,
         loadingGas,
@@ -276,7 +274,6 @@ export const useTransactionScreen = ({
         maxFee: transactionFeesResponse.maxFee,
         gasOptions: transactionFeesResponse.options,
         gasUpdatedAt: transactionFeesResponse.dataUpdatedAt,
-        onRefreshFee,
         isGalactica,
         isBaseFeeRampingUp: transactionFeesResponse.isBaseFeeRampingUp,
         speedChangeEnabled: transactionFeesResponse.speedChangeEnabled,
