@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import { renderHook } from "@testing-library/react-hooks"
 import { useGalacticaFees } from "./useGalacticaFees"
 import { ethers } from "ethers"
-import { BigNutils } from "~Utils"
+import { BigNumberUtils, BigNutils } from "~Utils"
 import { TestWrapper } from "~Test"
 import { GasPriceCoefficient } from "~Constants"
 
@@ -14,6 +14,14 @@ jest.mock("@tanstack/react-query", () => ({
 const mocked = <T extends (...args: any) => any>(fn: T): jest.Mock<ReturnType<T>, Parameters<T>> => {
     return fn as unknown as jest.Mock<ReturnType<T>, Parameters<T>>
 }
+
+const mockRewards = [
+    [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
+    [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
+    [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
+    [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
+    [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
+]
 
 describe("useGalacticaFees", () => {
     beforeEach(() => {
@@ -34,33 +42,7 @@ describe("useGalacticaFees", () => {
                         ethers.utils.parseUnits("1", "gwei").toHexString(),
                         ethers.utils.parseUnits("1", "gwei").toHexString(),
                     ],
-                    reward: [
-                        [
-                            `0x${BigInt(10).toString(16)}`,
-                            `0x${BigInt(20).toString(16)}`,
-                            `0x${BigInt(30).toString(16)}`,
-                        ],
-                        [
-                            `0x${BigInt(10).toString(16)}`,
-                            `0x${BigInt(20).toString(16)}`,
-                            `0x${BigInt(30).toString(16)}`,
-                        ],
-                        [
-                            `0x${BigInt(10).toString(16)}`,
-                            `0x${BigInt(20).toString(16)}`,
-                            `0x${BigInt(30).toString(16)}`,
-                        ],
-                        [
-                            `0x${BigInt(10).toString(16)}`,
-                            `0x${BigInt(20).toString(16)}`,
-                            `0x${BigInt(30).toString(16)}`,
-                        ],
-                        [
-                            `0x${BigInt(10).toString(16)}`,
-                            `0x${BigInt(20).toString(16)}`,
-                            `0x${BigInt(30).toString(16)}`,
-                        ],
-                    ],
+                    reward: mockRewards,
                 },
             },
             dataUpdatedAt: Date.now(),
@@ -109,5 +91,61 @@ describe("useGalacticaFees", () => {
             maxPriorityFee: BigNutils("50000000"),
             isLoading: false,
         })
+    })
+
+    it("should return isBaseFeeRampingUp as true if the base fee increase is over threshold", () => {
+        const baseFeeArray = Array.from({ length: 5 }, (_, idx) => idx)
+            .reduce<BigNumberUtils[]>(acc => {
+                if (acc.length === 0) return [BigNutils(ethers.utils.parseUnits("1", "gwei").toString())]
+                return [...acc, acc.at(-1)!.clone().multiply("1.02")]
+            }, [])
+            .map(u => `0x${u.toHex}`)
+        mocked(useQuery).mockReturnValue({
+            isFetching: false,
+            data: {
+                maxPriorityFee: `0x${
+                    BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
+                }`,
+                feeHistory: {
+                    baseFeePerGas: baseFeeArray,
+                    reward: mockRewards,
+                },
+            },
+            dataUpdatedAt: Date.now(),
+        } as any)
+        const { result } = renderHook(
+            () => useGalacticaFees({ isGalactica: true, blockId: "0x00000001", gas: { gas: 21000 } as any }),
+            { wrapper: TestWrapper },
+        )
+
+        expect(result.current.isBaseFeeRampingUp).toBe(true)
+    })
+
+    it("should return speedChangeEnabled as true if the base fee increase is over threshold", () => {
+        const baseFeeArray = Array.from({ length: 5 }, (_, idx) => idx)
+            .reduce<BigNumberUtils[]>(acc => {
+                if (acc.length === 0) return [BigNutils(ethers.utils.parseUnits("1", "gwei").toString())]
+                return [...acc, acc.at(-1)!.clone().multiply("1.02")]
+            }, [])
+            .map(u => `0x${u.toHex}`)
+        mocked(useQuery).mockReturnValue({
+            isFetching: false,
+            data: {
+                maxPriorityFee: `0x${
+                    BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
+                }`,
+                feeHistory: {
+                    baseFeePerGas: baseFeeArray,
+                    reward: mockRewards,
+                },
+            },
+            dataUpdatedAt: Date.now(),
+        } as any)
+        const { result } = renderHook(
+            () => useGalacticaFees({ isGalactica: true, blockId: "0x00000001", gas: { gas: 21000 } as any }),
+            { wrapper: TestWrapper },
+        )
+
+        expect(result.current.speedChangeEnabled).toBe(true)
     })
 })
