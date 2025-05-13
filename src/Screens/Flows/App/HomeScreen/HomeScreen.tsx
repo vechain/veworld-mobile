@@ -23,6 +23,7 @@ import {
     usePrefetchAllVns,
     useSetSelectedAccount,
     useTheme,
+    getVeDelegateBalanceQueryKey,
 } from "~Hooks"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
@@ -49,12 +50,14 @@ import {
 } from "./Components"
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 import { useTokenBalances } from "./Hooks"
+import { useQueryClient } from "@tanstack/react-query"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
     usePrefetchAllVns()
 
     const nav = useNavigation()
+    const queryClient = useQueryClient()
 
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
@@ -74,6 +77,12 @@ export const HomeScreen = () => {
 
     useFocusEffect(
         useCallback(() => {
+            // Invalidate the veDelegateBalance query to solve cache issues
+            queryClient.invalidateQueries({
+                queryKey: getVeDelegateBalanceQueryKey(selectedAccount.address),
+                refetchType: "all",
+            })
+
             updateBalances()
             updateSuggested()
         }, [updateBalances, updateSuggested]),

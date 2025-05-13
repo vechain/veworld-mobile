@@ -15,8 +15,8 @@ export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
 
-    const cardDimension = Math.min(SCREEN_WIDTH * 0.2, 64)
-    const imageDimension = Math.min(SCREEN_WIDTH * 0.2, 64)
+    const cardDimension = Math.min(SCREEN_WIDTH * 0.2, 72)
+    const imageDimension = Math.min(SCREEN_WIDTH * 0.2, 72)
     const textColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
     const iconUri = dapp.id
