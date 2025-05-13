@@ -44,10 +44,14 @@ onFlowComplete:
       visible: "Fee not delegated"
     commands:
       - tapOn:
+          id: "DELEGATE_OPEN"
+      - tapOn:
           id: "button-ACCOUNT"
       - tapOn:
-          id: "selectAccount"
+          id: "DELEGATE_ACCOUNT_CARD_RADIO"
           index: 0
+      - tapOn:
+          id: 'RENDERED_OPTION_BUTTON_BAR_APPLY'
       - tapOn:
           id: "confirm-send-button"
       - repeat:
