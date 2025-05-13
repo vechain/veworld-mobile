@@ -80,7 +80,7 @@ export type RootStackParamListHome = {
     [Routes.WALLET_DETAILS]: { device: Device }
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.TOKEN_DETAILS]: {
-        token: TokenWithCompleteInfo
+        token: FungibleTokenWithBalance | TokenWithCompleteInfo
         /**
          * Provided when user convert B3TR/VOT3 token to display bottom sheet result
          */

@@ -97,6 +97,13 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
         (token: FungibleTokenWithBalance) => {
             const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
 
+            if (token.name.endsWith("@vechain")) {
+                nav.navigate(Routes.TOKEN_DETAILS, {
+                    token,
+                })
+                return
+            }
+
             if (!isEdit && isTokenBalance) {
                 closeOtherSwipeableItems()
 
@@ -121,6 +128,7 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
     const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
         ({ item, getIndex, isActive, drag }) => {
             const isDisabled = item.symbol === VeDelegate.symbol
+
             return (
                 <BaseView mb={8}>
                     <SwipeableRow
