@@ -94,7 +94,8 @@ export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegati
                     px={12}
                     py={8}
                     textColor={theme.colors.cardButton.text}
-                    action={onDelegateClicked}>
+                    action={onDelegateClicked}
+                    testID="DELEGATE_OPEN">
                     {LL.DELEGATE()}
                 </BaseButton>
             </BaseView>
