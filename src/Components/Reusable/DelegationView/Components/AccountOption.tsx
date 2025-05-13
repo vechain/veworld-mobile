@@ -41,7 +41,7 @@ export const AccountOption = ({ selectedDelegationAccount, flatListProps, childr
                     renderItem={({ item }) => {
                         return (
                             <DelegateAccountCardRadio
-                                testID={`DELEGATE_ACCOUNT_CARD_RADIO_${item.address}`}
+                                testID={"DELEGATE_ACCOUNT_CARD_RADIO"}
                                 account={item}
                                 onPress={handlePress}
                                 selected={item.address === selectedAccount?.address}
