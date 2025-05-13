@@ -68,7 +68,7 @@ const getFees = async (thorClient: ThorClient) => {
     const [maxPriorityFee, feeHistory] = await Promise.all([
         thorClient.gas.getMaxPriorityFeePerGas(),
         thorClient.gas.getFeeHistory({
-            blockCount: 5,
+            blockCount: 8,
             newestBlock: "best",
             rewardPercentiles: [20, 40, 75],
         }),
@@ -141,8 +141,8 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
     const isBaseFeeRampingUp = useMemo(() => {
         if (typeof feesResponse === "undefined") return false
         const baseFees = feesResponse.feeHistory.baseFeePerGas.map(bFee => HexUInt.of(bFee).bi)
-        return BigNutils((baseFees[baseFees.length - 1] - baseFees[0]).toString())
-            .div(baseFees[0].toString())
+        return BigNutils((baseFees[baseFees.length - 1] - baseFees[3]).toString())
+            .div(baseFees[3].toString())
             .isBiggerThan("0.05")
     }, [feesResponse])
 
@@ -153,16 +153,26 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
     const speedChangeEnabled = useMemo(() => {
         if (typeof feesResponse === "undefined") return false
         const baseFees = feesResponse.feeHistory.baseFeePerGas.map(bFee => HexUInt.of(bFee).bi)
-        const last4Fees = baseFees.slice(-4)
+        //If there's a ramp up, enable speed change
         if (
-            BigNutils((last4Fees[last4Fees.length - 1] - last4Fees[0]).toString())
-                .div(last4Fees[0].toString())
-                .isLessThan("-0.02")
+            BigNutils((baseFees[baseFees.length - 1] - baseFees[3]).toString())
+                .div(baseFees[3].toString())
+                .isBiggerThan("0.05")
+        )
+            return true
+        const peakValue = BigNumberUtils.max(...baseFees).toBigInt
+        const peakIndex = [...baseFees].reverse().findIndex(bFee => bFee === peakValue)
+        //If the amount of blocks after the peak is less than 3, then we should keep the modal
+        if (peakIndex >= 5) return true
+        const slicedFees = baseFees.slice(peakIndex + 1)
+        const minimumValue = BigNumberUtils.min(...slicedFees).toBigInt
+        if (
+            BigNutils((peakValue - minimumValue).toString())
+                .div(minimumValue.toString())
+                .isBiggerThan("0.02")
         )
             return false
-        return BigNutils((baseFees[baseFees.length - 1] - baseFees[0]).toString())
-            .div(baseFees[0].toString())
-            .isBiggerThan("0.05")
+        return true
     }, [feesResponse])
 
     const memoized = useMemo(

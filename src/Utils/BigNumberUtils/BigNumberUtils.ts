@@ -253,8 +253,12 @@ class BigNumberUtils implements IBigNumberUtils {
         return new BigNumberUtils(this.data)
     }
 
-    static min(val1: BigNumberable, val2: BigNumberable) {
-        return new BigNumberUtils(BN.min(parseBigNumberable(val1), parseBigNumberable(val2)))
+    static min(...values: BigNumberable[]) {
+        return new BigNumberUtils(BN.min(...values.map(v => parseBigNumberable(v))))
+    }
+
+    static max(...values: BigNumberable[]) {
+        return new BigNumberUtils(BN.max(...values.map(v => parseBigNumberable(v))))
     }
 
     static average(values: BigNumberable[]) {
