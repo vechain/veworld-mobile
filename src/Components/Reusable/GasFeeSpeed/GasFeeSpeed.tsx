@@ -46,7 +46,7 @@ export const GasFeeSpeed = ({
         setSecondsRemaining(seconds <= 0 ? 0 : seconds)
     }, [gasUpdatedAt])
 
-    useInterval(intervalFn, 500)
+    useInterval(intervalFn, 200)
 
     return (
         <AnimatedBaseCard
