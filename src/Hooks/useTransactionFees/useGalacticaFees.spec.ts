@@ -26,7 +26,26 @@ const mockRewards = [
     [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
 ]
 
-const buildBaseFeeArray = (decreaseOffset: number = 0) => {
+function* bigNumberBuilder(
+    initialArray: BigNumberUtils[],
+    nextFn: (value: BigNumberUtils[]) => BigNumberUtils,
+    maxLength: number,
+) {
+    let arr = initialArray
+    for (let i = 0; i < maxLength; i++) {
+        const newValue = nextFn(arr)
+        arr.push(newValue)
+        yield newValue
+    }
+}
+
+const buildBaseFeeArray = ({
+    decreaseOffset = 0,
+    decreasePercentage = "0.125",
+}: {
+    decreaseOffset?: number
+    decreasePercentage?: string
+} = {}) => {
     const baseArray = Array.from({ length: 8 - decreaseOffset }, (_, idx) => idx).reduce<BigNumberUtils[]>(acc => {
         if (acc.length === 0) return [BigNutils(ethers.utils.parseUnits("1", "gwei").toString())]
         return [...acc, acc.at(-1)!.clone().multiply("1.02")]
@@ -34,10 +53,10 @@ const buildBaseFeeArray = (decreaseOffset: number = 0) => {
     const decreaseArray = Array.from({ length: decreaseOffset }, (_, idx) => idx).reduce<BigNumberUtils[]>(acc => {
         if (acc.length === 0)
             return [
-                baseArray.at(-1)?.clone().multiply("0.9583") ??
+                baseArray.at(-1)?.clone().multiply(BigNutils("1").minus(decreasePercentage).toString) ??
                     BigNutils(ethers.utils.parseUnits("1", "gwei").toString()),
             ]
-        return [...acc, acc.at(-1)!.clone().multiply("0.9583")]
+        return [...acc, acc.at(-1)!.clone().multiply(BigNutils("1").minus(decreasePercentage).toString)]
     }, [])
 
     return [...baseArray, ...decreaseArray].map(u => `0x${u.toBigInt.toString(16)}`)
@@ -108,12 +127,6 @@ describe("useGalacticaFees", () => {
     })
 
     it("should return isBaseFeeRampingUp as true if the base fee increase is over threshold", () => {
-        // const baseFeeArray = Array.from({ length: 8 }, (_, idx) => idx)
-        //     .reduce<BigNumberUtils[]>(acc => {
-        //         if (acc.length === 0) return [BigNutils(ethers.utils.parseUnits("1", "gwei").toString())]
-        //         return [...acc, acc.at(-1)!.clone().multiply("1.02")]
-        //     }, [])
-        //     .map(u => `0x${u.toHex}`)
         mocked(useQuery).mockReturnValue({
             isFetching: false,
             data: {
@@ -135,63 +148,83 @@ describe("useGalacticaFees", () => {
         expect(result.current.isBaseFeeRampingUp).toBe(true)
     })
 
-    it("should return speedChangeEnabled as true if the base fee increase is over threshold", () => {
-        // const baseFeeArray = Array.from({ length: 8 }, (_, idx) => idx)
-        //     .reduce<BigNumberUtils[]>(acc => {
-        //         if (acc.length === 0) return [BigNutils(ethers.utils.parseUnits("1", "gwei").toString())]
-        //         return [...acc, acc.at(-1)!.clone().multiply("1.02")]
-        //     }, [])
-        //     .map(u => `0x${u.toHex}`)
-        mocked(useQuery).mockReturnValue({
-            isFetching: false,
-            data: {
-                maxPriorityFee: `0x${
-                    BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
-                }`,
-                feeHistory: {
-                    baseFeePerGas: buildBaseFeeArray(),
-                    reward: mockRewards,
+    it.each([
+        { values: buildBaseFeeArray(), expectedResult: true, description: "increase - no ramp down" },
+        {
+            values: buildBaseFeeArray({ decreaseOffset: 1 }),
+            expectedResult: true,
+            description: "rmmp-up - 1 block ramp-down",
+        },
+        {
+            values: buildBaseFeeArray({ decreaseOffset: 2 }),
+            expectedResult: true,
+            description: "rmmp-up - 2 blocks ramp-down",
+        },
+        { values: buildBaseFeeArray({ decreaseOffset: 3 }), expectedResult: false, description: "ramp down 3 blocks" },
+        { values: buildBaseFeeArray({ decreaseOffset: 4 }), expectedResult: false, description: "ramp down 4 blocks" },
+        { values: buildBaseFeeArray({ decreaseOffset: 5 }), expectedResult: false, description: "ramp down 5 blocks" },
+        { values: buildBaseFeeArray({ decreaseOffset: 6 }), expectedResult: false, description: "ramp down 6 blocks" },
+        { values: buildBaseFeeArray({ decreaseOffset: 7 }), expectedResult: false, description: "ramp down 7 blocks" },
+        { values: buildBaseFeeArray({ decreaseOffset: 8 }), expectedResult: false, description: "ramp down 8 blocks" },
+        {
+            values: Array.from({ length: 8 }, () => ethers.utils.parseEther("1").toHexString()),
+            expectedResult: false,
+            description: "stable",
+        },
+        {
+            values: buildBaseFeeArray({ decreaseOffset: 5, decreasePercentage: "0.001" }),
+            expectedResult: true,
+            description: "ramp down, but not enough",
+        },
+        {
+            values: [
+                ...bigNumberBuilder(
+                    [],
+                    v => {
+                        switch (v.length % 4) {
+                            case 0:
+                                return (
+                                    v.at(-1)?.clone().multiply("1.02") ??
+                                    BigNutils(ethers.utils.parseEther("1").toString())
+                                )
+                            case 1:
+                                return v.at(-1)!.clone().multiply("1.02")
+                            case 2:
+                                return v.at(-1)!.clone().multiply("0.98")
+                            case 3:
+                                return v.at(-1)!.clone().multiply("0.98")
+                            default:
+                                throw new Error("IMPOSSIBLE")
+                        }
+                    },
+                    8,
+                ),
+            ].map(u => `0x${u.toHex}`),
+            expectedResult: false,
+            description: "harmonic",
+        },
+    ])(
+        "should return speedChangeEnabled correctly ($description) -> result: $expectedResult",
+        ({ values, expectedResult }) => {
+            mocked(useQuery).mockReturnValue({
+                isFetching: false,
+                data: {
+                    maxPriorityFee: `0x${
+                        BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
+                    }`,
+                    feeHistory: {
+                        baseFeePerGas: values,
+                        reward: mockRewards,
+                    },
                 },
-            },
-            dataUpdatedAt: Date.now(),
-        } as any)
-        const { result } = renderHook(
-            () => useGalacticaFees({ isGalactica: true, blockId: "0x00000001", gas: { gas: 21000 } as any }),
-            { wrapper: TestWrapper },
-        )
+                dataUpdatedAt: Date.now(),
+            } as any)
+            const { result } = renderHook(
+                () => useGalacticaFees({ isGalactica: true, blockId: "0x00000001", gas: { gas: 21000 } as any }),
+                { wrapper: TestWrapper },
+            )
 
-        expect(result.current.speedChangeEnabled).toBe(true)
-    })
-
-    it.only.each([
-        { values: buildBaseFeeArray(), expectedResult: true },
-        { values: buildBaseFeeArray(1), expectedResult: true },
-        { values: buildBaseFeeArray(2), expectedResult: true },
-        { values: buildBaseFeeArray(3), expectedResult: false },
-        { values: buildBaseFeeArray(4), expectedResult: false },
-        { values: buildBaseFeeArray(5), expectedResult: false },
-        { values: buildBaseFeeArray(6), expectedResult: false },
-        { values: buildBaseFeeArray(7), expectedResult: false },
-        { values: buildBaseFeeArray(8), expectedResult: false },
-    ])("should return speedChangeEnabled correctly", ({ values, expectedResult }) => {
-        mocked(useQuery).mockReturnValue({
-            isFetching: false,
-            data: {
-                maxPriorityFee: `0x${
-                    BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
-                }`,
-                feeHistory: {
-                    baseFeePerGas: values,
-                    reward: mockRewards,
-                },
-            },
-            dataUpdatedAt: Date.now(),
-        } as any)
-        const { result } = renderHook(
-            () => useGalacticaFees({ isGalactica: true, blockId: "0x00000001", gas: { gas: 21000 } as any }),
-            { wrapper: TestWrapper },
-        )
-
-        expect(result.current.speedChangeEnabled).toBe(expectedResult)
-    })
+            expect(result.current.speedChangeEnabled).toBe(expectedResult)
+        },
+    )
 })
