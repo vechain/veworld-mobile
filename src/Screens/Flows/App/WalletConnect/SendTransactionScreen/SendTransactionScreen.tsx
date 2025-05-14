@@ -257,24 +257,6 @@ export const SendTransactionScreen = ({ route }: Props) => {
 
                 <BaseSpacer height={24} />
                 <BaseView>
-                    <DelegationView
-                        setNoDelegation={resetDelegation}
-                        selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationAccount={setSelectedDelegationAccount}
-                        selectedDelegationAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                    />
-
-                    <BaseSpacer height={44} />
-                    <GasFeeSpeed
-                        gasUpdatedAt={gasUpdatedAt}
-                        options={gasOptions}
-                        selectedFeeOption={selectedFeeOption}
-                        setSelectedFeeOption={setSelectedFeeOption}
-                        onRefreshFee={onRefreshFee}
-                    />
-
                     <BaseSpacer height={44} />
                     <TransactionDetails
                         request={request}
@@ -289,12 +271,31 @@ export const SendTransactionScreen = ({ route }: Props) => {
                     <BaseSpacer height={30} />
 
                     {sessionContext && (
-                        <UnknownAppMessage
-                            verifyContext={sessionContext.verifyContext}
-                            confirmed={isInvalidChecked}
-                            setConfirmed={setInvalidChecked}
-                        />
+                        <>
+                            <UnknownAppMessage
+                                verifyContext={sessionContext.verifyContext}
+                                confirmed={isInvalidChecked}
+                                setConfirmed={setInvalidChecked}
+                            />
+                            <BaseSpacer height={30} />
+                        </>
                     )}
+
+                    <GasFeeSpeed
+                        gasUpdatedAt={gasUpdatedAt}
+                        options={gasOptions}
+                        selectedFeeOption={selectedFeeOption}
+                        setSelectedFeeOption={setSelectedFeeOption}
+                        onRefreshFee={onRefreshFee}>
+                        <DelegationView
+                            setNoDelegation={resetDelegation}
+                            selectedDelegationOption={selectedDelegationOption}
+                            setSelectedDelegationAccount={setSelectedDelegationAccount}
+                            selectedDelegationAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        />
+                    </GasFeeSpeed>
                 </BaseView>
                 <BaseSpacer height={194} />
             </ScrollView>

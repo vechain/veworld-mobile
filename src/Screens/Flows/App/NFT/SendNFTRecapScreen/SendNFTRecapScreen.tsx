@@ -32,7 +32,6 @@ import {
 import { AccountUtils, AddressUtils } from "~Utils"
 import { prepareNonFungibleClause } from "~Utils/TransactionUtils/TransactionUtils"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import { InfoSectionView } from "../NFTDetailScreen/Components"
 
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.SEND_NFT_RECAP>
 
@@ -142,30 +141,23 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
 
                         {nft && <NFTTransferCard collectionAddress={nft.address} tokenId={nft.tokenId} />}
 
-                        <DelegationView
-                            setNoDelegation={resetDelegation}
-                            selectedDelegationOption={selectedDelegationOption}
-                            setSelectedDelegationAccount={setSelectedDelegationAccount}
-                            selectedDelegationAccount={selectedDelegationAccount}
-                            selectedDelegationUrl={selectedDelegationUrl}
-                            setSelectedDelegationUrl={setSelectedDelegationUrl}
-                        />
-
                         <BaseSpacer height={24} />
 
-                        <InfoSectionView<React.JSX.Element>
-                            isFontReverse
-                            title={LL.ESTIMATED_GAS_FEE()}
-                            data={
-                                <GasFeeSpeed
-                                    gasUpdatedAt={gasUpdatedAt}
-                                    options={gasOptions}
-                                    selectedFeeOption={selectedFeeOption}
-                                    setSelectedFeeOption={setSelectedFeeOption}
-                                    onRefreshFee={onRefreshFee}
-                                />
-                            }
-                        />
+                        <GasFeeSpeed
+                            gasUpdatedAt={gasUpdatedAt}
+                            options={gasOptions}
+                            selectedFeeOption={selectedFeeOption}
+                            setSelectedFeeOption={setSelectedFeeOption}
+                            onRefreshFee={onRefreshFee}>
+                            <DelegationView
+                                setNoDelegation={resetDelegation}
+                                selectedDelegationOption={selectedDelegationOption}
+                                setSelectedDelegationAccount={setSelectedDelegationAccount}
+                                selectedDelegationAccount={selectedDelegationAccount}
+                                selectedDelegationUrl={selectedDelegationUrl}
+                                setSelectedDelegationUrl={setSelectedDelegationUrl}
+                            />
+                        </GasFeeSpeed>
                     </BaseView>
                     <RequireUserPassword
                         isOpen={isPasswordPromptOpen}

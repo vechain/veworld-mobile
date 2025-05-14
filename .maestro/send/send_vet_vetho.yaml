@@ -28,7 +28,7 @@ onFlowComplete:
     id: "next-button"
 - runFlow:
     when:
-      visible: "Select delegation"
+      visible: "Fee not delegated"
     commands:
       - tapOn:
           id: "confirm-send-button"
@@ -60,7 +60,7 @@ onFlowComplete:
     id: "next-button"
 - runFlow:
     when:
-      visible: "Select delegation"
+      visible: "Fee not delegated"
     commands:
       - tapOn:
           id: "confirm-send-button"
@@ -101,7 +101,7 @@ onFlowComplete:
     id: "next-button"
 - runFlow:
     when:
-      visible: "Select delegation"
+      visible: "Fee not delegated"
     commands:
       - tapOn:
           id: "confirm-send-button"

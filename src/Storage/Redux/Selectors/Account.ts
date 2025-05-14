@@ -4,6 +4,10 @@ import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
 import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
 import sortBy from "lodash/sortBy"
+import { ethers } from "ethers"
+import { HexUInt } from "@vechain/sdk-core"
+import { VTHO } from "~Constants"
+import { selectSelectedNetwork } from "./Network"
 
 export const selectAccountsState = (state: RootState) => state.accounts
 
@@ -108,9 +112,30 @@ export const selectDelegationAccounts = createSelector(
 
         return accountsWithoutObservedAccounts.filter(
             account =>
-                account.device.type === DEVICE_TYPE.LOCAL_MNEMONIC &&
+                (account.device.type === DEVICE_TYPE.LOCAL_MNEMONIC ||
+                    account.device.type === DEVICE_TYPE.LOCAL_PRIVATE_KEY) &&
                 !AddressUtils.compareAddresses(selectedAccountAddress, account.address),
         ) as LocalAccountWithDevice[]
+    },
+)
+
+export const selectDelegationAccountsWithVtho = createSelector(
+    [selectDelegationAccounts, selectSelectedNetwork, (state: RootState) => state.balances],
+    (accounts, network, balances) => {
+        return Object.entries(balances[network.type])
+            .filter(([address]) => accounts.find(acc => AddressUtils.compareAddresses(acc.address, address)))
+            .map(
+                ([address, _balances]) =>
+                    [
+                        address,
+                        _balances.find(v => AddressUtils.compareAddresses(v.tokenAddress, VTHO.address)),
+                    ] as const,
+            )
+            .filter(
+                ([_, vthoBalance]) =>
+                    vthoBalance && ethers.utils.parseUnits(HexUInt.of(vthoBalance?.balance).bi.toString(), 18).gt(0),
+            )
+            .map(([address]) => accounts.find(acc => AddressUtils.compareAddresses(acc.address, address))!)
     },
 )
 
