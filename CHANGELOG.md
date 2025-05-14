@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.2 (2025-05-14)</small>
+
+* build: init ([fc30cdb](https://github.com/vechain/veworld-mobile/commit/fc30cdb))
+* 111 galactica   p1   UI for delegation (#2913) ([395d977](https://github.com/vechain/veworld-mobile/commit/395d977)), closes [#2913](https://github.com/vechain/veworld-mobile/issues/2913)
+
 ## <small>2.2.1 (2025-05-13)</small>
 
 * build: init ([51f6358](https://github.com/vechain/veworld-mobile/commit/51f6358))
