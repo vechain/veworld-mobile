@@ -12,6 +12,9 @@ jobs:
           matrix:
             shard: [1,2,3,4]
           fail-fast: false
+        permissions: 
+          contents: read
+          actions: write
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -47,6 +50,10 @@ jobs:
     coverage:
         runs-on: ubuntu-latest
         needs: [unit]
+        permissions: 
+          contents: read
+          actions: read
+          id-token: write
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
