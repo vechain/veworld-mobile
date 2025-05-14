@@ -53,7 +53,7 @@ export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaini
     return (
         <BaseView flexDirection="column" style={styles.section} gap={4}>
             <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-                <BaseView gap={8}>
+                <BaseView gap={8} flexDirection="row">
                     <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
                         {LL.ESTIMATED_FEE()}
                     </BaseText>
