@@ -91,8 +91,6 @@ onFlowComplete:
           id: "DELEGATE_OPEN"
       - tapOn:
           id: "button-ACCOUNT"
-      - tapOn:
-          id: "button-ACCOUNT"
       - runFlow:
             when:
                platform: Android
