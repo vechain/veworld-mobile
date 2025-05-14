@@ -53,9 +53,19 @@ export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaini
     return (
         <BaseView flexDirection="column" style={styles.section} gap={4}>
             <BaseView flexDirection="row" justifyContent="space-between" w={100}>
-                <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
-                    {LL.ESTIMATED_FEE()}
-                </BaseText>
+                <BaseView gap={8}>
+                    <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
+                        {LL.ESTIMATED_FEE()}
+                    </BaseText>
+                    <BaseText
+                        typographyFont="captionMedium"
+                        color={theme.colors.updatingText}
+                        lineHeight={20}
+                        // eslint-disable-next-line react-native/no-inline-styles
+                        style={{ opacity: secondsRemaining <= 3 ? 1 : 0 }}>
+                        {LL.UPDATING_IN()}&nbsp;{LL.ONLY_SECONDS({ seconds: secondsRemaining })}
+                    </BaseText>
+                </BaseView>
                 <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
                     {LL.MAX_FEE()}
                 </BaseText>
