@@ -26,7 +26,7 @@ export const DAppsLoadingSkeleton = () => {
                                 alignItems: "flex-start",
                                 justifyContent: "space-between",
                                 children: [
-                                    { width: 96, height: 96, borderRadius: 8, marginRight: 16 },
+                                    { width: 72, height: 72, borderRadius: 8, marginRight: 16 },
                                     { width: 80, height: 10 },
                                 ],
                             },
