@@ -166,7 +166,12 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
             return false
         const peakIndex = baseFees.length - 1 - [...baseFees].reverse().findIndex(bFee => bFee === peakValue.toBigInt)
         //If the amount of blocks after the peak is less than 3, then we should keep the modal
-        if (peakIndex >= 5) return true
+        if (peakIndex >= 5) {
+            const sliced = baseFees.slice(peakIndex - 4, peakIndex + 1)
+            return BigNutils((sliced[sliced.length - 1] - sliced[0]).toString())
+                .div(sliced[0].toString())
+                .isBiggerThan("0.05")
+        }
         const slicedFees = baseFees.slice(peakIndex + 1)
         const minimumValue = BigNumberUtils.min(...slicedFees).toBigInt
         if (
