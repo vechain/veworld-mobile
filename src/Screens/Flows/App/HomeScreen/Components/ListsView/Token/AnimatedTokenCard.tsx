@@ -17,8 +17,8 @@ export const AnimatedTokenCard = ({ item, drag, isActive, isEdit, isBalanceVisib
     const { styles, theme } = useThemedStyles(baseStyles(isActive))
 
     const isBridgeToken = useMemo(() => {
-        return item.name.endsWith("@vechain")
-    }, [item.name])
+        return !!item.crossChainProvider
+    }, [item.crossChainProvider])
 
     useEffect(() => {
         isEdit && HapticsService.triggerImpact({ level: "Light" })

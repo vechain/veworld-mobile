@@ -5,6 +5,7 @@ import { FiatBalance } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
 import { useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { COLORS } from "~Constants"
+import { BalanceUtils } from "~Utils"
 
 type Props = {
     tokenWithBalance: FungibleTokenWithBalance
@@ -22,6 +23,11 @@ export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: 
     const { fiatBalance, change24h, isPositive24hChange, exchangeRate, isTokensOwnedLoading } =
         useTokenCardFiatInfo(tokenWithCompleteInfo)
 
+    const tokenBalance = useMemo(
+        () => BalanceUtils.getTokenUnitBalance(tokenWithBalance.balance.balance, tokenWithBalance.decimals ?? 0, 2),
+        [tokenWithBalance.balance.balance, tokenWithBalance.decimals],
+    )
+
     const showFiatBalance = useMemo(() => {
         return !!exchangeRate
     }, [exchangeRate])
@@ -32,7 +38,7 @@ export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: 
             symbol={tokenWithBalance.symbol}
             isLoading={isTokensOwnedLoading}
             isBalanceVisible={isBalanceVisible}
-            tokenBalance={tokenWithBalance.balance.balance}
+            tokenBalance={tokenBalance}
             isCrossChainToken
             rightContent={
                 showFiatBalance ? (

@@ -29,7 +29,7 @@ export const OfficialTokenCard = memo(
         const { data: exchangeRate } = useVechainStatsTokenInfo(token.symbol.toLowerCase())
 
         const { formatValue } = useFormatFiat()
-        const { tokenInfo } = tokenWithInfo
+        const { tokenInfo, crossChainProvider } = tokenWithInfo
         const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
 
         const change24h =
@@ -50,8 +50,8 @@ export const OfficialTokenCard = memo(
         }, [isVOT3, tokenFiatBalance, tokenWithInfo.fiatBalance])
 
         const isCrossChainToken = useMemo(() => {
-            return !!tokenWithInfo?.crossChainProvider
-        }, [tokenWithInfo?.crossChainProvider])
+            return !!crossChainProvider
+        }, [crossChainProvider])
 
         return (
             <TouchableOpacity onPress={action} style={[styles.container, style]} testID={symbol}>

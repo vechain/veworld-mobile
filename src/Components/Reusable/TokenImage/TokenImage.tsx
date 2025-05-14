@@ -11,13 +11,7 @@ type Props = {
     isCrossChainToken?: boolean
 }
 
-export const TokenImage = ({
-    icon,
-    symbol,
-    isVechainToken = false,
-    iconSize = 24,
-    isCrossChainToken = false,
-}: Props) => {
+export const TokenImage = ({ icon, symbol, isVechainToken = false, iconSize = 24, isCrossChainToken }: Props) => {
     if (isVechainToken) {
         return <Image source={{ uri: icon }} height={iconSize} width={iconSize} />
     }

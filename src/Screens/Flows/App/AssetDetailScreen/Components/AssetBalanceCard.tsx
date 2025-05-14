@@ -40,8 +40,7 @@ export const AssetBalanceCard = ({
             )
         }
 
-        // TODO: remove this check and use the tokenWithInfo.crossChainProvider instead
-        if (tokenWithInfo.name.endsWith("@vechain")) {
+        if (tokenWithInfo.crossChainProvider) {
             return (
                 <BridgeTokenBalanceCard
                     token={tokenWithInfo}

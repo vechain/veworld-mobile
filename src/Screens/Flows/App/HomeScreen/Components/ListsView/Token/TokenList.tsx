@@ -97,8 +97,8 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
         (token: FungibleTokenWithBalance) => {
             const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
 
-            if (token.name.endsWith("@vechain")) {
-                nav.navigate(Routes.TOKEN_DETAILS, {
+            if (token.crossChainProvider) {
+                nav.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
                     token,
                 })
                 return
