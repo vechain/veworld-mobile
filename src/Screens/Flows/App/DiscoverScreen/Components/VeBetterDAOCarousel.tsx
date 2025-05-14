@@ -94,6 +94,7 @@ export const VeBetterDAOCarousel = () => {
             w={360}
             h={100}
             paginationAlignment="flex-start"
+            loop={false}
             autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
             onSlidePress={onSlidePress}
         />

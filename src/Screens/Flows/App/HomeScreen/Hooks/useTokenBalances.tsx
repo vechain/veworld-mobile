@@ -14,6 +14,9 @@ import {
 } from "~Storage/Redux"
 import { useThor } from "~Components"
 import { useCallback, useEffect } from "react"
+import { useGetVeDelegateBalance } from "~Hooks"
+import { BigNutils } from "~Utils"
+import { VeDelegate } from "~Constants"
 
 /**
  * This hook is responsible for keeping the available tokens, balances and exchange rates data up to date.
@@ -33,6 +36,8 @@ export const useTokenBalances = () => {
 
     const thorClient = useThor()
 
+    const { data: veDelegateBalance } = useGetVeDelegateBalance(selectedAccount.address)
+
     const updateBalances = useCallback(async () => {
         // Update balances
         if (balances.length > 0) {
@@ -41,7 +46,7 @@ export const useTokenBalances = () => {
     }, [balances.length, dispatch, selectedAccount.address, thorClient])
 
     const updateSuggested = useCallback(async () => {
-        await dispatch(updateSuggestedTokens(selectedAccount.address, officialTokens, network))
+        await dispatch(updateSuggestedTokens(selectedAccount.address, [...officialTokens, VeDelegate], network))
     }, [dispatch, network, officialTokens, selectedAccount.address])
 
     // fetch official tokens from github
@@ -59,14 +64,15 @@ export const useTokenBalances = () => {
 
     // auto select suggested tokens if they don't exist already
     useEffect(() => {
-        if (
-            balances.length === 0 ||
-            missingSuggestedTokens.length === 0 ||
-            thorClient.genesis.id !== network.genesis.id
-        )
-            return
+        const missingTokens = [...missingSuggestedTokens]
 
-        dispatch(autoSelectSuggestTokens(selectedAccount.address, missingSuggestedTokens, network, thorClient))
+        if (!BigNutils(veDelegateBalance?.formatted ?? "0").isZero && !missingTokens.includes(VeDelegate.address)) {
+            missingTokens.push(VeDelegate.address)
+        }
+
+        if (balances.length === 0 || missingTokens.length === 0 || thorClient.genesis.id !== network.genesis.id) return
+
+        dispatch(autoSelectSuggestTokens(selectedAccount.address, missingTokens, network, thorClient))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         dispatch,
@@ -75,6 +81,7 @@ export const useTokenBalances = () => {
         thorClient.genesis.id,
         network.genesis.id,
         balances.length,
+        veDelegateBalance,
     ])
 
     /**

@@ -106,11 +106,11 @@ type RootTranslation = {
 	 */
 	ACTIVITY_B3TR_EMPTY_DESCRIPTION: string
 	/**
-	 * N​o​ ​B​3​T​R​ ​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​.
+	 * N​o​ ​V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​.
 	 */
 	ACTIVITY_B3TR_EMPTY_LABEL: string
 	/**
-	 * B​e​t​t​e​r
+	 * V​e​B​e​t​t​e​r
 	 */
 	ACTIVITY_B3TR_LABEL: string
 	/**
@@ -317,11 +317,11 @@ type RootTranslation = {
 	 */
 	AUGUST: string
 	/**
-	 * B​e​t​t​e​r​ ​a​c​t​i​o​n​ ​o​n
+	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n​ ​o​n
 	 */
 	B3TR_ACTION: string
 	/**
-	 * B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n
 	 */
 	B3TR_ACTION_MODAL_TITLE: string
 	/**
@@ -4057,7 +4057,7 @@ type RootTranslation = {
 	 */
 	UNVERIFIED_APP_TITLE: string
 	/**
-	 * F​e​e​s​ ​u​p​d​a​t​i​n​g​ ​i​n
+	 * u​p​d​a​t​i​n​g​ ​i​n
 	 */
 	UPDATING_IN: string
 	/**
@@ -4354,11 +4354,11 @@ export type TranslationFunctions = {
 	 */
 	ACTIVITY_B3TR_EMPTY_DESCRIPTION: () => LocalizedString
 	/**
-	 * No B3TR actions to show yet.
+	 * No VeBetter actions to show yet.
 	 */
 	ACTIVITY_B3TR_EMPTY_LABEL: () => LocalizedString
 	/**
-	 * Better
+	 * VeBetter
 	 */
 	ACTIVITY_B3TR_LABEL: () => LocalizedString
 	/**
@@ -4563,11 +4563,11 @@ Try reconnect your device to the internet.
 	 */
 	AUGUST: () => LocalizedString
 	/**
-	 * Better action on
+	 * VeBetter action on
 	 */
 	B3TR_ACTION: () => LocalizedString
 	/**
-	 * Better action
+	 * VeBetter action
 	 */
 	B3TR_ACTION_MODAL_TITLE: () => LocalizedString
 	/**
@@ -8255,7 +8255,7 @@ Are you sure you want to continue?
 	 */
 	UNVERIFIED_APP_TITLE: () => LocalizedString
 	/**
-	 * Fees updating in
+	 * updating in
 	 */
 	UPDATING_IN: () => LocalizedString
 	/**

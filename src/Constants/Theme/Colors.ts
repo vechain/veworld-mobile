@@ -187,6 +187,7 @@ export type Colors = {
         text: string
         icon: string
     }
+    updatingText: string
 }
 
 export enum COLORS {
@@ -238,6 +239,7 @@ export enum COLORS {
     GREEN_600 = "#25855A",
     GREEN_500 = "#38A169",
     GREEN_400 = "#48BB78",
+    GREEN_300 = "#68D391",
     GREEN_200 = "#9AE6B4",
     GREEN_100 = "#C6F6D5",
     GREEN_50 = "#F0FFF4",
@@ -470,6 +472,7 @@ const light: Colors = {
         text: COLORS.ORANGE_700,
         icon: COLORS.ORANGE_500,
     },
+    updatingText: COLORS.GREEN_400,
 }
 
 const dark: Colors = {
@@ -607,7 +610,7 @@ const dark: Colors = {
         text: COLORS.GREY_300,
     },
     convertBetterCard: {
-        inputBg: COLORS.PURPLE_DISABLED,
+        inputBg: COLORS.PURPLE,
         inputText: COLORS.WHITE,
         convertValueText: COLORS.GREY_300,
         swapIcon: COLORS.WHITE,
@@ -661,6 +664,7 @@ const dark: Colors = {
         text: COLORS.ORANGE_700,
         icon: COLORS.ORANGE_500,
     },
+    updatingText: COLORS.GREEN_400,
 }
 
 export const colors = { light, dark }

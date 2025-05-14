@@ -36,7 +36,29 @@ describe("AppLoader", () => {
 
     it("should hide loader overlay when isAppLoading is false", () => {
         withReanimatedTimer(() => {
-            const preloadedState: Partial<RootState> = {
+            let currentState: Partial<RootState> = {
+                cache: {
+                    derivedPath: DerivationPath.VET,
+                    isAppLoading: true,
+                    isTokensOwnedLoading: false,
+                    mnemonic: [],
+                },
+            }
+
+            const dynamicWrapper = ({ children }: { children: React.ReactNode }) => {
+                return TestWrapper({ children, preloadedState: currentState })
+            }
+
+            const { rerender } = render(
+                <AppLoader>
+                    <Text>{"Test"}</Text>
+                </AppLoader>,
+                { wrapper: dynamicWrapper },
+            )
+
+            const overlay = screen.getByTestId("app-loader-overlay")
+
+            currentState = {
                 cache: {
                     derivedPath: DerivationPath.VET,
                     isAppLoading: false,
@@ -44,14 +66,45 @@ describe("AppLoader", () => {
                     mnemonic: [],
                 },
             }
-            render(<AppLoader>{null}</AppLoader>, { wrapper: createWrapper(preloadedState) })
 
-            const overlay = screen.getByTestId("app-loader-overlay")
+            rerender(
+                <AppLoader>
+                    <Text>{"Test"}</Text>
+                </AppLoader>,
+            )
+
+            jest.advanceTimersByTime(300)
             expect(overlay).toHaveAnimatedStyle({ opacity: 0 })
         })
     })
 
-    it("should handle rapid loading state changes and transition animations", () => {
+    it("should set display to 'flex' when opacity is not 0", () => {
+        withReanimatedTimer(() => {
+            const preloadedState: Partial<RootState> = {
+                cache: {
+                    derivedPath: DerivationPath.VET,
+                    isAppLoading: true,
+                    isTokensOwnedLoading: false,
+                    mnemonic: [],
+                },
+            }
+
+            render(
+                <AppLoader>
+                    <Text>{"Test"}</Text>
+                </AppLoader>,
+                { wrapper: createWrapper(preloadedState) },
+            )
+
+            const overlay = screen.getByTestId("app-loader-overlay")
+            expect(overlay).toHaveAnimatedStyle({
+                opacity: 1,
+                display: "flex",
+            })
+        })
+    })
+
+    it("should set display style to 'none' when isAppLoading changes to false", () => {
         withReanimatedTimer(() => {
             let currentState: Partial<RootState> = {
                 cache: {
@@ -74,7 +127,10 @@ describe("AppLoader", () => {
             )
 
             const overlay = screen.getByTestId("app-loader-overlay")
-            expect(overlay).toHaveAnimatedStyle({ opacity: 1 })
+            expect(overlay).toHaveAnimatedStyle({
+                opacity: 1,
+                display: "flex",
+            })
 
             currentState = {
                 cache: {
@@ -91,26 +147,12 @@ describe("AppLoader", () => {
                 </AppLoader>,
             )
 
-            jest.advanceTimersByTime(100)
+            jest.advanceTimersByTime(300)
 
-            currentState = {
-                cache: {
-                    derivedPath: DerivationPath.VET,
-                    isAppLoading: true,
-                    isTokensOwnedLoading: false,
-                    mnemonic: [],
-                },
-            }
-
-            rerender(
-                <AppLoader>
-                    <Text>{"Test"}</Text>
-                </AppLoader>,
-            )
-
-            jest.advanceTimersByTime(200)
-
-            expect(overlay).toHaveAnimatedStyle({ opacity: 1 })
+            expect(overlay).toHaveAnimatedStyle({
+                opacity: 0,
+                display: "none",
+            })
         })
     })
 })
