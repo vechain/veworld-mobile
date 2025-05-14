@@ -13,7 +13,7 @@ export const BaseModal: React.FC<IBaseModal> = ({ isOpen, onClose, children, tra
     const theme = useTheme()
     return (
         <SafeAreaProvider>
-            <BaseSafeArea bg={transparent ? "transparent" : undefined} grow={1}>
+            <BaseSafeArea bg={transparent ? "transparent" : undefined}>
                 <Modal
                     visible={isOpen}
                     animationType="slide"
@@ -23,7 +23,7 @@ export const BaseModal: React.FC<IBaseModal> = ({ isOpen, onClose, children, tra
                     onDismiss={onClose}
                     onRequestClose={onClose}
                     {...otherProps}>
-                    <BaseView alignItems="center" justifyContent="flex-start" bg={theme.colors.background}>
+                    <BaseView alignItems="center" justifyContent="flex-start" flex={1} bg={theme.colors.background}>
                         {children}
                     </BaseView>
                 </Modal>
