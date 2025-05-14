@@ -88,6 +88,10 @@ onFlowComplete:
       - tapOn:
           id: "next-button"
       - tapOn:
+          id: "DELEGATE_OPEN"
+      - tapOn:
+          id: "button-ACCOUNT"
+      - tapOn:
           id: "button-ACCOUNT"
       - runFlow:
             when:
@@ -104,11 +108,13 @@ onFlowComplete:
                platform: iOS
             commands:
                - assertVisible:
-                  id: "selectAccount"
+                  id: "DELEGATE_ACCOUNT_CARD_RADIO"
                   index: 0
                - tapOn:
-                  id: "selectAccount"
+                  id: "DELEGATE_ACCOUNT_CARD_RADIO"
                   index: 0
+      - tapOn:
+          id: 'RENDERED_OPTION_BUTTON_BAR_APPLY'
       - tapOn:
           id: "confirm-send-button"
       - repeat:
