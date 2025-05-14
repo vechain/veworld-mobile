@@ -257,6 +257,30 @@ export const SendTransactionScreen = ({ route }: Props) => {
 
                 <BaseSpacer height={24} />
                 <BaseView>
+                    <BaseSpacer height={44} />
+                    <TransactionDetails
+                        request={request}
+                        network={network}
+                        message={request.message}
+                        options={request.options}
+                    />
+
+                    <BaseSpacer height={44} />
+                    {!!clausesMetadata.length && <ClausesCarousel clausesMetadata={clausesMetadata} />}
+
+                    <BaseSpacer height={30} />
+
+                    {sessionContext && (
+                        <>
+                            <UnknownAppMessage
+                                verifyContext={sessionContext.verifyContext}
+                                confirmed={isInvalidChecked}
+                                setConfirmed={setInvalidChecked}
+                            />
+                            <BaseSpacer height={30} />
+                        </>
+                    )}
+
                     <GasFeeSpeed
                         gasUpdatedAt={gasUpdatedAt}
                         options={gasOptions}
@@ -272,27 +296,6 @@ export const SendTransactionScreen = ({ route }: Props) => {
                             setSelectedDelegationUrl={setSelectedDelegationUrl}
                         />
                     </GasFeeSpeed>
-
-                    <BaseSpacer height={44} />
-                    <TransactionDetails
-                        request={request}
-                        network={network}
-                        message={request.message}
-                        options={request.options}
-                    />
-
-                    <BaseSpacer height={44} />
-                    {!!clausesMetadata.length && <ClausesCarousel clausesMetadata={clausesMetadata} />}
-
-                    <BaseSpacer height={30} />
-
-                    {sessionContext && (
-                        <UnknownAppMessage
-                            verifyContext={sessionContext.verifyContext}
-                            confirmed={isInvalidChecked}
-                            setConfirmed={setInvalidChecked}
-                        />
-                    )}
                 </BaseView>
                 <BaseSpacer height={194} />
             </ScrollView>
