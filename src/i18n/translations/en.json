@@ -83,7 +83,9 @@
   "BACKUP_YOUR_DEVICES_CTA": "Backup now",
   "BACKUP_YOUR_DEVICES_DESCRIPTION": "Before proceeding with the transaction, we suggest to backup the recovery phrase for this account.",
   "BACKUP_YOUR_DEVICES_TITLE": "Backup your wallet",
+  "BANNER_STELLAPAY_DESC": "Get your <> on <>",
   "BANNER_TITLE_CLAIM_USERNAME": "Claim your <><> for free now",
+  "BANNER_VEBETTER_DESC": "Explore the <> platform",
   "BASE_FEE_RAMPING_UP": "The transaction may take longer to process.",
   "BD_ACCOUNT_REMOVAL": "Your account will be removed, but you can still access it by adding new accounts to the wallet.",
   "BD_ADD_CONTACT": "Add contact details",
@@ -1045,7 +1047,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "BANNER_VEBETTER_DESC": "Explore the <> platform",
-  "BANNER_STELLAPAY_DESC": "Get your <> on <>"
+  "YESTERDAY": "Yesterday"
 }
