@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -85,8 +85,8 @@
     "@vechain/connex-driver": "^2.1.0",
     "@vechain/connex-framework": "^2.1.0",
     "@vechain/picasso": "^2.1.1",
-    "@vechain/sdk-core": "1.1.0",
-    "@vechain/sdk-network": "1.1.0",
+    "@vechain/sdk-core": "1.2.0-rc.1",
+    "@vechain/sdk-network": "1.2.0-rc.1",
     "@walletconnect/core": "2.15.2",
     "@walletconnect/react-native-compat": "2.15.2",
     "@walletconnect/utils": "2.15.2",
@@ -182,6 +182,7 @@
     "ts-retry-promise": "^0.8.1",
     "typesafe-i18n": "^5.26.2",
     "url": "^0.11.4",
+    "usehooks-ts": "^3.1.1",
     "util": "^0.12.5",
     "web3": "^4.13.0",
     "whatwg-fetch": "^3.6.20",

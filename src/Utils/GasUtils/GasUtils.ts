@@ -1,10 +1,10 @@
 import axios from "axios"
 import BigNumber from "bignumber.js"
 import { Transaction } from "thor-devkit"
-import { abis, BASE_GAS_PRICE, GasFeeOption, GasPriceCoefficient, VTHO } from "~Constants"
+import { abis, BASE_GAS_PRICE, GasPriceCoefficient, VTHO } from "~Constants"
 import { EstimateGasResult } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
-import BigNutils from "~Utils/BigNumberUtils"
+import BigNutils, { BigNumberUtils } from "~Utils/BigNumberUtils"
 import TransactionUtils from "~Utils/TransactionUtils"
 import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
 
@@ -174,19 +174,14 @@ type Props = {
     clauses: Transaction.Clause[]
     isDelegated: boolean
     vtho: any
-    priorityFees?: GasFeeOption
+    txFee?: BigNumberUtils
     userSelectedAmount?: string
 }
 
-export const calculateIsEnoughGas = ({ clauses, isDelegated, vtho, priorityFees }: Props) =>
-    calculateVthoGas(clauses, isDelegated, vtho, priorityFees)
+export const calculateIsEnoughGas = ({ clauses, isDelegated, vtho, txFee }: Props) =>
+    calculateVthoGas(clauses, isDelegated, vtho, txFee)
 
-const calculateVthoGas = (
-    clauses: Transaction.Clause[],
-    isDelegated: boolean,
-    vtho: any,
-    priorityFees?: GasFeeOption,
-) => {
+const calculateVthoGas = (clauses: Transaction.Clause[], isDelegated: boolean, vtho: any, txFee?: BigNumberUtils) => {
     const vthoTransferClauses = clauses.filter(
         clause =>
             clause.to &&
@@ -194,7 +189,7 @@ const calculateVthoGas = (
             TransactionUtils.isTokenTransferClause(clause),
     )
 
-    let txCostTotal = BigNutils(isDelegated ? "0" : (priorityFees?.gasRaw.toString ?? "0"))
+    let txCostTotal = BigNutils(isDelegated ? "0" : (txFee?.toString ?? "0"))
     let isEnoughGas = true
 
     for (const clause of vthoTransferClauses) {
@@ -212,7 +207,7 @@ const calculateVthoGas = (
     // Check if the total cost of the transaction is less than or equal to the total balance of VTHO
     isEnoughGas = totalBalance.isBiggerThan(txCostTotal.toString)
 
-    return { isGas: isEnoughGas, txCostTotal, gasCost: priorityFees }
+    return { isGas: isEnoughGas, txCostTotal, gasCost: txFee }
 }
 
 export default {
