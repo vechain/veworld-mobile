@@ -170,7 +170,7 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
             try {
                 keys = storageKeys
                     ? storageKeys
-                    : backUpKeys?.storage ?? (await StorageEncryptionKeyHelper.get({ pinCode }))
+                    : (backUpKeys?.storage ?? (await StorageEncryptionKeyHelper.get({ pinCode })))
 
                 setStorageKeys(null)
             } catch (e) {
