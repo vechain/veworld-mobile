@@ -43,7 +43,7 @@ export const NetworkBox: React.FC<Props> = ({ network, onPress, rightIcon, isSel
                         {network.currentUrl}
                     </BaseText>
                 </BaseView>
-                {rightIcon && <BaseIcon name={rightIcon} color={theme.colors.text} />}
+                {rightIcon && <BaseIcon name={rightIcon} color={theme.colors.text} size={16} />}
             </BaseView>
         ),
         [
