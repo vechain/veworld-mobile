@@ -123,3 +123,6 @@ android/keystore.properties
 # Android release build artifacts
 android/key_alias.txt
 android/store_password.txt
+
+src/i18n/translations/*
+!src/i18n/translations/en.json
