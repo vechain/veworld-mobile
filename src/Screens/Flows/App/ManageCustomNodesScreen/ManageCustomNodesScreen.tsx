@@ -143,7 +143,7 @@ export const ManageCustomNodesScreen = () => {
                     setSelectedItem={(network?: Network) => setNetworkToDelete(network?.id)}
                     onPress={onPress}
                     isOpen={networkToDelete === item.id}>
-                    <NetworkBox network={item} rightIcon="icon-pencil" flex={1} />
+                    <NetworkBox network={item} rightIcon="icon-editBox" flex={1} />
                 </SwipeableRow>
             )
         },
