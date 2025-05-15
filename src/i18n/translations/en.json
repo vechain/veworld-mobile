@@ -1045,5 +1045,7 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "BANNER_VEBETTER_DESC": "Explore the <> platform",
+  "BANNER_STELLAPAY_DESC": "Get your <> on <>"
 }

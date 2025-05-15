@@ -4274,6 +4274,14 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * E​x​p​l​o​r​e​ ​t​h​e​ ​<​>​ ​p​l​a​t​f​o​r​m
+	 */
+	BANNER_VEBETTER_DESC: string
+	/**
+	 * G​e​t​ ​y​o​u​r​ ​<​>​ ​o​n​ ​<​>
+	 */
+	BANNER_STELLAPAY_DESC: string
 }
 
 export type TranslationFunctions = {
@@ -8470,6 +8478,14 @@ Are you sure you want to continue?
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Explore the <> platform
+	 */
+	BANNER_VEBETTER_DESC: () => LocalizedString
+	/**
+	 * Get your <> on <>
+	 */
+	BANNER_STELLAPAY_DESC: () => LocalizedString
 }
 
 export type Formatters = {
