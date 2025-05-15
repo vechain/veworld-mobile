@@ -99,7 +99,9 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         isDisabledButtonState,
         gasOptions,
         gasUpdatedAt,
-        onRefreshFee,
+        isGalactica,
+        isBaseFeeRampingUp,
+        speedChangeEnabled,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -148,7 +150,9 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             options={gasOptions}
                             selectedFeeOption={selectedFeeOption}
                             setSelectedFeeOption={setSelectedFeeOption}
-                            onRefreshFee={onRefreshFee}>
+                            isGalactica={isGalactica}
+                            isBaseFeeRampingUp={isBaseFeeRampingUp}
+                            speedChangeEnabled={speedChangeEnabled}>
                             <DelegationView
                                 setNoDelegation={resetDelegation}
                                 selectedDelegationOption={selectedDelegationOption}

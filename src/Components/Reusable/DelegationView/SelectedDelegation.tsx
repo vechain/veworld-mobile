@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseButton, BaseText, BaseView } from "~Components/Base"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
@@ -73,7 +74,7 @@ export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegati
     ])
 
     return (
-        <BaseView w={100} px={16} pb={16}>
+        <Animated.View style={styles.root} layout={LinearTransition}>
             <BaseView
                 alignItems="center"
                 flexDirection="row"
@@ -98,7 +99,7 @@ export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegati
                     {LL.DELEGATE()}
                 </BaseButton>
             </BaseView>
-        </BaseView>
+        </Animated.View>
     )
 }
 
@@ -109,6 +110,11 @@ const baseStyles = (theme: ColorThemeType) => {
             borderWidth: 1,
             backgroundColor: theme.colors.cardButton.background,
             gap: 8,
+        },
+        root: {
+            width: "100%",
+            paddingHorizontal: 16,
+            paddingBottom: 16,
         },
     })
 }

@@ -1,6 +1,7 @@
 import { ethers } from "ethers"
 import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseText, BaseView } from "~Components/Base"
 import { GasPriceCoefficient, VTHO } from "~Constants"
@@ -51,7 +52,7 @@ export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaini
     const blinkStyles = useBlinkStyles({ enabled: secondsRemaining <= 3, duration: 1000 })
 
     return (
-        <BaseView flexDirection="column" style={styles.section} gap={4}>
+        <Animated.View layout={LinearTransition} style={styles.section}>
             <BaseView flexDirection="row" justifyContent="space-between" w={100}>
                 <BaseView gap={8} flexDirection="row">
                     <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
@@ -98,7 +99,7 @@ export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaini
                     {formatValue(maxFeeVtho)} {VTHO.symbol}
                 </BaseAnimatedText>
             </BaseView>
-        </BaseView>
+        </Animated.View>
     )
 }
 
@@ -106,6 +107,8 @@ const baseStyles = () => {
     return StyleSheet.create({
         section: {
             padding: 16,
+            flexDirection: "column",
+            gap: 4,
         },
     })
 }
