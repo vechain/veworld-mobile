@@ -1,12 +1,16 @@
 import moment from "moment"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 import { GasPriceCoefficient } from "~Constants"
 import { EstimateGasResult } from "~Model"
-import { BigNumberUtils, GasUtils } from "~Utils"
+import { BigNumberUtils } from "~Utils"
+import { useGalacticaFees } from "./useGalacticaFees"
+import { useLegacyFees } from "./useLegacyFees"
 
 type Props = {
     coefficient: GasPriceCoefficient
     gas: EstimateGasResult | undefined
+    isGalactica: boolean
+    blockId?: string
 }
 
 export type TransactionFeesResult = Record<
@@ -18,46 +22,63 @@ export type TransactionFeesResult = Record<
     }
 >
 
-export const useTransactionFees = (props: Props) => {
-    const [isLoading, _] = useState(false)
+export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: Props) => {
+    const {
+        isLoading: isGalacticaFeesLoading,
+        options: galacticaOptions,
+        txOptions: galacticaTxOptions,
+        maxPriorityFee: galacticaMaxPriorityFee,
+        dataUpdatedAt,
+        isBaseFeeRampingUp: galacticaBaseFeeRampingUp,
+        speedChangeEnabled,
+    } = useGalacticaFees({ isGalactica, blockId, gas })
 
-    const gasResult = useMemo(
-        () => GasUtils.getGasByCoefficient({ gas: props.gas, selectedFeeOption: props.coefficient.toString() }),
-        [props.coefficient, props.gas],
-    )
+    const {
+        isLoading: isLegacyFeesLoading,
+        options: legacyOptions,
+        txOptions: legacyTxOptions,
+    } = useLegacyFees({ gas })
 
     const options = useMemo(() => {
-        return {
-            [GasPriceCoefficient.REGULAR]: {
-                estimatedFee: gasResult.gasFeeOptions[GasPriceCoefficient.REGULAR].gasRaw,
-                maxFee: gasResult.gasFeeOptions[GasPriceCoefficient.REGULAR].gasRaw,
-                priorityFee: gasResult.priorityFees.gasRaw,
-            },
-            [GasPriceCoefficient.MEDIUM]: {
-                estimatedFee: gasResult.gasFeeOptions[GasPriceCoefficient.MEDIUM].gasRaw,
-                maxFee: gasResult.gasFeeOptions[GasPriceCoefficient.MEDIUM].gasRaw,
-                priorityFee: gasResult.priorityFees.gasRaw,
-            },
-            [GasPriceCoefficient.HIGH]: {
-                estimatedFee: gasResult.gasFeeOptions[GasPriceCoefficient.HIGH].gasRaw,
-                maxFee: gasResult.gasFeeOptions[GasPriceCoefficient.HIGH].gasRaw,
-                priorityFee: gasResult.priorityFees.gasRaw,
-            },
-        }
-    }, [gasResult.gasFeeOptions, gasResult.priorityFees.gasRaw])
+        return isGalactica && galacticaOptions ? galacticaOptions! : legacyOptions
+    }, [galacticaOptions, isGalactica, legacyOptions])
+
+    const txOptions = useMemo(() => {
+        return isGalactica && galacticaTxOptions ? galacticaTxOptions! : legacyTxOptions
+    }, [galacticaTxOptions, isGalactica, legacyTxOptions])
 
     const result = useMemo(() => {
         return {
-            estimatedFee: gasResult.gasFeeOptions[props.coefficient].gasRaw,
-            maxFee: gasResult.gasFeeOptions[props.coefficient].gasRaw,
-            gasPriceCoef: gasResult.gasPriceCoef,
-            priorityFee: gasResult.priorityFees.gasRaw,
+            estimatedFee: options[coefficient].estimatedFee,
+            maxFee: options[coefficient].maxFee,
+            txOptions: txOptions,
         }
-    }, [gasResult, props.coefficient])
+    }, [options, coefficient, txOptions])
+
+    const isBaseFeeRampingUp = useMemo(() => {
+        return isGalactica ? galacticaBaseFeeRampingUp : false
+    }, [galacticaBaseFeeRampingUp, isGalactica])
 
     const memoized = useMemo(
-        () => ({ ...result, options, isLoading, dataUpdatedAt: moment().valueOf() }),
-        [isLoading, result, options],
+        () => ({
+            ...result,
+            options,
+            isLoading: isLegacyFeesLoading || isGalacticaFeesLoading,
+            dataUpdatedAt: dataUpdatedAt ?? moment().valueOf(),
+            maxPriorityFee: galacticaMaxPriorityFee,
+            isBaseFeeRampingUp,
+            speedChangeEnabled,
+        }),
+        [
+            result,
+            options,
+            isLegacyFeesLoading,
+            isGalacticaFeesLoading,
+            dataUpdatedAt,
+            galacticaMaxPriorityFee,
+            isBaseFeeRampingUp,
+            speedChangeEnabled,
+        ],
     )
 
     return memoized
