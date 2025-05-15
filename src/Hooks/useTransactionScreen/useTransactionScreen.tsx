@@ -80,7 +80,7 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
-    const { isGalactica, loading: isGalacticaLoading, blockId } = useIsGalactica()
+    const { isGalactica, loading: isGalacticaLoading } = useIsGalactica()
     const onTransactionSuccess: typeof propsOnTransactionSuccess = useCallback(
         (tx, id) => {
             track(AnalyticsEvent.TRANSACTION_SEND_GAS, { gasOption: mapGasPriceCoefficient(selectedFeeOption) })
@@ -95,7 +95,6 @@ export const useTransactionScreen = ({
         coefficient: selectedFeeOption,
         gas,
         isGalactica,
-        blockId,
     })
 
     // 4. Build transaction

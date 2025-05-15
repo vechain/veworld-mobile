@@ -10,10 +10,9 @@ export const useIsGalactica = () => {
         queryFn: () => thorClient.blocks.getBlockCompressed("best"),
         staleTime: 10000,
         gcTime: 10000,
-        refetchInterval: 3000,
     })
 
     const isGalactica = useMemo(() => Boolean(data?.baseFeePerGas), [data?.baseFeePerGas])
 
-    return { isGalactica, loading: isFetching, blockId: data?.id }
+    return { isGalactica, loading: isFetching }
 }
