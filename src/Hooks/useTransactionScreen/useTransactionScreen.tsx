@@ -99,7 +99,7 @@ export const useTransactionScreen = ({
         if (!isGalacticaRaw) return false
         if (senderDevice?.type === DEVICE_TYPE.LEDGER) return forks?.GALACTICA?.transactions?.ledger || false
         return true
-    }, [forks.GALACTICA.transactions.ledger, isGalacticaRaw, senderDevice?.type])
+    }, [forks?.GALACTICA?.transactions?.ledger, isGalacticaRaw, senderDevice?.type])
 
     // 3. Priority fees
     const transactionFeesResponse = useTransactionFees({
