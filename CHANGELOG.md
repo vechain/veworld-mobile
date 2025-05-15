@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.2 (2025-05-15)</small>
+
+* build: init ([74caba1](https://github.com/vechain/veworld-mobile/commit/74caba1))
+* 100 galactica   p2 galactica implementation (#2934) ([888878d](https://github.com/vechain/veworld-mobile/commit/888878d)), closes [#2934](https://github.com/vechain/veworld-mobile/issues/2934)
+
 ## <small>2.2.1 (2025-05-13)</small>
 
 * build: init ([51f6358](https://github.com/vechain/veworld-mobile/commit/51f6358))
