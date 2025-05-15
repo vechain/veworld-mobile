@@ -28,7 +28,11 @@ export const CustomNodes: React.FC<Props> = ({ onManageNodesClick }) => {
             <BaseSpacer height={16} />
 
             {customNodes.length ? (
-                <BaseTouchableBox haptics="Light" action={onManageNodesClick} justifyContent="center">
+                <BaseTouchableBox
+                    testID="manage-nodes-button"
+                    haptics="Light"
+                    action={onManageNodesClick}
+                    justifyContent="center">
                     <BaseView flexDirection="row" alignItems="center" gap={8}>
                         <BaseIcon name="icon-settings-2" color={theme.colors.text} />
                         <BaseText typographyFont="buttonSecondary">{LL.NETWORK_MANAGE_NODES()}</BaseText>
@@ -37,14 +41,21 @@ export const CustomNodes: React.FC<Props> = ({ onManageNodesClick }) => {
                             borderRadius={8}
                             px={4}
                             py={2}>
-                            <BaseText typographyFont="captionSemiBold" color={theme.colors.textReversed}>
+                            <BaseText
+                                testID="custom-nodes-count"
+                                typographyFont="captionSemiBold"
+                                color={theme.colors.textReversed}>
                                 {customNodes.length}
                             </BaseText>
                         </BaseView>
                     </BaseView>
                 </BaseTouchableBox>
             ) : (
-                <BaseTouchableBox haptics="Light" action={onAddCustomPress} justifyContent="center">
+                <BaseTouchableBox
+                    testID="add-custom-node-button"
+                    haptics="Light"
+                    action={onAddCustomPress}
+                    justifyContent="center">
                     <BaseIcon name="icon-plus" color={theme.colors.text} />
                     <BaseText pl={8} typographyFont="buttonSecondary">
                         {LL.NETWORK_ADD_CUSTOM_NODE()}
