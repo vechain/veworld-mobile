@@ -64,7 +64,7 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: P
             ...result,
             options,
             isLoading: isLegacyFeesLoading || isGalacticaFeesLoading,
-            dataUpdatedAt: dataUpdatedAt || moment().valueOf(),
+            dataUpdatedAt: dataUpdatedAt ?? moment().valueOf(),
             maxPriorityFee: galacticaMaxPriorityFee,
             isBaseFeeRampingUp,
             speedChangeEnabled,

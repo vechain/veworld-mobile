@@ -64,14 +64,12 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
                 </BaseButton>
             </Animated.View>
             {speedChangeEnabled && (
-                <>
-                    <AnimatedBaseSpacer
-                        height={1}
-                        background={theme.isDark ? theme.colors.background : theme.colors.pressableCardBorder}
-                        layout={LinearTransition.duration(300)}
-                        style={opacityStyles}
-                    />
-                </>
+                <AnimatedBaseSpacer
+                    height={1}
+                    background={theme.isDark ? theme.colors.background : theme.colors.pressableCardBorder}
+                    layout={LinearTransition.duration(300)}
+                    style={opacityStyles}
+                />
             )}
         </>
     )
