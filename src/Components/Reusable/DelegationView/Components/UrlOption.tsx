@@ -84,7 +84,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRightColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : theme.colors.neutralVariant.border,
             borderTopLeftRadius: 7,
             borderBottomLeftRadius: 7,
-            padding: 14,
+            padding: 12,
         },
         radio: {
             backgroundColor: theme.isDark ? COLORS.PURPLE : theme.colors.radioButton.backgroudColor,
