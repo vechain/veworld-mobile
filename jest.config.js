@@ -74,6 +74,7 @@ module.exports = {
         "<rootDir>/src/AnimatedSplashScreen.tsx",
         "<rootDir>/src/EntryPoint.tsx",
         "<rootDir>/src/SplashScreen.tsx",
+        "<rootDir>/src/Assets",
     ],
     maxWorkers: 2,
     workerIdleMemoryLimit: "1GB",
