@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.2 (2025-05-15)</small>
+
+* build: init ([74b2cd1](https://github.com/vechain/veworld-mobile/commit/74b2cd1))
+* Refactor: manage node screen layout and improve custom nodes components (#2937) ([2d34105](https://github.com/vechain/veworld-mobile/commit/2d34105)), closes [#2937](https://github.com/vechain/veworld-mobile/issues/2937)
+
 ## <small>2.2.1 (2025-05-13)</small>
 
 * build: init ([51f6358](https://github.com/vechain/veworld-mobile/commit/51f6358))
