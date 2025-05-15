@@ -136,7 +136,8 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                                 gap={12}
                                 py={8}
                                 px={12}
-                                borderRadius={6}>
+                                borderRadius={6}
+                                mt={8}>
                                 <BaseIcon size={16} color={theme.colors.warningAlert.icon} name="icon-alert-triangle" />
                                 <BaseText typographyFont="bodyMedium" color={theme.colors.warningAlert.text}>
                                     {LL.BASE_FEE_RAMPING_UP()}
