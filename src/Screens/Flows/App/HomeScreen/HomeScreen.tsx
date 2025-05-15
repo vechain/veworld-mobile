@@ -111,8 +111,7 @@ export const HomeScreen = () => {
             })
 
             updateBalances()
-            updateSuggested()
-        }, [queryClient, selectedAccount.address, updateBalances, updateSuggested]),
+        }, [queryClient, selectedAccount.address, updateBalances]),
     )
 
     const onRefresh = useCallback(async () => {
