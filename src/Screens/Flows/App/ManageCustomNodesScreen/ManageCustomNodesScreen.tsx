@@ -1,15 +1,14 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { useBottomSheetModal } from "~Hooks"
 import { error } from "~Utils"
 import {
-    BackButtonHeader,
-    BaseIcon,
-    BaseSafeArea,
     BaseSpacer,
     BaseText,
     BaseView,
     DeleteConfirmationBottomSheet,
+    Layout,
     NetworkBox,
+    PlusIconHeaderButton,
     SwipeableRow,
 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -33,7 +32,6 @@ import { ERROR_EVENTS } from "~Constants"
 export const ManageCustomNodesScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
-    const theme = useTheme()
 
     const [networkToEditDeleteId, setNetworkToEditDeleteId] = useState<string>()
     const [networkToDelete, setNetworkToDelete] = useState<string>()
@@ -117,7 +115,7 @@ export const ManageCustomNodesScreen = () => {
 
     const renderSectionHeader = useCallback(({ section }: { section: SectionListData<Network, Section> }) => {
         return (
-            <BaseText mx={20} typographyFont="bodyMedium">
+            <BaseText mx={16} typographyFont="bodyMedium">
                 {section.title}
             </BaseText>
         )
@@ -162,58 +160,57 @@ export const ManageCustomNodesScreen = () => {
     )
 
     return (
-        <BaseSafeArea grow={1}>
-            <BackButtonHeader />
-            <BaseView flexDirection="row" justifyContent="space-between" mx={20}>
-                <BaseText typographyFont="subTitleBold">{LL.BD_CUSTOM_NODES()}</BaseText>
-                <BaseIcon name={"icon-plus"} size={24} bg={theme.colors.secondary} action={onAddNetworkPress} />
-            </BaseView>
-            <BaseSpacer height={16} />
-            <BaseView flexDirection="row" style={styles.listContainer}>
-                <SectionList
-                    extraData={networkToDelete}
-                    sections={sections}
-                    keyExtractor={i => i.id}
-                    SectionSeparatorComponent={renderSectionSeparator}
-                    renderSectionHeader={renderSectionHeader}
-                    renderItem={renderItem}
-                    onViewableItemsChanged={checkViewableItems}
-                    scrollEnabled={isScrollable}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                />
-            </BaseView>
-            <EditCustomNodeBottomSheet
-                ref={editNetworkSheetRef}
-                onClose={closeEditNetworkSheet}
-                network={networkToEdit}
-            />
+        <Layout
+            title={LL.BD_CUSTOM_NODES()}
+            headerRightElement={<PlusIconHeaderButton action={onAddNetworkPress} />}
+            fixedBody={
+                <BaseView flex={1}>
+                    <BaseView flexDirection="row" style={styles.listContainer}>
+                        <SectionList
+                            extraData={networkToDelete}
+                            sections={sections}
+                            keyExtractor={i => i.id}
+                            SectionSeparatorComponent={renderSectionSeparator}
+                            renderSectionHeader={renderSectionHeader}
+                            renderItem={renderItem}
+                            onViewableItemsChanged={checkViewableItems}
+                            scrollEnabled={isScrollable}
+                            showsVerticalScrollIndicator={false}
+                            showsHorizontalScrollIndicator={false}
+                        />
+                    </BaseView>
+                    <EditCustomNodeBottomSheet
+                        ref={editNetworkSheetRef}
+                        onClose={closeEditNetworkSheet}
+                        network={networkToEdit}
+                    />
 
-            <DeleteConfirmationBottomSheet
-                ref={deleteConfirmationSheetRef}
-                onClose={closeDeleteConfirmationSheet}
-                onConfirm={onDeleteNetworkConfirm}
-                title={LL.NETWORK_CONFIRM_REMOVE_NODE()}
-                description={LL.NETWORK_CONFIRM_REMOVE_NODE_DESC()}
-                deletingElement={
-                    networkToEdit && (
-                        <BaseView w={100} flexDirection="row">
-                            <NetworkBox network={networkToEdit} activeOpacity={1} />
-                        </BaseView>
-                    )
-                }
-            />
-        </BaseSafeArea>
+                    <DeleteConfirmationBottomSheet
+                        ref={deleteConfirmationSheetRef}
+                        onClose={closeDeleteConfirmationSheet}
+                        onConfirm={onDeleteNetworkConfirm}
+                        title={LL.NETWORK_CONFIRM_REMOVE_NODE()}
+                        description={LL.NETWORK_CONFIRM_REMOVE_NODE_DESC()}
+                        deletingElement={
+                            networkToEdit && (
+                                <BaseView w={100} flexDirection="row">
+                                    <NetworkBox network={networkToEdit} activeOpacity={1} />
+                                </BaseView>
+                            )
+                        }
+                    />
+                </BaseView>
+            }
+        />
     )
 }
 
 const styles = StyleSheet.create({
     listContainer: {
-        width: "100%",
+        marginTop: 16,
         marginBottom: 60,
     },
     card: {
-        paddingHorizontal: 20,
         marginVertical: 8,
     },
 })

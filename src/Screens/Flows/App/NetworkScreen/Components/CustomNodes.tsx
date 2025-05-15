@@ -29,14 +29,18 @@ export const CustomNodes: React.FC<Props> = ({ onManageNodesClick }) => {
 
             {customNodes.length ? (
                 <BaseTouchableBox haptics="Light" action={onManageNodesClick} justifyContent="center">
-                    <BaseIcon name="icon-settings-2" color={theme.colors.primary} />
-                    <BaseText px={8} typographyFont="buttonSecondary">
-                        {LL.NETWORK_MANAGE_NODES()}
-                    </BaseText>
-                    <BaseView bg={theme.colors.primary} borderRadius={6} px={4} py={2}>
-                        <BaseText typographyFont="smallCaptionMedium" color={theme.colors.primaryReversed}>
-                            {customNodes.length}
-                        </BaseText>
+                    <BaseView flexDirection="row" alignItems="center" gap={8}>
+                        <BaseIcon name="icon-settings-2" color={theme.colors.text} />
+                        <BaseText typographyFont="buttonSecondary">{LL.NETWORK_MANAGE_NODES()}</BaseText>
+                        <BaseView
+                            bg={theme.isDark ? theme.colors.secondary : theme.colors.primary}
+                            borderRadius={8}
+                            px={4}
+                            py={2}>
+                            <BaseText typographyFont="captionSemiBold" color={theme.colors.textReversed}>
+                                {customNodes.length}
+                            </BaseText>
+                        </BaseView>
                     </BaseView>
                 </BaseTouchableBox>
             ) : (
