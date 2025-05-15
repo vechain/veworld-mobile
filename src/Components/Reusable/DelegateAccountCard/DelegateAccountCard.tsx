@@ -39,6 +39,7 @@ export const DelegateAccountCard = memo(({ account, onPress, selected, container
                 action={() => onPress?.(account)}
                 justifyContent="space-between"
                 containerStyle={[styles.container, selected ? styles.selectedContainer : {}, containerStyle]}
+                innerContainerStyle={styles.innerTouchable}
                 accessibilityValue={{ text: selected ? "selected" : "not selected" }}
                 px={12}
                 py={12}>
@@ -81,10 +82,13 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
             alignItems: "center",
             flexDirection: "row",
+            borderRadius: 8,
         },
         selectedContainer: {
             borderWidth: 1,
-            borderRadius: 16,
             borderColor: theme.colors.text,
+        },
+        innerTouchable: {
+            borderRadius: 8,
         },
     })
