@@ -19,6 +19,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  build-push-translations:
+    uses: ./.github/workflows/upload-translations.yml
+    secrets: inherit
+    
   build-and-test-ios:
     uses: ./.github/workflows/e2e-ios.yml
     secrets: inherit
