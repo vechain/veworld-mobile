@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { Animated, Linking, StyleSheet, ViewStyle } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import { Animated, Linking, Pressable, StyleSheet, ViewStyle } from "react-native"
 import { SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -27,7 +26,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
     testID,
     isExternalLink,
     onPress: propsOnPress,
-    onPressActivation = "after",
+    onPressActivation = "before",
     name,
     children,
     contentWrapperStyle,
@@ -50,9 +49,9 @@ export const BaseCarouselItem: React.FC<Props> = ({
 
     return (
         <Animated.View testID={testID} style={[style, styles.container]}>
-            <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
+            <Pressable onPress={onPress}>
                 <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>
-            </TouchableOpacity>
+            </Pressable>
         </Animated.View>
     )
 }
@@ -62,6 +61,7 @@ const baseStyles = () =>
         container: {
             flex: 1,
             width: SCREEN_WIDTH,
+            pointerEvents: "box-none",
         },
         contentWrapper: {
             flex: 1,
