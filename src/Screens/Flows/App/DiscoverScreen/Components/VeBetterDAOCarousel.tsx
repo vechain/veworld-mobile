@@ -1,6 +1,8 @@
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { BaseCarousel, CarouselSlideItem, useFeatureFlags } from "~Components"
 import { VeBetterDaoBanner, StellaPayBanner } from "./Banners"
+import { mixpanel } from "~Utils/AnalyticsUtils"
+import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
 
 const DAO_URL = "https://governance.vebetterdao.org"
 const STELLA_URL = "https://www.stellapay.io/b/WGWV"
@@ -32,6 +34,14 @@ export const VeBetterDAOCarousel = () => {
         })
     }, [featureFlags.discoveryFeature.showStellaPayBanner])
 
+    const onSlidePress = useCallback((name: string) => {
+        if (name === "stella") {
+            mixpanel.track(AnalyticsEvent.DISCOVERY_STELLAPAY_BANNER_CLICKED)
+        } else {
+            mixpanel.track(AnalyticsEvent.DISCOVERY_VEBETTERDAO_BANNER_CLICKED)
+        }
+    }, [])
+
     return (
         <BaseCarousel
             testID="VeBetterDao_carousel"
@@ -40,6 +50,8 @@ export const VeBetterDAOCarousel = () => {
             loop={false}
             autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
             showPagination={false}
+            onSlidePressActivation="before"
+            onSlidePress={onSlidePress}
         />
     )
 }
