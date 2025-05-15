@@ -47,14 +47,13 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
             {
                 id: DelegationType.ACCOUNT,
                 label: LL.SEND_DELEGATION_ACCOUNT(),
-                disabled: accounts.length === 0,
             },
             {
                 id: DelegationType.URL,
                 label: LL.SEND_DELEGATION_URL(),
             },
         ]
-    }, [LL, accounts.length])
+    }, [LL])
 
     // this function is called when a delegation option is selected
     const handleSelectDelegationOption = useCallback((button: BaseButtonGroupHorizontalType) => {
@@ -73,21 +72,21 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
         return ["90%"]
     }, [accounts.length, selectedOption])
 
-    const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
-        data: selectedOption === DelegationType.ACCOUNT ? accounts : [],
-        snapPoints: computeSnappoints,
-    })
-
     const hasDynamicHeight = useMemo(() => {
         switch (selectedOption) {
             case DelegationType.NONE:
                 return true
             case DelegationType.ACCOUNT:
-                return false
+                return accounts.length === 0
             case DelegationType.URL:
                 return true
         }
-    }, [selectedOption])
+    }, [selectedOption, accounts])
+
+    const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
+        data: !hasDynamicHeight ? accounts : [],
+        snapPoints: computeSnappoints,
+    })
 
     return (
         <BaseBottomSheet

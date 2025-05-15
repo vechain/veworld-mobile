@@ -5,7 +5,7 @@ import { ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 
 type Props = PropsWithChildren<{
-    label: string
+    label?: string
     style?: ViewStyle
 }>
 
@@ -22,7 +22,7 @@ export const Option = ({ label, children, style }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     return (
         <BaseView style={[styles.result, style]} gap={16} flexDirection="column">
-            <OptionText>{label}</OptionText>
+            {label && <OptionText>{label}</OptionText>}
             {children}
         </BaseView>
     )

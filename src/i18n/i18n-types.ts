@@ -2679,6 +2679,10 @@ type RootTranslation = {
 	 */
 	NFT_TRANSFER_SENT: string
 	/**
+	 * T​h​e​r​e​ ​a​r​e​ ​n​o​ ​a​c​c​o​u​n​t​s​ ​w​i​t​h​ ​V​T​H​O​ ​b​a​l​a​n​c​e​ ​t​o​ ​d​e​l​e​g​a​t​e
+	 */
+	NO_ACCOUNTS_VTHO: string
+	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: string
@@ -6909,6 +6913,10 @@ Thanks for your patience!
 	 * NFT sent
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
+	/**
+	 * There are no accounts with VTHO balance to delegate
+	 */
+	NO_ACCOUNTS_VTHO: () => LocalizedString
 	/**
 	 * Go to NFTs
 	 */
