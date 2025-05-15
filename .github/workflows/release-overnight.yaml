@@ -146,10 +146,37 @@ jobs:
               echo "New android_build: ${{ steps.increment.outputs.new_build_android }}"
               echo "PR Branch: ${{ steps.increment.outputs.pr_branch }}"
 
+    build-push-translations:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                fetch-depth: 0
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                node-version: 20.17
+            - name: Install
+              run: yarn --frozen-lockfile
+            - name: Generate translations
+              env:
+                OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+              run: |
+                find src/i18n/translations/ ! -name 'en.json' -type f -exec rm -f {} +
+                yarn translo-cli
+            - name: Upload artifact
+              uses: actions/upload-artifact@v4
+              with:
+                name: translations
+                path: src/i18n/translations/
+                retention-days: 1
     
     release-ios:
       uses: ./.github/workflows/release-ios.yml
-      needs: setup-version-build
+      needs: [setup-version-build, build-push-translations]
       secrets: inherit
       with:
         version: ${{ needs.setup-version-build.outputs.new_version_ios }}
@@ -157,9 +184,7 @@ jobs:
 
     release-android:
       uses: ./.github/workflows/release-andorid.yaml
-      needs: 
-        - setup-version-build
-        - release-ios
+      needs: [setup-version-build, build-push-translations]
       secrets: inherit
       with:
         version: ${{ needs.setup-version-build.outputs.new_version_android }}

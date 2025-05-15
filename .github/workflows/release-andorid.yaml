@@ -56,6 +56,12 @@ jobs:
             - name: Install & Patch packages
               run: yarn install
 
+            - name: Download translations
+              uses: actions/download-artifact@v4
+              with:
+                  name: translations
+                  path: src/i18n/translations/
+                                
             - name: Setup Java
               uses: actions/setup-java@v3
               with:

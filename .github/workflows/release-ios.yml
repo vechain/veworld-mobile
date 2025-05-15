@@ -50,6 +50,13 @@ jobs:
             - name: Install Node.js dependencies
               run: |
                   yarn install
+            
+            - name: Download translations
+              uses: actions/download-artifact@v4
+              with:
+                  name: translations
+                  path: src/i18n/translations/
+                
 
             # Install Homebrew and applesimutils for Detox
             - name: Install macOS dependencies
