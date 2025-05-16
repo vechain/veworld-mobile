@@ -6,7 +6,7 @@ import { TestWrapper, TestHelpers } from "~Test"
 const { VeBitcoinWithCompleteInfo } = TestHelpers.data
 
 describe("BridgeTokenBalanceCard", () => {
-    it("should render the component", () => {
+    it("should render the component", async () => {
         const { findByText } = render(
             <BridgeTokenBalanceCard
                 token={VeBitcoinWithCompleteInfo}
@@ -18,7 +18,9 @@ describe("BridgeTokenBalanceCard", () => {
                 wrapper: TestWrapper,
             },
         )
-        expect(findByText("VeBitcoin")).toBeTruthy()
+
+        const tokenName = await findByText("VeBitcoin")
+        await expect(tokenName).toBeOnTheScreen()
     })
 
     it("should render the component with balance", async () => {
