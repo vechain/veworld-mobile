@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.2 (2025-05-16)</small>
+
+* build: init ([b64f178](https://github.com/vechain/veworld-mobile/commit/b64f178))
+* 130 - Discover banner refactor (#2939) ([694fc65](https://github.com/vechain/veworld-mobile/commit/694fc65)), closes [#2939](https://github.com/vechain/veworld-mobile/issues/2939)
+
 ## <small>2.2.1 (2025-05-13)</small>
 
 * build: init ([51f6358](https://github.com/vechain/veworld-mobile/commit/51f6358))
