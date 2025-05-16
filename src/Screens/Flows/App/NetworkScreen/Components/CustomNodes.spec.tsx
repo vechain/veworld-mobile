@@ -1,9 +1,9 @@
+import { fireEvent, render } from "@testing-library/react-native"
 import React from "react"
-import { render, fireEvent } from "@testing-library/react-native"
-import { CustomNodes } from "./CustomNodes"
-import { TestWrapper } from "~Test"
-import { RootState } from "~Storage/Redux/Types"
 import { NETWORK_TYPE } from "~Model"
+import { RootState } from "~Storage/Redux/Types"
+import { TestWrapper } from "~Test"
+import { CustomNodes } from "./CustomNodes"
 
 const onManageNodesClick = jest.fn()
 
@@ -29,6 +29,7 @@ describe("CustomNodes", () => {
                     showTestNetTag: true,
                     showConversionOtherNets: true,
                     isNodeError: false,
+                    hardfork: {},
                 },
             }),
         })
@@ -73,6 +74,7 @@ describe("CustomNodes", () => {
                     showTestNetTag: true,
                     showConversionOtherNets: true,
                     isNodeError: false,
+                    hardfork: {},
                 },
             }),
         })
@@ -118,6 +120,7 @@ describe("CustomNodes", () => {
                     showTestNetTag: true,
                     showConversionOtherNets: true,
                     isNodeError: false,
+                    hardfork: {},
                 },
             }),
         })

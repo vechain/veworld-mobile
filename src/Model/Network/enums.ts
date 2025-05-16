@@ -4,3 +4,8 @@ export enum NETWORK_TYPE {
     OTHER = "other",
     SOLO = "solo",
 }
+
+export enum NetworkHardFork {
+    FINALITY = 0,
+    GALACTICA = 1,
+}

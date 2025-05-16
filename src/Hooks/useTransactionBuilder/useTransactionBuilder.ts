@@ -35,8 +35,8 @@ export const useTransactionBuilder = ({
         return Transaction.of({
             chainTag: parseInt(thor.genesis.id.slice(-2), 16),
             blockRef: thor.status.head.id.slice(0, 18),
-            // 5 minutes
-            expiration: 30,
+            // ~16 minutes
+            expiration: 100,
             clauses: clauses,
             gas: txGas,
             dependsOn: dependsOn ?? null,

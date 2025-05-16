@@ -80,7 +80,7 @@ const getFees = async (thorClient: ThorClient) => {
     }
 }
 
-export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
+export const useGalacticaFees = ({ isGalactica, gas }: Props) => {
     const thorClient = useThorClient()
 
     const {
@@ -88,10 +88,11 @@ export const useGalacticaFees = ({ isGalactica, blockId, gas }: Props) => {
         data: feesResponse,
         dataUpdatedAt,
     } = useQuery({
-        queryKey: ["GalacticaFees", blockId],
+        queryKey: ["GalacticaFees"],
         queryFn: () => getFees(thorClient),
         enabled: isGalactica,
         placeholderData: keepPreviousData,
+        refetchInterval: 10000,
     })
 
     const options = useMemo(() => {

@@ -10,7 +10,6 @@ type Props = {
     coefficient: GasPriceCoefficient
     gas: EstimateGasResult | undefined
     isGalactica: boolean
-    blockId?: string
 }
 
 export type TransactionFeesResult = Record<
@@ -22,7 +21,7 @@ export type TransactionFeesResult = Record<
     }
 >
 
-export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: Props) => {
+export const useTransactionFees = ({ gas, coefficient, isGalactica }: Props) => {
     const {
         isLoading: isGalacticaFeesLoading,
         options: galacticaOptions,
@@ -31,7 +30,7 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica, blockId }: P
         dataUpdatedAt,
         isBaseFeeRampingUp: galacticaBaseFeeRampingUp,
         speedChangeEnabled,
-    } = useGalacticaFees({ isGalactica, blockId, gas })
+    } = useGalacticaFees({ isGalactica, gas })
 
     const {
         isLoading: isLegacyFeesLoading,
