@@ -2066,7 +2066,7 @@ type RootTranslation = {
 	 */
 	DONT_SEE_NFTS_2: string
 	/**
-	 * E​d​i​t​ ​s​p​e​e​d
+	 * S​p​e​e​d
 	 */
 	EDIT_SPEED: string
 	/**
@@ -2679,10 +2679,6 @@ type RootTranslation = {
 	 */
 	NFT_TRANSFER_SENT: string
 	/**
-	 * T​h​e​r​e​ ​a​r​e​ ​n​o​ ​a​c​c​o​u​n​t​s​ ​w​i​t​h​ ​V​T​H​O​ ​b​a​l​a​n​c​e​ ​t​o​ ​d​e​l​e​g​a​t​e
-	 */
-	NO_ACCOUNTS_VTHO: string
-	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: string
@@ -2871,6 +2867,10 @@ type RootTranslation = {
 	 * N​o​v​e​m​b​e​r
 	 */
 	NOVEMBER: string
+	/**
+	 * T​h​e​r​e​ ​a​r​e​ ​n​o​ ​a​c​c​o​u​n​t​s​ ​w​i​t​h​ ​V​T​H​O​ ​b​a​l​a​n​c​e​ ​t​o​ ​d​e​l​e​g​a​t​e
+	 */
+	NO_ACCOUNTS_VTHO: string
 	/**
 	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
 	 * @param {string} name
@@ -6301,7 +6301,7 @@ Thanks for your patience!
 	 */
 	DONT_SEE_NFTS_2: () => LocalizedString
 	/**
-	 * Edit speed
+	 * Speed
 	 */
 	EDIT_SPEED: () => LocalizedString
 	/**
@@ -6914,10 +6914,6 @@ Thanks for your patience!
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
 	/**
-	 * There are no accounts with VTHO balance to delegate
-	 */
-	NO_ACCOUNTS_VTHO: () => LocalizedString
-	/**
 	 * Go to NFTs
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: () => LocalizedString
@@ -7089,6 +7085,10 @@ Thanks for your patience!
 	 * November
 	 */
 	NOVEMBER: () => LocalizedString
+	/**
+	 * There are no accounts with VTHO balance to delegate
+	 */
+	NO_ACCOUNTS_VTHO: () => LocalizedString
 	/**
 	 * You don't have any hidden {name}
 	 */
