@@ -105,20 +105,6 @@ export const BridgeTokenBalanceCard = ({ token, isBalanceVisible, foundToken, op
                 ),
                 testID: "reciveButton",
             },
-            buy: {
-                name: LL.BTN_BUY(),
-                action: () => {
-                    if (PlatformUtils.isIOS()) {
-                        openBlockedFeaturesIOSBottomSheet()
-                        return
-                    }
-                    nav.navigate(Routes.BUY_FLOW)
-                },
-                icon: (
-                    <BaseIcon size={16} color={theme.colors.actionBanner.buttonTextSecondary} name="icon-plus-circle" />
-                ),
-                testID: "buyButton",
-            },
         }),
         [
             LL,
