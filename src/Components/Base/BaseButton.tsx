@@ -1,14 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
-import { TouchableOpacity, TouchableOpacityProps, FlexAlignType, StyleSheet } from "react-native"
+import Lottie from "lottie-react-native"
 import React, { useCallback, useMemo } from "react"
+import { FlexAlignType, StyleSheet, TouchableOpacity, TouchableOpacityProps } from "react-native"
+import { StyleProps } from "react-native-reanimated"
+import { LoaderDark, LoaderLight } from "~Assets"
 import { ColorThemeType, TFonts } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { useThemedStyles } from "~Hooks"
-import { BaseText } from "./BaseText"
-import Lottie from "lottie-react-native"
-import { LoaderDark, LoaderLight } from "~Assets"
-import { StyleProps } from "react-native-reanimated"
 import HapticsService from "~Services/HapticsService"
+import { BaseText } from "./BaseText"
 
 const { defaults: defaultTypography, ...otherTypography } = typography
 
@@ -46,6 +46,7 @@ type Props = {
     flex?: number
     activeOpacity?: number
     disabledActionHaptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
+    numberOfLines?: number
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -65,6 +66,7 @@ export const BaseButton = ({
     invertLoaderColor = false,
     disabledAction,
     disabledActionHaptics,
+    numberOfLines,
     ...otherProps
 }: Props) => {
     const {
@@ -193,7 +195,8 @@ export const BaseButton = ({
                     fontFamily={fontFamily}
                     fontWeight={fontWeight}
                     fontSize={fontSize}
-                    style={themedStyles.text}>
+                    style={themedStyles.text}
+                    numberOfLines={numberOfLines}>
                     {title}
                     {children}
                 </BaseText>

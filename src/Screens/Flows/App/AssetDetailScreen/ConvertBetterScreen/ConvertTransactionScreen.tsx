@@ -119,7 +119,9 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
         isDisabledButtonState,
         gasOptions,
         gasUpdatedAt,
-        onRefreshFee,
+        isGalactica,
+        isBaseFeeRampingUp,
+        speedChangeEnabled,
     } = useTransactionScreen({
         clauses: transactionClauses,
         onTransactionSuccess,
@@ -164,7 +166,9 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                         options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
                         setSelectedFeeOption={setSelectedFeeOption}
-                        onRefreshFee={onRefreshFee}>
+                        isGalactica={isGalactica}
+                        isBaseFeeRampingUp={isBaseFeeRampingUp}
+                        speedChangeEnabled={speedChangeEnabled}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}

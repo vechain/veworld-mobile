@@ -182,7 +182,15 @@ export type Colors = {
             border: string
         }
     }
+    warningAlert: {
+        background: string
+        text: string
+        icon: string
+    }
     updatingText: string
+    stellaPayBanner: {
+        background: string[]
+    }
 }
 
 export enum COLORS {
@@ -462,7 +470,15 @@ const light: Colors = {
             border: COLORS.GREY_200,
         },
     },
+    warningAlert: {
+        background: COLORS.ORANGE_50,
+        text: COLORS.ORANGE_700,
+        icon: COLORS.ORANGE_500,
+    },
     updatingText: COLORS.GREEN_400,
+    stellaPayBanner: {
+        background: ["#0C2749", "#3EA2C3"],
+    },
 }
 
 const dark: Colors = {
@@ -649,7 +665,15 @@ const dark: Colors = {
             border: COLORS.TRANSPARENT,
         },
     },
+    warningAlert: {
+        background: COLORS.ORANGE_50,
+        text: COLORS.ORANGE_700,
+        icon: COLORS.ORANGE_500,
+    },
     updatingText: COLORS.GREEN_400,
+    stellaPayBanner: {
+        background: ["#0C2749", "#3EA2C3"],
+    },
 }
 
 export const colors = { light, dark }

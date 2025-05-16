@@ -1,7 +1,7 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { defaultMainNetwork, defaultNetworks } from "~Constants"
 import { RootState } from "../Types"
-import { NETWORK_TYPE } from "~Model"
+import { NETWORK_TYPE, NetworkHardFork } from "~Model"
 
 const selectNetworksState = (state: RootState) => state.networks
 
@@ -43,3 +43,8 @@ export const selectNetworkById = createSelector(
 export const selectIsNodeError = createSelector(selectNetworksState, state => {
     return state.isNodeError
 })
+
+export const selectSelectedNetworkHardfork = createSelector(
+    [selectSelectedNetwork, selectNetworksState],
+    (network, networks) => networks.hardfork[network.genesis.id] ?? NetworkHardFork.FINALITY,
+)

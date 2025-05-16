@@ -375,6 +375,10 @@ type RootTranslation = {
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: string
 	/**
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​t​a​k​e​ ​l​o​n​g​e​r​ ​t​o​ ​p​r​o​c​e​s​s​.
+	 */
+	BASE_FEE_RAMPING_UP: string
+	/**
 	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​a​c​c​e​s​s​ ​i​t​ ​b​y​ ​a​d​d​i​n​g​ ​n​e​w​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​t​h​e​ ​w​a​l​l​e​t​.
 	 */
 	BD_ACCOUNT_REMOVAL: string
@@ -2062,7 +2066,7 @@ type RootTranslation = {
 	 */
 	DONT_SEE_NFTS_2: string
 	/**
-	 * E​d​i​t​ ​s​p​e​e​d
+	 * S​p​e​e​d
 	 */
 	EDIT_SPEED: string
 	/**
@@ -2863,6 +2867,10 @@ type RootTranslation = {
 	 * N​o​v​e​m​b​e​r
 	 */
 	NOVEMBER: string
+	/**
+	 * T​h​e​r​e​ ​a​r​e​ ​n​o​ ​a​c​c​o​u​n​t​s​ ​w​i​t​h​ ​V​T​H​O​ ​b​a​l​a​n​c​e​ ​t​o​ ​d​e​l​e​g​a​t​e
+	 */
+	NO_ACCOUNTS_VTHO: string
 	/**
 	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
 	 * @param {string} name
@@ -4270,6 +4278,14 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * E​x​p​l​o​r​e​ ​t​h​e​ ​<​>​ ​p​l​a​t​f​o​r​m
+	 */
+	BANNER_VEBETTER_DESC: string
+	/**
+	 * G​e​t​ ​y​o​u​r​ ​<​>​ ​o​n​ ​<​>
+	 */
+	BANNER_STELLAPAY_DESC: string
 }
 
 export type TranslationFunctions = {
@@ -4614,6 +4630,10 @@ Try reconnect your device to the internet.
 	 * Claim your <><> for free now
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: () => LocalizedString
+	/**
+	 * The transaction may take longer to process.
+	 */
+	BASE_FEE_RAMPING_UP: () => LocalizedString
 	/**
 	 * Your account will be removed, but you can still access it by adding new accounts to the wallet.
 	 */
@@ -6289,7 +6309,7 @@ Thanks for your patience!
 	 */
 	DONT_SEE_NFTS_2: () => LocalizedString
 	/**
-	 * Edit speed
+	 * Speed
 	 */
 	EDIT_SPEED: () => LocalizedString
 	/**
@@ -7073,6 +7093,10 @@ Thanks for your patience!
 	 * November
 	 */
 	NOVEMBER: () => LocalizedString
+	/**
+	 * There are no accounts with VTHO balance to delegate
+	 */
+	NO_ACCOUNTS_VTHO: () => LocalizedString
 	/**
 	 * You don't have any hidden {name}
 	 */
@@ -8462,6 +8486,14 @@ Are you sure you want to continue?
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Explore the <> platform
+	 */
+	BANNER_VEBETTER_DESC: () => LocalizedString
+	/**
+	 * Get your <> on <>
+	 */
+	BANNER_STELLAPAY_DESC: () => LocalizedString
 }
 
 export type Formatters = {

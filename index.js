@@ -28,6 +28,11 @@ import {
     Mono_Extra_Bold,
     Mono_Light,
     Mono_Regular,
+    Rubik_Bold,
+    Rubik_Regular,
+    Rubik_SemiBold,
+    Rubik_Medium,
+    Rubik_Light,
 } from "~Assets"
 import { ERROR_EVENTS, typography } from "~Constants"
 import { AnalyticsUtils, info, URIUtils } from "~Utils"
@@ -73,6 +78,11 @@ const Main = () => {
         [fontFamily["Mono-Bold"]]: Mono_Bold,
         [fontFamily["Mono-Regular"]]: Mono_Regular,
         [fontFamily["Mono-Light"]]: Mono_Light,
+        [fontFamily["Rubik-Bold"]]: Rubik_Bold,
+        [fontFamily["Rubik-Regular"]]: Rubik_Regular,
+        [fontFamily["Rubik-SemiBold"]]: Rubik_SemiBold,
+        [fontFamily["Rubik-Medium"]]: Rubik_Medium,
+        [fontFamily["Rubik-Light"]]: Rubik_Light,
         [fontFamily.DesignSystemIcons]: DesignSystemIcons,
     })
 

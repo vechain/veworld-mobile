@@ -28,19 +28,34 @@ export const CustomNodes: React.FC<Props> = ({ onManageNodesClick }) => {
             <BaseSpacer height={16} />
 
             {customNodes.length ? (
-                <BaseTouchableBox haptics="Light" action={onManageNodesClick} justifyContent="center">
-                    <BaseIcon name="icon-settings-2" color={theme.colors.primary} />
-                    <BaseText px={8} typographyFont="buttonSecondary">
-                        {LL.NETWORK_MANAGE_NODES()}
-                    </BaseText>
-                    <BaseView bg={theme.colors.primary} borderRadius={6} px={4} py={2}>
-                        <BaseText typographyFont="smallCaptionMedium" color={theme.colors.primaryReversed}>
-                            {customNodes.length}
-                        </BaseText>
+                <BaseTouchableBox
+                    testID="manage-nodes-button"
+                    haptics="Light"
+                    action={onManageNodesClick}
+                    justifyContent="center">
+                    <BaseView flexDirection="row" alignItems="center" gap={8}>
+                        <BaseIcon name="icon-settings-2" color={theme.colors.text} />
+                        <BaseText typographyFont="buttonSecondary">{LL.NETWORK_MANAGE_NODES()}</BaseText>
+                        <BaseView
+                            bg={theme.isDark ? theme.colors.secondary : theme.colors.primary}
+                            borderRadius={8}
+                            px={4}
+                            py={2}>
+                            <BaseText
+                                testID="custom-nodes-count"
+                                typographyFont="captionSemiBold"
+                                color={theme.colors.textReversed}>
+                                {customNodes.length}
+                            </BaseText>
+                        </BaseView>
                     </BaseView>
                 </BaseTouchableBox>
             ) : (
-                <BaseTouchableBox haptics="Light" action={onAddCustomPress} justifyContent="center">
+                <BaseTouchableBox
+                    testID="add-custom-node-button"
+                    haptics="Light"
+                    action={onAddCustomPress}
+                    justifyContent="center">
                     <BaseIcon name="icon-plus" color={theme.colors.text} />
                     <BaseText pl={8} typographyFont="buttonSecondary">
                         {LL.NETWORK_ADD_CUSTOM_NODE()}

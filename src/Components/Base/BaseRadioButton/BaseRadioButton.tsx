@@ -17,6 +17,7 @@ type Props = {
     onPress: (id: string) => void
     contentStyle?: ViewStyle
     labelStyle?: TextStyle
+    labelContainerStyle?: ViewStyle
     numberOfLines?: number
     rootStyle?: ViewStyle
     ellipsizeMode?: BaseTextProps["ellipsizeMode"]
@@ -35,6 +36,7 @@ export const BaseRadioButton = ({
     numberOfLines,
     rootStyle,
     ellipsizeMode,
+    labelContainerStyle,
 }: Props) => {
     const { styles, theme } = useThemedStyles(_theme => baseStyles(_theme, isSelected))
 
@@ -78,7 +80,8 @@ export const BaseRadioButton = ({
                     style={[computedTextStyles, labelStyle]}
                     lineHeight={20}
                     numberOfLines={numberOfLines}
-                    ellipsizeMode={ellipsizeMode}>
+                    ellipsizeMode={ellipsizeMode}
+                    containerStyle={labelContainerStyle}>
                     {label}
                 </BaseText>
                 <BaseIcon

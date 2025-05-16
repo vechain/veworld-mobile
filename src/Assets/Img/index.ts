@@ -12,6 +12,8 @@ const dark_nft_placeholder = require("./NFTPlaceholder_Dark.png")
 const light_nft_placeholder = require("./NFTPlaceholder_Light.png")
 const clouds = require("./Clouds.png")
 export const CoinifyLogo = require("./coinify_logo.png")
+export const StellaPayBannerB3MO = require("./StellaPayBanner_B3MO.png")
+export const VeBetterDaoBannerB3MO = require("./VeBetterDaoBanner_B3MO.png")
 
 export const NFTPlaceholderDark = dark_nft_placeholder
 export const NFTPlaceholderLight = light_nft_placeholder

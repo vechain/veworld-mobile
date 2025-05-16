@@ -1,6 +1,6 @@
 import { default as React, ReactNode, useCallback, useState } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputChangeEventData } from "react-native"
-import { BaseIcon, BaseRadioButton, BaseTextInput, BaseView } from "~Components/Base"
+import { BaseBottomSheetTextInput, BaseIcon, BaseRadioButton, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -36,7 +36,7 @@ export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: P
     return (
         <>
             <Option label={LL.DELEGATE_URL()}>
-                <BaseTextInput
+                <BaseBottomSheetTextInput
                     value={url}
                     onChange={onChange}
                     leftIcon={<BaseIcon haptics="Light" name={"icon-link"} size={20} color={theme.colors.textLight} />}
@@ -60,6 +60,8 @@ export const UrlOption = ({ selectedDelegationUrl, children, delegationUrls }: P
                                     rootStyle={styles.radio}
                                     ellipsizeMode="middle"
                                     testID={`URL_OPTION_${new URL(delUrl).hostname}_${new URL(delUrl).pathname}`}
+                                    contentStyle={styles.radioContent}
+                                    labelContainerStyle={styles.radioLabelContainer}
                                 />
                             ))}
                         </BaseView>
@@ -82,9 +84,20 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRightColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : theme.colors.neutralVariant.border,
             borderTopLeftRadius: 7,
             borderBottomLeftRadius: 7,
-            padding: 14,
+            padding: 12,
         },
         radio: {
             backgroundColor: theme.isDark ? COLORS.PURPLE : theme.colors.radioButton.backgroudColor,
+            maxWidth: "100%",
+        },
+        radioContent: {
+            gap: 12,
+            alignItems: "center",
+        },
+        radioLabel: {
+            lineHeight: 14,
+        },
+        radioLabelContainer: {
+            flex: 1,
         },
     })
