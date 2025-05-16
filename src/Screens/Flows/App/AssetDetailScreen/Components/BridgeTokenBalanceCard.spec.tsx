@@ -19,7 +19,7 @@ describe("BridgeTokenBalanceCard", () => {
             },
         )
 
-        const tokenName = await findByText("VeBitcoin")
+        const tokenName = await findByText("BTC")
         await expect(tokenName).toBeOnTheScreen()
     })
 
