@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.2 (2025-05-16)</small>
+
+* build: init ([5f07930](https://github.com/vechain/veworld-mobile/commit/5f07930))
+* fix: update StellaPay URL in VeBetterDAOCarousel component (#2945) ([9a442e8](https://github.com/vechain/veworld-mobile/commit/9a442e8)), closes [#2945](https://github.com/vechain/veworld-mobile/issues/2945)
+
 ## <small>2.2.1 (2025-05-13)</small>
 
 * build: init ([51f6358](https://github.com/vechain/veworld-mobile/commit/51f6358))
