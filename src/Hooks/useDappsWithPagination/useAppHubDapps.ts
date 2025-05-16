@@ -24,7 +24,6 @@ const filterDapps = (filter: DAppType, vbdDapps: VeBetterDaoDapp[] | undefined) 
         case DAppType.SUSTAINABILTY:
             return (
                 dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()) &&
-                Boolean(dapp.veBetterDaoId) &&
                 vbdDapps?.find(vbdDapp => vbdDapp.id.toLowerCase() === dapp.veBetterDaoId?.toLowerCase())
             )
         case DAppType.NFT:
