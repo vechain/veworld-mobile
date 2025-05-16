@@ -1,10 +1,8 @@
 import { abi } from "thor-devkit"
 
 type Vot3AbiKeys = "convertToB3TR" | "convertToVOT3"
-type XAllocationVotingAbiKeys = "currentRoundId" | "getAppsOfRound"
-type XAllocationPoolAbiKeys = "getMaxAppAllocation" | "getAppShares"
 
-export const X2EarnDapps: abi.Function.Definition = {
+export const X2EarnDapps = {
     inputs: [],
     name: "apps",
     outputs: [
@@ -48,7 +46,7 @@ export const X2EarnDapps: abi.Function.Definition = {
     ],
     stateMutability: "view",
     type: "function",
-}
+} as const satisfies abi.Function.Definition
 
 export const B3trAbis: Record<"approve", abi.Function.Definition> = {
     approve: {
@@ -106,7 +104,7 @@ export const Vot3Abis: Record<Vot3AbiKeys, abi.Function.Definition> = {
     },
 }
 
-export const XAllocationVoting: Record<XAllocationVotingAbiKeys, abi.Function.Definition> = {
+export const XAllocationVoting = {
     currentRoundId: {
         inputs: [],
         name: "currentRoundId",
@@ -171,9 +169,9 @@ export const XAllocationVoting: Record<XAllocationVotingAbiKeys, abi.Function.De
         stateMutability: "view",
         type: "function",
     },
-}
+} as const
 
-export const XAllocationPool: Record<XAllocationPoolAbiKeys, abi.Function.Definition> = {
+export const XAllocationPool = {
     getMaxAppAllocation: {
         inputs: [
             {
@@ -222,4 +220,4 @@ export const XAllocationPool: Record<XAllocationPoolAbiKeys, abi.Function.Defini
         stateMutability: "view",
         type: "function",
     },
-}
+} as const

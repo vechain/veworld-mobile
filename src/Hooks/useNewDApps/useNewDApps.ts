@@ -1,9 +1,9 @@
-import { useMemo } from "react"
-import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
-import { useAppSelector, selectFeaturedDapps } from "~Storage/Redux"
 import moment from "moment"
-import { BigNutils } from "~Utils"
+import { useMemo } from "react"
+import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps"
 import { VeBetterDaoDapp } from "~Model"
+import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
+import { BigNutils } from "~Utils"
 
 const secondsToMsTimestamp = (timestamp: string) => BigNutils(timestamp).multiply(1000).toNumber
 const sortByTimestamp = (a: { vbd: VeBetterDaoDapp | undefined }, b: { vbd: VeBetterDaoDapp | undefined }) =>
@@ -11,7 +11,7 @@ const sortByTimestamp = (a: { vbd: VeBetterDaoDapp | undefined }, b: { vbd: VeBe
 
 export const useNewDApps = () => {
     const dapps = useAppSelector(selectFeaturedDapps)
-    const { data: veBetterDaoDapps, isLoading } = useVeBetterDaoDapps()
+    const { data: veBetterDaoDapps, isLoading } = useVeBetterDaoActiveDapps()
 
     const newDapps = useMemo(() => {
         const threeMonthsAgo = moment().subtract(3, "months")
@@ -22,8 +22,7 @@ export const useNewDApps = () => {
                 const foundDapp = veBetterDaoDapps?.find(
                     vbdDapp =>
                         dapp.veBetterDaoId === vbdDapp.id &&
-                        moment(secondsToMsTimestamp(vbdDapp.createdAtTimestamp)).isAfter(threeMonthsAgo) &&
-                        vbdDapp.appAvailableForAllocationVoting, // Filter out dapps that aren't endorsed
+                        moment(secondsToMsTimestamp(vbdDapp.createdAtTimestamp)).isAfter(threeMonthsAgo),
                 )
                 return { dapp, vbd: foundDapp }
             })

@@ -9,6 +9,10 @@ export const selectDefaultNetworks = createSelector(selectNetworksState, _state 
     return defaultNetworks
 })
 
+export const selectDefaultMainnet = createSelector(selectDefaultNetworks, defaults => {
+    return defaults.find(u => u.type === NETWORK_TYPE.MAIN)!
+})
+
 // is type redundant? should we check for genesisid directly?
 export const selectNetworksByType = (type: NETWORK_TYPE) =>
     createSelector(selectNetworks, state => {

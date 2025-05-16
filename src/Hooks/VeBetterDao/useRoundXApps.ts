@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
-import { useThor } from "~Components"
+import { ThorClient } from "@vechain/sdk-network"
 import { abis, VEBETTER_DAO_XALLOCATION_VOTING_CONTRACT } from "~Constants"
+import { useMainnetThorClient } from "~Hooks/useThorClient"
 
 /**
  * xApp type
@@ -9,7 +10,6 @@ import { abis, VEBETTER_DAO_XALLOCATION_VOTING_CONTRACT } from "~Constants"
  * @property name - the xApp name
  * @property metadataURI - the xApp metadata URI
  * @property createdAtTimestamp - timestamp when xApp was added
- * @property isNew - whether the xApp is considered new as per {@link NEW_APP_PERIOD_SECONDS}
  */
 export type XApp = {
     id: string
@@ -17,7 +17,6 @@ export type XApp = {
     name: string
     metadataURI: string
     createdAtTimestamp: string
-    isNew: boolean
 }
 
 /**
@@ -26,22 +25,21 @@ export type XApp = {
  * @param roundId  the id of the round the get state for
  * @returns  all the available xApps (apps that can be voted on for allocation) capped to 256 see {@link XApp}
  */
-export const getRoundXApps = async (thor: Connex.Thor, roundId?: string): Promise<XApp[]> => {
+export const getRoundXApps = async (thor: ThorClient, roundId?: string): Promise<XApp[]> => {
     if (!roundId) return []
     const currentRoundAbi = abis.VeBetterDao.XAllocationVoting.getAppsOfRound
 
     if (!currentRoundAbi) throw new Error("getXApps function not found")
-    const res = await thor.account(VEBETTER_DAO_XALLOCATION_VOTING_CONTRACT).method(currentRoundAbi).call(roundId)
+    // const res = await thor.account(VEBETTER_DAO_XALLOCATION_VOTING_CONTRACT).method(currentRoundAbi).call(roundId)
+    const res = await thor.contracts
+        .load(VEBETTER_DAO_XALLOCATION_VOTING_CONTRACT, [abis.VeBetterDao.XAllocationVoting.getAppsOfRound])
+        .read.getAppsOfRound(BigInt(roundId))
 
-    if (res.vmError) return Promise.reject(new Error(res.vmError))
-
-    const apps = res.decoded[0]
-    return apps.map((app: any) => ({
-        id: app[0],
-        teamWalletAddress: app[1],
-        name: app[2],
-        metadataURI: app[3],
-        createdAtTimestamp: app[4],
+    const apps = res[0]
+    return apps.map(app => ({
+        ...app,
+        id: app.id as string,
+        createdAtTimestamp: app.createdAtTimestamp.toString(),
     }))
 }
 
@@ -55,7 +53,7 @@ export const getRoundXAppsQueryKey = (roundId?: string) => ["round", roundId, "g
  *  @returns all the available xApps (apps that can be voted on for allocation) capped to 256
  */
 export const useRoundXApps = (roundId?: string) => {
-    const thor = useThor()
+    const thor = useMainnetThorClient()
 
     return useQuery({
         queryKey: getRoundXAppsQueryKey(roundId),
