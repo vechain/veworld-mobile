@@ -32,6 +32,13 @@ const initialState: FeatureFlags = {
         bannersAutoplay: true,
         showStellaPayBanner: false,
     },
+    forks: {
+        GALACTICA: {
+            transactions: {
+                ledger: false,
+            },
+        },
+    },
 }
 
 const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)

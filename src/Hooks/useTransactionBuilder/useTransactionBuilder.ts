@@ -12,6 +12,8 @@ type Props = {
     isDelegated: boolean
     dependsOn?: string
     gasPriceCoef?: number
+    maxPriorityFeePerGas?: string
+    maxFeePerGas?: string
 }
 
 export const useTransactionBuilder = ({
@@ -20,6 +22,8 @@ export const useTransactionBuilder = ({
     clauses,
     isDelegated,
     gasPriceCoef = GasPriceCoefficient.REGULAR,
+    maxPriorityFeePerGas,
+    maxFeePerGas,
 }: Props) => {
     const thor = useThor()
 
@@ -31,10 +35,9 @@ export const useTransactionBuilder = ({
         return Transaction.of({
             chainTag: parseInt(thor.genesis.id.slice(-2), 16),
             blockRef: thor.status.head.id.slice(0, 18),
-            // 5 minutes
-            expiration: 30,
+            // ~16 minutes
+            expiration: 100,
             clauses: clauses,
-            gasPriceCoef,
             gas: txGas,
             dependsOn: dependsOn ?? null,
             nonce: nonce,
@@ -43,8 +46,26 @@ export const useTransactionBuilder = ({
                     features: 1,
                 },
             }),
+            ...(maxFeePerGas && maxPriorityFeePerGas
+                ? {
+                      maxFeePerGas: `0x${BigInt(maxFeePerGas).toString(16)}`,
+                      maxPriorityFeePerGas: `0x${BigInt(maxPriorityFeePerGas).toString(16)}`,
+                  }
+                : {
+                      gasPriceCoef,
+                  }),
         })
-    }, [gas?.gas, thor.genesis.id, thor.status.head.id, clauses, gasPriceCoef, dependsOn, isDelegated])
+    }, [
+        gas?.gas,
+        thor.genesis.id,
+        thor.status.head.id,
+        clauses,
+        dependsOn,
+        isDelegated,
+        maxFeePerGas,
+        maxPriorityFeePerGas,
+        gasPriceCoef,
+    ])
 
     return {
         buildTransaction,

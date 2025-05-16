@@ -182,6 +182,11 @@ export type Colors = {
             border: string
         }
     }
+    warningAlert: {
+        background: string
+        text: string
+        icon: string
+    }
     updatingText: string
 }
 
@@ -462,6 +467,11 @@ const light: Colors = {
             border: COLORS.GREY_200,
         },
     },
+    warningAlert: {
+        background: COLORS.ORANGE_50,
+        text: COLORS.ORANGE_700,
+        icon: COLORS.ORANGE_500,
+    },
     updatingText: COLORS.GREEN_400,
 }
 
@@ -648,6 +658,11 @@ const dark: Colors = {
             background: COLORS.PURPLE_DISABLED,
             border: COLORS.TRANSPARENT,
         },
+    },
+    warningAlert: {
+        background: COLORS.ORANGE_50,
+        text: COLORS.ORANGE_700,
+        icon: COLORS.ORANGE_500,
     },
     updatingText: COLORS.GREEN_400,
 }

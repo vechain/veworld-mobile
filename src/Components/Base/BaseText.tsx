@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useMemo } from "react"
-import { FlexAlignType, Text, TextProps, TextStyle } from "react-native"
+import { FlexAlignType, Text, TextProps, TextStyle, ViewStyle } from "react-native"
 import { typography } from "~Constants/Theme"
 import { useTheme } from "~Hooks"
 import { BaseView, BaseViewProps } from "./BaseView"
@@ -37,11 +37,22 @@ export type BaseTextProps = {
     alignContainer?: FlexAlignType
     justifyContainer?: "flex-start" | "flex-end" | "center" | "space-between" | "space-around" | "space-evenly"
     textTransform?: TextStyle["textTransform"]
+    containerStyle?: ViewStyle
 } & TextProps &
     Pick<BaseViewProps, "flex" | "flexGrow" | "flexShrink">
 
 export const BaseText = (props: BaseTextProps) => {
-    const { style, typographyFont, fontSize, fontWeight, fontFamily, lineHeight, textTransform, ...otherProps } = props
+    const {
+        style,
+        typographyFont,
+        fontSize,
+        fontWeight,
+        fontFamily,
+        lineHeight,
+        textTransform,
+        containerStyle,
+        ...otherProps
+    } = props
     const theme = useTheme()
 
     const computedFontSize = useMemo(
@@ -93,7 +104,8 @@ export const BaseText = (props: BaseTextProps) => {
             h={props.h}
             flex={props.flex}
             flexGrow={props.flexGrow}
-            flexShrink={props.flexShrink}>
+            flexShrink={props.flexShrink}
+            style={containerStyle}>
             <Text
                 style={[
                     {

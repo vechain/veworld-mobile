@@ -1,6 +1,6 @@
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { showErrorToast, showWarningToast } from "~Components"
+import { showErrorToast, showWarningToast, useFeatureFlags } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import {
     SignStatus,
@@ -13,12 +13,13 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
+import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
-import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectDevice, selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { error, GasUtils } from "~Utils"
 import { useVTHO_HACK } from "./useVTHO_HACK"
 
@@ -59,6 +60,10 @@ export const useTransactionScreen = ({
 
     const track = useAnalyticTracking()
 
+    const account = useAppSelector(selectSelectedAccount)
+    const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
+    const { forks } = useFeatureFlags()
+
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
         clauses,
@@ -79,6 +84,8 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
+    const { isGalactica: isGalacticaRaw, loading: isGalacticaLoading } = useIsGalactica()
+
     const onTransactionSuccess: typeof propsOnTransactionSuccess = useCallback(
         (tx, id) => {
             track(AnalyticsEvent.TRANSACTION_SEND_GAS, { gasOption: mapGasPriceCoefficient(selectedFeeOption) })
@@ -88,8 +95,18 @@ export const useTransactionScreen = ({
         [propsOnTransactionSuccess, selectedDelegationOption, selectedFeeOption, track],
     )
 
+    const isGalactica = useMemo(() => {
+        if (!isGalacticaRaw) return false
+        if (senderDevice?.type === DEVICE_TYPE.LEDGER) return forks?.GALACTICA?.transactions?.ledger || false
+        return true
+    }, [forks?.GALACTICA?.transactions?.ledger, isGalacticaRaw, senderDevice?.type])
+
     // 3. Priority fees
-    const transactionFeesResponse = useTransactionFees({ coefficient: selectedFeeOption, gas })
+    const transactionFeesResponse = useTransactionFees({
+        coefficient: selectedFeeOption,
+        gas,
+        isGalactica,
+    })
 
     // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
@@ -97,7 +114,7 @@ export const useTransactionScreen = ({
         gas,
         isDelegated,
         dependsOn: dappRequest?.options?.dependsOn,
-        gasPriceCoef: transactionFeesResponse.gasPriceCoef,
+        ...transactionFeesResponse.txOptions[selectedFeeOption],
     })
 
     // 5. Sign transaction
@@ -212,8 +229,8 @@ export const useTransactionScreen = ({
     ])
 
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty || transactionFeesResponse.isLoading,
-        [loading, loadingGas, isBiometricsEmpty, transactionFeesResponse.isLoading],
+        () => loading || loadingGas || isBiometricsEmpty || transactionFeesResponse.isLoading || isGalacticaLoading,
+        [loading, loadingGas, isBiometricsEmpty, transactionFeesResponse.isLoading, isGalacticaLoading],
     )
 
     /**
@@ -238,11 +255,10 @@ export const useTransactionScreen = ({
             loading ||
             isSubmitting.current ||
             transactionFeesResponse.isLoading ||
-            (gas?.gas ?? 0) === 0,
-        [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading, gas?.gas],
+            (gas?.gas ?? 0) === 0 ||
+            isGalacticaLoading,
+        [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading, gas?.gas, isGalacticaLoading],
     )
-
-    const onRefreshFee = useCallback(() => {}, [])
 
     return {
         selectedDelegationOption,
@@ -264,11 +280,12 @@ export const useTransactionScreen = ({
         selectedDelegationUrl,
         vtho,
         isDisabledButtonState,
-        priorityFee: transactionFeesResponse.priorityFee,
         estimatedFee: transactionFeesResponse.estimatedFee,
         maxFee: transactionFeesResponse.maxFee,
         gasOptions: transactionFeesResponse.options,
         gasUpdatedAt: transactionFeesResponse.dataUpdatedAt,
-        onRefreshFee,
+        isGalactica,
+        isBaseFeeRampingUp: transactionFeesResponse.isBaseFeeRampingUp,
+        speedChangeEnabled: transactionFeesResponse.speedChangeEnabled,
     }
 }
