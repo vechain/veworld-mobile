@@ -18,6 +18,10 @@ export interface Token {
     icon: string
     custom: boolean
     desc?: string
+    crossChainProvider?: {
+        name: string
+        url: string
+    }
 }
 
 /**

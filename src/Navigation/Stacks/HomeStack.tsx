@@ -15,6 +15,7 @@ import { Routes } from "~Navigation/Enums"
 import {
     AddCustomNodeScreen,
     AssetDetailScreen,
+    BridgeAssetDetailScreen,
     ChangeNetworkScreen,
     ClaimUsername,
     ConnectedAppsScreen,
@@ -90,6 +91,9 @@ export type RootStackParamListHome = {
             amount: string
             txId: string
         }
+    }
+    [Routes.BRIDGE_TOKEN_DETAILS]: {
+        token: FungibleTokenWithBalance
     }
     [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
         token: TokenWithCompleteInfo
@@ -173,6 +177,11 @@ export const HomeStack = () => {
                 />
 
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.BRIDGE_TOKEN_DETAILS}
+                    component={BridgeAssetDetailScreen}
+                    options={{ headerShown: false }}
+                />
                 <Screen
                     name={Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN}
                     component={ConvertTransactionScreen}

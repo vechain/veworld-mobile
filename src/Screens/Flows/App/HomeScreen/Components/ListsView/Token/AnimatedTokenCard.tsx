@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { RenderItemParams } from "react-native-draggable-flatlist"
 import { BaseIcon, BaseView } from "~Components"
@@ -7,7 +7,7 @@ import { ColorThemeType } from "~Constants"
 import { TokenCard } from "./TokenCard"
 import { FungibleTokenWithBalance } from "~Model"
 import HapticsService from "~Services/HapticsService"
-
+import { BridgeTokenCard } from "./BridgeTokenCard"
 interface IAnimatedTokenCard extends RenderItemParams<FungibleTokenWithBalance> {
     isEdit: boolean
     isBalanceVisible: boolean
@@ -15,6 +15,10 @@ interface IAnimatedTokenCard extends RenderItemParams<FungibleTokenWithBalance> 
 
 export const AnimatedTokenCard = ({ item, drag, isActive, isEdit, isBalanceVisible }: IAnimatedTokenCard) => {
     const { styles, theme } = useThemedStyles(baseStyles(isActive))
+
+    const isBridgeToken = useMemo(() => {
+        return !!item.crossChainProvider
+    }, [item.crossChainProvider])
 
     useEffect(() => {
         isEdit && HapticsService.triggerImpact({ level: "Light" })
@@ -30,7 +34,11 @@ export const AnimatedTokenCard = ({ item, drag, isActive, isEdit, isBalanceVisib
                     <BaseIcon color={theme.colors.text} name={"icon-grip-vertical"} size={30} />
                 </Pressable>
             )}
-            <TokenCard tokenWithBalance={item} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
+            {isBridgeToken ? (
+                <BridgeTokenCard tokenWithBalance={item} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
+            ) : (
+                <TokenCard tokenWithBalance={item} isEdit={isEdit} isBalanceVisible={isBalanceVisible} />
+            )}
         </BaseView>
     )
 }

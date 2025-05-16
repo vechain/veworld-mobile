@@ -1,14 +1,13 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { useCallback, useEffect, useMemo } from "react"
+import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { B3TR } from "~Constants"
-import { typography } from "~Constants/Theme"
-import { useBottomSheetModal, useBottomSheetRef, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { ColorThemeType, typography } from "~Constants/Theme"
+import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import striptags from "striptags"
 import {
     selectBalanceVisible,
     selectSelectedAccount,
@@ -16,31 +15,25 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
-import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
+import { AssetChart, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
+import Markdown from "react-native-markdown-display"
+import { useNavigation } from "@react-navigation/native"
 
-type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
+type Props = NativeStackScreenProps<RootStackParamListHome, Routes.BRIDGE_TOKEN_DETAILS>
 
 const { defaults: defaultTypography } = typography
 
-export const AssetDetailScreen = ({ route }: Props) => {
-    const { token, betterConversionResult } = route.params
+export const BridgeAssetDetailScreen = ({ route }: Props) => {
+    const { token } = route.params
     const { styles } = useThemedStyles(baseStyles)
-    const { LL, locale } = useI18nContext()
-
+    const { LL } = useI18nContext()
+    const navigation = useNavigation()
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
-
-    const {
-        ref: convertBetterSuccessBottomSheetRef,
-        onOpen: openConvertSuccessBetterSheet,
-        onClose: closeConvertSuccessBetterSheet,
-    } = useBottomSheetModal()
-
-    const convertB3trBsRef = useBottomSheetRef()
 
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
@@ -51,34 +44,48 @@ export const AssetDetailScreen = ({ route }: Props) => {
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
 
-    const tokenName = useMemo(
-        () => (token.symbol === B3TR.symbol ? LL.TITLE_VEBETTER() : token.name),
-        [LL, token.name, token.symbol],
-    )
-
-    // render description based on locale. NB: at the moment only EN is supported
-    const description = useMemo(() => {
-        if (!tokenWithCompleteInfo?.tokenInfo?.description) return ""
-
-        return tokenWithCompleteInfo?.tokenInfo?.description[locale] ?? tokenWithCompleteInfo?.tokenInfo?.description.en
-    }, [tokenWithCompleteInfo?.tokenInfo?.description, locale])
-
     const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
-    const onFailedConversion = useCallback(() => {
-        closeConvertSuccessBetterSheet()
-        convertB3trBsRef.current?.present()
-    }, [closeConvertSuccessBetterSheet, convertB3trBsRef])
-
-    useEffect(() => {
-        if (betterConversionResult) {
-            openConvertSuccessBetterSheet()
+    const tokenLabel = useMemo(() => {
+        switch (token.symbol) {
+            case "BTC":
+                return "Bitcoin"
+            case "ETH":
+                return "Ethereum"
+            case "SOL":
+                return "Solana"
+            case "XRP":
+                return "Ripple"
+            case "WAN":
+                return "Wanchain"
+            case "USDT":
+                return "Tether"
+            case "USDC":
+                return "USDC"
+            default:
+                return token.name
         }
-    }, [betterConversionResult, openConvertSuccessBetterSheet])
+    }, [token.symbol, token.name])
+
+    const tokenDescription = useMemo(() => {
+        return token.symbol === "USDT" || token.symbol === "USDC"
+            ? LL.ABOUT_BRIDGE_USD_TOKEN({
+                  label: tokenLabel,
+                  name: token.name,
+                  symbol: token.symbol,
+                  url: token.crossChainProvider?.url ?? "",
+              })
+            : LL.ABOUT_BRIDGE_TOKEN({
+                  label: tokenLabel,
+                  name: token.name,
+                  symbol: token.symbol,
+                  url: token.crossChainProvider?.url ?? "",
+              })
+    }, [token.symbol, token.name, token.crossChainProvider?.url, tokenLabel, LL])
 
     return (
         <Layout
-            title={tokenName}
+            title={token.name}
             fixedBody={
                 <ScrollView>
                     <BaseSpacer height={16} />
@@ -93,7 +100,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
                             isBalanceVisible={isBalanceVisible}
                             openQRCodeSheet={openQRCodeSheet}
                             isObserved={isObserved}
-                            convertB3trBottomSheetRef={convertB3trBsRef}
                         />
 
                         {token.symbol === B3TR.symbol && (
@@ -105,23 +111,25 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={40} />
 
-                        {/* TODO: handle loading/skeleton */}
-                        {!!description && (
-                            <>
-                                <BaseText
-                                    typographyFont="bodySemiBold"
-                                    align="left"
-                                    alignContainer="flex-start"
-                                    w={100}
-                                    mb={12}>
-                                    {LL.TITLE_ABOUT()} {tokenName}
-                                </BaseText>
+                        <BaseText
+                            typographyFont="bodySemiBold"
+                            align="left"
+                            alignContainer="flex-start"
+                            w={100}
+                            mb={12}>
+                            {LL.TITLE_ABOUT()} {token.name}
+                        </BaseText>
 
-                                <BaseText style={styles.tokenInfoText}>
-                                    {striptags(description.trim(), ["strong"])}
-                                </BaseText>
-                            </>
-                        )}
+                        <BaseText style={styles.tokenInfoText}>
+                            <Markdown
+                                style={{ body: styles.markdownText }}
+                                onLinkPress={url => {
+                                    navigation.navigate(Routes.BROWSER, { url })
+                                    return false
+                                }}>
+                                {tokenDescription}
+                            </Markdown>
+                        </BaseText>
 
                         <BaseSpacer height={24} />
 
@@ -129,25 +137,21 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <BaseSpacer height={16} />
                     </BaseView>
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-
-                    <ConvertedBetterBottomSheet
-                        ref={convertBetterSuccessBottomSheetRef}
-                        onClose={closeConvertSuccessBetterSheet}
-                        onFailure={onFailedConversion}
-                        {...betterConversionResult}
-                    />
                 </ScrollView>
             }
         />
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         assetDetailsBody: {
             paddingHorizontal: 16,
         },
         tokenInfoText: {
             lineHeight: defaultTypography.bodySemiBold.lineHeight,
+        },
+        markdownText: {
+            color: theme.colors.text,
         },
     })
