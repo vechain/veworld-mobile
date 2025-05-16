@@ -4,11 +4,10 @@ import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { B3TR } from "~Constants"
-import { typography } from "~Constants/Theme"
+import { ColorThemeType, typography } from "~Constants/Theme"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
-import striptags from "striptags"
 import {
     selectBalanceVisible,
     selectSelectedAccount,
@@ -18,6 +17,8 @@ import {
 import { AccountUtils } from "~Utils"
 import { AssetChart, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
+import Markdown from "react-native-markdown-display"
+import { useNavigation } from "@react-navigation/native"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.BRIDGE_TOKEN_DETAILS>
 
@@ -26,8 +27,8 @@ const { defaults: defaultTypography } = typography
 export const BridgeAssetDetailScreen = ({ route }: Props) => {
     const { token } = route.params
     const { styles } = useThemedStyles(baseStyles)
-    const { LL, locale } = useI18nContext()
-
+    const { LL } = useI18nContext()
+    const navigation = useNavigation()
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
@@ -43,39 +44,48 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
             t.symbol?.toLowerCase().includes(token.symbol.toLowerCase()),
     )
 
+    const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
+
     const tokenLabel = useMemo(() => {
         switch (token.symbol) {
             case "BTC":
-                return "VeBitcoin"
+                return "Bitcoin"
             case "ETH":
-                return "VeEthereum"
+                return "Ethereum"
             case "SOL":
-                return "VeSolana"
+                return "Solana"
             case "XRP":
-                return "VeRipple"
+                return "Ripple"
             case "WAN":
-                return "VeWanchain"
+                return "Wanchain"
             case "USDT":
-                return "VeTether"
+                return "Tether"
             case "USDC":
-                return "VeUSDC"
+                return "USDC"
             default:
                 return token.name
         }
     }, [token.symbol, token.name])
 
-    // render description based on locale. NB: at the moment only EN is supported
-    const description = useMemo(() => {
-        if (!tokenWithCompleteInfo?.tokenInfo?.description) return ""
-
-        return tokenWithCompleteInfo?.tokenInfo?.description[locale] ?? tokenWithCompleteInfo?.tokenInfo?.description.en
-    }, [tokenWithCompleteInfo?.tokenInfo?.description, locale])
-
-    const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
+    const tokenDescription = useMemo(() => {
+        return token.symbol === "USDT" || token.symbol === "USDC"
+            ? LL.ABOUT_BRIDGE_USD_TOKEN({
+                  label: tokenLabel,
+                  name: token.name,
+                  symbol: token.symbol,
+                  url: token.crossChainProvider?.url ?? "",
+              })
+            : LL.ABOUT_BRIDGE_TOKEN({
+                  label: tokenLabel,
+                  name: token.name,
+                  symbol: token.symbol,
+                  url: token.crossChainProvider?.url ?? "",
+              })
+    }, [token.symbol, token.name, token.crossChainProvider?.url, tokenLabel, LL])
 
     return (
         <Layout
-            title={tokenLabel}
+            title={token.name}
             fixedBody={
                 <ScrollView>
                     <BaseSpacer height={16} />
@@ -101,23 +111,25 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
 
                         <BaseSpacer height={40} />
 
-                        {/* TODO: render the right description based on the token symbol */}
-                        {!!description && (
-                            <>
-                                <BaseText
-                                    typographyFont="bodySemiBold"
-                                    align="left"
-                                    alignContainer="flex-start"
-                                    w={100}
-                                    mb={12}>
-                                    {LL.TITLE_ABOUT()} {tokenLabel}
-                                </BaseText>
+                        <BaseText
+                            typographyFont="bodySemiBold"
+                            align="left"
+                            alignContainer="flex-start"
+                            w={100}
+                            mb={12}>
+                            {LL.TITLE_ABOUT()} {token.name}
+                        </BaseText>
 
-                                <BaseText style={styles.tokenInfoText}>
-                                    {striptags(description.trim(), ["strong"])}
-                                </BaseText>
-                            </>
-                        )}
+                        <BaseText style={styles.tokenInfoText}>
+                            <Markdown
+                                style={{ body: styles.markdownText }}
+                                onLinkPress={url => {
+                                    navigation.navigate(Routes.BROWSER, { url })
+                                    return false
+                                }}>
+                                {tokenDescription}
+                            </Markdown>
+                        </BaseText>
 
                         <BaseSpacer height={24} />
 
@@ -131,12 +143,15 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         assetDetailsBody: {
             paddingHorizontal: 16,
         },
         tokenInfoText: {
             lineHeight: defaultTypography.bodySemiBold.lineHeight,
+        },
+        markdownText: {
+            color: theme.colors.text,
         },
     })
