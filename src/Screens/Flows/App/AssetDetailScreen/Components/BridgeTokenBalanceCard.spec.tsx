@@ -1,0 +1,64 @@
+import React from "react"
+import { render } from "@testing-library/react-native"
+import { BridgeTokenBalanceCard } from "./BridgeTokenBalanceCard"
+import { TestWrapper, TestHelpers } from "~Test"
+
+const { VeBitcoinWithCompleteInfo } = TestHelpers.data
+
+describe("BridgeTokenBalanceCard", () => {
+    it("should render the component", () => {
+        const { findByText } = render(
+            <BridgeTokenBalanceCard
+                token={VeBitcoinWithCompleteInfo}
+                isBalanceVisible={true}
+                openQRCodeSheet={jest.fn()}
+                isObserved={false}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+        expect(findByText("VeBitcoin")).toBeTruthy()
+    })
+
+    it("should render the component with balance", async () => {
+        const { findByText } = render(
+            <BridgeTokenBalanceCard
+                token={VeBitcoinWithCompleteInfo}
+                isBalanceVisible={true}
+                openQRCodeSheet={jest.fn()}
+                isObserved={false}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+        const tokenSymbol = await findByText("BTC")
+        const balance = await findByText("10")
+
+        await expect(tokenSymbol).toBeOnTheScreen()
+        await expect(balance).toBeOnTheScreen()
+    })
+
+    it("should render the component with hidden balance", async () => {
+        const { findByText } = render(
+            <BridgeTokenBalanceCard
+                token={VeBitcoinWithCompleteInfo}
+                isBalanceVisible={false}
+                openQRCodeSheet={jest.fn()}
+                isObserved={false}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+
+        const tokenSymbol = await findByText("BTC")
+        const balance = await findByText("•••••")
+        const fiatBalance = await findByText("$••••••")
+
+        await expect(tokenSymbol).toBeOnTheScreen()
+        await expect(balance).toBeOnTheScreen()
+        await expect(fiatBalance).toBeOnTheScreen()
+    })
+})
