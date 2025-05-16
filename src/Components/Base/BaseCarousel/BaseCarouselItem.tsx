@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { Animated, Linking, Pressable, StyleSheet, ViewStyle } from "react-native"
+import { Animated, Linking, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -49,9 +49,9 @@ export const BaseCarouselItem: React.FC<Props> = ({
 
     return (
         <Animated.View style={[style, styles.container]}>
-            <Pressable testID={testID} onPress={onPress}>
+            <TouchableOpacity testID={testID} onPress={onPress}>
                 <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>
-            </Pressable>
+            </TouchableOpacity>
         </Animated.View>
     )
 }
