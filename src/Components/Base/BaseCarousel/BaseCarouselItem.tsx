@@ -48,8 +48,8 @@ export const BaseCarouselItem: React.FC<Props> = ({
     }, [href, isExternalLink, name, nav, onPressActivation, propsOnPress])
 
     return (
-        <Animated.View testID={testID} style={[style, styles.container]}>
-            <Pressable onPress={onPress}>
+        <Animated.View style={[style, styles.container]}>
+            <Pressable testID={testID} onPress={onPress}>
                 <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>
             </Pressable>
         </Animated.View>
