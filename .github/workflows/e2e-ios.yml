@@ -63,6 +63,12 @@ jobs:
               run: |
                   yarn install:all
 
+            - name: Download translations
+              uses: actions/download-artifact@v4
+              with:
+                  name: translations
+                  path: src/i18n/translations/
+                                    
             # Install sentry properties
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1

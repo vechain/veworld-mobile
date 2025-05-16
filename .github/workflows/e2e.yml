@@ -38,6 +38,12 @@ jobs:
             - name: Install & Patch packages
               run: yarn install --frozen-lockfile --network-timeout 300000
 
+            - name: Download translations
+              uses: actions/download-artifact@v4
+              with:
+                  name: translations
+                  path: src/i18n/translations/
+                                
             # Setup Java for Android
             - name: Android - Setup Java
               if: ${{ inputs.platform == 'android' }}
