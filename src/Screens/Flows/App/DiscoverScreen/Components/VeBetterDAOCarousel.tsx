@@ -5,7 +5,7 @@ import { mixpanel } from "~Utils/AnalyticsUtils"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
 
 const DAO_URL = "https://governance.vebetterdao.org"
-const STELLA_URL = "https://www.stellapay.io/b/WGWV"
+const STELLA_URL = "https://vebetter.stellapay.io/"
 const slides: CarouselSlideItem[] = [
     {
         testID: "VeBetterDao_banner",
