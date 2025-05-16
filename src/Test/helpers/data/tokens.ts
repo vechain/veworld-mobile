@@ -151,7 +151,7 @@ export const customToken: Token = {
 }
 
 export const VeBitcoin: Token = {
-    name: "VeBitcoin",
+    name: "BTC@vechain",
     symbol: "BTC",
     address: "0x2099f5c6e20e1be2ead225ea77a6393f08dc652a",
     icon,

@@ -38,7 +38,7 @@ const navigationMock = {
 
 describe("BridgeAssetDetailScreen", () => {
     it("should render the screen", async () => {
-        const { findByText } = render(
+        const { findAllByText } = render(
             <BridgeAssetDetailScreen
                 route={{
                     params: { token: VeBitcoinWithBalance },
@@ -52,7 +52,7 @@ describe("BridgeAssetDetailScreen", () => {
             },
         )
 
-        const title = await findByText("VeBitcoin")
-        await expect(title).toBeTruthy()
+        const title = await findAllByText("BTC@vechain")
+        await expect(title[0]).toBeTruthy()
     })
 })
