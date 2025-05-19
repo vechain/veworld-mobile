@@ -1,4 +1,6 @@
 {
+  "ABOUT_BRIDGE_TOKEN": "**{name: string}** is a **wrapped version of {label:string} ({symbol:string})** that exists on the VeChain blockchain. This asset is made possible through our integration with **Wanchain**, a trusted cross-chain bridge provider.\n\nWhen you see **{name: string}** in your wallet, you're viewing {label:string} that has been securely locked on its native chain and represented on VeChain as a wrapped token. This allows you to interact with {symbol:string} on VeChain-based dApps while benefiting from VeChain’s low fees and high-speed network.\n\n\n**Powered by Wanchain Bridge**\nWanchain manages the cross-chain process and ensures the wrapped {symbol: string} is backed 1:1 by real {symbol: string}. You can always bridge {name: string} back to {label: string} if needed at [{url: string}]({url: string})",
+  "ABOUT_BRIDGE_USD_TOKEN": "**{name: string}** is a **wrapped version of {label:string} ({symbol:string})** that exists on the VeChain blockchain. This asset is made possible through our integration with **Wanchain**, a trusted cross-chain bridge provider.\n\n**{name: string}** represents {symbol: string} originally issued on chains like Ethereum, BNB Chain, or others. Through the Wanchain bridge, the original {symbol: string} is securely locked on its native chain and mirrored 1:1 as a wrapped asset on VeChain. This enables stablecoin use within the VeChain ecosystem while preserving the value and utility of the original {symbol: string}.\n\n**Powered by Wanchain Bridge**\nWanchain manages the cross-chain process and ensures the wrapped {symbol: string} is backed 1:1 by real {symbol: string}. You can always bridge {name: string} back to {label: string} if needed at [{url: string}]({url: string})",
   "ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT": "Add a new account",
   "ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_WALLET": "Add a new wallet",
   "ACCOUNT_OR_WALLET_BOTTOM_SHEET_SUBTITLE": "Do you want to add either a wallet or an account?",
@@ -83,7 +85,9 @@
   "BACKUP_YOUR_DEVICES_CTA": "Backup now",
   "BACKUP_YOUR_DEVICES_DESCRIPTION": "Before proceeding with the transaction, we suggest to backup the recovery phrase for this account.",
   "BACKUP_YOUR_DEVICES_TITLE": "Backup your wallet",
+  "BANNER_STELLAPAY_DESC": "Get your <> on <>",
   "BANNER_TITLE_CLAIM_USERNAME": "Claim your <><> for free now",
+  "BANNER_VEBETTER_DESC": "Explore the <> platform",
   "BASE_FEE_RAMPING_UP": "The transaction may take longer to process.",
   "BD_ACCOUNT_REMOVAL": "Your account will be removed, but you can still access it by adding new accounts to the wallet.",
   "BD_ADD_CONTACT": "Add contact details",

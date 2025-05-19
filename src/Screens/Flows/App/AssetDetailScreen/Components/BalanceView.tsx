@@ -93,7 +93,12 @@ export const BalanceView = ({
     return (
         <BaseView style={containerStyle ?? styles.layout}>
             <BaseView style={styles.balanceContainer}>
-                <TokenImage icon={tokenWithInfo.icon} isVechainToken={isVetToken} iconSize={26} />
+                <TokenImage
+                    icon={tokenWithInfo.icon}
+                    isVechainToken={isVetToken}
+                    iconSize={26}
+                    isCrossChainToken={!!tokenWithInfo.crossChainProvider}
+                />
                 <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                     {symbol}
                 </BaseText>

@@ -1,13 +1,10 @@
 import { StyleSheet, TouchableOpacity, ViewProps } from "react-native"
 import React, { memo, useMemo } from "react"
-import { BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
-import { TokenWithCompleteInfo, useBalances, useTheme, useThemedStyles } from "~Hooks"
-import { ColorThemeType, VOT3 } from "~Constants"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
+import { TokenWithCompleteInfo, useThemedStyles } from "~Hooks"
+import { ColorThemeType } from "~Constants"
 import { TokenImage } from "../TokenImage"
-import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { FungibleToken } from "~Model"
-import { useFormatFiat } from "~Hooks/useFormatFiat"
-import { useVechainStatsTokenInfo } from "~Api/Coingecko"
 import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 type OfficialTokenCardProps = {
@@ -21,33 +18,13 @@ type OfficialTokenCardProps = {
 export const OfficialTokenCard = memo(
     ({ token, tokenWithInfo = {}, style, action, selected, iconSize }: OfficialTokenCardProps & ViewProps) => {
         const { styles } = useThemedStyles(baseStyles(selected))
-        const theme = useTheme()
-        const isVOT3 = token.symbol === VOT3.symbol
         const isVetToken = isVechainToken(token.symbol)
-
-        const isBalanceVisible = useAppSelector(selectBalanceVisible)
-        const { data: exchangeRate } = useVechainStatsTokenInfo(token.symbol.toLowerCase())
-
-        const { formatValue } = useFormatFiat()
-        const { tokenInfo } = tokenWithInfo
-        const isPositive24hChange = (tokenInfo?.market_data?.price_change_percentage_24h ?? 0) >= 0
-
-        const change24h =
-            (isPositive24hChange ? "+" : "") +
-            formatValue(tokenInfo?.market_data?.price_change_percentage_24h ?? 0) +
-            "%"
-
-        const { tokenUnitBalance, fiatBalance: tokenFiatBalance } = useBalances({
-            token,
-            exchangeRate: tokenWithInfo?.exchangeRate ?? parseFloat(exchangeRate ?? "0"),
-        })
 
         const symbol = useMemo(() => tokenWithInfo.symbol ?? token?.symbol, [tokenWithInfo.symbol, token?.symbol])
 
-        const fiatBalance = useMemo(() => {
-            if (tokenWithInfo?.fiatBalance && !isVOT3) return tokenWithInfo.fiatBalance
-            return tokenFiatBalance
-        }, [isVOT3, tokenFiatBalance, tokenWithInfo.fiatBalance])
+        const isCrossChainToken = useMemo(() => {
+            return !!token.crossChainProvider
+        }, [token.crossChainProvider])
 
         return (
             <TouchableOpacity onPress={action} style={[styles.container, style]} testID={symbol}>
@@ -58,6 +35,7 @@ export const OfficialTokenCard = memo(
                             symbol={token.symbol}
                             isVechainToken={isVetToken}
                             iconSize={iconSize ?? 26}
+                            isCrossChainToken={isCrossChainToken}
                         />
                         <BaseSpacer width={12} />
                         <BaseView flexDirection="row">
@@ -65,36 +43,8 @@ export const OfficialTokenCard = memo(
                                 {token.symbol}
                             </BaseText>
                             <BaseSpacer width={8} />
-
-                            {tokenWithInfo.balance && (
-                                <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
-                                    {isBalanceVisible ? tokenUnitBalance : "•••••"}
-                                </BaseText>
-                            )}
                         </BaseView>
                     </BaseView>
-
-                    {!!exchangeRate && tokenWithInfo.balance && (
-                        <BaseView style={styles.balanceInfo}>
-                            {!!exchangeRate && (
-                                <FiatBalance
-                                    typographyFont="bodyBold"
-                                    color={theme.colors.assetDetailsCard.title}
-                                    balances={[fiatBalance]}
-                                    isVisible={isBalanceVisible}
-                                />
-                            )}
-                            {!!tokenInfo && (
-                                <BaseView flexDirection="row">
-                                    <BaseText
-                                        typographyFont="captionMedium"
-                                        color={isPositive24hChange ? theme.colors.positive : theme.colors.negative}>
-                                        {change24h}
-                                    </BaseText>
-                                </BaseView>
-                            )}
-                        </BaseView>
-                    )}
                 </BaseView>
             </TouchableOpacity>
         )

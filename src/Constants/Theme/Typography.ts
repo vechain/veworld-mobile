@@ -51,6 +51,11 @@ const fontFamily = {
     "Mono-Bold": "Mono-Bold",
     "Mono-Regular": "Mono-Regular",
     "Mono-Light": "Mono-Light",
+    "Rubik-Bold": "Rubik-Bold",
+    "Rubik-Regular": "Rubik-Regular",
+    "Rubik-SemiBold": "Rubik-SemiBold",
+    "Rubik-Medium": "Rubik-Medium",
+    "Rubik-Light": "Rubik-Light",
     DesignSystemIcons: "DesignSystemIcons",
 }
 
