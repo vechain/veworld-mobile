@@ -2,14 +2,14 @@ name: Generate Version Translations
 
 on:
     push:
-        branches: [main]
+        branches: ["release/ios-*-android-*"]
         paths:
             - "releases/*/versions/*.json"
 
 jobs:
     translate-version-descriptions:
         runs-on: ubuntu-latest
-        if: contains(github.event.head_commit.message, 'add version placeholders')
+        if: "!contains(github.event.head_commit.message, 'add translations')"
         permissions:
             contents: write
 
@@ -123,6 +123,6 @@ jobs:
 
                   git add releases/
                   git commit -m "chore: add translations for iOS ${{ env.IOS_VERSION }} and Android ${{ env.ANDROID_VERSION }} release notes"
-                  git push origin main
+                  git push origin HEAD
 
                   rm -rf temp/
