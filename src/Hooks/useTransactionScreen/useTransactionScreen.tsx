@@ -84,7 +84,7 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
-    const { isGalactica: isGalacticaRaw, loading: isGalacticaLoading } = useIsGalactica()
+    const { isGalactica: isGalacticaRaw } = useIsGalactica()
 
     const onTransactionSuccess: typeof propsOnTransactionSuccess = useCallback(
         (tx, id) => {
@@ -250,14 +250,8 @@ export const useTransactionScreen = ({
     }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, transactionFeesResponse.maxFee])
 
     const isDisabledButtonState = useMemo(
-        () =>
-            (!isEnoughGas && !isDelegated) ||
-            loading ||
-            isSubmitting.current ||
-            transactionFeesResponse.isLoading ||
-            (gas?.gas ?? 0) === 0 ||
-            isGalacticaLoading,
-        [isEnoughGas, isDelegated, loading, transactionFeesResponse.isLoading, gas?.gas, isGalacticaLoading],
+        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
+        [isEnoughGas, isDelegated, loading, gas?.gas],
     )
 
     return {
