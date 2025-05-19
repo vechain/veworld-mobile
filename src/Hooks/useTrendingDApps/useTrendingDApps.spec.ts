@@ -103,6 +103,7 @@ const initialStateMock = {
         custom: [],
         hasOpenedDiscovery: true,
         connectedApps: [],
+        bannerInteractions: {},
         tabsManager: {
             currentTabId: null,
             tabs: [],

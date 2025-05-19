@@ -7,10 +7,9 @@ import {
     BaseText,
     BaseView,
     DelegationView,
-    EstimatedTimeDetailsView,
     FadeoutButton,
     FiatBalance,
-    GasFeeOptions,
+    GasFeeSpeed,
     Layout,
     RequireUserPassword,
 } from "~Components"
@@ -106,24 +105,23 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
 
     const {
         selectedDelegationOption,
-        loadingGas,
         onSubmit,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
         setSelectedFeeOption,
         selectedFeeOption,
-        gasFeeOptions,
         resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
-        isEnoughGas,
-        txCostTotal,
-        isDelegated,
         selectedDelegationAccount,
         selectedDelegationUrl,
-        vtho,
         isDisabledButtonState,
+        gasOptions,
+        gasUpdatedAt,
+        isGalactica,
+        isBaseFeeRampingUp,
+        speedChangeEnabled,
     } = useTransactionScreen({
         clauses: transactionClauses,
         onTransactionSuccess,
@@ -142,15 +140,6 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                         isOpen={isPasswordPromptOpen}
                         onClose={handleClosePasswordModal}
                         onSuccess={onPasswordSuccess}
-                    />
-
-                    <DelegationView
-                        setNoDelegation={resetDelegation}
-                        selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationAccount={setSelectedDelegationAccount}
-                        selectedDelegationAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
                     />
 
                     <BaseSpacer height={24} />
@@ -172,19 +161,23 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                         )}
                     </BaseView>
 
-                    <GasFeeOptions
-                        setSelectedFeeOption={setSelectedFeeOption}
-                        selectedDelegationOption={selectedDelegationOption}
-                        loadingGas={loadingGas}
+                    <GasFeeSpeed
+                        gasUpdatedAt={gasUpdatedAt}
+                        options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
-                        gasFeeOptions={gasFeeOptions}
-                        isThereEnoughGas={isEnoughGas}
-                        totalBalance={vtho.balance.balance}
-                        txCostTotal={txCostTotal}
-                        isDelegated={isDelegated}
-                    />
-
-                    <EstimatedTimeDetailsView selectedFeeOption={selectedFeeOption} />
+                        setSelectedFeeOption={setSelectedFeeOption}
+                        isGalactica={isGalactica}
+                        isBaseFeeRampingUp={isBaseFeeRampingUp}
+                        speedChangeEnabled={speedChangeEnabled}>
+                        <DelegationView
+                            setNoDelegation={resetDelegation}
+                            selectedDelegationOption={selectedDelegationOption}
+                            setSelectedDelegationAccount={setSelectedDelegationAccount}
+                            selectedDelegationAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        />
+                    </GasFeeSpeed>
                 </BaseView>
             }
             footer={

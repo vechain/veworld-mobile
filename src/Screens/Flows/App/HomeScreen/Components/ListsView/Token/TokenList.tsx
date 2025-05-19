@@ -5,7 +5,7 @@ import Animated, { AnimateProps } from "react-native-reanimated"
 import { BaseView, SwipeableRow } from "~Components"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
-import { ColorThemeType, VET, VTHO } from "~Constants"
+import { ColorThemeType, VeDelegate, VET, VTHO } from "~Constants"
 import {
     changeBalancePosition,
     removeTokenBalance,
@@ -97,6 +97,13 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
         (token: FungibleTokenWithBalance) => {
             const isTokenBalance = BalanceUtils.getIsTokenWithBalance(token)
 
+            if (token.crossChainProvider) {
+                nav.navigate(Routes.BRIDGE_TOKEN_DETAILS, {
+                    token,
+                })
+                return
+            }
+
             if (!isEdit && isTokenBalance) {
                 closeOtherSwipeableItems()
 
@@ -120,6 +127,8 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
 
     const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
         ({ item, getIndex, isActive, drag }) => {
+            const isDisabled = item.symbol === VeDelegate.symbol
+
             return (
                 <BaseView mb={8}>
                     <SwipeableRow
@@ -134,6 +143,7 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
                         swipeEnabled={!isEdit}
                         onPress={onTokenPress}
                         isDragMode={isEdit}
+                        isDisabled={isDisabled}
                         isOpen={tokenToRemove.current?.address === item.address}>
                         <AnimatedTokenCard
                             item={item}

@@ -85,3 +85,4 @@ export const selectCurrentTabId = createSelector(getDiscoveryState, discovery =>
 export const selectCurrentTab = createSelector(selectTabs, selectCurrentTabId, (tabs, currentTabId) =>
     tabs.find(tab => tab.id === currentTabId),
 )
+export const selectBannerInteractions = createSelector(getDiscoveryState, discovery => discovery.bannerInteractions)

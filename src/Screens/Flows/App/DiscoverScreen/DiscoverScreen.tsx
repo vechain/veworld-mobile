@@ -17,7 +17,6 @@ import { useI18nContext } from "~i18n"
 import { Ecosystem, Favourites, Header, NewDapps } from "./Components"
 import { PopularTrendingDApps } from "./Components/PopularTrendingDApps"
 import { VeBetterDAOCarousel } from "./Components/VeBetterDAOCarousel"
-
 import { useDAppActions } from "./Hooks"
 
 export const DiscoverScreen: React.FC = () => {

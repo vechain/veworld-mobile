@@ -132,21 +132,25 @@ describe("useTransactionScreen", () => {
             handleClosePasswordModal: expect.any(Function),
             onPasswordSuccess: expect.any(Function),
             setSelectedFeeOption: expect.any(Function),
-            selectedFeeOption: "0",
-            gasFeeOptions: {
+            selectedFeeOption: 127,
+            gasOptions: {
                 "0": {
-                    gasFee: "0",
-                    gasRaw: BigNutils("0"),
+                    estimatedFee: BigNutils("0"),
+                    maxFee: BigNutils("0"),
+                    priorityFee: BigNutils("0"),
                 },
                 "127": {
-                    gasFee: "0",
-                    gasRaw: BigNutils("0"),
+                    estimatedFee: BigNutils("0"),
+                    maxFee: BigNutils("0"),
+                    priorityFee: BigNutils("0"),
                 },
                 "255": {
-                    gasFee: "0",
-                    gasRaw: BigNutils("0"),
+                    estimatedFee: BigNutils("0"),
+                    maxFee: BigNutils("0"),
+                    priorityFee: BigNutils("0"),
                 },
             },
+            gasUpdatedAt: expect.any(Number),
             resetDelegation: expect.any(Function),
             setSelectedDelegationAccount: expect.any(Function),
             setSelectedDelegationUrl: expect.any(Function),
@@ -165,16 +169,16 @@ describe("useTransactionScreen", () => {
                 },
                 custom: false,
                 decimals: 18,
-                desc: undefined,
                 icon: icon,
                 name: "Vethor",
                 symbol: "VTHO",
             },
             isDisabledButtonState: true,
-            priorityFees: {
-                gasFee: "0",
-                gasRaw: BigNutils("0"),
-            },
+            maxFee: BigNutils("0"),
+            estimatedFee: BigNutils("0"),
+            isBaseFeeRampingUp: false,
+            isGalactica: false,
+            speedChangeEnabled: false,
         })
     })
 
@@ -303,24 +307,22 @@ describe("useTransactionScreen", () => {
                     expect(mockNav).toHaveBeenCalledWith(Routes.LEDGER_SIGN_TRANSACTION, {
                         accountWithDevice: accWithDevice,
                         initialRoute: "Home",
-                        transaction: {
-                            body: {
-                                blockRef: "0x00ce27a27f982a6d",
-                                chainTag: 39,
-                                clauses: [
-                                    {
-                                        data: "0x",
-                                        to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
-                                        value: "300000000000000000000",
-                                    },
-                                ],
-                                dependsOn: null,
-                                expiration: 30,
-                                gas: 0,
-                                gasPriceCoef: 0,
-                                nonce: "0x1234ab",
-                            },
-                        },
+                        transaction: Transaction.of({
+                            blockRef: "0x00ce27a27f982a6d",
+                            chainTag: 39,
+                            clauses: [
+                                {
+                                    data: "0x",
+                                    to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
+                                    value: "300000000000000000000",
+                                },
+                            ],
+                            dependsOn: null,
+                            expiration: 100,
+                            gas: 0,
+                            gasPriceCoef: 127,
+                            nonce: "0x1234ab",
+                        }),
                         delegationSignature: undefined,
                         dappRequest,
                     })

@@ -1,5 +1,15 @@
 # Changelog
 
+## <small>2.2.1 (2025-05-13)</small>
+
+* build: init ([51f6358](https://github.com/vechain/veworld-mobile/commit/51f6358))
+* fix: improve veDelegate balance handling in HomeScreen (#2930) ([9e07b1b](https://github.com/vechain/veworld-mobile/commit/9e07b1b)), closes [#2930](https://github.com/vechain/veworld-mobile/issues/2930)
+
+## <small>2.1.5 (2025-04-30)</small>
+
+* build: init ([e7d48cf](https://github.com/vechain/veworld-mobile/commit/e7d48cf))
+* fix: fix base bottom sheet (#2904) ([060daa7](https://github.com/vechain/veworld-mobile/commit/060daa7)), closes [#2904](https://github.com/vechain/veworld-mobile/issues/2904)
+
 ## <small>2.1.4 (2025-04-14)</small>
 
 * build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))

@@ -1,21 +1,19 @@
 import React from "react"
-import { BaseView } from "../BaseView"
-import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
+import { StyleSheet } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
-import { ColorThemeType, isSmallScreen, SCREEN_WIDTH } from "~Constants"
-import { ImageSourcePropType, StyleSheet } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
 import { DotStyle } from "react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom/PaginationItem"
+import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { BaseView } from "../BaseView"
 import { BaseCarouselItem } from "./BaseCarouselItem"
 
 export type CarouselSlideItem = {
-    title?: string
+    name?: string
     testID?: string
     href?: string
-    source: ImageSourcePropType
+    content: React.ReactNode
     isExternalLink?: boolean
-    w?: number
-    h?: number
 }
 
 type Props = {
@@ -31,19 +29,28 @@ type Props = {
     autoPlay?: boolean
     autoPlayInterval?: number
     loop?: boolean
+    showPagination?: boolean
     paginationAlignment?: "flex-start" | "center" | "flex-end"
     testID?: string
+    onSlidePress?: (name: string) => void
+    /**
+     * Decide when `onSlidePress` is called. Default is `after
+     */
+    onSlidePressActivation?: "before" | "after"
 }
 
 export const BaseCarousel = ({
     data,
-    w = 360,
-    h = 100,
+    w = SCREEN_WIDTH,
+    h = 108,
     autoPlay = true,
     autoPlayInterval = 10000,
     loop = true,
     paginationAlignment = "center",
+    showPagination = true,
     testID,
+    onSlidePress,
+    onSlidePressActivation,
 }: Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
     const progress = useSharedValue<number>(0)
@@ -76,7 +83,8 @@ export const BaseCarousel = ({
                 mode="parallax"
                 modeConfig={{
                     parallaxScrollingScale: 1,
-                    parallaxScrollingOffset: isSmallScreen ? 15 : -10,
+                    parallaxAdjacentItemScale: 0.8,
+                    parallaxScrollingOffset: SCREEN_WIDTH / 6.5,
                 }}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
@@ -84,25 +92,28 @@ export const BaseCarousel = ({
                     return (
                         <BaseCarouselItem
                             testID={item.testID}
-                            source={item.source}
                             href={item.href}
                             isExternalLink={item.isExternalLink}
-                            w={item.w}
-                            h={item.h}
-                        />
+                            name={item.name}
+                            onPress={onSlidePress}
+                            onPressActivation={onSlidePressActivation}>
+                            {item.content}
+                        </BaseCarouselItem>
                     )
                 }}
             />
 
-            <Pagination.Basic
-                progress={progress}
-                data={data as object[]}
-                containerStyle={styles.paginatioContainer}
-                size={8}
-                onPress={onPressPagination}
-                dotStyle={styles.dots as DotStyle}
-                activeDotStyle={styles.activeDot as DotStyle}
-            />
+            {showPagination && (
+                <Pagination.Basic
+                    progress={progress}
+                    data={data as object[]}
+                    containerStyle={styles.paginatioContainer}
+                    size={8}
+                    onPress={onPressPagination}
+                    dotStyle={styles.dots as DotStyle}
+                    activeDotStyle={styles.activeDot as DotStyle}
+                />
+            )}
         </BaseView>
     )
 }
@@ -121,7 +132,7 @@ const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") =
         paginatioContainer: {
             gap: 6,
             alignSelf: paginationAlignment,
-            paddingHorizontal: 20,
+            paddingHorizontal: 16,
         },
         dots: {
             backgroundColor: theme.colors.defaultCarousel.dotBg,

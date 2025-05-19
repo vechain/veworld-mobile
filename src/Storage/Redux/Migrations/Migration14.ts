@@ -7,10 +7,8 @@ export const Migration14 = (state: PersistedState): PersistedState => {
 
     const newState: DiscoveryState = {
         ...currentState,
-        tabsManager: {
-            currentTabId: null,
-            tabs: [],
-        },
+        bannerInteractions: {},
+        custom: [],
     }
 
     return {
