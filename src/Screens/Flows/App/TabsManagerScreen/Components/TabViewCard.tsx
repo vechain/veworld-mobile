@@ -1,17 +1,22 @@
+import { BlurView } from "@react-native-community/blur"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
-import { ImageBackground, StyleSheet, TouchableOpacity } from "react-native"
-import { BaseIcon, BaseText, BaseTouchable } from "~Components"
+import { ImageBackground, Platform, StyleSheet, TouchableOpacity, View } from "react-native"
+import Animated from "react-native-reanimated"
+import { BaseIcon, BaseText } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { closeTab, selectCurrentTabId, setCurrentTab, Tab, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { useNavigation } from "@react-navigation/native"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import { BlurView } from "@react-native-community/blur"
+import { closeTab, selectCurrentTabId, setCurrentTab, Tab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 
 type TabViewCardProps = {
     tab: Tab
 }
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
+
+const PlatformView = Platform.OS === "android" ? View : BlurView
 
 export const TabViewCard = ({ tab }: TabViewCardProps) => {
     const { styles } = useThemedStyles(baseStyles)
@@ -30,18 +35,19 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
     }, [dispatch, tab.id])
 
     return (
-        <TouchableOpacity style={[styles.container, tab.id === selectedTabId && styles.selected]} onPress={onPress}>
+        <AnimatedTouchableOpacity
+            style={[styles.container, tab.id === selectedTabId && styles.selected]}
+            onPress={onPress}
+            sharedTransitionTag="BROWSER_TAB">
             <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
-                <BlurView style={styles.header} blurAmount={10} blurType="light">
+                <PlatformView style={styles.header} blurAmount={10} blurType="light">
                     <BaseText color={"white"}>{tab.title}</BaseText>
-                </BlurView>
-                <BlurView style={styles.footer} blurAmount={10} blurType="light">
-                    <BaseTouchable onPress={onClose}>
-                        <BaseIcon name="icon-x" size={16} color={"white"} />
-                    </BaseTouchable>
-                </BlurView>
+                </PlatformView>
+                <PlatformView style={styles.footer} blurAmount={10} blurType="light">
+                    <BaseIcon name="icon-x" size={16} color={"white"} onPress={onClose} />
+                </PlatformView>
             </ImageBackground>
-        </TouchableOpacity>
+        </AnimatedTouchableOpacity>
     )
 }
 
@@ -88,6 +94,12 @@ const baseStyles = (theme: ColorThemeType) => {
             paddingVertical: 10,
             borderBottomLeftRadius: 8,
             borderBottomRightRadius: 8,
+        },
+        footerButton: {
+            flexDirection: "row",
+            alignItems: "center",
+            width: "100%",
+            justifyContent: "center",
         },
     })
 }

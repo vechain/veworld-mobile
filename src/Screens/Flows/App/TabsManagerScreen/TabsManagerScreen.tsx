@@ -80,7 +80,7 @@ export const TabsManagerScreen = () => {
                 </BaseView>
             }
             fixedBody={
-                <BaseView flex={1}>
+                <BaseView flex={1} p={24}>
                     <FlatList
                         data={tabs}
                         numColumns={2}

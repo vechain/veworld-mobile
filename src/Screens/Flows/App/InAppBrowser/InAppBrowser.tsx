@@ -4,15 +4,15 @@ import React, { MutableRefObject, useCallback, useEffect, useRef, useState } fro
 import { StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import { captureRef, releaseCapture } from "react-native-view-shot"
 import WebView from "react-native-webview"
 import { BaseIcon, BaseText, BaseView, BrowserBottomBar, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
-import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
-import { captureRef, releaseCapture } from "react-native-view-shot"
 import { selectCurrentTab, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
@@ -70,17 +70,19 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         }
     })
 
-    const onGoBack = useCallback(() => {
+    const onGoBack = useCallback(async () => {
         if (webviewContainerRef.current && selectedTab) {
-            captureRef(webviewContainerRef, {
-                format: "jpg",
-                quality: 0.9,
-                fileName: `${selectedTab.id}-preview-${Date.now()}`,
-                result: "data-uri",
-            }).then(uri => {
-                dispatch(updateTab({ ...selectedTab, preview: uri }))
-                releaseCapture(uri)
-            })
+            try {
+                await captureRef(webviewContainerRef, {
+                    format: "jpg",
+                    quality: 0.9,
+                    fileName: `${selectedTab.id}-preview-${Date.now()}`,
+                    result: "data-uri",
+                }).then(uri => {
+                    dispatch(updateTab({ ...selectedTab, preview: uri }))
+                    releaseCapture(uri)
+                })
+            } catch {}
         }
     }, [webviewContainerRef, selectedTab, dispatch])
 
@@ -96,7 +98,11 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {userAgent && !isLoading && (
                         <>
-                            <Animated.View ref={webviewContainerRef} style={animatedStyles}>
+                            <Animated.View
+                                ref={webviewContainerRef}
+                                style={animatedStyles}
+                                sharedTransitionTag="BROWSER_TAB"
+                                collapsable={false}>
                                 <WebView
                                     ref={webviewRef as MutableRefObject<WebView>}
                                     source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
@@ -110,6 +116,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                                     injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
                                     allowsInlineMediaPlayback={true}
                                     originWhitelist={originWhitelist}
+                                    collapsable={false}
                                 />
                             </Animated.View>
                             {error && (

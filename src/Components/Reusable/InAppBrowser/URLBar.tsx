@@ -12,7 +12,7 @@ import { URIUtils } from "~Utils"
 
 type Props = {
     onNavigation?: (error: boolean) => void
-    onGoBack?: () => void
+    onGoBack?: () => void | Promise<void>
 }
 
 export const URLBar = ({ onNavigation, onGoBack }: Props) => {
@@ -21,13 +21,13 @@ export const URLBar = ({ onNavigation, onGoBack }: Props) => {
 
     const tabs = useAppSelector(selectTabs)
 
-    const navBackToDiscover = useCallback(() => {
+    const navBackToDiscover = useCallback(async () => {
+        await onGoBack?.()
         if (nav.canGoBack()) {
             nav.goBack()
         } else {
             nav.navigate(Routes.DISCOVER)
         }
-        onGoBack?.()
     }, [nav, onGoBack])
 
     const theme = useTheme()
