@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Transaction } from "@vechain/sdk-core"
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { default as React, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
@@ -11,10 +11,9 @@ import {
     BaseText,
     BaseView,
     DelegationView,
-    EstimatedTimeDetailsView,
     FadeoutButton,
     FiatBalance,
-    GasFeeOptions,
+    GasFeeSpeed,
     Layout,
     RequireUserPassword,
     TransferCard,
@@ -110,14 +109,11 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const {
         selectedDelegationOption,
-        loadingGas,
         onSubmit,
         isPasswordPromptOpen,
         handleClosePasswordModal,
         onPasswordSuccess,
         setSelectedFeeOption,
-        selectedFeeOption,
-        gasFeeOptions,
         resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
@@ -126,8 +122,13 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         isDelegated,
         selectedDelegationAccount,
         selectedDelegationUrl,
-        vtho,
         isDisabledButtonState,
+        gasOptions,
+        gasUpdatedAt,
+        selectedFeeOption,
+        isGalactica,
+        isBaseFeeRampingUp,
+        speedChangeEnabled,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -151,29 +152,28 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         let _finalAmount = amount
 
         if (isVTHO.current && !isDelegated) {
-            const feeOptionIndex = parseInt(selectedFeeOption, 10) as GasPriceCoefficient
-            const _gasFees = gasFeeOptions[feeOptionIndex].gasRaw
+            const _gasFees = gasOptions[selectedFeeOption].maxFee
             const _vthoBalance = BigNutils(token.balance.balance)
             _vthoBalance.minus(_gasFees.toString).toHuman(token.decimals).decimals(4)
 
             if (!isEnoughGas && _vthoBalance.isBiggerThan(BigNutils("0").toString)) {
                 if (
-                    priorityStatesToVTHOAmount.current[feeOptionIndex] !== _vthoBalance.toString ||
-                    priorityStatesToVTHOAmount.current[feeOptionIndex] === "0"
+                    priorityStatesToVTHOAmount.current[selectedFeeOption] !== _vthoBalance.toString ||
+                    priorityStatesToVTHOAmount.current[selectedFeeOption] === "0"
                 ) {
-                    priorityStatesToVTHOAmount.current[feeOptionIndex] = _vthoBalance.toString
+                    priorityStatesToVTHOAmount.current[selectedFeeOption] = _vthoBalance.toString
                 }
 
                 _finalAmount = _vthoBalance.toString
-            } else if (!BigNutils(priorityStatesToVTHOAmount.current[feeOptionIndex]).isZero) {
-                _finalAmount = priorityStatesToVTHOAmount.current[feeOptionIndex]
+            } else if (!BigNutils(priorityStatesToVTHOAmount.current[selectedFeeOption]).isZero) {
+                _finalAmount = priorityStatesToVTHOAmount.current[selectedFeeOption]
             }
         }
 
         setFinalAmount(_finalAmount)
     }, [
         amount,
-        gasFeeOptions,
+        gasOptions,
         isDelegated,
         isEnoughGas,
         selectedFeeOption,
@@ -218,15 +218,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         onSuccess={onPasswordSuccess}
                     />
 
-                    <DelegationView
-                        setNoDelegation={resetDelegation}
-                        selectedDelegationOption={selectedDelegationOption}
-                        setSelectedDelegationAccount={setSelectedDelegationAccount}
-                        selectedDelegationAccount={selectedDelegationAccount}
-                        selectedDelegationUrl={selectedDelegationUrl}
-                        setSelectedDelegationUrl={setSelectedDelegationUrl}
-                    />
-
                     <TotalSendAmountView
                         amount={finalAmount}
                         symbol={token.symbol}
@@ -236,19 +227,23 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         isEnoughGas={isEnoughGas}
                     />
 
-                    <GasFeeOptions
-                        setSelectedFeeOption={setSelectedFeeOption}
-                        selectedDelegationOption={selectedDelegationOption}
-                        loadingGas={loadingGas}
+                    <GasFeeSpeed
+                        gasUpdatedAt={gasUpdatedAt}
+                        options={gasOptions}
                         selectedFeeOption={selectedFeeOption}
-                        gasFeeOptions={gasFeeOptions}
-                        isThereEnoughGas={isEnoughGas}
-                        totalBalance={vtho.balance.balance}
-                        txCostTotal={txCostTotal}
-                        isDelegated={isDelegated}
-                    />
-
-                    <EstimatedTimeDetailsView selectedFeeOption={selectedFeeOption} />
+                        setSelectedFeeOption={setSelectedFeeOption}
+                        isGalactica={isGalactica}
+                        isBaseFeeRampingUp={isBaseFeeRampingUp}
+                        speedChangeEnabled={speedChangeEnabled}>
+                        <DelegationView
+                            setNoDelegation={resetDelegation}
+                            selectedDelegationOption={selectedDelegationOption}
+                            setSelectedDelegationAccount={setSelectedDelegationAccount}
+                            selectedDelegationAccount={selectedDelegationAccount}
+                            selectedDelegationUrl={selectedDelegationUrl}
+                            setSelectedDelegationUrl={setSelectedDelegationUrl}
+                        />
+                    </GasFeeSpeed>
 
                     <ContactManagementBottomSheet
                         ref={addContactSheet}

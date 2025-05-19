@@ -257,4 +257,30 @@ describe("BigNumberUtils class", () => {
 
         bigNumUtils.addTrailingZeros(2, callback)
     })
+
+    test("clone should clone the value entirely", () => {
+        const v1 = BigNutils("2")
+        const cloned = v1.clone()
+        expect(cloned.toString).toBe(v1.toString)
+        v1.div("2")
+        expect(v1.toString).toBe("1")
+        expect(cloned.toString).toBe("2")
+    })
+
+    test.each([
+        { val1: 1n, val2: 2n, result: "1", kind: "bigint" },
+        { val1: 2, val2: 1, result: "1", kind: "number" },
+        { val1: new BigNumber(3), val2: new BigNumber(2), result: "2", kind: "BigNumber" },
+        { val1: BigNutils("1"), val2: BigNutils("2"), result: "1", kind: "BigNumberUtils" },
+        { val1: "1", val2: "2", result: "1", kind: "string" },
+    ])(
+        "min should return the minimum between two values (with format $kind): $val1 - $val2 with result: $result",
+        ({ val1, val2, result }) => {
+            expect(BigNumberUtils.min(val1, val2).toString).toBe(result)
+        },
+    )
+
+    test("average should return the correct average", () => {
+        expect(BigNumberUtils.average([1n, "2", new BigNumber("3"), 4, BigNutils("5")]).toString).toBe("3")
+    })
 })

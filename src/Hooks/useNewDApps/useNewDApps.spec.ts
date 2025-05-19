@@ -20,7 +20,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "New DApp 1",
         teamWalletAddress: "0x123",
         metadataURI: "ipfs://test1",
-        createdAtTimestamp: twoMonthsAgo.toString(),
+        createdAtTimestamp: moment(twoMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -28,7 +28,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "New DApp 2",
         teamWalletAddress: "0x456",
         metadataURI: "ipfs://test2",
-        createdAtTimestamp: twoMonthsAgo.toString(),
+        createdAtTimestamp: moment(twoMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -36,7 +36,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "Old DApp 1",
         teamWalletAddress: "0x789",
         metadataURI: "ipfs://test3",
-        createdAtTimestamp: fourMonthsAgo.toString(),
+        createdAtTimestamp: moment(fourMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -44,7 +44,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "Old DApp 2",
         teamWalletAddress: "0xabc",
         metadataURI: "ipfs://test4",
-        createdAtTimestamp: fourMonthsAgo.toString(),
+        createdAtTimestamp: moment(fourMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: false,
     },
     {
@@ -52,14 +52,14 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "Old DApp 3",
         teamWalletAddress: "0xdef",
         metadataURI: "ipfs://test5",
-        createdAtTimestamp: fourMonthsAgo.toString(),
+        createdAtTimestamp: moment(fourMonthsAgo).unix().toString(),
     },
     {
         id: "dapp6-id",
         name: "New DApp 3",
         teamWalletAddress: "0x111",
         metadataURI: "ipfs://test6",
-        createdAtTimestamp: twoMonthsAgo.toString(),
+        createdAtTimestamp: moment(twoMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -67,7 +67,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "New DApp 4",
         teamWalletAddress: "0x222",
         metadataURI: "ipfs://test7",
-        createdAtTimestamp: twoMonthsAgo.toString(),
+        createdAtTimestamp: moment(twoMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -75,7 +75,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "Old DApp 4",
         teamWalletAddress: "0x333",
         metadataURI: "ipfs://test8",
-        createdAtTimestamp: fourMonthsAgo.toString(),
+        createdAtTimestamp: moment(fourMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -83,7 +83,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "New DApp 5",
         teamWalletAddress: "0x444",
         metadataURI: "ipfs://test9",
-        createdAtTimestamp: twoMonthsAgo.toString(),
+        createdAtTimestamp: moment(twoMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -91,7 +91,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "Old DApp 5",
         teamWalletAddress: "0x555",
         metadataURI: "ipfs://test10",
-        createdAtTimestamp: fourMonthsAgo.toString(),
+        createdAtTimestamp: moment(fourMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: false,
     },
     {
@@ -99,7 +99,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "New DApp 6",
         teamWalletAddress: "0x666",
         metadataURI: "ipfs://test11",
-        createdAtTimestamp: twoMonthsAgo.toString(),
+        createdAtTimestamp: moment(twoMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -107,7 +107,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "Old DApp 6",
         teamWalletAddress: "0x777",
         metadataURI: "ipfs://test12",
-        createdAtTimestamp: fourMonthsAgo.toString(),
+        createdAtTimestamp: moment(fourMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -115,7 +115,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "New DApp 7",
         teamWalletAddress: "0x888",
         metadataURI: "ipfs://test13",
-        createdAtTimestamp: twoMonthsAgo.toString(),
+        createdAtTimestamp: moment(twoMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
     {
@@ -123,7 +123,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "Old DApp 7",
         teamWalletAddress: "0x999",
         metadataURI: "ipfs://test14",
-        createdAtTimestamp: fourMonthsAgo.toString(),
+        createdAtTimestamp: moment(fourMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: false,
     },
     {
@@ -131,7 +131,7 @@ const mockVeBetterDaoDapps: VeBetterDaoDapp[] = [
         name: "New DApp 8",
         teamWalletAddress: "0xaaa",
         metadataURI: "ipfs://test15",
-        createdAtTimestamp: twoMonthsAgo.toString(),
+        createdAtTimestamp: moment(twoMonthsAgo).unix().toString(),
         appAvailableForAllocationVoting: true,
     },
 ]
@@ -179,6 +179,7 @@ const initialStateMock = {
         custom: [],
         hasOpenedDiscovery: true,
         connectedApps: [],
+        bannerInteractions: {},
     },
 }
 
@@ -255,7 +256,7 @@ describe("useNewDApps", () => {
             name: dapp.name,
             teamWalletAddress: `0x${index}`,
             metadataURI: `ipfs://extra${index}`,
-            createdAtTimestamp: dapp.createAt.toString(),
+            createdAtTimestamp: moment(dapp.createAt).unix().toString(),
             appAvailableForAllocationVoting: true,
         }))
 
@@ -301,7 +302,7 @@ describe("useNewDApps", () => {
                 name: `Many New DApp ${i}`,
                 teamWalletAddress: `0x${i}`,
                 metadataURI: `ipfs://manynew${i}`,
-                createdAtTimestamp: createAt.toString(),
+                createdAtTimestamp: moment(createAt).unix().toString(),
                 appAvailableForAllocationVoting: true,
             })
         }

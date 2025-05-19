@@ -1,50 +1,41 @@
-import { useNavigation } from "@react-navigation/native"
-import URIUtils from "~Utils/URIUtils"
-import { Routes } from "~Navigation"
-import { useVisitedUrls } from "./useVisitedUrls"
-import { useCallback, useMemo } from "react"
-import { useAppSelector, selectVisitedUrls, selectAllDapps } from "~Storage/Redux"
-import { HistoryUrlKind, mapHistoryUrls } from "~Utils/HistoryUtils"
+import { uniqBy } from "lodash"
+import { useMemo } from "react"
+import { selectAllDapps, selectVisitedUrls, useAppSelector } from "~Storage/Redux"
+import { HistoryDappItem, HistoryItem, HistoryUrlKind, mapHistoryUrls } from "~Utils/HistoryUtils"
 
-export enum SearchError {
-    ADDRESS_CANNOT_BE_REACHED,
+const sortHistoryItem = (a: HistoryItem, b: HistoryItem) => {
+    const aValue = a.type === HistoryUrlKind.DAPP ? a.dapp.name.toLowerCase() : a.name.toLowerCase()
+    const bValue = b.type === HistoryUrlKind.DAPP ? b.dapp.name.toLowerCase() : b.name.toLowerCase()
+    return aValue.localeCompare(bValue)
 }
 
 export const useBrowserSearch = (query: string) => {
-    const nav = useNavigation()
-    const { addVisitedUrl } = useVisitedUrls()
     const visitedUrls = useAppSelector(selectVisitedUrls)
     const apps = useAppSelector(selectAllDapps)
     const mappedUrls = useMemo(() => mapHistoryUrls(visitedUrls, apps), [apps, visitedUrls])
 
-    const results = useMemo(() => {
-        if (query.trim() === "") return mappedUrls
-        const lowerQuery = query.toLowerCase()
-        return mappedUrls.filter(url => {
-            if (url.type === HistoryUrlKind.DAPP)
-                return (
-                    url.dapp.name.toLowerCase().includes(lowerQuery) ||
-                    url.dapp.desc?.toLowerCase()?.includes(lowerQuery)
-                )
-            return url.name.toLowerCase().includes(lowerQuery) || url.url.includes(lowerQuery)
-        })
-    }, [mappedUrls, query])
+    const isValidQuery = useMemo(() => query.trim().length >= 2, [query])
 
-    const navigateToBrowser = useCallback(
-        async (value: string) => {
-            const valueLower = value.toLowerCase()
-            const isValid = await URIUtils.isValidBrowserUrl(valueLower)
-            if (isValid) {
-                const url = valueLower.startsWith("https://") ? valueLower : `https://${valueLower}`
-                nav.navigate(Routes.BROWSER, { url })
-                addVisitedUrl(url)
-                return
-            }
-
-            return SearchError.ADDRESS_CANNOT_BE_REACHED
-        },
-        [nav, addVisitedUrl],
+    const mappedApps = useMemo<HistoryDappItem[]>(
+        () => apps.map(app => ({ type: HistoryUrlKind.DAPP, dapp: app })),
+        [apps],
     )
 
-    return { navigateToBrowser, results }
+    const results = useMemo(() => {
+        if (!isValidQuery) return mappedUrls
+        const lowerQuery = query.toLowerCase()
+        const urls = mappedUrls.filter(url => url.type === HistoryUrlKind.URL)
+        const allDapps = uniqBy(
+            mappedUrls.filter(url => url.type === HistoryUrlKind.DAPP).concat(mappedApps),
+            "dapp.href",
+        )
+        return [...urls, ...allDapps]
+            .filter(url => {
+                if (url.type === HistoryUrlKind.DAPP) return url.dapp.name.toLowerCase().includes(lowerQuery)
+                return url.name.toLowerCase().includes(lowerQuery) || url.url.toLowerCase().includes(lowerQuery)
+            })
+            .sort(sortHistoryItem)
+    }, [isValidQuery, mappedApps, mappedUrls, query])
+
+    return { results, isValidQuery }
 }

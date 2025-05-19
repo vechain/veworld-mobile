@@ -4,8 +4,6 @@ import { TestWrapper } from "~Test"
 import { useVisitedUrls } from "./useVisitedUrls"
 import { HistoryDappItem, HistoryUrlItem, HistoryUrlKind } from "~Utils/HistoryUtils"
 
-jest.mock("~Utils/URIUtils")
-jest.mock("~Navigation")
 jest.mock("./useVisitedUrls")
 
 describe("useBrowserSearch", () => {
@@ -34,6 +32,7 @@ describe("useBrowserSearch", () => {
                         favorites: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
+                        bannerInteractions: {},
                     },
                 },
             },
@@ -75,6 +74,7 @@ describe("useBrowserSearch", () => {
                         favorites: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
+                        bannerInteractions: {},
                     },
                 },
             },
@@ -118,6 +118,7 @@ describe("useBrowserSearch", () => {
                         favorites: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
+                        bannerInteractions: {},
                     },
                 },
             },
@@ -130,7 +131,7 @@ describe("useBrowserSearch", () => {
         expect((result.current.results[1] as HistoryUrlItem).url).toBe(new URL("https://google.com").origin)
     })
 
-    it("should filter dapps by name or description", () => {
+    it("should filter dapps by name", () => {
         ;(useVisitedUrls as jest.Mock).mockResolvedValueOnce({
             addVisitedUrl: jest.fn(),
         })
@@ -163,8 +164,7 @@ describe("useBrowserSearch", () => {
                                 createAt: Date.now(),
                                 href: new URL("https://testnet.vechain.org").origin,
                                 isCustom: false,
-                                name: "Not what you'd expect",
-                                desc: "Vechain",
+                                name: "vechain_TEST",
                             },
                             {
                                 amountOfNavigations: 0,
@@ -178,6 +178,62 @@ describe("useBrowserSearch", () => {
                         favorites: [],
                         hasOpenedDiscovery: false,
                         connectedApps: [],
+                        bannerInteractions: {},
+                    },
+                },
+            },
+        })
+        expect(result.current.results).toBeDefined()
+        expect(result.current.results).toHaveLength(2)
+        expect(result.current.results[0].type).toBe(HistoryUrlKind.DAPP)
+        expect((result.current.results[0] as HistoryDappItem).dapp.href).toBe(new URL("https://google.com").origin)
+        expect(result.current.results[1].type).toBe(HistoryUrlKind.DAPP)
+        expect((result.current.results[1] as HistoryDappItem).dapp.href).toBe(
+            new URL("https://testnet.vechain.org").origin,
+        )
+    })
+
+    it("should filter dapps that are not in the visited urls", () => {
+        ;(useVisitedUrls as jest.Mock).mockResolvedValueOnce({
+            addVisitedUrl: jest.fn(),
+        })
+        const { result } = renderHook(() => useBrowserSearch("vechain"), {
+            wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    browser: {
+                        visitedUrls: [
+                            {
+                                amountOfNavigations: 0,
+                                createAt: Date.now(),
+                                href: new URL("https://testnet.vechain.org").origin,
+                                isCustom: false,
+                                name: "TEST",
+                            },
+                        ],
+                    },
+                    discovery: {
+                        custom: [
+                            {
+                                amountOfNavigations: 0,
+                                createAt: Date.now(),
+                                href: new URL("https://testnet.vechain.org").origin,
+                                isCustom: false,
+                                name: "vechain_TEST",
+                            },
+                            {
+                                amountOfNavigations: 0,
+                                createAt: Date.now(),
+                                href: new URL("https://google.com").origin,
+                                isCustom: false,
+                                name: "Vechain",
+                            },
+                        ],
+                        featured: [],
+                        favorites: [],
+                        hasOpenedDiscovery: false,
+                        connectedApps: [],
+                        bannerInteractions: {},
                     },
                 },
             },

@@ -27,8 +27,8 @@ import {
     addConnectedDiscoveryApp,
     changeSelectedNetwork,
     selectAccounts,
-    selectAllDapps,
     selectConnectedDiscoverDApps,
+    selectFeaturedDapps,
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
@@ -125,7 +125,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const { LL, locale } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
-    const allDapps = useAppSelector(selectAllDapps)
+    const allDapps = useAppSelector(selectFeaturedDapps)
     const {
         ref: ChangeAccountNetworkBottomSheetRef,
         onOpen: openChangeAccountNetworkBottomSheet,

@@ -15,6 +15,10 @@ export type Tab = {
     title: string
 }
 
+export type BannerInteractionDetails = {
+    amountOfInteractions: number
+}
+
 export type DiscoveryState = {
     featured: DiscoveryDApp[]
     favorites: DiscoveryDApp[]
@@ -24,6 +28,9 @@ export type DiscoveryState = {
     tabsManager: {
         currentTabId: string | null
         tabs: Tab[]
+    }
+    bannerInteractions: {
+        [bannerName: string]: BannerInteractionDetails
     }
 }
 
@@ -37,10 +44,7 @@ export const initialDiscoverState: DiscoveryState = {
         currentTabId: null,
         tabs: [],
     },
-}
-
-const sortByAmountOfNavigations = (dapps: DiscoveryDApp[]) => {
-    return dapps.sort((a, b) => b.amountOfNavigations - a.amountOfNavigations)
+    bannerInteractions: {},
 }
 
 const findByHref = (dapps: DiscoveryDApp[], href: string) => {
@@ -82,22 +86,17 @@ export const DiscoverySlice = createSlice({
                 if (existingDApp) {
                     existingDApp.amountOfNavigations += 1
                 }
-
-                //sort by amount of navigations
-                state.custom = sortByAmountOfNavigations(state.custom)
             } else {
                 const favourite = findByHref(state.favorites, payload.href)
 
                 if (favourite) {
                     favourite.amountOfNavigations += 1
-                    state.favorites = sortByAmountOfNavigations(state.favorites)
                 }
 
                 const featured = findByHref(state.featured, payload.href)
 
                 if (featured) {
                     featured.amountOfNavigations += 1
-                    state.featured = sortByAmountOfNavigations(state.featured)
                 }
             }
         },
@@ -139,6 +138,11 @@ export const DiscoverySlice = createSlice({
             state.tabsManager.currentTabId = null
         },
         resetDiscoveryState: () => initialDiscoverState,
+        incrementBannerInteractions: (state, action: PayloadAction<string>) => {
+            state.bannerInteractions[action.payload] = {
+                amountOfInteractions: (state.bannerInteractions[action.payload]?.amountOfInteractions ?? 0) + 1,
+            }
+        },
     },
 })
 
@@ -157,4 +161,5 @@ export const {
     setCurrentTab,
     closeTab,
     closeAllTabs,
+    incrementBannerInteractions,
 } = DiscoverySlice.actions

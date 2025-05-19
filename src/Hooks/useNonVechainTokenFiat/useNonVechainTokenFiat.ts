@@ -1,5 +1,6 @@
 import { useMemo } from "react"
 import { useVechainStatsTokensInfo } from "~Api/Coingecko"
+import { B3TR, VeDelegate } from "~Constants/Constants"
 import {
     selectCurrency,
     selectNonVechainTokensBalancesByAccount,
@@ -22,7 +23,13 @@ export const useNonVechainTokenFiat = (accountAddress?: string) => {
         if (!nonVeChainTokens) return []
 
         return visibleTokens.map(token => {
-            const tokenExchangeRate = nonVeChainTokens[token.symbol.toLowerCase()]
+            let tokenExchangeRate = nonVeChainTokens[token.symbol.toLowerCase()]
+
+            // VeDelegate is not a real token, it's exchange rate is the same as B3TR
+            if (token.symbol === VeDelegate.symbol) {
+                tokenExchangeRate = nonVeChainTokens[B3TR.symbol.toLowerCase()]
+            }
+
             if (!tokenExchangeRate) return "0"
 
             const exchangeRate =

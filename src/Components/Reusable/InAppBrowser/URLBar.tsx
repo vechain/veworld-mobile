@@ -1,14 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import { TabsIconSVG } from "~Assets"
 import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
 import { useTheme } from "~Hooks"
-import { Routes, RootStackParamListBrowser } from "~Navigation"
-import { URIUtils } from "~Utils"
-import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { selectTabs, useAppSelector } from "~Storage/Redux"
-import { TabsIconSVG } from "~Assets"
+import { URIUtils } from "~Utils"
 
 type Props = {
     onNavigation?: (error: boolean) => void
@@ -32,16 +32,19 @@ export const URLBar = ({ onNavigation, onGoBack }: Props) => {
 
     const theme = useTheme()
 
-    const animatedStyles = useAnimatedStyle(() => ({
-        height: showToolbars ? withTiming(56) : withTiming(24),
-    }))
+    const animatedStyles = useAnimatedStyle(
+        () => ({
+            height: showToolbars ? withTiming(56) : withTiming(24),
+        }),
+        [showToolbars],
+    )
 
     const onSubmit = useCallback(
         async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
             const value = e.nativeEvent.text.toLowerCase()
             const isValid = await URIUtils.isValidBrowserUrl(value)
             if (isValid) {
-                const url = value.startsWith("https://") ? value : `https://${value}`
+                const url = URIUtils.parseUrl(value)
                 onNavigation?.(false)
                 navigateToUrl(url)
                 return
@@ -74,7 +77,8 @@ export const URLBar = ({ onNavigation, onGoBack }: Props) => {
                             <BaseText
                                 testID="URL-bar-dapp-name"
                                 typographyFont="captionRegular"
-                                color={theme.colors.subtitle}>
+                                color={theme.colors.subtitle}
+                                numberOfLines={1}>
                                 {navigationState?.url}
                             </BaseText>
                         </BaseView>

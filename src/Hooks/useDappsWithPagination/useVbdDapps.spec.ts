@@ -96,6 +96,7 @@ describe("useVbdDapps", () => {
                         ],
                         favorites: [],
                         hasOpenedDiscovery: true,
+                        bannerInteractions: {},
                     },
                 },
             },

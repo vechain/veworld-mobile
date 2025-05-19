@@ -39,10 +39,12 @@ const TokenInfoResponseSchema = z.object({
     symbol: z.string(),
     name: z.string(),
     detail_platforms: z.object({
-        vechain: z.object({
-            decimal_place: z.nullable(z.number()),
-            contract_address: z.string(),
-        }),
+        vechain: z
+            .object({
+                decimal_place: z.nullable(z.number()),
+                contract_address: z.string(),
+            })
+            .optional(),
     }),
     image: z.object({
         thumb: z.string(),

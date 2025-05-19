@@ -1,68 +1,57 @@
-import React, { useMemo } from "react"
-import {
-    VeBetterDaoLightBanner,
-    VeBetterDaoDarkBanner,
-    VeBetterDaoStellaBanner,
-    VeBetterDaoVoteBanner,
-    VeBetterDaoMakeDappBanner,
-} from "~Assets/Banners"
+import React, { useCallback, useMemo } from "react"
 import { BaseCarousel, CarouselSlideItem, useFeatureFlags } from "~Components"
-import { useCurrentAllocationsRoundId, useTheme } from "~Hooks"
+import { VeBetterDaoBanner, StellaPayBanner } from "./Banners"
+import { mixpanel } from "~Utils/AnalyticsUtils"
+import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
 
-const DAO_URL = "https://governance.vebetterdao.org/apps"
-const DAO_VOTE_URL = "https://governance.vebetterdao.org/rounds/"
-const DAO_MAKE_APP_URL = "https://docs.vebetterdao.org"
-const STELLA_URL = "https://www.stellapay.io/b/WGWV"
+const DAO_URL = "https://governance.vebetterdao.org"
+const STELLA_URL = "https://vebetter.stellapay.io/"
+const slides: CarouselSlideItem[] = [
+    {
+        testID: "VeBetterDao_banner",
+        content: <VeBetterDaoBanner />,
+        href: DAO_URL,
+        name: "vbd_main",
+    },
+    {
+        testID: "VeBetterDao_stella_banner",
+        content: <StellaPayBanner />,
+        href: STELLA_URL,
+        isExternalLink: true,
+        name: "stella",
+    },
+]
 
 export const VeBetterDAOCarousel = () => {
-    const theme = useTheme()
-    const { data } = useCurrentAllocationsRoundId()
     const featureFlags = useFeatureFlags()
-
-    const slides: CarouselSlideItem[] = useMemo(
-        () => [
-            {
-                testID: "VeBetterDao_stella_banner",
-                source: VeBetterDaoStellaBanner,
-                href: STELLA_URL,
-                isExternalLink: true,
-            },
-            {
-                testID: "VeBetterDao_banner",
-                source: theme.isDark ? VeBetterDaoDarkBanner : VeBetterDaoLightBanner,
-                href: DAO_URL,
-            },
-            {
-                testID: "VeBetterDao_vote_banner",
-                source: VeBetterDaoVoteBanner,
-                href: `${DAO_VOTE_URL}${data ?? ""}`,
-            },
-            {
-                testID: "VeBetterDao_make_app_banner",
-                source: VeBetterDaoMakeDappBanner,
-                href: DAO_MAKE_APP_URL,
-            },
-        ],
-        [data, theme.isDark],
-    )
 
     const activeSlides = useMemo(() => {
         return slides.filter(slide => {
-            if (slide.testID === "VeBetterDao_stella_banner") {
+            if (slide.name === "stella") {
                 return featureFlags.discoveryFeature.showStellaPayBanner
             }
             return true
         })
-    }, [featureFlags.discoveryFeature.showStellaPayBanner, slides])
+    }, [featureFlags.discoveryFeature.showStellaPayBanner])
+
+    const onSlidePress = useCallback((name: string) => {
+        if (name === "stella") {
+            mixpanel.track(AnalyticsEvent.DISCOVERY_STELLAPAY_BANNER_CLICKED)
+        } else {
+            mixpanel.track(AnalyticsEvent.DISCOVERY_VEBETTERDAO_BANNER_CLICKED)
+        }
+    }, [])
 
     return (
         <BaseCarousel
             testID="VeBetterDao_carousel"
             data={activeSlides}
-            w={360}
-            h={100}
             paginationAlignment="flex-start"
+            loop={false}
             autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
+            showPagination={false}
+            onSlidePressActivation="before"
+            onSlidePress={onSlidePress}
         />
     )
 }

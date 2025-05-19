@@ -41,13 +41,11 @@ export const BrowserBottomBar: React.FC = () => {
     }, [route.name])
 
     const animatedStyles = useAnimatedStyle(() => {
-        const parsedPadding = isIOSPlatform ? 20 : 8
-
         return {
             opacity: showToolbars ? withTiming(1) : withTiming(0),
             height: showToolbars ? withTiming(56) : withTiming(0),
             paddingTop: showToolbars ? withTiming(8) : withTiming(0),
-            paddingBottom: showToolbars ? withTiming(parsedPadding) : withTiming(0),
+            paddingBottom: showToolbars ? withTiming(8) : withTiming(0),
         }
     }, [isIOSPlatform, showToolbars])
 
@@ -126,6 +124,7 @@ export const BrowserBottomBar: React.FC = () => {
                         name={config.name}
                         size={20}
                         color={theme.colors.text}
+                        style={styles.icon}
                     />
                 )
             })}
@@ -146,7 +145,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopColor: theme.colors.card,
             borderTopWidth: 1,
             paddingHorizontal: 16,
-            ...(isIOS() ? { marginBottom: 15 } : {}),
+            ...(isIOS() ? { marginBottom: 20 } : {}),
         },
         icon: {
             borderRadius: 10,

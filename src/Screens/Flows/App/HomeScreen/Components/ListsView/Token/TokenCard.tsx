@@ -1,6 +1,6 @@
 import React, { memo, useMemo } from "react"
 import { FiatBalance } from "~Components"
-import { COLORS } from "~Constants"
+import { B3TR, COLORS, VeDelegate } from "~Constants"
 import { useBalances, useTheme } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
@@ -19,7 +19,11 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
     const theme = useTheme()
     const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
-    const { data: exchangeRate } = useVechainStatsTokenInfo(tokenWithBalance.symbol.toLowerCase())
+    const { data: exchangeRate } = useVechainStatsTokenInfo(
+        tokenWithBalance.symbol === VeDelegate.symbol
+            ? B3TR.symbol.toLowerCase()
+            : tokenWithBalance.symbol.toLowerCase(),
+    )
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 

@@ -106,11 +106,11 @@ type RootTranslation = {
 	 */
 	ACTIVITY_B3TR_EMPTY_DESCRIPTION: string
 	/**
-	 * N​o​ ​B​3​T​R​ ​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​.
+	 * N​o​ ​V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w​ ​y​e​t​.
 	 */
 	ACTIVITY_B3TR_EMPTY_LABEL: string
 	/**
-	 * B​e​t​t​e​r
+	 * V​e​B​e​t​t​e​r
 	 */
 	ACTIVITY_B3TR_LABEL: string
 	/**
@@ -317,11 +317,11 @@ type RootTranslation = {
 	 */
 	AUGUST: string
 	/**
-	 * B​e​t​t​e​r​ ​a​c​t​i​o​n​ ​o​n
+	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n​ ​o​n
 	 */
 	B3TR_ACTION: string
 	/**
-	 * B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n
 	 */
 	B3TR_ACTION_MODAL_TITLE: string
 	/**
@@ -371,9 +371,21 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
+	 * G​e​t​ ​y​o​u​r​ ​<​>​ ​o​n​ ​<​>
+	 */
+	BANNER_STELLAPAY_DESC: string
+	/**
 	 * C​l​a​i​m​ ​y​o​u​r​ ​<​>​<​>​ ​f​o​r​ ​f​r​e​e​ ​n​o​w
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: string
+	/**
+	 * E​x​p​l​o​r​e​ ​t​h​e​ ​<​>​ ​p​l​a​t​f​o​r​m
+	 */
+	BANNER_VEBETTER_DESC: string
+	/**
+	 * T​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​m​a​y​ ​t​a​k​e​ ​l​o​n​g​e​r​ ​t​o​ ​p​r​o​c​e​s​s​.
+	 */
+	BASE_FEE_RAMPING_UP: string
 	/**
 	 * Y​o​u​r​ ​a​c​c​o​u​n​t​ ​w​i​l​l​ ​b​e​ ​r​e​m​o​v​e​d​,​ ​b​u​t​ ​y​o​u​ ​c​a​n​ ​s​t​i​l​l​ ​a​c​c​e​s​s​ ​i​t​ ​b​y​ ​a​d​d​i​n​g​ ​n​e​w​ ​a​c​c​o​u​n​t​s​ ​t​o​ ​t​h​e​ ​w​a​l​l​e​t​.
 	 */
@@ -1420,6 +1432,10 @@ type RootTranslation = {
 	 */
 	COMMON_BTN_ADD: string
 	/**
+	 * A​p​p​l​y
+	 */
+	COMMON_BTN_APPLY: string
+	/**
 	 * C​a​n​c​e​l
 	 */
 	COMMON_BTN_CANCEL: string
@@ -1890,6 +1906,46 @@ type RootTranslation = {
 	 */
 	DECEMBER: string
 	/**
+	 * D​e​l​e​g​a​t​e
+	 */
+	DELEGATE: string
+	/**
+	 * S​e​l​e​c​t​ ​a​n​ ​a​c​c​o​u​n​t
+	 */
+	DELEGATE_ACCOUNT: string
+	/**
+	 * C​h​a​n​g​e​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​ ​d​e​l​e​g​a​t​i​o​n​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​,​ ​a​c​c​o​u​n​t​ ​o​r​ ​U​R​L
+	 */
+	DELEGATE_DESCRIPTION: string
+	/**
+	 * D​e​l​e​g​a​t​e​ ​f​e​e
+	 */
+	DELEGATE_FEE: string
+	/**
+	 * B​y​ ​d​e​f​a​u​l​t​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​ ​c​o​s​t​ ​w​i​l​l​ ​b​e​ ​p​a​i​d​ ​b​y​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t​:
+	 */
+	DELEGATE_SELF: string
+	/**
+	 * I​n​s​e​r​t​ ​a​n​ ​U​R​L​ ​t​o​ ​d​e​l​e​g​a​t​e​ ​t​h​e​ ​f​e​e​:
+	 */
+	DELEGATE_URL: string
+	/**
+	 * I​n​s​e​r​t​ ​U​R​L​.​.​.
+	 */
+	DELEGATE_URL_PLACEHOLDER: string
+	/**
+	 * O​r​ ​s​e​l​e​c​t​ ​a​ ​r​e​c​e​n​t​:
+	 */
+	DELEGATE_URL_SELECT: string
+	/**
+	 * F​e​e​ ​d​e​l​e​g​a​t​e​d​ ​t​o
+	 */
+	DELEGATION_FEE: string
+	/**
+	 * F​e​e​ ​n​o​t​ ​d​e​l​e​g​a​t​e​d
+	 */
+	DELEGATION_NO_FEE: string
+	/**
 	 * S​c​a​n​ ​t​h​e​ ​Q​R​ ​c​o​d​e​ ​o​r​ ​u​s​e​ ​t​h​e​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​r​e​c​e​i​v​e​ ​t​o​k​e​n​s​ ​a​n​d​ ​N​F​T​s​.
 	 */
 	DESCRIPTION_QR_CODE_FOR_ACCOUNT: string
@@ -1926,7 +1982,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_DAPPS_TITLE: string
 	/**
-	 * E​c​o​s​y​s​t​e​m​ ​d​A​p​p​s
+	 * E​c​o​s​y​s​t​e​m
 	 */
 	DISCOVER_ECOSYSTEM: string
 	/**
@@ -1986,7 +2042,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUB_TITLE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s​ ​d​A​p​p​s
+	 * F​a​v​o​u​r​i​t​e​s
 	 */
 	DISCOVER_TAB_FAVOURITES: string
 	/**
@@ -1994,9 +2050,9 @@ type RootTranslation = {
 	 */
 	DISCOVER_TAB_FEATURED: string
 	/**
-	 * N​e​w​ ​d​A​p​p​s
+	 * R​e​c​e​n​t​l​y​ ​A​d​d​e​d
 	 */
-	DISCOVER_TAB_NEW_DAPPS: string
+	DISCOVER_TAB_RECENTLY_ADDED: string
 	/**
 	 * T​r​e​n​d​i​n​g​ ​&​ ​P​o​p​u​l​a​r
 	 */
@@ -2017,6 +2073,14 @@ type RootTranslation = {
 	 * T​r​y​ ​r​e​c​e​i​v​i​n​g​ ​o​n​e
 	 */
 	DONT_SEE_NFTS_2: string
+	/**
+	 * S​p​e​e​d
+	 */
+	EDIT_SPEED: string
+	/**
+	 * C​h​a​n​g​e​ ​t​h​e​ ​s​p​e​e​d​ ​o​f​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	EDIT_SPEED_DESC: string
 	/**
 	 * E​r​r​o​r​!
 	 */
@@ -2178,13 +2242,13 @@ type RootTranslation = {
 	 */
 	ERROR_WRONG_WORDS_COMBINATION_DESC: string
 	/**
+	 * E​s​t​i​m​a​t​e​d​ ​f​e​e
+	 */
+	ESTIMATED_FEE: string
+	/**
 	 * E​s​t​i​m​a​t​e​d​ ​g​a​s​ ​f​e​e
 	 */
 	ESTIMATED_GAS_FEE: string
-	/**
-	 * E​s​t​i​m​a​t​e​d​ ​t​i​m​e
-	 */
-	ESTIMATED_TIME: string
 	/**
 	 * F​a​c​e​ ​I​D
 	 */
@@ -2473,6 +2537,10 @@ type RootTranslation = {
 	 * M​a​r​c​h
 	 */
 	MARCH: string
+	/**
+	 * M​a​x​ ​f​e​e
+	 */
+	MAX_FEE: string
 	/**
 	 * M​a​y
 	 */
@@ -2808,6 +2876,10 @@ type RootTranslation = {
 	 */
 	NOVEMBER: string
 	/**
+	 * T​h​e​r​e​ ​a​r​e​ ​n​o​ ​a​c​c​o​u​n​t​s​ ​w​i​t​h​ ​V​T​H​O​ ​b​a​l​a​n​c​e​ ​t​o​ ​d​e​l​e​g​a​t​e
+	 */
+	NO_ACCOUNTS_VTHO: string
+	/**
 	 * Y​o​u​ ​d​o​n​'​t​ ​h​a​v​e​ ​a​n​y​ ​h​i​d​d​e​n​ ​{​n​a​m​e​}
 	 * @param {string} name
 	 */
@@ -2824,6 +2896,11 @@ type RootTranslation = {
 	 * O​c​t​o​b​e​r
 	 */
 	OCTOBER: string
+	/**
+	 * {​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
+	 * @param {number} seconds
+	 */
+	ONLY_SECONDS: RequiredParams<'seconds|toSecondsDuration'>
 	/**
 	 * O​r​i​g​i​n
 	 */
@@ -3328,6 +3405,10 @@ type RootTranslation = {
 	 */
 	SEND_ESTIMATED_TIME: string
 	/**
+	 * F​a​s​t
+	 */
+	SEND_FEE_FAST: string
+	/**
 	 * H​I​G​H
 	 */
 	SEND_FEE_HIGH: string
@@ -3336,9 +3417,17 @@ type RootTranslation = {
 	 */
 	SEND_FEE_MEDIUM: string
 	/**
+	 * N​o​r​m​a​l
+	 */
+	SEND_FEE_NORMAL: string
+	/**
 	 * R​E​G​U​L​A​R
 	 */
 	SEND_FEE_REGULAR: string
+	/**
+	 * S​l​o​w
+	 */
+	SEND_FEE_SLOW: string
 	/**
 	 * F​r​o​m
 	 */
@@ -3951,6 +4040,10 @@ type RootTranslation = {
 	 */
 	TOUCH_ID: string
 	/**
+	 * T​r​a​n​s​a​c​t​i​o​n​ ​f​e​e
+	 */
+	TRANSACTION_FEE: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​ ​I​D
 	 */
 	TRANSACTION_ID: string
@@ -3958,6 +4051,11 @@ type RootTranslation = {
 	 * T​y​p​e
 	 */
 	TYPE: string
+	/**
+	 * ~​ ​{​s​e​c​o​n​d​s​|​t​o​S​e​c​o​n​d​s​D​u​r​a​t​i​o​n​}
+	 * @param {number} seconds
+	 */
+	UNDER_SECONDS: RequiredParams<'seconds|toSecondsDuration'>
 	/**
 	 * U​n​k​n​o​w​n​ ​A​c​c​o​u​n​t
 	 */
@@ -3970,6 +4068,10 @@ type RootTranslation = {
 	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p
 	 */
 	UNVERIFIED_APP_TITLE: string
+	/**
+	 * u​p​d​a​t​i​n​g​ ​i​n
+	 */
+	UPDATING_IN: string
 	/**
 	 * u​s​e​r​n​a​m​e
 	 */
@@ -4184,6 +4286,33 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * *​*​{​n​a​m​e​}​*​*​ ​i​s​ ​a​ ​*​*​w​r​a​p​p​e​d​ ​v​e​r​s​i​o​n​ ​o​f​ ​{​l​a​b​e​l​}​ ​(​{​s​y​m​b​o​l​}​)​*​*​ ​t​h​a​t​ ​e​x​i​s​t​s​ ​o​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​b​l​o​c​k​c​h​a​i​n​.​ ​T​h​i​s​ ​a​s​s​e​t​ ​i​s​ ​m​a​d​e​ ​p​o​s​s​i​b​l​e​ ​t​h​r​o​u​g​h​ ​o​u​r​ ​i​n​t​e​g​r​a​t​i​o​n​ ​w​i​t​h​ ​*​*​W​a​n​c​h​a​i​n​*​*​,​ ​a​ ​t​r​u​s​t​e​d​ ​c​r​o​s​s​-​c​h​a​i​n​ ​b​r​i​d​g​e​ ​p​r​o​v​i​d​e​r​.​
+​
+​W​h​e​n​ ​y​o​u​ ​s​e​e​ ​*​*​{​n​a​m​e​}​*​*​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​'​r​e​ ​v​i​e​w​i​n​g​ ​{​l​a​b​e​l​}​ ​t​h​a​t​ ​h​a​s​ ​b​e​e​n​ ​s​e​c​u​r​e​l​y​ ​l​o​c​k​e​d​ ​o​n​ ​i​t​s​ ​n​a​t​i​v​e​ ​c​h​a​i​n​ ​a​n​d​ ​r​e​p​r​e​s​e​n​t​e​d​ ​o​n​ ​V​e​C​h​a​i​n​ ​a​s​ ​a​ ​w​r​a​p​p​e​d​ ​t​o​k​e​n​.​ ​T​h​i​s​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​i​n​t​e​r​a​c​t​ ​w​i​t​h​ ​{​s​y​m​b​o​l​}​ ​o​n​ ​V​e​C​h​a​i​n​-​b​a​s​e​d​ ​d​A​p​p​s​ ​w​h​i​l​e​ ​b​e​n​e​f​i​t​i​n​g​ ​f​r​o​m​ ​V​e​C​h​a​i​n​’​s​ ​l​o​w​ ​f​e​e​s​ ​a​n​d​ ​h​i​g​h​-​s​p​e​e​d​ ​n​e​t​w​o​r​k​.​
+​
+​
+​*​*​P​o​w​e​r​e​d​ ​b​y​ ​W​a​n​c​h​a​i​n​ ​B​r​i​d​g​e​*​*​
+​W​a​n​c​h​a​i​n​ ​m​a​n​a​g​e​s​ ​t​h​e​ ​c​r​o​s​s​-​c​h​a​i​n​ ​p​r​o​c​e​s​s​ ​a​n​d​ ​e​n​s​u​r​e​s​ ​t​h​e​ ​w​r​a​p​p​e​d​ ​{​s​y​m​b​o​l​}​ ​i​s​ ​b​a​c​k​e​d​ ​1​:​1​ ​b​y​ ​r​e​a​l​ ​{​s​y​m​b​o​l​}​.​ ​Y​o​u​ ​c​a​n​ ​a​l​w​a​y​s​ ​b​r​i​d​g​e​ ​{​n​a​m​e​}​ ​b​a​c​k​ ​t​o​ ​{​l​a​b​e​l​}​ ​i​f​ ​n​e​e​d​e​d​ ​a​t​ ​[​{​u​r​l​}​]​(​{​u​r​l​}​)
+	 * @param {string} label
+	 * @param {string} name
+	 * @param {string} symbol
+	 * @param {string} url
+	 */
+	ABOUT_BRIDGE_TOKEN: RequiredParams<'label' | 'label' | 'label' | 'name' | 'name' | 'name' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'url' | 'url'>
+	/**
+	 * *​*​{​n​a​m​e​}​*​*​ ​i​s​ ​a​ ​*​*​w​r​a​p​p​e​d​ ​v​e​r​s​i​o​n​ ​o​f​ ​{​l​a​b​e​l​}​ ​(​{​s​y​m​b​o​l​}​)​*​*​ ​t​h​a​t​ ​e​x​i​s​t​s​ ​o​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​b​l​o​c​k​c​h​a​i​n​.​ ​T​h​i​s​ ​a​s​s​e​t​ ​i​s​ ​m​a​d​e​ ​p​o​s​s​i​b​l​e​ ​t​h​r​o​u​g​h​ ​o​u​r​ ​i​n​t​e​g​r​a​t​i​o​n​ ​w​i​t​h​ ​*​*​W​a​n​c​h​a​i​n​*​*​,​ ​a​ ​t​r​u​s​t​e​d​ ​c​r​o​s​s​-​c​h​a​i​n​ ​b​r​i​d​g​e​ ​p​r​o​v​i​d​e​r​.​
+​
+​*​*​{​n​a​m​e​}​*​*​ ​r​e​p​r​e​s​e​n​t​s​ ​{​s​y​m​b​o​l​}​ ​o​r​i​g​i​n​a​l​l​y​ ​i​s​s​u​e​d​ ​o​n​ ​c​h​a​i​n​s​ ​l​i​k​e​ ​E​t​h​e​r​e​u​m​,​ ​B​N​B​ ​C​h​a​i​n​,​ ​o​r​ ​o​t​h​e​r​s​.​ ​T​h​r​o​u​g​h​ ​t​h​e​ ​W​a​n​c​h​a​i​n​ ​b​r​i​d​g​e​,​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​{​s​y​m​b​o​l​}​ ​i​s​ ​s​e​c​u​r​e​l​y​ ​l​o​c​k​e​d​ ​o​n​ ​i​t​s​ ​n​a​t​i​v​e​ ​c​h​a​i​n​ ​a​n​d​ ​m​i​r​r​o​r​e​d​ ​1​:​1​ ​a​s​ ​a​ ​w​r​a​p​p​e​d​ ​a​s​s​e​t​ ​o​n​ ​V​e​C​h​a​i​n​.​ ​T​h​i​s​ ​e​n​a​b​l​e​s​ ​s​t​a​b​l​e​c​o​i​n​ ​u​s​e​ ​w​i​t​h​i​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​e​c​o​s​y​s​t​e​m​ ​w​h​i​l​e​ ​p​r​e​s​e​r​v​i​n​g​ ​t​h​e​ ​v​a​l​u​e​ ​a​n​d​ ​u​t​i​l​i​t​y​ ​o​f​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​{​s​y​m​b​o​l​}​.​
+​
+​*​*​P​o​w​e​r​e​d​ ​b​y​ ​W​a​n​c​h​a​i​n​ ​B​r​i​d​g​e​*​*​
+​W​a​n​c​h​a​i​n​ ​m​a​n​a​g​e​s​ ​t​h​e​ ​c​r​o​s​s​-​c​h​a​i​n​ ​p​r​o​c​e​s​s​ ​a​n​d​ ​e​n​s​u​r​e​s​ ​t​h​e​ ​w​r​a​p​p​e​d​ ​{​s​y​m​b​o​l​}​ ​i​s​ ​b​a​c​k​e​d​ ​1​:​1​ ​b​y​ ​r​e​a​l​ ​{​s​y​m​b​o​l​}​.​ ​Y​o​u​ ​c​a​n​ ​a​l​w​a​y​s​ ​b​r​i​d​g​e​ ​{​n​a​m​e​}​ ​b​a​c​k​ ​t​o​ ​{​l​a​b​e​l​}​ ​i​f​ ​n​e​e​d​e​d​ ​a​t​ ​[​{​u​r​l​}​]​(​{​u​r​l​}​)
+	 * @param {string} label
+	 * @param {string} name
+	 * @param {string} symbol
+	 * @param {string} url
+	 */
+	ABOUT_BRIDGE_USD_TOKEN: RequiredParams<'label' | 'label' | 'name' | 'name' | 'name' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'url' | 'url'>
 }
 
 export type TranslationFunctions = {
@@ -4264,11 +4393,11 @@ export type TranslationFunctions = {
 	 */
 	ACTIVITY_B3TR_EMPTY_DESCRIPTION: () => LocalizedString
 	/**
-	 * No B3TR actions to show yet.
+	 * No VeBetter actions to show yet.
 	 */
 	ACTIVITY_B3TR_EMPTY_LABEL: () => LocalizedString
 	/**
-	 * Better
+	 * VeBetter
 	 */
 	ACTIVITY_B3TR_LABEL: () => LocalizedString
 	/**
@@ -4473,11 +4602,11 @@ Try reconnect your device to the internet.
 	 */
 	AUGUST: () => LocalizedString
 	/**
-	 * Better action on
+	 * VeBetter action on
 	 */
 	B3TR_ACTION: () => LocalizedString
 	/**
-	 * Better action
+	 * VeBetter action
 	 */
 	B3TR_ACTION_MODAL_TITLE: () => LocalizedString
 	/**
@@ -4525,9 +4654,21 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
+	 * Get your <> on <>
+	 */
+	BANNER_STELLAPAY_DESC: () => LocalizedString
+	/**
 	 * Claim your <><> for free now
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: () => LocalizedString
+	/**
+	 * Explore the <> platform
+	 */
+	BANNER_VEBETTER_DESC: () => LocalizedString
+	/**
+	 * The transaction may take longer to process.
+	 */
+	BASE_FEE_RAMPING_UP: () => LocalizedString
 	/**
 	 * Your account will be removed, but you can still access it by adding new accounts to the wallet.
 	 */
@@ -5567,6 +5708,10 @@ Thanks for your patience!
 	 */
 	COMMON_BTN_ADD: () => LocalizedString
 	/**
+	 * Apply
+	 */
+	COMMON_BTN_APPLY: () => LocalizedString
+	/**
 	 * Cancel
 	 */
 	COMMON_BTN_CANCEL: () => LocalizedString
@@ -6031,6 +6176,46 @@ Thanks for your patience!
 	 */
 	DECEMBER: () => LocalizedString
 	/**
+	 * Delegate
+	 */
+	DELEGATE: () => LocalizedString
+	/**
+	 * Select an account
+	 */
+	DELEGATE_ACCOUNT: () => LocalizedString
+	/**
+	 * Change the transaction fee delegation to another wallet, account or URL
+	 */
+	DELEGATE_DESCRIPTION: () => LocalizedString
+	/**
+	 * Delegate fee
+	 */
+	DELEGATE_FEE: () => LocalizedString
+	/**
+	 * By default the transaction fee cost will be paid by the active account:
+	 */
+	DELEGATE_SELF: () => LocalizedString
+	/**
+	 * Insert an URL to delegate the fee:
+	 */
+	DELEGATE_URL: () => LocalizedString
+	/**
+	 * Insert URL...
+	 */
+	DELEGATE_URL_PLACEHOLDER: () => LocalizedString
+	/**
+	 * Or select a recent:
+	 */
+	DELEGATE_URL_SELECT: () => LocalizedString
+	/**
+	 * Fee delegated to
+	 */
+	DELEGATION_FEE: () => LocalizedString
+	/**
+	 * Fee not delegated
+	 */
+	DELEGATION_NO_FEE: () => LocalizedString
+	/**
 	 * Scan the QR code or use the wallet address to receive tokens and NFTs.
 	 */
 	DESCRIPTION_QR_CODE_FOR_ACCOUNT: () => LocalizedString
@@ -6067,7 +6252,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_DAPPS_TITLE: () => LocalizedString
 	/**
-	 * Ecosystem dApps
+	 * Ecosystem
 	 */
 	DISCOVER_ECOSYSTEM: () => LocalizedString
 	/**
@@ -6127,7 +6312,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
 	/**
-	 * Favourites dApps
+	 * Favourites
 	 */
 	DISCOVER_TAB_FAVOURITES: () => LocalizedString
 	/**
@@ -6135,9 +6320,9 @@ Thanks for your patience!
 	 */
 	DISCOVER_TAB_FEATURED: () => LocalizedString
 	/**
-	 * New dApps
+	 * Recently Added
 	 */
-	DISCOVER_TAB_NEW_DAPPS: () => LocalizedString
+	DISCOVER_TAB_RECENTLY_ADDED: () => LocalizedString
 	/**
 	 * Trending & Popular
 	 */
@@ -6158,6 +6343,14 @@ Thanks for your patience!
 	 * Try receiving one
 	 */
 	DONT_SEE_NFTS_2: () => LocalizedString
+	/**
+	 * Speed
+	 */
+	EDIT_SPEED: () => LocalizedString
+	/**
+	 * Change the speed of the transaction
+	 */
+	EDIT_SPEED_DESC: () => LocalizedString
 	/**
 	 * Error!
 	 */
@@ -6319,13 +6512,13 @@ Thanks for your patience!
 	 */
 	ERROR_WRONG_WORDS_COMBINATION_DESC: () => LocalizedString
 	/**
+	 * Estimated fee
+	 */
+	ESTIMATED_FEE: () => LocalizedString
+	/**
 	 * Estimated gas fee
 	 */
 	ESTIMATED_GAS_FEE: () => LocalizedString
-	/**
-	 * Estimated time
-	 */
-	ESTIMATED_TIME: () => LocalizedString
 	/**
 	 * Face ID
 	 */
@@ -6614,6 +6807,10 @@ Thanks for your patience!
 	 * March
 	 */
 	MARCH: () => LocalizedString
+	/**
+	 * Max fee
+	 */
+	MAX_FEE: () => LocalizedString
 	/**
 	 * May
 	 */
@@ -6932,6 +7129,10 @@ Thanks for your patience!
 	 */
 	NOVEMBER: () => LocalizedString
 	/**
+	 * There are no accounts with VTHO balance to delegate
+	 */
+	NO_ACCOUNTS_VTHO: () => LocalizedString
+	/**
 	 * You don't have any hidden {name}
 	 */
 	NO_HIDDEN_COLLECTIONS: (arg: { name: string }) => LocalizedString
@@ -6947,6 +7148,10 @@ Thanks for your patience!
 	 * October
 	 */
 	OCTOBER: () => LocalizedString
+	/**
+	 * {seconds|toSecondsDuration}
+	 */
+	ONLY_SECONDS: (arg: { seconds: number }) => LocalizedString
 	/**
 	 * Origin
 	 */
@@ -7444,6 +7649,10 @@ Thanks for your patience!
 	 */
 	SEND_ESTIMATED_TIME: () => LocalizedString
 	/**
+	 * Fast
+	 */
+	SEND_FEE_FAST: () => LocalizedString
+	/**
 	 * HIGH
 	 */
 	SEND_FEE_HIGH: () => LocalizedString
@@ -7452,9 +7661,17 @@ Thanks for your patience!
 	 */
 	SEND_FEE_MEDIUM: () => LocalizedString
 	/**
+	 * Normal
+	 */
+	SEND_FEE_NORMAL: () => LocalizedString
+	/**
 	 * REGULAR
 	 */
 	SEND_FEE_REGULAR: () => LocalizedString
+	/**
+	 * Slow
+	 */
+	SEND_FEE_SLOW: () => LocalizedString
 	/**
 	 * From
 	 */
@@ -8061,6 +8278,10 @@ Are you sure you want to continue?
 	 */
 	TOUCH_ID: () => LocalizedString
 	/**
+	 * Transaction fee
+	 */
+	TRANSACTION_FEE: () => LocalizedString
+	/**
 	 * Transaction ID
 	 */
 	TRANSACTION_ID: () => LocalizedString
@@ -8068,6 +8289,10 @@ Are you sure you want to continue?
 	 * Type
 	 */
 	TYPE: () => LocalizedString
+	/**
+	 * ~ {seconds|toSecondsDuration}
+	 */
+	UNDER_SECONDS: (arg: { seconds: number }) => LocalizedString
 	/**
 	 * Unknown Account
 	 */
@@ -8080,6 +8305,10 @@ Are you sure you want to continue?
 	 * Unverified app
 	 */
 	UNVERIFIED_APP_TITLE: () => LocalizedString
+	/**
+	 * updating in
+	 */
+	UPDATING_IN: () => LocalizedString
 	/**
 	 * username
 	 */
@@ -8292,6 +8521,26 @@ Are you sure you want to continue?
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * **{name}** is a **wrapped version of {label} ({symbol})** that exists on the VeChain blockchain. This asset is made possible through our integration with **Wanchain**, a trusted cross-chain bridge provider.
+
+When you see **{name}** in your wallet, you're viewing {label} that has been securely locked on its native chain and represented on VeChain as a wrapped token. This allows you to interact with {symbol} on VeChain-based dApps while benefiting from VeChain’s low fees and high-speed network.
+
+**Powered by Wanchain Bridge**
+Wanchain manages the cross-chain process and ensures the wrapped {symbol} is backed 1:1 by real {symbol}. You can always bridge {name} back to {label} if needed at [{url}]({url})
+	 */
+	ABOUT_BRIDGE_TOKEN: (arg: { label: string, name: string, symbol: string, url: string }) => LocalizedString
+	/**
+	 * **{name}** is a **wrapped version of {label} ({symbol})** that exists on the VeChain blockchain. This asset is made possible through our integration with **Wanchain**, a trusted cross-chain bridge provider.
+
+**{name}** represents {symbol} originally issued on chains like Ethereum, BNB Chain, or others. Through the Wanchain bridge, the original {symbol} is securely locked on its native chain and mirrored 1:1 as a wrapped asset on VeChain. This enables stablecoin use within the VeChain ecosystem while preserving the value and utility of the original {symbol}.
+
+**Powered by Wanchain Bridge**
+Wanchain manages the cross-chain process and ensures the wrapped {symbol} is backed 1:1 by real {symbol}. You can always bridge {name} back to {label} if needed at [{url}]({url})
+	 */
+	ABOUT_BRIDGE_USD_TOKEN: (arg: { label: string, name: string, symbol: string, url: string }) => LocalizedString
 }
 
-export type Formatters = {}
+export type Formatters = {
+	toSecondsDuration: (value: number) => unknown
+}
