@@ -30,6 +30,33 @@ export type Translations = RootTranslation
 
 type RootTranslation = {
 	/**
+	 * *​*​{​n​a​m​e​}​*​*​ ​i​s​ ​a​ ​*​*​w​r​a​p​p​e​d​ ​v​e​r​s​i​o​n​ ​o​f​ ​{​l​a​b​e​l​}​ ​(​{​s​y​m​b​o​l​}​)​*​*​ ​t​h​a​t​ ​e​x​i​s​t​s​ ​o​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​b​l​o​c​k​c​h​a​i​n​.​ ​T​h​i​s​ ​a​s​s​e​t​ ​i​s​ ​m​a​d​e​ ​p​o​s​s​i​b​l​e​ ​t​h​r​o​u​g​h​ ​o​u​r​ ​i​n​t​e​g​r​a​t​i​o​n​ ​w​i​t​h​ ​*​*​W​a​n​c​h​a​i​n​*​*​,​ ​a​ ​t​r​u​s​t​e​d​ ​c​r​o​s​s​-​c​h​a​i​n​ ​b​r​i​d​g​e​ ​p​r​o​v​i​d​e​r​.​
+​
+​W​h​e​n​ ​y​o​u​ ​s​e​e​ ​*​*​{​n​a​m​e​}​*​*​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​'​r​e​ ​v​i​e​w​i​n​g​ ​{​l​a​b​e​l​}​ ​t​h​a​t​ ​h​a​s​ ​b​e​e​n​ ​s​e​c​u​r​e​l​y​ ​l​o​c​k​e​d​ ​o​n​ ​i​t​s​ ​n​a​t​i​v​e​ ​c​h​a​i​n​ ​a​n​d​ ​r​e​p​r​e​s​e​n​t​e​d​ ​o​n​ ​V​e​C​h​a​i​n​ ​a​s​ ​a​ ​w​r​a​p​p​e​d​ ​t​o​k​e​n​.​ ​T​h​i​s​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​i​n​t​e​r​a​c​t​ ​w​i​t​h​ ​{​s​y​m​b​o​l​}​ ​o​n​ ​V​e​C​h​a​i​n​-​b​a​s​e​d​ ​d​A​p​p​s​ ​w​h​i​l​e​ ​b​e​n​e​f​i​t​i​n​g​ ​f​r​o​m​ ​V​e​C​h​a​i​n​’​s​ ​l​o​w​ ​f​e​e​s​ ​a​n​d​ ​h​i​g​h​-​s​p​e​e​d​ ​n​e​t​w​o​r​k​.​
+​
+​
+​*​*​P​o​w​e​r​e​d​ ​b​y​ ​W​a​n​c​h​a​i​n​ ​B​r​i​d​g​e​*​*​
+​W​a​n​c​h​a​i​n​ ​m​a​n​a​g​e​s​ ​t​h​e​ ​c​r​o​s​s​-​c​h​a​i​n​ ​p​r​o​c​e​s​s​ ​a​n​d​ ​e​n​s​u​r​e​s​ ​t​h​e​ ​w​r​a​p​p​e​d​ ​{​s​y​m​b​o​l​}​ ​i​s​ ​b​a​c​k​e​d​ ​1​:​1​ ​b​y​ ​r​e​a​l​ ​{​s​y​m​b​o​l​}​.​ ​Y​o​u​ ​c​a​n​ ​a​l​w​a​y​s​ ​b​r​i​d​g​e​ ​{​n​a​m​e​}​ ​b​a​c​k​ ​t​o​ ​{​l​a​b​e​l​}​ ​i​f​ ​n​e​e​d​e​d​ ​a​t​ ​[​{​u​r​l​}​]​(​{​u​r​l​}​)
+	 * @param {string} label
+	 * @param {string} name
+	 * @param {string} symbol
+	 * @param {string} url
+	 */
+	ABOUT_BRIDGE_TOKEN: RequiredParams<'label' | 'label' | 'label' | 'name' | 'name' | 'name' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'url' | 'url'>
+	/**
+	 * *​*​{​n​a​m​e​}​*​*​ ​i​s​ ​a​ ​*​*​w​r​a​p​p​e​d​ ​v​e​r​s​i​o​n​ ​o​f​ ​{​l​a​b​e​l​}​ ​(​{​s​y​m​b​o​l​}​)​*​*​ ​t​h​a​t​ ​e​x​i​s​t​s​ ​o​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​b​l​o​c​k​c​h​a​i​n​.​ ​T​h​i​s​ ​a​s​s​e​t​ ​i​s​ ​m​a​d​e​ ​p​o​s​s​i​b​l​e​ ​t​h​r​o​u​g​h​ ​o​u​r​ ​i​n​t​e​g​r​a​t​i​o​n​ ​w​i​t​h​ ​*​*​W​a​n​c​h​a​i​n​*​*​,​ ​a​ ​t​r​u​s​t​e​d​ ​c​r​o​s​s​-​c​h​a​i​n​ ​b​r​i​d​g​e​ ​p​r​o​v​i​d​e​r​.​
+​
+​*​*​{​n​a​m​e​}​*​*​ ​r​e​p​r​e​s​e​n​t​s​ ​{​s​y​m​b​o​l​}​ ​o​r​i​g​i​n​a​l​l​y​ ​i​s​s​u​e​d​ ​o​n​ ​c​h​a​i​n​s​ ​l​i​k​e​ ​E​t​h​e​r​e​u​m​,​ ​B​N​B​ ​C​h​a​i​n​,​ ​o​r​ ​o​t​h​e​r​s​.​ ​T​h​r​o​u​g​h​ ​t​h​e​ ​W​a​n​c​h​a​i​n​ ​b​r​i​d​g​e​,​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​{​s​y​m​b​o​l​}​ ​i​s​ ​s​e​c​u​r​e​l​y​ ​l​o​c​k​e​d​ ​o​n​ ​i​t​s​ ​n​a​t​i​v​e​ ​c​h​a​i​n​ ​a​n​d​ ​m​i​r​r​o​r​e​d​ ​1​:​1​ ​a​s​ ​a​ ​w​r​a​p​p​e​d​ ​a​s​s​e​t​ ​o​n​ ​V​e​C​h​a​i​n​.​ ​T​h​i​s​ ​e​n​a​b​l​e​s​ ​s​t​a​b​l​e​c​o​i​n​ ​u​s​e​ ​w​i​t​h​i​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​e​c​o​s​y​s​t​e​m​ ​w​h​i​l​e​ ​p​r​e​s​e​r​v​i​n​g​ ​t​h​e​ ​v​a​l​u​e​ ​a​n​d​ ​u​t​i​l​i​t​y​ ​o​f​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​{​s​y​m​b​o​l​}​.​
+​
+​*​*​P​o​w​e​r​e​d​ ​b​y​ ​W​a​n​c​h​a​i​n​ ​B​r​i​d​g​e​*​*​
+​W​a​n​c​h​a​i​n​ ​m​a​n​a​g​e​s​ ​t​h​e​ ​c​r​o​s​s​-​c​h​a​i​n​ ​p​r​o​c​e​s​s​ ​a​n​d​ ​e​n​s​u​r​e​s​ ​t​h​e​ ​w​r​a​p​p​e​d​ ​{​s​y​m​b​o​l​}​ ​i​s​ ​b​a​c​k​e​d​ ​1​:​1​ ​b​y​ ​r​e​a​l​ ​{​s​y​m​b​o​l​}​.​ ​Y​o​u​ ​c​a​n​ ​a​l​w​a​y​s​ ​b​r​i​d​g​e​ ​{​n​a​m​e​}​ ​b​a​c​k​ ​t​o​ ​{​l​a​b​e​l​}​ ​i​f​ ​n​e​e​d​e​d​ ​a​t​ ​[​{​u​r​l​}​]​(​{​u​r​l​}​)
+	 * @param {string} label
+	 * @param {string} name
+	 * @param {string} symbol
+	 * @param {string} url
+	 */
+	ABOUT_BRIDGE_USD_TOKEN: RequiredParams<'label' | 'label' | 'name' | 'name' | 'name' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'url' | 'url'>
+	/**
 	 * A​d​d​ ​a​ ​n​e​w​ ​a​c​c​o​u​n​t
 	 */
 	ACCOUNT_OR_WALLET_BOTTOM_SHEET_ADD_ACCOUNT: string
@@ -1382,6 +1409,10 @@ type RootTranslation = {
 	 * C​h​e​c​k​i​n​g​ ​i​f​ ​u​s​e​r​n​a​m​e​ ​i​s​ ​a​v​a​i​l​a​b​l​e​.​.​.
 	 */
 	CHECKING_USERNAME_AVAILABILITY: string
+	/**
+	 * C​l​o​s​e​ ​a​l​l
+	 */
+	CLOSE_ALL: string
 	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​i​C​l​o​u​d​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
 	 */
@@ -3755,6 +3786,11 @@ type RootTranslation = {
 	 */
 	SYSTEM_THEME: string
 	/**
+	 * {​n​u​m​b​e​r​}​ ​t​a​b​s
+	 * @param {number} number
+	 */
+	TAB_AMOUNT: RequiredParams<'number'>
+	/**
 	 * T​a​k​e​ ​m​e​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
 	TAKE_ME_TO_DRIVE: string
@@ -4286,36 +4322,27 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * *​*​{​n​a​m​e​}​*​*​ ​i​s​ ​a​ ​*​*​w​r​a​p​p​e​d​ ​v​e​r​s​i​o​n​ ​o​f​ ​{​l​a​b​e​l​}​ ​(​{​s​y​m​b​o​l​}​)​*​*​ ​t​h​a​t​ ​e​x​i​s​t​s​ ​o​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​b​l​o​c​k​c​h​a​i​n​.​ ​T​h​i​s​ ​a​s​s​e​t​ ​i​s​ ​m​a​d​e​ ​p​o​s​s​i​b​l​e​ ​t​h​r​o​u​g​h​ ​o​u​r​ ​i​n​t​e​g​r​a​t​i​o​n​ ​w​i​t​h​ ​*​*​W​a​n​c​h​a​i​n​*​*​,​ ​a​ ​t​r​u​s​t​e​d​ ​c​r​o​s​s​-​c​h​a​i​n​ ​b​r​i​d​g​e​ ​p​r​o​v​i​d​e​r​.​
-​
-​W​h​e​n​ ​y​o​u​ ​s​e​e​ ​*​*​{​n​a​m​e​}​*​*​ ​i​n​ ​y​o​u​r​ ​w​a​l​l​e​t​,​ ​y​o​u​'​r​e​ ​v​i​e​w​i​n​g​ ​{​l​a​b​e​l​}​ ​t​h​a​t​ ​h​a​s​ ​b​e​e​n​ ​s​e​c​u​r​e​l​y​ ​l​o​c​k​e​d​ ​o​n​ ​i​t​s​ ​n​a​t​i​v​e​ ​c​h​a​i​n​ ​a​n​d​ ​r​e​p​r​e​s​e​n​t​e​d​ ​o​n​ ​V​e​C​h​a​i​n​ ​a​s​ ​a​ ​w​r​a​p​p​e​d​ ​t​o​k​e​n​.​ ​T​h​i​s​ ​a​l​l​o​w​s​ ​y​o​u​ ​t​o​ ​i​n​t​e​r​a​c​t​ ​w​i​t​h​ ​{​s​y​m​b​o​l​}​ ​o​n​ ​V​e​C​h​a​i​n​-​b​a​s​e​d​ ​d​A​p​p​s​ ​w​h​i​l​e​ ​b​e​n​e​f​i​t​i​n​g​ ​f​r​o​m​ ​V​e​C​h​a​i​n​’​s​ ​l​o​w​ ​f​e​e​s​ ​a​n​d​ ​h​i​g​h​-​s​p​e​e​d​ ​n​e​t​w​o​r​k​.​
-​
-​
-​*​*​P​o​w​e​r​e​d​ ​b​y​ ​W​a​n​c​h​a​i​n​ ​B​r​i​d​g​e​*​*​
-​W​a​n​c​h​a​i​n​ ​m​a​n​a​g​e​s​ ​t​h​e​ ​c​r​o​s​s​-​c​h​a​i​n​ ​p​r​o​c​e​s​s​ ​a​n​d​ ​e​n​s​u​r​e​s​ ​t​h​e​ ​w​r​a​p​p​e​d​ ​{​s​y​m​b​o​l​}​ ​i​s​ ​b​a​c​k​e​d​ ​1​:​1​ ​b​y​ ​r​e​a​l​ ​{​s​y​m​b​o​l​}​.​ ​Y​o​u​ ​c​a​n​ ​a​l​w​a​y​s​ ​b​r​i​d​g​e​ ​{​n​a​m​e​}​ ​b​a​c​k​ ​t​o​ ​{​l​a​b​e​l​}​ ​i​f​ ​n​e​e​d​e​d​ ​a​t​ ​[​{​u​r​l​}​]​(​{​u​r​l​}​)
-	 * @param {string} label
-	 * @param {string} name
-	 * @param {string} symbol
-	 * @param {string} url
-	 */
-	ABOUT_BRIDGE_TOKEN: RequiredParams<'label' | 'label' | 'label' | 'name' | 'name' | 'name' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'url' | 'url'>
-	/**
-	 * *​*​{​n​a​m​e​}​*​*​ ​i​s​ ​a​ ​*​*​w​r​a​p​p​e​d​ ​v​e​r​s​i​o​n​ ​o​f​ ​{​l​a​b​e​l​}​ ​(​{​s​y​m​b​o​l​}​)​*​*​ ​t​h​a​t​ ​e​x​i​s​t​s​ ​o​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​b​l​o​c​k​c​h​a​i​n​.​ ​T​h​i​s​ ​a​s​s​e​t​ ​i​s​ ​m​a​d​e​ ​p​o​s​s​i​b​l​e​ ​t​h​r​o​u​g​h​ ​o​u​r​ ​i​n​t​e​g​r​a​t​i​o​n​ ​w​i​t​h​ ​*​*​W​a​n​c​h​a​i​n​*​*​,​ ​a​ ​t​r​u​s​t​e​d​ ​c​r​o​s​s​-​c​h​a​i​n​ ​b​r​i​d​g​e​ ​p​r​o​v​i​d​e​r​.​
-​
-​*​*​{​n​a​m​e​}​*​*​ ​r​e​p​r​e​s​e​n​t​s​ ​{​s​y​m​b​o​l​}​ ​o​r​i​g​i​n​a​l​l​y​ ​i​s​s​u​e​d​ ​o​n​ ​c​h​a​i​n​s​ ​l​i​k​e​ ​E​t​h​e​r​e​u​m​,​ ​B​N​B​ ​C​h​a​i​n​,​ ​o​r​ ​o​t​h​e​r​s​.​ ​T​h​r​o​u​g​h​ ​t​h​e​ ​W​a​n​c​h​a​i​n​ ​b​r​i​d​g​e​,​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​{​s​y​m​b​o​l​}​ ​i​s​ ​s​e​c​u​r​e​l​y​ ​l​o​c​k​e​d​ ​o​n​ ​i​t​s​ ​n​a​t​i​v​e​ ​c​h​a​i​n​ ​a​n​d​ ​m​i​r​r​o​r​e​d​ ​1​:​1​ ​a​s​ ​a​ ​w​r​a​p​p​e​d​ ​a​s​s​e​t​ ​o​n​ ​V​e​C​h​a​i​n​.​ ​T​h​i​s​ ​e​n​a​b​l​e​s​ ​s​t​a​b​l​e​c​o​i​n​ ​u​s​e​ ​w​i​t​h​i​n​ ​t​h​e​ ​V​e​C​h​a​i​n​ ​e​c​o​s​y​s​t​e​m​ ​w​h​i​l​e​ ​p​r​e​s​e​r​v​i​n​g​ ​t​h​e​ ​v​a​l​u​e​ ​a​n​d​ ​u​t​i​l​i​t​y​ ​o​f​ ​t​h​e​ ​o​r​i​g​i​n​a​l​ ​{​s​y​m​b​o​l​}​.​
-​
-​*​*​P​o​w​e​r​e​d​ ​b​y​ ​W​a​n​c​h​a​i​n​ ​B​r​i​d​g​e​*​*​
-​W​a​n​c​h​a​i​n​ ​m​a​n​a​g​e​s​ ​t​h​e​ ​c​r​o​s​s​-​c​h​a​i​n​ ​p​r​o​c​e​s​s​ ​a​n​d​ ​e​n​s​u​r​e​s​ ​t​h​e​ ​w​r​a​p​p​e​d​ ​{​s​y​m​b​o​l​}​ ​i​s​ ​b​a​c​k​e​d​ ​1​:​1​ ​b​y​ ​r​e​a​l​ ​{​s​y​m​b​o​l​}​.​ ​Y​o​u​ ​c​a​n​ ​a​l​w​a​y​s​ ​b​r​i​d​g​e​ ​{​n​a​m​e​}​ ​b​a​c​k​ ​t​o​ ​{​l​a​b​e​l​}​ ​i​f​ ​n​e​e​d​e​d​ ​a​t​ ​[​{​u​r​l​}​]​(​{​u​r​l​}​)
-	 * @param {string} label
-	 * @param {string} name
-	 * @param {string} symbol
-	 * @param {string} url
-	 */
-	ABOUT_BRIDGE_USD_TOKEN: RequiredParams<'label' | 'label' | 'name' | 'name' | 'name' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'symbol' | 'url' | 'url'>
 }
 
 export type TranslationFunctions = {
+	/**
+	 * **{name}** is a **wrapped version of {label} ({symbol})** that exists on the VeChain blockchain. This asset is made possible through our integration with **Wanchain**, a trusted cross-chain bridge provider.
+
+When you see **{name}** in your wallet, you're viewing {label} that has been securely locked on its native chain and represented on VeChain as a wrapped token. This allows you to interact with {symbol} on VeChain-based dApps while benefiting from VeChain’s low fees and high-speed network.
+
+**Powered by Wanchain Bridge**
+Wanchain manages the cross-chain process and ensures the wrapped {symbol} is backed 1:1 by real {symbol}. You can always bridge {name} back to {label} if needed at [{url}]({url})
+	 */
+	ABOUT_BRIDGE_TOKEN: (arg: { label: string, name: string, symbol: string, url: string }) => LocalizedString
+	/**
+	 * **{name}** is a **wrapped version of {label} ({symbol})** that exists on the VeChain blockchain. This asset is made possible through our integration with **Wanchain**, a trusted cross-chain bridge provider.
+
+**{name}** represents {symbol} originally issued on chains like Ethereum, BNB Chain, or others. Through the Wanchain bridge, the original {symbol} is securely locked on its native chain and mirrored 1:1 as a wrapped asset on VeChain. This enables stablecoin use within the VeChain ecosystem while preserving the value and utility of the original {symbol}.
+
+**Powered by Wanchain Bridge**
+Wanchain manages the cross-chain process and ensures the wrapped {symbol} is backed 1:1 by real {symbol}. You can always bridge {name} back to {label} if needed at [{url}]({url})
+	 */
+	ABOUT_BRIDGE_USD_TOKEN: (arg: { label: string, name: string, symbol: string, url: string }) => LocalizedString
 	/**
 	 * Add a new account
 	 */
@@ -5659,6 +5686,10 @@ Thanks for your patience!
 	 * Checking if username is available...
 	 */
 	CHECKING_USERNAME_AVAILABILITY: () => LocalizedString
+	/**
+	 * Close all
+	 */
+	CLOSE_ALL: () => LocalizedString
 	/**
 	 * An error occurred while trying to connect to iCloud service. Try again!
 	 */
@@ -7994,6 +8025,10 @@ Are you sure you want to continue?
 	 */
 	SYSTEM_THEME: () => LocalizedString
 	/**
+	 * {number} tabs
+	 */
+	TAB_AMOUNT: (arg: { number: number }) => LocalizedString
+	/**
 	 * Take me to Google Drive
 	 */
 	TAKE_ME_TO_DRIVE: () => LocalizedString
@@ -8521,24 +8556,6 @@ Are you sure you want to continue?
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * **{name}** is a **wrapped version of {label} ({symbol})** that exists on the VeChain blockchain. This asset is made possible through our integration with **Wanchain**, a trusted cross-chain bridge provider.
-
-When you see **{name}** in your wallet, you're viewing {label} that has been securely locked on its native chain and represented on VeChain as a wrapped token. This allows you to interact with {symbol} on VeChain-based dApps while benefiting from VeChain’s low fees and high-speed network.
-
-**Powered by Wanchain Bridge**
-Wanchain manages the cross-chain process and ensures the wrapped {symbol} is backed 1:1 by real {symbol}. You can always bridge {name} back to {label} if needed at [{url}]({url})
-	 */
-	ABOUT_BRIDGE_TOKEN: (arg: { label: string, name: string, symbol: string, url: string }) => LocalizedString
-	/**
-	 * **{name}** is a **wrapped version of {label} ({symbol})** that exists on the VeChain blockchain. This asset is made possible through our integration with **Wanchain**, a trusted cross-chain bridge provider.
-
-**{name}** represents {symbol} originally issued on chains like Ethereum, BNB Chain, or others. Through the Wanchain bridge, the original {symbol} is securely locked on its native chain and mirrored 1:1 as a wrapped asset on VeChain. This enables stablecoin use within the VeChain ecosystem while preserving the value and utility of the original {symbol}.
-
-**Powered by Wanchain Bridge**
-Wanchain manages the cross-chain process and ensures the wrapped {symbol} is backed 1:1 by real {symbol}. You can always bridge {name} back to {label} if needed at [{url}]({url})
-	 */
-	ABOUT_BRIDGE_USD_TOKEN: (arg: { label: string, name: string, symbol: string, url: string }) => LocalizedString
 }
 
 export type Formatters = {

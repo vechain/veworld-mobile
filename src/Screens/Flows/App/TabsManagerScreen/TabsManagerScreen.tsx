@@ -1,16 +1,19 @@
-import React, { useCallback } from "react"
-import { FlatList, StyleSheet } from "react-native"
-import { BaseIcon, BaseSafeArea, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
-import { useThemedStyles } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
-import { RootStackParamListBrowser, Routes } from "~Navigation"
-import { selectTabs, useAppDispatch, useAppSelector, Tab, closeAllTabs } from "~Storage/Redux"
-import { TabViewCard } from "./Components"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
+import React, { useCallback, useMemo } from "react"
+import { FlatList, StyleSheet } from "react-native"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
+import { COLORS } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { Tab, closeAllTabs, selectTabs, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { TabViewCard } from "./Components"
 
 export const TabsManagerScreen = () => {
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const { LL } = useI18nContext()
 
     const tabs = useAppSelector(selectTabs)
 
@@ -36,24 +39,25 @@ export const TabsManagerScreen = () => {
         return <BaseSpacer height={16} />
     }, [])
 
+    const titleColor = useMemo(() => (theme.isDark ? COLORS.WHITE : COLORS.GREY_600), [theme.isDark])
+    const buttonTextColor = useMemo(() => (theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_600), [theme.isDark])
+    const disabledTextColor = useMemo(
+        () => (theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300),
+        [theme.isDark],
+    )
+
     return (
-        <BaseSafeArea>
-            <BaseView flex={1}>
-                <BaseView flex={1} px={24} pt={16}>
-                    <BaseView flexDirection="row" justifyContent="center" alignItems="center">
-                        <BaseText typographyFont="captionMedium">{`${tabs.length} tabs`}</BaseText>
-                    </BaseView>
-                    <BaseView style={styles.listContainer}>
-                        <FlatList
-                            data={tabs}
-                            numColumns={2}
-                            columnWrapperStyle={styles.columnWrapper}
-                            keyExtractor={item => item.id}
-                            renderItem={renderTab}
-                            ItemSeparatorComponent={renderSeparator}
-                        />
-                    </BaseView>
+        <Layout
+            fixedHeader={
+                <BaseView flexDirection="row" justifyContent="center" alignItems="center">
+                    <BaseText typographyFont="captionMedium" color={titleColor}>
+                        {LL.TAB_AMOUNT({ number: tabs.length })}
+                    </BaseText>
                 </BaseView>
+            }
+            noBackButton
+            noMargin
+            footer={
                 <BaseView style={styles.footerContainer}>
                     <BaseTouchable
                         disabled={tabs.length === 0}
@@ -61,19 +65,33 @@ export const TabsManagerScreen = () => {
                         onPress={onCloseAll}>
                         <BaseText
                             typographyFont="bodyMedium"
-                            color={tabs.length === 0 ? theme.colors.textDisabled : theme.colors.text}>
-                            {"Close all"}
+                            color={tabs.length === 0 ? disabledTextColor : buttonTextColor}>
+                            {LL.CLOSE_ALL()}
                         </BaseText>
                     </BaseTouchable>
                     <BaseTouchable style={styles.footerButton} onPress={onNewTab}>
-                        <BaseIcon name={"icon-plus"} size={20} />
+                        <BaseIcon name={"icon-plus"} size={20} color={buttonTextColor} />
                     </BaseTouchable>
                     <BaseTouchable style={[styles.footerButton, styles.footerButtonEnd]} onPress={onDone}>
-                        <BaseText typographyFont="bodyMedium">{"Done"}</BaseText>
+                        <BaseText typographyFont="bodyMedium" color={buttonTextColor}>
+                            {LL.COMMON_BTN_DONE()}
+                        </BaseText>
                     </BaseTouchable>
                 </BaseView>
-            </BaseView>
-        </BaseSafeArea>
+            }
+            fixedBody={
+                <BaseView flex={1}>
+                    <FlatList
+                        data={tabs}
+                        numColumns={2}
+                        columnWrapperStyle={styles.columnWrapper}
+                        keyExtractor={item => item.id}
+                        renderItem={renderTab}
+                        ItemSeparatorComponent={renderSeparator}
+                    />
+                </BaseView>
+            }
+        />
     )
 }
 
@@ -92,8 +110,7 @@ const baseStyles = () =>
             gap: 16,
         },
         footerContainer: {
-            paddingTop: 8,
-            paddingBottom: 40,
+            paddingVertical: 8,
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",

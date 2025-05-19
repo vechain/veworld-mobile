@@ -1,10 +1,10 @@
 import React from "react"
-import Svg, { Defs, G, Path, Text, Rect, ClipPath } from "react-native-svg"
+import Svg, { ClipPath, Defs, G, Path, Rect, Text } from "react-native-svg"
 
 const defaultFont = {
     fontFamily: "Inter-SemiBold",
     fontSize: 10,
-    fontWeight: "semibold",
+    fontWeight: "600",
 }
 
 type TabsIconSVGProps = {
