@@ -9,6 +9,7 @@ import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
+import { NativeModules } from "react-native"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
@@ -18,6 +19,7 @@ jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
     randomFillSync: jest.fn(buffer => buffer),
+    randomBytes: jest.fn(size => Buffer.alloc(Math.ceil(size), 16)),
     createCipheriv: jest.fn(() => ({
         update: (first: string) => first,
         final: () => "",
@@ -92,6 +94,10 @@ jest.mock("expo-modules-core", () => ({
         addListener: jest.fn(),
         removeListeners: jest.fn(),
     })),
+    LegacyEventEmitter: jest.fn().mockImplementation(() => ({
+        addListener: jest.fn(),
+        removeListeners: jest.fn(),
+    })),
     requireNativeModule: jest.fn().mockReturnValue({}), // Mock native modules
     Platform: {
         OS: "ios",
@@ -132,9 +138,8 @@ jest.mock("expo-font", () => ({
 
 jest.mock("react-native-localize", () => localizeMock)
 
-jest.mock("react-native-webview", () => ({
-    ...jest.requireActual("react-native-webview").WebView,
-}))
+// Mock RNCWebView
+NativeModules.RNCWebView = {}
 
 jest.mock("expo-clipboard", () => {})
 jest.mock("react-native-linear-gradient", () => "LinearGradient")

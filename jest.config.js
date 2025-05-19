@@ -59,6 +59,7 @@ module.exports = {
         "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
         "^react-native-device-info$": "<rootDir>/src/Test/mocks/react-native-device-info.js",
         "^@react-native-community/netinfo$": "<rootDir>/src/Test/mocks/@react-native-community/netinfo.js",
+        "react-native-webview": "<rootDir>/node_modules/react-native-webview/src/index.ts",
         Intl: "<rootDir>/node_modules/intl/",
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],

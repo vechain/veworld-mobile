@@ -96,7 +96,7 @@ describe("useTransactionScreen", () => {
             isWalletSecurityNone: false,
             biometrics: {},
         })
-        ;(crypto.randomFillSync as jest.Mock).mockReturnValue(Buffer.from("1234abc", "hex"))
+        ;(crypto.randomBytes as jest.Mock).mockReturnValue(Buffer.from("1234abc", "hex"))
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: "0x1234" },
             status: 200,
@@ -257,12 +257,7 @@ describe("useTransactionScreen", () => {
                 result.current.onSubmit()
             })
 
-            await waitFor(
-                () => {
-                    expect(onTransactionSuccess).toHaveBeenCalled()
-                },
-                { timeout: 10000 },
-            )
+            expect(onTransactionSuccess).toHaveBeenCalled()
         }, 20000)
 
         it("using ledger account should navigate", async () => {
@@ -302,34 +297,29 @@ describe("useTransactionScreen", () => {
 
             await act(async () => await result.current.onSubmit())
 
-            await waitFor(
-                () => {
-                    expect(mockNav).toHaveBeenCalledWith(Routes.LEDGER_SIGN_TRANSACTION, {
-                        accountWithDevice: accWithDevice,
-                        initialRoute: "Home",
-                        transaction: Transaction.of({
-                            blockRef: "0x00ce27a27f982a6d",
-                            chainTag: 39,
-                            clauses: [
-                                {
-                                    data: "0x",
-                                    to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
-                                    value: "300000000000000000000",
-                                },
-                            ],
-                            dependsOn: null,
-                            expiration: 30,
-                            gas: 0,
-                            gasPriceCoef: 127,
-                            nonce: "0x1234ab",
-                        }),
-                        delegationSignature: undefined,
-                        dappRequest,
-                    })
-                },
-                { timeout: 10000 },
-            )
-        }, 20000)
+            expect(mockNav).toHaveBeenCalledWith(Routes.LEDGER_SIGN_TRANSACTION, {
+                accountWithDevice: accWithDevice,
+                initialRoute: "Home",
+                transaction: Transaction.of({
+                    blockRef: "0x00ce27a27f982a6d",
+                    chainTag: 39,
+                    clauses: [
+                        {
+                            data: "0x",
+                            to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
+                            value: "300000000000000000000",
+                        },
+                    ],
+                    dependsOn: null,
+                    expiration: 30,
+                    gas: 0,
+                    gasPriceCoef: 127,
+                    nonce: "0x1234ab",
+                }),
+                delegationSignature: undefined,
+                dappRequest,
+            })
+        })
     })
 })
 
