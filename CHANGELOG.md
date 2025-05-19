@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.2 (2025-05-19)</small>
+
+* build: init ([bc68c5a](https://github.com/vechain/veworld-mobile/commit/bc68c5a))
+* 128 bug   dapps that lost endorsement dont have names in activity (#2944) ([aa12605](https://github.com/vechain/veworld-mobile/commit/aa12605)), closes [#2944](https://github.com/vechain/veworld-mobile/issues/2944)
+
 ## <small>2.2.1 (2025-05-13)</small>
 
 * build: init ([51f6358](https://github.com/vechain/veworld-mobile/commit/51f6358))
