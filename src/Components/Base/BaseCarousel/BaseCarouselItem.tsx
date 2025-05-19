@@ -1,18 +1,15 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
-import { Animated, ImageSourcePropType, ImageStyle, Linking, StyleSheet, ViewStyle } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import { Animated, Linking, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
+
 type Props = {
-    w?: number
-    h?: number
     testID?: string
     href?: string
-    source: ImageSourcePropType
     style?: ViewStyle
-    imageStyle?: ImageStyle
+    contentWrapperStyle?: ViewStyle
     isExternalLink?: boolean
     onPress?: (name: string) => void
     /**
@@ -20,22 +17,23 @@ type Props = {
      */
     onPressActivation?: "before" | "after"
     name?: string
+    children?: React.ReactNode
 }
 
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
+
 export const BaseCarouselItem: React.FC<Props> = ({
-    source,
     href,
     style,
-    imageStyle,
     testID,
     isExternalLink,
-    w = SCREEN_WIDTH - 32,
-    h = 128,
     onPress: propsOnPress,
-    onPressActivation = "after",
+    onPressActivation = "before",
     name,
+    children,
+    contentWrapperStyle,
 }) => {
-    const { styles } = useThemedStyles(baseStyles(w, h))
+    const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
 
     const onPress = useCallback(async () => {
@@ -52,28 +50,21 @@ export const BaseCarouselItem: React.FC<Props> = ({
     }, [href, isExternalLink, name, nav, onPressActivation, propsOnPress])
 
     return (
-        <Animated.View testID={testID} style={[style, styles.container]}>
-            <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
-                <Animated.Image
-                    source={source}
-                    resizeMode={"contain"}
-                    style={[imageStyle, styles.image as ImageStyle]}
-                />
-            </TouchableOpacity>
-        </Animated.View>
+        <AnimatedTouchableOpacity testID={testID} style={[style, styles.container]} onPress={onPress}>
+            <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>
+        </AnimatedTouchableOpacity>
     )
 }
 
-const baseStyles = (w: number, h: number) => () =>
+const baseStyles = () =>
     StyleSheet.create({
         container: {
             flex: 1,
-            width: w,
-            height: h,
-            marginLeft: 12,
+            width: SCREEN_WIDTH,
+            pointerEvents: "box-none",
         },
-        image: {
-            width: "100%",
-            height: "100%",
+        contentWrapper: {
+            flex: 1,
+            paddingHorizontal: 16,
         },
     })

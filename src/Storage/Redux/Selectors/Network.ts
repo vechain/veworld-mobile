@@ -1,12 +1,16 @@
 import { createSelector } from "@reduxjs/toolkit"
 import { defaultMainNetwork, defaultNetworks } from "~Constants"
 import { RootState } from "../Types"
-import { NETWORK_TYPE } from "~Model"
+import { NETWORK_TYPE, NetworkHardFork } from "~Model"
 
 const selectNetworksState = (state: RootState) => state.networks
 
 export const selectDefaultNetworks = createSelector(selectNetworksState, _state => {
     return defaultNetworks
+})
+
+export const selectDefaultMainnet = createSelector(selectDefaultNetworks, defaults => {
+    return defaults.find(u => u.type === NETWORK_TYPE.MAIN)!
 })
 
 // is type redundant? should we check for genesisid directly?
@@ -43,3 +47,8 @@ export const selectNetworkById = createSelector(
 export const selectIsNodeError = createSelector(selectNetworksState, state => {
     return state.isNodeError
 })
+
+export const selectSelectedNetworkHardfork = createSelector(
+    [selectSelectedNetwork, selectNetworksState],
+    (network, networks) => networks.hardfork[network.genesis.id] ?? NetworkHardFork.FINALITY,
+)

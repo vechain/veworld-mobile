@@ -145,6 +145,7 @@
     "react-native-keychain": "8.1.2",
     "react-native-linear-gradient": "^2.8.3",
     "react-native-localize": "^3.2.1",
+    "react-native-markdown-display": "^7.0.2",
     "react-native-mmkv": "3.2.0",
     "react-native-onesignal": "^5.2.5",
     "react-native-pager-view": "6.5.1",

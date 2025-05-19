@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { defaultMainNetwork } from "~Constants/Constants"
-import { Network } from "~Model"
+import { Network, NetworkHardFork } from "~Model"
 
 /**
  * Network state
@@ -17,6 +17,9 @@ export interface NetworkState {
     showTestNetTag: boolean
     showConversionOtherNets: boolean
     isNodeError: boolean
+    hardfork: {
+        [genesisId: string]: NetworkHardFork
+    }
 }
 
 const initialState: NetworkState = {
@@ -25,6 +28,7 @@ const initialState: NetworkState = {
     showTestNetTag: true,
     showConversionOtherNets: true,
     isNodeError: false,
+    hardfork: {},
 }
 
 export const NetworkSlice = createSlice({
@@ -52,6 +56,9 @@ export const NetworkSlice = createSlice({
             state.isNodeError = action.payload
         },
         resetNetworkState: () => initialState,
+        setHardFork: (state, action: PayloadAction<NetworkHardFork>) => {
+            state.hardfork[state.selectedNetwork] = action.payload
+        },
     },
 })
 
@@ -62,4 +69,5 @@ export const {
     removeCustomNetwork,
     updateNodeError,
     resetNetworkState,
+    setHardFork,
 } = NetworkSlice.actions

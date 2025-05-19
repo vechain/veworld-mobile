@@ -30,6 +30,13 @@ export type FeatureFlags = {
         bannersAutoplay: boolean
         showStellaPayBanner: boolean
     }
+    forks: {
+        GALACTICA: {
+            transactions: {
+                ledger: boolean
+            }
+        }
+    }
 }
 
 export const getFeatureFlags = async () => {

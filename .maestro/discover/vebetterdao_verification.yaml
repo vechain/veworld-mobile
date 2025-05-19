@@ -1,57 +1,53 @@
 appId: org.vechain.veworld.app
 tags:
-  - pull-request
-  - onlyAndroid
+    - pull-request
+    - onlyAndroid
 onFlowStart:
-  - runFlow: ../setup_reset/setupApp.yaml
+    - runFlow: ../setup_reset/setupApp.yaml
 onFlowComplete:
-  - runFlow: ../setup_reset/resetApp.yaml
+    - runFlow: ../setup_reset/resetApp.yaml
 ---
 # Test: Mobile QA Automation - Discover section - Verify that VeBetterDAO is listed, accessible and can be connected to wallet
 # Ticket: #2778
 
 - tapOn:
-    id: "discover-tab"
-- swipe:
-   from:
-     id: "__CAROUSEL_ITEM_0__"
-   direction: LEFT
+      id: "discover-tab"
 - runFlow:
-    when:
-      platform: Android
-    commands:
-      - tapOn:
-          id: "VeBetterDao_banner"
+      when:
+          platform: Android
+      commands:
+          - tapOn:
+                id: "__CAROUSEL_ITEM_0__"
 - runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn:
-          id: "__CAROUSEL_ITEM_1__"
+      when:
+          platform: iOS
+      commands:
+          - tapOn:
+                id: "__CAROUSEL_ITEM_0__"
 - tapOn:
-    text: "Login"
-    index: 0
+      text: "Login"
+      index: 0
 - tapOn: "CONFIRM"
 - tapOn: "CONNECT"
 - tapOn: "SIGN"
 - repeat:
-    while:
-      visible: "Insert your 6-digit PIN"
-    commands:
-      - tapOn: "1"
+      while:
+          visible: "Insert your 6-digit PIN"
+      commands:
+          - tapOn: "1"
 - runFlow:
-    when:
-      platform: Android
-    commands:
-      - tapOn:
-          id: "URL-bar-back-button-wrapper"
+      when:
+          platform: Android
+      commands:
+          - tapOn:
+                id: "URL-bar-back-button-wrapper"
 - runFlow:
-    when:
-      platform: iOS
-    commands:
-      - tapOn:
-          id: "URL-bar-back-button"
+      when:
+          platform: iOS
+      commands:
+          - tapOn:
+                id: "URL-bar-back-button"
 - tapOn:
-    id: "wallet-tab"
+      id: "wallet-tab"
 - assertVisible:
-        id: "AccountCard_changeAccountButton"
+      id: "AccountCard_changeAccountButton"

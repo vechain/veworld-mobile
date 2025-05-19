@@ -188,6 +188,9 @@ export type Colors = {
         icon: string
     }
     updatingText: string
+    stellaPayBanner: {
+        background: string[]
+    }
 }
 
 export enum COLORS {
@@ -473,6 +476,9 @@ const light: Colors = {
         icon: COLORS.ORANGE_500,
     },
     updatingText: COLORS.GREEN_400,
+    stellaPayBanner: {
+        background: ["#0C2749", "#3EA2C3"],
+    },
 }
 
 const dark: Colors = {
@@ -665,6 +671,9 @@ const dark: Colors = {
         icon: COLORS.ORANGE_500,
     },
     updatingText: COLORS.GREEN_400,
+    stellaPayBanner: {
+        background: ["#0C2749", "#3EA2C3"],
+    },
 }
 
 export const colors = { light, dark }

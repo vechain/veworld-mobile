@@ -5,7 +5,7 @@ import { ScrollView } from "react-native-gesture-handler"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { B3TR } from "~Constants"
 import { typography } from "~Constants/Theme"
-import { useBottomSheetModal, useBottomSheetRef, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useBottomSheetRef, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import striptags from "striptags"
@@ -29,6 +29,8 @@ export const AssetDetailScreen = ({ route }: Props) => {
     const { LL, locale } = useI18nContext()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const tokenWithCompleteInfo = useTokenWithCompleteInfo(token)
 
     const { ref: QRCodeBottomSheetRef, onOpen: openQRCodeSheet } = useBottomSheetModal()
 
@@ -56,10 +58,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
 
     // render description based on locale. NB: at the moment only EN is supported
     const description = useMemo(() => {
-        if (!token?.tokenInfo?.description) return ""
+        if (!tokenWithCompleteInfo?.tokenInfo?.description) return ""
 
-        return token?.tokenInfo?.description[locale] ?? token?.tokenInfo?.description.en
-    }, [token?.tokenInfo?.description, locale])
+        return tokenWithCompleteInfo?.tokenInfo?.description[locale] ?? tokenWithCompleteInfo?.tokenInfo?.description.en
+    }, [tokenWithCompleteInfo?.tokenInfo?.description, locale])
 
     const isObserved = useMemo(() => AccountUtils.isObservedAccount(selectedAccount), [selectedAccount])
 
@@ -86,7 +88,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <BaseSpacer height={40} />
 
                         <AssetBalanceCard
-                            tokenWithInfo={token}
+                            tokenWithInfo={tokenWithCompleteInfo}
                             foundToken={foundToken}
                             isBalanceVisible={isBalanceVisible}
                             openQRCodeSheet={openQRCodeSheet}
