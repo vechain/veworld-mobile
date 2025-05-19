@@ -1,24 +1,20 @@
 import { useQuery } from "@tanstack/react-query"
-import { abi } from "thor-devkit"
-import { useThor } from "~Components"
+import { ThorClient } from "@vechain/sdk-network"
 import { abis, VEBETTER_DAO_ALLOCATION_POOL_CONTRACT } from "~Constants"
-
-const functionFragment = abis.VeBetterDao.XAllocationPool.getAppShares
-const functionAbi = new abi.Function(functionFragment)
+import { useMainnetThorClient } from "~Hooks/useThorClient"
 
 /**
  *  Get the clauses to get the votes for the xApps in an allocation round
- * @param apps  the xApps to get the votes for
+ * @param thor ThorClient to use
+ * @param apps the xApps to get the votes for
  * @param roundId  the round id to get the votes for
  * @returns  the clauses to get the votes for the xApps in the round
  */
-export const getAppsShareClauses = (apps: string[], roundId?: string): Connex.VM.Clause[] => {
-    const clauses: Connex.VM.Clause[] = apps.map(app => ({
-        to: VEBETTER_DAO_ALLOCATION_POOL_CONTRACT,
-        value: 0,
-        data: functionAbi.encode(roundId, app),
-    }))
-    return clauses
+export const getAppsShareClauses = (thor: ThorClient, apps: string[], roundId?: string) => {
+    const loadedContract = thor.contracts.load(VEBETTER_DAO_ALLOCATION_POOL_CONTRACT, [
+        abis.VeBetterDao.XAllocationPool.getAppShares,
+    ])
+    return apps.map(app => loadedContract.clause.getAppShares(BigInt(roundId!), app as `0x${string}`))
 }
 
 /**
@@ -35,21 +31,20 @@ export const getXAppsSharesQueryKey = (roundId?: number | string) => [roundId, "
  *
  */
 export const useXAppsShares = (apps: string[], roundId?: string) => {
-    const thor = useThor()
+    const thor = useMainnetThorClient()
     return useQuery({
         queryKey: getXAppsSharesQueryKey(roundId),
         queryFn: async () => {
-            const clauses = getAppsShareClauses(apps, roundId)
-            const res = await thor.explain(clauses).execute()
+            const clauses = getAppsShareClauses(thor, apps, roundId)
+
+            const res = await thor.transactions.executeMultipleClausesCall(clauses)
 
             const votes = res.map((r, index) => {
-                if (r.reverted) throw new Error(`Clause ${index + 1} reverted with reason ${r.revertReason}`)
-                const decoded = functionAbi.decode(r.data)
-
+                if (!r.success) throw new Error(`Clause ${index + 1} reverted with reason ${r.result.errorMessage}`)
                 return {
                     app: apps[index],
-                    share: Number(decoded[0]) / 100,
-                    unallocatedShare: Number(decoded[1]) / 100,
+                    share: Number(r.result.array?.[0] || 0) / 100,
+                    unallocatedShare: Number(r.result.array?.[1] || 0) / 100,
                 }
             })
             return votes
