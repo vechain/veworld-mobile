@@ -6,25 +6,29 @@ import { useAnalyticTracking } from "~Hooks"
 
 const DAO_URL = "https://governance.vebetterdao.org"
 const STELLA_URL = "https://vebetter.stellapay.io/"
-const slides: CarouselSlideItem[] = [
-    {
-        testID: "VeBetterDao_banner",
-        content: <VeBetterDaoBanner />,
-        href: DAO_URL,
-        name: "vbd_main",
-    },
-    {
-        testID: "VeBetterDao_stella_banner",
-        content: <StellaPayBanner />,
-        href: STELLA_URL,
-        isExternalLink: true,
-        name: "stella",
-    },
-]
 
 export const VeBetterDAOCarousel = () => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
+
+    const slides: CarouselSlideItem[] = useMemo(
+        () => [
+            {
+                testID: "VeBetterDao_banner",
+                content: <VeBetterDaoBanner />,
+                href: DAO_URL,
+                name: "vbd_main",
+            },
+            {
+                testID: "VeBetterDao_stella_banner",
+                content: <StellaPayBanner />,
+                href: STELLA_URL,
+                isExternalLink: true,
+                name: "stella",
+            },
+        ],
+        [],
+    )
 
     const activeSlides = useMemo(() => {
         return slides.filter(slide => {
@@ -33,7 +37,7 @@ export const VeBetterDAOCarousel = () => {
             }
             return true
         })
-    }, [featureFlags.discoveryFeature.showStellaPayBanner])
+    }, [featureFlags.discoveryFeature.showStellaPayBanner, slides])
 
     const onSlidePress = useCallback(
         (name: string) => {
