@@ -229,8 +229,8 @@ export const useTransactionScreen = ({
     ])
 
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty || transactionFeesResponse.isLoading || isGalacticaLoading,
-        [loading, loadingGas, isBiometricsEmpty, transactionFeesResponse.isLoading, isGalacticaLoading],
+        () => loading || loadingGas || isBiometricsEmpty || transactionFeesResponse.isLoading,
+        [loading, loadingGas, isBiometricsEmpty, transactionFeesResponse.isLoading],
     )
 
     /**
