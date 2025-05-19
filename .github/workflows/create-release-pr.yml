@@ -1,4 +1,7 @@
 name: Create Version Info PR
+permissions:
+  contents: write
+  pull-requests: write
 
 on:
     workflow_run:
