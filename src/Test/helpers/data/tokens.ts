@@ -150,6 +150,67 @@ export const customToken: Token = {
     custom: true,
 }
 
+export const VeBitcoin: Token = {
+    name: "BTC@vechain",
+    symbol: "BTC",
+    address: "0x2099f5c6e20e1be2ead225ea77a6393f08dc652a",
+    icon,
+    crossChainProvider: {
+        name: "wanchain",
+        url: "https://wanchain.org",
+    },
+    custom: false,
+}
+
+export const VeBitcoinWithBalance: FungibleTokenWithBalance = {
+    ...VeBitcoin,
+    decimals: 8,
+    balance: {
+        balance: "10",
+        tokenAddress: VeBitcoin.address,
+        timeUpdated: Date.now().toString(),
+        isHidden: false,
+    },
+}
+
+export const VeBitcoinWithCompleteInfo: TokenWithCompleteInfo = {
+    ...VeBitcoin,
+    decimals: 8,
+    exchangeRateCurrency: "USD",
+    exchangeRateLoading: false,
+    fiatBalance: "1.032.453",
+    tokenInfoLoading: false,
+    tokenUnitBalance: "10",
+    tokenUnitFullBalance: "1000000000",
+    chartData: undefined,
+    exchangeRate: 103245.3,
+    tokenInfo: undefined,
+    balance: VeBitcoinWithBalance.balance,
+}
+
+export const VeEthereum: Token = {
+    name: "VeEthereum",
+    symbol: "ETH",
+    address: "0xad35f6241b8860aaaf3e12729425c624f4c5cb64",
+    icon,
+    crossChainProvider: {
+        name: "wanchain",
+        url: "https://wanchain.org",
+    },
+    custom: false,
+}
+
+export const VeEthereumWithBalance: FungibleTokenWithBalance = {
+    ...VeEthereum,
+    decimals: 18,
+    balance: {
+        balance: "12400000000000000000000",
+        tokenAddress: VeEthereum.address,
+        timeUpdated: Date.now().toString(),
+        isHidden: false,
+    },
+}
+
 export const CustomTokenWithBalance: FungibleTokenWithBalance = {
     ...customToken,
     decimals: 18,

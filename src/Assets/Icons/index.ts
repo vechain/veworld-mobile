@@ -13,6 +13,7 @@ const SecurityIconDark = require("./SecurityAlertIcon_dark.svg")
 const ApplePayIcon = require("./applePay.svg")
 const GooglePayIcon = require("./googlePay.svg")
 const StellaPayLogo = require("./stella_pay_logo.svg")
+const VeChainTokenBadge = require("./vechain_token_badge.png")
 
 export {
     VeChainVetLogo,
@@ -30,4 +31,5 @@ export {
     ApplePayIcon,
     GooglePayIcon,
     StellaPayLogo,
+    VeChainTokenBadge,
 }
