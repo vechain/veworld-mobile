@@ -134,6 +134,7 @@ export const DiscoverySlice = createSlice({
         },
         closeTab: (state, action: PayloadAction<string>) => {
             state.tabsManager.tabs = state.tabsManager.tabs.filter(tab => tab.id !== action.payload)
+            state.tabsManager.currentTabId = state.tabsManager.tabs[state.tabsManager.tabs.length - 1]?.id ?? null
         },
         closeAllTabs: state => {
             state.tabsManager.tabs = []
