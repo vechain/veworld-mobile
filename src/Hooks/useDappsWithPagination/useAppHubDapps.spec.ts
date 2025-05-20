@@ -25,6 +25,10 @@ const createInitialProps = (...dapps: DiscoveryDApp[]) => ({
             hasOpenedDiscovery: false,
             connectedApps: [],
             bannerInteractions: {},
+            tabsManager: {
+                currentTabId: null,
+                tabs: [],
+            },
         },
     },
 })

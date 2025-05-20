@@ -10,6 +10,10 @@ describe("DiscoverySlice", () => {
                 featured: [],
                 hasOpenedDiscovery: true,
                 bannerInteractions: Object.fromEntries(args.map(arg => [arg[0], { amountOfInteractions: arg[1] }])),
+                tabsManager: {
+                    currentTabId: null,
+                    tabs: [],
+                },
             }
         }
         it("Should increment the banner interactions of a known app", () => {

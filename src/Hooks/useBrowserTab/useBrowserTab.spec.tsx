@@ -1,6 +1,5 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { act } from "@testing-library/react-native"
-// import { openTab } from "~Storage/Redux"
 import { TestWrapper } from "~Test"
 import { useBrowserTab } from "./useBrowserTab"
 
