@@ -15,11 +15,11 @@ const UPGRADE_PROMPT_DELAY_DAYS = {
     THIRD_PROMPT: 20,
 }
 
-const S3_BASE_URL = "UPDATE_S3_BASE_URL"
+const VERSION_INFO_URL = "https://versioninfo.dev.veworld.vechain.org/releases"
 
 const fetchVersionInfo = async (): Promise<VersionManifest> => {
     const platform = PlatformUtils.isIOS() ? "ios" : "android"
-    const url = `${S3_BASE_URL}/${platform}/manifest.json`
+    const url = `${VERSION_INFO_URL}/${platform}/manifest.json`
     const response = await fetch(url)
 
     if (!response.ok) {
