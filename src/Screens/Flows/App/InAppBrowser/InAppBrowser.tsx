@@ -70,7 +70,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         }
     })
 
-    const onGoBack = useCallback(async () => {
+    const onNavigate = useCallback(async () => {
         if (webviewContainerRef.current && selectedTab) {
             try {
                 await captureRef(webviewContainerRef, {
@@ -88,7 +88,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            fixedHeader={<URLBar onNavigation={setError} onGoBack={onGoBack} />}
+            fixedHeader={<URLBar onBrowserNavigation={setError} onNavigate={onNavigate} />}
             noBackButton
             noMargin
             hasSafeArea={false}

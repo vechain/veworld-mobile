@@ -11,24 +11,29 @@ import { selectTabs, useAppSelector } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 
 type Props = {
-    onNavigation?: (error: boolean) => void
-    onGoBack?: () => void | Promise<void>
+    onBrowserNavigation?: (error: boolean) => void
+    onNavigate?: () => void | Promise<void>
 }
 
-export const URLBar = ({ onNavigation, onGoBack }: Props) => {
+export const URLBar = ({ onBrowserNavigation, onNavigate }: Props) => {
     const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
 
     const tabs = useAppSelector(selectTabs)
 
-    const navBackToDiscover = useCallback(async () => {
-        await onGoBack?.()
+    const navToDiscover = useCallback(async () => {
+        await onNavigate?.()
         if (nav.canGoBack()) {
             nav.goBack()
         } else {
             nav.navigate(Routes.DISCOVER)
         }
-    }, [nav, onGoBack])
+    }, [nav, onNavigate])
+
+    const navToTabsManager = useCallback(async () => {
+        await onNavigate?.()
+        nav.replace(Routes.DISCOVER_TABS_MANAGER)
+    }, [nav, onNavigate])
 
     const theme = useTheme()
 
@@ -45,13 +50,13 @@ export const URLBar = ({ onNavigation, onGoBack }: Props) => {
             const isValid = await URIUtils.isValidBrowserUrl(value)
             if (isValid) {
                 const url = URIUtils.parseUrl(value)
-                onNavigation?.(false)
+                onBrowserNavigation?.(false)
                 navigateToUrl(url)
                 return
             }
-            onNavigation?.(true)
+            onBrowserNavigation?.(true)
         },
-        [navigateToUrl, onNavigation],
+        [navigateToUrl, onBrowserNavigation],
     )
 
     const renderWithToolbar = useMemo(() => {
@@ -62,7 +67,7 @@ export const URLBar = ({ onNavigation, onGoBack }: Props) => {
                     testID="URL-bar-back-button"
                     name="icon-arrow-left"
                     color={theme.colors.text}
-                    action={navBackToDiscover}
+                    action={navToDiscover}
                     haptics="Light"
                     size={24}
                     p={8}
@@ -94,18 +99,15 @@ export const URLBar = ({ onNavigation, onGoBack }: Props) => {
                     )}
                 </BaseView>
 
-                <BaseTouchable
-                    onPress={() => {
-                        nav.replace(Routes.DISCOVER_TABS_MANAGER)
-                    }}>
+                <BaseTouchable onPress={navToTabsManager}>
                     <TabsIconSVG count={tabs.length} textColor={theme.colors.text} />
                 </BaseTouchable>
             </BaseView>
         )
     }, [
         isDapp,
-        nav,
-        navBackToDiscover,
+        navToDiscover,
+        navToTabsManager,
         navigationState?.url,
         onSubmit,
         tabs.length,
