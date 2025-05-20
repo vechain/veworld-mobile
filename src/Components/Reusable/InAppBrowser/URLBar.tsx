@@ -7,7 +7,7 @@ import { TabsIconSVG } from "~Assets"
 import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
 import { useTheme } from "~Hooks"
 import { RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
-import { selectTabs, useAppSelector } from "~Storage/Redux"
+import { selectCurrentTabId, selectTabs, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 
 type Props = {
@@ -21,6 +21,8 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings>>()
 
     const tabs = useAppSelector(selectTabs)
+    const selectedTabId = useAppSelector(selectCurrentTabId)
+    const dispatch = useAppDispatch()
 
     const navToDiscover = useCallback(async () => {
         await onNavigate?.()
@@ -49,11 +51,12 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
                 const url = URIUtils.parseUrl(value)
                 onBrowserNavigation?.(false)
                 navigateToUrl(url)
+                if (selectedTabId) dispatch(updateTab({ id: selectedTabId, href: url }))
                 return
             }
             onBrowserNavigation?.(true)
         },
-        [navigateToUrl, onBrowserNavigation],
+        [dispatch, navigateToUrl, onBrowserNavigation, selectedTabId],
     )
 
     const renderWithToolbar = useMemo(() => {

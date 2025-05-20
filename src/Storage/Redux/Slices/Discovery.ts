@@ -118,13 +118,15 @@ export const DiscoverySlice = createSlice({
             state.tabsManager.tabs.push(action.payload)
             state.tabsManager.currentTabId = action.payload.id
         },
-        updateTab: (state, action: PayloadAction<Tab>) => {
-            const { id, href, title, preview } = action.payload
+        updateTab: (state, action: PayloadAction<Pick<Tab, "id"> & Partial<Omit<Tab, "id">>>) => {
+            const { id, ...otherProps } = action.payload
             const tabIndex = state.tabsManager.tabs.findIndex(tab => tab.id === id)
             if (tabIndex !== -1) {
-                state.tabsManager.tabs[tabIndex].href = href
-                state.tabsManager.tabs[tabIndex].title = title
-                state.tabsManager.tabs[tabIndex].preview = preview
+                Object.entries(otherProps)
+                    .filter(([_, value]) => typeof value !== "undefined")
+                    .forEach(
+                        ([key, value]) => (state.tabsManager.tabs[tabIndex][key as keyof typeof otherProps] = value),
+                    )
             }
         },
         setCurrentTab: (state, action: PayloadAction<string>) => {
