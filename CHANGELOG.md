@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.2 (2025-05-20)</small>
+
+* build: init ([d19c8fe](https://github.com/vechain/veworld-mobile/commit/d19c8fe))
+* Chore:  Generate versions PR worflow (#2942) ([d7dacc8](https://github.com/vechain/veworld-mobile/commit/d7dacc8)), closes [#2942](https://github.com/vechain/veworld-mobile/issues/2942)
+
 ## <small>2.2.1 (2025-05-13)</small>
 
 * build: init ([51f6358](https://github.com/vechain/veworld-mobile/commit/51f6358))
