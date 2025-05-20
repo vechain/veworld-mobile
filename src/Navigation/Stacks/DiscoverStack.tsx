@@ -12,6 +12,7 @@ export type RootStackParamListBrowser = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS
     }
     [Routes.DISCOVER_TABS_MANAGER]: undefined
 }

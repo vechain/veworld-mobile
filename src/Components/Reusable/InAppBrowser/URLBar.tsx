@@ -6,29 +6,26 @@ import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { TabsIconSVG } from "~Assets"
 import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
 import { useTheme } from "~Hooks"
-import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
 import { selectTabs, useAppSelector } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 
 type Props = {
     onBrowserNavigation?: (error: boolean) => void
     onNavigate?: () => void | Promise<void>
+    returnScreen?: Routes.DISCOVER | Routes.SETTINGS
 }
 
-export const URLBar = ({ onBrowserNavigation, onNavigate }: Props) => {
+export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.DISCOVER }: Props) => {
     const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
-    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings>>()
 
     const tabs = useAppSelector(selectTabs)
 
     const navToDiscover = useCallback(async () => {
         await onNavigate?.()
-        if (nav.canGoBack()) {
-            nav.goBack()
-        } else {
-            nav.navigate(Routes.DISCOVER)
-        }
-    }, [nav, onNavigate])
+        nav.navigate(returnScreen)
+    }, [nav, onNavigate, returnScreen])
 
     const navToTabsManager = useCallback(async () => {
         await onNavigate?.()

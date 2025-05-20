@@ -37,8 +37,7 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
     return (
         <AnimatedTouchableOpacity
             style={[styles.container, tab.id === selectedTabId && styles.selected]}
-            onPress={onPress}
-            sharedTransitionTag="BROWSER_TAB">
+            onPress={onPress}>
             <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
                 <PlatformView style={styles.header} blurAmount={10} blurType="light">
                     <BaseText color={"white"}>{tab.title}</BaseText>

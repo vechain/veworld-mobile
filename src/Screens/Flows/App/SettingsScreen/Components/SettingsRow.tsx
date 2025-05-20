@@ -15,11 +15,11 @@ type Excluded =
     | Routes.CLAIM_USERNAME
     | Routes.USERNAME_CLAIMED
 
-type ExcludedSettingRoutes = Excluded | Routes.SETTINGS_GET_SUPPORT | Routes.SETTINGS_GIVE_FEEDBACK
+type ExcludedSettingRoutes = Excluded | Routes.BROWSER
 
 export type RowProps = {
     title: LocalizedString
-    screenName: keyof Omit<RootStackParamListSettings, Excluded>
+    screenName: keyof Omit<RootStackParamListSettings, Excluded> | Routes.BROWSER
     icon: IconKey
     showBadge?: boolean
     url?: string
@@ -32,12 +32,12 @@ export const SettingsRow = ({ title, screenName, icon, url, showBadge }: RowProp
     const theme = useTheme()
 
     const onPress = useCallback(() => {
-        if (url && (screenName === Routes.SETTINGS_GET_SUPPORT || screenName === Routes.SETTINGS_GIVE_FEEDBACK)) {
+        if (url && screenName === Routes.BROWSER) {
             navigateWithTab({
                 url,
                 title,
                 navigationFn(u) {
-                    nav.navigate(screenName, { url: u })
+                    nav.navigate(Routes.BROWSER, { url: u, returnScreen: Routes.SETTINGS })
                 },
             })
 

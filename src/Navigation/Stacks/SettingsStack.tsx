@@ -7,8 +7,11 @@ import {
     AddContactScreen,
     AddCustomNodeScreen,
     ChangeNetworkScreen,
+    ChooseBackupDetailsPassword,
+    ClaimUsername,
     ConnectedAppsScreen,
     ContactsScreen,
+    DetailsBackupScreen,
     GeneralScreen,
     ManageCustomNodesScreen,
     ManageUrlsScreen,
@@ -17,15 +20,11 @@ import {
     ResetAppScreen,
     SettingsScreen,
     SettingsTransactionsScreen,
-    WalletManagementScreen,
-    WalletDetailScreen,
-    DetailsBackupScreen,
-    ChooseBackupDetailsPassword,
-    ClaimUsername,
     UsernameClaimed,
+    WalletDetailScreen,
+    WalletManagementScreen,
 } from "~Screens"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
-import { SettingsBrowserView } from "~Screens/Flows/App/SettingsScreen/Components/SettingsBrowserView"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -46,8 +45,6 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.ICLOUD_DETAILS_BACKUP]: { deviceToBackup?: LocalDevice; backupDetails: string[] | string }
     [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
-    [Routes.SETTINGS_GET_SUPPORT]: { url: string }
-    [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
     [Routes.SETTINGS_NOTIFICATIONS]: undefined
     [Routes.CLAIM_USERNAME]: undefined
     [Routes.USERNAME_CLAIMED]: {
@@ -150,18 +147,6 @@ export const SettingsStack = () => {
                 options={{
                     headerShown: false,
                 }}
-            />
-
-            <Settings.Screen
-                name={Routes.SETTINGS_GET_SUPPORT}
-                component={SettingsBrowserView}
-                options={{ headerShown: false }}
-            />
-
-            <Settings.Screen
-                name={Routes.SETTINGS_GIVE_FEEDBACK}
-                component={SettingsBrowserView}
-                options={{ headerShown: false }}
             />
 
             <Settings.Screen

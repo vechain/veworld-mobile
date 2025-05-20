@@ -1,24 +1,21 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { MutableRefObject, useCallback, useEffect, useRef, useState } from "react"
+import React, { MutableRefObject, useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { captureRef, releaseCapture } from "react-native-view-shot"
 import WebView from "react-native-webview"
 import { BaseIcon, BaseText, BaseView, BrowserBottomBar, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
-import { selectCurrentTab, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
-    const webviewContainerRef = useRef<View>(null)
-
     const {
         webviewRef,
         onMessage,
@@ -40,9 +37,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const { locale, LL } = useI18nContext()
     const [error, setError] = useState(false)
     const { styles, theme } = useThemedStyles(baseStyles)
-
-    const selectedTab = useAppSelector(selectCurrentTab)
-    const dispatch = useAppDispatch()
+    const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
 
     useEffect(() => {
         if (route?.params?.ul) {
@@ -70,25 +65,15 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         }
     })
 
-    const onNavigate = useCallback(async () => {
-        if (webviewContainerRef.current && selectedTab) {
-            try {
-                await captureRef(webviewContainerRef, {
-                    format: "jpg",
-                    quality: 0.9,
-                    fileName: `${selectedTab.id}-preview-${Date.now()}`,
-                    result: "data-uri",
-                }).then(uri => {
-                    dispatch(updateTab({ ...selectedTab, preview: uri }))
-                    releaseCapture(uri)
-                })
-            } catch {}
-        }
-    }, [webviewContainerRef, selectedTab, dispatch])
-
     return (
         <Layout
-            fixedHeader={<URLBar onBrowserNavigation={setError} onNavigate={onNavigate} />}
+            fixedHeader={
+                <URLBar
+                    onBrowserNavigation={setError}
+                    onNavigate={performScreenshot}
+                    returnScreen={route.params.returnScreen}
+                />
+            }
             noBackButton
             noMargin
             hasSafeArea={false}
