@@ -99,7 +99,7 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
                     )}
                 </BaseView>
 
-                <BaseTouchable onPress={navToTabsManager}>
+                <BaseTouchable onPress={navToTabsManager} testID="TABS_BTN">
                     <TabsIconSVG count={tabs.length} textColor={theme.colors.text} />
                 </BaseTouchable>
             </BaseView>
