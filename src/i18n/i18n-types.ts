@@ -356,13 +356,13 @@ type RootTranslation = {
 	 */
 	B3TR_CLAIM_REWARD: string
 	/**
-	 * V​o​t​e​ ​o​n​ ​p​r​o​p​o​s​a​l
+	 * V​o​t​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
 	 */
 	B3TR_PROPOSAL_VOTE: string
 	/**
-	 * P​r​o​p​o​s​a​l​ ​s​u​p​p​o​r​t​ ​o​n
+	 * S​u​p​p​o​r​t​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
 	 */
-	B3TR_PROPSAL_SUPPORT: string
+	B3TR_PROPOSAL_SUPPORT: string
 	/**
 	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​e​b​e​r​ ​l​e​v​e​l
 	 */
@@ -4632,13 +4632,13 @@ Try reconnect your device to the internet.
 	 */
 	B3TR_CLAIM_REWARD: () => LocalizedString
 	/**
-	 * Vote on proposal
+	 * Vote on VeBetterDAO proposal
 	 */
 	B3TR_PROPOSAL_VOTE: () => LocalizedString
 	/**
-	 * Proposal support on
+	 * Support VeBetterDAO proposal
 	 */
-	B3TR_PROPSAL_SUPPORT: () => LocalizedString
+	B3TR_PROPOSAL_SUPPORT: () => LocalizedString
 	/**
 	 * New galaxy memeber level
 	 */
