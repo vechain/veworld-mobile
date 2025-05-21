@@ -3,7 +3,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
-import { COLORS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
@@ -95,7 +95,7 @@ export const TabsManagerScreen = () => {
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         rootContainer: {
             flex: 1,
@@ -114,7 +114,7 @@ const baseStyles = () =>
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: "#E7E9EB", //TODO: Remove this in favor of theme
+            backgroundColor: theme.colors.tabsFooter.background,
         },
         footerButton: {
             height: 40,

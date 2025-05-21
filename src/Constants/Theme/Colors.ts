@@ -191,6 +191,9 @@ export type Colors = {
     stellaPayBanner: {
         background: string[]
     }
+    tabsFooter: {
+        background: string
+    }
 }
 
 export enum COLORS {
@@ -479,6 +482,9 @@ const light: Colors = {
     stellaPayBanner: {
         background: ["#0C2749", "#3EA2C3"],
     },
+    tabsFooter: {
+        background: COLORS.GREY_200,
+    },
 }
 
 const dark: Colors = {
@@ -673,6 +679,9 @@ const dark: Colors = {
     updatingText: COLORS.GREEN_400,
     stellaPayBanner: {
         background: ["#0C2749", "#3EA2C3"],
+    },
+    tabsFooter: {
+        background: COLORS.PURPLE,
     },
 }
 
