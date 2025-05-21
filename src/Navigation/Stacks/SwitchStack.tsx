@@ -14,6 +14,7 @@ import {
     BlackListedCollectionsScreen,
     ChooseBackupDetailsPassword,
     ConnectAppScreen,
+    ConnectExternalAppScreenV1,
     DappChangeAccountScreen,
     DetailsBackupScreen,
     SendTransactionScreen,
@@ -78,6 +79,14 @@ export type RootStackParamListSwitch = {
     [Routes.ICLOUD_DETAILS_BACKUP]: { deviceToBackup?: LocalDevice; backupDetails: string[] | string }
     [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
     [Routes.SELL_FLOW]: undefined
+    [Routes.CONNECT_EXTERNAL_APP_SCREEN_V1]: undefined // | {
+    //       request: {
+    //           appUrl?: string
+    //           appPublicKey?: string
+    //           redirectUrl?: string
+    //           network?: string
+    //       }
+    //   }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 
@@ -164,6 +173,11 @@ export const SwitchStack = () => {
                             options={{
                                 presentation: "modal",
                             }}
+                        />
+
+                        <Switch.Screen
+                            name={Routes.CONNECT_EXTERNAL_APP_SCREEN_V1}
+                            component={ConnectExternalAppScreenV1}
                         />
                     </Switch.Group>
                 </>

@@ -95,4 +95,14 @@ export enum Routes {
     SECURITY_UPGRADE_V2 = "Security_Upgrade_V2",
     SECURITY_UPGRADE_V2_HOME = "Security_Upgrade_V2_Home",
     SECURITY_UPGRADE_V2_MNEMONIC_BACKUP = "Security_Upgrade_V2_Mnemonic_Backup",
+
+    // Routes for external apps that request connection/sign/send transactions with deep links
+
+    // ----------------------- VERSION 1 -----------------------
+    CONNECT_EXTERNAL_APP_SCREEN_V1 = "Connect_External_App_Screen_V1",
+    DISCONNECT_EXTERNAL_APP_SCREEN_V1 = "Disconnect_External_App_Screen_V1",
+    SIGN_TX_EXTERNAL_APP_SCREEN_V1 = "Sign_Tx_External_App_Screen_V1",
+    SIGN_MESSAGE_EXTERNAL_APP_SCREEN_V1 = "Sign_Message_External_App_Screen_V1",
+    SIGN_CERT_EXTERNAL_APP_SCREEN_V1 = "Sign_Cert_External_App_Screen_V1",
+    SIGN_TYPED_MESSAGE_EXTERNAL_APP_SCREEN_V1 = "Sign_Typed_Message_External_App_Screen_V1",
 }

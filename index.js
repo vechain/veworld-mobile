@@ -179,6 +179,24 @@ const linking = {
                     },
                 },
             },
+            [Routes.CONNECT_EXTERNAL_APP_SCREEN_V1]: {
+                path: "api/v1/connect",
+            },
+            [Routes.SIGN_TX_EXTERNAL_APP_SCREEN_V1]: {
+                path: "api/v1/signTransaction/:dapp_enc_key/:payload/:redirect/:nonce",
+            },
+            [Routes.SIGN_MESSAGE_EXTERNAL_APP_SCREEN_V1]: {
+                path: "api/v1/signMessage/:dapp_enc_key/:payload/:redirect/:nonce",
+            },
+            [Routes.SIGN_CERT_EXTERNAL_APP_SCREEN_V1]: {
+                path: "api/v1/signCertificate/:dapp_enc_key/:payload/:redirect/:nonce",
+            },
+            [Routes.SIGN_TYPED_MESSAGE_EXTERNAL_APP_SCREEN_V1]: {
+                path: "api/v1/signTypedMessage/:dapp_enc_key/:payload/:redirect/:nonce",
+            },
+            [Routes.DISCONNECT_EXTERNAL_APP_SCREEN_V1]: {
+                path: "api/v1/disconnect/:dapp_enc_key/:redirect/:nonce/:payload",
+            },
         },
     },
 }
