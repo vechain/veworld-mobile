@@ -40,7 +40,9 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
             onPress={onPress}>
             <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
                 <PlatformView style={styles.header} blurAmount={10} blurType="light">
-                    <BaseText color={"white"}>{tab.title}</BaseText>
+                    <BaseText color={"white"} numberOfLines={1} flexGrow={1}>
+                        {tab.title}
+                    </BaseText>
                 </PlatformView>
                 <PlatformView style={styles.footer} blurAmount={10} blurType="light">
                     <BaseIcon name="icon-x" size={16} color={"white"} onPress={onClose} />
@@ -69,7 +71,6 @@ const baseStyles = (theme: ColorThemeType) => {
         },
         header: {
             flexDirection: "row",
-            justifyContent: "flex-start",
             alignItems: "center",
             backgroundColor: "#170D45D8",
             paddingHorizontal: 12,

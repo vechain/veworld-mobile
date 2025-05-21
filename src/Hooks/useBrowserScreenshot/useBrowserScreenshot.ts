@@ -1,12 +1,14 @@
 import { useCallback, useMemo, useRef } from "react"
 import { View } from "react-native"
 import { captureRef, releaseCapture } from "react-native-view-shot"
+import { useInAppBrowser } from "~Components"
 import { useAppSelector, useAppDispatch, updateTab, selectCurrentTabId } from "~Storage/Redux"
 
 export const useBrowserScreenshot = () => {
     const webviewContainerRef = useRef<View>(null)
     const selectedTabId = useAppSelector(selectCurrentTabId)
     const dispatch = useAppDispatch()
+    const { isDapp, navigationState } = useInAppBrowser()
 
     const performScreenshot = useCallback(async () => {
         if (!webviewContainerRef.current || !selectedTabId) return
@@ -17,10 +19,10 @@ export const useBrowserScreenshot = () => {
                 fileName: `${selectedTabId}-preview-${Date.now()}`,
                 result: "data-uri",
             })
-            dispatch(updateTab({ id: selectedTabId, preview: uri }))
+            dispatch(updateTab({ id: selectedTabId, preview: uri, ...(!isDapp && { title: navigationState?.title }) }))
             releaseCapture(uri)
         } catch {}
-    }, [dispatch, selectedTabId])
+    }, [dispatch, isDapp, navigationState?.title, selectedTabId])
 
     const memoized = useMemo(() => ({ performScreenshot, ref: webviewContainerRef }), [performScreenshot])
 

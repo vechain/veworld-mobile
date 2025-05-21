@@ -69,7 +69,7 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
         )
 
     return (
-        <Animated.ScrollView contentContainerStyle={rootStyles}>
+        <Animated.View style={rootStyles}>
             {isQueryEmptyButWithResults && (
                 <BaseView justifyContent="space-between" flexDirection="row" alignItems="center" mb={24}>
                     <BaseText typographyFont="bodyMedium">{LL.BROWSER_HISTORY_DEFAULT_TITLE()}</BaseText>
@@ -116,9 +116,10 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                     showsHorizontalScrollIndicator={false}
                     scrollEnabled={true}
                     data={results}
+                    style={styles.flatListRoot}
                 />
             )}
-        </Animated.ScrollView>
+        </Animated.View>
     )
 }
 
@@ -150,5 +151,6 @@ const baseStyles = (theme: ColorThemeType) => {
             alignSelf: "center",
         },
         flatListPadding: { paddingBottom: 24 },
+        flatListRoot: { flex: 1 },
     })
 }

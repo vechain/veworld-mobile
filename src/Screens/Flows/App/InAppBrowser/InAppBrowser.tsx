@@ -83,11 +83,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {userAgent && !isLoading && (
                         <>
-                            <Animated.View
-                                ref={webviewContainerRef}
-                                style={animatedStyles}
-                                sharedTransitionTag="BROWSER_TAB"
-                                collapsable={false}>
+                            <Animated.View ref={webviewContainerRef} style={animatedStyles} collapsable={false}>
                                 <WebView
                                     ref={webviewRef as MutableRefObject<WebView>}
                                     source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
