@@ -955,6 +955,14 @@ type RootTranslation = {
 	 */
 	BROWSER_COPY_LINK: string
 	/**
+	 * O​p​e​n​ ​n​e​w​ ​t​a​b
+	 */
+	BROWSER_NEW_TAB: string
+	/**
+	 * C​l​o​s​e​ ​t​a​b
+	 */
+	BROWSER_CLOSE_TAB: string
+	/**
 	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
 	 */
 	BROWSER_COPY_LINK_SUCCESS: string
@@ -1409,6 +1417,10 @@ type RootTranslation = {
 	 * C​h​e​c​k​i​n​g​ ​i​f​ ​u​s​e​r​n​a​m​e​ ​i​s​ ​a​v​a​i​l​a​b​l​e​.​.​.
 	 */
 	CHECKING_USERNAME_AVAILABILITY: string
+	/**
+	 * C​l​o​s​e​ ​a​l​l
+	 */
+	CLOSE_ALL: string
 	/**
 	 * A​n​ ​e​r​r​o​r​ ​o​c​c​u​r​r​e​d​ ​w​h​i​l​e​ ​t​r​y​i​n​g​ ​t​o​ ​c​o​n​n​e​c​t​ ​t​o​ ​i​C​l​o​u​d​ ​s​e​r​v​i​c​e​.​ ​T​r​y​ ​a​g​a​i​n​!
 	 */
@@ -3782,6 +3794,11 @@ type RootTranslation = {
 	 */
 	SYSTEM_THEME: string
 	/**
+	 * {​n​u​m​b​e​r​}​ ​t​a​b​s
+	 * @param {number} number
+	 */
+	TAB_AMOUNT: RequiredParams<'number'>
+	/**
 	 * T​a​k​e​ ​m​e​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
 	TAKE_ME_TO_DRIVE: string
@@ -5226,6 +5243,14 @@ Thanks for your patience!
 	 */
 	BROWSER_COPY_LINK: () => LocalizedString
 	/**
+	 * Open new tab
+	 */
+	BROWSER_NEW_TAB: () => LocalizedString
+	/**
+	 * Close tab
+	 */
+	BROWSER_CLOSE_TAB: () => LocalizedString
+	/**
 	 * Link successfully copied to the clipboard
 	 */
 	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
@@ -5677,6 +5702,10 @@ Thanks for your patience!
 	 * Checking if username is available...
 	 */
 	CHECKING_USERNAME_AVAILABILITY: () => LocalizedString
+	/**
+	 * Close all
+	 */
+	CLOSE_ALL: () => LocalizedString
 	/**
 	 * An error occurred while trying to connect to iCloud service. Try again!
 	 */
@@ -8011,6 +8040,10 @@ Are you sure you want to continue?
 	 * System
 	 */
 	SYSTEM_THEME: () => LocalizedString
+	/**
+	 * {number} tabs
+	 */
+	TAB_AMOUNT: (arg: { number: number }) => LocalizedString
 	/**
 	 * Take me to Google Drive
 	 */
