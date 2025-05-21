@@ -54,7 +54,6 @@ const xApps: XApp[] = [
         name: "New DApp 1",
         metadataURI: "https://newdapp1.com",
         createdAtTimestamp: twoMonthsAgo.toString(),
-        isNew: true,
     },
     {
         id: "dapp2-id",
@@ -62,7 +61,6 @@ const xApps: XApp[] = [
         name: "New DApp 2",
         metadataURI: "https://newdapp2.com",
         createdAtTimestamp: twoMonthsAgo.toString(),
-        isNew: true,
     },
     {
         id: "dapp3-id",
@@ -70,7 +68,6 @@ const xApps: XApp[] = [
         name: "Old DApp 1",
         metadataURI: "https://olddapp1.com",
         createdAtTimestamp: fourMonthsAgo.toString(),
-        isNew: false,
     },
 ]
 

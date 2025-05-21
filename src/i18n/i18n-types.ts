@@ -398,7 +398,7 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
-	 * G​e​t​ ​y​o​u​r​ ​<​>​ ​o​n​ ​<​>
+	 * G​e​t​ ​y​o​u​r​ ​*​*​V​e​B​e​t​t​e​r​ ​c​r​e​d​i​t​ ​c​a​r​d​*​*​ ​o​n​ ​*​*​S​t​e​l​l​a​ ​p​a​y​!​*​*
 	 */
 	BANNER_STELLAPAY_DESC: string
 	/**
@@ -406,7 +406,7 @@ type RootTranslation = {
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: string
 	/**
-	 * E​x​p​l​o​r​e​ ​t​h​e​ ​<​>​ ​p​l​a​t​f​o​r​m
+	 * E​x​p​l​o​r​e​ ​t​h​e​ ​*​*​V​e​B​e​t​t​e​r​D​A​O​*​*​ ​p​l​a​t​f​o​r​m
 	 */
 	BANNER_VEBETTER_DESC: string
 	/**
@@ -4681,7 +4681,7 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
-	 * Get your <> on <>
+	 * Get your **VeBetter credit card** on **Stella pay!**
 	 */
 	BANNER_STELLAPAY_DESC: () => LocalizedString
 	/**
@@ -4689,7 +4689,7 @@ Try reconnect your device to the internet.
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: () => LocalizedString
 	/**
-	 * Explore the <> platform
+	 * Explore the **VeBetterDAO** platform
 	 */
 	BANNER_VEBETTER_DESC: () => LocalizedString
 	/**

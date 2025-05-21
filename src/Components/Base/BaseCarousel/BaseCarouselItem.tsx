@@ -20,6 +20,8 @@ type Props = {
     children?: React.ReactNode
 }
 
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
+
 export const BaseCarouselItem: React.FC<Props> = ({
     href,
     style,
@@ -48,11 +50,9 @@ export const BaseCarouselItem: React.FC<Props> = ({
     }, [href, isExternalLink, name, nav, onPressActivation, propsOnPress])
 
     return (
-        <Animated.View style={[style, styles.container]}>
-            <TouchableOpacity testID={testID} onPress={onPress}>
-                <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>
-            </TouchableOpacity>
-        </Animated.View>
+        <AnimatedTouchableOpacity testID={testID} style={[style, styles.container]} onPress={onPress}>
+            <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>
+        </AnimatedTouchableOpacity>
     )
 }
 

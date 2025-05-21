@@ -78,8 +78,8 @@ export const BaseCarousel = ({
                 height={h}
                 style={styles.carousel}
                 pagingEnabled
+                snapEnabled
                 containerStyle={styles.carouselContainer}
-                snapEnabled={true}
                 mode="parallax"
                 modeConfig={{
                     parallaxScrollingScale: 1,

@@ -1,9 +1,10 @@
 import { useCallback, useMemo } from "react"
 import { DiscoveryDApp } from "~Constants"
-import { DAppType } from "~Model"
+import { DAppType, VeBetterDaoDapp } from "~Model"
 import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
 import { PAGE_SIZE } from "./constants"
 import { UseDappsWithPaginationFetch, UseDappsWithPaginationSortKey } from "./types"
+import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps"
 
 export const sortAppHubDapps = (sort: UseDappsWithPaginationSortKey) => (a: DiscoveryDApp, b: DiscoveryDApp) => {
     switch (sort) {
@@ -16,12 +17,15 @@ export const sortAppHubDapps = (sort: UseDappsWithPaginationSortKey) => (a: Disc
     }
 }
 
-const filterDapps = (filter: DAppType) => (dapp: DiscoveryDApp) => {
+const filterDapps = (filter: DAppType, vbdDapps: VeBetterDaoDapp[] | undefined) => (dapp: DiscoveryDApp) => {
     switch (filter) {
         case DAppType.ALL:
             return true
         case DAppType.SUSTAINABILTY:
-            return dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase())
+            return (
+                dapp.tags?.includes(DAppType.SUSTAINABILTY.toLowerCase()) &&
+                vbdDapps?.find(vbdDapp => vbdDapp.id.toLowerCase() === dapp.veBetterDaoId?.toLowerCase())
+            )
         case DAppType.NFT:
             return dapp.tags?.includes(DAppType.NFT.toLowerCase())
 
@@ -35,6 +39,7 @@ const filterDapps = (filter: DAppType) => (dapp: DiscoveryDApp) => {
 
 export const useAppHubDapps = (filter: DAppType) => {
     const dapps = useAppSelector(selectFeaturedDapps)
+    const { data: vbdActiveDapps } = useVeBetterDaoActiveDapps()
 
     const mappedDapps = useMemo(
         () =>
@@ -43,8 +48,8 @@ export const useAppHubDapps = (filter: DAppType) => {
                     ...dapp,
                     tags: dapp.tags?.map(tag => tag.toLowerCase()),
                 }))
-                .filter(filterDapps(filter)),
-        [dapps, filter],
+                .filter(filterDapps(filter, vbdActiveDapps)),
+        [dapps, filter, vbdActiveDapps],
     )
 
     const _fetchWithPage: UseDappsWithPaginationFetch = useCallback(

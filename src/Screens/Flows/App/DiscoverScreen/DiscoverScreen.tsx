@@ -1,7 +1,6 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useRef } from "react"
-import { StyleSheet } from "react-native"
-import Animated, { useAnimatedRef } from "react-native-reanimated"
+import { ScrollView, StyleSheet } from "react-native"
 import { BaseSpacer, BaseView, Layout } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
@@ -28,8 +27,6 @@ export const DiscoverScreen: React.FC = () => {
 
     useFetchFeaturedDApps()
 
-    const animatedRef = useAnimatedRef<Animated.ScrollView>()
-
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
 
@@ -55,8 +52,7 @@ export const DiscoverScreen: React.FC = () => {
             hasSafeArea
             fixedBody={
                 <BaseView style={styles.rootContainer}>
-                    <Animated.ScrollView
-                        ref={animatedRef}
+                    <ScrollView
                         style={styles.scrollView}
                         showsHorizontalScrollIndicator={false}
                         showsVerticalScrollIndicator={false}>
@@ -84,7 +80,7 @@ export const DiscoverScreen: React.FC = () => {
                         <BaseSpacer height={48} />
 
                         <Ecosystem title={LL.DISCOVER_ECOSYSTEM()} />
-                    </Animated.ScrollView>
+                    </ScrollView>
                 </BaseView>
             }
         />

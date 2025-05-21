@@ -1,6 +1,6 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useNewDApps } from "./useNewDApps"
-import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
+import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps"
 import { TestWrapper } from "~Test"
 import moment from "moment"
 import { DiscoveryDApp } from "~Constants"
@@ -193,7 +193,7 @@ describe("useNewDApps", () => {
     })
 
     it("should return new DApps created in the last 3 months", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: mockVeBetterDaoDapps,
             isLoading: false,
         })
@@ -212,32 +212,6 @@ describe("useNewDApps", () => {
         expect(result.current.newDapps).toHaveLength(2)
         expect(result.current.newDapps[0].name).toBe("New DApp 1")
         expect(result.current.newDapps[1].name).toBe("New DApp 2")
-    })
-
-    it("should filter out DApps not available for allocation voting", () => {
-        // Mock with one DApp not available for voting
-        const modifiedVeBetterDaoDapps = [...mockVeBetterDaoDapps]
-        modifiedVeBetterDaoDapps[1] = {
-            ...modifiedVeBetterDaoDapps[1],
-            appAvailableForAllocationVoting: false,
-        }
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
-            data: modifiedVeBetterDaoDapps,
-            isLoading: false,
-        })
-
-        const { result } = renderHook(() => useNewDApps(), {
-            wrapper: TestWrapper,
-            initialProps: {
-                preloadedState: {
-                    discovery: initialStateMock.discovery,
-                },
-            },
-        })
-
-        // Should only include DApp1 (DApp2 is filtered out due to appAvailableForAllocationVoting: false)
-        expect(result.current.newDapps).toHaveLength(1)
-        expect(result.current.newDapps[0].name).toBe("New DApp 1")
     })
 
     it("should return newest 10 DApps when no DApps are newer than 3 months", () => {
@@ -264,7 +238,7 @@ describe("useNewDApps", () => {
             appAvailableForAllocationVoting: true,
         }))
 
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: [...mockVeBetterDaoDapps, ...extraVeBetterDaoDapps],
             isLoading: false,
         })
@@ -311,7 +285,7 @@ describe("useNewDApps", () => {
             })
         }
 
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: manyNewVeBetterDaoDapps,
             isLoading: false,
         })
@@ -332,7 +306,7 @@ describe("useNewDApps", () => {
     })
 
     it("should handle loading state correctly", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: undefined,
             isLoading: true,
         })
@@ -351,7 +325,7 @@ describe("useNewDApps", () => {
     })
 
     it("should handle empty data gracefully", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
         })
