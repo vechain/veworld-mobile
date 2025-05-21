@@ -289,7 +289,9 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                             <BaseView flexDirection="row" mr={8}>
                                 <BaseText typographyFont="subTitleBold">{tokenTotalToHumanFormatted}</BaseText>
                                 <BaseSpacer width={5} />
-                                <BaseText typographyFont="buttonSecondary">{token.symbol}</BaseText>
+                                <BaseText testID="SendScreen_tokenSymbol" typographyFont="buttonSecondary">
+                                    {token.symbol}
+                                </BaseText>
                             </BaseView>
 
                             {isError && (
@@ -317,7 +319,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                 {isInputInFiat ? (
                                                     <>
                                                         <BaseText typographyFont="bodySemiBold">{currency}</BaseText>
-                                                        <BaseText typographyFont="bodySemiBold" mx={4}>
+                                                        <BaseText
+                                                            testID="SendScreen_currencySymbol"
+                                                            typographyFont="bodySemiBold"
+                                                            mx={4}>
                                                             {CURRENCY_SYMBOLS[currency]}
                                                         </BaseText>
                                                     </>
@@ -325,6 +330,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     <>
                                                         {/*@ts-ignore*/}
                                                         <TokenImage
+                                                            testID="SendScreen_tokenImage"
                                                             icon={computedIcon}
                                                             symbol={token.symbol}
                                                             isVechainToken={isVechainToken(token.symbol)}
@@ -358,6 +364,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                             />
 
                                             <BaseTouchable
+                                                testID="SendScreen_maxButton"
                                                 haptics="Light"
                                                 action={handleOnMaxPress}
                                                 style={styles.iconMax}>
@@ -368,6 +375,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                                             {isExchangeRateAvailable && (
                                                 <BaseIcon
+                                                    testID="SendScreen_switchInputMode"
                                                     name={"icon-refresh-cw"}
                                                     size={20}
                                                     disabled={areFeesLoading}
