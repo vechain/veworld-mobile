@@ -1,4 +1,5 @@
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
+import { AxiosError } from "axios"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { showErrorToast, showWarningToast, useFeatureFlags } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
@@ -131,6 +132,19 @@ export const useTransactionScreen = ({
     // 6. Send transaction
     const { sendTransaction } = useSendTransaction(onTransactionSuccess)
 
+    const parseTxError = useCallback(
+        (e: unknown) => {
+            //TODO: Add generic error
+            if (!(e instanceof AxiosError)) return ""
+            if (e.response?.data?.contains("insufficient energy"))
+                return LL.SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY()
+            if (e.response?.data?.contains("gas price is less than block base fee"))
+                return LL.SEND_TRANSACTION_ERROR_GAS_FEE()
+            return ""
+        },
+        [LL],
+    )
+
     const sendTransactionSafe = useCallback(
         async (signedTx: Transaction) => {
             try {
@@ -138,12 +152,12 @@ export const useTransactionScreen = ({
             } catch (e) {
                 showErrorToast({
                     text1: LL.ERROR(),
-                    text2: LL.SEND_TRANSACTION_ERROR(),
+                    text2: `${LL.SEND_TRANSACTION_ERROR()}${parseTxError(e)}`,
                 })
                 onTransactionFailure(e)
             }
         },
-        [sendTransaction, onTransactionFailure, LL],
+        [sendTransaction, LL, parseTxError, onTransactionFailure],
     )
 
     const vtho = useVTHO_HACK(selectedDelegationAccount?.address ?? selectedAccount.address)
