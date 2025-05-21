@@ -11,7 +11,7 @@ import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectNetworkVBDTokens, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { TokenCard, VechainTokenCard } from "../../HomeScreen/Components"
+import { TokenCard, VechainTokenCard, BridgeTokenCard } from "../../HomeScreen/Components"
 
 type Props = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
 
@@ -77,7 +77,11 @@ export const SelectTokenSendScreen = () => {
                 case VOT3.address.toLowerCase():
                     return <VechainTokenCard isAnimation={false} isBalanceVisible tokenWithInfo={tokenWithInfoVOT3} />
                 default:
-                    return <TokenCard tokenWithBalance={item} isEdit={false} isBalanceVisible />
+                    return item.crossChainProvider ? (
+                        <BridgeTokenCard tokenWithBalance={item} isBalanceVisible isEdit={false} />
+                    ) : (
+                        <TokenCard tokenWithBalance={item} isEdit={false} isBalanceVisible />
+                    )
             }
         },
         [B3TR.address, VOT3.address, tokenWithInfoB3TR, tokenWithInfoVET, tokenWithInfoVOT3, tokenWithInfoVTHO],

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { StyleSheet, TextInput, ViewProps } from "react-native"
+import { Image, StyleSheet, TextInput, ViewProps, ImageStyle as RNImageStyle } from "react-native"
 import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import {
@@ -29,6 +29,8 @@ import { useI18nContext } from "~i18n"
 import { useUI } from "./Hooks"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
+import { VeChainTokenBadge } from "~Assets/Icons"
+import { ImageStyle } from "react-native-fast-image"
 
 const { defaults: defaultTypography } = typography
 
@@ -326,6 +328,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                             icon={computedIcon}
                                                             symbol={token.symbol}
                                                             isVechainToken={isVechainToken(token.symbol)}
+                                                            isCrossChainToken={!!token.crossChainProvider}
                                                             iconSize={24}
                                                         />
                                                         <BaseSpacer width={12} />
@@ -387,8 +390,19 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                   <>
                                                       {isInputInFiat ? (
                                                           <BaseView flexDirection="row" alignItems="center">
-                                                              {/* @ts-ignore */}
-                                                              <BaseImage uri={computedIcon} style={styles.logoIcon} />
+                                                              <BaseView>
+                                                                  <BaseImage
+                                                                      uri={computedIcon}
+                                                                      style={styles.logoIcon as ImageStyle}
+                                                                  />
+                                                                  {token.crossChainProvider && (
+                                                                      <Image
+                                                                          source={VeChainTokenBadge}
+                                                                          style={styles.iconBadge as RNImageStyle}
+                                                                      />
+                                                                  )}
+                                                              </BaseView>
+
                                                               <BaseSpacer width={8} />
                                                               <BaseText
                                                                   typographyFont="captionBold"
@@ -486,6 +500,13 @@ const baseStyles = (isExchangeRateAvailable: boolean) => () =>
             right: 72,
             bottom: -32,
             padding: 8,
+        },
+        iconBadge: {
+            width: 12,
+            height: 12,
+            position: "absolute",
+            right: -5,
+            bottom: -5,
         },
         iconMax: {
             position: "absolute",
