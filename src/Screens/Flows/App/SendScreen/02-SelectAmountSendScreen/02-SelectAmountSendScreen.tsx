@@ -80,7 +80,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const { styles, theme } = useThemedStyles(baseStyles(isExchangeRateAvailable))
 
-    const { getGasFees, tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(
+    const { getGasFees, tokenTotalBalance, tokenTotalToHuman, tokenTotalToHumanFormatted } = useTotalTokenBalance(
         token,
         isInputInFiat ? tokenAmountFromFiat : "1",
         address,
@@ -98,7 +98,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Example "147031782362332055578.377092605442914032"
      */
     const fiatTotalBalance = useMemo(
-        () => BigNutils().toCurrencyConversion(tokenTotalToHuman, exchangeRate),
+        () => BigNutils().toCurrencyConversion(tokenTotalToHuman.toString, exchangeRate),
         [exchangeRate, tokenTotalToHuman],
     )
 
@@ -249,10 +249,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(async () => {
-        const newValue = removeInvalidCharacters(isInputInFiat ? fiatTotalBalance.value : tokenTotalToHuman)
+        const newValue = removeInvalidCharacters(isInputInFiat ? fiatTotalBalance.value : tokenTotalToHuman.toString)
 
         setInput(newValue)
-        setTokenAmountFromFiat(tokenTotalToHuman)
+        setTokenAmountFromFiat(tokenTotalToHuman.toString)
 
         if (isVTHO.current) {
             setIsFeeAmountError(true)
@@ -287,7 +287,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         {/* [START] - HEADER */}
                         <BaseView flexDirection="row" alignItems="baseline" style={styles.budget}>
                             <BaseView flexDirection="row" mr={8}>
-                                <BaseText typographyFont="subTitleBold">{tokenTotalToHuman}</BaseText>
+                                <BaseText typographyFont="subTitleBold">{tokenTotalToHumanFormatted}</BaseText>
                                 <BaseSpacer width={5} />
                                 <BaseText typographyFont="buttonSecondary">{token.symbol}</BaseText>
                             </BaseView>
