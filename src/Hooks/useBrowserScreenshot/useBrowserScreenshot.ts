@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useRef } from "react"
 import { View } from "react-native"
 import { captureRef, releaseCapture } from "react-native-view-shot"
-import { useInAppBrowser } from "~Components"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useAppSelector, useAppDispatch, updateTab, selectCurrentTabId } from "~Storage/Redux"
 
 export const useBrowserScreenshot = () => {
