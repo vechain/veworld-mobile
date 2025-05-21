@@ -955,6 +955,14 @@ type RootTranslation = {
 	 */
 	BROWSER_COPY_LINK: string
 	/**
+	 * O​p​e​n​ ​n​e​w​ ​t​a​b
+	 */
+	BROWSER_NEW_TAB: string
+	/**
+	 * C​l​o​s​e​ ​t​a​b
+	 */
+	BROWSER_CLOSE_TAB: string
+	/**
 	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
 	 */
 	BROWSER_COPY_LINK_SUCCESS: string
@@ -5234,6 +5242,14 @@ Thanks for your patience!
 	 * Copy page link
 	 */
 	BROWSER_COPY_LINK: () => LocalizedString
+	/**
+	 * Open new tab
+	 */
+	BROWSER_NEW_TAB: () => LocalizedString
+	/**
+	 * Close tab
+	 */
+	BROWSER_CLOSE_TAB: () => LocalizedString
 	/**
 	 * Link successfully copied to the clipboard
 	 */
