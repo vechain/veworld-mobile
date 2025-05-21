@@ -93,8 +93,8 @@ export const VersionUpdateAvailableBottomSheet = () => {
     return (
         <DefaultBottomSheet
             ref={ref}
-            title={LL.UPDATE_VERSION_AVAILABLE()}
-            description={LL.UPDATE_VERSION_AVAILABLE_MESSAGE({
+            title={LL.APP_UPDATE_AVAILABLE()}
+            description={LL.APP_UPDATE_AVAILABLE_MESSAGE({
                 version: breakingVersion,
             })}
             mainButton={mainButton}
