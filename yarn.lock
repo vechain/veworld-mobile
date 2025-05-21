@@ -9833,7 +9833,7 @@ html-escaper@^2.0.0:
   resolved "https://registry.yarnpkg.com/html-escaper/-/html-escaper-2.0.2.tgz#dfd60027da36a36dfcbe236262c00a5822681453"
   integrity sha512-H2iMtd0I4Mt5eYiapRdIDjp+XzelXQ0tFE4JS7YFwFevXXMmOp9myNrUvCg0D6ws8iqkRPBfKHgbwig1SmlLfg==
 
-html2canvas@^1.0.0-rc.5:
+html2canvas@^1.0.0-rc.5, html2canvas@^1.4.1:
   version "1.4.1"
   resolved "https://registry.yarnpkg.com/html2canvas/-/html2canvas-1.4.1.tgz#7cef1888311b5011d507794a066041b14669a543"
   integrity sha512-fPU6BHNpsyIhr8yyMpTLLxAbkaK8ArIBcmZIRiBLiDhjeqvXolaEmDGmELFuX9I4xDcaKKcJl+TKZLqruBbmWA==
@@ -14350,6 +14350,17 @@ react-native-wagmi-charts@^2.6.0:
   version "2.7.0"
   resolved "https://registry.yarnpkg.com/react-native-wagmi-charts/-/react-native-wagmi-charts-2.7.0.tgz#519999857f29d29f5b24c4fc9046a4f654f620aa"
   integrity sha512-bit5Oque2bYduh3gz3RK4g+2OSFybD+BVvH13g4Hqt7Ts00TyODi702o/iWWmJJoS4HX7GRwL0/JSIdIaZYIBQ==
+react-native-view-shot@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-view-shot/-/react-native-view-shot-4.0.3.tgz#9b98388fcc5228073cb66ac98ca339eda35767ac"
+  integrity sha512-USNjYmED7C0me02c1DxKA0074Hw+y/nxo+xJKlffMvfUWWzL5ELh/TJA/pTnVqFurIrzthZDPtDM7aBFJuhrHQ==
+  dependencies:
+    html2canvas "^1.4.1"
+
+react-native-wagmi-charts@^2.5.3:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/react-native-wagmi-charts/-/react-native-wagmi-charts-2.6.0.tgz#3e58477c73908e54d5e6274a27d16b96bb80ca66"
+  integrity sha512-IITGLDjZWcESZaoDqTWQxIo+JDFERqFD85dJlCFUqtN/Arzkl4OhWHSsIb5p0x5bNxN3rGHhLdU19cU/rqAvww==
   dependencies:
     d3-array "^3.1.6"
     d3-interpolate-path "^2.2.3"
