@@ -189,7 +189,7 @@ const calculateVthoGas = (clauses: Transaction.Clause[], isDelegated: boolean, v
             TransactionUtils.isTokenTransferClause(clause),
     )
 
-    let txCostTotal = BigNutils(isDelegated ? "0" : (txFee?.toString ?? "0"))
+    let txCostTotal = BigNutils(isDelegated ? "0" : txFee?.toString ?? "0")
     let isEnoughGas = true
 
     for (const clause of vthoTransferClauses) {
