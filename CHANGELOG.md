@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.3 (2025-05-21)</small>
+
+* build: init ([2abe9e9](https://github.com/vechain/veworld-mobile/commit/2abe9e9))
+* 93 multiple tabs inapp browser (#2951) ([cf12695](https://github.com/vechain/veworld-mobile/commit/cf12695)), closes [#2951](https://github.com/vechain/veworld-mobile/issues/2951)
+
 ## <small>2.2.2 (2025-05-19)</small>
 
 * build: init ([bc68c5a](https://github.com/vechain/veworld-mobile/commit/bc68c5a))
