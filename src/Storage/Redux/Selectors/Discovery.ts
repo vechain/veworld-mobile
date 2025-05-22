@@ -78,4 +78,11 @@ export const selectSwapFeaturedDapps = createSelector(selectFeaturedDapps, dapps
     dapps.filter(dapp => dapp?.tags?.map(t => t.toLowerCase())?.includes("swap")),
 )
 
+export const selectTabs = createSelector(getDiscoveryState, discovery => discovery.tabsManager.tabs)
+
+export const selectCurrentTabId = createSelector(getDiscoveryState, discovery => discovery.tabsManager.currentTabId)
+
+export const selectCurrentTab = createSelector(selectTabs, selectCurrentTabId, (tabs, currentTabId) =>
+    tabs.find(tab => tab.id === currentTabId),
+)
 export const selectBannerInteractions = createSelector(getDiscoveryState, discovery => discovery.bannerInteractions)

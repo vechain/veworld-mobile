@@ -13,6 +13,7 @@ import { Migration12 } from "./Migration12"
 import { Migration13 } from "./Migration13"
 import { Migration14 } from "./Migration14"
 import { Migration15 } from "./Migration15"
+import { Migration16 } from "./Migration16"
 export const migrationUpdates: MigrationManifest = {
     2: state => Migration2(state),
     3: state => Migration3(state),
@@ -28,4 +29,5 @@ export const migrationUpdates: MigrationManifest = {
     13: state => Migration13(state),
     14: state => Migration14(state),
     15: state => Migration15(state),
+    16: state => Migration16(state),
 }

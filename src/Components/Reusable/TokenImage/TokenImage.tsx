@@ -4,6 +4,7 @@ import { COLORS } from "~Constants"
 import { BaseCustomTokenIcon, BaseView } from "~Components/Base"
 import { VeChainTokenBadge } from "~Assets/Icons"
 type Props = {
+    testID?: string
     icon?: string
     symbol?: string
     isVechainToken?: boolean
@@ -11,21 +12,28 @@ type Props = {
     isCrossChainToken?: boolean
 }
 
-export const TokenImage = ({ icon, symbol, isVechainToken = false, iconSize = 24, isCrossChainToken }: Props) => {
+export const TokenImage = ({
+    icon,
+    symbol,
+    isVechainToken = false,
+    iconSize = 24,
+    isCrossChainToken,
+    testID,
+}: Props) => {
     if (isVechainToken) {
-        return <Image source={{ uri: icon }} height={iconSize} width={iconSize} />
+        return <Image testID={testID} source={{ uri: icon }} height={iconSize} width={iconSize} />
     }
 
     return (
         <>
             {icon ? (
                 <BaseView style={[styles.imageContainer]}>
-                    <Image source={{ uri: icon }} width={iconSize} height={iconSize} />
+                    <Image testID={testID} source={{ uri: icon }} width={iconSize} height={iconSize} />
                     {isCrossChainToken && <Image source={VeChainTokenBadge} style={styles.crossChainBadge} />}
                 </BaseView>
             ) : (
                 <BaseView style={[styles.imageContainer]}>
-                    <BaseCustomTokenIcon style={styles.icon} tokenSymbol={symbol ?? ""} />
+                    <BaseCustomTokenIcon testID={testID} style={styles.icon} tokenSymbol={symbol ?? ""} />
                 </BaseView>
             )}
         </>

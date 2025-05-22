@@ -1,28 +1,38 @@
 import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseIcon, BaseText, BaseTextInput, BaseView } from "~Components"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
+import { TabsIconSVG } from "~Assets"
+import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
 import { useTheme } from "~Hooks"
-import { Routes } from "~Navigation"
+import { RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
+import { selectCurrentTabId, selectTabs, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 
 type Props = {
-    onNavigation?: (error: boolean) => void
+    onBrowserNavigation?: (error: boolean) => void
+    onNavigate?: () => void | Promise<void>
+    returnScreen?: Routes.DISCOVER | Routes.SETTINGS
 }
 
-export const URLBar = ({ onNavigation }: Props) => {
+export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.DISCOVER }: Props) => {
     const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
-    const nav = useNavigation()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings>>()
 
-    const navBackToDiscover = useCallback(() => {
-        if (nav.canGoBack()) {
-            nav.goBack()
-        } else {
-            nav.navigate(Routes.DISCOVER)
-        }
-    }, [nav])
+    const tabs = useAppSelector(selectTabs)
+    const selectedTabId = useAppSelector(selectCurrentTabId)
+    const dispatch = useAppDispatch()
+
+    const navToDiscover = useCallback(async () => {
+        await onNavigate?.()
+        nav.navigate(returnScreen)
+    }, [nav, onNavigate, returnScreen])
+
+    const navToTabsManager = useCallback(async () => {
+        await onNavigate?.()
+        nav.replace(Routes.DISCOVER_TABS_MANAGER)
+    }, [nav, onNavigate])
 
     const theme = useTheme()
 
@@ -39,13 +49,14 @@ export const URLBar = ({ onNavigation }: Props) => {
             const isValid = await URIUtils.isValidBrowserUrl(value)
             if (isValid) {
                 const url = URIUtils.parseUrl(value)
-                onNavigation?.(false)
+                onBrowserNavigation?.(false)
                 navigateToUrl(url)
+                if (selectedTabId) dispatch(updateTab({ id: selectedTabId, href: url }))
                 return
             }
-            onNavigation?.(true)
+            onBrowserNavigation?.(true)
         },
-        [navigateToUrl, onNavigation],
+        [dispatch, navigateToUrl, onBrowserNavigation, selectedTabId],
     )
 
     const renderWithToolbar = useMemo(() => {
@@ -56,7 +67,7 @@ export const URLBar = ({ onNavigation }: Props) => {
                     testID="URL-bar-back-button"
                     name="icon-arrow-left"
                     color={theme.colors.text}
-                    action={navBackToDiscover}
+                    action={navToDiscover}
                     haptics="Light"
                     size={24}
                     p={8}
@@ -87,13 +98,19 @@ export const URLBar = ({ onNavigation }: Props) => {
                         />
                     )}
                 </BaseView>
+
+                <BaseTouchable onPress={navToTabsManager} testID="TABS_BTN">
+                    <TabsIconSVG count={tabs.length} textColor={theme.colors.text} />
+                </BaseTouchable>
             </BaseView>
         )
     }, [
         isDapp,
-        navBackToDiscover,
+        navToDiscover,
+        navToTabsManager,
         navigationState?.url,
         onSubmit,
+        tabs.length,
         theme.colors.subtitle,
         theme.colors.text,
         theme.colors.textLight,

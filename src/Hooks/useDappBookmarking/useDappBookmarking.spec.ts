@@ -2,6 +2,7 @@ import { renderHook, act } from "@testing-library/react-hooks"
 import { useDappBookmarking } from "./useDappBookmarking"
 import { TestWrapper } from "~Test"
 import { DiscoveryDApp } from "~Constants"
+import { DiscoveryState } from "~Storage/Redux"
 
 const bookmarkedDapps: DiscoveryDApp[] = [
     {
@@ -62,7 +63,11 @@ const mockState = {
         hasOpenedDiscovery: true,
         connectedApps: [],
         bannerInteractions: {},
-    },
+        tabsManager: {
+            currentTabId: null,
+            tabs: [],
+        },
+    } satisfies DiscoveryState,
 }
 
 describe("useDappBookmarking", () => {
