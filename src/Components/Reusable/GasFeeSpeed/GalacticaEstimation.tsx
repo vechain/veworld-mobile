@@ -46,7 +46,7 @@ export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaini
 
     const estimatedFormattedFiat = useMemo(() => {
         if (estimatedFeeFiat.isLeesThan_0_01) return formatFiat({ amount: 0.01 })
-        return formatFiat({ amount: parseInt(estimatedFeeFiat.preciseValue, 10) })
+        return formatFiat({ amount: parseFloat(estimatedFeeFiat.preciseValue) })
     }, [estimatedFeeFiat.isLeesThan_0_01, estimatedFeeFiat.preciseValue, formatFiat])
 
     const blinkStyles = useBlinkStyles({ enabled: secondsRemaining <= 3, duration: 1000 })

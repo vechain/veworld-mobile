@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react"
 import { Transaction } from "thor-devkit"
 
 import { error, GasUtils } from "~Utils"
-import { useThor } from "~Components/Providers/ConnexProvider"
 import { EstimateGasResult } from "~Model"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ERROR_EVENTS } from "~Constants"
@@ -43,20 +42,18 @@ export const useTransactionGas = ({
     const selectedNetwork = useSelector(selectSelectedNetwork)
     const account = useAppSelector(selectSelectedAccount)
     const [gasPayer, setGasPayer] = useState<string>(providedGasPayer ?? account.address)
-    const thorClient = useThor()
 
     const calculateGasFees = useCallback(
         async (_clauses: Transaction.Body["clauses"]) => {
             return await GasUtils.estimateGas(
                 selectedNetwork.urls[0],
-                thorClient,
                 _clauses,
                 providedGas ?? 0,
                 account.address,
                 gasPayer,
             )
         },
-        [account.address, gasPayer, providedGas, selectedNetwork.urls, thorClient],
+        [account.address, gasPayer, providedGas, selectedNetwork.urls],
     )
 
     const estimateGas = useCallback(async () => {
