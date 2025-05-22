@@ -41,6 +41,8 @@ import {
     WalletDetailScreen,
     WalletManagementScreen,
 } from "~Screens"
+import SocialOnboardingScreen from "~Screens/Flows/Onboarding/social/SocialOnboardingScreen"
+import { SocialUserScreen } from "~Screens/Flows/Onboarding/social/SocialUserScreen"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -112,6 +114,7 @@ export type RootStackParamListHome = {
     [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
         wallet: CloudKitWallet | DrivetWallet
     }
+    [Routes.IMPORT_SOCIAL]: undefined
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
@@ -123,6 +126,8 @@ export type RootStackParamListHome = {
     [Routes.USERNAME_CLAIMED]: {
         username: string
     }
+    [Routes.SOCIAL_ONBOARDING]: undefined
+    [Routes.SOCIAL_USER]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -210,6 +215,14 @@ export const HomeStack = () => {
                         headerShown: false,
                     }}
                 />
+
+                <Screen
+                    name={Routes.SOCIAL_ONBOARDING}
+                    component={SocialOnboardingScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen name={Routes.SOCIAL_USER} component={SocialUserScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.SETTINGS_NETWORK}

@@ -8,7 +8,7 @@ import { useWalletStatus } from "~Components"
 import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
 import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
 import { TransactionRequest, TypeDataRequest } from "~Model/DApp"
-import { CreateWalletAppStack, Routes } from "~Navigation"
+import { CreateWalletAppStack, OnboardingStack, Routes } from "~Navigation"
 import { TabStack, TabStackParamList } from "~Navigation/Tabs"
 import {
     BlackListedCollectionsScreen,
@@ -26,10 +26,11 @@ import { LedgerSignMessage } from "~Screens/Flows/App/LedgerScreen/LedgerSignMes
 import { SignMessageScreen } from "~Screens/Flows/App/WalletConnect/SignMessageScreen"
 import { TransferEventListener } from "../../TransferEventListener"
 import { BuyStack } from "./BuyStack"
-import { OnboardingStack } from "./OnboardingStack"
+import { SocialOnboardingStack } from "./SocialOnboardingStack"
 import { SellStack } from "./SellStack"
 
 export type RootStackParamListSwitch = {
+    SocialOnboardingStack: undefined
     OnboardingStack: undefined
     TabStack: NavigatorScreenParams<TabStackParamList>
     ResetAppScreen: undefined
@@ -90,6 +91,11 @@ export const SwitchStack = () => {
         } else {
             return (
                 <>
+                    <Switch.Screen
+                        name="SocialOnboardingStack"
+                        component={SocialOnboardingStack}
+                        options={{ headerShown: false }}
+                    />
                     <Switch.Screen name="TabStack" component={AppContainer} options={{ headerShown: false }} />
 
                     {/* Full screen modals */}
@@ -173,6 +179,7 @@ export const SwitchStack = () => {
 
     return (
         <Switch.Navigator
+            initialRouteName="SocialOnboardingStack"
             screenOptions={{
                 headerShown: false,
             }}>

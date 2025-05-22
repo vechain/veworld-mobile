@@ -13,5 +13,6 @@
     ],
     "ios": {
         "scheme": "VeWorld"
-    }
+    },
+    "scheme": "veworld"
 }

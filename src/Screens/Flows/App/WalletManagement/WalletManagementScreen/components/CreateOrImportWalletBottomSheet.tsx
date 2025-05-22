@@ -42,6 +42,13 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
             }, 400)
         }, [nav, track, onClose])
 
+        const navigateToImportSocialWallet = useCallback(() => {
+            console.log("navigateToImportSocialWallet")
+            // track(AnalyticsEvent.SELECT_WALLET_IMPORT_MNEMONIC)
+            onClose()
+            nav.navigate(Routes.SOCIAL_ONBOARDING)
+        }, [nav, onClose])
+
         return (
             <BaseBottomSheet dynamicHeight ref={ref}>
                 <BaseView flexDirection="column" w={100}>
@@ -77,6 +84,21 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                             {LL.BD_IMPORT_WALLET_TYPE_SEED({
                                 cloud: PlatformUtils.isIOS() ? "iCloud" : "Google Drive",
                             })}
+                        </BaseText>
+                    </BaseView>
+                    <BaseIcon name="icon-chevron-right" size={24} color={theme.colors.text} />
+                </BaseTouchableBox>
+
+                <BaseSpacer height={16} />
+
+                <BaseTouchableBox action={navigateToImportSocialWallet} py={16} haptics="Medium">
+                    <BaseIcon name="icon-file-spreadsheet" size={20} color={theme.colors.text} />
+                    <BaseView flex={1} px={12}>
+                        <BaseText align="left" typographyFont="subSubTitle">
+                            {"Import social wallet"}
+                        </BaseText>
+                        <BaseText pt={4} align="left" typographyFont="captionRegular">
+                            {"Import social wallet"}
                         </BaseText>
                     </BaseView>
                     <BaseIcon name="icon-chevron-right" size={24} color={theme.colors.text} />

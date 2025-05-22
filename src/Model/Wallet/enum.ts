@@ -35,6 +35,7 @@ export enum DEVICE_TYPE {
     LOCAL_WATCHED = "local-watched",
     LOCAL_PRIVATE_KEY = "local-pk",
     LEDGER = "ledger",
+    SOCIAL = "social",
 }
 
 /**

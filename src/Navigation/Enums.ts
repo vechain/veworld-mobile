@@ -1,6 +1,8 @@
 export enum Routes {
     WELCOME = "Welcome",
     ONBOARDING = "Onboarding",
+    SOCIAL_ONBOARDING = "Social_Onboarding",
+    SOCIAL_USER = "Social_User",
     WALLET_TUTORIAL = "Wallet_Tutorial",
     WALLET_SETUP = "Wallet_Setup",
     IMPORT_HW_LEDGER_SELECT_DEVICE = "Import_Ledger_Select_Device",
@@ -9,6 +11,7 @@ export enum Routes {
     NEW_MNEMONIC = "New_Mnemonic",
     CONFIRM_MNEMONIC = "Confirm_Mnemonic",
     IMPORT_MNEMONIC = "Import_Mnemonic",
+    IMPORT_SOCIAL = "Import_Social",
     BROWSER = "Browser",
     HOME_STACK = "HomeStack",
     DISCOVER_STACK = "DiscoverStack",

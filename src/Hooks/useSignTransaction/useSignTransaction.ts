@@ -10,6 +10,7 @@ import { Routes } from "~Navigation"
 import { sponsorTransaction } from "~Networking"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { HexUtils, warn } from "~Utils"
+import { useSocialLogin } from "~Components/Providers/SocialLoginProvider/SocialLoginProvider"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -57,6 +58,7 @@ export const useSignTransaction = ({
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const nav = useNavigation()
+    const { signTransaction: socialLoginSignTransaction } = useSocialLogin()
 
     const getSignature = async (
         transaction: Transaction,
@@ -65,8 +67,10 @@ export const useSignTransaction = ({
         signatureAccount: AccountWithDevice = account,
     ): Promise<Buffer> => {
         const privateKey = getPrivateKey(wallet, signatureAccount)
-        const hash = transaction.getTransactionHash(delegateFor ? Address.of(delegateFor) : undefined).bytes
-        return Buffer.from(Secp256k1.sign(hash, privateKey))
+        const hash = transaction.getTransactionHash(delegateFor ? Address.of(delegateFor) : undefined)
+        const signature = Buffer.from(Secp256k1.sign(hash.bytes, privateKey))
+
+        return signature
     }
 
     const getUrlDelegationSignature = async (
@@ -80,9 +84,10 @@ export const useSignTransaction = ({
             // build hex encoded version of the transaction for signing request
             const rawTransaction = HexUtils.addPrefix(Buffer.from(transaction.encoded).toString("hex"))
 
+            const origin = account.address
             // request to send for sponsorship/fee delegation
             const sponsorRequest = {
-                origin: account.address.toLowerCase(),
+                origin: origin.toLowerCase(),
                 raw: rawTransaction,
             }
 
@@ -178,18 +183,23 @@ export const useSignTransaction = ({
         }
 
         //local mnemonic, identity already verified via useCheckIdentity
-        if (!senderDevice.wallet) {
+        if (senderDevice.type !== DEVICE_TYPE.SOCIAL && !senderDevice.wallet) {
             throw new Error("Hardware wallet not supported yet")
         }
 
-        const senderWallet = await WalletEncryptionKeyHelper.decryptWallet({
-            encryptedWallet: senderDevice.wallet,
-            pinCode: password,
-        })
+        let senderSignature: Buffer
+        // const senderSignature = await getSignature(transaction, senderWallet)
+        if (senderDevice.type === DEVICE_TYPE.SOCIAL) {
+            senderSignature = await socialLoginSignTransaction(transaction)
+        } else {
+            const senderWallet = await WalletEncryptionKeyHelper.decryptWallet({
+                encryptedWallet: senderDevice.wallet,
+                pinCode: password,
+            })
+            senderSignature = await getSignature(transaction, senderWallet)
+        }
 
-        const senderSignature = await getSignature(transaction, senderWallet)
         const delegationSignature = await getDelegationSignature(transaction, password)
-
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
 
         return Transaction.of(

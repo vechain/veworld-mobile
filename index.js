@@ -1,4 +1,8 @@
 /* eslint-disable react-native/no-inline-styles */
+import "fast-text-encoding"
+import "react-native-get-random-values"
+import "@ethersproject/shims"
+
 import React, { useEffect, useMemo, useRef, useState } from "react"
 import { AppRegistry, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
@@ -51,6 +55,7 @@ import { onlineManager } from "@tanstack/react-query"
 import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
+import { SocialLoginProvider } from "~Components/Providers/SocialLoginProvider/SocialLoginProvider"
 
 const { fontFamily } = typography
 
@@ -93,10 +98,10 @@ const Main = () => {
     useEffect(() => {
         setLocale(
             language ??
-                getLocales()
-                    .map(loc => loc.languageCode)
-                    .find(isLocale) ??
-                "en",
+            getLocales()
+                .map(loc => loc.languageCode)
+                .find(isLocale) ??
+            "en",
         )
     }, [setLocale, language])
 
@@ -112,28 +117,30 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <ConnexContextProvider>
-                <PersistQueryClientProvider
-                    client={queryClient}
-                    persistOptions={{
-                        persister: clientPersister,
-                    }}>
-                    <FeatureFlagsProvider>
-                        <NavigationProvider>
-                            <WalletConnectContextProvider>
-                                <InAppBrowserProvider>
-                                    <BottomSheetModalProvider>
-                                        <NotificationsProvider>
-                                            <EntryPoint />
-                                        </NotificationsProvider>
-                                    </BottomSheetModalProvider>
-                                </InAppBrowserProvider>
-                            </WalletConnectContextProvider>
-                        </NavigationProvider>
-                        <BaseToast />
-                    </FeatureFlagsProvider>
-                </PersistQueryClientProvider>
-            </ConnexContextProvider>
+            <SocialLoginProvider appId="YOUR_APP_ID_HERE" clientId="YOUR_CLIENT_ID_HERE">
+                <ConnexContextProvider>
+                    <PersistQueryClientProvider
+                        client={queryClient}
+                        persistOptions={{
+                            persister: clientPersister,
+                        }}>
+                        <FeatureFlagsProvider>
+                            <NavigationProvider>
+                                <WalletConnectContextProvider>
+                                    <InAppBrowserProvider>
+                                        <BottomSheetModalProvider>
+                                            <NotificationsProvider>
+                                                <EntryPoint />
+                                            </NotificationsProvider>
+                                        </BottomSheetModalProvider>
+                                    </InAppBrowserProvider>
+                                </WalletConnectContextProvider>
+                            </NavigationProvider>
+                            <BaseToast />
+                        </FeatureFlagsProvider>
+                    </PersistQueryClientProvider>
+                </ConnexContextProvider>
+            </SocialLoginProvider>
         </GestureHandlerRootView>
     )
 }

@@ -13,7 +13,9 @@ export const selectAccountsState = (state: RootState) => state.accounts
 export const selectAccounts = createSelector(selectAccountsState, selectDevicesState, (state, devices) => {
     return sortBy(
         state.accounts.map(account => {
-            const device = devices.find(_device => _device.rootAddress === account.rootAddress)
+            const device = devices.find(_device =>
+                AddressUtils.compareAddresses(_device.rootAddress, account.rootAddress),
+            )
 
             if (AccountUtils.isObservedAccount(account)) {
                 return account

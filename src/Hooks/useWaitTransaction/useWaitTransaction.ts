@@ -22,7 +22,7 @@ export const useWaitTransaction = (opts: UseWaitTransactionOptions) => {
         enabled: Boolean(opts.txId),
         retry: false,
     })
-
+    console.log("data", data)
     const isSuccess = useMemo(() => {
         if (typeof data === "undefined") return false
         return data != null && !data.reverted

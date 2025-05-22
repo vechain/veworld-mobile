@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import { DEVICE_TYPE } from "~Model"
 import { RootState } from "../Types"
 import sortBy from "lodash/sortBy"
-
+import { AddressUtils } from "~Utils"
 const selectAll = (state: RootState) => state
 const selectDevicesStateUnsorted = (state: RootState) => state.devices
 
@@ -25,7 +25,7 @@ export const selectHasOnboarded = createSelector(selectAll, state => {
 export const selectDevice = createSelector(
     [selectDevicesState, (_: RootState, rootAddress?: string) => rootAddress],
     (state, rootAddress) => {
-        return state.find(device => device.rootAddress === rootAddress)
+        return state.find(device => AddressUtils.compareAddresses(device.rootAddress, rootAddress))
     },
 )
 

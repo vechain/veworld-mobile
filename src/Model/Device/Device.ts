@@ -41,6 +41,13 @@ export interface LedgerDevice extends BaseDevice {
     readonly type: DEVICE_TYPE.LEDGER
 }
 
+/**
+ * The Social device
+ */
+export interface SocialDevice extends BaseDevice {
+    readonly type: DEVICE_TYPE.SOCIAL
+}
+
 export type WalletAndDevice = {
     wallet: Wallet
     device: Omit<LocalDevice, "wallet">

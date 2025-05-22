@@ -1,9 +1,11 @@
 import { useCallback, useState } from "react"
-import { IMPORT_TYPE, NewLedgerDevice } from "~Model"
+import { DEVICE_TYPE, IMPORT_TYPE, NewLedgerDevice, SocialDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import {
     addDeviceAndAccounts,
     addLedgerDeviceAndAccounts,
+    addSocialDeviceAndAccounts,
+    getNextDeviceIndex,
     setMnemonic,
     setNewLedgerDevice,
     setPrivateKey,
@@ -11,7 +13,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { selectAccountsState, selectHasOnboarded } from "~Storage/Redux/Selectors"
+import { selectAccountsState, selectDevices, selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
@@ -27,6 +29,7 @@ import { WalletEncryptionKeyHelper } from "~Components/Providers/EncryptedStorag
  */
 export const useCreateWallet = () => {
     const { createDevice } = useDeviceUtils()
+    const devices = useAppSelector(selectDevices)
     const biometrics = useBiometrics()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
@@ -152,9 +155,69 @@ export const useCreateWallet = () => {
     )
     //* [END] - Create Wallet
 
+    /**
+     * Insert new Social wallet in store
+     * @param address new social device address
+     * @param onError callback called if error
+     * @returns void
+     */
+    const createSocialWallet = useCallback(
+        async ({ address, onError }: { address: string; onError?: (error: unknown) => void }) => {
+            try {
+                console.log("createSocialWallet", address)
+                // create a device
+                //Create the new ledger device and persist it
+                const socialDevice: SocialDevice = {
+                    index: getNextDeviceIndex(devices),
+                    rootAddress: address,
+                    type: DEVICE_TYPE.SOCIAL,
+                    alias: "Social",
+                    position: 0, // this will be updated when the device is added to the redux store
+                }
+
+                console.log("social Device", socialDevice)
+                // add the device and account to redux
+                const newAccount = dispatch(addSocialDeviceAndAccounts(socialDevice))
+                console.log("newAccount", newAccount)
+                // set the selected account
+
+                // set the is complete to truedefined))
+                console.log("selecting account")
+                // if (!selectedAccount) dispatch(setSelectedAccount({ address: newAccount.address }))
+
+                setIsComplete(true)
+                track(AnalyticsEvent.WALLET_ADD_SOCIAL_SUCCESS)
+                track(AnalyticsEvent.WALLET_GENERATION, {
+                    context: userHasOnboarded ? "management" : "onboarding",
+                    type: "import",
+                    signature: "social",
+                })
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_SUCCESS, {
+                        type: "import",
+                        signature: "social",
+                    })
+                }
+            } catch (e) {
+                warn(ERROR_EVENTS.WALLET_CREATION, e)
+                track(AnalyticsEvent.WALLET_ADD_LEDGER_ERROR)
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_FAILED, {
+                        type: "import",
+                        signature: "social",
+                    })
+                }
+                onError?.(e)
+                throw e
+            }
+        },
+        [dispatch, track, userHasOnboarded, devices],
+    )
+
     return {
         createLocalWallet,
         createLedgerWallet,
+        createSocialWallet,
         accessControl: biometrics?.accessControl,
         isComplete,
     }
