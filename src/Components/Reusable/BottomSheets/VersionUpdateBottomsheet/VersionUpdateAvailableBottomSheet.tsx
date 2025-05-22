@@ -92,6 +92,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
 
     return (
         <DefaultBottomSheet
+            testId={"VersionUpdateAvailableBottomSheet"}
             ref={ref}
             title={LL.APP_UPDATE_AVAILABLE()}
             description={LL.APP_UPDATE_AVAILABLE_MESSAGE({
