@@ -2,10 +2,11 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
-import { useTheme } from "~Hooks"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { RootStackParamListSettings, Routes } from "~Navigation"
+import { useTheme } from "~Hooks"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { IconKey } from "~Model"
+import { RootStackParamListSettings, Routes } from "~Navigation"
 
 type Excluded =
     | Routes.WALLET_DETAILS
@@ -14,11 +15,11 @@ type Excluded =
     | Routes.CLAIM_USERNAME
     | Routes.USERNAME_CLAIMED
 
-type ExcludedSettingRoutes = Excluded | Routes.SETTINGS_GET_SUPPORT | Routes.SETTINGS_GIVE_FEEDBACK
+type ExcludedSettingRoutes = Excluded | Routes.BROWSER
 
 export type RowProps = {
     title: LocalizedString
-    screenName: keyof Omit<RootStackParamListSettings, Excluded>
+    screenName: keyof Omit<RootStackParamListSettings, Excluded> | Routes.BROWSER
     icon: IconKey
     showBadge?: boolean
     url?: string
@@ -26,17 +27,25 @@ export type RowProps = {
 
 export const SettingsRow = ({ title, screenName, icon, url, showBadge }: RowProps) => {
     const nav = useNavigation()
+    const { navigateWithTab } = useBrowserTab()
 
     const theme = useTheme()
 
     const onPress = useCallback(() => {
-        if (url && (screenName === Routes.SETTINGS_GET_SUPPORT || screenName === Routes.SETTINGS_GIVE_FEEDBACK)) {
-            nav.navigate(screenName, { url })
+        if (url && screenName === Routes.BROWSER) {
+            navigateWithTab({
+                url,
+                title,
+                navigationFn(u) {
+                    nav.navigate(Routes.BROWSER, { url: u, returnScreen: Routes.SETTINGS })
+                },
+            })
+
             return
         }
 
         nav.navigate(screenName as keyof Omit<RootStackParamListSettings, ExcludedSettingRoutes>)
-    }, [url, screenName, nav])
+    }, [url, screenName, nav, navigateWithTab, title])
 
     return (
         <BaseTouchable action={onPress} style={baseStyles.container} haptics="Light" testID={title}>

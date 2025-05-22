@@ -68,7 +68,7 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     get toHex(): string {
-        return this.data.toString(16)
+        return this.data.decimalPlaces(0).toString(16)
     }
 
     get toBigInt(): bigint {

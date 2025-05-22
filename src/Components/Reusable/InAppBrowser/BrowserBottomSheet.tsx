@@ -1,4 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { default as React, useMemo } from "react"
 import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
@@ -7,6 +9,8 @@ import { ColorThemeType } from "~Constants"
 import { useCopyClipboard, useDappBookmarking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
+import { RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
+import { closeTab, selectCurrentTabId, useAppDispatch, useAppSelector } from "~Storage/Redux"
 
 type Props = {}
 
@@ -23,6 +27,9 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { onCopyToClipboard } = useCopyClipboard()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings>>()
+    const dispatch = useAppDispatch()
+    const currentTabId = useAppSelector(selectCurrentTabId)
 
     const actions: BottomSheetAction[] = useMemo(() => {
         const favoriteItem = isBookMarked
@@ -41,6 +48,12 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
 
         return [
             {
+                id: "new-tab",
+                icon: "icon-plus",
+                label: LL.BROWSER_NEW_TAB(),
+                onPress: () => nav.replace(Routes.DISCOVER_SEARCH),
+            },
+            {
                 id: "copy",
                 icon: "icon-copy",
                 label: LL.BROWSER_COPY_LINK(),
@@ -58,8 +71,30 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 },
             },
             ...(isDapp ? [favoriteItem] : []),
+            {
+                id: "close-tab",
+                icon: "icon-x",
+                label: LL.BROWSER_CLOSE_TAB(),
+                onPress: () => {
+                    if (currentTabId) {
+                        dispatch(closeTab(currentTabId))
+                        nav.replace(Routes.DISCOVER_SEARCH)
+                    }
+                },
+            },
         ]
-    }, [LL, isBookMarked, isDapp, navigationState?.title, navigationState?.url, onCopyToClipboard, toggleBookmark])
+    }, [
+        isBookMarked,
+        LL,
+        toggleBookmark,
+        isDapp,
+        nav,
+        onCopyToClipboard,
+        navigationState?.url,
+        navigationState?.title,
+        currentTabId,
+        dispatch,
+    ])
 
     return (
         <BaseBottomSheet dynamicHeight ref={ref} blurBackdrop backgroundStyle={styles.rootSheet}>
