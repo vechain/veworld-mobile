@@ -13,11 +13,11 @@ import { ActivityDetailContent, ActivityDetailItem } from "./ActivityDetailItem"
 type Props = {
     activity: FungibleTokenActivity
     token?: FungibleToken
-    gasUsed?: number
+    paid: string | undefined
     isLoading?: boolean
 }
 
-export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, token, gasUsed, isLoading = false }) => {
+export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, token, paid, isLoading = false }) => {
     const { LL } = useI18nContext()
 
     const network = useMemo(() => {
@@ -28,7 +28,7 @@ export const FungibleTokenTransferDetails: React.FC<Props> = memo(({ activity, t
 
     const { onCopyToClipboard } = useCopyClipboard()
 
-    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(gasUsed)
+    const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(paid)
 
     const { symbol, decimals } = useFungibleTokenInfo(activity.tokenAddress)
 
