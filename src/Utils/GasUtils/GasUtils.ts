@@ -1,32 +1,17 @@
+import { TransactionClause } from "@vechain/sdk-core"
 import axios from "axios"
 import BigNumber from "bignumber.js"
 import { Transaction } from "thor-devkit"
-import { abis, BASE_GAS_PRICE, GasPriceCoefficient, VTHO } from "~Constants"
+import { GasPriceCoefficient, VTHO } from "~Constants"
 import { EstimateGasResult } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
 import BigNutils, { BigNumberUtils } from "~Utils/BigNumberUtils"
-import TransactionUtils from "~Utils/TransactionUtils"
 import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
-
-const paramsCache: Record<string, string> = {}
-
-const getBaseGasPrice = async (thor: Connex.Thor): Promise<string> => {
-    const k = `${thor.genesis.id}-${BASE_GAS_PRICE}`
-    if (paramsCache[k]) {
-        return paramsCache[k]
-    } else {
-        const address = "0x0000000000000000000000000000506172616d73"
-        const result = await thor.account(address).method(abis.paramsGet).cache([address]).call(BASE_GAS_PRICE)
-
-        paramsCache[k] = result.data
-        return result.data
-    }
-}
+import TransactionUtils from "~Utils/TransactionUtils"
 
 const estimateGas = async (
     url: string,
-    thor: Connex.Thor,
-    clauses: Connex.VM.Clause[],
+    clauses: TransactionClause[],
     providedGas: number,
     caller: string,
     gasPayer?: string,
@@ -68,8 +53,6 @@ const estimateGas = async (
         const execGas = data.reduce((sum, out) => sum + out.gasUsed, 0)
         gas = intrinsicGas + (execGas ? execGas + 15000 : 0)
     }
-
-    const baseGasPrice = await getBaseGasPrice(thor)
     const lastOutput = data.slice().pop()
 
     return {
@@ -78,7 +61,8 @@ const estimateGas = async (
         reverted: lastOutput ? lastOutput.reverted : false,
         revertReason: getRevertReason(lastOutput),
         vmError: lastOutput ? lastOutput.vmError : "",
-        baseGasPrice,
+        //We can easily hard code it
+        baseGasPrice: "10000000000000",
     }
 }
 
@@ -211,7 +195,6 @@ const calculateVthoGas = (clauses: Transaction.Clause[], isDelegated: boolean, v
 }
 
 export default {
-    getBaseGasPrice,
     estimateGas,
     gasToVtho,
     getTxFeeWithCoeff,

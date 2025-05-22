@@ -9,6 +9,7 @@ import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { Tab, closeAllTabs, selectTabs, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { TabViewCard } from "./Components"
+import { PlatformUtils } from "~Utils"
 
 export const TabsManagerScreen = () => {
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
@@ -115,6 +116,7 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "space-between",
             alignItems: "center",
             backgroundColor: theme.colors.tabsFooter.background,
+            paddingBottom: PlatformUtils.isIOS() ? 24 : 8,
         },
         footerButton: {
             height: 40,
