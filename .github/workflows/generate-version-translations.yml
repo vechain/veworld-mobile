@@ -1,0 +1,128 @@
+name: Generate Version Translations
+
+on:
+    push:
+        branches: ["release/ios-*-android-*"]
+        paths:
+            - "releases/*/versions/*.json"
+
+jobs:
+    translate-version-descriptions:
+        runs-on: ubuntu-latest
+        if: "!contains(github.event.head_commit.message, 'add translations')"
+        permissions:
+            contents: write
+
+        steps:
+            - name: Generate a token
+              id: generate-token
+              uses: actions/create-github-app-token@v1
+              with:
+                  app-id: ${{ secrets.APP_ID }}
+                  private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  token: ${{ steps.generate-token.outputs.token }}
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: 20.17
+
+            - name: Install dependencies
+              run: yarn --frozen-lockfile
+
+            - name: Find latest version files
+              id: find-versions
+              run: |
+                  LATEST_IOS_VERSION=$(cat releases/ios/manifest.json | jq -r '.latest')
+                  LATEST_ANDROID_VERSION=$(cat releases/android/manifest.json | jq -r '.latest')
+
+                  echo "IOS_VERSION=$LATEST_IOS_VERSION" >> $GITHUB_ENV
+                  echo "ANDROID_VERSION=$LATEST_ANDROID_VERSION" >> $GITHUB_ENV
+
+                  echo "IOS_VERSION_FILE=releases/ios/versions/$LATEST_IOS_VERSION.json" >> $GITHUB_ENV
+                  echo "ANDROID_VERSION_FILE=releases/android/versions/$LATEST_ANDROID_VERSION.json" >> $GITHUB_ENV
+
+            - name: Validate English descriptions exist
+              id: validate-descriptions
+              run: |
+                  IOS_DESCRIPTIONS=$(cat $IOS_VERSION_FILE | jq -r '.descriptions.en | length')
+                  ANDROID_DESCRIPTIONS=$(cat $ANDROID_VERSION_FILE | jq -r '.descriptions.en | length')
+
+                  if [ "$IOS_DESCRIPTIONS" -eq "0" ] || [ "$ANDROID_DESCRIPTIONS" -eq "0" ]; then
+                    echo "English descriptions are not yet filled. Skipping translation."
+                    exit 0
+                  fi
+
+                  echo "SHOULD_TRANSLATE=true" >> $GITHUB_ENV
+
+            - name: Translate iOS descriptions
+              if: env.SHOULD_TRANSLATE == 'true'
+              env:
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+              run: |
+                  mkdir -p temp/ios
+
+                  EN_DESCRIPTIONS=$(cat $IOS_VERSION_FILE | jq -r '.descriptions.en')
+
+                  echo "$EN_DESCRIPTIONS" | jq 'to_entries | reduce .[] as $pair ({}; .["ITEM_" + ($pair | .key | tostring)] = ($pair | .value))' > temp/ios/en.json
+
+                  cd temp/ios
+                  LANGUAGES=("de" "es" "fr" "hi" "it" "ja" "ko" "nl" "pl" "pt" "ru" "sv" "tr" "tw" "vi" "zh")
+
+                  for lang in "${LANGUAGES[@]}"; do
+                    yarn translo-cli --source en.json --target $lang.json --from en --to $lang
+                  done
+
+                  cd ../..
+
+                  for lang in "${LANGUAGES[@]}"; do
+                    if [ -f "temp/ios/$lang.json" ]; then
+                      jq --arg lang "$lang" \
+                        ".descriptions[\$lang] = $(cat "temp/ios/$lang.json" | jq 'to_entries | sort_by(.key | ltrimstr("ITEM_") | tonumber) | map(.value)')" \
+                        $IOS_VERSION_FILE > temp.json && mv temp.json $IOS_VERSION_FILE
+                    fi
+                  done
+
+            - name: Translate Android descriptions
+              if: env.SHOULD_TRANSLATE == 'true'
+              env:
+                  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+              run: |
+                  mkdir -p temp/android
+
+                  EN_DESCRIPTIONS=$(cat $ANDROID_VERSION_FILE | jq -r '.descriptions.en')
+
+                  echo "$EN_DESCRIPTIONS" | jq 'to_entries | reduce .[] as $pair ({}; .["ITEM_" + ($pair | .key | tostring)] = ($pair | .value))' > temp/android/en.json
+
+                  cd temp/android
+                  LANGUAGES=("de" "es" "fr" "hi" "it" "ja" "ko" "nl" "pl" "pt" "ru" "sv" "tr" "tw" "vi" "zh")
+
+                  for lang in "${LANGUAGES[@]}"; do
+                    yarn translo-cli --source en.json --target $lang.json --from en --to $lang
+                  done
+
+                  cd ../..
+
+                  for lang in "${LANGUAGES[@]}"; do
+                    if [ -f "temp/android/$lang.json" ]; then
+                      jq --arg lang "$lang" \
+                        ".descriptions[\$lang] = $(cat "temp/android/$lang.json" | jq 'to_entries | sort_by(.key | ltrimstr("ITEM_") | tonumber) | map(.value)')" \
+                        $ANDROID_VERSION_FILE > temp.json && mv temp.json $ANDROID_VERSION_FILE
+                    fi
+                  done
+
+            - name: Commit and push translations
+              if: env.SHOULD_TRANSLATE == 'true'
+              run: |
+                  git config user.name "vechain-ci"
+                  git config user.email "vechain.ci@vechain.org"
+
+                  git add releases/
+                  git commit -m "chore: add translations for iOS ${{ env.IOS_VERSION }} and Android ${{ env.ANDROID_VERSION }} release notes"
+                  git push origin HEAD
+
+                  rm -rf temp/

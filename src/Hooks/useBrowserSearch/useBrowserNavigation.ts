@@ -1,6 +1,5 @@
-import { useNavigation } from "@react-navigation/native"
 import { useCallback } from "react"
-import { Routes } from "~Navigation"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 import URIUtils from "~Utils/URIUtils"
 import { useVisitedUrls } from "./useVisitedUrls"
 
@@ -9,8 +8,8 @@ export enum SearchError {
 }
 
 export const useBrowserNavigation = () => {
-    const nav = useNavigation()
     const { addVisitedUrl } = useVisitedUrls()
+    const { navigateWithTab } = useBrowserTab()
 
     const navigateToBrowser = useCallback(
         async (value: string) => {
@@ -18,14 +17,14 @@ export const useBrowserNavigation = () => {
             const isValid = await URIUtils.isValidBrowserUrl(valueLower)
             if (isValid) {
                 const url = URIUtils.parseUrl(valueLower)
-                nav.navigate(Routes.BROWSER, { url })
+                navigateWithTab({ url, title: url })
                 addVisitedUrl(url)
                 return
             }
 
             return SearchError.ADDRESS_CANNOT_BE_REACHED
         },
-        [nav, addVisitedUrl],
+        [navigateWithTab, addVisitedUrl],
     )
 
     return { navigateToBrowser }

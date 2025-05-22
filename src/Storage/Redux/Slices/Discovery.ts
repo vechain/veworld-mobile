@@ -8,6 +8,13 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
+export type Tab = {
+    id: string
+    href: string
+    preview?: string
+    title: string
+}
+
 export type BannerInteractionDetails = {
     amountOfInteractions: number
 }
@@ -18,6 +25,10 @@ export type DiscoveryState = {
     custom: DiscoveryDApp[]
     hasOpenedDiscovery: boolean
     connectedApps: ConnectedDiscoveryApp[]
+    tabsManager: {
+        currentTabId: string | null
+        tabs: Tab[]
+    }
     bannerInteractions: {
         [bannerName: string]: BannerInteractionDetails
     }
@@ -29,6 +40,10 @@ export const initialDiscoverState: DiscoveryState = {
     custom: [],
     hasOpenedDiscovery: false,
     connectedApps: [],
+    tabsManager: {
+        currentTabId: null,
+        tabs: [],
+    },
     bannerInteractions: {},
 }
 
@@ -99,6 +114,32 @@ export const DiscoverySlice = createSlice({
         setDiscoverySectionOpened: state => {
             state.hasOpenedDiscovery = true
         },
+        openTab: (state, action: PayloadAction<Tab>) => {
+            state.tabsManager.tabs.push(action.payload)
+            state.tabsManager.currentTabId = action.payload.id
+        },
+        updateTab: (state, action: PayloadAction<Pick<Tab, "id"> & Partial<Omit<Tab, "id">>>) => {
+            const { id, ...otherProps } = action.payload
+            const tabIndex = state.tabsManager.tabs.findIndex(tab => tab.id === id)
+            if (tabIndex !== -1) {
+                Object.entries(otherProps)
+                    .filter(([_, value]) => typeof value !== "undefined")
+                    .forEach(
+                        ([key, value]) => (state.tabsManager.tabs[tabIndex][key as keyof typeof otherProps] = value),
+                    )
+            }
+        },
+        setCurrentTab: (state, action: PayloadAction<string>) => {
+            state.tabsManager.currentTabId = action.payload
+        },
+        closeTab: (state, action: PayloadAction<string>) => {
+            state.tabsManager.tabs = state.tabsManager.tabs.filter(tab => tab.id !== action.payload)
+            state.tabsManager.currentTabId = state.tabsManager.tabs[state.tabsManager.tabs.length - 1]?.id ?? null
+        },
+        closeAllTabs: state => {
+            state.tabsManager.tabs = []
+            state.tabsManager.currentTabId = null
+        },
         resetDiscoveryState: () => initialDiscoverState,
         incrementBannerInteractions: (state, action: PayloadAction<string>) => {
             state.bannerInteractions[action.payload] = {
@@ -118,5 +159,10 @@ export const {
     addConnectedDiscoveryApp,
     removeConnectedDiscoveryApp,
     setFeaturedDApps,
+    openTab,
+    updateTab,
+    setCurrentTab,
+    closeTab,
+    closeAllTabs,
     incrementBannerInteractions,
 } = DiscoverySlice.actions

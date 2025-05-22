@@ -95,6 +95,7 @@ export enum Routes {
     SECURITY_UPGRADE_V2 = "Security_Upgrade_V2",
     SECURITY_UPGRADE_V2_HOME = "Security_Upgrade_V2_Home",
     SECURITY_UPGRADE_V2_MNEMONIC_BACKUP = "Security_Upgrade_V2_Mnemonic_Backup",
+    DISCOVER_TABS_MANAGER = "Discover_Tabs_Manager",
 
     // Routes for external apps that request connection/sign/send transactions with deep links
 

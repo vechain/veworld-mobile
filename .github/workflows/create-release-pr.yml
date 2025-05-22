@@ -1,0 +1,165 @@
+name: Create Version Info PR
+permissions:
+  contents: write
+  pull-requests: write
+
+on:
+    workflow_run:
+        workflows: ["Set Repository Variables"]
+        types:
+            - completed
+
+jobs:
+    create-release-pr:
+        runs-on: ubuntu-latest
+        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+        steps:
+            - name: Generate a token
+              id: generate-token
+              uses: actions/create-github-app-token@v1
+              with:
+                  app-id: ${{ secrets.APP_ID }}
+                  private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+            - name: Checkout repository
+              uses: actions/checkout@v4
+              with:
+                  token: ${{ steps.generate-token.outputs.token }}
+
+            - name: Get version variables
+              env:
+                  GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+              run: |
+                  echo "IOS_VERSION=$(gh variable get IOS_VERSION)" >> $GITHUB_ENV
+                  echo "IOS_BUILD=$(gh variable get IOS_BUILD)" >> $GITHUB_ENV
+                  echo "ANDROID_VERSION=$(gh variable get ANDROID_VERSION)" >> $GITHUB_ENV
+                  echo "ANDROID_BUILD=$(gh variable get ANDROID_BUILD)" >> $GITHUB_ENV
+
+            - name: Create branch
+              run: |
+                  git config user.name "vechain-ci"
+                  git config user.email "vechain.ci@vechain.org"
+                  BRANCH_NAME="release/ios-${{ env.IOS_VERSION }}-android-${{ env.ANDROID_VERSION }}"
+                  git checkout -b $BRANCH_NAME
+                  echo "BRANCH_NAME=$BRANCH_NAME" >> $GITHUB_ENV
+
+            - name: Create iOS placeholder
+              run: |
+                  mkdir -p releases/ios/versions
+                  cat > releases/ios/versions/${{ env.IOS_VERSION }}.json << EOL
+                  {
+                    "version": "${{ env.IOS_VERSION }}",
+                    "major": false,
+                    "descriptions": {
+                      "en": []
+                    }
+                  }
+                  EOL
+
+            - name: Create Android placeholder
+              run: |
+                  mkdir -p releases/android/versions
+                  cat > releases/android/versions/${{ env.ANDROID_VERSION }}.json << EOL
+                  {
+                    "version": "${{ env.ANDROID_VERSION }}",
+                    "major": false,
+                    "descriptions": {
+                      "en": [],
+                      "de": [],
+                      "es": [],
+                      "fr": [],
+                      "hi": [],
+                      "it": [],
+                      "ja": [],
+                      "ko": [],
+                      "nl": [],
+                      "pl": [],
+                      "pt": [],
+                      "ru": [],
+                      "sv": [],
+                      "tr": [],
+                      "tw": [],
+                      "vi": [],
+                      "zh": [],
+                    }
+                  }
+                  EOL
+
+            - name: Update iOS manifest
+              run: |
+                  mkdir -p releases/ios
+                  if [ ! -f releases/ios/manifest.json ]; then
+                    cat > releases/ios/manifest.json << EOL
+                  {
+                    "latest": "${{ env.IOS_VERSION }}",
+                    "major": "${{ env.IOS_VERSION }}",
+                    "history": [
+                      { "version": "${{ env.IOS_VERSION }}", "key": "releases/ios/versions/${{ env.IOS_VERSION }}", "major": false }
+                    ]
+                  }
+                  EOL
+                  else
+                    VERSION_EXISTS=$(jq --arg v "${{ env.IOS_VERSION }}" '.history | map(.version) | index($v) != null' releases/ios/manifest.json)
+                    
+                    if [ "$VERSION_EXISTS" != "true" ]; then
+                      jq --arg v "${{ env.IOS_VERSION }}" '.latest = $v' releases/ios/manifest.json > temp.json && mv temp.json releases/ios/manifest.json
+                      
+                      jq --arg v "${{ env.IOS_VERSION }}" --arg k "/versions/${{ env.IOS_VERSION }}" \
+                        '.history += [{"version": $v, "key": $k, "major": false}]' \
+                        releases/ios/manifest.json > temp.json && mv temp.json releases/ios/manifest.json
+                    fi
+                  fi
+
+            - name: Update Android manifest
+              run: |
+                  mkdir -p releases/android
+                  if [ ! -f releases/android/manifest.json ]; then
+                    cat > releases/android/manifest.json << EOL
+                  {
+                    "latest": "${{ env.ANDROID_VERSION }}",
+                    "major": "${{ env.ANDROID_VERSION }}",
+                    "history": [
+                      { "version": "${{ env.ANDROID_VERSION }}", "key": "releases/android/versions/${{ env.ANDROID_VERSION }}", "major": false }
+                    ]
+                  }
+                  EOL
+                  else
+                    VERSION_EXISTS=$(jq --arg v "${{ env.ANDROID_VERSION }}" '.history | map(.version) | index($v) != null' releases/android/manifest.json)
+                    
+                    if [ "$VERSION_EXISTS" != "true" ]; then
+                      jq --arg v "${{ env.ANDROID_VERSION }}" '.latest = $v' releases/android/manifest.json > temp.json && mv temp.json releases/android/manifest.json
+                      
+                      jq --arg v "${{ env.ANDROID_VERSION }}" --arg k "/versions/${{ env.ANDROID_VERSION }}" \
+                        '.history += [{"version": $v, "key": $k, "major": false}]' \
+                        releases/android/manifest.json > temp.json && mv temp.json releases/android/manifest.json
+                    fi
+                  fi
+
+            - name: Commit changes
+              run: |
+                  git add releases/
+                  git commit -m "chore: add version placeholders for iOS ${{ env.IOS_VERSION }} and Android ${{ env.ANDROID_VERSION }}"
+                  git push origin ${{ env.BRANCH_NAME }}
+
+            - name: Create Pull Request
+              env:
+                  GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+              run: |
+                  PR_BODY="## Release Version Updates
+
+                  This PR was automatically generated after updating version numbers:
+
+                  - iOS: ${{ env.IOS_VERSION }} (build ${{ env.IOS_BUILD }})
+                  - Android: ${{ env.ANDROID_VERSION }} (build ${{ env.ANDROID_BUILD }})
+
+                  ### Next Steps:
+
+                  1. Update the descriptions in the version JSON files
+                  2. Set 'major' to true in both the version file and manifest if this is a major release
+                  3. Add translations for other languages if needed"
+
+                  gh pr create --title "Release: iOS ${{ env.IOS_VERSION }} / Android ${{ env.ANDROID_VERSION }}" \
+                    --body "$PR_BODY" \
+                    --base main \
+                    --head ${{ env.BRANCH_NAME }}
