@@ -1,7 +1,8 @@
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { AxiosError } from "axios"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { showErrorToast, showWarningToast, useFeatureFlags } from "~Components"
+import { showWarningToast, useFeatureFlags } from "~Components"
+import { showErrorToast } from "~Components/Base/BaseToast"
 import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
 import {
     SignStatus,
@@ -9,12 +10,12 @@ import {
     useAnalyticTracking,
     useCheckIdentity,
     useDelegation,
-    useSendTransaction,
     useSignTransaction,
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
 import { useIsGalactica } from "~Hooks/useIsGalactica"
+import { useSendTransaction } from "~Hooks/useSendTransaction"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
