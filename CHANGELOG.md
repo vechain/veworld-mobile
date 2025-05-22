@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.3 (2025-05-22)</small>
+
+* build: init ([57a037d](https://github.com/vechain/veworld-mobile/commit/57a037d))
+* 136 222 228   minor bugs (#2955) ([7f953f6](https://github.com/vechain/veworld-mobile/commit/7f953f6)), closes [#2955](https://github.com/vechain/veworld-mobile/issues/2955)
+
 ## <small>2.2.2 (2025-05-19)</small>
 
 * build: init ([bc68c5a](https://github.com/vechain/veworld-mobile/commit/bc68c5a))
