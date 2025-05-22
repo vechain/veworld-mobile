@@ -134,13 +134,12 @@ export const useTransactionScreen = ({
 
     const parseTxError = useCallback(
         (e: unknown) => {
-            //TODO: Add generic error
-            if (!(e instanceof AxiosError)) return ""
+            if (!(e instanceof AxiosError)) return LL.SEND_TRANSACTION_ERROR_GENERIC_ERROR()
             if (e.response?.data?.contains("insufficient energy"))
                 return LL.SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY()
             if (e.response?.data?.contains("gas price is less than block base fee"))
                 return LL.SEND_TRANSACTION_ERROR_GAS_FEE()
-            return ""
+            return LL.SEND_TRANSACTION_ERROR_GENERIC_ERROR()
         },
         [LL],
     )

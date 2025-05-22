@@ -356,13 +356,13 @@ type RootTranslation = {
 	 */
 	B3TR_CLAIM_REWARD: string
 	/**
-	 * V​o​t​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
-	 */
-	B3TR_PROPOSAL_VOTE: string
-	/**
 	 * S​u​p​p​o​r​t​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
 	 */
 	B3TR_PROPOSAL_SUPPORT: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	B3TR_PROPOSAL_VOTE: string
 	/**
 	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​e​b​e​r​ ​l​e​v​e​l
 	 */
@@ -3609,6 +3609,10 @@ type RootTranslation = {
 	 */
 	SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY: string
 	/**
+	 * g​e​n​e​r​i​c​ ​e​r​r​o​r
+	 */
+	SEND_TRANSACTION_ERROR_GENERIC_ERROR: string
+	/**
 	 * Y​o​u​r​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​b​a​c​k​ ​t​o​ ​B​3​T​R​ ​i​n​ ​t​h​i​s​ ​s​p​e​c​i​f​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​.​ ​B​y​ ​s​e​n​d​i​n​g​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​o​n​’​t​ ​b​e​ ​a​b​l​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​t​o​ ​a​n​y​ ​o​t​h​e​r​ ​a​s​s​e​t​.​
 ​A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​c​o​n​t​i​n​u​e​?
 	 */
@@ -4640,13 +4644,13 @@ Try reconnect your device to the internet.
 	 */
 	B3TR_CLAIM_REWARD: () => LocalizedString
 	/**
-	 * Vote on VeBetterDAO proposal
-	 */
-	B3TR_PROPOSAL_VOTE: () => LocalizedString
-	/**
 	 * Support VeBetterDAO proposal
 	 */
 	B3TR_PROPOSAL_SUPPORT: () => LocalizedString
+	/**
+	 * Vote on VeBetterDAO proposal
+	 */
+	B3TR_PROPOSAL_VOTE: () => LocalizedString
 	/**
 	 * New galaxy memeber level
 	 */
@@ -7850,6 +7854,10 @@ Thanks for your patience!
 	 * gas payer cannot cover fees
 	 */
 	SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY: () => LocalizedString
+	/**
+	 * generic error
+	 */
+	SEND_TRANSACTION_ERROR_GENERIC_ERROR: () => LocalizedString
 	/**
 	 * Your VOT3 tokens can only be converted back to B3TR in this specific wallet address. By sending to another wallet you won’t be able to convert to any other asset.
 Are you sure you want to continue?
