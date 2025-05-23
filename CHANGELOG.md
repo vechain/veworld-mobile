@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.3 (2025-05-23)</small>
+
+* build: init ([6a5c62f](https://github.com/vechain/veworld-mobile/commit/6a5c62f))
+* fix: fix langs (#2957) ([4f7ed4e](https://github.com/vechain/veworld-mobile/commit/4f7ed4e)), closes [#2957](https://github.com/vechain/veworld-mobile/issues/2957)
+
 ## <small>2.2.2 (2025-05-19)</small>
 
 * build: init ([bc68c5a](https://github.com/vechain/veworld-mobile/commit/bc68c5a))
