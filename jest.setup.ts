@@ -9,11 +9,13 @@ import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
+import React from "react"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
-jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
+
+jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js");
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
@@ -92,7 +94,8 @@ jest.mock("expo-modules-core", () => ({
         addListener: jest.fn(),
         removeListeners: jest.fn(),
     })),
-    requireNativeModule: jest.fn().mockReturnValue({}), // Mock native modules
+    requireNativeModule: jest.fn().mockReturnValue({}),
+    requireOptionalNativeModule: jest.fn().mockReturnValue({}),
     Platform: {
         OS: "ios",
     },
@@ -132,9 +135,18 @@ jest.mock("expo-font", () => ({
 
 jest.mock("react-native-localize", () => localizeMock)
 
-jest.mock("react-native-webview", () => ({
-    ...jest.requireActual("react-native-webview").WebView,
-}))
+jest.mock("react-native-webview", () => {
+    const WebView = ({ children, ...props }: { children?: ReactNode; [key: string]: any }) => 
+        React.createElement('WebView', props, children);
+    
+    // Add missing static properties
+    WebView.extraNativeComponentConfig = {};
+    
+    return {
+        WebView,
+        default: WebView,
+    };
+})
 
 jest.mock("expo-clipboard", () => {})
 jest.mock("react-native-linear-gradient", () => "LinearGradient")
@@ -245,8 +257,17 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
     return {
         ...turboModuleRegistry,
         getEnforcing: (name: string) => {
+            if (name === "RNCWebViewModule") {
+                return {
+                    startLoadWithResult: jest.fn(),
+                    getViewManagerConfig: jest.fn(),
+                };
+            }
             if (name === "RNCWebView") {
-                return null
+                return {
+                    startLoadWithResult: jest.fn(),
+                    getViewManagerConfig: jest.fn(),
+                };
             }
             if (name === "RNViewShot") {
                 return null
@@ -257,3 +278,12 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
 })
 
 require("react-native-reanimated").setUpTests()
+
+jest.mock("expo-task-manager", () => ({
+    defineTask: jest.fn(),
+    isTaskRegisteredAsync: jest.fn().mockResolvedValue(false),
+    unregisterTaskAsync: jest.fn(),
+    unregisterAllTasksAsync: jest.fn(),
+    getRegisteredTasksAsync: jest.fn().mockResolvedValue([]),
+    getTaskOptionsAsync: jest.fn(),
+}))
