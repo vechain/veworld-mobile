@@ -38,6 +38,7 @@ import { AnimatedSplashScreen } from "../../../AnimatedSplashScreen"
 import Onboarding from "./Helpers/Onboarding"
 import SaltHelper from "./Helpers/SaltHelper"
 import { StorageEncryptionKeys } from "./Model"
+import { Platform } from "react-native"
 
 const UserEncryptedStorage = new MMKV({
     id: "user_encrypted_storage",
@@ -110,6 +111,19 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
     const onboardingKey = useMemo(() => HexUtils.generateRandom(256), [])
 
     const oldPersistedState = useMemo(() => UserEncryptedStorage.getString("persist:root"), [])
+
+    // Network connectivity state
+    const [isConnected, setIsConnected] = useState<boolean>(true)
+
+    useEffect(() => {
+        const unsubscribe = NetInfo.addEventListener(state => {
+            setIsConnected(!!state.isConnected)
+        })
+
+        return () => {
+            unsubscribe()
+        }
+    }, [])
 
     const triggerAutoLock = () => {
         setAutoLock(true)
@@ -525,8 +539,6 @@ export const ApplicationSecurityProvider = ({ children }: ApplicationSecurityCon
         securityType,
         lockApplication,
     ])
-
-    const { isConnected } = NetInfo.useNetInfo()
 
     switch (walletStatus) {
         case WALLET_STATUS.NOT_INITIALISED:
