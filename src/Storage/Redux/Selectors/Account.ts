@@ -1,5 +1,5 @@
 import { createSelector } from "@reduxjs/toolkit"
-import { AccountUtils, AddressUtils } from "~Utils"
+import { AccountUtils, AddressUtils, BigNutils } from "~Utils"
 import { RootState } from "../Types"
 import { selectDevicesState } from "./Device"
 import { AccountWithDevice, DEVICE_TYPE, LocalAccountWithDevice } from "~Model"
@@ -134,6 +134,13 @@ export const selectDelegationAccountsWithVtho = createSelector(
             .filter(
                 ([_, vthoBalance]) =>
                     vthoBalance && ethers.utils.parseUnits(HexUInt.of(vthoBalance?.balance).bi.toString(), 18).gt(0),
+            )
+            .sort(([_, vtho1], [__, vtho2]) =>
+                BigNutils(HexUInt.of(vtho2?.balance ?? "0x0").bi.toString()).isBiggerThan(
+                    HexUInt.of(vtho1?.balance ?? "0x0").bi.toString(),
+                )
+                    ? 1
+                    : -1,
             )
             .map(([address]) => accounts.find(acc => AddressUtils.compareAddresses(acc.address, address))!)
     },

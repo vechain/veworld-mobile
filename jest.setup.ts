@@ -125,6 +125,11 @@ jest.mock("expo-haptics", () => ({
         Medium: "medium",
         Heavy: "heavy",
     },
+    NotificationFeedbackType: {
+        Success: "success",
+        Warning: "warning",
+        Error: "error",
+    },
     impactAsync: jest.fn(),
 }))
 

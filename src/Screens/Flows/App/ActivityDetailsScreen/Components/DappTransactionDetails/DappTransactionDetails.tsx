@@ -1,34 +1,34 @@
 import React, { memo, useMemo } from "react"
-import { VTHO, genesisesId } from "~Constants"
-import { AddressUtils, TransactionUtils } from "~Utils"
+import { Linking } from "react-native"
 import { BaseSpacer } from "~Components"
+import { VTHO, genesisesId } from "~Constants"
 import { useCopyClipboard } from "~Hooks"
-import { selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { ActivityStatus, DappTxActivity } from "~Model"
-import { ActivityDetail } from "../../Type"
+import { selectOfficialTokens, useAppSelector } from "~Storage/Redux"
+import { AddressUtils, TransactionUtils } from "~Utils"
 import { useGasFee } from "../../Hooks"
-import { ClausesCarousel } from "./ClausesCarousel"
+import { ActivityDetail } from "../../Type"
 import { ActivityDetailItem } from "../ActivityDetailItem"
-import { Linking } from "react-native"
+import { ClausesCarousel } from "./ClausesCarousel"
 
 type Props = {
     activity: DappTxActivity
     clauses?: Connex.VM.Clause[]
     status?: ActivityStatus
-    gasUsed?: number
+    paid: string | undefined
     isLoading?: boolean
 }
 
 export const DappTransactionDetails: React.FC<Props> = memo(
-    ({ activity, clauses, status, gasUsed, isLoading = false }) => {
+    ({ activity, clauses, status, paid, isLoading = false }) => {
         const { LL } = useI18nContext()
 
         const network = useMemo(() => {
             return activity.genesisId === genesisesId.main ? LL.NETWORK_LABEL_MAINNET() : LL.NETWORK_LABEL_TESTNET()
         }, [LL, activity.genesisId])
 
-        const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(gasUsed)
+        const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(paid)
 
         const tokens = useAppSelector(selectOfficialTokens)
 

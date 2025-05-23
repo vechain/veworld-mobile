@@ -1,42 +1,18 @@
-import { BigNumber } from "bignumber.js"
-import { useEffect, useMemo, useState } from "react"
+import { HexUInt } from "@vechain/sdk-core"
+import { useMemo } from "react"
 import { useVthoExchangeRate } from "~Api/Coingecko"
-import { showInfoToast, useThor } from "~Components"
-import { ERROR_EVENTS } from "~Constants"
+import { VTHO } from "~Constants"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
-import { BigNutils, GasUtils, warn } from "~Utils"
-import { useI18nContext } from "~i18n"
+import { BigNutils } from "~Utils"
 
-export const useGasFee = (gasUsed?: number) => {
-    const thor = useThor()
-
-    const [vthoGasFee, setVthoGasFee] = useState<string>()
-
-    const { LL } = useI18nContext()
-
-    useEffect(() => {
-        if (!gasUsed) return
-        const calculateVthoFee = async () => {
-            try {
-                const baseGasPrice = await GasUtils.getBaseGasPrice(thor)
-                const { gasFee } = GasUtils.gasToVtho({
-                    gas: new BigNumber(gasUsed || 0),
-                    baseGasPrice: new BigNumber(baseGasPrice),
-                })
-                setVthoGasFee(gasFee)
-            } catch (e) {
-                warn(ERROR_EVENTS.SEND, e)
-                showInfoToast({
-                    text1: LL.HEADS_UP(),
-                    text2: LL.NOTIFICATION_GAS_FEE_INACCURATE(),
-                })
-            }
-        }
-        calculateVthoFee()
-    }, [LL, gasUsed, thor])
-
+export const useGasFee = (paid?: string) => {
     const currency = useAppSelector(selectCurrency)
     const { data: VTHOexchangeRate } = useVthoExchangeRate(currency)
+
+    const vthoGasFee = useMemo(() => {
+        if (!paid) return
+        return BigNutils(HexUInt.of(paid).bi.toString()).toHuman(VTHO.decimals).decimals(2).toString
+    }, [paid])
 
     const fiatValueGasFeeSpent = useMemo(() => {
         if (VTHOexchangeRate && vthoGasFee) {
