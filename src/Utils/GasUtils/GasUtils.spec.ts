@@ -3,24 +3,11 @@ import BigNumber from "bignumber.js"
 import { GasPriceCoefficient } from "~Constants"
 import { TestHelpers } from "~Test"
 import GasUtils from "./GasUtils"
+import { TransactionClause } from "@vechain/sdk-core"
 
 const url = "https://mainnet.vechain.org"
 
-const thor = TestHelpers.thor.mockThorInstance({})
-const thorExplainExecuteVmError = TestHelpers.thor.mockThorInstance({
-    explain: (clauses: Connex.VM.Clause[]) => ({
-        ...TestHelpers.thor.stubs.explain.explain(clauses),
-        execute: TestHelpers.thor.stubs.explain.stubs.execute.vmErrorExecuteStub,
-    }),
-})
-const thorExplainExecuteReverts = TestHelpers.thor.mockThorInstance({
-    explain: (clauses: Connex.VM.Clause[]) => ({
-        ...TestHelpers.thor.stubs.explain.explain(clauses),
-        execute: TestHelpers.thor.stubs.explain.stubs.execute.revertingExecuteStub,
-    }),
-})
-
-const clausesStubs = TestHelpers.data.clauses
+const clausesStubs = TestHelpers.data.clauses as TransactionClause[]
 
 jest.mock("axios", () => ({
     get: jest.fn(() => ({
@@ -49,7 +36,7 @@ describe("GasUtils", () => {
                 ],
             })
 
-            const estimated = await GasUtils.estimateGas(url, thor, [], 0, "0x")
+            const estimated = await GasUtils.estimateGas(url, [], 0, "0x")
 
             expect(estimated).toStrictEqual({
                 caller: "0x",
@@ -57,7 +44,7 @@ describe("GasUtils", () => {
                 reverted: false,
                 revertReason: "",
                 vmError: "",
-                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "10000000000000",
             })
         })
 
@@ -78,13 +65,12 @@ describe("GasUtils", () => {
 
             const estimated = await GasUtils.estimateGas(
                 url,
-                thor,
                 [
                     ...clausesStubs,
                     {
                         to: "0x0000000000000000000000000000456e65726779",
                         data: "0x",
-                    } as Connex.VM.Clause,
+                    } as TransactionClause,
                 ],
                 0,
                 "0x",
@@ -95,7 +81,7 @@ describe("GasUtils", () => {
                 reverted: false,
                 revertReason: "",
                 vmError: "",
-                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "10000000000000",
             })
         })
 
@@ -116,7 +102,6 @@ describe("GasUtils", () => {
 
             const estimated = await GasUtils.estimateGas(
                 url,
-                thor,
                 clausesStubs,
                 0,
                 "0x",
@@ -128,7 +113,7 @@ describe("GasUtils", () => {
                 reverted: false,
                 revertReason: "",
                 vmError: "",
-                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "10000000000000",
             })
         })
 
@@ -146,21 +131,14 @@ describe("GasUtils", () => {
                     },
                 ],
             })
-            const reverted = await GasUtils.estimateGas(
-                url,
-                thorExplainExecuteReverts,
-                [],
-                0,
-                "0x",
-                TestHelpers.data.account1D1.address,
-            )
+            const reverted = await GasUtils.estimateGas(url, [], 0, "0x", TestHelpers.data.account1D1.address)
             expect(reverted).toStrictEqual({
                 caller: "0x",
                 gas: 72591,
                 reverted: true,
                 revertReason: "revertReason",
                 vmError: "",
-                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "10000000000000",
             })
         })
 
@@ -179,21 +157,14 @@ describe("GasUtils", () => {
                 ],
             })
 
-            const reverted = await GasUtils.estimateGas(
-                url,
-                thorExplainExecuteVmError,
-                [],
-                0,
-                "0x",
-                TestHelpers.data.account1D1.address,
-            )
+            const reverted = await GasUtils.estimateGas(url, [], 0, "0x", TestHelpers.data.account1D1.address)
             expect(reverted).toStrictEqual({
                 caller: "0x",
                 gas: 36591,
                 reverted: false,
                 revertReason: "vmError",
                 vmError: "vmError",
-                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "10000000000000",
             })
         })
         it("should run correctly with suggested gas", async () => {
@@ -211,21 +182,14 @@ describe("GasUtils", () => {
                 ],
             })
 
-            const reverted = await GasUtils.estimateGas(
-                url,
-                thorExplainExecuteVmError,
-                [],
-                50000,
-                "0x",
-                TestHelpers.data.account1D1.address,
-            )
+            const reverted = await GasUtils.estimateGas(url, [], 50000, "0x", TestHelpers.data.account1D1.address)
             expect(reverted).toStrictEqual({
                 caller: "0x",
                 gas: 50000,
                 reverted: false,
                 revertReason: "vmError",
                 vmError: "vmError",
-                baseGasPrice: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                baseGasPrice: "10000000000000",
             })
         })
     })

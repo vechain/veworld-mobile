@@ -18,6 +18,8 @@ import { DateUtils, HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityModalTitle } from "./util"
 
+import { useQuery } from "@tanstack/react-query"
+import { B3TR, VOT3 } from "~Constants"
 import {
     ActivityStatus,
     ActivityType,
@@ -31,6 +33,7 @@ import {
     SwapActivity,
     TypedDataActivity,
 } from "~Model"
+import { getTransaction } from "~Networking"
 import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
@@ -43,9 +46,6 @@ import {
     SignCertificateDetails,
 } from "./Components"
 import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
-import { getTransaction } from "~Networking"
-import { useQuery } from "@tanstack/react-query"
-import { B3TR, VOT3 } from "~Constants"
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
@@ -148,7 +148,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                     <FungibleTokenTransferDetails
                         activity={(activityFromStore ?? activity) as FungibleTokenActivity}
                         token={token}
-                        gasUsed={transaction?.gasUsed}
+                        paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
                 )
@@ -170,7 +170,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                         activity={(activityFromStore ?? activity) as DappTxActivity}
                         clauses={transaction?.clauses}
                         status={isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS}
-                        gasUsed={transaction?.gasUsed}
+                        paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
                 )
@@ -179,7 +179,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                 return (
                     <NonFungibleTokenTransferDetails
                         activity={(activityFromStore ?? activity) as NonFungibleTokenActivity}
-                        gasUsed={transaction?.gasUsed}
+                        paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
                 )
@@ -203,7 +203,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
         isloadingTxDetails,
         token,
         transaction?.clauses,
-        transaction?.gasUsed,
+        transaction?.paid,
     ])
 
     const onGoBack = useCallback(() => {

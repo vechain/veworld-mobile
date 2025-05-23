@@ -119,7 +119,7 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
     const renderWithoutToolbar = useMemo(() => {
         return (
             <BaseView style={styles.noToolbarContainer}>
-                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.subtitle}>
+                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.subtitle} numberOfLines={1}>
                     {navigationState?.url}
                 </BaseText>
             </BaseView>
@@ -153,6 +153,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flex: 1,
+        paddingHorizontal: 16,
     },
     dappContainer: {
         gap: 8,
