@@ -1,6 +1,5 @@
 {
     "name": "VeWorld",
-    "displayName": "VeWorld",
     "plugins": [
         "expo-font",
         "expo-secure-store",
@@ -10,8 +9,5 @@
                 "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
             }
         ]
-    ],
-    "ios": {
-        "scheme": "VeWorld"
-    }
+    ]
 }

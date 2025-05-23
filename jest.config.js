@@ -40,6 +40,7 @@ module.exports = {
             ")",
     ],
     moduleNameMapper: {
+        "react-native-webview": "<rootDir>/node_modules/react-native-webview/src/index.ts",
         "^~Api(.*)": ["<rootDir>/src/Api$1"],
         "^~Storage(.*)": ["<rootDir>/src/Storage$1"],
         "^~Model(.*)": ["<rootDir>/src/Model$1"],
