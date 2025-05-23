@@ -75,7 +75,7 @@ class PackageDetails(reactContext: ReactApplicationContext) : ReactContextBaseJa
             val sigs = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                 // For newer devices
                 val signingInfo = pInfo.signingInfo
-                signingInfo.apkContentsSigners
+                signingInfo?.apkContentsSigners
             } else {
                 // Legacy approach
                 pInfo.signatures

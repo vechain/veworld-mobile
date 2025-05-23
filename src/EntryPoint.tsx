@@ -8,7 +8,6 @@ import RNBootSplash from "react-native-bootsplash"
 import { SecurityLevelType } from "~Model"
 import { PlatformUtils } from "~Utils"
 import { CaptureProtection } from "react-native-capture-protection"
-import { SafeAreaProvider } from "react-native-safe-area-context"
 const { ScreenShieldRN } = NativeModules
 
 export const EntryPoint = () => {

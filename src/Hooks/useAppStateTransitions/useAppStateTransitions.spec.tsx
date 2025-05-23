@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { renderHook } from "@testing-library/react-hooks/native"
+import { renderHook } from "@testing-library/react-hooks"
 import { AppStateType } from "~Model"
 import { useAppStateTransitions } from "./useAppStateTransitions"
 import { useAppState } from "../useAppState"

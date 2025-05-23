@@ -1,5 +1,5 @@
 import React from "react"
-import { renderHook } from "@testing-library/react-hooks/native"
+import { renderHook } from "@testing-library/react-hooks"
 import { useTheme, useThemedStyles } from "./useTheme"
 import { ColorTheme, ColorThemeType } from "../../Constants/Theme/Theme"
 import { TestWrapper } from "~Test"
