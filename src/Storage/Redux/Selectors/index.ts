@@ -1,5 +1,6 @@
 export * from "./Account"
 export * from "./Activity"
+export * from "./VersionUpdate"
 export * from "./Analytics"
 export * from "./Balances"
 export * from "./Beat"

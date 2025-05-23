@@ -1,5 +1,6 @@
 export * from "./Account"
 export * from "./Activity"
+export * from "./AppVersion"
 export * from "./Beat"
 export * from "./Transaction"
 // export * from "./Backup"
