@@ -1,6 +1,9 @@
 {
     "name": "VeWorld",
     "displayName": "VeWorld",
+    "experiments": {
+        "turboModules": true
+    },
     "plugins": [
         "expo-font",
         "expo-secure-store",
@@ -9,7 +12,18 @@
             {
                 "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
             }
-        ]
+        ],
+        [
+            "expo-build-properties",
+            {
+              "ios": {
+                "newArchEnabled": true
+              },
+              "android": {
+                "newArchEnabled": true
+              }
+            }
+          ]
     ],
     "ios": {
         "scheme": "VeWorld"
