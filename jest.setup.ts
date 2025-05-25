@@ -138,7 +138,7 @@ jest.mock("expo-font", () => ({
 jest.mock("react-native-localize", () => localizeMock)
 
 jest.mock("react-native-webview", () => ({
-    ...jest.requireActual("react-native-webview").WebView,
+    WebView: ({ children }: { children?: ReactNode }) => children,
 }))
 
 jest.mock("expo-clipboard", () => {})
@@ -254,6 +254,9 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
                 return null
             }
             if (name === "RNViewShot") {
+                return null
+            }
+            if (name === "RNCWebViewModule") {
                 return null
             }
             return turboModuleRegistry.getEnforcing(name)
