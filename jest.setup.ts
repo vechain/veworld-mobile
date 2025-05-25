@@ -13,7 +13,7 @@ import * as localizeMock from "react-native-localize/mock"
 const componentMock = ({ children }: { children: ReactNode }) => children
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
-jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
+jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
