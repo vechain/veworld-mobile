@@ -17,7 +17,13 @@ jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-quick-crypto", () => ({
     default: {
-        randomBytes: jest.fn((size: number) => Buffer.alloc(size)),
+        randomBytes: jest.fn((size: number) => {
+            const buffer = Buffer.alloc(Math.ceil(size))
+            for (let i = 0; i < buffer.length; i++) {
+                buffer[i] = Math.floor(Math.random() * 256)
+            }
+            return buffer
+        }),
         getRandomValues: jest.fn(buffer => buffer),
         randomFillSync: jest.fn(buffer => buffer),
         createCipheriv: jest.fn(() => ({
@@ -34,8 +40,13 @@ jest.mock("react-native-quick-crypto", () => ({
             }),
         })),
     },
-    // Also expose functions for named imports
-    randomBytes: jest.fn((size: number) => Buffer.alloc(size)),
+    randomBytes: jest.fn((size: number) => {
+        const buffer = Buffer.alloc(Math.ceil(size))
+        for (let i = 0; i < buffer.length; i++) {
+            buffer[i] = Math.floor(Math.random() * 256)
+        }
+        return buffer
+    }),
     getRandomValues: jest.fn(buffer => buffer),
     randomFillSync: jest.fn(buffer => buffer),
     createCipheriv: jest.fn(() => ({
