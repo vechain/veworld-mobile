@@ -8754,12 +8754,12 @@ expo-av@~15.0.2:
   resolved "https://registry.yarnpkg.com/expo-av/-/expo-av-15.0.2.tgz#65bb08658a7fe3a67aa47da614abbfae9adb684e"
   integrity sha512-AHIHXdqLgK1dfHZF0JzX3YSVySGMrWn9QtPzaVjw54FAzvXfMt4sIoq4qRL/9XWCP9+ICcCs/u3EcvmxQjrfcA==
 
-expo-background-fetch@13.1.5:
-  version "13.1.5"
-  resolved "https://registry.yarnpkg.com/expo-background-fetch/-/expo-background-fetch-13.1.5.tgz#9deafc702a5bfa76bd6e7b5ebfdc0e279987d755"
-  integrity sha512-tQiQEH68o6iduDDOKdlTx7oa1cWf8d+RsT4vm2dFzoSEIr1gJtdNojN4U2qBxwTGYttJI1ug5/PYKpQUIS5VmA==
+expo-background-fetch@13.0.6:
+  version "13.0.6"
+  resolved "https://registry.yarnpkg.com/expo-background-fetch/-/expo-background-fetch-13.0.6.tgz#795d848e8676ff6e184994b30ca0a67e41dbab26"
+  integrity sha512-fhSpPA7U/CIuBwYbMVSbfPxczsvHKF8MWmFumfMgriDqop6bp/ccLbnpU1vPLQDPmRPS5dMdTz04KYIMdTpD9w==
   dependencies:
-    expo-task-manager "~13.1.5"
+    expo-task-manager "~12.0.6"
 
 expo-build-properties@~0.13.3:
   version "0.13.3"
@@ -8891,12 +8891,12 @@ expo-secure-store@~14.0.1:
   resolved "https://registry.yarnpkg.com/expo-secure-store/-/expo-secure-store-14.0.1.tgz#8953d5966430f5ff262f4d99e7551205870078d7"
   integrity sha512-QUS+j4+UG4jRQalgnpmTvvrFnMVLqPiUZRzYPnG3+JrZ5kwVW2w6YS3WWerPoR7C6g3y/a2htRxRSylsDs+TaQ==
 
-expo-task-manager@13.1.5, expo-task-manager@~13.1.5:
-  version "13.1.5"
-  resolved "https://registry.yarnpkg.com/expo-task-manager/-/expo-task-manager-13.1.5.tgz#fc09bdc9562339aa71de4ed2e7ff17491e6b6ee2"
-  integrity sha512-9jspZZ6y6hwo6QBwmfsUUX6sY4Mnrw8170LnOqrVfRuClkGaMrqDeBa9YUFTDt/BNYZ/3/QlZZ5QUHT9ziROfQ==
+expo-task-manager@12.0.6, expo-task-manager@~12.0.6:
+  version "12.0.6"
+  resolved "https://registry.yarnpkg.com/expo-task-manager/-/expo-task-manager-12.0.6.tgz#074cd10505d8866d43e8fe3a4c6520cd97332ff9"
+  integrity sha512-yGbS64OL95z7tAQAvryy0sGHuQgrcpvnJsdyuGL8MA9bcPtr+kytLZ4dOCDac7foQS7+FLDGgtiAR6v/64B5Pg==
   dependencies:
-    unimodules-app-loader "~5.1.3"
+    unimodules-app-loader "~5.0.1"
 
 expo@^51.0.14:
   version "51.0.39"
@@ -16314,10 +16314,10 @@ unicorn-magic@^0.1.0:
   resolved "https://registry.yarnpkg.com/unicorn-magic/-/unicorn-magic-0.1.0.tgz#1bb9a51c823aaf9d73a8bfcd3d1a23dde94b0ce4"
   integrity sha512-lRfVq8fE8gz6QMBuDM6a+LO3IAzTi05H6gCVaUpir2E1Rwpo4ZUog45KpNXKC/Mn3Yb9UDuHumeFTo9iV/D9FQ==
 
-unimodules-app-loader@~5.1.3:
-  version "5.1.3"
-  resolved "https://registry.yarnpkg.com/unimodules-app-loader/-/unimodules-app-loader-5.1.3.tgz#c3be527cd36120fc77d6843253075c8a9246f622"
-  integrity sha512-nPUkwfkpJWvdOQrVvyQSUol93/UdmsCVd9Hkx9RgAevmKSVYdZI+S87W73NGKl6QbwK9L1BDSY5OrQuo8Oq15g==
+unimodules-app-loader@~5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/unimodules-app-loader/-/unimodules-app-loader-5.0.1.tgz#4c5ac10b1043607441a171b8b6658b57a1e1e9f2"
+  integrity sha512-JI4dUMOovvLrZ1U/mrQrR73cxGH26H7NpfBxwE0hk59CBOyHO4YYpliI3hPSGgZzt+YEy2VZR6nrspSUXY8jyw==
 
 unique-filename@^3.0.0:
   version "3.0.0"
