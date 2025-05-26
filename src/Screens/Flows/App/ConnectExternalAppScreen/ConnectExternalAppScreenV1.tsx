@@ -1,20 +1,65 @@
-import React, { useMemo } from "react"
+import React, { useEffect, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { Text } from "react-native"
+import { NativeModules, Text } from "react-native"
 import { Routes } from "~Navigation"
 import { RootStackParamListSwitch } from "~Navigation/Stacks/SwitchStack"
-import { CryptoUtils } from "~Utils"
-import { BaseSafeArea } from "~Components"
+import { BaseSafeArea, BaseSpacer, BaseView } from "~Components"
+import { TestHelpers } from "~Test"
+
+const { vetTransaction1 } = TestHelpers.data
+
+const { CryptoKitManager } = NativeModules
 
 type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECT_EXTERNAL_APP_SCREEN_V1>
 
 export const ConnectExternalAppScreenV1 = (_: Props) => {
-    const { publicKey } = useMemo(() => CryptoUtils.generateDiffieHellmanKeys(), [])
+    const [publicKey, setPublicKey] = useState<string>("")
+    const [privateKey, setPrivateKey] = useState<string>("")
+
+    useEffect(() => {
+        const init = async () => {
+            const keyPair = await CryptoKitManager.generateKeyPair()
+            // console.log("keyPair", keyPair)
+            const keyPair2 = await CryptoKitManager.generateKeyPair()
+            // console.log("keyPair2", keyPair2)
+
+            setPublicKey(keyPair.publicKey)
+            setPrivateKey(keyPair.privateKey)
+
+            const sharedSecret = await CryptoKitManager.deriveSharedSecret(keyPair.privateKey, keyPair2.publicKey)
+            const sharedSecret2 = await CryptoKitManager.deriveSharedSecret(keyPair2.privateKey, keyPair.publicKey)
+            // console.log("sharedSecret", sharedSecret)
+            // console.log("sharedSecret2", sharedSecret2)
+
+            // console.log("symmetricKey", sharedSecret.sharedSecret === sharedSecret2.sharedSecret)
+
+            // console.log("sharedSecret.sharedSecret", sharedSecret.sharedSecret.length)
+
+            try {
+                const { encrypted, nonce } = await CryptoKitManager.encrypt(
+                    JSON.stringify(vetTransaction1),
+                    sharedSecret.sharedSecret,
+                )
+                // console.log("encrypted", encrypted)
+                // console.log("nonce", nonce)
+
+                await CryptoKitManager.decrypt(encrypted, sharedSecret2.sharedSecret, nonce)
+                // console.log("decrypted", decrypted)
+            } catch (error) {
+                // console.log(error)
+            }
+        }
+        init()
+    }, [])
 
     return (
         <BaseSafeArea>
             <Text>{"Connect External App"}</Text>
-            <Text>{publicKey}</Text>
+            <BaseSpacer height={10} />
+            <BaseView gap={10}>
+                <Text>{"publicKey: " + publicKey}</Text>
+                <Text>{"privateKey: " + privateKey}</Text>
+            </BaseView>
         </BaseSafeArea>
     )
 }

@@ -1,6 +1,5 @@
 import { HDNode, Keystore, mnemonic as Mnemonic } from "thor-devkit"
 import crypto from "react-native-quick-crypto"
-import nativeCrypto from "crypto"
 import scrypt from "react-native-scrypt"
 import { XPub } from "~Model/Crypto"
 import stringify from "json-stringify-safe"
@@ -144,26 +143,6 @@ const determineKeyImportType = (rawImportData: string): IMPORT_TYPE => {
     return IMPORT_TYPE.UNKNOWN
 }
 
-// const generateNewKeyPair = () => {
-//     const { publicKey, privateKey } = nativeCrypto.generateKeyPairSync("x25519", {
-//         publicKeyEncoding: {
-//             type: "spki",
-//             format: "pem",
-//         },
-//         privateKeyEncoding: {
-//             type: "pkcs8",
-//             format: "pem",
-//         },
-//     })
-//     return { publicKey: publicKey, privateKey: privateKey }
-// }
-
-const generateDiffieHellmanKeys = () => {
-    const dh = nativeCrypto.createDiffieHellman(2048)
-    const publicKey = dh.generateKeys("hex")
-    return { dh, publicKey }
-}
-
 export default {
     xPubFromHdNode,
     hdNodeFromXPub,
@@ -176,5 +155,4 @@ export default {
     decryptKeystoreFile,
     mnemonicStringToArray,
     determineKeyImportType,
-    generateDiffieHellmanKeys,
 }

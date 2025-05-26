@@ -14,6 +14,8 @@
 		2143469C7F9404D6E2507CED /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D8D2A2460E306519E0DBA9DB /* ExpoModulesProvider.swift */; };
 		2A70FAE6A804FEF809BADE51 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 381D08B5B2E6093FA19860A8 /* PrivacyInfo.xcprivacy */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		9672FFB32DDF817200EB49E9 /* CryptoKitManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 9672FFB12DDF817200EB49E9 /* CryptoKitManager.m */; };
+		9672FFB42DDF817200EB49E9 /* CryptoKitManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9672FFB22DDF817200EB49E9 /* CryptoKitManager.swift */; };
 		96A6B0397FEDE0E010EB381C /* libPods-VeWorld-VeWorldTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC4DFDFE4924FC0BAC6E9FF /* libPods-VeWorld-VeWorldTests.a */; };
 		BEC377FEE204B8F4B73A3A34 /* libPods-OneSignalNotificationServiceExtension.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 5BDB772B7D55844A6F930E03 /* libPods-OneSignalNotificationServiceExtension.a */; };
 		C49F5BFAED2083E96BD7E645 /* libPods-VeWorld.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 99EF0D267BC1506062EB93B6 /* libPods-VeWorld.a */; };
@@ -70,6 +72,8 @@
 		72960317816E2981225B9E1E /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-veworld-veworldTests/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = VeWorld/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		88D379AEBD627D3615E53975 /* Pods-OneSignalNotificationServiceExtension.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; path = "Target Support Files/Pods-OneSignalNotificationServiceExtension/Pods-OneSignalNotificationServiceExtension.debug.xcconfig"; sourceTree = "<group>"; };
+		9672FFB12DDF817200EB49E9 /* CryptoKitManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CryptoKitManager.m; sourceTree = "<group>"; };
+		9672FFB22DDF817200EB49E9 /* CryptoKitManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CryptoKitManager.swift; sourceTree = "<group>"; };
 		99EF0D267BC1506062EB93B6 /* libPods-VeWorld.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VeWorld.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E8F561D80F82B57705C7DB0 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-VeWorld/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		ABC4DFDFE4924FC0BAC6E9FF /* libPods-VeWorld-VeWorldTests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-VeWorld-VeWorldTests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -136,6 +140,8 @@
 		13B07FAE1A68108700A75B9A /* veworld */ = {
 			isa = PBXGroup;
 			children = (
+				9672FFB12DDF817200EB49E9 /* CryptoKitManager.m */,
+				9672FFB22DDF817200EB49E9 /* CryptoKitManager.swift */,
 				F4037AD12CC699A400317CE4 /* CloudKitManager.m */,
 				F4037AD22CC699A400317CE4 /* CloudKitManager.swift */,
 				F4037AD52CC699A400317CE4 /* ScreenShield.swift */,
@@ -589,6 +595,8 @@
 				F4037AD82CC699A400317CE4 /* ScreenShield.swift in Sources */,
 				F4037AD92CC699A400317CE4 /* CloudKitManager.swift in Sources */,
 				F4037ADA2CC699A400317CE4 /* CloudKitManager.m in Sources */,
+				9672FFB32DDF817200EB49E9 /* CryptoKitManager.m in Sources */,
+				9672FFB42DDF817200EB49E9 /* CryptoKitManager.swift in Sources */,
 				F4037ADB2CC699A400317CE4 /* ScreenShieldRN.swift in Sources */,
 				F4037ADD2CC699A400317CE4 /* ScreenShieldRN.m in Sources */,
 				13B07FBC1A68108700A75B9A /* AppDelegate.mm in Sources */,
@@ -940,10 +948,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
@@ -1016,10 +1021,7 @@
 					"-DFOLLY_CFG_NO_COROUTINES=1",
 					"-DFOLLY_HAVE_CLOCK_GETTIME=1",
 				);
-				OTHER_LDFLAGS = (
-					"$(inherited)",
-					" ",
-				);
+				OTHER_LDFLAGS = "$(inherited)  ";
 				REACT_NATIVE_PATH = "${PODS_ROOT}/../../node_modules/react-native";
 				SDKROOT = iphoneos;
 				SWIFT_VERSION = 5.0;
