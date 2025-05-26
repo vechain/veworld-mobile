@@ -89,11 +89,5 @@ const baseStyles = (theme: ColorThemeType) => {
             paddingHorizontal: 12,
             paddingVertical: 10,
         },
-        footerButton: {
-            flexDirection: "row",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "center",
-        },
     })
 }
