@@ -15,7 +15,9 @@ const UPGRADE_PROMPT_DELAY_DAYS = {
     THIRD_PROMPT: 20,
 }
 
-const VERSION_INFO_URL = "https://versioninfo.dev.veworld.vechain.org/releases"
+const VERSION_INFO_URL = __DEV__
+    ? process.env.REACT_APP_VERSIONINFO_DEV_URL
+    : process.env.REACT_APP_VERSIONINFO_PROD_URL
 
 const fetchVersionInfo = async (): Promise<VersionManifest> => {
     const platform = PlatformUtils.isIOS() ? "ios" : "android"
