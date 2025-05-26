@@ -35,7 +35,7 @@ describe("BrowserBottomBar", () => {
         expect(screen.getByTestId("browser-bottom-bar")).toBeOnTheScreen()
     })
 
-    it("should render favicon if the url is a dapp", () => {
+    it("should render favorite icon if the url is a dapp", () => {
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
             showToolbars: true,
             isDapp: true,
@@ -52,7 +52,7 @@ describe("BrowserBottomBar", () => {
         expect(screen.queryByTestId("browser-bottom-bar-icon-icon-star")).toBeOnTheScreen()
     })
 
-    it("should not render favicon if the url is not a dapp", () => {
+    it("should not render favorite icon if the url is not a dapp", () => {
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
             showToolbars: true,
             isDapp: false,
