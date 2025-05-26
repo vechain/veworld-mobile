@@ -16,6 +16,26 @@ jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-quick-crypto", () => ({
+    default: {
+        randomBytes: jest.fn((size: number) => Buffer.alloc(size)),
+        getRandomValues: jest.fn(buffer => buffer),
+        randomFillSync: jest.fn(buffer => buffer),
+        createCipheriv: jest.fn(() => ({
+            update: (first: string) => first,
+            final: () => "",
+        })),
+        createDecipheriv: jest.fn(() => ({
+            update: (first: string) => first,
+            final: () => "",
+        })),
+        createHash: jest.fn(() => ({
+            update: () => ({
+                digest: (first: string) => first,
+            }),
+        })),
+    },
+    // Also expose functions for named imports
+    randomBytes: jest.fn((size: number) => Buffer.alloc(size)),
     getRandomValues: jest.fn(buffer => buffer),
     randomFillSync: jest.fn(buffer => buffer),
     createCipheriv: jest.fn(() => ({
