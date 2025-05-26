@@ -8,11 +8,11 @@ import { useAnalyticTracking, useBottomSheetModal, useCheckAppVersion } from "~H
 import { useI18nContext } from "~i18n"
 import { PlatformUtils } from "~Utils"
 import {
-    VersionUpdateSlice,
     useAppDispatch,
     selectBreakingAppVersion,
     useAppSelector,
     selectUpdateDismissCount,
+    incrementDismissCount,
 } from "~Storage/Redux"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils.ts"
 
@@ -53,7 +53,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
     }, [track, breakingVersion, dismissCount, onClose, countryCode])
 
     const handleUpdateLater = useCallback(() => {
-        dispatch(VersionUpdateSlice.actions.incrementDismissCount())
+        dispatch(incrementDismissCount())
         track(AnalyticsEvent.VERSION_UPGRADE_MODAL_DISMISSED, {
             platform: isIOS() ? "iOS" : "Android",
             breakingVersion: breakingVersion,
