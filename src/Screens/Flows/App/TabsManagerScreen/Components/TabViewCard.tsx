@@ -1,8 +1,7 @@
-import { BlurView } from "@react-native-community/blur"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
-import { ImageBackground, Platform, StyleSheet, TouchableOpacity, View } from "react-native"
+import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
@@ -15,8 +14,6 @@ type TabViewCardProps = {
 }
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
-
-const PlatformView = Platform.OS === "android" ? View : BlurView
 
 export const TabViewCard = ({ tab }: TabViewCardProps) => {
     const { styles } = useThemedStyles(baseStyles)
@@ -39,14 +36,14 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
             style={[styles.container, tab.id === selectedTabId && styles.selected]}
             onPress={onPress}>
             <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
-                <PlatformView style={styles.header} blurAmount={10} blurType="light">
-                    <BaseText color={"white"} numberOfLines={1} flexGrow={1}>
+                <View style={styles.header}>
+                    <BaseText typographyFont="bodySemiBold" color={"white"} numberOfLines={1} flexGrow={1}>
                         {tab.title}
                     </BaseText>
-                </PlatformView>
-                <PlatformView style={styles.footer} blurAmount={10} blurType="light">
-                    <BaseIcon name="icon-x" size={16} color={"white"} onPress={onClose} />
-                </PlatformView>
+                </View>
+                <TouchableOpacity style={styles.footer} onPress={onClose} activeOpacity={0.8}>
+                    <BaseIcon name="icon-x" size={16} color={"white"} />
+                </TouchableOpacity>
             </ImageBackground>
         </AnimatedTouchableOpacity>
     )
@@ -59,9 +56,10 @@ const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
         container: {
             width: cardSize,
-            height: cardSize,
-            borderRadius: 8,
-            borderWidth: 4,
+            height: 188,
+            minWidth: 148,
+            borderRadius: 12,
+            borderWidth: 3,
             backgroundColor: theme.colors.background,
             borderColor: theme.colors.background,
             overflow: "hidden",
@@ -72,7 +70,7 @@ const baseStyles = (theme: ColorThemeType) => {
         header: {
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: "#170D45D8",
+            backgroundColor: "#202226BF",
             paddingHorizontal: 12,
             paddingVertical: 10,
         },
@@ -87,15 +85,9 @@ const baseStyles = (theme: ColorThemeType) => {
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: "#170D45D8",
+            backgroundColor: "#202226BF",
             paddingHorizontal: 12,
             paddingVertical: 10,
-        },
-        footerButton: {
-            flexDirection: "row",
-            alignItems: "center",
-            width: "100%",
-            justifyContent: "center",
         },
     })
 }

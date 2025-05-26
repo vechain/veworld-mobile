@@ -675,16 +675,44 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [prevY],
     )
 
+    // Add a ref to store the maximum layout height (when toolbars are hidden)
+    const maxLayoutHeightRef = useRef<number | null>(null)
+
     const onScroll = useCallback(
         (event: NativeSyntheticEvent<Readonly<EnhancedScrollEvent>>) => {
             const { contentOffset: offset, layoutMeasurement, contentSize } = event.nativeEvent
             const direction = detectScrollDirection(offset)
-            // Threshold to avoid the toolbars glitch when the scroll bounce
-            const threshold = contentSize.height - layoutMeasurement.height - 1
 
-            if (direction === ScrollDirection.DOWN && showToolbars) setShowToolbars(false)
-            if (direction === ScrollDirection.UP && !showToolbars && offset.y <= threshold) setShowToolbars(true)
-            if (offset.y === 0 || offset.y < 0) setShowToolbars(true)
+            // Track the maximum layout height to use as stable reference
+            if (
+                !showToolbars &&
+                (maxLayoutHeightRef.current === null || layoutMeasurement.height > maxLayoutHeightRef.current)
+            ) {
+                maxLayoutHeightRef.current = layoutMeasurement.height
+            }
+
+            // Use the stable reference height for calculations
+            const referenceHeight = maxLayoutHeightRef.current || layoutMeasurement.height
+
+            // Calculate threshold with a more conservative buffer to prevent bouncing
+            const threshold = contentSize.height - referenceHeight + 50
+
+            // Enable toolbar hiding only if the content height is larger than the reference height
+            if (contentSize.height > referenceHeight) {
+                // Add hysteresis to prevent rapid toggling
+                const hideThreshold = 100
+                const showThreshold = Math.max(threshold - 50, 0) // Additional buffer for showing
+
+                if (direction === ScrollDirection.DOWN && showToolbars && offset.y > hideThreshold) {
+                    setShowToolbars(false)
+                }
+                if (direction === ScrollDirection.UP && !showToolbars && offset.y <= showThreshold) {
+                    setShowToolbars(true)
+                }
+                if (offset.y === 0 || offset.y < 0) {
+                    setShowToolbars(true)
+                }
+            }
         },
         [detectScrollDirection, showToolbars],
     )
