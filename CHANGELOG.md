@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.3 (2025-05-26)</small>
+
+* build: init ([1167090](https://github.com/vechain/veworld-mobile/commit/1167090))
+* 141 Fix UI bug iOS - 2.2.3 and Android - 2.2.9 (#2964) ([0e09646](https://github.com/vechain/veworld-mobile/commit/0e09646)), closes [#2964](https://github.com/vechain/veworld-mobile/issues/2964)
+
 ## <small>2.2.2 (2025-05-19)</small>
 
 * build: init ([bc68c5a](https://github.com/vechain/veworld-mobile/commit/bc68c5a))
