@@ -116,7 +116,7 @@ export const BrowserBottomBar: React.FC = () => {
     ])
 
     return navigationState?.url ? (
-        <Animated.View style={[styles.bottomBar, styles.animatedContainer, animatedStyles]}>
+        <Animated.View testID="browser-bottom-bar" style={[styles.bottomBar, styles.animatedContainer, animatedStyles]}>
             {IconConfig.map((config, index) => {
                 return (
                     <BaseIcon
