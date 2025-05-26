@@ -1,6 +1,5 @@
 {
     "name": "VeWorld",
-    "displayName": "VeWorld",
     "experiments": {
         "turboModules": true
     },
@@ -24,8 +23,5 @@
               }
             }
           ]
-    ],
-    "ios": {
-        "scheme": "VeWorld"
-    }
+    ]
 }
