@@ -34,4 +34,38 @@ describe("BrowserBottomBar", () => {
 
         expect(screen.getByTestId("browser-bottom-bar")).toBeOnTheScreen()
     })
+
+    it("should render favicon if the url is a dapp", () => {
+        ;(useInAppBrowser as jest.Mock).mockReturnValue({
+            showToolbars: true,
+            isDapp: true,
+            navigationState: {
+                url: "https://mugshot.vet",
+            },
+        })
+        ;(useRoute as jest.Mock).mockReturnValue({
+            key: "browser",
+            name: Routes.BROWSER,
+        })
+        render(<BrowserBottomBar />, { wrapper: TestWrapper })
+
+        expect(screen.queryByTestId("browser-bottom-bar-icon-icon-star")).toBeOnTheScreen()
+    })
+
+    it("should not render favicon if the url is not a dapp", () => {
+        ;(useInAppBrowser as jest.Mock).mockReturnValue({
+            showToolbars: true,
+            isDapp: false,
+            navigationState: {
+                url: "https://vechain.org",
+            },
+        })
+        ;(useRoute as jest.Mock).mockReturnValue({
+            key: "browser",
+            name: Routes.BROWSER,
+        })
+        render(<BrowserBottomBar />, { wrapper: TestWrapper })
+
+        expect(screen.queryByTestId("browser-bottom-bar-icon-icon-star")).not.toBeOnTheScreen()
+    })
 })

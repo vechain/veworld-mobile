@@ -120,6 +120,7 @@ export const BrowserBottomBar: React.FC = () => {
             {IconConfig.map((config, index) => {
                 return (
                     <BaseIcon
+                        testID={`browser-bottom-bar-icon-${config.name}`}
                         key={`${config.name}-${index}`}
                         action={config.onPress}
                         disabled={config.disabled}
