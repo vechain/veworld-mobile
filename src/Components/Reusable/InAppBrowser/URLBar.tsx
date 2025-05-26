@@ -77,7 +77,7 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
                 {/* URL Text centered */}
                 <BaseView flex={1} alignItems="center" flexDirection="row">
                     {isDapp ? (
-                        <BaseView flexDirection="row" alignItems="center" style={styles.dappContainer}>
+                        <BaseView flex={0.95} flexDirection="row" alignItems="center" style={styles.dappContainer}>
                             <BaseIcon name="icon-lock" color={theme.colors.textLight} size={12} />
 
                             <BaseText
