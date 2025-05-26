@@ -13,13 +13,16 @@ import {
     ContactsScreen,
     DetailsBackupScreen,
     GeneralScreen,
+    InAppBrowser,
     ManageCustomNodesScreen,
     ManageUrlsScreen,
     NotificationScreen,
     PrivacyScreen,
     ResetAppScreen,
+    SearchScreen,
     SettingsScreen,
     SettingsTransactionsScreen,
+    TabsManagerScreen,
     UsernameClaimed,
     WalletDetailScreen,
     WalletManagementScreen,
@@ -49,6 +52,13 @@ export type RootStackParamListSettings = {
     [Routes.CLAIM_USERNAME]: undefined
     [Routes.USERNAME_CLAIMED]: {
         username: string
+    }
+    [Routes.DISCOVER_SEARCH]: undefined
+    [Routes.DISCOVER_TABS_MANAGER]: undefined
+    [Routes.BROWSER]: {
+        url: string
+        ul?: boolean
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS
     }
 }
 
@@ -161,6 +171,13 @@ export const SettingsStack = () => {
                 component={UsernameClaimed}
                 options={{ headerShown: false }}
             />
+            <Settings.Screen
+                name={Routes.DISCOVER_TABS_MANAGER}
+                component={TabsManagerScreen}
+                options={{ headerShown: false }}
+            />
+            <Settings.Screen name={Routes.DISCOVER_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
+            <Settings.Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
         </Settings.Navigator>
     )
 }

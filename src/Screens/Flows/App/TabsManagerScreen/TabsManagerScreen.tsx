@@ -29,7 +29,7 @@ export const TabsManagerScreen = () => {
     }, [nav])
 
     const onDone = useCallback(() => {
-        nav.navigate(Routes.DISCOVER)
+        nav.goBack()
     }, [nav])
 
     const renderTab = useCallback(({ item }: { item: Tab }) => {
