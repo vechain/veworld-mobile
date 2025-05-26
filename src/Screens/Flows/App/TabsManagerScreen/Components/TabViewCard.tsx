@@ -41,9 +41,9 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
                         {tab.title}
                     </BaseText>
                 </View>
-                <View style={styles.footer}>
-                    <BaseIcon name="icon-x" size={16} color={"white"} onPress={onClose} />
-                </View>
+                <TouchableOpacity style={styles.footer} onPress={onClose} activeOpacity={0.8}>
+                    <BaseIcon name="icon-x" size={16} color={"white"} />
+                </TouchableOpacity>
             </ImageBackground>
         </AnimatedTouchableOpacity>
     )
@@ -85,7 +85,7 @@ const baseStyles = (theme: ColorThemeType) => {
             flexDirection: "row",
             justifyContent: "center",
             alignItems: "center",
-            backgroundColor: COLORS.DARK_PURPLE_RBGA,
+            backgroundColor: "#202226BF",
             paddingHorizontal: 12,
             paddingVertical: 10,
         },

@@ -142,7 +142,7 @@ export const tabbarBaseStyles = StyleSheet.create({
         right: 0,
         borderTopWidth: 0,
         padding: 8,
-        height: PlatformUtils.isIOS() ? 90 : 68,
+        height: PlatformUtils.isIOS() ? 90 : 56,
     },
     shadow: {
         shadowColor: "#000",
