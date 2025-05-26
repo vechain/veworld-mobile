@@ -128,7 +128,7 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                                 {formatValue(maxFeeVtho)} {VTHO.symbol}
                             </BaseText>
                         </BaseView>
-                        {isBaseFeeRampingUp && (
+                        {isBaseFeeRampingUp && internalFeeOption === GasPriceCoefficient.REGULAR && (
                             <BaseView
                                 flexDirection="row"
                                 w={100}
