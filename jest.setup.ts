@@ -264,4 +264,13 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
     }
 })
 
+jest.mock("expo-task-manager", () => ({
+    defineTask: jest.fn(),
+    isTaskRegisteredAsync: jest.fn().mockResolvedValue(false),
+    unregisterTaskAsync: jest.fn().mockResolvedValue(true),
+    isTaskDefined: jest.fn().mockReturnValue(true),
+    getTaskOptionsAsync: jest.fn(),
+    getRegisteredTasksAsync: jest.fn().mockResolvedValue([]),
+}))
+
 require("react-native-reanimated").setUpTests()
