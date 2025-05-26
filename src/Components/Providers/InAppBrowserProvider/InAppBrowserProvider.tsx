@@ -679,12 +679,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         (event: NativeSyntheticEvent<Readonly<EnhancedScrollEvent>>) => {
             const { contentOffset: offset, layoutMeasurement, contentSize } = event.nativeEvent
             const direction = detectScrollDirection(offset)
-            // Threshold to avoid the toolbars glitch when the scroll bounce
-            const threshold = contentSize.height - layoutMeasurement.height - 1
 
-            if (direction === ScrollDirection.DOWN && showToolbars) setShowToolbars(false)
-            if (direction === ScrollDirection.UP && !showToolbars && offset.y <= threshold) setShowToolbars(true)
-            if (offset.y === 0 || offset.y < 0) setShowToolbars(true)
+            // Threshold to avoid the toolbars glitch when the scroll bounce
+            const threshold = contentSize.height - layoutMeasurement.height + 100
+
+            // Enable toolbar hiding only if the content height is larger than the layout height
+            if (contentSize.height > layoutMeasurement.height) {
+                if (direction === ScrollDirection.DOWN && showToolbars && offset.y > 100) setShowToolbars(false)
+                if (direction === ScrollDirection.UP && !showToolbars && offset.y <= threshold) setShowToolbars(true)
+                if (offset.y === 0 || offset.y < 0) setShowToolbars(true)
+            }
         },
         [detectScrollDirection, showToolbars],
     )
