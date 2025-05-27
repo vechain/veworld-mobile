@@ -3,7 +3,7 @@ import { BaseTokenCard } from "./BaseTokenCard"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 import { FiatBalance } from "~Components"
 import { FungibleTokenWithBalance } from "~Model"
-import { useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
+import { useFormatFiat, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
 import { COLORS } from "~Constants"
 import { BalanceUtils } from "~Utils"
 
@@ -15,6 +15,7 @@ type Props = {
 
 export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: Props) => {
     const theme = useTheme()
+    const { formatLocale } = useFormatFiat()
 
     const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
@@ -24,8 +25,14 @@ export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: 
         useTokenCardFiatInfo(tokenWithCompleteInfo)
 
     const tokenBalance = useMemo(
-        () => BalanceUtils.getTokenUnitBalance(tokenWithBalance.balance.balance, tokenWithBalance.decimals ?? 0, 2),
-        [tokenWithBalance.balance.balance, tokenWithBalance.decimals],
+        () =>
+            BalanceUtils.getTokenUnitBalance(
+                tokenWithBalance.balance.balance,
+                tokenWithBalance.decimals ?? 0,
+                2,
+                formatLocale,
+            ),
+        [formatLocale, tokenWithBalance.balance.balance, tokenWithBalance.decimals],
     )
 
     const showFiatBalance = useMemo(() => {
