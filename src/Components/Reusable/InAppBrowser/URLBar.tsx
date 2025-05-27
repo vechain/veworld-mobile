@@ -5,6 +5,7 @@ import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } fro
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { TabsIconSVG } from "~Assets"
 import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
+import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
 import { selectCurrentTabId, selectTabs, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
@@ -76,7 +77,7 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
                 {/* URL Text centered */}
                 <BaseView flex={1} alignItems="center" flexDirection="row">
                     {isDapp ? (
-                        <BaseView flexDirection="row" alignItems="center" style={styles.dappContainer}>
+                        <BaseView flex={0.9} flexDirection="row" alignItems="center" style={styles.dappContainer}>
                             <BaseIcon name="icon-lock" color={theme.colors.textLight} size={12} />
 
                             <BaseText
@@ -100,7 +101,11 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
                 </BaseView>
 
                 <BaseTouchable onPress={navToTabsManager} testID="TABS_BTN">
-                    <TabsIconSVG count={tabs.length} textColor={theme.colors.text} />
+                    <TabsIconSVG
+                        count={tabs.length}
+                        textColor={theme.colors.text}
+                        color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                    />
                 </BaseTouchable>
             </BaseView>
         )
@@ -114,12 +119,13 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
         theme.colors.subtitle,
         theme.colors.text,
         theme.colors.textLight,
+        theme.isDark,
     ])
 
     const renderWithoutToolbar = useMemo(() => {
         return (
             <BaseView style={styles.noToolbarContainer}>
-                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.subtitle}>
+                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.subtitle} numberOfLines={1}>
                     {navigationState?.url}
                 </BaseText>
             </BaseView>
@@ -153,6 +159,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         flex: 1,
+        paddingHorizontal: 16,
     },
     dappContainer: {
         gap: 8,

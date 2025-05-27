@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { TabsIconSVG } from "~Assets"
-import { BaseIcon, BaseTouchable, BaseView, HeaderStyle, HeaderTitle, PlusIconHeaderButton } from "~Components"
+import { BaseIcon, BaseTouchable, BaseView, HeaderStyle, HeaderTitle, AddTabHeaderButton } from "~Components"
+import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -35,10 +36,14 @@ export const Header = memo(() => {
                 />
                 {tabs.length > 0 ? (
                     <BaseTouchable onPress={onTabsPress}>
-                        <TabsIconSVG count={tabs.length} textColor={theme.colors.text} />
+                        <TabsIconSVG
+                            count={tabs.length}
+                            textColor={theme.colors.text}
+                            color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+                        />
                     </BaseTouchable>
                 ) : (
-                    <PlusIconHeaderButton action={onTabsPress} />
+                    <AddTabHeaderButton action={onTabsPress} />
                 )}
             </BaseView>
         </BaseView>

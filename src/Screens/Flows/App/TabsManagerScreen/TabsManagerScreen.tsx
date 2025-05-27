@@ -9,6 +9,7 @@ import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { Tab, closeAllTabs, selectTabs, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { TabViewCard } from "./Components"
+import { PlatformUtils } from "~Utils"
 
 export const TabsManagerScreen = () => {
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
@@ -28,7 +29,7 @@ export const TabsManagerScreen = () => {
     }, [nav])
 
     const onDone = useCallback(() => {
-        nav.navigate(Routes.DISCOVER)
+        nav.goBack()
     }, [nav])
 
     const renderTab = useCallback(({ item }: { item: Tab }) => {
@@ -39,7 +40,6 @@ export const TabsManagerScreen = () => {
         return <BaseSpacer height={16} />
     }, [])
 
-    const titleColor = useMemo(() => (theme.isDark ? COLORS.WHITE : COLORS.GREY_600), [theme.isDark])
     const buttonTextColor = useMemo(() => (theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_600), [theme.isDark])
     const disabledTextColor = useMemo(
         () => (theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300),
@@ -48,13 +48,6 @@ export const TabsManagerScreen = () => {
 
     return (
         <Layout
-            fixedHeader={
-                <BaseView flexDirection="row" justifyContent="center" alignItems="center">
-                    <BaseText typographyFont="captionMedium" color={titleColor}>
-                        {LL.TAB_AMOUNT({ number: tabs.length })}
-                    </BaseText>
-                </BaseView>
-            }
             noBackButton
             noMargin
             footer={
@@ -115,6 +108,7 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "space-between",
             alignItems: "center",
             backgroundColor: theme.colors.tabsFooter.background,
+            paddingBottom: PlatformUtils.isIOS() ? 42 : 8,
         },
         footerButton: {
             height: 40,

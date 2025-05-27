@@ -725,8 +725,7 @@ const B3trProposalSupport = ({ activity, onPress }: B3trProposalSupportProps) =>
             icon="icon-vote"
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
-            title={LL.B3TR_PROPSAL_SUPPORT()}
-            description={activity.proposalId}
+            title={LL.B3TR_PROPOSAL_SUPPORT()}
             onPress={onPressHandler}
         />
     )
