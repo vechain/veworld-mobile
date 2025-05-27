@@ -12,21 +12,21 @@ export interface IBaseModal extends ModalProps {
 export const BaseModal: React.FC<IBaseModal> = ({ isOpen, onClose, children, transparent = false, ...otherProps }) => {
     const { styles, theme } = useThemedStyles(baseStyles(transparent))
     return (
-        <Modal
-            visible={isOpen}
-            animationType="slide"
-            hardwareAccelerated
-            presentationStyle="fullScreen"
-            onDismiss={onClose}
-            transparent={transparent}
-            onRequestClose={onClose}
-            {...otherProps}>
-            <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles.container}>
+            <Modal
+                visible={isOpen}
+                animationType="slide"
+                hardwareAccelerated
+                presentationStyle="fullScreen"
+                onDismiss={onClose}
+                transparent={transparent}
+                onRequestClose={onClose}
+                {...otherProps}>
                 <BaseView alignItems="center" justifyContent="flex-start" flex={1} bg={theme.colors.background}>
                     {children}
                 </BaseView>
-            </SafeAreaView>
-        </Modal>
+            </Modal>
+        </SafeAreaView>
     )
 }
 
