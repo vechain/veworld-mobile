@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo } from "react"
-import { TokenWithCompleteInfo, useTheme } from "~Hooks"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { BaseSkeleton, BaseText, BaseView, FiatBalance } from "~Components"
+import { TokenImage } from "~Components/Reusable/TokenImage"
+import { B3TR, VOT3 } from "~Constants"
+import { TokenWithCompleteInfo, useFormatFiat, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import { StyleProp, StyleSheet, ViewStyle } from "react-native"
-import { B3TR, VOT3 } from "~Constants"
-import { TokenImage } from "~Components/Reusable/TokenImage"
+import { BigNutils } from "~Utils"
 import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 export const BalanceView = ({
@@ -23,10 +24,11 @@ export const BalanceView = ({
 }) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const { formatLocale } = useFormatFiat()
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
-    const { symbol, fiatBalance, exchangeRate, tokenUnitBalance, exchangeRateLoading } = tokenWithInfo
+    const { symbol, fiatBalance, exchangeRate, exchangeRateLoading, balance, decimals } = tokenWithInfo
 
     const isLoading = exchangeRateLoading || isTokensOwnedLoading
     const priceFeedNotAvailable = !exchangeRate || isLoading
@@ -112,7 +114,11 @@ export const BalanceView = ({
                     />
                 ) : (
                     <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
-                        {isBalanceVisible ? tokenUnitBalance : "•••••"}
+                        {isBalanceVisible
+                            ? BigNutils(balance?.balance)
+                                  .toHuman(decimals)
+                                  .toTokenFormatFull_string(decimals, formatLocale)
+                            : "•••••"}
                     </BaseText>
                 )}
             </BaseView>

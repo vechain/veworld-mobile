@@ -45,6 +45,17 @@ interface IBigNumberUtils {
     toBN: BN
 }
 
+const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
+    const numberWithDecimalSeparator = 1.1
+    return Intl.NumberFormat(locale)
+        .formatToParts(numberWithDecimalSeparator)
+        .find(part => part.type === "decimal")?.value
+}
+
+const stripTrailingZeros = (value: string) => {
+    return [...value].reduceRight((acc, curr) => (acc === "" && curr === "0" ? acc : `${curr}${acc}`), "")
+}
+
 class BigNumberUtils implements IBigNumberUtils {
     private data: BN
 
@@ -201,7 +212,7 @@ class BigNumberUtils implements IBigNumberUtils {
 
         let _data = ""
 
-        if (this.data.isLessThan("0.0001") && !this.data.isZero()) {
+        if (this.data.isLessThan("0.01") && !this.data.isZero()) {
             _data = `< ${formatter.format(0.01)}`
         } else {
             const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))
@@ -209,6 +220,27 @@ class BigNumberUtils implements IBigNumberUtils {
         }
 
         return _data
+    }
+
+    toTokenFormatFull_string(decimals: number, locale?: Intl.LocalesArgument): string {
+        const _locale = locale ?? "en-US"
+        const formatter = new Intl.NumberFormat(_locale.toString(), {
+            style: "decimal",
+            useGrouping: true,
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+        })
+
+        const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))
+
+        const separator = getDecimalSeparator(_locale.toString()) ?? "."
+
+        const formatted = formatter.format(tokenBalance as unknown as bigint)
+        const [unit, decimal] = formatted.split(separator)
+
+        if (typeof decimal === "undefined") return formatted
+
+        return [unit, stripTrailingZeros(decimal)].join(separator)
     }
 
     toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void, decimals?: number) {
