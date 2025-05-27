@@ -51,6 +51,17 @@ jest.mock("~Hooks", () => ({
         styles: {
             webView: { flex: 1, opacity: 1 },
             floatingButton: { textTransform: "uppercase" },
+            container: { flex: 1 },
+        },
+        theme: {
+            isDark: false,
+            colors: {
+                background: "#F2F2F7",
+                text: "#0B0043",
+                card: "#FFFFFF",
+                primary: "#0B0043",
+                border: "#0B0043",
+            },
         },
     })),
     useAnalyticTracking: jest.fn(() => jest.fn()),
