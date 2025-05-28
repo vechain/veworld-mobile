@@ -121,10 +121,10 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const renderHandle = useCallback(
             (props_: BottomSheetHandleProps) => (
                 <BaseView style={styles.handleWrapper}>
-                    <BaseView {...props_} style={styles.handleStyle} />
+                    <BaseView {...props_} style={enablePanDownToClose ? styles.handleStyle : styles.hideHandle} />
                 </BaseView>
             ),
-            [styles],
+            [enablePanDownToClose, styles],
         )
 
         const onSheetPositionChange = useCallback(
@@ -233,6 +233,9 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingTop: 8,
             paddingBottom: 16,
             paddingHorizontal: 8,
+        },
+        hideHandle: {
+            display: "none",
         },
         handleStyle: {
             width: 70,
