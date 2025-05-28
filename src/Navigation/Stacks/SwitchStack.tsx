@@ -79,14 +79,13 @@ export type RootStackParamListSwitch = {
     [Routes.ICLOUD_DETAILS_BACKUP]: { deviceToBackup?: LocalDevice; backupDetails: string[] | string }
     [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
     [Routes.SELL_FLOW]: undefined
-    [Routes.CONNECT_EXTERNAL_APP_SCREEN_V1]: undefined // | {
-    //       request: {
-    //           appUrl?: string
-    //           appPublicKey?: string
-    //           redirectUrl?: string
-    //           network?: string
-    //       }
-    //   }
+    [Routes.CONNECT_EXTERNAL_APP_SCREEN_V1]: {
+        app_name?: string
+        app_url?: string
+        public_key?: string
+        redirect_url?: string
+        network?: string
+    }
 }
 const Switch = createNativeStackNavigator<RootStackParamListSwitch>()
 

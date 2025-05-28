@@ -180,13 +180,7 @@ const linking = {
                 },
             },
             [Routes.CONNECT_EXTERNAL_APP_SCREEN_V1]: {
-                path: "api/v1/connect/:app_url?/:dapp_public_key?/:redirect_url?/:network?",
-                parse: {
-                    app_url: appUrl => appUrl,
-                    dapp_public_key: dappPublicKey => dappPublicKey,
-                    redirect_url: redirectUrl => redirectUrl,
-                    network: network => network ?? "mainnet",
-                },
+                path: "api/v1/connect/:app_name?/:app_url?/:public_key?/:redirect_url?/:network?",
             },
             [Routes.SIGN_TX_EXTERNAL_APP_SCREEN_V1]: {
                 path: "api/v1/signTransaction/:dapp_enc_key/:payload/:redirect/:nonce",

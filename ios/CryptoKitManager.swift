@@ -65,13 +65,7 @@ class CryptoKitManager: NSObject {
                 let sharedSecret: SharedSecret = try privateKey.sharedSecretFromKeyAgreement(
                     with: publicKey)
 
-                let symmetricKey: SymmetricKey = sharedSecret.x963DerivedSymmetricKey(
-                    using: SHA256.self,
-                    sharedInfo: Data(),
-                    outputByteCount: 32
-                )
-
-                let sharedSecretData: Data = symmetricKey.withUnsafeBytes {
+                let sharedSecretData: Data = sharedSecret.withUnsafeBytes {
                     return Data(Array($0))
                 }
 
@@ -151,7 +145,7 @@ class CryptoKitManager: NSObject {
                 let nonce: AES.GCM.Nonce = try AES.GCM.Nonce(data: nonceData)
 
                 // Recreate the sealed box
-              let sealedBox: AES.GCM.SealedBox = try AES.GCM.SealedBox(combined: encryptedData)
+                let sealedBox: AES.GCM.SealedBox = try AES.GCM.SealedBox(combined: encryptedData)
 
                 // Decrypt
                 let decryptedData: Data = try AES.GCM.open(sealedBox, using: key)

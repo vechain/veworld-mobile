@@ -13,7 +13,8 @@ type KeyPair = {
  */
 type SessionState = {
     keyPair: KeyPair
-    appUrl: string
+    appUrl?: string
+    appName: string
     sharedSecret: string
 }
 
@@ -39,16 +40,17 @@ export const ExternalDappsSlice = createSlice({
                 keyPair: KeyPair
                 appPublicKey: string
                 appUrl: string
+                appName: string
                 sharedSecret: string
             }>,
         ) => {
-            const { network, keyPair, appPublicKey, appUrl, sharedSecret } = action.payload
-            if (!state[network][appPublicKey]) {
-                state[network][appPublicKey] = {
-                    keyPair,
-                    appUrl,
-                    sharedSecret,
-                }
+            const { network, keyPair, appPublicKey, appUrl, appName, sharedSecret } = action.payload
+
+            state[network][appPublicKey] = {
+                keyPair,
+                appUrl,
+                appName,
+                sharedSecret,
             }
         },
         deleteExternalDappSession: (
@@ -61,7 +63,10 @@ export const ExternalDappsSlice = createSlice({
             const { network, appPublicKey } = action.payload
             delete state[network][appPublicKey]
         },
+        resetExternalDappsState: () => {
+            return initialExternalDappsState
+        },
     },
 })
 
-export const { newExternalDappSession, deleteExternalDappSession } = ExternalDappsSlice.actions
+export const { newExternalDappSession, deleteExternalDappSession, resetExternalDappsState } = ExternalDappsSlice.actions
