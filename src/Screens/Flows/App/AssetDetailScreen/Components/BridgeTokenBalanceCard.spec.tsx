@@ -1,7 +1,7 @@
-import React from "react"
 import { render } from "@testing-library/react-native"
+import React from "react"
+import { TestHelpers, TestWrapper } from "~Test"
 import { BridgeTokenBalanceCard } from "./BridgeTokenBalanceCard"
-import { TestWrapper, TestHelpers } from "~Test"
 
 const { VeBitcoinWithCompleteInfo } = TestHelpers.data
 
@@ -36,7 +36,7 @@ describe("BridgeTokenBalanceCard", () => {
             },
         )
         const tokenSymbol = await findByText("BTC")
-        const balance = await findByText("10")
+        const balance = await findByText("10.00")
 
         await expect(tokenSymbol).toBeOnTheScreen()
         await expect(balance).toBeOnTheScreen()

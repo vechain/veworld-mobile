@@ -222,6 +222,16 @@ class BigNumberUtils implements IBigNumberUtils {
         return _data
     }
 
+    /**
+     * Builds a formatted string, by using these rules:
+     * - Cap the value to {@link decimals} decimals
+     * - Strip trailing zeros
+     * - Always show at least two decimal places
+     * - If the value is less than the amount of decimals specified, show < 0.{{@link decimals} - 1}1
+     * @param decimals Number of decimals to show
+     * @param locale Locale of the user (defaults to 'en-US')
+     * @returns A formatted string
+     */
     toTokenFormatFull_string(decimals: number, locale?: Intl.LocalesArgument): string {
         const _locale = locale ?? "en-US"
         const formatter = new Intl.NumberFormat(_locale.toString(), {
@@ -238,10 +248,12 @@ class BigNumberUtils implements IBigNumberUtils {
         const formatted = formatter.format(tokenBalance as unknown as bigint)
 
         const [unit, decimal] = formatted.split(separator)
-        if (typeof decimal === "undefined") return [formatted, "00"].join(separator)
+        if (typeof decimal === "undefined") return [unit, "00"].join(separator)
         const strippedDecimals = stripTrailingZeros(decimal)
-        if (strippedDecimals === "" && parseInt(unit, 10) === 0)
-            return `< ${[unit, "0".repeat(decimals - 1) + "1"].join(separator)}`
+        if (strippedDecimals === "")
+            return parseInt(unit, 10) === 0
+                ? `< ${[unit, "0".repeat(decimals - 1) + "1"].join(separator)}`
+                : [unit, "00"].join(separator)
         return [unit, strippedDecimals].join(separator)
     }
 

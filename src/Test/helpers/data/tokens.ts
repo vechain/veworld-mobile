@@ -185,7 +185,10 @@ export const VeBitcoinWithCompleteInfo: TokenWithCompleteInfo = {
     chartData: undefined,
     exchangeRate: 103245.3,
     tokenInfo: undefined,
-    balance: VeBitcoinWithBalance.balance,
+    balance: {
+        ...VeBitcoinWithBalance.balance,
+        balance: "1000000000",
+    },
 }
 
 export const VeEthereum: Token = {
