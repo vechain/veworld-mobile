@@ -74,8 +74,7 @@ describe("ActivityDetailsUtils", () => {
 
             const activity = {
                 ...activityMock,
-                isTransaction: false,
-                round: 1,
+                roundId: "1",
                 type: ActivityType.B3TR_XALLOCATION_VOTE,
             }
             const title = getActivityTitle(activity, LL)
