@@ -2,6 +2,7 @@ name: Create Version Info PR
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 on:
     workflow_run:
