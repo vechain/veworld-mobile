@@ -46,6 +46,7 @@ interface IBigNumberUtils {
 }
 
 const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
+    if (locale === "tw" || locale === "zh-tw") return "."
     const numberWithDecimalSeparator = 1.1
     return Intl.NumberFormat(locale)
         .formatToParts(numberWithDecimalSeparator)
