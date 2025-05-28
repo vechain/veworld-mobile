@@ -26,6 +26,7 @@ import {
     SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
+    UnknownTxActivity,
     VeBetterDaoDapp,
 } from "~Model"
 import { selectAllTokens, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
@@ -731,6 +732,30 @@ const B3trProposalSupport = ({ activity, onPress }: B3trProposalSupportProps) =>
     )
 }
 
+type UnknownTxProps = {
+    activity: UnknownTxActivity
+    onPress: (activity: Activity) => void
+}
+
+const UnknownTx = ({ activity, onPress }: UnknownTxProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    return (
+        <BaseActivityBox
+            icon="icon-block"
+            time={time}
+            title={LL.UNKNOWN_TX()}
+            onPress={onPressHandler}
+            activityStatus={activity.status}
+        />
+    )
+}
+
 export const ActivityBox = {
     TokenTransfer: TokenTransfer,
     DAppTransaction: DAppTransaction,
@@ -747,4 +772,5 @@ export const ActivityBox = {
     B3trSwapB3trToVot3: B3trSwapB3trToVot3,
     B3trSwapVot3ToB3tr: B3trSwapVot3ToB3tr,
     B3trProposalSupport: B3trProposalSupport,
+    UnknownTx: UnknownTx,
 }

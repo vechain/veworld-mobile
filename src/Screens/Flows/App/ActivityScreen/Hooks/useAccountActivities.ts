@@ -58,7 +58,6 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
     const activities = useMemo(() => {
         if (data && data.pages?.length > 0) {
             const remoteActivities: Activity[] = []
-
             data.pages
                 .flatMap(page => page.data)
                 .forEach(event => {

@@ -12,7 +12,7 @@ export enum FilterType {
 export const filterValues = {
     all: {
         type: FilterType.ALL,
-        value: Object.values(ActivityEvent).filter(value => value !== ActivityEvent.UNKNOWN_TX),
+        value: Object.values(ActivityEvent),
     },
     b3tr: {
         type: FilterType.B3TR,
@@ -42,5 +42,5 @@ export const filterValues = {
         value: [ActivityEvent.TRANSFER_FT, ActivityEvent.TRANSFER_SF, ActivityEvent.TRANSFER_VET],
     },
     nfts: { type: FilterType.NFTS, value: [ActivityEvent.TRANSFER_NFT] },
-    dapps: { type: FilterType.DAPPS, value: [] },
+    dapps: { type: FilterType.DAPPS, value: [ActivityEvent.UNKNOWN_TX] },
 } as const

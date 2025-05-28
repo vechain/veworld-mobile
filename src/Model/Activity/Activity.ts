@@ -61,6 +61,7 @@ export interface IndexedHistoryEvent {
     outputToken?: string
     inputValue?: string
     outputValue?: string
+    reverted?: boolean
 }
 export interface NonTransactionalActivity {
     type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
@@ -183,6 +184,10 @@ export interface B3trProposalSupportActivity extends Activity {
     eventName: ActivityEvent.B3TR_PROPOSAL_SUPPORT
     value: string
     proposalId: string
+}
+
+export interface UnknownTxActivity extends Activity {
+    eventName: ActivityEvent.UNKNOWN_TX
 }
 
 export interface UknownTxEvent extends IndexedHistoryEvent {

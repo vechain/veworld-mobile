@@ -25,6 +25,7 @@ import {
     SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
+    UnknownTxActivity,
     VeBetterDaoDapp,
 } from "~Model"
 import { Routes } from "~Navigation"
@@ -155,6 +156,8 @@ const Item = ({
             return (
                 <ActivityBox.B3trProposalSupport activity={activity as B3trProposalSupportActivity} onPress={onPress} />
             )
+        case ActivityType.UNKNOWN_TX:
+            return <ActivityBox.UnknownTx activity={activity as UnknownTxActivity} onPress={onPress} />
         default:
             return null
     }
