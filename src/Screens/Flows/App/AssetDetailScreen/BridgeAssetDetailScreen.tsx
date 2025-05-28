@@ -1,7 +1,9 @@
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
+import Markdown from "react-native-markdown-display"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
 import { B3TR } from "~Constants"
 import { ColorThemeType, typography } from "~Constants/Theme"
@@ -17,8 +19,6 @@ import {
 import { AccountUtils } from "~Utils"
 import { AssetChart, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
-import Markdown from "react-native-markdown-display"
-import { useNavigation } from "@react-navigation/native"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.BRIDGE_TOKEN_DETAILS>
 
@@ -120,16 +120,14 @@ export const BridgeAssetDetailScreen = ({ route }: Props) => {
                             {LL.TITLE_ABOUT()} {token.name}
                         </BaseText>
 
-                        <BaseText style={styles.tokenInfoText}>
-                            <Markdown
-                                style={{ body: styles.markdownText }}
-                                onLinkPress={url => {
-                                    navigation.navigate(Routes.BROWSER, { url })
-                                    return false
-                                }}>
-                                {tokenDescription}
-                            </Markdown>
-                        </BaseText>
+                        <Markdown
+                            style={{ body: styles.markdownText }}
+                            onLinkPress={url => {
+                                navigation.navigate(Routes.BROWSER, { url })
+                                return false
+                            }}>
+                            {tokenDescription}
+                        </Markdown>
 
                         <BaseSpacer height={24} />
 
@@ -148,10 +146,8 @@ const baseStyles = (theme: ColorThemeType) =>
         assetDetailsBody: {
             paddingHorizontal: 16,
         },
-        tokenInfoText: {
-            lineHeight: defaultTypography.bodySemiBold.lineHeight,
-        },
         markdownText: {
             color: theme.colors.text,
+            lineHeight: defaultTypography.bodySemiBold.lineHeight,
         },
     })
