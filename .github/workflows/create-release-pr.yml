@@ -9,13 +9,12 @@ on:
         workflows: ["Set Repository Variables"]
         types:
             - completed
-    workflow_dispatch: 
-    push:
+    workflow_dispatch:
 
 jobs:
     create-release-pr:
         runs-on: ubuntu-latest
-        if: ${{ github.event_name == 'workflow_dispatch' || github.event_name == 'push' || github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
         steps:
             - name: Generate a token
