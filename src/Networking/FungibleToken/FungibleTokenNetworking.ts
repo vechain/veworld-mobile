@@ -35,8 +35,10 @@ export const getTokenSymbol = async (contractAddress: string, thor: Connex.Thor)
 export const getTokenDecimals = async (contractAddress: string, thor: Connex.Thor) => {
     try {
         const res = await thor.account(contractAddress).method(abis.VIP180.decimals).call()
-
-        return res.decoded[0]
+        const casted = Number(res.decoded[0])
+        if (casted > Number.MAX_SAFE_INTEGER) throw new Error("Decimals over max allowed")
+        if (isNaN(casted)) throw new Error("Decimals are not a number")
+        return casted
     } catch (e) {
         throw new Error("Failed to call or decode getTokenDecimals: " + e)
     }
