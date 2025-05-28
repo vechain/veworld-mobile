@@ -236,11 +236,13 @@ class BigNumberUtils implements IBigNumberUtils {
         const separator = getDecimalSeparator(_locale.toString()) ?? "."
 
         const formatted = formatter.format(tokenBalance as unknown as bigint)
+
         const [unit, decimal] = formatted.split(separator)
-
-        if (typeof decimal === "undefined") return formatted
-
-        return [unit, stripTrailingZeros(decimal)].join(separator)
+        if (typeof decimal === "undefined") return [formatted, "00"].join(separator)
+        const strippedDecimals = stripTrailingZeros(decimal)
+        if (strippedDecimals === "" && parseInt(unit, 10) === 0)
+            return `< ${[unit, "0".repeat(decimals - 1) + "1"].join(separator)}`
+        return [unit, strippedDecimals].join(separator)
     }
 
     toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void, decimals?: number) {

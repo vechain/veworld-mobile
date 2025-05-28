@@ -115,9 +115,7 @@ export const BalanceView = ({
                 ) : (
                     <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                         {isBalanceVisible
-                            ? BigNutils(balance?.balance)
-                                  .toHuman(decimals)
-                                  .toTokenFormatFull_string(decimals, formatLocale)
+                            ? BigNutils(balance?.balance).toHuman(decimals).toTokenFormatFull_string(7, formatLocale)
                             : "•••••"}
                     </BaseText>
                 )}
