@@ -1,4 +1,4 @@
-import { getActivityTitle } from "./ActivityDetailsUtils"
+import { getActivityModalTitle, getActivityTitle } from "./ActivityDetailsUtils"
 import { ActivityStatus, ActivityType } from "~Model/Activity"
 import { Activity } from "~Model"
 import { renderHook } from "@testing-library/react-hooks"
@@ -66,6 +66,35 @@ describe("ActivityDetailsUtils", () => {
             const activity = { ...activityMock, isTransaction: false, type: ActivityType.DAPP_TRANSACTION }
             const title = getActivityTitle(activity, LL)
             expect(title).toBe("DApp Connection")
+        })
+
+        it("should return the undefined for an unknown activity type", () => {
+            const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
+            const { LL } = result.current
+
+            const activity = { ...activityMock, type: "SWAP_GLO_TO_VET" as ActivityType }
+            const title = getActivityTitle(activity, LL)
+            expect(title).toBeUndefined()
+        })
+    })
+
+    describe("getActivityModalTitle", () => {
+        it("should return the correct title for an B3TR action activity", () => {
+            const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
+            const { LL } = result.current
+
+            const activity = { ...activityMock, type: ActivityType.B3TR_ACTION }
+            const title = getActivityModalTitle(activity, LL)
+            expect(title).toBe("VeBetter action")
+        })
+
+        it("should return the undefined for an unknown activity type", () => {
+            const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
+            const { LL } = result.current
+
+            const activity = { ...activityMock, type: "SWAP_GLO_TO_VET" as ActivityType }
+            const title = getActivityModalTitle(activity, LL)
+            expect(title).toBeUndefined()
         })
     })
 })
