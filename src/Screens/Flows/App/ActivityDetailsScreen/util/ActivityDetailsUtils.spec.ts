@@ -50,7 +50,7 @@ describe("ActivityDetailsUtils", () => {
             [ActivityType.TRANSFER_NFT, "NFT Send"],
             [ActivityType.TRANSFER_VET, "Send"],
             [ActivityType.TRANSFER_SF, "Send"],
-        ])("should return the correct title for an %s send activity", (type, expected) => {
+        ])("should return the correct title for a %s send activity", (type, expected) => {
             const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
             const { LL } = result.current
 
@@ -59,13 +59,27 @@ describe("ActivityDetailsUtils", () => {
             expect(title).toBe(expected)
         })
 
-        it("should return the correct title for an DApp connection activity that is not a transaction", () => {
+        it("should return the correct title for a DApp connection activity that is not a transaction", () => {
             const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
             const { LL } = result.current
 
             const activity = { ...activityMock, isTransaction: false, type: ActivityType.DAPP_TRANSACTION }
             const title = getActivityTitle(activity, LL)
             expect(title).toBe("DApp Connection")
+        })
+
+        it("should return the correct title for a B3TR_XALLOCATION_VOTE activity", () => {
+            const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
+            const { LL } = result.current
+
+            const activity = {
+                ...activityMock,
+                isTransaction: false,
+                round: 1,
+                type: ActivityType.B3TR_XALLOCATION_VOTE,
+            }
+            const title = getActivityTitle(activity, LL)
+            expect(title).toBe("Vote on round #1")
         })
 
         it("should return the undefined for an unknown activity type", () => {
