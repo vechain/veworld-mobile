@@ -1,15 +1,24 @@
 import { PersistedState } from "redux-persist/es/types"
 import { TokensState } from "../Types"
+import { FungibleToken } from "~Model"
 
 const safeParseInt = (value: string, defaultValue: number) => {
     try {
         const parsed = parseInt(value, 10)
         if (isNaN(parsed)) return defaultValue
         return parsed
-    } catch (e) {
+    } catch {
         return defaultValue
     }
 }
+
+const mapFungibleToken = (tk: FungibleToken) => ({
+    ...tk,
+    decimals: typeof tk.decimals === "string" ? safeParseInt(tk.decimals, 18) : tk.decimals,
+})
+
+const mapCustomTokens = (customTokens: Record<string, FungibleToken[]>) =>
+    Object.entries(customTokens).map(([address, tokens]) => [address, tokens.map(mapFungibleToken)])
 
 export const Migration17 = (state: PersistedState): PersistedState => {
     // @ts-ignore
@@ -21,15 +30,7 @@ export const Migration17 = (state: PersistedState): PersistedState => {
             Object.entries(currentState.tokens).map(([network, value]) => {
                 const customTokens = value.custom ?? {}
 
-                const mappedCustomTokens = Object.entries(customTokens).map(([address, tokens]) => [
-                    address,
-                    tokens.map(tk => ({
-                        ...tk,
-                        decimals: typeof tk.decimals === "string" ? safeParseInt(tk.decimals, 18) : tk.decimals,
-                    })),
-                ])
-
-                return [network, { ...value, custom: Object.fromEntries(mappedCustomTokens) }]
+                return [network, { ...value, custom: Object.fromEntries(mapCustomTokens(customTokens)) }]
             }),
         ) as TokensState["tokens"],
     }

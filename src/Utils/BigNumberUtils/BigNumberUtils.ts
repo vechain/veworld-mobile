@@ -234,6 +234,8 @@ class BigNumberUtils implements IBigNumberUtils {
      */
     toTokenFormatFull_string(decimals: number, locale?: Intl.LocalesArgument): string {
         const _locale = locale ?? "en-US"
+        const separator = getDecimalSeparator(_locale.toString()) ?? "."
+        if (this.data.isZero()) return ["0", "00"].join(separator)
         const formatter = new Intl.NumberFormat(_locale.toString(), {
             style: "decimal",
             useGrouping: true,
@@ -242,8 +244,6 @@ class BigNumberUtils implements IBigNumberUtils {
         })
 
         const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))
-
-        const separator = getDecimalSeparator(_locale.toString()) ?? "."
 
         const formatted = formatter.format(tokenBalance as unknown as bigint)
 
