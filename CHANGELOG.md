@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.4 (2025-05-28)</small>
+
+* build: init ([266d6ed](https://github.com/vechain/veworld-mobile/commit/266d6ed))
+* fix: add workflow dispatch and use app in create-release-pr (#2970) ([9eeb26e](https://github.com/vechain/veworld-mobile/commit/9eeb26e)), closes [#2970](https://github.com/vechain/veworld-mobile/issues/2970)
+
 ## <small>2.2.3 (2025-05-26)</small>
 
 * build: init ([014406b](https://github.com/vechain/veworld-mobile/commit/014406b))
