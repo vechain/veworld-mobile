@@ -23,7 +23,7 @@ export const ActivityStatusIndicator = ({ activityStatus }: Props) => {
 
     return (
         <BaseView bg={statusBgColor} ml={8} alignItems="center" borderRadius={6}>
-            <BaseText py={3} px={6} typographyFont="captionMedium" color={statusTextColor} numberOfLines={1}>
+            <BaseText py={2} px={4} typographyFont="captionMedium" color={statusTextColor} numberOfLines={1}>
                 {statusTitle}
             </BaseText>
         </BaseView>

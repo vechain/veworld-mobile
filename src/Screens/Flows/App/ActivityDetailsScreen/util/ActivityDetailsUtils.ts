@@ -72,6 +72,8 @@ export const getActivityModalTitle = (activity: Activity, LL: TranslationFunctio
             return getActivityTitle(activity, LL)
         case ActivityType.B3TR_ACTION:
             return LL.B3TR_ACTION_MODAL_TITLE()
+        case ActivityType.UNKNOWN_TX:
+            return LL.UNKNOWN_TX()
         default:
             warn(ERROR_EVENTS.ACTIVITIES, "Unknown activity type")
     }
