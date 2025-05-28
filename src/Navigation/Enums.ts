@@ -45,6 +45,7 @@ export enum Routes {
     ACTIVITY_SWAP = "ACTIVITY_SWAP",
     ACTIVITY_NFT = "ACTIVITY_NFT",
     ACTIVITY_DAPPS = "ACTIVITY_DAPPS",
+    ACTIVITY_OTHER = "ACTIVITY_OTHER",
     NFTS = "NFTs",
     NFT_DETAILS = "NFT_Details",
     NFT_COLLECTION_DETAILS = "NFT_Collection_Details",

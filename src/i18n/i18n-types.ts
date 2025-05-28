@@ -173,6 +173,14 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
+	 * O​t​h​e​r
+	 */
+	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * N​o​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -372,10 +380,6 @@ type RootTranslation = {
 	 * @param {number} number
 	 */
 	B3TR_XALLOCATION_VOTE: RequiredParams<'number'>
-	/**
-	 * O​n​-​c​h​a​i​n​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	UNKNOWN_TX: string
 	/**
 	 * B​a​c​k​i​n​g​ ​u​p​.​.​.
 	 */
@@ -4125,6 +4129,10 @@ type RootTranslation = {
 	 */
 	UNKNOWN_COLLECTION: string
 	/**
+	 * O​n​-​c​h​a​i​n​ ​T​r​a​n​s​a​c​t​i​o​n
+	 */
+	UNKNOWN_TX: string
+	/**
 	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p
 	 */
 	UNVERIFIED_APP_TITLE: string
@@ -4484,6 +4492,14 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
 	/**
+	 * Other
+	 */
+	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * No transactions to show
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: () => LocalizedString
+	/**
 	 * Add Account
 	 */
 	ADD_ACCOUNT: () => LocalizedString
@@ -4680,10 +4696,6 @@ Try reconnect your device to the internet.
 	 * Vote on round #{number}
 	 */
 	B3TR_XALLOCATION_VOTE: (arg: { number: number }) => LocalizedString
-	/**
-	 * On-chain transaction
-	 */
-	UNKNOWN_TX: () => LocalizedString
 	/**
 	 * Backing up...
 	 */
@@ -8384,6 +8396,10 @@ Are you sure you want to continue?
 	 * Unknown collection name
 	 */
 	UNKNOWN_COLLECTION: () => LocalizedString
+	/**
+	 * On-chain Transaction
+	 */
+	UNKNOWN_TX: () => LocalizedString
 	/**
 	 * Unverified app
 	 */
