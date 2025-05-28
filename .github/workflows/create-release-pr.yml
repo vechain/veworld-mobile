@@ -9,20 +9,26 @@ on:
         workflows: ["Set Repository Variables"]
         types:
             - completed
+    workflow_dispatch:
 
 jobs:
     create-release-pr:
         runs-on: ubuntu-latest
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
         steps:
-
+            - name: Generate a token
+              id: generate-token
+              uses: actions/create-github-app-token@v1
+              with:
+                app-id: ${{ secrets.APP_ID }}
+                private-key: ${{ secrets.APP_PRIVATE_KEY }}
             - name: Checkout repository
               uses: actions/checkout@v4
 
             - name: Get version variables
               env:
-                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  GH_TOKEN: ${{ steps.generate-token.outputs.token }}
               run: |
                   echo "IOS_VERSION=$(gh variable get IOS_VERSION)" >> $GITHUB_ENV
                   echo "IOS_BUILD=$(gh variable get IOS_BUILD)" >> $GITHUB_ENV
