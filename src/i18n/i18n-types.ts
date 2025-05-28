@@ -372,7 +372,7 @@ type RootTranslation = {
 	 */
 	B3TR_PROPOSAL_VOTE: string
 	/**
-	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​e​b​e​r​ ​l​e​v​e​l
+	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​b​e​r​ ​l​e​v​e​l
 	 */
 	B3TR_UPGRADE_GM: string
 	/**
@@ -4689,7 +4689,7 @@ Try reconnect your device to the internet.
 	 */
 	B3TR_PROPOSAL_VOTE: () => LocalizedString
 	/**
-	 * New galaxy memeber level
+	 * New galaxy member level
 	 */
 	B3TR_UPGRADE_GM: () => LocalizedString
 	/**

@@ -45,6 +45,8 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
             return LL.CONNECTED_APP_TITLE()
         case ActivityType.SIGN_TYPED_DATA:
             return LL.CONNECTED_APP_SIGN_TYPED_DATA()
+        case ActivityType.UNKNOWN_TX:
+            return LL.UNKNOWN_TX()
         default:
             warn(ERROR_EVENTS.ACTIVITIES, "Unknown activity type")
     }

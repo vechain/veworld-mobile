@@ -79,7 +79,7 @@
   "B3TR_CLAIM_REWARD": "Claimed voting rewards",
   "B3TR_PROPOSAL_SUPPORT": "Support VeBetterDAO proposal",
   "B3TR_PROPOSAL_VOTE": "Vote on VeBetterDAO proposal",
-  "B3TR_UPGRADE_GM": "New galaxy memeber level",
+  "B3TR_UPGRADE_GM": "New galaxy member level",
   "B3TR_XALLOCATION_VOTE": "Vote on round #{number:number}",
   "BACKING_UP": "Backing up...",
   "BACKUP_SUCCESSFUL_DESCRIPTION": "Your recovery phrase is now backed up and safe on {cloudType: string}",
