@@ -663,7 +663,7 @@ export const createActivityFromIndexedHistoryEvent = (
         case ActivityEvent.B3TR_CLAIM_REWARD: {
             return {
                 ...baseActivity,
-                eventName: ActivityEvent.B3TR_XALLOCATION_VOTE,
+                eventName: ActivityEvent.B3TR_CLAIM_REWARD,
                 value: value ?? "0x0",
                 roundId: roundId,
             } as B3trClaimRewardActivity

@@ -46,7 +46,7 @@ export interface IndexedHistoryEvent {
     appId?: string
     proof?: string
     roundId?: string
-    appVotes: {
+    appVotes?: {
         appId: string
         voteWeight: string
     }[]
