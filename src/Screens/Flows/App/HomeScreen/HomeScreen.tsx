@@ -111,8 +111,8 @@ export const HomeScreen = () => {
             })
 
             updateBalances()
-            updateSuggested()
-        }, [queryClient, selectedAccount.address, updateBalances, updateSuggested]),
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []),
     )
 
     const onRefresh = useCallback(async () => {
