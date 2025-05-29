@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.4 (2025-05-29)</small>
+
+* build: init ([6952001](https://github.com/vechain/veworld-mobile/commit/6952001))
+* 140 enhancement   rounding strategy (#2968) ([08fa4dd](https://github.com/vechain/veworld-mobile/commit/08fa4dd)), closes [#2968](https://github.com/vechain/veworld-mobile/issues/2968)
+
 ## <small>2.2.3 (2025-05-26)</small>
 
 * build: init ([014406b](https://github.com/vechain/veworld-mobile/commit/014406b))
