@@ -48,6 +48,7 @@ type ActivityBoxProps = {
      * If set to true, the title will be lighter than the description. Default is `false`
      */
     invertedStyles?: boolean
+    testID?: string
 }
 
 const BaseActivityBox = ({
@@ -62,6 +63,7 @@ const BaseActivityBox = ({
     activityStatus,
     onPress,
     invertedStyles,
+    testID,
 }: ActivityBoxProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -103,7 +105,7 @@ const BaseActivityBox = ({
     }
 
     return (
-        <BaseCard style={styles.rootContainer} onPress={onPress}>
+        <BaseCard testID={testID} style={styles.rootContainer} onPress={onPress}>
             <BaseView style={[styles.iconContainer, { backgroundColor: iconBackgroungColor }]}>
                 <BaseIcon name={icon} size={16} color={COLORS.DARK_PURPLE} testID="magnify" bg={iconBackgroungColor} />
             </BaseView>
@@ -294,7 +296,14 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
         onPress(activity, token)
     }
 
-    return <BaseActivityBox time={time} onPress={onPressHandler} {...getActivityProps()} />
+    return (
+        <BaseActivityBox
+            testID={`FT-TRANSFER-${activity.id}`}
+            time={time}
+            onPress={onPressHandler}
+            {...getActivityProps()}
+        />
+    )
 }
 
 type TokenSwapProps = {
@@ -331,6 +340,7 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
 
     return (
         <BaseActivityBox
+            testID={`SWAP-${activity.id}`}
             icon={icon}
             time={time}
             title={title}
@@ -371,6 +381,7 @@ const DAppTransaction = ({ activity, onPress }: DAppTransactionProps) => {
 
     return (
         <BaseActivityBox
+            testID={`DAPP-TX-${activity.id}`}
             icon="icon-layout-grid"
             time={time}
             title={title}
@@ -415,6 +426,7 @@ const DAppSignCertBox = ({ activity, onPress }: DAppSignCert) => {
 
     return (
         <BaseActivityBox
+            testID={`DAPP-SIGN-CERT-${activity.id}`}
             icon="icon-edit-2"
             time={time}
             title={title}
@@ -447,6 +459,7 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
 
     return (
         <BaseActivityBox
+            testID={`NFT-TRANSFER-${activity.id}`}
             icon="icon-image"
             time={time}
             title={title}
@@ -469,7 +482,15 @@ const ConnectedAppActivityBox = ({ activity, onPress }: ConnectedAppActivityProp
         onPress(activity)
     }
 
-    return <BaseActivityBox icon="icon-laptop" time={time} title={LL.CONNECTED_APP_TITLE()} onPress={onPressHandler} />
+    return (
+        <BaseActivityBox
+            testID={`CONNECTED-APP-${activity.id}`}
+            icon="icon-laptop"
+            time={time}
+            title={LL.CONNECTED_APP_TITLE()}
+            onPress={onPressHandler}
+        />
+    )
 }
 
 type SignedTypedDataProps = {
@@ -487,6 +508,7 @@ const SignedTypedData = ({ activity, onPress }: SignedTypedDataProps) => {
 
     return (
         <BaseActivityBox
+            testID={`SIGN-TYPED-DATA-${activity.id}`}
             icon="icon-check-check"
             time={time}
             title={LL.CONNECTED_APP_SIGN_TYPED_DATA()}
@@ -514,6 +536,7 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) =>
 
     return (
         <BaseActivityBox
+            testID={`B3TR-ACTION-${activity.id}`}
             icon="icon-leaf"
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
@@ -542,6 +565,7 @@ const B3trProposalVote = ({ activity, onPress }: B3trPrpoposalVoteProps) => {
 
     return (
         <BaseActivityBox
+            testID={`B3TR-PROPOSAL-VOTE-${activity.id}`}
             icon="icon-vote"
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
@@ -566,6 +590,7 @@ const B3trXAllocationVote = ({ activity, onPress }: B3trXAllocartionVoteProps) =
 
     return (
         <BaseActivityBox
+            testID={`B3TR-XALLOCATION-VOTE-${activity.id}`}
             icon="icon-vote"
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
@@ -592,6 +617,7 @@ const B3trClaimReward = ({ activity, onPress }: B3trClaimRewardProps) => {
 
     return (
         <BaseActivityBox
+            testID={`B3TR-CLAIM-REWARD-${activity.id}`}
             icon="icon-leaf"
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
@@ -618,6 +644,7 @@ const B3trUpgradeGM = ({ activity, onPress }: B3trUpgradeGMProps) => {
 
     return (
         <BaseActivityBox
+            testID={`B3TR-UPGRADE-GM-${activity.id}`}
             icon="icon-vote"
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
@@ -653,6 +680,7 @@ const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
 
     return (
         <BaseActivityBox
+            testID={`B3TR-SWAP-B3TR-TO-VOT3-${activity.id}`}
             icon={"icon-convert"}
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
@@ -693,6 +721,7 @@ const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
 
     return (
         <BaseActivityBox
+            testID={`B3TR-SWAP-VOT3-TO-B3TR-${activity.id}`}
             icon={"icon-convert"}
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
@@ -723,6 +752,7 @@ const B3trProposalSupport = ({ activity, onPress }: B3trProposalSupportProps) =>
 
     return (
         <BaseActivityBox
+            testID={`B3TR-PROPOSAL-SUPPORT-${activity.id}`}
             icon="icon-vote"
             iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
@@ -747,6 +777,7 @@ const UnknownTx = ({ activity, onPress }: UnknownTxProps) => {
 
     return (
         <BaseActivityBox
+            testID={`UNKNOWN-TX-${activity.id}`}
             icon="icon-block"
             time={time}
             title={LL.UNKNOWN_TX()}

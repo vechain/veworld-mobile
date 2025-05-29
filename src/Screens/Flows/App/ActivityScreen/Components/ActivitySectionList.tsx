@@ -53,6 +53,7 @@ type ActivitySectionListProps = {
     isFetching: boolean
     isRefreshing: boolean
     veBetterDaoDapps: VeBetterDaoDapp[]
+    initialNumToRender?: number
 }
 
 const ItemSeparatorComponent = () => {
@@ -170,6 +171,7 @@ export const ActivitySectionList = ({
     isFetching,
     isRefreshing,
     veBetterDaoDapps,
+    initialNumToRender = 10,
 }: ActivitySectionListProps) => {
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyle)
@@ -346,7 +348,7 @@ export const ActivitySectionList = ({
                 ref={sectionListRef}
                 contentContainerStyle={styles.listContainer}
                 sections={sections}
-                initialNumToRender={10}
+                initialNumToRender={initialNumToRender}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
                 renderSectionHeader={renderSectionHeader}
