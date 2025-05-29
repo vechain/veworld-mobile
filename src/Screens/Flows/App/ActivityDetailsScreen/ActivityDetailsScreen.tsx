@@ -164,6 +164,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.SWAP_FT_TO_FT:
             case ActivityType.SWAP_FT_TO_VET:
             case ActivityType.SWAP_VET_TO_FT:
+            case ActivityType.UNKNOWN_TX:
             case ActivityType.DAPP_TRANSACTION: {
                 return (
                     <DappTransactionDetails

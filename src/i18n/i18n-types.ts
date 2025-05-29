@@ -173,6 +173,14 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
+	 * O​t​h​e​r
+	 */
+	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * N​o​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -364,7 +372,7 @@ type RootTranslation = {
 	 */
 	B3TR_PROPOSAL_VOTE: string
 	/**
-	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​e​b​e​r​ ​l​e​v​e​l
+	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​b​e​r​ ​l​e​v​e​l
 	 */
 	B3TR_UPGRADE_GM: string
 	/**
@@ -4129,6 +4137,10 @@ type RootTranslation = {
 	 */
 	UNKNOWN_COLLECTION: string
 	/**
+	 * O​n​-​c​h​a​i​n​ ​T​r​a​n​s​a​c​t​i​o​n
+	 */
+	UNKNOWN_TX: string
+	/**
 	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p
 	 */
 	UNVERIFIED_APP_TITLE: string
@@ -4488,6 +4500,14 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
 	/**
+	 * Other
+	 */
+	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * No transactions to show
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: () => LocalizedString
+	/**
 	 * Add Account
 	 */
 	ADD_ACCOUNT: () => LocalizedString
@@ -4677,7 +4697,7 @@ Try reconnect your device to the internet.
 	 */
 	B3TR_PROPOSAL_VOTE: () => LocalizedString
 	/**
-	 * New galaxy memeber level
+	 * New galaxy member level
 	 */
 	B3TR_UPGRADE_GM: () => LocalizedString
 	/**
@@ -8392,6 +8412,10 @@ Are you sure you want to continue?
 	 * Unknown collection name
 	 */
 	UNKNOWN_COLLECTION: () => LocalizedString
+	/**
+	 * On-chain Transaction
+	 */
+	UNKNOWN_TX: () => LocalizedString
 	/**
 	 * Unverified app
 	 */

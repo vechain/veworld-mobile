@@ -1,11 +1,11 @@
 import React, { useMemo } from "react"
+import { FiatBalance } from "~Components"
+import { COLORS } from "~Constants"
+import { useFormatFiat, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
+import { FungibleTokenWithBalance } from "~Model"
+import { BalanceUtils } from "~Utils"
 import { BaseTokenCard } from "./BaseTokenCard"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
-import { FiatBalance } from "~Components"
-import { FungibleTokenWithBalance } from "~Model"
-import { useFormatFiat, useTheme, useTokenCardFiatInfo, useTokenWithCompleteInfo } from "~Hooks"
-import { COLORS } from "~Constants"
-import { BalanceUtils } from "~Utils"
 
 type Props = {
     tokenWithBalance: FungibleTokenWithBalance
