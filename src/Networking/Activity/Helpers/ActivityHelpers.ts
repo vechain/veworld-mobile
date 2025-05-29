@@ -25,6 +25,7 @@ import {
     SwapActivity,
     TypedData,
     TypedDataActivity,
+    UnknownTxActivity,
 } from "~Model"
 import { EventTypeResponse } from "~Networking"
 import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
@@ -545,6 +546,7 @@ export const createActivityFromIndexedHistoryEvent = (
         oldLevel,
         newLevel,
         from,
+        reverted,
     } = event
 
     const isTransaction =
@@ -564,6 +566,7 @@ export const createActivityFromIndexedHistoryEvent = (
         timestamp: blockTimestamp * 1000,
         gasPayer: gasPayer,
         delegated: origin !== gasPayer,
+        status: reverted ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS,
     }
 
     switch (eventName) {
@@ -660,7 +663,7 @@ export const createActivityFromIndexedHistoryEvent = (
         case ActivityEvent.B3TR_CLAIM_REWARD: {
             return {
                 ...baseActivity,
-                eventName: ActivityEvent.B3TR_XALLOCATION_VOTE,
+                eventName: ActivityEvent.B3TR_CLAIM_REWARD,
                 value: value ?? "0x0",
                 roundId: roundId,
             } as B3trClaimRewardActivity
@@ -692,6 +695,9 @@ export const createActivityFromIndexedHistoryEvent = (
             } as B3trProposalSupportActivity
         }
         case ActivityEvent.UNKNOWN_TX:
+            return {
+                ...baseActivity,
+            } as UnknownTxActivity
         default:
             return null
     }
