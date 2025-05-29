@@ -56,5 +56,6 @@ export const estimateGenericDelegatorFees = ({ networkType, clauses, signer }: E
                 signer,
                 clauses: clauses.map(({ to, data, value }) => ({ to, data, value })),
             },
+            method: "POST",
         }),
     )

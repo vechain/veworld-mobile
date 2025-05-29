@@ -14,6 +14,7 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
+import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
 import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
 import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
@@ -63,8 +64,7 @@ export const useTransactionScreen = ({
 
     const track = useAnalyticTracking()
 
-    const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
+    const senderDevice = useAppSelector(state => selectDevice(state, selectedAccount.rootAddress))
     const { forks } = useFeatureFlags()
 
     const [selectedDelegationToken, setSelectedDelegationToken] = useState(VTHO.symbol)
@@ -112,6 +112,13 @@ export const useTransactionScreen = ({
         coefficient: selectedFeeOption,
         gas,
         isGalactica,
+    })
+
+    useGenericDelegationFees({
+        clauses,
+        signer: selectedAccount.address,
+        token: selectedDelegationToken,
+        gas,
     })
 
     // 4. Build transaction
