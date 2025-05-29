@@ -2,13 +2,13 @@ import React, { useEffect, useMemo } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { RenderItemParams } from "react-native-draggable-flatlist"
 import { BaseIcon, BaseView } from "~Components"
-import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
-import { TokenCard } from "./TokenCard"
+import { useThemedStyles } from "~Hooks"
 import { FungibleTokenWithBalance } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { BridgeTokenCard } from "./BridgeTokenCard"
-interface IAnimatedTokenCard extends RenderItemParams<FungibleTokenWithBalance> {
+import { TokenCard } from "./TokenCard"
+interface IAnimatedTokenCard extends Omit<RenderItemParams<FungibleTokenWithBalance>, "getIndex"> {
     isEdit: boolean
     isBalanceVisible: boolean
 }

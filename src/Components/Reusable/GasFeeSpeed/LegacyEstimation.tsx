@@ -14,6 +14,7 @@ import { TokenImage } from "../TokenImage"
 type Props = {
     options: TransactionFeesResult
     selectedFeeOption: GasPriceCoefficient
+    onDelegationTokenClicked: () => void
 }
 
 export const LegacyEstimation = ({ options, selectedFeeOption }: Props) => {

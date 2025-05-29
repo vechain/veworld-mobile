@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { useInterval } from "usehooks-ts"
 import { BaseCard } from "~Components/Base"
-import { ColorThemeType, GasPriceCoefficient } from "~Constants"
+import { ColorThemeType, GasPriceCoefficient, VTHO } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -21,6 +21,9 @@ type Props = {
     isGalactica?: boolean
     isBaseFeeRampingUp: boolean
     speedChangeEnabled: boolean
+    delegationToken: string
+    availableDelegationTokens: string[]
+    setDelegationToken: (value: string) => void
 }
 
 const AnimatedBaseCard = Animated.createAnimatedComponent(wrapFunctionComponent(BaseCard))
@@ -34,6 +37,8 @@ export const GasFeeSpeed = ({
     children,
     isBaseFeeRampingUp,
     speedChangeEnabled,
+    delegationToken,
+    setDelegationToken,
 }: PropsWithChildren<Props>) => {
     const { styles } = useThemedStyles(baseStyles)
 
@@ -48,12 +53,16 @@ export const GasFeeSpeed = ({
 
     useInterval(intervalFn, 200)
 
+    const onDelegationTokenClicked = useCallback(() => {
+        setDelegationToken("")
+    }, [setDelegationToken])
+
     return (
         <AnimatedBaseCard
             containerStyle={styles.cardContainer}
             style={styles.card}
             layout={LinearTransition.duration(300)}>
-            {isGalactica ? (
+            {isGalactica && delegationToken === VTHO.symbol ? (
                 <>
                     <EditSpeedSection
                         onOpen={onOpen}
@@ -64,10 +73,24 @@ export const GasFeeSpeed = ({
                         options={options}
                         selectedFeeOption={selectedFeeOption}
                         secondsRemaining={secondsRemaining}
+                        onDelegationTokenClicked={onDelegationTokenClicked}
                     />
                 </>
             ) : (
-                <LegacyEstimation options={options} selectedFeeOption={selectedFeeOption} />
+                <>
+                    {delegationToken !== VTHO.symbol && (
+                        <EditSpeedSection
+                            onOpen={onOpen}
+                            selectedFeeOption={selectedFeeOption}
+                            speedChangeEnabled={speedChangeEnabled}
+                        />
+                    )}
+                    <LegacyEstimation
+                        options={options}
+                        selectedFeeOption={selectedFeeOption}
+                        onDelegationTokenClicked={onDelegationTokenClicked}
+                    />
+                </>
             )}
             {children}
             <GasFeeSpeedBottomSheet

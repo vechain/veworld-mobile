@@ -17,6 +17,7 @@ type Props = {
     options: TransactionFeesResult
     selectedFeeOption: GasPriceCoefficient
     secondsRemaining: number
+    onDelegationTokenClicked: () => void
 }
 
 export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaining }: Props) => {
