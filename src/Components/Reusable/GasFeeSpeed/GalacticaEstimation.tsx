@@ -11,16 +11,23 @@ import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { BaseAnimatedText } from "../BaseAnimatedText"
-import { TokenImage } from "../TokenImage"
+import { TokenSelector } from "./TokenSelector"
 
 type Props = {
     options: TransactionFeesResult
     selectedFeeOption: GasPriceCoefficient
     secondsRemaining: number
     onDelegationTokenClicked: () => void
+    selectedDelegationToken: string
 }
 
-export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaining }: Props) => {
+export const GalacticaEstimation = ({
+    options,
+    selectedFeeOption,
+    secondsRemaining,
+    onDelegationTokenClicked,
+    selectedDelegationToken,
+}: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
 
@@ -64,13 +71,7 @@ export const GalacticaEstimation = ({ options, selectedFeeOption, secondsRemaini
             </BaseView>
             <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
                 <BaseView flexDirection="row" gap={8}>
-                    <TokenImage icon={VTHO.icon} isVechainToken iconSize={16} />
-                    <BaseAnimatedText
-                        typographyFont="subSubTitleBold"
-                        color={theme.colors.assetDetailsCard.title}
-                        style={blinkStyles}>
-                        {VTHO.symbol}
-                    </BaseAnimatedText>
+                    <TokenSelector onPress={onDelegationTokenClicked} token={selectedDelegationToken} />
                     <BaseAnimatedText
                         typographyFont="subSubTitleBold"
                         color={theme.colors.assetDetailsCard.title}

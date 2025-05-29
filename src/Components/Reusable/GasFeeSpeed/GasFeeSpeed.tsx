@@ -73,6 +73,7 @@ export const GasFeeSpeed = ({
                         selectedFeeOption={selectedFeeOption}
                         secondsRemaining={secondsRemaining}
                         onDelegationTokenClicked={tokenBsOnOpen}
+                        selectedDelegationToken={delegationToken}
                     />
                 </>
             ) : (
@@ -88,6 +89,7 @@ export const GasFeeSpeed = ({
                         options={options}
                         selectedFeeOption={selectedFeeOption}
                         onDelegationTokenClicked={tokenBsOnOpen}
+                        selectedDelegationToken={delegationToken}
                     />
                 </>
             )}

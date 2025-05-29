@@ -9,15 +9,21 @@ import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionF
 import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
-import { TokenImage } from "../TokenImage"
+import { TokenSelector } from "./TokenSelector"
 
 type Props = {
     options: TransactionFeesResult
     selectedFeeOption: GasPriceCoefficient
     onDelegationTokenClicked: () => void
+    selectedDelegationToken: string
 }
 
-export const LegacyEstimation = ({ options, selectedFeeOption }: Props) => {
+export const LegacyEstimation = ({
+    options,
+    selectedFeeOption,
+    onDelegationTokenClicked,
+    selectedDelegationToken,
+}: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
 
@@ -52,10 +58,7 @@ export const LegacyEstimation = ({ options, selectedFeeOption }: Props) => {
                 {LL.GAS_FEE()}
             </BaseText>
             <BaseView flexDirection="row" gap={8}>
-                <TokenImage icon={VTHO.icon} isVechainToken iconSize={16} />
-                <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
-                    {VTHO.symbol}
-                </BaseText>
+                <TokenSelector onPress={onDelegationTokenClicked} token={selectedDelegationToken} />
                 <BaseText
                     typographyFont="subSubTitleBold"
                     color={theme.colors.assetDetailsCard.title}

@@ -8,6 +8,7 @@ import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { AnimatedTokenCard } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/AnimatedTokenCard"
 import { selectTokensWithBalances, useAppSelector } from "~Storage/Redux"
+import { BigNutils } from "~Utils"
 
 type Props = {
     selectedToken: string
@@ -24,10 +25,12 @@ type EnhancedTokenCardProps = {
     selected: boolean
 }
 const EnhancedTokenCard = ({ item, selected, onSelectedToken }: EnhancedTokenCardProps) => {
-    const { styles } = useThemedStyles(baseTokenCardStyles(selected))
+    const disabled = useMemo(() => BigNutils(item.balance.balance).isZero, [item.balance.balance])
+    const { styles } = useThemedStyles(baseTokenCardStyles({ selected, disabled }))
     const onPress = useCallback(() => {
         onSelectedToken(item.symbol)
     }, [item.symbol, onSelectedToken])
+
     return (
         <Pressable onPress={onPress}>
             <AnimatedTokenCard
@@ -110,10 +113,13 @@ const baseStyles = () =>
         },
     })
 
-const baseTokenCardStyles = (isSelected: boolean) => (theme: ColorThemeType) =>
-    StyleSheet.create({
-        rootContent: {
-            borderWidth: isSelected ? 2 : 0,
-            borderColor: theme.colors.text,
-        },
-    })
+const baseTokenCardStyles =
+    ({ selected, disabled }: { selected: boolean; disabled: boolean }) =>
+    (theme: ColorThemeType) =>
+        StyleSheet.create({
+            rootContent: {
+                borderWidth: selected ? 2 : 0,
+                borderColor: theme.colors.text,
+                backgroundColor: disabled ? theme.colors.editSpeedBs.result.background : theme.colors.card,
+            },
+        })

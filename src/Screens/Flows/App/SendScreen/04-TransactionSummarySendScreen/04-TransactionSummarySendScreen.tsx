@@ -129,6 +129,9 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         isGalactica,
         isBaseFeeRampingUp,
         speedChangeEnabled,
+        availableTokens,
+        selectedDelegationToken,
+        setSelectedDelegationToken,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -234,7 +237,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         setSelectedFeeOption={setSelectedFeeOption}
                         isGalactica={isGalactica}
                         isBaseFeeRampingUp={isBaseFeeRampingUp}
-                        speedChangeEnabled={speedChangeEnabled}>
+                        speedChangeEnabled={speedChangeEnabled}
+                        availableDelegationTokens={availableTokens}
+                        delegationToken={selectedDelegationToken}
+                        setDelegationToken={setSelectedDelegationToken}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
