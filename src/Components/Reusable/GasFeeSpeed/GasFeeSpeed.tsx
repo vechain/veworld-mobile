@@ -11,6 +11,7 @@ import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { EditSpeedSection } from "./EditSpeedSection"
 import { GalacticaEstimation } from "./GalacticaEstimation"
 import { GasFeeSpeedBottomSheet } from "./GasFeeSpeedBottomSheet"
+import { GasFeeTokenBottomSheet } from "./GasFeeTokenBottomSheet"
 import { LegacyEstimation } from "./LegacyEstimation"
 
 type Props = {
@@ -39,10 +40,12 @@ export const GasFeeSpeed = ({
     speedChangeEnabled,
     delegationToken,
     setDelegationToken,
+    availableDelegationTokens,
 }: PropsWithChildren<Props>) => {
     const { styles } = useThemedStyles(baseStyles)
 
-    const { onClose, onOpen, ref } = useBottomSheetModal()
+    const { onClose: speedBsOnClose, onOpen: speedBsOnOpen, ref: speedBsRef } = useBottomSheetModal()
+    const { onClose: tokenBsOnClose, onOpen: tokenBsOnOpen, ref: tokenBsRef } = useBottomSheetModal()
 
     const [secondsRemaining, setSecondsRemaining] = useState(10)
 
@@ -53,10 +56,6 @@ export const GasFeeSpeed = ({
 
     useInterval(intervalFn, 200)
 
-    const onDelegationTokenClicked = useCallback(() => {
-        setDelegationToken("")
-    }, [setDelegationToken])
-
     return (
         <AnimatedBaseCard
             containerStyle={styles.cardContainer}
@@ -65,7 +64,7 @@ export const GasFeeSpeed = ({
             {isGalactica && delegationToken === VTHO.symbol ? (
                 <>
                     <EditSpeedSection
-                        onOpen={onOpen}
+                        onOpen={speedBsOnOpen}
                         selectedFeeOption={selectedFeeOption}
                         speedChangeEnabled={speedChangeEnabled}
                     />
@@ -73,14 +72,14 @@ export const GasFeeSpeed = ({
                         options={options}
                         selectedFeeOption={selectedFeeOption}
                         secondsRemaining={secondsRemaining}
-                        onDelegationTokenClicked={onDelegationTokenClicked}
+                        onDelegationTokenClicked={tokenBsOnOpen}
                     />
                 </>
             ) : (
                 <>
                     {delegationToken !== VTHO.symbol && (
                         <EditSpeedSection
-                            onOpen={onOpen}
+                            onOpen={speedBsOnOpen}
                             selectedFeeOption={selectedFeeOption}
                             speedChangeEnabled={speedChangeEnabled}
                         />
@@ -88,19 +87,26 @@ export const GasFeeSpeed = ({
                     <LegacyEstimation
                         options={options}
                         selectedFeeOption={selectedFeeOption}
-                        onDelegationTokenClicked={onDelegationTokenClicked}
+                        onDelegationTokenClicked={tokenBsOnOpen}
                     />
                 </>
             )}
             {children}
             <GasFeeSpeedBottomSheet
-                ref={ref}
+                ref={speedBsRef}
                 options={options}
                 selectedFeeOption={selectedFeeOption}
                 setSelectedFeeOption={setSelectedFeeOption}
-                onClose={onClose}
+                onClose={speedBsOnClose}
                 isGalactica={isGalactica}
                 isBaseFeeRampingUp={isBaseFeeRampingUp}
+            />
+            <GasFeeTokenBottomSheet
+                ref={tokenBsRef}
+                availableTokens={availableDelegationTokens}
+                onClose={tokenBsOnClose}
+                selectedToken={delegationToken}
+                setSelectedToken={setDelegationToken}
             />
         </AnimatedBaseCard>
     )

@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from "react"
-import { Pressable, StyleSheet } from "react-native"
+import { Pressable, StyleSheet, ViewStyle } from "react-native"
 import { RenderItemParams } from "react-native-draggable-flatlist"
 import { BaseIcon, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
@@ -11,9 +11,17 @@ import { TokenCard } from "./TokenCard"
 interface IAnimatedTokenCard extends Omit<RenderItemParams<FungibleTokenWithBalance>, "getIndex"> {
     isEdit: boolean
     isBalanceVisible: boolean
+    rootStyle?: ViewStyle
 }
 
-export const AnimatedTokenCard = ({ item, drag, isActive, isEdit, isBalanceVisible }: IAnimatedTokenCard) => {
+export const AnimatedTokenCard = ({
+    item,
+    drag,
+    isActive,
+    isEdit,
+    isBalanceVisible,
+    rootStyle,
+}: IAnimatedTokenCard) => {
     const { styles, theme } = useThemedStyles(baseStyles(isActive))
 
     const isBridgeToken = useMemo(() => {
@@ -25,7 +33,7 @@ export const AnimatedTokenCard = ({ item, drag, isActive, isEdit, isBalanceVisib
     }, [isActive, isEdit])
 
     return (
-        <BaseView style={styles.animatedOuterContainer}>
+        <BaseView style={[styles.animatedOuterContainer, rootStyle]}>
             {isEdit && (
                 <Pressable
                     disabled={isActive}

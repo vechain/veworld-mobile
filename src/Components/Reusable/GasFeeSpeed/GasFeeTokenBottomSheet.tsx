@@ -1,9 +1,11 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { forwardRef, useCallback, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
+import { Pressable, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { FungibleTokenWithBalance } from "~Model"
 import { AnimatedTokenCard } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/AnimatedTokenCard"
 import { selectTokensWithBalances, useAppSelector } from "~Storage/Redux"
 
@@ -12,6 +14,32 @@ type Props = {
     setSelectedToken: (value: string) => void
     availableTokens: string[]
     onClose: () => void
+}
+
+const noop = () => {}
+
+type EnhancedTokenCardProps = {
+    item: FungibleTokenWithBalance
+    onSelectedToken: (value: string) => void
+    selected: boolean
+}
+const EnhancedTokenCard = ({ item, selected, onSelectedToken }: EnhancedTokenCardProps) => {
+    const { styles } = useThemedStyles(baseTokenCardStyles(selected))
+    const onPress = useCallback(() => {
+        onSelectedToken(item.symbol)
+    }, [item.symbol, onSelectedToken])
+    return (
+        <Pressable onPress={onPress}>
+            <AnimatedTokenCard
+                item={item}
+                drag={noop}
+                isEdit={false}
+                isActive={false}
+                isBalanceVisible
+                rootStyle={styles.rootContent}
+            />
+        </Pressable>
+    )
 }
 
 export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
@@ -28,10 +56,19 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
         onClose()
     }, [internalToken, onClose, setSelectedToken])
 
+    const onCancel = useCallback(() => {
+        setInternalToken(selectedToken)
+        onClose()
+    }, [onClose, selectedToken])
+
     const tokenList = useMemo(() => tokens.filter(tk => availableTokens.includes(tk.symbol)), [tokens, availableTokens])
 
+    const onDismiss = useCallback(() => {
+        setInternalToken(selectedToken)
+    }, [selectedToken])
+
     return (
-        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent}>
+        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent} onDismiss={onDismiss}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-coins" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -45,19 +82,17 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             <BaseSpacer height={24} />
             <BaseView flexDirection="column" gap={8}>
                 {tokenList.map(tk => (
-                    <AnimatedTokenCard
+                    <EnhancedTokenCard
                         item={tk}
-                        drag={() => setInternalToken(tk.symbol)}
-                        isEdit={false}
-                        isActive
-                        isBalanceVisible
                         key={tk.symbol}
+                        onSelectedToken={setInternalToken}
+                        selected={internalToken === tk.symbol}
                     />
                 ))}
             </BaseView>
             <BaseSpacer height={24} />
             <BaseView gap={16} flexDirection="row" w={100}>
-                <BaseButton variant="outline" action={onClose} flex={1} testID="GAS_FEE_TOKEN_BOTTOM_SHEET_CANCEL">
+                <BaseButton variant="outline" action={onCancel} flex={1} testID="GAS_FEE_TOKEN_BOTTOM_SHEET_CANCEL">
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <BaseButton action={onApply} flex={1} testID="GAS_FEE_TOKEN_BOTTOM_SHEET_APPLY">
@@ -72,5 +107,13 @@ const baseStyles = () =>
     StyleSheet.create({
         rootContent: {
             paddingBottom: 40,
+        },
+    })
+
+const baseTokenCardStyles = (isSelected: boolean) => (theme: ColorThemeType) =>
+    StyleSheet.create({
+        rootContent: {
+            borderWidth: isSelected ? 2 : 0,
+            borderColor: theme.colors.text,
         },
     })
