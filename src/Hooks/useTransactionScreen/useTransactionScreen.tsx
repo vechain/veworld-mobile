@@ -3,7 +3,7 @@ import { AxiosError } from "axios"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { showWarningToast, useFeatureFlags } from "~Components"
 import { showErrorToast } from "~Components/Base/BaseToast"
-import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient, VTHO } from "~Constants"
 import {
     SignStatus,
     SignTransactionResponse,
@@ -14,6 +14,7 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
+import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
 import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
@@ -65,6 +66,9 @@ export const useTransactionScreen = ({
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const { forks } = useFeatureFlags()
+
+    const [selectedDelegationToken, setSelectedDelegationToken] = useState(VTHO.symbol)
+    const availableTokens = useGenericDelegationTokens()
 
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
@@ -295,5 +299,8 @@ export const useTransactionScreen = ({
         isGalactica,
         isBaseFeeRampingUp: transactionFeesResponse.isBaseFeeRampingUp,
         speedChangeEnabled: transactionFeesResponse.speedChangeEnabled,
+        selectedDelegationToken,
+        setSelectedDelegationToken,
+        availableTokens,
     }
 }
