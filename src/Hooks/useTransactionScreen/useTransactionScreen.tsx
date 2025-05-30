@@ -23,7 +23,14 @@ import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
-import { selectDevice, selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectDefaultDelegationToken,
+    selectDevice,
+    selectSelectedAccount,
+    setIsAppLoading,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { error, GasUtils } from "~Utils"
 import { useVTHO_HACK } from "./useVTHO_HACK"
 
@@ -67,7 +74,8 @@ export const useTransactionScreen = ({
     const senderDevice = useAppSelector(state => selectDevice(state, selectedAccount.rootAddress))
     const { forks } = useFeatureFlags()
 
-    const [selectedDelegationToken, setSelectedDelegationToken] = useState(VTHO.symbol)
+    const defaultToken = useAppSelector(selectDefaultDelegationToken)
+    const [selectedDelegationToken, setSelectedDelegationToken] = useState(defaultToken)
     const availableTokens = useGenericDelegationTokens()
 
     // 1. Gas

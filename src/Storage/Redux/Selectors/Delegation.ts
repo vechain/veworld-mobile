@@ -36,3 +36,9 @@ export const getDefaultDelegationUrl = createSelector(
     selectDelegationState,
     (network, delegation) => delegation[network.genesis.id]?.defaultDelegationUrl,
 )
+
+export const selectDefaultDelegationToken = createSelector(
+    selectSelectedNetwork,
+    selectDelegationState,
+    (network, delegation) => delegation[network.genesis.id]?.defaultToken,
+)

@@ -157,6 +157,14 @@ type RootTranslation = {
 	 */
 	ACTIVITY_NFT_LABEL: string
 	/**
+	 * N​o​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: string
+	/**
+	 * O​t​h​e​r
+	 */
+	ACTIVITY_OTHER_LABEL: string
+	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: string
@@ -172,14 +180,6 @@ type RootTranslation = {
 	 * T​r​a​n​s​f​e​r
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
-	/**
-	 * O​t​h​e​r
-	 */
-	ACTIVITY_OTHER_LABEL: string
-	/**
-	 * N​o​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w
-	 */
-	ACTIVITY_OTHER_EMPTY_LABEL: string
 	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
@@ -1969,13 +1969,17 @@ type RootTranslation = {
 	 */
 	DELEGATE_FEE: string
 	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​ ​w​i​t​h
+	 */
+	DELEGATE_FEE_TOKEN_DESC: string
+	/**
 	 * F​e​e​ ​t​o​k​e​n
 	 */
 	DELEGATE_FEE_TOKEN_TITLE: string
 	/**
-	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​ ​w​i​t​h
+	 * U​s​e​ ​t​h​i​s​ ​t​o​k​e​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​t​r​a​n​s​a​c​t​i​o​n​s
 	 */
-	DELEGATE_FEE_TOKEN_DESC: string
+	DELEGATE_FEE_TOKEN_CHECKBOX: string
 	/**
 	 * B​y​ ​d​e​f​a​u​l​t​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​ ​c​o​s​t​ ​w​i​l​l​ ​b​e​ ​p​a​i​d​ ​b​y​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t​:
 	 */
@@ -4484,6 +4488,14 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_NFT_LABEL: () => LocalizedString
 	/**
+	 * No transactions to show
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Other
+	 */
+	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
 	 * No Swaps to show yet
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
@@ -4499,14 +4511,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Transfer
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
-	/**
-	 * Other
-	 */
-	ACTIVITY_OTHER_LABEL: () => LocalizedString
-	/**
-	 * No transactions to show
-	 */
-	ACTIVITY_OTHER_EMPTY_LABEL: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -6279,13 +6283,17 @@ Thanks for your patience!
 	 */
 	DELEGATE_FEE: () => LocalizedString
 	/**
+	 * Select the token to pay the fee with
+	 */
+	DELEGATE_FEE_TOKEN_DESC: () => LocalizedString
+	/**
 	 * Fee token
 	 */
 	DELEGATE_FEE_TOKEN_TITLE: () => LocalizedString
 	/**
-	 * Select the token to pay the fee with
+	 * Use this token for future transactions
 	 */
-	DELEGATE_FEE_TOKEN_DESC: () => LocalizedString
+	DELEGATE_FEE_TOKEN_CHECKBOX: () => LocalizedString
 	/**
 	 * By default the transaction fee cost will be paid by the active account:
 	 */

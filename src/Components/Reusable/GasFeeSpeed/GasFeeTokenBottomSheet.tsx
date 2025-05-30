@@ -7,8 +7,16 @@ import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { AnimatedTokenCard } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/AnimatedTokenCard"
-import { selectTokensWithBalances, useAppSelector } from "~Storage/Redux"
+import {
+    selectDefaultDelegationToken,
+    selectSelectedNetwork,
+    selectTokensWithBalances,
+    setDefaultDelegationToken,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { BigNutils } from "~Utils"
+import { CheckBoxWithText } from "../CheckBoxWithText"
 
 type Props = {
     selectedToken: string
@@ -52,17 +60,26 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
     const [internalToken, setInternalToken] = useState(selectedToken)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
     const tokens = useAppSelector(selectTokensWithBalances)
+    const defaultToken = useAppSelector(selectDefaultDelegationToken)
+    const dispatch = useAppDispatch()
+
+    const [isDefaultToken, setIsDefaultToken] = useState(false)
 
     const onApply = useCallback(() => {
         setSelectedToken(internalToken)
+        if (internalToken !== defaultToken)
+            dispatch(setDefaultDelegationToken({ genesisId: selectedNetwork.genesis.id, token: internalToken }))
         onClose()
-    }, [internalToken, onClose, setSelectedToken])
+    }, [defaultToken, dispatch, internalToken, onClose, selectedNetwork.genesis.id, setSelectedToken])
 
     const onCancel = useCallback(() => {
         setInternalToken(selectedToken)
+        setIsDefaultToken(selectedToken === defaultToken)
         onClose()
-    }, [onClose, selectedToken])
+    }, [defaultToken, onClose, selectedToken])
 
     const tokenList = useMemo(() => {
         return availableTokens.map(tk => tokens.find(u => u.symbol === tk)!)
@@ -71,6 +88,10 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     const onDismiss = useCallback(() => {
         setInternalToken(selectedToken)
     }, [selectedToken])
+
+    const onCheckChanged = useCallback((newValue: boolean) => {
+        setIsDefaultToken(newValue)
+    }, [])
 
     return (
         <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent} onDismiss={onDismiss}>
@@ -96,6 +117,17 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                 ))}
             </BaseView>
             <BaseSpacer height={24} />
+            {defaultToken !== internalToken && (
+                <>
+                    <CheckBoxWithText
+                        text={LL.DELEGATE_FEE_TOKEN_CHECKBOX()}
+                        checkAction={onCheckChanged}
+                        isChecked={isDefaultToken}
+                    />
+                    <BaseSpacer height={24} />
+                </>
+            )}
+
             <BaseView gap={16} flexDirection="row" w={100}>
                 <BaseButton variant="outline" action={onCancel} flex={1} testID="GAS_FEE_TOKEN_BOTTOM_SHEET_CANCEL">
                     {LL.COMMON_BTN_CANCEL()}
