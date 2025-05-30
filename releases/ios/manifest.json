@@ -2,6 +2,6 @@
   "latest": "2.2.4",
   "major": "2.2.4",
   "history": [
-    { "version": "2.2.4", "key": "releases/ios/versions/2.2.4", "major": false }
+    { "version": "2.2.4", "key": "releases/ios/versions/2.2.4", "major": true }
   ]
 }
