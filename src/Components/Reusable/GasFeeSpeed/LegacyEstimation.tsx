@@ -3,7 +3,7 @@ import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseText, BaseView } from "~Components/Base"
-import { GasPriceCoefficient, VTHO } from "~Constants"
+import { GasPriceCoefficient } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
@@ -32,7 +32,7 @@ export const LegacyEstimation = ({
     const { formatValue, formatFiat } = useFormatFiat()
 
     const { data: exchangeRate } = useExchangeRate({
-        id: getCoinGeckoIdBySymbol[VTHO.symbol],
+        id: getCoinGeckoIdBySymbol[selectedDelegationToken],
         vs_currency: currency,
     })
 

@@ -1,8 +1,8 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { TransactionClause } from "@vechain/sdk-core"
+import { ethers } from "ethers"
 import { useMemo } from "react"
 import { B3TR, GasPriceCoefficient, VET, VTHO } from "~Constants"
-import { EstimateGasResult } from "~Model"
 import { estimateGenericDelegatorFees, isValidGenericDelegatorNetwork } from "~Networking/GenericDelegator"
 import { useAppSelector, selectSelectedNetwork } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
@@ -10,7 +10,6 @@ import { BigNutils } from "~Utils"
 type Args = {
     clauses: TransactionClause[]
     signer: string
-    gas: EstimateGasResult | undefined
     /**
      * Selected delegation token. Technically it should only be: VET, VTHO, B3TR
      */
@@ -30,7 +29,7 @@ const mapTokenToResponseElement = (token: string) => {
     }
 }
 
-export const useGenericDelegationFees = ({ clauses, signer, token, gas }: Args) => {
+export const useGenericDelegationFees = ({ clauses, signer, token }: Args) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const { data, isFetching: isLoading } = useQuery({
         queryKey: ["GenericDelegatorEstimate", clauses, signer],
@@ -42,34 +41,37 @@ export const useGenericDelegationFees = ({ clauses, signer, token, gas }: Args) 
 
     const options = useMemo(() => {
         if (typeof data === "undefined") return
+        //Values returned from the endpoint are in WEI, they're in Ether. So, in order to be compliant with our interface, we should multiply the numbers by 1 ETH (10^18 WEI)
         return {
             [GasPriceCoefficient.REGULAR]: {
                 estimatedFee: BigNutils(data.transactionCost.regular[mapTokenToResponseElement(token)]).multiply(
-                    gas?.gas ?? 0,
+                    ethers.utils.parseEther("1").toString(),
                 ),
                 maxFee: BigNutils(data.transactionCost.regular[mapTokenToResponseElement(token)]).multiply(
-                    gas?.gas ?? 0,
+                    ethers.utils.parseEther("1").toString(),
                 ),
                 priorityFee: BigNutils("0"),
             },
             [GasPriceCoefficient.MEDIUM]: {
                 estimatedFee: BigNutils(data.transactionCost.medium[mapTokenToResponseElement(token)]).multiply(
-                    gas?.gas ?? 0,
+                    ethers.utils.parseEther("1").toString(),
                 ),
                 maxFee: BigNutils(data.transactionCost.medium[mapTokenToResponseElement(token)]).multiply(
-                    gas?.gas ?? 0,
+                    ethers.utils.parseEther("1").toString(),
                 ),
                 priorityFee: BigNutils("0"),
             },
             [GasPriceCoefficient.HIGH]: {
                 estimatedFee: BigNutils(data.transactionCost.high[mapTokenToResponseElement(token)]).multiply(
-                    gas?.gas ?? 0,
+                    ethers.utils.parseEther("1").toString(),
                 ),
-                maxFee: BigNutils(data.transactionCost.high[mapTokenToResponseElement(token)]).multiply(gas?.gas ?? 0),
+                maxFee: BigNutils(data.transactionCost.high[mapTokenToResponseElement(token)]).multiply(
+                    ethers.utils.parseEther("1").toString(),
+                ),
                 priorityFee: BigNutils("0"),
             },
         }
-    }, [data, gas?.gas, token])
+    }, [data, token])
 
     const memoized = useMemo(() => ({ isLoading, options }), [isLoading, options])
 

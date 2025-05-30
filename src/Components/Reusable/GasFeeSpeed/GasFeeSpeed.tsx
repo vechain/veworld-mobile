@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { useInterval } from "usehooks-ts"
 import { BaseCard } from "~Components/Base"
-import { ColorThemeType, GasPriceCoefficient, VTHO } from "~Constants"
+import { ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -61,7 +61,7 @@ export const GasFeeSpeed = ({
             containerStyle={styles.cardContainer}
             style={styles.card}
             layout={LinearTransition.duration(300)}>
-            {isGalactica && delegationToken === VTHO.symbol ? (
+            {isGalactica ? (
                 <>
                     <EditSpeedSection
                         onOpen={speedBsOnOpen}
@@ -78,13 +78,6 @@ export const GasFeeSpeed = ({
                 </>
             ) : (
                 <>
-                    {delegationToken !== VTHO.symbol && (
-                        <EditSpeedSection
-                            onOpen={speedBsOnOpen}
-                            selectedFeeOption={selectedFeeOption}
-                            speedChangeEnabled={speedChangeEnabled}
-                        />
-                    )}
                     <LegacyEstimation
                         options={options}
                         selectedFeeOption={selectedFeeOption}
@@ -102,6 +95,7 @@ export const GasFeeSpeed = ({
                 onClose={speedBsOnClose}
                 isGalactica={isGalactica}
                 isBaseFeeRampingUp={isBaseFeeRampingUp}
+                selectedDelegationToken={delegationToken}
             />
             <GasFeeTokenBottomSheet
                 ref={tokenBsRef}

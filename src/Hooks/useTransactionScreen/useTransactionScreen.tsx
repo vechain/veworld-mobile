@@ -114,12 +114,17 @@ export const useTransactionScreen = ({
         isGalactica,
     })
 
-    useGenericDelegationFees({
+    const genericDelegatorFees = useGenericDelegationFees({
         clauses,
         signer: selectedAccount.address,
         token: selectedDelegationToken,
-        gas,
     })
+
+    const gasOptions = useMemo(() => {
+        if (selectedDelegationToken === VTHO.symbol || typeof genericDelegatorFees.options === "undefined")
+            return transactionFeesResponse.options
+        return genericDelegatorFees.options
+    }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options])
 
     // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
@@ -301,7 +306,7 @@ export const useTransactionScreen = ({
         isDisabledButtonState,
         estimatedFee: transactionFeesResponse.estimatedFee,
         maxFee: transactionFeesResponse.maxFee,
-        gasOptions: transactionFeesResponse.options,
+        gasOptions,
         gasUpdatedAt: transactionFeesResponse.dataUpdatedAt,
         isGalactica,
         isBaseFeeRampingUp: transactionFeesResponse.isBaseFeeRampingUp,

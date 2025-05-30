@@ -64,7 +64,9 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
         onClose()
     }, [onClose, selectedToken])
 
-    const tokenList = useMemo(() => tokens.filter(tk => availableTokens.includes(tk.symbol)), [tokens, availableTokens])
+    const tokenList = useMemo(() => {
+        return availableTokens.map(tk => tokens.find(u => u.symbol === tk)!)
+    }, [tokens, availableTokens])
 
     const onDismiss = useCallback(() => {
         setInternalToken(selectedToken)

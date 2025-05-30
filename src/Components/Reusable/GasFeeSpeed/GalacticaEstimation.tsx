@@ -36,7 +36,7 @@ export const GalacticaEstimation = ({
     const { formatValue, formatFiat } = useFormatFiat()
 
     const { data: exchangeRate } = useExchangeRate({
-        id: getCoinGeckoIdBySymbol[VTHO.symbol],
+        id: getCoinGeckoIdBySymbol[selectedDelegationToken],
         vs_currency: currency,
     })
 
@@ -59,15 +59,19 @@ export const GalacticaEstimation = ({
 
     const blinkStyles = useBlinkStyles({ enabled: secondsRemaining <= 3, duration: 1000 })
 
+    const isGenericDelegator = useMemo(() => selectedDelegationToken !== VTHO.symbol, [selectedDelegationToken])
+
     return (
         <Animated.View layout={LinearTransition} style={styles.section}>
             <BaseView flexDirection="row" justifyContent="space-between" w={100}>
                 <BaseText color={theme.colors.textLight} typographyFont="captionMedium" numberOfLines={1}>
                     {LL.ESTIMATED_FEE()}
                 </BaseText>
-                <BaseText color={theme.colors.textLight} typographyFont="captionMedium" numberOfLines={1}>
-                    {LL.MAX_FEE()}
-                </BaseText>
+                {!isGenericDelegator && (
+                    <BaseText color={theme.colors.textLight} typographyFont="captionMedium" numberOfLines={1}>
+                        {LL.MAX_FEE()}
+                    </BaseText>
+                )}
             </BaseView>
             <BaseView flexDirection="row" justifyContent="space-between" w={100} alignItems="center">
                 <BaseView flexDirection="row" gap={8}>
@@ -83,13 +87,15 @@ export const GalacticaEstimation = ({
                         {estimatedFeeFiat.isLeesThan_0_01 ? `< ${estimatedFormattedFiat}` : estimatedFormattedFiat}
                     </BaseAnimatedText>
                 </BaseView>
-                <BaseAnimatedText
-                    typographyFont="subSubTitleBold"
-                    color={theme.colors.textLight}
-                    style={blinkStyles}
-                    testID="GALACTICA_MAX_FEE">
-                    {formatValue(maxFeeVtho)} {VTHO.symbol}
-                </BaseAnimatedText>
+                {!isGenericDelegator && (
+                    <BaseAnimatedText
+                        typographyFont="subSubTitleBold"
+                        color={theme.colors.textLight}
+                        style={blinkStyles}
+                        testID="GALACTICA_MAX_FEE">
+                        {formatValue(maxFeeVtho)} {VTHO.symbol}
+                    </BaseAnimatedText>
+                )}
             </BaseView>
         </Animated.View>
     )
