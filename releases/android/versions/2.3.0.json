@@ -1,8 +1,8 @@
 {
   "version": "2.3.0",
-  "major": false,
+  "major": true,
   "descriptions": {
-    "en": [],
+    "en": ["Test 1", "Test 2", "Test 3"],
     "de": [],
     "es": [],
     "fr": [],
