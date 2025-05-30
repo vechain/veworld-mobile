@@ -152,6 +152,7 @@ export const useTransactionScreen = ({
         dappRequest,
         initialRoute,
         resetDelegation,
+        selectedDelegationToken,
     })
 
     // 6. Send transaction

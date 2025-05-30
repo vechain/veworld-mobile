@@ -8,14 +8,15 @@ import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { AnimatedTokenCard } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/AnimatedTokenCard"
 import {
+    selectAllBalances,
+    selectAllTokens,
     selectDefaultDelegationToken,
     selectSelectedNetwork,
-    selectTokensWithBalances,
     setDefaultDelegationToken,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { BigNutils } from "~Utils"
+import { AddressUtils, BigNutils } from "~Utils"
 import { CheckBoxWithText } from "../CheckBoxWithText"
 
 type Props = {
@@ -62,7 +63,8 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     const [internalToken, setInternalToken] = useState(selectedToken)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
-    const tokens = useAppSelector(selectTokensWithBalances)
+    const tokens = useAppSelector(selectAllTokens)
+    const balances = useAppSelector(selectAllBalances)
     const defaultToken = useAppSelector(selectDefaultDelegationToken)
     const dispatch = useAppDispatch()
 
@@ -82,8 +84,20 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     }, [defaultToken, onClose, selectedToken])
 
     const tokenList = useMemo(() => {
-        return availableTokens.map(tk => tokens.find(u => u.symbol === tk)!)
-    }, [tokens, availableTokens])
+        return availableTokens.map(tk => {
+            const foundToken = tokens.find(u => u.symbol === tk)!
+            const balance = balances.find(b => AddressUtils.compareAddresses(b.tokenAddress, foundToken.address)) ?? {
+                balance: "0",
+                isHidden: false,
+                timeUpdated: new Date().toISOString(),
+                tokenAddress: foundToken.address,
+            }
+            return {
+                ...foundToken,
+                balance,
+            }
+        })
+    }, [availableTokens, tokens, balances])
 
     const onDismiss = useCallback(() => {
         setInternalToken(selectedToken)

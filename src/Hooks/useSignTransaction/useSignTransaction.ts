@@ -2,13 +2,14 @@ import { useNavigation } from "@react-navigation/native"
 import { Address, Hex, Secp256k1, Transaction } from "@vechain/sdk-core"
 import { HDNode } from "thor-devkit"
 import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
-import { ERROR_EVENTS } from "~Constants"
+import { ERROR_EVENTS, VTHO } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest, Wallet } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 import { sponsorTransaction } from "~Networking"
-import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { delegateGenericDelegator } from "~Networking/GenericDelegator"
+import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { HexUtils, warn } from "~Utils"
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
     buildTransaction: () => Transaction
     dappRequest?: TransactionRequest
     resetDelegation: () => void
+    selectedDelegationToken: string
 }
 
 export enum SignStatus {
@@ -52,9 +54,11 @@ export const useSignTransaction = ({
     dappRequest,
     initialRoute,
     resetDelegation,
+    selectedDelegationToken,
 }: Props) => {
     const { LL } = useI18nContext()
     const account = useAppSelector(selectSelectedAccount)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const nav = useNavigation()
 
@@ -139,6 +143,37 @@ export const useSignTransaction = ({
         }
     }
 
+    const getGenericDelegationTransaction = async (transaction: Transaction) => {
+        try {
+            // build hex encoded version of the transaction for signing request
+            const rawTransaction = HexUtils.addPrefix(Buffer.from(transaction.encoded).toString("hex"))
+
+            // request to send for sponsorship/fee delegation
+            const sponsorRequest = {
+                origin: account.address.toLowerCase(),
+                raw: rawTransaction,
+            }
+
+            const newTx = await delegateGenericDelegator({
+                ...sponsorRequest,
+                token: selectedDelegationToken,
+                networkType: selectedNetwork.type,
+            })
+
+            if (!newTx) {
+                throw new Error("[GENERIC DELEGATOR]: Error getting delegator signature")
+            }
+
+            return {
+                signature: Buffer.from(newTx.signature.substring(2), "hex"),
+                transaction: Transaction.of(Transaction.decode(Buffer.from(newTx.raw.substring(2), "hex"), false).body),
+            }
+        } catch (e) {
+            warn(ERROR_EVENTS.SIGN, "Error getting URL delegator signature", e)
+            return SignStatus.DELEGATION_FAILURE
+        }
+    }
+
     const navigateToLedger = async (
         transaction: Transaction,
         ledgerAccount: LedgerAccountWithDevice,
@@ -170,7 +205,7 @@ export const useSignTransaction = ({
     const signTransaction = async (password?: string): Promise<SignTransactionResponse> => {
         if (!senderDevice) throw new Error("Sender device not found")
 
-        const transaction = buildTransaction()
+        let transaction = buildTransaction()
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
             await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
@@ -187,8 +222,18 @@ export const useSignTransaction = ({
             pinCode: password,
         })
 
+        let delegationSignature: Buffer | SignStatus.DELEGATION_FAILURE | undefined
+
+        if (selectedDelegationToken !== VTHO.symbol) {
+            const result = await getGenericDelegationTransaction(transaction)
+            if (result === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
+            transaction = result.transaction
+            delegationSignature = result.signature
+        } else {
+            delegationSignature = await getDelegationSignature(transaction, password)
+        }
+
         const senderSignature = await getSignature(transaction, senderWallet)
-        const delegationSignature = await getDelegationSignature(transaction, password)
 
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
 

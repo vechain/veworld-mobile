@@ -59,3 +59,25 @@ export const estimateGenericDelegatorFees = ({ networkType, clauses, signer }: E
             method: "POST",
         }),
     )
+
+export const delegateGenericDelegator = ({
+    raw,
+    origin,
+    token,
+    networkType,
+}: {
+    raw: string
+    origin: string
+    token: string
+    networkType: NETWORK_TYPE
+}) =>
+    executeIfValidNetwork(networkType, `/delegator/delegate/${token}`, url =>
+        requestFromEndpoint<{ signature: string; address: string; raw: string; origin: string }>({
+            url: url,
+            data: {
+                raw,
+                origin,
+            },
+            method: "POST",
+        }),
+    )
