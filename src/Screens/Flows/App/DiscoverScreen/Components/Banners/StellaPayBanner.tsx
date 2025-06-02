@@ -1,5 +1,5 @@
 import React from "react"
-import { Image, StyleSheet, ImageStyle } from "react-native"
+import { Image, StyleSheet, ImageStyle, Platform } from "react-native"
 import { BaseView } from "~Components"
 import { StellaPayBannerB3MO, StellaPayLogoSVG } from "~Assets"
 import { useThemedStyles } from "~Hooks"
@@ -17,7 +17,7 @@ export const StellaPayBanner = () => {
             angle={90}
             start={{ x: 0.32, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.container}>
+            style={Platform.OS === "ios" ? styles.iosContainer : styles.androidContainer}>
             <BaseView alignItems={"flex-start"} gap={12} flex={1} justifyContent="center" style={styles.contentArea}>
                 <StellaPayLogoSVG />
                 <Markdown style={{ paragraph: styles.paragraph, body: styles.text }}>
@@ -31,7 +31,14 @@ export const StellaPayBanner = () => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        container: {
+        androidContainer: {
+            minHeight: 108,
+            borderRadius: 12,
+            paddingHorizontal: 16,
+            paddingVertical: 20,
+            paddingRight: 140,
+        },
+        iosContainer: {
             width: "110%",
             height: 130,
             borderRadius: 12,
@@ -47,8 +54,15 @@ const baseStyles = () =>
             width: 123,
             height: 123,
             position: "absolute",
-            right: 0,
-            bottom: 0,
+            ...(Platform.OS === "ios" && {
+                right: 0,
+                top: 0,
+            }),
+            ...(Platform.OS === "android" && {
+                right: -9,
+                top: 8,
+            }),
+            top: 8,
         },
         paragraph: {
             marginTop: 0,
@@ -59,9 +73,13 @@ const baseStyles = () =>
             fontSize: 15,
             color: "#EEF3F7",
             margin: 0,
-            lineHeight: 20,
         },
         contentArea: {
-            paddingRight: 130,
+            ...(Platform.OS === "ios" && {
+                paddingRight: 100,
+            }),
+            ...(Platform.OS === "android" && {
+                paddingRight: 0,
+            }),
         },
     })
