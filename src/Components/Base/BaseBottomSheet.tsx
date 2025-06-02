@@ -4,12 +4,13 @@ import {
     BottomSheetHandleProps,
     BottomSheetModal,
     BottomSheetModalProps,
+    BottomSheetView,
 } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
+import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import { useReducedMotion } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { LocalizedString } from "typesafe-i18n"
@@ -86,18 +87,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const reducedMotion = useReducedMotion()
         const { addBackHandlerListener, removeBackHandlerListener } = useBackHandler(backHandlerEvent)
 
-        const [contentHeight, setContentHeight] = useState<number>(0)
         const [sheetState, setSheetState] = useState<number>(-1)
-
-        const onLayoutHandler = useCallback(
-            (event: LayoutChangeEvent) => {
-                if (dynamicHeight) {
-                    const { height } = event.nativeEvent.layout
-                    setContentHeight(prev => (prev !== height ? height : prev))
-                }
-            },
-            [dynamicHeight],
-        )
 
         const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
             return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
@@ -128,9 +118,11 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         )
 
         const onSheetPositionChange = useCallback(
-            (index: number) => {
+            (index: number, position: number, type: any) => {
                 setSheetState(index)
-                onChange?.(index)
+                if (onChange) {
+                    onChange(index, position, type)
+                }
             },
             [onChange],
         )
@@ -157,19 +149,43 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
          * the minimum snap point is at least 60% of the screen height.
          */
         const snappoints = useMemo(() => {
+            // For dynamic height, don't provide snapPoints - let v5 handle it
             if (dynamicHeight) {
-                const percentage = Math.ceil(((contentHeight + bottomSafeAreaSize) / windowHeight) * 100)
-                return contentHeight ? [`${percentage}%`] : ["25%"]
+                return undefined
             }
 
             if (!snapPoints || !validateStringPercentages(snapPoints)) return ["60%"]
 
-            if (isSmallScreen && !ignoreMinimumSnapPoint && Number(snapPoints[0].slice(0, -1)) < 60) {
-                snapPoints[0] = "55%"
+            const adjustedSnapPoints = [...snapPoints]
+            if (isSmallScreen && !ignoreMinimumSnapPoint && Number(adjustedSnapPoints[0].slice(0, -1)) < 60) {
+                adjustedSnapPoints[0] = "55%"
             }
 
-            return snapPoints
-        }, [bottomSafeAreaSize, contentHeight, dynamicHeight, ignoreMinimumSnapPoint, snapPoints, windowHeight])
+            return adjustedSnapPoints
+        }, [dynamicHeight, ignoreMinimumSnapPoint, snapPoints])
+
+        // Calculate max dynamic content size for v5
+        const maxDynamicContentSize = useMemo(() => {
+            if (!dynamicHeight) return undefined
+
+            // Use 85% of screen height as max, accounting for safe areas
+            return Math.floor((windowHeight - bottomSafeAreaSize) * 0.85)
+        }, [dynamicHeight, windowHeight, bottomSafeAreaSize])
+
+        // Create content style object
+        const contentViewStyle = useMemo(
+            () => [
+                {
+                    paddingHorizontal: noMargins ? 0 : 24,
+                    paddingTop: noMargins ? 0 : 16,
+                    paddingBottom: noMargins ? 0 : 24,
+                    flexGrow: 1,
+                    alignItems: "stretch" as const,
+                },
+                contentStyle,
+            ],
+            [noMargins, contentStyle],
+        )
 
         return (
             <BottomSheetModal
@@ -187,21 +203,15 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 //Workaround for run tests on Maestro take a look at this https://github.com/software-mansion/react-native-reanimated/issues/6648
                 accessible={Platform.select({ ios: false })}
                 snapPoints={snappoints}
+                enableDynamicSizing={dynamicHeight}
+                maxDynamicContentSize={maxDynamicContentSize}
                 onChange={onSheetPositionChange}
                 {...sheetProps}>
-                <BaseView
-                    w={100}
-                    px={noMargins ? 0 : 24}
-                    pt={noMargins ? 0 : 16}
-                    pb={noMargins ? 0 : 24}
-                    flexGrow={1}
-                    alignItems="stretch"
-                    style={contentStyle}
-                    onLayout={onLayoutHandler}>
+                <BottomSheetView style={contentViewStyle}>
                     {title && <BaseText typographyFont="title">{title}</BaseText>}
                     {children}
                     {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
-                </BaseView>
+                </BottomSheetView>
                 {footer && (
                     <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
                         {footer}
