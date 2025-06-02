@@ -18,7 +18,7 @@ export const StellaPayBanner = () => {
             start={{ x: 0.32, y: 0 }}
             end={{ x: 1, y: 0 }}
             style={styles.container}>
-            <BaseView alignItems={"flex-start"} gap={16} flex={1} justifyContent="center">
+            <BaseView alignItems={"flex-start"} gap={16} flex={0.8}>
                 <StellaPayLogoSVG />
                 <Markdown style={{ paragraph: styles.paragraph, body: styles.text }}>
                     {LL.BANNER_STELLAPAY_DESC()}
@@ -32,18 +32,21 @@ export const StellaPayBanner = () => {
 const baseStyles = () =>
     StyleSheet.create({
         container: {
+            flex: 1,
             minHeight: 108,
+            width: "100%",
             borderRadius: 12,
             paddingHorizontal: 16,
-            paddingVertical: 20,
-            paddingRight: 140,
+            paddingVertical: 12,
+            alignItems: "center",
+            flexDirection: "row",
         },
         image: {
             width: 123,
             height: 123,
             position: "absolute",
-            right: -9,
-            top: 8,
+            right: 0,
+            bottom: 0,
         },
         paragraph: {
             marginTop: 0,
