@@ -2,30 +2,29 @@ name: Create Version Info PR
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 
 on:
     workflow_run:
         workflows: ["Set Repository Variables"]
         types:
             - completed
+    workflow_dispatch:
 
 jobs:
     create-release-pr:
         runs-on: ubuntu-latest
-        if: ${{ github.event.workflow_run.conclusion == 'success' }}
+        if: ${{ github.event_name == 'workflow_dispatch' || github.event.workflow_run.conclusion == 'success' }}
 
         steps:
             - name: Generate a token
               id: generate-token
               uses: actions/create-github-app-token@v1
               with:
-                  app-id: ${{ secrets.APP_ID }}
-                  private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
+                app-id: ${{ secrets.APP_ID }}
+                private-key: ${{ secrets.APP_PRIVATE_KEY }}
             - name: Checkout repository
               uses: actions/checkout@v4
-              with:
-                  token: ${{ steps.generate-token.outputs.token }}
 
             - name: Get version variables
               env:
@@ -144,7 +143,7 @@ jobs:
 
             - name: Create Pull Request
               env:
-                  GH_TOKEN: ${{ steps.generate-token.outputs.token }}
+                  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   PR_BODY="## Release Version Updates
 

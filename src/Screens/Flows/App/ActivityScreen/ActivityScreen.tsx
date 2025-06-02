@@ -20,6 +20,7 @@ import {
     ActivityAllScreen,
     ActivityB3trScreen,
     ActivityNftScreen,
+    ActivityOtherScreen,
     ActivitySwapScreen,
     ActivityTransferScreen,
 } from "./screens"
@@ -101,6 +102,11 @@ export const ActivityScreen = () => {
                             name={Routes.ACTIVITY_DAPPS}
                             component={ActivityDappsScreen}
                             options={{ title: LL.ACTIVITY_DAPPS_LABEL() }}
+                        />
+                        <Tab.Screen
+                            name={Routes.ACTIVITY_OTHER}
+                            component={ActivityOtherScreen}
+                            options={{ title: LL.ACTIVITY_OTHER_LABEL() }}
                         />
                     </Tab.Navigator>
                     <SelectAccountBottomSheet

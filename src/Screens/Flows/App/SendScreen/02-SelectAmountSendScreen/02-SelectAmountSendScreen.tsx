@@ -1,9 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { Image, StyleSheet, TextInput, ViewProps, ImageStyle as RNImageStyle } from "react-native"
+import { Image, ImageStyle as RNImageStyle, StyleSheet, TextInput, ViewProps } from "react-native"
+import { ImageStyle } from "react-native-fast-image"
 import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
+import { VeChainTokenBadge } from "~Assets/Icons"
 import {
     BaseCardGroup,
     BaseIcon,
@@ -14,10 +16,11 @@ import {
     BaseView,
     DismissKeyboardView,
     FadeoutButton,
+    FiatBalance,
     Layout,
     showErrorToast,
-    FiatBalance,
 } from "~Components"
+import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, CURRENCY_SYMBOLS, VET, VOT3, VTHO } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { useAmountInput, useTheme, useThemedStyles, useTotalTokenBalance } from "~Hooks"
@@ -25,12 +28,9 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils, TransactionUtils } from "~Utils"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 import { useI18nContext } from "~i18n"
 import { useUI } from "./Hooks"
-import { TokenImage } from "~Components/Reusable/TokenImage"
-import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
-import { VeChainTokenBadge } from "~Assets/Icons"
-import { ImageStyle } from "react-native-fast-image"
 
 const { defaults: defaultTypography } = typography
 
@@ -84,6 +84,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
         token,
         isInputInFiat ? tokenAmountFromFiat : "1",
         address,
+        token.decimals,
     )
 
     const { inputColorNotAnimated, placeholderColor, animatedFontStyle, animatedStyleInputColor } = useUI({

@@ -215,6 +215,7 @@ export enum COLORS {
     DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
     PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
+    DARK_PURPLE_RBGA_TRANSPARENT = "rgba(172, 155, 255, 0.8)",
     PURPLE = "#30265F",
     LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",

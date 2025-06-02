@@ -181,6 +181,14 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
+	 * O​t​h​e​r
+	 */
+	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * N​o​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -4523,6 +4531,14 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Transfer
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
+	/**
+	 * Other
+	 */
+	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * No transactions to show
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: () => LocalizedString
 	/**
 	 * Add Account
 	 */
