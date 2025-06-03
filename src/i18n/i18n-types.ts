@@ -181,14 +181,6 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
-	 * O​t​h​e​r
-	 */
-	ACTIVITY_OTHER_LABEL: string
-	/**
-	 * N​o​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w
-	 */
-	ACTIVITY_OTHER_EMPTY_LABEL: string
-	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -1579,6 +1571,10 @@ type RootTranslation = {
 	 */
 	COMMON_DAPPS: string
 	/**
+	 * H​i​d​e
+	 */
+	COMMON_HIDE: string
+	/**
 	 * I​m​p​o​r​t
 	 */
 	COMMON_IMPORT: string
@@ -1704,6 +1700,10 @@ type RootTranslation = {
 	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​ ​t​o​ ​r​e​m​o​v​e
 	 */
 	COMMON_SELECT_ACCOUNT_TO_REMOVE: string
+	/**
+	 * S​h​o​w
+	 */
+	COMMON_SHOW: string
 	/**
 	 * T​o​d​a​y
 	 */
@@ -4532,14 +4532,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
 	/**
-	 * Other
-	 */
-	ACTIVITY_OTHER_LABEL: () => LocalizedString
-	/**
-	 * No transactions to show
-	 */
-	ACTIVITY_OTHER_EMPTY_LABEL: () => LocalizedString
-	/**
 	 * Add Account
 	 */
 	ADD_ACCOUNT: () => LocalizedString
@@ -5919,6 +5911,10 @@ Thanks for your patience!
 	 */
 	COMMON_DAPPS: () => LocalizedString
 	/**
+	 * Hide
+	 */
+	COMMON_HIDE: () => LocalizedString
+	/**
 	 * Import
 	 */
 	COMMON_IMPORT: () => LocalizedString
@@ -6042,6 +6038,10 @@ Thanks for your patience!
 	 * Select account to remove
 	 */
 	COMMON_SELECT_ACCOUNT_TO_REMOVE: () => LocalizedString
+	/**
+	 * Show
+	 */
+	COMMON_SHOW: () => LocalizedString
 	/**
 	 * Today
 	 */
