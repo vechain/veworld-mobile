@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.4 (2025-06-03)</small>
+
+* build: init ([cb9f496](https://github.com/vechain/veworld-mobile/commit/cb9f496))
+* Fix sync s3 worflow (#2979) ([ac466b4](https://github.com/vechain/veworld-mobile/commit/ac466b4)), closes [#2979](https://github.com/vechain/veworld-mobile/issues/2979)
+
 ## <small>2.2.3 (2025-05-26)</small>
 
 * build: init ([014406b](https://github.com/vechain/veworld-mobile/commit/014406b))
