@@ -79,6 +79,27 @@ export const SelectedDelegation = ({
         theme.colors.textLight,
     ])
 
+    const disabled = useMemo(() => delegationToken !== VTHO.symbol, [delegationToken])
+
+    const buttonStyles = useMemo(() => {
+        if (disabled)
+            return {
+                bgColor: theme.colors.cardButton.disabled.background,
+                textColor: theme.colors.cardButton.disabled.text,
+            }
+
+        return {
+            bgColor: theme.colors.cardButton.background,
+            textColor: theme.colors.cardButton.text,
+        }
+    }, [
+        disabled,
+        theme.colors.cardButton.background,
+        theme.colors.cardButton.disabled.background,
+        theme.colors.cardButton.disabled.text,
+        theme.colors.cardButton.text,
+    ])
+
     return (
         <Animated.View style={styles.root} layout={LinearTransition}>
             <BaseView
@@ -95,14 +116,13 @@ export const SelectedDelegation = ({
                 {renderOption}
                 <BaseButton
                     variant="solid"
-                    bgColor={theme.colors.cardButton.background}
                     style={styles.cardButton}
                     px={12}
                     py={8}
-                    textColor={theme.colors.cardButton.text}
                     action={onDelegateClicked}
                     testID="DELEGATE_OPEN"
-                    disabled={delegationToken !== VTHO.symbol}>
+                    disabled={disabled}
+                    {...buttonStyles}>
                     {LL.DELEGATE()}
                 </BaseButton>
             </BaseView>

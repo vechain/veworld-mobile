@@ -172,6 +172,11 @@ export type Colors = {
         border: string
         background: string
         text: string
+        disabled: {
+            border: string
+            background: string
+            text: string
+        }
     }
     editSpeedBs: {
         title: string
@@ -469,6 +474,11 @@ const light: Colors = {
         background: COLORS.WHITE,
         border: COLORS.GREY_200,
         text: COLORS.PRIMARY_800,
+        disabled: {
+            background: COLORS.TRANSPARENT,
+            border: COLORS.TRANSPARENT,
+            text: COLORS.GREY_400,
+        },
     },
     editSpeedBs: {
         background: COLORS.GREY_50,
@@ -672,6 +682,11 @@ const dark: Colors = {
         background: COLORS.DARK_PURPLE_DISABLED,
         border: COLORS.TRANSPARENT,
         text: COLORS.LIME_GREEN,
+        disabled: {
+            background: COLORS.DARK_PURPLE_DISABLED,
+            border: COLORS.TRANSPARENT,
+            text: COLORS.PURPLE_DISABLED,
+        },
     },
     editSpeedBs: {
         background: COLORS.PURPLE,
