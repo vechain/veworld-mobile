@@ -2,7 +2,7 @@ import { TransactionClause } from "@vechain/sdk-core"
 import { NETWORK_TYPE } from "~Model"
 import { fetchFromEndpoint, requestFromEndpoint } from "~Networking/API"
 
-const baseUrl = {
+export const GENERIC_DELEGATOR_BASE_URL = {
     [NETWORK_TYPE.MAIN]: process.env.REACT_APP_GENERIC_DELEGATOR_MAINNET_URL,
     [NETWORK_TYPE.TEST]: process.env.REACT_APP_GENERIC_DELEGATOR_TESTNET_URL,
 }
@@ -16,7 +16,7 @@ const executeIfValidNetwork = <TReturnType>(
     path: string,
     cb: (url: string) => TReturnType,
 ): TReturnType => {
-    if (isValidGenericDelegatorNetwork(networkType)) return cb(`${baseUrl[networkType]}${path}`)
+    if (isValidGenericDelegatorNetwork(networkType)) return cb(`${GENERIC_DELEGATOR_BASE_URL[networkType]}${path}`)
     throw new Error("[GENERIC DELEGATOR]: Invalid Network")
 }
 

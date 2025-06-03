@@ -16,6 +16,7 @@ import {
 } from "~Hooks"
 import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
 import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
+import { useIsEnoughGas } from "~Hooks/useIsEnoughGas"
 import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
@@ -23,15 +24,17 @@ import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
+import { GENERIC_DELEGATOR_BASE_URL, isValidGenericDelegatorNetwork } from "~Networking/GenericDelegator"
 import {
     selectDefaultDelegationToken,
     selectDevice,
     selectSelectedAccount,
+    selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error, GasUtils } from "~Utils"
+import { error } from "~Utils"
 import { useVTHO_HACK } from "./useVTHO_HACK"
 
 type Props = {
@@ -66,8 +69,6 @@ export const useTransactionScreen = ({
 
     const [loading, setLoading] = useState(false)
     const [selectedFeeOption, setSelectedFeeOption] = useState(GasPriceCoefficient.MEDIUM)
-    const [isEnoughGas, setIsEnoughGas] = useState(true)
-    const [txCostTotal, setTxCostTotal] = useState("0")
 
     const track = useAnalyticTracking()
 
@@ -76,6 +77,8 @@ export const useTransactionScreen = ({
 
     const defaultToken = useAppSelector(selectDefaultDelegationToken)
     const [selectedDelegationToken, setSelectedDelegationToken] = useState(defaultToken)
+
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const availableTokens = useGenericDelegationTokens()
 
     // 1. Gas
@@ -134,12 +137,20 @@ export const useTransactionScreen = ({
         return genericDelegatorFees.options
     }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options])
 
+    const { hasEnoughBalance } = useIsEnoughGas({
+        selectedToken: selectedDelegationToken,
+        fee: gasOptions[selectedFeeOption].maxFee,
+        clauses,
+        isDelegated,
+    })
+
     // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
         clauses,
         gas,
         isDelegated,
         dependsOn: dappRequest?.options?.dependsOn,
+        //We don't care about sending the correct gasOptions for the generic delegator, since the tx will be retrieved from the delegator itself
         ...transactionFeesResponse.txOptions[selectedFeeOption],
     })
 
@@ -272,25 +283,18 @@ export const useTransactionScreen = ({
         [loading, loadingGas, isBiometricsEmpty],
     )
 
-    /**
-     * Check if the user has enough funds to send the transaction
-     * Calculate the amount to send without the gas fee
-     */
     useEffect(() => {
-        const { isGas, txCostTotal: _txCostTotal } = GasUtils.calculateIsEnoughGas({
-            clauses,
-            isDelegated,
-            vtho,
-            txFee: transactionFeesResponse.maxFee,
-        })
+        if (!hasEnoughBalance && selectedDelegationToken !== VTHO.symbol) setSelectedDelegationToken(VTHO.symbol)
+    }, [hasEnoughBalance, selectedDelegationToken])
 
-        setIsEnoughGas(isGas)
-        setTxCostTotal(_txCostTotal.toString)
-    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, transactionFeesResponse.maxFee])
+    useEffect(() => {
+        if (selectedDelegationToken !== VTHO.symbol && isValidGenericDelegatorNetwork(selectedNetwork.type))
+            setSelectedDelegationUrl(GENERIC_DELEGATOR_BASE_URL[selectedNetwork.type])
+    }, [selectedDelegationToken, selectedNetwork.type, setSelectedDelegationUrl])
 
     const isDisabledButtonState = useMemo(
-        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
-        [isEnoughGas, isDelegated, loading, gas?.gas],
+        () => (!hasEnoughBalance && !isDelegated) || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
+        [hasEnoughBalance, isDelegated, loading, gas?.gas],
     )
 
     return {
@@ -306,8 +310,7 @@ export const useTransactionScreen = ({
         resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
-        isEnoughGas,
-        txCostTotal,
+        isEnoughGas: hasEnoughBalance,
         isDelegated,
         selectedDelegationAccount,
         selectedDelegationUrl,

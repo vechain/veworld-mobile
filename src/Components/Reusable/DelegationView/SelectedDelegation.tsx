@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseButton, BaseText, BaseView } from "~Components/Base"
-import { ColorThemeType } from "~Constants"
+import { ColorThemeType, VTHO } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { LocalAccountWithDevice } from "~Model"
@@ -12,9 +12,15 @@ type Props = {
     selectedDelegationAccount?: LocalAccountWithDevice
     selectedDelegationUrl?: string
     onDelegateClicked: () => void
+    delegationToken: string
 }
 
-export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegationUrl, onDelegateClicked }: Props) => {
+export const SelectedDelegation = ({
+    selectedDelegationAccount,
+    selectedDelegationUrl,
+    onDelegateClicked,
+    delegationToken,
+}: Props) => {
     const { theme, styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
@@ -95,7 +101,8 @@ export const SelectedDelegation = ({ selectedDelegationAccount, selectedDelegati
                     py={8}
                     textColor={theme.colors.cardButton.text}
                     action={onDelegateClicked}
-                    testID="DELEGATE_OPEN">
+                    testID="DELEGATE_OPEN"
+                    disabled={delegationToken !== VTHO.symbol}>
                     {LL.DELEGATE()}
                 </BaseButton>
             </BaseView>
