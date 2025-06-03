@@ -81,14 +81,12 @@ export const GasFeeSpeed = ({
                     />
                 </>
             ) : (
-                <>
-                    <LegacyEstimation
-                        options={options}
-                        selectedFeeOption={selectedFeeOption}
-                        onDelegationTokenClicked={tokenBsOnOpen}
-                        selectedDelegationToken={delegationToken}
-                    />
-                </>
+                <LegacyEstimation
+                    options={options}
+                    selectedFeeOption={selectedFeeOption}
+                    onDelegationTokenClicked={tokenBsOnOpen}
+                    selectedDelegationToken={delegationToken}
+                />
             )}
             {delegationToken === VTHO.symbol && !isEnoughBalance && (
                 <BaseView

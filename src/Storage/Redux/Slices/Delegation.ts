@@ -130,12 +130,10 @@ export const DelegationSlice = createSlice({
             }>,
         ) => {
             const { token, genesisId } = action.payload
-            if (!state[genesisId]) {
-                state[genesisId] = {
-                    urls: [],
-                    defaultDelegationOption: DelegationType.NONE,
-                    defaultToken: token,
-                }
+            state[genesisId] ??= {
+                urls: [],
+                defaultDelegationOption: DelegationType.NONE,
+                defaultToken: token,
             }
             state[genesisId].defaultToken = token
         },

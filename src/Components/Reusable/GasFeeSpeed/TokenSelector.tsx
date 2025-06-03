@@ -30,7 +30,7 @@ export const TokenSelector = ({ token, onPress }: Props) => {
             case VOT3.symbol:
                 return VOT3.icon
             default:
-                foundToken?.icon
+                return foundToken?.icon
         }
     }, [foundToken?.icon, token])
 
