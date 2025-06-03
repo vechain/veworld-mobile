@@ -1,6 +1,6 @@
 import { DelegationType } from "~Model/Delegation"
 import { addDelegationUrl, DelegationSlice, DelegationState } from "./Delegation"
-import { defaultMainNetwork } from "~Constants/Constants"
+import { defaultMainNetwork, VTHO } from "~Constants/Constants"
 
 describe("DelegationSlice", () => {
     let initialState: Record<string, DelegationState> = {}
@@ -11,6 +11,7 @@ describe("DelegationSlice", () => {
             defaultDelegationOption: DelegationType.NONE,
             defaultDelegationAccount: undefined,
             defaultDelegationUrl: undefined,
+            defaultToken: VTHO.symbol,
         }
     })
 

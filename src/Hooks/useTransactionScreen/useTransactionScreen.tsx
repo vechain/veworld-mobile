@@ -39,7 +39,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { error } from "~Utils"
-import { useVTHO_HACK } from "./useVTHO_HACK"
 
 type Props = {
     clauses: TransactionClause[]
@@ -205,8 +204,6 @@ export const useTransactionScreen = ({
         [sendTransaction, LL, parseTxError, onTransactionFailure],
     )
 
-    const vtho = useVTHO_HACK(selectedDelegationAccount?.address ?? selectedAccount.address)
-
     /**
      * Signs the transaction and sends it to the blockchain
      */
@@ -332,7 +329,6 @@ export const useTransactionScreen = ({
         isDelegated,
         selectedDelegationAccount,
         selectedDelegationUrl,
-        vtho,
         isDisabledButtonState,
         estimatedFee: transactionFeesResponse.estimatedFee,
         maxFee: transactionFeesResponse.maxFee,
