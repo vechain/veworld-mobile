@@ -122,6 +122,10 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
         isGalactica,
         isBaseFeeRampingUp,
         speedChangeEnabled,
+        isEnoughGas,
+        availableTokens,
+        selectedDelegationToken,
+        setSelectedDelegationToken,
     } = useTransactionScreen({
         clauses: transactionClauses,
         onTransactionSuccess,
@@ -168,7 +172,11 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                         setSelectedFeeOption={setSelectedFeeOption}
                         isGalactica={isGalactica}
                         isBaseFeeRampingUp={isBaseFeeRampingUp}
-                        speedChangeEnabled={speedChangeEnabled}>
+                        speedChangeEnabled={speedChangeEnabled}
+                        isEnoughBalance={isEnoughGas}
+                        availableDelegationTokens={availableTokens}
+                        delegationToken={selectedDelegationToken}
+                        setDelegationToken={setSelectedDelegationToken}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
@@ -176,6 +184,7 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                             selectedDelegationAccount={selectedDelegationAccount}
                             selectedDelegationUrl={selectedDelegationUrl}
                             setSelectedDelegationUrl={setSelectedDelegationUrl}
+                            delegationToken={selectedDelegationToken}
                         />
                     </GasFeeSpeed>
                 </BaseView>
