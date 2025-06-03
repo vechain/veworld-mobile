@@ -24,7 +24,11 @@ import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
-import { GENERIC_DELEGATOR_BASE_URL, isValidGenericDelegatorNetwork } from "~Networking/GenericDelegator"
+import {
+    GENERIC_DELEGATOR_BASE_URL,
+    isGenericDelegatorUrl,
+    isValidGenericDelegatorNetwork,
+} from "~Networking/GenericDelegator"
 import {
     selectDefaultDelegationToken,
     selectDevice,
@@ -43,6 +47,10 @@ type Props = {
     onTransactionFailure: (error: unknown) => void
     initialRoute?: Routes.HOME | Routes.NFTS
     dappRequest?: TransactionRequest
+    /**
+     * Fallback to VTHO for delegation fees if the user doesn't have enough of the selected token
+     */
+    autoVTHOFallback?: boolean
 }
 
 const mapGasPriceCoefficient = (value: GasPriceCoefficient) => {
@@ -62,6 +70,7 @@ export const useTransactionScreen = ({
     onTransactionFailure,
     dappRequest,
     initialRoute,
+    autoVTHOFallback,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -283,14 +292,23 @@ export const useTransactionScreen = ({
         [loading, loadingGas, isBiometricsEmpty],
     )
 
-    useEffect(() => {
+    const fallbackToVTHO = useCallback(() => {
         if (!hasEnoughBalance && selectedDelegationToken !== VTHO.symbol) setSelectedDelegationToken(VTHO.symbol)
     }, [hasEnoughBalance, selectedDelegationToken])
+
+    useEffect(() => {
+        if (autoVTHOFallback) fallbackToVTHO()
+    }, [autoVTHOFallback, fallbackToVTHO, hasEnoughBalance, selectedDelegationToken])
 
     useEffect(() => {
         if (selectedDelegationToken !== VTHO.symbol && isValidGenericDelegatorNetwork(selectedNetwork.type))
             setSelectedDelegationUrl(GENERIC_DELEGATOR_BASE_URL[selectedNetwork.type])
     }, [selectedDelegationToken, selectedNetwork.type, setSelectedDelegationUrl])
+
+    useEffect(() => {
+        if (selectedDelegationToken === VTHO.symbol && isGenericDelegatorUrl(selectedDelegationUrl ?? ""))
+            resetDelegation()
+    }, [resetDelegation, selectedDelegationToken, selectedDelegationUrl])
 
     const isDisabledButtonState = useMemo(
         () => (!hasEnoughBalance && !isDelegated) || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
@@ -326,5 +344,6 @@ export const useTransactionScreen = ({
         selectedDelegationToken,
         setSelectedDelegationToken,
         availableTokens,
+        fallbackToVTHO,
     }
 }

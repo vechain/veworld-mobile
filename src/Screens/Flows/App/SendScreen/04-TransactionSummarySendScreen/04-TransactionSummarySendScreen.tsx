@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Transaction } from "@vechain/sdk-core"
-import { default as React, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { default as React, useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
@@ -18,7 +18,7 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
-import { AnalyticsEvent, COLORS, creteAnalyticsEvent, GasPriceCoefficient, VET, VTHO } from "~Constants"
+import { AnalyticsEvent, COLORS, creteAnalyticsEvent, VET, VTHO } from "~Constants"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
@@ -37,7 +37,6 @@ import {
 import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
-import { NotEnoughGasModal } from "./Modal"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TRANSACTION_SUMMARY_SEND>
 
@@ -48,7 +47,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const dispatch = useAppDispatch()
     const track = useAnalyticTracking()
     const nav = useNavigation()
-    const isVTHO = useRef(token.symbol.toLowerCase() === VTHO.symbol.toLowerCase())
 
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -118,7 +116,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
         isEnoughGas,
-        txCostTotal,
         isDelegated,
         selectedDelegationAccount,
         selectedDelegationUrl,
@@ -132,59 +129,44 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         availableTokens,
         selectedDelegationToken,
         setSelectedDelegationToken,
+        fallbackToVTHO,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
         onTransactionFailure,
+        autoVTHOFallback: false,
     })
 
     /**
-     * This is used to store the amount of VTHO when gas is not enough when user choose an higher prority,
-     * so we can restore the previous amount when user switch back to the previous priority.
-     */
-    const priorityStatesToVTHOAmount = useRef({
-        [GasPriceCoefficient.REGULAR]: amount,
-        [GasPriceCoefficient.MEDIUM]: "0",
-        [GasPriceCoefficient.HIGH]: "0",
-    })
-
-    /**
-     * If user is sending VTHO and gas is not enough, we will adjust the amount to send
+     * If user is sending a token and gas is not enough, we will adjust the amount to send.
      */
     useEffect(() => {
-        let _finalAmount = amount
+        if (isDelegated && selectedDelegationToken === VTHO.symbol) return
+        if (isEnoughGas) return
+        if (selectedDelegationToken.toLowerCase() !== token.symbol.toLowerCase()) return
+        const gasFees = gasOptions[selectedFeeOption].maxFee
+        const balance = BigNutils(token.balance.balance)
+        const newBalance = balance.minus(gasFees.toBN)
 
-        if (isVTHO.current && !isDelegated) {
-            const _gasFees = gasOptions[selectedFeeOption].maxFee
-            const _vthoBalance = BigNutils(token.balance.balance)
-            _vthoBalance.minus(_gasFees.toString).toHuman(token.decimals).decimals(4)
-
-            if (!isEnoughGas && _vthoBalance.isBiggerThan(BigNutils("0").toString)) {
-                if (
-                    priorityStatesToVTHOAmount.current[selectedFeeOption] !== _vthoBalance.toString ||
-                    priorityStatesToVTHOAmount.current[selectedFeeOption] === "0"
-                ) {
-                    priorityStatesToVTHOAmount.current[selectedFeeOption] = _vthoBalance.toString
-                }
-
-                _finalAmount = _vthoBalance.toString
-            } else if (!BigNutils(priorityStatesToVTHOAmount.current[selectedFeeOption]).isZero) {
-                _finalAmount = priorityStatesToVTHOAmount.current[selectedFeeOption]
-            }
-        }
-
-        setFinalAmount(_finalAmount)
+        setFinalAmount(newBalance.isBiggerThan("0") ? newBalance.toHuman(token.decimals).decimals(4).toString : "0")
     }, [
         amount,
         gasOptions,
         isDelegated,
         isEnoughGas,
+        selectedDelegationToken,
         selectedFeeOption,
         token.balance.balance,
         token.decimals,
         token.symbol,
-        txCostTotal,
     ])
+
+    useEffect(() => {
+        //Given that we use only 4 decimals, I'll do a check on 4 decimals
+        if (BigNutils(finalAmount).minus(amount).toBN.abs().gt("0.0001")) {
+            fallbackToVTHO()
+        }
+    }, [amount, fallbackToVTHO, finalAmount])
 
     return (
         <Layout
@@ -225,7 +207,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         amount={finalAmount}
                         symbol={token.symbol}
                         token={token}
-                        txCostTotal={txCostTotal}
+                        txCostTotal={"0"}
                         isDelegated={isDelegated}
                         isEnoughGas={isEnoughGas}
                     />
@@ -240,7 +222,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         speedChangeEnabled={speedChangeEnabled}
                         availableDelegationTokens={availableTokens}
                         delegationToken={selectedDelegationToken}
-                        setDelegationToken={setSelectedDelegationToken}>
+                        setDelegationToken={setSelectedDelegationToken}
+                        isEnoughBalance={isEnoughGas}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
@@ -248,6 +231,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                             selectedDelegationAccount={selectedDelegationAccount}
                             selectedDelegationUrl={selectedDelegationUrl}
                             setSelectedDelegationUrl={setSelectedDelegationUrl}
+                            delegationToken={selectedDelegationToken}
                         />
                     </GasFeeSpeed>
 
@@ -265,7 +249,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                     />
 
                     <BaseSpacer height={12} />
-                    {!isVTHO.current && <NotEnoughGasModal isVisible={!isEnoughGas && !isDelegated} />}
                 </BaseView>
             }
             footer={

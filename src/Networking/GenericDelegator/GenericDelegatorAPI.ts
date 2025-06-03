@@ -1,6 +1,7 @@
 import { TransactionClause } from "@vechain/sdk-core"
 import { NETWORK_TYPE } from "~Model"
 import { fetchFromEndpoint, requestFromEndpoint } from "~Networking/API"
+import { URIUtils } from "~Utils"
 
 export const GENERIC_DELEGATOR_BASE_URL = {
     [NETWORK_TYPE.MAIN]: process.env.REACT_APP_GENERIC_DELEGATOR_MAINNET_URL,
@@ -10,6 +11,9 @@ export const GENERIC_DELEGATOR_BASE_URL = {
 export const isValidGenericDelegatorNetwork = (
     value: NETWORK_TYPE,
 ): value is Extract<NETWORK_TYPE.MAIN, NETWORK_TYPE.TEST> => [NETWORK_TYPE.MAIN, NETWORK_TYPE.TEST].includes(value)
+
+export const isGenericDelegatorUrl = (url: string) =>
+    Boolean(Object.values(GENERIC_DELEGATOR_BASE_URL).find(delUrl => URIUtils.compareURLs(delUrl, url)))
 
 const executeIfValidNetwork = <TReturnType>(
     networkType: NETWORK_TYPE,
