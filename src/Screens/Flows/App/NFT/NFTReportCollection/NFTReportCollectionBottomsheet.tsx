@@ -26,15 +26,27 @@ export const NFTReportCollectionBottomsheet = React.forwardRef<BottomSheetModalM
         }, [onClose, reportNFTCollection, nftAddress, track])
 
         const mainButton = (
-            <BaseButton title={LL.NFT_REPORT_COLLECTION_CONFIRM()} action={handleProceedToReport} haptics="Medium" />
+            <BaseButton
+                testID="NFT_Report_Collection_Confirm_Button"
+                title={LL.NFT_REPORT_COLLECTION_CONFIRM()}
+                action={handleProceedToReport}
+                haptics="Medium"
+            />
         )
 
         const secondaryButton = (
-            <BaseButton title={LL.COMMON_BTN_CANCEL()} action={onClose} variant="outline" haptics="Medium" />
+            <BaseButton
+                testID="NFT_Report_Collection_Cancel_Button"
+                title={LL.COMMON_BTN_CANCEL()}
+                action={onClose}
+                variant="outline"
+                haptics="Medium"
+            />
         )
 
         return (
             <DefaultBottomSheet
+                testId="NFT_Report_Collection_Bottomsheet"
                 ref={ref}
                 title={LL.NFT_REPORT_COLLECTION()}
                 description={LL.NFT_REPORT_COLLECTION_MSG()}

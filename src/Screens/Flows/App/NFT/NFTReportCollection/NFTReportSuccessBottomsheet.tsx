@@ -12,6 +12,7 @@ export const NFTReportSuccessBottomsheet = React.forwardRef<BottomSheetModalMeth
 
     const mainButton = (
         <BaseButton
+            testID="NFT_Report_Success_Button"
             w={100}
             typographyFont="buttonMedium"
             haptics="Light"
@@ -23,6 +24,7 @@ export const NFTReportSuccessBottomsheet = React.forwardRef<BottomSheetModalMeth
 
     return (
         <DefaultBottomSheet
+            testId="NFT_Report_Success_Bottomsheet"
             ref={ref}
             title={LL.NFT_COLLECTION_REPORTED()}
             description={LL.NFT_COLLECTION_REPORTED_MSG()}
