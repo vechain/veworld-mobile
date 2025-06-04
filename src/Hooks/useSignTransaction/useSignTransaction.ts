@@ -10,7 +10,8 @@ import { Routes } from "~Navigation"
 import { sponsorTransaction } from "~Networking"
 import { delegateGenericDelegator } from "~Networking/GenericDelegator"
 import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { HexUtils, warn } from "~Utils"
+import { BigNumberUtils, HexUtils, warn } from "~Utils"
+import { validateGenericDelegatorTx } from "~Utils/GenericDelegatorUtils"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -21,6 +22,7 @@ type Props = {
     dappRequest?: TransactionRequest
     resetDelegation: () => void
     selectedDelegationToken: string
+    genericDelegatorFee?: BigNumberUtils
 }
 
 export enum SignStatus {
@@ -55,6 +57,7 @@ export const useSignTransaction = ({
     initialRoute,
     resetDelegation,
     selectedDelegationToken,
+    genericDelegatorFee,
 }: Props) => {
     const { LL } = useI18nContext()
     const account = useAppSelector(selectSelectedAccount)
@@ -224,9 +227,17 @@ export const useSignTransaction = ({
 
         let delegationSignature: Buffer | SignStatus.DELEGATION_FAILURE | undefined
 
-        if (selectedDelegationToken !== VTHO.symbol) {
+        if (selectedDelegationToken !== VTHO.symbol && typeof genericDelegatorFee !== "undefined") {
             const result = await getGenericDelegationTransaction(transaction)
             if (result === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
+            const isTxValid = await validateGenericDelegatorTx(
+                transaction,
+                result.transaction,
+                selectedDelegationToken,
+                selectedNetwork.type,
+                genericDelegatorFee,
+            )
+            if (!isTxValid) return SignStatus.DELEGATION_FAILURE
             transaction = result.transaction
             delegationSignature = result.signature
         } else {

@@ -172,6 +172,7 @@ export const useTransactionScreen = ({
         initialRoute,
         resetDelegation,
         selectedDelegationToken,
+        genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].maxFee,
     })
 
     // 6. Send transaction

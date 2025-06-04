@@ -85,3 +85,6 @@ export const delegateGenericDelegator = ({
             method: "POST",
         }),
     )
+
+export const getGenericDelegatorDepositAccount = ({ networkType }: { networkType: NETWORK_TYPE }) =>
+    executeIfValidNetwork(networkType, "/delegator/deposit-account", url => fetchFromEndpoint<string>(url))
