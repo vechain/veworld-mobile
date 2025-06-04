@@ -14,8 +14,6 @@ permissions:
 jobs:
     sync-to-s3:
         runs-on: ubuntu-latest
-        permissions:
-            contents: read
 
         steps:
             - name: Checkout repository
