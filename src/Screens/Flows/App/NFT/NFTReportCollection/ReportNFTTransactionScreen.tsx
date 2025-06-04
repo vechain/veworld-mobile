@@ -17,7 +17,16 @@ import { useAnalyticTracking, useBottomSheetModal, useTheme, useTransactionScree
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { selectCollectionWithContractAddress, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    reportCollection,
+    selectCollectionWithContractAddress,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    setIsAppLoading,
+    toggleBlackListCollection,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 import { NFTReportSuccessBottomsheet } from "./NFTReportSuccessBottomsheet"
 
@@ -34,6 +43,8 @@ export const ReportNFTTransactionScreen = ({ route }: Props) => {
     const { nftAddress, transactionClauses } = route.params
 
     const collection = useAppSelector(state => selectCollectionWithContractAddress(state, nftAddress))
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const handleBottomSheetClose = useCallback(() => {
         closeBottomSheet()
@@ -42,8 +53,29 @@ export const ReportNFTTransactionScreen = ({ route }: Props) => {
 
     const onTransactionSuccess = useCallback(() => {
         dispatch(setIsAppLoading(false))
+
+        if (collection) {
+            dispatch(
+                toggleBlackListCollection({
+                    network: selectedNetwork.type,
+                    collection,
+                    accountAddress: selectedAccount.address,
+                }),
+            )
+            dispatch(
+                reportCollection({
+                    network: selectedNetwork.type,
+                    collectionAddress: nftAddress,
+                    accountAddress: selectedAccount.address,
+                }),
+            )
+        }
+        track(AnalyticsEvent.NFT_COLLECTION_REPORTED, {
+            nftAddress: nftAddress,
+        })
+
         openBottomSheet()
-    }, [dispatch, openBottomSheet])
+    }, [dispatch, openBottomSheet, collection, selectedNetwork, selectedAccount, nftAddress, track])
 
     const onTransactionFailure = useCallback(() => {
         dispatch(setIsAppLoading(false))
