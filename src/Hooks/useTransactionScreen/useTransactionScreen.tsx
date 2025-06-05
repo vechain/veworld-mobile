@@ -220,6 +220,7 @@ export const useTransactionScreen = ({
                         return
                     case SignStatus.DELEGATION_FAILURE:
                         resetDelegation()
+                        setSelectedDelegationToken(VTHO.symbol)
                         showWarningToast({
                             text1: LL.ERROR(),
                             text2: LL.SEND_DELEGATION_ERROR_SIGNATURE(),

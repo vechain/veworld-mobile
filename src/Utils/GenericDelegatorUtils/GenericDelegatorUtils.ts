@@ -1,4 +1,4 @@
-import { Transaction } from "@vechain/sdk-core"
+import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ethers } from "ethers"
 import _ from "lodash"
 import { abis, VET } from "~Constants"
@@ -7,6 +7,13 @@ import { getGenericDelegatorDepositAccount } from "~Networking/GenericDelegator"
 import AddressUtils from "~Utils/AddressUtils"
 import BigNutils, { BigNumberUtils } from "~Utils/BigNumberUtils"
 
+const lowercaseClauseMap = (clause: TransactionClause) => ({
+    ...clause,
+    to: clause.to?.toLowerCase(),
+    data: clause.data?.toLowerCase(),
+    value: typeof clause.value === "string" ? clause.value.toLowerCase() : clause.value,
+})
+
 export const validateGenericDelegatorTx = async (
     baseTransaction: Transaction,
     genericDelegatorTransaction: Transaction,
@@ -14,17 +21,16 @@ export const validateGenericDelegatorTx = async (
     networkType: NETWORK_TYPE,
     selectedFee: BigNumberUtils,
 ) => {
-    const baseTxClauses = baseTransaction.body.clauses
-    const genericTxClauses = genericDelegatorTransaction.body.clauses
+    const baseTxClauses = baseTransaction.body.clauses.map(lowercaseClauseMap)
+    const genericTxClauses = genericDelegatorTransaction.body.clauses.map(lowercaseClauseMap)
 
     //Check if just one clause was added
     if (baseTxClauses.length + 1 !== genericTxClauses.length) return false
-    const difference = _.difference(genericTxClauses, baseTxClauses)
+    const difference = _.differenceWith(genericTxClauses, baseTxClauses, _.isEqual)
     //Check if the generic tx includes all the clauses of base tx clauses
     if (difference.length !== 1) return false
-    // if (!_.isEqual(_.intersection(genericTxClauses, baseTxClauses), baseTxClauses)) return false
 
-    const depositAccount = await getGenericDelegatorDepositAccount({ networkType })
+    const { depositAccount } = await getGenericDelegatorDepositAccount({ networkType })
 
     const [lastClause] = difference
     if (delegationToken === VET.symbol) {
@@ -49,7 +55,7 @@ export const validateGenericDelegatorTx = async (
     let decoded: ethers.utils.Result
     try {
         decoded = iface.decodeFunctionData("transfer", lastClause.data.slice(10))
-    } catch (e) {
+    } catch {
         return false
     }
     //Check if it's sending tokens to the deposit account

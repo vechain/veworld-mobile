@@ -87,4 +87,6 @@ export const delegateGenericDelegator = ({
     )
 
 export const getGenericDelegatorDepositAccount = ({ networkType }: { networkType: NETWORK_TYPE }) =>
-    executeIfValidNetwork(networkType, "/delegator/deposit-account", url => fetchFromEndpoint<string>(url))
+    executeIfValidNetwork(networkType, "/delegator/deposit-account", url =>
+        fetchFromEndpoint<{ depositAccount: string }>(url),
+    )
