@@ -49,6 +49,7 @@ export enum Routes {
     NFTS = "NFTs",
     NFT_DETAILS = "NFT_Details",
     NFT_COLLECTION_DETAILS = "NFT_Collection_Details",
+    REPORT_NFT_TRANSACTION_SCREEN = "Report_NFT_Transaction_Screen",
     SELL_FLOW = "Sell_Flow",
     SELL_WEBVIEW = "Sell_Webview",
     SELL_TRADE_HISTORY = "Sell_Trade_History",
