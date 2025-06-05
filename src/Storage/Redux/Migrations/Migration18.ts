@@ -3,6 +3,10 @@ import { PersistedState } from "redux-persist/es/types"
 import { NftSliceState } from "~Storage/Redux"
 
 export const Migration18 = (state: PersistedState): PersistedState => {
+    if (!state.nft) {
+        return state
+    }
+
     // @ts-ignore
     const currentState: NftSliceState = state.nft
 
