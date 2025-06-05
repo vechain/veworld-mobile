@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.4 (2025-06-05)</small>
+
+* build: init ([1e5a7a9](https://github.com/vechain/veworld-mobile/commit/1e5a7a9))
+* 138 enhahnce   user report nft collections nfts (#2976) ([ee93306](https://github.com/vechain/veworld-mobile/commit/ee93306)), closes [#2976](https://github.com/vechain/veworld-mobile/issues/2976)
+
 ## <small>2.2.3 (2025-05-26)</small>
 
 * build: init ([014406b](https://github.com/vechain/veworld-mobile/commit/014406b))
