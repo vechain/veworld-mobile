@@ -194,6 +194,10 @@ export type Colors = {
     tabsFooter: {
         background: string
     }
+    label: {
+        background: string
+        text: string
+    }
 }
 
 export enum COLORS {
@@ -486,6 +490,10 @@ const light: Colors = {
     tabsFooter: {
         background: COLORS.GREY_200,
     },
+    label: {
+        background: COLORS.GREY_200,
+        text: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -683,6 +691,10 @@ const dark: Colors = {
     },
     tabsFooter: {
         background: COLORS.PURPLE,
+    },
+    label: {
+        background: COLORS.PURPLE,
+        text: COLORS.WHITE,
     },
 }
 

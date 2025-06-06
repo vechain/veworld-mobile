@@ -1,7 +1,7 @@
 import type { abi } from "thor-devkit"
 import { BigNumber } from "bignumber.js"
 
-import { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2, VeBetterDao, VetDomains } from "./abis"
+import { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2, VeBetterDao, VetDomains, NFTBlacklist } from "./abis"
 import { Network } from "~Model"
 import { NETWORK_TYPE } from "~Model/Network/enums"
 
@@ -41,6 +41,7 @@ export const abis = {
     paramsGet,
     VeBetterDao,
     VetDomains,
+    NFTBlacklist,
 }
 
 export const genesisesId = {
