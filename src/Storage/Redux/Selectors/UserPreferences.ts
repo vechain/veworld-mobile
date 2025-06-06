@@ -86,3 +86,7 @@ export const selectRemovedNotificationTags = createSelector(reducer, state => {
 export const selectShowJailbrokeDeviceWarning = createSelector(reducer, state => {
     return state.showJailbrokeWarning
 })
+
+export const selectSignKeyPair = createSelector(reducer, state => {
+    return state.signKeyPair ?? { publicKey: "", privateKey: "" }
+})

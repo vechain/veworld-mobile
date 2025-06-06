@@ -3,6 +3,7 @@ import lodash from "lodash"
 import moment from "moment"
 import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants/Enums"
 import { Locales } from "~i18n"
+import { KeyPair } from "./ExternalDapps"
 
 /**
  * @typedef {Object} UserPreferenceState
@@ -22,6 +23,7 @@ import { Locales } from "~i18n"
  * @property {Object.<string, number>|undefined} lastBackupRequestTimestamp
  * @property {number|null} lastNotificationReminder
  * @property {string[]} removedNotificationTags
+ * @property {KeyPair|undefined} signKeyPair - Key pair for signing session tokens for external dapps connections
  */
 
 export interface UserPreferenceState {
@@ -43,6 +45,7 @@ export interface UserPreferenceState {
     lastNotificationReminder: number | null
     removedNotificationTags?: string[]
     showJailbrokeWarning?: boolean
+    signKeyPair?: KeyPair
 }
 
 const initialState: UserPreferenceState = {
@@ -64,6 +67,7 @@ const initialState: UserPreferenceState = {
     lastNotificationReminder: null,
     removedNotificationTags: undefined,
     showJailbrokeWarning: true,
+    signKeyPair: undefined,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -167,6 +171,10 @@ export const UserPreferencesSlice = createSlice({
                 state.removedNotificationTags = state.removedNotificationTags.filter(tag => tag !== action.payload)
             }
         },
+
+        setSignKeyPair: (state, action: PayloadAction<KeyPair>) => {
+            state.signKeyPair = action.payload
+        },
     },
 })
 
@@ -190,4 +198,5 @@ export const {
     addRemovedNotificationTag,
     removeRemovedNotificationTag,
     setShowJailbrokeDeviceWarning,
+    setSignKeyPair,
 } = UserPreferencesSlice.actions

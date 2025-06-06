@@ -1,7 +1,7 @@
 import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { ethers } from "ethers"
 
-export type DAppSourceType = "wallet-connect" | "in-app"
+export type DAppSourceType = "wallet-connect" | "in-app" | "external-app"
 
 type BaseRequest = {
     type: DAppSourceType
@@ -23,13 +23,20 @@ type BaseInAppRequest = BaseRequest & {
     isFirstRequest: boolean
 }
 
+type BaseExternalAppRequest = BaseRequest & {
+    type: "external-app"
+    publicKey: string
+    redirectUrl: string
+    nonce: string
+}
+
 type BaseCertificateRequest = {
     message: Connex.Vendor.CertMessage
     options: Connex.Signer.CertOptions
     method: "thor_signCertificate"
 }
 
-type BaseTransactionRequest = {
+export type BaseTransactionRequest = {
     message: Connex.Vendor.TxMessage
     options: Connex.Signer.TxOptions
     method: "thor_sendTransaction"
@@ -62,13 +69,15 @@ type WcTxRequest = BaseTransactionRequest & BaseWcRequest
 
 type InAppTxRequest = BaseTransactionRequest & BaseInAppRequest
 
+type ExternalAppTxRequest = BaseTransactionRequest & BaseExternalAppRequest
+
 type WcSignDataRequest = BaseTypedDataRequest & BaseWcRequest
 
 type InAppTypedDataRequest = BaseTypedDataRequest & BaseInAppRequest
 
 export type CertificateRequest = WcCertRequest | InAppCertRequest
 
-export type TransactionRequest = WcTxRequest | InAppTxRequest
+export type TransactionRequest = WcTxRequest | InAppTxRequest | ExternalAppTxRequest
 
 export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest
 
@@ -111,4 +120,14 @@ export type VeBetterDaoDAppMetadata = {
     ve_world?: {
         banner: string | number
     }
+}
+
+export type ExternalAppRequest = BaseExternalAppRequest & {
+    /**
+     * The payload is the encrypted and base64 encoded payload from the external app
+     * It is encrypted with the public key of the session
+     * It is decrypted with the private key of the session
+     * It is then parsed into a TransactionRequest
+     */
+    payload: string
 }

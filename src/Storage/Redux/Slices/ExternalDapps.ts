@@ -1,36 +1,31 @@
 import { createSlice, Draft, PayloadAction } from "@reduxjs/toolkit"
 import { NETWORK_TYPE } from "~Model"
 
-type KeyPair = {
+export type KeyPair = {
     publicKey: string
     privateKey: string
 }
 
-/**
- * One account can have multiple sessions.
- *
- * Mapping account topic => verify context
- */
-type SessionState = {
+export type SessionState = {
     keyPair: KeyPair
     appUrl?: string
     appName: string
     sharedSecret: string
+    address: string
 }
 
 export type ExternalDappsState = {
-    [Network in NETWORK_TYPE]: Record<string, SessionState>
+    sessions: { [Network in NETWORK_TYPE]: Record<string, SessionState> }
+    blackListedApps: string[]
 }
 
 export const initialExternalDappsState: ExternalDappsState = {
-    [NETWORK_TYPE.MAIN]: {},
-    [NETWORK_TYPE.TEST]: {},
-    [NETWORK_TYPE.OTHER]: {},
-    [NETWORK_TYPE.SOLO]: {},
+    sessions: { [NETWORK_TYPE.MAIN]: {}, [NETWORK_TYPE.TEST]: {}, [NETWORK_TYPE.OTHER]: {}, [NETWORK_TYPE.SOLO]: {} },
+    blackListedApps: [],
 }
 
 export const ExternalDappsSlice = createSlice({
-    name: "externalDappSessions",
+    name: "externalDapps",
     initialState: initialExternalDappsState,
     reducers: {
         newExternalDappSession: (
@@ -42,15 +37,17 @@ export const ExternalDappsSlice = createSlice({
                 appUrl: string
                 appName: string
                 sharedSecret: string
+                address: string
             }>,
         ) => {
-            const { network, keyPair, appPublicKey, appUrl, appName, sharedSecret } = action.payload
+            const { network, keyPair, appPublicKey, appUrl, appName, sharedSecret, address } = action.payload
 
-            state[network][appPublicKey] = {
+            state.sessions[network][appPublicKey] = {
                 keyPair,
                 appUrl,
                 appName,
                 sharedSecret,
+                address,
             }
         },
         deleteExternalDappSession: (
@@ -61,7 +58,13 @@ export const ExternalDappsSlice = createSlice({
             }>,
         ) => {
             const { network, appPublicKey } = action.payload
-            delete state[network][appPublicKey]
+            delete state.sessions[network][appPublicKey]
+        },
+        addBlackListedApp: (state: Draft<ExternalDappsState>, action: PayloadAction<string>) => {
+            state.blackListedApps.push(action.payload)
+        },
+        removeBlackListedApp: (state: Draft<ExternalDappsState>, action: PayloadAction<string>) => {
+            state.blackListedApps = state.blackListedApps.filter(app => app !== action.payload)
         },
         resetExternalDappsState: () => {
             return initialExternalDappsState
@@ -69,4 +72,10 @@ export const ExternalDappsSlice = createSlice({
     },
 })
 
-export const { newExternalDappSession, deleteExternalDappSession, resetExternalDappsState } = ExternalDappsSlice.actions
+export const {
+    newExternalDappSession,
+    deleteExternalDappSession,
+    addBlackListedApp,
+    removeBlackListedApp,
+    resetExternalDappsState,
+} = ExternalDappsSlice.actions

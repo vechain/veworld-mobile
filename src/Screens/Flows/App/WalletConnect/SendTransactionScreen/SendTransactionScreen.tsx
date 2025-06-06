@@ -139,6 +139,8 @@ export const SendTransactionScreen = ({ route }: Props) => {
                     txid: id,
                     signer: selectedAccount.address,
                 })
+            } else if (request.type === "external-app") {
+                //TODO: Implement external app transaction success
             } else {
                 postMessage({
                     id: request.id,
@@ -160,6 +162,8 @@ export const SendTransactionScreen = ({ route }: Props) => {
     const onTransactionFailure = useCallback(async () => {
         if (request.type === "wallet-connect") {
             await failRequest(request.requestEvent, getRpcError("internal"))
+        } else if (request.type === "external-app") {
+            //TODO: Implement external app transaction failure
         } else {
             postMessage({
                 id: request.id,
@@ -178,6 +182,8 @@ export const SendTransactionScreen = ({ route }: Props) => {
         try {
             if (request.type === "wallet-connect") {
                 await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
+            } else if (request.type === "external-app") {
+                //TODO: Implement external app transaction failure
             } else {
                 postMessage({
                     id: request.id,
