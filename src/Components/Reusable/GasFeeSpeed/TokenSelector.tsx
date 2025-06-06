@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseIcon } from "~Components/Base"
-import { B3TR, COLORS, ColorThemeType, VET, VOT3, VTHO } from "~Constants"
+import { B3TR, COLORS, ColorThemeType, VET, VTHO } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { selectAllTokens, useAppSelector } from "~Storage/Redux"
 import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
@@ -27,8 +27,6 @@ export const TokenSelector = ({ token, onPress }: Props) => {
                 return VET.icon
             case B3TR.symbol:
                 return B3TR.icon
-            case VOT3.symbol:
-                return VOT3.icon
             default:
                 return foundToken?.icon
         }

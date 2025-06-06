@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { useMemo } from "react"
-import { VTHO } from "~Constants"
+import { B3TR, VET, VTHO } from "~Constants"
 import { getGenericDelegatorCoins, isValidGenericDelegatorNetwork } from "~Networking/GenericDelegator"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
@@ -14,7 +14,7 @@ export const useGenericDelegationTokens = () => {
 
     const memoized = useMemo(() => {
         if (typeof data === "undefined") return [VTHO.symbol]
-        return [VTHO.symbol, ...data]
+        return [VTHO.symbol, ...data].filter(token => [B3TR.symbol, VTHO.symbol, VET.symbol].includes(token))
     }, [data])
 
     return memoized
