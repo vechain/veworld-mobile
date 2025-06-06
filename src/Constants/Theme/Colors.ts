@@ -204,6 +204,10 @@ export type Colors = {
         text: string
         icon: string
     }
+    label: {
+        background: string
+        text: string
+    }
 }
 
 export enum COLORS {
@@ -506,6 +510,10 @@ const light: Colors = {
         text: COLORS.RED_700,
         icon: COLORS.RED_500,
     },
+    label: {
+        background: COLORS.GREY_200,
+        text: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -713,6 +721,10 @@ const dark: Colors = {
         background: COLORS.RED_100,
         text: COLORS.RED_700,
         icon: COLORS.RED_500,
+    },
+    label: {
+        background: COLORS.PURPLE,
+        text: COLORS.WHITE,
     },
 }
 

@@ -34,3 +34,12 @@ export type BlackListedCollections = {
         }
     }
 }
+
+// REPORTED COLLECTIONS
+export type ReportedCollections = {
+    [network in NETWORK_TYPE]: {
+        [accountAddress: string]: {
+            addresses: string[]
+        }
+    }
+}

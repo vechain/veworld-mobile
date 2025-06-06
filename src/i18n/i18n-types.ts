@@ -1571,6 +1571,10 @@ type RootTranslation = {
 	 */
 	COMMON_DAPPS: string
 	/**
+	 * H​i​d​e
+	 */
+	COMMON_HIDE: string
+	/**
 	 * I​m​p​o​r​t
 	 */
 	COMMON_IMPORT: string
@@ -1681,6 +1685,10 @@ type RootTranslation = {
 	 */
 	COMMON_RECEIVE: string
 	/**
+	 * R​e​p​o​r​t
+	 */
+	COMMON_REPORT: string
+	/**
 	 * F​r​o​m
 	 */
 	COMMON_ROOT_ADDRESS: string
@@ -1692,6 +1700,10 @@ type RootTranslation = {
 	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​ ​t​o​ ​r​e​m​o​v​e
 	 */
 	COMMON_SELECT_ACCOUNT_TO_REMOVE: string
+	/**
+	 * S​h​o​w
+	 */
+	COMMON_SHOW: string
 	/**
 	 * T​o​d​a​y
 	 */
@@ -2693,6 +2705,14 @@ type RootTranslation = {
 	 */
 	NFT_ATTRIBUTES: string
 	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​r​e​p​o​r​t​e​d
+	 */
+	NFT_COLLECTION_REPORTED: string
+	/**
+	 * T​h​a​n​k​s​ ​f​o​r​ ​y​o​u​r​ ​r​e​p​o​r​t​!​ ​Y​o​u​r​ ​a​c​t​i​o​n​ ​h​e​l​p​s​ ​p​r​o​t​e​c​t​ ​t​h​e​ ​e​n​t​i​r​e​ ​c​o​m​m​u​n​i​t​y​.
+	 */
+	NFT_COLLECTION_REPORTED_MSG: string
+	/**
 	 * C​r​e​a​t​o​r
 	 */
 	NFT_DETAIL_CREATOR: string
@@ -2733,6 +2753,18 @@ type RootTranslation = {
 	 * N​F​T​ ​R​e​c​e​i​v​e
 	 */
 	NFT_RECEIVE: string
+	/**
+	 * R​e​p​o​r​t​ ​C​o​l​l​e​c​t​i​o​n
+	 */
+	NFT_REPORT_COLLECTION: string
+	/**
+	 * C​o​n​f​i​r​m​ ​R​e​p​o​r​t
+	 */
+	NFT_REPORT_COLLECTION_CONFIRM: string
+	/**
+	 * P​l​e​a​s​e​ ​r​e​p​o​r​t​ ​i​f​ ​t​h​i​s​ ​c​o​l​l​e​c​t​i​o​n​ ​a​p​p​e​a​r​s​ ​s​u​s​p​i​c​i​o​u​s​ ​o​r​ ​i​n​a​p​p​r​o​p​r​i​a​t​e​.
+	 */
+	NFT_REPORT_COLLECTION_MSG: string
 	/**
 	 * N​F​T​ ​S​e​n​d
 	 */
@@ -5895,6 +5927,10 @@ Thanks for your patience!
 	 */
 	COMMON_DAPPS: () => LocalizedString
 	/**
+	 * Hide
+	 */
+	COMMON_HIDE: () => LocalizedString
+	/**
 	 * Import
 	 */
 	COMMON_IMPORT: () => LocalizedString
@@ -6003,6 +6039,10 @@ Thanks for your patience!
 	 */
 	COMMON_RECEIVE: () => LocalizedString
 	/**
+	 * Report
+	 */
+	COMMON_REPORT: () => LocalizedString
+	/**
 	 * From
 	 */
 	COMMON_ROOT_ADDRESS: () => LocalizedString
@@ -6014,6 +6054,10 @@ Thanks for your patience!
 	 * Select account to remove
 	 */
 	COMMON_SELECT_ACCOUNT_TO_REMOVE: () => LocalizedString
+	/**
+	 * Show
+	 */
+	COMMON_SHOW: () => LocalizedString
 	/**
 	 * Today
 	 */
@@ -7011,6 +7055,14 @@ Thanks for your patience!
 	 */
 	NFT_ATTRIBUTES: () => LocalizedString
 	/**
+	 * Collection reported
+	 */
+	NFT_COLLECTION_REPORTED: () => LocalizedString
+	/**
+	 * Thanks for your report! Your action helps protect the entire community.
+	 */
+	NFT_COLLECTION_REPORTED_MSG: () => LocalizedString
+	/**
 	 * Creator
 	 */
 	NFT_DETAIL_CREATOR: () => LocalizedString
@@ -7051,6 +7103,18 @@ Thanks for your patience!
 	 * NFT Receive
 	 */
 	NFT_RECEIVE: () => LocalizedString
+	/**
+	 * Report Collection
+	 */
+	NFT_REPORT_COLLECTION: () => LocalizedString
+	/**
+	 * Confirm Report
+	 */
+	NFT_REPORT_COLLECTION_CONFIRM: () => LocalizedString
+	/**
+	 * Please report if this collection appears suspicious or inappropriate.
+	 */
+	NFT_REPORT_COLLECTION_MSG: () => LocalizedString
 	/**
 	 * NFT Send
 	 */
