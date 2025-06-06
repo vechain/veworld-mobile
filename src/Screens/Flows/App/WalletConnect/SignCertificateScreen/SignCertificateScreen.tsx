@@ -99,7 +99,7 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
             domain: new URL(request.appUrl).hostname,
             signer: selectedAccount?.address ?? "",
         }
-    }, [request.message, selectedAccount, request.appUrl])
+    }, [request.message, request.appUrl, selectedAccount?.address])
 
     const payloadToSign = useMemo(() => {
         return blake2b256(Certificate.encode(cert))

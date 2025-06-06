@@ -2,11 +2,14 @@ import React, { useCallback } from "react"
 import { Text, View, Button, ScrollView } from "react-native"
 
 import { usePrivy, getUserEmbeddedEthereumWallet, useLinkWithOAuth } from "@privy-io/expo"
+
 import { useNavigation } from "@react-navigation/native"
 import { useCreateWallet } from "../../../../Hooks/useCreateWallet/useCreateWallet"
+import { useSocialLogin } from "../../../../Components/Providers/SocialLoginProvider/SocialLoginProvider"
 
 export const SocialUserScreen = () => {
     const { createSocialWallet } = useCreateWallet()
+    const { accountAddress } = useSocialLogin()
     const nav = useNavigation<any>()
 
     const navigateToTabStack = useCallback(() => {
@@ -21,11 +24,11 @@ export const SocialUserScreen = () => {
 
     const account = getUserEmbeddedEthereumWallet(user)
     const createWalletAndNavigate = useCallback(() => {
-        if (account?.address) {
-            createSocialWallet({ address: account?.address })
+        if (accountAddress) {
+            createSocialWallet({ address: accountAddress })
             navigateToTabStack()
         }
-    }, [createSocialWallet, account?.address, navigateToTabStack])
+    }, [createSocialWallet, accountAddress, navigateToTabStack])
 
     // const { linkWithPasskey } = useLinkWithPasskey()
     const oauth = useLinkWithOAuth()

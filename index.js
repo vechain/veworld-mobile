@@ -117,13 +117,15 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <SocialLoginProvider appId="YOUR_APP_ID_HERE" clientId="YOUR_CLIENT_ID_HERE">
-                <ConnexContextProvider>
-                    <PersistQueryClientProvider
-                        client={queryClient}
-                        persistOptions={{
-                            persister: clientPersister,
-                        }}>
+            <ConnexContextProvider>
+                <PersistQueryClientProvider
+                    client={queryClient}
+                    persistOptions={{
+                        persister: clientPersister,
+                    }}>
+                    <SocialLoginProvider
+                        appId="cmal5kjzv0001jp0mshok7f37"
+                        clientId="WY6LHx69tXsKYk5SLbF5dtUekKfmuTquV4BybTVK4UCP9">
                         <FeatureFlagsProvider>
                             <NavigationProvider>
                                 <WalletConnectContextProvider>
@@ -138,9 +140,9 @@ const Main = () => {
                             </NavigationProvider>
                             <BaseToast />
                         </FeatureFlagsProvider>
-                    </PersistQueryClientProvider>
-                </ConnexContextProvider>
-            </SocialLoginProvider>
+                    </SocialLoginProvider>
+                </PersistQueryClientProvider>
+            </ConnexContextProvider>
         </GestureHandlerRootView>
     )
 }

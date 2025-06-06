@@ -30,7 +30,7 @@ export const selectSelectedNetwork = createSelector(
 )
 
 export const selectChainTag = createSelector(selectSelectedNetwork, network =>
-    parseInt(network.genesis.id.slice(-2), 16),
+    parseInt(network?.genesis?.id?.slice(-2) ?? "74", 16),
 )
 
 export const selectNetworkById = createSelector(
