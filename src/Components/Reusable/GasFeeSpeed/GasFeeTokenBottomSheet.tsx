@@ -74,14 +74,15 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
         setSelectedToken(internalToken)
         if (internalToken !== defaultToken)
             dispatch(setDefaultDelegationToken({ genesisId: selectedNetwork.genesis.id, token: internalToken }))
+        setIsDefaultToken(false)
         onClose()
     }, [defaultToken, dispatch, internalToken, onClose, selectedNetwork.genesis.id, setSelectedToken])
 
     const onCancel = useCallback(() => {
         setInternalToken(selectedToken)
-        setIsDefaultToken(selectedToken === defaultToken)
+        setIsDefaultToken(false)
         onClose()
-    }, [defaultToken, onClose, selectedToken])
+    }, [onClose, selectedToken])
 
     const tokenList = useMemo(() => {
         return availableTokens.map(tk => {

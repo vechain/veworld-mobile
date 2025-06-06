@@ -2,6 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import { RootState } from "../Types"
 import { selectSelectedNetwork } from "./Network"
 import { DelegationType } from "~Model/Delegation"
+import { VTHO } from "~Constants"
 
 export const selectDelegationState = (state: RootState) => state.delegation
 
@@ -40,5 +41,5 @@ export const getDefaultDelegationUrl = createSelector(
 export const selectDefaultDelegationToken = createSelector(
     selectSelectedNetwork,
     selectDelegationState,
-    (network, delegation) => delegation[network.genesis.id]?.defaultToken,
+    (network, delegation) => delegation[network.genesis.id]?.defaultToken ?? VTHO.symbol,
 )
