@@ -5,5 +5,6 @@ import * as RouterV2 from "./RouterV2VET.abi"
 import * as UniswapPairV2 from "./UniswapPairV2.abi"
 import * as VeBetterDao from "./VeBetterDao.abi"
 import * as VetDomains from "./VetDomains.abi"
+import * as NFTBlacklist from "./NFTBlacklist.abi"
 
-export { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2, VeBetterDao, VetDomains }
+export { VIP180, VIP181, RouterV2, UniswapRouterV2, UniswapPairV2, VeBetterDao, VetDomains, NFTBlacklist }

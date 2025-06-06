@@ -7,6 +7,7 @@ import {
     Collections,
     CollectionWithPagination,
     NFTs,
+    ReportedCollections,
 } from "../Types/Nft"
 import { GithubCollectionResponse, PaginationResponse } from "~Networking"
 import { AddressUtils, HexUtils } from "~Utils"
@@ -17,6 +18,7 @@ export type NftSliceState = {
     collections: Collections
     nfts: NFTs
     blackListedCollections: BlackListedCollections
+    reportedCollections: ReportedCollections
     isLoading: boolean
     error: string | undefined
 }
@@ -31,6 +33,12 @@ export const initialStateNft: NftSliceState = {
     collections: {},
     nfts: {},
     blackListedCollections: {
+        [NETWORK_TYPE.MAIN]: {},
+        [NETWORK_TYPE.TEST]: {},
+        [NETWORK_TYPE.SOLO]: {},
+        [NETWORK_TYPE.OTHER]: {},
+    },
+    reportedCollections: {
         [NETWORK_TYPE.MAIN]: {},
         [NETWORK_TYPE.TEST]: {},
         [NETWORK_TYPE.SOLO]: {},
@@ -154,6 +162,33 @@ export const NftSlice = createSlice({
                 } else {
                     state.blackListedCollections[network][accountAddress] = {
                         addresses: [collection.address],
+                    }
+                }
+            }
+            return state
+        },
+
+        // REPORT COLLECTION
+        reportCollection: (
+            state,
+            action: PayloadAction<{
+                network: NETWORK_TYPE
+                collectionAddress: string
+                accountAddress: string
+            }>,
+        ) => {
+            const { network, collectionAddress, accountAddress } = action.payload
+
+            const currentReported = state.reportedCollections[network][accountAddress]
+
+            const isAlreadyReported = currentReported?.addresses.includes(collectionAddress)
+
+            if (!isAlreadyReported) {
+                if (currentReported) {
+                    state.reportedCollections[network][accountAddress].addresses.push(collectionAddress)
+                } else {
+                    state.reportedCollections[network][accountAddress] = {
+                        addresses: [collectionAddress],
                     }
                 }
             }
@@ -289,6 +324,7 @@ export const {
     setCollectionRegistryInfo,
     setNetworkingSideEffects,
     toggleBlackListCollection,
+    reportCollection,
     setNFTs,
     updateNFT,
     resetNftState,
