@@ -310,8 +310,8 @@ export const useTransactionScreen = ({
     }, [resetDelegation, selectedDelegationToken, selectedDelegationUrl])
 
     const isDisabledButtonState = useMemo(
-        () => (!hasEnoughBalance && !isDelegated) || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
-        [hasEnoughBalance, isDelegated, loading, gas?.gas],
+        () => !hasEnoughBalance || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
+        [hasEnoughBalance, loading, gas?.gas],
     )
 
     return {
