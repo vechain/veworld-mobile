@@ -14,8 +14,6 @@ permissions:
 jobs:
     sync-to-s3:
         runs-on: ubuntu-latest
-        permissions:
-            contents: read
 
         steps:
             - name: Checkout repository
@@ -32,5 +30,5 @@ jobs:
                   DEV_S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
               run: |
                   echo "Syncing release information to development S3 bucket"
-                  aws s3 sync releases/ s3://${DEV_S3_BUCKET}/releases/ --delete
+                  aws s3 sync ./releases "s3://$DEV_S3_BUCKET/releases" --delete
                   echo "Development sync complete"
