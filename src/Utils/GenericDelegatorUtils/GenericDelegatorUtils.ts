@@ -11,7 +11,7 @@ const lowercaseClauseMap = (clause: TransactionClause) => ({
     ...clause,
     to: clause.to?.toLowerCase(),
     data: clause.data?.toLowerCase(),
-    value: typeof clause.value === "string" ? clause.value.toLowerCase() : clause.value,
+    value: clause.value === "0x" ? "0x" : BigNutils(clause.value).toHex.toLowerCase(),
 })
 
 export const validateGenericDelegatorTx = async (
@@ -26,14 +26,26 @@ export const validateGenericDelegatorTx = async (
 
     const difference = _.differenceWith(genericTxClauses, baseTxClauses, _.isEqual)
     //Check if the generic tx includes all the clauses of base tx clauses
-    if (difference.length !== 1) return false
+    if (difference.length !== 1)
+        return {
+            valid: false,
+            reason: "CLAUSES_DIFF",
+            metadata: { difference, sentClauses: baseTxClauses },
+        }
 
-    const { depositAccount } = await getGenericDelegatorDepositAccount({ networkType })
+    const { depositAccount } = await getGenericDelegatorDepositAccount({
+        networkType,
+    })
 
     const [lastClause] = difference
     if (delegationToken === VET.symbol) {
         //Check if it's sending tokens to the deposit account
-        if (!AddressUtils.compareAddresses(depositAccount, lastClause.to ?? undefined)) return false
+        if (!AddressUtils.compareAddresses(depositAccount, lastClause.to ?? undefined))
+            return {
+                valid: false,
+                reason: "NOT_DEPOSIT_ACCOUNT",
+                metadata: { depositAccount, to: lastClause.to },
+            }
         //Check if the amount of VET sent is off by more than 10%
         if (
             selectedFee
@@ -43,10 +55,22 @@ export const validateGenericDelegatorTx = async (
                 .toBN.abs()
                 .gt("0.1")
         )
-            return false
+            return {
+                valid: false,
+                reason: "OVER_THRESHOLD",
+                metadata: {
+                    fee: selectedFee.clone().toBigInt.toString(),
+                    valueSent: BigNutils(lastClause.value).toBigInt.toString(),
+                },
+            }
         //Check if it's trying sending some code
-        if (lastClause.data !== "0x") return false
-        return true
+        if (lastClause.data !== "0x")
+            return {
+                valid: false,
+                reason: "SENT_DATA",
+                metadata: { data: lastClause.data },
+            }
+        return { valid: true }
     }
     //Check ERC-20 tokens
     const iface = new ethers.utils.Interface([abis.VIP180.transfer])
@@ -54,10 +78,19 @@ export const validateGenericDelegatorTx = async (
     try {
         decoded = iface.decodeFunctionData("transfer", lastClause.data)
     } catch {
-        return false
+        return {
+            valid: false,
+            reason: "NOT_ERC20_TRANSFER",
+            metadata: { data: lastClause.data },
+        }
     }
     //Check if it's sending tokens to the deposit account
-    if (!AddressUtils.compareAddresses(depositAccount, decoded.to ?? undefined)) return false
+    if (!AddressUtils.compareAddresses(depositAccount, decoded.to ?? undefined))
+        return {
+            valid: false,
+            reason: "NOT_DEPOSIT_ACCOUNT",
+            metadata: { depositAccount, to: decoded.to },
+        }
 
     //Check if the amount of tokens sent is off by more than 1%
     if (
@@ -68,6 +101,13 @@ export const validateGenericDelegatorTx = async (
             .toBN.abs()
             .gt("0.1")
     )
-        return false
-    return true
+        return {
+            valid: false,
+            reason: "OVER_THRESHOLD",
+            metadata: {
+                fee: selectedFee.clone().toBigInt.toString(),
+                valueSent: BigNutils(decoded.amount?.toString()).toBigInt.toString(),
+            },
+        }
+    return { valid: true }
 }

@@ -10,7 +10,7 @@ import { Routes } from "~Navigation"
 import { sponsorTransaction } from "~Networking"
 import { delegateGenericDelegator } from "~Networking/GenericDelegator"
 import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { BigNumberUtils, HexUtils, warn } from "~Utils"
+import { BigNumberUtils, debug, HexUtils, warn } from "~Utils"
 import { validateGenericDelegatorTx } from "~Utils/GenericDelegatorUtils"
 
 type Props = {
@@ -230,14 +230,17 @@ export const useSignTransaction = ({
         if (selectedDelegationToken !== VTHO.symbol && typeof genericDelegatorFee !== "undefined") {
             const result = await getGenericDelegationTransaction(transaction)
             if (result === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
-            const isTxValid = await validateGenericDelegatorTx(
+            const { valid: isTxValid, ...rest } = await validateGenericDelegatorTx(
                 transaction,
                 result.transaction,
                 selectedDelegationToken,
                 selectedNetwork.type,
                 genericDelegatorFee,
             )
-            if (!isTxValid) return SignStatus.DELEGATION_FAILURE
+            if (!isTxValid) {
+                debug("SIGN", rest.reason, rest.metadata)
+                return SignStatus.DELEGATION_FAILURE
+            }
             transaction = result.transaction
             delegationSignature = result.signature
         } else {
