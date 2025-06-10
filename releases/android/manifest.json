@@ -1,7 +1,16 @@
 {
-  "latest": "2.3.0",
+  "latest": "2.3.1",
   "major": "2.3.0",
   "history": [
-    { "version": "2.3.0", "key": "releases/android/versions/2.3.0", "major": true }
+    {
+      "version": "2.3.0",
+      "key": "releases/android/versions/2.3.0",
+      "major": true
+    },
+    {
+      "version": "2.3.1",
+      "key": "/versions/2.3.1",
+      "major": false
+    }
   ]
 }
