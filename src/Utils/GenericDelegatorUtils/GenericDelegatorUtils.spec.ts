@@ -2,7 +2,6 @@ import { ABIContract, Address, Clause, Transaction, TransactionClause, Units, VE
 import { TESTNET_URL, ThorClient } from "@vechain/sdk-network"
 import { ethers } from "ethers"
 import { validateGenericDelegatorTx } from "./GenericDelegatorUtils"
-import { NETWORK_TYPE } from "~Model"
 import BigNutils from "~Utils/BigNumberUtils"
 import { getGenericDelegatorDepositAccount } from "~Networking/GenericDelegator"
 import { abis, B3TR } from "~Constants"
@@ -38,32 +37,12 @@ describe("GenericDelegatorUtils", () => {
                 await constructTx([constructVETTransfer()]),
                 await constructTx([constructVETTransfer(), constructVETTransfer(), constructVETTransfer()]),
                 "VET",
-                NETWORK_TYPE.TEST,
                 BigNutils("0"),
             )
             expect(result.valid).toBe(false)
             expect(result.reason).toBe("CLAUSES_DIFF")
         })
         describe("VET", () => {
-            it("should return false if the `to` is not the deposit account", async () => {
-                const depositAccount = ethers.Wallet.createRandom().address
-                const toAccount = ethers.Wallet.createRandom().address
-                ;(getGenericDelegatorDepositAccount as jest.Mock).mockResolvedValueOnce({
-                    depositAccount: depositAccount,
-                })
-                const result = await validateGenericDelegatorTx(
-                    await constructTx([constructVETTransfer(toAccount)]),
-                    await constructTx([
-                        constructVETTransfer(toAccount),
-                        constructVETTransfer(ethers.Wallet.createRandom().address),
-                    ]),
-                    "VET",
-                    NETWORK_TYPE.TEST,
-                    BigNutils("0"),
-                )
-                expect(result.valid).toBe(false)
-                expect(result.reason).toBe("NOT_DEPOSIT_ACCOUNT")
-            })
             it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
                 const toAccount = ethers.Wallet.createRandom().address
@@ -77,7 +56,6 @@ describe("GenericDelegatorUtils", () => {
                         constructVETTransfer(depositAccount, VET.of(100, Units.wei)),
                     ]),
                     "VET",
-                    NETWORK_TYPE.TEST,
                     BigNutils("89"),
                 )
                 expect(result.valid).toBe(false)
@@ -96,7 +74,6 @@ describe("GenericDelegatorUtils", () => {
                         { ...constructVETTransfer(depositAccount, VET.of(100, Units.wei)), data: "0x001100" },
                     ]),
                     "VET",
-                    NETWORK_TYPE.TEST,
                     BigNutils("99"),
                 )
                 expect(result.valid).toBe(false)
@@ -115,7 +92,6 @@ describe("GenericDelegatorUtils", () => {
                         constructVETTransfer(depositAccount, VET.of(100, Units.wei)),
                     ]),
                     "VET",
-                    NETWORK_TYPE.TEST,
                     BigNutils("99"),
                 )
                 expect(result.valid).toBe(true)
@@ -135,30 +111,10 @@ describe("GenericDelegatorUtils", () => {
                         constructTokenApprove(ethers.Wallet.createRandom().address),
                     ]),
                     "B3TR",
-                    NETWORK_TYPE.TEST,
                     BigNutils("0"),
                 )
                 expect(result.valid).toBe(false)
                 expect(result.reason).toBe("NOT_ERC20_TRANSFER")
-            })
-            it("should return false if the `to` is not the deposit account", async () => {
-                const depositAccount = ethers.Wallet.createRandom().address
-                const toAccount = ethers.Wallet.createRandom().address
-                ;(getGenericDelegatorDepositAccount as jest.Mock).mockResolvedValueOnce({
-                    depositAccount: depositAccount,
-                })
-                const result = await validateGenericDelegatorTx(
-                    await constructTx([constructVETTransfer(toAccount)]),
-                    await constructTx([
-                        constructVETTransfer(toAccount),
-                        constructTokenTransfer(ethers.Wallet.createRandom().address),
-                    ]),
-                    "B3TR",
-                    NETWORK_TYPE.TEST,
-                    BigNutils("0"),
-                )
-                expect(result.valid).toBe(false)
-                expect(result.reason).toBe("NOT_DEPOSIT_ACCOUNT")
             })
             it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -173,7 +129,6 @@ describe("GenericDelegatorUtils", () => {
                         constructTokenTransfer(depositAccount, VET.of(100, Units.wei)),
                     ]),
                     "B3TR",
-                    NETWORK_TYPE.TEST,
                     BigNutils("89"),
                 )
                 expect(result.valid).toBe(false)
@@ -192,7 +147,6 @@ describe("GenericDelegatorUtils", () => {
                         constructTokenTransfer(depositAccount, VET.of(100, Units.wei)),
                     ]),
                     "B3TR",
-                    NETWORK_TYPE.TEST,
                     BigNutils("99"),
                 )
                 expect(result.valid).toBe(true)

@@ -234,7 +234,6 @@ export const useSignTransaction = ({
                 transaction,
                 result.transaction,
                 selectedDelegationToken,
-                selectedNetwork.type,
                 genericDelegatorFee,
             )
             if (!isTxValid) {
