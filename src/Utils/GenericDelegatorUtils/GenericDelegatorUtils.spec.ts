@@ -41,7 +41,8 @@ describe("GenericDelegatorUtils", () => {
                 NETWORK_TYPE.TEST,
                 BigNutils("0"),
             )
-            expect(result).toBe(false)
+            expect(result.valid).toBe(false)
+            expect(result.reason).toBe("CLAUSES_DIFF")
         })
         describe("VET", () => {
             it("should return false if the `to` is not the deposit account", async () => {
@@ -60,7 +61,8 @@ describe("GenericDelegatorUtils", () => {
                     NETWORK_TYPE.TEST,
                     BigNutils("0"),
                 )
-                expect(result).toBe(false)
+                expect(result.valid).toBe(false)
+                expect(result.reason).toBe("NOT_DEPOSIT_ACCOUNT")
             })
             it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -78,7 +80,8 @@ describe("GenericDelegatorUtils", () => {
                     NETWORK_TYPE.TEST,
                     BigNutils("89"),
                 )
-                expect(result).toBe(false)
+                expect(result.valid).toBe(false)
+                expect(result.reason).toBe("OVER_THRESHOLD")
             })
             it("should return false if it's trying to send some data", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -94,9 +97,10 @@ describe("GenericDelegatorUtils", () => {
                     ]),
                     "VET",
                     NETWORK_TYPE.TEST,
-                    BigNutils("89"),
+                    BigNutils("99"),
                 )
-                expect(result).toBe(false)
+                expect(result.valid).toBe(false)
+                expect(result.reason).toBe("SENT_DATA")
             })
             it("should return true if all the checks are ok", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -114,7 +118,7 @@ describe("GenericDelegatorUtils", () => {
                     NETWORK_TYPE.TEST,
                     BigNutils("99"),
                 )
-                expect(result).toBe(true)
+                expect(result.valid).toBe(true)
             })
         })
         describe("B3TR", () => {
@@ -134,7 +138,8 @@ describe("GenericDelegatorUtils", () => {
                     NETWORK_TYPE.TEST,
                     BigNutils("0"),
                 )
-                expect(result).toBe(false)
+                expect(result.valid).toBe(false)
+                expect(result.reason).toBe("NOT_ERC20_TRANSFER")
             })
             it("should return false if the `to` is not the deposit account", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -152,7 +157,8 @@ describe("GenericDelegatorUtils", () => {
                     NETWORK_TYPE.TEST,
                     BigNutils("0"),
                 )
-                expect(result).toBe(false)
+                expect(result.valid).toBe(false)
+                expect(result.reason).toBe("NOT_DEPOSIT_ACCOUNT")
             })
             it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -170,7 +176,8 @@ describe("GenericDelegatorUtils", () => {
                     NETWORK_TYPE.TEST,
                     BigNutils("89"),
                 )
-                expect(result).toBe(false)
+                expect(result.valid).toBe(false)
+                expect(result.reason).toBe("OVER_THRESHOLD")
             })
             it("should return true if all the checks are ok", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -188,7 +195,7 @@ describe("GenericDelegatorUtils", () => {
                     NETWORK_TYPE.TEST,
                     BigNutils("99"),
                 )
-                expect(result).toBe(true)
+                expect(result.valid).toBe(true)
             })
         })
     })

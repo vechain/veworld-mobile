@@ -11,7 +11,7 @@ const lowercaseClauseMap = (clause: TransactionClause) => ({
     ...clause,
     to: clause.to?.toLowerCase(),
     data: clause.data?.toLowerCase(),
-    value: clause.value === "0x" ? "0x" : BigNutils(clause.value).toHex.toLowerCase(),
+    value: clause.value === "0x" ? "0x" : `0x${BigNutils(clause.value).toHex.toLowerCase()}`,
 })
 
 export const validateGenericDelegatorTx = async (
