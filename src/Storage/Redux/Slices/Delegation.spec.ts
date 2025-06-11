@@ -1,6 +1,6 @@
 import { DelegationType } from "~Model/Delegation"
-import { addDelegationUrl, DelegationSlice, DelegationState } from "./Delegation"
-import { defaultMainNetwork } from "~Constants/Constants"
+import { addDelegationUrl, DelegationSlice, DelegationState, setDefaultDelegationToken } from "./Delegation"
+import { defaultMainNetwork, defaultTestNetwork, VTHO } from "~Constants/Constants"
 
 describe("DelegationSlice", () => {
     let initialState: Record<string, DelegationState> = {}
@@ -11,6 +11,7 @@ describe("DelegationSlice", () => {
             defaultDelegationOption: DelegationType.NONE,
             defaultDelegationAccount: undefined,
             defaultDelegationUrl: undefined,
+            defaultToken: VTHO.symbol,
         }
     })
 
@@ -25,5 +26,28 @@ describe("DelegationSlice", () => {
             }),
         )
         expect(nextState[defaultMainNetwork.genesis.id].urls).toContain(url)
+    })
+
+    describe("Delegation token", () => {
+        it("should set the default delegation token on an existing network", () => {
+            const nextState = DelegationSlice.reducer(
+                initialState,
+                setDefaultDelegationToken({
+                    token: "VET",
+                    genesisId: defaultMainNetwork.genesis.id,
+                }),
+            )
+            expect(nextState[defaultMainNetwork.genesis.id].defaultToken).toBe("VET")
+        })
+        it("should set the default delegation token on a non existing network", () => {
+            const nextState = DelegationSlice.reducer(
+                initialState,
+                setDefaultDelegationToken({
+                    token: "VET",
+                    genesisId: defaultTestNetwork.genesis.id,
+                }),
+            )
+            expect(nextState[defaultTestNetwork.genesis.id].defaultToken).toBe("VET")
+        })
     })
 })

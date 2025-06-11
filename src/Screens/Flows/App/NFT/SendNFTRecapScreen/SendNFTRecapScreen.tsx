@@ -102,6 +102,10 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         isGalactica,
         isBaseFeeRampingUp,
         speedChangeEnabled,
+        isEnoughGas,
+        availableTokens,
+        selectedDelegationToken,
+        setSelectedDelegationToken,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -152,7 +156,11 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             setSelectedFeeOption={setSelectedFeeOption}
                             isGalactica={isGalactica}
                             isBaseFeeRampingUp={isBaseFeeRampingUp}
-                            speedChangeEnabled={speedChangeEnabled}>
+                            speedChangeEnabled={speedChangeEnabled}
+                            isEnoughBalance={isEnoughGas}
+                            availableDelegationTokens={availableTokens}
+                            delegationToken={selectedDelegationToken}
+                            setDelegationToken={setSelectedDelegationToken}>
                             <DelegationView
                                 setNoDelegation={resetDelegation}
                                 selectedDelegationOption={selectedDelegationOption}
@@ -160,6 +168,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                                 selectedDelegationAccount={selectedDelegationAccount}
                                 selectedDelegationUrl={selectedDelegationUrl}
                                 setSelectedDelegationUrl={setSelectedDelegationUrl}
+                                delegationToken={selectedDelegationToken}
                             />
                         </GasFeeSpeed>
                     </BaseView>
