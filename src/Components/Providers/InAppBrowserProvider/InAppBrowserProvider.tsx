@@ -135,6 +135,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
+    const { ref: connectBsRef } = useBottomSheetModal()
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -389,7 +390,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     isInjectedWallet: true,
                 })
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                connectBsRef.current?.present({
                     request: {
                         type: "in-app",
                         initialRequest: req,
@@ -399,7 +400,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -431,7 +432,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     request: req,
                 })
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                connectBsRef.current?.present({
                     request: {
                         type: "in-app",
                         initialRequest: req,
@@ -441,7 +442,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -474,7 +475,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     request: req,
                 })
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                connectBsRef.current?.present({
                     request: {
                         type: "in-app",
                         initialRequest: req,
@@ -484,7 +485,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
     // ~ MESSAGE VALIDATION
