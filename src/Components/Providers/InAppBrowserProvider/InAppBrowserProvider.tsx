@@ -1,6 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
+import React, { RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import {
     NativeModules,
     NativeScrollEvent,
@@ -79,6 +79,7 @@ type ContextType = {
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean
+    connectBsRef: RefObject<BottomSheetModalMethods>
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -783,6 +784,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
             isDapp,
+            connectBsRef,
         }
     }, [
         isLoading,
@@ -811,6 +813,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         switchAccount,
         packageInfo,
         isDapp,
+        connectBsRef,
     ])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
