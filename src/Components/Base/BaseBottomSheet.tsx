@@ -24,7 +24,7 @@ import { BaseView } from "./BaseView"
 const OPENED_STATE = 0
 const CLOSED_STATE = -1
 
-type Props<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints"> & {
+type Props<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints" | "children"> & {
     /**
      * The content of the modal.
      */
@@ -83,7 +83,7 @@ type Props<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints"> & {
     blurBackdrop?: boolean
 }
 
-const _BaseBottomSheet = <TData = unknown,>(
+const _BaseBottomSheet = <TData,>(
     {
         contentStyle,
         snapPoints,
