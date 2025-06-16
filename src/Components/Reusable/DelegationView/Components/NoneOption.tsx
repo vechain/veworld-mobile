@@ -1,5 +1,5 @@
 import { default as React } from "react"
-import { DelegateAccountCard } from "~Components/Reusable/DelegateAccountCard"
+import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { Option } from "./Option"
@@ -9,7 +9,7 @@ export const NoneOption = () => {
     const currentAccount = useAppSelector(selectSelectedAccount)
     return (
         <Option label={LL.DELEGATE_SELF()}>
-            <DelegateAccountCard testID="selectedAccount" account={currentAccount} selected />
+            <SelectableAccountCard testID="selectedAccount" account={currentAccount} selected />
         </Option>
     )
 }

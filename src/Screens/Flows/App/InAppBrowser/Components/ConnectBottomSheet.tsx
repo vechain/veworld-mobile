@@ -209,6 +209,7 @@ export const ConnectBottomSheet = () => {
                 setSelectedAccount={setSelectedAccount}
                 isVthoBalance
                 isBalanceVisible
+                cardVersion="v2"
             />
         </>
     )

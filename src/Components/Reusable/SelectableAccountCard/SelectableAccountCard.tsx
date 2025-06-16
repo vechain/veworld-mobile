@@ -14,7 +14,7 @@ type Props = {
     containerStyle?: StyleProp<ViewStyle>
 } & Pick<ViewProps, "testID" | "children">
 
-export const DelegateAccountCard = memo(({ account, onPress, selected, containerStyle, testID, children }: Props) => {
+export const SelectableAccountCard = memo(({ account, onPress, selected, containerStyle, testID, children }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, account.address))
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
@@ -85,7 +85,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 8,
         },
         selectedContainer: {
-            borderWidth: 1,
+            borderWidth: 2,
             borderColor: theme.colors.text,
         },
         innerTouchable: {
