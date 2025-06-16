@@ -1,7 +1,7 @@
 import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable } from "~Components/Base"
-import { COLORS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
@@ -15,7 +15,7 @@ type Props = {
 }
 
 export const AccountSelector = ({ account, variant = "short", disabled, onPress }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
     const { name: vnsName, address: vnsAddress } = useVns({
         name: "",
         address: account.address,
@@ -28,12 +28,12 @@ export const AccountSelector = ({ account, variant = "short", disabled, onPress 
                     {vnsName || AddressUtils.humanAddress(vnsAddress || account.address)}
                 </BaseText>
             )}
-            <BaseIcon name="icon-arrow-left-right" color={COLORS.GREY_500} size={16} />
+            <BaseIcon name="icon-arrow-left-right" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500} size={16} />
         </BaseTouchable>
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
             padding: 8,
@@ -43,8 +43,8 @@ const baseStyles = () =>
         },
         enabled: {
             borderWidth: 1,
-            borderColor: COLORS.GREY_200,
-            backgroundColor: COLORS.WHITE,
+            borderColor: theme.isDark ? COLORS.TRANSPARENT : COLORS.GREY_200,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
         },
         disabled: {
             backgroundColor: COLORS.GREY_100,

@@ -1,8 +1,9 @@
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo } from "react"
-import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
-import { useScrollableBottomSheet } from "~Hooks"
+import { AccountCard, BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { COLORS } from "~Constants"
+import { useScrollableBottomSheet, useTheme } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
@@ -96,13 +97,18 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             snapPoints: computeSnappoints,
         })
 
+        const theme = useTheme()
         return (
             <BaseBottomSheet
                 snapPoints={computeSnappoints}
                 ref={ref}
                 onChange={handleSheetChangePosition}
                 onDismiss={onDismiss}>
-                <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
+                <BaseView flexDirection="row" alignItems="center" gap={12}>
+                    <BaseIcon name="icon-wallet" size={20} color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900} />
+                    <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
+                </BaseView>
+
                 <BaseSpacer height={12} />
                 <BottomSheetFlatList
                     data={accounts}

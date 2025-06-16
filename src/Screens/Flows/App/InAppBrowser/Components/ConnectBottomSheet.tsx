@@ -12,7 +12,7 @@ import {
     useInAppBrowser,
 } from "~Components"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
-import { COLORS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, ConnectAppRequest, WatchedAccount } from "~Model"
@@ -126,7 +126,7 @@ export const ConnectBottomSheet = () => {
                             </BaseView>
                             <BaseSpacer height={24} />
                             <AnimatedBaseView
-                                bg={COLORS.WHITE}
+                                bg={theme.colors.assetDetailsCard.background}
                                 p={16}
                                 flexDirection="column"
                                 layout={LinearTransition.duration(300)}
@@ -149,13 +149,13 @@ export const ConnectBottomSheet = () => {
                                             <BaseText
                                                 typographyFont="bodyMedium"
                                                 numberOfLines={1}
-                                                color={COLORS.GREY_800}>
+                                                color={theme.colors.assetDetailsCard.title}>
                                                 {name}
                                             </BaseText>
                                             <BaseText
                                                 typographyFont="captionMedium"
                                                 numberOfLines={1}
-                                                color={COLORS.GREY_500}>
+                                                color={theme.colors.assetDetailsCard.text}>
                                                 {url}
                                             </BaseText>
                                         </BaseView>
@@ -163,11 +163,13 @@ export const ConnectBottomSheet = () => {
                                     <BaseButton
                                         action={() => setShowDetails(old => !old)}
                                         variant="ghost"
+                                        textColor={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
+                                        typographyFont="bodyMedium"
                                         rightIcon={
                                             <BaseIcon
                                                 name={showDetails ? "icon-chevron-up" : "icon-chevron-down"}
                                                 size={12}
-                                                color={COLORS.PRIMARY_800}
+                                                color={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
                                                 style={styles.rightIcon}
                                             />
                                         }>
@@ -180,7 +182,7 @@ export const ConnectBottomSheet = () => {
                                     style={[styles.detailsContainer, opacityStyles]}
                                     flexDirection="column"
                                     borderRadius={8}>
-                                    <BaseText typographyFont="bodyMedium" color={COLORS.GREY_800}>
+                                    <BaseText typographyFont="bodyMedium" color={theme.colors.assetDetailsCard.title}>
                                         {LL.CONNECTED_APP_ASKING_FOR_ACCESS({ dappName: name })}
                                     </BaseText>
                                     <AnimatedBaseView
@@ -195,8 +197,14 @@ export const ConnectBottomSheet = () => {
                                                 gap={8}
                                                 key={value}
                                                 alignItems="flex-start">
-                                                <BaseIcon name="icon-check" color={COLORS.GREY_400} size={12} />
-                                                <BaseText color={COLORS.GREY_600} typographyFont="captionRegular">
+                                                <BaseIcon
+                                                    name="icon-check"
+                                                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_400}
+                                                    size={12}
+                                                />
+                                                <BaseText
+                                                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                                                    typographyFont="captionRegular">
                                                     {LL[`CONNECTED_APP_ASKING_FOR_ACCESS_${value}`]()}
                                                 </BaseText>
                                             </AnimatedBaseView>
@@ -232,7 +240,7 @@ export const ConnectBottomSheet = () => {
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         rootContent: {
             paddingBottom: 40,
@@ -242,8 +250,8 @@ const baseStyles = () =>
             overflow: "hidden",
         },
         detailsContainer: {
-            backgroundColor: COLORS.GREY_50,
-            borderColor: COLORS.GREY_100,
+            backgroundColor: theme.colors.editSpeedBs.result.background,
+            borderColor: theme.colors.editSpeedBs.result.border,
             borderWidth: 1,
             padding: 16,
             gap: 12,
