@@ -1,5 +1,15 @@
 # Changelog
 
+## <small>2.2.4 (2025-06-06)</small>
+
+* build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
+* fix: redux migration app crash (#2983) ([c747df0](https://github.com/vechain/veworld-mobile/commit/c747df0)), closes [#2983](https://github.com/vechain/veworld-mobile/issues/2983)
+
+## <small>2.2.3 (2025-05-26)</small>
+
+* build: init ([014406b](https://github.com/vechain/veworld-mobile/commit/014406b))
+* 141 Fix UI bug iOS - 2.2.3 and Android - 2.2.9 (#2964) ([0e09646](https://github.com/vechain/veworld-mobile/commit/0e09646)), closes [#2964](https://github.com/vechain/veworld-mobile/issues/2964)
+
 ## <small>2.2.2 (2025-05-19)</small>
 
 * build: init ([bc68c5a](https://github.com/vechain/veworld-mobile/commit/bc68c5a))

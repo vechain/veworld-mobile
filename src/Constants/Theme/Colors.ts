@@ -194,6 +194,10 @@ export type Colors = {
     tabsFooter: {
         background: string
     }
+    label: {
+        background: string
+        text: string
+    }
 }
 
 export enum COLORS {
@@ -211,6 +215,7 @@ export enum COLORS {
     DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
     PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
+    DARK_PURPLE_RBGA_TRANSPARENT = "rgba(172, 155, 255, 0.8)",
     PURPLE = "#30265F",
     LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",
@@ -485,6 +490,10 @@ const light: Colors = {
     tabsFooter: {
         background: COLORS.GREY_200,
     },
+    label: {
+        background: COLORS.GREY_200,
+        text: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -682,6 +691,10 @@ const dark: Colors = {
     },
     tabsFooter: {
         background: COLORS.PURPLE,
+    },
+    label: {
+        background: COLORS.PURPLE,
+        text: COLORS.WHITE,
     },
 }
 

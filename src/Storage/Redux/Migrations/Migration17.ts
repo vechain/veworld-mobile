@@ -1,32 +1,42 @@
 import { PersistedState } from "redux-persist/es/types"
-import { AppVersion } from "~Model/AppVersion"
-import { ERROR_EVENTS } from "~Constants"
-import { debug } from "~Utils"
+import { TokensState } from "../Types"
+import { FungibleToken } from "~Model"
+
+const safeParseInt = (value: string, defaultValue: number) => {
+    try {
+        const parsed = parseInt(value, 10)
+        if (isNaN(parsed)) return defaultValue
+        return parsed
+    } catch {
+        return defaultValue
+    }
+}
+
+const mapFungibleToken = (tk: FungibleToken) => ({
+    ...tk,
+    decimals: typeof tk.decimals === "string" ? safeParseInt(tk.decimals, 18) : tk.decimals,
+})
+
+const mapCustomTokens = (customTokens: Record<string, FungibleToken[]>) =>
+    Object.entries(customTokens).map(([address, tokens]) => [address, tokens.map(mapFungibleToken)])
 
 export const Migration17 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 17: Adding version update state")
-
     // @ts-ignore
-    const currentState: AppVersion = state.versionUpdate
+    const currentState: TokensState = state.tokens
 
-    if (!currentState || Object.keys(currentState).length === 0) {
-        debug(ERROR_EVENTS.SECURITY, "================= **** No state to migrate **** =================")
-        return state
-    }
-
-    const newState: AppVersion = {
+    const newState: TokensState = {
         ...currentState,
-        majorVersion: "",
-        isUpToDate: null,
-        lastManifestCheck: null,
-        updateRequest: {
-            dismissCount: 0,
-            lastDismissedDate: null,
-        },
+        tokens: Object.fromEntries(
+            Object.entries(currentState.tokens).map(([network, value]) => {
+                const customTokens = value.custom ?? {}
+
+                return [network, { ...value, custom: Object.fromEntries(mapCustomTokens(customTokens)) }]
+            }),
+        ) as TokensState["tokens"],
     }
 
     return {
         ...state,
-        versionUpdate: newState,
+        tokens: newState,
     } as PersistedState
 }

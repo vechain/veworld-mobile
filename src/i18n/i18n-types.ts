@@ -157,6 +157,14 @@ type RootTranslation = {
 	 */
 	ACTIVITY_NFT_LABEL: string
 	/**
+	 * N​o​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​h​o​w
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: string
+	/**
+	 * O​t​h​e​r
+	 */
+	ACTIVITY_OTHER_LABEL: string
+	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: string
@@ -373,7 +381,7 @@ type RootTranslation = {
 	 */
 	B3TR_PROPOSAL_VOTE: string
 	/**
-	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​e​b​e​r​ ​l​e​v​e​l
+	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​b​e​r​ ​l​e​v​e​l
 	 */
 	B3TR_UPGRADE_GM: string
 	/**
@@ -960,17 +968,13 @@ type RootTranslation = {
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: string
 	/**
-	 * C​o​p​y​ ​p​a​g​e​ ​l​i​n​k
-	 */
-	BROWSER_COPY_LINK: string
-	/**
-	 * O​p​e​n​ ​n​e​w​ ​t​a​b
-	 */
-	BROWSER_NEW_TAB: string
-	/**
 	 * C​l​o​s​e​ ​t​a​b
 	 */
 	BROWSER_CLOSE_TAB: string
+	/**
+	 * C​o​p​y​ ​p​a​g​e​ ​l​i​n​k
+	 */
+	BROWSER_COPY_LINK: string
 	/**
 	 * L​i​n​k​ ​s​u​c​c​e​s​s​f​u​l​l​y​ ​c​o​p​i​e​d​ ​t​o​ ​t​h​e​ ​c​l​i​p​b​o​a​r​d
 	 */
@@ -1020,6 +1024,10 @@ type RootTranslation = {
 	 * T​h​e​ ​D​A​p​p​ ​r​e​e​q​u​e​s​t​e​d​ ​a​ ​n​e​t​w​o​r​k​ ​t​h​a​t​ ​i​s​ ​n​o​t​ ​f​o​u​n​d​.
 	 */
 	BROWSER_NETWORK_NOT_FOUND: string
+	/**
+	 * O​p​e​n​ ​n​e​w​ ​t​a​b
+	 */
+	BROWSER_NEW_TAB: string
 	/**
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
 	 */
@@ -1576,6 +1584,10 @@ type RootTranslation = {
 	 */
 	COMMON_DAPPS: string
 	/**
+	 * H​i​d​e
+	 */
+	COMMON_HIDE: string
+	/**
 	 * I​m​p​o​r​t
 	 */
 	COMMON_IMPORT: string
@@ -1686,6 +1698,10 @@ type RootTranslation = {
 	 */
 	COMMON_RECEIVE: string
 	/**
+	 * R​e​p​o​r​t
+	 */
+	COMMON_REPORT: string
+	/**
 	 * F​r​o​m
 	 */
 	COMMON_ROOT_ADDRESS: string
@@ -1697,6 +1713,10 @@ type RootTranslation = {
 	 * S​e​l​e​c​t​ ​a​c​c​o​u​n​t​ ​t​o​ ​r​e​m​o​v​e
 	 */
 	COMMON_SELECT_ACCOUNT_TO_REMOVE: string
+	/**
+	 * S​h​o​w
+	 */
+	COMMON_SHOW: string
 	/**
 	 * T​o​d​a​y
 	 */
@@ -2686,6 +2706,14 @@ type RootTranslation = {
 	 */
 	NFT_ATTRIBUTES: string
 	/**
+	 * C​o​l​l​e​c​t​i​o​n​ ​r​e​p​o​r​t​e​d
+	 */
+	NFT_COLLECTION_REPORTED: string
+	/**
+	 * T​h​a​n​k​s​ ​f​o​r​ ​y​o​u​r​ ​r​e​p​o​r​t​!​ ​Y​o​u​r​ ​a​c​t​i​o​n​ ​h​e​l​p​s​ ​p​r​o​t​e​c​t​ ​t​h​e​ ​e​n​t​i​r​e​ ​c​o​m​m​u​n​i​t​y​.
+	 */
+	NFT_COLLECTION_REPORTED_MSG: string
+	/**
 	 * C​r​e​a​t​o​r
 	 */
 	NFT_DETAIL_CREATOR: string
@@ -2726,6 +2754,18 @@ type RootTranslation = {
 	 * N​F​T​ ​R​e​c​e​i​v​e
 	 */
 	NFT_RECEIVE: string
+	/**
+	 * R​e​p​o​r​t​ ​C​o​l​l​e​c​t​i​o​n
+	 */
+	NFT_REPORT_COLLECTION: string
+	/**
+	 * C​o​n​f​i​r​m​ ​R​e​p​o​r​t
+	 */
+	NFT_REPORT_COLLECTION_CONFIRM: string
+	/**
+	 * P​l​e​a​s​e​ ​r​e​p​o​r​t​ ​i​f​ ​t​h​i​s​ ​c​o​l​l​e​c​t​i​o​n​ ​a​p​p​e​a​r​s​ ​s​u​s​p​i​c​i​o​u​s​ ​o​r​ ​i​n​a​p​p​r​o​p​r​i​a​t​e​.
+	 */
+	NFT_REPORT_COLLECTION_MSG: string
 	/**
 	 * N​F​T​ ​S​e​n​d
 	 */
@@ -3630,13 +3670,13 @@ type RootTranslation = {
 	 */
 	SEND_TRANSACTION_ERROR_GAS_FEE: string
 	/**
-	 * g​a​s​ ​p​a​y​e​r​ ​c​a​n​n​o​t​ ​c​o​v​e​r​ ​f​e​e​s
-	 */
-	SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY: string
-	/**
 	 * g​e​n​e​r​i​c​ ​e​r​r​o​r
 	 */
 	SEND_TRANSACTION_ERROR_GENERIC_ERROR: string
+	/**
+	 * g​a​s​ ​p​a​y​e​r​ ​c​a​n​n​o​t​ ​c​o​v​e​r​ ​f​e​e​s
+	 */
+	SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY: string
 	/**
 	 * Y​o​u​r​ ​V​O​T​3​ ​t​o​k​e​n​s​ ​c​a​n​ ​o​n​l​y​ ​b​e​ ​c​o​n​v​e​r​t​e​d​ ​b​a​c​k​ ​t​o​ ​B​3​T​R​ ​i​n​ ​t​h​i​s​ ​s​p​e​c​i​f​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​.​ ​B​y​ ​s​e​n​d​i​n​g​ ​t​o​ ​a​n​o​t​h​e​r​ ​w​a​l​l​e​t​ ​y​o​u​ ​w​o​n​’​t​ ​b​e​ ​a​b​l​e​ ​t​o​ ​c​o​n​v​e​r​t​ ​t​o​ ​a​n​y​ ​o​t​h​e​r​ ​a​s​s​e​t​.​
 ​A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​c​o​n​t​i​n​u​e​?
@@ -4134,6 +4174,10 @@ type RootTranslation = {
 	 */
 	UNKNOWN_COLLECTION: string
 	/**
+	 * O​n​-​c​h​a​i​n​ ​T​r​a​n​s​a​c​t​i​o​n
+	 */
+	UNKNOWN_TX: string
+	/**
 	 * U​n​v​e​r​i​f​i​e​d​ ​a​p​p
 	 */
 	UNVERIFIED_APP_TITLE: string
@@ -4477,6 +4521,14 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_NFT_LABEL: () => LocalizedString
 	/**
+	 * No transactions to show
+	 */
+	ACTIVITY_OTHER_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Other
+	 */
+	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
 	 * No Swaps to show yet
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
@@ -4690,7 +4742,7 @@ Try reconnect your device to the internet.
 	 */
 	B3TR_PROPOSAL_VOTE: () => LocalizedString
 	/**
-	 * New galaxy memeber level
+	 * New galaxy member level
 	 */
 	B3TR_UPGRADE_GM: () => LocalizedString
 	/**
@@ -5272,17 +5324,13 @@ Thanks for your patience!
 	 */
 	BROWSER_CHANGE_NETWORK_TITLE: () => LocalizedString
 	/**
-	 * Copy page link
-	 */
-	BROWSER_COPY_LINK: () => LocalizedString
-	/**
-	 * Open new tab
-	 */
-	BROWSER_NEW_TAB: () => LocalizedString
-	/**
 	 * Close tab
 	 */
 	BROWSER_CLOSE_TAB: () => LocalizedString
+	/**
+	 * Copy page link
+	 */
+	BROWSER_COPY_LINK: () => LocalizedString
 	/**
 	 * Link successfully copied to the clipboard
 	 */
@@ -5331,6 +5379,10 @@ Thanks for your patience!
 	 * The DApp reequested a network that is not found.
 	 */
 	BROWSER_NETWORK_NOT_FOUND: () => LocalizedString
+	/**
+	 * Open new tab
+	 */
+	BROWSER_NEW_TAB: () => LocalizedString
 	/**
 	 * Remove from Favorite dApps
 	 */
@@ -5884,6 +5936,10 @@ Thanks for your patience!
 	 */
 	COMMON_DAPPS: () => LocalizedString
 	/**
+	 * Hide
+	 */
+	COMMON_HIDE: () => LocalizedString
+	/**
 	 * Import
 	 */
 	COMMON_IMPORT: () => LocalizedString
@@ -5992,6 +6048,10 @@ Thanks for your patience!
 	 */
 	COMMON_RECEIVE: () => LocalizedString
 	/**
+	 * Report
+	 */
+	COMMON_REPORT: () => LocalizedString
+	/**
 	 * From
 	 */
 	COMMON_ROOT_ADDRESS: () => LocalizedString
@@ -6003,6 +6063,10 @@ Thanks for your patience!
 	 * Select account to remove
 	 */
 	COMMON_SELECT_ACCOUNT_TO_REMOVE: () => LocalizedString
+	/**
+	 * Show
+	 */
+	COMMON_SHOW: () => LocalizedString
 	/**
 	 * Today
 	 */
@@ -6988,6 +7052,14 @@ Thanks for your patience!
 	 */
 	NFT_ATTRIBUTES: () => LocalizedString
 	/**
+	 * Collection reported
+	 */
+	NFT_COLLECTION_REPORTED: () => LocalizedString
+	/**
+	 * Thanks for your report! Your action helps protect the entire community.
+	 */
+	NFT_COLLECTION_REPORTED_MSG: () => LocalizedString
+	/**
 	 * Creator
 	 */
 	NFT_DETAIL_CREATOR: () => LocalizedString
@@ -7028,6 +7100,18 @@ Thanks for your patience!
 	 * NFT Receive
 	 */
 	NFT_RECEIVE: () => LocalizedString
+	/**
+	 * Report Collection
+	 */
+	NFT_REPORT_COLLECTION: () => LocalizedString
+	/**
+	 * Confirm Report
+	 */
+	NFT_REPORT_COLLECTION_CONFIRM: () => LocalizedString
+	/**
+	 * Please report if this collection appears suspicious or inappropriate.
+	 */
+	NFT_REPORT_COLLECTION_MSG: () => LocalizedString
 	/**
 	 * NFT Send
 	 */
@@ -7905,13 +7989,13 @@ Thanks for your patience!
 	 */
 	SEND_TRANSACTION_ERROR_GAS_FEE: () => LocalizedString
 	/**
-	 * gas payer cannot cover fees
-	 */
-	SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY: () => LocalizedString
-	/**
 	 * generic error
 	 */
 	SEND_TRANSACTION_ERROR_GENERIC_ERROR: () => LocalizedString
+	/**
+	 * gas payer cannot cover fees
+	 */
+	SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY: () => LocalizedString
 	/**
 	 * Your VOT3 tokens can only be converted back to B3TR in this specific wallet address. By sending to another wallet you won’t be able to convert to any other asset.
 Are you sure you want to continue?
@@ -8401,6 +8485,10 @@ Are you sure you want to continue?
 	 * Unknown collection name
 	 */
 	UNKNOWN_COLLECTION: () => LocalizedString
+	/**
+	 * On-chain Transaction
+	 */
+	UNKNOWN_TX: () => LocalizedString
 	/**
 	 * Unverified app
 	 */

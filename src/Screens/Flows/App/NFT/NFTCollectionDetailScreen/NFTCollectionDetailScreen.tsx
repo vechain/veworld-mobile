@@ -1,20 +1,22 @@
-import React, { useCallback, useMemo, useState } from "react"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
-import { Routes } from "~Navigation"
+import { isEmpty } from "lodash"
+import React, { useCallback, useMemo, useState } from "react"
 import { BaseView, Layout } from "~Components"
-import { useNFTWithMetadata } from "./Hooks/useNFTWithMetadata"
+import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
+import { RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
+import { useResetNFTStack } from "../hooks"
+import { NetworkErrorView } from "../NFTScreen/Components/NetworkErrorView"
+import { NftLoader } from "../NFTScreen/Components/NftLoader"
 
 import { NFTList } from "./Components"
-import { isEmpty } from "lodash"
-import { NetworkErrorView } from "../NFTScreen/Components/NetworkErrorView"
 import { useCollectionSource } from "./Hooks/useCollectionSource"
-import { NftLoader } from "../NFTScreen/Components/NftLoader"
-import { useResetNFTStack } from "../hooks"
+import { useNFTWithMetadata } from "./Hooks/useNFTWithMetadata"
 
 type Props = NativeStackScreenProps<RootStackParamListNFT, Routes.NFT_COLLECTION_DETAILS>
 
 export const NFTCollectionDetailScreen = ({ route }: Props) => {
+    const { LL } = useI18nContext()
     useResetNFTStack()
     const [onEndReachedCalledDuringMomentum, setEndReachedCalledDuringMomentum] = useState(true)
 
@@ -53,6 +55,7 @@ export const NFTCollectionDetailScreen = ({ route }: Props) => {
 
     return (
         <Layout
+            title={LL.BD_COLLECTION()}
             safeAreaTestID="NFT_Collection_Detail_Screen"
             fixedBody={
                 <BaseView flex={1} justifyContent="center">

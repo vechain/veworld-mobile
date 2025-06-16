@@ -45,6 +45,18 @@ interface IBigNumberUtils {
     toBN: BN
 }
 
+const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
+    if (locale === "tw" || locale === "zh-tw") return "."
+    const numberWithDecimalSeparator = 1.1
+    return Intl.NumberFormat(locale)
+        .formatToParts(numberWithDecimalSeparator)
+        .find(part => part.type === "decimal")?.value
+}
+
+const stripTrailingZeros = (value: string) => {
+    return [...value].reduceRight((acc, curr) => (acc === "" && curr === "0" ? acc : `${curr}${acc}`), "")
+}
+
 class BigNumberUtils implements IBigNumberUtils {
     private data: BN
 
@@ -201,7 +213,7 @@ class BigNumberUtils implements IBigNumberUtils {
 
         let _data = ""
 
-        if (this.data.isLessThan("0.0001") && !this.data.isZero()) {
+        if (this.data.isLessThan("0.01") && !this.data.isZero()) {
             _data = `< ${formatter.format(0.01)}`
         } else {
             const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))
@@ -209,6 +221,41 @@ class BigNumberUtils implements IBigNumberUtils {
         }
 
         return _data
+    }
+
+    /**
+     * Builds a formatted string, by using these rules:
+     * - Cap the value to {@link decimals} decimals
+     * - Strip trailing zeros
+     * - Always show at least two decimal places
+     * - If the value is less than the amount of decimals specified, show < 0.{{@link decimals} - 1}1
+     * @param decimals Number of decimals to show
+     * @param locale Locale of the user (defaults to 'en-US')
+     * @returns A formatted string
+     */
+    toTokenFormatFull_string(decimals: number, locale?: Intl.LocalesArgument): string {
+        const _locale = locale ?? "en-US"
+        const separator = getDecimalSeparator(_locale.toString()) ?? "."
+        if (this.data.isZero()) return ["0", "00"].join(separator)
+        const formatter = new Intl.NumberFormat(_locale.toString(), {
+            style: "decimal",
+            useGrouping: true,
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+        })
+
+        const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))
+
+        const formatted = formatter.format(tokenBalance as unknown as bigint)
+
+        const [unit, decimal] = formatted.split(separator)
+        if (typeof decimal === "undefined") return [unit, "00"].join(separator)
+        const strippedDecimals = stripTrailingZeros(decimal)
+        if (strippedDecimals === "")
+            return parseInt(unit, 10) === 0
+                ? `< ${[unit, "0".repeat(decimals - 1) + "1"].join(separator)}`
+                : [unit, "00"].join(separator)
+        return [unit, strippedDecimals].join(separator)
     }
 
     toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void, decimals?: number) {

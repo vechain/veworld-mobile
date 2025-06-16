@@ -19,7 +19,7 @@ type Props = {
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     (
-        { icon, title, description, mainButton, secondaryButton, enablePanDownToClose = true, iconSize = 48, testId },
+        { icon, title, description, mainButton, secondaryButton, enablePanDownToClose = true, iconSize = 66, testId },
         ref,
     ) => {
         const { styles, theme } = useThemedStyles(baseStyles)

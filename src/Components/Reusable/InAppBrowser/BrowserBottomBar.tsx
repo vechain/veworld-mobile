@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { BackHandler, StyleSheet } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, useInAppBrowser } from "~Components"
-import { ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation"
@@ -63,6 +63,8 @@ export const BrowserBottomBar: React.FC = () => {
         return false
     }, [canGoBack, navigationCanGoBack, goBack, closeInAppBrowser])
 
+    const iconColor = useMemo(() => (theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_600), [theme.isDark])
+
     useEffect(() => {
         const sub = BackHandler.addEventListener("hardwareBackPress", onBackHandler)
         return () => sub.remove()
@@ -114,16 +116,17 @@ export const BrowserBottomBar: React.FC = () => {
     ])
 
     return navigationState?.url ? (
-        <Animated.View style={[styles.bottomBar, styles.animatedContainer, animatedStyles]}>
+        <Animated.View testID="browser-bottom-bar" style={[styles.bottomBar, styles.animatedContainer, animatedStyles]}>
             {IconConfig.map((config, index) => {
                 return (
                     <BaseIcon
+                        testID={`browser-bottom-bar-icon-${config.name}`}
                         key={`${config.name}-${index}`}
                         action={config.onPress}
                         disabled={config.disabled}
                         name={config.name}
                         size={20}
-                        color={theme.colors.text}
+                        color={iconColor}
                         style={styles.icon}
                     />
                 )
@@ -135,17 +138,17 @@ export const BrowserBottomBar: React.FC = () => {
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        animatedContainer: {},
+        animatedContainer: {
+            backgroundColor: theme.colors.background,
+            ...(isIOS() ? { marginBottom: 34 } : {}),
+        },
         bottomBar: {
             display: "flex",
             flexDirection: "row",
             justifyContent: "space-between",
             alignItems: "center",
-            backgroundColor: theme.colors.background,
-            borderTopColor: theme.colors.card,
-            borderTopWidth: 1,
+            backgroundColor: theme.colors.tabsFooter.background,
             paddingHorizontal: 16,
-            ...(isIOS() ? { marginBottom: 20 } : {}),
         },
         icon: {
             borderRadius: 10,

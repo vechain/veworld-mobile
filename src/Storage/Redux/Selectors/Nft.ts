@@ -34,14 +34,27 @@ export const selectBlackListedAddresses = createSelector(
     },
 )
 
+export const selectReportedAddresses = createSelector(
+    selectNftState,
+    selectSelectedNetwork,
+    selectSelectedAccount,
+    (state, network, account) => {
+        const normalizedAcct = HexUtils.normalize(account.address)
+        return state.reportedCollections[network.type][normalizedAcct]?.addresses ?? []
+    },
+)
+
 export const selectNftCollections = createSelector(
     selectAllNFTCollections,
     selectBlackListedAddresses,
-    (allCollections, blackListedAddresses) => {
+    selectReportedAddresses,
+    (allCollections, blackListedAddresses, reportedAddresses) => {
         if (!allCollections) return { ...initialCollectionsState }
 
         return {
-            collections: allCollections.collections.filter(col => !blackListedAddresses.includes(col.address)),
+            collections: allCollections.collections.filter(
+                col => !blackListedAddresses.includes(col.address) && !reportedAddresses.includes(col.address),
+            ),
             pagination: allCollections.pagination,
         }
     },
@@ -97,8 +110,13 @@ export const selectAllNfts = createSelector(selectNftState, selectSelectedAccoun
 export const selectAllVisibleNFTs = createSelector(
     selectAllNfts,
     selectBlackListedAddresses,
-    (allNfts, blackListedAddresses) => {
-        return allNfts.filter(nft => blackListedAddresses.indexOf(HexUtils.normalize(nft.address)) === -1)
+    selectReportedAddresses,
+    (allNfts, blackListedAddresses, reportedAddresses) => {
+        return allNfts.filter(
+            nft =>
+                blackListedAddresses.indexOf(HexUtils.normalize(nft.address)) === -1 &&
+                reportedAddresses.indexOf(HexUtils.normalize(nft.address)) === -1,
+        )
     },
 )
 
@@ -155,6 +173,16 @@ export const selectBlackListedCollections = createSelector(
     },
 )
 
+export const selectReportedCollections = createSelector(
+    selectAllNFTCollections,
+    selectReportedAddresses,
+    (allCollections, reportedAddresses) => {
+        if (!allCollections) return []
+
+        return allCollections.collections.filter(col => reportedAddresses.includes(col.address))
+    },
+)
+
 export const selectBlacklistedCollectionByAddress = createSelector(
     [selectNftState, selectBlackListedCollections, (state, collectionAddress: string) => collectionAddress],
     (state, blackListedCollections, collectionAddress: string) =>
@@ -167,5 +195,12 @@ export const isBlacklistedCollection = createSelector(
         return (
             blackListedAddresses.findIndex(address => AddressUtils.compareAddresses(address, collectionAddress)) !== -1
         )
+    },
+)
+
+export const isReportedCollection = createSelector(
+    [selectReportedAddresses, (state, collectionAddress: string) => collectionAddress],
+    (reportedAddresses, collectionAddress: string) => {
+        return reportedAddresses.findIndex(address => AddressUtils.compareAddresses(address, collectionAddress)) !== -1
     },
 )
