@@ -1,27 +1,12 @@
 import { default as React, useCallback, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
-import {
-    BaseBottomSheet,
-    BaseButton,
-    BaseIcon,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    SelectAccountBottomSheet,
-    useInAppBrowser,
-} from "~Components"
-import { AccountSelector } from "~Components/Reusable/AccountSelector"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, useInAppBrowser } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, ConnectAppRequest, WatchedAccount } from "~Model"
-import {
-    selectFeaturedDapps,
-    selectSelectedAccount,
-    selectVisibleAccountsWithoutObserved,
-    useAppSelector,
-} from "~Storage/Redux"
+import { ConnectAppRequest } from "~Model"
+import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
 import { DAppUtils } from "~Utils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
@@ -36,17 +21,13 @@ export const ConnectBottomSheet = () => {
     const { LL } = useI18nContext()
     const { connectBsRef, addAppAndNavToRequest, postMessage } = useInAppBrowser()
     const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
-    const { ref: accountBsRef, onClose: onAccountBsClose, onOpen: onAccountBsOpen } = useBottomSheetModal()
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const allApps = useAppSelector(selectFeaturedDapps)
-    const _selectedAccount = useAppSelector(selectSelectedAccount)
-    const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
 
     const [loadFallback, setLoadFallback] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
-    const [selectedAccount, _setSelectedAccount] = useState(_selectedAccount)
 
     const getInfo = useCallback(
         (req: Request) => {
@@ -104,10 +85,6 @@ export const ConnectBottomSheet = () => {
         [onCloseBs, postMessage],
     )
 
-    const setSelectedAccount = useCallback((account: AccountWithDevice | WatchedAccount) => {
-        if ("device" in account) _setSelectedAccount(account)
-    }, [])
-
     return (
         <>
             <BaseBottomSheet<Request> dynamicHeight contentStyle={styles.rootContent} ref={ref}>
@@ -115,14 +92,11 @@ export const ConnectBottomSheet = () => {
                     const { icon, name, url } = getInfo(data)
                     return (
                         <>
-                            <BaseView flexDirection="row" justifyContent="space-between">
-                                <BaseView flexDirection="row" gap={12}>
-                                    <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
-                                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                                        {LL.CONNECTION_REQUEST_TITLE()}
-                                    </BaseText>
-                                </BaseView>
-                                <AccountSelector account={selectedAccount} onPress={onAccountBsOpen} />
+                            <BaseView flexDirection="row" gap={12}>
+                                <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
+                                <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                                    {LL.CONNECTION_REQUEST_TITLE()}
+                                </BaseText>
                             </BaseView>
                             <BaseSpacer height={24} />
                             <AnimatedBaseView
@@ -165,6 +139,7 @@ export const ConnectBottomSheet = () => {
                                         variant="ghost"
                                         textColor={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
                                         typographyFont="bodyMedium"
+                                        px={0}
                                         rightIcon={
                                             <BaseIcon
                                                 name={showDetails ? "icon-chevron-up" : "icon-chevron-down"}
@@ -225,17 +200,6 @@ export const ConnectBottomSheet = () => {
                     )
                 }}
             </BaseBottomSheet>
-
-            <SelectAccountBottomSheet
-                ref={accountBsRef}
-                closeBottomSheet={onAccountBsClose}
-                selectedAccount={selectedAccount}
-                accounts={visibleAccounts}
-                setSelectedAccount={setSelectedAccount}
-                isVthoBalance
-                isBalanceVisible
-                cardVersion="v2"
-            />
         </>
     )
 }
