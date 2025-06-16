@@ -332,6 +332,15 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
+	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
+	 */
+	APP_UPDATE_AVAILABLE: string
+	/**
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
+	 * @param {string} version
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
+	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
 	APP_VERIFICATION_CONFIRM: string
@@ -1200,6 +1209,10 @@ type RootTranslation = {
 	 * A​c​t​i​v​i​t​y
 	 */
 	BTN_HISTORY: string
+	/**
+	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
+	 */
+	BTN_ILL_DO_IT_LATER: string
 	/**
 	 * I​m​p​o​r​t
 	 */
@@ -4681,6 +4694,14 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
+	 * Update available
+	 */
+	APP_UPDATE_AVAILABLE: () => LocalizedString
+	/**
+	 * Version {version} is now available to update with new features and improvements.
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
+	/**
 	 * Please confirm that you would like to process this request.
 	 */
 	APP_VERIFICATION_CONFIRM: () => LocalizedString
@@ -5542,6 +5563,10 @@ Thanks for your patience!
 	 * Activity
 	 */
 	BTN_HISTORY: () => LocalizedString
+	/**
+	 * I'll do it later
+	 */
+	BTN_ILL_DO_IT_LATER: () => LocalizedString
 	/**
 	 * Import
 	 */
