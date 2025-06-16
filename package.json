@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -62,6 +62,7 @@
     "@ethersproject/json-wallets": "5",
     "@expo/config-plugins": "~9.0.0",
     "@gorhom/bottom-sheet": "5.0.6",
+    "@formatjs/intl-numberformat": "^8.15.4",
     "@klarna/react-native-vector-drawable": "^0.5.1",
     "@ledgerhq/react-native-hw-transport-ble": "^6.33.4",
     "@metamask/rpc-errors": "^7.0.0",

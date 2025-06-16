@@ -1,5 +1,7 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { isEmpty } from "lodash"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { StyleSheet } from "react-native"
 import {
     BaseBottomSheet,
     BaseBottomSheetTextInput,
@@ -10,25 +12,23 @@ import {
     CustomTokenCard,
     useThor,
 } from "~Components"
-import { StyleSheet } from "react-native"
+import { AnalyticsEvent, ERROR_EVENTS, ScanTarget } from "~Constants"
+import { useAnalyticTracking, useCameraBottomSheet } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { FungibleToken } from "~Model"
 import {
     addOrUpdateCustomTokens,
     addTokenBalance,
-    selectVisibleCustomTokens,
     selectOfficialTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
+    selectVisibleCustomTokens,
     updateAccountBalances,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { FungibleToken } from "~Model"
-import { useAnalyticTracking, useCameraBottomSheet } from "~Hooks"
 import { AddressUtils, debug, warn } from "~Utils"
 import { getCustomTokenInfo } from "../../Utils"
-import { AnalyticsEvent, ERROR_EVENTS, ScanTarget } from "~Constants"
-import { isEmpty } from "lodash"
 
 type Props = {
     tokenAddress?: string
@@ -84,7 +84,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                             thorClient,
                         })
                         if (newToken) {
-                            if (isEmpty(newToken.decimals) || isEmpty(newToken.symbol) || isEmpty(newToken.name)) {
+                            if (isEmpty(newToken.symbol) || isEmpty(newToken.name)) {
                                 setErrorMessage(LL.MANAGE_CUSTOM_TOKENS_GENERIC_ERROR())
                                 return
                             }

@@ -1,5 +1,22 @@
 import getCanonicalLocales from "@formatjs/intl-getcanonicallocales/polyfill"
 import Locale from "@formatjs/intl-locale/polyfill"
 import PluralRules from "@formatjs/intl-pluralrules/polyfill"
+import NumberFormat from "@formatjs/intl-numberformat/polyfill"
+import "@formatjs/intl-numberformat/locale-data/de"
+import "@formatjs/intl-numberformat/locale-data/en"
+import "@formatjs/intl-numberformat/locale-data/es"
+import "@formatjs/intl-numberformat/locale-data/fr"
+import "@formatjs/intl-numberformat/locale-data/hi"
+import "@formatjs/intl-numberformat/locale-data/it"
+import "@formatjs/intl-numberformat/locale-data/ja"
+import "@formatjs/intl-numberformat/locale-data/ko"
+import "@formatjs/intl-numberformat/locale-data/nl"
+import "@formatjs/intl-numberformat/locale-data/pl"
+import "@formatjs/intl-numberformat/locale-data/pt"
+import "@formatjs/intl-numberformat/locale-data/ru"
+import "@formatjs/intl-numberformat/locale-data/sv"
+import "@formatjs/intl-numberformat/locale-data/tr"
+import "@formatjs/intl-numberformat/locale-data/vi"
+import "@formatjs/intl-numberformat/locale-data/zh"
 
-export { getCanonicalLocales, Locale, PluralRules }
+export { getCanonicalLocales, Locale, PluralRules, NumberFormat }
