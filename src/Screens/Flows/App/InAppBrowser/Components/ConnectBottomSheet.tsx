@@ -1,21 +1,18 @@
-import { default as React, useCallback, useState } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
-import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
+import { default as React, useCallback } from "react"
+import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, useInAppBrowser } from "~Components"
-import { COLORS, ColorThemeType } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ConnectAppRequest } from "~Model"
 import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
 import { DAppUtils } from "~Utils"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { DappDetails } from "./DappDetails"
+import { DappWithDetails } from "./DappWithDetails"
 
 type Request = {
     request: Extract<ConnectAppRequest, { type: "in-app" }>
 }
-
-const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
-const AnimatedBaseSpacer = Animated.createAnimatedComponent(wrapFunctionComponent(BaseSpacer))
 
 export const ConnectBottomSheet = () => {
     const { LL } = useI18nContext()
@@ -25,9 +22,6 @@ export const ConnectBottomSheet = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const allApps = useAppSelector(selectFeaturedDapps)
-
-    const [loadFallback, setLoadFallback] = useState(false)
-    const [showDetails, setShowDetails] = useState(false)
 
     const getInfo = useCallback(
         (req: Request) => {
@@ -49,21 +43,6 @@ export const ConnectBottomSheet = () => {
         },
         [allApps],
     )
-
-    const opacityStyles = useAnimatedStyle(() => {
-        return {
-            opacity: showDetails ? withTiming(1, { duration: 300 }) : withTiming(0, { duration: 300 }),
-            height: showDetails ? "auto" : 0,
-            padding: showDetails ? withTiming(16, { duration: 300 }) : withTiming(0, { duration: 300 }),
-        }
-    }, [showDetails])
-
-    const spacerStyles = useAnimatedStyle(() => {
-        return {
-            opacity: showDetails ? withTiming(1, { duration: 300 }) : withTiming(0, { duration: 300 }),
-            height: showDetails ? 16 : 0,
-        }
-    }, [showDetails])
 
     const onConnect = useCallback(
         ({ request }: Request) => {
@@ -99,94 +78,18 @@ export const ConnectBottomSheet = () => {
                                 </BaseText>
                             </BaseView>
                             <BaseSpacer height={24} />
-                            <AnimatedBaseView
-                                bg={theme.colors.assetDetailsCard.background}
-                                p={16}
-                                flexDirection="column"
-                                layout={LinearTransition.duration(300)}
-                                borderRadius={12}>
-                                <AnimatedBaseView flexDirection="row" gap={12} layout={LinearTransition.duration(300)}>
-                                    <BaseView flexDirection="row" gap={16} flex={1}>
-                                        <Image
-                                            source={
-                                                loadFallback
-                                                    ? require("~Assets/Img/dapp-fallback.png")
-                                                    : {
-                                                          uri: icon,
-                                                      }
-                                            }
-                                            style={[{ height: 48, width: 48 }, styles.icon] as StyleProp<ImageStyle>}
-                                            onError={() => setLoadFallback(true)}
-                                            resizeMode="contain"
-                                        />
-                                        <BaseView flexDirection="column" gap={2}>
-                                            <BaseText
-                                                typographyFont="bodyMedium"
-                                                numberOfLines={1}
-                                                color={theme.colors.assetDetailsCard.title}>
-                                                {name}
-                                            </BaseText>
-                                            <BaseText
-                                                typographyFont="captionMedium"
-                                                numberOfLines={1}
-                                                color={theme.colors.assetDetailsCard.text}>
-                                                {url}
-                                            </BaseText>
-                                        </BaseView>
-                                    </BaseView>
-                                    <BaseButton
-                                        action={() => setShowDetails(old => !old)}
-                                        variant="ghost"
-                                        textColor={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
-                                        typographyFont="bodyMedium"
-                                        px={0}
-                                        rightIcon={
-                                            <BaseIcon
-                                                name={showDetails ? "icon-chevron-up" : "icon-chevron-down"}
-                                                size={12}
-                                                color={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
-                                                style={styles.rightIcon}
-                                            />
-                                        }>
-                                        {showDetails ? LL.HIDE() : LL.DETAILS()}
-                                    </BaseButton>
-                                </AnimatedBaseView>
-                                <AnimatedBaseSpacer style={[spacerStyles]} />
-                                <AnimatedBaseView
-                                    layout={LinearTransition.duration(300)}
-                                    style={[styles.detailsContainer, opacityStyles]}
-                                    flexDirection="column"
-                                    borderRadius={8}>
-                                    <BaseText typographyFont="bodyMedium" color={theme.colors.assetDetailsCard.title}>
-                                        {LL.CONNECTED_APP_ASKING_FOR_ACCESS({ dappName: name })}
-                                    </BaseText>
-                                    <AnimatedBaseView
-                                        layout={LinearTransition.duration(300)}
-                                        flexDirection="column"
-                                        ml={8}
-                                        gap={8}>
-                                        {([1, 2] as const).map(value => (
-                                            <AnimatedBaseView
-                                                layout={LinearTransition.duration(300)}
-                                                flexDirection="row"
-                                                gap={8}
-                                                key={value}
-                                                alignItems="flex-start">
-                                                <BaseIcon
-                                                    name="icon-check"
-                                                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_400}
-                                                    size={12}
-                                                />
-                                                <BaseText
-                                                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-                                                    typographyFont="captionRegular">
-                                                    {LL[`CONNECTED_APP_ASKING_FOR_ACCESS_${value}`]()}
-                                                </BaseText>
-                                            </AnimatedBaseView>
-                                        ))}
-                                    </AnimatedBaseView>
-                                </AnimatedBaseView>
-                            </AnimatedBaseView>
+                            <DappWithDetails name={name} icon={icon} url={url}>
+                                <DappDetails.Title>
+                                    {LL.CONNECTED_APP_ASKING_FOR_ACCESS({ dappName: name })}
+                                </DappDetails.Title>
+                                <DappDetails.Container>
+                                    {([1, 2] as const).map(value => (
+                                        <DappDetails.CheckItem key={value}>
+                                            {LL[`CONNECTED_APP_ASKING_FOR_ACCESS_${value}`]()}
+                                        </DappDetails.CheckItem>
+                                    ))}
+                                </DappDetails.Container>
+                            </DappWithDetails>
                             <BaseSpacer height={24} />
                             <BaseView flexDirection="row" gap={16}>
                                 <BaseButton action={onCancel.bind(null, data)} variant="outline" flex={1}>

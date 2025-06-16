@@ -677,6 +677,7 @@
   "NFT_SEND": "NFT Send",
   "NFT_TRANSFER_RECEIVED": "NFT received",
   "NFT_TRANSFER_SENT": "NFT sent",
+  "NOT_VERIFIED_DAPP": "This dApp isn't verified by VeWorld.",
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Go to NFTs",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} was successfully sent to {to: string}.",
   "NOTIFICATION_CANT_REMOVE_ONLY_ACCOUNT": "The associated wallet only has 1 account. Please remove the wallet to remove this account",
