@@ -34,8 +34,8 @@ const AnimatedBaseSpacer = Animated.createAnimatedComponent(wrapFunctionComponen
 
 export const ConnectBottomSheet = () => {
     const { LL } = useI18nContext()
-    const { connectBsRef } = useInAppBrowser()
-    const { ref } = useBottomSheetModal({ externalRef: connectBsRef })
+    const { connectBsRef, addAppAndNavToRequest, postMessage } = useInAppBrowser()
+    const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
     const { ref: accountBsRef, onClose: onAccountBsClose, onOpen: onAccountBsOpen } = useBottomSheetModal()
 
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -84,8 +84,25 @@ export const ConnectBottomSheet = () => {
         }
     }, [showDetails])
 
-    const onConnect = useCallback(() => {}, [])
-    const onCancel = useCallback(() => {}, [])
+    const onConnect = useCallback(
+        ({ request }: Request) => {
+            onCloseBs()
+            addAppAndNavToRequest(request.initialRequest)
+        },
+        [addAppAndNavToRequest, onCloseBs],
+    )
+
+    const onCancel = useCallback(
+        ({ request }: Request) => {
+            postMessage({
+                id: request.initialRequest.id,
+                error: "User rejected the request",
+                method: request.initialRequest.method,
+            })
+            onCloseBs()
+        },
+        [onCloseBs, postMessage],
+    )
 
     const setSelectedAccount = useCallback((account: AccountWithDevice | WatchedAccount) => {
         if ("device" in account) _setSelectedAccount(account)
@@ -189,10 +206,10 @@ export const ConnectBottomSheet = () => {
                             </AnimatedBaseView>
                             <BaseSpacer height={24} />
                             <BaseView flexDirection="row" gap={16}>
-                                <BaseButton action={onCancel} variant="outline" flex={1}>
+                                <BaseButton action={onCancel.bind(null, data)} variant="outline" flex={1}>
                                     {LL.COMMON_BTN_CANCEL()}
                                 </BaseButton>
-                                <BaseButton action={onConnect} flex={1}>
+                                <BaseButton action={onConnect.bind(null, data)} flex={1}>
                                     {LL.COMMON_BTN_APPLY()}
                                 </BaseButton>
                             </BaseView>

@@ -83,12 +83,13 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 return ["75%"]
             }
 
-            if (accounts.length >= 6) {
-                return ["90%"]
-            }
+            // Card Version v1 is way bigger, so it needs more space
+            if (cardVersion === "v1") return ["90%"]
 
-            return ["50%", "75%", "90%"]
-        }, [accounts.length])
+            if (accounts.length < 8) return ["80%"]
+
+            return ["90%"]
+        }, [accounts.length, cardVersion])
 
         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
             data: accounts,
@@ -122,6 +123,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                                 account={item}
                                 onPress={handlePress}
                                 selected={item.address === selectedAccount?.address}
+                                balanceToken={isVthoBalance ? "VTHO" : "VET"}
                             />
                         )
                     }
