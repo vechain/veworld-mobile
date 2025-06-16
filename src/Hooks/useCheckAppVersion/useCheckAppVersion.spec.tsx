@@ -22,7 +22,7 @@ jest.mock("@tanstack/react-query", () => ({
 const initialVersionState: AppVersion = {
     isUpToDate: null,
     installedVersion: "",
-    breakingVersion: "",
+    majorVersion: "",
     lastManifestCheck: null,
     updateRequest: {
         dismissCount: 0,
@@ -66,7 +66,7 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
-                    breakingVersion: "1.1.0",
+                    majorVersion: "1.1.0",
                 },
             }
 
@@ -90,16 +90,16 @@ describe("useCheckAppVersion", () => {
             })
         })
 
-        it("should update breakingVersion in Redux when it changes", () => {
-            const mockBreakingVersionValue = "2.0.0"
-            jest.mocked(useQuery).mockReturnValue({ data: mockBreakingVersionValue } as any)
+        it("should update majorVersion in Redux when it changes", () => {
+            const mockmajorVersionValue = "2.0.0"
+            jest.mocked(useQuery).mockReturnValue({ data: mockmajorVersionValue } as any)
             jest.mocked(SemanticVersionUtils.moreThan).mockReturnValue(true)
 
             const preloadedState = {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
-                    breakingVersion: "1.5.0",
+                    majorVersion: "1.5.0",
                 },
             }
 
@@ -114,12 +114,12 @@ describe("useCheckAppVersion", () => {
     })
 
     describe("shouldShowUpdatePrompt Logic", () => {
-        it("should return false when breaking version is missing", () => {
+        it("should return false when major version is missing", () => {
             const preloadedState = {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
-                    breakingVersion: "",
+                    majorVersion: "",
                     isUpToDate: false,
                     updateRequest: {
                         dismissCount: 0,
@@ -146,7 +146,7 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "",
-                    breakingVersion: "2.0.0",
+                    majorVersion: "2.0.0",
                     isUpToDate: false,
                     updateRequest: {
                         dismissCount: 0,
@@ -173,7 +173,7 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
-                    breakingVersion: "2.0.0",
+                    majorVersion: "2.0.0",
                     isUpToDate: true,
                     updateRequest: {
                         dismissCount: 0,
@@ -209,7 +209,7 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
-                    breakingVersion: "2.0.0",
+                    majorVersion: "2.0.0",
                     isUpToDate: false,
                     updateRequest: {
                         dismissCount: 0,
@@ -271,7 +271,7 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
-                    breakingVersion: "2.0.0",
+                    majorVersion: "2.0.0",
                     isUpToDate: false,
                     updateRequest: {
                         dismissCount: 4,
@@ -280,8 +280,8 @@ describe("useCheckAppVersion", () => {
                 },
             }
 
-            jest.mocked(SemanticVersionUtils.moreThan).mockImplementation((breaking, installed) => {
-                return breaking === "2.0.0" && installed === "1.0.0"
+            jest.mocked(SemanticVersionUtils.moreThan).mockImplementation((major, installed) => {
+                return major === "2.0.0" && installed === "1.0.0"
             })
 
             const { result } = renderHook(() => useCheckAppVersion(), {
@@ -300,7 +300,7 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
-                    breakingVersion: "2.0.0",
+                    majorVersion: "2.0.0",
                     isUpToDate: false,
                     updateRequest: {
                         dismissCount: 3,
@@ -322,12 +322,12 @@ describe("useCheckAppVersion", () => {
             expect(result.current.hasPermanentlyDismissed).toBe(false)
         })
 
-        it("should return false when breaking version is missing", () => {
+        it("should return false when major version is missing", () => {
             const preloadedState = {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
-                    breakingVersion: "",
+                    majorVersion: "",
                     isUpToDate: false,
                     updateRequest: {
                         dismissCount: 4,
@@ -354,7 +354,7 @@ describe("useCheckAppVersion", () => {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "",
-                    breakingVersion: "2.0.0",
+                    majorVersion: "2.0.0",
                     isUpToDate: false,
                     updateRequest: {
                         dismissCount: 4,
@@ -376,12 +376,12 @@ describe("useCheckAppVersion", () => {
             expect(result.current.hasPermanentlyDismissed).toBe(false)
         })
 
-        it("should return false when breaking version is not higher than installed version", () => {
+        it("should return false when major version is not higher than installed version", () => {
             const preloadedState = {
                 versionUpdate: {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
-                    breakingVersion: "2.0.0",
+                    majorVersion: "2.0.0",
                     isUpToDate: false,
                     updateRequest: {
                         dismissCount: 4,

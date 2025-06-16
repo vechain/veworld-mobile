@@ -12,7 +12,7 @@ export const selectLastUpdateDismissTime = createSelector(selectVersionUpdateSta
 })
 
 export const selectBreakingAppVersion = createSelector(selectVersionUpdateState, state => {
-    return state.breakingVersion
+    return state.majorVersion
 })
 
 export const selectInstalledAppVersion = createSelector(selectVersionUpdateState, state => {

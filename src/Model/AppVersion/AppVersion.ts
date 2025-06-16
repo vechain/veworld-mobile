@@ -1,6 +1,6 @@
 export interface AppVersion {
     installedVersion: string
-    breakingVersion: string
+    majorVersion: string
     isUpToDate: boolean | null
     lastManifestCheck: number | null
     updateRequest: {
@@ -10,7 +10,7 @@ export interface AppVersion {
 }
 
 export interface VersionManifest {
-    lastBreaking: string
+    major: string
     latest: string
     history: string[]
 }

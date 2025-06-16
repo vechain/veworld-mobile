@@ -4,7 +4,7 @@ import { AppVersion } from "~Model/AppVersion"
 
 const initialVersionUpdateState: AppVersion = {
     installedVersion: "",
-    breakingVersion: "",
+    majorVersion: "",
     isUpToDate: null,
     lastManifestCheck: null,
     updateRequest: {
@@ -27,9 +27,9 @@ export const VersionUpdateSlice = createSlice({
             state.updateRequest.lastDismissedDate = null
         },
 
-        setBreakingVersion: (state, action: PayloadAction<string>) => {
-            if (state.breakingVersion !== action.payload) {
-                state.breakingVersion = action.payload
+        setMajorVersion: (state, action: PayloadAction<string>) => {
+            if (state.majorVersion !== action.payload) {
+                state.majorVersion = action.payload
                 state.updateRequest.dismissCount = 0
                 state.updateRequest.lastDismissedDate = null
             }
@@ -54,7 +54,7 @@ export const VersionUpdateSlice = createSlice({
 export const {
     incrementDismissCount,
     resetDismissCount,
-    setBreakingVersion,
+    setMajorVersion,
     setInstalledVersion,
     setIsUpToDate,
     setLastManifestCheck,

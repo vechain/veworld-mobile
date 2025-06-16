@@ -20,7 +20,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
     const { LL } = useI18nContext()
     const countryCode = getCountry()?.toLowerCase()
     const dispatch = useAppDispatch()
-    const breakingVersion = useAppSelector(selectBreakingAppVersion)
+    const majorVersion = useAppSelector(selectBreakingAppVersion)
     const dismissCount = useAppSelector(selectUpdateDismissCount)
     const { shouldShowUpdatePrompt } = useCheckAppVersion()
     const { ref, onOpen, onClose } = useBottomSheetModal()
@@ -32,7 +32,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
             track(AnalyticsEvent.VERSION_UPGRADE_MODAL_OPENED, {
                 platform: isIOS() ? "iOS" : "Android",
                 currentVersion: DeviceInfo.getVersion(),
-                breakingVersion: breakingVersion,
+                majorVersion: majorVersion,
                 count: dismissCount + 1,
             })
             onOpen()
@@ -40,27 +40,27 @@ export const VersionUpdateAvailableBottomSheet = () => {
         return () => {
             onClose()
         }
-    }, [shouldShowUpdatePrompt, breakingVersion, track, onOpen, onClose, dismissCount])
+    }, [shouldShowUpdatePrompt, majorVersion, track, onOpen, onClose, dismissCount])
 
     const handleUpdateApp = useCallback(async () => {
         track(AnalyticsEvent.VERSION_UPGRADE_MODAL_SUCCESS, {
             platform: isIOS() ? "iOS" : "Android",
-            breakingVersion: breakingVersion,
+            majorVersion: majorVersion,
             requestCount: dismissCount,
         })
         onClose()
         await Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL(countryCode) : GOOGLE_STORE_URL)
-    }, [track, breakingVersion, dismissCount, onClose, countryCode])
+    }, [track, majorVersion, dismissCount, onClose, countryCode])
 
     const handleUpdateLater = useCallback(() => {
         dispatch(incrementDismissCount())
         track(AnalyticsEvent.VERSION_UPGRADE_MODAL_DISMISSED, {
             platform: isIOS() ? "iOS" : "Android",
-            breakingVersion: breakingVersion,
+            majorVersion: majorVersion,
             requestCount: dismissCount,
         })
         onClose()
-    }, [breakingVersion, dismissCount, dispatch, onClose, track])
+    }, [majorVersion, dismissCount, dispatch, onClose, track])
 
     const mainButton = (
         <BaseButton
@@ -96,7 +96,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
             ref={ref}
             title={LL.APP_UPDATE_AVAILABLE()}
             description={LL.APP_UPDATE_AVAILABLE_MESSAGE({
-                version: breakingVersion,
+                version: majorVersion,
             })}
             mainButton={mainButton}
             secondaryButton={secondaryButton}
