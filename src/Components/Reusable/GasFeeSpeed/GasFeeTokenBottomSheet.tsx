@@ -12,10 +12,10 @@ import {
     selectAllTokens,
     selectDefaultDelegationToken,
     selectSelectedNetwork,
-    setDefaultDelegationToken,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { setDefaultDelegationToken } from "~Storage/Redux/Slices/Delegation"
 import { AddressUtils, BigNutils } from "~Utils"
 import { CheckBoxWithText } from "../CheckBoxWithText"
 
@@ -41,7 +41,7 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken }: EnhancedTokenCar
     }, [item.symbol, onSelectedToken])
 
     return (
-        <Pressable onPress={onPress}>
+        <Pressable onPress={onPress} testID="GAS_FEE_TOKEN_BOTTOM_SHEET_TOKEN">
             <AnimatedTokenCard
                 item={item}
                 drag={noop}
@@ -72,11 +72,11 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
 
     const onApply = useCallback(() => {
         setSelectedToken(internalToken)
-        if (internalToken !== defaultToken)
+        if (internalToken !== defaultToken && isDefaultToken)
             dispatch(setDefaultDelegationToken({ genesisId: selectedNetwork.genesis.id, token: internalToken }))
         setIsDefaultToken(false)
         onClose()
-    }, [defaultToken, dispatch, internalToken, onClose, selectedNetwork.genesis.id, setSelectedToken])
+    }, [defaultToken, dispatch, internalToken, isDefaultToken, onClose, selectedNetwork.genesis.id, setSelectedToken])
 
     const onCancel = useCallback(() => {
         setInternalToken(selectedToken)
@@ -100,16 +100,12 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
         })
     }, [availableTokens, tokens, balances])
 
-    const onDismiss = useCallback(() => {
-        setInternalToken(selectedToken)
-    }, [selectedToken])
-
     const onCheckChanged = useCallback((newValue: boolean) => {
         setIsDefaultToken(newValue)
     }, [])
 
     return (
-        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent} onDismiss={onDismiss}>
+        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-coins" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -138,6 +134,7 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                         text={LL.DELEGATE_FEE_TOKEN_CHECKBOX()}
                         checkAction={onCheckChanged}
                         isChecked={isDefaultToken}
+                        checkboxTestID="GAS_FEE_TOKEN_BOTTOM_SHEET_DEFAULT_CHECKBOX"
                     />
                     <BaseSpacer height={24} />
                 </>
