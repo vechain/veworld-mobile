@@ -167,8 +167,13 @@ export const useSignTransaction = ({
                 throw new Error("[GENERIC DELEGATOR]: Error getting delegator signature")
             }
 
+            const signature = Buffer.from(newTx.signature.substring(2), "hex")
+            const lastBit = signature[signature.length - 1]
+            //Align recovery bit
+            signature[signature.length - 1] = lastBit === 27 ? 0 : lastBit === 28 ? 1 : lastBit
+
             return {
-                signature: Buffer.from(newTx.signature.substring(2), "hex"),
+                signature,
                 transaction: Transaction.of(Transaction.decode(Buffer.from(newTx.raw.substring(2), "hex"), false).body),
             }
         } catch (e) {
