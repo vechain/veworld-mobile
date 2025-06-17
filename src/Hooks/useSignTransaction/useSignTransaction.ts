@@ -41,6 +41,19 @@ const getPrivateKey = (wallet: Wallet, account: AccountWithDevice) => {
 }
 
 /**
+ * Parse signature. (Change from `v` = 27/28 to 0/1)
+ * @param sig Signature returned from API
+ */
+const parseSignature = (sig: string) => {
+    const signature = Buffer.from(sig.substring(2), "hex")
+    const lastBit = signature[signature.length - 1]
+    //Align recovery bit
+    if (lastBit !== 27 && lastBit !== 28) return signature
+    signature[signature.length - 1] = lastBit - 27
+    return signature
+}
+
+/**
  * Hooks that expose a function to sign and send a transaction performing updates on success
  * @param buildTransaction the function to build the transaction
  * @param selectedDelegationAccount the account to delegate to
@@ -167,13 +180,8 @@ export const useSignTransaction = ({
                 throw new Error("[GENERIC DELEGATOR]: Error getting delegator signature")
             }
 
-            const signature = Buffer.from(newTx.signature.substring(2), "hex")
-            const lastBit = signature[signature.length - 1]
-            //Align recovery bit
-            signature[signature.length - 1] = lastBit === 27 ? 0 : lastBit === 28 ? 1 : lastBit
-
             return {
-                signature,
+                signature: parseSignature(newTx.signature),
                 transaction: Transaction.of(Transaction.decode(Buffer.from(newTx.raw.substring(2), "hex"), false).body),
             }
         } catch (e) {
