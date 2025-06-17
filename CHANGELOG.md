@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.5 (2025-06-17)</small>
+
+* build: init ([7c8010e](https://github.com/vechain/veworld-mobile/commit/7c8010e))
+* Rn 76.9 (#2963) ([cd85001](https://github.com/vechain/veworld-mobile/commit/cd85001)), closes [#2963](https://github.com/vechain/veworld-mobile/issues/2963)
+
 ## <small>2.2.4 (2025-06-06)</small>
 
 * build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
