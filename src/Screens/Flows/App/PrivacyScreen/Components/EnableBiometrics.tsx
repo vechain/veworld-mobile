@@ -72,11 +72,13 @@ export const EnableBiometrics = () => {
                 typographyFont="button"
             />
 
-            <RequireUserPassword
-                isOpen={isPasswordPromptOpen}
-                onClose={closePasswordPrompt}
-                onSuccess={onPasswordSuccess}
-            />
+            {isPasswordPromptOpen && (
+                <RequireUserPassword
+                    isOpen={isPasswordPromptOpen}
+                    onClose={closePasswordPrompt}
+                    onSuccess={onPasswordSuccess}
+                />
+            )}
 
             <BackupWarningBottomSheet
                 ref={backupWarningSheetRef}
