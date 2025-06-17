@@ -2,9 +2,9 @@ import { keepPreviousData, useQuery } from "@tanstack/react-query"
 import { TransactionClause } from "@vechain/sdk-core"
 import { ethers } from "ethers"
 import { useMemo } from "react"
-import { B3TR, GasPriceCoefficient, VET, VTHO } from "~Constants"
+import { GasPriceCoefficient } from "~Constants"
 import { estimateGenericDelegatorFees, isValidGenericDelegatorNetwork } from "~Networking/GenericDelegator"
-import { useAppSelector, selectSelectedNetwork } from "~Storage/Redux"
+import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 
 type Args = {
@@ -14,19 +14,6 @@ type Args = {
      * Selected delegation token. Technically it should only be: VET, VTHO, B3TR
      */
     token: string
-}
-
-const mapTokenToResponseElement = (token: string) => {
-    switch (token) {
-        case VTHO.symbol:
-            return "usingVtho"
-        case VET.symbol:
-            return "usingVet"
-        case B3TR.symbol:
-            return "usingB3tr"
-        default:
-            throw new Error("[GENERIC DELEGATOR]: Invalid token")
-    }
 }
 
 export const useGenericDelegationFees = ({ clauses, signer, token }: Args) => {
@@ -44,28 +31,28 @@ export const useGenericDelegationFees = ({ clauses, signer, token }: Args) => {
         //Values returned from the endpoint are in WEI, they're in Ether. So, in order to be compliant with our interface, we should multiply the numbers by 1 ETH (10^18 WEI)
         return {
             [GasPriceCoefficient.REGULAR]: {
-                estimatedFee: BigNutils(data.transactionCost.regular[mapTokenToResponseElement(token)]).multiply(
+                estimatedFee: BigNutils(data.transactionCost.regular[token.toLowerCase()]).multiply(
                     ethers.utils.parseEther("1").toString(),
                 ),
-                maxFee: BigNutils(data.transactionCost.regular[mapTokenToResponseElement(token)]).multiply(
+                maxFee: BigNutils(data.transactionCost.regular[token.toLowerCase()]).multiply(
                     ethers.utils.parseEther("1").toString(),
                 ),
                 priorityFee: BigNutils("0"),
             },
             [GasPriceCoefficient.MEDIUM]: {
-                estimatedFee: BigNutils(data.transactionCost.medium[mapTokenToResponseElement(token)]).multiply(
+                estimatedFee: BigNutils(data.transactionCost.medium[token.toLowerCase()]).multiply(
                     ethers.utils.parseEther("1").toString(),
                 ),
-                maxFee: BigNutils(data.transactionCost.medium[mapTokenToResponseElement(token)]).multiply(
+                maxFee: BigNutils(data.transactionCost.medium[token.toLowerCase()]).multiply(
                     ethers.utils.parseEther("1").toString(),
                 ),
                 priorityFee: BigNutils("0"),
             },
             [GasPriceCoefficient.HIGH]: {
-                estimatedFee: BigNutils(data.transactionCost.high[mapTokenToResponseElement(token)]).multiply(
+                estimatedFee: BigNutils(data.transactionCost.high[token.toLowerCase()]).multiply(
                     ethers.utils.parseEther("1").toString(),
                 ),
-                maxFee: BigNutils(data.transactionCost.high[mapTokenToResponseElement(token)]).multiply(
+                maxFee: BigNutils(data.transactionCost.high[token.toLowerCase()]).multiply(
                     ethers.utils.parseEther("1").toString(),
                 ),
                 priorityFee: BigNutils("0"),

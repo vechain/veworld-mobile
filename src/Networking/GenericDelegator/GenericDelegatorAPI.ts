@@ -29,7 +29,9 @@ type GetGenericDelegatorCoinsRequest = {
 }
 
 export const getGenericDelegatorCoins = ({ networkType }: GetGenericDelegatorCoinsRequest) =>
-    executeIfValidNetwork(networkType, "/delegator/coins", url => fetchFromEndpoint<string[]>(url))
+    executeIfValidNetwork(networkType, "/api/v1/deposit/tokens", url =>
+        fetchFromEndpoint<string[]>(url).then(res => res.map(token => token.toUpperCase())),
+    )
 
 type EstimateGenericDelegatorFeesRequest = {
     networkType: NETWORK_TYPE
@@ -38,10 +40,7 @@ type EstimateGenericDelegatorFeesRequest = {
 }
 
 export type EstimateGenericDelegatorFeesResponseItem = {
-    usingVtho: number
-    usingVet: number
-    usingB3tr: number
-    usingSmartAccount: number
+    [token: string]: number
 }
 
 export type EstimateGenericDelegatorFeesResponse = {
@@ -53,7 +52,7 @@ export type EstimateGenericDelegatorFeesResponse = {
 }
 
 export const estimateGenericDelegatorFees = ({ networkType, clauses, signer }: EstimateGenericDelegatorFeesRequest) =>
-    executeIfValidNetwork(networkType, "/delegator/estimate", url =>
+    executeIfValidNetwork(networkType, "/api/v1/estimate/clauses/,", url =>
         requestFromEndpoint<EstimateGenericDelegatorFeesResponse>({
             url: url,
             data: {
@@ -63,7 +62,6 @@ export const estimateGenericDelegatorFees = ({ networkType, clauses, signer }: E
             method: "POST",
         }),
     )
-
 export const delegateGenericDelegator = ({
     raw,
     origin,
@@ -75,7 +73,7 @@ export const delegateGenericDelegator = ({
     token: string
     networkType: NETWORK_TYPE
 }) =>
-    executeIfValidNetwork(networkType, `/delegator/delegate/${token}`, url =>
+    executeIfValidNetwork(networkType, `/api/v1/sign/transaction/${token.toLowerCase()}`, url =>
         requestFromEndpoint<{ signature: string; address: string; raw: string; origin: string }>({
             url: url,
             data: {
@@ -84,9 +82,4 @@ export const delegateGenericDelegator = ({
             },
             method: "POST",
         }),
-    )
-
-export const getGenericDelegatorDepositAccount = ({ networkType }: { networkType: NETWORK_TYPE }) =>
-    executeIfValidNetwork(networkType, "/delegator/deposit-account", url =>
-        fetchFromEndpoint<{ depositAccount: string }>(url),
     )

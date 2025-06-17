@@ -3,7 +3,6 @@ import { TESTNET_URL, ThorClient } from "@vechain/sdk-network"
 import { ethers } from "ethers"
 import { validateGenericDelegatorTx } from "./GenericDelegatorUtils"
 import BigNutils from "~Utils/BigNumberUtils"
-import { getGenericDelegatorDepositAccount } from "~Networking/GenericDelegator"
 import { abis, B3TR } from "~Constants"
 
 const thorClient = ThorClient.at(TESTNET_URL)
@@ -46,9 +45,6 @@ describe("GenericDelegatorUtils", () => {
             it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
                 const toAccount = ethers.Wallet.createRandom().address
-                ;(getGenericDelegatorDepositAccount as jest.Mock).mockResolvedValueOnce({
-                    depositAccount: depositAccount,
-                })
                 const result = await validateGenericDelegatorTx(
                     await constructTx([constructVETTransfer(toAccount)]),
                     await constructTx([
@@ -64,9 +60,6 @@ describe("GenericDelegatorUtils", () => {
             it("should return false if it's trying to send some data", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
                 const toAccount = ethers.Wallet.createRandom().address
-                ;(getGenericDelegatorDepositAccount as jest.Mock).mockResolvedValueOnce({
-                    depositAccount: depositAccount,
-                })
                 const result = await validateGenericDelegatorTx(
                     await constructTx([constructVETTransfer(toAccount)]),
                     await constructTx([
@@ -82,9 +75,6 @@ describe("GenericDelegatorUtils", () => {
             it("should return true if all the checks are ok", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
                 const toAccount = ethers.Wallet.createRandom().address
-                ;(getGenericDelegatorDepositAccount as jest.Mock).mockResolvedValueOnce({
-                    depositAccount: depositAccount,
-                })
                 const result = await validateGenericDelegatorTx(
                     await constructTx([constructVETTransfer(toAccount)]),
                     await constructTx([
@@ -99,11 +89,7 @@ describe("GenericDelegatorUtils", () => {
         })
         describe("B3TR", () => {
             it("should return false if the signature is wrong", async () => {
-                const depositAccount = ethers.Wallet.createRandom().address
                 const toAccount = ethers.Wallet.createRandom().address
-                ;(getGenericDelegatorDepositAccount as jest.Mock).mockResolvedValueOnce({
-                    depositAccount: depositAccount,
-                })
                 const result = await validateGenericDelegatorTx(
                     await constructTx([constructVETTransfer(toAccount)]),
                     await constructTx([
@@ -119,9 +105,6 @@ describe("GenericDelegatorUtils", () => {
             it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
                 const toAccount = ethers.Wallet.createRandom().address
-                ;(getGenericDelegatorDepositAccount as jest.Mock).mockResolvedValueOnce({
-                    depositAccount: depositAccount,
-                })
                 const result = await validateGenericDelegatorTx(
                     await constructTx([constructVETTransfer(toAccount)]),
                     await constructTx([
@@ -137,9 +120,6 @@ describe("GenericDelegatorUtils", () => {
             it("should return true if all the checks are ok", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
                 const toAccount = ethers.Wallet.createRandom().address
-                ;(getGenericDelegatorDepositAccount as jest.Mock).mockResolvedValueOnce({
-                    depositAccount: depositAccount,
-                })
                 const result = await validateGenericDelegatorTx(
                     await constructTx([constructVETTransfer(toAccount)]),
                     await constructTx([
