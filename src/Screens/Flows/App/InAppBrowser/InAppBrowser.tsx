@@ -12,7 +12,6 @@ import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
-import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
 
@@ -129,7 +128,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                         onClose={handleCloseChangeAccountNetworkBottomSheet}
                         onConfirm={handleConfirmChangeAccountNetworkBottomSheet}
                     />
-                    <ConnectBottomSheet />
                 </View>
             }
         />

@@ -1,6 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { RefObject, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
+import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import {
     NativeModules,
     NativeScrollEvent,
@@ -37,6 +37,8 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { useInteraction } from "../InteractionProvider"
+import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
 const { PackageDetails } = NativeModules
@@ -79,7 +81,6 @@ type ContextType = {
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean
-    connectBsRef: RefObject<BottomSheetModalMethods>
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -104,6 +105,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
     const [isLoading, setIsLoading] = React.useState(true)
+    const { connectBsRef } = useInteraction()
 
     useEffect(() => {
         if (platform === "ios") {
@@ -136,7 +138,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
-    const { ref: connectBsRef } = useBottomSheetModal()
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -784,7 +785,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
             isDapp,
-            connectBsRef,
         }
     }, [
         isLoading,
@@ -813,10 +813,14 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         switchAccount,
         packageInfo,
         isDapp,
-        connectBsRef,
     ])
 
-    return <Context.Provider value={contextValue}>{children}</Context.Provider>
+    return (
+        <Context.Provider value={contextValue}>
+            <ConnectBottomSheet />
+            {children}
+        </Context.Provider>
+    )
 }
 
 export const useInAppBrowser = () => {
