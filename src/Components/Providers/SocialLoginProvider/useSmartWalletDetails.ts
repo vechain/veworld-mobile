@@ -32,6 +32,7 @@ const useHasV1SmartAccount = (ownerAddress: string, thor: ThorClient, selectedNe
     return useQuery({
         queryKey: ["VECHAIN_KIT", "SMART_ACCOUNT", "HAS_V1_SMART_ACCOUNT", ownerAddress, selectedNetworkName],
         queryFn: async () => {
+            console.log("useHasV1SmartAccount query start")
             if (!ownerAddress) throw new Error("Owner address is required")
 
             const accountFactory = thor.contracts.load(
@@ -40,7 +41,7 @@ const useHasV1SmartAccount = (ownerAddress: string, thor: ThorClient, selectedNe
             )
 
             const result = await accountFactory.read.hasLegacyAccount(ownerAddress)
-            console.log("result", result)
+            console.log("useHasV1SmartAccount result", result)
             return result[0] as boolean
         },
         enabled: !!thor && !!ownerAddress && !!selectedNetworkName,
@@ -51,15 +52,16 @@ const useSmartAccountVersion = (smartAccountAddress: string, thor: ThorClient, s
     return useQuery({
         queryKey: ["VECHAIN_KIT", "SMART_ACCOUNT", "VERSION", smartAccountAddress],
         queryFn: async () => {
+            console.log("useSmartAccountVersion query start")
             if (!smartAccountAddress) throw new Error("Smart account address is required")
 
             const accountFactory = thor.contracts.load(
                 getConfig(selectedNetworkName).accountFactoryAddress,
                 SimpleAccountFactoryABI,
             )
-
+            console.log("useSmartAccountVersion accountFactory", accountFactory)
             const result = await accountFactory.read.version()
-            console.log("result", result)
+            console.log("useSmartAccountVersion result", result)
             return parseInt(result[0] as string) as number
         },
         enabled: !!thor && smartAccountAddress !== "" && !!selectedNetworkName,
@@ -70,6 +72,7 @@ const useSmartAccount = (ownerAddress: string, thor: ThorClient, selectedNetwork
     return useQuery({
         queryKey: ["VECHAIN_KIT_SMART_ACCOUNT", ownerAddress],
         queryFn: async (): Promise<SmartAccountReturnType> => {
+            console.log("useSmartAccount query start", ownerAddress)
             if (!ownerAddress) {
                 return { address: undefined, isDeployed: false }
             }
@@ -80,10 +83,10 @@ const useSmartAccount = (ownerAddress: string, thor: ThorClient, selectedNetwork
             )
 
             const account = await accountFactory.read.getAccountAddress(ownerAddress)
-            console.log("account", account)
+            console.log("useSmartAccount result", account)
 
             const isDeployed = (await thor.accounts.getAccount(Address.of(String(account[0])))).hasCode
-
+            console.log("useSmartAccount isDeployed", isDeployed)
             return {
                 address: String(account[0]),
                 isDeployed,
@@ -99,6 +102,7 @@ const useSmartAccount = (ownerAddress: string, thor: ThorClient, selectedNetwork
  * @returns Object containing all three query functions and their results
  */
 export const useSmartWalletDetails = (ownerAddress: string) => {
+    console.log("useSmartWalletDetails start", ownerAddress)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const nodeUrl = selectedNetwork.currentUrl
     const thor = ThorClient.at(nodeUrl)
@@ -115,7 +119,7 @@ export const useSmartWalletDetails = (ownerAddress: string) => {
         hasV1SmartAccountQuery,
         smartAccountVersionQuery,
         smartAccountQuery,
-        getSmartAccountAddress: getSmartAccountFactoryAddress,
+        getSmartAccountFactoryAddress,
         // Helper methods to refetch individual queries
         refetchHasV1SmartAccount: hasV1SmartAccountQuery.refetch,
         refetchSmartAccountVersion: smartAccountVersionQuery.refetch,

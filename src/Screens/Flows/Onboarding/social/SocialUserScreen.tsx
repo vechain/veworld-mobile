@@ -6,10 +6,11 @@ import { usePrivy, getUserEmbeddedEthereumWallet, useLinkWithOAuth } from "@priv
 import { useNavigation } from "@react-navigation/native"
 import { useCreateWallet } from "../../../../Hooks/useCreateWallet/useCreateWallet"
 import { useSocialLogin } from "../../../../Components/Providers/SocialLoginProvider/SocialLoginProvider"
+import { useSmartWalletDetails } from "../../../../Components/Providers/SocialLoginProvider/useSmartWalletDetails"
 
 export const SocialUserScreen = () => {
     const { createSocialWallet } = useCreateWallet()
-    const { accountAddress } = useSocialLogin()
+    // const { accountAddress } = useSocialLogin()
     const nav = useNavigation<any>()
 
     const navigateToTabStack = useCallback(() => {
@@ -23,12 +24,16 @@ export const SocialUserScreen = () => {
     const { logout, user } = usePrivy()
 
     const account = getUserEmbeddedEthereumWallet(user)
+    console.log("SocialUserScreen account", account?.address)
+    const { smartAccountQuery } = useSmartWalletDetails(account?.address ?? "")
     const createWalletAndNavigate = useCallback(() => {
-        if (accountAddress) {
-            createSocialWallet({ address: accountAddress })
+        const address = smartAccountQuery.data?.address
+        console.log("createWalletAndNavigate", address)
+        if (address) {
+            createSocialWallet({ address })
             navigateToTabStack()
         }
-    }, [createSocialWallet, accountAddress, navigateToTabStack])
+    }, [createSocialWallet, smartAccountQuery.data?.address, navigateToTabStack])
 
     // const { linkWithPasskey } = useLinkWithPasskey()
     const oauth = useLinkWithOAuth()

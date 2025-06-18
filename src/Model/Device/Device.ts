@@ -30,7 +30,11 @@ export interface BaseDevice {
  */
 export interface LocalDevice extends BaseDevice {
     wallet: string
-    readonly type: DEVICE_TYPE.LOCAL_MNEMONIC | DEVICE_TYPE.LOCAL_PRIVATE_KEY | DEVICE_TYPE.LOCAL_WATCHED
+    readonly type:
+        | DEVICE_TYPE.LOCAL_MNEMONIC
+        | DEVICE_TYPE.LOCAL_PRIVATE_KEY
+        | DEVICE_TYPE.LOCAL_WATCHED
+        | DEVICE_TYPE.SOCIAL
 }
 
 /**

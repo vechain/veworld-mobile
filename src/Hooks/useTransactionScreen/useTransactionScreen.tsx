@@ -19,6 +19,7 @@ import { Routes } from "~Navigation"
 import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { error, GasUtils } from "~Utils"
 import { useVTHO_HACK } from "./useVTHO_HACK"
+import { useSocialLogin } from "../../Components/Providers/SocialLoginProvider/SocialLoginProvider"
 
 type Props = {
     clauses: TransactionClause[]
@@ -114,6 +115,7 @@ export const useTransactionScreen = ({
 
     const vtho = useVTHO_HACK(selectedDelegationAccount?.address ?? selectedAccount.address)
 
+    const { signTransaction: signTransactionSocial } = useSocialLogin()
     /**
      * Signs the transaction and sends it to the blockchain
      */
@@ -122,6 +124,14 @@ export const useTransactionScreen = ({
             setLoading(true)
 
             try {
+                const senderDevice = selectedAccount.device
+                console.log("senderDevice", senderDevice)
+                if (senderDevice.type === DEVICE_TYPE.SOCIAL) {
+                    console.log("social device sign and send differently")
+                    const id = await signTransactionSocial(clauses)
+                    console.log("sent smarty wallet id", id)
+                    return
+                }
                 const transaction: SignTransactionResponse = await signTransaction(password)
 
                 switch (transaction) {

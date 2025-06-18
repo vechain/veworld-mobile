@@ -1,6 +1,6 @@
 import { useEmbeddedEthereumWallet } from "@privy-io/expo"
 import { encodeFunctionData, bytesToHex } from "viem"
-import { ABIContract, Address, Clause, Transaction } from "@vechain/sdk-core"
+import { ABIContract, Address, Clause, Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { SimpleAccountABI, SimpleAccountFactoryABI } from "./abi"
 import { ExecuteBatchWithAuthorizationSignData, ExecuteWithAuthorizationSignData } from "./Types"
@@ -17,12 +17,14 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
     // const { connection, connectedWallet } = useWallet()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
+    console.log("selectedAccount:", selectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const chainTag = useAppSelector(selectChainTag)
+    console.log("chainTag:", chainTag)
     const thor = ThorClient.at(selectedNetwork.currentUrl)
 
-    const { hasV1SmartAccountQuery, smartAccountVersionQuery, smartAccountQuery, getSmartAccountAddress } =
-        useSmartWalletDetails(selectedAccount?.address ?? "")
+    const { hasV1SmartAccountQuery, smartAccountVersionQuery, smartAccountQuery, getSmartAccountFactoryAddress } =
+        useSmartWalletDetails(wallets[0]?.address ?? "")
     const hasV1SmartAccount = hasV1SmartAccountQuery.data
     console.log("hasV1SmartAccount:", hasV1SmartAccount)
 
@@ -35,8 +37,89 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
     const smartAccountIsDeployed = smartAccountQuery.data?.isDeployed
     console.log("smartAccountIsDeployed:", smartAccountIsDeployed)
 
-    const smartAccountFactoryAddress = getSmartAccountAddress(selectedNetwork.name).accountFactoryAddress
+    const smartAccountFactoryAddress = getSmartAccountFactoryAddress(selectedNetwork.name).accountFactoryAddress
     console.log("smartAccountFactoryAddress:", smartAccountFactoryAddress)
+
+    /**
+     * Recover the signer address from an EIP-712 typed data signature
+     * This recreates the exact hash that was signed according to EIP-712 spec
+     */
+    const recoverEIP712Signer = (typedData: any, signature: string): string => {
+        try {
+            const { ethers } = require("ethers")
+            const digest = buildV3Digest(typedData)
+            const recoveredAddress = ethers.utils.recoverAddress(digest, signature)
+            return recoveredAddress
+        } catch (error) {
+            console.log("Manual EIP-712 signature recovery failed:", error)
+
+            // Log the signature details for debugging
+            console.log("Domain:", JSON.stringify(typedData.domain, null, 2))
+            console.log("Types:", JSON.stringify(typedData.types, null, 2))
+            console.log("Message:", JSON.stringify(typedData.message, null, 2))
+            console.log("Signature:", signature)
+            console.log("Primary Type:", typedData.primaryType)
+
+            throw new Error("Could not recover EIP-712 signer address")
+        }
+    }
+
+    /**
+     * Builds the digest for a V3 smart contract transaction, which uses non-standard EIP-712 hashing.
+     */
+    const buildV3Digest = (typedData: any): string => {
+        const { ethers } = require("ethers")
+
+        // Create domain separator manually to match contract's custom domain
+        const domainTypeHash = ethers.utils.keccak256(
+            ethers.utils.toUtf8Bytes(
+                "EIP712Domain(string name,string version,uint256 chainId,address verifyingContract)",
+            ),
+        )
+        const domainSeparator = ethers.utils.keccak256(
+            ethers.utils.defaultAbiCoder.encode(
+                ["bytes32", "bytes32", "bytes32", "uint256", "address"],
+                [
+                    domainTypeHash,
+                    ethers.utils.keccak256(ethers.utils.toUtf8Bytes(typedData.domain.name)),
+                    ethers.utils.keccak256(ethers.utils.toUtf8Bytes(typedData.domain.version)),
+                    typedData.domain.chainId,
+                    typedData.domain.verifyingContract,
+                ],
+            ),
+        )
+
+        // Create struct hash manually to match contract's array encoding
+        const batchTypeString =
+            "ExecuteBatchWithAuthorization(address[] to,uint256[] value,bytes[] data,uint256 validAfter,uint256 validBefore,bytes32 nonce)"
+        const typeHash = ethers.utils.keccak256(ethers.utils.toUtf8Bytes(batchTypeString))
+
+        // Hash arrays exactly like the contract does using abi.encodePacked
+        const toHash = ethers.utils.solidityKeccak256(["address[]"], [typedData.message.to])
+        const valueHash = ethers.utils.solidityKeccak256(["uint256[]"], [typedData.message.value])
+
+        // Double-hash the data array like the contract
+        const dataHashes = typedData.message.data.map((data: string) => ethers.utils.keccak256(data))
+        const dataHash = ethers.utils.solidityKeccak256(["bytes32[]"], [dataHashes])
+
+        const structHash = ethers.utils.solidityKeccak256(
+            ["bytes32", "bytes32", "bytes32", "bytes32", "uint256", "uint256", "bytes32"],
+            [
+                typeHash,
+                toHash,
+                valueHash,
+                dataHash,
+                typedData.message.validAfter,
+                typedData.message.validBefore,
+                typedData.message.nonce,
+            ],
+        )
+
+        // Create final digest
+        return ethers.utils.keccak256(
+            ethers.utils.solidityPack(["string", "bytes32", "bytes32"], ["\x19\x01", domainSeparator, structHash]),
+        )
+    }
 
     /**
      * Build the typed data structure for executeBatchWithAuthorization
@@ -50,7 +133,7 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
         chainId,
         verifyingContract,
     }: {
-        clauses: Connex.VM.Clause[]
+        clauses: TransactionClause[]
         chainId: number
         verifyingContract: string
     }): ExecuteBatchWithAuthorizationSignData {
@@ -115,7 +198,7 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
         chainId,
         verifyingContract,
     }: {
-        clause: Connex.VM.Clause
+        clause: TransactionClause
         chainId: number
         verifyingContract: string
     }): ExecuteWithAuthorizationSignData {
@@ -159,21 +242,33 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
      * Sign typed data using the embedded wallet provider for React Native
      */
     const signTypedDataPrivy = async (typedData: any): Promise<string> => {
+        console.log("smart account signTypedDataPrivy", typedData)
         if (!wallets.length) {
             throw new Error("No embedded wallet available")
         }
 
-        const { domain, types, value } = typedData
         if (!wallets) throw new Error("No Social wallet found")
 
         const privyProvider = await wallets[0].getProvider()
         const privvyAccount = wallets[0].address
-
+        console.log("signTypedDataPrivy with", privvyAccount)
         const signature = await privyProvider.request({
             method: "eth_signTypedData_v4",
-            params: [privvyAccount, { domain, primaryType: "Person", types, message: { ...value } }],
+            params: [privvyAccount, typedData],
         })
-        console.log("signed typed data with Privy", signature)
+        console.log("signature", signature)
+
+        // Recover address from EIP-712 typed data signature
+        try {
+            console.log("recovering signer from signature")
+            const recoveredAddress = recoverEIP712Signer(typedData, signature)
+            console.log("Expected signer (embedded wallet):", privvyAccount)
+            console.log("Recovered signer from signature:", recoveredAddress)
+            console.log("Addresses match:", privvyAccount.toLowerCase() === recoveredAddress.toLowerCase())
+        } catch (error) {
+            console.log("Failed to recover EIP-712 signer:", error)
+        }
+        console.log("signed typed data with Privy")
         return signature
     }
 
@@ -221,17 +316,12 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
      */
     const sendTransaction = async ({
         txClauses = [],
-        title = "Sign Transaction",
-        description,
-        buttonText = "Sign",
         suggestedMaxGas,
     }: {
-        txClauses: Connex.VM.Clause[]
-        title?: string
-        description?: string
-        buttonText?: string
+        txClauses: TransactionClause[]
         suggestedMaxGas?: number
     }): Promise<string> => {
+        console.log("sendTransaction")
         // Check if queries are still loading
         if (hasV1SmartAccountQuery.isLoading || smartAccountQuery.isLoading || smartAccountVersionQuery.isLoading) {
             throw new Error("Smart wallet data is still loading")
@@ -244,33 +334,41 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
         // Clauses for the transaction
         const clauses = []
 
+        // Now we can broadcast the transaction to the network by using our random transaction user
+        if (!wallets) throw new Error("No Social wallet found")
+
+        const privyProvider = await wallets[0].getProvider()
+        const embeddedWalletAddress = wallets[0].address
         // If the smart account was never deployed or the version is >= 3 and we have multiple clauses, we can batch them
         if (!hasV1SmartAccount || (smartAccountVersion && smartAccountVersion >= 3)) {
             const typedData = buildBatchAuthorizationTypedData({
                 clauses: txClauses,
-                chainId: chainTag,
+                chainId: 6986, // Use masked chainId for custom authorization method
                 verifyingContract: smartAccountAddress,
             })
 
-            // Sign the typed data (either cross-app or traditional Privy)
-            const signature = await signTypedDataPrivy(typedData)
+            // Manually create the digest to be signed, matching the contract's non-standard hashing.
+            // const digest = buildV3Digest(typedData)
 
+            // Sign the raw digest. This bypasses the standard EIP-712 hashing from `eth_signTypedData_v4`
+            const signature = await signTypedDataPrivy(typedData)
+            console.log("signed typed data", signature)
             // If the smart account is not deployed, deploy it first
             if (!smartAccountIsDeployed) {
                 clauses.push(
                     Clause.callFunction(
                         Address.of(smartAccountFactoryAddress),
                         ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
-                        [selectedAccount.address ?? ""],
+                        ["0xD6F978a38527e0D3047c9008094E996260A676f5"],
                     ),
                 )
             }
 
-            // Now the single batch execution call
+            // Now the single batch execution call using custom authorization for better compatibility
             clauses.push(
                 Clause.callFunction(
                     Address.of(smartAccountAddress),
-                    ABIContract.ofAbi(SimpleAccountABI).getFunction("executeBatchWithAuthorization"),
+                    ABIContract.ofAbi(SimpleAccountABI).getFunction("executeBatchWithCustomAuthorization"),
                     [
                         typedData.message.to,
                         typedData.message.value?.map((val: string) => BigInt(val)) ?? 0,
@@ -283,62 +381,54 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
                 ),
             )
         } else {
-            // Else, if it is a v1 smart account, we need to sign each clause individually
-            const dataToSign: ExecuteWithAuthorizationSignData[] = txClauses.map(txData =>
-                buildSingleAuthorizationTypedData({
-                    clause: txData,
-                    chainId: chainTag,
-                    verifyingContract: smartAccountAddress,
-                }),
-            )
-
-            // request signatures using privy
-            const signatures: string[] = []
-            for (let index = 0; index < dataToSign.length; index++) {
-                const data = dataToSign[index]
-                const txClause = txClauses[index]
-                if (!txClause) {
-                    throw new Error(`Transaction clause at index ${index} is undefined`)
-                }
-
-                const signature = await signTypedDataPrivy(data)
-                signatures.push(signature)
-            }
-
-            // if the account smartAccountAddress has no code yet, it's not been deployed/created yet
-            if (!smartAccountIsDeployed) {
-                clauses.push(
-                    Clause.callFunction(
-                        Address.of(smartAccountFactoryAddress),
-                        ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
-                        [selectedAccount.address ?? ""],
-                    ),
-                )
-            }
-
-            dataToSign.forEach((data, index) => {
-                clauses.push(
-                    Clause.callFunction(
-                        Address.of(smartAccountAddress ?? ""),
-                        ABIContract.ofAbi(SimpleAccountABI).getFunction("executeWithAuthorization"),
-                        [
-                            data.message.to as `0x${string}`,
-                            BigInt(data.message.value),
-                            data.message.data as `0x${string}`,
-                            BigInt(data.message.validAfter),
-                            BigInt(data.message.validBefore),
-                            signatures[index] as `0x${string}`,
-                        ],
-                    ),
-                )
-            })
+            // // Else, if it is a v1 smart account, we need to sign each clause individually
+            // const dataToSign: ExecuteWithAuthorizationSignData[] = txClauses.map(txData =>
+            //     buildSingleAuthorizationTypedData({
+            //         clause: txData,
+            //         chainId: chainTag,
+            //         verifyingContract: smartAccountAddress,
+            //     }),
+            // )
+            // // request signatures using privy
+            // const signatures: string[] = []
+            // for (let index = 0; index < dataToSign.length; index++) {
+            //     const data = dataToSign[index]
+            //     const txClause = txClauses[index]
+            //     if (!txClause) {
+            //         throw new Error(`Transaction clause at index ${index} is undefined`)
+            //     }
+            //     const signature = await signTypedDataPrivy(data)
+            //     signatures.push(signature)
+            // }
+            // // if the account smartAccountAddress has no code yet, it's not been deployed/created yet
+            // if (!smartAccountIsDeployed) {
+            //     clauses.push(
+            //         Clause.callFunction(
+            //             Address.of(smartAccountFactoryAddress),
+            //             ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
+            //             [selectedAccount.address ?? ""],
+            //         ),
+            //     )
+            // }
+            // dataToSign.forEach((data, index) => {
+            //     clauses.push(
+            //         Clause.callFunction(
+            //             Address.of(smartAccountAddress ?? ""),
+            //             ABIContract.ofAbi(SimpleAccountABI).getFunction("executeWithAuthorization"),
+            //             [
+            //                 data.message.to as `0x${string}`,
+            //                 BigInt(data.message.value),
+            //                 data.message.data as `0x${string}`,
+            //                 BigInt(data.message.validAfter),
+            //                 BigInt(data.message.validBefore),
+            //                 signatures[index] as `0x${string}`,
+            //             ],
+            //         ),
+            //     )
+            // })
         }
 
-        // Now we can broadcast the transaction to the network by using our random transaction user
-        if (!wallets) throw new Error("No Social wallet found")
-
-        const privyProvider = await wallets[0].getProvider()
-        const embeddedWalletAddress = wallets[0].address
+        console.log("embeddedWalletAddress", embeddedWalletAddress)
         // estimate the gas fees for the transaction
         const gasResult = await thor.gas.estimateGas(clauses, embeddedWalletAddress, {
             gasPadding: 1,
@@ -347,17 +437,21 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
         const parsedGasLimit = Math.max(gasResult.totalGas, suggestedMaxGas ?? 0)
 
         // build the transaction in VeChain format, with delegation enabled
-        const txBody = await thor.transactions.buildTransactionBody(clauses, parsedGasLimit, { isDelegated: true })
+        // TODO: do delegation properly
+        const txBody = await thor.transactions.buildTransactionBody(clauses, parsedGasLimit, {
+            isDelegated: false,
+        })
 
         const tx = Transaction.of(txBody)
 
         const hash = tx.getTransactionHash()
 
-        // console.log("Privy hash", hash.toString())
+        console.log("Calling privy to sign hash")
         const response = await privyProvider.request({
             method: "secp256k1_sign",
             params: [hash.toString()],
         })
+        console.log("privy got send signature", response)
         // console.log("privy got send signature", response)
         // vAdjusted = vAdjusted - 27
         const signatureHex = response.slice(2) // Remove 0x prefix
@@ -374,8 +468,7 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
         // Reassemble with the correct v value
         const adjustedSignature = `${r}${s}${vAdjusted.toString(16).padStart(2, "0")}`
         const signatureBuffer = Buffer.from(adjustedSignature, "hex")
-        // console.log("signed TX with Privy", signatureBuffer)
-
+        console.log("Got signature from privy")
         // sign the transaction and request the fee delegator to pay the gas fees in the process
 
         // TODO use embedded wallet to sign raw hash
@@ -383,20 +476,31 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
         // const signer = await providerWithDelegationEnabled.getSigner(randomTransactionUser.address)
         // const txInput = signerUtils.transactionBodyToTransactionRequestInput(txBody, randomTransactionUser.address)
 
-        const rawDelegateSigned = await getUrlDelegationSignature(tx, delegatorUrl, wallets[0].address)
+        const rawDelegateSigned = await getUrlDelegationSignature(tx, delegatorUrl, embeddedWalletAddress)
 
-        // publish the hexlified signed transaction directly on the node api
-        const { id } = (await fetch(`${nodeUrl}/transactions`, {
-            method: "POST",
-            headers: {
-                "content-type": "application/json",
-            },
-            body: JSON.stringify({
-                raw: Buffer.concat([signatureBuffer, rawDelegateSigned]),
-            }),
-        }).then(res => res.json())) as { id: string }
+        const signedTx = Transaction.of(txBody, Buffer.concat([signatureBuffer]))
+        // const signedTx = Transaction.of(txBody, signatureBuffer)
 
-        return id
+        const encodedRawTx = {
+            raw: HexUtils.addPrefix(Buffer.from(signedTx.encoded).toString("hex")),
+        }
+        console.log("sending tx to network", signedTx)
+
+        try {
+            // publish the hexlified signed transaction directly on the node api
+            const { id } = (await fetch(`${selectedNetwork.currentUrl}/transactions`, {
+                method: "POST",
+                headers: {
+                    "content-type": "application/json",
+                },
+                body: JSON.stringify(encodedRawTx),
+            }).then(res => res.json())) as { id: string }
+            console.log("tx sent to network", id)
+            return id
+        } catch (error) {
+            console.log("error sending tx to network", error)
+            throw error
+        }
     }
 
     /**
