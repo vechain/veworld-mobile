@@ -190,6 +190,24 @@ const NavigationProvider = ({ children }) => {
         () => ({
             dark: theme.isDark,
             colors: theme.colors,
+            fonts: {
+                regular: {
+                    fontFamily: typography.fontFamily["Inter-Regular"],
+                    fontWeight: "normal",
+                },
+                medium: {
+                    fontFamily: typography.fontFamily["Inter-Medium"],
+                    fontWeight: "500",
+                },
+                bold: {
+                    fontFamily: typography.fontFamily["Inter-Bold"],
+                    fontWeight: "bold",
+                },
+                heavy: {
+                    fontFamily: typography.fontFamily["Inter-Bold"],
+                    fontWeight: "bold",
+                },
+            },
         }),
         [theme],
     )
