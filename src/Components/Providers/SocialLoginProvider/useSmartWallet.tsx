@@ -339,11 +339,19 @@ export const useSmartWallet = ({ delegatorUrl }: { delegatorUrl: string }) => {
 
         const privyProvider = await wallets[0].getProvider()
         const embeddedWalletAddress = wallets[0].address
+
+        const CHAIN_ID_FROM_TAG: Record<number, number> = {
+            74: 6986, // mainnet
+            39: 45351, // testnet
+        }
+
+        const chainId = CHAIN_ID_FROM_TAG[chainTag]
+
         // If the smart account was never deployed or the version is >= 3 and we have multiple clauses, we can batch them
         if (!hasV1SmartAccount || (smartAccountVersion && smartAccountVersion >= 3)) {
             const typedData = buildBatchAuthorizationTypedData({
                 clauses: txClauses,
-                chainId: 6986, // Use masked chainId for custom authorization method
+                chainId,
                 verifyingContract: smartAccountAddress,
             })
 
