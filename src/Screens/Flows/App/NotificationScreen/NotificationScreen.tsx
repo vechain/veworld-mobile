@@ -36,6 +36,7 @@ export const NotificationScreen = () => {
     const [dapps, setDapps] = useState<VeBetterDaoDapp[]>([])
     const [tags, setTags] = useState<{ [key: string]: string }>({})
     const [searchText, setSearchText] = useState("")
+    const [isUpdatingTags, setIsUpdatingTags] = useState<{ [key: string]: boolean }>({})
 
     const {
         isNotificationPermissionEnabled,
@@ -110,14 +111,62 @@ export const NotificationScreen = () => {
                     return
                 }
 
-                addTag(tag, "true")
-            } else {
-                removeTag(tag)
-            }
+                // Prevent rapid toggling
+                if (isUpdatingTags[tag]) return
 
-            updateTags()
+                // Set loading state
+                setIsUpdatingTags(prev => ({ ...prev, [tag]: true }))
+
+                // Optimistic update
+                setTags(prev => ({ ...prev, [tag]: "true" }))
+
+                try {
+                    addTag(tag, "true")
+                } catch (apiError) {
+                    // Revert optimistic update on error
+                    setTags(prev => {
+                        const newTags = { ...prev }
+                        delete newTags[tag]
+                        return newTags
+                    })
+                } finally {
+                    // Clear loading state
+                    setIsUpdatingTags(prev => {
+                        const newState = { ...prev }
+                        delete newState[tag]
+                        return newState
+                    })
+                }
+            } else {
+                // Prevent rapid toggling
+                if (isUpdatingTags[tag]) return
+
+                // Set loading state
+                setIsUpdatingTags(prev => ({ ...prev, [tag]: true }))
+
+                // Optimistic update
+                setTags(prev => {
+                    const newTags = { ...prev }
+                    delete newTags[tag]
+                    return newTags
+                })
+
+                try {
+                    removeTag(tag)
+                } catch (apiError) {
+                    // Revert optimistic update on error
+                    setTags(prev => ({ ...prev, [tag]: "true" }))
+                } finally {
+                    // Clear loading state
+                    setIsUpdatingTags(prev => {
+                        const newState = { ...prev }
+                        delete newState[tag]
+                        return newState
+                    })
+                }
+            }
         },
-        [addTag, hasReachedSubscriptionLimit, removeTag, showSubscriptionLimitReachedWarning, updateTags],
+        [addTag, hasReachedSubscriptionLimit, removeTag, showSubscriptionLimitReachedWarning, isUpdatingTags],
     )
 
     const toogleDAppSubscriptionSwitch = useCallback(
@@ -128,22 +177,71 @@ export const NotificationScreen = () => {
                     return
                 }
 
-                addDAppTag(dappId)
-            } else {
-                removeDAppTag(dappId)
-            }
+                // Prevent rapid toggling
+                if (isUpdatingTags[dappId]) return
 
-            updateTags()
+                // Set loading state
+                setIsUpdatingTags(prev => ({ ...prev, [dappId]: true }))
+
+                // Optimistic update
+                setTags(prev => ({ ...prev, [dappId]: "true" }))
+
+                try {
+                    addDAppTag(dappId)
+                } catch (apiError) {
+                    // Revert optimistic update on error
+                    setTags(prev => {
+                        const newTags = { ...prev }
+                        delete newTags[dappId]
+                        return newTags
+                    })
+                } finally {
+                    // Clear loading state
+                    setIsUpdatingTags(prev => {
+                        const newState = { ...prev }
+                        delete newState[dappId]
+                        return newState
+                    })
+                }
+            } else {
+                // Prevent rapid toggling
+                if (isUpdatingTags[dappId]) return
+
+                // Set loading state
+                setIsUpdatingTags(prev => ({ ...prev, [dappId]: true }))
+
+                // Optimistic update
+                setTags(prev => {
+                    const newTags = { ...prev }
+                    delete newTags[dappId]
+                    return newTags
+                })
+
+                try {
+                    removeDAppTag(dappId)
+                } catch (apiError) {
+                    // Revert optimistic update on error
+                    setTags(prev => ({ ...prev, [dappId]: "true" }))
+                } finally {
+                    // Clear loading state
+                    setIsUpdatingTags(prev => {
+                        const newState = { ...prev }
+                        delete newState[dappId]
+                        return newState
+                    })
+                }
+            }
         },
-        [addDAppTag, hasReachedSubscriptionLimit, removeDAppTag, showSubscriptionLimitReachedWarning, updateTags],
+        [addDAppTag, hasReachedSubscriptionLimit, removeDAppTag, showSubscriptionLimitReachedWarning, isUpdatingTags],
     )
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<VeBetterDaoDapp>) => {
             const id = item.id
             const value = !!tags[id]
+            const onValueChange = toogleDAppSubscriptionSwitch(id)
 
-            return <EnableFeature title={item.name} onValueChange={toogleDAppSubscriptionSwitch(id)} value={value} />
+            return <EnableFeature title={item.name} onValueChange={onValueChange} value={value} />
         },
         [tags, toogleDAppSubscriptionSwitch],
     )
