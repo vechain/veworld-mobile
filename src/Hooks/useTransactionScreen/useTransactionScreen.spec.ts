@@ -107,7 +107,7 @@ describe("useTransactionScreen", () => {
             isWalletSecurityNone: false,
             biometrics: {},
         })
-        ;(crypto.randomFillSync as jest.Mock).mockReturnValue(Buffer.from("1234abc", "hex"))
+        ;(crypto.randomBytes as jest.Mock).mockReturnValue(Buffer.from("1234abc", "hex"))
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
             data: { id: "0x1234" },
             status: 200,
@@ -367,7 +367,7 @@ describe("useTransactionScreen", () => {
 
         it("using ledger account should navigate", async () => {
             ;(useSendTransaction as jest.Mock).mockImplementation(
-                () => jest.requireActual("~Hooks/useSendTransaction").useSendTransaction,
+                jest.requireActual("~Hooks/useSendTransaction").useSendTransaction,
             )
             const accWithDevice = {
                 ...firstLedgerAccount,

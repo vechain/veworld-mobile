@@ -11,7 +11,6 @@ import { typography } from "~Constants/Theme"
 import { AssetTrendBannerSkeleton } from "./AssetTrendBannerSkeleton"
 import { AssetPriceBannerSkeleton } from "./AssetPriceBannerSkeleton"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
-import { PlatformUtils } from "~Utils"
 const { ...otherTypography } = typography
 
 type Props = {
@@ -71,7 +70,7 @@ export const AssetPriceBanner = ({ isChartDataLoading }: Props) => {
                     </>
                 ) : (
                     <BaseView flexDirection="row">
-                        <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle, styles.icon]} />
+                        <BaseAnimatedText text={icon} style={[changeStyles, styles.textTitle]} />
                         <BaseAnimatedText text={formattedPriceChange} style={[changeStyles, styles.textTitle]} />
                     </BaseView>
                 )}
@@ -111,8 +110,5 @@ const baseStyles = (theme: ColorThemeType) =>
             fontFamily: otherTypography.fontFamily["Inter-Regular"],
             height: 16,
             padding: 0,
-        },
-        icon: {
-            marginRight: PlatformUtils.isAndroid() ? -8 : undefined,
         },
     })

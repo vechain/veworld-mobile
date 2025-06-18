@@ -4,12 +4,13 @@ import {
     BottomSheetHandleProps,
     BottomSheetModal,
     BottomSheetModalProps,
+    BottomSheetView,
 } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
+import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import { useReducedMotion } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { LocalizedString } from "typesafe-i18n"
@@ -110,18 +111,7 @@ const _BaseBottomSheet = <TData,>(
     const reducedMotion = useReducedMotion()
     const { addBackHandlerListener, removeBackHandlerListener } = useBackHandler(backHandlerEvent)
 
-    const [contentHeight, setContentHeight] = useState<number>(0)
     const [sheetState, setSheetState] = useState<number>(-1)
-
-    const onLayoutHandler = useCallback(
-        (event: LayoutChangeEvent) => {
-            if (dynamicHeight) {
-                const { height } = event.nativeEvent.layout
-                setContentHeight(prev => (prev !== height ? height : prev))
-            }
-        },
-        [dynamicHeight],
-    )
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
@@ -147,9 +137,9 @@ const _BaseBottomSheet = <TData,>(
     )
 
     const onSheetPositionChange = useCallback(
-        (index: number) => {
+        (index: number, position: number, type: any) => {
             setSheetState(index)
-            onChange?.(index)
+            onChange?.(index, position, type)
         },
         [onChange],
     )
@@ -176,9 +166,9 @@ const _BaseBottomSheet = <TData,>(
      * the minimum snap point is at least 60% of the screen height.
      */
     const snappoints = useMemo(() => {
+        // For dynamic height, don't provide snapPoints - let v5 handle it
         if (dynamicHeight) {
-            const percentage = Math.ceil(((contentHeight + bottomSafeAreaSize) / windowHeight) * 100)
-            return contentHeight ? [`${percentage}%`] : ["25%"]
+            return undefined
         }
 
         if (!snapPoints || !validateStringPercentages(snapPoints)) return ["60%"]
@@ -188,7 +178,30 @@ const _BaseBottomSheet = <TData,>(
         }
 
         return snapPoints
-    }, [bottomSafeAreaSize, contentHeight, dynamicHeight, ignoreMinimumSnapPoint, snapPoints, windowHeight])
+    }, [dynamicHeight, ignoreMinimumSnapPoint, snapPoints])
+
+    // Calculate max dynamic content size for v5
+    const maxDynamicContentSize = useMemo(() => {
+        if (!dynamicHeight) return undefined
+
+        // Use 85% of screen height as max, accounting for safe areas
+        return Math.floor((windowHeight - bottomSafeAreaSize) * 0.85)
+    }, [dynamicHeight, windowHeight, bottomSafeAreaSize])
+
+    // Create content style object
+    const contentViewStyle = useMemo(
+        () => [
+            {
+                paddingHorizontal: noMargins ? 0 : 24,
+                paddingTop: noMargins ? 0 : 16,
+                paddingBottom: noMargins ? 0 : 24,
+                flexGrow: 1,
+                alignItems: "stretch" as const,
+            },
+            contentStyle,
+        ],
+        [noMargins, contentStyle],
+    )
 
     return (
         <BottomSheetModal
@@ -198,7 +211,7 @@ const _BaseBottomSheet = <TData,>(
             enablePanDownToClose={enablePanDownToClose}
             index={0}
             backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
-            // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry.
+            // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry. Bug lagging (https://github.com/gorhom/react-native-bottom-sheet/issues/2046)
             backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
             handleComponent={renderHandle}
             keyboardBehavior="interactive"
@@ -206,23 +219,17 @@ const _BaseBottomSheet = <TData,>(
             //Workaround for run tests on Maestro take a look at this https://github.com/software-mansion/react-native-reanimated/issues/6648
             accessible={Platform.select({ ios: false })}
             snapPoints={snappoints}
+            enableDynamicSizing={dynamicHeight}
+            maxDynamicContentSize={maxDynamicContentSize}
             onChange={onSheetPositionChange}
             {...sheetProps}>
             {p => (
                 <>
-                    <BaseView
-                        w={100}
-                        px={noMargins ? 0 : 24}
-                        pt={noMargins ? 0 : 16}
-                        pb={noMargins ? 0 : 24}
-                        flexGrow={1}
-                        alignItems="stretch"
-                        style={contentStyle}
-                        onLayout={onLayoutHandler}>
+                    <BottomSheetView style={contentViewStyle}>
                         {title && <BaseText typographyFont="title">{title}</BaseText>}
                         {typeof children === "function" ? children(p?.data) : children}
                         {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
-                    </BaseView>
+                    </BottomSheetView>
                     {footer && (
                         <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
                             {footer}

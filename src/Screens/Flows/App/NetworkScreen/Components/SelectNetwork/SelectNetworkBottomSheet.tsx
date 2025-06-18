@@ -7,7 +7,7 @@ import { changeSelectedNetwork } from "~Storage/Redux/Actions"
 import { Network, NETWORK_TYPE } from "~Model"
 import { selectNetworksByType, selectSelectedNetwork } from "~Storage/Redux/Selectors"
 import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
-import { SectionListData, SectionListRenderItemInfo, StyleSheet } from "react-native"
+import { SectionListData, SectionListRenderItemInfo } from "react-native"
 import { useSetSelectedAccount } from "~Hooks"
 
 type Props = {
@@ -97,26 +97,18 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
             </BaseView>
 
             <BaseSpacer height={16} />
-            <BaseView flexDirection="row" style={baseStyles.list}>
-                <BottomSheetSectionList
-                    sections={sections}
-                    keyExtractor={i => i.id}
-                    ItemSeparatorComponent={renderItemSeparator}
-                    SectionSeparatorComponent={renderSectionSeparator}
-                    renderSectionHeader={renderSectionHeader}
-                    renderItem={renderItem}
-                    scrollEnabled={isListScrollable}
-                    showsVerticalScrollIndicator={false}
-                    showsHorizontalScrollIndicator={false}
-                />
-            </BaseView>
+
+            <BottomSheetSectionList
+                sections={sections}
+                keyExtractor={i => i.id}
+                ItemSeparatorComponent={renderItemSeparator}
+                SectionSeparatorComponent={renderSectionSeparator}
+                renderSectionHeader={renderSectionHeader}
+                renderItem={renderItem}
+                scrollEnabled={isListScrollable}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+            />
         </BaseBottomSheet>
     )
-})
-
-const baseStyles = StyleSheet.create({
-    list: {
-        width: "100%",
-        height: "100%",
-    },
 })
