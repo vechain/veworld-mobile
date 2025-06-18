@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useMemo, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef } from "react"
 import { AppRegistry, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
@@ -186,8 +186,6 @@ const linking = {
 const NavigationProvider = ({ children }) => {
     const theme = useTheme()
 
-    const [ready, setReady] = useState(false)
-
     const navigationTheme = useMemo(
         () => ({
             dark: theme.isDark,
@@ -207,7 +205,6 @@ const NavigationProvider = ({ children }) => {
                 if (routeNameRef && routeNameRef.current === null) {
                     routeNameRef.current = navigationRef.getCurrentRoute()?.name
                 }
-                setReady(true)
             }}
             onStateChange={async () => {
                 const previousRouteName = routeNameRef.current
@@ -222,7 +219,7 @@ const NavigationProvider = ({ children }) => {
             }}
             theme={navigationTheme}
             linking={linking}>
-            {ready ? children : null}
+            {children}
         </NavigationContainer>
     )
 }
