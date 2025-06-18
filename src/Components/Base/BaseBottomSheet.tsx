@@ -9,7 +9,7 @@ import {
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
-import React, { useCallback, useEffect, useMemo, useState } from "react"
+import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react"
 import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import { useReducedMotion } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -25,7 +25,7 @@ import { BaseView } from "./BaseView"
 const OPENED_STATE = 0
 const CLOSED_STATE = -1
 
-type Props<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints" | "children"> & {
+export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints" | "children"> & {
     /**
      * The content of the modal.
      */
@@ -101,7 +101,7 @@ const _BaseBottomSheet = <TData,>(
         enablePanDownToClose = true,
         blurBackdrop = false,
         ...props
-    }: Props<TData>,
+    }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
 ) => {
     const { onChange, ...sheetProps } = props
@@ -203,6 +203,27 @@ const _BaseBottomSheet = <TData,>(
         [noMargins, contentStyle],
     )
 
+    const Content = useCallback(
+        ({ children: nestedChildren }: PropsWithChildren) => {
+            return (
+                <>
+                    <BottomSheetView style={contentViewStyle}>
+                        {title && <BaseText typographyFont="title">{title}</BaseText>}
+                        {nestedChildren}
+                        {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                    </BottomSheetView>
+                    {footer && (
+                        <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
+                            {footer}
+                        </BaseView>
+                    )}
+                    {bottomSafeArea && <BaseSpacer height={bottomSafeAreaSize} />}
+                </>
+            )
+        },
+        [bottomSafeArea, bottomSafeAreaSize, contentViewStyle, dynamicHeight, footer, footerStyle, title],
+    )
+
     return (
         <BottomSheetModal
             animateOnMount={!reducedMotion}
@@ -223,20 +244,10 @@ const _BaseBottomSheet = <TData,>(
             maxDynamicContentSize={maxDynamicContentSize}
             onChange={onSheetPositionChange}
             {...sheetProps}>
-            {p => (
-                <>
-                    <BottomSheetView style={contentViewStyle}>
-                        {title && <BaseText typographyFont="title">{title}</BaseText>}
-                        {typeof children === "function" ? children(p?.data) : children}
-                        {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
-                    </BottomSheetView>
-                    {footer && (
-                        <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
-                            {footer}
-                        </BaseView>
-                    )}
-                    {bottomSafeArea && <BaseSpacer height={bottomSafeAreaSize} />}
-                </>
+            {typeof children === "function" ? (
+                p => <Content>{children(p?.data)}</Content>
+            ) : (
+                <Content>{children}</Content>
             )}
         </BottomSheetModal>
     )
