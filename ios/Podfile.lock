@@ -1580,29 +1580,7 @@ PODS:
   - react-native-onesignal (5.2.11):
     - OneSignalXCFramework (= 5.2.10)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-pager-view (6.5.1):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.10.14.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - react-native-pager-view/common (= 6.5.1)
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-pager-view/common (6.5.1):
+  - react-native-pager-view (6.8.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2092,7 +2070,7 @@ PODS:
     - React-logger
     - React-perflogger
     - React-utils (= 0.76.9)
-  - RNBootSplash (6.3.8):
+  - RNBootSplash (6.3.9):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2956,7 +2934,7 @@ SPEC CHECKSUMS:
   react-native-mmkv: ef0ad6b44a71c90c660234cae828bfb3c0e43a26
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-onesignal: 62ad0dfd1dabd68cc1dcc64746cb89e2ccd2ea70
-  react-native-pager-view: 9517b214fb7321493339fbcf53a30abd54fea07b
+  react-native-pager-view: 8e2dcf913f11f439b0ced243e5162d47569826b8
   react-native-quick-base64: f923222b05cd066ac7f89f54457215fc79cc3760
   react-native-quick-crypto: 361ecda861e23138ce68fea4b820cbc058688fb5
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
@@ -2991,7 +2969,7 @@ SPEC CHECKSUMS:
   React-utils: ed818f19ab445000d6b5c4efa9d462449326cc9f
   ReactCodegen: f853a20cc9125c5521c8766b4b49375fec20648b
   ReactCommon: 300d8d9c5cb1a6cd79a67cf5d8f91e4d477195f9
-  RNBootSplash: 0a9d3a978b4aa2e27c7d6bd156a7664306fac82b
+  RNBootSplash: 861da9c9be22b1c059ea98cca1bb436fd55d671e
   RNCAsyncStorage: 66991bb6672ed988a8c56289a08bf4fc3a29d4b3
   RNCMaskedView: b3aee2f4fa81807ec035be51c057aa2eed166173
   RNDeviceInfo: ae26ae45db3f9937f038a284bcd0a1db8d70db96
