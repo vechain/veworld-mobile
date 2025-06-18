@@ -1,6 +1,7 @@
 import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect } from "~Components"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { ColorThemeType, ERROR_EVENTS } from "~Constants"
 import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
