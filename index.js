@@ -131,8 +131,8 @@ const Main = () => {
                     }}>
                     <FeatureFlagsProvider>
                         <NavigationProvider>
-                            <WalletConnectContextProvider>
-                                <InteractionProvider>
+                            <InteractionProvider>
+                                <WalletConnectContextProvider>
                                     <BottomSheetModalProvider>
                                         <InAppBrowserProvider>
                                             <NotificationsProvider>
@@ -140,8 +140,8 @@ const Main = () => {
                                             </NotificationsProvider>
                                         </InAppBrowserProvider>
                                     </BottomSheetModalProvider>
-                                </InteractionProvider>
-                            </WalletConnectContextProvider>
+                                </WalletConnectContextProvider>
+                            </InteractionProvider>
                         </NavigationProvider>
                         <BaseToast />
                     </FeatureFlagsProvider>
