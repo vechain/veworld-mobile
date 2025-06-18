@@ -55,34 +55,32 @@ const ConnectBottomSheetContent = ({
 
     return (
         <>
-            <>
-                <BaseView flexDirection="row" gap={12}>
-                    <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
-                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                        {LL.CONNECTION_REQUEST_TITLE()}
-                    </BaseText>
-                </BaseView>
-                <BaseSpacer height={24} />
-                <DappWithDetails name={name} icon={icon} url={url}>
-                    <DappDetails.Title>{LL.CONNECTED_APP_ASKING_FOR_ACCESS({ dappName: name })}</DappDetails.Title>
-                    <DappDetails.Container>
-                        {([1, 2] as const).map(value => (
-                            <DappDetails.CheckItem key={value}>
-                                {LL[`CONNECTED_APP_ASKING_FOR_ACCESS_${value}`]()}
-                            </DappDetails.CheckItem>
-                        ))}
-                    </DappDetails.Container>
-                </DappWithDetails>
-                <BaseSpacer height={24} />
-                <BaseView flexDirection="row" gap={16}>
-                    <BaseButton action={onCancel.bind(null, request)} variant="outline" flex={1}>
-                        {LL.COMMON_BTN_CANCEL()}
-                    </BaseButton>
-                    <BaseButton action={onConnect.bind(null, request)} flex={1}>
-                        {LL.COMMON_BTN_APPLY()}
-                    </BaseButton>
-                </BaseView>
-            </>
+            <BaseView flexDirection="row" gap={12}>
+                <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
+                <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                    {LL.CONNECTION_REQUEST_TITLE()}
+                </BaseText>
+            </BaseView>
+            <BaseSpacer height={24} />
+            <DappWithDetails name={name} icon={icon} url={url}>
+                <DappDetails.Title>{LL.CONNECTED_APP_ASKING_FOR_ACCESS({ dappName: name })}</DappDetails.Title>
+                <DappDetails.Container>
+                    {([1, 2] as const).map(value => (
+                        <DappDetails.CheckItem key={value}>
+                            {LL[`CONNECTED_APP_ASKING_FOR_ACCESS_${value}`]()}
+                        </DappDetails.CheckItem>
+                    ))}
+                </DappDetails.Container>
+            </DappWithDetails>
+            <BaseSpacer height={24} />
+            <BaseView flexDirection="row" gap={16}>
+                <BaseButton action={onCancel.bind(null, request)} variant="outline" flex={1}>
+                    {LL.COMMON_BTN_CANCEL()}
+                </BaseButton>
+                <BaseButton action={onConnect.bind(null, request)} flex={1}>
+                    {LL.COMMON_BTN_APPLY()}
+                </BaseButton>
+            </BaseView>
         </>
     )
 }
@@ -130,20 +128,18 @@ export const ConnectBottomSheet = () => {
     )
 
     return (
-        <>
-            <BaseBottomSheet<Request> dynamicHeight contentStyle={styles.rootContent} ref={ref}>
-                {data => {
-                    return (
-                        <ConnectBottomSheetContent
-                            request={data.request}
-                            onCancel={onCancel}
-                            onConnect={onConnect}
-                            onCloseBs={onCloseBs}
-                        />
-                    )
-                }}
-            </BaseBottomSheet>
-        </>
+        <BaseBottomSheet<Request> dynamicHeight contentStyle={styles.rootContent} ref={ref}>
+            {data => {
+                return (
+                    <ConnectBottomSheetContent
+                        request={data.request}
+                        onCancel={onCancel}
+                        onConnect={onConnect}
+                        onCloseBs={onCloseBs}
+                    />
+                )
+            }}
+        </BaseBottomSheet>
     )
 }
 
