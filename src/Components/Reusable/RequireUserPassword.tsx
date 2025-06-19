@@ -1,5 +1,5 @@
 import React, { memo } from "react"
-import { BaseModal, BaseSafeArea, IBaseModal } from "~Components"
+import { BaseModal, BaseView, IBaseModal } from "~Components"
 import { LockScreen } from "~Screens"
 import { LOCKSCREEN_SCENARIO } from "~Screens/LockScreen/Enums"
 
@@ -14,14 +14,14 @@ export const RequireUserPassword: React.FC<IRequireUserPassword> = memo(
     ({ isOpen, onClose, onSuccess, scenario, isValidatePassword = true }) => {
         return (
             <BaseModal isOpen={isOpen} onClose={onClose}>
-                <BaseSafeArea>
+                <BaseView justifyContent="flex-start" w={100}>
                     <LockScreen
                         onSuccess={onSuccess}
                         onBack={onClose}
                         scenario={scenario ?? LOCKSCREEN_SCENARIO.UNLOCK_WALLET}
                         isValidatePassword={isValidatePassword}
                     />
-                </BaseSafeArea>
+                </BaseView>
             </BaseModal>
         )
     },

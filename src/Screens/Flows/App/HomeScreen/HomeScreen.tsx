@@ -75,6 +75,19 @@ export const HomeScreen = () => {
         dispatch(setAppResetTimestamp())
     }, [dispatch])
 
+    useFocusEffect(
+        useCallback(() => {
+            // Invalidate the veDelegateBalance query to solve cache issues
+            queryClient.invalidateQueries({
+                queryKey: getVeDelegateBalanceQueryKey(selectedAccount.address),
+                refetchType: "all",
+            })
+
+            updateBalances()
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, []),
+    )
+
     const { LL } = useI18nContext()
     // Pull down to refresh
     const [refreshing, setRefreshing] = React.useState(false)
@@ -101,19 +114,6 @@ export const HomeScreen = () => {
     const setSelectedAccount = (account: AccountWithDevice | WatchedAccount) => {
         onSetSelectedAccount({ address: account.address })
     }
-
-    useFocusEffect(
-        useCallback(() => {
-            // Invalidate the veDelegateBalance query to solve cache issues
-            queryClient.invalidateQueries({
-                queryKey: getVeDelegateBalanceQueryKey(selectedAccount.address),
-                refetchType: "all",
-            })
-
-            updateBalances()
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []),
-    )
 
     const onRefresh = useCallback(async () => {
         setRefreshing(true)

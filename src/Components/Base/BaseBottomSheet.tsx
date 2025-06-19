@@ -1,13 +1,19 @@
-import { BottomSheetHandleProps, BottomSheetModal, BottomSheetModalProps, BottomSheetView } from "@gorhom/bottom-sheet"
+import {
+    BottomSheetBackdrop,
+    BottomSheetBackdropProps,
+    BottomSheetHandleProps,
+    BottomSheetModal,
+    BottomSheetModalProps,
+} from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
+import { LayoutChangeEvent, Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import { useReducedMotion } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { LocalizedString } from "typesafe-i18n"
-import { BaseSpacer, BaseText } from "~Components"
+import { BaseSpacer, BaseText, BlurBackdropBottomSheet } from "~Components"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useBackHandler, useThemedStyles } from "~Hooks"
 import { BackHandlerEvent } from "~Model"
@@ -64,9 +70,11 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             noMargins = false,
             footer,
             children,
+            onPressOutside = "close",
             backHandlerEvent = BackHandlerEvent.DONT_BLOCK,
             bottomSafeArea = true,
             enablePanDownToClose = true,
+            blurBackdrop = false,
             ...props
         },
         ref,
@@ -78,7 +86,37 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const reducedMotion = useReducedMotion()
         const { addBackHandlerListener, removeBackHandlerListener } = useBackHandler(backHandlerEvent)
 
+        const [contentHeight, setContentHeight] = useState<number>(0)
         const [sheetState, setSheetState] = useState<number>(-1)
+
+        const onLayoutHandler = useCallback(
+            (event: LayoutChangeEvent) => {
+                if (dynamicHeight) {
+                    const { height } = event.nativeEvent.layout
+                    setContentHeight(prev => (prev !== height ? height : prev))
+                }
+            },
+            [dynamicHeight],
+        )
+
+        const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
+            return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
+        }, [])
+
+        const renderBackdrop = useCallback(
+            (props_: BottomSheetBackdropProps) => {
+                return (
+                    <BottomSheetBackdrop
+                        {...props_}
+                        pressBehavior={onPressOutside}
+                        opacity={0.8}
+                        disappearsOnIndex={-1}
+                    />
+                )
+            },
+
+            [onPressOutside],
+        )
 
         const renderHandle = useCallback(
             (props_: BottomSheetHandleProps) => (
@@ -90,11 +128,9 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         )
 
         const onSheetPositionChange = useCallback(
-            (index: number, position: number, type: any) => {
+            (index: number) => {
                 setSheetState(index)
-                if (onChange) {
-                    onChange(index, position, type)
-                }
+                onChange?.(index)
             },
             [onChange],
         )
@@ -121,43 +157,19 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
          * the minimum snap point is at least 60% of the screen height.
          */
         const snappoints = useMemo(() => {
-            // For dynamic height, don't provide snapPoints - let v5 handle it
             if (dynamicHeight) {
-                return undefined
+                const percentage = Math.ceil(((contentHeight + bottomSafeAreaSize) / windowHeight) * 100)
+                return contentHeight ? [`${percentage}%`] : ["25%"]
             }
 
             if (!snapPoints || !validateStringPercentages(snapPoints)) return ["60%"]
 
-            const adjustedSnapPoints = [...snapPoints]
-            if (isSmallScreen && !ignoreMinimumSnapPoint && Number(adjustedSnapPoints[0].slice(0, -1)) < 60) {
-                adjustedSnapPoints[0] = "55%"
+            if (isSmallScreen && !ignoreMinimumSnapPoint && Number(snapPoints[0].slice(0, -1)) < 60) {
+                snapPoints[0] = "55%"
             }
 
-            return adjustedSnapPoints
-        }, [dynamicHeight, ignoreMinimumSnapPoint, snapPoints])
-
-        // Calculate max dynamic content size for v5
-        const maxDynamicContentSize = useMemo(() => {
-            if (!dynamicHeight) return undefined
-
-            // Use 85% of screen height as max, accounting for safe areas
-            return Math.floor((windowHeight - bottomSafeAreaSize) * 0.85)
-        }, [dynamicHeight, windowHeight, bottomSafeAreaSize])
-
-        // Create content style object
-        const contentViewStyle = useMemo(
-            () => [
-                {
-                    paddingHorizontal: noMargins ? 0 : 24,
-                    paddingTop: noMargins ? 0 : 16,
-                    paddingBottom: noMargins ? 0 : 24,
-                    flexGrow: 1,
-                    alignItems: "stretch" as const,
-                },
-                contentStyle,
-            ],
-            [noMargins, contentStyle],
-        )
+            return snapPoints
+        }, [bottomSafeAreaSize, contentHeight, dynamicHeight, ignoreMinimumSnapPoint, snapPoints, windowHeight])
 
         return (
             <BottomSheetModal
@@ -168,22 +180,28 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 index={0}
                 backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
                 // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry.
-                // backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop} -- Bug lagging (https://github.com/gorhom/react-native-bottom-sheet/issues/2046)
+                backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
                 handleComponent={renderHandle}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
                 //Workaround for run tests on Maestro take a look at this https://github.com/software-mansion/react-native-reanimated/issues/6648
                 accessible={Platform.select({ ios: false })}
                 snapPoints={snappoints}
-                enableDynamicSizing={dynamicHeight}
-                maxDynamicContentSize={maxDynamicContentSize}
                 onChange={onSheetPositionChange}
                 {...sheetProps}>
-                <BottomSheetView style={contentViewStyle}>
+                <BaseView
+                    w={100}
+                    px={noMargins ? 0 : 24}
+                    pt={noMargins ? 0 : 16}
+                    pb={noMargins ? 0 : 24}
+                    flexGrow={1}
+                    alignItems="stretch"
+                    style={contentStyle}
+                    onLayout={onLayoutHandler}>
                     {title && <BaseText typographyFont="title">{title}</BaseText>}
                     {children}
                     {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
-                </BottomSheetView>
+                </BaseView>
                 {footer && (
                     <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
                         {footer}
