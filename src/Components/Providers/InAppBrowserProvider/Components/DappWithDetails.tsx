@@ -1,7 +1,9 @@
 import { PropsWithChildren, default as React, useMemo, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseButton, BaseIcon, BaseText } from "~Components"
+import { BaseSpacer } from "~Components/Base/BaseSpacer"
+import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -72,13 +74,15 @@ export const DappWithDetails = ({ name, icon, url, children, showDappWarning = t
                         <BaseText
                             typographyFont="bodyMedium"
                             numberOfLines={1}
-                            color={theme.colors.assetDetailsCard.title}>
+                            color={theme.colors.assetDetailsCard.title}
+                            testID="DAPP_WITH_DETAILS_NAME">
                             {name}
                         </BaseText>
                         <BaseText
                             typographyFont="captionMedium"
                             numberOfLines={1}
-                            color={theme.colors.assetDetailsCard.text}>
+                            color={theme.colors.assetDetailsCard.text}
+                            testID="DAPP_WITH_DETAILS_URL">
                             {url}
                         </BaseText>
                     </BaseView>
@@ -96,7 +100,8 @@ export const DappWithDetails = ({ name, icon, url, children, showDappWarning = t
                             color={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
                             style={styles.rightIcon}
                         />
-                    }>
+                    }
+                    testID="DAPP_WITH_DETAILS_DETAILS_BTN">
                     {showDetails ? LL.HIDE() : LL.DETAILS()}
                 </BaseButton>
             </AnimatedBaseView>

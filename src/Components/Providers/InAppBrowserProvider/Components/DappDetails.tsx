@@ -1,7 +1,8 @@
 import React, { PropsWithChildren } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseIcon, BaseText, BaseView } from "~Components"
+import { BaseIcon, BaseText } from "~Components"
+import { BaseView } from "~Components/Base/BaseView"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -50,7 +51,8 @@ const NotVerifiedWarning = () => {
             py={8}
             px={12}
             borderRadius={6}
-            mt={8}>
+            mt={8}
+            testID="DAPP_DETAILS_NOT_VERIFIED_WARNING">
             <BaseIcon size={16} color={theme.colors.warningAlert.icon} name="icon-alert-triangle" />
             <BaseText typographyFont="body" color={theme.colors.warningAlert.text}>
                 {LL.NOT_VERIFIED_DAPP()}
