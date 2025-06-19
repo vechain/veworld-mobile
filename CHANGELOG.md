@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.5 (2025-06-19)</small>
+
+* build: init ([627fd48](https://github.com/vechain/veworld-mobile/commit/627fd48))
+* fix: bump versionCode number (#2997) ([7c05e45](https://github.com/vechain/veworld-mobile/commit/7c05e45)), closes [#2997](https://github.com/vechain/veworld-mobile/issues/2997)
+
 ## <small>2.2.4 (2025-06-06)</small>
 
 * build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
