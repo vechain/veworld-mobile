@@ -1,11 +1,4 @@
-import {
-    BottomSheetBackdrop,
-    BottomSheetBackdropProps,
-    BottomSheetHandleProps,
-    BottomSheetModal,
-    BottomSheetModalProps,
-    BottomSheetView,
-} from "@gorhom/bottom-sheet"
+import { BottomSheetHandleProps, BottomSheetModal, BottomSheetModalProps, BottomSheetView } from "@gorhom/bottom-sheet"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
@@ -14,7 +7,7 @@ import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from 
 import { useReducedMotion } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { LocalizedString } from "typesafe-i18n"
-import { BaseSpacer, BaseText, BlurBackdropBottomSheet } from "~Components"
+import { BaseSpacer, BaseText } from "~Components"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useBackHandler, useThemedStyles } from "~Hooks"
 import { BackHandlerEvent } from "~Model"
@@ -71,7 +64,6 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             noMargins = false,
             footer,
             children,
-            onPressOutside,
             backHandlerEvent = BackHandlerEvent.DONT_BLOCK,
             bottomSafeArea = true,
             enablePanDownToClose = true,
@@ -87,25 +79,6 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const { addBackHandlerListener, removeBackHandlerListener } = useBackHandler(backHandlerEvent)
 
         const [sheetState, setSheetState] = useState<number>(-1)
-
-        const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
-            return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
-        }, [])
-
-        const renderBackdrop = useCallback(
-            (props_: BottomSheetBackdropProps) => {
-                return (
-                    <BottomSheetBackdrop
-                        {...props_}
-                        pressBehavior={onPressOutside}
-                        opacity={0.8}
-                        disappearsOnIndex={-1}
-                    />
-                )
-            },
-
-            [onPressOutside],
-        )
 
         const renderHandle = useCallback(
             (props_: BottomSheetHandleProps) => (
@@ -194,10 +167,8 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 enablePanDownToClose={enablePanDownToClose}
                 index={0}
                 backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
-                // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry. Bug lagging (https://github.com/gorhom/react-native-bottom-sheet/issues/2046)
-                backdropComponent={
-                    props.blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop
-                }
+                // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry.
+                // backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop} -- Bug lagging (https://github.com/gorhom/react-native-bottom-sheet/issues/2046)
                 handleComponent={renderHandle}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
