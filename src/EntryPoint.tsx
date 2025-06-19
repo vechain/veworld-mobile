@@ -7,7 +7,7 @@ import { AnimatedSplashScreen } from "./AnimatedSplashScreen"
 import RNBootSplash from "react-native-bootsplash"
 import { SecurityLevelType } from "~Model"
 import { PlatformUtils } from "~Utils"
-import { CaptureProtection } from "react-native-capture-protection"
+import RNScreenshotPrevent from "react-native-screenshot-prevent"
 const { ScreenShieldRN } = NativeModules
 
 export const EntryPoint = () => {
@@ -26,13 +26,13 @@ export const EntryPoint = () => {
             /* (IOS, Android) for android might be the only step to get secureView
              * on IOS enables blurry view when app goes into inactive state
              */
-            CaptureProtection.prevent()
+            RNScreenshotPrevent.enabled(true)
 
             if (PlatformUtils.isIOS()) {
                 /* (IOS) enableSecureView for IOS13+
                  * creates a hidden secureTextField which prevents Application UI capture on screenshots
                  */
-                CaptureProtection.prevent()
+                RNScreenshotPrevent.enableSecureView()
 
                 InteractionManager.runAfterInteractions(() => {
                     ScreenShieldRN.protectScreenRecording()
