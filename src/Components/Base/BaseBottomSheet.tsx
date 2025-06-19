@@ -195,7 +195,7 @@ const _BaseBottomSheet = <TData,>(
                 paddingHorizontal: noMargins ? 0 : 24,
                 paddingTop: noMargins ? 0 : 16,
                 paddingBottom: noMargins ? 0 : 24,
-                flexGrow: 1,
+                // flexGrow: 1,
                 alignItems: "stretch" as const,
             },
             contentStyle,

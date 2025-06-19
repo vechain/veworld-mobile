@@ -1,9 +1,8 @@
 import { default as React, useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
-import { ColorThemeType, ERROR_EVENTS } from "~Constants"
-import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
+import { ERROR_EVENTS } from "~Constants"
+import { useBottomSheetModal, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ConnectAppRequest } from "~Model"
 import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
@@ -91,7 +90,6 @@ export const ConnectBottomSheet = () => {
     const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
     const { rejectPendingProposal } = useWalletConnect()
 
-    const { styles } = useThemedStyles(baseStyles)
     const { processProposal } = useWcConnect({ onCloseBs })
 
     const onConnect = useCallback(
@@ -128,7 +126,7 @@ export const ConnectBottomSheet = () => {
     )
 
     return (
-        <BaseBottomSheet<Request> dynamicHeight contentStyle={styles.rootContent} ref={ref}>
+        <BaseBottomSheet<Request> dynamicHeight ref={ref}>
             {data => {
                 return (
                     <ConnectBottomSheetContent
@@ -142,24 +140,3 @@ export const ConnectBottomSheet = () => {
         </BaseBottomSheet>
     )
 }
-
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        rootContent: {
-            paddingBottom: 40,
-        },
-        icon: {
-            borderRadius: 8,
-            overflow: "hidden",
-        },
-        detailsContainer: {
-            backgroundColor: theme.colors.editSpeedBs.result.background,
-            borderColor: theme.colors.editSpeedBs.result.border,
-            borderWidth: 1,
-            padding: 16,
-            gap: 12,
-        },
-        rightIcon: {
-            marginLeft: 2,
-        },
-    })
