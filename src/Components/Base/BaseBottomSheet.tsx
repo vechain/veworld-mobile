@@ -9,7 +9,7 @@ import {
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
-import React, { PropsWithChildren, useCallback, useEffect, useMemo, useState } from "react"
+import { PropsWithChildren, default as React, useCallback, useEffect, useMemo, useState } from "react"
 import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import { useReducedMotion } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -166,7 +166,7 @@ const _BaseBottomSheet = <TData,>(
      * the minimum snap point is at least 60% of the screen height.
      */
     const snappoints = useMemo(() => {
-        // For dynamic height, don't provide snapPoints - let v5 handle it
+        // For dynamic height, don't provide snapPoints - let v4 handle it
         if (dynamicHeight) {
             return undefined
         }
@@ -240,9 +240,9 @@ const _BaseBottomSheet = <TData,>(
             //Workaround for run tests on Maestro take a look at this https://github.com/software-mansion/react-native-reanimated/issues/6648
             accessible={Platform.select({ ios: false })}
             snapPoints={snappoints}
-            enableDynamicSizing={dynamicHeight}
-            maxDynamicContentSize={maxDynamicContentSize}
             onChange={onSheetPositionChange}
+            maxDynamicContentSize={maxDynamicContentSize}
+            enableDynamicSizing={dynamicHeight}
             {...sheetProps}>
             {typeof children === "function" ? (
                 p => <Content>{children(p?.data)}</Content>

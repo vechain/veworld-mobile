@@ -113,15 +113,13 @@ export const TransakPayWebView = ({
     return (
         <BaseView flex={1}>
             {!isLoading && isAndroid && <BaseStatusBar />}
+            <BaseActivityIndicator isVisible={isLoading} />
             <BaseView style={styles.webviewWrapper}>
                 <TransakWebView
                     transakConfig={transakConfig}
                     onTransakEvent={onTransakEventHandler}
                     style={styles.webView}
                     originWhitelist={["http://", "https://", "about:*"]}
-                    renderLoading={() => {
-                        return <BaseActivityIndicator isVisible={isLoading} />
-                    }}
                 />
             </BaseView>
             {isProcessing && (

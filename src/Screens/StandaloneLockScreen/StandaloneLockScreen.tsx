@@ -1,14 +1,14 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { memo, useCallback, useEffect, useMemo, useState } from "react"
 import { PinVerificationError, PinVerificationErrorType } from "~Model"
-import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context"
+import { SafeAreaView } from "react-native-safe-area-context"
 import { StyleSheet, Text, View } from "react-native"
+import { PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { StandaloneNumPad, StandalonePasswordPins } from "./components"
 import { useOnDigitPress, useThemedStyles } from "~Hooks"
 import RNBootSplash from "react-native-bootsplash"
-import { PlatformUtils } from "~Utils"
 
 type Props = {
     onPinInserted: (pin: string) => Promise<void>
@@ -76,22 +76,18 @@ export const StandaloneLockScreen: React.FC<Props> = memo(({ onPinInserted }) =>
     }, [LL])
 
     return (
-        <SafeAreaProvider>
-            <SafeAreaView
-                style={[PlatformUtils.isAndroid() ? styles.androidTopPadding : {}, styles.safeArea]}
-                edges={PlatformUtils.isIOS() ? ["top"] : undefined}>
-                <View style={styles.titleContainer}>
-                    <Text style={styles.title}>{title}</Text>
-                </View>
-                <View style={styles.container}>
-                    <Text style={styles.subTitle}>{subTitle}</Text>
-                    <View style={{ marginTop: isSmallScreen ? 45 : 80 }} />
-                    <StandalonePasswordPins digitNumber={digitNumber} pin={pin} isPinError={isError} />
-                    <View style={{ marginTop: isSmallScreen ? 32 : 80 }} />
-                    <StandaloneNumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
-                </View>
-            </SafeAreaView>
-        </SafeAreaProvider>
+        <SafeAreaView style={[PlatformUtils.isAndroid() ? styles.androidTopPadding : {}, styles.safeArea]}>
+            <View style={styles.titleContainer}>
+                <Text style={styles.title}>{title}</Text>
+            </View>
+            <View style={styles.container}>
+                <Text style={styles.subTitle}>{subTitle}</Text>
+                <View style={{ marginTop: isSmallScreen ? 45 : 80 }} />
+                <StandalonePasswordPins digitNumber={digitNumber} pin={pin} isPinError={isError} />
+                <View style={{ marginTop: isSmallScreen ? 32 : 80 }} />
+                <StandaloneNumPad onDigitPress={handleOnDigitPress} onDigitDelete={onDigitDelete} />
+            </View>
+        </SafeAreaView>
     )
 })
 

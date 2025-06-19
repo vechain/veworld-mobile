@@ -132,6 +132,7 @@ export const CoinifyPayWebView = ({
     return (
         <BaseView flex={1}>
             {!isLoading && isAndroid && <BaseStatusBar />}
+            <BaseActivityIndicator isVisible={isLoading} />
             <WebView
                 testID="CoinifyPayWebView"
                 source={{ uri: url }}
@@ -140,9 +141,6 @@ export const CoinifyPayWebView = ({
                 style={styles.webView}
                 originWhitelist={originWhitelist}
                 injectedJavaScript={injectedJs}
-                renderLoading={() => {
-                    return <BaseActivityIndicator isVisible={isLoading} />
-                }}
             />
 
             <AnimatedFloatingButton
