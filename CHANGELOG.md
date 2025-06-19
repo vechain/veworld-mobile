@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.5 (2025-06-19)</small>
+
+* build: init ([b95155d](https://github.com/vechain/veworld-mobile/commit/b95155d))
+* FIX: First round of fixes (#2989) ([c241c6a](https://github.com/vechain/veworld-mobile/commit/c241c6a)), closes [#2989](https://github.com/vechain/veworld-mobile/issues/2989)
+
 ## <small>2.2.4 (2025-06-06)</small>
 
 * build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
