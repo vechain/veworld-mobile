@@ -2,7 +2,8 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles, useVns } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
+import { useVns } from "~Hooks/useVns"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import AddressUtils from "~Utils/AddressUtils"
 import { AccountIcon } from "../Account/AccountIcon"
@@ -24,7 +25,7 @@ export const AccountSelector = ({ account, variant = "short", disabled, onPress 
         <BaseTouchable style={[styles.root, disabled ? styles.disabled : styles.enabled]} onPress={onPress}>
             <AccountIcon address={account.address} size={24} />
             {variant === "long" && (
-                <BaseText typographyFont="bodyMedium" color={COLORS.GREY_800}>
+                <BaseText typographyFont="bodyMedium" color={COLORS.GREY_800} testID="ACCOUNT_SELECTOR_TEXT">
                     {vnsName || AddressUtils.humanAddress(vnsAddress || account.address)}
                 </BaseText>
             )}
