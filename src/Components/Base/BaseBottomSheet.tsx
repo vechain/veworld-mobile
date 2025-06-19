@@ -137,9 +137,9 @@ const _BaseBottomSheet = <TData,>(
     )
 
     const onSheetPositionChange = useCallback(
-        (index: number, position: number, type: any) => {
+        (index: number) => {
             setSheetState(index)
-            onChange?.(index, position, type)
+            onChange?.(index)
         },
         [onChange],
     )
@@ -195,12 +195,12 @@ const _BaseBottomSheet = <TData,>(
                 paddingHorizontal: noMargins ? 0 : 24,
                 paddingTop: noMargins ? 0 : 16,
                 paddingBottom: noMargins ? 0 : 24,
-                // flexGrow: 1,
+                flexGrow: snapPoints ? 1 : undefined,
                 alignItems: "stretch" as const,
             },
             contentStyle,
         ],
-        [noMargins, contentStyle],
+        [noMargins, snapPoints, contentStyle],
     )
 
     const Content = useCallback(
