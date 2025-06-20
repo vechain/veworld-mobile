@@ -65,7 +65,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
     return (
         <>
             <BaseView flexDirection="row" gap={12} justifyContent="space-between">
-                <BaseView flex={1}>
+                <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
                         {LL.SIGN_CERTIFICATE_REQUEST_TITLE()}
@@ -73,6 +73,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 </BaseView>
                 <AccountSelector account={selectedAccount} onPress={onOpenSelectAccountBs} variant="short" />
             </BaseView>
+            <BaseSpacer height={24} />
             <DappWithDetails name={name} icon={icon} url={url} isDefaultVisible>
                 <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
                     {request.message.payload.content}
@@ -103,8 +104,8 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
 }
 
 export const CertificateBottomSheet = () => {
-    const { connectBsRef } = useInteraction()
-    const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
+    const { certificateBsRef } = useInteraction()
+    const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: certificateBsRef })
 
     const { ref: selectAccountBsRef } = useBottomSheetModal()
 
@@ -112,7 +113,7 @@ export const CertificateBottomSheet = () => {
     const onCancel = useCallback(async () => {}, [])
 
     return (
-        <BaseBottomSheet<Request> dynamicHeight ref={ref}>
+        <BaseBottomSheet<Request> dynamicHeight ref={certificateBsRef}>
             {data => (
                 <CertificateBottomSheetContent
                     onCancel={onCancel}

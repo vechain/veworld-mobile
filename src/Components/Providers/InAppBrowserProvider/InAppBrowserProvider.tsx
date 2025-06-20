@@ -38,6 +38,7 @@ import {
 import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { useInteraction } from "../InteractionProvider"
+import { CertificateBottomSheet } from "./Components/CertificateBottomSheet/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
@@ -387,7 +388,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (isAlreadyConnected) {
-                certificateBsRef.current?.present({
+                nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
                     request: req,
                     isInjectedWallet: true,
                 })
@@ -402,7 +403,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [certificateBsRef, connectBsRef, connectedDiscoveryApps, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -430,7 +431,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (isAlreadyConnected) {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
+                certificateBsRef.current?.present({
                     request: req,
                 })
             } else {
@@ -444,7 +445,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [certificateBsRef, connectBsRef, connectedDiscoveryApps, switchAccount, switchNetwork],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -818,6 +819,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     return (
         <Context.Provider value={contextValue}>
             <ConnectBottomSheet />
+            <CertificateBottomSheet />
             {children}
         </Context.Provider>
     )
