@@ -1981,6 +1981,18 @@ type RootTranslation = {
 	 */
 	DELEGATE_FEE: string
 	/**
+	 * U​s​e​ ​t​h​i​s​ ​t​o​k​e​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	DELEGATE_FEE_TOKEN_CHECKBOX: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​ ​w​i​t​h
+	 */
+	DELEGATE_FEE_TOKEN_DESC: string
+	/**
+	 * F​e​e​ ​t​o​k​e​n
+	 */
+	DELEGATE_FEE_TOKEN_TITLE: string
+	/**
 	 * B​y​ ​d​e​f​a​u​l​t​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​ ​c​o​s​t​ ​w​i​l​l​ ​b​e​ ​p​a​i​d​ ​b​y​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t​:
 	 */
 	DELEGATE_SELF: string
@@ -2765,6 +2777,10 @@ type RootTranslation = {
 	 * N​F​T​ ​s​e​n​t
 	 */
 	NFT_TRANSFER_SENT: string
+	/**
+	 * N​o​ ​V​T​H​O​ ​b​a​l​a​n​c​e​.​ ​S​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​t​o​k​e​n
+	 */
+	NO_VTHO_BALANCE: string
 	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
@@ -6315,6 +6331,18 @@ Thanks for your patience!
 	 */
 	DELEGATE_FEE: () => LocalizedString
 	/**
+	 * Use this token for future transactions
+	 */
+	DELEGATE_FEE_TOKEN_CHECKBOX: () => LocalizedString
+	/**
+	 * Select the token to pay the fee with
+	 */
+	DELEGATE_FEE_TOKEN_DESC: () => LocalizedString
+	/**
+	 * Fee token
+	 */
+	DELEGATE_FEE_TOKEN_TITLE: () => LocalizedString
+	/**
 	 * By default the transaction fee cost will be paid by the active account:
 	 */
 	DELEGATE_SELF: () => LocalizedString
@@ -7099,6 +7127,10 @@ Thanks for your patience!
 	 * NFT sent
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
+	/**
+	 * No VTHO balance. Select another token
+	 */
+	NO_VTHO_BALANCE: () => LocalizedString
 	/**
 	 * Go to NFTs
 	 */
