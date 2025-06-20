@@ -1647,7 +1647,7 @@ PODS:
     - Yoga
   - react-native-restart (0.0.27):
     - React-Core
-  - react-native-safe-area-context (5.4.0):
+  - react-native-safe-area-context (5.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1660,8 +1660,8 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-safe-area-context/common (= 5.4.0)
-    - react-native-safe-area-context/fabric (= 5.4.0)
+    - react-native-safe-area-context/common (= 5.4.1)
+    - react-native-safe-area-context/fabric (= 5.4.1)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1670,7 +1670,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/common (5.4.0):
+  - react-native-safe-area-context/common (5.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1691,7 +1691,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/fabric (5.4.0):
+  - react-native-safe-area-context/fabric (5.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2346,7 +2346,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.4.0):
+  - RNScreens (4.11.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2367,9 +2367,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.4.0)
+    - RNScreens/common (= 4.11.1)
     - Yoga
-  - RNScreens/common (4.4.0):
+  - RNScreens/common (4.11.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2938,7 +2938,7 @@ SPEC CHECKSUMS:
   react-native-quick-base64: f923222b05cd066ac7f89f54457215fc79cc3760
   react-native-quick-crypto: 361ecda861e23138ce68fea4b820cbc058688fb5
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
-  react-native-safe-area-context: c68127652d8b9a26a28ac9597167a3ad90bcd713
+  react-native-safe-area-context: cecba5fe389e388e17685aa3bacb3c9e817149a3
   react-native-slider: d8c35cc0162af73c9448f4b18c34d09e841cc1ab
   react-native-view-shot: c6708fc5e7a841021007fdf7d6659d031e17efee
   react-native-webview: 6b9fc65c1951203a3e958ff3cc0a858d4b6be901
@@ -2981,7 +2981,7 @@ SPEC CHECKSUMS:
   RNLocalize: 7748f0bf70c8e0cbb97c11a8431990bb03b0cfae
   RNReactNativeHapticFeedback: a4429a7c923cdd31d44c74417b8330d8e93737bd
   RNReanimated: 6b9d5b5919acb1900ce0d36ef95906026c517674
-  RNScreens: 362f4c861dd155f898908d5035d97b07a3f1a9d1
+  RNScreens: da08089f1b06c3e0a459545ee2e0eb94ea18a80b
   RNScrypt: 3e8612600c93aaa3bfa7849b6d1a4ab61613e2af
   RNSentry: ac7beae04304d95491a512b5abf6926d4501c73c
   RNSVG: b889dc9c1948eeea0576a16cc405c91c37a12c19
