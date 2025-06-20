@@ -928,6 +928,7 @@
   "SIGNED_CERTIFICATE": "Signed certificate",
   "SIGN_CERTIFICATE": "Sign certificate",
   "SIGN_CERTIFICATE_REQUEST_TITLE": "Sign certificate",
+  "SIGN_CERTIFICATE_REQUEST_CTA": "Sign",
   "SIGN_TRANSACTION": "Sign transaction",
   "SIGN_TRANSACTION_ERROR": "Error signing transaction",
   "STATUS": "Status",

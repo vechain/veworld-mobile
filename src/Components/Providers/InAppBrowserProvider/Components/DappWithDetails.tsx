@@ -23,9 +23,9 @@ type Props = PropsWithChildren<{
      */
     showDappWarning?: boolean
     /**
-     * Show collapsable details button. Defaults to true
+     * True if the details should be visible by default, false otherwise. Defaults to false
      */
-    collapsableDetails?: boolean
+    isDefaultVisible?: boolean
 }>
 
 export const DappWithDetails = ({
@@ -34,12 +34,12 @@ export const DappWithDetails = ({
     url,
     children,
     showDappWarning = true,
-    collapsableDetails = true,
+    isDefaultVisible = false,
 }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
-    const [showDetails, setShowDetails] = useState(false)
+    const [showDetails, setShowDetails] = useState(isDefaultVisible)
 
     const allApps = useAppSelector(selectFeaturedDapps)
 
@@ -98,25 +98,23 @@ export const DappWithDetails = ({
                         </BaseText>
                     </BaseView>
                 </BaseView>
-                {collapsableDetails && (
-                    <BaseButton
-                        action={() => setShowDetails(old => !old)}
-                        variant="ghost"
-                        textColor={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
-                        typographyFont="bodyMedium"
-                        px={0}
-                        rightIcon={
-                            <BaseIcon
-                                name={showDetails ? "icon-chevron-up" : "icon-chevron-down"}
-                                size={12}
-                                color={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
-                                style={styles.rightIcon}
-                            />
-                        }
-                        testID="DAPP_WITH_DETAILS_DETAILS_BTN">
-                        {showDetails ? LL.HIDE() : LL.DETAILS()}
-                    </BaseButton>
-                )}
+                <BaseButton
+                    action={() => setShowDetails(old => !old)}
+                    variant="ghost"
+                    textColor={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
+                    typographyFont="bodyMedium"
+                    px={0}
+                    rightIcon={
+                        <BaseIcon
+                            name={showDetails ? "icon-chevron-up" : "icon-chevron-down"}
+                            size={12}
+                            color={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
+                            style={styles.rightIcon}
+                        />
+                    }
+                    testID="DAPP_WITH_DETAILS_DETAILS_BTN">
+                    {showDetails ? LL.HIDE() : LL.DETAILS()}
+                </BaseButton>
             </AnimatedBaseView>
             {!isDapp && showDappWarning && (
                 <>
@@ -125,7 +123,7 @@ export const DappWithDetails = ({
                 </>
             )}
             <AnimatedBaseSpacer style={[spacerStyles]} />
-            {collapsableDetails && <DappDetails show={showDetails}>{children}</DappDetails>}
+            <DappDetails show={showDetails}>{children}</DappDetails>
         </AnimatedBaseView>
     )
 }

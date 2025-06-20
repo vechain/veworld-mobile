@@ -105,7 +105,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
     const [isLoading, setIsLoading] = React.useState(true)
-    const { connectBsRef } = useInteraction()
+    const { connectBsRef, certificateBsRef } = useInteraction()
 
     useEffect(() => {
         if (platform === "ios") {
@@ -387,7 +387,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (isAlreadyConnected) {
-                nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
+                certificateBsRef.current?.present({
                     request: req,
                     isInjectedWallet: true,
                 })
@@ -402,7 +402,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [certificateBsRef, connectBsRef, connectedDiscoveryApps, switchAccount, switchNetwork],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -627,8 +627,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (request.method === "thor_signCertificate") {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
-                    request,
+                certificateBsRef.current?.present({
+                    request: request,
                 })
             }
 
@@ -638,7 +638,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [dispatch, nav],
+        [certificateBsRef, dispatch, nav],
     )
 
     const onMessage = useCallback(
