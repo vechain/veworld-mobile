@@ -1910,6 +1910,10 @@ type RootTranslation = {
 	 */
 	CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
 	/**
+	 * C​o​n​n​e​c​t
+	 */
+	CONNECTION_REQUEST_CTA: string
+	/**
 	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
 	 */
 	CONNECTION_REQUEST_TITLE: string
@@ -6271,6 +6275,10 @@ Thanks for your patience!
 	 * {name} is asking for access to:
 	 */
 	CONNECTION_REQUEST_SUBTITLE: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Connect
+	 */
+	CONNECTION_REQUEST_CTA: () => LocalizedString
 	/**
 	 * Connection request
 	 */
