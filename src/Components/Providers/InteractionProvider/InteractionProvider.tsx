@@ -4,13 +4,15 @@ import { useBottomSheetModal } from "~Hooks"
 
 type ContextType = {
     connectBsRef: RefObject<BottomSheetModalMethods>
+    certificateBsRef: RefObject<BottomSheetModalMethods>
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
 
 export const InteractionProvider = ({ children }: PropsWithChildren) => {
     const { ref: connectBsRef } = useBottomSheetModal()
-    const contextValue = useMemo(() => ({ connectBsRef }), [connectBsRef])
+    const { ref: certificateBsRef } = useBottomSheetModal()
+    const contextValue = useMemo(() => ({ connectBsRef, certificateBsRef }), [connectBsRef, certificateBsRef])
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
 }
