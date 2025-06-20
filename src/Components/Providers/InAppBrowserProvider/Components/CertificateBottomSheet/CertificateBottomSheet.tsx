@@ -1,12 +1,20 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { default as React, useCallback, useMemo } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
+import { SelectAccountBottomSheet } from "~Components/Reusable"
+import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { CertificateRequest } from "~Model"
-import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
-import { DAppUtils } from "~Utils"
+import {
+    selectFeaturedDapps,
+    selectSelectedAccount,
+    selectVisibleAccountsWithoutObserved,
+    useAppSelector,
+} from "~Storage/Redux"
+import { AccountUtils, DAppUtils } from "~Utils"
 import { DappWithDetails } from "../DappWithDetails"
 
 type Request = {
@@ -19,13 +27,23 @@ type Props = {
     onCancel: (request: CertificateRequest) => Promise<void>
     onSign: (request: CertificateRequest) => Promise<void>
     onCloseBs: () => void
+    selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
 }
 
-const CertificateBottomSheetContent = ({ request, onCancel, onSign }: Props) => {
+const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
     const allApps = useAppSelector(selectFeaturedDapps)
+
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
+    const { onClose: onCloseSelectAccountBs, onOpen: onOpenSelectAccountBs } = useBottomSheetModal({
+        externalRef: selectAccountBsRef,
+    })
+
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+
     const { icon, name, url } = useMemo(() => {
         const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(request.appUrl).origin)
         if (foundDapp)
@@ -46,11 +64,14 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign }: Props) => 
 
     return (
         <>
-            <BaseView flexDirection="row" gap={12}>
-                <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
-                <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                    {LL.SIGN_CERTIFICATE_REQUEST_TITLE()}
-                </BaseText>
+            <BaseView flexDirection="row" gap={12} justifyContent="space-between">
+                <BaseView flex={1}>
+                    <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
+                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                        {LL.SIGN_CERTIFICATE_REQUEST_TITLE()}
+                    </BaseText>
+                </BaseView>
+                <AccountSelector account={selectedAccount} onPress={onOpenSelectAccountBs} variant="short" />
             </BaseView>
             <DappWithDetails name={name} icon={icon} url={url} isDefaultVisible>
                 <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
@@ -62,10 +83,21 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign }: Props) => 
                 <BaseButton action={onCancel.bind(null, request)} variant="outline" flex={1}>
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
-                <BaseButton action={onSign.bind(null, request)} flex={1}>
+                <BaseButton
+                    action={onSign.bind(null, request)}
+                    flex={1}
+                    disabled={AccountUtils.isObservedAccount(selectedAccount)}>
                     {LL.SIGN_CERTIFICATE_REQUEST_CTA()}
                 </BaseButton>
             </BaseView>
+
+            <SelectAccountBottomSheet
+                closeBottomSheet={onCloseSelectAccountBs}
+                accounts={visibleAccounts}
+                setSelectedAccount={onSetSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBsRef}
+            />
         </>
     )
 }
@@ -73,6 +105,8 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign }: Props) => 
 export const CertificateBottomSheet = () => {
     const { connectBsRef } = useInteraction()
     const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
+
+    const { ref: selectAccountBsRef } = useBottomSheetModal()
 
     const onSign = useCallback(async () => {}, [])
     const onCancel = useCallback(async () => {}, [])
@@ -85,6 +119,7 @@ export const CertificateBottomSheet = () => {
                     onSign={onSign}
                     onCloseBs={onCloseBs}
                     request={data.request}
+                    selectAccountBsRef={selectAccountBsRef}
                 />
             )}
         </BaseBottomSheet>
