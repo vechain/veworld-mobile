@@ -1,27 +1,37 @@
 {
-    "name": "VeWorld",
-    "experiments": {
-        "turboModules": true
-    },
-    "plugins": [
-        "expo-font",
-        "expo-secure-store",
-        [
-            "expo-local-authentication",
-            {
-                "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
-            }
-        ],
-        [
-            "expo-build-properties",
-            {
-              "ios": {
-                "newArchEnabled": true
-              },
-              "android": {
-                "newArchEnabled": true
-              }
-            }
-          ]
+  "name": "VeWorld",
+  "experiments": {
+    "turboModules": true
+  },
+  "plugins": [
+    "expo-font",
+    "expo-secure-store",
+    [
+      "expo-local-authentication",
+      {
+        "faceIDPermission": "Allow $(PRODUCT_NAME) to use Face ID."
+      }
+    ],
+    [
+      "expo-build-properties",
+      {
+        "ios": {
+          "newArchEnabled": true
+        },
+        "android": {
+          "newArchEnabled": true
+        }
+      }
     ]
+  ],
+  "android": {
+    "permissions": [
+      "android.permission.USE_BIOMETRIC",
+      "android.permission.USE_FINGERPRINT"
+    ],
+    "package": "com.anonymous.veworld"
+  },
+  "ios": {
+    "bundleIdentifier": "com.anonymous.veworld"
+  }
 }
