@@ -13,9 +13,40 @@ import * as localizeMock from "react-native-localize/mock"
 const componentMock = ({ children }: { children: ReactNode }) => children
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
-jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
+jest.mock("react-native/src/private/animated/NativeAnimatedHelper.js")
 jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-quick-crypto", () => ({
+    default: {
+        randomBytes: jest.fn((size: number) => {
+            const buffer = Buffer.alloc(Math.ceil(size))
+            for (let i = 0; i < buffer.length; i++) {
+                buffer[i] = Math.floor(Math.random() * 256)
+            }
+            return buffer
+        }),
+        getRandomValues: jest.fn(buffer => buffer),
+        randomFillSync: jest.fn(buffer => buffer),
+        createCipheriv: jest.fn(() => ({
+            update: (first: string) => first,
+            final: () => "",
+        })),
+        createDecipheriv: jest.fn(() => ({
+            update: (first: string) => first,
+            final: () => "",
+        })),
+        createHash: jest.fn(() => ({
+            update: () => ({
+                digest: (first: string) => first,
+            }),
+        })),
+    },
+    randomBytes: jest.fn((size: number) => {
+        const buffer = Buffer.alloc(Math.ceil(size))
+        for (let i = 0; i < buffer.length; i++) {
+            buffer[i] = Math.floor(Math.random() * 256)
+        }
+        return buffer
+    }),
     getRandomValues: jest.fn(buffer => buffer),
     randomFillSync: jest.fn(buffer => buffer),
     createCipheriv: jest.fn(() => ({
@@ -138,7 +169,7 @@ jest.mock("expo-font", () => ({
 jest.mock("react-native-localize", () => localizeMock)
 
 jest.mock("react-native-webview", () => ({
-    ...jest.requireActual("react-native-webview").WebView,
+    WebView: ({ children }: { children?: ReactNode }) => children,
 }))
 
 jest.mock("expo-clipboard", () => {})
@@ -256,9 +287,21 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
             if (name === "RNViewShot") {
                 return null
             }
+            if (name === "RNCWebViewModule") {
+                return null
+            }
             return turboModuleRegistry.getEnforcing(name)
         },
     }
 })
+
+jest.mock("expo-task-manager", () => ({
+    defineTask: jest.fn(),
+    isTaskRegisteredAsync: jest.fn().mockResolvedValue(false),
+    unregisterTaskAsync: jest.fn().mockResolvedValue(true),
+    isTaskDefined: jest.fn().mockReturnValue(true),
+    getTaskOptionsAsync: jest.fn(),
+    getRegisteredTasksAsync: jest.fn().mockResolvedValue([]),
+}))
 
 require("react-native-reanimated").setUpTests()

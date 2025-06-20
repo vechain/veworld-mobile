@@ -11,7 +11,6 @@ import {
     ConfirmDeleteCloudBackupBottomSheet,
     DeleteCloudBackupBottomSheet,
     EnableCloudBottomSheet,
-    RequireUserPassword,
     WalletBackupStatusRow,
 } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -36,6 +35,7 @@ import {
 } from "~Storage/Redux"
 import { DateUtils, PlatformUtils } from "~Utils"
 import { getTimeZone } from "react-native-localize"
+import { PasswordModal } from "./PasswordModal"
 
 type Props = {
     backupDetails: string[] | string
@@ -209,42 +209,40 @@ export const CloudBackupCard: FC<Props> = ({ backupDetails, deviceToBackup }) =>
 
     return (
         <>
-            <BaseView justifyContent="center">
-                <CardWithHeader
-                    title={LL.TITLE_BACKUP_CLOUD()}
-                    iconName="icon-cloud"
-                    sideHeader={
-                        <BaseView style={styles.sideHeader}>
-                            <BaseText
-                                typographyFont="smallCaptionMedium"
-                                px={6}
-                                py={2}
-                                color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}>
-                                {LL.RECOMMENDED()}
-                            </BaseText>
-                        </BaseView>
-                    }>
-                    <WalletBackupStatusRow
-                        variant={isWalletBackedUp ? "success" : "error"}
-                        title={PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
-                        rightElement={
-                            isAppLoading ? (
-                                <Lottie
-                                    source={theme.isDark ? LoaderDark : LoaderLight}
-                                    autoPlay
-                                    loop
-                                    style={styles.lottie}
-                                />
-                            ) : (
-                                <BaseIcon name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
-                            )
-                        }
-                        onPress={handleCloudBackupPress}
-                        disabled={isAppLoading}
-                        loading={isAppLoading}
-                    />
-                </CardWithHeader>
-            </BaseView>
+            <CardWithHeader
+                title={LL.TITLE_BACKUP_CLOUD()}
+                iconName="icon-cloud"
+                sideHeader={
+                    <BaseView style={styles.sideHeader}>
+                        <BaseText
+                            typographyFont="smallCaptionMedium"
+                            px={6}
+                            py={2}
+                            color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}>
+                            {LL.RECOMMENDED()}
+                        </BaseText>
+                    </BaseView>
+                }>
+                <WalletBackupStatusRow
+                    variant={isWalletBackedUp ? "success" : "error"}
+                    title={PlatformUtils.isIOS() ? LL.ICLOUD() : LL.GOOGLE_DRIVE()}
+                    rightElement={
+                        isAppLoading ? (
+                            <Lottie
+                                source={theme.isDark ? LoaderDark : LoaderLight}
+                                autoPlay
+                                loop
+                                style={styles.lottie}
+                            />
+                        ) : (
+                            <BaseIcon name="icon-chevron-right" size={14} color={COLORS.DARK_PURPLE} />
+                        )
+                    }
+                    onPress={handleCloudBackupPress}
+                    disabled={isAppLoading}
+                    loading={isAppLoading}
+                />
+            </CardWithHeader>
 
             <DeleteCloudBackupBottomSheet
                 ref={deleteBackupRef}
@@ -260,7 +258,7 @@ export const CloudBackupCard: FC<Props> = ({ backupDetails, deviceToBackup }) =>
 
             <EnableCloudBottomSheet ref={EnableCloudRef} onClose={onCloseEnableCloud} />
 
-            <RequireUserPassword
+            <PasswordModal
                 isOpen={isPasswordPromptOpen}
                 onClose={handleClosePasswordModal}
                 onSuccess={onPasswordSuccess}

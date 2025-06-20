@@ -42,7 +42,7 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { useAccountDelete } from "./hooks"
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated"
-import { DefaultStyle } from "react-native-reanimated/lib/typescript/reanimated2/hook/commonTypes"
+import { DefaultStyle } from "react-native-reanimated/lib/typescript/hook/commonTypes"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.WALLET_DETAILS>
 

@@ -36,6 +36,7 @@ export const NotificationScreen = () => {
     const [dapps, setDapps] = useState<VeBetterDaoDapp[]>([])
     const [tags, setTags] = useState<{ [key: string]: string }>({})
     const [searchText, setSearchText] = useState("")
+    const [isUpdatingTags, setIsUpdatingTags] = useState(false)
 
     const {
         isNotificationPermissionEnabled,
@@ -49,9 +50,17 @@ export const NotificationScreen = () => {
     const areNotificationsEnabled = !!isUserOptedIn && !!isNotificationPermissionEnabled
     const hasReachedSubscriptionLimit = Object.keys(tags).length === SUBSCRIPTION_LIMIT
 
-    const updateTags = useCallback(() => {
-        getTags().then(setTags)
-    }, [getTags])
+    const updateTags = useCallback(async () => {
+        if (isUpdatingTags) return
+
+        setIsUpdatingTags(true)
+        try {
+            const newTags = await getTags()
+            setTags(newTags)
+        } finally {
+            setIsUpdatingTags(false)
+        }
+    }, [getTags, isUpdatingTags])
 
     const resetLastNotificationReminderTimestamp = useCallback(() => {
         dispatch(updateLastNotificationReminder(null))
@@ -110,14 +119,18 @@ export const NotificationScreen = () => {
                     return
                 }
 
+                setTags(prev => ({ ...prev, [tag]: "true" }))
                 addTag(tag, "true")
             } else {
+                setTags(prev => {
+                    const newTags = { ...prev }
+                    delete newTags[tag]
+                    return newTags
+                })
                 removeTag(tag)
             }
-
-            updateTags()
         },
-        [addTag, hasReachedSubscriptionLimit, removeTag, showSubscriptionLimitReachedWarning, updateTags],
+        [addTag, hasReachedSubscriptionLimit, removeTag, showSubscriptionLimitReachedWarning],
     )
 
     const toogleDAppSubscriptionSwitch = useCallback(
@@ -128,14 +141,18 @@ export const NotificationScreen = () => {
                     return
                 }
 
+                setTags(prev => ({ ...prev, [dappId]: "true" }))
                 addDAppTag(dappId)
             } else {
+                setTags(prev => {
+                    const newTags = { ...prev }
+                    delete newTags[dappId]
+                    return newTags
+                })
                 removeDAppTag(dappId)
             }
-
-            updateTags()
         },
-        [addDAppTag, hasReachedSubscriptionLimit, removeDAppTag, showSubscriptionLimitReachedWarning, updateTags],
+        [addDAppTag, hasReachedSubscriptionLimit, removeDAppTag, showSubscriptionLimitReachedWarning],
     )
 
     const renderItem = useCallback(

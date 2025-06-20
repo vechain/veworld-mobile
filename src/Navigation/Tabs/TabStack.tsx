@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import React, { useCallback, useMemo, createContext, useContext, useState } from "react"
+import { StyleSheet, TouchableOpacity } from "react-native"
 import { TabIcon } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
 import { IconKey } from "~Model"
@@ -18,6 +18,7 @@ import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryS
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import PlatformUtils from "~Utils/PlatformUtils"
+import { COLORS } from "~Constants"
 
 export type TabStackParamList = {
     HomeStack: NavigatorScreenParams<RootStackParamListHome>
@@ -29,9 +30,33 @@ export type TabStackParamList = {
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
 
+const FocusedTabContext = createContext<string>("HomeStack")
+
+const CustomTabButton = (props: any) => {
+    const { children, onPress, route, ...otherProps } = props
+    const focusedTab = useContext(FocusedTabContext)
+
+    const routeName = route?.name || props.routeName || props.descriptor?.route?.name || "unknown"
+
+    const focused = focusedTab === routeName
+
+    return (
+        <TouchableOpacity
+            {...otherProps}
+            onPress={onPress}
+            style={[
+                customTabButtonStyles.container,
+                focused ? customTabButtonStyles.focused : customTabButtonStyles.unfocused,
+            ]}>
+            {children}
+        </TouchableOpacity>
+    )
+}
+
 export const TabStack = () => {
     const theme = useTheme()
     const currentScreen = useAppSelector(selectCurrentScreen)
+    const [focusedTab, setFocusedTab] = useState<string>("HomeStack")
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
@@ -52,6 +77,21 @@ export const TabStack = () => {
         [isShowBackupModal],
     )
 
+    // Create a custom tabBarButton that tracks the focused tab
+    const createTabBarButton = useCallback((routeName: string) => {
+        return (props: any) => {
+            const enhancedProps = {
+                ...props,
+                route: { name: routeName },
+                onPress: () => {
+                    setFocusedTab(routeName)
+                    props.onPress?.()
+                },
+            }
+            return <CustomTabButton {...enhancedProps} />
+        }
+    }, [])
+
     const display = useMemo(() => {
         switch (currentScreen) {
             case Routes.SETTINGS_GET_SUPPORT:
@@ -70,69 +110,95 @@ export const TabStack = () => {
     }, [currentScreen])
 
     return (
-        <Tab.Navigator
-            screenOptions={{
-                headerShown: false,
-                tabBarShowLabel: false,
-                tabBarStyle: {
-                    display,
-                    backgroundColor: theme.colors.card,
-                    ...tabbarBaseStyles.tabbar,
-                    ...tabbarBaseStyles.shadow,
-                },
-            }}>
-            <Tab.Screen
-                name="HomeStack"
-                component={HomeStack}
-                options={{
-                    tabBarLabel: "Wallet",
-                    tabBarTestID: "wallet-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home"),
-                }}
-            />
+        <FocusedTabContext.Provider value={focusedTab}>
+            <Tab.Navigator
+                screenOptions={() => ({
+                    headerShown: false,
+                    tabBarShowLabel: false,
+                    tabBarStyle: {
+                        display,
+                        backgroundColor: theme.colors.card,
+                        ...tabbarBaseStyles.tabbar,
+                        ...tabbarBaseStyles.shadow,
+                    },
+                    lazy: true,
+                })}>
+                <Tab.Screen
+                    name="HomeStack"
+                    component={HomeStack}
+                    options={{
+                        tabBarLabel: "Wallet",
+                        tabBarButtonTestID: "wallet-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home"),
+                        tabBarButton: createTabBarButton("HomeStack"),
+                    }}
+                />
 
-            <Tab.Screen
-                name="NFTStack"
-                component={NFTStack}
-                options={{
-                    tabBarLabel: "NFT",
-                    tabBarTestID: "nft-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image"),
-                }}
-            />
+                <Tab.Screen
+                    name="NFTStack"
+                    component={NFTStack}
+                    options={{
+                        tabBarLabel: "NFT",
+                        tabBarButtonTestID: "nft-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image"),
+                        tabBarButton: createTabBarButton("NFTStack"),
+                    }}
+                />
 
-            <Tab.Screen
-                name="DiscoverStack"
-                component={DiscoverStack}
-                options={{
-                    tabBarLabel: "Discover",
-                    tabBarTestID: "discover-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer"),
-                }}
-            />
+                <Tab.Screen
+                    name="DiscoverStack"
+                    component={DiscoverStack}
+                    options={{
+                        tabBarLabel: "Discover",
+                        tabBarButtonTestID: "discover-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer"),
+                        tabBarButton: createTabBarButton("DiscoverStack"),
+                    }}
+                />
 
-            <Tab.Screen
-                name={Routes.HISTORY_STACK}
-                component={HistoryStack}
-                options={{
-                    tabBarLabel: Routes.HISTORY,
-                    tabBarTestID: "history-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history"),
-                }}
-            />
+                <Tab.Screen
+                    name={Routes.HISTORY_STACK}
+                    component={HistoryStack}
+                    options={{
+                        tabBarLabel: Routes.HISTORY,
+                        tabBarButtonTestID: "history-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history"),
+                        tabBarButton: createTabBarButton(Routes.HISTORY_STACK),
+                    }}
+                />
 
-            <Tab.Screen
-                name="SettingsStack"
-                component={SettingsStack}
-                options={{
-                    tabBarLabel: "Settings",
-                    tabBarTestID: "settings-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu"),
-                }}
-            />
-        </Tab.Navigator>
+                <Tab.Screen
+                    name="SettingsStack"
+                    component={SettingsStack}
+                    options={{
+                        tabBarLabel: "Settings",
+                        tabBarButtonTestID: "settings-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu"),
+                        tabBarButton: createTabBarButton("SettingsStack"),
+                    }}
+                />
+            </Tab.Navigator>
+        </FocusedTabContext.Provider>
     )
 }
+
+const customTabButtonStyles = StyleSheet.create({
+    container: {
+        alignItems: "center",
+        justifyContent: "center",
+        marginHorizontal: 8,
+        paddingHorizontal: 8,
+        paddingVertical: 8,
+        borderRadius: 8,
+        minWidth: 50,
+    },
+    focused: {
+        backgroundColor: COLORS.DARK_PURPLE,
+    },
+    unfocused: {
+        backgroundColor: "transparent",
+    },
+})
 
 export const tabbarBaseStyles = StyleSheet.create({
     tabbar: {
@@ -141,8 +207,9 @@ export const tabbarBaseStyles = StyleSheet.create({
         left: 0,
         right: 0,
         borderTopWidth: 0,
-        padding: 8,
-        height: PlatformUtils.isIOS() ? 90 : 56,
+        paddingHorizontal: 8,
+        paddingTop: 12,
+        height: PlatformUtils.isIOS() ? 90 : 60,
     },
     shadow: {
         shadowColor: "#000",

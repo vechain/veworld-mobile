@@ -185,11 +185,13 @@ export const PrivacyScreen = () => {
 
                         <DevicesBackupState devices={devices} onPress={handleDeviceBackup} />
 
-                        <RequireUserPassword
-                            isOpen={isPasswordPromptOpen}
-                            onClose={closePasswordPrompt}
-                            onSuccess={onPasswordSuccess}
-                        />
+                        {isPasswordPromptOpen && (
+                            <RequireUserPassword
+                                isOpen={isPasswordPromptOpen}
+                                onClose={closePasswordPrompt}
+                                onSuccess={onPasswordSuccess}
+                            />
+                        )}
 
                         <BaseSpacer height={40} />
 
@@ -204,13 +206,15 @@ export const PrivacyScreen = () => {
                             </>
                         )}
 
-                        <RequireUserPassword
-                            isOpen={isEditPinPromptOpen}
-                            onClose={closeEditPinPrompt}
-                            onSuccess={onPinSuccess}
-                            scenario={lockScreenScenario}
-                            isValidatePassword={isValidatePassword}
-                        />
+                        {isEditPinPromptOpen && (
+                            <RequireUserPassword
+                                isOpen={isEditPinPromptOpen}
+                                onClose={closeEditPinPrompt}
+                                onSuccess={onPinSuccess}
+                                scenario={lockScreenScenario}
+                                isValidatePassword={isValidatePassword}
+                            />
+                        )}
                     </BaseView>
                     <BackupWarningBottomSheet
                         ref={backupWarningSheetRef}

@@ -12,7 +12,7 @@ import { PersistConfig } from "redux-persist/es/types"
 import { BaseToast } from "~Components"
 import { ConnexContext } from "~Components/Providers/ConnexProvider"
 import { NotificationsProvider } from "~Components/Providers/NotificationsProvider"
-import { ThemeEnum } from "~Constants"
+import { ThemeEnum, typography } from "~Constants"
 import { useTheme } from "~Hooks"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
@@ -32,6 +32,24 @@ const NavigationProvider = ({ children }: { children: React.ReactNode }) => {
         () => ({
             dark: theme.isDark,
             colors: theme.colors,
+            fonts: {
+                regular: {
+                    fontFamily: typography.fontFamily["Inter-Regular"],
+                    fontWeight: "normal" as const,
+                },
+                medium: {
+                    fontFamily: typography.fontFamily["Inter-Medium"],
+                    fontWeight: "500" as const,
+                },
+                bold: {
+                    fontFamily: typography.fontFamily["Inter-Bold"],
+                    fontWeight: "bold" as const,
+                },
+                heavy: {
+                    fontFamily: typography.fontFamily["Inter-Bold"],
+                    fontWeight: "bold" as const,
+                },
+            },
         }),
         [theme],
     )
