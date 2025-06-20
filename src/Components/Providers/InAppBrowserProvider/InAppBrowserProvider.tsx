@@ -37,6 +37,8 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { useInteraction } from "../InteractionProvider"
+import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
 const { PackageDetails } = NativeModules
@@ -103,6 +105,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
     const [isLoading, setIsLoading] = React.useState(true)
+    const { connectBsRef } = useInteraction()
 
     useEffect(() => {
         if (platform === "ios") {
@@ -389,7 +392,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     isInjectedWallet: true,
                 })
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                connectBsRef.current?.present({
                     request: {
                         type: "in-app",
                         initialRequest: req,
@@ -399,7 +402,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -431,7 +434,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     request: req,
                 })
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                connectBsRef.current?.present({
                     request: {
                         type: "in-app",
                         initialRequest: req,
@@ -441,7 +444,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -474,7 +477,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     request: req,
                 })
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
+                connectBsRef.current?.present({
                     request: {
                         type: "in-app",
                         initialRequest: req,
@@ -484,7 +487,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
     )
 
     // ~ MESSAGE VALIDATION
@@ -812,7 +815,12 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         isDapp,
     ])
 
-    return <Context.Provider value={contextValue}>{children}</Context.Provider>
+    return (
+        <Context.Provider value={contextValue}>
+            <ConnectBottomSheet />
+            {children}
+        </Context.Provider>
+    )
 }
 
 export const useInAppBrowser = () => {

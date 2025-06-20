@@ -1,7 +1,6 @@
 import { default as React, useCallback } from "react"
 import { BaseButton, BaseView } from "~Components/Base"
 import { useThor } from "~Components/Providers"
-import { FlatListScrollPropsType } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
@@ -21,7 +20,6 @@ type Props = {
 
     onReset: () => void
     onClose: () => void
-    flatListScrollProps: FlatListScrollPropsType
     accounts: LocalAccountWithDevice[]
     delegationUrls: string[]
 }
@@ -56,7 +54,6 @@ const ButtonBar = ({ onCancel, onApply, disabled }: ButtonBarProps) => {
 
 export const RenderedOption = ({
     selectedOption,
-    flatListScrollProps,
     selectedDelegationAccount,
     selectedDelegationUrl,
     onReset,
@@ -88,10 +85,7 @@ export const RenderedOption = ({
         )
     if (selectedOption === DelegationType.ACCOUNT)
         return (
-            <AccountOption
-                selectedDelegationAccount={selectedDelegationAccount}
-                flatListProps={flatListScrollProps}
-                accounts={accounts}>
+            <AccountOption selectedDelegationAccount={selectedDelegationAccount} accounts={accounts}>
                 {({ onCancel, selectedAccount }) => (
                     <ButtonBar
                         onCancel={() => {

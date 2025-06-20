@@ -21,7 +21,7 @@ export const OptionText = ({ children }: PropsWithChildren) => {
 export const Option = ({ label, children, style }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     return (
-        <BaseView style={[styles.result, style]} gap={16} flexDirection="column">
+        <BaseView style={[styles.result, style]}>
             {label && <OptionText>{label}</OptionText>}
             {children}
         </BaseView>
@@ -36,5 +36,7 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.editSpeedBs.result.background,
             padding: 24,
             borderRadius: 12,
+            gap: 16,
+            flexDirection: "column",
         },
     })
