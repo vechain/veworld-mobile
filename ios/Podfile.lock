@@ -1580,29 +1580,7 @@ PODS:
   - react-native-onesignal (5.2.11):
     - OneSignalXCFramework (= 5.2.10)
     - React (< 1.0.0, >= 0.13.0)
-  - react-native-pager-view (6.5.1):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.10.14.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - react-native-pager-view/common (= 6.5.1)
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-pager-view/common (6.5.1):
+  - react-native-pager-view (6.8.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1669,7 +1647,7 @@ PODS:
     - Yoga
   - react-native-restart (0.0.27):
     - React-Core
-  - react-native-safe-area-context (5.4.0):
+  - react-native-safe-area-context (5.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1682,8 +1660,8 @@ PODS:
     - React-featureflags
     - React-graphics
     - React-ImageManager
-    - react-native-safe-area-context/common (= 5.4.0)
-    - react-native-safe-area-context/fabric (= 5.4.0)
+    - react-native-safe-area-context/common (= 5.4.1)
+    - react-native-safe-area-context/fabric (= 5.4.1)
     - React-NativeModulesApple
     - React-RCTFabric
     - React-rendererdebug
@@ -1692,7 +1670,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/common (5.4.0):
+  - react-native-safe-area-context/common (5.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -1713,7 +1691,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - react-native-safe-area-context/fabric (5.4.0):
+  - react-native-safe-area-context/fabric (5.4.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2092,7 +2070,7 @@ PODS:
     - React-logger
     - React-perflogger
     - React-utils (= 0.76.9)
-  - RNBootSplash (6.3.8):
+  - RNBootSplash (6.3.9):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2161,7 +2139,7 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFlashList (1.7.3):
+  - RNFlashList (1.8.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2182,7 +2160,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNGestureHandler (2.25.0):
+  - RNGestureHandler (2.26.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2368,7 +2346,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNScreens (4.4.0):
+  - RNScreens (4.11.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2389,9 +2367,9 @@ PODS:
     - ReactCodegen
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
-    - RNScreens/common (= 4.4.0)
+    - RNScreens/common (= 4.11.1)
     - Yoga
-  - RNScreens/common (4.4.0):
+  - RNScreens/common (4.11.1):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2956,11 +2934,11 @@ SPEC CHECKSUMS:
   react-native-mmkv: ef0ad6b44a71c90c660234cae828bfb3c0e43a26
   react-native-netinfo: cec9c4e86083cb5b6aba0e0711f563e2fbbff187
   react-native-onesignal: 62ad0dfd1dabd68cc1dcc64746cb89e2ccd2ea70
-  react-native-pager-view: 9517b214fb7321493339fbcf53a30abd54fea07b
+  react-native-pager-view: 8e2dcf913f11f439b0ced243e5162d47569826b8
   react-native-quick-base64: f923222b05cd066ac7f89f54457215fc79cc3760
   react-native-quick-crypto: 361ecda861e23138ce68fea4b820cbc058688fb5
   react-native-restart: 0bc732f4461709022a742bb29bcccf6bbc5b4863
-  react-native-safe-area-context: c68127652d8b9a26a28ac9597167a3ad90bcd713
+  react-native-safe-area-context: cecba5fe389e388e17685aa3bacb3c9e817149a3
   react-native-slider: d8c35cc0162af73c9448f4b18c34d09e841cc1ab
   react-native-view-shot: c6708fc5e7a841021007fdf7d6659d031e17efee
   react-native-webview: 6b9fc65c1951203a3e958ff3cc0a858d4b6be901
@@ -2991,19 +2969,19 @@ SPEC CHECKSUMS:
   React-utils: ed818f19ab445000d6b5c4efa9d462449326cc9f
   ReactCodegen: f853a20cc9125c5521c8766b4b49375fec20648b
   ReactCommon: 300d8d9c5cb1a6cd79a67cf5d8f91e4d477195f9
-  RNBootSplash: 0a9d3a978b4aa2e27c7d6bd156a7664306fac82b
+  RNBootSplash: 861da9c9be22b1c059ea98cca1bb436fd55d671e
   RNCAsyncStorage: 66991bb6672ed988a8c56289a08bf4fc3a29d4b3
   RNCMaskedView: b3aee2f4fa81807ec035be51c057aa2eed166173
   RNDeviceInfo: ae26ae45db3f9937f038a284bcd0a1db8d70db96
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
-  RNFlashList: 648e2273693600985aaa72a2ef4700e815500901
-  RNGestureHandler: 9c8bf98209e658e1ceb13026f176e4ede1f24491
+  RNFlashList: 4757464d196d6b0ee2266c31051d7de4bb0f1660
+  RNGestureHandler: 262397ce56c7f34c72e2363681ca285a1de3e3e8
   RNInAppBrowser: 6d3eb68d471b9834335c664704719b8be1bfdb20
   RNKeychain: df33ae4d27df06622fc14190b790ba8749f6be76
   RNLocalize: 7748f0bf70c8e0cbb97c11a8431990bb03b0cfae
   RNReactNativeHapticFeedback: a4429a7c923cdd31d44c74417b8330d8e93737bd
   RNReanimated: 6b9d5b5919acb1900ce0d36ef95906026c517674
-  RNScreens: 362f4c861dd155f898908d5035d97b07a3f1a9d1
+  RNScreens: da08089f1b06c3e0a459545ee2e0eb94ea18a80b
   RNScrypt: 3e8612600c93aaa3bfa7849b6d1a4ab61613e2af
   RNSentry: ac7beae04304d95491a512b5abf6926d4501c73c
   RNSVG: b889dc9c1948eeea0576a16cc405c91c37a12c19

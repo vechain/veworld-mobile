@@ -31,16 +31,11 @@ const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
         return theme.colors.text
     }
 
-    const bgColor = isFocused ? COLORS.DARK_PURPLE : "transparent"
     return StyleSheet.create({
         icon: {
             color: iconColor(),
         },
         container: {
-            borderRadius: 8,
-            paddingHorizontal: 20,
-            paddingVertical: 10,
-            backgroundColor: bgColor,
             position: "relative",
         },
         warningLabel: {
