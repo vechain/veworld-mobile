@@ -21,7 +21,6 @@ module.exports = {
             "|@react-navigation" +
             "|native-base" +
             "|@expo(nent)?/.*" +
-            "|@expo-.*" +
             "|@expo-google-fonts/.*" +
             "|expo-.*" +
             "|@unimodules" +

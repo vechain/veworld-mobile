@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import Animated, { useAnimatedProps, SharedValue, DerivedValue } from "react-native-reanimated"
+import Animated, { useAnimatedProps } from "react-native-reanimated"
 import { TextInputProps, TextInput, TextProps as RNTextProps, KeyboardTypeOptions } from "react-native"
 import { PlatformUtils } from "~Utils"
 
@@ -7,13 +7,13 @@ import { PlatformUtils } from "~Utils"
 // forked from https://github.com/wcandillon/react-native-redash/blob/master/src/ReText.tsx
 Animated.addWhitelistedNativeProps({ text: true })
 
-interface BaseAnimatedTextProps<T extends string = string> extends Omit<TextInputProps, "value" | "style"> {
-    text: SharedValue<T> | DerivedValue<T>
+interface BaseAnimatedTextProps extends Omit<TextInputProps, "value" | "style"> {
+    text: Animated.SharedValue<string>
     style?: Animated.AnimateProps<RNTextProps>["style"]
 }
 
 export const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
-export const BaseAnimatedText = <T extends string = string>(props: BaseAnimatedTextProps<T>): JSX.Element => {
+export const BaseAnimatedText = (props: BaseAnimatedTextProps): JSX.Element => {
     const { style, text, ...rest } = props
     const animatedProps = useAnimatedProps(() => {
         return {

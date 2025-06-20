@@ -31,11 +31,7 @@ export const EditWalletAccountBottomSheet = React.forwardRef<BottomSheetModalMet
 
                         <BaseSpacer height={8} />
 
-                        <BaseBottomSheetTextInput
-                            testID="ChangeAlias_Input"
-                            defaultValue={alias}
-                            setValue={onChangeText}
-                        />
+                        <BaseBottomSheetTextInput testID="ChangeAlias_Input" value={alias} setValue={onChangeText} />
 
                         <BaseSpacer height={40} />
 
