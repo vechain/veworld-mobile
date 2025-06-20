@@ -94,9 +94,10 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             flexDirection: "row",
             borderRadius: 8,
+            borderWidth: 2,
+            borderColor: theme.colors.transparent,
         },
         selectedContainer: {
-            borderWidth: 2,
             borderColor: theme.colors.text,
         },
         innerTouchable: {
