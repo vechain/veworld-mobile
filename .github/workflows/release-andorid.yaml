@@ -143,6 +143,17 @@ jobs:
                   export KEY_ALIAS="$(<key_alias.txt)"
                   fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}}
 
+            - name: Push APK to Vercel blob
+              working-directory: "./android"
+              env:
+                  VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+                  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+                  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+              run: |
+                  APK_PATH="./app/build/outputs/apk/release/app-release.apk"
+                  yarn global add vercel
+                  vercel blob put --rw-token $VERCEL_TOKEN $APK_PATH --pathname veworld-release-latest.apk --project $VERCEL_PROJECT_ID --content-type "application/vnd.android.package-archive"
+
             - name: Commit and Push Changes
               run: |
                   git config user.name "vechain-ci"
