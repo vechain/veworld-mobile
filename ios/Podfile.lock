@@ -2139,7 +2139,7 @@ PODS:
     - React-Core
     - SDWebImage (~> 5.11.1)
     - SDWebImageWebPCoder (~> 0.8.4)
-  - RNFlashList (1.7.3):
+  - RNFlashList (1.8.3):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2160,7 +2160,7 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
-  - RNGestureHandler (2.25.0):
+  - RNGestureHandler (2.26.0):
     - DoubleConversion
     - glog
     - hermes-engine
@@ -2974,8 +2974,8 @@ SPEC CHECKSUMS:
   RNCMaskedView: b3aee2f4fa81807ec035be51c057aa2eed166173
   RNDeviceInfo: ae26ae45db3f9937f038a284bcd0a1db8d70db96
   RNFastImage: 462a183c4b0b6b26fdfd639e1ed6ba37536c3b87
-  RNFlashList: 648e2273693600985aaa72a2ef4700e815500901
-  RNGestureHandler: 9c8bf98209e658e1ceb13026f176e4ede1f24491
+  RNFlashList: 4757464d196d6b0ee2266c31051d7de4bb0f1660
+  RNGestureHandler: 262397ce56c7f34c72e2363681ca285a1de3e3e8
   RNInAppBrowser: 6d3eb68d471b9834335c664704719b8be1bfdb20
   RNKeychain: df33ae4d27df06622fc14190b790ba8749f6be76
   RNLocalize: 7748f0bf70c8e0cbb97c11a8431990bb03b0cfae

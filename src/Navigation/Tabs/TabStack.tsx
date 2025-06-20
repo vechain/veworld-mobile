@@ -121,6 +121,7 @@ export const TabStack = () => {
                         ...tabbarBaseStyles.tabbar,
                         ...tabbarBaseStyles.shadow,
                     },
+                    lazy: true,
                 })}>
                 <Tab.Screen
                     name="HomeStack"
