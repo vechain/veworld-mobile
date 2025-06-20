@@ -1,8 +1,15 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useNavigation } from "@react-navigation/native"
+import { IWalletKit } from "@reown/walletkit"
+import { ErrorResponse } from "@walletconnect/jsonrpc-types"
 import { PendingRequestTypes, SessionTypes } from "@walletconnect/types"
-import { AddressUtils, debug, error, HexUtils, WalletConnectUtils, warn } from "~Utils"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { ActiveSessions, getRpcError, showErrorToast, showInfoToast } from "~Components"
+import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
+import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { AccountWithDevice } from "~Model"
+import { Routes } from "~Navigation"
 import {
     changeSelectedNetwork,
     selectNetworks,
@@ -12,13 +19,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { ActiveSessions, getRpcError, showErrorToast, showInfoToast } from "~Components"
-import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
-import { useI18nContext } from "~i18n"
-import { useAnalyticTracking, useSetSelectedAccount } from "~Hooks"
-import { IWalletKit } from "@reown/walletkit"
-import { ErrorResponse } from "@walletconnect/jsonrpc-types"
+import { AddressUtils, debug, error, HexUtils, WalletConnectUtils, warn } from "~Utils"
 
 type PendingRequests = Record<string, PendingRequestTypes.Struct>
 
@@ -38,6 +39,8 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
     const sessions = useMemo(() => Object.values(activeSessions), [activeSessions])
 
     const [pendingRequests, setPendingRequests] = useState<PendingRequests>({})
+
+    const { certificateBsRef } = useInteraction()
 
     const addPendingRequest = useCallback((requestEvent: PendingRequestTypes.Struct) => {
         setPendingRequests(prev => ({
@@ -125,7 +128,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
             if (message) {
                 track(AnalyticsEvent.DAPP_REQUEST_CERTIFICATE)
-                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
+                certificateBsRef.current?.present({
                     request: {
                         method: "thor_signCertificate",
                         type: "wallet-connect",
@@ -145,7 +148,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 return failRequest(requestEvent, getRpcError("invalidParams"))
             }
         },
-        [failRequest, LL, track, nav],
+        [LL, track, certificateBsRef, failRequest],
     )
 
     const goToSendTransaction = useCallback(
