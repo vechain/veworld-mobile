@@ -1910,6 +1910,10 @@ type RootTranslation = {
 	 */
 	CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
 	/**
+	 * C​o​n​n​e​c​t
+	 */
+	CONNECTION_REQUEST_CTA: string
+	/**
 	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
 	 */
 	CONNECTION_REQUEST_TITLE: string
@@ -2783,10 +2787,6 @@ type RootTranslation = {
 	 */
 	NFT_TRANSFER_SENT: string
 	/**
-	 * T​h​i​s​ ​d​A​p​p​ ​i​s​n​'​t​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.
-	 */
-	NOT_VERIFIED_DAPP: string
-	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: string
@@ -2971,6 +2971,10 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​i​n​g​ ​m​a​y​ ​t​a​k​e​ ​a​ ​f​e​w​ ​s​e​c​o​n​d​s​.
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
+	/**
+	 * T​h​i​s​ ​d​A​p​p​ ​i​s​n​'​t​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.
+	 */
+	NOT_VERIFIED_DAPP: string
 	/**
 	 * N​o​v​e​m​b​e​r
 	 */
@@ -6264,6 +6268,10 @@ Thanks for your patience!
 	 */
 	CONNECTION_REQUEST_SUBTITLE: (arg: { name: unknown }) => LocalizedString
 	/**
+	 * Connect
+	 */
+	CONNECTION_REQUEST_CTA: () => LocalizedString
+	/**
 	 * Connection request
 	 */
 	CONNECTION_REQUEST_TITLE: () => LocalizedString
@@ -7137,10 +7145,6 @@ Thanks for your patience!
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
 	/**
-	 * This dApp isn't verified by VeWorld.
-	 */
-	NOT_VERIFIED_DAPP: () => LocalizedString
-	/**
 	 * Go to NFTs
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: () => LocalizedString
@@ -7308,6 +7312,10 @@ Thanks for your patience!
 	 * Connecting may take a few seconds.
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
+	/**
+	 * This dApp isn't verified by VeWorld.
+	 */
+	NOT_VERIFIED_DAPP: () => LocalizedString
 	/**
 	 * November
 	 */

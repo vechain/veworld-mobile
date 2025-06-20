@@ -77,7 +77,7 @@ const ConnectBottomSheetContent = ({
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <BaseButton action={onConnect.bind(null, request)} flex={1}>
-                    {LL.COMMON_BTN_APPLY()}
+                    {LL.CONNECTION_REQUEST_CTA()}
                 </BaseButton>
             </BaseView>
         </>
