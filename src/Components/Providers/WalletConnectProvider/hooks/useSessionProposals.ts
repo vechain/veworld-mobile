@@ -19,7 +19,7 @@ export const useSessionProposals = (
     const dispatch = useAppDispatch()
 
     const [sessionProposals, setSessionProposals] = useState<SessionProposalState>({})
-    const { connectBsRef } = useInteraction()
+    const { connectBsRef, setConnectBsData } = useInteraction()
     const proposalList = useMemo(() => Object.values(sessionProposals), [sessionProposals])
 
     /**
@@ -72,18 +72,17 @@ export const useSessionProposals = (
                 return await respondInvalidSession(proposal, validationError)
             }
 
-            connectBsRef.current?.present({
-                request: {
-                    type: "wallet-connect",
-                    appName: proposal.params.proposer.metadata.name,
-                    appUrl: proposal.params.proposer.metadata.url,
-                    iconUrl: proposal.params.proposer.metadata.icons[0],
-                    description: proposal.params.proposer.metadata.description,
-                    proposal,
-                },
+            setConnectBsData({
+                type: "wallet-connect",
+                appName: proposal.params.proposer.metadata.name,
+                appUrl: proposal.params.proposer.metadata.url,
+                iconUrl: proposal.params.proposer.metadata.icons[0],
+                description: proposal.params.proposer.metadata.description,
+                proposal,
             })
+            connectBsRef.current?.present()
         },
-        [LL, connectBsRef, respondInvalidSession],
+        [LL, connectBsRef, respondInvalidSession, setConnectBsData],
     )
 
     const approvePendingProposal = useCallback(

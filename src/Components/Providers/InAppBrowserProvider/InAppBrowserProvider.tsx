@@ -106,7 +106,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
     const [isLoading, setIsLoading] = React.useState(true)
-    const { connectBsRef, certificateBsRef } = useInteraction()
+    const { connectBsRef, setConnectBsData, certificateBsRef } = useInteraction()
 
     useEffect(() => {
         if (platform === "ios") {
@@ -393,17 +393,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     isInjectedWallet: true,
                 })
             } else {
-                connectBsRef.current?.present({
-                    request: {
-                        type: "in-app",
-                        initialRequest: req,
-                        appUrl,
-                        appName,
-                    },
+                setConnectBsData({
+                    type: "in-app",
+                    initialRequest: req,
+                    appUrl,
+                    appName,
                 })
+                connectBsRef.current?.present()
             }
         },
-        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, setConnectBsData, switchAccount, switchNetwork],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -435,17 +434,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     request: req,
                 })
             } else {
-                connectBsRef.current?.present({
-                    request: {
-                        type: "in-app",
-                        initialRequest: req,
-                        appUrl,
-                        appName,
-                    },
+                setConnectBsData({
+                    type: "in-app",
+                    initialRequest: req,
+                    appUrl,
+                    appName,
                 })
+                connectBsRef.current?.present()
             }
         },
-        [certificateBsRef, connectBsRef, connectedDiscoveryApps, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, setConnectBsData, switchAccount, switchNetwork, certificateBsRef],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -478,17 +476,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     request: req,
                 })
             } else {
-                connectBsRef.current?.present({
-                    request: {
-                        type: "in-app",
-                        initialRequest: req,
-                        appUrl,
-                        appName,
-                    },
+                setConnectBsData({
+                    type: "in-app",
+                    initialRequest: req,
+                    appUrl,
+                    appName,
                 })
+                connectBsRef.current?.present()
             }
         },
-        [connectBsRef, connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, setConnectBsData, switchAccount, switchNetwork],
     )
 
     // ~ MESSAGE VALIDATION
