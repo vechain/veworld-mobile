@@ -24,7 +24,6 @@ export const SocialOnboardingStack = () => {
 
     return (
         <SocialOnboarding.Navigator screenOptions={{ headerShown: false, animation }}>
-
             <SocialOnboarding.Screen
                 name={Routes.SOCIAL_ONBOARDING}
                 component={SocialOnboardingScreen}

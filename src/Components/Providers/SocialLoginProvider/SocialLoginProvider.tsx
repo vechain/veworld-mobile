@@ -5,14 +5,23 @@ import { PrivyProvider, usePrivy } from "@privy-io/expo"
 import { TypedData } from "../../../Model"
 // import { useEmbeddedWallet } from "./useEmbeddedWallet"
 import { useSmartWallet } from "./useSmartWallet"
-import { TransactionClause } from "@vechain/sdk-core"
+import { Transaction, TransactionClause } from "@vechain/sdk-core"
 
 // Create context for your enhanced functionality
 const SocialLoginContext = createContext<{
     accountAddress: string
-    signTransaction: (clauses: TransactionClause[], delegateFor?: string) => Promise<string>
+    // signTransaction: (clauses: TransactionClause[], delegateFor?: string) => Promise<string>
+    sendTransaction: (signedTransaction: Transaction) => Promise<string>
     signMessage: (hash: Buffer) => Promise<Buffer>
+    signTransaction: (transaction: Transaction, delegateFor?: string) => Promise<Buffer>
     signTypedData: (typedData: TypedData) => Promise<string>
+    buildTransaction: (
+        clauses: TransactionClause[],
+        gas?: number,
+        isDelegated?: boolean,
+        dependsOn?: string,
+        gasPriceCoef?: number,
+    ) => Promise<Transaction>
 } | null>(null)
 
 export const SocialLoginProvider: React.FC<{
@@ -57,14 +66,44 @@ const SocialLoginImplementation: React.FC<{ children: React.ReactNode }> = ({ ch
         [smartWallet],
     )
 
+    const signTransaction = useCallback(
+        async (transaction: Transaction, delegateFor?: string): Promise<Buffer> => {
+            return await smartWallet.signTransaction(transaction, delegateFor)
+        },
+        [smartWallet],
+    )
+
+    const buildTransaction = useCallback(
+        async (
+            clauses: TransactionClause[],
+            gas?: number,
+            isDelegated?: boolean,
+            dependsOn?: string,
+            gasPriceCoef?: number,
+        ): Promise<Transaction> => {
+            console.log("SocialLoginProvider buildTransaction", clauses, gas, isDelegated, dependsOn, gasPriceCoef)
+            return await smartWallet.buildTransaction(clauses, gas, isDelegated, dependsOn, gasPriceCoef)
+        },
+        [smartWallet],
+    )
+
     const contextValue = useMemo(
         () => ({
             accountAddress: smartWallet.smartAccountAddress ?? "",
-            signTransaction: sendTransaction,
+            signTransaction,
+            buildTransaction,
+            sendTransaction,
             signMessage,
             signTypedData,
         }),
-        [sendTransaction, signMessage, signTypedData, smartWallet.smartAccountAddress],
+        [
+            sendTransaction,
+            signMessage,
+            signTypedData,
+            buildTransaction,
+            smartWallet.smartAccountAddress,
+            signTransaction,
+        ],
     )
 
     return <SocialLoginContext.Provider value={contextValue}>{children}</SocialLoginContext.Provider>

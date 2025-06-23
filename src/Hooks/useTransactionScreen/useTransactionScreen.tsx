@@ -115,7 +115,6 @@ export const useTransactionScreen = ({
 
     const vtho = useVTHO_HACK(selectedDelegationAccount?.address ?? selectedAccount.address)
 
-    const { signTransaction: signTransactionSocial } = useSocialLogin()
     /**
      * Signs the transaction and sends it to the blockchain
      */
@@ -124,15 +123,7 @@ export const useTransactionScreen = ({
             setLoading(true)
 
             try {
-                const senderDevice = selectedAccount.device
-                console.log("senderDevice", senderDevice)
-                if (senderDevice.type === DEVICE_TYPE.SOCIAL) {
-                    console.log("social device sign and send differently")
-                    const id = await signTransactionSocial(clauses)
-                    console.log("sent smarty wallet id", id)
-                    return
-                }
-                const transaction: SignTransactionResponse = await signTransaction(password)
+                const transaction = await signTransaction(password)
 
                 switch (transaction) {
                     case SignStatus.NAVIGATE_TO_LEDGER:
@@ -184,7 +175,7 @@ export const useTransactionScreen = ({
                 selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
                 selectedDelegationOption !== DelegationType.ACCOUNT
             ) {
-                const tx = buildTransaction()
+                const tx = await buildTransaction()
                 await navigateToLedger(tx, selectedAccount as LedgerAccountWithDevice, undefined)
             } else {
                 await checkIdentityBeforeOpening()

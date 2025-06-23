@@ -1,9 +1,11 @@
 import { useCallback } from "react"
 import { HexUtils } from "~Utils"
-import { EstimateGasResult } from "~Model"
+import { DEVICE_TYPE, EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
+import { useSocialLogin } from "../../Components/Providers/SocialLoginProvider/SocialLoginProvider"
+import { selectDevice, selectSelectedAccount, useAppSelector } from "../../Storage/Redux"
 
 type Props = {
     providedGas?: number
@@ -22,11 +24,19 @@ export const useTransactionBuilder = ({
     gasPriceCoef = GasPriceCoefficient.REGULAR,
 }: Props) => {
     const thor = useThor()
+    const account = useAppSelector(selectSelectedAccount)
+    const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
+    const { buildTransaction: socialLoginBuildTransaction } = useSocialLogin()
 
-    const buildTransaction = useCallback(() => {
+    const buildTransaction = useCallback(async () => {
         const nonce = HexUtils.generateRandom(8)
 
         const txGas = gas?.gas ?? 0
+
+        if (senderDevice?.type === DEVICE_TYPE.SOCIAL) {
+            console.log("building transaction with social login 1")
+            return await socialLoginBuildTransaction(clauses, txGas, isDelegated, dependsOn, gasPriceCoef)
+        }
 
         return Transaction.of({
             chainTag: parseInt(thor.genesis.id.slice(-2), 16),
@@ -44,7 +54,17 @@ export const useTransactionBuilder = ({
                 },
             }),
         })
-    }, [gas?.gas, thor.genesis.id, thor.status.head.id, clauses, gasPriceCoef, dependsOn, isDelegated])
+    }, [
+        gas?.gas,
+        thor.genesis.id,
+        thor.status.head.id,
+        clauses,
+        gasPriceCoef,
+        dependsOn,
+        isDelegated,
+        senderDevice?.type,
+        socialLoginBuildTransaction,
+    ])
 
     return {
         buildTransaction,

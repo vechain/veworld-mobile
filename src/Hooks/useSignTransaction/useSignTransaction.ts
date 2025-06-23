@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Address, Hex, Secp256k1, Transaction } from "@vechain/sdk-core"
 import { HDNode } from "thor-devkit"
 import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
+import { useSocialLogin } from "../../Components/Providers/SocialLoginProvider/SocialLoginProvider"
 import { ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest, Wallet } from "~Model"
@@ -10,14 +11,13 @@ import { Routes } from "~Navigation"
 import { sponsorTransaction } from "~Networking"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { HexUtils, warn } from "~Utils"
-import { useSocialLogin } from "~Components/Providers/SocialLoginProvider/SocialLoginProvider"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
     initialRoute?: Routes.NFTS | Routes.HOME
-    buildTransaction: () => Transaction
+    buildTransaction: () => Promise<Transaction>
     dappRequest?: TransactionRequest
     resetDelegation: () => void
 }
@@ -42,7 +42,7 @@ const getPrivateKey = (wallet: Wallet, account: AccountWithDevice) => {
  * @param buildTransaction the function to build the transaction
  * @param selectedDelegationAccount the account to delegate to
  * @param selectedDelegationOption the delegation option
- * @param selectedDelegationUrl the delegation url
+ * @param selectedDelegationUrl the delegation url22
  * @param initialRoute the initial route to navigate to
  */
 export const useSignTransaction = ({
@@ -58,8 +58,8 @@ export const useSignTransaction = ({
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const nav = useNavigation()
-    const { signTransaction: socialLoginSignTransaction } = useSocialLogin()
 
+    const { signTransaction: socialSignTransaction } = useSocialLogin()
     const getSignature = async (
         transaction: Transaction,
         wallet: Wallet,
@@ -77,6 +77,7 @@ export const useSignTransaction = ({
         transaction: Transaction,
     ): Promise<Buffer | SignStatus.DELEGATION_FAILURE> => {
         try {
+            console.log("getUrlDelegationSignature", transaction)
             if (!selectedDelegationUrl) {
                 throw new Error("Delegation url not found when requesting delegation signature")
             }
@@ -175,7 +176,7 @@ export const useSignTransaction = ({
     const signTransaction = async (password?: string): Promise<SignTransactionResponse> => {
         if (!senderDevice) throw new Error("Sender device not found")
 
-        const transaction = buildTransaction()
+        const transaction = await buildTransaction()
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
             await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
@@ -190,7 +191,8 @@ export const useSignTransaction = ({
         let senderSignature: Buffer
         // const senderSignature = await getSignature(transaction, senderWallet)
         if (senderDevice.type === DEVICE_TYPE.SOCIAL) {
-            senderSignature = await socialLoginSignTransaction(transaction)
+            console.log("social sign transaction", transaction)
+            senderSignature = await socialSignTransaction(transaction)
         } else {
             const senderWallet = await WalletEncryptionKeyHelper.decryptWallet({
                 encryptedWallet: senderDevice.wallet,
@@ -199,8 +201,12 @@ export const useSignTransaction = ({
             senderSignature = await getSignature(transaction, senderWallet)
         }
 
+        console.log("getting delegation signature", transaction)
         const delegationSignature = await getDelegationSignature(transaction, password)
+        console.log("got delegation signature", delegationSignature)
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
+
+        console.log("combining signature " + senderSignature.toString("hex"), delegationSignature?.toString("hex"))
 
         return Transaction.of(
             transaction.body,

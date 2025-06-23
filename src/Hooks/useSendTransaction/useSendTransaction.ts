@@ -31,6 +31,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
     const lastReviewTimestamp = useAppSelector(selectLastReviewTimestamp)
 
     const sendTransaction = async (signedTransaction: Transaction): Promise<string> => {
+        console.log("sendTransaction", signedTransaction)
         dispatch(setIsAppLoading(true))
 
         const encodedRawTx = {
@@ -41,6 +42,7 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
 
         try {
             response = await axios.post(`${selectedNetwork.currentUrl}/transactions`, encodedRawTx)
+            console.log("response", response.data)
         } catch (e) {
             if (e instanceof AxiosError) {
                 const axiosError = e as AxiosError

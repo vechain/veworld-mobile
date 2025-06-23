@@ -1,5 +1,13 @@
 import { AccountUtils, AddressUtils, debug, error } from "~Utils"
-import { BaseDevice, DEVICE_TYPE, LedgerDevice, LocalDevice, NewLedgerDevice, SocialDevice, WalletAccount } from "~Model"
+import {
+    BaseDevice,
+    DEVICE_TYPE,
+    LedgerDevice,
+    LocalDevice,
+    NewLedgerDevice,
+    SocialDevice,
+    WalletAccount,
+} from "~Model"
 import { selectDevices } from "../Selectors"
 import { addDevice, bulkUpdateDevices, renameDevice, updateDevice } from "../Slices/Device"
 import { AppThunk, createAppAsyncThunk } from "../Types"
