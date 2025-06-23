@@ -43,6 +43,8 @@ export interface UserPreferenceState {
     lastNotificationReminder: number | null
     removedNotificationTags?: string[]
     showJailbrokeWarning?: boolean
+    hideStargateBannerHomeScreen?: boolean
+    hideStargateBannerVETScreen?: boolean
 }
 
 const initialState: UserPreferenceState = {
@@ -64,6 +66,8 @@ const initialState: UserPreferenceState = {
     lastNotificationReminder: null,
     removedNotificationTags: undefined,
     showJailbrokeWarning: true,
+    hideStargateBannerHomeScreen: false,
+    hideStargateBannerVETScreen: false,
 }
 
 export const UserPreferencesSlice = createSlice({
@@ -167,6 +171,14 @@ export const UserPreferencesSlice = createSlice({
                 state.removedNotificationTags = state.removedNotificationTags.filter(tag => tag !== action.payload)
             }
         },
+
+        setHideStargateBannerHomeScreen: (state, action: PayloadAction<boolean>) => {
+            state.hideStargateBannerHomeScreen = action.payload
+        },
+
+        setHideStargateBannerVETScreen: (state, action: PayloadAction<boolean>) => {
+            state.hideStargateBannerVETScreen = action.payload
+        },
     },
 })
 
@@ -190,4 +202,6 @@ export const {
     addRemovedNotificationTag,
     removeRemovedNotificationTag,
     setShowJailbrokeDeviceWarning,
+    setHideStargateBannerHomeScreen,
+    setHideStargateBannerVETScreen,
 } = UserPreferencesSlice.actions

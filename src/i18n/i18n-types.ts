@@ -410,6 +410,10 @@ type RootTranslation = {
 	 */
 	BANNER_STELLAPAY_DESC: string
 	/**
+	 * G​e​t​ ​*​*​r​e​w​a​r​d​s​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
+	 */
+	BANNER_STARGATE_DESC: string
+	/**
 	 * C​l​a​i​m​ ​y​o​u​r​ ​<​>​<​>​ ​f​o​r​ ​f​r​e​e​ ​n​o​w
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: string
@@ -1349,6 +1353,10 @@ type RootTranslation = {
 	 * S​e​l​l
 	 */
 	BTN_SELL: string
+	/**
+	 * E​a​r​n​ ​s​t​a​k​i​n​g​ ​r​e​w​a​r​d​s
+	 */
+	BTN_EARNING_STAKING_REWARDS: string
 	/**
 	 * S​e​n​d
 	 */
@@ -4757,6 +4765,10 @@ Try reconnect your device to the internet.
 	 */
 	BANNER_STELLAPAY_DESC: () => LocalizedString
 	/**
+	 * Get **rewards** by staking your **VET tokens**
+	 */
+	BANNER_STARGATE_DESC: () => LocalizedString
+	/**
 	 * Claim your <><> for free now
 	 */
 	BANNER_TITLE_CLAIM_USERNAME: () => LocalizedString
@@ -5690,6 +5702,10 @@ Thanks for your patience!
 	 * Sell
 	 */
 	BTN_SELL: () => LocalizedString
+	/**
+	 * Earn staking rewards
+	 */
+	BTN_EARNING_STAKING_REWARDS: () => LocalizedString
 	/**
 	 * Send
 	 */

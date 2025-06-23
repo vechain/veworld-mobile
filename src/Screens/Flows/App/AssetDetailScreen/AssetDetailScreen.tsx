@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { AlertInline, BaseSpacer, BaseText, BaseView, Layout, QRCodeBottomSheet } from "~Components"
-import { B3TR } from "~Constants"
+import { B3TR, VET } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { useBottomSheetModal, useBottomSheetRef, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -15,9 +15,10 @@ import {
     selectSendableTokensWithBalance,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils } from "~Utils"
+import { AccountUtils, BigNutils } from "~Utils"
 import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
+import { BannersCarousel } from "../HomeScreen/Components/BannerCarousel"
 
 type Props = NativeStackScreenProps<RootStackParamListHome, Routes.TOKEN_DETAILS>
 
@@ -104,6 +105,10 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         )}
 
                         <BaseSpacer height={40} />
+                        {token.symbol === VET.symbol &&
+                            BigNutils(tokenWithCompleteInfo.balance?.balance)
+                                .toHuman(tokenWithCompleteInfo.decimals)
+                                .isBiggerThan(1000) && <BannersCarousel location="token_screen" />}
 
                         {/* TODO: handle loading/skeleton */}
                         {!!description && (

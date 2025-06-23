@@ -86,3 +86,11 @@ export const selectRemovedNotificationTags = createSelector(reducer, state => {
 export const selectShowJailbrokeDeviceWarning = createSelector(reducer, state => {
     return state.showJailbrokeWarning
 })
+
+export const selectHideStargateBannerHomeScreen = createSelector(reducer, state => {
+    return state.hideStargateBannerHomeScreen
+})
+
+export const selectHideStargateBannerVETScreen = createSelector(reducer, state => {
+    return state.hideStargateBannerVETScreen
+})
