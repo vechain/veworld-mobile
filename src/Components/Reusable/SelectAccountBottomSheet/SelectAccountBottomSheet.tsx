@@ -1,6 +1,7 @@
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { BottomSheetFlatList, BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo } from "react"
+import { SectionListData } from "react-native"
 import { AccountCard, BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useScrollableBottomSheet, useTheme } from "~Hooks"
@@ -50,6 +51,14 @@ const ItemSeparatorComponent = ({ cardVersion = "v1" }: Pick<Props, "cardVersion
     <BaseSpacer height={cardVersion === "v1" ? 16 : 8} />
 )
 
+const SectionHeader = ({
+    section,
+}: {
+    section: SectionListData<AccountWithDevice, { data: AccountWithDevice[]; alias: string }>
+}) => {
+    return <BaseText typographyFont="bodyMedium">{section.alias}</BaseText>
+}
+
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     (
@@ -98,6 +107,15 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         })
 
         const theme = useTheme()
+
+        const sections = useMemo(() => {
+            const groupedAccounts = accounts.reduce((acc, curr) => {
+                const key = curr.device?.alias ?? curr.alias
+                return { ...acc, [key]: [...(acc[key] ?? []), curr] }
+            }, {} as { [alias: string]: AccountWithDevice[] })
+            return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
+        }, [accounts])
+
         return (
             <BaseBottomSheet
                 snapPoints={computeSnappoints}
@@ -110,12 +128,12 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 </BaseView>
 
                 <BaseSpacer height={12} />
-                <BottomSheetFlatList
-                    data={accounts}
-                    keyExtractor={account => account.address}
-                    ItemSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
-                    renderItem={({ item }) =>
-                        cardVersion === "v1" ? (
+                {cardVersion === "v1" ? (
+                    <BottomSheetFlatList
+                        data={accounts}
+                        keyExtractor={account => account.address}
+                        ItemSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
+                        renderItem={({ item }) => (
                             <AccountCard
                                 testID="selectAccount"
                                 account={item}
@@ -124,17 +142,27 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                                 isVthoBalance={isVthoBalance}
                                 isBalanceVisible={isBalanceVisible}
                             />
-                        ) : (
+                        )}
+                        {...flatListScrollProps}
+                    />
+                ) : (
+                    <BottomSheetSectionList
+                        sections={sections}
+                        keyExtractor={item => item.address}
+                        renderSectionHeader={SectionHeader}
+                        renderItem={({ item }) => (
                             <SelectableAccountCard
                                 account={item}
                                 onPress={handlePress}
                                 selected={item.address === selectedAccount?.address}
                                 balanceToken={isVthoBalance ? "VTHO" : "VET"}
                             />
-                        )
-                    }
-                    {...flatListScrollProps}
-                />
+                        )}
+                        ItemSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
+                        SectionSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
+                        {...flatListScrollProps}
+                    />
+                )}
             </BaseBottomSheet>
         )
     },

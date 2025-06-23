@@ -40,7 +40,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
     const [pendingRequests, setPendingRequests] = useState<PendingRequests>({})
 
-    const { certificateBsRef } = useInteraction()
+    const { certificateBsRef, setCertificateBsData } = useInteraction()
 
     const addPendingRequest = useCallback((requestEvent: PendingRequestTypes.Struct) => {
         setPendingRequests(prev => ({
@@ -128,18 +128,17 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
             if (message) {
                 track(AnalyticsEvent.DAPP_REQUEST_CERTIFICATE)
-                certificateBsRef.current?.present({
-                    request: {
-                        method: "thor_signCertificate",
-                        type: "wallet-connect",
-                        requestEvent,
-                        session,
-                        message,
-                        options,
-                        appName: session.peer.metadata.name,
-                        appUrl: session.peer.metadata.url,
-                    },
+                setCertificateBsData({
+                    method: "thor_signCertificate",
+                    type: "wallet-connect",
+                    requestEvent,
+                    session,
+                    message,
+                    options,
+                    appName: session.peer.metadata.name,
+                    appUrl: session.peer.metadata.url,
                 })
+                certificateBsRef.current?.present()
             } else {
                 showErrorToast({
                     text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
@@ -148,7 +147,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 return failRequest(requestEvent, getRpcError("invalidParams"))
             }
         },
-        [LL, track, certificateBsRef, failRequest],
+        [LL, track, setCertificateBsData, certificateBsRef, failRequest],
     )
 
     const goToSendTransaction = useCallback(

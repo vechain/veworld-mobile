@@ -106,7 +106,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
     const [isLoading, setIsLoading] = React.useState(true)
-    const { connectBsRef, setConnectBsData, certificateBsRef } = useInteraction()
+    const { connectBsRef, setConnectBsData, certificateBsRef, setCertificateBsData } = useInteraction()
 
     useEffect(() => {
         if (platform === "ios") {
@@ -430,9 +430,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (isAlreadyConnected) {
-                certificateBsRef.current?.present({
-                    request: req,
-                })
+                setCertificateBsData(req)
+                certificateBsRef.current?.present()
             } else {
                 setConnectBsData({
                     type: "in-app",
@@ -443,7 +442,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 connectBsRef.current?.present()
             }
         },
-        [connectBsRef, connectedDiscoveryApps, setConnectBsData, switchAccount, switchNetwork, certificateBsRef],
+        [
+            connectedDiscoveryApps,
+            switchAccount,
+            switchNetwork,
+            setCertificateBsData,
+            certificateBsRef,
+            setConnectBsData,
+            connectBsRef,
+        ],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -625,9 +632,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (request.method === "thor_signCertificate") {
-                certificateBsRef.current?.present({
-                    request: request,
-                })
+                setCertificateBsData(request)
+                certificateBsRef.current?.present()
             }
 
             if (request.method === "thor_signTypedData") {
@@ -636,7 +642,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [certificateBsRef, dispatch, nav],
+        [certificateBsRef, dispatch, nav, setCertificateBsData],
     )
 
     const onMessage = useCallback(

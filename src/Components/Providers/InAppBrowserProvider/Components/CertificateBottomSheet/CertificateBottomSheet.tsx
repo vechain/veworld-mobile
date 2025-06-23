@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import { Blake2b256, Certificate } from "@vechain/sdk-core"
-import { default as React, useCallback, useMemo } from "react"
+import { default as React, useCallback, useMemo, useRef } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
@@ -128,13 +128,14 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 setSelectedAccount={onSetSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={selectAccountBsRef}
+                cardVersion="v2"
             />
         </>
     )
 }
 
 export const CertificateBottomSheet = () => {
-    const { certificateBsRef } = useInteraction()
+    const { certificateBsRef, certificateBsData, setCertificateBsData } = useInteraction()
     const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: certificateBsRef })
 
     const { ref: selectAccountBsRef } = useBottomSheetModal()
@@ -150,6 +151,8 @@ export const CertificateBottomSheet = () => {
     const nav = useNavigation()
 
     const dispatch = useAppDispatch()
+
+    const isUserAction = useRef(false)
 
     const buildCertificate = useCallback(
         (request: CertificateRequest) => {
@@ -218,6 +221,7 @@ export const CertificateBottomSheet = () => {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
 
                 dispatch(setIsAppLoading(false))
+                isUserAction.current = true
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
 
@@ -237,7 +241,6 @@ export const CertificateBottomSheet = () => {
             } finally {
                 dispatch(setIsAppLoading(false))
             }
-
             onCloseBs()
         },
         [
@@ -254,7 +257,7 @@ export const CertificateBottomSheet = () => {
         ],
     )
 
-    const onCancel = useCallback(
+    const rejectRequest = useCallback(
         async (request: CertificateRequest) => {
             if (request.type === "wallet-connect") {
                 await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
@@ -267,20 +270,39 @@ export const CertificateBottomSheet = () => {
             }
 
             track(AnalyticsEvent.DAPP_CERTIFICATE_REJECTED)
-
-            onCloseBs()
         },
-        [failRequest, onCloseBs, postMessage, track],
+        [failRequest, postMessage, track],
     )
 
+    const onCancel = useCallback(
+        async (request: CertificateRequest) => {
+            await rejectRequest(request)
+            isUserAction.current = true
+            onCloseBs()
+        },
+        [onCloseBs, rejectRequest],
+    )
+
+    const onDismiss = useCallback(async () => {
+        if (isUserAction.current) {
+            setCertificateBsData(null)
+            isUserAction.current = false
+            return
+        }
+        if (!certificateBsData) return
+        await rejectRequest(certificateBsData)
+        isUserAction.current = false
+        setCertificateBsData(null)
+    }, [certificateBsData, rejectRequest, setCertificateBsData])
+
     return (
-        <BaseBottomSheet<Request> dynamicHeight ref={certificateBsRef}>
-            {data => (
+        <BaseBottomSheet<Request> dynamicHeight ref={certificateBsRef} onDismiss={onDismiss}>
+            {certificateBsData && (
                 <CertificateBottomSheetContent
                     onCancel={onCancel}
                     onSign={onSign}
                     onCloseBs={onCloseBs}
-                    request={data.request}
+                    request={certificateBsData}
                     selectAccountBsRef={selectAccountBsRef}
                 />
             )}
