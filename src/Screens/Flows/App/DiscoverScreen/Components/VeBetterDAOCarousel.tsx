@@ -31,7 +31,6 @@ export const VeBetterDAOCarousel = () => {
                 testID: "Stargate_banner",
                 content: <StargateBanner />,
                 href: STARGATE_URL,
-                isExternalLink: true,
                 name: "stargate",
             },
         ],
