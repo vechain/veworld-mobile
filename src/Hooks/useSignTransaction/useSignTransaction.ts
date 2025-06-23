@@ -46,10 +46,10 @@ const getPrivateKey = (wallet: Wallet, account: AccountWithDevice) => {
  */
 const parseSignature = (sig: string) => {
     const signature = Buffer.from(sig.substring(2), "hex")
-    const lastBit = signature[signature.length - 1]
-    //Align recovery bit
-    if (lastBit !== 27 && lastBit !== 28) return signature
-    signature[signature.length - 1] = lastBit - 27
+    // const lastBit = signature[signature.length - 1]
+    // //Align recovery bit
+    // if (lastBit !== 27 && lastBit !== 28) return signature
+    // signature[signature.length - 1] = lastBit - 27
     return signature
 }
 
