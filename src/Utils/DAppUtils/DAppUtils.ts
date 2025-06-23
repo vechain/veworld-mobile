@@ -1,5 +1,9 @@
 import { SignedDataRequest } from "~Components/Providers/InAppBrowserProvider/types"
 import { RequestMethods } from "~Constants"
+import { decodeBase64 } from "tweetnacl-util"
+import nacl from "tweetnacl"
+import { KeyPair, SessionState } from "~Storage/Redux"
+import { BaseTransactionRequest, ExternalAppRequest, TransactionRequest } from "~Model"
 
 const isValidTxMessage = (message: unknown): message is Connex.Vendor.TxMessage => {
     if (!Array.isArray(message)) {
@@ -107,9 +111,71 @@ export const getAppHubIconUrl = (appId: string) => {
     return `${process.env.REACT_APP_HUB_URL}/imgs/${appId}.png`
 }
 
+const validateExternalAppSession = (session: string, signKeyPair: KeyPair) => {
+    const sessionKeyPair = nacl.sign.keyPair.fromSecretKey(decodeBase64(signKeyPair.privateKey))
+
+    const decryptedSession = nacl.sign.open(decodeBase64(session), sessionKeyPair.publicKey)
+
+    if (!decryptedSession) {
+        return false
+    }
+
+    return true
+}
+
+const parseSignTxRequest = (
+    request: string,
+    externalDappSessions: Record<string, SessionState>,
+    signKeyPair: KeyPair,
+) => {
+    const { payload: encPayload, ...decodedRequest }: ExternalAppRequest = JSON.parse(
+        new TextDecoder().decode(decodeBase64(request)),
+    )
+
+    const session = externalDappSessions[decodedRequest.publicKey]
+
+    if (!session) {
+        throw new Error("Session not found")
+    }
+
+    const sessionKeyPair = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
+
+    // Decrypt the payload
+    const sharedSecret = nacl.box.before(decodeBase64(decodedRequest.publicKey), sessionKeyPair.secretKey)
+
+    const decryptedPayload = nacl.box.open.after(
+        decodeBase64(encPayload),
+        decodeBase64(decodedRequest.nonce),
+        sharedSecret,
+    )
+
+    if (!decryptedPayload) {
+        // TODO: Respond to the external app with an error using the error helper
+        throw new Error("500 - Invalid payload")
+    }
+
+    const payload: {
+        transaction: BaseTransactionRequest
+        session: string
+    } = JSON.parse(new TextDecoder().decode(decryptedPayload))
+
+    if (!payload.session || !validateExternalAppSession(payload.session, signKeyPair)) {
+        // TODO: Unauthorized
+        throw new Error("401 - Unauthorized")
+    }
+
+    const req: TransactionRequest = {
+        ...payload.transaction,
+        ...decodedRequest,
+    }
+
+    return req
+}
+
 export const DAppUtils = {
     isValidTxMessage,
     isValidCertMessage,
     getAppHubIconUrl,
     isValidSignedDataMessage,
+    parseSignTxRequest,
 }
