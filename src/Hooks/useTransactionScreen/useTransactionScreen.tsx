@@ -200,9 +200,12 @@ export const useTransactionScreen = ({
                     text2: `${LL.SEND_TRANSACTION_ERROR()}${parseTxError(e)}`,
                 })
                 onTransactionFailure(e)
+            } finally {
+                setLoading(false)
+                dispatch(setIsAppLoading(false))
             }
         },
-        [sendTransaction, LL, parseTxError, onTransactionFailure],
+        [sendTransaction, LL, parseTxError, onTransactionFailure, dispatch],
     )
 
     /**

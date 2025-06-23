@@ -18,7 +18,7 @@ import {
     RequireUserPassword,
     TransferCard,
 } from "~Components"
-import { AnalyticsEvent, COLORS, creteAnalyticsEvent, VET, VTHO } from "~Constants"
+import { AnalyticsEvent, COLORS, creteAnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
 import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
@@ -34,7 +34,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils, AddressUtils, BigNutils, TransactionUtils } from "~Utils"
+import { AccountUtils, AddressUtils, BigNutils, error, TransactionUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { ContactManagementBottomSheet } from "../../ContactsScreen"
 
@@ -90,8 +90,14 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const onTransactionSuccess = useCallback(
         async (transaction: Transaction) => {
-            dispatch(addPendingTransferTransactionActivity(transaction))
-            onFinish(true)
+            try {
+                dispatch(addPendingTransferTransactionActivity(transaction))
+                dispatch(setIsAppLoading(false))
+                onFinish(true)
+            } catch (e) {
+                error(ERROR_EVENTS.SEND, e)
+                onFinish(false)
+            }
         },
         [dispatch, onFinish],
     )
