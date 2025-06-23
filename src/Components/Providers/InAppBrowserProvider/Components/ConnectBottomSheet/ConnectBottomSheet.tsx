@@ -1,4 +1,4 @@
-import { default as React, useCallback, useMemo } from "react"
+import { default as React, useCallback, useMemo, useRef } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { ERROR_EVENTS } from "~Constants"
@@ -86,11 +86,12 @@ const ConnectBottomSheetContent = ({
 
 export const ConnectBottomSheet = () => {
     const { addAppAndNavToRequest, postMessage } = useInAppBrowser()
-    const { connectBsRef } = useInteraction()
+    const { connectBsRef, connectBsData, setConnectBsData } = useInteraction()
     const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
     const { rejectPendingProposal } = useWalletConnect()
 
     const { processProposal } = useWcConnect({ onCloseBs })
+    const isUserAction = useRef(false)
 
     const onConnect = useCallback(
         async (request: ConnectAppRequest) => {
@@ -99,12 +100,13 @@ export const ConnectBottomSheet = () => {
             } else {
                 addAppAndNavToRequest(request.initialRequest)
             }
+            isUserAction.current = true
             onCloseBs()
         },
         [addAppAndNavToRequest, onCloseBs, processProposal],
     )
 
-    const onCancel = useCallback(
+    const rejectProposal = useCallback(
         async (request: ConnectAppRequest) => {
             if (request.type === "wallet-connect") {
                 try {
@@ -119,24 +121,41 @@ export const ConnectBottomSheet = () => {
                     method: request.initialRequest.method,
                 })
             }
-
-            onCloseBs()
         },
-        [onCloseBs, postMessage, rejectPendingProposal],
+        [postMessage, rejectPendingProposal],
     )
 
+    const onCancel = useCallback(
+        async (request: ConnectAppRequest) => {
+            await rejectProposal(request)
+            isUserAction.current = true
+            onCloseBs()
+        },
+        [onCloseBs, rejectProposal],
+    )
+
+    const onDismiss = useCallback(async () => {
+        if (isUserAction.current) {
+            setConnectBsData(null)
+            isUserAction.current = false
+            return
+        }
+        if (!connectBsData) return
+        await rejectProposal(connectBsData)
+        isUserAction.current = false
+        setConnectBsData(null)
+    }, [connectBsData, rejectProposal, setConnectBsData])
+
     return (
-        <BaseBottomSheet<Request> dynamicHeight ref={ref}>
-            {data => {
-                return (
-                    <ConnectBottomSheetContent
-                        request={data.request}
-                        onCancel={onCancel}
-                        onConnect={onConnect}
-                        onCloseBs={onCloseBs}
-                    />
-                )
-            }}
+        <BaseBottomSheet<Request> dynamicHeight ref={ref} onDismiss={onDismiss}>
+            {connectBsData && (
+                <ConnectBottomSheetContent
+                    request={connectBsData}
+                    onCancel={onCancel}
+                    onConnect={onConnect}
+                    onCloseBs={onCloseBs}
+                />
+            )}
         </BaseBottomSheet>
     )
 }
