@@ -1,6 +1,7 @@
 export interface AppVersion {
     installedVersion: string
     majorVersion: string
+    latestVersion: string
     isUpToDate: boolean | null
     lastManifestCheck: number | null
     updateRequest: {

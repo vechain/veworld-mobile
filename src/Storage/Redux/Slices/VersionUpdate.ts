@@ -5,6 +5,7 @@ import { AppVersion } from "~Model/AppVersion"
 const initialVersionUpdateState: AppVersion = {
     installedVersion: "",
     majorVersion: "",
+    latestVersion: "",
     isUpToDate: null,
     lastManifestCheck: null,
     updateRequest: {
@@ -39,6 +40,10 @@ export const VersionUpdateSlice = createSlice({
             state.installedVersion = action.payload
         },
 
+        setLatestVersion: (state, action: PayloadAction<string>) => {
+            state.latestVersion = action.payload
+        },
+
         setIsUpToDate: (state, action: PayloadAction<boolean>) => {
             state.isUpToDate = action.payload
         },
@@ -56,6 +61,7 @@ export const {
     resetDismissCount,
     setMajorVersion,
     setInstalledVersion,
+    setLatestVersion,
     setIsUpToDate,
     setLastManifestCheck,
     resetVersionUpdateState,

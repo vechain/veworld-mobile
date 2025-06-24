@@ -15,6 +15,10 @@ export const selectBreakingAppVersion = createSelector(selectVersionUpdateState,
     return state.majorVersion
 })
 
+export const selectLatestAppVersion = createSelector(selectVersionUpdateState, state => {
+    return state.latestVersion
+})
+
 export const selectInstalledAppVersion = createSelector(selectVersionUpdateState, state => {
     return state.installedVersion
 })

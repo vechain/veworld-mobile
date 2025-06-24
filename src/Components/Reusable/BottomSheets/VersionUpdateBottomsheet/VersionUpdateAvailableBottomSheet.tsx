@@ -13,6 +13,7 @@ import {
     useAppSelector,
     selectUpdateDismissCount,
     incrementDismissCount,
+    selectLatestAppVersion,
 } from "~Storage/Redux"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils.ts"
 
@@ -21,6 +22,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
     const countryCode = getCountry()?.toLowerCase()
     const dispatch = useAppDispatch()
     const majorVersion = useAppSelector(selectBreakingAppVersion)
+    const latestVersion = useAppSelector(selectLatestAppVersion)
     const dismissCount = useAppSelector(selectUpdateDismissCount)
     const { shouldShowUpdatePrompt } = useCheckAppVersion()
     const { ref, onOpen, onClose } = useBottomSheetModal()
@@ -33,6 +35,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
                 platform: isIOS() ? "iOS" : "Android",
                 currentVersion: DeviceInfo.getVersion(),
                 majorVersion: majorVersion,
+                latestVersion: latestVersion,
                 count: dismissCount + 1,
             })
             onOpen()
@@ -40,27 +43,29 @@ export const VersionUpdateAvailableBottomSheet = () => {
         return () => {
             onClose()
         }
-    }, [shouldShowUpdatePrompt, majorVersion, track, onOpen, onClose, dismissCount])
+    }, [shouldShowUpdatePrompt, majorVersion, latestVersion, track, onOpen, onClose, dismissCount])
 
     const handleUpdateApp = useCallback(async () => {
         track(AnalyticsEvent.VERSION_UPGRADE_MODAL_SUCCESS, {
             platform: isIOS() ? "iOS" : "Android",
             majorVersion: majorVersion,
+            latestVersion: latestVersion,
             requestCount: dismissCount,
         })
         onClose()
         await Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL(countryCode) : GOOGLE_STORE_URL)
-    }, [track, majorVersion, dismissCount, onClose, countryCode])
+    }, [track, majorVersion, latestVersion, dismissCount, onClose, countryCode])
 
     const handleUpdateLater = useCallback(() => {
         dispatch(incrementDismissCount())
         track(AnalyticsEvent.VERSION_UPGRADE_MODAL_DISMISSED, {
             platform: isIOS() ? "iOS" : "Android",
             majorVersion: majorVersion,
+            latestVersion: latestVersion,
             requestCount: dismissCount,
         })
         onClose()
-    }, [majorVersion, dismissCount, dispatch, onClose, track])
+    }, [majorVersion, latestVersion, dismissCount, dispatch, onClose, track])
 
     const mainButton = (
         <BaseButton
@@ -96,7 +101,7 @@ export const VersionUpdateAvailableBottomSheet = () => {
             ref={ref}
             title={LL.APP_UPDATE_AVAILABLE()}
             description={LL.APP_UPDATE_AVAILABLE_MESSAGE({
-                version: majorVersion,
+                version: latestVersion,
             })}
             mainButton={mainButton}
             secondaryButton={secondaryButton}

@@ -17,6 +17,7 @@ export const Migration18 = (state: PersistedState): PersistedState => {
     const newState: AppVersion = {
         ...currentState,
         majorVersion: "",
+        latestVersion: "",
         isUpToDate: null,
         lastManifestCheck: null,
         updateRequest: {

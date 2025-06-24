@@ -35,31 +35,43 @@ export const useCheckAppVersion = () => {
     const versionUpdateStatus = useAppSelector(selectUpdatePromptStatus)
     const dispatch = useAppDispatch()
 
-    const { data: majorVersion } = useQuery({
+    const { data: versionInfo } = useQuery({
         queryKey: ["versionManifest"],
         queryFn: fetchVersionInfo,
-        select: data => data.major,
+        select: data => ({
+            major: data.major,
+            latest: data.latest,
+        }),
         staleTime: TWENTY_FOUR_HOURS,
         gcTime: TWENTY_FOUR_HOURS,
         retry: 3,
     })
 
     useEffect(() => {
-        if (majorVersion) {
+        if (versionInfo) {
             const installedVersion = DeviceInfo.getVersion()
-
             if (installedVersion !== versionUpdateStatus.installedVersion) {
                 dispatch(VersionUpdateSlice.actions.setInstalledVersion(installedVersion))
             }
 
-            const needsUpdate = SemanticVersionUtils.moreThan(majorVersion, installedVersion)
+            const needsUpdate = SemanticVersionUtils.moreThan(versionInfo.major, installedVersion)
             dispatch(VersionUpdateSlice.actions.setIsUpToDate(!needsUpdate))
 
-            if (needsUpdate && majorVersion !== versionUpdateStatus.majorVersion) {
-                dispatch(VersionUpdateSlice.actions.setMajorVersion(majorVersion))
+            if (needsUpdate && versionInfo.major !== versionUpdateStatus.majorVersion) {
+                dispatch(VersionUpdateSlice.actions.setMajorVersion(versionInfo.major))
+            }
+
+            if (versionInfo.latest !== versionUpdateStatus.latestVersion) {
+                dispatch(VersionUpdateSlice.actions.setLatestVersion(versionInfo.latest))
             }
         }
-    }, [dispatch, majorVersion, versionUpdateStatus.installedVersion, versionUpdateStatus.majorVersion])
+    }, [
+        dispatch,
+        versionInfo,
+        versionUpdateStatus.installedVersion,
+        versionUpdateStatus.majorVersion,
+        versionUpdateStatus.latestVersion,
+    ])
 
     const shouldShowUpdatePrompt = useMemo(() => {
         if (!versionUpdateStatus.majorVersion || !versionUpdateStatus.installedVersion) {
