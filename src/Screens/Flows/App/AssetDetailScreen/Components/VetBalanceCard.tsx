@@ -236,7 +236,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 disabled: BigNutils(token.balance?.balance || "0").isZero,
             },
             stakeRewards: {
-                name: LL.BTN_EARNING_STAKING_REWARDS(),
+                name: LL.BTN_STAKE(),
                 action: () => {
                     navigateWithTab({
                         title: "Stargate",
