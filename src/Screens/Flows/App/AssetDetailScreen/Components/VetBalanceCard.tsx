@@ -240,7 +240,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 action: () => {
                     navigateWithTab({
                         title: "Stargate",
-                        url: "https://stake.vechain.org",
+                        url: "https://stargate.vechain.org",
                         navigationFn(u) {
                             nav.navigate(Routes.BROWSER, { url: u, returnScreen: Routes.HOME })
                         },
