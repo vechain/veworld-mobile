@@ -8,7 +8,7 @@ import { ConnectAppRequest } from "~Model"
 import {
     addConnectedAppActivity,
     selectNetworks,
-    selectSelectedAccount,
+    selectSelectedAccountOrNull,
     setIsAppLoading,
     useAppDispatch,
     useAppSelector,
@@ -20,7 +20,7 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const networks = useAppSelector(selectNetworks)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const { approvePendingProposal } = useWalletConnect()
 
     /**
@@ -41,7 +41,7 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
                         networks.map(network => `vechain:${network.genesis.id.slice(-32)}`)
 
                     const accounts = _chains.map((scope: string) => {
-                        return `${scope}:${selectedAccount.address}`
+                        return `${scope}:${selectedAccount!.address}`
                     })
 
                     if (namespaces[key]) {
@@ -86,7 +86,7 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
                 dispatch(setIsAppLoading(false))
             }
         },
-        [dispatch, networks, selectedAccount.address, approvePendingProposal, LL, onCloseBs],
+        [dispatch, networks, selectedAccount, approvePendingProposal, LL, onCloseBs],
     )
 
     const memoized = useMemo(() => ({ processProposal }), [processProposal])
