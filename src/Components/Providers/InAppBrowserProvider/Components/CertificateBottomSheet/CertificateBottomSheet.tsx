@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
 import { Blake2b256, Certificate } from "@vechain/sdk-core"
-import { default as React, useCallback, useMemo, useRef } from "react"
+import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
@@ -18,7 +18,6 @@ import {
     selectSelectedAccount,
     selectVerifyContext,
     selectVisibleAccountsWithoutObserved,
-    setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -38,9 +37,10 @@ type Props = {
     onSign: (args: { request: CertificateRequest; password?: string }) => Promise<void>
     onCloseBs: () => void
     selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
+    isLoading: boolean
 }
 
-const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef }: Props) => {
+const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef, isLoading }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
@@ -114,8 +114,10 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                             disabled={
                                 AccountUtils.isObservedAccount(selectedAccount) ||
                                 isBiometricsEmpty ||
-                                !validConnectedApp
-                            }>
+                                !validConnectedApp ||
+                                isLoading
+                            }
+                            isLoading={isLoading}>
                             {LL.SIGN_CERTIFICATE_REQUEST_CTA()}
                         </BaseButton>
                     )}
@@ -154,6 +156,8 @@ export const CertificateBottomSheet = () => {
 
     const isUserAction = useRef(false)
 
+    const [isLoading, setIsLoading] = useState(false)
+
     const buildCertificate = useCallback(
         (request: CertificateRequest) => {
             const certificate = Certificate.of({
@@ -187,12 +191,12 @@ export const CertificateBottomSheet = () => {
                     return
                 }
 
+                setIsLoading(true)
+
                 const signature = await signMessage(payload, password)
                 if (!signature) {
                     throw new Error("Signature is empty")
                 }
-
-                dispatch(setIsAppLoading(true))
 
                 const res: Connex.Vendor.CertResponse = {
                     signature: HexUtils.addPrefix(signature.toString("hex")),
@@ -219,8 +223,6 @@ export const CertificateBottomSheet = () => {
                 )
 
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
-
-                dispatch(setIsAppLoading(false))
                 isUserAction.current = true
             } catch (err: unknown) {
                 track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
@@ -236,10 +238,6 @@ export const CertificateBottomSheet = () => {
                         method: RequestMethods.SIGN_CERTIFICATE,
                     })
                 }
-
-                dispatch(setIsAppLoading(false))
-            } finally {
-                dispatch(setIsAppLoading(false))
             }
             onCloseBs()
         },
@@ -259,6 +257,7 @@ export const CertificateBottomSheet = () => {
 
     const rejectRequest = useCallback(
         async (request: CertificateRequest) => {
+            setIsLoading(true)
             if (request.type === "wallet-connect") {
                 await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
             } else {
@@ -284,15 +283,19 @@ export const CertificateBottomSheet = () => {
     )
 
     const onDismiss = useCallback(async () => {
-        if (isUserAction.current) {
-            setCertificateBsData(null)
+        try {
+            if (isUserAction.current) {
+                setCertificateBsData(null)
+                isUserAction.current = false
+                return
+            }
+            if (!certificateBsData) return
+            await rejectRequest(certificateBsData)
             isUserAction.current = false
-            return
+            setCertificateBsData(null)
+        } finally {
+            setIsLoading(false)
         }
-        if (!certificateBsData) return
-        await rejectRequest(certificateBsData)
-        isUserAction.current = false
-        setCertificateBsData(null)
     }, [certificateBsData, rejectRequest, setCertificateBsData])
 
     return (
@@ -304,6 +307,7 @@ export const CertificateBottomSheet = () => {
                     onCloseBs={onCloseBs}
                     request={certificateBsData}
                     selectAccountBsRef={selectAccountBsRef}
+                    isLoading={isLoading}
                 />
             )}
         </BaseBottomSheet>
