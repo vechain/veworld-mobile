@@ -108,7 +108,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         {token.symbol === VET.symbol &&
                             BigNutils(tokenWithCompleteInfo.balance?.balance)
                                 .toHuman(tokenWithCompleteInfo.decimals)
-                                .isBiggerThan(10000) && <BannersCarousel location="token_screen" />}
+                                .isBiggerThan(9999) && <BannersCarousel location="token_screen" />}
 
                         {/* TODO: handle loading/skeleton */}
                         {!!description && (
