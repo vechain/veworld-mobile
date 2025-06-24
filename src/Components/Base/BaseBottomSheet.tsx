@@ -207,11 +207,19 @@ const _BaseBottomSheet = <TData,>(
         ({ children: nestedChildren }: PropsWithChildren) => {
             return (
                 <>
-                    <BottomSheetView style={contentViewStyle}>
-                        {title && <BaseText typographyFont="title">{title}</BaseText>}
-                        {nestedChildren}
-                        {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
-                    </BottomSheetView>
+                    {snapPoints ? (
+                        <BaseView style={contentViewStyle}>
+                            {title && <BaseText typographyFont="title">{title}</BaseText>}
+                            {nestedChildren}
+                            {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                        </BaseView>
+                    ) : (
+                        <BottomSheetView style={contentViewStyle}>
+                            {title && <BaseText typographyFont="title">{title}</BaseText>}
+                            {nestedChildren}
+                            {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                        </BottomSheetView>
+                    )}
                     {footer && (
                         <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
                             {footer}
@@ -221,7 +229,7 @@ const _BaseBottomSheet = <TData,>(
                 </>
             )
         },
-        [bottomSafeArea, bottomSafeAreaSize, contentViewStyle, dynamicHeight, footer, footerStyle, title],
+        [bottomSafeArea, bottomSafeAreaSize, contentViewStyle, dynamicHeight, footer, footerStyle, snapPoints, title],
     )
 
     return (
