@@ -15,7 +15,7 @@ import { Routes } from "~Navigation"
 import {
     addSignCertificateActivity,
     selectFeaturedDapps,
-    selectSelectedAccount,
+    selectSelectedAccountOrNull,
     selectVerifyContext,
     selectVisibleAccountsWithoutObserved,
     useAppDispatch,
@@ -46,7 +46,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
 
     const allApps = useAppSelector(selectFeaturedDapps)
 
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
     const { onClose: onCloseSelectAccountBs, onOpen: onOpenSelectAccountBs } = useBottomSheetModal({
         externalRef: selectAccountBsRef,
@@ -93,7 +93,9 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                         {LL.SIGN_CERTIFICATE_REQUEST_TITLE()}
                     </BaseText>
                 </BaseView>
-                <AccountSelector account={selectedAccount} onPress={onOpenSelectAccountBs} variant="short" />
+                {selectedAccount && (
+                    <AccountSelector account={selectedAccount} onPress={onOpenSelectAccountBs} variant="short" />
+                )}
             </BaseView>
             <BaseSpacer height={24} />
             <DappWithDetails name={name} icon={icon} url={url} isDefaultVisible>
@@ -115,7 +117,8 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                                 AccountUtils.isObservedAccount(selectedAccount) ||
                                 isBiometricsEmpty ||
                                 !validConnectedApp ||
-                                isLoading
+                                isLoading ||
+                                !selectedAccount
                             }
                             isLoading={isLoading}>
                             {LL.SIGN_CERTIFICATE_REQUEST_CTA()}
@@ -148,7 +151,7 @@ export const CertificateBottomSheet = () => {
 
     const { failRequest, processRequest } = useWalletConnect()
 
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
 
     const nav = useNavigation()
 
@@ -160,6 +163,7 @@ export const CertificateBottomSheet = () => {
 
     const buildCertificate = useCallback(
         (request: CertificateRequest) => {
+            if (!selectedAccount) return
             const certificate = Certificate.of({
                 purpose: request.message.purpose,
                 payload: request.message.payload,
@@ -172,7 +176,7 @@ export const CertificateBottomSheet = () => {
                 payload: Buffer.from(Blake2b256.of(certificate.encode()).bytes),
             }
         },
-        [selectedAccount.address],
+        [selectedAccount],
     )
 
     // Sign
@@ -181,8 +185,8 @@ export const CertificateBottomSheet = () => {
     const onSign = useCallback(
         async ({ request, password }: { request: CertificateRequest; password?: string }) => {
             try {
-                const { certificate, payload } = buildCertificate(request)
-                if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
+                const { certificate, payload } = buildCertificate(request)!
+                if (selectedAccount!.device.type === DEVICE_TYPE.LEDGER) {
                     nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
                         request,
                         accountWithDevice: selectedAccount as LedgerAccountWithDevice,
