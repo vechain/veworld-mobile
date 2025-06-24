@@ -121,10 +121,10 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
         const renderHandle = useCallback(
             (props_: BottomSheetHandleProps) => (
                 <BaseView style={styles.handleWrapper}>
-                    <BaseView {...props_} style={enablePanDownToClose ? styles.handleStyle : styles.hideHandle} />
+                    <BaseView {...props_} style={styles.handleStyle} />
                 </BaseView>
             ),
-            [enablePanDownToClose, styles],
+            [styles],
         )
 
         const onSheetPositionChange = useCallback(
@@ -181,7 +181,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
                 // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry.
                 backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
-                handleComponent={renderHandle}
+                handleComponent={enablePanDownToClose ? renderHandle : null}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
                 //Workaround for run tests on Maestro take a look at this https://github.com/software-mansion/react-native-reanimated/issues/6648
@@ -233,9 +233,6 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingTop: 8,
             paddingBottom: 16,
             paddingHorizontal: 8,
-        },
-        hideHandle: {
-            display: "none",
         },
         handleStyle: {
             width: 70,

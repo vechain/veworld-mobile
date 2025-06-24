@@ -23,6 +23,7 @@ const initialVersionState: AppVersion = {
     isUpToDate: null,
     installedVersion: "",
     majorVersion: "",
+    latestVersion: "",
     lastManifestCheck: null,
     updateRequest: {
         dismissCount: 0,
@@ -36,7 +37,12 @@ describe("useCheckAppVersion", () => {
 
         jest.mocked(DeviceInfo.getVersion).mockReturnValue("1.0.0")
         jest.mocked(SemanticVersionUtils.moreThan).mockReturnValue(false)
-        jest.mocked(useQuery).mockReturnValue({ data: "1.1.0" } as any)
+        jest.mocked(useQuery).mockReturnValue({
+            data: {
+                major: "1.1.0",
+                latest: "1.1.0",
+            },
+        } as any)
     })
 
     describe("useEffect Version Sync Logic", () => {
@@ -92,7 +98,12 @@ describe("useCheckAppVersion", () => {
 
         it("should update majorVersion in Redux when it changes", () => {
             const mockmajorVersionValue = "2.0.0"
-            jest.mocked(useQuery).mockReturnValue({ data: mockmajorVersionValue } as any)
+            jest.mocked(useQuery).mockReturnValue({
+                data: {
+                    major: mockmajorVersionValue,
+                    latest: "2.0.0",
+                },
+            } as any)
             jest.mocked(SemanticVersionUtils.moreThan).mockReturnValue(true)
 
             const preloadedState = {
@@ -210,6 +221,7 @@ describe("useCheckAppVersion", () => {
                     ...initialVersionState,
                     installedVersion: "1.0.0",
                     majorVersion: "2.0.0",
+                    latestVersion: "3.0.0",
                     isUpToDate: false,
                     updateRequest: {
                         dismissCount: 0,

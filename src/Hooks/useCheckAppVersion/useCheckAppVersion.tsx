@@ -95,7 +95,7 @@ export const useCheckAppVersion = () => {
         }
 
         const now = moment()
-        const lastDismiss = moment.unix(versionUpdateStatus.updateRequest.lastDismissedDate)
+        const lastDismiss = moment(versionUpdateStatus.updateRequest.lastDismissedDate)
         const daysSinceLastDismiss = now.diff(lastDismiss, "days")
 
         switch (versionUpdateStatus.updateRequest.dismissCount) {
