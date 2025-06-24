@@ -35,7 +35,6 @@ type Props = {
     request: CertificateRequest
     onCancel: (request: CertificateRequest) => Promise<void>
     onSign: (args: { request: CertificateRequest; password?: string }) => Promise<void>
-    onCloseBs: () => void
     selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
     isLoading: boolean
 }
@@ -308,7 +307,6 @@ export const CertificateBottomSheet = () => {
                 <CertificateBottomSheetContent
                     onCancel={onCancel}
                     onSign={onSign}
-                    onCloseBs={onCloseBs}
                     request={certificateBsData}
                     selectAccountBsRef={selectAccountBsRef}
                     isLoading={isLoading}
