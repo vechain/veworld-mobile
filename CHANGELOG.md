@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.5 (2025-06-24)</small>
+
+* build: init ([f269c65](https://github.com/vechain/veworld-mobile/commit/f269c65))
+* Feat: app version upgrade bottomsheet (#2953) ([b4a1670](https://github.com/vechain/veworld-mobile/commit/b4a1670)), closes [#2953](https://github.com/vechain/veworld-mobile/issues/2953)
+
 ## <small>2.2.4 (2025-06-06)</small>
 
 * build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
