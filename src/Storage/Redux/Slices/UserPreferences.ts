@@ -47,7 +47,7 @@ export interface UserPreferenceState {
     hideStargateBannerVETScreen?: boolean
 }
 
-const initialState: UserPreferenceState = {
+export const initialState: UserPreferenceState = {
     theme: ThemeEnum.SYSTEM,
     hideTokensWithNoBalance: false,
     isPinCodeRequired: true,
