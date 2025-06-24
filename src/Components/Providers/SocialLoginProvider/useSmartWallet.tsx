@@ -15,7 +15,7 @@ import {
 } from "../../../Utils/SmartWalletTransactionBuilder"
 import { useCallback } from "react"
 
-export const useSmartWallet = ({ _delegatorUrl }: { _delegatorUrl: string }) => {
+export const useSmartWallet = () => {
     const { wallets } = useEmbeddedEthereumWallet()
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -217,7 +217,7 @@ export const useSmartWallet = ({ _delegatorUrl }: { _delegatorUrl: string }) => 
 
     const signTransaction = useCallback(
         async (transaction: Transaction, delegateFor?: string): Promise<Buffer> => {
-            console.log("SmartWallet signTransaction", transaction, delegateFor)
+            console.log("SmartWallet signTransaction", delegateFor)
             const hash = transaction.getTransactionHash(delegateFor ? Address.of(delegateFor) : undefined)
 
             if (!wallets) throw new Error("No Social wallet found")
@@ -324,9 +324,11 @@ export const useSmartWallet = ({ _delegatorUrl }: { _delegatorUrl: string }) => 
         const parsedGasLimit = Math.max(gasResult.totalGas, suggestedMaxGas ?? 0)
 
         // build the transaction in VeChain format, with delegation enabled
-        // TODO: do delegation properly
-        const txBody = await thor.transactions.buildTransactionBody(clauses, parsedGasLimit, {
+        console.log("building transaction with delegation", isDelegated)
+        const txBody = await thor.transactions.buildTransactionBody(smartAccountClauses, parsedGasLimit, {
             isDelegated,
+            gasPriceCoef,
+            dependsOn,
         })
         console.log("built transaction", txBody)
         return Transaction.of(txBody)

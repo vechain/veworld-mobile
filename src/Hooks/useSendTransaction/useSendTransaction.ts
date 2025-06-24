@@ -63,8 +63,12 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
         }
 
         const { id } = response.data
-
-        await onSuccess(signedTransaction, id)
+        console.log("sendTransaction success", id, onSuccess)
+        try {
+            await onSuccess(signedTransaction, id)
+        } catch (e) {
+            console.log("onSuccess error", e)
+        }
 
         showSuccessToast({
             text1: LL.SUCCESS_GENERIC(),

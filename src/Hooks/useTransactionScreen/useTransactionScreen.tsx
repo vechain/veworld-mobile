@@ -19,7 +19,6 @@ import { Routes } from "~Navigation"
 import { selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { error, GasUtils } from "~Utils"
 import { useVTHO_HACK } from "./useVTHO_HACK"
-import { useSocialLogin } from "../../Components/Providers/SocialLoginProvider/SocialLoginProvider"
 
 type Props = {
     clauses: TransactionClause[]

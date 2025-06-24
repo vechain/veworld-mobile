@@ -10,8 +10,6 @@ import { Transaction, TransactionClause } from "@vechain/sdk-core"
 // Create context for your enhanced functionality
 const SocialLoginContext = createContext<{
     accountAddress: string
-    // signTransaction: (clauses: TransactionClause[], delegateFor?: string) => Promise<string>
-    sendTransaction: (signedTransaction: Transaction) => Promise<string>
     signMessage: (hash: Buffer) => Promise<Buffer>
     signTransaction: (transaction: Transaction, delegateFor?: string) => Promise<Buffer>
     signTypedData: (typedData: TypedData) => Promise<string>
@@ -39,18 +37,7 @@ export const SocialLoginProvider: React.FC<{
 // Inner component that uses Privy hooks after PrivyProvider is initialized
 const SocialLoginImplementation: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     // const embeddedWallet = useEmbeddedWallet()
-    const smartWallet = useSmartWallet({ delegatorUrl: "https://sponsor.vechain.energy/by/1060" })
-
-    // Explicitly define functions that delegate to the hook
-    const sendTransaction = useCallback(
-        async (clauses: TransactionClause[], delegateFor?: string): Promise<string> => {
-            console.log("SocialLoginProvider signTransaction")
-            const id = await smartWallet.sendTransaction({ txClauses: clauses })
-            console.log("id", id)
-            return id
-        },
-        [smartWallet],
-    )
+    const smartWallet = useSmartWallet()
 
     const signMessage = useCallback(
         async (hash: Buffer): Promise<Buffer> => {
@@ -92,18 +79,10 @@ const SocialLoginImplementation: React.FC<{ children: React.ReactNode }> = ({ ch
             accountAddress: smartWallet.smartAccountAddress ?? "",
             signTransaction,
             buildTransaction,
-            sendTransaction,
             signMessage,
             signTypedData,
         }),
-        [
-            sendTransaction,
-            signMessage,
-            signTypedData,
-            buildTransaction,
-            smartWallet.smartAccountAddress,
-            signTransaction,
-        ],
+        [signMessage, signTypedData, buildTransaction, smartWallet.smartAccountAddress, signTransaction],
     )
 
     return <SocialLoginContext.Provider value={contextValue}>{children}</SocialLoginContext.Provider>

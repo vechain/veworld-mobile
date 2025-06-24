@@ -94,9 +94,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
     const onTransactionSuccess = useCallback(
         async (transaction: Transaction) => {
             dispatch(addPendingTransferTransactionActivity(transaction))
+
             onFinish(true)
         },
-        [dispatch, onFinish],
+        [dispatch, onFinish, selectedAccount.device.type],
     )
 
     const onTransactionFailure = useCallback(() => {

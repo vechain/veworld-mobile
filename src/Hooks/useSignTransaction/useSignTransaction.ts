@@ -11,6 +11,7 @@ import { Routes } from "~Navigation"
 import { sponsorTransaction } from "~Networking"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { HexUtils, warn } from "~Utils"
+import { useEmbeddedEthereumWallet } from "@privy-io/expo"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -58,7 +59,7 @@ export const useSignTransaction = ({
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const nav = useNavigation()
-
+    const { wallets } = useEmbeddedEthereumWallet()
     const { signTransaction: socialSignTransaction } = useSocialLogin()
     const getSignature = async (
         transaction: Transaction,
@@ -85,13 +86,18 @@ export const useSignTransaction = ({
             // build hex encoded version of the transaction for signing request
             const rawTransaction = HexUtils.addPrefix(Buffer.from(transaction.encoded).toString("hex"))
 
-            const origin = account.address
+            let origin = account.address
+            if (senderDevice?.type === DEVICE_TYPE.SOCIAL) {
+                origin = wallets[0]?.address ?? account.address
+            }
+            console.log("origin", origin)
+
             // request to send for sponsorship/fee delegation
             const sponsorRequest = {
                 origin: origin.toLowerCase(),
                 raw: rawTransaction,
             }
-
+            console.log("sponsorRequest", sponsorRequest, selectedDelegationUrl)
             const signature = await sponsorTransaction(selectedDelegationUrl, sponsorRequest)
 
             if (!signature) {
@@ -126,6 +132,10 @@ export const useSignTransaction = ({
                 pinCode: password,
             })
 
+            if (senderDevice?.type === DEVICE_TYPE.SOCIAL) {
+                console.log("delegationDevice.type === DEVICE_TYPE.SOCIAL", wallets[0]?.address)
+                return await getSignature(transaction, delegationWallet, wallets[0]?.address, selectedDelegationAccount)
+            }
             return await getSignature(transaction, delegationWallet, account.address, selectedDelegationAccount)
         } catch (e) {
             warn(ERROR_EVENTS.SIGN, "Error getting account delegator signature", e)
@@ -201,7 +211,12 @@ export const useSignTransaction = ({
             senderSignature = await getSignature(transaction, senderWallet)
         }
 
-        console.log("getting delegation signature", transaction)
+        console.log(
+            "getting delegation signature",
+            selectedDelegationAccount,
+            selectedDelegationOption,
+            selectedDelegationUrl,
+        )
         const delegationSignature = await getDelegationSignature(transaction, password)
         console.log("got delegation signature", delegationSignature)
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE

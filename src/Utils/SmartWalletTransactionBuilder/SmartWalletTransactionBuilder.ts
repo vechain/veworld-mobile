@@ -155,7 +155,7 @@ export async function buildSmartWalletTransactionClauses({
         hasV1SmartAccount,
         factoryAddress: smartAccountFactoryAddress,
     } = smartAccountConfig
-    const { chainId, chainTag } = networkConfig
+    const { chainId } = networkConfig
 
     // If the smart account was never deployed or the version is >= 3 and we have multiple clauses, we can batch them
     if (!hasV1SmartAccount || (smartAccountVersion && smartAccountVersion >= 3)) {
@@ -173,7 +173,7 @@ export async function buildSmartWalletTransactionClauses({
                 Clause.callFunction(
                     Address.of(smartAccountFactoryAddress),
                     ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
-                    ["0xD6F978a38527e0D3047c9008094E996260A676f5"],
+                    [smartAccountAddress],
                 ),
             )
         }
@@ -199,7 +199,7 @@ export async function buildSmartWalletTransactionClauses({
         const dataToSign: ExecuteWithAuthorizationSignData[] = txClauses.map(txData =>
             buildSingleAuthorizationTypedData({
                 clause: txData,
-                chainId: chainTag,
+                chainId,
                 verifyingContract: smartAccountAddress,
             }),
         )

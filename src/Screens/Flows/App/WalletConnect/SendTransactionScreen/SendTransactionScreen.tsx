@@ -23,7 +23,7 @@ import {
 import { AnalyticsEvent, creteAnalyticsEvent, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTransactionScreen } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, WatchedAccount } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE, WatchedAccount } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { TransactionDetails, UnknownAppMessage } from "~Screens"
 import {
@@ -113,6 +113,7 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const onFinish = useCallback(
         (sucess: boolean) => {
+            console.log("onFinish", sucess)
             if (sucess) {
                 track(AnalyticsEvent.WALLET_OPERATION, {
                     ...creteAnalyticsEvent({
@@ -133,12 +134,14 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
 
     const onTransactionSuccess = useCallback(
         async (transaction: Transaction, id: string) => {
+            console.log("onTransactionSuccess", transaction, id)
             if (request.type === "wallet-connect") {
                 await processRequest(request.requestEvent, {
                     txid: id,
                     signer: selectedAccount.address,
                 })
             } else {
+                console.log("postMessage", request.id, id, selectedAccount.address)
                 postMessage({
                     id: request.id,
                     data: {
@@ -148,12 +151,23 @@ export const SendTransactionScreen: FC<Props> = ({ route }: Props) => {
                     method: RequestMethods.REQUEST_TRANSACTION,
                 })
             }
+            console.log("addPendingDappTransactionActivity", request.appName, request.appUrl)
 
-            dispatch(addPendingDappTransactionActivity(transaction, request.appName, request.appUrl))
+            if (selectedAccount.device.type !== DEVICE_TYPE.SOCIAL) {
+                dispatch(addPendingDappTransactionActivity(transaction, request.appName, request.appUrl))
+            }
 
             onFinish(true)
         },
-        [request, processRequest, selectedAccount.address, postMessage, dispatch, onFinish],
+        [
+            request,
+            processRequest,
+            selectedAccount.address,
+            postMessage,
+            dispatch,
+            onFinish,
+            selectedAccount.device.type,
+        ],
     )
 
     const onTransactionFailure = useCallback(async () => {
