@@ -23,11 +23,13 @@ const ConnectBottomSheetContent = ({
     onCancel,
     onConnect,
     onCloseBs,
+    isLoading,
 }: {
     request: ConnectAppRequest
     onConnect: (req: ConnectAppRequest) => Promise<void>
     onCancel: (req: ConnectAppRequest) => Promise<void>
     onCloseBs: () => void
+    isLoading: boolean
 }) => {
     const { LL } = useI18nContext()
     const allApps = useAppSelector(selectFeaturedDapps)
@@ -76,7 +78,7 @@ const ConnectBottomSheetContent = ({
                 <BaseButton action={onCancel.bind(null, request)} variant="outline" flex={1}>
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
-                <BaseButton action={onConnect.bind(null, request)} flex={1}>
+                <BaseButton action={onConnect.bind(null, request)} flex={1} isLoading={isLoading} disabled={isLoading}>
                     {LL.CONNECTION_REQUEST_CTA()}
                 </BaseButton>
             </BaseView>
@@ -90,7 +92,7 @@ export const ConnectBottomSheet = () => {
     const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
     const { rejectPendingProposal } = useWalletConnect()
 
-    const { processProposal } = useWcConnect({ onCloseBs })
+    const { processProposal, isLoading, setIsLoading } = useWcConnect({ onCloseBs })
     const isUserAction = useRef(false)
 
     const onConnect = useCallback(
@@ -135,16 +137,20 @@ export const ConnectBottomSheet = () => {
     )
 
     const onDismiss = useCallback(async () => {
-        if (isUserAction.current) {
-            setConnectBsData(null)
+        try {
+            if (isUserAction.current) {
+                setConnectBsData(null)
+                isUserAction.current = false
+                return
+            }
+            if (!connectBsData) return
+            await rejectProposal(connectBsData)
             isUserAction.current = false
-            return
+            setConnectBsData(null)
+        } finally {
+            setIsLoading(false)
         }
-        if (!connectBsData) return
-        await rejectProposal(connectBsData)
-        isUserAction.current = false
-        setConnectBsData(null)
-    }, [connectBsData, rejectProposal, setConnectBsData])
+    }, [connectBsData, rejectProposal, setConnectBsData, setIsLoading])
 
     return (
         <BaseBottomSheet<Request> dynamicHeight ref={ref} onDismiss={onDismiss}>
@@ -154,6 +160,7 @@ export const ConnectBottomSheet = () => {
                     onCancel={onCancel}
                     onConnect={onConnect}
                     onCloseBs={onCloseBs}
+                    isLoading={isLoading}
                 />
             )}
         </BaseBottomSheet>
