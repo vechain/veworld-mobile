@@ -47,7 +47,7 @@ export interface UserPreferenceState {
     hideStargateBannerVETScreen?: boolean
 }
 
-export const initialState: UserPreferenceState = {
+export const initialUserPreferencesState: UserPreferenceState = {
     theme: ThemeEnum.SYSTEM,
     hideTokensWithNoBalance: false,
     isPinCodeRequired: true,
@@ -72,7 +72,7 @@ export const initialState: UserPreferenceState = {
 
 export const UserPreferencesSlice = createSlice({
     name: "userPreferences",
-    initialState,
+    initialState: initialUserPreferencesState,
     reducers: {
         setTheme: (state, action: PayloadAction<ThemeEnum>) => {
             state.theme = action.payload
@@ -142,12 +142,12 @@ export const UserPreferencesSlice = createSlice({
         resetUserPreferencesState: state => {
             if (state.language !== "en") {
                 const selectedLanguage = state.language
-                state = lodash.cloneDeep(initialState)
+                state = lodash.cloneDeep(initialUserPreferencesState)
                 state.language = selectedLanguage
                 return
             }
 
-            return initialState
+            return initialUserPreferencesState
         },
 
         updateLastNotificationReminder: (state, action: PayloadAction<number | null>) => {
