@@ -69,7 +69,7 @@ export const BannersCarousel = ({ location }: Props) => {
                 showPagination={false}
                 autoPlay={false}
                 loop={false}
-                testID="HomeScreen_carousel"
+                testID={`${location}_carousel`}
                 onSlidePressActivation="before"
                 onSlidePress={onSlidePress}
             />

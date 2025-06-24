@@ -31,7 +31,7 @@ const initialState: FeatureFlags = {
     discoveryFeature: {
         bannersAutoplay: true,
         showStellaPayBanner: false,
-        showStargateBanner: false,
+        showStargateBanner: __DEV__ ? true : false,
     },
     forks: {
         GALACTICA: {

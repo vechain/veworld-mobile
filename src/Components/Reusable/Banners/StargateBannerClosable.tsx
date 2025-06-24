@@ -37,7 +37,7 @@ export const StargateBannerClosable = ({ location }: Props) => {
                 </BaseView>
                 <Image source={StargateB3MO} style={styles.image as ImageStyle} />
             </ImageBackground>
-            <Pressable style={styles.closeButton} onPress={onClose}>
+            <Pressable style={styles.closeButton} onPress={onClose} testID="Stargate_banner_close_button">
                 <BaseIcon name="icon-x" size={16} color={"white"} />
             </Pressable>
         </BaseView>
