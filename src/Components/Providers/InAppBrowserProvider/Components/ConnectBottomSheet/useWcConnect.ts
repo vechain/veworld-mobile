@@ -1,5 +1,5 @@
 import { ProposalTypes, SessionTypes } from "@walletconnect/types"
-import { useCallback, useMemo } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { showErrorToast, showSuccessToast } from "~Components/Base"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { ERROR_EVENTS } from "~Constants"
@@ -9,7 +9,6 @@ import {
     addConnectedAppActivity,
     selectNetworks,
     selectSelectedAccountOrNull,
-    setIsAppLoading,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -22,6 +21,7 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
     const networks = useAppSelector(selectNetworks)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const { approvePendingProposal } = useWalletConnect()
+    const [isLoading, setIsLoading] = useState(false)
 
     /**
      * Handle session proposal
@@ -63,7 +63,7 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
             addNamespaces(params.requiredNamespaces)
             addNamespaces(params.optionalNamespaces)
 
-            dispatch(setIsAppLoading(true))
+            setIsLoading(true)
 
             try {
                 await approvePendingProposal(request.proposal, namespaces)
@@ -82,14 +82,12 @@ export const useWcConnect = ({ onCloseBs }: { onCloseBs: () => void }) => {
                 })
             } finally {
                 onCloseBs()
-
-                dispatch(setIsAppLoading(false))
             }
         },
         [dispatch, networks, selectedAccount, approvePendingProposal, LL, onCloseBs],
     )
 
-    const memoized = useMemo(() => ({ processProposal }), [processProposal])
+    const memoized = useMemo(() => ({ processProposal, isLoading, setIsLoading }), [isLoading, processProposal])
 
     return memoized
 }
