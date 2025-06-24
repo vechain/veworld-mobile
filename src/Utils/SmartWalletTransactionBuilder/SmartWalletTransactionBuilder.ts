@@ -144,7 +144,11 @@ export async function buildSmartWalletTransactionClauses({
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountConfig
     networkConfig: NetworkConfig
-    signTypedData: SigningFunction
+    signTypedData: (
+        domain: Record<string, unknown>,
+        types: Record<string, unknown>,
+        message: Record<string, unknown>,
+    ) => Promise<string>
     selectedAccountAddress?: string
 }): Promise<TransactionClause[]> {
     const clauses: TransactionClause[] = []
@@ -165,7 +169,7 @@ export async function buildSmartWalletTransactionClauses({
             verifyingContract: smartAccountAddress,
         })
 
-        const signature = await signTypedData(typedData)
+        const signature = await signTypedData(typedData.domain, typedData.types, typedData.message)
 
         // If the smart account is not deployed, deploy it first
         if (!smartAccountIsDeployed) {
@@ -212,7 +216,7 @@ export async function buildSmartWalletTransactionClauses({
             if (!txClause) {
                 throw new Error(`Transaction clause at index ${index} is undefined`)
             }
-            const signature = await signTypedData(data)
+            const signature = await signTypedData(data.domain, data.types, data.message)
             signatures.push(signature)
         }
 

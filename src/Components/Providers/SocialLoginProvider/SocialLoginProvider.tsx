@@ -1,18 +1,20 @@
 // src/Providers/SocialLoginProvider.tsx
 import React, { createContext, useContext, useCallback, useMemo } from "react"
 import { PrivyProvider, usePrivy } from "@privy-io/expo"
-// import { Transaction } from "@vechain/sdk-core"
-import { TypedData } from "../../../Model"
-// import { useEmbeddedWallet } from "./useEmbeddedWallet"
 import { useSmartWallet } from "./useSmartWallet"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
+import { TypedDataDomain } from "ethers"
 
 // Create context for your enhanced functionality
 const SocialLoginContext = createContext<{
     accountAddress: string
     signMessage: (hash: Buffer) => Promise<Buffer>
     signTransaction: (transaction: Transaction, delegateFor?: string) => Promise<Buffer>
-    signTypedData: (typedData: TypedData) => Promise<string>
+    signTypedData: (
+        domain: TypedDataDomain,
+        types: Record<string, unknown>,
+        message: Record<string, unknown>,
+    ) => Promise<string>
     buildTransaction: (
         clauses: TransactionClause[],
         gas?: number,
@@ -47,8 +49,12 @@ const SocialLoginImplementation: React.FC<{ children: React.ReactNode }> = ({ ch
     )
 
     const signTypedData = useCallback(
-        async (typedData: TypedData): Promise<string> => {
-            return await smartWallet.signTypedData(typedData)
+        async (
+            domain: Record<string, unknown>,
+            types: Record<string, unknown>,
+            value: Record<string, unknown>,
+        ): Promise<string> => {
+            return await smartWallet.signTypedData(domain, types, value)
         },
         [smartWallet],
     )

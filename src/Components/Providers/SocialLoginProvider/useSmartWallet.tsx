@@ -36,26 +36,6 @@ export const useSmartWallet = () => {
     const smartAccountFactoryAddress = getSmartAccountFactoryAddress(selectedNetwork.name).accountFactoryAddress
 
     /**
-     * Sign typed data using the embedded wallet provider for React Native
-     */
-    const signTypedDataPrivy = async (typedData: any): Promise<string> => {
-        if (!wallets.length) {
-            throw new Error("No embedded wallet available")
-        }
-
-        if (!wallets) throw new Error("No Social wallet found")
-
-        const privyProvider = await wallets[0].getProvider()
-        const privvyAccount = wallets[0].address
-        const signature = await privyProvider.request({
-            method: "eth_signTypedData_v4",
-            params: [privvyAccount, typedData],
-        })
-
-        return signature
-    }
-
-    /**
      * Sign a message using the embedded wallet provider for React Native
      */
     const signMessagePrivy = async (message: Buffer): Promise<Buffer> => {
@@ -145,7 +125,7 @@ export const useSmartWallet = () => {
             txClauses,
             smartAccountConfig,
             networkConfig,
-            signTypedData: signTypedDataPrivy,
+            signTypedData,
             selectedAccountAddress: selectedAccount.address,
         })
 
@@ -259,11 +239,72 @@ export const useSmartWallet = () => {
 
     /**
      * Sign a typed data using the VechainKit wallet
-     * @param data - The typed data to sign
+     * @param domain - The domain of the typed data
+     * @param types - The types of the typed data
+     * @param message - The message of the typed data
      * @returns The signature of the typed data
      */
-    const signTypedData = async (data: any): Promise<string> => {
-        return await signTypedDataPrivy(data)
+    const signTypedData = async (
+        domain: Record<string, unknown>,
+        types: Record<string, unknown>,
+        message: Record<string, unknown>,
+    ): Promise<string> => {
+        if (!wallets.length) {
+            throw new Error("No embedded wallet available")
+        }
+
+        if (!wallets) throw new Error("No Social wallet found")
+
+        const privyProvider = await wallets[0].getProvider()
+        const privvyAccount = wallets[0].address
+        // Deduce primary type (standard approach)
+        // const primaryType = primaryType ?? findPrimaryType(types, value)
+
+        // Build EIP-712 compliant structure
+        const eip712Data = {
+            domain,
+            primaryType: findPrimaryType(types, message),
+            types,
+            message,
+        }
+        console.log("data", JSON.stringify(eip712Data, null, 2))
+        console.log(`Signing typed data with primary type: ${eip712Data.primaryType}`)
+        console.log("EIP-712 structure:", JSON.stringify(eip712Data, null, 2))
+        console.log("privyProvider", privyProvider, privvyAccount)
+        const signature = await privyProvider.request({
+            method: "eth_signTypedData_v4",
+            params: [privvyAccount, eip712Data],
+        })
+        console.log("got typed data signature", signature)
+        return signature
+    }
+
+    const findPrimaryType = (types: Record<string, any>, message: any): string => {
+        const typeNames = Object.keys(types).filter(key => key !== "EIP712Domain")
+
+        if (typeNames.length === 0) {
+            throw new Error("No custom types found")
+        }
+
+        if (typeNames.length === 1) {
+            return typeNames[0]
+        }
+
+        // Find exact match: all required fields present, no extra fields
+        for (const typeName of typeNames) {
+            const typeDefinition = types[typeName]
+            const messageKeys = Object.keys(message)
+            const requiredFields = typeDefinition.map((field: any) => field.name)
+
+            const hasAllRequiredFields = requiredFields.every((field: string) => messageKeys.includes(field))
+            const hasNoExtraFields = messageKeys.every(key => requiredFields.includes(key))
+
+            if (hasAllRequiredFields && hasNoExtraFields) {
+                return typeName
+            }
+        }
+
+        throw new Error("No type matches message structure")
     }
 
     const buildTransaction = async (
@@ -313,7 +354,7 @@ export const useSmartWallet = () => {
             txClauses: clauses,
             smartAccountConfig,
             networkConfig,
-            signTypedData: signTypedDataPrivy,
+            signTypedData,
             selectedAccountAddress: selectedAccount.address,
         })
         // estimate the gas fees for the transaction

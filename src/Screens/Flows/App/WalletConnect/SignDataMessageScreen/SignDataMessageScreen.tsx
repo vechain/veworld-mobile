@@ -43,6 +43,7 @@ type Props = NativeStackScreenProps<RootStackParamListSwitch, Routes.CONNECTED_A
 
 export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
     const { request } = route.params
+    console.log("request", JSON.stringify(request))
 
     const { processRequest, failRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()

@@ -93,7 +93,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     const onTransactionSuccess = useCallback(
         async (transaction: Transaction) => {
-            dispatch(addPendingTransferTransactionActivity(transaction))
+            if (selectedAccount.device.type !== DEVICE_TYPE.SOCIAL) {
+                console.log("addPendingTransferTransactionActivity skip for social")
+                dispatch(addPendingTransferTransactionActivity(transaction))
+            }
 
             onFinish(true)
         },

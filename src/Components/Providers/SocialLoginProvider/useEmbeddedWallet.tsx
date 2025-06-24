@@ -71,12 +71,30 @@ export const useEmbeddedWallet = (): UseEmbeddedWalletResult => {
             const privyProvider = await wallets[0].getProvider()
             const privvyAccount = wallets[0].address
 
-            const message = await privyProvider.request({
+            // Deduce primary type (standard approach)
+            const primaryType = Object.keys(types).find(key => key !== "EIP712Domain") || Object.keys(types)[0]
+
+            if (!primaryType) {
+                throw new Error("No primary type found in types definition")
+            }
+
+            // Build EIP-712 compliant structure
+            const eip712Data = {
+                domain,
+                primaryType,
+                types,
+                message: value,
+            }
+
+            console.log(`Signing typed data with primary type: ${primaryType}`)
+            console.log("EIP-712 structure:", JSON.stringify(eip712Data, null, 2))
+
+            const signature = await privyProvider.request({
                 method: "eth_signTypedData_v4",
-                params: [privvyAccount, { domain, primaryType: "Person", types, message: { ...value } }],
+                params: [privvyAccount, eip712Data],
             })
 
-            return message
+            return signature
         },
         [wallets],
     )

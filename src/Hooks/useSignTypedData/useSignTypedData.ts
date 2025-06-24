@@ -8,7 +8,7 @@ import { useSocialLogin } from "~Components/Providers/SocialLoginProvider/Social
 type Props = { typedData: TypedData }
 
 export const useSignTypedMessage = ({ typedData }: Props) => {
-    console.log("useSignTypedMessage", typedData)
+    console.log("useSignTypedMessage", JSON.stringify(typedData))
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const currentNetwork = useAppSelector(selectSelectedNetwork)
@@ -50,7 +50,8 @@ export const useSignTypedMessage = ({ typedData }: Props) => {
         if (!senderDevice) return
 
         if (senderDevice.type === DEVICE_TYPE.SOCIAL) {
-            return await signTypedDataSocial(typedData)
+            const { domain, types, value } = typedData
+            return await signTypedDataSocial(domain, types, value)
         }
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) throw new Error("Ledger devices not supported in this hook")
