@@ -4,7 +4,7 @@ import { ERROR_EVENTS } from "~Constants"
 import { debug } from "~Utils"
 
 export const Migration18 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 17: Adding version update state")
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 18: Adding version update state")
 
     // @ts-ignore
     const currentState: AppVersion = state.versionUpdate
