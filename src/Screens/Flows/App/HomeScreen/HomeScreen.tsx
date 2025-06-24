@@ -51,6 +51,7 @@ import {
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 import { useTokenBalances } from "./Hooks"
 import { useQueryClient } from "@tanstack/react-query"
+import { BannersCarousel } from "./Components/BannerCarousel"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -208,13 +209,12 @@ export const HomeScreen = () => {
             noBackButton
             fixedBody={
                 <NestableScrollContainer
-                    style={styles.container}
                     ref={scrollViewRef}
                     testID="HomeScreen_ScrollView"
                     refreshControl={
                         <RefreshControl onRefresh={onRefresh} tintColor={theme.colors.border} refreshing={refreshing} />
                     }>
-                    <BaseView>
+                    <BaseView style={styles.container}>
                         <BaseView alignItems="center">
                             <DeviceJailBrokenAlert />
                             <ClaimUsernameBanner />
@@ -227,13 +227,15 @@ export const HomeScreen = () => {
                             />
                         </BaseView>
                         <BaseSpacer height={16} />
-
                         <FastActionsBar actions={Actions} />
-
                         <BaseSpacer height={16} />
+                    </BaseView>
+
+                    <BannersCarousel location="home_screen" />
+
+                    <BaseView style={styles.container}>
                         <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                         <BaseSpacer height={8} />
-
                         <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
                         <BaseSpacer height={24} />
                     </BaseView>

@@ -1,33 +1,18 @@
 import { PersistedState } from "redux-persist/es/types"
-import { AppVersion } from "~Model/AppVersion"
-import { ERROR_EVENTS } from "~Constants"
-import { debug } from "~Utils"
+import { UserPreferenceState } from "../Slices/UserPreferences"
 
 export const Migration18 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 18: Adding version update state")
-
     // @ts-ignore
-    const currentState: AppVersion = state.versionUpdate
+    const currentState: UserPreferenceState = state.userPreferences
 
-    if (!currentState || Object.keys(currentState).length === 0) {
-        debug(ERROR_EVENTS.SECURITY, "================= **** No state to migrate **** =================")
-        return state
-    }
-
-    const newState: AppVersion = {
+    const newState: UserPreferenceState = {
         ...currentState,
-        majorVersion: "",
-        latestVersion: "",
-        isUpToDate: null,
-        lastManifestCheck: null,
-        updateRequest: {
-            dismissCount: 0,
-            lastDismissedDate: null,
-        },
+        hideStargateBannerHomeScreen: false,
+        hideStargateBannerVETScreen: false,
     }
 
     return {
         ...state,
-        versionUpdate: newState,
+        userPreferences: newState,
     } as PersistedState
 }

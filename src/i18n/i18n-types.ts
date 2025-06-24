@@ -415,6 +415,10 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
+	 * G​e​t​ ​*​*​r​e​w​a​r​d​s​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
+	 */
+	BANNER_STARGATE_DESC: string
+	/**
 	 * G​e​t​ ​y​o​u​r​ ​*​*​V​e​B​e​t​t​e​r​ ​c​r​e​d​i​t​ ​c​a​r​d​*​*​ ​o​n​ ​*​*​S​t​e​l​l​a​ ​p​a​y​!​*​*
 	 */
 	BANNER_STELLAPAY_DESC: string
@@ -1177,6 +1181,10 @@ type RootTranslation = {
 	 * D​o​w​n​l​o​a​d​ ​l​o​g​s
 	 */
 	BTN_DOWNLOAD_LOGS: string
+	/**
+	 * S​t​a​k​e
+	 */
+	BTN_STAKE: string
 	/**
 	 * E​d​i​t​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
@@ -4774,6 +4782,10 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
+	 * Get **rewards** by staking your **VET tokens**
+	 */
+	BANNER_STARGATE_DESC: () => LocalizedString
+	/**
 	 * Get your **VeBetter credit card** on **Stella pay!**
 	 */
 	BANNER_STELLAPAY_DESC: () => LocalizedString
@@ -5531,6 +5543,10 @@ Thanks for your patience!
 	 * Download logs
 	 */
 	BTN_DOWNLOAD_LOGS: () => LocalizedString
+	/**
+	 * Stake
+	 */
+	BTN_STAKE: () => LocalizedString
 	/**
 	 * Edit custom node
 	 */
