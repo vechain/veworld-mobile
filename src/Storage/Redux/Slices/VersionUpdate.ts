@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import moment from "moment"
 import { AppVersion } from "~Model/AppVersion"
 
 const initialVersionUpdateState: AppVersion = {
@@ -20,7 +19,7 @@ export const VersionUpdateSlice = createSlice({
     reducers: {
         incrementDismissCount: state => {
             state.updateRequest.dismissCount += 1
-            state.updateRequest.lastDismissedDate = moment().unix()
+            state.updateRequest.lastDismissedDate = Date.now()
         },
 
         resetDismissCount: state => {

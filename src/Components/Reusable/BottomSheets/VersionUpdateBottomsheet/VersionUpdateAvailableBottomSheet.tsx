@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react"
 import { Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
-import { getCountry } from "react-native-localize"
 import { BaseButton, DefaultBottomSheet } from "~Components"
 import { AnalyticsEvent, APPLE_STORE_URL, GOOGLE_STORE_URL } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useCheckAppVersion } from "~Hooks"
@@ -19,7 +18,6 @@ import { isIOS } from "~Utils/PlatformUtils/PlatformUtils.ts"
 
 export const VersionUpdateAvailableBottomSheet = () => {
     const { LL } = useI18nContext()
-    const countryCode = getCountry()?.toLowerCase()
     const dispatch = useAppDispatch()
     const majorVersion = useAppSelector(selectBreakingAppVersion)
     const latestVersion = useAppSelector(selectLatestAppVersion)
@@ -53,8 +51,8 @@ export const VersionUpdateAvailableBottomSheet = () => {
             requestCount: dismissCount,
         })
         onClose()
-        await Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL(countryCode) : GOOGLE_STORE_URL)
-    }, [track, majorVersion, latestVersion, dismissCount, onClose, countryCode])
+        await Linking.openURL(PlatformUtils.isIOS() ? APPLE_STORE_URL : GOOGLE_STORE_URL)
+    }, [track, majorVersion, latestVersion, dismissCount, onClose])
 
     const handleUpdateLater = useCallback(() => {
         dispatch(incrementDismissCount())
