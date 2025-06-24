@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react"
-import { BaseCarousel, BaseSpacer, CarouselSlideItem, useFeatureFlags } from "~Components"
+import { BaseCarousel, BaseSpacer, CarouselSlideItem } from "~Components"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { StargateBannerClosable } from "~Components/Reusable"
