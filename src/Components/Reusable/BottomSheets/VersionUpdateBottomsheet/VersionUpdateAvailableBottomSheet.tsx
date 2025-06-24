@@ -103,7 +103,6 @@ export const VersionUpdateAvailableBottomSheet = () => {
             })}
             mainButton={mainButton}
             secondaryButton={secondaryButton}
-            enablePanDownToClose={false}
             icon="icon-mobile"
             iconSize={40}
         />
