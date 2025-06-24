@@ -1,14 +1,15 @@
 import { HDNode, secp256k1 } from "thor-devkit"
 import { DEVICE_TYPE, Wallet } from "~Model"
-import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { HexUtils } from "~Utils"
 
 export const useSignMessage = () => {
-    const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
+    const account = useAppSelector(selectSelectedAccountOrNull)
+    const senderDevice = useAppSelector(state => selectDevice(state, account?.rootAddress))
 
     const getMnemonicSignature = async (hash: Buffer, wallet: Wallet) => {
+        if (!account) throw new Error("No account selected")
         if (!wallet.mnemonic) throw new Error("Mnemonic wallet can't have an empty mnemonic")
 
         if (!account.index && account.index !== 0) throw new Error("signatureAccount index is empty")
