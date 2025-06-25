@@ -81,7 +81,7 @@ jobs:
                   is-executable: false
                   working-directory: "./android"
 
-              # Decode key_password
+            # Decode key_password
             - name: Decode STORE_PASSWORD
               uses: mobiledevops/secret-to-file-action@v1
               with:
@@ -99,7 +99,7 @@ jobs:
                   is-executable: false
                   working-directory: "./android"
 
-              # Install sentry properties
+            # Install sentry properties
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
               with:
@@ -153,10 +153,8 @@ jobs:
                   BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
               run: |
                   yarn global add vercel
-                   vercel blob put -t $VERCEL_TOKEN -d -p veworld-release-latest.apk -c . ./app/build/outputs/apk/release/app-release.apk --content-type "application/vnd.android.package-archive"
-
-§vercel blob put --rw-token ${{ secrets.VERCEL_RW_TOKEN }} "./app/build/outputs/apk/release/app-release.apk" \
-                    --pathname veworld-release-latest.apk --project ${{ secrets.VERCEL_PROJECT_ID }} \
+                  vercel blob put -t $VERCEL_TOKEN -d -p veworld-release-latest.apk \
+                    -c . ./app/build/outputs/apk/release/app-release.apk \
                     --content-type "application/vnd.android.package-archive"
 
             - name: Commit and Push Changes
