@@ -19,6 +19,7 @@ import { Routes } from "~Navigation"
 import { BigNutils, PlatformUtils } from "~Utils"
 import { ActionsButtonGroup } from "./ActionsButtonGroup"
 import { BalanceView } from "./BalanceView"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 
 type Props = {
     token: TokenWithCompleteInfo
@@ -32,6 +33,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
     const { styles, theme } = useThemedStyles(baseStyle)
     const { LL } = useI18nContext()
     const nav = useNavigation()
+    const { navigateWithTab } = useBrowserTab()
 
     const { change24h, exchangeRate, isPositive24hChange, isLoading } = useTokenCardFiatInfo(token)
 
@@ -233,6 +235,21 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 testID: "sellButton",
                 disabled: BigNutils(token.balance?.balance || "0").isZero,
             },
+            stakeRewards: {
+                name: LL.BTN_STAKE(),
+                action: () => {
+                    navigateWithTab({
+                        title: "Stargate",
+                        url: "https://stargate.vechain.org",
+                        navigationFn(u) {
+                            nav.navigate(Routes.BROWSER, { url: u, returnScreen: Routes.HOME })
+                        },
+                    })
+                },
+                icon: actionBottomSheetIcon("icon-coins"),
+                testID: "stakeRewardsButton",
+                disabled: !BigNutils(token.balance?.balance || "0").isBiggerThan(10000),
+            },
         }),
         [
             LL,
@@ -240,6 +257,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
             foundToken,
             isObserved,
             nav,
+            navigateWithTab,
             openBlockedFeaturesIOSBottomSheet,
             openQRCodeSheet,
             token.balance?.balance,
@@ -257,15 +275,20 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
         ]
 
         if (PlatformUtils.isAndroid() && featureFlags.paymentProvidersFeature.coinify.android)
-            return [...commonActions, ActionsBottomSheet.sell]
+            commonActions.push(ActionsBottomSheet.sell)
         if (PlatformUtils.isIOS() && featureFlags.paymentProvidersFeature.coinify.iOS)
-            return [...commonActions, ActionsBottomSheet.sell]
+            commonActions.push(ActionsBottomSheet.sell)
+
+        if (featureFlags.discoveryFeature.showStargateBanner) {
+            commonActions.push(ActionsBottomSheet.stakeRewards)
+        }
 
         return commonActions
     }, [
         ActionsBottomSheet,
         featureFlags.paymentProvidersFeature.coinify.android,
         featureFlags.paymentProvidersFeature.coinify.iOS,
+        featureFlags.discoveryFeature.showStargateBanner,
     ])
 
     const renderFiatBalance = useMemo(() => {

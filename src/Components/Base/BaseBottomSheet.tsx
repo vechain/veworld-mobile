@@ -181,7 +181,7 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
                 // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry.
                 backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
-                handleComponent={renderHandle}
+                handleComponent={enablePanDownToClose ? renderHandle : null}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
                 //Workaround for run tests on Maestro take a look at this https://github.com/software-mansion/react-native-reanimated/issues/6648
