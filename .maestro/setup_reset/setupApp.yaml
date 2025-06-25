@@ -31,6 +31,8 @@ env:
          id: "Networks"
        timeout: 10000
 - tapOn:
+      id: "Networks"
+- tapOn:
       id: "networks_box_mainnet"
 - tapOn:
       id: "networks_box_testnet"
