@@ -7,6 +7,7 @@ export enum FilterType {
     TRANSFER = "transfer",
     NFTS = "nfts",
     DAPPS = "dapps",
+    STAKING = "staking",
     OTHER = "other",
 }
 
@@ -44,5 +45,15 @@ export const filterValues = {
     },
     nfts: { type: FilterType.NFTS, value: [ActivityEvent.TRANSFER_NFT] },
     dapps: { type: FilterType.DAPPS, value: [] },
+    staking: {
+        type: FilterType.STAKING,
+        value: [
+            ActivityEvent.STARGATE_DELEGATE,
+            ActivityEvent.STARGATE_STAKE,
+            ActivityEvent.STARGATE_CLAIM_REWARDS,
+            ActivityEvent.STARGATE_UNDELEGATE,
+            ActivityEvent.STARGATE_UNSTAKE,
+        ],
+    },
     other: { type: FilterType.OTHER, value: [ActivityEvent.UNKNOWN_TX] },
 } as const
