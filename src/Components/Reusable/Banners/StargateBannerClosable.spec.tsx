@@ -8,6 +8,6 @@ describe("StargateBannerClosable", () => {
         render(<StargateBannerClosable />, {
             wrapper: TestWrapper,
         })
-        expect(screen.getByTestId("Stargate_banner_close_button")).toBeOnTheScreen()
+        expect(screen.getByTestId("stargate-closable-banner")).toBeOnTheScreen()
     })
 })

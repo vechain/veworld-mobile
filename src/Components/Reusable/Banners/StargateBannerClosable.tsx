@@ -11,7 +11,7 @@ export const StargateBannerClosable = () => {
     const { LL } = useI18nContext()
 
     return (
-        <BaseView style={styles.root}>
+        <BaseView testID="stargate-closable-banner" style={styles.root}>
             <ImageBackground source={StargateBannerBackground} style={styles.container} resizeMode="cover">
                 <BaseView alignItems={"flex-start"} gap={8} flex={1} justifyContent="center">
                     <StargateLogo />
