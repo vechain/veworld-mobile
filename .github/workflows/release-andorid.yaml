@@ -145,7 +145,7 @@ jobs:
                     version_name:${{inputs.version}}
 
 
-            - name: Push APK to Vercel blob
+            - name: Push APK to Vercel blob (nonblocking attempt)
               env:
                   VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
                   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -153,13 +153,11 @@ jobs:
                   VERCEL_BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
                   BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
               run: |
-                  pwd
-                  ls -ltrR
-                  yarn global add vercel
+                  yarn global add vercel || true
                   vercel blob put -t $VERCEL_TOKEN -d -c. -p \
                     veworld-release-latest.apk \
                     ./android/app/build/outputs/apk/release/app-release.apk \
-                    --content-type "application/vnd.android.package-archive"
+                    --content-type "application/vnd.android.package-archive" || true
 
             - name: Commit and Push Changes
               run: |
