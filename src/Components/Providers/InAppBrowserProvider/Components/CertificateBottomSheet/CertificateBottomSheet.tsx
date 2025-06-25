@@ -3,6 +3,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Blake2b256, Certificate } from "@vechain/sdk-core"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { SelectAccountBottomSheet } from "~Components/Reusable"
@@ -22,7 +23,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils, DAppUtils, error, HexUtils } from "~Utils"
-import { useInAppBrowser } from "../../InAppBrowserProvider"
 import { DappWithDetails } from "../DappWithDetails"
 import { Signable } from "../Signable"
 
@@ -85,7 +85,11 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
 
     return (
         <>
-            <BaseView flexDirection="row" gap={12} justifyContent="space-between">
+            <BaseView
+                flexDirection="row"
+                gap={12}
+                justifyContent="space-between"
+                testID="SIGN_CERTIFICATE_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>

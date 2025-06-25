@@ -1,12 +1,12 @@
 import { NavigationState, useNavigation } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo } from "react"
+import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { useSessionProposals } from "~Components/Providers/WalletConnectProvider/hooks/useSessionProposals"
 import { useWcDeepLinking } from "~Components/Providers/WalletConnectProvider/hooks/useWcDeepLinking"
 import { useWcPairing } from "~Components/Providers/WalletConnectProvider/hooks/useWcPairing"
 import { useWcSessions } from "~Components/Providers/WalletConnectProvider/hooks/useWcSessions"
 import { ERROR_EVENTS } from "~Constants"
 import { WalletConnectUtils, warn } from "~Utils"
-import { useInteraction } from "../InteractionProvider"
 import { useWcRequest } from "./hooks"
 
 /**
