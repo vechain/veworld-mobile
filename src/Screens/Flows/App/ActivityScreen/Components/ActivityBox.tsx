@@ -1,12 +1,14 @@
 import moment from "moment"
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
+import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, VET, VOT3 } from "~Constants"
 import { useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
     Activity,
+    ActivityEvent,
     ActivityStatus,
     B3trActionActivity,
     B3trClaimRewardActivity,
@@ -23,6 +25,7 @@ import {
     IconKey,
     NonFungibleTokenActivity,
     SignCertActivity,
+    StargateActivity,
     SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
@@ -33,6 +36,13 @@ import { selectAllTokens, selectCustomTokens, selectOfficialTokens, useAppSelect
 import { AddressUtils, BigNutils } from "~Utils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
 
+type GradientConfig = {
+    colors: string[]
+    angle?: number
+    start?: { x: number; y: number }
+    end?: { x: number; y: number }
+}
+
 type ActivityBoxProps = {
     icon: IconKey
     time: string
@@ -42,7 +52,7 @@ type ActivityBoxProps = {
     rightAmountDescription?: string | React.ReactNode
     nftImage?: string
     activityStatus?: ActivityStatus
-    iconBackgroungColor?: string
+    iconBackgroundColor?: string | GradientConfig
     onPress: () => void
     /**
      * If set to true, the title will be lighter than the description. Default is `false`
@@ -59,7 +69,7 @@ const BaseActivityBox = ({
     rightAmount,
     rightAmountDescription,
     nftImage,
-    iconBackgroungColor = COLORS.GREY_100,
+    iconBackgroundColor = COLORS.GREY_100,
     activityStatus,
     onPress,
     invertedStyles,
@@ -104,11 +114,39 @@ const BaseActivityBox = ({
         )
     }
 
+    const renderIconContainer = () => {
+        const isGradient = typeof iconBackgroundColor === "object"
+
+        if (isGradient) {
+            const gradientConfig = iconBackgroundColor as GradientConfig
+            return (
+                <LinearGradient
+                    colors={gradientConfig.colors}
+                    angle={gradientConfig.angle}
+                    start={gradientConfig.start}
+                    end={gradientConfig.end}
+                    style={styles.iconContainer}>
+                    <BaseIcon name={icon} size={16} color={COLORS.WHITE} testID="magnify" />
+                </LinearGradient>
+            )
+        }
+
+        return (
+            <BaseView style={[styles.iconContainer, { backgroundColor: iconBackgroundColor as string }]}>
+                <BaseIcon
+                    name={icon}
+                    size={16}
+                    color={COLORS.DARK_PURPLE}
+                    testID="magnify"
+                    bg={iconBackgroundColor as string}
+                />
+            </BaseView>
+        )
+    }
+
     return (
         <BaseCard testID={testID} style={styles.rootContainer} onPress={onPress}>
-            <BaseView style={[styles.iconContainer, { backgroundColor: iconBackgroungColor }]}>
-                <BaseIcon name={icon} size={16} color={COLORS.DARK_PURPLE} testID="magnify" bg={iconBackgroungColor} />
-            </BaseView>
+            {renderIconContainer()}
 
             <BaseSpacer width={16} />
 
@@ -538,7 +576,7 @@ const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) =>
         <BaseActivityBox
             testID={`B3TR-ACTION-${activity.id}`}
             icon="icon-leaf"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_ACTION()}
             description={dapp?.name}
@@ -567,7 +605,7 @@ const B3trProposalVote = ({ activity, onPress }: B3trPrpoposalVoteProps) => {
         <BaseActivityBox
             testID={`B3TR-PROPOSAL-VOTE-${activity.id}`}
             icon="icon-vote"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_PROPOSAL_VOTE()}
             onPress={onPressHandler}
@@ -592,7 +630,7 @@ const B3trXAllocationVote = ({ activity, onPress }: B3trXAllocartionVoteProps) =
         <BaseActivityBox
             testID={`B3TR-XALLOCATION-VOTE-${activity.id}`}
             icon="icon-vote"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_XALLOCATION_VOTE({ number: parseInt(activity.roundId, 10) })}
             onPress={onPressHandler}
@@ -619,7 +657,7 @@ const B3trClaimReward = ({ activity, onPress }: B3trClaimRewardProps) => {
         <BaseActivityBox
             testID={`B3TR-CLAIM-REWARD-${activity.id}`}
             icon="icon-leaf"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_CLAIM_REWARD()}
             onPress={onPressHandler}
@@ -646,7 +684,7 @@ const B3trUpgradeGM = ({ activity, onPress }: B3trUpgradeGMProps) => {
         <BaseActivityBox
             testID={`B3TR-UPGRADE-GM-${activity.id}`}
             icon="icon-vote"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_UPGRADE_GM()}
             description={activity.newLevel}
@@ -682,7 +720,7 @@ const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
         <BaseActivityBox
             testID={`B3TR-SWAP-B3TR-TO-VOT3-${activity.id}`}
             icon={"icon-convert"}
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={title}
             rightAmount={rightAmount}
@@ -723,7 +761,7 @@ const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
         <BaseActivityBox
             testID={`B3TR-SWAP-VOT3-TO-B3TR-${activity.id}`}
             icon={"icon-convert"}
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={title}
             rightAmount={rightAmount}
@@ -754,7 +792,7 @@ const B3trProposalSupport = ({ activity, onPress }: B3trProposalSupportProps) =>
         <BaseActivityBox
             testID={`B3TR-PROPOSAL-SUPPORT-${activity.id}`}
             icon="icon-vote"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_PROPOSAL_SUPPORT()}
             onPress={onPressHandler}
@@ -787,6 +825,64 @@ const UnknownTx = ({ activity, onPress }: UnknownTxProps) => {
     )
 }
 
+type StakingProps = {
+    activity: StargateActivity
+    onPress: (activity: Activity) => void
+}
+
+const Staking = ({ activity, onPress }: StakingProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    const getStakingIcon = (eventName: string): IconKey => {
+        switch (eventName) {
+            case ActivityEvent.STARGATE_STAKE:
+                return "icon-download"
+            case ActivityEvent.STARGATE_UNSTAKE:
+                return "icon-upload"
+            case ActivityEvent.STARGATE_DELEGATE:
+                return "icon-lock"
+            case ActivityEvent.STARGATE_UNDELEGATE:
+                return "icon-unlock"
+            case ActivityEvent.STARGATE_CLAIM_REWARDS:
+                return "icon-gift"
+            default:
+                return "icon-blocks"
+        }
+    }
+
+    const baseActivityBoxProps = () => {
+        return {
+            icon: getStakingIcon(activity.eventName),
+            title: !activity.eventName.includes("CLAIM_REWARDS")
+                ? activity.token + " " + LL[`ACTIVITY_${activity.eventName}_LABEL`]()
+                : LL[`ACTIVITY_${activity.eventName}_LABEL`](),
+            description: activity.nodeName,
+            rightAmount: `${activity.eventName.includes("STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${activity.value}`,
+            rightAmountDescription: activity.token,
+            onPress: onPressHandler,
+        }
+    }
+
+    return (
+        <BaseActivityBox
+            testID={`STARGATE-${activity.eventName}-${activity.id}`}
+            iconBackgroundColor={{
+                colors: ["#820744", "#211EAB"],
+                angle: 132,
+                start: { x: 0.15, y: 0 },
+                end: { x: 0.87, y: 1 },
+            }}
+            time={time}
+            {...baseActivityBoxProps()}
+        />
+    )
+}
+
 export const ActivityBox = {
     TokenTransfer: TokenTransfer,
     DAppTransaction: DAppTransaction,
@@ -794,6 +890,7 @@ export const ActivityBox = {
     DAppSignCert: DAppSignCertBox,
     ConnectedAppActivity: ConnectedAppActivityBox,
     SignedTypedData: SignedTypedData,
+    Staking: Staking,
     TokenSwap: TokenSwap,
     B3trAction: B3trAction,
     B3trProposalVote: B3trProposalVote,

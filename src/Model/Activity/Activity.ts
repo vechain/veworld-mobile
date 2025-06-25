@@ -323,4 +323,5 @@ export interface StargateActivity extends Activity {
         | ActivityEvent.STARGATE_CLAIM_REWARDS
     value: string
     nodeName: string
+    token?: string
 }
