@@ -14,6 +14,7 @@ export const ActivityStakingScreen = () => {
     const nav = useNavigation()
     const { navigateWithTab } = useBrowserTab()
     const { styles } = useThemedStyles(baseStyles)
+    const URL = "https://stargate.finance/stake"
 
     const onPress = useCallback(
         (url: string, title: string) => {
@@ -37,7 +38,7 @@ export const ActivityStakingScreen = () => {
                     hasCardStyle
                     label={LL.ACTIVITY_ALL_EMPTY_LABEL()}
                     description={LL.ACTIVITY_STAKING_EMPTY_LABEL()}
-                    onPress={() => onPress("https://stargate.finance/stake", "Stargate")}
+                    onPress={() => onPress(URL, "Stargate")}
                 />
             </BaseView>
         )
