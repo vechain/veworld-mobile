@@ -146,7 +146,6 @@ jobs:
 
 
             - name: Push APK to Vercel blob
-              working-directory: "/home/runner/work/veworld-mobile/veworld-mobile/android/app/build/outputs/apk/release"
               env:
                   VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
                   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -155,10 +154,11 @@ jobs:
                   BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
               run: |
                   pwd
-                  ls -ltr
+                  ls -ltrR
                   yarn global add vercel
                   vercel blob put -t $VERCEL_TOKEN -d -c. -p \
-                    veworld-release-latest.apk app-release.apk \
+                    veworld-release-latest.apk \
+                    ./android/app/build/outputs/apk/release/app-release.apk \
                     --content-type "application/vnd.android.package-archive"
 
             - name: Commit and Push Changes
