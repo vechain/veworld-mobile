@@ -141,10 +141,15 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}}
+                  fastlane build_android_ci version_code:${{inputs.build}} \
+                    version_name:${{inputs.version}}
+
+            - name: Check file
+              working-directory: "."
+              run: find ./ -name \*.apk -ls
 
             - name: Push APK to Vercel blob
-              working-directory: "./android"
+              working-directory: "./android/app/build/outputs/apk/release"
               env:
                   VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
                   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -153,8 +158,8 @@ jobs:
                   BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
               run: |
                   yarn global add vercel
-                  vercel blob put -t $VERCEL_TOKEN -d -p veworld-release-latest.apk \
-                    -c . ./app/build/outputs/apk/release/app-release.apk \
+                  vercel blob put -t $VERCEL_TOKEN -d -c. -p \
+                    veworld-release-latest.apk app-release.apk \
                     --content-type "application/vnd.android.package-archive"
 
             - name: Commit and Push Changes
