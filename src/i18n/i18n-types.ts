@@ -1182,10 +1182,6 @@ type RootTranslation = {
 	 */
 	BTN_DOWNLOAD_LOGS: string
 	/**
-	 * S​t​a​k​e
-	 */
-	BTN_STAKE: string
-	/**
 	 * E​d​i​t​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	BTN_EDIT_CUSTOM_NODE: string
@@ -1386,6 +1382,10 @@ type RootTranslation = {
 	 * S​k​i​p
 	 */
 	BTN_SKIP: string
+	/**
+	 * S​t​a​k​e
+	 */
+	BTN_STAKE: string
 	/**
 	 * S​w​a​p
 	 */
@@ -2129,6 +2129,10 @@ type RootTranslation = {
 	 * F​e​a​t​u​r​e​d
 	 */
 	DISCOVER_TAB_FEATURED: string
+	/**
+	 * S​t​a​k​i​n​g
+	 */
+	DISCOVER_TAB_STAKING: string
 	/**
 	 * R​e​c​e​n​t​l​y​ ​A​d​d​e​d
 	 */
@@ -5544,10 +5548,6 @@ Thanks for your patience!
 	 */
 	BTN_DOWNLOAD_LOGS: () => LocalizedString
 	/**
-	 * Stake
-	 */
-	BTN_STAKE: () => LocalizedString
-	/**
 	 * Edit custom node
 	 */
 	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
@@ -5747,6 +5747,10 @@ Thanks for your patience!
 	 * Skip
 	 */
 	BTN_SKIP: () => LocalizedString
+	/**
+	 * Stake
+	 */
+	BTN_STAKE: () => LocalizedString
 	/**
 	 * Swap
 	 */
@@ -6483,6 +6487,10 @@ Thanks for your patience!
 	 * Featured
 	 */
 	DISCOVER_TAB_FEATURED: () => LocalizedString
+	/**
+	 * Staking
+	 */
+	DISCOVER_TAB_STAKING: () => LocalizedString
 	/**
 	 * Recently Added
 	 */
