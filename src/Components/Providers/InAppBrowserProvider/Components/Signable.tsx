@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback } from "react"
 import { RequireUserPassword } from "~Components/Reusable"
-import { useCheckIdentity } from "~Hooks"
+import { useCheckIdentity } from "~Hooks/useCheckIdentity"
 
 type Props<TArgs> = {
     args: TArgs

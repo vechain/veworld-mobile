@@ -108,7 +108,11 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
             </DappWithDetails>
             <BaseSpacer height={24} />
             <BaseView flexDirection="row" gap={16}>
-                <BaseButton action={onCancel.bind(null, request)} variant="outline" flex={1}>
+                <BaseButton
+                    action={onCancel.bind(null, request)}
+                    variant="outline"
+                    flex={1}
+                    testID="SIGN_CERTIFICATE_REQUEST_BTN_CANCEL">
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <Signable args={signableArgs} onSign={onSign}>
@@ -123,7 +127,8 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                                 isLoading ||
                                 !selectedAccount
                             }
-                            isLoading={isLoading}>
+                            isLoading={isLoading}
+                            testID="SIGN_CERTIFICATE_REQUEST_BTN_SIGN">
                             {LL.SIGN_CERTIFICATE_REQUEST_CTA()}
                         </BaseButton>
                     )}
@@ -271,7 +276,7 @@ export const CertificateBottomSheet = () => {
                 postMessage({
                     id: request.id,
                     error: "User rejected request",
-                    method: RequestMethods.REQUEST_TRANSACTION,
+                    method: RequestMethods.SIGN_CERTIFICATE,
                 })
             }
 
