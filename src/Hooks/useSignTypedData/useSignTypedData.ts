@@ -4,15 +4,14 @@ import { DEVICE_TYPE, TypedData, Wallet } from "~Model"
 import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ThorClient, VeChainPrivateKeySigner, VeChainProvider } from "@vechain/sdk-network"
 import { HexUtils } from "~Utils"
-import { useSocialLogin } from "~Components/Providers/SocialLoginProvider/SocialLoginProvider"
+import { useVechainWalletContext } from "~VechainWalletKit"
 type Props = { typedData: TypedData }
 
 export const useSignTypedMessage = ({ typedData }: Props) => {
-    console.log("useSignTypedMessage", JSON.stringify(typedData))
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const { signTypedData: signTypedDataSocial } = useSocialLogin()
+    const { signTypedData: signTypedDataSocial } = useVechainWalletContext()
 
     const getSignature = async (privateKey: Buffer) => {
         const { domain, types, value } = typedData
@@ -51,7 +50,7 @@ export const useSignTypedMessage = ({ typedData }: Props) => {
 
         if (senderDevice.type === DEVICE_TYPE.SOCIAL) {
             const { domain, types, value } = typedData
-            return await signTypedDataSocial(domain, types, value)
+            return await signTypedDataSocial({ domain, types, message: value })
         }
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) throw new Error("Ledger devices not supported in this hook")

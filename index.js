@@ -55,7 +55,7 @@ import { onlineManager } from "@tanstack/react-query"
 import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
-import { SocialLoginProvider } from "~Components/Providers/SocialLoginProvider/SocialLoginProvider"
+import { VechainWalletWithPrivy } from "~VechainWalletKit"
 
 const { fontFamily } = typography
 
@@ -98,10 +98,10 @@ const Main = () => {
     useEffect(() => {
         setLocale(
             language ??
-            getLocales()
-                .map(loc => loc.languageCode)
-                .find(isLocale) ??
-            "en",
+                getLocales()
+                    .map(loc => loc.languageCode)
+                    .find(isLocale) ??
+                "en",
         )
     }, [setLocale, language])
 
@@ -123,9 +123,22 @@ const Main = () => {
                     persistOptions={{
                         persister: clientPersister,
                     }}>
-                    <SocialLoginProvider
-                        appId="cmal5kjzv0001jp0mshok7f37"
-                        clientId="WY6LHx69tXsKYk5SLbF5dtUekKfmuTquV4BybTVK4UCP9">
+                    <VechainWalletWithPrivy
+                        config={{
+                            provider: "privy",
+                            network: "testnet",
+                            providerConfig: {
+                                appId: "cmal5kjzv0001jp0mshok7f37",
+                                clientId: "WY6LHx69tXsKYk5SLbF5dtUekKfmuTquV4BybTVK4UCP9",
+                            },
+                            networkConfig: {
+                                chainId: 39,
+                                chainTag: 39,
+                                nodeUrl: "https://testnet.vechain.org",
+                                network: "testnet",
+                                name: "testnet",
+                            },
+                        }}>
                         <FeatureFlagsProvider>
                             <NavigationProvider>
                                 <WalletConnectContextProvider>
@@ -140,7 +153,7 @@ const Main = () => {
                             </NavigationProvider>
                             <BaseToast />
                         </FeatureFlagsProvider>
-                    </SocialLoginProvider>
+                    </VechainWalletWithPrivy>
                 </PersistQueryClientProvider>
             </ConnexContextProvider>
         </GestureHandlerRootView>

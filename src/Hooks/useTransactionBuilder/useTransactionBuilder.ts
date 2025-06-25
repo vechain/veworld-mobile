@@ -4,7 +4,7 @@ import { DEVICE_TYPE, EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import { useSocialLogin } from "../../Components/Providers/SocialLoginProvider/SocialLoginProvider"
+import { useVechainWalletContext } from "../../VechainWalletKit"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "../../Storage/Redux"
 
 type Props = {
@@ -26,7 +26,7 @@ export const useTransactionBuilder = ({
     const thor = useThor()
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
-    const { buildTransaction: socialLoginBuildTransaction } = useSocialLogin()
+    const { buildTransaction: socialLoginBuildTransaction } = useVechainWalletContext()
 
     const buildTransaction = useCallback(async () => {
         const nonce = HexUtils.generateRandom(8)
@@ -34,8 +34,12 @@ export const useTransactionBuilder = ({
         const txGas = gas?.gas ?? 0
 
         if (senderDevice?.type === DEVICE_TYPE.SOCIAL) {
-            console.log("building transaction with social login 1")
-            return await socialLoginBuildTransaction(clauses, txGas, isDelegated, dependsOn, gasPriceCoef)
+            return await socialLoginBuildTransaction(clauses, {
+                gas: txGas,
+                isDelegated,
+                dependsOn,
+                gasPriceCoef,
+            })
         }
 
         return Transaction.of({
