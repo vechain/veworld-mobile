@@ -1,10 +1,8 @@
 import { useFocusEffect } from "@react-navigation/native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import {
-    AnimatedSearchBar,
     BaseCard,
-    BaseSkeleton,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -17,7 +15,7 @@ import {
 import { vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { NETWORK_TYPE, VeBetterDaoDapp } from "~Model"
+import { NETWORK_TYPE } from "~Model"
 import { selectSelectedNetwork, updateLastNotificationReminder, useAppDispatch, useAppSelector } from "~Storage/Redux"
 
 const SUBSCRIPTION_LIMIT = 10
@@ -25,17 +23,15 @@ const SUBSCRIPTION_LIMIT = 10
 export const NotificationScreen = () => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
-    const { styles, theme } = useThemedStyles(baseStyle)
+    const { theme } = useThemedStyles(baseStyle)
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
-
-    const { data = [], error, isPending } = useVeBetterDaoDapps()
+    const { data = [], error } = useVeBetterDaoDapps()
     const { getTags, addTag, addDAppTag, removeTag, removeDAppTag } = useNotifications()
 
-    const [dapps, setDapps] = useState<VeBetterDaoDapp[]>([])
+    const [dappNotifications, setDappNotifications] = useState<boolean>(false)
     const [tags, setTags] = useState<{ [key: string]: string }>({})
-    const [searchText, setSearchText] = useState("")
 
     const {
         isNotificationPermissionEnabled,
@@ -56,21 +52,6 @@ export const NotificationScreen = () => {
     const resetLastNotificationReminderTimestamp = useCallback(() => {
         dispatch(updateLastNotificationReminder(null))
     }, [dispatch])
-
-    const sortDAppsByName = useCallback((_dapps: VeBetterDaoDapp[]) => {
-        return _dapps.sort((a, b) => a.name.localeCompare(b.name))
-    }, [])
-
-    const filterDapps = useCallback(
-        (text: string) => {
-            const query = text.trim().toLowerCase()
-            const result = data.filter(dapp => dapp.name.toLowerCase().includes(query))
-            const newData = query.length > 0 ? result : data
-            const newDataSortedByName = sortDAppsByName(newData)
-            setDapps(newDataSortedByName)
-        },
-        [data, sortDAppsByName],
-    )
 
     const toggleNotificationsSwitch = useCallback(() => {
         if (!featureEnabled) {
@@ -120,37 +101,35 @@ export const NotificationScreen = () => {
         [addTag, hasReachedSubscriptionLimit, removeTag, showSubscriptionLimitReachedWarning, updateTags],
     )
 
-    const toogleDAppSubscriptionSwitch = useCallback(
-        (dappId: string) => (value: boolean) => {
-            if (value) {
-                if (hasReachedSubscriptionLimit) {
-                    showSubscriptionLimitReachedWarning()
-                    return
-                }
+    const toogleDAppSubscriptionSwitch = useCallback(() => {
+        const allCurrentlyEnabled = data.every(dapp => !!tags[dapp.id])
 
-                addDAppTag(dappId)
-            } else {
-                removeDAppTag(dappId)
+        if (allCurrentlyEnabled) {
+            data.forEach(dapp => {
+                removeDAppTag(dapp.id)
+            })
+            setDappNotifications(false)
+        } else {
+            if (hasReachedSubscriptionLimit) {
+                showSubscriptionLimitReachedWarning()
+                return
             }
+            data.forEach(dapp => {
+                addDAppTag(dapp.id)
+            })
+            setDappNotifications(true)
+        }
 
-            updateTags()
-        },
-        [addDAppTag, hasReachedSubscriptionLimit, removeDAppTag, showSubscriptionLimitReachedWarning, updateTags],
-    )
-
-    const renderItem = useCallback(
-        ({ item }: ListRenderItemInfo<VeBetterDaoDapp>) => {
-            const id = item.id
-            const value = !!tags[id]
-
-            return <EnableFeature title={item.name} onValueChange={toogleDAppSubscriptionSwitch(id)} value={value} />
-        },
-        [tags, toogleDAppSubscriptionSwitch],
-    )
-
-    const renderSeparator = useCallback(() => {
-        return <BaseSpacer height={16} />
-    }, [])
+        updateTags()
+    }, [
+        addDAppTag,
+        data,
+        hasReachedSubscriptionLimit,
+        removeDAppTag,
+        showSubscriptionLimitReachedWarning,
+        updateTags,
+        tags,
+    ])
 
     const ListHeaderComponent = useMemo(() => {
         return (
@@ -185,16 +164,14 @@ export const NotificationScreen = () => {
                             value={!!tags[voteReminderTagKey]}
                         />
                         <BaseSpacer height={40} />
-
                         {isMainnet && (
                             <>
                                 <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_DAPPS()}</BaseText>
                                 <BaseSpacer height={16} />
-                                <AnimatedSearchBar
-                                    placeholder={LL.PUSH_NOTIFICATIONS_PREFERENCES_PLACEHOLDER()}
-                                    value={searchText}
-                                    iconColor={theme.colors.primary}
-                                    onTextChange={setSearchText}
+                                <EnableFeature
+                                    title={LL.PUSH_NOTIFICATIONS_DAPPS_DESC()}
+                                    onValueChange={toogleDAppSubscriptionSwitch}
+                                    value={dappNotifications}
                                 />
                             </>
                         )}
@@ -207,69 +184,12 @@ export const NotificationScreen = () => {
         LL,
         areNotificationsEnabled,
         isMainnet,
-        searchText,
         tags,
-        theme.colors.primary,
         toggleNotificationsSwitch,
         toogleSubscriptionSwitch,
+        toogleDAppSubscriptionSwitch,
+        dappNotifications,
     ])
-
-    const Skeleton = useMemo(() => {
-        return (
-            <BaseView>
-                {[1, 2, 3, 4, 5, 6, 7, 8].map(value => {
-                    return (
-                        <BaseSkeleton
-                            key={value}
-                            animationDirection="horizontalLeft"
-                            containerStyle={styles.skeletonCard}
-                            boneColor={theme.colors.skeletonBoneColor}
-                            highlightColor={theme.colors.skeletonHighlightColor}
-                            layout={[{ flexDirection: "column", height: "100%", width: "100%", borderRadius: 50 }]}
-                        />
-                    )
-                })}
-            </BaseView>
-        )
-    }, [styles.skeletonCard, theme.colors.skeletonBoneColor, theme.colors.skeletonHighlightColor])
-
-    const DappsList = useMemo(() => {
-        return !isPending && !error ? (
-            <FlatList
-                data={areNotificationsEnabled && isMainnet ? dapps : []}
-                keyExtractor={item => item.id}
-                ItemSeparatorComponent={renderSeparator}
-                ListFooterComponent={<BaseSpacer height={40} />}
-                renderItem={renderItem}
-                showsVerticalScrollIndicator={false}
-                showsHorizontalScrollIndicator={false}
-                ListHeaderComponent={ListHeaderComponent}
-            />
-        ) : (
-            Skeleton
-        )
-    }, [
-        ListHeaderComponent,
-        Skeleton,
-        areNotificationsEnabled,
-        dapps,
-        error,
-        isMainnet,
-        isPending,
-        renderItem,
-        renderSeparator,
-    ])
-
-    useEffect(() => {
-        filterDapps(searchText)
-    }, [filterDapps, searchText])
-
-    useEffect(() => {
-        if (data) {
-            const dataSortedByName = sortDAppsByName(data)
-            setDapps(dataSortedByName)
-        }
-    }, [data, sortDAppsByName])
 
     useEffect(() => {
         if (error) {
@@ -286,12 +206,20 @@ export const NotificationScreen = () => {
         }, [updateTags]),
     )
 
+    // Sync dappNotifications state with actual tags
+    useEffect(() => {
+        if (data.length > 0) {
+            const allEnabled = data.every(dapp => !!tags[dapp.id])
+            setDappNotifications(allEnabled)
+        }
+    }, [data, tags])
+
     return (
         <Layout
             title={LL.PUSH_NOTIFICATIONS()}
             body={
                 <BaseView pt={16} bg={theme.colors.background}>
-                    {DappsList}
+                    {ListHeaderComponent}
                 </BaseView>
             }
         />
