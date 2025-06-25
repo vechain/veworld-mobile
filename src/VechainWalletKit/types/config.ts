@@ -1,6 +1,5 @@
 export interface VechainWalletSDKConfig {
     provider: "privy" | "custom"
-    network: "mainnet" | "testnet"
     providerConfig: {
         appId: string
         clientId: string
@@ -11,8 +10,7 @@ export interface VechainWalletSDKConfig {
 
 export interface NetworkConfig {
     chainId: number
-    chainTag: number
     nodeUrl: string
-    network: string
+    networkType: string
     name: string
 }

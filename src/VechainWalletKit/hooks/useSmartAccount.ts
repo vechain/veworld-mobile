@@ -10,6 +10,7 @@ export interface UseSmartAccountProps {
 }
 
 export function useSmartAccount({ thor, networkName }: UseSmartAccountProps) {
+    console.log("useSmartAccount", networkName)
     const config = useMemo(() => getSmartAccountConfig(networkName), [networkName])
 
     const getSmartAccount = useCallback(
@@ -18,9 +19,10 @@ export function useSmartAccount({ thor, networkName }: UseSmartAccountProps) {
                 if (!ownerAddress) {
                     return { address: undefined, isDeployed: false }
                 }
-
+                console.log("Getting smart account", ownerAddress, "factory address", config.accountFactoryAddress)
                 const accountFactory = thor.contracts.load(config.accountFactoryAddress, SimpleAccountFactoryABI)
                 const account = await accountFactory.read.getAccountAddress(ownerAddress)
+                console.log("got account address", account)
                 const smartAccountAddress = String(account[0])
 
                 if (!smartAccountAddress) {

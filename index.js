@@ -56,6 +56,7 @@ import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { VechainWalletWithPrivy } from "~VechainWalletKit"
+import { selectSelectedNetwork } from "~Storage/Redux/Selectors"
 
 const { fontFamily } = typography
 
@@ -93,18 +94,29 @@ const Main = () => {
 
     const { setLocale } = useI18nContext()
     const language = useAppSelector(selectLanguage)
-
     // set the locale based on the language
     useEffect(() => {
         setLocale(
             language ??
-                getLocales()
-                    .map(loc => loc.languageCode)
-                    .find(isLocale) ??
-                "en",
+            getLocales()
+                .map(loc => loc.languageCode)
+                .find(isLocale) ??
+            "en",
         )
     }, [setLocale, language])
 
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const networkType = selectedNetwork.type
+    const name = selectedNetwork.name
+    const nodeUrl = selectedNetwork.currentUrl
+
+    const CHAIN_ID_FROM_TAG = {
+        74: 6986, // mainnet
+        39: 45351, // testnet
+    }
+    const chainId = CHAIN_ID_FROM_TAG[parseInt(selectedNetwork.genesis.id.slice(-2), 16)]
+
+    console.log("selectedNetwork index", selectedNetwork)
     // init analytics
     useEffect(() => {
         if (isAnalyticsEnabled) {
@@ -126,17 +138,15 @@ const Main = () => {
                     <VechainWalletWithPrivy
                         config={{
                             provider: "privy",
-                            network: "testnet",
                             providerConfig: {
                                 appId: "cmal5kjzv0001jp0mshok7f37",
-                                clientId: "WY6LHx69tXsKYk5SLbF5dtUekKfmuTquV4BybTVK4UCP9",
+                                clientId: "client-WY6LHx69tXsKYk5SLbF5dtUekKfmuTquV4BybTVK4UCP9",
                             },
                             networkConfig: {
-                                chainId: 39,
-                                chainTag: 39,
-                                nodeUrl: "https://testnet.vechain.org",
-                                network: "testnet",
-                                name: "testnet",
+                                chainId,
+                                nodeUrl,
+                                networkType,
+                                name,
                             },
                         }}>
                         <FeatureFlagsProvider>

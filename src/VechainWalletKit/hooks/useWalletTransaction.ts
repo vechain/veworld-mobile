@@ -27,7 +27,6 @@ export function useWalletTransaction({ thor, networkName, signTypedDataFn }: Use
             clauses: TransactionClause[],
             ownerAddress: string,
             chainId: number,
-            chainTag: number,
             selectedAccountAddress?: string,
             options?: BuildTransactionOptions,
         ): Promise<Transaction> => {
@@ -54,17 +53,11 @@ export function useWalletTransaction({ thor, networkName, signTypedDataFn }: Use
                 factoryAddress: smartAccount.getFactoryAddress(),
             }
 
-            // Build network configuration
-            const networkConfig = {
-                chainId,
-                chainTag,
-            }
-
             // Build smart wallet transaction clauses
             const finalClauses = await transactionBuilder.buildSmartWalletTransactionClauses({
                 txClauses: clauses,
                 smartAccountConfig,
-                networkConfig,
+                chainId,
                 selectedAccountAddress,
             })
 

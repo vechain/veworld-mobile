@@ -56,6 +56,7 @@ export class PrivyAdapter extends BaseAdapter {
     }
 
     async signTransaction(tx: Transaction): Promise<Buffer> {
+        console.log("signTransaction", tx)
         this.updateState()
         if (!this._isAuthenticated || !this.wallets.length) {
             throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated or no wallet available")
@@ -64,12 +65,12 @@ export class PrivyAdapter extends BaseAdapter {
         try {
             const privyProvider = await this.wallets[0].getProvider()
             const hash = tx.getTransactionHash()
-
+            console.log("Calling privy to sign transaction")
             const response = await privyProvider.request({
                 method: "secp256k1_sign",
                 params: [hash.toString()],
             })
-
+            console.log("Response from privy", response)
             // Process signature format
             const signatureHex = response.slice(2)
             const r = signatureHex.slice(0, 64)
@@ -89,6 +90,7 @@ export class PrivyAdapter extends BaseAdapter {
     }
 
     async signTypedData(data: TypedDataPayload): Promise<string> {
+        console.log("signTypedData", data)
         this.updateState()
         if (!this._isAuthenticated || !this.wallets.length) {
             throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated or no wallet available")
@@ -97,7 +99,7 @@ export class PrivyAdapter extends BaseAdapter {
         try {
             const privyProvider = await this.wallets[0].getProvider()
             const privyAccount = this.wallets[0].address
-
+            console.log("requesting sign for typed data privy")
             const signature = await privyProvider.request({
                 method: "eth_signTypedData_v4",
                 params: [
@@ -110,7 +112,7 @@ export class PrivyAdapter extends BaseAdapter {
                     }),
                 ],
             })
-
+            console.log("signature", signature)
             return signature
         } catch (error) {
             throw new WalletError(WalletErrorType.SIGNATURE_REJECTED, "Failed to sign typed data", error)

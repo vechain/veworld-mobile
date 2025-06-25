@@ -36,14 +36,15 @@ export interface VechainWalletProviderProps {
 export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ children, config, adapter }) => {
     const [address, setAddress] = useState("")
     const [isDeployed, setIsDeployed] = useState(false)
-
+    console.log("VechainWalletProvider", config)
     // Initialize Thor client
+    console.log("config.networkConfig.nodeUrl", config.networkConfig.nodeUrl)
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
 
     // Initialize wallet transaction hook
     const walletTransaction = useWalletTransaction({
         thor,
-        networkName: config.networkConfig.network,
+        networkName: config.networkConfig.networkType,
         signTypedDataFn: async (data: TypedDataPayload): Promise<string> => {
             return await adapter.signTypedData(data)
         },
@@ -115,18 +116,13 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
                 throw new WalletError(WalletErrorType.CONNECTION_FAILED, "User not authenticated")
             }
 
-            // Get chain information from Thor client
-            const bestBlock = await thor.blocks.getBestBlockRef()
-            const chainTag = bestBlock?.slice(-2)
-            if (!chainTag) {
-                throw new WalletError(WalletErrorType.NETWORK_ERROR, "Failed to get chain tag")
-            }
+            // Use chainId from config for both chainId and chainTag parameters
+            const chainId = config.networkConfig.chainId
 
             return await walletTransaction.buildTransaction(
                 clauses,
                 address,
-                config.networkConfig.chainId,
-                parseInt(chainTag, 16),
+                chainId,
                 options?.selectedAccountAddress,
                 {
                     gas: options?.gas,
@@ -136,7 +132,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
                 },
             )
         },
-        [isAuthenticated, address, thor, walletTransaction, config.networkConfig.chainId],
+        [isAuthenticated, address, walletTransaction, config.networkConfig.chainId],
     )
 
     const logout = useCallback(async (): Promise<void> => {

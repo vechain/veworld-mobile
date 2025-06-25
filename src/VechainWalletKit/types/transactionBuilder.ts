@@ -65,9 +65,4 @@ export interface SmartAccountTransactionConfig {
     factoryAddress: string
 }
 
-export interface TransactionNetworkConfig {
-    chainId: number
-    chainTag: number
-}
-
 export type TransactionSigningFunction = (typedData: any) => Promise<string>

@@ -4,7 +4,6 @@ import { encodeFunctionData, bytesToHex } from "viem"
 import {
     TransactionSigningFunction,
     SmartAccountTransactionConfig,
-    TransactionNetworkConfig,
     ExecuteBatchWithAuthorizationSignData,
     ExecuteWithAuthorizationSignData,
 } from "../types/transactionBuilder"
@@ -17,7 +16,7 @@ export interface UseTransactionBuilderProps {
 export interface SmartWalletTransactionClausesParams {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
-    networkConfig: TransactionNetworkConfig
+    chainId: any
     selectedAccountAddress?: string
 }
 
@@ -35,22 +34,13 @@ const EIP712_DOMAIN_TYPE = [
  * Create the common domain structure
  */
 function createDomain(chainId: number, verifyingContract: string) {
+    console.log("creating domain", chainId, verifyingContract)
     return {
         name: "Wallet",
         version: "1",
         chainId,
         verifyingContract,
     }
-}
-
-/**
- * Process clause data (handle ABI encoding)
- */
-function processClauseData(clause: TransactionClause): string {
-    if (typeof clause.data === "object" && "abi" in clause.data) {
-        return encodeFunctionData(clause.data)
-    }
-    return clause.data || "0x"
 }
 
 /**
@@ -83,7 +73,11 @@ function buildBatchAuthorizationTypedData({
     clauses.forEach(clause => {
         toArray.push(clause.to ?? "")
         valueArray.push(String(clause.value))
-        dataArray.push(processClauseData(clause))
+        if (typeof clause.data === "object" && "abi" in clause.data) {
+            dataArray.push(encodeFunctionData(clause.data))
+        } else {
+            dataArray.push(clause.data || "0x")
+        }
     })
 
     const { validAfter, validBefore } = getExpirationTimes(300) // 5 minutes
@@ -145,7 +139,10 @@ function buildSingleAuthorizationTypedData({
             validBefore,
             to: clause.to,
             value: String(clause.value),
-            data: processClauseData(clause),
+            data:
+                (typeof clause.data === "object" && "abi" in clause.data
+                    ? encodeFunctionData(clause.data)
+                    : clause.data) || "0x",
         },
     }
 }
@@ -157,12 +154,12 @@ function buildSingleAuthorizationTypedData({
 async function buildBatchExecutionClauses({
     txClauses,
     smartAccountConfig,
-    networkConfig,
+    chainId,
     signTypedDataFn,
 }: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
-    networkConfig: TransactionNetworkConfig
+    chainId: any
     signTypedDataFn: TransactionSigningFunction
 }): Promise<TransactionClause[]> {
     const clauses: TransactionClause[] = []
@@ -171,7 +168,6 @@ async function buildBatchExecutionClauses({
         isDeployed: smartAccountIsDeployed,
         factoryAddress: smartAccountFactoryAddress,
     } = smartAccountConfig
-    const { chainId } = networkConfig
 
     // Build the batch authorization typed data
     const typedData = buildBatchAuthorizationTypedData({
@@ -179,9 +175,9 @@ async function buildBatchExecutionClauses({
         chainId,
         verifyingContract: smartAccountAddress,
     })
-
+    console.log("building batch execution clauses")
     const signature = await signTypedDataFn(typedData)
-
+    console.log("building batch execution clauses", signature, smartAccountAddress, smartAccountIsDeployed)
     // If the smart account is not deployed, deploy it first
     if (!smartAccountIsDeployed) {
         clauses.push(
@@ -192,7 +188,7 @@ async function buildBatchExecutionClauses({
             ),
         )
     }
-
+    console.log("Create batch execution call", smartAccountAddress)
     // Add the batch execution call
     clauses.push(
         Clause.callFunction(
@@ -209,7 +205,7 @@ async function buildBatchExecutionClauses({
             ],
         ),
     )
-
+    console.log("Complete batch execution clauses")
     return clauses
 }
 
@@ -220,13 +216,13 @@ async function buildBatchExecutionClauses({
 async function buildIndividualExecutionClauses({
     txClauses,
     smartAccountConfig,
-    networkConfig,
+    chainId,
     selectedAccountAddress,
     signTypedDataFn,
 }: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
-    networkConfig: TransactionNetworkConfig
+    chainId: any
     selectedAccountAddress?: string
     signTypedDataFn: TransactionSigningFunction
 }): Promise<TransactionClause[]> {
@@ -236,7 +232,6 @@ async function buildIndividualExecutionClauses({
         isDeployed: smartAccountIsDeployed,
         factoryAddress: smartAccountFactoryAddress,
     } = smartAccountConfig
-    const { chainId } = networkConfig
 
     // Build typed data for each clause
     const dataToSign = txClauses.map(txData =>
@@ -296,7 +291,7 @@ export function useTransactionBuilder({ signTypedDataFn }: UseTransactionBuilder
         async ({
             txClauses,
             smartAccountConfig,
-            networkConfig,
+            chainId,
             selectedAccountAddress,
         }: SmartWalletTransactionClausesParams): Promise<TransactionClause[]> => {
             const { version: smartAccountVersion, hasV1SmartAccount } = smartAccountConfig
@@ -308,14 +303,14 @@ export function useTransactionBuilder({ signTypedDataFn }: UseTransactionBuilder
                 return await buildBatchExecutionClauses({
                     txClauses,
                     smartAccountConfig,
-                    networkConfig,
+                    chainId,
                     signTypedDataFn,
                 })
             } else {
                 return await buildIndividualExecutionClauses({
                     txClauses,
                     smartAccountConfig,
-                    networkConfig,
+                    chainId,
                     selectedAccountAddress,
                     signTypedDataFn,
                 })

@@ -18,8 +18,8 @@ export default function SocialOnboardingScreen() {
             setError(JSON.stringify(err.message))
         },
     })
-    const privyAppId = "YOUR_APP_ID_HERE"
-    const privyClientId = "YOUR_CLIENT_ID_HERE"
+    const privyAppId = "cmal5kjzv0001jp0mshok7f37"
+    const privyClientId = "client-WY6LHx69tXsKYk5SLbF5dtUekKfmuTquV4BybTVK4UCP9"
     const dashboardUrl = `https://dashboard.privy.io/apps/${privyAppId}/settings?setting=clients`
     return (
         <View style={styles.container}>
