@@ -737,6 +737,7 @@
   "PUSH_NOTIFICATIONS": "Pushmeldingen",
   "PUSH_NOTIFICATIONS_ACTIVE": "Sta Pushmeldingen toe",
   "PUSH_NOTIFICATIONS_DAPPS": "X2Earn dApps",
+  "PUSH_NOTIFICATIONS_DAPPS_DESC": "Laatste nieuws en updates",
   "PUSH_NOTIFICATIONS_DESC": "Blijf op de hoogte van het laatste nieuws en updates",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC": "Er is een fout opgetreden bij het laden van je voorkeuren. Probeer het opnieuw.",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE": "Fout",

@@ -737,6 +737,7 @@
   "PUSH_NOTIFICATIONS": "Push-Benachrichtigungen",
   "PUSH_NOTIFICATIONS_ACTIVE": "Push-Benachrichtigungen zulassen",
   "PUSH_NOTIFICATIONS_DAPPS": "X2Earn dApps",
+  "PUSH_NOTIFICATIONS_DAPPS_DESC": "Neueste Nachrichten und Updates",
   "PUSH_NOTIFICATIONS_DESC": "Bleiben Sie mit den neuesten Nachrichten und Updates auf dem Laufenden",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC": "Beim Laden Ihrer Einstellungen ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut.",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE": "Fehler",

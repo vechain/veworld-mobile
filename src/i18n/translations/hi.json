@@ -737,6 +737,7 @@
   "PUSH_NOTIFICATIONS": "पुश सूचनाएँ",
   "PUSH_NOTIFICATIONS_ACTIVE": "पुश सूचनाओं की अनुमति दें",
   "PUSH_NOTIFICATIONS_DAPPS": "X2Earn डैप्स",
+  "PUSH_NOTIFICATIONS_DAPPS_DESC": "नवीनतम समाचार और अपडेट",
   "PUSH_NOTIFICATIONS_DESC": "ताज़ा ख़बरों और अपडेट्स के साथ बने रहें",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC": "आपकी प्राथमिकताएँ लोड करने की कोशिश में एक त्रुटि हुई। कृपया फिर से प्रयास करें।",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE": "त्रुटि",

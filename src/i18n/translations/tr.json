@@ -737,6 +737,7 @@
   "PUSH_NOTIFICATIONS": "Anlık Bildirimler",
   "PUSH_NOTIFICATIONS_ACTIVE": "Anlık Bildirimlere İzin Ver",
   "PUSH_NOTIFICATIONS_DAPPS": "X2Earn dApps",
+  "PUSH_NOTIFICATIONS_DAPPS_DESC": "En son haberler ve güncellemeler",
   "PUSH_NOTIFICATIONS_DESC": "En son haberler ve güncellemelerle güncel kalın",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC": "Tercihlerinizi yüklemeye çalışırken bir hata oluştu. Lütfen tekrar deneyin.",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE": "Hata",

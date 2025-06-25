@@ -737,6 +737,7 @@
   "PUSH_NOTIFICATIONS": "Уведомления",
   "PUSH_NOTIFICATIONS_ACTIVE": "Разрешить уведомления",
   "PUSH_NOTIFICATIONS_DAPPS": "X2Earn dApps",
+  "PUSH_NOTIFICATIONS_DAPPS_DESC": "Последние новости и обновления",
   "PUSH_NOTIFICATIONS_DESC": "Будьте в курсе последних новостей и обновлений",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC": "Произошла ошибка при попытке загрузить ваши настройки. Пожалуйста, попробуйте снова.",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE": "Ошибка",

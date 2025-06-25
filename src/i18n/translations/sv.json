@@ -737,6 +737,7 @@
   "PUSH_NOTIFICATIONS": "Pushnotiser",
   "PUSH_NOTIFICATIONS_ACTIVE": "Tillåt pushnotiser",
   "PUSH_NOTIFICATIONS_DAPPS": "X2Earn dApps",
+  "PUSH_NOTIFICATIONS_DAPPS_DESC": "Senaste nyheterna och uppdateringarna",
   "PUSH_NOTIFICATIONS_DESC": "Håll dig uppdaterad med de senaste nyheterna och uppdateringarna",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC": "Ett fel inträffade när dina inställningar försökte laddas. Försök igen.",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE": "Fel",

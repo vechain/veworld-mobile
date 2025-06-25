@@ -737,6 +737,7 @@
   "PUSH_NOTIFICATIONS": "Notifications Push",
   "PUSH_NOTIFICATIONS_ACTIVE": "Autoriser les notifications push",
   "PUSH_NOTIFICATIONS_DAPPS": "X2Earn dApps",
+  "PUSH_NOTIFICATIONS_DAPPS_DESC": "Dernières nouvelles et mises à jour",
   "PUSH_NOTIFICATIONS_DESC": "Restez à jour avec les dernières nouvelles et mises à jour",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC": "Une erreur est survenue lors du chargement de vos préférences. Veuillez réessayer.",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE": "Erreur",
