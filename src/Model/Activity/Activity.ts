@@ -313,3 +313,14 @@ export interface B3trProposalSupportEvent extends IndexedHistoryEvent {
     value: string
     proposalId: string
 }
+
+export interface StargateActivity extends Activity {
+    eventName:
+        | ActivityEvent.STARGATE_DELEGATE
+        | ActivityEvent.STARGATE_UNDELEGATE
+        | ActivityEvent.STARGATE_STAKE
+        | ActivityEvent.STARGATE_UNSTAKE
+        | ActivityEvent.STARGATE_CLAIM_REWARDS
+    value: string
+    nodeName: string
+}
