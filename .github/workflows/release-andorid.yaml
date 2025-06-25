@@ -144,14 +144,9 @@ jobs:
                   fastlane build_android_ci version_code:${{inputs.build}} \
                     version_name:${{inputs.version}}
 
-            - name: Check file
-              run: |
-                   pwd
-                   ls -ltr
-                   find ./ -name \*.apk -ls
 
             - name: Push APK to Vercel blob
-              working-directory: "./android/app/build/outputs/apk/release"
+              working-directory: "/home/runner/work/veworld-mobile/veworld-mobile/android/app/build/outputs/apk/release"
               env:
                   VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
                   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
@@ -159,6 +154,8 @@ jobs:
                   VERCEL_BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
                   BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
               run: |
+                  pwd
+                  ls -ltr
                   yarn global add vercel
                   vercel blob put -t $VERCEL_TOKEN -d -c. -p \
                     veworld-release-latest.apk app-release.apk \
