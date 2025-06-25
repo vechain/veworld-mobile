@@ -1,10 +1,10 @@
 import { encodeFunctionData, bytesToHex } from "viem"
 import { ABIContract, Address, Clause, TransactionClause } from "@vechain/sdk-core"
-import { SimpleAccountABI, SimpleAccountFactoryABI } from "../../Components/Providers/SocialLoginProvider/abi"
+import { SimpleAccountABI, SimpleAccountFactoryABI } from "../abi"
 import {
     ExecuteBatchWithAuthorizationSignData,
     ExecuteWithAuthorizationSignData,
-} from "../../Components/Providers/SocialLoginProvider/Types"
+} from "../Types"
 
 export interface SmartAccountConfig {
     address: string

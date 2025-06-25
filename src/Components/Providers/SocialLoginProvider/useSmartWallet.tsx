@@ -12,7 +12,7 @@ import {
     buildSmartWalletTransactionClauses,
     type SmartAccountConfig,
     type NetworkConfig,
-} from "../../../Utils/SmartWalletTransactionBuilder"
+} from "./SmartWalletTransactionBuilder"
 import { useCallback } from "react"
 
 export const useSmartWallet = () => {
