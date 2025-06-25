@@ -145,8 +145,10 @@ jobs:
                     version_name:${{inputs.version}}
 
             - name: Check file
-              working-directory: "."
-              run: find ./ -name \*.apk -ls
+              run: |
+                   pwd
+                   ls -ltr
+                   find ./ -name \*.apk -ls
 
             - name: Push APK to Vercel blob
               working-directory: "./android/app/build/outputs/apk/release"
