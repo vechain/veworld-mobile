@@ -14,7 +14,7 @@ export const ActivityStakingScreen = () => {
     const nav = useNavigation()
     const { navigateWithTab } = useBrowserTab()
     const { styles } = useThemedStyles(baseStyles)
-    const URL = "https://stargate.finance/stake"
+    const URL = "https://stargate.vechain.org"
 
     const onPress = useCallback(
         (url: string, title: string) => {
