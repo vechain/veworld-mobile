@@ -31,6 +31,7 @@ module.exports = {
                     "~Selectors": "./src/Selectors",
                     "~Test": "./src/Test/index.tsx",
                     "~Networking": "./src/Networking",
+                    "~VechainWalletKit": "./src/VechainWalletKit",
                     "~Events": "./src/Events",
                     "~Logging": "./src/Logging",
                     http: "stream-http",

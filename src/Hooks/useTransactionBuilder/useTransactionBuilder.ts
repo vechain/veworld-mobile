@@ -4,7 +4,7 @@ import { DEVICE_TYPE, EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import { useVechainWalletContext } from "../../VechainWalletKit"
+import { useVechainWalletContext } from "~VechainWalletKit"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "../../Storage/Redux"
 
 type Props = {

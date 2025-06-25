@@ -5,7 +5,7 @@ import { usePrivy, getUserEmbeddedEthereumWallet, useLinkWithOAuth } from "@priv
 
 import { useNavigation } from "@react-navigation/native"
 import { useCreateWallet } from "../../../../Hooks/useCreateWallet/useCreateWallet"
-// import { useVechainWalletContext } from "../../../../VechainWalletKit"
+// import { useVechainWalletContext } from "~VechainWalletKit"
 
 export const SocialUserScreen = () => {
     const { createSocialWallet } = useCreateWallet()

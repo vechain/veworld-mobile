@@ -3,7 +3,7 @@ import { DEVICE_TYPE, Wallet } from "~Model"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { HexUtils } from "~Utils"
-import { useVechainWalletContext } from "../../VechainWalletKit"
+import { useVechainWalletContext } from "~VechainWalletKit"
 
 type Props = {
     hash: Buffer
