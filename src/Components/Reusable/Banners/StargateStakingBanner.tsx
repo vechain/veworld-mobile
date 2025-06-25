@@ -31,7 +31,7 @@ export const StargateStakingBanner = () => {
 
     return (
         <TouchableOpacity activeOpacity={0.8} onPress={handlePress} style={styles.container}>
-            <BaseView flex={0.5} flexDirection="row" alignItems="center" gap={12}>
+            <BaseView flex={0.5} flexDirection="row" alignItems="center" gap={16}>
                 <Image source={StargateDappLogo} style={styles.logo as ImageStyle} />
                 <Markdown style={{ paragraph: styles.paragraph, body: styles.text }}>
                     {LL.BANNER_STARGATE_DESC()}
