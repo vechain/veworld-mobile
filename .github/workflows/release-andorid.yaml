@@ -150,9 +150,12 @@ jobs:
                   VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
                   VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
                   VERCEL_BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
+                  BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
               run: |
                   yarn global add vercel
-                  vercel blob put --rw-token ${{ secrets.VERCEL_RW_TOKEN }} "./app/build/outputs/apk/release/app-release.apk" \
+                   vercel blob put -t $VERCEL_TOKEN -d -p veworld-release-latest.apk -c . ./app/build/outputs/apk/release/app-release.apk --content-type "application/vnd.android.package-archive"
+
+§vercel blob put --rw-token ${{ secrets.VERCEL_RW_TOKEN }} "./app/build/outputs/apk/release/app-release.apk" \
                     --pathname veworld-release-latest.apk --project ${{ secrets.VERCEL_PROJECT_ID }} \
                     --content-type "application/vnd.android.package-archive"
 
