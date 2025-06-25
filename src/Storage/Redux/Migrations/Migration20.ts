@@ -2,7 +2,7 @@ import { PersistedState } from "redux-persist/es/types"
 import { DelegationState } from "../Slices"
 import { VTHO } from "~Constants"
 
-export const Migration18 = (state: PersistedState): PersistedState => {
+export const Migration20 = (state: PersistedState): PersistedState => {
     // @ts-ignore
     const currentState: Record<string, DelegationState> = state.delegation
 
