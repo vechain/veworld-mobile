@@ -5,7 +5,7 @@ import { TestWrapper } from "~Test"
 
 describe("StargateBannerClosable", () => {
     it("should render correctly", () => {
-        render(<StargateBannerClosable location="home_screen" />, {
+        render(<StargateBannerClosable />, {
             wrapper: TestWrapper,
         })
         expect(screen.getByTestId("Stargate_banner_close_button")).toBeOnTheScreen()
