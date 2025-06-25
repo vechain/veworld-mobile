@@ -172,11 +172,30 @@ type RootTranslation = {
 	 * S​t​a​k​i​n​g
 	 */
 	ACTIVITY_STAKING_LABEL: string
-
 	/**
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * Delegate
+	 */
+	ACTIVITY_STARGATE_DELEGATE_LABEL: string
+	/**
+	 * Stake
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: string
+	/**
+	 * Claim rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL: string
+	/**
+	 * Undelegate
+	 */
+	ACTIVITY_STARGATE_UNDELEGATE_LABEL: string
+	/**
+	 * Unstake
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
@@ -4540,6 +4559,26 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * Delegate
+	 */
+	ACTIVITY_STARGATE_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Stake
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: () => LocalizedString
+	/**
+	 * Claim rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL: () => LocalizedString
+	/**
+	 * Undelegate
+	 */
+	ACTIVITY_STARGATE_UNDELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Unstake
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yet
 	 */
