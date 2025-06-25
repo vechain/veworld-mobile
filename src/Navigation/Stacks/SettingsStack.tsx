@@ -58,7 +58,7 @@ export type RootStackParamListSettings = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.ACTIVITY_STAKING
     }
 }
 
