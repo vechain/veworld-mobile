@@ -862,7 +862,7 @@ const Staking = ({ activity, onPress }: StakingProps) => {
                 ? activity.token + " " + LL[`ACTIVITY_${activity.eventName}_LABEL`]()
                 : LL[`ACTIVITY_${activity.eventName}_LABEL`](),
             description: activity.nodeName,
-            rightAmount: `${activity.eventName.includes("STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${activity.value}`,
+            rightAmount: `${activity.eventName.includes("_STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${activity.value}`,
             rightAmountDescription: activity.token,
             onPress: onPressHandler,
         }

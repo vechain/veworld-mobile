@@ -15,6 +15,7 @@ export type RootStackParamListBrowser = {
         returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.ACTIVITY_STAKING
     }
     [Routes.DISCOVER_TABS_MANAGER]: undefined
+    [Routes.ACTIVITY_STAKING]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListBrowser>()

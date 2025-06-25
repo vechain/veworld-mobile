@@ -14,7 +14,7 @@ import { URIUtils } from "~Utils"
 type Props = {
     onBrowserNavigation?: (error: boolean) => void
     onNavigate?: () => void | Promise<void>
-    returnScreen?: Routes.DISCOVER | Routes.SETTINGS
+    returnScreen?: Routes.SETTINGS | Routes.ACTIVITY_STAKING | Routes.DISCOVER
 }
 
 export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.DISCOVER }: Props) => {
