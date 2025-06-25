@@ -80,7 +80,7 @@ const baseStyles = (theme: ColorThemeType) =>
         logo: {
             width: 48,
             height: 48,
-            borderRadius: 12,
+            borderRadius: 8,
         },
         banner: {
             width: 106,

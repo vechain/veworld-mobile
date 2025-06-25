@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react"
 import { BaseCarousel, BaseSpacer, CarouselSlideItem } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { AnalyticsEvent } from "~Constants"
+import { AnalyticsEvent, STARGATE_DAPP_URL } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import { StargateBannerClosable } from "~Components/Reusable"
 import {
@@ -30,7 +30,7 @@ export const BannersCarousel = ({ location }: Props) => {
             {
                 testID: "Stargate_banner",
                 name: "Stargate",
-                href: "https://stargate.vechain.org",
+                href: STARGATE_DAPP_URL,
                 content: <StargateBannerClosable />,
                 closable: location === "home_screen",
                 closeButtonStyle: {
