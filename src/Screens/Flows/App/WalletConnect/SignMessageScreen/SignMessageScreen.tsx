@@ -91,9 +91,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
     }, [chainId, utfMessage])
 
     // Sign
-    const { signMessage } = useSignMessage({
-        hash: payloadToSign,
-    })
+    const { signMessage } = useSignMessage()
 
     const onClose = useCallback(() => {
         nav.goBack()
@@ -118,7 +116,7 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
                     return handleLedgerAccount()
                 }
 
-                const signature = await signMessage(password)
+                const signature = await signMessage(payloadToSign, password)
                 if (!signature) {
                     throw new Error("Signature is empty")
                 }
@@ -144,15 +142,16 @@ export const SignMessageScreen: FC<Props> = ({ route }: Props) => {
             onClose()
         },
         [
-            handleLedgerAccount,
             onClose,
-            selectedAccount,
+            selectedAccount.device.type,
             signMessage,
-            requestEvent,
-            failRequest,
-            processRequest,
+            payloadToSign,
             dispatch,
+            processRequest,
+            requestEvent,
+            handleLedgerAccount,
             track,
+            failRequest,
         ],
     )
 

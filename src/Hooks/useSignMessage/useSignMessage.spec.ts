@@ -61,18 +61,12 @@ describe("useSignMessage", () => {
         mockAccount(account1D1)
         mockDevice(keystoreDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignMessage({
-                    hash: messageToSign,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignMessage(), { wrapper: TestWrapper })
         expect(result.current).toEqual({
             signMessage: expect.any(Function),
         })
 
-        const signature = await result.current.signMessage()
+        const signature = await result.current.signMessage(messageToSign)
 
         await expect(signature?.length).toBe(65)
     })
@@ -81,18 +75,12 @@ describe("useSignMessage", () => {
         mockAccount(account1D1)
         mockDevice(keystoreDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignMessage({
-                    hash: messageToSign,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignMessage(), { wrapper: TestWrapper })
         expect(result.current).toEqual({
             signMessage: expect.any(Function),
         })
 
-        const signature = await result.current.signMessage()
+        const signature = await result.current.signMessage(messageToSign)
 
         await expect(signature?.length).toBe(65)
     })
@@ -101,19 +89,15 @@ describe("useSignMessage", () => {
         mockAccount(firstLedgerAccount)
         mockDevice(ledgerDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignMessage({
-                    hash: messageToSign,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignMessage(), { wrapper: TestWrapper })
 
         expect(result.current).toEqual({
             signMessage: expect.any(Function),
         })
 
-        await expect(result.current.signMessage()).rejects.toThrow("Ledger devices not supported in this hook")
+        await expect(result.current.signMessage(messageToSign)).rejects.toThrow(
+            "Ledger devices not supported in this hook",
+        )
     })
 
     it("no wallet should throw error", async () => {
@@ -124,10 +108,7 @@ describe("useSignMessage", () => {
         })
 
         const { result } = renderHook(
-            () =>
-                useSignMessage({
-                    hash: messageToSign,
-                }),
+            () => useSignMessage(),
 
             { wrapper: TestWrapper },
         )
@@ -136,6 +117,6 @@ describe("useSignMessage", () => {
             signMessage: expect.any(Function),
         })
 
-        await expect(result.current.signMessage()).rejects.toThrow("The device doesn't have a wallet")
+        await expect(result.current.signMessage(messageToSign)).rejects.toThrow("The device doesn't have a wallet")
     })
 })
