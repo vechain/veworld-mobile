@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { StargateSVG } from "~Assets/IconComponents"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, useFeatureFlags } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
@@ -31,6 +31,7 @@ export const EmptyActivityList = React.memo<EmptyActivityListProps>(
     ({ icon, label, description, hasCardStyle = false, onPress }) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const colors = useEmptyActivityColors(theme.isDark, hasCardStyle)
+        const featureFlags = useFeatureFlags()
 
         const containerStyle = useMemo(
             () => [
@@ -71,7 +72,7 @@ export const EmptyActivityList = React.memo<EmptyActivityListProps>(
                     </>
                 )}
 
-                {onPress && (
+                {onPress && featureFlags.discoveryFeature.showStargateBanner && (
                     <>
                         <BaseSpacer height={24} />
                         <BaseButton variant="solid" title={LL.ACTIVITY_STAKING_EMPTY_BUTTON()} action={onPress} />
