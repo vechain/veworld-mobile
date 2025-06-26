@@ -11,7 +11,7 @@ import {
     showWarningToast,
     useFeatureFlags,
 } from "~Components"
-import { VET } from "~Constants"
+import { STARGATE_DAPP_URL, VET } from "~Constants"
 import { TokenWithCompleteInfo, useBottomSheetModal, useThemedStyles, useTokenCardFiatInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FastAction, FungibleTokenWithBalance, IconKey } from "~Model"
@@ -240,7 +240,7 @@ export const VetBalanceCard = ({ token, isBalanceVisible, foundToken, openQRCode
                 action: () => {
                     navigateWithTab({
                         title: "Stargate",
-                        url: "https://stargate.vechain.org",
+                        url: STARGATE_DAPP_URL,
                         navigationFn(u) {
                             nav.navigate(Routes.BROWSER, { url: u, returnScreen: Routes.HOME })
                         },

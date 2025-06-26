@@ -43,6 +43,20 @@ export const VOT3WithBalance: FungibleTokenWithBalance = {
     },
 }
 
+export const VETWithCompleteInfo: TokenWithCompleteInfo = {
+    ...VET,
+    exchangeRateCurrency: "USD",
+    exchangeRateLoading: false,
+    fiatBalance: "0",
+    tokenInfoLoading: true,
+    tokenUnitBalance: "35",
+    tokenUnitFullBalance: "35",
+    chartData: undefined,
+    exchangeRate: undefined,
+    tokenInfo: undefined,
+    balance: VETWithBalance.balance,
+}
+
 export const B3TRWithCompleteInfo: TokenWithCompleteInfo = {
     ...B3TR,
     exchangeRateCurrency: "USD",

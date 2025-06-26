@@ -1,10 +1,11 @@
 import { useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { Animated, Linking, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
-import { SCREEN_WIDTH } from "~Constants"
+import { Animated, Linking, Pressable, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { Routes } from "~Navigation"
+import { BaseIcon } from "../BaseIcon"
 
 type Props = {
     testID?: string
@@ -12,6 +13,9 @@ type Props = {
     style?: ViewStyle
     contentWrapperStyle?: ViewStyle
     isExternalLink?: boolean
+    closable?: boolean
+    closeButtonStyle?: ViewStyle
+    onClose?: () => void
     onPress?: (name: string) => void
     /**
      * Decide when `onPress` is called. Default is `after
@@ -33,6 +37,9 @@ export const BaseCarouselItem: React.FC<Props> = ({
     name,
     children,
     contentWrapperStyle,
+    closable = false,
+    onClose,
+    closeButtonStyle,
 }) => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
@@ -66,8 +73,20 @@ export const BaseCarouselItem: React.FC<Props> = ({
     }, [href, isExternalLink, onPressActivation, propsOnPress, name, navigateWithTab, nav, returnScreen])
 
     return (
-        <AnimatedTouchableOpacity testID={testID} style={[style, styles.container]} onPress={onPress}>
+        <AnimatedTouchableOpacity
+            testID={testID}
+            style={[style, styles.container]}
+            activeOpacity={0.95}
+            onPress={onPress}>
             <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>
+            {closable && (
+                <Pressable
+                    style={[styles.closeButton, closeButtonStyle]}
+                    onPress={onClose}
+                    testID="Stargate_banner_close_button">
+                    <BaseIcon name="icon-x" size={16} color={COLORS.GREY_100} />
+                </Pressable>
+            )}
         </AnimatedTouchableOpacity>
     )
 }
@@ -78,9 +97,20 @@ const baseStyles = () =>
             flex: 1,
             width: SCREEN_WIDTH,
             pointerEvents: "box-none",
+            position: "relative",
         },
         contentWrapper: {
             flex: 1,
             paddingHorizontal: 16,
+        },
+        closeButton: {
+            position: "absolute",
+            right: 6,
+            top: 6,
+            width: 24,
+            height: 24,
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 4,
         },
     })

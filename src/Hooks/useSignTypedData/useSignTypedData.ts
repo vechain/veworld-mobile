@@ -1,8 +1,8 @@
+import { ethers } from "ethers"
 import { HDNode } from "thor-devkit"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { DEVICE_TYPE, TypedData, Wallet } from "~Model"
-import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { ThorClient, VeChainPrivateKeySigner, VeChainProvider } from "@vechain/sdk-network"
+import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { HexUtils } from "~Utils"
 
 type Props = { typedData: TypedData }
@@ -10,17 +10,12 @@ type Props = { typedData: TypedData }
 export const useSignTypedMessage = ({ typedData }: Props) => {
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
-    const currentNetwork = useAppSelector(selectSelectedNetwork)
 
     const getSignature = (privateKey: Buffer) => {
         const { domain, types, value } = typedData
 
-        const thorClient = ThorClient.fromUrl(currentNetwork.currentUrl)
-
-        const signer = new VeChainPrivateKeySigner(privateKey, new VeChainProvider(thorClient))
-
-        //@ts-ignore
-        return signer.signTypedData(domain, types, value)
+        const ethersWallet = new ethers.Wallet(Buffer.from(privateKey).toString("hex"))
+        return ethersWallet._signTypedData(domain, types, value)
     }
 
     const getSignatureByMnemonic = (wallet: Wallet) => {
