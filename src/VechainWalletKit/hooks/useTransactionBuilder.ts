@@ -34,7 +34,6 @@ const EIP712_DOMAIN_TYPE = [
  * Create the common domain structure
  */
 function createDomain(chainId: number, verifyingContract: string) {
-    console.log("creating domain", chainId, verifyingContract)
     return {
         name: "Wallet",
         version: "1",
@@ -159,7 +158,7 @@ async function buildBatchExecutionClauses({
 }: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
-    chainId: any
+    chainId: number
     signTypedDataFn: TransactionSigningFunction
 }): Promise<TransactionClause[]> {
     const clauses: TransactionClause[] = []
@@ -222,7 +221,7 @@ async function buildIndividualExecutionClauses({
 }: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
-    chainId: any
+    chainId: number
     selectedAccountAddress?: string
     signTypedDataFn: TransactionSigningFunction
 }): Promise<TransactionClause[]> {

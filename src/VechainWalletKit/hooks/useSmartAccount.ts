@@ -10,7 +10,6 @@ export interface UseSmartAccountProps {
 }
 
 export function useSmartAccount({ thor, networkName }: UseSmartAccountProps) {
-    console.log("useSmartAccount", networkName)
     const config = useMemo(() => getSmartAccountConfig(networkName), [networkName])
 
     const getSmartAccount = useCallback(

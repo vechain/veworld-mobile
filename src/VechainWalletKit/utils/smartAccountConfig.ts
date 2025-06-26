@@ -7,7 +7,7 @@ export interface SmartAccountReturnType {
     isDeployed: boolean
 }
 
-const SMART_ACCOUNT_CONFIGS = {
+const SMART_ACCOUNT_CONFIG = {
     testnet: {
         accountFactoryAddress: "0x713b908Bcf77f3E00EFEf328E50b657a1A23AeaF",
     },
@@ -17,8 +17,11 @@ const SMART_ACCOUNT_CONFIGS = {
 } as const
 
 export const getSmartAccountConfig = (networkName: string): SmartAccountConfig => {
-    if (networkName === "testnet") return SMART_ACCOUNT_CONFIGS.testnet
-    return SMART_ACCOUNT_CONFIGS.mainnet
+    if (networkName === "testnet" || networkName === "mainnet") {
+        return SMART_ACCOUNT_CONFIG[networkName]
+    }
+
+    throw new Error(`Unsupported network: ${networkName}`)
 }
 
 export const getSmartAccountFactoryAddress = (networkName: string): SmartAccountConfig => {

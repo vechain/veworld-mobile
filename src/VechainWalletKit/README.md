@@ -33,7 +33,7 @@ const config: VechainWalletSDKConfig = {
   networkConfig: {
     network: 'testnet', // or 'mainnet'
     nodeUrl: 'https://testnet.vechain.org',
-    chainId: 39, // 39 for testnet, 100009 for mainnet
+    // chainId is automatically derived: 39 for testnet, 100009 for mainnet
   },
   providerConfig: {
     appId: 'your-privy-app-id',
@@ -215,7 +215,7 @@ const handleSignTypedData = async () => {
     domain: {
       name: 'MyDApp',
       version: '1',
-      chainId: 39,
+      chainId: 39, // This will be automatically set based on your network config
       verifyingContract: '0x...',
     },
     types: {
@@ -320,9 +320,8 @@ providerConfig: {
 ```tsx
 interface VechainWalletSDKConfig {
   networkConfig: {
-    chainId: number
     nodeUrl: string
-    networkType: string
+    networkType: "mainnet" | "testnet"
     name: string
   }
   providerConfig: Record<string, unknown>
@@ -335,7 +334,6 @@ interface VechainWalletSDKConfig {
 ```tsx
 const config = {
   networkConfig: {
-    chainId: 39,
     nodeUrl: 'https://testnet.vechain.org',
     networkType: 'testnet',
     name: 'testnet'
@@ -352,7 +350,6 @@ const config = {
 ```tsx
 const config = {
   networkConfig: {
-    chainId: 100009,
     nodeUrl: 'https://mainnet.vechain.org',
     networkType: 'mainnet',
     name: 'mainnet'

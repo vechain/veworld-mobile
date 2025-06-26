@@ -110,12 +110,6 @@ const Main = () => {
     const name = selectedNetwork.name
     const nodeUrl = selectedNetwork.currentUrl
 
-    const CHAIN_ID_FROM_TAG = {
-        74: 6986, // mainnet
-        39: 45351, // testnet
-    }
-    const chainId = CHAIN_ID_FROM_TAG[parseInt(selectedNetwork.genesis.id.slice(-2), 16)]
-
     console.log("selectedNetwork index", selectedNetwork)
     // init analytics
     useEffect(() => {
@@ -142,7 +136,6 @@ const Main = () => {
                                 clientId: "client-WY6LHx69tXsKYk5SLbF5dtUekKfmuTquV4BybTVK4UCP9",
                             },
                             networkConfig: {
-                                chainId,
                                 nodeUrl,
                                 networkType,
                                 name,

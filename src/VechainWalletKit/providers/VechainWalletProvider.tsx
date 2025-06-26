@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useCallback, useMemo, useState, useEffect } from "react"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
-import { VechainWalletSDKConfig } from "../types/config"
+import { getLast16BitsOfChainId, VechainWalletSDKConfig } from "../types/config"
 import { SignOptions, BuildOptions, TypedDataPayload } from "../types/transaction"
 import { WalletAdapter, LoginOptions } from "../types/wallet"
 import { useWalletTransaction } from "../hooks/useWalletTransaction"
@@ -37,9 +37,8 @@ export interface VechainWalletProviderProps {
 export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ children, config, adapter }) => {
     const [address, setAddress] = useState("")
     const [isDeployed, setIsDeployed] = useState(false)
-    console.log("VechainWalletProvider", config)
+
     // Initialize Thor client
-    console.log("config.networkConfig.nodeUrl", config.networkConfig.nodeUrl)
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
 
     // Initialize wallet transaction hook
@@ -117,8 +116,8 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
                 throw new WalletError(WalletErrorType.CONNECTION_FAILED, "User not authenticated")
             }
 
-            // Use chainId from config for both chainId and chainTag parameters
-            const chainId = config.networkConfig.chainId
+            // Derive chainId from networkType
+            const chainId = getLast16BitsOfChainId(config.networkConfig.networkType)
 
             return await walletTransaction.buildTransaction(
                 clauses,
@@ -133,7 +132,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
                 },
             )
         },
-        [isAuthenticated, address, walletTransaction, config.networkConfig.chainId],
+        [isAuthenticated, address, walletTransaction, config.networkConfig.networkType],
     )
 
     const login = useCallback(
