@@ -35,6 +35,7 @@ import {
 import { selectAllTokens, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
+import { getTokenLevelName } from "../constants/filterValues"
 
 type GradientConfig = {
     colors: string[]
@@ -858,12 +859,13 @@ const Staking = ({ activity, onPress }: StakingProps) => {
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
-            title: !activity.eventName.includes("CLAIM_REWARDS")
-                ? activity.token + " " + LL[`ACTIVITY_${activity.eventName}_LABEL`]()
-                : LL[`ACTIVITY_${activity.eventName}_LABEL`](),
-            description: activity.nodeName,
+            title:
+                activity.eventName === ActivityEvent.STARGATE_CLAIM_REWARDS
+                    ? LL.ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL({ tokenId: activity.tokenId })
+                    : LL[`ACTIVITY_${activity.eventName}_LABEL`](),
+            description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
             rightAmount: `${activity.eventName.includes("_STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${activity.value}`,
-            rightAmountDescription: activity.token,
+            rightAmountDescription: activity.tokenId,
             onPress: onPressHandler,
         }
     }

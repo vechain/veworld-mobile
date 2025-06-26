@@ -322,6 +322,6 @@ export interface StargateActivity extends Activity {
         | ActivityEvent.STARGATE_UNSTAKE
         | ActivityEvent.STARGATE_CLAIM_REWARDS
     value: string
-    nodeName: string
-    token?: string
+    levelId?: string
+    tokenId?: string
 }
