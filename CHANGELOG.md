@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.5 (2025-06-26)</small>
+
+* build: init ([5d4d12e](https://github.com/vechain/veworld-mobile/commit/5d4d12e))
+* refactor: removed the send max funds scenario (#3008) ([40ea7e6](https://github.com/vechain/veworld-mobile/commit/40ea7e6)), closes [#3008](https://github.com/vechain/veworld-mobile/issues/3008)
+
 ## <small>2.2.4 (2025-06-06)</small>
 
 * build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
