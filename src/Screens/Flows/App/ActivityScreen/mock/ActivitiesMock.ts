@@ -1,6 +1,15 @@
 /* eslint-disable max-len */
 import { VET, VTHO, DIRECTIONS } from "~Constants"
-import { Activity, ActivityStatus, ActivityType, DappTxActivity, FungibleTokenActivity, SignCertActivity } from "~Model"
+import {
+    Activity,
+    ActivityEvent,
+    ActivityStatus,
+    ActivityType,
+    DappTxActivity,
+    FungibleTokenActivity,
+    SignCertActivity,
+    StargateActivity,
+} from "~Model"
 
 const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
     {
@@ -362,8 +371,200 @@ const SIGN_CERT_ACTIVITIES: SignCertActivity[] = [
     },
 ]
 
+const STARGATE_ACTIVITIES: StargateActivity[] = [
+    {
+        // Delegate VET
+        from: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
+        to: ["0x576da7124c7bb65a692d95848276367e5a844d95"],
+        id: "0x7a15dcf5a1205ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaf11",
+        blockNumber: 15181780,
+        isTransaction: true,
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        type: ActivityType.STARGATE_DELEGATE,
+        timestamp: 1682337919000,
+        gasUsed: 65432,
+        gasPayer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
+        delegated: false,
+        status: ActivityStatus.SUCCESS,
+        clauses: [
+            {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x0",
+                data: "0x1234567890abcdef1234567890abcdef12345678",
+            },
+        ],
+        outputs: [],
+        eventName: ActivityEvent.STARGATE_DELEGATE,
+        value: "10000000000000000000000",
+        levelId: "0",
+        tokenId: "VET",
+    },
+    {
+        // Undelegate VET
+        from: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
+        to: ["0x576da7124c7bb65a692d95848276367e5a844d95"],
+        id: "0x8b26edf6b2306fc72gd9fb76cg188690009250gb21e55d91575eg7e04egfbg22",
+        blockNumber: 15181785,
+        isTransaction: true,
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        type: ActivityType.STARGATE_UNDELEGATE,
+        timestamp: 1682437919000,
+        gasUsed: 58124,
+        gasPayer: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
+        delegated: false,
+        status: ActivityStatus.SUCCESS,
+        clauses: [
+            {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x0",
+                data: "0xabcdef1234567890abcdef1234567890abcdef12",
+            },
+        ],
+        outputs: [],
+        eventName: ActivityEvent.STARGATE_UNDELEGATE,
+        value: "5000000000000000000000",
+        levelId: "1",
+        tokenId: "VET",
+    },
+    {
+        // Stake VOT3
+        from: "0xa123456789012345678901234567890123456789",
+        to: ["0x576da7124c7bb65a692d95848276367e5a844d95"],
+        id: "0x9c37feg7c3417gd83he0gc87dh299701110361hc32f66e02686fh8f15fhgch33",
+        blockNumber: 15181790,
+        isTransaction: true,
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        type: ActivityType.STARGATE_STAKE,
+        timestamp: 1682537919000,
+        gasUsed: 72156,
+        gasPayer: "0xa123456789012345678901234567890123456789",
+        delegated: true,
+        status: ActivityStatus.SUCCESS,
+        clauses: [
+            {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x0",
+                data: "0xdef1234567890abcdef1234567890abcdef123456",
+            },
+        ],
+        outputs: [],
+        eventName: ActivityEvent.STARGATE_STAKE,
+        value: "25000000000000000000000",
+        levelId: "2",
+        tokenId: "VOT3",
+    },
+    {
+        // Unstake B3TR
+        from: "0xb234567890123456789012345678901234567890",
+        to: ["0x576da7124c7bb65a692d95848276367e5a844d95"],
+        id: "0xad48ghb8d4528he94if1hd98ei410812221472id43g77f13797gi9g26gihdj44",
+        blockNumber: 15181795,
+        isTransaction: true,
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        type: ActivityType.STARGATE_UNSTAKE,
+        timestamp: 1682637919000,
+        gasUsed: 54321,
+        gasPayer: "0xb234567890123456789012345678901234567890",
+        delegated: false,
+        status: ActivityStatus.SUCCESS,
+        clauses: [
+            {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x0",
+                data: "0x567890abcdef1234567890abcdef1234567890ab",
+            },
+        ],
+        outputs: [],
+        eventName: ActivityEvent.STARGATE_UNSTAKE,
+        value: "15000000000000000000000",
+        levelId: "3",
+        tokenId: "B3TR",
+    },
+    {
+        // Claim Rewards
+        from: "0xc345678901234567890123456789012345678901",
+        to: ["0x576da7124c7bb65a692d95848276367e5a844d95"],
+        id: "0xbe59hic9e5639jf05jg2ie09fj521923332583je54h88g24808hj0h37hjiek55",
+        blockNumber: 15181800,
+        isTransaction: true,
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        type: ActivityType.STARGATE_CLAIM_REWARDS,
+        timestamp: 1682737919000,
+        gasUsed: 43287,
+        gasPayer: "0xc345678901234567890123456789012345678901",
+        delegated: true,
+        status: ActivityStatus.SUCCESS,
+        clauses: [
+            {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x0",
+                data: "0x90abcdef1234567890abcdef1234567890abcdef",
+            },
+        ],
+        outputs: [],
+        eventName: ActivityEvent.STARGATE_CLAIM_REWARDS,
+        value: "3450000000000000000000",
+        tokenId: "VET",
+    },
+    {
+        // Additional Delegate with different levelId
+        from: "0xd456789012345678901234567890123456789012",
+        to: ["0x576da7124c7bb65a692d95848276367e5a844d95"],
+        id: "0xcf60hjd0f6740kg16kh3jf10gk632034443694kf65i99h35919ik1i48ik",
+        blockNumber: 15181805,
+        isTransaction: true,
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        type: ActivityType.STARGATE_DELEGATE,
+        timestamp: 1682837919000,
+        gasUsed: 67890,
+        gasPayer: "0xd456789012345678901234567890123456789012",
+        delegated: false,
+        status: ActivityStatus.SUCCESS,
+        clauses: [
+            {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x0",
+                data: "0xcdef1234567890abcdef1234567890abcdef1234",
+            },
+        ],
+        outputs: [],
+        eventName: ActivityEvent.STARGATE_DELEGATE,
+        value: "50000000000000000000000",
+        levelId: "4",
+        tokenId: "VET",
+    },
+    {
+        // Failed Stake Transaction
+        from: "0xe567890123456789012345678901234567890123",
+        to: ["0x576da7124c7bb65a692d95848276367e5a844d95"],
+        id: "0xdg71ike1g7851lh27li4kg21hl743145554705lg76j00i46020jl2j59jlmfl66",
+        blockNumber: 15181810,
+        isTransaction: true,
+        genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
+        type: ActivityType.STARGATE_STAKE,
+        timestamp: 1682937919000,
+        gasUsed: 21000,
+        gasPayer: "0xe567890123456789012345678901234567890123",
+        delegated: false,
+        status: ActivityStatus.REVERTED,
+        clauses: [
+            {
+                to: "0x576da7124c7bb65a692d95848276367e5a844d95",
+                value: "0x0",
+                data: "0xef1234567890abcdef1234567890abcdef123456",
+            },
+        ],
+        outputs: [],
+        eventName: ActivityEvent.STARGATE_STAKE,
+        value: "8000000000000000000000",
+        levelId: "5",
+        tokenId: "VOT3",
+    },
+]
+
 export const ACTIVITIES_MOCK: Activity[] = [
     FUNGIBLE_TOKEN_ACTIVITIES,
     CONNECTED_APP_ACTIVITIES,
     SIGN_CERT_ACTIVITIES,
+    STARGATE_ACTIVITIES,
 ].flat()
