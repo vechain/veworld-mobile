@@ -5,6 +5,7 @@ import TestData from "../../Test/helpers"
 import { useSignTypedMessage } from "./useSignTypedData"
 import { TestWrapper } from "~Test"
 import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
+import { ethers } from "ethers"
 
 const { account1D1, wallet1, keystoreDevice, firstLedgerAccount, ledgerDevice, device1 } = TestData.data
 
@@ -158,5 +159,29 @@ describe("useSignTypedData", () => {
         })
 
         await expect(result.current.signTypedData()).rejects.toThrow("The device doesn't have a wallet")
+    })
+
+    it("should match the signer", async () => {
+        mockAccount(account1D1)
+        mockDevice(keystoreDevice)
+
+        const { result } = renderHook(
+            () =>
+                useSignTypedMessage({
+                    typedData: typedDataMock,
+                }),
+            { wrapper: TestWrapper },
+        )
+        expect(result.current).toEqual({
+            signTypedData: expect.any(Function),
+        })
+
+        const signature = await result.current.signTypedData()
+
+        expect(
+            ethers.utils
+                .verifyTypedData(typedDataMock.domain, typedDataMock.types, typedDataMock.value, signature!)
+                .toLowerCase(),
+        ).toBe(typedDataMock.signer.toLowerCase())
     })
 })
