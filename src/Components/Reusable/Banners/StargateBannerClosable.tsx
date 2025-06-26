@@ -1,34 +1,18 @@
-import React, { useCallback } from "react"
-import { Image, StyleSheet, ImageStyle, ImageBackground, Pressable } from "react-native"
-import { BaseIcon, BaseView } from "~Components"
+import React from "react"
+import { Image, ImageBackground, ImageStyle, StyleSheet } from "react-native"
+import Markdown from "react-native-markdown-display"
 import { StargateB3MO, StargateBannerBackground, StargateLogo } from "~Assets"
+import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import Markdown from "react-native-markdown-display"
-import { useAppDispatch } from "~Storage/Redux/Hooks"
-import { setHideStargateBannerHomeScreen, setHideStargateBannerVETScreen } from "~Storage/Redux"
 
-type Props = {
-    location: "home_screen" | "token_screen"
-}
-
-export const StargateBannerClosable = ({ location }: Props) => {
+export const StargateBannerClosable = () => {
     const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
 
-    const dispatch = useAppDispatch()
-
-    const onClose = useCallback(() => {
-        if (location === "home_screen") {
-            dispatch(setHideStargateBannerHomeScreen(true))
-        } else if (location === "token_screen") {
-            dispatch(setHideStargateBannerVETScreen(true))
-        }
-    }, [dispatch, location])
-
     return (
-        <BaseView style={styles.root}>
-            <ImageBackground source={StargateBannerBackground} style={styles.container}>
+        <BaseView testID="stargate-closable-banner" style={styles.root}>
+            <ImageBackground source={StargateBannerBackground} style={styles.container} resizeMode="cover">
                 <BaseView alignItems={"flex-start"} gap={8} flex={1} justifyContent="center">
                     <StargateLogo />
                     <Markdown style={{ paragraph: styles.paragraph, body: styles.text }}>
@@ -37,9 +21,6 @@ export const StargateBannerClosable = ({ location }: Props) => {
                 </BaseView>
                 <Image source={StargateB3MO} style={styles.image as ImageStyle} />
             </ImageBackground>
-            <Pressable style={styles.closeButton} onPress={onClose} testID="Stargate_banner_close_button">
-                <BaseIcon name="icon-x" size={16} color={"white"} />
-            </Pressable>
         </BaseView>
     )
 }
@@ -54,11 +35,11 @@ const baseStyles = () =>
             paddingRight: 140,
         },
         image: {
-            width: 114,
-            height: 114,
+            width: 130,
+            height: 130,
             position: "absolute",
-            right: 25,
-            top: -5,
+            right: 10,
+            top: -10,
         },
         paragraph: {
             marginTop: 0,
@@ -69,15 +50,5 @@ const baseStyles = () =>
             fontSize: 14,
             color: "#EEF3F7",
             margin: 0,
-        },
-        closeButton: {
-            position: "absolute",
-            right: 6,
-            top: 6,
-            width: 24,
-            height: 24,
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 4,
         },
     })

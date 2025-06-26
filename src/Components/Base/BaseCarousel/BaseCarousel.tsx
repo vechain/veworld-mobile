@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleSheet } from "react-native"
+import { StyleSheet, ViewStyle } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
 import { DotStyle } from "react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom/PaginationItem"
@@ -14,6 +14,9 @@ export type CarouselSlideItem = {
     href?: string
     content: React.ReactNode
     isExternalLink?: boolean
+    closable?: boolean
+    onClose?: () => void
+    closeButtonStyle?: ViewStyle
 }
 
 type Props = {
@@ -96,7 +99,10 @@ export const BaseCarousel = ({
                             isExternalLink={item.isExternalLink}
                             name={item.name}
                             onPress={onSlidePress}
-                            onPressActivation={onSlidePressActivation}>
+                            onPressActivation={onSlidePressActivation}
+                            closable={item.closable}
+                            onClose={item.onClose}
+                            closeButtonStyle={item.closeButtonStyle}>
                             {item.content}
                         </BaseCarouselItem>
                     )
