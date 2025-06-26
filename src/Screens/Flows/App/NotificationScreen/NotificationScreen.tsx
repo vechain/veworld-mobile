@@ -216,6 +216,7 @@ export const NotificationScreen = () => {
 
     return (
         <Layout
+            safeAreaTestID="Notification_Screen"
             title={LL.PUSH_NOTIFICATIONS()}
             body={
                 <BaseView pt={16} bg={theme.colors.background}>
