@@ -3,7 +3,7 @@ import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { VechainWalletSDKConfig } from "../types/config"
 import { SignOptions, BuildOptions, TypedDataPayload } from "../types/transaction"
-import { BaseAdapter } from "../adapters/BaseAdapter"
+import { WalletAdapter, LoginOptions } from "../types/wallet"
 import { useWalletTransaction } from "../hooks/useWalletTransaction"
 import { WalletError, WalletErrorType } from "../utils/errors"
 
@@ -22,6 +22,7 @@ interface VechainWalletContext {
     buildTransaction: (clauses: TransactionClause[], options?: BuildOptions) => Promise<Transaction>
 
     // Authentication management
+    login: (options: LoginOptions) => Promise<void>
     logout: () => Promise<void>
 }
 
@@ -30,7 +31,7 @@ const VechainWalletContext = createContext<VechainWalletContext | null>(null)
 export interface VechainWalletProviderProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
-    adapter: BaseAdapter
+    adapter: WalletAdapter
 }
 
 export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ children, config, adapter }) => {
@@ -135,6 +136,13 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
         [isAuthenticated, address, walletTransaction, config.networkConfig.chainId],
     )
 
+    const login = useCallback(
+        async (options: LoginOptions): Promise<void> => {
+            await adapter.login(options)
+        },
+        [adapter],
+    )
+
     const logout = useCallback(async (): Promise<void> => {
         await adapter.logout()
         setAddress("")
@@ -150,18 +158,29 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
             signTransaction,
             signTypedData,
             buildTransaction,
+            login,
             logout,
         }),
-        [address, isAuthenticated, isDeployed, signMessage, signTransaction, signTypedData, buildTransaction, logout],
+        [
+            address,
+            isAuthenticated,
+            isDeployed,
+            signMessage,
+            signTransaction,
+            signTypedData,
+            buildTransaction,
+            login,
+            logout,
+        ],
     )
 
     return <VechainWalletContext.Provider value={contextValue}>{children}</VechainWalletContext.Provider>
 }
 
-export const useVechainWalletContext = (): VechainWalletContext => {
+export const useVechainWallet = (): VechainWalletContext => {
     const context = useContext(VechainWalletContext)
     if (!context) {
-        throw new Error("useVechainWalletContext must be used within a VechainWalletProvider")
+        throw new Error("useVechainWallet must be used within a VechainWalletProvider")
     }
     return context
 }

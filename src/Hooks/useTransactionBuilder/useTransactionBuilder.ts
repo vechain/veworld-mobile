@@ -4,7 +4,7 @@ import { DEVICE_TYPE, EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import { useVechainWalletContext } from "~VechainWalletKit"
+import { useVechainWallet } from "~VechainWalletKit"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "../../Storage/Redux"
 
 type Props = {
@@ -26,7 +26,7 @@ export const useTransactionBuilder = ({
     const thor = useThor()
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
-    const { buildTransaction: socialLoginBuildTransaction } = useVechainWalletContext()
+    const { buildTransaction: socialLoginBuildTransaction } = useVechainWallet()
 
     const buildTransaction = useCallback(async () => {
         const nonce = HexUtils.generateRandom(8)

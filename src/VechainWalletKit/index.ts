@@ -1,5 +1,5 @@
 // Main provider
-export { VechainWalletProvider, useVechainWalletContext } from "./providers/VechainWalletProvider"
+export { VechainWalletProvider, useVechainWallet } from "./providers/VechainWalletProvider"
 
 // Privy-specific provider
 export { VechainWalletWithPrivy } from "./providers/VechainWalletWithPrivy"
@@ -9,7 +9,8 @@ export * from "./hooks"
 
 // Types
 export * from "./types"
+export type { LoginOptions } from "./types/wallet"
 
 // Utils and adapters
-export { PrivyAdapter } from "./adapters/PrivyAdapter"
-export * from "./utils/errors" 
+export { usePrivyAdapter } from "./adapters/PrivyAdapter"
+export * from "./utils/errors"

@@ -4,14 +4,14 @@ import { DEVICE_TYPE, TypedData, Wallet } from "~Model"
 import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ThorClient, VeChainPrivateKeySigner, VeChainProvider } from "@vechain/sdk-network"
 import { HexUtils } from "~Utils"
-import { useVechainWalletContext } from "~VechainWalletKit"
+import { useVechainWallet } from "~VechainWalletKit"
 type Props = { typedData: TypedData }
 
 export const useSignTypedMessage = ({ typedData }: Props) => {
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const currentNetwork = useAppSelector(selectSelectedNetwork)
-    const { signTypedData: signTypedDataSocial } = useVechainWalletContext()
+    const { signTypedData: signTypedDataSocial } = useVechainWallet()
 
     const getSignature = async (privateKey: Buffer) => {
         const { domain, types, value } = typedData

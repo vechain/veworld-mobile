@@ -13,7 +13,7 @@ VechainWalletKit uses an adapter pattern to abstract away specific wallet provid
 │              VechainWalletProvider                      │
 │                (Provider Agnostic)                      │
 ├─────────────────────────────────────────────────────────┤
-│                   BaseAdapter                           │
+│                 WalletAdapter                           │
 │                   (Interface)                           │
 ├─────────────────────────────────────────────────────────┤
 │    PrivyAdapter    │    CustomAdapter    │    ...       │
@@ -83,7 +83,7 @@ function AppWithCustomSetup() {
 
 ```tsx
 import React from 'react'
-import { useVechainWalletContext } from '@/VechainWalletKit'
+import { useVechainWallet } from '@/VechainWalletKit'
 import { TransactionClause } from '@vechain/sdk-core'
 
 function WalletComponent() {
@@ -96,7 +96,7 @@ function WalletComponent() {
     signTypedData,
     buildTransaction,
     logout,
-  } = useVechainWalletContext()
+  } = useVechainWallet()
 
   const handleSendTransaction = async () => {
     if (!isAuthenticated) return
@@ -166,7 +166,7 @@ The SDK automatically handles smart account operations:
 import { useSmartAccount } from '@/VechainWalletKit'
 
 function SmartAccountInfo() {
-  const { address } = useVechainWalletContext()
+  const { address } = useVechainWallet()
   const { data: smartAccount, isLoading } = useSmartAccount(address)
 
   if (isLoading) return <div>Loading smart account info...</div>
@@ -243,46 +243,51 @@ const handleSignTypedData = async () => {
 
 ## 🔌 Creating Custom Adapters
 
-You can create custom adapters for other wallet providers:
+You can create custom wallet adapters using React hooks:
 
 ```tsx
-import { BaseAdapter } from '@/VechainWalletKit'
-import { Account, TypedDataPayload } from '@/VechainWalletKit/types'
+import { useMemo } from 'react'
+import { WalletAdapter, Account, TypedDataPayload } from '@/VechainWalletKit/types'
 
-export class CustomWalletAdapter extends BaseAdapter {
-  constructor(private customWallet: CustomWalletInstance) {
-    super()
-  }
+export const useCustomWalletAdapter = (customWallet: CustomWalletInstance): WalletAdapter => {
+  const isAuthenticated = customWallet.isConnected()
 
-  async signMessage(message: Buffer): Promise<Buffer> {
-    // Implement your wallet's message signing
-    const signature = await this.customWallet.signMessage(message)
-    return Buffer.from(signature, 'hex')
-  }
+  return useMemo(() => ({
+    isAuthenticated,
 
-  async signTransaction(tx: Transaction): Promise<Buffer> {
-    // Implement your wallet's transaction signing
-    const signature = await this.customWallet.signTransaction(tx)
-    return Buffer.from(signature, 'hex')
-  }
+    async signMessage(message: Buffer): Promise<Buffer> {
+      // Implement your wallet's message signing
+      const signature = await customWallet.signMessage(message)
+      return Buffer.from(signature, 'hex')
+    },
 
-  async signTypedData(data: TypedDataPayload): Promise<string> {
-    // Implement your wallet's typed data signing
-    return await this.customWallet.signTypedData(data)
-  }
+    async signTransaction(tx: Transaction): Promise<Buffer> {
+      // Implement your wallet's transaction signing
+      const signature = await customWallet.signTransaction(tx)
+      return Buffer.from(signature, 'hex')
+    },
 
-  async getAccount(): Promise<Account> {
-    const account = await this.customWallet.getAccount()
-    return {
-      address: account.address,
-      isDeployed: account.isDeployed,
+    async signTypedData(data: TypedDataPayload): Promise<string> {
+      // Implement your wallet's typed data signing
+      return await customWallet.signTypedData(data)
+    },
+
+    async getAccount(): Promise<Account> {
+      const account = await customWallet.getAccount()
+      return {
+        address: account.address,
+        isDeployed: account.isDeployed,
+      }
+    },
+
+    async login(options: LoginOptions): Promise<void> {
+      await customWallet.connect(options)
+    },
+
+    async logout(): Promise<void> {
+      await customWallet.disconnect()
     }
-  }
-
-  async logout(): Promise<void> {
-    await this.customWallet.disconnect()
-    this.setAuthenticated(false)
-  }
+  }), [isAuthenticated, customWallet])
 }
 ```
 
@@ -292,10 +297,12 @@ export class CustomWalletAdapter extends BaseAdapter {
 
 ```tsx
 interface VechainWalletSDKConfig {
+  provider: 'privy' | 'custom'
   networkConfig: {
-    network: 'mainnet' | 'testnet'
-    nodeUrl: string
     chainId: number
+    nodeUrl: string
+    networkType: string
+    name: string
   }
   providerConfig: {
     appId: string
@@ -308,27 +315,109 @@ interface VechainWalletSDKConfig {
 
 **Testnet:**
 ```tsx
-networkConfig: {
-  network: 'testnet',
-  nodeUrl: 'https://testnet.vechain.org',
-  chainId: 39,
+const config = {
+  provider: 'privy',
+  networkConfig: {
+    chainId: 39,
+    nodeUrl: 'https://testnet.vechain.org',
+    networkType: 'testnet',
+    name: 'testnet'
+  },
+  providerConfig: {
+    appId: 'your-privy-app-id',
+    clientId: 'your-privy-client-id'
+  }
 }
 ```
 
 **Mainnet:**
 ```tsx
-networkConfig: {
-  network: 'mainnet',
-  nodeUrl: 'https://mainnet.vechain.org',
-  chainId: 100009,
+const config = {
+  provider: 'privy',
+  networkConfig: {
+    chainId: 100009,
+    nodeUrl: 'https://mainnet.vechain.org',
+    networkType: 'mainnet',
+    name: 'mainnet'
+  },
+  providerConfig: {
+    appId: 'your-privy-app-id',
+    clientId: 'your-privy-client-id'
+  }
 }
 ```
 
 ## 🛠️ Available Hooks
 
-- `useVechainWalletContext()` - Main wallet context
+- `useVechainWallet()` - Main wallet context
 - `useSmartAccount(address)` - Smart account information
 - `useWalletTransaction(config)` - Transaction building utilities
+
+## 🔐 Login Usage
+
+The VechainWalletKit requires you to specify login options when calling the login method. This provides maximum flexibility and explicit control.
+
+### Login Method
+
+```tsx
+const { login } = useVechainWallet()
+
+// Login with Google
+await login({ 
+  provider: 'google',
+  oauthRedirectUri: 'your-app://' 
+})
+
+// Login with Apple
+await login({ 
+  provider: 'apple',
+  oauthRedirectUri: 'your-app://' 
+})
+
+// Login with Discord
+await login({ 
+  provider: 'discord',
+  oauthRedirectUri: 'custom-scheme://' 
+})
+```
+
+### Supported Providers
+
+- `google`
+- `apple`
+- `discord`
+- `github`
+- `twitter`
+- `linkedin`
+- `spotify`
+- `tiktok`
+- `instagram`
+
+### Dynamic Provider Selection
+
+```tsx
+function LoginScreen() {
+  const { login } = useVechainWallet()
+  
+  const handleLogin = (provider: string) => {
+    login({ 
+      provider,
+      oauthRedirectUri: 'your-app://' 
+    })
+  }
+
+  return (
+    <View>
+      {['google', 'apple', 'discord'].map(provider => (
+        <Button 
+          key={provider}
+          title={`Login with ${provider}`}
+          onPress={() => handleLogin(provider)}
+        />
+      ))}
+    </View>
+  )
+}
 
 ## ⚠️ Error Handling
 
@@ -384,11 +473,11 @@ The hook usage remains largely the same, but now you get additional features lik
 
 ```tsx
 // Main providers
-export { VechainWalletProvider, useVechainWalletContext }
+export { VechainWalletProvider, useVechainWallet }
 export { VechainWalletWithPrivy }
 
 // Adapters
-export { PrivyAdapter, BaseAdapter }
+export { usePrivyAdapter }
 
 // Hooks
 export { useSmartAccount, useWalletTransaction }
@@ -421,19 +510,21 @@ export { WalletError, WalletErrorType }
 You can easily mock the wallet context for testing:
 
 ```tsx
-import { VechainWalletProvider } from '@/VechainWalletKit'
+import { VechainWalletProvider, WalletAdapter } from '@/VechainWalletKit'
 
 // Create a mock adapter for testing
-class MockAdapter extends BaseAdapter {
-  async signMessage() { return Buffer.from('mock-signature', 'hex') }
-  async signTransaction() { return Buffer.from('mock-signature', 'hex') }
-  async signTypedData() { return 'mock-signature' }
-  async getAccount() { return { address: '0x123...', isDeployed: true } }
-  async logout() { this.setAuthenticated(false) }
+const mockAdapter: WalletAdapter = {
+  isAuthenticated: true,
+  async signMessage() { return Buffer.from('mock-signature', 'hex') },
+  async signTransaction() { return Buffer.from('mock-signature', 'hex') },
+  async signTypedData() { return 'mock-signature' },
+  async getAccount() { return { address: '0x123...', isDeployed: true } },
+  async login(options) { /* mock login */ },
+  async logout() { /* mock logout */ }
 }
 
 // Use in tests
-<VechainWalletProvider config={mockConfig} adapter={new MockAdapter()}>
+<VechainWalletProvider config={mockConfig} adapter={mockAdapter}>
   <ComponentUnderTest />
 </VechainWalletProvider>
 ``` 

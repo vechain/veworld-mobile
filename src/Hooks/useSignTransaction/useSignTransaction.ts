@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { Address, Hex, Secp256k1, Transaction } from "@vechain/sdk-core"
 import { HDNode } from "thor-devkit"
 import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
-import { useVechainWalletContext } from "~VechainWalletKit"
+import { useVechainWallet } from "~VechainWalletKit"
 import { ERROR_EVENTS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest, Wallet } from "~Model"
@@ -60,7 +60,7 @@ export const useSignTransaction = ({
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const nav = useNavigation()
     const { wallets } = useEmbeddedEthereumWallet()
-    const { signTransaction: socialSignTransaction } = useVechainWalletContext()
+    const { signTransaction: socialSignTransaction } = useVechainWallet()
     const getSignature = async (
         transaction: Transaction,
         wallet: Wallet,

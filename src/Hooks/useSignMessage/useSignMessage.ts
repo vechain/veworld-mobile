@@ -3,7 +3,7 @@ import { DEVICE_TYPE, Wallet } from "~Model"
 import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { HexUtils } from "~Utils"
-import { useVechainWalletContext } from "~VechainWalletKit"
+import { useVechainWallet } from "~VechainWalletKit"
 
 type Props = {
     hash: Buffer
@@ -12,7 +12,7 @@ type Props = {
 export const useSignMessage = ({ hash }: Props) => {
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
-    const { signMessage: signMessageSocial } = useVechainWalletContext()
+    const { signMessage: signWithVechainWallet } = useVechainWallet()
 
     const getMnemonicSignature = async (wallet: Wallet) => {
         if (!wallet.mnemonic) throw new Error("Mnemonic wallet can't have an empty mnemonic")
@@ -46,7 +46,7 @@ export const useSignMessage = ({ hash }: Props) => {
         if (senderDevice.type === DEVICE_TYPE.LEDGER) throw new Error("Ledger devices not supported in this hook")
 
         if (senderDevice.type === DEVICE_TYPE.SOCIAL) {
-            return await signMessageSocial(hash)
+            return await signWithVechainWallet(hash)
         }
 
         //local mnemonic, identity already verified via useCheckIdentity
