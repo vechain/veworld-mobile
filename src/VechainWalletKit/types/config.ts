@@ -1,10 +1,5 @@
 export interface VechainWalletSDKConfig {
-    provider: "privy" | "custom"
-    providerConfig: {
-        appId: string
-        clientId: string
-        [key: string]: unknown
-    }
+    providerConfig: Record<string, unknown>
     networkConfig: NetworkConfig
 }
 

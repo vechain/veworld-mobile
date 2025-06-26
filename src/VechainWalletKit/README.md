@@ -293,30 +293,47 @@ export const useCustomWalletAdapter = (customWallet: CustomWalletInstance): Wall
 
 ## 📋 Configuration Options
 
+The `providerConfig` is adapter-specific and depends on which wallet provider you're using:
+
+**For Privy Adapter:**
+```tsx
+providerConfig: {
+  appId: 'your-privy-app-id',
+  clientId: 'your-privy-client-id'
+}
+```
+
+**For Custom Adapters:**
+```tsx
+providerConfig: {
+  apiKey: 'your-api-key',
+  environment: 'production',
+  customOption: 'value'
+  // Any configuration your adapter needs
+}
+```
+
+## 📋 Network Configuration Options
+
 ### VechainWalletSDKConfig
 
 ```tsx
 interface VechainWalletSDKConfig {
-  provider: 'privy' | 'custom'
   networkConfig: {
     chainId: number
     nodeUrl: string
     networkType: string
     name: string
   }
-  providerConfig: {
-    appId: string
-    clientId: string
-  }
+  providerConfig: Record<string, unknown>
 }
 ```
 
 ### Network Configurations
 
-**Testnet:**
+**Testnet (with Privy):**
 ```tsx
 const config = {
-  provider: 'privy',
   networkConfig: {
     chainId: 39,
     nodeUrl: 'https://testnet.vechain.org',
@@ -324,16 +341,16 @@ const config = {
     name: 'testnet'
   },
   providerConfig: {
+    // Privy-specific configuration
     appId: 'your-privy-app-id',
     clientId: 'your-privy-client-id'
   }
 }
 ```
 
-**Mainnet:**
+**Mainnet (with Privy):**
 ```tsx
 const config = {
-  provider: 'privy',
   networkConfig: {
     chainId: 100009,
     nodeUrl: 'https://mainnet.vechain.org',
@@ -341,6 +358,7 @@ const config = {
     name: 'mainnet'
   },
   providerConfig: {
+    // Privy-specific configuration
     appId: 'your-privy-app-id',
     clientId: 'your-privy-client-id'
   }

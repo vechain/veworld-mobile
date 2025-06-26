@@ -62,12 +62,12 @@ export const usePrivyAdapter = (): WalletAdapter => {
                 try {
                     const privyProvider = await currentWallets[0].getProvider()
                     const hash = tx.getTransactionHash()
-                    console.log("Calling privy to sign transaction")
+
                     const response = await privyProvider.request({
                         method: "secp256k1_sign",
                         params: [hash.toString()],
                     })
-                    console.log("Response from privy", response)
+
                     // Process signature format
                     const signatureHex = response.slice(2)
                     const r = signatureHex.slice(0, 64)

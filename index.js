@@ -137,7 +137,6 @@ const Main = () => {
                     }}>
                     <VechainWalletWithPrivy
                         config={{
-                            provider: "privy",
                             providerConfig: {
                                 appId: "cmal5kjzv0001jp0mshok7f37",
                                 clientId: "client-WY6LHx69tXsKYk5SLbF5dtUekKfmuTquV4BybTVK4UCP9",

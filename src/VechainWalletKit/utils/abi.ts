@@ -199,4 +199,4 @@ export const SimpleAccountFactoryABI = [
         stateMutability: "pure",
         type: "function",
     },
-] as const 
+] as const

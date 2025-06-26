@@ -23,4 +23,4 @@ export const getSmartAccountConfig = (networkName: string): SmartAccountConfig =
 
 export const getSmartAccountFactoryAddress = (networkName: string): SmartAccountConfig => {
     return getSmartAccountConfig(networkName)
-} 
+}

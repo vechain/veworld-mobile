@@ -18,8 +18,11 @@ const VechainWalletWithPrivyImplementation: React.FC<VechainWalletWithPrivyProps
 }
 
 export const VechainWalletWithPrivy: React.FC<VechainWalletWithPrivyProps> = ({ children, config }) => {
+    // Type cast for Privy-specific configuration
+    const privyConfig = config.providerConfig as { appId: string; clientId: string }
+
     return (
-        <PrivyProvider appId={config.providerConfig.appId} clientId={config.providerConfig.clientId}>
+        <PrivyProvider appId={privyConfig.appId} clientId={privyConfig.clientId}>
             <VechainWalletWithPrivyImplementation config={config}>{children}</VechainWalletWithPrivyImplementation>
         </PrivyProvider>
     )
