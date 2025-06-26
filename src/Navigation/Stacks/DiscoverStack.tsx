@@ -12,7 +12,7 @@ export type RootStackParamListBrowser = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.ACTIVITY_STAKING
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
     }
     [Routes.DISCOVER_TABS_MANAGER]: undefined
     [Routes.ACTIVITY_STAKING]: undefined
