@@ -6,7 +6,6 @@ export interface VechainWalletSDKConfig {
 export interface NetworkConfig {
     nodeUrl: string
     networkType: "mainnet" | "testnet"
-    name: string
 }
 
 export const getLast16BitsOfChainId = (networkType: "mainnet" | "testnet"): number => {

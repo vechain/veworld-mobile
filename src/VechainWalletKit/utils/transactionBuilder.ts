@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react"
+// Removed React imports - now using pure functions
 import { Address, ABIContract, Clause, TransactionClause } from "@vechain/sdk-core"
 import { encodeFunctionData, bytesToHex } from "viem"
 import {
@@ -9,15 +9,12 @@ import {
 } from "../types/transactionBuilder"
 import { SimpleAccountABI, SimpleAccountFactoryABI } from "../utils/abi"
 
-export interface UseTransactionBuilderProps {
-    signTypedDataFn: TransactionSigningFunction
-}
-
 export interface SmartWalletTransactionClausesParams {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
-    chainId: any
+    chainId: number
     selectedAccountAddress?: string
+    signTypedDataFn: TransactionSigningFunction
 }
 
 /**
@@ -162,36 +159,32 @@ async function buildBatchExecutionClauses({
     signTypedDataFn: TransactionSigningFunction
 }): Promise<TransactionClause[]> {
     const clauses: TransactionClause[] = []
-    const {
-        address: smartAccountAddress,
-        isDeployed: smartAccountIsDeployed,
-        factoryAddress: smartAccountFactoryAddress,
-    } = smartAccountConfig
+    const { address, isDeployed, factoryAddress } = smartAccountConfig
 
     // Build the batch authorization typed data
     const typedData = buildBatchAuthorizationTypedData({
         clauses: txClauses,
         chainId,
-        verifyingContract: smartAccountAddress,
+        verifyingContract: address,
     })
     console.log("building batch execution clauses")
     const signature = await signTypedDataFn(typedData)
-    console.log("building batch execution clauses", signature, smartAccountAddress, smartAccountIsDeployed)
+    console.log("building batch execution clauses", signature, address, isDeployed)
     // If the smart account is not deployed, deploy it first
-    if (!smartAccountIsDeployed) {
+    if (!isDeployed) {
         clauses.push(
             Clause.callFunction(
-                Address.of(smartAccountFactoryAddress),
+                Address.of(factoryAddress),
                 ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
-                [smartAccountAddress],
+                [address],
             ),
         )
     }
-    console.log("Create batch execution call", smartAccountAddress)
+    console.log("Create batch execution call", address)
     // Add the batch execution call
     clauses.push(
         Clause.callFunction(
-            Address.of(smartAccountAddress),
+            Address.of(address),
             ABIContract.ofAbi(SimpleAccountABI).getFunction("executeBatchWithCustomAuthorization"),
             [
                 typedData.message.to,
@@ -216,7 +209,6 @@ async function buildIndividualExecutionClauses({
     txClauses,
     smartAccountConfig,
     chainId,
-    selectedAccountAddress,
     signTypedDataFn,
 }: {
     txClauses: TransactionClause[]
@@ -226,18 +218,14 @@ async function buildIndividualExecutionClauses({
     signTypedDataFn: TransactionSigningFunction
 }): Promise<TransactionClause[]> {
     const clauses: TransactionClause[] = []
-    const {
-        address: smartAccountAddress,
-        isDeployed: smartAccountIsDeployed,
-        factoryAddress: smartAccountFactoryAddress,
-    } = smartAccountConfig
+    const { address, isDeployed, factoryAddress } = smartAccountConfig
 
     // Build typed data for each clause
     const dataToSign = txClauses.map(txData =>
         buildSingleAuthorizationTypedData({
             clause: txData,
             chainId,
-            verifyingContract: smartAccountAddress,
+            verifyingContract: address,
         }),
     )
 
@@ -254,12 +242,12 @@ async function buildIndividualExecutionClauses({
     }
 
     // If the smart account is not deployed, deploy it first
-    if (!smartAccountIsDeployed) {
+    if (!isDeployed) {
         clauses.push(
             Clause.callFunction(
-                Address.of(smartAccountFactoryAddress),
+                Address.of(factoryAddress),
                 ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
-                [selectedAccountAddress ?? ""],
+                [address ?? ""],
             ),
         )
     }
@@ -268,7 +256,7 @@ async function buildIndividualExecutionClauses({
     dataToSign.forEach((data, index) => {
         clauses.push(
             Clause.callFunction(
-                Address.of(smartAccountAddress ?? ""),
+                Address.of(address ?? ""),
                 ABIContract.ofAbi(SimpleAccountABI).getFunction("executeWithAuthorization"),
                 [
                     data.message.to as `0x${string}`,
@@ -285,43 +273,30 @@ async function buildIndividualExecutionClauses({
     return clauses
 }
 
-export function useTransactionBuilder({ signTypedDataFn }: UseTransactionBuilderProps) {
-    const buildSmartWalletTransactionClauses = useCallback(
-        async ({
+export async function buildSmartWalletTransactionClauses({
+    txClauses,
+    smartAccountConfig,
+    chainId,
+    signTypedDataFn,
+}: SmartWalletTransactionClausesParams): Promise<TransactionClause[]> {
+    const { version: smartAccountVersion, hasV1SmartAccount } = smartAccountConfig
+
+    // Determine execution strategy based on smart account version
+    const shouldUseBatchExecution = !hasV1SmartAccount || (smartAccountVersion && smartAccountVersion >= 3)
+
+    if (shouldUseBatchExecution) {
+        return await buildBatchExecutionClauses({
             txClauses,
             smartAccountConfig,
             chainId,
-            selectedAccountAddress,
-        }: SmartWalletTransactionClausesParams): Promise<TransactionClause[]> => {
-            const { version: smartAccountVersion, hasV1SmartAccount } = smartAccountConfig
-
-            // Determine execution strategy based on smart account version
-            const shouldUseBatchExecution = !hasV1SmartAccount || (smartAccountVersion && smartAccountVersion >= 3)
-
-            if (shouldUseBatchExecution) {
-                return await buildBatchExecutionClauses({
-                    txClauses,
-                    smartAccountConfig,
-                    chainId,
-                    signTypedDataFn,
-                })
-            } else {
-                return await buildIndividualExecutionClauses({
-                    txClauses,
-                    smartAccountConfig,
-                    chainId,
-                    selectedAccountAddress,
-                    signTypedDataFn,
-                })
-            }
-        },
-        [signTypedDataFn],
-    )
-
-    return useMemo(
-        () => ({
-            buildSmartWalletTransactionClauses,
-        }),
-        [buildSmartWalletTransactionClauses],
-    )
+            signTypedDataFn,
+        })
+    } else {
+        return await buildIndividualExecutionClauses({
+            txClauses,
+            smartAccountConfig,
+            chainId,
+            signTypedDataFn,
+        })
+    }
 }

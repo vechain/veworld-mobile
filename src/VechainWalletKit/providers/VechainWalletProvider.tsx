@@ -4,7 +4,8 @@ import { ThorClient } from "@vechain/sdk-network"
 import { getLast16BitsOfChainId, VechainWalletSDKConfig } from "../types/config"
 import { SignOptions, BuildOptions, TypedDataPayload } from "../types/transaction"
 import { WalletAdapter, LoginOptions } from "../types/wallet"
-import { useWalletTransaction } from "../hooks/useWalletTransaction"
+import { useSmartAccount } from "../hooks/useSmartAccount"
+import { buildSmartWalletTransactionClauses } from "../utils/transactionBuilder"
 import { WalletError, WalletErrorType } from "../utils/errors"
 
 interface VechainWalletContext {
@@ -41,13 +42,10 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
     // Initialize Thor client
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
 
-    // Initialize wallet transaction hook
-    const walletTransaction = useWalletTransaction({
+    // Initialize smart account hook
+    const smartAccount = useSmartAccount({
         thor,
         networkName: config.networkConfig.networkType,
-        signTypedDataFn: async (data: TypedDataPayload): Promise<string> => {
-            return await adapter.signTypedData(data)
-        },
     })
 
     const isAuthenticated = adapter.isAuthenticated
@@ -61,8 +59,8 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
                     setAddress(account.address)
 
                     // Get smart account info to determine deployment status
-                    const smartAccountInfo = await walletTransaction.getSmartAccountInfo(account.address)
-                    setIsDeployed(smartAccountInfo.isDeployed)
+                    const smartAccountData = await smartAccount.getSmartAccount(account.address)
+                    setIsDeployed(smartAccountData.isDeployed)
                 } catch (error) {
                     // Replace console.warn with proper error handling
                     setAddress("")
@@ -75,7 +73,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
         }
 
         updateAccountInfo()
-    }, [isAuthenticated, adapter, walletTransaction])
+    }, [isAuthenticated, adapter, smartAccount])
 
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
@@ -119,20 +117,53 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
             // Derive chainId from networkType
             const chainId = getLast16BitsOfChainId(config.networkConfig.networkType)
 
-            return await walletTransaction.buildTransaction(
-                clauses,
-                address,
+            // Get smart account information
+            const smartAccountInfo = await smartAccount.getSmartAccount(address)
+            const hasV1SmartAccount = await smartAccount.hasV1SmartAccount(address)
+
+            let smartAccountVersion: number | undefined
+            if (smartAccountInfo.address) {
+                smartAccountVersion = await smartAccount.getSmartAccountVersion(smartAccountInfo.address)
+            } else {
+                smartAccountVersion = undefined
+            }
+
+            // Build smart account configuration
+            const smartAccountConfig = {
+                address: smartAccountInfo.address ?? "",
+                version: smartAccountVersion,
+                isDeployed: smartAccountInfo.isDeployed,
+                hasV1SmartAccount,
+                factoryAddress: smartAccount.getFactoryAddress(),
+            }
+
+            // Build smart wallet transaction clauses
+            const finalClauses = await buildSmartWalletTransactionClauses({
+                txClauses: clauses,
+                smartAccountConfig,
                 chainId,
-                options?.selectedAccountAddress,
-                {
-                    gas: options?.gas,
-                    isDelegated: options?.isDelegated,
-                    dependsOn: options?.dependsOn,
-                    gasPriceCoef: options?.gasPriceCoef,
+                signTypedDataFn: async (data: TypedDataPayload): Promise<string> => {
+                    return await adapter.signTypedData(data)
                 },
-            )
+            })
+
+            // Estimate gas
+            const gasResult = await thor.gas.estimateGas(finalClauses, address, {
+                gasPadding: 1,
+            })
+
+            const parsedGasLimit = Math.max(gasResult.totalGas, options?.gas ?? 0)
+
+            // Build the transaction in VeChain format
+            const txBody = await thor.transactions.buildTransactionBody(finalClauses, parsedGasLimit, {
+                isDelegated: options?.isDelegated ?? false,
+                dependsOn: options?.dependsOn,
+                gasPriceCoef: options?.gasPriceCoef,
+            })
+
+            return Transaction.of(txBody)
         },
-        [isAuthenticated, address, walletTransaction, config.networkConfig.networkType],
+        [isAuthenticated, address, smartAccount, config.networkConfig.networkType, thor, adapter],
     )
 
     const login = useCallback(

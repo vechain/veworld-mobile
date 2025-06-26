@@ -15,5 +15,4 @@ export interface BuildOptions {
     isDelegated?: boolean
     dependsOn?: string
     gasPriceCoef?: number
-    selectedAccountAddress?: string
-} 
+}

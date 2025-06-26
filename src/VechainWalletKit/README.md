@@ -322,7 +322,6 @@ interface VechainWalletSDKConfig {
   networkConfig: {
     nodeUrl: string
     networkType: "mainnet" | "testnet"
-    name: string
   }
   providerConfig: Record<string, unknown>
 }
@@ -335,8 +334,7 @@ interface VechainWalletSDKConfig {
 const config = {
   networkConfig: {
     nodeUrl: 'https://testnet.vechain.org',
-    networkType: 'testnet',
-    name: 'testnet'
+    networkType: 'testnet'
   },
   providerConfig: {
     // Privy-specific configuration
@@ -351,8 +349,7 @@ const config = {
 const config = {
   networkConfig: {
     nodeUrl: 'https://mainnet.vechain.org',
-    networkType: 'mainnet',
-    name: 'mainnet'
+    networkType: 'mainnet'
   },
   providerConfig: {
     // Privy-specific configuration
@@ -366,7 +363,6 @@ const config = {
 
 - `useVechainWallet()` - Main wallet context
 - `useSmartAccount(address)` - Smart account information
-- `useWalletTransaction(config)` - Transaction building utilities
 
 ## 🔐 Login Usage
 
@@ -495,7 +491,7 @@ export { VechainWalletWithPrivy }
 export { usePrivyAdapter }
 
 // Hooks
-export { useSmartAccount, useWalletTransaction }
+export { useSmartAccount }
 
 // Types
 export type { 

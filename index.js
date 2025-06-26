@@ -107,7 +107,6 @@ const Main = () => {
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const networkType = selectedNetwork.type
-    const name = selectedNetwork.name
     const nodeUrl = selectedNetwork.currentUrl
 
     console.log("selectedNetwork index", selectedNetwork)
@@ -138,7 +137,6 @@ const Main = () => {
                             networkConfig: {
                                 nodeUrl,
                                 networkType,
-                                name,
                             },
                         }}>
                         <FeatureFlagsProvider>

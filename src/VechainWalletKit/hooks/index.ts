@@ -1,9 +1,9 @@
 // Functional hooks
-export { useWalletTransaction } from "./useWalletTransaction"
 export { useSmartAccount } from "./useSmartAccount"
-export { useTransactionBuilder } from "./useTransactionBuilder"
 
 // Hook types
-export type { UseWalletTransactionProps, BuildTransactionOptions } from "./useWalletTransaction"
 export type { UseSmartAccountProps } from "./useSmartAccount"
-export type { UseTransactionBuilderProps, SmartWalletTransactionClausesParams } from "./useTransactionBuilder"
+
+// Pure functions (moved to utils)
+export { buildSmartWalletTransactionClauses } from "../utils/transactionBuilder"
+export type { SmartWalletTransactionClausesParams } from "../utils/transactionBuilder"
