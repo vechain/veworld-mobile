@@ -22,7 +22,7 @@ import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 import { selectDevice, selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { error, GasUtils } from "~Utils"
+import { BigNutils, error, GasUtils } from "~Utils"
 import { useVTHO_HACK } from "./useVTHO_HACK"
 
 type Props = {
@@ -45,7 +45,7 @@ const mapGasPriceCoefficient = (value: GasPriceCoefficient) => {
 }
 
 export const useTransactionScreen = ({
-    clauses,
+    clauses: _clauses,
     onTransactionSuccess: propsOnTransactionSuccess,
     onTransactionFailure,
     dappRequest,
@@ -54,6 +54,10 @@ export const useTransactionScreen = ({
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const clauses = useMemo(() => {
+        return _clauses.map(clause => ({ ...clause, value: `0x${BigNutils(clause.value || 0).toHex}` }))
+    }, [_clauses])
 
     const [loading, setLoading] = useState(false)
     const [selectedFeeOption, setSelectedFeeOption] = useState(GasPriceCoefficient.MEDIUM)

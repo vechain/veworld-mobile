@@ -415,7 +415,7 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
-	 * G​e​t​ ​*​*​r​e​w​a​r​d​s​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
+	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
 	BANNER_STARGATE_DESC: string
 	/**
@@ -1182,10 +1182,6 @@ type RootTranslation = {
 	 */
 	BTN_DOWNLOAD_LOGS: string
 	/**
-	 * S​t​a​k​e
-	 */
-	BTN_STAKE: string
-	/**
 	 * E​d​i​t​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	BTN_EDIT_CUSTOM_NODE: string
@@ -1386,6 +1382,10 @@ type RootTranslation = {
 	 * S​k​i​p
 	 */
 	BTN_SKIP: string
+	/**
+	 * S​t​a​k​e
+	 */
+	BTN_STAKE: string
 	/**
 	 * S​w​a​p
 	 */
@@ -2133,6 +2133,10 @@ type RootTranslation = {
 	 * R​e​c​e​n​t​l​y​ ​A​d​d​e​d
 	 */
 	DISCOVER_TAB_RECENTLY_ADDED: string
+	/**
+	 * S​t​a​k​i​n​g
+	 */
+	DISCOVER_TAB_STAKING: string
 	/**
 	 * T​r​e​n​d​i​n​g​ ​&​ ​P​o​p​u​l​a​r
 	 */
@@ -4782,7 +4786,7 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
-	 * Get **rewards** by staking your **VET tokens**
+	 * Get **VTHO** by staking your **VET tokens**
 	 */
 	BANNER_STARGATE_DESC: () => LocalizedString
 	/**
@@ -5544,10 +5548,6 @@ Thanks for your patience!
 	 */
 	BTN_DOWNLOAD_LOGS: () => LocalizedString
 	/**
-	 * Stake
-	 */
-	BTN_STAKE: () => LocalizedString
-	/**
 	 * Edit custom node
 	 */
 	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
@@ -5747,6 +5747,10 @@ Thanks for your patience!
 	 * Skip
 	 */
 	BTN_SKIP: () => LocalizedString
+	/**
+	 * Stake
+	 */
+	BTN_STAKE: () => LocalizedString
 	/**
 	 * Swap
 	 */
@@ -6487,6 +6491,10 @@ Thanks for your patience!
 	 * Recently Added
 	 */
 	DISCOVER_TAB_RECENTLY_ADDED: () => LocalizedString
+	/**
+	 * Staking
+	 */
+	DISCOVER_TAB_STAKING: () => LocalizedString
 	/**
 	 * Trending & Popular
 	 */

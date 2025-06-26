@@ -1,7 +1,7 @@
 import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useRef } from "react"
 import { ScrollView, StyleSheet } from "react-native"
-import { BaseSpacer, BaseView, Layout } from "~Components"
+import { BaseSpacer, BaseText, BaseView, Layout, StargateStakingBanner, useFeatureFlags } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -24,6 +24,7 @@ export const DiscoverScreen: React.FC = () => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { styles } = useThemedStyles(baseStyles)
+    const featureFlags = useFeatureFlags()
 
     useFetchFeaturedDApps()
 
@@ -69,6 +70,15 @@ export const DiscoverScreen: React.FC = () => {
                                 />
                                 <BaseSpacer height={48} />
                             </>
+                        )}
+
+                        {featureFlags.discoveryFeature.showStargateBanner && (
+                            <BaseView px={16}>
+                                <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_TAB_STAKING()}</BaseText>
+                                <BaseSpacer height={16} />
+                                <StargateStakingBanner />
+                                <BaseSpacer height={48} />
+                            </BaseView>
                         )}
 
                         {/* New Dapps */}
