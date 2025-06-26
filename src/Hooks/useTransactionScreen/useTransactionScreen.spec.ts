@@ -417,7 +417,7 @@ describe("useTransactionScreen", () => {
                                 {
                                     data: "0x",
                                     to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
-                                    value: "300000000000000000000",
+                                    value: "0x1043561a8829300000",
                                 },
                             ],
                             dependsOn: null,
