@@ -26,6 +26,10 @@ env:
                 id: "button_notifications_skip"
 - tapOn:
       id: "settings-tab"
+- extendedWaitUntil:
+       visible:
+         id: "Networks"
+       timeout: 10000
 - tapOn:
       id: "Networks"
 - tapOn:

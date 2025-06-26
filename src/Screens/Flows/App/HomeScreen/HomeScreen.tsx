@@ -13,12 +13,12 @@ import {
     QRCodeBottomSheet,
     SelectAccountBottomSheet,
     useFeatureFlags,
+    VersionUpdateAvailableBottomSheet,
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import {
     useAnalyticTracking,
     useBottomSheetModal,
-    useCheckVersion,
     useMemoizedAnimation,
     usePrefetchAllVns,
     useSetSelectedAccount,
@@ -135,8 +135,6 @@ export const HomeScreen = () => {
     const scrollViewRef = useRef(null)
 
     useScrollToTop(scrollViewRef)
-
-    useCheckVersion()
 
     const featureFlags = useFeatureFlags()
 
@@ -256,6 +254,7 @@ export const HomeScreen = () => {
                     <DeviceBackupBottomSheet />
                     <DeviceJailBrokenWarningModal />
                     <EnableNotificationsBottomSheet />
+                    <VersionUpdateAvailableBottomSheet />
                     <DisabledBuySwapIosBottomSheet
                         ref={blockedFeaturesIOSBottomSheetRef}
                         onConfirm={closeBlockedFeaturesIOSBottomSheet}
