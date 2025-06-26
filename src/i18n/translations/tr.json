@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "Kazanmaya Başla",
   "ACTIVITY_STAKING_EMPTY_LABEL": "VET tokenlarınızı stake ederek ödüller kazanmaya başlayın.",
   "ACTIVITY_STAKING_LABEL": "Stake Etme",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "Ödülleri talep etti",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} Ödülleri talep etti",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "delege edildi",
   "ACTIVITY_STARGATE_STAKE_LABEL": "stake edildi",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "delegasyon kaldırıldı",

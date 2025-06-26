@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "Beginne zu verdienen",
   "ACTIVITY_STAKING_EMPTY_LABEL": "Beginnen Sie, Belohnungen zu verdienen, indem Sie Ihre VET-Token staken.",
   "ACTIVITY_STAKING_LABEL": "Staking",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "Belohnungen beansprucht",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} Belohnungen beansprucht",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "delegiert",
   "ACTIVITY_STARGATE_STAKE_LABEL": "gestaked",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "nicht mehr delegiert",

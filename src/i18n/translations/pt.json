@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "Comece a ganhar",
   "ACTIVITY_STAKING_EMPTY_LABEL": "Comece a ganhar recompensas ao fazer staking dos seus tokens VET.",
   "ACTIVITY_STAKING_LABEL": "Staking",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "Recompensas reivindicadas",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} Recompensas reivindicadas",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "delegado",
   "ACTIVITY_STARGATE_STAKE_LABEL": "em staking",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "não delegado",

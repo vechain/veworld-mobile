@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "Inizia a guadagnare",
   "ACTIVITY_STAKING_EMPTY_LABEL": "Inizia a guadagnare ricompense puntando i tuoi token VET.",
   "ACTIVITY_STAKING_LABEL": "Puntamento",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "Ricompense rivendicate",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} Ricompense rivendicate",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "delegato",
   "ACTIVITY_STARGATE_STAKE_LABEL": "puntato",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "non delegato",

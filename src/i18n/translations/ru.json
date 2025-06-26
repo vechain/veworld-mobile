@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "Начните зарабатывать",
   "ACTIVITY_STAKING_EMPTY_LABEL": "Начните зарабатывать вознаграждения, размещая ваши VET токены.",
   "ACTIVITY_STAKING_LABEL": "Стекинг",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "Полученные вознаграждения",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} Полученные вознаграждения",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "делегировано",
   "ACTIVITY_STARGATE_STAKE_LABEL": "размещено",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "де-делегировано",

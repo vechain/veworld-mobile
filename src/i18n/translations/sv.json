@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "Börja tjäna",
   "ACTIVITY_STAKING_EMPTY_LABEL": "Börja tjäna belöningar genom att staka dina VET-tokens.",
   "ACTIVITY_STAKING_LABEL": "Staking",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "Inlösta belöningar",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} Inlösta belöningar",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "delegerade",
   "ACTIVITY_STARGATE_STAKE_LABEL": "stakade",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "odelgerade",

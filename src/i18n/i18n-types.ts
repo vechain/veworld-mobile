@@ -4570,7 +4570,7 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	/**
 	 * Claim rewards
 	 */
-	ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL: () => LocalizedString
+	ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL: (arg: { tokenId: string | undefined }) => LocalizedString
 	/**
 	 * Undelegate
 	 */

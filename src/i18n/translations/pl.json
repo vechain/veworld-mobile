@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "Zacznij zarabiać",
   "ACTIVITY_STAKING_EMPTY_LABEL": "Zacznij zarabiać nagrody, obstawiając swoje tokeny VET.",
   "ACTIVITY_STAKING_LABEL": "Staking",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "Odebrane nagrody",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} Odebrane nagrody",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "delegowane",
   "ACTIVITY_STARGATE_STAKE_LABEL": "zastawione",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "niezdelegowane",

@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "Bắt đầu kiếm tiền",
   "ACTIVITY_STAKING_EMPTY_LABEL": "Bắt đầu kiếm phần thưởng bằng cách staking token VET của bạn.",
   "ACTIVITY_STAKING_LABEL": "Staking",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "Phần thưởng đã nhận",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} Phần thưởng đã nhận",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "được ủy quyền",
   "ACTIVITY_STARGATE_STAKE_LABEL": "đã stake",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "đã hết ủy quyền",

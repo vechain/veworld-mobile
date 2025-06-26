@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "Commencez à gagner",
   "ACTIVITY_STAKING_EMPTY_LABEL": "Commencez à gagner des récompenses en jalonnant vos jetons VET.",
   "ACTIVITY_STAKING_LABEL": "Jalonnement",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "Récompenses réclamées",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} Récompenses réclamées",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "délégué",
   "ACTIVITY_STARGATE_STAKE_LABEL": "jalonné",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "non délégué",

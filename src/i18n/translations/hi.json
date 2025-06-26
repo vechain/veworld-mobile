@@ -31,7 +31,7 @@
   "ACTIVITY_STAKING_EMPTY_BUTTON": "कमाई शुरू करें",
   "ACTIVITY_STAKING_EMPTY_LABEL": "अपने VET टोकन को स्टेक करके पुरस्कार अर्जित करना शुरू करें।",
   "ACTIVITY_STAKING_LABEL": "स्टेकिंग",
-  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "पुरस्कार दावा किया",
+  "ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL": "{tokenId: string} पुरस्कार दावा किया",
   "ACTIVITY_STARGATE_DELEGATE_LABEL": "प्रतिनिधित",
   "ACTIVITY_STARGATE_STAKE_LABEL": "स्टेक किया गया",
   "ACTIVITY_STARGATE_UNDELEGATE_LABEL": "प्रतिनिध्त वापिस लिया गया",
