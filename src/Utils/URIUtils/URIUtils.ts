@@ -1,4 +1,5 @@
 import axios, { AxiosError } from "axios"
+import DeviceInfo from "react-native-device-info"
 import { validateIpfsUri } from "~Utils/IPFSUtils/IPFSUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
@@ -144,7 +145,8 @@ async function isValidBrowserUrl(url: string): Promise<boolean> {
         }
 
         if (navInput) {
-            await axios.get(navInput)
+            const userAgent = await DeviceInfo.getUserAgent()
+            await axios.get(navInput, { headers: { "User-Agent": userAgent } })
             return true
         } else {
             return false
