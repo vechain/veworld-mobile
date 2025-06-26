@@ -3046,6 +3046,10 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: string
 	/**
+	 * Latest news and updates
+	 */
+	PUSH_NOTIFICATIONS_DAPPS_DESC: string
+	/**
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
@@ -7384,6 +7388,10 @@ Thanks for your patience!
 	 * X2Earn dApps
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
+	/**
+	 * Latest news and updates
+	 */
+	PUSH_NOTIFICATIONS_DAPPS_DESC: () => LocalizedString
 	/**
 	 * Keep up to date with the latest news and updates
 	 */
