@@ -179,19 +179,23 @@ type RootTranslation = {
 	/**
 	 * Delegate
 	 */
-	ACTIVITY_STARGATE_DELEGATE_LABEL: string
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
 	/**
 	 * Stake
 	 */
 	ACTIVITY_STARGATE_STAKE_LABEL: string
 	/**
-	 * Claim rewards
+	 * Claimed rewards
 	 */
-	ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL: string
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
 	/**
 	 * Undelegate
 	 */
-	ACTIVITY_STARGATE_UNDELEGATE_LABEL: string
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: string
 	/**
 	 * Unstake
 	 */
@@ -4587,19 +4591,23 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	/**
 	 * Delegate
 	 */
-	ACTIVITY_STARGATE_DELEGATE_LABEL: () => LocalizedString
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
 	/**
 	 * Stake
 	 */
 	ACTIVITY_STARGATE_STAKE_LABEL: () => LocalizedString
 	/**
-	 * Claim rewards
+	 * Claimed rewards
 	 */
-	ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL: (arg: { tokenId: string | undefined }) => LocalizedString
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: (arg: { tokenId: string | undefined }) => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: (arg: { tokenId: string | undefined }) => LocalizedString
 	/**
 	 * Undelegate
 	 */
-	ACTIVITY_STARGATE_UNDELEGATE_LABEL: () => LocalizedString
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: () => LocalizedString
 	/**
 	 * Unstake
 	 */

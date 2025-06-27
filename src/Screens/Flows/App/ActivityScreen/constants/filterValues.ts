@@ -50,7 +50,8 @@ export const filterValues = {
         value: [
             ActivityEvent.STARGATE_DELEGATE,
             ActivityEvent.STARGATE_STAKE,
-            ActivityEvent.STARGATE_CLAIM_REWARDS,
+            ActivityEvent.STARGATE_CLAIM_REWARDS_BASE,
+            ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE,
             ActivityEvent.STARGATE_UNDELEGATE,
             ActivityEvent.STARGATE_UNSTAKE,
         ],
@@ -86,7 +87,6 @@ const TOKEN_LEVEL_MAPPING = {
     [TokenLevelId.Flash]: "Flash",
 } as const
 
-export const getTokenLevelName = (levelId: string): string => {
-    const numericLevel = parseInt(levelId, 10)
-    return TOKEN_LEVEL_MAPPING[numericLevel as TokenLevelId] || levelId
+export const getTokenLevelName = (levelId: TokenLevelId): string => {
+    return TOKEN_LEVEL_MAPPING[levelId] || ""
 }

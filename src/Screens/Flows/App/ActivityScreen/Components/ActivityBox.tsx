@@ -849,22 +849,43 @@ const Staking = ({ activity, onPress }: StakingProps) => {
                 return "icon-lock"
             case ActivityEvent.STARGATE_UNDELEGATE:
                 return "icon-unlock"
-            case ActivityEvent.STARGATE_CLAIM_REWARDS:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
                 return "icon-gift"
             default:
                 return "icon-blocks"
         }
     }
 
+    const hasRightAmount = !activity.eventName.includes("NODE_")
+
+    const getActivityTitle = () => {
+        switch (activity.eventName) {
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL({ tokenId: activity.tokenId })
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL({ tokenId: activity.tokenId })
+            case ActivityEvent.STARGATE_DELEGATE:
+                return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
+            case ActivityEvent.STARGATE_UNDELEGATE:
+                return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
+            case ActivityEvent.STARGATE_STAKE:
+                return LL.ACTIVITY_STARGATE_STAKE_LABEL()
+            case ActivityEvent.STARGATE_UNSTAKE:
+                return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
+            default:
+                return LL.ACTIVITY_STARGATE_STAKE_LABEL()
+        }
+    }
+
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
-            title:
-                activity.eventName === ActivityEvent.STARGATE_CLAIM_REWARDS
-                    ? LL.ACTIVITY_STARGATE_CLAIM_REWARDS_LABEL({ tokenId: activity.tokenId })
-                    : LL[`ACTIVITY_${activity.eventName}_LABEL`](),
+            title: getActivityTitle(),
             description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
-            rightAmount: `${activity.eventName.includes("_STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${activity.value}`,
+            rightAmount: hasRightAmount
+                ? `${activity.eventName.includes("_STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${activity.value}`
+                : undefined,
             rightAmountDescription: activity.tokenId,
             onPress: onPressHandler,
         }
