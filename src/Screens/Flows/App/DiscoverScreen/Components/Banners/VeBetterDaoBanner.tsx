@@ -18,7 +18,12 @@ export const VeBetterDaoBanner = () => {
                     <VeBetterLogoGreenSVG />
                     <VeBetterSVG color={COLORS.WHITE} width={72} height={14} />
                 </BaseView>
-                <Markdown style={{ paragraph: styles.paragraph, body: styles.text, strong: { color: "#B1F16C" } }}>
+                <Markdown
+                    style={{
+                        paragraph: styles.paragraph,
+                        body: styles.text,
+                        strong: { color: "#B1F16C", fontWeight: "600" },
+                    }}>
                     {LL.BANNER_VEBETTER_DESC()}
                 </Markdown>
             </BaseView>

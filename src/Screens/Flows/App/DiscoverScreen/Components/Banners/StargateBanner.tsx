@@ -15,7 +15,7 @@ export const StargateBanner = () => {
             <ImageBackground source={StargateBannerBackground} style={styles.container}>
                 <BaseView alignItems={"flex-start"} gap={16} flex={1} justifyContent="center">
                     <StargateLogo />
-                    <Markdown style={{ paragraph: styles.paragraph, body: styles.text }}>
+                    <Markdown style={{ paragraph: styles.paragraph, body: styles.text, strong: styles.bold }}>
                         {LL.BANNER_STARGATE_DESC()}
                     </Markdown>
                 </BaseView>
@@ -49,8 +49,11 @@ const baseStyles = () =>
         },
         text: {
             fontFamily: "Rubik",
-            fontSize: 14,
+            fontSize: 15,
             color: "#EEF3F7",
             margin: 0,
+        },
+        bold: {
+            fontWeight: "600",
         },
     })
