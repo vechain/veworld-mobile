@@ -3,7 +3,7 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
-import { B3TR, COLORS, DIRECTIONS, VET, VOT3 } from "~Constants"
+import { B3TR, COLORS, DIRECTIONS, VET, VOT3, VTHO } from "~Constants"
 import { useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
@@ -862,9 +862,9 @@ const Staking = ({ activity, onPress }: StakingProps) => {
     const getActivityTitle = () => {
         switch (activity.eventName) {
             case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
-                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL({ tokenId: activity.tokenId })
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
             case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
-                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL({ tokenId: activity.tokenId })
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
             case ActivityEvent.STARGATE_DELEGATE:
                 return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
             case ActivityEvent.STARGATE_UNDELEGATE:
@@ -878,15 +878,19 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         }
     }
 
+    const amount = BigNutils(activity.value)
+        .toHuman(B3TR.decimals ?? 0)
+        .toTokenFormat_string(2)
+
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
             description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
             rightAmount: hasRightAmount
-                ? `${activity.eventName.includes("_STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${activity.value}`
+                ? `${activity.eventName.includes("_STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${amount}`
                 : undefined,
-            rightAmountDescription: activity.tokenId,
+            rightAmountDescription: activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol,
             onPress: onPressHandler,
         }
     }

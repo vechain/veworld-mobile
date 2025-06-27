@@ -185,6 +185,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_STAKE_LABEL: string
 	/**
+	 * Event name
+	 */
+	ACTIVITY_EVENT_NAME: string
+	/**
 	 * Claimed rewards
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
@@ -4597,13 +4601,17 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_STAKE_LABEL: () => LocalizedString
 	/**
-	 * Claimed rewards
+	 * Event name
 	 */
-	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: (arg: { tokenId: string | undefined }) => LocalizedString
+	ACTIVITY_EVENT_NAME: () => LocalizedString
 	/**
 	 * Claimed rewards
 	 */
-	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: (arg: { tokenId: string | undefined }) => LocalizedString
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: () => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
 	/**
 	 * Undelegate
 	 */
