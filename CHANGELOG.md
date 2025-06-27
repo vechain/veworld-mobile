@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.5 (2025-06-27)</small>
+
+* build: init ([ff2b38c](https://github.com/vechain/veworld-mobile/commit/ff2b38c))
+* Fix: Activities List + Details (#3027) ([efbb5a7](https://github.com/vechain/veworld-mobile/commit/efbb5a7)), closes [#3027](https://github.com/vechain/veworld-mobile/issues/3027)
+
 ## <small>2.2.4 (2025-06-06)</small>
 
 * build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
