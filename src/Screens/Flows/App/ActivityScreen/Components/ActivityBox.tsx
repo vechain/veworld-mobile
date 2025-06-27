@@ -858,7 +858,7 @@ const Staking = ({ activity, onPress }: StakingProps) => {
     }
 
     const hasRightAmount = useMemo(() => {
-        return !(activity?.type === ActivityEvent.STARGATE_UNDELEGATE)
+        return activity?.type !== ActivityEvent.STARGATE_UNDELEGATE
     }, [activity?.type])
 
     const getActivityTitle = () => {
@@ -892,12 +892,19 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         .toHuman(B3TR.decimals ?? 0)
         .toTokenFormat_string(2)
 
+    const rightAmount = useMemo(() => {
+        if (hasRightAmount) {
+            return `${isMinus ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${amount}`
+        }
+        return undefined
+    }, [hasRightAmount, isMinus, amount])
+
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
             description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
-            rightAmount: hasRightAmount ? `${isMinus ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${amount}` : undefined,
+            rightAmount: rightAmount,
             rightAmountDescription:
                 hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
             onPress: onPressHandler,
