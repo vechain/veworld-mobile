@@ -857,7 +857,9 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         }
     }
 
-    const hasRightAmount = !activity.eventName.includes("NODE_")
+    const hasRightAmount = useMemo(() => {
+        return !(activity?.type === ActivityEvent.STARGATE_UNDELEGATE)
+    }, [activity?.type])
 
     const getActivityTitle = () => {
         switch (activity.eventName) {
@@ -878,6 +880,14 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         }
     }
 
+    const isMinus = useMemo(() => {
+        return !(
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE ||
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE ||
+            activity?.type === ActivityEvent.STARGATE_UNSTAKE
+        )
+    }, [activity?.type])
+
     const amount = BigNutils(activity.value)
         .toHuman(B3TR.decimals ?? 0)
         .toTokenFormat_string(2)
@@ -887,10 +897,9 @@ const Staking = ({ activity, onPress }: StakingProps) => {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
             description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
-            rightAmount: hasRightAmount
-                ? `${activity.eventName.includes("_STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${amount}`
-                : undefined,
-            rightAmountDescription: activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol,
+            rightAmount: hasRightAmount ? `${isMinus ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${amount}` : undefined,
+            rightAmountDescription:
+                hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
             onPress: onPressHandler,
         }
     }
