@@ -5,6 +5,7 @@ import { StargateB3MO, StargateBannerBackground, StargateLogo } from "~Assets"
 import { BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const StargateBanner = () => {
     const { styles } = useThemedStyles(baseStyles)
@@ -15,7 +16,13 @@ export const StargateBanner = () => {
             <ImageBackground source={StargateBannerBackground} style={styles.container}>
                 <BaseView alignItems={"flex-start"} gap={16} flex={1} justifyContent="center">
                     <StargateLogo />
-                    <Markdown style={{ paragraph: styles.paragraph, body: styles.text }}>
+                    <Markdown
+                        style={{
+                            paragraph: styles.paragraph,
+                            body: styles.text,
+                            // Android does not support fontWeight 600
+                            ...(!isAndroid() && { strong: styles.bold }),
+                        }}>
                         {LL.BANNER_STARGATE_DESC()}
                     </Markdown>
                 </BaseView>
@@ -49,8 +56,11 @@ const baseStyles = () =>
         },
         text: {
             fontFamily: "Rubik",
-            fontSize: 14,
+            fontSize: 15,
             color: "#EEF3F7",
             margin: 0,
+        },
+        bold: {
+            fontWeight: "600",
         },
     })
