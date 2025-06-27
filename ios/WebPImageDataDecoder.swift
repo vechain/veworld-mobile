@@ -10,11 +10,11 @@ class WebPImageDataDecoder: NSObject, RCTImageDataDecoder {
     return "WebPImageDataDecoder"
   }
 
-  func canDecodeImageData(_ imageData: Data) -> Bool {
+  @objc func canDecodeImageData(_ imageData: Data) -> Bool {
     return SDImageWebPCoder.shared.canDecode(from: imageData)
   }
 
-  func decodeImageData(_ imageData: Data,
+  @objc func decodeImageData(_ imageData: Data,
                        size: CGSize,
                        scale: CGFloat,
                        resizeMode: RCTResizeMode,
