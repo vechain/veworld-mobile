@@ -149,7 +149,7 @@ describe("Smart Account Lifecycle Integration (Direct Hook Testing)", () => {
             ]
 
             await act(async () => {
-                await result.current.buildTransaction(userClauses)
+                await result.current.buildSmartAccountTransaction(userClauses)
             })
 
             // Verify smart account deployment was included
@@ -226,7 +226,7 @@ describe("Smart Account Lifecycle Integration (Direct Hook Testing)", () => {
             ]
 
             await act(async () => {
-                await result.current.buildTransaction(userClauses)
+                await result.current.buildSmartAccountTransaction(userClauses)
             })
 
             // Verify transaction was built for deployed smart account
@@ -332,7 +332,7 @@ describe("Smart Account Lifecycle Integration (Direct Hook Testing)", () => {
             ]
 
             await act(async () => {
-                await result.current.buildTransaction(userClauses)
+                await result.current.buildSmartAccountTransaction(userClauses)
             })
 
             // Verify mainnet was used
@@ -371,7 +371,7 @@ describe("Smart Account Lifecycle Integration (Direct Hook Testing)", () => {
             ]
 
             await act(async () => {
-                await result.current.buildTransaction(userClauses)
+                await result.current.buildSmartAccountTransaction(userClauses)
             })
 
             // Verify testnet was used

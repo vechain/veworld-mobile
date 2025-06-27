@@ -115,7 +115,7 @@ describe("Transaction Operations Integration (Direct Hook Testing)", () => {
             let signature: Buffer | null = null
 
             await act(async () => {
-                transaction = await result.current.buildTransaction(clauses)
+                transaction = await result.current.buildSmartAccountTransaction(clauses)
                 signature = await result.current.signTransaction(transaction)
             })
 
@@ -157,7 +157,7 @@ describe("Transaction Operations Integration (Direct Hook Testing)", () => {
             ]
 
             await act(async () => {
-                await result.current.buildTransaction(clauses)
+                await result.current.buildSmartAccountTransaction(clauses)
             })
 
             // Verify gas estimation was called with correct parameters
@@ -201,7 +201,7 @@ describe("Transaction Operations Integration (Direct Hook Testing)", () => {
             ]
 
             await act(async () => {
-                await result.current.buildTransaction(clauses, { gas: 200000 })
+                await result.current.buildSmartAccountTransaction(clauses, { gas: 200000 })
             })
 
             // Verify transaction body was built with custom gas (max of estimated and custom)
@@ -245,7 +245,7 @@ describe("Transaction Operations Integration (Direct Hook Testing)", () => {
             ]
 
             await act(async () => {
-                await result.current.buildTransaction(clauses)
+                await result.current.buildSmartAccountTransaction(clauses)
             })
 
             // Verify transaction builder was called with multiple clauses
@@ -294,7 +294,7 @@ describe("Transaction Operations Integration (Direct Hook Testing)", () => {
             ]
 
             await act(async () => {
-                await result.current.buildTransaction(clauses, { isDelegated: true })
+                await result.current.buildSmartAccountTransaction(clauses, { isDelegated: true })
             })
 
             // Verify transaction body was built with delegation flag

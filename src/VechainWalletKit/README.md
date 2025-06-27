@@ -187,7 +187,11 @@ function SmartAccountInfo() {
 ### Custom Transaction Options
 
 ```tsx
-const handleComplexTransaction = async () => {
+import { useVechainWallet } from '@/VechainWalletKit'
+import { HexUtils, Transaction } from '@vechain/sdk-core'
+import axios from 'axios'
+
+const sendTransaction = async (contractAddress: string, encodedFunctionCall: string, previousTxId: string) => {
   const clauses: TransactionClause[] = [
     {
       to: contractAddress,
@@ -198,12 +202,21 @@ const handleComplexTransaction = async () => {
 
   const transaction = await buildTransaction(clauses, {
     gas: 100000,
-    isDelegated: true, // Use fee delegation
-    dependsOn: previousTxId, // Transaction dependency
-    gasPriceCoef: 128, // Gas price coefficient
+    isDelegated: false, 
+    gasPriceCoef: 0,
   })
 
   const signature = await signTransaction(transaction)
+  const signedTransaction = Transaction.of(
+    transaction.body,
+    senderSignature,
+  )
+
+  const encodedRawTx = {
+            raw: HexUtils.addPrefix(Buffer.from(signedTransaction.encoded).toString("hex")),
+        }
+
+  return await axios.post(`https://mainnet.vechain.org/transactions`, encodedRawTx)
 }
 ```
 
@@ -308,7 +321,6 @@ providerConfig: {
 ```tsx
 providerConfig: {
   apiKey: 'your-api-key',
-  environment: 'production',
   customOption: 'value'
   // Any configuration your adapter needs
 }
@@ -394,45 +406,6 @@ await login({
 })
 ```
 
-### Supported Providers
-
-- `google`
-- `apple`
-- `discord`
-- `github`
-- `twitter`
-- `linkedin`
-- `spotify`
-- `tiktok`
-- `instagram`
-
-### Dynamic Provider Selection
-
-```tsx
-function LoginScreen() {
-  const { login } = useVechainWallet()
-  
-  const handleLogin = (provider: string) => {
-    login({ 
-      provider,
-      oauthRedirectUri: 'your-app://' 
-    })
-  }
-
-  return (
-    <View>
-      {['google', 'apple', 'discord'].map(provider => (
-        <Button 
-          key={provider}
-          title={`Login with ${provider}`}
-          onPress={() => handleLogin(provider)}
-        />
-      ))}
-    </View>
-  )
-}
-```
-
 ## ⚠️ Error Handling
 
 The SDK provides typed error handling:
@@ -451,112 +424,9 @@ try {
       case WalletErrorType.WALLET_NOT_FOUND:
         console.error('Wallet not found')
         break
-      case WalletErrorType.INVALID_CONFIGURATION:
-        console.error('Invalid configuration')
-        break
       default:
         console.error('Unknown wallet error:', error.message)
     }
   }
 }
 ```
-
-## 🔄 Migration Guide
-
-### From SocialLoginProvider
-
-If you're migrating from the old `SocialLoginProvider`:
-
-**Before:**
-```tsx
-<SocialLoginProvider>
-  <App />
-</SocialLoginProvider>
-```
-
-**After:**
-```tsx
-<VechainWalletWithPrivy config={config}>
-  <App />
-</VechainWalletWithPrivy>
-```
-
-The hook usage remains largely the same, but now you get additional features like smart account management and better transaction building.
-
-## 📦 Exports
-
-```tsx
-// Main providers
-export { VechainWalletProvider, useVechainWallet }
-export { VechainWalletWithPrivy }
-
-// Hooks
-export { useSmartAccount }
-export { usePrivyAdapter }
-
-// Types (all types are exported via barrel export)
-export type { 
-  VechainWalletSDKConfig, 
-  Account, 
-  WalletAdapter,
-  LoginOptions,
-  TypedDataPayload,
-  BuildOptions 
-}
-
-// Utils
-export { buildSmartWalletTransactionClauses }
-export { WalletError, WalletErrorType }
-export * from './utils/smartAccountConfig'
-```
-
-## 🧪 Testing
-
-The VechainWalletKit is fully tested with React Testing Library using behavioral testing approaches:
-
-```tsx
-import { renderHook, waitFor, act } from '@testing-library/react-native'
-import { VechainWalletProvider, useVechainWallet } from '@/VechainWalletKit'
-
-// Create a mock adapter for testing
-const mockAdapter = {
-  isAuthenticated: true,
-  async signMessage() { return Buffer.from('mock-signature', 'hex') },
-  async signTransaction() { return Buffer.from('mock-signature', 'hex') },
-  async signTypedData() { return 'mock-signature' },
-  async getAccount() { return { address: '0x123...', isDeployed: true } },
-  async login() { /* mock login */ },
-  async logout() { /* mock logout */ }
-}
-
-// Use in tests with direct hook testing
-const createWrapper = (adapter: any) => ({ children }: { children: React.ReactNode }) => (
-  <VechainWalletProvider config={mockConfig} adapter={adapter}>
-    {children}
-  </VechainWalletProvider>
-)
-
-test('should handle wallet operations', async () => {
-  const wrapper = createWrapper(mockAdapter)
-  const { result } = renderHook(() => useVechainWallet(), { wrapper })
-
-  await waitFor(() => {
-    expect(result.current.isAuthenticated).toBe(true)
-  })
-
-  await act(async () => {
-    const signature = await result.current.signMessage(Buffer.from('test'))
-    expect(signature).toEqual(Buffer.from('mock-signature', 'hex'))
-  })
-})
-```
-
-## 🎯 Benefits
-
-1. **Provider Agnostic** - Easy to switch between wallet providers
-2. **Smart Account Ready** - Built-in support for VeChain smart accounts
-3. **Type Safe** - Full TypeScript support with proper error handling
-4. **Modular** - Use only what you need
-5. **Testable** - Comprehensive test suite with React Testing Library
-6. **Future Proof** - Ready for extraction to npm package
-7. **Clean Code** - No console.log statements in production code

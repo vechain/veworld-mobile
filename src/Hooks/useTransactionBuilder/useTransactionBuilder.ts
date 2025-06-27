@@ -26,7 +26,7 @@ export const useTransactionBuilder = ({
     const thor = useThor()
     const account = useAppSelector(selectSelectedAccount)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
-    const { buildTransaction: socialLoginBuildTransaction } = useVechainWallet()
+    const { buildSmartAccountTransaction } = useVechainWallet()
 
     const buildTransaction = useCallback(async () => {
         const nonce = HexUtils.generateRandom(8)
@@ -34,7 +34,7 @@ export const useTransactionBuilder = ({
         const txGas = gas?.gas ?? 0
 
         if (senderDevice?.type === DEVICE_TYPE.SOCIAL) {
-            return await socialLoginBuildTransaction(clauses, {
+            return await buildSmartAccountTransaction(clauses, {
                 gas: txGas,
                 isDelegated,
                 dependsOn,
@@ -67,7 +67,7 @@ export const useTransactionBuilder = ({
         dependsOn,
         isDelegated,
         senderDevice?.type,
-        socialLoginBuildTransaction,
+        buildSmartAccountTransaction,
     ])
 
     return {

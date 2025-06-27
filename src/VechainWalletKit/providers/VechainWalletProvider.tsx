@@ -23,7 +23,7 @@ export interface VechainWalletContext {
     signTypedData: (data: TypedDataPayload) => Promise<string>
 
     // Transaction methods
-    buildTransaction: (clauses: TransactionClause[], options?: BuildOptions) => Promise<Transaction>
+    buildSmartAccountTransaction: (clauses: TransactionClause[], options?: BuildOptions) => Promise<Transaction>
 
     // Authentication management
     login: (options: LoginOptions) => Promise<void>
@@ -110,7 +110,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
         [adapter, isAuthenticated],
     )
 
-    const buildTransaction = useCallback(
+    const buildSmartAccountTransaction = useCallback(
         async (clauses: TransactionClause[], options?: BuildOptions): Promise<Transaction> => {
             if (!isAuthenticated) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated")
@@ -186,7 +186,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
             signMessage,
             signTransaction,
             signTypedData,
-            buildTransaction,
+            buildSmartAccountTransaction,
             login,
             logout,
         }),
@@ -197,7 +197,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
             signMessage,
             signTransaction,
             signTypedData,
-            buildTransaction,
+            buildSmartAccountTransaction,
             login,
             logout,
         ],
