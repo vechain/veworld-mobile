@@ -121,6 +121,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
 	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​V​E​T​ ​t​o​k​e​n​s​.
+	 */
+	ACTIVITY_STAKING_EMPTY_LABEL: string
+	/**
 	 * A​l​l
 	 */
 	ACTIVITY_ALL_LABEL: string
@@ -128,6 +132,10 @@ type RootTranslation = {
 	 * D​i​s​c​o​v​e​r​ ​V​e​B​e​t​t​e​r​D​A​O
 	 */
 	ACTIVITY_B3TR_EMPTY_BUTTON: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​
+	 */
+	ACTIVITY_STAKING_EMPTY_BUTTON: string
 	/**
 	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​y​o​u​r​ ​b​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​e​v​e​r​y​ ​d​a​y​!
 	 */
@@ -161,9 +169,37 @@ type RootTranslation = {
 	 */
 	ACTIVITY_OTHER_EMPTY_LABEL: string
 	/**
+	 * S​t​a​k​i​n​g
+	 */
+	ACTIVITY_STAKING_LABEL: string
+	/**
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * Delegate
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
+	/**
+	 * Stake
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: string
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
+	/**
+	 * Undelegate
+	 */
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: string
+	/**
+	 * Unstake
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
@@ -4497,6 +4533,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
 	/**
+	 * Start earning rewards by staking your VET tokens.
+	 */
+	ACTIVITY_STAKING_EMPTY_LABEL: () => LocalizedString
+	/**
 	 * All
 	 */
 	ACTIVITY_ALL_LABEL: () => LocalizedString
@@ -4504,6 +4544,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Discover VeBetterDAO
 	 */
 	ACTIVITY_B3TR_EMPTY_BUTTON: () => LocalizedString
+	/**
+	 * Start earning
+	 */
+	ACTIVITY_STAKING_EMPTY_BUTTON: () => LocalizedString
 	/**
 	 * Start earning B3TR tokens with your better actions every day!
 	 */
@@ -4537,9 +4581,37 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_OTHER_EMPTY_LABEL: () => LocalizedString
 	/**
+	 * Staking
+	 */
+	ACTIVITY_STAKING_LABEL: () => LocalizedString
+	/**
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * Delegate
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Stake
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: () => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: (arg: { tokenId: string | undefined }) => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: (arg: { tokenId: string | undefined }) => LocalizedString
+	/**
+	 * Undelegate
+	 */
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Unstake
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yet
 	 */
