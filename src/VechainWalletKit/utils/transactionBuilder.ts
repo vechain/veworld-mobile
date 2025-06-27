@@ -177,9 +177,7 @@ async function buildBatchExecutionClauses({
         chainId,
         verifyingContract: address,
     })
-    console.log("building batch execution clauses")
     const signature = await signTypedDataFn(typedData)
-    console.log("building batch execution clauses", signature, address, isDeployed)
     // If the smart account is not deployed, deploy it first
     if (!isDeployed) {
         clauses.push(
@@ -190,7 +188,6 @@ async function buildBatchExecutionClauses({
             ),
         )
     }
-    console.log("Create batch execution call", address)
     // Add the batch execution call
     clauses.push(
         Clause.callFunction(
@@ -207,7 +204,6 @@ async function buildBatchExecutionClauses({
             ],
         ),
     )
-    console.log("Complete batch execution clauses")
     return clauses
 }
 

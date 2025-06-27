@@ -6,6 +6,7 @@ import { SignOptions, BuildOptions, TypedDataPayload } from "../types/transactio
 import { LoginOptions, WalletAdapter } from "../types/wallet"
 import { useSmartAccount } from "../hooks/useSmartAccount"
 import { buildSmartWalletTransactionClauses } from "../utils/transactionBuilder"
+import { WalletError, WalletErrorType } from "../utils/errors"
 
 /**
  * Context interface for the VeChain Wallet Provider
@@ -81,27 +82,40 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
 
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
+            if (!isAuthenticated) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated")
+            }
             return await adapter.signMessage(message)
         },
-        [adapter],
+        [adapter, isAuthenticated],
     )
 
     const signTransaction = useCallback(
         async (tx: Transaction, _options?: SignOptions): Promise<Buffer> => {
+            if (!isAuthenticated) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated")
+            }
             return await adapter.signTransaction(tx)
         },
-        [adapter],
+        [adapter, isAuthenticated],
     )
 
     const signTypedData = useCallback(
         async (data: TypedDataPayload): Promise<string> => {
+            if (!isAuthenticated) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated")
+            }
             return await adapter.signTypedData(data)
         },
-        [adapter],
+        [adapter, isAuthenticated],
     )
 
     const buildTransaction = useCallback(
         async (clauses: TransactionClause[], options?: BuildOptions): Promise<Transaction> => {
+            if (!isAuthenticated) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated")
+            }
+
             // Get smart account information
             const smartAccountInfo = await smartAccount.getSmartAccount(address)
             const hasV1SmartAccount = await smartAccount.hasV1SmartAccount(address)
@@ -148,7 +162,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
 
             return Transaction.of(txBody)
         },
-        [address, smartAccount, config.networkConfig.networkType, thor, adapter],
+        [address, smartAccount, config.networkConfig.networkType, thor, adapter, isAuthenticated],
     )
 
     const login = useCallback(

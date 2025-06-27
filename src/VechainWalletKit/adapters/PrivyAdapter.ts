@@ -51,7 +51,6 @@ export const usePrivyAdapter = (): WalletAdapter => {
             },
 
             async signTransaction(tx: Transaction): Promise<Buffer> {
-                console.log("signTransaction", tx)
                 if (!isAuthenticated || !currentWallets.length) {
                     throw new WalletError(
                         WalletErrorType.WALLET_NOT_FOUND,
@@ -87,7 +86,6 @@ export const usePrivyAdapter = (): WalletAdapter => {
             },
 
             async signTypedData(data: TypedDataPayload): Promise<string> {
-                console.log("signTypedData", data)
                 if (!isAuthenticated || !currentWallets.length) {
                     throw new WalletError(
                         WalletErrorType.WALLET_NOT_FOUND,
@@ -98,7 +96,6 @@ export const usePrivyAdapter = (): WalletAdapter => {
                 try {
                     const privyProvider = await currentWallets[0].getProvider()
                     const privyAccount = currentWallets[0].address
-                    console.log("requesting sign for typed data privy")
                     const signature = await privyProvider.request({
                         method: "eth_signTypedData_v4",
                         params: [
@@ -111,7 +108,6 @@ export const usePrivyAdapter = (): WalletAdapter => {
                             }),
                         ],
                     })
-                    console.log("signature", signature)
                     return signature
                 } catch (error) {
                     throw new WalletError(WalletErrorType.SIGNATURE_REJECTED, "Failed to sign typed data", error)

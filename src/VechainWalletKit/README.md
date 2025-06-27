@@ -31,9 +31,8 @@ import { VechainWalletWithPrivy, VechainWalletSDKConfig } from '@/VechainWalletK
 
 const config: VechainWalletSDKConfig = {
   networkConfig: {
-    network: 'testnet', // or 'mainnet'
     nodeUrl: 'https://testnet.vechain.org',
-    // chainId is automatically derived: 39 for testnet, 100009 for mainnet
+    networkType: 'testnet', // or 'mainnet'
   },
   providerConfig: {
     appId: 'your-privy-app-id',
@@ -56,20 +55,12 @@ function App() {
 import React from 'react'
 import { 
   VechainWalletProvider, 
-  PrivyAdapter, 
+  usePrivyAdapter, 
   VechainWalletSDKConfig 
 } from '@/VechainWalletKit'
-import { usePrivy, useEmbeddedEthereumWallet } from '@privy-io/expo'
 
 function AppWithCustomSetup() {
-  const { user, logout } = usePrivy()
-  const { wallets } = useEmbeddedEthereumWallet()
-  
-  const adapter = new PrivyAdapter(
-    () => user,
-    () => wallets || [],
-    () => logout
-  )
+  const adapter = usePrivyAdapter()
 
   return (
     <VechainWalletProvider config={config} adapter={adapter}>
@@ -95,6 +86,7 @@ function WalletComponent() {
     signTransaction,
     signTypedData,
     buildTransaction,
+    login,
     logout,
   } = useVechainWallet()
 
@@ -167,17 +159,26 @@ import { useSmartAccount } from '@/VechainWalletKit'
 
 function SmartAccountInfo() {
   const { address } = useVechainWallet()
-  const { data: smartAccount, isLoading } = useSmartAccount(address)
+  const smartAccountHook = useSmartAccount({ 
+    thor: thorClient, 
+    networkName: 'testnet' 
+  })
 
-  if (isLoading) return <div>Loading smart account info...</div>
+  const [smartAccount, setSmartAccount] = useState(null)
+  
+  useEffect(() => {
+    if (address) {
+      smartAccountHook.getSmartAccount(address).then(setSmartAccount)
+    }
+  }, [address])
+
+  if (!smartAccount) return <div>Loading smart account info...</div>
 
   return (
     <div>
       <h3>Smart Account Details</h3>
       <p>Address: {smartAccount?.address}</p>
       <p>Deployed: {smartAccount?.isDeployed ? 'Yes' : 'No'}</p>
-      <p>Version: {smartAccount?.version}</p>
-      <p>Has V1 Account: {smartAccount?.hasV1Account ? 'Yes' : 'No'}</p>
     </div>
   )
 }
@@ -200,7 +201,6 @@ const handleComplexTransaction = async () => {
     isDelegated: true, // Use fee delegation
     dependsOn: previousTxId, // Transaction dependency
     gasPriceCoef: 128, // Gas price coefficient
-    selectedAccountAddress: specificSmartAccountAddress,
   })
 
   const signature = await signTransaction(transaction)
@@ -247,7 +247,8 @@ You can create custom wallet adapters using React hooks:
 
 ```tsx
 import { useMemo } from 'react'
-import { WalletAdapter, Account, TypedDataPayload } from '@/VechainWalletKit/types'
+import { WalletAdapter, Account, TypedDataPayload, LoginOptions } from '@/VechainWalletKit'
+import { Transaction } from '@vechain/sdk-core'
 
 export const useCustomWalletAdapter = (customWallet: CustomWalletInstance): WalletAdapter => {
   const isAuthenticated = customWallet.isConnected()
@@ -362,7 +363,8 @@ const config = {
 ## 🛠️ Available Hooks
 
 - `useVechainWallet()` - Main wallet context
-- `useSmartAccount(address)` - Smart account information
+- `useSmartAccount({ thor, networkName })` - Smart account management utilities
+- `usePrivyAdapter()` - Privy wallet adapter (when using Privy)
 
 ## 🔐 Login Usage
 
@@ -429,6 +431,7 @@ function LoginScreen() {
     </View>
   )
 }
+```
 
 ## ⚠️ Error Handling
 
@@ -445,8 +448,11 @@ try {
       case WalletErrorType.SIGNATURE_REJECTED:
         console.error('User rejected signature')
         break
-      case WalletErrorType.NETWORK_ERROR:
-        console.error('Network error occurred')
+      case WalletErrorType.WALLET_NOT_FOUND:
+        console.error('Wallet not found')
+        break
+      case WalletErrorType.INVALID_CONFIGURATION:
+        console.error('Invalid configuration')
         break
       default:
         console.error('Unknown wallet error:', error.message)
@@ -484,24 +490,65 @@ The hook usage remains largely the same, but now you get additional features lik
 export { VechainWalletProvider, useVechainWallet }
 export { VechainWalletWithPrivy }
 
-// Adapters
-export { usePrivyAdapter }
-
 // Hooks
 export { useSmartAccount }
+export { usePrivyAdapter }
 
-// Types
+// Types (all types are exported via barrel export)
 export type { 
   VechainWalletSDKConfig, 
   Account, 
-  SmartAccountInfo,
+  WalletAdapter,
+  LoginOptions,
   TypedDataPayload,
-  SignOptions,
   BuildOptions 
 }
 
 // Utils
+export { buildSmartWalletTransactionClauses }
 export { WalletError, WalletErrorType }
+export * from './utils/smartAccountConfig'
+```
+
+## 🧪 Testing
+
+The VechainWalletKit is fully tested with React Testing Library using behavioral testing approaches:
+
+```tsx
+import { renderHook, waitFor, act } from '@testing-library/react-native'
+import { VechainWalletProvider, useVechainWallet } from '@/VechainWalletKit'
+
+// Create a mock adapter for testing
+const mockAdapter = {
+  isAuthenticated: true,
+  async signMessage() { return Buffer.from('mock-signature', 'hex') },
+  async signTransaction() { return Buffer.from('mock-signature', 'hex') },
+  async signTypedData() { return 'mock-signature' },
+  async getAccount() { return { address: '0x123...', isDeployed: true } },
+  async login() { /* mock login */ },
+  async logout() { /* mock logout */ }
+}
+
+// Use in tests with direct hook testing
+const createWrapper = (adapter: any) => ({ children }: { children: React.ReactNode }) => (
+  <VechainWalletProvider config={mockConfig} adapter={adapter}>
+    {children}
+  </VechainWalletProvider>
+)
+
+test('should handle wallet operations', async () => {
+  const wrapper = createWrapper(mockAdapter)
+  const { result } = renderHook(() => useVechainWallet(), { wrapper })
+
+  await waitFor(() => {
+    expect(result.current.isAuthenticated).toBe(true)
+  })
+
+  await act(async () => {
+    const signature = await result.current.signMessage(Buffer.from('test'))
+    expect(signature).toEqual(Buffer.from('mock-signature', 'hex'))
+  })
+})
 ```
 
 ## 🎯 Benefits
@@ -510,29 +557,6 @@ export { WalletError, WalletErrorType }
 2. **Smart Account Ready** - Built-in support for VeChain smart accounts
 3. **Type Safe** - Full TypeScript support with proper error handling
 4. **Modular** - Use only what you need
-5. **Testable** - Easy to mock adapters for testing
+5. **Testable** - Comprehensive test suite with React Testing Library
 6. **Future Proof** - Ready for extraction to npm package
-
-## 🧪 Testing
-
-You can easily mock the wallet context for testing:
-
-```tsx
-import { VechainWalletProvider, WalletAdapter } from '@/VechainWalletKit'
-
-// Create a mock adapter for testing
-const mockAdapter: WalletAdapter = {
-  isAuthenticated: true,
-  async signMessage() { return Buffer.from('mock-signature', 'hex') },
-  async signTransaction() { return Buffer.from('mock-signature', 'hex') },
-  async signTypedData() { return 'mock-signature' },
-  async getAccount() { return { address: '0x123...', isDeployed: true } },
-  async login(options) { /* mock login */ },
-  async logout() { /* mock logout */ }
-}
-
-// Use in tests
-<VechainWalletProvider config={mockConfig} adapter={mockAdapter}>
-  <ComponentUnderTest />
-</VechainWalletProvider>
-``` 
+7. **Clean Code** - No console.log statements in production code
