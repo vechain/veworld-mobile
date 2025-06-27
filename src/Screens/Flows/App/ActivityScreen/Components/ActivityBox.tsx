@@ -3,7 +3,7 @@ import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
-import { B3TR, COLORS, DIRECTIONS, VET, VOT3 } from "~Constants"
+import { B3TR, COLORS, DIRECTIONS, VET, VOT3, VTHO } from "~Constants"
 import { useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
@@ -857,14 +857,16 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         }
     }
 
-    const hasRightAmount = !activity.eventName.includes("NODE_")
+    const hasRightAmount = useMemo(() => {
+        return activity?.type !== ActivityEvent.STARGATE_UNDELEGATE
+    }, [activity?.type])
 
     const getActivityTitle = () => {
         switch (activity.eventName) {
             case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
-                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL({ tokenId: activity.tokenId })
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
             case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
-                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL({ tokenId: activity.tokenId })
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
             case ActivityEvent.STARGATE_DELEGATE:
                 return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
             case ActivityEvent.STARGATE_UNDELEGATE:
@@ -878,15 +880,33 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         }
     }
 
+    const isMinus = useMemo(() => {
+        return !(
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE ||
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE ||
+            activity?.type === ActivityEvent.STARGATE_UNSTAKE
+        )
+    }, [activity?.type])
+
+    const amount = BigNutils(activity.value)
+        .toHuman(B3TR.decimals ?? 0)
+        .toTokenFormat_string(2)
+
+    const rightAmount = useMemo(() => {
+        if (hasRightAmount) {
+            return `${isMinus ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${amount}`
+        }
+        return undefined
+    }, [hasRightAmount, isMinus, amount])
+
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
             description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
-            rightAmount: hasRightAmount
-                ? `${activity.eventName.includes("_STAKE") ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${activity.value}`
-                : undefined,
-            rightAmountDescription: activity.tokenId,
+            rightAmount: rightAmount,
+            rightAmountDescription:
+                hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
             onPress: onPressHandler,
         }
     }

@@ -64,6 +64,7 @@ export interface IndexedHistoryEvent {
     inputValue?: string
     outputValue?: string
     reverted?: boolean
+    levelId?: TokenLevelId
 }
 export interface NonTransactionalActivity {
     type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
@@ -326,4 +327,5 @@ export interface StargateActivity extends Activity {
         | ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE
     value: string
     tokenId?: string
+    levelId?: TokenLevelId
 }
