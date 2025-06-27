@@ -6,6 +6,7 @@ import { useThemedStyles } from "~Hooks"
 import LinearGradient from "react-native-linear-gradient"
 import { useI18nContext } from "~i18n"
 import Markdown from "react-native-markdown-display"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const StellaPayBanner = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -20,7 +21,13 @@ export const StellaPayBanner = () => {
             style={styles.container}>
             <BaseView alignItems={"flex-start"} gap={16} flex={1} justifyContent="center">
                 <StellaPayLogoSVG />
-                <Markdown style={{ paragraph: styles.paragraph, body: styles.text, strong: styles.bold }}>
+                <Markdown
+                    style={{
+                        paragraph: styles.paragraph,
+                        body: styles.text,
+                        // Android does not support fontWeight 600
+                        ...(!isAndroid() && { strong: styles.bold }),
+                    }}>
                     {LL.BANNER_STELLAPAY_DESC()}
                 </Markdown>
             </BaseView>

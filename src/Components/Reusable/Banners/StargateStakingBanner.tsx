@@ -10,6 +10,7 @@ import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const StargateStakingBanner = () => {
     const { styles } = useThemedStyles(baseStyles)
@@ -33,7 +34,13 @@ export const StargateStakingBanner = () => {
         <TouchableOpacity activeOpacity={0.8} onPress={handlePress} style={styles.container}>
             <BaseView flex={0.5} flexDirection="row" alignItems="center" gap={16}>
                 <Image source={StargateDappLogo} style={styles.logo as ImageStyle} />
-                <Markdown style={{ paragraph: styles.paragraph, body: styles.text, strong: styles.bold }}>
+                <Markdown
+                    style={{
+                        paragraph: styles.paragraph,
+                        body: styles.text,
+                        // Android does not support fontWeight 600
+                        ...(!isAndroid() && { strong: styles.bold }),
+                    }}>
                     {LL.BANNER_STARGATE_DESC()}
                 </Markdown>
             </BaseView>
