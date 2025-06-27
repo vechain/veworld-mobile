@@ -1,16 +1,14 @@
-// Main provider
-export { VechainWalletProvider, useVechainWallet } from "./providers/VechainWalletProvider"
+// Export all types
+export * from "./types"
 
-// Privy-specific provider
+// Export providers
+export { VechainWalletProvider, useVechainWallet } from "./providers/VechainWalletProvider"
 export { VechainWalletWithPrivy } from "./providers/VechainWalletWithPrivy"
 
-// Functional hooks
-export * from "./hooks"
+// Export hooks
+export { useSmartAccount } from "./hooks/useSmartAccount"
 
-// Types
-export * from "./types"
-export type { LoginOptions } from "./types/wallet"
-
-// Utils and adapters
-export { usePrivyAdapter } from "./adapters/PrivyAdapter"
+// Export utilities
+export { buildSmartWalletTransactionClauses } from "./utils/transactionBuilder"
 export * from "./utils/errors"
+export * from "./utils/smartAccountConfig"

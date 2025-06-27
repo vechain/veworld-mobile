@@ -1,14 +1,16 @@
 import React, { createContext, useContext, useCallback, useMemo, useState, useEffect } from "react"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
-import { getLast16BitsOfChainId, VechainWalletSDKConfig } from "../types/config"
+import { VechainWalletSDKConfig } from "../types/config"
 import { SignOptions, BuildOptions, TypedDataPayload } from "../types/transaction"
-import { WalletAdapter, LoginOptions } from "../types/wallet"
+import { LoginOptions, WalletAdapter } from "../types/wallet"
 import { useSmartAccount } from "../hooks/useSmartAccount"
 import { buildSmartWalletTransactionClauses } from "../utils/transactionBuilder"
-import { WalletError, WalletErrorType } from "../utils/errors"
 
-interface VechainWalletContext {
+/**
+ * Context interface for the VeChain Wallet Provider
+ */
+export interface VechainWalletContext {
     // Core wallet info
     address: string
     isAuthenticated: boolean
@@ -27,13 +29,16 @@ interface VechainWalletContext {
     logout: () => Promise<void>
 }
 
-const VechainWalletContext = createContext<VechainWalletContext | null>(null)
-
+/**
+ * Props for the VechainWalletProvider component
+ */
 export interface VechainWalletProviderProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
     adapter: WalletAdapter
 }
+
+const VechainWalletContext = createContext<VechainWalletContext | null>(null)
 
 export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ children, config, adapter }) => {
     const [address, setAddress] = useState("")
@@ -62,7 +67,6 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
                     const smartAccountData = await smartAccount.getSmartAccount(account.address)
                     setIsDeployed(smartAccountData.isDeployed)
                 } catch (error) {
-                    // Replace console.warn with proper error handling
                     setAddress("")
                     setIsDeployed(false)
                 }
@@ -77,46 +81,27 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
 
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
-            if (!isAuthenticated) {
-                throw new WalletError(WalletErrorType.CONNECTION_FAILED, "User not authenticated")
-            }
-
             return await adapter.signMessage(message)
         },
-        [isAuthenticated, adapter],
+        [adapter],
     )
 
     const signTransaction = useCallback(
         async (tx: Transaction, _options?: SignOptions): Promise<Buffer> => {
-            if (!isAuthenticated) {
-                throw new WalletError(WalletErrorType.CONNECTION_FAILED, "User not authenticated")
-            }
-
             return await adapter.signTransaction(tx)
         },
-        [isAuthenticated, adapter],
+        [adapter],
     )
 
     const signTypedData = useCallback(
         async (data: TypedDataPayload): Promise<string> => {
-            if (!isAuthenticated) {
-                throw new WalletError(WalletErrorType.CONNECTION_FAILED, "User not authenticated")
-            }
-
             return await adapter.signTypedData(data)
         },
-        [isAuthenticated, adapter],
+        [adapter],
     )
 
     const buildTransaction = useCallback(
         async (clauses: TransactionClause[], options?: BuildOptions): Promise<Transaction> => {
-            if (!isAuthenticated || !address) {
-                throw new WalletError(WalletErrorType.CONNECTION_FAILED, "User not authenticated")
-            }
-
-            // Derive chainId from networkType
-            const chainId = getLast16BitsOfChainId(config.networkConfig.networkType)
-
             // Get smart account information
             const smartAccountInfo = await smartAccount.getSmartAccount(address)
             const hasV1SmartAccount = await smartAccount.hasV1SmartAccount(address)
@@ -141,7 +126,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
             const finalClauses = await buildSmartWalletTransactionClauses({
                 txClauses: clauses,
                 smartAccountConfig,
-                chainId,
+                networkType: config.networkConfig.networkType,
                 signTypedDataFn: async (data: TypedDataPayload): Promise<string> => {
                     return await adapter.signTypedData(data)
                 },
@@ -163,7 +148,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
 
             return Transaction.of(txBody)
         },
-        [isAuthenticated, address, smartAccount, config.networkConfig.networkType, thor, adapter],
+        [address, smartAccount, config.networkConfig.networkType, thor, adapter],
     )
 
     const login = useCallback(

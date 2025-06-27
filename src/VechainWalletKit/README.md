@@ -442,9 +442,6 @@ try {
 } catch (error) {
   if (error instanceof WalletError) {
     switch (error.type) {
-      case WalletErrorType.CONNECTION_FAILED:
-        console.error('Wallet not connected')
-        break
       case WalletErrorType.SIGNATURE_REJECTED:
         console.error('User rejected signature')
         break

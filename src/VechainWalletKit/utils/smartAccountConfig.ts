@@ -2,11 +2,6 @@ export interface SmartAccountConfig {
     accountFactoryAddress: string
 }
 
-export interface SmartAccountReturnType {
-    address: string | undefined
-    isDeployed: boolean
-}
-
 const SMART_ACCOUNT_CONFIG = {
     testnet: {
         accountFactoryAddress: "0x713b908Bcf77f3E00EFEf328E50b657a1A23AeaF",
