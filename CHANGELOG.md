@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.5 (2025-06-27)</small>
+
+* build: init ([19b056f](https://github.com/vechain/veworld-mobile/commit/19b056f))
+* Fix :: Banners font size and font weight (#3023) ([0111424](https://github.com/vechain/veworld-mobile/commit/0111424)), closes [#3023](https://github.com/vechain/veworld-mobile/issues/3023)
+
 ## <small>2.2.4 (2025-06-06)</small>
 
 * build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
