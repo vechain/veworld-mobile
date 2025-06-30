@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.5 (2025-06-30)</small>
+
+* build: init ([8e24c0b](https://github.com/vechain/veworld-mobile/commit/8e24c0b))
+* Fix(i18n): update staking reward copy (#3031) ([4ee92d8](https://github.com/vechain/veworld-mobile/commit/4ee92d8)), closes [#3031](https://github.com/vechain/veworld-mobile/issues/3031)
+
 ## <small>2.2.4 (2025-06-06)</small>
 
 * build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
