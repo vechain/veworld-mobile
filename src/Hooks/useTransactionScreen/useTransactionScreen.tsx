@@ -141,6 +141,7 @@ export const useTransactionScreen = ({
         clauses,
         signer: selectedAccount.address,
         token: selectedDelegationToken,
+        isGalactica,
     })
 
     const gasOptions = useMemo(() => {

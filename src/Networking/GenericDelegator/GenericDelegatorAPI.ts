@@ -48,6 +48,7 @@ export type EstimateGenericDelegatorFeesResponse = {
         regular: EstimateGenericDelegatorFeesResponseItem
         medium: EstimateGenericDelegatorFeesResponseItem
         high: EstimateGenericDelegatorFeesResponseItem
+        legacy: EstimateGenericDelegatorFeesResponseItem
     }
 }
 
