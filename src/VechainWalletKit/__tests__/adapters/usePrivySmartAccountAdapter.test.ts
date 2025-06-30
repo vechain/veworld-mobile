@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react-native"
-import { usePrivySmartAccountAdapter } from "../../adapters/PrivySmartAccountAdapter"
+import { usePrivySmartAccountAdapter } from "../../adapters/usePrivySmartAccountAdapter"
 
 // Simple working mocks
 jest.mock("@privy-io/expo", () => ({
@@ -23,7 +23,7 @@ jest.mock("@privy-io/expo", () => ({
     }),
 }))
 
-describe("PrivySmartAccountAdapter", () => {
+describe("usePrivySmartAccountAdapter", () => {
     it("should initialize correctly", () => {
         const { result } = renderHook(() => usePrivySmartAccountAdapter())
 

@@ -1,7 +1,7 @@
 import React from "react"
 import { PrivyProvider } from "@privy-io/expo"
 import { VechainWalletProvider, VechainWalletProviderProps } from "./VechainWalletProvider"
-import { usePrivySmartAccountAdapter } from "../adapters/PrivySmartAccountAdapter"
+import { usePrivySmartAccountAdapter } from "../adapters/usePrivySmartAccountAdapter"
 import { VechainWalletSDKConfig } from "../types/config"
 
 interface PrivyConfig extends VechainWalletSDKConfig {

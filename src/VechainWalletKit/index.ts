@@ -6,7 +6,7 @@ export { VechainWalletProvider, useVechainWallet } from "./providers/VechainWall
 export { VechainWalletWithPrivy } from "./providers/VechainWalletWithPrivy"
 
 // Export adapters
-export { usePrivySmartAccountAdapter } from "./adapters/PrivySmartAccountAdapter"
+export { usePrivySmartAccountAdapter } from "./adapters/usePrivySmartAccountAdapter"
 
 // Export hooks
 export { useSmartAccount } from "./hooks/useSmartAccount"

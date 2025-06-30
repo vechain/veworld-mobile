@@ -44,7 +44,7 @@ const setUnauthenticatedUser = () => {
     }
 }
 
-const setMockWallet = (address: string, providerResponse: string) => {
+const setMockWalletProviderResponse = (address: string, providerResponse: string) => {
     mockWalletState = {
         wallets: [
             {
@@ -102,7 +102,7 @@ describe("Smart Account User Journey Tests", () => {
         it("should complete full onboarding flow", async () => {
             // Set up authenticated user for this test
             setAuthenticatedUser("new-user")
-            setMockWallet("0x5555555555555555555555555555555555555555", "0xsignature")
+            setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
 
             const { result } = renderHook(() => usePrivySmartAccountAdapter())
 
@@ -131,7 +131,7 @@ describe("Smart Account User Journey Tests", () => {
         it("should handle login and logout flow", async () => {
             // Set up authenticated user for this test
             setAuthenticatedUser("test-user")
-            setMockWallet("0x5555555555555555555555555555555555555555", "0xsignature")
+            setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
 
             const { result } = renderHook(() => usePrivySmartAccountAdapter())
 
@@ -164,7 +164,7 @@ describe("Smart Account User Journey Tests", () => {
 
             // Short valid hex signature for testing
             const mockSignature = "0x1234abcd5678ef90"
-            setMockWallet("0x5555555555555555555555555555555555555555", mockSignature)
+            setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", mockSignature)
 
             const { result } = renderHook(() => usePrivySmartAccountAdapter())
 
@@ -193,7 +193,7 @@ describe("Smart Account User Journey Tests", () => {
 
             // Short valid hex signature for testing
             const mockSignature = "0xabcd1234ef567890"
-            setMockWallet("0x5555555555555555555555555555555555555555", mockSignature)
+            setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", mockSignature)
 
             const { result } = renderHook(() => usePrivySmartAccountAdapter())
 

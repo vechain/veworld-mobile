@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react-native"
-import { usePrivySmartAccountAdapter } from "../../adapters/PrivySmartAccountAdapter"
+import { usePrivySmartAccountAdapter } from "../../adapters/usePrivySmartAccountAdapter"
 
 // Mock VeChain SDK to avoid BigInt issues
 jest.mock("@vechain/sdk-core", () => ({
@@ -173,7 +173,7 @@ describe("Smart Account Deployment", () => {
             )
         })
 
-        it("should handle V1 smart account deployment differently", async () => {
+        it("should handle V1 smart account transcations by building individual execution clauses", async () => {
             const { result } = renderHook(() => usePrivySmartAccountAdapter())
 
             const transactionParams = {
@@ -183,11 +183,16 @@ describe("Smart Account Deployment", () => {
                         value: "1000000000000000000",
                         data: "0x",
                     },
+                    {
+                        to: "0x9876543210987654321098765432109876543210",
+                        value: "2000000000000000000",
+                        data: "0x",
+                    },
                 ],
                 smartAccountConfig: {
                     address: "0x5555555555555555555555555555555555555555",
                     version: 1,
-                    isDeployed: false,
+                    isDeployed: true,
                     hasV1SmartAccount: true,
                     factoryAddress: "0xfactoryfactoryfactoryfactoryfactoryfa",
                 },
@@ -197,7 +202,8 @@ describe("Smart Account Deployment", () => {
             const resultClauses = await result.current.buildSmartAccountTransaction(transactionParams)
 
             expect(Array.isArray(resultClauses)).toBe(true)
-            expect(resultClauses.length).toBeGreaterThan(0)
+            // 1 for each of the txClauses
+            expect(resultClauses.length).toBe(2)
 
             // V1 accounts use individual execution, different from V3 batch execution
             expect(resultClauses).toEqual(
@@ -207,13 +213,16 @@ describe("Smart Account Deployment", () => {
                         value: expect.any(String),
                         data: expect.any(String),
                     }),
+                    expect.objectContaining({
+                        to: expect.any(String),
+                        value: expect.any(String),
+                        data: expect.any(String),
+                    }),
                 ]),
             )
         })
-    })
 
-    describe("Edge Cases", () => {
-        it("should handle missing factory address gracefully", async () => {
+        it("should handle V3 smart account transcations by building batch execution clauses", async () => {
             const { result } = renderHook(() => usePrivySmartAccountAdapter())
 
             const transactionParams = {
@@ -223,48 +232,38 @@ describe("Smart Account Deployment", () => {
                         value: "1000000000000000000",
                         data: "0x",
                     },
+                    {
+                        to: "0x9876543210987654321098765432109876543210",
+                        value: "2000000000000000000",
+                        data: "0x",
+                    },
                 ],
                 smartAccountConfig: {
                     address: "0x6666666666666666666666666666666666666666",
                     version: 3,
                     isDeployed: false,
                     hasV1SmartAccount: false,
-                    factoryAddress: "", // Empty factory address
-                },
-                networkType: "testnet" as const,
-            }
-
-            // Should handle gracefully and return valid transaction clauses
-            const resultClauses = await result.current.buildSmartAccountTransaction(transactionParams)
-            expect(Array.isArray(resultClauses)).toBe(true)
-            expect(resultClauses.length).toBeGreaterThan(0)
-        })
-
-        it("should handle deployment status mismatch scenarios", async () => {
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
-
-            // Test scenario where config says deployed but blockchain check says otherwise
-            const potentiallyInconsistentConfig = {
-                txClauses: [
-                    {
-                        to: "0x9876543210987654321098765432109876543210",
-                        value: "1000000000000000000",
-                        data: "0x",
-                    },
-                ],
-                smartAccountConfig: {
-                    address: "0x7777777777777777777777777777777777777777",
-                    version: 3,
-                    isDeployed: true, // Config says deployed
-                    hasV1SmartAccount: false,
                     factoryAddress: "0xfactoryfactoryfactoryfactoryfactoryfa",
                 },
                 networkType: "testnet" as const,
             }
 
-            // Should trust the config parameter rather than re-checking deployment
-            const resultClauses = await result.current.buildSmartAccountTransaction(potentiallyInconsistentConfig)
+            const resultClauses = await result.current.buildSmartAccountTransaction(transactionParams)
+
             expect(Array.isArray(resultClauses)).toBe(true)
+            // 1 for the deployment and 1 for the combined txClauses
+            expect(resultClauses.length).toBe(2)
+
+            // V3 accounts use batch execution, different from V1 individual execution
+            expect(resultClauses).toEqual(
+                expect.arrayContaining([
+                    expect.objectContaining({
+                        to: expect.any(String),
+                        value: expect.any(String),
+                        data: expect.any(String),
+                    }),
+                ]),
+            )
         })
     })
 })

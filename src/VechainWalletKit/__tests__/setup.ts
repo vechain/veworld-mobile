@@ -29,11 +29,11 @@ jest.mock("@vechain/sdk-core", () => ({
     },
 }))
 
-// Mock viem to avoid BigInt issues
-jest.mock("viem", () => ({
-    encodeFunctionData: jest.fn().mockReturnValue("0xmockeddata"),
-    bytesToHex: jest.fn().mockImplementation((bytes: Uint8Array) => `0x${Buffer.from(bytes).toString("hex")}`),
-}))
+// // Mock viem to avoid BigInt issues
+// jest.mock("viem", () => ({
+//     encodeFunctionData: jest.fn().mockReturnValue("0xmockeddata"),
+//     bytesToHex: jest.fn().mockImplementation((bytes: Uint8Array) => `0x${Buffer.from(bytes).toString("hex")}`),
+// }))
 
 // Mock Privy SDK
 jest.mock("@privy-io/expo", () => ({
@@ -65,14 +65,6 @@ global.crypto = {
         return array
     },
 } as any
-
-// Mock console methods to reduce noise in tests
-global.console = {
-    ...console,
-    warn: jest.fn(),
-    error: jest.fn(),
-    log: jest.fn(),
-}
 
 // Test utilities for creating mock data
 export const createMockSmartAccountConfig = (overrides = {}) => ({
