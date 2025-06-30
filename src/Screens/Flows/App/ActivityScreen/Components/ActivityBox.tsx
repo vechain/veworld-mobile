@@ -831,16 +831,6 @@ type StakingProps = {
     onPress: (activity: Activity) => void
 }
 
-const getStakingDescription = (activity: StargateActivity, LL: TranslationFunctions): string => {
-    if (activity.levelId) {
-        return getTokenLevelName(activity.levelId)
-    }
-
-    return activity.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE
-        ? LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_DESC()
-        : LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_DESC()
-}
-
 const getStakingIcon = (eventName: string): IconKey => {
     switch (eventName) {
         case ActivityEvent.STARGATE_STAKE:
@@ -913,7 +903,7 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(activity, LL),
-            description: getStakingDescription(activity, LL),
+            description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
             rightAmount: rightAmount,
             rightAmountDescription:
                 hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
