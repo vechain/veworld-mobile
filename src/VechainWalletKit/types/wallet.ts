@@ -1,5 +1,6 @@
-import { Transaction } from "@vechain/sdk-core"
+import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { TypedDataPayload } from "./transaction"
+import { SmartAccountTransactionConfig } from "./transactionBuilder"
 
 export interface Account {
     address: string
@@ -15,6 +16,16 @@ export interface WalletAdapter {
     login(options: LoginOptions): Promise<void>
     logout(): Promise<void>
     readonly isAuthenticated: boolean
+}
+
+export interface SmartAccountAdapter extends WalletAdapter {
+    buildSmartAccountTransaction(params: {
+        txClauses: TransactionClause[]
+        smartAccountConfig: SmartAccountTransactionConfig
+        networkType: "mainnet" | "testnet"
+    }): Promise<TransactionClause[]>
+    isSmartAccountDeployed(address: string): Promise<boolean>
+    getSmartAccountConfig(): Promise<SmartAccountTransactionConfig>
 }
 
 export interface LoginOptions {

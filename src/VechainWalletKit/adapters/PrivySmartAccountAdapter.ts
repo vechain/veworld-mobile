@@ -1,19 +1,191 @@
-import { Address, ABIContract, Clause, TransactionClause } from "@vechain/sdk-core"
+import { useMemo } from "react"
+import { usePrivy, useEmbeddedEthereumWallet, useLoginWithOAuth } from "@privy-io/expo"
+import { Transaction, Address, ABIContract, Clause, TransactionClause } from "@vechain/sdk-core"
 import { encodeFunctionData, bytesToHex } from "viem"
+import { Account, SmartAccountAdapter, LoginOptions } from "../types/wallet"
+import { TypedDataPayload } from "../types/transaction"
 import {
-    TransactionSigningFunction,
     SmartAccountTransactionConfig,
     ExecuteBatchWithAuthorizationSignData,
     ExecuteWithAuthorizationSignData,
+    TransactionSigningFunction,
 } from "../types/transactionBuilder"
+import { WalletError, WalletErrorType } from "../utils/errors"
 import { SimpleAccountABI, SimpleAccountFactoryABI } from "../utils/abi"
+import { HexUtils } from "../../Utils"
 
-export interface SmartWalletTransactionClausesParams {
-    txClauses: TransactionClause[]
-    smartAccountConfig: SmartAccountTransactionConfig
-    networkType: "mainnet" | "testnet"
-    signTypedDataFn: TransactionSigningFunction
+export const usePrivySmartAccountAdapter = (): SmartAccountAdapter => {
+    const { user, logout } = usePrivy()
+    const { wallets } = useEmbeddedEthereumWallet()
+    const oauth = useLoginWithOAuth()
+
+    const isAuthenticated = !!user && (wallets?.length || 0) > 0
+
+    return useMemo(() => {
+        const currentWallets = wallets || []
+
+        return {
+            isAuthenticated,
+
+            async login(options: LoginOptions): Promise<void> {
+                const provider = options.provider as any
+                const redirectUri = options.oauthRedirectUri
+                await oauth.login({ provider, redirectUri })
+            },
+
+            async logout(): Promise<void> {
+                await logout()
+            },
+
+            async signMessage(message: Buffer): Promise<Buffer> {
+                if (!isAuthenticated || !currentWallets.length) {
+                    throw new WalletError(
+                        WalletErrorType.WALLET_NOT_FOUND,
+                        "User not authenticated or no wallet available",
+                    )
+                }
+
+                try {
+                    const privyProvider = await currentWallets[0].getProvider()
+                    const privyAccount = currentWallets[0].address
+                    const signature = await privyProvider.request({
+                        method: "personal_sign",
+                        params: [HexUtils.addPrefix(message.toString("hex")), privyAccount],
+                    })
+                    return Buffer.from(signature.slice(2), "hex")
+                } catch (error) {
+                    throw new WalletError(WalletErrorType.SIGNATURE_REJECTED, "Failed to sign message", error)
+                }
+            },
+
+            async signTransaction(tx: Transaction): Promise<Buffer> {
+                if (!isAuthenticated || !currentWallets.length) {
+                    throw new WalletError(
+                        WalletErrorType.WALLET_NOT_FOUND,
+                        "User not authenticated or no wallet available",
+                    )
+                }
+
+                try {
+                    const privyProvider = await currentWallets[0].getProvider()
+                    const hash = tx.getTransactionHash()
+
+                    const response = await privyProvider.request({
+                        method: "secp256k1_sign",
+                        params: [hash.toString()],
+                    })
+
+                    // Process signature format
+                    const signatureHex = response.slice(2)
+                    const r = signatureHex.slice(0, 64)
+                    const s = signatureHex.slice(64, 128)
+                    const v = signatureHex.slice(128, 130)
+
+                    let vAdjusted = parseInt(v, 16)
+                    if (vAdjusted === 27 || vAdjusted === 28) {
+                        vAdjusted -= 27
+                    }
+
+                    const adjustedSignature = `${r}${s}${vAdjusted.toString(16).padStart(2, "0")}`
+                    return Buffer.from(adjustedSignature, "hex")
+                } catch (error) {
+                    throw new WalletError(WalletErrorType.SIGNATURE_REJECTED, "Failed to sign transaction", error)
+                }
+            },
+
+            async signTypedData(data: TypedDataPayload): Promise<string> {
+                if (!isAuthenticated || !currentWallets.length) {
+                    throw new WalletError(
+                        WalletErrorType.WALLET_NOT_FOUND,
+                        "User not authenticated or no wallet available",
+                    )
+                }
+
+                try {
+                    const privyProvider = await currentWallets[0].getProvider()
+                    const privyAccount = currentWallets[0].address
+                    const signature = await privyProvider.request({
+                        method: "eth_signTypedData_v4",
+                        params: [
+                            privyAccount,
+                            JSON.stringify({
+                                domain: data.domain,
+                                types: data.types,
+                                primaryType: findPrimaryType(data.types, data.message),
+                                message: data.message,
+                            }),
+                        ],
+                    })
+                    return signature
+                } catch (error) {
+                    throw new WalletError(WalletErrorType.SIGNATURE_REJECTED, "Failed to sign typed data", error)
+                }
+            },
+
+            async getAccount(): Promise<Account> {
+                if (!isAuthenticated || !currentWallets.length) {
+                    throw new WalletError(
+                        WalletErrorType.WALLET_NOT_FOUND,
+                        "User not authenticated or no wallet available",
+                    )
+                }
+
+                return {
+                    address: currentWallets[0].address,
+                    isDeployed: false, // This would need to be determined by smart account logic
+                }
+            },
+
+            // Smart Account specific methods
+            async buildSmartAccountTransaction(params: {
+                txClauses: TransactionClause[]
+                smartAccountConfig: SmartAccountTransactionConfig
+                networkType: "mainnet" | "testnet"
+            }): Promise<TransactionClause[]> {
+                const { txClauses, smartAccountConfig, networkType } = params
+                const { version: smartAccountVersion, hasV1SmartAccount } = smartAccountConfig
+
+                const chainId = getChainIdFromNetworkType(networkType)
+                const signTypedDataFn: TransactionSigningFunction = async typedData => {
+                    return await this.signTypedData(typedData)
+                }
+
+                // Determine execution strategy based on smart account version
+                const shouldUseBatchExecution = !hasV1SmartAccount || (smartAccountVersion && smartAccountVersion >= 3)
+
+                if (shouldUseBatchExecution) {
+                    return await buildBatchExecutionClauses({
+                        txClauses,
+                        smartAccountConfig,
+                        chainId,
+                        signTypedDataFn,
+                    })
+                } else {
+                    return await buildIndividualExecutionClauses({
+                        txClauses,
+                        smartAccountConfig,
+                        chainId,
+                        signTypedDataFn,
+                    })
+                }
+            },
+
+            async isSmartAccountDeployed(_address: string): Promise<boolean> {
+                // TODO: Implement smart account deployment check
+                // This would typically involve checking if the smart account contract exists at the given address
+                return false
+            },
+
+            async getSmartAccountConfig(): Promise<SmartAccountTransactionConfig> {
+                // TODO: Implement smart account config retrieval
+                // This would typically involve getting the smart account configuration from the wallet or provider
+                throw new Error("getSmartAccountConfig not implemented")
+            },
+        }
+    }, [isAuthenticated, wallets, oauth, logout])
 }
+
+// Helper functions moved from transactionBuilder.ts
 
 /**
  * Common EIP712Domain type definition
@@ -178,6 +350,7 @@ async function buildBatchExecutionClauses({
         verifyingContract: address,
     })
     const signature = await signTypedDataFn(typedData)
+
     // If the smart account is not deployed, deploy it first
     if (!isDeployed) {
         clauses.push(
@@ -188,6 +361,7 @@ async function buildBatchExecutionClauses({
             ),
         )
     }
+
     // Add the batch execution call
     clauses.push(
         Clause.callFunction(
@@ -278,31 +452,14 @@ async function buildIndividualExecutionClauses({
     return clauses
 }
 
-export async function buildSmartWalletTransactionClauses({
-    txClauses,
-    smartAccountConfig,
-    networkType,
-    signTypedDataFn,
-}: SmartWalletTransactionClausesParams): Promise<TransactionClause[]> {
-    const { version: smartAccountVersion, hasV1SmartAccount } = smartAccountConfig
+const findPrimaryType = (types: Record<string, any>, message: any): string => {
+    const typeKeys = Object.keys(types).filter(key => key !== "EIP712Domain")
 
-    const chainId = getChainIdFromNetworkType(networkType)
-    // Determine execution strategy based on smart account version
-    const shouldUseBatchExecution = !hasV1SmartAccount || (smartAccountVersion && smartAccountVersion >= 3)
-
-    if (shouldUseBatchExecution) {
-        return await buildBatchExecutionClauses({
-            txClauses,
-            smartAccountConfig,
-            chainId,
-            signTypedDataFn,
-        })
-    } else {
-        return await buildIndividualExecutionClauses({
-            txClauses,
-            smartAccountConfig,
-            chainId,
-            signTypedDataFn,
-        })
+    for (const typeKey of typeKeys) {
+        if (message[typeKey.toLowerCase()] !== undefined) {
+            return typeKey
+        }
     }
+
+    return typeKeys[0] || "Unknown"
 }
