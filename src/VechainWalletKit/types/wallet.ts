@@ -13,12 +13,12 @@ export interface WalletAdapter {
     signTransaction(tx: Transaction): Promise<Buffer>
     signTypedData(data: TypedDataPayload): Promise<string>
     getAccount(): Promise<Account>
-    login(options: LoginOptions): Promise<void>
-    logout(): Promise<void>
     readonly isAuthenticated: boolean
 }
 
 export interface SmartAccountAdapter extends WalletAdapter {
+    login(options: LoginOptions): Promise<void>
+    logout(): Promise<void>
     buildSmartAccountTransaction(params: {
         txClauses: TransactionClause[]
         smartAccountConfig: SmartAccountTransactionConfig

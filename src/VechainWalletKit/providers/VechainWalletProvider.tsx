@@ -5,7 +5,6 @@ import { VechainWalletSDKConfig } from "../types/config"
 import { SignOptions, BuildOptions, TypedDataPayload } from "../types/transaction"
 import { LoginOptions, WalletAdapter } from "../types/wallet"
 import { useSmartAccount } from "../hooks/useSmartAccount"
-import { buildSmartWalletTransactionClauses } from "../utils/transactionBuilder"
 import { WalletError, WalletErrorType } from "../utils/errors"
 
 /**

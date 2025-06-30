@@ -4,8 +4,7 @@ import { usePrivySmartAccountAdapter } from "../../adapters/PrivySmartAccountAda
 /**
  * Smart Account User Journey Tests
  *
- * Simplified tests that focus on user interaction flows without calling
- * VeChain SDK functions that create BigInt serialization issues.
+ * Tests that focus on user interaction flows with the Kit
  */
 
 describe("Smart Account User Journey Tests", () => {

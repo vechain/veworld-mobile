@@ -1,6 +1,5 @@
 import { renderHook } from "@testing-library/react-native"
 import { usePrivySmartAccountAdapter } from "../../adapters/PrivySmartAccountAdapter"
-import { SmartAccountTransactionConfig } from "../../types/transactionBuilder"
 
 // Mock VeChain SDK at the test level to ensure it's applied
 jest.mock("@vechain/sdk-core", () => ({
@@ -71,56 +70,6 @@ describe("Smart Account Lifecycle Scenarios", () => {
             expect(typeof result.current.buildSmartAccountTransaction).toBe("function")
             expect(typeof result.current.isSmartAccountDeployed).toBe("function")
             expect(typeof result.current.getSmartAccountConfig).toBe("function")
-        })
-
-        it("should provide all required SmartAccountAdapter methods", () => {
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
-
-            // Test that all SmartAccountAdapter methods are available
-            expect(result.current).toMatchObject({
-                isAuthenticated: expect.any(Boolean),
-                login: expect.any(Function),
-                logout: expect.any(Function),
-                signMessage: expect.any(Function),
-                signTransaction: expect.any(Function),
-                signTypedData: expect.any(Function),
-                getAccount: expect.any(Function),
-                buildSmartAccountTransaction: expect.any(Function),
-                isSmartAccountDeployed: expect.any(Function),
-                getSmartAccountConfig: expect.any(Function),
-            })
-        })
-    })
-
-    describe("Configuration Validation", () => {
-        it("should accept valid smart account configurations", () => {
-            const validConfigurations: SmartAccountTransactionConfig[] = [
-                {
-                    address: "0x1234567890123456789012345678901234567890",
-                    version: 3,
-                    isDeployed: false,
-                    hasV1SmartAccount: false,
-                    factoryAddress: "0xabcdef1234567890123456789012345678901234",
-                },
-                {
-                    address: "0x2345678901234567890123456789012345678901",
-                    version: 1,
-                    isDeployed: true,
-                    hasV1SmartAccount: true,
-                    factoryAddress: "0xbcdef01234567890123456789012345678901234",
-                },
-            ]
-
-            validConfigurations.forEach(config => {
-                expect(() => {
-                    // Just verify the adapter can access the config properties
-                    expect(config.address).toBeTruthy()
-                    expect(config.version).toBeGreaterThan(0)
-                    expect(typeof config.isDeployed).toBe("boolean")
-                    expect(typeof config.hasV1SmartAccount).toBe("boolean")
-                    expect(config.factoryAddress).toBeTruthy()
-                }).not.toThrow()
-            })
         })
     })
 

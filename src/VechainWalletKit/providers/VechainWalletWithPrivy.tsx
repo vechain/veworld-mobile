@@ -1,7 +1,7 @@
 import React from "react"
 import { PrivyProvider } from "@privy-io/expo"
 import { VechainWalletProvider, VechainWalletProviderProps } from "./VechainWalletProvider"
-import { usePrivyAdapter } from "../adapters/PrivyAdapter"
+import { usePrivySmartAccountAdapter } from "../adapters/PrivySmartAccountAdapter"
 import { VechainWalletSDKConfig } from "../types/config"
 
 interface PrivyConfig extends VechainWalletSDKConfig {
@@ -17,7 +17,7 @@ interface VechainWalletWithPrivyProps extends Omit<VechainWalletProviderProps, "
 }
 
 const VechainWalletWithPrivyImplementation: React.FC<VechainWalletWithPrivyProps> = ({ children, config }) => {
-    const adapter = usePrivyAdapter()
+    const adapter = usePrivySmartAccountAdapter()
 
     return (
         <VechainWalletProvider config={config} adapter={adapter}>
