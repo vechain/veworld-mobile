@@ -3,7 +3,7 @@ import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { VechainWalletSDKConfig } from "../types/config"
 import { SignOptions, BuildOptions, TypedDataPayload } from "../types/transaction"
-import { LoginOptions, WalletAdapter } from "../types/wallet"
+import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
 import { useSmartAccount } from "../hooks/useSmartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
 
@@ -35,7 +35,7 @@ export interface VechainWalletContext {
 export interface VechainWalletProviderProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
-    adapter: WalletAdapter
+    adapter: SmartAccountAdapter
 }
 
 const VechainWalletContext = createContext<VechainWalletContext | null>(null)
@@ -135,14 +135,11 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
                 factoryAddress: smartAccount.getFactoryAddress(),
             }
 
-            // Build smart wallet transaction clauses
-            const finalClauses = await buildSmartWalletTransactionClauses({
+            // Use the adapter to build smart account transaction clauses
+            const finalClauses = await adapter.buildSmartAccountTransaction({
                 txClauses: clauses,
                 smartAccountConfig,
                 networkType: config.networkConfig.networkType,
-                signTypedDataFn: async (data: TypedDataPayload): Promise<string> => {
-                    return await adapter.signTypedData(data)
-                },
             })
 
             // Estimate gas
