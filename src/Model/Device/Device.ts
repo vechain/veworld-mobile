@@ -22,6 +22,7 @@ export interface BaseDevice {
     isBackedUpManual?: boolean
     lastBackupDate?: string
     isMigrated?: boolean
+    wallet?: string
 }
 
 /**

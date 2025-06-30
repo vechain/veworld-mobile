@@ -35,7 +35,7 @@ export interface AccountWithDevice extends WalletAccount {
     domain?: string
 }
 
-export type Device = LedgerDevice | LocalDevice
+export type Device = LedgerDevice | LocalDevice | BaseDevice
 
 export interface LocalAccountWithDevice extends WalletAccount {
     device: LocalDevice

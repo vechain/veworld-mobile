@@ -12,7 +12,7 @@ import {
 } from "../types/transactionBuilder"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import { SimpleAccountABI, SimpleAccountFactoryABI } from "../utils/abi"
-import { HexUtils } from "../../Utils"
+import HexUtils from "../../Utils/HexUtils"
 
 export const usePrivySmartAccountAdapter = (): SmartAccountAdapter => {
     const { user, logout } = usePrivy()
