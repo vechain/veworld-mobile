@@ -161,7 +161,10 @@ describe("Smart Account User Journey Tests", () => {
         it("should handle message signing requests", async () => {
             // Set up authenticated user with specific provider response
             setAuthenticatedUser("test-user")
-            setMockWallet("0x5555555555555555555555555555555555555555", "0xsignature123")
+
+            // Short valid hex signature for testing
+            const mockSignature = "0x1234abcd5678ef90"
+            setMockWallet("0x5555555555555555555555555555555555555555", mockSignature)
 
             const { result } = renderHook(() => usePrivySmartAccountAdapter())
 
@@ -170,7 +173,8 @@ describe("Smart Account User Journey Tests", () => {
             await act(async () => {
                 const signature = await result.current.signMessage(message)
                 expect(signature).toBeInstanceOf(Buffer)
-                expect(signature.length).toBeGreaterThan(0)
+                expect(signature.length).toBe(8) // 8 bytes for our test signature
+                expect(signature.toString("hex")).toBe(mockSignature.slice(2)) // Without 0x prefix
             })
 
             const mockWallet = mockWalletState.wallets[0]
@@ -186,7 +190,10 @@ describe("Smart Account User Journey Tests", () => {
         it("should handle typed data signing", async () => {
             // Set up authenticated user with specific provider response
             setAuthenticatedUser("test-user")
-            setMockWallet("0x5555555555555555555555555555555555555555", "0xtypeddatasignature")
+
+            // Short valid hex signature for testing
+            const mockSignature = "0xabcd1234ef567890"
+            setMockWallet("0x5555555555555555555555555555555555555555", mockSignature)
 
             const { result } = renderHook(() => usePrivySmartAccountAdapter())
 
@@ -213,7 +220,7 @@ describe("Smart Account User Journey Tests", () => {
 
             await act(async () => {
                 const signature = await result.current.signTypedData(typedData)
-                expect(signature).toBe("0xtypeddatasignature")
+                expect(signature).toBe(mockSignature)
             })
 
             const mockWallet = mockWalletState.wallets[0]
