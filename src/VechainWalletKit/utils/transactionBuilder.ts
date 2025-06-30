@@ -178,7 +178,7 @@ async function buildBatchExecutionClauses({
             Clause.callFunction(
                 Address.of(factoryAddress),
                 ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
-                [address],
+                [address, 0],
             ),
         )
     }
@@ -247,7 +247,7 @@ async function buildIndividualExecutionClauses({
             Clause.callFunction(
                 Address.of(factoryAddress),
                 ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
-                [address ?? ""],
+                [address ?? "", 0],
             ),
         )
     }
