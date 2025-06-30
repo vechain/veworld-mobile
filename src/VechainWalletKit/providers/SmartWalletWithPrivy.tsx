@@ -12,7 +12,6 @@ interface PrivyConfig extends VechainWalletSDKConfig {
 }
 
 export interface SmartWalletWithPrivyProps extends Omit<SmartWalletProps, "adapter"> {
-    // Add any Privy-specific props if needed
     config: PrivyConfig
 }
 

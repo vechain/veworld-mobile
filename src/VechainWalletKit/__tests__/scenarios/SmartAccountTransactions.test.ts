@@ -3,7 +3,7 @@ import { renderHook, act } from "@testing-library/react-native"
 import { useSmartWallet } from "../../providers/SmartWalletProvider"
 import { SmartWalletWithPrivyProvider } from "../../providers/SmartWalletWithPrivy"
 
-// Mock VeChain SDK to support real buildSmartAccountTransaction function
+// Mock VeChain SDK
 jest.mock("@vechain/sdk-core", () => {
     const actualSdkCore = jest.requireActual("@vechain/sdk-core")
     return {
