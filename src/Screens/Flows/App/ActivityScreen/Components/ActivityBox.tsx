@@ -5,7 +5,7 @@ import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, VET, VOT3, VTHO } from "~Constants"
 import { useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
-import { useI18nContext } from "~i18n"
+import { useI18nContext, TranslationFunctions } from "~i18n"
 import {
     Activity,
     ActivityEvent,
@@ -831,6 +831,53 @@ type StakingProps = {
     onPress: (activity: Activity) => void
 }
 
+const getStakingDescription = (activity: StargateActivity, LL: TranslationFunctions): string => {
+    if (activity.levelId) {
+        return getTokenLevelName(activity.levelId)
+    }
+
+    return activity.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE
+        ? LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_DESC()
+        : LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_DESC()
+}
+
+const getStakingIcon = (eventName: string): IconKey => {
+    switch (eventName) {
+        case ActivityEvent.STARGATE_STAKE:
+            return "icon-download"
+        case ActivityEvent.STARGATE_UNSTAKE:
+            return "icon-upload"
+        case ActivityEvent.STARGATE_DELEGATE:
+            return "icon-lock"
+        case ActivityEvent.STARGATE_UNDELEGATE:
+            return "icon-unlock"
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
+            return "icon-gift"
+        default:
+            return "icon-blocks"
+    }
+}
+
+const getActivityTitle = (activity: StargateActivity, LL: TranslationFunctions): string => {
+    switch (activity.eventName) {
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+            return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
+            return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
+        case ActivityEvent.STARGATE_DELEGATE:
+            return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
+        case ActivityEvent.STARGATE_UNDELEGATE:
+            return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
+        case ActivityEvent.STARGATE_STAKE:
+            return LL.ACTIVITY_STARGATE_STAKE_LABEL()
+        case ActivityEvent.STARGATE_UNSTAKE:
+            return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
+        default:
+            return LL.ACTIVITY_STARGATE_STAKE_LABEL()
+    }
+}
+
 const Staking = ({ activity, onPress }: StakingProps) => {
     const { LL } = useI18nContext()
     const time = moment(activity.timestamp).format("HH:mm")
@@ -839,46 +886,9 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         onPress(activity)
     }
 
-    const getStakingIcon = (eventName: string): IconKey => {
-        switch (eventName) {
-            case ActivityEvent.STARGATE_STAKE:
-                return "icon-download"
-            case ActivityEvent.STARGATE_UNSTAKE:
-                return "icon-upload"
-            case ActivityEvent.STARGATE_DELEGATE:
-                return "icon-lock"
-            case ActivityEvent.STARGATE_UNDELEGATE:
-                return "icon-unlock"
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
-                return "icon-gift"
-            default:
-                return "icon-blocks"
-        }
-    }
-
     const hasRightAmount = useMemo(() => {
         return activity?.type !== ActivityEvent.STARGATE_UNDELEGATE
     }, [activity?.type])
-
-    const getActivityTitle = () => {
-        switch (activity.eventName) {
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
-                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
-            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
-                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
-            case ActivityEvent.STARGATE_DELEGATE:
-                return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
-            case ActivityEvent.STARGATE_UNDELEGATE:
-                return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
-            case ActivityEvent.STARGATE_STAKE:
-                return LL.ACTIVITY_STARGATE_STAKE_LABEL()
-            case ActivityEvent.STARGATE_UNSTAKE:
-                return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
-            default:
-                return LL.ACTIVITY_STARGATE_STAKE_LABEL()
-        }
-    }
 
     const isMinus = useMemo(() => {
         return !(
@@ -902,8 +912,8 @@ const Staking = ({ activity, onPress }: StakingProps) => {
     const baseActivityBoxProps = () => {
         return {
             icon: getStakingIcon(activity.eventName),
-            title: getActivityTitle(),
-            description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
+            title: getActivityTitle(activity, LL),
+            description: getStakingDescription(activity, LL),
             rightAmount: rightAmount,
             rightAmountDescription:
                 hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
