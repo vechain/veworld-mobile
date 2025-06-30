@@ -1,11 +1,15 @@
+import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback, useRef, useState } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { NestableDraggableFlatList, RenderItem } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { BaseView, SwipeableRow } from "~Components"
-import { AnimatedTokenCard } from "./AnimatedTokenCard"
-import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { ColorThemeType, VeDelegate, VET, VTHO } from "~Constants"
+import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { FungibleTokenWithBalance } from "~Model"
+import { Routes } from "~Navigation"
+import { RemoveCustomTokenBottomSheet } from "~Screens"
 import {
     changeBalancePosition,
     removeTokenBalance,
@@ -18,13 +22,9 @@ import {
     selectSelectedAccount,
     selectSelectedNetwork,
 } from "~Storage/Redux/Selectors"
-import { AnimatedChartCard } from "./AnimatedChartCard"
-import { FungibleTokenWithBalance } from "~Model"
-import { RemoveCustomTokenBottomSheet } from "~Screens"
-import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { AccountUtils, BalanceUtils } from "~Utils"
-import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
+import { AnimatedChartCard } from "./AnimatedChartCard"
+import { AnimatedTokenCard } from "./AnimatedTokenCard"
 
 interface Props extends AnimateProps<ViewProps> {
     isEdit: boolean
@@ -126,7 +126,7 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
     )
 
     const renderItem: RenderItem<FungibleTokenWithBalance> = useCallback(
-        ({ item, getIndex, isActive, drag }) => {
+        ({ item, isActive, drag }) => {
             const isDisabled = item.symbol === VeDelegate.symbol
 
             return (
@@ -148,7 +148,6 @@ export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps 
                         <AnimatedTokenCard
                             item={item}
                             isActive={isActive}
-                            getIndex={getIndex}
                             drag={drag}
                             isEdit={isEdit}
                             isBalanceVisible={isBalanceVisible}

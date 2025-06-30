@@ -8,7 +8,8 @@ import TransactionUtils from "../TransactionUtils"
  * @returns The type of the activity.
  */
 export const getActivityTypeFromClause = (clauses: Connex.VM.Clause[]): ActivityType => {
-    if (clauses.length > 1 || clauses.length === 0) return ActivityType.DAPP_TRANSACTION
+    //It should take into account fee delegation
+    if (clauses.length > 2 || clauses.length === 0) return ActivityType.DAPP_TRANSACTION
 
     if (TransactionUtils.isTokenTransferClause(clauses[0])) {
         return ActivityType.TRANSFER_FT

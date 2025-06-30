@@ -37,6 +37,10 @@ describe("GasFeeSpeed", () => {
                     isGalactica={false}
                     isBaseFeeRampingUp={false}
                     speedChangeEnabled={false}
+                    availableDelegationTokens={["VTHO"]}
+                    delegationToken="VTHO"
+                    isEnoughBalance={true}
+                    setDelegationToken={jest.fn()}
                 />,
                 { wrapper: TestWrapper },
             )
@@ -60,6 +64,10 @@ describe("GasFeeSpeed", () => {
                     isGalactica={true}
                     isBaseFeeRampingUp={false}
                     speedChangeEnabled={true}
+                    availableDelegationTokens={["VTHO"]}
+                    delegationToken="VTHO"
+                    isEnoughBalance={true}
+                    setDelegationToken={jest.fn()}
                 />,
                 { wrapper: TestWrapper },
             )
@@ -94,6 +102,10 @@ describe("GasFeeSpeed", () => {
                 isGalactica={false}
                 isBaseFeeRampingUp={false}
                 speedChangeEnabled={false}
+                availableDelegationTokens={["VTHO"]}
+                delegationToken="VTHO"
+                isEnoughBalance={true}
+                setDelegationToken={jest.fn()}
             />,
             { wrapper: TestWrapper },
         )
@@ -111,6 +123,10 @@ describe("GasFeeSpeed", () => {
                 isGalactica={true}
                 isBaseFeeRampingUp={false}
                 speedChangeEnabled={false}
+                availableDelegationTokens={["VTHO"]}
+                delegationToken="VTHO"
+                isEnoughBalance={true}
+                setDelegationToken={jest.fn()}
             />,
             { wrapper: TestWrapper },
         )
@@ -128,6 +144,10 @@ describe("GasFeeSpeed", () => {
                 isGalactica={true}
                 isBaseFeeRampingUp={false}
                 speedChangeEnabled={true}
+                availableDelegationTokens={["VTHO"]}
+                delegationToken="VTHO"
+                isEnoughBalance={true}
+                setDelegationToken={jest.fn()}
             />,
             { wrapper: TestWrapper },
         )
