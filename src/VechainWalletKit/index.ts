@@ -2,10 +2,7 @@
 export * from "./types"
 
 // Export providers
-export {
-    SmartWalletProvider as VechainWalletProvider,
-    useSmartWallet as useVechainWallet,
-} from "./providers/SmartWalletProvider"
+export { SmartWalletProvider, useSmartWallet } from "./providers/SmartWalletProvider"
 export { SmartWalletWithPrivyProvider } from "./providers/SmartWalletWithPrivy"
 export type { SmartWalletWithPrivyProps } from "./providers/SmartWalletWithPrivy"
 

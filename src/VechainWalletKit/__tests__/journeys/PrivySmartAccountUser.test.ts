@@ -323,7 +323,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
 
         it("should handle full provider configuration", () => {
             // This test verifies that the VechainWalletWithPrivy component
-            // properly passes through the configuration to both PrivyProvider and VechainWalletProvider
+            // properly passes through the configuration to both PrivyProvider and SmartWalletProvider
 
             // Since we're mocking PrivyProvider to just render children,
             // we can verify the component renders without errors

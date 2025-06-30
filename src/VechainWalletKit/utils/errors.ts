@@ -1,7 +1,6 @@
 export enum WalletErrorType {
     SIGNATURE_REJECTED = "SIGNATURE_REJECTED",
     WALLET_NOT_FOUND = "WALLET_NOT_FOUND",
-    INVALID_CONFIGURATION = "INVALID_CONFIGURATION",
 }
 
 export class WalletError extends Error {

@@ -10,14 +10,14 @@ VechainWalletKit uses an adapter pattern to abstract away specific wallet provid
 ┌─────────────────────────────────────────────────────────┐
 │                    Your App                             │
 ├─────────────────────────────────────────────────────────┤
-│              VechainWalletProvider                      │
+│              SmartWalletProvider                        │
 │                (Provider Agnostic)                      │
 ├─────────────────────────────────────────────────────────┤
-│                 WalletAdapter                           │
+│               SmartAccountAdapter                       │
 │                   (Interface)                           │
 ├─────────────────────────────────────────────────────────┤
-│    PrivyAdapter    │    CustomAdapter    │    ...       │
-│   (Privy Impl)     │   (Your Impl)       │              │
+│   PrivyAdapter     │   CustomAdapter    │    ...        │
+│   (Privy Impl)     │   (Your Impl)      │               │
 └─────────────────────────────────────────────────────────┘
 ```
 
@@ -27,7 +27,7 @@ VechainWalletKit uses an adapter pattern to abstract away specific wallet provid
 
 ```tsx
 import React from 'react'
-import { VechainWalletWithPrivy, VechainWalletSDKConfig } from '@/VechainWalletKit'
+import { SmartWalletWithPrivyProvider, VechainWalletSDKConfig } from '@/VechainWalletKit'
 
 const config: VechainWalletSDKConfig = {
   networkConfig: {
@@ -42,9 +42,9 @@ const config: VechainWalletSDKConfig = {
 
 function App() {
   return (
-    <VechainWalletWithPrivy config={config}>
+    <SmartWalletWithPrivyProvider config={config}>
       <YourAppContent />
-    </VechainWalletWithPrivy>
+    </SmartWalletWithPrivyProvider>
   )
 }
 ```
@@ -54,18 +54,18 @@ function App() {
 ```tsx
 import React from 'react'
 import { 
-  VechainWalletProvider, 
-  usePrivyAdapter, 
+  SmartWalletProvider, 
+  usePrivySmartAccountAdapter, 
   VechainWalletSDKConfig 
 } from '@/VechainWalletKit'
 
 function AppWithCustomSetup() {
-  const adapter = usePrivyAdapter()
+  const adapter = usePrivySmartAccountAdapter()
 
   return (
-    <VechainWalletProvider config={config} adapter={adapter}>
+    <SmartWalletProvider config={config} adapter={adapter}>
       <YourAppContent />
-    </VechainWalletProvider>
+    </SmartWalletProvider>
   )
 }
 ```
@@ -103,7 +103,7 @@ function WalletComponent() {
         },
       ]
 
-      // Build the transaction
+      // Build the transaction (automatically handles smart account deployment and execution)
       const transaction = await buildTransaction(clauses, {
         gas: 21000,
         isDelegated: false,
@@ -152,15 +152,20 @@ function WalletComponent() {
 
 ### Smart Account Operations
 
-The SDK automatically handles smart account operations:
+The SDK automatically handles smart account operations, but you can access the smart account utilities directly:
 
 ```tsx
 import { useSmartAccount } from '@/VechainWalletKit'
+import { ThorClient } from '@vechain/sdk-network'
 
 function SmartAccountInfo() {
   const { address } = useVechainWallet()
+  
+  // Initialize Thor client
+  const thor = ThorClient.at('https://testnet.vechain.org')
+  
   const smartAccountHook = useSmartAccount({ 
-    thor: thorClient, 
+    thor, 
     networkName: 'testnet' 
   })
 
@@ -191,7 +196,9 @@ import { useVechainWallet } from '@/VechainWalletKit'
 import { HexUtils, Transaction } from '@vechain/sdk-core'
 import axios from 'axios'
 
-const sendTransaction = async (contractAddress: string, encodedFunctionCall: string, previousTxId: string) => {
+const sendTransaction = async (contractAddress: string, encodedFunctionCall: string) => {
+  const { buildTransaction, signTransaction } = useVechainWallet()
+  
   const clauses: TransactionClause[] = [
     {
       to: contractAddress,
@@ -200,6 +207,7 @@ const sendTransaction = async (contractAddress: string, encodedFunctionCall: str
     },
   ]
 
+  // Build transaction with custom options
   const transaction = await buildTransaction(clauses, {
     gas: 100000,
     isDelegated: false, 
@@ -209,12 +217,12 @@ const sendTransaction = async (contractAddress: string, encodedFunctionCall: str
   const signature = await signTransaction(transaction)
   const signedTransaction = Transaction.of(
     transaction.body,
-    senderSignature,
+    signature,
   )
 
   const encodedRawTx = {
-            raw: HexUtils.addPrefix(Buffer.from(signedTransaction.encoded).toString("hex")),
-        }
+    raw: HexUtils.addPrefix(Buffer.from(signedTransaction.encoded).toString("hex")),
+  }
 
   return await axios.post(`https://mainnet.vechain.org/transactions`, encodedRawTx)
 }
@@ -243,6 +251,7 @@ const handleSignTypedData = async () => {
         { name: 'timestamp', type: 'uint256' },
       ],
     },
+    primaryType: 'Message',
     message: {
       content: 'Hello VeChain!',
       timestamp: Date.now(),
@@ -260,10 +269,10 @@ You can create custom wallet adapters using React hooks:
 
 ```tsx
 import { useMemo } from 'react'
-import { WalletAdapter, Account, TypedDataPayload, LoginOptions } from '@/VechainWalletKit'
+import { SmartAccountAdapter, Account, TypedDataPayload, LoginOptions } from '@/VechainWalletKit'
 import { Transaction } from '@vechain/sdk-core'
 
-export const useCustomWalletAdapter = (customWallet: CustomWalletInstance): WalletAdapter => {
+export const useCustomWalletAdapter = (customWallet: CustomWalletInstance): SmartAccountAdapter => {
   const isAuthenticated = customWallet.isConnected()
 
   return useMemo(() => ({
@@ -290,7 +299,6 @@ export const useCustomWalletAdapter = (customWallet: CustomWalletInstance): Wall
       const account = await customWallet.getAccount()
       return {
         address: account.address,
-        isDeployed: account.isDeployed,
       }
     },
 
@@ -374,9 +382,9 @@ const config = {
 
 ## 🛠️ Available Hooks
 
-- `useVechainWallet()` - Main wallet context
+- `useVechainWallet()` - Main wallet context with authentication and transaction management
 - `useSmartAccount({ thor, networkName })` - Smart account management utilities
-- `usePrivyAdapter()` - Privy wallet adapter (when using Privy)
+- `usePrivySmartAccountAdapter()` - Privy wallet adapter (when using Privy)
 
 ## 🔐 Login Usage
 
@@ -399,9 +407,9 @@ await login({
   oauthRedirectUri: 'your-app://' 
 })
 
-// Login with Discord
+// Login with Twitter
 await login({ 
-  provider: 'discord',
+  provider: 'twitter',
   oauthRedirectUri: 'custom-scheme://' 
 })
 ```
@@ -429,4 +437,33 @@ try {
     }
   }
 }
+```
+
+## 🔄 Smart Account Transaction Building
+
+The SDK automatically handles smart account transactions with the following features:
+
+- **Automatic Deployment**: If the smart account isn't deployed, it will be deployed automatically
+- **Version Detection**: Automatically detects V1 vs V3+ smart accounts
+- **Batch Execution**: V3+ smart accounts use batch execution for better efficiency
+- **Individual Execution**: V1 smart accounts use individual execution for each transaction clause
+- **Gas Estimation**: Automatically estimates gas requirements including deployment costs
+
+### Smart Account Features
+
+```tsx
+const { buildTransaction, isDeployed } = useVechainWallet()
+
+// The SDK handles all smart account complexity automatically
+const transaction = await buildTransaction([
+  { to: '0x...', value: '0x0', data: '0x...' },
+  { to: '0x...', value: '0x0', data: '0x...' }
+], {
+  gas: 200000,
+  isDelegated: false
+})
+
+// For V3+ accounts: Creates deployment + batch execution
+// For V1 accounts: Creates deployment + individual executions
+// For deployed accounts: Skips deployment step
 ```
