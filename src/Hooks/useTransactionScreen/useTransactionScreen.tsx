@@ -38,7 +38,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { error } from "~Utils"
+import { BigNutils, error } from "~Utils"
 
 type Props = {
     clauses: TransactionClause[]
@@ -64,7 +64,7 @@ const mapGasPriceCoefficient = (value: GasPriceCoefficient) => {
 }
 
 export const useTransactionScreen = ({
-    clauses,
+    clauses: _clauses,
     onTransactionSuccess: propsOnTransactionSuccess,
     onTransactionFailure,
     dappRequest,
@@ -74,6 +74,10 @@ export const useTransactionScreen = ({
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
+
+    const clauses = useMemo(() => {
+        return _clauses.map(clause => ({ ...clause, value: `0x${BigNutils(clause.value || 0).toHex}` }))
+    }, [_clauses])
 
     const [loading, setLoading] = useState(false)
     const [selectedFeeOption, setSelectedFeeOption] = useState(GasPriceCoefficient.MEDIUM)

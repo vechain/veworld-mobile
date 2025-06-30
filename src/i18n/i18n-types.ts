@@ -149,6 +149,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_DAPPS_LABEL: string
 	/**
+	 * E​v​e​n​t​ ​n​a​m​e
+	 */
+	ACTIVITY_EVENT_NAME: string
+	/**
 	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_NFT_EMPTY_LABEL: string
@@ -164,6 +168,42 @@ type RootTranslation = {
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g
+	 */
+	ACTIVITY_STAKING_EMPTY_BUTTON: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​V​E​T​ ​t​o​k​e​n​s​.
+	 */
+	ACTIVITY_STAKING_EMPTY_LABEL: string
+	/**
+	 * S​t​a​k​i​n​g
+	 */
+	ACTIVITY_STAKING_LABEL: string
+	/**
+	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
+	/**
+	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
+	/**
+	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e​d
+	 */
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​d
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: string
+	/**
+	 * V​E​T​ ​u​n​s​t​a​k​e​d
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
@@ -415,7 +455,7 @@ type RootTranslation = {
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
 	/**
-	 * G​e​t​ ​*​*​r​e​w​a​r​d​s​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
+	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
 	 */
 	BANNER_STARGATE_DESC: string
 	/**
@@ -1182,10 +1222,6 @@ type RootTranslation = {
 	 */
 	BTN_DOWNLOAD_LOGS: string
 	/**
-	 * S​t​a​k​e
-	 */
-	BTN_STAKE: string
-	/**
 	 * E​d​i​t​ ​c​u​s​t​o​m​ ​n​o​d​e
 	 */
 	BTN_EDIT_CUSTOM_NODE: string
@@ -1386,6 +1422,10 @@ type RootTranslation = {
 	 * S​k​i​p
 	 */
 	BTN_SKIP: string
+	/**
+	 * S​t​a​k​e
+	 */
+	BTN_STAKE: string
 	/**
 	 * S​w​a​p
 	 */
@@ -2145,6 +2185,10 @@ type RootTranslation = {
 	 * R​e​c​e​n​t​l​y​ ​A​d​d​e​d
 	 */
 	DISCOVER_TAB_RECENTLY_ADDED: string
+	/**
+	 * S​t​a​k​i​n​g
+	 */
+	DISCOVER_TAB_STAKING: string
 	/**
 	 * T​r​e​n​d​i​n​g​ ​&​ ​P​o​p​u​l​a​r
 	 */
@@ -4537,6 +4581,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_DAPPS_LABEL: () => LocalizedString
 	/**
+	 * Event name
+	 */
+	ACTIVITY_EVENT_NAME: () => LocalizedString
+	/**
 	 * No NFTs to show yet
 	 */
 	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
@@ -4552,6 +4600,42 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * Start earning
+	 */
+	ACTIVITY_STAKING_EMPTY_BUTTON: () => LocalizedString
+	/**
+	 * Start earning rewards by staking your VET tokens.
+	 */
+	ACTIVITY_STAKING_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Staking
+	 */
+	ACTIVITY_STAKING_LABEL: () => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: () => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * VET staked & delegated
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Node undelegated
+	 */
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: () => LocalizedString
+	/**
+	 * VET staked
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: () => LocalizedString
+	/**
+	 * VET unstaked
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yet
 	 */
@@ -4798,7 +4882,7 @@ Try reconnect your device to the internet.
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
 	/**
-	 * Get **rewards** by staking your **VET tokens**
+	 * Get **VTHO** by staking your **VET tokens**
 	 */
 	BANNER_STARGATE_DESC: () => LocalizedString
 	/**
@@ -5560,10 +5644,6 @@ Thanks for your patience!
 	 */
 	BTN_DOWNLOAD_LOGS: () => LocalizedString
 	/**
-	 * Stake
-	 */
-	BTN_STAKE: () => LocalizedString
-	/**
 	 * Edit custom node
 	 */
 	BTN_EDIT_CUSTOM_NODE: () => LocalizedString
@@ -5763,6 +5843,10 @@ Thanks for your patience!
 	 * Skip
 	 */
 	BTN_SKIP: () => LocalizedString
+	/**
+	 * Stake
+	 */
+	BTN_STAKE: () => LocalizedString
 	/**
 	 * Swap
 	 */
@@ -6515,6 +6599,10 @@ Thanks for your patience!
 	 * Recently Added
 	 */
 	DISCOVER_TAB_RECENTLY_ADDED: () => LocalizedString
+	/**
+	 * Staking
+	 */
+	DISCOVER_TAB_STAKING: () => LocalizedString
 	/**
 	 * Trending & Popular
 	 */

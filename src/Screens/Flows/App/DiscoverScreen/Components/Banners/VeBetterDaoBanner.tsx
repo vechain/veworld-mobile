@@ -6,6 +6,7 @@ import { useThemedStyles } from "~Hooks"
 import { COLORS } from "~Constants"
 import { useI18nContext } from "~i18n"
 import Markdown from "react-native-markdown-display"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const VeBetterDaoBanner = () => {
     const { styles } = useThemedStyles(baseStyles)
@@ -18,7 +19,13 @@ export const VeBetterDaoBanner = () => {
                     <VeBetterLogoGreenSVG />
                     <VeBetterSVG color={COLORS.WHITE} width={72} height={14} />
                 </BaseView>
-                <Markdown style={{ paragraph: styles.paragraph, body: styles.text, strong: { color: "#B1F16C" } }}>
+                <Markdown
+                    style={{
+                        paragraph: styles.paragraph,
+                        body: styles.text,
+                        // Android does not support fontWeight 600
+                        ...(!isAndroid() && { strong: { color: "#B1F16C", fontWeight: "600" } }),
+                    }}>
                     {LL.BANNER_VEBETTER_DESC()}
                 </Markdown>
             </BaseView>

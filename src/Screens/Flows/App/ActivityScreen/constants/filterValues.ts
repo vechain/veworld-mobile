@@ -7,6 +7,7 @@ export enum FilterType {
     TRANSFER = "transfer",
     NFTS = "nfts",
     DAPPS = "dapps",
+    STAKING = "staking",
     OTHER = "other",
 }
 
@@ -44,5 +45,48 @@ export const filterValues = {
     },
     nfts: { type: FilterType.NFTS, value: [ActivityEvent.TRANSFER_NFT] },
     dapps: { type: FilterType.DAPPS, value: [] },
+    staking: {
+        type: FilterType.STAKING,
+        value: [
+            ActivityEvent.STARGATE_DELEGATE,
+            ActivityEvent.STARGATE_STAKE,
+            ActivityEvent.STARGATE_CLAIM_REWARDS_BASE,
+            ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE,
+            ActivityEvent.STARGATE_UNDELEGATE,
+            ActivityEvent.STARGATE_UNSTAKE,
+        ],
+    },
     other: { type: FilterType.OTHER, value: [ActivityEvent.UNKNOWN_TX] },
 } as const
+
+export enum TokenLevelId {
+    None,
+    Strength,
+    Thunder,
+    Mjolnir,
+    VeThorX,
+    StrengthX,
+    ThunderX,
+    MjolnirX,
+    Dawn,
+    Lightning,
+    Flash,
+}
+
+const TOKEN_LEVEL_MAPPING = {
+    [TokenLevelId.None]: "None",
+    [TokenLevelId.Strength]: "Strength",
+    [TokenLevelId.Thunder]: "Thunder",
+    [TokenLevelId.Mjolnir]: "Mjolnir",
+    [TokenLevelId.VeThorX]: "VeThorX",
+    [TokenLevelId.StrengthX]: "StrengthX",
+    [TokenLevelId.ThunderX]: "ThunderX",
+    [TokenLevelId.MjolnirX]: "MjolnirX",
+    [TokenLevelId.Dawn]: "Dawn",
+    [TokenLevelId.Lightning]: "Lightning",
+    [TokenLevelId.Flash]: "Flash",
+} as const
+
+export const getTokenLevelName = (levelId: TokenLevelId): string => {
+    return TOKEN_LEVEL_MAPPING[levelId] || ""
+}
