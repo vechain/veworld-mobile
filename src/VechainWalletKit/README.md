@@ -55,12 +55,12 @@ function App() {
 import React from 'react'
 import { 
   SmartWalletProvider, 
-  usePrivyAdapter, 
+  usePrivyExpoAdapter, 
   VechainWalletSDKConfig 
 } from '@/VechainWalletKit'
 
 function AppWithCustomSetup() {
-  const adapter = usePrivyAdapter()
+  const adapter = usePrivyExpoAdapter()
 
   return (
     <SmartWalletProvider config={config} adapter={adapter}>
@@ -384,7 +384,7 @@ const config = {
 
 - `useVechainWallet()` - Main wallet context with authentication and transaction management
 - `useSmartAccount({ thor, networkName })` - Smart account management utilities
-- `usePrivyAdapter()` - Privy wallet adapter (when using Privy)
+- `usePrivyExpoAdapter()` - Privy wallet adapter (when using Privy)
 
 ## 🔐 Login Usage
 

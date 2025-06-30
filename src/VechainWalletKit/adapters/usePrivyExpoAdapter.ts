@@ -6,7 +6,7 @@ import { TypedDataPayload } from "../types/transaction"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import HexUtils from "../../Utils/HexUtils"
 
-export const usePrivyAdapter = (): SmartAccountAdapter => {
+export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
     const { user, logout } = usePrivy()
     const { wallets, create } = useEmbeddedEthereumWallet()
     const oauth = useLoginWithOAuth()
