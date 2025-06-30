@@ -1,7 +1,3 @@
-/**
- * Data that the user must sign in order to execute a transaction
- * by authorizing the Smart Account contract
- */
 export interface ExecuteWithAuthorizationSignData {
     domain: {
         name: string

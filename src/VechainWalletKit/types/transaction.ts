@@ -10,7 +10,7 @@ export interface SignOptions {
     delegateFor?: string
 }
 
-export interface BuildOptions {
+export interface TransactionOptions {
     gas?: number
     isDelegated?: boolean
     dependsOn?: string

@@ -2,42 +2,29 @@ import React, { createContext, useContext, useCallback, useMemo, useState, useEf
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { VechainWalletSDKConfig } from "../types/config"
-import { SignOptions, BuildOptions, TypedDataPayload } from "../types/transaction"
+import { SignOptions, TransactionOptions, TypedDataPayload } from "../types/transaction"
 import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
 import { useSmartAccount } from "../hooks/useSmartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
+import { SmartWalletContext } from "../types"
+import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
 
-/**
- * Context interface for the VeChain Wallet Provider
- */
-export interface VechainWalletContext {
-    // Core wallet info
-    address: string
-    isAuthenticated: boolean
-    isDeployed: boolean
-
-    signMessage: (message: Buffer) => Promise<Buffer>
-    signTransaction: (tx: Transaction, options?: SignOptions) => Promise<Buffer>
-    signTypedData: (data: TypedDataPayload) => Promise<string>
-    buildTransaction: (clauses: TransactionClause[], options?: BuildOptions) => Promise<Transaction>
-
-    // Authentication management
-    login: (options: LoginOptions) => Promise<void>
-    logout: () => Promise<void>
-}
-
-/**
- * Props for the VechainWalletProvider component
- */
-export interface VechainWalletProviderProps {
+export interface SmartWalletProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
     adapter: SmartAccountAdapter
 }
 
-const VechainWalletContext = createContext<VechainWalletContext | null>(null)
+const SmartWalletProviderContext = createContext<SmartWalletContext | null>(null)
 
-export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ children, config, adapter }) => {
+/**
+ * Base provider for a smart wallet. This uses the adapter pattern to allow for different implementations of the smart account adapter.
+ *
+ * @param children - The children of the provider.
+ * @param config - The configuration for the provider
+ * @param adapter - The adapter that implements the SmartAccountAdapter interface and provides the funtionality to sign, build, and manage the smart account.
+ */
+export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, config, adapter }) => {
     const [address, setAddress] = useState("")
     const [isDeployed, setIsDeployed] = useState(false)
 
@@ -107,7 +94,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
     )
 
     const buildTransaction = useCallback(
-        async (clauses: TransactionClause[], options?: BuildOptions): Promise<Transaction> => {
+        async (clauses: TransactionClause[], options?: TransactionOptions): Promise<Transaction> => {
             if (!isAuthenticated) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated")
             }
@@ -132,11 +119,11 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
                 factoryAddress: smartAccount.getFactoryAddress(),
             }
 
-            // Use the adapter to build smart account transaction clauses
-            const finalClauses = await adapter.buildTransaction({
+            const finalClauses = await buildSmartAccountTransaction({
                 txClauses: clauses,
                 smartAccountConfig,
                 networkType: config.networkConfig.networkType,
+                signTypedDataFn: signTypedData,
             })
 
             // Estimate gas
@@ -155,7 +142,7 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
 
             return Transaction.of(txBody)
         },
-        [address, smartAccount, config.networkConfig.networkType, thor, adapter, isAuthenticated],
+        [address, smartAccount, config.networkConfig.networkType, thor, isAuthenticated, signTypedData],
     )
 
     const login = useCallback(
@@ -196,13 +183,13 @@ export const VechainWalletProvider: React.FC<VechainWalletProviderProps> = ({ ch
         ],
     )
 
-    return <VechainWalletContext.Provider value={contextValue}>{children}</VechainWalletContext.Provider>
+    return <SmartWalletProviderContext.Provider value={contextValue}>{children}</SmartWalletProviderContext.Provider>
 }
 
-export const useVechainWallet = (): VechainWalletContext => {
-    const context = useContext(VechainWalletContext)
+export const useSmartWallet = (): SmartWalletContext => {
+    const context = useContext(SmartWalletProviderContext)
     if (!context) {
-        throw new Error("useVechainWallet must be used within a VechainWalletProvider")
+        throw new Error("useSmartWallet must be used within a SmartWalletProvider")
     }
     return context
 }

@@ -86,8 +86,8 @@ const resetMockOAuth = () => {
 
 import { renderHook, act } from "@testing-library/react-native"
 import React from "react"
-import { VechainWalletWithPrivy } from "../../providers/VechainWalletWithPrivy"
-import { useVechainWallet } from "../../providers/VechainWalletProvider"
+import { useSmartWallet } from "../../providers/SmartWalletProvider"
+import { SmartWalletWithPrivyProvider } from "../../providers/SmartWalletWithPrivy"
 
 /**
  * Smart Account User Journey Tests with VechainWalletWithPrivy
@@ -111,7 +111,7 @@ const testConfig = {
 
 // Custom wrapper component for testing that uses VechainWalletWithPrivy
 const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    return React.createElement(VechainWalletWithPrivy, {
+    return React.createElement(SmartWalletWithPrivyProvider, {
         config: testConfig,
         children,
     })
@@ -130,7 +130,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
             setAuthenticatedUser("new-user")
             setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
 
-            const { result } = renderHook(() => useVechainWallet(), {
+            const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
             })
 
@@ -158,7 +158,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
             setAuthenticatedUser("test-user")
             setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
 
-            const { result } = renderHook(() => useVechainWallet(), {
+            const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
             })
 
@@ -193,7 +193,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
             const mockSignature = "0x1234abcd5678ef90"
             setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", mockSignature)
 
-            const { result } = renderHook(() => useVechainWallet(), {
+            const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
             })
 
@@ -224,7 +224,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
             const mockSignature = "0xabcd1234ef567890"
             setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", mockSignature)
 
-            const { result } = renderHook(() => useVechainWallet(), {
+            const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
             })
 
@@ -269,7 +269,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
             setUnauthenticatedUser()
             setEmptyWallets()
 
-            const { result } = renderHook(() => useVechainWallet(), {
+            const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
             })
 
@@ -283,7 +283,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
             setAuthenticatedUser("test-user")
             setProviderError(new Error("Provider error"))
 
-            const { result } = renderHook(() => useVechainWallet(), {
+            const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
             })
 
@@ -299,7 +299,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
             setAuthenticatedUser("integration-test-user")
             setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
 
-            const { result } = renderHook(() => useVechainWallet(), {
+            const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
             })
 
@@ -327,7 +327,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
 
             // Since we're mocking PrivyProvider to just render children,
             // we can verify the component renders without errors
-            const { result } = renderHook(() => useVechainWallet(), {
+            const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
             })
 
