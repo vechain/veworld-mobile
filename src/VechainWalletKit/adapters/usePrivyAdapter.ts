@@ -1,14 +1,14 @@
 import { useMemo } from "react"
 import { usePrivy, useEmbeddedEthereumWallet, useLoginWithOAuth } from "@privy-io/expo"
 import { Transaction } from "@vechain/sdk-core"
-import { Account, SmartAccountAdapter, LoginOptions } from "../types/wallet"
+import { SmartAccountAdapter, LoginOptions } from "../types/wallet"
 import { TypedDataPayload } from "../types/transaction"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import HexUtils from "../../Utils/HexUtils"
 
-export const usePrivySmartAccountAdapter = (): SmartAccountAdapter => {
+export const usePrivyAdapter = (): SmartAccountAdapter => {
     const { user, logout } = usePrivy()
-    const { wallets } = useEmbeddedEthereumWallet()
+    const { wallets, create } = useEmbeddedEthereumWallet()
     const oauth = useLoginWithOAuth()
 
     const isAuthenticated = !!user && (wallets?.length || 0) > 0
@@ -29,12 +29,17 @@ export const usePrivySmartAccountAdapter = (): SmartAccountAdapter => {
                 await logout()
             },
 
+            // Will create only one wallet for the user even if called multiple times.
+            async createWallet(): Promise<void> {
+                await create()
+            },
+
             async signMessage(message: Buffer): Promise<Buffer> {
                 if (!isAuthenticated || !currentWallets.length) {
-                    throw new WalletError(
-                        WalletErrorType.WALLET_NOT_FOUND,
-                        "User not authenticated or no wallet available",
-                    )
+                    const errormessage = !isAuthenticated
+                        ? "User not authenticated"
+                        : "No wallet available. Please create a wallet first."
+                    throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, errormessage)
                 }
 
                 try {
@@ -114,7 +119,7 @@ export const usePrivySmartAccountAdapter = (): SmartAccountAdapter => {
                 }
             },
 
-            async getAccount(): Promise<Account> {
+            getAccount(): string {
                 if (!isAuthenticated || !currentWallets.length) {
                     throw new WalletError(
                         WalletErrorType.WALLET_NOT_FOUND,
@@ -122,12 +127,10 @@ export const usePrivySmartAccountAdapter = (): SmartAccountAdapter => {
                     )
                 }
 
-                return {
-                    address: currentWallets[0].address,
-                }
+                return currentWallets[0].address
             },
         }
-    }, [isAuthenticated, wallets, oauth, logout])
+    }, [isAuthenticated, wallets, oauth, logout, create])
 }
 
 export const findPrimaryType = (types: Record<string, any>, message: any): string => {

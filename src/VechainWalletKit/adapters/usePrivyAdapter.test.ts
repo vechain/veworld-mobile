@@ -1,5 +1,5 @@
 import { renderHook } from "@testing-library/react-native"
-import { usePrivySmartAccountAdapter } from "./usePrivySmartAccountAdapter"
+import { usePrivyAdapter } from "./usePrivyAdapter"
 import { WalletError, WalletErrorType } from "../utils/errors"
 
 // Mock VeChain Transaction
@@ -104,7 +104,7 @@ const setProviderError = (error: Error) => {
     }
 }
 
-describe("usePrivySmartAccountAdapter", () => {
+describe("usePrivyAdapter", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         // Reset to default authenticated state
@@ -121,7 +121,7 @@ describe("usePrivySmartAccountAdapter", () => {
                 "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1b"
             setMockWalletWithProvider(mockSignatureResponse)
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => usePrivyAdapter())
 
             const signature = await result.current.signTransaction(mockTransaction as any)
 
@@ -147,7 +147,7 @@ describe("usePrivySmartAccountAdapter", () => {
                 "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1b"
             setMockWalletWithProvider(mockSignatureResponse)
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => usePrivyAdapter())
 
             const signature = await result.current.signTransaction(mockTransaction as any)
 
@@ -163,7 +163,7 @@ describe("usePrivySmartAccountAdapter", () => {
                 "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef1c"
             setMockWalletWithProvider(mockSignatureResponse)
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => usePrivyAdapter())
 
             const signature = await result.current.signTransaction(mockTransaction as any)
 
@@ -179,7 +179,7 @@ describe("usePrivySmartAccountAdapter", () => {
                 "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef00"
             setMockWalletWithProvider(mockSignatureResponse)
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => usePrivyAdapter())
 
             const signature = await result.current.signTransaction(mockTransaction as any)
 
@@ -191,7 +191,7 @@ describe("usePrivySmartAccountAdapter", () => {
         it("should throw error when user is not authenticated", async () => {
             setUnauthenticatedUser()
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => usePrivyAdapter())
 
             await expect(result.current.signTransaction(mockTransaction as any)).rejects.toThrow(WalletError)
             await expect(result.current.signTransaction(mockTransaction as any)).rejects.toThrow(
@@ -203,7 +203,7 @@ describe("usePrivySmartAccountAdapter", () => {
             setAuthenticatedUser()
             setEmptyWallets()
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => usePrivyAdapter())
 
             await expect(result.current.signTransaction(mockTransaction as any)).rejects.toThrow(WalletError)
             await expect(result.current.signTransaction(mockTransaction as any)).rejects.toThrow(
@@ -215,7 +215,7 @@ describe("usePrivySmartAccountAdapter", () => {
             setAuthenticatedUser()
             setProviderError(new Error("Provider signing failed"))
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => usePrivyAdapter())
 
             await expect(result.current.signTransaction(mockTransaction as any)).rejects.toThrow(WalletError)
             await expect(result.current.signTransaction(mockTransaction as any)).rejects.toThrow(
@@ -227,7 +227,7 @@ describe("usePrivySmartAccountAdapter", () => {
             setAuthenticatedUser()
             setProviderError(new Error("User rejected the transaction"))
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => usePrivyAdapter())
 
             await expect(result.current.signTransaction(mockTransaction as any)).rejects.toThrow(WalletError)
 

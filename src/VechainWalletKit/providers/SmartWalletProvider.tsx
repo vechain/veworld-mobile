@@ -8,6 +8,7 @@ import { useSmartAccount } from "../hooks/useSmartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import { SmartWalletContext } from "../types"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
+import { getChainId } from "../utils/chainId"
 
 export interface SmartWalletProps {
     children: React.ReactNode
@@ -44,11 +45,11 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         const updateAccountInfo = async () => {
             if (isAuthenticated) {
                 try {
-                    const account = await adapter.getAccount()
-                    setAddress(account.address)
+                    const accountAddress = adapter.getAccount()
+                    setAddress(accountAddress)
 
                     // Get smart account info to determine deployment status
-                    const smartAccountData = await smartAccount.getSmartAccount(account.address)
+                    const smartAccountData = await smartAccount.getSmartAccount(accountAddress)
                     setIsDeployed(smartAccountData.isDeployed)
                 } catch (error) {
                     setAddress("")
@@ -61,7 +62,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         }
 
         updateAccountInfo()
-    }, [isAuthenticated, adapter, smartAccount])
+    }, [isAuthenticated, adapter, smartAccount, address])
 
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
@@ -95,8 +96,8 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const buildTransaction = useCallback(
         async (clauses: TransactionClause[], options?: TransactionOptions): Promise<Transaction> => {
-            if (!isAuthenticated) {
-                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated")
+            if (!isAuthenticated || !address) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated or no address")
             }
 
             // Get smart account information
@@ -122,7 +123,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             const finalClauses = await buildSmartAccountTransaction({
                 txClauses: clauses,
                 smartAccountConfig,
-                networkType: config.networkConfig.networkType,
+                chainId: getChainId(config.networkConfig.networkType, config.networkConfig.chainId),
                 signTypedDataFn: signTypedData,
             })
 
@@ -142,7 +143,15 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
             return Transaction.of(txBody)
         },
-        [address, smartAccount, config.networkConfig.networkType, thor, isAuthenticated, signTypedData],
+        [
+            address,
+            smartAccount,
+            config.networkConfig.networkType,
+            thor,
+            isAuthenticated,
+            signTypedData,
+            config.networkConfig.chainId,
+        ],
     )
 
     const login = useCallback(
@@ -158,6 +167,10 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         setIsDeployed(false)
     }, [adapter])
 
+    const createWallet = useCallback(async (): Promise<void> => {
+        await adapter.createWallet()
+    }, [adapter])
+
     const contextValue = useMemo(
         () => ({
             address,
@@ -169,6 +182,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             buildTransaction,
             login,
             logout,
+            createWallet,
         }),
         [
             address,
@@ -180,6 +194,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             buildTransaction,
             login,
             logout,
+            createWallet,
         ],
     )
 

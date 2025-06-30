@@ -1,7 +1,7 @@
 import React from "react"
 import { PrivyProvider } from "@privy-io/expo"
 import { SmartWalletProvider, SmartWalletProps } from "./SmartWalletProvider"
-import { usePrivySmartAccountAdapter } from "../adapters/usePrivySmartAccountAdapter"
+import { usePrivyAdapter } from "../adapters/usePrivyAdapter"
 import { VechainWalletSDKConfig } from "../types/config"
 
 interface PrivyConfig extends VechainWalletSDKConfig {
@@ -22,7 +22,7 @@ export interface SmartWalletWithPrivyProps extends Omit<SmartWalletProps, "adapt
  * @param config - The configuration for the provider including Privy app credentials.
  */
 const SmartWalletWithPrivyImpl: React.FC<SmartWalletWithPrivyProps> = ({ children, config }) => {
-    const adapter = usePrivySmartAccountAdapter()
+    const adapter = usePrivyAdapter()
 
     return (
         <SmartWalletProvider config={config} adapter={adapter}>

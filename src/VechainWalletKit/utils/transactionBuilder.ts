@@ -41,18 +41,6 @@ function getExpirationTimes(durationInSeconds: number) {
     }
 }
 
-function getChainIdFromNetworkType(networkType: "mainnet" | "testnet"): number {
-    // Mainnet chain ID is the geesis block id "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a"
-    // Testnet chain ID is the geesis block id "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127"
-    // The smart account uses the last 16 bits of the chainId, so we convert it here
-    if (networkType === "mainnet") {
-        return 6986
-    } else if (networkType === "testnet") {
-        return 45351
-    }
-    throw new Error(`Unsupported network type: ${networkType}`)
-}
-
 /**
  * Build the typed data structure for executeBatchWithAuthorization
  */
@@ -276,13 +264,11 @@ async function buildIndividualExecutionClauses({
 export async function buildSmartAccountTransaction(params: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
-    networkType: "mainnet" | "testnet"
+    chainId: number
     signTypedDataFn: TransactionSigningFunction
 }): Promise<TransactionClause[]> {
-    const { txClauses, smartAccountConfig, networkType, signTypedDataFn } = params
+    const { txClauses, smartAccountConfig, signTypedDataFn, chainId } = params
     const { version: smartAccountVersion, hasV1SmartAccount } = smartAccountConfig
-
-    const chainId = getChainIdFromNetworkType(networkType)
 
     // Determine execution strategy based on smart account version
     const shouldUseBatchExecution = !hasV1SmartAccount || (smartAccountVersion && smartAccountVersion >= 3)

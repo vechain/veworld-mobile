@@ -124,7 +124,7 @@ describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
         resetMockOAuth()
     })
 
-    describe("New User First-Time Setup", () => {
+    describe("New smart account First-Time Setup", () => {
         it("should complete full onboarding flow", async () => {
             // Set up authenticated user for this test
             setAuthenticatedUser("new-user")
