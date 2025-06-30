@@ -548,6 +548,7 @@ export const createActivityFromIndexedHistoryEvent = (
         newLevel,
         from,
         reverted,
+        levelId,
     } = event
 
     const isTransaction =
@@ -706,6 +707,7 @@ export const createActivityFromIndexedHistoryEvent = (
                 eventName: eventName,
                 value: value,
                 tokenId: tokenId,
+                levelId: levelId,
             } as StargateActivity
         }
         case ActivityEvent.UNKNOWN_TX:

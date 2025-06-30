@@ -121,10 +121,6 @@ type RootTranslation = {
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: string
 	/**
-	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​V​E​T​ ​t​o​k​e​n​s​.
-	 */
-	ACTIVITY_STAKING_EMPTY_LABEL: string
-	/**
 	 * A​l​l
 	 */
 	ACTIVITY_ALL_LABEL: string
@@ -132,10 +128,6 @@ type RootTranslation = {
 	 * D​i​s​c​o​v​e​r​ ​V​e​B​e​t​t​e​r​D​A​O
 	 */
 	ACTIVITY_B3TR_EMPTY_BUTTON: string
-	/**
-	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​
-	 */
-	ACTIVITY_STAKING_EMPTY_BUTTON: string
 	/**
 	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​B​3​T​R​ ​t​o​k​e​n​s​ ​w​i​t​h​ ​y​o​u​r​ ​b​e​t​t​e​r​ ​a​c​t​i​o​n​s​ ​e​v​e​r​y​ ​d​a​y​!
 	 */
@@ -157,6 +149,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_DAPPS_LABEL: string
 	/**
+	 * E​v​e​n​t​ ​n​a​m​e
+	 */
+	ACTIVITY_EVENT_NAME: string
+	/**
 	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_NFT_EMPTY_LABEL: string
@@ -169,39 +165,43 @@ type RootTranslation = {
 	 */
 	ACTIVITY_OTHER_EMPTY_LABEL: string
 	/**
-	 * S​t​a​k​i​n​g
-	 */
-	ACTIVITY_STAKING_LABEL: string
-	/**
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
 	/**
-	 * Delegate
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g
 	 */
-	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
+	ACTIVITY_STAKING_EMPTY_BUTTON: string
 	/**
-	 * Stake
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​V​E​T​ ​t​o​k​e​n​s​.
 	 */
-	ACTIVITY_STARGATE_STAKE_LABEL: string
+	ACTIVITY_STAKING_EMPTY_LABEL: string
 	/**
-	 * Event name
+	 * S​t​a​k​i​n​g
 	 */
-	ACTIVITY_EVENT_NAME: string
+	ACTIVITY_STAKING_LABEL: string
 	/**
-	 * Claimed rewards
+	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
 	/**
-	 * Claimed rewards
+	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
 	/**
-	 * Undelegate
+	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
+	/**
+	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e​d
 	 */
 	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: string
 	/**
-	 * Unstake
+	 * V​E​T​ ​s​t​a​k​e​d
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: string
+	/**
+	 * V​E​T​ ​u​n​s​t​a​k​e​d
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
@@ -4537,10 +4537,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_ALL_EMPTY_LABEL: () => LocalizedString
 	/**
-	 * Start earning rewards by staking your VET tokens.
-	 */
-	ACTIVITY_STAKING_EMPTY_LABEL: () => LocalizedString
-	/**
 	 * All
 	 */
 	ACTIVITY_ALL_LABEL: () => LocalizedString
@@ -4548,10 +4544,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Discover VeBetterDAO
 	 */
 	ACTIVITY_B3TR_EMPTY_BUTTON: () => LocalizedString
-	/**
-	 * Start earning
-	 */
-	ACTIVITY_STAKING_EMPTY_BUTTON: () => LocalizedString
 	/**
 	 * Start earning B3TR tokens with your better actions every day!
 	 */
@@ -4573,6 +4565,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_DAPPS_LABEL: () => LocalizedString
 	/**
+	 * Event name
+	 */
+	ACTIVITY_EVENT_NAME: () => LocalizedString
+	/**
 	 * No NFTs to show yet
 	 */
 	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
@@ -4585,25 +4581,21 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_OTHER_EMPTY_LABEL: () => LocalizedString
 	/**
-	 * Staking
-	 */
-	ACTIVITY_STAKING_LABEL: () => LocalizedString
-	/**
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
 	/**
-	 * Delegate
+	 * Start earning
 	 */
-	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
+	ACTIVITY_STAKING_EMPTY_BUTTON: () => LocalizedString
 	/**
-	 * Stake
+	 * Start earning rewards by staking your VET tokens.
 	 */
-	ACTIVITY_STARGATE_STAKE_LABEL: () => LocalizedString
+	ACTIVITY_STAKING_EMPTY_LABEL: () => LocalizedString
 	/**
-	 * Event name
+	 * Staking
 	 */
-	ACTIVITY_EVENT_NAME: () => LocalizedString
+	ACTIVITY_STAKING_LABEL: () => LocalizedString
 	/**
 	 * Claimed rewards
 	 */
@@ -4613,11 +4605,19 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
 	/**
-	 * Undelegate
+	 * VET staked & delegated
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Node undelegated
 	 */
 	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: () => LocalizedString
 	/**
-	 * Unstake
+	 * VET staked
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: () => LocalizedString
+	/**
+	 * VET unstaked
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
