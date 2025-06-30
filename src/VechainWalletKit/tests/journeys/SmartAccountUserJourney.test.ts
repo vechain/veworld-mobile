@@ -1,3 +1,23 @@
+// Mock Privy SDK before any imports to avoid Expo native module issues
+jest.doMock("@privy-io/expo", () => ({
+    usePrivy: jest.fn(() => ({
+        user: { id: "journey-test-user" },
+        logout: jest.fn(),
+    })),
+    useEmbeddedEthereumWallet: jest.fn(() => ({
+        wallets: [
+            {
+                address: "0x5555555555555555555555555555555555555555",
+                getProvider: jest.fn().mockResolvedValue({
+                    request: jest.fn().mockResolvedValue("0xjourneysignature"),
+                }),
+            },
+        ],
+    })),
+    useLoginWithOAuth: jest.fn(() => ({
+        login: jest.fn(),
+    })),
+}))
 import { renderHook, act } from "@testing-library/react-native"
 import { usePrivySmartAccountAdapter } from "../../adapters/PrivySmartAccountAdapter"
 
