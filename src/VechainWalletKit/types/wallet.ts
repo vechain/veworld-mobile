@@ -19,7 +19,7 @@ export interface WalletAdapter {
 export interface SmartAccountAdapter extends WalletAdapter {
     login(options: LoginOptions): Promise<void>
     logout(): Promise<void>
-    buildSmartAccountTransaction(params: {
+    buildTransaction(params: {
         txClauses: TransactionClause[]
         smartAccountConfig: SmartAccountTransactionConfig
         networkType: "mainnet" | "testnet"

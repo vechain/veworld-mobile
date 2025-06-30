@@ -137,7 +137,7 @@ export const usePrivySmartAccountAdapter = (): SmartAccountAdapter => {
             },
 
             // Smart Account specific methods
-            async buildSmartAccountTransaction(params: {
+            async buildTransaction(params: {
                 txClauses: TransactionClause[]
                 smartAccountConfig: SmartAccountTransactionConfig
                 networkType: "mainnet" | "testnet"

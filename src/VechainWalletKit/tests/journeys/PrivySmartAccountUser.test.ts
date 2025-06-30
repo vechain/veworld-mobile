@@ -27,6 +27,8 @@ jest.mock("@privy-io/expo", () => ({
     usePrivy: jest.fn(() => mockUserState),
     useEmbeddedEthereumWallet: jest.fn(() => mockWalletState),
     useLoginWithOAuth: jest.fn(() => mockOAuthState),
+    // Mock PrivyProvider to simply render children
+    PrivyProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
 // Helper functions to set different mock states
@@ -83,15 +85,39 @@ const resetMockOAuth = () => {
 }
 
 import { renderHook, act } from "@testing-library/react-native"
-import { usePrivySmartAccountAdapter } from "../../adapters/usePrivySmartAccountAdapter"
+import React from "react"
+import { VechainWalletWithPrivy } from "../../providers/VechainWalletWithPrivy"
+import { useVechainWallet } from "../../providers/VechainWalletProvider"
 
 /**
- * Smart Account User Journey Tests
+ * Smart Account User Journey Tests with VechainWalletWithPrivy
  *
- * Tests that focus on user interaction flows with the Kit
+ * Tests that focus on user interaction flows using the full VechainWalletWith
+ Privy wrapper
+ * This provides coverage for the complete integration including PrivyProvider
  */
 
-describe("Smart Account User Journey Tests", () => {
+// Test configuration for VechainWalletWithPrivy
+const testConfig = {
+    providerConfig: {
+        appId: "test-app-id",
+        clientId: "test-client-id",
+    },
+    networkConfig: {
+        nodeUrl: "https://testnet.vechain.org",
+        networkType: "testnet" as const,
+    },
+}
+
+// Custom wrapper component for testing that uses VechainWalletWithPrivy
+const TestWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+    return React.createElement(VechainWalletWithPrivy, {
+        config: testConfig,
+        children,
+    })
+}
+
+describe("Smart Account User Journey Tests with VechainWalletWithPrivy", () => {
     beforeEach(() => {
         // Reset all mocks before each test
         jest.clearAllMocks()
@@ -104,7 +130,9 @@ describe("Smart Account User Journey Tests", () => {
             setAuthenticatedUser("new-user")
             setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => useVechainWallet(), {
+                wrapper: TestWrapper,
+            })
 
             // 1. User starts authenticated
             expect(result.current.isAuthenticated).toBe(true)
@@ -119,11 +147,8 @@ describe("Smart Account User Journey Tests", () => {
 
             expect(mockOAuthState.login).toHaveBeenCalled()
 
-            // 3. User can access their account
-            await act(async () => {
-                const account = await result.current.getAccount()
-                expect(account.address).toBeTruthy()
-            })
+            // 3. User can access their account address
+            expect(result.current.address).toBeTruthy()
         })
     })
 
@@ -133,7 +158,9 @@ describe("Smart Account User Journey Tests", () => {
             setAuthenticatedUser("test-user")
             setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => useVechainWallet(), {
+                wrapper: TestWrapper,
+            })
 
             // Test login functionality
             await act(async () => {
@@ -166,7 +193,9 @@ describe("Smart Account User Journey Tests", () => {
             const mockSignature = "0x1234abcd5678ef90"
             setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", mockSignature)
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => useVechainWallet(), {
+                wrapper: TestWrapper,
+            })
 
             const message = Buffer.from("Please sign this message", "utf8")
 
@@ -195,7 +224,9 @@ describe("Smart Account User Journey Tests", () => {
             const mockSignature = "0xabcd1234ef567890"
             setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", mockSignature)
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => useVechainWallet(), {
+                wrapper: TestWrapper,
+            })
 
             const typedData = {
                 domain: {
@@ -238,13 +269,13 @@ describe("Smart Account User Journey Tests", () => {
             setUnauthenticatedUser()
             setEmptyWallets()
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => useVechainWallet(), {
+                wrapper: TestWrapper,
+            })
 
             const message = Buffer.from("Test message", "utf8")
 
-            await expect(result.current.signMessage(message)).rejects.toThrow(
-                "User not authenticated or no wallet available",
-            )
+            await expect(result.current.signMessage(message)).rejects.toThrow("User not authenticated")
         })
 
         it("should handle provider errors", async () => {
@@ -252,11 +283,56 @@ describe("Smart Account User Journey Tests", () => {
             setAuthenticatedUser("test-user")
             setProviderError(new Error("Provider error"))
 
-            const { result } = renderHook(() => usePrivySmartAccountAdapter())
+            const { result } = renderHook(() => useVechainWallet(), {
+                wrapper: TestWrapper,
+            })
 
             const message = Buffer.from("Test message", "utf8")
 
             await expect(result.current.signMessage(message)).rejects.toThrow("Failed to sign message")
+        })
+    })
+
+    describe("VechainWalletWithPrivy Integration", () => {
+        it("should initialize with proper Privy configuration", async () => {
+            // Set up authenticated user for this test
+            setAuthenticatedUser("integration-test-user")
+            setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
+
+            const { result } = renderHook(() => useVechainWallet(), {
+                wrapper: TestWrapper,
+            })
+
+            // Verify the wallet context is properly initialized
+            expect(result.current.isAuthenticated).toBe(true)
+
+            // Wait for the address to be set asynchronously
+            await act(async () => {
+                // Trigger any async operations by calling a method
+                await new Promise(resolve => setTimeout(resolve, 0))
+            })
+
+            expect(result.current.address).toBeTruthy()
+            expect(typeof result.current.signMessage).toBe("function")
+            expect(typeof result.current.signTransaction).toBe("function")
+            expect(typeof result.current.signTypedData).toBe("function")
+            expect(typeof result.current.buildTransaction).toBe("function")
+            expect(typeof result.current.login).toBe("function")
+            expect(typeof result.current.logout).toBe("function")
+        })
+
+        it("should handle full provider configuration", () => {
+            // This test verifies that the VechainWalletWithPrivy component
+            // properly passes through the configuration to both PrivyProvider and VechainWalletProvider
+
+            // Since we're mocking PrivyProvider to just render children,
+            // we can verify the component renders without errors
+            const { result } = renderHook(() => useVechainWallet(), {
+                wrapper: TestWrapper,
+            })
+
+            expect(result.current).toBeDefined()
+            expect(typeof result.current.isAuthenticated).toBe("boolean")
         })
     })
 })

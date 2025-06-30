@@ -117,7 +117,7 @@ describe("Smart Account Deployment", () => {
                 networkType: "testnet" as const,
             }
 
-            const resultClauses = await result.current.buildSmartAccountTransaction(transactionParams)
+            const resultClauses = await result.current.buildTransaction(transactionParams)
 
             expect(Array.isArray(resultClauses)).toBe(true)
             expect(resultClauses.length).toBeGreaterThan(0)
@@ -156,7 +156,7 @@ describe("Smart Account Deployment", () => {
                 networkType: "testnet" as const,
             }
 
-            const resultClauses = await result.current.buildSmartAccountTransaction(transactionParams)
+            const resultClauses = await result.current.buildTransaction(transactionParams)
 
             expect(Array.isArray(resultClauses)).toBe(true)
             expect(resultClauses.length).toBeGreaterThan(0)
@@ -199,7 +199,7 @@ describe("Smart Account Deployment", () => {
                 networkType: "testnet" as const,
             }
 
-            const resultClauses = await result.current.buildSmartAccountTransaction(transactionParams)
+            const resultClauses = await result.current.buildTransaction(transactionParams)
 
             expect(Array.isArray(resultClauses)).toBe(true)
             // 1 for each of the txClauses
@@ -248,7 +248,7 @@ describe("Smart Account Deployment", () => {
                 networkType: "testnet" as const,
             }
 
-            const resultClauses = await result.current.buildSmartAccountTransaction(transactionParams)
+            const resultClauses = await result.current.buildTransaction(transactionParams)
 
             expect(Array.isArray(resultClauses)).toBe(true)
             // 1 for the deployment and 1 for the combined txClauses
