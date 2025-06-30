@@ -149,6 +149,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_DAPPS_LABEL: string
 	/**
+	 * E​v​e​n​t​ ​n​a​m​e
+	 */
+	ACTIVITY_EVENT_NAME: string
+	/**
 	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_NFT_EMPTY_LABEL: string
@@ -164,6 +168,42 @@ type RootTranslation = {
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g
+	 */
+	ACTIVITY_STAKING_EMPTY_BUTTON: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​V​T​H​O​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​V​E​T​ ​t​o​k​e​n​s​.
+	 */
+	ACTIVITY_STAKING_EMPTY_LABEL: string
+	/**
+	 * S​t​a​k​i​n​g
+	 */
+	ACTIVITY_STAKING_LABEL: string
+	/**
+	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
+	/**
+	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
+	/**
+	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e​d
+	 */
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​d
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: string
+	/**
+	 * V​E​T​ ​u​n​s​t​a​k​e​d
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
@@ -4525,6 +4565,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_DAPPS_LABEL: () => LocalizedString
 	/**
+	 * Event name
+	 */
+	ACTIVITY_EVENT_NAME: () => LocalizedString
+	/**
 	 * No NFTs to show yet
 	 */
 	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
@@ -4540,6 +4584,42 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * Start earning
+	 */
+	ACTIVITY_STAKING_EMPTY_BUTTON: () => LocalizedString
+	/**
+	 * Start earning VTHO by staking your VET tokens.
+	 */
+	ACTIVITY_STAKING_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Staking
+	 */
+	ACTIVITY_STAKING_LABEL: () => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: () => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * VET staked & delegated
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Node undelegated
+	 */
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: () => LocalizedString
+	/**
+	 * VET staked
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: () => LocalizedString
+	/**
+	 * VET unstaked
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yet
 	 */

@@ -120,7 +120,7 @@ export type RootStackParamListHome = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined

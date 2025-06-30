@@ -23,6 +23,7 @@ import {
     ActivityOtherScreen,
     ActivitySwapScreen,
     ActivityTransferScreen,
+    ActivityStakingScreen,
 } from "./screens"
 import { Routes } from "~Navigation"
 import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
@@ -87,6 +88,11 @@ export const ActivityScreen = () => {
                             name={Routes.ACTIVITY_TRANSFER}
                             component={ActivityTransferScreen}
                             options={{ title: LL.ACTIVITY_TRANSFER_LABEL() }}
+                        />
+                        <Tab.Screen
+                            name={Routes.ACTIVITY_STAKING}
+                            component={ActivityStakingScreen}
+                            options={{ title: LL.ACTIVITY_STAKING_LABEL() }}
                         />
                         <Tab.Screen
                             name={Routes.ACTIVITY_SWAP}
