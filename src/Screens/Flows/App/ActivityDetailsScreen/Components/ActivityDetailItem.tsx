@@ -52,6 +52,9 @@ export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, borde
             justifyContent="flex-start">
             <BaseView>
                 <BaseText typographyFont="body" pb={5}>
+                    {activityDetail.eventName ?? ""}
+                </BaseText>
+                <BaseText typographyFont="body" pb={5}>
                     {activityDetail.title}
                 </BaseText>
 
