@@ -185,10 +185,6 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DESCRIPTION: string
 	/**
-	 * B3TR Claimed rewards
-	 */
-	ACTIVITY_STARGATE_B3TR_CLAIMED_REWARDS_LABEL: string
-	/**
 	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
@@ -4608,10 +4604,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Staking
 	 */
 	ACTIVITY_STAKING_LABEL: () => LocalizedString
-	/**
-	 * B3TR Claimed rewards
-	 */
-	ACTIVITY_STARGATE_B3TR_CLAIMED_REWARDS_LABEL: () => LocalizedString
 	/**
 	 * Claimed rewards
 	 */

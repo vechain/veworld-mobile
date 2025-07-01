@@ -5,7 +5,7 @@ import { TouchableOpacity } from "react-native-gesture-handler"
 import Markdown from "react-native-markdown-display"
 import { StargateDappBannerB3MO, StargateDappLogo } from "~Assets"
 import { BaseView } from "~Components"
-import { AnalyticsEvent, COLORS, ColorThemeType, STARGATE_DAPP_URL } from "~Constants"
+import { AnalyticsEvent, COLORS, ColorThemeType, STARGATE_URL } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
@@ -21,7 +21,7 @@ export const StargateStakingBanner = () => {
 
     const handlePress = () => {
         navigateWithTab({
-            url: STARGATE_DAPP_URL,
+            url: STARGATE_URL,
             title: "Stargate",
             navigationFn: (url: string) => {
                 track(AnalyticsEvent.DISCOVERY_STARGATE_BANNER_CLICKED, { location: "staking" })

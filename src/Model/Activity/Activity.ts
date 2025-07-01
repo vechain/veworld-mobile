@@ -326,7 +326,6 @@ export interface StargateActivity extends Activity {
         | ActivityEvent.STARGATE_CLAIM_REWARDS_BASE
         | ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE
         | ActivityEvent.STARGATE_DELEGATE_ONLY
-        | ActivityEvent.B3TR_CLAIMED_REWARDS
     value: string
     tokenId?: string
     levelId?: TokenLevelId
