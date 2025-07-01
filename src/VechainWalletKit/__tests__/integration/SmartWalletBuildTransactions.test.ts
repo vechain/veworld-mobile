@@ -66,6 +66,7 @@ jest.mock("@privy-io/expo", () => ({
                 }),
             },
         ],
+        create: jest.fn().mockResolvedValue(undefined),
     })),
     useLoginWithOAuth: jest.fn(() => ({
         login: jest.fn(),
@@ -79,17 +80,10 @@ const setMockAddress = (address: string) => {
 
 // Mock smart account functions that can be dynamically set per test
 let mockGetSmartAccount: jest.Mock = jest.fn()
-let mockHasV1SmartAccount: jest.Mock = jest.fn()
-let mockGetSmartAccountVersion: jest.Mock = jest.fn()
 
-// Mock useSmartAccount hook with dynamic functions
-jest.mock("../../hooks/useSmartAccount", () => ({
-    useSmartAccount: jest.fn(() => ({
-        getSmartAccount: jest.fn().mockImplementation((...args) => mockGetSmartAccount(...args)),
-        hasV1SmartAccount: jest.fn().mockImplementation((...args) => mockHasV1SmartAccount(...args)),
-        getSmartAccountVersion: jest.fn().mockImplementation((...args) => mockGetSmartAccountVersion(...args)),
-        getFactoryAddress: jest.fn().mockReturnValue("0x1234567890123456789012345678901234567890"),
-    })),
+// Mock smart account utility functions
+jest.mock("../../utils/smartAccount", () => ({
+    getSmartAccount: jest.fn().mockImplementation((...args) => mockGetSmartAccount(...args)),
 }))
 
 // Test configuration for SmartWalletWithPrivy
@@ -121,8 +115,6 @@ describe("Building transactions for smart accounts", () => {
         // Reset mock calls between tests
         mockBuildTransactionBody.mockClear()
         mockGetSmartAccount.mockClear()
-        mockHasV1SmartAccount.mockClear()
-        mockGetSmartAccountVersion.mockClear()
     })
 
     describe("Transaction Building Based on Deployment Status", () => {
@@ -132,12 +124,18 @@ describe("Building transactions for smart accounts", () => {
             mockGetSmartAccount.mockResolvedValue({
                 address: "0x3333333333333333333333333333333333333333",
                 isDeployed: false,
+                version: 3,
+                hasV1Account: false,
+                factoryAddress: "0x1234567890123456789012345678901234567890",
             })
-            mockHasV1SmartAccount.mockReturnValue(false)
-            mockGetSmartAccountVersion.mockReturnValue(3)
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
+            })
+
+            // Initialize the wallet first
+            await act(async () => {
+                await result.current.initialiseWallet()
             })
 
             const txClauses = [
@@ -176,12 +174,18 @@ describe("Building transactions for smart accounts", () => {
             mockGetSmartAccount.mockResolvedValue({
                 address: "0x4444444444444444444444444444444444444444",
                 isDeployed: true,
+                version: 3,
+                hasV1Account: false,
+                factoryAddress: "0x1234567890123456789012345678901234567890",
             })
-            mockHasV1SmartAccount.mockReturnValue(false)
-            mockGetSmartAccountVersion.mockReturnValue(3)
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
+            })
+
+            // Initialize the wallet first
+            await act(async () => {
+                await result.current.initialiseWallet()
             })
 
             const txClauses = [
@@ -211,12 +215,18 @@ describe("Building transactions for smart accounts", () => {
             mockGetSmartAccount.mockResolvedValue({
                 address: "0x5555555555555555555555555555555555555555",
                 isDeployed: true,
+                version: 1,
+                hasV1Account: true,
+                factoryAddress: "0x1234567890123456789012345678901234567890",
             })
-            mockHasV1SmartAccount.mockReturnValue(true)
-            mockGetSmartAccountVersion.mockReturnValue(1)
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
+            })
+
+            // Initialize the wallet first
+            await act(async () => {
+                await result.current.initialiseWallet()
             })
 
             const txClauses = [

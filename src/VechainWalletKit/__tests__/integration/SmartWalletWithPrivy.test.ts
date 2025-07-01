@@ -42,11 +42,6 @@ jest.mock("@privy-io/expo", () => ({
     PrivyProvider: ({ children }: { children: React.ReactNode }) => children,
 }))
 
-// Mock useSmartAccount hook
-jest.mock("../../hooks/useSmartAccount", () => ({
-    useSmartAccount: jest.fn(() => mockSmartAccountState),
-}))
-
 // Helper functions to set different mock states
 const setAuthenticatedUser = (userId: string) => {
     mockUserState = {
@@ -188,6 +183,11 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
                 wrapper: TestWrapper,
             })
 
+            // Init the wallet
+            await act(async () => {
+                await result.current.initialiseWallet()
+            })
+
             // Wait for async state updates to complete
             await waitFor(() => result.current.isLoading === false)
 
@@ -205,7 +205,7 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
             expect(mockOAuthState.login).toHaveBeenCalled()
 
             // 3. User can access their account address
-            expect(result.current.address).toBeTruthy()
+            expect(result.current.smartAccountAddress).toBeTruthy()
         })
 
         it("should handle deployed smart account", async () => {
@@ -218,11 +218,14 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
                 wrapper: TestWrapper,
             })
 
+            await act(async () => {
+                await result.current.initialiseWallet()
+            })
+
             // Wait for async state updates to complete
             await waitFor(() => result.current.isLoading === false)
 
             expect(result.current.isAuthenticated).toBe(true)
-            expect(result.current.isDeployed).toBe(true)
         })
 
         it("should handle V1 smart account migration", async () => {
@@ -234,6 +237,10 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
+            })
+
+            await act(async () => {
+                await result.current.initialiseWallet()
             })
 
             // Wait for async state updates to complete
@@ -252,6 +259,10 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
                 wrapper: TestWrapper,
             })
 
+            await act(async () => {
+                await result.current.initialiseWallet()
+            })
+
             // Wait for async state updates to complete
             await waitFor(() => result.current.isLoading === false)
 
@@ -267,6 +278,10 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
+            })
+
+            await act(async () => {
+                await result.current.initialiseWallet()
             })
 
             // Test login functionality
@@ -304,6 +319,10 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
                 wrapper: TestWrapper,
             })
 
+            await act(async () => {
+                await result.current.initialiseWallet()
+            })
+
             const message = Buffer.from("Please sign this message", "utf8")
 
             await act(async () => {
@@ -333,6 +352,10 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
+            })
+
+            await act(async () => {
+                await result.current.initialiseWallet()
             })
 
             const typedData = {
@@ -392,6 +415,10 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
+            })
+
+            await act(async () => {
+                await result.current.initialiseWallet()
             })
 
             const message = Buffer.from("Test message", "utf8")

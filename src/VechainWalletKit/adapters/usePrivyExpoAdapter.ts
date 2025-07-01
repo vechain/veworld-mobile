@@ -10,7 +10,6 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
     const { user, logout } = usePrivy()
     const { wallets, create } = useEmbeddedEthereumWallet()
     const oauth = useLoginWithOAuth()
-
     const isAuthenticated = !!user && (wallets?.length || 0) > 0
 
     return useMemo(() => {
@@ -30,8 +29,12 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             },
 
             // Will create only one wallet for the user even if called multiple times.
-            async createWallet(): Promise<void> {
-                await create()
+            async createWallet(): Promise<string> {
+                if (!currentWallets?.length) {
+                    await create()
+                }
+
+                return currentWallets[0].address
             },
 
             async signMessage(message: Buffer): Promise<Buffer> {
@@ -120,14 +123,14 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             },
 
             getAccount(): string {
-                if (!isAuthenticated || !currentWallets.length) {
+                if (!isAuthenticated) {
                     throw new WalletError(
                         WalletErrorType.WALLET_NOT_FOUND,
                         "User not authenticated or no wallet available",
                     )
                 }
 
-                return currentWallets[0].address
+                return currentWallets[0]?.address ?? ""
             },
         }
     }, [isAuthenticated, wallets, oauth, logout, create])

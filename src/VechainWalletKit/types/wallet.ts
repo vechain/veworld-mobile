@@ -7,7 +7,7 @@ export interface SigningOperations {
 }
 
 export interface WalletContext extends SigningOperations {
-    address: string
+    ownerAddress: string
     buildTransaction: (clauses: TransactionClause[], options?: TransactionOptions) => Promise<Transaction>
 }
 export interface AuthenticationOperations {
@@ -17,13 +17,15 @@ export interface AuthenticationOperations {
 }
 
 export interface SmartWalletContext extends WalletContext, AuthenticationOperations {
-    isDeployed: boolean
     isLoading: boolean
-    createWallet(): Promise<void>
+    isInitialized: boolean
+    ownerAddress: string
+    smartAccountAddress: string
+    initialiseWallet: () => Promise<void>
 }
 export interface SmartAccountAdapter extends SigningOperations, AuthenticationOperations {
-    createWallet(): Promise<void>
     getAccount(): string
+    createWallet(): Promise<string>
 }
 
 export interface LoginOptions {

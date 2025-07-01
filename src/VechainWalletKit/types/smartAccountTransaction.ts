@@ -57,7 +57,7 @@ export interface SmartAccountTransactionConfig {
     address: string
     version?: number
     isDeployed: boolean
-    hasV1SmartAccount: boolean
+    hasV1Account: boolean
     factoryAddress: string
 }
 

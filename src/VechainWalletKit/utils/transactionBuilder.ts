@@ -268,10 +268,10 @@ export async function buildSmartAccountTransaction(params: {
     signTypedDataFn: TransactionSigningFunction
 }): Promise<TransactionClause[]> {
     const { txClauses, smartAccountConfig, signTypedDataFn, chainId } = params
-    const { version: smartAccountVersion, hasV1SmartAccount } = smartAccountConfig
+    const { version: smartAccountVersion, hasV1Account } = smartAccountConfig
 
     // Determine execution strategy based on smart account version
-    const shouldUseBatchExecution = !hasV1SmartAccount || (smartAccountVersion && smartAccountVersion >= 3)
+    const shouldUseBatchExecution = !hasV1Account || (smartAccountVersion && smartAccountVersion >= 3)
 
     if (shouldUseBatchExecution) {
         return await buildBatchExecutionClauses({

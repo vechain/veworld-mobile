@@ -10,7 +10,7 @@ export type { SmartWalletWithPrivyProps } from "./providers/SmartWalletWithPrivy
 export { usePrivyExpoAdapter } from "./adapters/usePrivyExpoAdapter"
 
 // Export hooks
-export { useSmartAccount } from "./hooks/useSmartAccount"
+export { useSmartAccount } from "./utils/smartAccount"
 
 // Export utilities
 export * from "./utils/errors"

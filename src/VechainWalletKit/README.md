@@ -6,7 +6,7 @@ A modular, provider-agnostic wallet SDK for VeChain applications with smart acco
 
 VechainWalletKit uses an adapter pattern to abstract away specific wallet providers (like Privy) from your application logic. This makes it easy to switch providers or create custom implementations.
 
-This kit can be used with standard react or react native applications.  Currently a Privy expo adapter is provided but we will add a Privy react adapter soon.
+This kit can be used with react native applications.  Currently a Privy expo adapter is provided.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
