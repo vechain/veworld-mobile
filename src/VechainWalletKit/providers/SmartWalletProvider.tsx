@@ -30,7 +30,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const [smartAccountAddress, setSmartAccountAddress] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const [smartAccountConfig, setSmartAccountConfig] = useState<SmartAccountTransactionConfig | null>(null)
-    const [isInitialized, setIsInitialized] = useState(false)
+    const [isInitialised, setIsInitialised] = useState(false)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
@@ -50,7 +50,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             setSmartAccountAddress(smartAccountData.address)
 
             // Mark as initialized after first successful call
-            setIsInitialized(true)
+            setIsInitialised(true)
         } catch (error) {
             throw new WalletError(WalletErrorType.NETWORK_ERROR, "Error initialising wallet", error)
         } finally {
@@ -61,7 +61,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     // Auto-update when config changes, but only if already initialized
     useEffect(() => {
         const updateOnConfigChange = async () => {
-            if (isInitialized && isAuthenticated && ownerAddress) {
+            if (isInitialised && isAuthenticated && ownerAddress) {
                 try {
                     setIsLoading(true)
                     // Re-fetch smart account info with new config
@@ -81,7 +81,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         config.networkConfig.networkType,
         config.networkConfig.nodeUrl,
         thor,
-        isInitialized,
+        isInitialised,
         isAuthenticated,
         ownerAddress,
     ])
@@ -92,7 +92,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             setOwnerAddress("")
             setSmartAccountAddress("")
             setSmartAccountConfig(null)
-            setIsInitialized(false)
+            setIsInitialised(false)
             setIsLoading(false)
         }
     }, [isAuthenticated])
@@ -189,7 +189,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         setOwnerAddress("")
         setSmartAccountAddress("")
         setSmartAccountConfig(null)
-        setIsInitialized(false)
+        setIsInitialised(false)
         setIsAuthenticated(false)
     }, [adapter])
 
@@ -198,7 +198,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             ownerAddress,
             smartAccountAddress,
             isLoading,
-            isInitialized,
+            isInitialized: isInitialised,
             isAuthenticated,
             initialiseWallet,
             signMessage,
@@ -213,7 +213,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             isAuthenticated,
             smartAccountAddress,
             isLoading,
-            isInitialized,
+            isInitialised,
             initialiseWallet,
             signMessage,
             signTransaction,

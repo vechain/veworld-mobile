@@ -6,7 +6,7 @@ A modular, provider-agnostic wallet SDK for VeChain applications with smart acco
 
 VechainWalletKit uses an adapter pattern to abstract away specific wallet providers (like Privy) from your application logic. This makes it easy to switch providers or create custom implementations.
 
-This kit can be used with react native applications.  Currently a Privy expo adapter is provided.
+This kit can be used with react native applications. Currently a Privy expo adapter is provided.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -28,10 +28,11 @@ This kit can be used with react native applications.  Currently a Privy expo ada
 ### Dependencies
 
 For react native applications that want to use the Privy expo adapter, you will need to install the following dependencies:
+
 -   yarn add "@vechain/sdk-core"
 -   yarn add "@vechain/sdk-network"
 -   yarn add "@privy-io/expo"
--   npx expo install expo-apple-authentication expo-application expo-crypto expo-linking expo-secure-store expo-web-browser react-native-passkeys react-native-webview @privy-io/expo-native-extensions @privy-io/expo  
+-   npx expo install expo-apple-authentication expo-application expo-crypto expo-linking expo-secure-store expo-web-browser react-native-passkeys react-native-webview @privy-io/expo-native-extensions @privy-io/expo
 -   yarn add fast-text-encoding react-native-get-random-values @ethersproject/shims
 
 ### Option 1: Using with Privy expo (Recommended for most users)
@@ -65,10 +66,17 @@ function App() {
 ```tsx
 import React from "react"
 import { SmartWalletProvider, usePrivyExpoAdapter, VechainWalletSDKConfig } from "@/VechainWalletKit"
-import { useCustomAdapter} from "@/your-custom-adapter"
+import { useCustomAdapter } from "@/your-custom-adapter"
 
 function AppWithCustomSetup() {
     const adapter = useCustomAdapter()
+
+    const config: VechainWalletSDKConfig = {
+        networkConfig: {
+            nodeUrl: "https://testnet.vechain.org",
+            networkType: "testnet", // or 'mainnet'
+        },
+    }
 
     return (
         <SmartWalletProvider config={config} adapter={adapter}>
@@ -96,10 +104,15 @@ function WalletComponent() {
         buildTransaction,
         login,
         logout,
+        initialiseWallet,
     } = useSmartWallet()
 
+    const handleCreateWallet = async () => {
+        await initialiseWallet()
+    }
+
     const handleSendTransaction = async () => {
-        if (!isAuthenticated) return
+        if (!isAuthenticated || !isInitialised) return
 
         try {
             // Build transaction clauses
@@ -123,7 +136,7 @@ function WalletComponent() {
             const signedTransaction = Transaction.of(transaction.body, signature)
 
             const encodedRawTx = {
-              raw: HexUtils.addPrefix(Buffer.from(signedTransaction.encoded).toString("hex")),
+                raw: HexUtils.addPrefix(Buffer.from(signedTransaction.encoded).toString("hex")),
             }
 
             await axios.post(`https://testnet.vechain.org/transactions`, encodedRawTx)
@@ -153,6 +166,7 @@ function WalletComponent() {
             <p>Smart Account Deployed: {isDeployed ? "Yes" : "No"}</p>
 
             <div>
+                <button onClick={handleCreateWallet}>Create Wallet</button>
                 <button onClick={handleSignMessage}>Sign Message</button>
                 <button onClick={handleSendTransaction}>Send Transaction</button>
                 <button onClick={logout}>Logout</button>
@@ -163,45 +177,6 @@ function WalletComponent() {
 ```
 
 ## 🔧 Advanced Usage
-
-### Smart Account Operations
-
-The SDK automatically handles smart account operations, but you can access the smart account utilities directly:
-
-```tsx
-import { useSmartAccount } from "@/VechainWalletKit"
-import { ThorClient } from "@vechain/sdk-network"
-
-function SmartAccountInfo() {
-    const { address } = useVechainWallet()
-
-    // Initialize Thor client
-    const thor = ThorClient.at("https://testnet.vechain.org")
-
-    const smartAccountHook = useSmartAccount({
-        thor,
-        networkName: "testnet",
-    })
-
-    const [smartAccount, setSmartAccount] = useState(null)
-
-    useEffect(() => {
-        if (address) {
-            smartAccountHook.getSmartAccount(address).then(setSmartAccount)
-        }
-    }, [address])
-
-    if (!smartAccount) return <div>Loading smart account info...</div>
-
-    return (
-        <div>
-            <h3>Smart Account Details</h3>
-            <p>Address: {smartAccount?.address}</p>
-            <p>Deployed: {smartAccount?.isDeployed ? "Yes" : "No"}</p>
-        </div>
-    )
-}
-```
 
 ### EIP-712 Typed Data Signing
 
@@ -240,7 +215,7 @@ const handleSignTypedData = async () => {
 
 ## 🔌 Creating Custom Adapters
 
-You can create custom wallet adapters using React hooks.  The adapter pattern allows you to use any provider that allows you to sign transactions, typed data, and messages.  Privy is already supported, but you can create your own adapter to use other providers, or even use a local private key. As long as your adapter implements the SmartAccountAdapter interface, it will work with the SmartWalletProvider.
+You can create custom wallet adapters using React hooks. The adapter pattern allows you to use any provider that allows you to sign transactions, typed data, and messages. Privy is already supported, but you can create your own adapter to use other providers, or even use a local private key. As long as your adapter implements the SmartAccountAdapter interface, it will work with the SmartWalletProvider.
 
 ```tsx
 import { useMemo } from "react"
@@ -284,6 +259,9 @@ export const useCustomWalletAdapter = (customWallet: CustomWalletInstance): Smar
 
             async logout(): Promise<void> {
                 await customWallet.disconnect()
+            },
+            async createWallet(): Promise<void> {
+                await customWallet.create()
             },
         }),
         [isAuthenticated, customWallet],
@@ -364,7 +342,7 @@ const config = {
 
 ## 🛠️ Available Hooks
 
--   `useSmartWallet()` - Main wallet context with authentication and transaction management.  This is the main hook you will use to access all wallet features. It acts as a facade for the underlying adapter.
+-   `useSmartWallet()` - Main wallet context with authentication and transaction management. This is the main hook you will use to access all wallet features. It acts as a facade for the underlying adapter.
 -   `useSmartAccount({ thor, networkName })` - Smart account management utilities
 -   `usePrivyAdapter()` - Privy wallet adapter (when using Privy)
 
@@ -430,26 +408,3 @@ The SDK automatically handles smart account transactions with the following feat
 -   **Batch Execution**: V3+ smart accounts use batch execution for better efficiency
 -   **Individual Execution**: V1 smart accounts use individual execution for each transaction clause
 -   **Gas Estimation**: Automatically estimates gas requirements including deployment costs
-
-### Smart Account Features
-
-```tsx
-const { buildTransaction, isDeployed } = useSmartWallet()
-
-// The SDK handles all smart account complexity automatically
-const transaction = await buildTransaction(
-    [
-        { to: "0x...", value: "0x0", data: "0x..." },
-        { to: "0x...", value: "0x0", data: "0x..." },
-    ],
-    {
-        gas: 200000,
-        isDelegated: false,
-    },
-)
-
-// For V3+ accounts: Creates deployment + batch execution
-// For V1 accounts: Creates deployment + individual executions
-// For deployed accounts: Skips deployment step
-```
-
