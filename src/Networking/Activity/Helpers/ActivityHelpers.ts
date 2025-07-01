@@ -701,6 +701,8 @@ export const createActivityFromIndexedHistoryEvent = (
         case ActivityEvent.STARGATE_STAKE:
         case ActivityEvent.STARGATE_UNSTAKE:
         case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+        case ActivityEvent.STARGATE_DELEGATE_ONLY:
+        case ActivityEvent.B3TR_CLAIMED_REWARDS:
         case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE: {
             return {
                 ...baseActivity,

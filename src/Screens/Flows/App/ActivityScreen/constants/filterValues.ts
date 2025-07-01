@@ -54,6 +54,8 @@ export const filterValues = {
             ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE,
             ActivityEvent.STARGATE_UNDELEGATE,
             ActivityEvent.STARGATE_UNSTAKE,
+            ActivityEvent.STARGATE_DELEGATE_ONLY,
+            ActivityEvent.B3TR_CLAIMED_REWARDS,
         ],
     },
     other: { type: FilterType.OTHER, value: [ActivityEvent.UNKNOWN_TX] },
