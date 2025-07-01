@@ -880,13 +880,16 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         }
     }
 
-    const isMinus = useMemo(() => {
-        return !(
+    const isClaimingRewards = useMemo(() => {
+        return (
             activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE ||
-            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE ||
-            activity?.type === ActivityEvent.STARGATE_UNSTAKE
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE
         )
     }, [activity?.type])
+
+    const isMinus = useMemo(() => {
+        return !(isClaimingRewards || activity?.type === ActivityEvent.STARGATE_UNSTAKE)
+    }, [activity?.type, isClaimingRewards])
 
     const amount = BigNutils(activity.value)
         .toHuman(B3TR.decimals ?? 0)
@@ -903,7 +906,11 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
-            description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
+            description: activity.levelId
+                ? getTokenLevelName(activity.levelId)
+                : isClaimingRewards
+                ? LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DESCRIPTION()
+                : "",
             rightAmount: rightAmount,
             rightAmountDescription:
                 hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),

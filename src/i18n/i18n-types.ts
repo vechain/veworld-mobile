@@ -181,6 +181,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STAKING_LABEL: string
 	/**
+	 * Delegation / Base
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DESCRIPTION: string
+	/**
 	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
@@ -4592,6 +4596,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Start earning VTHO by staking your VET tokens.
 	 */
 	ACTIVITY_STAKING_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Delegation / Base
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DESCRIPTION: () => LocalizedString
 	/**
 	 * Staking
 	 */
