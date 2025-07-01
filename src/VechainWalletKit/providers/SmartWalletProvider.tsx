@@ -28,6 +28,7 @@ const SmartWalletProviderContext = createContext<SmartWalletContext | null>(null
 export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, config, adapter }) => {
     const [address, setAddress] = useState("")
     const [isDeployed, setIsDeployed] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
     // Initialize Thor client
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
@@ -37,7 +38,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         thor,
         networkName: config.networkConfig.networkType,
     })
-
     const isAuthenticated = adapter.isAuthenticated
 
     // Update address when authentication state changes
@@ -46,18 +46,21 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             if (isAuthenticated) {
                 try {
                     const accountAddress = adapter.getAccount()
+                    setAddress(accountAddress)
 
                     // Get smart account info to determine deployment status
                     const smartAccountData = await smartAccount.getSmartAccount(accountAddress)
-                    setAddress(smartAccountData.address ?? "")
                     setIsDeployed(smartAccountData.isDeployed)
                 } catch (error) {
                     setAddress("")
                     setIsDeployed(false)
+                } finally {
+                    setIsLoading(false)
                 }
             } else {
                 setAddress("")
                 setIsDeployed(false)
+                setIsLoading(false)
             }
         }
 
@@ -176,6 +179,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             address,
             isAuthenticated,
             isDeployed,
+            isLoading,
             signMessage,
             signTransaction,
             signTypedData,
@@ -188,6 +192,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             address,
             isAuthenticated,
             isDeployed,
+            isLoading,
             signMessage,
             signTransaction,
             signTypedData,

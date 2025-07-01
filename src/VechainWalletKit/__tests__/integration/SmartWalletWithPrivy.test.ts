@@ -22,6 +22,17 @@ let mockOAuthState = {
     login: jest.fn(),
 }
 
+// Dynamic mock system for useSmartAccount hook
+let mockSmartAccountState = {
+    getSmartAccount: jest.fn().mockResolvedValue({
+        address: "0x1111111111111111111111111111111111111111",
+        isDeployed: false,
+    }),
+    hasV1SmartAccount: jest.fn().mockResolvedValue(false),
+    getSmartAccountVersion: jest.fn().mockResolvedValue(2),
+    getFactoryAddress: jest.fn().mockReturnValue("0xFactoryAddress123456789012345678901234567890"),
+}
+
 // Mock Privy SDK with dynamic state
 jest.mock("@privy-io/expo", () => ({
     usePrivy: jest.fn(() => mockUserState),
@@ -29,6 +40,11 @@ jest.mock("@privy-io/expo", () => ({
     useLoginWithOAuth: jest.fn(() => mockOAuthState),
     // Mock PrivyProvider to simply render children
     PrivyProvider: ({ children }: { children: React.ReactNode }) => children,
+}))
+
+// Mock useSmartAccount hook
+jest.mock("../../hooks/useSmartAccount", () => ({
+    useSmartAccount: jest.fn(() => mockSmartAccountState),
 }))
 
 // Helper functions to set different mock states
@@ -46,7 +62,7 @@ const setUnauthenticatedUser = () => {
     }
 }
 
-const setMockWalletProviderResponse = (address: string, providerResponse: string) => {
+const setMockPrivyProviderResp = (address: string, providerResponse: string) => {
     mockWalletState = {
         wallets: [
             {
@@ -84,16 +100,53 @@ const resetMockOAuth = () => {
     }
 }
 
-import { renderHook, act } from "@testing-library/react-native"
+// Helper functions for Smart Account mock state
+const setGetMockSmartAccountResp = (address: string, isDeployed: boolean) => {
+    mockSmartAccountState = {
+        ...mockSmartAccountState,
+        getSmartAccount: jest.fn().mockResolvedValue({
+            address,
+            isDeployed,
+        }),
+    }
+}
+
+const setSmartAccountVersion = (version: number) => {
+    mockSmartAccountState = {
+        ...mockSmartAccountState,
+        getSmartAccountVersion: jest.fn().mockResolvedValue(version),
+    }
+}
+
+const setHasV1SmartAccount = (hasV1: boolean) => {
+    mockSmartAccountState = {
+        ...mockSmartAccountState,
+        hasV1SmartAccount: jest.fn().mockResolvedValue(hasV1),
+    }
+}
+
+const resetMockSmartAccount = () => {
+    mockSmartAccountState = {
+        getSmartAccount: jest.fn().mockResolvedValue({
+            address: "0x1111111111111111111111111111111111111111",
+            isDeployed: false,
+        }),
+        hasV1SmartAccount: jest.fn().mockResolvedValue(false),
+        getSmartAccountVersion: jest.fn().mockResolvedValue(2),
+        getFactoryAddress: jest.fn().mockReturnValue("0xFactoryAddress123456789012345678901234567890"),
+    }
+}
+
+import { renderHook, act, waitFor } from "@testing-library/react-native"
 import React from "react"
 import { useSmartWallet } from "../../providers/SmartWalletProvider"
 import { SmartWalletWithPrivyProvider } from "../../providers/SmartWalletWithPrivy"
 
 /**
- * Smart Account User Journey Tests with SmartWalletWithPrivyProvider
+ * Smart Account Tests with SmartWalletWithPrivyProvider
  *
  * Tests that focus on user interaction flows using the full SmartWalletWithPrivyProvider wrapper
- * This provides coverage for the complete integration including PrivyProvider
+ * This provides coverage for the complete integration including usePrivyExpoAdapter
  */
 
 // Test configuration for SmartWalletWithPrivyProvider
@@ -121,17 +174,22 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
         // Reset all mocks before each test
         jest.clearAllMocks()
         resetMockOAuth()
+        resetMockSmartAccount()
     })
 
     describe("New smart account First-Time Setup", () => {
         it("should complete full onboarding flow", async () => {
             // Set up authenticated user for this test
             setAuthenticatedUser("new-user")
-            setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
+            setMockPrivyProviderResp("0x5555555555555555555555555555555555555555", "0xsignature")
+            setGetMockSmartAccountResp("0x1111111111111111111111111111111111111111", true)
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
             })
+
+            // Wait for async state updates to complete
+            await waitFor(() => result.current.isLoading === false)
 
             // 1. User starts authenticated
             expect(result.current.isAuthenticated).toBe(true)
@@ -149,13 +207,63 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
             // 3. User can access their account address
             expect(result.current.address).toBeTruthy()
         })
+
+        it("should handle deployed smart account", async () => {
+            // Example of using smart account helper functions
+            setAuthenticatedUser("user-with-deployed-account")
+            setMockPrivyProviderResp("0x5555555555555555555555555555555555555555", "0xsignature")
+            setGetMockSmartAccountResp("0x1111111111111111111111111111111111111111", true)
+
+            const { result } = renderHook(() => useSmartWallet(), {
+                wrapper: TestWrapper,
+            })
+
+            // Wait for async state updates to complete
+            await waitFor(() => result.current.isLoading === false)
+
+            expect(result.current.isAuthenticated).toBe(true)
+            expect(result.current.isDeployed).toBe(true)
+        })
+
+        it("should handle V1 smart account migration", async () => {
+            // Test legacy account scenario
+            setAuthenticatedUser("user-with-v1-account")
+            setMockPrivyProviderResp("0x5555555555555555555555555555555555555555", "0xsignature")
+            setHasV1SmartAccount(true)
+            setSmartAccountVersion(1)
+
+            const { result } = renderHook(() => useSmartWallet(), {
+                wrapper: TestWrapper,
+            })
+
+            // Wait for async state updates to complete
+            await waitFor(() => result.current.isLoading === false)
+
+            expect(result.current.isAuthenticated).toBe(true)
+        })
+
+        it("should handle custom smart account address", async () => {
+            // Test custom smart account address
+            setAuthenticatedUser("user-with-custom-account")
+            setMockPrivyProviderResp("0x5555555555555555555555555555555555555555", "0xsignature")
+            setGetMockSmartAccountResp("0x9999999999999999999999999999999999999999", false)
+
+            const { result } = renderHook(() => useSmartWallet(), {
+                wrapper: TestWrapper,
+            })
+
+            // Wait for async state updates to complete
+            await waitFor(() => result.current.isLoading === false)
+
+            expect(result.current.isAuthenticated).toBe(true)
+        })
     })
 
     describe("Authentication Flow Management", () => {
         it("should handle login and logout flow", async () => {
             // Set up authenticated user for this test
             setAuthenticatedUser("test-user")
-            setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", "0xsignature")
+            setMockPrivyProviderResp("0x5555555555555555555555555555555555555555", "0xsignature")
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
@@ -190,7 +298,7 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
 
             // Short valid hex signature for testing
             const mockSignature = "0x1234abcd5678ef90"
-            setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", mockSignature)
+            setMockPrivyProviderResp("0x5555555555555555555555555555555555555555", mockSignature)
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,
@@ -221,7 +329,7 @@ describe("SmartWalletWithPrivyProvider Tests", () => {
 
             // Short valid hex signature for testing
             const mockSignature = "0xabcd1234ef567890"
-            setMockWalletProviderResponse("0x5555555555555555555555555555555555555555", mockSignature)
+            setMockPrivyProviderResp("0x5555555555555555555555555555555555555555", mockSignature)
 
             const { result } = renderHook(() => useSmartWallet(), {
                 wrapper: TestWrapper,

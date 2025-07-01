@@ -18,6 +18,7 @@ export interface AuthenticationOperations {
 
 export interface SmartWalletContext extends WalletContext, AuthenticationOperations {
     isDeployed: boolean
+    isLoading: boolean
     createWallet(): Promise<void>
 }
 export interface SmartAccountAdapter extends SigningOperations, AuthenticationOperations {
