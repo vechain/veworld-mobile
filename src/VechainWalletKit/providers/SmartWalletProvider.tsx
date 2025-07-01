@@ -46,10 +46,10 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             if (isAuthenticated) {
                 try {
                     const accountAddress = adapter.getAccount()
-                    setAddress(accountAddress)
 
                     // Get smart account info to determine deployment status
                     const smartAccountData = await smartAccount.getSmartAccount(accountAddress)
+                    setAddress(smartAccountData.address ?? "")
                     setIsDeployed(smartAccountData.isDeployed)
                 } catch (error) {
                     setAddress("")
