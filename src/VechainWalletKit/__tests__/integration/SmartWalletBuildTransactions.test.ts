@@ -23,6 +23,12 @@ jest.mock("@vechain/sdk-core", () => {
     }
 })
 
+// Create mock contract methods that can be configured per test
+let mockGetAccountAddress: jest.Mock = jest.fn()
+let mockHasLegacyAccount: jest.Mock = jest.fn()
+let mockVersion: jest.Mock = jest.fn()
+let mockGetAccount: jest.Mock = jest.fn()
+
 // Mock @vechain/sdk-network
 jest.mock("@vechain/sdk-network", () => ({
     ThorClient: {
@@ -36,6 +42,18 @@ jest.mock("@vechain/sdk-network", () => ({
                     gas: 21000,
                 }),
             },
+            contracts: {
+                load: jest.fn().mockReturnValue({
+                    read: {
+                        getAccountAddress: jest.fn().mockImplementation((...args) => mockGetAccountAddress(...args)),
+                        hasLegacyAccount: jest.fn().mockImplementation((...args) => mockHasLegacyAccount(...args)),
+                        version: jest.fn().mockImplementation((...args) => mockVersion(...args)),
+                    },
+                }),
+            },
+            accounts: {
+                getAccount: jest.fn().mockImplementation((...args) => mockGetAccount(...args)),
+            },
         }),
     },
 }))
@@ -45,7 +63,7 @@ const { ThorClient } = require("@vechain/sdk-network")
 const mockBuildTransactionBody = ThorClient.at().transactions.buildTransactionBody
 
 // Mock Privy SDK with configurable address
-let mockUserAddress = "0x5555555555555555555555555555555555555555"
+let mockEmbeddedAddress = "0x5555555555555555555555555555555555555555"
 
 jest.mock("@privy-io/expo", () => ({
     PrivyProvider: ({ children }: { children: React.ReactNode }) => children,
@@ -57,7 +75,7 @@ jest.mock("@privy-io/expo", () => ({
         wallets: [
             {
                 get address() {
-                    return mockUserAddress
+                    return mockEmbeddedAddress
                 },
                 getProvider: jest.fn().mockResolvedValue({
                     request: jest
@@ -74,17 +92,27 @@ jest.mock("@privy-io/expo", () => ({
 }))
 
 // Helper to set mock address for different test scenarios
-const setMockAddress = (address: string) => {
-    mockUserAddress = address
+const setMockPrivyEmbeddedAddress = (address: string) => {
+    mockEmbeddedAddress = address
 }
 
-// Mock smart account functions that can be dynamically set per test
-let mockGetSmartAccount: jest.Mock = jest.fn()
+// Helper functions to configure smart account behavior for tests
+const setupSmartAccountContractResponses = (config: {
+    smartAccountAddress: string
+    isDeployed: boolean
+    hasV1Account: boolean
+    version: number
+}) => {
+    // Mock the contract factory calls
+    mockGetAccountAddress.mockResolvedValue([config.smartAccountAddress])
+    mockHasLegacyAccount.mockResolvedValue([config.hasV1Account])
+    mockVersion.mockResolvedValue([config.version.toString()])
 
-// Mock smart account utility functions
-jest.mock("../../utils/smartAccount", () => ({
-    getSmartAccount: jest.fn().mockImplementation((...args) => mockGetSmartAccount(...args)),
-}))
+    // Mock the account deployment check
+    mockGetAccount.mockResolvedValue({
+        hasCode: config.isDeployed,
+    })
+}
 
 // Test configuration for SmartWalletWithPrivy
 const testConfig = {
@@ -114,19 +142,21 @@ describe("Building transactions for smart accounts", () => {
     beforeEach(() => {
         // Reset mock calls between tests
         mockBuildTransactionBody.mockClear()
-        mockGetSmartAccount.mockClear()
+        mockGetAccountAddress.mockClear()
+        mockHasLegacyAccount.mockClear()
+        mockVersion.mockClear()
+        mockGetAccount.mockClear()
     })
 
     describe("Transaction Building Based on Deployment Status", () => {
         it("should build transaction for undeployed V3 smart account", async () => {
             // Set up test scenario: undeployed V3 smart account
-            setMockAddress("0x3333333333333333333333333333333333333333")
-            mockGetSmartAccount.mockResolvedValue({
-                address: "0x3333333333333333333333333333333333333333",
+            setMockPrivyEmbeddedAddress("0x3333333333333333333333333333333333333333")
+            setupSmartAccountContractResponses({
+                smartAccountAddress: "0x3333333333333333333333333333333333333333",
                 isDeployed: false,
-                version: 3,
                 hasV1Account: false,
-                factoryAddress: "0x1234567890123456789012345678901234567890",
+                version: 3,
             })
 
             const { result } = renderHook(() => useSmartWallet(), {
@@ -160,7 +190,7 @@ describe("Building transactions for smart accounts", () => {
             expect(actualClauses).toHaveLength(2) // deployment + batch execution of 2 clauses
 
             // First clause should be deployment (createAccount)
-            expect(actualClauses[0].to).toBe("0x1234567890123456789012345678901234567890") // factory address
+            expect(actualClauses[0].to).toBe("0x713b908bcf77f3e00efef328e50b657a1a23aeaf") // factory address (testnet)
             expect(actualClauses[0].data).toContain("0x5fbfb9cf") // createAccount function selector
 
             // Second clause should be batch execution (using correct address from explicit mock)
@@ -170,13 +200,12 @@ describe("Building transactions for smart accounts", () => {
 
         it("should build transaction for already deployed V3 smart account", async () => {
             // Set up test scenario: already deployed V3 smart account
-            setMockAddress("0x4444444444444444444444444444444444444444")
-            mockGetSmartAccount.mockResolvedValue({
-                address: "0x4444444444444444444444444444444444444444",
+            setMockPrivyEmbeddedAddress("0x4444444444444444444444444444444444444444")
+            setupSmartAccountContractResponses({
+                smartAccountAddress: "0x4444444444444444444444444444444444444444",
                 isDeployed: true,
-                version: 3,
                 hasV1Account: false,
-                factoryAddress: "0x1234567890123456789012345678901234567890",
+                version: 3,
             })
 
             const { result } = renderHook(() => useSmartWallet(), {
@@ -211,13 +240,12 @@ describe("Building transactions for smart accounts", () => {
 
         it("should build transaction for a deployed V1 smart account", async () => {
             // Set up test scenario: deployed V1 smart account
-            setMockAddress("0x5555555555555555555555555555555555555555")
-            mockGetSmartAccount.mockResolvedValue({
-                address: "0x5555555555555555555555555555555555555555",
+            setMockPrivyEmbeddedAddress("0x5555555555555555555555555555555555555555")
+            setupSmartAccountContractResponses({
+                smartAccountAddress: "0x5555555555555555555555555555555555555555",
                 isDeployed: true,
-                version: 1,
                 hasV1Account: true,
-                factoryAddress: "0x1234567890123456789012345678901234567890",
+                version: 1,
             })
 
             const { result } = renderHook(() => useSmartWallet(), {
