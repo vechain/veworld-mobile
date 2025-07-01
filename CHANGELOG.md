@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.6 (2025-07-01)</small>
+
+* build: init ([dab5596](https://github.com/vechain/veworld-mobile/commit/dab5596))
+* fix(InAppBrowserProvider): enhance navigation state handling with previous URL tracking (#3037) ([640cb3b](https://github.com/vechain/veworld-mobile/commit/640cb3b)), closes [#3037](https://github.com/vechain/veworld-mobile/issues/3037)
+
 ## <small>2.2.5 (2025-06-30)</small>
 
 * build: init ([8e24c0b](https://github.com/vechain/veworld-mobile/commit/8e24c0b))
