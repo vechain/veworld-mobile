@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useCallback, useMemo, useState, useEffect } from "react"
+import React, { createContext, useContext, useCallback, useMemo, useState, useEffect, useRef } from "react"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
-import { VechainWalletSDKConfig } from "../types/config"
+import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
 import { SignOptions, TransactionOptions, TypedDataPayload } from "../types/transaction"
 import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
 import { getSmartAccount } from "../utils/smartAccount"
@@ -34,6 +34,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const [isAuthenticated, setIsAuthenticated] = useState(false)
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
+    const previousConfigRef = useRef<NetworkConfig | null>(null)
 
     const initialiseWallet = useCallback(async (): Promise<void> => {
         if (!adapter.isAuthenticated) {
@@ -43,12 +44,13 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         try {
             setIsLoading(true)
             const adapterAddress = await adapter.createWallet()
-            setOwnerAddress(adapterAddress)
+            const factoryAddress = getFactoryAddress(config.networkConfig)
             // Get smart account info to determine deployment status and smart account address
-            const smartAccountData = await getSmartAccount(thor, config.networkConfig.networkType, adapterAddress)
+            const smartAccountData = await getSmartAccount(thor, adapterAddress, factoryAddress)
+            setOwnerAddress(adapterAddress)
             setSmartAccountConfig(smartAccountData)
             setSmartAccountAddress(smartAccountData.address)
-
+            previousConfigRef.current = config.networkConfig
             // Mark as initialized after first successful call
             setIsInitialised(true)
         } catch (error) {
@@ -56,16 +58,22 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         } finally {
             setIsLoading(false)
         }
-    }, [adapter, thor, config.networkConfig.networkType])
+    }, [adapter, thor, config.networkConfig])
 
-    // Auto-update when config changes, but only if already initialized
+    // Auto-update when config changes, NOT immediately after initialiseWallet
     useEffect(() => {
         const updateOnConfigChange = async () => {
-            if (isInitialised && isAuthenticated && ownerAddress) {
+            if (
+                isInitialised &&
+                isAuthenticated &&
+                hasNetworkConfigChanged(previousConfigRef.current, config.networkConfig)
+            ) {
                 try {
                     setIsLoading(true)
+                    const factoryAddress = getFactoryAddress(config.networkConfig)
+                    const adapterAddress = adapter.getAccount()
                     // Re-fetch smart account info with new config
-                    const smartAccountData = await getSmartAccount(thor, config.networkConfig.networkType, ownerAddress)
+                    const smartAccountData = await getSmartAccount(thor, adapterAddress, factoryAddress)
                     setSmartAccountConfig(smartAccountData)
                     setSmartAccountAddress(smartAccountData.address)
                 } catch (error) {
@@ -74,17 +82,13 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     setIsLoading(false)
                 }
             }
+
+            // Update ref with current config
+            previousConfigRef.current = config.networkConfig
         }
 
         updateOnConfigChange()
-    }, [
-        config.networkConfig.networkType,
-        config.networkConfig.nodeUrl,
-        thor,
-        isInitialised,
-        isAuthenticated,
-        ownerAddress,
-    ])
+    }, [config.networkConfig, thor, isInitialised, isAuthenticated, ownerAddress, adapter])
 
     // Reset state when authentication changes
     useEffect(() => {
@@ -236,4 +240,32 @@ export const useSmartWallet = (): SmartWalletContext => {
         )
     }
     return context
+}
+
+export function getFactoryAddress(networkConfig: NetworkConfig): string {
+    if (networkConfig.smartAccountFactoryAddress) {
+        return networkConfig.smartAccountFactoryAddress
+    }
+
+    const factoryAddresses = {
+        testnet: "0x713b908Bcf77f3E00EFEf328E50b657a1A23AeaF",
+        mainnet: "0xC06Ad8573022e2BE416CA89DA47E8c592971679A",
+    }
+    const networkType = networkConfig.networkType
+    if (networkType !== "testnet" && networkType !== "mainnet") {
+        throw new Error(`Unsupported network: ${networkType}`)
+    }
+
+    return factoryAddresses[networkType]
+}
+
+const hasNetworkConfigChanged = (previousConfig: NetworkConfig | null, currentConfig: NetworkConfig): boolean => {
+    if (!previousConfig) {
+        return true
+    }
+    return (
+        previousConfig.networkType !== currentConfig.networkType ||
+        previousConfig.nodeUrl !== currentConfig.nodeUrl ||
+        previousConfig.smartAccountFactoryAddress !== currentConfig.smartAccountFactoryAddress
+    )
 }

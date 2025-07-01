@@ -9,9 +9,6 @@ export class WalletError extends Error {
     constructor(public type: WalletErrorType, message: string, public originalError?: unknown) {
         super(message)
         this.name = "WalletError"
+        this.originalError = originalError
     }
-}
-
-export const createWalletError = (type: WalletErrorType, message: string, originalError?: unknown): WalletError => {
-    return new WalletError(type, message, originalError)
 }

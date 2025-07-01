@@ -6,15 +6,16 @@ import { SmartAccountTransactionConfig } from "../types/smartAccountTransaction"
 
 export async function getSmartAccount(
     thor: ThorClient,
-    networkName: string,
     ownerAddress: string,
+    accountFactoryAddress: string,
 ): Promise<SmartAccountTransactionConfig> {
-    if (!ownerAddress) {
-        throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "No owner address provided")
+    if (!ownerAddress || !accountFactoryAddress) {
+        throw new WalletError(
+            WalletErrorType.WALLET_NOT_FOUND,
+            `Owner address: ${ownerAddress} or account factory address: ${accountFactoryAddress} not found`,
+        )
     }
-
-    const config = getSmartAccountConfig(networkName)
-    const accountFactory = thor.contracts.load(config.accountFactoryAddress, SimpleAccountFactoryABI)
+    const accountFactory = thor.contracts.load(accountFactoryAddress, SimpleAccountFactoryABI)
 
     try {
         const account = await accountFactory.read.getAccountAddress(ownerAddress)
@@ -30,39 +31,9 @@ export async function getSmartAccount(
             hasV1Account: hasV1Account[0] as boolean,
             isDeployed,
             version: parseInt(version[0] as string) as number,
-            factoryAddress: config.accountFactoryAddress,
+            factoryAddress: accountFactoryAddress,
         }
     } catch (error) {
         throw new WalletError(WalletErrorType.NETWORK_ERROR, "Network error whilst reading smart account info", error)
     }
-}
-
-export interface SmartAccountConfig {
-    accountFactoryAddress: string
-}
-
-export function getFactoryAddress(networkName: string): string {
-    const config = getSmartAccountConfig(networkName)
-    return config.accountFactoryAddress
-}
-
-const SMART_ACCOUNT_CONFIG = {
-    testnet: {
-        accountFactoryAddress: "0x713b908Bcf77f3E00EFEf328E50b657a1A23AeaF",
-    },
-    mainnet: {
-        accountFactoryAddress: "0xC06Ad8573022e2BE416CA89DA47E8c592971679A",
-    },
-} as const
-
-export const getSmartAccountConfig = (networkName: string): SmartAccountConfig => {
-    if (networkName === "testnet" || networkName === "mainnet") {
-        return SMART_ACCOUNT_CONFIG[networkName]
-    }
-
-    throw new Error(`Unsupported network: ${networkName}`)
-}
-
-export const getSmartAccountFactoryAddress = (networkName: string): SmartAccountConfig => {
-    return getSmartAccountConfig(networkName)
 }
