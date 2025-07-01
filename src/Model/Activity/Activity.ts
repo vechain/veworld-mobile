@@ -329,4 +329,9 @@ export interface StargateActivity extends Activity {
     value: string
     tokenId?: string
     levelId?: TokenLevelId
+    owner?: string
+    vetGeneratedVthoRewards?: string
+    delegationRewards?: string
+    migrated?: boolean
+    autorenew?: boolean
 }
