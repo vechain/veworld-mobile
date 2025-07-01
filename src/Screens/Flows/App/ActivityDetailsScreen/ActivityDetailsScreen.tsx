@@ -192,7 +192,6 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
             case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
             case ActivityType.STARGATE_DELEGATE_ONLY:
-            case ActivityType.B3TR_CLAIMED_REWARDS:
             case ActivityType.STARGATE_UNDELEGATE:
             case ActivityType.STARGATE_UNSTAKE:
                 return (

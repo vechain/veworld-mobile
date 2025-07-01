@@ -852,7 +852,6 @@ const Staking = ({ activity, onPress }: StakingProps) => {
                 return "icon-unlock"
             case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
             case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
-            case ActivityEvent.B3TR_CLAIMED_REWARDS:
                 return "icon-gift"
             default:
                 return "icon-blocks"
@@ -867,8 +866,6 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         switch (activity.eventName) {
             case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
-            case ActivityEvent.B3TR_CLAIMED_REWARDS:
-                return LL.ACTIVITY_STARGATE_B3TR_CLAIMED_REWARDS_LABEL()
             case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
             case ActivityEvent.STARGATE_DELEGATE:

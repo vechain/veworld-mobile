@@ -3,7 +3,7 @@ import { BaseCarousel, CarouselSlideItem, useFeatureFlags } from "~Components"
 import { VeBetterDaoBanner, StellaPayBanner, StargateBanner } from "./Banners"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
 import { useAnalyticTracking } from "~Hooks"
-import { STARGATE_DAPP_URL } from "~Constants"
+import { STARGATE_URL } from "~Constants"
 
 const DAO_URL = "https://governance.vebetterdao.org"
 const STELLA_URL = "https://vebetter.stellapay.io/"
@@ -30,7 +30,7 @@ export const VeBetterDAOCarousel = () => {
             {
                 testID: "Stargate_banner",
                 content: <StargateBanner />,
-                href: STARGATE_DAPP_URL,
+                href: STARGATE_URL,
                 name: "stargate",
             },
         ],
