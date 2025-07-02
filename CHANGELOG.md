@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.6 (2025-07-02)</small>
+
+* build: init ([100fdc6](https://github.com/vechain/veworld-mobile/commit/100fdc6))
+* 169 bug   webp format not rendering   mobile (#3024) ([06ee413](https://github.com/vechain/veworld-mobile/commit/06ee413)), closes [#3024](https://github.com/vechain/veworld-mobile/issues/3024)
+
 ## <small>2.2.5 (2025-06-30)</small>
 
 * build: init ([8e24c0b](https://github.com/vechain/veworld-mobile/commit/8e24c0b))
