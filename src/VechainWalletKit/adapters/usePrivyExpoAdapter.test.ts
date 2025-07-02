@@ -114,7 +114,7 @@ describe("usePrivyExpoAdapter", () => {
     })
 
     describe("signTransaction", () => {
-        it("should successfully sign a transaction with proper signature format", async () => {
+        it("should successfully sign a transaction with proper vechain signature format", async () => {
             // Mock a complete signature with r, s, v components (65 bytes total = 130 hex chars)
             const mockSignatureResponse =
                 "0x1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef" +

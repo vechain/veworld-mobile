@@ -1,11 +1,16 @@
+import { WalletError, WalletErrorType } from "./errors"
+
 export const getChainId = (networkType: "mainnet" | "testnet" | "solo", chainId?: number): number => {
     if (networkType === "solo") {
         if (!chainId) {
-            throw new Error("Chain ID is required for solo network type")
+            throw new WalletError(WalletErrorType.INVALID_CHAIN_ID, "Chain ID is required for solo network type")
         }
         // Check if chainId fits in 16 bits (0 to 65535)
         if (chainId < 0 || chainId > 0xffff) {
-            throw new Error("Chain ID must be the last 16 bits of the genesis block")
+            throw new WalletError(
+                WalletErrorType.INVALID_CHAIN_ID,
+                "Chain ID must be the last 16 bits of the genesis block",
+            )
         }
         return chainId
     }

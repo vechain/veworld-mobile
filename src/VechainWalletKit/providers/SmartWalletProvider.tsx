@@ -19,7 +19,7 @@ export interface SmartWalletProps {
 const SmartWalletProviderContext = createContext<SmartWalletContext | null>(null)
 
 /**
- * Base provider for a smart wallet. This uses the adapter pattern to allow for different implementations of the smart account adapter.
+ * This uses the adapter pattern to allow for different implementations of the underlying wallet signing functionality.
  *
  * @param children - The children of the provider.
  * @param config - The configuration for the provider

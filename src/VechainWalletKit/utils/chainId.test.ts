@@ -1,4 +1,5 @@
 import { getChainId } from "./chainId"
+import { WalletError, WalletErrorType } from "./errors"
 
 describe("getChainId", () => {
     describe("solo network", () => {
@@ -13,20 +14,48 @@ describe("getChainId", () => {
             expect(result).toBe(65535)
         })
 
-        it("should throw error when chainId is not provided", () => {
-            expect(() => getChainId("solo")).toThrow("Chain ID is required for solo network type")
+        it("should throw WalletError when chainId is not provided", () => {
+            expect(() => getChainId("solo")).toThrow(WalletError)
+            try {
+                getChainId("solo")
+            } catch (error) {
+                expect(error).toBeInstanceOf(WalletError)
+                expect((error as WalletError).type).toBe(WalletErrorType.INVALID_CHAIN_ID)
+                expect((error as WalletError).message).toBe("Chain ID is required for solo network type")
+            }
         })
 
-        it("should throw error when chainId is negative", () => {
-            expect(() => getChainId("solo", -1)).toThrow("Chain ID must be the last 16 bits of the genesis block")
+        it("should throw WalletError when chainId is negative", () => {
+            expect(() => getChainId("solo", -1)).toThrow(WalletError)
+            try {
+                getChainId("solo", -1)
+            } catch (error) {
+                expect(error).toBeInstanceOf(WalletError)
+                expect((error as WalletError).type).toBe(WalletErrorType.INVALID_CHAIN_ID)
+                expect((error as WalletError).message).toBe("Chain ID must be the last 16 bits of the genesis block")
+            }
         })
 
-        it("should throw error when chainId exceeds 16-bit limit", () => {
-            expect(() => getChainId("solo", 65536)).toThrow("Chain ID must be the last 16 bits of the genesis block")
+        it("should throw WalletError when chainId exceeds 16-bit limit", () => {
+            expect(() => getChainId("solo", 65536)).toThrow(WalletError)
+            try {
+                getChainId("solo", 65536)
+            } catch (error) {
+                expect(error).toBeInstanceOf(WalletError)
+                expect((error as WalletError).type).toBe(WalletErrorType.INVALID_CHAIN_ID)
+                expect((error as WalletError).message).toBe("Chain ID must be the last 16 bits of the genesis block")
+            }
         })
 
-        it("should throw error when chainId is way above limit", () => {
-            expect(() => getChainId("solo", 100000)).toThrow("Chain ID must be the last 16 bits of the genesis block")
+        it("should throw WalletError when chainId is way above limit", () => {
+            expect(() => getChainId("solo", 100000)).toThrow(WalletError)
+            try {
+                getChainId("solo", 100000)
+            } catch (error) {
+                expect(error).toBeInstanceOf(WalletError)
+                expect((error as WalletError).type).toBe(WalletErrorType.INVALID_CHAIN_ID)
+                expect((error as WalletError).message).toBe("Chain ID must be the last 16 bits of the genesis block")
+            }
         })
 
         it("should handle chainId of 1 for solo network", () => {

@@ -4,7 +4,7 @@ A modular, provider-agnostic wallet SDK for VeChain applications with smart acco
 
 ## 🏗️ Architecture
 
-VechainWalletKit uses an adapter pattern to abstract away specific wallet providers (like Privy) from your application logic. This makes it easy to switch providers or create custom implementations.
+VechainWalletKit uses an adapter pattern to abstract away specific wallet providers (like Privy) from your application logic. This makes it easy to switch providers by creating custom implementations.
 
 This kit can be used with react native applications. Currently a Privy expo adapter is provided.
 
@@ -27,7 +27,7 @@ This kit can be used with react native applications. Currently a Privy expo adap
 
 ### Dependencies
 
-For react native applications that want to use the Privy expo adapter, you will need to install the following dependencies:
+The following dependencies are required to use the built in Privy implementation:
 
 -   yarn add "@vechain/sdk-core"
 -   yarn add "@vechain/sdk-network"
@@ -283,6 +283,7 @@ providerConfig: {
 ```
 
 **For Custom Adapters:**
+You can add any configuration your adapter needs to the providerConfig object.
 
 ```tsx
 providerConfig: {
@@ -343,8 +344,7 @@ const config = {
 ## 🛠️ Available Hooks
 
 -   `useSmartWallet()` - Main wallet context with authentication and transaction management. This is the main hook you will use to access all wallet features. It acts as a facade for the underlying adapter.
--   `useSmartAccount({ thor, networkName })` - Smart account management utilities
--   `usePrivyAdapter()` - Privy wallet adapter (when using Privy)
+-   `usePrivyAdapter()` - Privy wallet adapter
 
 ## 🔐 Login Usage
 

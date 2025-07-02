@@ -3,6 +3,7 @@ export enum WalletErrorType {
     WALLET_NOT_FOUND = "WALLET_NOT_FOUND",
     NETWORK_ERROR = "NETWORK_ERROR",
     CONTEXT_NOT_FOUND = "CONTEXT_NOT_FOUND",
+    INVALID_CHAIN_ID = "INVALID_CHAIN_ID",
 }
 
 export class WalletError extends Error {
