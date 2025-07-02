@@ -173,7 +173,7 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STAKING_EMPTY_BUTTON: string
 	/**
-	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​r​e​w​a​r​d​s​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​V​E​T​ ​t​o​k​e​n​s​.
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​V​T​H​O​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​V​E​T​ ​t​o​k​e​n​s​.
 	 */
 	ACTIVITY_STAKING_EMPTY_LABEL: string
 	/**
@@ -4605,7 +4605,7 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STAKING_EMPTY_BUTTON: () => LocalizedString
 	/**
-	 * Start earning rewards by staking your VET tokens.
+	 * Start earning VTHO by staking your VET tokens.
 	 */
 	ACTIVITY_STAKING_EMPTY_LABEL: () => LocalizedString
 	/**
