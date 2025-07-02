@@ -20,6 +20,7 @@ import {
     AnalyticsSlice,
     BrowserSlice,
     Notification,
+    VersionUpdateSlice,
     ExternalDappsSlice,
 } from "./Slices"
 import { persistReducer } from "redux-persist"
@@ -46,5 +47,6 @@ export const reducer = (nftPersistConfig: PersistConfig<NftSliceState>) =>
         [AnalyticsSlice.name]: AnalyticsSlice.reducer,
         [BrowserSlice.name]: BrowserSlice.reducer,
         [Notification.name]: Notification.reducer,
+        [VersionUpdateSlice.name]: VersionUpdateSlice.reducer,
         [ExternalDappsSlice.name]: ExternalDappsSlice.reducer,
     })

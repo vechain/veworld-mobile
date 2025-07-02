@@ -1,25 +1,33 @@
 import { PersistedState } from "redux-persist/es/types"
-import { UserPreferenceState } from "~Storage/Redux"
-import nacl from "tweetnacl"
-import { encodeBase64 } from "tweetnacl-util"
+import { AppVersion } from "~Model/AppVersion"
+import { ERROR_EVENTS } from "~Constants"
+import { debug } from "~Utils"
 
 export const Migration19 = (state: PersistedState): PersistedState => {
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 19: Adding version update state")
+
     // @ts-ignore
-    const currentState: UserPreferenceState = state.userPreferences
+    const currentState: AppVersion = state.versionUpdate
 
-    // Generate a new key pair for signing session tokens for external dapps connections
-    const keyPair = nacl.sign.keyPair()
+    if (!currentState || Object.keys(currentState).length === 0) {
+        debug(ERROR_EVENTS.SECURITY, "================= **** No state to migrate **** =================")
+        return state
+    }
 
-    const newState: UserPreferenceState = {
+    const newState: AppVersion = {
         ...currentState,
-        signKeyPair: {
-            publicKey: encodeBase64(keyPair.publicKey),
-            privateKey: encodeBase64(keyPair.secretKey),
+        majorVersion: "",
+        latestVersion: "",
+        isUpToDate: null,
+        lastManifestCheck: null,
+        updateRequest: {
+            dismissCount: 0,
+            lastDismissedDate: null,
         },
     }
 
     return {
         ...state,
-        userPreferences: newState,
+        versionUpdate: newState,
     } as PersistedState
 }

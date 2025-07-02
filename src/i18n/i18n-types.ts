@@ -149,6 +149,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_DAPPS_LABEL: string
 	/**
+	 * E​v​e​n​t​ ​n​a​m​e
+	 */
+	ACTIVITY_EVENT_NAME: string
+	/**
 	 * N​o​ ​N​F​T​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_NFT_EMPTY_LABEL: string
@@ -164,6 +168,42 @@ type RootTranslation = {
 	 * O​t​h​e​r
 	 */
 	ACTIVITY_OTHER_LABEL: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g
+	 */
+	ACTIVITY_STAKING_EMPTY_BUTTON: string
+	/**
+	 * S​t​a​r​t​ ​e​a​r​n​i​n​g​ ​V​T​H​O​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​V​E​T​ ​t​o​k​e​n​s​.
+	 */
+	ACTIVITY_STAKING_EMPTY_LABEL: string
+	/**
+	 * S​t​a​k​i​n​g
+	 */
+	ACTIVITY_STAKING_LABEL: string
+	/**
+	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
+	/**
+	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
+	/**
+	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e​d
+	 */
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​d
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: string
+	/**
+	 * V​E​T​ ​u​n​s​t​a​k​e​d
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
@@ -332,6 +372,15 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
+	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
+	 */
+	APP_UPDATE_AVAILABLE: string
+	/**
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
+	 * @param {string} version
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
+	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
 	APP_VERIFICATION_CONFIRM: string
@@ -405,6 +454,10 @@ type RootTranslation = {
 	 * B​a​c​k​u​p​ ​y​o​u​r​ ​w​a​l​l​e​t
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: string
+	/**
+	 * G​e​t​ ​*​*​V​T​H​O​*​*​ ​b​y​ ​s​t​a​k​i​n​g​ ​y​o​u​r​ ​*​*​V​E​T​ ​t​o​k​e​n​s​*​*
+	 */
+	BANNER_STARGATE_DESC: string
 	/**
 	 * G​e​t​ ​y​o​u​r​ ​*​*​V​e​B​e​t​t​e​r​ ​c​r​e​d​i​t​ ​c​a​r​d​*​*​ ​o​n​ ​*​*​S​t​e​l​l​a​ ​p​a​y​!​*​*
 	 */
@@ -1201,6 +1254,10 @@ type RootTranslation = {
 	 */
 	BTN_HISTORY: string
 	/**
+	 * I​'​l​l​ ​d​o​ ​i​t​ ​l​a​t​e​r
+	 */
+	BTN_ILL_DO_IT_LATER: string
+	/**
 	 * I​m​p​o​r​t
 	 */
 	BTN_IMPORT: string
@@ -1365,6 +1422,10 @@ type RootTranslation = {
 	 * S​k​i​p
 	 */
 	BTN_SKIP: string
+	/**
+	 * S​t​a​k​e
+	 */
+	BTN_STAKE: string
 	/**
 	 * S​w​a​p
 	 */
@@ -2112,6 +2173,10 @@ type RootTranslation = {
 	 * R​e​c​e​n​t​l​y​ ​A​d​d​e​d
 	 */
 	DISCOVER_TAB_RECENTLY_ADDED: string
+	/**
+	 * S​t​a​k​i​n​g
+	 */
+	DISCOVER_TAB_STAKING: string
 	/**
 	 * T​r​e​n​d​i​n​g​ ​&​ ​P​o​p​u​l​a​r
 	 */
@@ -4500,6 +4565,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_DAPPS_LABEL: () => LocalizedString
 	/**
+	 * Event name
+	 */
+	ACTIVITY_EVENT_NAME: () => LocalizedString
+	/**
 	 * No NFTs to show yet
 	 */
 	ACTIVITY_NFT_EMPTY_LABEL: () => LocalizedString
@@ -4515,6 +4584,42 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Other
 	 */
 	ACTIVITY_OTHER_LABEL: () => LocalizedString
+	/**
+	 * Start earning
+	 */
+	ACTIVITY_STAKING_EMPTY_BUTTON: () => LocalizedString
+	/**
+	 * Start earning VTHO by staking your VET tokens.
+	 */
+	ACTIVITY_STAKING_EMPTY_LABEL: () => LocalizedString
+	/**
+	 * Staking
+	 */
+	ACTIVITY_STAKING_LABEL: () => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: () => LocalizedString
+	/**
+	 * Claimed rewards
+	 */
+	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * VET staked & delegated
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Node undelegated
+	 */
+	ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL: () => LocalizedString
+	/**
+	 * VET staked
+	 */
+	ACTIVITY_STARGATE_STAKE_LABEL: () => LocalizedString
+	/**
+	 * VET unstaked
+	 */
+	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yet
 	 */
@@ -4681,6 +4786,14 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
+	 * Update available
+	 */
+	APP_UPDATE_AVAILABLE: () => LocalizedString
+	/**
+	 * Version {version} is now available to update with new features and improvements.
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
+	/**
 	 * Please confirm that you would like to process this request.
 	 */
 	APP_VERIFICATION_CONFIRM: () => LocalizedString
@@ -4752,6 +4865,10 @@ Try reconnect your device to the internet.
 	 * Backup your wallet
 	 */
 	BACKUP_YOUR_DEVICES_TITLE: () => LocalizedString
+	/**
+	 * Get **VTHO** by staking your **VET tokens**
+	 */
+	BANNER_STARGATE_DESC: () => LocalizedString
 	/**
 	 * Get your **VeBetter credit card** on **Stella pay!**
 	 */
@@ -5543,6 +5660,10 @@ Thanks for your patience!
 	 */
 	BTN_HISTORY: () => LocalizedString
 	/**
+	 * I'll do it later
+	 */
+	BTN_ILL_DO_IT_LATER: () => LocalizedString
+	/**
 	 * Import
 	 */
 	BTN_IMPORT: () => LocalizedString
@@ -5706,6 +5827,10 @@ Thanks for your patience!
 	 * Skip
 	 */
 	BTN_SKIP: () => LocalizedString
+	/**
+	 * Stake
+	 */
+	BTN_STAKE: () => LocalizedString
 	/**
 	 * Swap
 	 */
@@ -6446,6 +6571,10 @@ Thanks for your patience!
 	 * Recently Added
 	 */
 	DISCOVER_TAB_RECENTLY_ADDED: () => LocalizedString
+	/**
+	 * Staking
+	 */
+	DISCOVER_TAB_STAKING: () => LocalizedString
 	/**
 	 * Trending & Popular
 	 */

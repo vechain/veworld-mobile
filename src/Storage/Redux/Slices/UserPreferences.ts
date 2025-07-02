@@ -45,10 +45,12 @@ export interface UserPreferenceState {
     lastNotificationReminder: number | null
     removedNotificationTags?: string[]
     showJailbrokeWarning?: boolean
+    hideStargateBannerHomeScreen?: boolean
+    hideStargateBannerVETScreen?: boolean
     signKeyPair?: KeyPair
 }
 
-const initialState: UserPreferenceState = {
+export const initialUserPreferencesState: UserPreferenceState = {
     theme: ThemeEnum.SYSTEM,
     hideTokensWithNoBalance: false,
     isPinCodeRequired: true,
@@ -67,12 +69,14 @@ const initialState: UserPreferenceState = {
     lastNotificationReminder: null,
     removedNotificationTags: undefined,
     showJailbrokeWarning: true,
+    hideStargateBannerHomeScreen: false,
+    hideStargateBannerVETScreen: false,
     signKeyPair: undefined,
 }
 
 export const UserPreferencesSlice = createSlice({
     name: "userPreferences",
-    initialState,
+    initialState: initialUserPreferencesState,
     reducers: {
         setTheme: (state, action: PayloadAction<ThemeEnum>) => {
             state.theme = action.payload
@@ -142,12 +146,12 @@ export const UserPreferencesSlice = createSlice({
         resetUserPreferencesState: state => {
             if (state.language !== "en") {
                 const selectedLanguage = state.language
-                state = lodash.cloneDeep(initialState)
+                state = lodash.cloneDeep(initialUserPreferencesState)
                 state.language = selectedLanguage
                 return
             }
 
-            return initialState
+            return initialUserPreferencesState
         },
 
         updateLastNotificationReminder: (state, action: PayloadAction<number | null>) => {
@@ -170,6 +174,14 @@ export const UserPreferencesSlice = createSlice({
             if (state.removedNotificationTags?.includes(action.payload)) {
                 state.removedNotificationTags = state.removedNotificationTags.filter(tag => tag !== action.payload)
             }
+        },
+
+        setHideStargateBannerHomeScreen: (state, action: PayloadAction<boolean>) => {
+            state.hideStargateBannerHomeScreen = action.payload
+        },
+
+        setHideStargateBannerVETScreen: (state, action: PayloadAction<boolean>) => {
+            state.hideStargateBannerVETScreen = action.payload
         },
 
         setSignKeyPair: (state, action: PayloadAction<KeyPair>) => {
@@ -198,5 +210,7 @@ export const {
     addRemovedNotificationTag,
     removeRemovedNotificationTag,
     setShowJailbrokeDeviceWarning,
+    setHideStargateBannerHomeScreen,
+    setHideStargateBannerVETScreen,
     setSignKeyPair,
 } = UserPreferencesSlice.actions
