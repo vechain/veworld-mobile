@@ -7,19 +7,22 @@ import { TabsIconSVG } from "~Assets"
 import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
-import { RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
+import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { selectCurrentTabId, selectTabs, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 
 type Props = {
     onBrowserNavigation?: (error: boolean) => void
     onNavigate?: () => void | Promise<void>
-    returnScreen?: Routes.DISCOVER | Routes.SETTINGS
+    returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
 }
 
 export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.DISCOVER }: Props) => {
     const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
-    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings>>()
+    const nav =
+        useNavigation<
+            NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListHome>
+        >()
 
     const tabs = useAppSelector(selectTabs)
     const selectedTabId = useAppSelector(selectCurrentTabId)

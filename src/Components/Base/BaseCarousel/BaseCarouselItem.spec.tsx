@@ -4,7 +4,7 @@ import { Linking, Text } from "react-native"
 import { TestWrapper } from "~Test"
 import { BaseCarouselItem } from "./BaseCarouselItem"
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
+import { useNavigation, useRoute } from "@react-navigation/native"
 
 jest.mock("react-native/Libraries/Settings/Settings", () => ({
     get: jest.fn(),
@@ -14,6 +14,7 @@ jest.mock("react-native/Libraries/Settings/Settings", () => ({
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useNavigation: jest.fn(),
+    useRoute: jest.fn(),
 }))
 
 jest.mock("react-native", () => {
@@ -35,6 +36,7 @@ describe("BaseCarouselItem", () => {
     })
 
     it("should render correctly", () => {
+        ;(useRoute as jest.Mock).mockReturnValue({ name: Routes.DISCOVER })
         const { getByTestId } = render(
             <BaseCarouselItem testID="carousel-item">
                 <Text testID="test-text">{"test text"}</Text>
@@ -48,6 +50,7 @@ describe("BaseCarouselItem", () => {
     })
 
     it("should open external link when isExternalLink is true and href is provided", async () => {
+        ;(useRoute as jest.Mock).mockReturnValue({ name: Routes.DISCOVER })
         const testHref = "https://example.com"
         const { getByTestId } = render(
             <BaseCarouselItem
@@ -77,6 +80,7 @@ describe("BaseCarouselItem", () => {
     it("should navigate to browser when isExternalLink is false and href is provided", () => {
         const navigate = jest.fn()
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate })
+        ;(useRoute as jest.Mock).mockReturnValue({ name: Routes.HOME })
         const testHref = "https://example.com"
         const { getByTestId } = render(
             <BaseCarouselItem
@@ -96,12 +100,13 @@ describe("BaseCarouselItem", () => {
 
         // Check if navigation.navigate was called with correct route and params
         expect(onPress).toHaveBeenCalled()
-        expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: testHref })
+        expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: testHref, returnScreen: Routes.HOME })
     })
 
     it("should not call Linking.openURL or navigate when href is not provided", () => {
         const navigate = jest.fn()
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate })
+        ;(useRoute as jest.Mock).mockReturnValue({ name: Routes.HOME })
         const { getByTestId } = render(
             <BaseCarouselItem testID="carousel-item" onPress={onPress} name="no-link">
                 <Text>{"No Link"}</Text>
@@ -121,6 +126,7 @@ describe("BaseCarouselItem", () => {
     it("should call onPress after navigation when onPressActivation is 'after'", () => {
         const navigate = jest.fn()
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate })
+        ;(useRoute as jest.Mock).mockReturnValue({ name: Routes.HOME })
         const testHref = "https://example.com"
         const { getByTestId } = render(
             <BaseCarouselItem
@@ -140,13 +146,14 @@ describe("BaseCarouselItem", () => {
         fireEvent.press(getByTestId("carousel-item"))
 
         // Check order of execution
-        expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: testHref })
+        expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: testHref, returnScreen: Routes.HOME })
         expect(onPress).toHaveBeenCalled()
     })
 
     it("should call onPress before navigation when onPressActivation is 'before'", () => {
         const navigate = jest.fn()
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate })
+        ;(useRoute as jest.Mock).mockReturnValue({ name: Routes.HOME })
         const testHref = "https://example.com"
         const { getByTestId } = render(
             <BaseCarouselItem
@@ -167,6 +174,6 @@ describe("BaseCarouselItem", () => {
 
         // Check order of execution
         expect(onPress).toHaveBeenCalled()
-        expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: testHref })
+        expect(navigate).toHaveBeenCalledWith(Routes.BROWSER, { url: testHref, returnScreen: Routes.HOME })
     })
 })

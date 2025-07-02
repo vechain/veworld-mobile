@@ -12,7 +12,7 @@ import {
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { showInfoToast, showWarningToast } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, usePrevious, useSetSelectedAccount } from "~Hooks"
 import { Locales, useI18nContext } from "~i18n"
 import {
     AccountWithDevice,
@@ -160,6 +160,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const webviewRef = useRef<WebView | undefined>()
 
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
+    const previousUrl = usePrevious(navigationState?.url)
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -717,9 +718,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [detectScrollDirection, showToolbars],
     )
 
-    const onNavigationStateChange = useCallback((navState: WebViewNavigation) => {
-        setNavigationState(navState)
-    }, [])
+    const onNavigationStateChange = useCallback(
+        (navState: WebViewNavigation) => {
+            setNavigationState(navState)
+            if (previousUrl !== navState.url) {
+                setShowToolbars(true)
+            }
+        },
+        [previousUrl],
+    )
 
     const closeInAppBrowser = useCallback(() => {
         nav.goBack()
