@@ -63,7 +63,7 @@ function buildBatchAuthorizationTypedData({
         if (typeof clause.data === "object" && "abi" in clause.data) {
             dataArray.push(encodeFunctionData(clause.data))
         } else {
-            dataArray.push(clause.data || "0x")
+            dataArray.push(clause.data ?? "0x")
         }
     })
 
@@ -129,7 +129,7 @@ function buildSingleAuthorizationTypedData({
             data:
                 (typeof clause.data === "object" && "abi" in clause.data
                     ? encodeFunctionData(clause.data)
-                    : clause.data) || "0x",
+                    : clause.data) ?? "0x",
         },
     }
 }

@@ -76,8 +76,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     const smartAccountData = await getSmartAccount(thor, adapterAddress, factoryAddress)
                     setSmartAccountConfig(smartAccountData)
                     setSmartAccountAddress(smartAccountData.address)
-                } catch (error) {
-                    // Silently handle config update errors to avoid disrupting user experience
                 } finally {
                     setIsLoading(false)
                 }

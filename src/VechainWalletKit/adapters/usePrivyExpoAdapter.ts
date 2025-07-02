@@ -10,10 +10,10 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
     const { user, logout } = usePrivy()
     const { wallets, create } = useEmbeddedEthereumWallet()
     const oauth = useLoginWithOAuth()
-    const isAuthenticated = !!user && (wallets?.length || 0) > 0
+    const isAuthenticated = !!user && (wallets?.length ?? 0) > 0
 
     return useMemo(() => {
-        const currentWallets = wallets || []
+        const currentWallets = wallets ?? []
 
         return {
             isAuthenticated,
@@ -145,5 +145,5 @@ export const findPrimaryType = (types: Record<string, any>, message: any): strin
         }
     }
 
-    return typeKeys[0] || "Unknown"
+    return typeKeys[0] ?? "Unknown"
 }

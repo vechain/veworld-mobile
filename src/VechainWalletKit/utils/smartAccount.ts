@@ -30,7 +30,7 @@ export async function getSmartAccount(
             address: smartAccountAddress,
             hasV1Account: hasV1Account[0] as boolean,
             isDeployed,
-            version: parseInt(version[0] as string) as number,
+            version: parseInt(version[0] as string),
             factoryAddress: accountFactoryAddress,
         }
     } catch (error) {
