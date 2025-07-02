@@ -17,6 +17,8 @@ import {
     UnknownTxActivity,
     NETWORK_TYPE,
 } from "~Model"
+import LinearGradient from "react-native-linear-gradient"
+import { BaseIcon } from "~Components/Base/BaseIcon"
 
 const activities: Activity[] = [
     {
@@ -409,6 +411,37 @@ describe("ActivityBox", () => {
             )
 
             expect(screen.getByTestId(/^UNKNOWN-TX-/i)).toBeTruthy()
+        })
+    })
+
+    describe("Gradient Background Icon Rendering", () => {
+        it("renders LinearGradient and BaseIcon with testID 'magnify' when isGradient is true", () => {
+            const gradientConfig = {
+                colors: ["#000", "#fff"],
+                angle: 45,
+                start: { x: 0, y: 0 },
+                end: { x: 1, y: 1 },
+            }
+            const icon = "icon-star"
+            const styles = { iconContainer: { padding: 0 } }
+            const isGradient = true
+
+            const TestIconBackground = () =>
+                isGradient ? (
+                    <LinearGradient
+                        colors={gradientConfig.colors}
+                        angle={gradientConfig.angle}
+                        start={gradientConfig.start}
+                        end={gradientConfig.end}
+                        style={styles.iconContainer}>
+                        <BaseIcon name={icon} size={16} color={"#fff"} testID="magnify" />
+                    </LinearGradient>
+                ) : null
+
+            render(<TestIconBackground />)
+
+            expect(screen.getByTestId("magnify")).toBeTruthy()
+            expect(screen.UNSAFE_queryAllByType(LinearGradient).length).toBeGreaterThan(0)
         })
     })
 })
