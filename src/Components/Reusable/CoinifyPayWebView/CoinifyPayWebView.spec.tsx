@@ -8,9 +8,14 @@ import { CoinifyPayWebView } from "./CoinifyPayWebView"
 const { account1D1, account2D1 } = TestHelpers.data
 const amount = 100
 
-jest.mock("react-native", () => ({
-    ...jest.requireActual("react-native"),
-}))
+// Mock react-native-webview
+jest.mock("react-native-webview", () => {
+    const { View } = jest.requireActual("react-native")
+    return {
+        __esModule: true,
+        default: jest.fn(({ testID, ...props }) => <View testID={testID} {...props} />),
+    }
+})
 
 jest.mock("react-native/Libraries/Settings/Settings", () => ({
     get: jest.fn(),
@@ -34,6 +39,18 @@ jest.mock("react-native", () => {
         },
     }
 })
+
+// Mock the AnimatedFloatingButton component
+jest.mock("../AnimatedFloatingButton", () => ({
+    AnimatedFloatingButton: jest.fn(({ children, ...props }) => {
+        const { View } = jest.requireActual("react-native")
+        return (
+            <View testID="AnimatedFloatingButton" {...props}>
+                {children}
+            </View>
+        )
+    }),
+}))
 
 const mockedNavigate = jest.fn()
 const mockedReplace = jest.fn()

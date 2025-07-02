@@ -3,7 +3,7 @@ import { forwardRef, default as React, useCallback, useMemo, useState } from "re
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButtonGroupHorizontal, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { ColorThemeType } from "~Constants"
-import { useScrollableBottomSheet, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, BaseButtonGroupHorizontalType, LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
@@ -83,18 +83,12 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
         }
     }, [selectedOption, accounts])
 
-    const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
-        data: !hasDynamicHeight ? accounts : [],
-        snapPoints: computeSnappoints,
-    })
-
     return (
         <BaseBottomSheet
             style={styles.root}
             dynamicHeight={hasDynamicHeight}
             ref={ref}
-            snapPoints={hasDynamicHeight ? undefined : computeSnappoints}
-            onChange={hasDynamicHeight ? undefined : handleSheetChangePosition}>
+            snapPoints={hasDynamicHeight ? undefined : computeSnappoints}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-arrow-link" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -120,7 +114,6 @@ export const DelegationBottomSheet = forwardRef<BottomSheetModalMethods, Props>(
             />
             <BaseSpacer height={24} />
             <RenderedOption
-                flatListScrollProps={flatListScrollProps}
                 onReset={() => {
                     setSelectedOption(selectedDelegationOption)
                 }}
