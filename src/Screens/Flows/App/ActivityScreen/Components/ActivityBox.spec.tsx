@@ -4,6 +4,7 @@ import React from "react"
 import { TestWrapper } from "~Test"
 import {
     Activity,
+    ActivityType,
     B3trActionActivity,
     B3trClaimRewardActivity,
     B3trProposalSupportActivity,
@@ -16,9 +17,63 @@ import {
     SwapActivity,
     UnknownTxActivity,
     NETWORK_TYPE,
+    NonFungibleTokenActivity,
+    ActivityStatus,
 } from "~Model"
+import { DIRECTIONS } from "~Constants"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseIcon } from "~Components/Base/BaseIcon"
+
+const mockTheme = {
+    colors: {
+        activityCard: {
+            time: "#666",
+            title: "#000",
+            subtitleBold: "#333",
+            subtitleLight: "#999",
+            swap: "#444",
+        },
+    },
+}
+
+jest.mock("~Hooks", () => ({
+    ...jest.requireActual("~Hooks"),
+    useNFTInfo: () => ({
+        tokenMetadata: {
+            image: "https://example.com/nft.jpg",
+        },
+        collectionName: "Test Collection",
+        isMediaLoading: false,
+    }),
+    useThemedStyles: () => ({
+        styles: {
+            rootContainer: {},
+            iconContainer: {},
+            titleContainer: {},
+            textContainer: {},
+            rightTextContainer: {},
+            rightImageContainer: {},
+        },
+        theme: mockTheme,
+    }),
+    useTheme: () => mockTheme,
+    useNFTMedia: () => ({
+        fetchMedia: async () => ({
+            image: "https://example.com/nft.jpg",
+            mime: "image/jpeg",
+            mediaType: "IMAGE",
+        }),
+    }),
+}))
+
+jest.mock("~Components/Providers/PersistedCacheProvider", () => ({
+    usePersistedCache: () => ({
+        mediaCache: {
+            getItem: () => null,
+            setItem: () => {},
+        },
+    }),
+}))
 
 const activities: Activity[] = [
     {
@@ -285,9 +340,35 @@ describe("ActivityBox", () => {
         },
     }
 
+    describe("TokenTransfer", () => {
+        const tokenActivity: FungibleTokenActivity = {
+            id: "test-id",
+            blockNumber: 123,
+            timestamp: Date.now(),
+            type: ActivityType.TRANSFER_FT,
+            amount: "1000000000000000000",
+            tokenAddress: "0x0",
+            direction: DIRECTIONS.UP,
+            from: "0x123",
+            to: ["0x456"],
+            status: ActivityStatus.SUCCESS,
+            isTransaction: true,
+            delegated: false,
+        }
+
+        it("renders correctly", () => {
+            const { getByTestId } = render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.TokenTransfer activity={tokenActivity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+            expect(getByTestId(`FT-TRANSFER-${tokenActivity.id}`)).toBeTruthy()
+        })
+    })
+
     describe("Fungible Token Activities", () => {
-        it("should render FT transfer correctly", () => {
-            const activity = activities[0] as FungibleTokenActivity
+        it("renders FT transfer correctly", () => {
+            const activity = activities[1] as FungibleTokenActivity
             render(
                 <TestWrapper preloadedState={mockPreloadedState}>
                     <ActivityBox.TokenTransfer activity={activity} onPress={mockOnPress} />
@@ -411,6 +492,32 @@ describe("ActivityBox", () => {
             )
 
             expect(screen.getByTestId(/^UNKNOWN-TX-/i)).toBeTruthy()
+        })
+    })
+
+    describe("NFT Media Rendering", () => {
+        it("renders NFTMedia when NFT metadata is available", () => {
+            const activity: NonFungibleTokenActivity = {
+                id: "test-id",
+                blockNumber: 123,
+                timestamp: Date.now(),
+                type: ActivityType.TRANSFER_NFT,
+                tokenId: "1",
+                contractAddress: "0x123",
+                direction: DIRECTIONS.UP,
+                from: "0x123",
+                to: ["0x456"],
+                status: ActivityStatus.SUCCESS,
+                isTransaction: true,
+                delegated: false,
+            }
+
+            const { getByTestId } = render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.NFTTransfer activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+            expect(getByTestId("nft-media")).toBeTruthy()
         })
     })
 

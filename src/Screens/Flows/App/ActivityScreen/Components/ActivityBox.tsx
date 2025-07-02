@@ -90,7 +90,7 @@ const BaseActivityBox = ({
         }
 
         if (showNftImage) {
-            return <NFTMedia uri={nftImage ?? ""} styles={styles.rightImageContainer} />
+            return <NFTMedia uri={nftImage ?? ""} styles={styles.rightImageContainer} testID="nft-media" />
         }
 
         return (
@@ -482,7 +482,7 @@ type NFTTransferActivityBoxProps = {
 
 const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
-    const { collectionName } = useNFTInfo(activity?.tokenId, activity.contractAddress)
+    const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
     const isReceived = activity.direction === DIRECTIONS.DOWN
     const title = isReceived ? LL.NFT_TRANSFER_RECEIVED() : LL.NFT_TRANSFER_SENT()
     const time = moment(activity.timestamp).format("HH:mm")
@@ -504,6 +504,7 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
             title={title}
             description={validatedCollectionName()}
             onPress={onPressHandler}
+            nftImage={tokenMetadata?.image}
         />
     )
 }
