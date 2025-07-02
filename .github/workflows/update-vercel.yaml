@@ -8,6 +8,10 @@ jobs:
         name: Prepare APK for Vercel
         runs-on: ubuntu-latest
         environment: android-release
+        permissions:
+          actions: write
+          contents: read
+        env:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
