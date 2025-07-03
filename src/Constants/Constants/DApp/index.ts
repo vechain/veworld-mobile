@@ -8,4 +8,4 @@ export const VEBETTER_DAO_EMISSION_CONTRACT = "0xDf94739bd169C84fe6478D8420Bb807
 export const VEBETTER_DAO_ALLOCATION_POOL_CONTRACT = "0x4191776F05f4bE4848d3f4d587345078B439C7d3"
 
 // Stargate DApp
-export const STARGATE_DAPP_URL = "https://stargate.vechain.org"
+export const STARGATE_DAPP_URL = "https://app.stargate.vechain.org"
