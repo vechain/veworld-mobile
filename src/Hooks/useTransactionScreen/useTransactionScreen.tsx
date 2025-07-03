@@ -121,6 +121,7 @@ export const useTransactionScreen = ({
         isDelegated,
         dependsOn: dappRequest?.options?.dependsOn,
         ...transactionFeesResponse.txOptions[selectedFeeOption],
+        deviceType: selectedAccount.device.type,
     })
 
     // 5. Sign transaction

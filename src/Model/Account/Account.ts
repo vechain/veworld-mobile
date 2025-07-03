@@ -1,4 +1,4 @@
-import { BaseDevice, LedgerDevice, LocalDevice } from "~Model/Device"
+import { BaseDevice, LedgerDevice, LocalDevice, SmartWalletDevice } from "~Model/Device"
 import { DEVICE_TYPE } from "~Model/Wallet"
 
 /**
@@ -35,7 +35,7 @@ export interface AccountWithDevice extends WalletAccount {
     domain?: string
 }
 
-export type Device = LedgerDevice | LocalDevice
+export type Device = LedgerDevice | LocalDevice | SmartWalletDevice
 
 export interface LocalAccountWithDevice extends WalletAccount {
     device: LocalDevice
