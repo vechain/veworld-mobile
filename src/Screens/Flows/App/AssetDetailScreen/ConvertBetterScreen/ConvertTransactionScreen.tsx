@@ -128,6 +128,7 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
         setSelectedDelegationToken,
         hasEnoughBalanceOnAny,
         isFirstTimeLoadingFees,
+        hasEnoughBalanceOnToken,
     } = useTransactionScreen({
         clauses: transactionClauses,
         onTransactionSuccess,
@@ -180,7 +181,8 @@ export const ConvertTransactionScreen: React.FC<Props> = ({ route, navigation })
                         delegationToken={selectedDelegationToken}
                         setDelegationToken={setSelectedDelegationToken}
                         hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
-                        isFirstTimeLoadingFees={isFirstTimeLoadingFees}>
+                        isFirstTimeLoadingFees={isFirstTimeLoadingFees}
+                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}

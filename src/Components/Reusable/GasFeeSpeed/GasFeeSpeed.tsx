@@ -28,6 +28,9 @@ type Props = {
     isEnoughBalance: boolean
     hasEnoughBalanceOnAny: boolean
     isFirstTimeLoadingFees: boolean
+    hasEnoughBalanceOnToken: {
+        [token: string]: boolean
+    }
 }
 
 const AnimatedBaseCard = Animated.createAnimatedComponent(wrapFunctionComponent(BaseCard))
@@ -47,6 +50,7 @@ export const GasFeeSpeed = ({
     isEnoughBalance,
     hasEnoughBalanceOnAny,
     isFirstTimeLoadingFees,
+    hasEnoughBalanceOnToken,
 }: PropsWithChildren<Props>) => {
     const { styles } = useThemedStyles(baseStyles)
 
@@ -113,6 +117,7 @@ export const GasFeeSpeed = ({
                 onClose={tokenBsOnClose}
                 selectedToken={delegationToken}
                 setSelectedToken={setDelegationToken}
+                hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
             />
         </AnimatedBaseCard>
     )

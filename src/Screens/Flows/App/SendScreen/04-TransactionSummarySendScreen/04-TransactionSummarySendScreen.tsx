@@ -138,6 +138,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         fallbackToVTHO,
         hasEnoughBalanceOnAny,
         isFirstTimeLoadingFees,
+        hasEnoughBalanceOnToken,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -171,10 +172,10 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
 
     useEffect(() => {
         //Given that we use only 4 decimals, I'll do a check on 4 decimals
-        if (BigNutils(finalAmount).minus(amount).toBN.abs().gt("0.0001")) {
+        if (BigNutils(finalAmount).minus(amount).toBN.abs().gt("0.0001") || selectedDelegationToken !== token.symbol) {
             fallbackToVTHO()
         }
-    }, [amount, fallbackToVTHO, finalAmount])
+    }, [amount, fallbackToVTHO, finalAmount, selectedDelegationToken, token.symbol])
 
     return (
         <Layout
@@ -233,7 +234,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         setDelegationToken={setSelectedDelegationToken}
                         isEnoughBalance={isEnoughGas}
                         hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
-                        isFirstTimeLoadingFees={isFirstTimeLoadingFees}>
+                        isFirstTimeLoadingFees={isFirstTimeLoadingFees}
+                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}

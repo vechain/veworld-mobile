@@ -159,7 +159,7 @@ export const useTransactionScreen = ({
         return Object.fromEntries(
             Object.entries(genericDelegatorFees.allOptions)
                 .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
-                .concat([[VTHO.symbol.toLowerCase(), transactionFeesResponse.options[selectedFeeOption].maxFee]]),
+                .concat([[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]]),
         )
     }, [genericDelegatorFees.allOptions, selectedFeeOption, transactionFeesResponse.options])
 
@@ -168,9 +168,8 @@ export const useTransactionScreen = ({
         [genericDelegatorFees.isFirstTimeLoading, loadingGas, transactionFeesResponse.isFirstTimeLoading],
     )
 
-    const { hasEnoughBalance, hasEnoughBalanceOnAny } = useIsEnoughGas({
+    const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
         selectedToken: selectedDelegationToken,
-        fee: gasOptions[selectedFeeOption].maxFee,
         clauses,
         isDelegated,
         allFeeOptions: selectedFeeAllTokenOptions,
@@ -373,6 +372,6 @@ export const useTransactionScreen = ({
         fallbackToVTHO,
         hasEnoughBalanceOnAny,
         isFirstTimeLoadingFees,
-        selectedFeeAllTokenOptions,
+        hasEnoughBalanceOnToken,
     }
 }

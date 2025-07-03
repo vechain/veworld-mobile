@@ -16,7 +16,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { setDefaultDelegationToken } from "~Storage/Redux/Slices/Delegation"
-import { AddressUtils, BigNutils } from "~Utils"
+import { AddressUtils } from "~Utils"
 import { CheckBoxWithText } from "../CheckBoxWithText"
 
 type Props = {
@@ -24,6 +24,9 @@ type Props = {
     setSelectedToken: (value: string) => void
     availableTokens: string[]
     onClose: () => void
+    hasEnoughBalanceOnToken: {
+        [token: string]: boolean
+    }
 }
 
 const noop = () => {}
@@ -32,16 +35,16 @@ type EnhancedTokenCardProps = {
     item: FungibleTokenWithBalance
     onSelectedToken: (value: string) => void
     selected: boolean
+    disabled: boolean
 }
-const EnhancedTokenCard = ({ item, selected, onSelectedToken }: EnhancedTokenCardProps) => {
-    const disabled = useMemo(() => BigNutils(item.balance.balance).isZero, [item.balance.balance])
+const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled }: EnhancedTokenCardProps) => {
     const { styles } = useThemedStyles(baseTokenCardStyles({ selected, disabled }))
     const onPress = useCallback(() => {
-        onSelectedToken(item.symbol)
-    }, [item.symbol, onSelectedToken])
+        if (!disabled) onSelectedToken(item.symbol)
+    }, [disabled, item.symbol, onSelectedToken])
 
     return (
-        <Pressable onPress={onPress} testID="GAS_FEE_TOKEN_BOTTOM_SHEET_TOKEN">
+        <Pressable onPress={onPress} testID="GAS_FEE_TOKEN_BOTTOM_SHEET_TOKEN" disabled={disabled}>
             <AnimatedTokenCard
                 item={item}
                 drag={noop}
@@ -55,7 +58,7 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken }: EnhancedTokenCar
 }
 
 export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
-    { selectedToken, setSelectedToken, onClose, availableTokens },
+    { selectedToken, setSelectedToken, onClose, availableTokens, hasEnoughBalanceOnToken },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -105,7 +108,11 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     }, [])
 
     return (
-        <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent}>
+        <BaseBottomSheet
+            ref={ref}
+            dynamicHeight
+            contentStyle={styles.rootContent}
+            backgroundStyle={styles.rootContentBackground}>
             <BaseView flexDirection="row" gap={12}>
                 <BaseIcon name="icon-coins" size={20} color={theme.colors.editSpeedBs.title} />
                 <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -124,6 +131,7 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                         key={tk.symbol}
                         onSelectedToken={setInternalToken}
                         selected={internalToken === tk.symbol}
+                        disabled={!hasEnoughBalanceOnToken[tk.symbol]}
                     />
                 ))}
             </BaseView>
@@ -152,10 +160,13 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
     )
 })
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         rootContent: {
             paddingBottom: 40,
+        },
+        rootContentBackground: {
+            backgroundColor: theme.colors.actionBottomSheet.background,
         },
     })
 
