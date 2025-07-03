@@ -41,6 +41,7 @@ import { NotificationsProvider, PersistedThemeProvider, StoreContextProvider } f
 import {
     selectAnalyticsTrackingEnabled,
     selectLanguage,
+    selectSelectedNetwork,
     selectSentryTrackingEnabled,
     setCurrentMountedScreen,
     useAppDispatch,
@@ -56,6 +57,7 @@ import { onlineManager } from "@tanstack/react-query"
 import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
+import { SmartWalletWithPrivyProvider } from "./src/VechainWalletKit"
 
 const { fontFamily } = typography
 
@@ -118,6 +120,10 @@ const Main = () => {
         }
     }, [isAnalyticsEnabled])
 
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const networkType = selectedNetwork.type
+    const nodeUrl = selectedNetwork.currentUrl
+
     if (!fontsLoaded) return
 
     return (
@@ -128,20 +134,33 @@ const Main = () => {
                     persistOptions={{
                         persister: clientPersister,
                     }}>
-                    <FeatureFlagsProvider>
-                        <NavigationProvider>
-                            <WalletConnectContextProvider>
-                                <InAppBrowserProvider>
-                                    <BottomSheetModalProvider>
-                                        <NotificationsProvider>
-                                            <EntryPoint />
-                                        </NotificationsProvider>
-                                    </BottomSheetModalProvider>
-                                </InAppBrowserProvider>
-                            </WalletConnectContextProvider>
-                        </NavigationProvider>
-                        <BaseToast />
-                    </FeatureFlagsProvider>
+                    <SmartWalletWithPrivyProvider
+                        config={{
+                            providerConfig: {
+                                appId: process.env.PRIVY_APP_ID,
+                                clientId: process.env.PRIVY_CLIENT_ID,
+                            },
+                            networkConfig: {
+                                nodeUrl,
+                                networkType,
+                            },
+                        }}
+                        adapter={adapter}>
+                        <FeatureFlagsProvider>
+                            <NavigationProvider>
+                                <WalletConnectContextProvider>
+                                    <InAppBrowserProvider>
+                                        <BottomSheetModalProvider>
+                                            <NotificationsProvider>
+                                                <EntryPoint />
+                                            </NotificationsProvider>
+                                        </BottomSheetModalProvider>
+                                    </InAppBrowserProvider>
+                                </WalletConnectContextProvider>
+                            </NavigationProvider>
+                            <BaseToast />
+                        </FeatureFlagsProvider>
+                    </SmartWalletWithPrivyProvider>
                 </PersistQueryClientProvider>
             </ConnexContextProvider>
         </GestureHandlerRootView>

@@ -1,5 +1,13 @@
 import { AccountUtils, AddressUtils, debug, error } from "~Utils"
-import { BaseDevice, DEVICE_TYPE, LedgerDevice, LocalDevice, NewLedgerDevice, WalletAccount } from "~Model"
+import {
+    BaseDevice,
+    DEVICE_TYPE,
+    LedgerDevice,
+    LocalDevice,
+    NewLedgerDevice,
+    SmartWalletDevice,
+    WalletAccount,
+} from "~Model"
 import { selectDevices } from "../Selectors"
 import { addDevice, bulkUpdateDevices, renameDevice, updateDevice } from "../Slices/Device"
 import { AppThunk, createAppAsyncThunk } from "../Types"
@@ -88,4 +96,33 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
     },
 )
 
-export { renameDevice, addDeviceAndAccounts, addLedgerDeviceAndAccounts, updateDevice, bulkUpdateDevices }
+/**
+ *  Add a Smart Wallet device and its first account
+ * @param device  the device to add
+ * @returns the added account
+ */
+const addSmartWalletDeviceAndAccount =
+    (device: SmartWalletDevice): AppThunk<WalletAccount> =>
+    dispatch => {
+        dispatch(addDevice(device))
+
+        let account: WalletAccount = {
+            alias: "Smart Wallet Account",
+            address: device.rootAddress,
+            rootAddress: device.rootAddress,
+            index: -1,
+            visible: true,
+        }
+
+        dispatch(addAccount(account))
+        return account
+    }
+
+export {
+    renameDevice,
+    addDeviceAndAccounts,
+    addLedgerDeviceAndAccounts,
+    addSmartWalletDeviceAndAccount,
+    updateDevice,
+    bulkUpdateDevices,
+}
