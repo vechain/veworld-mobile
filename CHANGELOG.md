@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.6 (2025-07-03)</small>
+
+* build: init ([3a075bd](https://github.com/vechain/veworld-mobile/commit/3a075bd))
+* Fix: Include new copy to Claim Regards (#3033) ([63de530](https://github.com/vechain/veworld-mobile/commit/63de530)), closes [#3033](https://github.com/vechain/veworld-mobile/issues/3033)
+
 ## <small>2.2.5 (2025-06-30)</small>
 
 * build: init ([8e24c0b](https://github.com/vechain/veworld-mobile/commit/8e24c0b))
