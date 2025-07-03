@@ -150,11 +150,22 @@ export const useTransactionScreen = ({
         return genericDelegatorFees.options
     }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options])
 
-    const { hasEnoughBalance } = useIsEnoughGas({
+    const selectedFeeAllTokenOptions = useMemo(() => {
+        if (typeof genericDelegatorFees.allOptions === "undefined") return undefined
+        return Object.fromEntries(
+            Object.entries(genericDelegatorFees.allOptions)
+                .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
+                .concat([VTHO.symbol.toLowerCase(), transactionFeesResponse.options[selectedFeeOption].maxFee]),
+        )
+    }, [genericDelegatorFees.allOptions, selectedFeeOption, transactionFeesResponse.options])
+
+    const { hasEnoughBalance, hasEnoughBalanceOnAny } = useIsEnoughGas({
         selectedToken: selectedDelegationToken,
         fee: gasOptions[selectedFeeOption].maxFee,
         clauses,
         isDelegated,
+        allFeeOptions: selectedFeeAllTokenOptions,
+        isLoadingFees: genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading,
     })
 
     // 4. Build transaction
@@ -318,8 +329,8 @@ export const useTransactionScreen = ({
     }, [resetDelegation, selectedDelegationToken, selectedDelegationUrl])
 
     const isDisabledButtonState = useMemo(
-        () => !hasEnoughBalance || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
-        [hasEnoughBalance, loading, gas?.gas],
+        () => !hasEnoughBalanceOnAny || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
+        [hasEnoughBalanceOnAny, loading, gas?.gas],
     )
 
     return {
@@ -351,5 +362,6 @@ export const useTransactionScreen = ({
         setSelectedDelegationToken,
         availableTokens,
         fallbackToVTHO,
+        hasEnoughBalanceOnAny,
     }
 }

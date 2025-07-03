@@ -12,6 +12,12 @@ type Args = {
     fee: BigNumberUtils
     clauses: TransactionClause[]
     isDelegated: boolean
+    allFeeOptions:
+        | {
+              [token: string]: BigNumberUtils
+          }
+        | undefined
+    isLoadingFees: boolean
 }
 
 const calculateClausesValue = ({
@@ -37,7 +43,7 @@ const calculateClausesValue = ({
     return sum
 }
 
-export const useIsEnoughGas = ({ selectedToken, fee, clauses, isDelegated }: Args) => {
+export const useIsEnoughGas = ({ selectedToken, fee, clauses, isDelegated, allFeeOptions, isLoadingFees }: Args) => {
     const allTokens = useAppSelector(selectAllTokens)
     const tokens = useAppSelector(selectTokensWithBalances)
 
@@ -56,13 +62,39 @@ export const useIsEnoughGas = ({ selectedToken, fee, clauses, isDelegated }: Arg
     )
 
     const hasEnoughBalance = useMemo(() => {
+        if (isLoadingFees) return true
         //Delegation with VTHO should count as "0" for fees
         if (isDelegated && selectedToken === VTHO.symbol)
             return BigNutils(tokenBalance).minus(clausesAmount.toBN).isBiggerThan("0")
         return BigNutils(tokenBalance).minus(clausesAmount.toBN).isBiggerThan(fee.toBN)
-    }, [clausesAmount.toBN, fee.toBN, isDelegated, selectedToken, tokenBalance])
+    }, [clausesAmount.toBN, fee.toBN, isDelegated, isLoadingFees, selectedToken, tokenBalance])
 
-    const memoized = useMemo(() => ({ hasEnoughBalance }), [hasEnoughBalance])
+    const hasEnoughBalanceOnAny = useMemo(() => {
+        if (isLoadingFees) return true
+        if (selectedToken === VTHO.symbol && isDelegated)
+            return BigNutils(tokenBalance).minus(clausesAmount.toBN).isBiggerThan("0")
+        return Object.entries(allFeeOptions).some(([token, tokenFee]) => {
+            const balance = tokens.find(tk => tk.symbol === token)?.balance?.balance ?? "0"
+            const foundTmpToken = allTokens.find(tk => tk.symbol === token)!
+            const clausesValue = calculateClausesValue({ clauses, selectedToken: foundTmpToken })
+            return BigNutils(balance).minus(clausesValue.toBN).isBiggerThan(tokenFee.toBN)
+        })
+    }, [
+        allFeeOptions,
+        allTokens,
+        clauses,
+        clausesAmount.toBN,
+        isDelegated,
+        isLoadingFees,
+        selectedToken,
+        tokenBalance,
+        tokens,
+    ])
+
+    const memoized = useMemo(
+        () => ({ hasEnoughBalance, hasEnoughBalanceOnAny }),
+        [hasEnoughBalance, hasEnoughBalanceOnAny],
+    )
 
     return memoized
 }
