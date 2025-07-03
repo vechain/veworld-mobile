@@ -34,6 +34,8 @@ import {
     resetAnalyticsState,
     BrowserSlice,
     resetBrowserState,
+    VersionUpdateSlice,
+    resetVersionUpdateState,
 } from "./Slices"
 import { migrationUpdates } from "~Storage/Redux/Migrations"
 import { createMigrate } from "redux-persist"
@@ -68,7 +70,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
     return {
         key: "root",
         storage,
-        version: 17,
+        version: 19,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,
@@ -85,6 +87,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
             WalletConnectSessionsSlice.name,
             AnalyticsSlice.name,
             BrowserSlice.name,
+            VersionUpdateSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),
         transforms: [encryptor],
@@ -113,4 +116,5 @@ export const resetActions = [
     resetPendingState,
     resetAnalyticsState,
     resetBrowserState,
+    resetVersionUpdateState,
 ]

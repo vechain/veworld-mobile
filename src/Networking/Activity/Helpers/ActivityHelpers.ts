@@ -22,6 +22,7 @@ import {
     Network,
     NonFungibleTokenActivity,
     SignCertActivity,
+    StargateActivity,
     SwapActivity,
     TypedData,
     TypedDataActivity,
@@ -547,6 +548,7 @@ export const createActivityFromIndexedHistoryEvent = (
         newLevel,
         from,
         reverted,
+        levelId,
     } = event
 
     const isTransaction =
@@ -693,6 +695,20 @@ export const createActivityFromIndexedHistoryEvent = (
                 value: value,
                 proposalId: proposalId,
             } as B3trProposalSupportActivity
+        }
+        case ActivityEvent.STARGATE_UNDELEGATE:
+        case ActivityEvent.STARGATE_DELEGATE:
+        case ActivityEvent.STARGATE_STAKE:
+        case ActivityEvent.STARGATE_UNSTAKE:
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE: {
+            return {
+                ...baseActivity,
+                eventName: eventName,
+                value: value,
+                tokenId: tokenId,
+                levelId: levelId,
+            } as StargateActivity
         }
         case ActivityEvent.UNKNOWN_TX:
             return {
