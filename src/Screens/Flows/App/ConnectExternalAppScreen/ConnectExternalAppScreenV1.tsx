@@ -15,6 +15,7 @@ export const ConnectExternalAppScreenV1 = ({ route }: Props) => {
 
     const handleConnect = useCallback(() => {
         if (!public_key || !redirect_url || !app_name) return
+
         onConnect({
             dappPublicKey: public_key,
             redirectUrl: redirect_url,

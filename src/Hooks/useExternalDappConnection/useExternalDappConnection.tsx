@@ -1,4 +1,4 @@
-import { useCallback } from "react"
+import { useCallback, useEffect } from "react"
 import { Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import nacl from "tweetnacl"
@@ -10,6 +10,7 @@ import {
     selectSelectedNetwork,
     useAppDispatch,
     newExternalDappSession,
+    setSignKeyPair,
 } from "~Storage/Redux"
 import { error } from "~Utils"
 
@@ -30,6 +31,19 @@ export const useExternalDappConnection = () => {
     const getKeyPairFromPrivateKey = useCallback((privateKey: string) => {
         return nacl.box.keyPair.fromSecretKey(decodeBase64(privateKey))
     }, [])
+
+    useEffect(() => {
+        //Generate a new sign key pair if it doesn't exist
+        if (!signKeyPair.publicKey || !signKeyPair.privateKey) {
+            const keyPair = nacl.sign.keyPair()
+            dispatch(
+                setSignKeyPair({
+                    publicKey: encodeBase64(keyPair.publicKey),
+                    privateKey: encodeBase64(keyPair.secretKey),
+                }),
+            )
+        }
+    }, [signKeyPair, dispatch])
 
     const onConnect = useCallback(
         async ({ dappPublicKey, redirectUrl, dappName, dappUrl }: OnConnectParams) => {

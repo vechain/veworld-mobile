@@ -228,10 +228,9 @@ const linking = externalDappSessions => ({
                         const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
 
                         const req = {
-                            ...payload,
+                            ...payload.transaction,
                             ...decodedRequest,
                         }
-
                         return req
                     },
                 },

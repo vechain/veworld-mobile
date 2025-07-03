@@ -2,7 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { Transaction } from "@vechain/sdk-core"
 import React, { useCallback, useMemo, useRef } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import { Linking, ScrollView, StyleSheet } from "react-native"
 import {
     AccountCard,
     BackButtonHeader,
@@ -140,7 +140,9 @@ export const SendTransactionScreen = ({ route }: Props) => {
                     signer: selectedAccount.address,
                 })
             } else if (request.type === "external-app") {
-                //TODO: Implement external app transaction success
+                // await Linking.openURL(
+                //     `${request.redirectUrl}?txid=${id}&signer=${selectedAccount.address}&error=success`,
+                // )
             } else {
                 postMessage({
                     id: request.id,
@@ -163,7 +165,7 @@ export const SendTransactionScreen = ({ route }: Props) => {
         if (request.type === "wallet-connect") {
             await failRequest(request.requestEvent, getRpcError("internal"))
         } else if (request.type === "external-app") {
-            //TODO: Implement external app transaction failure
+            await Linking.openURL(`${request.redirectUrl}?error=error`)
         } else {
             postMessage({
                 id: request.id,
