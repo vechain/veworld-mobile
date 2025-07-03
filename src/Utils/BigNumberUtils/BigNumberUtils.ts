@@ -1,6 +1,14 @@
 import { BigNumber as BN } from "bignumber.js"
 import { isEmpty } from "lodash"
 
+export type BigNumberable = string | number | BN | bigint | BigNumberUtils
+
+const parseBigNumberable = (value: BigNumberable): BN.Value => {
+    if (typeof value === "bigint") return value.toString()
+    if (value instanceof BigNumberUtils) return value.toBN
+    return value
+}
+
 interface IBigNumberUtils {
     // utility Methods
     toHuman(decimals: number, callback?: (result: BN) => void): BigNumberUtils
@@ -15,6 +23,7 @@ interface IBigNumberUtils {
     ): { value: string; preciseValue: string; isLeesThan_0_01: boolean }
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
+    clone(): BigNumberUtils
 
     // Math Methods
     minus(value: string | number | BN, callback?: (result: BN) => void): BigNumberUtils
@@ -32,6 +41,20 @@ interface IBigNumberUtils {
     toNumber: number
     toHex: string
     isZero: boolean
+    toBigInt: bigint
+    toBN: BN
+}
+
+const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
+    if (locale === "tw" || locale === "zh-tw") return "."
+    const numberWithDecimalSeparator = 1.1
+    return Intl.NumberFormat(locale)
+        .formatToParts(numberWithDecimalSeparator)
+        .find(part => part.type === "decimal")?.value
+}
+
+const stripTrailingZeros = (value: string) => {
+    return [...value].reduceRight((acc, curr) => (acc === "" && curr === "0" ? acc : `${curr}${acc}`), "")
 }
 
 class BigNumberUtils implements IBigNumberUtils {
@@ -57,11 +80,19 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     get toHex(): string {
-        return this.data.toString(16)
+        return this.data.decimalPlaces(0).toString(16)
+    }
+
+    get toBigInt(): bigint {
+        return BigInt(this.data.decimalPlaces(0).toString())
     }
 
     get isZero(): boolean {
         return this.data.isZero()
+    }
+
+    get toBN(): BN {
+        return new BN(this.data)
     }
 
     // Methods
@@ -134,6 +165,16 @@ class BigNumberUtils implements IBigNumberUtils {
         return this
     }
 
+    div(value: string | number | BN, callback?: (result: BN) => void): this {
+        this.data = this.data.div(value)
+
+        if (callback) {
+            callback(this.data)
+        }
+
+        return this
+    }
+
     isLessThan(value: string | number | BN): boolean {
         return this.data.isLessThan(value)
     }
@@ -172,7 +213,7 @@ class BigNumberUtils implements IBigNumberUtils {
 
         let _data = ""
 
-        if (this.data.isLessThan("0.0001") && !this.data.isZero()) {
+        if (this.data.isLessThan("0.01") && !this.data.isZero()) {
             _data = `< ${formatter.format(0.01)}`
         } else {
             const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))
@@ -180,6 +221,41 @@ class BigNumberUtils implements IBigNumberUtils {
         }
 
         return _data
+    }
+
+    /**
+     * Builds a formatted string, by using these rules:
+     * - Cap the value to {@link decimals} decimals
+     * - Strip trailing zeros
+     * - Always show at least two decimal places
+     * - If the value is less than the amount of decimals specified, show < 0.{{@link decimals} - 1}1
+     * @param decimals Number of decimals to show
+     * @param locale Locale of the user (defaults to 'en-US')
+     * @returns A formatted string
+     */
+    toTokenFormatFull_string(decimals: number, locale?: Intl.LocalesArgument): string {
+        const _locale = locale ?? "en-US"
+        const separator = getDecimalSeparator(_locale.toString()) ?? "."
+        if (this.data.isZero()) return ["0", "00"].join(separator)
+        const formatter = new Intl.NumberFormat(_locale.toString(), {
+            style: "decimal",
+            useGrouping: true,
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+        })
+
+        const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))
+
+        const formatted = formatter.format(tokenBalance as unknown as bigint)
+
+        const [unit, decimal] = formatted.split(separator)
+        if (typeof decimal === "undefined") return [unit, "00"].join(separator)
+        const strippedDecimals = stripTrailingZeros(decimal)
+        if (strippedDecimals === "")
+            return parseInt(unit, 10) === 0
+                ? `< ${[unit, "0".repeat(decimals - 1) + "1"].join(separator)}`
+                : [unit, "00"].join(separator)
+        return [unit, strippedDecimals].join(separator)
     }
 
     toCurrencyConversion(balance: string, rate?: number, callback?: (result: BN) => void, decimals?: number) {
@@ -218,6 +294,27 @@ class BigNumberUtils implements IBigNumberUtils {
         }
 
         return this
+    }
+
+    clone() {
+        return new BigNumberUtils(this.data)
+    }
+
+    static min(...values: BigNumberable[]) {
+        return new BigNumberUtils(BN.min(...values.map(v => parseBigNumberable(v))))
+    }
+
+    static max(...values: BigNumberable[]) {
+        return new BigNumberUtils(BN.max(...values.map(v => parseBigNumberable(v))))
+    }
+
+    static average(values: BigNumberable[]) {
+        return values
+            .reduce<BigNumberUtils>((acc, v) => {
+                const u = acc.plus(parseBigNumberable(v))
+                return u
+            }, BigNutils("0"))
+            .div(values.length)
     }
 }
 

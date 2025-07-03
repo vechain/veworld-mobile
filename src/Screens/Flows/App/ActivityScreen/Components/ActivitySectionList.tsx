@@ -22,9 +22,11 @@ import {
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
+    StargateActivity,
     SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
+    UnknownTxActivity,
     VeBetterDaoDapp,
 } from "~Model"
 import { Routes } from "~Navigation"
@@ -52,6 +54,7 @@ type ActivitySectionListProps = {
     isFetching: boolean
     isRefreshing: boolean
     veBetterDaoDapps: VeBetterDaoDapp[]
+    initialNumToRender?: number
 }
 
 const ItemSeparatorComponent = () => {
@@ -155,6 +158,15 @@ const Item = ({
             return (
                 <ActivityBox.B3trProposalSupport activity={activity as B3trProposalSupportActivity} onPress={onPress} />
             )
+        case ActivityType.UNKNOWN_TX:
+            return <ActivityBox.UnknownTx activity={activity as UnknownTxActivity} onPress={onPress} />
+        case ActivityType.STARGATE_DELEGATE:
+        case ActivityType.STARGATE_STAKE:
+        case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
+        case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
+        case ActivityType.STARGATE_UNDELEGATE:
+        case ActivityType.STARGATE_UNSTAKE:
+            return <ActivityBox.Staking activity={activity as StargateActivity} onPress={onPress} />
         default:
             return null
     }
@@ -167,6 +179,7 @@ export const ActivitySectionList = ({
     isFetching,
     isRefreshing,
     veBetterDaoDapps,
+    initialNumToRender = 10,
 }: ActivitySectionListProps) => {
     const nav = useNavigation()
     const { styles, theme } = useThemedStyles(baseStyle)
@@ -343,7 +356,7 @@ export const ActivitySectionList = ({
                 ref={sectionListRef}
                 contentContainerStyle={styles.listContainer}
                 sections={sections}
-                initialNumToRender={10}
+                initialNumToRender={initialNumToRender}
                 renderItem={renderItem}
                 keyExtractor={keyExtractor}
                 renderSectionHeader={renderSectionHeader}

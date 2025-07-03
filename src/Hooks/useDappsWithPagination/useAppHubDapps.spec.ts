@@ -4,6 +4,10 @@ import { DAppType } from "~Model"
 import { TestWrapper } from "~Test"
 import { DiscoveryDApp } from "~Constants"
 import moment from "moment"
+import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps"
+
+// Mock the dependencies
+jest.mock("~Hooks/useFetchFeaturedDApps")
 
 const buildDapp = (overrides?: Partial<DiscoveryDApp>): DiscoveryDApp => {
     return {
@@ -24,12 +28,23 @@ const createInitialProps = (...dapps: DiscoveryDApp[]) => ({
             favorites: [],
             hasOpenedDiscovery: false,
             connectedApps: [],
+            bannerInteractions: {},
+            tabsManager: {
+                currentTabId: null,
+                tabs: [],
+            },
         },
     },
 })
 
 describe("useAppHubDapps", () => {
+    beforeEach(() => {
+        jest.resetAllMocks()
+    })
     it("should render correctly", async () => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
+            data: [],
+        })
         const { result } = renderHook(() => useAppHubDapps(DAppType.ALL), {
             wrapper: TestWrapper,
             initialProps: createInitialProps(buildDapp({ name: "TEST DAPP" })),
@@ -42,6 +57,9 @@ describe("useAppHubDapps", () => {
     })
 
     it("should return hasMore = false if there are < 10 items", async () => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
+            data: [],
+        })
         const { result } = renderHook(() => useAppHubDapps(DAppType.ALL), {
             wrapper: TestWrapper,
             initialProps: createInitialProps(buildDapp({ name: "TEST DAPP" })),
@@ -54,6 +72,9 @@ describe("useAppHubDapps", () => {
     })
 
     it("should return hasMore = true if there are > 10 items", async () => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
+            data: [],
+        })
         const { result } = renderHook(() => useAppHubDapps(DAppType.ALL), {
             wrapper: TestWrapper,
             initialProps: createInitialProps(
@@ -76,6 +97,9 @@ describe("useAppHubDapps", () => {
     })
 
     it("Should sort by alphabetic_asc correctly", async () => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
+            data: [],
+        })
         const { result } = renderHook(() => useAppHubDapps(DAppType.ALL), {
             wrapper: TestWrapper,
             initialProps: createInitialProps(buildDapp({ name: "b" }), buildDapp({ name: "A" })),
@@ -88,6 +112,9 @@ describe("useAppHubDapps", () => {
     })
 
     it("Should sort by alphabetic_desc correctly", async () => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
+            data: [],
+        })
         const { result } = renderHook(() => useAppHubDapps(DAppType.ALL), {
             wrapper: TestWrapper,
             initialProps: createInitialProps(buildDapp({ name: "A" }), buildDapp({ name: "b" })),
@@ -100,6 +127,9 @@ describe("useAppHubDapps", () => {
     })
 
     it("Should sort by newest correctly", async () => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
+            data: [],
+        })
         const { result } = renderHook(() => useAppHubDapps(DAppType.ALL), {
             wrapper: TestWrapper,
             initialProps: createInitialProps(
@@ -112,5 +142,43 @@ describe("useAppHubDapps", () => {
 
         expect(res.page[0].name).toBe("Should be first")
         expect(res.page[1].name).toBe("Should be last")
+    })
+
+    it("Should return only VBD active apps from SUSTAINABILITY filter", async () => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
+            data: [{ id: "0x01" }],
+        })
+        const { result } = renderHook(() => useAppHubDapps(DAppType.SUSTAINABILTY), {
+            wrapper: TestWrapper,
+            initialProps: createInitialProps(
+                buildDapp({
+                    createAt: moment().subtract(1, "day").valueOf(),
+                    name: "Not active dapp",
+                    tags: [DAppType.SUSTAINABILTY.toLowerCase()],
+                    veBetterDaoId: "0x02",
+                }),
+                buildDapp({
+                    createAt: Date.now(),
+                    name: "VBD",
+                    veBetterDaoId: "0x01",
+                    tags: [DAppType.SUSTAINABILTY.toLowerCase()],
+                }),
+                buildDapp({
+                    createAt: moment().subtract(1, "day").valueOf(),
+                    name: "No VBD ID",
+                    tags: [DAppType.SUSTAINABILTY.toLowerCase()],
+                }),
+                buildDapp({
+                    createAt: moment().subtract(1, "day").valueOf(),
+                    name: "Not active dapp + no sustainability tag",
+                    veBetterDaoId: "0x03",
+                }),
+            ),
+        })
+
+        const res = await result.current.fetchWithPage({ page: 0, sort: "newest" })
+
+        expect(res.page).toHaveLength(1)
+        expect(res.page[0].name).toBe("VBD")
     })
 })

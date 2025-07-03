@@ -1,21 +1,23 @@
-import React, { useCallback } from "react"
-import { BaseView, BaseText, BaseSpacer } from "~Components"
+import React, { useCallback, useMemo } from "react"
 import { FlatList, ListRenderItemInfo } from "react-native"
-import { useI18nContext } from "~i18n"
-import { useTrendingDApps } from "~Hooks"
-import { DAppCard } from "./DAppCard"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
+import { useTrendingDApps } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../Hooks"
+import { DAppCard } from "./DAppCard"
+import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
 
 export const PopularTrendingDApps = () => {
     const { LL } = useI18nContext()
     const { isLoading, trendingDapps } = useTrendingDApps()
     const { onDAppPress } = useDAppActions()
 
+    const slicedData = useMemo(() => trendingDapps.slice(0, 10), [trendingDapps])
+
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
-            const isLast = index === trendingDapps.length - 1
+            const isLast = index === slicedData.length - 1
             const columnsGap = 16
 
             const onPress = () => {
@@ -28,25 +30,20 @@ export const PopularTrendingDApps = () => {
                 </BaseView>
             )
         },
-        [onDAppPress, trendingDapps.length],
+        [onDAppPress, slicedData.length],
     )
 
     return (
         <BaseView>
             <BaseView flexDirection="row" justifyContent="space-between" px={16}>
-                <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_TAB_TRENDING_AND_POPULAR()}</BaseText>
+                <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_TAB_TRENDING_AND_POPULAR()}</BaseText>
             </BaseView>
             <BaseSpacer height={16} />
 
             {isLoading ? (
                 <DAppsLoadingSkeleton />
             ) : (
-                <FlatList
-                    data={trendingDapps}
-                    horizontal
-                    showsHorizontalScrollIndicator={false}
-                    renderItem={renderItem}
-                />
+                <FlatList data={slicedData} horizontal showsHorizontalScrollIndicator={false} renderItem={renderItem} />
             )}
         </BaseView>
     )

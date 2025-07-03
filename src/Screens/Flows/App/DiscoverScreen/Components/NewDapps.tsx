@@ -1,12 +1,12 @@
 import React, { useCallback } from "react"
-import { BaseView, BaseText, BaseSpacer } from "~Components"
-import { useI18nContext } from "~i18n"
-import { useNewDApps } from "~Hooks"
-import { DAppCard } from "./DAppCard"
 import { FlatList, ListRenderItemInfo } from "react-native"
+import { BaseSpacer, BaseText, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
+import { useNewDApps } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { useDAppActions } from "../Hooks"
+import { DAppCard } from "./DAppCard"
+import { DAppsLoadingSkeleton } from "./DAppsLoadingSkeleton"
 
 export const NewDapps = () => {
     const { LL } = useI18nContext()
@@ -34,7 +34,7 @@ export const NewDapps = () => {
     return (
         <BaseView>
             <BaseView flexDirection="row" justifyContent="space-between" px={16}>
-                <BaseText typographyFont="bodySemiBold">{LL.DISCOVER_TAB_NEW_DAPPS()}</BaseText>
+                <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_TAB_RECENTLY_ADDED()}</BaseText>
             </BaseView>
             <BaseSpacer height={16} />
 

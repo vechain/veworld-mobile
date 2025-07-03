@@ -18,6 +18,8 @@ import { DateUtils, HexUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { getActivityModalTitle } from "./util"
 
+import { useQuery } from "@tanstack/react-query"
+import { B3TR, VOT3 } from "~Constants"
 import {
     ActivityStatus,
     ActivityType,
@@ -28,9 +30,11 @@ import {
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
+    StargateActivity,
     SwapActivity,
     TypedDataActivity,
 } from "~Model"
+import { getTransaction } from "~Networking"
 import { selectActivity, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { ExplorerLinkType, getExplorerLink } from "~Utils/AddressUtils/AddressUtils"
 import { ContactManagementBottomSheet } from "../ContactsScreen"
@@ -43,9 +47,7 @@ import {
     SignCertificateDetails,
 } from "./Components"
 import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
-import { getTransaction } from "~Networking"
-import { useQuery } from "@tanstack/react-query"
-import { B3TR, VOT3 } from "~Constants"
+import { StargateActivityDetails } from "./Components/StakingDetails"
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
@@ -148,7 +150,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                     <FungibleTokenTransferDetails
                         activity={(activityFromStore ?? activity) as FungibleTokenActivity}
                         token={token}
-                        gasUsed={transaction?.gasUsed}
+                        paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
                 )
@@ -164,13 +166,14 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.SWAP_FT_TO_FT:
             case ActivityType.SWAP_FT_TO_VET:
             case ActivityType.SWAP_VET_TO_FT:
+            case ActivityType.UNKNOWN_TX:
             case ActivityType.DAPP_TRANSACTION: {
                 return (
                     <DappTransactionDetails
                         activity={(activityFromStore ?? activity) as DappTxActivity}
                         clauses={transaction?.clauses}
                         status={isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS}
-                        gasUsed={transaction?.gasUsed}
+                        paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
                 )
@@ -179,11 +182,24 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                 return (
                     <NonFungibleTokenTransferDetails
                         activity={(activityFromStore ?? activity) as NonFungibleTokenActivity}
-                        gasUsed={transaction?.gasUsed}
+                        paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />
                 )
             }
+            case ActivityType.STARGATE_DELEGATE:
+            case ActivityType.STARGATE_STAKE:
+            case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
+            case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
+            case ActivityType.STARGATE_UNDELEGATE:
+            case ActivityType.STARGATE_UNSTAKE:
+                return (
+                    <StargateActivityDetails
+                        activity={(activityFromStore ?? activity) as StargateActivity}
+                        paid={transaction?.paid}
+                        isLoading={isloadingTxDetails}
+                    />
+                )
             case ActivityType.CONNECTED_APP_TRANSACTION: {
                 return <ConnectedAppDetails activity={(activityFromStore ?? activity) as ConnectedAppActivity} />
             }
@@ -203,7 +219,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
         isloadingTxDetails,
         token,
         transaction?.clauses,
-        transaction?.gasUsed,
+        transaction?.paid,
     ])
 
     const onGoBack = useCallback(() => {
@@ -218,7 +234,6 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
         },
         [openAddCustomTokenSheet],
     )
-
     return (
         <>
             <Layout

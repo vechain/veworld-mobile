@@ -28,47 +28,8 @@ jobs:
     secrets: inherit
 
   scan:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20.17
-
-      - name: Install & Patch packages
-        run: yarn install
-
-      - name: Lint & Format Check
-        run: yarn lint && yarn format:check
-
-      - name: Tests with Coverage
-        env:
-          NODE_OPTIONS: "--max_old_space_size=8192"
-          REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
-        run: yarn test:coverage --reporter=json-summary | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
-
-      - name: Sonar Args
-        id: sonar-args
-        env:
-          ref: "${{ github.ref }}"
-          head: "${{ github.head_ref || 'main' }}"
-        run: |
-          if [[ $ref == 'refs/heads/main' ]]; then
-            echo "SONAR_ARGS=-Dsonar.branch.name=main" >> $GITHUB_OUTPUT
-          else
-            echo "SONAR_ARGS=-Dsonar.pullrequest.key=${{ github.event.pull_request.number }} -Dsonar.pullrequest.branch=${{ github.ref_name }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}" >> $GITHUB_OUTPUT
-          fi
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarqube-scan-action@v4.2.1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
+    uses: ./.github/workflows/unit-tests.yml
+    secrets: inherit
 
   report:
     runs-on: ubuntu-latest

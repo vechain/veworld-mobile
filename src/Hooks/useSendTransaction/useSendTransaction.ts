@@ -91,7 +91,17 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
                 })
         }
 
-        await dispatch(updateAccountBalances(thorClient, selectedAccount.address))
+        try {
+            await dispatch(updateAccountBalances(thorClient, selectedAccount.address))
+        } catch (balanceError) {
+            // Log the balance update error but don't re-throw,
+            // as sending the transaction succeeded.
+            error(
+                ERROR_EVENTS.SEND,
+                "Error updating balances after successfully sending a transaction: " + id,
+                balanceError,
+            )
+        }
 
         return id
     }

@@ -10,12 +10,12 @@ import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
 import { SearchResultItem } from "./SearchResultItem"
 
 type Props = {
-    query: string
     error?: SearchError
     results: HistoryItem[]
+    isValidQuery: boolean
 }
 
-export const SearchResults = ({ query, error, results }: Props) => {
+export const SearchResults = ({ error, results, isValidQuery }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const dispatch = useAppDispatch()
@@ -24,16 +24,14 @@ export const SearchResults = ({ query, error, results }: Props) => {
         dispatch(resetBrowserState())
     }, [dispatch])
 
-    const isQueryEmpty = useMemo(() => query.trim() === "", [query])
-
     const isQueryEmptyButWithResults = useMemo(
-        () => isQueryEmpty && results.length !== 0,
-        [isQueryEmpty, results.length],
+        () => !isValidQuery && results.length !== 0,
+        [isValidQuery, results.length],
     )
 
     const isQueryEmptyWithNoResults = useMemo(
-        () => isQueryEmpty && results.length === 0,
-        [isQueryEmpty, results.length],
+        () => !isValidQuery && results.length === 0,
+        [isValidQuery, results.length],
     )
 
     const rootStyles = useMemo(() => {
@@ -46,9 +44,12 @@ export const SearchResults = ({ query, error, results }: Props) => {
         return <BaseSpacer height={24} />
     }, [])
 
-    const renderItem = useCallback(({ item }: ListRenderItemInfo<HistoryItem>) => {
-        return <SearchResultItem item={item} />
-    }, [])
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<HistoryItem>) => {
+            return <SearchResultItem item={item} isValidQuery={isValidQuery} />
+        },
+        [isValidQuery],
+    )
 
     if (error === SearchError.ADDRESS_CANNOT_BE_REACHED)
         return (
@@ -68,13 +69,15 @@ export const SearchResults = ({ query, error, results }: Props) => {
         )
 
     return (
-        <Animated.ScrollView contentContainerStyle={rootStyles}>
+        <Animated.View style={rootStyles}>
             {isQueryEmptyButWithResults && (
                 <BaseView justifyContent="space-between" flexDirection="row" alignItems="center" mb={24}>
                     <BaseText typographyFont="bodyMedium">{LL.BROWSER_HISTORY_DEFAULT_TITLE()}</BaseText>
                     <BaseButton
                         action={onClear}
-                        rightIcon={<BaseIcon size={12} name="icon-retry" style={styles.clearIcon} />}
+                        rightIcon={
+                            <BaseIcon size={12} name="icon-retry" style={styles.clearIcon} color={theme.colors.text} />
+                        }
                         variant="ghost"
                         px={0}
                         py={0}>
@@ -83,7 +86,7 @@ export const SearchResults = ({ query, error, results }: Props) => {
                 </BaseView>
             )}
 
-            {!isQueryEmpty && (
+            {isValidQuery && (
                 <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={24}>
                     <BaseText typographyFont="bodyMedium">
                         {LL.BROWSER_HISTORY_RESULTS({ amount: results.length })}
@@ -113,9 +116,10 @@ export const SearchResults = ({ query, error, results }: Props) => {
                     showsHorizontalScrollIndicator={false}
                     scrollEnabled={true}
                     data={results}
+                    style={styles.flatListRoot}
                 />
             )}
-        </Animated.ScrollView>
+        </Animated.View>
     )
 }
 
@@ -131,6 +135,7 @@ const baseStyles = (theme: ColorThemeType) => {
         clearText: {
             ...typography.defaults.body,
             fontWeight: "500",
+            color: theme.colors.text,
         },
         clearIcon: {
             marginLeft: 4,
@@ -146,5 +151,6 @@ const baseStyles = (theme: ColorThemeType) => {
             alignSelf: "center",
         },
         flatListPadding: { paddingBottom: 24 },
+        flatListRoot: { flex: 1 },
     })
 }

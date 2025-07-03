@@ -15,6 +15,7 @@ import { Routes } from "~Navigation/Enums"
 import {
     AddCustomNodeScreen,
     AssetDetailScreen,
+    BridgeAssetDetailScreen,
     ChangeNetworkScreen,
     ClaimUsername,
     ConnectedAppsScreen,
@@ -36,6 +37,7 @@ import {
     SelectLedgerDevice,
     SelectTokenSendScreen,
     SwapScreen,
+    TabsManagerScreen,
     TransactionSummarySendScreen,
     UsernameClaimed,
     WalletDetailScreen,
@@ -91,6 +93,9 @@ export type RootStackParamListHome = {
             txId: string
         }
     }
+    [Routes.BRIDGE_TOKEN_DETAILS]: {
+        token: FungibleTokenWithBalance
+    }
     [Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN]: {
         token: TokenWithCompleteInfo
         amount: string
@@ -115,6 +120,7 @@ export type RootStackParamListHome = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
@@ -123,6 +129,7 @@ export type RootStackParamListHome = {
     [Routes.USERNAME_CLAIMED]: {
         username: string
     }
+    [Routes.DISCOVER_TABS_MANAGER]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -173,6 +180,11 @@ export const HomeStack = () => {
                 />
 
                 <Screen name={Routes.TOKEN_DETAILS} component={AssetDetailScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.BRIDGE_TOKEN_DETAILS}
+                    component={BridgeAssetDetailScreen}
+                    options={{ headerShown: false }}
+                />
                 <Screen
                     name={Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN}
                     component={ConvertTransactionScreen}
@@ -225,6 +237,11 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
                     component={ManageCustomNodesScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.DISCOVER_TABS_MANAGER}
+                    component={TabsManagerScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

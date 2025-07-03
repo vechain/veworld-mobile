@@ -96,6 +96,11 @@ describe("useVbdDapps", () => {
                         ],
                         favorites: [],
                         hasOpenedDiscovery: true,
+                        bannerInteractions: {},
+                        tabsManager: {
+                            currentTabId: null,
+                            tabs: [],
+                        },
                     },
                 },
             },

@@ -9,6 +9,12 @@ const Mono_Extra_Bold = require("./Mono/JetBrainsMono-ExtraBold.ttf")
 const Mono_Light = require("./Mono/JetBrainsMono-Light.ttf")
 const Mono_Regular = require("./Mono/JetBrainsMono-Regular.ttf")
 
+const Rubik_Bold = require("./Rubik/Rubik-Bold.ttf")
+const Rubik_Regular = require("./Rubik/Rubik-Regular.ttf")
+const Rubik_SemiBold = require("./Rubik/Rubik-SemiBold.ttf")
+const Rubik_Medium = require("./Rubik/Rubik-Medium.ttf")
+const Rubik_Light = require("./Rubik/Rubik-Light.ttf")
+
 const DesignSystemIcons = require("./DesignSystemIcons/DesignSystemIcons.ttf")
 
 export { designSystemIconMap } from "./DesignSystemIcons/designSystemIconMap"
@@ -24,4 +30,9 @@ export {
     Mono_Extra_Bold,
     Mono_Light,
     Mono_Regular,
+    Rubik_Bold,
+    Rubik_Regular,
+    Rubik_SemiBold,
+    Rubik_Medium,
+    Rubik_Light,
 }

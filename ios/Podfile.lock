@@ -107,9 +107,9 @@ PODS:
   - MixpanelReactNative (3.0.8):
     - Mixpanel-swift (= 4.3.0)
     - React-Core
-  - MMKV (2.1.0):
-    - MMKVCore (~> 2.1.0)
-  - MMKVCore (2.1.1)
+  - MMKV (2.2.2):
+    - MMKVCore (~> 2.2.2)
+  - MMKVCore (2.2.2)
   - MultiplatformBleAdapter (0.2.0)
   - OneSignalXCFramework (5.2.10):
     - OneSignalXCFramework/OneSignalComplete (= 5.2.10)
@@ -1280,6 +1280,27 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - react-native-view-shot (4.0.3):
+    - DoubleConversion
+    - glog
+    - hermes-engine
+    - RCT-Folly (= 2024.01.01.00)
+    - RCTRequired
+    - RCTTypeSafety
+    - React-Codegen
+    - React-Core
+    - React-debug
+    - React-Fabric
+    - React-featureflags
+    - React-graphics
+    - React-ImageManager
+    - React-NativeModulesApple
+    - React-RCTFabric
+    - React-rendererdebug
+    - React-utils
+    - ReactCommon/turbomodule/bridging
+    - ReactCommon/turbomodule/core
+    - Yoga
   - react-native-webview (13.8.6):
     - DoubleConversion
     - glog
@@ -1530,6 +1551,9 @@ PODS:
     - React-logger (= 0.74.7)
     - React-perflogger (= 0.74.7)
     - React-utils (= 0.74.7)
+  - ReactNativeWebPFormat (1.2.1):
+    - React-Core
+    - SDWebImageWebPCoder
   - RNBootSplash (6.3.3):
     - React-Core
   - RNCAsyncStorage (1.23.1):
@@ -1752,6 +1776,7 @@ DEPENDENCIES:
   - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
+  - react-native-view-shot (from `../node_modules/react-native-view-shot`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-nativeconfig (from `../node_modules/react-native/ReactCommon`)
   - React-NativeModulesApple (from `../node_modules/react-native/ReactCommon/react/nativemodule/core/platform/ios`)
@@ -1776,6 +1801,7 @@ DEPENDENCIES:
   - React-runtimescheduler (from `../node_modules/react-native/ReactCommon/react/renderer/runtimescheduler`)
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativeWebPFormat (from `../node_modules/react-native-webp-format`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
@@ -1948,6 +1974,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
+  react-native-view-shot:
+    :path: "../node_modules/react-native-view-shot"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-nativeconfig:
@@ -1996,6 +2024,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native/ReactCommon/react/utils"
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativeWebPFormat:
+    :path: "../node_modules/react-native-webp-format"
   RNBootSplash:
     :path: "../node_modules/react-native-bootsplash"
   RNCAsyncStorage:
@@ -2064,8 +2094,8 @@ SPEC CHECKSUMS:
   lottie-react-native: f851c0e235f171d99083c803f728f644be1dcf65
   Mixpanel-swift: 2192b9a24cf41b870749e4e0e10fbc9822bb2b4a
   MixpanelReactNative: cd3d7129cfc77d796d07e117846f1f2a9d2fe02d
-  MMKV: ce484c1ac40bf76d5f09a0195d2ec5b3d3840d55
-  MMKVCore: 1eb661c6c498ab88e3df9ce5d8ff94d05fcc0567
+  MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
+  MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
   MultiplatformBleAdapter: b1fddd0d499b96b607e00f0faa8e60648343dc1d
   OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
   OpenSSL-Universal: ca89c20240633a77c776082ba76b7d90f992bf77
@@ -2111,6 +2141,7 @@ SPEC CHECKSUMS:
   react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
   react-native-safe-area-context: ab7beb734b0f9f79f55ae144a6c946a6422f55d6
   react-native-slider: 04b00ccd4b9fa0882004ea22f9e753244f1a48dc
+  react-native-view-shot: a6308bd6bab513b43cd86293b9ea4aa9393eb5f6
   react-native-webview: 05bae3a03a1e4f59568dfc05286c0ebf8954106c
   React-nativeconfig: 3b359be06d9ee8d64c1eacbca4f1040f331573fd
   React-NativeModulesApple: 511a01d5be0fdb768f6438dd672a79808451ab00
@@ -2135,6 +2166,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: bd24ce5b35c288355514aa42cacc9dc782d12dba
   React-utils: eb18bf39ea87c4d38f175f41d77b07093eaf7765
   ReactCommon: 9ed4522c478fc82fd9822fd2be960875fccb2c45
+  ReactNativeWebPFormat: a40e251d8727e946461055997e539c4e985481f1
   RNBootSplash: ced7b181afb7fd80a570cd8c5a3d89d04e2fc245
   RNCAsyncStorage: 826b603ae9c0f88b5ac4e956801f755109fa4d5c
   RNCMaskedView: 090213d32d8b3bb83a4dcb7d12c18f0152591906

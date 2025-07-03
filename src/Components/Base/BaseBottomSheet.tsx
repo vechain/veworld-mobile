@@ -1,5 +1,3 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { LayoutChangeEvent, Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import {
     BottomSheetBackdrop,
     BottomSheetBackdropProps,
@@ -7,18 +5,20 @@ import {
     BottomSheetModal,
     BottomSheetModalProps,
 } from "@gorhom/bottom-sheet"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseView } from "./BaseView"
-import { useBackHandler, useThemedStyles } from "~Hooks"
-import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
-import { BaseSpacer, BaseText, BlurBackdropBottomSheet } from "~Components"
-import { LocalizedString } from "typesafe-i18n"
-import { useReducedMotion } from "react-native-reanimated"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { LayoutChangeEvent, Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
+import { useReducedMotion } from "react-native-reanimated"
+import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { LocalizedString } from "typesafe-i18n"
+import { BaseSpacer, BaseText, BlurBackdropBottomSheet } from "~Components"
+import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
+import { useBackHandler, useThemedStyles } from "~Hooks"
 import { BackHandlerEvent } from "~Model"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
-import { useSafeAreaInsets } from "react-native-safe-area-context"
+import { BaseView } from "./BaseView"
 
 const OPENED_STATE = 0
 const CLOSED_STATE = -1
@@ -179,8 +179,9 @@ export const BaseBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
                 enablePanDownToClose={enablePanDownToClose}
                 index={0}
                 backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
-                backdropComponent={blurBackdrop ? renderBlurBackdrop : renderBackdrop}
-                handleComponent={renderHandle}
+                // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry.
+                backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
+                handleComponent={enablePanDownToClose ? renderHandle : null}
                 keyboardBehavior="interactive"
                 keyboardBlurBehavior="restore"
                 //Workaround for run tests on Maestro take a look at this https://github.com/software-mansion/react-native-reanimated/issues/6648

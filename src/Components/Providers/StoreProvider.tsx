@@ -39,7 +39,7 @@ const StoreContextProvider = ({ children }: StoreContextProviderProps) => {
         const nftPersistence: PersistConfig<NftSliceState> = {
             key: NftSlice.name,
             storage: newStorage(mmkv),
-            whitelist: ["blackListedCollections"],
+            whitelist: ["blackListedCollections", "reportedCollections"],
         }
 
         const persistedReducer: Reducer = persistReducer<RootState>(persistConfig, reducer(nftPersistence))

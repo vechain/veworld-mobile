@@ -55,10 +55,14 @@ export const useTotalTokenBalance = (
     }, [token.balance.balance])
 
     const tokenTotalToHuman = useMemo(() => {
+        return BigNutils(tokenTotalBalance).toHuman(token.decimals)
+    }, [token.decimals, tokenTotalBalance])
+
+    const tokenTotalToHumanFormatted = useMemo(() => {
         return BigNutils(tokenTotalBalance)
             .toHuman(token.decimals)
-            .toTokenFormat_string(decimals ?? 8, formatLocale)
+            .toTokenFormatFull_string(decimals ?? 8, formatLocale)
     }, [decimals, formatLocale, token.decimals, tokenTotalBalance])
 
-    return { tokenTotalBalance, tokenTotalToHuman, getGasFees }
+    return { tokenTotalBalance, tokenTotalToHuman, tokenTotalToHumanFormatted, getGasFees }
 }

@@ -14,10 +14,14 @@ type Props = {
     secondaryButton?: React.ReactNode
     enablePanDownToClose?: boolean
     iconSize?: number
+    testId?: string
 }
 
 export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ icon, title, description, mainButton, secondaryButton, enablePanDownToClose = true, iconSize = 66 }, ref) => {
+    (
+        { icon, title, description, mainButton, secondaryButton, enablePanDownToClose = true, iconSize = 66, testId },
+        ref,
+    ) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
@@ -29,12 +33,12 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 backgroundStyle={styles.bottomSheet}
                 enablePanDownToClose={enablePanDownToClose}
                 blurBackdrop={true}>
-                <BaseView>
-                    <BaseSpacer height={16} />
+                <BaseView testID={testId}>
+                    {enablePanDownToClose && <BaseSpacer height={16} />}
                     <BaseView justifyContent="center" alignItems="center">
                         <BaseIcon name={icon} style={styles.icon} size={iconSize} color={theme.colors.text} />
-                        <BaseSpacer height={26} />
-                        <BaseText align="center" typographyFont="subSubTitleMedium">
+                        <BaseSpacer height={24} />
+                        <BaseText align="center" typographyFont="subSubTitleSemiBold">
                             {title}
                         </BaseText>
                         <BaseSpacer height={12} />

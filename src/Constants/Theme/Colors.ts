@@ -178,6 +178,36 @@ export type Colors = {
         bg: string
         divider: string
     }
+    cardButton: {
+        border: string
+        background: string
+        text: string
+    }
+    editSpeedBs: {
+        title: string
+        background: string
+        subtitle: string
+        result: {
+            background: string
+            border: string
+        }
+    }
+    warningAlert: {
+        background: string
+        text: string
+        icon: string
+    }
+    updatingText: string
+    stellaPayBanner: {
+        background: string[]
+    }
+    tabsFooter: {
+        background: string
+    }
+    label: {
+        background: string
+        text: string
+    }
 }
 
 export enum COLORS {
@@ -195,6 +225,7 @@ export enum COLORS {
     DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
     PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
+    DARK_PURPLE_RBGA_TRANSPARENT = "rgba(172, 155, 255, 0.8)",
     PURPLE = "#30265F",
     LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",
@@ -229,6 +260,7 @@ export enum COLORS {
     GREEN_600 = "#25855A",
     GREEN_500 = "#38A169",
     GREEN_400 = "#48BB78",
+    GREEN_300 = "#68D391",
     GREEN_200 = "#9AE6B4",
     GREEN_100 = "#C6F6D5",
     GREEN_50 = "#F0FFF4",
@@ -452,6 +484,36 @@ const light: Colors = {
         divider: COLORS.GREY_100,
         bg: COLORS.GREY_50,
     },
+    cardButton: {
+        background: COLORS.WHITE,
+        border: COLORS.GREY_200,
+        text: COLORS.PRIMARY_800,
+    },
+    editSpeedBs: {
+        background: COLORS.GREY_50,
+        title: COLORS.PRIMARY_900,
+        subtitle: COLORS.GREY_600,
+        result: {
+            background: COLORS.GREY_100,
+            border: COLORS.GREY_200,
+        },
+    },
+    warningAlert: {
+        background: COLORS.ORANGE_50,
+        text: COLORS.ORANGE_700,
+        icon: COLORS.ORANGE_500,
+    },
+    updatingText: COLORS.GREEN_400,
+    stellaPayBanner: {
+        background: ["#0C2749", "#3EA2C3"],
+    },
+    tabsFooter: {
+        background: COLORS.GREY_200,
+    },
+    label: {
+        background: COLORS.GREY_200,
+        text: COLORS.GREY_600,
+    },
 }
 
 const dark: Colors = {
@@ -589,7 +651,7 @@ const dark: Colors = {
         text: COLORS.GREY_300,
     },
     convertBetterCard: {
-        inputBg: COLORS.PURPLE_DISABLED,
+        inputBg: COLORS.PURPLE,
         inputText: COLORS.WHITE,
         convertValueText: COLORS.GREY_300,
         swapIcon: COLORS.WHITE,
@@ -633,6 +695,36 @@ const dark: Colors = {
     b3trStatsCard: {
         divider: COLORS.PURPLE,
         bg: COLORS.PURPLE_DISABLED,
+    },
+    cardButton: {
+        background: COLORS.DARK_PURPLE_DISABLED,
+        border: COLORS.TRANSPARENT,
+        text: COLORS.LIME_GREEN,
+    },
+    editSpeedBs: {
+        background: COLORS.PURPLE,
+        title: COLORS.WHITE,
+        subtitle: COLORS.GREY_300,
+        result: {
+            background: COLORS.PURPLE_DISABLED,
+            border: COLORS.TRANSPARENT,
+        },
+    },
+    warningAlert: {
+        background: COLORS.ORANGE_50,
+        text: COLORS.ORANGE_700,
+        icon: COLORS.ORANGE_500,
+    },
+    updatingText: COLORS.GREEN_400,
+    stellaPayBanner: {
+        background: ["#0C2749", "#3EA2C3"],
+    },
+    tabsFooter: {
+        background: COLORS.PURPLE,
+    },
+    label: {
+        background: COLORS.PURPLE,
+        text: COLORS.WHITE,
     },
 }
 

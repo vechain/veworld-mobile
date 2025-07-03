@@ -6,14 +6,14 @@ import {
     AlertCard,
     BaseSpacer,
     BaseView,
+    HeaderStyle,
     HeaderTitle,
     Layout,
     SelectedNetworkViewer,
-    HeaderStyle,
     useNotifications,
 } from "~Components"
 import { ColorThemeType, isSmallScreen } from "~Constants"
-import { useCheckWalletBackup, useTabBarBottomMargin, useThemedStyles, useClaimableUsernames } from "~Hooks"
+import { useCheckWalletBackup, useClaimableUsernames, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -124,7 +124,7 @@ export const SettingsScreen = () => {
                         data={settingsList}
                         scrollEnabled={isShowBackupModal || isSmallScreen}
                         keyExtractor={(item, index) =>
-                            item.element === "settingsRow" ? item.screenName : `${item.element}-${index}`
+                            item.element === "settingsRow" ? item.icon : `${item.element}-${index}`
                         }
                         showsVerticalScrollIndicator={false}
                         showsHorizontalScrollIndicator={false}
@@ -211,14 +211,14 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean, notificationFea
         {
             element: "settingsRow",
             title: LL.TITLE_GET_SUPPORT(),
-            screenName: Routes.SETTINGS_GET_SUPPORT,
+            screenName: Routes.BROWSER,
             icon: "icon-help-circle",
             url: "https://support.veworld.com",
         },
         {
             element: "settingsRow",
             title: LL.TITLE_GIVE_FEEDBACK(),
-            screenName: Routes.SETTINGS_GIVE_FEEDBACK,
+            screenName: Routes.BROWSER,
             icon: "icon-message-square",
             url: "https://forms.office.com/e/Vq1CUJD9Vy",
         },

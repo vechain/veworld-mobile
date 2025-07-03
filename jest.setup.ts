@@ -14,6 +14,7 @@ const componentMock = ({ children }: { children: ReactNode }) => children
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
+jest.mock("jail-monkey", () => require("./src/Test/mocks/jail-monkey"))
 jest.mock("react-native-quick-crypto", () => ({
     getRandomValues: jest.fn(buffer => buffer),
     randomFillSync: jest.fn(buffer => buffer),
@@ -120,6 +121,11 @@ jest.mock("expo-haptics", () => ({
         Light: "light",
         Medium: "medium",
         Heavy: "heavy",
+    },
+    NotificationFeedbackType: {
+        Success: "success",
+        Warning: "warning",
+        Error: "error",
     },
     impactAsync: jest.fn(),
 }))
@@ -247,7 +253,12 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
             if (name === "RNCWebView") {
                 return null
             }
+            if (name === "RNViewShot") {
+                return null
+            }
             return turboModuleRegistry.getEnforcing(name)
         },
     }
 })
+
+require("react-native-reanimated").setUpTests()

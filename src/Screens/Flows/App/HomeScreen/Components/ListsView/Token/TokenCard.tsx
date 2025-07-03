@@ -1,7 +1,7 @@
 import React, { memo, useMemo } from "react"
 import { FiatBalance } from "~Components"
-import { COLORS } from "~Constants"
-import { useBalances, useTheme } from "~Hooks"
+import { B3TR, COLORS, VeDelegate } from "~Constants"
+import { useBalances, useFormatFiat, useTheme } from "~Hooks"
 import { BalanceUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
@@ -19,7 +19,13 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
     const theme = useTheme()
     const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
-    const { data: exchangeRate } = useVechainStatsTokenInfo(tokenWithBalance.symbol.toLowerCase())
+    const { formatLocale } = useFormatFiat()
+
+    const { data: exchangeRate } = useVechainStatsTokenInfo(
+        tokenWithBalance.symbol === VeDelegate.symbol
+            ? B3TR.symbol.toLowerCase()
+            : tokenWithBalance.symbol.toLowerCase(),
+    )
 
     const isTokensOwnedLoading = useAppSelector(selectIsTokensOwnedLoading)
 
@@ -29,8 +35,14 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
     })
 
     const tokenBalance = useMemo(
-        () => BalanceUtils.getTokenUnitBalance(tokenWithBalance.balance.balance, tokenWithBalance.decimals ?? 0, 2),
-        [tokenWithBalance.balance.balance, tokenWithBalance.decimals],
+        () =>
+            BalanceUtils.getTokenUnitBalance(
+                tokenWithBalance.balance.balance,
+                tokenWithBalance.decimals ?? 0,
+                2,
+                formatLocale,
+            ),
+        [formatLocale, tokenWithBalance.balance.balance, tokenWithBalance.decimals],
     )
 
     const showFiatBalance = useMemo(() => {

@@ -1,9 +1,11 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { StyleSheet, TextInput, ViewProps } from "react-native"
+import { Image, ImageStyle as RNImageStyle, StyleSheet, TextInput, ViewProps } from "react-native"
+import { ImageStyle } from "react-native-fast-image"
 import Animated, { AnimatedProps, FadeInRight, FadeOut } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
+import { VeChainTokenBadge } from "~Assets/Icons"
 import {
     BaseCardGroup,
     BaseIcon,
@@ -14,10 +16,11 @@ import {
     BaseView,
     DismissKeyboardView,
     FadeoutButton,
+    FiatBalance,
     Layout,
     showErrorToast,
-    FiatBalance,
 } from "~Components"
+import { TokenImage } from "~Components/Reusable/TokenImage"
 import { B3TR, COLORS, CURRENCY_SYMBOLS, VET, VOT3, VTHO } from "~Constants"
 import { typography } from "~Constants/Theme"
 import { useAmountInput, useTheme, useThemedStyles, useTotalTokenBalance } from "~Hooks"
@@ -25,10 +28,9 @@ import { RootStackParamListHome, Routes } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils, TransactionUtils } from "~Utils"
+import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 import { useI18nContext } from "~i18n"
 import { useUI } from "./Hooks"
-import { TokenImage } from "~Components/Reusable/TokenImage"
-import { isVechainToken } from "~Utils/TokenUtils/TokenUtils"
 
 const { defaults: defaultTypography } = typography
 
@@ -78,10 +80,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
     const { styles, theme } = useThemedStyles(baseStyles(isExchangeRateAvailable))
 
-    const { getGasFees, tokenTotalBalance, tokenTotalToHuman } = useTotalTokenBalance(
+    const { getGasFees, tokenTotalBalance, tokenTotalToHuman, tokenTotalToHumanFormatted } = useTotalTokenBalance(
         token,
         isInputInFiat ? tokenAmountFromFiat : "1",
         address,
+        token.decimals,
     )
 
     const { inputColorNotAnimated, placeholderColor, animatedFontStyle, animatedStyleInputColor } = useUI({
@@ -96,7 +99,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Example "147031782362332055578.377092605442914032"
      */
     const fiatTotalBalance = useMemo(
-        () => BigNutils().toCurrencyConversion(tokenTotalToHuman, exchangeRate),
+        () => BigNutils().toCurrencyConversion(tokenTotalToHuman.toString, exchangeRate),
         [exchangeRate, tokenTotalToHuman],
     )
 
@@ -247,10 +250,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
      * Sets the input value to the max available balance (in TOKEN or FIAT)
      */
     const handleOnMaxPress = useCallback(async () => {
-        const newValue = removeInvalidCharacters(isInputInFiat ? fiatTotalBalance.value : tokenTotalToHuman)
+        const newValue = removeInvalidCharacters(isInputInFiat ? fiatTotalBalance.value : tokenTotalToHuman.toString)
 
         setInput(newValue)
-        setTokenAmountFromFiat(tokenTotalToHuman)
+        setTokenAmountFromFiat(tokenTotalToHuman.toString)
 
         if (isVTHO.current) {
             setIsFeeAmountError(true)
@@ -285,9 +288,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                         {/* [START] - HEADER */}
                         <BaseView flexDirection="row" alignItems="baseline" style={styles.budget}>
                             <BaseView flexDirection="row" mr={8}>
-                                <BaseText typographyFont="subTitleBold">{tokenTotalToHuman}</BaseText>
+                                <BaseText typographyFont="subTitleBold">{tokenTotalToHumanFormatted}</BaseText>
                                 <BaseSpacer width={5} />
-                                <BaseText typographyFont="buttonSecondary">{token.symbol}</BaseText>
+                                <BaseText testID="SendScreen_tokenSymbol" typographyFont="buttonSecondary">
+                                    {token.symbol}
+                                </BaseText>
                             </BaseView>
 
                             {isError && (
@@ -315,7 +320,10 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                 {isInputInFiat ? (
                                                     <>
                                                         <BaseText typographyFont="bodySemiBold">{currency}</BaseText>
-                                                        <BaseText typographyFont="bodySemiBold" mx={4}>
+                                                        <BaseText
+                                                            testID="SendScreen_currencySymbol"
+                                                            typographyFont="bodySemiBold"
+                                                            mx={4}>
                                                             {CURRENCY_SYMBOLS[currency]}
                                                         </BaseText>
                                                     </>
@@ -323,9 +331,11 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                     <>
                                                         {/*@ts-ignore*/}
                                                         <TokenImage
+                                                            testID="SendScreen_tokenImage"
                                                             icon={computedIcon}
                                                             symbol={token.symbol}
                                                             isVechainToken={isVechainToken(token.symbol)}
+                                                            isCrossChainToken={!!token.crossChainProvider}
                                                             iconSize={24}
                                                         />
                                                         <BaseSpacer width={12} />
@@ -355,6 +365,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                             />
 
                                             <BaseTouchable
+                                                testID="SendScreen_maxButton"
                                                 haptics="Light"
                                                 action={handleOnMaxPress}
                                                 style={styles.iconMax}>
@@ -365,6 +376,7 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
 
                                             {isExchangeRateAvailable && (
                                                 <BaseIcon
+                                                    testID="SendScreen_switchInputMode"
                                                     name={"icon-refresh-cw"}
                                                     size={20}
                                                     disabled={areFeesLoading}
@@ -387,8 +399,19 @@ export const SelectAmountSendScreen = ({ route }: Props) => {
                                                   <>
                                                       {isInputInFiat ? (
                                                           <BaseView flexDirection="row" alignItems="center">
-                                                              {/* @ts-ignore */}
-                                                              <BaseImage uri={computedIcon} style={styles.logoIcon} />
+                                                              <BaseView>
+                                                                  <BaseImage
+                                                                      uri={computedIcon}
+                                                                      style={styles.logoIcon as ImageStyle}
+                                                                  />
+                                                                  {token.crossChainProvider && (
+                                                                      <Image
+                                                                          source={VeChainTokenBadge}
+                                                                          style={styles.iconBadge as RNImageStyle}
+                                                                      />
+                                                                  )}
+                                                              </BaseView>
+
                                                               <BaseSpacer width={8} />
                                                               <BaseText
                                                                   typographyFont="captionBold"
@@ -486,6 +509,13 @@ const baseStyles = (isExchangeRateAvailable: boolean) => () =>
             right: 72,
             bottom: -32,
             padding: 8,
+        },
+        iconBadge: {
+            width: 12,
+            height: 12,
+            position: "absolute",
+            right: -5,
+            bottom: -5,
         },
         iconMax: {
             position: "absolute",

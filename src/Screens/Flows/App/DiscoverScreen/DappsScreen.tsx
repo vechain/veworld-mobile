@@ -2,7 +2,7 @@ import { useNavigation, useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useEffect, useRef } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { useAnimatedRef } from "react-native-reanimated"
-import { BaseSpacer, BaseView } from "~Components"
+import { BaseSpacer, BaseText, BaseView, StargateStakingBanner, useFeatureFlags } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { Routes } from "~Navigation"
@@ -25,6 +25,7 @@ export const DappsScreen = () => {
     const nav = useNavigation()
     const dispatch = useAppDispatch()
     const { styles } = useThemedStyles(baseStyles)
+    const featureFlags = useFeatureFlags()
 
     useFetchFeaturedDApps()
 
@@ -47,6 +48,7 @@ export const DappsScreen = () => {
     }, [track, hasOpenedDiscovery, dispatch])
 
     const onSeeAllPress = useCallback(() => nav.navigate(Routes.DISCOVER_FAVOURITES), [nav])
+
     return (
         <BaseView style={styles.rootContainer}>
             <Animated.ScrollView
@@ -67,6 +69,15 @@ export const DappsScreen = () => {
                         />
                         <BaseSpacer height={48} />
                     </>
+                )}
+
+                {featureFlags.discoveryFeature.showStargateBanner && (
+                    <BaseView px={16}>
+                        <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_TAB_STAKING()}</BaseText>
+                        <BaseSpacer height={16} />
+                        <StargateStakingBanner />
+                        <BaseSpacer height={48} />
+                    </BaseView>
                 )}
 
                 {/* New Dapps */}

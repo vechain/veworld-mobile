@@ -1,6 +1,7 @@
 import { DIRECTIONS } from "~Constants"
 import { TypedData } from "~Model"
 import { ActivityEvent, ActivityStatus, ActivitySupport, ActivityType } from "./enum"
+import { TokenLevelId } from "~Screens/Flows/App/ActivityScreen/constants/filterValues"
 
 export type OutputResponse = {
     contractAddress: string
@@ -27,6 +28,7 @@ export interface Activity {
     gasUsed?: number
     delegated?: boolean
     outputs?: OutputResponse[]
+    levelId?: TokenLevelId
 }
 
 export interface IndexedHistoryEvent {
@@ -46,7 +48,7 @@ export interface IndexedHistoryEvent {
     appId?: string
     proof?: string
     roundId?: string
-    appVotes: {
+    appVotes?: {
         appId: string
         voteWeight: string
     }[]
@@ -61,6 +63,8 @@ export interface IndexedHistoryEvent {
     outputToken?: string
     inputValue?: string
     outputValue?: string
+    reverted?: boolean
+    levelId?: TokenLevelId
 }
 export interface NonTransactionalActivity {
     type: ActivityType.CONNECTED_APP_TRANSACTION | ActivityType.SIGN_CERT
@@ -185,6 +189,10 @@ export interface B3trProposalSupportActivity extends Activity {
     proposalId: string
 }
 
+export interface UnknownTxActivity extends Activity {
+    eventName: ActivityEvent.UNKNOWN_TX
+}
+
 export interface UknownTxEvent extends IndexedHistoryEvent {
     eventName: ActivityEvent.UNKNOWN_TX
 }
@@ -307,4 +315,17 @@ export interface B3trProposalSupportEvent extends IndexedHistoryEvent {
     from: string
     value: string
     proposalId: string
+}
+
+export interface StargateActivity extends Activity {
+    eventName:
+        | ActivityEvent.STARGATE_DELEGATE
+        | ActivityEvent.STARGATE_UNDELEGATE
+        | ActivityEvent.STARGATE_STAKE
+        | ActivityEvent.STARGATE_UNSTAKE
+        | ActivityEvent.STARGATE_CLAIM_REWARDS_BASE
+        | ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE
+    value: string
+    tokenId?: string
+    levelId?: TokenLevelId
 }

@@ -58,6 +58,7 @@ export const TabStack = () => {
             case Routes.SETTINGS_GIVE_FEEDBACK:
             case Routes.BROWSER:
             case Routes.TOKEN_DETAILS:
+            case Routes.DISCOVER_TABS_MANAGER:
                 return "none"
 
             case "":
@@ -141,7 +142,7 @@ export const tabbarBaseStyles = StyleSheet.create({
         right: 0,
         borderTopWidth: 0,
         padding: 8,
-        height: PlatformUtils.isIOS() ? 86 : 68,
+        height: PlatformUtils.isIOS() ? 90 : 56,
     },
     shadow: {
         shadowColor: "#000",

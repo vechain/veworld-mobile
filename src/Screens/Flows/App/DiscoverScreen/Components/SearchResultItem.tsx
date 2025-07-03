@@ -1,17 +1,17 @@
-import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useVisitedUrls } from "~Hooks/useBrowserSearch"
-import { Routes } from "~Navigation"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { DAppUtils } from "~Utils"
 import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
 import { useDAppActions } from "../Hooks"
 
 type Props = {
     item: HistoryItem
+    isValidQuery: boolean
 }
 
 const IMAGE_SIZE = 48
@@ -23,12 +23,12 @@ const generateFaviconUrl = (url: string) => {
     return generatedUrl.href
 }
 
-export const SearchResultItem = ({ item }: Props) => {
+export const SearchResultItem = ({ item, isValidQuery }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
     const { removeVisitedUrl } = useVisitedUrls()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const nav = useNavigation()
     const { onDAppPress } = useDAppActions()
+    const { navigateWithTab } = useBrowserTab()
 
     const iconUri = useMemo(() => {
         try {
@@ -64,11 +64,8 @@ export const SearchResultItem = ({ item }: Props) => {
 
     const handleNavigate = useCallback(() => {
         if (item.type === HistoryUrlKind.DAPP) onDAppPress(item.dapp)
-        else
-            nav.navigate(Routes.BROWSER, {
-                url: websiteUrl,
-            })
-    }, [item, onDAppPress, nav, websiteUrl])
+        else navigateWithTab({ url: websiteUrl, title: websiteUrl })
+    }, [item, onDAppPress, navigateWithTab, websiteUrl])
 
     return (
         <BaseView flexDirection="row" style={[styles.rootContainer]}>
@@ -102,15 +99,17 @@ export const SearchResultItem = ({ item }: Props) => {
                     <BaseText typographyFont="bodySemiBold" testID="SEARCH_RESULT_ITEM_NAME">
                         {name}
                     </BaseText>
-                    <BaseText typographyFont="caption" numberOfLines={1} testID="SEARCH_RESULT_ITEM_DESCRIPTION">
+                    <BaseText typographyFont="captionMedium" numberOfLines={1} testID="SEARCH_RESULT_ITEM_DESCRIPTION">
                         {description}
                     </BaseText>
                 </BaseView>
             </TouchableOpacity>
 
             {/* Action Btn */}
-            <BaseTouchable onPress={handleRemoveClick} testID="SEARCH_RESULT_ITEM_REMOVE">
-                <BaseIcon name="icon-x" size={20} />
+            <BaseTouchable
+                onPress={isValidQuery ? handleNavigate : handleRemoveClick}
+                testID="SEARCH_RESULT_ITEM_REMOVE">
+                <BaseIcon name={isValidQuery ? "icon-arrow-link" : "icon-x"} size={20} color={theme.colors.text} />
             </BaseTouchable>
         </BaseView>
     )

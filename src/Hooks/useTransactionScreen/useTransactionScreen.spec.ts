@@ -4,12 +4,16 @@ import { TestHelpers, TestWrapper } from "~Test"
 import { Routes } from "~Navigation"
 import { AccountWithDevice, BaseDevice, SecurityLevelType, TransactionRequest } from "~Model"
 import crypto from "react-native-quick-crypto"
-import axios from "axios"
+import axios, { AxiosError } from "axios"
 import { waitFor } from "@testing-library/react-native"
 import { selectDevice, selectSelectedAccount, selectVthoTokenWithBalanceByAccount } from "~Storage/Redux"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { BigNutils } from "~Utils"
 import { Transaction } from "@vechain/sdk-core"
+import { useSendTransaction } from "~Hooks/useSendTransaction"
+import { i18nObject } from "~i18n"
+import { showErrorToast } from "~Components/Base/BaseToast"
+import { loadLocale } from "~i18n/i18n-util.sync"
 
 const { vetTransaction1, account1D1, device1, firstLedgerAccount, ledgerDevice, wallet1 } = TestHelpers.data
 
@@ -20,7 +24,10 @@ const mockNav = jest.fn()
 jest.mock("../useBiometrics")
 jest.mock("../useWalletSecurity")
 jest.mock("react-native-quick-crypto")
-jest.mock("axios")
+jest.mock("axios", () => ({
+    ...Object.keys(jest.requireActual("axios")).reduce((pre, methodName) => ({ ...pre, [methodName]: jest.fn() }), {}),
+    AxiosError: jest.requireActual("axios").AxiosError,
+}))
 jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),
     selectSelectedAccount: jest.fn(),
@@ -28,6 +35,8 @@ jest.mock("~Storage/Redux", () => ({
     selectVthoTokenWithBalanceByAccount: jest.fn(),
     getDefaultDelegationUrl: jest.fn().mockReturnValue("https://example.com"),
 }))
+
+jest.mock("~Hooks/useSendTransaction")
 
 jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
     ...jest.requireActual("~Components/Providers/EncryptedStorageProvider/Helpers"),
@@ -48,6 +57,8 @@ jest.mock("@react-navigation/native", () => ({
         navigate: mockNav,
     }),
 }))
+
+jest.mock("~Components/Base/BaseToast")
 
 const mockedVtho = {
     balance: {
@@ -111,6 +122,9 @@ describe("useTransactionScreen", () => {
     })
 
     it("hook should render", async () => {
+        ;(useSendTransaction as jest.Mock).mockImplementation(
+            jest.requireActual("~Hooks/useSendTransaction").useSendTransaction,
+        )
         const { result } = renderHook(
             () =>
                 useTransactionScreen({
@@ -132,21 +146,25 @@ describe("useTransactionScreen", () => {
             handleClosePasswordModal: expect.any(Function),
             onPasswordSuccess: expect.any(Function),
             setSelectedFeeOption: expect.any(Function),
-            selectedFeeOption: "0",
-            gasFeeOptions: {
+            selectedFeeOption: 127,
+            gasOptions: {
                 "0": {
-                    gasFee: "0",
-                    gasRaw: BigNutils("0"),
+                    estimatedFee: BigNutils("0"),
+                    maxFee: BigNutils("0"),
+                    priorityFee: BigNutils("0"),
                 },
                 "127": {
-                    gasFee: "0",
-                    gasRaw: BigNutils("0"),
+                    estimatedFee: BigNutils("0"),
+                    maxFee: BigNutils("0"),
+                    priorityFee: BigNutils("0"),
                 },
                 "255": {
-                    gasFee: "0",
-                    gasRaw: BigNutils("0"),
+                    estimatedFee: BigNutils("0"),
+                    maxFee: BigNutils("0"),
+                    priorityFee: BigNutils("0"),
                 },
             },
+            gasUpdatedAt: expect.any(Number),
             resetDelegation: expect.any(Function),
             setSelectedDelegationAccount: expect.any(Function),
             setSelectedDelegationUrl: expect.any(Function),
@@ -165,21 +183,24 @@ describe("useTransactionScreen", () => {
                 },
                 custom: false,
                 decimals: 18,
-                desc: undefined,
                 icon: icon,
                 name: "Vethor",
                 symbol: "VTHO",
             },
             isDisabledButtonState: true,
-            priorityFees: {
-                gasFee: "0",
-                gasRaw: BigNutils("0"),
-            },
+            maxFee: BigNutils("0"),
+            estimatedFee: BigNutils("0"),
+            isBaseFeeRampingUp: false,
+            isGalactica: false,
+            speedChangeEnabled: false,
         })
     })
 
     describe("send token transaction", () => {
         it("should submit transaction", async () => {
+            ;(useSendTransaction as jest.Mock).mockImplementation(
+                jest.requireActual("~Hooks/useSendTransaction").useSendTransaction,
+            )
             const { result } = renderHook(
                 () =>
                     useTransactionScreen({
@@ -221,7 +242,90 @@ describe("useTransactionScreen", () => {
             expect(transaction).toBeInstanceOf(Transaction)
         }, 20000)
 
+        describe("error messages on submit", () => {
+            loadLocale("en")
+            const LL = i18nObject("en")
+            it.each([
+                {
+                    thorMessage: "insufficient energy",
+                    isAxios: true,
+                    result: LL.SEND_TRANSACTION_ERROR_INSUFFICIENT_ENERGY(),
+                },
+                {
+                    thorMessage: "gas price is less than block base fee",
+                    isAxios: true,
+                    result: LL.SEND_TRANSACTION_ERROR_GAS_FEE(),
+                },
+                { thorMessage: "unknown message", isAxios: true, result: LL.SEND_TRANSACTION_ERROR_GENERIC_ERROR() },
+                { isAxios: false, result: LL.SEND_TRANSACTION_ERROR_GENERIC_ERROR() },
+            ])(
+                "should error: isAxios: $isAxios, thorMessage: $thorMessage",
+                async ({ isAxios, result: localizedResult, thorMessage }) => {
+                    ;(useSendTransaction as jest.Mock).mockImplementation(() => ({
+                        sendTransaction: jest.fn().mockRejectedValue(
+                            isAxios
+                                ? new AxiosError(
+                                      "ERROR",
+                                      "403",
+                                      undefined,
+                                      {},
+                                      {
+                                          data: thorMessage!,
+                                          status: 403,
+                                          statusText: "Forbidden",
+                                          config: {} as any,
+                                          headers: {},
+                                      },
+                                  )
+                                : new Error("MESSAGE"),
+                        ),
+                    }))
+                    const { result } = renderHook(
+                        () =>
+                            useTransactionScreen({
+                                clauses: vetTransaction1.body.clauses,
+                                onTransactionSuccess,
+                                onTransactionFailure,
+                                dappRequest: {
+                                    isFirstRequest: true,
+                                    method: "thor_sendTransaction",
+                                    id: "1234",
+                                    type: "in-app",
+                                    message: [],
+                                    options: {
+                                        gas: 210000,
+                                    },
+                                    appUrl: "https://example.com",
+                                    appName: "Example",
+                                },
+                            }),
+                        {
+                            wrapper: TestWrapper,
+                        },
+                    )
+
+                    await act(async () => await result.current.onSubmit())
+
+                    await waitFor(
+                        () => {
+                            expect(onTransactionFailure).toHaveBeenCalled()
+                            expect(showErrorToast).toHaveBeenCalledWith(
+                                expect.objectContaining({
+                                    text2: `${LL.SEND_TRANSACTION_ERROR()}${localizedResult}`,
+                                }),
+                            )
+                        },
+                        { timeout: 10000 },
+                    )
+                },
+                20000,
+            )
+        })
+
         it("should only allow submitting one transaction at a time", async () => {
+            ;(useSendTransaction as jest.Mock).mockImplementation(
+                jest.requireActual("~Hooks/useSendTransaction").useSendTransaction,
+            )
             const { result } = renderHook(
                 () =>
                     useTransactionScreen({
@@ -262,6 +366,9 @@ describe("useTransactionScreen", () => {
         }, 20000)
 
         it("using ledger account should navigate", async () => {
+            ;(useSendTransaction as jest.Mock).mockImplementation(
+                () => jest.requireActual("~Hooks/useSendTransaction").useSendTransaction,
+            )
             const accWithDevice = {
                 ...firstLedgerAccount,
                 device: ledgerDevice,
@@ -303,24 +410,22 @@ describe("useTransactionScreen", () => {
                     expect(mockNav).toHaveBeenCalledWith(Routes.LEDGER_SIGN_TRANSACTION, {
                         accountWithDevice: accWithDevice,
                         initialRoute: "Home",
-                        transaction: {
-                            body: {
-                                blockRef: "0x00ce27a27f982a6d",
-                                chainTag: 39,
-                                clauses: [
-                                    {
-                                        data: "0x",
-                                        to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
-                                        value: "300000000000000000000",
-                                    },
-                                ],
-                                dependsOn: null,
-                                expiration: 30,
-                                gas: 0,
-                                gasPriceCoef: 0,
-                                nonce: "0x1234ab",
-                            },
-                        },
+                        transaction: Transaction.of({
+                            blockRef: "0x00ce27a27f982a6d",
+                            chainTag: 39,
+                            clauses: [
+                                {
+                                    data: "0x",
+                                    to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
+                                    value: "0x1043561a8829300000",
+                                },
+                            ],
+                            dependsOn: null,
+                            expiration: 100,
+                            gas: 0,
+                            gasPriceCoef: 127,
+                            nonce: "0x1234ab",
+                        }),
                         delegationSignature: undefined,
                         dappRequest,
                     })

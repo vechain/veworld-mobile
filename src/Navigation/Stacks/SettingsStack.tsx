@@ -7,25 +7,27 @@ import {
     AddContactScreen,
     AddCustomNodeScreen,
     ChangeNetworkScreen,
+    ChooseBackupDetailsPassword,
+    ClaimUsername,
     ConnectedAppsScreen,
     ContactsScreen,
+    DetailsBackupScreen,
     GeneralScreen,
+    InAppBrowser,
     ManageCustomNodesScreen,
     ManageUrlsScreen,
     NotificationScreen,
     PrivacyScreen,
     ResetAppScreen,
+    SearchScreen,
     SettingsScreen,
     SettingsTransactionsScreen,
-    WalletManagementScreen,
-    WalletDetailScreen,
-    DetailsBackupScreen,
-    ChooseBackupDetailsPassword,
-    ClaimUsername,
+    TabsManagerScreen,
     UsernameClaimed,
+    WalletDetailScreen,
+    WalletManagementScreen,
 } from "~Screens"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
-import { SettingsBrowserView } from "~Screens/Flows/App/SettingsScreen/Components/SettingsBrowserView"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -46,12 +48,17 @@ export type RootStackParamListSettings = {
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.ICLOUD_DETAILS_BACKUP]: { deviceToBackup?: LocalDevice; backupDetails: string[] | string }
     [Routes.CHOOSE_DETAILS_BACKUP_PASSWORD]: { backupDetails: string[] | string; device: LocalDevice }
-    [Routes.SETTINGS_GET_SUPPORT]: { url: string }
-    [Routes.SETTINGS_GIVE_FEEDBACK]: { url: string }
     [Routes.SETTINGS_NOTIFICATIONS]: undefined
     [Routes.CLAIM_USERNAME]: undefined
     [Routes.USERNAME_CLAIMED]: {
         username: string
+    }
+    [Routes.DISCOVER_SEARCH]: undefined
+    [Routes.DISCOVER_TABS_MANAGER]: undefined
+    [Routes.BROWSER]: {
+        url: string
+        ul?: boolean
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
     }
 }
 
@@ -153,18 +160,6 @@ export const SettingsStack = () => {
             />
 
             <Settings.Screen
-                name={Routes.SETTINGS_GET_SUPPORT}
-                component={SettingsBrowserView}
-                options={{ headerShown: false }}
-            />
-
-            <Settings.Screen
-                name={Routes.SETTINGS_GIVE_FEEDBACK}
-                component={SettingsBrowserView}
-                options={{ headerShown: false }}
-            />
-
-            <Settings.Screen
                 name={Routes.SETTINGS_NOTIFICATIONS}
                 component={NotificationScreen}
                 options={{ headerShown: false }}
@@ -176,6 +171,13 @@ export const SettingsStack = () => {
                 component={UsernameClaimed}
                 options={{ headerShown: false }}
             />
+            <Settings.Screen
+                name={Routes.DISCOVER_TABS_MANAGER}
+                component={TabsManagerScreen}
+                options={{ headerShown: false }}
+            />
+            <Settings.Screen name={Routes.DISCOVER_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
+            <Settings.Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
         </Settings.Navigator>
     )
 }

@@ -1,67 +1,116 @@
-import React, { useCallback } from "react"
-import { Animated, ImageSourcePropType, ImageStyle, Linking, StyleSheet, ViewStyle } from "react-native"
-import { TouchableOpacity } from "react-native-gesture-handler"
+import { useNavigation, useRoute } from "@react-navigation/native"
+import React, { useCallback, useMemo } from "react"
+import { Animated, Linking, Pressable, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
-import { SCREEN_WIDTH } from "~Constants"
+import { BaseIcon } from "../BaseIcon"
+
 type Props = {
-    w?: number
-    h?: number
     testID?: string
     href?: string
-    source: ImageSourcePropType
     style?: ViewStyle
-    imageStyle?: ImageStyle
+    contentWrapperStyle?: ViewStyle
     isExternalLink?: boolean
+    closable?: boolean
+    closeButtonStyle?: ViewStyle
+    onClose?: () => void
+    onPress?: (name: string) => void
+    /**
+     * Decide when `onPress` is called. Default is `after
+     */
+    onPressActivation?: "before" | "after"
+    name?: string
+    children?: React.ReactNode
 }
 
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
+
 export const BaseCarouselItem: React.FC<Props> = ({
-    source,
     href,
     style,
-    imageStyle,
     testID,
     isExternalLink,
-    w = SCREEN_WIDTH - 40,
-    h = 128,
+    onPress: propsOnPress,
+    onPressActivation = "before",
+    name,
+    children,
+    contentWrapperStyle,
+    closable = false,
+    onClose,
+    closeButtonStyle,
 }) => {
-    const { styles } = useThemedStyles(baseStyles(w, h))
+    const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+    const route = useRoute()
+    const { navigateWithTab } = useBrowserTab()
 
-    const onPress = useCallback(() => {
-        if (href) {
-            if (isExternalLink) {
-                Linking.openURL(href)
-            } else {
-                nav.navigate(Routes.BROWSER, { url: href })
-            }
+    const returnScreen = useMemo(() => {
+        if (route.name === Routes.TOKEN_DETAILS) {
+            return Routes.HOME
         }
-    }, [href, isExternalLink, nav])
+        return route.name as Routes.DISCOVER | Routes.SETTINGS | Routes.HOME
+    }, [route.name])
+
+    const onPress = useCallback(async () => {
+        if (!href) return
+        if (isExternalLink) {
+            if (onPressActivation === "before") propsOnPress?.(name ?? "")
+            await Linking.openURL(href)
+            if (onPressActivation === "after") propsOnPress?.(name ?? "")
+        } else {
+            if (onPressActivation === "before") propsOnPress?.(name ?? "")
+            navigateWithTab({
+                title: name || href,
+                url: href,
+                navigationFn(u) {
+                    nav.navigate(Routes.BROWSER, { url: u, returnScreen })
+                },
+            })
+            if (onPressActivation === "after") propsOnPress?.(name ?? "")
+        }
+    }, [href, isExternalLink, onPressActivation, propsOnPress, name, navigateWithTab, nav, returnScreen])
 
     return (
-        <Animated.View testID={testID} style={[style, styles.container]}>
-            <TouchableOpacity onPress={onPress} activeOpacity={0.8}>
-                <Animated.Image
-                    source={source}
-                    resizeMode={"contain"}
-                    style={[imageStyle, styles.image as ImageStyle]}
-                />
-            </TouchableOpacity>
-        </Animated.View>
+        <AnimatedTouchableOpacity
+            testID={testID}
+            style={[style, styles.container]}
+            activeOpacity={0.95}
+            onPress={onPress}>
+            <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>
+            {closable && (
+                <Pressable
+                    style={[styles.closeButton, closeButtonStyle]}
+                    onPress={onClose}
+                    testID="Stargate_banner_close_button">
+                    <BaseIcon name="icon-x" size={16} color={COLORS.GREY_100} />
+                </Pressable>
+            )}
+        </AnimatedTouchableOpacity>
     )
 }
 
-const baseStyles = (w: number, h: number) => () =>
+const baseStyles = () =>
     StyleSheet.create({
         container: {
             flex: 1,
-            width: w,
-            height: h,
-            marginLeft: 20,
+            width: SCREEN_WIDTH,
+            pointerEvents: "box-none",
+            position: "relative",
         },
-        image: {
-            width: "100%",
-            height: "100%",
+        contentWrapper: {
+            flex: 1,
+            paddingHorizontal: 16,
+        },
+        closeButton: {
+            position: "absolute",
+            right: 6,
+            top: 6,
+            width: 24,
+            height: 24,
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 4,
         },
     })

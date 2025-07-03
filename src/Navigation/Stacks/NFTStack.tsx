@@ -1,10 +1,12 @@
 import React from "react"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { TransactionClause } from "@vechain/sdk-core"
 import {
     InsertAddressSendScreen,
     NFTCollectionDetailScreen,
     NFTDetailScreen,
     NFTScreen,
+    ReportNFTTransactionScreen,
     SendNFTRecapScreen,
 } from "~Screens"
 import { Routes } from "~Navigation/Enums"
@@ -31,6 +33,11 @@ export type RootStackParamListNFT = {
         tokenId: string
         receiverAddress: string
     }
+
+    [Routes.REPORT_NFT_TRANSACTION_SCREEN]: {
+        nftAddress: string
+        transactionClauses: TransactionClause[]
+    }
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListNFT>()
@@ -48,6 +55,12 @@ export const NFTStack = () => {
                 <Screen
                     name={Routes.NFT_COLLECTION_DETAILS}
                     component={NFTCollectionDetailScreen}
+                    options={{ headerShown: false }}
+                />
+
+                <Screen
+                    name={Routes.REPORT_NFT_TRANSACTION_SCREEN}
+                    component={ReportNFTTransactionScreen}
                     options={{ headerShown: false }}
                 />
 

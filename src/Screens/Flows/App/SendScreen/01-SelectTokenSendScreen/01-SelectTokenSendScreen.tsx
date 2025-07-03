@@ -1,17 +1,17 @@
 import { ListRenderItemInfo } from "@react-native/virtualized-lists/Lists/VirtualizedList"
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { FlatList, StyleSheet, TouchableOpacity } from "react-native"
 import { BaseSpacer, BaseText, BaseView, Layout, SendVot3WarningBottomSheet } from "~Components"
-import { ColorThemeType, VET, VTHO } from "~Constants"
+import { ColorThemeType, VeDelegate, VET, VTHO } from "~Constants"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectNetworkVBDTokens, selectSendableTokensWithBalance, useAppSelector } from "~Storage/Redux"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { TokenCard, VechainTokenCard } from "../../HomeScreen/Components"
+import { TokenCard, VechainTokenCard, BridgeTokenCard } from "../../HomeScreen/Components"
 
 type Props = NativeStackNavigationProp<RootStackParamListHome, Routes.SELECT_TOKEN_SEND>
 
@@ -20,6 +20,11 @@ export const SelectTokenSendScreen = () => {
     const tokens = useAppSelector(selectSendableTokensWithBalance)
     const { VOT3, B3TR } = useAppSelector(state => selectNetworkVBDTokens(state))
     const { ref: vot3WarningRef, onOpen: openVot3Warning, onClose: closeVot3Warning } = useBottomSheetModal()
+
+    const filteredTokens = useMemo(() => {
+        // VeDelegate is not a real token, and cannot be sent
+        return tokens.filter(token => token.symbol !== VeDelegate.symbol)
+    }, [tokens])
 
     const nav = useNavigation<Props>()
 
@@ -44,7 +49,7 @@ export const SelectTokenSendScreen = () => {
     )
 
     const handleVot3Confirm = () => {
-        const vot3Token = tokens.find(token => compareAddresses(VOT3.address, token.address))
+        const vot3Token = filteredTokens.find(token => compareAddresses(VOT3.address, token.address))
         closeVot3Warning()
         if (vot3Token) {
             nav.navigate(Routes.INSERT_ADDRESS_SEND, {
@@ -72,7 +77,11 @@ export const SelectTokenSendScreen = () => {
                 case VOT3.address.toLowerCase():
                     return <VechainTokenCard isAnimation={false} isBalanceVisible tokenWithInfo={tokenWithInfoVOT3} />
                 default:
-                    return <TokenCard tokenWithBalance={item} isEdit={false} isBalanceVisible />
+                    return item.crossChainProvider ? (
+                        <BridgeTokenCard tokenWithBalance={item} isBalanceVisible isEdit={false} />
+                    ) : (
+                        <TokenCard tokenWithBalance={item} isEdit={false} isBalanceVisible />
+                    )
             }
         },
         [B3TR.address, VOT3.address, tokenWithInfoB3TR, tokenWithInfoVET, tokenWithInfoVOT3, tokenWithInfoVTHO],
@@ -105,8 +114,12 @@ export const SelectTokenSendScreen = () => {
                         <BaseText typographyFont="subSubTitleLight">{LL.SEND_TOKEN_SELECT_ASSET()}</BaseText>
                         <BaseSpacer height={24} />
                     </BaseView>
-                    {tokens.length ? (
-                        <FlatList data={tokens} renderItem={renderItem} ItemSeparatorComponent={renderItemSeparator} />
+                    {filteredTokens.length ? (
+                        <FlatList
+                            data={filteredTokens}
+                            renderItem={renderItem}
+                            ItemSeparatorComponent={renderItemSeparator}
+                        />
                     ) : (
                         <BaseText m={20}>{LL.BD_NO_TOKEN_FOUND()}</BaseText>
                     )}

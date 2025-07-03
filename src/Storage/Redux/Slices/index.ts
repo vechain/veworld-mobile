@@ -1,6 +1,7 @@
 export * from "./Account"
 export * from "./Activity"
 export * from "./Analytics"
+export * from "./VersionUpdate"
 export * from "./Balances"
 export * from "./Beat"
 export * from "./Browser"

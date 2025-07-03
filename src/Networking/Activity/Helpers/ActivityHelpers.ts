@@ -22,9 +22,11 @@ import {
     Network,
     NonFungibleTokenActivity,
     SignCertActivity,
+    StargateActivity,
     SwapActivity,
     TypedData,
     TypedDataActivity,
+    UnknownTxActivity,
 } from "~Model"
 import { EventTypeResponse } from "~Networking"
 import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
@@ -545,6 +547,8 @@ export const createActivityFromIndexedHistoryEvent = (
         oldLevel,
         newLevel,
         from,
+        reverted,
+        levelId,
     } = event
 
     const isTransaction =
@@ -564,6 +568,7 @@ export const createActivityFromIndexedHistoryEvent = (
         timestamp: blockTimestamp * 1000,
         gasPayer: gasPayer,
         delegated: origin !== gasPayer,
+        status: reverted ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS,
     }
 
     switch (eventName) {
@@ -660,7 +665,7 @@ export const createActivityFromIndexedHistoryEvent = (
         case ActivityEvent.B3TR_CLAIM_REWARD: {
             return {
                 ...baseActivity,
-                eventName: ActivityEvent.B3TR_XALLOCATION_VOTE,
+                eventName: ActivityEvent.B3TR_CLAIM_REWARD,
                 value: value ?? "0x0",
                 roundId: roundId,
             } as B3trClaimRewardActivity
@@ -691,7 +696,24 @@ export const createActivityFromIndexedHistoryEvent = (
                 proposalId: proposalId,
             } as B3trProposalSupportActivity
         }
+        case ActivityEvent.STARGATE_UNDELEGATE:
+        case ActivityEvent.STARGATE_DELEGATE:
+        case ActivityEvent.STARGATE_STAKE:
+        case ActivityEvent.STARGATE_UNSTAKE:
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+        case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE: {
+            return {
+                ...baseActivity,
+                eventName: eventName,
+                value: value,
+                tokenId: tokenId,
+                levelId: levelId,
+            } as StargateActivity
+        }
         case ActivityEvent.UNKNOWN_TX:
+            return {
+                ...baseActivity,
+            } as UnknownTxActivity
         default:
             return null
     }

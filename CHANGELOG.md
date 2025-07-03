@@ -1,5 +1,35 @@
 # Changelog
 
+## <small>2.2.5 (2025-06-30)</small>
+
+* build: init ([8e24c0b](https://github.com/vechain/veworld-mobile/commit/8e24c0b))
+* Fix(i18n): update staking reward copy (#3031) ([4ee92d8](https://github.com/vechain/veworld-mobile/commit/4ee92d8)), closes [#3031](https://github.com/vechain/veworld-mobile/issues/3031)
+
+## <small>2.2.4 (2025-06-06)</small>
+
+* build: init ([df13e7b](https://github.com/vechain/veworld-mobile/commit/df13e7b))
+* fix: redux migration app crash (#2983) ([c747df0](https://github.com/vechain/veworld-mobile/commit/c747df0)), closes [#2983](https://github.com/vechain/veworld-mobile/issues/2983)
+
+## <small>2.2.3 (2025-05-26)</small>
+
+* build: init ([014406b](https://github.com/vechain/veworld-mobile/commit/014406b))
+* 141 Fix UI bug iOS - 2.2.3 and Android - 2.2.9 (#2964) ([0e09646](https://github.com/vechain/veworld-mobile/commit/0e09646)), closes [#2964](https://github.com/vechain/veworld-mobile/issues/2964)
+
+## <small>2.2.2 (2025-05-19)</small>
+
+* build: init ([bc68c5a](https://github.com/vechain/veworld-mobile/commit/bc68c5a))
+* 128 bug   dapps that lost endorsement dont have names in activity (#2944) ([aa12605](https://github.com/vechain/veworld-mobile/commit/aa12605)), closes [#2944](https://github.com/vechain/veworld-mobile/issues/2944)
+
+## <small>2.2.1 (2025-05-13)</small>
+
+* build: init ([51f6358](https://github.com/vechain/veworld-mobile/commit/51f6358))
+* fix: improve veDelegate balance handling in HomeScreen (#2930) ([9e07b1b](https://github.com/vechain/veworld-mobile/commit/9e07b1b)), closes [#2930](https://github.com/vechain/veworld-mobile/issues/2930)
+
+## <small>2.1.5 (2025-04-30)</small>
+
+* build: init ([e7d48cf](https://github.com/vechain/veworld-mobile/commit/e7d48cf))
+* fix: fix base bottom sheet (#2904) ([060daa7](https://github.com/vechain/veworld-mobile/commit/060daa7)), closes [#2904](https://github.com/vechain/veworld-mobile/issues/2904)
+
 ## <small>2.1.4 (2025-04-14)</small>
 
 * build: init ([b227b8d](https://github.com/vechain/veworld-mobile/commit/b227b8d))

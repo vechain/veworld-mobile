@@ -8,6 +8,7 @@ import WebView from "react-native-webview"
 import { BaseIcon, BaseText, BaseView, BrowserBottomBar, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
@@ -36,6 +37,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const { locale, LL } = useI18nContext()
     const [error, setError] = useState(false)
     const { styles, theme } = useThemedStyles(baseStyles)
+    const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
 
     useEffect(() => {
         if (route?.params?.ul) {
@@ -65,7 +67,13 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            fixedHeader={<URLBar onNavigation={setError} />}
+            fixedHeader={
+                <URLBar
+                    onBrowserNavigation={setError}
+                    onNavigate={performScreenshot}
+                    returnScreen={route.params.returnScreen}
+                />
+            }
             noBackButton
             noMargin
             hasSafeArea={false}
@@ -75,7 +83,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {userAgent && !isLoading && (
                         <>
-                            <Animated.View style={animatedStyles}>
+                            <Animated.View ref={webviewContainerRef} style={animatedStyles} collapsable={false}>
                                 <WebView
                                     ref={webviewRef as MutableRefObject<WebView>}
                                     source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
@@ -89,6 +97,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                                     injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
                                     allowsInlineMediaPlayback={true}
                                     originWhitelist={originWhitelist}
+                                    collapsable={false}
                                 />
                             </Animated.View>
                             {error && (

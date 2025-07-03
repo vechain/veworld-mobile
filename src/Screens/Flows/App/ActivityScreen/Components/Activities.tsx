@@ -15,6 +15,8 @@ type ActivitiesProps = {
         | typeof filterValues.transfer
         | typeof filterValues.nfts
         | typeof filterValues.dapps
+        | typeof filterValues.staking
+        | typeof filterValues.other
     emptyComponent: React.JSX.Element
 }
 

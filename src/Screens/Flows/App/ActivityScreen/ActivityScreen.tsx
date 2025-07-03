@@ -20,8 +20,10 @@ import {
     ActivityAllScreen,
     ActivityB3trScreen,
     ActivityNftScreen,
+    ActivityOtherScreen,
     ActivitySwapScreen,
     ActivityTransferScreen,
+    ActivityStakingScreen,
 } from "./screens"
 import { Routes } from "~Navigation"
 import { ActivityDappsScreen } from "./screens/ActivityDappsScreen"
@@ -88,6 +90,11 @@ export const ActivityScreen = () => {
                             options={{ title: LL.ACTIVITY_TRANSFER_LABEL() }}
                         />
                         <Tab.Screen
+                            name={Routes.ACTIVITY_STAKING}
+                            component={ActivityStakingScreen}
+                            options={{ title: LL.ACTIVITY_STAKING_LABEL() }}
+                        />
+                        <Tab.Screen
                             name={Routes.ACTIVITY_SWAP}
                             component={ActivitySwapScreen}
                             options={{ title: LL.ACTIVITY_SWAP_LABEL() }}
@@ -101,6 +108,11 @@ export const ActivityScreen = () => {
                             name={Routes.ACTIVITY_DAPPS}
                             component={ActivityDappsScreen}
                             options={{ title: LL.ACTIVITY_DAPPS_LABEL() }}
+                        />
+                        <Tab.Screen
+                            name={Routes.ACTIVITY_OTHER}
+                            component={ActivityOtherScreen}
+                            options={{ title: LL.ACTIVITY_OTHER_LABEL() }}
                         />
                     </Tab.Navigator>
                     <SelectAccountBottomSheet
