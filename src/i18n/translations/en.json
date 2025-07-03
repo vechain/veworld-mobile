@@ -741,6 +741,7 @@
   "NO_MARKETPLACE": "Unable to open marketplace",
   "NO_THANKS": "No thanks",
   "NO_VTHO_BALANCE": "No VTHO balance. Select another token",
+  "NO_TOKENS_AVAILABLE_FOR_FEE": "No tokens available to pay the fee.",
   "OCTOBER": "October",
   "ONLY_SECONDS": "{seconds:number|toSecondsDuration}",
   "ORIGIN": "Origin",

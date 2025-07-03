@@ -19,6 +19,7 @@ type Props = {
     onDelegationTokenClicked: () => void
     selectedDelegationToken: string
     isEnoughBalance: boolean
+    hasEnoughBalanceOnAny: boolean
 }
 
 export const LegacyEstimation = ({

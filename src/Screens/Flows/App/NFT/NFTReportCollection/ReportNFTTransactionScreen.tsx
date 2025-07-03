@@ -105,6 +105,7 @@ export const ReportNFTTransactionScreen = ({ route }: Props) => {
         availableTokens,
         selectedDelegationToken,
         setSelectedDelegationToken,
+        hasEnoughBalanceOnAny,
     } = useTransactionScreen({
         clauses: transactionClauses,
         onTransactionSuccess,
@@ -160,7 +161,8 @@ export const ReportNFTTransactionScreen = ({ route }: Props) => {
                             isEnoughBalance={isEnoughGas}
                             availableDelegationTokens={availableTokens}
                             delegationToken={selectedDelegationToken}
-                            setDelegationToken={setSelectedDelegationToken}>
+                            setDelegationToken={setSelectedDelegationToken}
+                            hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}>
                             <DelegationView
                                 setNoDelegation={resetDelegation}
                                 selectedDelegationOption={selectedDelegationOption}

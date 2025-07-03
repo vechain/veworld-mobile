@@ -11,6 +11,7 @@ import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
 import { BaseAnimatedText } from "../BaseAnimatedText"
+import { NoTokensAvailableForFee } from "./NoTokensAvailableForFee"
 import { NoVthoBalanceAlert } from "./NoVthoBalanceAlert"
 import { TokenSelector } from "./TokenSelector"
 
@@ -21,6 +22,7 @@ type Props = {
     onDelegationTokenClicked: () => void
     selectedDelegationToken: string
     isEnoughBalance: boolean
+    hasEnoughBalanceOnAny: boolean
 }
 
 export const GalacticaEstimation = ({
@@ -30,6 +32,7 @@ export const GalacticaEstimation = ({
     onDelegationTokenClicked,
     selectedDelegationToken,
     isEnoughBalance,
+    hasEnoughBalanceOnAny,
 }: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -82,7 +85,12 @@ export const GalacticaEstimation = ({
                 </Animated.View>
                 <TokenSelector onPress={onDelegationTokenClicked} token={selectedDelegationToken} />
             </Animated.View>
-            <NoVthoBalanceAlert isEnoughBalance={isEnoughBalance} delegationToken={selectedDelegationToken} />
+            {/* Make sure to only show the "NO VTHO" error when you have at least another token available */}
+            {!hasEnoughBalanceOnAny ? (
+                <NoTokensAvailableForFee isEnoughBalance={hasEnoughBalanceOnAny} />
+            ) : (
+                <NoVthoBalanceAlert isEnoughBalance={isEnoughBalance} delegationToken={selectedDelegationToken} />
+            )}
         </Animated.View>
     )
 }

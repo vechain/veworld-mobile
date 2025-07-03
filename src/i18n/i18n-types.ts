@@ -2847,10 +2847,6 @@ type RootTranslation = {
 	 */
 	NFT_TRANSFER_SENT: string
 	/**
-	 * N​o​ ​V​T​H​O​ ​b​a​l​a​n​c​e​.​ ​S​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​t​o​k​e​n
-	 */
-	NO_VTHO_BALANCE: string
-	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: string
@@ -3056,6 +3052,14 @@ type RootTranslation = {
 	 * N​o​ ​t​h​a​n​k​s
 	 */
 	NO_THANKS: string
+	/**
+	 * N​o​ ​V​T​H​O​ ​b​a​l​a​n​c​e​.​ ​S​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​t​o​k​e​n
+	 */
+	NO_VTHO_BALANCE: string
+	/**
+	 * N​o​ ​t​o​k​e​n​s​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​.
+	 */
+	NO_TOKENS_AVAILABLE_FOR_FEE: string
 	/**
 	 * O​c​t​o​b​e​r
 	 */
@@ -7265,10 +7269,6 @@ Thanks for your patience!
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
 	/**
-	 * No VTHO balance. Select another token
-	 */
-	NO_VTHO_BALANCE: () => LocalizedString
-	/**
 	 * Go to NFTs
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: () => LocalizedString
@@ -7456,6 +7456,14 @@ Thanks for your patience!
 	 * No thanks
 	 */
 	NO_THANKS: () => LocalizedString
+	/**
+	 * No VTHO balance. Select another token
+	 */
+	NO_VTHO_BALANCE: () => LocalizedString
+	/**
+	 * No tokens available to pay the fee.
+	 */
+	NO_TOKENS_AVAILABLE_FOR_FEE: () => LocalizedString
 	/**
 	 * October
 	 */

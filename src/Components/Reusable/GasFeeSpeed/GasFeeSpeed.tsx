@@ -26,6 +26,7 @@ type Props = {
     availableDelegationTokens: string[]
     setDelegationToken: (value: string) => void
     isEnoughBalance: boolean
+    hasEnoughBalanceOnAny: boolean
 }
 
 const AnimatedBaseCard = Animated.createAnimatedComponent(wrapFunctionComponent(BaseCard))
@@ -43,6 +44,7 @@ export const GasFeeSpeed = ({
     setDelegationToken,
     availableDelegationTokens,
     isEnoughBalance,
+    hasEnoughBalanceOnAny,
 }: PropsWithChildren<Props>) => {
     const { styles } = useThemedStyles(baseStyles)
 
@@ -72,6 +74,7 @@ export const GasFeeSpeed = ({
                         onDelegationTokenClicked={tokenBsOnOpen}
                         selectedDelegationToken={delegationToken}
                         isEnoughBalance={isEnoughBalance}
+                        hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                     />
                     <EditSpeedSection
                         onOpen={speedBsOnOpen}
@@ -86,6 +89,7 @@ export const GasFeeSpeed = ({
                     onDelegationTokenClicked={tokenBsOnOpen}
                     selectedDelegationToken={delegationToken}
                     isEnoughBalance={isEnoughBalance}
+                    hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
                 />
             )}
             {children}
