@@ -2498,6 +2498,11 @@ type RootTranslation = {
 	 */
 	JUNE: string
 	/**
+	 * {​v​a​l​u​e​}​ ​K​g
+	 * @param {string} value
+	 */
+	KILOGRAMS: RequiredParams<'value'>
+	/**
 	 * C​e​r​t​i​f​i​c​a​t​e​ ​i​s​ ​r​e​a​d​y
 	 */
 	LEDGER_CERTIFICATE_READ: string
@@ -3713,7 +3718,7 @@ type RootTranslation = {
 	 */
 	SEND_TO: string
 	/**
-	 * S​e​l​e​c​t​ ​o​n​e​ ​o​f​ ​y​o​u​r​ ​t​o​k​e​n​s​ ​t​o​ ​s​e​n​d​:
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​a​s​s​e​t​ ​y​o​u​ ​w​i​s​h​ ​t​o​ ​s​e​n​d​:
 	 */
 	SEND_TOKEN_SELECT_ASSET: string
 	/**
@@ -6928,6 +6933,10 @@ Thanks for your patience!
 	 */
 	JUNE: () => LocalizedString
 	/**
+	 * {value} Kg
+	 */
+	KILOGRAMS: (arg: { value: string }) => LocalizedString
+	/**
 	 * Certificate is ready
 	 */
 	LEDGER_CERTIFICATE_READ: () => LocalizedString
@@ -8117,7 +8126,7 @@ Thanks for your patience!
 	 */
 	SEND_TO: () => LocalizedString
 	/**
-	 * Select one of your tokens to send:
+	 * Select the token asset you wish to send:
 	 */
 	SEND_TOKEN_SELECT_ASSET: () => LocalizedString
 	/**

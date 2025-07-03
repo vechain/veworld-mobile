@@ -606,6 +606,7 @@
   "JANUARY": "January",
   "JULY": "July",
   "JUNE": "June",
+  "KILOGRAMS": "{value:string} Kg",
   "LEDGER_CERTIFICATE_READ": "Certificate is ready",
   "LEDGER_CERTIFICATE_READ_SB": "The certificate is ready to be sent to the DApp, press confirm to continue",
   "LEDGER_CERT_TITLE_SB": "Please follow the instructions below to sign the certificate with your Ledger",
