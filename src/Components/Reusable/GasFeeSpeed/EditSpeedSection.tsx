@@ -2,7 +2,7 @@ import React from "react"
 import { StyleSheet } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
-import { ColorThemeType, GasPriceCoefficient } from "~Constants"
+import { COLORS, ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
@@ -84,6 +84,8 @@ const baseStyles = (speedChangeEnabled: boolean) => (theme: ColorThemeType) =>
             width: "100%",
             padding: speedChangeEnabled ? 16 : 0,
             height: speedChangeEnabled ? "auto" : 0,
+            borderBottomWidth: 1,
+            borderBottomColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
         },
         cardButton: {
             borderColor: theme.colors.cardButton.border,

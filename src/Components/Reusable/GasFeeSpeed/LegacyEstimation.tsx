@@ -1,14 +1,16 @@
 import { ethers } from "ethers"
 import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
 import { BaseText, BaseView } from "~Components/Base"
-import { GasPriceCoefficient } from "~Constants"
+import { COLORS, ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
+import { NoVthoBalanceAlert } from "./NoVthoBalanceAlert"
 import { TokenSelector } from "./TokenSelector"
 
 type Props = {
@@ -16,6 +18,7 @@ type Props = {
     selectedFeeOption: GasPriceCoefficient
     onDelegationTokenClicked: () => void
     selectedDelegationToken: string
+    isEnoughBalance: boolean
 }
 
 export const LegacyEstimation = ({
@@ -23,6 +26,7 @@ export const LegacyEstimation = ({
     selectedFeeOption,
     onDelegationTokenClicked,
     selectedDelegationToken,
+    isEnoughBalance,
 }: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -53,30 +57,43 @@ export const LegacyEstimation = ({
     }, [estimatedFeeFiat.isLeesThan_0_01, estimatedFeeFiat.preciseValue, formatFiat])
 
     return (
-        <BaseView flexDirection="column" style={styles.section} gap={4}>
-            <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
-                {LL.GAS_FEE()}
-            </BaseText>
-            <BaseView flexDirection="row" gap={8}>
+        <Animated.View layout={LinearTransition} style={styles.rootWithAlert}>
+            <Animated.View layout={LinearTransition} style={styles.root}>
+                <BaseView flexDirection="column" gap={4}>
+                    <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
+                        {LL.GAS_FEE()}
+                    </BaseText>
+                    <BaseView flexDirection="row" gap={8}>
+                        <BaseText
+                            typographyFont="subSubTitleBold"
+                            color={theme.colors.assetDetailsCard.title}
+                            testID="LEGACY_ESTIMATED_FEE">
+                            {selectedDelegationToken}&nbsp;{formatValue(estimatedFeeVtho)}
+                        </BaseText>
+                        <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                            {estimatedFeeFiat.isLeesThan_0_01 ? `< ${estimatedFormattedFiat}` : estimatedFormattedFiat}
+                        </BaseText>
+                    </BaseView>
+                </BaseView>
                 <TokenSelector onPress={onDelegationTokenClicked} token={selectedDelegationToken} />
-                <BaseText
-                    typographyFont="subSubTitleBold"
-                    color={theme.colors.assetDetailsCard.title}
-                    testID="LEGACY_ESTIMATED_FEE">
-                    {formatValue(estimatedFeeVtho)}
-                </BaseText>
-                <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                    {estimatedFeeFiat.isLeesThan_0_01 ? `< ${estimatedFormattedFiat}` : estimatedFormattedFiat}
-                </BaseText>
-            </BaseView>
-        </BaseView>
+            </Animated.View>
+            <NoVthoBalanceAlert isEnoughBalance={isEnoughBalance} delegationToken={selectedDelegationToken} />
+        </Animated.View>
     )
 }
 
-const baseStyles = () => {
+const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
-        section: {
+        root: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+        },
+        rootWithAlert: {
             padding: 16,
+            flexDirection: "column",
+            gap: 12,
+            borderBottomWidth: 1,
+            borderBottomColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
         },
     })
 }

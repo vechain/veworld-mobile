@@ -140,8 +140,7 @@ const baseStyles = (theme: ColorThemeType) => {
         },
         root: {
             width: "100%",
-            paddingHorizontal: 16,
-            paddingBottom: 16,
+            padding: 16,
         },
     })
 }

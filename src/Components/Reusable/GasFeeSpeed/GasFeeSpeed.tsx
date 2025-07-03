@@ -3,11 +3,10 @@ import { PropsWithChildren, default as React, useCallback, useState } from "reac
 import { StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { useInterval } from "usehooks-ts"
-import { BaseCard, BaseIcon, BaseText, BaseView } from "~Components/Base"
-import { ColorThemeType, GasPriceCoefficient, VTHO } from "~Constants"
+import { BaseCard } from "~Components/Base"
+import { ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
-import { useI18nContext } from "~i18n"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { EditSpeedSection } from "./EditSpeedSection"
 import { GalacticaEstimation } from "./GalacticaEstimation"
@@ -45,8 +44,7 @@ export const GasFeeSpeed = ({
     availableDelegationTokens,
     isEnoughBalance,
 }: PropsWithChildren<Props>) => {
-    const { LL } = useI18nContext()
-    const { styles, theme } = useThemedStyles(baseStyles)
+    const { styles } = useThemedStyles(baseStyles)
 
     const { onClose: speedBsOnClose, onOpen: speedBsOnOpen, ref: speedBsRef } = useBottomSheetModal()
     const { onClose: tokenBsOnClose, onOpen: tokenBsOnOpen, ref: tokenBsRef } = useBottomSheetModal()
@@ -67,17 +65,18 @@ export const GasFeeSpeed = ({
             layout={LinearTransition.duration(300)}>
             {isGalactica ? (
                 <>
-                    <EditSpeedSection
-                        onOpen={speedBsOnOpen}
-                        selectedFeeOption={selectedFeeOption}
-                        speedChangeEnabled={speedChangeEnabled}
-                    />
                     <GalacticaEstimation
                         options={options}
                         selectedFeeOption={selectedFeeOption}
                         secondsRemaining={secondsRemaining}
                         onDelegationTokenClicked={tokenBsOnOpen}
                         selectedDelegationToken={delegationToken}
+                        isEnoughBalance={isEnoughBalance}
+                    />
+                    <EditSpeedSection
+                        onOpen={speedBsOnOpen}
+                        selectedFeeOption={selectedFeeOption}
+                        speedChangeEnabled={speedChangeEnabled}
                     />
                 </>
             ) : (
@@ -86,23 +85,8 @@ export const GasFeeSpeed = ({
                     selectedFeeOption={selectedFeeOption}
                     onDelegationTokenClicked={tokenBsOnOpen}
                     selectedDelegationToken={delegationToken}
+                    isEnoughBalance={isEnoughBalance}
                 />
-            )}
-            {delegationToken === VTHO.symbol && !isEnoughBalance && (
-                <BaseView
-                    flexDirection="row"
-                    bg={theme.colors.errorAlert.background}
-                    gap={12}
-                    py={8}
-                    px={12}
-                    borderRadius={6}
-                    mx={16}
-                    mb={16}>
-                    <BaseIcon size={16} color={theme.colors.errorAlert.icon} name="icon-alert-triangle" />
-                    <BaseText typographyFont="body" color={theme.colors.errorAlert.text}>
-                        {LL.NO_VTHO_BALANCE()}
-                    </BaseText>
-                </BaseView>
             )}
             {children}
             <GasFeeSpeedBottomSheet
