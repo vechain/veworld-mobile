@@ -10,6 +10,7 @@ import {
     SignCertActivity,
     StargateActivity,
 } from "~Model"
+import { TokenLevelId } from "../constants/filterValues"
 
 const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
     {
@@ -396,7 +397,7 @@ const STARGATE_ACTIVITIES: StargateActivity[] = [
         outputs: [],
         eventName: ActivityEvent.STARGATE_DELEGATE,
         value: "10000000000000000000000",
-        levelId: "0",
+        levelId: TokenLevelId.None,
         tokenId: "VET",
     },
     {
@@ -423,7 +424,7 @@ const STARGATE_ACTIVITIES: StargateActivity[] = [
         outputs: [],
         eventName: ActivityEvent.STARGATE_UNDELEGATE,
         value: "5000000000000000000000",
-        levelId: "1",
+        levelId: TokenLevelId.None,
         tokenId: "VET",
     },
     {
@@ -450,7 +451,7 @@ const STARGATE_ACTIVITIES: StargateActivity[] = [
         outputs: [],
         eventName: ActivityEvent.STARGATE_STAKE,
         value: "25000000000000000000000",
-        levelId: "2",
+        levelId: TokenLevelId.None,
         tokenId: "VOT3",
     },
     {
@@ -477,7 +478,7 @@ const STARGATE_ACTIVITIES: StargateActivity[] = [
         outputs: [],
         eventName: ActivityEvent.STARGATE_UNSTAKE,
         value: "15000000000000000000000",
-        levelId: "3",
+        levelId: TokenLevelId.None,
         tokenId: "B3TR",
     },
     {
@@ -488,7 +489,7 @@ const STARGATE_ACTIVITIES: StargateActivity[] = [
         blockNumber: 15181800,
         isTransaction: true,
         genesisId: "0x00000000851caf3cfdb6e899cf5958bfb1ac3413d346d43539627e6be7ec1b4a",
-        type: ActivityType.STARGATE_CLAIM_REWARDS,
+        type: ActivityType.STARGATE_CLAIM_REWARDS_BASE,
         timestamp: 1682737919000,
         gasUsed: 43287,
         gasPayer: "0xc345678901234567890123456789012345678901",
@@ -502,7 +503,7 @@ const STARGATE_ACTIVITIES: StargateActivity[] = [
             },
         ],
         outputs: [],
-        eventName: ActivityEvent.STARGATE_CLAIM_REWARDS,
+        eventName: ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE,
         value: "3450000000000000000000",
         tokenId: "VET",
     },
@@ -530,7 +531,7 @@ const STARGATE_ACTIVITIES: StargateActivity[] = [
         outputs: [],
         eventName: ActivityEvent.STARGATE_DELEGATE,
         value: "50000000000000000000000",
-        levelId: "4",
+        levelId: TokenLevelId.None,
         tokenId: "VET",
     },
     {
@@ -557,7 +558,7 @@ const STARGATE_ACTIVITIES: StargateActivity[] = [
         outputs: [],
         eventName: ActivityEvent.STARGATE_STAKE,
         value: "8000000000000000000000",
-        levelId: "5",
+        levelId: TokenLevelId.None,
         tokenId: "VOT3",
     },
 ]
