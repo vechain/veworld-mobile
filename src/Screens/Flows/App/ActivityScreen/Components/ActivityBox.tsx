@@ -1,5 +1,5 @@
 import moment from "moment"
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
@@ -840,7 +840,7 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         onPress(activity)
     }
 
-    const getStakingIcon = (eventName: string): IconKey => {
+    const getStakingIcon = useCallback((eventName: string): IconKey => {
         switch (eventName) {
             case ActivityEvent.STARGATE_STAKE:
                 return "icon-download"
@@ -857,13 +857,16 @@ const Staking = ({ activity, onPress }: StakingProps) => {
             default:
                 return "icon-blocks"
         }
-    }
+    }, [])
 
     const hasRightAmount = useMemo(() => {
-        return activity?.type !== ActivityEvent.STARGATE_UNDELEGATE
+        return !(
+            activity?.type === ActivityEvent.STARGATE_UNDELEGATE ||
+            activity?.type === ActivityEvent.STARGATE_DELEGATE_ONLY
+        )
     }, [activity?.type])
 
-    const getActivityTitle = () => {
+    const getActivityTitle = useCallback(() => {
         switch (activity.eventName) {
             case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
@@ -871,6 +874,8 @@ const Staking = ({ activity, onPress }: StakingProps) => {
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
             case ActivityEvent.STARGATE_DELEGATE:
                 return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_ONLY:
+                return LL.ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL()
             case ActivityEvent.STARGATE_UNDELEGATE:
                 return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
             case ActivityEvent.STARGATE_STAKE:
@@ -880,18 +885,15 @@ const Staking = ({ activity, onPress }: StakingProps) => {
             default:
                 return LL.ACTIVITY_STARGATE_STAKE_LABEL()
         }
-    }
-
-    const isClaimingRewards = useMemo(() => {
-        return (
-            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE ||
-            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE
-        )
-    }, [activity?.type])
+    }, [activity.eventName, LL])
 
     const isMinus = useMemo(() => {
-        return !(isClaimingRewards || activity?.type === ActivityEvent.STARGATE_UNSTAKE)
-    }, [activity?.type, isClaimingRewards])
+        return !(
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE ||
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE ||
+            activity?.type === ActivityEvent.STARGATE_UNSTAKE
+        )
+    }, [activity?.type])
 
     const amount = BigNutils(activity.value)
         .toHuman(B3TR.decimals ?? 0)
@@ -908,11 +910,7 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
-            description: activity.levelId
-                ? getTokenLevelName(activity.levelId)
-                : isClaimingRewards
-                ? LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DESCRIPTION()
-                : "",
+            description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
             rightAmount: rightAmount,
             rightAmountDescription:
                 hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
