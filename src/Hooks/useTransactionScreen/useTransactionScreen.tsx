@@ -151,13 +151,22 @@ export const useTransactionScreen = ({
     }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options])
 
     const selectedFeeAllTokenOptions = useMemo(() => {
-        if (typeof genericDelegatorFees.allOptions === "undefined") return undefined
+        if (
+            typeof genericDelegatorFees.allOptions === "undefined" ||
+            typeof transactionFeesResponse.options === "undefined"
+        )
+            return undefined
         return Object.fromEntries(
             Object.entries(genericDelegatorFees.allOptions)
                 .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
-                .concat([VTHO.symbol.toLowerCase(), transactionFeesResponse.options[selectedFeeOption].maxFee]),
+                .concat([[VTHO.symbol.toLowerCase(), transactionFeesResponse.options[selectedFeeOption].maxFee]]),
         )
     }, [genericDelegatorFees.allOptions, selectedFeeOption, transactionFeesResponse.options])
+
+    const isFirstTimeLoadingFees = useMemo(
+        () => genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading || loadingGas,
+        [genericDelegatorFees.isFirstTimeLoading, loadingGas, transactionFeesResponse.isFirstTimeLoading],
+    )
 
     const { hasEnoughBalance, hasEnoughBalanceOnAny } = useIsEnoughGas({
         selectedToken: selectedDelegationToken,
@@ -165,7 +174,7 @@ export const useTransactionScreen = ({
         clauses,
         isDelegated,
         allFeeOptions: selectedFeeAllTokenOptions,
-        isLoadingFees: genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading,
+        isLoadingFees: isFirstTimeLoadingFees,
     })
 
     // 4. Build transaction
@@ -363,5 +372,7 @@ export const useTransactionScreen = ({
         availableTokens,
         fallbackToVTHO,
         hasEnoughBalanceOnAny,
+        isFirstTimeLoadingFees,
+        selectedFeeAllTokenOptions,
     }
 }

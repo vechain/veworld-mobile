@@ -3,7 +3,7 @@ import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { BaseText, BaseView } from "~Components/Base"
+import { BaseSkeleton, BaseText, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useBlinkStyles, useFormatFiat, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
@@ -23,6 +23,7 @@ type Props = {
     selectedDelegationToken: string
     isEnoughBalance: boolean
     hasEnoughBalanceOnAny: boolean
+    isFirstTimeLoadingFees: boolean
 }
 
 export const GalacticaEstimation = ({
@@ -33,6 +34,7 @@ export const GalacticaEstimation = ({
     selectedDelegationToken,
     isEnoughBalance,
     hasEnoughBalanceOnAny,
+    isFirstTimeLoadingFees,
 }: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -67,21 +69,31 @@ export const GalacticaEstimation = ({
                     <BaseText color={theme.colors.textLight} typographyFont="captionMedium" numberOfLines={1}>
                         {LL.MAX_FEE()}
                     </BaseText>
-                    <BaseView flexDirection="row" gap={8}>
-                        <BaseAnimatedText
-                            typographyFont="subSubTitleBold"
-                            color={theme.colors.assetDetailsCard.title}
-                            style={blinkStyles}
-                            testID="GALACTICA_ESTIMATED_FEE">
-                            {selectedDelegationToken}&nbsp;{formatValue(maxFeeVtho)}
-                        </BaseAnimatedText>
-                        <BaseAnimatedText
-                            typographyFont="bodyMedium"
-                            color={theme.colors.textLight}
-                            style={blinkStyles}>
-                            {maxFeeFiat.isLeesThan_0_01 ? `< ${maxFormattedFiat}` : maxFormattedFiat}
-                        </BaseAnimatedText>
-                    </BaseView>
+                    {isFirstTimeLoadingFees ? (
+                        <BaseSkeleton
+                            animationDirection="horizontalLeft"
+                            boneColor={theme.colors.skeletonBoneColor}
+                            highlightColor={theme.colors.skeletonHighlightColor}
+                            height={14}
+                            width={60}
+                        />
+                    ) : (
+                        <BaseView flexDirection="row" gap={8}>
+                            <BaseAnimatedText
+                                typographyFont="subSubTitleBold"
+                                color={theme.colors.assetDetailsCard.title}
+                                style={blinkStyles}
+                                testID="GALACTICA_ESTIMATED_FEE">
+                                {selectedDelegationToken}&nbsp;{formatValue(maxFeeVtho)}
+                            </BaseAnimatedText>
+                            <BaseAnimatedText
+                                typographyFont="bodyMedium"
+                                color={theme.colors.textLight}
+                                style={blinkStyles}>
+                                {maxFeeFiat.isLeesThan_0_01 ? `< ${maxFormattedFiat}` : maxFormattedFiat}
+                            </BaseAnimatedText>
+                        </BaseView>
+                    )}
                 </Animated.View>
                 <TokenSelector onPress={onDelegationTokenClicked} token={selectedDelegationToken} />
             </Animated.View>

@@ -70,7 +70,7 @@ export const useIsEnoughGas = ({ selectedToken, fee, clauses, isDelegated, allFe
     }, [clausesAmount.toBN, fee.toBN, isDelegated, isLoadingFees, selectedToken, tokenBalance])
 
     const hasEnoughBalanceOnAny = useMemo(() => {
-        if (isLoadingFees) return true
+        if (isLoadingFees || typeof allFeeOptions === "undefined") return true
         if (selectedToken === VTHO.symbol && isDelegated)
             return BigNutils(tokenBalance).minus(clausesAmount.toBN).isBiggerThan("0")
         return Object.entries(allFeeOptions).some(([token, tokenFee]) => {

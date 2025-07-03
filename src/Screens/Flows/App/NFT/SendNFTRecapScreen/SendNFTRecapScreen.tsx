@@ -107,6 +107,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         selectedDelegationToken,
         setSelectedDelegationToken,
         hasEnoughBalanceOnAny,
+        isFirstTimeLoadingFees,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -162,7 +163,8 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             availableDelegationTokens={availableTokens}
                             delegationToken={selectedDelegationToken}
                             setDelegationToken={setSelectedDelegationToken}
-                            hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}>
+                            hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
+                            isFirstTimeLoadingFees={isFirstTimeLoadingFees}>
                             <DelegationView
                                 setNoDelegation={resetDelegation}
                                 selectedDelegationOption={selectedDelegationOption}

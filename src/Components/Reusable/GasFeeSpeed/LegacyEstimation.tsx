@@ -3,7 +3,7 @@ import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { BaseText, BaseView } from "~Components/Base"
+import { BaseSkeleton, BaseText, BaseView } from "~Components/Base"
 import { COLORS, ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
@@ -20,6 +20,7 @@ type Props = {
     selectedDelegationToken: string
     isEnoughBalance: boolean
     hasEnoughBalanceOnAny: boolean
+    isFirstTimeLoadingFees: boolean
 }
 
 export const LegacyEstimation = ({
@@ -28,6 +29,7 @@ export const LegacyEstimation = ({
     onDelegationTokenClicked,
     selectedDelegationToken,
     isEnoughBalance,
+    isFirstTimeLoadingFees,
 }: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -64,17 +66,29 @@ export const LegacyEstimation = ({
                     <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
                         {LL.GAS_FEE()}
                     </BaseText>
-                    <BaseView flexDirection="row" gap={8}>
-                        <BaseText
-                            typographyFont="subSubTitleBold"
-                            color={theme.colors.assetDetailsCard.title}
-                            testID="LEGACY_ESTIMATED_FEE">
-                            {selectedDelegationToken}&nbsp;{formatValue(estimatedFeeVtho)}
-                        </BaseText>
-                        <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                            {estimatedFeeFiat.isLeesThan_0_01 ? `< ${estimatedFormattedFiat}` : estimatedFormattedFiat}
-                        </BaseText>
-                    </BaseView>
+                    {isFirstTimeLoadingFees ? (
+                        <BaseSkeleton
+                            animationDirection="horizontalLeft"
+                            boneColor={theme.colors.skeletonBoneColor}
+                            highlightColor={theme.colors.skeletonHighlightColor}
+                            height={14}
+                            width={60}
+                        />
+                    ) : (
+                        <BaseView flexDirection="row" gap={8}>
+                            <BaseText
+                                typographyFont="subSubTitleBold"
+                                color={theme.colors.assetDetailsCard.title}
+                                testID="LEGACY_ESTIMATED_FEE">
+                                {selectedDelegationToken}&nbsp;{formatValue(estimatedFeeVtho)}
+                            </BaseText>
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                                {estimatedFeeFiat.isLeesThan_0_01
+                                    ? `< ${estimatedFormattedFiat}`
+                                    : estimatedFormattedFiat}
+                            </BaseText>
+                        </BaseView>
+                    )}
                 </BaseView>
                 <TokenSelector onPress={onDelegationTokenClicked} token={selectedDelegationToken} />
             </Animated.View>

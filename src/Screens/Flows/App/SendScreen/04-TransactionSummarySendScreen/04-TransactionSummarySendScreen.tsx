@@ -137,6 +137,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         setSelectedDelegationToken,
         fallbackToVTHO,
         hasEnoughBalanceOnAny,
+        isFirstTimeLoadingFees,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -231,7 +232,8 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
                         delegationToken={selectedDelegationToken}
                         setDelegationToken={setSelectedDelegationToken}
                         isEnoughBalance={isEnoughGas}
-                        hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}>
+                        hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
+                        isFirstTimeLoadingFees={isFirstTimeLoadingFees}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
