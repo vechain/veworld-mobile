@@ -11,6 +11,11 @@ on:
                 description: "Build number"
                 type: string
                 required: true
+            PushToVercel:
+                description: "Push release to Vercel latest APK?"
+                type: boolean
+                required: true
+                default: false
 
     workflow_call:
         inputs:
@@ -81,7 +86,7 @@ jobs:
                   is-executable: false
                   working-directory: "./android"
 
-              # Decode key_password
+            # Decode key_password
             - name: Decode STORE_PASSWORD
               uses: mobiledevops/secret-to-file-action@v1
               with:
@@ -99,7 +104,7 @@ jobs:
                   is-executable: false
                   working-directory: "./android"
 
-              # Install sentry properties
+            # Install sentry properties
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
               with:
@@ -142,6 +147,20 @@ jobs:
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
                   fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}}
+            - name: Push APK to Vercel blob (nonblocking attempt)
+              if: inputs.PushToVercel == true
+              env:
+                  VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+                  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+                  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+                  VERCEL_BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
+                  BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
+              run: |
+                  yarn global add vercel || true
+                  vercel blob put -t $VERCEL_TOKEN -d -c. -p \
+                    veworld-release-latest.apk \
+                    ./android/app/build/outputs/apk/release/app-release.apk \
+                    --content-type "application/vnd.android.package-archive" || true
 
             - name: Commit and Push Changes
               run: |
