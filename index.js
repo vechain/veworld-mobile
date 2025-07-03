@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
 import React, { useEffect, useMemo, useRef, useState } from "react"
-import { AppRegistry, LogBox } from "react-native"
+import { AppRegistry, Linking, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
@@ -197,7 +197,12 @@ const linking = externalDappSessions => ({
                         const session = externalDappSessions[decodedRequest.publicKey]
 
                         if (!session) {
-                            throw new Error("Session not found")
+                            Linking.openURL(
+                                `${decodedRequest.redirectUrl}?error=${encodeURIComponent(
+                                    "Unauthorized",
+                                )}&error_code=401`,
+                            )
+                            return
                         }
 
                         const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
@@ -212,7 +217,12 @@ const linking = externalDappSessions => ({
                         )
 
                         if (!decryptedPayload) {
-                            throw new Error("Invalid payload")
+                            Linking.openURL(
+                                `${decodedRequest.redirectUrl}?error=${encodeURIComponent(
+                                    "Invalid payload",
+                                )}&error_code=400`,
+                            )
+                            return
                         }
 
                         const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
