@@ -22,6 +22,7 @@ import { RootState } from "~Storage/Redux/Types"
 import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
 import TestHelpers from "./helpers"
 import { B3TRWithBalance, token1WithBalance, token2WithBalance, VOT3WithBalance } from "./helpers/data"
+import { SmartWalletWithPrivyProvider } from "~VechainWalletKit/providers/SmartWalletWithPrivy"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -157,18 +158,30 @@ export const TestWrapper = ({
     return (
         <Provider store={getStore(preloadedState)}>
             <QueryClientProvider client={queryClient}>
-                <GestureHandlerRootView>
-                    <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
-                        <BottomSheetModalProvider>
-                            <NavigationProvider>
-                                <NotificationsProvider>
-                                    <TestTranslationProvider>{children}</TestTranslationProvider>
-                                </NotificationsProvider>
-                            </NavigationProvider>
-                        </BottomSheetModalProvider>
-                        <BaseToast />
-                    </ConnexContext.Provider>
-                </GestureHandlerRootView>
+                <SmartWalletWithPrivyProvider
+                    config={{
+                        networkConfig: {
+                            nodeUrl: "https://testnet.vechain.com",
+                            networkType: "testnet",
+                        },
+                        providerConfig: {
+                            appId: "test-app-id",
+                            clientId: "test-client-id",
+                        },
+                    }}>
+                    <GestureHandlerRootView>
+                        <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
+                            <BottomSheetModalProvider>
+                                <NavigationProvider>
+                                    <NotificationsProvider>
+                                        <TestTranslationProvider>{children}</TestTranslationProvider>
+                                    </NotificationsProvider>
+                                </NavigationProvider>
+                            </BottomSheetModalProvider>
+                            <BaseToast />
+                        </ConnexContext.Provider>
+                    </GestureHandlerRootView>
+                </SmartWalletWithPrivyProvider>
             </QueryClientProvider>
         </Provider>
     )

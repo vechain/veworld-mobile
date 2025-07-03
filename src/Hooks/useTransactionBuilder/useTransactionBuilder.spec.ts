@@ -2,6 +2,7 @@ import { renderHook } from "@testing-library/react-hooks"
 import { TestWrapper } from "~Test"
 import { useTransactionBuilder } from "~Hooks/useTransactionBuilder/useTransactionBuilder"
 import TestData from "../../Test/helpers"
+import { DEVICE_TYPE } from "../../Model/Wallet/enum"
 
 const { vetTransaction1 } = TestData.data
 
@@ -20,6 +21,7 @@ describe("useTransactionBuilder", () => {
                         vmError: "",
                         baseGasPrice: "21000",
                     },
+                    deviceType: DEVICE_TYPE.LOCAL_MNEMONIC,
                 }),
             { wrapper: TestWrapper },
         )
@@ -41,12 +43,13 @@ describe("useTransactionBuilder", () => {
                         vmError: "",
                         baseGasPrice: "21000",
                     },
+                    deviceType: DEVICE_TYPE.LOCAL_MNEMONIC,
                     providedGas: 21000,
                 }),
             { wrapper: TestWrapper },
         )
 
-        const tx = result.current.buildTransaction()
+        const tx = await result.current.buildTransaction()
         expect(tx).toBeDefined()
         expect(tx.body.clauses).toEqual(vetTransaction1.body.clauses)
         expect(tx.body.gas).toEqual(21000)
@@ -66,11 +69,12 @@ describe("useTransactionBuilder", () => {
                         vmError: "",
                         baseGasPrice: "21000",
                     },
+                    deviceType: DEVICE_TYPE.LOCAL_MNEMONIC,
                 }),
             { wrapper: TestWrapper },
         )
 
-        const tx = result.current.buildTransaction()
+        const tx = await result.current.buildTransaction()
         expect(tx).toBeDefined()
         expect(tx.body.clauses).toEqual(vetTransaction1.body.clauses)
         expect(tx.body.gas).toEqual(21000)
@@ -94,11 +98,12 @@ describe("useTransactionBuilder", () => {
                         vmError: "",
                         baseGasPrice: "21000",
                     },
+                    deviceType: DEVICE_TYPE.LOCAL_MNEMONIC,
                 }),
             { wrapper: TestWrapper },
         )
 
-        const tx = result.current.buildTransaction()
+        const tx = await result.current.buildTransaction()
         expect(tx.body.dependsOn).toEqual(dependsOn)
     })
 
@@ -117,11 +122,12 @@ describe("useTransactionBuilder", () => {
                         vmError: "",
                         baseGasPrice: "21000",
                     },
+                    deviceType: DEVICE_TYPE.LOCAL_MNEMONIC,
                 }),
             { wrapper: TestWrapper },
         )
 
-        const tx = result.current.buildTransaction()
+        const tx = await result.current.buildTransaction()
 
         expect(tx.body.reserved).toBeDefined()
         expect(tx.body.reserved).toEqual({ features: 1 })

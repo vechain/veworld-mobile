@@ -19,7 +19,7 @@ jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
 }))
 
 const defaultProps = {
-    buildTransaction: () => {
+    buildTransaction: async () => {
         return vetTransaction1
     },
     initialRoute: Routes.NFTS,

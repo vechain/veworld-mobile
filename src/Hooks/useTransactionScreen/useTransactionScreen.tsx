@@ -227,7 +227,7 @@ export const useTransactionScreen = ({
                 selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
                 selectedDelegationOption !== DelegationType.ACCOUNT
             ) {
-                const tx = buildTransaction()
+                const tx = await buildTransaction()
                 await navigateToLedger(tx, selectedAccount as LedgerAccountWithDevice, undefined)
             } else {
                 await checkIdentityBeforeOpening()
