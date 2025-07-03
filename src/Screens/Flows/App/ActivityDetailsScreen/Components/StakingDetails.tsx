@@ -24,6 +24,7 @@ export const StargateActivityDetails: React.FC<Props> = memo(({ activity, paid, 
             case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
             case ActivityEvent.STARGATE_DELEGATE:
+            case ActivityEvent.STARGATE_DELEGATE_ONLY:
                 return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
             case ActivityEvent.STARGATE_UNDELEGATE:
                 return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()

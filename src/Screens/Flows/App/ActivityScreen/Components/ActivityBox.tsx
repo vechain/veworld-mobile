@@ -90,7 +90,7 @@ const BaseActivityBox = ({
         }
 
         if (showNftImage) {
-            return <NFTMedia uri={nftImage ?? ""} styles={styles.rightImageContainer} />
+            return <NFTMedia uri={nftImage ?? ""} styles={styles.rightImageContainer} testID="nft-media" />
         }
 
         return (
@@ -482,7 +482,7 @@ type NFTTransferActivityBoxProps = {
 
 const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
-    const { collectionName } = useNFTInfo(activity?.tokenId, activity.contractAddress)
+    const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
     const isReceived = activity.direction === DIRECTIONS.DOWN
     const title = isReceived ? LL.NFT_TRANSFER_RECEIVED() : LL.NFT_TRANSFER_SENT()
     const time = moment(activity.timestamp).format("HH:mm")
@@ -504,6 +504,7 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
             title={title}
             description={validatedCollectionName()}
             onPress={onPressHandler}
+            nftImage={tokenMetadata?.image}
         />
     )
 }
@@ -846,6 +847,7 @@ const Staking = ({ activity, onPress }: StakingProps) => {
             case ActivityEvent.STARGATE_UNSTAKE:
                 return "icon-upload"
             case ActivityEvent.STARGATE_DELEGATE:
+            case ActivityEvent.STARGATE_DELEGATE_ONLY:
                 return "icon-lock"
             case ActivityEvent.STARGATE_UNDELEGATE:
                 return "icon-unlock"
@@ -880,13 +882,16 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         }
     }
 
-    const isMinus = useMemo(() => {
-        return !(
+    const isClaimingRewards = useMemo(() => {
+        return (
             activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE ||
-            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE ||
-            activity?.type === ActivityEvent.STARGATE_UNSTAKE
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE
         )
     }, [activity?.type])
+
+    const isMinus = useMemo(() => {
+        return !(isClaimingRewards || activity?.type === ActivityEvent.STARGATE_UNSTAKE)
+    }, [activity?.type, isClaimingRewards])
 
     const amount = BigNutils(activity.value)
         .toHuman(B3TR.decimals ?? 0)
@@ -903,7 +908,11 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         return {
             icon: getStakingIcon(activity.eventName),
             title: getActivityTitle(),
-            description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
+            description: activity.levelId
+                ? getTokenLevelName(activity.levelId)
+                : isClaimingRewards
+                ? LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DESCRIPTION()
+                : "",
             rightAmount: rightAmount,
             rightAmountDescription:
                 hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
