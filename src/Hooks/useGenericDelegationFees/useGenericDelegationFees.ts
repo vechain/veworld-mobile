@@ -84,26 +84,26 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
     })
 
     const allLegacyOptions = useMemo(() => {
-        if (typeof data === "undefined") return undefined
+        if (data === undefined) return undefined
         return Object.fromEntries(
             allowedTokens.map(tk => [tk, buildTransactionCost(data, ["legacy", "legacy", "legacy"], tk)!]),
         )
     }, [data])
 
     const allGalacticaOptions = useMemo(() => {
-        if (typeof data === "undefined") return undefined
+        if (data === undefined) return undefined
         return Object.fromEntries(
             allowedTokens.map(tk => [tk, buildTransactionCost(data, ["regular", "medium", "high"], tk)!]),
         )
     }, [data])
 
     const legacyOptions = useMemo(() => {
-        if (typeof allLegacyOptions === "undefined") return undefined
+        if (allLegacyOptions === undefined) return undefined
         return allLegacyOptions[token]
     }, [allLegacyOptions, token])
 
     const galacticaOptions = useMemo(() => {
-        if (typeof allGalacticaOptions === "undefined") return undefined
+        if (allGalacticaOptions === undefined) return undefined
         return allGalacticaOptions[token]
     }, [allGalacticaOptions, token])
 

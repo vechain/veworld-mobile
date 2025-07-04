@@ -145,15 +145,15 @@ export const useTransactionScreen = ({
     })
 
     const gasOptions = useMemo(() => {
-        if (selectedDelegationToken === VTHO.symbol || typeof genericDelegatorFees.options === "undefined")
+        if (selectedDelegationToken === VTHO.symbol || genericDelegatorFees.options === undefined)
             return transactionFeesResponse.options
         return genericDelegatorFees.options
     }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options])
 
     const selectedFeeAllTokenOptions = useMemo(() => {
         if (
-            (typeof genericDelegatorFees.allOptions === "undefined" && genericDelegatorFees.isLoading) ||
-            typeof transactionFeesResponse.options === "undefined"
+            (genericDelegatorFees.allOptions === undefined && genericDelegatorFees.isLoading) ||
+            transactionFeesResponse.options === undefined
         )
             return undefined
         return Object.fromEntries(

@@ -13,7 +13,7 @@ export const useGenericDelegationTokens = () => {
     })
 
     const memoized = useMemo(() => {
-        if (typeof data === "undefined") return [VTHO.symbol]
+        if (data === undefined) return [VTHO.symbol]
         return [VTHO.symbol, ...data].filter(token => [B3TR.symbol, VTHO.symbol, VET.symbol].includes(token))
     }, [data])
 

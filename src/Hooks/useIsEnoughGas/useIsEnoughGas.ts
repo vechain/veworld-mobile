@@ -50,7 +50,7 @@ export const useIsEnoughGas = ({ selectedToken, clauses, isDelegated, allFeeOpti
         const availableTokens = [VTHO.symbol, B3TR.symbol, VET.symbol]
         return Object.fromEntries(
             availableTokens.map(tokenSymbol => {
-                if (isLoadingFees || typeof allFeeOptions === "undefined") return [tokenSymbol, true] as const
+                if (isLoadingFees || allFeeOptions === undefined) return [tokenSymbol, true] as const
                 const foundTmpToken = allTokens.find(tk => tk.symbol === tokenSymbol)!
                 const balance = tokens.find(tk => tk.symbol === tokenSymbol)?.balance?.balance ?? "0"
                 const clausesValue = calculateClausesValue({ clauses, selectedToken: foundTmpToken })
