@@ -41,7 +41,7 @@ onFlowComplete:
     id: "next-button"
 - runFlow:
     when:
-      visible: "Fee not delegated"
+      visible: "Fee delegation"
     commands:
       - tapOn:
           id: "DELEGATE_OPEN"
@@ -117,6 +117,10 @@ onFlowComplete:
                   index: 0
       - tapOn:
           id: 'RENDERED_OPTION_BUTTON_BAR_APPLY'
+      - extendedWaitUntil:
+          visible:
+             id: "MAX_FEE_GALACTICA"
+          timeout: 10000
       - tapOn:
           id: "confirm-send-button"
       - repeat:
