@@ -28,7 +28,8 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
 
     const animatedStyles = useAnimatedStyle(() => {
         return {
-            padding: speedChangeEnabled ? 16 : 0,
+            paddingVertical: speedChangeEnabled ? 12 : 0,
+            paddingHorizontal: speedChangeEnabled ? 16 : 0,
         }
     }, [speedChangeEnabled])
 
@@ -38,7 +39,7 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
                 style={[styles.section, animatedStyles, opacityStyles]}
                 layout={LinearTransition.duration(300)}>
                 <BaseView flexDirection="column" gap={4} flex={1}>
-                    <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
+                    <BaseText color={theme.colors.textLightish} typographyFont="captionMedium">
                         {LL.SEND_ESTIMATED_TIME()}
                     </BaseText>
                     <BaseView flexDirection="row" gap={8}>
@@ -49,9 +50,6 @@ export const EditSpeedSection = ({ speedChangeEnabled, selectedFeeOption, onOpen
                     </BaseView>
                 </BaseView>
                 <BaseButton
-                    leftIcon={
-                        <BaseIcon name="icon-thunder" color={theme.colors.cardButton.text} size={16} px={0} py={0} />
-                    }
                     action={onOpen}
                     variant="solid"
                     bgColor={theme.colors.cardButton.background}
@@ -82,7 +80,8 @@ const baseStyles = (speedChangeEnabled: boolean) => (theme: ColorThemeType) =>
             gap: 12,
             justifyContent: "space-between",
             width: "100%",
-            padding: speedChangeEnabled ? 16 : 0,
+            paddingVertical: speedChangeEnabled ? 12 : 0,
+            paddingHorizontal: speedChangeEnabled ? 16 : 0,
             height: speedChangeEnabled ? "auto" : 0,
             borderBottomWidth: 1,
             borderBottomColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,

@@ -66,7 +66,7 @@ export const GalacticaEstimation = ({
         <Animated.View layout={LinearTransition} style={styles.rootWithAlert}>
             <Animated.View layout={LinearTransition} style={styles.root}>
                 <Animated.View layout={LinearTransition} style={styles.section}>
-                    <BaseText color={theme.colors.textLight} typographyFont="captionMedium" numberOfLines={1}>
+                    <BaseText color={theme.colors.textLightish} typographyFont="captionMedium" numberOfLines={1}>
                         {LL.MAX_FEE()}
                     </BaseText>
                     {isFirstTimeLoadingFees ? (
@@ -88,7 +88,7 @@ export const GalacticaEstimation = ({
                             </BaseAnimatedText>
                             <BaseAnimatedText
                                 typographyFont="bodyMedium"
-                                color={theme.colors.textLight}
+                                color={theme.colors.textLightish}
                                 style={blinkStyles}>
                                 {maxFeeFiat.isLeesThan_0_01 ? `< ${maxFormattedFiat}` : maxFormattedFiat}
                             </BaseAnimatedText>
@@ -120,7 +120,8 @@ const baseStyles = (theme: ColorThemeType) => {
             justifyContent: "space-between",
         },
         rootWithAlert: {
-            padding: 16,
+            paddingVertical: 12,
+            paddingHorizontal: 16,
             flexDirection: "column",
             gap: 12,
             borderBottomWidth: 1,

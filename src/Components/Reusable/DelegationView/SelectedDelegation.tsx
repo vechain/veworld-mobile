@@ -37,34 +37,24 @@ export const SelectedDelegation = ({
     const renderOption = useMemo(() => {
         if (selectedDelegationAccount)
             return (
-                <BaseView flexDirection="column" gap={4}>
-                    <BaseText typographyFont="captionMedium" color={theme.colors.textLight}>
-                        {LL.DELEGATION_FEE()}
-                    </BaseText>
-                    <BaseText typographyFont="bodySemiBold" color={theme.colors.subtitle} numberOfLines={1}>
-                        {name || AddressUtils.humanAddress(selectedDelegationAccount.address)}
-                    </BaseText>
-                </BaseView>
+                <BaseText typographyFont="bodySemiBold" color={theme.colors.subtitle} numberOfLines={1}>
+                    {name || AddressUtils.humanAddress(selectedDelegationAccount.address)}
+                </BaseText>
             )
 
         if (selectedDelegationUrl)
             return (
-                <BaseView flexDirection="column" gap={4} flex={1}>
-                    <BaseText typographyFont="captionMedium" color={theme.colors.textLight}>
-                        {LL.DELEGATION_FEE()}
-                    </BaseText>
-                    <BaseText
-                        numberOfLines={1}
-                        color={theme.colors.subtitle}
-                        typographyFont="bodySemiBold"
-                        flexShrink={1}
-                        ellipsizeMode="middle">
-                        {`${delegationUrlParsed?.host}${delegationUrlParsed?.pathname}`}
-                    </BaseText>
-                </BaseView>
+                <BaseText
+                    numberOfLines={1}
+                    color={theme.colors.subtitle}
+                    typographyFont="bodySemiBold"
+                    flexShrink={1}
+                    ellipsizeMode="middle">
+                    {`${delegationUrlParsed?.host}${delegationUrlParsed?.pathname}`}
+                </BaseText>
             )
         return (
-            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+            <BaseText color={theme.colors.subtitle} typographyFont="bodySemiBold">
                 {LL.DELEGATION_NO_FEE()}
             </BaseText>
         )
@@ -76,7 +66,6 @@ export const SelectedDelegation = ({
         selectedDelegationAccount,
         selectedDelegationUrl,
         theme.colors.subtitle,
-        theme.colors.textLight,
     ])
 
     const disabled = useMemo(() => delegationToken !== VTHO.symbol, [delegationToken])
@@ -102,30 +91,23 @@ export const SelectedDelegation = ({
 
     return (
         <Animated.View style={styles.root} layout={LinearTransition}>
-            <BaseView
-                alignItems="center"
-                flexDirection="row"
-                bg={theme.colors.editSpeedBs.result.background}
-                pt={8}
-                pb={8}
-                pr={8}
-                pl={12}
-                justifyContent="space-between"
-                borderRadius={8}
-                gap={12}>
+            <BaseView flexDirection="column" flex={1}>
+                <BaseText typographyFont="captionMedium" color={theme.colors.textLightish}>
+                    {LL.DELEGATION_FEE()}
+                </BaseText>
                 {renderOption}
-                <BaseButton
-                    variant="solid"
-                    style={styles.cardButton}
-                    px={12}
-                    py={8}
-                    action={onDelegateClicked}
-                    testID="DELEGATE_OPEN"
-                    disabled={disabled}
-                    {...buttonStyles}>
-                    {LL.DELEGATE()}
-                </BaseButton>
             </BaseView>
+            <BaseButton
+                variant="solid"
+                style={styles.cardButton}
+                px={12}
+                py={8}
+                action={onDelegateClicked}
+                testID="DELEGATE_OPEN"
+                disabled={disabled}
+                {...buttonStyles}>
+                {LL.DELEGATE()}
+            </BaseButton>
         </Animated.View>
     )
 }
@@ -140,7 +122,10 @@ const baseStyles = (theme: ColorThemeType) => {
         },
         root: {
             width: "100%",
-            padding: 16,
+            paddingVertical: 12,
+            paddingHorizontal: 16,
+            flexDirection: "row",
+            alignItems: "center",
         },
     })
 }

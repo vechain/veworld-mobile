@@ -57,6 +57,7 @@ export type Colors = {
     cardDivider: string
     switchEnabled: string
     textLight: string
+    textLightish: string
     checkboxFilledBackground: string
     checkboxIcon: string
     passwordPlaceholder: string
@@ -330,6 +331,7 @@ const light: Colors = {
     alertDescription: COLORS.GREY_600,
     numberPad: COLORS.GREY_600,
     textLight: COLORS.GREY_500,
+    textLightish: COLORS.GREY_500,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
@@ -479,7 +481,7 @@ const light: Colors = {
         border: COLORS.GREY_200,
         text: COLORS.PRIMARY_800,
         disabled: {
-            background: COLORS.TRANSPARENT,
+            background: COLORS.GREY_100,
             border: COLORS.TRANSPARENT,
             text: COLORS.GREY_400,
         },
@@ -542,6 +544,7 @@ const dark: Colors = {
     alertDescription: COLORS.GREY_600,
     numberPad: COLORS.GREY_300,
     textLight: COLORS.WHITE,
+    textLightish: COLORS.GREY_300,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,

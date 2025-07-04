@@ -63,7 +63,7 @@ export const LegacyEstimation = ({
         <Animated.View layout={LinearTransition} style={styles.rootWithAlert}>
             <Animated.View layout={LinearTransition} style={styles.root}>
                 <BaseView flexDirection="column" gap={4}>
-                    <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
+                    <BaseText color={theme.colors.textLightish} typographyFont="captionMedium">
                         {LL.GAS_FEE()}
                     </BaseText>
                     {isFirstTimeLoadingFees ? (
@@ -82,7 +82,7 @@ export const LegacyEstimation = ({
                                 testID="LEGACY_ESTIMATED_FEE">
                                 {selectedDelegationToken}&nbsp;{formatValue(estimatedFeeVtho)}
                             </BaseText>
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLightish}>
                                 {estimatedFeeFiat.isLeesThan_0_01
                                     ? `< ${estimatedFormattedFiat}`
                                     : estimatedFormattedFiat}
@@ -104,7 +104,8 @@ const baseStyles = (theme: ColorThemeType) => {
             justifyContent: "space-between",
         },
         rootWithAlert: {
-            padding: 16,
+            paddingVertical: 12,
+            paddingHorizontal: 16,
             flexDirection: "column",
             gap: 12,
             borderBottomWidth: 1,
