@@ -152,16 +152,21 @@ export const useTransactionScreen = ({
 
     const selectedFeeAllTokenOptions = useMemo(() => {
         if (
-            typeof genericDelegatorFees.allOptions === "undefined" ||
+            (typeof genericDelegatorFees.allOptions === "undefined" && genericDelegatorFees.isLoading) ||
             typeof transactionFeesResponse.options === "undefined"
         )
             return undefined
         return Object.fromEntries(
-            Object.entries(genericDelegatorFees.allOptions)
+            Object.entries(genericDelegatorFees.allOptions || {})
                 .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
                 .concat([[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]]),
         )
-    }, [genericDelegatorFees.allOptions, selectedFeeOption, transactionFeesResponse.options])
+    }, [
+        genericDelegatorFees.allOptions,
+        genericDelegatorFees.isLoading,
+        selectedFeeOption,
+        transactionFeesResponse.options,
+    ])
 
     const isFirstTimeLoadingFees = useMemo(
         () => genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading || loadingGas,
@@ -337,8 +342,8 @@ export const useTransactionScreen = ({
     }, [resetDelegation, selectedDelegationToken, selectedDelegationUrl])
 
     const isDisabledButtonState = useMemo(
-        () => !hasEnoughBalanceOnAny || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
-        [hasEnoughBalanceOnAny, loading, gas?.gas],
+        () => !hasEnoughBalance || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
+        [hasEnoughBalance, loading, gas?.gas],
     )
 
     return {
