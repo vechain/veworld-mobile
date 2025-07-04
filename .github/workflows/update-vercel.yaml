@@ -1,0 +1,38 @@
+name: Vercel apk upload
+
+on:
+    workflow_call:
+
+jobs:
+    vercel-upload:
+        name: upload most recent apk to vercel
+        runs-on: ubuntu-latest
+        environment: android-release
+        permissions:
+            actions: write
+            contents: read
+        env:
+            VERCEL_ORG_ID: ${{ secrets.VERCEL_TEAM_ID }}
+            VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+
+        steps:
+            - name: download-release
+              uses: actions/download-artifact@v4
+              with:
+                  name: latest-apk
+                  path: .
+
+            - name: list-release
+              run: ls -l .
+
+            - name: Push APK to Vercel blob (nonblocking attempt)
+              env:
+                  VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+                  VERCEL_BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
+                  BLOB_READ_WRITE_TOKEN: ${{ secrets.VERCEL_RW_TOKEN }}
+              run: |
+                  yarn global add vercel || true
+                  vercel blob put -t $VERCEL_TOKEN -d -c. -p \
+                    veworld-release-latest.apk \
+                    ./app-release.apk \
+                    --content-type "application/vnd.android.package-archive"

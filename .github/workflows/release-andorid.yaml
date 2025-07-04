@@ -32,6 +32,10 @@ jobs:
         name: Build and Release Android
         runs-on: ubuntu-latest
         environment: android-release
+        permissions:
+            actions: write
+            contents: read
+        env:
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
@@ -81,7 +85,7 @@ jobs:
                   is-executable: false
                   working-directory: "./android"
 
-              # Decode key_password
+            # Decode key_password
             - name: Decode STORE_PASSWORD
               uses: mobiledevops/secret-to-file-action@v1
               with:
@@ -99,7 +103,7 @@ jobs:
                   is-executable: false
                   working-directory: "./android"
 
-              # Install sentry properties
+            # Install sentry properties
             - name: Sentry properties
               uses: mobiledevops/secret-to-file-action@v1
               with:
@@ -142,6 +146,17 @@ jobs:
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
                   fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}}
+
+            - name: Artifact apk
+              id: upload
+              uses: actions/upload-artifact@v4
+              with:
+                  name: latest-apk
+                  path: ./android/app/build/outputs/apk/release/app-release.apk
+                  retention-days: 5
+
+            - name: Output Artifact id
+              run: echo 'Artifact ID is ${{ steps.upload.outputs.artifact-id }}'
 
             - name: Commit and Push Changes
               run: |
