@@ -10,6 +10,7 @@ import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionF
 import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
+import { NoTokensAvailableForFee } from "./NoTokensAvailableForFee"
 import { NoVthoBalanceAlert } from "./NoVthoBalanceAlert"
 import { TokenSelector } from "./TokenSelector"
 
@@ -30,6 +31,7 @@ export const LegacyEstimation = ({
     selectedDelegationToken,
     isEnoughBalance,
     isFirstTimeLoadingFees,
+    hasEnoughBalanceOnAny,
 }: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -92,7 +94,12 @@ export const LegacyEstimation = ({
                 </BaseView>
                 <TokenSelector onPress={onDelegationTokenClicked} token={selectedDelegationToken} />
             </Animated.View>
-            <NoVthoBalanceAlert isEnoughBalance={isEnoughBalance} delegationToken={selectedDelegationToken} />
+            {/* Make sure to only show the "NO VTHO" error when you have at least another token available */}
+            {!hasEnoughBalanceOnAny ? (
+                <NoTokensAvailableForFee isEnoughBalance={hasEnoughBalanceOnAny} />
+            ) : (
+                <NoVthoBalanceAlert isEnoughBalance={isEnoughBalance} delegationToken={selectedDelegationToken} />
+            )}
         </Animated.View>
     )
 }
@@ -102,10 +109,11 @@ const baseStyles = (theme: ColorThemeType) => {
         root: {
             flexDirection: "row",
             justifyContent: "space-between",
+            paddingTop: 12,
+            paddingHorizontal: 16,
         },
         rootWithAlert: {
-            paddingVertical: 12,
-            paddingHorizontal: 16,
+            paddingBottom: 12,
             flexDirection: "column",
             gap: 12,
             borderBottomWidth: 1,

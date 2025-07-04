@@ -119,6 +119,7 @@ const baseStyles = (theme: ColorThemeType) => {
             borderWidth: 1,
             backgroundColor: theme.colors.cardButton.background,
             gap: 8,
+            flex: 0.3,
         },
         root: {
             width: "100%",
@@ -126,6 +127,7 @@ const baseStyles = (theme: ColorThemeType) => {
             paddingHorizontal: 16,
             flexDirection: "row",
             alignItems: "center",
+            gap: 12,
         },
     })
 }

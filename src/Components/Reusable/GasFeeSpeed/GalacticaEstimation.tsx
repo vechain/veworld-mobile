@@ -95,7 +95,11 @@ export const GalacticaEstimation = ({
                         </BaseView>
                     )}
                 </Animated.View>
-                <TokenSelector onPress={onDelegationTokenClicked} token={selectedDelegationToken} />
+                <TokenSelector
+                    onPress={onDelegationTokenClicked}
+                    token={selectedDelegationToken}
+                    style={styles.selector}
+                />
             </Animated.View>
             {/* Make sure to only show the "NO VTHO" error when you have at least another token available */}
             {!hasEnoughBalanceOnAny ? (
@@ -112,20 +116,25 @@ const baseStyles = (theme: ColorThemeType) => {
         section: {
             flexDirection: "column",
             gap: 4,
+            flex: 1,
         },
         root: {
             flexDirection: "row",
-            gap: 16,
+            gap: 12,
             alignItems: "center",
             justifyContent: "space-between",
+            paddingTop: 12,
+            paddingHorizontal: 16,
         },
         rootWithAlert: {
-            paddingVertical: 12,
-            paddingHorizontal: 16,
             flexDirection: "column",
             gap: 12,
             borderBottomWidth: 1,
             borderBottomColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
+            paddingBottom: 12,
+        },
+        selector: {
+            flex: 0.3,
         },
     })
 }

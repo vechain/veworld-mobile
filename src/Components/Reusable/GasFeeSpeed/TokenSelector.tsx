@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { BaseButton, BaseIcon } from "~Components/Base"
 import { B3TR, COLORS, ColorThemeType, VET, VTHO } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -10,8 +10,9 @@ import { TokenImage } from "../TokenImage"
 type Props = {
     token: string
     onPress: () => void
+    style?: StyleProp<ViewStyle>
 }
-export const TokenSelector = ({ token, onPress }: Props) => {
+export const TokenSelector = ({ token, onPress, style }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const tokens = useAppSelector(selectAllTokens)
 
@@ -51,9 +52,9 @@ export const TokenSelector = ({ token, onPress }: Props) => {
             }
             action={onPress}
             variant="solid"
-            px={8}
+            px={12}
             py={8}
-            style={styles.root}
+            style={[styles.root, style]}
             textColor={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>
             {token}
         </BaseButton>

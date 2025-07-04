@@ -17,11 +17,19 @@ export const NoVthoBalanceAlert = ({ delegationToken, isEnoughBalance }: Props) 
     if (isEnoughBalance) return null
 
     return (
-        <BaseView flexDirection="row" bg={theme.colors.errorAlert.background} gap={12} borderRadius={6} px={12} py={8}>
-            <BaseIcon size={16} color={theme.colors.errorAlert.icon} name="icon-alert-triangle" />
-            <BaseText typographyFont="body" color={theme.colors.errorAlert.text}>
-                {LL.NO_VTHO_BALANCE()}
-            </BaseText>
+        <BaseView px={16}>
+            <BaseView
+                flexDirection="row"
+                bg={theme.colors.errorAlert.background}
+                gap={12}
+                borderRadius={6}
+                px={12}
+                py={8}>
+                <BaseIcon size={16} color={theme.colors.errorAlert.icon} name="icon-alert-triangle" />
+                <BaseText typographyFont="body" color={theme.colors.errorAlert.text}>
+                    {LL.NO_VTHO_BALANCE()}
+                </BaseText>
+            </BaseView>
         </BaseView>
     )
 }
