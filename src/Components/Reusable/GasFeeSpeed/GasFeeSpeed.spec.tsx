@@ -41,6 +41,9 @@ describe("GasFeeSpeed", () => {
                     delegationToken="VTHO"
                     isEnoughBalance={true}
                     setDelegationToken={jest.fn()}
+                    hasEnoughBalanceOnAny
+                    isFirstTimeLoadingFees={false}
+                    hasEnoughBalanceOnToken={{ VTHO: true }}
                 />,
                 { wrapper: TestWrapper },
             )
@@ -68,6 +71,9 @@ describe("GasFeeSpeed", () => {
                     delegationToken="VTHO"
                     isEnoughBalance={true}
                     setDelegationToken={jest.fn()}
+                    hasEnoughBalanceOnAny
+                    isFirstTimeLoadingFees={false}
+                    hasEnoughBalanceOnToken={{ VTHO: true }}
                 />,
                 { wrapper: TestWrapper },
             )
@@ -106,6 +112,9 @@ describe("GasFeeSpeed", () => {
                 delegationToken="VTHO"
                 isEnoughBalance={true}
                 setDelegationToken={jest.fn()}
+                hasEnoughBalanceOnAny
+                isFirstTimeLoadingFees={false}
+                hasEnoughBalanceOnToken={{ VTHO: true }}
             />,
             { wrapper: TestWrapper },
         )
@@ -127,6 +136,9 @@ describe("GasFeeSpeed", () => {
                 delegationToken="VTHO"
                 isEnoughBalance={true}
                 setDelegationToken={jest.fn()}
+                hasEnoughBalanceOnAny
+                isFirstTimeLoadingFees={false}
+                hasEnoughBalanceOnToken={{ VTHO: true }}
             />,
             { wrapper: TestWrapper },
         )
@@ -148,6 +160,9 @@ describe("GasFeeSpeed", () => {
                 delegationToken="VTHO"
                 isEnoughBalance={true}
                 setDelegationToken={jest.fn()}
+                hasEnoughBalanceOnAny
+                isFirstTimeLoadingFees={false}
+                hasEnoughBalanceOnToken={{ VTHO: true }}
             />,
             { wrapper: TestWrapper },
         )

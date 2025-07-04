@@ -88,7 +88,14 @@ class VTHOToken extends Token {
 describe("useIsEnoughGas", () => {
     it("should return true if user has enough VTHO & tx is delegated", () => {
         const { result } = renderHook(
-            () => useIsEnoughGas({ selectedToken: "VTHO", clauses: [], fee: BigNutils("0"), isDelegated: true }),
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "VTHO",
+                    clauses: [],
+                    isDelegated: true,
+                    allFeeOptions: { ["VTHO"]: BigNutils("0") },
+                    isLoadingFees: false,
+                }),
             {
                 wrapper: TestWrapper,
                 initialProps: {
@@ -101,7 +108,14 @@ describe("useIsEnoughGas", () => {
     })
     it("should return true if user has enough VTHO & tx is not delegated", () => {
         const { result } = renderHook(
-            () => useIsEnoughGas({ selectedToken: "VTHO", clauses: [], fee: BigNutils("0"), isDelegated: false }),
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "VTHO",
+                    clauses: [],
+                    isDelegated: false,
+                    allFeeOptions: { ["VTHO"]: BigNutils("0") },
+                    isLoadingFees: false,
+                }),
             {
                 wrapper: TestWrapper,
                 initialProps: {
@@ -114,7 +128,14 @@ describe("useIsEnoughGas", () => {
     })
     it("should return false if user doesn't have enough VTHO & tx is not delegated", () => {
         const { result } = renderHook(
-            () => useIsEnoughGas({ selectedToken: "VTHO", clauses: [], fee: BigNutils("2"), isDelegated: false }),
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "VTHO",
+                    clauses: [],
+                    isDelegated: false,
+                    allFeeOptions: { ["VTHO"]: BigNutils("2") },
+                    isLoadingFees: false,
+                }),
             {
                 wrapper: TestWrapper,
                 initialProps: {
@@ -127,7 +148,14 @@ describe("useIsEnoughGas", () => {
     })
     it("should return true if user doesn't have enough VTHO & tx is delegated", () => {
         const { result } = renderHook(
-            () => useIsEnoughGas({ selectedToken: "VTHO", clauses: [], fee: BigNutils("2"), isDelegated: true }),
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "VTHO",
+                    clauses: [],
+                    isDelegated: true,
+                    allFeeOptions: { ["VTHO"]: BigNutils("2") },
+                    isLoadingFees: false,
+                }),
             {
                 wrapper: TestWrapper,
                 initialProps: {
@@ -140,7 +168,14 @@ describe("useIsEnoughGas", () => {
     })
     it("should return false if user doesn't have enough B3TR & tx is delegated", () => {
         const { result } = renderHook(
-            () => useIsEnoughGas({ selectedToken: "B3TR", clauses: [], fee: BigNutils("2"), isDelegated: true }),
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "B3TR",
+                    clauses: [],
+                    isDelegated: true,
+                    allFeeOptions: { ["B3TR"]: BigNutils("1") },
+                    isLoadingFees: false,
+                }),
             {
                 wrapper: TestWrapper,
                 initialProps: {
@@ -153,7 +188,14 @@ describe("useIsEnoughGas", () => {
     })
     it("should return true if user has enough B3TR & tx is delegated", () => {
         const { result } = renderHook(
-            () => useIsEnoughGas({ selectedToken: "B3TR", clauses: [], fee: BigNutils("2"), isDelegated: true }),
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "B3TR",
+                    clauses: [],
+                    isDelegated: true,
+                    allFeeOptions: { ["B3TR"]: BigNutils("2") },
+                    isLoadingFees: false,
+                }),
             {
                 wrapper: TestWrapper,
                 initialProps: {
@@ -175,7 +217,8 @@ describe("useIsEnoughGas", () => {
                             new B3TRToken(10n, Units.wei),
                         ),
                     ],
-                    fee: BigNutils("2"),
+                    allFeeOptions: { ["B3TR"]: BigNutils("2") },
+                    isLoadingFees: false,
                     isDelegated: false,
                 }),
             {
@@ -199,7 +242,8 @@ describe("useIsEnoughGas", () => {
                             new VTHOToken(10n, Units.wei),
                         ),
                     ],
-                    fee: BigNutils("2"),
+                    allFeeOptions: { ["B3TR"]: BigNutils("2") },
+                    isLoadingFees: false,
                     isDelegated: true,
                 }),
             {
@@ -223,7 +267,9 @@ describe("useIsEnoughGas", () => {
                             new VTHOToken(10n, Units.wei),
                         ),
                     ],
-                    fee: BigNutils("2"),
+
+                    allFeeOptions: { ["B3TR"]: BigNutils("2") },
+                    isLoadingFees: false,
                     isDelegated: true,
                 }),
             {

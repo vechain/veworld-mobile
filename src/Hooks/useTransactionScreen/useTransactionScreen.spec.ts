@@ -168,7 +168,7 @@ describe("useTransactionScreen", () => {
             resetDelegation: expect.any(Function),
             setSelectedDelegationAccount: expect.any(Function),
             setSelectedDelegationUrl: expect.any(Function),
-            isEnoughGas: false,
+            isEnoughGas: true,
             isDelegated: false,
             selectedDelegationAccount: undefined,
             selectedDelegationUrl: undefined,
@@ -182,6 +182,13 @@ describe("useTransactionScreen", () => {
             setSelectedDelegationToken: expect.any(Function),
             fallbackToVTHO: expect.any(Function),
             availableTokens: ["VTHO"],
+            hasEnoughBalanceOnAny: true,
+            hasEnoughBalanceOnToken: {
+                B3TR: true,
+                VET: true,
+                VTHO: true,
+            },
+            isFirstTimeLoadingFees: true,
         })
     })
 
