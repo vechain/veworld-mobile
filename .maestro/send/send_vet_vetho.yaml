@@ -31,9 +31,9 @@ onFlowComplete:
       visible: "Fee not delegated"
     commands:
       - extendedWaitUntil:
-        visible:
-            id: "MAX_FEE_GALACTICA"
-        timeout: 10000
+          visible:
+              id: "MAX_FEE_GALACTICA"
+          timeout: 10000
       - tapOn:
           id: "confirm-send-button"
 - repeat:
