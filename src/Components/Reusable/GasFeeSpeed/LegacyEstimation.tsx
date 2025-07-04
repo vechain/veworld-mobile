@@ -77,7 +77,7 @@ export const LegacyEstimation = ({
                             width={60}
                         />
                     ) : (
-                        <BaseView flexDirection="row" gap={8}>
+                        <BaseView flexDirection="row" gap={8} testID="MAX_FEE_LEGACY">
                             <BaseText
                                 typographyFont="subSubTitleBold"
                                 color={theme.colors.assetDetailsCard.title}

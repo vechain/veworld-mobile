@@ -52,7 +52,7 @@ export const GalacticaEstimation = ({
     const maxFeeVtho = useMemo(() => parseFloat(ethers.utils.formatEther(maxFee.toString)), [maxFee.toString])
 
     const maxFeeFiat = useMemo(() => {
-        return BigNutils().toCurrencyConversion(maxFeeVtho.toString() || "0", exchangeRate ?? 1)
+        return BigNutils().toCurrencyConversion(maxFeeVtho.toString() ?? "0", exchangeRate ?? 1)
     }, [maxFeeVtho, exchangeRate])
 
     const maxFormattedFiat = useMemo(() => {
@@ -78,7 +78,7 @@ export const GalacticaEstimation = ({
                             width={60}
                         />
                     ) : (
-                        <BaseView flexDirection="row" gap={8}>
+                        <BaseView flexDirection="row" gap={8} testID="MAX_FEE_GALACTICA">
                             <BaseAnimatedText
                                 typographyFont="subSubTitleBold"
                                 color={theme.colors.assetDetailsCard.title}

@@ -157,7 +157,7 @@ export const useTransactionScreen = ({
         )
             return undefined
         return Object.fromEntries(
-            Object.entries(genericDelegatorFees.allOptions || {})
+            Object.entries(genericDelegatorFees.allOptions ?? {})
                 .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
                 .concat([[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]]),
         )
