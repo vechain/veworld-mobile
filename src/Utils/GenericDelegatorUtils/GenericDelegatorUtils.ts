@@ -11,15 +11,17 @@ const lowercaseClauseMap = (clause: TransactionClause) => ({
     value: clause.value === "0x" ? "0x" : `0x${BigNutils(clause.value).toHex.toLowerCase()}`,
 })
 
-type GenericDelegatorTransactionValidationResult =
-    | {
-          valid: true
-      }
-    | {
-          valid: false
-          metadata: Record<string, unknown>
-          reason: string
-      }
+export type GenericDelegatorTransactionValidationResultValid = {
+    valid: true
+}
+export type GenericDelegatorTransactionValidationResultInvalid = {
+    valid: false
+    metadata: Record<string, unknown>
+    reason: string
+}
+export type GenericDelegatorTransactionValidationResult =
+    | GenericDelegatorTransactionValidationResultValid
+    | GenericDelegatorTransactionValidationResultInvalid
 
 export const validateGenericDelegatorTx = async (
     baseTransaction: Transaction,

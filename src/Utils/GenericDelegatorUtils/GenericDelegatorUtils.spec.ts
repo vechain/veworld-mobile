@@ -1,9 +1,9 @@
 import { ABIContract, Address, Clause, Transaction, TransactionClause, Units, VET } from "@vechain/sdk-core"
 import { TESTNET_URL, ThorClient } from "@vechain/sdk-network"
 import { ethers } from "ethers"
-import { validateGenericDelegatorTx } from "./GenericDelegatorUtils"
-import BigNutils from "~Utils/BigNumberUtils"
 import { abis, B3TR } from "~Constants"
+import BigNutils from "~Utils/BigNumberUtils"
+import { GenericDelegatorTransactionValidationResultInvalid, validateGenericDelegatorTx } from "./GenericDelegatorUtils"
 
 const thorClient = ThorClient.at(TESTNET_URL)
 
@@ -39,7 +39,7 @@ describe("GenericDelegatorUtils", () => {
                 BigNutils("0"),
             )
             expect(result.valid).toBe(false)
-            expect(result.reason).toBe("CLAUSES_DIFF")
+            expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("CLAUSES_DIFF")
         })
         describe("VET", () => {
             it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
@@ -55,7 +55,7 @@ describe("GenericDelegatorUtils", () => {
                     BigNutils("89"),
                 )
                 expect(result.valid).toBe(false)
-                expect(result.reason).toBe("OVER_THRESHOLD")
+                expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("OVER_THRESHOLD")
             })
             it("should return false if it's trying to send some data", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -70,7 +70,7 @@ describe("GenericDelegatorUtils", () => {
                     BigNutils("99"),
                 )
                 expect(result.valid).toBe(false)
-                expect(result.reason).toBe("SENT_DATA")
+                expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("SENT_DATA")
             })
             it("should return true if all the checks are ok", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -100,7 +100,7 @@ describe("GenericDelegatorUtils", () => {
                     BigNutils("0"),
                 )
                 expect(result.valid).toBe(false)
-                expect(result.reason).toBe("NOT_ERC20_TRANSFER")
+                expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("NOT_ERC20_TRANSFER")
             })
             it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
@@ -115,7 +115,7 @@ describe("GenericDelegatorUtils", () => {
                     BigNutils("89"),
                 )
                 expect(result.valid).toBe(false)
-                expect(result.reason).toBe("OVER_THRESHOLD")
+                expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("OVER_THRESHOLD")
             })
             it("should return true if all the checks are ok", async () => {
                 const depositAccount = ethers.Wallet.createRandom().address
