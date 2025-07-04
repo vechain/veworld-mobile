@@ -28,8 +28,12 @@ onFlowComplete:
     id: "next-button"
 - runFlow:
     when:
-      visible: "Fee not delegated"
+      visible: "Fee delegation"
     commands:
+      - extendedWaitUntil:
+          visible:
+              id: "MAX_FEE_GALACTICA"
+          timeout: 10000
       - tapOn:
           id: "confirm-send-button"
 - repeat:
@@ -60,8 +64,12 @@ onFlowComplete:
     id: "next-button"
 - runFlow:
     when:
-      visible: "Fee not delegated"
+      visible: "Fee delegation"
     commands:
+      - extendedWaitUntil:
+          visible:
+              id: "MAX_FEE_GALACTICA"
+          timeout: 10000
       - tapOn:
           id: "confirm-send-button"
 - repeat:
@@ -101,8 +109,12 @@ onFlowComplete:
     id: "next-button"
 - runFlow:
     when:
-      visible: "Fee not delegated"
+      visible: "Fee delegation"
     commands:
+      - extendedWaitUntil:
+          visible:
+              id: "MAX_FEE_GALACTICA"
+          timeout: 10000
       - tapOn:
           id: "confirm-send-button"
 - repeat:

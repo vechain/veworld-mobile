@@ -87,6 +87,7 @@ export const useGalacticaFees = ({ isGalactica, gas }: Props) => {
         isFetching: isLoading,
         data: feesResponse,
         dataUpdatedAt,
+        isLoading: isFirstTimeLoading,
     } = useQuery({
         queryKey: ["GalacticaFees"],
         queryFn: () => getFees(thorClient),
@@ -195,12 +196,14 @@ export const useGalacticaFees = ({ isGalactica, gas }: Props) => {
             dataUpdatedAt,
             isBaseFeeRampingUp,
             speedChangeEnabled,
+            isFirstTimeLoading,
         }),
         [
             dataUpdatedAt,
             feesResponse?.maxPriorityFee,
             gasOptions,
             isBaseFeeRampingUp,
+            isFirstTimeLoading,
             isLoading,
             speedChangeEnabled,
             txOptions,

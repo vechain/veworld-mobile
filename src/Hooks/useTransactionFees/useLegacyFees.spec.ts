@@ -49,6 +49,7 @@ describe("useLegacyFees", () => {
                 },
             },
             isLoading: false,
+            isFirstTimeLoading: false,
         })
     })
 })

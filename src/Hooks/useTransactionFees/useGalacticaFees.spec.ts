@@ -69,6 +69,7 @@ describe("useGalacticaFees", () => {
     it("should render correctly", () => {
         mocked(useQuery).mockReturnValue({
             isFetching: false,
+            isLoading: false,
             data: {
                 maxPriorityFee: `0x${
                     BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
@@ -123,6 +124,7 @@ describe("useGalacticaFees", () => {
             },
             maxPriorityFee: BigNutils("50000000"),
             isLoading: false,
+            isFirstTimeLoading: false,
         })
     })
 

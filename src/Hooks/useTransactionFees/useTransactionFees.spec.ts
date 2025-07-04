@@ -73,6 +73,7 @@ describe("useTransactionFees", () => {
             isLoading: false,
             options: mockedOptions,
             txOptions: mockedLegacyTxOptions,
+            isFirstTimeLoading: false,
         })
         ;(useGalacticaFees as jest.Mock).mockReturnValue({
             isLoading: false,
@@ -82,6 +83,7 @@ describe("useTransactionFees", () => {
             dataUpdatedAt: Date.now(),
             isBaseFeeRampingUp: false,
             speedChangeEnabled: false,
+            isFirstTimeLoading: false,
         })
 
         const { result } = renderHook(
@@ -104,6 +106,7 @@ describe("useTransactionFees", () => {
             speedChangeEnabled: false,
             maxPriorityFee: BigNutils("0"),
             isBaseFeeRampingUp: false,
+            isFirstTimeLoading: false,
         })
     })
 
@@ -112,6 +115,7 @@ describe("useTransactionFees", () => {
             isLoading: false,
             options: {},
             txOptions: {},
+            isFirstTimeLoading: false,
         })
         ;(useGalacticaFees as jest.Mock).mockReturnValue({
             isLoading: false,
@@ -121,6 +125,7 @@ describe("useTransactionFees", () => {
             dataUpdatedAt: Date.now(),
             isBaseFeeRampingUp: false,
             speedChangeEnabled: false,
+            isFirstTimeLoading: false,
         })
 
         const { result } = renderHook(
@@ -143,6 +148,7 @@ describe("useTransactionFees", () => {
             speedChangeEnabled: false,
             maxPriorityFee: BigNutils("1"),
             isBaseFeeRampingUp: false,
+            isFirstTimeLoading: false,
         })
     })
 })

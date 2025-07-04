@@ -1,11 +1,11 @@
 import React, { FC, useCallback } from "react"
-import BouncyCheckbox from "react-native-bouncy-checkbox"
-import { BaseIcon, BaseText } from "~Components/Base"
-import { useThemedStyles } from "~Hooks"
-import { LocalizedString } from "typesafe-i18n"
-import { COLORS, ColorThemeType, TFonts } from "~Constants"
-import HapticsService from "~Services/HapticsService"
 import { StyleSheet } from "react-native"
+import BouncyCheckbox from "react-native-bouncy-checkbox"
+import { LocalizedString } from "typesafe-i18n"
+import { BaseIcon, BaseText } from "~Components/Base"
+import { COLORS, ColorThemeType, TFonts } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import HapticsService from "~Services/HapticsService"
 
 type Props = {
     isChecked: boolean
@@ -15,9 +15,19 @@ type Props = {
     checkSize?: number
     testID?: string
     checkAction: (checked: boolean) => void
+    checkboxTestID?: string
 }
 
-export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, testID, checkAction, isChecked }) => {
+export const CheckBoxWithText: FC<Props> = ({
+    font,
+    fontColor,
+    text,
+    checkSize,
+    testID,
+    checkAction,
+    isChecked,
+    checkboxTestID,
+}) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     const onPress = useCallback(
@@ -40,6 +50,7 @@ export const CheckBoxWithText: FC<Props> = ({ font, fontColor, text, checkSize, 
                 isChecked ? <BaseIcon name="icon-check" size={14} color={theme.colors.checkboxIcon} /> : <></>
             }
             isChecked={isChecked}
+            testID={checkboxTestID}
             textComponent={
                 <BaseText typographyFont={font ? font : "footNote"} color={fontColor} my={14} mx={10} testID={testID}>
                     {text}

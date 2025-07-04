@@ -1,22 +1,38 @@
 import { ethers } from "ethers"
 import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { getCoinGeckoIdBySymbol, useExchangeRate } from "~Api/Coingecko"
-import { BaseText, BaseView } from "~Components/Base"
-import { GasPriceCoefficient, VTHO } from "~Constants"
+import { BaseSkeleton, BaseText, BaseView } from "~Components/Base"
+import { COLORS, ColorThemeType, GasPriceCoefficient } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { TransactionFeesResult } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BigNutils } from "~Utils"
-import { TokenImage } from "../TokenImage"
+import { NoTokensAvailableForFee } from "./NoTokensAvailableForFee"
+import { NoVthoBalanceAlert } from "./NoVthoBalanceAlert"
+import { TokenSelector } from "./TokenSelector"
 
 type Props = {
     options: TransactionFeesResult
     selectedFeeOption: GasPriceCoefficient
+    onDelegationTokenClicked: () => void
+    selectedDelegationToken: string
+    isEnoughBalance: boolean
+    hasEnoughBalanceOnAny: boolean
+    isFirstTimeLoadingFees: boolean
 }
 
-export const LegacyEstimation = ({ options, selectedFeeOption }: Props) => {
+export const LegacyEstimation = ({
+    options,
+    selectedFeeOption,
+    onDelegationTokenClicked,
+    selectedDelegationToken,
+    isEnoughBalance,
+    isFirstTimeLoadingFees,
+    hasEnoughBalanceOnAny,
+}: Props) => {
     const { LL } = useI18nContext()
     const { theme, styles } = useThemedStyles(baseStyles)
 
@@ -25,7 +41,7 @@ export const LegacyEstimation = ({ options, selectedFeeOption }: Props) => {
     const { formatValue, formatFiat } = useFormatFiat()
 
     const { data: exchangeRate } = useExchangeRate({
-        id: getCoinGeckoIdBySymbol[VTHO.symbol],
+        id: getCoinGeckoIdBySymbol[selectedDelegationToken],
         vs_currency: currency,
     })
 
@@ -46,33 +62,62 @@ export const LegacyEstimation = ({ options, selectedFeeOption }: Props) => {
     }, [estimatedFeeFiat.isLeesThan_0_01, estimatedFeeFiat.preciseValue, formatFiat])
 
     return (
-        <BaseView flexDirection="column" style={styles.section} gap={4}>
-            <BaseText color={theme.colors.textLight} typographyFont="captionMedium">
-                {LL.GAS_FEE()}
-            </BaseText>
-            <BaseView flexDirection="row" gap={8}>
-                <TokenImage icon={VTHO.icon} isVechainToken iconSize={16} />
-                <BaseText typographyFont="subSubTitleBold" color={theme.colors.assetDetailsCard.title}>
-                    {VTHO.symbol}
-                </BaseText>
-                <BaseText
-                    typographyFont="subSubTitleBold"
-                    color={theme.colors.assetDetailsCard.title}
-                    testID="LEGACY_ESTIMATED_FEE">
-                    {formatValue(estimatedFeeVtho)}
-                </BaseText>
-                <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                    {estimatedFeeFiat.isLeesThan_0_01 ? `< ${estimatedFormattedFiat}` : estimatedFormattedFiat}
-                </BaseText>
-            </BaseView>
-        </BaseView>
+        <Animated.View layout={LinearTransition} style={styles.rootWithAlert}>
+            <Animated.View layout={LinearTransition} style={styles.root}>
+                <BaseView flexDirection="column" gap={4}>
+                    <BaseText color={theme.colors.textLightish} typographyFont="captionMedium">
+                        {LL.GAS_FEE()}
+                    </BaseText>
+                    {isFirstTimeLoadingFees ? (
+                        <BaseSkeleton
+                            animationDirection="horizontalLeft"
+                            boneColor={theme.colors.skeletonBoneColor}
+                            highlightColor={theme.colors.skeletonHighlightColor}
+                            height={14}
+                            width={60}
+                        />
+                    ) : (
+                        <BaseView flexDirection="row" gap={8} testID="MAX_FEE_LEGACY">
+                            <BaseText
+                                typographyFont="subSubTitleBold"
+                                color={theme.colors.assetDetailsCard.title}
+                                testID="LEGACY_ESTIMATED_FEE">
+                                {selectedDelegationToken}&nbsp;{formatValue(estimatedFeeVtho)}
+                            </BaseText>
+                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLightish}>
+                                {estimatedFeeFiat.isLeesThan_0_01
+                                    ? `< ${estimatedFormattedFiat}`
+                                    : estimatedFormattedFiat}
+                            </BaseText>
+                        </BaseView>
+                    )}
+                </BaseView>
+                <TokenSelector onPress={onDelegationTokenClicked} token={selectedDelegationToken} />
+            </Animated.View>
+            {/* Make sure to only show the "NO VTHO" error when you have at least another token available */}
+            {!hasEnoughBalanceOnAny ? (
+                <NoTokensAvailableForFee isEnoughBalance={hasEnoughBalanceOnAny} />
+            ) : (
+                <NoVthoBalanceAlert isEnoughBalance={isEnoughBalance} delegationToken={selectedDelegationToken} />
+            )}
+        </Animated.View>
     )
 }
 
-const baseStyles = () => {
+const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
-        section: {
-            padding: 16,
+        root: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            paddingTop: 12,
+            paddingHorizontal: 16,
+        },
+        rootWithAlert: {
+            paddingBottom: 12,
+            flexDirection: "column",
+            gap: 12,
+            borderBottomWidth: 1,
+            borderBottomColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.GREY_100,
         },
     })
 }
