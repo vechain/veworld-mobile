@@ -95,6 +95,7 @@ describe("GasFeeTokenBottomSheet", () => {
                 setSelectedToken={setSelectedToken}
                 availableTokens={["VTHO", "VET"]}
                 onClose={jest.fn()}
+                hasEnoughBalanceOnToken={{ VTHO: true, VET: true }}
             />,
             { wrapper: createWrapper },
         )
@@ -129,6 +130,7 @@ describe("GasFeeTokenBottomSheet", () => {
                 setSelectedToken={setSelectedToken}
                 availableTokens={["VTHO", "VET"]}
                 onClose={jest.fn()}
+                hasEnoughBalanceOnToken={{ VTHO: true, VET: true }}
             />,
             { wrapper: createWrapper },
         )

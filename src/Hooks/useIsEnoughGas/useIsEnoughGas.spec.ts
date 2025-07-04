@@ -93,7 +93,7 @@ describe("useIsEnoughGas", () => {
                     selectedToken: "VTHO",
                     clauses: [],
                     isDelegated: true,
-                    allFeeOptions: { ["VTHO"]: BigNutils("0") },
+                    allFeeOptions: { B3TR: BigNutils(""), VTHO: BigNutils("0"), VET: BigNutils("0") },
                     isLoadingFees: false,
                 }),
             {
@@ -113,7 +113,7 @@ describe("useIsEnoughGas", () => {
                     selectedToken: "VTHO",
                     clauses: [],
                     isDelegated: false,
-                    allFeeOptions: { ["VTHO"]: BigNutils("0") },
+                    allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("0"), VET: BigNutils("0") },
                     isLoadingFees: false,
                 }),
             {
@@ -133,7 +133,7 @@ describe("useIsEnoughGas", () => {
                     selectedToken: "VTHO",
                     clauses: [],
                     isDelegated: false,
-                    allFeeOptions: { ["VTHO"]: BigNutils("2") },
+                    allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("2"), VET: BigNutils("0") },
                     isLoadingFees: false,
                 }),
             {
@@ -153,7 +153,7 @@ describe("useIsEnoughGas", () => {
                     selectedToken: "VTHO",
                     clauses: [],
                     isDelegated: true,
-                    allFeeOptions: { ["VTHO"]: BigNutils("2") },
+                    allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("2"), VET: BigNutils("0") },
                     isLoadingFees: false,
                 }),
             {
@@ -173,7 +173,7 @@ describe("useIsEnoughGas", () => {
                     selectedToken: "B3TR",
                     clauses: [],
                     isDelegated: true,
-                    allFeeOptions: { ["B3TR"]: BigNutils("1") },
+                    allFeeOptions: { B3TR: BigNutils("1"), VTHO: BigNutils("0"), VET: BigNutils("0") },
                     isLoadingFees: false,
                 }),
             {
@@ -193,7 +193,7 @@ describe("useIsEnoughGas", () => {
                     selectedToken: "B3TR",
                     clauses: [],
                     isDelegated: true,
-                    allFeeOptions: { ["B3TR"]: BigNutils("2") },
+                    allFeeOptions: { B3TR: BigNutils("2"), VTHO: BigNutils("0"), VET: BigNutils("0") },
                     isLoadingFees: false,
                 }),
             {
@@ -217,7 +217,7 @@ describe("useIsEnoughGas", () => {
                             new B3TRToken(10n, Units.wei),
                         ),
                     ],
-                    allFeeOptions: { ["B3TR"]: BigNutils("2") },
+                    allFeeOptions: { B3TR: BigNutils("2"), VTHO: BigNutils("0"), VET: BigNutils("0") },
                     isLoadingFees: false,
                     isDelegated: false,
                 }),
@@ -242,7 +242,7 @@ describe("useIsEnoughGas", () => {
                             new VTHOToken(10n, Units.wei),
                         ),
                     ],
-                    allFeeOptions: { ["B3TR"]: BigNutils("2") },
+                    allFeeOptions: { B3TR: BigNutils("2"), VTHO: BigNutils("0"), VET: BigNutils("0") },
                     isLoadingFees: false,
                     isDelegated: true,
                 }),
@@ -268,7 +268,7 @@ describe("useIsEnoughGas", () => {
                         ),
                     ],
 
-                    allFeeOptions: { ["B3TR"]: BigNutils("2") },
+                    allFeeOptions: { B3TR: BigNutils("2"), VTHO: BigNutils("0"), VET: BigNutils("0") },
                     isLoadingFees: false,
                     isDelegated: true,
                 }),
