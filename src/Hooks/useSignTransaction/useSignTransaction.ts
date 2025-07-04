@@ -230,14 +230,14 @@ export const useSignTransaction = ({
         if (selectedDelegationToken !== VTHO.symbol && typeof genericDelegatorFee !== "undefined") {
             const result = await getGenericDelegationTransaction(transaction)
             if (result === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
-            const { valid: isTxValid, ...rest } = await validateGenericDelegatorTx(
+            const validationResult = await validateGenericDelegatorTx(
                 transaction,
                 result.transaction,
                 selectedDelegationToken,
                 genericDelegatorFee,
             )
-            if (!isTxValid) {
-                debug("SIGN", rest.reason, rest.metadata)
+            if (!validationResult.valid) {
+                debug("SIGN", validationResult.reason, validationResult.metadata)
                 return SignStatus.DELEGATION_FAILURE
             }
             transaction = result.transaction
