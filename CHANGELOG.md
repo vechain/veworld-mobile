@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0 (2025-07-03)
+
+* build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
+* feat: wallet kit abstraction containing smart account capabilities ([adf58a5](https://github.com/vechain/veworld-mobile/commit/adf58a5))
+
 ## <small>2.2.5 (2025-06-30)</small>
 
 * build: init ([8e24c0b](https://github.com/vechain/veworld-mobile/commit/8e24c0b))
