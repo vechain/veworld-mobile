@@ -181,17 +181,21 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STAKING_LABEL: string
 	/**
-	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 * B​a​s​e​ ​r​e​w​a​r​d​s
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
 	/**
-	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​w​a​r​d​s
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
 	/**
 	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
 	 */
 	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
+	/**
+	 * N​o​d​e​ ​d​e​l​e​g​a​t​e​d
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL: string
 	/**
 	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e​d
 	 */
@@ -4601,17 +4605,21 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STAKING_LABEL: () => LocalizedString
 	/**
-	 * Claimed rewards
+	 * Base rewards
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: () => LocalizedString
 	/**
-	 * Claimed rewards
+	 * Delegation rewards
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
 	/**
 	 * VET staked & delegated
 	 */
 	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Node delegated
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL: () => LocalizedString
 	/**
 	 * Node undelegated
 	 */
