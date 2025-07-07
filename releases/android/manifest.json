@@ -1,6 +1,6 @@
 {
   "latest": "2.3.2",
-  "major": "2.3.0",
+  "major": "2.3.2",
   "history": [
     {
       "version": "2.3.0",
@@ -10,7 +10,7 @@
     {
       "version": "2.3.2",
       "key": "/versions/2.3.2",
-      "major": false
+      "major": true
     }
   ]
 }
