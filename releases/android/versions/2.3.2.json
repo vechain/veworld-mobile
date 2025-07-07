@@ -1,8 +1,8 @@
 {
   "version": "2.3.2",
-  "major": false,
+  "major": true,
   "descriptions": {
-    "en": [],
+    "en": ["Activity event for StarGate delegation"],
     "de": [],
     "es": [],
     "fr": [],
