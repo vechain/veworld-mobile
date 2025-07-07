@@ -2,7 +2,7 @@
   "version": "2.2.6",
   "major": true,
   "descriptions": {
-    "en": ["Activity event for StarGate delegation"],
+    "en": ["Activity event for StarGate delegation", "Additional NFT media file support", "Minor bugs and enhancements"],
     "de": [],
     "es": [],
     "fr": [],
