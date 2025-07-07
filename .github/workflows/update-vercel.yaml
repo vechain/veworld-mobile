@@ -1,7 +1,16 @@
 name: Vercel apk upload
 
 on:
-    workflow_call:
+    workflow_dispatch:
+        inputs:
+            PushSource:
+                type: choice
+                default: "latest-apk"
+                description: "Artifact Source of the release"
+                options:
+                    - "app-release.apk"
+                    - "latest-apk"
+                    - "VeWorld.app"
 
 jobs:
     vercel-upload:
@@ -19,7 +28,7 @@ jobs:
             - name: download-release
               uses: actions/download-artifact@v4
               with:
-                  name: latest-apk
+                  name: ${{ inputs.PushSource }}
                   path: .
 
             - name: list-release
@@ -34,5 +43,5 @@ jobs:
                   yarn global add vercel || true
                   vercel blob put -t $VERCEL_TOKEN -d -c. -p \
                     veworld-release-latest.apk \
-                    ./app-release.apk \
+                    ./${{ inputs.PushSource }} \
                     --content-type "application/vnd.android.package-archive"
