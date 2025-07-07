@@ -91,9 +91,7 @@ export const useCheckAppVersion = () => {
                 )
             }
 
-            if (installedVersion && deviceVersion !== installedVersion) {
-                dispatch(VersionUpdateSlice.actions.setInstalledVersion(deviceVersion))
-            } else if (!installedVersion) {
+            if (!installedVersion || deviceVersion !== installedVersion) {
                 dispatch(VersionUpdateSlice.actions.setInstalledVersion(deviceVersion))
             }
 
