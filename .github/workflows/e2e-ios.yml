@@ -119,7 +119,7 @@ jobs:
                   name: VeWorld.app
                   path: ${{ env.APP_PATH }}
 
-            #Speifying version and device + retry on a temporary basis while devicecloud work on higher spec vm options.
+            # Speifying version and device + retry on a temporary basis while devicecloud work on higher spec vm options.
             - name: Test iOS
               uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
               with:
@@ -129,4 +129,5 @@ jobs:
                   include-tags: pull-request
                   ios-device: iphone-16
                   ios-version: 18
+                  report: html
                   retry: 2

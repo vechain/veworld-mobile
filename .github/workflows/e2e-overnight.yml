@@ -5,7 +5,7 @@ on:
     # schedule:
         # Runs at 22:00 UTC every Monday to Friday
         # - cron: '0 22 * * 1-5'
-        
+
 jobs:
     e2e-ios:
         uses: ./.github/workflows/e2e.yml
@@ -19,5 +19,3 @@ jobs:
             platform: android
             parallel: 1
         secrets: inherit
-
-    

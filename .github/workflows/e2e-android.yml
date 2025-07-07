@@ -135,4 +135,5 @@ jobs:
                   app-file: ${{ env.output_dir }}/app-release.apk
                   exclude-tags: onlyIOS
                   include-tags: pull-request
+                  report: html
                   retry: 2
