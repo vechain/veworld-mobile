@@ -3,6 +3,13 @@ title = "my gitleaks config"
 [extend]
 useDefault = true
 
+[allowlist]
+description = "Ignore Podfile.lock files as they contain package checksums that trigger false positives"
+paths = [
+    '''ios/Podfile\.lock''',
+    '''android/.*\.lock''',
+]
+
 [[rules]]
 id = "datadog-access-token"
 description = "Detected a Datadog Access Token, potentially risking monitoring and analytics data exposure and manipulation."
