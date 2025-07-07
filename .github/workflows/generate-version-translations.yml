@@ -1,4 +1,8 @@
 name: Generate Version Translations
+permissions:
+  contents: write
+  pull-requests: write
+  id-token: write
 
 on:
     push:
@@ -10,8 +14,6 @@ jobs:
     translate-version-descriptions:
         runs-on: ubuntu-latest
         if: "!contains(github.event.head_commit.message, 'add translations')"
-        permissions:
-            contents: write
 
         steps:
             - name: Generate a token
@@ -26,12 +28,13 @@ jobs:
               with:
                   token: ${{ steps.generate-token.outputs.token }}
 
-            - name: Setup Node.js
+            - name: Setup Node
               uses: actions/setup-node@v4
               with:
-                  node-version: 20.17
+                  node-version-file: .nvmrc
+                  cache: "yarn"
 
-            - name: Install dependencies
+            - name: Install 
               run: yarn --frozen-lockfile
 
             - name: Find latest version files
@@ -59,30 +62,112 @@ jobs:
 
                   echo "SHOULD_TRANSLATE=true" >> $GITHUB_ENV
 
+            - name: Setup release translation environment
+              if: env.SHOULD_TRANSLATE == 'true'
+              run: |
+                  mkdir -p releaseI18n
+                  
+                  cat > translo.release.config.json << EOL
+                  {
+                      "translationPath": "./releaseI18n",
+                      "languages": [
+                          {
+                              "name": "English",
+                              "code": "en"
+                          },
+                          {
+                              "name": "Japanese",
+                              "code": "ja"
+                          },
+                          {
+                              "name": "Vietnamese",
+                              "code": "vi"
+                          },
+                          {
+                              "name": "German",
+                              "code": "de"
+                          },
+                          {
+                              "name": "Dutch",
+                              "code": "nl"
+                          },
+                          {
+                              "name": "South Korean",
+                              "code": "ko"
+                          },
+                          {
+                              "name": "Italian",
+                              "code": "it"
+                          },
+                          {
+                              "name": "Swedish",
+                              "code": "sv"
+                          },
+                          {
+                              "name": "French",
+                              "code": "fr"
+                          },
+                          {
+                              "name": "Taiwanese",
+                              "code": "tw"
+                          },
+                          {
+                              "name": "Spanish",
+                              "code": "es"
+                          },
+                          {
+                              "name": "Turkey",
+                              "code": "tr"
+                          },
+                          {
+                              "name": "Indian",
+                              "code": "hi"
+                          },
+                          {
+                              "name": "Chinese",
+                              "code": "zh"
+                          },
+                          {
+                              "name": "Russian",
+                              "code": "ru"
+                          },
+                          {
+                              "name": "Portuguese",
+                              "code": "pt"
+                          },
+                          {
+                              "name": "Polish",
+                              "code": "pl"
+                          }
+                      ],
+                      "fixedWords": {
+                          "en": {
+                              "VeWorld": "VeWorld",
+                              "veWorld": "veWorld",
+                              "Better": "Better",
+                              "On-chain": "On-chain"
+                          }
+                      }
+                  }
+                  EOL
+                  
+                  mv --force translo.release.config.json translo.config.json
+
             - name: Translate iOS descriptions
               if: env.SHOULD_TRANSLATE == 'true'
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
-                  mkdir -p temp/ios
-
                   EN_DESCRIPTIONS=$(cat $IOS_VERSION_FILE | jq -r '.descriptions.en')
+                  echo "$EN_DESCRIPTIONS" | jq 'to_entries | reduce .[] as $pair ({}; .["ITEM_" + ($pair | .key | tostring)] = ($pair | .value))' > releaseI18n/en.json
 
-                  echo "$EN_DESCRIPTIONS" | jq 'to_entries | reduce .[] as $pair ({}; .["ITEM_" + ($pair | .key | tostring)] = ($pair | .value))' > temp/ios/en.json
-
-                  cd temp/ios
                   LANGUAGES=("de" "es" "fr" "hi" "it" "ja" "ko" "nl" "pl" "pt" "ru" "sv" "tr" "tw" "vi" "zh")
+                  yarn translo-cli
 
                   for lang in "${LANGUAGES[@]}"; do
-                    yarn translo-cli --source en.json --target $lang.json --from en --to $lang
-                  done
-
-                  cd ../..
-
-                  for lang in "${LANGUAGES[@]}"; do
-                    if [ -f "temp/ios/$lang.json" ]; then
+                    if [ -f "releaseI18n/$lang.json" ]; then
                       jq --arg lang "$lang" \
-                        ".descriptions[\$lang] = $(cat "temp/ios/$lang.json" | jq 'to_entries | sort_by(.key | ltrimstr("ITEM_") | tonumber) | map(.value)')" \
+                        ".descriptions[\$lang] = $(cat "releaseI18n/$lang.json" | jq 'to_entries | sort_by(.key | ltrimstr("ITEM_") | tonumber) | map(.value)')" \
                         $IOS_VERSION_FILE > temp.json && mv temp.json $IOS_VERSION_FILE
                     fi
                   done
@@ -92,25 +177,20 @@ jobs:
               env:
                   OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
               run: |
-                  mkdir -p temp/android
-
                   EN_DESCRIPTIONS=$(cat $ANDROID_VERSION_FILE | jq -r '.descriptions.en')
 
-                  echo "$EN_DESCRIPTIONS" | jq 'to_entries | reduce .[] as $pair ({}; .["ITEM_" + ($pair | .key | tostring)] = ($pair | .value))' > temp/android/en.json
+                  rm -f releaseI18n/*.json
+                  
+                  echo "$EN_DESCRIPTIONS" | jq 'to_entries | reduce .[] as $pair ({}; .["ITEM_" + ($pair | .key | tostring)] = ($pair | .value))' > releaseI18n/en.json
 
-                  cd temp/android
                   LANGUAGES=("de" "es" "fr" "hi" "it" "ja" "ko" "nl" "pl" "pt" "ru" "sv" "tr" "tw" "vi" "zh")
 
-                  for lang in "${LANGUAGES[@]}"; do
-                    yarn translo-cli --source en.json --target $lang.json --from en --to $lang
-                  done
-
-                  cd ../..
+                  yarn translo-cli
 
                   for lang in "${LANGUAGES[@]}"; do
-                    if [ -f "temp/android/$lang.json" ]; then
+                    if [ -f "releaseI18n/$lang.json" ]; then
                       jq --arg lang "$lang" \
-                        ".descriptions[\$lang] = $(cat "temp/android/$lang.json" | jq 'to_entries | sort_by(.key | ltrimstr("ITEM_") | tonumber) | map(.value)')" \
+                        ".descriptions[\$lang] = $(cat "releaseI18n/$lang.json" | jq 'to_entries | sort_by(.key | ltrimstr("ITEM_") | tonumber) | map(.value)')" \
                         $ANDROID_VERSION_FILE > temp.json && mv temp.json $ANDROID_VERSION_FILE
                     fi
                   done
@@ -124,5 +204,3 @@ jobs:
                   git add releases/
                   git commit -m "chore: add translations for iOS ${{ env.IOS_VERSION }} and Android ${{ env.ANDROID_VERSION }} release notes"
                   git push origin HEAD
-
-                  rm -rf temp/
