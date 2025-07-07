@@ -206,13 +206,22 @@ export const NotificationScreen = () => {
         }, [updateTags]),
     )
 
-    // Sync dappNotifications state with actual tags
     useEffect(() => {
         if (data.length > 0) {
             const allEnabled = data.every(dapp => !!tags[dapp.id])
             setDappNotifications(allEnabled)
+
+            // If notifications are enabled for all dapps, subscribe any new ones
+            if (allEnabled) {
+                data.forEach(dapp => {
+                    if (!tags[dapp.id]) {
+                        addDAppTag(dapp.id)
+                    }
+                })
+                updateTags()
+            }
         }
-    }, [data, tags])
+    }, [data, tags, addDAppTag, updateTags])
 
     return (
         <Layout

@@ -3122,7 +3122,7 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
-	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
+	 * App news & updates, vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
 	/**
@@ -7505,7 +7505,7 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
 	/**
-	 * Vote reminder
+	 * App news & updates, vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
 	/**
