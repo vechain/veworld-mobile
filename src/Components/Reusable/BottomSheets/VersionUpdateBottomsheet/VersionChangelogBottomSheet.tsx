@@ -50,8 +50,9 @@ export const VersionChangelogBottomSheet = () => {
             blurBackdrop
             dynamicHeight
             backgroundStyle={{ backgroundColor: theme.colors.actionBottomSheet.background }}
+            onDismiss={handleDismiss}
             ref={ref}>
-            <BaseView gap={24}>
+            <BaseView gap={24} testID="VersionChangelogBottomSheet">
                 <BaseView gap={16} flexDirection="row" justifyContent="space-between" alignSelf="center">
                     <BaseIcon size={24} color={theme.colors.text} name="icon-party-popper" />
                     <BaseText flexGrow={1} typographyFont="subTitleSemiBold" color={theme.colors.text}>
@@ -75,7 +76,13 @@ export const VersionChangelogBottomSheet = () => {
                         renderItem={renderListItems}
                     />
                 </BaseView>
-                <BaseButton my={16} action={handleDismiss} title={LL.BTN_DISMISS()} variant="outline" />
+                <BaseButton
+                    testID="Dismiss_Button"
+                    my={16}
+                    action={handleDismiss}
+                    title={LL.BTN_DISMISS()}
+                    variant="outline"
+                />
             </BaseView>
         </BaseBottomSheet>
     )

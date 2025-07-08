@@ -82,20 +82,19 @@ export const useCheckAppVersion = () => {
 
     useEffect(() => {
         if (versionInfo) {
-            if (SemanticVersionUtils.moreThan(versionInfo.major, deviceVersion)) {
+            const needsUpdate = SemanticVersionUtils.moreThan(versionInfo.major, deviceVersion)
+
+            if (installedVersion && deviceVersion !== installedVersion) {
                 dispatch(
                     setChangelogToShow({
                         shouldShow: true,
                         changelogKey: versionInfo.changelogKey,
                     }),
                 )
-            }
-
-            if (!installedVersion || deviceVersion !== installedVersion) {
+                dispatch(VersionUpdateSlice.actions.setInstalledVersion(deviceVersion))
+            } else if (!installedVersion) {
                 dispatch(VersionUpdateSlice.actions.setInstalledVersion(deviceVersion))
             }
-
-            const needsUpdate = SemanticVersionUtils.moreThan(versionInfo.major, deviceVersion)
             dispatch(VersionUpdateSlice.actions.setIsUpToDate(!needsUpdate))
 
             if (needsUpdate && versionInfo.major !== versionUpdateStatus.majorVersion) {
