@@ -1,0 +1,91 @@
+{
+  "version": "2.3.2",
+  "major": true,
+  "descriptions": {
+    "en": [
+      "Stargate support",
+      "Additional NFT media file support",
+      "Minor bugs and enhancements"
+    ],
+    "de": [
+      "Stargate-Unterstützung",
+      "Zusätzliche Unterstützung für NFT-Mediendateien",
+      "Kleinere Fehlerkorrekturen und Verbesserungen"
+    ],
+    "es": [
+      "Soporte de Stargate",
+      "Soporte para archivos multimedia NFT adicionales",
+      "Errores menores y mejoras"
+    ],
+    "fr": [
+      "Support Stargate",
+      "Prise en charge de fichiers médias NFT supplémentaires",
+      "Petits bugs et améliorations"
+    ],
+    "hi": [
+      "स्टारगेट समर्थन",
+      "अतिरिक्त NFT मीडिया फ़ाइल समर्थन",
+      "छोटे बग और वृद्धि"
+    ],
+    "it": [
+      "Supporto Stargate",
+      "Supporto aggiuntivo per file multimediali NFT",
+      "Correzioni minori e miglioramenti"
+    ],
+    "ja": [
+      "スターゲートのサポート",
+      "追加のNFTメディアファイルのサポート",
+      "小さなバグと機能強化"
+    ],
+    "ko": [
+      "스타게이트 지원",
+      "추가적인 NFT 미디어 파일 지원",
+      "사소한 버그 수정 및 개선"
+    ],
+    "nl": [
+      "Stargate-ondersteuning",
+      "Extra NFT-mediabestandsondersteuning",
+      "Kleine bugs en verbeteringen"
+    ],
+    "pl": [
+      "Obsługa Stargate",
+      "Dodatkowe wsparcie dla plików multimedialnych NFT",
+      "Drobne błędy i ulepszenia"
+    ],
+    "pt": [
+      "Suporte ao Stargate",
+      "Suporte adicional para arquivo de mídia NFT",
+      "Pequenos bugs e melhorias"
+    ],
+    "ru": [
+      "Поддержка Stargate",
+      "Поддержка дополнительных медиафайлов NFT",
+      "Мелкие ошибки и улучшения"
+    ],
+    "sv": [
+      "Stargate-stöd",
+      "Ytterligare stöd för NFT-mediefiler",
+      "Mindre buggar och förbättringar"
+    ],
+    "tr": [
+      "Yıldız kapısı desteği",
+      "Ek NFT medya dosyası desteği",
+      "Küçük hatalar ve iyileştirmeler"
+    ],
+    "tw": [
+      "星際之門支援",
+      "額外的 NFT 媒體檔案支援",
+      "次要錯誤和增強功能"
+    ],
+    "vi": [
+      "Hỗ trợ Stargate",
+      "Hỗ trợ tệp phương tiện NFT bổ sung",
+      "Sửa lỗi nhỏ và cải tiến"
+    ],
+    "zh": [
+      "星际之门支持",
+      "附加 NFT 媒体文件支持",
+      "小问题和增强"
+    ]
+  }
+}
