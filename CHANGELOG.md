@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.7 (2025-07-09)</small>
+
+* build: init ([7fd74fc](https://github.com/vechain/veworld-mobile/commit/7fd74fc))
+* remove gitleaks (#3059) ([b88ab10](https://github.com/vechain/veworld-mobile/commit/b88ab10)), closes [#3059](https://github.com/vechain/veworld-mobile/issues/3059)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
