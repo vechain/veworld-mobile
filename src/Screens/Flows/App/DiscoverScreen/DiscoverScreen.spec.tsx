@@ -11,6 +11,8 @@ import { useVeBetterDaoActiveDapps, useVeBetterDaoDapps } from "~Hooks/useFetchF
 
 jest.useFakeTimers()
 
+jest.mock("~Hooks/useFetchFeaturedDApps")
+
 jest.mock("react-native", () => ({
     ...jest.requireActual("react-native"),
 }))
