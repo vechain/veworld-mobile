@@ -3110,6 +3110,10 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: string
 	/**
+	 * Latest news and updates
+	 */
+	PUSH_NOTIFICATIONS_DAPPS_DESC: string
+	/**
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
@@ -3142,7 +3146,7 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
-	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
+	 * App news & updates, vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
 	/**
@@ -7513,6 +7517,10 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
 	/**
+	 * Latest news and updates
+	 */
+	PUSH_NOTIFICATIONS_DAPPS_DESC: () => LocalizedString
+	/**
 	 * Keep up to date with the latest news and updates
 	 */
 	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
@@ -7545,7 +7553,7 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
 	/**
-	 * Vote reminder
+	 * App news & updates, vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
 	/**

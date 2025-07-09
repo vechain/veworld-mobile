@@ -4,4 +4,5 @@ export interface NotificationState {
     optedIn: boolean | null
     dappVisitCounter: Record<string, number>
     userTags: Record<string, string>
+    dappNotifications: boolean
 }
