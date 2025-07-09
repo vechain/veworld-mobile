@@ -170,6 +170,6 @@ export const useCheckAppVersion = () => {
         shouldShowUpdatePrompt,
         hasPermanentlyDismissed,
         shouldShowChangelog: versionUpdateStatus.shouldShowChangelog,
-        changelog: changelog || [],
+        changelog: changelog ?? [],
     }
 }
