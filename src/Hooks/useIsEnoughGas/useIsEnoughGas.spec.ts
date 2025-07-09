@@ -2,7 +2,7 @@ import { renderHook } from "@testing-library/react-hooks"
 import { useIsEnoughGas } from "./useIsEnoughGas"
 import { TestWrapper } from "~Test"
 import { BigNutils } from "~Utils"
-import { B3TR, defaultTestNetwork, VTHO } from "~Constants"
+import { B3TR, defaultTestNetwork, TEST_B3TR_ADDRESS, VTHO } from "~Constants"
 import { RootState } from "~Storage/Redux/Types"
 import { ethers } from "ethers"
 import { DEVICE_TYPE } from "~Model"
@@ -24,7 +24,7 @@ const createPreloadedState = (balance: string): Partial<RootState> => {
                         balance,
                         isHidden: false,
                         timeUpdated: new Date().toISOString(),
-                        tokenAddress: B3TR.address,
+                        tokenAddress: TEST_B3TR_ADDRESS,
                     },
                 ],
             },
