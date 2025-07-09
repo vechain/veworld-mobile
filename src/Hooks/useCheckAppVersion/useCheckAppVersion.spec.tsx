@@ -25,6 +25,8 @@ const initialVersionState: AppVersion = {
     majorVersion: "",
     latestVersion: "",
     lastManifestCheck: null,
+    shouldShowChangelog: false,
+    changelogKey: null,
     updateRequest: {
         dismissCount: 0,
         lastDismissedDate: null,
@@ -413,6 +415,124 @@ describe("useCheckAppVersion", () => {
             })
 
             expect(result.current.hasPermanentlyDismissed).toBe(false)
+        })
+    })
+
+    describe("Changelog Logic", () => {
+        it("should expose shouldShowChangelog from state", () => {
+            const preloadedState = {
+                versionUpdate: {
+                    ...initialVersionState,
+                    shouldShowChangelog: true,
+                    changelogKey: "changelog-1.1.0",
+                },
+            }
+
+            const { result } = renderHook(() => useCheckAppVersion(), {
+                wrapper: ({ children }) =>
+                    TestWrapper({
+                        children,
+                        preloadedState,
+                    }),
+            })
+
+            expect(result.current.shouldShowChangelog).toBe(true)
+        })
+
+        it("should return empty array when changelog data is not available", () => {
+            const preloadedState = {
+                versionUpdate: {
+                    ...initialVersionState,
+                    shouldShowChangelog: true,
+                    changelogKey: "changelog-1.1.0",
+                },
+            }
+
+            jest.mocked(useQuery).mockImplementation((options: any) => {
+                if (options.queryKey[0] === "changelog") {
+                    return { data: undefined } as any
+                }
+                return {
+                    data: {
+                        major: "1.1.0",
+                        latest: "1.1.0",
+                        changelogKey: "changelog-1.1.0",
+                    },
+                } as any
+            })
+
+            const { result } = renderHook(() => useCheckAppVersion(), {
+                wrapper: ({ children }) =>
+                    TestWrapper({
+                        children,
+                        preloadedState,
+                    }),
+            })
+
+            expect(result.current.changelog).toEqual([])
+        })
+
+        it("should return changelog data when available", () => {
+            const mockChangelogData = ["New feature 1", "Bug fix 1"]
+            const preloadedState = {
+                versionUpdate: {
+                    ...initialVersionState,
+                    shouldShowChangelog: true,
+                    changelogKey: "changelog-1.1.0",
+                },
+            }
+
+            jest.mocked(useQuery).mockImplementation((options: any) => {
+                if (options.queryKey[0] === "changelog") {
+                    return { data: mockChangelogData } as any
+                }
+                return {
+                    data: {
+                        major: "1.1.0",
+                        latest: "1.1.0",
+                        changelogKey: "changelog-1.1.0",
+                    },
+                } as any
+            })
+
+            const { result } = renderHook(() => useCheckAppVersion(), {
+                wrapper: ({ children }) =>
+                    TestWrapper({
+                        children,
+                        preloadedState,
+                    }),
+            })
+
+            expect(result.current.changelog).toEqual(mockChangelogData)
+        })
+
+        it("should trigger setChangelogToShow when app version changes", () => {
+            jest.mocked(DeviceInfo.getVersion).mockReturnValue("1.1.0")
+
+            const preloadedState = {
+                versionUpdate: {
+                    ...initialVersionState,
+                    installedVersion: "1.0.0",
+                    changelogKey: null,
+                    shouldShowChangelog: false,
+                },
+            }
+
+            jest.mocked(useQuery).mockReturnValue({
+                data: {
+                    major: "2.0.0",
+                    latest: "2.0.0",
+                    changelogKey: "changelog-2.0.0",
+                },
+            } as any)
+
+            renderHook(() => useCheckAppVersion(), {
+                wrapper: ({ children }) =>
+                    TestWrapper({
+                        children,
+                        preloadedState,
+                    }),
+            })
         })
     })
 })

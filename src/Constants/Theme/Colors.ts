@@ -693,8 +693,8 @@ const dark: Colors = {
         background: COLORS.PURPLE,
     },
     label: {
-        background: COLORS.PURPLE,
-        text: COLORS.WHITE,
+        background: COLORS.PURPLE_DISABLED,
+        text: COLORS.GREY_300,
     },
 }
 
