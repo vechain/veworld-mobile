@@ -45,9 +45,12 @@ describe("useSignTransaction", () => {
     })
 
     it("should render correctly", async () => {
-        const { result } = renderHook(() => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS }), {
-            wrapper: TestWrapper,
-        })
+        const { result } = renderHook(
+            () => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS, selectedDelegationToken: "VTHO" }),
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         expect(result.current).toEqual({
             signTransaction: expect.any(Function),
@@ -60,9 +63,12 @@ describe("useSignTransaction", () => {
             throw new Error("Error")
         })
 
-        const { result } = renderHook(() => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS }), {
-            wrapper: TestWrapper,
-        })
+        const { result } = renderHook(
+            () => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS, selectedDelegationToken: "VTHO" }),
+            {
+                wrapper: TestWrapper,
+            },
+        )
         expect(result.current).toEqual({
             signTransaction: expect.any(Function),
             navigateToLedger: expect.any(Function),
@@ -72,9 +78,12 @@ describe("useSignTransaction", () => {
     })
 
     it("signAndSendTransaction - no delegation works as expected", async () => {
-        const { result } = renderHook(() => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS }), {
-            wrapper: TestWrapper,
-        })
+        const { result } = renderHook(
+            () => useSignTransaction({ ...defaultProps, initialRoute: Routes.NFTS, selectedDelegationToken: "VTHO" }),
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         expect(result.current).toEqual({
             signTransaction: expect.any(Function),
@@ -100,6 +109,7 @@ describe("useSignTransaction", () => {
                             device: device1,
                         },
                         initialRoute: Routes.HOME,
+                        selectedDelegationToken: "VTHO",
                     }),
                 { wrapper: TestWrapper },
             )
@@ -123,6 +133,7 @@ describe("useSignTransaction", () => {
                         ...defaultProps,
                         selectedDelegationOption: DelegationType.ACCOUNT,
                         initialRoute: Routes.HOME,
+                        selectedDelegationToken: "VTHO",
                     }),
                 { wrapper: TestWrapper },
             )
@@ -145,6 +156,7 @@ describe("useSignTransaction", () => {
                         selectedDelegationOption: DelegationType.URL,
                         selectedDelegationUrl: "https://vechainstats.com",
                         initialRoute: Routes.HOME,
+                        selectedDelegationToken: "VTHO",
                     }),
                 { wrapper: TestWrapper },
             )
@@ -175,6 +187,7 @@ describe("useSignTransaction", () => {
                         ...defaultProps,
                         selectedDelegationOption: DelegationType.URL,
                         initialRoute: Routes.HOME,
+                        selectedDelegationToken: "VTHO",
                     }),
                 { wrapper: TestWrapper },
             )

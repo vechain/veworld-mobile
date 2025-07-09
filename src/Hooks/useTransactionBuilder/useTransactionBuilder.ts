@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { HexUtils } from "~Utils"
+import { BigNumberUtils, HexUtils } from "~Utils"
 import { DEVICE_TYPE, EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
@@ -16,6 +16,12 @@ type Props = {
     maxPriorityFeePerGas?: string
     maxFeePerGas?: string
     deviceType: DEVICE_TYPE
+    genericDelgation: {
+        token: string
+        isGenDelegation: boolean
+        amount: BigNumberUtils | undefined
+        delegatorAddress: string
+    }
 }
 
 export const useTransactionBuilder = ({
@@ -27,6 +33,7 @@ export const useTransactionBuilder = ({
     maxPriorityFeePerGas,
     maxFeePerGas,
     deviceType,
+    genericDelgation,
 }: Props) => {
     const thor = useThor()
     const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
@@ -37,7 +44,13 @@ export const useTransactionBuilder = ({
         const txGas = gas?.gas ?? 0
 
         if (deviceType === DEVICE_TYPE.SMART_WALLET) {
-            return buildTransactionWithSmartWallet(clauses)
+            return buildTransactionWithSmartWallet(
+                clauses,
+                {
+                    gasPriceCoef,
+                },
+                genericDelgation,
+            )
         }
 
         return Transaction.of({

@@ -1,4 +1,4 @@
-import { Address, ABIContract, Clause, TransactionClause } from "@vechain/sdk-core"
+import { Address, ABIContract, Clause, TransactionClause, VET } from "@vechain/sdk-core"
 import { encodeFunctionData, bytesToHex } from "viem"
 import {
     SmartAccountTransactionConfig,
@@ -7,6 +7,8 @@ import {
     TransactionSigningFunction,
 } from "../types/smartAccountTransaction"
 import { SimpleAccountABI, SimpleAccountFactoryABI } from "../utils/abi"
+import { BigNumberUtils, BigNutils, TransactionUtils } from "../../Utils"
+import { abi } from "thor-devkit"
 
 /**
  * Common EIP712Domain type definition
@@ -170,7 +172,7 @@ async function buildBatchExecutionClauses({
             ),
         )
     }
-
+    // if gen delegator add the transfer clause
     // Add the batch execution call
     clauses.push(
         Clause.callFunction(
@@ -266,12 +268,28 @@ export async function buildSmartAccountTransaction(params: {
     smartAccountConfig: SmartAccountTransactionConfig
     chainId: number
     signTypedDataFn: TransactionSigningFunction
+    // optional gen delegator object
+    genericDelgation?: {
+        token: string
+        isGenDelegation: boolean
+        amount: BigNumberUtils | undefined
+        delegatorAddress: string
+    }
 }): Promise<TransactionClause[]> {
-    const { txClauses, smartAccountConfig, signTypedDataFn, chainId } = params
+    const { txClauses, smartAccountConfig, signTypedDataFn, chainId, genericDelgation } = params
     const { version: smartAccountVersion, hasV1Account } = smartAccountConfig
 
     // Determine execution strategy based on smart account version
     const shouldUseBatchExecution = !hasV1Account || (smartAccountVersion && smartAccountVersion >= 3)
+
+    if (genericDelgation) {
+        const transferClause = getTransferClause(
+            genericDelgation.token,
+            genericDelgation.delegatorAddress,
+            genericDelgation.amount,
+        )
+        txClauses.push(...transferClause)
+    }
 
     if (shouldUseBatchExecution) {
         return await buildBatchExecutionClauses({
@@ -288,4 +306,57 @@ export async function buildSmartAccountTransaction(params: {
             signTypedDataFn,
         })
     }
+}
+
+export const transfer: abi.Function.Definition = {
+    inputs: [
+        {
+            internalType: "address",
+            name: "to",
+            type: "address",
+        },
+        {
+            internalType: "uint256",
+            name: "amount",
+            type: "uint256",
+        },
+    ],
+    name: "transfer",
+    outputs: [
+        {
+            internalType: "bool",
+            name: "",
+            type: "bool",
+        },
+    ],
+    stateMutability: "nonpayable",
+    type: "function",
+}
+
+const DELEGATOR_ADDRESS_MAINNET = "0x8692410Da301A9b796B68A58Ff660D51e979c6fa"
+
+const getTransferClause = (token: string, tokenAddress: string, amount: BigNumberUtils | undefined) => {
+    const amountHex = `0x${amount?.toHex}`
+    // code from export const prepareFungibleClause = (
+    const addressTo = DELEGATOR_ADDRESS_MAINNET
+    if (token === "VET") {
+        return [
+            {
+                to: addressTo,
+                value: amountHex,
+                data: "0x",
+            },
+        ]
+    }
+
+    const func = new abi.Function(transfer)
+    const data = func.encode(addressTo, amountHex)
+
+    return [
+        {
+            to: tokenAddress,
+            value: "0x0",
+            data: data,
+        },
+    ]
 }

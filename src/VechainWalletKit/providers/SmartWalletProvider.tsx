@@ -9,6 +9,7 @@ import { WalletError, WalletErrorType } from "../utils/errors"
 import { SmartAccountTransactionConfig, SmartWalletContext } from "../types"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
 import { getChainId } from "../utils/chainId"
+import { BigNumberUtils } from "../../Utils"
 
 export interface SmartWalletProps {
     children: React.ReactNode
@@ -129,8 +130,18 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         [adapter, isAuthenticated],
     )
 
+    // p[ass in optional gen delegator object
     const buildTransaction = useCallback(
-        async (clauses: TransactionClause[], options?: TransactionOptions): Promise<Transaction> => {
+        async (
+            clauses: TransactionClause[],
+            options?: TransactionOptions,
+            genericDelgation?: {
+                token: string
+                isGenDelegation: boolean
+                amount: BigNumberUtils | undefined
+                delegatorAddress: string
+            },
+        ): Promise<Transaction> => {
             if (!isAuthenticated || !ownerAddress) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
@@ -147,6 +158,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     smartAccountConfig,
                     chainId: getChainId(config.networkConfig.networkType, config.networkConfig.chainId),
                     signTypedDataFn: signTypedData,
+                    genericDelgation,
                 })
 
                 // Estimate gas
