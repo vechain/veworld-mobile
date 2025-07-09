@@ -26,10 +26,12 @@ function getChangedKeys() {
     const newJson = JSON.parse(newI18n)
 
     const changedKeys: string[] = Object.keys(newJson).filter(key => oldJson[key] !== newJson[key])
+    const deletedKeys: string[] = Object.keys(oldJson).filter(key => newJson[key] === undefined)
 
     console.log("Changed keys: ", changedKeys)
+    console.log("Deleted keys: ", deletedKeys)
 
-    return changedKeys
+    return changedKeys.concat(deletedKeys)
 }
 
 function main() {
