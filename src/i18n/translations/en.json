@@ -963,6 +963,7 @@
   "TAKE_ME_TO_ICLOUD": "Take me to iCloud",
   "TAP_TO_VIEW": "Tap to view phrase",
   "TEST": "TEst changes",
+  "TEST2": "Test2",
   "THEM": "them?",
   "TITLE_ABOUT": "About",
   "TITLE_ADD_CONTACT": "Add Contact",
@@ -1092,6 +1093,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "TEST2": "Test2"
+  "YESTERDAY": "Yesterday"
 }
