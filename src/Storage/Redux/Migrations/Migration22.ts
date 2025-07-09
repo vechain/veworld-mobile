@@ -3,8 +3,8 @@ import { ERROR_EVENTS } from "~Constants"
 import { debug } from "~Utils"
 import { NotificationState } from "../Types"
 
-export const Migration21 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 21: Adding dapps notifications state")
+export const Migration22 = (state: PersistedState): PersistedState => {
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 22: Adding dapps notifications state")
 
     // @ts-ignore
     const currentState: NotificationState = state.notification
