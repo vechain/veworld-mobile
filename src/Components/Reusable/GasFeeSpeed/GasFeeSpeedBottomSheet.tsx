@@ -25,10 +25,19 @@ type Props = {
     isGalactica?: boolean
     options: TransactionFeesResult
     isBaseFeeRampingUp: boolean
+    selectedDelegationToken: string
 }
 
 export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
-    { setSelectedFeeOption, selectedFeeOption, onClose, isGalactica, options, isBaseFeeRampingUp },
+    {
+        setSelectedFeeOption,
+        selectedFeeOption,
+        onClose,
+        isGalactica,
+        options,
+        isBaseFeeRampingUp,
+        selectedDelegationToken,
+    },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -65,6 +74,8 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
         setSelectedFeeOption(internalFeeOption)
         onClose()
     }, [internalFeeOption, onClose, setSelectedFeeOption])
+
+    const isGenericDelegator = useMemo(() => selectedDelegationToken !== VTHO.symbol, [selectedDelegationToken])
 
     return (
         <BaseBottomSheet ref={ref} dynamicHeight contentStyle={styles.rootContent}>
@@ -114,20 +125,23 @@ export const GasFeeSpeedBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                                 typographyFont="bodyMedium"
                                 color={theme.colors.textLight}
                                 testID="GALACTICA_ESTIMATED_FEE_BS">
-                                {formatValue(estimatedFeeVtho)} {VTHO.symbol}
+                                {formatValue(estimatedFeeVtho)} {selectedDelegationToken}
                             </BaseText>
                         </BaseView>
-                        <BaseView flexDirection="row" w={100} justifyContent="space-between">
-                            <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
-                                {LL.MAX_FEE()}
-                            </BaseText>
-                            <BaseText
-                                typographyFont="bodyMedium"
-                                color={theme.colors.textLight}
-                                testID="GALACTICA_MAX_FEE_BS">
-                                {formatValue(maxFeeVtho)} {VTHO.symbol}
-                            </BaseText>
-                        </BaseView>
+                        {!isGenericDelegator && (
+                            <BaseView flexDirection="row" w={100} justifyContent="space-between">
+                                <BaseText typographyFont="bodyMedium" color={theme.colors.textLight}>
+                                    {LL.MAX_FEE()}
+                                </BaseText>
+                                <BaseText
+                                    typographyFont="bodyMedium"
+                                    color={theme.colors.textLight}
+                                    testID="GALACTICA_MAX_FEE_BS">
+                                    {formatValue(maxFeeVtho)} {VTHO.symbol}
+                                </BaseText>
+                            </BaseView>
+                        )}
+
                         {isBaseFeeRampingUp && internalFeeOption === GasPriceCoefficient.REGULAR && (
                             <BaseView
                                 flexDirection="row"
