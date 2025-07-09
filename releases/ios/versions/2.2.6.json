@@ -1,0 +1,91 @@
+{
+  "version": "2.2.6",
+  "major": true,
+  "descriptions": {
+    "en": [
+      "Activity event for StarGate delegation",
+      "Additional NFT media file support",
+      "Minor bugs and enhancements"
+    ],
+    "de": [
+      "Aktivitätsereignis für StarGate-Delegation",
+      "Unterstützung für zusätzliche NFT-Mediendateien",
+      "Kleinere Fehler und Verbesserungen"
+    ],
+    "es": [
+      "Evento de actividad para la delegación de StarGate",
+      "Soporte adicional para archivos multimedia NFT",
+      "Bugs menores y mejoras"
+    ],
+    "fr": [
+      "Événement d'activité pour la délégation StarGate",
+      "Prise en charge supplémentaire des fichiers média NFT",
+      "Corrections mineures et améliorations"
+    ],
+    "hi": [
+      "स्टारगेट प्रतिनिधिमंडल के लिए गतिविधि कार्यक्रम",
+      "अतिरिक्त NFT मीडिया फ़ाइल समर्थन",
+      "छोटे बग और सुधार"
+    ],
+    "it": [
+      "Evento di attività per la delegazione di StarGate",
+      "Supporto aggiuntivo per file multimediali NFT",
+      "Correzioni minori e miglioramenti"
+    ],
+    "ja": [
+      "スターゲート代表団のアクティビティイベント",
+      "追加のNFTメディアファイルのサポート",
+      "軽微なバグと改善"
+    ],
+    "ko": [
+      "스타게이트 대표단을 위한 활동 이벤트",
+      "추가 NFT 미디어 파일 지원",
+      "사소한 버그 수정 및 개선"
+    ],
+    "nl": [
+      "Activiteitsevenement voor StarGate-delegatie",
+      "Ondersteuning voor aanvullende NFT-mediabestanden",
+      "Kleine bugs en verbeteringen"
+    ],
+    "pl": [
+      "Wydarzenie aktywności dla delegacji StarGate",
+      "Dodatkowe wsparcie dla plików multimedialnych NFT",
+      "Drobne błędy i ulepszenia"
+    ],
+    "pt": [
+      "Evento de atividade para delegação StarGate",
+      "Suporte adicional para arquivo de mídia NFT",
+      "Pequenos erros e melhorias"
+    ],
+    "ru": [
+      "Мероприятие для делегации StarGate",
+      "Дополнительная поддержка медиафайлов NFT",
+      "Небольшие баги и улучшения"
+    ],
+    "sv": [
+      "Aktivitetshändelse för StarGate-delegationen",
+      "Stöd för ytterligare NFT-mediainnehåll",
+      "Mindre buggar och förbättringar"
+    ],
+    "tr": [
+      "StarGate delegasyonu için etkinlik etkinliği",
+      "Ek NFT medya dosyası desteği",
+      "Küçük hatalar ve iyileştirmeler"
+    ],
+    "tw": [
+      "StarGate 代表團活動事件",
+      "新增支持的 NFT 媒體檔案",
+      "小錯誤修正及增強功能"
+    ],
+    "vi": [
+      "Sự kiện hoạt động cho cuộc ủy quyền StarGate",
+      "Hỗ trợ tệp phương tiện NFT bổ sung",
+      "Sửa lỗi nhỏ và cải tiến"
+    ],
+    "zh": [
+      "StarGate 委派的活动事件",
+      "附加的 NFT 媒体文件支持",
+      "小错误和增强功能"
+    ]
+  }
+}
