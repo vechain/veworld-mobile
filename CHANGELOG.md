@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.7 (2025-07-09)</small>
+
+* build: init ([ab17c87](https://github.com/vechain/veworld-mobile/commit/ab17c87))
+* Feat: Centralize dApp Notifications Settings (#3013) ([d2fd505](https://github.com/vechain/veworld-mobile/commit/d2fd505)), closes [#3013](https://github.com/vechain/veworld-mobile/issues/3013)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
