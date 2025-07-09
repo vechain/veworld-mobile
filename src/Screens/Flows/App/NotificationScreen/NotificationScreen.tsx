@@ -16,7 +16,14 @@ import { vechainNewsAndUpdates, voteReminderTagKey } from "~Constants"
 import { useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
-import { selectSelectedNetwork, updateLastNotificationReminder, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import {
+    selectDappNotifications,
+    selectSelectedNetwork,
+    setDappNotifications,
+    updateLastNotificationReminder,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 
 const SUBSCRIPTION_LIMIT = 10
 
@@ -26,11 +33,12 @@ export const NotificationScreen = () => {
     const { theme } = useThemedStyles(baseStyle)
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const dappNotifications = useAppSelector(selectDappNotifications)
+
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
     const { data = [], error } = useVeBetterDaoDapps()
     const { getTags, addTag, addDAppTag, removeTag, removeDAppTag } = useNotifications()
 
-    const [dappNotifications, setDappNotifications] = useState<boolean>(false)
     const [tags, setTags] = useState<{ [key: string]: string }>({})
 
     const {
@@ -108,7 +116,7 @@ export const NotificationScreen = () => {
             data.forEach(dapp => {
                 removeDAppTag(dapp.id)
             })
-            setDappNotifications(false)
+            dispatch(setDappNotifications(false))
         } else {
             if (hasReachedSubscriptionLimit) {
                 showSubscriptionLimitReachedWarning()
@@ -117,7 +125,7 @@ export const NotificationScreen = () => {
             data.forEach(dapp => {
                 addDAppTag(dapp.id)
             })
-            setDappNotifications(true)
+            dispatch(setDappNotifications(true))
         }
 
         updateTags()
@@ -129,6 +137,7 @@ export const NotificationScreen = () => {
         showSubscriptionLimitReachedWarning,
         updateTags,
         tags,
+        dispatch,
     ])
 
     const ListHeaderComponent = useMemo(() => {
@@ -205,23 +214,6 @@ export const NotificationScreen = () => {
             updateTags()
         }, [updateTags]),
     )
-
-    useEffect(() => {
-        if (data.length > 0) {
-            const allEnabled = data.every(dapp => !!tags[dapp.id])
-            setDappNotifications(allEnabled)
-
-            // If notifications are enabled for all dapps, subscribe any new ones
-            if (allEnabled) {
-                data.forEach(dapp => {
-                    if (!tags[dapp.id]) {
-                        addDAppTag(dapp.id)
-                    }
-                })
-                updateTags()
-            }
-        }
-    }, [data, tags, addDAppTag, updateTags])
 
     return (
         <Layout

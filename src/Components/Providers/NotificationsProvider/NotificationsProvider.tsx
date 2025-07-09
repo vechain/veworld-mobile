@@ -2,13 +2,14 @@ import { useNavigation } from "@react-navigation/native"
 import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedState } from "react-native-onesignal"
 import { vechainNewsAndUpdates } from "~Constants"
-import { useAppState } from "~Hooks"
+import { useAppState, useVeBetterDaoDapps } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
 import {
     addRemovedNotificationTag,
     increaseDappVisitCounter,
     removeDappVisitCounter,
     removeRemovedNotificationTag,
+    selectDappNotifications,
     selectDappVisitCounter,
     selectNotificationFeautureEnabled,
     selectNotificationOptedIn,
@@ -51,6 +52,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const dispatch = useAppDispatch()
     const navigation = useNavigation()
     const { pushNotificationFeature } = useFeatureFlags()
+    const { data: dapps = [] } = useVeBetterDaoDapps()
 
     const permissionEnabled = useAppSelector(selectNotificationPermissionEnabled)
     const optedIn = useAppSelector(selectNotificationOptedIn)
@@ -58,6 +60,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const removedNotificationTags = useAppSelector(selectRemovedNotificationTags)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
+    const dappsNotifications = useAppSelector(selectDappNotifications)
     const isFetcingTags = useRef(false)
 
     const { currentState, previousState } = useAppState()
@@ -291,6 +294,27 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         },
         [dispatch, featureEnabled, isMainnet],
     )
+
+    const updateDappNotifications = useCallback(async () => {
+        if (dapps.length > 0) {
+            const tags = await getTags()
+            const allEnabled = dapps.every(dapp => !!tags[dapp.id])
+            if (!allEnabled) {
+                dapps.forEach(dapp => {
+                    if (!tags[dapp.id]) {
+                        addDAppTag(dapp.id)
+                    }
+                })
+            }
+        }
+    }, [dapps, getTags, addDAppTag])
+
+    useEffect(() => {
+        // Keep the dapp notifications in sync with the dapps list
+        if (dappsNotifications) {
+            updateDappNotifications()
+        }
+    }, [dappsNotifications, updateDappNotifications])
 
     const contextValue = useMemo(() => {
         return {
