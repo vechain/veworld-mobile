@@ -3,6 +3,7 @@ import {
     selectSelectedNetwork,
     selectBalancesForAccount,
     selectNetworks,
+    selectNetworkVBDTokens,
 } from "~Storage/Redux/Selectors"
 import { RootState } from "~Storage/Redux/Types"
 import { Dispatch } from "@reduxjs/toolkit"
@@ -161,8 +162,9 @@ export const autoSelectSuggestTokens =
 export const resetTokenBalances = async (dispatch: Dispatch, getState: () => RootState) => {
     const account = selectSelectedAccount(getState())
     const network = selectSelectedNetwork(getState())
+    const networkVBDTokens = selectNetworkVBDTokens(getState())
 
-    const defaultTokens = [{ ...VET }, { ...VTHO }]
+    const defaultTokens = [{ ...VET }, { ...VTHO }, { ...networkVBDTokens.B3TR }, { ...networkVBDTokens.VOT3 }]
     if (account) {
         dispatch(
             updateTokenBalances({
