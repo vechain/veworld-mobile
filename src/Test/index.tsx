@@ -14,6 +14,7 @@ import { ConnexContext } from "~Components/Providers/ConnexProvider"
 import { NotificationsProvider } from "~Components/Providers/NotificationsProvider"
 import { ThemeEnum } from "~Constants"
 import { useTheme } from "~Hooks"
+import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import { loadLocale_sync, Locales, TypesafeI18n } from "~i18n"
 import { DEVICE_TYPE } from "~Model"
 import { SecurePersistedCache } from "~Storage/PersistedCache"
@@ -144,6 +145,10 @@ export const TestWrapper = ({
         resetThemeCache: jest.fn(),
         changeTheme: jest.fn(),
     })
+    ;(useVeBetterDaoDapps as jest.Mock).mockImplementation(() => ({
+        data: [],
+        isFetching: false,
+    }))
 
     const queryClient = new QueryClient({
         defaultOptions: {
