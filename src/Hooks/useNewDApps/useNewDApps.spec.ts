@@ -7,7 +7,6 @@ import { DiscoveryDApp } from "~Constants"
 import { VeBetterDaoDapp } from "~Model"
 
 // Mock the dependencies
-jest.mock("~Hooks/useFetchFeaturedDApps")
 
 // Setup test dates
 const twoMonthsAgo = moment().subtract(2, "months").valueOf()

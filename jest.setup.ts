@@ -245,6 +245,8 @@ jest.mock("~Components/Providers/PersistedThemeProvider/PersistedThemeProvider",
     usePersistedTheme: jest.fn(),
 }))
 
+jest.mock("~Hooks/useFetchFeaturedDApps")
+
 jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
     const turboModuleRegistry = jest.requireActual("react-native/Libraries/TurboModule/TurboModuleRegistry")
     return {

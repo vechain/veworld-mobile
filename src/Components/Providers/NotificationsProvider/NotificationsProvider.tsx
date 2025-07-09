@@ -2,8 +2,9 @@ import { useNavigation } from "@react-navigation/native"
 import React, { createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useRef } from "react"
 import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedState } from "react-native-onesignal"
 import { vechainNewsAndUpdates } from "~Constants"
-import { useAppState, useVeBetterDaoDapps } from "~Hooks"
+import { useAppState } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
+import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import {
     addRemovedNotificationTag,
     increaseDappVisitCounter,
