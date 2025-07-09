@@ -962,6 +962,7 @@
   "TAKE_ME_TO_DRIVE": "Take me to Google Drive",
   "TAKE_ME_TO_ICLOUD": "Take me to iCloud",
   "TAP_TO_VIEW": "Tap to view phrase",
+  "TEST": "Test",
   "THEM": "them?",
   "TITLE_ABOUT": "About",
   "TITLE_ADD_CONTACT": "Add Contact",
@@ -1091,6 +1092,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "TEST": "Test"
+  "YESTERDAY": "Yesterday"
 }
