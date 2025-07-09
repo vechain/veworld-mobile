@@ -41,6 +41,7 @@ describe("useAppHubDapps", () => {
             isFetching: false,
         }))
     })
+
     it("should render correctly", async () => {
         ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: [],

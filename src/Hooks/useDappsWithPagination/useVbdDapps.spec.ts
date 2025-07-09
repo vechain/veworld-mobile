@@ -32,9 +32,6 @@ const buildAppHubDapp = (overrides?: Partial<DiscoveryDApp>): DiscoveryDApp => {
 }
 
 describe("useVbdDapps", () => {
-    beforeEach(() => {
-        jest.resetAllMocks()
-    })
     afterEach(() => {
         ;(axios.get as jest.Mock).mockRestore()
     })
