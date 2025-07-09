@@ -38,9 +38,54 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
         }
 
         let response: AxiosResponse
+        let id: string = ""
 
         try {
             response = await axios.post(`${selectedNetwork.currentUrl}/transactions`, encodedRawTx)
+
+            id = response.data.id
+            await onSuccess(signedTransaction, id)
+
+            showSuccessToast({
+                text1: LL.SUCCESS_GENERIC(),
+                text2: LL.SUCCESS_GENERIC_OPERATION(),
+                textLink: LL.NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
+                onPress: async () => {
+                    await Linking.openURL(
+                        `${selectedNetwork.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${id}`,
+                    )
+                },
+                visibilityTime: 4000,
+                testID: "transactionSuccessToast",
+            })
+
+            // this will ask for the review after 3 weeks if the user has not reviewed the app yet
+            const nextReviewDate = moment(lastReviewTimestamp).add(3, "weeks")
+            const isTimeForANewReview = moment().isAfter(nextReviewDate)
+
+            if (InAppReview.isAvailable() && isTimeForANewReview) {
+                InAppReview.RequestInAppReview()
+                    .then(() => {
+                        dispatch(setLastReviewTimestamp(new Date().toISOString()))
+                    })
+                    .catch(inAppReviewError => {
+                        error(ERROR_EVENTS.SEND, `InAppReview error: ${inAppReviewError}`)
+                    })
+            }
+
+            try {
+                await dispatch(updateAccountBalances(thorClient, selectedAccount.address))
+            } catch (balanceError) {
+                // Log the balance update error but don't re-throw,
+                // as sending the transaction succeeded.
+                error(
+                    ERROR_EVENTS.SEND,
+                    "Error updating balances after successfully sending a transaction: " + id,
+                    balanceError,
+                )
+            }
+
+            return id
         } catch (e) {
             if (e instanceof AxiosError) {
                 const axiosError = e as AxiosError
@@ -58,52 +103,10 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
             }
 
             throw e
+        } finally {
+            // Ensure app loading state is reset even if there's an error
+            dispatch(setIsAppLoading(false))
         }
-
-        const { id } = response.data
-
-        await onSuccess(signedTransaction, id)
-
-        showSuccessToast({
-            text1: LL.SUCCESS_GENERIC(),
-            text2: LL.SUCCESS_GENERIC_OPERATION(),
-            textLink: LL.NOTIFICATION_SEE_TRANSACTION_DETAILS_ACTION(),
-            onPress: async () => {
-                await Linking.openURL(
-                    `${selectedNetwork.explorerUrl ?? defaultMainNetwork.explorerUrl}/transactions/${id}`,
-                )
-            },
-            visibilityTime: 4000,
-            testID: "transactionSuccessToast",
-        })
-
-        // this will ask for the review after 3 weeks if the user has not reviewed the app yet
-        const nextReviewDate = moment(lastReviewTimestamp).add(3, "weeks")
-        const isTimeForANewReview = moment().isAfter(nextReviewDate)
-
-        if (InAppReview.isAvailable() && isTimeForANewReview) {
-            InAppReview.RequestInAppReview()
-                .then(() => {
-                    dispatch(setLastReviewTimestamp(new Date().toISOString()))
-                })
-                .catch(inAppReviewError => {
-                    error(ERROR_EVENTS.SEND, `InAppReview error: ${inAppReviewError}`)
-                })
-        }
-
-        try {
-            await dispatch(updateAccountBalances(thorClient, selectedAccount.address))
-        } catch (balanceError) {
-            // Log the balance update error but don't re-throw,
-            // as sending the transaction succeeded.
-            error(
-                ERROR_EVENTS.SEND,
-                "Error updating balances after successfully sending a transaction: " + id,
-                balanceError,
-            )
-        }
-
-        return id
     }
 
     return { sendTransaction }
