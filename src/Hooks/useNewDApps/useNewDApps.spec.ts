@@ -1,12 +1,12 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useNewDApps } from "./useNewDApps"
-import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps"
+import { useVeBetterDaoActiveDapps, useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import { TestWrapper } from "~Test"
 import moment from "moment"
 import { DiscoveryDApp } from "~Constants"
 import { VeBetterDaoDapp } from "~Model"
 
-// Mock the dependencies
+jest.mock("~Hooks/useFetchFeaturedDApps")
 
 // Setup test dates
 const twoMonthsAgo = moment().subtract(2, "months").valueOf()
@@ -189,6 +189,10 @@ const initialStateMock = {
 describe("useNewDApps", () => {
     beforeEach(() => {
         jest.resetAllMocks()
+        ;(useVeBetterDaoDapps as jest.Mock).mockImplementation(() => ({
+            data: [],
+            isFetching: false,
+        }))
     })
 
     it("should return new DApps created in the last 3 months", () => {

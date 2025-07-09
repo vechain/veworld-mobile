@@ -6,6 +6,8 @@ import { DiscoveryDApp } from "~Constants"
 import moment from "moment"
 import { useVeBetterDaoActiveDapps, useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 
+jest.mock("~Hooks/useFetchFeaturedDApps")
+
 const buildDapp = (overrides?: Partial<DiscoveryDApp>): DiscoveryDApp => {
     return {
         amountOfNavigations: 0,

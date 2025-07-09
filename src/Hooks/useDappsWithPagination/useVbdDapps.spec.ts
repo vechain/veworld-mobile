@@ -9,6 +9,7 @@ import { DiscoveryDApp } from "~Constants"
 import { randomBytes } from "node:crypto"
 
 jest.mock("axios")
+jest.mock("~Hooks/useFetchFeaturedDApps")
 
 const buildVbdDapp = (overrides?: Partial<VeBetterDaoDapp>): VeBetterDaoDapp => ({
     createdAtTimestamp: new Date().toISOString(),
