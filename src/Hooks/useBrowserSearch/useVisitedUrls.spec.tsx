@@ -1,10 +1,10 @@
-import React from "react"
-import { useVisitedUrls } from "./useVisitedUrls"
-import { TestWrapper } from "~Test"
 import { act, renderHook } from "@testing-library/react-hooks"
-import { useAppSelector, selectVisitedUrls } from "~Storage/Redux"
+import React from "react"
 import { InAppBrowserProvider } from "~Components"
+import { selectVisitedUrls, useAppSelector } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
+import { TestWrapper } from "~Test"
+import { useVisitedUrls } from "./useVisitedUrls"
 
 const mockBrowserState = {
     visitedUrls: [],
@@ -26,7 +26,7 @@ const createWrapper = ({
 
 describe("useVisitedUrls", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
     })
 
     it("should add to the visited urls if the url is valid", async () => {

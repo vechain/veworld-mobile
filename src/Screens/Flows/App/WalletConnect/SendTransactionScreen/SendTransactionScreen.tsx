@@ -106,11 +106,8 @@ export const SendTransactionScreen = ({ route }: Props) => {
     }, [openSelectAccountBottomSheet, request.options.signer])
 
     const goBack = useCallback(() => {
-        // Requires an extra goBack if it's the first request from the dapp
-        if (request.type === "in-app" && request.isFirstRequest) nav.goBack()
-
         nav.goBack()
-    }, [nav, request])
+    }, [nav])
 
     const onFinish = useCallback(
         (sucess: boolean) => {
