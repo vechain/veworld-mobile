@@ -149,11 +149,6 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
                 </BaseView>
 
-                <BaseView flexDirection="row" alignItems="center" gap={12}>
-                    <BaseIcon name="icon-wallet" size={20} color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900} />
-                    <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
-                </BaseView>
-
                 <BaseSpacer height={12} />
                 {cardVersion === "v1" ? (
                     <BottomSheetFlatList
