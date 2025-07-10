@@ -4125,6 +4125,10 @@ type RootTranslation = {
 	 */
 	TITLE_SETTINGS: string
 	/**
+	 * T​o​t​a​l​ ​l​o​c​k​e​d
+	 */
+	TITLE_TOTAL_LOCKED: string
+	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​s
 	 */
 	TITLE_TRANSACTIONS: string
@@ -8493,6 +8497,10 @@ Are you sure you want to continue?
 	 * Settings
 	 */
 	TITLE_SETTINGS: () => LocalizedString
+	/**
+	 * Total locked
+	 */
+	TITLE_TOTAL_LOCKED: () => LocalizedString
 	/**
 	 * Transactions
 	 */

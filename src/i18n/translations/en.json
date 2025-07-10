@@ -1004,6 +1004,7 @@
   "TITLE_SECURITY": "Protect your wallet",
   "TITLE_SECURITY_DOWNGRADE": "Your app is blocked",
   "TITLE_SETTINGS": "Settings",
+  "TITLE_TOTAL_LOCKED": "Total locked",
   "TITLE_TRANSACTIONS": "Transactions",
   "TITLE_UNLOCK_KEYSTORE": "Unlock keystore",
   "TITLE_USERNAME_CLAIMED": "Username claimed!",

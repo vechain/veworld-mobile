@@ -52,6 +52,7 @@ import { EnableNotificationsBottomSheet } from "./Components/EnableNotifications
 import { useTokenBalances } from "./Hooks"
 import { useQueryClient } from "@tanstack/react-query"
 import { BannersCarousel } from "./Components/BannerCarousel"
+import { StakedCard } from "./Components/Staking"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -232,6 +233,10 @@ export const HomeScreen = () => {
                     </BaseView>
 
                     <BannersCarousel location="home_screen" />
+
+                    <BaseView style={styles.container}>
+                        <StakedCard />
+                    </BaseView>
 
                     <BaseView style={styles.container}>
                         <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
