@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.7 (2025-07-10)</small>
+
+* build: init ([590b0a4](https://github.com/vechain/veworld-mobile/commit/590b0a4))
+* Fix: UI on Notification screen (#3064) ([0268d8f](https://github.com/vechain/veworld-mobile/commit/0268d8f)), closes [#3064](https://github.com/vechain/veworld-mobile/issues/3064)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
