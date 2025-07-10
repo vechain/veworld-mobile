@@ -13,11 +13,20 @@ type Props = {
     /**
      * Called on the bottom sheet dismiss
      */
+    /**
+     * Called on the bottom sheet dismiss
+     */
     onDismiss?: () => void
     /**
      * Called to close the bottom sheet
      */
+    /**
+     * Called to close the bottom sheet
+     */
     closeBottomSheet?: () => void
+    /**
+     * List of accounts to display
+     */
     /**
      * List of accounts to display
      */
@@ -26,7 +35,14 @@ type Props = {
      * Called when an account is selected
      * @param account New selected account
      */
+    /**
+     * Called when an account is selected
+     * @param account New selected account
+     */
     setSelectedAccount: (account: AccountWithDevice | WatchedAccount) => void
+    /**
+     * The selected account
+     */
     /**
      * The selected account
      */
@@ -34,7 +50,13 @@ type Props = {
     /**
      * If false, show the VET balance, otherwise VTHO. Defaults to false (only works with `cardVersion` = 'v1')
      */
+    /**
+     * If false, show the VET balance, otherwise VTHO. Defaults to false (only works with `cardVersion` = 'v1')
+     */
     isVthoBalance?: boolean
+    /**
+     * If false the balance is not visible. Defaults to `true`
+     */
     /**
      * If false the balance is not visible. Defaults to `true`
      */
@@ -122,6 +144,11 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 ref={ref}
                 onChange={handleSheetChangePosition}
                 onDismiss={onDismiss}>
+                <BaseView flexDirection="row" alignItems="center" gap={12}>
+                    <BaseIcon name="icon-wallet" size={20} color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900} />
+                    <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
+                </BaseView>
+
                 <BaseView flexDirection="row" alignItems="center" gap={12}>
                     <BaseIcon name="icon-wallet" size={20} color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900} />
                     <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
