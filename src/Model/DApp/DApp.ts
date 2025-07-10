@@ -1,5 +1,6 @@
 import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
 import { ethers } from "ethers"
+import { NETWORK_TYPE } from "~Model/Network"
 
 export type DAppSourceType = "wallet-connect" | "in-app" | "external-app"
 
@@ -51,6 +52,14 @@ type BaseTypedDataRequest = {
     method: "thor_signTypedData"
 }
 
+type BaseExternalConnectAppRequest = BaseRequest & {
+    type: "external-app"
+    publicKey: string
+    redirectUrl: string
+    nonce: string
+    network: NETWORK_TYPE
+}
+
 type WcConnectAppRequest = BaseRequest & {
     type: "wallet-connect"
     proposal: SignClientTypes.EventArguments["session_proposal"]
@@ -81,7 +90,7 @@ export type TransactionRequest = WcTxRequest | InAppTxRequest | ExternalAppTxReq
 
 export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest
 
-export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
+export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest | BaseExternalConnectAppRequest
 
 export type InAppRequest = InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
 

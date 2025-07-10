@@ -13,6 +13,7 @@ import { DappDetails } from "../DappDetails"
 import { DappWithDetails } from "../DappWithDetails"
 import { useWcConnect } from "./useWcConnect"
 import { useWcSwitchChain } from "./useWcSwitchChain"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 
 type Request = {
     request: ConnectAppRequest
@@ -91,6 +92,7 @@ export const ConnectBottomSheet = () => {
     const { connectBsRef, connectBsData, setConnectBsData } = useInteraction()
     const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
     const { rejectPendingProposal } = useWalletConnect()
+    const { onConnect: onConnectExternalDapp, onRejectConnection } = useExternalDappConnection()
 
     const { processProposal, isLoading, setIsLoading } = useWcConnect({ onCloseBs })
     const isUserAction = useRef(false)
@@ -99,13 +101,20 @@ export const ConnectBottomSheet = () => {
         async (request: ConnectAppRequest) => {
             if (request.type === "wallet-connect") {
                 await processProposal(request)
+            } else if (request.type === "external-app") {
+                await onConnectExternalDapp({
+                    dappPublicKey: request.publicKey,
+                    redirectUrl: request.redirectUrl,
+                    dappName: request.appName,
+                    dappUrl: request.appUrl,
+                })
             } else {
                 addAppAndNavToRequest(request.initialRequest)
             }
             isUserAction.current = true
             onCloseBs()
         },
-        [addAppAndNavToRequest, onCloseBs, processProposal],
+        [addAppAndNavToRequest, onCloseBs, onConnectExternalDapp, processProposal],
     )
 
     const rejectProposal = useCallback(
@@ -116,6 +125,8 @@ export const ConnectBottomSheet = () => {
                 } catch (err: unknown) {
                     error(ERROR_EVENTS.WALLET_CONNECT, err)
                 }
+            } else if (request.type === "external-app") {
+                await onRejectConnection(request.redirectUrl)
             } else {
                 postMessage({
                     id: request.initialRequest.id,
@@ -124,7 +135,7 @@ export const ConnectBottomSheet = () => {
                 })
             }
         },
-        [postMessage, rejectPendingProposal],
+        [onRejectConnection, postMessage, rejectPendingProposal],
     )
 
     const onCancel = useCallback(
