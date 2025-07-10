@@ -1962,6 +1962,10 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_token_transfer: string
 	/**
+	 * C​o​n​n​e​c​t
+	 */
+	CONNECTION_REQUEST_CTA: string
+	/**
 	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
@@ -1974,10 +1978,6 @@ type RootTranslation = {
 	 * @param {unknown} name
 	 */
 	CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
-	/**
-	 * C​o​n​n​e​c​t
-	 */
-	CONNECTION_REQUEST_CTA: string
 	/**
 	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
 	 */
@@ -3135,7 +3135,7 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: string
 	/**
-	 * Latest news and updates
+	 * A​p​p​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DAPPS_DESC: string
 	/**
@@ -3167,11 +3167,11 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: string
 	/**
-	 * V​e​B​e​t​t​e​r​D​A​O
+	 * V​e​B​e​t​t​e​r
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
-	 * App news & updates, vote reminder
+	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
 	/**
@@ -6413,6 +6413,10 @@ Thanks for your patience!
 	 */
 	CONNECTED_APP_token_transfer: () => LocalizedString
 	/**
+	 * Connect
+	 */
+	CONNECTION_REQUEST_CTA: () => LocalizedString
+	/**
 	 * ● Request your signature on certificates or identification and agreements
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
@@ -6424,10 +6428,6 @@ Thanks for your patience!
 	 * {name} is asking for access to:
 	 */
 	CONNECTION_REQUEST_SUBTITLE: (arg: { name: unknown }) => LocalizedString
-	/**
-	 * Connect
-	 */
-	CONNECTION_REQUEST_CTA: () => LocalizedString
 	/**
 	 * Connection request
 	 */
@@ -7566,7 +7566,7 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
 	/**
-	 * Latest news and updates
+	 * App news & updates
 	 */
 	PUSH_NOTIFICATIONS_DAPPS_DESC: () => LocalizedString
 	/**
@@ -7598,11 +7598,11 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: () => LocalizedString
 	/**
-	 * VeBetterDAO
+	 * VeBetter
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
 	/**
-	 * App news & updates, vote reminder
+	 * Vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
 	/**
