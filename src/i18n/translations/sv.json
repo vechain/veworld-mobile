@@ -436,7 +436,7 @@
   "CONNECTED_APPS_SCREEN_TITLE": "Anslutna appar",
   "CONNECTED_APP_ASKING_FOR_ACCESS": "{dappName:string} begär åtkomst till:",
   "CONNECTED_APP_ASKING_FOR_ACCESS_1": "Begär transaktioner att skicka till VeChain Thor.",
-  "CONNECTED_APP_ASKING_FOR_ACCESS_2": "Begär din signatur på certifikat eller identifiering och avtal.",
+  "CONNECTED_APP_ASKING_FOR_ACCESS_2": "Begär din signatur på certifikat eller identifikation och avtal.",
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION": "Du har tidigare anslutit till {dapp:string} med ett annat konto. Vill du byta till det konto som är anslutet till {dapp:string}?",
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "Byt konto",
   "CONNECTED_APP_CONNECTION_REQUESTS": "Anslutningsförfrågningar",

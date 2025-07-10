@@ -199,7 +199,6 @@ export const useTransactionScreen = ({
         selectedDelegationUrl,
         dappRequest,
         initialRoute,
-        resetDelegation,
         selectedDelegationToken,
         genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].maxFee,
     })
