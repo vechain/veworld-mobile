@@ -1,3 +1,5 @@
+import { useNavigation } from "@react-navigation/native"
+import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { FC, useCallback, useMemo } from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import {
@@ -11,9 +13,21 @@ import {
     getRpcError,
     RequireUserPassword,
     SelectAccountBottomSheet,
-    useWalletConnect,
     useInAppBrowser,
+    useWalletConnect,
 } from "~Components"
+import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
+import {
+    useAnalyticTracking,
+    useBottomSheetModal,
+    useCheckIdentity,
+    useSetSelectedAccount,
+    useSignTypedMessage,
+} from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { AccountWithDevice, DEVICE_TYPE, SignedTypedDataResponse, TypedData, WatchedAccount } from "~Model"
+import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { UnknownAppMessage } from "~Screens"
 import {
     addSignTypedDataActivity,
     selectVerifyContext,
@@ -22,20 +36,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { error, HexUtils } from "~Utils"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckIdentity,
-    useSetSelectedAccount,
-    useSignTypedMessage,
-} from "~Hooks"
-import { AccountWithDevice, DEVICE_TYPE, SignedTypedDataResponse, TypedData, WatchedAccount } from "~Model"
-import { useI18nContext } from "~i18n"
-import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import { useNavigation } from "@react-navigation/native"
-import { UnknownAppMessage } from "~Screens"
-import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useObservedAccountExclusion } from "../Hooks"
 import { DataMessageDetails } from "./Components"
 
@@ -97,14 +97,11 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
 
     const onClose = useCallback(() => {
         if (nav.canGoBack()) {
-            // Requires an extra goBack if it's the first request from the dapp
-            if (request.type === "in-app" && request.isFirstRequest) nav.goBack()
-
             nav.goBack()
         } else {
             nav.navigate(Routes.DISCOVER)
         }
-    }, [request, nav])
+    }, [nav])
 
     const handleAccept = useCallback(
         async (password?: string) => {
