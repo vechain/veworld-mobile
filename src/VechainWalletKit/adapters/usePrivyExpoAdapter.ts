@@ -18,7 +18,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
 
     return useMemo(() => {
         const currentWallets = wallets ?? []
-        console.log("Privy isAuthenticated", isAuthenticated)
+        console.log("Privy isAuthenticated", isAuthenticated, currentWallets)
         return {
             isAuthenticated,
 
@@ -43,6 +43,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             },
 
             async signMessage(message: Buffer): Promise<Buffer> {
+                console.log("usePrivyExpoAdapter signMessage", isAuthenticated, currentWallets)
                 if (!isAuthenticated || !currentWallets.length) {
                     const errormessage = !isAuthenticated
                         ? "User not authenticated"
@@ -64,6 +65,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             },
 
             async signTransaction(tx: Transaction): Promise<Buffer> {
+                console.log("usePrivyExpoAdapter signTransaction", isAuthenticated, currentWallets)
                 if (!isAuthenticated || !currentWallets.length) {
                     throw new WalletError(
                         WalletErrorType.WALLET_NOT_FOUND,
@@ -99,6 +101,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             },
 
             async signTypedData(data: TypedDataPayload): Promise<string> {
+                console.log("usePrivyExpoAdapter signTypedData", isAuthenticated, currentWallets)
                 if (!isAuthenticated || !currentWallets.length) {
                     throw new WalletError(
                         WalletErrorType.WALLET_NOT_FOUND,

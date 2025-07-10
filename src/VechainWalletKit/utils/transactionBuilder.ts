@@ -153,15 +153,16 @@ async function buildBatchExecutionClauses({
 }): Promise<TransactionClause[]> {
     const clauses: TransactionClause[] = []
     const { address, isDeployed, factoryAddress } = smartAccountConfig
-
+    console.log("buildBatchExecutionClauses smartAccountConfig", JSON.stringify(smartAccountConfig))
     // Build the batch authorization typed data
     const typedData = buildBatchAuthorizationTypedData({
         clauses: txClauses,
         chainId,
         verifyingContract: address,
     })
+    console.log("buildBatchExecutionClauses typedData", JSON.stringify(typedData))
     const signature = await signTypedDataFn(typedData)
-
+    console.log("buildBatchExecutionClauses signature", signature)
     // If the smart account is not deployed, deploy it first
     if (!isDeployed) {
         clauses.push(
@@ -279,10 +280,11 @@ export async function buildSmartAccountTransaction(params: {
     const { txClauses, smartAccountConfig, signTypedDataFn, chainId, genericDelgation } = params
     const { version: smartAccountVersion, hasV1Account } = smartAccountConfig
 
+    console.log("buildSmartAccountTransaction genericDelgation", JSON.stringify(genericDelgation))
     // Determine execution strategy based on smart account version
     const shouldUseBatchExecution = !hasV1Account || (smartAccountVersion && smartAccountVersion >= 3)
 
-    if (genericDelgation) {
+    if (genericDelgation && genericDelgation.isGenDelegation) {
         const transferClause = getTransferClause(
             genericDelgation.token,
             genericDelgation.delegatorAddress,
@@ -292,6 +294,7 @@ export async function buildSmartAccountTransaction(params: {
     }
 
     if (shouldUseBatchExecution) {
+        console.log("buildSmartAccountTransaction shouldUseBatchExecution")
         return await buildBatchExecutionClauses({
             txClauses,
             smartAccountConfig,

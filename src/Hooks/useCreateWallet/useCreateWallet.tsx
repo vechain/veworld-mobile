@@ -171,9 +171,10 @@ export const useCreateWallet = () => {
                     alias: "Smart Wallet",
                     position: 0, // this will be updated when the device is added to the redux store
                 }
+                console.log("smartWalletDevice", smartWalletDevice)
                 // add the device and account to redux
                 const newAccount = dispatch(addSmartWalletDeviceAndAccount(smartWalletDevice))
-
+                console.log("newAccount", newAccount)
                 // set the selected account
                 if (!selectedAccount) dispatch(setSelectedAccount({ address: newAccount.address }))
 

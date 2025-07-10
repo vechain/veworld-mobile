@@ -1,6 +1,6 @@
 import React, { useCallback } from "react"
-import { Text, View, Button, ScrollView, StyleSheet } from "react-native"
-
+import { Text, View, Button, StyleSheet } from "react-native"
+import { useCreateWallet } from "../../../../Hooks/useCreateWallet"
 import { useNavigation } from "@react-navigation/native"
 import { useSmartWallet } from "../../../../VechainWalletKit"
 
@@ -11,6 +11,7 @@ export const SmartAccountScreen = () => {
     // const { accountAddress } = useSocialLogin()
     const nav = useNavigation<any>()
 
+    const { createSmartWallet } = useCreateWallet()
     const navigateToTabStack = useCallback(() => {
         // Navigate directly to TabStack instead of a specific tab
         nav.reset({
@@ -21,8 +22,14 @@ export const SmartAccountScreen = () => {
 
     const initialiseWalletAndNavigate = useCallback(async () => {
         await initialiseWallet()
-        console.log("creating wallet!")
     }, [initialiseWallet])
+
+    const addWalletToVeWorld = useCallback(async () => {
+        if (isAuthenticated && smartAccountAddress) {
+            await createSmartWallet({ address: smartAccountAddress })
+            console.log("wallet added to veworld")
+        }
+    }, [createSmartWallet, isAuthenticated, smartAccountAddress])
 
     const handleLogin = useCallback(async () => {
         console.log("logging in!")
@@ -39,7 +46,6 @@ export const SmartAccountScreen = () => {
             <View
                 style={{
                     padding: 40,
-                    // display: "flex",
                     // flexDirection: "column",
                     gap: 10,
                 }}>
@@ -76,6 +82,7 @@ export const SmartAccountScreen = () => {
                 </View>
                 <Button title="Initialise Wallet" onPress={initialiseWalletAndNavigate} />
                 <Button title="Go to Main App" onPress={navigateToTabStack} />
+                <Button title="Add Wallet to VeWorld" onPress={addWalletToVeWorld} />
                 {/* <Button title="Logout" onPress={logout} /> */}
             </View>
         </View>

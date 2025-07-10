@@ -105,7 +105,7 @@ const addSmartWalletDeviceAndAccount =
     (device: SmartWalletDevice): AppThunk<WalletAccount> =>
     dispatch => {
         dispatch(addDevice(device))
-
+        console.log("addSmartWalletDeviceAndAccount completed", device)
         let account: WalletAccount = {
             alias: "Smart Wallet Account",
             address: device.rootAddress,
@@ -115,6 +115,7 @@ const addSmartWalletDeviceAndAccount =
         }
 
         dispatch(addAccount(account))
+        console.log("addAccount completed", account)
         return account
     }
 

@@ -35,6 +35,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
+    console.log("SmartWalletProvider", adapter.isAuthenticated)
 
     const initialiseWallet = useCallback(async (): Promise<void> => {
         if (!adapter.isAuthenticated) {
@@ -58,6 +59,16 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             setIsLoading(false)
         }
     }, [adapter, thor, config.networkConfig])
+
+    useEffect(() => {
+        const init = async () => {
+            if (adapter.isAuthenticated) {
+                console.log("SmartWalletProvider useEffect initialiseWallet")
+                await initialiseWallet()
+            }
+        }
+        init()
+    }, [adapter.isAuthenticated, initialiseWallet])
 
     // Auto-update when config changes, NOT immediately after initialiseWallet
     useEffect(() => {
@@ -100,9 +111,10 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
-            if (!adapter.isAuthenticated) {
-                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
-            }
+            console.log("SmartWalletProvider signMessage", adapter.isAuthenticated)
+            // if (!adapter.isAuthenticated) {
+            //     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            // }
             return await adapter.signMessage(message)
         },
         [adapter],
@@ -110,9 +122,9 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const signTransaction = useCallback(
         async (tx: Transaction, _options?: SignOptions): Promise<Buffer> => {
-            if (!adapter.isAuthenticated) {
-                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
-            }
+            // if (!adapter.isAuthenticated) {
+            //     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            // }
             return await adapter.signTransaction(tx)
         },
         [adapter],
@@ -120,9 +132,9 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const signTypedData = useCallback(
         async (data: TypedDataPayload): Promise<string> => {
-            if (!adapter.isAuthenticated) {
-                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
-            }
+            // if (!adapter.isAuthenticated) {
+            //     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            // }
             return await adapter.signTypedData(data)
         },
         [adapter],
@@ -140,15 +152,20 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 delegatorAddress: string
             },
         ): Promise<Transaction> => {
-            if (!adapter.isAuthenticated || !ownerAddress) {
-                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
-            }
+            // if (!adapter.isAuthenticated || !ownerAddress) {
+            //     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            // }
             if (!smartAccountConfig) {
+                console.log("SmartWalletProvider", JSON.stringify(smartAccountConfig))
                 throw new WalletError(
                     WalletErrorType.WALLET_NOT_FOUND,
                     "Smart wallet not initialized, call initialiseWallet first",
                 )
             }
+            console.log(
+                "SmartWalletProvider buildTransaction smartAccountConfig present",
+                JSON.stringify(smartAccountConfig),
+            )
 
             try {
                 const finalClauses = await buildSmartAccountTransaction({
@@ -175,6 +192,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
                 return Transaction.of(txBody)
             } catch (error) {
+                console.log("SmartWalletProvider buildTransaction error", JSON.stringify(error))
                 throw new WalletError(WalletErrorType.NETWORK_ERROR, "Error building transaction", error)
             }
         },
