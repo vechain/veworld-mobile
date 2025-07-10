@@ -325,7 +325,13 @@ export interface StargateActivity extends Activity {
         | ActivityEvent.STARGATE_UNSTAKE
         | ActivityEvent.STARGATE_CLAIM_REWARDS_BASE
         | ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE
+        | ActivityEvent.STARGATE_DELEGATE_ONLY
     value: string
     tokenId?: string
     levelId?: TokenLevelId
+    owner?: string
+    vetGeneratedVthoRewards?: string
+    delegationRewards?: string
+    migrated?: boolean
+    autorenew?: boolean
 }

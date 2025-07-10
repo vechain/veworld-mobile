@@ -8,13 +8,13 @@ import { filterValues } from "../constants"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
+import { STARGATE_DAPP_URL } from "~Constants"
 
 export const ActivityStakingScreen = () => {
     const { LL } = useI18nContext()
     const nav = useNavigation()
     const { navigateWithTab } = useBrowserTab()
     const { styles } = useThemedStyles(baseStyles)
-    const URL = "https://stargate.vechain.org"
 
     const onPress = useCallback(
         (url: string, title: string) => {
@@ -38,7 +38,7 @@ export const ActivityStakingScreen = () => {
                     hasCardStyle
                     label={LL.ACTIVITY_ALL_EMPTY_LABEL()}
                     description={LL.ACTIVITY_STAKING_EMPTY_LABEL()}
-                    onPress={() => onPress(URL, "Stargate")}
+                    onPress={() => onPress(STARGATE_DAPP_URL, "Stargate")}
                 />
             </BaseView>
         )

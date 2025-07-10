@@ -4,3 +4,4 @@ export const selectNotificationPermissionEnabled = (state: RootState) => state.n
 export const selectNotificationOptedIn = (state: RootState) => state.notification.optedIn
 export const selectDappVisitCounter = (state: RootState) => state.notification.dappVisitCounter
 export const selectNotificationFeautureEnabled = (state: RootState) => state.notification.feautureEnabled
+export const selectDappNotifications = (state: RootState) => state.notification.dappNotifications
