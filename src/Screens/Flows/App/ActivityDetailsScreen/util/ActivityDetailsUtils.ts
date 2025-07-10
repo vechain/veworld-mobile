@@ -45,10 +45,24 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
             return LL.CONNECTED_APP_TITLE()
         case ActivityType.SIGN_TYPED_DATA:
             return LL.CONNECTED_APP_SIGN_TYPED_DATA()
+        case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
+            return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
+        case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
+            return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
+        case ActivityType.STARGATE_DELEGATE:
+            return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
+        case ActivityType.STARGATE_DELEGATE_ONLY:
+            return LL.ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL()
+        case ActivityType.STARGATE_UNDELEGATE:
+            return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
+        case ActivityType.STARGATE_STAKE:
+            return LL.ACTIVITY_STARGATE_STAKE_LABEL()
+        case ActivityType.STARGATE_UNSTAKE:
+            return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
         case ActivityType.UNKNOWN_TX:
             return LL.UNKNOWN_TX()
         default:
-            warn(ERROR_EVENTS.ACTIVITIES, "Unknown activity type")
+            warn(ERROR_EVENTS.ACTIVITIES, "Unknown activity type", activity.type)
     }
 }
 
@@ -71,11 +85,18 @@ export const getActivityModalTitle = (activity: Activity, LL: TranslationFunctio
         case ActivityType.TRANSFER_NFT:
         case ActivityType.CONNECTED_APP_TRANSACTION:
         case ActivityType.SIGN_TYPED_DATA:
+        case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
+        case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
+        case ActivityType.STARGATE_DELEGATE:
+        case ActivityType.STARGATE_DELEGATE_ONLY:
+        case ActivityType.STARGATE_UNDELEGATE:
+        case ActivityType.STARGATE_STAKE:
+        case ActivityType.STARGATE_UNSTAKE:
         case ActivityType.UNKNOWN_TX:
             return getActivityTitle(activity, LL)
         case ActivityType.B3TR_ACTION:
             return LL.B3TR_ACTION_MODAL_TITLE()
         default:
-            warn(ERROR_EVENTS.ACTIVITIES, "Unknown activity type")
+            warn(ERROR_EVENTS.ACTIVITIES, "Unknown activity type" + activity.type)
     }
 }

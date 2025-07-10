@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { LocalAccountWithDevice } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { defaultMainNetwork, defaultTestNetwork } from "~Constants/Constants"
+import { defaultMainNetwork, defaultTestNetwork, VTHO } from "~Constants/Constants"
 
 /**
  * Delegation State
@@ -13,16 +13,19 @@ export interface DelegationState {
     defaultDelegationOption: DelegationType
     defaultDelegationAccount?: LocalAccountWithDevice
     defaultDelegationUrl?: string
+    defaultToken: string
 }
 
 const initialState: Record<string, DelegationState> = {
     [defaultMainNetwork.genesis.id]: {
         urls: [],
         defaultDelegationOption: DelegationType.NONE,
+        defaultToken: VTHO.symbol,
     },
     [defaultTestNetwork.genesis.id]: {
         urls: [],
         defaultDelegationOption: DelegationType.NONE,
+        defaultToken: VTHO.symbol,
     },
 }
 
@@ -44,6 +47,7 @@ export const DelegationSlice = createSlice({
                 state[genesisId] = {
                     urls: [url],
                     defaultDelegationOption: DelegationType.NONE,
+                    defaultToken: VTHO.symbol,
                 }
             }
 
@@ -60,6 +64,7 @@ export const DelegationSlice = createSlice({
                 state[genesisId] = {
                     urls: [],
                     defaultDelegationOption: DelegationType.NONE,
+                    defaultToken: VTHO.symbol,
                 }
             } else {
                 state[genesisId].urls = state[genesisId].urls.filter(_url => _url !== url)
@@ -72,6 +77,7 @@ export const DelegationSlice = createSlice({
                 state[genesisId] = {
                     urls: [],
                     defaultDelegationOption: type,
+                    defaultToken: VTHO.symbol,
                 }
             }
 
@@ -90,6 +96,7 @@ export const DelegationSlice = createSlice({
                 state[genesisId] = {
                     urls: [],
                     defaultDelegationOption: DelegationType.NONE,
+                    defaultToken: VTHO.symbol,
                 }
             }
 
@@ -108,12 +115,28 @@ export const DelegationSlice = createSlice({
                 state[genesisId] = {
                     urls: url ? [url] : [],
                     defaultDelegationOption: DelegationType.NONE,
+                    defaultToken: VTHO.symbol,
                 }
             }
 
             state[genesisId].defaultDelegationUrl = url
         },
         resetDelegationState: () => initialState,
+        setDefaultDelegationToken: (
+            state,
+            action: PayloadAction<{
+                genesisId: string
+                token: string
+            }>,
+        ) => {
+            const { token, genesisId } = action.payload
+            state[genesisId] ??= {
+                urls: [],
+                defaultDelegationOption: DelegationType.NONE,
+                defaultToken: token,
+            }
+            state[genesisId].defaultToken = token
+        },
     },
 })
 
@@ -124,4 +147,5 @@ export const {
     setDefaultDelegationUrl,
     deleteDelegationUrl,
     resetDelegationState,
+    setDefaultDelegationToken,
 } = DelegationSlice.actions

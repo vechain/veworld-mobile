@@ -181,17 +181,21 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STAKING_LABEL: string
 	/**
-	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 * B​a​s​e​ ​r​e​w​a​r​d​s
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: string
 	/**
-	 * C​l​a​i​m​e​d​ ​r​e​w​a​r​d​s
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​w​a​r​d​s
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: string
 	/**
 	 * V​E​T​ ​s​t​a​k​e​d​ ​&​ ​d​e​l​e​g​a​t​e​d
 	 */
 	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: string
+	/**
+	 * N​o​d​e​ ​d​e​l​e​g​a​t​e​d
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL: string
 	/**
 	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e​d
 	 */
@@ -2059,6 +2063,18 @@ type RootTranslation = {
 	 */
 	DELEGATE_FEE: string
 	/**
+	 * U​s​e​ ​t​h​i​s​ ​t​o​k​e​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	DELEGATE_FEE_TOKEN_CHECKBOX: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​ ​w​i​t​h
+	 */
+	DELEGATE_FEE_TOKEN_DESC: string
+	/**
+	 * F​e​e​ ​t​o​k​e​n
+	 */
+	DELEGATE_FEE_TOKEN_TITLE: string
+	/**
 	 * B​y​ ​d​e​f​a​u​l​t​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​ ​c​o​s​t​ ​w​i​l​l​ ​b​e​ ​p​a​i​d​ ​b​y​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t​:
 	 */
 	DELEGATE_SELF: string
@@ -2075,11 +2091,11 @@ type RootTranslation = {
 	 */
 	DELEGATE_URL_SELECT: string
 	/**
-	 * F​e​e​ ​d​e​l​e​g​a​t​e​d​ ​t​o
+	 * F​e​e​ ​d​e​l​e​g​a​t​i​o​n
 	 */
 	DELEGATION_FEE: string
 	/**
-	 * F​e​e​ ​n​o​t​ ​d​e​l​e​g​a​t​e​d
+	 * N​o​n​e
 	 */
 	DELEGATION_NO_FEE: string
 	/**
@@ -3062,6 +3078,14 @@ type RootTranslation = {
 	 */
 	NO_THANKS: string
 	/**
+	 * N​o​ ​t​o​k​e​n​s​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​.
+	 */
+	NO_TOKENS_AVAILABLE_FOR_FEE: string
+	/**
+	 * N​o​ ​V​T​H​O​ ​b​a​l​a​n​c​e​.​ ​S​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​t​o​k​e​n
+	 */
+	NO_VTHO_BALANCE: string
+	/**
 	 * O​c​t​o​b​e​r
 	 */
 	OCTOBER: string
@@ -3111,6 +3135,10 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: string
 	/**
+	 * Latest news and updates
+	 */
+	PUSH_NOTIFICATIONS_DAPPS_DESC: string
+	/**
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
@@ -3143,7 +3171,7 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
-	 * V​o​t​e​ ​r​e​m​i​n​d​e​r
+	 * App news & updates, vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: string
 	/**
@@ -4630,17 +4658,21 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STAKING_LABEL: () => LocalizedString
 	/**
-	 * Claimed rewards
+	 * Base rewards
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL: () => LocalizedString
 	/**
-	 * Claimed rewards
+	 * Delegation rewards
 	 */
 	ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL: () => LocalizedString
 	/**
 	 * VET staked & delegated
 	 */
 	ACTIVITY_STARGATE_NODE_DELEGATE_LABEL: () => LocalizedString
+	/**
+	 * Node delegated
+	 */
+	ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL: () => LocalizedString
 	/**
 	 * Node undelegated
 	 */
@@ -6489,6 +6521,18 @@ Thanks for your patience!
 	 */
 	DELEGATE_FEE: () => LocalizedString
 	/**
+	 * Use this token for future transactions
+	 */
+	DELEGATE_FEE_TOKEN_CHECKBOX: () => LocalizedString
+	/**
+	 * Select the token to pay the fee with
+	 */
+	DELEGATE_FEE_TOKEN_DESC: () => LocalizedString
+	/**
+	 * Fee token
+	 */
+	DELEGATE_FEE_TOKEN_TITLE: () => LocalizedString
+	/**
 	 * By default the transaction fee cost will be paid by the active account:
 	 */
 	DELEGATE_SELF: () => LocalizedString
@@ -6505,11 +6549,11 @@ Thanks for your patience!
 	 */
 	DELEGATE_URL_SELECT: () => LocalizedString
 	/**
-	 * Fee delegated to
+	 * Fee delegation
 	 */
 	DELEGATION_FEE: () => LocalizedString
 	/**
-	 * Fee not delegated
+	 * None
 	 */
 	DELEGATION_NO_FEE: () => LocalizedString
 	/**
@@ -7474,6 +7518,14 @@ Thanks for your patience!
 	 */
 	NO_THANKS: () => LocalizedString
 	/**
+	 * No tokens available to pay the fee.
+	 */
+	NO_TOKENS_AVAILABLE_FOR_FEE: () => LocalizedString
+	/**
+	 * No VTHO balance. Select another token
+	 */
+	NO_VTHO_BALANCE: () => LocalizedString
+	/**
 	 * October
 	 */
 	OCTOBER: () => LocalizedString
@@ -7522,6 +7574,10 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
 	/**
+	 * Latest news and updates
+	 */
+	PUSH_NOTIFICATIONS_DAPPS_DESC: () => LocalizedString
+	/**
 	 * Keep up to date with the latest news and updates
 	 */
 	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
@@ -7554,7 +7610,7 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
 	/**
-	 * Vote reminder
+	 * App news & updates, vote reminder
 	 */
 	PUSH_NOTIFICATIONS_VOTE_REMINDER: () => LocalizedString
 	/**
