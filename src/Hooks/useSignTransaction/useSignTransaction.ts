@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { Address, Hex, Secp256k1, Transaction } from "@vechain/sdk-core"
 import { HDNode } from "thor-devkit"
-import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
+import { showWarningToast, WalletEncryptionKeyHelper } from "~Components"
 import { ERROR_EVENTS, VTHO } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest, Wallet } from "~Model"
@@ -20,7 +20,6 @@ type Props = {
     initialRoute?: Routes.NFTS | Routes.HOME
     buildTransaction: () => Transaction
     dappRequest?: TransactionRequest
-    resetDelegation: () => void
     selectedDelegationToken: string
     genericDelegatorFee?: BigNumberUtils
 }
@@ -55,7 +54,6 @@ export const useSignTransaction = ({
     buildTransaction,
     dappRequest,
     initialRoute,
-    resetDelegation,
     selectedDelegationToken,
     genericDelegatorFee,
 }: Props) => {
@@ -206,12 +204,7 @@ export const useSignTransaction = ({
         )
 
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) {
-            resetDelegation()
-            showErrorToast({
-                text1: LL.ERROR(),
-                text2: LL.SEND_DELEGATION_ERROR_SIGNATURE(),
-            })
-            return
+            return SignStatus.DELEGATION_FAILURE
         }
 
         nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
@@ -232,7 +225,8 @@ export const useSignTransaction = ({
         let transaction = buildTransaction()
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
-            await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
+            const result = await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
+            if (result === SignStatus.DELEGATION_FAILURE) return result
             return SignStatus.NAVIGATE_TO_LEDGER
         }
 
