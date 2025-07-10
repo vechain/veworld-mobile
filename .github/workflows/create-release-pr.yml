@@ -51,7 +51,23 @@ jobs:
                     "version": "${{ env.IOS_VERSION }}",
                     "major": false,
                     "descriptions": {
-                      "en": []
+                      "en": [],
+                      "de": [],
+                      "es": [],
+                      "fr": [],
+                      "hi": [],
+                      "it": [],
+                      "ja": [],
+                      "ko": [],
+                      "nl": [],
+                      "pl": [],
+                      "pt": [],
+                      "ru": [],
+                      "sv": [],
+                      "tr": [],
+                      "tw": [],
+                      "vi": [],
+                      "zh": []
                     }
                   }
                   EOL
@@ -80,7 +96,7 @@ jobs:
                       "tr": [],
                       "tw": [],
                       "vi": [],
-                      "zh": [],
+                      "zh": []
                     }
                   }
                   EOL
@@ -104,7 +120,7 @@ jobs:
                     if [ "$VERSION_EXISTS" != "true" ]; then
                       jq --arg v "${{ env.IOS_VERSION }}" '.latest = $v' releases/ios/manifest.json > temp.json && mv temp.json releases/ios/manifest.json
                       
-                      jq --arg v "${{ env.IOS_VERSION }}" --arg k "/versions/${{ env.IOS_VERSION }}" \
+                      jq --arg v "${{ env.IOS_VERSION }}" --arg k "releases/ios/versions/${{ env.IOS_VERSION }}" \
                         '.history += [{"version": $v, "key": $k, "major": false}]' \
                         releases/ios/manifest.json > temp.json && mv temp.json releases/ios/manifest.json
                     fi
@@ -129,7 +145,7 @@ jobs:
                     if [ "$VERSION_EXISTS" != "true" ]; then
                       jq --arg v "${{ env.ANDROID_VERSION }}" '.latest = $v' releases/android/manifest.json > temp.json && mv temp.json releases/android/manifest.json
                       
-                      jq --arg v "${{ env.ANDROID_VERSION }}" --arg k "/versions/${{ env.ANDROID_VERSION }}" \
+                      jq --arg v "${{ env.ANDROID_VERSION }}" --arg k "releases/android/versions/${{ env.ANDROID_VERSION }}" \
                         '.history += [{"version": $v, "key": $k, "major": false}]' \
                         releases/android/manifest.json > temp.json && mv temp.json releases/android/manifest.json
                     fi

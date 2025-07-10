@@ -6,14 +6,13 @@ import React, { useMemo } from "react"
 import { Certificate } from "thor-devkit"
 import { useWalletStatus } from "~Components"
 import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
-import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
+import { CertificateRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
 import { TransactionRequest, TypeDataRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import { TabStack, TabStackParamList } from "~Navigation/Tabs"
 import {
     BlackListedCollectionsScreen,
     ChooseBackupDetailsPassword,
-    ConnectAppScreen,
     ConnectExternalAppScreenV1,
     DappChangeAccountScreen,
     DetailsBackupScreen,
@@ -37,9 +36,6 @@ export type RootStackParamListSwitch = {
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.BUY_FLOW]: undefined
-    [Routes.CONNECT_APP_SCREEN]: {
-        request: ConnectAppRequest
-    }
     [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
         request: TransactionRequest
         isInjectedWallet?: boolean
@@ -114,8 +110,6 @@ export const SwitchStack = () => {
                                 presentation: "modal",
                             }}
                         />
-
-                        <Switch.Screen name={Routes.CONNECT_APP_SCREEN} component={ConnectAppScreen} />
 
                         <Switch.Screen
                             name={Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN}

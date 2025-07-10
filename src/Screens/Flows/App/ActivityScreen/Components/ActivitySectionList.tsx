@@ -166,6 +166,7 @@ const Item = ({
         case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
         case ActivityType.STARGATE_UNDELEGATE:
         case ActivityType.STARGATE_UNSTAKE:
+        case ActivityType.STARGATE_DELEGATE_ONLY:
             return <ActivityBox.Staking activity={activity as StargateActivity} onPress={onPress} />
         default:
             return null

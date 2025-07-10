@@ -57,6 +57,7 @@ import { onlineManager } from "@tanstack/react-query"
 import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
+import { InteractionProvider } from "~Components/Providers/InteractionProvider"
 import { decodeBase64 } from "tweetnacl-util"
 import nacl from "tweetnacl"
 
@@ -133,15 +134,17 @@ const Main = () => {
                     }}>
                     <FeatureFlagsProvider>
                         <NavigationProvider>
-                            <WalletConnectContextProvider>
-                                <InAppBrowserProvider>
+                            <InteractionProvider>
+                                <WalletConnectContextProvider>
                                     <BottomSheetModalProvider>
-                                        <NotificationsProvider>
-                                            <EntryPoint />
-                                        </NotificationsProvider>
+                                        <InAppBrowserProvider>
+                                            <NotificationsProvider>
+                                                <EntryPoint />
+                                            </NotificationsProvider>
+                                        </InAppBrowserProvider>
                                     </BottomSheetModalProvider>
-                                </InAppBrowserProvider>
-                            </WalletConnectContextProvider>
+                                </WalletConnectContextProvider>
+                            </InteractionProvider>
                         </NavigationProvider>
                         <BaseToast />
                     </FeatureFlagsProvider>

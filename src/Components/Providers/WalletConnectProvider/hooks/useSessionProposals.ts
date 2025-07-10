@@ -1,26 +1,25 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
-import { debug, WalletConnectUtils, warn } from "~Utils"
-import { getRpcError, SessionProposal, SessionProposalState, showErrorToast } from "~Components"
-import { Routes } from "~Navigation"
-import { useNavigation } from "@react-navigation/native"
 import { ErrorResponse } from "@walletconnect/jsonrpc-types"
-import { useI18nContext } from "~i18n"
 import { SessionTypes } from "@walletconnect/types"
-import { insertContext, useAppDispatch } from "~Storage/Redux"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { getRpcError, SessionProposal, SessionProposalState, showErrorToast } from "~Components"
+import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { validateRequestNamespaces } from "~Components/Providers/WalletConnectProvider/config/supported-chains"
 import { ERROR_EVENTS } from "~Constants"
+import { useI18nContext } from "~i18n"
+import { insertContext, useAppDispatch } from "~Storage/Redux"
+import { debug, WalletConnectUtils, warn } from "~Utils"
 
 export const useSessionProposals = (
     isBlackListScreen: () => boolean,
     addSession: (session: SessionTypes.Struct) => void,
     deepLinkPairingTopics: string[],
 ) => {
-    const nav = useNavigation()
     const { LL } = useI18nContext()
 
     const dispatch = useAppDispatch()
 
     const [sessionProposals, setSessionProposals] = useState<SessionProposalState>({})
+    const { connectBsRef, setConnectBsData } = useInteraction()
     const proposalList = useMemo(() => Object.values(sessionProposals), [sessionProposals])
 
     /**
@@ -73,18 +72,17 @@ export const useSessionProposals = (
                 return await respondInvalidSession(proposal, validationError)
             }
 
-            nav.navigate(Routes.CONNECT_APP_SCREEN, {
-                request: {
-                    type: "wallet-connect",
-                    appName: proposal.params.proposer.metadata.name,
-                    appUrl: proposal.params.proposer.metadata.url,
-                    iconUrl: proposal.params.proposer.metadata.icons[0],
-                    description: proposal.params.proposer.metadata.description,
-                    proposal,
-                },
+            setConnectBsData({
+                type: "wallet-connect",
+                appName: proposal.params.proposer.metadata.name,
+                appUrl: proposal.params.proposer.metadata.url,
+                iconUrl: proposal.params.proposer.metadata.icons[0],
+                description: proposal.params.proposer.metadata.description,
+                proposal,
             })
+            connectBsRef.current?.present()
         },
-        [LL, nav, respondInvalidSession],
+        [LL, connectBsRef, respondInvalidSession, setConnectBsData],
     )
 
     const approvePendingProposal = useCallback(

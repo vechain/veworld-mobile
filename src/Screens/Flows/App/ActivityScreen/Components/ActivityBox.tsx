@@ -1,5 +1,5 @@
 import moment from "moment"
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
@@ -90,7 +90,7 @@ const BaseActivityBox = ({
         }
 
         if (showNftImage) {
-            return <NFTMedia uri={nftImage ?? ""} styles={styles.rightImageContainer} />
+            return <NFTMedia uri={nftImage ?? ""} styles={styles.rightImageContainer} testID="nft-media" />
         }
 
         return (
@@ -482,7 +482,7 @@ type NFTTransferActivityBoxProps = {
 
 const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
-    const { collectionName } = useNFTInfo(activity?.tokenId, activity.contractAddress)
+    const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
     const isReceived = activity.direction === DIRECTIONS.DOWN
     const title = isReceived ? LL.NFT_TRANSFER_RECEIVED() : LL.NFT_TRANSFER_SENT()
     const time = moment(activity.timestamp).format("HH:mm")
@@ -504,6 +504,7 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
             title={title}
             description={validatedCollectionName()}
             onPress={onPressHandler}
+            nftImage={tokenMetadata?.image}
         />
     )
 }
@@ -839,13 +840,14 @@ const Staking = ({ activity, onPress }: StakingProps) => {
         onPress(activity)
     }
 
-    const getStakingIcon = (eventName: string): IconKey => {
+    const getStakingIcon = useCallback((eventName: string): IconKey => {
         switch (eventName) {
             case ActivityEvent.STARGATE_STAKE:
                 return "icon-download"
             case ActivityEvent.STARGATE_UNSTAKE:
                 return "icon-upload"
             case ActivityEvent.STARGATE_DELEGATE:
+            case ActivityEvent.STARGATE_DELEGATE_ONLY:
                 return "icon-lock"
             case ActivityEvent.STARGATE_UNDELEGATE:
                 return "icon-unlock"
@@ -855,13 +857,16 @@ const Staking = ({ activity, onPress }: StakingProps) => {
             default:
                 return "icon-blocks"
         }
-    }
+    }, [])
 
     const hasRightAmount = useMemo(() => {
-        return activity?.type !== ActivityEvent.STARGATE_UNDELEGATE
+        return !(
+            activity?.type === ActivityEvent.STARGATE_UNDELEGATE ||
+            activity?.type === ActivityEvent.STARGATE_DELEGATE_ONLY
+        )
     }, [activity?.type])
 
-    const getActivityTitle = () => {
+    const getActivityTitle = useCallback(() => {
         switch (activity.eventName) {
             case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
@@ -869,6 +874,8 @@ const Staking = ({ activity, onPress }: StakingProps) => {
                 return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
             case ActivityEvent.STARGATE_DELEGATE:
                 return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_ONLY:
+                return LL.ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL()
             case ActivityEvent.STARGATE_UNDELEGATE:
                 return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
             case ActivityEvent.STARGATE_STAKE:
@@ -878,7 +885,7 @@ const Staking = ({ activity, onPress }: StakingProps) => {
             default:
                 return LL.ACTIVITY_STARGATE_STAKE_LABEL()
         }
-    }
+    }, [activity.eventName, LL])
 
     const isMinus = useMemo(() => {
         return !(

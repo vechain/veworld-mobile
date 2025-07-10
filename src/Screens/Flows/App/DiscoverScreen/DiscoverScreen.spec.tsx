@@ -7,8 +7,11 @@ import { PlatformOSType } from "react-native"
 import { RootState } from "~Storage/Redux/Types"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 import { BaseToast } from "~Components"
+import { useVeBetterDaoActiveDapps, useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 
 jest.useFakeTimers()
+
+jest.mock("~Hooks/useFetchFeaturedDApps")
 
 jest.mock("react-native", () => ({
     ...jest.requireActual("react-native"),
@@ -59,6 +62,16 @@ const MockNavigator = () => (
 )
 
 describe("DiscoverScreen", () => {
+    beforeAll(() => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockImplementation(() => ({
+            data: [],
+            isLoading: false,
+        }))
+        ;(useVeBetterDaoDapps as jest.Mock).mockImplementation(() => ({
+            data: [],
+            isFetching: false,
+        }))
+    })
     it("should render correctly on iOS", async () => {
         // Render the MockNavigator instead of DiscoverScreen directly
         render(<MockNavigator />, {

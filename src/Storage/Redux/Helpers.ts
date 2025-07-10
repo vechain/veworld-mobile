@@ -36,6 +36,7 @@ import {
     resetBrowserState,
     VersionUpdateSlice,
     resetVersionUpdateState,
+    Notification,
     ExternalDappsSlice,
     resetExternalDappsState,
 } from "./Slices"
@@ -72,7 +73,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
     return {
         key: "root",
         storage,
-        version: 20,
+        version: 22,
         blacklist: [NftSlice.name, PendingSlice.name],
         whitelist: [
             CurrencySlice.name,
@@ -90,6 +91,7 @@ export const getPersistorConfig = async (mmkv: MMKV, encryptionKey: string): Pro
             AnalyticsSlice.name,
             BrowserSlice.name,
             VersionUpdateSlice.name,
+            Notification.name,
             ExternalDappsSlice.name,
         ],
         migrate: createMigrate(migrationUpdates, { debug: true }),

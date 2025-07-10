@@ -112,14 +112,11 @@ export const SignCertificateScreen: FC<Props> = ({ route }: Props) => {
 
     const onClose = useCallback(() => {
         if (nav.canGoBack()) {
-            // Requires an extra goBack if it's the first request from the dapp
-            if (request.type === "in-app" && request.isFirstRequest) nav.goBack()
-
             nav.goBack()
         } else {
             nav.navigate(Routes.DISCOVER)
         }
-    }, [request, nav])
+    }, [nav])
 
     const handleAccept = useCallback(
         async (password?: string) => {

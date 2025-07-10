@@ -7,6 +7,7 @@ export const initialNotificationState: NotificationState = {
     optedIn: null,
     dappVisitCounter: {},
     userTags: {},
+    dappNotifications: false,
 }
 
 export const Notification = createSlice({
@@ -41,6 +42,9 @@ export const Notification = createSlice({
                 delete state.dappVisitCounter[action.payload.dappId]
             }
         },
+        setDappNotifications: (state, action: PayloadAction<boolean>) => {
+            state.dappNotifications = action.payload
+        },
     },
 })
 
@@ -50,5 +54,6 @@ export const {
     updateNotificationOptedIn,
     increaseDappVisitCounter,
     setDappVisitCounter,
+    setDappNotifications,
     removeDappVisitCounter,
 } = Notification.actions
