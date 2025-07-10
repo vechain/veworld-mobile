@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { useInAppBrowser } from "~Components"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { DiscoveryDApp } from "~Constants"
 import { deleteVisitedUrl, setVisitedUrl, useAppDispatch } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
