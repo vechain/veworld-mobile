@@ -183,13 +183,18 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
                 const parsedGasLimit = Math.max(gasResult.totalGas, options?.gas ?? 0)
 
+                console.log("SmartWalletProvider options", JSON.stringify(options))
                 // Build the transaction in VeChain format
                 const txBody = await thor.transactions.buildTransactionBody(finalClauses, parsedGasLimit, {
                     isDelegated: options?.isDelegated ?? false,
                     dependsOn: options?.dependsOn,
-                    gasPriceCoef: options?.gasPriceCoef,
+                    // gasPriceCoef: options?.gasPriceCoef,
+                    maxFeePerGas: options?.maxFeePerGas,
+                    maxPriorityFeePerGas: options?.maxPriorityFeePerGas,
+                    gasPriceCoef: 0,
                 })
 
+                console.log("SmartWalletProvider buildTransaction txBody", JSON.stringify(txBody))
                 return Transaction.of(txBody)
             } catch (error) {
                 console.log("SmartWalletProvider buildTransaction error", JSON.stringify(error))

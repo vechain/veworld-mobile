@@ -15,4 +15,6 @@ export interface TransactionOptions {
     isDelegated?: boolean
     dependsOn?: string
     gasPriceCoef?: number
+    maxFeePerGas?: string
+    maxPriorityFeePerGas?: string
 }

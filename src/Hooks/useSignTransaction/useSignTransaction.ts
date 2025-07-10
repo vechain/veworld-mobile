@@ -100,13 +100,15 @@ export const useSignTransaction = ({
             // where the initial transaction will be sent from
             const origin = senderDevice?.type === DEVICE_TYPE.SMART_WALLET ? smartWalletOwnerAddress : account.address
 
+            console.log("getUrlDelegationSignature smart wallet", origin, account.address, smartWalletOwnerAddress)
             // request to send for sponsorship/fee delegation
             const sponsorRequest = {
                 origin: origin.toLowerCase(),
                 raw: rawTransaction,
             }
-
+            console.log("getUrlDelegationSignature sponsorRequest", JSON.stringify(sponsorRequest))
             const signature = await sponsorTransaction(selectedDelegationUrl, sponsorRequest)
+            console.log("getUrlDelegationSignature signature", signature)
 
             if (!signature) {
                 throw new Error("Error getting delegator signature")
