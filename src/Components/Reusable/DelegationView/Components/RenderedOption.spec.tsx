@@ -7,14 +7,6 @@ import { DelegationType } from "~Model/Delegation"
 import { TestWrapper } from "~Test"
 import { RenderedOption } from "./RenderedOption"
 
-const flatListScrollProps = {
-    onViewableItemsChanged: jest.fn(),
-    scrollEnabled: true,
-    showsHorizontalScrollIndicator: false,
-    showsVerticalScrollIndicator: true,
-    viewabilityConfig: { itemVisiblePercentThreshold: 100 },
-}
-
 describe("RenderedOption", () => {
     it(`should render correctly for ${DelegationType.NONE}`, () => {
         const onReset = jest.fn()
@@ -23,7 +15,6 @@ describe("RenderedOption", () => {
         render(
             <RenderedOption
                 selectedOption={DelegationType.NONE}
-                flatListScrollProps={flatListScrollProps}
                 onReset={onReset}
                 onClose={onClose}
                 setNoDelegation={setNoDelegation}
@@ -76,7 +67,6 @@ describe("RenderedOption", () => {
         render(
             <RenderedOption
                 selectedOption={DelegationType.ACCOUNT}
-                flatListScrollProps={flatListScrollProps}
                 onReset={onReset}
                 onClose={onClose}
                 setNoDelegation={jest.fn()}
@@ -115,7 +105,6 @@ describe("RenderedOption", () => {
         render(
             <RenderedOption
                 selectedOption={DelegationType.URL}
-                flatListScrollProps={flatListScrollProps}
                 onReset={onReset}
                 onClose={onClose}
                 setNoDelegation={jest.fn()}
@@ -158,7 +147,6 @@ describe("RenderedOption", () => {
         render(
             <RenderedOption
                 selectedOption={DelegationType.URL}
-                flatListScrollProps={flatListScrollProps}
                 onReset={onReset}
                 onClose={onClose}
                 setNoDelegation={jest.fn()}

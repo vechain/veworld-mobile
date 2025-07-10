@@ -1,12 +1,16 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
-import React from "react"
 import { act } from "@testing-library/react-native"
-import { RootState } from "../../../Storage/Redux/Types"
-import { Provider } from "react-redux"
-import { BaseToast } from "react-native-toast-message"
-import { getStore } from "../../../Test"
+import React from "react"
 import { PlatformOSType } from "react-native"
+import { BaseToast } from "react-native-toast-message"
+import { Provider } from "react-redux"
+import { ThemeEnum } from "~Constants"
+import { SecurePersistedCache } from "~Storage/PersistedCache"
+import { RootState } from "../../../Storage/Redux/Types"
+import { getStore } from "../../../Test"
+import { InteractionProvider } from "../InteractionProvider"
+import { usePersistedTheme } from "../PersistedThemeProvider"
+import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
 
 jest.mock("react-native", () => ({
     ...jest.requireActual("react-native"),
@@ -51,14 +55,25 @@ jest.mock("@react-navigation/native", () => {
 })
 
 const createWrapper = (platform: PlatformOSType) => {
-    return ({ children, preloadedState }: { children: React.ReactNode; preloadedState: Partial<RootState> }) => (
-        <Provider store={getStore(preloadedState)}>
-            <InAppBrowserProvider platform={platform}>
-                {children}
-                <BaseToast />
-            </InAppBrowserProvider>
-        </Provider>
-    )
+    return ({ children, preloadedState }: { children: React.ReactNode; preloadedState: Partial<RootState> }) => {
+        ;(usePersistedTheme as jest.Mock<ReturnType<typeof usePersistedTheme>>).mockReturnValue({
+            themeCache: new SecurePersistedCache<ThemeEnum>("test-theme-key", "test-theme"),
+            theme: ThemeEnum.DARK,
+            initThemeCache: jest.fn(),
+            resetThemeCache: jest.fn(),
+            changeTheme: jest.fn(),
+        })
+        return (
+            <Provider store={getStore(preloadedState)}>
+                <InteractionProvider>
+                    <InAppBrowserProvider platform={platform}>
+                        {children}
+                        <BaseToast />
+                    </InAppBrowserProvider>
+                </InteractionProvider>
+            </Provider>
+        )
+    }
 }
 
 describe("useInAppBrowser hook", () => {

@@ -1808,6 +1808,19 @@ type RootTranslation = {
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: string
 	/**
+	 * {​d​a​p​p​N​a​m​e​}​ ​i​s​ ​a​s​k​i​n​g​ ​f​o​r​ ​a​c​c​e​s​s​ ​t​o​:
+	 * @param {string} dappName
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
+	/**
+	 * R​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS_1: string
+	/**
+	 * R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS_2: string
+	/**
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​ ​w​i​t​h​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​a​c​c​o​u​n​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​w​i​t​c​h​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​?
 	 * @param {string} dapp
 	 */
@@ -1961,6 +1974,10 @@ type RootTranslation = {
 	 * @param {unknown} name
 	 */
 	CONNECTION_REQUEST_SUBTITLE: RequiredParams<'name'>
+	/**
+	 * C​o​n​n​e​c​t
+	 */
+	CONNECTION_REQUEST_CTA: string
 	/**
 	 * C​o​n​n​e​c​t​i​o​n​ ​r​e​q​u​e​s​t
 	 */
@@ -2461,6 +2478,10 @@ type RootTranslation = {
 	 * H​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n​s
 	 */
 	HIDDEN_COLLECTIONS: string
+	/**
+	 * H​i​d​e
+	 */
+	HIDE: string
 	/**
 	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
 	 */
@@ -3031,6 +3052,10 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​i​n​g​ ​m​a​y​ ​t​a​k​e​ ​a​ ​f​e​w​ ​s​e​c​o​n​d​s​.
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
+	/**
+	 * T​h​i​s​ ​d​A​p​p​ ​i​s​n​'​t​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.
+	 */
+	NOT_VERIFIED_DAPP: string
 	/**
 	 * N​o​v​e​m​b​e​r
 	 */
@@ -6236,6 +6261,18 @@ Thanks for your patience!
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
 	/**
+	 * {dappName} is asking for access to:
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
+	/**
+	 * Request transactions to send to VeChain Thor.
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
+	/**
+	 * Request your signature on certificates or identification and agreements.
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
+	/**
 	 * You have previously connected to {dapp} with a different account. Do you want to switch to the account connected to {dapp}?
 	 */
 	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: (arg: { dapp: string }) => LocalizedString
@@ -6387,6 +6424,10 @@ Thanks for your patience!
 	 * {name} is asking for access to:
 	 */
 	CONNECTION_REQUEST_SUBTITLE: (arg: { name: unknown }) => LocalizedString
+	/**
+	 * Connect
+	 */
+	CONNECTION_REQUEST_CTA: () => LocalizedString
 	/**
 	 * Connection request
 	 */
@@ -6887,6 +6928,10 @@ Thanks for your patience!
 	 * Hidden collections
 	 */
 	HIDDEN_COLLECTIONS: () => LocalizedString
+	/**
+	 * Hide
+	 */
+	HIDE: () => LocalizedString
 	/**
 	 * Hide collection
 	 */
@@ -7440,6 +7485,10 @@ Thanks for your patience!
 	 * Connecting may take a few seconds.
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
+	/**
+	 * This dApp isn't verified by VeWorld.
+	 */
+	NOT_VERIFIED_DAPP: () => LocalizedString
 	/**
 	 * November
 	 */
