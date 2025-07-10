@@ -32,7 +32,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const [isLoading, setIsLoading] = useState(false)
     const [smartAccountConfig, setSmartAccountConfig] = useState<SmartAccountTransactionConfig | null>(null)
     const [isInitialised, setIsInitialised] = useState(false)
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
@@ -41,7 +40,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         if (!adapter.isAuthenticated) {
             throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
         }
-        setIsAuthenticated(true)
         try {
             setIsLoading(true)
             const adapterAddress = await adapter.createWallet()
@@ -66,7 +64,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         const updateOnConfigChange = async () => {
             if (
                 isInitialised &&
-                isAuthenticated &&
+                adapter.isAuthenticated &&
                 hasNetworkConfigChanged(previousConfigRef.current, config.networkConfig)
             ) {
                 try {
@@ -87,47 +85,47 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         }
 
         updateOnConfigChange()
-    }, [config.networkConfig, thor, isInitialised, isAuthenticated, ownerAddress, adapter])
+    }, [config.networkConfig, thor, isInitialised, adapter.isAuthenticated, ownerAddress, adapter])
 
     // Reset state when authentication changes
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!adapter.isAuthenticated) {
             setOwnerAddress("")
             setSmartAccountAddress("")
             setSmartAccountConfig(null)
             setIsInitialised(false)
             setIsLoading(false)
         }
-    }, [isAuthenticated])
+    }, [adapter.isAuthenticated])
 
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
-            if (!isAuthenticated) {
+            if (!adapter.isAuthenticated) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
             return await adapter.signMessage(message)
         },
-        [adapter, isAuthenticated],
+        [adapter],
     )
 
     const signTransaction = useCallback(
         async (tx: Transaction, _options?: SignOptions): Promise<Buffer> => {
-            if (!isAuthenticated) {
+            if (!adapter.isAuthenticated) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
             return await adapter.signTransaction(tx)
         },
-        [adapter, isAuthenticated],
+        [adapter],
     )
 
     const signTypedData = useCallback(
         async (data: TypedDataPayload): Promise<string> => {
-            if (!isAuthenticated) {
+            if (!adapter.isAuthenticated) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
             return await adapter.signTypedData(data)
         },
-        [adapter, isAuthenticated],
+        [adapter],
     )
 
     // p[ass in optional gen delegator object
@@ -142,7 +140,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 delegatorAddress: string
             },
         ): Promise<Transaction> => {
-            if (!isAuthenticated || !ownerAddress) {
+            if (!adapter.isAuthenticated || !ownerAddress) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
             if (!smartAccountConfig) {
@@ -184,7 +182,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             ownerAddress,
             config.networkConfig.networkType,
             thor,
-            isAuthenticated,
+            adapter.isAuthenticated,
             signTypedData,
             smartAccountConfig,
             config.networkConfig.chainId,
@@ -193,6 +191,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const login = useCallback(
         async (options: LoginOptions): Promise<void> => {
+            console.log("SmartWalletProvider login", options)
             await adapter.login(options)
         },
         [adapter],
@@ -204,7 +203,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         setSmartAccountAddress("")
         setSmartAccountConfig(null)
         setIsInitialised(false)
-        setIsAuthenticated(false)
     }, [adapter])
 
     const contextValue = useMemo(
@@ -213,7 +211,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             smartAccountAddress,
             isLoading,
             isInitialized: isInitialised,
-            isAuthenticated,
+            isAuthenticated: adapter.isAuthenticated,
             initialiseWallet,
             signMessage,
             signTransaction,
@@ -224,7 +222,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         }),
         [
             ownerAddress,
-            isAuthenticated,
+            adapter.isAuthenticated,
             smartAccountAddress,
             isLoading,
             isInitialised,

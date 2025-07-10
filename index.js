@@ -105,10 +105,10 @@ const Main = () => {
     useEffect(() => {
         setLocale(
             language ??
-                getLocales()
-                    .map(loc => loc.languageCode)
-                    .find(isLocale) ??
-                "en",
+            getLocales()
+                .map(loc => loc.languageCode)
+                .find(isLocale) ??
+            "en",
         )
     }, [setLocale, language])
 
@@ -125,7 +125,8 @@ const Main = () => {
     const nodeUrl = selectedNetwork.currentUrl
 
     if (!fontsLoaded) return
-
+    console.log("privy app id", process.env.PRIVY_APP_ID)
+    console.log("privy client id", process.env.PRIVY_CLIENT_ID)
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ConnexContextProvider>
@@ -144,8 +145,7 @@ const Main = () => {
                                 nodeUrl,
                                 networkType,
                             },
-                        }}
-                        adapter={adapter}>
+                        }}>
                         <FeatureFlagsProvider>
                             <NavigationProvider>
                                 <WalletConnectContextProvider>

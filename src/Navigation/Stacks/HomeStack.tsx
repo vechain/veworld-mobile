@@ -43,6 +43,7 @@ import {
     WalletDetailScreen,
     WalletManagementScreen,
 } from "~Screens"
+import { SmartAccountScreen } from "../../Screens/Flows/WalletCreation/SmartAccount"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -104,6 +105,7 @@ export type RootStackParamListHome = {
     [Routes.SETTINGS_CONNECTED_APPS]: undefined
     [Routes.OBSERVE_WALLET]: undefined
     [Routes.IMPORT_MNEMONIC]: undefined
+    [Routes.IMPORT_SMART_ACCOUNT]: undefined
     [Routes.IMPORT_HW_LEDGER_SELECT_DEVICE]: undefined
     [Routes.IMPORT_HW_LEDGER_ENABLE_ADDITIONAL_SETTINGS]: {
         device: ConnectedLedgerDevice
@@ -192,6 +194,11 @@ export const HomeStack = () => {
                 />
                 <Screen name={Routes.OBSERVE_WALLET} component={ObserveWalletScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.IMPORT_MNEMONIC} component={ImportLocalWallet} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.IMPORT_SMART_ACCOUNT}
+                    component={SmartAccountScreen}
+                    options={{ headerShown: false }}
+                />
 
                 <Screen
                     name={Routes.IMPORT_HW_LEDGER_SELECT_DEVICE}

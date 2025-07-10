@@ -9,16 +9,21 @@ import HexUtils from "../../Utils/HexUtils"
 export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
     const { user, logout } = usePrivy()
     const { wallets, create } = useEmbeddedEthereumWallet()
-    const oauth = useLoginWithOAuth()
+    const oauth = useLoginWithOAuth({
+        onError: (err: any) => {
+            console.log("error logging", JSON.stringify(err))
+        },
+    })
     const isAuthenticated = !!user && (wallets?.length ?? 0) > 0
 
     return useMemo(() => {
         const currentWallets = wallets ?? []
-
+        console.log("Privy isAuthenticated", isAuthenticated)
         return {
             isAuthenticated,
 
             async login(options: LoginOptions): Promise<void> {
+                console.log("usePrivyExpoAdapter login", options)
                 const provider = options.provider as any
                 const redirectUri = options.oauthRedirectUri
                 await oauth.login({ provider, redirectUri })

@@ -13,6 +13,7 @@ export enum Routes {
     HOME_STACK = "HomeStack",
     DISCOVER_STACK = "DiscoverStack",
 
+    IMPORT_SMART_ACCOUNT = "Import_Smart_Account",
     IMPORT_FROM_CLOUD = "Import_From_Cloud",
     IMPORT_MNEMONIC_BACKUP_PASSWORD = "Import_Mnemonic_Backup_Password",
     ICLOUD_DETAILS_BACKUP = "Icloud_Details_Backup",

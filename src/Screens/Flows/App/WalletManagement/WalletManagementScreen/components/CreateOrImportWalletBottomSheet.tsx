@@ -42,6 +42,14 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
             }, 400)
         }, [nav, track, onClose])
 
+        const navigateToSmartAccount = useCallback(() => {
+            onClose()
+            // track(AnalyticsEvent.SELECT_WALLET_IMPORT_SMART_ACCOUNT)
+            setTimeout(() => {
+                nav.navigate(Routes.IMPORT_SMART_ACCOUNT)
+            }, 400)
+        }, [nav, onClose])
+
         return (
             <BaseBottomSheet dynamicHeight ref={ref}>
                 <BaseView flexDirection="column" w={100}>
@@ -95,6 +103,17 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                         </BaseText>
                     </BaseView>
                     <BaseIcon name="icon-chevron-right" size={24} color={theme.colors.text} />
+                </BaseTouchableBox>
+
+                <BaseSpacer height={16} />
+
+                <BaseTouchableBox action={navigateToSmartAccount} py={16} haptics="Medium">
+                    <BaseIcon name="icon-users" size={24} color={theme.colors.text} />
+                    <BaseView flex={1} px={12}>
+                        <BaseText align="left" typographyFont="subSubTitle">
+                            {"Import Smart Account"}
+                        </BaseText>
+                    </BaseView>
                 </BaseTouchableBox>
 
                 <BaseSpacer height={16} />

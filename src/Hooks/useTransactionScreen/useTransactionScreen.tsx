@@ -168,7 +168,7 @@ export const useTransactionScreen = ({
         transactionFeesResponse.options,
     ])
 
-    console.log("selectedFeeAllTokenOptions", selectedFeeAllTokenOptions)
+    // console.log("selectedFeeAllTokenOptions", selectedFeeAllTokenOptions)
 
     const isFirstTimeLoadingFees = useMemo(
         () => genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading || loadingGas,
