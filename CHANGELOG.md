@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.7 (2025-07-11)</small>
+
+* build: init ([c11ace7](https://github.com/vechain/veworld-mobile/commit/c11ace7))
+* Fix :: Enable dApp notifications by default (#3069) ([2612f27](https://github.com/vechain/veworld-mobile/commit/2612f27)), closes [#3069](https://github.com/vechain/veworld-mobile/issues/3069)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
