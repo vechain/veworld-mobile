@@ -1,7 +1,7 @@
-import { Clause, Transaction } from "@vechain/sdk-core"
-import { Event, Output, Transfer } from "@vechain/sdk-network"
+import { Transaction } from "@vechain/sdk-core"
+import { Event, Transfer } from "@vechain/sdk-network"
 
-export interface IndexableEvent {
+export interface IndexableAbi {
     isEvent(transaction: Transaction, events: Event | Event[], transfer: Transfer): boolean
     decode(
         transaction: Transaction,
@@ -13,15 +13,15 @@ export interface IndexableEvent {
 }
 
 export abstract class AbiManager {
-    protected indexableEvents: IndexableEvent[] | undefined
+    protected indexableEvents: IndexableAbi[] | undefined
 
     async loadAbis() {
         this.indexableEvents = await this._loadAbis()
     }
 
-    abstract _loadAbis(): Promise<IndexableEvent[]>
+    protected abstract _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[]
 
-    protected assertEventsLoaded(): asserts this is { indexableEvents: IndexableEvent[] } {
+    protected assertEventsLoaded(): asserts this is { indexableEvents: IndexableAbi[] } {
         if (this.indexableEvents === undefined) throw new Error("[assertEventsLoaded]: Load ABIs first")
     }
 }
