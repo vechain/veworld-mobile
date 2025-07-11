@@ -760,7 +760,7 @@
   "PUSH_NOTIFICATIONS": "Powiadomienia Push",
   "PUSH_NOTIFICATIONS_ACTIVE": "Zezwól na Powiadomienia Push",
   "PUSH_NOTIFICATIONS_DAPPS": "X2Earn dApps",
-  "PUSH_NOTIFICATIONS_DAPPS_DESC": "Aktualności i aktualizacje aplikacji",
+  "PUSH_NOTIFICATIONS_DAPPS_DESC": "Aktualności i zmiany w aplikacji",
   "PUSH_NOTIFICATIONS_DESC": "Bądź na bieżąco z najnowszymi wiadomościami i aktualizacjami",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_DESC": "Wystąpił błąd podczas ładowania twoich preferencji. Spróbuj ponownie.",
   "PUSH_NOTIFICATIONS_PREFERENCES_GENERIC_ERROR_TITLE": "Błąd",
