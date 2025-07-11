@@ -37,7 +37,12 @@ import {
 import { ERROR_EVENTS, typography } from "~Constants"
 import { AnalyticsUtils, info, URIUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { NotificationsProvider, PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
+import {
+    NotificationsProvider,
+    PersistedThemeProvider,
+    StoreContextProvider,
+    DeepLinksProvider,
+} from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
     selectExternalDappSessions,
@@ -135,15 +140,17 @@ const Main = () => {
                     <FeatureFlagsProvider>
                         <NavigationProvider>
                             <InteractionProvider>
-                                <WalletConnectContextProvider>
-                                    <BottomSheetModalProvider>
-                                        <InAppBrowserProvider>
-                                            <NotificationsProvider>
-                                                <EntryPoint />
-                                            </NotificationsProvider>
-                                        </InAppBrowserProvider>
-                                    </BottomSheetModalProvider>
-                                </WalletConnectContextProvider>
+                                <DeepLinksProvider>
+                                    <WalletConnectContextProvider>
+                                        <BottomSheetModalProvider>
+                                            <InAppBrowserProvider>
+                                                <NotificationsProvider>
+                                                    <EntryPoint />
+                                                </NotificationsProvider>
+                                            </InAppBrowserProvider>
+                                        </BottomSheetModalProvider>
+                                    </WalletConnectContextProvider>
+                                </DeepLinksProvider>
                             </InteractionProvider>
                         </NavigationProvider>
                         <BaseToast />
@@ -185,9 +192,9 @@ const linking = externalDappSessions => ({
                     },
                 },
             },
-            [Routes.CONNECT_EXTERNAL_APP_SCREEN_V1]: {
-                path: "api/v1/connect/:app_name?/:app_url?/:public_key?/:redirect_url?/:network?",
-            },
+            // [Routes.CONNECT_EXTERNAL_APP_SCREEN_V1]: {
+            //     path: "api/v1/connect/:app_name?/:app_url?/:public_key?/:redirect_url?/:network?",
+            // },
             [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
                 path: "api/v1/signTransaction/:request?",
                 parse: {

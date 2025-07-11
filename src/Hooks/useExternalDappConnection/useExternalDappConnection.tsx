@@ -4,13 +4,13 @@ import DeviceInfo from "react-native-device-info"
 import nacl from "tweetnacl"
 import { decodeBase64, encodeBase64 } from "tweetnacl-util"
 import {
-    selectSelectedAccount,
     useAppSelector,
     selectSignKeyPair,
     selectSelectedNetwork,
     useAppDispatch,
     newExternalDappSession,
     setSignKeyPair,
+    selectSelectedAccountOrNull,
 } from "~Storage/Redux"
 import { error } from "~Utils"
 
@@ -24,7 +24,7 @@ type OnConnectParams = {
 export const useExternalDappConnection = () => {
     const signKeyPair = useAppSelector(selectSignKeyPair)
     const network = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
 
     const dispatch = useAppDispatch()
 
