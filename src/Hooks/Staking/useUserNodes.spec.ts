@@ -1,8 +1,29 @@
+import { TestWrapper, TestHelpers } from "~Test"
 import { renderHook } from "@testing-library/react-hooks"
 import { useUserNodes } from "./useUserNodes"
-import { TestWrapper, TestHelpers } from "~Test"
 
 const { StargateNodeMocks } = TestHelpers.data
+
+const mockQuerySuccess = {
+    data: StargateNodeMocks,
+    isLoading: false,
+    error: undefined,
+    isError: false,
+}
+
+const mockQueryError = {
+    data: undefined,
+    isLoading: false,
+    error: new Error("Test error"),
+    isError: true,
+}
+
+const mockQueryLoading = {
+    data: undefined,
+    isLoading: true,
+    error: undefined,
+    isError: false,
+}
 
 jest.mock("@tanstack/react-query", () => {
     const actualQuery = jest.requireActual("@tanstack/react-query")
@@ -18,28 +39,10 @@ jest.mock("@tanstack/react-query", () => {
                 }
             }
 
-            return {
-                data: StargateNodeMocks,
-                isLoading: false,
-                error: undefined,
-                isError: false,
-            }
+            return mockQuerySuccess
         }),
     }
 })
-
-jest.mock("~Hooks/useThorClient", () => ({
-    useThorClient: jest.fn().mockReturnValue({
-        contracts: {
-            load: jest.fn().mockReturnValue({
-                read: {
-                    getUserNodes: jest.fn().mockResolvedValue([[]]),
-                    isLegacyNode: jest.fn().mockResolvedValue([false]),
-                },
-            }),
-        },
-    }),
-}))
 
 jest.mock("~Constants/Constants/Staking", () => ({
     getStartgatNetworkConfig: jest.fn().mockReturnValue({
@@ -55,9 +58,35 @@ jest.mock("~Hooks/useBlockchainNetwork", () => ({
     }),
 }))
 
+jest.mock("~Hooks/useThorClient", () => ({
+    useThorClient: jest.fn().mockReturnValue({
+        contracts: {
+            load: jest.fn(),
+        },
+    }),
+    useMainnetThorClient: jest.fn().mockReturnValue({
+        contracts: {
+            load: jest.fn(),
+        },
+    }),
+}))
+
 describe("useUserNodes", () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        const mockUseQuery = require("@tanstack/react-query").useQuery
+        mockUseQuery.mockImplementation(({ enabled }: { enabled?: boolean }) => {
+            if (!enabled) {
+                return {
+                    data: undefined,
+                    isLoading: false,
+                    error: undefined,
+                    isError: false,
+                }
+            }
+
+            return mockQuerySuccess
+        })
     })
 
     it("should return empty stargateNodes array when address is undefined", () => {
@@ -110,15 +139,9 @@ describe("useUserNodes", () => {
 
     it("should handle error state", () => {
         const mockUseQuery = require("@tanstack/react-query").useQuery
-        mockUseQuery.mockImplementationOnce(() => ({
-            data: undefined,
-            isLoading: false,
-            error: new Error("Test error"),
-            isError: true,
-        }))
+        mockUseQuery.mockImplementation(() => mockQueryError)
 
         const address = "0x123456789"
-
         const { result } = renderHook(() => useUserNodes(address), {
             wrapper: TestWrapper,
         })
@@ -130,15 +153,9 @@ describe("useUserNodes", () => {
 
     it("should handle loading state", () => {
         const mockUseQuery = require("@tanstack/react-query").useQuery
-        mockUseQuery.mockImplementationOnce(() => ({
-            data: undefined,
-            isLoading: true,
-            error: undefined,
-            isError: false,
-        }))
+        mockUseQuery.mockImplementation(() => mockQueryLoading)
 
         const address = "0x123456789"
-
         const { result } = renderHook(() => useUserNodes(address), {
             wrapper: TestWrapper,
         })
