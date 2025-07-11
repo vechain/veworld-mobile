@@ -1,5 +1,4 @@
 import { Abi, AbiEvent, AbiEventParameter, ExtractAbiEvent, ExtractAbiEventNames } from "abitype"
-import allStakeholderVote from "./abis/all-stakeholder-vote"
 
 const buildFakeSignature = (event: AbiEvent) => {
     if (event.inputs.length === 0) return event.name
@@ -38,8 +37,6 @@ type ExtractFakeSignatureEvents<TAbi extends Abi> = ValuesOf<{
 
 type ExtractEventNameFromFakeSignature<TKey> = TKey extends `${infer First extends string}(` ? First : TKey
 
-type M = ExtractFakeSignatureEvents<typeof allStakeholderVote>
-
 export class AbiBuilder<TEvents extends Record<string, AbiEvent> = {}> {
     events: TEvents = {} as any
 
@@ -61,14 +58,19 @@ export class AbiBuilder<TEvents extends Record<string, AbiEvent> = {}> {
                     .map(u => [buildFakeSignature(u as AbiEvent), u]),
             ),
         }
-        return this as unknown as AbiBuilder<
-            TEvents & {
-                [key in Exclude<ExtractFakeSignatureEvents<TAbi>, keyof TEvents>]: ExtractAbiEvent<
-                    TAbi,
-                    ExtractEventNameFromFakeSignature<key>
-                >
-            }
-        >
+        return this as any
+    }
+
+    concat<TAbiBuilder extends AbiBuilder>(
+        abiBuilder: TAbiBuilder,
+    ): TAbiBuilder extends AbiBuilder<infer BuilderEvents>
+        ? AbiBuilder<TEvents & { [key in Exclude<keyof BuilderEvents, keyof TEvents>]: BuilderEvents[key] }>
+        : never {
+        this.events = {
+            ...this.events,
+            ...Object.fromEntries(Object.entries(abiBuilder.events).filter(([key]) => !this.events[key])),
+        }
+        return this as any
     }
 
     getEvent<TKey extends keyof TEvents>(key: TKey): TEvents[TKey] {
