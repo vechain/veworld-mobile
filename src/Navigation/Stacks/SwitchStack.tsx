@@ -6,18 +6,16 @@ import React, { useMemo } from "react"
 import { Certificate } from "thor-devkit"
 import { useWalletStatus } from "~Components"
 import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
-import { CertificateRequest, ConnectAppRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
+import { CertificateRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
 import { TransactionRequest, TypeDataRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import { TabStack, TabStackParamList } from "~Navigation/Tabs"
 import {
     BlackListedCollectionsScreen,
     ChooseBackupDetailsPassword,
-    ConnectAppScreen,
     DappChangeAccountScreen,
     DetailsBackupScreen,
     SendTransactionScreen,
-    SignCertificateScreen,
     SignDataMessageScreen,
 } from "~Screens"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
@@ -36,15 +34,9 @@ export type RootStackParamListSwitch = {
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.BUY_FLOW]: undefined
-    [Routes.CONNECT_APP_SCREEN]: {
-        request: ConnectAppRequest
-    }
     [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
         request: TransactionRequest
         isInjectedWallet?: boolean
-    }
-    [Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN]: {
-        request: CertificateRequest
     }
     [Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN]: {
         request: TypeDataRequest
@@ -107,16 +99,9 @@ export const SwitchStack = () => {
                             }}
                         />
 
-                        <Switch.Screen name={Routes.CONNECT_APP_SCREEN} component={ConnectAppScreen} />
-
                         <Switch.Screen
                             name={Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN}
                             component={SendTransactionScreen}
-                        />
-
-                        <Switch.Screen
-                            name={Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN}
-                            component={SignCertificateScreen}
                         />
 
                         <Switch.Screen

@@ -12,6 +12,7 @@ type Props = {
     selectedDelegationAccount?: LocalAccountWithDevice
     selectedDelegationUrl?: string
     setSelectedDelegationUrl: (url: string) => void
+    delegationToken: string
 }
 
 export function DelegationView({
@@ -21,6 +22,7 @@ export function DelegationView({
     selectedDelegationAccount,
     selectedDelegationUrl,
     setSelectedDelegationUrl,
+    delegationToken,
 }: Readonly<Props>) {
     const { onOpen, ref, onClose } = useBottomSheetModal()
 
@@ -30,6 +32,7 @@ export function DelegationView({
                 onDelegateClicked={onOpen}
                 selectedDelegationAccount={selectedDelegationAccount}
                 selectedDelegationUrl={selectedDelegationUrl}
+                delegationToken={delegationToken}
             />
 
             <DelegationBottomSheet

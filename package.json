@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.2.5",
+  "version": "2.2.6",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -31,6 +31,7 @@
     "dapps-index:generate": "ts-node scripts/generate-dapps-index.ts",
     "i18n:types": "typesafe-i18n",
     "i18n:generate": "dotenv -e .env.local translo-cli",
+    "i18n:generate-diff": "ts-node scripts/remove-changed-translation-keys.ts && yarn i18n:generate",
     "release:ci": "release-it --ci",
     "prepare": "husky",
     "e2e.ios.build.d": "SKIP_SENTRY=true detox build --configuration ios.sim.debug",
