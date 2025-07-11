@@ -2,10 +2,10 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import React, { forwardRef, useCallback, useMemo, useState } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
-import { ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { AnalyticsEvent, ColorThemeType } from "~Constants"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { FungibleTokenWithBalance } from "~Model"
+import { FungibleTokenWithBalance, NETWORK_TYPE } from "~Model"
 import { AnimatedTokenCard } from "~Screens/Flows/App/HomeScreen/Components/ListsView/Token/AnimatedTokenCard"
 import {
     selectAllBalances,
@@ -73,13 +73,30 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
 
     const [isDefaultToken, setIsDefaultToken] = useState(false)
 
+    const track = useAnalyticTracking()
+
     const onApply = useCallback(() => {
         setSelectedToken(internalToken)
-        if (internalToken !== defaultToken && isDefaultToken)
+        if (internalToken !== defaultToken && isDefaultToken) {
             dispatch(setDefaultDelegationToken({ genesisId: selectedNetwork.genesis.id, token: internalToken }))
+            if (selectedNetwork.type === NETWORK_TYPE.MAIN && internalToken !== "VTHO")
+                track(AnalyticsEvent.SETTINGS_DELEGATION_TOKEN, {
+                    token: internalToken,
+                })
+        }
         setIsDefaultToken(false)
         onClose()
-    }, [defaultToken, dispatch, internalToken, isDefaultToken, onClose, selectedNetwork.genesis.id, setSelectedToken])
+    }, [
+        defaultToken,
+        dispatch,
+        internalToken,
+        isDefaultToken,
+        onClose,
+        selectedNetwork.genesis.id,
+        selectedNetwork.type,
+        setSelectedToken,
+        track,
+    ])
 
     const onCancel = useCallback(() => {
         setInternalToken(selectedToken)
