@@ -56,7 +56,6 @@ type BaseExternalConnectAppRequest = BaseRequest & {
     type: "external-app"
     publicKey: string
     redirectUrl: string
-    nonce: string
     network: NETWORK_TYPE
 }
 

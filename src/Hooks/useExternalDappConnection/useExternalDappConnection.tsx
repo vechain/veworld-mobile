@@ -13,6 +13,8 @@ import {
     selectSelectedAccountOrNull,
 } from "~Storage/Redux"
 import { error } from "~Utils"
+import { DeepLinkError } from "~Utils/ErrorMessageUtils"
+import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 
 type OnConnectParams = {
     dappPublicKey: string
@@ -96,22 +98,17 @@ export const useExternalDappConnection = () => {
                     )}`,
                 )
             } catch (_err: unknown) {
-                const err = _err as Error
+                const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
                 error("EXTERNAL_DAPP_CONNECTION", err)
-                await Linking.openURL(
-                    `${redirectUrl}/onVeWorldConnected?errorMessage=${err.message}&errorCode=${err.name}`,
-                )
+                await Linking.openURL(`${redirectUrl}?errorMessage=${err.message}&errorCode=${err.name}`)
             }
         },
         [dispatch, network.type, selectedAccount, signKeyPair],
     )
 
     const onRejectConnection = useCallback(async (redirectUrl: string) => {
-        await Linking.openURL(
-            `${redirectUrl}/onVeWorldConnected?errorMessage=${encodeURIComponent(
-                "Connection rejected",
-            )}&error_code=401`,
-        )
+        const err = new DeepLinkError(DeepLinkErrorCode.UserRejected)
+        await Linking.openURL(`${redirectUrl}?errorMessage=${encodeURIComponent(err.message)}&error_code=${err.code}`)
     }, [])
 
     return {
