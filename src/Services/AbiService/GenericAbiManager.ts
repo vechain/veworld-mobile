@@ -3,6 +3,11 @@ import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
 import generated from "./generated"
 import { Transaction } from "@vechain/sdk-core"
 import { Output } from "@vechain/sdk-network"
+import { AbiEventParameter } from "abitype"
+
+const getIndexedInputs = (inputs: AbiEventParameter[] | readonly AbiEventParameter[]) => {
+    return inputs.filter(input => input.indexed)
+}
 
 export class GenericAbiManager extends AbiManager {
     protected _loadAbis(): IndexableAbi[] {
@@ -13,13 +18,14 @@ export class GenericAbiManager extends AbiManager {
                 fullSignature,
                 isEvent(_, events, __) {
                     if (Array.isArray(events)) return false
-                    if (events.topics.length !== item.inputs.length) return false
+                    if (events.topics.length - 1 !== getIndexedInputs(item.inputs).length) return false
                     return iface.getEventTopic(item.name).toLowerCase() === events.topics[0]
                 },
                 decode(_, events, __) {
                     if (Array.isArray(events))
                         throw new Error("[GenericAbiManager]: Invalid input. Events cannot be an array")
-                    return iface.decodeEventLog(item.name, events.data, events.topics)
+                    const decodedLog = iface.decodeEventLog(item.name, events.data, events.topics)
+                    return Object.fromEntries(Object.entries(decodedLog).filter(([key]) => !key.match(/^\d+$/)))
                 },
             } satisfies IndexableAbi
         })

@@ -20,7 +20,7 @@ export class ReceiptProcessor {
                 [] as EventResult[],
             )
 
-            receiptOutputs.concat(events.map(evt => ({ clauseIndex: i, name: evt.name, params: evt.params })))
+            receiptOutputs.push(...events.map(evt => ({ clauseIndex: i, name: evt.name, params: evt.params })))
         }
         return receiptOutputs
     }
