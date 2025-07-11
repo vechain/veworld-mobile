@@ -1,7 +1,8 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useUserNodes } from "./useUserNodes"
-import { TestWrapper } from "~Test"
-import { NodeInfo } from "~Model"
+import { TestWrapper, TestHelpers } from "~Test"
+
+const { StargateNodeMocks } = TestHelpers.data
 
 jest.mock("@tanstack/react-query", () => {
     const actualQuery = jest.requireActual("@tanstack/react-query")
@@ -17,44 +18,8 @@ jest.mock("@tanstack/react-query", () => {
                 }
             }
 
-            const mockNodes: unknown = [
-                {
-                    nodeId: 1,
-                    isLegacyNode: false,
-                    nodeLevel: 0,
-                    xNodeOwner: "0x0",
-                    isXNodeHolder: false,
-                    isXNodeDelegated: false,
-                    isXNodeDelegator: false,
-                    isXNodeDelegatee: false,
-                    delegatee: "0x0",
-                },
-                {
-                    nodeId: 2,
-                    isLegacyNode: true,
-                    nodeLevel: 0,
-                    xNodeOwner: "0x0",
-                    isXNodeHolder: false,
-                    isXNodeDelegated: false,
-                    isXNodeDelegator: false,
-                    isXNodeDelegatee: false,
-                    delegatee: "0x0",
-                },
-                {
-                    nodeId: 3,
-                    isLegacyNode: false,
-                    nodeLevel: 0,
-                    xNodeOwner: "0x0",
-                    isXNodeHolder: false,
-                    isXNodeDelegated: false,
-                    isXNodeDelegator: false,
-                    isXNodeDelegatee: false,
-                    delegatee: "0x0",
-                },
-            ]
-
             return {
-                data: mockNodes as NodeInfo[],
+                data: StargateNodeMocks,
                 isLoading: false,
                 error: undefined,
                 isError: false,
@@ -130,7 +95,7 @@ describe("useUserNodes", () => {
     it("should handle network type correctly", () => {
         require("~Hooks/useBlockchainNetwork").useBlockchainNetwork.mockReturnValueOnce({
             network: {
-                type: "testnet", // Just use the string directly
+                type: "testnet",
             },
         })
 
@@ -150,7 +115,6 @@ describe("useUserNodes", () => {
             isLoading: false,
             error: new Error("Test error"),
             isError: true,
-            stargateNodes: [],
         }))
 
         const address = "0x123456789"

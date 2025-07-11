@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { TokenWithCompleteInfo } from "~Hooks"
-import { FungibleTokenWithBalance, NftData, NFTMediaType, NonFungibleToken, Token } from "~Model"
+import { FungibleTokenWithBalance, NftData, NFTMediaType, NodeInfo, NonFungibleToken, Token } from "~Model"
 
 export const VETWithBalance: FungibleTokenWithBalance = {
     ...VET,
@@ -264,3 +264,61 @@ export const StargateNftMock: NftData = {
     claimableRewards: "10000000000000000000000",
     accumulatedRewards: "10000000000000000000000",
 }
+
+export const StargateNftMocks = [
+    StargateNftMock,
+    {
+        tokenId: 2,
+        levelId: 2,
+        vetAmountStaked: "20000000000000000000000",
+        isDelegated: false,
+        claimableRewards: "20000000000000000000000",
+        accumulatedRewards: "20000000000000000000000",
+    },
+    {
+        tokenId: 3,
+        levelId: 3,
+        vetAmountStaked: "30000000000000000000000",
+        isDelegated: true,
+        claimableRewards: "30000000000000000000000",
+        accumulatedRewards: "30000000000000000000000",
+    },
+]
+
+export const StargateNodeMock: NodeInfo = {
+    nodeId: 1,
+    nodeLevel: 1,
+    xNodeOwner: "0x123",
+    isXNodeHolder: false,
+    isXNodeDelegated: false,
+    isXNodeDelegator: false,
+    isXNodeDelegatee: false,
+    delegatee: "0x456",
+    isLegacyNode: false,
+}
+
+export const StargateNodeMocks: NodeInfo[] = [
+    StargateNodeMock,
+    {
+        nodeId: 2,
+        nodeLevel: 2,
+        xNodeOwner: "0x789",
+        isXNodeHolder: false,
+        isXNodeDelegated: false,
+        isXNodeDelegator: false,
+        isXNodeDelegatee: false,
+        delegatee: "0xabc",
+        isLegacyNode: true,
+    },
+    {
+        nodeId: 3,
+        nodeLevel: 3,
+        xNodeOwner: "0xdef",
+        isXNodeHolder: false,
+        isXNodeDelegated: false,
+        isXNodeDelegator: false,
+        isXNodeDelegatee: false,
+        delegatee: "0xghi",
+        isLegacyNode: false,
+    },
+]

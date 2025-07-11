@@ -1,7 +1,8 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useUserStargateNfts } from "./useUserStargateNfts"
-import { TestWrapper } from "~Test"
-import { NodeInfo, NftData } from "~Model/Staking"
+import { TestWrapper, TestHelpers } from "~Test"
+
+const { StargateNftMocks, StargateNodeMocks } = TestHelpers.data
 
 jest.mock("@tanstack/react-query", () => {
     const actualQuery = jest.requireActual("@tanstack/react-query")
@@ -18,35 +19,8 @@ jest.mock("@tanstack/react-query", () => {
                 }
             }
 
-            const mockNfts: NftData[] = [
-                {
-                    tokenId: 1,
-                    levelId: 1,
-                    vetAmountStaked: "10000000000000000000000",
-                    isDelegated: true,
-                    claimableRewards: "10000000000000000000000",
-                    accumulatedRewards: "10000000000000000000000",
-                },
-                {
-                    tokenId: 2,
-                    levelId: 2,
-                    vetAmountStaked: "20000000000000000000000",
-                    isDelegated: false,
-                    claimableRewards: "20000000000000000000000",
-                    accumulatedRewards: "20000000000000000000000",
-                },
-                {
-                    tokenId: 3,
-                    levelId: 3,
-                    vetAmountStaked: "30000000000000000000000",
-                    isDelegated: true,
-                    claimableRewards: "30000000000000000000000",
-                    accumulatedRewards: "30000000000000000000000",
-                },
-            ]
-
             return {
-                data: mockNfts,
+                data: StargateNftMocks,
                 isLoading: false,
                 error: undefined,
                 isError: false,
@@ -87,42 +61,6 @@ jest.mock("~Constants/Constants/Staking", () => ({
 }))
 
 describe("useUserStargateNfts", () => {
-    const mockStargateNodes: NodeInfo[] = [
-        {
-            nodeId: 1,
-            nodeLevel: 1,
-            xNodeOwner: "0x123",
-            isXNodeHolder: false,
-            isXNodeDelegated: false,
-            isXNodeDelegator: false,
-            isXNodeDelegatee: false,
-            delegatee: "0x456",
-            isLegacyNode: false,
-        },
-        {
-            nodeId: 2,
-            nodeLevel: 2,
-            xNodeOwner: "0x789",
-            isXNodeHolder: false,
-            isXNodeDelegated: false,
-            isXNodeDelegator: false,
-            isXNodeDelegatee: false,
-            delegatee: "0xabc",
-            isLegacyNode: false,
-        },
-        {
-            nodeId: 3,
-            nodeLevel: 3,
-            xNodeOwner: "0xdef",
-            isXNodeHolder: false,
-            isXNodeDelegated: false,
-            isXNodeDelegator: false,
-            isXNodeDelegatee: false,
-            delegatee: "0xghi",
-            isLegacyNode: false,
-        },
-    ]
-
     beforeEach(() => {
         jest.clearAllMocks()
     })
@@ -137,7 +75,7 @@ describe("useUserStargateNfts", () => {
     })
 
     it("should return NFTs data when nodes are provided", () => {
-        const { result } = renderHook(() => useUserStargateNfts(mockStargateNodes, false), {
+        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
             wrapper: TestWrapper,
         })
 
@@ -149,7 +87,7 @@ describe("useUserStargateNfts", () => {
     })
 
     it("should handle loading state when isLoadingNodes is true", () => {
-        const { result } = renderHook(() => useUserStargateNfts(mockStargateNodes, true), {
+        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, true), {
             wrapper: TestWrapper,
         })
 
@@ -166,7 +104,7 @@ describe("useUserStargateNfts", () => {
             refetch: jest.fn(),
         }))
 
-        const { result } = renderHook(() => useUserStargateNfts(mockStargateNodes, false), {
+        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
             wrapper: TestWrapper,
         })
 
@@ -184,7 +122,7 @@ describe("useUserStargateNfts", () => {
             refetch: jest.fn(),
         }))
 
-        const { result } = renderHook(() => useUserStargateNfts(mockStargateNodes, false), {
+        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
             wrapper: TestWrapper,
         })
 
@@ -201,7 +139,7 @@ describe("useUserStargateNfts", () => {
             },
         })
 
-        const { result } = renderHook(() => useUserStargateNfts(mockStargateNodes, false), {
+        const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
             wrapper: TestWrapper,
         })
 
@@ -220,7 +158,7 @@ describe("useUserStargateNfts", () => {
 
         mockUseQuery.mockImplementationOnce(mockQuerySpy)
 
-        renderHook(() => useUserStargateNfts(mockStargateNodes, false, 5000), {
+        renderHook(() => useUserStargateNfts(StargateNodeMocks, false, 5000), {
             wrapper: TestWrapper,
         })
 
