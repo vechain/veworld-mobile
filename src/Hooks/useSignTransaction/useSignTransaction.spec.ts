@@ -24,7 +24,6 @@ const defaultProps = {
     },
     initialRoute: Routes.NFTS,
     selectedDelegationOption: DelegationType.NONE,
-    resetDelegation: () => {},
 }
 
 jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
