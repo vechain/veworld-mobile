@@ -19,16 +19,27 @@ type Props = PropsWithChildren<{
     icon: string
     url: string
     /**
-     * Show warning if the URL is not of a dapp
+     * Show warning if the URL is not of a dapp. Defaults to true
      */
     showDappWarning?: boolean
+    /**
+     * True if the details should be visible by default, false otherwise. Defaults to false
+     */
+    isDefaultVisible?: boolean
 }>
 
-export const DappWithDetails = ({ name, icon, url, children, showDappWarning = true }: Props) => {
+export const DappWithDetails = ({
+    name,
+    icon,
+    url,
+    children,
+    showDappWarning = true,
+    isDefaultVisible = false,
+}: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
-    const [showDetails, setShowDetails] = useState(false)
+    const [showDetails, setShowDetails] = useState(isDefaultVisible)
 
     const allApps = useAppSelector(selectFeaturedDapps)
 

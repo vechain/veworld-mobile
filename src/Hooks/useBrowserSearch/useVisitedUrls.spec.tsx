@@ -1,10 +1,15 @@
 import { act, renderHook } from "@testing-library/react-hooks"
 import React from "react"
-import { InAppBrowserProvider } from "~Components"
 import { selectVisitedUrls, useAppSelector } from "~Storage/Redux"
 import { RootState } from "~Storage/Redux/Types"
 import { TestWrapper } from "~Test"
 import { useVisitedUrls } from "./useVisitedUrls"
+
+jest.mock("~Components/Providers/InAppBrowserProvider", () => ({
+    useInAppBrowser: jest.fn().mockReturnValue({
+        navigationState: {},
+    } as any),
+}))
 
 const mockBrowserState = {
     visitedUrls: [],
@@ -17,17 +22,13 @@ const createWrapper = ({
     children?: React.ReactNode
     preloadedState?: Partial<RootState>
 }) => {
-    return (
-        <TestWrapper preloadedState={preloadedState ?? { browser: mockBrowserState }}>
-            <InAppBrowserProvider platform="ios">{children}</InAppBrowserProvider>
-        </TestWrapper>
-    )
+    return <TestWrapper preloadedState={preloadedState ?? { browser: mockBrowserState }}>{children}</TestWrapper>
 }
 
 describe("useVisitedUrls", () => {
-    beforeEach(() => {
-        jest.clearAllMocks()
-    })
+    // beforeEach(() => {
+    //     jest.clearAllMocks()
+    // })
 
     it("should add to the visited urls if the url is valid", async () => {
         const { result } = renderHook(

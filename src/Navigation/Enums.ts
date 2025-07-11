@@ -87,7 +87,6 @@ export enum Routes {
     RESET_APP = "Reset_App",
     BLACKLISTED_COLLECTIONS = "Blacklisted_Collections",
     CONNECTED_APP_SEND_TRANSACTION_SCREEN = "Connected_App_Send_Transaction_Screen",
-    CONNECTED_APP_SIGN_CERTIFICATE_SCREEN = "Connected_App_Sign_Certificate_Screen",
     CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN = "Connected_App_Sign_Typed_Message_Screen",
     CONNECTED_APP_SIGN_MESSAGE_SCREEN = "Connected_App_Sign_Message_Screen",
     BLOCKED_APP_SCREEN = "Blocked_App_Screen",

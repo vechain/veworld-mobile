@@ -1,12 +1,16 @@
 import { render, screen } from "@testing-library/react-native"
 import React from "react"
-import { InAppBrowserProvider } from "~Components/Providers"
-import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
 import { CoinifyPayWebView } from "./CoinifyPayWebView"
 
 const { account1D1, account2D1 } = TestHelpers.data
 const amount = 100
+
+jest.mock("~Components/Providers/InAppBrowserProvider", () => ({
+    useInAppBrowser: jest.fn().mockReturnValue({
+        originWhitelist: ["http://", "https://", "about:*", "blob:"],
+    } as any),
+}))
 
 // Mock react-native-webview
 jest.mock("react-native-webview", () => {
@@ -68,24 +72,10 @@ jest.mock("@react-navigation/native", () => {
     }
 })
 
-const createWrapper = ({
-    children,
-    preloadedState,
-}: {
-    children: React.ReactNode
-    preloadedState: Partial<RootState>
-}) => {
-    return (
-        <TestWrapper preloadedState={preloadedState}>
-            <InAppBrowserProvider platform={"android"}>{children}</InAppBrowserProvider>
-        </TestWrapper>
-    )
-}
-
 describe("CoinifyPayWebView component", () => {
     it("render correctly buy view", async () => {
         render(<CoinifyPayWebView currentAmount={amount} destinationAddress={account1D1.address} target="buy" />, {
-            wrapper: createWrapper,
+            wrapper: TestWrapper,
         })
 
         const webview = screen.getByTestId("CoinifyPayWebView")
@@ -93,7 +83,7 @@ describe("CoinifyPayWebView component", () => {
     })
     it("render correct sell view", async () => {
         render(<CoinifyPayWebView currentAmount={amount} destinationAddress={account2D1.address} target="sell" />, {
-            wrapper: createWrapper,
+            wrapper: TestWrapper,
         })
 
         const webview = screen.getByTestId("CoinifyPayWebView")
@@ -103,7 +93,7 @@ describe("CoinifyPayWebView component", () => {
         render(
             <CoinifyPayWebView currentAmount={amount} destinationAddress={account2D1.address} target="trade-history" />,
             {
-                wrapper: createWrapper,
+                wrapper: TestWrapper,
             },
         )
 
