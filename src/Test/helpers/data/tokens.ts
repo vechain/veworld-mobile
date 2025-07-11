@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { TokenWithCompleteInfo } from "~Hooks"
-import { FungibleTokenWithBalance, NFTMediaType, NonFungibleToken, Token } from "~Model"
+import { FungibleTokenWithBalance, NftData, NFTMediaType, NonFungibleToken, Token } from "~Model"
 
 export const VETWithBalance: FungibleTokenWithBalance = {
     ...VET,
@@ -254,4 +254,13 @@ export const NFT_Mock: NonFungibleToken = {
     mimeType: "image/png",
     mediaType: NFTMediaType.IMAGE,
     updated: true,
+}
+
+export const StargateNftMock: NftData = {
+    tokenId: 1,
+    levelId: 1,
+    vetAmountStaked: "10000000000000000000000",
+    isDelegated: true,
+    claimableRewards: "10000000000000000000000",
+    accumulatedRewards: "10000000000000000000000",
 }

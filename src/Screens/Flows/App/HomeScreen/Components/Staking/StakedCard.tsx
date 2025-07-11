@@ -1,10 +1,10 @@
 import React, { memo, useMemo } from "react"
 import { Image, StyleSheet } from "react-native"
 import { StargateAvatar } from "~Assets"
-import { BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
 import { VET } from "~Constants"
 import { ColorThemeType } from "~Constants/Theme"
-import { useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
+import { useFormatFiat, useTheme, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useUserNodes } from "~Hooks/Staking/useUserNodes"
 import { useUserStargateNfts } from "~Hooks/Staking/useUserStargateNfts"
 import { formatUnits } from "ethers/lib/utils"
@@ -19,8 +19,9 @@ export const StakedCard = memo(() => {
 
     const address = useAppSelector(selectSelectedAccountAddress)
 
-    const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
+    const vetTokenInfo = useTokenWithCompleteInfo(VET)
 
+    const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes, 6000)
 
     const totalLockedVet = useMemo(() => {
@@ -38,9 +39,7 @@ export const StakedCard = memo(() => {
         })
     }, [totalLockedVet, formatLocale])
 
-    if (isLoadingNodes || isLoadingNfts || totalLockedVet === 0) {
-        return null
-    }
+    const fiatValueOfLockedVet = totalLockedVet * (vetTokenInfo.exchangeRate ?? 0)
 
     return (
         <BaseView mb={40}>
@@ -56,16 +55,34 @@ export const StakedCard = memo(() => {
                     </BaseText>
                     <BaseView style={styles.valueContainer}>
                         <BaseView style={styles.vetContainer}>
-                            <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.stakedCard.vetValue}>
-                                {VET.symbol}
-                            </BaseText>
-                            <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.stakedCard.vetValue}>
-                                {formattedLockedVet}
-                            </BaseText>
+                            {isLoadingNfts || isLoadingNodes ? (
+                                <BaseSkeleton
+                                    height={20}
+                                    width={100}
+                                    boneColor={theme.colors.skeletonBoneColor}
+                                    highlightColor={theme.colors.skeletonHighlightColor}
+                                />
+                            ) : (
+                                <>
+                                    <BaseText
+                                        typographyFont="subSubTitleSemiBold"
+                                        color={theme.colors.stakedCard.vetValue}>
+                                        {VET.symbol}
+                                    </BaseText>
+                                    <BaseText
+                                        typographyFont="subSubTitleSemiBold"
+                                        color={theme.colors.stakedCard.vetValue}>
+                                        {formattedLockedVet}
+                                    </BaseText>
+                                </>
+                            )}
                         </BaseView>
-                        <BaseText align="left" typographyFont="bodyMedium" color={theme.colors.stakedCard.fiatValue}>
-                            $99,9999
-                        </BaseText>
+                        <FiatBalance
+                            isLoading={vetTokenInfo.exchangeRateLoading}
+                            balances={[fiatValueOfLockedVet.toString()]}
+                            typographyFont="bodyMedium"
+                            color={theme.colors.stakedCard.fiatValue}
+                        />
                     </BaseView>
                 </BaseView>
             </BaseView>
