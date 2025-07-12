@@ -11,7 +11,11 @@ import { formatUnits } from "ethers/lib/utils"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 
-export const StakedCard = memo(() => {
+type Props = {
+    isBalanceVisible?: boolean
+}
+
+export const StakedCard = memo(({ isBalanceVisible = true }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
     const theme = useTheme()
@@ -72,13 +76,14 @@ export const StakedCard = memo(() => {
                                     <BaseText
                                         typographyFont="subSubTitleSemiBold"
                                         color={theme.colors.stakedCard.vetValue}>
-                                        {formattedLockedVet}
+                                        {isBalanceVisible ? formattedLockedVet : "••••••"}
                                     </BaseText>
                                 </>
                             )}
                         </BaseView>
                         <FiatBalance
                             isLoading={vetTokenInfo.exchangeRateLoading}
+                            isVisible={isBalanceVisible}
                             balances={[fiatValueOfLockedVet.toString()]}
                             typographyFont="bodyMedium"
                             color={theme.colors.stakedCard.fiatValue}
