@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0 (2025-07-11)
+
+* build: init ([34bb360](https://github.com/vechain/veworld-mobile/commit/34bb360))
+* feat: add analytics tracking for gen del (#3067) ([b1f8fce](https://github.com/vechain/veworld-mobile/commit/b1f8fce)), closes [#3067](https://github.com/vechain/veworld-mobile/issues/3067)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
