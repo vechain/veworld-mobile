@@ -3,6 +3,7 @@ import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
 import business_events_generated from "./business_events_generated"
 import { ethers } from "ethers"
 import { NETWORK_TYPE } from "~Model"
+import { preferredOrder } from "./order"
 
 type Operator = "EQ" | "NE" | "GT" | "LT" | "GE" | "LE"
 
@@ -82,7 +83,7 @@ const getEventValue = (event: EventResult, operand: string, originValue: string)
     return event.params[operand].toString().toLowerCase().trim()
 }
 
-const convertEventResultAliasRecordIntoParams = (
+export const convertEventResultAliasRecordIntoParams = (
     record: Record<string, EventResult>,
     item: BusinessEvent,
     originValue: string,
@@ -158,14 +159,13 @@ const matchesRulesSingle = (
     })
 }
 
-const decodeEventFn = (_prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
+export const decodeEventFn = (_prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
     let matchingEvents: Record<string, EventResult[]> = {}
     let prevEvents = [..._prevEvents]
     for (let i = 0; i < item.events.length; i++) {
         const itemEvent = item.events[i]
         const foundEvents = prevEvents.filter(evt => evt.name === itemEvent.name)
         if (foundEvents.length === 0) throw new Error("[BusinessEventValidator]: No matching events found")
-
         const eventsMatchingConditions = matchesConditions(foundEvents, itemEvent.conditions, origin)
         if (eventsMatchingConditions.length === 0)
             throw new Error("[BusinessEventValidator]: No events matching conditions found")
@@ -194,7 +194,7 @@ const decodeEventFn = (_prevEvents: EventResult[], item: BusinessEvent, origin: 
     throw new Error("[BusinessEventValidator]: No matching rules found")
 }
 
-const matchesEventFn = (prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
+export const matchesEventFn = (prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
     try {
         decodeEventFn(prevEvents, item, origin)
         return true
@@ -212,7 +212,7 @@ const substituteString = (value: string | number, network: NETWORK_TYPE, params:
     return params[`${param}_${network}`] ?? params[param] ?? param
 }
 
-const replaceItemWithParams = (item: BusinessEvent, network: NETWORK_TYPE, params: Record<string, string>) => {
+export const replaceItemWithParams = (item: BusinessEvent, network: NETWORK_TYPE, params: Record<string, string>) => {
     return {
         ...item,
         events: item.events.map(evt => ({
@@ -227,14 +227,13 @@ const replaceItemWithParams = (item: BusinessEvent, network: NETWORK_TYPE, param
 }
 
 export class BusinessEventAbiManager extends AbiManager {
-    private logger = console
     constructor(protected readonly network: NETWORK_TYPE, protected readonly params?: Record<string, string>) {
         super()
     }
 
     protected _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[] {
         const entries = Object.entries(business_events_generated)
-        return entries.map(([signature, item]) => {
+        const mappedEntries = entries.map(([signature, item]) => {
             const parsedItem = replaceItemWithParams(item, this.network, this.params ?? {})
             return {
                 name: parsedItem.name,
@@ -249,8 +248,11 @@ export class BusinessEventAbiManager extends AbiManager {
                         origin,
                     )
                 },
-            }
+            } satisfies IndexableAbi
         })
+        return mappedEntries.sort(
+            (a, b) => preferredOrder.indexOf(a.fullSignature as any) - preferredOrder.indexOf(b.fullSignature as any),
+        )
     }
     protected _parseEvents(_output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
         this.assertEventsLoaded()
