@@ -46,8 +46,9 @@ export class GenericAbiManager extends AbiManager {
                 return {
                     name: found.fullSignature,
                     params: found.decode(evt, undefined, []),
+                    address: evt.address,
                 }
             })
-            .filter((u): u is EventResult => typeof u !== "boolean")
+            .filter((u): u is Required<EventResult> => typeof u !== "boolean")
     }
 }

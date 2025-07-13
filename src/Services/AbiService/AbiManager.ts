@@ -1,6 +1,11 @@
 import { Event, Output, Transfer } from "@vechain/sdk-network"
 
-export type EventResult = { name: string; params: { [key: string]: unknown } }
+export type EventResult = {
+    name: string
+    /** Address that generated the event */
+    address?: string
+    params: { [key: string]: unknown }
+}
 export interface IndexableAbi {
     fullSignature: string
     name: string

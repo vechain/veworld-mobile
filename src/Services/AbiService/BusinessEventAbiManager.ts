@@ -2,13 +2,14 @@ import { Output } from "@vechain/sdk-network"
 import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
 import business_events_generated from "./business_events_generated"
 import { ethers } from "ethers"
+import { NETWORK_TYPE } from "~Model"
 
 type Operator = "EQ" | "NE" | "GT" | "LT" | "GE" | "LE"
 
 type Condition = {
-    firstOperand: string
+    firstOperand: string | number
     isFirstStatic: boolean
-    secondOperand: string
+    secondOperand: string | number
     isSecondStatic: boolean
     operator: Operator
 }
@@ -62,18 +63,24 @@ const convertEventResultWithAliasIntoRecord = (results: EventResultWithAlias[]):
     return Object.fromEntries(results.map(({ alias, ...event }) => [alias, event]))
 }
 
-const convertEventResultAliasRecordIntoParams = (record: Record<string, EventResult>, item: BusinessEvent) => {
-    return Object.fromEntries(
-        item.paramsDefinition.map(param => {
-            const value = record[param.eventName].params[param.name]
-            return [param.businessEventName, value]
-        }),
-    )
-}
-
 function assertToStringable(value: unknown): asserts value is { toString(): string } {
     if (value === undefined) throw new Error("[assertToStringable]: Value is undefined")
     if (value === null) throw new Error("[assertToStringable]: Value is null")
+}
+
+const getEventValue = (event: EventResult, operand: string) => {
+    if (operand === "address") return event.address?.toLowerCase() ?? ""
+    assertToStringable(event.params[operand])
+    return event.params[operand].toString().toLowerCase().trim()
+}
+
+const convertEventResultAliasRecordIntoParams = (record: Record<string, EventResult>, item: BusinessEvent) => {
+    return Object.fromEntries(
+        item.paramsDefinition.map(param => {
+            const value = getEventValue(record[param.eventName], param.name)
+            return [param.businessEventName, value]
+        }),
+    )
 }
 
 const evaluateOperator = (operator: Operator, firstValue: string, secondValue: string) => {
@@ -93,13 +100,9 @@ const evaluateOperator = (operator: Operator, firstValue: string, secondValue: s
     }
 }
 
-const getEventValue = (event: EventResult, operand: string) => {
-    assertToStringable(event.params[operand])
-    return event.params[operand].toString().toLowerCase().trim()
-}
-
-const resolveOperandValue = (operand: string, isStatic: boolean, event: EventResult) => {
-    if (isStatic) return operand.toLowerCase().trim()
+const resolveOperandValue = (operand: string | number, isStatic: boolean, event: EventResult) => {
+    if (isStatic) return operand.toString().toLowerCase().trim()
+    if (typeof operand === "number") throw new Error("[BusinessEventValidator]: Invalid operand")
     return getEventValue(event, operand)
 }
 
@@ -176,17 +179,44 @@ const matchesEventFn = (prevEvents: EventResult[], item: BusinessEvent) => {
     }
 }
 
+const PLACEHOLDER_REGEX = /^\$\{(\w+)\}$/
+
+const substituteString = (value: string | number, network: NETWORK_TYPE, params: Record<string, string>) => {
+    if (typeof value === "number") return value
+    if (!PLACEHOLDER_REGEX.test(value)) return value
+    return params[`${value}_${network}`] ?? params[value] ?? value
+}
+
+const replaceItemWithParams = (item: BusinessEvent, network: NETWORK_TYPE, params: Record<string, string>) => {
+    return {
+        ...item,
+        events: item.events.map(evt => ({
+            ...evt,
+            conditions: evt.conditions.map(condition => ({
+                ...condition,
+                firstOperand: substituteString(condition.firstOperand, network, params),
+                secondOperand: substituteString(condition.secondOperand, network, params),
+            })),
+        })),
+    } satisfies BusinessEvent
+}
+
 export class BusinessEventAbiManager extends AbiManager {
+    constructor(protected readonly network: NETWORK_TYPE, protected readonly params?: Record<string, string>) {
+        super()
+    }
+
     protected _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[] {
         return Object.entries(business_events_generated).map(([signature, item]) => {
+            const parsedItem = replaceItemWithParams(item, this.network, this.params ?? {})
             return {
-                name: item.name,
+                name: parsedItem.name,
                 fullSignature: signature,
                 isEvent(_, __, prevEvents) {
-                    return matchesEventFn(prevEvents, item)
+                    return matchesEventFn(prevEvents, parsedItem)
                 },
                 decode(_, __, prevEvents) {
-                    return decodeEventFn(prevEvents, item)
+                    return decodeEventFn(prevEvents, parsedItem)
                 },
             }
         })
