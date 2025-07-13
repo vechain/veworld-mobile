@@ -140,7 +140,7 @@ const decodeEventFn = (prevEvents: EventResult[], item: BusinessEvent) => {
     for (let i = 0; i < item.events.length; i++) {
         const itemEvent = item.events[i]
         const foundEvents = prevEvents.filter(evt => evt.name === itemEvent.name)
-        if (!foundEvents) throw new Error("[BusinessEventValidator]: No matching events found")
+        if (foundEvents.length === 0) throw new Error("[BusinessEventValidator]: No matching events found")
         const eventsMatchingConditions = matchesConditions(foundEvents, itemEvent.conditions)
         if (eventsMatchingConditions.length === 0)
             throw new Error("[BusinessEventValidator]: No events matching conditions found")
@@ -156,8 +156,7 @@ const decodeEventFn = (prevEvents: EventResult[], item: BusinessEvent) => {
         )
         for (const combination of allCombinations) {
             const matching = matchesRulesSingle(combination, item.rules)
-            if (matching)
-                return convertEventResultAliasRecordIntoParams(convertEventResultWithAliasIntoRecord(combination), item)
+            if (matching) return convertEventResultWithAliasIntoRecord(combination)
         }
 
         throw new Error("[BusinessEventValidator]: No matching rules found")
@@ -165,8 +164,7 @@ const decodeEventFn = (prevEvents: EventResult[], item: BusinessEvent) => {
 
     const parsedRules = Object.entries(matchingEvents).map(([alias, events]) => ({ ...events[0], alias }))
     const rulesMatching = matchesRulesSingle(parsedRules, item.rules)
-    if (rulesMatching)
-        return convertEventResultAliasRecordIntoParams(convertEventResultWithAliasIntoRecord(parsedRules), item)
+    if (rulesMatching) return convertEventResultWithAliasIntoRecord(parsedRules)
     throw new Error("[BusinessEventValidator]: No matching rules found")
 }
 
@@ -184,7 +182,8 @@ const PLACEHOLDER_REGEX = /^\$\{(\w+)\}$/
 const substituteString = (value: string | number, network: NETWORK_TYPE, params: Record<string, string>) => {
     if (typeof value === "number") return value
     if (!PLACEHOLDER_REGEX.test(value)) return value
-    return params[`${value}_${network}`] ?? params[value] ?? value
+    const param = value.match(PLACEHOLDER_REGEX)![1]
+    return params[`${param}_${network}`] ?? params[param] ?? param
 }
 
 const replaceItemWithParams = (item: BusinessEvent, network: NETWORK_TYPE, params: Record<string, string>) => {
@@ -216,7 +215,7 @@ export class BusinessEventAbiManager extends AbiManager {
                     return matchesEventFn(prevEvents, parsedItem)
                 },
                 decode(_, __, prevEvents) {
-                    return decodeEventFn(prevEvents, parsedItem)
+                    return convertEventResultAliasRecordIntoParams(decodeEventFn(prevEvents, parsedItem), item)
                 },
             }
         })

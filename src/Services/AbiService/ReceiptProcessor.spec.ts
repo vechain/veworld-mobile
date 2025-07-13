@@ -63,7 +63,7 @@ describe("ReceiptProcessor", () => {
             ])
         })
 
-        it.only("Process block - With regular transactions (Labelled TXs)", async () => {
+        it("Process block - With regular transactions (Labelled TXs)", async () => {
             const block = require("./fixtures/block_b3tr_action.json")
 
             const outputs = (block.transactions as TransactionReceipt[]).flatMap(tx =>
@@ -73,7 +73,13 @@ describe("ReceiptProcessor", () => {
             expect(outputs).toHaveLength(5)
             const names = outputs.map(output => output.name)
 
-            console.log("NAMES", names)
+            expect(names).toStrictEqual([
+                "B3TR_ActionReward(address,address,uint256,bytes32,string)",
+                "B3TR_ActionReward(address,address,uint256,bytes32,string)",
+                "Transfer(indexed address,indexed address,uint256)",
+                "VET_TRANSFER(address,address,uint256)",
+                "VET_TRANSFER(address,address,uint256)",
+            ])
         })
     })
 })
