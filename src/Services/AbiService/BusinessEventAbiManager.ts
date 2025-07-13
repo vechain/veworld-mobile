@@ -68,16 +68,28 @@ function assertToStringable(value: unknown): asserts value is { toString(): stri
     if (value === null) throw new Error("[assertToStringable]: Value is null")
 }
 
-const getEventValue = (event: EventResult, operand: string) => {
+/**
+ *
+ * @param event Event Result
+ * @param operand Operand
+ * @param originValue Value of `origin` from the transaction
+ * @returns
+ */
+const getEventValue = (event: EventResult, operand: string, originValue: string) => {
     if (operand === "address") return event.address?.toLowerCase() ?? ""
+    if (operand === "origin") return originValue.toLowerCase()
     assertToStringable(event.params[operand])
     return event.params[operand].toString().toLowerCase().trim()
 }
 
-const convertEventResultAliasRecordIntoParams = (record: Record<string, EventResult>, item: BusinessEvent) => {
+const convertEventResultAliasRecordIntoParams = (
+    record: Record<string, EventResult>,
+    item: BusinessEvent,
+    originValue: string,
+) => {
     return Object.fromEntries(
         item.paramsDefinition.map(param => {
-            const value = getEventValue(record[param.eventName], param.name)
+            const value = getEventValue(record[param.eventName], param.name, originValue)
             return [param.businessEventName, value]
         }),
     )
@@ -100,48 +112,59 @@ const evaluateOperator = (operator: Operator, firstValue: string, secondValue: s
     }
 }
 
-const resolveOperandValue = (operand: string | number, isStatic: boolean, event: EventResult) => {
+const resolveOperandValue = (operand: string | number, isStatic: boolean, event: EventResult, originValue: string) => {
     if (isStatic) return operand.toString().toLowerCase().trim()
     if (typeof operand === "number") throw new Error("[BusinessEventValidator]: Invalid operand")
-    return getEventValue(event, operand)
+    return getEventValue(event, operand, originValue)
 }
 
-const matchesConditionsSingle = (result: EventResult, conditions: Condition[] | readonly Condition[]) => {
+const matchesConditionsSingle = (
+    result: EventResult,
+    conditions: Condition[] | readonly Condition[],
+    originValue: string,
+) => {
     return conditions.every(condition => {
-        const firstValue = resolveOperandValue(condition.firstOperand, condition.isFirstStatic, result)
-        const secondValue = resolveOperandValue(condition.secondOperand, condition.isSecondStatic, result)
+        const firstValue = resolveOperandValue(condition.firstOperand, condition.isFirstStatic, result, originValue)
+        const secondValue = resolveOperandValue(condition.secondOperand, condition.isSecondStatic, result, originValue)
         return evaluateOperator(condition.operator, firstValue, secondValue)
     })
 }
 
-const matchesConditions = (results: EventResult[], conditions: Condition[] | readonly Condition[]) => {
-    return results.filter(result => matchesConditionsSingle(result, conditions))
+const matchesConditions = (
+    results: EventResult[],
+    conditions: Condition[] | readonly Condition[],
+    originValue: string,
+) => {
+    return results.filter(result => matchesConditionsSingle(result, conditions, originValue))
 }
 
 const matchesRulesSingle = (
     result: EventResultWithAlias[],
     rules: BusinessEventRule[] | readonly BusinessEventRule[],
+    origin: string,
 ) => {
     return rules.every(rule => {
         const firstValue = getEventValue(
             result.find(evt => evt.alias === rule.firstEventName)!,
             rule.firstEventProperty,
+            origin,
         )
         const secondValue = getEventValue(
             result.find(evt => evt.alias === rule.secondEventName)!,
             rule.secondEventProperty,
+            origin,
         )
         return evaluateOperator(rule.operator, firstValue, secondValue)
     })
 }
 
-const decodeEventFn = (prevEvents: EventResult[], item: BusinessEvent) => {
+const decodeEventFn = (prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
     let matchingEvents: Record<string, EventResult[]> = {}
     for (let i = 0; i < item.events.length; i++) {
         const itemEvent = item.events[i]
         const foundEvents = prevEvents.filter(evt => evt.name === itemEvent.name)
         if (foundEvents.length === 0) throw new Error("[BusinessEventValidator]: No matching events found")
-        const eventsMatchingConditions = matchesConditions(foundEvents, itemEvent.conditions)
+        const eventsMatchingConditions = matchesConditions(foundEvents, itemEvent.conditions, origin)
         if (eventsMatchingConditions.length === 0)
             throw new Error("[BusinessEventValidator]: No events matching conditions found")
         matchingEvents[itemEvent.alias] = eventsMatchingConditions
@@ -155,7 +178,7 @@ const decodeEventFn = (prevEvents: EventResult[], item: BusinessEvent) => {
             Object.entries(matchingEvents).map(([alias, events]) => events.map(evt => ({ ...evt, alias }))),
         )
         for (const combination of allCombinations) {
-            const matching = matchesRulesSingle(combination, item.rules)
+            const matching = matchesRulesSingle(combination, item.rules, origin)
             if (matching) return convertEventResultWithAliasIntoRecord(combination)
         }
 
@@ -163,14 +186,14 @@ const decodeEventFn = (prevEvents: EventResult[], item: BusinessEvent) => {
     }
 
     const parsedRules = Object.entries(matchingEvents).map(([alias, events]) => ({ ...events[0], alias }))
-    const rulesMatching = matchesRulesSingle(parsedRules, item.rules)
+    const rulesMatching = matchesRulesSingle(parsedRules, item.rules, origin)
     if (rulesMatching) return convertEventResultWithAliasIntoRecord(parsedRules)
     throw new Error("[BusinessEventValidator]: No matching rules found")
 }
 
-const matchesEventFn = (prevEvents: EventResult[], item: BusinessEvent) => {
+const matchesEventFn = (prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
     try {
-        decodeEventFn(prevEvents, item)
+        decodeEventFn(prevEvents, item, origin)
         return true
     } catch {
         return false
@@ -211,19 +234,23 @@ export class BusinessEventAbiManager extends AbiManager {
             return {
                 name: parsedItem.name,
                 fullSignature: signature,
-                isEvent(_, __, prevEvents) {
-                    return matchesEventFn(prevEvents, parsedItem)
+                isEvent(_, __, prevEvents, origin) {
+                    return matchesEventFn(prevEvents, parsedItem, origin)
                 },
-                decode(_, __, prevEvents) {
-                    return convertEventResultAliasRecordIntoParams(decodeEventFn(prevEvents, parsedItem), item)
+                decode(_, __, prevEvents, origin) {
+                    return convertEventResultAliasRecordIntoParams(
+                        decodeEventFn(prevEvents, parsedItem, origin),
+                        item,
+                        origin,
+                    )
                 },
             }
         })
     }
-    protected _parseEvents(_output: Output, prevEvents: EventResult[]): EventResult[] {
+    protected _parseEvents(_output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
         this.assertEventsLoaded()
-        const found = this.indexableAbis.find(abi => abi.isEvent(undefined, undefined, prevEvents))
+        const found = this.indexableAbis.find(abi => abi.isEvent(undefined, undefined, prevEvents, origin))
         if (!found) return prevEvents
-        return [{ name: found.fullSignature, params: found.decode(undefined, undefined, prevEvents) }]
+        return [{ name: found.fullSignature, params: found.decode(undefined, undefined, prevEvents, origin) }]
     }
 }

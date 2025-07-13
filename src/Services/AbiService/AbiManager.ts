@@ -9,11 +9,17 @@ export type EventResult = {
 export interface IndexableAbi {
     fullSignature: string
     name: string
-    isEvent(event: Event | undefined, transfer: Transfer | undefined, prevEvents: EventResult[]): boolean
+    isEvent(
+        event: Event | undefined,
+        transfer: Transfer | undefined,
+        prevEvents: EventResult[],
+        origin: string,
+    ): boolean
     decode(
         event: Event | undefined,
         transfer: Transfer | undefined,
         prevEvents: EventResult[],
+        origin: string,
     ): {
         [key: string]: unknown
     }
@@ -31,10 +37,10 @@ export abstract class AbiManager {
     }
 
     protected abstract _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[]
-    protected abstract _parseEvents(output: Output, prevEvents: EventResult[]): EventResult[]
+    protected abstract _parseEvents(output: Output, prevEvents: EventResult[], origin: string): EventResult[]
 
-    parseEvents(output: Output, prevEvents: EventResult[]) {
+    parseEvents(output: Output, prevEvents: EventResult[], origin: string) {
         this.assertEventsLoaded()
-        return this._parseEvents(output, prevEvents)
+        return this._parseEvents(output, prevEvents, origin)
     }
 }

@@ -35,17 +35,17 @@ export class GenericAbiManager extends AbiManager {
         })
     }
 
-    protected _parseEvents(output: Output, prevEvents: EventResult[]): EventResult[] {
+    protected _parseEvents(output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
         if (prevEvents.length !== 0)
             throw new Error("[GenericAbiManager]: This should be the first ABI Manager in the list")
 
         return output.events
             .map(evt => {
-                const found = this.indexableAbis?.find(abi => abi.isEvent(evt, undefined, []))
+                const found = this.indexableAbis?.find(abi => abi.isEvent(evt, undefined, [], origin))
                 if (!found) return false
                 return {
                     name: found.fullSignature,
-                    params: found.decode(evt, undefined, []),
+                    params: found.decode(evt, undefined, [], origin),
                     address: evt.address,
                 }
             })

@@ -1,4 +1,4 @@
-import { TransactionReceipt } from "@vechain/sdk-network"
+import { ExpandedBlockDetail } from "@vechain/sdk-network"
 import { BusinessEventAbiManager } from "./BusinessEventAbiManager"
 import { GenericAbiManager } from "./GenericAbiManager"
 import { NativeAbiManager } from "./NativeAbiManager"
@@ -32,23 +32,26 @@ describe("ReceiptProcessor", () => {
         it("should identify a transfer event of erc 20", async () => {
             const receiptProcessor = new ReceiptProcessor([genericAbiManager])
 
-            const result = receiptProcessor.analyzeReceipt([
-                {
-                    contractAddress: null,
-                    events: [
-                        {
-                            address: "0x0000000000000000000000000000456e65726779",
-                            topics: [
-                                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
-                                "0x00000000000000000000000014b3fe72a8c99a118bb8e288c51c9bd5eeac1f24",
-                                "0x000000000000000000000000809e880c96a911965d8e3e00e207a97071678f7d",
-                            ],
-                            data: "0x00000000000000000000000000000000000000000000010f07dcbd8349644000",
-                        },
-                    ],
-                    transfers: [],
-                },
-            ])
+            const result = receiptProcessor.analyzeReceipt(
+                [
+                    {
+                        contractAddress: null,
+                        events: [
+                            {
+                                address: "0x0000000000000000000000000000456e65726779",
+                                topics: [
+                                    "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                                    "0x00000000000000000000000014b3fe72a8c99a118bb8e288c51c9bd5eeac1f24",
+                                    "0x000000000000000000000000809e880c96a911965d8e3e00e207a97071678f7d",
+                                ],
+                                data: "0x00000000000000000000000000000000000000000000010f07dcbd8349644000",
+                            },
+                        ],
+                        transfers: [],
+                    },
+                ],
+                "0x0",
+            )
 
             expect(result).toStrictEqual([
                 {
@@ -63,11 +66,11 @@ describe("ReceiptProcessor", () => {
             ])
         })
 
-        it("Process block - With regular transactions (Labelled TXs)", async () => {
+        it("Process block - B3TR Action + Transfers", async () => {
             const block = require("./fixtures/block_b3tr_action.json")
 
-            const outputs = (block.transactions as TransactionReceipt[]).flatMap(tx =>
-                commonReceiptProcessor.analyzeReceipt(tx.outputs),
+            const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
+                commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
             )
 
             expect(outputs).toHaveLength(5)

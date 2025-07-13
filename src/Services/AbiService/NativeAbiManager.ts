@@ -19,14 +19,14 @@ export class NativeAbiManager extends AbiManager {
             },
         ]
     }
-    protected _parseEvents(output: Output, prevEvents: EventResult[]): EventResult[] {
+    protected _parseEvents(output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
         const transfers = output.transfers
             .map(transfer => {
-                const found = this.indexableAbis?.find(abi => abi.isEvent(undefined, transfer, []))
+                const found = this.indexableAbis?.find(abi => abi.isEvent(undefined, transfer, [], origin))
                 if (!found) return false
                 return {
                     name: found.fullSignature,
-                    params: found.decode(undefined, transfer, []),
+                    params: found.decode(undefined, transfer, [], origin),
                 }
             })
             .filter((u): u is EventResult => typeof u !== "boolean")
