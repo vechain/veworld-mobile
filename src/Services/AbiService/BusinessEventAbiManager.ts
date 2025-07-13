@@ -158,16 +158,19 @@ const matchesRulesSingle = (
     })
 }
 
-const decodeEventFn = (prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
+const decodeEventFn = (_prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
     let matchingEvents: Record<string, EventResult[]> = {}
+    let prevEvents = [..._prevEvents]
     for (let i = 0; i < item.events.length; i++) {
         const itemEvent = item.events[i]
         const foundEvents = prevEvents.filter(evt => evt.name === itemEvent.name)
         if (foundEvents.length === 0) throw new Error("[BusinessEventValidator]: No matching events found")
+
         const eventsMatchingConditions = matchesConditions(foundEvents, itemEvent.conditions, origin)
         if (eventsMatchingConditions.length === 0)
             throw new Error("[BusinessEventValidator]: No events matching conditions found")
         matchingEvents[itemEvent.alias] = eventsMatchingConditions
+        prevEvents = prevEvents.filter(evt => !eventsMatchingConditions.includes(evt))
     }
 
     if (Object.keys(matchingEvents).length !== item.events.length)
@@ -195,7 +198,7 @@ const matchesEventFn = (prevEvents: EventResult[], item: BusinessEvent, origin: 
     try {
         decodeEventFn(prevEvents, item, origin)
         return true
-    } catch {
+    } catch (e) {
         return false
     }
 }
@@ -224,12 +227,14 @@ const replaceItemWithParams = (item: BusinessEvent, network: NETWORK_TYPE, param
 }
 
 export class BusinessEventAbiManager extends AbiManager {
+    private logger = console
     constructor(protected readonly network: NETWORK_TYPE, protected readonly params?: Record<string, string>) {
         super()
     }
 
     protected _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[] {
-        return Object.entries(business_events_generated).map(([signature, item]) => {
+        const entries = Object.entries(business_events_generated)
+        return entries.map(([signature, item]) => {
             const parsedItem = replaceItemWithParams(item, this.network, this.params ?? {})
             return {
                 name: parsedItem.name,

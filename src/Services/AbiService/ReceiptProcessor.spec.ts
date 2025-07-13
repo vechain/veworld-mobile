@@ -84,5 +84,27 @@ describe("ReceiptProcessor", () => {
                 "VET_TRANSFER(address,address,uint256)",
             ])
         })
+
+        it("Process block - DEX Transactions", async () => {
+            const block = require("./fixtures/block_dex.json")
+
+            const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
+                commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
+            )
+
+            expect(outputs).toHaveLength(9)
+            const names = outputs.map(output => output.name)
+            expect(names).toStrictEqual([
+                "B3TR_ActionReward(address,address,uint256,bytes32,string)",
+                "FT_VET_Swap2(address,address,address,uint256,uint256)",
+                "B3TR_ActionReward(address,address,uint256,bytes32,string)",
+                "Approval(indexed address,indexed address,uint256)",
+                "Token_FTSwap(address,address,address,address,uint256,uint256)",
+                "VET_FT_Swap(address,address,address,uint256,uint256)",
+                "VET_FT_Swap(address,address,address,uint256,uint256)",
+                "Approval(indexed address,indexed address,uint256)",
+                "FT_VET_Swap(address,address,address,uint256,uint256)",
+            ])
+        })
     })
 })

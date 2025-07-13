@@ -1,5 +1,6 @@
 import { Output } from "@vechain/sdk-network"
 import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
+import { ethers } from "ethers"
 
 export class NativeAbiManager extends AbiManager {
     protected _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[] {
@@ -14,7 +15,11 @@ export class NativeAbiManager extends AbiManager {
                 decode(event, transfer) {
                     if (event) throw new Error("[NativeAbiManager]: Error while decoding.")
                     if (!transfer) throw new Error("[NativeAbiManager]: Error while decoding.")
-                    return { from: transfer.sender, to: transfer.recipient, amount: transfer.amount }
+                    return {
+                        from: transfer.sender,
+                        to: transfer.recipient,
+                        amount: ethers.BigNumber.from(transfer.amount).toString(),
+                    }
                 },
             },
         ]
