@@ -1,4 +1,4 @@
-/* eslint-disable max-len */
+// eslint-disable max-len
 export default {
     "NewProposal(indexed uint256,indexed uint8,indexed address)": {
         anonymous: false,

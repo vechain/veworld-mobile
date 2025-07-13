@@ -1,20 +1,19 @@
-import { Transaction } from "@vechain/sdk-core"
 import { Event, Output, Transfer } from "@vechain/sdk-network"
 
+export type EventResult = { name: string; params: { [key: string]: unknown } }
 export interface IndexableAbi {
     fullSignature: string
     name: string
-    isEvent(transaction: Transaction, events: Event | Event[], transfer: Transfer[]): boolean
+    isEvent(event: Event | undefined, transfer: Transfer | undefined, prevEvents: EventResult[]): boolean
     decode(
-        transaction: Transaction,
-        events: Event | Event[],
-        transfers: Transfer[],
+        event: Event | undefined,
+        transfer: Transfer | undefined,
+        prevEvents: EventResult[],
     ): {
         [key: string]: unknown
     }
 }
 
-export type EventResult = { name: string; params: { [key: string]: unknown } }
 export abstract class AbiManager {
     protected indexableAbis: IndexableAbi[] | undefined
 
@@ -27,10 +26,10 @@ export abstract class AbiManager {
     }
 
     protected abstract _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[]
-    protected abstract _parseEvents(transaction: Transaction, output: Output, prevEvents: EventResult[]): EventResult[]
+    protected abstract _parseEvents(output: Output, prevEvents: EventResult[]): EventResult[]
 
-    parseEvents(transaction: Transaction, output: Output, prevEvents: EventResult[]) {
+    parseEvents(output: Output, prevEvents: EventResult[]) {
         this.assertEventsLoaded()
-        return this._parseEvents(transaction, output, prevEvents)
+        return this._parseEvents(output, prevEvents)
     }
 }

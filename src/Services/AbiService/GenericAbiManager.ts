@@ -1,7 +1,6 @@
 import { ethers } from "ethers"
 import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
 import generated from "./generated"
-import { Transaction } from "@vechain/sdk-core"
 import { Output } from "@vechain/sdk-network"
 import { AbiEventParameter } from "abitype"
 
@@ -16,32 +15,37 @@ export class GenericAbiManager extends AbiManager {
             return {
                 name: item.name,
                 fullSignature,
-                isEvent(_, events, __) {
-                    if (Array.isArray(events)) return false
-                    if (events.topics.length - 1 !== getIndexedInputs(item.inputs).length) return false
-                    return iface.getEventTopic(item.name).toLowerCase() === events.topics[0]
+                isEvent(event) {
+                    if (!event) throw new Error("[GenericAbiManager]: Error while decoding.")
+                    if (event.topics.length - 1 !== getIndexedInputs(item.inputs).length) return false
+                    return iface.getEventTopic(item.name).toLowerCase() === event.topics[0]
                 },
-                decode(_, events, __) {
-                    if (Array.isArray(events))
-                        throw new Error("[GenericAbiManager]: Invalid input. Events cannot be an array")
-                    const decodedLog = iface.decodeEventLog(item.name, events.data, events.topics)
-                    return Object.fromEntries(Object.entries(decodedLog).filter(([key]) => !key.match(/^\d+$/)))
+                decode(event) {
+                    if (!event) throw new Error("[GenericAbiManager]: Error while decoding.")
+                    const decodedLog = iface.decodeEventLog(item.name, event.data, event.topics)
+                    return Object.fromEntries(
+                        Object.entries(decodedLog)
+                            .filter(([key]) => !key.match(/^\d+$/))
+                            .map(([key, value]) =>
+                                value instanceof ethers.BigNumber ? [key, value.toString()] : [key, value],
+                            ),
+                    )
                 },
             } satisfies IndexableAbi
         })
     }
 
-    protected _parseEvents(transaction: Transaction, output: Output, prevEvents: EventResult[]): EventResult[] {
+    protected _parseEvents(output: Output, prevEvents: EventResult[]): EventResult[] {
         if (prevEvents.length !== 0)
             throw new Error("[GenericAbiManager]: This should be the first ABI Manager in the list")
 
         return output.events
             .map(evt => {
-                const found = this.indexableAbis?.find(abi => abi.isEvent(transaction, evt, output.transfers))
+                const found = this.indexableAbis?.find(abi => abi.isEvent(evt, undefined, []))
                 if (!found) return false
                 return {
                     name: found.fullSignature,
-                    params: found.decode(transaction, evt, output.transfers),
+                    params: found.decode(evt, undefined, []),
                 }
             })
             .filter((u): u is EventResult => typeof u !== "boolean")
