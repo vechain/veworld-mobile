@@ -121,7 +121,7 @@ export const useTransactionScreen = ({
             track(AnalyticsEvent.TRANSACTION_SEND_DELEGATION, { delegationOption: selectedDelegationOption })
             if (selectedNetwork.type === NETWORK_TYPE.MAIN)
                 track(AnalyticsEvent.TRANSACTION_SEND_DELEGATION_TOKEN, {
-                    token: selectedDelegationToken,
+                    delegationToken: selectedDelegationToken,
                 })
             propsOnTransactionSuccess(tx, id)
         },
