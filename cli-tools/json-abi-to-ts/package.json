@@ -1,5 +1,6 @@
 {
   "name": "json-abi-to-ts",
+  "version": "0.0.0",
   "devDependencies": {
     "@types/node": "20",
     "@types/yargs": "^17.0.33",
