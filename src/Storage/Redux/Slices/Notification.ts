@@ -7,7 +7,7 @@ export const initialNotificationState: NotificationState = {
     optedIn: null,
     dappVisitCounter: {},
     userTags: {},
-    dappNotifications: false,
+    dappNotifications: true,
 }
 
 export const Notification = createSlice({

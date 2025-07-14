@@ -34,7 +34,7 @@ jobs:
         environment: android-release
         permissions:
             actions: write
-            contents: read
+            contents: write
 
         steps:
             - name: Checkout repository
@@ -159,6 +159,8 @@ jobs:
               run: echo 'Artifact ID is ${{ steps.upload.outputs.artifact-id }}'
 
             - name: Commit and Push Changes
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   git config user.name "vechain-ci"
                   git config user.email "vechain.ci@vechain.org"

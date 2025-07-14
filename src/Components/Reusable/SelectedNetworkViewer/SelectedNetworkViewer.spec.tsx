@@ -12,9 +12,8 @@ const findLabel = async (label: string) => await screen.findByText(label, {}, { 
 
 describe("SelectedNetworkViewer", () => {
     const mockUseBlockchainNetwork = useBlockchainNetwork as jest.MockedFunction<typeof useBlockchainNetwork>
-
-    afterEach(() => {
-        jest.resetAllMocks()
+    beforeEach(() => {
+        jest.clearAllMocks()
     })
 
     it("should render the network name when the network is not mainnet", async () => {

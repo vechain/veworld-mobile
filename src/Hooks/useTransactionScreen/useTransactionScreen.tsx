@@ -21,7 +21,7 @@ import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice, NETWORK_TYPE, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 import {
@@ -119,9 +119,20 @@ export const useTransactionScreen = ({
         (tx, id) => {
             track(AnalyticsEvent.TRANSACTION_SEND_GAS, { gasOption: mapGasPriceCoefficient(selectedFeeOption) })
             track(AnalyticsEvent.TRANSACTION_SEND_DELEGATION, { delegationOption: selectedDelegationOption })
+            if (selectedNetwork.type === NETWORK_TYPE.MAIN)
+                track(AnalyticsEvent.TRANSACTION_SEND_DELEGATION_TOKEN, {
+                    token: selectedDelegationToken,
+                })
             propsOnTransactionSuccess(tx, id)
         },
-        [propsOnTransactionSuccess, selectedDelegationOption, selectedFeeOption, track],
+        [
+            propsOnTransactionSuccess,
+            selectedDelegationOption,
+            selectedDelegationToken,
+            selectedFeeOption,
+            selectedNetwork.type,
+            track,
+        ],
     )
 
     const isGalactica = useMemo(() => {
