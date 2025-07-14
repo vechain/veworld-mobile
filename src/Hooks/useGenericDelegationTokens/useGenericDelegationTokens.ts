@@ -11,7 +11,6 @@ export const useGenericDelegationTokens = () => {
         queryFn: () => getGenericDelegatorCoins({ networkType: selectedNetwork.type }),
         enabled: isValidGenericDelegatorNetwork(selectedNetwork.type),
     })
-    console.log("gen delegation data", data)
     const memoized = useMemo(() => {
         if (data === undefined) return [VTHO.symbol]
         return [VTHO.symbol, ...data].filter(token => [B3TR.symbol, VTHO.symbol, VET.symbol].includes(token))

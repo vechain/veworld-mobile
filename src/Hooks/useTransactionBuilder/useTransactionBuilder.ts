@@ -44,6 +44,7 @@ export const useTransactionBuilder = ({
         const txGas = gas?.gas ?? 0
 
         if (deviceType === DEVICE_TYPE.SMART_WALLET) {
+            console.log("buildTransaction genericDelgation clauses", clauses?.length)
             return buildTransactionWithSmartWallet(
                 clauses,
                 {
@@ -91,6 +92,7 @@ export const useTransactionBuilder = ({
         gasPriceCoef,
         deviceType,
         buildTransactionWithSmartWallet,
+        genericDelgation,
     ])
 
     return {

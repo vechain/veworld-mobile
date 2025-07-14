@@ -45,9 +45,11 @@ export const fetchFromEndpoint = async <T>(url: string) => {
  */
 export const requestFromEndpoint = async <T>(config: AxiosRequestConfig) => {
     try {
+        console.log("delegator requestFromEndpoint config", config)
         const response = await axiosInstance.request<T>(config)
         return response.data
     } catch (error) {
+        console.log("requestFromEndpoint error", error.response.data)
         // Verify if 'error' is an instance of an Error before accessing 'error.message'
         if (error instanceof Error) {
             throw new Error(`Failed to fetch from endpoint ${config.url}: ${error.message}`)

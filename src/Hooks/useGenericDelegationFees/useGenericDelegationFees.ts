@@ -34,32 +34,33 @@ const buildTransactionCost = (
     token: string,
 ) => {
     if (!data || keys.length !== 3) return undefined
-    const lowerCaseToken = token.toLowerCase()
+
+    const tokenName = token === "B3TR" || token === "VET" ? token.toLowerCase() : token
     //Values returned from the endpoint are in WEI, they're in Ether. So, in order to be compliant with our interface, we should multiply the numbers by 1 ETH (10^18 WEI)
     return {
         [GasPriceCoefficient.REGULAR]: {
-            estimatedFee: BigNutils(data.transactionCost[keys[0]][lowerCaseToken]).multiply(
+            estimatedFee: BigNutils(data.transactionCost[keys[0]][tokenName]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
-            maxFee: BigNutils(data.transactionCost[keys[0]][lowerCaseToken]).multiply(
+            maxFee: BigNutils(data.transactionCost[keys[0]][tokenName]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
             priorityFee: BigNutils("0"),
         },
         [GasPriceCoefficient.MEDIUM]: {
-            estimatedFee: BigNutils(data.transactionCost[keys[1]][lowerCaseToken]).multiply(
+            estimatedFee: BigNutils(data.transactionCost[keys[1]][tokenName]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
-            maxFee: BigNutils(data.transactionCost[keys[1]][lowerCaseToken]).multiply(
+            maxFee: BigNutils(data.transactionCost[keys[1]][tokenName]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
             priorityFee: BigNutils("0"),
         },
         [GasPriceCoefficient.HIGH]: {
-            estimatedFee: BigNutils(data.transactionCost[keys[2]][lowerCaseToken]).multiply(
+            estimatedFee: BigNutils(data.transactionCost[keys[2]][tokenName]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
-            maxFee: BigNutils(data.transactionCost[keys[2]][lowerCaseToken]).multiply(
+            maxFee: BigNutils(data.transactionCost[keys[2]][tokenName]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
             priorityFee: BigNutils("0"),
@@ -82,7 +83,6 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         refetchInterval: 10000,
         placeholderData: keepPreviousData,
     })
-
     const allLegacyOptions = useMemo(() => {
         if (data === undefined) return undefined
         return Object.fromEntries(
@@ -92,9 +92,8 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
 
     const allGalacticaOptions = useMemo(() => {
         if (data === undefined) return undefined
-        return Object.fromEntries(
-            allowedTokens.map(tk => [tk, buildTransactionCost(data, ["regular", "medium", "high"], tk)!]),
-        )
+        const result = allowedTokens.map(tk => [tk, buildTransactionCost(data, ["regular", "medium", "high"], tk)!])
+        return Object.fromEntries(result)
     }, [data])
 
     const legacyOptions = useMemo(() => {

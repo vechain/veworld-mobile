@@ -58,7 +58,7 @@ function buildBatchAuthorizationTypedData({
     const toArray: string[] = []
     const valueArray: string[] = []
     const dataArray: string[] = []
-
+    console.log("buildBatchAuthorizationTypedData clauses", JSON.stringify(clauses))
     clauses.forEach(clause => {
         toArray.push(clause.to ?? "")
         valueArray.push(String(clause.value))
@@ -151,9 +151,9 @@ async function buildBatchExecutionClauses({
     chainId: number
     signTypedDataFn: TransactionSigningFunction
 }): Promise<TransactionClause[]> {
-    const clauses: TransactionClause[] = []
     const { address, isDeployed, factoryAddress } = smartAccountConfig
-    console.log("buildBatchExecutionClauses smartAccountConfig", JSON.stringify(smartAccountConfig))
+
+    console.log("buildBatchExecutionClauses txClauses", txClauses.length)
     // Build the batch authorization typed data
     const typedData = buildBatchAuthorizationTypedData({
         clauses: txClauses,
@@ -162,8 +162,9 @@ async function buildBatchExecutionClauses({
     })
     console.log("buildBatchExecutionClauses typedData", JSON.stringify(typedData))
     const signature = await signTypedDataFn(typedData)
-    console.log("buildBatchExecutionClauses signature", signature)
     // If the smart account is not deployed, deploy it first
+
+    const clauses: TransactionClause[] = []
     if (!isDeployed) {
         clauses.push(
             Clause.callFunction(
@@ -173,8 +174,7 @@ async function buildBatchExecutionClauses({
             ),
         )
     }
-    // if gen delegator add the transfer clause
-    // Add the batch execution call
+
     clauses.push(
         Clause.callFunction(
             Address.of(address),
@@ -272,6 +272,7 @@ export async function buildSmartAccountTransaction(params: {
     // optional gen delegator object
     genericDelgation?: {
         token: string
+        tokenAddress: string
         isGenDelegation: boolean
         amount: BigNumberUtils | undefined
         delegatorAddress: string
@@ -280,30 +281,36 @@ export async function buildSmartAccountTransaction(params: {
     const { txClauses, smartAccountConfig, signTypedDataFn, chainId, genericDelgation } = params
     const { version: smartAccountVersion, hasV1Account } = smartAccountConfig
 
+    const clauses: TransactionClause[] = [...txClauses]
     console.log("buildSmartAccountTransaction genericDelgation", JSON.stringify(genericDelgation))
     // Determine execution strategy based on smart account version
     const shouldUseBatchExecution = !hasV1Account || (smartAccountVersion && smartAccountVersion >= 3)
 
     if (genericDelgation && genericDelgation.isGenDelegation) {
+        console.log("pushing transaction clasue")
         const transferClause = getTransferClause(
             genericDelgation.token,
-            genericDelgation.delegatorAddress,
+            genericDelgation.tokenAddress,
+            // TODO pass in proper one to these functions
+            DELEGATOR_ADDRESS_MAINNET,
             genericDelgation.amount,
         )
-        txClauses.push(...transferClause)
+
+        clauses.push(...transferClause)
+        console.log("txClauses", JSON.stringify(txClauses))
     }
 
     if (shouldUseBatchExecution) {
         console.log("buildSmartAccountTransaction shouldUseBatchExecution")
         return await buildBatchExecutionClauses({
-            txClauses,
+            txClauses: clauses,
             smartAccountConfig,
             chainId,
             signTypedDataFn,
         })
     } else {
         return await buildIndividualExecutionClauses({
-            txClauses,
+            txClauses: clauses,
             smartAccountConfig,
             chainId,
             signTypedDataFn,
@@ -336,12 +343,23 @@ export const transfer: abi.Function.Definition = {
     type: "function",
 }
 
-const DELEGATOR_ADDRESS_MAINNET = "0x8692410Da301A9b796B68A58Ff660D51e979c6fa"
+const DELEGATOR_ADDRESS_MAINNET = "0xe705e3f310ab09fb9eb40b43cb1368289ef1f829"
 
-const getTransferClause = (token: string, tokenAddress: string, amount: BigNumberUtils | undefined) => {
+const getTransferClause = (
+    token: string,
+    tokenAddress: string,
+    delegatorAddress: string,
+    amount: BigNumberUtils | undefined,
+) => {
+    console.log("getTransferClause token", token)
+    console.log("getTransferClause tokenAddress", tokenAddress)
+    console.log("getTransferClause toAddres", delegatorAddress)
+    console.log("getTransferClause amount", amount?.toBigInt)
     const amountHex = `0x${amount?.toHex}`
+
+    console.log("getTransferClause amountHex", amountHex)
     // code from export const prepareFungibleClause = (
-    const addressTo = DELEGATOR_ADDRESS_MAINNET
+    const addressTo = "0xe705e3f310ab09fb9eb40b43cb1368289ef1f829"
     if (token === "VET") {
         return [
             {

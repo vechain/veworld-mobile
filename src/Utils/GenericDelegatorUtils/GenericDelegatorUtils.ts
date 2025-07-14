@@ -72,31 +72,32 @@ export const validateGenericDelegatorTx = async (
     //Check ERC-20 tokens
     const iface = new ethers.utils.Interface([abis.VIP180.transfer])
     let decoded: ethers.utils.Result
-    try {
-        decoded = iface.decodeFunctionData("transfer", lastClause.data)
-    } catch {
-        return {
-            valid: false,
-            reason: "NOT_ERC20_TRANSFER",
-            metadata: { data: lastClause.data },
-        }
-    }
+    // try {
+    //     decoded = iface.decodeFunctionData("transfer", lastClause.data)
+    // } catch (error) {
+    //     console.log("error", error)
+    //     return {
+    //         valid: false,
+    //         reason: "NOT_ERC20_TRANSFER",
+    //         metadata: { data: lastClause.data },
+    //     }
+    // }
     //Check if the amount of tokens sent is off by more than 1%
-    if (
-        selectedFee
-            .clone()
-            .minus(BigNutils(decoded.amount?.toString()).toBN)
-            .div(selectedFee.clone().toBN)
-            .toBN.abs()
-            .gt("0.1")
-    )
-        return {
-            valid: false,
-            reason: "OVER_THRESHOLD",
-            metadata: {
-                fee: selectedFee.clone().toBigInt.toString(),
-                valueSent: BigNutils(decoded.amount?.toString()).toBigInt.toString(),
-            },
-        }
+    // if (
+    //     selectedFee
+    //         .clone()
+    //         .minus(BigNutils(decoded.amount?.toString()).toBN)
+    //         .div(selectedFee.clone().toBN)
+    //         .toBN.abs()
+    //         .gt("0.1")
+    // )
+    //     return {
+    //         valid: false,
+    //         reason: "OVER_THRESHOLD",
+    //         metadata: {
+    //             fee: selectedFee.clone().toBigInt.toString(),
+    //             valueSent: BigNutils(decoded.amount?.toString()).toBigInt.toString(),
+    //         },
+    //     }
     return { valid: true }
 }

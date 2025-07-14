@@ -3,7 +3,7 @@ import { AxiosError } from "axios"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { showWarningToast, useFeatureFlags } from "~Components"
 import { showErrorToast } from "~Components/Base/BaseToast"
-import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient, VTHO } from "~Constants"
+import { AnalyticsEvent, B3TR, ERROR_EVENTS, GasPriceCoefficient, VET, VTHO } from "~Constants"
 import {
     SignStatus,
     SignTransactionResponse,
@@ -39,6 +39,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNutils, error } from "~Utils"
+import { useSmartWallet } from "../../VechainWalletKit"
 
 type Props = {
     clauses: TransactionClause[]
@@ -93,6 +94,7 @@ export const useTransactionScreen = ({
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const availableTokens = useGenericDelegationTokens()
 
+    const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
         clauses,
@@ -137,8 +139,35 @@ export const useTransactionScreen = ({
         isGalactica,
     })
 
+    const [transactionClauses, setTransactionClauses] = useState<TransactionClause[]>(clauses)
+    const [isLoadingClauses, setIsLoadingClauses] = useState(false)
+
+    useEffect(() => {
+        const buildClauses = async () => {
+            if (selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET) {
+                setIsLoadingClauses(true)
+                try {
+                    console.log("Building smart wallet clauses")
+                    const smartWalletTx = await buildTransactionWithSmartWallet(clauses)
+                    setTransactionClauses(smartWalletTx.body.clauses)
+                } catch (error) {
+                    console.error("Error building smart wallet clauses:", error)
+                    // Fallback to original clauses on error
+                    setTransactionClauses(clauses)
+                } finally {
+                    setIsLoadingClauses(false)
+                }
+            } else {
+                setTransactionClauses(clauses)
+            }
+        }
+
+        buildClauses()
+    }, [selectedAccount.device.type, buildTransactionWithSmartWallet, clauses])
+    // TODO: need to build the clasues HERE for smart account!!
+
     const genericDelegatorFees = useGenericDelegationFees({
-        clauses,
+        clauses: transactionClauses,
         signer: selectedAccount.address,
         token: selectedDelegationToken,
         isGalactica,
@@ -156,6 +185,7 @@ export const useTransactionScreen = ({
             transactionFeesResponse.options === undefined
         )
             return undefined
+
         return Object.fromEntries(
             Object.entries(genericDelegatorFees.allOptions ?? {})
                 .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
@@ -168,11 +198,18 @@ export const useTransactionScreen = ({
         transactionFeesResponse.options,
     ])
 
-    // console.log("selectedFeeAllTokenOptions", selectedFeeAllTokenOptions)
-
     const isFirstTimeLoadingFees = useMemo(
-        () => genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading || loadingGas,
-        [genericDelegatorFees.isFirstTimeLoading, loadingGas, transactionFeesResponse.isFirstTimeLoading],
+        () =>
+            genericDelegatorFees.isFirstTimeLoading ||
+            transactionFeesResponse.isFirstTimeLoading ||
+            loadingGas ||
+            isLoadingClauses,
+        [
+            genericDelegatorFees.isFirstTimeLoading,
+            loadingGas,
+            transactionFeesResponse.isFirstTimeLoading,
+            isLoadingClauses,
+        ],
     )
 
     const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
@@ -183,15 +220,21 @@ export const useTransactionScreen = ({
         isLoadingFees: isFirstTimeLoadingFees,
     })
 
+    const addressMap = {
+        [VET.symbol]: VET.address,
+        [B3TR.symbol]: B3TR.address,
+    }
     // 4. Build transaction
+    console.log("maxFee", genericDelegatorFees.allOptions?.["b3trWithSmartAccount"][selectedFeeOption].maxFee)
     // need to know its delegated here.
     let genericDelgation = {
-        token: selectDefaultDelegationToken,
+        token: selectedDelegationToken,
+        tokenAddress: addressMap[selectedDelegationToken],
         isGenDelegation:
             selectedDelegationToken !== VTHO.symbol &&
             genericDelegatorFees.options?.[selectedFeeOption].maxFee !== undefined,
-        amount: genericDelegatorFees.options?.[selectedFeeOption].maxFee,
-        delegatorAddress: "0x8692410Da301A9b796B68A58Ff660D51e979c6fa",
+        amount: genericDelegatorFees.allOptions?.["b3trWithSmartAccount"][selectedFeeOption].maxFee,
+        delegatorAddress: "0xe705e3f310ab09fb9eb40b43cb1368289ef1f829",
     }
 
     const { buildTransaction } = useTransactionBuilder({
@@ -334,8 +377,8 @@ export const useTransactionScreen = ({
     ])
 
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty,
-        [loading, loadingGas, isBiometricsEmpty],
+        () => loading || loadingGas || isBiometricsEmpty || isLoadingClauses,
+        [loading, loadingGas, isBiometricsEmpty, isLoadingClauses],
     )
 
     const fallbackToVTHO = useCallback(() => {

@@ -35,7 +35,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
-    console.log("SmartWalletProvider", adapter.isAuthenticated)
 
     const initialiseWallet = useCallback(async (): Promise<void> => {
         if (!adapter.isAuthenticated) {
@@ -147,11 +146,13 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             options?: TransactionOptions,
             genericDelgation?: {
                 token: string
+                tokenAddress: string
                 isGenDelegation: boolean
                 amount: BigNumberUtils | undefined
                 delegatorAddress: string
             },
         ): Promise<Transaction> => {
+            console.log("SmartWalletProvider buildTransaction", JSON.stringify(genericDelgation))
             // if (!adapter.isAuthenticated || !ownerAddress) {
             //     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             // }
@@ -198,14 +199,13 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 return Transaction.of(txBody)
             } catch (error) {
                 console.log("SmartWalletProvider buildTransaction error", JSON.stringify(error))
-                throw new WalletError(WalletErrorType.NETWORK_ERROR, "Error building transaction", error)
+                throw new WalletError(WalletErrorType.BUILDING_TRANSACTION_ERROR, "Error building transaction", error)
             }
         },
         [
             ownerAddress,
             config.networkConfig.networkType,
             thor,
-            adapter.isAuthenticated,
             signTypedData,
             smartAccountConfig,
             config.networkConfig.chainId,
