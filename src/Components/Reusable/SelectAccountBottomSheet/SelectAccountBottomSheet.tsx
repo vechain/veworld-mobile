@@ -172,6 +172,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                         sections={sections}
                         keyExtractor={item => item.address}
                         renderSectionHeader={SectionHeader}
+                        stickySectionHeadersEnabled={false}
                         renderItem={({ item }) => (
                             <SelectableAccountCard
                                 account={item}
@@ -182,7 +183,6 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                         )}
                         ItemSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
                         SectionSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
-                        {...flatListScrollProps}
                     />
                 )}
             </BaseBottomSheet>
