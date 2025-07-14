@@ -9,20 +9,16 @@ export type EventResult = {
 export interface IndexableAbi {
     fullSignature: string
     name: string
-    isEvent(
-        event: Event | undefined,
-        transfer: Transfer | undefined,
-        prevEvents: EventResult[],
-        origin: string,
-    ): boolean
     decode(
         event: Event | undefined,
         transfer: Transfer | undefined,
         prevEvents: EventResult[],
         origin: string,
-    ): {
-        [key: string]: unknown
-    }
+    ):
+        | {
+              [key: string]: unknown
+          }
+        | undefined
 }
 
 export abstract class AbiManager {

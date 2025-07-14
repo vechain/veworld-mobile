@@ -1,6 +1,11 @@
-import { Output } from "@vechain/sdk-network"
+import { Event, Output, Transfer } from "@vechain/sdk-network"
 import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
 import { ethers } from "ethers"
+
+function assertsIsTransfer(event: Event | undefined, transfer: Transfer | undefined): asserts transfer is Transfer {
+    if (event) throw new Error("[NativeAbiManager]: Error while decoding.")
+    if (!transfer) throw new Error("[NativeAbiManager]: Error while decoding.")
+}
 
 export class NativeAbiManager extends AbiManager {
     protected _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[] {
@@ -8,13 +13,8 @@ export class NativeAbiManager extends AbiManager {
             {
                 name: "VET_TRANSFER",
                 fullSignature: "VET_TRANSFER(address,address,uint256)",
-                isEvent(event, transfer) {
-                    if (event) return false
-                    return Boolean(transfer)
-                },
                 decode(event, transfer) {
-                    if (event) throw new Error("[NativeAbiManager]: Error while decoding.")
-                    if (!transfer) throw new Error("[NativeAbiManager]: Error while decoding.")
+                    assertsIsTransfer(event, transfer)
                     return {
                         from: transfer.sender,
                         to: transfer.recipient,
@@ -27,7 +27,7 @@ export class NativeAbiManager extends AbiManager {
     protected _parseEvents(output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
         const transfers = output.transfers
             .map(transfer => {
-                const found = this.indexableAbis?.find(abi => abi.isEvent(undefined, transfer, [], origin))
+                const found = this.indexableAbis?.find(abi => abi.decode(undefined, transfer, [], origin) !== undefined)
                 if (!found) return false
                 return {
                     name: found.fullSignature,

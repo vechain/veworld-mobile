@@ -194,15 +194,6 @@ export const decodeEventFn = (_prevEvents: EventResult[], item: BusinessEvent, o
     throw new Error("[BusinessEventValidator]: No matching rules found")
 }
 
-export const matchesEventFn = (prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
-    try {
-        decodeEventFn(prevEvents, item, origin)
-        return true
-    } catch (e) {
-        return false
-    }
-}
-
 const PLACEHOLDER_REGEX = /^\$\{(\w+)\}$/
 
 const substituteString = (value: string | number, network: NETWORK_TYPE, params: Record<string, string>) => {
@@ -238,15 +229,16 @@ export class BusinessEventAbiManager extends AbiManager {
             return {
                 name: parsedItem.name,
                 fullSignature: signature,
-                isEvent(_, __, prevEvents, origin) {
-                    return matchesEventFn(prevEvents, parsedItem, origin)
-                },
                 decode(_, __, prevEvents, origin) {
-                    return convertEventResultAliasRecordIntoParams(
-                        decodeEventFn(prevEvents, parsedItem, origin),
-                        item,
-                        origin,
-                    )
+                    try {
+                        return convertEventResultAliasRecordIntoParams(
+                            decodeEventFn(prevEvents, parsedItem, origin),
+                            item,
+                            origin,
+                        )
+                    } catch {
+                        return undefined
+                    }
                 },
             } satisfies IndexableAbi
         })
@@ -256,8 +248,12 @@ export class BusinessEventAbiManager extends AbiManager {
     }
     protected _parseEvents(_output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
         this.assertEventsLoaded()
-        const found = this.indexableAbis.find(abi => abi.isEvent(undefined, undefined, prevEvents, origin))
+        const found = this.indexableAbis.reduce((acc, curr) => {
+            if (acc) return acc
+            const decoded = curr.decode(undefined, undefined, prevEvents, origin)
+            if (decoded !== undefined) return { fullSignature: curr.fullSignature, decoded }
+        }, undefined as { decoded: { [key: string]: unknown }; fullSignature: string } | undefined)
         if (!found) return prevEvents
-        return [{ name: found.fullSignature, params: found.decode(undefined, undefined, prevEvents, origin) }]
+        return [{ name: found.fullSignature, params: found.decoded }]
     }
 }

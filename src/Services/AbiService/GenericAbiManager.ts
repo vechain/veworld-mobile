@@ -1,11 +1,20 @@
 import { ethers } from "ethers"
 import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
 import generated from "./generated"
-import { Output } from "@vechain/sdk-network"
-import { AbiEventParameter } from "abitype"
+import { Event, Output } from "@vechain/sdk-network"
+import { AbiEvent, AbiEventParameter } from "abitype"
 
 const getIndexedInputs = (inputs: AbiEventParameter[] | readonly AbiEventParameter[]) => {
     return inputs.filter(input => input.indexed)
+}
+
+function assertsHasEvent(event: Event | undefined): asserts event is Event {
+    if (!event) throw new Error("[GenericAbiManager]: Error while decoding.")
+}
+
+const isEvent = (event: Event, item: AbiEvent, iface: ethers.utils.Interface) => {
+    if (event.topics.length - 1 !== getIndexedInputs(item.inputs).length) return false
+    return iface.getEventTopic(item.name).toLowerCase() === event.topics[0]
 }
 
 export class GenericAbiManager extends AbiManager {
@@ -15,13 +24,9 @@ export class GenericAbiManager extends AbiManager {
             return {
                 name: item.name,
                 fullSignature,
-                isEvent(event) {
-                    if (!event) throw new Error("[GenericAbiManager]: Error while decoding.")
-                    if (event.topics.length - 1 !== getIndexedInputs(item.inputs).length) return false
-                    return iface.getEventTopic(item.name).toLowerCase() === event.topics[0]
-                },
                 decode(event) {
-                    if (!event) throw new Error("[GenericAbiManager]: Error while decoding.")
+                    assertsHasEvent(event)
+                    if (!isEvent(event, item, iface)) return undefined
                     const decodedLog = iface.decodeEventLog(item.name, event.data, event.topics)
                     return Object.fromEntries(
                         Object.entries(decodedLog)
@@ -41,7 +46,7 @@ export class GenericAbiManager extends AbiManager {
 
         return output.events
             .map(evt => {
-                const found = this.indexableAbis?.find(abi => abi.isEvent(evt, undefined, [], origin))
+                const found = this.indexableAbis?.find(abi => abi.decode(evt, undefined, [], origin) !== undefined)
                 if (!found) return false
                 return {
                     name: found.fullSignature,
