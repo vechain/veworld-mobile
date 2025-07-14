@@ -32,7 +32,7 @@ export class GenericAbiManager extends AbiManager {
                         Object.entries(decodedLog)
                             .filter(([key]) => !key.match(/^\d+$/))
                             .map(([key, value]) =>
-                                value instanceof ethers.BigNumber ? [key, value.toString()] : [key, value],
+                                value instanceof ethers.BigNumber ? [key, BigInt(value.toString())] : [key, value],
                             ),
                     )
                 },

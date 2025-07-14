@@ -18,7 +18,7 @@ export class NativeAbiManager extends AbiManager {
                     return {
                         from: transfer.sender,
                         to: transfer.recipient,
-                        amount: ethers.BigNumber.from(transfer.amount).toString(),
+                        amount: BigInt(ethers.BigNumber.from(transfer.amount).toString()),
                     }
                 },
             },

@@ -1,11 +1,29 @@
 import { AbiManager, EventResult } from "./AbiManager"
 import { Output } from "@vechain/sdk-network"
+import generated from "./generated"
+import { AbiEventParameter, AbiParameterToPrimitiveType } from "abitype"
+
+type ValueOf<T> = T[keyof T]
+
+type OutputArrayToObject<TParameters extends any[] | readonly any[]> = TParameters extends readonly [
+    infer First,
+    ...infer Rest,
+]
+    ? First extends AbiEventParameter & { name: string }
+        ? {
+              [key in First["name"]]: AbiParameterToPrimitiveType<First>
+          } & OutputArrayToObject<Rest>
+        : never
+    : {}
 
 export type ReceiptOutput = {
     clauseIndex: number
-    name: string
-    params: unknown
-}
+} & ValueOf<{
+    [key in keyof typeof generated]: {
+        name: key
+        params: OutputArrayToObject<(typeof generated)[key]["inputs"]>
+    }
+}>
 
 export class ReceiptProcessor {
     constructor(private readonly abiManagers: AbiManager[]) {}
@@ -19,7 +37,7 @@ export class ReceiptProcessor {
                 [] as EventResult[],
             )
 
-            receiptOutputs.push(...events.map(evt => ({ clauseIndex: i, name: evt.name, params: evt.params })))
+            receiptOutputs.push(...(events.map(evt => ({ clauseIndex: i, name: evt.name, params: evt.params })) as any))
         }
         return receiptOutputs
     }

@@ -60,7 +60,7 @@ describe("ReceiptProcessor", () => {
                     params: {
                         from: "0x14B3Fe72a8c99a118bb8E288c51c9bd5eeac1F24",
                         to: "0x809e880c96a911965D8E3e00E207A97071678f7D",
-                        value: "4999634180000000000000",
+                        value: 4999634180000000000000n,
                     },
                 },
             ])
