@@ -53,7 +53,14 @@
     "e2e.android.test.r": "detox test --configuration android.emu.release.33",
     "e2e.android.r": "yarn e2e.android.build.r && yarn e2e.android.test.r",
     "lint-staged": "lint-staged",
-    "translo-cli": "translo-cli"
+    "translo-cli": "translo-cli",
+    "abi:build": "cd ./cli-tools/json-abi-to-ts && yarn build",
+    "abi:install": "cd ./cli-tools/json-abi-to-ts && yarn",
+    "abi:generate-json-abi-file": "$(yarn bin json-abi-to-ts) generate-object --input-directory ./abi-resources/abis --out-file ./abi-resources/generated-abi.json --output json",
+    "abi:generate-ts-abi-file": "$(yarn bin json-abi-to-ts) generate-object --input-directory ./abi-resources/abis --out-file ./src/Generated/abi.ts --output ts",
+    "abi:generate-business-events-directory": "$(yarn bin json-abi-to-ts) validate-update-business-events --input-directory ./abi-resources/business_events --out-directory ./abi-resources/business_events --generated-event-input-file ./abi-resources/generated-abi.json",
+    "abi:generate-ts-business-events-file": "$(yarn bin json-abi-to-ts) generate-object --input-directory ./abi-resources/business_events --out-file ./src/Generated/businessEvents.ts --output ts",
+    "abi:generate": "yarn abi:generate-json-abi-file && yarn abi:generate-ts-abi-file && yarn abi:generate-business-events-directory && yarn abi:generate-ts-business-events-file"
   },
   "dependencies": {
     "@coinbase/cbpay-js": "^2.2.1",

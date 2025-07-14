@@ -1,8 +1,8 @@
 import { ethers } from "ethers"
 import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
-import generated from "./generated"
 import { Event, Output } from "@vechain/sdk-network"
 import { AbiEvent, AbiEventParameter } from "abitype"
+import generatedAbi from "~Generated/abi"
 
 const getIndexedInputs = (inputs: AbiEventParameter[] | readonly AbiEventParameter[]) => {
     return inputs.filter(input => input.indexed)
@@ -19,7 +19,7 @@ const isEvent = (event: Event, item: AbiEvent, iface: ethers.utils.Interface) =>
 
 export class GenericAbiManager extends AbiManager {
     protected _loadAbis(): IndexableAbi[] {
-        return Object.entries(generated).map(([fullSignature, item]) => {
+        return Object.entries(generatedAbi).map(([fullSignature, item]) => {
             const iface = new ethers.utils.Interface([item])
             return {
                 name: item.name,

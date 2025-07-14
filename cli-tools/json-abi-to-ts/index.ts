@@ -1,8 +1,10 @@
+#!/usr/bin/env node
+
 /* eslint-disable no-console */
 import assert from "node:assert"
 import { existsSync } from "node:fs"
 import { mkdir, readdir, readFile, writeFile } from "node:fs/promises"
-import path from "node:path"
+import path, { dirname } from "node:path"
 import yargs from "yargs"
 import { hideBin } from "yargs/helpers"
 import { stripFakeSignature, validateAndUpdateBusinessEvent } from "./business-event.js"
@@ -72,6 +74,12 @@ yargs(parsedArgs)
                             .map((u: any) => [buildFakeSignature(u), u]),
                     ),
                 }
+            }
+
+            const outFileDir = dirname(outFile)
+
+            if (!existsSync(outFileDir)) {
+                await mkdir(outFileDir, { recursive: true })
             }
 
             await writeFile(
@@ -176,6 +184,11 @@ yargs(parsedArgs)
                     parsedGeneratedEventInputFile,
                 )
                 const outFile = getOutFile(argv.outFile ?? argv.inputFile, "json", argv.overwrite)
+                const outFileDir = dirname(outFile)
+                if (!existsSync(outFileDir)) {
+                    await mkdir(outFileDir, { recursive: true })
+                }
+
                 await writeFile(outFile, JSON.stringify(result, undefined, 2))
                 console.log(`File generated at ${outFile}`)
                 return

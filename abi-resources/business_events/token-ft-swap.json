@@ -1,0 +1,138 @@
+{
+  "name": "Token_FTSwap",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "inputTransfer",
+      "conditions": [
+        {
+          "firstOperand": "from",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "value",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        }
+      ]
+    },
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "outputTransfer",
+      "conditions": [
+        {
+          "firstOperand": "to",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "value",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        }
+      ]
+    },
+    {
+      "name": "Swap(indexed address,uint256,uint256,uint256,uint256,indexed address)",
+      "alias": "swap",
+      "conditions": []
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "inputTransfer",
+      "firstEventProperty": "from",
+      "secondEventName": "outputTransfer",
+      "secondEventProperty": "to",
+      "operator": "EQ"
+    },
+    {
+      "firstEventName": "inputTransfer",
+      "firstEventProperty": "address",
+      "secondEventName": "outputTransfer",
+      "secondEventProperty": "address",
+      "operator": "NE"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "from",
+      "eventName": "inputTransfer",
+      "businessEventName": "from"
+    },
+    {
+      "name": "to",
+      "eventName": "inputTransfer",
+      "businessEventName": "to"
+    },
+    {
+      "name": "address",
+      "eventName": "inputTransfer",
+      "businessEventName": "inputToken"
+    },
+    {
+      "name": "address",
+      "eventName": "outputTransfer",
+      "businessEventName": "outputToken"
+    },
+    {
+      "name": "value",
+      "eventName": "inputTransfer",
+      "businessEventName": "inputValue"
+    },
+    {
+      "name": "value",
+      "eventName": "outputTransfer",
+      "businessEventName": "outputValue"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    },
+    {
+      "type": "address",
+      "name": "inputToken",
+      "internalType": "address",
+      "indexed": false
+    },
+    {
+      "type": "address",
+      "name": "outputToken",
+      "internalType": "address",
+      "indexed": false
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "inputValue",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "outputValue",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
+}

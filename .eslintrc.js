@@ -3,7 +3,7 @@ module.exports = {
     extends: ["@react-native/eslint-config", "plugin:prettier/recommended"],
     parser: "@typescript-eslint/parser",
     plugins: ["@typescript-eslint", "i18next", "es"],
-    ignorePatterns: ["src/i18n/*", "coverage/*"],
+    ignorePatterns: ["src/i18n/*", "coverage/*", "src/Generated/*"],
     overrides: [
         {
             files: ["*.ts", "*.tsx", "*.js", "*.jsx"],

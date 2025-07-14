@@ -1,9 +1,9 @@
 import { Output } from "@vechain/sdk-network"
 import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
-import business_events_generated from "./business_events_generated"
 import { ethers } from "ethers"
 import { NETWORK_TYPE } from "~Model"
-import { preferredOrder } from "./order"
+import { defaultSorting } from "./sorting"
+import businessEvents from "~Generated/businessEvents"
 
 type Operator = "EQ" | "NE" | "GT" | "LT" | "GE" | "LE"
 
@@ -223,7 +223,7 @@ export class BusinessEventAbiManager extends AbiManager {
     }
 
     protected _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[] {
-        const entries = Object.entries(business_events_generated)
+        const entries = Object.entries(businessEvents)
         const mappedEntries = entries.map(([signature, item]) => {
             const parsedItem = replaceItemWithParams(item, this.network, this.params ?? {})
             return {
@@ -243,7 +243,7 @@ export class BusinessEventAbiManager extends AbiManager {
             } satisfies IndexableAbi
         })
         return mappedEntries.sort(
-            (a, b) => preferredOrder.indexOf(a.fullSignature as any) - preferredOrder.indexOf(b.fullSignature as any),
+            (a, b) => defaultSorting.indexOf(a.fullSignature as any) - defaultSorting.indexOf(b.fullSignature as any),
         )
     }
     protected _parseEvents(_output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
