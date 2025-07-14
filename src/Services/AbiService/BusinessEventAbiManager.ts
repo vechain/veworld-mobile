@@ -49,8 +49,8 @@ function cartesian<T extends any[]>(args: T[]) {
     let result: T[] = []
     let max = args.length - 1
     function helper(arr: T, i: number) {
-        for (var j = 0, l = args[i].length; j < l; j++) {
-            var a = arr.slice(0) // clone arr
+        for (let j = 0, l = args[i].length; j < l; j++) {
+            let a = arr.slice(0) // clone arr
             a.push(args[i][j])
             if (i === max) result.push(a as T)
             else helper(a as T, i + 1)
