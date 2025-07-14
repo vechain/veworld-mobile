@@ -2,6 +2,7 @@ import { AbiManager, EventResult } from "./AbiManager"
 import { Output } from "@vechain/sdk-network"
 import generated from "./generated"
 import { AbiEventParameter, AbiParameterToPrimitiveType } from "abitype"
+import business_events_generated from "./business_events_generated"
 
 type ValueOf<T> = T[keyof T]
 
@@ -18,12 +19,20 @@ type OutputArrayToObject<TParameters extends any[] | readonly any[]> = TParamete
 
 export type ReceiptOutput = {
     clauseIndex: number
-} & ValueOf<{
-    [key in keyof typeof generated]: {
-        name: key
-        params: OutputArrayToObject<(typeof generated)[key]["inputs"]>
-    }
-}>
+} & (
+    | ValueOf<{
+          [key in keyof typeof generated]: {
+              name: key
+              params: OutputArrayToObject<(typeof generated)[key]["inputs"]>
+          }
+      }>
+    | ValueOf<{
+          [key in keyof typeof business_events_generated]: {
+              name: key
+              params: OutputArrayToObject<(typeof business_events_generated)[key]["inputs"]>
+          }
+      }>
+)
 
 export class ReceiptProcessor {
     constructor(private readonly abiManagers: AbiManager[]) {}
