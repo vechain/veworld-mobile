@@ -1,0 +1,123 @@
+{
+  "number": 63,
+  "id": "0x0000003fec4004bd63fbd206a3026c9cd652a4105a270a737263b0805bb6366d",
+  "size": 597,
+  "parentID": "0x0000003e7a9136a60394e5fa9af82e986add9c1ed8337173b9df0756a7596c1c",
+  "timestamp": 1715256090,
+  "gasLimit": 10000000,
+  "beneficiary": "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+  "gasUsed": 403092,
+  "totalScore": 63,
+  "txsRoot": "0x3f98cfbaeba0ab53ef0523b8bb16cafcc825c9a7db715619ba6bd7cd80789bf6",
+  "txsFeatures": 1,
+  "stateRoot": "0xd91f5757f2e67143a4976bf9b6108aeb829bae828a73b24846264889a3b5136f",
+  "receiptsRoot": "0xe0df75718b1a4083d26e113803a6efd15722e00da39e30304c326547724183f9",
+  "com": false,
+  "signer": "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+  "isTrunk": true,
+  "isFinalized": false,
+  "transactions": [
+    {
+      "id": "0xf6dc0f1fdf27dbc003a0f24fcef6644cc23b9dc7fc2a87078a30b0a28f449c6a",
+      "chainTag": 246,
+      "blockRef": "0x0000003a98e253f0",
+      "expiration": 18,
+      "clauses": [
+        {
+          "to": "0xed324c3628923d9816012cb5bc10c4d817e824a5",
+          "value": "0x0",
+          "data": "0x5b70ea9f"
+        }
+      ],
+      "gasPriceCoef": 0,
+      "gas": 209046,
+      "origin": "0x435933c8064b4ae76be665428e0307ef2ccfbd68",
+      "delegator": null,
+      "nonce": "0x9fd06613",
+      "dependsOn": null,
+      "size": 119,
+      "gasUsed": 194046,
+      "gasPayer": "0x435933c8064b4ae76be665428e0307ef2ccfbd68",
+      "paid": "0xa84ede0e675730000",
+      "reward": "0x327e0f6ab89a28000",
+      "reverted": false,
+      "outputs": [
+        {
+          "contractAddress": null,
+          "events": [
+            {
+              "address": "0xed324c3628923d9816012cb5bc10c4d817e824a5",
+              "topics": [
+                "0x26e57b75d51bb4535260f2bbcf7f5ca9f9612af5e3b52e82d20852b529f03290",
+                "0x000000000000000000000000435933c8064b4ae76be665428e0307ef2ccfbd68"
+              ],
+              "data": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"
+            },
+            {
+              "address": "0xed324c3628923d9816012cb5bc10c4d817e824a5",
+              "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x0000000000000000000000000000000000000000000000000000000000000000",
+                "0x000000000000000000000000435933c8064b4ae76be665428e0307ef2ccfbd68",
+                "0x0000000000000000000000000000000000000000000000000000000000000000"
+              ],
+              "data": "0x"
+            }
+          ],
+          "transfers": []
+        }
+      ]
+    },
+    {
+      "id": "0xe32345906a563a4eaf5f725cdb8361a1f859e40d18395f9e718bd7a97a9ad608",
+      "chainTag": 246,
+      "blockRef": "0x0000003b8af513cf",
+      "expiration": 18,
+      "clauses": [
+        {
+          "to": "0xed324c3628923d9816012cb5bc10c4d817e824a5",
+          "value": "0x0",
+          "data": "0x5b70ea9f"
+        }
+      ],
+      "gasPriceCoef": 0,
+      "gas": 209046,
+      "origin": "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+      "delegator": null,
+      "nonce": "0x11b3e972",
+      "dependsOn": null,
+      "size": 119,
+      "gasUsed": 209046,
+      "gasPayer": "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+      "paid": "0xb5518956d444f0000",
+      "reward": "0x366542cd3fae48000",
+      "reverted": false,
+      "outputs": [
+        {
+          "contractAddress": null,
+          "events": [
+            {
+              "address": "0xed324c3628923d9816012cb5bc10c4d817e824a5",
+              "topics": [
+                "0x26e57b75d51bb4535260f2bbcf7f5ca9f9612af5e3b52e82d20852b529f03290",
+                "0x000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa"
+              ],
+              "data": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000001"
+            },
+            {
+              "address": "0xed324c3628923d9816012cb5bc10c4d817e824a5",
+              "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x0000000000000000000000000000000000000000000000000000000000000000",
+                "0x000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa",
+                "0x0000000000000000000000000000000000000000000000000000000000000001"
+              ],
+              "data": "0x"
+            }
+          ],
+          "transfers": []
+        }
+      ]
+    }
+  ]
+}

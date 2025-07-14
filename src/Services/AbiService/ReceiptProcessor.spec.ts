@@ -67,7 +67,7 @@ describe("ReceiptProcessor", () => {
         })
 
         it("Process block - B3TR Action + Transfers", async () => {
-            const block = require("./fixtures/block_b3tr_action.json")
+            const block = require("~fixtures/business-event-blocks/block_b3tr_action.json")
 
             const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                 commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
@@ -86,7 +86,7 @@ describe("ReceiptProcessor", () => {
         })
 
         it("Process block - DEX Transactions", async () => {
-            const block = require("./fixtures/block_dex.json")
+            const block = require("~fixtures/business-event-blocks/block_dex.json")
 
             const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                 commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
@@ -108,7 +108,7 @@ describe("ReceiptProcessor", () => {
         })
 
         it("Process block - MaaS sale", async () => {
-            const block = require("./fixtures/block_marketplace_sales.json")
+            const block = require("~fixtures/business-event-blocks/block_marketplace_sales.json")
 
             const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                 commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
@@ -130,7 +130,7 @@ describe("ReceiptProcessor", () => {
 
         describe("Process block - Stargate", () => {
             it("Stake", async () => {
-                const block = require("./fixtures/block_stargate_stake.json")
+                const block = require("~fixtures/business-event-blocks/block_stargate_stake.json")
 
                 const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                     commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
@@ -141,7 +141,7 @@ describe("ReceiptProcessor", () => {
                 expect(names).toStrictEqual(["STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)"])
             })
             it("Unstake", async () => {
-                const block = require("./fixtures/block_stargate_unstake.json")
+                const block = require("~fixtures/business-event-blocks/block_stargate_unstake.json")
 
                 const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                     commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
@@ -152,7 +152,7 @@ describe("ReceiptProcessor", () => {
                 expect(names).toStrictEqual(["STARGATE_UNSTAKE(uint256,uint256,uint8,address)"])
             })
             it("Claim rewards base", async () => {
-                const block = require("./fixtures/block_stargate_claim_base_reward.json")
+                const block = require("~fixtures/business-event-blocks/block_stargate_claim_base_reward.json")
 
                 const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                     commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
@@ -163,7 +163,7 @@ describe("ReceiptProcessor", () => {
                 expect(names[3]).toBe("STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)")
             })
             it("Claim rewards delegation", async () => {
-                const block = require("./fixtures/block_stargate_claim_delegate_reward.json")
+                const block = require("~fixtures/business-event-blocks/block_stargate_claim_delegate_reward.json")
 
                 const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                     commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
@@ -174,7 +174,7 @@ describe("ReceiptProcessor", () => {
                 expect(names[0]).toBe("STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)")
             })
             it("Stake delegate", async () => {
-                const block = require("./fixtures/block_stargate_stake_delegate.json")
+                const block = require("~fixtures/business-event-blocks/block_stargate_stake_delegate.json")
 
                 const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                     commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
@@ -185,7 +185,7 @@ describe("ReceiptProcessor", () => {
                 expect(names[0]).toBe("STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)")
             })
             it("Undelegate", async () => {
-                const block = require("./fixtures/block_stargate_undelegate.json")
+                const block = require("~fixtures/business-event-blocks/block_stargate_undelegate.json")
 
                 const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                     commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),
@@ -196,7 +196,7 @@ describe("ReceiptProcessor", () => {
                 expect(names[0]).toBe("STARGATE_UNDELEGATE(uint256)")
             })
             it("Delegate", async () => {
-                const block = require("./fixtures/block_stargate_delegation.json")
+                const block = require("~fixtures/business-event-blocks/block_stargate_delegation.json")
 
                 const outputs = (block.transactions as ExpandedBlockDetail["transactions"]).flatMap(tx =>
                     commonReceiptProcessor.analyzeReceipt(tx.outputs, tx.origin),

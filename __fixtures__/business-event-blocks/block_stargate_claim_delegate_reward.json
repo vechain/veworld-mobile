@@ -1,0 +1,76 @@
+{
+  "number": 22123367,
+  "id": "0x0151936741cbc50923e95b1204fc4ae8a1e48e93318382d1ac53dc0092a35134",
+  "size": 542,
+  "parentID": "0x015193661c7d1d910f126a4d68c9c9b5f619d4cf0cac01ede05671a7fbf593fb",
+  "timestamp": 1751271310,
+  "gasLimit": 40000000,
+  "beneficiary": "0xb4094c25f86d628fdd571afc4077f0d0196afb48",
+  "gasUsed": 70629,
+  "totalScore": 203992866,
+  "txsRoot": "0x028c966d129306e475b06354cc4e5864e769fa690e0ffcfeb95acb547e8fe06c",
+  "txsFeatures": 1,
+  "stateRoot": "0x82f6ad88bca2fe6d0d267563296e79d0594c6908908cb831cbcbc41087c7722b",
+  "receiptsRoot": "0x698c084c6d7c2931a71812c84ed8efec401ebf490c47f024b0b4cd8be2f260b2",
+  "com": true,
+  "signer": "0x0771bc0fe8b6dcf72372440c79a309e92ffb93e8",
+  "isTrunk": true,
+  "isFinalized": false,
+  "baseFeePerGas": "0x9184e72a000",
+  "transactions": [
+    {
+      "id": "0xb718008a948d14aeecd2234ab18eba3c8071ded3abbc1b874125d46036f94d89",
+      "type": 81,
+      "chainTag": 39,
+      "blockRef": "0x01519365e6e048d1",
+      "expiration": 100,
+      "clauses": [
+        {
+          "to": "0x7240e3bc0d26431512d5b67dbd26d199205bffe8",
+          "value": "0x0",
+          "data": "0x0962ef790000000000000000000000000000000000000000000000000000000000000004"
+        }
+      ],
+      "maxFeePerGas": "0x96281100d34",
+      "maxPriorityFeePerGas": "0x45938b534",
+      "gas": 85629,
+      "origin": "0x0f872421dc479f3c11edd89512731814d0598db5",
+      "delegator": null,
+      "nonce": "0xbcd9fa31",
+      "dependsOn": null,
+      "size": 168,
+      "gasUsed": 70629,
+      "gasPayer": "0x0f872421dc479f3c11edd89512731814d0598db5",
+      "paid": "0x9d1eebf08ca1384",
+      "reward": "0x4afbbba60f384",
+      "reverted": false,
+      "outputs": [
+        {
+          "contractAddress": null,
+          "events": [
+            {
+              "address": "0x0000000000000000000000000000456e65726779",
+              "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x0000000000000000000000007240e3bc0d26431512d5b67dbd26d199205bffe8",
+                "0x0000000000000000000000000f872421dc479f3c11edd89512731814d0598db5"
+              ],
+              "data": "0x00000000000000000000000000000000000000000000000e1ae6f29439acb000"
+            },
+            {
+              "address": "0x7240e3bc0d26431512d5b67dbd26d199205bffe8",
+              "topics": [
+                "0xe4fea81930180a28bed643ad84b5c70b47a7f780388053588df3b32a5d3ac2e6",
+                "0x0000000000000000000000000000000000000000000000000000000000000004",
+                "0x0000000000000000000000000f872421dc479f3c11edd89512731814d0598db5",
+                "0x0000000000000000000000000f872421dc479f3c11edd89512731814d0598db5"
+              ],
+              "data": "0x00000000000000000000000000000000000000000000000e1ae6f29439acb000"
+            }
+          ],
+          "transfers": []
+        }
+      ]
+    }
+  ]
+}

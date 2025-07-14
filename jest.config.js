@@ -57,6 +57,7 @@ module.exports = {
         "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
         "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
         "^~Generated(.*)": ["<rootDir>/src/Generated$1"],
+        "^~fixtures(.*)": ["<rootDir>/__fixtures__$1"],
         "^react-native-device-info$": "<rootDir>/src/Test/mocks/react-native-device-info.js",
         "^@react-native-community/netinfo$": "<rootDir>/src/Test/mocks/@react-native-community/netinfo.js",
         Intl: "<rootDir>/node_modules/intl/",
