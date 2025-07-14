@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.7 (2025-07-14)</small>
+
+* build: init ([035e9f8](https://github.com/vechain/veworld-mobile/commit/035e9f8))
+* Fix :: disable sticky section headers in SelectAccountBottomSheet (#3073) ([67d21ab](https://github.com/vechain/veworld-mobile/commit/67d21ab)), closes [#3073](https://github.com/vechain/veworld-mobile/issues/3073)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
