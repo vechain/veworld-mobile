@@ -195,7 +195,6 @@ export const useTransactionScreen = ({
 
     const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
         selectedToken: selectedDelegationToken,
-        clauses,
         isDelegated,
         allFeeOptions: selectedFeeAllTokenOptions,
         isLoadingFees: isFirstTimeLoadingFees,
