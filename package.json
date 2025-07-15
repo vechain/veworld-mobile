@@ -26,7 +26,7 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "format": "yarn prettier --write src",
     "format:check": "yarn prettier --check src",
-    "postinstall": "patch-package --exclude 'nothing'",
+    "postinstall": "patch-package --exclude 'nothing' && yarn abi:all",
     "check-circular-dependencies": "npx madge --circular --warning --extensions js,jsx,ts,tsx .",
     "dapps-index:generate": "ts-node scripts/generate-dapps-index.ts",
     "i18n:types": "typesafe-i18n",
@@ -60,7 +60,8 @@
     "abi:generate-ts-abi-file": "$(yarn bin json-abi-to-ts) generate-object --input-directory ./abi-resources/abis --out-file ./src/Generated/abi.ts --output ts",
     "abi:generate-business-events-directory": "$(yarn bin json-abi-to-ts) validate-update-business-events --input-directory ./abi-resources/business_events --out-directory ./abi-resources/business_events --generated-event-input-file ./abi-resources/generated-abi.json",
     "abi:generate-ts-business-events-file": "$(yarn bin json-abi-to-ts) generate-object --input-directory ./abi-resources/business_events --out-file ./src/Generated/businessEvents.ts --output ts",
-    "abi:generate": "yarn abi:generate-json-abi-file && yarn abi:generate-ts-abi-file && yarn abi:generate-business-events-directory && yarn abi:generate-ts-business-events-file"
+    "abi:generate": "yarn abi:generate-json-abi-file && yarn abi:generate-ts-abi-file && yarn abi:generate-business-events-directory && yarn abi:generate-ts-business-events-file",
+    "abi:all": "yarn abi:install && yarn abi:build && yarn abi:generate"
   },
   "dependencies": {
     "@coinbase/cbpay-js": "^2.2.1",
