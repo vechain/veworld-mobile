@@ -16,8 +16,7 @@ const convertEventResultWithAliasIntoRecord = (results: EventResultWithAlias[]):
 const decodeEventFn = (_prevEvents: EventResult[], item: BusinessEvent, origin: string) => {
     let matchingEvents: Record<string, EventResult[]> = {}
     let prevEvents = [..._prevEvents]
-    for (let i = 0; i < item.events.length; i++) {
-        const itemEvent = item.events[i]
+    for (const itemEvent of item.events) {
         const foundEvents = prevEvents.filter(evt => evt.name === itemEvent.name)
         if (foundEvents.length === 0) throw new Error("[BusinessEventValidator]: No matching events found")
         const eventsMatchingConditions = matchesConditions(foundEvents, itemEvent.conditions, origin)
@@ -53,7 +52,8 @@ const PLACEHOLDER_REGEX = /^\$\{(\w+)\}$/
 const substituteString = (value: string | number, network: NETWORK_TYPE, params: Record<string, string>) => {
     if (typeof value === "number") return value
     if (!PLACEHOLDER_REGEX.test(value)) return value
-    const param = value.match(PLACEHOLDER_REGEX)![1]
+
+    const param = PLACEHOLDER_REGEX.exec(value)![1]
     return params[`${param}_${network}`] ?? params[param] ?? param
 }
 
