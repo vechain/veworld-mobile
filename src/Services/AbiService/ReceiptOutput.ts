@@ -17,6 +17,7 @@ type OutputArrayToObject<TParameters extends any[] | readonly any[]> = TParamete
 
 export type ReceiptOutput = {
     clauseIndex: number
+    address?: string
 } & (
     | ValueOf<{
           [key in keyof typeof abi]: {

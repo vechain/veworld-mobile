@@ -14,7 +14,14 @@ export class ReceiptProcessor {
                 [] as EventResult[],
             )
 
-            receiptOutputs.push(...(events.map(evt => ({ clauseIndex: i, name: evt.name, params: evt.params })) as any))
+            receiptOutputs.push(
+                ...(events.map(evt => ({
+                    clauseIndex: i,
+                    name: evt.name,
+                    params: evt.params,
+                    address: evt.address,
+                })) as any),
+            )
         }
         return receiptOutputs
     }
