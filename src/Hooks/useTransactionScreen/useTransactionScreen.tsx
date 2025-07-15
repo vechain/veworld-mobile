@@ -69,7 +69,7 @@ export const useTransactionScreen = ({
     onTransactionFailure,
     dappRequest,
     initialRoute,
-    autoVTHOFallback,
+    autoVTHOFallback = true,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
