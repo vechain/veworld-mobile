@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.7 (2025-07-15)</small>
+
+* build: init ([f74dd91](https://github.com/vechain/veworld-mobile/commit/f74dd91))
+* fix: add back auto vtho fallback (#3080) ([9e7811e](https://github.com/vechain/veworld-mobile/commit/9e7811e)), closes [#3080](https://github.com/vechain/veworld-mobile/issues/3080)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
