@@ -204,7 +204,7 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     toTokenFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
-        const _locale = locale ?? "en-US"
+        const _locale = locale || "en-US"
         const formatter = NumberFormatter[_locale as keyof typeof NumberFormatter]
 
         let _data = ""
