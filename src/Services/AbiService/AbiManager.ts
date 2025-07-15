@@ -1,4 +1,9 @@
-import { Event, Output, Transfer } from "@vechain/sdk-network"
+import { Event, Transfer } from "@vechain/sdk-network"
+
+export type InspectableOutput = {
+    events: Event[]
+    transfers: Transfer[]
+}
 
 export type EventResult = {
     name: string
@@ -33,9 +38,9 @@ export abstract class AbiManager {
     }
 
     protected abstract _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[]
-    protected abstract _parseEvents(output: Output, prevEvents: EventResult[], origin: string): EventResult[]
+    protected abstract _parseEvents(output: InspectableOutput, prevEvents: EventResult[], origin: string): EventResult[]
 
-    parseEvents(output: Output, prevEvents: EventResult[], origin: string) {
+    parseEvents(output: InspectableOutput, prevEvents: EventResult[], origin: string) {
         this.assertEventsLoaded()
         return this._parseEvents(output, prevEvents, origin)
     }

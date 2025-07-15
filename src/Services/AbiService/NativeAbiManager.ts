@@ -1,5 +1,5 @@
-import { Event, Output, Transfer } from "@vechain/sdk-network"
-import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
+import { Event, Transfer } from "@vechain/sdk-network"
+import { AbiManager, EventResult, IndexableAbi, InspectableOutput } from "./AbiManager"
 import { ethers } from "ethers"
 
 function assertsIsTransfer(event: Event | undefined, transfer: Transfer | undefined): asserts transfer is Transfer {
@@ -24,7 +24,7 @@ export class NativeAbiManager extends AbiManager {
             },
         ]
     }
-    protected _parseEvents(output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
+    protected _parseEvents(output: InspectableOutput, prevEvents: EventResult[], origin: string): EventResult[] {
         const transfers = output.transfers
             .map(transfer => {
                 const found = this.indexableAbis?.find(abi => abi.decode(undefined, transfer, [], origin) !== undefined)

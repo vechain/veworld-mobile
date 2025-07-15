@@ -1,6 +1,6 @@
 import { ethers } from "ethers"
-import { AbiManager, EventResult, IndexableAbi } from "./AbiManager"
-import { Event, Output } from "@vechain/sdk-network"
+import { AbiManager, EventResult, IndexableAbi, InspectableOutput } from "./AbiManager"
+import { Event } from "@vechain/sdk-network"
 import { AbiEvent, AbiEventParameter } from "abitype"
 import generatedAbi from "~Generated/abi"
 
@@ -40,7 +40,7 @@ export class GenericAbiManager extends AbiManager {
         })
     }
 
-    protected _parseEvents(output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
+    protected _parseEvents(output: InspectableOutput, prevEvents: EventResult[], origin: string): EventResult[] {
         if (prevEvents.length !== 0)
             throw new Error("[GenericAbiManager]: This should be the first ABI Manager in the list")
 

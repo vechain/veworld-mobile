@@ -35,7 +35,6 @@ describe("ReceiptProcessor", () => {
             const result = receiptProcessor.analyzeReceipt(
                 [
                     {
-                        contractAddress: null,
                         events: [
                             {
                                 address: "0x0000000000000000000000000000456e65726779",

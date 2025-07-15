@@ -1,7 +1,6 @@
-import { Output } from "@vechain/sdk-network"
 import businessEvents from "~Generated/businessEvents"
 import { NETWORK_TYPE } from "~Model"
-import { AbiManager, EventResult, IndexableAbi } from "../AbiManager"
+import { AbiManager, EventResult, IndexableAbi, InspectableOutput } from "../AbiManager"
 import { cartesian } from "./cartesian"
 import { matchesConditions } from "./condition"
 import { convertEventResultAliasRecordIntoParams } from "./params"
@@ -100,7 +99,7 @@ export class BusinessEventAbiManager extends AbiManager {
             (a, b) => defaultSorting.indexOf(a.fullSignature as any) - defaultSorting.indexOf(b.fullSignature as any),
         )
     }
-    protected _parseEvents(_output: Output, prevEvents: EventResult[], origin: string): EventResult[] {
+    protected _parseEvents(_output: InspectableOutput, prevEvents: EventResult[], origin: string): EventResult[] {
         this.assertEventsLoaded()
         const found = this.indexableAbis.reduce((acc, curr) => {
             if (acc) return acc

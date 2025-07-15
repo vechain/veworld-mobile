@@ -1,11 +1,10 @@
-import { AbiManager, EventResult } from "./AbiManager"
-import { Output } from "@vechain/sdk-network"
+import { AbiManager, EventResult, InspectableOutput } from "./AbiManager"
 import { ReceiptOutput } from "./ReceiptOutput"
 
 export class ReceiptProcessor {
     constructor(private readonly abiManagers: AbiManager[]) {}
 
-    analyzeReceipt(outputs: Output[], origin: string): ReceiptOutput[] {
+    analyzeReceipt(outputs: InspectableOutput[], origin: string): ReceiptOutput[] {
         const receiptOutputs: ReceiptOutput[] = []
         for (let i = 0; i < outputs.length; i++) {
             const output = outputs[i]
