@@ -1,0 +1,98 @@
+export const NumberFormatter = {
+    "de-DE": new Intl.NumberFormat("de-DE", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "en-US": new Intl.NumberFormat("en-US", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "es-ES": new Intl.NumberFormat("es-ES", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "fr-FR": new Intl.NumberFormat("fr-FR", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "hi-IN": new Intl.NumberFormat("hi-IN", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "it-IT": new Intl.NumberFormat("it-IT", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "ja-JP": new Intl.NumberFormat("ja-JP", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "ko-KR": new Intl.NumberFormat("ko-KR", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "nl-NL": new Intl.NumberFormat("nl-NL", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "pl-PL": new Intl.NumberFormat("pl-PL", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "pt-PT": new Intl.NumberFormat("pt-PT", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "ru-RU": new Intl.NumberFormat("ru-RU", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "tr-TR": new Intl.NumberFormat("tr-TR", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "zh-TW": new Intl.NumberFormat("zh-TW", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "vi-VN": new Intl.NumberFormat("vi-VN", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+    "zh-CN": new Intl.NumberFormat("zh-CN", {
+        style: "decimal",
+        useGrouping: true,
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+    }),
+}

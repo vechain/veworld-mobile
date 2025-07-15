@@ -16,5 +16,6 @@ export * from "./DApp"
 export * from "./Notification"
 export * from "./vetDomains"
 export * from "./AppVersion"
+export * from "./NumberFormatter"
 
 export { SettingsConstants }

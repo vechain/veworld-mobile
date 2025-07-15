@@ -1,5 +1,6 @@
 import { BigNumber as BN } from "bignumber.js"
 import { isEmpty } from "lodash"
+import { NumberFormatter } from "~Constants/Constants"
 
 export type BigNumberable = string | number | BN | bigint | BigNumberUtils
 
@@ -204,12 +205,7 @@ class BigNumberUtils implements IBigNumberUtils {
 
     toTokenFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
         const _locale = locale ?? "en-US"
-        const formatter = new Intl.NumberFormat(_locale.toString(), {
-            style: "decimal",
-            useGrouping: true,
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
-        })
+        const formatter = NumberFormatter[_locale as keyof typeof NumberFormatter]
 
         let _data = ""
 
