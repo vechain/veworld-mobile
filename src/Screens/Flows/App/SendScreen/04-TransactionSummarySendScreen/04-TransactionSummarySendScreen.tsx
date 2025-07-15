@@ -19,8 +19,9 @@ import {
     TransferCard,
 } from "~Components"
 import { AnalyticsEvent, COLORS, creteAnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
-import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
+import { useAnalyticTracking, useTheme, useTransferAddContact } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
+import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {

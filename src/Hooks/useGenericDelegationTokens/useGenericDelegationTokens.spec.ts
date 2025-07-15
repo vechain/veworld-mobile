@@ -39,7 +39,7 @@ describe("useGenericDelegationTokens", () => {
         expect(result.current.tokens).toStrictEqual([VTHO.symbol, VET.symbol, B3TR.symbol])
     })
 
-    it("it should return just VTHO is data is undefined", async () => {
+    it("it should return just VTHO if data is undefined", async () => {
         ;(useQuery as jest.Mock).mockReturnValue({
             data: undefined,
             isFetching: true,
