@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.7 (2025-07-15)</small>
+
+* build: init ([956d8df](https://github.com/vechain/veworld-mobile/commit/956d8df))
+* Do not rely on generic delegator (#3075) ([a609429](https://github.com/vechain/veworld-mobile/commit/a609429)), closes [#3075](https://github.com/vechain/veworld-mobile/issues/3075)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
