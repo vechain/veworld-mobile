@@ -2,7 +2,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import React, { forwardRef, useCallback, useMemo, useState } from "react"
 import { Pressable, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
-import { AnalyticsEvent, ColorThemeType } from "~Constants"
+import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { FungibleTokenWithBalance, NETWORK_TYPE } from "~Model"
@@ -81,7 +81,7 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
             dispatch(setDefaultDelegationToken({ genesisId: selectedNetwork.genesis.id, token: internalToken }))
             if (selectedNetwork.type === NETWORK_TYPE.MAIN && internalToken !== "VTHO")
                 track(AnalyticsEvent.SETTINGS_DELEGATION_TOKEN, {
-                    token: internalToken,
+                    delegationToken: internalToken,
                 })
         }
         setIsDefaultToken(false)
@@ -183,7 +183,7 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingBottom: 40,
         },
         rootContentBackground: {
-            backgroundColor: theme.colors.actionBottomSheet.background,
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : theme.colors.actionBottomSheet.background,
         },
     })
 

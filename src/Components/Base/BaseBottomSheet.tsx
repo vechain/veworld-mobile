@@ -9,7 +9,7 @@ import {
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
-import { PropsWithChildren, default as React, useCallback, useEffect, useMemo, useState } from "react"
+import { PropsWithChildren, default as React, ReactNode, useCallback, useEffect, useMemo, useState } from "react"
 import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import { useReducedMotion } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
@@ -82,6 +82,51 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
      * Enable blur backdrop on iOS
      */
     blurBackdrop?: boolean
+}
+
+const BaseBottomSheetContent = ({
+    bottomSafeArea,
+    bottomSafeAreaSize,
+    contentViewStyle,
+    dynamicHeight,
+    footer,
+    footerStyle,
+    snapPoints,
+    title,
+    children,
+}: PropsWithChildren<{
+    bottomSafeArea: boolean
+    bottomSafeAreaSize: number
+    contentViewStyle: StyleProp<ViewStyle>[] | StyleProp<ViewStyle>
+    dynamicHeight: boolean
+    footer: ReactNode
+    footerStyle: StyleProp<ViewStyle>[] | StyleProp<ViewStyle>
+    snapPoints?: string[]
+    title?: string
+}>) => {
+    return (
+        <>
+            {snapPoints ? (
+                <BaseView style={contentViewStyle}>
+                    {title && <BaseText typographyFont="title">{title}</BaseText>}
+                    {children}
+                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                </BaseView>
+            ) : (
+                <BottomSheetView style={contentViewStyle}>
+                    {title && <BaseText typographyFont="title">{title}</BaseText>}
+                    {children}
+                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                </BottomSheetView>
+            )}
+            {footer && (
+                <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
+                    {footer}
+                </BaseView>
+            )}
+            {bottomSafeArea && <BaseSpacer height={bottomSafeAreaSize} />}
+        </>
+    )
 }
 
 const _BaseBottomSheet = <TData,>(
@@ -203,35 +248,6 @@ const _BaseBottomSheet = <TData,>(
         [noMargins, snapPoints, contentStyle],
     )
 
-    const Content = useCallback(
-        ({ children: nestedChildren }: PropsWithChildren) => {
-            return (
-                <>
-                    {snapPoints ? (
-                        <BaseView style={contentViewStyle}>
-                            {title && <BaseText typographyFont="title">{title}</BaseText>}
-                            {nestedChildren}
-                            {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
-                        </BaseView>
-                    ) : (
-                        <BottomSheetView style={contentViewStyle}>
-                            {title && <BaseText typographyFont="title">{title}</BaseText>}
-                            {nestedChildren}
-                            {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
-                        </BottomSheetView>
-                    )}
-                    {footer && (
-                        <BaseView w={100} px={24} alignItems="center" justifyContent="center" style={footerStyle}>
-                            {footer}
-                        </BaseView>
-                    )}
-                    {bottomSafeArea && <BaseSpacer height={bottomSafeAreaSize} />}
-                </>
-            )
-        },
-        [bottomSafeArea, bottomSafeAreaSize, contentViewStyle, dynamicHeight, footer, footerStyle, snapPoints, title],
-    )
-
     return (
         <BottomSheetModal
             animateOnMount={!reducedMotion}
@@ -253,9 +269,31 @@ const _BaseBottomSheet = <TData,>(
             enableDynamicSizing={dynamicHeight}
             {...sheetProps}>
             {typeof children === "function" ? (
-                p => <Content>{children(p?.data)}</Content>
+                p => (
+                    <BaseBottomSheetContent
+                        bottomSafeArea={bottomSafeArea}
+                        bottomSafeAreaSize={bottomSafeAreaSize}
+                        contentViewStyle={contentViewStyle}
+                        dynamicHeight={dynamicHeight}
+                        footer={footer}
+                        footerStyle={footerStyle}
+                        snapPoints={snapPoints}
+                        title={title}>
+                        {children(p?.data)}
+                    </BaseBottomSheetContent>
+                )
             ) : (
-                <Content>{children}</Content>
+                <BaseBottomSheetContent
+                    bottomSafeArea={bottomSafeArea}
+                    bottomSafeAreaSize={bottomSafeAreaSize}
+                    contentViewStyle={contentViewStyle}
+                    dynamicHeight={dynamicHeight}
+                    footer={footer}
+                    footerStyle={footerStyle}
+                    snapPoints={snapPoints}
+                    title={title}>
+                    {children}
+                </BaseBottomSheetContent>
             )}
         </BottomSheetModal>
     )
