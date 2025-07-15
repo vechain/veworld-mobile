@@ -1,4 +1,3 @@
-import { TransactionClause } from "@vechain/sdk-core"
 import { useMemo } from "react"
 import { B3TR, VET, VTHO } from "~Constants"
 import { FungibleToken, NETWORK_TYPE } from "~Model"
@@ -9,7 +8,6 @@ import AddressUtils from "~Utils/AddressUtils"
 
 type Args = {
     selectedToken: string
-    clauses: TransactionClause[]
     isDelegated: boolean
     allFeeOptions:
         | {
