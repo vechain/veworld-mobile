@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.3.0 (2025-07-15)
+
+* build: init ([483dad7](https://github.com/vechain/veworld-mobile/commit/483dad7))
+* feat: add analytics tracking for account change in CertificateBottomSheet (#3078) ([2c1dddc](https://github.com/vechain/veworld-mobile/commit/2c1dddc)), closes [#3078](https://github.com/vechain/veworld-mobile/issues/3078)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
