@@ -31,4 +31,12 @@ export type ReceiptOutput = {
               params: OutputArrayToObject<(typeof businessEvents)[key]["inputs"]>
           }
       }>
+    | {
+          name: "VET_TRANSFER(address,address,uint256)"
+          params: {
+              from: string
+              to: string
+              amount: bigint
+          }
+      }
 )
