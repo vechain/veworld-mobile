@@ -69,7 +69,7 @@ export const useTransactionScreen = ({
     onTransactionFailure,
     dappRequest,
     initialRoute,
-    autoVTHOFallback,
+    autoVTHOFallback = true,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -91,7 +91,7 @@ export const useTransactionScreen = ({
     const [selectedDelegationToken, setSelectedDelegationToken] = useState(defaultToken)
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const availableTokens = useGenericDelegationTokens()
+    const { tokens: availableTokens, isLoading: isLoadingTokens } = useGenericDelegationTokens()
 
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
@@ -112,6 +112,13 @@ export const useTransactionScreen = ({
         setGasPayer,
         providedUrl: dappRequest?.options?.delegator?.url,
     })
+
+    useEffect(() => {
+        if (availableTokens.length === 1 && !isLoadingTokens) {
+            resetDelegation()
+            setSelectedDelegationToken(VTHO.symbol)
+        }
+    }, [availableTokens.length, isLoadingTokens, resetDelegation])
 
     const { isGalactica: isGalacticaRaw } = useIsGalactica()
 

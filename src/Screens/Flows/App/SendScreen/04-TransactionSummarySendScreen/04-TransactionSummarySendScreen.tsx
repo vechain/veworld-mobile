@@ -19,8 +19,9 @@ import {
     TransferCard,
 } from "~Components"
 import { AnalyticsEvent, COLORS, creteAnalyticsEvent, ERROR_EVENTS, VET, VTHO } from "~Constants"
-import { useAnalyticTracking, useTheme, useTransactionScreen, useTransferAddContact } from "~Hooks"
+import { useAnalyticTracking, useTheme, useTransferAddContact } from "~Hooks"
 import { useFormatFiat } from "~Hooks/useFormatFiat"
+import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { ContactType, DEVICE_TYPE, FungibleTokenWithBalance } from "~Model"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import {
@@ -150,16 +151,28 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
      * If user is sending a token and gas is not enough, we will adjust the amount to send.
      */
     useEffect(() => {
-        if (isDelegated && selectedDelegationToken === VTHO.symbol) return
-        if (isEnoughGas) return
-        if (selectedDelegationToken.toLowerCase() !== token.symbol.toLowerCase()) return
+        if (isDelegated && selectedDelegationToken === VTHO.symbol) {
+            return
+        }
+        if (isEnoughGas) {
+            return
+        }
+        if (selectedDelegationToken.toLowerCase() !== token.symbol.toLowerCase()) {
+            return
+        }
+
         const gasFees = gasOptions[selectedFeeOption].maxFee
         const balance = BigNutils(token.balance.balance)
-        const newBalance = balance.minus(gasFees.toBN)
-
-        setFinalAmount(newBalance.isBiggerThan("0") ? newBalance.toHuman(token.decimals).decimals(4).toString : "0")
+        if (BigNutils(amount).multiply(BigNutils(10).toBN.pow(18)).plus(gasFees.toBN).isBiggerThan(balance.toBN)) {
+            const newBalance = balance.minus(gasFees.toBN)
+            if (newBalance.isLessThan("0")) {
+                fallbackToVTHO()
+                setFinalAmount(amount)
+            } else setFinalAmount(newBalance.toHuman(token.decimals).decimals(4).toString)
+        }
     }, [
         amount,
+        fallbackToVTHO,
         gasOptions,
         isDelegated,
         isEnoughGas,
@@ -169,13 +182,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         token.decimals,
         token.symbol,
     ])
-
-    useEffect(() => {
-        //Given that we use only 4 decimals, I'll do a check on 4 decimals
-        if (BigNutils(finalAmount).minus(amount).toBN.abs().gt("0.0001") || selectedDelegationToken !== token.symbol) {
-            fallbackToVTHO()
-        }
-    }, [amount, fallbackToVTHO, finalAmount, selectedDelegationToken, token.symbol])
 
     return (
         <Layout

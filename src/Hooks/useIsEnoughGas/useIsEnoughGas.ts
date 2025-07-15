@@ -51,6 +51,7 @@ export const useIsEnoughGas = ({ selectedToken, clauses, isDelegated, allFeeOpti
         return Object.fromEntries(
             availableTokens.map(tokenSymbol => {
                 if (isLoadingFees || allFeeOptions === undefined) return [tokenSymbol, true] as const
+                if (allFeeOptions[tokenSymbol] === undefined) return [tokenSymbol, false] as const
                 const foundTmpToken = allTokens.find(tk => tk.symbol === tokenSymbol)!
                 const balance = tokens.find(tk => tk.symbol === tokenSymbol)?.balance?.balance ?? "0"
                 const clausesValue = calculateClausesValue({ clauses, selectedToken: foundTmpToken })
