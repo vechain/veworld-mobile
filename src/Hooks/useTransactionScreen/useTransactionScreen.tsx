@@ -69,7 +69,7 @@ export const useTransactionScreen = ({
     onTransactionFailure,
     dappRequest,
     initialRoute,
-    autoVTHOFallback,
+    autoVTHOFallback = true,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -98,6 +98,8 @@ export const useTransactionScreen = ({
         clauses,
         providedGas: dappRequest?.options?.gas,
     })
+
+    const transactionOutputs = useMemo(() => gas?.outputs, [gas?.outputs])
 
     // 2. Delegation
     const {
@@ -197,6 +199,8 @@ export const useTransactionScreen = ({
         isDelegated,
         allFeeOptions: selectedFeeAllTokenOptions,
         isLoadingFees: isFirstTimeLoadingFees,
+        transactionOutputs,
+        origin: selectedAccount.address,
     })
 
     // 4. Build transaction
