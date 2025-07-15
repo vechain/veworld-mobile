@@ -75,7 +75,7 @@ export class BusinessEventAbiManager extends AbiManager {
         super()
     }
 
-    protected _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[] {
+    protected _loadAbis(): IndexableAbi[] {
         const entries = Object.entries(businessEvents)
         const mappedEntries = entries.map(([signature, item]) => {
             const parsedItem = replaceItemWithParams(item, this.network, this.params ?? {})
