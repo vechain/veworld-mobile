@@ -3,11 +3,12 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import React, { useCallback, useMemo } from "react"
 import { SectionListData } from "react-native"
 import { AccountCard, BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { COLORS } from "~Constants"
+import { COLORS, isSmallScreen } from "~Constants"
 import { useScrollableBottomSheet, useTheme } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     /**
@@ -111,6 +112,10 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 return ["50%"]
             }
 
+            if (accounts.length === 5 && !isSmallScreen) {
+                return isIOS() ? ["65%"] : ["55%"]
+            }
+
             if (accounts.length < 6) {
                 return ["75%"]
             }
@@ -172,6 +177,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                         sections={sections}
                         keyExtractor={item => item.address}
                         renderSectionHeader={SectionHeader}
+                        stickySectionHeadersEnabled={false}
                         renderItem={({ item }) => (
                             <SelectableAccountCard
                                 account={item}
@@ -183,6 +189,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                         ItemSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
                         SectionSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
                         {...flatListScrollProps}
+                        scrollEnabled
                     />
                 )}
             </BaseBottomSheet>
