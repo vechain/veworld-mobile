@@ -117,8 +117,8 @@ describe("useUserNodes", () => {
         })
 
         expect(result.current.stargateNodes.length).toBe(2)
-        expect(result.current.stargateNodes[0].nodeId).toBe(1)
-        expect(result.current.stargateNodes[1].nodeId).toBe(3)
+        expect(result.current.stargateNodes[0].nodeId).toBe("1")
+        expect(result.current.stargateNodes[1].nodeId).toBe("3")
     })
 
     it("should filter out legacy nodes", () => {

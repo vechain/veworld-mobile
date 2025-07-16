@@ -14,8 +14,8 @@ export interface NodeInfo extends RawNodeInfo {
 }
 
 export interface NftData {
-    tokenId: number
-    levelId?: number
+    tokenId: string
+    levelId?: string
     vetAmountStaked?: string
     isDelegated?: boolean
     claimableRewards?: string

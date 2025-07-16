@@ -121,9 +121,9 @@ describe("useUserStargateNfts", () => {
         })
 
         expect(result.current.ownedStargateNfts.length).toBe(3)
-        expect(result.current.ownedStargateNfts[0].tokenId).toBe(1)
-        expect(result.current.ownedStargateNfts[1].tokenId).toBe(2)
-        expect(result.current.ownedStargateNfts[2].tokenId).toBe(3)
+        expect(result.current.ownedStargateNfts[0].tokenId).toBe("1")
+        expect(result.current.ownedStargateNfts[1].tokenId).toBe("2")
+        expect(result.current.ownedStargateNfts[2].tokenId).toBe("3")
         expect(result.current.isLoading).toBe(false)
     })
 

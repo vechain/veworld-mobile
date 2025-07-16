@@ -257,8 +257,8 @@ export const NFT_Mock: NonFungibleToken = {
 }
 
 export const StargateNftMock: NftData = {
-    tokenId: 1,
-    levelId: 1,
+    tokenId: "1",
+    levelId: "1",
     vetAmountStaked: "10000000000000000000000",
     isDelegated: true,
     claimableRewards: "10000000000000000000000",
@@ -268,25 +268,25 @@ export const StargateNftMock: NftData = {
 export const StargateNftMocks = [
     StargateNftMock,
     {
-        tokenId: 2,
-        levelId: 2,
+        tokenId: "2",
+        levelId: "2",
         vetAmountStaked: "20000000000000000000000",
         isDelegated: false,
         claimableRewards: "20000000000000000000000",
         accumulatedRewards: "20000000000000000000000",
     },
     {
-        tokenId: 3,
-        levelId: 3,
+        tokenId: "3",
+        levelId: "3",
         vetAmountStaked: "30000000000000000000000",
         isDelegated: true,
         claimableRewards: "30000000000000000000000",
         accumulatedRewards: "30000000000000000000000",
     },
-]
+] satisfies NftData[]
 
 export const StargateNodeMock: NodeInfo = {
-    nodeId: 1,
+    nodeId: "1",
     nodeLevel: 1,
     xNodeOwner: "0x123",
     isXNodeHolder: false,
@@ -300,7 +300,7 @@ export const StargateNodeMock: NodeInfo = {
 export const StargateNodeMocks: NodeInfo[] = [
     StargateNodeMock,
     {
-        nodeId: 2,
+        nodeId: "2",
         nodeLevel: 2,
         xNodeOwner: "0x789",
         isXNodeHolder: false,
@@ -311,7 +311,7 @@ export const StargateNodeMocks: NodeInfo[] = [
         isLegacyNode: true,
     },
     {
-        nodeId: 3,
+        nodeId: "3",
         nodeLevel: 3,
         xNodeOwner: "0xdef",
         isXNodeHolder: false,

@@ -25,45 +25,34 @@ export const getUserStargateNfts = async (
     stargateDelegationAddress?: string,
 ): Promise<NftData[]> => {
     if (!stargateNodes?.length || !stargateNFTAddress || !stargateDelegationAddress) return []
+    const nftContract = thor.contracts.load(stargateNFTAddress, [StargateInfo.getToken])
+    const delegationContract = thor.contracts.load(stargateDelegationAddress, [
+        StargateDelegationFunctions.isDelegationActive,
+        StargateDelegationRewards.claimableRewards,
+        StargateDelegationRewards.accumulatedRewards,
+    ])
 
     try {
         const nftsData: NftData[] = []
 
         for (const node of stargateNodes) {
-            const tokenContract = thor.contracts.load(stargateNFTAddress, [StargateInfo.getToken])
-            const tokenResult = await tokenContract.read.getToken(BigInt(node.nodeId))
-            const tokenResultArray = tokenResult[0] as unknown as Array<any>
+            const clauses = [
+                nftContract.clause.getToken(BigInt(node.nodeId)),
+                delegationContract.clause.isDelegationActive(BigInt(node.nodeId)),
+                delegationContract.clause.claimableRewards(BigInt(node.nodeId)),
+                delegationContract.clause.accumulatedRewards(BigInt(node.nodeId)),
+            ]
+            const result = await thor.transactions.executeMultipleClausesCall(clauses)
 
-            const levelId = tokenResultArray[1]
-            const vetAmountStaked = tokenResultArray[3]
-
-            const delegationStatusContract = thor.contracts.load(stargateDelegationAddress, [
-                StargateDelegationFunctions.isDelegationActive,
-            ])
-            const delegationStatusResult = await delegationStatusContract.read.isDelegationActive(BigInt(node.nodeId))
-            const isDelegationActive = delegationStatusResult[0]
-
-            const claimableRewardsContract = thor.contracts.load(stargateDelegationAddress, [
-                StargateDelegationRewards.claimableRewards,
-            ])
-            const claimableRewardsResult = await claimableRewardsContract.read.claimableRewards(BigInt(node.nodeId))
-            const claimableRewards = claimableRewardsResult[0]
-
-            const accumulatedRewardsContract = thor.contracts.load(stargateDelegationAddress, [
-                StargateDelegationRewards.accumulatedRewards,
-            ])
-            const accumulatedRewardsResult = await accumulatedRewardsContract.read.accumulatedRewards(
-                BigInt(node.nodeId),
-            )
-            const accumulatedRewards = accumulatedRewardsResult[0]
-
+            if (result.some(r => !r.success)) throw new Error("[getUserStargateNfts]: Clause reverted")
             nftsData.push({
-                tokenId: Number(node.nodeId),
-                levelId: Number(levelId),
-                vetAmountStaked: vetAmountStaked.toString(),
-                isDelegated: isDelegationActive,
-                claimableRewards: claimableRewards.toString(),
-                accumulatedRewards: accumulatedRewards.toString(),
+                tokenId: node.nodeId,
+                //These two `any` are required since the SDK cannot infer the type
+                levelId: (result[0].result.plain! as any).levelId.toString(),
+                vetAmountStaked: (result[0].result.plain! as any).vetAmountStaked.toString(),
+                isDelegated: result[1].result.plain as boolean,
+                claimableRewards: result[2].result.plain as string,
+                accumulatedRewards: result[3].result.plain as string,
             })
         }
 
