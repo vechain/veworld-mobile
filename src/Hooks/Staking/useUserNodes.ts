@@ -5,9 +5,9 @@ import { NodeManagement, UserNodesInfo } from "~Constants"
 import { getStartgatNetworkConfig } from "~Constants/Constants/Staking"
 import { useBlockchainNetwork } from "~Hooks/useBlockchainNetwork"
 import { useThorClient } from "~Hooks/useThorClient"
-import { NETWORK_TYPE, NodeInfo, RawNodeInfo } from "~Model"
+import { NETWORK_TYPE, NodeInfo } from "~Model"
 
-export const getUserNodesQueryKey = (address?: string) => ["userNodes", address]
+export const getUserNodesQueryKey = (network: NETWORK_TYPE, address?: string) => ["userNodes", address]
 
 export const getUserNodes = async (
     thor: ThorClient,
@@ -21,18 +21,19 @@ export const getUserNodes = async (
         const isLegacyNodeContract = thor.contracts.load(nodeManagementAddress, [NodeManagement.isLegacyNode])
 
         const userNodesResult = await userNodesContract.read.getUserNodes(address)
-        const rawNodes = userNodesResult[0] as unknown as RawNodeInfo[]
+        const rawNodes = userNodesResult[0]
 
-        return await Promise.all(
-            (rawNodes || []).map(async node => {
-                const isLegacyResult = await isLegacyNodeContract.read.isLegacyNode(BigInt(node.nodeId))
+        if (!rawNodes || rawNodes.length === 0) return []
+        const clauses = rawNodes.map(node => isLegacyNodeContract.clause.isLegacyNode(BigInt(node.nodeId)))
+        const result = await thor.transactions.executeMultipleClausesCall(clauses)
 
-                return {
-                    ...node,
-                    isLegacyNode: isLegacyResult[0],
-                }
-            }),
-        )
+        return rawNodes.map((node, idx) => {
+            return {
+                ...node,
+                nodeId: node.nodeId.toString(),
+                isLegacyNode: result[idx].result.plain as boolean,
+            } satisfies NodeInfo
+        })
     } catch (error) {
         throw new Error(`Error fetching user nodes ${error}`)
     }
@@ -51,8 +52,8 @@ export const useUserNodes = (address?: string) => {
     }, [networkType])
 
     const queryKey = React.useMemo(() => {
-        return getUserNodesQueryKey(address)
-    }, [address])
+        return getUserNodesQueryKey(network.type, address)
+    }, [address, network.type])
 
     const enabled = !!thor && !!address && !!nodeManagementAddress
 

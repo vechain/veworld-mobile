@@ -1,5 +1,5 @@
 export interface RawNodeInfo {
-    nodeId: number
+    nodeId: string
     nodeLevel: number
     xNodeOwner: string
     isXNodeHolder: boolean

@@ -1,4 +1,4 @@
-import React, { memo, useMemo } from "react"
+import { memo, default as React, useMemo } from "react"
 import { Image, StyleSheet } from "react-native"
 import { StargateAvatar } from "~Assets"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
@@ -7,9 +7,9 @@ import { ColorThemeType } from "~Constants/Theme"
 import { useFormatFiat, useTheme, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useUserNodes } from "~Hooks/Staking/useUserNodes"
 import { useUserStargateNfts } from "~Hooks/Staking/useUserStargateNfts"
-import { formatUnits } from "ethers/lib/utils"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
+import { BalanceUtils, BigNutils } from "~Utils"
 
 type Props = {
     isBalanceVisible?: boolean
@@ -29,21 +29,24 @@ export const StakedCard = memo(({ isBalanceVisible = true }: Props) => {
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes, 120000)
 
     const totalLockedVet = useMemo(() => {
-        return ownedStargateNfts
-            .filter(nft => !!nft.isDelegated)
-            .reduce((acc, nft) => {
-                const stakedAmount = nft.vetAmountStaked ? formatUnits(nft.vetAmountStaked, VET.decimals) : "0"
-                return acc + Number(stakedAmount)
-            }, 0)
+        return ownedStargateNfts.reduce((acc, nft) => {
+            return acc.plus(nft.vetAmountStaked ?? "0")
+        }, BigNutils("0"))
     }, [ownedStargateNfts])
 
     const formattedLockedVet = useMemo(() => {
-        return totalLockedVet.toLocaleString(formatLocale, {
-            maximumFractionDigits: 2,
-        })
+        return BigNutils(totalLockedVet.toBN).toHuman(VET.decimals).toTokenFormatFull_string(2, formatLocale)
     }, [totalLockedVet, formatLocale])
 
-    const fiatValueOfLockedVet = totalLockedVet * (vetTokenInfo.exchangeRate ?? 0)
+    const fiatBalance = useMemo(() => {
+        return BalanceUtils.getFiatBalance(totalLockedVet.toString, vetTokenInfo.exchangeRate ?? 1, VET.decimals)
+    }, [totalLockedVet.toString, vetTokenInfo.exchangeRate])
+
+    const formattedFiatBalance = useMemo(() => {
+        return BigNutils(fiatBalance).toTokenFormatFull_string(2, formatLocale)
+    }, [fiatBalance, formatLocale])
+
+    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return null
 
     return (
         <BaseView mb={40}>
@@ -84,7 +87,7 @@ export const StakedCard = memo(({ isBalanceVisible = true }: Props) => {
                         <FiatBalance
                             isLoading={vetTokenInfo.exchangeRateLoading}
                             isVisible={isBalanceVisible}
-                            balances={[fiatValueOfLockedVet.toString()]}
+                            balances={[formattedFiatBalance.toString()]}
                             typographyFont="bodyMedium"
                             color={theme.colors.stakedCard.fiatValue}
                         />
