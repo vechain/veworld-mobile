@@ -1,4 +1,5 @@
-import { useNavigation, useScrollToTop, useFocusEffect } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useScrollToTop } from "@react-navigation/native"
+import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { RefreshControl, StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
@@ -17,13 +18,13 @@ import {
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import {
+    getVeDelegateBalanceQueryKey,
     useAnalyticTracking,
     useBottomSheetModal,
     useMemoizedAnimation,
     usePrefetchAllVns,
     useSetSelectedAccount,
     useTheme,
-    getVeDelegateBalanceQueryKey,
 } from "~Hooks"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
@@ -31,6 +32,7 @@ import {
     selectBalanceVisible,
     selectCurrency,
     selectSelectedAccount,
+    selectSelectedNetwork,
     selectVisibleAccounts,
     setAppResetTimestamp,
     useAppDispatch,
@@ -48,11 +50,10 @@ import {
     Header,
     TokenList,
 } from "./Components"
-import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
-import { useTokenBalances } from "./Hooks"
-import { useQueryClient } from "@tanstack/react-query"
 import { BannersCarousel } from "./Components/BannerCarousel"
+import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 import { StakedCard } from "./Components/Staking"
+import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -64,6 +65,7 @@ export const HomeScreen = () => {
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
     const { updateBalances, updateSuggested } = useTokenBalances()
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -117,14 +119,28 @@ export const HomeScreen = () => {
         onSetSelectedAccount({ address: account.address })
     }
 
+    const invalidateStargateQueries = useCallback(async () => {
+        await Promise.all([
+            queryClient.invalidateQueries({
+                queryKey: ["userStargateNodes", selectedNetwork.type, selectedAccount.address],
+                exact: true,
+            }),
+            queryClient.invalidateQueries({
+                queryKey: ["userStargateNfts", selectedNetwork.type, selectedAccount.address],
+                exact: true,
+            }),
+        ])
+    }, [queryClient, selectedAccount.address, selectedNetwork.type])
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
         await updateBalances()
         await updateSuggested()
+        await invalidateStargateQueries()
 
         setRefreshing(false)
-    }, [updateBalances, updateSuggested])
+    }, [invalidateStargateQueries, updateBalances, updateSuggested])
 
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),

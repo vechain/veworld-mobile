@@ -7,7 +7,7 @@ import { useThorClient } from "~Hooks/useThorClient"
 import { NETWORK_TYPE, NodeInfo } from "~Model"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
-export const getUserNodesQueryKey = (network: NETWORK_TYPE, address?: string) => ["userNodes", address]
+export const getUserNodesQueryKey = (network: NETWORK_TYPE, address?: string) => ["userStargateNodes", network, address]
 
 export const getUserNodes = async (
     thor: ThorClient,
