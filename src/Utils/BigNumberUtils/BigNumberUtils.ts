@@ -197,6 +197,10 @@ class BigNumberUtils implements IBigNumberUtils {
         return this.data.isLessThan(value)
     }
 
+    isLessThanOrEqual(value: string | number | BN): boolean {
+        return this.data.isLessThanOrEqualTo(value)
+    }
+
     isBiggerThan(value: string | number | BN): boolean {
         return this.data.isGreaterThan(value)
     }
