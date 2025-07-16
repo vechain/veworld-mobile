@@ -1,16 +1,15 @@
 import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
-import { useThorClient } from "~Hooks/useThorClient"
-import { useBlockchainNetwork } from "~Hooks/useBlockchainNetwork"
-import { NETWORK_TYPE } from "~Model/Network/enums"
 import { useMemo } from "react"
-import { getStartgatNetworkConfig } from "~Constants/Constants/Staking"
-import { StargateInfo } from "~Constants/Constants/Staking/abis/StargateNFT.abi"
+import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 import {
     StargateDelegationFunctions,
     StargateDelegationRewards,
 } from "~Constants/Constants/Staking/abis/StargateDelegation.abi"
-import { NodeInfo, NftData } from "~Model/Staking"
+import { StargateInfo } from "~Constants/Constants/Staking/abis/StargateNFT.abi"
+import { useThorClient } from "~Hooks/useThorClient"
+import { NftData, NodeInfo } from "~Model/Staking"
+import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 export const getUserStargateNftsQueryKey = (stargateNodes: NodeInfo[]) => [
     "userStargateNfts",
@@ -78,19 +77,15 @@ export const useUserStargateNfts = (
     refetchInterval?: number,
 ) => {
     const thor = useThorClient()
-    const { network } = useBlockchainNetwork()
-
-    const networkType = useMemo(() => {
-        return network.type === NETWORK_TYPE.MAIN ? "mainnet" : "testnet"
-    }, [network.type])
+    const network = useAppSelector(selectSelectedNetwork)
 
     const { stargateNFTAddress, stargateDelegationAddress } = useMemo(() => {
-        const config = getStartgatNetworkConfig(networkType)
+        const config = getStargateNetworkConfig(network.type)
         return {
             stargateNFTAddress: config?.STARGATE_NFT_CONTRACT_ADDRESS,
             stargateDelegationAddress: config?.STARGATE_DELEGATION_CONTRACT_ADDRESS,
         }
-    }, [networkType])
+    }, [network.type])
 
     const queryKey = useMemo(() => {
         return getUserStargateNftsQueryKey(stargateNodes)

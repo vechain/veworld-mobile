@@ -1,2 +1,2 @@
-export * from "./StakingContants"
+export * from "./StakingConstants"
 export * from "./abis"

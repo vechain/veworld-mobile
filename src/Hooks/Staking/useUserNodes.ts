@@ -2,10 +2,10 @@ import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
 import React from "react"
 import { NodeManagement, UserNodesInfo } from "~Constants"
-import { getStartgatNetworkConfig } from "~Constants/Constants/Staking"
-import { useBlockchainNetwork } from "~Hooks/useBlockchainNetwork"
+import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 import { useThorClient } from "~Hooks/useThorClient"
 import { NETWORK_TYPE, NodeInfo } from "~Model"
+import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
 export const getUserNodesQueryKey = (network: NETWORK_TYPE, address?: string) => ["userNodes", address]
 
@@ -41,15 +41,11 @@ export const getUserNodes = async (
 
 export const useUserNodes = (address?: string) => {
     const thor = useThorClient()
-    const { network } = useBlockchainNetwork()
-
-    const networkType = React.useMemo(() => {
-        return network.type === NETWORK_TYPE.MAIN ? "mainnet" : "testnet"
-    }, [network.type])
+    const network = useAppSelector(selectSelectedNetwork)
 
     const nodeManagementAddress = React.useMemo(() => {
-        return getStartgatNetworkConfig(networkType)?.NODE_MANAGEMENT_CONTRACT_ADDRESS
-    }, [networkType])
+        return getStargateNetworkConfig(network.type)?.NODE_MANAGEMENT_CONTRACT_ADDRESS
+    }, [network.type])
 
     const queryKey = React.useMemo(() => {
         return getUserNodesQueryKey(network.type, address)

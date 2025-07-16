@@ -1,7 +1,7 @@
-type Network = "mainnet" | "testnet"
+import { NETWORK_TYPE } from "~Model"
 
-export const startgateNetworkConfig: Record<
-    Network,
+export const stargateNetworkConfig: Record<
+    NETWORK_TYPE,
     {
         [key: string]: string
     }
@@ -18,6 +18,8 @@ export const startgateNetworkConfig: Record<
         LEGACY_NODES_CONTRACT_ADDRESS: "0x0747b39abc0de3d11c8ddfe2e7eed00aaa8d475c",
         STARGATE_DELEGATION_CONTRACT_ADDRESS: "0x7240e3bc0d26431512d5b67dbd26d199205bffe8",
     },
+    other: {},
+    solo: {},
 }
 
-export const getStartgatNetworkConfig = (network: Network) => startgateNetworkConfig[network]
+export const getStargateNetworkConfig = (network: NETWORK_TYPE) => stargateNetworkConfig[network]

@@ -1,6 +1,8 @@
 import { TestWrapper, TestHelpers } from "~Test"
 import { renderHook } from "@testing-library/react-hooks"
 import { useUserNodes } from "./useUserNodes"
+import { RootState } from "~Storage/Redux/Types"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
 
 const { StargateNodeMocks } = TestHelpers.data
 
@@ -45,16 +47,8 @@ jest.mock("@tanstack/react-query", () => {
 })
 
 jest.mock("~Constants/Constants/Staking", () => ({
-    getStartgatNetworkConfig: jest.fn().mockReturnValue({
+    getStargateNetworkConfig: jest.fn().mockReturnValue({
         NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xNodeManagementAddress",
-    }),
-}))
-
-jest.mock("~Hooks/useBlockchainNetwork", () => ({
-    useBlockchainNetwork: jest.fn().mockReturnValue({
-        network: {
-            type: "mainnet",
-        },
     }),
 }))
 
@@ -70,6 +64,17 @@ jest.mock("~Hooks/useThorClient", () => ({
         },
     }),
 }))
+
+const preloadedState: Partial<RootState> = {
+    networks: {
+        customNetworks: [],
+        hardfork: {},
+        isNodeError: false,
+        selectedNetwork: defaultMainNetwork.id,
+        showConversionOtherNets: false,
+        showTestNetTag: false,
+    },
+}
 
 describe("useUserNodes", () => {
     beforeEach(() => {
@@ -92,6 +97,9 @@ describe("useUserNodes", () => {
     it("should return empty stargateNodes array when address is undefined", () => {
         const { result } = renderHook(() => useUserNodes(undefined), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
         expect(result.current.stargateNodes).toEqual([])
@@ -103,6 +111,9 @@ describe("useUserNodes", () => {
 
         const { result } = renderHook(() => useUserNodes(address), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
         expect(result.current.stargateNodes.length).toBe(2)
@@ -115,23 +126,32 @@ describe("useUserNodes", () => {
 
         const { result } = renderHook(() => useUserNodes(address), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
-        const legacyNodeExists = result.current.stargateNodes.some(node => node.nodeId === 2)
+        const legacyNodeExists = result.current.stargateNodes.some(node => node.nodeId === "2")
         expect(legacyNodeExists).toBe(false)
     })
 
     it("should handle network type correctly", () => {
-        require("~Hooks/useBlockchainNetwork").useBlockchainNetwork.mockReturnValueOnce({
-            network: {
-                type: "testnet",
-            },
-        })
-
         const address = "0x123456789"
 
         const { result } = renderHook(() => useUserNodes(address), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    networks: {
+                        customNetworks: [],
+                        hardfork: {},
+                        isNodeError: false,
+                        selectedNetwork: defaultTestNetwork.id,
+                        showConversionOtherNets: false,
+                        showTestNetTag: false,
+                    },
+                },
+            },
         })
 
         expect(result.current.stargateNodes.length).toBe(2)
@@ -144,6 +164,9 @@ describe("useUserNodes", () => {
         const address = "0x123456789"
         const { result } = renderHook(() => useUserNodes(address), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
         expect(result.current.isError).toBe(true)
@@ -158,6 +181,9 @@ describe("useUserNodes", () => {
         const address = "0x123456789"
         const { result } = renderHook(() => useUserNodes(address), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
         expect(result.current.isLoading).toBe(true)

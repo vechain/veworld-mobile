@@ -1,6 +1,8 @@
 import { TestWrapper, TestHelpers } from "~Test"
 import { renderHook } from "@testing-library/react-hooks"
 import { useUserStargateNfts } from "./useUserStargateNfts"
+import { RootState } from "~Storage/Redux/Types"
+import { defaultMainNetwork, defaultTestNetwork } from "~Constants"
 
 const { StargateNftMocks, StargateNodeMocks } = TestHelpers.data
 
@@ -61,20 +63,23 @@ jest.mock("~Hooks/useThorClient", () => ({
     }),
 }))
 
-jest.mock("~Hooks/useBlockchainNetwork", () => ({
-    useBlockchainNetwork: jest.fn().mockReturnValue({
-        network: {
-            type: "mainnet",
-        },
-    }),
-}))
-
 jest.mock("~Constants/Constants/Staking", () => ({
-    getStartgatNetworkConfig: jest.fn().mockReturnValue({
+    getStargateNetworkConfig: jest.fn().mockReturnValue({
         STARGATE_NFT_CONTRACT_ADDRESS: "0xStargateNFTContractAddress",
         STARGATE_DELEGATION_CONTRACT_ADDRESS: "0xStargateDelegationContractAddress",
     }),
 }))
+
+const preloadedState: Partial<RootState> = {
+    networks: {
+        customNetworks: [],
+        hardfork: {},
+        isNodeError: false,
+        selectedNetwork: defaultMainNetwork.id,
+        showConversionOtherNets: false,
+        showTestNetTag: false,
+    },
+}
 
 describe("useUserStargateNfts", () => {
     beforeEach(() => {
@@ -98,6 +103,9 @@ describe("useUserStargateNfts", () => {
     it("should return empty array when no nodes are provided", () => {
         const { result } = renderHook(() => useUserStargateNfts([], false), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
         expect(result.current.ownedStargateNfts).toEqual([])
@@ -107,6 +115,9 @@ describe("useUserStargateNfts", () => {
     it("should return NFTs data when nodes are provided", () => {
         const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
         expect(result.current.ownedStargateNfts.length).toBe(3)
@@ -119,6 +130,9 @@ describe("useUserStargateNfts", () => {
     it("should handle loading state when isLoadingNodes is true", () => {
         const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, true), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
         expect(result.current.isLoading).toBe(true)
@@ -130,6 +144,9 @@ describe("useUserStargateNfts", () => {
 
         const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
         expect(result.current.isLoading).toBe(true)
@@ -142,6 +159,9 @@ describe("useUserStargateNfts", () => {
 
         const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: preloadedState,
+            },
         })
 
         expect(result.current.isError).toBe(true)
@@ -151,14 +171,20 @@ describe("useUserStargateNfts", () => {
     })
 
     it("should handle network type changes correctly", () => {
-        require("~Hooks/useBlockchainNetwork").useBlockchainNetwork.mockReturnValueOnce({
-            network: {
-                type: "testnet",
-            },
-        })
-
         const { result } = renderHook(() => useUserStargateNfts(StargateNodeMocks, false), {
             wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    networks: {
+                        customNetworks: [],
+                        hardfork: {},
+                        isNodeError: false,
+                        selectedNetwork: defaultTestNetwork.id,
+                        showConversionOtherNets: false,
+                        showTestNetTag: false,
+                    },
+                },
+            },
         })
 
         expect(result.current.ownedStargateNfts.length).toBe(3)
