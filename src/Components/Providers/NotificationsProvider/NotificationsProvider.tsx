@@ -68,7 +68,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
 
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
-    const initializeIneSignal = useCallback(() => {
+    const initializeOneSignal = useCallback(() => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
 
         try {
@@ -214,15 +214,42 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         })
     }, [getTags])
 
+    const updateDappNotifications = useCallback(async () => {
+        if (dapps.length > 0) {
+            const tags = await getTags()
+            const allEnabled = dapps.every(dapp => !!tags[dapp.id])
+            if (!allEnabled) {
+                dapps.forEach(dapp => {
+                    if (!tags[dapp.id]) {
+                        addDAppTag(dapp.id)
+                    }
+                })
+            }
+        }
+    }, [dapps, getTags, addDAppTag])
+
     const init = useCallback(async () => {
-        initializeIneSignal()
+        initializeOneSignal()
         await getOptInStatus()
         await getPermission()
 
         if (!removedNotificationTags?.includes(vechainNewsAndUpdates)) {
             addTag(vechainNewsAndUpdates, "true")
         }
-    }, [addTag, getOptInStatus, getPermission, initializeIneSignal, removedNotificationTags])
+
+        // Keep the dapp notifications in sync with the dapps list
+        if (dappsNotifications) {
+            updateDappNotifications()
+        }
+    }, [
+        addTag,
+        dappsNotifications,
+        getOptInStatus,
+        getPermission,
+        initializeOneSignal,
+        removedNotificationTags,
+        updateDappNotifications,
+    ])
 
     useEffect(() => {
         dispatch(updateNotificationFeatureFlag(pushNotificationFeature?.enabled))
@@ -295,27 +322,6 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         },
         [dispatch, featureEnabled, isMainnet],
     )
-
-    const updateDappNotifications = useCallback(async () => {
-        if (dapps.length > 0) {
-            const tags = await getTags()
-            const allEnabled = dapps.every(dapp => !!tags[dapp.id])
-            if (!allEnabled) {
-                dapps.forEach(dapp => {
-                    if (!tags[dapp.id]) {
-                        addDAppTag(dapp.id)
-                    }
-                })
-            }
-        }
-    }, [dapps, getTags, addDAppTag])
-
-    useEffect(() => {
-        // Keep the dapp notifications in sync with the dapps list
-        if (dappsNotifications) {
-            updateDappNotifications()
-        }
-    }, [dappsNotifications, updateDappNotifications])
 
     const contextValue = useMemo(() => {
         return {
