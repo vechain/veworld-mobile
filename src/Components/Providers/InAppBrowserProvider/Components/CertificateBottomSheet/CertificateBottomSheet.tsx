@@ -95,6 +95,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 flexDirection="row"
                 gap={12}
                 justifyContent="space-between"
+                mb={16}
                 testID="SIGN_CERTIFICATE_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
