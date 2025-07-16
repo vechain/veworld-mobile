@@ -1,5 +1,6 @@
 import { BigNumber as BN } from "bignumber.js"
 import { isEmpty } from "lodash"
+import { getNumberFormatter } from "~Constants/Constants/NumberFormatter"
 
 export type BigNumberable = string | number | BN | bigint | BigNumberUtils
 
@@ -207,11 +208,11 @@ class BigNumberUtils implements IBigNumberUtils {
 
     toCurrencyFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
         const _locale = locale ?? "en-US"
-        const formatter = new Intl.NumberFormat(_locale.toString(), {
+        const formatter = getNumberFormatter({
+            locale: _locale,
+            precision: decimals,
             style: "decimal",
             useGrouping: true,
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
         })
         let _data = ""
 
@@ -227,11 +228,11 @@ class BigNumberUtils implements IBigNumberUtils {
     toTokenFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
         const _locale = locale || "en-US"
 
-        const formatter = new Intl.NumberFormat(_locale.toString(), {
+        const formatter = getNumberFormatter({
+            locale: _locale,
+            precision: decimals,
             style: "decimal",
             useGrouping: true,
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
         })
 
         let _data = ""
@@ -260,11 +261,11 @@ class BigNumberUtils implements IBigNumberUtils {
         const _locale = locale ?? "en-US"
         const separator = getDecimalSeparator(_locale.toString()) ?? "."
         if (this.data.isZero()) return ["0", "00"].join(separator)
-        const formatter = new Intl.NumberFormat(_locale.toString(), {
+        const formatter = getNumberFormatter({
+            locale: _locale,
+            precision: decimals,
             style: "decimal",
             useGrouping: true,
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
         })
 
         const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))

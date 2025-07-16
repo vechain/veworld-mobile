@@ -1,13 +1,9 @@
 import { useCallback } from "react"
-// import { useThor } from "~Components"
 import { NftCollection } from "~Model"
 import {
     getContractAddresses,
-    getName,
     getNftBalanceOf,
     getNftsForContract,
-    getSymbol,
-    getTokenTotalSupply,
     getTokenURI,
     GithubCollectionResponse,
 } from "~Networking"
@@ -71,10 +67,7 @@ export const useNFTCollections = () => {
 
                 try {
                     // NFT_WHALE - replace here
-                    const start = performance.now()
                     balanceOf = await getNftBalanceOf(currentAddress, collection.address, thor)
-                    const end = performance.now()
-                    console.log("getNftsContract", end - start)
                 } catch (e) {
                     warn(ERROR_EVENTS.NFT, "failed to get balance", e)
                 }
@@ -92,15 +85,8 @@ export const useNFTCollections = () => {
                         description = tokenMetadata.description
                     }
                 }
-                // const [name, symbol, totalSupply] = await Promise.all([
-                //     getName(collection.address, thor),
-                //     getSymbol(collection.address, thor),
-                //     getTokenTotalSupply(collection.address, thor),
-                // ])
+
                 const { name, symbol, totalSupply } = await getNftCollectionMetadata(collection.address, thor)
-                console.log("name", name)
-                console.log("symbol", symbol)
-                console.log("totalSupply", totalSupply)
 
                 const updated: NftCollection = {
                     ...collection,
