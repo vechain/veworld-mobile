@@ -1,8 +1,29 @@
 import { BigNumber as BN } from "bignumber.js"
 import { isEmpty } from "lodash"
-import { NumberFormatter } from "~Constants/Constants"
 
 export type BigNumberable = string | number | BN | bigint | BigNumberUtils
+
+const locales_separator = {
+    tw: ".",
+    "zh-tw": ".",
+    zh: ".",
+    "zh-cn": ".",
+    de: ",",
+    en: ".",
+    es: ",",
+    fr: ",",
+    hi: ".",
+    it: ",",
+    ja: ".",
+    ko: ".",
+    nl: ",",
+    pl: ",",
+    pt: ",",
+    ru: ",",
+    sv: ",",
+    tr: ",",
+    vi: ",",
+}
 
 const parseBigNumberable = (value: BigNumberable): BN.Value => {
     if (typeof value === "bigint") return value.toString()
@@ -47,11 +68,7 @@ interface IBigNumberUtils {
 }
 
 const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
-    if (locale === "tw" || locale === "zh-tw") return "."
-    const numberWithDecimalSeparator = 1.1
-    return Intl.NumberFormat(locale)
-        .formatToParts(numberWithDecimalSeparator)
-        .find(part => part.type === "decimal")?.value
+    return locales_separator[locale as keyof typeof locales_separator]
 }
 
 const stripTrailingZeros = (value: string) => {
@@ -205,7 +222,13 @@ class BigNumberUtils implements IBigNumberUtils {
 
     toTokenFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
         const _locale = locale || "en-US"
-        const formatter = NumberFormatter[_locale as keyof typeof NumberFormatter]
+
+        const formatter = new Intl.NumberFormat(_locale.toString(), {
+            style: "decimal",
+            useGrouping: true,
+            minimumFractionDigits: decimals,
+            maximumFractionDigits: decimals,
+        })
 
         let _data = ""
 
