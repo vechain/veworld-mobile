@@ -2,7 +2,7 @@ import { RouteProp } from "@react-navigation/native"
 import { NativeStackNavigationProp, NativeStackScreenProps } from "@react-navigation/native-stack"
 import { render, screen } from "@testing-library/react-native"
 import React from "react"
-import { GasPriceCoefficient } from "~Constants"
+import { GasPriceCoefficient, VTHO } from "~Constants"
 import { useTransactionScreen } from "~Hooks/useTransactionScreen"
 import { DelegationType } from "~Model/Delegation"
 import { RootStackParamListHome, Routes } from "~Navigation"
@@ -210,5 +210,44 @@ describe("TransactionSummarySendScreen", () => {
                 },
             ],
         })
+    })
+
+    it("should fallback when sending VTHO with VET set as the default delegation token without having VET", () => {
+        const balance = `0x${BigNutils("1492").multiply(BigNutils(10).toBN.pow(18)).toHex}`
+
+        render(
+            <TransactionSummarySendScreen
+                {...createTestProps()}
+                route={{
+                    key: "string",
+                    name: Routes.TRANSACTION_SUMMARY_SEND,
+                    path: "string",
+                    params: {
+                        amount: "1492",
+                        address: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
+                        token: {
+                            address: VTHO.address,
+                            balance: {
+                                balance,
+                                position: undefined,
+                                timeUpdated: "2023-05-24T13:14:07.205Z",
+                                tokenAddress: "VTHO",
+                                isHidden: false,
+                            },
+                            custom: false,
+                            decimals: 18,
+                            icon: "soe image url",
+                            name: "Vechain",
+                            symbol: "VTHO",
+                        },
+                    },
+                }}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
+
+        expect(fallbackToVTHO).toHaveBeenCalled()
     })
 })

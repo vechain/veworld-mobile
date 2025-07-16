@@ -42,6 +42,7 @@ type Props = {
 const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef, isLoading }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const track = useAnalyticTracking()
 
     const allApps = useAppSelector(selectFeaturedDapps)
 
@@ -83,12 +84,18 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
 
     const signableArgs = useMemo(() => ({ request }), [request])
 
+    const onChangeAccountPress = useCallback(() => {
+        track(AnalyticsEvent.DAPP_CERTIFICATE_CHANGE_ACCOUNT_CLICKED)
+        onOpenSelectAccountBs()
+    }, [onOpenSelectAccountBs, track])
+
     return (
         <>
             <BaseView
                 flexDirection="row"
                 gap={12}
                 justifyContent="space-between"
+                mb={16}
                 testID="SIGN_CERTIFICATE_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
@@ -97,7 +104,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                     </BaseText>
                 </BaseView>
                 {selectedAccount && (
-                    <AccountSelector account={selectedAccount} onPress={onOpenSelectAccountBs} variant="short" />
+                    <AccountSelector account={selectedAccount} onPress={onChangeAccountPress} variant="short" />
                 )}
             </BaseView>
             <BaseSpacer height={24} />
