@@ -26,7 +26,7 @@ export const StakedCard = memo(({ isBalanceVisible = true }: Props) => {
     const vetTokenInfo = useTokenWithCompleteInfo(VET)
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
-    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes, 120000)
+    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
 
     const totalLockedVet = useMemo(() => {
         return ownedStargateNfts.reduce((acc, nft) => {

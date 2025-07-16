@@ -57,7 +57,7 @@ export const useUserNodes = (address?: string) => {
         queryKey,
         queryFn: async () => await getUserNodes(thor, address, nodeManagementAddress),
         enabled,
-        staleTime: 60000,
+        staleTime: 60 * 5 * 1000,
     })
 
     const stargateNodes = React.useMemo(() => data?.filter(node => !node.isLegacyNode) || [], [data])

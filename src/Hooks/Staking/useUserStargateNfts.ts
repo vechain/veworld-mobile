@@ -71,11 +71,7 @@ export const getUserStargateNfts = async (
     }
 }
 
-export const useUserStargateNfts = (
-    stargateNodes: NodeInfo[] = [],
-    isLoadingNodes?: boolean,
-    refetchInterval?: number,
-) => {
+export const useUserStargateNfts = (stargateNodes: NodeInfo[] = [], isLoadingNodes?: boolean) => {
     const thor = useThorClient()
     const network = useAppSelector(selectSelectedNetwork)
 
@@ -105,8 +101,7 @@ export const useUserStargateNfts = (
         queryFn: async () =>
             await getUserStargateNfts(thor, stargateNodes, stargateNFTAddress, stargateDelegationAddress),
         enabled,
-        refetchInterval,
-        staleTime: 60000,
+        staleTime: 60 * 5 * 1000,
     })
 
     const hasCallErrors = useMemo(() => {
