@@ -45,6 +45,17 @@ describe("GasUtils", () => {
                 revertReason: "",
                 vmError: "",
                 baseGasPrice: "10000000000000",
+                outputs: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        gasUsed: 591,
+                        revertReason: "",
+                        reverted: false,
+                        transfers: [],
+                        vmError: "",
+                    },
+                ],
             })
         })
 
@@ -82,6 +93,17 @@ describe("GasUtils", () => {
                 revertReason: "",
                 vmError: "",
                 baseGasPrice: "10000000000000",
+                outputs: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        gasUsed: 591,
+                        revertReason: "",
+                        reverted: false,
+                        transfers: [],
+                        vmError: "",
+                    },
+                ],
             })
         })
 
@@ -114,6 +136,17 @@ describe("GasUtils", () => {
                 revertReason: "",
                 vmError: "",
                 baseGasPrice: "10000000000000",
+                outputs: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        gasUsed: 591,
+                        revertReason: "",
+                        reverted: false,
+                        transfers: [],
+                        vmError: "",
+                    },
+                ],
             })
         })
 
@@ -139,6 +172,17 @@ describe("GasUtils", () => {
                 revertReason: "revertReason",
                 vmError: "",
                 baseGasPrice: "10000000000000",
+                outputs: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        gasUsed: 36591,
+                        revertReason: "revertReason",
+                        reverted: true,
+                        transfers: [],
+                        vmError: "",
+                    },
+                ],
             })
         })
 
@@ -150,7 +194,7 @@ describe("GasUtils", () => {
                         events: [],
                         transfers: [],
                         gasUsed: 591,
-                        reverted: false,
+                        reverted: true,
                         vmError: "vmError",
                         revertReason: "vmError",
                     },
@@ -161,10 +205,21 @@ describe("GasUtils", () => {
             expect(reverted).toStrictEqual({
                 caller: "0x",
                 gas: 36591,
-                reverted: false,
+                reverted: true,
                 revertReason: "vmError",
                 vmError: "vmError",
                 baseGasPrice: "10000000000000",
+                outputs: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        gasUsed: 591,
+                        revertReason: "vmError",
+                        reverted: true,
+                        transfers: [],
+                        vmError: "vmError",
+                    },
+                ],
             })
         })
         it("should run correctly with suggested gas", async () => {
@@ -190,6 +245,17 @@ describe("GasUtils", () => {
                 revertReason: "vmError",
                 vmError: "vmError",
                 baseGasPrice: "10000000000000",
+                outputs: [
+                    {
+                        data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                        events: [],
+                        gasUsed: 591,
+                        revertReason: "vmError",
+                        reverted: false,
+                        transfers: [],
+                        vmError: "vmError",
+                    },
+                ],
             })
         })
     })
