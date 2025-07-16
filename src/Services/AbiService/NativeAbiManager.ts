@@ -8,7 +8,7 @@ function assertsIsTransfer(event: Event | undefined, transfer: Transfer | undefi
 }
 
 export class NativeAbiManager extends AbiManager {
-    protected _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[] {
+    protected _loadAbis(): IndexableAbi[] {
         return [
             {
                 name: "VET_TRANSFER",
