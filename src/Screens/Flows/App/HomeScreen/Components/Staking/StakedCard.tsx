@@ -85,11 +85,15 @@ export const StakedCard = memo(({ isBalanceVisible = true }: Props) => {
                             )}
                         </BaseView>
                         <FiatBalance
-                            isLoading={vetTokenInfo.exchangeRateLoading}
+                            isLoading={vetTokenInfo.exchangeRateLoading || isLoadingNfts || isLoadingNodes}
                             isVisible={isBalanceVisible}
                             balances={[formattedFiatBalance.toString()]}
                             typographyFont="bodyMedium"
                             color={theme.colors.stakedCard.fiatValue}
+                            skeletonHeight={12}
+                            skeletonWidth={60}
+                            skeletonBoneColor={theme.colors.skeletonBoneColor}
+                            skeletonHighlightColor={theme.colors.skeletonHighlightColor}
                         />
                     </BaseView>
                 </BaseView>
