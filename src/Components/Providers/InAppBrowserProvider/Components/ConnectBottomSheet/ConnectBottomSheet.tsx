@@ -74,7 +74,7 @@ const ConnectBottomSheetContent = ({
                 </DappDetails.Container>
             </DappWithDetails>
             <BaseSpacer height={24} />
-            <BaseView flexDirection="row" gap={16}>
+            <BaseView flexDirection="row" gap={16} mb={16}>
                 <BaseButton action={onCancel.bind(null, request)} variant="outline" flex={1}>
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>

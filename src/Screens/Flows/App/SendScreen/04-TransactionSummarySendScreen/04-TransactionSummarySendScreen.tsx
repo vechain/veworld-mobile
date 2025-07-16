@@ -158,6 +158,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
             return
         }
         if (selectedDelegationToken.toLowerCase() !== token.symbol.toLowerCase()) {
+            fallbackToVTHO()
             return
         }
 
@@ -165,7 +166,7 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         const balance = BigNutils(token.balance.balance)
         if (BigNutils(amount).multiply(BigNutils(10).toBN.pow(18)).plus(gasFees.toBN).isBiggerThan(balance.toBN)) {
             const newBalance = balance.minus(gasFees.toBN)
-            if (newBalance.isLessThan("0")) {
+            if (newBalance.isLessThanOrEqual("0")) {
                 fallbackToVTHO()
                 setFinalAmount(amount)
             } else setFinalAmount(newBalance.toHuman(token.decimals).decimals(4).toString)
