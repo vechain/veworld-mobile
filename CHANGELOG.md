@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.7 (2025-07-16)</small>
+
+* build: init ([d29d326](https://github.com/vechain/veworld-mobile/commit/d29d326))
+* fix: rename initializeIneSignal to initializeOneSignal and sync dapp notifications on init (#3085) ([e78e746](https://github.com/vechain/veworld-mobile/commit/e78e746)), closes [#3085](https://github.com/vechain/veworld-mobile/issues/3085)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
