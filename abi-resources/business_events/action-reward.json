@@ -1,0 +1,108 @@
+{
+  "name": "B3TR_ActionReward",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "transferB3TR",
+      "conditions": [
+        {
+          "firstOperand": "from",
+          "isFirstStatic": false,
+          "secondOperand": "${X2EARN_REWARDS_POOL_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    },
+    {
+      "name": "RewardDistributed(uint256,indexed bytes32,indexed address,string,indexed address)",
+      "alias": "actionReward",
+      "conditions": [
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${X2EARN_REWARDS_POOL_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "transferB3TR",
+      "firstEventProperty": "value",
+      "secondEventName": "actionReward",
+      "secondEventProperty": "amount",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "to",
+      "eventName": "transferB3TR",
+      "businessEventName": "to"
+    },
+    {
+      "name": "from",
+      "eventName": "transferB3TR",
+      "businessEventName": "from"
+    },
+    {
+      "name": "value",
+      "eventName": "transferB3TR",
+      "businessEventName": "value"
+    },
+    {
+      "name": "appId",
+      "eventName": "actionReward",
+      "businessEventName": "appId"
+    },
+    {
+      "name": "proof",
+      "eventName": "actionReward",
+      "businessEventName": "proof"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "bytes32",
+      "name": "appId",
+      "type": "bytes32"
+    },
+    {
+      "indexed": false,
+      "internalType": "string",
+      "name": "proof",
+      "type": "string"
+    }
+  ],
+  "type": "event"
+}

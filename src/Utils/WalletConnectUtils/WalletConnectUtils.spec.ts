@@ -223,7 +223,7 @@ describe("WalletConnectUtils", () => {
         it("should throw an error if the uri is invalid", () => {
             const uri = "invalidUri"
 
-            expect(() => getTopicFromPairUri(uri)).toThrowError()
+            expect(() => getTopicFromPairUri(uri)).toThrow()
         })
     })
 

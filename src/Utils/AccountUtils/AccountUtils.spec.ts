@@ -29,9 +29,9 @@ describe("AccountUtils", () => {
     })
 
     it("getAccountForIndex - should throw when no xPub", () => {
-        expect(() =>
-            AccountUtils.getAccountForIndex(0, { ...TestHelpers.data.device1, xPub: undefined }, 0),
-        ).toThrowError("The XPub can't be null for HD devices")
+        expect(() => AccountUtils.getAccountForIndex(0, { ...TestHelpers.data.device1, xPub: undefined }, 0)).toThrow(
+            "The XPub can't be null for HD devices",
+        )
     })
 
     it("updateAccountVns - should return an account with the vnsName property", () => {

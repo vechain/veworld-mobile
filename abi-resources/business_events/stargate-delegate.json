@@ -1,0 +1,72 @@
+{
+  "name": "STARGATE_DELEGATE",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "DelegationSimulationStarted(indexed uint256,indexed address,uint256,indexed bool,address)",
+      "alias": "delegation",
+      "conditions": [
+        {
+          "firstOperand": "tokenId",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "delegator",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_DELEGATION_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [],
+  "paramsDefinition": [
+    {
+      "name": "tokenId",
+      "eventName": "delegation",
+      "businessEventName": "tokenId"
+    },
+    {
+      "name": "delegator",
+      "eventName": "delegation",
+      "businessEventName": "owner"
+    },
+    {
+      "name": "isDelegationForever",
+      "eventName": "delegation",
+      "businessEventName": "autorenew"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "bool",
+      "name": "autorenew",
+      "type": "bool"
+    }
+  ],
+  "type": "event"
+}

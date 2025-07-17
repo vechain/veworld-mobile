@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "module": "nodenext",
+        "moduleResolution": "nodenext",
+        "target": "esnext",
+        "strict": true,
+        "outDir": "build",
+        "types": ["node"]
+    },
+    "include": ["index.ts", "business-event.ts", "utils.ts"]
+}

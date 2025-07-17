@@ -91,6 +91,6 @@ describe("createDevice", () => {
             )
         expect(() => {
             result.current.createDevice(DerivationPath.VET, mnemonic)
-        }).toThrowError(ERRORS.ADDRESS_EXISTS)
+        }).toThrow(ERRORS.ADDRESS_EXISTS)
     })
 })

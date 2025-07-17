@@ -1,0 +1,126 @@
+{
+  "name": "B3TR_B3trToVot3Swap",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "transferVOT3",
+      "conditions": [
+        {
+          "firstOperand": "from",
+          "isFirstStatic": false,
+          "secondOperand": "0x0000000000000000000000000000000000000000",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${VOT3_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    },
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "transferB3TR",
+      "conditions": [
+        {
+          "firstOperand": "to",
+          "isFirstStatic": false,
+          "secondOperand": "${VOT3_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "transferB3TR",
+      "firstEventProperty": "value",
+      "secondEventName": "transferVOT3",
+      "secondEventProperty": "value",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "to",
+      "eventName": "transferB3TR",
+      "businessEventName": "to"
+    },
+    {
+      "name": "from",
+      "eventName": "transferB3TR",
+      "businessEventName": "from"
+    },
+    {
+      "name": "address",
+      "eventName": "transferB3TR",
+      "businessEventName": "inputToken"
+    },
+    {
+      "name": "address",
+      "eventName": "transferVOT3",
+      "businessEventName": "outputToken"
+    },
+    {
+      "name": "value",
+      "eventName": "transferB3TR",
+      "businessEventName": "inputValue"
+    },
+    {
+      "name": "value",
+      "eventName": "transferVOT3",
+      "businessEventName": "outputValue"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "type": "address",
+      "name": "inputToken",
+      "internalType": "address",
+      "indexed": false
+    },
+    {
+      "type": "address",
+      "name": "outputToken",
+      "internalType": "address",
+      "indexed": false
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "inputValue",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "outputValue",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
+}

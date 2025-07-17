@@ -33,6 +33,7 @@ module.exports = {
                     "~Networking": "./src/Networking",
                     "~Events": "./src/Events",
                     "~Logging": "./src/Logging",
+                    "~Generated": "./src/Generated",
                     http: "stream-http",
                     https: "https-browserify",
                     crypto: "react-native-quick-crypto",

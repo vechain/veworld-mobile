@@ -18,7 +18,10 @@ jobs:
 
             - name: Install Packages
               run: |
-                  yarn install
+                yarn abi:install
+                yarn abi:build
+                yarn install
+                yarn abi:generate
 
             - name: Run generation script
               run: |

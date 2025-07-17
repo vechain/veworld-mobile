@@ -49,7 +49,7 @@ jobs:
 
             - name: Install Node.js dependencies
               run: |
-                  yarn install
+                yarn install:all
 
             # Install Homebrew and applesimutils for Detox
             - name: Install macOS dependencies

@@ -1,0 +1,107 @@
+{
+  "name": "WOV_Non_Custodial_Sale",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "purchaseNonCustodial(indexed uint256,indexed address,indexed uint256,address,uint256,uint256,bool,address)",
+      "alias": "sale",
+      "conditions": []
+    },
+    {
+      "name": "Transfer(indexed address,indexed address,indexed uint256)",
+      "alias": "transfer",
+      "conditions": [
+        {
+          "firstOperand": "tokenId",
+          "isFirstStatic": false,
+          "secondOperand": "0",
+          "isSecondStatic": true,
+          "operator": "GT"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "sale",
+      "firstEventProperty": "tokenId",
+      "secondEventName": "transfer",
+      "secondEventProperty": "tokenId",
+      "operator": "EQ"
+    },
+    {
+      "firstEventName": "sale",
+      "firstEventProperty": "buyer",
+      "secondEventName": "transfer",
+      "secondEventProperty": "to",
+      "operator": "EQ"
+    },
+    {
+      "firstEventName": "sale",
+      "firstEventProperty": "nft",
+      "secondEventName": "transfer",
+      "secondEventProperty": "address",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "tokenId",
+      "eventName": "sale",
+      "businessEventName": "tokenId"
+    },
+    {
+      "name": "buyer",
+      "eventName": "sale",
+      "businessEventName": "to"
+    },
+    {
+      "name": "from",
+      "eventName": "transfer",
+      "businessEventName": "from"
+    },
+    {
+      "name": "nft",
+      "eventName": "sale",
+      "businessEventName": "tokenAddress"
+    },
+    {
+      "name": "price",
+      "eventName": "sale",
+      "businessEventName": "value"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "tokenAddress",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
+}

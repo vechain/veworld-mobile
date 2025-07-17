@@ -19,7 +19,7 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
-                  node-version: 20.17
+                  node-version: 20.19
             - name: Install
               run: yarn --frozen-lockfile
             - name: Generate translations

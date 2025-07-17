@@ -1,0 +1,69 @@
+{
+  "name": "B3TR_XAllocationVote",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "AllocationVoteCast(indexed address,indexed uint256,bytes32[],uint256[])",
+      "alias": "voteEvent",
+      "conditions": [
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${X_ALLOC_VOTING_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [],
+  "paramsDefinition": [
+    {
+      "name": "voter",
+      "eventName": "voteEvent",
+      "businessEventName": "from"
+    },
+    {
+      "name": "roundId",
+      "eventName": "voteEvent",
+      "businessEventName": "roundId"
+    },
+    {
+      "name": "appsIds",
+      "eventName": "voteEvent",
+      "businessEventName": "appsIds"
+    },
+    {
+      "name": "voteWeights",
+      "eventName": "voteEvent",
+      "businessEventName": "voteWeights"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "roundId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "bytes32[]",
+      "name": "appsIds",
+      "type": "bytes32[]"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256[]",
+      "name": "voteWeights",
+      "type": "uint256[]"
+    }
+  ],
+  "type": "event"
+}
