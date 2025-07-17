@@ -1,5 +1,4 @@
 import React, { ComponentClass, FC } from "react"
-import { getNumberFormatter } from "~Constants"
 
 // need this function because JS will auto convert very small numbers to scientific notation
 export function convertSmallSciNotationToDecimal(value: number): string {
@@ -40,10 +39,10 @@ export function numberToPercentWorklet(
         throw new Error("numberToPercentWorklet does not handle negative precision values")
     }
 
-    const formatter = getNumberFormatter({
-        locale: locale?.toString(),
-        precision,
+    const formatter = new Intl.NumberFormat(locale?.toString(), {
         style: "decimal",
+        minimumFractionDigits: precision,
+        maximumFractionDigits: precision,
         useGrouping: true,
     })
 
