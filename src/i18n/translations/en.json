@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "Error signing transaction",
   "STARGATE_CLAIMABLE": "Claimable",
   "STARGATE_LOCKED": "Locked",
+  "STARGATE_NEW_STAKE": "New stake",
   "STARGATE_REWARDS": "Rewards",
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Available to claim",

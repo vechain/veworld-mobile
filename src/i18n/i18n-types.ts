@@ -3927,17 +3927,21 @@ type RootTranslation = {
 	 */
 	SIGN_TRANSACTION_ERROR: string
 	/**
+	 * C​l​a​i​m​a​b​l​e
+	 */
+	STARGATE_CLAIMABLE: string
+	/**
 	 * L​o​c​k​e​d
 	 */
 	STARGATE_LOCKED: string
 	/**
+	 * N​e​w​ ​s​t​a​k​e
+	 */
+	STARGATE_NEW_STAKE: string
+	/**
 	 * R​e​w​a​r​d​s
 	 */
 	STARGATE_REWARDS: string
-	/**
-	 * C​l​a​i​m​a​b​l​e
-	 */
-	STARGATE_CLAIMABLE: string
 	/**
 	 * S​t​a​t​u​s
 	 */
@@ -8371,17 +8375,21 @@ Are you sure you want to continue?
 	 */
 	SIGN_TRANSACTION_ERROR: () => LocalizedString
 	/**
+	 * Claimable
+	 */
+	STARGATE_CLAIMABLE: () => LocalizedString
+	/**
 	 * Locked
 	 */
 	STARGATE_LOCKED: () => LocalizedString
 	/**
+	 * New stake
+	 */
+	STARGATE_NEW_STAKE: () => LocalizedString
+	/**
 	 * Rewards
 	 */
 	STARGATE_REWARDS: () => LocalizedString
-	/**
-	 * Claimable
-	 */
-	STARGATE_CLAIMABLE: () => LocalizedString
 	/**
 	 * Status
 	 */
