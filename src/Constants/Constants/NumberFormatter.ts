@@ -257,10 +257,12 @@ export const getNumberFormatter = ({
         return CachedNumberFormatter[key]
     }
 
-    return (CachedNumberFormatter[key] = new Intl.NumberFormat(_locale, {
+    CachedNumberFormatter[key] = new Intl.NumberFormat(_locale, {
         style,
         minimumFractionDigits: _precision,
         maximumFractionDigits: _precision,
         useGrouping,
-    }))
+    })
+
+    return CachedNumberFormatter[key]
 }
