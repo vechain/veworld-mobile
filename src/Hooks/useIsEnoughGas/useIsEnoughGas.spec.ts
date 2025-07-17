@@ -166,6 +166,26 @@ describe("useIsEnoughGas", () => {
 
         expect(result.current.hasEnoughBalance).toBe(true)
     })
+    it("should return true if user has exactly 0 VTHO & tx is delegated", () => {
+        const { result } = renderHook(
+            () =>
+                useIsEnoughGas({
+                    selectedToken: "VTHO",
+                    clauses: [],
+                    isDelegated: true,
+                    allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("2"), VET: BigNutils("0") },
+                    isLoadingFees: false,
+                }),
+            {
+                wrapper: TestWrapper,
+                initialProps: {
+                    preloadedState: createPreloadedState("0"),
+                },
+            },
+        )
+
+        expect(result.current.hasEnoughBalance).toBe(true)
+    })
     it("should return false if user doesn't have enough B3TR & tx is delegated", () => {
         const { result } = renderHook(
             () =>
