@@ -187,6 +187,10 @@ class BigNumberUtils implements IBigNumberUtils {
         return this.data.isGreaterThan(value)
     }
 
+    isBiggerThanOrEqual(value: string | number | BN): boolean {
+        return this.data.isGreaterThanOrEqualTo(value)
+    }
+
     toCurrencyFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
         const _locale = locale ?? "en-US"
         const formatter = new Intl.NumberFormat(_locale.toString(), {

@@ -173,7 +173,7 @@ describe("useIsEnoughGas", () => {
                     selectedToken: "B3TR",
                     clauses: [],
                     isDelegated: true,
-                    allFeeOptions: { B3TR: BigNutils("1"), VTHO: BigNutils("0"), VET: BigNutils("0") },
+                    allFeeOptions: { B3TR: BigNutils("2"), VTHO: BigNutils("0"), VET: BigNutils("0") },
                     isLoadingFees: false,
                 }),
             {
