@@ -78,17 +78,13 @@ export const StargateCarousel = () => {
                     data={cards}
                     h={316}
                     paginationAlignment="flex-start"
-                    w={248}
-                    containerStyle={{
-                        width: width,
-                    }}
-                    carouselStyle={{
-                        width: width,
-                    }}
+                    w={240}
                     contentWrapperStyle={styles.padding}
                     paginationStyle={styles.padding}
                     onSlidePress={onOpenCard}
-                    mode="horizontal"
+                    mode="normal"
+                    containerWidth={width}
+                    gap={8}
                 />
             </BaseView>
         </BaseView>

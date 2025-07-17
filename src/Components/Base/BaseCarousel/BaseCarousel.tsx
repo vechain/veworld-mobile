@@ -20,10 +20,42 @@ export type CarouselSlideItem = {
     style?: ViewStyle
 }
 
+type ParallaxProps = {
+    /**
+     * Mode of the Carousel: choose 'parallax' for a parallax effect, 'horizontal' for a normal carousel.
+     * @default 'parallax'
+     */
+    mode?: "parallax"
+
+    /**
+     * Scrolling offset for the parallax effect. Only works when `mode` is set to `parallax`.
+     * @default SCREEN_WIDTH / 5
+     */
+    parallaxScrollingOffset?: number
+}
+
+type HorizontalProps = {
+    /**
+     * Mode of the Carousel: choose 'parallax' for a parallax effect, 'normal' for a normal carousel.
+     * @default 'parallax'
+     */
+    mode?: "normal"
+    /**
+     * Width of the whole container.
+     * @default SCREEN_WIDTH
+     */
+    containerWidth?: number
+    /**
+     * Gap between elements.
+     * @default 0
+     */
+    gap?: number
+}
+
 type Props = {
     data: CarouselSlideItem[]
     /**
-     * This should be the desired width of the carousel item
+     * This should be the desired width of the carousel item.
      */
     w?: number
     /**
@@ -45,20 +77,10 @@ type Props = {
     carouselStyle?: ViewStyle
     contentWrapperStyle?: ViewStyle
     /**
-     * Mode of the Carousel: choose 'parallax' for a parallax effect, 'horizontal' for a normal carousel.
-     * @default 'parallax'
-     */
-    mode?: "parallax" | "horizontal"
-    /**
      * Pagination style. Only applicable if `showPagination` is set to true.
      */
     paginationStyle?: ViewStyle
-    /**
-     * Scrolling offset for the parallax effect. Only works when `mode` is set to `parallax`.
-     * @default SCREEN_WIDTH / 5
-     */
-    parallaxScrollingOffset?: number
-}
+} & (ParallaxProps | HorizontalProps)
 
 export const BaseCarousel = ({
     data,
@@ -76,8 +98,7 @@ export const BaseCarousel = ({
     carouselStyle,
     contentWrapperStyle,
     paginationStyle,
-    mode = "parallax",
-    parallaxScrollingOffset = SCREEN_WIDTH / 6.5,
+    ...restProps
 }: Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
     const progress = useSharedValue<number>(0)
@@ -94,17 +115,36 @@ export const BaseCarousel = ({
         })
     }
 
+    const mode = useMemo(() => restProps.mode ?? "parallax", [restProps.mode])
+
     const configFromMode = useMemo(() => {
-        if (mode === "horizontal") return {}
+        if (mode === "normal") return {}
         return {
             mode: "parallax" as const,
             modeConfig: {
                 parallaxScrollingScale: 1,
                 parallaxAdjacentItemScale: 0.8,
-                parallaxScrollingOffset,
+                parallaxScrollingOffset: (restProps as ParallaxProps).parallaxScrollingOffset ?? SCREEN_WIDTH / 6.5,
             },
         }
-    }, [parallaxScrollingOffset, mode])
+    }, [mode, restProps])
+
+    const carouselStyles = useMemo(() => {
+        if (mode === "parallax") return [styles.carousel, carouselStyle]
+        return [styles.carousel, { width: (restProps as HorizontalProps).containerWidth }, carouselStyle]
+    }, [carouselStyle, mode, restProps, styles.carousel])
+
+    const containerStyles = useMemo(() => {
+        if (mode === "parallax") return [styles.carouselContainer, containerStyle]
+        return [styles.carouselContainer, { width: (restProps as HorizontalProps).containerWidth }, containerStyle]
+    }, [containerStyle, mode, restProps, styles.carouselContainer])
+
+    const itemWidth = useMemo(() => {
+        if (mode === "parallax") return w
+        const gap = (restProps as HorizontalProps).gap ?? 0
+        if (w + gap >= SCREEN_WIDTH) return SCREEN_WIDTH
+        return w + gap
+    }, [mode, restProps, w])
 
     return (
         <BaseView flex={1} style={[styles.container]} testID={testID}>
@@ -113,12 +153,12 @@ export const BaseCarousel = ({
                 data={data}
                 autoPlay={autoPlay}
                 loop={loop}
-                width={w}
+                width={itemWidth}
                 height={h}
-                style={[styles.carousel, carouselStyle]}
+                style={carouselStyles}
                 pagingEnabled
                 snapEnabled
-                containerStyle={[styles.carouselContainer, containerStyle]}
+                containerStyle={containerStyles}
                 {...configFromMode}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
