@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useMemo } from "react"
 import { StyleSheet, ViewStyle } from "react-native"
 import { useSharedValue } from "react-native-reanimated"
 import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
@@ -44,7 +44,19 @@ type Props = {
     containerStyle?: ViewStyle
     carouselStyle?: ViewStyle
     contentWrapperStyle?: ViewStyle
+    /**
+     * Mode of the Carousel: choose 'parallax' for a parallax effect, 'horizontal' for a normal carousel.
+     * @default 'parallax'
+     */
+    mode?: "parallax" | "horizontal"
+    /**
+     * Pagination style. Only applicable if `showPagination` is set to true.
+     */
     paginationStyle?: ViewStyle
+    /**
+     * Scrolling offset for the parallax effect. Only works when `mode` is set to `parallax`.
+     * @default SCREEN_WIDTH / 5
+     */
     parallaxScrollingOffset?: number
 }
 
@@ -64,8 +76,9 @@ export const BaseCarousel = ({
     carouselStyle,
     contentWrapperStyle,
     paginationStyle,
-}: // parallaxScrollingOffset = SCREEN_WIDTH / 6.5,
-Props) => {
+    mode = "parallax",
+    parallaxScrollingOffset = SCREEN_WIDTH / 6.5,
+}: Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
     const progress = useSharedValue<number>(0)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
@@ -81,6 +94,18 @@ Props) => {
         })
     }
 
+    const configFromMode = useMemo(() => {
+        if (mode === "horizontal") return {}
+        return {
+            mode: "parallax" as const,
+            modeConfig: {
+                parallaxScrollingScale: 1,
+                parallaxAdjacentItemScale: 0.8,
+                parallaxScrollingOffset,
+            },
+        }
+    }, [parallaxScrollingOffset, mode])
+
     return (
         <BaseView flex={1} style={[styles.container]} testID={testID}>
             <Carousel
@@ -94,12 +119,7 @@ Props) => {
                 pagingEnabled
                 snapEnabled
                 containerStyle={[styles.carouselContainer, containerStyle]}
-                // mode="parallax"
-                // modeConfig={{
-                //     parallaxScrollingScale: 1,
-                //     parallaxAdjacentItemScale: 0.8,
-                //     parallaxScrollingOffset,
-                // }}
+                {...configFromMode}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
                 renderItem={({ item }) => {

@@ -88,6 +88,7 @@ export const StargateCarousel = () => {
                     contentWrapperStyle={styles.padding}
                     paginationStyle={styles.padding}
                     onSlidePress={onOpenCard}
+                    mode="horizontal"
                 />
             </BaseView>
         </BaseView>
