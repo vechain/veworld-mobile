@@ -39,6 +39,7 @@ const locales_separator = {
     "tr-TR": ",",
     vi: ",",
     "vi-VN": ",",
+    "nl-BE": ",",
 }
 
 const parseBigNumberable = (value: BigNumberable): BN.Value => {
