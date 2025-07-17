@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "거래 서명 오류",
   "STARGATE_CLAIMABLE": "청구 가능",
   "STARGATE_LOCKED": "잠김",
+  "STARGATE_NEW_STAKE": "새 스테이크",
   "STARGATE_REWARDS": "보상",
   "STATUS": "상태",
   "SUCCESS_DOMAIN_AVAILABLE": "청구 가능",

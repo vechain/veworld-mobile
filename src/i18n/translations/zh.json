@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "签署交易时出错",
   "STARGATE_CLAIMABLE": "可领取",
   "STARGATE_LOCKED": "已锁定",
+  "STARGATE_NEW_STAKE": "新投注",
   "STARGATE_REWARDS": "奖励",
   "STATUS": "状态",
   "SUCCESS_DOMAIN_AVAILABLE": "可供认领",

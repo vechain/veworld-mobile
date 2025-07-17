@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "Lỗi ký giao dịch",
   "STARGATE_CLAIMABLE": "Có thể yêu cầu",
   "STARGATE_LOCKED": "Đã khóa",
+  "STARGATE_NEW_STAKE": "Cổ phần mới",
   "STARGATE_REWARDS": "Phần thưởng",
   "STATUS": "Trạng thái",
   "SUCCESS_DOMAIN_AVAILABLE": "Có sẵn để yêu cầu",

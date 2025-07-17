@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "İşlem imzalanırken hata oluştu",
   "STARGATE_CLAIMABLE": "Talep Edilebilir",
   "STARGATE_LOCKED": "Kilitli",
+  "STARGATE_NEW_STAKE": "Yeni kazık",
   "STARGATE_REWARDS": "Ödüller",
   "STATUS": "Durum",
   "SUCCESS_DOMAIN_AVAILABLE": "Talep edilebilir",

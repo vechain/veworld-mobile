@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "Errore nella firma della transazione",
   "STARGATE_CLAIMABLE": "Richiedibile",
   "STARGATE_LOCKED": "Bloccato",
+  "STARGATE_NEW_STAKE": "Nuova puntata",
   "STARGATE_REWARDS": "Ricompense",
   "STATUS": "Stato",
   "SUCCESS_DOMAIN_AVAILABLE": "Disponibile per il claim",

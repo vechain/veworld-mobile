@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "लेन-देन पर हस्ताक्षर करते समय त्रुटि",
   "STARGATE_CLAIMABLE": "दावा किया जा सकता",
   "STARGATE_LOCKED": "लॉक्ड",
+  "STARGATE_NEW_STAKE": "नया दाँव",
   "STARGATE_REWARDS": "इनाम",
   "STATUS": "स्थिति",
   "SUCCESS_DOMAIN_AVAILABLE": "दावा करने के लिए उपलब्ध",

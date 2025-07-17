@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "Błąd przy podpisywaniu transakcji",
   "STARGATE_CLAIMABLE": "Możliwe do odebrania",
   "STARGATE_LOCKED": "Zablokowane",
+  "STARGATE_NEW_STAKE": "Nowa stawka",
   "STARGATE_REWARDS": "Nagrody",
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Dostępne do roszczenia",

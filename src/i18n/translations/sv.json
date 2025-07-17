@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "Fel vid signering av transaktion",
   "STARGATE_CLAIMABLE": "Kan hämtas",
   "STARGATE_LOCKED": "Låst",
+  "STARGATE_NEW_STAKE": "Nytt insats",
   "STARGATE_REWARDS": "Belöningar",
   "STATUS": "Status",
   "SUCCESS_DOMAIN_AVAILABLE": "Tillgänglig att hävda",
