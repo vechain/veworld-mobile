@@ -51,7 +51,7 @@ export const getNftCollectionMetadata = async (address: string, thor: ThorClient
 
     const results = await thor.contracts.executeMultipleClausesCall(clauses)
 
-    if (results.length < 2) {
+    if (results.some(result => !result.success)) {
         throw new Error("Failed to get NFT collection metadata")
     }
 
