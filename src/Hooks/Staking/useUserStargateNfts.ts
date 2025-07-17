@@ -12,11 +12,11 @@ import { NETWORK_TYPE } from "~Model"
 import { NftData, NodeInfo } from "~Model/Staking"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 
-export const getUserStargateNftsQueryKey = (network: NETWORK_TYPE, address?: string) => [
-    "userStargateNfts",
-    network,
-    address,
-]
+export const getUserStargateNftsQueryKey = (
+    network: NETWORK_TYPE,
+    address: string | undefined,
+    nodesLength: number,
+) => ["userStargateNfts", network, address, nodesLength]
 
 export const getUserStargateNfts = async (
     thor: ThorClient,
@@ -76,8 +76,8 @@ export const useUserStargateNfts = (stargateNodes: NodeInfo[] = [], isLoadingNod
     }, [network.type])
 
     const queryKey = useMemo(() => {
-        return getUserStargateNftsQueryKey(network.type, selectedAccount.address)
-    }, [selectedAccount.address, network.type])
+        return getUserStargateNftsQueryKey(network.type, selectedAccount.address, stargateNodes.length)
+    }, [network.type, selectedAccount.address, stargateNodes.length])
 
     const enabled =
         !!thor && !!stargateNodes.length && !!stargateNFTAddress && !!stargateDelegationAddress && !isLoadingNodes
