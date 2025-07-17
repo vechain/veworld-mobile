@@ -251,7 +251,7 @@ export const HomeScreen = () => {
                     <BannersCarousel location="home_screen" />
 
                     <BaseView style={styles.container}>
-                        <StakedCard isBalanceVisible={isBalanceVisible} />
+                        <StakedCard />
                     </BaseView>
 
                     <BaseView style={styles.container}>

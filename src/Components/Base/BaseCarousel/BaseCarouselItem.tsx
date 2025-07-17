@@ -75,7 +75,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
     return (
         <AnimatedTouchableOpacity
             testID={testID}
-            style={[style, styles.container]}
+            style={[styles.container, style]}
             activeOpacity={0.95}
             onPress={onPress}>
             <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>

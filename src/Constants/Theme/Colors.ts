@@ -213,6 +213,9 @@ export type Colors = {
         fiatValue: string
         vetValue: string
     }
+    stakedVetCard: {
+        background: string
+    }
 }
 
 export enum COLORS {
@@ -351,7 +354,7 @@ const light: Colors = {
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
-    cardDivider: COLORS.GREY_200,
+    cardDivider: COLORS.GREY_100,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
@@ -523,6 +526,9 @@ const light: Colors = {
     stakedCard: {
         fiatValue: COLORS.GREY_600,
         vetValue: COLORS.GREY_800,
+    },
+    stakedVetCard: {
+        background: COLORS.GREY_50,
     },
 }
 
@@ -740,6 +746,9 @@ const dark: Colors = {
     stakedCard: {
         fiatValue: COLORS.GREY_100,
         vetValue: COLORS.WHITE,
+    },
+    stakedVetCard: {
+        background: COLORS.PURPLE,
     },
 }
 

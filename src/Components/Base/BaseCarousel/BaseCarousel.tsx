@@ -17,6 +17,7 @@ export type CarouselSlideItem = {
     closable?: boolean
     onClose?: () => void
     closeButtonStyle?: ViewStyle
+    style?: ViewStyle
 }
 
 type Props = {
@@ -102,7 +103,8 @@ export const BaseCarousel = ({
                             onPressActivation={onSlidePressActivation}
                             closable={item.closable}
                             onClose={item.onClose}
-                            closeButtonStyle={item.closeButtonStyle}>
+                            closeButtonStyle={item.closeButtonStyle}
+                            style={item.style}>
                             {item.content}
                         </BaseCarouselItem>
                     )

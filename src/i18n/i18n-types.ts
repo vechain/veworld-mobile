@@ -3927,6 +3927,18 @@ type RootTranslation = {
 	 */
 	SIGN_TRANSACTION_ERROR: string
 	/**
+	 * L​o​c​k​e​d
+	 */
+	STARGATE_LOCKED: string
+	/**
+	 * R​e​w​a​r​d​s
+	 */
+	STARGATE_REWARDS: string
+	/**
+	 * C​l​a​i​m​a​b​l​e
+	 */
+	STARGATE_CLAIMABLE: string
+	/**
 	 * S​t​a​t​u​s
 	 */
 	STATUS: string
@@ -8358,6 +8370,18 @@ Are you sure you want to continue?
 	 * Error signing transaction
 	 */
 	SIGN_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * Locked
+	 */
+	STARGATE_LOCKED: () => LocalizedString
+	/**
+	 * Rewards
+	 */
+	STARGATE_REWARDS: () => LocalizedString
+	/**
+	 * Claimable
+	 */
+	STARGATE_CLAIMABLE: () => LocalizedString
 	/**
 	 * Status
 	 */
