@@ -89,6 +89,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderColor: theme.isDark ? COLORS.TRANSPARENT : COLORS.GREY_100,
             borderWidth: 1,
             minWidth: 240,
+            height: "100%",
         },
         rootContent: {
             padding: 16,

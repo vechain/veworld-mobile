@@ -66,7 +66,17 @@ export const StargateCarousel = () => {
                     data={cards}
                     h={316}
                     paginationAlignment="flex-start"
-                    w={width}
+                    w={248}
+                    containerStyle={{
+                        width: width,
+                    }}
+                    carouselStyle={{
+                        width: width,
+                    }}
+                    // eslint-disable-next-line react-native/no-inline-styles
+                    contentWrapperStyle={{
+                        paddingHorizontal: 24,
+                    }}
                 />
             </BaseView>
         </BaseView>

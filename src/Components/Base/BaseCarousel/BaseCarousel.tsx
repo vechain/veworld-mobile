@@ -41,6 +41,10 @@ type Props = {
      * Decide when `onSlidePress` is called. Default is `after
      */
     onSlidePressActivation?: "before" | "after"
+    containerStyle?: ViewStyle
+    carouselStyle?: ViewStyle
+    contentWrapperStyle?: ViewStyle
+    parallaxScrollingOffset?: number
 }
 
 export const BaseCarousel = ({
@@ -55,7 +59,11 @@ export const BaseCarousel = ({
     testID,
     onSlidePress,
     onSlidePressActivation,
-}: Props) => {
+    containerStyle,
+    carouselStyle,
+    contentWrapperStyle,
+}: // parallaxScrollingOffset = SCREEN_WIDTH / 6.5,
+Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
     const progress = useSharedValue<number>(0)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
@@ -80,16 +88,16 @@ export const BaseCarousel = ({
                 loop={loop}
                 width={w}
                 height={h}
-                style={styles.carousel}
+                style={[styles.carousel, carouselStyle]}
                 pagingEnabled
                 snapEnabled
-                containerStyle={styles.carouselContainer}
-                mode="parallax"
-                modeConfig={{
-                    parallaxScrollingScale: 1,
-                    parallaxAdjacentItemScale: 0.8,
-                    parallaxScrollingOffset: SCREEN_WIDTH / 6.5,
-                }}
+                containerStyle={[styles.carouselContainer, containerStyle]}
+                // mode="parallax"
+                // modeConfig={{
+                //     parallaxScrollingScale: 1,
+                //     parallaxAdjacentItemScale: 0.8,
+                //     parallaxScrollingOffset,
+                // }}
                 autoPlayInterval={autoPlayInterval}
                 onProgressChange={progress}
                 renderItem={({ item }) => {
@@ -100,6 +108,7 @@ export const BaseCarousel = ({
                             isExternalLink={item.isExternalLink}
                             name={item.name}
                             onPress={onSlidePress}
+                            contentWrapperStyle={contentWrapperStyle}
                             onPressActivation={onSlidePressActivation}
                             closable={item.closable}
                             onClose={item.onClose}
