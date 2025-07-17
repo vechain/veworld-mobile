@@ -26,7 +26,7 @@ const RowItem = ({ label, value, icon }: { label: string; value: string; icon: s
     }, [value, formatLocale])
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" py={2}>
             <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="captionMedium">
                 {label}
             </BaseText>

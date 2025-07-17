@@ -80,6 +80,10 @@ type Props = {
      * Pagination style. Only applicable if `showPagination` is set to true.
      */
     paginationStyle?: ViewStyle
+    /**
+     * Style for the root container
+     */
+    rootStyle?: ViewStyle
 } & (ParallaxProps | HorizontalProps)
 
 export const BaseCarousel = ({
@@ -98,6 +102,7 @@ export const BaseCarousel = ({
     carouselStyle,
     contentWrapperStyle,
     paginationStyle,
+    rootStyle,
     ...restProps
 }: Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
@@ -147,7 +152,7 @@ export const BaseCarousel = ({
     }, [mode, restProps, w])
 
     return (
-        <BaseView flex={1} style={[styles.container]} testID={testID}>
+        <BaseView flex={1} style={[styles.container, rootStyle]} testID={testID}>
             <Carousel
                 ref={ref}
                 data={data}
@@ -200,7 +205,7 @@ export const BaseCarousel = ({
 const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") => (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
-            gap: 8,
+            gap: 12,
         },
         carouselContainer: {
             width: "100%",

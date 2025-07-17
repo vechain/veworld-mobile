@@ -3943,6 +3943,10 @@ type RootTranslation = {
 	 */
 	STARGATE_REWARDS: string
 	/**
+	 * M​a​n​a​g​e​ ​y​o​u​r​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_MANAGE_STAKING: string
+	/**
 	 * S​t​a​t​u​s
 	 */
 	STATUS: string
@@ -8390,6 +8394,10 @@ Are you sure you want to continue?
 	 * Rewards
 	 */
 	STARGATE_REWARDS: () => LocalizedString
+	/**
+	 * Manage your staking
+	 */
+	STARGATE_MANAGE_STAKING: () => LocalizedString
 	/**
 	 * Status
 	 */
