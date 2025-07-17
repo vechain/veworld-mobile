@@ -17,10 +17,10 @@ import { Activity, Beat } from "~Model"
 import { useBeatWebsocket } from "./Hooks/useBeatWebsocket"
 import { EventTypeResponse } from "~Networking"
 import { fetchTransfersForBlock } from "~Networking/Transfers"
-import { useThor } from "~Components"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
 import { ERROR_EVENTS } from "~Constants"
+import { useThorClient } from "~Hooks/useThorClient"
 
 export const TransferEventListener: React.FC = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -31,7 +31,7 @@ export const TransferEventListener: React.FC = () => {
 
     const network = useAppSelector(selectSelectedNetwork)
 
-    const thor = useThor()
+    const thor = useThorClient()
 
     const { fetchData } = useFungibleTokenInfo()
 
