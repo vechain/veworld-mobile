@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.9 (2025-07-17)</small>
+
+* build: init ([ae57f26](https://github.com/vechain/veworld-mobile/commit/ae57f26))
+* Improve App performance (#3081) ([973d9fd](https://github.com/vechain/veworld-mobile/commit/973d9fd)), closes [#3081](https://github.com/vechain/veworld-mobile/issues/3081)
+
 ## <small>2.2.7 (2025-07-17)</small>
 
 * build: init ([f993278](https://github.com/vechain/veworld-mobile/commit/f993278))
