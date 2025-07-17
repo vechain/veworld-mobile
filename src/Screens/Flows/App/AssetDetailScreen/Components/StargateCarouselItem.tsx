@@ -75,7 +75,7 @@ export const StargateCarouselItem = ({ item }: Props) => {
             <BaseView flexDirection="column" gap={8}>
                 <RowItem label={LL.STARGATE_LOCKED()} value={item.vetAmountStaked ?? "0"} icon={VET.icon} />
                 <RowItem label={LL.STARGATE_REWARDS()} value={item.accumulatedRewards ?? "0"} icon={VTHO.icon} />
-                <RowItem label={LL.STARGATE_CLAIMABLE()} value={item.claimableRewards ?? "0"} icon={VET.icon} />
+                <RowItem label={LL.STARGATE_CLAIMABLE()} value={item.claimableRewards ?? "0"} icon={VTHO.icon} />
             </BaseView>
         </BaseCard>
     )

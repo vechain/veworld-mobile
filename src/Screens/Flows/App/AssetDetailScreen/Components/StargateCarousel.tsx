@@ -2,8 +2,9 @@ import React, { useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import { BaseCarousel, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
-import { ColorThemeType } from "~Constants"
+import { ColorThemeType, STARGATE_DAPP_URL } from "~Constants"
 import { useThemedStyles, useUserNodes, useUserStargateNfts } from "~Hooks"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
@@ -45,6 +46,17 @@ export const StargateCarousel = () => {
         setWidth(e.nativeEvent.layout.width)
     }, [])
 
+    const { navigateWithTab } = useBrowserTab()
+
+    const onOpenCard = useCallback(
+        (name: string) => {
+            if (name === "NEW_STAKE") return
+            //`name` is the tokenId
+            navigateWithTab({ url: `${STARGATE_DAPP_URL}/nft/${name}`, title: `Stargate Token ID #${name}` })
+        },
+        [navigateWithTab],
+    )
+
     if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return null
 
     return (
@@ -73,10 +85,9 @@ export const StargateCarousel = () => {
                     carouselStyle={{
                         width: width,
                     }}
-                    // eslint-disable-next-line react-native/no-inline-styles
-                    contentWrapperStyle={{
-                        paddingHorizontal: 24,
-                    }}
+                    contentWrapperStyle={styles.padding}
+                    paginationStyle={styles.padding}
+                    onSlidePress={onOpenCard}
                 />
             </BaseView>
         </BaseView>
@@ -98,5 +109,8 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         carouselItem: {
             width: 240,
+        },
+        padding: {
+            paddingStart: 24,
         },
     })

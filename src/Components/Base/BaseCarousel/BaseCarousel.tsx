@@ -44,6 +44,7 @@ type Props = {
     containerStyle?: ViewStyle
     carouselStyle?: ViewStyle
     contentWrapperStyle?: ViewStyle
+    paginationStyle?: ViewStyle
     parallaxScrollingOffset?: number
 }
 
@@ -62,6 +63,7 @@ export const BaseCarousel = ({
     containerStyle,
     carouselStyle,
     contentWrapperStyle,
+    paginationStyle,
 }: // parallaxScrollingOffset = SCREEN_WIDTH / 6.5,
 Props) => {
     const ref = React.useRef<ICarouselInstance>(null)
@@ -124,7 +126,7 @@ Props) => {
                 <Pagination.Basic
                     progress={progress}
                     data={data as object[]}
-                    containerStyle={styles.paginatioContainer}
+                    containerStyle={[styles.paginatioContainer, paginationStyle]}
                     size={8}
                     onPress={onPressPagination}
                     dotStyle={styles.dots as DotStyle}

@@ -1,6 +1,6 @@
 import { default as React, useCallback } from "react"
 import { Image, ImageStyle, StyleSheet, TouchableOpacity } from "react-native"
-import { StargateAvatar } from "~Assets"
+import { StargateBigLogo } from "~Assets/Img/StargateBigLogo"
 import { BaseCard, BaseIcon, BaseText } from "~Components"
 import { COLORS, ColorThemeType, STARGATE_DAPP_URL } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -19,7 +19,7 @@ export const NewStargateStakeCarouselItem = () => {
 
     return (
         <BaseCard containerStyle={styles.root} style={styles.rootContent}>
-            <Image source={{ uri: StargateAvatar }} style={styles.image as ImageStyle} />
+            <Image source={{ uri: StargateBigLogo }} style={styles.image as ImageStyle} />
             <TouchableOpacity style={styles.buttonStyle} onPress={onOpenNewStake}>
                 <BaseIcon size={32} name="icon-plus" color={theme.colors.assetDetailsCard.title} />
                 <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
