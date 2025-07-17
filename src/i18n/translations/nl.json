@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "Fout bij het ondertekenen van de transactie",
   "STARGATE_CLAIMABLE": "Inwisselbaar",
   "STARGATE_LOCKED": "Vergrendeld",
+  "STARGATE_MANAGE_STAKING": "Beheer uw staking",
   "STARGATE_NEW_STAKE": "Nieuwe inzet",
   "STARGATE_REWARDS": "Beloningen",
   "STATUS": "Status",

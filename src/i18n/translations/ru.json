@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "Ошибка при подписании транзакции",
   "STARGATE_CLAIMABLE": "Доступно для получения",
   "STARGATE_LOCKED": "Заблокировано",
+  "STARGATE_MANAGE_STAKING": "Управление вашим стейкингом",
   "STARGATE_NEW_STAKE": "Новая доля",
   "STARGATE_REWARDS": "Награды",
   "STATUS": "Статус",
