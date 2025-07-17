@@ -102,6 +102,13 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
         isGalactica,
         isBaseFeeRampingUp,
         speedChangeEnabled,
+        isEnoughGas,
+        availableTokens,
+        selectedDelegationToken,
+        setSelectedDelegationToken,
+        hasEnoughBalanceOnAny,
+        isFirstTimeLoadingFees,
+        hasEnoughBalanceOnToken,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -152,7 +159,14 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                             setSelectedFeeOption={setSelectedFeeOption}
                             isGalactica={isGalactica}
                             isBaseFeeRampingUp={isBaseFeeRampingUp}
-                            speedChangeEnabled={speedChangeEnabled}>
+                            speedChangeEnabled={speedChangeEnabled}
+                            isEnoughBalance={isEnoughGas}
+                            availableDelegationTokens={availableTokens}
+                            delegationToken={selectedDelegationToken}
+                            setDelegationToken={setSelectedDelegationToken}
+                            hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
+                            isFirstTimeLoadingFees={isFirstTimeLoadingFees}
+                            hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}>
                             <DelegationView
                                 setNoDelegation={resetDelegation}
                                 selectedDelegationOption={selectedDelegationOption}
@@ -160,6 +174,7 @@ export const SendNFTRecapScreen = ({ route }: Props) => {
                                 selectedDelegationAccount={selectedDelegationAccount}
                                 selectedDelegationUrl={selectedDelegationUrl}
                                 setSelectedDelegationUrl={setSelectedDelegationUrl}
+                                delegationToken={selectedDelegationToken}
                             />
                         </GasFeeSpeed>
                     </BaseView>

@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect, useMemo } from "react"
-import { WalletConnectUtils, warn } from "~Utils"
 import { NavigationState, useNavigation } from "@react-navigation/native"
-import { useWcRequest } from "./hooks"
+import React, { useCallback, useEffect, useMemo } from "react"
+import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { useSessionProposals } from "~Components/Providers/WalletConnectProvider/hooks/useSessionProposals"
-import { useWcSessions } from "~Components/Providers/WalletConnectProvider/hooks/useWcSessions"
-import { useWcPairing } from "~Components/Providers/WalletConnectProvider/hooks/useWcPairing"
 import { useWcDeepLinking } from "~Components/Providers/WalletConnectProvider/hooks/useWcDeepLinking"
+import { useWcPairing } from "~Components/Providers/WalletConnectProvider/hooks/useWcPairing"
+import { useWcSessions } from "~Components/Providers/WalletConnectProvider/hooks/useWcSessions"
 import { ERROR_EVENTS } from "~Constants"
+import { WalletConnectUtils, warn } from "~Utils"
+import { useWcRequest } from "./hooks"
 
 /**
  * Wallet Connect Flow:
@@ -34,11 +35,13 @@ const WalletConnectContext = React.createContext<WCContext>({} as WCContext)
 const WalletConnectContextProvider = ({ children }: WalletConnectContextProviderProps) => {
     // General
     const nav = useNavigation()
+    const { certificateBsData, connectBsData } = useInteraction()
 
     const isBlackListScreen = useCallback((): boolean => {
         if (!nav) return true
+        if (certificateBsData?.type === "wallet-connect" || connectBsData?.type === "wallet-connect") return true
         return !WalletConnectUtils.shouldAutoNavigate(nav.getState() as NavigationState<ReactNavigation.RootParamList>)
-    }, [nav])
+    }, [certificateBsData?.type, connectBsData?.type, nav])
 
     const { addSessionDisconnect, disconnectSession, activeSessions, addSession } = useWcSessions()
 
@@ -111,4 +114,4 @@ const useWalletConnect = () => {
     return context
 }
 
-export { WalletConnectContextProvider, useWalletConnect }
+export { useWalletConnect, WalletConnectContextProvider }

@@ -4,11 +4,13 @@ import { LogLevel, NotificationClickEvent, OneSignal, PushSubscriptionChangedSta
 import { vechainNewsAndUpdates } from "~Constants"
 import { useAppState } from "~Hooks"
 import { AppStateType, NETWORK_TYPE } from "~Model"
+import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import {
     addRemovedNotificationTag,
     increaseDappVisitCounter,
     removeDappVisitCounter,
     removeRemovedNotificationTag,
+    selectDappNotifications,
     selectDappVisitCounter,
     selectNotificationFeautureEnabled,
     selectNotificationOptedIn,
@@ -51,6 +53,7 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const dispatch = useAppDispatch()
     const navigation = useNavigation()
     const { pushNotificationFeature } = useFeatureFlags()
+    const { data: dapps = [] } = useVeBetterDaoDapps()
 
     const permissionEnabled = useAppSelector(selectNotificationPermissionEnabled)
     const optedIn = useAppSelector(selectNotificationOptedIn)
@@ -58,13 +61,14 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
     const removedNotificationTags = useAppSelector(selectRemovedNotificationTags)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const featureEnabled = useAppSelector(selectNotificationFeautureEnabled)
+    const dappsNotifications = useAppSelector(selectDappNotifications)
     const isFetcingTags = useRef(false)
 
     const { currentState, previousState } = useAppState()
 
     const isMainnet = selectedNetwork.type === NETWORK_TYPE.MAIN
 
-    const initializeIneSignal = useCallback(() => {
+    const initializeOneSignal = useCallback(() => {
         const appId = __DEV__ ? process.env.ONE_SIGNAL_APP_ID : process.env.ONE_SIGNAL_APP_ID_PROD
 
         try {
@@ -210,15 +214,42 @@ const NotificationsProvider = ({ children }: PropsWithChildren) => {
         })
     }, [getTags])
 
+    const updateDappNotifications = useCallback(async () => {
+        if (dapps.length > 0) {
+            const tags = await getTags()
+            const allEnabled = dapps.every(dapp => !!tags[dapp.id])
+            if (!allEnabled) {
+                dapps.forEach(dapp => {
+                    if (!tags[dapp.id]) {
+                        addDAppTag(dapp.id)
+                    }
+                })
+            }
+        }
+    }, [dapps, getTags, addDAppTag])
+
     const init = useCallback(async () => {
-        initializeIneSignal()
+        initializeOneSignal()
         await getOptInStatus()
         await getPermission()
 
         if (!removedNotificationTags?.includes(vechainNewsAndUpdates)) {
             addTag(vechainNewsAndUpdates, "true")
         }
-    }, [addTag, getOptInStatus, getPermission, initializeIneSignal, removedNotificationTags])
+
+        // Keep the dapp notifications in sync with the dapps list
+        if (dappsNotifications) {
+            updateDappNotifications()
+        }
+    }, [
+        addTag,
+        dappsNotifications,
+        getOptInStatus,
+        getPermission,
+        initializeOneSignal,
+        removedNotificationTags,
+        updateDappNotifications,
+    ])
 
     useEffect(() => {
         dispatch(updateNotificationFeatureFlag(pushNotificationFeature?.enabled))

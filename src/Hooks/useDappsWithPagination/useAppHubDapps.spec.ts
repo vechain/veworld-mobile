@@ -4,9 +4,8 @@ import { DAppType } from "~Model"
 import { TestWrapper } from "~Test"
 import { DiscoveryDApp } from "~Constants"
 import moment from "moment"
-import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps"
+import { useVeBetterDaoActiveDapps, useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 
-// Mock the dependencies
 jest.mock("~Hooks/useFetchFeaturedDApps")
 
 const buildDapp = (overrides?: Partial<DiscoveryDApp>): DiscoveryDApp => {
@@ -38,9 +37,13 @@ const createInitialProps = (...dapps: DiscoveryDApp[]) => ({
 })
 
 describe("useAppHubDapps", () => {
-    beforeEach(() => {
-        jest.resetAllMocks()
+    beforeAll(() => {
+        ;(useVeBetterDaoDapps as jest.Mock).mockImplementation(() => ({
+            data: [],
+            isFetching: false,
+        }))
     })
+
     it("should render correctly", async () => {
         ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: [],

@@ -316,12 +316,7 @@ describe("WalletConnectUtils", () => {
                 return navState
             }
 
-            expect(shouldAutoNavigate(mockState(Routes.CONNECT_APP_SCREEN))).toBe(false)
-
             expect(shouldAutoNavigate(mockState(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN))).toBe(false)
-
-            expect(shouldAutoNavigate(mockState(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN))).toBe(false)
-
             expect(shouldAutoNavigate(mockState(Routes.BUY))).toBe(true)
             expect(shouldAutoNavigate(mockState(Routes.APP_SECURITY))).toBe(true)
         })
