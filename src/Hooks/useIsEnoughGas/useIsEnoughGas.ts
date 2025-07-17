@@ -57,10 +57,10 @@ export const useIsEnoughGas = ({ selectedToken, clauses, isDelegated, allFeeOpti
                 const clausesValue = calculateClausesValue({ clauses, selectedToken: foundTmpToken })
                 //Delegation with VTHO should count as "0" for fees
                 if (tokenSymbol === VTHO.symbol && isDelegated)
-                    return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThan("0")] as const
+                    return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
                 return [
                     tokenSymbol,
-                    BigNutils(balance).minus(clausesValue.toBN).isBiggerThan(allFeeOptions[tokenSymbol].toBN),
+                    BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual(allFeeOptions[tokenSymbol].toBN),
                 ] as const
             }),
         )
