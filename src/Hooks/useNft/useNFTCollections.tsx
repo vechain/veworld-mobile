@@ -27,7 +27,6 @@ import { useI18nContext } from "~i18n"
 import { getNftCollectionMetadata } from "~Networking/NFT/getNftCollectionMetadata"
 import { debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { withPerf } from "~Utils/DebugUtils"
 import { initCollectionMetadataFromRegistry, initCollectionMetadataWithoutRegistry } from "./Helpers"
 import { useLazyLoader } from "./useLazyLoader"
 
@@ -68,10 +67,7 @@ export const useNFTCollections = () => {
 
                 try {
                     // NFT_WHALE - replace here
-                    balanceOf = await withPerf(
-                        () => getNftBalanceOf(currentAddress, collection.address, thor),
-                        `BALANCE OF -- ${collection.address}`,
-                    )
+                    balanceOf = await getNftBalanceOf(currentAddress, collection.address, thor)
                 } catch (e) {
                     warn(ERROR_EVENTS.NFT, "failed to get balance", e)
                 }
@@ -80,33 +76,17 @@ export const useNFTCollections = () => {
                 let description = collection.description
                 if (!collection.fromRegistry) {
                     // NFT_WHALE - replace here
-                    const { data } = await withPerf(
-                        () => getNftsForContract(network.type, collection.address, currentAddress, 1, 0),
-                        "getNftsForContract",
-                    )
-                    const tokenURI = await withPerf(
-                        () => getTokenURI(data[0].tokenId, collection.address, thor),
-                        "getTokenURI",
-                    )
-                    const tokenMetadata = await withPerf(() => fetchMetadata(tokenURI), "fetchMetadata")
+                    const { data } = await getNftsForContract(network.type, collection.address, currentAddress, 1, 0)
+                    const tokenURI = await getTokenURI(data[0].tokenId, collection.address, thor)
+                    const tokenMetadata = await fetchMetadata(tokenURI)
 
                     if (tokenMetadata) {
                         image = tokenMetadata.image
                         description = tokenMetadata.description
                     }
                 }
-                // const [name, symbol, totalSupply] = await Promise.all([
-                //     getName(collection.address, thor),
-                //     getSymbol(collection.address, thor),
-                //     getTokenTotalSupply(collection.address, thor),
-                // ])
-                const { name, symbol, totalSupply } = await withPerf(
-                    () => getNftCollectionMetadata(collection.address, thor),
-                    "getNftCollectionMetadata",
-                )
-                // console.log("name", name)
-                // console.log("symbol", symbol)
-                // console.log("totalSupply", totalSupply)
+
+                const { name, symbol, totalSupply } = await getNftCollectionMetadata(collection.address, thor)
 
                 const updated: NftCollection = {
                     ...collection,
