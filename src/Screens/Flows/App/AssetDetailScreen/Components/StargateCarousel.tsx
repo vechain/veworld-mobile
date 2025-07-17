@@ -1,12 +1,12 @@
-import React, { useCallback, useMemo, useState } from "react"
+import { default as React, useCallback, useMemo, useState } from "react"
 import { LayoutChangeEvent, StyleSheet } from "react-native"
 import { BaseCarousel, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import { ColorThemeType, STARGATE_DAPP_URL } from "~Constants"
 import { useThemedStyles, useUserNodes, useUserStargateNfts } from "~Hooks"
-import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
+import { BannersCarousel } from "../../HomeScreen/Components"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
 
@@ -29,7 +29,8 @@ export const StargateCarousel = () => {
                         isExternalLink: false,
                         name: nft.tokenId,
                         style: styles.carouselItem,
-                    } satisfies CarouselSlideItem),
+                        href: `${STARGATE_DAPP_URL}/nft/${nft.tokenId}`,
+                    } as CarouselSlideItem),
             )
             .concat([
                 {
@@ -46,18 +47,8 @@ export const StargateCarousel = () => {
         setWidth(e.nativeEvent.layout.width)
     }, [])
 
-    const { navigateWithTab } = useBrowserTab()
-
-    const onOpenCard = useCallback(
-        (name: string) => {
-            if (name === "NEW_STAKE") return
-            //`name` is the tokenId
-            navigateWithTab({ url: `${STARGATE_DAPP_URL}/nft/${name}`, title: `Stargate Token ID #${name}` })
-        },
-        [navigateWithTab],
-    )
-
-    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return null
+    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0)
+        return <BannersCarousel location="token_screen" />
 
     return (
         <BaseView flexDirection="column" gap={12} w={100} mb={40} onLayout={onLayout}>
@@ -81,7 +72,6 @@ export const StargateCarousel = () => {
                     w={240}
                     contentWrapperStyle={styles.padding}
                     paginationStyle={styles.padding}
-                    onSlidePress={onOpenCard}
                     mode="normal"
                     containerWidth={width}
                     gap={8}

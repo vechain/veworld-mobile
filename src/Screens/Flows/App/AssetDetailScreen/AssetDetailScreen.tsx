@@ -16,7 +16,6 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
-import { BannersCarousel } from "../HomeScreen/Components/BannerCarousel"
 import { AssetChart, ConvertedBetterBottomSheet, MarketInfoView } from "./Components"
 import { AssetBalanceCard } from "./Components/AssetBalanceCard"
 import { StargateCarousel } from "./Components/StargateCarousel"
@@ -108,7 +107,6 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         <BaseSpacer height={40} />
                         {token.symbol === VET.symbol && (
                             <>
-                                <BannersCarousel location="token_screen" />
                                 <StargateCarousel />
                             </>
                         )}

@@ -1,4 +1,5 @@
-import { default as React, useCallback } from "react"
+import { useNavigation } from "@react-navigation/native"
+import React, { useCallback } from "react"
 import { Image, ImageStyle, StyleSheet, TouchableOpacity } from "react-native"
 import { StargateBigLogo } from "~Assets/Img/StargateBigLogo"
 import { BaseCard, BaseIcon, BaseText } from "~Components"
@@ -6,16 +7,24 @@ import { COLORS, ColorThemeType, STARGATE_DAPP_URL } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
 
 export const NewStargateStakeCarouselItem = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()
 
     const onOpenNewStake = useCallback(() => {
-        navigateWithTab({ url: `${STARGATE_DAPP_URL}/stake`, title: "Stargate Stake" })
-    }, [navigateWithTab])
+        navigateWithTab({
+            url: `${STARGATE_DAPP_URL}/stake`,
+            title: "Stargate Stake",
+            navigationFn(u) {
+                nav.navigate(Routes.BROWSER, { url: u, returnScreen: Routes.HOME })
+            },
+        })
+    }, [nav, navigateWithTab])
 
     return (
         <BaseCard containerStyle={styles.root} style={styles.rootContent}>
