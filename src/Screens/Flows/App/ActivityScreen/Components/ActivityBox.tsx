@@ -34,8 +34,8 @@ import {
 } from "~Model"
 import { selectAllTokens, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
+import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
-import { getTokenLevelName } from "../constants/filterValues"
 
 type GradientConfig = {
     colors: string[]

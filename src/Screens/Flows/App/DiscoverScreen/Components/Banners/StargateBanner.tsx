@@ -1,5 +1,6 @@
 import React from "react"
-import { Image, ImageBackground, ImageStyle, StyleSheet } from "react-native"
+import { ImageBackground, StyleSheet } from "react-native"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import Markdown from "react-native-markdown-display"
 import { StargateB3MO, StargateBannerBackground, StargateLogo } from "~Assets"
 import { BaseView } from "~Components"
@@ -26,7 +27,7 @@ export const StargateBanner = () => {
                         {LL.BANNER_STARGATE_DESC()}
                     </Markdown>
                 </BaseView>
-                <Image source={StargateB3MO} style={styles.image as ImageStyle} />
+                <FastImage source={StargateB3MO} style={styles.image as ImageStyle} />
             </ImageBackground>
         </BaseView>
     )
