@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.7 (2025-07-17)</small>
+
+* build: init ([f993278](https://github.com/vechain/veworld-mobile/commit/f993278))
+* fix: fix useIsEnoughGas to check for exact 0 (#3089) ([0c35a85](https://github.com/vechain/veworld-mobile/commit/0c35a85)), closes [#3089](https://github.com/vechain/veworld-mobile/issues/3089)
+
 ## 2.3.0 (2025-07-03)
 
 * build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))

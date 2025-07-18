@@ -79,18 +79,11 @@ export const HomeScreen = () => {
         dispatch(setAppResetTimestamp())
     }, [dispatch])
 
-    useFocusEffect(
-        useCallback(() => {
-            // Invalidate the veDelegateBalance query to solve cache issues
-            queryClient.invalidateQueries({
-                queryKey: getVeDelegateBalanceQueryKey(selectedAccount.address),
-                refetchType: "all",
-            })
-
-            updateBalances()
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []),
-    )
+    useEffect(() => {
+        // Update balances when the screen is loaded the first time
+        updateBalances()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const { LL } = useI18nContext()
     // Pull down to refresh
@@ -219,6 +212,17 @@ export const HomeScreen = () => {
         theme.colors.text,
         track,
     ])
+
+    useFocusEffect(
+        useCallback(() => {
+            // Invalidate the veDelegateBalance query to solve cache issues
+            queryClient.refetchQueries({
+                queryKey: getVeDelegateBalanceQueryKey(selectedAccount.address),
+                exact: true,
+                stale: true,
+            })
+        }, [queryClient, selectedAccount.address]),
+    )
 
     return (
         <Layout
