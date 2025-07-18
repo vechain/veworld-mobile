@@ -11,7 +11,6 @@ import {
 } from "~Storage/Redux"
 import { NonFungibleToken } from "~Model"
 import { getNftsForContract, getTokenURI } from "~Networking"
-import { useThor } from "~Components"
 import { debug, error } from "~Utils"
 import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
 import { useI18nContext } from "~i18n"
@@ -19,6 +18,7 @@ import { initialiseNFTMetadata } from "./Helpers"
 import { useTheme, useNFTMetadata } from "~Hooks"
 import { useLazyLoader } from "./useLazyLoader"
 import { ERROR_EVENTS } from "~Constants"
+import { useThorClient } from "~Hooks/useThorClient"
 
 export const useNFTs = () => {
     const dispatch = useAppDispatch()
@@ -26,7 +26,7 @@ export const useNFTs = () => {
     const currentAddress = useAppSelector(selectSelectedAccountAddress)
     const visibleNfts = useAppSelector(selectAllNftsWithoutMetadata)
     const { fetchMetadata } = useNFTMetadata()
-    const thor = useThor()
+    const thor = useThorClient()
     const { LL } = useI18nContext()
 
     const theme = useTheme()

@@ -17,5 +17,6 @@ export * from "./Notification"
 export * from "./vetDomains"
 export * from "./AppVersion"
 export * from "./Staking"
+export * from "./NumberFormatter"
 
 export { SettingsConstants }
