@@ -1,5 +1,12 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { NativeScrollEvent, NativeSyntheticEvent, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import {
+    NativeScrollEvent,
+    NativeSyntheticEvent,
+    StyleProp,
+    StyleSheet,
+    TouchableOpacity,
+    ViewStyle,
+} from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
@@ -40,11 +47,11 @@ type Props = {
     /**
      * Style of the carousel
      */
-    containerStyle?: ViewStyle
+    containerStyle?: StyleProp<ViewStyle>
     /**
      * Style of the {@link BaseCarouselItem}
      */
-    contentWrapperStyle?: ViewStyle
+    contentWrapperStyle?: StyleProp<ViewStyle>
     /**
      * Pagination style. Only applicable if `showPagination` is set to true.
      */

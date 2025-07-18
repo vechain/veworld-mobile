@@ -1,9 +1,10 @@
 import React, { useCallback, useMemo } from "react"
+import { StyleSheet } from "react-native"
 import { BaseCarousel, BaseSpacer, CarouselSlideItem } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { StargateBannerClosable } from "~Components/Reusable"
-import { AnalyticsEvent, STARGATE_DAPP_URL } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
+import { AnalyticsEvent, SCREEN_WIDTH, STARGATE_DAPP_URL } from "~Constants"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import {
     selectHideStargateBannerHomeScreen,
     setHideStargateBannerHomeScreen,
@@ -22,6 +23,7 @@ export const BannersCarousel = ({ location }: Props) => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
     const hideStargateBannerHomeScreen = useAppSelector(selectHideStargateBannerHomeScreen)
+    const { styles } = useThemedStyles(baseStyles)
 
     const dispatch = useAppDispatch()
 
@@ -83,8 +85,22 @@ export const BannersCarousel = ({ location }: Props) => {
                 testID={`${location}_carousel`}
                 onSlidePressActivation="before"
                 onSlidePress={onSlidePress}
+                gap={0}
+                {...(location === "token_screen" && {
+                    padding: 0,
+                    w: SCREEN_WIDTH - 32,
+                    contentWrapperStyle: styles.carouselItem,
+                })}
             />
             <BaseSpacer height={location === "home_screen" ? 32 : 40} />
         </>
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        carouselItem: {
+            paddingHorizontal: 0,
+            width: SCREEN_WIDTH - 32,
+        },
+    })

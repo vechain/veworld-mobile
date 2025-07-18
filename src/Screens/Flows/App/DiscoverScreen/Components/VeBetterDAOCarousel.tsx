@@ -1,9 +1,8 @@
 import React, { useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
-import { BaseCarousel, CarouselSlideItem, useFeatureFlags } from "~Components"
-import { SCREEN_WIDTH, STARGATE_DAPP_URL } from "~Constants"
+import { CarouselSlideItem, FullscreenBaseCarousel, useFeatureFlags } from "~Components"
+import { STARGATE_DAPP_URL } from "~Constants"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking } from "~Hooks"
 import { StargateBanner, StellaPayBanner, VeBetterDaoBanner } from "./Banners"
 
 const DAO_URL = "https://governance.vebetterdao.org"
@@ -12,7 +11,6 @@ const STELLA_URL = "https://vebetter.stellapay.io/"
 export const VeBetterDAOCarousel = () => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
-    const { styles } = useThemedStyles(baseStyles)
 
     const slides: CarouselSlideItem[] = useMemo(
         () => [
@@ -64,29 +62,15 @@ export const VeBetterDAOCarousel = () => {
         [track],
     )
 
-    const snapOffsets = useMemo(() => activeSlides.map((_, idx) => SCREEN_WIDTH * idx), [activeSlides])
-
     return (
-        <BaseCarousel
+        <FullscreenBaseCarousel
             testID="VeBetterDao_carousel"
             data={activeSlides}
             paginationAlignment="flex-start"
             showPagination={false}
             onSlidePressActivation="before"
             onSlidePress={onSlidePress}
-            gap={0}
-            w={SCREEN_WIDTH - 32}
-            padding={0}
-            contentWrapperStyle={styles.itemWrapper}
-            snapOffsets={snapOffsets}
+            padding={16}
         />
     )
 }
-
-const baseStyles = () =>
-    StyleSheet.create({
-        itemWrapper: {
-            paddingHorizontal: 16,
-            width: SCREEN_WIDTH,
-        },
-    })
