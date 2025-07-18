@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo, useState } from "react"
-import { LayoutChangeEvent, StyleSheet } from "react-native"
-import { BaseButton, BaseCarousel, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
+import React, { useCallback, useMemo } from "react"
+import { StyleSheet } from "react-native"
+import { BaseButton, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import { ColorThemeType, STARGATE_DAPP_URL } from "~Constants"
 import { useThemedStyles, useUserNodes, useUserStargateNfts } from "~Hooks"
@@ -11,6 +11,7 @@ import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { BannersCarousel } from "../../HomeScreen/Components"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
+import { StargateBaseCarousel } from "./StargateBaseCarousel"
 import { StargateCarouselItem } from "./StargateCarouselItem"
 
 export const StargateCarousel = () => {
@@ -20,7 +21,6 @@ export const StargateCarousel = () => {
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
-    const [width, setWidth] = useState(300)
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()
@@ -28,13 +28,13 @@ export const StargateCarousel = () => {
     const cards = useMemo(() => {
         return ownedStargateNfts
             .map(
-                nft =>
+                (nft, idx) =>
                     ({
                         content: <StargateCarouselItem item={nft} />,
                         closable: false,
                         isExternalLink: false,
                         name: nft.tokenId,
-                        style: styles.carouselItem,
+                        style: idx === 0 ? styles.biggerCarouselItem : styles.carouselItem,
                         href: `${STARGATE_DAPP_URL}/nft/${nft.tokenId}`,
                     } as CarouselSlideItem),
             )
@@ -44,14 +44,10 @@ export const StargateCarousel = () => {
                     closable: false,
                     isExternalLink: false,
                     name: "NEW_STAKE",
-                    style: styles.carouselItem,
+                    style: styles.biggerCarouselItem,
                 } satisfies CarouselSlideItem,
             ])
-    }, [ownedStargateNfts, styles.carouselItem])
-
-    const onLayout = useCallback((e: LayoutChangeEvent) => {
-        setWidth(e.nativeEvent.layout.width)
-    }, [])
+    }, [ownedStargateNfts, styles.biggerCarouselItem, styles.carouselItem])
 
     const onNavigateToStargate = useCallback(() => {
         navigateWithTab({
@@ -67,7 +63,7 @@ export const StargateCarousel = () => {
         return <BannersCarousel location="token_screen" />
 
     return (
-        <BaseView flexDirection="column" gap={12} w={100} mb={40} onLayout={onLayout}>
+        <BaseView flexDirection="column" gap={12} w={100} mb={40}>
             <BaseText py={10} typographyFont="bodySemiBold">
                 {LL.ACTIVITY_STAKING_LABEL()}
             </BaseText>
@@ -78,19 +74,12 @@ export const StargateCarousel = () => {
                     rootStyle={styles.section}
                 />
                 <BaseSpacer bg={theme.colors.cardDivider} height={1} />
-                <BaseCarousel
-                    showPagination
-                    autoPlay={false}
-                    loop={false}
+                <StargateBaseCarousel
                     data={cards}
-                    h={316}
-                    paginationAlignment="flex-start"
-                    w={240}
                     contentWrapperStyle={styles.padding}
-                    paginationStyle={styles.padding}
-                    mode="normal"
-                    containerWidth={width}
-                    gap={8}
+                    w={240}
+                    paginationAlignment="flex-start"
+                    padding={24}
                 />
                 <BaseSpacer bg={theme.colors.cardDivider} height={1} />
                 <BaseButton
@@ -123,8 +112,11 @@ const baseStyles = (theme: ColorThemeType) =>
         carouselItem: {
             width: 240,
         },
+        biggerCarouselItem: {
+            width: 264,
+        },
         padding: {
-            paddingStart: 24,
+            paddingStart: 0,
         },
         button: {
             marginHorizontal: 24,

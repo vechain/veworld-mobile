@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { Animated, Linking, Pressable, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import { Animated, Linking, Pressable, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
@@ -11,7 +11,7 @@ type Props = {
     testID?: string
     href?: string
     style?: ViewStyle
-    contentWrapperStyle?: ViewStyle
+    contentWrapperStyle?: StyleProp<ViewStyle>
     isExternalLink?: boolean
     closable?: boolean
     closeButtonStyle?: ViewStyle
