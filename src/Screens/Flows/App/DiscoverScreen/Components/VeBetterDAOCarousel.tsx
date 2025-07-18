@@ -1,9 +1,11 @@
+import { useRoute } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel, useFeatureFlags } from "~Components"
-import { SCREEN_WIDTH, STARGATE_DAPP_URL } from "~Constants"
+import { SCREEN_WIDTH, STARGATE_DAPP_URL_DISCOVER_BANNER, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { Routes } from "~Navigation"
 import { StargateBanner, StellaPayBanner, VeBetterDaoBanner } from "./Banners"
 
 const DAO_URL = "https://governance.vebetterdao.org"
@@ -13,6 +15,7 @@ export const VeBetterDAOCarousel = () => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
     const { styles } = useThemedStyles(baseStyles)
+    const location = useRoute()
 
     const slides: CarouselSlideItem[] = useMemo(
         () => [
@@ -32,11 +35,14 @@ export const VeBetterDAOCarousel = () => {
             {
                 testID: "Stargate_banner",
                 content: <StargateBanner />,
-                href: STARGATE_DAPP_URL,
+                href:
+                    location.name === Routes.HOME || location.name === Routes.TOKEN_DETAILS
+                        ? STARGATE_DAPP_URL_HOME_BANNER
+                        : STARGATE_DAPP_URL_DISCOVER_BANNER,
                 name: "stargate",
             },
         ],
-        [],
+        [location.name],
     )
 
     const activeSlides = useMemo(() => {
