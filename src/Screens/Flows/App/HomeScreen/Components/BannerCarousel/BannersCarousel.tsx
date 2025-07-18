@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo } from "react"
 import { BaseCarousel, BaseSpacer, CarouselSlideItem } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
+import { StargateBannerClosable } from "~Components/Reusable"
 import { AnalyticsEvent, STARGATE_DAPP_URL } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
-import { StargateBannerClosable } from "~Components/Reusable"
 import {
-    useAppSelector,
     selectHideStargateBannerHomeScreen,
     setHideStargateBannerHomeScreen,
     useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 
 type Props = {
@@ -77,11 +77,9 @@ export const BannersCarousel = ({ location }: Props) => {
         <>
             {location === "home_screen" && <BaseSpacer height={location === "home_screen" ? 16 : 40} />}
             <BaseCarousel
-                h={88}
+                itemHeight={88}
                 data={filteredBanners}
                 showPagination={false}
-                autoPlay={false}
-                loop={false}
                 testID={`${location}_carousel`}
                 onSlidePressActivation="before"
                 onSlidePress={onSlidePress}

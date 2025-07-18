@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseButton, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
+import { BaseButton, BaseCarousel, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import { ColorThemeType, STARGATE_DAPP_URL } from "~Constants"
 import { useThemedStyles, useUserNodes, useUserStargateNfts } from "~Hooks"
@@ -11,7 +11,6 @@ import { Routes } from "~Navigation"
 import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { BannersCarousel } from "../../HomeScreen/Components"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
-import { StargateBaseCarousel } from "./StargateBaseCarousel"
 import { StargateCarouselItem } from "./StargateCarouselItem"
 
 export const StargateCarousel = () => {
@@ -74,7 +73,7 @@ export const StargateCarousel = () => {
                     rootStyle={styles.section}
                 />
                 <BaseSpacer bg={theme.colors.cardDivider} height={1} />
-                <StargateBaseCarousel
+                <BaseCarousel
                     data={cards}
                     contentWrapperStyle={styles.padding}
                     w={240}

@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { CarouselSlideItem, useFeatureFlags } from "~Components"
+import { BaseCarousel, CarouselSlideItem, useFeatureFlags } from "~Components"
 import { SCREEN_WIDTH, STARGATE_DAPP_URL } from "~Constants"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
-import { StargateBaseCarousel } from "../../AssetDetailScreen/Components/StargateBaseCarousel"
 import { StargateBanner, StellaPayBanner, VeBetterDaoBanner } from "./Banners"
 
 const DAO_URL = "https://governance.vebetterdao.org"
@@ -68,12 +67,10 @@ export const VeBetterDAOCarousel = () => {
     const snapOffsets = useMemo(() => activeSlides.map((_, idx) => SCREEN_WIDTH * idx), [activeSlides])
 
     return (
-        <StargateBaseCarousel
+        <BaseCarousel
             testID="VeBetterDao_carousel"
             data={activeSlides}
             paginationAlignment="flex-start"
-            loop={false}
-            // autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
             showPagination={false}
             onSlidePressActivation="before"
             onSlidePress={onSlidePress}
