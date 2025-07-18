@@ -1,5 +1,7 @@
 import { ComponentProps, default as React, useCallback, useMemo } from "react"
+import { StyleSheet } from "react-native"
 import { SCREEN_WIDTH } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { BaseCarousel } from "./BaseCarousel"
 
 type Props = {
@@ -26,7 +28,15 @@ type Props = {
     | "gap"
 >
 
-export const FullscreenBaseCarousel = ({ padding = 16, data, baseWidth = SCREEN_WIDTH, gap = 8, ...props }: Props) => {
+export const FullscreenBaseCarousel = ({
+    padding = 16,
+    data,
+    baseWidth = SCREEN_WIDTH,
+    gap = 8,
+    contentWrapperStyle,
+    ...props
+}: Props) => {
+    const { styles } = useThemedStyles(baseStyles)
     /**
      * Calculate the snap offsets
      */
@@ -65,5 +75,21 @@ export const FullscreenBaseCarousel = ({ padding = 16, data, baseWidth = SCREEN_
             })),
         [calculateWidth, data],
     )
-    return <BaseCarousel snapOffsets={snapOffsets} data={mappedData} padding={padding} gap={gap} {...props} />
+    return (
+        <BaseCarousel
+            snapOffsets={snapOffsets}
+            data={mappedData}
+            padding={padding}
+            gap={gap}
+            contentWrapperStyle={[contentWrapperStyle, styles.itemWrapper]}
+            {...props}
+        />
+    )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        itemWrapper: {
+            paddingHorizontal: 0,
+        },
+    })

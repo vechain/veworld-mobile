@@ -1,10 +1,9 @@
 import { useRoute } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel, useFeatureFlags } from "~Components"
 import { SCREEN_WIDTH, STARGATE_DAPP_URL_DISCOVER_BANNER, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking } from "~Hooks"
 import { Routes } from "~Navigation"
 import { StargateBanner, StellaPayBanner, VeBetterDaoBanner } from "./Banners"
 
@@ -14,7 +13,6 @@ const STELLA_URL = "https://vebetter.stellapay.io/"
 export const VeBetterDAOCarousel = () => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
-    const { styles } = useThemedStyles(baseStyles)
     const location = useRoute()
 
     const slides: CarouselSlideItem[] = useMemo(
@@ -80,14 +78,6 @@ export const VeBetterDAOCarousel = () => {
             padding={16}
             gap={8}
             baseWidth={SCREEN_WIDTH}
-            contentWrapperStyle={styles.noPadding}
         />
     )
 }
-
-const baseStyles = () =>
-    StyleSheet.create({
-        noPadding: {
-            paddingHorizontal: 0,
-        },
-    })
