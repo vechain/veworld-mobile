@@ -105,11 +105,7 @@ export const AssetDetailScreen = ({ route }: Props) => {
                         )}
 
                         <BaseSpacer height={40} />
-                        {token.symbol === VET.symbol && (
-                            <>
-                                <StargateCarousel />
-                            </>
-                        )}
+                        {token.symbol === VET.symbol && <StargateCarousel />}
 
                         {/* TODO: handle loading/skeleton */}
                         {!!description && (
