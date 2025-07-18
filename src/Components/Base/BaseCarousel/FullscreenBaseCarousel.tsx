@@ -27,10 +27,13 @@ type Props = {
 >
 
 export const FullscreenBaseCarousel = ({ padding = 16, data, baseWidth = SCREEN_WIDTH, gap = 8, ...props }: Props) => {
-    const itemWidth = useMemo(() => baseWidth - padding * 3 - gap, [baseWidth, padding, gap])
+    /**
+     * Calculate the snap offsets
+     */
     const snapOffsets = useMemo(
         () =>
             data.map((_, idx, arr) => {
+                //If it's the first item, return 0
                 if (idx === 0) return 0
                 if (idx === arr.length - 1)
                     return baseWidth - 3 * gap * (data.length - 2) + baseWidth * (data.length - 2)
@@ -38,6 +41,12 @@ export const FullscreenBaseCarousel = ({ padding = 16, data, baseWidth = SCREEN_
             }),
         [baseWidth, data, gap],
     )
+    /**
+     * Calculate the width of each card.
+     * Each card will show a {@link gap} of the next card.
+     * The first and last card will only need to show one card to the right/left, so it's 2*gap.
+     * The cards in the middle need to show a card on the left and right, that's why it's double the gap
+     */
     const calculateWidth = useCallback(
         (idx: number) => {
             if (idx === 0 || idx === data.length - 1) return baseWidth - 2 * gap
@@ -45,6 +54,9 @@ export const FullscreenBaseCarousel = ({ padding = 16, data, baseWidth = SCREEN_
         },
         [baseWidth, data.length, gap],
     )
+    /**
+     * Add the style property to each card in order to set the specific width they need
+     */
     const mappedData = useMemo(
         () =>
             data.map((d, idx) => ({
@@ -53,14 +65,5 @@ export const FullscreenBaseCarousel = ({ padding = 16, data, baseWidth = SCREEN_
             })),
         [calculateWidth, data],
     )
-    return (
-        <BaseCarousel
-            w={itemWidth}
-            snapOffsets={snapOffsets}
-            data={mappedData}
-            padding={padding}
-            gap={gap}
-            {...props}
-        />
-    )
+    return <BaseCarousel snapOffsets={snapOffsets} data={mappedData} padding={padding} gap={gap} {...props} />
 }
