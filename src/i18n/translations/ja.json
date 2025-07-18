@@ -1018,6 +1018,7 @@
   "TITLE_SECURITY": "ウォレットを保護",
   "TITLE_SECURITY_DOWNGRADE": "アプリがブロックされています",
   "TITLE_SETTINGS": "設定",
+  "TITLE_TOTAL_LOCKED": "総ロック数",
   "TITLE_TRANSACTIONS": "トランザクション",
   "TITLE_UNLOCK_KEYSTORE": "キーストアを解除",
   "TITLE_USERNAME_CLAIMED": "ユーザー名が取得されました！",

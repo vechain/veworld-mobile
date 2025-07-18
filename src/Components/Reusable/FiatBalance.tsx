@@ -11,6 +11,29 @@ type FiatBalanceProps = {
     prefix?: string
     typographyFont?: BaseTextProps["typographyFont"]
     color?: BaseTextProps["color"]
+    /**
+     * Height of the skeleton.
+     * @default 38.5
+     */
+    skeletonHeight?: number
+    /**
+     * Width of the skeleton.
+     * @default 140
+     */
+    skeletonWidth?: number
+    /**
+     * Bone color of the skeleton. {@link BaseSkeleton}
+     * Dark:
+     * @default COLORS.LIME_GREEN
+     * Light:
+     * @default COLORS.DARK_PURPLE
+     */
+    skeletonBoneColor?: string
+    /**
+     * Highlight color of the skeleton: {@link BaseSkeleton}
+     * @default COLORS.LIGHT_PURPLE
+     */
+    skeletonHighlightColor?: string
 } & BaseViewProps
 
 export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps) => {
@@ -21,6 +44,10 @@ export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps)
         typographyFont,
         color,
         prefix = "",
+        skeletonHeight,
+        skeletonWidth,
+        skeletonBoneColor,
+        skeletonHighlightColor,
         ...baseviewProps
     } = props
     const theme = useTheme()
@@ -36,10 +63,10 @@ export const FiatBalance: React.FC<FiatBalanceProps> = (props: FiatBalanceProps)
         <BaseView testID="fiat-balance-skeleton" pt={4} {...baseviewProps}>
             <BaseSkeleton
                 animationDirection="horizontalLeft"
-                boneColor={theme.isDark ? COLORS.LIME_GREEN : COLORS.DARK_PURPLE}
-                highlightColor={COLORS.LIGHT_PURPLE}
-                height={38.5}
-                width={140}
+                boneColor={skeletonBoneColor ?? (theme.isDark ? COLORS.LIME_GREEN : COLORS.DARK_PURPLE)}
+                highlightColor={skeletonHighlightColor ?? COLORS.LIGHT_PURPLE}
+                height={skeletonHeight ?? 38.5}
+                width={skeletonWidth ?? 140}
             />
         </BaseView>
     ) : (

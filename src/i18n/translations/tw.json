@@ -1018,6 +1018,7 @@
   "TITLE_SECURITY": "保護您的錢包",
   "TITLE_SECURITY_DOWNGRADE": "您的應用程式已被鎖定",
   "TITLE_SETTINGS": "設定",
+  "TITLE_TOTAL_LOCKED": "總鎖定",
   "TITLE_TRANSACTIONS": "交易",
   "TITLE_UNLOCK_KEYSTORE": "解鎖金鑰庫",
   "TITLE_USERNAME_CLAIMED": "用戶名已獲取！",
