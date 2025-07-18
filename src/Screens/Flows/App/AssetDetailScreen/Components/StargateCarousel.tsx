@@ -83,7 +83,7 @@ export const StargateCarousel = () => {
                     autoPlay={false}
                     loop={false}
                     data={cards}
-                    h={324}
+                    h={316}
                     paginationAlignment="flex-start"
                     w={240}
                     contentWrapperStyle={styles.padding}

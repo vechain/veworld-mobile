@@ -1,8 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { ImageStyle } from "react-native-fast-image"
-import { BaseCard, BaseText, BaseView, NFTImage, useThor } from "~Components"
+import { BaseCard, BaseText, BaseView, useThor } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS, ColorThemeType, getStargateNetworkConfig, VET, VTHO } from "~Constants"
 import { useFormatFiat, useNFTMetadata, useTheme, useThemedStyles } from "~Hooks"
@@ -10,8 +9,9 @@ import { useI18nContext } from "~i18n"
 import { NftData } from "~Model"
 import { getTokenURI } from "~Networking"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { BigNutils, URIUtils } from "~Utils"
+import { BigNutils } from "~Utils"
 import { getTokenLevelName, TokenLevelId } from "~Utils/StargateUtils"
+import { StargateImage } from "./StargateImage"
 
 type Props = {
     item: NftData
@@ -27,11 +27,13 @@ const RowItem = ({ label, value, icon }: { label: string; value: string; icon: s
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" py={2}>
-            <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="captionMedium">
+            <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="captionMedium">
                 {label}
             </BaseText>
             <BaseView gap={8} flexDirection="row">
-                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800}>{formattedValue}</BaseText>
+                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800} typographyFont="captionMedium">
+                    {formattedValue}
+                </BaseText>
                 <TokenImage icon={icon} isVechainToken iconSize={16} />
             </BaseView>
         </BaseView>
@@ -62,10 +64,7 @@ export const StargateCarouselItem = ({ item }: Props) => {
 
     return (
         <BaseCard containerStyle={styles.root} style={styles.rootContent}>
-            <NFTImage
-                uri={data?.image ? URIUtils.convertUriToUrl(data?.image) : undefined}
-                style={styles.image as ImageStyle}
-            />
+            <StargateImage uri={data?.image} />
             <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="bodySemiBold">
                 {getTokenLevelName(
                     (data?.attributes?.find(attr => attr.trait_type === "Level")?.value as TokenLevelId | undefined) ??

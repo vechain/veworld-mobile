@@ -30,7 +30,7 @@ export const NewStargateStakeCarouselItem = () => {
         <BaseCard containerStyle={styles.root} style={styles.rootContent}>
             <Image source={{ uri: StargateBigLogo }} style={styles.image as ImageStyle} />
             <TouchableOpacity style={styles.buttonStyle} onPress={onOpenNewStake}>
-                <BaseIcon size={32} name="icon-plus" color={theme.colors.assetDetailsCard.title} />
+                <BaseIcon size={32} name="icon-plus" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE} />
                 <BaseText typographyFont="bodySemiBold" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
                     {LL.STARGATE_NEW_STAKE()}
                 </BaseText>
