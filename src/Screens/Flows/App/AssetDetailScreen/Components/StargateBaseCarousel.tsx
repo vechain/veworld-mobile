@@ -16,8 +16,6 @@ type Props = {
      * This should be the desired height of the carousel item
      */
     h?: number
-    autoPlay?: boolean
-    autoPlayInterval?: number
     loop?: boolean
     showPagination?: boolean
     paginationAlignment?: "flex-start" | "center" | "flex-end"
@@ -47,6 +45,10 @@ type Props = {
      * Do not use a custom style to set it since it'll break the normal layout
      */
     padding?: number
+    /**
+     * Provide snap offsets. By default they're calculated
+     */
+    snapOffsets?: number[]
 }
 
 export const StargateBaseCarousel = ({
@@ -55,13 +57,15 @@ export const StargateBaseCarousel = ({
     contentWrapperStyle,
     onSlidePressActivation,
     gap = 8,
-    w = SCREEN_WIDTH,
+    w: _w = SCREEN_WIDTH,
     showPagination = true,
     rootStyle,
     paginationAlignment = "center",
     paginationStyle,
     containerStyle,
     padding = 16,
+    testID,
+    snapOffsets,
 }: Props) => {
     const [page, setPage] = useState(0)
 
@@ -86,13 +90,27 @@ export const StargateBaseCarousel = ({
         setPage(index)
     }, [])
 
+    const w = useMemo(() => {
+        if (_w + gap >= SCREEN_WIDTH) return SCREEN_WIDTH - gap
+        return _w
+    }, [_w, gap])
+
     const offsets = useMemo(
         () =>
             Array.from({ length: data.length }, (_, idx) => {
-                if (idx === 0 || idx === data.length - 1) return w + gap + padding
-                return w + gap
+                if (idx === 0) return 0
+                return w * idx + gap * idx + padding
             }),
         [data.length, gap, padding, w],
+    )
+
+    const getInitialPaddingStyles = useCallback(
+        (index: number) => {
+            if (padding === 0) return undefined
+            if (index === 0) return { paddingStart: padding }
+            if (index === data.length - 1) return { paddingEnd: padding }
+        },
+        [data.length, padding],
     )
 
     return (
@@ -100,15 +118,16 @@ export const StargateBaseCarousel = ({
             <Animated.FlatList
                 ref={ref}
                 data={data}
-                snapToOffsets={offsets}
+                snapToOffsets={snapOffsets ?? offsets}
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 pagingEnabled
-                decelerationRate="fast"
+                decelerationRate="normal"
                 snapToAlignment="start"
                 horizontal
                 onMomentumScrollEnd={onMomentumScrollEnd}
                 style={containerStyle}
                 keyExtractor={item => item.name ?? ""}
+                testID={testID}
                 renderItem={({ item, index }) => {
                     return (
                         <BaseCarouselItem
@@ -117,14 +136,7 @@ export const StargateBaseCarousel = ({
                             isExternalLink={item.isExternalLink}
                             name={item.name}
                             onPress={onSlidePress}
-                            contentWrapperStyle={[
-                                contentWrapperStyle,
-                                index === 0
-                                    ? { paddingStart: padding }
-                                    : index === data.length - 1
-                                    ? { paddingEnd: padding }
-                                    : undefined,
-                            ]}
+                            contentWrapperStyle={[contentWrapperStyle, getInitialPaddingStyles(index)]}
                             onPressActivation={onSlidePressActivation}
                             closable={item.closable}
                             onClose={item.onClose}

@@ -1,9 +1,11 @@
 import React, { useCallback, useMemo } from "react"
-import { BaseCarousel, CarouselSlideItem, useFeatureFlags } from "~Components"
-import { VeBetterDaoBanner, StellaPayBanner, StargateBanner } from "./Banners"
+import { StyleSheet } from "react-native"
+import { CarouselSlideItem, useFeatureFlags } from "~Components"
+import { SCREEN_WIDTH, STARGATE_DAPP_URL } from "~Constants"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
-import { useAnalyticTracking } from "~Hooks"
-import { STARGATE_DAPP_URL } from "~Constants"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { StargateBaseCarousel } from "../../AssetDetailScreen/Components/StargateBaseCarousel"
+import { StargateBanner, StellaPayBanner, VeBetterDaoBanner } from "./Banners"
 
 const DAO_URL = "https://governance.vebetterdao.org"
 const STELLA_URL = "https://vebetter.stellapay.io/"
@@ -11,6 +13,7 @@ const STELLA_URL = "https://vebetter.stellapay.io/"
 export const VeBetterDAOCarousel = () => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
+    const { styles } = useThemedStyles(baseStyles)
 
     const slides: CarouselSlideItem[] = useMemo(
         () => [
@@ -62,16 +65,31 @@ export const VeBetterDAOCarousel = () => {
         [track],
     )
 
+    const snapOffsets = useMemo(() => activeSlides.map((_, idx) => SCREEN_WIDTH * idx), [activeSlides])
+
     return (
-        <BaseCarousel
+        <StargateBaseCarousel
             testID="VeBetterDao_carousel"
             data={activeSlides}
             paginationAlignment="flex-start"
             loop={false}
-            autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
+            // autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
             showPagination={false}
             onSlidePressActivation="before"
             onSlidePress={onSlidePress}
+            gap={0}
+            w={SCREEN_WIDTH - 32}
+            padding={0}
+            contentWrapperStyle={styles.itemWrapper}
+            snapOffsets={snapOffsets}
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        itemWrapper: {
+            paddingHorizontal: 16,
+            width: SCREEN_WIDTH,
+        },
+    })
