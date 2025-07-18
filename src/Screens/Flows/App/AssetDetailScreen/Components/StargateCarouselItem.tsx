@@ -1,10 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseCard, BaseText, BaseView, useThor } from "~Components"
+import { BaseCard, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS, ColorThemeType, getStargateNetworkConfig, VET, VTHO } from "~Constants"
 import { useFormatFiat, useNFTMetadata, useTheme, useThemedStyles } from "~Hooks"
+import { useThorClient } from "~Hooks/useThorClient"
 import { useI18nContext } from "~i18n"
 import { NftData } from "~Model"
 import { getTokenURI } from "~Networking"
@@ -47,7 +48,7 @@ export const StargateCarouselItem = ({ item }: Props) => {
 
     const network = useAppSelector(selectSelectedNetwork)
 
-    const thor = useThor()
+    const thor = useThorClient()
 
     const { data: tokenURI } = useQuery({
         queryKey: ["StargateTokenURI", network.type, item.tokenId],
@@ -58,7 +59,7 @@ export const StargateCarouselItem = ({ item }: Props) => {
 
     const { data } = useQuery({
         queryKey: ["StargateNftMetadata", network.type, item.tokenId],
-        queryFn: () => fetchMetadata(tokenURI),
+        queryFn: () => fetchMetadata(tokenURI!),
         enabled: Boolean(tokenURI),
     })
 
