@@ -3,7 +3,12 @@ import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseCarousel, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
-import { ColorThemeType, STARGATE_DAPP_URL } from "~Constants"
+import {
+    ColorThemeType,
+    STARGATE_DAPP_URL,
+    STARGATE_DAPP_URL_MANAGE_STAKING_BANNER,
+    STARGATE_DAPP_URL_NEW_STAKING_BANNER,
+} from "~Constants"
 import { useThemedStyles, useUserNodes, useUserStargateNfts } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { useI18nContext } from "~i18n"
@@ -44,13 +49,14 @@ export const StargateCarousel = () => {
                     isExternalLink: false,
                     name: "NEW_STAKE",
                     style: styles.biggerCarouselItem,
+                    href: STARGATE_DAPP_URL_NEW_STAKING_BANNER,
                 } satisfies CarouselSlideItem,
             ])
     }, [ownedStargateNfts, styles.biggerCarouselItem, styles.carouselItem])
 
     const onNavigateToStargate = useCallback(() => {
         navigateWithTab({
-            url: STARGATE_DAPP_URL,
+            url: STARGATE_DAPP_URL_MANAGE_STAKING_BANNER,
             title: "Stargate App",
             navigationFn(u) {
                 nav.navigate(Routes.BROWSER, { url: u, returnScreen: Routes.HOME })
