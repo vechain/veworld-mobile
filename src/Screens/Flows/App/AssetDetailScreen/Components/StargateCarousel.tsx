@@ -41,6 +41,7 @@ export const StargateCarousel = () => {
                         name: nft.tokenId,
                         style: idx === 0 ? styles.biggerCarouselItem : styles.carouselItem,
                         href: `${STARGATE_DAPP_URL}/nft/${nft.tokenId}`,
+                        testID: `STARGATE_CAROUSEL_ITEM_${nft.tokenId}`,
                     } as CarouselSlideItem),
             )
             .concat([
@@ -51,6 +52,7 @@ export const StargateCarousel = () => {
                     name: "NEW_STAKE",
                     style: styles.biggerCarouselItem,
                     href: STARGATE_DAPP_URL_NEW_STAKING_BANNER,
+                    testID: "STARGATE_CAROUSEL_NEW_STAKE",
                 } satisfies CarouselSlideItem,
             ])
     }, [ownedStargateNfts, styles.biggerCarouselItem, styles.carouselItem])

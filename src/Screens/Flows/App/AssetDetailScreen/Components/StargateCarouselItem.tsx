@@ -4,7 +4,8 @@ import { StyleSheet } from "react-native"
 import { BaseCard, BaseText, BaseView } from "~Components"
 import { TokenImage } from "~Components/Reusable/TokenImage"
 import { COLORS, ColorThemeType, getStargateNetworkConfig, VET, VTHO } from "~Constants"
-import { useFormatFiat, useNFTMetadata, useTheme, useThemedStyles } from "~Hooks"
+import { useFormatFiat, useTheme, useThemedStyles } from "~Hooks"
+import { useNFTMetadata } from "~Hooks/useNFTMetadata"
 import { useThorClient } from "~Hooks/useThorClient"
 import { useI18nContext } from "~i18n"
 import { NftData } from "~Model"
@@ -18,7 +19,7 @@ type Props = {
     item: NftData
 }
 
-const RowItem = ({ label, value, icon }: { label: string; value: string; icon: string }) => {
+const RowItem = ({ label, value, icon, testID }: { label: string; value: string; icon: string; testID: string }) => {
     const theme = useTheme()
     const { formatLocale } = useFormatFiat()
 
@@ -27,7 +28,7 @@ const RowItem = ({ label, value, icon }: { label: string; value: string; icon: s
     }, [value, formatLocale])
 
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" py={2}>
+        <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" py={2} testID={testID}>
             <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="captionMedium">
                 {label}
             </BaseText>
@@ -73,9 +74,24 @@ export const StargateCarouselItem = ({ item }: Props) => {
                 )}
             </BaseText>
             <BaseView flexDirection="column" gap={8}>
-                <RowItem label={LL.STARGATE_LOCKED()} value={item.vetAmountStaked ?? "0"} icon={VET.icon} />
-                <RowItem label={LL.STARGATE_REWARDS()} value={item.accumulatedRewards ?? "0"} icon={VTHO.icon} />
-                <RowItem label={LL.STARGATE_CLAIMABLE()} value={item.claimableRewards ?? "0"} icon={VTHO.icon} />
+                <RowItem
+                    label={LL.STARGATE_LOCKED()}
+                    value={item.vetAmountStaked ?? "0"}
+                    icon={VET.icon}
+                    testID="STARGATE_CAROUSEL_ITEM_VALUE_LOCKED"
+                />
+                <RowItem
+                    label={LL.STARGATE_REWARDS()}
+                    value={item.accumulatedRewards ?? "0"}
+                    icon={VTHO.icon}
+                    testID="STARGATE_CAROUSEL_ITEM_VALUE_REWARDS"
+                />
+                <RowItem
+                    label={LL.STARGATE_CLAIMABLE()}
+                    value={item.claimableRewards ?? "0"}
+                    icon={VTHO.icon}
+                    testID="STARGATE_CAROUSEL_ITEM_VALUE_CLAIMABLE"
+                />
             </BaseView>
         </BaseCard>
     )
