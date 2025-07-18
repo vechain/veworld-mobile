@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from "react"
+import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel, useFeatureFlags } from "~Components"
-import { STARGATE_DAPP_URL } from "~Constants"
+import { SCREEN_WIDTH, STARGATE_DAPP_URL } from "~Constants"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
-import { useAnalyticTracking } from "~Hooks"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { StargateBanner, StellaPayBanner, VeBetterDaoBanner } from "./Banners"
 
 const DAO_URL = "https://governance.vebetterdao.org"
@@ -11,6 +12,7 @@ const STELLA_URL = "https://vebetter.stellapay.io/"
 export const VeBetterDAOCarousel = () => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
+    const { styles } = useThemedStyles(baseStyles)
 
     const slides: CarouselSlideItem[] = useMemo(
         () => [
@@ -66,11 +68,20 @@ export const VeBetterDAOCarousel = () => {
         <FullscreenBaseCarousel
             testID="VeBetterDao_carousel"
             data={activeSlides}
-            paginationAlignment="flex-start"
             showPagination={false}
             onSlidePressActivation="before"
             onSlidePress={onSlidePress}
             padding={16}
+            gap={8}
+            baseWidth={SCREEN_WIDTH}
+            contentWrapperStyle={styles.noPadding}
         />
     )
 }
+
+const baseStyles = () =>
+    StyleSheet.create({
+        noPadding: {
+            paddingHorizontal: 0,
+        },
+    })

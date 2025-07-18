@@ -1,4 +1,4 @@
-import { ComponentProps, default as React, useMemo } from "react"
+import { ComponentProps, default as React, useCallback, useMemo } from "react"
 import { SCREEN_WIDTH } from "~Constants"
 import { BaseCarousel } from "./BaseCarousel"
 
@@ -23,25 +23,43 @@ type Props = {
     | "contentWrapperStyle"
     | "testID"
     | "itemHeight"
+    | "gap"
 >
 
-export const FullscreenBaseCarousel = ({
-    contentWrapperStyle,
-    padding = 16,
-    data,
-    baseWidth = SCREEN_WIDTH,
-    ...props
-}: Props) => {
-    const itemWidth = useMemo(() => baseWidth - padding * 2, [baseWidth, padding])
-    const snapOffsets = useMemo(() => data.map((_, idx) => baseWidth * idx), [baseWidth, data])
+export const FullscreenBaseCarousel = ({ padding = 16, data, baseWidth = SCREEN_WIDTH, gap = 8, ...props }: Props) => {
+    const itemWidth = useMemo(() => baseWidth - padding * 3 - gap, [baseWidth, padding, gap])
+    const snapOffsets = useMemo(
+        () =>
+            data.map((_, idx, arr) => {
+                if (idx === 0) return 0
+                if (idx === arr.length - 1)
+                    return baseWidth - 3 * gap * (data.length - 2) + baseWidth * (data.length - 2)
+                return baseWidth * idx - 3 * gap * idx
+            }),
+        [baseWidth, data, gap],
+    )
+    const calculateWidth = useCallback(
+        (idx: number) => {
+            if (idx === 0 || idx === data.length - 1) return baseWidth - 2 * gap
+            return baseWidth - 4 * gap
+        },
+        [baseWidth, data.length, gap],
+    )
+    const mappedData = useMemo(
+        () =>
+            data.map((d, idx) => ({
+                ...d,
+                style: [d.style, { width: calculateWidth(idx) }],
+            })),
+        [calculateWidth, data],
+    )
     return (
         <BaseCarousel
-            contentWrapperStyle={[contentWrapperStyle, { width: baseWidth }, { paddingHorizontal: padding }]}
             w={itemWidth}
             snapOffsets={snapOffsets}
-            data={data}
-            padding={0}
-            gap={0}
+            data={mappedData}
+            padding={padding}
+            gap={gap}
             {...props}
         />
     )

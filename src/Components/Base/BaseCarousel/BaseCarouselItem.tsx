@@ -10,7 +10,7 @@ import { BaseIcon } from "../BaseIcon"
 type Props = {
     testID?: string
     href?: string
-    style?: ViewStyle
+    style?: StyleProp<ViewStyle>
     contentWrapperStyle?: StyleProp<ViewStyle>
     isExternalLink?: boolean
     closable?: boolean

@@ -23,7 +23,7 @@ export type CarouselSlideItem = {
     closable?: boolean
     onClose?: () => void
     closeButtonStyle?: ViewStyle
-    style?: ViewStyle
+    style?: StyleProp<ViewStyle>
 }
 
 type Props = {
