@@ -957,6 +957,7 @@
   "SIGN_TRANSACTION_ERROR": "Fehler beim Unterschreiben der Transaktion",
   "STARGATE_CLAIMABLE": "Einlösbar",
   "STARGATE_LOCKED": "Gesperrt",
+  "STARGATE_MANAGE_STAKING": "Verwalten Sie Ihr Staking",
   "STARGATE_NEW_STAKE": "Neuer Einsatz",
   "STARGATE_REWARDS": "Belohnungen",
   "STATUS": "Status",
