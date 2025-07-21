@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.9 (2025-07-21)</small>
+
+* build: init ([9aed4db](https://github.com/vechain/veworld-mobile/commit/9aed4db))
+* fix:  input background color (#3098) ([9e6ba8b](https://github.com/vechain/veworld-mobile/commit/9e6ba8b)), closes [#3098](https://github.com/vechain/veworld-mobile/issues/3098)
+
 ## <small>2.2.7 (2025-07-17)</small>
 
 * build: init ([f993278](https://github.com/vechain/veworld-mobile/commit/f993278))
