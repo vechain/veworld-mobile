@@ -20,12 +20,10 @@ concurrency:
 
 jobs:
   build-and-test-ios:
-    id: ios
     uses: ./.github/workflows/e2e-ios.yml
     secrets: inherit
 
   build-and-test-android:
-    id: android
     uses: ./.github/workflows/e2e-android.yml
     secrets: inherit
 
@@ -48,7 +46,7 @@ jobs:
             {
               "text": "${{ job.status }} scan ${{ needs.scan.result }}, \
                        iOS ${{ needs.build-and-test-ios.result }} \
-                       url: ${{ steps.ios.outputs.resultsUrl }}, \
+                       url: ${{ needs.build-and-test-ios.outputs.resultsUrl }}, \
                        Android ${{needs.build-and-test-android.result}} \
-                       url: ${{ steps.android.outputs.resultsUrl }}"
+                       url: ${{ needs.build-and-test-android.outputs.resultsUrl }}"
             }
