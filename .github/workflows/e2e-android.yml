@@ -13,7 +13,7 @@ jobs:
         if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
         outputs:
             app: app/build/outputs/apk/release
-            resultsUrl: ${{ steps.test-result.outputs.resultsUrl }}
+            resultUrl: ${{ steps.test-result.outputs.resultUrl }}
         env:
             SENTRY_LOG_LEVEL: debug
         steps:
@@ -142,4 +142,5 @@ jobs:
             - name: Blurt test result
               id: test-result
               run: |
-                  echo "resultsUrl=$("${{ steps.android-test.outputs.stdout }}"| grep "console.devicecloud.dev/results" | sort -u | head -1)" >> "$GITHUB_OUTPUT"
+                  echo "resultUrl=$(echo "${{ steps.android-test.outputs.stdout }}" | grep "console.devicecloud.dev/results" | sort -u | head -1)" >> "$GITHUB_OUTPUT"
+                  env

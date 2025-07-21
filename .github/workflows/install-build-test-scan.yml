@@ -46,7 +46,7 @@ jobs:
             {
               "text": "${{ job.status }} scan ${{ needs.scan.result }}, \
                        iOS ${{ needs.build-and-test-ios.result }} \
-                       url: ${{ needs.build-and-test-ios.outputs.resultsUrl }}, \
+                       url: ${{ needs.build-and-test-ios.outputs.resultUrl }}, \
                        Android ${{needs.build-and-test-android.result}} \
-                       url: ${{ needs.build-and-test-android.outputs.resultsUrl }}"
+                       url: ${{ needs.build-and-test-android.outputs.resultUrl }}"
             }

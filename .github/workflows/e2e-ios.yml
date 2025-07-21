@@ -11,7 +11,7 @@ jobs:
         runs-on: macos-15
         environment: ios-release
         outputs:
-            resultsUrl: ${{ steps.test-result.outputs.resultsUrl }}
+            resultUrl: ${{ steps.test-result.outputs.resultUrl }}
 
         permissions:
             actions: write
@@ -138,4 +138,4 @@ jobs:
             - name: Blurt test result
               id: test-result
               run: |
-                  echo "resultUrl=$("${{ steps.ios-test.outputs.stdout }}"| grep "console.devicecloud.dev/results" | sort -u | head -1)" >> "$GITHUB_OUTPUT"
+                  echo "resultUrl=$(echo "${{ steps.ios-test.outputs.stdout }}" | grep "console.devicecloud.dev/results" | sort -u | head -1)" >> "$GITHUB_OUTPUT"
