@@ -202,6 +202,10 @@ export const CertificateBottomSheet = () => {
             try {
                 const { certificate, payload } = buildCertificate(request)!
                 if (selectedAccount!.device.type === DEVICE_TYPE.LEDGER) {
+                    // Do not reject request if it's a ledger request
+                    isUserAction.current = true
+                    onCloseBs()
+
                     nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
                         request,
                         accountWithDevice: selectedAccount as LedgerAccountWithDevice,
