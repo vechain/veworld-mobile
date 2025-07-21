@@ -14,6 +14,7 @@ jobs:
         outputs:
             app: app/build/outputs/apk/release
             resultUrl: ${{ steps.test-result.outputs.resultUrl }}
+            resultsLines: ${{ steps.extract-results.outputs.results-lines }}
         env:
             SENTRY_LOG_LEVEL: debug
         steps:
@@ -139,8 +140,18 @@ jobs:
                   include-tags: pull-request
                   retry: 2
 
+            - name: Extract results URLs
+              id: extract-results
+              run: |
+                  RESULTS_LINES=$(echo "${{ steps.android-test.outputs.stdout }}" | grep "/results" || echo "")
+                  echo "results-lines<<EOF" >> "$GITHUB_OUTPUT"
+                  echo "$RESULTS_LINES" >> "$GITHUB_OUTPUT"
+                  echo "EOF" >> "$GITHUB_OUTPUT"
+
             - name: Blurt test result
               id: test-result
               run: |
-                  echo "resultUrl=$(echo "${{ steps.android-test.outputs.stdout }}" | grep "console.devicecloud.dev/results" | sort -u | head -1)" >> "$GITHUB_OUTPUT"
-                  env
+                  echo "=== All results lines ==="
+                  echo "${{ steps.extract-results.outputs.results-lines }}"
+                  echo "========================="
+                  echo "resultUrl=$(echo "${{ steps.extract-results.outputs.results-lines }}" | grep "console.devicecloud.dev" | sort -u | head -1)" >> "$GITHUB_OUTPUT"
