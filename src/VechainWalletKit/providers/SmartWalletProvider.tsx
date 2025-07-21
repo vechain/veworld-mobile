@@ -38,6 +38,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const initialiseWallet = useCallback(async (): Promise<void> => {
         if (!adapter.isAuthenticated) {
+            console.log("SmartWalletProvider initialiseWallet not authenticated")
             throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
         }
         try {
@@ -175,6 +176,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     chainId: getChainId(config.networkConfig.networkType, config.networkConfig.chainId),
                     signTypedDataFn: signTypedData,
                     genericDelgation,
+                    ownerAddress,
                 })
 
                 // Estimate gas
@@ -189,10 +191,8 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 const txBody = await thor.transactions.buildTransactionBody(finalClauses, parsedGasLimit, {
                     isDelegated: options?.isDelegated ?? false,
                     dependsOn: options?.dependsOn,
-                    // gasPriceCoef: options?.gasPriceCoef,
                     maxFeePerGas: options?.maxFeePerGas,
                     maxPriorityFeePerGas: options?.maxPriorityFeePerGas,
-                    gasPriceCoef: 0,
                 })
 
                 console.log("SmartWalletProvider buildTransaction txBody", JSON.stringify(txBody))

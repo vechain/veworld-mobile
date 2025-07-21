@@ -273,6 +273,7 @@ export const useSignTransaction = ({
             transaction = result.transaction
             delegationSignature = result.signature
         } else {
+            console.log("getting delegation signature")
             delegationSignature = await getDelegationSignature(transaction, password)
         }
 
@@ -280,6 +281,7 @@ export const useSignTransaction = ({
 
         let senderSignature: Buffer
         if (senderDevice.type === DEVICE_TYPE.SMART_WALLET) {
+            console.log("signing transaction with smart wallet")
             senderSignature = await signTransactionWithSmartWallet(transaction)
         } else {
             //local mnemonic, identity already verified via useCheckIdentity

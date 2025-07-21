@@ -145,11 +145,13 @@ async function buildBatchExecutionClauses({
     smartAccountConfig,
     chainId,
     signTypedDataFn,
+    ownerAddress,
 }: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
     chainId: number
     signTypedDataFn: TransactionSigningFunction
+    ownerAddress: string
 }): Promise<TransactionClause[]> {
     const { address, isDeployed, factoryAddress } = smartAccountConfig
 
@@ -166,11 +168,12 @@ async function buildBatchExecutionClauses({
 
     const clauses: TransactionClause[] = []
     if (!isDeployed) {
+        console.log("buildBatchExecutionClauses isDeployed", ownerAddress)
         clauses.push(
             Clause.callFunction(
                 Address.of(factoryAddress),
                 ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
-                [address, 0],
+                [ownerAddress],
             ),
         )
     }
@@ -202,11 +205,13 @@ async function buildIndividualExecutionClauses({
     smartAccountConfig,
     chainId,
     signTypedDataFn,
+    ownerAddress,
 }: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
     chainId: number
     signTypedDataFn: TransactionSigningFunction
+    ownerAddress: string
 }): Promise<TransactionClause[]> {
     const clauses: TransactionClause[] = []
     const { address, isDeployed, factoryAddress } = smartAccountConfig
@@ -234,11 +239,12 @@ async function buildIndividualExecutionClauses({
 
     // If the smart account is not deployed, deploy it first
     if (!isDeployed) {
+        console.log("ownerAddress", ownerAddress)
         clauses.push(
             Clause.callFunction(
                 Address.of(factoryAddress),
                 ABIContract.ofAbi(SimpleAccountFactoryABI).getFunction("createAccount"),
-                [address ?? "", 0],
+                [ownerAddress],
             ),
         )
     }
@@ -267,6 +273,7 @@ async function buildIndividualExecutionClauses({
 export async function buildSmartAccountTransaction(params: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
+    ownerAddress: string
     chainId: number
     signTypedDataFn: TransactionSigningFunction
     // optional gen delegator object
@@ -278,7 +285,7 @@ export async function buildSmartAccountTransaction(params: {
         delegatorAddress: string
     }
 }): Promise<TransactionClause[]> {
-    const { txClauses, smartAccountConfig, signTypedDataFn, chainId, genericDelgation } = params
+    const { txClauses, smartAccountConfig, signTypedDataFn, chainId, genericDelgation, ownerAddress } = params
     const { version: smartAccountVersion, hasV1Account } = smartAccountConfig
 
     const clauses: TransactionClause[] = [...txClauses]
@@ -307,6 +314,7 @@ export async function buildSmartAccountTransaction(params: {
             smartAccountConfig,
             chainId,
             signTypedDataFn,
+            ownerAddress,
         })
     } else {
         return await buildIndividualExecutionClauses({
@@ -314,6 +322,7 @@ export async function buildSmartAccountTransaction(params: {
             smartAccountConfig,
             chainId,
             signTypedDataFn,
+            ownerAddress,
         })
     }
 }

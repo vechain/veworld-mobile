@@ -131,11 +131,6 @@ export const SimpleAccountFactoryABI = [
                 name: "owner",
                 type: "address",
             },
-            {
-                internalType: "uint256",
-                name: "salt",
-                type: "uint256",
-            },
         ],
         name: "createAccount",
         outputs: [

@@ -20,16 +20,13 @@ export const SmartAccountScreen = () => {
         })
     }, [nav])
 
-    const initialiseWalletAndNavigate = useCallback(async () => {
+    const createAndInitWallet = useCallback(async () => {
         await initialiseWallet()
-    }, [initialiseWallet])
-
-    const addWalletToVeWorld = useCallback(async () => {
         if (isAuthenticated && smartAccountAddress) {
             await createSmartWallet({ address: smartAccountAddress })
             console.log("wallet added to veworld")
         }
-    }, [createSmartWallet, isAuthenticated, smartAccountAddress])
+    }, [initialiseWallet, isAuthenticated, smartAccountAddress, createSmartWallet])
 
     const handleLogin = useCallback(async () => {
         console.log("logging in!")
@@ -80,9 +77,9 @@ export const SmartAccountScreen = () => {
                         // disabled={oauth.state.status === "loading"}
                         onPress={handleLogout}></Button>
                 </View>
-                <Button title="Initialise Wallet" onPress={initialiseWalletAndNavigate} />
+                <Button title="Initialise Wallet" onPress={createAndInitWallet} />
                 <Button title="Go to Main App" onPress={navigateToTabStack} />
-                <Button title="Add Wallet to VeWorld" onPress={addWalletToVeWorld} />
+
                 {/* <Button title="Logout" onPress={logout} /> */}
             </View>
         </View>

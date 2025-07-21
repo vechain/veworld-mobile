@@ -26,6 +26,14 @@ export async function getSmartAccount(
 
         const hasV1Account = await accountFactory.read.hasLegacyAccount(ownerAddress)
         const version = await accountFactory.read.version()
+        console.log("smart account details", {
+            ownerAddress,
+            smartAccountAddress,
+            hasV1Account: hasV1Account[0] as boolean,
+            isDeployed,
+            version: parseInt(version[0] as string),
+            factoryAddress: accountFactoryAddress,
+        })
         return {
             address: smartAccountAddress,
             hasV1Account: hasV1Account[0] as boolean,

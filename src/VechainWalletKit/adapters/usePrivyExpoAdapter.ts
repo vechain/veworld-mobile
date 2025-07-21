@@ -14,7 +14,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             console.log("error logging", JSON.stringify(err))
         },
     })
-    const isAuthenticated = !!user && (wallets?.length ?? 0) > 0
+    const isAuthenticated = !!user
 
     return useMemo(() => {
         const currentWallets = wallets ?? []
