@@ -654,7 +654,7 @@ const dark: Colors = {
         text: COLORS.GREY_300,
     },
     convertBetterCard: {
-        inputBg: COLORS.PURPLE,
+        inputBg: COLORS.PURPLE_DISABLED,
         inputText: COLORS.WHITE,
         convertValueText: COLORS.GREY_300,
         swapIcon: COLORS.WHITE,
