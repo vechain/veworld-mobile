@@ -30,6 +30,6 @@ export const Migration23 = (state: PersistedState): PersistedState => {
 
     return {
         ...state,
-        notification: newState,
+        balances: newState,
     } as PersistedState
 }
