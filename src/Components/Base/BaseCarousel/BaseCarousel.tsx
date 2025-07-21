@@ -144,6 +144,9 @@ export const BaseCarousel = ({
                 ref={ref}
                 data={data}
                 snapToOffsets={snapOffsets ?? offsets}
+                snapToEnd={false}
+                snapToStart={false}
+                disableIntervalMomentum
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 pagingEnabled
                 decelerationRate="normal"
