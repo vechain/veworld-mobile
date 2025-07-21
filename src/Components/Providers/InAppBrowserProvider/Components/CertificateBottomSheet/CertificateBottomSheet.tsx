@@ -107,7 +107,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 )}
             </BaseView>
             <BaseSpacer height={12} />
-            <DappWithDetails name={name} icon={icon} url={url} isDefaultVisible>
+            <DappWithDetails name={name} icon={icon} url={url}>
                 <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
                     {request.message.payload.content}
                 </BaseText>
