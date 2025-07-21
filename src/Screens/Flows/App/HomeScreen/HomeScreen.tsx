@@ -76,12 +76,6 @@ export const HomeScreen = () => {
         dispatch(setAppResetTimestamp())
     }, [dispatch])
 
-    useEffect(() => {
-        // Update balances when the screen is loaded the first time
-        updateBalances()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
     const { LL } = useI18nContext()
     // Pull down to refresh
     const [refreshing, setRefreshing] = React.useState(false)

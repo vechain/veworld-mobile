@@ -6,6 +6,10 @@ import AddressUtils from "../AddressUtils"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
 import { BigNumber } from "bignumber.js"
 import BigNutils from "~Utils/BigNumberUtils"
+import { ethers } from "ethers"
+import { VIP180 } from "~Constants/Constants/Thor/abis"
+
+const vip180Interface = new ethers.utils.Interface([VIP180.balanceOf])
 
 /**
  * Calls out to external sources to get the balance
@@ -36,6 +40,66 @@ const getBalanceFromBlockchain = async (
             timeUpdated: new Date().toISOString(),
             isHidden: false,
         }
+    } catch (e) {
+        error(ERROR_EVENTS.TOKENS, e)
+        throw new Error("Failed to get balance from external service")
+    }
+}
+
+const getMultipleBalancesFromBlockchain = async (
+    tokenAddresses: string[],
+    accountAddress: string,
+    network: Network,
+    thor: Connex.Thor,
+): Promise<Balance[]> => {
+    try {
+        const vetOrVthoInAddresses =
+            tokenAddresses.find(addr => AddressUtils.compareAddresses(addr, VET.address)) ||
+            tokenAddresses.find(addr => AddressUtils.compareAddresses(addr, VTHO.address))
+        const notVetOrVtho = tokenAddresses.filter(
+            addr =>
+                !AddressUtils.compareAddresses(addr, VET.address) && !AddressUtils.compareAddresses(addr, VTHO.address),
+        )
+        const balances: Balance[] = []
+        if (vetOrVthoInAddresses) {
+            const result = await getVetAndVthoBalancesFromBlockchain(accountAddress, network)
+            balances.push({
+                tokenAddress: VET.address,
+                timeUpdated: new Date().toISOString(),
+                balance: result.balance,
+                isHidden: false,
+            })
+            balances.push({
+                tokenAddress: VTHO.address,
+                timeUpdated: new Date().toISOString(),
+                balance: result.energy,
+                isHidden: false,
+            })
+        }
+        if (notVetOrVtho.length === 0) return balances
+        const clauses = notVetOrVtho.map(token =>
+            thor.account(token).method(abis.VIP180.balanceOf).asClause(accountAddress),
+        )
+
+        const result = await thor.explain(clauses).caller(accountAddress).execute()
+
+        return balances.concat(
+            result
+                .map((r, idx) => {
+                    try {
+                        const balance = vip180Interface.decodeFunctionResult("balanceOf", r.data)
+                        return {
+                            balance: (balance[0] as ethers.BigNumber).toHexString(),
+                            tokenAddress: notVetOrVtho[idx],
+                            timeUpdated: new Date().toISOString(),
+                            isHidden: false,
+                        }
+                    } catch {
+                        return undefined
+                    }
+                })
+                .filter((v): v is NonNullable<typeof v> => v !== undefined),
+        )
     } catch (e) {
         error(ERROR_EVENTS.TOKENS, e)
         throw new Error("Failed to get balance from external service")
@@ -132,4 +196,5 @@ export default {
     getFiatBalance,
     getTokenUnitBalance,
     getBalanceAndTokenInfoFromBlockchain,
+    getMultipleBalancesFromBlockchain,
 }

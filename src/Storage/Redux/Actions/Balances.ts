@@ -48,29 +48,29 @@ export const updateAccountBalances =
             return
         }
 
-        const networkBalances: Balance[] = []
-
         const network = selectSelectedNetwork(getState())
 
         try {
-            for (const accountBalance of accountBalances) {
-                //Skip updating balances if it's up to date. If `force` is set to true, skip this check
-                if (Date.now() - new Date(accountBalance.timeUpdated).getTime() <= BALANCE_UPDATE_CACHE_TIME && !force)
-                    continue
-                const networkBalance = await BalanceUtils.getBalanceFromBlockchain(
-                    accountBalance.tokenAddress,
-                    accountAddress,
-                    network,
-                    thorClient,
-                )
-                if (networkBalance) networkBalances.push(networkBalance)
-            }
+            const updatableBalances = force
+                ? accountBalances
+                : accountBalances.filter(
+                      balance => Date.now() - new Date(balance.timeUpdated).getTime() >= BALANCE_UPDATE_CACHE_TIME,
+                  )
+
+            const newBalances = await BalanceUtils.getMultipleBalancesFromBlockchain(
+                updatableBalances.map(balance => balance.tokenAddress),
+                accountAddress,
+                network,
+                thorClient,
+            )
+
+            if (newBalances.length === 0) return
 
             dispatch(
                 updateTokenBalances({
                     network: network.type,
                     accountAddress,
-                    newBalances: networkBalances,
+                    newBalances,
                 }),
             )
         } catch (e) {
