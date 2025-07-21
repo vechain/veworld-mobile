@@ -13,6 +13,7 @@ jobs:
         if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
         outputs:
             app: app/build/outputs/apk/release
+            resultsUrl: ${{ steps.test-result.outputs.resultsUrl }}
         env:
             SENTRY_LOG_LEVEL: debug
         steps:
@@ -129,6 +130,7 @@ jobs:
                   path: ${{ env.output_dir }}/app-release.apk
 
             - name: Test Android
+              id: android-test
               uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
               with:
                   api-key: ${{ secrets.DCD_API_KEY }}
@@ -136,3 +138,8 @@ jobs:
                   exclude-tags: onlyIOS
                   include-tags: pull-request
                   retry: 2
+
+            - name: Blurt test result
+              id: test-result
+              run: |
+                  echo "resultsUrl=$("${{ steps.android-tests.outputs.stdout }}"| grep "console.devicecloud.dev/results" | sort -u | head -1)" >> "$GITHUB_OUTPUT"
