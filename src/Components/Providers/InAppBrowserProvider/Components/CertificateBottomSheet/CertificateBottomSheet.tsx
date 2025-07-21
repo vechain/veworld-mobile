@@ -95,10 +95,9 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 flexDirection="row"
                 gap={12}
                 justifyContent="space-between"
-                mb={16}
                 testID="SIGN_CERTIFICATE_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
-                    <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
+                    <BaseIcon name="icon-certificate" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
                         {LL.SIGN_CERTIFICATE_REQUEST_TITLE()}
                     </BaseText>
@@ -107,8 +106,8 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                     <AccountSelector account={selectedAccount} onPress={onChangeAccountPress} variant="short" />
                 )}
             </BaseView>
-            <BaseSpacer height={24} />
-            <DappWithDetails name={name} icon={icon} url={url} isDefaultVisible>
+            <BaseSpacer height={12} />
+            <DappWithDetails name={name} icon={icon} url={url}>
                 <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
                     {request.message.payload.content}
                 </BaseText>
