@@ -1,7 +1,7 @@
-import { abis } from "~Constants"
+import { VIP181_ABI } from "@vechain/sdk-core"
+import { ThorClient } from "@vechain/sdk-network"
 
-export const getName = async (contractAddress: string, thor: Connex.Thor): Promise<string> => {
-    const name = await thor.account(contractAddress).method(abis.VIP181.name).call()
-
-    return name.decoded[0]
+export const getName = async (contractAddress: string, thor: ThorClient): Promise<string> => {
+    const name = await thor.contracts.load(contractAddress, VIP181_ABI).read.name()
+    return name[0] as string
 }

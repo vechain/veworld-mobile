@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.2.6",
+  "version": "2.2.8",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -68,7 +68,6 @@
     "@craftzdog/react-native-buffer": "^6.0.5",
     "@ethersproject/json-wallets": "5",
     "@ethersproject/shims": "^5.8.0",
-    "@formatjs/intl-numberformat": "^8.15.4",
     "@gorhom/bottom-sheet": "^4.6.4",
     "@klarna/react-native-vector-drawable": "^0.5.1",
     "@ledgerhq/react-native-hw-transport-ble": "^6.33.4",
@@ -154,6 +153,7 @@
     "react-native-draggable-flatlist": "^4.0.1",
     "react-native-drop-shadow": "1.0.0",
     "react-native-fast-image": "^8.6.3",
+    "react-native-fast-url": "^0.6.0",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-get-random-values": "^1.11.0",
     "react-native-haptic-feedback": "^2.3.3",
@@ -204,7 +204,6 @@
     "thor-devkit": "^2.0.9",
     "ts-retry-promise": "^0.8.1",
     "typesafe-i18n": "^5.26.2",
-    "url": "^0.11.4",
     "usehooks-ts": "^3.1.1",
     "util": "^0.12.5",
     "web3": "^4.13.0",

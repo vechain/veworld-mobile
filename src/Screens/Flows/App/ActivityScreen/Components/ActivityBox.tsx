@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, VET, VOT3, VTHO } from "~Constants"
-import { useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
+import { useFormatFiat, useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
     Activity,
@@ -239,6 +239,7 @@ type TokenTransferActivityBoxProps = {
 const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const { formatLocale } = useFormatFiat()
 
     const { amount, timestamp, tokenAddress, direction, to, from } = activity
 
@@ -271,7 +272,7 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
 
         return BigNutils(amount)
             .toHuman(token?.decimals ?? 0)
-            .toTokenFormat_string(2)
+            .toTokenFormat_string(2, formatLocale)
     }
 
     const getActivityProps = (): Omit<ActivityBoxProps, "time" | "onPress"> => {
@@ -357,6 +358,7 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
     const icon = "icon-arrow-left-right"
     const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
+    const { formatLocale } = useFormatFiat()
 
     const allTokens = useAppSelector(selectAllTokens)
     const outputToken = allTokens.find(_token => AddressUtils.compareAddresses(_token.address, activity.outputToken))
@@ -364,11 +366,11 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
 
     const paidAmount = BigNutils(activity.inputValue)
         .toHuman(inputToken?.decimals ?? 0)
-        .toTokenFormat_string(2)
+        .toTokenFormat_string(2, formatLocale)
 
     const receivedAmount = BigNutils(activity.outputValue)
         .toHuman(outputToken?.decimals ?? 0)
-        .toTokenFormat_string(2)
+        .toTokenFormat_string(2, formatLocale)
 
     const rightAmount = `${DIRECTIONS.UP} ${receivedAmount} ${outputToken?.symbol ?? ""}`
     const rightAmountDescription = `${DIRECTIONS.DOWN} ${paidAmount} ${inputToken?.symbol ?? ""}`
@@ -566,13 +568,14 @@ type B3trActionProps = {
 const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) => {
     const { LL } = useI18nContext()
     const time = moment(activity.timestamp).format("HH:mm")
+    const { formatLocale } = useFormatFiat()
 
     const onPressHandler = () => {
         onPress(activity)
     }
 
     const dapp = veBetterDaoDapps.find(d => d.id === activity.appId)
-    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2)
+    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2, formatLocale)
 
     return (
         <BaseActivityBox
@@ -648,12 +651,13 @@ type B3trClaimRewardProps = {
 const B3trClaimReward = ({ activity, onPress }: B3trClaimRewardProps) => {
     const { LL } = useI18nContext()
     const time = moment(activity.timestamp).format("HH:mm")
+    const { formatLocale } = useFormatFiat()
 
     const onPressHandler = () => {
         onPress(activity)
     }
 
-    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2)
+    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2, formatLocale)
 
     return (
         <BaseActivityBox
@@ -702,14 +706,14 @@ type B3trSwapB3trToVot3Props = {
 
 const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
     const { LL } = useI18nContext()
-
+    const { formatLocale } = useFormatFiat()
     const title = LL.TOKEN_CONVERSION()
     const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
 
     const amount = BigNutils(activity.value)
         .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2)
+        .toTokenFormat_string(2, formatLocale)
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${VOT3.symbol}`
     const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${B3TR.symbol}`
@@ -743,14 +747,14 @@ type B3trSwapVot3ToB3trProps = {
 
 const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
     const { LL } = useI18nContext()
-
     const title = LL.TOKEN_CONVERSION()
     const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
+    const { formatLocale } = useFormatFiat()
 
     const amount = BigNutils(activity.value)
         .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2)
+        .toTokenFormat_string(2, formatLocale)
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${B3TR.symbol}`
     const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${VOT3.symbol}`
@@ -835,6 +839,7 @@ type StakingProps = {
 const Staking = ({ activity, onPress }: StakingProps) => {
     const { LL } = useI18nContext()
     const time = moment(activity.timestamp).format("HH:mm")
+    const { formatLocale } = useFormatFiat()
 
     const onPressHandler = () => {
         onPress(activity)
@@ -897,7 +902,7 @@ const Staking = ({ activity, onPress }: StakingProps) => {
 
     const amount = BigNutils(activity.value)
         .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2)
+        .toTokenFormat_string(2, formatLocale)
 
     const rightAmount = useMemo(() => {
         if (hasRightAmount) {

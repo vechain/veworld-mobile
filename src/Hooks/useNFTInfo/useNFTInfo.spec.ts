@@ -1,9 +1,9 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { useNFTInfo } from "./useNFTInfo"
-import { useThor } from "~Components"
 import { getName, getTokenURI } from "~Networking"
 import * as logger from "~Utils/Logger/Logger"
 import { NFTMediaType, NFTMetadata } from "~Model"
+import { useThorClient } from "~Hooks/useThorClient"
 
 jest.mock("~Networking", () => ({
     getName: jest.fn(),
@@ -21,8 +21,8 @@ jest.mock("~Hooks/useNFTMetadata", () => {
     }
 })
 
-jest.mock("~Components", () => ({
-    useThor: jest.fn(),
+jest.mock("~Hooks/useThorClient", () => ({
+    useThorClient: jest.fn(),
 }))
 
 jest.mock("~Utils/Logger/Logger", () => ({
@@ -62,7 +62,7 @@ describe("useNFTInfo", () => {
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
         ;(getName as jest.Mock).mockResolvedValue(nameMock)
         fetchMetadata.mockResolvedValue(nftMetaMock)
-        ;(useThor as jest.Mock).mockReturnValue(thor)
+        ;(useThorClient as jest.Mock).mockReturnValue(thor)
 
         const { result, waitForNextUpdate } = renderHook(() => useNFTInfo(tokenId, address))
 
@@ -85,7 +85,7 @@ describe("useNFTInfo", () => {
         ;(getTokenURI as jest.Mock).mockRejectedValue(errorMock)
         ;(getName as jest.Mock).mockRejectedValue(errorMock)
         fetchMetadata.mockResolvedValue(errorMock)
-        ;(useThor as jest.Mock).mockReturnValue(thor)
+        ;(useThorClient as jest.Mock).mockReturnValue(thor)
 
         const consoleErrorSpy = jest.spyOn(logger, "warn")
 
@@ -111,7 +111,7 @@ describe("useNFTInfo", () => {
         ;(getTokenURI as jest.Mock).mockResolvedValue(tokenUriMock)
         ;(getName as jest.Mock).mockResolvedValue(nameMock)
         fetchMetadata.mockRejectedValueOnce(new Error("Error"))
-        ;(useThor as jest.Mock).mockReturnValue(thor)
+        ;(useThorClient as jest.Mock).mockReturnValue(thor)
 
         const { result, waitForNextUpdate } = renderHook(() => useNFTInfo(tokenId, contractAddress))
 

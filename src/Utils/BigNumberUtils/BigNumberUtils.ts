@@ -1,7 +1,46 @@
 import { BigNumber as BN } from "bignumber.js"
 import { isEmpty } from "lodash"
+import { getNumberFormatter } from "~Constants/Constants/NumberFormatter"
 
 export type BigNumberable = string | number | BN | bigint | BigNumberUtils
+
+const locales_separator = {
+    tw: ".",
+    "zh-tw": ".",
+    zh: ".",
+    "zh-cn": ".",
+    de: ",",
+    "de-DE": ",",
+    en: ".",
+    "en-US": ".",
+    es: ",",
+    "es-ES": ",",
+    fr: ",",
+    "fr-FR": ",",
+    hi: ".",
+    "hi-IN": ".",
+    it: ",",
+    "it-IT": ",",
+    ja: ".",
+    "ja-JP": ".",
+    ko: ".",
+    "ko-KR": ".",
+    nl: ",",
+    "nl-NL": ",",
+    pl: ",",
+    "pl-PL": ",",
+    pt: ",",
+    "pt-PT": ",",
+    ru: ",",
+    "ru-RU": ",",
+    sv: ",",
+    "sv-SE": ",",
+    tr: ",",
+    "tr-TR": ",",
+    vi: ",",
+    "vi-VN": ",",
+    "nl-BE": ",",
+}
 
 const parseBigNumberable = (value: BigNumberable): BN.Value => {
     if (typeof value === "bigint") return value.toString()
@@ -46,11 +85,7 @@ interface IBigNumberUtils {
 }
 
 const getDecimalSeparator = (locale: Intl.LocalesArgument) => {
-    if (locale === "tw" || locale === "zh-tw") return "."
-    const numberWithDecimalSeparator = 1.1
-    return Intl.NumberFormat(locale)
-        .formatToParts(numberWithDecimalSeparator)
-        .find(part => part.type === "decimal")?.value
+    return locales_separator[locale as keyof typeof locales_separator]
 }
 
 const stripTrailingZeros = (value: string) => {
@@ -187,13 +222,17 @@ class BigNumberUtils implements IBigNumberUtils {
         return this.data.isGreaterThan(value)
     }
 
+    isBiggerThanOrEqual(value: string | number | BN): boolean {
+        return this.data.isGreaterThanOrEqualTo(value)
+    }
+
     toCurrencyFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
         const _locale = locale ?? "en-US"
-        const formatter = new Intl.NumberFormat(_locale.toString(), {
+        const formatter = getNumberFormatter({
+            locale: _locale,
+            precision: decimals,
             style: "decimal",
             useGrouping: true,
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
         })
         let _data = ""
 
@@ -207,12 +246,13 @@ class BigNumberUtils implements IBigNumberUtils {
     }
 
     toTokenFormat_string(decimals: number, locale?: Intl.LocalesArgument): string {
-        const _locale = locale ?? "en-US"
-        const formatter = new Intl.NumberFormat(_locale.toString(), {
+        const _locale = locale || "en-US"
+
+        const formatter = getNumberFormatter({
+            locale: _locale,
+            precision: decimals,
             style: "decimal",
             useGrouping: true,
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
         })
 
         let _data = ""
@@ -241,11 +281,11 @@ class BigNumberUtils implements IBigNumberUtils {
         const _locale = locale ?? "en-US"
         const separator = getDecimalSeparator(_locale.toString()) ?? "."
         if (this.data.isZero()) return ["0", "00"].join(separator)
-        const formatter = new Intl.NumberFormat(_locale.toString(), {
+        const formatter = getNumberFormatter({
+            locale: _locale,
+            precision: decimals,
             style: "decimal",
             useGrouping: true,
-            minimumFractionDigits: decimals,
-            maximumFractionDigits: decimals,
         })
 
         const tokenBalance = new BN(this.data.toFixed(decimals, BN.ROUND_DOWN))
