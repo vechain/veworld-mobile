@@ -101,7 +101,7 @@ const getTokenBalanceFromBlockchain = async (
 
         return res.decoded[0]
     } catch (e) {
-        info(ERROR_EVENTS.TOKENS, e)
+        info(ERROR_EVENTS.TOKENS, tokenAddress, e)
     }
 }
 

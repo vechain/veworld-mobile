@@ -1,4 +1,5 @@
-import { useNavigation, useScrollToTop, useFocusEffect } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useScrollToTop } from "@react-navigation/native"
+import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { RefreshControl, StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
@@ -17,13 +18,13 @@ import {
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import {
+    getVeDelegateBalanceQueryKey,
     useAnalyticTracking,
     useBottomSheetModal,
     useMemoizedAnimation,
     usePrefetchAllVns,
     useSetSelectedAccount,
     useTheme,
-    getVeDelegateBalanceQueryKey,
 } from "~Hooks"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
@@ -48,10 +49,9 @@ import {
     Header,
     TokenList,
 } from "./Components"
+import { BannersCarousel } from "./Components/BannerCarousel"
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 import { useTokenBalances } from "./Hooks"
-import { useQueryClient } from "@tanstack/react-query"
-import { BannersCarousel } from "./Components/BannerCarousel"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -112,8 +112,7 @@ export const HomeScreen = () => {
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await updateBalances()
-        await updateSuggested()
+        await Promise.all([updateBalances(true), updateSuggested()])
 
         setRefreshing(false)
     }, [updateBalances, updateSuggested])
