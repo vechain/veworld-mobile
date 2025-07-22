@@ -1,8 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import DeviceInfo from "react-native-device-info"
 import { AppVersion } from "~Model/AppVersion"
 
 const initialVersionUpdateState: AppVersion = {
-    installedVersion: "",
+    installedVersion: DeviceInfo.getVersion(),
     majorVersion: "",
     latestVersion: "",
     isUpToDate: null,

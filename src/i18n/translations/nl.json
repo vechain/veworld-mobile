@@ -958,7 +958,7 @@
   "SIGN_CERTIFICATE_REQUEST_TITLE": "Certificaat ondertekenen",
   "SIGN_TRANSACTION": "Transactie ondertekenen",
   "SIGN_TRANSACTION_ERROR": "Fout bij het ondertekenen van de transactie",
-  "STARGATE_CLAIMABLE": "Inwisselbaar",
+  "STARGATE_CLAIMABLE": "Claimbaar",
   "STARGATE_LOCKED": "Vergrendeld",
   "STARGATE_MANAGE_STAKING": "Beheer je staking",
   "STARGATE_NEW_STAKE": "Nieuwe inzet",

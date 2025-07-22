@@ -958,7 +958,7 @@
   "SIGN_CERTIFICATE_REQUEST_TITLE": "Signera certifikat",
   "SIGN_TRANSACTION": "Signera transaktion",
   "SIGN_TRANSACTION_ERROR": "Fel vid signering av transaktion",
-  "STARGATE_CLAIMABLE": "Möjlig att förekomma",
+  "STARGATE_CLAIMABLE": "Möjlig att hämta",
   "STARGATE_LOCKED": "Låst",
   "STARGATE_MANAGE_STAKING": "Hantera din insats",
   "STARGATE_NEW_STAKE": "Ny insats",

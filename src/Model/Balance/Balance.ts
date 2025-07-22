@@ -3,7 +3,7 @@ import { FungibleToken } from "~Model"
 /**
  * @field `tokenAddress` - The address of the token
  * @field `balance` - The current balance
- * @field `timeUpdated` - The time the data was updated in seconds
+ * @field `timeUpdated` - The time the data was updated in ISO String
  * @field `tokenName` - The name of the token
  * @field `tokenSymbol` - The symbol of the token
  * @field `tokenDecimals` - The number of decimals the token has
