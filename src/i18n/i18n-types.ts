@@ -3911,13 +3911,13 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	SIGN_CERTIFICATE_REQUEST_TITLE: string
-	/**
 	 * S​i​g​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
+	/**
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
 	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
@@ -3926,6 +3926,26 @@ type RootTranslation = {
 	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SIGN_TRANSACTION_ERROR: string
+	/**
+	 * C​l​a​i​m​a​b​l​e
+	 */
+	STARGATE_CLAIMABLE: string
+	/**
+	 * L​o​c​k​e​d
+	 */
+	STARGATE_LOCKED: string
+	/**
+	 * N​e​w​ ​s​t​a​k​e
+	 */
+	STARGATE_NEW_STAKE: string
+	/**
+	 * R​e​w​a​r​d​s
+	 */
+	STARGATE_REWARDS: string
+	/**
+	 * M​a​n​a​g​e​ ​y​o​u​r​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_MANAGE_STAKING: string
 	/**
 	 * S​t​a​t​u​s
 	 */
@@ -4181,6 +4201,10 @@ type RootTranslation = {
 	 * S​e​t​t​i​n​g​s
 	 */
 	TITLE_SETTINGS: string
+	/**
+	 * T​o​t​a​l​ ​l​o​c​k​e​d
+	 */
+	TITLE_TOTAL_LOCKED: string
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​s
 	 */
@@ -8339,13 +8363,13 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Sign certificate
-	 */
-	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
-	/**
 	 * Sign
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Sign certificate
+	 */
+	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * Sign transaction
 	 */
@@ -8354,6 +8378,26 @@ Are you sure you want to continue?
 	 * Error signing transaction
 	 */
 	SIGN_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * Claimable
+	 */
+	STARGATE_CLAIMABLE: () => LocalizedString
+	/**
+	 * Locked
+	 */
+	STARGATE_LOCKED: () => LocalizedString
+	/**
+	 * New stake
+	 */
+	STARGATE_NEW_STAKE: () => LocalizedString
+	/**
+	 * Rewards
+	 */
+	STARGATE_REWARDS: () => LocalizedString
+	/**
+	 * Manage your staking
+	 */
+	STARGATE_MANAGE_STAKING: () => LocalizedString
 	/**
 	 * Status
 	 */
@@ -8606,6 +8650,10 @@ Are you sure you want to continue?
 	 * Settings
 	 */
 	TITLE_SETTINGS: () => LocalizedString
+	/**
+	 * Total locked
+	 */
+	TITLE_TOTAL_LOCKED: () => LocalizedString
 	/**
 	 * Transactions
 	 */
