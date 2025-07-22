@@ -46,7 +46,7 @@ const getBalanceFromBlockchain = async (
     }
 }
 
-const getMultipleBalancesFromBlockchain = async (
+const getBalancesFromBlockchain = async (
     tokenAddresses: string[],
     accountAddress: string,
     network: Network,
@@ -83,23 +83,24 @@ const getMultipleBalancesFromBlockchain = async (
 
         const result = await thor.explain(clauses).caller(accountAddress).execute()
 
-        return balances.concat(
-            result
-                .map((r, idx) => {
-                    try {
-                        const balance = vip180Interface.decodeFunctionResult("balanceOf", r.data)
-                        return {
-                            balance: (balance[0] as ethers.BigNumber).toHexString(),
-                            tokenAddress: notVetOrVtho[idx],
-                            timeUpdated: new Date().toISOString(),
-                            isHidden: false,
-                        }
-                    } catch {
-                        return undefined
-                    }
-                })
-                .filter((v): v is NonNullable<typeof v> => v !== undefined),
-        )
+        const nowIso = new Date().toISOString()
+
+        const updatedBalances = result.flatMap((res, idx) => {
+            // skip clauses that obviously failed
+            if (res.reverted || res.data === "0x" || res.data.length < 10) return []
+
+            const [raw] = vip180Interface.decodeFunctionResult("balanceOf", res.data)
+            return [
+                {
+                    balance: (raw as ethers.BigNumber).toHexString(),
+                    tokenAddress: notVetOrVtho[idx],
+                    timeUpdated: nowIso,
+                    isHidden: false,
+                },
+            ]
+        })
+
+        return balances.concat(updatedBalances)
     } catch (e) {
         error(ERROR_EVENTS.TOKENS, e)
         throw new Error("Failed to get balance from external service")
@@ -196,5 +197,5 @@ export default {
     getFiatBalance,
     getTokenUnitBalance,
     getBalanceAndTokenInfoFromBlockchain,
-    getMultipleBalancesFromBlockchain,
+    getBalancesFromBlockchain,
 }

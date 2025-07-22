@@ -54,7 +54,7 @@ export const updateAccountBalances =
 
             dispatch(setIsTokensOwnedLoading(true))
 
-            const newBalances = await BalanceUtils.getMultipleBalancesFromBlockchain(
+            const newBalances = await BalanceUtils.getBalancesFromBlockchain(
                 updatableBalances.map(balance => balance.tokenAddress),
                 accountAddress,
                 network,
