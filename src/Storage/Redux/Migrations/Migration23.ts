@@ -9,7 +9,7 @@ const ONE_HOUR = 60 * 60 * 1000
 /**
  *
  * @param balanceFilter Filter function that should return true if the item should be excluded, false otherwise
- * @returns Map-like function, that filters out what described by {@link balanceFilter} and all the balances that have a difference of more than 1 day from the VET balance update.
+ * @returns Map-like function, that filters out what described by {@link balanceFilter} and all the balances that have a difference of more than 1 hour from the VET balance update.
  */
 const mapFn =
     (balanceFilter?: (balance: Balance) => boolean) =>
