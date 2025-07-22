@@ -53,7 +53,7 @@ export const useUserNodes = (address?: string) => {
 
     const enabled = !!thor && !!address && !!nodeManagementAddress
 
-    const { data, isLoading, error, isError } = useQuery({
+    const { data, error, isError, isFetching } = useQuery({
         queryKey,
         queryFn: async () => await getUserNodes(thor, address, nodeManagementAddress),
         enabled,
@@ -65,7 +65,7 @@ export const useUserNodes = (address?: string) => {
     return {
         data,
         stargateNodes,
-        isLoading,
+        isLoading: isFetching,
         error,
         isError,
     }

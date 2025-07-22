@@ -1,11 +1,12 @@
 import React from "react"
-import { Image, StyleSheet, ImageStyle } from "react-native"
-import { BaseView } from "~Components"
-import { StellaPayBannerB3MO, StellaPayLogoSVG } from "~Assets"
-import { useThemedStyles } from "~Hooks"
+import { StyleSheet } from "react-native"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
-import { useI18nContext } from "~i18n"
 import Markdown from "react-native-markdown-display"
+import { StellaPayBannerB3MO, StellaPayLogoSVG } from "~Assets"
+import { BaseView } from "~Components"
+import { useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const StellaPayBanner = () => {
@@ -31,7 +32,7 @@ export const StellaPayBanner = () => {
                     {LL.BANNER_STELLAPAY_DESC()}
                 </Markdown>
             </BaseView>
-            <Image source={StellaPayBannerB3MO} style={styles.image as ImageStyle} />
+            <FastImage source={StellaPayBannerB3MO} style={styles.image as ImageStyle} />
         </LinearGradient>
     )
 }

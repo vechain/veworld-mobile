@@ -1,14 +1,14 @@
 import React, { useCallback, useMemo } from "react"
-import { BaseCarousel, BaseSpacer, CarouselSlideItem } from "~Components"
+import { BaseSpacer, CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { AnalyticsEvent, STARGATE_DAPP_URL } from "~Constants"
-import { useAnalyticTracking } from "~Hooks"
 import { StargateBannerClosable } from "~Components/Reusable"
+import { AnalyticsEvent, SCREEN_WIDTH, STARGATE_DAPP_URL } from "~Constants"
+import { useAnalyticTracking } from "~Hooks"
 import {
-    useAppSelector,
     selectHideStargateBannerHomeScreen,
     setHideStargateBannerHomeScreen,
     useAppDispatch,
+    useAppSelector,
 } from "~Storage/Redux"
 
 type Props = {
@@ -76,15 +76,21 @@ export const BannersCarousel = ({ location }: Props) => {
     return (
         <>
             {location === "home_screen" && <BaseSpacer height={location === "home_screen" ? 16 : 40} />}
-            <BaseCarousel
-                h={88}
+            <FullscreenBaseCarousel
+                itemHeight={88}
                 data={filteredBanners}
                 showPagination={false}
-                autoPlay={false}
-                loop={false}
                 testID={`${location}_carousel`}
                 onSlidePressActivation="before"
                 onSlidePress={onSlidePress}
+                gap={0}
+                // Remove the -16 if you need to have another item
+                baseWidth={SCREEN_WIDTH - 16}
+                padding={16}
+                {...(location === "token_screen" && {
+                    padding: 0,
+                    baseWidth: SCREEN_WIDTH - 32,
+                })}
             />
             <BaseSpacer height={location === "home_screen" ? 32 : 40} />
         </>
