@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import moment from "moment"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import DeviceInfo from "react-native-device-info"
 import { VersionManifest } from "~Model/AppVersion"
 import { selectUpdatePromptStatus, useAppDispatch, useAppSelector, VersionUpdateSlice } from "~Storage/Redux"
@@ -34,6 +34,7 @@ const fetchVersionInfo = async (): Promise<VersionManifest> => {
 export const useCheckAppVersion = () => {
     const versionUpdateStatus = useAppSelector(selectUpdatePromptStatus)
     const dispatch = useAppDispatch()
+    const [versionCheckComplete, setVersionCheckComplete] = useState(false)
 
     const { data: versionInfo } = useQuery({
         queryKey: ["versionManifest"],
@@ -64,6 +65,8 @@ export const useCheckAppVersion = () => {
             if (versionInfo.latest !== versionUpdateStatus.latestVersion) {
                 dispatch(VersionUpdateSlice.actions.setLatestVersion(versionInfo.latest))
             }
+
+            setVersionCheckComplete(true)
         }
     }, [
         dispatch,
@@ -74,7 +77,7 @@ export const useCheckAppVersion = () => {
     ])
 
     const shouldShowUpdatePrompt = useMemo(() => {
-        if (!versionUpdateStatus.majorVersion || !versionUpdateStatus.installedVersion) {
+        if (!versionUpdateStatus.majorVersion || !versionUpdateStatus.installedVersion || !versionCheckComplete) {
             return false
         }
 
@@ -108,7 +111,7 @@ export const useCheckAppVersion = () => {
             default:
                 return false
         }
-    }, [versionUpdateStatus])
+    }, [versionCheckComplete, versionUpdateStatus])
 
     const hasPermanentlyDismissed = useMemo(() => {
         return (
