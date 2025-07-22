@@ -15,6 +15,7 @@ import {
     QRCodeBottomSheet,
     SelectAccountBottomSheet,
     useFeatureFlags,
+    VersionChangelogBottomSheet,
     VersionUpdateAvailableBottomSheet,
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
@@ -273,6 +274,7 @@ export const HomeScreen = () => {
                     <DeviceJailBrokenWarningModal />
                     <EnableNotificationsBottomSheet />
                     <VersionUpdateAvailableBottomSheet />
+                    <VersionChangelogBottomSheet />
                     <DisabledBuySwapIosBottomSheet
                         ref={blockedFeaturesIOSBottomSheetRef}
                         onConfirm={closeBlockedFeaturesIOSBottomSheet}

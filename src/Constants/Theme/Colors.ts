@@ -740,8 +740,8 @@ const dark: Colors = {
         icon: COLORS.RED_500,
     },
     label: {
-        background: COLORS.PURPLE,
-        text: COLORS.WHITE,
+        background: COLORS.PURPLE_DISABLED,
+        text: COLORS.GREY_300,
     },
     stakedCard: {
         fiatValue: COLORS.GREY_100,

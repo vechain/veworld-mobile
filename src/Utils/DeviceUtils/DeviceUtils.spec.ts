@@ -10,6 +10,7 @@ jest.mock("react-native-device-info", () => ({
     isLowRamDevice: jest.fn(),
     getMaxMemory: jest.fn(),
     getTotalMemory: jest.fn(),
+    getVersion: jest.fn(),
 }))
 
 const PRIVATE_KEY = "0x99f0500549792796c14fed62011a51081dc5b5e68fe8bd8a13b86be829c4fd36"
