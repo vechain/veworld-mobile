@@ -1,27 +1,17 @@
 import { PersistedState } from "redux-persist/es/types"
-import { AppVersion } from "~Model/AppVersion"
-import { ERROR_EVENTS } from "~Constants"
-import { debug } from "~Utils"
+import { DelegationState } from "../Slices"
+import { VTHO } from "~Constants"
 
 export const Migration21 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 20: Adding changelog fields to version update state")
-
     // @ts-ignore
-    const currentState: AppVersion = state.versionUpdate
+    const currentState: Record<string, DelegationState> = state.delegation
 
-    if (!currentState || Object.keys(currentState).length === 0) {
-        debug(ERROR_EVENTS.SECURITY, "================= **** No state to migrate **** =================")
-        return state
-    }
-
-    const newState: AppVersion = {
-        ...currentState,
-        shouldShowChangelog: false,
-        changelogKey: null,
-    }
+    const newState: Record<string, DelegationState> = Object.fromEntries(
+        Object.entries(currentState).map(([genesisId, value]) => [genesisId, { ...value, defaultToken: VTHO.symbol }]),
+    )
 
     return {
         ...state,
-        versionUpdate: newState,
+        delegation: newState,
     } as PersistedState
 }

@@ -1,10 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 import moment from "moment"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import DeviceInfo from "react-native-device-info"
 import { VersionManifest } from "~Model/AppVersion"
 import {
-    selectInstalledAppVersion,
     selectLanguage,
     selectUpdatePromptStatus,
     setChangelogToShow,
@@ -56,10 +55,9 @@ const fetchChangelog = async (
 
 export const useCheckAppVersion = () => {
     const versionUpdateStatus = useAppSelector(selectUpdatePromptStatus)
-    const installedVersion = useAppSelector(selectInstalledAppVersion)
     const language = useAppSelector(selectLanguage)
     const dispatch = useAppDispatch()
-    const deviceVersion = DeviceInfo.getVersion()
+    const [versionCheckComplete, setVersionCheckComplete] = useState(false)
 
     const { data: versionInfo } = useQuery({
         queryKey: ["versionManifest"],
@@ -82,19 +80,18 @@ export const useCheckAppVersion = () => {
 
     useEffect(() => {
         if (versionInfo) {
-            const needsUpdate = SemanticVersionUtils.moreThan(versionInfo.major, deviceVersion)
-
-            if (installedVersion && deviceVersion !== installedVersion) {
+            const installedVersion = DeviceInfo.getVersion()
+            if (installedVersion !== versionUpdateStatus.installedVersion) {
+                dispatch(VersionUpdateSlice.actions.setInstalledVersion(installedVersion))
                 dispatch(
                     setChangelogToShow({
                         shouldShow: true,
                         changelogKey: versionInfo.changelogKey,
                     }),
                 )
-                dispatch(VersionUpdateSlice.actions.setInstalledVersion(deviceVersion))
-            } else if (!installedVersion) {
-                dispatch(VersionUpdateSlice.actions.setInstalledVersion(deviceVersion))
             }
+
+            const needsUpdate = SemanticVersionUtils.moreThan(versionInfo.major, installedVersion)
             dispatch(VersionUpdateSlice.actions.setIsUpToDate(!needsUpdate))
 
             if (needsUpdate && versionInfo.major !== versionUpdateStatus.majorVersion) {
@@ -104,18 +101,19 @@ export const useCheckAppVersion = () => {
             if (versionInfo.latest !== versionUpdateStatus.latestVersion) {
                 dispatch(VersionUpdateSlice.actions.setLatestVersion(versionInfo.latest))
             }
+
+            setVersionCheckComplete(true)
         }
     }, [
         dispatch,
         versionInfo,
+        versionUpdateStatus.installedVersion,
         versionUpdateStatus.majorVersion,
         versionUpdateStatus.latestVersion,
-        installedVersion,
-        deviceVersion,
     ])
 
     const shouldShowUpdatePrompt = useMemo(() => {
-        if (!versionUpdateStatus.majorVersion || !deviceVersion) {
+        if (!versionUpdateStatus.majorVersion || !versionUpdateStatus.installedVersion || !versionCheckComplete) {
             return false
         }
 
@@ -149,13 +147,7 @@ export const useCheckAppVersion = () => {
             default:
                 return false
         }
-    }, [
-        deviceVersion,
-        versionUpdateStatus.isUpToDate,
-        versionUpdateStatus.majorVersion,
-        versionUpdateStatus.updateRequest.dismissCount,
-        versionUpdateStatus.updateRequest.lastDismissedDate,
-    ])
+    }, [versionCheckComplete, versionUpdateStatus])
 
     const hasPermanentlyDismissed = useMemo(() => {
         return (

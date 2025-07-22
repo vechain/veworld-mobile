@@ -11,6 +11,7 @@ import {
 } from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { showInfoToast, showWarningToast } from "~Components"
+import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, usePrevious, useSetSelectedAccount } from "~Hooks"
 import { Locales, useI18nContext } from "~i18n"
@@ -37,6 +38,8 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
+import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
 const { PackageDetails } = NativeModules
@@ -103,6 +106,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
     const [isLoading, setIsLoading] = React.useState(true)
+    const { connectBsRef, setConnectBsData, certificateBsRef, setCertificateBsData } = useInteraction()
 
     useEffect(() => {
         if (platform === "ios") {
@@ -390,17 +394,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     isInjectedWallet: true,
                 })
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
-                    request: {
-                        type: "in-app",
-                        initialRequest: req,
-                        appUrl,
-                        appName,
-                    },
+                setConnectBsData({
+                    type: "in-app",
+                    initialRequest: req,
+                    appUrl,
+                    appName,
                 })
+                connectBsRef.current?.present()
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, setConnectBsData, switchAccount, switchNetwork],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -428,21 +431,27 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (isAlreadyConnected) {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
-                    request: req,
-                })
+                setCertificateBsData(req)
+                certificateBsRef.current?.present()
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
-                    request: {
-                        type: "in-app",
-                        initialRequest: req,
-                        appUrl,
-                        appName,
-                    },
+                setConnectBsData({
+                    type: "in-app",
+                    initialRequest: req,
+                    appUrl,
+                    appName,
                 })
+                connectBsRef.current?.present()
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [
+            connectedDiscoveryApps,
+            switchAccount,
+            switchNetwork,
+            setCertificateBsData,
+            certificateBsRef,
+            setConnectBsData,
+            connectBsRef,
+        ],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -475,17 +484,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     request: req,
                 })
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
-                    request: {
-                        type: "in-app",
-                        initialRequest: req,
-                        appUrl,
-                        appName,
-                    },
+                setConnectBsData({
+                    type: "in-app",
+                    initialRequest: req,
+                    appUrl,
+                    appName,
                 })
+                connectBsRef.current?.present()
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [connectBsRef, connectedDiscoveryApps, nav, setConnectBsData, switchAccount, switchNetwork],
     )
 
     // ~ MESSAGE VALIDATION
@@ -625,9 +633,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (request.method === "thor_signCertificate") {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
-                    request,
-                })
+                setCertificateBsData(request)
+                certificateBsRef.current?.present()
             }
 
             if (request.method === "thor_signTypedData") {
@@ -636,7 +643,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [dispatch, nav],
+        [certificateBsRef, dispatch, nav, setCertificateBsData],
     )
 
     const onMessage = useCallback(
@@ -819,7 +826,13 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         isDapp,
     ])
 
-    return <Context.Provider value={contextValue}>{children}</Context.Provider>
+    return (
+        <Context.Provider value={contextValue}>
+            <ConnectBottomSheet />
+            <CertificateBottomSheet />
+            {children}
+        </Context.Provider>
+    )
 }
 
 export const useInAppBrowser = () => {

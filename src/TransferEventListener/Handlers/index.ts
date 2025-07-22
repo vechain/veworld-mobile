@@ -1,5 +1,6 @@
 export * from "./TransferEventHandlers"
 
+import { ThorClient } from "@vechain/sdk-network"
 import { AccountWithDevice, Network } from "~Model"
 import { IncomingTransferResponse } from "~Networking"
 
@@ -12,7 +13,7 @@ export interface BaseTransferHandlerProps {
 
 export interface NFTTransferHandlerProps extends BaseTransferHandlerProps {
     network: Network
-    thorClient: Connex.Thor
+    thorClient: ThorClient
     updateNFTs: (params: { network: string; accountAddress: string }) => void
 }
 

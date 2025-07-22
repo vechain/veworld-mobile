@@ -1821,6 +1821,19 @@ type RootTranslation = {
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: string
 	/**
+	 * {​d​a​p​p​N​a​m​e​}​ ​i​s​ ​a​s​k​i​n​g​ ​f​o​r​ ​a​c​c​e​s​s​ ​t​o​:
+	 * @param {string} dappName
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS: RequiredParams<'dappName'>
+	/**
+	 * R​e​q​u​e​s​t​ ​t​r​a​n​s​a​c​t​i​o​n​s​ ​t​o​ ​s​e​n​d​ ​t​o​ ​V​e​C​h​a​i​n​ ​T​h​o​r​.
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS_1: string
+	/**
+	 * R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s​.
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS_2: string
+	/**
 	 * Y​o​u​ ​h​a​v​e​ ​p​r​e​v​i​o​u​s​l​y​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​ ​w​i​t​h​ ​a​ ​d​i​f​f​e​r​e​n​t​ ​a​c​c​o​u​n​t​.​ ​D​o​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​s​w​i​t​c​h​ ​t​o​ ​t​h​e​ ​a​c​c​o​u​n​t​ ​c​o​n​n​e​c​t​e​d​ ​t​o​ ​{​d​a​p​p​}​?
 	 * @param {string} dapp
 	 */
@@ -1962,6 +1975,10 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_token_transfer: string
 	/**
+	 * C​o​n​n​e​c​t
+	 */
+	CONNECTION_REQUEST_CTA: string
+	/**
 	 * ●​ ​R​e​q​u​e​s​t​ ​y​o​u​r​ ​s​i​g​n​a​t​u​r​e​ ​o​n​ ​c​e​r​t​i​f​i​c​a​t​e​s​ ​o​r​ ​i​d​e​n​t​i​f​i​c​a​t​i​o​n​ ​a​n​d​ ​a​g​r​e​e​m​e​n​t​s
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: string
@@ -2059,6 +2076,18 @@ type RootTranslation = {
 	 */
 	DELEGATE_FEE: string
 	/**
+	 * U​s​e​ ​t​h​i​s​ ​t​o​k​e​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​t​r​a​n​s​a​c​t​i​o​n​s
+	 */
+	DELEGATE_FEE_TOKEN_CHECKBOX: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​t​o​k​e​n​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​ ​w​i​t​h
+	 */
+	DELEGATE_FEE_TOKEN_DESC: string
+	/**
+	 * F​e​e​ ​t​o​k​e​n
+	 */
+	DELEGATE_FEE_TOKEN_TITLE: string
+	/**
 	 * B​y​ ​d​e​f​a​u​l​t​ ​t​h​e​ ​t​r​a​n​s​a​c​t​i​o​n​ ​f​e​e​ ​c​o​s​t​ ​w​i​l​l​ ​b​e​ ​p​a​i​d​ ​b​y​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t​:
 	 */
 	DELEGATE_SELF: string
@@ -2075,11 +2104,11 @@ type RootTranslation = {
 	 */
 	DELEGATE_URL_SELECT: string
 	/**
-	 * F​e​e​ ​d​e​l​e​g​a​t​e​d​ ​t​o
+	 * F​e​e​ ​d​e​l​e​g​a​t​i​o​n
 	 */
 	DELEGATION_FEE: string
 	/**
-	 * F​e​e​ ​n​o​t​ ​d​e​l​e​g​a​t​e​d
+	 * N​o​n​e
 	 */
 	DELEGATION_NO_FEE: string
 	/**
@@ -2462,6 +2491,10 @@ type RootTranslation = {
 	 * H​i​d​d​e​n​ ​c​o​l​l​e​c​t​i​o​n​s
 	 */
 	HIDDEN_COLLECTIONS: string
+	/**
+	 * H​i​d​e
+	 */
+	HIDE: string
 	/**
 	 * H​i​d​e​ ​c​o​l​l​e​c​t​i​o​n
 	 */
@@ -3033,6 +3066,10 @@ type RootTranslation = {
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: string
 	/**
+	 * T​h​i​s​ ​d​A​p​p​ ​i​s​n​'​t​ ​v​e​r​i​f​i​e​d​ ​b​y​ ​V​e​W​o​r​l​d​.
+	 */
+	NOT_VERIFIED_DAPP: string
+	/**
 	 * N​o​v​e​m​b​e​r
 	 */
 	NOVEMBER: string
@@ -3053,6 +3090,14 @@ type RootTranslation = {
 	 * N​o​ ​t​h​a​n​k​s
 	 */
 	NO_THANKS: string
+	/**
+	 * N​o​ ​t​o​k​e​n​s​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​p​a​y​ ​t​h​e​ ​f​e​e​.
+	 */
+	NO_TOKENS_AVAILABLE_FOR_FEE: string
+	/**
+	 * N​o​ ​V​T​H​O​ ​b​a​l​a​n​c​e​.​ ​S​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​t​o​k​e​n
+	 */
+	NO_VTHO_BALANCE: string
 	/**
 	 * O​c​t​o​b​e​r
 	 */
@@ -3103,6 +3148,10 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: string
 	/**
+	 * A​p​p​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
+	 */
+	PUSH_NOTIFICATIONS_DAPPS_DESC: string
+	/**
 	 * K​e​e​p​ ​u​p​ ​t​o​ ​d​a​t​e​ ​w​i​t​h​ ​t​h​e​ ​l​a​t​e​s​t​ ​n​e​w​s​ ​a​n​d​ ​u​p​d​a​t​e​s
 	 */
 	PUSH_NOTIFICATIONS_DESC: string
@@ -3131,7 +3180,7 @@ type RootTranslation = {
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: string
 	/**
-	 * V​e​B​e​t​t​e​r​D​A​O
+	 * V​e​B​e​t​t​e​r
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: string
 	/**
@@ -3875,6 +3924,14 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
+	 * S​i​g​n
+	 */
+	SIGN_CERTIFICATE_REQUEST_CTA: string
+	/**
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGN_CERTIFICATE_REQUEST_TITLE: string
+	/**
 	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SIGN_TRANSACTION: string
@@ -4137,6 +4194,10 @@ type RootTranslation = {
 	 * S​e​t​t​i​n​g​s
 	 */
 	TITLE_SETTINGS: string
+	/**
+	 * T​o​t​a​l​ ​l​o​c​k​e​d
+	 */
+	TITLE_TOTAL_LOCKED: string
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​s
 	 */
@@ -6237,6 +6298,18 @@ Thanks for your patience!
 	 */
 	CONNECTED_APPS_SCREEN_TITLE: () => LocalizedString
 	/**
+	 * {dappName} is asking for access to:
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS: (arg: { dappName: string }) => LocalizedString
+	/**
+	 * Request transactions to send to VeChain Thor.
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS_1: () => LocalizedString
+	/**
+	 * Request your signature on certificates or identification and agreements.
+	 */
+	CONNECTED_APP_ASKING_FOR_ACCESS_2: () => LocalizedString
+	/**
 	 * You have previously connected to {dapp} with a different account. Do you want to switch to the account connected to {dapp}?
 	 */
 	CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_DESCRIPTION: (arg: { dapp: string }) => LocalizedString
@@ -6377,6 +6450,10 @@ Thanks for your patience!
 	 */
 	CONNECTED_APP_token_transfer: () => LocalizedString
 	/**
+	 * Connect
+	 */
+	CONNECTION_REQUEST_CTA: () => LocalizedString
+	/**
 	 * ● Request your signature on certificates or identification and agreements
 	 */
 	CONNECTION_REQUEST_SIGN_DESCRIPTION: () => LocalizedString
@@ -6473,6 +6550,18 @@ Thanks for your patience!
 	 */
 	DELEGATE_FEE: () => LocalizedString
 	/**
+	 * Use this token for future transactions
+	 */
+	DELEGATE_FEE_TOKEN_CHECKBOX: () => LocalizedString
+	/**
+	 * Select the token to pay the fee with
+	 */
+	DELEGATE_FEE_TOKEN_DESC: () => LocalizedString
+	/**
+	 * Fee token
+	 */
+	DELEGATE_FEE_TOKEN_TITLE: () => LocalizedString
+	/**
 	 * By default the transaction fee cost will be paid by the active account:
 	 */
 	DELEGATE_SELF: () => LocalizedString
@@ -6489,11 +6578,11 @@ Thanks for your patience!
 	 */
 	DELEGATE_URL_SELECT: () => LocalizedString
 	/**
-	 * Fee delegated to
+	 * Fee delegation
 	 */
 	DELEGATION_FEE: () => LocalizedString
 	/**
-	 * Fee not delegated
+	 * None
 	 */
 	DELEGATION_NO_FEE: () => LocalizedString
 	/**
@@ -6876,6 +6965,10 @@ Thanks for your patience!
 	 * Hidden collections
 	 */
 	HIDDEN_COLLECTIONS: () => LocalizedString
+	/**
+	 * Hide
+	 */
+	HIDE: () => LocalizedString
 	/**
 	 * Hide collection
 	 */
@@ -7430,6 +7523,10 @@ Thanks for your patience!
 	 */
 	NOTIFICATION_warning_wallet_connect_connection_could_delay: () => LocalizedString
 	/**
+	 * This dApp isn't verified by VeWorld.
+	 */
+	NOT_VERIFIED_DAPP: () => LocalizedString
+	/**
 	 * November
 	 */
 	NOVEMBER: () => LocalizedString
@@ -7449,6 +7546,14 @@ Thanks for your patience!
 	 * No thanks
 	 */
 	NO_THANKS: () => LocalizedString
+	/**
+	 * No tokens available to pay the fee.
+	 */
+	NO_TOKENS_AVAILABLE_FOR_FEE: () => LocalizedString
+	/**
+	 * No VTHO balance. Select another token
+	 */
+	NO_VTHO_BALANCE: () => LocalizedString
 	/**
 	 * October
 	 */
@@ -7498,6 +7603,10 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_DAPPS: () => LocalizedString
 	/**
+	 * App news & updates
+	 */
+	PUSH_NOTIFICATIONS_DAPPS_DESC: () => LocalizedString
+	/**
 	 * Keep up to date with the latest news and updates
 	 */
 	PUSH_NOTIFICATIONS_DESC: () => LocalizedString
@@ -7526,7 +7635,7 @@ Thanks for your patience!
 	 */
 	PUSH_NOTIFICATIONS_UPDATES: () => LocalizedString
 	/**
-	 * VeBetterDAO
+	 * VeBetter
 	 */
 	PUSH_NOTIFICATIONS_VEBETTERDAO: () => LocalizedString
 	/**
@@ -8259,6 +8368,14 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
+	 * Sign
+	 */
+	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Sign certificate
+	 */
+	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
+	/**
 	 * Sign transaction
 	 */
 	SIGN_TRANSACTION: () => LocalizedString
@@ -8518,6 +8635,10 @@ Are you sure you want to continue?
 	 * Settings
 	 */
 	TITLE_SETTINGS: () => LocalizedString
+	/**
+	 * Total locked
+	 */
+	TITLE_TOTAL_LOCKED: () => LocalizedString
 	/**
 	 * Transactions
 	 */

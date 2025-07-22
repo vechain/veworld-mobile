@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
-import { useThor } from "~Components"
 import { ERROR_EVENTS } from "~Constants"
 import { useNFTMetadata } from "~Hooks"
+import { useThorClient } from "~Hooks/useThorClient"
 import { NFTMetadata } from "~Model"
 import { getName, getTokenURI } from "~Networking"
 import { warn } from "~Utils"
@@ -30,7 +30,7 @@ export const useNFTInfo = (tokenId: string, contractAddress: string) => {
 
     const [isMediaLoading, setIsMediaLoading] = useState<boolean>(true)
 
-    const thor = useThor()
+    const thor = useThorClient()
 
     useEffect(() => {
         const load = async () => {
@@ -51,7 +51,7 @@ export const useNFTInfo = (tokenId: string, contractAddress: string) => {
         if (tokenId && contractAddress && thor) load()
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [tokenId, contractAddress, thor.genesis.id])
+    }, [tokenId, contractAddress, thor])
 
     return {
         tokenMetadata,

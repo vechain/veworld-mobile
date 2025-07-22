@@ -57,6 +57,7 @@ export type Colors = {
     cardDivider: string
     switchEnabled: string
     textLight: string
+    textLightish: string
     checkboxFilledBackground: string
     checkboxIcon: string
     passwordPlaceholder: string
@@ -172,6 +173,11 @@ export type Colors = {
         border: string
         background: string
         text: string
+        disabled: {
+            border: string
+            background: string
+            text: string
+        }
     }
     editSpeedBs: {
         title: string
@@ -194,9 +200,18 @@ export type Colors = {
     tabsFooter: {
         background: string
     }
+    errorAlert: {
+        background: string
+        text: string
+        icon: string
+    }
     label: {
         background: string
         text: string
+    }
+    stakedCard: {
+        fiatValue: string
+        vetValue: string
     }
 }
 
@@ -320,6 +335,7 @@ const light: Colors = {
     alertDescription: COLORS.GREY_600,
     numberPad: COLORS.GREY_600,
     textLight: COLORS.GREY_500,
+    textLightish: COLORS.GREY_500,
     background: COLORS.LIGHT_GRAY,
     backgroundReversed: COLORS.DARK_PURPLE,
     backgroundTransparent: COLORS.LIGHT_GRAY_TRANSPARENT,
@@ -468,6 +484,11 @@ const light: Colors = {
         background: COLORS.WHITE,
         border: COLORS.GREY_200,
         text: COLORS.PRIMARY_800,
+        disabled: {
+            background: COLORS.GREY_100,
+            border: COLORS.TRANSPARENT,
+            text: COLORS.GREY_400,
+        },
     },
     editSpeedBs: {
         background: COLORS.GREY_50,
@@ -490,9 +511,18 @@ const light: Colors = {
     tabsFooter: {
         background: COLORS.GREY_200,
     },
+    errorAlert: {
+        background: COLORS.RED_50,
+        text: COLORS.RED_700,
+        icon: COLORS.RED_500,
+    },
     label: {
         background: COLORS.GREY_200,
         text: COLORS.GREY_600,
+    },
+    stakedCard: {
+        fiatValue: COLORS.GREY_600,
+        vetValue: COLORS.GREY_800,
     },
 }
 
@@ -522,6 +552,7 @@ const dark: Colors = {
     alertDescription: COLORS.GREY_600,
     numberPad: COLORS.GREY_300,
     textLight: COLORS.WHITE,
+    textLightish: COLORS.GREY_300,
     background: COLORS.DARK_PURPLE,
     backgroundReversed: COLORS.GRAY,
     backgroundTransparent: COLORS.DARK_PURPLE_TRANSPARENT,
@@ -631,7 +662,7 @@ const dark: Colors = {
         text: COLORS.GREY_300,
     },
     convertBetterCard: {
-        inputBg: COLORS.PURPLE,
+        inputBg: COLORS.PURPLE_DISABLED,
         inputText: COLORS.WHITE,
         convertValueText: COLORS.GREY_300,
         swapIcon: COLORS.WHITE,
@@ -670,6 +701,11 @@ const dark: Colors = {
         background: COLORS.DARK_PURPLE_DISABLED,
         border: COLORS.TRANSPARENT,
         text: COLORS.LIME_GREEN,
+        disabled: {
+            background: COLORS.DARK_PURPLE_DISABLED,
+            border: COLORS.TRANSPARENT,
+            text: COLORS.PURPLE_DISABLED,
+        },
     },
     editSpeedBs: {
         background: COLORS.PURPLE,
@@ -692,9 +728,18 @@ const dark: Colors = {
     tabsFooter: {
         background: COLORS.PURPLE,
     },
+    errorAlert: {
+        background: COLORS.RED_100,
+        text: COLORS.RED_700,
+        icon: COLORS.RED_500,
+    },
     label: {
         background: COLORS.PURPLE_DISABLED,
         text: COLORS.GREY_300,
+    },
+    stakedCard: {
+        fiatValue: COLORS.GREY_100,
+        vetValue: COLORS.WHITE,
     },
 }
 

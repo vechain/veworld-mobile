@@ -1,16 +1,25 @@
 import { render, screen } from "@testing-library/react-native"
 import React from "react"
-import { InAppBrowserProvider } from "~Components/Providers"
-import { RootState } from "~Storage/Redux/Types"
 import { TestHelpers, TestWrapper } from "~Test"
 import { CoinifyPayWebView } from "./CoinifyPayWebView"
 
 const { account1D1, account2D1 } = TestHelpers.data
 const amount = 100
 
-jest.mock("react-native", () => ({
-    ...jest.requireActual("react-native"),
+jest.mock("~Components/Providers/InAppBrowserProvider", () => ({
+    useInAppBrowser: jest.fn().mockReturnValue({
+        originWhitelist: ["http://", "https://", "about:*", "blob:"],
+    } as any),
 }))
+
+// Mock react-native-webview
+jest.mock("react-native-webview", () => {
+    const { View } = jest.requireActual("react-native")
+    return {
+        __esModule: true,
+        default: jest.fn(({ testID, ...props }) => <View testID={testID} {...props} />),
+    }
+})
 
 jest.mock("react-native/Libraries/Settings/Settings", () => ({
     get: jest.fn(),
@@ -35,6 +44,18 @@ jest.mock("react-native", () => {
     }
 })
 
+// Mock the AnimatedFloatingButton component
+jest.mock("../AnimatedFloatingButton", () => ({
+    AnimatedFloatingButton: jest.fn(({ children, ...props }) => {
+        const { View } = jest.requireActual("react-native")
+        return (
+            <View testID="AnimatedFloatingButton" {...props}>
+                {children}
+            </View>
+        )
+    }),
+}))
+
 const mockedNavigate = jest.fn()
 const mockedReplace = jest.fn()
 
@@ -51,24 +72,10 @@ jest.mock("@react-navigation/native", () => {
     }
 })
 
-const createWrapper = ({
-    children,
-    preloadedState,
-}: {
-    children: React.ReactNode
-    preloadedState: Partial<RootState>
-}) => {
-    return (
-        <TestWrapper preloadedState={preloadedState}>
-            <InAppBrowserProvider platform={"android"}>{children}</InAppBrowserProvider>
-        </TestWrapper>
-    )
-}
-
 describe("CoinifyPayWebView component", () => {
     it("render correctly buy view", async () => {
         render(<CoinifyPayWebView currentAmount={amount} destinationAddress={account1D1.address} target="buy" />, {
-            wrapper: createWrapper,
+            wrapper: TestWrapper,
         })
 
         const webview = screen.getByTestId("CoinifyPayWebView")
@@ -76,7 +83,7 @@ describe("CoinifyPayWebView component", () => {
     })
     it("render correct sell view", async () => {
         render(<CoinifyPayWebView currentAmount={amount} destinationAddress={account2D1.address} target="sell" />, {
-            wrapper: createWrapper,
+            wrapper: TestWrapper,
         })
 
         const webview = screen.getByTestId("CoinifyPayWebView")
@@ -86,7 +93,7 @@ describe("CoinifyPayWebView component", () => {
         render(
             <CoinifyPayWebView currentAmount={amount} destinationAddress={account2D1.address} target="trade-history" />,
             {
-                wrapper: createWrapper,
+                wrapper: TestWrapper,
             },
         )
 
