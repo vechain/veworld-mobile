@@ -133,46 +133,45 @@ jobs:
                   force-avd-creation: false
                   disable-animations: true
                   avd-name: ${{ env.ANDROID_AVD_NAME }}
-                  script: yarn detox test --configuration ${{ env.ANDROID_CONFIGURATION }} --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --parallel ${{ inputs.parallel }} --publish &> cucumber.log
+                  script: yarn detox test --configuration ${{ env.ANDROID_CONFIGURATION }} --headless --record-logs all --take-screenshots failing --tags "not @broken and not @notAndroid" --parallel ${{ inputs.parallel }} --publish &> detox.log
 
             # Run iOS tests
             - name: iOS - Detox test
+              if: ${{ inputs.platform == 'ios' }}
               id: test_app_ios
               timeout-minutes: 100
-              run: yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --parallel ${{ inputs.parallel }} --publish &> cucumber.log
+              run: yarn detox test --configuration ${{ env.IOS_CONFIGURATION }} --cleanup --headless --record-logs all --take-screenshots failing --retry 1 --tags "not @broken" --parallel ${{ inputs.parallel }} --publish &> detox.log
 
             # Upload test artifacts from Detox
-            - name: Upload detox artifacts
+            - name: Upload detox test artifacts
               if: always() && (steps.test_app_ios.outcome == 'failure' || steps.test_app_android.outcome == 'failure')
               uses: actions/upload-artifact@v4
               with:
-                  name: detox-fail-artifacts
+                  name: detox-test-artifacts-${{ inputs.platform }}
                   path: artifacts
 
-            # Upload cucumber artifacts
-            - name: Upload cucumber artifacts
+            # Upload detox logs
+            - name: Upload detox logs
               if: always() && (steps.test_app_ios.outcome == 'failure' || steps.test_app_android.outcome == 'failure')
               uses: actions/upload-artifact@v4
               with:
-                  name: cucumber-fail-artifacts
-                  path: |
-                      cucumber.log
-                      cucumber-report.html
+                  name: detox-logs-${{ inputs.platform }}
+                  path: detox.log
 
             # Upload Metro Bundler logs
             - name: Upload Metro Bundler logs
               if: always() && (steps.build_app_ios.outcome == 'failure' || steps.build_app_android.outcome == 'failure')
               uses: actions/upload-artifact@v4
               with:
-                  name: metro-bundler-logs
+                  name: metro-bundler-logs-${{ inputs.platform }}
                   path: metro-bundler.log
 
-            # Get cucumber published url
-            - name: Parse cucumber report URL
+            # Get detox published url
+            - name: Parse detox report URL
               id: parse_report_url
               if: always() && (steps.test_app_ios.outcome != 'skipped' || steps.test_app_android.outcome != 'skipped')
               run: |
-                  echo report_url=$(cat cucumber.log | grep -Eo "https://reports.cucumber.io/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
+                  echo report_url=$(cat detox.log | grep -Eo "https://[a-zA-Z0-9-.]+/reports/[a-zA-Z0-9-]+") >> "$GITHUB_OUTPUT"
 
             # Combine build statuses
             - name: Combine build statuses
@@ -213,7 +212,7 @@ jobs:
                                     🌿 Branch: *${{ github.ref_name }}*
                                     🔨 Commit: *${{ github.actor }}* [${{ github.sha.short }}](${{ github.event.head_commit.url }})
                                     🔗 Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-                                    📈 Cucumber Report: ${{ steps.parse_report_url.outputs.report_url || 'Not found.' }}"
+                                    📈 Detox Report: ${{ steps.parse_report_url.outputs.report_url || 'Not found.' }}"
                       }
               env:
                   SLACK_BOT_TOKEN: ${{ secrets.SLACK_VEWORLD_BOT_TOKEN }}
