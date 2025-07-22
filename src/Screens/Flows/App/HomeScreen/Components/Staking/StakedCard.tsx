@@ -1,5 +1,5 @@
 import { memo, default as React, useMemo } from "react"
-import { Image, StyleSheet } from "react-native"
+import { Image, ImageStyle, StyleSheet } from "react-native"
 import { StargateAvatar } from "~Assets"
 import { BaseSkeleton, BaseSpacer, BaseText, BaseView, FiatBalance } from "~Components"
 import { VET } from "~Constants"
@@ -55,7 +55,7 @@ export const StakedCard = memo(({ isBalanceVisible = true }: Props) => {
             </BaseText>
             <BaseSpacer height={8} />
             <BaseView style={styles.container}>
-                <Image source={{ uri: StargateAvatar }} height={40} width={40} borderRadius={6} />
+                <Image source={StargateAvatar} style={styles.image as ImageStyle} borderRadius={6} />
                 <BaseView flex={1}>
                     <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
                         {LL.TITLE_TOTAL_LOCKED()}
@@ -111,6 +111,11 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             borderRadius: 12,
             gap: 16,
+        },
+        image: {
+            height: 40,
+            width: 40,
+            borderRadius: 6,
         },
         valueContainer: {
             flexDirection: "row",
