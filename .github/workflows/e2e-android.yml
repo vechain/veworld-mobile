@@ -142,5 +142,8 @@ jobs:
 
             - name: Blurt test result
               id: test-result
+              needs: android-test 
               run: |
                   echo "resultUrl=${{ steps.android-test.outputs.DEVICE_CLOUD_CONSOLE_URL }}" >> "$GITHUB_OUTPUT"
+                  echo "outputs=${{ toJSON(steps.android-test.outputs) }}"
+
