@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { Animated, Linking, Pressable, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import { Animated, Linking, Pressable, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
@@ -10,8 +10,8 @@ import { BaseIcon } from "../BaseIcon"
 type Props = {
     testID?: string
     href?: string
-    style?: ViewStyle
-    contentWrapperStyle?: ViewStyle
+    style?: StyleProp<ViewStyle>
+    contentWrapperStyle?: StyleProp<ViewStyle>
     isExternalLink?: boolean
     closable?: boolean
     closeButtonStyle?: ViewStyle
@@ -75,7 +75,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
     return (
         <AnimatedTouchableOpacity
             testID={testID}
-            style={[style, styles.container]}
+            style={[styles.container, style]}
             activeOpacity={0.95}
             onPress={onPress}>
             <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>

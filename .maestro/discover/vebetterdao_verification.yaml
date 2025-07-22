@@ -17,13 +17,13 @@ onFlowComplete:
           platform: Android
       commands:
           - tapOn:
-                id: "__CAROUSEL_ITEM_0__"
+                id: "VeBetterDao_banner"
 - runFlow:
       when:
           platform: iOS
       commands:
           - tapOn:
-                id: "__CAROUSEL_ITEM_0__"
+                id: "VeBetterDao_banner"
 - tapOn:
       text: "Login"
       index: 0

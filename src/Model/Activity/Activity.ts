@@ -1,7 +1,7 @@
 import { DIRECTIONS } from "~Constants"
 import { TypedData } from "~Model"
 import { ActivityEvent, ActivityStatus, ActivitySupport, ActivityType } from "./enum"
-import { TokenLevelId } from "~Screens/Flows/App/ActivityScreen/constants/filterValues"
+import { TokenLevelId } from "~Utils/StargateUtils"
 
 export type OutputResponse = {
     contractAddress: string
