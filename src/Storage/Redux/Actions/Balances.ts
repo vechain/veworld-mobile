@@ -40,22 +40,19 @@ export const upsertTokenBalance =
 export const updateAccountBalances =
     (thorClient: Connex.Thor, accountAddress: string, force: boolean = false) =>
     async (dispatch: Dispatch, getState: () => RootState) => {
-        dispatch(setIsTokensOwnedLoading(true))
-        const accountBalances = selectBalancesForAccount(getState(), accountAddress)
-
-        if (accountBalances.length === 0) {
-            dispatch(setIsTokensOwnedLoading(false))
-            return
-        }
-
-        const network = selectSelectedNetwork(getState())
-
         try {
+            const accountBalances = selectBalancesForAccount(getState(), accountAddress)
+
+            const network = selectSelectedNetwork(getState())
             const updatableBalances = force
                 ? accountBalances
                 : accountBalances.filter(
                       balance => Date.now() - new Date(balance.timeUpdated).getTime() >= BALANCE_UPDATE_CACHE_TIME,
                   )
+
+            if (updatableBalances.length === 0) return
+
+            dispatch(setIsTokensOwnedLoading(true))
 
             const newBalances = await BalanceUtils.getMultipleBalancesFromBlockchain(
                 updatableBalances.map(balance => balance.tokenAddress),

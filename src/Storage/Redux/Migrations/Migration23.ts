@@ -1,5 +1,5 @@
 import { PersistedState } from "redux-persist/es/types"
-import { ERROR_EVENTS, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS } from "~Constants"
+import { B3TR, ERROR_EVENTS, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS, VOT3 } from "~Constants"
 import { AddressUtils, debug } from "~Utils"
 import { BalanceState } from "../Slices"
 
@@ -23,6 +23,16 @@ export const Migration23 = (state: PersistedState): PersistedState => {
                     balance =>
                         !AddressUtils.compareAddresses(balance.tokenAddress, TEST_B3TR_ADDRESS) &&
                         !AddressUtils.compareAddresses(balance.tokenAddress, TEST_VOT3_ADDRESS),
+                ),
+            ]),
+        ),
+        testnet: Object.fromEntries(
+            Object.entries(currentState.testnet).map(([account, balances]) => [
+                account,
+                balances.filter(
+                    balance =>
+                        !AddressUtils.compareAddresses(balance.tokenAddress, B3TR.address) &&
+                        !AddressUtils.compareAddresses(balance.tokenAddress, VOT3.address),
                 ),
             ]),
         ),
