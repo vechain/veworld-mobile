@@ -960,7 +960,7 @@
   "SIGN_TRANSACTION_ERROR": "Erreur lors de la signature de la transaction",
   "STARGATE_CLAIMABLE": "Réclamable",
   "STARGATE_LOCKED": "Verrouillé",
-  "STARGATE_MANAGE_STAKING": "Gérez votre staking",
+  "STARGATE_MANAGE_STAKING": "Gérer votre mise",
   "STARGATE_NEW_STAKE": "Nouvelle mise",
   "STARGATE_REWARDS": "Récompenses",
   "STATUS": "Statut",
