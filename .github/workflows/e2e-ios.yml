@@ -138,4 +138,5 @@ jobs:
             - name: Blurt test result
               id: test-result
               run: |
-                  echo "resultUrl=$(echo "${{ steps.ios-test.outputs.stdout }}" | grep "console.devicecloud.dev/results" | sort -u | head -1)" >> "$GITHUB_OUTPUT"
+              run: |
+                  echo "resultUrl=${{ steps.ios-test.outputs.DEVCICE_CLOUD_CONSOLE_URL }}" >> "$GITHUB_OUTPUT"

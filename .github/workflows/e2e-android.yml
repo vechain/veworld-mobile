@@ -140,18 +140,7 @@ jobs:
                   include-tags: pull-request
                   retry: 2
 
-            - name: Extract results URLs
-              id: extract-results
-              run: |
-                  RESULTS_LINES=$(echo "${{ steps.android-test.outputs.stdout }}" | grep "/results" || echo "")
-                  echo "results-lines<<EOF" >> "$GITHUB_OUTPUT"
-                  echo "$RESULTS_LINES" >> "$GITHUB_OUTPUT"
-                  echo "EOF" >> "$GITHUB_OUTPUT"
-
             - name: Blurt test result
               id: test-result
               run: |
-                  echo "=== All results lines ==="
-                  echo "${{ steps.extract-results.outputs.results-lines }}"
-                  echo "========================="
-                  echo "resultUrl=$(echo "${{ steps.extract-results.outputs.results-lines }}" | grep "console.devicecloud.dev" | sort -u | head -1)" >> "$GITHUB_OUTPUT"
+                  echo "resultUrl=${{ steps.android-test.outputs.DEVCICE_CLOUD_CONSOLE_URL }}" >> "$GITHUB_OUTPUT"
