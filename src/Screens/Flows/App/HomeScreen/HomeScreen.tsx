@@ -1,8 +1,9 @@
 import { useFocusEffect, useNavigation, useScrollToTop } from "@react-navigation/native"
 import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { RefreshControl, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { RefreshControl } from "react-native-gesture-handler"
 import { FadeInRight } from "react-native-reanimated"
 import {
     BaseIcon,
@@ -247,7 +248,7 @@ export const HomeScreen = () => {
                     <BannersCarousel location="home_screen" />
 
                     <BaseView style={styles.container}>
-                        <StakedCard isBalanceVisible={isBalanceVisible} />
+                        <StakedCard />
                     </BaseView>
 
                     <BaseView style={styles.container}>

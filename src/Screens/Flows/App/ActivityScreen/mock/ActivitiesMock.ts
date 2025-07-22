@@ -10,7 +10,7 @@ import {
     SignCertActivity,
     StargateActivity,
 } from "~Model"
-import { TokenLevelId } from "../constants/filterValues"
+import { TokenLevelId } from "~Utils/StargateUtils"
 
 const FUNGIBLE_TOKEN_ACTIVITIES: FungibleTokenActivity[] = [
     {
