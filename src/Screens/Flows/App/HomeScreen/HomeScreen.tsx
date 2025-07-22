@@ -32,12 +32,13 @@ import {
     selectBalanceVisible,
     selectCurrency,
     selectSelectedAccount,
+    selectSelectedNetwork,
     selectVisibleAccounts,
     setAppResetTimestamp,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils, PlatformUtils } from "~Utils"
+import { AccountUtils, AddressUtils, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import {
     AccountCard,
@@ -51,6 +52,7 @@ import {
 } from "./Components"
 import { BannersCarousel } from "./Components/BannerCarousel"
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
+import { StakedCard } from "./Components/Staking"
 import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
@@ -63,6 +65,7 @@ export const HomeScreen = () => {
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
     const { updateBalances, updateSuggested } = useTokenBalances()
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -103,13 +106,26 @@ export const HomeScreen = () => {
         onSetSelectedAccount({ address: account.address })
     }
 
+    const invalidateStargateQueries = useCallback(async () => {
+        await queryClient.invalidateQueries({
+            predicate(query) {
+                if (!["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string)) return false
+                if (query.queryKey.length < 3) return false
+                if (query.queryKey[1] !== selectedNetwork.type) return false
+                if (!AddressUtils.compareAddresses(query.queryKey[2] as string | undefined, selectedAccount.address))
+                    return false
+                return true
+            },
+        })
+    }, [queryClient, selectedAccount.address, selectedNetwork.type])
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await Promise.all([updateBalances(true), updateSuggested()])
+        await Promise.all([updateBalances(true), updateSuggested(), invalidateStargateQueries()])
 
         setRefreshing(false)
-    }, [updateBalances, updateSuggested])
+    }, [invalidateStargateQueries, updateBalances, updateSuggested])
 
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),
@@ -229,6 +245,10 @@ export const HomeScreen = () => {
                     </BaseView>
 
                     <BannersCarousel location="home_screen" />
+
+                    <BaseView style={styles.container}>
+                        <StakedCard isBalanceVisible={isBalanceVisible} />
+                    </BaseView>
 
                     <BaseView style={styles.container}>
                         <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
