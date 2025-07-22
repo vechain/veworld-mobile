@@ -20,6 +20,12 @@ const mapFn =
             account,
             balances.filter(balance => {
                 if (balanceFilter?.(balance)) return false
+                /**
+                 * The issue that this aims to solve is that we have all the tokens in every network.
+                 * For example, if you added a custom token on testnet, it magically appeared on mainnet/solo/other networks too.
+                 * Given that the call for it will fail, the timeUpdated will be really old.
+                 * This aims to clear up the storage
+                 */
                 if (new Date(vetBalance.timeUpdated).getTime() - new Date(balance.timeUpdated).getTime() >= ONE_HOUR)
                     return false
                 return true
