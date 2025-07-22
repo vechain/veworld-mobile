@@ -1018,6 +1018,7 @@
   "TITLE_SECURITY": "Защитите ваш кошелёк",
   "TITLE_SECURITY_DOWNGRADE": "Ваше приложение заблокировано",
   "TITLE_SETTINGS": "Настройки",
+  "TITLE_TOTAL_LOCKED": "Всего заблокировано",
   "TITLE_TRANSACTIONS": "Транзакции",
   "TITLE_UNLOCK_KEYSTORE": "Разблокировать хранилище ключей",
   "TITLE_USERNAME_CLAIMED": "Имя пользователя занято!",

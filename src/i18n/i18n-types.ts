@@ -3911,13 +3911,13 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
-	 */
-	SIGN_CERTIFICATE_REQUEST_TITLE: string
-	/**
 	 * S​i​g​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
+	/**
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 */
+	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
 	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
@@ -4181,6 +4181,10 @@ type RootTranslation = {
 	 * S​e​t​t​i​n​g​s
 	 */
 	TITLE_SETTINGS: string
+	/**
+	 * T​o​t​a​l​ ​l​o​c​k​e​d
+	 */
+	TITLE_TOTAL_LOCKED: string
 	/**
 	 * T​r​a​n​s​a​c​t​i​o​n​s
 	 */
@@ -8339,13 +8343,13 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Sign certificate
-	 */
-	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
-	/**
 	 * Sign
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Sign certificate
+	 */
+	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * Sign transaction
 	 */
@@ -8606,6 +8610,10 @@ Are you sure you want to continue?
 	 * Settings
 	 */
 	TITLE_SETTINGS: () => LocalizedString
+	/**
+	 * Total locked
+	 */
+	TITLE_TOTAL_LOCKED: () => LocalizedString
 	/**
 	 * Transactions
 	 */

@@ -1018,6 +1018,7 @@
   "TITLE_SECURITY": "지갑 보호",
   "TITLE_SECURITY_DOWNGRADE": "앱이 차단되었습니다",
   "TITLE_SETTINGS": "설정",
+  "TITLE_TOTAL_LOCKED": "총 잠금",
   "TITLE_TRANSACTIONS": "거래",
   "TITLE_UNLOCK_KEYSTORE": "키스토어 잠금 해제",
   "TITLE_USERNAME_CLAIMED": "사용자 이름이 등록되었습니다!",
