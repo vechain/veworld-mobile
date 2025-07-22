@@ -1,10 +1,9 @@
 import React, { useCallback, useMemo } from "react"
-import { StyleSheet } from "react-native"
-import { BaseCarousel, BaseSpacer, CarouselSlideItem } from "~Components"
+import { BaseSpacer, CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { StargateBannerClosable } from "~Components/Reusable"
 import { AnalyticsEvent, SCREEN_WIDTH, STARGATE_DAPP_URL } from "~Constants"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking } from "~Hooks"
 import {
     selectHideStargateBannerHomeScreen,
     setHideStargateBannerHomeScreen,
@@ -23,7 +22,6 @@ export const BannersCarousel = ({ location }: Props) => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
     const hideStargateBannerHomeScreen = useAppSelector(selectHideStargateBannerHomeScreen)
-    const { styles } = useThemedStyles(baseStyles)
 
     const dispatch = useAppDispatch()
 
@@ -78,7 +76,7 @@ export const BannersCarousel = ({ location }: Props) => {
     return (
         <>
             {location === "home_screen" && <BaseSpacer height={location === "home_screen" ? 16 : 40} />}
-            <BaseCarousel
+            <FullscreenBaseCarousel
                 itemHeight={88}
                 data={filteredBanners}
                 showPagination={false}
@@ -86,21 +84,15 @@ export const BannersCarousel = ({ location }: Props) => {
                 onSlidePressActivation="before"
                 onSlidePress={onSlidePress}
                 gap={0}
+                // Remove the -16 if you need to have another item
+                baseWidth={SCREEN_WIDTH - 16}
+                padding={16}
                 {...(location === "token_screen" && {
                     padding: 0,
-                    w: SCREEN_WIDTH - 32,
-                    contentWrapperStyle: styles.carouselItem,
+                    baseWidth: SCREEN_WIDTH - 32,
                 })}
             />
             <BaseSpacer height={location === "home_screen" ? 32 : 40} />
         </>
     )
 }
-
-const baseStyles = () =>
-    StyleSheet.create({
-        carouselItem: {
-            paddingHorizontal: 0,
-            width: SCREEN_WIDTH - 32,
-        },
-    })

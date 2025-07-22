@@ -8,21 +8,21 @@ const { StargateNodeMocks } = TestHelpers.data
 
 const mockQuerySuccess = {
     data: StargateNodeMocks,
-    isLoading: false,
+    isFetching: false,
     error: undefined,
     isError: false,
 }
 
 const mockQueryError = {
     data: undefined,
-    isLoading: false,
+    isFetching: false,
     error: new Error("Test error"),
     isError: true,
 }
 
 const mockQueryLoading = {
     data: undefined,
-    isLoading: true,
+    isFetching: true,
     error: undefined,
     isError: false,
 }
@@ -84,7 +84,7 @@ describe("useUserNodes", () => {
             if (!enabled) {
                 return {
                     data: undefined,
-                    isLoading: false,
+                    isFetching: false,
                     error: undefined,
                     isError: false,
                 }

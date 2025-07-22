@@ -45,8 +45,6 @@ export const FullscreenBaseCarousel = ({
             data.map((_, idx, arr) => {
                 //If it's the first item, return 0
                 if (idx === 0) return 0
-                // if (idx === arr.length - 1)
-                //     return baseWidth - 3 * gap * (data.length - 2) + baseWidth * (data.length - 2)
                 if (idx === arr.length - 1) {
                     //Calculate the length of N-1 tabs
                     const tabsNormalLength = baseWidth * (data.length - 1)
@@ -54,6 +52,14 @@ export const FullscreenBaseCarousel = ({
                     const middleTabsLength = 3 * gap * (data.length - 2)
                     return tabsNormalLength - middleTabsLength
                 }
+                /**
+                 * Middle tabs:
+                 * The first middle tab needs to have at least the full width - 3 * gap:
+                 *  - 1*gap for the previous tab
+                 *  - 1*gap for the actual gap
+                 *  - 1*gap since the previous tab has a 1*gap to show the first middle tab and does not fill the full width
+                 * From the second middle tab onwards, it's the width of the card + 1*gap since it needs to show the other cards.
+                 */
                 return (baseWidth - 3 * gap) * idx
             }),
         [baseWidth, data, gap],

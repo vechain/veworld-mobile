@@ -1,12 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import {
-    NativeScrollEvent,
-    NativeSyntheticEvent,
-    StyleProp,
-    StyleSheet,
-    TouchableOpacity,
-    ViewStyle,
-} from "react-native"
+import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle, ViewToken } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
@@ -97,14 +90,6 @@ export const BaseCarousel = ({
     const ref = useRef<Animated.FlatList<any>>(null)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
 
-    const onMomentumScrollEnd = useCallback((e: NativeSyntheticEvent<NativeScrollEvent>) => {
-        let contentOffset = e.nativeEvent.contentOffset
-        let viewSize = e.nativeEvent.layoutMeasurement
-
-        if (contentOffset.x === 0) setPage(0)
-        else setPage(Math.floor((contentOffset.x + viewSize.width) / viewSize.width))
-    }, [])
-
     const ItemSeparatorComponent = useCallback(() => <BaseSpacer width={gap} />, [gap])
 
     const onPressPagination = useCallback((index: number) => {
@@ -112,7 +97,6 @@ export const BaseCarousel = ({
             index,
             animated: true,
         })
-        setPage(index)
     }, [])
 
     const w = useMemo(() => {
@@ -124,9 +108,9 @@ export const BaseCarousel = ({
         () =>
             Array.from({ length: data.length }, (_, idx) => {
                 if (idx === 0) return 0
-                return w * idx + gap * idx + padding
+                return w * idx + gap * idx
             }),
-        [data.length, gap, padding, w],
+        [data.length, gap, w],
     )
 
     const getInitialPaddingStyles = useCallback(
@@ -138,18 +122,30 @@ export const BaseCarousel = ({
         [data.length, padding],
     )
 
+    const onViewableItemsChanged = useCallback(
+        (info: { viewableItems: ViewToken<CarouselSlideItem>[]; changed: ViewToken<CarouselSlideItem>[] }) => {
+            if (info.viewableItems.length === 0) return
+            setPage(info.viewableItems[0].index!)
+        },
+        [],
+    )
+
     return (
         <BaseView flex={1} flexDirection="column" style={[styles.root, rootStyle]}>
             <Animated.FlatList
                 ref={ref}
                 data={data}
                 snapToOffsets={snapOffsets ?? offsets}
+                snapToEnd={false}
+                snapToStart={false}
+                disableIntervalMomentum
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 pagingEnabled
+                viewabilityConfig={{ itemVisiblePercentThreshold: 100 }}
+                onViewableItemsChanged={onViewableItemsChanged}
                 decelerationRate="normal"
                 snapToAlignment="start"
                 horizontal
-                onMomentumScrollEnd={onMomentumScrollEnd}
                 style={containerStyle}
                 keyExtractor={item => item.name ?? ""}
                 testID={testID}
