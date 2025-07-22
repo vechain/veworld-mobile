@@ -115,4 +115,50 @@ describe("Migration23", () => {
             ),
         ).toBeUndefined()
     })
+
+    it("should remove balances that are more than 1 hour older than vet balances", () => {
+        const account = ethers.Wallet.createRandom().address
+        const twoHoursAgoDate = new Date()
+        twoHoursAgoDate.setHours(new Date().getHours() - 2)
+        const result = Migration23({
+            balances: {
+                other: {},
+                solo: {},
+                testnet: {},
+                mainnet: {
+                    [account]: [
+                        {
+                            balance: "0x0",
+                            isHidden: false,
+                            timeUpdated: new Date().toISOString(),
+                            tokenAddress: B3TR.address,
+                        },
+                        {
+                            balance: "0x0",
+                            isHidden: false,
+                            timeUpdated: new Date().toISOString(),
+                            tokenAddress: VOT3.address,
+                        },
+                        {
+                            balance: "0x0",
+                            isHidden: false,
+                            timeUpdated: new Date().toISOString(),
+                            tokenAddress: VET.address,
+                        },
+                        {
+                            balance: "0x0",
+                            isHidden: false,
+                            timeUpdated: twoHoursAgoDate.toISOString(),
+                            tokenAddress: ethers.Wallet.createRandom().address,
+                        },
+                    ] satisfies Balance[],
+                },
+            },
+        } as any) as unknown as RootState
+
+        expect(result.balances.mainnet[account]).toHaveLength(3)
+        expect(result.balances.mainnet[account][0].tokenAddress).toBe(B3TR.address)
+        expect(result.balances.mainnet[account][1].tokenAddress).toBe(VOT3.address)
+        expect(result.balances.mainnet[account][2].tokenAddress).toBe(VET.address)
+    })
 })

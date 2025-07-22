@@ -28,7 +28,7 @@ const mapFn =
     }
 
 export const Migration23 = (state: PersistedState): PersistedState => {
-    debug(ERROR_EVENTS.SECURITY, "Performing migration 23: Adding dapps notifications state")
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 23: Fixing balances on networks")
 
     // @ts-ignore
     const currentState: BalanceState = state.balances
