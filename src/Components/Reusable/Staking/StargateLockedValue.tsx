@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { Image, StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { StargateAvatar } from "~Assets"
 import { BaseSkeleton, BaseText, BaseView } from "~Components/Base"
 import { VET } from "~Constants"
@@ -9,6 +9,7 @@ import { NftData } from "~Model"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils, BigNutils } from "~Utils"
 import { FiatBalance } from "../FiatBalance"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 
 type Props = {
     isLoading: boolean
@@ -44,7 +45,7 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle }: Props) 
 
     return (
         <BaseView style={[styles.container, rootStyle]}>
-            <Image source={{ uri: StargateAvatar }} height={40} width={40} borderRadius={6} />
+            <FastImage source={StargateAvatar} style={styles.avatar as ImageStyle} />
             <BaseView flex={1}>
                 <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
                     {LL.TITLE_TOTAL_LOCKED()}
@@ -92,6 +93,11 @@ const baseStyles = () =>
             flexDirection: "row",
             alignItems: "center",
             gap: 16,
+        },
+        avatar: {
+            width: 40,
+            height: 40,
+            borderRadius: 6,
         },
         valueContainer: {
             flexDirection: "row",
