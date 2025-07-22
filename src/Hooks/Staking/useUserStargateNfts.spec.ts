@@ -8,7 +8,7 @@ const { StargateNftMocks, StargateNodeMocks } = TestHelpers.data
 
 const mockQuerySuccess = {
     data: StargateNftMocks,
-    isLoading: false,
+    isFetching: false,
     error: undefined,
     isError: false,
     refetch: jest.fn(),
@@ -16,7 +16,7 @@ const mockQuerySuccess = {
 
 const mockQueryLoading = {
     data: undefined,
-    isLoading: true,
+    isFetching: true,
     error: undefined,
     isError: false,
     refetch: jest.fn(),
@@ -24,7 +24,7 @@ const mockQueryLoading = {
 
 const mockQueryError = {
     data: undefined,
-    isLoading: false,
+    isFetching: false,
     error: new Error("Test error"),
     isError: true,
     refetch: jest.fn(),
@@ -38,7 +38,7 @@ jest.mock("@tanstack/react-query", () => {
             if (!enabled) {
                 return {
                     data: undefined,
-                    isLoading: false,
+                    isFetching: false,
                     error: undefined,
                     isError: false,
                     refetch: jest.fn(),
@@ -89,7 +89,7 @@ describe("useUserStargateNfts", () => {
             if (!enabled) {
                 return {
                     data: undefined,
-                    isLoading: false,
+                    isFetching: false,
                     error: undefined,
                     isError: false,
                     refetch: jest.fn(),

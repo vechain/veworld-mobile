@@ -84,7 +84,7 @@ export const useUserStargateNfts = (stargateNodes: NodeInfo[] = [], isLoadingNod
 
     const {
         data,
-        isLoading: isLoadingStargate,
+        isFetching: isLoadingStargate,
         error,
         isError,
         refetch,
