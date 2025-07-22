@@ -46,6 +46,49 @@ const getBalanceFromBlockchain = async (
     }
 }
 
+const getErc20BalancesFromBlockchain = async (tokenAddresses: string[], accountAddress: string, thor: Connex.Thor) => {
+    const clauses = tokenAddresses.map(token =>
+        thor.account(token).method(abis.VIP180.balanceOf).asClause(accountAddress),
+    )
+
+    const result = await thor.explain(clauses).caller(accountAddress).execute()
+
+    const nowIso = new Date().toISOString()
+
+    return result.flatMap((res, idx) => {
+        // skip clauses that obviously failed
+        if (res.reverted || res.data === "0x" || res.data.length < 10) return []
+
+        const [raw] = vip180Interface.decodeFunctionResult("balanceOf", res.data)
+        return [
+            {
+                balance: (raw as ethers.BigNumber).toHexString(),
+                tokenAddress: tokenAddresses[idx],
+                timeUpdated: nowIso,
+                isHidden: false,
+            },
+        ]
+    })
+}
+
+const getNativeBalancesFromBlockchain = async (accountAddress: string, network: Network) => {
+    const result = await getVetAndVthoBalancesFromBlockchain(accountAddress, network)
+    return [
+        {
+            tokenAddress: VET.address,
+            timeUpdated: new Date().toISOString(),
+            balance: result.balance,
+            isHidden: false,
+        },
+        {
+            tokenAddress: VTHO.address,
+            timeUpdated: new Date().toISOString(),
+            balance: result.energy,
+            isHidden: false,
+        },
+    ]
+}
+
 const getBalancesFromBlockchain = async (
     tokenAddresses: string[],
     accountAddress: string,
@@ -53,54 +96,23 @@ const getBalancesFromBlockchain = async (
     thor: Connex.Thor,
 ): Promise<Balance[]> => {
     try {
-        const vetOrVthoInAddresses =
-            tokenAddresses.find(addr => AddressUtils.compareAddresses(addr, VET.address)) ||
-            tokenAddresses.find(addr => AddressUtils.compareAddresses(addr, VTHO.address))
+        // Check if VET or VTHO is in the balances to update
+        const vetOrVthoInAddresses = tokenAddresses.find(
+            addr =>
+                AddressUtils.compareAddresses(addr, VET.address) || AddressUtils.compareAddresses(addr, VTHO.address),
+        )
         const notVetOrVtho = tokenAddresses.filter(
             addr =>
                 !AddressUtils.compareAddresses(addr, VET.address) && !AddressUtils.compareAddresses(addr, VTHO.address),
         )
         const balances: Balance[] = []
         if (vetOrVthoInAddresses) {
-            const result = await getVetAndVthoBalancesFromBlockchain(accountAddress, network)
-            balances.push({
-                tokenAddress: VET.address,
-                timeUpdated: new Date().toISOString(),
-                balance: result.balance,
-                isHidden: false,
-            })
-            balances.push({
-                tokenAddress: VTHO.address,
-                timeUpdated: new Date().toISOString(),
-                balance: result.energy,
-                isHidden: false,
-            })
+            const result = await getNativeBalancesFromBlockchain(accountAddress, network)
+            balances.push(...result)
         }
         if (notVetOrVtho.length === 0) return balances
-        const clauses = notVetOrVtho.map(token =>
-            thor.account(token).method(abis.VIP180.balanceOf).asClause(accountAddress),
-        )
-
-        const result = await thor.explain(clauses).caller(accountAddress).execute()
-
-        const nowIso = new Date().toISOString()
-
-        const updatedBalances = result.flatMap((res, idx) => {
-            // skip clauses that obviously failed
-            if (res.reverted || res.data === "0x" || res.data.length < 10) return []
-
-            const [raw] = vip180Interface.decodeFunctionResult("balanceOf", res.data)
-            return [
-                {
-                    balance: (raw as ethers.BigNumber).toHexString(),
-                    tokenAddress: notVetOrVtho[idx],
-                    timeUpdated: nowIso,
-                    isHidden: false,
-                },
-            ]
-        })
-
-        return balances.concat(updatedBalances)
+        const erc20Balances = await getErc20BalancesFromBlockchain(notVetOrVtho, accountAddress, thor)
+        return balances.concat(erc20Balances)
     } catch (e) {
         error(ERROR_EVENTS.TOKENS, e)
         throw new Error("Failed to get balance from external service")
