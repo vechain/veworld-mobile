@@ -49,7 +49,6 @@ export const updateAccountBalances =
                 : accountBalances.filter(
                       balance => Date.now() - new Date(balance.timeUpdated).getTime() >= BALANCE_UPDATE_CACHE_TIME,
                   )
-
             if (updatableBalances.length === 0) return
 
             dispatch(setIsTokensOwnedLoading(true))
@@ -124,7 +123,7 @@ export const resetTokenBalances = async (dispatch: Dispatch, getState: () => Roo
                     accountAddress: account.address,
                     tokenAddress: token.address,
                     balance: "0",
-                    timeUpdated: new Date().toISOString(),
+                    timeUpdated: new Date(0).toISOString(),
                     isCustomToken: false,
                     isHidden: false,
                     position: undefined,
