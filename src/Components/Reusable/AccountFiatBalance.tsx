@@ -16,6 +16,12 @@ type AccountFiatBalanceProps = {
     isLoading?: boolean
 }
 
+const parseFiatBalance = (value: string) => {
+    //Fiat balances that have a value < 0.01, have the value set as '< < 0.01'
+    if (value.includes("<")) return 0
+    return Number(value)
+}
+
 const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFiatBalanceProps) => {
     const { isLoading: _isLoading = false, isVisible = true } = props
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
@@ -57,12 +63,12 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
 
     const sum = useMemo(
         () =>
-            Number(tokenWithInfoVET.fiatBalance) +
-            Number(tokenWithInfoVTHO.fiatBalance) +
-            Number(tokenWithInfoB3TR.fiatBalance) +
-            Number(vot3FiatBalance) +
-            Number(nonVechaiTokensFiat.reduce((a, b) => Number(a) + Number(b), 0)) +
-            Number(stargateFiatBalance),
+            parseFiatBalance(tokenWithInfoVET.fiatBalance) +
+            parseFiatBalance(tokenWithInfoVTHO.fiatBalance) +
+            parseFiatBalance(tokenWithInfoB3TR.fiatBalance) +
+            parseFiatBalance(vot3FiatBalance) +
+            nonVechaiTokensFiat.reduce((a, b) => a + parseFiatBalance(b), 0) +
+            parseFiatBalance(stargateFiatBalance),
         [
             tokenWithInfoVET.fiatBalance,
             tokenWithInfoVTHO.fiatBalance,
