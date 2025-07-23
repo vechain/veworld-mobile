@@ -5,6 +5,8 @@ var axios = require("axios")
 import MockAdapter from "axios-mock-adapter"
 import { getTokenDecimals, getTokenName, getTokenSymbol } from "~Networking"
 import { error } from "~Utils/Logger"
+import { ethers } from "ethers"
+import { VIP180 } from "~Constants/Constants/Thor/abis"
 
 const { account1D1, token1, token2, customToken } = TestHelpers.data
 const thorAccountStub = TestHelpers.thor.stubs.account
@@ -12,6 +14,80 @@ const thorClient = TestHelpers.thor.mockThorInstance({})
 const thorClientWithCallError = TestHelpers.thor.mockThorInstance({
     account: thorAccountStub({ shouldCallError: true }),
 })
+
+const createBalanceOfStub = (balances: string[]) => {
+    return {
+        ...thorClient,
+        account(addr) {
+            return {
+                ...thorAccountStub({})(addr),
+                method(abi) {
+                    return {
+                        asClause(..._args: any[]): Connex.Thor.Transaction["clauses"][0] {
+                            if (!("name" in abi) || typeof abi.name !== "string")
+                                throw new Error("Abi name not implemented")
+                            return {
+                                to: addr,
+                                value: "0x0",
+                                data: new ethers.utils.Interface([abi as any]).encodeFunctionData(abi.name, _args),
+                            }
+                        },
+                        cache(_hints: string[]) {
+                            return this
+                        },
+                        call(..._args: any[]): Promise<Connex.VM.Output & Connex.Thor.Account.WithDecoded> {
+                            return Promise.resolve({
+                                events: [],
+                                data: "0x000000000000000000000000000000000000000000000000000009184e72a000",
+                                vmError: "",
+                                gasUsed: 1234,
+                                reverted: false,
+                                transfers: [],
+                                decoded: ["0x9184e72a000"],
+                            })
+                        },
+
+                        caller(_addr: string) {
+                            return this
+                        },
+                        gas(_gas: number) {
+                            return this
+                        },
+                        gasPayer(_addr: string) {
+                            return this
+                        },
+                        gasPrice(_gp: string | number) {
+                            return this
+                        },
+                        transact(..._args: any[]): Connex.Vendor.TxSigningService {
+                            throw Error("Not implemented")
+                        },
+                        value(_val: string | number) {
+                            return this
+                        },
+                    }
+                },
+            }
+        },
+        explain(clauses) {
+            return {
+                ...TestHelpers.thor.stubs.explain.explain(clauses),
+                async execute() {
+                    return clauses.map((_, idx) => ({
+                        events: [],
+                        transfers: [],
+                        data: new ethers.utils.Interface([VIP180.balanceOf]).encodeFunctionResult("balanceOf", [
+                            balances[idx],
+                        ]),
+                        vmError: "",
+                        gasUsed: 100000,
+                        reverted: false,
+                    }))
+                },
+            }
+        },
+    } satisfies Connex.Thor
+}
 
 jest.mock("~Networking", () => ({
     getTokenDecimals: jest.fn(),
@@ -187,5 +263,62 @@ describe("BalanceUtils", () => {
         )
 
         expect(balanceAndTokens).toBeUndefined()
+    })
+
+    describe("getBalancesFromBlockchain", () => {
+        it("should include VTHO if VET is included", async () => {
+            mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).reply(200, mockedBalance)
+
+            const result = await BalanceUtils.getBalancesFromBlockchain(
+                [VET.address],
+                account1D1.address,
+                mainNetwork,
+                thorClient,
+            )
+
+            expect(result[0].balance).toEqual(mockedBalance.balance)
+            expect(result[1].balance).toEqual(mockedBalance.energy)
+        })
+        it("should include VET if VTHO is included", async () => {
+            mock.onGet(`${mainNetwork.currentUrl}/accounts/${account1D1.address}`).reply(200, mockedBalance)
+
+            const result = await BalanceUtils.getBalancesFromBlockchain(
+                [VTHO.address],
+                account1D1.address,
+                mainNetwork,
+                thorClient,
+            )
+
+            expect(result[0].balance).toEqual(mockedBalance.balance)
+            expect(result[1].balance).toEqual(mockedBalance.energy)
+        })
+        it("should get balances for one ERC-20", async () => {
+            const balance = ethers.utils.parseEther("3.3").toHexString()
+            const result = await BalanceUtils.getBalancesFromBlockchain(
+                [token1.address],
+                account1D1.address,
+                mainNetwork,
+                createBalanceOfStub([balance]),
+            )
+
+            expect(result).toHaveLength(1)
+            expect(result[0].balance).toEqual(balance)
+        })
+        it("should get balances for multiple ERC-20s", async () => {
+            const [balance1, balance2] = [
+                ethers.utils.parseEther("3.3").toHexString(),
+                ethers.utils.parseEther("4.5").toHexString(),
+            ]
+            const result = await BalanceUtils.getBalancesFromBlockchain(
+                [token1.address, token2.address],
+                account1D1.address,
+                mainNetwork,
+                createBalanceOfStub([balance1, balance2]),
+            )
+
+            expect(result).toHaveLength(2)
+            expect(result[0].balance).toBe(balance1)
+            expect(result[1].balance).toBe(balance2)
+        })
     })
 })

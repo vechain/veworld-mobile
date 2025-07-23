@@ -385,6 +385,19 @@ type RootTranslation = {
 	 */
 	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
 	/**
+	 * A​p​p​ ​u​p​d​a​t​e​d
+	 */
+	APP_UPDATED: string
+	/**
+	 * H​e​r​e​ ​i​s​ ​w​h​a​t​ ​i​s​ ​n​e​w​:
+	 */
+	APP_UPDATED_WHATS_NEW: string
+	/**
+	 * v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * @param {string} version
+	 */
+	APP_VERSION: RequiredParams<'version'>
+	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
 	APP_VERIFICATION_CONFIRM: string
@@ -4882,6 +4895,18 @@ Try reconnect your device to the internet.
 	 * Version {version} is now available to update with new features and improvements.
 	 */
 	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
+	/**
+	 * App updated
+	 */
+	APP_UPDATED: () => LocalizedString
+	/**
+	 * Here is what is new:
+	 */
+	APP_UPDATED_WHATS_NEW: () => LocalizedString
+	/**
+	 * version {version}
+	 */
+	APP_VERSION: (arg: { version: string }) => LocalizedString
 	/**
 	 * Please confirm that you would like to process this request.
 	 */
