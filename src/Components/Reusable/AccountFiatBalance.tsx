@@ -1,9 +1,15 @@
-import React, { useMemo } from "react"
+import { default as React, useMemo } from "react"
+import { FiatBalance } from "~Components"
 import { VET, VTHO } from "~Constants"
 import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
-import { FiatBalance } from "~Components"
-import { BalanceUtils } from "~Utils"
-import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
+import {
+    selectBalanceForToken,
+    selectNetworkVBDTokens,
+    selectSelectedAccountAddress,
+    useAppSelector,
+} from "~Storage/Redux"
+import { BalanceUtils, BigNutils } from "~Utils"
 
 type AccountFiatBalanceProps = {
     isVisible?: boolean
@@ -11,8 +17,9 @@ type AccountFiatBalanceProps = {
 }
 
 const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFiatBalanceProps) => {
-    const { isLoading = false, isVisible = true } = props
+    const { isLoading: _isLoading = false, isVisible = true } = props
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
+    const accountAddress = useAppSelector(selectSelectedAccountAddress)
 
     const theme = useTheme()
 
@@ -30,19 +37,39 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
 
     const nonVechaiTokensFiat = useNonVechainTokenFiat()
 
+    const { data: stargateNodes, isLoading: loadingNodes } = useUserNodes(accountAddress)
+    const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts(
+        stargateNodes,
+        loadingNodes,
+    )
+
+    const totalStargateVet = useMemo(() => {
+        return stargateNfts.reduce((acc, nft) => {
+            return acc.plus(nft.vetAmountStaked ?? "0")
+        }, BigNutils("0"))
+    }, [stargateNfts])
+
+    const stargateFiatBalance = useMemo(() => {
+        return BalanceUtils.getFiatBalance(totalStargateVet.toString, tokenWithInfoVET.exchangeRate ?? 1, VET.decimals)
+    }, [totalStargateVet, tokenWithInfoVET.exchangeRate])
+
+    const isLoading = useMemo(() => _isLoading || loadingStargateNfts, [_isLoading, loadingStargateNfts])
+
     const sum = useMemo(
         () =>
             Number(tokenWithInfoVET.fiatBalance) +
             Number(tokenWithInfoVTHO.fiatBalance) +
             Number(tokenWithInfoB3TR.fiatBalance) +
             Number(vot3FiatBalance) +
-            Number(nonVechaiTokensFiat.reduce((a, b) => Number(a) + Number(b), 0)),
+            Number(nonVechaiTokensFiat.reduce((a, b) => Number(a) + Number(b), 0)) +
+            Number(stargateFiatBalance),
         [
             tokenWithInfoVET.fiatBalance,
             tokenWithInfoVTHO.fiatBalance,
             tokenWithInfoB3TR.fiatBalance,
             vot3FiatBalance,
             nonVechaiTokensFiat,
+            stargateFiatBalance,
         ],
     )
 
@@ -60,6 +87,7 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
                 tokenWithInfoB3TR.fiatBalance,
                 vot3FiatBalance,
                 ...nonVechaiTokensFiat,
+                stargateFiatBalance,
             ]}
         />
     )
