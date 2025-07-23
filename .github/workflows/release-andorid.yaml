@@ -58,7 +58,8 @@ jobs:
                   git config user.email "${{ github.actor }}@users.noreply.github.com"
 
             - name: Install & Patch packages
-              run: yarn install
+              run: |
+                yarn install:android
 
             - name: Setup Java
               uses: actions/setup-java@v3

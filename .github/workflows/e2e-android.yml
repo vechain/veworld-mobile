@@ -38,7 +38,8 @@ jobs:
                   cache: "yarn"
 
             - name: Install & Patch packages
-              run: yarn install
+              run: |
+                yarn install:android
 
             - name: Setup Java
               uses: actions/setup-java@v3

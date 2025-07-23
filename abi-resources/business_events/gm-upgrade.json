@@ -1,0 +1,104 @@
+{
+  "name": "B3TR_GMUpgrade",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "Upgraded(indexed uint256,uint256,uint256)",
+      "alias": "upgradeGM",
+      "conditions": [
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${GM_NFT_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    },
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "transferB3TR",
+      "conditions": [
+        {
+          "firstOperand": "to",
+          "isFirstStatic": false,
+          "secondOperand": "${TREASURY_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [],
+  "paramsDefinition": [
+    {
+      "name": "from",
+      "eventName": "transferB3TR",
+      "businessEventName": "from"
+    },
+    {
+      "name": "address",
+      "eventName": "transferB3TR",
+      "businessEventName": "to"
+    },
+    {
+      "name": "value",
+      "eventName": "transferB3TR",
+      "businessEventName": "value"
+    },
+    {
+      "name": "tokenId",
+      "eventName": "upgradeGM",
+      "businessEventName": "tokenId"
+    },
+    {
+      "name": "newLevel",
+      "eventName": "upgradeGM",
+      "businessEventName": "newLevel"
+    },
+    {
+      "name": "oldLevel",
+      "eventName": "upgradeGM",
+      "businessEventName": "oldLevel"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "type": "address",
+      "name": "to",
+      "internalType": "address",
+      "indexed": false
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "newLevel",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "oldLevel",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
+}
