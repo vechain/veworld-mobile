@@ -139,6 +139,7 @@ export type Colors = {
         convertValueText: string
         swapIcon: string
         borderColor: string
+        errorText: string
     }
     activityCard: {
         time: string
@@ -453,6 +454,7 @@ const light: Colors = {
         convertValueText: COLORS.GREY_500,
         swapIcon: COLORS.GREY_600,
         borderColor: COLORS.GREY_200,
+        errorText: COLORS.RED_600,
     },
     activityCard: {
         time: COLORS.GREY_600,
@@ -673,6 +675,7 @@ const dark: Colors = {
         convertValueText: COLORS.GREY_300,
         swapIcon: COLORS.WHITE,
         borderColor: COLORS.DARK_PURPLE_DISABLED,
+        errorText: COLORS.RED_300,
     },
     activityCard: {
         time: COLORS.GREY_200,
