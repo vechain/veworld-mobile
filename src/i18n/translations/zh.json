@@ -81,7 +81,7 @@
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "不支持蓝牙",
   "ALERT_TITLE_VOT3": "VOT3",
   "APP_UPDATED": "应用已更新",
-  "APP_UPDATED_WHATS_NEW": "以下是更新内容：",
+  "APP_UPDATED_WHATS_NEW": "以下是新内容：",
   "APP_UPDATE_AVAILABLE": "更新可用",
   "APP_UPDATE_AVAILABLE_MESSAGE": "版本 {version:string} 现已可用，包含新特性和改进。",
   "APP_VERIFICATION_CONFIRM": "请确认您要处理此请求。",
