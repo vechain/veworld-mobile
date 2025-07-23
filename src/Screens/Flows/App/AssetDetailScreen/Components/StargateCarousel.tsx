@@ -87,7 +87,7 @@ export const StargateCarousel = () => {
                     contentWrapperStyle={styles.padding}
                     w={240}
                     paginationAlignment="flex-start"
-                    padding={24}
+                    padding={16}
                 />
                 <BaseSpacer bg={theme.colors.cardDivider} height={1} />
                 <BaseButton
@@ -96,7 +96,8 @@ export const StargateCarousel = () => {
                     style={styles.button}
                     py={8}
                     textColor={theme.colors.actionBanner.buttonTextSecondary}
-                    bgColor={theme.colors.actionBanner.buttonBackground}>
+                    bgColor={theme.colors.actionBanner.buttonBackground}
+                    typographyFont="bodySemiBold">
                     {LL.STARGATE_MANAGE_STAKING()}
                 </BaseButton>
             </BaseView>
@@ -107,7 +108,7 @@ export const StargateCarousel = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         section: {
-            paddingHorizontal: 24,
+            paddingHorizontal: 16,
         },
         card: {
             backgroundColor: theme.colors.stakedVetCard.background,
@@ -121,13 +122,13 @@ const baseStyles = (theme: ColorThemeType) =>
             width: 240,
         },
         biggerCarouselItem: {
-            width: 264,
+            width: 256,
         },
         padding: {
             paddingStart: 0,
         },
         button: {
-            marginHorizontal: 24,
+            marginHorizontal: 16,
             borderColor: theme.colors.actionBanner.buttonBorder,
             borderWidth: 1,
         },
