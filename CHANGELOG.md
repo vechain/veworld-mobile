@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.10 (2025-07-23)</small>
+
+* build: init ([3bb7417](https://github.com/vechain/veworld-mobile/commit/3bb7417))
+* fix: fix b3tr conversion leaving dust (#3114) ([824e4d1](https://github.com/vechain/veworld-mobile/commit/824e4d1)), closes [#3114](https://github.com/vechain/veworld-mobile/issues/3114)
+
 ## <small>2.2.9 (2025-07-21)</small>
 
 * build: init ([9aed4db](https://github.com/vechain/veworld-mobile/commit/9aed4db))
