@@ -17,7 +17,7 @@ type Props = {
     animatedStyle?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
     error?: boolean
     onSendAmountChange?: (amount: string) => void
-    onMaxAmountPress?: (maxAmount: string) => void
+    onMaxAmountPress?: (realAmount: string, formattedAmount: string) => void
 }
 
 export const ConvertBetterCard: React.FC<Props> = ({
@@ -63,8 +63,8 @@ export const ConvertBetterCard: React.FC<Props> = ({
     }, [token?.icon, token?.symbol])
 
     const handleOnMaxPress = useCallback(() => {
-        onMaxAmountPress?.(tokenTotalToHuman)
-    }, [onMaxAmountPress, tokenTotalToHuman])
+        onMaxAmountPress?.(tokenTotalBalance, tokenTotalToHuman)
+    }, [onMaxAmountPress, tokenTotalBalance, tokenTotalToHuman])
 
     return (
         <Animated.View style={animatedStyle}>
@@ -159,7 +159,7 @@ const baseStyles = (theme: ColorThemeType) =>
             color: theme.colors.convertBetterCard.convertValueText,
         },
         inputError: {
-            color: theme.colors.errorVariant.title,
+            color: theme.colors.convertBetterCard.errorText,
         },
         balanceContainer: {
             flex: 1,
@@ -169,7 +169,7 @@ const baseStyles = (theme: ColorThemeType) =>
             gap: 8,
         },
         totalBalanceError: {
-            color: theme.colors.errorVariant.title,
+            color: theme.colors.convertBetterCard.errorText,
         },
         maxButton: {
             borderColor: theme.colors.actionBanner.buttonBorder,
