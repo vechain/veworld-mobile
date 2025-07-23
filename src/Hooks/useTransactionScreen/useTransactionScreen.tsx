@@ -99,6 +99,8 @@ export const useTransactionScreen = ({
         providedGas: dappRequest?.options?.gas,
     })
 
+    const transactionOutputs = useMemo(() => gas?.outputs, [gas?.outputs])
+
     // 2. Delegation
     const {
         resetDelegation,
@@ -193,10 +195,11 @@ export const useTransactionScreen = ({
 
     const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
         selectedToken: selectedDelegationToken,
-        clauses,
         isDelegated,
         allFeeOptions: selectedFeeAllTokenOptions,
         isLoadingFees: isFirstTimeLoadingFees,
+        transactionOutputs,
+        origin: selectedAccount.address,
     })
 
     // 4. Build transaction
