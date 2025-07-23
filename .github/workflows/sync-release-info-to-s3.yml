@@ -19,16 +19,16 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v4
 
-            - name: Configure AWS credentials for Development
+            - name: Configure AWS credentials for Production
               uses: aws-actions/configure-aws-credentials@v4
               with:
-                  role-to-assume: ${{ secrets.AWS_ROLE_DEV }}
+                  role-to-assume: ${{ secrets.AWS_ROLE_PROD }}
                   aws-region: eu-west-1
 
-            - name: Sync to Development S3 Bucket
+            - name: Sync to Production S3 Bucket
               env:
-                  DEV_S3_BUCKET: ${{ secrets.DEV_S3_BUCKET }}
+                  PROD_S3_BUCKET: ${{ secrets.PROD_S3_BUCKET }}
               run: |
-                  echo "Syncing release information to development S3 bucket"
-                  aws s3 sync ./releases "s3://$DEV_S3_BUCKET/releases" --delete
-                  echo "Development sync complete"
+                  echo "Syncing release information to production S3 bucket"
+                  aws s3 sync ./releases "s3://$PROD_S3_BUCKET/releases" --delete
+                  echo "Production sync complete"
