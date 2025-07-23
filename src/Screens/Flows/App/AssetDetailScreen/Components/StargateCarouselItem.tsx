@@ -69,8 +69,7 @@ export const StargateCarouselItem = ({ item }: Props) => {
             <StargateImage uri={data?.image} />
             <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="bodySemiBold">
                 {getTokenLevelName(
-                    (data?.attributes?.find(attr => attr.trait_type === "Level")?.value as TokenLevelId | undefined) ??
-                        TokenLevelId.None,
+                    (item.levelId ? (parseInt(item.levelId, 10) as TokenLevelId) : undefined) ?? TokenLevelId.None,
                 )}
             </BaseText>
             <BaseView flexDirection="column" gap={8}>

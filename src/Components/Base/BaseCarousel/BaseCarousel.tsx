@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle, ViewToken } from "react-native"
+import { ScrollView, StyleProp, StyleSheet, TouchableOpacity, ViewStyle, ViewToken } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
@@ -174,7 +174,9 @@ export const BaseCarousel = ({
                 showsHorizontalScrollIndicator={false}
             />
             {showPagination && (
-                <BaseView style={[styles.dotContainer, { paddingStart: padding }, paginationStyle]}>
+                <ScrollView
+                    contentContainerStyle={[styles.dotContainer, { paddingStart: padding }, paginationStyle]}
+                    horizontal>
                     {Array.from({ length: data.length }, (_, idx) => (
                         <TouchableOpacity
                             key={idx}
@@ -182,7 +184,7 @@ export const BaseCarousel = ({
                             onPress={onPressPagination.bind(null, idx)}
                         />
                     ))}
-                </BaseView>
+                </ScrollView>
             )}
         </BaseView>
     )
@@ -197,7 +199,6 @@ const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") =
             gap: 6,
             alignSelf: paginationAlignment,
             paddingHorizontal: 16,
-            flexDirection: "row",
         },
         dot: {
             backgroundColor: theme.colors.defaultCarousel.dotBg,
