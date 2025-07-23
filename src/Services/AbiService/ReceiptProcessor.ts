@@ -2,7 +2,7 @@ import { AbiManager, EventResult, InspectableOutput } from "./AbiManager"
 import { ReceiptOutput } from "./ReceiptOutput"
 
 export class ReceiptProcessor {
-    constructor(private readonly abiManagers: AbiManager[]) {}
+    constructor(readonly abiManagers: AbiManager[]) {}
 
     analyzeReceipt(outputs: InspectableOutput[], origin: string): ReceiptOutput[] {
         const receiptOutputs: ReceiptOutput[] = []

@@ -33,11 +33,11 @@ export abstract class AbiManager {
         if (this.indexableAbis === undefined) throw new Error("[assertEventsLoaded]: Load ABIs first")
     }
 
-    async loadAbis() {
-        this.indexableAbis = await this._loadAbis()
+    loadAbis() {
+        this.indexableAbis = this._loadAbis()
     }
 
-    protected abstract _loadAbis(): Promise<IndexableAbi[]> | IndexableAbi[]
+    protected abstract _loadAbis(): IndexableAbi[]
     protected abstract _parseEvents(output: InspectableOutput, prevEvents: EventResult[], origin: string): EventResult[]
 
     parseEvents(output: InspectableOutput, prevEvents: EventResult[], origin: string) {

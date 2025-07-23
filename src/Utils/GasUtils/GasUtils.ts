@@ -63,6 +63,7 @@ const estimateGas = async (
         vmError: lastOutput ? lastOutput.vmError : "",
         //We can easily hard code it
         baseGasPrice: "10000000000000",
+        outputs: data,
     }
 }
 
