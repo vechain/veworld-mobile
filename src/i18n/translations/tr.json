@@ -87,7 +87,7 @@
   "APP_VERIFICATION_CONFIRM": "Lütfen bu isteği işleme koymak istediğinizi onaylayın.",
   "APP_VERIFICATION_INVALID": "Bu uygulamaya bağlantı sağlanamaz, çünkü istek kötü niyetli görünüyor.",
   "APP_VERIFICATION_UNKNOWN": "Bu isteği yapan uygulama doğrulanamadı. Kendi sorumluluğunuzda ilerleyin.",
-  "APP_VERSION": "sürüm {version:string}",
+  "APP_VERSION": "versiyon {version:string}",
   "APRIL": "Nisan",
   "AUGUST": "Ağustos",
   "B3TR_ACTION": "VeBetter eylemi",
