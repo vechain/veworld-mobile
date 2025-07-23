@@ -1,6 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { Contract, ThorClient } from "@vechain/sdk-network"
-import { AbiParametersToPrimitiveTypes } from "abitype"
+import { ThorClient } from "@vechain/sdk-network"
 import { useMemo } from "react"
 import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 import {
@@ -13,7 +12,8 @@ import { useThorClient } from "~Hooks/useThorClient"
 import { NETWORK_TYPE } from "~Model"
 import { NftData, NodeInfo } from "~Model/Staking"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
-import { AddressUtils, BigNutils } from "~Utils"
+import { BigNutils } from "~Utils"
+import { getHistoricalVTHOClaimed } from "./historical"
 
 const getUserStargateNftsQueryKey = (network: NETWORK_TYPE, address: string | undefined, nodesLength: number) => [
     "userStargateNfts",
@@ -21,44 +21,6 @@ const getUserStargateNftsQueryKey = (network: NETWORK_TYPE, address: string | un
     address,
     nodesLength,
 ]
-
-const getHistoricalVTHOClaimed = async (
-    thor: ThorClient,
-    nodeId: string,
-    accountAddress: string,
-    nftContract: Contract<[typeof StargateNftEvents.BaseVTHORewardsClaimed]>,
-    delegationContract: Contract<[typeof StargateDelegationEvents.DelegationRewardsClaimed]>,
-) => {
-    const nftCriteria = nftContract.criteria.BaseVTHORewardsClaimed({ owner: accountAddress, tokenId: BigInt(nodeId) })
-    const delegationCriteria = delegationContract.criteria.DelegationRewardsClaimed({
-        claimer: accountAddress,
-        tokenId: BigInt(nodeId),
-    })
-    const filteredLogs = await thor.logs.filterEventLogs({
-        criteriaSet: [nftCriteria, delegationCriteria],
-        options: {
-            limit: 1000,
-            offset: 0,
-        },
-    })
-
-    return filteredLogs.reduce((acc, curr) => {
-        if (AddressUtils.compareAddresses(curr.address, nftContract.address)) {
-            const data = curr.decodedData as AbiParametersToPrimitiveTypes<
-                (typeof StargateNftEvents.BaseVTHORewardsClaimed)["inputs"]
-            >
-            //data[3] is the `amount` property
-            acc.plus(data[2].toString())
-        } else {
-            const data = curr.decodedData as AbiParametersToPrimitiveTypes<
-                (typeof StargateDelegationEvents.DelegationRewardsClaimed)["inputs"]
-            >
-            //data[3] is the `rewards` property
-            acc.plus(data[3].toString())
-        }
-        return acc
-    }, BigNutils("0"))
-}
 
 export const getUserStargateNfts = async (
     thor: ThorClient,
