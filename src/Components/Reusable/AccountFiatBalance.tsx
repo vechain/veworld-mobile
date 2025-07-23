@@ -43,7 +43,7 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
 
     const nonVechaiTokensFiat = useNonVechainTokenFiat()
 
-    const { data: stargateNodes, isLoading: loadingNodes } = useUserNodes(accountAddress)
+    const { stargateNodes: stargateNodes, isLoading: loadingNodes } = useUserNodes(accountAddress)
     const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts(
         stargateNodes,
         loadingNodes,
