@@ -4,11 +4,9 @@ import { useCallback } from "react"
 import { abi, Transaction } from "thor-devkit"
 import { abis, AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
-import { useFormatFiat } from "~Hooks/useFormatFiat"
 import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
 import { RootStackParamListHome, Routes } from "~Navigation"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
-import { BigNutils } from "~Utils"
 
 export const useConvertBetterTokens = () => {
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListHome>>()
@@ -16,7 +14,6 @@ export const useConvertBetterTokens = () => {
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
 
     const b3trWithCompleteInfo = useTokenWithCompleteInfo(B3TR)
-    const { formatLocale } = useFormatFiat()
 
     const buildB3trTxClauses = useCallback(
         (amount: string): Transaction.Clause[] => {
@@ -70,38 +67,38 @@ export const useConvertBetterTokens = () => {
      * Helpers that create transaction to convert B3TR to VOT3 token
      */
     const convertB3tr = useCallback(
-        (amount: string) => {
+        (amount: string, formattedAmount: string) => {
             const clauses = buildB3trTxClauses(amount)
             track(AnalyticsEvent.CONVERT_B3TR_VOT3, {
                 from: "B3TR",
                 to: "VOT3",
             })
             nav.replace(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
-                amount: BigNutils(amount).toHuman(18).toTokenFormat_string(2, formatLocale),
+                amount: formattedAmount,
                 transactionClauses: clauses,
                 token: b3trWithCompleteInfo,
             })
         },
-        [b3trWithCompleteInfo, buildB3trTxClauses, formatLocale, nav, track],
+        [b3trWithCompleteInfo, buildB3trTxClauses, nav, track],
     )
 
     /**
      * Helper that create transaction to convert VOT3 to B3TR token
      */
     const convertVot3 = useCallback(
-        (amount: string) => {
+        (amount: string, formattedAmount: string) => {
             const clauses = buildVot3TxClauses(amount)
             track(AnalyticsEvent.CONVERT_B3TR_VOT3, {
                 from: "VOT3",
                 to: "B3TR",
             })
             nav.replace(Routes.CONVERT_BETTER_TOKENS_TRANSACTION_SCREEN, {
-                amount: BigNutils(amount).toHuman(18).toTokenFormat_string(2, formatLocale),
+                amount: formattedAmount,
                 transactionClauses: clauses,
                 token: b3trWithCompleteInfo,
             })
         },
-        [b3trWithCompleteInfo, buildVot3TxClauses, formatLocale, nav, track],
+        [b3trWithCompleteInfo, buildVot3TxClauses, nav, track],
     )
 
     return {

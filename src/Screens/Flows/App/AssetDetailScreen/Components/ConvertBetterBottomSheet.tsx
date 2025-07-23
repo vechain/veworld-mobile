@@ -84,8 +84,9 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const onChangeText = useCallback(
         (newValue: string) => {
             const _newValue = removeInvalidCharacters(newValue)
+            const _realValue = ethers.utils.parseEther(_newValue || "0").toString()
             setInput(_newValue)
-            setRealValue(ethers.utils.parseEther(_newValue).toString())
+            setRealValue(_realValue)
 
             if (_newValue === "" || BigNutils(_newValue).isZero) {
                 if (timer.current) {
@@ -98,20 +99,16 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                 return
             }
 
-            const balanceToHuman = BigNutils((isB3TRActive ? b3trTokenTotal : vot3TokenTotal) ?? "1").toHuman(
-                B3TR.decimals,
-            )
+            const balance = BigNutils((isB3TRActive ? b3trTokenTotal : vot3TokenTotal) ?? "1").toString
 
-            const controlValue = BigNutils(_newValue).addTrailingZeros(B3TR.decimals).toHuman(B3TR.decimals)
-
-            if (controlValue.isBiggerThan(balanceToHuman.toString)) {
+            if (BigNutils(_realValue).isBiggerThan(balance)) {
                 setIsError(true)
                 HapticsService.triggerNotification({ level: "Error" })
             } else {
                 setIsError(false)
             }
         },
-        [B3TR.decimals, b3trTokenTotal, isB3TRActive, removeInvalidCharacters, setInput, vot3TokenTotal],
+        [b3trTokenTotal, isB3TRActive, removeInvalidCharacters, setInput, vot3TokenTotal],
     )
 
     const onMaxAmountPress = useCallback(
@@ -139,11 +136,11 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const onConvertPress = useCallback(() => {
         onClose()
         if (isB3TRActive) {
-            convertB3tr(realValue)
+            convertB3tr(realValue, input)
         } else {
-            convertVot3(realValue)
+            convertVot3(realValue, input)
         }
-    }, [convertB3tr, convertVot3, isB3TRActive, onClose, realValue])
+    }, [convertB3tr, convertVot3, input, isB3TRActive, onClose, realValue])
 
     return (
         <BaseBottomSheet
