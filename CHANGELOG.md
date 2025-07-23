@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.10 (2025-07-23)</small>
+
+* build: init ([358adf3](https://github.com/vechain/veworld-mobile/commit/358adf3))
+* Feat: Changelog bottomsheet (#3052) ([0afb43f](https://github.com/vechain/veworld-mobile/commit/0afb43f)), closes [#3052](https://github.com/vechain/veworld-mobile/issues/3052)
+
 ## <small>2.2.9 (2025-07-21)</small>
 
 * build: init ([9aed4db](https://github.com/vechain/veworld-mobile/commit/9aed4db))
