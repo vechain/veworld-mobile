@@ -35,6 +35,10 @@ const businessEventManagers = {
     [NETWORK_TYPE.OTHER]: new BusinessEventAbiManager(NETWORK_TYPE.OTHER, {}),
 }
 
+nativeAbiManager.loadAbis()
+genericAbiManager.loadAbis()
+Object.values(businessEventManagers).forEach(manager => manager.loadAbis())
+
 export const getReceiptProcessor = (
     network: NETWORK_TYPE,
     includedManagers: ("Generic" | "BusinessEvent" | "Native")[] = ["Generic", "Native", "BusinessEvent"],

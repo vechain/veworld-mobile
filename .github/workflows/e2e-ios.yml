@@ -125,7 +125,7 @@ jobs:
             # Specifying version and device + retry on a temporary basis while devicecloud work on higher spec vm options.
             - name: Test iOS
               id: ios-test
-              uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
+              uses: devicecloud-dev/device-cloud-for-maestro@v1
               with:
                   api-key: ${{ secrets.DCD_API_KEY }}
                   app-file: ${{ env.APP_PATH }}
