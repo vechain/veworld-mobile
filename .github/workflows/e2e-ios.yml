@@ -139,4 +139,3 @@ jobs:
               id: test-result
               run: |
                   echo "resultUrl=${{ steps.ios-test.outputs.DEVICE_CLOUD_CONSOLE_URL }}" >> "$GITHUB_OUTPUT"
-                  echo "${{ toJSON(steps.ios-test.outputs) }}"
