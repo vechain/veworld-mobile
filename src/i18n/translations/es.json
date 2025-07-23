@@ -81,7 +81,7 @@
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "Bluetooth no es compatible",
   "ALERT_TITLE_VOT3": "VOT3",
   "APP_UPDATED": "Aplicación actualizada",
-  "APP_UPDATED_WHATS_NEW": "Esto es lo nuevo:",
+  "APP_UPDATED_WHATS_NEW": "Aquí está lo nuevo:",
   "APP_UPDATE_AVAILABLE": "Actualización disponible",
   "APP_UPDATE_AVAILABLE_MESSAGE": "La versión {version:string} está disponible para actualizarse con nuevas características y mejoras.",
   "APP_VERIFICATION_CONFIRM": "Por favor confirma que te gustaría procesar esta solicitud.",
