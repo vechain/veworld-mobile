@@ -81,7 +81,7 @@
   "ALERT_TITLE_UNSUPPORTED_BLUETOOTH": "Bluetooth không được hỗ trợ",
   "ALERT_TITLE_VOT3": "VOT3",
   "APP_UPDATED": "Ứng dụng đã được cập nhật",
-  "APP_UPDATED_WHATS_NEW": "Đây là những tính năng mới:",
+  "APP_UPDATED_WHATS_NEW": "Đây là những gì mới:",
   "APP_UPDATE_AVAILABLE": "Cập nhật khả dụng",
   "APP_UPDATE_AVAILABLE_MESSAGE": "Phiên bản {version:string} hiện đã có sẵn để cập nhật với các tính năng và cải tiến mới.",
   "APP_VERIFICATION_CONFIRM": "Vui lòng xác nhận rằng bạn muốn xử lý yêu cầu này.",

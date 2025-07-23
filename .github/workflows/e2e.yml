@@ -36,7 +36,11 @@ jobs:
                   cache: "yarn"
 
             - name: Install & Patch packages
-              run: yarn install --frozen-lockfile --network-timeout 300000
+              run: |
+                yarn abi:install
+                yarn abi:build
+                yarn install --frozen-lockfile --network-timeout 300000
+                yarn abi:generate
 
             # Setup Java for Android
             - name: Android - Setup Java
