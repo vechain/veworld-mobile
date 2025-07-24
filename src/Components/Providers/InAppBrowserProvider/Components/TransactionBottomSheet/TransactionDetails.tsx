@@ -42,6 +42,7 @@ const TransactionCarousel = ({ outputs, expanded }: { outputs: ReceiptOutput[]; 
             gap={0}
             showPagination
             rootStyle={styles.carouselRoot}
+            bottomSheet
         />
     )
 }

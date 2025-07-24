@@ -27,6 +27,7 @@ type Props = {
     | "itemHeight"
     | "gap"
     | "rootStyle"
+    | "bottomSheet"
 >
 
 export const FullscreenBaseCarousel = ({

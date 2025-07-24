@@ -1,3 +1,4 @@
+import { BottomSheetFlatList, BottomSheetFlatListMethods } from "@gorhom/bottom-sheet"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import {
     ListRenderItemInfo,
@@ -74,6 +75,11 @@ type Props = {
      * Provide snap offsets. By default they're calculated
      */
     snapOffsets?: number[]
+    /**
+     * Set to true if it's inside a bottom sheet.
+     * @default false
+     */
+    bottomSheet?: boolean
 }
 
 export const BaseCarousel = ({
@@ -92,10 +98,11 @@ export const BaseCarousel = ({
     testID,
     snapOffsets,
     itemHeight,
+    bottomSheet,
 }: Props) => {
     const [page, setPage] = useState(0)
 
-    const ref = useRef<Animated.FlatList<any>>(null)
+    const ref = useRef<Animated.FlatList<any> | BottomSheetFlatListMethods>(null)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
 
     const ItemSeparatorComponent = useCallback(() => <BaseSpacer width={gap} />, [gap])
@@ -169,10 +176,12 @@ export const BaseCarousel = ({
         [contentWrapperStyle, getInitialPaddingStyles, itemHeight, onSlidePress, onSlidePressActivation],
     )
 
+    const Component = useMemo(() => (bottomSheet ? BottomSheetFlatList : Animated.FlatList), [bottomSheet])
+
     return (
         <BaseView flex={1} flexDirection="column" style={[styles.root, rootStyle]}>
-            <Animated.FlatList
-                ref={ref}
+            <Component
+                ref={ref as any}
                 data={data}
                 snapToOffsets={offsets}
                 snapToEnd={false}
