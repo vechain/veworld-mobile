@@ -40,7 +40,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
     const [pendingRequests, setPendingRequests] = useState<PendingRequests>({})
 
-    const { certificateBsRef, setCertificateBsData } = useInteraction()
+    const { certificateBsRef, setCertificateBsData, transactionBsRef, setTransactionBsData } = useInteraction()
 
     const addPendingRequest = useCallback((requestEvent: PendingRequestTypes.Struct) => {
         setPendingRequests(prev => ({
@@ -168,18 +168,17 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
             if (message) {
                 track(AnalyticsEvent.DAPP_TX_REQUESTED)
-                nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
-                    request: {
-                        method: "thor_sendTransaction",
-                        type: "wallet-connect",
-                        requestEvent,
-                        session,
-                        message,
-                        options,
-                        appName: session.peer.metadata.name,
-                        appUrl: session.peer.metadata.url,
-                    },
+                setTransactionBsData({
+                    method: "thor_sendTransaction",
+                    type: "wallet-connect",
+                    requestEvent,
+                    session,
+                    message,
+                    options,
+                    appName: session.peer.metadata.name,
+                    appUrl: session.peer.metadata.url,
                 })
+                transactionBsRef.current?.present()
             } else {
                 showErrorToast({
                     text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
@@ -190,7 +189,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 return failRequest(requestEvent, rpcError)
             }
         },
-        [failRequest, LL, track, nav],
+        [LL, track, setTransactionBsData, transactionBsRef, failRequest],
     )
 
     const goToSignMessage = useCallback(

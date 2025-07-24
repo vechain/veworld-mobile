@@ -6,6 +6,7 @@ import { CertificateRequest, ConnectAppRequest, TransactionRequest } from "~Mode
 type ContextType = {
     connectBsRef: RefObject<BottomSheetModalMethods>
     certificateBsRef: RefObject<BottomSheetModalMethods>
+    transactionBsRef: RefObject<BottomSheetModalMethods>
     connectBsData: ConnectAppRequest | null
     setConnectBsData: Dispatch<SetStateAction<ConnectAppRequest | null>>
     certificateBsData: CertificateRequest | null
@@ -19,6 +20,7 @@ const Context = React.createContext<ContextType | undefined>(undefined)
 export const InteractionProvider = ({ children }: PropsWithChildren) => {
     const { ref: connectBsRef } = useBottomSheetModal()
     const { ref: certificateBsRef } = useBottomSheetModal()
+    const { ref: transactionBsRef } = useBottomSheetModal()
     const [connectBsData, setConnectBsData] = useState<ConnectAppRequest | null>(null)
     const [certificateBsData, setCertificateBsData] = useState<CertificateRequest | null>(null)
     const [transactionBsData, setTransactionBsData] = useState<TransactionRequest | null>(null)
@@ -30,10 +32,11 @@ export const InteractionProvider = ({ children }: PropsWithChildren) => {
             certificateBsRef,
             certificateBsData,
             setCertificateBsData,
+            transactionBsRef,
             transactionBsData,
             setTransactionBsData,
         }),
-        [connectBsRef, connectBsData, certificateBsRef, certificateBsData, transactionBsData],
+        [connectBsRef, connectBsData, certificateBsRef, certificateBsData, transactionBsRef, transactionBsData],
     )
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
