@@ -958,6 +958,8 @@
   "SIGN_CERTIFICATE_REQUEST_TITLE": "Assinar certificado",
   "SIGN_TRANSACTION": "Assinar transação",
   "SIGN_TRANSACTION_ERROR": "Erro ao assinar a transação",
+  "SIGN_TRANSACTION_REQUEST_CTA": "Confirmar",
+  "SIGN_TRANSACTION_REQUEST_TITLE": "Transação do aplicativo",
   "STARGATE_CLAIMABLE": "Reivindicável",
   "STARGATE_LOCKED": "Bloqueado",
   "STARGATE_MANAGE_STAKING": "Gerencie seu staking",

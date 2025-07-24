@@ -958,6 +958,8 @@
   "SIGN_CERTIFICATE_REQUEST_TITLE": "Подписать сертификат",
   "SIGN_TRANSACTION": "Подписать транзакцию",
   "SIGN_TRANSACTION_ERROR": "Ошибка при подписании транзакции",
+  "SIGN_TRANSACTION_REQUEST_CTA": "Подтвердить",
+  "SIGN_TRANSACTION_REQUEST_TITLE": "Транзакция приложения",
   "STARGATE_CLAIMABLE": "Доступно для получения",
   "STARGATE_LOCKED": "Заблокировано",
   "STARGATE_MANAGE_STAKING": "Управляйте своим стейкингом",

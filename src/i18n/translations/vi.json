@@ -958,6 +958,8 @@
   "SIGN_CERTIFICATE_REQUEST_TITLE": "Ký chứng chỉ",
   "SIGN_TRANSACTION": "Ký giao dịch",
   "SIGN_TRANSACTION_ERROR": "Lỗi ký giao dịch",
+  "SIGN_TRANSACTION_REQUEST_CTA": "Xác nhận",
+  "SIGN_TRANSACTION_REQUEST_TITLE": "Giao dịch ứng dụng",
   "STARGATE_CLAIMABLE": "Có thể yêu cầu",
   "STARGATE_LOCKED": "Đã khóa",
   "STARGATE_MANAGE_STAKING": "Quản lý đặt cược của bạn",

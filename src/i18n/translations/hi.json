@@ -958,6 +958,8 @@
   "SIGN_CERTIFICATE_REQUEST_TITLE": "प्रमाणपत्र पर हस्ताक्षर करें",
   "SIGN_TRANSACTION": "लेन-देन पर हस्ताक्षर करें",
   "SIGN_TRANSACTION_ERROR": "लेन-देन पर हस्ताक्षर करते समय त्रुटि",
+  "SIGN_TRANSACTION_REQUEST_CTA": "पुष्टि करें",
+  "SIGN_TRANSACTION_REQUEST_TITLE": "एप्लिकेशन लेनदेन",
   "STARGATE_CLAIMABLE": "दावा करने योग्य",
   "STARGATE_LOCKED": "लॉक किया हुआ",
   "STARGATE_MANAGE_STAKING": "अपने स्टेकिंग का प्रबंधन करें",
