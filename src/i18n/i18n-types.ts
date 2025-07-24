@@ -3192,6 +3192,22 @@ type RootTranslation = {
 	 */
 	RECAP: string
 	/**
+	 * S​w​a​p
+	 */
+	RECEIPT_OUTPUT_SWAP: string
+	/**
+	 * T​o​k​e​n​ ​s​e​n​d
+	 */
+	RECEIPT_OUTPUT_TOKEN_SEND: string
+	/**
+	 * T​o​k​e​n​ ​r​e​c​e​i​v​e
+	 */
+	RECEIPT_OUTPUT_TOKEN_RECEIVE: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: string
+	/**
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
@@ -3932,14 +3948,6 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
-	 * C​o​n​f​i​r​m
-	 */
-	SIGN_TRANSACTION_REQUEST_CTA: string
-	/**
-	 * A​p​p​ ​t​r​a​n​s​a​c​t​i​o​n
-	 */
-	SIGN_TRANSACTION_REQUEST_TITLE: string
-	/**
 	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SIGN_TRANSACTION: string
@@ -3947,6 +3955,14 @@ type RootTranslation = {
 	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SIGN_TRANSACTION_ERROR: string
+	/**
+	 * C​o​n​f​i​r​m
+	 */
+	SIGN_TRANSACTION_REQUEST_CTA: string
+	/**
+	 * A​p​p​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SIGN_TRANSACTION_REQUEST_TITLE: string
 	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
@@ -7675,6 +7691,22 @@ Thanks for your patience!
 	 */
 	RECAP: () => LocalizedString
 	/**
+	 * Swap
+	 */
+	RECEIPT_OUTPUT_SWAP: () => LocalizedString
+	/**
+	 * Token send
+	 */
+	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
+	/**
+	 * Token receive
+	 */
+	RECEIPT_OUTPUT_TOKEN_RECEIVE: () => LocalizedString
+	/**
+	 * Contract call
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
+	/**
 	 * Received
 	 */
 	RECEIVED: () => LocalizedString
@@ -8404,14 +8436,6 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
-	 * Confirm
-	 */
-	SIGN_TRANSACTION_REQUEST_CTA: () => LocalizedString
-	/**
-	 * App transaction
-	 */
-	SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
-	/**
 	 * Sign transaction
 	 */
 	SIGN_TRANSACTION: () => LocalizedString
@@ -8419,6 +8443,14 @@ Are you sure you want to continue?
 	 * Error signing transaction
 	 */
 	SIGN_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * Confirm
+	 */
+	SIGN_TRANSACTION_REQUEST_CTA: () => LocalizedString
+	/**
+	 * App transaction
+	 */
+	SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * Claimable
 	 */

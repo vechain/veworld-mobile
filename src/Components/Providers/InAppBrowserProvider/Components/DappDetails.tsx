@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
@@ -61,9 +61,9 @@ const NotVerifiedWarning = () => {
     )
 }
 
-type Props = PropsWithChildren<{ show: boolean }>
+type Props = PropsWithChildren<{ show: boolean; style?: StyleProp<ViewStyle> }>
 
-const DappDetails = ({ children, show }: Props) => {
+const DappDetails = ({ children, show, style }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const animatedStyles = useAnimatedStyle(() => {
         return {
@@ -75,7 +75,7 @@ const DappDetails = ({ children, show }: Props) => {
     return (
         <AnimatedBaseView
             layout={LinearTransition.duration(300)}
-            style={[styles.detailsContainer, animatedStyles]}
+            style={[styles.detailsContainer, animatedStyles, style]}
             flexDirection="column"
             borderRadius={8}>
             {children}
