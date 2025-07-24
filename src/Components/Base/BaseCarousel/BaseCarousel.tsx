@@ -1,5 +1,13 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { ScrollView, StyleProp, StyleSheet, TouchableOpacity, ViewStyle, ViewToken } from "react-native"
+import {
+    ListRenderItemInfo,
+    ScrollView,
+    StyleProp,
+    StyleSheet,
+    TouchableOpacity,
+    ViewStyle,
+    ViewToken,
+} from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
@@ -135,6 +143,32 @@ export const BaseCarousel = ({
         [],
     )
 
+    const renderItem = useCallback(
+        ({ item, index }: ListRenderItemInfo<CarouselSlideItem>) => {
+            return (
+                <BaseCarouselItem
+                    testID={item.testID}
+                    href={item.href}
+                    isExternalLink={item.isExternalLink}
+                    name={item.name}
+                    onPress={onSlidePress}
+                    contentWrapperStyle={[
+                        itemHeight ? { height: itemHeight } : undefined,
+                        contentWrapperStyle,
+                        getInitialPaddingStyles(index),
+                    ]}
+                    onPressActivation={onSlidePressActivation}
+                    closable={item.closable}
+                    onClose={item.onClose}
+                    closeButtonStyle={item.closeButtonStyle}
+                    style={item.style}>
+                    {item.content}
+                </BaseCarouselItem>
+            )
+        },
+        [contentWrapperStyle, getInitialPaddingStyles, itemHeight, onSlidePress, onSlidePressActivation],
+    )
+
     return (
         <BaseView flex={1} flexDirection="column" style={[styles.root, rootStyle]}>
             <Animated.FlatList
@@ -153,28 +187,7 @@ export const BaseCarousel = ({
                 style={containerStyle}
                 keyExtractor={item => item.name ?? ""}
                 testID={testID}
-                renderItem={({ item, index }) => {
-                    return (
-                        <BaseCarouselItem
-                            testID={item.testID}
-                            href={item.href}
-                            isExternalLink={item.isExternalLink}
-                            name={item.name}
-                            onPress={onSlidePress}
-                            contentWrapperStyle={[
-                                itemHeight ? { height: itemHeight } : undefined,
-                                contentWrapperStyle,
-                                getInitialPaddingStyles(index),
-                            ]}
-                            onPressActivation={onSlidePressActivation}
-                            closable={item.closable}
-                            onClose={item.onClose}
-                            closeButtonStyle={item.closeButtonStyle}
-                            style={item.style}>
-                            {item.content}
-                        </BaseCarouselItem>
-                    )
-                }}
+                renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
             />
             {showPagination && (

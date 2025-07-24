@@ -3192,21 +3192,25 @@ type RootTranslation = {
 	 */
 	RECAP: string
 	/**
+	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: string
+	/**
 	 * S​w​a​p
 	 */
 	RECEIPT_OUTPUT_SWAP: string
-	/**
-	 * T​o​k​e​n​ ​s​e​n​d
-	 */
-	RECEIPT_OUTPUT_TOKEN_SEND: string
 	/**
 	 * T​o​k​e​n​ ​r​e​c​e​i​v​e
 	 */
 	RECEIPT_OUTPUT_TOKEN_RECEIVE: string
 	/**
-	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
+	 * T​o​k​e​n​ ​s​e​n​d
 	 */
-	RECEIPT_OUTPUT_CONTRACT_CALL: string
+	RECEIPT_OUTPUT_TOKEN_SEND: string
+	/**
+	 * T​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: string
 	/**
 	 * R​e​c​e​i​v​e​d
 	 */
@@ -7691,21 +7695,25 @@ Thanks for your patience!
 	 */
 	RECAP: () => LocalizedString
 	/**
+	 * Contract call
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
+	/**
 	 * Swap
 	 */
 	RECEIPT_OUTPUT_SWAP: () => LocalizedString
-	/**
-	 * Token send
-	 */
-	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
 	/**
 	 * Token receive
 	 */
 	RECEIPT_OUTPUT_TOKEN_RECEIVE: () => LocalizedString
 	/**
-	 * Contract call
+	 * Token send
 	 */
-	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
+	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
+	/**
+	 * Token conversion
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: () => LocalizedString
 	/**
 	 * Received
 	 */

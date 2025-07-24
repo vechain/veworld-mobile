@@ -4,7 +4,7 @@ import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components/Base"
 import { SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { TransactionRequest } from "~Model"
-import { getReceiptProcessor, InspectableOutput } from "~Services/AbiService"
+import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services/AbiService"
 import { selectFeaturedDapps, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { DAppUtils } from "~Utils"
 import { DappDetailsCard } from "../DappDetailsCard"
@@ -15,9 +15,39 @@ type Props = {
     request: TransactionRequest
 }
 
+const safeJsonStringify = (arg: unknown) =>
+    JSON.stringify(arg, (_, value) => {
+        if (typeof value === "bigint") return value.toString()
+        return value
+    })
+
+const TransactionCarousel = ({ outputs, expanded }: { outputs: ReceiptOutput[]; expanded: boolean }) => {
+    const { styles } = useThemedStyles(baseStyles)
+    const outcomeItems = useMemo(() => {
+        return outputs.map(
+            output =>
+                ({
+                    content: <ReceiptOutputRenderer expanded={expanded} output={output} />,
+                    closable: false,
+                    name: safeJsonStringify(output),
+                } satisfies CarouselSlideItem),
+        )
+    }, [expanded, outputs])
+    return (
+        <FullscreenBaseCarousel
+            data={outcomeItems}
+            baseWidth={SCREEN_WIDTH - 80}
+            paginationAlignment="center"
+            padding={0}
+            gap={0}
+            showPagination
+            rootStyle={styles.carouselRoot}
+        />
+    )
+}
+
 export const TransactionDetails = ({ request, outputs = [] }: Props) => {
     const allApps = useAppSelector(selectFeaturedDapps)
-    const { styles } = useThemedStyles(baseStyles)
     const network = useAppSelector(selectSelectedNetwork)
 
     const receiptProcessor = useMemo(() => getReceiptProcessor(network.type), [network.type])
@@ -45,30 +75,10 @@ export const TransactionDetails = ({ request, outputs = [] }: Props) => {
         }
     }, [allApps, request.appName, request.appUrl])
 
-    const outcomeItems = useMemo(() => {
-        return analyzedOutputs.map(
-            output =>
-                ({
-                    content: <ReceiptOutputRenderer expanded={true} output={output} />,
-                    closable: false,
-                } satisfies CarouselSlideItem),
-        )
-    }, [analyzedOutputs])
-
     return (
-        <DappDetailsCard name={name} icon={icon} url={url}>
-            {({ visible: _visible }) => {
-                return (
-                    <FullscreenBaseCarousel
-                        data={outcomeItems}
-                        baseWidth={SCREEN_WIDTH - 40}
-                        paginationAlignment="center"
-                        padding={0}
-                        gap={0}
-                        showPagination
-                        rootStyle={styles.carouselRoot}
-                    />
-                )
+        <DappDetailsCard name={name} icon={icon} url={url} showSpacer={false}>
+            {({ visible }) => {
+                return <TransactionCarousel outputs={analyzedOutputs} expanded={visible} />
             }}
         </DappDetailsCard>
     )
@@ -78,5 +88,6 @@ const baseStyles = () =>
     StyleSheet.create({
         carouselRoot: {
             gap: 16,
+            marginTop: 16,
         },
     })

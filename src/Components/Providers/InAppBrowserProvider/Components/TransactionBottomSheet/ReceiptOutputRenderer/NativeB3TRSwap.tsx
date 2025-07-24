@@ -72,5 +72,6 @@ const baseStyles = () =>
     StyleSheet.create({
         icon: {
             backgroundColor: COLORS.B3TR_ICON_BACKGROUND,
+            padding: 6,
         },
     })

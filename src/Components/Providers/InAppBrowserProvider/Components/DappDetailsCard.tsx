@@ -26,6 +26,11 @@ type Props = {
      * True if the details should be visible by default, false otherwise. Defaults to false
      */
     isDefaultVisible?: boolean
+    /**
+     * Show spacer before the children.
+     * @default true
+     */
+    showSpacer?: boolean
     children: (props: { visible: boolean }) => React.ReactNode
 }
 
@@ -36,6 +41,7 @@ export const DappDetailsCard = ({
     children,
     showDappWarning = true,
     isDefaultVisible = false,
+    showSpacer = true,
 }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -123,7 +129,8 @@ export const DappDetailsCard = ({
                     <DappDetails.NotVerifiedWarning />
                 </>
             )}
-            <AnimatedBaseSpacer style={[spacerStyles]} />
+            {showSpacer && <AnimatedBaseSpacer style={[spacerStyles]} />}
+
             {children({ visible: showDetails })}
         </AnimatedBaseView>
     )
