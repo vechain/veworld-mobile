@@ -225,7 +225,14 @@ export const useTransactionScreen = ({
         [B3TR.symbol]: B3TR.address,
     }
     // 4. Build transaction
-    console.log("maxFee", genericDelegatorFees.allOptions?.["b3trWithSmartAccount"][selectedFeeOption].maxFee)
+
+    const feeMap = {
+        [VET.symbol]: genericDelegatorFees.allOptions?.["vetWithSmartAccount"][selectedFeeOption].maxFee,
+        [B3TR.symbol]: genericDelegatorFees.allOptions?.["b3trWithSmartAccount"][selectedFeeOption].maxFee,
+    }
+
+    console.log("feeMap", feeMap)
+
     // need to know its delegated here.
     let genericDelgation = {
         token: selectedDelegationToken,
@@ -233,7 +240,7 @@ export const useTransactionScreen = ({
         isGenDelegation:
             selectedDelegationToken !== VTHO.symbol &&
             genericDelegatorFees.options?.[selectedFeeOption].maxFee !== undefined,
-        amount: genericDelegatorFees.allOptions?.["b3trWithSmartAccount"][selectedFeeOption].maxFee,
+        amount: feeMap[selectedDelegationToken],
         delegatorAddress: "0xe705e3f310ab09fb9eb40b43cb1368289ef1f829",
     }
 

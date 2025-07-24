@@ -96,7 +96,7 @@ export const delegateGenericDelegatorSmartAccount = ({
     token: string
     networkType: NETWORK_TYPE
 }) =>
-    executeIfValidNetwork(networkType, `/api/v1/sign/transaction/authorized/${token.toLowerCase()}`, url =>
+    executeIfValidNetwork(networkType, `/api/v1/sign/transaction/hybrid/${token.toLowerCase()}`, url =>
         requestFromEndpoint<{ signature: string; address: string; raw: string; origin: string }>({
             url: url,
             data: {
