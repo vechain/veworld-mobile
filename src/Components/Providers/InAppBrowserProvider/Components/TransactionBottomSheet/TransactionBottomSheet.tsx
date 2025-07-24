@@ -1,8 +1,8 @@
+import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { Transaction } from "@vechain/sdk-core"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, showErrorToast } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
@@ -144,7 +144,7 @@ export const TransactionBottomSheetContent = ({
                 )}
             </BaseView>
             <BaseSpacer height={12} />
-            <ScrollView>
+            <BottomSheetScrollView style={styles.scrollView}>
                 <TransactionDetails request={request} outputs={transactionOutputs} clauses={clauses} />
                 <BaseSpacer height={12} />
                 <GasFeeSpeed
@@ -173,7 +173,7 @@ export const TransactionBottomSheetContent = ({
                         delegationToken={selectedDelegationToken}
                     />
                 </GasFeeSpeed>
-            </ScrollView>
+            </BottomSheetScrollView>
 
             <BaseView flexDirection="row" gap={16} mt={24}>
                 <BaseButton
@@ -358,8 +358,10 @@ export const TransactionBottomSheet = () => {
         }
     }, [rejectRequest, setTransactionBsData, transactionBsData])
 
+    const snapPoints = useMemo(() => ["33%", "66%", "80%"], [])
+
     return (
-        <BaseBottomSheet dynamicHeight ref={transactionBsRef} onDismiss={onDismiss}>
+        <BaseBottomSheet snapPoints={snapPoints} ref={transactionBsRef} onDismiss={onDismiss}>
             {transactionBsData && (
                 <TransactionBottomSheetContent
                     onCancel={onCancel}
@@ -379,5 +381,8 @@ const baseStyles = () =>
     StyleSheet.create({
         gasFeeSpeedContainer: {
             marginTop: 0,
+        },
+        scrollView: {
+            flex: 1,
         },
     })
