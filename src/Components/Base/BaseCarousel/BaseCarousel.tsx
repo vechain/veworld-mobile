@@ -92,25 +92,30 @@ export const BaseCarousel = ({
 
     const ItemSeparatorComponent = useCallback(() => <BaseSpacer width={gap} />, [gap])
 
-    const onPressPagination = useCallback((index: number) => {
-        ref.current?.scrollToIndex({
-            index,
-            animated: true,
-        })
-    }, [])
-
     const w = useMemo(() => {
         if (_w + gap >= SCREEN_WIDTH) return SCREEN_WIDTH - gap
         return _w
     }, [_w, gap])
 
-    const offsets = useMemo(
+    const _offsets = useMemo(
         () =>
             Array.from({ length: data.length }, (_, idx) => {
                 if (idx === 0) return 0
                 return w * idx + gap * idx
             }),
         [data.length, gap, w],
+    )
+
+    const offsets = useMemo(() => snapOffsets ?? _offsets, [snapOffsets, _offsets])
+
+    const onPressPagination = useCallback(
+        (index: number) => {
+            ref.current?.scrollToOffset({
+                offset: offsets[index],
+                animated: true,
+            })
+        },
+        [offsets],
     )
 
     const getInitialPaddingStyles = useCallback(
@@ -135,15 +140,14 @@ export const BaseCarousel = ({
             <Animated.FlatList
                 ref={ref}
                 data={data}
-                snapToOffsets={snapOffsets ?? offsets}
+                snapToOffsets={offsets}
                 snapToEnd={false}
                 snapToStart={false}
                 disableIntervalMomentum
                 ItemSeparatorComponent={ItemSeparatorComponent}
-                pagingEnabled
                 viewabilityConfig={{ itemVisiblePercentThreshold: 100 }}
                 onViewableItemsChanged={onViewableItemsChanged}
-                decelerationRate="normal"
+                decelerationRate="fast"
                 snapToAlignment="start"
                 horizontal
                 style={containerStyle}
