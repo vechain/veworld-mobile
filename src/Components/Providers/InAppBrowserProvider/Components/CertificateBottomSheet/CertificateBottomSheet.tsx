@@ -103,7 +103,12 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                     </BaseText>
                 </BaseView>
                 {selectedAccount && (
-                    <AccountSelector account={selectedAccount} onPress={onChangeAccountPress} variant="short" />
+                    <AccountSelector
+                        account={selectedAccount}
+                        onPress={onChangeAccountPress}
+                        variant="short"
+                        changeable
+                    />
                 )}
             </BaseView>
             <BaseSpacer height={12} />

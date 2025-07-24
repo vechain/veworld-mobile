@@ -1,7 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { Dispatch, PropsWithChildren, RefObject, SetStateAction, useContext, useMemo, useState } from "react"
 import { useBottomSheetModal } from "~Hooks"
-import { CertificateRequest, ConnectAppRequest } from "~Model"
+import { CertificateRequest, ConnectAppRequest, TransactionRequest } from "~Model"
 
 type ContextType = {
     connectBsRef: RefObject<BottomSheetModalMethods>
@@ -10,6 +10,8 @@ type ContextType = {
     setConnectBsData: Dispatch<SetStateAction<ConnectAppRequest | null>>
     certificateBsData: CertificateRequest | null
     setCertificateBsData: Dispatch<SetStateAction<CertificateRequest | null>>
+    transactionBsData: TransactionRequest | null
+    setTransactionBsData: Dispatch<SetStateAction<TransactionRequest | null>>
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -19,6 +21,7 @@ export const InteractionProvider = ({ children }: PropsWithChildren) => {
     const { ref: certificateBsRef } = useBottomSheetModal()
     const [connectBsData, setConnectBsData] = useState<ConnectAppRequest | null>(null)
     const [certificateBsData, setCertificateBsData] = useState<CertificateRequest | null>(null)
+    const [transactionBsData, setTransactionBsData] = useState<TransactionRequest | null>(null)
     const contextValue = useMemo(
         () => ({
             connectBsRef,
@@ -27,8 +30,10 @@ export const InteractionProvider = ({ children }: PropsWithChildren) => {
             certificateBsRef,
             certificateBsData,
             setCertificateBsData,
+            transactionBsData,
+            setTransactionBsData,
         }),
-        [connectBsRef, connectBsData, certificateBsRef, certificateBsData],
+        [connectBsRef, connectBsData, certificateBsRef, certificateBsData, transactionBsData],
     )
 
     return <Context.Provider value={contextValue}>{children}</Context.Provider>
