@@ -57,7 +57,7 @@ const BaseReceiptOutput = ({ expanded, label, children, additionalDetails, ...ic
     const { styles, theme } = useThemedStyles(baseStyles)
     return (
         <DappDetails show style={styles.root}>
-            <BaseView flexDirection="row" gap={16} justifyContent="space-between" alignItems="center" p={16}>
+            <BaseView flexDirection="row" gap={16} justifyContent="space-between" alignItems="center" pb={16}>
                 <BaseView flexDirection="row" gap={12} flex={1}>
                     <IconRenderer {...iconProps} />
                     <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
@@ -67,7 +67,7 @@ const BaseReceiptOutput = ({ expanded, label, children, additionalDetails, ...ic
                 {children}
             </BaseView>
             {expanded && (
-                <BaseView style={styles.additionalDetails} flexDirection="column" p={16}>
+                <BaseView style={styles.additionalDetails} flexDirection="column">
                     {additionalDetails}
                 </BaseView>
             )}
@@ -80,11 +80,13 @@ const baseStyles = (theme: ColorThemeType) =>
         root: {
             gap: 0,
             flexDirection: "column",
-            padding: 0,
+            paddingVertical: 16,
         },
         additionalDetails: {
             borderTopWidth: 1,
             borderTopColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_100,
+            gap: 12,
+            paddingVertical: 16,
         },
         icon: {
             backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_100,

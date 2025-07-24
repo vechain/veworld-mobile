@@ -1,3 +1,4 @@
+import { TransactionClause } from "@vechain/sdk-core"
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components/Base"
@@ -12,6 +13,7 @@ import { ReceiptOutputRenderer } from "./ReceiptOutputRenderer/ReceiptOutputRend
 
 type Props = {
     outputs: InspectableOutput[] | undefined
+    clauses: TransactionClause[] | undefined
     request: TransactionRequest
 }
 
@@ -21,18 +23,26 @@ const safeJsonStringify = (arg: unknown) =>
         return value
     })
 
-const TransactionCarousel = ({ outputs, expanded }: { outputs: ReceiptOutput[]; expanded: boolean }) => {
+const TransactionCarousel = ({
+    outputs,
+    expanded,
+    clauses,
+}: {
+    outputs: ReceiptOutput[]
+    expanded: boolean
+    clauses: TransactionClause[]
+}) => {
     const { styles } = useThemedStyles(baseStyles)
     const outcomeItems = useMemo(() => {
         return outputs.map(
             output =>
                 ({
-                    content: <ReceiptOutputRenderer expanded={expanded} output={output} />,
+                    content: <ReceiptOutputRenderer expanded={expanded} output={output} clauses={clauses} />,
                     closable: false,
                     name: safeJsonStringify(output),
                 } satisfies CarouselSlideItem),
         )
-    }, [expanded, outputs])
+    }, [clauses, expanded, outputs])
     return (
         <FullscreenBaseCarousel
             data={outcomeItems}
@@ -47,7 +57,7 @@ const TransactionCarousel = ({ outputs, expanded }: { outputs: ReceiptOutput[]; 
     )
 }
 
-export const TransactionDetails = ({ request, outputs = [] }: Props) => {
+export const TransactionDetails = ({ request, outputs = [], clauses = [] }: Props) => {
     const allApps = useAppSelector(selectFeaturedDapps)
     const network = useAppSelector(selectSelectedNetwork)
 
@@ -79,7 +89,7 @@ export const TransactionDetails = ({ request, outputs = [] }: Props) => {
     return (
         <DappDetailsCard name={name} icon={icon} url={url} showSpacer={false}>
             {({ visible }) => {
-                return <TransactionCarousel outputs={analyzedOutputs} expanded={visible} />
+                return <TransactionCarousel outputs={analyzedOutputs} expanded={visible} clauses={clauses} />
             }}
         </DappDetailsCard>
     )

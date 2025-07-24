@@ -3200,6 +3200,10 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_SWAP: string
 	/**
+	 * T​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: string
+	/**
 	 * T​o​k​e​n​ ​r​e​c​e​i​v​e
 	 */
 	RECEIPT_OUTPUT_TOKEN_RECEIVE: string
@@ -3208,9 +3212,17 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
 	/**
-	 * T​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n
+	 * T​o
 	 */
-	RECEIPT_OUTPUT_TOKEN_CONVERSION: string
+	ADDITIONAL_DETAIL_TO: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: string
+	/**
+	 * C​l​a​u​s​e
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: string
 	/**
 	 * R​e​c​e​i​v​e​d
 	 */
@@ -7703,6 +7715,10 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_SWAP: () => LocalizedString
 	/**
+	 * Token conversion
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: () => LocalizedString
+	/**
 	 * Token receive
 	 */
 	RECEIPT_OUTPUT_TOKEN_RECEIVE: () => LocalizedString
@@ -7711,9 +7727,17 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
 	/**
-	 * Token conversion
+	 * To
 	 */
-	RECEIPT_OUTPUT_TOKEN_CONVERSION: () => LocalizedString
+	ADDITIONAL_DETAIL_TO: () => LocalizedString
+	/**
+	 * Contract data
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: () => LocalizedString
+	/**
+	 * Clause
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: () => LocalizedString
 	/**
 	 * Received
 	 */

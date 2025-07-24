@@ -145,7 +145,7 @@ export const TransactionBottomSheetContent = ({
             </BaseView>
             <BaseSpacer height={12} />
             <ScrollView>
-                <TransactionDetails request={request} outputs={transactionOutputs} />
+                <TransactionDetails request={request} outputs={transactionOutputs} clauses={clauses} />
                 <BaseSpacer height={12} />
                 <GasFeeSpeed
                     gasUpdatedAt={gasUpdatedAt}

@@ -1,3 +1,4 @@
+import { TransactionClause } from "@vechain/sdk-core"
 import React from "react"
 import { ReceiptOutput } from "~Services/AbiService"
 import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -10,9 +11,10 @@ import { TokenSendOutput } from "./TokenSendOutput"
 type Props = {
     expanded: boolean
     output: ReceiptOutput
+    clauses: TransactionClause[]
 }
 
-export const ReceiptOutputRenderer = ({ expanded, output }: Props) => {
+export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     switch (output.name) {
         case "Transfer(indexed address,indexed address,uint256)":
@@ -23,6 +25,6 @@ export const ReceiptOutputRenderer = ({ expanded, output }: Props) => {
         case "B3TR_Vot3ToB3trSwap(address,address,address,address,uint256,uint256)":
             return <NativeB3TRSwap expanded={expanded} output={output} />
         default:
-            return <ContractCallOutput expanded={expanded} output={output} />
+            return <ContractCallOutput expanded={expanded} output={output} clauses={clauses} />
     }
 }
