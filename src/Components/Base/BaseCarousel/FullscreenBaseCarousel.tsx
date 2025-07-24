@@ -26,6 +26,7 @@ type Props = {
     | "testID"
     | "itemHeight"
     | "gap"
+    | "rootStyle"
 >
 
 export const FullscreenBaseCarousel = ({

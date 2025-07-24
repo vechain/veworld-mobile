@@ -19,7 +19,6 @@ import {
 import { TransactionRequest } from "~Model"
 import {
     addPendingDappTransactionActivity,
-    selectFeaturedDapps,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
     selectVerifyContext,
@@ -28,11 +27,11 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils, DAppUtils } from "~Utils"
+import { AccountUtils } from "~Utils"
 import { assertDefined } from "~Utils/TypeUtils"
 import { useI18nContext } from "~i18n"
 import { useInAppBrowser } from "../../InAppBrowserProvider"
-import { DappWithDetails } from "../DappWithDetails"
+import { TransactionDetails } from "./TransactionDetails"
 type Props = {
     request: TransactionRequest
     onCancel: (request: TransactionRequest) => Promise<void>
@@ -54,7 +53,6 @@ export const TransactionBottomSheetContent = ({
 }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const allApps = useAppSelector(selectFeaturedDapps)
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
@@ -73,24 +71,6 @@ export const TransactionBottomSheetContent = ({
 
         return sessionContext.verifyContext.validation === "VALID"
     }, [sessionContext])
-
-    const { icon, name, url } = useMemo(() => {
-        const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(request.appUrl).origin)
-        if (foundDapp)
-            return {
-                icon: foundDapp.id
-                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
-                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
-                name: foundDapp.name,
-                url: request.appUrl,
-            }
-
-        return {
-            name: request.appName,
-            url: request.appUrl,
-            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(request.appUrl).origin}`,
-        }
-    }, [allApps, request.appName, request.appUrl])
 
     const onChangeAccountPress = useCallback(() => {
         onOpenSelectAccountBs()
@@ -132,6 +112,7 @@ export const TransactionBottomSheetContent = ({
         isFirstTimeLoadingFees,
         hasEnoughBalanceOnToken,
         isBiometricsEmpty,
+        transactionOutputs,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -164,7 +145,7 @@ export const TransactionBottomSheetContent = ({
             </BaseView>
             <BaseSpacer height={12} />
             <ScrollView>
-                <DappWithDetails name={name} icon={icon} url={url} />
+                <TransactionDetails request={request} outputs={transactionOutputs} />
                 <BaseSpacer height={12} />
                 <GasFeeSpeed
                     gasUpdatedAt={gasUpdatedAt}

@@ -386,5 +386,6 @@ export const useTransactionScreen = ({
         isFirstTimeLoadingFees,
         hasEnoughBalanceOnToken,
         isBiometricsEmpty,
+        transactionOutputs,
     }
 }
