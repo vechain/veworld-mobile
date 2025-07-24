@@ -3,12 +3,16 @@ PODS:
   - BVLinearGradient (2.8.3):
     - React-Core
   - DoubleConversion (1.1.6)
+  - EXApplication (5.9.1):
+    - ExpoModulesCore
   - EXAV (15.0.2):
     - ExpoModulesCore
     - ReactCommon/turbomodule/core
   - EXConstants (17.0.8):
     - ExpoModulesCore
   - Expo (52.0.46):
+    - ExpoModulesCore
+  - ExpoAppleAuthentication (6.4.2):
     - ExpoModulesCore
   - ExpoAsset (11.0.5):
     - ExpoModulesCore
@@ -19,6 +23,8 @@ PODS:
     - ZXingObjC/OneD
     - ZXingObjC/PDF417
   - ExpoClipboard (7.0.1):
+    - ExpoModulesCore
+  - ExpoCrypto (13.0.2):
     - ExpoModulesCore
   - ExpoFileSystem (18.0.12):
     - ExpoModulesCore
@@ -53,7 +59,11 @@ PODS:
     - ReactCommon/turbomodule/bridging
     - ReactCommon/turbomodule/core
     - Yoga
+  - ExpoNativeExtensions (0.0.5):
+    - ExpoModulesCore
   - ExpoSecureStore (14.0.1):
+    - ExpoModulesCore
+  - ExpoWebBrowser (13.0.3):
     - ExpoModulesCore
   - EXTaskManager (12.0.6):
     - ExpoModulesCore
@@ -1550,29 +1560,6 @@ PODS:
     - Yoga
   - react-native-context-menu-view (1.19.0):
     - React
-  - react-native-fast-url (0.6.0):
-    - DoubleConversion
-    - glog
-    - hermes-engine
-    - RCT-Folly (= 2024.10.14.00)
-    - RCTRequired
-    - RCTTypeSafety
-    - React-Core
-    - React-debug
-    - React-Fabric
-    - React-featureflags
-    - React-graphics
-    - React-ImageManager
-    - React-NativeModulesApple
-    - React-RCTFabric
-    - React-rendererdebug
-    - React-utils
-    - ReactCodegen
-    - ReactCommon/turbomodule/bridging
-    - ReactCommon/turbomodule/core
-    - Yoga
-  - react-native-context-menu-view (1.19.0):
-    - React
   - react-native-get-random-values (1.11.0):
     - React-Core
   - react-native-in-app-review (4.3.5):
@@ -2093,6 +2080,11 @@ PODS:
     - React-logger
     - React-perflogger
     - React-utils (= 0.76.9)
+  - ReactNativePasskeys (0.3.3):
+    - ExpoModulesCore
+  - ReactNativeWebPFormat (1.2.1):
+    - React-Core
+    - SDWebImageWebPCoder
   - RNBootSplash (6.3.9):
     - DoubleConversion
     - glog
@@ -2570,7 +2562,6 @@ DEPENDENCIES:
   - react-native-capture-protection (from `../node_modules/react-native-capture-protection`)
   - "react-native-compat (from `../node_modules/@walletconnect/react-native-compat`)"
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
-  - react-native-fast-url (from `../node_modules/react-native-fast-url`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
@@ -2611,6 +2602,7 @@ DEPENDENCIES:
   - React-utils (from `../node_modules/react-native/ReactCommon/react/utils`)
   - ReactCodegen (from `build/generated/ios`)
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
+  - ReactNativePasskeys (from `../node_modules/react-native-passkeys/ios`)
   - ReactNativeWebPFormat (from `../node_modules/react-native-webp-format`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
@@ -2782,8 +2774,6 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@walletconnect/react-native-compat"
   react-native-context-menu-view:
     :path: "../node_modules/react-native-context-menu-view"
-  react-native-fast-url:
-    :path: "../node_modules/react-native-fast-url"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-in-app-review:
@@ -2864,6 +2854,8 @@ EXTERNAL SOURCES:
     :path: build/generated/ios
   ReactCommon:
     :path: "../node_modules/react-native/ReactCommon"
+  ReactNativePasskeys:
+    :path: "../node_modules/react-native-passkeys/ios"
   ReactNativeWebPFormat:
     :path: "../node_modules/react-native-webp-format"
   RNBootSplash:
@@ -2907,20 +2899,25 @@ SPEC CHECKSUMS:
   boost: 1dca942403ed9342f98334bf4c3621f011aa7946
   BVLinearGradient: 880f91a7854faff2df62518f0281afb1c60d49a3
   DoubleConversion: f16ae600a246532c4020132d54af21d0ddb2a385
+  EXApplication: c08200c34daca7af7fd76ac4b9d606077410e8ad
   EXAV: 57ea461614a714b8b8fcc72c6fbc298b8f1ec78b
   EXConstants: a1f35b9aabbb3c6791f8e67722579b1ffcdd3f18
   Expo: 3e53243e3281214a7d613f8a875c0b732d7512c2
+  ExpoAppleAuthentication: 265219fa0ba1110872079f55f56686b9737b0065
   ExpoAsset: 0687fe05f5d051c4a34dd1f9440bd00858413cfe
   ExpoBackgroundFetch: 4973770f696e74dccc2f1b391cd04b23fbc51856
   ExpoCamera: 173e000631122854b87c20310513981e89030bc6
   ExpoClipboard: 5250b207b6d545f4e9aac5ea3c6e61c4f16d0aed
+  ExpoCrypto: 156078f266bf28f80ecf5e2a9c3a0d6ffce07a1c
   ExpoFileSystem: c8c19bf80d914c83dda3beb8569d7fb603be0970
   ExpoFont: 773955186469acc5108ff569712a2d243857475f
   ExpoHaptics: e01cce0741d68c281853118eb0267f88d42c6b7a
   ExpoKeepAwake: 2a5f15dd4964cba8002c9a36676319a3394c85c7
   ExpoLocalAuthentication: 64bf2cbee456f5639d69a853684c285afc0602d8
   ExpoModulesCore: dd965804a882f1dbb6036fceea4d912461aeaa0d
+  ExpoNativeExtensions: 6473752d98717e690d7a68298f166aac81fc9a16
   ExpoSecureStore: d006eea5e316283099d46f80a6b10055b89a6008
+  ExpoWebBrowser: 7595ccac6938eb65b076385fd23d035db9ecdc8e
   EXTaskManager: e9e20f65855cbe0a38d6e2dc2e895e5928b30923
   fast_float: 06eeec4fe712a76acc9376682e4808b05ce978b6
   FBLazyVector: 7605ea4810e0e10ae4815292433c09bf4324ba45
@@ -3013,6 +3010,8 @@ SPEC CHECKSUMS:
   React-utils: 54df9ada708578c8ad40d92895d6fed03e0e8a9e
   ReactCodegen: 21a52ccddc6479448fc91903a437dd23ddc7366c
   ReactCommon: bfd3600989d79bc3acbe7704161b171a1480b9fd
+  ReactNativePasskeys: 4ca7fc35132705665742daf94ed1e779a20229f5
+  ReactNativeWebPFormat: a40e251d8727e946461055997e539c4e985481f1
   RNBootSplash: a5efdff6012882afd5d0dabfccaa3e95e275b876
   RNCAsyncStorage: ac02697867ba18d2cfd761ebb144417fe65b210e
   RNCMaskedView: 7da5771779ec8f3514482f61288bbd644af26600

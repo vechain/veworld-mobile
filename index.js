@@ -47,7 +47,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import * as Sentry from "@sentry/react-native"
-import "react-native-fast-url/src/polyfill"
+import "react-native-url-polyfill"
 import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { clientPersister, queryClient } from "~Api/QueryProvider"
