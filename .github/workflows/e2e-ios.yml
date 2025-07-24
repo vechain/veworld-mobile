@@ -10,6 +10,9 @@ jobs:
         name: Build & Test iOS
         runs-on: macos-15
         environment: ios-release
+        outputs:
+            resultUrl: ${{ steps.test-result.outputs.resultUrl }}
+
         permissions:
             actions: write
             contents: read
@@ -119,9 +122,10 @@ jobs:
                   name: VeWorld.app
                   path: ${{ env.APP_PATH }}
 
-            #Speifying version and device + retry on a temporary basis while devicecloud work on higher spec vm options.
+            # Specifying version and device + retry on a temporary basis while devicecloud work on higher spec vm options.
             - name: Test iOS
-              uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
+              id: ios-test
+              uses: devicecloud-dev/device-cloud-for-maestro@v1
               with:
                   api-key: ${{ secrets.DCD_API_KEY }}
                   app-file: ${{ env.APP_PATH }}
@@ -130,3 +134,8 @@ jobs:
                   ios-device: iphone-16
                   ios-version: 18
                   retry: 2
+
+            - name: Blurt test result
+              id: test-result
+              run: |
+                  echo "resultUrl=${{ steps.ios-test.outputs.DEVICE_CLOUD_CONSOLE_URL }}" >> "$GITHUB_OUTPUT"

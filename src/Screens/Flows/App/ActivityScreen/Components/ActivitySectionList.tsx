@@ -22,6 +22,7 @@ import {
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
+    StargateActivity,
     SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
@@ -159,6 +160,14 @@ const Item = ({
             )
         case ActivityType.UNKNOWN_TX:
             return <ActivityBox.UnknownTx activity={activity as UnknownTxActivity} onPress={onPress} />
+        case ActivityType.STARGATE_DELEGATE:
+        case ActivityType.STARGATE_STAKE:
+        case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
+        case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
+        case ActivityType.STARGATE_UNDELEGATE:
+        case ActivityType.STARGATE_UNSTAKE:
+        case ActivityType.STARGATE_DELEGATE_ONLY:
+            return <ActivityBox.Staking activity={activity as StargateActivity} onPress={onPress} />
         default:
             return null
     }

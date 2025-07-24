@@ -1,14 +1,14 @@
+import { NavigationState } from "@react-navigation/native"
+import { IWalletKit, WalletKit } from "@reown/walletkit"
 import { Core } from "@walletconnect/core"
 import { PendingRequestTypes, SessionTypes, SignClientTypes } from "@walletconnect/types"
-import { IWalletKit, WalletKit } from "@reown/walletkit"
-import { Network } from "~Model"
-import { debug, error, warn } from "~Utils/Logger"
-import { NavigationState } from "@react-navigation/native"
-import { Routes } from "~Navigation"
-import HexUtils from "~Utils/HexUtils"
-import { ErrorMessageUtils } from "~Utils"
 import { Mutex } from "async-mutex"
 import { ERROR_EVENTS } from "~Constants"
+import { Network } from "~Model"
+import { Routes } from "~Navigation"
+import { ErrorMessageUtils } from "~Utils"
+import HexUtils from "~Utils/HexUtils"
+import { debug, error, warn } from "~Utils/Logger"
 
 let _web3wallet: IWalletKit
 
@@ -117,9 +117,7 @@ export function shouldAutoNavigate(navState: NavigationState<ReactNavigation.Roo
     return !navState.routes.some(
         route =>
             route.name === Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN ||
-            route.name === Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN ||
             route.name === Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN ||
-            route.name === Routes.CONNECT_APP_SCREEN ||
             route.name === Routes.LEDGER_SIGN_TRANSACTION ||
             route.name === Routes.LEDGER_SIGN_CERTIFICATE,
     )

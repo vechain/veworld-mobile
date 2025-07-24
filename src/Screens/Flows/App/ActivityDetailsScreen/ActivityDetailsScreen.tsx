@@ -30,6 +30,7 @@ import {
     FungibleTokenActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
+    StargateActivity,
     SwapActivity,
     TypedDataActivity,
 } from "~Model"
@@ -46,6 +47,7 @@ import {
     SignCertificateDetails,
 } from "./Components"
 import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
+import { StargateActivityDetails } from "./Components/StakingDetails"
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
@@ -185,6 +187,20 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                     />
                 )
             }
+            case ActivityType.STARGATE_DELEGATE:
+            case ActivityType.STARGATE_STAKE:
+            case ActivityType.STARGATE_CLAIM_REWARDS_BASE:
+            case ActivityType.STARGATE_CLAIM_REWARDS_DELEGATE:
+            case ActivityType.STARGATE_DELEGATE_ONLY:
+            case ActivityType.STARGATE_UNDELEGATE:
+            case ActivityType.STARGATE_UNSTAKE:
+                return (
+                    <StargateActivityDetails
+                        activity={(activityFromStore ?? activity) as StargateActivity}
+                        paid={transaction?.paid}
+                        isLoading={isloadingTxDetails}
+                    />
+                )
             case ActivityType.CONNECTED_APP_TRANSACTION: {
                 return <ConnectedAppDetails activity={(activityFromStore ?? activity) as ConnectedAppActivity} />
             }
@@ -219,7 +235,6 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
         },
         [openAddCustomTokenSheet],
     )
-
     return (
         <>
             <Layout

@@ -139,7 +139,7 @@ export const AddCustomTokenBottomSheet = React.forwardRef<BottomSheetModalMethod
                     balance: {
                         balance: "0",
                         tokenAddress: token?.address ?? newCustomToken?.address ?? "",
-                        timeUpdated: new Date().toISOString(),
+                        timeUpdated: new Date(0).toISOString(),
                         isCustomToken: true,
                         isHidden: false,
                     },

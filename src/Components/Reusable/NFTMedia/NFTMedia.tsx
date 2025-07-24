@@ -21,6 +21,7 @@ type Props = {
     isUseLongPress?: boolean
     isPlayAudio?: boolean
     useNativeControls?: boolean
+    testID?: string
 }
 
 export const NFTMedia = memo(
@@ -31,6 +32,7 @@ export const NFTMedia = memo(
         isUseLongPress = false,
         isPlayAudio = false,
         useNativeControls = false,
+        testID,
         ...restProps
     }: Props) => {
         const [isLoading, setIsLoading] = useState(true)
@@ -129,7 +131,7 @@ export const NFTMedia = memo(
         }, [LongPressItems, RenderNFT, isUseLongPress, onLongPressImage])
 
         return (
-            <BaseView>
+            <BaseView testID={testID}>
                 {RenderImageWithProvider}
                 {isLoading && tokenMedia?.mediaType !== NFTMediaType.VIDEO && (
                     <Skeleton

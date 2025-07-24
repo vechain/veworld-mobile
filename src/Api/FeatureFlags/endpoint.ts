@@ -29,6 +29,7 @@ export type FeatureFlags = {
     discoveryFeature: {
         bannersAutoplay: boolean
         showStellaPayBanner: boolean
+        showStargateBanner: boolean
     }
     forks: {
         GALACTICA: {

@@ -16,12 +16,12 @@ describe("useBottomSheet", () => {
         act(() => {
             result.current.onOpen()
         })
-        expect(result.current.ref.current?.expand).toBeCalled()
+        expect(result.current.ref.current?.expand).toHaveBeenCalled()
         expect(result.current.onClose).toBeDefined()
         act(() => {
             result.current.onClose()
         })
-        expect(result.current.ref.current?.close).toBeCalled()
+        expect(result.current.ref.current?.close).toHaveBeenCalled()
     })
 })
 
@@ -39,12 +39,12 @@ describe("useBottomSheetModal", () => {
         act(() => {
             result.current.onOpen()
         })
-        expect(result.current.ref.current?.present).toBeCalled()
+        expect(result.current.ref.current?.present).toHaveBeenCalled()
         expect(result.current.onClose).toBeDefined()
         act(() => {
             result.current.onClose()
         })
-        expect(result.current.ref.current?.close).toBeCalled()
+        expect(result.current.ref.current?.close).toHaveBeenCalled()
         expect(result.current.openWithDelay).toBeDefined()
     })
 

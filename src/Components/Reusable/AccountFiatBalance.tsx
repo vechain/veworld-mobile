@@ -1,26 +1,46 @@
-import React, { useMemo } from "react"
-import { VET, VTHO } from "~Constants"
-import { useNonVechainTokenFiat, useTheme, useTokenWithCompleteInfo } from "~Hooks"
+import { default as React, useMemo } from "react"
 import { FiatBalance } from "~Components"
-import { BalanceUtils } from "~Utils"
-import { selectBalanceForToken, selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
+import { VET, VTHO } from "~Constants"
+import { useTheme } from "~Hooks"
+import { useUserNodes, useUserStargateNfts } from "~Hooks/Staking"
+import { useNonVechainTokenFiat } from "~Hooks/useNonVechainTokenFiat"
+import { useTokenWithCompleteInfo } from "~Hooks/useTokenWithCompleteInfo"
+import {
+    selectB3trAddress,
+    selectBalanceForToken,
+    selectNetworkVBDTokens,
+    selectSelectedAccountAddress,
+    selectVot3Address,
+    useAppSelector,
+} from "~Storage/Redux"
+import { BalanceUtils, BigNutils } from "~Utils"
 
 type AccountFiatBalanceProps = {
     isVisible?: boolean
     isLoading?: boolean
 }
 
+const parseFiatBalance = (value: string) => {
+    //Fiat balances that have a value < 0.01, have the value set as '< < 0.01'
+    if (value.includes("<")) return 0
+    return Number(value)
+}
+
 const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFiatBalanceProps) => {
-    const { isLoading = false, isVisible = true } = props
+    const { isLoading: _isLoading = false, isVisible = true } = props
     const { B3TR, VOT3 } = useAppSelector(state => selectNetworkVBDTokens(state))
+    const accountAddress = useAppSelector(selectSelectedAccountAddress)
 
     const theme = useTheme()
 
     const tokenWithInfoVET = useTokenWithCompleteInfo(VET)
     const tokenWithInfoVTHO = useTokenWithCompleteInfo(VTHO)
 
-    const tokenWithInfoB3TR = useTokenWithCompleteInfo(B3TR)
-    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, VOT3.address))
+    const b3trAddress = useAppSelector(selectB3trAddress)
+    const vot3Address = useAppSelector(selectVot3Address)
+
+    const tokenWithInfoB3TR = useTokenWithCompleteInfo({ ...B3TR, address: b3trAddress })
+    const vot3RawBalance = useAppSelector(state => selectBalanceForToken(state, vot3Address))
 
     const vot3FiatBalance = BalanceUtils.getFiatBalance(
         vot3RawBalance?.balance ?? "0",
@@ -30,19 +50,39 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
 
     const nonVechaiTokensFiat = useNonVechainTokenFiat()
 
+    const { stargateNodes, isLoading: loadingNodes } = useUserNodes(accountAddress)
+    const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts(
+        stargateNodes,
+        loadingNodes,
+    )
+
+    const totalStargateVet = useMemo(() => {
+        return stargateNfts.reduce((acc, nft) => {
+            return acc.plus(nft.vetAmountStaked ?? "0")
+        }, BigNutils("0"))
+    }, [stargateNfts])
+
+    const stargateFiatBalance = useMemo(() => {
+        return BalanceUtils.getFiatBalance(totalStargateVet.toString, tokenWithInfoVET.exchangeRate ?? 1, VET.decimals)
+    }, [totalStargateVet, tokenWithInfoVET.exchangeRate])
+
+    const isLoading = useMemo(() => _isLoading || loadingStargateNfts, [_isLoading, loadingStargateNfts])
+
     const sum = useMemo(
         () =>
-            Number(tokenWithInfoVET.fiatBalance) +
-            Number(tokenWithInfoVTHO.fiatBalance) +
-            Number(tokenWithInfoB3TR.fiatBalance) +
-            Number(vot3FiatBalance) +
-            Number(nonVechaiTokensFiat.reduce((a, b) => Number(a) + Number(b), 0)),
+            parseFiatBalance(tokenWithInfoVET.fiatBalance) +
+            parseFiatBalance(tokenWithInfoVTHO.fiatBalance) +
+            parseFiatBalance(tokenWithInfoB3TR.fiatBalance) +
+            parseFiatBalance(vot3FiatBalance) +
+            nonVechaiTokensFiat.reduce((a, b) => a + parseFiatBalance(b), 0) +
+            parseFiatBalance(stargateFiatBalance),
         [
             tokenWithInfoVET.fiatBalance,
             tokenWithInfoVTHO.fiatBalance,
             tokenWithInfoB3TR.fiatBalance,
             vot3FiatBalance,
             nonVechaiTokensFiat,
+            stargateFiatBalance,
         ],
     )
 
@@ -60,6 +100,7 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
                 tokenWithInfoB3TR.fiatBalance,
                 vot3FiatBalance,
                 ...nonVechaiTokensFiat,
+                stargateFiatBalance,
             ]}
         />
     )

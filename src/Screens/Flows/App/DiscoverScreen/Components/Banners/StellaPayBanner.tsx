@@ -1,11 +1,13 @@
 import React from "react"
-import { Image, StyleSheet, ImageStyle, Platform } from "react-native"
-import { BaseView } from "~Components"
-import { StellaPayBannerB3MO, StellaPayLogoSVG } from "~Assets"
-import { useThemedStyles } from "~Hooks"
+import { StyleSheet } from "react-native"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import LinearGradient from "react-native-linear-gradient"
-import { useI18nContext } from "~i18n"
 import Markdown from "react-native-markdown-display"
+import { StellaPayBannerB3MO, StellaPayLogoSVG } from "~Assets"
+import { BaseView } from "~Components"
+import { useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const StellaPayBanner = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -20,11 +22,17 @@ export const StellaPayBanner = () => {
             style={Platform.OS === "ios" ? styles.iosContainer : styles.androidContainer}>
             <BaseView alignItems={"flex-start"} gap={12} flex={1} justifyContent="center" style={styles.contentArea}>
                 <StellaPayLogoSVG />
-                <Markdown style={{ paragraph: styles.paragraph, body: styles.text }}>
+                <Markdown
+                    style={{
+                        paragraph: styles.paragraph,
+                        body: styles.text,
+                        // Android does not support fontWeight 600
+                        ...(!isAndroid() && { strong: styles.bold }),
+                    }}>
                     {LL.BANNER_STELLAPAY_DESC()}
                 </Markdown>
             </BaseView>
-            <Image source={StellaPayBannerB3MO} style={styles.image as ImageStyle} />
+            <FastImage source={StellaPayBannerB3MO} style={styles.image as ImageStyle} />
         </LinearGradient>
     )
 }
@@ -74,12 +82,7 @@ const baseStyles = () =>
             color: "#EEF3F7",
             margin: 0,
         },
-        contentArea: {
-            ...(Platform.OS === "ios" && {
-                paddingRight: 100,
-            }),
-            ...(Platform.OS === "android" && {
-                paddingRight: 0,
-            }),
+        bold: {
+            fontWeight: "600",
         },
     })

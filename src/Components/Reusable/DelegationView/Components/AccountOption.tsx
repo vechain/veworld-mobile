@@ -1,17 +1,16 @@
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { default as React, ReactNode, useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
+import { FlatList } from "react-native-gesture-handler"
 import { BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { DelegateAccountCardRadio } from "~Components/Reusable/DelegateAccountCard"
 import { COLORS } from "~Constants"
-import { FlatListScrollPropsType, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, LocalAccountWithDevice, WatchedAccount } from "~Model"
 import { Option } from "./Option"
 
 type Props = {
     selectedDelegationAccount?: LocalAccountWithDevice
-    flatListProps: FlatListScrollPropsType
     children: (args: { onCancel: () => void; selectedAccount: LocalAccountWithDevice | undefined }) => ReactNode
     accounts: LocalAccountWithDevice[]
 }
@@ -37,7 +36,7 @@ const AccountEmptyOption = () => {
     )
 }
 
-export const AccountOption = ({ selectedDelegationAccount, flatListProps, children, accounts }: Props) => {
+export const AccountOption = ({ selectedDelegationAccount, children, accounts }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
 
@@ -62,7 +61,7 @@ export const AccountOption = ({ selectedDelegationAccount, flatListProps, childr
                 {accounts.length === 0 ? (
                     <AccountEmptyOption />
                 ) : (
-                    <BottomSheetFlatList
+                    <FlatList
                         data={accounts}
                         keyExtractor={account => account.address}
                         ItemSeparatorComponent={ItemSeparatorComponent}
@@ -70,13 +69,14 @@ export const AccountOption = ({ selectedDelegationAccount, flatListProps, childr
                             return (
                                 <DelegateAccountCardRadio
                                     testID={"DELEGATE_ACCOUNT_CARD_RADIO"}
+                                    balanceToken={"VTHO"}
                                     account={item}
                                     onPress={handlePress}
                                     selected={item.address === selectedAccount?.address}
                                 />
                             )
                         }}
-                        {...flatListProps}
+                        // {...flatListProps}
                     />
                 )}
             </Option>

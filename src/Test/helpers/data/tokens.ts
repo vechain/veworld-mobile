@@ -1,7 +1,7 @@
 /* eslint-disable max-len */
 import { B3TR, VET, VOT3, VTHO } from "~Constants"
 import { TokenWithCompleteInfo } from "~Hooks"
-import { FungibleTokenWithBalance, NFTMediaType, NonFungibleToken, Token } from "~Model"
+import { FungibleTokenWithBalance, NftData, NFTMediaType, NodeInfo, NonFungibleToken, Token } from "~Model"
 
 export const VETWithBalance: FungibleTokenWithBalance = {
     ...VET,
@@ -41,6 +41,20 @@ export const VOT3WithBalance: FungibleTokenWithBalance = {
         timeUpdated: Date.now().toString(),
         isHidden: false,
     },
+}
+
+export const VETWithCompleteInfo: TokenWithCompleteInfo = {
+    ...VET,
+    exchangeRateCurrency: "USD",
+    exchangeRateLoading: false,
+    fiatBalance: "0",
+    tokenInfoLoading: true,
+    tokenUnitBalance: "35",
+    tokenUnitFullBalance: "35",
+    chartData: undefined,
+    exchangeRate: undefined,
+    tokenInfo: undefined,
+    balance: VETWithBalance.balance,
 }
 
 export const B3TRWithCompleteInfo: TokenWithCompleteInfo = {
@@ -241,3 +255,70 @@ export const NFT_Mock: NonFungibleToken = {
     mediaType: NFTMediaType.IMAGE,
     updated: true,
 }
+
+export const StargateNftMock: NftData = {
+    tokenId: "1",
+    levelId: "1",
+    vetAmountStaked: "10000000000000000000000",
+    isDelegated: true,
+    claimableRewards: "10000000000000000000000",
+    accumulatedRewards: "10000000000000000000000",
+}
+
+export const StargateNftMocks = [
+    StargateNftMock,
+    {
+        tokenId: "2",
+        levelId: "2",
+        vetAmountStaked: "20000000000000000000000",
+        isDelegated: false,
+        claimableRewards: "20000000000000000000000",
+        accumulatedRewards: "20000000000000000000000",
+    },
+    {
+        tokenId: "3",
+        levelId: "3",
+        vetAmountStaked: "30000000000000000000000",
+        isDelegated: true,
+        claimableRewards: "30000000000000000000000",
+        accumulatedRewards: "30000000000000000000000",
+    },
+] satisfies NftData[]
+
+export const StargateNodeMock: NodeInfo = {
+    nodeId: "1",
+    nodeLevel: 1,
+    xNodeOwner: "0x123",
+    isXNodeHolder: false,
+    isXNodeDelegated: false,
+    isXNodeDelegator: false,
+    isXNodeDelegatee: false,
+    delegatee: "0x456",
+    isLegacyNode: false,
+}
+
+export const StargateNodeMocks: NodeInfo[] = [
+    StargateNodeMock,
+    {
+        nodeId: "2",
+        nodeLevel: 2,
+        xNodeOwner: "0x789",
+        isXNodeHolder: false,
+        isXNodeDelegated: false,
+        isXNodeDelegator: false,
+        isXNodeDelegatee: false,
+        delegatee: "0xabc",
+        isLegacyNode: true,
+    },
+    {
+        nodeId: "3",
+        nodeLevel: 3,
+        xNodeOwner: "0xdef",
+        isXNodeHolder: false,
+        isXNodeDelegated: false,
+        isXNodeDelegator: false,
+        isXNodeDelegatee: false,
+        delegatee: "0xghi",
+        isLegacyNode: false,
+    },
+]

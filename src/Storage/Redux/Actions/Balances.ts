@@ -1,16 +1,18 @@
+import { Dispatch } from "@reduxjs/toolkit"
+import { ERROR_EVENTS, VET, VTHO } from "~Constants"
+import { Balance, Network } from "~Model"
 import {
+    selectBalancesForAccount,
+    selectNetworkVBDTokens,
     selectSelectedAccount,
     selectSelectedNetwork,
-    selectBalancesForAccount,
-    selectNetworks,
 } from "~Storage/Redux/Selectors"
-import { RootState } from "~Storage/Redux/Types"
-import { Dispatch } from "@reduxjs/toolkit"
-import { debug, error } from "~Utils/Logger"
-import { BalanceUtils } from "~Utils"
 import { setIsTokensOwnedLoading, updateTokenBalances } from "~Storage/Redux/Slices"
-import { Balance, NETWORK_TYPE, Network } from "~Model"
-import { ERROR_EVENTS, VET, VTHO } from "~Constants"
+import { RootState } from "~Storage/Redux/Types"
+import { BalanceUtils } from "~Utils"
+import { debug, error } from "~Utils/Logger"
+
+const BALANCE_UPDATE_CACHE_TIME = 5 * 60 * 1000
 
 export const upsertTokenBalance =
     (thorClient: Connex.Thor, accountAddress: string, tokenAddress: string) =>
@@ -33,92 +35,40 @@ export const upsertTokenBalance =
 /**
  * Updates all balances for an account
  * @param accountAddress - the account address for this balance
+ * @param force - Force updating the balance skipping cache time
  */
 export const updateAccountBalances =
-    (thorClient: Connex.Thor, accountAddress: string) => async (dispatch: Dispatch, getState: () => RootState) => {
-        dispatch(setIsTokensOwnedLoading(true))
-        const accountBalances = selectBalancesForAccount(getState(), accountAddress)
-
-        if (accountBalances.length === 0) return
-
-        const balancesMain: Balance[] = []
-        const balancesTest: Balance[] = []
-        const balancesOther: Balance[] = []
-
-        const main = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.MAIN)
-        const test = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.TEST)
-        const other = selectNetworks(getState()).find((net: Network) => net.type === NETWORK_TYPE.OTHER)
-
-        if (!main || !test) throw new Error("Networks not found")
-
+    (thorClient: Connex.Thor, accountAddress: string, force: boolean = false) =>
+    async (dispatch: Dispatch, getState: () => RootState) => {
         try {
-            for (const accountBalance of accountBalances) {
-                const balanceMain = await BalanceUtils.getBalanceFromBlockchain(
-                    accountBalance.tokenAddress,
-                    accountAddress,
-                    main,
-                    thorClient,
-                )
+            const accountBalances = selectBalancesForAccount(getState(), accountAddress)
 
-                const balanceTest = await BalanceUtils.getBalanceFromBlockchain(
-                    accountBalance.tokenAddress,
-                    accountAddress,
-                    test,
-                    thorClient,
-                )
+            const network = selectSelectedNetwork(getState())
+            const updatableBalances = force
+                ? accountBalances
+                : accountBalances.filter(
+                      balance => Date.now() - new Date(balance.timeUpdated).getTime() >= BALANCE_UPDATE_CACHE_TIME,
+                  )
+            if (updatableBalances.length === 0) return
 
-                if (balanceMain) {
-                    balancesMain.push({
-                        ...balanceMain,
-                    })
-                }
+            dispatch(setIsTokensOwnedLoading(true))
 
-                if (balanceTest) {
-                    balancesTest.push({
-                        ...balanceTest,
-                    })
-                }
+            const newBalances = await BalanceUtils.getBalancesFromBlockchain(
+                updatableBalances.map(balance => balance.tokenAddress),
+                accountAddress,
+                network,
+                thorClient,
+            )
 
-                if (other) {
-                    const balanceOther = await BalanceUtils.getBalanceFromBlockchain(
-                        accountBalance.tokenAddress,
-                        accountAddress,
-                        other,
-                        thorClient,
-                    )
-                    if (balanceOther) {
-                        balancesOther.push({
-                            ...balanceOther,
-                        })
-                    }
-                }
-            }
+            if (newBalances.length === 0) return
 
             dispatch(
                 updateTokenBalances({
-                    network: main.type,
+                    network: network.type,
                     accountAddress,
-                    newBalances: balancesMain,
+                    newBalances,
                 }),
             )
-
-            dispatch(
-                updateTokenBalances({
-                    network: test.type,
-                    accountAddress,
-                    newBalances: balancesTest,
-                }),
-            )
-
-            if (other) {
-                dispatch(
-                    updateTokenBalances({
-                        network: other.type,
-                        accountAddress,
-                        newBalances: balancesOther,
-                    }),
-                )
-            }
         } catch (e) {
             throw new Error(`Failed to get balance from external service: ${e}`)
         } finally {
@@ -161,8 +111,9 @@ export const autoSelectSuggestTokens =
 export const resetTokenBalances = async (dispatch: Dispatch, getState: () => RootState) => {
     const account = selectSelectedAccount(getState())
     const network = selectSelectedNetwork(getState())
+    const networkVBDTokens = selectNetworkVBDTokens(getState())
 
-    const defaultTokens = [{ ...VET }, { ...VTHO }]
+    const defaultTokens = [{ ...VET }, { ...VTHO }, { ...networkVBDTokens.B3TR }, { ...networkVBDTokens.VOT3 }]
     if (account) {
         dispatch(
             updateTokenBalances({
@@ -172,7 +123,7 @@ export const resetTokenBalances = async (dispatch: Dispatch, getState: () => Roo
                     accountAddress: account.address,
                     tokenAddress: token.address,
                     balance: "0",
-                    timeUpdated: new Date().toISOString(),
+                    timeUpdated: new Date(0).toISOString(),
                     isCustomToken: false,
                     isHidden: false,
                     position: undefined,

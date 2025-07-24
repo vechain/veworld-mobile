@@ -1,14 +1,18 @@
-import React from "react"
-import { render, screen } from "@testing-library/react-native"
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
-import { DiscoverScreen } from "./DiscoverScreen"
-import { TestWrapper } from "~Test"
-import { PlatformOSType } from "react-native"
-import { RootState } from "~Storage/Redux/Types"
-import { InAppBrowserProvider } from "~Components/Providers/InAppBrowserProvider"
+import { render, screen } from "@testing-library/react-native"
+import React from "react"
 import { BaseToast } from "~Components"
+import { useVeBetterDaoActiveDapps, useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
+import { RootState } from "~Storage/Redux/Types"
+import { TestWrapper } from "~Test"
+import { DiscoverScreen } from "./DiscoverScreen"
 
 jest.useFakeTimers()
+
+jest.mock("~Hooks/useFetchFeaturedDApps")
+jest.mock("./Hooks", () => ({
+    useDAppActions: jest.fn().mockReturnValue({ onDAppPress: jest.fn() }),
+}))
 
 jest.mock("react-native", () => ({
     ...jest.requireActual("react-native"),
@@ -37,16 +41,18 @@ jest.mock("react-native", () => {
     }
 })
 
-const createWrapper = (platform: PlatformOSType) => {
-    return ({ children, preloadedState }: { children: React.ReactNode; preloadedState: Partial<RootState> }) => (
-        <TestWrapper preloadedState={preloadedState}>
-            <InAppBrowserProvider platform={platform}>
-                {children}
-                <BaseToast />
-            </InAppBrowserProvider>
-        </TestWrapper>
-    )
-}
+const createWrapper = ({
+    children,
+    preloadedState,
+}: {
+    children: React.ReactNode
+    preloadedState: Partial<RootState>
+}) => (
+    <TestWrapper preloadedState={preloadedState}>
+        {children}
+        <BaseToast />
+    </TestWrapper>
+)
 
 // Create a stack navigator
 const Stack = createNativeStackNavigator()
@@ -59,24 +65,26 @@ const MockNavigator = () => (
 )
 
 describe("DiscoverScreen", () => {
-    it("should render correctly on iOS", async () => {
-        // Render the MockNavigator instead of DiscoverScreen directly
-        render(<MockNavigator />, {
-            wrapper: createWrapper("ios"),
-        })
-
-        // Add assertions here if needed
+    beforeAll(() => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockImplementation(() => ({
+            data: [],
+            isLoading: false,
+        }))
+        ;(useVeBetterDaoDapps as jest.Mock).mockImplementation(() => ({
+            data: [],
+            isFetching: false,
+        }))
     })
 
     it("should render correctly on Android", async () => {
         render(<MockNavigator />, {
-            wrapper: createWrapper("android"),
+            wrapper: createWrapper,
         })
     })
 
     it("should show the carousel", async () => {
         render(<MockNavigator />, {
-            wrapper: createWrapper("ios"),
+            wrapper: createWrapper,
         })
 
         const carousel = await screen.findByTestId("VeBetterDao_carousel")
@@ -85,7 +93,7 @@ describe("DiscoverScreen", () => {
 
     it("shouldn't show favorite apps if no favorite apps are available", async () => {
         render(<MockNavigator />, {
-            wrapper: createWrapper("ios"),
+            wrapper: createWrapper,
         })
 
         const favoriteApps = await screen.queryByText("Favourites dApps")
@@ -94,7 +102,7 @@ describe("DiscoverScreen", () => {
 
     it("should show new dapps section", async () => {
         render(<MockNavigator />, {
-            wrapper: createWrapper("ios"),
+            wrapper: createWrapper,
         })
 
         const newDapps = await screen.findByText("Recently Added")
@@ -103,7 +111,7 @@ describe("DiscoverScreen", () => {
 
     it("should show trending dapps section", async () => {
         render(<MockNavigator />, {
-            wrapper: createWrapper("ios"),
+            wrapper: createWrapper,
         })
 
         const trendingDapps = await screen.findByText("Trending & Popular")
@@ -112,7 +120,7 @@ describe("DiscoverScreen", () => {
 
     it("should show ecosystem dapps section", async () => {
         render(<MockNavigator />, {
-            wrapper: createWrapper("ios"),
+            wrapper: createWrapper,
         })
 
         const ecosystemDapps = await screen.findByText("Ecosystem")

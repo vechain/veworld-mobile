@@ -1,13 +1,9 @@
 import { useCallback } from "react"
-import { useThor } from "~Components"
 import { NftCollection } from "~Model"
 import {
     getContractAddresses,
-    getName,
     getNftBalanceOf,
     getNftsForContract,
-    getSymbol,
-    getTokenTotalSupply,
     getTokenURI,
     GithubCollectionResponse,
 } from "~Networking"
@@ -21,15 +17,18 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { debug, warn } from "~Utils"
-import { initCollectionMetadataFromRegistry, initCollectionMetadataWithoutRegistry } from "./Helpers"
-import { useI18nContext } from "~i18n"
-import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
-import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
-import { useNFTMetadata } from "~Hooks"
-import { useLazyLoader } from "./useLazyLoader"
-import { ERROR_EVENTS } from "~Constants"
+
 import { isEmpty } from "lodash"
+import { ERROR_EVENTS } from "~Constants"
+import { NFT_PAGE_SIZE } from "~Constants/Constants/NFT"
+import { useNFTMetadata } from "~Hooks"
+import { useThorClient } from "~Hooks/useThorClient"
+import { useI18nContext } from "~i18n"
+import { getNftCollectionMetadata } from "~Networking/NFT/getNftCollectionMetadata"
+import { debug, warn } from "~Utils"
+import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { initCollectionMetadataFromRegistry, initCollectionMetadataWithoutRegistry } from "./Helpers"
+import { useLazyLoader } from "./useLazyLoader"
 
 /**
  * `useNFTCollections` is a React hook that facilitates the fetching and management of NFT collections for a selected account.
@@ -48,7 +47,7 @@ import { isEmpty } from "lodash"
  */
 
 export const useNFTCollections = () => {
-    const thor = useThor()
+    const thor = useThorClient()
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const network = useAppSelector(selectSelectedNetwork)
@@ -75,7 +74,6 @@ export const useNFTCollections = () => {
 
                 let image = collection.image
                 let description = collection.description
-
                 if (!collection.fromRegistry) {
                     // NFT_WHALE - replace here
                     const { data } = await getNftsForContract(network.type, collection.address, currentAddress, 1, 0)
@@ -87,17 +85,19 @@ export const useNFTCollections = () => {
                         description = tokenMetadata.description
                     }
                 }
+
+                const { name, symbol, totalSupply } = await getNftCollectionMetadata(collection.address, thor)
+
                 const updated: NftCollection = {
                     ...collection,
                     balanceOf: balanceOf,
                     image,
-                    name: await getName(collection.address, thor),
+                    name,
                     description,
                     updated: true,
-                    symbol: await getSymbol(collection.address, thor),
-                    totalSupply: await getTokenTotalSupply(collection.address, thor),
+                    symbol,
+                    totalSupply: Number(totalSupply),
                 }
-
                 dispatch(
                     updateCollection({
                         currentAccountAddress: currentAddress, // NFT_WHALE - replace here

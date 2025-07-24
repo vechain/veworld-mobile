@@ -1,12 +1,14 @@
 import moment from "moment"
-import React, { useMemo } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
+import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
-import { B3TR, COLORS, DIRECTIONS, VET, VOT3 } from "~Constants"
-import { useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
+import { B3TR, COLORS, DIRECTIONS, VET, VOT3, VTHO } from "~Constants"
+import { useFormatFiat, useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import {
     Activity,
+    ActivityEvent,
     ActivityStatus,
     B3trActionActivity,
     B3trClaimRewardActivity,
@@ -23,6 +25,7 @@ import {
     IconKey,
     NonFungibleTokenActivity,
     SignCertActivity,
+    StargateActivity,
     SwapActivity,
     TransactionOutcomes,
     TypedDataActivity,
@@ -31,7 +34,15 @@ import {
 } from "~Model"
 import { selectAllTokens, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
+import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
+
+type GradientConfig = {
+    colors: string[]
+    angle?: number
+    start?: { x: number; y: number }
+    end?: { x: number; y: number }
+}
 
 type ActivityBoxProps = {
     icon: IconKey
@@ -42,7 +53,7 @@ type ActivityBoxProps = {
     rightAmountDescription?: string | React.ReactNode
     nftImage?: string
     activityStatus?: ActivityStatus
-    iconBackgroungColor?: string
+    iconBackgroundColor?: string | GradientConfig
     onPress: () => void
     /**
      * If set to true, the title will be lighter than the description. Default is `false`
@@ -59,7 +70,7 @@ const BaseActivityBox = ({
     rightAmount,
     rightAmountDescription,
     nftImage,
-    iconBackgroungColor = COLORS.GREY_100,
+    iconBackgroundColor = COLORS.GREY_100,
     activityStatus,
     onPress,
     invertedStyles,
@@ -79,7 +90,7 @@ const BaseActivityBox = ({
         }
 
         if (showNftImage) {
-            return <NFTMedia uri={nftImage ?? ""} styles={styles.rightImageContainer} />
+            return <NFTMedia uri={nftImage ?? ""} styles={styles.rightImageContainer} testID="nft-media" />
         }
 
         return (
@@ -104,11 +115,39 @@ const BaseActivityBox = ({
         )
     }
 
+    const renderIconContainer = () => {
+        const isGradient = typeof iconBackgroundColor === "object"
+
+        if (isGradient) {
+            const gradientConfig = iconBackgroundColor as GradientConfig
+            return (
+                <LinearGradient
+                    colors={gradientConfig.colors}
+                    angle={gradientConfig.angle}
+                    start={gradientConfig.start}
+                    end={gradientConfig.end}
+                    style={styles.iconContainer}>
+                    <BaseIcon name={icon} size={16} color={COLORS.WHITE} testID="magnify" />
+                </LinearGradient>
+            )
+        }
+
+        return (
+            <BaseView style={[styles.iconContainer, { backgroundColor: iconBackgroundColor as string }]}>
+                <BaseIcon
+                    name={icon}
+                    size={16}
+                    color={COLORS.DARK_PURPLE}
+                    testID="magnify"
+                    bg={iconBackgroundColor as string}
+                />
+            </BaseView>
+        )
+    }
+
     return (
         <BaseCard testID={testID} style={styles.rootContainer} onPress={onPress}>
-            <BaseView style={[styles.iconContainer, { backgroundColor: iconBackgroungColor }]}>
-                <BaseIcon name={icon} size={16} color={COLORS.DARK_PURPLE} testID="magnify" bg={iconBackgroungColor} />
-            </BaseView>
+            {renderIconContainer()}
 
             <BaseSpacer width={16} />
 
@@ -200,6 +239,7 @@ type TokenTransferActivityBoxProps = {
 const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const { formatLocale } = useFormatFiat()
 
     const { amount, timestamp, tokenAddress, direction, to, from } = activity
 
@@ -232,7 +272,7 @@ const TokenTransfer = ({ activity, onPress }: TokenTransferActivityBoxProps) => 
 
         return BigNutils(amount)
             .toHuman(token?.decimals ?? 0)
-            .toTokenFormat_string(2)
+            .toTokenFormat_string(2, formatLocale)
     }
 
     const getActivityProps = (): Omit<ActivityBoxProps, "time" | "onPress"> => {
@@ -318,6 +358,7 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
     const icon = "icon-arrow-left-right"
     const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
+    const { formatLocale } = useFormatFiat()
 
     const allTokens = useAppSelector(selectAllTokens)
     const outputToken = allTokens.find(_token => AddressUtils.compareAddresses(_token.address, activity.outputToken))
@@ -325,11 +366,11 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
 
     const paidAmount = BigNutils(activity.inputValue)
         .toHuman(inputToken?.decimals ?? 0)
-        .toTokenFormat_string(2)
+        .toTokenFormat_string(2, formatLocale)
 
     const receivedAmount = BigNutils(activity.outputValue)
         .toHuman(outputToken?.decimals ?? 0)
-        .toTokenFormat_string(2)
+        .toTokenFormat_string(2, formatLocale)
 
     const rightAmount = `${DIRECTIONS.UP} ${receivedAmount} ${outputToken?.symbol ?? ""}`
     const rightAmountDescription = `${DIRECTIONS.DOWN} ${paidAmount} ${inputToken?.symbol ?? ""}`
@@ -443,7 +484,7 @@ type NFTTransferActivityBoxProps = {
 
 const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
     const { LL } = useI18nContext()
-    const { collectionName } = useNFTInfo(activity?.tokenId, activity.contractAddress)
+    const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
     const isReceived = activity.direction === DIRECTIONS.DOWN
     const title = isReceived ? LL.NFT_TRANSFER_RECEIVED() : LL.NFT_TRANSFER_SENT()
     const time = moment(activity.timestamp).format("HH:mm")
@@ -465,6 +506,7 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
             title={title}
             description={validatedCollectionName()}
             onPress={onPressHandler}
+            nftImage={tokenMetadata?.image}
         />
     )
 }
@@ -526,19 +568,20 @@ type B3trActionProps = {
 const B3trAction = ({ activity, onPress, veBetterDaoDapps }: B3trActionProps) => {
     const { LL } = useI18nContext()
     const time = moment(activity.timestamp).format("HH:mm")
+    const { formatLocale } = useFormatFiat()
 
     const onPressHandler = () => {
         onPress(activity)
     }
 
     const dapp = veBetterDaoDapps.find(d => d.id === activity.appId)
-    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2)
+    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2, formatLocale)
 
     return (
         <BaseActivityBox
             testID={`B3TR-ACTION-${activity.id}`}
             icon="icon-leaf"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_ACTION()}
             description={dapp?.name}
@@ -567,7 +610,7 @@ const B3trProposalVote = ({ activity, onPress }: B3trPrpoposalVoteProps) => {
         <BaseActivityBox
             testID={`B3TR-PROPOSAL-VOTE-${activity.id}`}
             icon="icon-vote"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_PROPOSAL_VOTE()}
             onPress={onPressHandler}
@@ -592,7 +635,7 @@ const B3trXAllocationVote = ({ activity, onPress }: B3trXAllocartionVoteProps) =
         <BaseActivityBox
             testID={`B3TR-XALLOCATION-VOTE-${activity.id}`}
             icon="icon-vote"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_XALLOCATION_VOTE({ number: parseInt(activity.roundId, 10) })}
             onPress={onPressHandler}
@@ -608,18 +651,19 @@ type B3trClaimRewardProps = {
 const B3trClaimReward = ({ activity, onPress }: B3trClaimRewardProps) => {
     const { LL } = useI18nContext()
     const time = moment(activity.timestamp).format("HH:mm")
+    const { formatLocale } = useFormatFiat()
 
     const onPressHandler = () => {
         onPress(activity)
     }
 
-    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2)
+    const rewardValue = BigNutils(activity.value).toHuman(B3TR.decimals).toTokenFormat_string(2, formatLocale)
 
     return (
         <BaseActivityBox
             testID={`B3TR-CLAIM-REWARD-${activity.id}`}
             icon="icon-leaf"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_CLAIM_REWARD()}
             onPress={onPressHandler}
@@ -646,7 +690,7 @@ const B3trUpgradeGM = ({ activity, onPress }: B3trUpgradeGMProps) => {
         <BaseActivityBox
             testID={`B3TR-UPGRADE-GM-${activity.id}`}
             icon="icon-vote"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_UPGRADE_GM()}
             description={activity.newLevel}
@@ -662,14 +706,14 @@ type B3trSwapB3trToVot3Props = {
 
 const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
     const { LL } = useI18nContext()
-
+    const { formatLocale } = useFormatFiat()
     const title = LL.TOKEN_CONVERSION()
     const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
 
     const amount = BigNutils(activity.value)
         .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2)
+        .toTokenFormat_string(2, formatLocale)
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${VOT3.symbol}`
     const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${B3TR.symbol}`
@@ -682,7 +726,7 @@ const B3trSwapB3trToVot3 = ({ activity, onPress }: B3trSwapB3trToVot3Props) => {
         <BaseActivityBox
             testID={`B3TR-SWAP-B3TR-TO-VOT3-${activity.id}`}
             icon={"icon-convert"}
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={title}
             rightAmount={rightAmount}
@@ -703,14 +747,14 @@ type B3trSwapVot3ToB3trProps = {
 
 const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
     const { LL } = useI18nContext()
-
     const title = LL.TOKEN_CONVERSION()
     const time = moment(activity.timestamp).format("HH:mm")
     const theme = useTheme()
+    const { formatLocale } = useFormatFiat()
 
     const amount = BigNutils(activity.value)
         .toHuman(B3TR.decimals ?? 0)
-        .toTokenFormat_string(2)
+        .toTokenFormat_string(2, formatLocale)
 
     const rightAmount = `${DIRECTIONS.UP} ${amount} ${B3TR.symbol}`
     const rightAmountDescription = `${DIRECTIONS.DOWN}  ${amount} ${VOT3.symbol}`
@@ -723,7 +767,7 @@ const B3trSwapVot3ToB3tr = ({ activity, onPress }: B3trSwapVot3ToB3trProps) => {
         <BaseActivityBox
             testID={`B3TR-SWAP-VOT3-TO-B3TR-${activity.id}`}
             icon={"icon-convert"}
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={title}
             rightAmount={rightAmount}
@@ -754,7 +798,7 @@ const B3trProposalSupport = ({ activity, onPress }: B3trProposalSupportProps) =>
         <BaseActivityBox
             testID={`B3TR-PROPOSAL-SUPPORT-${activity.id}`}
             icon="icon-vote"
-            iconBackgroungColor={COLORS.B3TR_ICON_BACKGROUND}
+            iconBackgroundColor={COLORS.B3TR_ICON_BACKGROUND}
             time={time}
             title={LL.B3TR_PROPOSAL_SUPPORT()}
             onPress={onPressHandler}
@@ -787,6 +831,113 @@ const UnknownTx = ({ activity, onPress }: UnknownTxProps) => {
     )
 }
 
+type StakingProps = {
+    activity: StargateActivity
+    onPress: (activity: Activity) => void
+}
+
+const Staking = ({ activity, onPress }: StakingProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+    const { formatLocale } = useFormatFiat()
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    const getStakingIcon = useCallback((eventName: string): IconKey => {
+        switch (eventName) {
+            case ActivityEvent.STARGATE_STAKE:
+                return "icon-download"
+            case ActivityEvent.STARGATE_UNSTAKE:
+                return "icon-upload"
+            case ActivityEvent.STARGATE_DELEGATE:
+            case ActivityEvent.STARGATE_DELEGATE_ONLY:
+                return "icon-lock"
+            case ActivityEvent.STARGATE_UNDELEGATE:
+                return "icon-unlock"
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
+                return "icon-gift"
+            default:
+                return "icon-blocks"
+        }
+    }, [])
+
+    const hasRightAmount = useMemo(() => {
+        return !(
+            activity?.type === ActivityEvent.STARGATE_UNDELEGATE ||
+            activity?.type === ActivityEvent.STARGATE_DELEGATE_ONLY
+        )
+    }, [activity?.type])
+
+    const getActivityTitle = useCallback(() => {
+        switch (activity.eventName) {
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_BASE:
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_BASE_LABEL()
+            case ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE:
+                return LL.ACTIVITY_STARGATE_CLAIM_REWARDS_DELEGATE_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE:
+                return LL.ACTIVITY_STARGATE_NODE_DELEGATE_LABEL()
+            case ActivityEvent.STARGATE_DELEGATE_ONLY:
+                return LL.ACTIVITY_STARGATE_NODE_DELEGATE_ONLY_LABEL()
+            case ActivityEvent.STARGATE_UNDELEGATE:
+                return LL.ACTIVITY_STARGATE_NODE_UNDELEGATE_LABEL()
+            case ActivityEvent.STARGATE_STAKE:
+                return LL.ACTIVITY_STARGATE_STAKE_LABEL()
+            case ActivityEvent.STARGATE_UNSTAKE:
+                return LL.ACTIVITY_STARGATE_UNSTAKE_LABEL()
+            default:
+                return LL.ACTIVITY_STARGATE_STAKE_LABEL()
+        }
+    }, [activity.eventName, LL])
+
+    const isMinus = useMemo(() => {
+        return !(
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_BASE ||
+            activity?.type === ActivityEvent.STARGATE_CLAIM_REWARDS_DELEGATE ||
+            activity?.type === ActivityEvent.STARGATE_UNSTAKE
+        )
+    }, [activity?.type])
+
+    const amount = BigNutils(activity.value)
+        .toHuman(B3TR.decimals ?? 0)
+        .toTokenFormat_string(2, formatLocale)
+
+    const rightAmount = useMemo(() => {
+        if (hasRightAmount) {
+            return `${isMinus ? DIRECTIONS.DOWN : DIRECTIONS.UP} ${amount}`
+        }
+        return undefined
+    }, [hasRightAmount, isMinus, amount])
+
+    const baseActivityBoxProps = () => {
+        return {
+            icon: getStakingIcon(activity.eventName),
+            title: getActivityTitle(),
+            description: activity.levelId ? getTokenLevelName(activity.levelId) : "",
+            rightAmount: rightAmount,
+            rightAmountDescription:
+                hasRightAmount && (activity.eventName.includes("_CLAIM_") ? VTHO.symbol : VET.symbol),
+            onPress: onPressHandler,
+        }
+    }
+
+    return (
+        <BaseActivityBox
+            testID={`STARGATE-${activity.eventName}-${activity.id}`}
+            iconBackgroundColor={{
+                colors: ["#820744", "#211EAB"],
+                angle: 132,
+                start: { x: 0.15, y: 0 },
+                end: { x: 0.87, y: 1 },
+            }}
+            time={time}
+            {...baseActivityBoxProps()}
+        />
+    )
+}
+
 export const ActivityBox = {
     TokenTransfer: TokenTransfer,
     DAppTransaction: DAppTransaction,
@@ -794,6 +945,7 @@ export const ActivityBox = {
     DAppSignCert: DAppSignCertBox,
     ConnectedAppActivity: ConnectedAppActivityBox,
     SignedTypedData: SignedTypedData,
+    Staking: Staking,
     TokenSwap: TokenSwap,
     B3trAction: B3trAction,
     B3trProposalVote: B3trProposalVote,

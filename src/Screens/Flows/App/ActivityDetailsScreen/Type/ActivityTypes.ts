@@ -3,6 +3,7 @@ import { IconKey } from "~Model"
 
 export type ActivityDetail = {
     id: number
+    eventName?: string
     title: string
     value: string
     typographyFont: TFonts

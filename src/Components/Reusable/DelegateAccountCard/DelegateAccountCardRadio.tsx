@@ -2,9 +2,9 @@ import { ComponentProps, memo, default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon } from "~Components"
 import { useThemedStyles } from "~Hooks"
-import { DelegateAccountCard } from "./DelegateAccountCard"
+import { SelectableAccountCard } from "../SelectableAccountCard"
 
-type Props = Omit<ComponentProps<typeof DelegateAccountCard>, "children">
+type Props = Omit<ComponentProps<typeof SelectableAccountCard>, "children">
 
 export const DelegateAccountCardRadio = memo(({ selected, ...props }: Props) => {
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -16,7 +16,7 @@ export const DelegateAccountCardRadio = memo(({ selected, ...props }: Props) => 
     }, [selected, theme.colors.radioButton.activeTextColor, theme.colors.radioButton.textColor])
 
     return (
-        <DelegateAccountCard selected={selected} {...props}>
+        <SelectableAccountCard selected={selected} {...props}>
             <BaseIcon
                 name={selected ? "icon-radio-selected" : "icon-radio-default"}
                 color={iconColor}
@@ -26,7 +26,7 @@ export const DelegateAccountCardRadio = memo(({ selected, ...props }: Props) => 
                 p={0}
                 style={styles.icon}
             />
-        </DelegateAccountCard>
+        </SelectableAccountCard>
     )
 })
 

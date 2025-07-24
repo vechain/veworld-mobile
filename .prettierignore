@@ -3,3 +3,4 @@ src/i18n/*
 src/Assets/Lottie/**/*.json
 package.json
 .maestro/send/*
+src/Generated/*

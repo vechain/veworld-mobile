@@ -11,6 +11,7 @@ import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { EditSpeedSection } from "./EditSpeedSection"
 import { GalacticaEstimation } from "./GalacticaEstimation"
 import { GasFeeSpeedBottomSheet } from "./GasFeeSpeedBottomSheet"
+import { GasFeeTokenBottomSheet } from "./GasFeeTokenBottomSheet"
 import { LegacyEstimation } from "./LegacyEstimation"
 
 type Props = {
@@ -21,6 +22,15 @@ type Props = {
     isGalactica?: boolean
     isBaseFeeRampingUp: boolean
     speedChangeEnabled: boolean
+    delegationToken: string
+    availableDelegationTokens: string[]
+    setDelegationToken: (value: string) => void
+    isEnoughBalance: boolean
+    hasEnoughBalanceOnAny: boolean
+    isFirstTimeLoadingFees: boolean
+    hasEnoughBalanceOnToken: {
+        [token: string]: boolean
+    }
 }
 
 const AnimatedBaseCard = Animated.createAnimatedComponent(wrapFunctionComponent(BaseCard))
@@ -34,10 +44,18 @@ export const GasFeeSpeed = ({
     children,
     isBaseFeeRampingUp,
     speedChangeEnabled,
+    delegationToken,
+    setDelegationToken,
+    availableDelegationTokens,
+    isEnoughBalance,
+    hasEnoughBalanceOnAny,
+    isFirstTimeLoadingFees,
+    hasEnoughBalanceOnToken,
 }: PropsWithChildren<Props>) => {
     const { styles } = useThemedStyles(baseStyles)
 
-    const { onClose, onOpen, ref } = useBottomSheetModal()
+    const { onClose: speedBsOnClose, onOpen: speedBsOnOpen, ref: speedBsRef } = useBottomSheetModal()
+    const { onClose: tokenBsOnClose, onOpen: tokenBsOnOpen, ref: tokenBsRef } = useBottomSheetModal()
 
     const [secondsRemaining, setSecondsRemaining] = useState(10)
 
@@ -55,29 +73,51 @@ export const GasFeeSpeed = ({
             layout={LinearTransition.duration(300)}>
             {isGalactica ? (
                 <>
-                    <EditSpeedSection
-                        onOpen={onOpen}
-                        selectedFeeOption={selectedFeeOption}
-                        speedChangeEnabled={speedChangeEnabled}
-                    />
                     <GalacticaEstimation
                         options={options}
                         selectedFeeOption={selectedFeeOption}
                         secondsRemaining={secondsRemaining}
+                        onDelegationTokenClicked={tokenBsOnOpen}
+                        selectedDelegationToken={delegationToken}
+                        isEnoughBalance={isEnoughBalance}
+                        hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
+                        isFirstTimeLoadingFees={isFirstTimeLoadingFees}
+                    />
+                    <EditSpeedSection
+                        onOpen={speedBsOnOpen}
+                        selectedFeeOption={selectedFeeOption}
+                        speedChangeEnabled={speedChangeEnabled}
                     />
                 </>
             ) : (
-                <LegacyEstimation options={options} selectedFeeOption={selectedFeeOption} />
+                <LegacyEstimation
+                    options={options}
+                    selectedFeeOption={selectedFeeOption}
+                    onDelegationTokenClicked={tokenBsOnOpen}
+                    selectedDelegationToken={delegationToken}
+                    isEnoughBalance={isEnoughBalance}
+                    hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
+                    isFirstTimeLoadingFees={isFirstTimeLoadingFees}
+                />
             )}
             {children}
             <GasFeeSpeedBottomSheet
-                ref={ref}
+                ref={speedBsRef}
                 options={options}
                 selectedFeeOption={selectedFeeOption}
                 setSelectedFeeOption={setSelectedFeeOption}
-                onClose={onClose}
+                onClose={speedBsOnClose}
                 isGalactica={isGalactica}
                 isBaseFeeRampingUp={isBaseFeeRampingUp}
+                selectedDelegationToken={delegationToken}
+            />
+            <GasFeeTokenBottomSheet
+                ref={tokenBsRef}
+                availableTokens={availableDelegationTokens}
+                onClose={tokenBsOnClose}
+                selectedToken={delegationToken}
+                setSelectedToken={setDelegationToken}
+                hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}
             />
         </AnimatedBaseCard>
     )

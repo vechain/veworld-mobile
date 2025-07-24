@@ -1,0 +1,97 @@
+{
+  "name": "B3TR_ProposalDeposit",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "ProposalDeposit(indexed address,indexed uint256,uint256)",
+      "alias": "proposalDeposit",
+      "conditions": [
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_GOVERNOR_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    },
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "transferVOT3",
+      "conditions": [
+        {
+          "firstOperand": "to",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_GOVERNOR_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${VOT3_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "proposalDeposit",
+      "firstEventProperty": "amount",
+      "secondEventName": "transferVOT3",
+      "secondEventProperty": "value",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "to",
+      "eventName": "transferVOT3",
+      "businessEventName": "to"
+    },
+    {
+      "name": "from",
+      "eventName": "transferVOT3",
+      "businessEventName": "from"
+    },
+    {
+      "name": "value",
+      "eventName": "transferVOT3",
+      "businessEventName": "value"
+    },
+    {
+      "name": "proposalId",
+      "eventName": "proposalDeposit",
+      "businessEventName": "proposalId"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "proposalId",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
+}

@@ -37,6 +37,7 @@ import {
     SelectLedgerDevice,
     SelectTokenSendScreen,
     SwapScreen,
+    TabsManagerScreen,
     TransactionSummarySendScreen,
     UsernameClaimed,
     WalletDetailScreen,
@@ -119,7 +120,7 @@ export type RootStackParamListHome = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
@@ -128,6 +129,7 @@ export type RootStackParamListHome = {
     [Routes.USERNAME_CLAIMED]: {
         username: string
     }
+    [Routes.DISCOVER_TABS_MANAGER]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -235,6 +237,11 @@ export const HomeStack = () => {
                 <Screen
                     name={Routes.SETTINGS_MANAGE_CUSTOM_NODES}
                     component={ManageCustomNodesScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={Routes.DISCOVER_TABS_MANAGER}
+                    component={TabsManagerScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

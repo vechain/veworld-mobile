@@ -168,31 +168,27 @@ describe("useTransactionScreen", () => {
             resetDelegation: expect.any(Function),
             setSelectedDelegationAccount: expect.any(Function),
             setSelectedDelegationUrl: expect.any(Function),
-            isEnoughGas: false,
-            txCostTotal: "0",
+            isEnoughGas: true,
             isDelegated: false,
             selectedDelegationAccount: undefined,
             selectedDelegationUrl: undefined,
-            vtho: {
-                address: "0x0000000000000000000000000000456e65726779",
-                balance: {
-                    accountAddress: "0xf077b491b355E64048cE21E3A6Fc4751eEeA77fa",
-                    balance: "0",
-                    isCustomToken: false,
-                    tokenAddress: "0x0000000000000000000000000000456e65726779",
-                },
-                custom: false,
-                decimals: 18,
-                icon: icon,
-                name: "Vethor",
-                symbol: "VTHO",
-            },
             isDisabledButtonState: true,
             maxFee: BigNutils("0"),
             estimatedFee: BigNutils("0"),
             isBaseFeeRampingUp: false,
             isGalactica: false,
             speedChangeEnabled: false,
+            selectedDelegationToken: "VTHO",
+            setSelectedDelegationToken: expect.any(Function),
+            fallbackToVTHO: expect.any(Function),
+            availableTokens: ["VTHO"],
+            hasEnoughBalanceOnAny: true,
+            hasEnoughBalanceOnToken: {
+                B3TR: true,
+                VET: true,
+                VTHO: true,
+            },
+            isFirstTimeLoadingFees: true,
         })
     })
 
@@ -417,7 +413,7 @@ describe("useTransactionScreen", () => {
                                 {
                                     data: "0x",
                                     to: "0x435933c8064b4Ae76bE665428e0307eF2cCFBD68",
-                                    value: "300000000000000000000",
+                                    value: "0x1043561a8829300000",
                                 },
                             ],
                             dependsOn: null,
@@ -435,7 +431,3 @@ describe("useTransactionScreen", () => {
         }, 20000)
     })
 })
-
-const icon =
-    // eslint-disable-next-line max-len
-    "data:image/x-icon;base64,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"
