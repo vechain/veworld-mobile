@@ -1,5 +1,6 @@
 import React, { useMemo } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import { StargateAvatar } from "~Assets"
 import { BaseSkeleton, BaseText, BaseView } from "~Components/Base"
 import { VET } from "~Constants"
@@ -9,7 +10,6 @@ import { NftData } from "~Model"
 import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils, BigNutils } from "~Utils"
 import { FiatBalance } from "../FiatBalance"
-import FastImage, { ImageStyle } from "react-native-fast-image"
 
 type Props = {
     isLoading: boolean
@@ -38,11 +38,6 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle }: Props) 
     const fiatBalance = useMemo(() => {
         return BalanceUtils.getFiatBalance(totalLockedVet.toString, vetTokenInfo.exchangeRate ?? 1, VET.decimals)
     }, [totalLockedVet.toString, vetTokenInfo.exchangeRate])
-
-    const formattedFiatBalance = useMemo(() => {
-        return BigNutils(fiatBalance).toTokenFormatFull_string(2, formatLocale)
-    }, [fiatBalance, formatLocale])
-
     return (
         <BaseView style={[styles.container, rootStyle]}>
             <FastImage source={StargateAvatar} style={styles.avatar as ImageStyle} />
@@ -73,7 +68,7 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle }: Props) 
                     <FiatBalance
                         isLoading={vetTokenInfo.exchangeRateLoading || isLoading}
                         isVisible={isBalanceVisible}
-                        balances={[formattedFiatBalance.toString()]}
+                        balances={[fiatBalance]}
                         typographyFont="bodyMedium"
                         color={theme.colors.stakedCard.fiatValue}
                         skeletonHeight={12}
