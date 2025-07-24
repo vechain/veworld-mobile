@@ -958,6 +958,8 @@
   "SIGN_CERTIFICATE_REQUEST_TITLE": "Signera certifikat",
   "SIGN_TRANSACTION": "Signera transaktion",
   "SIGN_TRANSACTION_ERROR": "Fel vid signering av transaktion",
+  "SIGN_TRANSACTION_REQUEST_CTA": "Bekräfta",
+  "SIGN_TRANSACTION_REQUEST_TITLE": "Apptransaktion",
   "STARGATE_CLAIMABLE": "Kan hämtas",
   "STARGATE_LOCKED": "Låst",
   "STARGATE_MANAGE_STAKING": "Hantera ditt insats",

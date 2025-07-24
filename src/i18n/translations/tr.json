@@ -958,6 +958,8 @@
   "SIGN_CERTIFICATE_REQUEST_TITLE": "Sertifikayı imzala",
   "SIGN_TRANSACTION": "İşlemi İmzala",
   "SIGN_TRANSACTION_ERROR": "İşlem imzalanırken hata oluştu",
+  "SIGN_TRANSACTION_REQUEST_CTA": "Onayla",
+  "SIGN_TRANSACTION_REQUEST_TITLE": "Uygulama işlemi",
   "STARGATE_CLAIMABLE": "Talep edilebilir",
   "STARGATE_LOCKED": "Kilitli",
   "STARGATE_MANAGE_STAKING": "Stake yönetiminizi yapın",
