@@ -1,5 +1,5 @@
 import { default as React, useMemo } from "react"
-import { BaseText } from "~Components/Base"
+import { BaseText, BaseView } from "~Components/Base"
 import { DIRECTIONS } from "~Constants"
 import { useFormatFiat } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -31,7 +31,11 @@ export const TokenReceiveOutput = ({ expanded, output }: Props) => {
     )
 
     return (
-        <BaseReceiptOutput expanded={expanded} label={LL.RECEIPT_OUTPUT_TOKEN_RECEIVE()} iconKey="icon-arrow-down">
+        <BaseReceiptOutput
+            expanded={expanded}
+            label={LL.RECEIPT_OUTPUT_TOKEN_RECEIVE()}
+            iconKey="icon-arrow-down"
+            additionalDetails={<BaseView />}>
             <BaseReceiptOutput.ValueMainText>
                 <BaseText>{`${DIRECTIONS.UP} ${amountHuman} ${token?.symbol}`}</BaseText>
             </BaseReceiptOutput.ValueMainText>

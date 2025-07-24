@@ -1,6 +1,6 @@
 import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon } from "~Components/Base"
+import { BaseIcon, BaseView } from "~Components/Base"
 import { COLORS, DIRECTIONS } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -55,7 +55,11 @@ export const NativeB3TRSwap = ({ expanded, output }: Props) => {
     )
 
     return (
-        <BaseReceiptOutput expanded={expanded} label={LL.RECEIPT_OUTPUT_TOKEN_RECEIVE()} iconNode={<NativeSwapIcon />}>
+        <BaseReceiptOutput
+            expanded={expanded}
+            label={LL.RECEIPT_OUTPUT_TOKEN_RECEIVE()}
+            iconNode={<NativeSwapIcon />}
+            additionalDetails={<BaseView />}>
             <BaseReceiptOutput.ValueContainer flexDirection="column" gap={2}>
                 <BaseReceiptOutput.ValueMainText>
                     {`${DIRECTIONS.UP} ${amountInHuman} ${inputTokenSymbol}`}

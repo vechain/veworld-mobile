@@ -1,4 +1,5 @@
 import { default as React } from "react"
+import { BaseView } from "~Components/Base"
 import { useI18nContext } from "~i18n"
 import { ReceiptOutput } from "~Services/AbiService"
 import { BaseReceiptOutput } from "./BaseReceiptOutput"
@@ -11,5 +12,12 @@ type Props = {
 export const ContractCallOutput = ({ expanded }: Props) => {
     const { LL } = useI18nContext()
 
-    return <BaseReceiptOutput expanded={expanded} label={LL.RECEIPT_OUTPUT_CONTRACT_CALL()} iconKey="icon-unlock" />
+    return (
+        <BaseReceiptOutput
+            expanded={expanded}
+            label={LL.RECEIPT_OUTPUT_CONTRACT_CALL()}
+            iconKey="icon-unlock"
+            additionalDetails={<BaseView />}
+        />
+    )
 }
