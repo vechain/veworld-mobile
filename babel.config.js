@@ -43,11 +43,13 @@ module.exports = {
                 },
             },
         ],
+        // Move reanimated plugin to the end and update its configuration
         [
-            // should always come last
             "react-native-reanimated/plugin",
             {
                 globals: ["__scanCodes"],
+                // Add relativeSourceLocation if needed
+                relativeSourceLocation: true,
             },
         ],
     ],
