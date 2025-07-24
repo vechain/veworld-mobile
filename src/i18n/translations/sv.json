@@ -776,6 +776,7 @@
   "RECAP": "Sammanfattning",
   "RECEIPT_OUTPUT_CONTRACT_CALL": "Kontraktsanrop",
   "RECEIPT_OUTPUT_SWAP": "Växla",
+  "RECEIPT_OUTPUT_TOKEN_CONVERSION": "Tokenkonvertering",
   "RECEIPT_OUTPUT_TOKEN_RECEIVE": "Token mottagning",
   "RECEIPT_OUTPUT_TOKEN_SEND": "Token sändning",
   "RECEIVED": "Mottaget",

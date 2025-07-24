@@ -776,6 +776,7 @@
   "RECAP": "Samenvatting",
   "RECEIPT_OUTPUT_CONTRACT_CALL": "Contractoproep",
   "RECEIPT_OUTPUT_SWAP": "Ruilen",
+  "RECEIPT_OUTPUT_TOKEN_CONVERSION": "Tokenconversie",
   "RECEIPT_OUTPUT_TOKEN_RECEIVE": "Token ontvangen",
   "RECEIPT_OUTPUT_TOKEN_SEND": "Token verzenden",
   "RECEIVED": "Ontvangen",

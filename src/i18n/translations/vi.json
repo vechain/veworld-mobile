@@ -776,6 +776,7 @@
   "RECAP": "Tóm tắt",
   "RECEIPT_OUTPUT_CONTRACT_CALL": "Gọi hợp đồng",
   "RECEIPT_OUTPUT_SWAP": "Hoán đổi",
+  "RECEIPT_OUTPUT_TOKEN_CONVERSION": "Chuyển đổi token",
   "RECEIPT_OUTPUT_TOKEN_RECEIVE": "Nhận mã thông báo",
   "RECEIPT_OUTPUT_TOKEN_SEND": "Gửi mã thông báo",
   "RECEIVED": "Đã nhận",

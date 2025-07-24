@@ -776,6 +776,7 @@
   "RECAP": "要約",
   "RECEIPT_OUTPUT_CONTRACT_CALL": "コントラクト呼び出し",
   "RECEIPT_OUTPUT_SWAP": "スワップ",
+  "RECEIPT_OUTPUT_TOKEN_CONVERSION": "トークンの変換",
   "RECEIPT_OUTPUT_TOKEN_RECEIVE": "トークン受信",
   "RECEIPT_OUTPUT_TOKEN_SEND": "トークン送信",
   "RECEIVED": "受け取った",

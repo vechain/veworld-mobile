@@ -776,6 +776,7 @@
   "RECAP": "Récapitulatif",
   "RECEIPT_OUTPUT_CONTRACT_CALL": "Appel de contrat",
   "RECEIPT_OUTPUT_SWAP": "Échange",
+  "RECEIPT_OUTPUT_TOKEN_CONVERSION": "Conversion de jetons",
   "RECEIPT_OUTPUT_TOKEN_RECEIVE": "Réception de jeton",
   "RECEIPT_OUTPUT_TOKEN_SEND": "Envoi de jeton",
   "RECEIVED": "Reçu",

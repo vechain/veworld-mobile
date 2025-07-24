@@ -776,6 +776,7 @@
   "RECAP": "Özet",
   "RECEIPT_OUTPUT_CONTRACT_CALL": "Sözleşme çağrısı",
   "RECEIPT_OUTPUT_SWAP": "Takas",
+  "RECEIPT_OUTPUT_TOKEN_CONVERSION": "Jeton dönüşümü",
   "RECEIPT_OUTPUT_TOKEN_RECEIVE": "Token alma",
   "RECEIPT_OUTPUT_TOKEN_SEND": "Token gönderme",
   "RECEIVED": "Alındı",

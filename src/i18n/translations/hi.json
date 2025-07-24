@@ -776,6 +776,7 @@
   "RECAP": "सारांश",
   "RECEIPT_OUTPUT_CONTRACT_CALL": "अनुबंध कॉल",
   "RECEIPT_OUTPUT_SWAP": "स्वैप",
+  "RECEIPT_OUTPUT_TOKEN_CONVERSION": "टोकन रूपांतरण",
   "RECEIPT_OUTPUT_TOKEN_RECEIVE": "टोकन प्राप्ति",
   "RECEIPT_OUTPUT_TOKEN_SEND": "टोकन भेजें",
   "RECEIVED": "प्राप्त",
