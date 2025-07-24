@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react"
 import { BaseSpacer, CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { StargateBannerClosable } from "~Components/Reusable"
-import { AnalyticsEvent, SCREEN_WIDTH, STARGATE_DAPP_URL } from "~Constants"
+import { AnalyticsEvent, SCREEN_WIDTH, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
 import { useAnalyticTracking } from "~Hooks"
 import {
     selectHideStargateBannerHomeScreen,
@@ -30,7 +30,7 @@ export const BannersCarousel = ({ location }: Props) => {
             {
                 testID: "Stargate_banner",
                 name: "Stargate",
-                href: STARGATE_DAPP_URL,
+                href: STARGATE_DAPP_URL_HOME_BANNER,
                 content: <StargateBannerClosable />,
                 closable: location === "home_screen",
                 closeButtonStyle: {
