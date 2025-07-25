@@ -19,8 +19,8 @@ export const StellaPayBanner = () => {
             angle={90}
             start={{ x: 0.32, y: 0 }}
             end={{ x: 1, y: 0 }}
-            style={styles.container}>
-            <BaseView alignItems={"flex-start"} gap={16} flex={1} justifyContent="center">
+            style={Platform.OS === "ios" ? styles.iosContainer : styles.androidContainer}>
+            <BaseView alignItems={"flex-start"} gap={12} flex={1} justifyContent="center" style={styles.contentArea}>
                 <StellaPayLogoSVG />
                 <Markdown
                     style={{
@@ -39,18 +39,37 @@ export const StellaPayBanner = () => {
 
 const baseStyles = () =>
     StyleSheet.create({
-        container: {
+        androidContainer: {
             minHeight: 108,
             borderRadius: 12,
             paddingHorizontal: 16,
             paddingVertical: 20,
             paddingRight: 140,
         },
+        iosContainer: {
+            width: "110%",
+            height: 130,
+            borderRadius: 12,
+            paddingHorizontal: 20,
+            paddingVertical: 16,
+            alignItems: "flex-start",
+            flexDirection: "row",
+            position: "relative",
+            top: -12,
+            left: -18,
+        },
         image: {
             width: 123,
             height: 123,
             position: "absolute",
-            right: -9,
+            ...(Platform.OS === "ios" && {
+                right: 0,
+                top: 0,
+            }),
+            ...(Platform.OS === "android" && {
+                right: -9,
+                top: 8,
+            }),
             top: 8,
         },
         paragraph: {

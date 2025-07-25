@@ -40,15 +40,17 @@ module.exports = {
                     stream: "stream-browserify",
                     buffer: "@craftzdog/react-native-buffer",
                     "@ethersproject/pbkdf2": "./patches/patch-pbkdf2.js",
-                    url: "react-native-fast-url",
+                    url: "react-native-url-polyfill",
                 },
             },
         ],
+        // Move reanimated plugin to the end and update its configuration
         [
-            // should always come last
             "react-native-reanimated/plugin",
             {
                 globals: ["__scanCodes"],
+                // Add relativeSourceLocation if needed
+                relativeSourceLocation: true,
             },
         ],
     ],

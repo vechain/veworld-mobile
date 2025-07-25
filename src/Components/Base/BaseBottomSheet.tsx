@@ -182,9 +182,11 @@ const _BaseBottomSheet = <TData,>(
     )
 
     const onSheetPositionChange = useCallback(
-        (index: number) => {
+        (index: number, position: number, type: any) => {
             setSheetState(index)
-            onChange?.(index)
+            if (onChange) {
+                onChange(index, position, type)
+            }
         },
         [onChange],
     )

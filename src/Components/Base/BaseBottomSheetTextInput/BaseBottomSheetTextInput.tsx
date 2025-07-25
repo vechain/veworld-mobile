@@ -43,4 +43,3 @@ const BottomSheetTextInputComponent = forwardRef<TextInput, BottomSheetTextInput
 )
 
 export const BaseBottomSheetTextInput = memo(BottomSheetTextInputComponent)
-BaseBottomSheetTextInput.displayName = "BaseBottomSheetTextInput"
