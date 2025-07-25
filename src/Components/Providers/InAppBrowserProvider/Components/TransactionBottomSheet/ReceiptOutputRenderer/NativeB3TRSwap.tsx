@@ -1,22 +1,17 @@
 import { default as React, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseView } from "~Components/Base"
+import { BaseIcon } from "~Components/Base"
 import { COLORS, DIRECTIONS } from "~Constants"
 import { useFormatFiat, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { ReceiptOutput } from "~Services/AbiService"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
-import { BaseReceiptOutput } from "./BaseReceiptOutput"
+import { BaseReceiptOutput, ReceiptOutputProps } from "./BaseReceiptOutput"
 
-type Props = {
-    output: Extract<
-        ReceiptOutput,
-        | { name: "B3TR_Vot3ToB3trSwap(address,address,address,address,uint256,uint256)" }
-        | { name: "B3TR_B3trToVot3Swap(address,address,address,address,uint256,uint256)" }
-    >
-    expanded: boolean
-}
+type Props = ReceiptOutputProps<
+    | "B3TR_Vot3ToB3trSwap(address,address,address,address,uint256,uint256)"
+    | "B3TR_B3trToVot3Swap(address,address,address,address,uint256,uint256)"
+>
 
 const NativeSwapIcon = () => {
     const { styles } = useThemedStyles(baseStyles)
@@ -59,7 +54,7 @@ export const NativeB3TRSwap = ({ expanded, output }: Props) => {
             expanded={expanded}
             label={LL.RECEIPT_OUTPUT_TOKEN_RECEIVE()}
             iconNode={<NativeSwapIcon />}
-            additionalDetails={<BaseView />}>
+            output={output}>
             <BaseReceiptOutput.ValueContainer flexDirection="column" gap={2}>
                 <BaseReceiptOutput.ValueMainText>
                     {`${DIRECTIONS.UP} ${amountInHuman} ${inputTokenSymbol}`}

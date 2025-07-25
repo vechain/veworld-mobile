@@ -1,17 +1,13 @@
 import { default as React, useMemo } from "react"
-import { BaseText, BaseView } from "~Components/Base"
+import { BaseText } from "~Components/Base"
 import { DIRECTIONS } from "~Constants"
 import { useFormatFiat } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { ReceiptOutput } from "~Services/AbiService"
 import { selectAllTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
-import { BaseReceiptOutput } from "./BaseReceiptOutput"
+import { BaseReceiptOutput, ReceiptOutputProps } from "./BaseReceiptOutput"
 
-type Props = {
-    output: Extract<ReceiptOutput, { name: "Transfer(indexed address,indexed address,uint256)" }>
-    expanded: boolean
-}
+type Props = ReceiptOutputProps<"Transfer(indexed address,indexed address,uint256)">
 
 export const TokenReceiveOutput = ({ expanded, output }: Props) => {
     const { LL } = useI18nContext()
@@ -35,7 +31,7 @@ export const TokenReceiveOutput = ({ expanded, output }: Props) => {
             expanded={expanded}
             label={LL.RECEIPT_OUTPUT_TOKEN_RECEIVE()}
             iconKey="icon-arrow-down"
-            additionalDetails={<BaseView />}>
+            output={output}>
             <BaseReceiptOutput.ValueMainText>
                 <BaseText>{`${DIRECTIONS.UP} ${amountHuman} ${token?.symbol}`}</BaseText>
             </BaseReceiptOutput.ValueMainText>

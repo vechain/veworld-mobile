@@ -19,12 +19,9 @@ export const ContractCallOutput = ({ expanded, output, clauses }: Props) => {
             expanded={expanded}
             label={LL.RECEIPT_OUTPUT_CONTRACT_CALL()}
             iconKey="icon-unlock"
+            output={output}
             additionalDetails={
                 <>
-                    <BaseAdditionalDetail
-                        label={LL.ADDITIONAL_DETAIL_CLAUSE()}
-                        value={<BaseAdditionalDetail.StringValue value={`#${output.clauseIndex + 1}`} />}
-                    />
                     <BaseAdditionalDetail
                         label={LL.ADDITIONAL_DETAIL_TO()}
                         value={<BaseAdditionalDetail.HexValue value={clauses[output.clauseIndex].to ?? ""} />}

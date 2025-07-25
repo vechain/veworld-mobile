@@ -3,17 +3,26 @@ import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTextProps, BaseView, BaseViewProps } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
+import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
+import { ReceiptOutput } from "~Services/AbiService"
 import { DappDetails } from "../../DappDetails"
+import { BaseAdditionalDetail } from "./BaseAdditionalDetail"
 
 type IconRendererProps = { iconKey?: IconKey } | { iconNode?: ReactNode }
 type BaseReceiptOutputProps = PropsWithChildren<
     {
         expanded: boolean
         label: string
-        additionalDetails: ReactNode
+        additionalDetails?: ReactNode
+        output: ReceiptOutput
     } & IconRendererProps
 >
+
+export type ReceiptOutputProps<TName extends ReceiptOutput["name"]> = {
+    expanded: boolean
+    output: Extract<ReceiptOutput, { name: TName }>
+}
 
 const IconRenderer = (props: IconRendererProps) => {
     const { theme, styles } = useThemedStyles(baseStyles)
@@ -53,7 +62,15 @@ const ValueSubText = ({ typographyFont = "captionMedium", align = "right", ...pr
     )
 }
 
-const BaseReceiptOutput = ({ expanded, label, children, additionalDetails, ...iconProps }: BaseReceiptOutputProps) => {
+const BaseReceiptOutput = ({
+    expanded,
+    label,
+    children,
+    additionalDetails,
+    output,
+    ...iconProps
+}: BaseReceiptOutputProps) => {
+    const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     return (
         <DappDetails show style={styles.root}>
@@ -68,6 +85,10 @@ const BaseReceiptOutput = ({ expanded, label, children, additionalDetails, ...ic
             </BaseView>
             {expanded && (
                 <BaseView style={styles.additionalDetails} flexDirection="column">
+                    <BaseAdditionalDetail
+                        label={LL.ADDITIONAL_DETAIL_CLAUSE()}
+                        value={<BaseAdditionalDetail.StringValue value={`#${output.clauseIndex + 1}`} />}
+                    />
                     {additionalDetails}
                 </BaseView>
             )}
