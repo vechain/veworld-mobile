@@ -10,6 +10,7 @@ import { B3TRProposalVoteOutput } from "./B3TR/B3TRProposalVoteOutput"
 import { B3TRRoundVoteOutput } from "./B3TR/B3TRRoundVoteOutput"
 import { NativeB3TRSwapOutput } from "./B3TR/NativeB3TRSwapOutput"
 import { ContractCallOutput } from "./ContractCallOutput"
+import { StargateBaseOutput } from "./Stargate/StargateBaseOutput"
 import { NftReceiveOutput } from "./Tokens/NftReceiveOutput"
 import { NftSendOutput } from "./Tokens/NftSendOutput"
 import { SwapOutput } from "./Tokens/SwapOutput"
@@ -53,6 +54,14 @@ export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
         case "VET_FT_Swap(address,address,address,uint256,uint256)":
         case "Token_FTSwap(address,address,address,address,uint256,uint256)":
             return <SwapOutput expanded={expanded} output={output} clause={clause} />
+        case "STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)":
+        case "STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)":
+        case "STARGATE_STAKE(uint256,uint256,uint8,address,bool)":
+        case "STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)":
+        case "STARGATE_DELEGATE(uint256,address,bool)":
+        case "STARGATE_UNDELEGATE(uint256)":
+        case "STARGATE_UNSTAKE(uint256,uint256,uint8,address)":
+            return <StargateBaseOutput expanded={expanded} output={output} clause={clause} />
         default:
             return <ContractCallOutput expanded={expanded} output={output} clause={clause} />
     }

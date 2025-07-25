@@ -3273,6 +3273,34 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
 	/**
+	 * B​a​s​e​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: string
+	/**
+	 * V​E​T​ ​u​n​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​ ​&​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: string
+	/**
+	 * N​o​d​e​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: string
+	/**
+	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: string
+	/**
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
@@ -7835,6 +7863,34 @@ Thanks for your patience!
 	 * Token send
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
+	/**
+	 * Base rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: () => LocalizedString
+	/**
+	 * Delegation rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: () => LocalizedString
+	/**
+	 * VET stake
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: () => LocalizedString
+	/**
+	 * VET unstake
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
+	/**
+	 * VET stake & delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: () => LocalizedString
+	/**
+	 * Node delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: () => LocalizedString
+	/**
+	 * Node undelegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: () => LocalizedString
 	/**
 	 * Received
 	 */
