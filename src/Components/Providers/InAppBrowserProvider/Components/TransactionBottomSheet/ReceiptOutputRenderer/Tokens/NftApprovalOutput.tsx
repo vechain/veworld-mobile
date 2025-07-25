@@ -31,7 +31,7 @@ export const NftApprovalOutput = ({ output, ...props }: Props) => {
     return (
         <BaseReceiptOutput
             label={LL.RECEIPT_OUTPUT_NFT_APPROVE()}
-            iconKey="icon-arrow-down"
+            iconKey="icon-key"
             output={output}
             additionalDetails={
                 <>
