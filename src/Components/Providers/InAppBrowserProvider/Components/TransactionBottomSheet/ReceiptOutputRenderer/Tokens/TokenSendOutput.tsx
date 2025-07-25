@@ -4,8 +4,8 @@ import { useFormatFiat } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectAllTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
-import { BaseAdditionalDetail } from "./BaseAdditionalDetail"
-import { BaseReceiptOutput, ReceiptOutputProps } from "./BaseReceiptOutput"
+import { BaseAdditionalDetail } from "../BaseAdditionalDetail"
+import { BaseReceiptOutput, ReceiptOutputProps } from "../BaseReceiptOutput"
 
 type Props = ReceiptOutputProps<"Transfer(indexed address,indexed address,uint256)">
 

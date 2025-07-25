@@ -10,8 +10,9 @@ import { B3TRProposalVoteOutput } from "./B3TR/B3TRProposalVoteOutput"
 import { B3TRRoundVoteOutput } from "./B3TR/B3TRRoundVoteOutput"
 import { NativeB3TRSwapOutput } from "./B3TR/NativeB3TRSwapOutput"
 import { ContractCallOutput } from "./ContractCallOutput"
-import { TokenReceiveOutput } from "./TokenReceiveOutput"
-import { TokenSendOutput } from "./TokenSendOutput"
+import { SwapOutput } from "./Tokens/SwapOutput"
+import { TokenReceiveOutput } from "./Tokens/TokenReceiveOutput"
+import { TokenSendOutput } from "./Tokens/TokenSendOutput"
 
 type Props = {
     expanded: boolean
@@ -41,6 +42,11 @@ export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
         case "B3TR_ClaimReward(address,address,uint256,uint256)":
         case "B3TR_ClaimReward_V2(address,address,uint256,uint256)":
             return <B3TRClaimRewardsOutput expanded={expanded} output={output} clause={clause} />
+        case "FT_VET_Swap(address,address,address,uint256,uint256)":
+        case "FT_VET_Swap2(address,address,address,uint256,uint256)":
+        case "VET_FT_Swap(address,address,address,uint256,uint256)":
+        case "Token_FTSwap(address,address,address,address,uint256,uint256)":
+            return <SwapOutput expanded={expanded} output={output} clause={clause} />
         default:
             return <ContractCallOutput expanded={expanded} output={output} clause={clause} />
     }
