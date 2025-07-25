@@ -7,7 +7,8 @@ import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
+import { NETWORK_TYPE } from "~Model"
+import { selectFeaturedDapps, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { DappDetails } from "./DappDetails"
 
@@ -47,6 +48,7 @@ export const DappDetailsCard = ({
     const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
     const [showDetails, setShowDetails] = useState(isDefaultVisible)
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const allApps = useAppSelector(selectFeaturedDapps)
 
@@ -58,6 +60,7 @@ export const DappDetailsCard = ({
     }, [showDetails])
 
     const isDapp = useMemo(() => {
+        if (selectedNetwork.type !== NETWORK_TYPE.MAIN) return true
         return Boolean(
             allApps.find(dapp => {
                 const navStateRoot = new URL(url).origin
@@ -65,7 +68,7 @@ export const DappDetailsCard = ({
                 return navStateRoot === dappRoot
             }),
         )
-    }, [allApps, url])
+    }, [allApps, selectedNetwork.type, url])
 
     return (
         <AnimatedBaseView
