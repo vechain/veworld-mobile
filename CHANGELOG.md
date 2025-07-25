@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.2.10 (2025-07-24)</small>
+
+* build: init ([955e4db](https://github.com/vechain/veworld-mobile/commit/955e4db))
+* fix: fix comma + snap of base carousel (#3116) ([812d481](https://github.com/vechain/veworld-mobile/commit/812d481)), closes [#3116](https://github.com/vechain/veworld-mobile/issues/3116)
+
 ## <small>2.2.9 (2025-07-21)</small>
 
 * build: init ([9aed4db](https://github.com/vechain/veworld-mobile/commit/9aed4db))
