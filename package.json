@@ -71,7 +71,7 @@
     "@ethersproject/json-wallets": "5",
     "@expo/config-plugins": "~9.0.0",
     "@ethersproject/shims": "^5.8.0",
-    "@gorhom/bottom-sheet": "5.0.6",
+    "@gorhom/bottom-sheet": "5.1.6",
     "@klarna/react-native-vector-drawable": "^0.5.1",
     "@ledgerhq/react-native-hw-transport-ble": "^6.33.4",
     "@metamask/rpc-errors": "^7.0.0",
