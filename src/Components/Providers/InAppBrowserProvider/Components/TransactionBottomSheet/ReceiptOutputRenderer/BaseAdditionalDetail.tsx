@@ -49,7 +49,7 @@ const BaseAdditionalDetail = ({ label, value }: { label: string; value: ReactNod
             <BaseText typographyFont="smallCaptionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
                 {label}
             </BaseText>
-            {value}
+            {typeof value === "string" ? <StringValue value={value} /> : value}
         </BaseView>
     )
 }

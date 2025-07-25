@@ -4,14 +4,14 @@ import { useFormatFiat } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
-import { BaseReceiptOutput, ReceiptOutputProps } from "./BaseReceiptOutput"
+import { BaseReceiptOutput, ReceiptOutputProps } from "../BaseReceiptOutput"
 
 type Props = ReceiptOutputProps<
     | "B3TR_Vot3ToB3trSwap(address,address,address,address,uint256,uint256)"
     | "B3TR_B3trToVot3Swap(address,address,address,address,uint256,uint256)"
 >
 
-export const NativeB3TRSwap = ({ output, ...props }: Props) => {
+export const NativeB3TRSwapOutput = ({ output, ...props }: Props) => {
     const { LL } = useI18nContext()
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
     const { formatLocale } = useFormatFiat()

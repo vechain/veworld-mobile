@@ -233,10 +233,6 @@ type RootTranslation = {
 	 */
 	ADDITIONAL_DETAIL_CONTRACT_DATA: string
 	/**
-	 * T​o
-	 */
-	ADDITIONAL_DETAIL_TO: string
-	/**
 	 * F​r​o​m
 	 */
 	ADDITIONAL_DETAIL_FROM: string
@@ -248,6 +244,14 @@ type RootTranslation = {
 	 * R​e​c​e​i​v​e​r
 	 */
 	ADDITIONAL_DETAIL_SENDER: string
+	/**
+	 * T​o
+	 */
+	ADDITIONAL_DETAIL_TO: string
+	/**
+	 * A​p​p
+	 */
+	ADDITIONAL_DETAIL_APP: string
 	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
@@ -3236,6 +3240,27 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
 	/**
+	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​#​{​r​o​u​n​d​I​d​}
+	 * @param {number} roundId
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: RequiredParams<'roundId'>
+	/**
+	 * V​o​t​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: string
+	/**
+	 * S​u​p​p​o​r​t​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: string
+	/**
+	 * V​o​t​i​n​g​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: string
+	/**
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
@@ -4799,10 +4824,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ADDITIONAL_DETAIL_CONTRACT_DATA: () => LocalizedString
 	/**
-	 * To
-	 */
-	ADDITIONAL_DETAIL_TO: () => LocalizedString
-	/**
 	 * From
 	 */
 	ADDITIONAL_DETAIL_FROM: () => LocalizedString
@@ -4814,6 +4835,14 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Receiver
 	 */
 	ADDITIONAL_DETAIL_SENDER: () => LocalizedString
+	/**
+	 * To
+	 */
+	ADDITIONAL_DETAIL_TO: () => LocalizedString
+	/**
+	 * App
+	 */
+	ADDITIONAL_DETAIL_APP: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -7762,6 +7791,26 @@ Thanks for your patience!
 	 * Token send
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
+	/**
+	 * VeBetter action
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: () => LocalizedString
+	/**
+	 * Vote on #{roundId}
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: (arg: { roundId: number }) => LocalizedString
+	/**
+	 * Vote on VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: () => LocalizedString
+	/**
+	 * Support VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: () => LocalizedString
+	/**
+	 * Voting rewards
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: () => LocalizedString
 	/**
 	 * Received
 	 */
