@@ -1,5 +1,5 @@
 import { TransactionClause } from "@vechain/sdk-core"
-import { PropsWithChildren, default as React, ReactNode } from "react"
+import { PropsWithChildren, default as React, ReactNode, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTextProps, BaseView, BaseViewProps } from "~Components/Base"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -78,8 +78,12 @@ const BaseReceiptOutput = ({
 }: BaseReceiptOutputProps) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
+    const rootStyles = useMemo(
+        () => [styles.root, !expanded && { justifyContent: "center" as const, height: "100%" as const }],
+        [expanded, styles.root],
+    )
     return (
-        <DappDetails show style={styles.root}>
+        <DappDetails show style={rootStyles} noAnimation>
             <BaseView
                 flexDirection="row"
                 gap={16}

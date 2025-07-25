@@ -45,7 +45,7 @@ const StringValue = ({ value }: { value: string }) => {
 const BaseAdditionalDetail = ({ label, value }: { label: string; value: ReactNode }) => {
     const theme = useTheme()
     return (
-        <BaseView flexDirection="column" gap={4}>
+        <BaseView flexDirection="row" justifyContent="space-between" w={100} gap={4}>
             <BaseText typographyFont="smallCaptionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
                 {label}
             </BaseText>

@@ -53,6 +53,7 @@ const TransactionCarousel = ({
             showPagination
             rootStyle={styles.carouselRoot}
             bottomSheet
+            contentWrapperStyle={styles.contentWrapper}
         />
     )
 }
@@ -100,5 +101,8 @@ const baseStyles = () =>
         carouselRoot: {
             gap: 16,
             marginTop: 16,
+        },
+        contentWrapper: {
+            height: "100%",
         },
     })

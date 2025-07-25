@@ -61,9 +61,16 @@ const NotVerifiedWarning = () => {
     )
 }
 
-type Props = PropsWithChildren<{ show: boolean; style?: StyleProp<ViewStyle> }>
+type Props = PropsWithChildren<{
+    show: boolean
+    style?: StyleProp<ViewStyle>
+    /**
+     * Skip the animated styles
+     */
+    noAnimation?: boolean
+}>
 
-const DappDetails = ({ children, show, style }: Props) => {
+const DappDetails = ({ children, show, style, noAnimation = false }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const animatedStyles = useAnimatedStyle(() => {
         return {
@@ -75,7 +82,7 @@ const DappDetails = ({ children, show, style }: Props) => {
     return (
         <AnimatedBaseView
             layout={LinearTransition.duration(300)}
-            style={[styles.detailsContainer, animatedStyles, style]}
+            style={[styles.detailsContainer, noAnimation ? undefined : animatedStyles, style]}
             flexDirection="column"
             borderRadius={8}>
             {children}
