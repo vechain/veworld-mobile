@@ -44,7 +44,7 @@ export const NativeB3TRSwap = ({ output, ...props }: Props) => {
 
     return (
         <BaseReceiptOutput
-            label={LL.RECEIPT_OUTPUT_TOKEN_RECEIVE()}
+            label={LL.RECEIPT_OUTPUT_TOKEN_CONVERSION()}
             iconKey="icon-convert"
             iconBg={COLORS.B3TR_ICON_BACKGROUND}
             iconColor={COLORS.GREY_700}
