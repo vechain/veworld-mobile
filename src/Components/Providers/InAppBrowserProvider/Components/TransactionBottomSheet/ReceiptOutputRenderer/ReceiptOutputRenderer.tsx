@@ -10,6 +10,8 @@ import { B3TRProposalVoteOutput } from "./B3TR/B3TRProposalVoteOutput"
 import { B3TRRoundVoteOutput } from "./B3TR/B3TRRoundVoteOutput"
 import { NativeB3TRSwapOutput } from "./B3TR/NativeB3TRSwapOutput"
 import { ContractCallOutput } from "./ContractCallOutput"
+import { NftReceiveOutput } from "./Tokens/NftReceiveOutput"
+import { NftSendOutput } from "./Tokens/NftSendOutput"
 import { SwapOutput } from "./Tokens/SwapOutput"
 import { TokenReceiveOutput } from "./Tokens/TokenReceiveOutput"
 import { TokenSendOutput } from "./Tokens/TokenSendOutput"
@@ -28,6 +30,10 @@ export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
             if (AddressUtils.compareAddresses(output.params.from, selectedAccount.address))
                 return <TokenSendOutput expanded={expanded} output={output} clause={clause} />
             return <TokenReceiveOutput expanded={expanded} output={output} clause={clause} />
+        case "Transfer(indexed address,indexed address,indexed uint256)":
+            if (AddressUtils.compareAddresses(output.params.from, selectedAccount.address))
+                return <NftSendOutput expanded={expanded} output={output} clause={clause} />
+            return <NftReceiveOutput expanded={expanded} output={output} clause={clause} />
         case "B3TR_B3trToVot3Swap(address,address,address,address,uint256,uint256)":
         case "B3TR_Vot3ToB3trSwap(address,address,address,address,uint256,uint256)":
             return <NativeB3TRSwapOutput expanded={expanded} output={output} clause={clause} />

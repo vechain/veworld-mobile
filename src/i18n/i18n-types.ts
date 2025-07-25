@@ -225,6 +225,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
+	 * A​p​p
+	 */
+	ADDITIONAL_DETAIL_APP: string
+	/**
 	 * C​l​a​u​s​e
 	 */
 	ADDITIONAL_DETAIL_CLAUSE: string
@@ -249,9 +253,9 @@ type RootTranslation = {
 	 */
 	ADDITIONAL_DETAIL_TO: string
 	/**
-	 * A​p​p
+	 * T​o​k​e​n​ ​I​D
 	 */
-	ADDITIONAL_DETAIL_APP: string
+	ADDITIONAL_DETAIL_TOKEN_ID: string
 	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
@@ -3220,9 +3224,30 @@ type RootTranslation = {
 	 */
 	RECAP: string
 	/**
+	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: string
+	/**
+	 * V​o​t​i​n​g​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
 	 */
 	RECEIPT_OUTPUT_CONTRACT_CALL: string
+	/**
+	 * S​u​p​p​o​r​t​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​#​{​r​o​u​n​d​I​d​}
+	 * @param {number} roundId
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: RequiredParams<'roundId'>
 	/**
 	 * S​w​a​p
 	 */
@@ -3236,30 +3261,17 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_TOKEN_RECEIVE: string
 	/**
+	 * N​F​T​ ​r​e​c​e​i​v​e
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: string
+	/**
+	 * N​F​T​ ​s​e​n​d
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: string
+	/**
 	 * T​o​k​e​n​ ​s​e​n​d
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
-	/**
-	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n
-	 */
-	RECEIPT_OUTPUT_B3TR_ACTION: string
-	/**
-	 * V​o​t​e​ ​o​n​ ​#​{​r​o​u​n​d​I​d​}
-	 * @param {number} roundId
-	 */
-	RECEIPT_OUTPUT_ROUND_VOTE: RequiredParams<'roundId'>
-	/**
-	 * V​o​t​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
-	 */
-	RECEIPT_OUTPUT_PROPOSAL_VOTE: string
-	/**
-	 * S​u​p​p​o​r​t​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
-	 */
-	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: string
-	/**
-	 * V​o​t​i​n​g​ ​r​e​w​a​r​d​s
-	 */
-	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: string
 	/**
 	 * R​e​c​e​i​v​e​d
 	 */
@@ -4816,6 +4828,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
 	/**
+	 * App
+	 */
+	ADDITIONAL_DETAIL_APP: () => LocalizedString
+	/**
 	 * Clause
 	 */
 	ADDITIONAL_DETAIL_CLAUSE: () => LocalizedString
@@ -4840,9 +4856,9 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ADDITIONAL_DETAIL_TO: () => LocalizedString
 	/**
-	 * App
+	 * Token ID
 	 */
-	ADDITIONAL_DETAIL_APP: () => LocalizedString
+	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -7772,9 +7788,29 @@ Thanks for your patience!
 	 */
 	RECAP: () => LocalizedString
 	/**
+	 * VeBetter action
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: () => LocalizedString
+	/**
+	 * Voting rewards
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: () => LocalizedString
+	/**
 	 * Contract call
 	 */
 	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
+	/**
+	 * Support VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: () => LocalizedString
+	/**
+	 * Vote on VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: () => LocalizedString
+	/**
+	 * Vote on #{roundId}
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: (arg: { roundId: number }) => LocalizedString
 	/**
 	 * Swap
 	 */
@@ -7788,29 +7824,17 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_TOKEN_RECEIVE: () => LocalizedString
 	/**
+	 * NFT receive
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: () => LocalizedString
+	/**
+	 * NFT send
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: () => LocalizedString
+	/**
 	 * Token send
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
-	/**
-	 * VeBetter action
-	 */
-	RECEIPT_OUTPUT_B3TR_ACTION: () => LocalizedString
-	/**
-	 * Vote on #{roundId}
-	 */
-	RECEIPT_OUTPUT_ROUND_VOTE: (arg: { roundId: number }) => LocalizedString
-	/**
-	 * Vote on VeBetterDAO proposal
-	 */
-	RECEIPT_OUTPUT_PROPOSAL_VOTE: () => LocalizedString
-	/**
-	 * Support VeBetterDAO proposal
-	 */
-	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: () => LocalizedString
-	/**
-	 * Voting rewards
-	 */
-	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: () => LocalizedString
 	/**
 	 * Received
 	 */
