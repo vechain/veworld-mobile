@@ -39,4 +39,8 @@ export type ReceiptOutput = {
               amount: bigint
           }
       }
+    | {
+          name: "___INTERNAL_UNKNOWN___"
+          params: {}
+      }
 )
