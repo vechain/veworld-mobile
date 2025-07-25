@@ -8,7 +8,7 @@ on:
 jobs:
     build-e2e-ios:
         name: Build & Test iOS
-        runs-on: macos-15
+        runs-on: macos-latest-xlarge
         environment: ios-release
         outputs:
             resultUrl: ${{ steps.test-result.outputs.resultUrl }}
