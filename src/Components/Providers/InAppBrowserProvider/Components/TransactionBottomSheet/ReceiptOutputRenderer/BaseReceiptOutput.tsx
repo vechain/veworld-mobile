@@ -114,7 +114,16 @@ const BaseReceiptOutput = ({
                         label={LL.ADDITIONAL_DETAIL_CONTRACT_DATA()}
                         value={<BaseAdditionalDetail.HexValue value={clause.data ?? "0x"} />}
                     />
+
                     {additionalDetails}
+
+                    {clause.comment && (
+                        <BaseAdditionalDetail
+                            label={LL.ADDITIONAL_DETAIL_MESSAGE()}
+                            direction="column"
+                            value={<BaseAdditionalDetail.StringValue value={clause.comment} numberOfLines={3} />}
+                        />
+                    )}
                 </BaseView>
             )}
         </DappDetails>

@@ -77,7 +77,11 @@ export const useTransactionScreen = ({
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const clauses = useMemo(() => {
-        return _clauses.map(clause => ({ ...clause, value: `0x${BigNutils(clause.value || 0).toHex}` }))
+        return _clauses.map(clause => ({
+            value: `0x${BigNutils(clause.value || 0).toHex}`,
+            data: clause.data,
+            to: clause.to,
+        }))
     }, [_clauses])
 
     const [loading, setLoading] = useState(false)

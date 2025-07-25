@@ -225,6 +225,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
+	 * A​L​L
+	 */
+	ADDITIONAL_DETAIL_ALL: string
+	/**
 	 * A​p​p
 	 */
 	ADDITIONAL_DETAIL_APP: string
@@ -261,9 +265,9 @@ type RootTranslation = {
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: string
 	/**
-	 * A​L​L
+	 * M​e​s​s​a​g​e
 	 */
-	ADDITIONAL_DETAIL_ALL: string
+	ADDITIONAL_DETAIL_MESSAGE: string
 	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
@@ -3244,6 +3248,10 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_CONTRACT_CALL: string
 	/**
+	 * N​F​T​ ​a​p​p​r​o​v​a​l
+	 */
+	RECEIPT_OUTPUT_NFT_APPROVE: string
+	/**
 	 * N​F​T​ ​r​e​c​e​i​v​e
 	 */
 	RECEIPT_OUTPUT_NFT_RECEIVE: string
@@ -3297,6 +3305,10 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_SWAP: string
 	/**
+	 * T​o​k​e​n​ ​a​p​p​r​o​v​a​l
+	 */
+	RECEIPT_OUTPUT_TOKEN_APPROVE: string
+	/**
 	 * T​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n
 	 */
 	RECEIPT_OUTPUT_TOKEN_CONVERSION: string
@@ -3308,14 +3320,6 @@ type RootTranslation = {
 	 * T​o​k​e​n​ ​s​e​n​d
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
-	/**
-	 * T​o​k​e​n​ ​a​p​p​r​o​v​a​l
-	 */
-	RECEIPT_OUTPUT_TOKEN_APPROVE: string
-	/**
-	 * N​F​T​ ​a​p​p​r​o​v​a​l
-	 */
-	RECEIPT_OUTPUT_NFT_APPROVE: string
 	/**
 	 * R​e​c​e​i​v​e​d
 	 */
@@ -4872,6 +4876,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
 	/**
+	 * ALL
+	 */
+	ADDITIONAL_DETAIL_ALL: () => LocalizedString
+	/**
 	 * App
 	 */
 	ADDITIONAL_DETAIL_APP: () => LocalizedString
@@ -4908,9 +4916,9 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
 	/**
-	 * ALL
+	 * Message
 	 */
-	ADDITIONAL_DETAIL_ALL: () => LocalizedString
+	ADDITIONAL_DETAIL_MESSAGE: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -7852,6 +7860,10 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
 	/**
+	 * NFT approval
+	 */
+	RECEIPT_OUTPUT_NFT_APPROVE: () => LocalizedString
+	/**
 	 * NFT receive
 	 */
 	RECEIPT_OUTPUT_NFT_RECEIVE: () => LocalizedString
@@ -7904,6 +7916,10 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_SWAP: () => LocalizedString
 	/**
+	 * Token approval
+	 */
+	RECEIPT_OUTPUT_TOKEN_APPROVE: () => LocalizedString
+	/**
 	 * Token conversion
 	 */
 	RECEIPT_OUTPUT_TOKEN_CONVERSION: () => LocalizedString
@@ -7915,14 +7931,6 @@ Thanks for your patience!
 	 * Token send
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
-	/**
-	 * Token approval
-	 */
-	RECEIPT_OUTPUT_TOKEN_APPROVE: () => LocalizedString
-	/**
-	 * NFT approval
-	 */
-	RECEIPT_OUTPUT_NFT_APPROVE: () => LocalizedString
 	/**
 	 * Received
 	 */

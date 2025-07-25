@@ -1,6 +1,6 @@
-import React, { ReactNode } from "react"
+import React, { ReactNode, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseButton, BaseIcon, BaseText, BaseView } from "~Components/Base"
+import { BaseButton, BaseIcon, BaseText, BaseTextProps, BaseView, BaseViewProps } from "~Components/Base"
 import { COLORS } from "~Constants"
 import { useCopyClipboard, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -17,6 +17,7 @@ const HexValue = ({ value }: { value: string }) => {
             variant="ghost"
             size="sm"
             px={0}
+            py={0}
             typographyFont="captionMedium"
             title={AddressUtils.humanAddress(value)}
             action={() => onCopyToClipboard(value, LL.COMMON_LBL_ADDRESS())}
@@ -32,20 +33,39 @@ const HexValue = ({ value }: { value: string }) => {
     )
 }
 
-const StringValue = ({ value }: { value: string }) => {
+const StringValue = ({
+    value,
+    ...props
+}: { value: string } & Omit<BaseTextProps, "children" | "color" | "typographyFont">) => {
     const theme = useTheme()
 
     return (
-        <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}>
+        <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800} {...props}>
             {value}
         </BaseText>
     )
 }
 
-const BaseAdditionalDetail = ({ label, value }: { label: string; value: ReactNode }) => {
+const BaseAdditionalDetail = ({
+    label,
+    value,
+    direction = "row",
+}: {
+    label: string
+    value: ReactNode
+    direction?: "row" | "column"
+}) => {
     const theme = useTheme()
+    const props = useMemo((): BaseViewProps => {
+        switch (direction) {
+            case "row":
+                return { flexDirection: "row", justifyContent: "space-between", gap: 32 }
+            case "column":
+                return { flexDirection: "column", gap: 4 }
+        }
+    }, [direction])
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" w={100} gap={4}>
+        <BaseView w={100} {...props}>
             <BaseText typographyFont="smallCaptionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
                 {label}
             </BaseText>

@@ -81,6 +81,7 @@ export const TransactionBottomSheetContent = ({
             to: clause.to,
             value: clause.value,
             data: clause.data || "0x",
+            comment: clause.comment,
         }))
     }, [request.message])
 
