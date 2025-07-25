@@ -225,6 +225,30 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
+	 * C​l​a​u​s​e
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: string
+	/**
+	 * T​o
+	 */
+	ADDITIONAL_DETAIL_TO: string
+	/**
+	 * F​r​o​m
+	 */
+	ADDITIONAL_DETAIL_FROM: string
+	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	ADDITIONAL_DETAIL_RECEIVER: string
+	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	ADDITIONAL_DETAIL_SENDER: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -3212,18 +3236,6 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
 	/**
-	 * T​o
-	 */
-	ADDITIONAL_DETAIL_TO: string
-	/**
-	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
-	 */
-	ADDITIONAL_DETAIL_CONTRACT_DATA: string
-	/**
-	 * C​l​a​u​s​e
-	 */
-	ADDITIONAL_DETAIL_CLAUSE: string
-	/**
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
@@ -4778,6 +4790,30 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Transfer
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
+	/**
+	 * Clause
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: () => LocalizedString
+	/**
+	 * Contract data
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: () => LocalizedString
+	/**
+	 * To
+	 */
+	ADDITIONAL_DETAIL_TO: () => LocalizedString
+	/**
+	 * From
+	 */
+	ADDITIONAL_DETAIL_FROM: () => LocalizedString
+	/**
+	 * Receiver
+	 */
+	ADDITIONAL_DETAIL_RECEIVER: () => LocalizedString
+	/**
+	 * Receiver
+	 */
+	ADDITIONAL_DETAIL_SENDER: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -7726,18 +7762,6 @@ Thanks for your patience!
 	 * Token send
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
-	/**
-	 * To
-	 */
-	ADDITIONAL_DETAIL_TO: () => LocalizedString
-	/**
-	 * Contract data
-	 */
-	ADDITIONAL_DETAIL_CONTRACT_DATA: () => LocalizedString
-	/**
-	 * Clause
-	 */
-	ADDITIONAL_DETAIL_CLAUSE: () => LocalizedString
 	/**
 	 * Received
 	 */

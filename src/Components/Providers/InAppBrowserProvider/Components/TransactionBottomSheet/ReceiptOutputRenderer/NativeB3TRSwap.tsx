@@ -1,8 +1,6 @@
 import { default as React, useMemo } from "react"
-import { StyleSheet } from "react-native"
-import { BaseIcon } from "~Components/Base"
 import { COLORS, DIRECTIONS } from "~Constants"
-import { useFormatFiat, useThemedStyles } from "~Hooks"
+import { useFormatFiat } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectNetworkVBDTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
@@ -13,12 +11,7 @@ type Props = ReceiptOutputProps<
     | "B3TR_B3trToVot3Swap(address,address,address,address,uint256,uint256)"
 >
 
-const NativeSwapIcon = () => {
-    const { styles } = useThemedStyles(baseStyles)
-    return <BaseIcon name="icon-convert" size={12} style={styles.icon} color={COLORS.GREY_700} />
-}
-
-export const NativeB3TRSwap = ({ expanded, output }: Props) => {
+export const NativeB3TRSwap = ({ output, ...props }: Props) => {
     const { LL } = useI18nContext()
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
     const { formatLocale } = useFormatFiat()
@@ -51,10 +44,12 @@ export const NativeB3TRSwap = ({ expanded, output }: Props) => {
 
     return (
         <BaseReceiptOutput
-            expanded={expanded}
             label={LL.RECEIPT_OUTPUT_TOKEN_RECEIVE()}
-            iconNode={<NativeSwapIcon />}
-            output={output}>
+            iconKey="icon-convert"
+            iconBg={COLORS.B3TR_ICON_BACKGROUND}
+            iconColor={COLORS.GREY_700}
+            output={output}
+            {...props}>
             <BaseReceiptOutput.ValueContainer flexDirection="column" gap={2}>
                 <BaseReceiptOutput.ValueMainText>
                     {`${DIRECTIONS.UP} ${amountInHuman} ${inputTokenSymbol}`}
@@ -66,11 +61,3 @@ export const NativeB3TRSwap = ({ expanded, output }: Props) => {
         </BaseReceiptOutput>
     )
 }
-
-const baseStyles = () =>
-    StyleSheet.create({
-        icon: {
-            backgroundColor: COLORS.B3TR_ICON_BACKGROUND,
-            padding: 6,
-        },
-    })

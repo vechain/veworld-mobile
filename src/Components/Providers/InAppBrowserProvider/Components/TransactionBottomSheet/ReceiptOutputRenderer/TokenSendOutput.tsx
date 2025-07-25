@@ -4,11 +4,12 @@ import { useFormatFiat } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { selectAllTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
+import { BaseAdditionalDetail } from "./BaseAdditionalDetail"
 import { BaseReceiptOutput, ReceiptOutputProps } from "./BaseReceiptOutput"
 
 type Props = ReceiptOutputProps<"Transfer(indexed address,indexed address,uint256)">
 
-export const TokenSendOutput = ({ expanded, output }: Props) => {
+export const TokenSendOutput = ({ output, ...props }: Props) => {
     const { LL } = useI18nContext()
     const tokens = useAppSelector(selectAllTokens)
     const token = useMemo(
@@ -27,10 +28,16 @@ export const TokenSendOutput = ({ expanded, output }: Props) => {
 
     return (
         <BaseReceiptOutput
-            expanded={expanded}
             label={LL.RECEIPT_OUTPUT_TOKEN_SEND()}
             iconKey="icon-arrow-up"
-            output={output}>
+            output={output}
+            additionalDetails={
+                <BaseAdditionalDetail
+                    label={LL.ADDITIONAL_DETAIL_RECEIVER()}
+                    value={<BaseAdditionalDetail.HexValue value={output.params.to} />}
+                />
+            }
+            {...props}>
             <BaseReceiptOutput.ValueContainer>
                 <BaseReceiptOutput.ValueMainText>
                     {`${DIRECTIONS.DOWN} ${amountHuman} ${token?.symbol}`}

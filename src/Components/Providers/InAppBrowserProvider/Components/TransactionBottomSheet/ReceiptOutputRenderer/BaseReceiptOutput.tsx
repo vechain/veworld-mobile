@@ -1,3 +1,4 @@
+import { TransactionClause } from "@vechain/sdk-core"
 import { PropsWithChildren, default as React, ReactNode } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTextProps, BaseView, BaseViewProps } from "~Components/Base"
@@ -9,19 +10,22 @@ import { ReceiptOutput } from "~Services/AbiService"
 import { DappDetails } from "../../DappDetails"
 import { BaseAdditionalDetail } from "./BaseAdditionalDetail"
 
-type IconRendererProps = { iconKey?: IconKey } | { iconNode?: ReactNode }
+type IconRendererProps = { iconKey?: IconKey; iconColor?: string; iconBg?: string } | { iconNode?: ReactNode }
 type BaseReceiptOutputProps = PropsWithChildren<
     {
         expanded: boolean
         label: string
+        labelColor?: string
         additionalDetails?: ReactNode
         output: ReceiptOutput
+        clause: TransactionClause
     } & IconRendererProps
 >
 
 export type ReceiptOutputProps<TName extends ReceiptOutput["name"]> = {
     expanded: boolean
     output: Extract<ReceiptOutput, { name: TName }>
+    clause: TransactionClause
 }
 
 const IconRenderer = (props: IconRendererProps) => {
@@ -30,9 +34,9 @@ const IconRenderer = (props: IconRendererProps) => {
     if ("iconKey" in props && props.iconKey)
         return (
             <BaseIcon
-                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                color={props.iconColor ?? (theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600)}
                 name={props.iconKey}
-                style={styles.icon}
+                style={[styles.icon, props.iconBg && { backgroundColor: props.iconBg }]}
                 size={12}
             />
         )
@@ -65,19 +69,28 @@ const ValueSubText = ({ typographyFont = "captionMedium", align = "right", ...pr
 const BaseReceiptOutput = ({
     expanded,
     label,
+    labelColor,
     children,
     additionalDetails,
     output,
+    clause,
     ...iconProps
 }: BaseReceiptOutputProps) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     return (
         <DappDetails show style={styles.root}>
-            <BaseView flexDirection="row" gap={16} justifyContent="space-between" alignItems="center" pb={16}>
+            <BaseView
+                flexDirection="row"
+                gap={16}
+                justifyContent="space-between"
+                alignItems="center"
+                pb={expanded ? 16 : 0}>
                 <BaseView flexDirection="row" gap={12} flex={1}>
                     <IconRenderer {...iconProps} />
-                    <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
+                    <BaseText
+                        typographyFont="captionMedium"
+                        color={labelColor ?? (theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600)}>
                         {label}
                     </BaseText>
                 </BaseView>
@@ -88,6 +101,14 @@ const BaseReceiptOutput = ({
                     <BaseAdditionalDetail
                         label={LL.ADDITIONAL_DETAIL_CLAUSE()}
                         value={<BaseAdditionalDetail.StringValue value={`#${output.clauseIndex + 1}`} />}
+                    />
+                    <BaseAdditionalDetail
+                        label={LL.ADDITIONAL_DETAIL_TO()}
+                        value={<BaseAdditionalDetail.HexValue value={clause.to ?? ""} />}
+                    />
+                    <BaseAdditionalDetail
+                        label={LL.ADDITIONAL_DETAIL_CONTRACT_DATA()}
+                        value={<BaseAdditionalDetail.HexValue value={clause.data ?? "0x"} />}
                     />
                     {additionalDetails}
                 </BaseView>
@@ -107,7 +128,7 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopWidth: 1,
             borderTopColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_100,
             gap: 12,
-            paddingVertical: 16,
+            paddingTop: 16,
         },
         icon: {
             backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_100,
