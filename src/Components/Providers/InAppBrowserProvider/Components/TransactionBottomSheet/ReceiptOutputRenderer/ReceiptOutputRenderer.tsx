@@ -11,9 +11,11 @@ import { B3TRRoundVoteOutput } from "./B3TR/B3TRRoundVoteOutput"
 import { NativeB3TRSwapOutput } from "./B3TR/NativeB3TRSwapOutput"
 import { ContractCallOutput } from "./ContractCallOutput"
 import { StargateBaseOutput } from "./Stargate/StargateBaseOutput"
+import { NftApprovalOutput } from "./Tokens/NftApprovalOutput"
 import { NftReceiveOutput } from "./Tokens/NftReceiveOutput"
 import { NftSendOutput } from "./Tokens/NftSendOutput"
 import { SwapOutput } from "./Tokens/SwapOutput"
+import { TokenApprovalOutput } from "./Tokens/TokenApprovalOutput"
 import { TokenReceiveOutput } from "./Tokens/TokenReceiveOutput"
 import { TokenSendOutput } from "./Tokens/TokenSendOutput"
 
@@ -62,6 +64,11 @@ export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
         case "STARGATE_UNDELEGATE(uint256)":
         case "STARGATE_UNSTAKE(uint256,uint256,uint8,address)":
             return <StargateBaseOutput expanded={expanded} output={output} clause={clause} />
+        case "Approval(indexed address,indexed address,uint256)":
+            return <TokenApprovalOutput expanded={expanded} output={output} clause={clause} />
+        case "Approval(indexed address,indexed address,indexed uint256)":
+        case "ApprovalForAll(indexed address,indexed address,bool)":
+            return <NftApprovalOutput expanded={expanded} output={output} clause={clause} />
         default:
             return <ContractCallOutput expanded={expanded} output={output} clause={clause} />
     }

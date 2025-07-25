@@ -6,29 +6,11 @@ import { BaseCarousel } from "./BaseCarousel"
 
 type Props = {
     /**
-     * Padding on the left and right.
-     * @default 16
-     */
-    padding?: number
-    /**
      * Base width.
      * @default SCREEN_WIDTH
      */
     baseWidth?: number
-} & Pick<
-    ComponentProps<typeof BaseCarousel>,
-    | "data"
-    | "paginationAlignment"
-    | "showPagination"
-    | "onSlidePress"
-    | "onSlidePressActivation"
-    | "contentWrapperStyle"
-    | "testID"
-    | "itemHeight"
-    | "gap"
-    | "rootStyle"
-    | "bottomSheet"
->
+} & Omit<ComponentProps<typeof BaseCarousel>, "w" | "snapOffsets">
 
 export const FullscreenBaseCarousel = ({
     padding = 16,

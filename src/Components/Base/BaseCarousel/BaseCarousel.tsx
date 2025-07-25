@@ -80,6 +80,11 @@ type Props = {
      * @default false
      */
     bottomSheet?: boolean
+    /**
+     * Force the snap behaviour. This property, due to unknown reasons, works only on Android.
+     * @default true
+     */
+    forceSnap?: boolean
 }
 
 export const BaseCarousel = ({
@@ -99,6 +104,7 @@ export const BaseCarousel = ({
     snapOffsets,
     itemHeight,
     bottomSheet,
+    forceSnap = true,
 }: Props) => {
     const [page, setPage] = useState(0)
 
@@ -186,7 +192,7 @@ export const BaseCarousel = ({
                 snapToOffsets={offsets}
                 snapToEnd={false}
                 snapToStart={false}
-                disableIntervalMomentum
+                disableIntervalMomentum={forceSnap}
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 viewabilityConfig={{ itemVisiblePercentThreshold: 100 }}
                 onViewableItemsChanged={onViewableItemsChanged}

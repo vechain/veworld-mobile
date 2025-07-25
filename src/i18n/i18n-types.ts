@@ -249,6 +249,10 @@ type RootTranslation = {
 	 */
 	ADDITIONAL_DETAIL_SENDER: string
 	/**
+	 * S​p​e​n​d​e​r
+	 */
+	ADDITIONAL_DETAIL_SPENDER: string
+	/**
 	 * T​o
 	 */
 	ADDITIONAL_DETAIL_TO: string
@@ -256,6 +260,10 @@ type RootTranslation = {
 	 * T​o​k​e​n​ ​I​D
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: string
+	/**
+	 * A​L​L
+	 */
+	ADDITIONAL_DETAIL_ALL: string
 	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
@@ -3236,6 +3244,14 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_CONTRACT_CALL: string
 	/**
+	 * N​F​T​ ​r​e​c​e​i​v​e
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: string
+	/**
+	 * N​F​T​ ​s​e​n​d
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: string
+	/**
 	 * S​u​p​p​o​r​t​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
 	 */
 	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: string
@@ -3249,6 +3265,34 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_ROUND_VOTE: RequiredParams<'roundId'>
 	/**
+	 * B​a​s​e​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: string
+	/**
+	 * N​o​d​e​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​ ​&​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: string
+	/**
+	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: string
+	/**
+	 * V​E​T​ ​u​n​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
+	/**
 	 * S​w​a​p
 	 */
 	RECEIPT_OUTPUT_SWAP: string
@@ -3261,45 +3305,17 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_TOKEN_RECEIVE: string
 	/**
-	 * N​F​T​ ​r​e​c​e​i​v​e
-	 */
-	RECEIPT_OUTPUT_NFT_RECEIVE: string
-	/**
-	 * N​F​T​ ​s​e​n​d
-	 */
-	RECEIPT_OUTPUT_NFT_SEND: string
-	/**
 	 * T​o​k​e​n​ ​s​e​n​d
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
 	/**
-	 * B​a​s​e​ ​r​e​w​a​r​d​s
+	 * T​o​k​e​n​ ​a​p​p​r​o​v​a​l
 	 */
-	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: string
+	RECEIPT_OUTPUT_TOKEN_APPROVE: string
 	/**
-	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​w​a​r​d​s
+	 * N​F​T​ ​a​p​p​r​o​v​a​l
 	 */
-	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: string
-	/**
-	 * V​E​T​ ​s​t​a​k​e
-	 */
-	RECEIPT_OUTPUT_STARGATE_STAKE: string
-	/**
-	 * V​E​T​ ​u​n​s​t​a​k​e
-	 */
-	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
-	/**
-	 * V​E​T​ ​s​t​a​k​e​ ​&​ ​d​e​l​e​g​a​t​e
-	 */
-	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: string
-	/**
-	 * N​o​d​e​ ​d​e​l​e​g​a​t​e
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATE: string
-	/**
-	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e
-	 */
-	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: string
+	RECEIPT_OUTPUT_NFT_APPROVE: string
 	/**
 	 * R​e​c​e​i​v​e​d
 	 */
@@ -4880,6 +4896,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ADDITIONAL_DETAIL_SENDER: () => LocalizedString
 	/**
+	 * Spender
+	 */
+	ADDITIONAL_DETAIL_SPENDER: () => LocalizedString
+	/**
 	 * To
 	 */
 	ADDITIONAL_DETAIL_TO: () => LocalizedString
@@ -4887,6 +4907,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Token ID
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
+	/**
+	 * ALL
+	 */
+	ADDITIONAL_DETAIL_ALL: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -7828,6 +7852,14 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
 	/**
+	 * NFT receive
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: () => LocalizedString
+	/**
+	 * NFT send
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: () => LocalizedString
+	/**
 	 * Support VeBetterDAO proposal
 	 */
 	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: () => LocalizedString
@@ -7839,6 +7871,34 @@ Thanks for your patience!
 	 * Vote on #{roundId}
 	 */
 	RECEIPT_OUTPUT_ROUND_VOTE: (arg: { roundId: number }) => LocalizedString
+	/**
+	 * Base rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: () => LocalizedString
+	/**
+	 * Delegation rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: () => LocalizedString
+	/**
+	 * Node delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: () => LocalizedString
+	/**
+	 * VET stake
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: () => LocalizedString
+	/**
+	 * VET stake & delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: () => LocalizedString
+	/**
+	 * Node undelegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: () => LocalizedString
+	/**
+	 * VET unstake
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
 	/**
 	 * Swap
 	 */
@@ -7852,45 +7912,17 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_TOKEN_RECEIVE: () => LocalizedString
 	/**
-	 * NFT receive
-	 */
-	RECEIPT_OUTPUT_NFT_RECEIVE: () => LocalizedString
-	/**
-	 * NFT send
-	 */
-	RECEIPT_OUTPUT_NFT_SEND: () => LocalizedString
-	/**
 	 * Token send
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
 	/**
-	 * Base rewards
+	 * Token approval
 	 */
-	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: () => LocalizedString
+	RECEIPT_OUTPUT_TOKEN_APPROVE: () => LocalizedString
 	/**
-	 * Delegation rewards
+	 * NFT approval
 	 */
-	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: () => LocalizedString
-	/**
-	 * VET stake
-	 */
-	RECEIPT_OUTPUT_STARGATE_STAKE: () => LocalizedString
-	/**
-	 * VET unstake
-	 */
-	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
-	/**
-	 * VET stake & delegate
-	 */
-	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: () => LocalizedString
-	/**
-	 * Node delegate
-	 */
-	RECEIPT_OUTPUT_STARGATE_DELEGATE: () => LocalizedString
-	/**
-	 * Node undelegate
-	 */
-	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: () => LocalizedString
+	RECEIPT_OUTPUT_NFT_APPROVE: () => LocalizedString
 	/**
 	 * Received
 	 */
