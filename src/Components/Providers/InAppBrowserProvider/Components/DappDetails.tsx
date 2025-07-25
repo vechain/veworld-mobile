@@ -54,7 +54,7 @@ const NotVerifiedWarning = () => {
             mt={8}
             testID="DAPP_DETAILS_NOT_VERIFIED_WARNING">
             <BaseIcon size={16} color={theme.colors.warningAlert.icon} name="icon-alert-triangle" />
-            <BaseText typographyFont="body" color={theme.colors.warningAlert.text}>
+            <BaseText typographyFont="body" color={theme.colors.warningAlert.text} flex={1}>
                 {LL.NOT_VERIFIED_DAPP()}
             </BaseText>
         </BaseView>
