@@ -358,10 +358,14 @@ export const TransactionBottomSheet = () => {
         }
     }, [rejectRequest, setTransactionBsData, transactionBsData])
 
-    const snapPoints = useMemo(() => ["80%", "90%"], [])
+    const snapPoints = useMemo(() => ["90%"], [])
 
     return (
-        <BaseBottomSheet snapPoints={snapPoints} ref={transactionBsRef} onDismiss={onDismiss}>
+        <BaseBottomSheet
+            snapPoints={snapPoints}
+            ref={transactionBsRef}
+            onDismiss={onDismiss}
+            enableContentPanningGesture={false}>
             {transactionBsData && (
                 <TransactionBottomSheetContent
                     onCancel={onCancel}

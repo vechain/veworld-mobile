@@ -72,13 +72,18 @@ export const FullscreenBaseCarousel = ({
             })),
         [calculateWidth, data],
     )
+
+    const contentWrapper = useMemo(() => {
+        return [contentWrapperStyle, styles.itemWrapper]
+    }, [contentWrapperStyle, styles.itemWrapper])
+
     return (
         <BaseCarousel
             snapOffsets={snapOffsets}
             data={mappedData}
             padding={padding}
             gap={gap}
-            contentWrapperStyle={[contentWrapperStyle, styles.itemWrapper]}
+            contentWrapperStyle={contentWrapper}
             {...props}
         />
     )

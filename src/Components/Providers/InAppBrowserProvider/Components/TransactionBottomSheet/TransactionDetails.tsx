@@ -53,7 +53,6 @@ const TransactionCarousel = ({
             showPagination
             rootStyle={styles.carouselRoot}
             bottomSheet
-            forceSnap={false}
         />
     )
 }
