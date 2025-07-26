@@ -3,7 +3,6 @@ import React, { useCallback } from "react"
 import { SelectAccountBottomSheet } from "~Components"
 import { AccountWithDevice, LocalAccountWithDevice, WatchedAccount } from "~Model"
 import { DelegationType } from "~Model/Delegation"
-import { selectBalanceVisible, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 
 type Props = {
@@ -18,8 +17,6 @@ type Props = {
 // component to select an account for delegation
 export const SelectDelegationAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ onClose, setSelectedAccount, selectedAccount, selectedDelegationOption, setNoDelegation, accounts }, ref) => {
-        const isBalanceVisible = useAppSelector(selectBalanceVisible)
-
         const onDismiss = () => {
             if (selectedDelegationOption === DelegationType.ACCOUNT && !selectedAccount) {
                 setNoDelegation()
@@ -44,7 +41,6 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<BottomSheetMo
                 selectedAccount={selectedAccount as AccountWithDevice}
                 ref={ref}
                 isVthoBalance
-                isBalanceVisible={isBalanceVisible}
             />
         )
     },

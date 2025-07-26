@@ -147,7 +147,6 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 setSelectedAccount={onSetSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={selectAccountBsRef}
-                cardVersion="v2"
             />
         </>
     )
