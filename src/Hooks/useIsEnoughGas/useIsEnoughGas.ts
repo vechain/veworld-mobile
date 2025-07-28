@@ -17,6 +17,7 @@ type Args = {
     isLoadingFees: boolean
     transactionOutputs: InspectableOutput[] | undefined
     origin: string
+    enableSameTokenFeeHandling?: boolean
 }
 
 const calculateClausesValue = ({
@@ -61,6 +62,7 @@ export const useIsEnoughGas = ({
     isLoadingFees,
     transactionOutputs,
     origin,
+    enableSameTokenFeeHandling = false,
 }: Args) => {
     const allTokens = useAppSelector(selectAllTokens)
     const tokens = useAppSelector(selectTokensWithBalances)
@@ -75,12 +77,22 @@ export const useIsEnoughGas = ({
                 if (allFeeOptions[tokenSymbol] === undefined) return [tokenSymbol, false] as const
                 const foundTmpToken = allTokens.find(tk => tk.symbol === tokenSymbol)!
                 const balance = tokens.find(tk => tk.symbol === tokenSymbol)?.balance?.balance ?? "0"
-                const clausesValue = calculateClausesValue({
-                    transactionOutputs,
-                    selectedToken: foundTmpToken,
-                    network: network.type,
-                    origin,
-                })
+
+                // Skip clausesValue check when enableSameTokenFeeHandling is true AND this is the selected token
+                // This allows selecting the same token for gas fees even when there's not enough for both amount and fees
+                const isSelectedTokenWithFeeHandlingEnabled =
+                    enableSameTokenFeeHandling && tokenSymbol === selectedToken
+
+                // Skip clausesValue check when enableSameTokenFeeHandling is true
+                const clausesValue = isSelectedTokenWithFeeHandlingEnabled
+                    ? BigNutils("0")
+                    : calculateClausesValue({
+                          transactionOutputs,
+                          selectedToken: foundTmpToken,
+                          network: network.type,
+                          origin,
+                      })
+
                 //Delegation with VTHO should count as "0" for fees
                 if (tokenSymbol === VTHO.symbol && isDelegated)
                     return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
@@ -90,7 +102,18 @@ export const useIsEnoughGas = ({
                 ] as const
             }),
         )
-    }, [allFeeOptions, allTokens, isDelegated, isLoadingFees, network.type, tokens, transactionOutputs, origin])
+    }, [
+        allFeeOptions,
+        allTokens,
+        isDelegated,
+        isLoadingFees,
+        network.type,
+        tokens,
+        transactionOutputs,
+        origin,
+        enableSameTokenFeeHandling,
+        selectedToken,
+    ])
 
     const hasEnoughBalanceOnAny = useMemo(() => {
         return Object.values(hasEnoughBalanceOnToken).some(Boolean)
