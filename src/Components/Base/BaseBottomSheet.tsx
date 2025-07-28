@@ -82,6 +82,10 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
      * Enable blur backdrop on iOS
      */
     blurBackdrop?: boolean
+    /**
+     * Enable floating behavior - detach from the bottom of the screen
+     */
+    floating?: boolean
 }
 
 const BaseBottomSheetContent = ({
@@ -145,6 +149,7 @@ const _BaseBottomSheet = <TData,>(
         bottomSafeArea = true,
         enablePanDownToClose = true,
         blurBackdrop = false,
+        floating = true,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
@@ -255,6 +260,8 @@ const _BaseBottomSheet = <TData,>(
             ref={ref}
             enablePanDownToClose={enablePanDownToClose}
             index={0}
+            style={floating && styles.floating}
+            bottomInset={floating ? bottomSafeAreaSize : undefined}
             backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
             // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry. Bug lagging (https://github.com/gorhom/react-native-bottom-sheet/issues/2046)
             backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
@@ -267,6 +274,7 @@ const _BaseBottomSheet = <TData,>(
             onChange={onSheetPositionChange}
             maxDynamicContentSize={maxDynamicContentSize}
             enableDynamicSizing={dynamicHeight}
+            detached={floating}
             {...sheetProps}>
             {typeof children === "function" ? (
                 p => (
@@ -319,6 +327,10 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "center",
             alignItems: "center",
             opacity: 0.5,
+        },
+        floating: {
+            borderRadius: 24,
+            marginHorizontal: 8,
         },
         handleWrapper: {
             marginTop: 8,

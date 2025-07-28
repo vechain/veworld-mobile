@@ -38,6 +38,11 @@ export type FeatureFlags = {
             }
         }
     }
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: boolean
+        }
+    }
 }
 
 export const getFeatureFlags = async () => {

@@ -12,8 +12,9 @@ import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 
-type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
+type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {

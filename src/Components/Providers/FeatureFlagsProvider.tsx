@@ -40,6 +40,11 @@ const initialState: FeatureFlags = {
             },
         },
     },
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: false,
+        },
+    },
 }
 
 const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)

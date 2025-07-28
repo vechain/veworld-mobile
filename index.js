@@ -180,6 +180,19 @@ const linking = {
                             },
                         },
                     },
+                    AppsStack: {
+                        path: "apps",
+                        initialRouteName: "Apps",
+                        screens: {
+                            Browser: {
+                                path: "browser/:redirect?/:ul/:url",
+                                parse: {
+                                    ul: () => true,
+                                    url: url => URIUtils.decodeUrl_HACK(url),
+                                },
+                            },
+                        },
+                    },
                 },
             },
         },
