@@ -1,5 +1,5 @@
-import React, { ReactNode, useMemo } from "react"
-import { StyleSheet } from "react-native"
+import React, { ReactNode, useMemo, useState } from "react"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import { BaseButton, BaseIcon, BaseText, BaseTextProps, BaseView, BaseViewProps } from "~Components/Base"
 import { COLORS } from "~Constants"
 import { useCopyClipboard, useTheme, useThemedStyles, useVns } from "~Hooks"
@@ -33,7 +33,7 @@ const HexValue = ({ value, testID }: { value: string; testID?: string }) => {
             size="sm"
             px={0}
             py={0}
-            typographyFont="captionMedium"
+            typographyFont="bodyMedium"
             title={formattedValue}
             action={() => onCopyToClipboard(value, LL.COMMON_LBL_ADDRESS())}
             textTestID={testID}
@@ -51,12 +51,22 @@ const HexValue = ({ value, testID }: { value: string; testID?: string }) => {
 
 const StringValue = ({
     value,
+    style,
     ...props
 }: { value: string } & Omit<BaseTextProps, "children" | "color" | "typographyFont">) => {
     const theme = useTheme()
+    const [height, setHeight] = useState<number>()
 
     return (
-        <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800} {...props}>
+        <BaseText
+            typographyFont="bodyMedium"
+            color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
+            onLayout={e => {
+                // Please, do not change this behaviour. It's the only way to make it work for long strings.
+                setHeight(e.nativeEvent.layout.height)
+            }}
+            style={[{ height }, style]}
+            {...props}>
             {value}
         </BaseText>
     )
@@ -67,11 +77,13 @@ const BaseAdditionalDetail = ({
     value,
     direction = "row",
     testID,
+    style,
 }: {
     label: string
     value: ReactNode
     direction?: "row" | "column"
     testID?: string
+    style?: StyleProp<ViewStyle>
 }) => {
     const theme = useTheme()
     const props = useMemo((): BaseViewProps => {
@@ -83,8 +95,8 @@ const BaseAdditionalDetail = ({
         }
     }, [direction])
     return (
-        <BaseView w={100} testID={testID} {...props}>
-            <BaseText typographyFont="smallCaptionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
+        <BaseView w={100} testID={testID} style={style} {...props}>
+            <BaseText typographyFont="captionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
                 {label}
             </BaseText>
             {typeof value === "string" ? <StringValue value={value} /> : value}

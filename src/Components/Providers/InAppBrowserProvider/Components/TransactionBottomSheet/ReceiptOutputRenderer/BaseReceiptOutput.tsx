@@ -143,7 +143,7 @@ const baseStyles = (theme: ColorThemeType) =>
         root: {
             gap: 0,
             flexDirection: "column",
-            paddingVertical: 16,
+            paddingTop: 16,
         },
         additionalDetails: {
             borderTopWidth: 1,
