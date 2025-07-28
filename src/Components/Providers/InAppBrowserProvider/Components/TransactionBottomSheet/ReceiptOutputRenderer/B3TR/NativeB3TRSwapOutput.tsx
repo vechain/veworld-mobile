@@ -51,12 +51,12 @@ export const NativeB3TRSwapOutput = ({ output, ...props }: Props) => {
             output={output}
             {...props}>
             <BaseReceiptOutput.ValueContainer flexDirection="column" gap={2}>
-                <BaseReceiptOutput.ValueMainText testID="B3TR_SWAP_INPUT_VALUE">
-                    {`${DIRECTIONS.UP} ${amountInHuman} ${inputTokenSymbol}`}
-                </BaseReceiptOutput.ValueMainText>
                 <BaseReceiptOutput.ValueSubText testID="B3TR_SWAP_OUTPUT_VALUE">
-                    {`${DIRECTIONS.DOWN} ${amountOutHuman} ${outputTokenSymbol}`}
+                    {`${DIRECTIONS.UP} ${amountOutHuman} ${outputTokenSymbol}`}
                 </BaseReceiptOutput.ValueSubText>
+                <BaseReceiptOutput.ValueMainText testID="B3TR_SWAP_INPUT_VALUE">
+                    {`${DIRECTIONS.DOWN} ${amountInHuman} ${inputTokenSymbol}`}
+                </BaseReceiptOutput.ValueMainText>
             </BaseReceiptOutput.ValueContainer>
         </BaseReceiptOutput>
     )
