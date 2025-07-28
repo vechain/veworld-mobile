@@ -1,0 +1,128 @@
+{
+  "name": "FT_VET_Swap2",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "Transfer(indexed address,indexed address,uint256)",
+      "alias": "inputTransfer",
+      "conditions": [
+        {
+          "firstOperand": "value",
+          "isFirstStatic": false,
+          "secondOperand": "0",
+          "isSecondStatic": true,
+          "operator": "GT"
+        }
+      ]
+    },
+    {
+      "name": "VET_TRANSFER(address,address,uint256)",
+      "alias": "outputTransfer",
+      "conditions": [
+        {
+          "firstOperand": "amount",
+          "isFirstStatic": false,
+          "secondOperand": "0",
+          "isSecondStatic": true,
+          "operator": "GT"
+        }
+      ]
+    },
+    {
+      "name": "Swap(indexed address,indexed address,uint256,uint256,uint256,uint256,uint256,uint256,uint256,uint256)",
+      "alias": "swap",
+      "conditions": [
+        {
+          "firstOperand": "amountIn",
+          "isFirstStatic": false,
+          "secondOperand": "0",
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "amountOutReceived",
+          "isFirstStatic": false,
+          "secondOperand": "0",
+          "isSecondStatic": true,
+          "operator": "GT"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "swap",
+      "firstEventProperty": "withdrawAmount",
+      "secondEventName": "inputTransfer",
+      "secondEventProperty": "value",
+      "operator": "EQ"
+    },
+    {
+      "firstEventName": "swap",
+      "firstEventProperty": "amountOutReceived",
+      "secondEventName": "outputTransfer",
+      "secondEventProperty": "amount",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "account",
+      "eventName": "swap",
+      "businessEventName": "from"
+    },
+    {
+      "name": "account",
+      "eventName": "swap",
+      "businessEventName": "to"
+    },
+    {
+      "name": "address",
+      "eventName": "inputTransfer",
+      "businessEventName": "inputToken"
+    },
+    {
+      "name": "withdrawAmount",
+      "eventName": "swap",
+      "businessEventName": "inputValue"
+    },
+    {
+      "name": "amountOutReceived",
+      "eventName": "swap",
+      "businessEventName": "outputValue"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "to",
+      "type": "address"
+    },
+    {
+      "type": "address",
+      "name": "inputToken",
+      "internalType": "address",
+      "indexed": false
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "inputValue",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "outputValue",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
+}

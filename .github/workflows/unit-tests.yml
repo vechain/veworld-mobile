@@ -9,12 +9,13 @@ jobs:
     unit:
         runs-on: ubuntu-latest
         strategy:
-          matrix:
-            shard: [1,2,3,4]
-          fail-fast: false
-        permissions: 
-          contents: read
-          actions: write
+            matrix:
+                shard: [1, 2, 3, 4]
+            fail-fast: false
+        permissions:
+            contents: read
+            actions: write
+
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -22,19 +23,23 @@ jobs:
             - name: Setup Node.js
               uses: actions/setup-node@v4
               with:
-                node-version: 20.17
+                node-version: 20.19
                 cache: 'yarn'
 
             - name: Install & Patch packages
-              run: yarn install
+              run: |
+                yarn abi:install
+                yarn abi:build
+                yarn install
+                yarn abi:generate
 
             - name: Lint & Format Check
               run: yarn lint && yarn format:check
 
             - name: Tests with Coverage
               env:
-                NODE_OPTIONS: "--max_old_space_size=8192"
-                REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
+                  NODE_OPTIONS: "--max_old_space_size=8192"
+                  REACT_APP_WALLET_CONNECT_PROJECT_ID: "f1c07ceecbc6115eaa26b2221c2e43cd"
               run: yarn test:coverage --shard=${{ matrix.shard }}/${{ strategy.job-total }} | tee ./coverage.txt  && exit ${PIPESTATUS[0]}
 
             - name: Upload coverage folder
@@ -45,15 +50,15 @@ jobs:
               with:
                   name: coverage-artifacts-${{ matrix.shard }}
                   path: ${{ env.COVERAGE_PARENT_FOLDER }}
-                  retention-days: 1   
-              
+                  retention-days: 1
+
     coverage:
         runs-on: ubuntu-latest
         needs: [unit]
-        permissions: 
-          contents: read
-          actions: read
-          id-token: write
+        permissions:
+            contents: read
+            actions: read
+            id-token: write
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -78,19 +83,19 @@ jobs:
             - name: Sonar Args
               id: sonar-args
               env:
-                ref: "${{ github.ref }}"
-                head: "${{ github.head_ref || 'main' }}"
+                  ref: "${{ github.ref }}"
+                  head: "${{ github.head_ref || 'main' }}"
               run: |
-                if [[ $ref == 'refs/heads/main' ]]; then
-                    echo "SONAR_ARGS=-Dsonar.branch.name=main" >> $GITHUB_OUTPUT
-                else
-                    echo "SONAR_ARGS=-Dsonar.pullrequest.key=${{ github.event.pull_request.number }} -Dsonar.pullrequest.branch=${{ github.ref_name }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}" >> $GITHUB_OUTPUT
-                fi
+                  if [[ $ref == 'refs/heads/main' ]]; then
+                      echo "SONAR_ARGS=-Dsonar.branch.name=main" >> $GITHUB_OUTPUT
+                  else
+                      echo "SONAR_ARGS=-Dsonar.pullrequest.key=${{ github.event.pull_request.number }} -Dsonar.pullrequest.branch=${{ github.ref_name }} -Dsonar.pullrequest.base=${{ github.event.pull_request.base.ref }}" >> $GITHUB_OUTPUT
+                  fi
 
             - name: SonarCloud Scan
               uses: SonarSource/sonarqube-scan-action@v4.2.1
               env:
-                GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-                SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+                  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
               with:
-                args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}
+                  args: ${{ steps.sonar-args.outputs.SONAR_ARGS }}

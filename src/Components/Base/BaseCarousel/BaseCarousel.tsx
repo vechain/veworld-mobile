@@ -1,12 +1,11 @@
-import React from "react"
-import { StyleSheet, ViewStyle } from "react-native"
-import { useSharedValue } from "react-native-reanimated"
-import Carousel, { ICarouselInstance, Pagination } from "react-native-reanimated-carousel"
-import { DotStyle } from "react-native-reanimated-carousel/lib/typescript/components/Pagination/Custom/PaginationItem"
+import React, { useCallback, useMemo, useRef, useState } from "react"
+import { ScrollView, StyleProp, StyleSheet, TouchableOpacity, ViewStyle, ViewToken } from "react-native"
+import Animated from "react-native-reanimated"
+import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
+import { BaseSpacer } from "~Components/Base/BaseSpacer"
+import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { BaseView } from "../BaseView"
-import { BaseCarouselItem } from "./BaseCarouselItem"
 
 export type CarouselSlideItem = {
     name?: string
@@ -17,21 +16,19 @@ export type CarouselSlideItem = {
     closable?: boolean
     onClose?: () => void
     closeButtonStyle?: ViewStyle
+    style?: StyleProp<ViewStyle>
 }
 
 type Props = {
     data: CarouselSlideItem[]
     /**
-     * This should be the desired width of the carousel item
+     * Width used to calculate snap offsets.
      */
     w?: number
     /**
-     * This should be the desired height of the carousel item
+     * Height of the item
      */
-    h?: number
-    autoPlay?: boolean
-    autoPlayInterval?: number
-    loop?: boolean
+    itemHeight?: number
     showPagination?: boolean
     paginationAlignment?: "flex-start" | "center" | "flex-end"
     testID?: string
@@ -40,58 +37,123 @@ type Props = {
      * Decide when `onSlidePress` is called. Default is `after
      */
     onSlidePressActivation?: "before" | "after"
+    /**
+     * Style of the carousel
+     */
+    containerStyle?: StyleProp<ViewStyle>
+    /**
+     * Style of the {@link BaseCarouselItem}
+     */
+    contentWrapperStyle?: StyleProp<ViewStyle>
+    /**
+     * Pagination style. Only applicable if `showPagination` is set to true.
+     */
+    paginationStyle?: ViewStyle
+    /**
+     * Style for the root container
+     */
+    rootStyle?: ViewStyle
+    /**
+     * Gap between items
+     */
+    gap?: number
+    /**
+     * Padding around the carousel.
+     * Do not use a custom style to set it since it'll break the normal layout
+     */
+    padding?: number
+    /**
+     * Provide snap offsets. By default they're calculated
+     */
+    snapOffsets?: number[]
 }
 
 export const BaseCarousel = ({
     data,
-    w = SCREEN_WIDTH,
-    h = 108,
-    autoPlay = true,
-    autoPlayInterval = 10000,
-    loop = true,
-    paginationAlignment = "center",
-    showPagination = true,
-    testID,
     onSlidePress,
+    contentWrapperStyle,
     onSlidePressActivation,
+    gap = 8,
+    w: _w = SCREEN_WIDTH,
+    showPagination = true,
+    rootStyle,
+    paginationAlignment = "center",
+    paginationStyle,
+    containerStyle,
+    padding = 16,
+    testID,
+    snapOffsets,
+    itemHeight,
 }: Props) => {
-    const ref = React.useRef<ICarouselInstance>(null)
-    const progress = useSharedValue<number>(0)
+    const [page, setPage] = useState(0)
+
+    const ref = useRef<Animated.FlatList<any>>(null)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
 
-    const onPressPagination = (index: number) => {
-        ref.current?.scrollTo({
-            /**
-             * Calculate the difference between the current index and the target index
-             * to ensure that the carousel scrolls to the nearest index
-             */
-            count: index - progress.value,
-            animated: true,
-        })
-    }
+    const ItemSeparatorComponent = useCallback(() => <BaseSpacer width={gap} />, [gap])
+
+    const w = useMemo(() => {
+        if (_w + gap >= SCREEN_WIDTH) return SCREEN_WIDTH - gap
+        return _w
+    }, [_w, gap])
+
+    const _offsets = useMemo(
+        () =>
+            Array.from({ length: data.length }, (_, idx) => {
+                if (idx === 0) return 0
+                return w * idx + gap * idx
+            }),
+        [data.length, gap, w],
+    )
+
+    const offsets = useMemo(() => snapOffsets ?? _offsets, [snapOffsets, _offsets])
+
+    const onPressPagination = useCallback(
+        (index: number) => {
+            ref.current?.scrollToOffset({
+                offset: offsets[index],
+                animated: true,
+            })
+        },
+        [offsets],
+    )
+
+    const getInitialPaddingStyles = useCallback(
+        (index: number) => {
+            if (padding === 0) return undefined
+            if (index === 0) return { paddingStart: padding }
+            if (index === data.length - 1) return { paddingEnd: padding }
+        },
+        [data.length, padding],
+    )
+
+    const onViewableItemsChanged = useCallback(
+        (info: { viewableItems: ViewToken<CarouselSlideItem>[]; changed: ViewToken<CarouselSlideItem>[] }) => {
+            if (info.viewableItems.length === 0) return
+            setPage(info.viewableItems[0].index!)
+        },
+        [],
+    )
 
     return (
-        <BaseView flex={1} style={[styles.container]} testID={testID}>
-            <Carousel
+        <BaseView flex={1} flexDirection="column" style={[styles.root, rootStyle]}>
+            <Animated.FlatList
                 ref={ref}
                 data={data}
-                autoPlay={autoPlay}
-                loop={loop}
-                width={w}
-                height={h}
-                style={styles.carousel}
-                pagingEnabled
-                snapEnabled
-                containerStyle={styles.carouselContainer}
-                mode="parallax"
-                modeConfig={{
-                    parallaxScrollingScale: 1,
-                    parallaxAdjacentItemScale: 0.8,
-                    parallaxScrollingOffset: SCREEN_WIDTH / 6.5,
-                }}
-                autoPlayInterval={autoPlayInterval}
-                onProgressChange={progress}
-                renderItem={({ item }) => {
+                snapToOffsets={offsets}
+                snapToEnd={false}
+                snapToStart={false}
+                disableIntervalMomentum
+                ItemSeparatorComponent={ItemSeparatorComponent}
+                viewabilityConfig={{ itemVisiblePercentThreshold: 100 }}
+                onViewableItemsChanged={onViewableItemsChanged}
+                decelerationRate="fast"
+                snapToAlignment="start"
+                horizontal
+                style={containerStyle}
+                keyExtractor={item => item.name ?? ""}
+                testID={testID}
+                renderItem={({ item, index }) => {
                     return (
                         <BaseCarouselItem
                             testID={item.testID}
@@ -99,26 +161,34 @@ export const BaseCarousel = ({
                             isExternalLink={item.isExternalLink}
                             name={item.name}
                             onPress={onSlidePress}
+                            contentWrapperStyle={[
+                                itemHeight ? { height: itemHeight } : undefined,
+                                contentWrapperStyle,
+                                getInitialPaddingStyles(index),
+                            ]}
                             onPressActivation={onSlidePressActivation}
                             closable={item.closable}
                             onClose={item.onClose}
-                            closeButtonStyle={item.closeButtonStyle}>
+                            closeButtonStyle={item.closeButtonStyle}
+                            style={item.style}>
                             {item.content}
                         </BaseCarouselItem>
                     )
                 }}
+                showsHorizontalScrollIndicator={false}
             />
-
             {showPagination && (
-                <Pagination.Basic
-                    progress={progress}
-                    data={data as object[]}
-                    containerStyle={styles.paginatioContainer}
-                    size={8}
-                    onPress={onPressPagination}
-                    dotStyle={styles.dots as DotStyle}
-                    activeDotStyle={styles.activeDot as DotStyle}
-                />
+                <ScrollView
+                    contentContainerStyle={[styles.dotContainer, { paddingStart: padding }, paginationStyle]}
+                    horizontal>
+                    {Array.from({ length: data.length }, (_, idx) => (
+                        <TouchableOpacity
+                            key={idx}
+                            style={[styles.dot, page === idx ? styles.activeDot : undefined]}
+                            onPress={onPressPagination.bind(null, idx)}
+                        />
+                    ))}
+                </ScrollView>
             )}
         </BaseView>
     )
@@ -126,23 +196,19 @@ export const BaseCarousel = ({
 
 const baseStyles = (paginationAlignment: "flex-start" | "center" | "flex-end") => (theme: ColorThemeType) =>
     StyleSheet.create({
-        container: {
-            gap: 8,
+        root: {
+            gap: 12,
         },
-        carouselContainer: {
-            width: "100%",
-        },
-        carousel: {
-            width: SCREEN_WIDTH,
-        },
-        paginatioContainer: {
+        dotContainer: {
             gap: 6,
             alignSelf: paginationAlignment,
             paddingHorizontal: 16,
         },
-        dots: {
+        dot: {
             backgroundColor: theme.colors.defaultCarousel.dotBg,
             borderRadius: 50,
+            width: 8,
+            height: 8,
         },
         activeDot: {
             backgroundColor: theme.colors.defaultCarousel.activeDotBg,

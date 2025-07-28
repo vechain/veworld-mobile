@@ -1,12 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
+import DeviceInfo from "react-native-device-info"
 import { AppVersion } from "~Model/AppVersion"
 
 const initialVersionUpdateState: AppVersion = {
-    installedVersion: "",
+    installedVersion: DeviceInfo.getVersion(),
     majorVersion: "",
     latestVersion: "",
     isUpToDate: null,
     lastManifestCheck: null,
+    shouldShowChangelog: false,
+    changelogKey: null,
     updateRequest: {
         dismissCount: 0,
         lastDismissedDate: null,
@@ -51,6 +54,11 @@ export const VersionUpdateSlice = createSlice({
             state.lastManifestCheck = action.payload
         },
 
+        setChangelogToShow: (state, action: PayloadAction<{ shouldShow: boolean; changelogKey: string | null }>) => {
+            state.shouldShowChangelog = action.payload.shouldShow
+            state.changelogKey = action.payload.changelogKey
+        },
+
         resetVersionUpdateState: () => initialVersionUpdateState,
     },
 })
@@ -63,5 +71,6 @@ export const {
     setLatestVersion,
     setIsUpToDate,
     setLastManifestCheck,
+    setChangelogToShow,
     resetVersionUpdateState,
 } = VersionUpdateSlice.actions

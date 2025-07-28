@@ -3,7 +3,7 @@ import { AxiosError } from "axios"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { showWarningToast, useFeatureFlags } from "~Components"
 import { showErrorToast } from "~Components/Base/BaseToast"
-import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient } from "~Constants"
+import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient, VTHO } from "~Constants"
 import {
     SignStatus,
     SignTransactionResponse,
@@ -14,16 +14,31 @@ import {
     useTransactionBuilder,
     useTransactionGas,
 } from "~Hooks"
+import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
+import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
+import { useIsEnoughGas } from "~Hooks/useIsEnoughGas"
 import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice, NETWORK_TYPE, TransactionRequest } from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
-import { selectDevice, selectSelectedAccount, setIsAppLoading, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { BigNutils, error, GasUtils } from "~Utils"
-import { useVTHO_HACK } from "./useVTHO_HACK"
+import {
+    GENERIC_DELEGATOR_BASE_URL,
+    isGenericDelegatorUrl,
+    isValidGenericDelegatorNetwork,
+} from "~Networking/GenericDelegator"
+import {
+    selectDefaultDelegationToken,
+    selectDevice,
+    selectSelectedAccount,
+    selectSelectedNetwork,
+    setIsAppLoading,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { BigNutils, error } from "~Utils"
 
 type Props = {
     clauses: TransactionClause[]
@@ -31,6 +46,10 @@ type Props = {
     onTransactionFailure: (error: unknown) => void
     initialRoute?: Routes.HOME | Routes.NFTS
     dappRequest?: TransactionRequest
+    /**
+     * Fallback to VTHO for delegation fees if the user doesn't have enough of the selected token
+     */
+    autoVTHOFallback?: boolean
 }
 
 const mapGasPriceCoefficient = (value: GasPriceCoefficient) => {
@@ -50,6 +69,7 @@ export const useTransactionScreen = ({
     onTransactionFailure,
     dappRequest,
     initialRoute,
+    autoVTHOFallback = true,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -61,20 +81,25 @@ export const useTransactionScreen = ({
 
     const [loading, setLoading] = useState(false)
     const [selectedFeeOption, setSelectedFeeOption] = useState(GasPriceCoefficient.MEDIUM)
-    const [isEnoughGas, setIsEnoughGas] = useState(true)
-    const [txCostTotal, setTxCostTotal] = useState("0")
 
     const track = useAnalyticTracking()
 
-    const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
+    const senderDevice = useAppSelector(state => selectDevice(state, selectedAccount.rootAddress))
     const { forks } = useFeatureFlags()
+
+    const defaultToken = useAppSelector(selectDefaultDelegationToken)
+    const [selectedDelegationToken, setSelectedDelegationToken] = useState(defaultToken)
+
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const { tokens: availableTokens, isLoading: isLoadingTokens } = useGenericDelegationTokens()
 
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
         clauses,
         providedGas: dappRequest?.options?.gas,
     })
+
+    const transactionOutputs = useMemo(() => gas?.outputs, [gas?.outputs])
 
     // 2. Delegation
     const {
@@ -90,15 +115,33 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
+    useEffect(() => {
+        if (availableTokens.length === 1 && !isLoadingTokens) {
+            resetDelegation()
+            setSelectedDelegationToken(VTHO.symbol)
+        }
+    }, [availableTokens.length, isLoadingTokens, resetDelegation])
+
     const { isGalactica: isGalacticaRaw } = useIsGalactica()
 
     const onTransactionSuccess: typeof propsOnTransactionSuccess = useCallback(
         (tx, id) => {
             track(AnalyticsEvent.TRANSACTION_SEND_GAS, { gasOption: mapGasPriceCoefficient(selectedFeeOption) })
             track(AnalyticsEvent.TRANSACTION_SEND_DELEGATION, { delegationOption: selectedDelegationOption })
+            if (selectedNetwork.type === NETWORK_TYPE.MAIN)
+                track(AnalyticsEvent.TRANSACTION_SEND_DELEGATION_TOKEN, {
+                    delegationToken: selectedDelegationToken,
+                })
             propsOnTransactionSuccess(tx, id)
         },
-        [propsOnTransactionSuccess, selectedDelegationOption, selectedFeeOption, track],
+        [
+            propsOnTransactionSuccess,
+            selectedDelegationOption,
+            selectedDelegationToken,
+            selectedFeeOption,
+            selectedNetwork.type,
+            track,
+        ],
     )
 
     const isGalactica = useMemo(() => {
@@ -114,12 +157,58 @@ export const useTransactionScreen = ({
         isGalactica,
     })
 
+    const genericDelegatorFees = useGenericDelegationFees({
+        clauses,
+        signer: selectedAccount.address,
+        token: selectedDelegationToken,
+        isGalactica,
+    })
+
+    const gasOptions = useMemo(() => {
+        if (selectedDelegationToken === VTHO.symbol || genericDelegatorFees.options === undefined)
+            return transactionFeesResponse.options
+        return genericDelegatorFees.options
+    }, [genericDelegatorFees.options, selectedDelegationToken, transactionFeesResponse.options])
+
+    const selectedFeeAllTokenOptions = useMemo(() => {
+        if (
+            (genericDelegatorFees.allOptions === undefined && genericDelegatorFees.isLoading) ||
+            transactionFeesResponse.options === undefined
+        )
+            return undefined
+        return Object.fromEntries(
+            Object.entries(genericDelegatorFees.allOptions ?? {})
+                .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
+                .concat([[VTHO.symbol, transactionFeesResponse.options[selectedFeeOption].maxFee]]),
+        )
+    }, [
+        genericDelegatorFees.allOptions,
+        genericDelegatorFees.isLoading,
+        selectedFeeOption,
+        transactionFeesResponse.options,
+    ])
+
+    const isFirstTimeLoadingFees = useMemo(
+        () => genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading || loadingGas,
+        [genericDelegatorFees.isFirstTimeLoading, loadingGas, transactionFeesResponse.isFirstTimeLoading],
+    )
+
+    const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
+        selectedToken: selectedDelegationToken,
+        isDelegated,
+        allFeeOptions: selectedFeeAllTokenOptions,
+        isLoadingFees: isFirstTimeLoadingFees,
+        transactionOutputs,
+        origin: selectedAccount.address,
+    })
+
     // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
         clauses,
         gas,
         isDelegated,
         dependsOn: dappRequest?.options?.dependsOn,
+        //We don't care about sending the correct gasOptions for the generic delegator, since the tx will be retrieved from the delegator itself
         ...transactionFeesResponse.txOptions[selectedFeeOption],
     })
 
@@ -131,7 +220,8 @@ export const useTransactionScreen = ({
         selectedDelegationUrl,
         dappRequest,
         initialRoute,
-        resetDelegation,
+        selectedDelegationToken,
+        genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].maxFee,
     })
 
     // 6. Send transaction
@@ -159,12 +249,13 @@ export const useTransactionScreen = ({
                     text2: `${LL.SEND_TRANSACTION_ERROR()}${parseTxError(e)}`,
                 })
                 onTransactionFailure(e)
+            } finally {
+                setLoading(false)
+                dispatch(setIsAppLoading(false))
             }
         },
-        [sendTransaction, LL, parseTxError, onTransactionFailure],
+        [sendTransaction, LL, parseTxError, onTransactionFailure, dispatch],
     )
-
-    const vtho = useVTHO_HACK(selectedDelegationAccount?.address ?? selectedAccount.address)
 
     /**
      * Signs the transaction and sends it to the blockchain
@@ -181,6 +272,7 @@ export const useTransactionScreen = ({
                         return
                     case SignStatus.DELEGATION_FAILURE:
                         resetDelegation()
+                        setSelectedDelegationToken(VTHO.symbol)
                         showWarningToast({
                             text1: LL.ERROR(),
                             text2: LL.SEND_DELEGATION_ERROR_SIGNATURE(),
@@ -251,25 +343,27 @@ export const useTransactionScreen = ({
         [loading, loadingGas, isBiometricsEmpty],
     )
 
-    /**
-     * Check if the user has enough funds to send the transaction
-     * Calculate the amount to send without the gas fee
-     */
-    useEffect(() => {
-        const { isGas, txCostTotal: _txCostTotal } = GasUtils.calculateIsEnoughGas({
-            clauses,
-            isDelegated,
-            vtho,
-            txFee: transactionFeesResponse.maxFee,
-        })
+    const fallbackToVTHO = useCallback(() => {
+        if (!hasEnoughBalance && selectedDelegationToken !== VTHO.symbol) setSelectedDelegationToken(VTHO.symbol)
+    }, [hasEnoughBalance, selectedDelegationToken])
 
-        setIsEnoughGas(isGas)
-        setTxCostTotal(_txCostTotal.toString)
-    }, [clauses, gas, isDelegated, selectedFeeOption, vtho, selectedAccount, transactionFeesResponse.maxFee])
+    useEffect(() => {
+        if (autoVTHOFallback) fallbackToVTHO()
+    }, [autoVTHOFallback, fallbackToVTHO, hasEnoughBalance, selectedDelegationToken])
+
+    useEffect(() => {
+        if (selectedDelegationToken !== VTHO.symbol && isValidGenericDelegatorNetwork(selectedNetwork.type))
+            setSelectedDelegationUrl(GENERIC_DELEGATOR_BASE_URL[selectedNetwork.type])
+    }, [selectedDelegationToken, selectedNetwork.type, setSelectedDelegationUrl])
+
+    useEffect(() => {
+        if (selectedDelegationToken === VTHO.symbol && isGenericDelegatorUrl(selectedDelegationUrl ?? ""))
+            resetDelegation()
+    }, [resetDelegation, selectedDelegationToken, selectedDelegationUrl])
 
     const isDisabledButtonState = useMemo(
-        () => (!isEnoughGas && !isDelegated) || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
-        [isEnoughGas, isDelegated, loading, gas?.gas],
+        () => !hasEnoughBalance || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
+        [hasEnoughBalance, loading, gas?.gas],
     )
 
     return {
@@ -285,19 +379,24 @@ export const useTransactionScreen = ({
         resetDelegation,
         setSelectedDelegationAccount,
         setSelectedDelegationUrl,
-        isEnoughGas,
-        txCostTotal,
+        isEnoughGas: hasEnoughBalance,
         isDelegated,
         selectedDelegationAccount,
         selectedDelegationUrl,
-        vtho,
         isDisabledButtonState,
         estimatedFee: transactionFeesResponse.estimatedFee,
         maxFee: transactionFeesResponse.maxFee,
-        gasOptions: transactionFeesResponse.options,
+        gasOptions,
         gasUpdatedAt: transactionFeesResponse.dataUpdatedAt,
         isGalactica,
         isBaseFeeRampingUp: transactionFeesResponse.isBaseFeeRampingUp,
         speedChangeEnabled: transactionFeesResponse.speedChangeEnabled,
+        selectedDelegationToken,
+        setSelectedDelegationToken,
+        availableTokens,
+        fallbackToVTHO,
+        hasEnoughBalanceOnAny,
+        isFirstTimeLoadingFees,
+        hasEnoughBalanceOnToken,
     }
 }

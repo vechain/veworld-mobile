@@ -187,6 +187,9 @@ jest.mock("@gorhom/bottom-sheet", () => ({
     BottomSheetFlatList: ({ data, renderItem }: any) => {
         return data.map((row: any) => renderItem({ item: row }))
     },
+    BottomSheetSectionList: ({ sections, renderItem }: any) => {
+        return sections.flatMap((s: any) => s.data).map((row: any) => renderItem({ item: row }))
+    },
 }))
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")

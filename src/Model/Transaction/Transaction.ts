@@ -1,5 +1,6 @@
 import { Transaction } from "thor-devkit"
 import { FungibleToken } from "~Model/Token"
+import { InspectableOutput } from "~Services/AbiService"
 
 export enum ClauseType {
     DEPLOY_CONTRACT = "deploy_contract",
@@ -50,6 +51,7 @@ export type EstimateGasResult = {
     revertReason: string
     vmError: string
     baseGasPrice: string
+    outputs: InspectableOutput[]
 }
 export interface CreateBodyParams {
     thorClient: Connex.Thor

@@ -30,12 +30,14 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica }: Props) => 
         dataUpdatedAt,
         isBaseFeeRampingUp: galacticaBaseFeeRampingUp,
         speedChangeEnabled,
+        isFirstTimeLoading: isFirstTimeLoadingGalactica,
     } = useGalacticaFees({ isGalactica, gas })
 
     const {
         isLoading: isLegacyFeesLoading,
         options: legacyOptions,
         txOptions: legacyTxOptions,
+        isFirstTimeLoading: isFirstTimeLoadingLegacy,
     } = useLegacyFees({ gas })
 
     const options = useMemo(() => {
@@ -67,6 +69,7 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica }: Props) => 
             maxPriorityFee: galacticaMaxPriorityFee,
             isBaseFeeRampingUp,
             speedChangeEnabled,
+            isFirstTimeLoading: isFirstTimeLoadingGalactica || isFirstTimeLoadingLegacy,
         }),
         [
             result,
@@ -77,6 +80,8 @@ export const useTransactionFees = ({ gas, coefficient, isGalactica }: Props) => 
             galacticaMaxPriorityFee,
             isBaseFeeRampingUp,
             speedChangeEnabled,
+            isFirstTimeLoadingGalactica,
+            isFirstTimeLoadingLegacy,
         ],
     )
 

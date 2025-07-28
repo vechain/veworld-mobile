@@ -41,8 +41,9 @@ export function numberToPercentWorklet(
 
     const formatter = new Intl.NumberFormat(locale?.toString(), {
         style: "decimal",
-        useGrouping: true,
         minimumFractionDigits: precision,
+        maximumFractionDigits: precision,
+        useGrouping: true,
     })
 
     if (value === undefined || isNaN(value)) {

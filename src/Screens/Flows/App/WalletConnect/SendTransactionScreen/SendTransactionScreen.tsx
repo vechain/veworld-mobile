@@ -106,11 +106,8 @@ export const SendTransactionScreen = ({ route }: Props) => {
     }, [openSelectAccountBottomSheet, request.options.signer])
 
     const goBack = useCallback(() => {
-        // Requires an extra goBack if it's the first request from the dapp
-        if (request.type === "in-app" && request.isFirstRequest) nav.goBack()
-
         nav.goBack()
-    }, [nav, request])
+    }, [nav])
 
     const onFinish = useCallback(
         (sucess: boolean) => {
@@ -214,6 +211,13 @@ export const SendTransactionScreen = ({ route }: Props) => {
         isGalactica,
         isBaseFeeRampingUp,
         speedChangeEnabled,
+        isEnoughGas,
+        availableTokens,
+        selectedDelegationToken,
+        setSelectedDelegationToken,
+        hasEnoughBalanceOnAny,
+        isFirstTimeLoadingFees,
+        hasEnoughBalanceOnToken,
     } = useTransactionScreen({
         clauses,
         onTransactionSuccess,
@@ -290,7 +294,14 @@ export const SendTransactionScreen = ({ route }: Props) => {
                         setSelectedFeeOption={setSelectedFeeOption}
                         isGalactica={isGalactica}
                         isBaseFeeRampingUp={isBaseFeeRampingUp}
-                        speedChangeEnabled={speedChangeEnabled}>
+                        speedChangeEnabled={speedChangeEnabled}
+                        isEnoughBalance={isEnoughGas}
+                        availableDelegationTokens={availableTokens}
+                        delegationToken={selectedDelegationToken}
+                        setDelegationToken={setSelectedDelegationToken}
+                        hasEnoughBalanceOnAny={hasEnoughBalanceOnAny}
+                        isFirstTimeLoadingFees={isFirstTimeLoadingFees}
+                        hasEnoughBalanceOnToken={hasEnoughBalanceOnToken}>
                         <DelegationView
                             setNoDelegation={resetDelegation}
                             selectedDelegationOption={selectedDelegationOption}
@@ -298,6 +309,7 @@ export const SendTransactionScreen = ({ route }: Props) => {
                             selectedDelegationAccount={selectedDelegationAccount}
                             selectedDelegationUrl={selectedDelegationUrl}
                             setSelectedDelegationUrl={setSelectedDelegationUrl}
+                            delegationToken={selectedDelegationToken}
                         />
                     </GasFeeSpeed>
                 </BaseView>

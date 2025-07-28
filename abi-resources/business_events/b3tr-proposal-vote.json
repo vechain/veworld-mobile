@@ -1,0 +1,91 @@
+{
+  "name": "B3TR_ProposalVote",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "VoteCast(indexed address,indexed uint256,uint8,uint256,uint256,string)",
+      "alias": "voteEvent",
+      "conditions": [
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${B3TR_GOVERNOR_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    }
+  ],
+  "rules": [],
+  "paramsDefinition": [
+    {
+      "name": "voter",
+      "eventName": "voteEvent",
+      "businessEventName": "from"
+    },
+    {
+      "name": "proposalId",
+      "eventName": "voteEvent",
+      "businessEventName": "proposalId"
+    },
+    {
+      "name": "support",
+      "eventName": "voteEvent",
+      "businessEventName": "support"
+    },
+    {
+      "name": "reason",
+      "eventName": "voteEvent",
+      "businessEventName": "reason"
+    },
+    {
+      "name": "weight",
+      "eventName": "voteEvent",
+      "businessEventName": "voteWeight"
+    },
+    {
+      "name": "power",
+      "eventName": "voteEvent",
+      "businessEventName": "votePower"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "from",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "proposalId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint8",
+      "name": "support",
+      "type": "uint8"
+    },
+    {
+      "indexed": false,
+      "internalType": "string",
+      "name": "reason",
+      "type": "string"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "voteWeight",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "votePower",
+      "type": "uint256"
+    }
+  ],
+  "type": "event"
+}

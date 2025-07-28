@@ -1,7 +1,9 @@
-import { useNavigation, useScrollToTop, useFocusEffect } from "@react-navigation/native"
+import { useFocusEffect, useNavigation, useScrollToTop } from "@react-navigation/native"
+import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { RefreshControl, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { NestableScrollContainer } from "react-native-draggable-flatlist"
+import { RefreshControl } from "react-native-gesture-handler"
 import { FadeInRight } from "react-native-reanimated"
 import {
     BaseIcon,
@@ -13,17 +15,18 @@ import {
     QRCodeBottomSheet,
     SelectAccountBottomSheet,
     useFeatureFlags,
+    VersionChangelogBottomSheet,
     VersionUpdateAvailableBottomSheet,
 } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import {
+    getVeDelegateBalanceQueryKey,
     useAnalyticTracking,
     useBottomSheetModal,
     useMemoizedAnimation,
     usePrefetchAllVns,
     useSetSelectedAccount,
     useTheme,
-    getVeDelegateBalanceQueryKey,
 } from "~Hooks"
 import { AccountWithDevice, FastAction, WatchedAccount } from "~Model"
 import { Routes } from "~Navigation"
@@ -31,12 +34,13 @@ import {
     selectBalanceVisible,
     selectCurrency,
     selectSelectedAccount,
+    selectSelectedNetwork,
     selectVisibleAccounts,
     setAppResetTimestamp,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils, PlatformUtils } from "~Utils"
+import { AccountUtils, AddressUtils, PlatformUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import {
     AccountCard,
@@ -48,10 +52,10 @@ import {
     Header,
     TokenList,
 } from "./Components"
-import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
-import { useTokenBalances } from "./Hooks"
-import { useQueryClient } from "@tanstack/react-query"
 import { BannersCarousel } from "./Components/BannerCarousel"
+import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
+import { StakedCard } from "./Components/Staking"
+import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -63,6 +67,7 @@ export const HomeScreen = () => {
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
     const { updateBalances, updateSuggested } = useTokenBalances()
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -75,19 +80,6 @@ export const HomeScreen = () => {
     useEffect(() => {
         dispatch(setAppResetTimestamp())
     }, [dispatch])
-
-    useFocusEffect(
-        useCallback(() => {
-            // Invalidate the veDelegateBalance query to solve cache issues
-            queryClient.invalidateQueries({
-                queryKey: getVeDelegateBalanceQueryKey(selectedAccount.address),
-                refetchType: "all",
-            })
-
-            updateBalances()
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, []),
-    )
 
     const { LL } = useI18nContext()
     // Pull down to refresh
@@ -116,14 +108,26 @@ export const HomeScreen = () => {
         onSetSelectedAccount({ address: account.address })
     }
 
+    const invalidateStargateQueries = useCallback(async () => {
+        await queryClient.invalidateQueries({
+            predicate(query) {
+                if (!["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string)) return false
+                if (query.queryKey.length < 3) return false
+                if (query.queryKey[1] !== selectedNetwork.type) return false
+                if (!AddressUtils.compareAddresses(query.queryKey[2] as string | undefined, selectedAccount.address))
+                    return false
+                return true
+            },
+        })
+    }, [queryClient, selectedAccount.address, selectedNetwork.type])
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await updateBalances()
-        await updateSuggested()
+        await Promise.all([updateBalances(true), updateSuggested(), invalidateStargateQueries()])
 
         setRefreshing(false)
-    }, [updateBalances, updateSuggested])
+    }, [invalidateStargateQueries, updateBalances, updateSuggested])
 
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),
@@ -203,6 +207,17 @@ export const HomeScreen = () => {
         track,
     ])
 
+    useFocusEffect(
+        useCallback(() => {
+            // Invalidate the veDelegateBalance query to solve cache issues
+            queryClient.refetchQueries({
+                queryKey: getVeDelegateBalanceQueryKey(selectedAccount.address),
+                exact: true,
+                stale: true,
+            })
+        }, [queryClient, selectedAccount.address]),
+    )
+
     return (
         <Layout
             fixedHeader={<Header />}
@@ -234,6 +249,10 @@ export const HomeScreen = () => {
                     <BannersCarousel location="home_screen" />
 
                     <BaseView style={styles.container}>
+                        <StakedCard />
+                    </BaseView>
+
+                    <BaseView style={styles.container}>
                         <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                         <BaseSpacer height={8} />
                         <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
@@ -255,6 +274,7 @@ export const HomeScreen = () => {
                     <DeviceJailBrokenWarningModal />
                     <EnableNotificationsBottomSheet />
                     <VersionUpdateAvailableBottomSheet />
+                    <VersionChangelogBottomSheet />
                     <DisabledBuySwapIosBottomSheet
                         ref={blockedFeaturesIOSBottomSheetRef}
                         onConfirm={closeBlockedFeaturesIOSBottomSheet}

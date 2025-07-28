@@ -8,8 +8,8 @@ import { URIUtils } from "~Utils"
 import { DiscoveryDApp } from "~Constants"
 import { randomBytes } from "node:crypto"
 
-jest.mock("~Hooks/useFetchFeaturedDApps")
 jest.mock("axios")
+jest.mock("~Hooks/useFetchFeaturedDApps")
 
 const buildVbdDapp = (overrides?: Partial<VeBetterDaoDapp>): VeBetterDaoDapp => ({
     createdAtTimestamp: new Date().toISOString(),
@@ -37,7 +37,7 @@ describe("useVbdDapps", () => {
         ;(axios.get as jest.Mock).mockRestore()
     })
     it("should render correctly", async () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValueOnce({
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
             data: undefined,
             isFetching: false,
         })
@@ -52,7 +52,7 @@ describe("useVbdDapps", () => {
     })
 
     it("should grab metadata from ipfs if app is not on app hub", async () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValueOnce({
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
             data: [buildVbdDapp({ name: "TEST DAPP", id: "VBD_ID" })],
             isFetching: false,
         })
@@ -80,7 +80,7 @@ describe("useVbdDapps", () => {
 
     it("should return the discovery dapp if app is on app hub", async () => {
         const dapp = buildVbdDapp({ name: "TEST DAPP", id: "VBD_ID_TEST" })
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValueOnce({
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
             data: [dapp],
             isFetching: false,
         })
@@ -118,7 +118,7 @@ describe("useVbdDapps", () => {
     })
 
     it("should return hasMore = false if there are < 10 items", async () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValueOnce({
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
             data: [buildVbdDapp({ name: "TEST DAPP", id: "VBD_ID" })],
             isFetching: false,
         })
@@ -142,7 +142,7 @@ describe("useVbdDapps", () => {
     })
 
     it("should return hasMore = true if there are > 10 items", async () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValueOnce({
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
             data: Array.from({ length: 11 }, (_, idx) =>
                 buildVbdDapp({ name: `TEST DAPP #${idx.toString().padStart(2, "0")}`, id: "VBD_ID" }),
             ),
@@ -174,7 +174,7 @@ describe("useVbdDapps", () => {
     })
 
     it("should return dependencyLoading = true if fetching from contract", async () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValueOnce({
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
             data: undefined,
             isFetching: true,
         })

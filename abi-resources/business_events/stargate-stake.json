@@ -1,0 +1,143 @@
+{
+  "name": "STARGATE_STAKE",
+  "sameClause": true,
+  "events": [
+    {
+      "name": "TokenMinted(indexed address,indexed uint8,indexed bool,uint256,uint256)",
+      "alias": "tokenMinted",
+      "conditions": [
+        {
+          "firstOperand": "levelId",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "tokenId",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "vetAmountStaked",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        },
+        {
+          "firstOperand": "owner",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "address",
+          "isFirstStatic": false,
+          "secondOperand": "${STARGATE_NFT_CONTRACT}",
+          "isSecondStatic": true,
+          "operator": "EQ"
+        }
+      ]
+    },
+    {
+      "name": "VET_TRANSFER(address,address,uint256)",
+      "alias": "vetTransfer",
+      "conditions": [
+        {
+          "firstOperand": "from",
+          "isFirstStatic": false,
+          "secondOperand": "origin",
+          "isSecondStatic": false,
+          "operator": "EQ"
+        },
+        {
+          "firstOperand": "amount",
+          "isFirstStatic": false,
+          "secondOperand": 0,
+          "isSecondStatic": true,
+          "operator": "GT"
+        }
+      ]
+    }
+  ],
+  "rules": [
+    {
+      "firstEventName": "tokenMinted",
+      "firstEventProperty": "owner",
+      "secondEventName": "vetTransfer",
+      "secondEventProperty": "from",
+      "operator": "EQ"
+    },
+    {
+      "firstEventName": "tokenMinted",
+      "firstEventProperty": "vetAmountStaked",
+      "secondEventName": "vetTransfer",
+      "secondEventProperty": "amount",
+      "operator": "EQ"
+    }
+  ],
+  "paramsDefinition": [
+    {
+      "name": "tokenId",
+      "eventName": "tokenMinted",
+      "businessEventName": "tokenId"
+    },
+    {
+      "name": "vetAmountStaked",
+      "eventName": "tokenMinted",
+      "businessEventName": "value"
+    },
+    {
+      "name": "levelId",
+      "eventName": "tokenMinted",
+      "businessEventName": "levelId"
+    },
+    {
+      "name": "owner",
+      "eventName": "tokenMinted",
+      "businessEventName": "owner"
+    },
+    {
+      "name": "migrated",
+      "eventName": "tokenMinted",
+      "businessEventName": "migrated"
+    }
+  ],
+  "inputs": [
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "tokenId",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint256",
+      "name": "value",
+      "type": "uint256"
+    },
+    {
+      "indexed": false,
+      "internalType": "uint8",
+      "name": "levelId",
+      "type": "uint8"
+    },
+    {
+      "indexed": false,
+      "internalType": "address",
+      "name": "owner",
+      "type": "address"
+    },
+    {
+      "indexed": false,
+      "internalType": "bool",
+      "name": "migrated",
+      "type": "bool"
+    }
+  ],
+  "type": "event"
+}

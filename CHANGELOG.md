@@ -1,5 +1,25 @@
 # Changelog
 
+## <small>2.2.10 (2025-07-24)</small>
+
+* build: init ([955e4db](https://github.com/vechain/veworld-mobile/commit/955e4db))
+* fix: fix comma + snap of base carousel (#3116) ([812d481](https://github.com/vechain/veworld-mobile/commit/812d481)), closes [#3116](https://github.com/vechain/veworld-mobile/issues/3116)
+
+## <small>2.2.9 (2025-07-21)</small>
+
+* build: init ([9aed4db](https://github.com/vechain/veworld-mobile/commit/9aed4db))
+* fix:  input background color (#3098) ([9e6ba8b](https://github.com/vechain/veworld-mobile/commit/9e6ba8b)), closes [#3098](https://github.com/vechain/veworld-mobile/issues/3098)
+
+## <small>2.2.7 (2025-07-17)</small>
+
+* build: init ([f993278](https://github.com/vechain/veworld-mobile/commit/f993278))
+* fix: fix useIsEnoughGas to check for exact 0 (#3089) ([0c35a85](https://github.com/vechain/veworld-mobile/commit/0c35a85)), closes [#3089](https://github.com/vechain/veworld-mobile/issues/3089)
+
+## 2.3.0 (2025-07-03)
+
+* build: init ([01acef7](https://github.com/vechain/veworld-mobile/commit/01acef7))
+* feat: wallet kit abstraction containing smart account capabilities ([adf58a5](https://github.com/vechain/veworld-mobile/commit/adf58a5))
+
 ## <small>2.2.5 (2025-06-30)</small>
 
 * build: init ([8e24c0b](https://github.com/vechain/veworld-mobile/commit/8e24c0b))

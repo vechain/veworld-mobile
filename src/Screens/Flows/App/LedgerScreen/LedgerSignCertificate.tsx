@@ -170,13 +170,9 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     }, [ledgerErrorCode, closeConnectionErrorSheet, openConnectionErrorSheet])
 
     const navigateOnFinish = useCallback(() => {
-        // Requires an extra goBack if it's the first request from the dapp
-        if (request.type === "in-app" && request.isFirstRequest) nav.goBack()
-        // nav back to SignCertificate Screen
-        nav.goBack()
         // nav back to original screen
         nav.goBack()
-    }, [request, nav])
+    }, [nav])
 
     const handleOnConfirm = useCallback(async () => {
         try {
