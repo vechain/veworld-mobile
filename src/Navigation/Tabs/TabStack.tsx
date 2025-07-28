@@ -128,7 +128,7 @@ export const TabStack = () => {
                     component={HomeStack}
                     options={{
                         tabBarLabel: "Wallet",
-                        tabBarButtonTestID: "wallet-tab",
+                        tabBarTestID: "wallet-tab",
                         tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home"),
                         tabBarButton: createTabBarButton("HomeStack"),
                     }}
@@ -139,7 +139,7 @@ export const TabStack = () => {
                     component={NFTStack}
                     options={{
                         tabBarLabel: "NFT",
-                        tabBarButtonTestID: "nft-tab",
+                        tabBarTestID: "nft-tab",
                         tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image"),
                         tabBarButton: createTabBarButton("NFTStack"),
                     }}
@@ -150,7 +150,7 @@ export const TabStack = () => {
                     component={DiscoverStack}
                     options={{
                         tabBarLabel: "Discover",
-                        tabBarButtonTestID: "discover-tab",
+                        tabBarTestID: "discover-tab",
                         tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer"),
                         tabBarButton: createTabBarButton("DiscoverStack"),
                     }}
@@ -161,7 +161,7 @@ export const TabStack = () => {
                     component={HistoryStack}
                     options={{
                         tabBarLabel: Routes.HISTORY,
-                        tabBarButtonTestID: "history-tab",
+                        tabBarTestID: "history-tab",
                         tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history"),
                         tabBarButton: createTabBarButton(Routes.HISTORY_STACK),
                     }}
@@ -172,7 +172,7 @@ export const TabStack = () => {
                     component={SettingsStack}
                     options={{
                         tabBarLabel: "Settings",
-                        tabBarButtonTestID: "settings-tab",
+                        tabBarTestID: "settings-tab",
                         tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu"),
                         tabBarButton: createTabBarButton("SettingsStack"),
                     }}

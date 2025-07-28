@@ -40,7 +40,7 @@ module.exports = {
                     stream: "stream-browserify",
                     buffer: "@craftzdog/react-native-buffer",
                     "@ethersproject/pbkdf2": "./patches/patch-pbkdf2.js",
-                    url: "react-native-fast-url",
+                    url: "react-native-fast-url/src/polyfill",
                 },
             },
         ],

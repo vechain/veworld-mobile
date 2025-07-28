@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios"
 import DeviceInfo from "react-native-device-info"
 import { validateIpfsUri } from "~Utils/IPFSUtils/IPFSUtils"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
+import { URL } from "react-native-fast-url"
 
 const REGEX_WWW = /^www\.[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(:\d+)?$/
 const REGEX_NOT_WWW = /^[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z]{2,}(:\d+)?$/

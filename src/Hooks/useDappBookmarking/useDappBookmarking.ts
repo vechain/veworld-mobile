@@ -10,6 +10,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
+import { URL } from "react-native-fast-url"
 
 export const useDappBookmarking = (url?: string, title?: string) => {
     const dispatch = useAppDispatch()

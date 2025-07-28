@@ -41,6 +41,7 @@ import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
+import { URL } from "react-native-fast-url"
 
 const { PackageDetails } = NativeModules
 
