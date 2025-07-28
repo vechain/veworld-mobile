@@ -68,9 +68,10 @@ type Props = PropsWithChildren<{
      * Skip the animated styles
      */
     noAnimation?: boolean
+    testID?: string
 }>
 
-const DappDetails = ({ children, show, style, noAnimation = false }: Props) => {
+const DappDetails = ({ children, show, style, noAnimation = false, testID }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const animatedStyles = useAnimatedStyle(() => {
         return {
@@ -84,7 +85,8 @@ const DappDetails = ({ children, show, style, noAnimation = false }: Props) => {
             layout={LinearTransition.duration(300)}
             style={[styles.detailsContainer, noAnimation ? undefined : animatedStyles, style]}
             flexDirection="column"
-            borderRadius={8}>
+            borderRadius={8}
+            testID={testID}>
             {children}
         </AnimatedBaseView>
     )

@@ -34,10 +34,12 @@ export const B3TRActionOutput = ({ output, ...props }: Props) => {
             iconBg={COLORS.B3TR_ICON_BACKGROUND}
             iconColor={COLORS.GREY_700}
             output={output}
-            additionalDetails={app && <BaseAdditionalDetail label={LL.ADDITIONAL_DETAIL_APP()} value={app.name} />}
+            additionalDetails={
+                app && <BaseAdditionalDetail label={LL.ADDITIONAL_DETAIL_APP()} value={app.name} testID="B3TR_APP" />
+            }
             {...props}>
             <BaseReceiptOutput.ValueContainer flexDirection="column" gap={2}>
-                <BaseReceiptOutput.ValueMainText>
+                <BaseReceiptOutput.ValueMainText testID="B3TR_ACTION_VALUE">
                     {`${DIRECTIONS.UP} ${amountHuman} ${B3TR.symbol}`}
                 </BaseReceiptOutput.ValueMainText>
             </BaseReceiptOutput.ValueContainer>

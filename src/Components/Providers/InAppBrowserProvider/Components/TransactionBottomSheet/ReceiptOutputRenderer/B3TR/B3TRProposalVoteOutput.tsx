@@ -15,6 +15,7 @@ export const B3TRProposalVoteOutput = ({ output, ...props }: Props) => {
             iconBg={COLORS.B3TR_ICON_BACKGROUND}
             iconColor={COLORS.GREY_700}
             output={output}
+            testID="B3TR_PROPOSAL_VOTE"
             {...props}
         />
     )

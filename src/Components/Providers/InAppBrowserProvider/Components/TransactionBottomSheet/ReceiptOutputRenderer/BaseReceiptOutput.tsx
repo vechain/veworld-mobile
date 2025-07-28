@@ -19,6 +19,7 @@ type BaseReceiptOutputProps = PropsWithChildren<
         additionalDetails?: ReactNode
         output: ReceiptOutput
         clause: TransactionClause
+        testID?: string
     } & IconRendererProps
 >
 
@@ -74,6 +75,7 @@ const BaseReceiptOutput = ({
     additionalDetails,
     output,
     clause,
+    testID,
     ...iconProps
 }: BaseReceiptOutputProps) => {
     const { LL } = useI18nContext()
@@ -83,7 +85,7 @@ const BaseReceiptOutput = ({
         [expanded, styles.root],
     )
     return (
-        <DappDetails show style={rootStyles} noAnimation>
+        <DappDetails show style={rootStyles} noAnimation testID={testID}>
             <BaseView
                 flexDirection="row"
                 gap={16}

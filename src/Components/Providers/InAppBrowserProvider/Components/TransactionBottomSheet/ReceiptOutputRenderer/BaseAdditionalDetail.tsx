@@ -50,10 +50,12 @@ const BaseAdditionalDetail = ({
     label,
     value,
     direction = "row",
+    testID,
 }: {
     label: string
     value: ReactNode
     direction?: "row" | "column"
+    testID?: string
 }) => {
     const theme = useTheme()
     const props = useMemo((): BaseViewProps => {
@@ -65,7 +67,7 @@ const BaseAdditionalDetail = ({
         }
     }, [direction])
     return (
-        <BaseView w={100} {...props}>
+        <BaseView w={100} testID={testID} {...props}>
             <BaseText typographyFont="smallCaptionMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}>
                 {label}
             </BaseText>

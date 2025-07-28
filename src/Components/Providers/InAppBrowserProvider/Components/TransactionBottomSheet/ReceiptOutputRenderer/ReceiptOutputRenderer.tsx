@@ -33,6 +33,10 @@ export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
             if (AddressUtils.compareAddresses(output.params.from, selectedAccount.address))
                 return <TokenSendOutput expanded={expanded} output={output} clause={clause} />
             return <TokenReceiveOutput expanded={expanded} output={output} clause={clause} />
+        case "VET_TRANSFER(address,address,uint256)":
+            if (AddressUtils.compareAddresses(output.params.from, selectedAccount.address))
+                return <TokenSendOutput expanded={expanded} output={output} clause={clause} />
+            return <TokenReceiveOutput expanded={expanded} output={output} clause={clause} />
         case "Transfer(indexed address,indexed address,indexed uint256)":
             if (AddressUtils.compareAddresses(output.params.from, selectedAccount.address))
                 return <NftSendOutput expanded={expanded} output={output} clause={clause} />

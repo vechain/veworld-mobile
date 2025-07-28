@@ -31,7 +31,7 @@ export const B3TRClaimRewardsOutput = ({ output, ...props }: Props) => {
             output={output}
             {...props}>
             <BaseReceiptOutput.ValueContainer flexDirection="column" gap={2}>
-                <BaseReceiptOutput.ValueMainText>
+                <BaseReceiptOutput.ValueMainText testID="B3TR_CLAIM_REWARDS_VALUE">
                     {`${DIRECTIONS.UP} ${amountHuman} ${B3TR.symbol}`}
                 </BaseReceiptOutput.ValueMainText>
             </BaseReceiptOutput.ValueContainer>
