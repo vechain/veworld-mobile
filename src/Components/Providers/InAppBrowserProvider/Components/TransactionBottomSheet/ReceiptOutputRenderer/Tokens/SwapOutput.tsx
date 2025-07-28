@@ -78,12 +78,14 @@ export const SwapOutput = ({ output, ...props }: Props) => {
 
     return (
         <BaseReceiptOutput label={LL.RECEIPT_OUTPUT_SWAP()} iconKey="icon-arrow-left-right" output={output} {...props}>
-            <BaseReceiptOutput.ValueMainText>
-                {`${DIRECTIONS.UP} ${amountInHuman} ${inputToken?.symbol}`}
-            </BaseReceiptOutput.ValueMainText>
-            <BaseReceiptOutput.ValueSubText>
-                {`${DIRECTIONS.UP} ${amountOutHuman} ${outputToken?.symbol}`}
-            </BaseReceiptOutput.ValueSubText>
+            <BaseReceiptOutput.ValueContainer flexDirection="column" gap={2}>
+                <BaseReceiptOutput.ValueMainText>
+                    {`${DIRECTIONS.DOWN} ${amountInHuman} ${inputToken?.symbol}`}
+                </BaseReceiptOutput.ValueMainText>
+                <BaseReceiptOutput.ValueSubText>
+                    {`${DIRECTIONS.UP} ${amountOutHuman} ${outputToken?.symbol}`}
+                </BaseReceiptOutput.ValueSubText>
+            </BaseReceiptOutput.ValueContainer>
         </BaseReceiptOutput>
     )
 }

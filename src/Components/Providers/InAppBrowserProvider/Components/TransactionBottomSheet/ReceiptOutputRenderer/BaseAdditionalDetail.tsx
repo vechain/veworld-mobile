@@ -2,7 +2,7 @@ import React, { ReactNode, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseText, BaseTextProps, BaseView, BaseViewProps } from "~Components/Base"
 import { COLORS } from "~Constants"
-import { useCopyClipboard, useTheme, useThemedStyles } from "~Hooks"
+import { useCopyClipboard, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AddressUtils } from "~Utils"
 
@@ -10,6 +10,15 @@ const HexValue = ({ value }: { value: string }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { onCopyToClipboard } = useCopyClipboard()
+
+    const isAddress = useMemo(() => {
+        return AddressUtils.isValid(value)
+    }, [value])
+
+    const { name } = useVns({
+        address: isAddress ? value : "",
+        name: "",
+    })
 
     return (
         <BaseButton
@@ -19,7 +28,7 @@ const HexValue = ({ value }: { value: string }) => {
             px={0}
             py={0}
             typographyFont="captionMedium"
-            title={AddressUtils.humanAddress(value)}
+            title={name || AddressUtils.humanAddress(value)}
             action={() => onCopyToClipboard(value, LL.COMMON_LBL_ADDRESS())}
             rightIcon={
                 <BaseIcon

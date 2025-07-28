@@ -102,7 +102,7 @@ export { DappDetails }
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         detailsContainer: {
-            backgroundColor: theme.colors.editSpeedBs.result.background,
+            backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_50,
             borderColor: theme.colors.editSpeedBs.result.border,
             borderWidth: 1,
             padding: 16,

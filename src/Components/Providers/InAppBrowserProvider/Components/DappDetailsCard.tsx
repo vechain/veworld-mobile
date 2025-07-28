@@ -72,7 +72,7 @@ export const DappDetailsCard = ({
 
     return (
         <AnimatedBaseView
-            bg={theme.colors.assetDetailsCard.background}
+            bg={theme.isDark ? COLORS.PURPLE : COLORS.WHITE}
             p={16}
             flexDirection="column"
             layout={LinearTransition.duration(300)}
