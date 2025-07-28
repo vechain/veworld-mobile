@@ -265,4 +265,176 @@ describe("ReceiptOutputRenderer", () => {
             })
         })
     })
+    describe("Stargate", () => {
+        describe("Claim rewards", () => {
+            it("v1", () => {
+                renderComponentWithProps(
+                    <ReceiptOutputRenderer
+                        expanded
+                        clauses={clauses}
+                        output={{
+                            clauseIndex: 0,
+                            name: "STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)",
+                            params: {
+                                owner: "0x0",
+                                tokenId: 1n,
+                                value: ethers.utils.parseEther("1").toBigInt(),
+                            },
+                        }}
+                    />,
+                    {
+                        wrapper: TestWrapper,
+                    },
+                )
+
+                expect(
+                    screen.getByTestId("STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)_VALUE"),
+                ).toHaveTextContent("+ 1.00 VTHO")
+            })
+            it("v2", () => {
+                renderComponentWithProps(
+                    <ReceiptOutputRenderer
+                        expanded
+                        clauses={clauses}
+                        output={{
+                            clauseIndex: 0,
+                            name: "STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)",
+                            params: {
+                                owner: "0x0",
+                                tokenId: 1n,
+                                value: ethers.utils.parseEther("1").toBigInt(),
+                            },
+                        }}
+                    />,
+                    {
+                        wrapper: TestWrapper,
+                    },
+                )
+
+                expect(
+                    screen.getByTestId("STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)_VALUE"),
+                ).toHaveTextContent("+ 1.00 VTHO")
+            })
+        })
+        it("Stake", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_STAKE(uint256,uint256,uint8,address,bool)",
+                        params: {
+                            levelId: 1,
+                            migrated: false,
+                            owner: "0x0",
+                            tokenId: 1n,
+                            value: ethers.utils.parseEther("1").toBigInt(),
+                        },
+                    }}
+                />,
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_STAKE(uint256,uint256,uint8,address,bool)_VALUE")).toHaveTextContent(
+                "- 1.00 VET",
+            )
+        })
+        it("Stake delegate", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)",
+                        params: {
+                            levelId: 1,
+                            migrated: false,
+                            owner: "0x0",
+                            tokenId: 1n,
+                            value: ethers.utils.parseEther("1").toBigInt(),
+                            autorenew: true,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+
+            expect(
+                screen.getByTestId("STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)_VALUE"),
+            ).toHaveTextContent("- 1.00 VET")
+        })
+        it("Unstake", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_UNSTAKE(uint256,uint256,uint8,address)",
+                        params: {
+                            levelId: 1,
+                            owner: "0x0",
+                            tokenId: 1n,
+                            value: ethers.utils.parseEther("1").toBigInt(),
+                        },
+                    }}
+                />,
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_UNSTAKE(uint256,uint256,uint8,address)_VALUE")).toHaveTextContent(
+                "+ 1.00 VET",
+            )
+        })
+        it("Delegate", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_DELEGATE(uint256,address,bool)",
+                        params: {
+                            owner: "0x0",
+                            tokenId: 1n,
+                            autorenew: true,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_DELEGATE(uint256,address,bool)_TOKEN_ID")).toHaveTextContent("#1")
+        })
+        it("Undelegate", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "STARGATE_UNDELEGATE(uint256)",
+                        params: {
+                            tokenId: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("STARGATE_UNDELEGATE(uint256)_TOKEN_ID")).toHaveTextContent("#1")
+        })
+    })
 })

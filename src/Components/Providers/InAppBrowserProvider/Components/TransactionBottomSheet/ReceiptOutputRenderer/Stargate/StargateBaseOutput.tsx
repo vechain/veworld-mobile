@@ -63,7 +63,7 @@ export const StargateBaseOutput = ({ output, ...props }: Props) => {
             case "STARGATE_UNSTAKE(uint256,uint256,uint8,address)":
                 return (
                     <BaseReceiptOutput.ValueContainer>
-                        <BaseReceiptOutput.ValueMainText>
+                        <BaseReceiptOutput.ValueMainText testID={`${output.name}_VALUE`}>
                             {`${valueDirection} ${valueHuman} ${valueSymbol}`}
                         </BaseReceiptOutput.ValueMainText>
                     </BaseReceiptOutput.ValueContainer>
@@ -97,7 +97,11 @@ export const StargateBaseOutput = ({ output, ...props }: Props) => {
             iconNode={<StargateIcon icon={icon} />}
             output={output}
             additionalDetails={
-                <BaseAdditionalDetail label={LL.ADDITIONAL_DETAIL_TOKEN_ID()} value={`#${output.params.tokenId}`} />
+                <BaseAdditionalDetail
+                    label={LL.ADDITIONAL_DETAIL_TOKEN_ID()}
+                    value={`#${output.params.tokenId}`}
+                    testID={`${output.name}_TOKEN_ID`}
+                />
             }
             {...props}>
             {children}
