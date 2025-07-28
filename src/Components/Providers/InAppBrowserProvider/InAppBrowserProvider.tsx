@@ -41,6 +41,7 @@ import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
+import { TypedDataBottomSheet } from "./Components/TypedDataBottomSheet"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
 const { PackageDetails } = NativeModules
@@ -114,6 +115,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         setCertificateBsData,
         transactionBsRef,
         setTransactionBsData,
+        typedDataBsRef,
+        setTypedDataBsData,
     } = useInteraction()
 
     useEffect(() => {
@@ -494,9 +497,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (isAlreadyConnected) {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
-                    request: req,
-                })
+                setTypedDataBsData(req)
+                typedDataBsRef.current?.present()
             } else {
                 setConnectBsData({
                     type: "in-app",
@@ -507,7 +509,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 connectBsRef.current?.present()
             }
         },
-        [connectBsRef, connectedDiscoveryApps, nav, setConnectBsData, switchAccount, switchNetwork],
+        [
+            connectBsRef,
+            connectedDiscoveryApps,
+            setConnectBsData,
+            setTypedDataBsData,
+            switchAccount,
+            switchNetwork,
+            typedDataBsRef,
+        ],
     )
 
     // ~ MESSAGE VALIDATION
@@ -650,12 +660,19 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (request.method === "thor_signTypedData") {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
-                    request,
-                })
+                setTypedDataBsData(request)
+                typedDataBsRef.current?.present()
             }
         },
-        [certificateBsRef, dispatch, nav, setCertificateBsData, setTransactionBsData, transactionBsRef],
+        [
+            certificateBsRef,
+            dispatch,
+            setCertificateBsData,
+            setTransactionBsData,
+            setTypedDataBsData,
+            transactionBsRef,
+            typedDataBsRef,
+        ],
     )
 
     const onMessage = useCallback(
@@ -843,6 +860,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             <ConnectBottomSheet />
             <CertificateBottomSheet />
             <TransactionBottomSheet />
+            <TypedDataBottomSheet />
             {children}
         </Context.Provider>
     )

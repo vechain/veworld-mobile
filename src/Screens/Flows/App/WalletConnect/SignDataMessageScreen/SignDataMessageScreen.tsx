@@ -17,13 +17,7 @@ import {
     useWalletConnect,
 } from "~Components"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import {
-    useAnalyticTracking,
-    useBottomSheetModal,
-    useCheckIdentity,
-    useSetSelectedAccount,
-    useSignTypedMessage,
-} from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useCheckIdentity, useSetSelectedAccount } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AccountWithDevice, DEVICE_TYPE, SignedTypedDataResponse, TypedData, WatchedAccount } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
@@ -93,7 +87,7 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
         }
     }, [request, selectedAccount?.address])
 
-    const { signTypedData } = useSignTypedMessage({ typedData })
+    // const { signTypedData } = useSignTypedMessage({ typedData })
 
     const onClose = useCallback(() => {
         if (nav.canGoBack()) {
@@ -104,13 +98,14 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
     }, [nav])
 
     const handleAccept = useCallback(
-        async (password?: string) => {
+        async (_password?: string) => {
             try {
                 if (selectedAccount.device.type === DEVICE_TYPE.LEDGER) {
                     throw new Error("Ledger devices not supported")
                 }
 
-                const signature = await signTypedData(password)
+                // const signature = await signTypedData(password)
+                const signature = ""
 
                 if (!signature) {
                     throw new Error("Signature is empty")
@@ -163,7 +158,6 @@ export const SignDataMessageScreen: FC<Props> = ({ route }: Props) => {
         [
             onClose,
             selectedAccount.device.type,
-            signTypedData,
             typedData,
             dispatch,
             request,
