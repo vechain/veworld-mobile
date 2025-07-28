@@ -20,6 +20,12 @@ const HexValue = ({ value }: { value: string }) => {
         name: "",
     })
 
+    const formattedValue = useMemo(() => {
+        if (name) return name
+        if (value.length < 10) return value
+        return AddressUtils.humanAddress(value)
+    }, [name, value])
+
     return (
         <BaseButton
             textColor={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_600}
@@ -28,7 +34,7 @@ const HexValue = ({ value }: { value: string }) => {
             px={0}
             py={0}
             typographyFont="captionMedium"
-            title={name || AddressUtils.humanAddress(value)}
+            title={formattedValue}
             action={() => onCopyToClipboard(value, LL.COMMON_LBL_ADDRESS())}
             rightIcon={
                 <BaseIcon
