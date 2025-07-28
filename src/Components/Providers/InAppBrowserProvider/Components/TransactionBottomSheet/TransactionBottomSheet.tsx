@@ -1,7 +1,7 @@
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { Transaction } from "@vechain/sdk-core"
-import { default as React, useCallback, useMemo, useRef, useState } from "react"
+import { default as React, useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, showErrorToast } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -39,8 +39,6 @@ type Props = {
     onTransactionFailure: () => Promise<void>
     onNavigateToLedger: () => void
     selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
-
-    isLoading: boolean
 }
 
 export const TransactionBottomSheetContent = ({
@@ -237,8 +235,6 @@ export const TransactionBottomSheet = () => {
 
     const isUserAction = useRef(false)
 
-    const [isLoading, setIsLoading] = useState(false)
-
     const onFinish = useCallback(
         (success: boolean) => {
             assertDefined(transactionBsData)
@@ -269,7 +265,7 @@ export const TransactionBottomSheet = () => {
             if (transactionBsData.type === "wallet-connect") {
                 await processRequest(transactionBsData.requestEvent, {
                     txid: id,
-                    signer: selectedAccount!.address,
+                    signer: selectedAccount.address,
                 })
             } else {
                 postMessage({
@@ -325,7 +321,7 @@ export const TransactionBottomSheet = () => {
                         method: RequestMethods.REQUEST_TRANSACTION,
                     })
                 }
-            } catch (e) {
+            } catch {
                 showErrorToast({
                     text1: LL.NOTIFICATION_wallet_connect_matching_error(),
                 })
@@ -344,19 +340,15 @@ export const TransactionBottomSheet = () => {
     )
 
     const onDismiss = useCallback(async () => {
-        try {
-            if (isUserAction.current) {
-                setTransactionBsData(null)
-                isUserAction.current = false
-                return
-            }
-            if (!transactionBsData) return
-            await rejectRequest(transactionBsData)
-            isUserAction.current = false
+        if (isUserAction.current) {
             setTransactionBsData(null)
-        } finally {
-            setIsLoading(false)
+            isUserAction.current = false
+            return
         }
+        if (!transactionBsData) return
+        await rejectRequest(transactionBsData)
+        isUserAction.current = false
+        setTransactionBsData(null)
     }, [rejectRequest, setTransactionBsData, transactionBsData])
 
     const snapPoints = useMemo(() => ["90%"], [])
@@ -371,7 +363,6 @@ export const TransactionBottomSheet = () => {
                 <TransactionBottomSheetContent
                     onCancel={onCancel}
                     request={transactionBsData}
-                    isLoading={isLoading}
                     selectAccountBsRef={selectAccountBsRef}
                     onTransactionFailure={onTransactionFailure}
                     onTransactionSuccess={onTransactionSuccess}

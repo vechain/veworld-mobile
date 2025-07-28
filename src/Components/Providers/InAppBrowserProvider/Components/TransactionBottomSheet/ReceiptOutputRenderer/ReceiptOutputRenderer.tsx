@@ -30,9 +30,6 @@ export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
     const clause = useMemo(() => clauses[output.clauseIndex], [clauses, output.clauseIndex])
     switch (output.name) {
         case "Transfer(indexed address,indexed address,uint256)":
-            if (AddressUtils.compareAddresses(output.params.from, selectedAccount.address))
-                return <TokenSendOutput expanded={expanded} output={output} clause={clause} />
-            return <TokenReceiveOutput expanded={expanded} output={output} clause={clause} />
         case "VET_TRANSFER(address,address,uint256)":
             if (AddressUtils.compareAddresses(output.params.from, selectedAccount.address))
                 return <TokenSendOutput expanded={expanded} output={output} clause={clause} />

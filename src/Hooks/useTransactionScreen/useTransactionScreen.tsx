@@ -41,8 +41,8 @@ import { BigNutils, error } from "~Utils"
 
 type Props = {
     clauses: TransactionClause[]
-    onTransactionSuccess: (transaction: Transaction, txId: string) => void
-    onTransactionFailure: (error: unknown) => void
+    onTransactionSuccess: (transaction: Transaction, txId: string) => void | Promise<void>
+    onTransactionFailure: (error: unknown) => void | Promise<void>
     initialRoute?: Routes.HOME | Routes.NFTS
     dappRequest?: TransactionRequest
     /**
@@ -253,7 +253,7 @@ export const useTransactionScreen = ({
                     text1: LL.ERROR(),
                     text2: `${LL.SEND_TRANSACTION_ERROR()}${parseTxError(e)}`,
                 })
-                onTransactionFailure(e)
+                await onTransactionFailure(e)
             } finally {
                 setLoading(false)
                 dispatch(setIsAppLoading(false))
@@ -295,7 +295,7 @@ export const useTransactionScreen = ({
                 })
                 setLoading(false)
                 dispatch(setIsAppLoading(false))
-                onTransactionFailure(e)
+                await onTransactionFailure(e)
             }
         },
         [signTransaction, onNavigateToLedger, resetDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
@@ -323,7 +323,7 @@ export const useTransactionScreen = ({
             await checkIdentityBeforeOpening()
         } catch (e) {
             error(ERROR_EVENTS.SEND, e)
-            onTransactionFailure(e)
+            await onTransactionFailure(e)
         } finally {
             isSubmitting.current = false
         }

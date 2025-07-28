@@ -21,12 +21,6 @@ export const SwapOutput = ({ output, ...props }: Props) => {
     const parsed = useMemo(() => {
         switch (output.name) {
             case "FT_VET_Swap(address,address,address,uint256,uint256)":
-                return {
-                    inputValue: output.params.inputValue,
-                    inputToken: output.params.inputToken,
-                    outputToken: VET.address,
-                    outputValue: output.params.outputValue,
-                }
             case "FT_VET_Swap2(address,address,address,uint256,uint256)":
                 return {
                     inputValue: output.params.inputValue,
