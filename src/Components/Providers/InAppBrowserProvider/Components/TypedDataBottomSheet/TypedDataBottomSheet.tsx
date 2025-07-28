@@ -1,4 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { ethers } from "ethers"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
@@ -7,6 +8,7 @@ import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConne
 import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
+import { VIP180 } from "~Constants/Constants/Thor/abis"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignTypedMessage, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { SignedTypedDataResponse, TypeDataRequest, TypedData } from "~Model"
@@ -107,7 +109,22 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
             <BaseSpacer height={12} />
             <DappWithDetails name={name} icon={icon} url={url}>
                 <Renderer.Container>
-                    <Renderer value={request.value} />
+                    {/* <Renderer value={request.value} /> */}
+                    <Renderer
+                        value={{
+                            to: ["0x75a6a29db80bd8a64d3d4b19b29d09bb2245a97f"],
+                            value: ["0x0"],
+                            data: [
+                                new ethers.utils.Interface([VIP180.transfer]).encodeFunctionData("transfer", [
+                                    "0x75a6a29db80bd8a64d3d4b19b29d09bb2245a97f",
+                                    ethers.utils.parseEther("1").toString(),
+                                ]),
+                            ],
+                            validAfter: 0,
+                            validBefore: Math.floor(Date.now() / 1000),
+                            nonce: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
+                        }}
+                    />
                     {/* <Renderer value={{ test: [{ nested: new Date().toISOString() }], notTest: "TEST" }} /> */}
                 </Renderer.Container>
                 {/* <JsonViewer data={{ test: [{ nested: new Date().toISOString() }], notTest: "TEST" }} /> */}
