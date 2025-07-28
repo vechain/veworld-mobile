@@ -1560,6 +1560,9 @@ PODS:
     - Yoga
   - react-native-context-menu-view (1.19.0):
     - React
+  - react-native-fast-url (1.0.0):
+    - React-Core
+    - React-jsi
   - react-native-get-random-values (1.11.0):
     - React-Core
   - react-native-in-app-review (4.3.5):
@@ -2562,6 +2565,7 @@ DEPENDENCIES:
   - react-native-capture-protection (from `../node_modules/react-native-capture-protection`)
   - "react-native-compat (from `../node_modules/@walletconnect/react-native-compat`)"
   - react-native-context-menu-view (from `../node_modules/react-native-context-menu-view`)
+  - react-native-fast-url (from `../node_modules/react-native-fast-url`)
   - react-native-get-random-values (from `../node_modules/react-native-get-random-values`)
   - react-native-in-app-review (from `../node_modules/react-native-in-app-review`)
   - react-native-mmkv (from `../node_modules/react-native-mmkv`)
@@ -2774,6 +2778,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/@walletconnect/react-native-compat"
   react-native-context-menu-view:
     :path: "../node_modules/react-native-context-menu-view"
+  react-native-fast-url:
+    :path: "../node_modules/react-native-fast-url"
   react-native-get-random-values:
     :path: "../node_modules/react-native-get-random-values"
   react-native-in-app-review:
@@ -2970,6 +2976,7 @@ SPEC CHECKSUMS:
   react-native-capture-protection: fd182aaae299fbab7f2790555f1ac59778f8951a
   react-native-compat: cd0d74a1ba0c462c140f0e300d6ad0e7582b96c5
   react-native-context-menu-view: f20df4bf07145c6d14ef631c8b8663ccdac9fb7c
+  react-native-fast-url: 5a825e00d85d038d31d977effcb41a3533ae7ae0
   react-native-get-random-values: 21325b2244dfa6b58878f51f9aa42821e7ba3d06
   react-native-in-app-review: cf4a29c5a1d6bb28dd0d15f1fb1faa25e265bfb5
   react-native-mmkv: 4b3326800276b532f3c69d88ed341fc806ed1868
