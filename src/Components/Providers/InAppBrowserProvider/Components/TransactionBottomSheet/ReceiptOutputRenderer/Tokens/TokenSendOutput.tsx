@@ -42,12 +42,12 @@ export const TokenSendOutput = ({ output, ...props }: Props) => {
             additionalDetails={
                 <BaseAdditionalDetail
                     label={LL.ADDITIONAL_DETAIL_RECEIVER()}
-                    value={<BaseAdditionalDetail.HexValue value={output.params.to} />}
+                    value={<BaseAdditionalDetail.HexValue value={output.params.to} testID="TOKEN_SEND_RECEIVER" />}
                 />
             }
             {...props}>
             <BaseReceiptOutput.ValueContainer>
-                <BaseReceiptOutput.ValueMainText>
+                <BaseReceiptOutput.ValueMainText testID="TOKEN_SEND_VALUE">
                     {`${DIRECTIONS.DOWN} ${amountHuman} ${token?.symbol}`}
                 </BaseReceiptOutput.ValueMainText>
             </BaseReceiptOutput.ValueContainer>

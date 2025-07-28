@@ -6,7 +6,7 @@ import { useCopyClipboard, useTheme, useThemedStyles, useVns } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { AddressUtils } from "~Utils"
 
-const HexValue = ({ value }: { value: string }) => {
+const HexValue = ({ value, testID }: { value: string; testID?: string }) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { onCopyToClipboard } = useCopyClipboard()
@@ -36,6 +36,7 @@ const HexValue = ({ value }: { value: string }) => {
             typographyFont="captionMedium"
             title={formattedValue}
             action={() => onCopyToClipboard(value, LL.COMMON_LBL_ADDRESS())}
+            textTestID={testID}
             rightIcon={
                 <BaseIcon
                     name="icon-copy"

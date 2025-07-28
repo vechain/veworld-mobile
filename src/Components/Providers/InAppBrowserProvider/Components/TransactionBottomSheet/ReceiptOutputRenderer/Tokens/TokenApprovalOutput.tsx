@@ -33,11 +33,17 @@ export const TokenApprovalOutput = ({ output, ...props }: Props) => {
             additionalDetails={
                 <BaseAdditionalDetail
                     label={LL.ADDITIONAL_DETAIL_SPENDER()}
-                    value={<BaseAdditionalDetail.HexValue value={output.params.spender} />}
+                    value={
+                        <BaseAdditionalDetail.HexValue value={output.params.spender} testID="TOKEN_APPROVAL_SPENDER" />
+                    }
                 />
             }
             {...props}>
-            <BaseReceiptOutput.ValueMainText>{`${amountHuman} ${token?.symbol}`}</BaseReceiptOutput.ValueMainText>
+            <BaseReceiptOutput.ValueContainer>
+                <BaseReceiptOutput.ValueMainText testID="TOKEN_APPROVAL_VALUE">
+                    {`${amountHuman} ${token?.symbol}`}
+                </BaseReceiptOutput.ValueMainText>
+            </BaseReceiptOutput.ValueContainer>
         </BaseReceiptOutput>
     )
 }

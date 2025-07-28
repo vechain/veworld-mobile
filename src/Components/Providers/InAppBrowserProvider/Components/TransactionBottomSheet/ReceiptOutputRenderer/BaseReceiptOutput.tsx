@@ -106,15 +106,21 @@ const BaseReceiptOutput = ({
                 <BaseView style={styles.additionalDetails} flexDirection="column">
                     <BaseAdditionalDetail
                         label={LL.ADDITIONAL_DETAIL_CLAUSE()}
-                        value={<BaseAdditionalDetail.StringValue value={`#${output.clauseIndex + 1}`} />}
+                        value={`#${output.clauseIndex + 1}`}
+                        testID="BASE_RECEIPT_CLAUSE_INDEX"
                     />
                     <BaseAdditionalDetail
                         label={LL.ADDITIONAL_DETAIL_TO()}
-                        value={<BaseAdditionalDetail.HexValue value={clause.to ?? ""} />}
+                        value={<BaseAdditionalDetail.HexValue value={clause.to ?? ""} testID="BASE_RECEIPT_TO" />}
                     />
                     <BaseAdditionalDetail
                         label={LL.ADDITIONAL_DETAIL_CONTRACT_DATA()}
-                        value={<BaseAdditionalDetail.HexValue value={clause.data ?? "0x"} />}
+                        value={
+                            <BaseAdditionalDetail.HexValue
+                                value={clause.data ?? "0x"}
+                                testID="BASE_RECEIPT_CONTRACT_DATA"
+                            />
+                        }
                     />
 
                     {additionalDetails}

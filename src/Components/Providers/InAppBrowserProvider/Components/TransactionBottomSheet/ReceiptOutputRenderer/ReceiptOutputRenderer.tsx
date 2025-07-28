@@ -71,8 +71,11 @@ export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
         case "Approval(indexed address,indexed address,uint256)":
             return <TokenApprovalOutput expanded={expanded} output={output} clause={clause} />
         case "Approval(indexed address,indexed address,indexed uint256)":
-        case "ApprovalForAll(indexed address,indexed address,bool)":
             return <NftApprovalOutput expanded={expanded} output={output} clause={clause} />
+        case "ApprovalForAll(indexed address,indexed address,bool)":
+            //Show the event only if approved == true
+            if (output.params.approved) return <NftApprovalOutput expanded={expanded} output={output} clause={clause} />
+            return <ContractCallOutput expanded={expanded} output={output} clause={clause} />
         default:
             return <ContractCallOutput expanded={expanded} output={output} clause={clause} />
     }

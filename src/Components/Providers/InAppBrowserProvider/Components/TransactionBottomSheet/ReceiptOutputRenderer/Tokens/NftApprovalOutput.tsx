@@ -37,9 +37,13 @@ export const NftApprovalOutput = ({ output, ...props }: Props) => {
                 <>
                     <BaseAdditionalDetail
                         label={LL.ADDITIONAL_DETAIL_SPENDER()}
-                        value={<BaseAdditionalDetail.HexValue value={spender} />}
+                        value={<BaseAdditionalDetail.HexValue value={spender} testID="NFT_APPROVAL_SPENDER" />}
                     />
-                    <BaseAdditionalDetail label={LL.ADDITIONAL_DETAIL_TOKEN_ID()} value={value} />
+                    <BaseAdditionalDetail
+                        label={LL.ADDITIONAL_DETAIL_TOKEN_ID()}
+                        value={value}
+                        testID="NFT_APPROVAL_VALUE"
+                    />
                 </>
             }
             {...props}

@@ -17,9 +17,13 @@ export const NftSendOutput = ({ output, ...props }: Props) => {
                 <>
                     <BaseAdditionalDetail
                         label={LL.ADDITIONAL_DETAIL_RECEIVER()}
-                        value={<BaseAdditionalDetail.HexValue value={output.params.to} />}
+                        value={<BaseAdditionalDetail.HexValue value={output.params.to} testID="NFT_SEND_RECEIVER" />}
                     />
-                    <BaseAdditionalDetail label={LL.ADDITIONAL_DETAIL_TOKEN_ID()} value={`#${output.params.tokenId}`} />
+                    <BaseAdditionalDetail
+                        label={LL.ADDITIONAL_DETAIL_TOKEN_ID()}
+                        value={`#${output.params.tokenId}`}
+                        testID="NFT_SEND_TOKEN_ID"
+                    />
                 </>
             }
             {...props}
