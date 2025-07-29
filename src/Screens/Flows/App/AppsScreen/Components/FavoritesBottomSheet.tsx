@@ -1,0 +1,160 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import React, { useCallback, useEffect, useState } from "react"
+import { StyleSheet } from "react-native"
+import {
+    DragEndParams,
+    NestableDraggableFlatList,
+    NestableScrollContainer,
+    RenderItem,
+} from "react-native-draggable-flatlist"
+import {
+    AnimatedSaveHeaderButton,
+    BaseBottomSheet,
+    BaseSpacer,
+    BaseView,
+    FavoriteDAppCard,
+    ListEmptyResults,
+    ReorderIconHeaderButton,
+} from "~Components"
+import { DiscoveryDApp } from "~Constants"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { useI18nContext } from "~i18n"
+import { DAppOptionsBottomSheet } from "../../DiscoverScreen/Components/Bottomsheets"
+import { useDAppActions } from "../../DiscoverScreen/Hooks"
+
+type Props = {
+    onClose: () => void
+}
+
+export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
+    const [isEditingMode, setIsEditingMode] = useState(false)
+    const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>()
+
+    const { styles } = useThemedStyles(baseStyles)
+    const { LL } = useI18nContext()
+    const { onDAppPress } = useDAppActions()
+    const dispatch = useAppDispatch()
+
+    const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
+
+    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+
+    const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
+
+    const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
+
+    const onMorePress = useCallback(
+        (dapp: DiscoveryDApp) => {
+            setSelectedDApp(dapp)
+            onOpenDAppOptions()
+        },
+        [onOpenDAppOptions],
+    )
+
+    const onLongPress = useCallback(() => {
+        if (!isEditingMode) {
+            setIsEditingMode(true)
+        }
+    }, [isEditingMode])
+
+    const renderItem: RenderItem<DiscoveryDApp> = useCallback(
+        ({ item, isActive, drag }) => {
+            return (
+                <FavoriteDAppCard
+                    dapp={item}
+                    isActive={isActive}
+                    isEditMode={isEditingMode}
+                    onPress={onDAppPress}
+                    onRightActionPress={onMorePress}
+                    onLongPress={onLongPress}
+                    onRightActionLongPress={isEditingMode ? drag : undefined}
+                />
+            )
+        },
+        [isEditingMode, onDAppPress, onLongPress, onMorePress],
+    )
+
+    const onDragEnd = useCallback(({ data }: DragEndParams<DiscoveryDApp>) => {
+        setReorderedDapps(data)
+    }, [])
+
+    const onSaveReorderedDapps = useCallback(() => {
+        dispatch(reorderBookmarks(reorderedDapps))
+        setIsEditingMode(false)
+    }, [dispatch, reorderedDapps])
+
+    useEffect(() => {
+        if (reorderedDapps.length !== bookmarkedDApps.length) setReorderedDapps(bookmarkedDApps)
+    }, [bookmarkedDApps, reorderedDapps.length])
+
+    return (
+        <>
+            <BaseBottomSheet
+                ref={ref}
+                title={LL.FAVOURITES_DAPPS_TITLE()}
+                snapPoints={["60%", "90%"]}
+                onDismiss={onClose}>
+                <BaseView style={styles.headerContainer}>
+                    <BaseView style={styles.headerContent}>
+                        {isEditingMode ? (
+                            <AnimatedSaveHeaderButton action={onSaveReorderedDapps} />
+                        ) : (
+                            <ReorderIconHeaderButton
+                                action={() => {
+                                    setIsEditingMode(true)
+                                }}
+                            />
+                        )}
+                    </BaseView>
+                </BaseView>
+                <BaseView style={styles.container}>
+                    <NestableScrollContainer>
+                        <NestableDraggableFlatList
+                            scrollEnabled={!isEditingMode}
+                            contentContainerStyle={styles.listContentContainer}
+                            extraData={isEditingMode}
+                            data={reorderedDapps}
+                            onDragEnd={onDragEnd}
+                            keyExtractor={(item, index) => item?.href ?? index.toString()}
+                            renderItem={renderItem}
+                            ListFooterComponent={renderFooter}
+                            showsVerticalScrollIndicator={false}
+                            ListEmptyComponent={
+                                <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
+                            }
+                        />
+                    </NestableScrollContainer>
+                </BaseView>
+            </BaseBottomSheet>
+            <DAppOptionsBottomSheet
+                ref={dappOptionsRef}
+                onClose={() => {
+                    setSelectedDApp(undefined)
+                    onCloseDAppOptions()
+                }}
+                selectedDApp={selectedDApp}
+            />
+        </>
+    )
+})
+
+const baseStyles = () =>
+    StyleSheet.create({
+        container: {
+            flex: 1,
+        },
+        headerContainer: {
+            borderBottomWidth: StyleSheet.hairlineWidth,
+            borderBottomColor: "rgba(255, 255, 255, 0.1)",
+        },
+        headerContent: {
+            flexDirection: "row",
+            justifyContent: "space-between",
+            alignItems: "center",
+        },
+        listContentContainer: {
+            flexGrow: 1,
+            paddingTop: 12,
+        },
+    })
