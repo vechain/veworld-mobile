@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "接続中",
   "LEDGER_DATA_SIGNED": "データに署名されました",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "委任されたハードウェアウォレットはまだサポートされていません",
+  "LEDGER_DEVICE_ALERT": "Ledgerデバイスでは型付きデータに署名できません。他のアカウントを選択してください。",
   "LEDGER_MESSAGE_READY": "メッセージの準備ができました",
   "LEDGER_MESSAGE_READ_SB": "メッセージの準備ができました。続行するには確認を押してください",
   "LEDGER_MESSAGE_TITLE_SB": "Ledgerでメッセージに署名するには、以下の指示に従ってください",

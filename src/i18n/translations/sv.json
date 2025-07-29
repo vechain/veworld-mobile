@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "Ansluter",
   "LEDGER_DATA_SIGNED": "Data signerad",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "Delegerad hårdvaruplånbok stöds inte ännu",
+  "LEDGER_DEVICE_ALERT": "Typed Data kan inte signeras med en Ledger-enhet. Vänligen välj ett annat konto.",
   "LEDGER_MESSAGE_READY": "Meddelandet är klart",
   "LEDGER_MESSAGE_READ_SB": "Meddelandet är klart, tryck på bekräfta för att fortsätta",
   "LEDGER_MESSAGE_TITLE_SB": "Vänligen följ instruktionerna nedan för att signera meddelandet med din Ledger",

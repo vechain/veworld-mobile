@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "Verbinden",
   "LEDGER_DATA_SIGNED": "Daten unterschrieben",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "Delegierte Hardware-Wallet wird noch nicht unterstützt",
+  "LEDGER_DEVICE_ALERT": "Signierte Daten können nicht mit einem Ledger-Gerät signiert werden. Bitte wählen Sie ein anderes Konto aus.",
   "LEDGER_MESSAGE_READY": "Nachricht ist bereit",
   "LEDGER_MESSAGE_READ_SB": "Die Nachricht ist bereit, drücken Sie Bestätigen, um fortzufahren",
   "LEDGER_MESSAGE_TITLE_SB": "Bitte folgen Sie den untenstehenden Anweisungen, um die Nachricht mit Ihrem Ledger zu unterschreiben",

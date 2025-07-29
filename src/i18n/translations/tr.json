@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "Bağlanıyor",
   "LEDGER_DATA_SIGNED": "Veri imzalandı",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "Delege edilen donanım cüzdanı henüz desteklenmiyor",
+  "LEDGER_DEVICE_ALERT": "Türkçe çeviri: Ledger cihazı ile yazılmış veriler imzalanamaz. Lütfen başka bir hesap seçin.",
   "LEDGER_MESSAGE_READY": "Mesaj hazır",
   "LEDGER_MESSAGE_READ_SB": "Mesaj hazır, devam etmek için onaylayın",
   "LEDGER_MESSAGE_TITLE_SB": "Mesajı Ledger ile imzalamak için lütfen aşağıdaki talimatları izleyin",

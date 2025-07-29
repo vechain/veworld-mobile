@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "Łączenie",
   "LEDGER_DATA_SIGNED": "Dane podpisane",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "Delegowane portfele sprzętowe jeszcze nie są obsługiwane",
+  "LEDGER_DEVICE_ALERT": "Danych wpisanych nie można podpisać za pomocą urządzenia Ledger. Proszę wybrać inne konto.",
   "LEDGER_MESSAGE_READY": "Wiadomość jest gotowa",
   "LEDGER_MESSAGE_READ_SB": "Wiadomość jest gotowa, naciśnij potwierdź, aby kontynuować",
   "LEDGER_MESSAGE_TITLE_SB": "Postępuj zgodnie z poniższymi instrukcjami, aby podpisać wiadomość za pomocą Ledger",

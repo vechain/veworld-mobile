@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "Đang kết nối",
   "LEDGER_DATA_SIGNED": "Dữ liệu đã được ký",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "Chưa hỗ trợ ví cứng ủy quyền",
+  "LEDGER_DEVICE_ALERT": "Không thể ký Dữ liệu Gõ bằng thiết bị Ledger. Vui lòng chọn tài khoản khác.",
   "LEDGER_MESSAGE_READY": "Tin nhắn đã sẵn sàng",
   "LEDGER_MESSAGE_READ_SB": "Tin nhắn đã sẵn sàng, nhấn xác nhận để tiếp tục",
   "LEDGER_MESSAGE_TITLE_SB": "Vui lòng làm theo hướng dẫn dưới đây để ký tin nhắn với Ledger của bạn",

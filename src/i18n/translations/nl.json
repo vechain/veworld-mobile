@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "Verbinden",
   "LEDGER_DATA_SIGNED": "Gegevens ondertekend",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "Gedelegeerde hardware-portemonnee nog niet ondersteund",
+  "LEDGER_DEVICE_ALERT": "Getypte gegevens kunnen niet worden ondertekend met een Ledger-apparaat. Selecteer een andere rekening.",
   "LEDGER_MESSAGE_READY": "Bericht is klaar",
   "LEDGER_MESSAGE_READ_SB": "Het bericht is klaar, druk op bevestigen om door te gaan",
   "LEDGER_MESSAGE_TITLE_SB": "Volg de onderstaande instructies om het bericht te ondertekenen met je Ledger",

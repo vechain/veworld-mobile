@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "Connexion",
   "LEDGER_DATA_SIGNED": "Données signées",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "Portefeuille matériel délégué non encore pris en charge",
+  "LEDGER_DEVICE_ALERT": "Les données typées ne peuvent pas être signées avec un appareil Ledger. Veuillez sélectionner un autre compte.",
   "LEDGER_MESSAGE_READY": "Message prêt",
   "LEDGER_MESSAGE_READ_SB": "Le message est prêt, appuyez sur confirmer pour continuer",
   "LEDGER_MESSAGE_TITLE_SB": "Veuillez suivre les instructions ci-dessous pour signer le message avec votre Ledger",

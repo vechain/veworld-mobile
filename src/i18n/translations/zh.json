@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "正在连接",
   "LEDGER_DATA_SIGNED": "数据已签名",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "暂不支持委托硬件钱包",
+  "LEDGER_DEVICE_ALERT": "无法通过Ledger设备签署类型化数据。请选择其他账户。",
   "LEDGER_MESSAGE_READY": "消息已准备好",
   "LEDGER_MESSAGE_READ_SB": "消息已准备好，按确认继续",
   "LEDGER_MESSAGE_TITLE_SB": "请按照以下说明使用您的 Ledger 签署消息",

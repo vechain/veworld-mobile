@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "Conectando",
   "LEDGER_DATA_SIGNED": "Dados assinados",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "Carteira de hardware delegada ainda não é suportada",
+  "LEDGER_DEVICE_ALERT": "Os dados digitados não podem ser assinados com um dispositivo Ledger. Por favor, selecione outra conta.",
   "LEDGER_MESSAGE_READY": "Mensagem está pronta",
   "LEDGER_MESSAGE_READ_SB": "A mensagem está pronta, pressione confirmar para continuar",
   "LEDGER_MESSAGE_TITLE_SB": "Por favor, siga as instruções abaixo para assinar a mensagem com o seu Ledger",

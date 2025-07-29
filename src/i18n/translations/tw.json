@@ -637,6 +637,7 @@
   "LEDGER_CONNECTING": "連接中",
   "LEDGER_DATA_SIGNED": "數據已簽署",
   "LEDGER_DELEGATION_NOT_SUPPORTED": "不支持委託硬體錢包",
+  "LEDGER_DEVICE_ALERT": "Ledger 裝置無法簽署已輸入的資料。請選擇其他帳戶。",
   "LEDGER_MESSAGE_READY": "消息已準備好",
   "LEDGER_MESSAGE_READ_SB": "消息已準備好，按確認繼續",
   "LEDGER_MESSAGE_TITLE_SB": "請按照以下說明使用 Ledger 簽署消息",
