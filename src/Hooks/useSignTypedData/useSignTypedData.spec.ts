@@ -6,8 +6,10 @@ import { useSignTypedMessage } from "./useSignTypedData"
 import { TestWrapper } from "~Test"
 import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
 import { ethers } from "ethers"
+import { HDNode } from "thor-devkit"
 
-const { account1D1, wallet1, keystoreDevice, firstLedgerAccount, ledgerDevice, device1 } = TestData.data
+const { account1D1, wallet1, keystoreDevice, firstLedgerAccount, ledgerDevice, device1, defaultMnemonicPhrase } =
+    TestData.data
 
 jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),
@@ -97,6 +99,46 @@ describe("useSignTypedData", () => {
         mockAccount(account1D1)
         mockDevice(keystoreDevice)
 
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
+        expect(result.current).toEqual({
+            signTypedData: expect.any(Function),
+        })
+
+        const signature = await result.current.signTypedData(typedDataMock)
+
+        expect(signature?.length).toBe(132)
+    })
+
+    it("should work with private key wallet", async () => {
+        mockAccount(account1D1)
+        mockDevice(keystoreDevice)
+
+        const wallet = HDNode.fromMnemonic(defaultMnemonicPhrase).derive(0)
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue({
+            privateKey: wallet.privateKey?.toString("hex"),
+            rootAddress: wallet.address,
+            nonce: "nonce",
+        })
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
+        expect(result.current).toEqual({
+            signTypedData: expect.any(Function),
+        })
+
+        const signature = await result.current.signTypedData(typedDataMock)
+
+        expect(signature?.length).toBe(132)
+    })
+
+    it("should work with mnemonic wallet", async () => {
+        mockAccount(account1D1)
+        mockDevice(keystoreDevice)
+
+        const wallet = HDNode.fromMnemonic(defaultMnemonicPhrase).derive(0)
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue({
+            mnemonic: defaultMnemonicPhrase,
+            rootAddress: wallet.address,
+            nonce: "nonce",
+        })
         const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
         expect(result.current).toEqual({
             signTypedData: expect.any(Function),
