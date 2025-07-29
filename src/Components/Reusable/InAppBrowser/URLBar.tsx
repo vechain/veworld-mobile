@@ -1,25 +1,40 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
-import React, { useCallback, useMemo } from "react"
+import React, { useCallback } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
+import FastImage from "react-native-fast-image"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { TabsIconSVG } from "~Assets"
-import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
+import { BaseIcon, BaseText, BaseTextInput, BaseView, useInAppBrowser } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
-import { selectCurrentTabId, selectTabs, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectCurrentTabId, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { Spinner } from "../Spinner"
 
 type Props = {
     onBrowserNavigation?: (error: boolean) => void
     onNavigate?: () => void | Promise<void>
     returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
+    isLoading?: boolean
+    onOpenOptions?: () => void
 }
 
-export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.DISCOVER }: Props) => {
-    const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
+const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
+const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
+const AnimatedBaseText = Animated.createAnimatedComponent(wrapFunctionComponent(BaseText))
+const AnimatedFavicon = Animated.createAnimatedComponent(FastImage)
+
+export const URLBar = ({
+    onBrowserNavigation,
+    onNavigate,
+    returnScreen = Routes.DISCOVER,
+    isLoading,
+    onOpenOptions,
+}: Props) => {
+    const { showToolbars, navigationState, navigateToUrl, dappMetadata } = useInAppBrowser()
     const nav =
         useNavigation<
             NativeStackNavigationProp<
@@ -27,7 +42,6 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
             >
         >()
 
-    const tabs = useAppSelector(selectTabs)
     const selectedTabId = useAppSelector(selectCurrentTabId)
     const dispatch = useAppDispatch()
 
@@ -36,19 +50,29 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
         nav.navigate(returnScreen)
     }, [nav, onNavigate, returnScreen])
 
-    const navToTabsManager = useCallback(async () => {
-        await onNavigate?.()
-        nav.replace(Routes.DISCOVER_TABS_MANAGER)
-    }, [nav, onNavigate])
+    // const navToTabsManager = useCallback(async () => {
+    //     await onNavigate?.()
+    //     nav.replace(Routes.DISCOVER_TABS_MANAGER)
+    // }, [nav, onNavigate])
 
     const theme = useTheme()
 
     const animatedStyles = useAnimatedStyle(
         () => ({
             height: showToolbars ? withTiming(56) : withTiming(24),
+            marginBottom: showToolbars ? 0 : 8,
         }),
         [showToolbars],
     )
+
+    const animatedIconStyles = useAnimatedStyle(() => ({
+        opacity: withTiming(showToolbars ? 1 : 0, { duration: 400 }),
+        transform: [{ scale: withTiming(showToolbars ? 1 : 0, { duration: 300 }) }],
+    }))
+
+    const animatedFaviconStyles = useAnimatedStyle(() => ({
+        transform: [{ scale: withTiming(showToolbars ? 1 : 0.6, { duration: 300 }) }],
+    }))
 
     const onSubmit = useCallback(
         async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
@@ -66,34 +90,42 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
         [dispatch, navigateToUrl, onBrowserNavigation, selectedTabId],
     )
 
-    const renderWithToolbar = useMemo(() => {
-        return (
-            <BaseView style={styles.inputContainer}>
+    return navigationState?.url ? (
+        <Animated.View style={[styles.animatedContainer, animatedStyles]}>
+            <AnimatedBaseView style={styles.inputContainer}>
                 {/* Icon on the left */}
-                <BaseIcon
+                <AnimatedBaseIcon
                     testID="URL-bar-back-button"
-                    name="icon-arrow-left"
-                    color={theme.colors.text}
+                    name="icon-x"
+                    color={theme.colors.textReversed}
+                    bg={COLORS.GREY_800}
                     action={navToDiscover}
                     haptics="Light"
-                    size={24}
+                    size={16}
                     p={8}
+                    style={[animatedIconStyles, styles.iconButton]}
                 />
 
                 {/* URL Text centered */}
-                <BaseView flex={1} alignItems="center" flexDirection="row">
-                    {isDapp ? (
-                        <BaseView flex={0.9} flexDirection="row" alignItems="center" style={styles.dappContainer}>
-                            <BaseIcon name="icon-lock" color={theme.colors.textLight} size={12} />
-
-                            <BaseText
-                                testID="URL-bar-dapp-name"
-                                typographyFont="captionRegular"
-                                color={theme.colors.subtitle}
-                                numberOfLines={1}>
-                                {navigationState?.url}
-                            </BaseText>
-                        </BaseView>
+                <AnimatedBaseView flex={1} alignItems="center" flexDirection="row" justifyContent="center" gap={8}>
+                    {dappMetadata ? (
+                        <>
+                            {!isLoading ? (
+                                <AnimatedFavicon
+                                    source={{ uri: dappMetadata.icon, priority: FastImage.priority.high }}
+                                    style={[animatedFaviconStyles, styles.favicon]}
+                                />
+                            ) : (
+                                <Spinner color={theme.colors.textReversed} />
+                            )}
+                            <AnimatedBaseText
+                                allowFontScaling={false}
+                                typographyFont="bodySemiBold"
+                                color={theme.colors.textReversed}
+                                style={[styles.appName]}>
+                                {dappMetadata.name}
+                            </AnimatedBaseText>
+                        </>
                     ) : (
                         <BaseTextInput
                             testID="URL-bar-input"
@@ -104,43 +136,19 @@ export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.
                             containerStyle={styles.textInputContainerRoot}
                         />
                     )}
-                </BaseView>
+                </AnimatedBaseView>
 
-                <BaseTouchable onPress={navToTabsManager} testID="TABS_BTN">
-                    <TabsIconSVG
-                        count={tabs.length}
-                        textColor={theme.colors.text}
-                        color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
-                    />
-                </BaseTouchable>
-            </BaseView>
-        )
-    }, [
-        isDapp,
-        navToDiscover,
-        navToTabsManager,
-        navigationState?.url,
-        onSubmit,
-        tabs.length,
-        theme.colors.subtitle,
-        theme.colors.text,
-        theme.colors.textLight,
-        theme.isDark,
-    ])
-
-    const renderWithoutToolbar = useMemo(() => {
-        return (
-            <BaseView style={styles.noToolbarContainer}>
-                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.subtitle} numberOfLines={1}>
-                    {navigationState?.url}
-                </BaseText>
-            </BaseView>
-        )
-    }, [navigationState?.url, theme.colors.subtitle])
-
-    return navigationState?.url ? (
-        <Animated.View style={[styles.animatedContainer, animatedStyles]}>
-            {showToolbars ? renderWithToolbar : renderWithoutToolbar}
+                <AnimatedBaseIcon
+                    name="icon-more-vertical"
+                    color={theme.colors.textReversed}
+                    bg={COLORS.GREY_800}
+                    action={onOpenOptions}
+                    haptics="Light"
+                    size={16}
+                    p={8}
+                    style={[animatedIconStyles, styles.iconButton]}
+                />
+            </AnimatedBaseView>
         </Animated.View>
     ) : null
 }
@@ -150,6 +158,8 @@ const styles = StyleSheet.create({
         opacity: 1,
         alignItems: "center",
         flexDirection: "row",
+        backgroundColor: COLORS.GREY_700,
+        paddingVertical: 8,
     },
     inputContainer: {
         width: "100%",
@@ -166,14 +176,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flex: 1,
         paddingHorizontal: 16,
+        marginVertical: 8,
     },
     dappContainer: {
         gap: 8,
     },
-    urlText: {
+    appName: {
         textAlign: "center", // centers the text
-        marginHorizontal: 10, // adds space around the text
-        marginVertical: 10,
+        transformOrigin: "center",
+        fontSize: 14,
+        fontWeight: "700",
     },
     textInput: {
         fontSize: 12,
@@ -186,5 +198,14 @@ const styles = StyleSheet.create({
     },
     textInputContainerRoot: {
         width: "100%",
+    },
+    favicon: {
+        width: 24,
+        height: 24,
+        borderRadius: 4,
+        transformOrigin: "center",
+    },
+    iconButton: {
+        transformOrigin: "center",
     },
 })

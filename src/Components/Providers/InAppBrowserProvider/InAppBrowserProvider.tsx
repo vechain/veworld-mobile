@@ -82,6 +82,13 @@ type ContextType = {
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean
+    dappMetadata:
+        | {
+              icon: string
+              name: string
+              url: string
+          }
+        | undefined
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -767,6 +774,26 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         )
     }, [allDapps, navigationState])
 
+    const dappMetadata = useMemo(() => {
+        if (!navigationState?.url) return undefined
+
+        const foundDapp = allDapps.find(app => new URL(app.href).origin === new URL(navigationState?.url ?? "").origin)
+        if (foundDapp)
+            return {
+                icon: foundDapp.id
+                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
+                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
+                name: foundDapp.name,
+                url: navigationState?.url,
+            }
+
+        return {
+            name: new URL(navigationState?.url ?? "").hostname,
+            url: navigationState?.url,
+            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(navigationState?.url ?? "").origin}`,
+        }
+    }, [allDapps, navigationState?.url])
+
     const contextValue = React.useMemo(() => {
         return {
             isLoading,
@@ -796,6 +823,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
             isDapp,
+            dappMetadata,
         }
     }, [
         isLoading,
@@ -824,6 +852,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         switchAccount,
         packageInfo,
         isDapp,
+        dappMetadata,
     ])
 
     return (
