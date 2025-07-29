@@ -7,9 +7,10 @@ type Props = {
     children: ReactNode
     testID?: string
     action: () => void
+    rounded?: boolean
 }
 
-export const HeaderIconButton = ({ children, testID, action }: Props) => {
+export const HeaderIconButton = ({ children, testID, action, rounded = false }: Props) => {
     const theme = useTheme()
 
     return (
@@ -18,7 +19,11 @@ export const HeaderIconButton = ({ children, testID, action }: Props) => {
                 p={7}
                 bg={theme.colors.card}
                 flexDirection="row"
-                style={[styles.container, { borderColor: theme.colors.rightIconHeaderBorder }]}>
+                style={[
+                    styles.container,
+                    { borderColor: theme.colors.rightIconHeaderBorder },
+                    rounded && styles.rounded,
+                ]}>
                 {children}
             </BaseView>
         </TouchableOpacity>
@@ -31,5 +36,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 6,
         alignContent: "space-between",
+    },
+    rounded: {
+        borderRadius: 100,
     },
 })

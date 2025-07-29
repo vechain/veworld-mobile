@@ -1106,6 +1106,10 @@ type RootTranslation = {
 	 */
 	BTN_ADD_ACCOUNT: string
 	/**
+	 * O​r​d​e​r​ ​s​a​v​e​d​!
+	 */
+	BTN_ORDER_SAVED: string
+	/**
 	 * A​d​d​ ​c​o​n​t​a​c​t
 	 */
 	BTN_ADD_CONTACT: string
@@ -5609,6 +5613,10 @@ Thanks for your patience!
 	 * ADD ACCOUNT
 	 */
 	BTN_ADD_ACCOUNT: () => LocalizedString
+	/**
+	 * Order saved!
+	 */
+	BTN_ORDER_SAVED: () => LocalizedString
 	/**
 	 * Add contact
 	 */

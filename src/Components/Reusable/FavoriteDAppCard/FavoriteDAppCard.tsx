@@ -14,18 +14,28 @@ type Props = {
     onLongPress: (dapp: DiscoveryDApp) => void
     onRightActionPress: (dapp: DiscoveryDApp) => void
     onRightActionLongPress?: (dapp: DiscoveryDApp) => void
+    px?: number
 }
 
 const IMAGE_SIZE = 48
 
 export const FavoriteDAppCard: React.FC<Props> = memo(
-    ({ dapp, isEditMode, isActive, onPress, onLongPress, onRightActionPress, onRightActionLongPress }: Props) => {
+    ({
+        dapp,
+        isEditMode,
+        isActive,
+        onPress,
+        onLongPress,
+        onRightActionPress,
+        onRightActionLongPress,
+        px = 16,
+    }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
             <ScaleDecorator activeScale={1.05}>
                 <ShadowDecorator elevation={1} radius={4} opacity={0.2} color={theme.colors.backgroundReversed}>
-                    <BaseView flexDirection="row" flex={1} bg={theme.colors.background} px={16} mb={16}>
+                    <BaseView flexDirection="row" flex={1} bg={theme.colors.background} px={px} mb={16}>
                         <BaseTouchable
                             disabled={isEditMode || isActive}
                             style={[styles.card]}

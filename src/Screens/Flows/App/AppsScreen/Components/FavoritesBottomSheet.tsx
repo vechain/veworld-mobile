@@ -10,6 +10,7 @@ import {
 import {
     AnimatedSaveHeaderButton,
     BaseBottomSheet,
+    BaseIcon,
     BaseSpacer,
     BaseView,
     FavoriteDAppCard,
@@ -17,7 +18,7 @@ import {
     ReorderIconHeaderButton,
 } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { DAppOptionsBottomSheet } from "../../DiscoverScreen/Components/Bottomsheets"
@@ -32,6 +33,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>()
 
     const { styles } = useThemedStyles(baseStyles)
+    const theme = useTheme()
     const { LL } = useI18nContext()
     const { onDAppPress } = useDAppActions()
     const dispatch = useAppDispatch()
@@ -69,6 +71,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     onRightActionPress={onMorePress}
                     onLongPress={onLongPress}
                     onRightActionLongPress={isEditingMode ? drag : undefined}
+                    px={0}
                 />
             )
         },
@@ -92,22 +95,37 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         <>
             <BaseBottomSheet
                 ref={ref}
-                title={LL.FAVOURITES_DAPPS_TITLE()}
-                snapPoints={["60%", "90%"]}
-                onDismiss={onClose}>
-                <BaseView style={styles.headerContainer}>
-                    <BaseView style={styles.headerContent}>
-                        {isEditingMode ? (
-                            <AnimatedSaveHeaderButton action={onSaveReorderedDapps} />
-                        ) : (
-                            <ReorderIconHeaderButton
-                                action={() => {
-                                    setIsEditingMode(true)
-                                }}
-                            />
-                        )}
+                floating={false}
+                leftElement={
+                    <BaseView style={styles.headerContainer}>
+                        <BaseView style={styles.headerContent}>
+                            <BaseIcon name="icon-star" size={24} color={theme.colors.text} />
+                        </BaseView>
                     </BaseView>
-                </BaseView>
+                }
+                rightElement={
+                    <BaseView style={styles.headerContainer}>
+                        <BaseView style={styles.headerContent}>
+                            {isEditingMode ? (
+                                <AnimatedSaveHeaderButton
+                                    action={onSaveReorderedDapps}
+                                    buttonTextAfterClick={LL.BTN_ORDER_SAVED()}
+                                />
+                            ) : (
+                                <ReorderIconHeaderButton
+                                    rounded
+                                    action={() => {
+                                        setIsEditingMode(true)
+                                    }}
+                                />
+                            )}
+                        </BaseView>
+                    </BaseView>
+                }
+                title={LL.FAVOURITES_DAPPS_TITLE()}
+                snapPoints={["90%"]}
+                onDismiss={onClose}
+                stackBehavior="replace">
                 <BaseView style={styles.container}>
                     <NestableScrollContainer>
                         <NestableDraggableFlatList
