@@ -88,7 +88,7 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                 flexDirection="row"
                 gap={12}
                 justifyContent="space-between"
-                testID="SIGN_CERTIFICATE_REQUEST_TITLE">
+                testID="SIGN_TYPED_DATA_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-certificate" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
@@ -116,8 +116,7 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                     action={onCancel.bind(null, request)}
                     variant="outline"
                     flex={1}
-                    testID="SIGN_TYPED_DATA_REQUEST_BTN_CANCEL"
-                    disabled={isLoading}>
+                    testID="SIGN_TYPED_DATA_REQUEST_BTN_CANCEL">
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <Signable args={signableArgs} onSign={onSign}>
