@@ -7,7 +7,8 @@ import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConne
 import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignTypedMessage, useTheme } from "~Hooks"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
+import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, SignedTypedDataResponse, TypeDataRequest, TypedData } from "~Model"
 import {
