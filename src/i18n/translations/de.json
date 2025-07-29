@@ -994,6 +994,8 @@
   "SIGN_TRANSACTION_ERROR": "Fehler beim Unterschreiben der Transaktion",
   "SIGN_TRANSACTION_REQUEST_CTA": "Bestätigen",
   "SIGN_TRANSACTION_REQUEST_TITLE": "App-Transaktion",
+  "SIGN_TYPED_DATA_REQUEST_CTA": "Unterschreiben",
+  "SIGN_TYPED_DATA_REQUEST_TITLE": "Signierte getippte Daten",
   "STARGATE_CLAIMABLE": "Einlösbar",
   "STARGATE_LOCKED": "Gesperrt",
   "STARGATE_MANAGE_STAKING": "Verwalten Sie Ihr Staking",

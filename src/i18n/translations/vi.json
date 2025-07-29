@@ -994,6 +994,8 @@
   "SIGN_TRANSACTION_ERROR": "Lỗi ký giao dịch",
   "SIGN_TRANSACTION_REQUEST_CTA": "Xác nhận",
   "SIGN_TRANSACTION_REQUEST_TITLE": "Giao dịch ứng dụng",
+  "SIGN_TYPED_DATA_REQUEST_CTA": "Ký",
+  "SIGN_TYPED_DATA_REQUEST_TITLE": "Ký dữ liệu đã nhập",
   "STARGATE_CLAIMABLE": "Có thể yêu cầu",
   "STARGATE_LOCKED": "Đã khóa",
   "STARGATE_MANAGE_STAKING": "Quản lý đặt cược của bạn",

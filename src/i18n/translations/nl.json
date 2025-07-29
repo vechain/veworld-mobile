@@ -994,6 +994,8 @@
   "SIGN_TRANSACTION_ERROR": "Fout bij het ondertekenen van de transactie",
   "SIGN_TRANSACTION_REQUEST_CTA": "Bevestigen",
   "SIGN_TRANSACTION_REQUEST_TITLE": "App-transactie",
+  "SIGN_TYPED_DATA_REQUEST_CTA": "Ondertekenen",
+  "SIGN_TYPED_DATA_REQUEST_TITLE": "Onderteken getypte gegevens",
   "STARGATE_CLAIMABLE": "Inbaar",
   "STARGATE_LOCKED": "Vergrendeld",
   "STARGATE_MANAGE_STAKING": "Beheer uw staking",

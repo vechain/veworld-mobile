@@ -994,6 +994,8 @@
   "SIGN_TRANSACTION_ERROR": "Ошибка при подписании транзакции",
   "SIGN_TRANSACTION_REQUEST_CTA": "Подтвердить",
   "SIGN_TRANSACTION_REQUEST_TITLE": "Транзакция приложения",
+  "SIGN_TYPED_DATA_REQUEST_CTA": "Подписать",
+  "SIGN_TYPED_DATA_REQUEST_TITLE": "Подписать типизированные данные",
   "STARGATE_CLAIMABLE": "Доступно для получения",
   "STARGATE_LOCKED": "Заблокировано",
   "STARGATE_MANAGE_STAKING": "Управляйте своим стейкингом",

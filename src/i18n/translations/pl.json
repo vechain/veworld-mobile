@@ -994,6 +994,8 @@
   "SIGN_TRANSACTION_ERROR": "Błąd przy podpisywaniu transakcji",
   "SIGN_TRANSACTION_REQUEST_CTA": "Potwierdź",
   "SIGN_TRANSACTION_REQUEST_TITLE": "Transakcja aplikacji",
+  "SIGN_TYPED_DATA_REQUEST_CTA": "Podpisz",
+  "SIGN_TYPED_DATA_REQUEST_TITLE": "Podpisz dane sformatowane",
   "STARGATE_CLAIMABLE": "Możliwe do odebrania",
   "STARGATE_LOCKED": "Zablokowane",
   "STARGATE_MANAGE_STAKING": "Zarządzaj swoim stakingiem",

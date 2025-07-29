@@ -994,6 +994,8 @@
   "SIGN_TRANSACTION_ERROR": "İşlem imzalanırken hata oluştu",
   "SIGN_TRANSACTION_REQUEST_CTA": "Onayla",
   "SIGN_TRANSACTION_REQUEST_TITLE": "Uygulama işlemi",
+  "SIGN_TYPED_DATA_REQUEST_CTA": "İmzala",
+  "SIGN_TYPED_DATA_REQUEST_TITLE": "Yazılı veriyi imzala",
   "STARGATE_CLAIMABLE": "Talep edilebilir",
   "STARGATE_LOCKED": "Kilitli",
   "STARGATE_MANAGE_STAKING": "Stake yönetiminizi yapın",
