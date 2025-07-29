@@ -39,7 +39,7 @@ export type BaseTextProps = {
     textTransform?: TextStyle["textTransform"]
     containerStyle?: ViewStyle
 } & TextProps &
-    Pick<BaseViewProps, "flex" | "flexGrow" | "flexShrink">
+    Pick<BaseViewProps, "flex" | "flexGrow" | "flexShrink" | "flexDirection">
 
 export const BaseText = (props: BaseTextProps) => {
     const {
@@ -105,6 +105,7 @@ export const BaseText = (props: BaseTextProps) => {
             flex={props.flex}
             flexGrow={props.flexGrow}
             flexShrink={props.flexShrink}
+            flexDirection={props.flexDirection}
             style={containerStyle}>
             <Text
                 style={[

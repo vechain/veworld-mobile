@@ -45,7 +45,7 @@ const NotVerifiedWarning = () => {
     return (
         <BaseView
             flexDirection="row"
-            w={100}
+            alignItems="center"
             bg={theme.colors.warningAlert.background}
             gap={12}
             py={8}
@@ -54,7 +54,7 @@ const NotVerifiedWarning = () => {
             mt={8}
             testID="DAPP_DETAILS_NOT_VERIFIED_WARNING">
             <BaseIcon size={16} color={theme.colors.warningAlert.icon} name="icon-alert-triangle" />
-            <BaseText typographyFont="body" color={theme.colors.warningAlert.text} flex={1}>
+            <BaseText typographyFont="body" color={theme.colors.warningAlert.text} flex={1} flexDirection="row">
                 {LL.NOT_VERIFIED_DAPP()}
             </BaseText>
         </BaseView>

@@ -96,14 +96,18 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
             warn(ERROR_EVENTS.WALLET_CONNECT, `Responding with WC Request ${requestEvent.id}`, err)
 
-            await web3Wallet.respondSessionRequest({
-                topic: requestEvent.topic,
-                response: {
-                    id: requestEvent.id,
-                    jsonrpc: "The request was rejected",
-                    error: err,
-                },
-            })
+            try {
+                await web3Wallet.respondSessionRequest({
+                    topic: requestEvent.topic,
+                    response: {
+                        id: requestEvent.id,
+                        jsonrpc: "The request was rejected",
+                        error: err,
+                    },
+                })
+            } catch {
+                error(ERROR_EVENTS.WALLET_CONNECT, "Failed to respond to WC")
+            }
 
             afterRequest(requestEvent)
         },
