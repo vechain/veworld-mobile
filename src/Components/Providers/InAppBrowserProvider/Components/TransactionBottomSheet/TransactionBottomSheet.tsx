@@ -1,7 +1,7 @@
 import { BottomSheetScrollView } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { Transaction } from "@vechain/sdk-core"
-import { default as React, useCallback, useMemo, useRef } from "react"
+import { ComponentProps, default as React, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, showErrorToast } from "~Components/Base"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
@@ -39,7 +39,7 @@ type Props = {
     onTransactionFailure: () => Promise<void>
     onNavigateToLedger: () => void
     selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
-}
+} & Pick<ComponentProps<typeof TransactionDetails>, "onShowDetails">
 
 export const TransactionBottomSheetContent = ({
     request,
@@ -48,6 +48,7 @@ export const TransactionBottomSheetContent = ({
     onTransactionFailure,
     onTransactionSuccess,
     onNavigateToLedger,
+    onShowDetails,
 }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -144,7 +145,12 @@ export const TransactionBottomSheetContent = ({
             </BaseView>
             <BaseSpacer height={12} />
             <BottomSheetScrollView style={styles.scrollView}>
-                <TransactionDetails request={request} outputs={transactionOutputs} clauses={clauses} />
+                <TransactionDetails
+                    request={request}
+                    outputs={transactionOutputs}
+                    clauses={clauses}
+                    onShowDetails={onShowDetails}
+                />
                 <BaseSpacer height={12} />
                 <GasFeeSpeed
                     gasUpdatedAt={gasUpdatedAt}
@@ -234,6 +240,8 @@ export const TransactionBottomSheet = () => {
     const dispatch = useAppDispatch()
 
     const isUserAction = useRef(false)
+
+    const [snapPoints, setSnapPoints] = useState(["75%"])
 
     const onFinish = useCallback(
         (success: boolean) => {
@@ -351,7 +359,10 @@ export const TransactionBottomSheet = () => {
         setTransactionBsData(null)
     }, [rejectRequest, setTransactionBsData, transactionBsData])
 
-    const snapPoints = useMemo(() => ["90%"], [])
+    const onShowDetails = useCallback((newValue: boolean) => {
+        if (newValue) setSnapPoints(["98%"])
+        else setSnapPoints(["75%"])
+    }, [])
 
     return (
         <BaseBottomSheet
@@ -367,6 +378,7 @@ export const TransactionBottomSheet = () => {
                     onTransactionFailure={onTransactionFailure}
                     onTransactionSuccess={onTransactionSuccess}
                     onNavigateToLedger={onNavigateToLedger}
+                    onShowDetails={onShowDetails}
                 />
             )}
         </BaseBottomSheet>

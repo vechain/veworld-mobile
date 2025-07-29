@@ -33,6 +33,7 @@ type Props = {
      */
     showSpacer?: boolean
     children: (props: { visible: boolean }) => React.ReactNode
+    onShowDetails?: (newValue: boolean) => void
 }
 
 export const DappDetailsCard = ({
@@ -43,6 +44,7 @@ export const DappDetailsCard = ({
     showDappWarning = true,
     isDefaultVisible = false,
     showSpacer = true,
+    onShowDetails,
 }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -109,7 +111,10 @@ export const DappDetailsCard = ({
                     </BaseView>
                 </BaseView>
                 <BaseButton
-                    action={() => setShowDetails(old => !old)}
+                    action={() => {
+                        setShowDetails(old => !old)
+                        onShowDetails?.(!showDetails)
+                    }}
                     variant="ghost"
                     textColor={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
                     typographyFont="bodyMedium"

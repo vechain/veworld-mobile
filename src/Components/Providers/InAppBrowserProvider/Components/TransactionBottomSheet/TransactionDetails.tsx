@@ -1,5 +1,5 @@
 import { TransactionClause } from "@vechain/sdk-core"
-import React, { useMemo } from "react"
+import React, { ComponentProps, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components/Base"
 import { SCREEN_WIDTH } from "~Constants"
@@ -15,7 +15,7 @@ type Props = {
     outputs: InspectableOutput[] | undefined
     clauses: TransactionClause[] | undefined
     request: TransactionRequest
-}
+} & Pick<ComponentProps<typeof DappDetailsCard>, "onShowDetails">
 
 const safeJsonStringify = (arg: unknown) =>
     JSON.stringify(arg, (_, value) => {
@@ -58,7 +58,7 @@ const TransactionCarousel = ({
     )
 }
 
-export const TransactionDetails = ({ request, outputs = [], clauses = [] }: Props) => {
+export const TransactionDetails = ({ request, outputs = [], clauses = [], onShowDetails }: Props) => {
     const allApps = useAppSelector(selectFeaturedDapps)
     const network = useAppSelector(selectSelectedNetwork)
 
@@ -88,7 +88,7 @@ export const TransactionDetails = ({ request, outputs = [], clauses = [] }: Prop
     }, [allApps, request.appName, request.appUrl])
 
     return (
-        <DappDetailsCard name={name} icon={icon} url={url} showSpacer={false}>
+        <DappDetailsCard name={name} icon={icon} url={url} showSpacer={false} onShowDetails={onShowDetails}>
             {({ visible }) => {
                 return <TransactionCarousel outputs={analyzedOutputs} expanded={visible} clauses={clauses} />
             }}
