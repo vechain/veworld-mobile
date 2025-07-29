@@ -152,6 +152,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     onCloseDAppOptions()
                 }}
                 selectedDApp={selectedDApp}
+                stackBehavior="replace"
             />
         </>
     )
