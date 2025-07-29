@@ -1,9 +1,9 @@
 import { TransactionClause } from "@vechain/sdk-core"
-import { default as React } from "react"
-import { COLORS } from "~Constants"
-import { useTheme } from "~Hooks"
+import { default as React, useMemo } from "react"
 import { useI18nContext } from "~i18n"
 import { ReceiptOutput } from "~Services/AbiService"
+import { stripFakeSignature } from "~Services/AbiService/ReceiptOutput"
+import { BaseAdditionalDetail } from "./BaseAdditionalDetail"
 import { BaseReceiptOutput } from "./BaseReceiptOutput"
 
 type Props = {
@@ -12,16 +12,25 @@ type Props = {
     clause: TransactionClause
 }
 
-export const ContractCallOutput = (props: Props) => {
+export const ContractCallOutput = ({ output, ...props }: Props) => {
     const { LL } = useI18nContext()
-    const theme = useTheme()
+
+    const isUnknownOutput = useMemo(() => output.name === "___INTERNAL_UNKNOWN___", [output.name])
 
     return (
         <BaseReceiptOutput
             label={LL.RECEIPT_OUTPUT_CONTRACT_CALL()}
-            iconKey="icon-help-circle"
-            iconColor={theme.isDark ? COLORS.ORANGE_300 : COLORS.ORANGE_500}
-            labelColor={theme.isDark ? COLORS.ORANGE_300 : COLORS.ORANGE_500}
+            iconKey={isUnknownOutput ? "icon-help-circle" : "icon-file-check"}
+            output={output}
+            additionalDetails={
+                isUnknownOutput ? (
+                    <BaseAdditionalDetail
+                        label={LL.ADDITIONAL_DETAIL_EVENT()}
+                        value={stripFakeSignature(output.name)}
+                        testID="CONTRACT_CALL_FAKE_SIGNATURE"
+                    />
+                ) : null
+            }
             {...props}
         />
     )

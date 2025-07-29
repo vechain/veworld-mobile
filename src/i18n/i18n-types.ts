@@ -241,9 +241,17 @@ type RootTranslation = {
 	 */
 	ADDITIONAL_DETAIL_CONTRACT_DATA: string
 	/**
+	 * E​v​e​n​t
+	 */
+	ADDITIONAL_DETAIL_EVENT: string
+	/**
 	 * F​r​o​m
 	 */
 	ADDITIONAL_DETAIL_FROM: string
+	/**
+	 * M​e​s​s​a​g​e
+	 */
+	ADDITIONAL_DETAIL_MESSAGE: string
 	/**
 	 * R​e​c​e​i​v​e​r
 	 */
@@ -264,10 +272,6 @@ type RootTranslation = {
 	 * T​o​k​e​n​ ​I​D
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: string
-	/**
-	 * M​e​s​s​a​g​e
-	 */
-	ADDITIONAL_DETAIL_MESSAGE: string
 	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
@@ -4892,9 +4896,17 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ADDITIONAL_DETAIL_CONTRACT_DATA: () => LocalizedString
 	/**
+	 * Event
+	 */
+	ADDITIONAL_DETAIL_EVENT: () => LocalizedString
+	/**
 	 * From
 	 */
 	ADDITIONAL_DETAIL_FROM: () => LocalizedString
+	/**
+	 * Message
+	 */
+	ADDITIONAL_DETAIL_MESSAGE: () => LocalizedString
 	/**
 	 * Receiver
 	 */
@@ -4915,10 +4927,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Token ID
 	 */
 	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
-	/**
-	 * Message
-	 */
-	ADDITIONAL_DETAIL_MESSAGE: () => LocalizedString
 	/**
 	 * Add Account
 	 */

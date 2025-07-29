@@ -360,7 +360,7 @@ export const TransactionBottomSheet = () => {
     }, [rejectRequest, setTransactionBsData, transactionBsData])
 
     const onShowDetails = useCallback((newValue: boolean) => {
-        if (newValue) setSnapPoints(["98%"])
+        if (newValue) setSnapPoints(["90%"])
         else setSnapPoints(["75%"])
     }, [])
 

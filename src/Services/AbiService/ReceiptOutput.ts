@@ -44,3 +44,11 @@ export type ReceiptOutput = {
           params: {}
       }
 )
+
+const FAKE_SIGNATURE_REGEX = /(.*)\(/
+
+export const stripFakeSignature = (signature: string) => {
+    if (!FAKE_SIGNATURE_REGEX.test(signature)) return signature
+    const matchArray = signature.match(FAKE_SIGNATURE_REGEX)!
+    return matchArray[1]
+}
