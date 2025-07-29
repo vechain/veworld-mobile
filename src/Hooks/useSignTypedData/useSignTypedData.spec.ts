@@ -83,59 +83,41 @@ describe("useSignTypedData", () => {
         mockAccount(account1D1)
         mockDevice(keystoreDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
         expect(result.current).toEqual({
             signTypedData: expect.any(Function),
         })
 
-        const signature = await result.current.signTypedData()
+        const signature = await result.current.signTypedData(typedDataMock)
 
-        await expect(signature?.length).toBe(132)
+        expect(signature?.length).toBe(132)
     })
 
     it("should work with keystore wallet", async () => {
         mockAccount(account1D1)
         mockDevice(keystoreDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
         expect(result.current).toEqual({
             signTypedData: expect.any(Function),
         })
 
-        const signature = await result.current.signTypedData()
+        const signature = await result.current.signTypedData(typedDataMock)
 
-        await expect(signature?.length).toBe(132)
+        expect(signature?.length).toBe(132)
     })
 
     it("should throw with ledger type account", async () => {
         mockAccount(firstLedgerAccount)
         mockDevice(ledgerDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
 
         expect(result.current).toEqual({
             signTypedData: expect.any(Function),
         })
 
-        await expect(result.current.signTypedData()).rejects.toThrow("Ledger devices not supported")
+        await expect(result.current.signTypedData(typedDataMock)).rejects.toThrow("Ledger devices not supported")
     })
 
     it("no wallet should throw error", async () => {
@@ -146,10 +128,7 @@ describe("useSignTypedData", () => {
         })
 
         const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
+            () => useSignTypedMessage(),
 
             { wrapper: TestWrapper },
         )
@@ -158,25 +137,19 @@ describe("useSignTypedData", () => {
             signTypedData: expect.any(Function),
         })
 
-        await expect(result.current.signTypedData()).rejects.toThrow("The device doesn't have a wallet")
+        await expect(result.current.signTypedData(typedDataMock)).rejects.toThrow("The device doesn't have a wallet")
     })
 
     it("should match the signer", async () => {
         mockAccount(account1D1)
         mockDevice(keystoreDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
         expect(result.current).toEqual({
             signTypedData: expect.any(Function),
         })
 
-        const signature = await result.current.signTypedData()
+        const signature = await result.current.signTypedData(typedDataMock)
 
         expect(
             ethers.utils
