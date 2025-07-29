@@ -994,6 +994,8 @@
   "SIGN_TRANSACTION_ERROR": "Error signing transaction",
   "SIGN_TRANSACTION_REQUEST_CTA": "Confirm",
   "SIGN_TRANSACTION_REQUEST_TITLE": "App transaction",
+  "SIGN_TYPED_DATA_REQUEST_CTA": "Sign",
+  "SIGN_TYPED_DATA_REQUEST_TITLE": "Sign typed data",
   "STARGATE_CLAIMABLE": "Claimable",
   "STARGATE_LOCKED": "Locked",
   "STARGATE_MANAGE_STAKING": "Manage your staking",

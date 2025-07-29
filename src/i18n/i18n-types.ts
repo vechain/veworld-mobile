@@ -4085,6 +4085,14 @@ type RootTranslation = {
 	 */
 	SIGN_TRANSACTION_REQUEST_TITLE: string
 	/**
+	 * S​i​g​n
+	 */
+	SIGN_TYPED_DATA_REQUEST_CTA: string
+	/**
+	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
+	 */
+	SIGN_TYPED_DATA_REQUEST_TITLE: string
+	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
@@ -8692,6 +8700,14 @@ Are you sure you want to continue?
 	 * App transaction
 	 */
 	SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Sign
+	 */
+	SIGN_TYPED_DATA_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Sign typed data
+	 */
+	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * Claimable
 	 */

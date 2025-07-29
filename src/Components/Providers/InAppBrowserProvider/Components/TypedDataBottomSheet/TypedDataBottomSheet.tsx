@@ -1,5 +1,4 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { ethers } from "ethers"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
@@ -8,7 +7,6 @@ import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConne
 import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { VIP180 } from "~Constants/Constants/Thor/abis"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignTypedMessage, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { SignedTypedDataResponse, TypeDataRequest, TypedData } from "~Model"
@@ -17,7 +15,7 @@ import {
     selectFeaturedDapps,
     selectSelectedAccountOrNull,
     selectVerifyContext,
-    selectVisibleAccountsWithoutObserved,
+    selectVisibleAccountsWithoutObservedAndLedger,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -42,7 +40,7 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
     const allApps = useAppSelector(selectFeaturedDapps)
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
-    const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
+    const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObservedAndLedger)
     const { onClose: onCloseSelectAccountBs, onOpen: onOpenSelectAccountBs } = useBottomSheetModal({
         externalRef: selectAccountBsRef,
     })
@@ -94,7 +92,7 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-certificate" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                        {"Sign typed data"}
+                        {LL.SIGN_TYPED_DATA_REQUEST_TITLE()}
                     </BaseText>
                 </BaseView>
                 {selectedAccount && (
@@ -109,25 +107,8 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
             <BaseSpacer height={12} />
             <DappWithDetails name={name} icon={icon} url={url}>
                 <Renderer.Container>
-                    {/* <Renderer value={request.value} /> */}
-                    <Renderer
-                        value={{
-                            to: ["0x75a6a29db80bd8a64d3d4b19b29d09bb2245a97f"],
-                            value: ["0x0"],
-                            data: [
-                                new ethers.utils.Interface([VIP180.transfer]).encodeFunctionData("transfer", [
-                                    "0x75a6a29db80bd8a64d3d4b19b29d09bb2245a97f",
-                                    ethers.utils.parseEther("1").toString(),
-                                ]),
-                            ],
-                            validAfter: 0,
-                            validBefore: Math.floor(Date.now() / 1000),
-                            nonce: ethers.utils.hexlify(ethers.utils.randomBytes(32)),
-                        }}
-                    />
-                    {/* <Renderer value={{ test: [{ nested: new Date().toISOString() }], notTest: "TEST" }} /> */}
+                    <Renderer value={request.value} />
                 </Renderer.Container>
-                {/* <JsonViewer data={{ test: [{ nested: new Date().toISOString() }], notTest: "TEST" }} /> */}
             </DappWithDetails>
             <BaseSpacer height={24} />
             <BaseView flexDirection="row" gap={16}>
@@ -135,7 +116,8 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                     action={onCancel.bind(null, request)}
                     variant="outline"
                     flex={1}
-                    testID="SIGN_CERTIFICATE_REQUEST_BTN_CANCEL">
+                    testID="SIGN_TYPED_DATA_REQUEST_BTN_CANCEL"
+                    disabled={isLoading}>
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <Signable args={signableArgs} onSign={onSign}>
@@ -151,8 +133,8 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                                 !selectedAccount
                             }
                             isLoading={isLoading}
-                            testID="SIGN_CERTIFICATE_REQUEST_BTN_SIGN">
-                            {LL.SIGN_CERTIFICATE_REQUEST_CTA()}
+                            testID="SIGN_TYPED_DATA_REQUEST_BTN_SIGN">
+                            {LL.SIGN_TYPED_DATA_REQUEST_CTA()}
                         </BaseButton>
                     )}
                 </Signable>
@@ -265,7 +247,7 @@ export const TypedDataBottomSheet = () => {
                 postMessage({
                     id: request.id,
                     error: "User rejected request",
-                    method: RequestMethods.SIGN_CERTIFICATE,
+                    method: RequestMethods.SIGN_TYPED_DATA,
                 })
             }
 
