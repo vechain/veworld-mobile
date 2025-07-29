@@ -19,8 +19,10 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils, error, HexUtils } from "~Utils"
-import { DappWithDetails } from "../DappWithDetails"
+import { DappDetails } from "../DappDetails"
+import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
+import { LedgerDeviceAlert } from "./LedgerDeviceAlert"
 import { Renderer } from "./Renderer"
 
 type Props = {
@@ -59,6 +61,16 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
         onOpenSelectAccountBs()
     }, [onOpenSelectAccountBs])
 
+    const isConfirmDisabled = useMemo(
+        () =>
+            AccountUtils.isObservedAccount(selectedAccount) ||
+            !validConnectedApp ||
+            isLoading ||
+            !selectedAccount ||
+            selectedAccount.device.type === DEVICE_TYPE.LEDGER,
+        [isLoading, selectedAccount, validConnectedApp],
+    )
+
     return (
         <>
             <BaseView
@@ -82,11 +94,23 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                 )}
             </BaseView>
             <BaseSpacer height={12} />
-            <DappWithDetails appName={request.appName} appUrl={request.appUrl}>
-                <Renderer.Container>
-                    <Renderer value={request.value} />
-                </Renderer.Container>
-            </DappWithDetails>
+            <DappDetailsCard appName={request.appName} appUrl={request.appUrl}>
+                {({ visible }) => (
+                    <>
+                        {selectedAccount?.device.type === DEVICE_TYPE.LEDGER && (
+                            <>
+                                <LedgerDeviceAlert />
+                                <BaseSpacer height={16} />
+                            </>
+                        )}
+                        <DappDetails show={visible}>
+                            <Renderer.Container>
+                                <Renderer value={request.value} />
+                            </Renderer.Container>
+                        </DappDetails>
+                    </>
+                )}
+            </DappDetailsCard>
             <BaseSpacer height={24} />
             <BaseView flexDirection="row" gap={16}>
                 <BaseButton
@@ -101,14 +125,7 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                         <BaseButton
                             action={checkIdentityBeforeOpening}
                             flex={1}
-                            disabled={
-                                AccountUtils.isObservedAccount(selectedAccount) ||
-                                isBiometricsEmpty ||
-                                !validConnectedApp ||
-                                isLoading ||
-                                !selectedAccount ||
-                                selectedAccount.device.type === DEVICE_TYPE.LEDGER
-                            }
+                            disabled={isConfirmDisabled || isBiometricsEmpty}
                             isLoading={isLoading}
                             testID="SIGN_TYPED_DATA_REQUEST_BTN_SIGN">
                             {LL.SIGN_TYPED_DATA_REQUEST_CTA()}
