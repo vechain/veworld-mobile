@@ -199,7 +199,7 @@ export const BaseCarousel = ({
                 renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
             />
-            {showPagination && (
+            {showPagination && data.length > 1 && (
                 <ScrollView
                     contentContainerStyle={[styles.dotContainer, { paddingStart: padding }, paginationStyle]}
                     horizontal>
