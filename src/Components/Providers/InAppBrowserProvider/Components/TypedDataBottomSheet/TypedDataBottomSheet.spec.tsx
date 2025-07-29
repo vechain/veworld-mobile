@@ -7,7 +7,7 @@ import * as InAppBrowserProvider from "~Components/Providers/InAppBrowserProvide
 import * as InteractionProvider from "~Components/Providers/InteractionProvider"
 import * as WalletConnectProvider from "~Components/Providers/WalletConnectProvider"
 import { RequestMethods } from "~Constants"
-import { AccountWithDevice } from "~Model"
+import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import { AddressUtils, CryptoUtils } from "~Utils"
 import { TypedDataBottomSheet } from "./TypedDataBottomSheet"
 
@@ -342,5 +342,100 @@ describe("TypedDataBottomSheet", () => {
                 },
                 "0x00",
             )
+    })
+
+    it("should show an alert when selected account is ledger", async () => {
+        const typedDataBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+        const postMessage = jest.fn()
+        const userAddress = ethers.Wallet.createRandom().address
+        jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+            typedDataBsRef,
+            typedDataBsData: {
+                method: RequestMethods.SIGN_TYPED_DATA,
+                id: "0x1",
+                type: "in-app",
+                domain: {
+                    chainId: 1,
+                    name: "Test APP",
+                    version: "1",
+                },
+                types: {
+                    Authentication: [
+                        {
+                            name: "user",
+                            type: "address",
+                        },
+                        {
+                            name: "isSocialLogin",
+                            type: "bool",
+                        },
+                        {
+                            name: "timestamp",
+                            type: "string",
+                        },
+                    ],
+                },
+                value: {
+                    user: userAddress,
+                    isSocialLogin: false,
+                    timestamp: "2025-07-22T07:33:23.599Z",
+                },
+                options: {},
+                origin: "0x0",
+                appUrl: "https://vechain.org",
+                appName: "TEST APP",
+                isFirstRequest: false,
+            },
+            setTypedDataBsData: jest.fn(),
+        } as any)
+        jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
+            postMessage,
+        } as any)
+        const processRequest = jest.fn()
+        jest.spyOn(WalletConnectProvider, "useWalletConnect").mockReturnValue({
+            failRequest: jest.fn(),
+            processRequest,
+        } as any)
+
+        TestHelpers.render.renderComponentWithProps(<TypedDataBottomSheet />, {
+            wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    accounts: {
+                        accounts: [
+                            {
+                                ...mockAccountWithDevice1,
+                                device: {
+                                    ...device1,
+                                    type: DEVICE_TYPE.LEDGER,
+                                    deviceId: "TEST",
+                                },
+                            },
+                        ],
+                        selectedAccount: mockAccountWithDevice1.address,
+                    },
+                    devices: [
+                        {
+                            ...device1,
+                            type: DEVICE_TYPE.LEDGER,
+                            deviceId: "TEST",
+                        },
+                    ],
+                    sessions: {
+                        TOPIC: {
+                            verifyContext: {
+                                validation: "VALID",
+                            } as any,
+                            isDeepLink: false,
+                        },
+                    },
+                },
+            },
+        })
+        await act(() => {
+            typedDataBsRef.current.present()
+        })
+
+        expect(screen.getByTestId("LEDGER_DEVICE_ALERT")).toBeVisible()
     })
 })
