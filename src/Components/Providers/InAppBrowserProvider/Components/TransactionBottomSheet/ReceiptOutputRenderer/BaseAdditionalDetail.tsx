@@ -63,6 +63,7 @@ const StringValue = ({
             color={theme.isDark ? COLORS.WHITE : COLORS.GREY_800}
             onLayout={e => {
                 // Please, do not change this behaviour. It's the only way to make it work for long strings.
+                if (e.nativeEvent.layout.height === 0) return
                 setHeight(e.nativeEvent.layout.height)
             }}
             style={[{ height }, style]}
