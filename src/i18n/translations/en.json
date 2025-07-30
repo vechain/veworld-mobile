@@ -807,6 +807,7 @@
   "RECEIPT_OUTPUT_TOKEN_CONVERSION": "Token conversion",
   "RECEIPT_OUTPUT_TOKEN_RECEIVE": "Token receive",
   "RECEIPT_OUTPUT_TOKEN_SEND": "Token send",
+  "RECEIPT_OUTPUT_GENERIC_TOKEN": "token",
   "RECEIVED": "Received",
   "RECEIVE_ACTIVITY": "Receive",
   "RECEIVE_NFT": "Receive NFT",

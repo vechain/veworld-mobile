@@ -29,7 +29,7 @@ export const TokenSendOutput = ({ output, ...props }: Props) => {
     const amountHuman = useMemo(
         () =>
             BigNutils(value.toString())
-                .toHuman(token?.decimals ?? 0)
+                .toHuman(token?.decimals ?? 18)
                 .toTokenFormat_string(2, formatLocale),
         [formatLocale, value, token?.decimals],
     )
@@ -48,7 +48,7 @@ export const TokenSendOutput = ({ output, ...props }: Props) => {
             {...props}>
             <BaseReceiptOutput.ValueContainer>
                 <BaseReceiptOutput.ValueMainText testID="TOKEN_SEND_VALUE">
-                    {`${DIRECTIONS.DOWN} ${amountHuman} ${token?.symbol}`}
+                    {`${DIRECTIONS.DOWN} ${amountHuman} ${token?.symbol ?? LL.RECEIPT_OUTPUT_GENERIC_TOKEN()}`}
                 </BaseReceiptOutput.ValueMainText>
             </BaseReceiptOutput.ValueContainer>
         </BaseReceiptOutput>

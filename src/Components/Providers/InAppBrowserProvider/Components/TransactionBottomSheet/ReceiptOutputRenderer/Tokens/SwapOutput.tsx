@@ -57,7 +57,7 @@ export const SwapOutput = ({ output, ...props }: Props) => {
     const amountInHuman = useMemo(
         () =>
             BigNutils(parsed.inputValue.toString())
-                .toHuman(inputToken?.decimals ?? 0)
+                .toHuman(inputToken?.decimals ?? 18)
                 .toTokenFormat_string(2, formatLocale),
         [formatLocale, inputToken?.decimals, parsed.inputValue],
     )
@@ -65,7 +65,7 @@ export const SwapOutput = ({ output, ...props }: Props) => {
     const amountOutHuman = useMemo(
         () =>
             BigNutils(parsed.outputValue.toString())
-                .toHuman(outputToken?.decimals ?? 0)
+                .toHuman(outputToken?.decimals ?? 18)
                 .toTokenFormat_string(2, formatLocale),
         [formatLocale, outputToken?.decimals, parsed.outputValue],
     )
@@ -74,10 +74,10 @@ export const SwapOutput = ({ output, ...props }: Props) => {
         <BaseReceiptOutput label={LL.RECEIPT_OUTPUT_SWAP()} iconKey="icon-arrow-left-right" output={output} {...props}>
             <BaseReceiptOutput.ValueContainer flexDirection="column" gap={2}>
                 <BaseReceiptOutput.ValueMainText testID="SWAP_OUTPUT_VALUE">
-                    {`${DIRECTIONS.UP} ${amountOutHuman} ${outputToken?.symbol}`}
+                    {`${DIRECTIONS.UP} ${amountOutHuman} ${outputToken?.symbol ?? LL.RECEIPT_OUTPUT_GENERIC_TOKEN()}`}
                 </BaseReceiptOutput.ValueMainText>
                 <BaseReceiptOutput.ValueSubText testID="SWAP_INPUT_VALUE">
-                    {`${DIRECTIONS.DOWN} ${amountInHuman} ${inputToken?.symbol}`}
+                    {`${DIRECTIONS.DOWN} ${amountInHuman} ${inputToken?.symbol ?? LL.RECEIPT_OUTPUT_GENERIC_TOKEN()}`}
                 </BaseReceiptOutput.ValueSubText>
             </BaseReceiptOutput.ValueContainer>
         </BaseReceiptOutput>

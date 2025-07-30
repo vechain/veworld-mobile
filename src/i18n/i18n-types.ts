@@ -3325,6 +3325,10 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
 	/**
+	 * t​o​k​e​n
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: string
+	/**
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
@@ -7939,6 +7943,10 @@ Thanks for your patience!
 	 * Token send
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
+	/**
+	 * token
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: () => LocalizedString
 	/**
 	 * Received
 	 */
