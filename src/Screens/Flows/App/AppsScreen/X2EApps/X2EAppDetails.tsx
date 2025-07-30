@@ -3,8 +3,8 @@ import { StyleSheet } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseButton, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
-import { COLORS, ColorThemeType } from "~Constants"
-import { useTheme, useThemedStyles } from "~Hooks"
+import { COLORS } from "~Constants"
+import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
@@ -41,7 +41,7 @@ const Stats = () => {
 const Actions = () => {
     const { LL } = useI18nContext()
     return (
-        <AnimatedBaseView layout={LinearTransition.duration(300)} flexDirection="column" gap={16} px={0}>
+        <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="column" gap={16} px={0}>
             <BaseButton action={() => {}}>{LL.BTN_ADD_TO_FAVORITES()}</BaseButton>
             <BaseButton action={() => {}}>{LL.BTN_OPEN()}</BaseButton>
         </AnimatedBaseView>
@@ -70,19 +70,18 @@ const Container = ({ children }: PropsWithChildren) => {
 type Props = PropsWithChildren<{ show: boolean }>
 
 const X2EAppDetails = ({ children, show }: Props) => {
-    const { styles } = useThemedStyles(baseStyles)
     const animatedStyles = useAnimatedStyle(() => {
         return {
             opacity: show ? withTiming(1, { duration: 100 }) : withTiming(0, { duration: 0 }),
             height: show ? "auto" : 0,
         }
     }, [show])
+
     return (
         <AnimatedBaseView
-            layout={LinearTransition.duration(300)}
+            layout={LinearTransition.duration(100)}
             style={[styles.detailsContainer, animatedStyles]}
-            flexDirection="column"
-            borderRadius={24}>
+            flexDirection="column">
             {children}
         </AnimatedBaseView>
     )
@@ -96,12 +95,8 @@ X2EAppDetails.Container = Container
 
 export { X2EAppDetails }
 
-const baseStyles = (theme: ColorThemeType) =>
-    StyleSheet.create({
-        detailsContainer: {
-            backgroundColor: theme.colors.editSpeedBs.result.background,
-            borderColor: theme.colors.editSpeedBs.result.border,
-            borderWidth: 1,
-            gap: 12,
-        },
-    })
+const styles = StyleSheet.create({
+    detailsContainer: {
+        gap: 12,
+    },
+})

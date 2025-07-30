@@ -76,7 +76,7 @@ const X2EAppItem = ({ dapp }: { dapp: DiscoveryDApp }) => {
     )
 }
 
-const DAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
+const X2EAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
     const renderItem = useCallback(({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
         return <X2EAppItem dapp={item} />
     }, [])
@@ -214,7 +214,7 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
                         </BaseText>
                     </BaseView>
                     <TopFilters filters={filterOptions} />
-                    <DAppsList dapps={dappsToShow || []} isLoading={isLoading} onFetchNextPage={onFetchNextPage} />
+                    <X2EAppsList dapps={dappsToShow || []} isLoading={isLoading} onFetchNextPage={onFetchNextPage} />
                 </BaseView>
             </BaseBottomSheet>
         )

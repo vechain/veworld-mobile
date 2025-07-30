@@ -2,15 +2,13 @@ import { PropsWithChildren, default as React, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
-import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
-import { COLORS } from "~Constants"
+import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { X2EAppDetails } from "./X2EAppDetails"
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
-const AnimatedBaseSpacer = Animated.createAnimatedComponent(wrapFunctionComponent(BaseSpacer))
 
 type Props = PropsWithChildren<{
     name: string
@@ -27,21 +25,36 @@ export const X2EAppWithDetails = ({ name, icon, url, children, isDefaultVisible 
     const [loadFallback, setLoadFallback] = useState(false)
     const [showDetails, setShowDetails] = useState(isDefaultVisible)
 
-    const spacerStyles = useAnimatedStyle(() => {
-        return {
-            opacity: showDetails ? withTiming(1, { duration: 300 }) : withTiming(0, { duration: 300 }),
-            height: showDetails ? 16 : 0,
-        }
-    }, [showDetails])
-
     const toggleDetails = () => {
         setShowDetails(prev => !prev)
     }
 
+    const containerStyle = useAnimatedStyle(() => {
+        return {
+            backgroundColor: showDetails
+                ? withTiming(theme.colors.editSpeedBs.result.background, { duration: 100 })
+                : withTiming(theme.colors.card, { duration: 0 }),
+            borderRadius: showDetails ? withTiming(24, { duration: 100 }) : withTiming(0, { duration: 100 }),
+        }
+    }, [showDetails])
+
+    const headerStyle = useAnimatedStyle(() => {
+        return {
+            padding: showDetails ? withTiming(24, { duration: 100 }) : withTiming(0, { duration: 50 }),
+        }
+    }, [showDetails])
+
     return (
-        <AnimatedBaseView flexDirection="column" layout={LinearTransition.duration(300)} borderRadius={12}>
-            <TouchableOpacity activeOpacity={0.7} onPress={toggleDetails} testID="DAPP_WITH_DETAILS_ROW">
-                <AnimatedBaseView flexDirection="row" gap={12} layout={LinearTransition.duration(300)}>
+        <AnimatedBaseView
+            flexDirection="column"
+            layout={LinearTransition.duration(100)}
+            style={[styles.mainContainer, containerStyle]}>
+            <TouchableOpacity activeOpacity={0.7} onPress={toggleDetails} testID="X2E_APP_WITH_DETAILS_ROW">
+                <AnimatedBaseView
+                    flexDirection="row"
+                    gap={12}
+                    style={headerStyle}
+                    layout={LinearTransition.duration(100)}>
                     <BaseView flexDirection="row" gap={16} flex={1}>
                         <Image
                             source={
@@ -81,14 +94,17 @@ export const X2EAppWithDetails = ({ name, icon, url, children, isDefaultVisible 
                     </BaseView>
                 </AnimatedBaseView>
             </TouchableOpacity>
-            <AnimatedBaseSpacer style={[spacerStyles]} />
             <X2EAppDetails show={showDetails}>{children}</X2EAppDetails>
         </AnimatedBaseView>
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
+        mainContainer: {
+            backgroundColor: theme.colors.editSpeedBs.result.background,
+            overflow: "hidden",
+        },
         icon: {
             borderRadius: 8,
             overflow: "hidden",
