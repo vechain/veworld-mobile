@@ -138,7 +138,7 @@ const BaseReceiptOutput = ({
 
                     {clause.comment && (
                         <BaseAdditionalDetail
-                            label={LL.ADDITIONAL_DETAIL_MESSAGE()}
+                            label={LL.ADDITIONAL_DETAIL_COMMENT()}
                             direction="column"
                             value={<BaseAdditionalDetail.StringValue value={clause.comment} numberOfLines={3} />}
                         />

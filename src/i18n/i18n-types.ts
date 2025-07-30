@@ -249,9 +249,9 @@ type RootTranslation = {
 	 */
 	ADDITIONAL_DETAIL_FROM: string
 	/**
-	 * M​e​s​s​a​g​e
+	 * C​o​m​m​e​n​t
 	 */
-	ADDITIONAL_DETAIL_MESSAGE: string
+	ADDITIONAL_DETAIL_COMMENT: string
 	/**
 	 * R​e​c​e​i​v​e​r
 	 */
@@ -2620,13 +2620,13 @@ type RootTranslation = {
 	 */
 	LEDGER_DATA_SIGNED: string
 	/**
-	 * T​y​p​e​d​ ​D​a​t​a​ ​c​a​n​n​o​t​ ​b​e​ ​s​i​g​n​e​d​ ​w​i​t​h​ ​a​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​.
-	 */
-	LEDGER_DEVICE_ALERT: string
-	/**
 	 * D​e​l​e​g​a​t​e​d​ ​h​a​r​d​w​a​r​e​ ​w​a​l​l​e​t​ ​n​o​t​ ​s​u​p​p​o​r​t​e​d​ ​y​e​t
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: string
+	/**
+	 * T​y​p​e​d​ ​D​a​t​a​ ​c​a​n​n​o​t​ ​b​e​ ​s​i​g​n​e​d​ ​w​i​t​h​ ​a​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​.
+	 */
+	LEDGER_DEVICE_ALERT: string
 	/**
 	 * M​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y
 	 */
@@ -3256,6 +3256,10 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_CONTRACT_CALL: string
 	/**
+	 * t​o​k​e​n
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: string
+	/**
 	 * N​F​T​ ​a​p​p​r​o​v​a​l
 	 */
 	RECEIPT_OUTPUT_NFT_APPROVE: string
@@ -3328,10 +3332,6 @@ type RootTranslation = {
 	 * T​o​k​e​n​ ​s​e​n​d
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
-	/**
-	 * t​o​k​e​n
-	 */
-	RECEIPT_OUTPUT_GENERIC_TOKEN: string
 	/**
 	 * R​e​c​e​i​v​e​d
 	 */
@@ -4920,9 +4920,9 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ADDITIONAL_DETAIL_FROM: () => LocalizedString
 	/**
-	 * Message
+	 * Comment
 	 */
-	ADDITIONAL_DETAIL_MESSAGE: () => LocalizedString
+	ADDITIONAL_DETAIL_COMMENT: () => LocalizedString
 	/**
 	 * Receiver
 	 */
@@ -7271,13 +7271,13 @@ Thanks for your patience!
 	 */
 	LEDGER_DATA_SIGNED: () => LocalizedString
 	/**
-	 * Typed Data cannot be signed with a Ledger device. Please select another account.
-	 */
-	LEDGER_DEVICE_ALERT: () => LocalizedString
-	/**
 	 * Delegated hardware wallet not supported yet
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
+	 * Typed Data cannot be signed with a Ledger device. Please select another account.
+	 */
+	LEDGER_DEVICE_ALERT: () => LocalizedString
 	/**
 	 * Message is ready
 	 */
@@ -7888,6 +7888,10 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
 	/**
+	 * token
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: () => LocalizedString
+	/**
 	 * NFT approval
 	 */
 	RECEIPT_OUTPUT_NFT_APPROVE: () => LocalizedString
@@ -7959,10 +7963,6 @@ Thanks for your patience!
 	 * Token send
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
-	/**
-	 * token
-	 */
-	RECEIPT_OUTPUT_GENERIC_TOKEN: () => LocalizedString
 	/**
 	 * Received
 	 */
