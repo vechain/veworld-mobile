@@ -265,7 +265,6 @@ export const HomeScreen = () => {
                         accounts={accounts}
                         setSelectedAccount={setSelectedAccount}
                         selectedAccount={selectedAccount}
-                        isBalanceVisible={isBalanceVisible}
                         ref={selectAccountBottomSheetRef}
                     />
 
