@@ -3,7 +3,7 @@ import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "reac
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
-import { COLORS, ColorThemeType } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { X2EAppDetails } from "./X2EAppDetails"
@@ -47,9 +47,16 @@ export const X2EAppWithDetails = ({ name, icon, desc, children, isDefaultVisible
     return (
         <AnimatedBaseView
             flexDirection="column"
-            layout={LinearTransition.duration(100)}
+            layout={LinearTransition.duration(300)}
             style={[styles.mainContainer, containerStyle]}>
             <TouchableOpacity activeOpacity={0.7} onPress={toggleDetails} testID="X2E_APP_WITH_DETAILS_ROW">
+                <BaseView justifyContent="center">
+                    {showDetails && (
+                        <BaseView style={styles.chevron}>
+                            <BaseIcon name="icon-chevron-up" size={16} color={theme.colors.label.text} />
+                        </BaseView>
+                    )}
+                </BaseView>
                 <AnimatedBaseView
                     flexDirection="row"
                     pb={8}
@@ -70,7 +77,7 @@ export const X2EAppWithDetails = ({ name, icon, desc, children, isDefaultVisible
                         />
                         <BaseView flexDirection="column" gap={4} flex={1} pr={24}>
                             <BaseText
-                                typographyFont="bodyMedium"
+                                typographyFont={showDetails ? "subTitleSemiBold" : "bodyMedium"}
                                 numberOfLines={1}
                                 color={theme.colors.assetDetailsCard.title}
                                 testID="DAPP_WITH_DETAILS_NAME">
@@ -84,13 +91,6 @@ export const X2EAppWithDetails = ({ name, icon, desc, children, isDefaultVisible
                                 {desc}
                             </BaseText>
                         </BaseView>
-                    </BaseView>
-                    <BaseView justifyContent="center">
-                        <BaseIcon
-                            name={showDetails ? "icon-chevron-up" : "icon-chevron-down"}
-                            size={12}
-                            color={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
-                        />
                     </BaseView>
                 </AnimatedBaseView>
             </TouchableOpacity>
@@ -108,5 +108,13 @@ const baseStyles = (theme: ColorThemeType) =>
         icon: {
             borderRadius: 8,
             overflow: "hidden",
+        },
+        chevron: {
+            position: "absolute",
+            right: 14,
+            top: 14,
+            borderRadius: 99,
+            padding: 8,
+            backgroundColor: theme.colors.label.background,
         },
     })

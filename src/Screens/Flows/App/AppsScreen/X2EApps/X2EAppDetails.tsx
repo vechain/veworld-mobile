@@ -21,14 +21,14 @@ const Title = ({ children }: PropsWithChildren) => {
 
 const Stats = () => {
     return (
-        <BaseView flexDirection={"row"} justifyContent={"space-between"} py={4} px={8}>
+        <BaseView flexDirection={"row"} justifyContent={"space-between"} py={4} px={8} gap={8}>
             <BaseView flexDirection="column" gap={2}>
                 <BaseText typographyFont={"bodySemiBold"}>{"4.5"}</BaseText>
                 <BaseText typographyFont={"captionRegular"}>{"Rating"}</BaseText>
             </BaseView>
             <BaseView flexDirection="column" gap={2}>
                 <BaseText typographyFont={"bodySemiBold"}>{"1.1M"}</BaseText>
-                <BaseText typographyFont={"captionMedium"}>{"Users"}</BaseText>
+                <BaseText typographyFont={"captionRegular"}>{"Users"}</BaseText>
             </BaseView>
             <BaseView flexDirection="column" gap={2}>
                 <BaseText typographyFont={"bodySemiBold"}>{"10.8 T"}</BaseText>

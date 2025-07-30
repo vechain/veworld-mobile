@@ -64,7 +64,7 @@ const X2EAppItem = ({ dapp }: { dapp: DiscoveryDApp }) => {
                     {dapp.desc || "Discover this exciting DApp from the VeChain ecosystem."}
                 </X2EAppDetails.Description>
                 <X2EAppDetails.Stats />
-                <BaseSpacer height={18} />
+                <BaseSpacer height={8} />
                 <X2EAppDetails.Actions />
             </X2EAppDetails.Container>
         </X2EAppWithDetails>
@@ -205,7 +205,7 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
                     <BaseView flexDirection="row" gap={16}>
                         <BaseIcon name="icon-salad" size={32} color={theme.colors.editSpeedBs.title} />
                         <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                            {LL.COMMON_DAPPS()}
+                            {"Food & Drinks"}
                         </BaseText>
                     </BaseView>
                     <TopFilters filters={filterOptions} />
