@@ -1,6 +1,6 @@
 import React, { forwardRef, useCallback, useMemo, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseBottomSheet, BaseChip, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseBottomSheet, BaseChip, BaseIcon, BaseSpacer, BaseText, BaseView, BaseButton } from "~Components"
 import { Spinner } from "~Components/Reusable/Spinner"
 import { DiscoveryDApp } from "~Constants"
 import { DAppType } from "~Model"
@@ -54,6 +54,8 @@ const LoadingMoreFooter = ({ isLoading }: { isLoading: boolean }) => {
 }
 
 const X2EAppItem = ({ dapp }: { dapp: DiscoveryDApp }) => {
+    const { LL } = useI18nContext()
+
     return (
         <X2EAppWithDetails
             name={dapp.name}
@@ -64,6 +66,11 @@ const X2EAppItem = ({ dapp }: { dapp: DiscoveryDApp }) => {
                     {dapp.desc || "Discover this exciting DApp from the VeChain ecosystem."}
                 </X2EAppDetails.Description>
                 <X2EAppDetails.Stats />
+                <BaseSpacer height={18} />
+                <BaseView flexDirection="column" gap={16} px={0}>
+                    <BaseButton action={() => {}}>{LL.BTN_ADD_TO_FAVORITES()}</BaseButton>
+                    <BaseButton action={() => {}}>{LL.BTN_OPEN()}</BaseButton>
+                </BaseView>
             </X2EAppDetails.Container>
         </X2EAppWithDetails>
     )
@@ -118,7 +125,7 @@ const DAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
 }
 
 const styles = StyleSheet.create({
-    flatListPadding: { paddingHorizontal: 16, paddingBottom: 24, paddingTop: 16 },
+    flatListPadding: { paddingBottom: 24 },
 })
 
 type X2EAppsBottomSheetProps = {
@@ -193,7 +200,12 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
         }, [fetchNextPage])
 
         return (
-            <BaseBottomSheet snapPoints={["90%"]} ref={ref} onDismiss={onDismiss} floating={false}>
+            <BaseBottomSheet
+                snapPoints={["90%"]}
+                ref={ref}
+                onDismiss={onDismiss}
+                floating={false}
+                backgroundStyle={{ backgroundColor: theme.colors.card }}>
                 <BaseView pb={16} gap={32}>
                     <BaseView flexDirection="row" gap={16}>
                         <BaseIcon name="icon-salad" size={32} color={theme.colors.editSpeedBs.title} />

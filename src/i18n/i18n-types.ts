@@ -376,15 +376,6 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
-	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
-	 */
-	APP_UPDATE_AVAILABLE: string
-	/**
-	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
-	 * @param {string} version
-	 */
-	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
-	/**
 	 * A​p​p​ ​u​p​d​a​t​e​d
 	 */
 	APP_UPDATED: string
@@ -393,10 +384,14 @@ type RootTranslation = {
 	 */
 	APP_UPDATED_WHATS_NEW: string
 	/**
-	 * v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
+	 */
+	APP_UPDATE_AVAILABLE: string
+	/**
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
 	 * @param {string} version
 	 */
-	APP_VERSION: RequiredParams<'version'>
+	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
 	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
@@ -409,6 +404,11 @@ type RootTranslation = {
 	 * T​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​ ​t​h​a​t​ ​i​s​ ​m​a​k​i​n​g​ ​t​h​i​s​ ​r​e​q​u​e​s​t​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​v​e​r​i​f​i​e​d​.​ ​P​r​o​c​e​e​d​ ​a​t​ ​y​o​u​r​ ​o​w​n​ ​r​i​s​k​.
 	 */
 	APP_VERIFICATION_UNKNOWN: string
+	/**
+	 * v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * @param {string} version
+	 */
+	APP_VERSION: RequiredParams<'version'>
 	/**
 	 * A​p​r​i​l
 	 */
@@ -1114,7 +1114,7 @@ type RootTranslation = {
 	 */
 	BTN_ADD_CUSTOM_NODE: string
 	/**
-	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BTN_ADD_TO_FAVORITES: string
 	/**
@@ -1338,6 +1338,10 @@ type RootTranslation = {
 	 * N​E​X​T​:​ ​C​R​E​A​T​E​ ​P​A​S​S​W​O​R​D
 	 */
 	BTN_ONBOARDING_SLIDE_03: string
+	/**
+	 * O​p​e​n
+	 */
+	BTN_OPEN: string
 	/**
 	 * O​p​e​n​ ​d​A​p​p
 	 */
@@ -3948,6 +3952,10 @@ type RootTranslation = {
 	 */
 	STARGATE_LOCKED: string
 	/**
+	 * M​a​n​a​g​e​ ​y​o​u​r​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_MANAGE_STAKING: string
+	/**
 	 * N​e​w​ ​s​t​a​k​e
 	 */
 	STARGATE_NEW_STAKE: string
@@ -3955,10 +3963,6 @@ type RootTranslation = {
 	 * R​e​w​a​r​d​s
 	 */
 	STARGATE_REWARDS: string
-	/**
-	 * M​a​n​a​g​e​ ​y​o​u​r​ ​s​t​a​k​i​n​g
-	 */
-	STARGATE_MANAGE_STAKING: string
 	/**
 	 * S​t​a​t​u​s
 	 */
@@ -4888,14 +4892,6 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
-	 * Update available
-	 */
-	APP_UPDATE_AVAILABLE: () => LocalizedString
-	/**
-	 * Version {version} is now available to update with new features and improvements.
-	 */
-	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
-	/**
 	 * App updated
 	 */
 	APP_UPDATED: () => LocalizedString
@@ -4904,9 +4900,13 @@ Try reconnect your device to the internet.
 	 */
 	APP_UPDATED_WHATS_NEW: () => LocalizedString
 	/**
-	 * version {version}
+	 * Update available
 	 */
-	APP_VERSION: (arg: { version: string }) => LocalizedString
+	APP_UPDATE_AVAILABLE: () => LocalizedString
+	/**
+	 * Version {version} is now available to update with new features and improvements.
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
 	/**
 	 * Please confirm that you would like to process this request.
 	 */
@@ -4919,6 +4919,10 @@ Try reconnect your device to the internet.
 	 * The application that is making this request could not be verified. Proceed at your own risk.
 	 */
 	APP_VERIFICATION_UNKNOWN: () => LocalizedString
+	/**
+	 * version {version}
+	 */
+	APP_VERSION: (arg: { version: string }) => LocalizedString
 	/**
 	 * April
 	 */
@@ -5618,7 +5622,7 @@ Thanks for your patience!
 	 */
 	BTN_ADD_CUSTOM_NODE: () => LocalizedString
 	/**
-	 * Add to Favorite dApps
+	 * Add to Favorites
 	 */
 	BTN_ADD_TO_FAVORITES: () => LocalizedString
 	/**
@@ -5841,6 +5845,10 @@ Thanks for your patience!
 	 * NEXT: CREATE PASSWORD
 	 */
 	BTN_ONBOARDING_SLIDE_03: () => LocalizedString
+	/**
+	 * Open
+	 */
+	BTN_OPEN: () => LocalizedString
 	/**
 	 * Open dApp
 	 */
@@ -8412,6 +8420,10 @@ Are you sure you want to continue?
 	 */
 	STARGATE_LOCKED: () => LocalizedString
 	/**
+	 * Manage your staking
+	 */
+	STARGATE_MANAGE_STAKING: () => LocalizedString
+	/**
 	 * New stake
 	 */
 	STARGATE_NEW_STAKE: () => LocalizedString
@@ -8419,10 +8431,6 @@ Are you sure you want to continue?
 	 * Rewards
 	 */
 	STARGATE_REWARDS: () => LocalizedString
-	/**
-	 * Manage your staking
-	 */
-	STARGATE_MANAGE_STAKING: () => LocalizedString
 	/**
 	 * Status
 	 */
