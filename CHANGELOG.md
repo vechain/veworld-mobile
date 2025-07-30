@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.1 (2025-07-30)</small>
+
+* build: init ([25054ca](https://github.com/vechain/veworld-mobile/commit/25054ca))
+* Sign typed data (#3131) ([1a46486](https://github.com/vechain/veworld-mobile/commit/1a46486)), closes [#3131](https://github.com/vechain/veworld-mobile/issues/3131)
+
 ## <small>2.2.10 (2025-07-24)</small>
 
 * build: init ([955e4db](https://github.com/vechain/veworld-mobile/commit/955e4db))
