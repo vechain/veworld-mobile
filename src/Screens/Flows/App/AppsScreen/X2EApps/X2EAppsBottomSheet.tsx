@@ -25,7 +25,7 @@ type TopFiltersProps = {
 
 const TopFilters = ({ filters }: TopFiltersProps) => {
     return (
-        <BaseView flexDirection="row" justifyContent="space-between">
+        <BaseView flexDirection="row" justifyContent="space-between" py={8}>
             {filters.map(({ key, isSelected, title, onPress }) => (
                 <BaseChip key={key} label={title} active={isSelected} onPress={onPress} />
             ))}
@@ -120,7 +120,7 @@ const X2EAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
 }
 
 const styles = StyleSheet.create({
-    flatListPadding: { paddingBottom: 24 },
+    flatListPadding: { paddingBottom: 24, paddingTop: 32 },
 })
 
 type X2EAppsBottomSheetProps = {
@@ -196,18 +196,19 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
 
         return (
             <BaseBottomSheet
-                snapPoints={["90%"]}
+                snapPoints={["93%"]}
                 ref={ref}
                 onDismiss={onDismiss}
                 floating={false}
                 backgroundStyle={{ backgroundColor: theme.colors.card }}>
-                <BaseView pb={16} gap={32}>
+                <BaseView pb={16}>
                     <BaseView flexDirection="row" gap={16}>
                         <BaseIcon name="icon-salad" size={32} color={theme.colors.editSpeedBs.title} />
                         <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
                             {"Food & Drinks"}
                         </BaseText>
                     </BaseView>
+                    <BaseSpacer height={32} />
                     <TopFilters filters={filterOptions} />
                     <X2EAppsList dapps={dappsToShow || []} isLoading={isLoading} onFetchNextPage={onFetchNextPage} />
                 </BaseView>
