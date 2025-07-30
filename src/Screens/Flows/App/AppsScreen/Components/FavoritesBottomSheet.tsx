@@ -60,6 +60,23 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         }
     }, [isEditingMode])
 
+    const onLongPressHandler = useCallback(
+        (_dapp: DiscoveryDApp) => {
+            if (!isEditingMode) {
+                onLongPress()
+            }
+        },
+        [isEditingMode, onLongPress],
+    )
+
+    const handleDAppPress = useCallback(
+        (dapp: DiscoveryDApp) => {
+            onDAppPress(dapp)
+            onClose()
+        },
+        [onDAppPress, onClose],
+    )
+
     const renderItem: RenderItem<DiscoveryDApp> = useCallback(
         ({ item, isActive, drag }) => {
             return (
@@ -67,15 +84,15 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     dapp={item}
                     isActive={isActive}
                     isEditMode={isEditingMode}
-                    onPress={onDAppPress}
+                    onPress={handleDAppPress}
                     onRightActionPress={onMorePress}
-                    onLongPress={onLongPress}
+                    onLongPress={onLongPressHandler}
                     onRightActionLongPress={isEditingMode ? drag : undefined}
                     px={0}
                 />
             )
         },
-        [isEditingMode, onDAppPress, onLongPress, onMorePress],
+        [isEditingMode, handleDAppPress, onLongPressHandler, onMorePress],
     )
 
     const onDragEnd = useCallback(({ data }: DragEndParams<DiscoveryDApp>) => {
@@ -124,8 +141,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 }
                 title={LL.FAVOURITES_DAPPS_TITLE()}
                 snapPoints={["90%"]}
-                onDismiss={onClose}
-                stackBehavior="replace">
+                onDismiss={onClose}>
                 <BaseView style={styles.container}>
                     <NestableScrollContainer>
                         <NestableDraggableFlatList
@@ -138,6 +154,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                             renderItem={renderItem}
                             ListFooterComponent={renderFooter}
                             showsVerticalScrollIndicator={false}
+                            activationDistance={isEditingMode ? 10 : 30}
                             ListEmptyComponent={
                                 <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
                             }
@@ -150,6 +167,11 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 onClose={() => {
                     setSelectedDApp(undefined)
                     onCloseDAppOptions()
+                }}
+                onNavigateToDApp={() => {
+                    setSelectedDApp(undefined)
+                    onCloseDAppOptions()
+                    ;(ref as any)?.current?.dismiss()
                 }}
                 selectedDApp={selectedDApp}
                 stackBehavior="replace"

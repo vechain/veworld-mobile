@@ -33,7 +33,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
-            <ScaleDecorator activeScale={1.05}>
+            <ScaleDecorator activeScale={0.98}>
                 <ShadowDecorator elevation={1} radius={4} opacity={0.2} color={theme.colors.backgroundReversed}>
                     <BaseView flexDirection="row" flex={1} bg={theme.colors.background} px={px} mb={16}>
                         <BaseTouchable
@@ -56,7 +56,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                                     }
                                     resizeMode="contain"
                                 />
-                                <BaseSpacer width={12} />
+                                <BaseSpacer width={24} />
                                 <BaseView flex={1}>
                                     <BaseText
                                         ellipsizeMode="tail"
@@ -109,12 +109,15 @@ const baseStyles = () =>
         touchableContainer: {
             width: 40,
             height: 40,
-            alignItems: "center",
+            paddingRight: 4,
+            alignItems: "flex-end",
             justifyContent: "center",
         },
         icon: {
             borderRadius: 4,
             overflow: "hidden",
+            width: 48,
+            height: 48,
         },
         nameText: {
             fontWeight: "bold",

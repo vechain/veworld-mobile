@@ -14,13 +14,14 @@ import { useI18nContext } from "~i18n"
 type Props = {
     selectedDApp?: DiscoveryDApp
     onClose?: () => void
+    onNavigateToDApp?: (dapp: DiscoveryDApp) => void
     stackBehavior?: "push" | "replace"
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer height={14} />
 
 export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ selectedDApp, onClose, stackBehavior = "push" }, ref) => {
+    ({ selectedDApp, onClose, onNavigateToDApp, stackBehavior = "push" }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const bookmarkedDApps = useDappBookmarking(selectedDApp?.href, selectedDApp?.name)
         const nav = useNavigation()
@@ -38,10 +39,14 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                     dispatch(addNavigationToDApp({ href: selectedDApp.href, isCustom: selectedDApp.isCustom ?? false }))
                 }, 1000)
 
+                if (onNavigateToDApp) {
+                    onNavigateToDApp(selectedDApp)
+                }
+
                 onClose?.()
                 nav.navigate(Routes.BROWSER, { url: selectedDApp.href })
             }
-        }, [selectedDApp, onClose, nav, track, dispatch])
+        }, [selectedDApp, onClose, onNavigateToDApp, nav, track, dispatch])
 
         const onSeeOnVBDPress = useCallback(() => {
             onClose?.()
