@@ -2,12 +2,12 @@ import { ethers } from "ethers"
 import { HDNode } from "thor-devkit"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { DEVICE_TYPE, TypedData, Wallet } from "~Model"
-import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
 import { HexUtils } from "~Utils"
 
 export const useSignTypedMessage = () => {
-    const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
+    const account = useAppSelector(selectSelectedAccountOrNull)
+    const senderDevice = useAppSelector(state => selectDevice(state, account?.rootAddress))
 
     const getSignature = (typedData: TypedData, privateKey: Buffer) => {
         const { domain, types, value } = typedData
@@ -19,10 +19,10 @@ export const useSignTypedMessage = () => {
     const getSignatureByMnemonic = (typedData: TypedData, wallet: Wallet) => {
         if (!wallet.mnemonic) throw new Error("Mnemonic wallet can't have an empty mnemonic")
 
-        if (!account.index && account.index !== 0) throw new Error("signatureAccount index is empty")
+        if (!account?.index && account?.index !== 0) throw new Error("signatureAccount index is empty")
 
         const hdNode = HDNode.fromMnemonic(wallet.mnemonic)
-        const derivedNode = hdNode.derive(account.index)
+        const derivedNode = hdNode.derive(account?.index)
 
         const privateKey = derivedNode.privateKey as Buffer
 
