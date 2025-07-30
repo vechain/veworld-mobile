@@ -211,7 +211,6 @@ export const TransactionBottomSheetContent = ({
                 setSelectedAccount={onSetSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={selectAccountBsRef}
-                cardVersion="v2"
             />
             <RequireUserPassword
                 isOpen={isPasswordPromptOpen}

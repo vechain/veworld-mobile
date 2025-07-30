@@ -40,7 +40,14 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
     const [pendingRequests, setPendingRequests] = useState<PendingRequests>({})
 
-    const { certificateBsRef, setCertificateBsData, transactionBsRef, setTransactionBsData } = useInteraction()
+    const {
+        certificateBsRef,
+        setCertificateBsData,
+        transactionBsRef,
+        setTransactionBsData,
+        typedDataBsRef,
+        setTypedDataBsData,
+    } = useInteraction()
 
     const addPendingRequest = useCallback((requestEvent: PendingRequestTypes.Struct) => {
         setPendingRequests(prev => ({
@@ -227,23 +234,22 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 return failRequest(requestEvent, getRpcError("invalidParams"))
             }
 
-            nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
-                request: {
-                    method: "thor_signTypedData",
-                    type: "wallet-connect",
-                    domain,
-                    types,
-                    value,
-                    options,
-                    requestEvent,
-                    session,
-                    origin: session.peer.metadata.url,
-                    appName: session.peer.metadata.name,
-                    appUrl: session.peer.metadata.url,
-                },
+            setTypedDataBsData({
+                method: "thor_signTypedData",
+                type: "wallet-connect",
+                domain,
+                types,
+                value,
+                options,
+                requestEvent,
+                session,
+                origin: session.peer.metadata.url,
+                appName: session.peer.metadata.name,
+                appUrl: session.peer.metadata.url,
             })
+            typedDataBsRef.current?.present()
         },
-        [failRequest, nav],
+        [failRequest, setTypedDataBsData, typedDataBsRef],
     )
 
     const switchAccount = useCallback(

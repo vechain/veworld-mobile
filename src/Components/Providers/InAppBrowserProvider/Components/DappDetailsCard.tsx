@@ -9,6 +9,7 @@ import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
 import { selectFeaturedDapps, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { DAppUtils } from "~Utils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { DappDetails } from "./DappDetails"
 
@@ -16,9 +17,14 @@ const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(
 const AnimatedBaseSpacer = Animated.createAnimatedComponent(wrapFunctionComponent(BaseSpacer))
 
 type Props = {
-    name: string
-    icon: string
-    url: string
+    /**
+     * Url of the app from the request
+     */
+    appUrl: string
+    /**
+     * Name of the app from the request
+     */
+    appName: string
     /**
      * Show warning if the URL is not of a dapp. Defaults to true
      */
@@ -37,9 +43,8 @@ type Props = {
 }
 
 export const DappDetailsCard = ({
-    name,
-    icon,
-    url,
+    appName,
+    appUrl,
     children,
     showDappWarning = true,
     isDefaultVisible = false,
@@ -61,16 +66,25 @@ export const DappDetailsCard = ({
         }
     }, [showDetails])
 
-    const isDapp = useMemo(() => {
-        if (selectedNetwork.type !== NETWORK_TYPE.MAIN) return true
-        return Boolean(
-            allApps.find(dapp => {
-                const navStateRoot = new URL(url).origin
-                const dappRoot = new URL(dapp.href).origin
-                return navStateRoot === dappRoot
-            }),
-        )
-    }, [allApps, selectedNetwork.type, url])
+    const { icon, name, url, isDapp } = useMemo(() => {
+        const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(appUrl).origin)
+        if (foundDapp)
+            return {
+                icon: foundDapp.id
+                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
+                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
+                name: foundDapp.name,
+                url: appUrl,
+                isDapp: true,
+            }
+
+        return {
+            name: appName,
+            url: appUrl,
+            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(appUrl).origin}`,
+            isDapp: selectedNetwork.type !== NETWORK_TYPE.MAIN,
+        }
+    }, [allApps, appName, appUrl, selectedNetwork.type])
 
     return (
         <AnimatedBaseView

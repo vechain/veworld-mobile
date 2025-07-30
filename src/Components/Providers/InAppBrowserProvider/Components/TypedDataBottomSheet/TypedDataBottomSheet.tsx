@@ -1,6 +1,4 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useNavigation } from "@react-navigation/native"
-import { Blake2b256, Certificate } from "@vechain/sdk-core"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
@@ -8,13 +6,13 @@ import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
-import { AnalyticsEvent, COLORS, ERROR_EVENTS, RequestMethods } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
+import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
+import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
-import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
-import { Routes } from "~Navigation"
+import { DEVICE_TYPE, SignedTypedDataResponse, TypeDataRequest, TypedData } from "~Model"
 import {
-    addSignCertificateActivity,
+    addSignTypedDataActivity,
     selectSelectedAccountOrNull,
     selectVerifyContext,
     selectVisibleAccountsWithoutObserved,
@@ -22,26 +20,23 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils, error, HexUtils } from "~Utils"
-import { DappWithDetails } from "../DappWithDetails"
+import { DappDetails } from "../DappDetails"
+import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
-
-type Request = {
-    request: CertificateRequest
-    isInjectedWallet?: boolean
-}
+import { LedgerDeviceAlert } from "./LedgerDeviceAlert"
+import { Renderer } from "./Renderer"
 
 type Props = {
-    request: CertificateRequest
-    onCancel: (request: CertificateRequest) => Promise<void>
-    onSign: (args: { request: CertificateRequest; password?: string }) => Promise<void>
+    request: TypeDataRequest
+    onCancel: (request: TypeDataRequest) => Promise<void>
+    onSign: (args: { request: TypeDataRequest; password?: string }) => Promise<void>
     selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
     isLoading: boolean
 }
 
-const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef, isLoading }: Props) => {
+const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef, isLoading }: Props) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const track = useAnalyticTracking()
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
@@ -64,9 +59,18 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
     const signableArgs = useMemo(() => ({ request }), [request])
 
     const onChangeAccountPress = useCallback(() => {
-        track(AnalyticsEvent.DAPP_CERTIFICATE_CHANGE_ACCOUNT_CLICKED)
         onOpenSelectAccountBs()
-    }, [onOpenSelectAccountBs, track])
+    }, [onOpenSelectAccountBs])
+
+    const isConfirmDisabled = useMemo(
+        () =>
+            AccountUtils.isObservedAccount(selectedAccount) ||
+            !validConnectedApp ||
+            isLoading ||
+            !selectedAccount ||
+            selectedAccount.device.type === DEVICE_TYPE.LEDGER,
+        [isLoading, selectedAccount, validConnectedApp],
+    )
 
     return (
         <>
@@ -74,11 +78,11 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 flexDirection="row"
                 gap={12}
                 justifyContent="space-between"
-                testID="SIGN_CERTIFICATE_REQUEST_TITLE">
+                testID="SIGN_TYPED_DATA_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-certificate" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                        {LL.SIGN_CERTIFICATE_REQUEST_TITLE()}
+                        {LL.SIGN_TYPED_DATA_REQUEST_TITLE()}
                     </BaseText>
                 </BaseView>
                 {selectedAccount && (
@@ -91,18 +95,30 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 )}
             </BaseView>
             <BaseSpacer height={12} />
-            <DappWithDetails appName={request.appName} appUrl={request.appUrl}>
-                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
-                    {request.message.payload.content}
-                </BaseText>
-            </DappWithDetails>
+            <DappDetailsCard appName={request.appName} appUrl={request.appUrl}>
+                {({ visible }) => (
+                    <>
+                        {selectedAccount?.device.type === DEVICE_TYPE.LEDGER && (
+                            <>
+                                <LedgerDeviceAlert />
+                                <BaseSpacer height={16} />
+                            </>
+                        )}
+                        <DappDetails show={visible}>
+                            <Renderer.Container>
+                                <Renderer value={request.value} />
+                            </Renderer.Container>
+                        </DappDetails>
+                    </>
+                )}
+            </DappDetailsCard>
             <BaseSpacer height={24} />
             <BaseView flexDirection="row" gap={16}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"
                     flex={1}
-                    testID="SIGN_CERTIFICATE_REQUEST_BTN_CANCEL">
+                    testID="SIGN_TYPED_DATA_REQUEST_BTN_CANCEL">
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <Signable args={signableArgs} onSign={onSign}>
@@ -110,16 +126,10 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                         <BaseButton
                             action={checkIdentityBeforeOpening}
                             flex={1}
-                            disabled={
-                                AccountUtils.isObservedAccount(selectedAccount) ||
-                                isBiometricsEmpty ||
-                                !validConnectedApp ||
-                                isLoading ||
-                                !selectedAccount
-                            }
+                            disabled={isConfirmDisabled || isBiometricsEmpty}
                             isLoading={isLoading}
-                            testID="SIGN_CERTIFICATE_REQUEST_BTN_SIGN">
-                            {LL.SIGN_CERTIFICATE_REQUEST_CTA()}
+                            testID="SIGN_TYPED_DATA_REQUEST_BTN_SIGN">
+                            {LL.SIGN_TYPED_DATA_REQUEST_CTA()}
                         </BaseButton>
                     )}
                 </Signable>
@@ -136,9 +146,9 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
     )
 }
 
-export const CertificateBottomSheet = () => {
-    const { certificateBsRef, certificateBsData, setCertificateBsData } = useInteraction()
-    const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: certificateBsRef })
+export const TypedDataBottomSheet = () => {
+    const { typedDataBsRef, typedDataBsData, setTypedDataBsData } = useInteraction()
+    const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: typedDataBsRef })
 
     const { ref: selectAccountBsRef } = useBottomSheetModal()
 
@@ -150,87 +160,60 @@ export const CertificateBottomSheet = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
 
-    const nav = useNavigation()
-
     const dispatch = useAppDispatch()
 
     const isUserAction = useRef(false)
 
     const [isLoading, setIsLoading] = useState(false)
 
-    const buildCertificate = useCallback(
-        (request: CertificateRequest) => {
+    const buildTypedData = useCallback(
+        (request: TypeDataRequest) => {
             if (!selectedAccount) return
-            const certificate = Certificate.of({
-                purpose: request.message.purpose,
-                payload: request.message.payload,
-                timestamp: Math.round(Date.now() / 1000),
-                domain: new URL(request.appUrl).hostname,
-                signer: selectedAccount.address ?? "",
-            })
             return {
-                certificate,
-                payload: Buffer.from(Blake2b256.of(certificate.encode()).bytes),
+                timestamp: Math.round(Date.now() / 1000),
+                signer: selectedAccount?.address ?? "",
+                ...request,
             }
         },
         [selectedAccount],
     )
 
     // Sign
-    const { signMessage } = useSignMessage()
+    const { signTypedData } = useSignTypedMessage()
 
     const onSign = useCallback(
-        async ({ request, password }: { request: CertificateRequest; password?: string }) => {
+        async ({ request, password }: { request: TypeDataRequest; password?: string }) => {
             try {
-                const { certificate, payload } = buildCertificate(request)!
-                if (selectedAccount!.device.type === DEVICE_TYPE.LEDGER) {
-                    // Do not reject request if it's a ledger request
-                    isUserAction.current = true
-                    onCloseBs()
-
-                    nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
-                        request,
-                        accountWithDevice: selectedAccount as LedgerAccountWithDevice,
-                        certificate: certificate,
-                    })
-                    return
-                }
+                const tData = buildTypedData(request)!
 
                 setIsLoading(true)
 
-                const signature = await signMessage(payload, password)
+                const signature = await signTypedData(tData, password)
                 if (!signature) {
                     throw new Error("Signature is empty")
                 }
 
-                const res: Connex.Vendor.CertResponse = {
-                    signature: HexUtils.addPrefix(signature.toString("hex")),
-                    annex: {
-                        domain: certificate.domain,
-                        timestamp: certificate.timestamp,
-                        signer: certificate.signer,
-                    },
+                const signedTypedData: SignedTypedDataResponse & TypedData = {
+                    ...tData,
+                    signature: HexUtils.addPrefix(signature),
                 }
 
                 if (request.type === "wallet-connect") {
-                    await processRequest(request.requestEvent, res)
+                    await processRequest(request.requestEvent, signature)
                 } else {
-                    postMessage({ id: request.id, data: res, method: RequestMethods.SIGN_CERTIFICATE })
+                    postMessage({
+                        id: request.id,
+                        data: signedTypedData.signature,
+                        method: RequestMethods.SIGN_TYPED_DATA,
+                    })
                 }
 
-                dispatch(
-                    addSignCertificateActivity(
-                        request.appName,
-                        certificate.domain,
-                        certificate.payload.content,
-                        certificate.purpose,
-                    ),
-                )
+                dispatch(addSignTypedDataActivity(request.origin, signedTypedData))
 
-                track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
+                track(AnalyticsEvent.DAPP_TYPED_DATA_SUCCESS)
                 isUserAction.current = true
             } catch (err: unknown) {
-                track(AnalyticsEvent.DAPP_CERTIFICATE_FAILED)
+                track(AnalyticsEvent.DAPP_TYPED_DATA_FAILED)
 
                 error(ERROR_EVENTS.WALLET_CONNECT, err)
 
@@ -240,28 +223,17 @@ export const CertificateBottomSheet = () => {
                     postMessage({
                         id: request.id,
                         error: "Internal error",
-                        method: RequestMethods.SIGN_CERTIFICATE,
+                        method: RequestMethods.SIGN_TYPED_DATA,
                     })
                 }
             }
             onCloseBs()
         },
-        [
-            buildCertificate,
-            dispatch,
-            failRequest,
-            nav,
-            onCloseBs,
-            postMessage,
-            processRequest,
-            selectedAccount,
-            signMessage,
-            track,
-        ],
+        [buildTypedData, dispatch, failRequest, onCloseBs, postMessage, processRequest, signTypedData, track],
     )
 
     const rejectRequest = useCallback(
-        async (request: CertificateRequest) => {
+        async (request: TypeDataRequest) => {
             setIsLoading(true)
             if (request.type === "wallet-connect") {
                 await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
@@ -269,7 +241,7 @@ export const CertificateBottomSheet = () => {
                 postMessage({
                     id: request.id,
                     error: "User rejected request",
-                    method: RequestMethods.SIGN_CERTIFICATE,
+                    method: RequestMethods.SIGN_TYPED_DATA,
                 })
             }
 
@@ -279,7 +251,7 @@ export const CertificateBottomSheet = () => {
     )
 
     const onCancel = useCallback(
-        async (request: CertificateRequest) => {
+        async (request: TypeDataRequest) => {
             await rejectRequest(request)
             isUserAction.current = true
             onCloseBs()
@@ -290,26 +262,26 @@ export const CertificateBottomSheet = () => {
     const onDismiss = useCallback(async () => {
         try {
             if (isUserAction.current) {
-                setCertificateBsData(null)
+                setTypedDataBsData(null)
                 isUserAction.current = false
                 return
             }
-            if (!certificateBsData) return
-            await rejectRequest(certificateBsData)
+            if (!typedDataBsData) return
+            await rejectRequest(typedDataBsData)
             isUserAction.current = false
-            setCertificateBsData(null)
+            setTypedDataBsData(null)
         } finally {
             setIsLoading(false)
         }
-    }, [certificateBsData, rejectRequest, setCertificateBsData])
+    }, [rejectRequest, setTypedDataBsData, typedDataBsData])
 
     return (
-        <BaseBottomSheet<Request> dynamicHeight ref={certificateBsRef} onDismiss={onDismiss}>
-            {certificateBsData && (
-                <CertificateBottomSheetContent
+        <BaseBottomSheet dynamicHeight ref={typedDataBsRef} onDismiss={onDismiss}>
+            {typedDataBsData && (
+                <TypedDataBottomSheetContent
                     onCancel={onCancel}
                     onSign={onSign}
-                    request={certificateBsData}
+                    request={typedDataBsData}
                     selectAccountBsRef={selectAccountBsRef}
                     isLoading={isLoading}
                 />

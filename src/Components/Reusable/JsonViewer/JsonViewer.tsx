@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import JSONTree, { Renderable, JSONTreeProps } from "react-native-json-tree"
+import JSONTree, { JSONTreeProps, Renderable } from "react-native-json-tree"
 import { BaseText, BaseView, CopyToClipboardAddress } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { AddressUtils } from "~Utils"

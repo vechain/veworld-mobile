@@ -7,7 +7,7 @@ import { Certificate } from "thor-devkit"
 import { useWalletStatus } from "~Components"
 import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
 import { CertificateRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
-import { TransactionRequest, TypeDataRequest } from "~Model/DApp"
+import { TransactionRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import { TabStack, TabStackParamList } from "~Navigation/Tabs"
 import {
@@ -15,7 +15,6 @@ import {
     ChooseBackupDetailsPassword,
     DappChangeAccountScreen,
     DetailsBackupScreen,
-    SignDataMessageScreen,
 } from "~Screens"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
 import { LedgerSignCertificate, LedgerSignTransaction } from "~Screens/Flows/App/LedgerScreen"
@@ -33,9 +32,6 @@ export type RootStackParamListSwitch = {
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.BUY_FLOW]: undefined
-    [Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN]: {
-        request: TypeDataRequest
-    }
     [Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN]: {
         requestEvent: PendingRequestTypes.Struct
         message: string
@@ -92,11 +88,6 @@ export const SwitchStack = () => {
                             options={{
                                 presentation: "modal",
                             }}
-                        />
-
-                        <Switch.Screen
-                            name={Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN}
-                            component={SignDataMessageScreen}
                         />
 
                         <Switch.Screen name={Routes.CONNECTED_APP_SIGN_MESSAGE_SCREEN} component={SignMessageScreen} />
