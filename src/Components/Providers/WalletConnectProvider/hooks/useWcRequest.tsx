@@ -40,7 +40,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
     const [pendingRequests, setPendingRequests] = useState<PendingRequests>({})
 
-    const { certificateBsRef, setCertificateBsData } = useInteraction()
+    const { certificateBsRef, setCertificateBsData, transactionBsRef, setTransactionBsData } = useInteraction()
 
     const addPendingRequest = useCallback((requestEvent: PendingRequestTypes.Struct) => {
         setPendingRequests(prev => ({
@@ -96,14 +96,18 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
             warn(ERROR_EVENTS.WALLET_CONNECT, `Responding with WC Request ${requestEvent.id}`, err)
 
-            await web3Wallet.respondSessionRequest({
-                topic: requestEvent.topic,
-                response: {
-                    id: requestEvent.id,
-                    jsonrpc: "The request was rejected",
-                    error: err,
-                },
-            })
+            try {
+                await web3Wallet.respondSessionRequest({
+                    topic: requestEvent.topic,
+                    response: {
+                        id: requestEvent.id,
+                        jsonrpc: "The request was rejected",
+                        error: err,
+                    },
+                })
+            } catch {
+                error(ERROR_EVENTS.WALLET_CONNECT, "Failed to respond to WC")
+            }
 
             afterRequest(requestEvent)
         },
@@ -168,18 +172,17 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
 
             if (message) {
                 track(AnalyticsEvent.DAPP_TX_REQUESTED)
-                nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
-                    request: {
-                        method: "thor_sendTransaction",
-                        type: "wallet-connect",
-                        requestEvent,
-                        session,
-                        message,
-                        options,
-                        appName: session.peer.metadata.name,
-                        appUrl: session.peer.metadata.url,
-                    },
+                setTransactionBsData({
+                    method: "thor_sendTransaction",
+                    type: "wallet-connect",
+                    requestEvent,
+                    session,
+                    message,
+                    options,
+                    appName: session.peer.metadata.name,
+                    appUrl: session.peer.metadata.url,
                 })
+                transactionBsRef.current?.present()
             } else {
                 showErrorToast({
                     text1: LL.NOTIFICATION_DAPP_INVALID_REQUEST(),
@@ -190,7 +193,7 @@ export const useWcRequest = (isBlackListScreen: () => boolean, activeSessions: A
                 return failRequest(requestEvent, rpcError)
             }
         },
-        [failRequest, LL, track, nav],
+        [LL, track, setTransactionBsData, transactionBsRef, failRequest],
     )
 
     const goToSignMessage = useCallback(

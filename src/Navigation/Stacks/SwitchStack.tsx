@@ -15,7 +15,6 @@ import {
     ChooseBackupDetailsPassword,
     DappChangeAccountScreen,
     DetailsBackupScreen,
-    SendTransactionScreen,
     SignDataMessageScreen,
 } from "~Screens"
 import { AppBlockedScreen } from "~Screens/Flows/App/AppBlockedScreen"
@@ -34,10 +33,6 @@ export type RootStackParamListSwitch = {
     [Routes.CREATE_WALLET_FLOW]: undefined
     [Routes.BLACKLISTED_COLLECTIONS]: undefined
     [Routes.BUY_FLOW]: undefined
-    [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
-        request: TransactionRequest
-        isInjectedWallet?: boolean
-    }
     [Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN]: {
         request: TypeDataRequest
     }
@@ -97,11 +92,6 @@ export const SwitchStack = () => {
                             options={{
                                 presentation: "modal",
                             }}
-                        />
-
-                        <Switch.Screen
-                            name={Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN}
-                            component={SendTransactionScreen}
                         />
 
                         <Switch.Screen

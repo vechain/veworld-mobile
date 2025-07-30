@@ -100,6 +100,7 @@ jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useRoute: jest.fn(),
+    useNavigationState: jest.fn(),
 }))
 
 jest.mock("~Hooks/Staking", () => ({
