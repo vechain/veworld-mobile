@@ -141,7 +141,6 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                 setSelectedAccount={onSetSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={selectAccountBsRef}
-                cardVersion="v2"
             />
         </>
     )
