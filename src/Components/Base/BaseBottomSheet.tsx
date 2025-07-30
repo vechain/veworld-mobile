@@ -245,12 +245,12 @@ const _BaseBottomSheet = <TData,>(
                 paddingHorizontal: noMargins ? 0 : 24,
                 paddingTop: noMargins ? 0 : 16,
                 paddingBottom: noMargins ? 0 : 24,
-                flexGrow: snapPoints ? 1 : undefined,
+                flexGrow: snapPoints && !floating ? 1 : undefined,
                 alignItems: "stretch" as const,
             },
             contentStyle,
         ],
-        [noMargins, snapPoints, contentStyle],
+        [noMargins, snapPoints, contentStyle, floating],
     )
 
     return (
@@ -342,7 +342,7 @@ const baseStyles = (theme: ColorThemeType) =>
             width: 70,
             height: 4,
             borderRadius: 8,
-            backgroundColor: theme.colors.text,
+            backgroundColor: COLORS.GREY_300,
             alignSelf: "center",
         },
     })

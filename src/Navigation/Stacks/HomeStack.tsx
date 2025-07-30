@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import React from "react"
+import { useFeatureFlags } from "~Components"
 import { TokenWithCompleteInfo, useNavAnimation } from "~Hooks"
 import {
     CloudKitWallet,
@@ -32,6 +33,7 @@ import {
     ManageCustomTokenScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
+    SearchScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
@@ -43,6 +45,7 @@ import {
     WalletDetailScreen,
     WalletManagementScreen,
 } from "~Screens"
+import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 
 type NavigationMetadata<RouteName extends keyof RootStackParamListHome> = {
     route: RouteName
@@ -120,7 +123,7 @@ export type RootStackParamListHome = {
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
     }
     [Routes.SETTINGS_NETWORK]: undefined
     [Routes.SETTINGS_ADD_CUSTOM_NODE]: undefined
@@ -130,12 +133,15 @@ export type RootStackParamListHome = {
         username: string
     }
     [Routes.DISCOVER_TABS_MANAGER]: undefined
+    [Routes.APPS_TABS_MANAGER]: undefined
+    [Routes.APPS_SEARCH]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
 
 export const HomeStack = () => {
     const { animation } = useNavAnimation()
+    const { betterWorldFeature } = useFeatureFlags()
 
     return (
         <Navigator id="HomeStack" screenOptions={{ headerShown: false, animation }}>
@@ -240,8 +246,15 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={Routes.DISCOVER_TABS_MANAGER}
+                    name={
+                        betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER
+                    }
                     component={TabsManagerScreen}
+                    options={{ headerShown: false }}
+                />
+                <Screen
+                    name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_TABS_MANAGER}
+                    component={betterWorldFeature.appsScreen.enabled ? AppsSearchScreen : SearchScreen}
                     options={{ headerShown: false }}
                 />
             </Group>

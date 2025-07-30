@@ -7,13 +7,12 @@ import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { BaseIcon, BaseText, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
-import { useAnalyticTracking, useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
-import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
-import { InAppBrowserOptionsBottomSheet } from "./Components/InAppBrowserOptionsBottomSheet"
+import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
 
@@ -41,11 +40,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [isLoadingWebView, setIsLoadingWebView] = useState(false)
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
-    const {
-        ref: InAppBrowserOptionsBottomSheetRef,
-        onOpen: openInAppBrowserOptionsBottomSheet,
-        onClose: closeInAppBrowserOptionsBottomSheet,
-    } = useBottomSheetModal()
 
     useEffect(() => {
         if (route?.params?.ul) {
@@ -83,14 +77,13 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            bg={COLORS.GREY_700}
+            bg={COLORS.DARK_PURPLE}
             fixedHeader={
                 <URLBar
                     isLoading={isLoadingWebView}
                     onBrowserNavigation={setError}
                     onNavigate={performScreenshot}
                     returnScreen={route.params.returnScreen}
-                    onOpenOptions={openInAppBrowserOptionsBottomSheet}
                 />
             }
             noBackButton
@@ -147,10 +140,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                         ref={ChangeAccountNetworkBottomSheetRef}
                         onClose={handleCloseChangeAccountNetworkBottomSheet}
                         onConfirm={handleConfirmChangeAccountNetworkBottomSheet}
-                    />
-                    <InAppBrowserOptionsBottomSheet
-                        ref={InAppBrowserOptionsBottomSheetRef}
-                        onClose={closeInAppBrowserOptionsBottomSheet}
                     />
                 </View>
             }

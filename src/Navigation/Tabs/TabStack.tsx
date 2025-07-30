@@ -63,6 +63,8 @@ export const TabStack = () => {
             case Routes.BROWSER:
             case Routes.TOKEN_DETAILS:
             case Routes.DISCOVER_TABS_MANAGER:
+            case Routes.APPS_TABS_MANAGER:
+            case Routes.APPS_SEARCH:
                 return "none"
 
             case "":

@@ -126,6 +126,9 @@ export type Colors = {
         disabledText: string
         disabledIcon: string
         disabledIconBackground: string
+        dangerIcon: string
+        dangerIconBackground: string
+        dangerText: string
     }
     assetDetailsCard: {
         background: string
@@ -433,7 +436,7 @@ const light: Colors = {
     actionBottomSheet: {
         background: COLORS.GREY_50,
         iconBackground: COLORS.GREY_100,
-        text: COLORS.PRIMARY_800,
+        text: COLORS.GREY_700,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
         activeIconBackground: COLORS.WHITE,
@@ -441,6 +444,9 @@ const light: Colors = {
         disabledText: COLORS.GREY_400,
         disabledIcon: COLORS.GREY_400,
         disabledIconBackground: COLORS.GREY_100,
+        dangerIcon: COLORS.RED_600,
+        dangerIconBackground: COLORS.GREY_100,
+        dangerText: COLORS.RED_600,
     },
     assetDetailsCard: {
         background: COLORS.GREY_50,
@@ -662,6 +668,9 @@ const dark: Colors = {
         disabledText: COLORS.DARK_PURPLE_DISABLED,
         disabledIcon: COLORS.DARK_PURPLE_DISABLED,
         disabledIconBackground: COLORS.PURPLE_DISABLED,
+        dangerIcon: COLORS.RED_200,
+        dangerIconBackground: COLORS.PURPLE_DISABLED,
+        dangerText: COLORS.RED_200,
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,

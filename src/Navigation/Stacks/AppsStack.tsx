@@ -2,7 +2,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { useNavAnimation } from "~Hooks"
 import { Routes } from "~Navigation/Enums"
-import { InAppBrowser, SearchScreen, TabsManagerScreen } from "~Screens"
+import { InAppBrowser, TabsManagerScreen } from "~Screens"
+import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AppsScreen } from "~Screens/Flows/App/AppsScreen/AppsScreen"
 
 export type RootStackParamListApps = {
@@ -13,7 +14,7 @@ export type RootStackParamListApps = {
         returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
     }
     [Routes.APPS_SEARCH]: undefined
-    [Routes.DISCOVER_TABS_MANAGER]: undefined
+    [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.ACTIVITY_STAKING]: undefined
 }
 
@@ -29,12 +30,8 @@ export const AppsStack = () => {
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
             </Group>
 
-            <Screen name={Routes.APPS_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
-            <Screen
-                name={Routes.DISCOVER_TABS_MANAGER}
-                component={TabsManagerScreen}
-                options={{ headerShown: false }}
-            />
+            <Screen name={Routes.APPS_SEARCH} component={AppsSearchScreen} options={{ headerShown: false }} />
+            <Screen name={Routes.APPS_TABS_MANAGER} component={TabsManagerScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }
