@@ -23,13 +23,13 @@ export const ContractCallOutput = ({ output, ...props }: Props) => {
             iconKey={isUnknownOutput ? "icon-help-circle" : "icon-file-check"}
             output={output}
             additionalDetails={
-                isUnknownOutput ? (
+                !isUnknownOutput && (
                     <BaseAdditionalDetail
                         label={LL.ADDITIONAL_DETAIL_EVENT()}
                         value={stripFakeSignature(output.name)}
                         testID="CONTRACT_CALL_FAKE_SIGNATURE"
                     />
-                ) : null
+                )
             }
             {...props}
         />
