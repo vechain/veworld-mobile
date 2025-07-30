@@ -789,6 +789,7 @@
   "RECEIPT_OUTPUT_B3TR_ACTION": "Działanie VeBetter",
   "RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS": "Nagrody za głosowanie",
   "RECEIPT_OUTPUT_CONTRACT_CALL": "Wywołanie kontraktu",
+  "RECEIPT_OUTPUT_GENERIC_TOKEN": "token",
   "RECEIPT_OUTPUT_NFT_APPROVE": "Zatwierdzenie NFT",
   "RECEIPT_OUTPUT_NFT_RECEIVE": "Odbiór NFT",
   "RECEIPT_OUTPUT_NFT_SEND": "Wysłanie NFT",
