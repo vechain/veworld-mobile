@@ -45,7 +45,7 @@ const IconRenderer = (props: IconRendererProps) => {
 }
 
 const ValueContainer = ({ alignSelf = "flex-end", flexShrink = 0, ...props }: BaseViewProps) => {
-    return <BaseView alignSelf={alignSelf} flexShrink={flexShrink} {...props} />
+    return <BaseView alignSelf={alignSelf} flexShrink={flexShrink} flex={1} {...props} />
 }
 
 const ValueMainText = ({ typographyFont = "bodySemiBold", align = "right", ...props }: BaseTextProps) => {
@@ -55,6 +55,9 @@ const ValueMainText = ({ typographyFont = "bodySemiBold", align = "right", ...pr
             typographyFont={typographyFont}
             color={theme.colors.assetDetailsCard.title}
             align={align}
+            flex={1}
+            numberOfLines={1}
+            ellipsizeMode="middle"
             {...props}
         />
     )
@@ -63,7 +66,15 @@ const ValueMainText = ({ typographyFont = "bodySemiBold", align = "right", ...pr
 const ValueSubText = ({ typographyFont = "captionMedium", align = "right", ...props }: BaseTextProps) => {
     const theme = useTheme()
     return (
-        <BaseText typographyFont={typographyFont} color={theme.colors.assetDetailsCard.text} align={align} {...props} />
+        <BaseText
+            typographyFont={typographyFont}
+            color={theme.colors.assetDetailsCard.text}
+            align={align}
+            flex={1}
+            numberOfLines={1}
+            ellipsizeMode="middle"
+            {...props}
+        />
     )
 }
 
@@ -92,7 +103,7 @@ const BaseReceiptOutput = ({
                 justifyContent="space-between"
                 alignItems="center"
                 pb={expanded ? 16 : 0}>
-                <BaseView flexDirection="row" gap={12} flex={1}>
+                <BaseView flexDirection="row" gap={12}>
                     <IconRenderer {...iconProps} />
                     <BaseText
                         typographyFont="captionMedium"
