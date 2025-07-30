@@ -2,7 +2,12 @@ import { TransactionClause } from "@vechain/sdk-core"
 import { useMemo } from "react"
 import { B3TR, VET, VTHO } from "~Constants"
 import { FungibleToken } from "~Model"
-import { selectAllTokens, selectTokensWithBalances, useAppSelector } from "~Storage/Redux"
+import {
+    selectAllTokens,
+    selectSendableTokensWithBalance,
+    selectTokensWithBalances,
+    useAppSelector,
+} from "~Storage/Redux"
 import { BigNumberUtils, BigNutils } from "~Utils"
 import AddressUtils from "~Utils/AddressUtils"
 import TransactionUtils from "~Utils/TransactionUtils"
@@ -44,7 +49,8 @@ const calculateClausesValue = ({
 
 export const useIsEnoughGas = ({ selectedToken, clauses, isDelegated, allFeeOptions, isLoadingFees }: Args) => {
     const allTokens = useAppSelector(selectAllTokens)
-    const tokens = useAppSelector(selectTokensWithBalances)
+
+    const tokens = useAppSelector(selectSendableTokensWithBalance)
 
     const hasEnoughBalanceOnToken = useMemo(() => {
         const availableTokens = [VTHO.symbol, B3TR.symbol, VET.symbol]

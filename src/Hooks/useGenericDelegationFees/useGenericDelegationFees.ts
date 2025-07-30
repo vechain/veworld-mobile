@@ -6,6 +6,7 @@ import { B3TR, GasPriceCoefficient, VET } from "~Constants"
 import {
     estimateGenericDelegatorFees,
     EstimateGenericDelegatorFeesResponse,
+    getDelegatorDepositAddress,
     isValidGenericDelegatorNetwork,
 } from "~Networking/GenericDelegator"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -71,11 +72,14 @@ const buildTransactionCost = (
 const allowedTokens = [VET.symbol, B3TR.symbol, "vetWithSmartAccount", "b3trWithSmartAccount"]
 
 export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }: Args) => {
+    //TODO get delegator address
+
+    console.log("estimate fess with clauses", JSON.stringify(clauses))
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const {
         data,
-        isFetching: isLoading,
-        isLoading: isFirstTimeLoading,
+        isFetching: isFeesLoading,
+        isLoading: isFeesFirstTimeLoading,
     } = useQuery({
         queryKey: ["GenericDelegatorEstimate", clauses, signer],
         queryFn: () => estimateGenericDelegatorFees({ clauses, signer, networkType: selectedNetwork.type }),
@@ -83,6 +87,18 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         refetchInterval: 10000,
         placeholderData: keepPreviousData,
     })
+
+    const {
+        data: delegatorAddressResponse,
+        isFetching: isDelegatorLoading,
+        isLoading: isDelegatorFirstTimeLoading,
+    } = useQuery({
+        queryKey: ["GenericDelegatorDepositAddress", selectedNetwork.type],
+        queryFn: () => getDelegatorDepositAddress({ networkType: selectedNetwork.type }),
+        enabled: isValidGenericDelegatorNetwork(selectedNetwork.type),
+        refetchInterval: 5 * 60 * 1000,
+    })
+
     const allLegacyOptions = useMemo(() => {
         if (data === undefined) return undefined
         return Object.fromEntries(
@@ -95,6 +111,11 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         const result = allowedTokens.map(tk => [tk, buildTransactionCost(data, ["regular", "medium", "high"], tk)!])
         return Object.fromEntries(result)
     }, [data])
+
+    const delegatorAddress = useMemo(() => {
+        if (delegatorAddressResponse === undefined) return undefined
+        return (delegatorAddressResponse as unknown as { depositAccount: string }).depositAccount
+    }, [delegatorAddressResponse])
 
     const legacyOptions = useMemo(() => {
         if (allLegacyOptions === undefined) return undefined
@@ -116,9 +137,12 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         [allGalacticaOptions, allLegacyOptions, isGalactica],
     )
 
+    const isLoading = isFeesLoading || isDelegatorLoading
+    const isFirstTimeLoading = isFeesFirstTimeLoading || isDelegatorFirstTimeLoading
+
     const memoized = useMemo(
-        () => ({ isLoading, options, allOptions, isFirstTimeLoading }),
-        [allOptions, isFirstTimeLoading, isLoading, options],
+        () => ({ isLoading, options, allOptions, isFirstTimeLoading, delegatorAddress }),
+        [allOptions, isFirstTimeLoading, isLoading, options, delegatorAddress],
     )
 
     return memoized

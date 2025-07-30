@@ -1,4 +1,4 @@
-import { Address, ABIContract, Clause, TransactionClause, VET } from "@vechain/sdk-core"
+import { Address, ABIContract, Clause, TransactionClause } from "@vechain/sdk-core"
 import { encodeFunctionData, bytesToHex } from "viem"
 import {
     SmartAccountTransactionConfig,
@@ -7,7 +7,7 @@ import {
     TransactionSigningFunction,
 } from "../types/smartAccountTransaction"
 import { SimpleAccountABI, SimpleAccountFactoryABI } from "../utils/abi"
-import { BigNumberUtils, BigNutils, TransactionUtils } from "../../Utils"
+import { BigNumberUtils } from "../../Utils"
 import { abi } from "thor-devkit"
 
 /**
@@ -23,7 +23,7 @@ const EIP712_DOMAIN_TYPE = [
 /**
  * Create the common domain structure
  */
-function createDomain(chainId: number, verifyingContract: string) {
+function createDomain(chainId: string, verifyingContract: string) {
     return {
         name: "Wallet",
         version: "1",
@@ -52,13 +52,12 @@ function buildBatchAuthorizationTypedData({
     verifyingContract,
 }: {
     clauses: TransactionClause[]
-    chainId: number
+    chainId: string
     verifyingContract: string
 }): ExecuteBatchWithAuthorizationSignData {
     const toArray: string[] = []
     const valueArray: string[] = []
     const dataArray: string[] = []
-    console.log("buildBatchAuthorizationTypedData clauses", JSON.stringify(clauses))
     clauses.forEach(clause => {
         toArray.push(clause.to ?? "")
         valueArray.push(String(clause.value))
@@ -105,7 +104,7 @@ function buildSingleAuthorizationTypedData({
     verifyingContract,
 }: {
     clause: TransactionClause
-    chainId: number
+    chainId: string
     verifyingContract: string
 }): ExecuteWithAuthorizationSignData {
     const { validAfter, validBefore } = getExpirationTimes(60) // 1 minute
@@ -149,26 +148,23 @@ async function buildBatchExecutionClauses({
 }: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
-    chainId: number
+    chainId: string
     signTypedDataFn: TransactionSigningFunction
     ownerAddress: string
 }): Promise<TransactionClause[]> {
     const { address, isDeployed, factoryAddress } = smartAccountConfig
 
-    console.log("buildBatchExecutionClauses txClauses", txClauses.length)
     // Build the batch authorization typed data
     const typedData = buildBatchAuthorizationTypedData({
         clauses: txClauses,
         chainId,
         verifyingContract: address,
     })
-    console.log("buildBatchExecutionClauses typedData", JSON.stringify(typedData))
     const signature = await signTypedDataFn(typedData)
     // If the smart account is not deployed, deploy it first
 
     const clauses: TransactionClause[] = []
     if (!isDeployed) {
-        console.log("buildBatchExecutionClauses isDeployed", ownerAddress)
         clauses.push(
             Clause.callFunction(
                 Address.of(factoryAddress),
@@ -209,13 +205,11 @@ async function buildIndividualExecutionClauses({
 }: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
-    chainId: number
+    chainId: string
     signTypedDataFn: TransactionSigningFunction
     ownerAddress: string
 }): Promise<TransactionClause[]> {
-    const clauses: TransactionClause[] = []
     const { address, isDeployed, factoryAddress } = smartAccountConfig
-
     // Build typed data for each clause
     const dataToSign = txClauses.map(txData =>
         buildSingleAuthorizationTypedData({
@@ -237,9 +231,9 @@ async function buildIndividualExecutionClauses({
         signatures.push(signature)
     }
 
+    const clauses: TransactionClause[] = []
     // If the smart account is not deployed, deploy it first
     if (!isDeployed) {
-        console.log("ownerAddress", ownerAddress)
         clauses.push(
             Clause.callFunction(
                 Address.of(factoryAddress),
@@ -248,25 +242,22 @@ async function buildIndividualExecutionClauses({
             ),
         )
     }
-
     // Add individual execution calls
     dataToSign.forEach((data, index) => {
-        clauses.push(
-            Clause.callFunction(
-                Address.of(address ?? ""),
-                ABIContract.ofAbi(SimpleAccountABI).getFunction("executeWithAuthorization"),
-                [
-                    data.message.to as `0x${string}`,
-                    BigInt(data.message.value),
-                    data.message.data as `0x${string}`,
-                    BigInt(data.message.validAfter),
-                    BigInt(data.message.validBefore),
-                    signatures[index] as `0x${string}`,
-                ],
-            ),
+        const clause = Clause.callFunction(
+            Address.of(address ?? ""),
+            ABIContract.ofAbi(SimpleAccountABI).getFunction("executeWithAuthorization"),
+            [
+                data.message.to as `0x${string}`,
+                BigInt(data.message.value),
+                data.message.data as `0x${string}`,
+                BigInt(data.message.validAfter),
+                BigInt(data.message.validBefore),
+                signatures[index] as `0x${string}`,
+            ],
         )
+        clauses.push(clause)
     })
-
     return clauses
 }
 
@@ -274,7 +265,7 @@ export async function buildSmartAccountTransaction(params: {
     txClauses: TransactionClause[]
     smartAccountConfig: SmartAccountTransactionConfig
     ownerAddress: string
-    chainId: number
+    chainId: string
     signTypedDataFn: TransactionSigningFunction
     // optional gen delegator object
     genericDelgation?: {
@@ -286,29 +277,27 @@ export async function buildSmartAccountTransaction(params: {
     }
 }): Promise<TransactionClause[]> {
     const { txClauses, smartAccountConfig, signTypedDataFn, chainId, genericDelgation, ownerAddress } = params
-    const { version: smartAccountVersion, hasV1Account } = smartAccountConfig
+    const { hasV1Account } = smartAccountConfig
 
     const clauses: TransactionClause[] = [...txClauses]
-    console.log("buildSmartAccountTransaction genericDelgation", JSON.stringify(genericDelgation))
     // Determine execution strategy based on smart account version
-    const shouldUseBatchExecution = !hasV1Account || (smartAccountVersion && smartAccountVersion >= 3)
+    const shouldUseBatchExecution = !hasV1Account
 
     if (genericDelgation && genericDelgation.isGenDelegation) {
-        console.log("pushing transaction clasue")
+
         const transferClause = getTransferClause(
             genericDelgation.token,
             genericDelgation.tokenAddress,
             // TODO pass in proper one to these functions
-            DELEGATOR_ADDRESS_MAINNET,
+            genericDelgation.delegatorAddress,
             genericDelgation.amount,
         )
 
+        console.log("adding transfer clause for genericDelgation", JSON.stringify(transferClause))
         clauses.push(...transferClause)
-        console.log("txClauses", JSON.stringify(txClauses))
     }
 
     if (shouldUseBatchExecution) {
-        console.log("buildSmartAccountTransaction shouldUseBatchExecution")
         return await buildBatchExecutionClauses({
             txClauses: clauses,
             smartAccountConfig,
@@ -317,6 +306,7 @@ export async function buildSmartAccountTransaction(params: {
             ownerAddress,
         })
     } else {
+        console.log("building individual execution clauses")
         return await buildIndividualExecutionClauses({
             txClauses: clauses,
             smartAccountConfig,
@@ -352,23 +342,16 @@ export const transfer: abi.Function.Definition = {
     type: "function",
 }
 
-const DELEGATOR_ADDRESS_MAINNET = "0xe705e3f310ab09fb9eb40b43cb1368289ef1f829"
-
 const getTransferClause = (
     token: string,
     tokenAddress: string,
     delegatorAddress: string,
     amount: BigNumberUtils | undefined,
 ) => {
-    console.log("getTransferClause token", token)
-    console.log("getTransferClause tokenAddress", tokenAddress)
-    console.log("getTransferClause toAddres", delegatorAddress)
-    console.log("getTransferClause amount", amount?.toBigInt)
     const amountHex = `0x${amount?.toHex}`
 
-    console.log("getTransferClause amountHex", amountHex)
     // code from export const prepareFungibleClause = (
-    const addressTo = "0xe705e3f310ab09fb9eb40b43cb1368289ef1f829"
+    const addressTo = delegatorAddress
     if (token === "VET") {
         return [
             {

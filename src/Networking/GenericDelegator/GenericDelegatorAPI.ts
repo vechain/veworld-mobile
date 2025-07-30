@@ -5,7 +5,7 @@ import { URIUtils } from "~Utils"
 
 export const GENERIC_DELEGATOR_BASE_URL = {
     [NETWORK_TYPE.MAIN]: "http://localhost:3000",
-    [NETWORK_TYPE.TEST]: process.env.REACT_APP_GENERIC_DELEGATOR_TESTNET_URL,
+    [NETWORK_TYPE.TEST]: "http://localhost:3000",
 }
 
 export const isValidGenericDelegatorNetwork = (
@@ -96,7 +96,7 @@ export const delegateGenericDelegatorSmartAccount = ({
     token: string
     networkType: NETWORK_TYPE
 }) =>
-    executeIfValidNetwork(networkType, `/api/v1/sign/transaction/hybrid/${token.toLowerCase()}`, url =>
+    executeIfValidNetwork(networkType, `/api/v1/sign/transaction/authorized/${token.toLowerCase()}`, url =>
         requestFromEndpoint<{ signature: string; address: string; raw: string; origin: string }>({
             url: url,
             data: {
@@ -106,3 +106,6 @@ export const delegateGenericDelegatorSmartAccount = ({
             method: "POST",
         }),
     )
+
+export const getDelegatorDepositAddress = ({ networkType }: { networkType: NETWORK_TYPE }) =>
+    executeIfValidNetwork(networkType, "/api/v1/deposit/account", url => fetchFromEndpoint<string>(url))

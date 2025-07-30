@@ -231,6 +231,7 @@ export const useTransactionScreen = ({
         [B3TR.symbol]: genericDelegatorFees.allOptions?.["b3trWithSmartAccount"][selectedFeeOption].maxFee,
     }
 
+    //TODO using wrong fee for testnet executeIndividual
     console.log("feeMap", feeMap)
 
     // need to know its delegated here.
@@ -241,7 +242,7 @@ export const useTransactionScreen = ({
             selectedDelegationToken !== VTHO.symbol &&
             genericDelegatorFees.options?.[selectedFeeOption].maxFee !== undefined,
         amount: feeMap[selectedDelegationToken],
-        delegatorAddress: "0xe705e3f310ab09fb9eb40b43cb1368289ef1f829",
+        delegatorAddress: genericDelegatorFees.delegatorAddress ?? "",
     }
 
     const { buildTransaction } = useTransactionBuilder({

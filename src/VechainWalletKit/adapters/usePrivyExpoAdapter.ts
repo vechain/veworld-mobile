@@ -112,6 +112,7 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
                 try {
                     const privyProvider = await currentWallets[0].getProvider()
                     const privyAccount = currentWallets[0].address
+                    console.log("privyAccount", privyAccount)
                     const signature = await privyProvider.request({
                         method: "eth_signTypedData_v4",
                         params: [
