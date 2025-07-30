@@ -1,8 +1,8 @@
 import React, { forwardRef, useCallback, useMemo, useState } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import { BaseBottomSheet, BaseChip, BaseIcon, BaseSpacer, BaseText, BaseView, BaseButton } from "~Components"
+import { BaseBottomSheet, BaseChip, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { Spinner } from "~Components/Reusable/Spinner"
-import { DiscoveryDApp } from "~Constants"
+import { COLORS, DiscoveryDApp } from "~Constants"
 import { DAppType } from "~Model"
 import { useDappsWithPagination, UseDappsWithPaginationSortKey } from "~Hooks/useDappsWithPagination"
 import { useI18nContext } from "~i18n"
@@ -54,23 +54,18 @@ const LoadingMoreFooter = ({ isLoading }: { isLoading: boolean }) => {
 }
 
 const X2EAppItem = ({ dapp }: { dapp: DiscoveryDApp }) => {
-    const { LL } = useI18nContext()
-
     return (
         <X2EAppWithDetails
             name={dapp.name}
             icon={dapp.iconUri || `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`}
-            url={dapp.href}>
+            desc={dapp.desc}>
             <X2EAppDetails.Container>
                 <X2EAppDetails.Description>
                     {dapp.desc || "Discover this exciting DApp from the VeChain ecosystem."}
                 </X2EAppDetails.Description>
                 <X2EAppDetails.Stats />
                 <BaseSpacer height={18} />
-                <BaseView flexDirection="column" gap={16} px={0}>
-                    <BaseButton action={() => {}}>{LL.BTN_ADD_TO_FAVORITES()}</BaseButton>
-                    <BaseButton action={() => {}}>{LL.BTN_OPEN()}</BaseButton>
-                </BaseView>
+                <X2EAppDetails.Actions />
             </X2EAppDetails.Container>
         </X2EAppWithDetails>
     )
@@ -82,7 +77,7 @@ const X2EAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
     }, [])
 
     const renderItemSeparator = useCallback(() => {
-        return <BaseSpacer height={16} />
+        return <BaseSpacer height={24} />
     }, [])
 
     const renderListFooter = useCallback(() => {
@@ -90,7 +85,7 @@ const X2EAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
     }, [isLoading])
 
     const renderSkeletonItem = useCallback(() => {
-        return <BaseView bg="grey.200" h={100} borderRadius={12} />
+        return <BaseView bg={COLORS.GREY_200} h={100} borderRadius={12} />
     }, [])
 
     if (isLoading && dapps.length === 0) {

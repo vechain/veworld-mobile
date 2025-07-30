@@ -24,7 +24,7 @@ const Stats = () => {
         <BaseView flexDirection={"row"} justifyContent={"space-between"} py={4} px={8}>
             <BaseView flexDirection="column" gap={2}>
                 <BaseText typographyFont={"bodySemiBold"}>{"4.5"}</BaseText>
-                <BaseText typographyFont={"captionMedium"}>{"Rating"}</BaseText>
+                <BaseText typographyFont={"captionRegular"}>{"Rating"}</BaseText>
             </BaseView>
             <BaseView flexDirection="column" gap={2}>
                 <BaseText typographyFont={"bodySemiBold"}>{"1.1M"}</BaseText>
@@ -42,8 +42,12 @@ const Actions = () => {
     const { LL } = useI18nContext()
     return (
         <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="column" gap={16} px={0}>
-            <BaseButton action={() => {}}>{LL.BTN_ADD_TO_FAVORITES()}</BaseButton>
-            <BaseButton action={() => {}}>{LL.BTN_OPEN()}</BaseButton>
+            <BaseButton style={styles.button} action={() => {}}>
+                {LL.BTN_ADD_TO_FAVORITES()}
+            </BaseButton>
+            <BaseButton style={styles.button} action={() => {}}>
+                {LL.BTN_OPEN()}
+            </BaseButton>
         </AnimatedBaseView>
     )
 }
@@ -52,7 +56,7 @@ const Description = ({ children }: { children: string }) => {
     const theme = useTheme()
     return (
         <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="row" gap={8} alignItems="flex-start">
-            <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="bodyMedium">
+            <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
                 {children}
             </BaseText>
         </AnimatedBaseView>
@@ -61,7 +65,7 @@ const Description = ({ children }: { children: string }) => {
 
 const Container = ({ children }: PropsWithChildren) => {
     return (
-        <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="column" gap={8} p={24}>
+        <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="column" gap={8} px={24} pb={24}>
             {children}
         </AnimatedBaseView>
     )
@@ -98,5 +102,9 @@ export { X2EAppDetails }
 const styles = StyleSheet.create({
     detailsContainer: {
         gap: 12,
+    },
+    button: {
+        borderRadius: 99,
+        height: 48,
     },
 })

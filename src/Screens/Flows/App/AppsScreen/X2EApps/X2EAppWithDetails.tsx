@@ -13,14 +13,14 @@ const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(
 type Props = PropsWithChildren<{
     name: string
     icon: string
-    url: string
+    desc?: string
     /**
      * True if the details should be visible by default, false otherwise. Defaults to false
      */
     isDefaultVisible?: boolean
 }>
 
-export const X2EAppWithDetails = ({ name, icon, url, children, isDefaultVisible = false }: Props) => {
+export const X2EAppWithDetails = ({ name, icon, desc, children, isDefaultVisible = false }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
     const [showDetails, setShowDetails] = useState(isDefaultVisible)
@@ -32,7 +32,7 @@ export const X2EAppWithDetails = ({ name, icon, url, children, isDefaultVisible 
     const containerStyle = useAnimatedStyle(() => {
         return {
             backgroundColor: showDetails
-                ? withTiming(theme.colors.editSpeedBs.result.background, { duration: 100 })
+                ? withTiming(theme.colors.assetDetailsCard.background, { duration: 100 })
                 : withTiming(theme.colors.card, { duration: 0 }),
             borderRadius: showDetails ? withTiming(24, { duration: 100 }) : withTiming(0, { duration: 100 }),
         }
@@ -40,7 +40,7 @@ export const X2EAppWithDetails = ({ name, icon, url, children, isDefaultVisible 
 
     const headerStyle = useAnimatedStyle(() => {
         return {
-            padding: showDetails ? withTiming(24, { duration: 100 }) : withTiming(0, { duration: 50 }),
+            padding: showDetails ? withTiming(24, { duration: 100 }) : withTiming(0, { duration: 100 }),
         }
     }, [showDetails])
 
@@ -52,10 +52,10 @@ export const X2EAppWithDetails = ({ name, icon, url, children, isDefaultVisible 
             <TouchableOpacity activeOpacity={0.7} onPress={toggleDetails} testID="X2E_APP_WITH_DETAILS_ROW">
                 <AnimatedBaseView
                     flexDirection="row"
-                    gap={12}
+                    pb={8}
                     style={headerStyle}
                     layout={LinearTransition.duration(100)}>
-                    <BaseView flexDirection="row" gap={16} flex={1}>
+                    <BaseView flexDirection="row" gap={24} flex={1}>
                         <Image
                             source={
                                 loadFallback
@@ -64,11 +64,11 @@ export const X2EAppWithDetails = ({ name, icon, url, children, isDefaultVisible 
                                           uri: icon,
                                       }
                             }
-                            style={[{ height: 48, width: 48 }, styles.icon] as StyleProp<ImageStyle>}
+                            style={[{ height: 64, width: 64 }, styles.icon] as StyleProp<ImageStyle>}
                             onError={() => setLoadFallback(true)}
                             resizeMode="contain"
                         />
-                        <BaseView flexDirection="column" gap={2} flex={1}>
+                        <BaseView flexDirection="column" gap={4} flex={1} pr={24}>
                             <BaseText
                                 typographyFont="bodyMedium"
                                 numberOfLines={1}
@@ -77,11 +77,11 @@ export const X2EAppWithDetails = ({ name, icon, url, children, isDefaultVisible 
                                 {name}
                             </BaseText>
                             <BaseText
-                                typographyFont="captionMedium"
-                                numberOfLines={1}
+                                typographyFont="captionRegular"
+                                numberOfLines={2}
                                 color={theme.colors.assetDetailsCard.text}
                                 testID="DAPP_WITH_DETAILS_URL">
-                                {url}
+                                {desc}
                             </BaseText>
                         </BaseView>
                     </BaseView>
