@@ -20,16 +20,14 @@ export const ContractCallOutput = ({ output, ...props }: Props) => {
     return (
         <BaseReceiptOutput
             label={LL.RECEIPT_OUTPUT_CONTRACT_CALL()}
-            iconKey={isUnknownOutput ? "icon-help-circle" : "icon-file-check"}
+            iconKey="icon-file-check"
             output={output}
             additionalDetails={
-                !isUnknownOutput && (
-                    <BaseAdditionalDetail
-                        label={LL.ADDITIONAL_DETAIL_EVENT()}
-                        value={stripFakeSignature(output.name)}
-                        testID="CONTRACT_CALL_FAKE_SIGNATURE"
-                    />
-                )
+                <BaseAdditionalDetail
+                    label={LL.ADDITIONAL_DETAIL_EVENT()}
+                    value={isUnknownOutput ? "--" : stripFakeSignature(output.name)}
+                    testID="CONTRACT_CALL_FAKE_SIGNATURE"
+                />
             }
             {...props}
         />
