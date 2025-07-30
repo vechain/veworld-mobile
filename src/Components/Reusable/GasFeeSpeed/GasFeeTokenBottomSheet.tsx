@@ -27,6 +27,8 @@ type Props = {
     hasEnoughBalanceOnToken: {
         [token: string]: boolean
     }
+
+    sendingTokenSymbol?: string
 }
 
 const noop = () => {}
@@ -58,7 +60,7 @@ const EnhancedTokenCard = ({ item, selected, onSelectedToken, disabled }: Enhanc
 }
 
 export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>(function GasFeeSpeedBottomSheet(
-    { selectedToken, setSelectedToken, onClose, availableTokens, hasEnoughBalanceOnToken },
+    { selectedToken, setSelectedToken, onClose, availableTokens, hasEnoughBalanceOnToken, sendingTokenSymbol },
     ref,
 ) {
     const { LL } = useI18nContext()
@@ -148,7 +150,7 @@ export const GasFeeTokenBottomSheet = forwardRef<BottomSheetModalMethods, Props>
                         key={tk.symbol}
                         onSelectedToken={setInternalToken}
                         selected={internalToken === tk.symbol}
-                        disabled={!hasEnoughBalanceOnToken[tk.symbol]}
+                        disabled={!hasEnoughBalanceOnToken[tk.symbol] && tk.symbol !== sendingTokenSymbol}
                     />
                 ))}
             </BaseView>

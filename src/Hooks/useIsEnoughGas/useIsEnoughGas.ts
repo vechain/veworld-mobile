@@ -17,6 +17,7 @@ type Args = {
     isLoadingFees: boolean
     transactionOutputs: InspectableOutput[] | undefined
     origin: string
+    enableSameTokenFeeHandling?: boolean
 }
 
 const calculateClausesValue = ({
@@ -61,6 +62,7 @@ export const useIsEnoughGas = ({
     isLoadingFees,
     transactionOutputs,
     origin,
+    enableSameTokenFeeHandling = false,
 }: Args) => {
     const allTokens = useAppSelector(selectAllTokens)
     const tokens = useAppSelector(selectTokensWithBalances)
@@ -73,24 +75,46 @@ export const useIsEnoughGas = ({
                 if (isLoadingFees || allFeeOptions === undefined || !transactionOutputs)
                     return [tokenSymbol, true] as const
                 if (allFeeOptions[tokenSymbol] === undefined) return [tokenSymbol, false] as const
+
                 const foundTmpToken = allTokens.find(tk => tk.symbol === tokenSymbol)!
                 const balance = tokens.find(tk => tk.symbol === tokenSymbol)?.balance?.balance ?? "0"
+
                 const clausesValue = calculateClausesValue({
                     transactionOutputs,
                     selectedToken: foundTmpToken,
                     network: network.type,
                     origin,
                 })
+
                 //Delegation with VTHO should count as "0" for fees
                 if (tokenSymbol === VTHO.symbol && isDelegated)
                     return [tokenSymbol, BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual("0")] as const
+
+                if (enableSameTokenFeeHandling && tokenSymbol === selectedToken && tokenSymbol !== VTHO.symbol) {
+                    return [
+                        tokenSymbol,
+                        BigNutils(balance).isBiggerThanOrEqual(allFeeOptions[tokenSymbol].toBN),
+                    ] as const
+                }
+
                 return [
                     tokenSymbol,
                     BigNutils(balance).minus(clausesValue.toBN).isBiggerThanOrEqual(allFeeOptions[tokenSymbol].toBN),
                 ] as const
             }),
         )
-    }, [allFeeOptions, allTokens, isDelegated, isLoadingFees, network.type, tokens, transactionOutputs, origin])
+    }, [
+        allFeeOptions,
+        allTokens,
+        isDelegated,
+        isLoadingFees,
+        network.type,
+        tokens,
+        transactionOutputs,
+        origin,
+        enableSameTokenFeeHandling,
+        selectedToken,
+    ])
 
     const hasEnoughBalanceOnAny = useMemo(() => {
         return Object.values(hasEnoughBalanceOnToken).some(Boolean)
