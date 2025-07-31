@@ -106,7 +106,7 @@ const BaseReceiptOutput = ({
                 <BaseView flexDirection="row" gap={12}>
                     <IconRenderer {...iconProps} />
                     <BaseText
-                        typographyFont="captionMedium"
+                        typographyFont="bodyMedium"
                         color={labelColor ?? (theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600)}>
                         {label}
                     </BaseText>

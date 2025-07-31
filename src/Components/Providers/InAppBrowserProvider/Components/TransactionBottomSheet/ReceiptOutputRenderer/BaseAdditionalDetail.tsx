@@ -35,7 +35,7 @@ const HexValue = ({ value, testID }: { value: string; testID?: string }) => {
             py={0}
             typographyFont="bodyMedium"
             title={formattedValue}
-            action={() => onCopyToClipboard(value, LL.COMMON_LBL_ADDRESS())}
+            action={() => onCopyToClipboard(value, LL.COMMON_LBL_VALUE())}
             textTestID={testID}
             rightIcon={
                 <BaseIcon

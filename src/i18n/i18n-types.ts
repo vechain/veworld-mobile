@@ -237,6 +237,10 @@ type RootTranslation = {
 	 */
 	ADDITIONAL_DETAIL_CLAUSE: string
 	/**
+	 * C​o​m​m​e​n​t
+	 */
+	ADDITIONAL_DETAIL_COMMENT: string
+	/**
 	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
 	 */
 	ADDITIONAL_DETAIL_CONTRACT_DATA: string
@@ -248,10 +252,6 @@ type RootTranslation = {
 	 * F​r​o​m
 	 */
 	ADDITIONAL_DETAIL_FROM: string
-	/**
-	 * C​o​m​m​e​n​t
-	 */
-	ADDITIONAL_DETAIL_COMMENT: string
 	/**
 	 * R​e​c​e​i​v​e​r
 	 */
@@ -1778,6 +1778,10 @@ type RootTranslation = {
 	 * U​R​L
 	 */
 	COMMON_LBL_URL: string
+	/**
+	 * V​a​l​u​e
+	 */
+	COMMON_LBL_VALUE: string
 	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
@@ -4908,6 +4912,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ADDITIONAL_DETAIL_CLAUSE: () => LocalizedString
 	/**
+	 * Comment
+	 */
+	ADDITIONAL_DETAIL_COMMENT: () => LocalizedString
+	/**
 	 * Contract data
 	 */
 	ADDITIONAL_DETAIL_CONTRACT_DATA: () => LocalizedString
@@ -4919,10 +4927,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * From
 	 */
 	ADDITIONAL_DETAIL_FROM: () => LocalizedString
-	/**
-	 * Comment
-	 */
-	ADDITIONAL_DETAIL_COMMENT: () => LocalizedString
 	/**
 	 * Receiver
 	 */
@@ -6434,6 +6438,10 @@ Thanks for your patience!
 	 * URL
 	 */
 	COMMON_LBL_URL: () => LocalizedString
+	/**
+	 * Value
+	 */
+	COMMON_LBL_VALUE: () => LocalizedString
 	/**
 	 * Market Cap
 	 */
