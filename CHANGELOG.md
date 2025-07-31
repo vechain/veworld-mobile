@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.0 (2025-07-29)
+
+* build: init ([9200067](https://github.com/vechain/veworld-mobile/commit/9200067))
+* feat: add analytic tracking for browser navigation events in BrowserBottomBar component (#3129) ([3ad7e3e](https://github.com/vechain/veworld-mobile/commit/3ad7e3e)), closes [#3129](https://github.com/vechain/veworld-mobile/issues/3129)
+
 ## <small>2.2.10 (2025-07-24)</small>
 
 * build: init ([955e4db](https://github.com/vechain/veworld-mobile/commit/955e4db))
