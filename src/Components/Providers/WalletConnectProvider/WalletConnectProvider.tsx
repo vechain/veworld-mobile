@@ -35,13 +35,19 @@ const WalletConnectContext = React.createContext<WCContext>({} as WCContext)
 const WalletConnectContextProvider = ({ children }: WalletConnectContextProviderProps) => {
     // General
     const nav = useNavigation()
-    const { certificateBsData, connectBsData } = useInteraction()
+    const { certificateBsData, connectBsData, transactionBsData, typedDataBsData } = useInteraction()
 
     const isBlackListScreen = useCallback((): boolean => {
         if (!nav) return true
-        if (certificateBsData?.type === "wallet-connect" || connectBsData?.type === "wallet-connect") return true
+        if (
+            certificateBsData?.type === "wallet-connect" ||
+            connectBsData?.type === "wallet-connect" ||
+            transactionBsData?.type === "wallet-connect" ||
+            typedDataBsData?.type === "wallet-connect"
+        )
+            return true
         return !WalletConnectUtils.shouldAutoNavigate(nav.getState() as NavigationState<ReactNavigation.RootParamList>)
-    }, [certificateBsData?.type, connectBsData?.type, nav])
+    }, [certificateBsData?.type, connectBsData?.type, nav, transactionBsData?.type, typedDataBsData?.type])
 
     const { addSessionDisconnect, disconnectSession, activeSessions, addSession } = useWcSessions()
 

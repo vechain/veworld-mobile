@@ -47,6 +47,7 @@ type Props = {
     activeOpacity?: number
     disabledActionHaptics?: "Success" | "Warning" | "Error" | "Light" | "Medium" | "Heavy"
     numberOfLines?: number
+    textTestID?: string
 } & TouchableOpacityProps
 
 export const BaseButton = ({
@@ -67,6 +68,7 @@ export const BaseButton = ({
     disabledAction,
     disabledActionHaptics,
     numberOfLines,
+    textTestID,
     ...otherProps
 }: Props) => {
     const {
@@ -196,7 +198,8 @@ export const BaseButton = ({
                     fontWeight={fontWeight}
                     fontSize={fontSize}
                     style={themedStyles.text}
-                    numberOfLines={numberOfLines}>
+                    numberOfLines={numberOfLines}
+                    testID={textTestID}>
                     {title}
                     {children}
                 </BaseText>

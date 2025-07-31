@@ -1,4 +1,4 @@
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { NavigationState, useNavigation, useNavigationState } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { Animated, Linking, Pressable, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
@@ -27,6 +27,8 @@ type Props = {
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
 
+const routeNameSelector = (state: NavigationState) => state.routes[state.index].name
+
 export const BaseCarouselItem: React.FC<Props> = ({
     href,
     style,
@@ -43,15 +45,15 @@ export const BaseCarouselItem: React.FC<Props> = ({
 }) => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const route = useRoute()
+    const route = useNavigationState(routeNameSelector)
     const { navigateWithTab } = useBrowserTab()
 
     const returnScreen = useMemo(() => {
-        if (route.name === Routes.TOKEN_DETAILS) {
+        if (route === Routes.TOKEN_DETAILS) {
             return Routes.HOME
         }
-        return route.name as Routes.DISCOVER | Routes.SETTINGS | Routes.HOME
-    }, [route.name])
+        return route as Routes.DISCOVER | Routes.SETTINGS | Routes.HOME
+    }, [route])
 
     const onPress = useCallback(async () => {
         if (!href) return

@@ -6,27 +6,11 @@ import { BaseCarousel } from "./BaseCarousel"
 
 type Props = {
     /**
-     * Padding on the left and right.
-     * @default 16
-     */
-    padding?: number
-    /**
      * Base width.
      * @default SCREEN_WIDTH
      */
     baseWidth?: number
-} & Pick<
-    ComponentProps<typeof BaseCarousel>,
-    | "data"
-    | "paginationAlignment"
-    | "showPagination"
-    | "onSlidePress"
-    | "onSlidePressActivation"
-    | "contentWrapperStyle"
-    | "testID"
-    | "itemHeight"
-    | "gap"
->
+} & Omit<ComponentProps<typeof BaseCarousel>, "w" | "snapOffsets">
 
 export const FullscreenBaseCarousel = ({
     padding = 16,
@@ -88,13 +72,18 @@ export const FullscreenBaseCarousel = ({
             })),
         [calculateWidth, data],
     )
+
+    const contentWrapper = useMemo(() => {
+        return [contentWrapperStyle, styles.itemWrapper]
+    }, [contentWrapperStyle, styles.itemWrapper])
+
     return (
         <BaseCarousel
             snapOffsets={snapOffsets}
             data={mappedData}
             padding={padding}
             gap={gap}
-            contentWrapperStyle={[contentWrapperStyle, styles.itemWrapper]}
+            contentWrapperStyle={contentWrapper}
             {...props}
         />
     )

@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo } from "react"
 import { BackHandler, StyleSheet } from "react-native"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, useInAppBrowser } from "~Components"
-import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
@@ -34,6 +34,7 @@ export const BrowserBottomBar: React.FC = () => {
     const { styles } = useThemedStyles(baseStyles)
     const isIOSPlatform = isIOS()
     const route = useRoute()
+    const track = useAnalyticTracking()
     const { onOpen: openBottomSheet, ref: bottomSheetRef } = useBottomSheetModal()
 
     const fromDiscovery = useMemo(() => {
@@ -50,6 +51,7 @@ export const BrowserBottomBar: React.FC = () => {
     }, [isIOSPlatform, showToolbars])
 
     const onBackHandler = useCallback(() => {
+        track(AnalyticsEvent.BROWSER_GO_BACK_CLICKED)
         if (canGoBack) {
             goBack()
             return true
@@ -61,7 +63,12 @@ export const BrowserBottomBar: React.FC = () => {
         }
 
         return false
-    }, [canGoBack, navigationCanGoBack, goBack, closeInAppBrowser])
+    }, [track, canGoBack, navigationCanGoBack, goBack, closeInAppBrowser])
+
+    const onForwardHandler = useCallback(() => {
+        track(AnalyticsEvent.BROWSER_GO_FORWARD_CLICKED)
+        goForward()
+    }, [track, goForward])
 
     const iconColor = useMemo(() => (theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_600), [theme.isDark])
 
@@ -79,7 +86,7 @@ export const BrowserBottomBar: React.FC = () => {
             },
             {
                 name: "icon-chevron-right",
-                onPress: goForward,
+                onPress: onForwardHandler,
                 disabled: !canGoForward,
             },
             ...(isDapp
@@ -106,7 +113,7 @@ export const BrowserBottomBar: React.FC = () => {
         canGoBack,
         canGoForward,
         fromDiscovery,
-        goForward,
+        onForwardHandler,
         isBookMarked,
         isDapp,
         onBackHandler,
