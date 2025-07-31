@@ -171,7 +171,9 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 onNavigateToDApp={() => {
                     setSelectedDApp(undefined)
                     onCloseDAppOptions()
-                    ;(ref as any)?.current?.dismiss()
+                    if (ref && typeof ref !== "function") {
+                        ref.current?.dismiss()
+                    }
                 }}
                 selectedDApp={selectedDApp}
                 stackBehavior="replace"
