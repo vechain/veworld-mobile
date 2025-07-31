@@ -3284,7 +3284,7 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_PROPOSAL_VOTE: string
 	/**
-	 * V​o​t​e​ ​o​n​ ​#​{​r​o​u​n​d​I​d​}
+	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d​ ​#​{​r​o​u​n​d​I​d​}
 	 * @param {number} roundId
 	 */
 	RECEIPT_OUTPUT_ROUND_VOTE: RequiredParams<'roundId'>
@@ -7920,7 +7920,7 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_PROPOSAL_VOTE: () => LocalizedString
 	/**
-	 * Vote on #{roundId}
+	 * Vote on round #{roundId}
 	 */
 	RECEIPT_OUTPUT_ROUND_VOTE: (arg: { roundId: number }) => LocalizedString
 	/**

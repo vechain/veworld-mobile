@@ -797,7 +797,7 @@
   "RECEIPT_OUTPUT_NFT_SEND": "NFT send",
   "RECEIPT_OUTPUT_PROPOSAL_SUPPORT": "Support VeBetterDAO proposal",
   "RECEIPT_OUTPUT_PROPOSAL_VOTE": "Vote on VeBetterDAO proposal",
-  "RECEIPT_OUTPUT_ROUND_VOTE": "Vote on #{roundId: number}",
+  "RECEIPT_OUTPUT_ROUND_VOTE": "Vote on round #{roundId: number}",
   "RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE": "Base rewards",
   "RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION": "Delegation rewards",
   "RECEIPT_OUTPUT_STARGATE_DELEGATE": "Node delegate",
