@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.0 (2025-07-31)
+
+* build: init ([f5f1348](https://github.com/vechain/veworld-mobile/commit/f5f1348))
+* feat: update receipt output size + fix copy label (#3135) ([0a0100b](https://github.com/vechain/veworld-mobile/commit/0a0100b)), closes [#3135](https://github.com/vechain/veworld-mobile/issues/3135)
+
 ## <small>2.2.10 (2025-07-24)</small>
 
 * build: init ([955e4db](https://github.com/vechain/veworld-mobile/commit/955e4db))
