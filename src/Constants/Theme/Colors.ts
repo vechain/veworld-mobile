@@ -208,6 +208,7 @@ export type Colors = {
     }
     label: {
         background: string
+        backgroundLighter: string
         text: string
     }
     stakedCard: {
@@ -523,6 +524,7 @@ const light: Colors = {
     },
     label: {
         background: COLORS.GREY_200,
+        backgroundLighter: COLORS.GREY_100,
         text: COLORS.GREY_600,
     },
     stakedCard: {
@@ -744,6 +746,7 @@ const dark: Colors = {
     },
     label: {
         background: COLORS.PURPLE_DISABLED,
+        backgroundLighter: COLORS.PURPLE_DISABLED,
         text: COLORS.GREY_300,
     },
     stakedCard: {

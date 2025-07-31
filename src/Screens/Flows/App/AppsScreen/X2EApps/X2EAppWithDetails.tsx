@@ -1,4 +1,4 @@
-import { PropsWithChildren, default as React, useState } from "react"
+import { PropsWithChildren, default as React, useMemo, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
@@ -14,13 +14,21 @@ type Props = PropsWithChildren<{
     name: string
     icon: string
     desc?: string
+    category?: string
     /**
      * True if the details should be visible by default, false otherwise. Defaults to false
      */
     isDefaultVisible?: boolean
 }>
 
-export const X2EAppWithDetails = ({ name, icon, desc, children, isDefaultVisible = false }: Props) => {
+export const X2EAppWithDetails = ({
+    name,
+    icon,
+    desc,
+    category = "Food & Drinks",
+    children,
+    isDefaultVisible = false,
+}: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
     const [showDetails, setShowDetails] = useState(isDefaultVisible)
@@ -38,10 +46,8 @@ export const X2EAppWithDetails = ({ name, icon, desc, children, isDefaultVisible
         }
     }, [showDetails])
 
-    const headerStyle = useAnimatedStyle(() => {
-        return {
-            padding: showDetails ? withTiming(24, { duration: 100 }) : withTiming(0, { duration: 100 }),
-        }
+    const padding = useMemo(() => {
+        return showDetails ? 24 : 0
     }, [showDetails])
 
     return (
@@ -59,8 +65,7 @@ export const X2EAppWithDetails = ({ name, icon, desc, children, isDefaultVisible
                 </BaseView>
                 <AnimatedBaseView
                     flexDirection="row"
-                    pb={8}
-                    style={headerStyle}
+                    style={{ padding: padding }}
                     layout={LinearTransition.duration(100)}>
                     <BaseView flexDirection="row" gap={24} flex={1}>
                         <Image
@@ -75,21 +80,36 @@ export const X2EAppWithDetails = ({ name, icon, desc, children, isDefaultVisible
                             onError={() => setLoadFallback(true)}
                             resizeMode="contain"
                         />
-                        <BaseView flexDirection="column" gap={4} flex={1} pr={24}>
+                        <BaseView flexDirection="column" gap={4} pr={100} overflow="hidden">
                             <BaseText
-                                typographyFont={showDetails ? "subTitleSemiBold" : "bodyMedium"}
+                                typographyFont={showDetails ? "subTitleSemiBold" : "subSubTitleSemiBold"}
                                 numberOfLines={1}
                                 color={theme.colors.assetDetailsCard.title}
                                 testID="DAPP_WITH_DETAILS_NAME">
                                 {name}
                             </BaseText>
-                            <BaseText
-                                typographyFont="captionRegular"
-                                numberOfLines={2}
-                                color={theme.colors.assetDetailsCard.text}
-                                testID="DAPP_WITH_DETAILS_URL">
-                                {desc}
-                            </BaseText>
+                            {showDetails ? (
+                                <BaseText
+                                    bg={theme.colors.label.backgroundLighter}
+                                    px={8}
+                                    py={4}
+                                    borderRadius={4}
+                                    typographyFont="captionMedium"
+                                    color={theme.colors.label.text}
+                                    testID="DAPP_WITH_DETAILS_URL">
+                                    {category}
+                                </BaseText>
+                            ) : (
+                                <BaseText
+                                    typographyFont="captionRegular"
+                                    numberOfLines={2}
+                                    ellipsizeMode="tail"
+                                    pr={24}
+                                    color={theme.colors.assetDetailsCard.text}
+                                    testID="DAPP_WITH_DETAILS_URL">
+                                    {desc}
+                                </BaseText>
+                            )}
                         </BaseView>
                     </BaseView>
                 </AnimatedBaseView>
@@ -103,6 +123,7 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         mainContainer: {
             backgroundColor: theme.colors.editSpeedBs.result.background,
+            transformOrigin: "center",
             overflow: "hidden",
         },
         icon: {

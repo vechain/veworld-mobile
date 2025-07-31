@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react"
 import { StyleSheet } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseButton, BaseText } from "~Components"
+import { BaseButton, BaseIcon, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -23,15 +23,15 @@ const Stats = () => {
     return (
         <BaseView flexDirection={"row"} justifyContent={"space-between"} py={4} px={8} gap={8}>
             <BaseView flexDirection="column" gap={2}>
-                <BaseText typographyFont={"bodySemiBold"}>{"4.5"}</BaseText>
+                <BaseText typographyFont={"subSubTitleSemiBold"}>{"4.5"}</BaseText>
                 <BaseText typographyFont={"captionRegular"}>{"Rating"}</BaseText>
             </BaseView>
             <BaseView flexDirection="column" gap={2}>
-                <BaseText typographyFont={"bodySemiBold"}>{"1.1M"}</BaseText>
+                <BaseText typographyFont={"subSubTitleSemiBold"}>{"1.1M"}</BaseText>
                 <BaseText typographyFont={"captionRegular"}>{"Users"}</BaseText>
             </BaseView>
             <BaseView flexDirection="column" gap={2}>
-                <BaseText typographyFont={"bodySemiBold"}>{"10.8 T"}</BaseText>
+                <BaseText typographyFont={"subSubTitleSemiBold"}>{"10.8 T"}</BaseText>
                 <BaseText typographyFont={"captionMedium"}>{"CO2 saved"}</BaseText>
             </BaseView>
         </BaseView>
@@ -42,12 +42,14 @@ const Actions = () => {
     const { LL } = useI18nContext()
     return (
         <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="column" gap={16} px={0}>
-            <BaseButton style={styles.button} action={() => {}}>
-                {LL.BTN_ADD_TO_FAVORITES()}
+            <BaseButton variant="outline" action={() => {}}>
+                <BaseView flexDirection="row" alignItems="center">
+                    <BaseIcon name="icon-star" size={16} />
+                    <BaseSpacer width={12} />
+                    <BaseText typographyFont="bodyMedium">{LL.BTN_ADD_TO_FAVORITES()}</BaseText>
+                </BaseView>
             </BaseButton>
-            <BaseButton style={styles.button} action={() => {}}>
-                {LL.BTN_OPEN()}
-            </BaseButton>
+            <BaseButton action={() => {}}>{LL.BTN_OPEN()}</BaseButton>
         </AnimatedBaseView>
     )
 }
@@ -56,7 +58,7 @@ const Description = ({ children }: { children: string }) => {
     const theme = useTheme()
     return (
         <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="row" gap={8} alignItems="flex-start">
-            <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
+            <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="body">
                 {children}
             </BaseText>
         </AnimatedBaseView>
@@ -105,6 +107,9 @@ const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 99,
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "center",
         height: 48,
     },
 })
