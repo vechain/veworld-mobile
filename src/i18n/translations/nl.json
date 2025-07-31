@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "App resetten",
   "BTN_RESET_APP_CHECKBOX": "Ik ben me ervan bewust dat deze actie onomkeerbaar is (vereist)",
   "BTN_RETRY": "Opnieuw proberen",
+  "BTN_SAVE": "Opslaan",
+  "BTN_SAVED": "Opgeslagen!",
   "BTN_SCAN_QR_CODE": "Scan QR Code",
   "BTN_SECURITY_CREATE_PASSWORD": "Wachtwoord aanmaken",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "Wachtwoord aanmaken voor backup",

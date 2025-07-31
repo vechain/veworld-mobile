@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "Zresetuj aplikację",
   "BTN_RESET_APP_CHECKBOX": "Jestem świadomy, że ta akcja jest nieodwracalna (wymagane)",
   "BTN_RETRY": "Ponów",
+  "BTN_SAVE": "Zapisz",
+  "BTN_SAVED": "Zapisano!",
   "BTN_SCAN_QR_CODE": "Skanuj kod QR",
   "BTN_SECURITY_CREATE_PASSWORD": "Utwórz hasło",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "Utwórz hasło do kopii zapasowej",

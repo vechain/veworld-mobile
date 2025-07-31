@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "Uygulamayı Sıfırla",
   "BTN_RESET_APP_CHECKBOX": "Bu işlemin geri alınamaz olduğunun farkındayım (gereklidir)",
   "BTN_RETRY": "Yeniden Dene",
+  "BTN_SAVE": "Kaydet",
+  "BTN_SAVED": "Kaydedildi!",
   "BTN_SCAN_QR_CODE": "QR Kodunu Tara",
   "BTN_SECURITY_CREATE_PASSWORD": "Şifre Oluştur",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "Yedekleme için şifre oluştur",

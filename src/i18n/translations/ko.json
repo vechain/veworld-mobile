@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "앱 초기화",
   "BTN_RESET_APP_CHECKBOX": "이 작업은 돌이킬 수 없음을 알고 있습니다 (필수)",
   "BTN_RETRY": "다시 시도",
+  "BTN_SAVE": "저장",
+  "BTN_SAVED": "저장됨!",
   "BTN_SCAN_QR_CODE": "QR 코드 스캔",
   "BTN_SECURITY_CREATE_PASSWORD": "비밀번호 생성",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "백업을 위한 비밀번호 생성",

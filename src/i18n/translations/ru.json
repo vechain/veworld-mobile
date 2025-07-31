@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "Сбросить приложение",
   "BTN_RESET_APP_CHECKBOX": "Я осознаю, что данное действие необратимо (обязательно)",
   "BTN_RETRY": "Повторить",
+  "BTN_SAVE": "Сохранить",
+  "BTN_SAVED": "Сохранено!",
   "BTN_SCAN_QR_CODE": "Сканировать QR-код",
   "BTN_SECURITY_CREATE_PASSWORD": "Создать пароль",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "Создать пароль для резервного копирования",

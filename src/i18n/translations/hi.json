@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "ऐप रीसेट करें",
   "BTN_RESET_APP_CHECKBOX": "मैं अवगत हूँ कि यह क्रिया अपरिवर्तनीय है (आवश्यक)",
   "BTN_RETRY": "पुनः प्रयास करें",
+  "BTN_SAVE": "सहेजें",
+  "BTN_SAVED": "सहेजा गया!",
   "BTN_SCAN_QR_CODE": "QR कोड स्कैन करें",
   "BTN_SECURITY_CREATE_PASSWORD": "पासवर्ड बनाएं",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "बैकअप के लिए पासवर्ड बनाएं",

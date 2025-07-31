@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "アプリをリセット",
   "BTN_RESET_APP_CHECKBOX": "この操作が不可逆であることを認識しています（必須）",
   "BTN_RETRY": "再試行",
+  "BTN_SAVE": "保存",
+  "BTN_SAVED": "保存されました！",
   "BTN_SCAN_QR_CODE": "QRコードをスキャン",
   "BTN_SECURITY_CREATE_PASSWORD": "パスワードを作成",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "バックアップ用にパスワードを作成",

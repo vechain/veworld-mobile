@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "Återställ app",
   "BTN_RESET_APP_CHECKBOX": "Jag är medveten om att denna åtgärd är oåterkallelig (krävs)",
   "BTN_RETRY": "Försök igen",
+  "BTN_SAVE": "Spara",
+  "BTN_SAVED": "Sparad!",
   "BTN_SCAN_QR_CODE": "Skanna QR-kod",
   "BTN_SECURITY_CREATE_PASSWORD": "Skapa lösenord",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "Skapa lösenord för att säkerhetskopiera",

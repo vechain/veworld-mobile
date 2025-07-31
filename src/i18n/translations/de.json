@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "App zurücksetzen",
   "BTN_RESET_APP_CHECKBOX": "Mir ist bewusst, dass diese Aktion nicht rückgängig gemacht werden kann (erforderlich)",
   "BTN_RETRY": "Erneut versuchen",
+  "BTN_SAVE": "Speichern",
+  "BTN_SAVED": "Gespeichert!",
   "BTN_SCAN_QR_CODE": "QR-Code scannen",
   "BTN_SECURITY_CREATE_PASSWORD": "Passwort erstellen",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "Passwort zur Sicherung erstellen",

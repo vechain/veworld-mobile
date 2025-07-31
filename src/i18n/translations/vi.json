@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "Đặt lại ứng dụng",
   "BTN_RESET_APP_CHECKBOX": "Tôi biết hành động này không thể khôi phục (bắt buộc)",
   "BTN_RETRY": "Thử lại",
+  "BTN_SAVE": "Lưu",
+  "BTN_SAVED": "Đã lưu!",
   "BTN_SCAN_QR_CODE": "Quét mã QR",
   "BTN_SECURITY_CREATE_PASSWORD": "Tạo mật khẩu",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "Tạo mật khẩu để sao lưu",

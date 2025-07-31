@@ -330,6 +330,8 @@
   "BTN_RESET_APP": "重置應用",
   "BTN_RESET_APP_CHECKBOX": "我知道此操作不可逆 (必須的)",
   "BTN_RETRY": "重試",
+  "BTN_SAVE": "儲存",
+  "BTN_SAVED": "已儲存!",
   "BTN_SCAN_QR_CODE": "掃描 QR 碼",
   "BTN_SECURITY_CREATE_PASSWORD": "創建密碼",
   "BTN_SECURITY_CREATE_PASSWORD_BACKUP": "創建密碼以備份",
