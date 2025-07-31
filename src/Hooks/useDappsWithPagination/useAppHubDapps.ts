@@ -5,6 +5,7 @@ import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
 import { PAGE_SIZE } from "./constants"
 import { UseDappsWithPaginationFetch, UseDappsWithPaginationSortKey } from "./types"
 import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps"
+import { DappTypeV2 } from "~Screens/Flows/App/AppsScreen/Components/Ecosystem/types"
 
 export const sortAppHubDapps = (sort: UseDappsWithPaginationSortKey) => (a: DiscoveryDApp, b: DiscoveryDApp) => {
     switch (sort) {
@@ -17,7 +18,7 @@ export const sortAppHubDapps = (sort: UseDappsWithPaginationSortKey) => (a: Disc
     }
 }
 
-const filterDapps = (filter: DAppType, vbdDapps: VeBetterDaoDapp[] | undefined) => (dapp: DiscoveryDApp) => {
+const filterDappsV1 = (filter: DAppType, vbdDapps: VeBetterDaoDapp[] | undefined) => (dapp: DiscoveryDApp) => {
     switch (filter) {
         case DAppType.ALL:
             return true
@@ -37,7 +38,25 @@ const filterDapps = (filter: DAppType, vbdDapps: VeBetterDaoDapp[] | undefined) 
     }
 }
 
-export const useAppHubDapps = (filter: DAppType) => {
+const filterDappsV2 = (filter: DappTypeV2, _vbdDapps: VeBetterDaoDapp[] | undefined) => (_dapp: DiscoveryDApp) => {
+    switch (filter) {
+        case DappTypeV2.ALL:
+            return true
+        case DappTypeV2.DEFI:
+            return true
+        case DappTypeV2.NFTS:
+            return true
+        case DappTypeV2.GOVERNANCE:
+            return true
+        case DappTypeV2.TOOLS:
+            return true
+    }
+}
+
+export const useAppHubDapps = ({
+    filter,
+    kind,
+}: { kind: "v1"; filter: DAppType } | { kind: "v2"; filter: DappTypeV2 }) => {
     const dapps = useAppSelector(selectFeaturedDapps)
     const { data: vbdActiveDapps } = useVeBetterDaoActiveDapps()
 
@@ -48,8 +67,8 @@ export const useAppHubDapps = (filter: DAppType) => {
                     ...dapp,
                     tags: dapp.tags?.map(tag => tag.toLowerCase()),
                 }))
-                .filter(filterDapps(filter, vbdActiveDapps)),
-        [dapps, filter, vbdActiveDapps],
+                .filter(kind === "v1" ? filterDappsV1(filter, vbdActiveDapps) : filterDappsV2(filter, vbdActiveDapps)),
+        [dapps, filter, kind, vbdActiveDapps],
     )
 
     const _fetchWithPage: UseDappsWithPaginationFetch = useCallback(
@@ -76,8 +95,18 @@ export const useAppHubDapps = (filter: DAppType) => {
         [_fetchWithPage],
     )
 
+    const fetchAll = useCallback(
+        (sort: UseDappsWithPaginationSortKey) => {
+            if (!mappedDapps) return []
+            const filteredDapps = [...mappedDapps].sort(sortAppHubDapps(sort))
+            return filteredDapps
+        },
+        [mappedDapps],
+    )
+
     return {
         dependencyLoading: mappedDapps.length === 0,
         fetchWithPage,
+        fetchAll,
     }
 }

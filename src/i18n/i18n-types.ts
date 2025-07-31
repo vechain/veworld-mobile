@@ -2214,11 +2214,23 @@ type RootTranslation = {
 	/**
 	 * N​F​T​s
 	 */
-	DISCOVER_ECOSYSTEM_FILTER_NFTS: string
+	DISCOVER_ECOSYSTEM_FILTER_NFT: string
 	/**
 	 * S​u​s​t​a​i​n​a​b​i​l​i​t​y
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: string
+	/**
+	 * D​e​F​i
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DEFI: string
+	/**
+	 * G​o​v​e​r​n​a​n​c​e
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_GOVERNANCE: string
+	/**
+	 * T​o​o​l​s
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_TOOLS: string
 	/**
 	 * A​d​d​ ​b​o​o​k​m​a​r​k​s​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
 	 */
@@ -6869,11 +6881,23 @@ Thanks for your patience!
 	/**
 	 * NFTs
 	 */
-	DISCOVER_ECOSYSTEM_FILTER_NFTS: () => LocalizedString
+	DISCOVER_ECOSYSTEM_FILTER_NFT: () => LocalizedString
 	/**
 	 * Sustainability
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: () => LocalizedString
+	/**
+	 * DeFi
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DEFI: () => LocalizedString
+	/**
+	 * Governance
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_GOVERNANCE: () => LocalizedString
+	/**
+	 * Tools
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_TOOLS: () => LocalizedString
 	/**
 	 * Add bookmarks in the browser
 	 */
