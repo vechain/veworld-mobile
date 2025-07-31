@@ -5,38 +5,48 @@ import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 
 import { StyleSheet } from "react-native"
 import { typography } from "~Constants"
 import { LocalizedString } from "typesafe-i18n"
+import { useI18nContext } from "~i18n"
 
 type Props = {
     action: () => void
     testID?: string
     buttonTextAfterClick?: LocalizedString
+    rounded?: boolean
+    circled?: boolean
 }
 
 const { fontFamily } = typography
 
 const animationDuration = 350
 
-export const AnimatedSaveHeaderButton = ({ action, testID = "Reorder-HeaderIcon", buttonTextAfterClick }: Props) => {
+export const AnimatedSaveHeaderButton = ({
+    action,
+    testID = "Reorder-HeaderIcon",
+    buttonTextAfterClick,
+    rounded = false,
+}: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
-
+    const { LL } = useI18nContext()
     const hasBeenClicked = useSharedValue(0)
-    const [buttonText, setButtonText] = useState("Save")
+    const [buttonText, setButtonText] = useState(LL.BTN_SAVE())
 
     const handlePress = () => {
         hasBeenClicked.value = 1
-        setButtonText(buttonTextAfterClick ?? "Saved!")
+        setButtonText(buttonTextAfterClick ?? LL.BTN_SAVED())
     }
 
     const onPress = useCallback(() => {
         hasBeenClicked.value = 0
-        setButtonText("Save")
+        setButtonText(LL.BTN_SAVE())
         action()
-    }, [hasBeenClicked, action])
+    }, [hasBeenClicked, action, LL])
 
     const containerAnimatedStyles = useAnimatedStyle(() => {
         return {
             backgroundColor: withTiming(
-                hasBeenClicked.value ? theme.colors.successVariant.background : theme.colors.card,
+                hasBeenClicked.value
+                    ? theme.colors.successVariant.background
+                    : theme.colors.actionBottomSheet.iconBackground,
                 {
                     duration: animationDuration,
                 },
@@ -68,7 +78,7 @@ export const AnimatedSaveHeaderButton = ({ action, testID = "Reorder-HeaderIcon"
             testID={testID}
             disabled={hasBeenClicked.value === 1}
             action={handlePress}
-            animatedStyles={[containerAnimatedStyles, styles.buttonContainer]}>
+            animatedStyles={[containerAnimatedStyles, styles.buttonContainer, rounded && styles.rounded]}>
             <Animated.Text style={[animatedStyles, styles.buttonLabel]} numberOfLines={1}>
                 {buttonText}
             </Animated.Text>
@@ -79,9 +89,7 @@ export const AnimatedSaveHeaderButton = ({ action, testID = "Reorder-HeaderIcon"
 const baseStyles = () =>
     StyleSheet.create({
         buttonContainer: {
-            borderRadius: 100,
-            paddingHorizontal: 16,
-            paddingVertical: 7,
+            minWidth: 64,
             justifyContent: "center",
             alignItems: "center",
         },
@@ -90,5 +98,10 @@ const baseStyles = () =>
             fontSize: 12,
             fontWeight: "600",
             textAlign: "center",
+        },
+        rounded: {
+            borderRadius: 8,
+            paddingHorizontal: 16,
+            paddingVertical: 8,
         },
     })

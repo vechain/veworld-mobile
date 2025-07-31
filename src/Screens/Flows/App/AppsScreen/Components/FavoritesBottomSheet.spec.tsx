@@ -111,7 +111,10 @@ jest.mock("~Components", () => ({
             <View testID="empty-results-text">{subtitle}</View>
         </View>
     ),
-    AnimatedSaveHeaderButton: ({ action }: any) => <View testID="save-button" onTouchEnd={action} />,
+    AnimatedSaveHeaderButton: ({ action, rounded }: any) => (
+        // eslint-disable-next-line react-native/no-inline-styles
+        <View testID="save-button" onTouchEnd={action} style={rounded ? { borderRadius: 100 } : undefined} />
+    ),
     ReorderIconHeaderButton: ({ action }: any) => <View testID="reorder-button" onTouchEnd={action} />,
 }))
 

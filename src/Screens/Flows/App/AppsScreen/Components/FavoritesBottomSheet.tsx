@@ -17,7 +17,7 @@ import {
     ListEmptyResults,
     ReorderIconHeaderButton,
 } from "~Components"
-import { DiscoveryDApp } from "~Constants"
+import { ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -113,6 +113,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
             <BaseBottomSheet
                 ref={ref}
                 floating={false}
+                contentStyle={styles.bottomSheetContent}
                 leftElement={
                     <BaseView style={styles.headerContainer}>
                         <BaseView style={styles.headerContent}>
@@ -127,13 +128,15 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                                 <AnimatedSaveHeaderButton
                                     action={onSaveReorderedDapps}
                                     buttonTextAfterClick={LL.BTN_ORDER_SAVED()}
+                                    rounded
                                 />
                             ) : (
                                 <ReorderIconHeaderButton
-                                    rounded
                                     action={() => {
                                         setIsEditingMode(true)
                                     }}
+                                    circled
+                                    style={styles.reorderIcon}
                                 />
                             )}
                         </BaseView>
@@ -141,6 +144,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 }
                 title={LL.FAVOURITES_DAPPS_TITLE()}
                 snapPoints={["90%"]}
+                backgroundStyle={styles.layout}
                 onDismiss={onClose}>
                 <BaseView style={styles.container}>
                     <NestableScrollContainer>
@@ -176,20 +180,23 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     }
                 }}
                 selectedDApp={selectedDApp}
-                stackBehavior="replace"
             />
         </>
     )
 })
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             flex: 1,
         },
+        bottomSheetContent: {
+            paddingHorizontal: 20,
+        },
         headerContainer: {
             borderBottomWidth: StyleSheet.hairlineWidth,
             borderBottomColor: "rgba(255, 255, 255, 0.1)",
+            paddingHorizontal: 8,
         },
         headerContent: {
             flexDirection: "row",
@@ -199,5 +206,14 @@ const baseStyles = () =>
         listContentContainer: {
             flexGrow: 1,
             paddingTop: 12,
+        },
+        layout: {
+            backgroundColor: theme.colors.actionBottomSheet.background,
+            borderTopRightRadius: 24,
+            borderTopLeftRadius: 24,
+        },
+        reorderIcon: {
+            backgroundColor: theme.colors.actionBottomSheet.iconBackground,
+            borderWidth: 0,
         },
     })

@@ -1,5 +1,5 @@
 import React, { ReactNode } from "react"
-import { StyleSheet, TouchableOpacity } from "react-native"
+import { StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { BaseView } from "~Components/Base"
 import { useTheme } from "~Hooks"
 
@@ -8,9 +8,11 @@ type Props = {
     testID?: string
     action: () => void
     rounded?: boolean
+    circled?: boolean
+    style?: StyleProp<ViewStyle>
 }
 
-export const HeaderIconButton = ({ children, testID, action, rounded = false }: Props) => {
+export const HeaderIconButton = ({ children, testID, action, rounded = false, circled = false, style }: Props) => {
     const theme = useTheme()
 
     return (
@@ -23,6 +25,8 @@ export const HeaderIconButton = ({ children, testID, action, rounded = false }: 
                     styles.container,
                     { borderColor: theme.colors.rightIconHeaderBorder },
                     rounded && styles.rounded,
+                    circled && styles.circled,
+                    style,
                 ]}>
                 {children}
             </BaseView>
@@ -38,6 +42,11 @@ const styles = StyleSheet.create({
         alignContent: "space-between",
     },
     rounded: {
+        borderRadius: 8,
+    },
+    circled: {
         borderRadius: 100,
+        alignItems: "center",
+        justifyContent: "center",
     },
 })
