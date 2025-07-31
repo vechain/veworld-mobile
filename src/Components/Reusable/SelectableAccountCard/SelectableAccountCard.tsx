@@ -51,18 +51,18 @@ export const SelectableAccountCard = memo(
                     containerStyle={[styles.container, selected ? styles.selectedContainer : {}, containerStyle]}
                     innerContainerStyle={styles.innerTouchable}
                     accessibilityValue={{ text: selected ? "selected" : "not selected" }}
-                    px={12}
-                    py={12}>
+                    px={16}
+                    py={16}>
                     <BaseView flexDirection="row" gap={12} alignItems="center" flex={1}>
-                        <AccountIcon address={account.address} size={32} />
+                        <AccountIcon address={account.address} size={40} />
                         <BaseView flexDirection="column" gap={4}>
-                            <BaseText numberOfLines={1} color={theme.colors.title} typographyFont="bodyBold">
+                            <BaseText numberOfLines={1} color={theme.colors.title} typographyFont="bodySemiBold">
                                 {account.alias}
                             </BaseText>
                             <BaseView flexDirection="row" gap={8}>
                                 {account?.device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge mr={8} />}
                                 <BaseText
-                                    typographyFont="bodyMedium"
+                                    typographyFont="captionRegular"
                                     color={theme.isDark ? COLORS.GREY_100 : theme.colors.textLight}>
                                     {vnsName || AddressUtils.humanAddress(vnsAddress || account.address)}
                                 </BaseText>
@@ -72,11 +72,11 @@ export const SelectableAccountCard = memo(
                     <BaseView flexDirection="column">
                         <BaseText
                             color={theme.isDark ? COLORS.GREY_100 : theme.colors.subtitle}
-                            typographyFont="bodyMedium"
+                            typographyFont="bodySemiBold"
                             align="right">
                             {balance}
                         </BaseText>
-                        <BaseText color={theme.colors.textLight} typographyFont="bodyMedium" align="right">
+                        <BaseText color={theme.colors.textLight} typographyFont="captionRegular" align="right">
                             {balanceToken}
                         </BaseText>
                     </BaseView>
