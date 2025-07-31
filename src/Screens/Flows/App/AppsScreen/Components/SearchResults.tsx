@@ -72,15 +72,19 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
         <Animated.View style={rootStyles}>
             {isQueryEmptyButWithResults && (
                 <BaseView justifyContent="space-between" flexDirection="row" alignItems="center" mb={24}>
-                    <BaseText typographyFont="bodyMedium">{LL.BROWSER_HISTORY_DEFAULT_TITLE()}</BaseText>
+                    <BaseView flexDirection="row" alignItems="center" gap={8}>
+                        <BaseIcon name="icon-history" size={16} color={theme.colors.text} />
+                        <BaseText typographyFont="subSubTitleSemiBold">{LL.BROWSER_HISTORY_DEFAULT_TITLE()}</BaseText>
+                    </BaseView>
                     <BaseButton
                         action={onClear}
                         rightIcon={
-                            <BaseIcon size={12} name="icon-retry" style={styles.clearIcon} color={theme.colors.text} />
+                            <BaseIcon size={16} name="icon-retry" style={styles.clearIcon} color={theme.colors.text} />
                         }
-                        variant="ghost"
-                        px={0}
-                        py={0}>
+                        variant="outline"
+                        size="sm"
+                        px={12}
+                        py={4}>
                         <Text style={styles.clearText}>{LL.BROWSER_HISTORY_CLEAR()}</Text>
                     </BaseButton>
                 </BaseView>
@@ -133,8 +137,8 @@ const baseStyles = (theme: ColorThemeType) => {
             justifyContent: "center",
         },
         clearText: {
-            ...typography.defaults.body,
-            fontWeight: "500",
+            ...typography.defaults.bodySemiBold,
+            fontWeight: "600",
             color: theme.colors.text,
         },
         clearIcon: {

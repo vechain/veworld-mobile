@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import WebView from "react-native-webview"
-import { BaseIcon, BaseText, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
+import { BaseIcon, BaseStatusBar, BaseText, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
@@ -92,6 +92,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
             hasTopSafeAreaOnly
             fixedBody={
                 <View style={styles.container}>
+                    <BaseStatusBar hero={true} />
                     {userAgent && !isLoading && (
                         <>
                             <Animated.View ref={webviewContainerRef} style={animatedStyles} collapsable={false}>

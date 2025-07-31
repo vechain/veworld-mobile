@@ -5,7 +5,7 @@ import { default as React, useCallback, useMemo, useState } from "react"
 import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers"
-import { COLORS, SCREEN_HEIGHT } from "~Constants"
+import { ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useDappBookmarking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
@@ -110,7 +110,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             {
                 type: "action",
                 id: "tabs",
-                icon: "icon-tags",
+                icon: "icon-copy",
                 label: LL.BROWSER_SEE_ALL_TABS(),
                 onPress: () => navToTabsManager(),
             },
@@ -188,7 +188,12 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                             </BaseText>
                         </BaseTouchable>
                     ) : (
-                        <BaseSpacer key={`separator-${idx}`} height={1} background={COLORS.GREY_100} my={10} />
+                        <BaseSpacer
+                            key={`separator-${idx}`}
+                            height={1}
+                            background={theme.colors.actionBottomSheet.iconBackground}
+                            my={10}
+                        />
                     ),
                 )}
             </BaseView>
@@ -196,7 +201,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
     )
 })
 
-const baseStyles = () => {
+const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
         actionContainer: {
             flexDirection: "column",
@@ -212,7 +217,7 @@ const baseStyles = () => {
             paddingVertical: 6,
         },
         rootSheet: {
-            backgroundColor: "white",
+            backgroundColor: theme.colors.actionBottomSheet.background,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
         },

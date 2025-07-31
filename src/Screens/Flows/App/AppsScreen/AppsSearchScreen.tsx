@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native"
-import { BaseIcon, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
+import { BaseIcon, BaseStatusBar, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
 import { SearchError, useBrowserNavigation, useBrowserSearch, useThemedStyles } from "~Hooks"
 import { SearchBar } from "./Components/SearchBar"
 import { SearchResults } from "./Components/SearchResults"
@@ -42,6 +42,7 @@ export const AppsSearchScreen = () => {
             noMargin
             fixedBody={
                 <>
+                    <BaseStatusBar hero={true} />
                     <BaseView style={[styles.rootContainer]}>
                         <SearchResults error={error} results={results} isValidQuery={isValidQuery} />
                     </BaseView>

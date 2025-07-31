@@ -520,7 +520,7 @@ const light: Colors = {
         background: ["#0C2749", "#3EA2C3"],
     },
     tabsFooter: {
-        background: COLORS.GREY_200,
+        background: COLORS.WHITE,
     },
     errorAlert: {
         background: COLORS.RED_50,
@@ -668,9 +668,9 @@ const dark: Colors = {
         disabledText: COLORS.DARK_PURPLE_DISABLED,
         disabledIcon: COLORS.DARK_PURPLE_DISABLED,
         disabledIconBackground: COLORS.PURPLE_DISABLED,
-        dangerIcon: COLORS.RED_200,
+        dangerIcon: COLORS.RED_300,
         dangerIconBackground: COLORS.PURPLE_DISABLED,
-        dangerText: COLORS.RED_200,
+        dangerText: COLORS.RED_300,
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,
