@@ -161,9 +161,9 @@ async function buildBatchExecutionClauses({
         verifyingContract: address,
     })
     const signature = await signTypedDataFn(typedData)
-    // If the smart account is not deployed, deploy it first
 
     const clauses: TransactionClause[] = []
+    // If the smart account is not deployed, deploy it first
     if (!isDeployed) {
         clauses.push(
             Clause.callFunction(
@@ -177,7 +177,7 @@ async function buildBatchExecutionClauses({
     clauses.push(
         Clause.callFunction(
             Address.of(address),
-            ABIContract.ofAbi(SimpleAccountABI).getFunction("executeBatchWithCustomAuthorization"),
+            ABIContract.ofAbi(SimpleAccountABI).getFunction("executeBatchWithAuthorization"),
             [
                 typedData.message.to,
                 typedData.message.value?.map((val: string) => BigInt(val)) ?? 0,
@@ -284,7 +284,6 @@ export async function buildSmartAccountTransaction(params: {
     const shouldUseBatchExecution = !hasV1Account
 
     if (genericDelgation && genericDelgation.isGenDelegation) {
-
         const transferClause = getTransferClause(
             genericDelgation.token,
             genericDelgation.tokenAddress,
