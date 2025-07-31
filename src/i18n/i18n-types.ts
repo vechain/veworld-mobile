@@ -1110,6 +1110,14 @@ type RootTranslation = {
 	 */
 	BTN_ORDER_SAVED: string
 	/**
+	 * Save
+	 */
+	BTN_SAVE: string
+	/**
+	 * Saved!
+	 */
+	BTN_SAVED: string
+	/**
 	 * A​d​d​ ​c​o​n​t​a​c​t
 	 */
 	BTN_ADD_CONTACT: string
@@ -5853,6 +5861,14 @@ Thanks for your patience!
 	 * Open dApp
 	 */
 	BTN_OPEN_DAPP: () => LocalizedString
+	/**
+	 * Save
+	 */
+	BTN_SAVE: () => LocalizedString
+	/**
+	 * Saved!
+	 */
+	BTN_SAVED: () => LocalizedString
 	/**
 	 * Paste Address
 	 */
