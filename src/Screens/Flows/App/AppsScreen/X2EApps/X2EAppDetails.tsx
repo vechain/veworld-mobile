@@ -13,6 +13,14 @@ const TIMING_CONFIG = {
     easing: Easing.bezier(0.25, 0.1, 0.25, 1),
 }
 
+const CLOSING_TIMING = {
+    duration: 200,
+    easing: Easing.bezier(0.42, 0, 1, 1), // Ease-out for closing
+}
+
+// No bounce layout transition for smoother closing
+const SMOOTH_LAYOUT = LinearTransition.springify().damping(20).stiffness(100).mass(0.6)
+
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
 const Title = ({ children }: PropsWithChildren) => {
@@ -65,7 +73,7 @@ const Stats = ({
 }: StatsProps) => {
     return (
         <AnimatedBaseView
-            layout={LinearTransition.springify().damping(12).stiffness(100).mass(0.8)}
+            layout={SMOOTH_LAYOUT}
             flexDirection={"row"}
             justifyContent={"space-between"}
             py={4}
@@ -115,11 +123,7 @@ const Actions = ({
     )
 
     return (
-        <AnimatedBaseView
-            layout={LinearTransition.springify().damping(12).stiffness(100).mass(0.8)}
-            flexDirection="column"
-            gap={16}
-            px={0}>
+        <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="column" gap={16} px={0}>
             <Animated.View style={[styles.initialAnimationState, favoriteButtonStyle]}>
                 <BaseButton variant="outline" action={onAddToFavorites}>
                     <BaseView flexDirection="row" alignItems="center">
@@ -152,11 +156,7 @@ const Description = ({ children }: { children: string }) => {
     )
 
     return (
-        <AnimatedBaseView
-            layout={LinearTransition.springify().damping(12).stiffness(100).mass(0.8)}
-            flexDirection="row"
-            gap={8}
-            alignItems="flex-start">
+        <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="row" gap={8} alignItems="flex-start">
             <Animated.View style={[styles.initialAnimationState, descriptionStyle]}>
                 <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="body">
                     {children}
@@ -168,12 +168,7 @@ const Description = ({ children }: { children: string }) => {
 
 const Container = ({ children }: PropsWithChildren) => {
     return (
-        <AnimatedBaseView
-            layout={LinearTransition.springify().damping(15).stiffness(150).mass(0.5)}
-            flexDirection="column"
-            gap={8}
-            px={24}
-            pb={24}>
+        <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="column" gap={8} px={24} pb={24}>
             {children}
         </AnimatedBaseView>
     )
@@ -189,15 +184,11 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
         const shouldShow = show && visible
 
         return {
-            opacity: shouldShow
-                ? withTiming(1, TIMING_CONFIG)
-                : withTiming(0, { duration: 150, easing: Easing.in(Easing.ease) }),
+            opacity: shouldShow ? withTiming(1, TIMING_CONFIG) : withTiming(0, CLOSING_TIMING),
             height: show ? "auto" : 0,
             transform: [
                 {
-                    translateY: shouldShow
-                        ? withTiming(0, TIMING_CONFIG)
-                        : withTiming(-10, { duration: 150, easing: Easing.in(Easing.ease) }),
+                    translateY: shouldShow ? withTiming(0, TIMING_CONFIG) : withTiming(-5, CLOSING_TIMING),
                 },
             ],
         }
@@ -205,7 +196,7 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
 
     return (
         <AnimatedBaseView
-            layout={LinearTransition.springify().damping(12).stiffness(100).mass(0.8)}
+            layout={SMOOTH_LAYOUT}
             style={[styles.detailsContainer, animatedStyles]}
             flexDirection="column">
             {children}

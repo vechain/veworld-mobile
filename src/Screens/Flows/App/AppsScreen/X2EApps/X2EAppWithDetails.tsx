@@ -32,7 +32,7 @@ const TIMING_CONFIG = {
 }
 
 const CLOSING_TIMING = {
-    duration: 200,
+    duration: 250, // Slower closing for smoother effect
     easing: Easing.bezier(0.42, 0, 1, 1), // Ease-out for closing
 }
 
@@ -77,9 +77,11 @@ export const X2EAppWithDetails = ({
         } else {
             // Closing - hide content first, then collapse
             setContentVisible(false)
+            // Allow more time for the content to hide before collapsing the container
             setTimeout(() => {
                 setShowDetails(false)
-                setIsAnimating(false)
+                // Keep disabled longer to prevent interaction during full close animation
+                setTimeout(() => setIsAnimating(false), 300)
             }, 200)
         }
     }
@@ -96,7 +98,7 @@ export const X2EAppWithDetails = ({
                       // Complete the animation with a spring for natural feel
                       withSpring(24, SPRING_CONFIG),
                   )
-                : withTiming(0, CLOSING_TIMING),
+                : withTiming(0, CLOSING_TIMING), // Use pure timing for closing for a controlled animation
         }
     }, [showDetails])
 
@@ -126,7 +128,8 @@ export const X2EAppWithDetails = ({
     return (
         <AnimatedBaseView
             flexDirection="column"
-            layout={LinearTransition.springify().damping(12).stiffness(100).mass(0.8)}
+            // Use less bouncy animation parameters for layout transitions
+            layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}
             style={[styles.mainContainer, containerStyle]}>
             <TouchableOpacity
                 activeOpacity={0.7}
@@ -143,7 +146,7 @@ export const X2EAppWithDetails = ({
                 <AnimatedBaseView
                     flexDirection="row"
                     style={[padding]}
-                    layout={LinearTransition.springify().damping(12).stiffness(100).mass(0.8)}>
+                    layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}>
                     <BaseView flexDirection="row" gap={24} flex={1}>
                         <Image
                             source={
