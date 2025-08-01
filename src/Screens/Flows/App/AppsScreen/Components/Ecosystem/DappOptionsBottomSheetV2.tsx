@@ -49,10 +49,9 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
 
 type Props = {
     bsRef: RefObject<BottomSheetModalMethods>
-    selectedDapp: DiscoveryDApp | undefined
 }
 
-export const DappOptionsBottomSheetV2 = ({ bsRef, selectedDapp }: Props) => {
+export const DappOptionsBottomSheetV2 = ({ bsRef }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { onClose } = useBottomSheetModal({ externalRef: bsRef })
 
@@ -65,7 +64,7 @@ export const DappOptionsBottomSheetV2 = ({ bsRef, selectedDapp }: Props) => {
             backgroundStyle={styles.layout}
             noMargins
             floating>
-            {selectedDapp && <Content dapp={selectedDapp} onClose={onClose} />}
+            {dapp => <Content dapp={dapp} onClose={onClose} />}
         </BaseBottomSheet>
     )
 }
@@ -79,6 +78,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flexDirection: "row",
             gap: 24,
             paddingVertical: 6,
+            alignItems: "center",
         },
         icon: {
             padding: 8,

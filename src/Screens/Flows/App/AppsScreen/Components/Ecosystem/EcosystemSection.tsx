@@ -1,6 +1,5 @@
 import React, { useCallback, useState } from "react"
 import { BaseView } from "~Components"
-import { DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { UseDappsWithPaginationSortKey } from "~Hooks/useDappsWithPagination"
 import { useAppHubDapps } from "~Hooks/useDappsWithPagination/useAppHubDapps"
@@ -15,7 +14,6 @@ import { DappTypeV2 } from "./types"
 export const EcosystemSection = () => {
     const [selectedFilter, setSelectedFilter] = useState(DappTypeV2.ALL)
     const [selectedSort, setSelectedSort] = useState<UseDappsWithPaginationSortKey>("alphabetic_asc")
-    const [selectedDapp, setSelectedDapp] = useState<DiscoveryDApp>()
 
     const { ref: sortBs, onOpen: onOpenSortBs } = useBottomSheetModal()
     const { ref: dappOptionsBs, onOpen: onOpenDappOptionsBs } = useBottomSheetModal()
@@ -27,13 +25,6 @@ export const EcosystemSection = () => {
     })
 
     const openSortApps = useCallback(() => onOpenSortBs(), [onOpenSortBs])
-    const onDappOptionsClicked = useCallback(
-        (dapp: DiscoveryDApp) => {
-            setSelectedDapp(dapp)
-            onOpenDappOptionsBs()
-        },
-        [onOpenDappOptionsBs],
-    )
 
     return (
         <BaseView px={16} gap={16}>
@@ -41,12 +32,12 @@ export const EcosystemSection = () => {
             <FiltersSection selectedFilter={selectedFilter} onPress={setSelectedFilter} />
             <DAppsList
                 items={sortedDapps}
-                onMorePress={onDappOptionsClicked}
+                onMorePress={onOpenDappOptionsBs}
                 onOpenDApp={onDAppPress}
                 isLoading={dependencyLoading}
             />
             <SortDAppsBottomSheetV2 onSortChange={setSelectedSort} selectedSort={selectedSort} bsRef={sortBs} />
-            <DappOptionsBottomSheetV2 bsRef={dappOptionsBs} selectedDapp={selectedDapp} />
+            <DappOptionsBottomSheetV2 bsRef={dappOptionsBs} />
         </BaseView>
     )
 }
