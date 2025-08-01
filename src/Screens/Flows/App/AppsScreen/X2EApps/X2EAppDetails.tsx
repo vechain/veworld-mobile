@@ -19,37 +19,83 @@ const Title = ({ children }: PropsWithChildren) => {
     )
 }
 
-const Stats = () => {
+interface StatItemProps {
+    value: string
+    label: string
+}
+
+interface StatsProps {
+    rating?: StatItemProps
+    users?: StatItemProps
+    co2Saved?: StatItemProps
+    customStats?: StatItemProps[]
+}
+
+const Stats = ({
+    rating = { value: "4.5", label: "Rating" },
+    users = { value: "1.1M", label: "Users" },
+    co2Saved = { value: "10.8 T", label: "CO2 saved" },
+    customStats = [],
+}: StatsProps) => {
     return (
         <BaseView flexDirection={"row"} justifyContent={"space-between"} py={4} px={8} gap={8}>
-            <BaseView flexDirection="column" gap={2}>
-                <BaseText typographyFont={"subSubTitleSemiBold"}>{"4.5"}</BaseText>
-                <BaseText typographyFont={"captionRegular"}>{"Rating"}</BaseText>
-            </BaseView>
-            <BaseView flexDirection="column" gap={2}>
-                <BaseText typographyFont={"subSubTitleSemiBold"}>{"1.1M"}</BaseText>
-                <BaseText typographyFont={"captionRegular"}>{"Users"}</BaseText>
-            </BaseView>
-            <BaseView flexDirection="column" gap={2}>
-                <BaseText typographyFont={"subSubTitleSemiBold"}>{"10.8 T"}</BaseText>
-                <BaseText typographyFont={"captionMedium"}>{"CO2 saved"}</BaseText>
-            </BaseView>
+            {rating && (
+                <BaseView flexDirection="column" gap={2}>
+                    <BaseText typographyFont={"subSubTitleSemiBold"}>{rating.value}</BaseText>
+                    <BaseText typographyFont={"captionRegular"}>{rating.label}</BaseText>
+                </BaseView>
+            )}
+            {users && (
+                <BaseView flexDirection="column" gap={2}>
+                    <BaseText typographyFont={"subSubTitleSemiBold"}>{users.value}</BaseText>
+                    <BaseText typographyFont={"captionRegular"}>{users.label}</BaseText>
+                </BaseView>
+            )}
+            {co2Saved && (
+                <BaseView flexDirection="column" gap={2}>
+                    <BaseText typographyFont={"subSubTitleSemiBold"}>{co2Saved.value}</BaseText>
+                    <BaseText typographyFont={"captionMedium"}>{co2Saved.label}</BaseText>
+                </BaseView>
+            )}
+            {customStats.map((stat, index) => (
+                <BaseView key={index} flexDirection="column" gap={2}>
+                    <BaseText typographyFont={"subSubTitleSemiBold"}>{stat.value}</BaseText>
+                    <BaseText typographyFont={"captionMedium"}>{stat.label}</BaseText>
+                </BaseView>
+            ))}
         </BaseView>
     )
 }
 
-const Actions = () => {
+interface ActionsProps {
+    onAddToFavorites?: () => void
+    onOpen?: () => void
+    isFavorite?: boolean
+    openButtonText?: string
+    favoriteButtonText?: string
+}
+
+const Actions = ({
+    onAddToFavorites = () => {},
+    onOpen = () => {},
+    isFavorite = false,
+    openButtonText,
+    favoriteButtonText,
+}: ActionsProps) => {
     const { LL } = useI18nContext()
     return (
-        <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="column" gap={16} px={0}>
-            <BaseButton variant="outline" action={() => {}}>
+        <AnimatedBaseView layout={LinearTransition.duration(300)} flexDirection="column" gap={16} px={0}>
+            <BaseButton variant="outline" action={onAddToFavorites}>
                 <BaseView flexDirection="row" alignItems="center">
-                    <BaseIcon name="icon-star" size={16} />
+                    <BaseIcon name={"icon-star"} size={16} />
                     <BaseSpacer width={12} />
-                    <BaseText typographyFont="bodyMedium">{LL.BTN_ADD_TO_FAVORITES()}</BaseText>
+                    <BaseText typographyFont="bodyMedium">
+                        {favoriteButtonText ||
+                            (isFavorite ? LL.BTN_REMOVE_FROM_FAVORITES?.() : LL.BTN_ADD_TO_FAVORITES?.())}
+                    </BaseText>
                 </BaseView>
             </BaseButton>
-            <BaseButton action={() => {}}>{LL.BTN_OPEN()}</BaseButton>
+            <BaseButton action={onOpen}>{openButtonText || LL.BTN_OPEN()}</BaseButton>
         </AnimatedBaseView>
     )
 }
@@ -57,7 +103,7 @@ const Actions = () => {
 const Description = ({ children }: { children: string }) => {
     const theme = useTheme()
     return (
-        <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="row" gap={8} alignItems="flex-start">
+        <AnimatedBaseView layout={LinearTransition.duration(300)} flexDirection="row" gap={8} alignItems="flex-start">
             <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="body">
                 {children}
             </BaseText>
@@ -67,7 +113,7 @@ const Description = ({ children }: { children: string }) => {
 
 const Container = ({ children }: PropsWithChildren) => {
     return (
-        <AnimatedBaseView layout={LinearTransition.duration(100)} flexDirection="column" gap={8} px={24} pb={24}>
+        <AnimatedBaseView layout={LinearTransition.duration(300)} flexDirection="column" gap={8} px={24} pb={24}>
             {children}
         </AnimatedBaseView>
     )
@@ -78,14 +124,14 @@ type Props = PropsWithChildren<{ show: boolean }>
 const X2EAppDetails = ({ children, show }: Props) => {
     const animatedStyles = useAnimatedStyle(() => {
         return {
-            opacity: show ? withTiming(1, { duration: 100 }) : withTiming(0, { duration: 0 }),
+            opacity: show ? withTiming(1, { duration: 300 }) : withTiming(0, { duration: 100 }),
             height: show ? "auto" : 0,
         }
     }, [show])
 
     return (
         <AnimatedBaseView
-            layout={LinearTransition.duration(100)}
+            layout={LinearTransition.duration(300)}
             style={[styles.detailsContainer, animatedStyles]}
             flexDirection="column">
             {children}

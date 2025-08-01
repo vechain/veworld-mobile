@@ -1,4 +1,4 @@
-import { PropsWithChildren, default as React, useMemo, useState } from "react"
+import { PropsWithChildren, default as React, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
@@ -46,8 +46,10 @@ export const X2EAppWithDetails = ({
         }
     }, [showDetails])
 
-    const padding = useMemo(() => {
-        return showDetails ? 24 : 0
+    const padding = useAnimatedStyle(() => {
+        return {
+            padding: showDetails ? withTiming(24, { duration: 100 }) : withTiming(0, { duration: 100 }),
+        }
     }, [showDetails])
 
     return (
@@ -63,10 +65,7 @@ export const X2EAppWithDetails = ({
                         </BaseView>
                     )}
                 </BaseView>
-                <AnimatedBaseView
-                    flexDirection="row"
-                    style={{ padding: padding }}
-                    layout={LinearTransition.duration(100)}>
+                <AnimatedBaseView flexDirection="row" style={padding} layout={LinearTransition.duration(300)}>
                     <BaseView flexDirection="row" gap={24} flex={1}>
                         <Image
                             source={
