@@ -1,6 +1,6 @@
 import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useRef } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import { FlatList, ListRenderItemInfo, StyleSheet, VirtualizedList } from "react-native"
 import { BaseSpacer } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { DappHorizontalCardSkeleton } from "~Screens/Flows/App/DiscoverScreen/Components/DappHorizontalCardSkeleton"
@@ -40,6 +40,9 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
         return <DappHorizontalCardSkeleton />
     }, [])
 
+    const getItemCount = useCallback((data: any) => (Array.isArray(data) ? data.length : 0), [])
+    const getItem = useCallback((data: any, index: number) => (Array.isArray(data) ? data[index] : null), [])
+
     if (isLoading && items.length === 0) {
         return (
             <FlatList
@@ -55,7 +58,7 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
     }
 
     return (
-        <FlatList
+        <VirtualizedList
             ref={flatListRef}
             data={items}
             scrollEnabled={true}
@@ -65,6 +68,8 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}
+            getItemCount={getItemCount}
+            getItem={getItem}
         />
     )
 }

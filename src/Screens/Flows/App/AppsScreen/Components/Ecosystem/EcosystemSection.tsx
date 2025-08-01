@@ -35,7 +35,7 @@ export const EcosystemSection = () => {
                 onOpenDApp={onDAppPress}
                 isLoading={dependencyLoading}
             />
-            <SortDAppsBottomSheetV2 onSortChange={setSelectedSort} selectedSort={selectedSort} ref={sortBs} />
+            <SortDAppsBottomSheetV2 onSortChange={setSelectedSort} selectedSort={selectedSort} bsRef={sortBs} />
         </BaseView>
     )
 }

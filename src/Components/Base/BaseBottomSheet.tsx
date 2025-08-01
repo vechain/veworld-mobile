@@ -102,6 +102,7 @@ const BaseBottomSheetContent = ({
     snapPoints,
     title,
     children,
+    floating,
 }: PropsWithChildren<{
     bottomSafeArea: boolean
     bottomSafeAreaSize: number
@@ -111,6 +112,7 @@ const BaseBottomSheetContent = ({
     footerStyle: StyleProp<ViewStyle>[] | StyleProp<ViewStyle>
     snapPoints?: string[]
     title?: string
+    floating: boolean
 }>) => {
     return (
         <>
@@ -124,7 +126,7 @@ const BaseBottomSheetContent = ({
                 <BottomSheetView style={contentViewStyle}>
                     {title && <BaseText typographyFont="title">{title}</BaseText>}
                     {children}
-                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                    {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
                 </BottomSheetView>
             )}
             {footer && (
@@ -296,7 +298,8 @@ const _BaseBottomSheet = <TData,>(
                         footer={footer}
                         footerStyle={footerStyle}
                         snapPoints={snapPoints}
-                        title={title}>
+                        title={title}
+                        floating={floating}>
                         {children(p?.data)}
                     </BaseBottomSheetContent>
                 )
@@ -309,7 +312,8 @@ const _BaseBottomSheet = <TData,>(
                     footer={footer}
                     footerStyle={footerStyle}
                     snapPoints={snapPoints}
-                    title={title}>
+                    title={title}
+                    floating={floating}>
                     {children}
                 </BaseBottomSheetContent>
             )}
