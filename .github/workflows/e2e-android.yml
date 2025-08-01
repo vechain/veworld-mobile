@@ -113,7 +113,7 @@ jobs:
                   working-directory: "."
 
             - name: precheck fastlane build
-              id: build
+              id: prebuild
               run: |
                   type fastlane || true
                   type bundle || true
