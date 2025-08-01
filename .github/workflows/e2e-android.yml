@@ -117,6 +117,7 @@ jobs:
               run: |
                   type fastlane || true
                   type bundle || true
+                  apt list || true
                   bundle update || true
             - name: Build apk
               id: build
