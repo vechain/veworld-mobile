@@ -20,6 +20,7 @@ type Args = {
      */
     token: string
     isGalactica: boolean
+    enabled?: boolean
 }
 
 /**
@@ -83,7 +84,7 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
     } = useQuery({
         queryKey: ["GenericDelegatorEstimate", clauses, signer],
         queryFn: () => estimateGenericDelegatorFees({ clauses, signer, networkType: selectedNetwork.type }),
-        enabled: isValidGenericDelegatorNetwork(selectedNetwork.type),
+        enabled: clauses?.length > 0 && isValidGenericDelegatorNetwork(selectedNetwork.type),
         refetchInterval: 10000,
         placeholderData: keepPreviousData,
     })
@@ -95,7 +96,7 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
     } = useQuery({
         queryKey: ["GenericDelegatorDepositAddress", selectedNetwork.type],
         queryFn: () => getDelegatorDepositAddress({ networkType: selectedNetwork.type }),
-        enabled: isValidGenericDelegatorNetwork(selectedNetwork.type),
+        enabled: clauses?.length > 0 && isValidGenericDelegatorNetwork(selectedNetwork.type),
         placeholderData: keepPreviousData,
         refetchInterval: 5 * 60 * 1000,
     })

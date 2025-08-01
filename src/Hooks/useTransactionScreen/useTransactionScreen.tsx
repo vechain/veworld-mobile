@@ -38,7 +38,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNutils, error } from "~Utils"
-import { GenericDelegationDetails, useSmartWallet } from "../../VechainWalletKit"
+import { useSmartWallet } from "../../VechainWalletKit"
 
 type Props = {
     clauses: TransactionClause[]
@@ -129,10 +129,35 @@ export const useTransactionScreen = ({
     const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
     const { tokens: availableTokens, isLoading: isLoadingTokens } = useGenericDelegationTokens()
 
+    const [transactionClauses, setTransactionClauses] = useState<TransactionClause[]>(clauses)
+    const [isLoadingClauses, setIsLoadingClauses] = useState(false)
+
+    useEffect(() => {
+        const buildClauses = async () => {
+            if (selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET) {
+                setIsLoadingClauses(true)
+                try {
+                    const smartWalletTx = await buildTransactionWithSmartWallet(clauses)
+                    setTransactionClauses(smartWalletTx.body.clauses)
+                } catch (e) {
+                    error(ERROR_EVENTS.SEND, e)
+                    setTransactionClauses(clauses)
+                } finally {
+                    setIsLoadingClauses(false)
+                }
+            } else {
+                setTransactionClauses(clauses)
+            }
+        }
+
+        buildClauses()
+    }, [selectedAccount.device.type, buildTransactionWithSmartWallet, clauses])
+
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
-        clauses,
+        clauses: isLoadingClauses ? [] : transactionClauses,
         providedGas: dappRequest?.options?.gas,
+        disabled: isLoadingClauses,
     })
 
     const transactionOutputs = useMemo(() => gas?.outputs, [gas?.outputs])
@@ -193,32 +218,8 @@ export const useTransactionScreen = ({
         isGalactica,
     })
 
-    const [transactionClauses, setTransactionClauses] = useState<TransactionClause[]>(clauses)
-    const [isLoadingClauses, setIsLoadingClauses] = useState(false)
-
-    useEffect(() => {
-        const buildClauses = async () => {
-            if (selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET) {
-                setIsLoadingClauses(true)
-                try {
-                    const smartWalletTx = await buildTransactionWithSmartWallet(clauses)
-                    setTransactionClauses(smartWalletTx.body.clauses)
-                } catch (e) {
-                    error(ERROR_EVENTS.SEND, e)
-                    setTransactionClauses(clauses)
-                } finally {
-                    setIsLoadingClauses(false)
-                }
-            } else {
-                setTransactionClauses(clauses)
-            }
-        }
-
-        buildClauses()
-    }, [selectedAccount.device.type, buildTransactionWithSmartWallet, clauses])
-
     const genericDelegatorFees = useGenericDelegationFees({
-        clauses: transactionClauses,
+        clauses: isLoadingClauses ? [] : transactionClauses,
         signer: selectedAccount.address,
         token: selectedDelegationToken,
         isGalactica,

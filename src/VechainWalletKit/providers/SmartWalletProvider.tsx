@@ -153,6 +153,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             options?: TransactionOptions,
             genericDelgationDetails?: GenericDelegationDetails,
         ): Promise<Transaction> => {
+            console.log("buildTransaction start")
             if (!adapter.isAuthenticated || !ownerAddress) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
@@ -187,6 +188,8 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     maxFeePerGas: options?.maxFeePerGas,
                     maxPriorityFeePerGas: options?.maxPriorityFeePerGas,
                 })
+
+                console.log("buildTransaction end")
 
                 return Transaction.of(txBody)
             } catch (error) {
