@@ -1,8 +1,8 @@
 import { default as React, useCallback, useMemo } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet, Text } from "react-native"
+import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { ColorThemeType, typography } from "~Constants"
+import { ColorThemeType } from "~Constants"
 import { SearchError, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { resetBrowserState, useAppDispatch } from "~Storage/Redux"
@@ -73,26 +73,35 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
             {isQueryEmptyButWithResults && (
                 <BaseView justifyContent="space-between" flexDirection="row" alignItems="center" mb={24}>
                     <BaseView flexDirection="row" alignItems="center" gap={8}>
-                        <BaseIcon name="icon-history" size={16} color={theme.colors.text} />
-                        <BaseText typographyFont="subSubTitleSemiBold">{LL.BROWSER_HISTORY_DEFAULT_TITLE()}</BaseText>
+                        <BaseIcon name="icon-history" size={16} color={theme.colors.history.titleColor} />
+                        <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.history.titleColor}>
+                            {LL.BROWSER_HISTORY_DEFAULT_TITLE()}
+                        </BaseText>
                     </BaseView>
                     <BaseButton
                         action={onClear}
                         rightIcon={
-                            <BaseIcon size={16} name="icon-retry" style={styles.clearIcon} color={theme.colors.text} />
+                            <BaseIcon
+                                size={16}
+                                name="icon-retry"
+                                style={styles.clearIcon}
+                                color={theme.colors.history.button.text}
+                            />
                         }
-                        variant="outline"
                         size="sm"
+                        style={styles.clearButton}
+                        textColor={theme.colors.history.button.text}
+                        typographyFont="bodySemiBold"
                         px={12}
                         py={4}>
-                        <Text style={styles.clearText}>{LL.BROWSER_HISTORY_CLEAR()}</Text>
+                        {LL.BROWSER_HISTORY_CLEAR()}
                     </BaseButton>
                 </BaseView>
             )}
 
             {isValidQuery && (
                 <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={24}>
-                    <BaseText typographyFont="bodyMedium">
+                    <BaseText typographyFont="bodyMedium" color={theme.colors.history.titleColor}>
                         {LL.BROWSER_HISTORY_RESULTS({ amount: results.length })}
                     </BaseText>
                 </BaseView>
@@ -105,9 +114,9 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                             name="icon-history"
                             style={styles.errorIcon}
                             size={32}
-                            color={theme.colors.emptyStateIcon.foreground}
+                            color={theme.colors.history.historyItem.iconColor}
                         />
-                        <BaseText>{LL.BROWSER_HISTORY_EMPTY()}</BaseText>
+                        <BaseText color={theme.colors.history.historyItem.title}>{LL.BROWSER_HISTORY_EMPTY()}</BaseText>
                     </BaseView>
                 </BaseView>
             ) : (
@@ -136,11 +145,6 @@ const baseStyles = (theme: ColorThemeType) => {
         rootContainerEmpty: {
             justifyContent: "center",
         },
-        clearText: {
-            ...typography.defaults.bodySemiBold,
-            fontWeight: "600",
-            color: theme.colors.text,
-        },
         clearIcon: {
             marginLeft: 4,
         },
@@ -151,10 +155,15 @@ const baseStyles = (theme: ColorThemeType) => {
         errorIcon: {
             borderRadius: 999,
             padding: 16,
-            backgroundColor: theme.colors.emptyStateIcon.background,
+            backgroundColor: theme.colors.history.historyItem.iconBackground,
             alignSelf: "center",
         },
         flatListPadding: { paddingBottom: 24 },
         flatListRoot: { flex: 1 },
+        clearButton: {
+            backgroundColor: theme.colors.history.button.background,
+            borderColor: theme.colors.history.button.border,
+            borderWidth: 1,
+        },
     })
 }

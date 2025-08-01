@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
 import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
@@ -36,12 +37,13 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
             style={[styles.container, tab.id === selectedTabId && styles.selected]}
             onPress={onPress}>
             <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
-                <View style={styles.header}>
-                    <BaseText typographyFont="bodySemiBold" color={"white"} numberOfLines={1} flexGrow={1}>
-                        {tab.title}
-                    </BaseText>
-                </View>
-                <TouchableOpacity style={styles.footer} onPress={onClose} activeOpacity={0.8}>
+                <TouchableOpacity style={styles.header} onPress={onClose} activeOpacity={0.8}>
+                    <View style={styles.headerText}>
+                        <FastImage source={{ uri: tab.preview }} style={styles.headerIcon as ImageStyle} />
+                        <BaseText typographyFont="bodySemiBold" color={"white"} numberOfLines={1}>
+                            {tab.title}
+                        </BaseText>
+                    </View>
                     <BaseIcon name="icon-x" size={16} color={"white"} />
                 </TouchableOpacity>
             </ImageBackground>
@@ -56,23 +58,36 @@ const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
         container: {
             width: cardSize,
-            height: 188,
+            height: 194,
             minWidth: 148,
             borderRadius: 12,
             borderWidth: 3,
-            backgroundColor: theme.colors.background,
-            borderColor: theme.colors.background,
+            backgroundColor: theme.colors.tabsFooter.background,
+            borderColor: theme.colors.tabsFooter.background,
             overflow: "hidden",
         },
         selected: {
-            borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_400,
+            borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
         },
         header: {
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: "#202226BF",
+            justifyContent: "space-between",
+            gap: 8,
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_90_TRANSPARENT : COLORS.PURPLE_RGBA_TRANSPARENT,
             paddingHorizontal: 12,
             paddingVertical: 10,
+        },
+        headerText: {
+            flex: 0.8,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+        },
+        headerIcon: {
+            width: 16,
+            height: 16,
+            borderRadius: 4,
         },
         image: {
             width: "100%",

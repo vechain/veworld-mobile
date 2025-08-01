@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
-import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useVisitedUrls } from "~Hooks/useBrowserSearch"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
@@ -73,12 +72,14 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
                 style={styles.touchableContainer}
                 onPress={handleNavigate}
                 testID="SEARCH_RESULT_ITEM_CONTAINER">
-                <BaseView style={styles.iconContainer}>
+                <BaseView
+                    style={styles.iconContainer}
+                    bg={loadFallback || !iconUri ? theme.colors.history.historyItem.iconBackground : "transparent"}>
                     {loadFallback || !iconUri ? (
                         <BaseIcon
                             name={item.type === HistoryUrlKind.DAPP ? "icon-image" : "icon-globe"}
-                            size={16}
-                            color={theme.colors.emptyStateIcon.foreground}
+                            size={20}
+                            color={theme.colors.history.historyItem.iconColor}
                             testID="SEARCH_RESULT_ITEM_FALLBACK_ICON"
                         />
                     ) : (
@@ -96,10 +97,17 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
 
                 {/* Title & Desc */}
                 <BaseView flex={1} justifyContent="center">
-                    <BaseText typographyFont="bodySemiBold" testID="SEARCH_RESULT_ITEM_NAME">
+                    <BaseText
+                        typographyFont="bodySemiBold"
+                        testID="SEARCH_RESULT_ITEM_NAME"
+                        color={theme.colors.history.historyItem.title}>
                         {name}
                     </BaseText>
-                    <BaseText typographyFont="captionMedium" numberOfLines={1} testID="SEARCH_RESULT_ITEM_DESCRIPTION">
+                    <BaseText
+                        typographyFont="captionMedium"
+                        numberOfLines={1}
+                        testID="SEARCH_RESULT_ITEM_DESCRIPTION"
+                        color={theme.colors.history.historyItem.subtitle}>
                         {description}
                     </BaseText>
                 </BaseView>
@@ -109,13 +117,17 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
             <BaseTouchable
                 onPress={isValidQuery ? handleNavigate : handleRemoveClick}
                 testID="SEARCH_RESULT_ITEM_REMOVE">
-                <BaseIcon name={isValidQuery ? "icon-arrow-link" : "icon-x"} size={20} color={theme.colors.text} />
+                <BaseIcon
+                    name={isValidQuery ? "icon-arrow-link" : "icon-x"}
+                    size={20}
+                    color={theme.colors.history.historyItem.rightIconColor}
+                />
             </BaseTouchable>
         </BaseView>
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
         rootContainer: {
             gap: 12,
@@ -128,7 +140,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flexShrink: 1,
         },
         icon: {
-            borderRadius: 4,
+            borderRadius: 8,
             overflow: "hidden",
         },
         dappImage: {
@@ -136,11 +148,10 @@ const baseStyles = (theme: ColorThemeType) =>
             height: IMAGE_SIZE,
         },
         iconContainer: {
-            borderRadius: 4,
+            borderRadius: 8,
             overflow: "hidden",
             alignItems: "center",
             justifyContent: "center",
-            backgroundColor: theme.colors.card,
             width: IMAGE_SIZE,
             height: IMAGE_SIZE,
         },
