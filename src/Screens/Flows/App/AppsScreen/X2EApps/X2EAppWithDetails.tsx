@@ -6,8 +6,8 @@ import Animated, {
     withSpring,
     withTiming,
     Easing,
-    withSequence,
-    withDelay,
+    useSharedValue,
+    interpolate,
 } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
@@ -16,20 +16,20 @@ import { useThemedStyles } from "~Hooks"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { X2EAppDetails } from "./X2EAppDetails"
 
-// Animation configurations
-const SPRING_CONFIG = {
-    damping: 12,
-    stiffness: 90,
-    mass: 0.6,
-    overshootClamping: false,
-    restSpeedThreshold: 0.3,
-    restDisplacementThreshold: 0.3,
+// Consistent animation timings for opening and closing
+const ANIMATION_TIMING = {
+    fontSizeChange: 300,
+    labelTransition: 300,
+    contentFadeDelay: 150,
+    contentFade: 300,
+    containerExpand: 300,
+    containerCollapse: 300,
+    paddingChange: 300,
+    totalDuration: 700, // Total animation duration
 }
 
-const TIMING_CONFIG = {
-    duration: 250,
-    easing: Easing.bezier(0.25, 0.1, 0.25, 1),
-}
+// Smooth easing for all animations
+const SMOOTH_EASING = Easing.bezier(0.22, 1, 0.36, 1)
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
@@ -58,99 +58,185 @@ export const X2EAppWithDetails = ({
     const [isAnimating, setIsAnimating] = useState(false)
     const [contentVisible, setContentVisible] = useState(isDefaultVisible)
 
+    // Animation progress shared value (0 = closed, 1 = open)
+    const animationProgress = useSharedValue(isDefaultVisible ? 1 : 0)
+    // Press animation scale value
+    const scale = useSharedValue(1)
+
     const toggleDetails = () => {
         if (isAnimating) return
         setIsAnimating(true)
 
-        // Toggle the details state
-        if (!showDetails) {
-            // Opening
+        // Whether we're opening or closing
+        const isOpening = !showDetails
+
+        if (isOpening) {
+            // Show container immediately but content will fade in
             setShowDetails(true)
-            // Very short delay to start the sequence
-            setTimeout(() => setContentVisible(true), 50)
-            // Allow enough time for all sequential animations to complete
-            // Add extra time since we're doing true sequential animations now
-            setTimeout(() => setIsAnimating(false), 800)
-        } else {
-            // Closing - hide content first, then collapse
-            setContentVisible(false)
-            // Allow more time for the content to hide before collapsing the container
+
+            // Start animation to value 1 (open)
+            animationProgress.value = withTiming(1, {
+                duration: ANIMATION_TIMING.totalDuration,
+                easing: SMOOTH_EASING,
+            })
+
+            // Show content with a delay
             setTimeout(() => {
-                setShowDetails(false)
-                // Keep disabled longer to prevent interaction during full close animation
-                setTimeout(() => setIsAnimating(false), 350)
-            }, 150)
+                setContentVisible(true)
+            }, ANIMATION_TIMING.contentFadeDelay)
+
+            // Animation is complete
+            setTimeout(() => {
+                setIsAnimating(false)
+            }, ANIMATION_TIMING.totalDuration)
+        } else {
+            // Start animation to value 0 (closed)
+            animationProgress.value = withTiming(0, {
+                duration: ANIMATION_TIMING.totalDuration,
+                easing: SMOOTH_EASING,
+            })
+
+            // Hide content with a delay to allow fade out
+            setTimeout(() => {
+                setContentVisible(false)
+
+                // Hide container after content is hidden
+                setTimeout(() => {
+                    setShowDetails(false)
+                    setIsAnimating(false)
+                }, ANIMATION_TIMING.containerCollapse)
+            }, ANIMATION_TIMING.contentFadeDelay)
         }
     }
 
-    const containerStyle = useAnimatedStyle(() => {
-        return {
-            backgroundColor: showDetails
-                ? withTiming(theme.colors.assetDetailsCard.background, TIMING_CONFIG)
-                : withSequence(
-                      // First keep color while shape starts changing
-                      withTiming(theme.colors.assetDetailsCard.background, {
-                          duration: 50,
-                          easing: Easing.out(Easing.ease),
-                      }),
-                      // Then fade to card color
-                      withTiming(theme.colors.card, {
-                          duration: 200,
-                          easing: Easing.bezier(0.22, 1, 0.36, 1),
-                      }),
-                  ),
-            borderRadius: showDetails
-                ? withSequence(
-                      // Quick start with small movement
-                      withTiming(8, { duration: 80, easing: Easing.ease }),
-                      // Complete the animation with a spring for natural feel
-                      withSpring(24, SPRING_CONFIG),
-                  )
-                : withSequence(
-                      // Start with slight change
-                      withTiming(20, {
-                          duration: 100,
-                          easing: Easing.bezier(0.22, 1, 0.36, 1),
-                      }),
-                      // Complete smooth fade to 0
-                      withTiming(0, {
-                          duration: 200,
-                          easing: Easing.bezier(0.22, 1, 0.36, 1),
-                      }),
-                  ),
-        }
-    }, [showDetails])
+    // Press handlers for scaling animation
+    const onPressIn = () => {
+        scale.value = withSpring(0.97, { damping: 12, stiffness: 200 })
+    }
 
+    const onPressOut = () => {
+        scale.value = withSpring(1, { damping: 12, stiffness: 200 })
+    }
+
+    // Container style animation
+    const containerStyle = useAnimatedStyle(() => {
+        // Use conditional to properly type the backgroundColor
+        const backgroundColor =
+            animationProgress.value > 0.5
+                ? withTiming(theme.colors.assetDetailsCard.background, {
+                      duration: ANIMATION_TIMING.containerExpand,
+                      easing: SMOOTH_EASING,
+                  })
+                : withTiming(theme.colors.card, {
+                      duration: ANIMATION_TIMING.containerCollapse,
+                      easing: SMOOTH_EASING,
+                  })
+
+        return {
+            backgroundColor,
+            borderRadius: interpolate(animationProgress.value, [0, 1], [0, 24]),
+        }
+    }, [theme])
+
+    // Padding animation
+    const padding = useAnimatedStyle(() => {
+        return {
+            paddingTop: interpolate(animationProgress.value, [0, 1], [0, 24]),
+            paddingHorizontal: interpolate(animationProgress.value, [0, 1], [0, 24]),
+            paddingBottom: interpolate(animationProgress.value, [0, 1], [0, 12]),
+        }
+    }, [])
+
+    // Font size animated style
+    const fontStyle = useAnimatedStyle(() => {
+        // Interpolate font size between small (15) and large (17)
+        const fontSize = interpolate(animationProgress.value, [0, 1], [15, 17])
+
+        // Interpolate font weight between normal (500) and bold (600)
+        const fontWeight = interpolate(animationProgress.value, [0, 1], [500, 600])
+
+        return {
+            fontSize,
+            fontWeight: `${fontWeight}` as any,
+        }
+    })
+
+    // Content animation
     const contentStyle = useAnimatedStyle(() => {
         return {
             opacity: contentVisible
-                ? withTiming(1, { duration: 250, easing: Easing.out(Easing.ease) })
-                : withTiming(0, { duration: 150, easing: Easing.in(Easing.ease) }),
+                ? withTiming(1, {
+                      duration: ANIMATION_TIMING.contentFade,
+                      easing: SMOOTH_EASING,
+                  })
+                : withTiming(0, {
+                      duration: ANIMATION_TIMING.contentFade,
+                      easing: SMOOTH_EASING,
+                  }),
             transform: [
                 {
                     scale: contentVisible
-                        ? withTiming(1, { duration: 250, easing: Easing.out(Easing.ease) })
-                        : withTiming(0.95, { duration: 150, easing: Easing.in(Easing.ease) }),
+                        ? withTiming(1, {
+                              duration: ANIMATION_TIMING.contentFade,
+                              easing: SMOOTH_EASING,
+                          })
+                        : withTiming(0.97, {
+                              duration: ANIMATION_TIMING.contentFade,
+                              easing: SMOOTH_EASING,
+                          }),
                 },
             ],
         }
     }, [contentVisible])
 
-    const padding = useAnimatedStyle(() => {
+    // Description text animation style
+    const descriptionStyle = useAnimatedStyle(() => {
         return {
-            padding: showDetails
-                ? withDelay(50, withTiming(24, { duration: 300, easing: Easing.out(Easing.ease) }))
-                : withSequence(
-                      // Initial hold to sync with container animation
-                      withTiming(24, { duration: 50, easing: Easing.out(Easing.ease) }),
-                      // Smooth fade out with nice easing
-                      withTiming(0, {
-                          duration: 250,
-                          easing: Easing.bezier(0.22, 1, 0.36, 1),
-                      }),
-                  ),
+            opacity: interpolate(animationProgress.value, [0, 0.5], [1, 0]),
+            transform: [
+                {
+                    translateY: interpolate(animationProgress.value, [0, 0.5], [0, -10]),
+                },
+            ],
         }
-    }, [showDetails])
+    })
+
+    // Category label animation style
+    const categoryLabelStyle = useAnimatedStyle(() => {
+        return {
+            opacity: interpolate(animationProgress.value, [0.5, 1], [0, 1]),
+            transform: [
+                {
+                    translateY: interpolate(animationProgress.value, [0.5, 1], [10, 0]),
+                },
+            ],
+        }
+    })
+
+    // Press animation style
+    const pressAnimationStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ scale: scale.value }],
+        }
+    })
+
+    // Chevron animation
+    const chevronStyle = useAnimatedStyle(() => {
+        return {
+            opacity: interpolate(animationProgress.value, [0.3, 0.7], [0, 1]),
+            transform: [
+                {
+                    translateX: interpolate(animationProgress.value, [0.3, 1], [20, 0]),
+                },
+                {
+                    translateY: interpolate(animationProgress.value, [0.3, 1], [-15, 0]),
+                },
+                {
+                    rotate: `${interpolate(animationProgress.value, [0, 1], [-90, 0])}deg`,
+                },
+            ],
+        }
+    })
 
     return (
         <AnimatedBaseView
@@ -158,74 +244,88 @@ export const X2EAppWithDetails = ({
             // Use less bouncy animation parameters for layout transitions
             layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}
             style={[styles.mainContainer, containerStyle]}>
-            <TouchableOpacity
-                activeOpacity={0.7}
-                onPress={toggleDetails}
-                disabled={isAnimating}
-                testID="X2E_APP_WITH_DETAILS_ROW">
-                <BaseView justifyContent="center">
-                    {showDetails && (
-                        <BaseView style={styles.chevron}>
-                            <BaseIcon name="icon-chevron-up" size={16} color={theme.colors.label.text} />
-                        </BaseView>
-                    )}
-                </BaseView>
-                <AnimatedBaseView
-                    flexDirection="row"
-                    style={[padding]}
-                    layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}>
-                    <BaseView flexDirection="row" gap={24} flex={1}>
-                        <Image
-                            source={
-                                loadFallback
-                                    ? require("~Assets/Img/dapp-fallback.png")
-                                    : {
-                                          uri: icon,
-                                      }
-                            }
-                            style={[{ height: 64, width: 64 }, styles.icon] as StyleProp<ImageStyle>}
-                            onError={() => setLoadFallback(true)}
-                            resizeMode="contain"
-                        />
-                        <BaseView flexDirection="column" gap={4} pr={100} overflow="hidden">
-                            <BaseText
-                                typographyFont={showDetails ? "subTitleSemiBold" : "subSubTitleSemiBold"}
-                                numberOfLines={1}
-                                color={theme.colors.assetDetailsCard.title}
-                                testID="DAPP_WITH_DETAILS_NAME">
-                                {name}
-                            </BaseText>
-                            {showDetails ? (
-                                <Animated.View style={contentStyle}>
-                                    <BaseText
-                                        bg={theme.colors.label.backgroundLighter}
-                                        px={8}
-                                        py={4}
-                                        borderRadius={4}
-                                        typographyFont="captionMedium"
-                                        color={theme.colors.label.text}
-                                        testID="DAPP_WITH_DETAILS_URL">
-                                        {category}
-                                    </BaseText>
-                                </Animated.View>
-                            ) : (
-                                <BaseText
-                                    typographyFont="captionRegular"
-                                    numberOfLines={2}
-                                    ellipsizeMode="tail"
-                                    pr={24}
-                                    color={theme.colors.assetDetailsCard.text}
-                                    testID="DAPP_WITH_DETAILS_URL">
-                                    {desc}
-                                </BaseText>
-                            )}
-                        </BaseView>
+            <Animated.View style={pressAnimationStyle}>
+                <TouchableOpacity
+                    activeOpacity={0.9}
+                    onPress={toggleDetails}
+                    onPressIn={onPressIn}
+                    onPressOut={onPressOut}
+                    disabled={isAnimating}
+                    testID="X2E_APP_WITH_DETAILS_ROW">
+                    <BaseView justifyContent="center">
+                        <Animated.View style={[styles.chevron, chevronStyle]}>
+                            <BaseIcon name="icon-chevron-down" size={16} color={theme.colors.label.text} />
+                        </Animated.View>
                     </BaseView>
-                </AnimatedBaseView>
-            </TouchableOpacity>
-            <X2EAppDetails show={showDetails} visible={contentVisible}>
-                {children}
-            </X2EAppDetails>
+                    <AnimatedBaseView
+                        flexDirection="row"
+                        style={[padding]}
+                        layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}>
+                        <BaseView flexDirection="row" gap={24} flex={1}>
+                            <Image
+                                source={
+                                    loadFallback
+                                        ? require("~Assets/Img/dapp-fallback.png")
+                                        : {
+                                              uri: icon,
+                                          }
+                                }
+                                style={[{ height: 64, width: 64 }, styles.icon] as StyleProp<ImageStyle>}
+                                onError={() => setLoadFallback(true)}
+                                resizeMode="contain"
+                            />
+                            <BaseView
+                                flexDirection="column"
+                                gap={8}
+                                pr={16}
+                                overflow="hidden"
+                                flex={1}
+                                style={styles.textContainer}>
+                                <Animated.Text
+                                    style={[styles.appNameText, fontStyle]}
+                                    numberOfLines={1}
+                                    testID="DAPP_WITH_DETAILS_NAME">
+                                    {name}
+                                </Animated.Text>
+                                {showDetails ? (
+                                    <Animated.View style={[contentStyle, categoryLabelStyle]}>
+                                        <BaseView flexDirection="row">
+                                            <BaseText
+                                                bg={theme.colors.label.backgroundLighter}
+                                                px={8}
+                                                py={4}
+                                                borderRadius={4}
+                                                typographyFont="captionMedium"
+                                                color={theme.colors.label.text}
+                                                testID="DAPP_WITH_DETAILS_CATEGORY">
+                                                {category}
+                                            </BaseText>
+                                        </BaseView>
+                                    </Animated.View>
+                                ) : (
+                                    <Animated.View style={descriptionStyle}>
+                                        <BaseText
+                                            typographyFont="captionRegular"
+                                            numberOfLines={2}
+                                            ellipsizeMode="tail"
+                                            color={theme.colors.assetDetailsCard.text}
+                                            w={100}
+                                            testID="DAPP_WITH_DETAILS_DESC">
+                                            {desc}
+                                        </BaseText>
+                                    </Animated.View>
+                                )}
+                            </BaseView>
+                        </BaseView>
+                    </AnimatedBaseView>
+                </TouchableOpacity>
+            </Animated.View>
+
+            <Animated.View>
+                <X2EAppDetails show={showDetails} visible={contentVisible}>
+                    {children}
+                </X2EAppDetails>
+            </Animated.View>
         </AnimatedBaseView>
     )
 }
@@ -248,5 +348,12 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 99,
             padding: 8,
             backgroundColor: theme.colors.label.background,
+        },
+        textContainer: {
+            zIndex: 1,
+        },
+        appNameText: {
+            color: theme.colors.assetDetailsCard.title,
+            fontFamily: "Inter-SemiBold",
         },
     })
