@@ -228,7 +228,11 @@ export const HomeStack = () => {
                         headerShown: false,
                     }}
                 />
-                <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.BROWSER}
+                    component={InAppBrowser}
+                    options={{ headerShown: false, animation: "slide_from_bottom" }}
+                />
                 <Screen
                     name={Routes.SETTINGS_NETWORK}
                     component={ChangeNetworkScreen}

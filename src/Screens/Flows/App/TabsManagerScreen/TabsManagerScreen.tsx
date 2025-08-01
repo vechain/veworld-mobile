@@ -2,19 +2,29 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { FlatList, StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseStatusBar, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
+import {
+    BaseIcon,
+    BaseSpacer,
+    BaseStatusBar,
+    BaseText,
+    BaseTouchable,
+    BaseView,
+    Layout,
+    useFeatureFlags,
+} from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { RootStackParamListApps, Routes } from "~Navigation"
+import { RootStackParamListApps, RootStackParamListBrowser, Routes } from "~Navigation"
 import { Tab, closeAllTabs, selectTabs, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { TabViewCard } from "./Components"
 import { PlatformUtils } from "~Utils"
+import { TabViewCard } from "./Components"
 
 export const TabsManagerScreen = () => {
-    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListApps>>()
+    const nav = useNavigation<NativeStackNavigationProp<RootStackParamListApps & RootStackParamListBrowser>>()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
+    const { betterWorldFeature } = useFeatureFlags()
 
     const tabs = useAppSelector(selectTabs)
 
@@ -25,8 +35,12 @@ export const TabsManagerScreen = () => {
     }, [dispatch])
 
     const onNewTab = useCallback(() => {
-        nav.replace(Routes.APPS_SEARCH)
-    }, [nav])
+        if (betterWorldFeature.appsScreen.enabled) {
+            nav.replace(Routes.APPS_SEARCH)
+        } else {
+            nav.replace(Routes.DISCOVER_SEARCH)
+        }
+    }, [betterWorldFeature.appsScreen.enabled, nav])
 
     const onDone = useCallback(() => {
         nav.goBack()
@@ -81,7 +95,7 @@ export const TabsManagerScreen = () => {
                 </BaseView>
             }
             fixedBody={
-                <BaseView flex={1} p={24} pt={8} bg={theme.colors.tabsFooter.background} style={styles.listContainer}>
+                <BaseView flex={1} px={24} pt={8} bg={theme.colors.tabsFooter.background} style={styles.listContainer}>
                     <BaseText mb={8} align="center" typographyFont="bodyMedium" color={buttonTextColor}>
                         {tabs.length} {tabs.length === 1 ? "tab" : "tabs"}
                     </BaseText>

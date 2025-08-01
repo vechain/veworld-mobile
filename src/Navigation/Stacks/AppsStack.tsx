@@ -27,7 +27,11 @@ export const AppsStack = () => {
         <Navigator id="AppsStack" screenOptions={{ headerShown: false, animation }}>
             <Group>
                 <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
-                <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.BROWSER}
+                    component={InAppBrowser}
+                    options={{ headerShown: false, animation: "slide_from_bottom" }}
+                />
             </Group>
 
             <Screen name={Routes.APPS_SEARCH} component={AppsSearchScreen} options={{ headerShown: false }} />

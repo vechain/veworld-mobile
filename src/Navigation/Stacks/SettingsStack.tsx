@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
+import { useFeatureFlags } from "~Components"
 import { useNavAnimation } from "~Hooks"
 import { Device, LocalDevice } from "~Model"
 import { Routes } from "~Navigation/Enums"
@@ -19,7 +20,6 @@ import {
     NotificationScreen,
     PrivacyScreen,
     ResetAppScreen,
-    SearchScreen,
     SettingsScreen,
     SettingsTransactionsScreen,
     TabsManagerScreen,
@@ -28,6 +28,7 @@ import {
     WalletManagementScreen,
 } from "~Screens"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
+import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -55,10 +56,12 @@ export type RootStackParamListSettings = {
     }
     [Routes.DISCOVER_SEARCH]: undefined
     [Routes.DISCOVER_TABS_MANAGER]: undefined
+    [Routes.APPS_TABS_MANAGER]: undefined
+    [Routes.APPS_SEARCH]: undefined
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
-        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
+        returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
     }
 }
 
@@ -66,6 +69,7 @@ const Settings = createNativeStackNavigator<RootStackParamListSettings>()
 
 export const SettingsStack = () => {
     const { animation } = useNavAnimation()
+    const { betterWorldFeature } = useFeatureFlags()
 
     return (
         <Settings.Navigator screenOptions={{ headerShown: false, animation }}>
@@ -172,12 +176,20 @@ export const SettingsStack = () => {
                 options={{ headerShown: false }}
             />
             <Settings.Screen
-                name={Routes.DISCOVER_TABS_MANAGER}
+                name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER}
                 component={TabsManagerScreen}
                 options={{ headerShown: false }}
             />
-            <Settings.Screen name={Routes.DISCOVER_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
-            <Settings.Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+            <Settings.Screen
+                name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
+                component={AppsSearchScreen}
+                options={{ headerShown: false }}
+            />
+            <Settings.Screen
+                name={Routes.BROWSER}
+                component={InAppBrowser}
+                options={{ headerShown: false, animation: "slide_from_bottom" }}
+            />
         </Settings.Navigator>
     )
 }

@@ -4,7 +4,7 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { default as React, useCallback, useMemo, useState } from "react"
 import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
-import { useInAppBrowser } from "~Components/Providers"
+import { useFeatureFlags, useInAppBrowser } from "~Components/Providers"
 import { ColorThemeType, SCREEN_HEIGHT } from "~Constants"
 import { useDappBookmarking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -42,19 +42,28 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         >()
     const dispatch = useAppDispatch()
     const currentTabId = useAppSelector(selectCurrentTabId)
+    const { betterWorldFeature } = useFeatureFlags()
     const [actionContainerHeight, setActionContainerHeight] = useState(SCREEN_HEIGHT / 2)
 
     const navToTabsManager = useCallback(async () => {
         await onNavigate?.()
-        nav.replace(Routes.DISCOVER_TABS_MANAGER)
+        if (betterWorldFeature.appsScreen.enabled) {
+            nav.replace(Routes.APPS_TABS_MANAGER)
+        } else {
+            nav.replace(Routes.DISCOVER_TABS_MANAGER)
+        }
         onClose?.()
-    }, [nav, onNavigate, onClose])
+    }, [nav, onNavigate, onClose, betterWorldFeature.appsScreen.enabled])
 
     const navToNewTab = useCallback(async () => {
         await onNavigate?.()
-        nav.replace(Routes.APPS_SEARCH)
+        if (betterWorldFeature.appsScreen.enabled) {
+            nav.replace(Routes.APPS_SEARCH)
+        } else {
+            nav.replace(Routes.DISCOVER_SEARCH)
+        }
         onClose?.()
-    }, [nav, onNavigate, onClose])
+    }, [nav, onNavigate, onClose, betterWorldFeature.appsScreen.enabled])
 
     const actions: BottomSheetActionItem[] = useMemo(() => {
         const favoriteItem: BottomSheetAction = isBookMarked

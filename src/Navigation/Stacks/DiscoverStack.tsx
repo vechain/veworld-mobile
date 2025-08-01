@@ -2,7 +2,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { useNavAnimation } from "~Hooks"
 import { Routes } from "~Navigation/Enums"
-import { DiscoverScreen, FavouritesScreen, InAppBrowser, SearchScreen, TabsManagerScreen } from "~Screens"
+import { DiscoverScreen, FavouritesScreen, InAppBrowser, TabsManagerScreen } from "~Screens"
+import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 
 export type RootStackParamListBrowser = {
     [Routes.DISCOVER]: undefined
@@ -27,11 +28,15 @@ export const DiscoverStack = () => {
         <Navigator id="BrowserStack" screenOptions={{ headerShown: false, animation }}>
             <Group>
                 <Screen name={Routes.DISCOVER} component={DiscoverScreen} options={{ headerShown: false }} />
-                <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.BROWSER}
+                    component={InAppBrowser}
+                    options={{ headerShown: false, animation: "slide_from_bottom" }}
+                />
             </Group>
 
             <Screen name={Routes.DISCOVER_FAVOURITES} component={FavouritesScreen} options={{ headerShown: false }} />
-            <Screen name={Routes.DISCOVER_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
+            <Screen name={Routes.DISCOVER_SEARCH} component={AppsSearchScreen} options={{ headerShown: false }} />
             <Screen
                 name={Routes.DISCOVER_TABS_MANAGER}
                 component={TabsManagerScreen}
