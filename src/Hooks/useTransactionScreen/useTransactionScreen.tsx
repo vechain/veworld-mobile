@@ -254,7 +254,6 @@ export const useTransactionScreen = ({
         [B3TR.symbol]: B3TR.address,
     }
 
-    console.log("feeMap", feeMap)
     // need to know its delegated here.
     let genericDelgation = {
         token: selectedDelegationToken,
@@ -266,7 +265,7 @@ export const useTransactionScreen = ({
         delegatorAddress: genericDelegatorFees.delegatorAddress ?? "",
     }
 
-    console.log("genericDelgation", genericDelgation)
+    // console.log("genericDelgation", genericDelgation)
     const { buildTransaction } = useTransactionBuilder({
         clauses,
         gas,

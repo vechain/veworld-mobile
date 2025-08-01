@@ -124,9 +124,9 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
             console.log("SmartWalletProvider signMessage", adapter.isAuthenticated)
-            // if (!adapter.isAuthenticated) {
-            //     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
-            // }
+            if (!adapter.isAuthenticated) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            }
             return await adapter.signMessage(message)
         },
         [adapter],
@@ -134,9 +134,9 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const signTransaction = useCallback(
         async (tx: Transaction, _options?: SignOptions): Promise<Buffer> => {
-            // if (!adapter.isAuthenticated) {
-            //     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
-            // }
+            if (!adapter.isAuthenticated) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            }
             return await adapter.signTransaction(tx)
         },
         [adapter],
@@ -144,9 +144,9 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const signTypedData = useCallback(
         async (data: TypedDataPayload): Promise<string> => {
-            // if (!adapter.isAuthenticated) {
-            //     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
-            // }
+            if (!adapter.isAuthenticated) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            }
             return await adapter.signTypedData(data)
         },
         [adapter],
@@ -165,9 +165,9 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 delegatorAddress: string
             },
         ): Promise<Transaction> => {
-            // if (!adapter.isAuthenticated || !ownerAddress) {
-            //     throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
-            // }
+            if (!adapter.isAuthenticated || !ownerAddress) {
+                throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
+            }
             if (!smartAccountConfig || !chainId) {
                 throw new WalletError(
                     WalletErrorType.WALLET_NOT_FOUND,
