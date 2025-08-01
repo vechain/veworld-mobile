@@ -28,7 +28,7 @@ export const StakedCard = memo(() => {
     if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return null
 
     return (
-        <BaseView mb={40}>
+        <BaseView>
             <BaseText py={10} typographyFont="bodySemiBold">
                 {LL.ACTIVITY_STAKING_LABEL()}
             </BaseText>
@@ -44,9 +44,6 @@ export const StakedCard = memo(() => {
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        root: {
-            marginBottom: 40,
-        },
         container: {
             backgroundColor: theme.colors.card,
             padding: 16,

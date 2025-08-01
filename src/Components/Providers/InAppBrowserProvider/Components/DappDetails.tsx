@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from "react"
-import { StyleSheet } from "react-native"
+import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
@@ -45,7 +45,7 @@ const NotVerifiedWarning = () => {
     return (
         <BaseView
             flexDirection="row"
-            w={100}
+            alignItems="center"
             bg={theme.colors.warningAlert.background}
             gap={12}
             py={8}
@@ -54,16 +54,24 @@ const NotVerifiedWarning = () => {
             mt={8}
             testID="DAPP_DETAILS_NOT_VERIFIED_WARNING">
             <BaseIcon size={16} color={theme.colors.warningAlert.icon} name="icon-alert-triangle" />
-            <BaseText typographyFont="body" color={theme.colors.warningAlert.text}>
+            <BaseText typographyFont="body" color={theme.colors.warningAlert.text} flex={1} flexDirection="row">
                 {LL.NOT_VERIFIED_DAPP()}
             </BaseText>
         </BaseView>
     )
 }
 
-type Props = PropsWithChildren<{ show: boolean }>
+type Props = PropsWithChildren<{
+    show: boolean
+    style?: StyleProp<ViewStyle>
+    /**
+     * Skip the animated styles
+     */
+    noAnimation?: boolean
+    testID?: string
+}>
 
-const DappDetails = ({ children, show }: Props) => {
+const DappDetails = ({ children, show, style, noAnimation = false, testID }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const animatedStyles = useAnimatedStyle(() => {
         return {
@@ -75,9 +83,10 @@ const DappDetails = ({ children, show }: Props) => {
     return (
         <AnimatedBaseView
             layout={LinearTransition.duration(300)}
-            style={[styles.detailsContainer, animatedStyles]}
+            style={[styles.detailsContainer, noAnimation ? undefined : animatedStyles, style]}
             flexDirection="column"
-            borderRadius={8}>
+            borderRadius={8}
+            testID={testID}>
             {children}
         </AnimatedBaseView>
     )
@@ -93,7 +102,7 @@ export { DappDetails }
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         detailsContainer: {
-            backgroundColor: theme.colors.editSpeedBs.result.background,
+            backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_50,
             borderColor: theme.colors.editSpeedBs.result.border,
             borderWidth: 1,
             padding: 16,
