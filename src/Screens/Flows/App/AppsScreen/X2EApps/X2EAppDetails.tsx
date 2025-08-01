@@ -302,22 +302,23 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
         }
     }
 
+    // Better animation style to avoid both autoNaN issues and flashing gaps
     const animatedStyles = useAnimatedStyle(() => {
+        // Opacity animation with proper sequence
+        const opacity = shouldShow
+            ? withTiming(1, TIMING_CONFIG)
+            : withSequence(
+                  withTiming(1, { duration: 50, easing: Easing.linear }),
+                  withTiming(0, { duration: 200, easing: SMOOTH_OUT_EASING }),
+              )
+
+        // Use maxHeight for a more stable animation that won't cause layout jumps
         return {
-            opacity: shouldShow
-                ? withTiming(1, TIMING_CONFIG)
-                : withSequence(
-                      // Hold briefly at full opacity
-                      withTiming(1, { duration: 50, easing: Easing.linear }),
-                      // Then fade out with dynamic easing
-                      withTiming(0, { duration: 200, easing: SMOOTH_OUT_EASING }),
-                  ),
-            height: shouldShow
-                ? withTiming("auto", { duration: TIMING_CONFIG.duration, easing: SMOOTH_OUT_EASING })
-                : withTiming(0, { duration: TIMING_CONFIG.duration, easing: SMOOTH_OUT_EASING }),
+            opacity,
+            maxHeight: shouldShow ? 1000 : 0, // Fixed height eliminates the calculation issues
             overflow: "hidden",
         }
-    }, [show, visible])
+    }, [shouldShow])
 
     return (
         <AnimatedBaseView

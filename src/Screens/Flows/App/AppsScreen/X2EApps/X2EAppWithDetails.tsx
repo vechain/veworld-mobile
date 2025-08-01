@@ -59,6 +59,9 @@ export const X2EAppWithDetails = ({
     const [contentVisible, setContentVisible] = useState(isDefaultVisible)
     const [detailsLayoutReady, setDetailsLayoutReady] = useState(isDefaultVisible)
 
+    // Used to prevent the flash on first open
+    const [hasBeenOpenedBefore, setHasBeenOpenedBefore] = useState(isDefaultVisible)
+
     // Animation progress shared value (0 = closed, 1 = open)
     const animationProgress = useSharedValue(isDefaultVisible ? 1 : 0)
     // Press animation scale value
@@ -68,6 +71,7 @@ export const X2EAppWithDetails = ({
     useEffect(() => {
         if (isDefaultVisible) {
             setDetailsLayoutReady(true)
+            setHasBeenOpenedBefore(true)
         }
     }, [isDefaultVisible])
 
@@ -79,6 +83,9 @@ export const X2EAppWithDetails = ({
         const isOpening = !showDetails
 
         if (isOpening) {
+            // Track that we've opened it at least once
+            setHasBeenOpenedBefore(true)
+
             // Show container immediately but content will fade in
             setShowDetails(true)
 
@@ -104,23 +111,21 @@ export const X2EAppWithDetails = ({
                 }, ANIMATION_TIMING.totalDuration)
             })
         } else {
+            // First fade out content
+            setContentVisible(false)
+
             // Start animation to value 0 (closed)
             animationProgress.value = withTiming(0, {
                 duration: ANIMATION_TIMING.totalDuration,
                 easing: SMOOTH_EASING,
             })
 
-            // Hide content with a delay to allow fade out
+            // Wait for animation to complete
             setTimeout(() => {
-                setContentVisible(false)
-
-                // Hide container after content is hidden
-                setTimeout(() => {
-                    setShowDetails(false)
-                    setIsAnimating(false)
-                    setDetailsLayoutReady(false)
-                }, ANIMATION_TIMING.containerCollapse)
-            }, ANIMATION_TIMING.contentFadeDelay)
+                setDetailsLayoutReady(false)
+                setShowDetails(false)
+                setIsAnimating(false)
+            }, ANIMATION_TIMING.totalDuration)
         }
     }
 
@@ -330,11 +335,14 @@ export const X2EAppWithDetails = ({
                 </TouchableOpacity>
             </Animated.View>
 
-            <Animated.View>
-                <X2EAppDetails show={showDetails && detailsLayoutReady} visible={contentVisible}>
-                    {children}
-                </X2EAppDetails>
-            </Animated.View>
+            {/* Conditionally render the details component to avoid first-time layout calculation issues */}
+            {(hasBeenOpenedBefore || showDetails) && (
+                <Animated.View>
+                    <X2EAppDetails show={showDetails && detailsLayoutReady} visible={contentVisible}>
+                        {children}
+                    </X2EAppDetails>
+                </Animated.View>
+            )}
         </AnimatedBaseView>
     )
 }
