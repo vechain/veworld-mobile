@@ -31,11 +31,6 @@ const TIMING_CONFIG = {
     easing: Easing.bezier(0.25, 0.1, 0.25, 1),
 }
 
-const CLOSING_TIMING = {
-    duration: 250, // Slower closing for smoother effect
-    easing: Easing.bezier(0.42, 0, 1, 1), // Ease-out for closing
-}
-
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
 type Props = PropsWithChildren<{
@@ -71,9 +66,11 @@ export const X2EAppWithDetails = ({
         if (!showDetails) {
             // Opening
             setShowDetails(true)
-            // Delay content visibility until container starts expanding
+            // Very short delay to start the sequence
             setTimeout(() => setContentVisible(true), 50)
-            setTimeout(() => setIsAnimating(false), 400)
+            // Allow enough time for all sequential animations to complete
+            // Add extra time since we're doing true sequential animations now
+            setTimeout(() => setIsAnimating(false), 800)
         } else {
             // Closing - hide content first, then collapse
             setContentVisible(false)
@@ -81,8 +78,8 @@ export const X2EAppWithDetails = ({
             setTimeout(() => {
                 setShowDetails(false)
                 // Keep disabled longer to prevent interaction during full close animation
-                setTimeout(() => setIsAnimating(false), 300)
-            }, 200)
+                setTimeout(() => setIsAnimating(false), 350)
+            }, 150)
         }
     }
 
@@ -90,7 +87,18 @@ export const X2EAppWithDetails = ({
         return {
             backgroundColor: showDetails
                 ? withTiming(theme.colors.assetDetailsCard.background, TIMING_CONFIG)
-                : withTiming(theme.colors.card, CLOSING_TIMING),
+                : withSequence(
+                      // First keep color while shape starts changing
+                      withTiming(theme.colors.assetDetailsCard.background, {
+                          duration: 50,
+                          easing: Easing.out(Easing.ease),
+                      }),
+                      // Then fade to card color
+                      withTiming(theme.colors.card, {
+                          duration: 200,
+                          easing: Easing.bezier(0.22, 1, 0.36, 1),
+                      }),
+                  ),
             borderRadius: showDetails
                 ? withSequence(
                       // Quick start with small movement
@@ -98,7 +106,18 @@ export const X2EAppWithDetails = ({
                       // Complete the animation with a spring for natural feel
                       withSpring(24, SPRING_CONFIG),
                   )
-                : withTiming(0, CLOSING_TIMING), // Use pure timing for closing for a controlled animation
+                : withSequence(
+                      // Start with slight change
+                      withTiming(20, {
+                          duration: 100,
+                          easing: Easing.bezier(0.22, 1, 0.36, 1),
+                      }),
+                      // Complete smooth fade to 0
+                      withTiming(0, {
+                          duration: 200,
+                          easing: Easing.bezier(0.22, 1, 0.36, 1),
+                      }),
+                  ),
         }
     }, [showDetails])
 
@@ -120,8 +139,16 @@ export const X2EAppWithDetails = ({
     const padding = useAnimatedStyle(() => {
         return {
             padding: showDetails
-                ? withDelay(50, withTiming(24, { duration: 200, easing: Easing.out(Easing.ease) }))
-                : withTiming(0, { duration: 100, easing: Easing.in(Easing.ease) }),
+                ? withDelay(50, withTiming(24, { duration: 300, easing: Easing.out(Easing.ease) }))
+                : withSequence(
+                      // Initial hold to sync with container animation
+                      withTiming(24, { duration: 50, easing: Easing.out(Easing.ease) }),
+                      // Smooth fade out with nice easing
+                      withTiming(0, {
+                          duration: 250,
+                          easing: Easing.bezier(0.22, 1, 0.36, 1),
+                      }),
+                  ),
         }
     }, [showDetails])
 

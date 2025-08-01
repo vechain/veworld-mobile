@@ -1,6 +1,13 @@
-import React, { PropsWithChildren } from "react"
+import React, { PropsWithChildren, useState, useEffect } from "react"
 import { StyleSheet } from "react-native"
-import Animated, { LinearTransition, useAnimatedStyle, withTiming, Easing, withDelay } from "react-native-reanimated"
+import Animated, {
+    LinearTransition,
+    useAnimatedStyle,
+    withTiming,
+    Easing,
+    withDelay,
+    withSequence,
+} from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
@@ -13,13 +20,11 @@ const TIMING_CONFIG = {
     easing: Easing.bezier(0.25, 0.1, 0.25, 1),
 }
 
-const CLOSING_TIMING = {
-    duration: 200,
-    easing: Easing.bezier(0.42, 0, 1, 1), // Ease-out for closing
-}
-
 // No bounce layout transition for smoother closing
 const SMOOTH_LAYOUT = LinearTransition.springify().damping(20).stiffness(100).mass(0.6)
+
+// Smooth ease-out bezier curve for dynamic closing
+const SMOOTH_OUT_EASING = Easing.bezier(0.22, 1, 0.36, 1)
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
@@ -38,18 +43,53 @@ interface StatItemProps {
     delay?: number
 }
 
-// Separate component for each stat item that safely uses hooks
-const StatItem = ({ value, label, delay = 0 }: StatItemProps) => {
-    const animatedStyle = useAnimatedStyle(
+// Base animation durations and delays
+const BASE_ENTRY_DELAY = 100
+const ENTRY_DELAY_INCREMENT = 80
+
+const Description = ({ children }: { children: string }) => {
+    const theme = useTheme()
+
+    const descriptionStyle = useAnimatedStyle(
         () => ({
-            opacity: withDelay(delay, withTiming(1, TIMING_CONFIG)),
-            transform: [{ translateY: withDelay(delay, withTiming(0, TIMING_CONFIG)) }],
+            opacity: withDelay(BASE_ENTRY_DELAY, withTiming(1, TIMING_CONFIG)),
+            transform: [
+                { translateY: withDelay(BASE_ENTRY_DELAY, withTiming(0, TIMING_CONFIG)) },
+                { scale: withDelay(BASE_ENTRY_DELAY, withTiming(1, TIMING_CONFIG)) },
+            ],
         }),
-        [delay],
+        [],
     )
 
     return (
-        <Animated.View style={[styles.initialAnimationState, animatedStyle]}>
+        <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="row" gap={8} alignItems="flex-start">
+            <Animated.View style={[styles.sequentialRevealState, descriptionStyle]}>
+                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="body">
+                    {children}
+                </BaseText>
+            </Animated.View>
+        </AnimatedBaseView>
+    )
+}
+
+// Separate component for each stat item that safely uses hooks
+const StatItem = ({ value, label, delay = 0 }: StatItemProps) => {
+    // Calculate total delay including the Stats component base delay
+    const totalDelay = BASE_ENTRY_DELAY + ENTRY_DELAY_INCREMENT + delay
+
+    const animatedStyle = useAnimatedStyle(
+        () => ({
+            opacity: withDelay(totalDelay, withTiming(1, TIMING_CONFIG)),
+            transform: [
+                { translateY: withDelay(totalDelay, withTiming(0, TIMING_CONFIG)) },
+                { scale: withDelay(totalDelay, withTiming(1, TIMING_CONFIG)) },
+            ],
+        }),
+        [totalDelay],
+    )
+
+    return (
+        <Animated.View style={[styles.sequentialRevealState, animatedStyle]}>
             <BaseView flexDirection="column" gap={2}>
                 <BaseText typographyFont={"subSubTitleSemiBold"}>{value}</BaseText>
                 <BaseText typographyFont={"captionMedium"}>{label}</BaseText>
@@ -80,10 +120,10 @@ const Stats = ({
             px={8}
             gap={8}>
             {rating && <StatItem value={rating.value} label={rating.label} delay={0} />}
-            {users && <StatItem value={users.value} label={users.label} delay={50} />}
-            {co2Saved && <StatItem value={co2Saved.value} label={co2Saved.label} delay={100} />}
+            {users && <StatItem value={users.value} label={users.label} delay={40} />}
+            {co2Saved && <StatItem value={co2Saved.value} label={co2Saved.label} delay={80} />}
             {customStats.map((stat, index) => (
-                <StatItem key={index} value={stat.value} label={stat.label} delay={150 + index * 50} />
+                <StatItem key={index} value={stat.value} label={stat.label} delay={120 + index * 40} />
             ))}
         </AnimatedBaseView>
     )
@@ -106,25 +146,34 @@ const Actions = ({
 }: ActionsProps) => {
     const { LL } = useI18nContext()
 
+    // Calculate total delay for buttons to appear after description and stats
+    const actionsBaseDelay = BASE_ENTRY_DELAY + ENTRY_DELAY_INCREMENT * 2
+
     const favoriteButtonStyle = useAnimatedStyle(
         () => ({
-            opacity: withDelay(50, withTiming(1, TIMING_CONFIG)),
-            transform: [{ translateY: withDelay(50, withTiming(0, TIMING_CONFIG)) }],
+            opacity: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)),
+            transform: [
+                { translateY: withDelay(actionsBaseDelay, withTiming(0, TIMING_CONFIG)) },
+                { scale: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)) },
+            ],
         }),
         [],
     )
 
     const openButtonStyle = useAnimatedStyle(
         () => ({
-            opacity: withDelay(100, withTiming(1, TIMING_CONFIG)),
-            transform: [{ translateY: withDelay(100, withTiming(0, TIMING_CONFIG)) }],
+            opacity: withDelay(actionsBaseDelay + 50, withTiming(1, TIMING_CONFIG)),
+            transform: [
+                { translateY: withDelay(actionsBaseDelay + 50, withTiming(0, TIMING_CONFIG)) },
+                { scale: withDelay(actionsBaseDelay + 50, withTiming(1, TIMING_CONFIG)) },
+            ],
         }),
         [],
     )
 
     return (
         <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="column" gap={16} px={0}>
-            <Animated.View style={[styles.initialAnimationState, favoriteButtonStyle]}>
+            <Animated.View style={[styles.sequentialRevealState, favoriteButtonStyle]}>
                 <BaseButton variant="outline" action={onAddToFavorites}>
                     <BaseView flexDirection="row" alignItems="center">
                         <BaseIcon name={"icon-star"} size={16} />
@@ -137,30 +186,8 @@ const Actions = ({
                 </BaseButton>
             </Animated.View>
 
-            <Animated.View style={[styles.initialAnimationState, openButtonStyle]}>
+            <Animated.View style={[styles.sequentialRevealState, openButtonStyle]}>
                 <BaseButton action={onOpen}>{openButtonText || LL.BTN_OPEN()}</BaseButton>
-            </Animated.View>
-        </AnimatedBaseView>
-    )
-}
-
-const Description = ({ children }: { children: string }) => {
-    const theme = useTheme()
-
-    const descriptionStyle = useAnimatedStyle(
-        () => ({
-            opacity: withDelay(50, withTiming(1, TIMING_CONFIG)),
-            transform: [{ translateY: withDelay(50, withTiming(0, TIMING_CONFIG)) }],
-        }),
-        [],
-    )
-
-    return (
-        <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="row" gap={8} alignItems="flex-start">
-            <Animated.View style={[styles.initialAnimationState, descriptionStyle]}>
-                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="body">
-                    {children}
-                </BaseText>
             </Animated.View>
         </AnimatedBaseView>
     )
@@ -174,23 +201,112 @@ const Container = ({ children }: PropsWithChildren) => {
     )
 }
 
+// Sequential animation section wrapper that waits for previous section to complete
+const SequentialSection = ({
+    children,
+    index,
+    isVisible,
+    onAnimationComplete,
+}: {
+    children: React.ReactNode
+    index: number
+    isVisible: boolean
+    onAnimationComplete?: () => void
+}) => {
+    // First section has no delay, others wait for previous to complete
+    const animationDelay = index === 0 ? 80 : 100
+    const animationDuration = 250
+
+    const [isContentVisible, setIsContentVisible] = useState(false)
+
+    // Only start showing content when our turn comes
+    useEffect(() => {
+        if (isVisible) {
+            // Add delay based on section index
+            const timer = setTimeout(() => {
+                setIsContentVisible(true)
+
+                // Notify that this section's animation is complete
+                const completeTimer = setTimeout(() => {
+                    onAnimationComplete?.()
+                }, animationDuration)
+
+                return () => clearTimeout(completeTimer)
+            }, animationDelay)
+
+            return () => clearTimeout(timer)
+        } else {
+            setIsContentVisible(false)
+        }
+    }, [isVisible, animationDelay, onAnimationComplete, animationDuration])
+
+    // Animation style for this section
+    const sectionStyle = useAnimatedStyle(() => {
+        return {
+            opacity: isContentVisible
+                ? withTiming(1, { duration: animationDuration, easing: Easing.out(Easing.ease) })
+                : 0,
+            transform: [
+                {
+                    translateY: isContentVisible
+                        ? withTiming(0, { duration: animationDuration, easing: Easing.out(Easing.ease) })
+                        : 8,
+                },
+                {
+                    scale: isContentVisible
+                        ? withTiming(1, { duration: animationDuration, easing: Easing.out(Easing.ease) })
+                        : 0.98,
+                },
+            ],
+        }
+    }, [isContentVisible])
+
+    // Don't render until it's this section's turn
+    if (!isVisible) return null
+
+    return <Animated.View style={[sectionStyle]}>{children}</Animated.View>
+}
+
 type Props = PropsWithChildren<{
     show: boolean
     visible?: boolean
 }>
 
 const X2EAppDetails = ({ children, show, visible = show }: Props) => {
-    const animatedStyles = useAnimatedStyle(() => {
-        const shouldShow = show && visible
+    const shouldShow = show && visible
 
+    // Control sequential section animations
+    const [sectionProgress, setSectionProgress] = useState(0)
+
+    // Reset animation sequence when visibility changes
+    useEffect(() => {
+        if (shouldShow) {
+            setSectionProgress(0)
+        } else {
+            // Reset progress when closing - we'll fade everything out together
+            setSectionProgress(-1)
+        }
+    }, [shouldShow])
+
+    // Handle section completion - advance to next section
+    const handleSectionComplete = (currentIndex: number) => {
+        // Only advance when showing
+        if (shouldShow) {
+            setSectionProgress(prev => Math.max(prev, currentIndex + 1))
+        }
+    }
+
+    const animatedStyles = useAnimatedStyle(() => {
         return {
-            opacity: shouldShow ? withTiming(1, TIMING_CONFIG) : withTiming(0, CLOSING_TIMING),
+            opacity: shouldShow
+                ? withTiming(1, TIMING_CONFIG)
+                : withSequence(
+                      // Hold briefly at full opacity
+                      withTiming(1, { duration: 50, easing: Easing.linear }),
+                      // Then fade out with dynamic easing
+                      withTiming(0, { duration: 200, easing: SMOOTH_OUT_EASING }),
+                  ),
             height: show ? "auto" : 0,
-            transform: [
-                {
-                    translateY: shouldShow ? withTiming(0, TIMING_CONFIG) : withTiming(-5, CLOSING_TIMING),
-                },
-            ],
         }
     }, [show, visible])
 
@@ -199,7 +315,16 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
             layout={SMOOTH_LAYOUT}
             style={[styles.detailsContainer, animatedStyles]}
             flexDirection="column">
-            {children}
+            {/* When closing, we need to make everything immediately visible before the fadeout */}
+            {React.Children.map(children, (child, index) => (
+                <SequentialSection
+                    key={index}
+                    index={index}
+                    isVisible={(shouldShow && index <= sectionProgress) || (!shouldShow && show)}
+                    onAnimationComplete={() => handleSectionComplete(index)}>
+                    {child}
+                </SequentialSection>
+            ))}
         </AnimatedBaseView>
     )
 }
@@ -226,5 +351,12 @@ const styles = StyleSheet.create({
     initialAnimationState: {
         opacity: 0,
         transform: [{ translateY: 10 }],
+    },
+    sequentialRevealState: {
+        opacity: 0,
+        transform: [
+            { translateY: 8 }, // Start slightly above final position
+            { scale: 0.95 }, // Slightly smaller scale for a subtle "pop" effect
+        ],
     },
 })
