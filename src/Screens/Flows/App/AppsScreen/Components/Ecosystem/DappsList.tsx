@@ -70,5 +70,5 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
 }
 
 const styles = StyleSheet.create({
-    flatListPadding: { paddingBottom: 24 },
+    flatListPadding: { paddingBottom: 96 },
 })

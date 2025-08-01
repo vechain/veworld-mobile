@@ -35,5 +35,6 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             gap: 12,
+            paddingVertical: 8,
         },
     })
