@@ -8,7 +8,7 @@ on:
 jobs:
     build-test-android:
         name: Build & Test Android
-        runs-on: ubuntu-latest-xlarge
+        runs-on: VeWorld-Mobile-ARM
         environment: android-release
         if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
         outputs:
@@ -112,6 +112,12 @@ jobs:
                   is-executable: false
                   working-directory: "."
 
+            - name: precheck fastlane build
+              id: build
+              run: |
+                  type fastlane || true
+                  type bundle || true
+                  bundle update || true
             - name: Build apk
               id: build
               run: |
@@ -119,6 +125,7 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
+                  bundle exec fastlane build_android
                   fastlane build_test_ci version_code:99 version_name:"9.9.9"
                   cd app/build/outputs/apk/release
                   OUTPUT_DIR=$(pwd)
