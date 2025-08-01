@@ -9,6 +9,7 @@ import {
 import { SimpleAccountABI, SimpleAccountFactoryABI } from "../utils/abi"
 import { BigNumberUtils } from "../../Utils"
 import { abi } from "thor-devkit"
+import { GenericDelegationDetails } from "../types/transaction"
 
 /**
  * Common EIP712Domain type definition
@@ -268,31 +269,18 @@ export async function buildSmartAccountTransaction(params: {
     chainId: string
     signTypedDataFn: TransactionSigningFunction
     // optional gen delegator object
-    genericDelgation?: {
-        token: string
-        tokenAddress: string
-        isGenDelegation: boolean
-        amount: BigNumberUtils | undefined
-        delegatorAddress: string
-    }
+    genericDelgationDetails?: GenericDelegationDetails
 }): Promise<TransactionClause[]> {
-    const { txClauses, smartAccountConfig, signTypedDataFn, chainId, genericDelgation, ownerAddress } = params
+    const { txClauses, smartAccountConfig, signTypedDataFn, chainId, genericDelgationDetails, ownerAddress } = params
     const { hasV1Account } = smartAccountConfig
 
     const clauses: TransactionClause[] = [...txClauses]
     // Determine execution strategy based on smart account version
     const shouldUseBatchExecution = !hasV1Account
 
-    if (genericDelgation && genericDelgation.isGenDelegation) {
-        const transferClause = getTransferClause(
-            genericDelgation.token,
-            genericDelgation.tokenAddress,
-            // TODO pass in proper one to these functions
-            genericDelgation.delegatorAddress,
-            genericDelgation.amount,
-        )
-
-        console.log("adding transfer clause for genericDelgation", JSON.stringify(transferClause))
+    if (genericDelgationDetails) {
+        const { token, tokenAddress, depositAccount, fee } = genericDelgationDetails
+        const transferClause = getTransferClause(token, tokenAddress, depositAccount, fee)
         clauses.push(...transferClause)
     }
 
@@ -305,7 +293,6 @@ export async function buildSmartAccountTransaction(params: {
             ownerAddress,
         })
     } else {
-        console.log("building individual execution clauses")
         return await buildIndividualExecutionClauses({
             txClauses: clauses,
             smartAccountConfig,
@@ -347,10 +334,8 @@ const getTransferClause = (
     delegatorAddress: string,
     amount: BigNumberUtils | undefined,
 ) => {
-    console.log("getTransferClause amount", amount)
     const amountHex = `0x${amount?.toHex}`
 
-    // code from export const prepareFungibleClause = (
     const addressTo = delegatorAddress
     if (token === "VET") {
         return [

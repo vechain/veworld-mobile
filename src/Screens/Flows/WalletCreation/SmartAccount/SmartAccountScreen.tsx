@@ -21,28 +21,9 @@ export const SmartAccountScreen = () => {
     }, [nav])
 
     useEffect(() => {
-        console.log("initialiseWallet changed")
-    }, [initialiseWallet])
-
-    useEffect(() => {
-        console.log("createSmartWallet changed")
-    }, [createSmartWallet])
-
-    useEffect(() => {
-        console.log("isAuthenticated changed")
-    }, [isAuthenticated])
-
-    useEffect(() => {
-        console.log("smartAccountAddress changed")
-    }, [smartAccountAddress])
-
-    useEffect(() => {
         const init = async () => {
-            console.log("init isAuthenticated", isAuthenticated, smartAccountAddress)
             if (isAuthenticated && smartAccountAddress) {
-                console.log("initialising wallet!")
                 await initialiseWallet()
-                console.log("createSmartWallet", smartAccountAddress)
                 await createSmartWallet({ address: smartAccountAddress })
             }
         }

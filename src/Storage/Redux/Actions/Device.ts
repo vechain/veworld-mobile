@@ -116,7 +116,7 @@ const addSmartWalletDeviceAndAccount =
                 alias: "Smart Wallet Account",
                 address: deviceExists.rootAddress,
                 rootAddress: deviceExists.rootAddress,
-                index: -1,
+                index: deviceExists.index,
                 visible: true,
             }
             return existingAccount

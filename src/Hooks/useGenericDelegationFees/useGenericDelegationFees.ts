@@ -34,28 +34,12 @@ const buildTransactionCost = (
     keys: (keyof EstimateGenericDelegatorFeesResponse["transactionCost"])[],
     token: string,
 ) => {
-    console.log("data", data, keys, token)
     if (!data || keys.length !== 3) return undefined
     let tokenToUse = token
     if (!token.includes("WithSmartAccount")) {
         tokenToUse = token.toLowerCase()
     }
 
-    console.log(
-        "data.transactionCost[keys[0]][lowerCaseToken]",
-        data.transactionCost[keys[0]][tokenToUse],
-        BigNutils(data.transactionCost[keys[0]][tokenToUse]).multiply(ethers.utils.parseEther("1").toString()),
-    )
-    console.log(
-        "data.transactionCost[keys[1]][lowerCaseToken]",
-        data.transactionCost[keys[1]][tokenToUse],
-        BigNutils(data.transactionCost[keys[1]][tokenToUse]).multiply(ethers.utils.parseEther("1").toString()),
-    )
-    console.log(
-        "data.transactionCost[keys[2]][lowerCaseToken]",
-        data.transactionCost[keys[2]][tokenToUse],
-        BigNutils(data.transactionCost[keys[2]][tokenToUse]).multiply(ethers.utils.parseEther("1").toString()),
-    )
     //Values returned from the endpoint are in WEI, they're in Ether. So, in order to be compliant with our interface, we should multiply the numbers by 1 ETH (10^18 WEI)
     return {
         [GasPriceCoefficient.REGULAR]: {
@@ -130,7 +114,7 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         )
     }, [data])
 
-    const delegatorAddress = useMemo(() => {
+    const depositAccount = useMemo(() => {
         if (delegatorAddressResponse === undefined) return undefined
         return (delegatorAddressResponse as unknown as { depositAccount: string }).depositAccount
     }, [delegatorAddressResponse])
@@ -159,8 +143,8 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
     const isFirstTimeLoading = isFeesFirstTimeLoading || isDelegatorFirstTimeLoading
 
     const memoized = useMemo(
-        () => ({ isLoading, options, allOptions, isFirstTimeLoading, delegatorAddress }),
-        [allOptions, isFirstTimeLoading, isLoading, options, delegatorAddress],
+        () => ({ isLoading, options, allOptions, isFirstTimeLoading, depositAccount }),
+        [allOptions, isFirstTimeLoading, isLoading, options, depositAccount],
     )
 
     return memoized

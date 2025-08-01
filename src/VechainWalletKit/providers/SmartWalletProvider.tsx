@@ -2,14 +2,13 @@ import React, { createContext, useContext, useCallback, useMemo, useState, useEf
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
-import { SignOptions, TransactionOptions, TypedDataPayload } from "../types/transaction"
+import { GenericDelegationDetails, SignOptions, TransactionOptions, TypedDataPayload } from "../types/transaction"
 import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
 import { getSmartAccount } from "../utils/smartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import { SmartAccountTransactionConfig, SmartWalletContext } from "../types"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
-import { BigNumberUtils } from "../../Utils"
-
+import { BigNumberUtils } from "../../Utils/BigNumberUtils"
 export interface SmartWalletProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
@@ -37,7 +36,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const previousConfigRef = useRef<NetworkConfig | null>(null)
 
     const initialiseWallet = useCallback(async (): Promise<void> => {
-        console.log("SmartWalletProvider initialiseWallet", adapter.isAuthenticated)
         if (!adapter.isAuthenticated) {
             throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
         }
@@ -82,11 +80,9 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 adapter.isAuthenticated &&
                 hasNetworkConfigChanged(previousConfigRef.current, config.networkConfig)
             ) {
-                console.log("SmartWalletProvider updateOnConfigChange")
                 try {
                     setIsLoading(true)
                     const factoryAddress = getFactoryAddress(config.networkConfig)
-                    console.log("SmartWalletProvider updateOnConfigChange factoryAddress", factoryAddress)
                     const adapterAddress = adapter.getAccount()
                     // Re-fetch smart account info with new config
                     const smartAccountData = await getSmartAccount(thor, adapterAddress, factoryAddress)
@@ -123,7 +119,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
-            console.log("SmartWalletProvider signMessage", adapter.isAuthenticated)
             if (!adapter.isAuthenticated) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
@@ -152,18 +147,11 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         [adapter],
     )
 
-    // p[ass in optional gen delegator object
     const buildTransaction = useCallback(
         async (
             clauses: TransactionClause[],
             options?: TransactionOptions,
-            genericDelgation?: {
-                token: string
-                tokenAddress: string
-                isGenDelegation: boolean
-                amount: BigNumberUtils | undefined
-                delegatorAddress: string
-            },
+            genericDelgationDetails?: GenericDelegationDetails,
         ): Promise<Transaction> => {
             if (!adapter.isAuthenticated || !ownerAddress) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
@@ -174,11 +162,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     "Smart wallet not initialized, call initialiseWallet first",
                 )
             }
-            console.log(
-                "SmartWalletProvider buildTransaction smartAccountConfig present",
-                JSON.stringify(smartAccountConfig),
-            )
-            console.log("network type", config.networkConfig.networkType, chainId, genericDelgation)
 
             try {
                 const finalClauses = await buildSmartAccountTransaction({
@@ -186,11 +169,10 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     smartAccountConfig,
                     chainId,
                     signTypedDataFn: signTypedData,
-                    genericDelgation,
+                    genericDelgationDetails,
                     ownerAddress,
                 })
 
-                console.log("SmartWalletProvider buildTransaction finalClauses", JSON.stringify(finalClauses))
                 // Estimate gas
                 const gasResult = await thor.gas.estimateGas(finalClauses, ownerAddress, {
                     gasPadding: 1,
@@ -198,7 +180,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
                 const parsedGasLimit = Math.max(gasResult.totalGas, options?.gas ?? 0)
 
-                console.log("SmartWalletProvider options", JSON.stringify(options))
                 // Build the transaction in VeChain format
                 const txBody = await thor.transactions.buildTransactionBody(finalClauses, parsedGasLimit, {
                     isDelegated: options?.isDelegated ?? false,
@@ -207,14 +188,12 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     maxPriorityFeePerGas: options?.maxPriorityFeePerGas,
                 })
 
-                console.log("SmartWalletProvider buildTransaction txBody", JSON.stringify(txBody))
                 return Transaction.of(txBody)
             } catch (error) {
-                console.log("SmartWalletProvider buildTransaction error", error)
                 throw new WalletError(WalletErrorType.BUILDING_TRANSACTION_ERROR, "Error building transaction", error)
             }
         },
-        [ownerAddress, config.networkConfig.networkType, thor, signTypedData, smartAccountConfig, chainId],
+        [ownerAddress, thor, signTypedData, smartAccountConfig, chainId, adapter.isAuthenticated],
     )
 
     const login = useCallback(

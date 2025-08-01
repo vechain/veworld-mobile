@@ -4,7 +4,7 @@ import { DEVICE_TYPE, EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import { useSmartWallet } from "../../VechainWalletKit"
+import { GenericDelegationDetails, useSmartWallet } from "../../VechainWalletKit"
 
 type Props = {
     providedGas?: number
@@ -16,12 +16,7 @@ type Props = {
     maxPriorityFeePerGas?: string
     maxFeePerGas?: string
     deviceType: DEVICE_TYPE
-    genericDelgation: {
-        token: string
-        isGenDelegation: boolean
-        amount: BigNumberUtils | undefined
-        delegatorAddress: string
-    }
+    genericDelgationDetails?: GenericDelegationDetails
 }
 
 export const useTransactionBuilder = ({
@@ -33,7 +28,7 @@ export const useTransactionBuilder = ({
     maxPriorityFeePerGas,
     maxFeePerGas,
     deviceType,
-    genericDelgation,
+    genericDelgationDetails,
 }: Props) => {
     const thor = useThor()
     const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
@@ -44,7 +39,6 @@ export const useTransactionBuilder = ({
         const txGas = gas?.gas ?? 0
 
         if (deviceType === DEVICE_TYPE.SMART_WALLET) {
-            console.log("buildTransaction genericDelgation clauses", clauses?.length)
             return buildTransactionWithSmartWallet(
                 clauses,
                 {
@@ -53,7 +47,7 @@ export const useTransactionBuilder = ({
                     isDelegated,
                     gasPriceCoef,
                 },
-                genericDelgation,
+                genericDelgationDetails,
             )
         }
 
@@ -93,7 +87,7 @@ export const useTransactionBuilder = ({
         gasPriceCoef,
         deviceType,
         buildTransactionWithSmartWallet,
-        genericDelgation,
+        genericDelgationDetails,
     ])
 
     return {
