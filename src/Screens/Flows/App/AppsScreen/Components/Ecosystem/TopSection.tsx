@@ -15,7 +15,7 @@ export const TopSection = ({ onPress }: Props) => {
         <BaseView flexDirection={"row"} justifyContent="space-between">
             <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_ECOSYSTEM()}</BaseText>
             <BaseTouchable onPress={onPress} style={styles.button}>
-                <BaseIcon name="icon-sort-desc" size={16} color={theme.colors.text} />
+                <BaseIcon name="icon-sort-desc" size={20} color={theme.colors.text} />
             </BaseTouchable>
         </BaseView>
     )
@@ -24,6 +24,6 @@ export const TopSection = ({ onPress }: Props) => {
 const baseStyles = () =>
     StyleSheet.create({
         button: {
-            padding: 8,
+            padding: 10,
         },
     })

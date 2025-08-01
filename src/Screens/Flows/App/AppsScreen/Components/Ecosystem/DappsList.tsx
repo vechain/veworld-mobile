@@ -3,8 +3,8 @@ import React, { useCallback, useRef } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseSpacer } from "~Components"
 import { DiscoveryDApp } from "~Constants"
-import { DAppHorizontalCard } from "~Screens/Flows/App/DiscoverScreen/Components/DAppHorizontalCard"
 import { DappHorizontalCardSkeleton } from "~Screens/Flows/App/DiscoverScreen/Components/DappHorizontalCardSkeleton"
+import { DAppHorizontalCardV2 } from "./DAppHorizontalCardV2"
 
 type Props = {
     items: DiscoveryDApp[]
@@ -20,7 +20,7 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
             return (
-                <DAppHorizontalCard
+                <DAppHorizontalCardV2
                     dapp={item}
                     onOpenDApp={onOpenDApp}
                     onPress={() => {

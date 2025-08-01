@@ -6,14 +6,15 @@ import { useAppHubDapps } from "~Hooks/useDappsWithPagination/useAppHubDapps"
 import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
 import { DAppsList } from "./DappsList"
 import { FiltersSection } from "./FiltersSection"
+import { SortDAppsBottomSheetV2 } from "./SortDAppsBottomSheetV2"
 import { TopSection } from "./TopSection"
 import { DappTypeV2 } from "./types"
 
 export const EcosystemSection = () => {
     const [selectedFilter, setSelectedFilter] = useState(DappTypeV2.ALL)
-    const [selectedSort, _setSelectedSort] = useState<UseDappsWithPaginationSortKey>("alphabetic_asc")
+    const [selectedSort, setSelectedSort] = useState<UseDappsWithPaginationSortKey>("alphabetic_asc")
 
-    const { onOpen: onOpenSortBs } = useBottomSheetModal()
+    const { ref: sortBs, onOpen: onOpenSortBs } = useBottomSheetModal()
     const { onOpen: onOpenDappOptionsBs } = useBottomSheetModal()
     const { onDAppPress } = useDAppActions()
     const { dependencyLoading, sortedDapps } = useAppHubDapps({
@@ -34,6 +35,7 @@ export const EcosystemSection = () => {
                 onOpenDApp={onDAppPress}
                 isLoading={dependencyLoading}
             />
+            <SortDAppsBottomSheetV2 onSortChange={setSelectedSort} selectedSort={selectedSort} ref={sortBs} />
         </BaseView>
     )
 }

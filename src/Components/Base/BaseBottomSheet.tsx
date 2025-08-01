@@ -25,7 +25,10 @@ import { BaseView } from "./BaseView"
 const OPENED_STATE = 0
 const CLOSED_STATE = -1
 
-export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints" | "children"> & {
+export type BaseBottomSheetProps<TData = unknown> = Omit<
+    BottomSheetModalProps,
+    "snapPoints" | "children" | "enablePanDownToClose"
+> & {
     /**
      * The content of the modal.
      */
@@ -76,6 +79,7 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
     bottomSafeArea?: boolean
     /**
      * Enable pan down to close
+     * @default true
      */
     enablePanDownToClose?: boolean
     /**
