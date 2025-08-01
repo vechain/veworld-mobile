@@ -117,7 +117,9 @@ jobs:
               run: |
                   type fastlane || true
                   type bundle || true
+                  type gem || true
                   apt list || true
+                  gem install bundle || true
                   bundle update || true
             - name: Build apk
               id: build
