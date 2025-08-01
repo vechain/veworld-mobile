@@ -53,6 +53,7 @@ export const SortDAppsBottomSheetV2 = React.forwardRef<BottomSheetModalMethods, 
                 blurBackdrop
                 enablePanDownToClose={false}
                 backgroundStyle={styles.layout}
+                noMargins
                 floating>
                 <BaseView style={styles.container}>
                     <BaseView flexDirection="row" style={styles.titleContainer}>
