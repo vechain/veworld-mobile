@@ -34,8 +34,8 @@ jobs:
         environment: android-release
         permissions:
             actions: write
-            contents: read
-        env:
+            contents: write
+
         steps:
             - name: Checkout repository
               uses: actions/checkout@v3
@@ -58,7 +58,8 @@ jobs:
                   git config user.email "${{ github.actor }}@users.noreply.github.com"
 
             - name: Install & Patch packages
-              run: yarn install
+              run: |
+                yarn install:android
 
             - name: Setup Java
               uses: actions/setup-java@v3
@@ -159,6 +160,8 @@ jobs:
               run: echo 'Artifact ID is ${{ steps.upload.outputs.artifact-id }}'
 
             - name: Commit and Push Changes
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               run: |
                   git config user.name "vechain-ci"
                   git config user.email "vechain.ci@vechain.org"

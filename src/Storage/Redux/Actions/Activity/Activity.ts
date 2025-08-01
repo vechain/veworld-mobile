@@ -1,4 +1,5 @@
 import { Transaction } from "@vechain/sdk-core"
+import { ThorClient } from "@vechain/sdk-network"
 import {
     Activity,
     ActivityStatus,
@@ -29,12 +30,12 @@ import { AppThunk, createAppAsyncThunk } from "~Storage/Redux/Types"
  */
 export const validateAndUpsertActivity = createAppAsyncThunk(
     "activity/upsertTransactionDetails",
-    async ({ activity, thor }: { activity: Activity; thor: Connex.Thor }, { dispatch }) => {
+    async ({ activity, thor }: { activity: Activity; thor: ThorClient }, { dispatch }) => {
         let updatedActivity = { ...activity }
 
         // If the activity is a transaction, we need to fetch the transaction from the chain
         if (updatedActivity.isTransaction) {
-            const txReceipt = await thor.transaction(updatedActivity.txId?.toLowerCase() ?? "").getReceipt()
+            const txReceipt = await thor.transactions.getTransactionReceipt(updatedActivity.txId?.toLowerCase() ?? "")
 
             updatedActivity.blockNumber = txReceipt?.meta.blockNumber ?? 0
 

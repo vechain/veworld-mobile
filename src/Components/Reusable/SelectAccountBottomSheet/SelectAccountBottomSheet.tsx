@@ -1,45 +1,56 @@
-import React, { useCallback, useMemo } from "react"
-import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useScrollableBottomSheet } from "~Hooks"
-import { AccountCard, BaseBottomSheet, BaseSpacer, BaseText } from "~Components"
+import React, { useCallback, useMemo } from "react"
+import { SectionListData } from "react-native"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { COLORS, isSmallScreen } from "~Constants"
+import { useScrollableBottomSheet, useTheme } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { useI18nContext } from "~i18n"
+import { SelectableAccountCard } from "../SelectableAccountCard"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
-/**
- * @typedef {object} Props
- * @prop {() => void} onDismiss - called on the bottom sheet dismiss
- * @prop {() => void} closeBottomSheet - called to close the bottom sheet
- * @prop {AccountWithDevice[]} accounts - list of accounts to display
- * @prop {(account?: AccountWithDevice) => void} setSelectedAccount - called when an account is selected
- * @prop {AccountWithDevice} [selectedAccount] - the selected account
- */
 type Props = {
+    /**
+     * Called on the bottom sheet dismiss
+     */
     onDismiss?: () => void
+    /**
+     * Called to close the bottom sheet
+     */
     closeBottomSheet?: () => void
+    /**
+     * List of accounts to display
+     */
     accounts: AccountWithDevice[]
+    /**
+     * Called when an account is selected
+     * @param account New selected account
+     */
     setSelectedAccount: (account: AccountWithDevice | WatchedAccount) => void
+    /**
+     * The selected account
+     */
     selectedAccount?: AccountWithDevice
+    /**
+     * If false, show the VET balance, otherwise VTHO. Defaults to false
+     */
     isVthoBalance?: boolean
-    isBalanceVisible?: boolean
 }
 
-const ItemSeparatorComponent = () => <BaseSpacer height={16} />
+const ItemSeparatorComponent = () => <BaseSpacer height={8} />
+
+const SectionHeader = ({
+    section,
+}: {
+    section: SectionListData<AccountWithDevice, { data: AccountWithDevice[]; alias: string }>
+}) => {
+    return <BaseText typographyFont="bodyMedium">{section.alias}</BaseText>
+}
 
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    (
-        {
-            closeBottomSheet,
-            setSelectedAccount,
-            selectedAccount,
-            onDismiss,
-            accounts,
-            isVthoBalance = false,
-            isBalanceVisible = true,
-        },
-        ref,
-    ) => {
+    ({ closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss, accounts, isVthoBalance = false }, ref) => {
         const { LL } = useI18nContext()
 
         const handlePress = useCallback(
@@ -55,15 +66,17 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 return ["50%"]
             }
 
+            if (accounts.length === 5 && !isSmallScreen) {
+                return isIOS() ? ["65%"] : ["55%"]
+            }
+
             if (accounts.length < 6) {
                 return ["75%"]
             }
 
-            if (accounts.length >= 6) {
-                return ["90%"]
-            }
+            if (accounts.length < 8) return ["80%"]
 
-            return ["50%", "75%", "90%"]
+            return ["90%"]
         }, [accounts.length])
 
         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
@@ -71,29 +84,46 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             snapPoints: computeSnappoints,
         })
 
+        const theme = useTheme()
+
+        const sections = useMemo(() => {
+            const groupedAccounts = accounts.reduce((acc, curr) => {
+                const key = curr.device?.alias ?? curr.alias
+                return { ...acc, [key]: [...(acc[key] ?? []), curr] }
+            }, {} as { [alias: string]: AccountWithDevice[] })
+            return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
+        }, [accounts])
+
         return (
             <BaseBottomSheet
                 snapPoints={computeSnappoints}
                 ref={ref}
                 onChange={handleSheetChangePosition}
                 onDismiss={onDismiss}>
-                <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
+                <BaseView flexDirection="row" alignItems="center" gap={12}>
+                    <BaseIcon name="icon-wallet" size={20} color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900} />
+                    <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
+                </BaseView>
+
                 <BaseSpacer height={12} />
-                <BottomSheetFlatList
-                    data={accounts}
-                    keyExtractor={account => account.address}
-                    ItemSeparatorComponent={ItemSeparatorComponent}
+                <BottomSheetSectionList
+                    sections={sections}
+                    keyExtractor={item => item.address}
+                    renderSectionHeader={SectionHeader}
+                    stickySectionHeadersEnabled={false}
                     renderItem={({ item }) => (
-                        <AccountCard
-                            testID="selectAccount"
+                        <SelectableAccountCard
                             account={item}
                             onPress={handlePress}
                             selected={item.address === selectedAccount?.address}
-                            isVthoBalance={isVthoBalance}
-                            isBalanceVisible={isBalanceVisible}
+                            balanceToken={isVthoBalance ? "VTHO" : "VET"}
+                            testID="selectAccount"
                         />
                     )}
+                    ItemSeparatorComponent={ItemSeparatorComponent}
+                    SectionSeparatorComponent={ItemSeparatorComponent}
                     {...flatListScrollProps}
+                    scrollEnabled
                 />
             </BaseBottomSheet>
         )

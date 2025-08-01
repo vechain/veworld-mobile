@@ -1,6 +1,7 @@
-import { abis } from "~Constants"
+import { VIP181_ABI } from "@vechain/sdk-core"
+import { ThorClient } from "@vechain/sdk-network"
 
-export const getTokenURI = async (tokenId: string, contractAddress: string, thor: Connex.Thor) => {
-    const res = await thor.account(contractAddress).method(abis.VIP181.tokenURI).call(tokenId)
-    return res.decoded[0]
+export const getTokenURI = async (tokenId: string, contractAddress: string, thor: ThorClient) => {
+    const res = await thor.contracts.load(contractAddress, VIP181_ABI).read.tokenURI(tokenId)
+    return res[0] as string
 }

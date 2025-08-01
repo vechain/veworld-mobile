@@ -1,9 +1,16 @@
 import { useQuery } from "@tanstack/react-query"
 import moment from "moment"
-import { useEffect, useMemo } from "react"
+import { useEffect, useMemo, useState } from "react"
 import DeviceInfo from "react-native-device-info"
 import { VersionManifest } from "~Model/AppVersion"
-import { selectUpdatePromptStatus, useAppDispatch, useAppSelector, VersionUpdateSlice } from "~Storage/Redux"
+import {
+    selectLanguage,
+    selectUpdatePromptStatus,
+    setChangelogToShow,
+    useAppDispatch,
+    useAppSelector,
+    VersionUpdateSlice,
+} from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 import SemanticVersionUtils from "~Utils/SemanticVersionUtils"
 
@@ -31,9 +38,26 @@ const fetchVersionInfo = async (): Promise<VersionManifest> => {
     return await response.json()
 }
 
+const fetchChangelog = async (
+    changelogKey: string | null,
+): Promise<{
+    version: string
+    major: boolean
+    descriptions: Record<string, string[]>
+}> => {
+    const url = `${VERSION_INFO_URL}/${changelogKey}.json`
+    const response = await fetch(url)
+    if (!response.ok) {
+        throw new Error(`Changelog fetch failed (status ${response.status})`)
+    }
+    return await response.json()
+}
+
 export const useCheckAppVersion = () => {
     const versionUpdateStatus = useAppSelector(selectUpdatePromptStatus)
+    const language = useAppSelector(selectLanguage)
     const dispatch = useAppDispatch()
+    const [versionCheckComplete, setVersionCheckComplete] = useState(false)
 
     const { data: versionInfo } = useQuery({
         queryKey: ["versionManifest"],
@@ -41,10 +65,17 @@ export const useCheckAppVersion = () => {
         select: data => ({
             major: data.major,
             latest: data.latest,
+            changelogKey: data.history.find(v => v.version === data.major)?.key ?? null,
         }),
         staleTime: TWENTY_FOUR_HOURS,
         gcTime: TWENTY_FOUR_HOURS,
         retry: 3,
+    })
+    const { data: changelog } = useQuery({
+        queryKey: ["changelog", versionUpdateStatus.changelogKey],
+        queryFn: () => fetchChangelog(versionUpdateStatus.changelogKey),
+        enabled: !!versionUpdateStatus.changelogKey && versionUpdateStatus.shouldShowChangelog,
+        select: data => data.descriptions[language] ?? data.descriptions.en ?? [],
     })
 
     useEffect(() => {
@@ -52,6 +83,12 @@ export const useCheckAppVersion = () => {
             const installedVersion = DeviceInfo.getVersion()
             if (installedVersion !== versionUpdateStatus.installedVersion) {
                 dispatch(VersionUpdateSlice.actions.setInstalledVersion(installedVersion))
+                dispatch(
+                    setChangelogToShow({
+                        shouldShow: true,
+                        changelogKey: versionInfo.changelogKey,
+                    }),
+                )
             }
 
             const needsUpdate = SemanticVersionUtils.moreThan(versionInfo.major, installedVersion)
@@ -64,6 +101,8 @@ export const useCheckAppVersion = () => {
             if (versionInfo.latest !== versionUpdateStatus.latestVersion) {
                 dispatch(VersionUpdateSlice.actions.setLatestVersion(versionInfo.latest))
             }
+
+            setVersionCheckComplete(true)
         }
     }, [
         dispatch,
@@ -74,7 +113,7 @@ export const useCheckAppVersion = () => {
     ])
 
     const shouldShowUpdatePrompt = useMemo(() => {
-        if (!versionUpdateStatus.majorVersion || !versionUpdateStatus.installedVersion) {
+        if (!versionUpdateStatus.majorVersion || !versionUpdateStatus.installedVersion || !versionCheckComplete) {
             return false
         }
 
@@ -108,7 +147,7 @@ export const useCheckAppVersion = () => {
             default:
                 return false
         }
-    }, [versionUpdateStatus])
+    }, [versionCheckComplete, versionUpdateStatus])
 
     const hasPermanentlyDismissed = useMemo(() => {
         return (
@@ -122,5 +161,7 @@ export const useCheckAppVersion = () => {
     return {
         shouldShowUpdatePrompt,
         hasPermanentlyDismissed,
+        shouldShowChangelog: versionUpdateStatus.shouldShowChangelog,
+        changelog: changelog ?? [],
     }
 }

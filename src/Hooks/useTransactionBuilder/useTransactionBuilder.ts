@@ -64,7 +64,8 @@ export const useTransactionBuilder = ({
             expiration: 100,
             clauses: clauses,
             gas: txGas,
-            dependsOn: dependsOn ?? null,
+            //Logical OR since it could happen that it's an empty string
+            dependsOn: dependsOn || null,
             nonce: nonce,
             ...(isDelegated && {
                 reserved: {

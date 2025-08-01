@@ -21,8 +21,7 @@ import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
 import { useTransactionFees } from "~Hooks/useTransactionFees/useTransactionFees"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest } from "~Model"
-import { DelegationType } from "~Model/Delegation"
+import { DEVICE_TYPE, NETWORK_TYPE, TransactionRequest } from "~Model"
 import { Routes } from "~Navigation"
 import {
     GENERIC_DELEGATOR_BASE_URL,
@@ -43,14 +42,15 @@ import { useSmartWallet } from "../../VechainWalletKit"
 
 type Props = {
     clauses: TransactionClause[]
-    onTransactionSuccess: (transaction: Transaction, txId: string) => void
-    onTransactionFailure: (error: unknown) => void
+    onTransactionSuccess: (transaction: Transaction, txId: string) => void | Promise<void>
+    onTransactionFailure: (error: unknown) => void | Promise<void>
     initialRoute?: Routes.HOME | Routes.NFTS
     dappRequest?: TransactionRequest
     /**
      * Fallback to VTHO for delegation fees if the user doesn't have enough of the selected token
      */
     autoVTHOFallback?: boolean
+    onNavigateToLedger?: () => void
 }
 
 const mapGasPriceCoefficient = (value: GasPriceCoefficient) => {
@@ -70,14 +70,19 @@ export const useTransactionScreen = ({
     onTransactionFailure,
     dappRequest,
     initialRoute,
-    autoVTHOFallback,
+    onNavigateToLedger,
+    autoVTHOFallback = true,
 }: Props) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
     const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const clauses = useMemo(() => {
-        return _clauses.map(clause => ({ ...clause, value: `0x${BigNutils(clause.value || 0).toHex}` }))
+        return _clauses.map(clause => ({
+            value: `0x${BigNutils(clause.value || 0).toHex}`,
+            data: clause.data,
+            to: clause.to,
+        }))
     }, [_clauses])
 
     const [loading, setLoading] = useState(false)
@@ -92,14 +97,17 @@ export const useTransactionScreen = ({
     const [selectedDelegationToken, setSelectedDelegationToken] = useState(defaultToken)
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
-    const availableTokens = useGenericDelegationTokens()
 
     const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
+    const { tokens: availableTokens, isLoading: isLoadingTokens } = useGenericDelegationTokens()
+
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
         clauses,
         providedGas: dappRequest?.options?.gas,
     })
+
+    const transactionOutputs = useMemo(() => gas?.outputs, [gas?.outputs])
 
     // 2. Delegation
     const {
@@ -115,15 +123,33 @@ export const useTransactionScreen = ({
         providedUrl: dappRequest?.options?.delegator?.url,
     })
 
+    useEffect(() => {
+        if (availableTokens.length === 1 && !isLoadingTokens) {
+            resetDelegation()
+            setSelectedDelegationToken(VTHO.symbol)
+        }
+    }, [availableTokens.length, isLoadingTokens, resetDelegation])
+
     const { isGalactica: isGalacticaRaw } = useIsGalactica()
 
     const onTransactionSuccess: typeof propsOnTransactionSuccess = useCallback(
         (tx, id) => {
             track(AnalyticsEvent.TRANSACTION_SEND_GAS, { gasOption: mapGasPriceCoefficient(selectedFeeOption) })
             track(AnalyticsEvent.TRANSACTION_SEND_DELEGATION, { delegationOption: selectedDelegationOption })
+            if (selectedNetwork.type === NETWORK_TYPE.MAIN)
+                track(AnalyticsEvent.TRANSACTION_SEND_DELEGATION_TOKEN, {
+                    delegationToken: selectedDelegationToken,
+                })
             propsOnTransactionSuccess(tx, id)
         },
-        [propsOnTransactionSuccess, selectedDelegationOption, selectedFeeOption, track],
+        [
+            propsOnTransactionSuccess,
+            selectedDelegationOption,
+            selectedDelegationToken,
+            selectedFeeOption,
+            selectedNetwork.type,
+            track,
+        ],
     )
 
     const isGalactica = useMemo(() => {
@@ -147,12 +173,10 @@ export const useTransactionScreen = ({
             if (selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET) {
                 setIsLoadingClauses(true)
                 try {
-                    console.log("Building smart wallet clauses")
                     const smartWalletTx = await buildTransactionWithSmartWallet(clauses)
                     setTransactionClauses(smartWalletTx.body.clauses)
-                } catch (error) {
-                    console.error("Error building smart wallet clauses:", error)
-                    // Fallback to original clauses on error
+                } catch (e) {
+                    error(ERROR_EVENTS.SEND, e)
                     setTransactionClauses(clauses)
                 } finally {
                     setIsLoadingClauses(false)
@@ -164,7 +188,6 @@ export const useTransactionScreen = ({
 
         buildClauses()
     }, [selectedAccount.device.type, buildTransactionWithSmartWallet, clauses])
-    // TODO: need to build the clasues HERE for smart account!!
 
     const genericDelegatorFees = useGenericDelegationFees({
         clauses: transactionClauses,
@@ -185,7 +208,6 @@ export const useTransactionScreen = ({
             transactionFeesResponse.options === undefined
         )
             return undefined
-
         return Object.fromEntries(
             Object.entries(genericDelegatorFees.allOptions ?? {})
                 .map(([token, value]) => [token, value[selectedFeeOption].maxFee] as const)
@@ -214,26 +236,25 @@ export const useTransactionScreen = ({
 
     const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
         selectedToken: selectedDelegationToken,
-        clauses,
         isDelegated,
         allFeeOptions: selectedFeeAllTokenOptions,
         isLoadingFees: isFirstTimeLoadingFees,
+        transactionOutputs,
+        origin: selectedAccount.address,
     })
 
-    const addressMap = {
-        [VET.symbol]: VET.address,
-        [B3TR.symbol]: B3TR.address,
-    }
     // 4. Build transaction
 
     const feeMap = {
         [VET.symbol]: genericDelegatorFees.allOptions?.["vetWithSmartAccount"][selectedFeeOption].maxFee,
         [B3TR.symbol]: genericDelegatorFees.allOptions?.["b3trWithSmartAccount"][selectedFeeOption].maxFee,
     }
+    const addressMap = {
+        [VET.symbol]: VET.address,
+        [B3TR.symbol]: B3TR.address,
+    }
 
-    //TODO using wrong fee for testnet executeIndividual
     console.log("feeMap", feeMap)
-
     // need to know its delegated here.
     let genericDelgation = {
         token: selectedDelegationToken,
@@ -245,6 +266,7 @@ export const useTransactionScreen = ({
         delegatorAddress: genericDelegatorFees.delegatorAddress ?? "",
     }
 
+    console.log("genericDelgation", genericDelgation)
     const { buildTransaction } = useTransactionBuilder({
         clauses,
         gas,
@@ -257,16 +279,14 @@ export const useTransactionScreen = ({
     })
 
     // 5. Sign transaction
-    const { signTransaction, navigateToLedger } = useSignTransaction({
+    const { signTransaction } = useSignTransaction({
         buildTransaction,
         selectedDelegationAccount,
         selectedDelegationOption,
         selectedDelegationUrl,
         dappRequest,
         initialRoute,
-        resetDelegation,
         selectedDelegationToken,
-        //change to smart account fee option vetSmartAccount
         genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].maxFee,
     })
 
@@ -294,7 +314,7 @@ export const useTransactionScreen = ({
                     text1: LL.ERROR(),
                     text2: `${LL.SEND_TRANSACTION_ERROR()}${parseTxError(e)}`,
                 })
-                onTransactionFailure(e)
+                await onTransactionFailure(e)
             } finally {
                 setLoading(false)
                 dispatch(setIsAppLoading(false))
@@ -315,6 +335,7 @@ export const useTransactionScreen = ({
 
                 switch (transaction) {
                     case SignStatus.NAVIGATE_TO_LEDGER:
+                        onNavigateToLedger?.()
                         return
                     case SignStatus.DELEGATION_FAILURE:
                         resetDelegation()
@@ -335,10 +356,10 @@ export const useTransactionScreen = ({
                 })
                 setLoading(false)
                 dispatch(setIsAppLoading(false))
-                onTransactionFailure(e)
+                await onTransactionFailure(e)
             }
         },
-        [signTransaction, resetDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
+        [signTransaction, onNavigateToLedger, resetDelegation, LL, sendTransactionSafe, dispatch, onTransactionFailure],
     )
 
     const {
@@ -360,29 +381,14 @@ export const useTransactionScreen = ({
         isSubmitting.current = true
 
         try {
-            if (
-                selectedAccount.device.type === DEVICE_TYPE.LEDGER &&
-                selectedDelegationOption !== DelegationType.ACCOUNT
-            ) {
-                const tx = await buildTransaction()
-                await navigateToLedger(tx, selectedAccount as LedgerAccountWithDevice, undefined)
-            } else {
-                await checkIdentityBeforeOpening()
-            }
+            await checkIdentityBeforeOpening()
         } catch (e) {
             error(ERROR_EVENTS.SEND, e)
-            onTransactionFailure(e)
+            await onTransactionFailure(e)
         } finally {
             isSubmitting.current = false
         }
-    }, [
-        selectedAccount,
-        selectedDelegationOption,
-        buildTransaction,
-        navigateToLedger,
-        checkIdentityBeforeOpening,
-        onTransactionFailure,
-    ])
+    }, [checkIdentityBeforeOpening, onTransactionFailure])
 
     const isLoading = useMemo(
         () => loading || loadingGas || isBiometricsEmpty || isLoadingClauses,
@@ -444,5 +450,7 @@ export const useTransactionScreen = ({
         hasEnoughBalanceOnAny,
         isFirstTimeLoadingFees,
         hasEnoughBalanceOnToken,
+        isBiometricsEmpty,
+        transactionOutputs,
     }
 }

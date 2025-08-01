@@ -1,11 +1,10 @@
 import { useCallback, useState } from "react"
-import { DEVICE_TYPE, IMPORT_TYPE, NewLedgerDevice, SmartWalletDevice } from "~Model"
+import { DEVICE_TYPE, IMPORT_TYPE, NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import {
     addDeviceAndAccounts,
     addSmartWalletDeviceAndAccount,
     addLedgerDeviceAndAccounts,
-    getNextDeviceIndex,
     setMnemonic,
     setNewLedgerDevice,
     setPrivateKey,
@@ -13,7 +12,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { selectAccountsState, selectDevices, selectHasOnboarded } from "~Storage/Redux/Selectors"
+import { selectAccountsState, selectHasOnboarded } from "~Storage/Redux/Selectors"
 import { warn } from "~Utils/Logger"
 import { useBiometrics } from "../useBiometrics"
 import { useAnalyticTracking } from "~Hooks/useAnalyticTracking"
@@ -31,7 +30,6 @@ export const useCreateWallet = () => {
     const { createDevice } = useDeviceUtils()
     const biometrics = useBiometrics()
     const dispatch = useAppDispatch()
-    const devices = useAppSelector(selectDevices)
     const selectedAccount = useAppSelector(selectAccountsState)?.selectedAccount
     const userHasOnboarded = useAppSelector(selectHasOnboarded)
     const [isComplete, setIsComplete] = useState(false)
@@ -162,19 +160,19 @@ export const useCreateWallet = () => {
      */
     const createSmartWallet = useCallback(
         async ({ address, onError }: { address: string; onError?: (error: unknown) => void }) => {
+            console.log("createSmartWallet", address)
             try {
                 //Create the new Smart Wallet device and persist it
-                const smartWalletDevice: SmartWalletDevice = {
-                    index: getNextDeviceIndex(devices),
+                const smartWalletDevice = {
                     rootAddress: address,
-                    type: DEVICE_TYPE.SMART_WALLET,
+                    type: DEVICE_TYPE.SMART_WALLET as const,
                     alias: "Smart Wallet",
                     position: 0, // this will be updated when the device is added to the redux store
                 }
-        
+
                 // add the device and account to redux
                 const newAccount = dispatch(addSmartWalletDeviceAndAccount(smartWalletDevice))
-              
+
                 // set the selected account
                 if (!selectedAccount) dispatch(setSelectedAccount({ address: newAccount.address }))
 
@@ -204,7 +202,7 @@ export const useCreateWallet = () => {
                 throw e
             }
         },
-        [dispatch, track, userHasOnboarded, devices, selectedAccount],
+        [dispatch, track, userHasOnboarded, selectedAccount],
     )
 
     //* [END] - Create Wallet

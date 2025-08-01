@@ -1,17 +1,17 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useEffect } from "react"
 import { Text, View, Button, StyleSheet } from "react-native"
 import { useCreateWallet } from "../../../../Hooks/useCreateWallet"
 import { useNavigation } from "@react-navigation/native"
 import { useSmartWallet } from "../../../../VechainWalletKit"
 
 export const SmartAccountScreen = () => {
-    // const { createSmartWallet } = useCreateWallet()
+    const { createSmartWallet } = useCreateWallet()
     const { login, logout, isAuthenticated, smartAccountAddress, ownerAddress, initialiseWallet } = useSmartWallet()
     // const [user, setUser] = useState<any>(null)
     // const { accountAddress } = useSocialLogin()
     const nav = useNavigation<any>()
 
-    const { createSmartWallet } = useCreateWallet()
+    // const { createSmartWallet } = useCreateWallet()
     const navigateToTabStack = useCallback(() => {
         // Navigate directly to TabStack instead of a specific tab
         nav.reset({
@@ -20,13 +20,34 @@ export const SmartAccountScreen = () => {
         })
     }, [nav])
 
-    const createAndInitWallet = useCallback(async () => {
-        await initialiseWallet()
-        if (isAuthenticated && smartAccountAddress) {
-            await createSmartWallet({ address: smartAccountAddress })
-            console.log("wallet added to veworld")
+    useEffect(() => {
+        console.log("initialiseWallet changed")
+    }, [initialiseWallet])
+
+    useEffect(() => {
+        console.log("createSmartWallet changed")
+    }, [createSmartWallet])
+
+    useEffect(() => {
+        console.log("isAuthenticated changed")
+    }, [isAuthenticated])
+
+    useEffect(() => {
+        console.log("smartAccountAddress changed")
+    }, [smartAccountAddress])
+
+    useEffect(() => {
+        const init = async () => {
+            console.log("init isAuthenticated", isAuthenticated, smartAccountAddress)
+            if (isAuthenticated && smartAccountAddress) {
+                console.log("initialising wallet!")
+                await initialiseWallet()
+                console.log("createSmartWallet", smartAccountAddress)
+                await createSmartWallet({ address: smartAccountAddress })
+            }
         }
-    }, [initialiseWallet, isAuthenticated, smartAccountAddress, createSmartWallet])
+        init()
+    }, [isAuthenticated, initialiseWallet, createSmartWallet, smartAccountAddress])
 
     const handleLogin = useCallback(async () => {
         console.log("logging in!")
@@ -77,7 +98,7 @@ export const SmartAccountScreen = () => {
                         // disabled={oauth.state.status === "loading"}
                         onPress={handleLogout}></Button>
                 </View>
-                <Button title="Initialise Wallet" onPress={createAndInitWallet} />
+                {/* <Button title="Initialise Wallet" onPress={createAndInitWallet} /> */}
                 <Button title="Go to Main App" onPress={navigateToTabStack} />
 
                 {/* <Button title="Logout" onPress={logout} /> */}

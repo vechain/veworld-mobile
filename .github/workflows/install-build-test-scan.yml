@@ -44,5 +44,9 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-              "text": "${{ job.status }} scan ${{ needs.scan.result }}, iOS ${{ needs.build-and-test-ios.result }}, Android ${{needs.build-and-test-android.result}}"
+              "text": "${{ job.status }} scan ${{ needs.scan.result }}, \
+                       iOS ${{ needs.build-and-test-ios.result }} \
+                       url: ${{ needs.build-and-test-ios.outputs.resultUrl }}, \
+                       Android ${{needs.build-and-test-android.result}} \
+                       url: ${{ needs.build-and-test-android.outputs.resultUrl }}"
             }

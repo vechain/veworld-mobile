@@ -11,6 +11,7 @@ import {
 } from "react-native"
 import WebView, { WebViewMessageEvent, WebViewNavigation } from "react-native-webview"
 import { showInfoToast, showWarningToast } from "~Components"
+import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, usePrevious, useSetSelectedAccount } from "~Hooks"
 import { Locales, useI18nContext } from "~i18n"
@@ -37,6 +38,10 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
+import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
+import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
+import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
+import { TypedDataBottomSheet } from "./Components/TypedDataBottomSheet"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
 const { PackageDetails } = NativeModules
@@ -103,6 +108,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const [packageInfo, setPackageInfo] = React.useState<PackageInfoResponse | null>(null)
     const [isLoading, setIsLoading] = React.useState(true)
+    const {
+        connectBsRef,
+        setConnectBsData,
+        certificateBsRef,
+        setCertificateBsData,
+        transactionBsRef,
+        setTransactionBsData,
+        typedDataBsRef,
+        setTypedDataBsData,
+    } = useInteraction()
 
     useEffect(() => {
         if (platform === "ios") {
@@ -385,22 +400,27 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (isAlreadyConnected) {
-                nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
-                    request: req,
-                    isInjectedWallet: true,
-                })
+                setTransactionBsData(req)
+                transactionBsRef.current?.present()
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
-                    request: {
-                        type: "in-app",
-                        initialRequest: req,
-                        appUrl,
-                        appName,
-                    },
+                setConnectBsData({
+                    type: "in-app",
+                    initialRequest: req,
+                    appUrl,
+                    appName,
                 })
+                connectBsRef.current?.present()
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [
+            connectBsRef,
+            connectedDiscoveryApps,
+            setConnectBsData,
+            setTransactionBsData,
+            switchAccount,
+            switchNetwork,
+            transactionBsRef,
+        ],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -428,21 +448,27 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (isAlreadyConnected) {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
-                    request: req,
-                })
+                setCertificateBsData(req)
+                certificateBsRef.current?.present()
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
-                    request: {
-                        type: "in-app",
-                        initialRequest: req,
-                        appUrl,
-                        appName,
-                    },
+                setConnectBsData({
+                    type: "in-app",
+                    initialRequest: req,
+                    appUrl,
+                    appName,
                 })
+                connectBsRef.current?.present()
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [
+            connectedDiscoveryApps,
+            switchAccount,
+            switchNetwork,
+            setCertificateBsData,
+            certificateBsRef,
+            setConnectBsData,
+            connectBsRef,
+        ],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -471,21 +497,27 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (isAlreadyConnected) {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
-                    request: req,
-                })
+                setTypedDataBsData(req)
+                typedDataBsRef.current?.present()
             } else {
-                nav.navigate(Routes.CONNECT_APP_SCREEN, {
-                    request: {
-                        type: "in-app",
-                        initialRequest: req,
-                        appUrl,
-                        appName,
-                    },
+                setConnectBsData({
+                    type: "in-app",
+                    initialRequest: req,
+                    appUrl,
+                    appName,
                 })
+                connectBsRef.current?.present()
             }
         },
-        [connectedDiscoveryApps, nav, switchAccount, switchNetwork],
+        [
+            connectBsRef,
+            connectedDiscoveryApps,
+            setConnectBsData,
+            setTypedDataBsData,
+            switchAccount,
+            switchNetwork,
+            typedDataBsRef,
+        ],
     )
 
     // ~ MESSAGE VALIDATION
@@ -618,25 +650,29 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             )
 
             if (request.method === "thor_sendTransaction") {
-                nav.navigate(Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN, {
-                    request: request,
-                    isInjectedWallet: true,
-                })
+                setTransactionBsData(request)
+                transactionBsRef.current?.present()
             }
 
             if (request.method === "thor_signCertificate") {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN, {
-                    request,
-                })
+                setCertificateBsData(request)
+                certificateBsRef.current?.present()
             }
 
             if (request.method === "thor_signTypedData") {
-                nav.navigate(Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN, {
-                    request,
-                })
+                setTypedDataBsData(request)
+                typedDataBsRef.current?.present()
             }
         },
-        [dispatch, nav],
+        [
+            certificateBsRef,
+            dispatch,
+            setCertificateBsData,
+            setTransactionBsData,
+            setTypedDataBsData,
+            transactionBsRef,
+            typedDataBsRef,
+        ],
     )
 
     const onMessage = useCallback(
@@ -819,7 +855,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         isDapp,
     ])
 
-    return <Context.Provider value={contextValue}>{children}</Context.Provider>
+    return (
+        <Context.Provider value={contextValue}>
+            <ConnectBottomSheet />
+            <CertificateBottomSheet />
+            <TransactionBottomSheet />
+            <TypedDataBottomSheet />
+            {children}
+        </Context.Provider>
+    )
 }
 
 export const useInAppBrowser = () => {

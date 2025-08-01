@@ -347,6 +347,7 @@ const getTransferClause = (
     delegatorAddress: string,
     amount: BigNumberUtils | undefined,
 ) => {
+    console.log("getTransferClause amount", amount)
     const amountHex = `0x${amount?.toHex}`
 
     // code from export const prepareFungibleClause = (

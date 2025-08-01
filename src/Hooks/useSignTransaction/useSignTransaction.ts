@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { Address, Hex, Secp256k1, Transaction } from "@vechain/sdk-core"
 import { HDNode } from "thor-devkit"
-import { showErrorToast, showWarningToast, WalletEncryptionKeyHelper } from "~Components"
+import { showWarningToast, WalletEncryptionKeyHelper } from "~Components"
 import { ERROR_EVENTS, VTHO } from "~Constants"
 import { useI18nContext } from "~i18n"
 import {
@@ -28,7 +28,6 @@ type Props = {
     initialRoute?: Routes.NFTS | Routes.HOME
     buildTransaction: () => Promise<Transaction>
     dappRequest?: TransactionRequest
-    resetDelegation: () => void
     selectedDelegationToken: string
     genericDelegatorFee?: BigNumberUtils
 }
@@ -63,7 +62,6 @@ export const useSignTransaction = ({
     buildTransaction,
     dappRequest,
     initialRoute,
-    resetDelegation,
     selectedDelegationToken,
     genericDelegatorFee,
 }: Props) => {
@@ -100,15 +98,13 @@ export const useSignTransaction = ({
             // where the initial transaction will be sent from
             const origin = senderDevice?.type === DEVICE_TYPE.SMART_WALLET ? smartWalletOwnerAddress : account.address
 
-            console.log("getUrlDelegationSignature smart wallet", origin, account.address, smartWalletOwnerAddress)
             // request to send for sponsorship/fee delegation
             const sponsorRequest = {
                 origin: origin.toLowerCase(),
                 raw: rawTransaction,
             }
-            console.log("getUrlDelegationSignature sponsorRequest", JSON.stringify(sponsorRequest))
+
             const signature = await sponsorTransaction(selectedDelegationUrl, sponsorRequest)
-            console.log("getUrlDelegationSignature signature", signature)
 
             if (!signature) {
                 throw new Error("Error getting delegator signature")
@@ -116,7 +112,6 @@ export const useSignTransaction = ({
 
             return Buffer.from(signature.substr(2), "hex")
         } catch (e) {
-            console.log("getUrlDelegationSignature error", e)
             warn(ERROR_EVENTS.SIGN, "Error getting URL delegator signature", e)
             return SignStatus.DELEGATION_FAILURE
         }
@@ -161,20 +156,7 @@ export const useSignTransaction = ({
         }
     }
 
-    const getDelegationSignature = async (
-        transaction: Transaction,
-        password?: string,
-    ): Promise<Buffer | SignStatus.DELEGATION_FAILURE | undefined> => {
-        switch (selectedDelegationOption) {
-            case DelegationType.URL:
-                return await getUrlDelegationSignature(transaction)
-            case DelegationType.ACCOUNT:
-                return await getAccountDelegationSignature(transaction, password)
-        }
-    }
-
     const getGenericDelegationTransaction = async (transaction: Transaction) => {
-        console.log("getGenericDelegationTransaction transaction", transaction)
         try {
             // build hex encoded version of the transaction for signing request
             const rawTransaction = HexUtils.addPrefix(Buffer.from(transaction.encoded).toString("hex"))
@@ -192,7 +174,6 @@ export const useSignTransaction = ({
                     token: selectedDelegationToken,
                     networkType: selectedNetwork.type,
                 })
-                console.log("getGenericDelegationTransaction smart walletnewTx", newTx)
             } else {
                 newTx = await delegateGenericDelegator({
                     ...sponsorRequest,
@@ -210,9 +191,38 @@ export const useSignTransaction = ({
                 transaction: Transaction.of(Transaction.decode(Buffer.from(newTx.raw.substring(2), "hex"), false).body),
             }
         } catch (e) {
-            console.log("getGenericDelegationTransaction error", e)
             warn(ERROR_EVENTS.SIGN, "Error getting URL delegator signature", e)
             return SignStatus.DELEGATION_FAILURE
+        }
+    }
+
+    const getDelegationSignature = async (
+        transaction: Transaction,
+        password?: string,
+    ): Promise<{ transaction: Transaction; signature: Buffer | SignStatus.DELEGATION_FAILURE | undefined }> => {
+        switch (selectedDelegationOption) {
+            case DelegationType.URL: {
+                if (selectedDelegationToken === VTHO.symbol || genericDelegatorFee === undefined)
+                    return { transaction, signature: await getUrlDelegationSignature(transaction) }
+                const result = await getGenericDelegationTransaction(transaction)
+                if (result === SignStatus.DELEGATION_FAILURE)
+                    return { transaction, signature: SignStatus.DELEGATION_FAILURE }
+                const validationResult = await validateGenericDelegatorTx(
+                    transaction,
+                    result.transaction,
+                    selectedDelegationToken,
+                    genericDelegatorFee,
+                )
+                if (!validationResult.valid) {
+                    debug("SIGN", validationResult.reason, validationResult.metadata)
+                    return { transaction, signature: SignStatus.DELEGATION_FAILURE }
+                }
+                return { transaction: result.transaction, signature: result.signature }
+            }
+            case DelegationType.ACCOUNT:
+                return { transaction, signature: await getAccountDelegationSignature(transaction, password) }
+            default:
+                return { transaction, signature: undefined }
         }
     }
 
@@ -221,20 +231,18 @@ export const useSignTransaction = ({
         ledgerAccount: LedgerAccountWithDevice,
         password?: string,
     ) => {
-        const delegationSignature = await getDelegationSignature(transaction, password)
+        const { signature: delegationSignature, transaction: newTx } = await getDelegationSignature(
+            transaction,
+            password,
+        )
 
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) {
-            resetDelegation()
-            showErrorToast({
-                text1: LL.ERROR(),
-                text2: LL.SEND_DELEGATION_ERROR_SIGNATURE(),
-            })
-            return
+            return SignStatus.DELEGATION_FAILURE
         }
 
         nav.navigate(Routes.LEDGER_SIGN_TRANSACTION, {
             accountWithDevice: ledgerAccount,
-            transaction,
+            transaction: newTx,
             initialRoute,
             delegationSignature: delegationSignature?.toString("hex"),
             dappRequest,
@@ -250,34 +258,15 @@ export const useSignTransaction = ({
         let transaction = await buildTransaction()
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
-            await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
+            const result = await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
+            if (result === SignStatus.DELEGATION_FAILURE) return result
             return SignStatus.NAVIGATE_TO_LEDGER
         }
 
-        let delegationSignature: Buffer | SignStatus.DELEGATION_FAILURE | undefined
-
-        if (selectedDelegationToken !== VTHO.symbol && genericDelegatorFee !== undefined) {
-            const result = await getGenericDelegationTransaction(transaction)
-            if (result === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
-            const validationResult = await validateGenericDelegatorTx(
-                transaction,
-                result.transaction,
-                selectedDelegationToken,
-                genericDelegatorFee,
-            )
-            if (!validationResult.valid) {
-                debug("SIGN", validationResult.reason, validationResult.metadata)
-                return SignStatus.DELEGATION_FAILURE
-            }
-            console.log("using tx from generic delegator")
-            transaction = result.transaction
-            delegationSignature = result.signature
-        } else {
-            console.log("getting delegation signature")
-            delegationSignature = await getDelegationSignature(transaction, password)
-        }
-
-        if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
+        const { signature: delegationSignature, transaction: newTx } = await getDelegationSignature(
+            transaction,
+            password,
+        )
 
         let senderSignature: Buffer
         if (senderDevice.type === DEVICE_TYPE.SMART_WALLET) {
@@ -297,10 +286,10 @@ export const useSignTransaction = ({
             senderSignature = await getSignature(transaction, senderWallet)
         }
 
-        console.log("delegation signature", delegationSignature)
-        console.log("sender signature", senderSignature)
+        if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
+
         return Transaction.of(
-            transaction.body,
+            newTx.body,
             delegationSignature ? Buffer.concat([senderSignature, delegationSignature]) : senderSignature,
         )
     }

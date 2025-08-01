@@ -27,13 +27,13 @@ describe("useConvertBetterTokens", () => {
     })
     it("navigate to convert B3TR token to VOT3", async () => {
         const amount = "1"
+        const formattedAmount = ethers.utils.parseEther(amount.toString()).toString()
         const { result } = renderHook(() => useConvertBetterTokens(), { wrapper: TestWrapper })
         const { convertB3tr } = result.current
 
-        await act(async () => convertB3tr(amount))
+        await act(async () => convertB3tr(formattedAmount, amount))
 
         const spender = VOT3.address
-        const formattedAmount = ethers.utils.parseEther(amount.toString()).toString()
 
         const approveData = new abi.Function(abis.VeBetterDao.B3trAbis.approve).encode(spender, formattedAmount)
         const convertData = new abi.Function(abis.VeBetterDao.Vot3Abis.convertToVOT3).encode(formattedAmount)
@@ -60,12 +60,11 @@ describe("useConvertBetterTokens", () => {
 
     it("navigate to convert VOT3 to B3TR", async () => {
         const amount = "1"
+        const formattedAmount = ethers.utils.parseEther(amount.toString()).toString()
         const { result } = renderHook(() => useConvertBetterTokens(), { wrapper: TestWrapper })
         const { convertVot3 } = result.current
 
-        await act(async () => convertVot3(amount))
-
-        const formattedAmount = ethers.utils.parseEther(amount.toString()).toString()
+        await act(async () => convertVot3(formattedAmount, amount))
 
         const convertData = new abi.Function(abis.VeBetterDao.Vot3Abis.convertToB3TR).encode(formattedAmount)
 

@@ -37,6 +37,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const previousConfigRef = useRef<NetworkConfig | null>(null)
 
     const initialiseWallet = useCallback(async (): Promise<void> => {
+        console.log("SmartWalletProvider initialiseWallet", adapter.isAuthenticated)
         if (!adapter.isAuthenticated) {
             throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
         }

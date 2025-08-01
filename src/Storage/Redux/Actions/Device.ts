@@ -98,14 +98,38 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
 
 /**
  *  Add a Smart Wallet device and its first account
- * @param device  the device to add
+ * @param device  the device to add (without index, will be calculated)
  * @returns the added account
  */
 const addSmartWalletDeviceAndAccount =
-    (device: SmartWalletDevice): AppThunk<WalletAccount> =>
-    dispatch => {
-        dispatch(addDevice(device))
-        console.log("addSmartWalletDeviceAndAccount completed", device)
+    (device: Omit<SmartWalletDevice, "index">): AppThunk<WalletAccount> =>
+    (dispatch, getState) => {
+        const devices = selectDevices(getState())
+
+        const deviceExists = devices.find(existingDevice =>
+            AddressUtils.compareAddresses(existingDevice.rootAddress, device.rootAddress),
+        )
+
+        if (deviceExists) {
+            // Return existing account if device already exists
+            const existingAccount: WalletAccount = {
+                alias: "Smart Wallet Account",
+                address: deviceExists.rootAddress,
+                rootAddress: deviceExists.rootAddress,
+                index: -1,
+                visible: true,
+            }
+            return existingAccount
+        }
+
+        // Calculate the next device index
+        const deviceWithIndex: SmartWalletDevice = {
+            ...device,
+            index: getNextDeviceIndex(devices),
+        }
+
+        dispatch(addDevice(deviceWithIndex))
+
         let account: WalletAccount = {
             alias: "Smart Wallet Account",
             address: device.rootAddress,
@@ -115,7 +139,7 @@ const addSmartWalletDeviceAndAccount =
         }
 
         dispatch(addAccount(account))
-        console.log("addAccount completed", account)
+
         return account
     }
 

@@ -44,7 +44,6 @@ export const useSendTransaction = (onSuccess: (transaction: Transaction, id: str
             response = await axios.post(`${selectedNetwork.currentUrl}/transactions`, encodedRawTx)
 
             id = response.data.id
-            console.log("sendTransaction id", id)
             await onSuccess(signedTransaction, id)
 
             showSuccessToast({

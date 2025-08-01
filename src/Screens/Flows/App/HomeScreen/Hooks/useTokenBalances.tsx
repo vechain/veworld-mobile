@@ -1,3 +1,7 @@
+import { useCallback, useEffect } from "react"
+import { useThor } from "~Components"
+import { VeDelegate } from "~Constants"
+import { useGetVeDelegateBalance } from "~Hooks"
 import {
     autoSelectSuggestTokens,
     resetTokenBalances,
@@ -12,11 +16,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { useThor } from "~Components"
-import { useCallback, useEffect } from "react"
-import { useGetVeDelegateBalance } from "~Hooks"
 import { BigNutils } from "~Utils"
-import { VeDelegate } from "~Constants"
 
 /**
  * This hook is responsible for keeping the available tokens, balances and exchange rates data up to date.
@@ -38,12 +38,12 @@ export const useTokenBalances = () => {
 
     const { data: veDelegateBalance } = useGetVeDelegateBalance(selectedAccount.address)
 
-    const updateBalances = useCallback(async () => {
-        // Update balances
-        if (balances.length > 0) {
-            await dispatch(updateAccountBalances(thorClient, selectedAccount.address))
-        }
-    }, [balances.length, dispatch, selectedAccount.address, thorClient])
+    const updateBalances = useCallback(
+        async (force = false) => {
+            await dispatch(updateAccountBalances(thorClient, selectedAccount.address, force))
+        },
+        [dispatch, selectedAccount.address, thorClient],
+    )
 
     const updateSuggested = useCallback(async () => {
         await dispatch(updateSuggestedTokens(selectedAccount.address, [...officialTokens, VeDelegate], network))

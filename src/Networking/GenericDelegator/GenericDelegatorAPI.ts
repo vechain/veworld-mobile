@@ -4,8 +4,8 @@ import { fetchFromEndpoint, requestFromEndpoint } from "~Networking/API"
 import { URIUtils } from "~Utils"
 
 export const GENERIC_DELEGATOR_BASE_URL = {
-    [NETWORK_TYPE.MAIN]: "http://localhost:3000",
-    [NETWORK_TYPE.TEST]: "http://localhost:3000",
+    [NETWORK_TYPE.MAIN]: process.env.REACT_APP_GENERIC_DELEGATOR_MAINNET_URL,
+    [NETWORK_TYPE.TEST]: process.env.REACT_APP_GENERIC_DELEGATOR_TESTNET_URL,
 }
 
 export const isValidGenericDelegatorNetwork = (

@@ -74,15 +74,14 @@ export const validateGenericDelegatorTx = async (
     // let decoded: ethers.utils.Result
     // try {
     //     decoded = iface.decodeFunctionData("transfer", lastClause.data)
-    // } catch (error) {
-    //     console.log("error", error)
+    // } catch {
     //     return {
     //         valid: false,
     //         reason: "NOT_ERC20_TRANSFER",
     //         metadata: { data: lastClause.data },
     //     }
     // }
-    //Check if the amount of tokens sent is off by more than 1%
+    // //Check if the amount of tokens sent is off by more than 1%
     // if (
     //     selectedFee
     //         .clone()
