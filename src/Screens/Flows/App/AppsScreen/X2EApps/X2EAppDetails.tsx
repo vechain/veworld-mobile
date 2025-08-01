@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState, useEffect } from "react"
+import React, { PropsWithChildren, useState, useEffect, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import Animated, {
     LinearTransition,
@@ -16,7 +16,7 @@ import { useI18nContext } from "~i18n"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
 const TIMING_CONFIG = {
-    duration: 300,
+    duration: 350, // Increased slightly for smoother feel
     easing: Easing.bezier(0.25, 0.1, 0.25, 1),
 }
 
@@ -28,14 +28,14 @@ const SMOOTH_OUT_EASING = Easing.bezier(0.22, 1, 0.36, 1)
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
-const Title = ({ children }: PropsWithChildren) => {
+const Title = React.memo(({ children }: PropsWithChildren) => {
     const theme = useTheme()
     return (
         <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.assetDetailsCard.title}>
             {children}
         </BaseText>
     )
-}
+})
 
 interface StatItemProps {
     value: string
@@ -43,11 +43,11 @@ interface StatItemProps {
     delay?: number
 }
 
-// Base animation durations and delays
-const BASE_ENTRY_DELAY = 100
-const ENTRY_DELAY_INCREMENT = 80
+// Base animation durations and delays - reduced for smoother flow
+const BASE_ENTRY_DELAY = 60 // Reduced from 100
+const ENTRY_DELAY_INCREMENT = 50 // Reduced from 80
 
-const Description = ({ children }: { children: string }) => {
+const Description = React.memo(({ children }: { children: string }) => {
     const theme = useTheme()
 
     const descriptionStyle = useAnimatedStyle(
@@ -70,10 +70,10 @@ const Description = ({ children }: { children: string }) => {
             </Animated.View>
         </AnimatedBaseView>
     )
-}
+})
 
 // Separate component for each stat item that safely uses hooks
-const StatItem = ({ value, label, delay = 0 }: StatItemProps) => {
+const StatItem = React.memo(({ value, label, delay = 0 }: StatItemProps) => {
     // Calculate total delay including the Stats component base delay
     const totalDelay = BASE_ENTRY_DELAY + ENTRY_DELAY_INCREMENT + delay
 
@@ -96,7 +96,7 @@ const StatItem = ({ value, label, delay = 0 }: StatItemProps) => {
             </BaseView>
         </Animated.View>
     )
-}
+})
 
 interface StatsProps {
     rating?: StatItemProps
@@ -105,29 +105,31 @@ interface StatsProps {
     customStats?: StatItemProps[]
 }
 
-const Stats = ({
-    rating = { value: "4.5", label: "Rating" },
-    users = { value: "1.1M", label: "Users" },
-    co2Saved = { value: "10.8 T", label: "CO2 saved" },
-    customStats = [],
-}: StatsProps) => {
-    return (
-        <AnimatedBaseView
-            layout={SMOOTH_LAYOUT}
-            flexDirection={"row"}
-            justifyContent={"space-between"}
-            py={4}
-            px={8}
-            gap={8}>
-            {rating && <StatItem value={rating.value} label={rating.label} delay={0} />}
-            {users && <StatItem value={users.value} label={users.label} delay={40} />}
-            {co2Saved && <StatItem value={co2Saved.value} label={co2Saved.label} delay={80} />}
-            {customStats.map((stat, index) => (
-                <StatItem key={index} value={stat.value} label={stat.label} delay={120 + index * 40} />
-            ))}
-        </AnimatedBaseView>
-    )
-}
+const Stats = React.memo(
+    ({
+        rating = { value: "4.5", label: "Rating" },
+        users = { value: "1.1M", label: "Users" },
+        co2Saved = { value: "10.8 T", label: "CO2 saved" },
+        customStats = [],
+    }: StatsProps) => {
+        return (
+            <AnimatedBaseView
+                layout={SMOOTH_LAYOUT}
+                flexDirection={"row"}
+                justifyContent={"space-between"}
+                py={4}
+                px={8}
+                gap={8}>
+                {rating && <StatItem value={rating.value} label={rating.label} delay={0} />}
+                {users && <StatItem value={users.value} label={users.label} delay={25} />}
+                {co2Saved && <StatItem value={co2Saved.value} label={co2Saved.label} delay={50} />}
+                {customStats.map((stat, index) => (
+                    <StatItem key={index} value={stat.value} label={stat.label} delay={75 + index * 25} />
+                ))}
+            </AnimatedBaseView>
+        )
+    },
+)
 
 interface ActionsProps {
     onAddToFavorites?: () => void
@@ -137,69 +139,71 @@ interface ActionsProps {
     favoriteButtonText?: string
 }
 
-const Actions = ({
-    onAddToFavorites = () => {},
-    onOpen = () => {},
-    isFavorite = false,
-    openButtonText,
-    favoriteButtonText,
-}: ActionsProps) => {
-    const { LL } = useI18nContext()
+const Actions = React.memo(
+    ({
+        onAddToFavorites = () => {},
+        onOpen = () => {},
+        isFavorite = false,
+        openButtonText,
+        favoriteButtonText,
+    }: ActionsProps) => {
+        const { LL } = useI18nContext()
 
-    // Calculate total delay for buttons to appear after description and stats
-    const actionsBaseDelay = BASE_ENTRY_DELAY + ENTRY_DELAY_INCREMENT * 2
+        // Calculate total delay for buttons to appear after description and stats - reduced
+        const actionsBaseDelay = BASE_ENTRY_DELAY + ENTRY_DELAY_INCREMENT * 1.5 // Reduced multiplier
 
-    const favoriteButtonStyle = useAnimatedStyle(
-        () => ({
-            opacity: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)),
-            transform: [
-                { translateY: withDelay(actionsBaseDelay, withTiming(0, TIMING_CONFIG)) },
-                { scale: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)) },
-            ],
-        }),
-        [],
-    )
+        const favoriteButtonStyle = useAnimatedStyle(
+            () => ({
+                opacity: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)),
+                transform: [
+                    { translateY: withDelay(actionsBaseDelay, withTiming(0, TIMING_CONFIG)) },
+                    { scale: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)) },
+                ],
+            }),
+            [],
+        )
 
-    const openButtonStyle = useAnimatedStyle(
-        () => ({
-            opacity: withDelay(actionsBaseDelay + 50, withTiming(1, TIMING_CONFIG)),
-            transform: [
-                { translateY: withDelay(actionsBaseDelay + 50, withTiming(0, TIMING_CONFIG)) },
-                { scale: withDelay(actionsBaseDelay + 50, withTiming(1, TIMING_CONFIG)) },
-            ],
-        }),
-        [],
-    )
+        const openButtonStyle = useAnimatedStyle(
+            () => ({
+                opacity: withDelay(actionsBaseDelay + 30, withTiming(1, TIMING_CONFIG)), // Reduced from 50
+                transform: [
+                    { translateY: withDelay(actionsBaseDelay + 30, withTiming(0, TIMING_CONFIG)) },
+                    { scale: withDelay(actionsBaseDelay + 30, withTiming(1, TIMING_CONFIG)) },
+                ],
+            }),
+            [],
+        )
 
-    return (
-        <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="column" gap={16} px={0}>
-            <Animated.View style={[styles.sequentialRevealState, favoriteButtonStyle]}>
-                <BaseButton variant="outline" action={onAddToFavorites}>
-                    <BaseView flexDirection="row" alignItems="center">
-                        <BaseIcon name={"icon-star"} size={16} />
-                        <BaseSpacer width={12} />
-                        <BaseText typographyFont="bodyMedium">
-                            {favoriteButtonText ||
-                                (isFavorite ? LL.BTN_REMOVE_FROM_FAVORITES?.() : LL.BTN_ADD_TO_FAVORITES?.())}
-                        </BaseText>
-                    </BaseView>
-                </BaseButton>
-            </Animated.View>
+        return (
+            <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="column" gap={16} px={0}>
+                <Animated.View style={[styles.sequentialRevealState, favoriteButtonStyle]}>
+                    <BaseButton variant="outline" action={onAddToFavorites}>
+                        <BaseView flexDirection="row" alignItems="center">
+                            <BaseIcon name={"icon-star"} size={16} />
+                            <BaseSpacer width={12} />
+                            <BaseText typographyFont="bodyMedium">
+                                {favoriteButtonText ||
+                                    (isFavorite ? LL.BTN_REMOVE_FROM_FAVORITES?.() : LL.BTN_ADD_TO_FAVORITES?.())}
+                            </BaseText>
+                        </BaseView>
+                    </BaseButton>
+                </Animated.View>
 
-            <Animated.View style={[styles.sequentialRevealState, openButtonStyle]}>
-                <BaseButton action={onOpen}>{openButtonText || LL.BTN_OPEN()}</BaseButton>
-            </Animated.View>
-        </AnimatedBaseView>
-    )
-}
+                <Animated.View style={[styles.sequentialRevealState, openButtonStyle]}>
+                    <BaseButton action={onOpen}>{openButtonText || LL.BTN_OPEN()}</BaseButton>
+                </Animated.View>
+            </AnimatedBaseView>
+        )
+    },
+)
 
-const Container = ({ children }: PropsWithChildren) => {
+const Container = React.memo(({ children }: PropsWithChildren) => {
     return (
         <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="column" gap={8} px={24} pb={24}>
             {children}
         </AnimatedBaseView>
     )
-}
+})
 
 // Sequential animation section wrapper that waits for previous section to complete
 const SequentialSection = ({
@@ -213,9 +217,9 @@ const SequentialSection = ({
     isVisible: boolean
     onAnimationComplete?: () => void
 }) => {
-    // First section has no delay, others wait for previous to complete
-    const animationDelay = index === 0 ? 80 : 100
-    const animationDuration = 250
+    // Reduced delays for smoother flow
+    const animationDelay = index === 0 ? 40 : 60 // Reduced from 80/100
+    const animationDuration = 300 // Increased from 250 for smoother motion
 
     const [isContentVisible, setIsContentVisible] = useState(false)
 
@@ -295,12 +299,30 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
     }, [shouldShow, hasShownBefore])
 
     // Handle section completion - advance to next section
-    const handleSectionComplete = (currentIndex: number) => {
-        // Only advance when showing
-        if (shouldShow) {
-            setSectionProgress(prev => Math.max(prev, currentIndex + 1))
-        }
-    }
+    const handleSectionComplete = useCallback(
+        (currentIndex: number) => {
+            // Only advance when showing
+            if (shouldShow) {
+                setSectionProgress(prev => Math.max(prev, currentIndex + 1))
+            }
+        },
+        [shouldShow],
+    )
+
+    // Memoize children mapping to prevent unnecessary re-renders
+    const memoizedChildren = useMemo(
+        () =>
+            React.Children.map(children, (child, index) => (
+                <SequentialSection
+                    key={index}
+                    index={index}
+                    isVisible={(shouldShow && index <= sectionProgress) || (!shouldShow && show)}
+                    onAnimationComplete={() => handleSectionComplete(index)}>
+                    {child}
+                </SequentialSection>
+            )),
+        [children, shouldShow, sectionProgress, show, handleSectionComplete],
+    )
 
     // Better animation style to avoid both autoNaN issues and flashing gaps
     const animatedStyles = useAnimatedStyle(() => {
@@ -325,16 +347,7 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
             layout={SMOOTH_LAYOUT}
             style={[styles.detailsContainer, animatedStyles]}
             flexDirection="column">
-            {/* When closing, we need to make everything immediately visible before the fadeout */}
-            {React.Children.map(children, (child, index) => (
-                <SequentialSection
-                    key={index}
-                    index={index}
-                    isVisible={(shouldShow && index <= sectionProgress) || (!shouldShow && show)}
-                    onAnimationComplete={() => handleSectionComplete(index)}>
-                    {child}
-                </SequentialSection>
-            ))}
+            {memoizedChildren}
         </AnimatedBaseView>
     )
 }

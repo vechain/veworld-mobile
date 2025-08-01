@@ -39,7 +39,7 @@ type DAppsListProps = {
     isLoading: boolean
 }
 
-const LoadingMoreFooter = ({ isLoading }: { isLoading: boolean }) => {
+const LoadingMoreFooter = React.memo(({ isLoading }: { isLoading: boolean }) => {
     const { LL } = useI18nContext()
 
     if (isLoading)
@@ -51,9 +51,9 @@ const LoadingMoreFooter = ({ isLoading }: { isLoading: boolean }) => {
         )
 
     return <BaseSpacer height={0} />
-}
+})
 
-const X2EAppItem = ({ dapp }: { dapp: DiscoveryDApp }) => {
+const X2EAppItem = React.memo(({ dapp }: { dapp: DiscoveryDApp }) => {
     return (
         <X2EAppWithDetails
             name={dapp.name}
@@ -69,9 +69,9 @@ const X2EAppItem = ({ dapp }: { dapp: DiscoveryDApp }) => {
             </X2EAppDetails.Container>
         </X2EAppWithDetails>
     )
-}
+})
 
-const X2EAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
+const X2EAppsList = React.memo(({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
     const renderItem = useCallback(({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
         return <X2EAppItem dapp={item} />
     }, [])
@@ -87,6 +87,8 @@ const X2EAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
     const renderSkeletonItem = useCallback(() => {
         return <BaseView bg={COLORS.GREY_200} h={100} borderRadius={12} />
     }, [])
+
+    const keyExtractor = useCallback((item: DiscoveryDApp) => item.href, [])
 
     if (isLoading && dapps.length === 0) {
         return (
@@ -106,7 +108,7 @@ const X2EAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
         <FlatList
             data={dapps}
             scrollEnabled={true}
-            keyExtractor={item => item.href}
+            keyExtractor={keyExtractor}
             contentContainerStyle={styles.flatListPadding}
             ItemSeparatorComponent={renderItemSeparator}
             showsVerticalScrollIndicator={false}
@@ -117,7 +119,7 @@ const X2EAppsList = ({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
             onEndReachedThreshold={0.5}
         />
     )
-}
+})
 
 const styles = StyleSheet.create({
     flatListPadding: { paddingBottom: 24, paddingTop: 32 },
@@ -190,7 +192,7 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
             ]
         }, [LL, selectedDappsType])
 
-        const onFetchNextPage = useCallback(async () => {
+        const onFetchNextPage = useCallback(() => {
             fetchNextPage()
         }, [fetchNextPage])
 
