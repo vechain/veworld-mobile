@@ -104,6 +104,14 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         setIsEditingMode(false)
     }, [dispatch, reorderedDapps])
 
+    const handleNavigateToDApp = useCallback(() => {
+        setSelectedDApp(undefined)
+        onCloseDAppOptions()
+        if (ref && typeof ref !== "function" && ref.current) {
+            ref.current.dismiss()
+        }
+    }, [onCloseDAppOptions, ref])
+
     useEffect(() => {
         if (reorderedDapps.length !== bookmarkedDApps.length) setReorderedDapps(bookmarkedDApps)
     }, [bookmarkedDApps, reorderedDapps.length])
@@ -172,13 +180,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     setSelectedDApp(undefined)
                     onCloseDAppOptions()
                 }}
-                onNavigateToDApp={() => {
-                    setSelectedDApp(undefined)
-                    onCloseDAppOptions()
-                    if (ref && typeof ref !== "function") {
-                        ref.current?.dismiss()
-                    }
-                }}
+                onNavigateToDApp={handleNavigateToDApp}
                 selectedDApp={selectedDApp}
             />
         </>
