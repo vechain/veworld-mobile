@@ -349,11 +349,13 @@ export const TransactionBottomSheet = () => {
     const onDismiss = useCallback(async () => {
         if (isUserAction.current) {
             setTransactionBsData(null)
+            setSnapPoints(["75%"])
             isUserAction.current = false
             return
         }
         if (!transactionBsData) return
         await rejectRequest(transactionBsData)
+        setSnapPoints(["75%"])
         isUserAction.current = false
         setTransactionBsData(null)
     }, [rejectRequest, setTransactionBsData, transactionBsData])
