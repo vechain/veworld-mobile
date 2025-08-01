@@ -31,6 +31,11 @@ jobs:
             - name: Checkout repository
               uses: actions/checkout@v3
 
+            - name: Setup Ruby
+              uses: ruby/setup-ruby@v1
+              with:
+                  bundler-cache: true
+
             - name: Setup Node
               uses: actions/setup-node@v3
               with:
@@ -115,10 +120,9 @@ jobs:
             - name: precheck fastlane build
               id: prebuild
               run: |
-                  type fastlane || true
-                  type bundle || true
                   type gem || true
-                  apt list || true
+                  type bundle || true
+                  type fastlane || true
                   gem install bundle || true
                   bundle update || true
             - name: Build apk
