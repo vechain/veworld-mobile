@@ -1,4 +1,4 @@
-import { PropsWithChildren, default as React, useState } from "react"
+import React, { PropsWithChildren, useState, useEffect } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, {
     LinearTransition,
@@ -57,11 +57,19 @@ export const X2EAppWithDetails = ({
     const [showDetails, setShowDetails] = useState(isDefaultVisible)
     const [isAnimating, setIsAnimating] = useState(false)
     const [contentVisible, setContentVisible] = useState(isDefaultVisible)
+    const [detailsLayoutReady, setDetailsLayoutReady] = useState(isDefaultVisible)
 
     // Animation progress shared value (0 = closed, 1 = open)
     const animationProgress = useSharedValue(isDefaultVisible ? 1 : 0)
     // Press animation scale value
     const scale = useSharedValue(1)
+
+    // Ensure details are visible if isDefaultVisible
+    useEffect(() => {
+        if (isDefaultVisible) {
+            setDetailsLayoutReady(true)
+        }
+    }, [isDefaultVisible])
 
     const toggleDetails = () => {
         if (isAnimating) return
@@ -74,21 +82,27 @@ export const X2EAppWithDetails = ({
             // Show container immediately but content will fade in
             setShowDetails(true)
 
-            // Start animation to value 1 (open)
-            animationProgress.value = withTiming(1, {
-                duration: ANIMATION_TIMING.totalDuration,
-                easing: SMOOTH_EASING,
+            // Slight delay to allow layout to be prepared
+            requestAnimationFrame(() => {
+                // Make sure layout is ready before animation
+                setDetailsLayoutReady(true)
+
+                // Start animation to value 1 (open)
+                animationProgress.value = withTiming(1, {
+                    duration: ANIMATION_TIMING.totalDuration,
+                    easing: SMOOTH_EASING,
+                })
+
+                // Show content with a delay
+                setTimeout(() => {
+                    setContentVisible(true)
+                }, ANIMATION_TIMING.contentFadeDelay)
+
+                // Animation is complete
+                setTimeout(() => {
+                    setIsAnimating(false)
+                }, ANIMATION_TIMING.totalDuration)
             })
-
-            // Show content with a delay
-            setTimeout(() => {
-                setContentVisible(true)
-            }, ANIMATION_TIMING.contentFadeDelay)
-
-            // Animation is complete
-            setTimeout(() => {
-                setIsAnimating(false)
-            }, ANIMATION_TIMING.totalDuration)
         } else {
             // Start animation to value 0 (closed)
             animationProgress.value = withTiming(0, {
@@ -104,6 +118,7 @@ export const X2EAppWithDetails = ({
                 setTimeout(() => {
                     setShowDetails(false)
                     setIsAnimating(false)
+                    setDetailsLayoutReady(false)
                 }, ANIMATION_TIMING.containerCollapse)
             }, ANIMATION_TIMING.contentFadeDelay)
         }
@@ -223,16 +238,10 @@ export const X2EAppWithDetails = ({
     // Chevron animation
     const chevronStyle = useAnimatedStyle(() => {
         return {
-            opacity: interpolate(animationProgress.value, [0.3, 0.7], [0, 1]),
+            opacity: interpolate(animationProgress.value, [0.1, 0.7], [0, 1]),
             transform: [
                 {
-                    translateX: interpolate(animationProgress.value, [0.3, 1], [20, 0]),
-                },
-                {
-                    translateY: interpolate(animationProgress.value, [0.3, 1], [-15, 0]),
-                },
-                {
-                    rotate: `${interpolate(animationProgress.value, [0, 1], [-90, 0])}deg`,
+                    rotate: `${interpolate(animationProgress.value, [0, 1], [-180, 0])}deg`,
                 },
             ],
         }
@@ -322,7 +331,7 @@ export const X2EAppWithDetails = ({
             </Animated.View>
 
             <Animated.View>
-                <X2EAppDetails show={showDetails} visible={contentVisible}>
+                <X2EAppDetails show={showDetails && detailsLayoutReady} visible={contentVisible}>
                     {children}
                 </X2EAppDetails>
             </Animated.View>

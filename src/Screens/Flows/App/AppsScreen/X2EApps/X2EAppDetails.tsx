@@ -275,6 +275,9 @@ type Props = PropsWithChildren<{
 const X2EAppDetails = ({ children, show, visible = show }: Props) => {
     const shouldShow = show && visible
 
+    // Track whether this is the first time opening
+    const [hasShownBefore, setHasShownBefore] = useState(false)
+
     // Control sequential section animations
     const [sectionProgress, setSectionProgress] = useState(0)
 
@@ -282,11 +285,14 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
     useEffect(() => {
         if (shouldShow) {
             setSectionProgress(0)
+            if (!hasShownBefore) {
+                setHasShownBefore(true)
+            }
         } else {
             // Reset progress when closing - we'll fade everything out together
             setSectionProgress(-1)
         }
-    }, [shouldShow])
+    }, [shouldShow, hasShownBefore])
 
     // Handle section completion - advance to next section
     const handleSectionComplete = (currentIndex: number) => {
@@ -306,7 +312,10 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
                       // Then fade out with dynamic easing
                       withTiming(0, { duration: 200, easing: SMOOTH_OUT_EASING }),
                   ),
-            height: show ? "auto" : 0,
+            height: shouldShow
+                ? withTiming("auto", { duration: TIMING_CONFIG.duration, easing: SMOOTH_OUT_EASING })
+                : withTiming(0, { duration: TIMING_CONFIG.duration, easing: SMOOTH_OUT_EASING }),
+            overflow: "hidden",
         }
     }, [show, visible])
 
