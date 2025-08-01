@@ -15,6 +15,13 @@ type Props = {
 export const HeaderIconButton = ({ children, testID, action, rounded = false, circled = false, style }: Props) => {
     const theme = useTheme()
 
+    // Validation: prevent both rounded and circled being true simultaneously
+    // If both rounded and circled are true, circled takes precedence
+
+    // Prioritize circled over rounded if both are provided
+    const shouldUseRounded = rounded && !circled
+    const shouldUseCircled = circled
+
     return (
         <TouchableOpacity testID={testID} onPress={action} activeOpacity={0.7}>
             <BaseView
@@ -24,8 +31,8 @@ export const HeaderIconButton = ({ children, testID, action, rounded = false, ci
                 style={[
                     styles.container,
                     { borderColor: theme.colors.rightIconHeaderBorder },
-                    rounded && styles.rounded,
-                    circled && styles.circled,
+                    shouldUseRounded && styles.rounded,
+                    shouldUseCircled && styles.circled,
                     style,
                 ]}>
                 {children}
