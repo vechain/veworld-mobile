@@ -8,6 +8,7 @@ import Animated, {
     Easing,
     useSharedValue,
     interpolate,
+    interpolateColor,
 } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
@@ -133,17 +134,12 @@ export const X2EAppWithDetails = React.memo(
 
         // Container style animation
         const containerStyle = useAnimatedStyle(() => {
-            // Use conditional to properly type the backgroundColor
-            const backgroundColor =
-                animationProgress.value > 0.5
-                    ? withTiming(theme.colors.assetDetailsCard.background, {
-                          duration: ANIMATION_TIMING.containerExpand,
-                          easing: SMOOTH_EASING,
-                      })
-                    : withTiming(theme.colors.card, {
-                          duration: ANIMATION_TIMING.containerCollapse,
-                          easing: SMOOTH_EASING,
-                      })
+            // Smooth color interpolation that transitions early in the animation (0 to 0.3)
+            const backgroundColor = interpolateColor(
+                animationProgress.value,
+                [0, 0.3], // Transition happens in first 30% of animation - earlier and smoother
+                [theme.colors.card, theme.colors.assetDetailsCard.background],
+            )
 
             return {
                 backgroundColor,
@@ -205,10 +201,10 @@ export const X2EAppWithDetails = React.memo(
         // Description text animation style
         const descriptionStyle = useAnimatedStyle(() => {
             return {
-                opacity: interpolate(animationProgress.value, [0, 0.5], [1, 0]),
+                opacity: interpolate(animationProgress.value, [0, 0.3], [1, 0]),
                 transform: [
                     {
-                        translateY: interpolate(animationProgress.value, [0, 0.5], [0, -10]),
+                        translateY: interpolate(animationProgress.value, [0, 0.3], [0, -10]),
                     },
                 ],
             }
@@ -217,10 +213,10 @@ export const X2EAppWithDetails = React.memo(
         // Category label animation style
         const categoryLabelStyle = useAnimatedStyle(() => {
             return {
-                opacity: interpolate(animationProgress.value, [0.5, 1], [0, 1]),
+                opacity: interpolate(animationProgress.value, [0.7, 1], [0, 1]),
                 transform: [
                     {
-                        translateY: interpolate(animationProgress.value, [0.5, 1], [10, 0]),
+                        translateY: interpolate(animationProgress.value, [0.7, 1], [10, 0]),
                     },
                 ],
             }
