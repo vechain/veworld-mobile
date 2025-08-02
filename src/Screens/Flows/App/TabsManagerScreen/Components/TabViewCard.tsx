@@ -37,15 +37,18 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
             style={[styles.container, tab.id === selectedTabId && styles.selected]}
             onPress={onPress}>
             <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
-                <TouchableOpacity style={styles.header} onPress={onClose} activeOpacity={0.8}>
+                <View style={styles.header}>
                     <View style={styles.headerText}>
-                        <FastImage source={{ uri: tab.preview }} style={styles.headerIcon as ImageStyle} />
+                        {/* TODO: add favicon */}
+                        <FastImage source={{ uri: tab.preview }} style={styles.headerFavicon as ImageStyle} />
                         <BaseText typographyFont="bodySemiBold" color={"white"} numberOfLines={1}>
                             {tab.title}
                         </BaseText>
                     </View>
-                    <BaseIcon name="icon-x" size={16} color={"white"} />
-                </TouchableOpacity>
+                    <TouchableOpacity style={styles.closeIcon} onPress={onClose} activeOpacity={0.8}>
+                        <BaseIcon name="icon-x" size={16} color={"white"} />
+                    </TouchableOpacity>
+                </View>
             </ImageBackground>
         </AnimatedTouchableOpacity>
     )
@@ -75,19 +78,25 @@ const baseStyles = (theme: ColorThemeType) => {
             justifyContent: "space-between",
             gap: 8,
             backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_90_TRANSPARENT : COLORS.PURPLE_RGBA_TRANSPARENT,
-            paddingHorizontal: 12,
-            paddingVertical: 10,
         },
         headerText: {
             flex: 0.8,
             flexDirection: "row",
             alignItems: "center",
             gap: 8,
+            paddingLeft: 12,
+            paddingVertical: 10,
         },
-        headerIcon: {
+        headerFavicon: {
             width: 16,
             height: 16,
             borderRadius: 4,
+        },
+        closeIcon: {
+            alignItems: "center",
+            justifyContent: "center",
+            paddingHorizontal: 12,
+            paddingVertical: 10,
         },
         image: {
             width: "100%",
