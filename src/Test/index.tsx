@@ -11,7 +11,6 @@ import { Provider } from "react-redux"
 import { PersistConfig } from "redux-persist/es/types"
 import { BaseToast } from "~Components"
 import { ConnexContext } from "~Components/Providers/ConnexProvider"
-import { InteractionProvider } from "~Components/Providers/InteractionProvider"
 import { NotificationsProvider } from "~Components/Providers/NotificationsProvider"
 import { ThemeEnum } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -160,16 +159,14 @@ export const TestWrapper = ({
             <QueryClientProvider client={queryClient}>
                 <GestureHandlerRootView>
                     <ConnexContext.Provider value={TestHelpers.thor.mockThorInstance({})}>
-                        <InteractionProvider>
-                            <BottomSheetModalProvider>
-                                <NavigationProvider>
-                                    <NotificationsProvider>
-                                        <TestTranslationProvider>{children}</TestTranslationProvider>
-                                    </NotificationsProvider>
-                                </NavigationProvider>
-                            </BottomSheetModalProvider>
-                            <BaseToast />
-                        </InteractionProvider>
+                        <BottomSheetModalProvider>
+                            <NavigationProvider>
+                                <NotificationsProvider>
+                                    <TestTranslationProvider>{children}</TestTranslationProvider>
+                                </NotificationsProvider>
+                            </NavigationProvider>
+                        </BottomSheetModalProvider>
+                        <BaseToast />
                     </ConnexContext.Provider>
                 </GestureHandlerRootView>
             </QueryClientProvider>

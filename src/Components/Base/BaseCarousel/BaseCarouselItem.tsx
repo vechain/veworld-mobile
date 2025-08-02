@@ -1,6 +1,6 @@
-import { useNavigation, useRoute } from "@react-navigation/native"
+import { NavigationState, useNavigation, useNavigationState } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { Animated, Linking, Pressable, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
+import { Animated, Linking, Pressable, StyleProp, StyleSheet, TouchableOpacity, ViewStyle } from "react-native"
 import { COLORS, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
@@ -10,8 +10,8 @@ import { BaseIcon } from "../BaseIcon"
 type Props = {
     testID?: string
     href?: string
-    style?: ViewStyle
-    contentWrapperStyle?: ViewStyle
+    style?: StyleProp<ViewStyle>
+    contentWrapperStyle?: StyleProp<ViewStyle>
     isExternalLink?: boolean
     closable?: boolean
     closeButtonStyle?: ViewStyle
@@ -26,6 +26,8 @@ type Props = {
 }
 
 const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
+
+const routeNameSelector = (state: NavigationState) => state.routes[state.index].name
 
 export const BaseCarouselItem: React.FC<Props> = ({
     href,
@@ -43,15 +45,15 @@ export const BaseCarouselItem: React.FC<Props> = ({
 }) => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation()
-    const route = useRoute()
+    const route = useNavigationState(routeNameSelector)
     const { navigateWithTab } = useBrowserTab()
 
     const returnScreen = useMemo(() => {
-        if (route.name === Routes.TOKEN_DETAILS) {
+        if (route === Routes.TOKEN_DETAILS) {
             return Routes.HOME
         }
-        return route.name as Routes.DISCOVER | Routes.SETTINGS | Routes.HOME
-    }, [route.name])
+        return route as Routes.DISCOVER | Routes.SETTINGS | Routes.HOME
+    }, [route])
 
     const onPress = useCallback(async () => {
         if (!href) return
@@ -75,7 +77,7 @@ export const BaseCarouselItem: React.FC<Props> = ({
     return (
         <AnimatedTouchableOpacity
             testID={testID}
-            style={[style, styles.container]}
+            style={[styles.container, style]}
             activeOpacity={0.95}
             onPress={onPress}>
             <Animated.View style={[styles.contentWrapper, contentWrapperStyle]}>{children}</Animated.View>

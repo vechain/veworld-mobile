@@ -8,7 +8,7 @@ import { filterValues } from "../constants"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
-import { STARGATE_DAPP_URL } from "~Constants"
+import { STARGATE_DAPP_URL_ACTIVITIES_BANNER } from "~Constants"
 
 export const ActivityStakingScreen = () => {
     const { LL } = useI18nContext()
@@ -38,7 +38,7 @@ export const ActivityStakingScreen = () => {
                     hasCardStyle
                     label={LL.ACTIVITY_ALL_EMPTY_LABEL()}
                     description={LL.ACTIVITY_STAKING_EMPTY_LABEL()}
-                    onPress={() => onPress(STARGATE_DAPP_URL, "Stargate")}
+                    onPress={() => onPress(STARGATE_DAPP_URL_ACTIVITIES_BANNER, "Stargate")}
                 />
             </BaseView>
         )

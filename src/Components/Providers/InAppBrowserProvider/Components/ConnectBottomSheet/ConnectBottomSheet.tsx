@@ -1,13 +1,13 @@
 import { default as React, useCallback, useMemo, useRef } from "react"
 import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { ERROR_EVENTS } from "~Constants"
 import { useBottomSheetModal, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { ConnectAppRequest } from "~Model"
 import { selectFeaturedDapps, useAppSelector } from "~Storage/Redux"
-import { DAppUtils, error } from "~Utils"
-import { useInteraction } from "../../../InteractionProvider"
+import { error } from "~Utils"
 import { useInAppBrowser } from "../../InAppBrowserProvider"
 import { DappDetails } from "../DappDetails"
 import { DappWithDetails } from "../DappWithDetails"
@@ -35,22 +35,9 @@ const ConnectBottomSheetContent = ({
     const { LL } = useI18nContext()
     const allApps = useAppSelector(selectFeaturedDapps)
     const theme = useTheme()
-    const { icon, name, url } = useMemo(() => {
+    const dappName = useMemo(() => {
         const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(request.appUrl).origin)
-        if (foundDapp)
-            return {
-                icon: foundDapp.id
-                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
-                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
-                name: foundDapp.name,
-                url: request.appUrl,
-            }
-
-        return {
-            name: request.appName,
-            url: request.appUrl,
-            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(request.appUrl).origin}`,
-        }
+        return foundDapp?.name ?? request.appName
     }, [allApps, request.appName, request.appUrl])
 
     useWcSwitchChain(request, { onCloseBs })
@@ -64,8 +51,8 @@ const ConnectBottomSheetContent = ({
                 </BaseText>
             </BaseView>
             <BaseSpacer height={24} />
-            <DappWithDetails name={name} icon={icon} url={url}>
-                <DappDetails.Title>{LL.CONNECTED_APP_ASKING_FOR_ACCESS({ dappName: name })}</DappDetails.Title>
+            <DappWithDetails appName={request.appName} appUrl={request.appUrl}>
+                <DappDetails.Title>{LL.CONNECTED_APP_ASKING_FOR_ACCESS({ dappName })}</DappDetails.Title>
                 <DappDetails.Container>
                     {([1, 2] as const).map(value => (
                         <DappDetails.CheckItem key={value}>
@@ -75,7 +62,7 @@ const ConnectBottomSheetContent = ({
                 </DappDetails.Container>
             </DappWithDetails>
             <BaseSpacer height={24} />
-            <BaseView flexDirection="row" gap={16}>
+            <BaseView flexDirection="row" gap={16} mb={16}>
                 <BaseButton action={onCancel.bind(null, request)} variant="outline" flex={1}>
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>

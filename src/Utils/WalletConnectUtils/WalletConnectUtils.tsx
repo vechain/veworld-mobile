@@ -115,12 +115,7 @@ export function shouldAutoNavigate(navState: NavigationState<ReactNavigation.Roo
     if (!navState || !navState.routes) return false
 
     return !navState.routes.some(
-        route =>
-            route.name === Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN ||
-            route.name === Routes.CONNECTED_APP_SIGN_CERTIFICATE_SCREEN ||
-            route.name === Routes.CONNECTED_APP_SIGN_TYPED_MESSAGE_SCREEN ||
-            route.name === Routes.LEDGER_SIGN_TRANSACTION ||
-            route.name === Routes.LEDGER_SIGN_CERTIFICATE,
+        route => route.name === Routes.LEDGER_SIGN_TRANSACTION || route.name === Routes.LEDGER_SIGN_CERTIFICATE,
     )
 }
 

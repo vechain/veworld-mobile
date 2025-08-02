@@ -1,11 +1,12 @@
 import React from "react"
-import { StyleSheet, Image, ImageStyle } from "react-native"
+import { StyleSheet } from "react-native"
+import FastImage, { ImageStyle } from "react-native-fast-image"
+import Markdown from "react-native-markdown-display"
 import { VeBetterDaoBannerB3MO, VeBetterLogoGreenSVG, VeBetterSVG } from "~Assets"
 import { BaseView } from "~Components"
-import { useThemedStyles } from "~Hooks"
 import { COLORS } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import Markdown from "react-native-markdown-display"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 export const VeBetterDaoBanner = () => {
@@ -29,7 +30,7 @@ export const VeBetterDaoBanner = () => {
                     {LL.BANNER_VEBETTER_DESC()}
                 </Markdown>
             </BaseView>
-            <Image source={VeBetterDaoBannerB3MO} style={styles.image as ImageStyle} />
+            <FastImage source={VeBetterDaoBannerB3MO} style={styles.image as ImageStyle} />
         </BaseView>
     )
 }

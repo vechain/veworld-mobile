@@ -1,5 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import { ethers } from "ethers"
+import { default as React, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet } from "react-native"
 import { TouchableOpacity } from "react-native-gesture-handler"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
@@ -26,6 +27,8 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const [isSwapped, setIsSwapped] = useState(false)
     const [isSwapEnabled, setIsSwapEnabled] = useState(true)
     const [isError, setIsError] = useState(false)
+    // Real value that'll be sent to the blockchain
+    const [realValue, setRealValue] = useState("0")
 
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -72,6 +75,7 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const resetStates = useCallback(() => {
         setIsSwapEnabled(true)
         setInput("")
+        setRealValue("0")
         cardPosition.value = 0
         setIsSwapped(false)
         setIsError(false)
@@ -80,7 +84,9 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const onChangeText = useCallback(
         (newValue: string) => {
             const _newValue = removeInvalidCharacters(newValue)
+            const _realValue = ethers.utils.parseEther(_newValue || "0").toString()
             setInput(_newValue)
+            setRealValue(_realValue)
 
             if (_newValue === "" || BigNutils(_newValue).isZero) {
                 if (timer.current) {
@@ -93,26 +99,23 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
                 return
             }
 
-            const balanceToHuman = BigNutils((isB3TRActive ? b3trTokenTotal : vot3TokenTotal) ?? "1").toHuman(
-                B3TR.decimals,
-            )
+            const balance = BigNutils((isB3TRActive ? b3trTokenTotal : vot3TokenTotal) ?? "1").toString
 
-            const controlValue = BigNutils(_newValue).addTrailingZeros(B3TR.decimals).toHuman(B3TR.decimals)
-
-            if (controlValue.isBiggerThan(balanceToHuman.toString)) {
+            if (BigNutils(_realValue).isBiggerThan(balance)) {
                 setIsError(true)
                 HapticsService.triggerNotification({ level: "Error" })
             } else {
                 setIsError(false)
             }
         },
-        [B3TR.decimals, b3trTokenTotal, isB3TRActive, removeInvalidCharacters, setInput, vot3TokenTotal],
+        [b3trTokenTotal, isB3TRActive, removeInvalidCharacters, setInput, vot3TokenTotal],
     )
 
     const onMaxAmountPress = useCallback(
-        (maxAmount: string) => {
-            const _newValue = removeInvalidCharacters(maxAmount)
+        (realAmount: string, formattedAmount: string) => {
+            const _newValue = removeInvalidCharacters(formattedAmount)
             setInput(_newValue)
+            setRealValue(realAmount)
         },
         [removeInvalidCharacters, setInput],
     )
@@ -133,11 +136,11 @@ export const ConvertBetterBottomSheet = React.forwardRef<BottomSheetModalMethods
     const onConvertPress = useCallback(() => {
         onClose()
         if (isB3TRActive) {
-            convertB3tr(input)
+            convertB3tr(realValue, input)
         } else {
-            convertVot3(input)
+            convertVot3(realValue, input)
         }
-    }, [convertB3tr, convertVot3, input, isB3TRActive, onClose])
+    }, [convertB3tr, convertVot3, input, isB3TRActive, onClose, realValue])
 
     return (
         <BaseBottomSheet

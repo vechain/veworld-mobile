@@ -1,25 +1,69 @@
 import { PersistedState } from "redux-persist/es/types"
-import { UserPreferenceState } from "~Storage/Redux"
-import nacl from "tweetnacl"
-import { encodeBase64 } from "tweetnacl-util"
+import { B3TR, ERROR_EVENTS, TEST_B3TR_ADDRESS, TEST_VOT3_ADDRESS, VET, VOT3 } from "~Constants"
+import { AddressUtils, debug } from "~Utils"
+import { BalanceState } from "../Slices"
+import { Balance } from "~Model"
+
+const ONE_HOUR = 60 * 60 * 1000
+
+/**
+ *
+ * @param balanceFilter Filter function that should return true if the item should be excluded, false otherwise
+ * @returns Map-like function, that filters out what described by {@link balanceFilter} and all the balances that have a difference of more than 1 hour from the VET balance update.
+ */
+const mapFn =
+    (balanceFilter?: (balance: Balance) => boolean) =>
+    ([account, balances]: [string, Balance[]]) => {
+        const vetBalance = balances.find(b => b.tokenAddress === VET.address)
+        if (!vetBalance) return [account, balances]
+        return [
+            account,
+            balances.filter(balance => {
+                if (balanceFilter?.(balance)) return false
+                /**
+                 * The issue that this aims to solve is that we have all the tokens in every network.
+                 * For example, if you added a custom token on testnet, it magically appeared on mainnet/solo/other networks too.
+                 * Given that the call for it will fail, the timeUpdated will be really old.
+                 * This aims to clear up the storage
+                 */
+                if (new Date(vetBalance.timeUpdated).getTime() - new Date(balance.timeUpdated).getTime() >= ONE_HOUR)
+                    return false
+                return true
+            }),
+        ]
+    }
 
 export const Migration23 = (state: PersistedState): PersistedState => {
+    debug(ERROR_EVENTS.SECURITY, "Performing migration 23: Fixing balances on networks")
+
     // @ts-ignore
-    const currentState: UserPreferenceState = state.userPreferences
+    const currentState: BalanceState = state.balances
 
-    // Generate a new key pair for signing session tokens for external dapps connections
-    const keyPair = nacl.sign.keyPair()
+    if (!currentState || Object.keys(currentState).length === 0) {
+        debug(ERROR_EVENTS.SECURITY, "================= **** No state to migrate **** =================")
+        return state
+    }
 
-    const newState: UserPreferenceState = {
-        ...currentState,
-        signKeyPair: {
-            publicKey: encodeBase64(keyPair.publicKey),
-            privateKey: encodeBase64(keyPair.secretKey),
-        },
+    const mainnetMapFn = mapFn(
+        balance =>
+            AddressUtils.compareAddresses(balance.tokenAddress, TEST_B3TR_ADDRESS) ||
+            AddressUtils.compareAddresses(balance.tokenAddress, TEST_VOT3_ADDRESS),
+    )
+    const testnetMapFn = mapFn(
+        balance =>
+            AddressUtils.compareAddresses(balance.tokenAddress, B3TR.address) ||
+            AddressUtils.compareAddresses(balance.tokenAddress, VOT3.address),
+    )
+
+    const newState: BalanceState = {
+        mainnet: Object.fromEntries(Object.entries(currentState.mainnet).map(mainnetMapFn)),
+        testnet: Object.fromEntries(Object.entries(currentState.testnet).map(testnetMapFn)),
+        solo: Object.fromEntries(Object.entries(currentState.solo).map(mapFn())),
+        other: Object.fromEntries(Object.entries(currentState.other).map(mapFn())),
     }
 
     return {
         ...state,
-        userPreferences: newState,
+        balances: newState,
     } as PersistedState
 }

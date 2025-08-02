@@ -69,6 +69,7 @@ export const AccountOption = ({ selectedDelegationAccount, children, accounts }:
                             return (
                                 <DelegateAccountCardRadio
                                     testID={"DELEGATE_ACCOUNT_CARD_RADIO"}
+                                    balanceToken={"VTHO"}
                                     account={item}
                                     onPress={handlePress}
                                     selected={item.address === selectedAccount?.address}

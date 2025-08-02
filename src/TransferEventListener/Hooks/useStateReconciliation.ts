@@ -8,7 +8,7 @@ export const useStateReconciliation = () => {
 
     const updateBalances = useCallback(
         (params: { accountAddress: string }) => {
-            dispatch(updateAccountBalances(thor, params.accountAddress))
+            dispatch(updateAccountBalances(thor, params.accountAddress, true))
         },
         [dispatch, thor],
     )

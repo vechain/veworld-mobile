@@ -167,23 +167,22 @@ export const NotificationScreen = () => {
 
                         <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_VEBETTERDAO()}</BaseText>
                         <BaseSpacer height={16} />
+                        {isMainnet && (
+                            <>
+                                <EnableFeature
+                                    title={LL.PUSH_NOTIFICATIONS_DAPPS_DESC()}
+                                    onValueChange={toogleDAppSubscriptionSwitch}
+                                    value={dappNotifications}
+                                />
+                                <BaseSpacer height={16} />
+                            </>
+                        )}
                         <EnableFeature
                             title={LL.PUSH_NOTIFICATIONS_VOTE_REMINDER()}
                             onValueChange={toogleSubscriptionSwitch(voteReminderTagKey)}
                             value={!!tags[voteReminderTagKey]}
                         />
                         <BaseSpacer height={40} />
-                        {isMainnet && (
-                            <>
-                                <BaseText typographyFont="subSubTitle">{LL.PUSH_NOTIFICATIONS_DAPPS()}</BaseText>
-                                <BaseSpacer height={16} />
-                                <EnableFeature
-                                    title={LL.PUSH_NOTIFICATIONS_DAPPS_DESC()}
-                                    onValueChange={toogleDAppSubscriptionSwitch}
-                                    value={dappNotifications}
-                                />
-                            </>
-                        )}
                     </>
                 )}
                 <BaseSpacer height={12} />

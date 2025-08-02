@@ -1,9 +1,11 @@
+import { useRoute } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
-import { BaseCarousel, CarouselSlideItem, useFeatureFlags } from "~Components"
-import { VeBetterDaoBanner, StellaPayBanner, StargateBanner } from "./Banners"
+import { CarouselSlideItem, FullscreenBaseCarousel, useFeatureFlags } from "~Components"
+import { SCREEN_WIDTH, STARGATE_DAPP_URL_DISCOVER_BANNER, STARGATE_DAPP_URL_HOME_BANNER } from "~Constants"
 import { AnalyticsEvent } from "~Constants/Enums/AnalyticsEvent"
 import { useAnalyticTracking } from "~Hooks"
-import { STARGATE_DAPP_URL } from "~Constants"
+import { Routes } from "~Navigation"
+import { StargateBanner, StellaPayBanner, VeBetterDaoBanner } from "./Banners"
 
 const DAO_URL = "https://governance.vebetterdao.org"
 const STELLA_URL = "https://vebetter.stellapay.io/"
@@ -11,6 +13,7 @@ const STELLA_URL = "https://vebetter.stellapay.io/"
 export const VeBetterDAOCarousel = () => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
+    const location = useRoute()
 
     const slides: CarouselSlideItem[] = useMemo(
         () => [
@@ -30,11 +33,14 @@ export const VeBetterDAOCarousel = () => {
             {
                 testID: "Stargate_banner",
                 content: <StargateBanner />,
-                href: STARGATE_DAPP_URL,
+                href:
+                    location.name === Routes.HOME || location.name === Routes.TOKEN_DETAILS
+                        ? STARGATE_DAPP_URL_HOME_BANNER
+                        : STARGATE_DAPP_URL_DISCOVER_BANNER,
                 name: "stargate",
             },
         ],
-        [],
+        [location.name],
     )
 
     const activeSlides = useMemo(() => {
@@ -63,15 +69,15 @@ export const VeBetterDAOCarousel = () => {
     )
 
     return (
-        <BaseCarousel
+        <FullscreenBaseCarousel
             testID="VeBetterDao_carousel"
             data={activeSlides}
-            paginationAlignment="flex-start"
-            loop={false}
-            autoPlay={featureFlags.discoveryFeature.bannersAutoplay}
             showPagination={false}
             onSlidePressActivation="before"
             onSlidePress={onSlidePress}
+            padding={16}
+            gap={8}
+            baseWidth={SCREEN_WIDTH}
         />
     )
 }

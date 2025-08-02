@@ -2,44 +2,42 @@ import { ethers } from "ethers"
 import { HDNode } from "thor-devkit"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { DEVICE_TYPE, TypedData, Wallet } from "~Model"
-import { selectDevice, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
 import { HexUtils } from "~Utils"
 
-type Props = { typedData: TypedData }
+export const useSignTypedMessage = () => {
+    const account = useAppSelector(selectSelectedAccountOrNull)
+    const senderDevice = useAppSelector(state => selectDevice(state, account?.rootAddress))
 
-export const useSignTypedMessage = ({ typedData }: Props) => {
-    const account = useAppSelector(selectSelectedAccount)
-    const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
-
-    const getSignature = (privateKey: Buffer) => {
+    const getSignature = (typedData: TypedData, privateKey: Buffer) => {
         const { domain, types, value } = typedData
 
         const ethersWallet = new ethers.Wallet(Buffer.from(privateKey).toString("hex"))
         return ethersWallet._signTypedData(domain, types, value)
     }
 
-    const getSignatureByMnemonic = (wallet: Wallet) => {
+    const getSignatureByMnemonic = (typedData: TypedData, wallet: Wallet) => {
         if (!wallet.mnemonic) throw new Error("Mnemonic wallet can't have an empty mnemonic")
 
-        if (!account.index && account.index !== 0) throw new Error("signatureAccount index is empty")
+        if (!account?.index && account?.index !== 0) throw new Error("signatureAccount index is empty")
 
         const hdNode = HDNode.fromMnemonic(wallet.mnemonic)
-        const derivedNode = hdNode.derive(account.index)
+        const derivedNode = hdNode.derive(account?.index)
 
         const privateKey = derivedNode.privateKey as Buffer
 
-        return getSignature(privateKey)
+        return getSignature(typedData, privateKey)
     }
 
-    const getSignatureByPrivateKey = (wallet: Wallet) => {
+    const getSignatureByPrivateKey = (typedData: TypedData, wallet: Wallet) => {
         if (!wallet.privateKey) throw new Error("Private key wallet can't have an empty private key")
 
         const privateKey = Buffer.from(HexUtils.removePrefix(wallet.privateKey), "hex")
 
-        return getSignature(privateKey)
+        return getSignature(typedData, privateKey)
     }
 
-    const signTypedData = async (password?: string) => {
+    const signTypedData = async (typedData: TypedData, password?: string) => {
         if (!senderDevice) return
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) throw new Error("Ledger devices not supported in this hook")
@@ -51,8 +49,8 @@ export const useSignTypedMessage = ({ typedData }: Props) => {
             pinCode: password,
         })
 
-        if (wallet.mnemonic) return getSignatureByMnemonic(wallet)
-        if (wallet.privateKey) return getSignatureByPrivateKey(wallet)
+        if (wallet.mnemonic) return getSignatureByMnemonic(typedData, wallet)
+        if (wallet.privateKey) return getSignatureByPrivateKey(typedData, wallet)
 
         throw new Error("Wallet doesn't have a mnemonic or a private key")
     }

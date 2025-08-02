@@ -1,0 +1,100 @@
+{
+  "number": 22028903,
+  "id": "0x01502267f59ee9c5120d6091684a1a4f27720643c23359b46328b80540a8b4a6",
+  "size": 542,
+  "parentID": "0x01502266fbd599ccf323436947977ec372da4cc5e185738c3922b3435af65cd6",
+  "timestamp": 1750326670,
+  "gasLimit": 40000000,
+  "beneficiary": "0xb4094c25f86d628fdd571afc4077f0d0196afb48",
+  "gasUsed": 119104,
+  "totalScore": 202670370,
+  "txsRoot": "0xb2a0c6169ed628fbdac3fce6e19f934b3094972edb8cea0492fe3ec8bed0dbd7",
+  "txsFeatures": 1,
+  "stateRoot": "0xae92c4a756dc5ea5a71b736c570fee16d62fe56e31733f25cb3b18e98ce03ea9",
+  "receiptsRoot": "0xa52a63f39ab7497d0540b59383d70a99362ce47deeb7b8bb26c88aa2e87e48f2",
+  "com": true,
+  "signer": "0xfc46da62040d72b9e47b6e4cbbf06657da496cb2",
+  "isTrunk": true,
+  "isFinalized": true,
+  "baseFeePerGas": "0x9184e72a000",
+  "transactions": [
+    {
+      "id": "0x03334bdcd415078480d3ee21aa912b1c6ef7c8ff1351bde430021168b6f8f879",
+      "type": 81,
+      "chainTag": 39,
+      "blockRef": "0x0150226580b437f4",
+      "expiration": 100,
+      "clauses": [
+        {
+          "to": "0x1ec1d168574603ec35b9d229843b7c2b44bcb770",
+          "value": "0x0",
+          "data": "0x2e17de780000000000000000000000000000000000000000000000000000000000000009"
+        }
+      ],
+      "maxFeePerGas": "0x95ff980a220",
+      "maxPriorityFeePerGas": "0x1d1a94a20",
+      "gas": 231744,
+      "origin": "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+      "delegator": null,
+      "nonce": "0x6d0ced8d",
+      "dependsOn": null,
+      "size": 168,
+      "gasUsed": 119104,
+      "gasPayer": "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+      "paid": "0x108abadabb3ea800",
+      "reward": "0x34e48e9f6a800",
+      "reverted": false,
+      "outputs": [
+        {
+          "contractAddress": null,
+          "events": [
+            {
+              "address": "0x1ec1d168574603ec35b9d229843b7c2b44bcb770",
+              "topics": [
+                "0xfd607be866b63b8e815d2012454b3085c5d64f7c7a461ff7fd9c14a8860bf531",
+                "0x000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa",
+                "0x0000000000000000000000000000000000000000000000000000000000000009"
+              ],
+              "data": "0x000000000000000000000000000000000000000000000000000007f544a44c00"
+            },
+            {
+              "address": "0x0000000000000000000000000000456e65726779",
+              "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x0000000000000000000000001ec1d168574603ec35b9d229843b7c2b44bcb770",
+                "0x000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa"
+              ],
+              "data": "0x000000000000000000000000000000000000000000000000000007f544a44c00"
+            },
+            {
+              "address": "0x1ec1d168574603ec35b9d229843b7c2b44bcb770",
+              "topics": [
+                "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef",
+                "0x000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa",
+                "0x0000000000000000000000000000000000000000000000000000000000000000",
+                "0x0000000000000000000000000000000000000000000000000000000000000009"
+              ],
+              "data": "0x"
+            },
+            {
+              "address": "0x1ec1d168574603ec35b9d229843b7c2b44bcb770",
+              "topics": [
+                "0x355103f9b8153e2d8052446029758fac8de69ef88551f67429b4873d21b2cd6c",
+                "0x000000000000000000000000f077b491b355e64048ce21e3a6fc4751eeea77fa",
+                "0x0000000000000000000000000000000000000000000000000000000000000009"
+              ],
+              "data": "0x00000000000000000000000000000000000000000000000000000000000000090000000000000000000000000000000000000000000000004563918244f40000"
+            }
+          ],
+          "transfers": [
+            {
+              "sender": "0x1ec1d168574603ec35b9d229843b7c2b44bcb770",
+              "recipient": "0xf077b491b355e64048ce21e3a6fc4751eeea77fa",
+              "amount": "0x4563918244f40000"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

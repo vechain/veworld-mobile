@@ -139,6 +139,7 @@ export type Colors = {
         convertValueText: string
         swapIcon: string
         borderColor: string
+        errorText: string
     }
     activityCard: {
         time: string
@@ -208,6 +209,13 @@ export type Colors = {
     label: {
         background: string
         text: string
+    }
+    stakedCard: {
+        fiatValue: string
+        vetValue: string
+    }
+    stakedVetCard: {
+        background: string
     }
 }
 
@@ -281,6 +289,7 @@ export enum COLORS {
     GREY_50 = "#F9F9FA",
     ORANGE_50 = "#FFFAF0",
     ORANGE_100 = "#FEEBCB",
+    ORANGE_300 = "#F6AD55",
     ORANGE_500 = "#DD6B20",
     ORANGE_700 = "#9C4221",
     PRIMARY_50 = "#F9F8FB",
@@ -347,7 +356,7 @@ const light: Colors = {
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
-    cardDivider: COLORS.GREY_200,
+    cardDivider: COLORS.GREY_100,
     border: COLORS.DARK_PURPLE,
     notification: COLORS.DARK_PURPLE,
     transparent: COLORS.TRANSPARENT,
@@ -446,6 +455,7 @@ const light: Colors = {
         convertValueText: COLORS.GREY_500,
         swapIcon: COLORS.GREY_600,
         borderColor: COLORS.GREY_200,
+        errorText: COLORS.RED_600,
     },
     activityCard: {
         time: COLORS.GREY_600,
@@ -515,6 +525,13 @@ const light: Colors = {
     label: {
         background: COLORS.GREY_200,
         text: COLORS.GREY_600,
+    },
+    stakedCard: {
+        fiatValue: COLORS.GREY_600,
+        vetValue: COLORS.GREY_800,
+    },
+    stakedVetCard: {
+        background: COLORS.GREY_50,
     },
 }
 
@@ -654,11 +671,12 @@ const dark: Colors = {
         text: COLORS.GREY_300,
     },
     convertBetterCard: {
-        inputBg: COLORS.PURPLE,
+        inputBg: COLORS.PURPLE_DISABLED,
         inputText: COLORS.WHITE,
         convertValueText: COLORS.GREY_300,
         swapIcon: COLORS.WHITE,
         borderColor: COLORS.DARK_PURPLE_DISABLED,
+        errorText: COLORS.RED_300,
     },
     activityCard: {
         time: COLORS.GREY_200,
@@ -726,8 +744,15 @@ const dark: Colors = {
         icon: COLORS.RED_500,
     },
     label: {
+        background: COLORS.PURPLE_DISABLED,
+        text: COLORS.GREY_300,
+    },
+    stakedCard: {
+        fiatValue: COLORS.GREY_100,
+        vetValue: COLORS.WHITE,
+    },
+    stakedVetCard: {
         background: COLORS.PURPLE,
-        text: COLORS.WHITE,
     },
 }
 

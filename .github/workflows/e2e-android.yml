@@ -13,6 +13,8 @@ jobs:
         if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
         outputs:
             app: app/build/outputs/apk/release
+            resultUrl: ${{ steps.test-result.outputs.resultUrl }}
+            resultsLines: ${{ steps.extract-results.outputs.results-lines }}
         env:
             SENTRY_LOG_LEVEL: debug
         steps:
@@ -36,7 +38,8 @@ jobs:
                   cache: "yarn"
 
             - name: Install & Patch packages
-              run: yarn install
+              run: |
+                yarn install:android
 
             - name: Setup Java
               uses: actions/setup-java@v3
@@ -129,10 +132,17 @@ jobs:
                   path: ${{ env.output_dir }}/app-release.apk
 
             - name: Test Android
-              uses: devicecloud-dev/device-cloud-for-maestro@v1.2.2
+              id: android-test
+              uses: devicecloud-dev/device-cloud-for-maestro@v1
               with:
                   api-key: ${{ secrets.DCD_API_KEY }}
                   app-file: ${{ env.output_dir }}/app-release.apk
                   exclude-tags: onlyIOS
                   include-tags: pull-request
                   retry: 2
+
+            - name: Blurt test result
+              id: test-result
+              run: |
+                  echo "resultUrl=${{ steps.android-test.outputs.DEVICE_CLOUD_CONSOLE_URL }}" >> "$GITHUB_OUTPUT"
+
