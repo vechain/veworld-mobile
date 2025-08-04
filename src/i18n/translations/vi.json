@@ -249,6 +249,8 @@
   "BROWSER_HISTORY_CLEAR": "Xóa",
   "BROWSER_HISTORY_DEFAULT_TITLE": "Lịch sử",
   "BROWSER_HISTORY_EMPTY": "Không có lịch sử để hiển thị",
+  "BROWSER_HISTORY_FOUND": "Tìm thấy",
+  "BROWSER_HISTORY_MORE_RESULTS": "Nhiều kết quả hơn",
   "BROWSER_HISTORY_No_RECORDS": "Không có lịch sử",
   "BROWSER_HISTORY_RESULTS": "{amount:number} Kết quả",
   "BROWSER_HISTORY_SEARCH_PLACEHOLDER": "Tìm kiếm",

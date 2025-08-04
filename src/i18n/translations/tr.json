@@ -249,6 +249,8 @@
   "BROWSER_HISTORY_CLEAR": "Temizle",
   "BROWSER_HISTORY_DEFAULT_TITLE": "Geçmiş",
   "BROWSER_HISTORY_EMPTY": "Gösterilecek geçmiş yok",
+  "BROWSER_HISTORY_FOUND": "Bulundu",
+  "BROWSER_HISTORY_MORE_RESULTS": "Daha fazla sonuç",
   "BROWSER_HISTORY_No_RECORDS": "Kayıtlı Geçmiş Yok",
   "BROWSER_HISTORY_RESULTS": "{amount:number} Sonuç",
   "BROWSER_HISTORY_SEARCH_PLACEHOLDER": "Ara",

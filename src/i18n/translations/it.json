@@ -249,6 +249,8 @@
   "BROWSER_HISTORY_CLEAR": "Cancella",
   "BROWSER_HISTORY_DEFAULT_TITLE": "Storia",
   "BROWSER_HISTORY_EMPTY": "Nessuna cronologia da mostrare",
+  "BROWSER_HISTORY_FOUND": "Trovato",
+  "BROWSER_HISTORY_MORE_RESULTS": "Altri risultati",
   "BROWSER_HISTORY_No_RECORDS": "Nessuna cronologia disponibile",
   "BROWSER_HISTORY_RESULTS": "{amount:number} Risultati",
   "BROWSER_HISTORY_SEARCH_PLACEHOLDER": "Cerca",

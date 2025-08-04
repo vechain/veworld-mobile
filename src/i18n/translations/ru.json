@@ -249,6 +249,8 @@
   "BROWSER_HISTORY_CLEAR": "Очистить",
   "BROWSER_HISTORY_DEFAULT_TITLE": "История",
   "BROWSER_HISTORY_EMPTY": "Нет истории для показа",
+  "BROWSER_HISTORY_FOUND": "Найдено",
+  "BROWSER_HISTORY_MORE_RESULTS": "Больше результатов",
   "BROWSER_HISTORY_No_RECORDS": "История отсутствует",
   "BROWSER_HISTORY_RESULTS": "{amount:number} Результатов",
   "BROWSER_HISTORY_SEARCH_PLACEHOLDER": "Поиск",

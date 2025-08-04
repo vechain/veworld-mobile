@@ -249,6 +249,8 @@
   "BROWSER_HISTORY_CLEAR": "Löschen",
   "BROWSER_HISTORY_DEFAULT_TITLE": "Verlauf",
   "BROWSER_HISTORY_EMPTY": "Kein Verlauf anzuzeigen",
+  "BROWSER_HISTORY_FOUND": "Gefunden",
+  "BROWSER_HISTORY_MORE_RESULTS": "Weitere Ergebnisse",
   "BROWSER_HISTORY_No_RECORDS": "Kein Verlauf verfügbar",
   "BROWSER_HISTORY_RESULTS": "{amount:number} Ergebnisse",
   "BROWSER_HISTORY_SEARCH_PLACEHOLDER": "Suchen",

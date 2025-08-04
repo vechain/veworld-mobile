@@ -249,6 +249,8 @@
   "BROWSER_HISTORY_CLEAR": "हटाएँ",
   "BROWSER_HISTORY_DEFAULT_TITLE": "इतिहास",
   "BROWSER_HISTORY_EMPTY": "दिखाने के लिए कोई इतिहास नहीं है",
+  "BROWSER_HISTORY_FOUND": "प्राप्त",
+  "BROWSER_HISTORY_MORE_RESULTS": "अधिक परिणाम",
   "BROWSER_HISTORY_No_RECORDS": "कोई इतिहास उपलब्ध नहीं है",
   "BROWSER_HISTORY_RESULTS": "{amount:number} परिणाम",
   "BROWSER_HISTORY_SEARCH_PLACEHOLDER": "खोजें",
