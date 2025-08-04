@@ -1,5 +1,5 @@
 {
-  "latest": "2.2.7",
+  "latest": "2.3.2",
   "major": "2.2.6",
   "history": [
     {
@@ -15,6 +15,11 @@
     {
       "version": "2.2.7",
       "key": "releases/ios/versions/2.2.7",
+      "major": false
+    },
+    {
+      "version": "2.3.2",
+      "key": "releases/ios/versions/2.3.2",
       "major": false
     }
   ]
