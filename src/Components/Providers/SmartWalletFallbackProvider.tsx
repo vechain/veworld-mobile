@@ -9,7 +9,7 @@ import {
 } from "../../VechainWalletKit/types/transaction"
 import { WalletError, WalletErrorType } from "../../VechainWalletKit/utils/errors"
 
-const SmartWalletFallbackContext = createContext<SmartWalletContext | null>(null)
+export const SmartWalletFallbackContext = createContext<SmartWalletContext | null>(null)
 
 interface SmartWalletFallbackProviderProps {
     children: React.ReactNode

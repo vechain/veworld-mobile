@@ -1,17 +1,23 @@
 import { useContext } from "react"
 
 import { useFeatureFlags } from "../Components/Providers/FeatureFlagsProvider"
-import { useSmartWalletFallback } from "../Components/Providers/SmartWalletFallbackProvider"
+import { SmartWalletFallbackContext } from "../Components/Providers/SmartWalletFallbackProvider"
 import type { SmartWalletContext } from "../VechainWalletKit/types/wallet"
 import { SmartWalletProviderContext } from "../VechainWalletKit/providers/SmartWalletProvider"
 
 export const useSmartWallet = (): SmartWalletContext => {
     const featureFlags = useFeatureFlags()
-    const fallbackCtx = useSmartWalletFallback()
+    const fallbackCtx = useContext(SmartWalletFallbackContext) as SmartWalletContext | undefined
 
     // never throws; undefined when provider isn’t mounted
     const vechainCtx = useContext(SmartWalletProviderContext) as SmartWalletContext | undefined
 
-    const ff = { ...featureFlags, smartWalletFeature: { enabled: false } }
-    return !ff.smartWalletFeature.enabled || !vechainCtx ? fallbackCtx : vechainCtx
+    const ff = { ...featureFlags, smartWalletFeature: { enabled: true } }
+    if (!ff.smartWalletFeature.enabled || vechainCtx == null) {
+        if (fallbackCtx == null) {
+            throw new Error("SmartWallet context is unavailable and fallback context is missing.")
+        }
+        return fallbackCtx
+    }
+    return vechainCtx
 }

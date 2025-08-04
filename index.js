@@ -75,7 +75,7 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
 const ConditionalSmartWallet = ({ children, nodeUrl, networkType }) => {
     const featureFlags = useFeatureFlags()
 
-    const ff = { ...featureFlags, smartWalletFeature: { enabled: false } }
+    const ff = { ...featureFlags, smartWalletFeature: { enabled: true } }
     if (ff.smartWalletFeature.enabled) {
         return (
             <SmartWalletWithPrivyProvider
@@ -133,10 +133,10 @@ const Main = () => {
     useEffect(() => {
         setLocale(
             language ??
-            getLocales()
-                .map(loc => loc.languageCode)
-                .find(isLocale) ??
-            "en",
+                getLocales()
+                    .map(loc => loc.languageCode)
+                    .find(isLocale) ??
+                "en",
         )
     }, [setLocale, language])
 
