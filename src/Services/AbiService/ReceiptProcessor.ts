@@ -13,14 +13,28 @@ export class ReceiptProcessor {
                 [] as EventResult[],
             )
 
-            receiptOutputs.push(
-                ...(events.map(evt => ({
-                    clauseIndex: i,
-                    name: evt.name,
-                    params: evt.params,
-                    address: evt.address,
-                })) as any),
-            )
+            if (events.length === 0) {
+                receiptOutputs.push(
+                    ...output.events.map(
+                        evt =>
+                            ({
+                                clauseIndex: i,
+                                name: "___INTERNAL_UNKNOWN___",
+                                params: {},
+                                address: evt.address,
+                            } as any),
+                    ),
+                )
+            } else {
+                receiptOutputs.push(
+                    ...(events.map(evt => ({
+                        clauseIndex: i,
+                        name: evt.name,
+                        params: evt.params,
+                        address: evt.address,
+                    })) as any),
+                )
+            }
         }
         return receiptOutputs
     }

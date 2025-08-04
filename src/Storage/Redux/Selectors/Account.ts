@@ -96,6 +96,16 @@ export const selectVisibleAccountsWithoutObserved = createSelector(selectAccount
 })
 
 /**
+ * @returns all the visibile accounts that are not ledger
+ */
+export const selectVisibleAccountsWithoutObservedAndLedger = createSelector(
+    selectVisibleAccountsWithoutObserved,
+    accounts => {
+        return accounts.filter(account => account.visible && account.device.type !== DEVICE_TYPE.LEDGER)
+    },
+)
+
+/**
  * @returns all the visibile accounts but the selected one
  */
 export const selectVisibleAccountsButSelected = createSelector(
