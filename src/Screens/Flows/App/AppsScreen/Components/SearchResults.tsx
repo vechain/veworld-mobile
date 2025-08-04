@@ -1,5 +1,5 @@
 import { default as React, useCallback, useMemo } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import { ListRenderItemInfo, SectionList, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
@@ -11,9 +11,10 @@ import { SearchResultItem } from "./SearchResultItem"
 
 type Props = {
     error?: SearchError
-    results: HistoryItem[]
+    results: { found: HistoryItem[]; others: HistoryItem[] }
     isValidQuery: boolean
 }
+//TODO: section list for more results
 
 export const SearchResults = ({ error, results, isValidQuery }: Props) => {
     const { LL } = useI18nContext()
@@ -25,13 +26,13 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
     }, [dispatch])
 
     const isQueryEmptyButWithResults = useMemo(
-        () => !isValidQuery && results.length !== 0,
-        [isValidQuery, results.length],
+        () => !isValidQuery && results.found.length !== 0,
+        [isValidQuery, results.found.length],
     )
 
     const isQueryEmptyWithNoResults = useMemo(
-        () => !isValidQuery && results.length === 0,
-        [isValidQuery, results.length],
+        () => !isValidQuery && results.found.length === 0,
+        [isValidQuery, results.found.length],
     )
 
     const rootStyles = useMemo(() => {
@@ -49,6 +50,38 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
             return <SearchResultItem item={item} isValidQuery={isValidQuery} />
         },
         [isValidQuery],
+    )
+
+    const renderSectionHeader = useCallback(
+        ({ section }: { section: { key: string } }) => {
+            if (!isValidQuery) return <></>
+            if (section.key === "found") {
+                return (
+                    <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={8}>
+                        <BaseText typographyFont="bodySemiBold" color={theme.colors.history.titleColor}>
+                            {LL.BROWSER_HISTORY_FOUND()}
+                        </BaseText>
+                    </BaseView>
+                )
+            } else if (section.key === "others" && results.others.length > 0) {
+                return (
+                    <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={8} mt={24}>
+                        <BaseText typographyFont="bodyMedium" color={theme.colors.history.historyItem.subtitle}>
+                            {LL.BROWSER_HISTORY_MORE_RESULTS()}
+                        </BaseText>
+                    </BaseView>
+                )
+            }
+
+            return <></>
+        },
+        [
+            LL,
+            isValidQuery,
+            results.others.length,
+            theme.colors.history.historyItem.subtitle,
+            theme.colors.history.titleColor,
+        ],
     )
 
     if (error === SearchError.ADDRESS_CANNOT_BE_REACHED)
@@ -99,14 +132,6 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                 </BaseView>
             )}
 
-            {isValidQuery && (
-                <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={24}>
-                    <BaseText typographyFont="bodyMedium" color={theme.colors.history.titleColor}>
-                        {LL.BROWSER_HISTORY_RESULTS({ amount: results.length })}
-                    </BaseText>
-                </BaseView>
-            )}
-
             {isQueryEmptyWithNoResults ? (
                 <BaseView alignItems="center" justifyContent="center" flexGrow={1}>
                     <BaseView style={styles.errorContainer}>
@@ -120,7 +145,7 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                     </BaseView>
                 </BaseView>
             ) : (
-                <FlatList
+                <SectionList
                     renderItem={renderItem}
                     keyExtractor={item => (item.type === HistoryUrlKind.DAPP ? item.dapp.href : item.url)}
                     ItemSeparatorComponent={renderItemSeparator}
@@ -128,7 +153,12 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     scrollEnabled={true}
-                    data={results}
+                    renderSectionHeader={renderSectionHeader}
+                    stickySectionHeadersEnabled={false}
+                    sections={[
+                        { data: results.found, key: "found" },
+                        { data: results.others, key: "others" },
+                    ]}
                     style={styles.flatListRoot}
                 />
             )}

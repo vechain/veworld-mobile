@@ -253,6 +253,8 @@
   "BROWSER_HISTORY_RESULTS": "{amount:number} Results",
   "BROWSER_HISTORY_SEARCH_PLACEHOLDER": "Search",
   "BROWSER_HISTORY_TITLE": "Browser History",
+  "BROWSER_HISTORY_MORE_RESULTS": "More results",
+  "BROWSER_HISTORY_FOUND": "Found",
   "BROWSER_INVALID_DEEP_LINK": "There was an error trying to acces this link. Make sure it's correct and try again.",
   "BROWSER_NETWORK_NOT_FOUND": "The DApp reequested a network that is not found.",
   "BROWSER_NEW_TAB": "Open new tab",

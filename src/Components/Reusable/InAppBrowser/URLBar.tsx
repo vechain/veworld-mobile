@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native"
 import FastImage from "react-native-fast-image"
 import { URL } from "react-native-fast-url"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseIcon, BaseText, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
+import { BaseIcon, BaseText, BaseTouchable, BaseView, useFeatureFlags, useInAppBrowser } from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
@@ -27,8 +27,9 @@ const AnimatedBaseText = Animated.createAnimatedComponent(wrapFunctionComponent(
 const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
 const AnimatedFavicon = Animated.createAnimatedComponent(FastImage)
 
-export const URLBar = ({ onNavigate, returnScreen = Routes.DISCOVER, isLoading }: Props) => {
+export const URLBar = ({ onNavigate, returnScreen, isLoading }: Props) => {
     const { showToolbars, navigationState, dappMetadata } = useInAppBrowser()
+    const { betterWorldFeature } = useFeatureFlags()
     const nav =
         useNavigation<
             NativeStackNavigationProp<
@@ -36,17 +37,27 @@ export const URLBar = ({ onNavigate, returnScreen = Routes.DISCOVER, isLoading }
             >
         >()
 
+    const _returnScreen = useMemo(() => {
+        if (returnScreen) return returnScreen
+        if (betterWorldFeature.appsScreen.enabled) return Routes.APPS_SEARCH
+        return Routes.DISCOVER_SEARCH
+    }, [betterWorldFeature.appsScreen.enabled, returnScreen])
+
     const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()
 
     const navToDiscover = useCallback(async () => {
         await onNavigate?.()
-        nav.navigate(returnScreen)
-    }, [nav, onNavigate, returnScreen])
+        nav.navigate(_returnScreen)
+    }, [nav, onNavigate, _returnScreen])
 
     const navToSearch = useCallback(async () => {
         await onNavigate?.()
-        nav.navigate(Routes.APPS_SEARCH)
-    }, [nav, onNavigate])
+        if (betterWorldFeature.appsScreen.enabled) {
+            nav.replace(Routes.APPS_SEARCH)
+        } else {
+            nav.replace(Routes.DISCOVER_SEARCH)
+        }
+    }, [betterWorldFeature.appsScreen.enabled, nav, onNavigate])
 
     const animatedStyles = useAnimatedStyle(
         () => ({

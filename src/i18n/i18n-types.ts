@@ -1078,6 +1078,14 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_TITLE: string
 	/**
+	 * M​o​r​e​ ​r​e​s​u​l​t​s
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: string
+	/**
+	 * F​o​u​n​d
+	 */
+	BROWSER_HISTORY_FOUND: string
+	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​a​c​c​e​s​ ​t​h​i​s​ ​l​i​n​k​.​ ​M​a​k​e​ ​s​u​r​e​ ​i​t​'​s​ ​c​o​r​r​e​c​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
 	BROWSER_INVALID_DEEP_LINK: string
@@ -1090,9 +1098,17 @@ type RootTranslation = {
 	 */
 	BROWSER_NEW_TAB: string
 	/**
+	 * R​e​l​o​a​d​ ​p​a​g​e
+	 */
+	BROWSER_RELOAD_PAGE: string
+	/**
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: string
+	/**
+	 * S​e​e​ ​a​l​l​ ​t​a​b​s​ ​o​p​e​n
+	 */
+	BROWSER_SEE_ALL_TABS: string
 	/**
 	 * S​h​a​r​e
 	 */
@@ -1101,14 +1117,6 @@ type RootTranslation = {
 	 * T​a​b​s
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: string
-	/**
-	 * S​e​e​ ​a​l​l​ ​t​a​b​s​ ​o​p​e​n
-	 */
-	BROWSER_SEE_ALL_TABS: string
-	/**
-	 * R​e​l​o​a​d​ ​p​a​g​e
-	 */
-	BROWSER_RELOAD_PAGE: string
 	/**
 	 * A​D​D​ ​A​C​C​O​U​N​T
 	 */
@@ -5590,6 +5598,14 @@ Thanks for your patience!
 	 */
 	BROWSER_HISTORY_TITLE: () => LocalizedString
 	/**
+	 * More results
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: () => LocalizedString
+	/**
+	 * Found
+	 */
+	BROWSER_HISTORY_FOUND: () => LocalizedString
+	/**
 	 * There was an error trying to acces this link. Make sure it's correct and try again.
 	 */
 	BROWSER_INVALID_DEEP_LINK: () => LocalizedString
@@ -5602,9 +5618,17 @@ Thanks for your patience!
 	 */
 	BROWSER_NEW_TAB: () => LocalizedString
 	/**
+	 * Reload page
+	 */
+	BROWSER_RELOAD_PAGE: () => LocalizedString
+	/**
 	 * Remove from Favorites
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
+	/**
+	 * See all tabs open
+	 */
+	BROWSER_SEE_ALL_TABS: () => LocalizedString
 	/**
 	 * Share
 	 */
@@ -5613,14 +5637,6 @@ Thanks for your patience!
 	 * Tabs
 	 */
 	BROWSER_TAB_MANAGEMENT_TITLE: () => LocalizedString
-	/**
-	 * See all tabs open
-	 */
-	BROWSER_SEE_ALL_TABS: () => LocalizedString
-	/**
-	 * Reload page
-	 */
-	BROWSER_RELOAD_PAGE: () => LocalizedString
 	/**
 	 * ADD ACCOUNT
 	 */
