@@ -1,13 +1,15 @@
-import React from "react"
-import { render, screen } from "@testing-library/react-native"
-import { BannersCarousel } from "./BannersCarousel"
-import { TestWrapper } from "~Test"
-import { RootState } from "~Storage/Redux/Types"
-import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
-import { FeatureFlagsProvider, useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
-import { FeatureFlags } from "~Api/FeatureFlags/endpoint"
 import { useRoute } from "@react-navigation/native"
+import { render, screen } from "@testing-library/react-native"
+import React from "react"
+import { TestWrapper } from "~Test"
+
+import { FeatureFlags } from "~Api/FeatureFlags/endpoint"
+import { FeatureFlagsProvider, useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
+import { CURRENCY, CURRENCY_FORMATS, SYMBOL_POSITIONS, ThemeEnum } from "~Constants"
 import { Routes } from "~Navigation"
+import { RootState } from "~Storage/Redux/Types"
+
+import { BannersCarousel } from "./BannersCarousel"
 
 const createWrapper = (preloadedState: Partial<RootState>) => {
     return ({ children }: { children: React.ReactNode }) => (
@@ -86,6 +88,7 @@ jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
 jest.mock("@react-navigation/native", () => ({
     ...jest.requireActual("@react-navigation/native"),
     useRoute: jest.fn(),
+    useNavigationState: jest.fn(),
 }))
 
 describe("BannersCarousel", () => {

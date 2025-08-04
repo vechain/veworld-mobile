@@ -290,6 +290,7 @@ export enum COLORS {
     GREY_50 = "#F9F9FA",
     ORANGE_50 = "#FFFAF0",
     ORANGE_100 = "#FEEBCB",
+    ORANGE_300 = "#F6AD55",
     ORANGE_500 = "#DD6B20",
     ORANGE_700 = "#9C4221",
     PRIMARY_50 = "#F9F8FB",

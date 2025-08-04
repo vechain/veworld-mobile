@@ -290,12 +290,6 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         dispatch(setIsAppLoading(false))
 
         if (dappRequest) {
-            // Requires an extra goBack if it's the first request from the dapp
-            if (dappRequest.type === "in-app" && dappRequest.isFirstRequest) nav.goBack()
-
-            // nav back to SendTransaction Screen
-            nav.goBack()
-            // nav back to original screen
             nav.goBack()
         } else {
             if (initialRoute) {
