@@ -150,12 +150,13 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     "Smart wallet not initialized, call initialiseWallet first",
                 )
             }
-            const genesisBlock = await thor.blocks.getGenesisBlock()
-            if (!genesisBlock) {
-                throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
-            }
 
             try {
+                const genesisBlock = await thor.blocks.getGenesisBlock()
+                if (!genesisBlock) {
+                    throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
+                }
+
                 const finalClauses = await buildSmartAccountTransaction({
                     txClauses: clauses,
                     smartAccountConfig,
