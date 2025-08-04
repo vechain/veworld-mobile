@@ -24,6 +24,7 @@ const mockRewards = [
     [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
     [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
     [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
+    ["0x0", "0x0", "0x0"],
 ]
 
 function* bigNumberBuilder(
@@ -75,7 +76,7 @@ describe("useGalacticaFees", () => {
                     BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
                 }`,
                 feeHistory: {
-                    baseFeePerGas: Array.from({ length: 8 }, () => ethers.utils.parseUnits("1", "gwei").toHexString()),
+                    baseFeePerGas: Array.from({ length: 9 }, () => ethers.utils.parseUnits("1", "gwei").toHexString()),
                     reward: mockRewards,
                 },
             },
@@ -155,12 +156,12 @@ describe("useGalacticaFees", () => {
         {
             values: buildBaseFeeArray({ decreaseOffset: 1 }),
             expectedResult: true,
-            description: "rmmp-up - 1 block ramp-down",
+            description: "ramp-up - 1 block ramp-down",
         },
         {
             values: buildBaseFeeArray({ decreaseOffset: 2 }),
             expectedResult: true,
-            description: "rmmp-up - 2 blocks ramp-down",
+            description: "ramp-up - 2 blocks ramp-down",
         },
         { values: buildBaseFeeArray({ decreaseOffset: 3 }), expectedResult: false, description: "ramp down 3 blocks" },
         { values: buildBaseFeeArray({ decreaseOffset: 4 }), expectedResult: false, description: "ramp down 4 blocks" },
@@ -229,4 +230,68 @@ describe("useGalacticaFees", () => {
             expect(result.current.speedChangeEnabled).toBe(expectedResult)
         },
     )
+
+    it("should use the latest base fee but not reward", () => {
+        mocked(useQuery).mockReturnValue({
+            isFetching: false,
+            isLoading: false,
+            data: {
+                maxPriorityFee: `0x${
+                    BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
+                }`,
+                feeHistory: {
+                    baseFeePerGas: Array.from({ length: 8 }, () => "0x0").concat([
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                    ]),
+                    reward: mockRewards,
+                },
+            },
+            dataUpdatedAt: Date.now(),
+        } as any)
+
+        const { result } = renderHook(
+            () => useGalacticaFees({ isGalactica: true, blockId: "0x00000001", gas: { gas: 21000 } as any }),
+            { wrapper: TestWrapper },
+        )
+
+        expect(result.current).toStrictEqual({
+            dataUpdatedAt: expect.any(Number),
+            isBaseFeeRampingUp: true,
+            speedChangeEnabled: true,
+            options: {
+                [GasPriceCoefficient.REGULAR]: {
+                    estimatedFee: BigNutils("21000000210000"),
+                    maxFee: BigNutils("21420000210000"),
+                    priorityFee: BigNutils("210000"),
+                },
+                [GasPriceCoefficient.MEDIUM]: {
+                    estimatedFee: BigNutils("21000000420000"),
+                    maxFee: BigNutils("21630000420000"),
+                    priorityFee: BigNutils("420000"),
+                },
+                [GasPriceCoefficient.HIGH]: {
+                    estimatedFee: BigNutils("21000000630000"),
+                    maxFee: BigNutils("21966000630000"),
+                    priorityFee: BigNutils("630000"),
+                },
+            },
+            txOptions: {
+                [GasPriceCoefficient.REGULAR]: {
+                    maxFeePerGas: "1020000010",
+                    maxPriorityFeePerGas: "10",
+                },
+                [GasPriceCoefficient.MEDIUM]: {
+                    maxFeePerGas: "1030000020",
+                    maxPriorityFeePerGas: "20",
+                },
+                [GasPriceCoefficient.HIGH]: {
+                    maxFeePerGas: "1046000030",
+                    maxPriorityFeePerGas: "30",
+                },
+            },
+            maxPriorityFee: BigNutils("50000000"),
+            isLoading: false,
+            isFirstTimeLoading: false,
+        })
+    })
 })
