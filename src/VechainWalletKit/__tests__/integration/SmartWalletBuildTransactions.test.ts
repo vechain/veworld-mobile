@@ -368,35 +368,33 @@ describe("Building transactions for smart accounts", () => {
             const actualClauses = mockBuildTransactionBody.mock.calls[0][0]
             expect(actualClauses).toHaveLength(2) // deployment + batch execution of 2 clauses
 
-            // First clause should be deployment (createAccount)
+            // First clause: Smart account deployment
             expect(actualClauses[0].to).toBe("0x713b908bcf77f3e00efef328e50b657a1a23aeaf") // factory address (testnet)
 
             const createAccountSelector = getFunctionSelector(SimpleAccountFactoryABI, "createAccount")
             expect(actualClauses[0].data).toContain(createAccountSelector)
 
-            // Second clause should be batch execution (using the smartAccountAddress)
+            // Second clause: Batch execution containing user transaction + B3TR fee transfer
             expect(actualClauses[1].to).toBe(smartAccountAddress)
 
             const executeBatchSelector = getFunctionSelector(SimpleAccountABI, "executeBatchWithAuthorization")
             expect(actualClauses[1].data).toContain(executeBatchSelector)
 
+            // Decode the batch execution to verify it contains both the user transaction and fee transfer
             const executeBatchWithAuthorizationAbi = new ABIFunction(
-                SimpleAccountABI.find(fn => fn.name === "executeBatchWithAuthorization") as unknown,
+                SimpleAccountABI.find(fn => fn.name === "executeBatchWithAuthorization")!,
             )
+            const decodedBatchData = executeBatchWithAuthorizationAbi.decodeData(Hex.of(actualClauses[1].data))
 
-            // decoded the executeBatchWithAuthorization clause that contains the clauses the smart wallet will execute
-            const decodedData: any = executeBatchWithAuthorizationAbi.decodeData(Hex.of(actualClauses[1].data))
+            // Verify the B3TR fee transfer is included in the batch
+            const batchToAddresses = decodedBatchData.args![0] as string[]
+            const batchDataArray = decodedBatchData.args![2] as string[]
 
-            // Check the b3tr transfer to the generic delegator deposit account has been included
-            const toAddress = decodedData.args[0][1]
-            expect(toAddress).toBe(B3TR.address)
-            const data = decodedData.args[2][1]
-            const b3trTransferData = erc20TransferAbi.decodeData(Hex.of(data))
+            // Second transaction in batch should be B3TR transfer to deposit account
+            expect(batchToAddresses[1]).toBe(B3TR.address)
+            const b3trTransferData = erc20TransferAbi.decodeData(Hex.of(batchDataArray[1]))
             expect(b3trTransferData.functionName).toBe("transfer")
-            expect(Array.isArray(b3trTransferData.args)).toBe(true)
             expect(b3trTransferData.args?.[0]).toBe(mockDelegatorDepositAccount)
-
-            // Ensure the correct amount of b3tr is being transferred to the deposit account
             expect(b3trTransferData.args?.[1]?.toString()).toBe(genericDelegationFee.toString)
         })
 
@@ -445,29 +443,27 @@ describe("Building transactions for smart accounts", () => {
             const actualClauses = mockBuildTransactionBody.mock.calls[0][0]
             expect(actualClauses).toHaveLength(1) // only batch execution, no deployment needed
 
-            // Should be batch execution only (account is already deployed)
-            expect(actualClauses[0].to).toBe(smartAccountAddress) // smart account address
+            // Single clause: Batch execution containing user transaction + B3TR fee transfer
+            expect(actualClauses[0].to).toBe(smartAccountAddress)
 
             const executeBatchSelector = getFunctionSelector(SimpleAccountABI, "executeBatchWithAuthorization")
             expect(actualClauses[0].data).toContain(executeBatchSelector)
 
+            // Decode the batch execution to verify it contains both the user transaction and fee transfer
             const executeBatchWithAuthorizationAbi = new ABIFunction(
-                SimpleAccountABI.find(fn => fn.name === "executeBatchWithAuthorization") as unknown,
+                SimpleAccountABI.find(fn => fn.name === "executeBatchWithAuthorization")!,
             )
+            const decodedBatchData = executeBatchWithAuthorizationAbi.decodeData(Hex.of(actualClauses[0].data))
 
-            // decoded the executeBatchWithAuthorization clause that contains the clauses the smart wallet will execute
-            const decodedData: any = executeBatchWithAuthorizationAbi.decodeData(Hex.of(actualClauses[0].data))
+            // Verify the B3TR fee transfer is included in the batch
+            const batchToAddresses = decodedBatchData.args![0] as string[]
+            const batchDataArray = decodedBatchData.args![2] as string[]
 
-            // Check the b3tr transfer to the generic delegator deposit account has been included
-            const toAddress = decodedData.args[0][1]
-            expect(toAddress).toBe(B3TR.address)
-            const data = decodedData.args[2][1]
-            const b3trTransferData = erc20TransferAbi.decodeData(Hex.of(data))
+            // Second transaction in batch should be B3TR transfer to deposit account
+            expect(batchToAddresses[1]).toBe(B3TR.address)
+            const b3trTransferData = erc20TransferAbi.decodeData(Hex.of(batchDataArray[1]))
             expect(b3trTransferData.functionName).toBe("transfer")
-            expect(Array.isArray(b3trTransferData.args)).toBe(true)
             expect(b3trTransferData.args?.[0]).toBe(mockDelegatorDepositAccount)
-
-            // Ensure the correct amount of b3tr is being transferred to the deposit account
             expect(b3trTransferData.args?.[1]?.toString()).toBe(genericDelegationFee.toString)
         })
 
@@ -520,34 +516,175 @@ describe("Building transactions for smart accounts", () => {
             const actualClauses = mockBuildTransactionBody.mock.calls[0][0]
             expect(actualClauses).toHaveLength(3) // V1 uses individual executions for each clause
 
-            // V1 uses individual executeWithAuthorization for each clause (account is deployed)
-            expect(actualClauses[0].to).toBe(smartAccountAddress) // smart account address
-
             const executeSelector = getFunctionSelector(SimpleAccountABI, "executeWithAuthorization")
+
+            // First clause: User transaction wrapped in executeWithAuthorization
+            expect(actualClauses[0].to).toBe(smartAccountAddress)
             expect(actualClauses[0].data).toContain(executeSelector)
 
-            // Second clause should also go to smart account for individual execution
-            expect(actualClauses[1].to).toBe(smartAccountAddress) // smart account address
+            // Second clause: User transaction wrapped in executeWithAuthorization
+            expect(actualClauses[1].to).toBe(smartAccountAddress)
             expect(actualClauses[1].data).toContain(executeSelector)
 
-            // Third clause should be the B3TR transfer to deposit account (also wrapped in executeWithAuthorization)
-            const transferToDepositAccount = actualClauses[2]
-            expect(transferToDepositAccount.to).toBe(smartAccountAddress) // smart account address
-            expect(transferToDepositAccount.data).toContain(executeSelector)
+            // Third clause: B3TR fee transfer wrapped in executeWithAuthorization
+            const feeTransferClause = actualClauses[2]
+            expect(feeTransferClause.to).toBe(smartAccountAddress)
+            expect(feeTransferClause.data).toContain(executeSelector)
 
             // Decode the executeWithAuthorization to get the embedded ERC20 transfer
             const executeWithAuthorizationAbi = new ABIFunction(
                 SimpleAccountABI.find(fn => fn.name === "executeWithAuthorization")!,
             )
-            const decodedExecuteData = executeWithAuthorizationAbi.decodeData(Hex.of(transferToDepositAccount.data))
+            const decodedExecuteData = executeWithAuthorizationAbi.decodeData(Hex.of(feeTransferClause.data))
 
-            // The embedded data should be an ERC20 transfer
+            // Extract and verify the embedded B3TR transfer
             const embeddedTransferData = decodedExecuteData.args![2] as string // The 'data' parameter
-            const transferToDepositAccountData = erc20TransferAbi.decodeData(Hex.of(embeddedTransferData))
+            const b3trTransferData = erc20TransferAbi.decodeData(Hex.of(embeddedTransferData))
 
-            expect(transferToDepositAccountData.functionName).toBe("transfer")
-            expect(transferToDepositAccountData.args?.[0]).toBe(mockDelegatorDepositAccount)
-            expect(transferToDepositAccountData.args?.[1]?.toString()).toBe(genericDelegationFee.toString)
+            expect(b3trTransferData.functionName).toBe("transfer")
+            expect(b3trTransferData.args?.[0]).toBe(mockDelegatorDepositAccount)
+            expect(b3trTransferData.args?.[1]?.toString()).toBe(genericDelegationFee.toString)
+        })
+
+        it("should build transaction for undeployed V3 smart account using VET generic delegation", async () => {
+            // Set up test scenario: undeployed V3 smart account
+            const embeddedAddress = "0x6666666666666666666666666666666666666666"
+            setMockPrivyEmbeddedAddress(embeddedAddress)
+            const smartAccountAddress = "0x7777777777777777777777777777777777777777"
+            setupSmartAccountContractResponses({
+                smartAccountAddress,
+                isDeployed: false,
+                hasV1Account: false,
+                version: 3,
+            })
+
+            const { result } = renderHook(() => useSmartWallet(), {
+                wrapper: TestWrapper,
+            })
+
+            // Initialize the wallet first
+            await act(async () => {
+                await result.current.initialiseWallet()
+            })
+
+            const txClauses = [
+                {
+                    to: "0x9876543210987654321098765432109876543210",
+                    value: "1000000000000000000",
+                    data: "0x",
+                },
+            ]
+
+            const genericDelegationFee = new BigNumberUtils("2000000000000000000")
+            const genericDelegationDetails: GenericDelegationDetails = {
+                token: "VET",
+                tokenAddress: "", // Not needed for VET
+                fee: genericDelegationFee,
+                depositAccount: mockDelegatorDepositAccount,
+            }
+            await act(async () => {
+                await result.current.buildTransaction(txClauses, undefined, genericDelegationDetails)
+            })
+
+            expect(mockBuildTransactionBody).toHaveBeenCalled()
+            const actualClauses = mockBuildTransactionBody.mock.calls[0][0]
+            expect(actualClauses).toHaveLength(2) // deployment + batch execution of 2 clauses
+
+            // First clause: Smart account deployment
+            expect(actualClauses[0].to).toBe("0x713b908bcf77f3e00efef328e50b657a1a23aeaf") // factory address (testnet)
+
+            const createAccountSelector = getFunctionSelector(SimpleAccountFactoryABI, "createAccount")
+            expect(actualClauses[0].data).toContain(createAccountSelector)
+
+            // Second clause: Batch execution containing user transaction + VET fee transfer
+            expect(actualClauses[1].to).toBe(smartAccountAddress)
+
+            const executeBatchSelector = getFunctionSelector(SimpleAccountABI, "executeBatchWithAuthorization")
+            expect(actualClauses[1].data).toContain(executeBatchSelector)
+
+            // Decode the batch execution to verify it contains both the user transaction and VET fee transfer
+            const executeBatchWithAuthorizationAbi = new ABIFunction(
+                SimpleAccountABI.find(fn => fn.name === "executeBatchWithAuthorization")!,
+            )
+            const decodedBatchData = executeBatchWithAuthorizationAbi.decodeData(Hex.of(actualClauses[1].data))
+
+            // Verify the VET fee transfer is included in the batch
+            const batchToAddresses = decodedBatchData.args![0] as string[]
+            const batchValues = decodedBatchData.args![1] // Keep as decoded BigInt array
+            const batchDataArray = decodedBatchData.args![2] as string[]
+
+            // Second transaction in batch should be VET transfer to deposit account
+            expect(batchToAddresses[1]).toBe(mockDelegatorDepositAccount)
+            expect(batchValues[1]).toBe(BigInt(genericDelegationFee.toString))
+            expect(batchDataArray[1]).toBe("0x") // Empty data for VET transfer
+        })
+
+        it("should build transaction for deployed V3 smart account using VET generic delegation", async () => {
+            // Set up test scenario: deployed V3 smart account
+            const smartAccountAddress = "0x8888888888888888888888888888888888888888"
+            setMockPrivyEmbeddedAddress("0x6666666666666666666666666666666666666666")
+            setupSmartAccountContractResponses({
+                smartAccountAddress,
+                isDeployed: true,
+                hasV1Account: false,
+                version: 3,
+            })
+
+            const { result } = renderHook(() => useSmartWallet(), {
+                wrapper: TestWrapper,
+            })
+
+            // Initialize the wallet first
+            await act(async () => {
+                await result.current.initialiseWallet()
+            })
+
+            const txClauses = [
+                {
+                    to: "0x9876543210987654321098765432109876543210",
+                    value: "1500000000000000000",
+                    data: "0x",
+                },
+            ]
+
+            const genericDelegationFee = new BigNumberUtils("3000000000000000000")
+            const genericDelegationDetails: GenericDelegationDetails = {
+                token: "VET",
+                tokenAddress: "", // Not needed for VET
+                fee: genericDelegationFee,
+                depositAccount: mockDelegatorDepositAccount,
+            }
+
+            // Build the transaction with VET generic delegation
+            await act(async () => {
+                await result.current.buildTransaction(txClauses, undefined, genericDelegationDetails)
+            })
+
+            expect(mockBuildTransactionBody).toHaveBeenCalled()
+            const actualClauses = mockBuildTransactionBody.mock.calls[0][0]
+            expect(actualClauses).toHaveLength(1) // only batch execution, no deployment needed
+
+            // Single clause: Batch execution containing user transaction + VET fee transfer
+            expect(actualClauses[0].to).toBe(smartAccountAddress)
+
+            const executeBatchSelector = getFunctionSelector(SimpleAccountABI, "executeBatchWithAuthorization")
+            expect(actualClauses[0].data).toContain(executeBatchSelector)
+
+            // Decode the batch execution to verify it contains both the user transaction and VET fee transfer
+            const executeBatchWithAuthorizationAbi = new ABIFunction(
+                SimpleAccountABI.find(fn => fn.name === "executeBatchWithAuthorization")!,
+            )
+            const decodedBatchData = executeBatchWithAuthorizationAbi.decodeData(Hex.of(actualClauses[0].data))
+
+            // Verify the VET fee transfer is included in the batch
+            const batchToAddresses = decodedBatchData.args![0] as string[]
+            const batchValues = decodedBatchData.args![1] // Keep as decoded BigInt array
+            const batchDataArray = decodedBatchData.args![2] as string[]
+
+            // Second transaction in batch should be VET transfer to deposit account
+            expect(batchToAddresses[1]).toBe(mockDelegatorDepositAccount)
+            expect(batchValues[1]).toBe(BigInt(genericDelegationFee.toString))
+            expect(batchDataArray[1]).toBe("0x") // Empty data for VET transfer
         })
     })
 })
