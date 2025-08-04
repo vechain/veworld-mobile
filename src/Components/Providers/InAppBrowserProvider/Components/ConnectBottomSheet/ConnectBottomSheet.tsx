@@ -79,7 +79,7 @@ export const ConnectBottomSheet = () => {
     const { connectBsRef, connectBsData, setConnectBsData } = useInteraction()
     const { ref, onClose: onCloseBs } = useBottomSheetModal({ externalRef: connectBsRef })
     const { rejectPendingProposal } = useWalletConnect()
-    const { onConnect: onConnectExternalDapp, onRejectConnection } = useExternalDappConnection()
+    const { onConnect: onConnectExternalDapp, onRejectRequest } = useExternalDappConnection()
 
     const { processProposal, isLoading, setIsLoading } = useWcConnect({ onCloseBs })
     const isUserAction = useRef(false)
@@ -113,7 +113,7 @@ export const ConnectBottomSheet = () => {
                     error(ERROR_EVENTS.WALLET_CONNECT, err)
                 }
             } else if (request.type === "external-app") {
-                await onRejectConnection(request.redirectUrl)
+                await onRejectRequest(request.redirectUrl)
             } else {
                 postMessage({
                     id: request.initialRequest.id,
@@ -122,7 +122,7 @@ export const ConnectBottomSheet = () => {
                 })
             }
         },
-        [onRejectConnection, postMessage, rejectPendingProposal],
+        [onRejectRequest, postMessage, rejectPendingProposal],
     )
 
     const onCancel = useCallback(

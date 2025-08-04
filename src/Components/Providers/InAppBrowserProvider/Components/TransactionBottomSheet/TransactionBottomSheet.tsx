@@ -32,6 +32,7 @@ import { assertDefined } from "~Utils/TypeUtils"
 import { useI18nContext } from "~i18n"
 import { useInAppBrowser } from "../../InAppBrowserProvider"
 import { TransactionDetails } from "./TransactionDetails"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 type Props = {
     request: TransactionRequest
     onCancel: (request: TransactionRequest) => Promise<void>
@@ -227,6 +228,11 @@ export const TransactionBottomSheet = () => {
     const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: transactionBsRef })
     const { ref: selectAccountBsRef } = useBottomSheetModal()
     const network = useAppSelector(selectSelectedNetwork)
+    const {
+        onRejectRequest,
+        onTransactionSuccess: onExternalSuccess,
+        onTransactionFailure: onExternalFailure,
+    } = useExternalDappConnection()
 
     const track = useAnalyticTracking()
 
@@ -274,6 +280,8 @@ export const TransactionBottomSheet = () => {
                     txid: id,
                     signer: selectedAccount.address,
                 })
+            } else if (transactionBsData.type === "external-app") {
+                await onExternalSuccess(transactionBsData.redirectUrl, id)
             } else {
                 postMessage({
                     id: transactionBsData.id,
@@ -291,7 +299,7 @@ export const TransactionBottomSheet = () => {
 
             onFinish(true)
         },
-        [transactionBsData, selectedAccount, dispatch, onFinish, processRequest, postMessage],
+        [transactionBsData, selectedAccount, dispatch, onFinish, processRequest, postMessage, onExternalSuccess],
     )
 
     const onTransactionFailure = useCallback(async () => {
@@ -299,6 +307,8 @@ export const TransactionBottomSheet = () => {
         assertDefined(selectedAccount)
         if (transactionBsData.type === "wallet-connect") {
             await failRequest(transactionBsData.requestEvent, getRpcError("internal"))
+        } else if (transactionBsData.type === "external-app") {
+            await onExternalFailure(transactionBsData.redirectUrl)
         } else {
             postMessage({
                 id: transactionBsData.id,
@@ -308,7 +318,7 @@ export const TransactionBottomSheet = () => {
         }
 
         onFinish(false)
-    }, [transactionBsData, selectedAccount, onFinish, failRequest, postMessage])
+    }, [transactionBsData, selectedAccount, onFinish, failRequest, postMessage, onExternalFailure])
 
     const onNavigateToLedger = useCallback(() => {
         // Do not reject request if it's a ledger request
@@ -321,6 +331,8 @@ export const TransactionBottomSheet = () => {
             try {
                 if (request.type === "wallet-connect") {
                     await failRequest(request.requestEvent, getRpcError("userRejectedRequest"))
+                } else if (request.type === "external-app") {
+                    await onRejectRequest(request.redirectUrl)
                 } else {
                     postMessage({
                         id: request.id,
@@ -334,7 +346,7 @@ export const TransactionBottomSheet = () => {
                 })
             }
         },
-        [LL, failRequest, postMessage],
+        [LL, failRequest, postMessage, onRejectRequest],
     )
 
     const onCancel = useCallback(

@@ -1,10 +1,11 @@
 import React, { useCallback, useEffect } from "react"
 import { Linking } from "react-native"
-import { ConnectionLinkParams } from "./types"
+import { ConnectionLinkParams, SignTransactionParams } from "./types"
 import { useInteraction } from "../InteractionProvider"
 import { DeepLinkError } from "~Utils/ErrorMessageUtils"
 import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
 import { error } from "~Utils"
+import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 
 const parseUrl = (url: string) => {
     const urlObj = new URL(url)
@@ -15,7 +16,8 @@ const parseUrl = (url: string) => {
 }
 
 export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) => {
-    const { setConnectBsData, connectBsRef } = useInteraction()
+    const { setConnectBsData, connectBsRef, setTransactionBsData, transactionBsRef } = useInteraction()
+    const { parseTransactionRequest } = useExternalDappConnection()
 
     const handleConnectionLink = useCallback(
         (params: ConnectionLinkParams) => {
@@ -34,6 +36,17 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         [setConnectBsData, connectBsRef],
     )
 
+    const handleSignTransaction = useCallback(
+        async (params: SignTransactionParams) => {
+            const request = await parseTransactionRequest(params.request)
+            if (request) {
+                setTransactionBsData(request)
+                transactionBsRef.current?.present()
+            }
+        },
+        [parseTransactionRequest, setTransactionBsData, transactionBsRef],
+    )
+
     const handleInvalidEvent = (redirectUrl: string) => {
         const err = new DeepLinkError(DeepLinkErrorCode.MethodNotFound)
         error("EXTERNAL_DAPP_CONNECTION", err)
@@ -48,6 +61,11 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     handleConnectionLink(request as ConnectionLinkParams)
                     return
                 case "singTransaction":
+                    handleSignTransaction(request as SignTransactionParams)
+                    return
+                case "signCertificate":
+                    return
+                case "disconnect":
                     return
                 default:
                     handleInvalidEvent(request.redirect_url)
@@ -58,7 +76,7 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         Linking.addEventListener("url", handleDeepLink)
 
         return () => Linking.removeAllListeners("url")
-    }, [handleConnectionLink])
+    }, [handleConnectionLink, handleSignTransaction])
 
     return <>{children}</>
 }

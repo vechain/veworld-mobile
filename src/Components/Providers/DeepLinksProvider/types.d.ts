@@ -8,3 +8,10 @@ type ConnectionLinkParams = {
     redirect_url: string
     network: NETWORK_TYPE
 }
+
+type SignTransactionParams = {
+    /**
+     * Encoded URI of the transaction request object
+     */
+    request: string
+}

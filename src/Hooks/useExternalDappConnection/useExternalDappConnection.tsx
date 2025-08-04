@@ -3,6 +3,7 @@ import { Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import nacl from "tweetnacl"
 import { decodeBase64, encodeBase64 } from "tweetnacl-util"
+import { TransactionRequest } from "~Model"
 import {
     useAppSelector,
     selectSignKeyPair,
@@ -11,6 +12,7 @@ import {
     newExternalDappSession,
     setSignKeyPair,
     selectSelectedAccountOrNull,
+    selectExternalDappSessions,
 } from "~Storage/Redux"
 import { error } from "~Utils"
 import { DeepLinkError } from "~Utils/ErrorMessageUtils"
@@ -27,6 +29,7 @@ export const useExternalDappConnection = () => {
     const signKeyPair = useAppSelector(selectSignKeyPair)
     const network = useAppSelector(selectSelectedNetwork)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const externalDappSessions = useAppSelector(selectExternalDappSessions)
 
     const dispatch = useAppDispatch()
 
@@ -106,14 +109,79 @@ export const useExternalDappConnection = () => {
         [dispatch, network.type, selectedAccount, signKeyPair],
     )
 
-    const onRejectConnection = useCallback(async (redirectUrl: string) => {
+    const parseTransactionRequest = useCallback(
+        async (encodedRequest: string): Promise<TransactionRequest | undefined> => {
+            const request = decodeURIComponent(encodedRequest)
+            const { payload: encPayload, ...decodedRequest } = JSON.parse(
+                new TextDecoder().decode(decodeBase64(request)),
+            )
+            try {
+                const session = externalDappSessions[decodedRequest.publicKey]
+
+                if (!session) {
+                    await Linking.openURL(
+                        `${decodedRequest.redirectUrl}?error=${encodeURIComponent("Unauthorized")}&error_code=401`,
+                    )
+                    return
+                }
+
+                const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
+
+                // Decrypt the payload
+                const sharedSecret = nacl.box.before(decodeBase64(decodedRequest.publicKey), KP.secretKey)
+
+                const decryptedPayload = nacl.box.open.after(
+                    decodeBase64(encPayload),
+                    decodeBase64(decodedRequest.nonce),
+                    sharedSecret,
+                )
+
+                if (!decryptedPayload) {
+                    await Linking.openURL(
+                        `${decodedRequest.redirectUrl}?error=${encodeURIComponent("Invalid payload")}&error_code=400`,
+                    )
+                    return
+                }
+
+                const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
+
+                const req = {
+                    ...payload.transaction,
+                    ...decodedRequest,
+                }
+                return req as TransactionRequest
+            } catch (e) {
+                const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
+                error("EXTERNAL_DAPP_CONNECTION", err)
+                await Linking.openURL(`${decodedRequest.redirectUrl}?errorMessage=${err.message}&errorCode=${err.code}`)
+                return
+            }
+        },
+        [externalDappSessions],
+    )
+
+    const onTransactionSuccess = useCallback(async (redirectUrl: string, txId: string) => {
+        await Linking.openURL(`${redirectUrl}/onTransactionSuccess?id=${encodeURIComponent(txId)}`)
+    }, [])
+
+    const onTransactionFailure = useCallback(async (redirectUrl: string) => {
+        const err = new DeepLinkError(DeepLinkErrorCode.TransactionRejected)
+        await Linking.openURL(
+            `${redirectUrl}/onTransactionFailure?errorMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`,
+        )
+    }, [])
+
+    const onRejectRequest = useCallback(async (redirectUrl: string) => {
         const err = new DeepLinkError(DeepLinkErrorCode.UserRejected)
-        await Linking.openURL(`${redirectUrl}?errorMessage=${encodeURIComponent(err.message)}&error_code=${err.code}`)
+        await Linking.openURL(`${redirectUrl}?errorMessage=${encodeURIComponent(err.message)}&errorCode=${err.code}`)
     }, [])
 
     return {
         onConnect,
         getKeyPairFromPrivateKey,
-        onRejectConnection,
+        onRejectRequest,
+        parseTransactionRequest,
+        onTransactionSuccess,
+        onTransactionFailure,
     }
 }
