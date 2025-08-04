@@ -32,6 +32,7 @@ import { assertDefined } from "~Utils/TypeUtils"
 import { useI18nContext } from "~i18n"
 import { useInAppBrowser } from "../../InAppBrowserProvider"
 import { TransactionDetails } from "./TransactionDetails"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 type Props = {
     request: TransactionRequest
     onCancel: (request: TransactionRequest) => Promise<void>
@@ -127,6 +128,7 @@ export const TransactionBottomSheetContent = ({
                 flexDirection="row"
                 gap={12}
                 justifyContent="space-between"
+                px={24}
                 testID="SIGN_TRANSACTION_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
@@ -180,7 +182,7 @@ export const TransactionBottomSheetContent = ({
                 </GasFeeSpeed>
             </BottomSheetScrollView>
 
-            <BaseView flexDirection="row" gap={16} mt={24}>
+            <BaseView flexDirection="row" gap={16} mt={24} px={24} mb={isIOS() ? 16 : 0}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"
@@ -370,7 +372,8 @@ export const TransactionBottomSheet = () => {
             snapPoints={snapPoints}
             ref={transactionBsRef}
             onDismiss={onDismiss}
-            enableContentPanningGesture={false}>
+            enableContentPanningGesture={false}
+            noMargins>
             {transactionBsData && (
                 <TransactionBottomSheetContent
                     onCancel={onCancel}
@@ -393,5 +396,6 @@ const baseStyles = () =>
         },
         scrollView: {
             flex: 1,
+            paddingHorizontal: 24,
         },
     })
