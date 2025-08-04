@@ -6,8 +6,10 @@ import { useSignTypedMessage } from "./useSignTypedData"
 import { TestWrapper } from "~Test"
 import { selectDevice, selectSelectedAccount } from "~Storage/Redux"
 import { ethers } from "ethers"
+import { HDNode } from "thor-devkit"
 
-const { account1D1, wallet1, keystoreDevice, firstLedgerAccount, ledgerDevice, device1 } = TestData.data
+const { account1D1, wallet1, keystoreDevice, firstLedgerAccount, ledgerDevice, device1, defaultMnemonicPhrase } =
+    TestData.data
 
 jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),
@@ -83,59 +85,81 @@ describe("useSignTypedData", () => {
         mockAccount(account1D1)
         mockDevice(keystoreDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
         expect(result.current).toEqual({
             signTypedData: expect.any(Function),
         })
 
-        const signature = await result.current.signTypedData()
+        const signature = await result.current.signTypedData(typedDataMock)
 
-        await expect(signature?.length).toBe(132)
+        expect(signature?.length).toBe(132)
     })
 
     it("should work with keystore wallet", async () => {
         mockAccount(account1D1)
         mockDevice(keystoreDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
         expect(result.current).toEqual({
             signTypedData: expect.any(Function),
         })
 
-        const signature = await result.current.signTypedData()
+        const signature = await result.current.signTypedData(typedDataMock)
 
-        await expect(signature?.length).toBe(132)
+        expect(signature?.length).toBe(132)
+    })
+
+    it("should work with private key wallet", async () => {
+        mockAccount(account1D1)
+        mockDevice(keystoreDevice)
+
+        const wallet = HDNode.fromMnemonic(defaultMnemonicPhrase).derive(0)
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue({
+            privateKey: wallet.privateKey?.toString("hex"),
+            rootAddress: wallet.address,
+            nonce: "nonce",
+        })
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
+        expect(result.current).toEqual({
+            signTypedData: expect.any(Function),
+        })
+
+        const signature = await result.current.signTypedData(typedDataMock)
+
+        expect(signature?.length).toBe(132)
+    })
+
+    it("should work with mnemonic wallet", async () => {
+        mockAccount(account1D1)
+        mockDevice(keystoreDevice)
+
+        const wallet = HDNode.fromMnemonic(defaultMnemonicPhrase).derive(0)
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue({
+            mnemonic: defaultMnemonicPhrase,
+            rootAddress: wallet.address,
+            nonce: "nonce",
+        })
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
+        expect(result.current).toEqual({
+            signTypedData: expect.any(Function),
+        })
+
+        const signature = await result.current.signTypedData(typedDataMock)
+
+        expect(signature?.length).toBe(132)
     })
 
     it("should throw with ledger type account", async () => {
         mockAccount(firstLedgerAccount)
         mockDevice(ledgerDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
 
         expect(result.current).toEqual({
             signTypedData: expect.any(Function),
         })
 
-        await expect(result.current.signTypedData()).rejects.toThrow("Ledger devices not supported")
+        await expect(result.current.signTypedData(typedDataMock)).rejects.toThrow("Ledger devices not supported")
     })
 
     it("no wallet should throw error", async () => {
@@ -146,10 +170,7 @@ describe("useSignTypedData", () => {
         })
 
         const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
+            () => useSignTypedMessage(),
 
             { wrapper: TestWrapper },
         )
@@ -158,25 +179,19 @@ describe("useSignTypedData", () => {
             signTypedData: expect.any(Function),
         })
 
-        await expect(result.current.signTypedData()).rejects.toThrow("The device doesn't have a wallet")
+        await expect(result.current.signTypedData(typedDataMock)).rejects.toThrow("The device doesn't have a wallet")
     })
 
     it("should match the signer", async () => {
         mockAccount(account1D1)
         mockDevice(keystoreDevice)
 
-        const { result } = renderHook(
-            () =>
-                useSignTypedMessage({
-                    typedData: typedDataMock,
-                }),
-            { wrapper: TestWrapper },
-        )
+        const { result } = renderHook(() => useSignTypedMessage(), { wrapper: TestWrapper })
         expect(result.current).toEqual({
             signTypedData: expect.any(Function),
         })
 
-        const signature = await result.current.signTypedData()
+        const signature = await result.current.signTypedData(typedDataMock)
 
         expect(
             ethers.utils

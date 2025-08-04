@@ -188,6 +188,12 @@ export enum AnalyticsEvent {
      * Transaction Settings
      */
     SETTINGS_DELEGATION_TOKEN = "SETTINGS_DELEGATION_TOKEN",
+
+    /**
+     * Browser
+     */
+    BROWSER_GO_BACK_CLICKED = "BROWSER_GO_BACK_CLICKED",
+    BROWSER_GO_FORWARD_CLICKED = "BROWSER_GO_FORWARD_CLICKED",
 }
 
 /**

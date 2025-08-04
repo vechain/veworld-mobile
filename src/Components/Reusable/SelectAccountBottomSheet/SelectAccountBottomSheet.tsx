@@ -1,8 +1,8 @@
-import { BottomSheetFlatList, BottomSheetSectionList } from "@gorhom/bottom-sheet"
+import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useMemo } from "react"
 import { SectionListData } from "react-native"
-import { AccountCard, BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { COLORS, isSmallScreen } from "~Constants"
 import { useScrollableBottomSheet, useTheme } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
@@ -14,20 +14,11 @@ type Props = {
     /**
      * Called on the bottom sheet dismiss
      */
-    /**
-     * Called on the bottom sheet dismiss
-     */
     onDismiss?: () => void
     /**
      * Called to close the bottom sheet
      */
-    /**
-     * Called to close the bottom sheet
-     */
     closeBottomSheet?: () => void
-    /**
-     * List of accounts to display
-     */
     /**
      * List of accounts to display
      */
@@ -36,43 +27,18 @@ type Props = {
      * Called when an account is selected
      * @param account New selected account
      */
-    /**
-     * Called when an account is selected
-     * @param account New selected account
-     */
     setSelectedAccount: (account: AccountWithDevice | WatchedAccount) => void
-    /**
-     * The selected account
-     */
     /**
      * The selected account
      */
     selectedAccount?: AccountWithDevice
     /**
-     * If false, show the VET balance, otherwise VTHO. Defaults to false (only works with `cardVersion` = 'v1')
-     */
-    /**
-     * If false, show the VET balance, otherwise VTHO. Defaults to false (only works with `cardVersion` = 'v1')
+     * If false, show the VET balance, otherwise VTHO. Defaults to false
      */
     isVthoBalance?: boolean
-    /**
-     * If false the balance is not visible. Defaults to `true`
-     */
-    /**
-     * If false the balance is not visible. Defaults to `true`
-     */
-    isBalanceVisible?: boolean
-    /**
-     * Set the version of the card.
-     * V1 is the old one: {@link AccountCard}
-     * V2 is the new one: {@link SelectableAccountCard}
-     */
-    cardVersion?: "v1" | "v2"
 }
 
-const ItemSeparatorComponent = ({ cardVersion = "v1" }: Pick<Props, "cardVersion">) => (
-    <BaseSpacer height={cardVersion === "v1" ? 16 : 8} />
-)
+const ItemSeparatorComponent = () => <BaseSpacer height={8} />
 
 const SectionHeader = ({
     section,
@@ -84,19 +50,7 @@ const SectionHeader = ({
 
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    (
-        {
-            closeBottomSheet,
-            setSelectedAccount,
-            selectedAccount,
-            onDismiss,
-            accounts,
-            isVthoBalance = false,
-            isBalanceVisible = true,
-            cardVersion = "v1",
-        },
-        ref,
-    ) => {
+    ({ closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss, accounts, isVthoBalance = false }, ref) => {
         const { LL } = useI18nContext()
 
         const handlePress = useCallback(
@@ -120,13 +74,10 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 return ["75%"]
             }
 
-            // Card Version v1 is way bigger, so it needs more space
-            if (cardVersion === "v1") return ["90%"]
-
             if (accounts.length < 8) return ["80%"]
 
             return ["90%"]
-        }, [accounts.length, cardVersion])
+        }, [accounts.length])
 
         const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
             data: accounts,
@@ -155,43 +106,25 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 </BaseView>
 
                 <BaseSpacer height={12} />
-                {cardVersion === "v1" ? (
-                    <BottomSheetFlatList
-                        data={accounts}
-                        keyExtractor={account => account.address}
-                        ItemSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
-                        renderItem={({ item }) => (
-                            <AccountCard
-                                testID="selectAccount"
-                                account={item}
-                                onPress={handlePress}
-                                selected={item.address === selectedAccount?.address}
-                                isVthoBalance={isVthoBalance}
-                                isBalanceVisible={isBalanceVisible}
-                            />
-                        )}
-                        {...flatListScrollProps}
-                    />
-                ) : (
-                    <BottomSheetSectionList
-                        sections={sections}
-                        keyExtractor={item => item.address}
-                        renderSectionHeader={SectionHeader}
-                        stickySectionHeadersEnabled={false}
-                        renderItem={({ item }) => (
-                            <SelectableAccountCard
-                                account={item}
-                                onPress={handlePress}
-                                selected={item.address === selectedAccount?.address}
-                                balanceToken={isVthoBalance ? "VTHO" : "VET"}
-                            />
-                        )}
-                        ItemSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
-                        SectionSeparatorComponent={ItemSeparatorComponent.bind(null, { cardVersion })}
-                        {...flatListScrollProps}
-                        scrollEnabled
-                    />
-                )}
+                <BottomSheetSectionList
+                    sections={sections}
+                    keyExtractor={item => item.address}
+                    renderSectionHeader={SectionHeader}
+                    stickySectionHeadersEnabled={false}
+                    renderItem={({ item }) => (
+                        <SelectableAccountCard
+                            account={item}
+                            onPress={handlePress}
+                            selected={item.address === selectedAccount?.address}
+                            balanceToken={isVthoBalance ? "VTHO" : "VET"}
+                            testID="selectAccount"
+                        />
+                    )}
+                    ItemSeparatorComponent={ItemSeparatorComponent}
+                    SectionSeparatorComponent={ItemSeparatorComponent}
+                    {...flatListScrollProps}
+                    scrollEnabled
+                />
             </BaseBottomSheet>
         )
     },

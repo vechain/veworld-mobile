@@ -1,5 +1,14 @@
+import { BottomSheetFlatList, BottomSheetFlatListMethods } from "@gorhom/bottom-sheet"
 import React, { useCallback, useMemo, useRef, useState } from "react"
-import { ScrollView, StyleProp, StyleSheet, TouchableOpacity, ViewStyle, ViewToken } from "react-native"
+import {
+    ListRenderItemInfo,
+    ScrollView,
+    StyleProp,
+    StyleSheet,
+    TouchableOpacity,
+    ViewStyle,
+    ViewToken,
+} from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
@@ -66,6 +75,11 @@ type Props = {
      * Provide snap offsets. By default they're calculated
      */
     snapOffsets?: number[]
+    /**
+     * Set to true if it's inside a bottom sheet.
+     * @default false
+     */
+    bottomSheet?: boolean
 }
 
 export const BaseCarousel = ({
@@ -84,10 +98,11 @@ export const BaseCarousel = ({
     testID,
     snapOffsets,
     itemHeight,
+    bottomSheet,
 }: Props) => {
     const [page, setPage] = useState(0)
 
-    const ref = useRef<Animated.FlatList<any>>(null)
+    const ref = useRef<Animated.FlatList<any> | BottomSheetFlatListMethods>(null)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
 
     const ItemSeparatorComponent = useCallback(() => <BaseSpacer width={gap} />, [gap])
@@ -135,10 +150,38 @@ export const BaseCarousel = ({
         [],
     )
 
+    const renderItem = useCallback(
+        ({ item, index }: ListRenderItemInfo<CarouselSlideItem>) => {
+            return (
+                <BaseCarouselItem
+                    testID={item.testID}
+                    href={item.href}
+                    isExternalLink={item.isExternalLink}
+                    name={item.name}
+                    onPress={onSlidePress}
+                    contentWrapperStyle={[
+                        itemHeight ? { height: itemHeight } : undefined,
+                        contentWrapperStyle,
+                        getInitialPaddingStyles(index),
+                    ]}
+                    onPressActivation={onSlidePressActivation}
+                    closable={item.closable}
+                    onClose={item.onClose}
+                    closeButtonStyle={item.closeButtonStyle}
+                    style={item.style}>
+                    {item.content}
+                </BaseCarouselItem>
+            )
+        },
+        [contentWrapperStyle, getInitialPaddingStyles, itemHeight, onSlidePress, onSlidePressActivation],
+    )
+
+    const Component = useMemo(() => (bottomSheet ? BottomSheetFlatList : Animated.FlatList), [bottomSheet])
+
     return (
         <BaseView flex={1} flexDirection="column" style={[styles.root, rootStyle]}>
-            <Animated.FlatList
-                ref={ref}
+            <Component
+                ref={ref as any}
                 data={data}
                 snapToOffsets={offsets}
                 snapToEnd={false}
@@ -153,31 +196,10 @@ export const BaseCarousel = ({
                 style={containerStyle}
                 keyExtractor={item => item.name ?? ""}
                 testID={testID}
-                renderItem={({ item, index }) => {
-                    return (
-                        <BaseCarouselItem
-                            testID={item.testID}
-                            href={item.href}
-                            isExternalLink={item.isExternalLink}
-                            name={item.name}
-                            onPress={onSlidePress}
-                            contentWrapperStyle={[
-                                itemHeight ? { height: itemHeight } : undefined,
-                                contentWrapperStyle,
-                                getInitialPaddingStyles(index),
-                            ]}
-                            onPressActivation={onSlidePressActivation}
-                            closable={item.closable}
-                            onClose={item.onClose}
-                            closeButtonStyle={item.closeButtonStyle}
-                            style={item.style}>
-                            {item.content}
-                        </BaseCarouselItem>
-                    )
-                }}
+                renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
             />
-            {showPagination && (
+            {showPagination && data.length > 1 && (
                 <ScrollView
                     contentContainerStyle={[styles.dotContainer, { paddingStart: padding }, paginationStyle]}
                     horizontal>
