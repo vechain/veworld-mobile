@@ -44,7 +44,7 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={onBookmarkPress}>
                 <BaseIcon
-                    name={isBookMarked ? "icon-star-on" : "icon-star-off"}
+                    name={isBookMarked ? "icon-star-on" : "icon-star"}
                     size={16}
                     style={styles.icon}
                     color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
