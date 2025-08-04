@@ -21,24 +21,24 @@ const calculateFeeHistory = (res: FeeHistoryResponse, maxPriorityFee: string) =>
     //Slicing because the last reward will always be 0, since it's targeting `next`
     const allRewards = res.reward.slice(0, -1)
     const latestBlockRewards = allRewards[allRewards.length - 1]
-    const equalRewardsOnLastBlock = new Set(latestBlockRewards).size === 3
+    const differentRewardsOnLastBlock = new Set(latestBlockRewards).size === 3
     //Base fees, on the other hand, are correct. The latest value is the value of the next block
     const latestBaseFee = HexUInt.of(res.baseFeePerGas[res.baseFeePerGas.length - 1]).bi
 
     const rewardRegular = BigNumberUtils.min(
-        equalRewardsOnLastBlock
+        differentRewardsOnLastBlock
             ? HexUInt.of(latestBlockRewards[0]).bi
             : BigNumberUtils.average(allRewards.map(rewards => rewards[0])).toBigInt,
         HexUInt.of(maxPriorityFee).bi,
     ).toBigInt
     const rewardMedium = BigNumberUtils.min(
-        equalRewardsOnLastBlock
+        differentRewardsOnLastBlock
             ? HexUInt.of(latestBlockRewards[1]).bi
             : BigNumberUtils.average(allRewards.map(rewards => rewards[1])).toBigInt,
         HexUInt.of(maxPriorityFee).bi,
     ).toBigInt
     const rewardHigh = BigNumberUtils.min(
-        equalRewardsOnLastBlock
+        differentRewardsOnLastBlock
             ? HexUInt.of(latestBlockRewards[2]).bi
             : BigNumberUtils.average(allRewards.map(rewards => rewards[2])).toBigInt,
         HexUInt.of(maxPriorityFee).bi,
