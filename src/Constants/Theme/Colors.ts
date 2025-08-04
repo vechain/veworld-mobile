@@ -217,6 +217,12 @@ export type Colors = {
     stakedVetCard: {
         background: string
     }
+    dappCard: {
+        name: string
+        description: string
+        icon: string
+    }
+    dappTitle: string
 }
 
 export enum COLORS {
@@ -533,6 +539,12 @@ const light: Colors = {
     stakedVetCard: {
         background: COLORS.GREY_50,
     },
+    dappCard: {
+        name: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_800,
 }
 
 const dark: Colors = {
@@ -754,6 +766,12 @@ const dark: Colors = {
     stakedVetCard: {
         background: COLORS.PURPLE,
     },
+    dappCard: {
+        name: COLORS.GREY_50,
+        description: COLORS.GREY_400,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_100,
 }
 
 export const colors = { light, dark }

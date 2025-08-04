@@ -13,9 +13,11 @@ export const TopSection = ({ onPress }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     return (
         <BaseView flexDirection={"row"} justifyContent="space-between">
-            <BaseText typographyFont="subSubTitleSemiBold">{LL.DISCOVER_ECOSYSTEM()}</BaseText>
+            <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.dappTitle}>
+                {LL.DISCOVER_ECOSYSTEM()}
+            </BaseText>
             <BaseTouchable onPress={onPress} style={styles.button}>
-                <BaseIcon name="icon-sort-desc" size={20} color={theme.colors.text} />
+                <BaseIcon name="icon-sort-desc" size={20} color={theme.colors.subtitle} />
             </BaseTouchable>
         </BaseView>
     )

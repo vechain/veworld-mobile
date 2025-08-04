@@ -40,15 +40,20 @@ export const DAppHorizontalCardV2 = ({ dapp, onOpenDApp, onPress }: Props) => {
                 />
                 {/* Title & Desc */}
                 <BaseView flex={1} justifyContent="center" flexDirection="column" gap={4}>
-                    <BaseText typographyFont="bodySemiBold">{dapp.name}</BaseText>
-                    <BaseText typographyFont="captionMedium" numberOfLines={2}>
+                    <BaseText typographyFont="bodySemiBold" color={theme.colors.dappCard.name}>
+                        {dapp.name}
+                    </BaseText>
+                    <BaseText
+                        typographyFont="captionMedium"
+                        numberOfLines={2}
+                        color={theme.colors.dappCard.description}>
                         {dapp.desc}
                     </BaseText>
                 </BaseView>
             </BaseTouchable>
             {/* Action Btn */}
             <BaseTouchable style={styles.iconContainer} onPress={() => onPress(dapp)}>
-                <BaseIcon name="icon-more-vertical" color={theme.colors.text} size={20} />
+                <BaseIcon name="icon-more-vertical" color={theme.colors.dappCard.icon} size={20} />
             </BaseTouchable>
         </BaseView>
     )
