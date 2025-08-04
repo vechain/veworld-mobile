@@ -56,6 +56,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             // Mark as initialized after first successful call
             setIsInitialised(true)
         } catch (error) {
+            console.error("Error initialising wallet", error)
             throw new WalletError(WalletErrorType.NETWORK_ERROR, "Error initialising wallet", error)
         } finally {
             setIsLoading(false)
