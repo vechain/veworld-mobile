@@ -29,7 +29,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const [isLoading, setIsLoading] = useState(false)
     const [smartAccountConfig, setSmartAccountConfig] = useState<SmartAccountTransactionConfig | null>(null)
     const [isInitialised, setIsInitialised] = useState(false)
-    const [chainId, setChainId] = useState<string | null>(null)
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
@@ -48,11 +47,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             setSmartAccountConfig(smartAccountData)
             setSmartAccountAddress(smartAccountData.address)
             previousConfigRef.current = config.networkConfig
-            const genesisBlock = await thor.blocks.getGenesisBlock()
-            if (!genesisBlock) {
-                throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
-            }
-            setChainId(genesisBlock.id)
             // Mark as initialized after first successful call
             setIsInitialised(true)
         } catch (error) {
@@ -88,11 +82,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
 
                     setSmartAccountConfig(smartAccountData)
                     setSmartAccountAddress(smartAccountData.address)
-                    const genesisBlock = await thor.blocks.getGenesisBlock()
-                    if (!genesisBlock) {
-                        throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
-                    }
-                    setChainId(genesisBlock.id)
                 } finally {
                     setIsLoading(false)
                 }
@@ -155,18 +144,22 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             if (!adapter.isAuthenticated || !ownerAddress) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
-            if (!smartAccountConfig || !chainId) {
+            if (!smartAccountConfig) {
                 throw new WalletError(
                     WalletErrorType.WALLET_NOT_FOUND,
                     "Smart wallet not initialized, call initialiseWallet first",
                 )
+            }
+            const genesisBlock = await thor.blocks.getGenesisBlock()
+            if (!genesisBlock) {
+                throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
             }
 
             try {
                 const finalClauses = await buildSmartAccountTransaction({
                     txClauses: clauses,
                     smartAccountConfig,
-                    chainId,
+                    chainId: genesisBlock.id,
                     signTypedDataFn: signTypedData,
                     genericDelgationDetails,
                     ownerAddress,
@@ -192,7 +185,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 throw new WalletError(WalletErrorType.BUILDING_TRANSACTION_ERROR, "Error building transaction", error)
             }
         },
-        [ownerAddress, thor, signTypedData, smartAccountConfig, chainId, adapter.isAuthenticated],
+        [ownerAddress, thor, signTypedData, smartAccountConfig, adapter.isAuthenticated],
     )
 
     const login = useCallback(
