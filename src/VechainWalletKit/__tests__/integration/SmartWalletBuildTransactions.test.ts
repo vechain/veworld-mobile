@@ -324,6 +324,7 @@ describe("Building transactions for smart accounts", () => {
         const erc20AbiJson = ERC20_ABI.filter(abi => abi.type === "function" && abi.name === "transfer")[0]
         const erc20TransferAbi = new ABIFunction(erc20AbiJson)
 
+        /* eslint-disable max-len */
         it("should build transaction for undeployed V3 smart account using generic delegation to pay for the transaction", async () => {
             // Set up test scenario: undeployed V3 smart account
             const embeddedAddress = "0x3333333333333333333333333333333333333333"
@@ -398,6 +399,7 @@ describe("Building transactions for smart accounts", () => {
             expect(b3trTransferData.args?.[1]?.toString()).toBe(genericDelegationFee.toString)
         })
 
+        /* eslint-disable max-len */
         it("should build transaction for already deployed V3 smart account using generic delegation to pay for the transaction", async () => {
             const smartAccountAddress = "0x4444444444444444444444444444444444444444"
             // Set up test scenario: already deployed V3 smart account
@@ -467,6 +469,7 @@ describe("Building transactions for smart accounts", () => {
             expect(b3trTransferData.args?.[1]?.toString()).toBe(genericDelegationFee.toString)
         })
 
+        /* eslint-disable max-len */
         it("should build transaction for a deployed V1 smart account using generic delegation to pay for the transaction", async () => {
             // Set up test scenario: deployed V1 smart account
             const smartAccountAddress = "0x5555555555555555555555555555555555555555"
@@ -610,7 +613,7 @@ describe("Building transactions for smart accounts", () => {
 
             // Verify the VET fee transfer is included in the batch
             const batchToAddresses = decodedBatchData.args![0] as string[]
-            const batchValues = decodedBatchData.args![1] // Keep as decoded BigInt array
+            const batchValues = decodedBatchData.args![1] as BigInt[]
             const batchDataArray = decodedBatchData.args![2] as string[]
 
             // Second transaction in batch should be VET transfer to deposit account
@@ -678,7 +681,7 @@ describe("Building transactions for smart accounts", () => {
 
             // Verify the VET fee transfer is included in the batch
             const batchToAddresses = decodedBatchData.args![0] as string[]
-            const batchValues = decodedBatchData.args![1] // Keep as decoded BigInt array
+            const batchValues = decodedBatchData.args![1] as BigInt[]
             const batchDataArray = decodedBatchData.args![2] as string[]
 
             // Second transaction in batch should be VET transfer to deposit account
