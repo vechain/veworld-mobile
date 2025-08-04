@@ -251,12 +251,12 @@ const _BaseBottomSheet = <TData,>(
                 paddingHorizontal: noMargins ? 0 : 24,
                 paddingTop: noMargins ? 0 : 16,
                 paddingBottom: noMargins ? 0 : 24,
-                flexGrow: snapPoints && !floating ? 1 : undefined,
+                flexGrow: snapPoints ? 1 : undefined,
                 alignItems: "stretch" as const,
             },
             contentStyle,
         ],
-        [noMargins, snapPoints, contentStyle, floating],
+        [noMargins, snapPoints, contentStyle],
     )
 
     return (
