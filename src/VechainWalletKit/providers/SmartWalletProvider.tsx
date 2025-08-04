@@ -2,21 +2,19 @@ import React, { createContext, useContext, useCallback, useMemo, useState, useEf
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
-import { SignOptions, TransactionOptions, TypedDataPayload } from "../types/transaction"
+import { SignOptions, TransactionOptions, TypedDataPayload, GenericDelegationDetails } from "../types/transaction"
 import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
 import { getSmartAccount } from "../utils/smartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import { SmartAccountTransactionConfig, SmartWalletContext } from "../types"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
-import { getChainId } from "../utils/chainId"
-
 export interface SmartWalletProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
     adapter: SmartAccountAdapter
 }
 
-const SmartWalletProviderContext = createContext<SmartWalletContext | null>(null)
+export const SmartWalletProviderContext = createContext<SmartWalletContext | null>(null)
 
 /**
  * This uses the adapter pattern to allow for different implementations of the underlying wallet signing functionality.
@@ -31,7 +29,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
     const [isLoading, setIsLoading] = useState(false)
     const [smartAccountConfig, setSmartAccountConfig] = useState<SmartAccountTransactionConfig | null>(null)
     const [isInitialised, setIsInitialised] = useState(false)
-    const [isAuthenticated, setIsAuthenticated] = useState(false)
+    const [chainId, setChainId] = useState<string | null>(null)
 
     const thor = useMemo(() => ThorClient.at(config.networkConfig.nodeUrl), [config.networkConfig.nodeUrl])
     const previousConfigRef = useRef<NetworkConfig | null>(null)
@@ -40,7 +38,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         if (!adapter.isAuthenticated) {
             throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
         }
-        setIsAuthenticated(true)
         try {
             setIsLoading(true)
             const adapterAddress = await adapter.createWallet()
@@ -51,6 +48,11 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             setSmartAccountConfig(smartAccountData)
             setSmartAccountAddress(smartAccountData.address)
             previousConfigRef.current = config.networkConfig
+            const genesisBlock = await thor.blocks.getGenesisBlock()
+            if (!genesisBlock) {
+                throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
+            }
+            setChainId(genesisBlock.id)
             // Mark as initialized after first successful call
             setIsInitialised(true)
         } catch (error) {
@@ -60,12 +62,21 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         }
     }, [adapter, thor, config.networkConfig])
 
+    useEffect(() => {
+        const init = async () => {
+            if (adapter.isAuthenticated) {
+                await initialiseWallet()
+            }
+        }
+        init()
+    }, [adapter.isAuthenticated, initialiseWallet])
+
     // Auto-update when config changes, NOT immediately after initialiseWallet
     useEffect(() => {
         const updateOnConfigChange = async () => {
             if (
                 isInitialised &&
-                isAuthenticated &&
+                adapter.isAuthenticated &&
                 hasNetworkConfigChanged(previousConfigRef.current, config.networkConfig)
             ) {
                 try {
@@ -74,8 +85,14 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     const adapterAddress = adapter.getAccount()
                     // Re-fetch smart account info with new config
                     const smartAccountData = await getSmartAccount(thor, adapterAddress, factoryAddress)
+
                     setSmartAccountConfig(smartAccountData)
                     setSmartAccountAddress(smartAccountData.address)
+                    const genesisBlock = await thor.blocks.getGenesisBlock()
+                    if (!genesisBlock) {
+                        throw new WalletError(WalletErrorType.NETWORK_ERROR, "Genesis block not found")
+                    }
+                    setChainId(genesisBlock.id)
                 } finally {
                     setIsLoading(false)
                 }
@@ -86,55 +103,59 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         }
 
         updateOnConfigChange()
-    }, [config.networkConfig, thor, isInitialised, isAuthenticated, ownerAddress, adapter])
+    }, [config.networkConfig, thor, isInitialised, adapter.isAuthenticated, ownerAddress, adapter])
 
     // Reset state when authentication changes
     useEffect(() => {
-        if (!isAuthenticated) {
+        if (!adapter.isAuthenticated) {
             setOwnerAddress("")
             setSmartAccountAddress("")
             setSmartAccountConfig(null)
             setIsInitialised(false)
             setIsLoading(false)
         }
-    }, [isAuthenticated])
+    }, [adapter.isAuthenticated])
 
     const signMessage = useCallback(
         async (message: Buffer): Promise<Buffer> => {
-            if (!isAuthenticated) {
+            if (!adapter.isAuthenticated) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
             return await adapter.signMessage(message)
         },
-        [adapter, isAuthenticated],
+        [adapter],
     )
 
     const signTransaction = useCallback(
         async (tx: Transaction, _options?: SignOptions): Promise<Buffer> => {
-            if (!isAuthenticated) {
+            if (!adapter.isAuthenticated) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
             return await adapter.signTransaction(tx)
         },
-        [adapter, isAuthenticated],
+        [adapter],
     )
 
     const signTypedData = useCallback(
         async (data: TypedDataPayload): Promise<string> => {
-            if (!isAuthenticated) {
+            if (!adapter.isAuthenticated) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
             return await adapter.signTypedData(data)
         },
-        [adapter, isAuthenticated],
+        [adapter],
     )
 
     const buildTransaction = useCallback(
-        async (clauses: TransactionClause[], options?: TransactionOptions): Promise<Transaction> => {
-            if (!isAuthenticated || !ownerAddress) {
+        async (
+            clauses: TransactionClause[],
+            options?: TransactionOptions,
+            genericDelgationDetails?: GenericDelegationDetails,
+        ): Promise<Transaction> => {
+            if (!adapter.isAuthenticated || !ownerAddress) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
-            if (!smartAccountConfig) {
+            if (!smartAccountConfig || !chainId) {
                 throw new WalletError(
                     WalletErrorType.WALLET_NOT_FOUND,
                     "Smart wallet not initialized, call initialiseWallet first",
@@ -145,8 +166,10 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 const finalClauses = await buildSmartAccountTransaction({
                     txClauses: clauses,
                     smartAccountConfig,
-                    chainId: getChainId(config.networkConfig.networkType, config.networkConfig.chainId),
+                    chainId,
                     signTypedDataFn: signTypedData,
+                    genericDelgationDetails,
+                    ownerAddress,
                 })
 
                 // Estimate gas
@@ -160,23 +183,16 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                 const txBody = await thor.transactions.buildTransactionBody(finalClauses, parsedGasLimit, {
                     isDelegated: options?.isDelegated ?? false,
                     dependsOn: options?.dependsOn,
-                    gasPriceCoef: options?.gasPriceCoef,
+                    maxFeePerGas: options?.maxFeePerGas,
+                    maxPriorityFeePerGas: options?.maxPriorityFeePerGas,
                 })
 
                 return Transaction.of(txBody)
             } catch (error) {
-                throw new WalletError(WalletErrorType.NETWORK_ERROR, "Error building transaction", error)
+                throw new WalletError(WalletErrorType.BUILDING_TRANSACTION_ERROR, "Error building transaction", error)
             }
         },
-        [
-            ownerAddress,
-            config.networkConfig.networkType,
-            thor,
-            isAuthenticated,
-            signTypedData,
-            smartAccountConfig,
-            config.networkConfig.chainId,
-        ],
+        [ownerAddress, thor, signTypedData, smartAccountConfig, chainId, adapter.isAuthenticated],
     )
 
     const login = useCallback(
@@ -192,7 +208,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         setSmartAccountAddress("")
         setSmartAccountConfig(null)
         setIsInitialised(false)
-        setIsAuthenticated(false)
     }, [adapter])
 
     const contextValue = useMemo(
@@ -201,7 +216,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             smartAccountAddress,
             isLoading,
             isInitialized: isInitialised,
-            isAuthenticated,
+            isAuthenticated: adapter.isAuthenticated,
             initialiseWallet,
             signMessage,
             signTransaction,
@@ -212,7 +227,7 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
         }),
         [
             ownerAddress,
-            isAuthenticated,
+            adapter.isAuthenticated,
             smartAccountAddress,
             isLoading,
             isInitialised,

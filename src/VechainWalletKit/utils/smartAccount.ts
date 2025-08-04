@@ -16,7 +16,6 @@ export async function getSmartAccount(
         )
     }
     const accountFactory = thor.contracts.load(accountFactoryAddress, SimpleAccountFactoryABI)
-
     try {
         const account = await accountFactory.read.getAccountAddress(ownerAddress)
         const smartAccountAddress = String(account[0])
@@ -25,12 +24,10 @@ export async function getSmartAccount(
         const isDeployed = (await thor.accounts.getAccount(Address.of(smartAccountAddress))).hasCode
 
         const hasV1Account = await accountFactory.read.hasLegacyAccount(ownerAddress)
-        const version = await accountFactory.read.version()
         return {
             address: smartAccountAddress,
             hasV1Account: hasV1Account[0] as boolean,
             isDeployed,
-            version: parseInt(version[0] as string),
             factoryAddress: accountFactoryAddress,
         }
     } catch (error) {
