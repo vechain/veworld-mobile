@@ -1,16 +1,16 @@
 import { TouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { RefObject, useCallback } from "react"
+import { default as React, RefObject, useCallback } from "react"
 import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
-import { ColorThemeType, DiscoveryDApp } from "~Constants"
+import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useDappBookmarking, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
 
 const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }) => {
     const { LL } = useI18nContext()
-    const { styles } = useThemedStyles(baseStyles)
+    const { styles, theme } = useThemedStyles(baseStyles)
 
     const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.href)
     const { onDAppPress } = useDAppActions()
@@ -30,18 +30,39 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
     }, [LL, dapp.desc, dapp.href, dapp.name])
 
     return (
-        <BaseView px={24} gap={4}>
+        <BaseView px={24} gap={4} pb={16}>
             <TouchableOpacity style={styles.button} onPress={onOpenDappPress}>
-                <BaseIcon name="icon-arrow-link" size={16} style={styles.icon} />
-                <BaseText>{LL.BTN_OPEN_DAPP()}</BaseText>
+                <BaseIcon
+                    name="icon-arrow-link"
+                    size={16}
+                    style={styles.icon}
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                />
+                <BaseText color={theme.colors.dappCard.name} typographyFont="bodySemiBold">
+                    {LL.BTN_OPEN_DAPP()}
+                </BaseText>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={onBookmarkPress}>
-                <BaseIcon name={isBookMarked ? "icon-star-on" : "icon-star-off"} size={16} style={styles.icon} />
-                <BaseText>{isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITE() : LL.BTN_ADD_TO_FAVORITE()}</BaseText>
+                <BaseIcon
+                    name={isBookMarked ? "icon-star-on" : "icon-star-off"}
+                    size={16}
+                    style={styles.icon}
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                />
+                <BaseText color={theme.colors.dappCard.name} typographyFont="bodySemiBold">
+                    {isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITE() : LL.BTN_ADD_TO_FAVORITE()}
+                </BaseText>
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={onShare}>
-                <BaseIcon name="icon-share" size={16} style={styles.icon} />
-                <BaseText>{LL.BROWSER_SHARE()}</BaseText>
+                <BaseIcon
+                    name="icon-share"
+                    size={16}
+                    style={styles.icon}
+                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                />
+                <BaseText color={theme.colors.dappCard.name} typographyFont="bodySemiBold">
+                    {LL.BROWSER_SHARE()}
+                </BaseText>
             </TouchableOpacity>
         </BaseView>
     )
@@ -82,5 +103,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         icon: {
             padding: 8,
+            backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_100,
         },
     })
