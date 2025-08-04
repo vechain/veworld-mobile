@@ -15,7 +15,7 @@ import {
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 import { sponsorTransaction } from "~Networking"
-import { useSmartWallet } from "../../VechainWalletKit"
+import { useSmartWallet } from "../useSmartWallet"
 import { delegateGenericDelegator, delegateGenericDelegatorSmartAccount } from "~Networking/GenericDelegator"
 import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNumberUtils, debug, HexUtils, warn } from "~Utils"

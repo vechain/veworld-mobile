@@ -40,6 +40,9 @@ const initialState: FeatureFlags = {
             },
         },
     },
+    smartWalletFeature: {
+        enabled: false,
+    },
 }
 
 const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)

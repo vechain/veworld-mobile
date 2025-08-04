@@ -1,6 +1,5 @@
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import { TransactionOptions, SignOptions, TypedDataPayload } from "./transaction"
-import { BigNumberUtils } from "../../Utils"
+import { TransactionOptions, SignOptions, TypedDataPayload, GenericDelegationDetails } from "./transaction"
 export interface SigningOperations {
     signMessage: (message: Buffer) => Promise<Buffer>
     signTransaction: (tx: Transaction, options?: SignOptions) => Promise<Buffer>
@@ -12,12 +11,7 @@ export interface WalletContext extends SigningOperations {
     buildTransaction: (
         clauses: TransactionClause[],
         options?: TransactionOptions,
-        genericDelgation?: {
-            token: string
-            isGenDelegation: boolean
-            amount: BigNumberUtils
-            delegatorAddress: string
-        },
+        genericDelgation?: GenericDelegationDetails,
     ) => Promise<Transaction>
 }
 export interface AuthenticationOperations {

@@ -38,7 +38,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNutils, error } from "~Utils"
-import { useSmartWallet } from "../../VechainWalletKit"
+import { useSmartWallet } from "../useSmartWallet"
 
 type Props = {
     clauses: TransactionClause[]

@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react"
 import { Text, View, Button, StyleSheet } from "react-native"
 import { useCreateWallet } from "../../../../Hooks/useCreateWallet"
 import { useNavigation } from "@react-navigation/native"
-import { useSmartWallet } from "../../../../VechainWalletKit"
+import { useSmartWallet } from "../../../../Hooks"
 
 export const SmartAccountScreen = () => {
     const { createSmartWallet } = useCreateWallet()

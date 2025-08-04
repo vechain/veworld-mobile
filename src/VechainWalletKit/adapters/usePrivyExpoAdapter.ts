@@ -9,21 +9,15 @@ import HexUtils from "../../Utils/HexUtils"
 export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
     const { user, logout } = usePrivy()
     const { wallets, create } = useEmbeddedEthereumWallet()
-    const oauth = useLoginWithOAuth({
-        onError: (err: any) => {
-            console.log("error logging", JSON.stringify(err))
-        },
-    })
+    const oauth = useLoginWithOAuth()
     const isAuthenticated = !!user
 
     return useMemo(() => {
         const currentWallets = wallets ?? []
-        console.log("Privy isAuthenticated", isAuthenticated, currentWallets)
         return {
             isAuthenticated,
 
             async login(options: LoginOptions): Promise<void> {
-                console.log("usePrivyExpoAdapter login", options)
                 const provider = options.provider as any
                 const redirectUri = options.oauthRedirectUri
                 await oauth.login({ provider, redirectUri })
@@ -43,7 +37,6 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             },
 
             async signMessage(message: Buffer): Promise<Buffer> {
-                console.log("usePrivyExpoAdapter signMessage", isAuthenticated, currentWallets)
                 if (!isAuthenticated || !currentWallets.length) {
                     const errormessage = !isAuthenticated
                         ? "User not authenticated"
@@ -65,7 +58,6 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             },
 
             async signTransaction(tx: Transaction): Promise<Buffer> {
-                console.log("usePrivyExpoAdapter signTransaction", isAuthenticated, currentWallets)
                 if (!isAuthenticated || !currentWallets.length) {
                     throw new WalletError(
                         WalletErrorType.WALLET_NOT_FOUND,
@@ -101,7 +93,6 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
             },
 
             async signTypedData(data: TypedDataPayload): Promise<string> {
-                console.log("usePrivyExpoAdapter signTypedData", isAuthenticated, currentWallets)
                 if (!isAuthenticated || !currentWallets.length) {
                     throw new WalletError(
                         WalletErrorType.WALLET_NOT_FOUND,
@@ -112,7 +103,6 @@ export const usePrivyExpoAdapter = (): SmartAccountAdapter => {
                 try {
                     const privyProvider = await currentWallets[0].getProvider()
                     const privyAccount = currentWallets[0].address
-                    console.log("privyAccount", privyAccount)
                     const signature = await privyProvider.request({
                         method: "eth_signTypedData_v4",
                         params: [

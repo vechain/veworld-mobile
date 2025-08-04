@@ -2,7 +2,8 @@
 export * from "./types"
 
 // Export providers
-export { SmartWalletProvider, useSmartWallet } from "./providers/SmartWalletProvider"
+export { SmartWalletProvider } from "./providers/SmartWalletProvider"
+// Note: useSmartWallet is now exported from ~Hooks for feature flag compatibility
 export { SmartWalletWithPrivyProvider } from "./providers/SmartWalletWithPrivy"
 export type { SmartWalletWithPrivyProps } from "./providers/SmartWalletWithPrivy"
 

@@ -2,20 +2,19 @@ import React, { createContext, useContext, useCallback, useMemo, useState, useEf
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
 import { NetworkConfig, VechainWalletSDKConfig } from "../types/config"
-import { GenericDelegationDetails, SignOptions, TransactionOptions, TypedDataPayload } from "../types/transaction"
+import { SignOptions, TransactionOptions, TypedDataPayload, GenericDelegationDetails } from "../types/transaction"
 import { LoginOptions, SmartAccountAdapter } from "../types/wallet"
 import { getSmartAccount } from "../utils/smartAccount"
 import { WalletError, WalletErrorType } from "../utils/errors"
 import { SmartAccountTransactionConfig, SmartWalletContext } from "../types"
 import { buildSmartAccountTransaction } from "../utils/transactionBuilder"
-import { BigNumberUtils } from "../../Utils/BigNumberUtils"
 export interface SmartWalletProps {
     children: React.ReactNode
     config: VechainWalletSDKConfig
     adapter: SmartAccountAdapter
 }
 
-const SmartWalletProviderContext = createContext<SmartWalletContext | null>(null)
+export const SmartWalletProviderContext = createContext<SmartWalletContext | null>(null)
 
 /**
  * This uses the adapter pattern to allow for different implementations of the underlying wallet signing functionality.
@@ -153,7 +152,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
             options?: TransactionOptions,
             genericDelgationDetails?: GenericDelegationDetails,
         ): Promise<Transaction> => {
-            console.log("buildTransaction start")
             if (!adapter.isAuthenticated || !ownerAddress) {
                 throw new WalletError(WalletErrorType.WALLET_NOT_FOUND, "User not authenticated, login first")
             }
@@ -188,8 +186,6 @@ export const SmartWalletProvider: React.FC<SmartWalletProps> = ({ children, conf
                     maxFeePerGas: options?.maxFeePerGas,
                     maxPriorityFeePerGas: options?.maxPriorityFeePerGas,
                 })
-
-                console.log("buildTransaction end")
 
                 return Transaction.of(txBody)
             } catch (error) {

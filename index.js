@@ -15,6 +15,7 @@ import {
     WalletConnectContextProvider,
     FeatureFlagsProvider,
 } from "~Components"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import {
@@ -58,6 +59,7 @@ import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
+import { SmartWalletFallbackProvider } from "~Components/Providers/SmartWalletFallbackProvider"
 import { SmartWalletWithPrivyProvider } from "./src/VechainWalletKit"
 
 const { fontFamily } = typography
@@ -68,6 +70,31 @@ info(ERROR_EVENTS.APP, "is Hermes active : ", isHermes())
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs
     LogBox.ignoreAllLogs()
+}
+
+const ConditionalSmartWallet = ({ children, nodeUrl, networkType }) => {
+    const featureFlags = useFeatureFlags()
+
+    const ff = { ...featureFlags, smartWalletFeature: { enabled: false } }
+    if (ff.smartWalletFeature.enabled) {
+        return (
+            <SmartWalletWithPrivyProvider
+                config={{
+                    providerConfig: {
+                        appId: process.env.PRIVY_APP_ID,
+                        clientId: process.env.PRIVY_CLIENT_ID,
+                    },
+                    networkConfig: {
+                        nodeUrl,
+                        networkType,
+                    },
+                }}>
+                {children}
+            </SmartWalletWithPrivyProvider>
+        )
+    }
+
+    return <SmartWalletFallbackProvider>{children}</SmartWalletFallbackProvider>
 }
 
 const Main = () => {
@@ -126,8 +153,6 @@ const Main = () => {
     const nodeUrl = selectedNetwork.currentUrl
 
     if (!fontsLoaded) return
-    console.log("privy app id", process.env.PRIVY_APP_ID)
-    console.log("privy client id", process.env.PRIVY_CLIENT_ID)
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ConnexContextProvider>
@@ -136,18 +161,8 @@ const Main = () => {
                     persistOptions={{
                         persister: clientPersister,
                     }}>
-                    <SmartWalletWithPrivyProvider
-                        config={{
-                            providerConfig: {
-                                appId: process.env.PRIVY_APP_ID,
-                                clientId: process.env.PRIVY_CLIENT_ID,
-                            },
-                            networkConfig: {
-                                nodeUrl,
-                                networkType,
-                            },
-                        }}>
-                        <FeatureFlagsProvider>
+                    <FeatureFlagsProvider>
+                        <ConditionalSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
                             <NavigationProvider>
                                 <InteractionProvider>
                                     <WalletConnectContextProvider>
@@ -162,8 +177,8 @@ const Main = () => {
                                 </InteractionProvider>
                             </NavigationProvider>
                             <BaseToast />
-                        </FeatureFlagsProvider>
-                    </SmartWalletWithPrivyProvider>
+                        </ConditionalSmartWallet>
+                    </FeatureFlagsProvider>
                 </PersistQueryClientProvider>
             </ConnexContextProvider>
         </GestureHandlerRootView>

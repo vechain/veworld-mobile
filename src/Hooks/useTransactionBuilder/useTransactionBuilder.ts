@@ -4,7 +4,8 @@ import { DEVICE_TYPE, EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import { GenericDelegationDetails, useSmartWallet } from "../../VechainWalletKit"
+import { GenericDelegationDetails } from "../../VechainWalletKit"
+import { useSmartWallet } from "../useSmartWallet"
 
 type Props = {
     providedGas?: number

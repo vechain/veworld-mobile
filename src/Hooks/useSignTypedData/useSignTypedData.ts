@@ -4,7 +4,7 @@ import { WalletEncryptionKeyHelper } from "~Components"
 import { DEVICE_TYPE, TypedData, Wallet } from "~Model"
 import { selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
 import { HexUtils } from "~Utils"
-import { useSmartWallet } from "../../VechainWalletKit"
+import { useSmartWallet } from "../useSmartWallet"
 
 export const useSignTypedMessage = () => {
     const account = useAppSelector(selectSelectedAccountOrNull)
