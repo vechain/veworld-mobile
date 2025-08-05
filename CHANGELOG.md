@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.0 (2025-08-05)
+
+* build: init ([71e6bde](https://github.com/vechain/veworld-mobile/commit/71e6bde))
+* feat: generic delegator support for smart wallets (#3145) ([90e4017](https://github.com/vechain/veworld-mobile/commit/90e4017)), closes [#3145](https://github.com/vechain/veworld-mobile/issues/3145)
+
 ## <small>2.3.1 (2025-08-04)</small>
 
 * build: init ([ecfcbcc](https://github.com/vechain/veworld-mobile/commit/ecfcbcc))
