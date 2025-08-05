@@ -11,8 +11,8 @@ export const VbdCarouselItemSkeleton = () => {
         <BaseView style={styles.root}>
             <BaseSkeleton
                 animationDirection="horizontalLeft"
-                boneColor={COLORS.GREY_200}
-                highlightColor={COLORS.GREY_300}
+                boneColor={theme.isDark ? COLORS.LIGHT_PURPLE : COLORS.GREY_200}
+                highlightColor={theme.isDark ? COLORS.PURPLE : COLORS.GREY_300}
                 rootStyle={[StyleSheet.absoluteFill]}
                 height={257}
             />
