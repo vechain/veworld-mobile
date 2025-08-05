@@ -1,14 +1,14 @@
 import React, { forwardRef, useCallback, useMemo, useState } from "react"
 import { ListRenderItemInfo, ScrollView, StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseChip, BaseIcon, BaseSpacer, BaseText, BaseView, BaseSkeleton } from "~Components"
 import { X2ECategory, X2ECategoryType, VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
 import { useTheme, useVeBetterDaoDapps } from "~Hooks"
 import { URIUtils } from "~Utils"
+import { useI18nContext } from "~i18n"
 import { X2EAppWithDetails } from "./X2EAppWithDetails"
 import { X2EAppDetails } from "./X2EAppDetails"
-
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
 type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
 
@@ -19,11 +19,39 @@ type Filter = {
     onPress: () => void
 }
 
+// Helper function to get localized category key (returns the key, not the translated value)
+const getCategoryLocalizationKey = (categoryId: X2ECategoryType) => {
+    switch (categoryId) {
+        case X2ECategoryType.OTHERS:
+            return "APP_CATEGORY_OTHERS"
+        case X2ECategoryType.EDUCATION_LEARNING:
+            return "APP_CATEGORY_LEARNING"
+        case X2ECategoryType.FITNESS_WELLNESS:
+            return "APP_CATEGORY_LIFESTYLE"
+        case X2ECategoryType.GREEN_FINANCE_DEFI:
+            return "APP_CATEGORY_WEB3"
+        case X2ECategoryType.GREEN_MOBILITY_TRAVEL:
+            return "APP_CATEGORY_TRANSPORTATION"
+        case X2ECategoryType.NUTRITION:
+            return "APP_CATEGORY_FOOD_AND_DRINK"
+        case X2ECategoryType.PLASTIC_WASTE_RECYCLING:
+            return "APP_CATEGORY_RECYCLING"
+        case X2ECategoryType.RENEWABLE_ENERGY_EFFICIENCY:
+            return "APP_CATEGORY_ENERGY"
+        case X2ECategoryType.SUSTAINABLE_SHOPPING:
+            return "APP_CATEGORY_SHOPPING"
+        case X2ECategoryType.PETS:
+            return "APP_CATEGORY_PETS"
+        default:
+            return "APP_CATEGORY_OTHERS"
+    }
+}
+
 type TopFiltersProps = {
     filters: Filter[]
 }
 
-const TopFilters = ({ filters }: TopFiltersProps) => {
+const TopFilters = React.memo(({ filters }: TopFiltersProps) => {
     return (
         <BaseView style={styles.filtersContainer}>
             <ScrollView
@@ -38,9 +66,8 @@ const TopFilters = ({ filters }: TopFiltersProps) => {
             </ScrollView>
         </BaseView>
     )
-}
+})
 
-// Skeleton component that matches the X2EAppWithDetails structure
 const X2EAppSkeleton = React.memo(() => {
     const theme = useTheme()
 
@@ -118,12 +145,23 @@ const X2EAppsList = React.memo(({ apps, isLoading }: X2EAppsListProps) => {
 })
 
 const X2EAppItem = React.memo(({ dapp }: { dapp: X2EDapp }) => {
+    const { LL } = useI18nContext()
+
     const logoUrl = useMemo(() => {
         return URIUtils.convertUriToUrl(dapp.logo)
     }, [dapp.logo])
 
+    // Get all categories for display, or fallback to OTHERS if none
+    const categoryDisplayNames = useMemo(() => {
+        if (!dapp.categories || dapp.categories.length === 0) {
+            return [LL[getCategoryLocalizationKey(X2ECategoryType.OTHERS)]()]
+        }
+
+        return dapp.categories.map(categoryId => LL[getCategoryLocalizationKey(categoryId)]())
+    }, [dapp.categories, LL])
+
     return (
-        <X2EAppWithDetails name={dapp.name} icon={logoUrl} desc={dapp.description}>
+        <X2EAppWithDetails name={dapp.name} icon={logoUrl} desc={dapp.description} categories={categoryDisplayNames}>
             <X2EAppDetails.Container>
                 <X2EAppDetails.Description>{dapp.description}</X2EAppDetails.Description>
                 <X2EAppDetails.Stats />
@@ -151,10 +189,12 @@ type X2EAppsBottomSheetProps = {
 
 export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(({ onDismiss }, ref) => {
     const theme = useTheme()
+    const { LL } = useI18nContext()
 
     const [selectedCategory, setSelectedCategory] = useState(() => X2ECategory.RENEWABLE_ENERGY_EFFICIENCY)
 
     const { data: allApps, isLoading } = useVeBetterDaoDapps()
+
     const x2eAppsToShow = useMemo(() => {
         if (!allApps) return []
 
@@ -167,14 +207,17 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
         const categoriesToShow = Object.values(X2ECategory)
 
         return categoriesToShow
-            .map(category => ({
-                key: category.id,
-                title: category.displayName,
-                isSelected: selectedCategory.id === category.id,
-                onPress: () => setSelectedCategory(category),
-            }))
+            .map(category => {
+                const localizationKey = getCategoryLocalizationKey(category.id)
+                return {
+                    key: category.id,
+                    title: (LL[localizationKey] as () => string)(),
+                    isSelected: selectedCategory.id === category.id,
+                    onPress: () => setSelectedCategory(category),
+                }
+            })
             .sort((a, b) => a.title.localeCompare(b.title))
-    }, [selectedCategory.id])
+    }, [selectedCategory.id, LL])
 
     return (
         <BaseBottomSheet
@@ -188,7 +231,7 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
                 <BaseView flexDirection="row" gap={16} alignItems="center" px={24} mt={16}>
                     <BaseIcon name={selectedCategory.icon} size={32} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                        {selectedCategory.displayName}
+                        {LL[getCategoryLocalizationKey(selectedCategory.id)]()}
                     </BaseText>
                 </BaseView>
                 <BaseSpacer height={32} />

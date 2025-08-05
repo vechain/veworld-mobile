@@ -38,7 +38,7 @@ type Props = PropsWithChildren<{
     name: string
     icon: string
     desc?: string
-    category?: string
+    categories?: string[]
     /**
      * True if the details should be visible by default, false otherwise. Defaults to false
      */
@@ -46,7 +46,7 @@ type Props = PropsWithChildren<{
 }>
 
 export const X2EAppWithDetails = React.memo(
-    ({ name, icon, desc, category = "Food & Drinks", children, isDefaultVisible = false }: Props) => {
+    ({ name, icon, desc, categories = [], children, isDefaultVisible = false }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const [loadFallback, setLoadFallback] = useState(false)
         const [showDetails, setShowDetails] = useState(isDefaultVisible)
@@ -292,17 +292,20 @@ export const X2EAppWithDetails = React.memo(
                                     </Animated.Text>
                                     {showDetails ? (
                                         <Animated.View style={[contentStyle, categoryLabelStyle]}>
-                                            <BaseView flexDirection="row">
-                                                <BaseText
-                                                    bg={theme.colors.label.backgroundLighter}
-                                                    px={8}
-                                                    py={4}
-                                                    borderRadius={4}
-                                                    typographyFont="captionMedium"
-                                                    color={theme.colors.label.text}
-                                                    testID="DAPP_WITH_DETAILS_CATEGORY">
-                                                    {category}
-                                                </BaseText>
+                                            <BaseView flexDirection="row" flexWrap="wrap" gap={8}>
+                                                {categories.map((category, index) => (
+                                                    <BaseText
+                                                        key={index}
+                                                        bg={theme.colors.label.backgroundLighter}
+                                                        px={8}
+                                                        py={4}
+                                                        borderRadius={4}
+                                                        typographyFont="captionMedium"
+                                                        color={theme.colors.label.text}
+                                                        testID={`DAPP_WITH_DETAILS_CATEGORY_${index}`}>
+                                                        {category}
+                                                    </BaseText>
+                                                ))}
                                             </BaseView>
                                         </Animated.View>
                                     ) : (
