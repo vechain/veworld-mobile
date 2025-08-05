@@ -1,4 +1,4 @@
-import { BigNumber, TypedDataDomain } from "ethers"
+import { TypedDataDomain } from "ethers"
 import { BigNumberUtils } from "../../Utils"
 
 export interface TypedDataPayload {
