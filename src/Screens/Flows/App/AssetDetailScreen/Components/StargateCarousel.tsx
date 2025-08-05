@@ -26,6 +26,7 @@ export const StargateCarousel = () => {
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
+    const isManager = stargateNodes.some(node => node.isXNodeDelegatee && !node.isXNodeHolder)
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()
@@ -80,6 +81,7 @@ export const StargateCarousel = () => {
                     isLoading={isLoadingNodes || isLoadingNfts}
                     nfts={ownedStargateNfts}
                     rootStyle={styles.section}
+                    isManager={isManager}
                 />
                 <BaseSpacer bg={theme.colors.cardDivider} height={1} />
                 <BaseCarousel

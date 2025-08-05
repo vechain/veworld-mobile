@@ -20,7 +20,7 @@ export const StakedCard = memo(() => {
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
-
+    const isManager = stargateNodes.some(node => node.isXNodeDelegatee && !node.isXNodeHolder)
     const nav = useNavigation()
 
     const vetWithCompleteInfo = useTokenWithCompleteInfo(VET)
@@ -36,7 +36,11 @@ export const StakedCard = memo(() => {
             <BaseTouchable
                 style={styles.container}
                 onPress={() => nav.navigate(Routes.TOKEN_DETAILS, { token: vetWithCompleteInfo })}>
-                <StargateLockedValue isLoading={isLoadingNfts || isLoadingNodes} nfts={ownedStargateNfts} />
+                <StargateLockedValue
+                    isLoading={isLoadingNfts || isLoadingNodes}
+                    nfts={ownedStargateNfts}
+                    isManager={isManager}
+                />
             </BaseTouchable>
         </BaseView>
     )
