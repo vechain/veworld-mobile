@@ -20,8 +20,7 @@ const parseSmartAccountData = (data?: string) => {
     try {
         return simpleAccountIface.parseTransaction({ data })
     } catch {
-        console.log("not a SimpleAccount call")
-        return null // not a SimpleAccount call
+        return null
     }
 }
 
