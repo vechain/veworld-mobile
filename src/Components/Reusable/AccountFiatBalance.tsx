@@ -51,6 +51,7 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
     const nonVechaiTokensFiat = useNonVechainTokenFiat()
 
     const { stargateNodes, isLoading: loadingNodes } = useUserNodes(accountAddress)
+
     const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts(
         stargateNodes,
         loadingNodes,
@@ -63,8 +64,13 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
     }, [stargateNfts])
 
     const stargateFiatBalance = useMemo(() => {
+        // We only include staked VET in fiat balance if user is the owner, not a delegatee (manager) - Stargate staking
+        const isManager = stargateNodes.some(node => node.isXNodeDelegatee && !node.isXNodeHolder)
+
+        if (isManager) return "0"
+
         return BalanceUtils.getFiatBalance(totalStargateVet.toString, tokenWithInfoVET.exchangeRate ?? 1, VET.decimals)
-    }, [totalStargateVet, tokenWithInfoVET.exchangeRate])
+    }, [totalStargateVet, tokenWithInfoVET.exchangeRate, stargateNodes])
 
     const isLoading = useMemo(() => _isLoading || loadingStargateNfts, [_isLoading, loadingStargateNfts])
 
