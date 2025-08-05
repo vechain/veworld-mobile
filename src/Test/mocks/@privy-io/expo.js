@@ -4,19 +4,10 @@
 
 import React from "react"
 
-// Mock wallet object
-const mockWallet = {
-    address: "0x1234567890123456789012345678901234567890",
-    getProvider: jest.fn().mockResolvedValue({
-        request: jest.fn().mockResolvedValue("0x1234567890123456789012345678901234567890"),
-    }),
-}
-
 // Mock user object
-const mockUser = {
-    id: "test-user-id",
-    email: "test@example.com",
-}
+const mockUser = undefined
+
+const mockWallet = {}
 
 // Mock hooks - using direct function definitions
 function usePrivy() {
@@ -28,7 +19,7 @@ function usePrivy() {
 
 function useEmbeddedEthereumWallet() {
     return {
-        wallets: [mockWallet],
+        wallets: [],
         create: jest.fn().mockResolvedValue(mockWallet),
     }
 }

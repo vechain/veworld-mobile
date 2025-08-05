@@ -189,10 +189,7 @@ describe("useTransactionScreen", () => {
                 VTHO: true,
             },
             isFirstTimeLoadingFees: true,
-<<<<<<< HEAD
-=======
             isBiometricsEmpty: true,
->>>>>>> main
         })
     })
 
