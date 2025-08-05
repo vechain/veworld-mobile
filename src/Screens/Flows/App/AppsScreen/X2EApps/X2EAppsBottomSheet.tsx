@@ -1,19 +1,19 @@
 import React, { forwardRef, useCallback, useMemo, useState } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
+import { FlatList, ListRenderItemInfo, ScrollView, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseChip, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { Spinner } from "~Components/Reusable/Spinner"
-import { COLORS, DiscoveryDApp } from "~Constants"
-import { DAppType } from "~Model"
-import { useDappsWithPagination, UseDappsWithPaginationSortKey } from "~Hooks/useDappsWithPagination"
-import { useI18nContext } from "~i18n"
-import { useTheme } from "~Hooks"
+import { COLORS } from "~Constants"
+import { X2ECategory, X2ECategoryType, VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
+import { useTheme, useVeBetterDaoDapps } from "~Hooks"
+import { URIUtils } from "~Utils"
 import { X2EAppWithDetails } from "./X2EAppWithDetails"
 import { X2EAppDetails } from "./X2EAppDetails"
 import { SortableKeys } from "../../DiscoverScreen/Components/Bottomsheets"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 
+type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
+
 type Filter = {
-    key: DAppType
+    key: X2ECategoryType
     title: string
     isSelected: boolean
     onPress: () => void
@@ -25,44 +25,35 @@ type TopFiltersProps = {
 
 const TopFilters = ({ filters }: TopFiltersProps) => {
     return (
-        <BaseView flexDirection="row" justifyContent="space-between" py={8}>
-            {filters.map(({ key, isSelected, title, onPress }) => (
-                <BaseChip key={key} label={title} active={isSelected} onPress={onPress} />
-            ))}
+        <BaseView style={styles.filtersContainer}>
+            <ScrollView
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.filtersScrollContainer}>
+                {filters.map(({ key, isSelected, title, onPress }) => (
+                    <BaseView key={key} mx={6}>
+                        <BaseChip label={title} active={isSelected} onPress={onPress} />
+                    </BaseView>
+                ))}
+            </ScrollView>
         </BaseView>
     )
 }
 
-type DAppsListProps = {
-    dapps: DiscoveryDApp[]
-    onFetchNextPage: () => void
+type X2EListProps = {
+    apps: X2EDapp[]
     isLoading: boolean
 }
 
-const LoadingMoreFooter = React.memo(({ isLoading }: { isLoading: boolean }) => {
-    const { LL } = useI18nContext()
+const X2EAppItem = React.memo(({ dapp }: { dapp: X2EDapp }) => {
+    const logoUrl = useMemo(() => {
+        return URIUtils.convertUriToUrl(dapp.logo)
+    }, [dapp.logo])
 
-    if (isLoading)
-        return (
-            <BaseView gap={8} alignItems="center" justifyContent="center" flexDirection="row" w={100} py={8} mt={20}>
-                <Spinner />
-                <BaseText typographyFont="bodySemiBold">{LL.LOADING_MORE()}</BaseText>
-            </BaseView>
-        )
-
-    return <BaseSpacer height={0} />
-})
-
-const X2EAppItem = React.memo(({ dapp }: { dapp: DiscoveryDApp }) => {
     return (
-        <X2EAppWithDetails
-            name={dapp.name}
-            icon={dapp.iconUri || `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`}
-            desc={dapp.desc}>
+        <X2EAppWithDetails name={dapp.name} icon={logoUrl} desc={dapp.description}>
             <X2EAppDetails.Container>
-                <X2EAppDetails.Description>
-                    {dapp.desc || "Discover this exciting DApp from the VeChain ecosystem."}
-                </X2EAppDetails.Description>
+                <X2EAppDetails.Description>{dapp.description}</X2EAppDetails.Description>
                 <X2EAppDetails.Stats />
                 <BaseSpacer height={8} />
                 <X2EAppDetails.Actions />
@@ -71,8 +62,8 @@ const X2EAppItem = React.memo(({ dapp }: { dapp: DiscoveryDApp }) => {
     )
 })
 
-const X2EAppsList = React.memo(({ dapps, onFetchNextPage, isLoading }: DAppsListProps) => {
-    const renderItem = useCallback(({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
+const X2EAppsList = React.memo(({ apps, isLoading }: X2EListProps) => {
+    const renderItem = useCallback(({ item }: ListRenderItemInfo<X2EDapp>) => {
         return <X2EAppItem dapp={item} />
     }, [])
 
@@ -80,17 +71,13 @@ const X2EAppsList = React.memo(({ dapps, onFetchNextPage, isLoading }: DAppsList
         return <BaseSpacer height={24} />
     }, [])
 
-    const renderListFooter = useCallback(() => {
-        return <LoadingMoreFooter isLoading={isLoading} />
-    }, [isLoading])
-
     const renderSkeletonItem = useCallback(() => {
         return <BaseView bg={COLORS.GREY_200} h={100} borderRadius={12} />
     }, [])
 
-    const keyExtractor = useCallback((item: DiscoveryDApp) => item.href, [])
+    const keyExtractor = useCallback((item: X2EDapp) => item.id, [])
 
-    if (isLoading && dapps.length === 0) {
+    if (isLoading && apps.length === 0) {
         return (
             <FlatList
                 renderItem={renderSkeletonItem}
@@ -106,7 +93,7 @@ const X2EAppsList = React.memo(({ dapps, onFetchNextPage, isLoading }: DAppsList
 
     return (
         <FlatList
-            data={dapps}
+            data={apps}
             scrollEnabled={true}
             keyExtractor={keyExtractor}
             contentContainerStyle={styles.flatListPadding}
@@ -114,15 +101,20 @@ const X2EAppsList = React.memo(({ dapps, onFetchNextPage, isLoading }: DAppsList
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}
-            onEndReached={onFetchNextPage}
-            ListFooterComponent={renderListFooter}
             onEndReachedThreshold={0.5}
         />
     )
 })
 
 const styles = StyleSheet.create({
-    flatListPadding: { paddingBottom: 24, paddingTop: 32 },
+    flatListPadding: { paddingBottom: 24, paddingTop: 32, paddingHorizontal: 24 },
+    filtersContainer: {
+        height: 48,
+    },
+    filtersScrollContainer: {
+        paddingHorizontal: 16,
+        alignItems: "center",
+    },
 })
 
 type X2EAppsBottomSheetProps = {
@@ -133,68 +125,44 @@ type X2EAppsBottomSheetProps = {
 
 export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(
     ({ onDismiss, sortedBy = "asc" }, ref) => {
-        const { LL } = useI18nContext()
         const theme = useTheme()
 
-        const [selectedDappsType, setSelectedDappsType] = useState(DAppType.ALL)
+        const [selectedCategory, setSelectedCategory] = useState(() => X2ECategory.RENEWABLE_ENERGY_EFFICIENCY)
 
-        const vbdSort = useMemo<UseDappsWithPaginationSortKey>(() => {
-            switch (sortedBy) {
-                case "asc":
-                    return "alphabetic_asc"
-                case "desc":
-                    return "alphabetic_desc"
-                case "newest":
-                    return "newest"
-            }
-        }, [sortedBy])
+        const { data: allApps, isLoading } = useVeBetterDaoDapps()
+        const dappsToShow = useMemo(() => {
+            if (!allApps) return []
 
-        const {
-            data: dappsToShow,
-            fetchNextPage,
-            isLoading,
-        } = useDappsWithPagination({
-            sort: vbdSort,
-            filter: selectedDappsType,
-        })
+            // Filter by category
+            const filtered = allApps.filter(dapp => dapp.categories?.includes(selectedCategory.id) || false)
+
+            // Sort
+            return [...filtered].sort((a, b) => {
+                switch (sortedBy) {
+                    case "asc":
+                        return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+                    case "desc":
+                        return b.name.toLowerCase().localeCompare(a.name.toLowerCase())
+                    case "newest":
+                        return parseInt(b.createdAtTimestamp) - parseInt(a.createdAtTimestamp)
+                    default:
+                        return 0
+                }
+            })
+        }, [allApps, selectedCategory.id, sortedBy])
 
         const filterOptions = useMemo(() => {
-            const _all = DAppType.ALL
-            const _sustainability = DAppType.SUSTAINABILTY
-            const _nft = DAppType.NFT
-            const _dapps = DAppType.DAPPS
+            const categoriesToShow = Object.values(X2ECategory)
 
-            return [
-                {
-                    key: _all,
-                    title: LL.DISCOVER_ECOSYSTEM_FILTER_ALL(),
-                    isSelected: selectedDappsType === _all,
-                    onPress: () => setSelectedDappsType(_all),
-                },
-                {
-                    key: _sustainability,
-                    title: LL.DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY(),
-                    isSelected: selectedDappsType === _sustainability,
-                    onPress: () => setSelectedDappsType(_sustainability),
-                },
-                {
-                    key: _nft,
-                    title: LL.DISCOVER_ECOSYSTEM_FILTER_NFTS(),
-                    isSelected: selectedDappsType === _nft,
-                    onPress: () => setSelectedDappsType(_nft),
-                },
-                {
-                    key: _dapps,
-                    title: LL.DISCOVER_ECOSYSTEM_FILTER_DAPPS(),
-                    isSelected: selectedDappsType === _dapps,
-                    onPress: () => setSelectedDappsType(_dapps),
-                },
-            ]
-        }, [LL, selectedDappsType])
-
-        const onFetchNextPage = useCallback(() => {
-            fetchNextPage()
-        }, [fetchNextPage])
+            return categoriesToShow
+                .map(category => ({
+                    key: category.id,
+                    title: category.displayName,
+                    isSelected: selectedCategory.id === category.id,
+                    onPress: () => setSelectedCategory(category),
+                }))
+                .sort((a, b) => a.title.localeCompare(b.title))
+        }, [selectedCategory.id])
 
         return (
             <BaseBottomSheet
@@ -202,17 +170,20 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
                 ref={ref}
                 onDismiss={onDismiss}
                 floating={false}
+                noMargins={true}
                 backgroundStyle={{ backgroundColor: theme.colors.card }}>
-                <BaseView pb={16}>
-                    <BaseView flexDirection="row" gap={16}>
-                        <BaseIcon name="icon-salad" size={32} color={theme.colors.editSpeedBs.title} />
-                        <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                            {"Food & Drinks"}
-                        </BaseText>
+                <BaseView pb={16} py={18}>
+                    <BaseView flexDirection="row" gap={16} alignItems="center" px={24}>
+                        <BaseIcon name={selectedCategory.icon} size={32} color={theme.colors.editSpeedBs.title} />
+                        <BaseView flex={1}>
+                            <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                                {selectedCategory.displayName}
+                            </BaseText>
+                        </BaseView>
                     </BaseView>
                     <BaseSpacer height={32} />
                     <TopFilters filters={filterOptions} />
-                    <X2EAppsList dapps={dappsToShow || []} isLoading={isLoading} onFetchNextPage={onFetchNextPage} />
+                    <X2EAppsList apps={dappsToShow || []} isLoading={isLoading} />
                 </BaseView>
             </BaseBottomSheet>
         )

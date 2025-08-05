@@ -124,7 +124,7 @@ const Stats = React.memo(
                 {users && <StatItem value={users.value} label={users.label} delay={25} />}
                 {co2Saved && <StatItem value={co2Saved.value} label={co2Saved.label} delay={50} />}
                 {customStats.map((stat, index) => (
-                    <StatItem key={index} value={stat.value} label={stat.label} delay={75 + index * 25} />
+                    <StatItem key={stat.label} value={stat.value} label={stat.label} delay={75 + index * 25} />
                 ))}
             </AnimatedBaseView>
         )
@@ -135,67 +135,56 @@ interface ActionsProps {
     onAddToFavorites?: () => void
     onOpen?: () => void
     isFavorite?: boolean
-    openButtonText?: string
-    favoriteButtonText?: string
 }
 
-const Actions = React.memo(
-    ({
-        onAddToFavorites = () => {},
-        onOpen = () => {},
-        isFavorite = false,
-        openButtonText,
-        favoriteButtonText,
-    }: ActionsProps) => {
-        const { LL } = useI18nContext()
+const Actions = React.memo(({ onAddToFavorites = () => {}, onOpen = () => {}, isFavorite = false }: ActionsProps) => {
+    const { LL } = useI18nContext()
 
-        // Calculate total delay for buttons to appear after description and stats - reduced
-        const actionsBaseDelay = BASE_ENTRY_DELAY + ENTRY_DELAY_INCREMENT * 1.5 // Reduced multiplier
+    // Calculate total delay for buttons to appear after description and stats - reduced
+    const actionsBaseDelay = BASE_ENTRY_DELAY + ENTRY_DELAY_INCREMENT * 1.5 // Reduced multiplier
 
-        const favoriteButtonStyle = useAnimatedStyle(
-            () => ({
-                opacity: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)),
-                transform: [
-                    { translateY: withDelay(actionsBaseDelay, withTiming(0, TIMING_CONFIG)) },
-                    { scale: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)) },
-                ],
-            }),
-            [],
-        )
+    const favoriteButtonStyle = useAnimatedStyle(
+        () => ({
+            opacity: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)),
+            transform: [
+                { translateY: withDelay(actionsBaseDelay, withTiming(0, TIMING_CONFIG)) },
+                { scale: withDelay(actionsBaseDelay, withTiming(1, TIMING_CONFIG)) },
+            ],
+        }),
+        [],
+    )
 
-        const openButtonStyle = useAnimatedStyle(
-            () => ({
-                opacity: withDelay(actionsBaseDelay + 30, withTiming(1, TIMING_CONFIG)), // Reduced from 50
-                transform: [
-                    { translateY: withDelay(actionsBaseDelay + 30, withTiming(0, TIMING_CONFIG)) },
-                    { scale: withDelay(actionsBaseDelay + 30, withTiming(1, TIMING_CONFIG)) },
-                ],
-            }),
-            [],
-        )
+    const openButtonStyle = useAnimatedStyle(
+        () => ({
+            opacity: withDelay(actionsBaseDelay + 30, withTiming(1, TIMING_CONFIG)), // Reduced from 50
+            transform: [
+                { translateY: withDelay(actionsBaseDelay + 30, withTiming(0, TIMING_CONFIG)) },
+                { scale: withDelay(actionsBaseDelay + 30, withTiming(1, TIMING_CONFIG)) },
+            ],
+        }),
+        [],
+    )
 
-        return (
-            <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="column" gap={16} px={0}>
-                <Animated.View style={[styles.sequentialRevealState, favoriteButtonStyle]}>
-                    <BaseButton variant="outline" action={onAddToFavorites}>
-                        <BaseView flexDirection="row" alignItems="center">
-                            <BaseIcon name={"icon-star"} size={16} />
-                            <BaseSpacer width={12} />
-                            <BaseText typographyFont="bodyMedium">
-                                {favoriteButtonText ||
-                                    (isFavorite ? LL.BTN_REMOVE_FROM_FAVORITES?.() : LL.BTN_ADD_TO_FAVORITES?.())}
-                            </BaseText>
-                        </BaseView>
-                    </BaseButton>
-                </Animated.View>
+    return (
+        <AnimatedBaseView layout={SMOOTH_LAYOUT} flexDirection="column" gap={16} px={0}>
+            <Animated.View style={[styles.sequentialRevealState, favoriteButtonStyle]}>
+                <BaseButton variant="outline" action={onAddToFavorites}>
+                    <BaseView flexDirection="row" alignItems="center">
+                        <BaseIcon name={"icon-star"} size={16} />
+                        <BaseSpacer width={12} />
+                        <BaseText typographyFont="bodyMedium">
+                            {isFavorite ? LL.BTN_REMOVE_FROM_FAVORITES?.() : LL.BTN_ADD_TO_FAVORITES?.()}
+                        </BaseText>
+                    </BaseView>
+                </BaseButton>
+            </Animated.View>
 
-                <Animated.View style={[styles.sequentialRevealState, openButtonStyle]}>
-                    <BaseButton action={onOpen}>{openButtonText || LL.BTN_OPEN()}</BaseButton>
-                </Animated.View>
-            </AnimatedBaseView>
-        )
-    },
-)
+            <Animated.View style={[styles.sequentialRevealState, openButtonStyle]}>
+                <BaseButton action={onOpen}>{LL.BTN_OPEN()}</BaseButton>
+            </Animated.View>
+        </AnimatedBaseView>
+    )
+})
 
 const Container = React.memo(({ children }: PropsWithChildren) => {
     return (
