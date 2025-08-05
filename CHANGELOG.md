@@ -1,10 +1,5 @@
 # Changelog
 
-## <small>2.3.1 (2025-08-01)</small>
-
-* build: init ([a1fe0d5](https://github.com/vechain/veworld-mobile/commit/a1fe0d5))
-* fix: fix macos runners (#3139) ([14d4988](https://github.com/vechain/veworld-mobile/commit/14d4988)), closes [#3139](https://github.com/vechain/veworld-mobile/issues/3139)
-
 ## <small>2.2.10 (2025-07-24)</small>
 
 * build: init ([955e4db](https://github.com/vechain/veworld-mobile/commit/955e4db))
