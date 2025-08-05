@@ -160,7 +160,6 @@ export const useCreateWallet = () => {
      */
     const createSmartWallet = useCallback(
         async ({ address, onError }: { address: string; onError?: (error: unknown) => void }) => {
-            console.log("createSmartWallet", address)
             try {
                 //Create the new Smart Wallet device and persist it
                 const smartWalletDevice = {

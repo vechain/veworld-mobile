@@ -31,12 +31,10 @@ export const SmartAccountScreen = () => {
     }, [isAuthenticated, initialiseWallet, createSmartWallet, smartAccountAddress])
 
     const handleLogin = useCallback(async () => {
-        console.log("logging in!")
         await login({ provider: "google", oauthRedirectUri: "veworld://" })
     }, [login])
 
     const handleLogout = useCallback(async () => {
-        console.log("logging out!")
         await logout()
     }, [logout])
 

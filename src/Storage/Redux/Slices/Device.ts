@@ -19,12 +19,10 @@ export const DeviceSlice = createSlice({
             }
         },
         addDevice: (state, action: PayloadAction<Device>) => {
-            console.log("addDevice", action.payload)
             state.push({
                 ...action.payload,
                 position: state.length,
             })
-            console.log("device state after add", state)
         },
         updateDevice: (
             state,

@@ -43,7 +43,6 @@ export const useSignMessage = () => {
         if (senderDevice.type === DEVICE_TYPE.LEDGER) throw new Error("Ledger devices not supported in this hook")
 
         if (senderDevice.type === DEVICE_TYPE.SMART_WALLET) {
-            console.log("signing message with smart wallet")
             return await signMessageWithSmartWallet(hash)
         }
 
