@@ -10,6 +10,7 @@ export const AppsScreen = () => {
         <Layout
             title="Apps"
             hasTopSafeAreaOnly
+            noBackButton
             fixedBody={
                 <BaseView flex={1} gap={16}>
                     <ScrollView style={styles.scrollView}>
