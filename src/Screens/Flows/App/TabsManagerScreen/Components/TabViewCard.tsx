@@ -4,7 +4,7 @@ import React, { useCallback } from "react"
 import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated from "react-native-reanimated"
-import { BaseIcon, BaseText } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
@@ -39,8 +39,13 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
             <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
                 <View style={styles.header}>
                     <View style={styles.headerText}>
-                        {/* TODO: add favicon */}
-                        <FastImage source={{ uri: tab.preview }} style={styles.headerFavicon as ImageStyle} />
+                        {tab.favicon ? (
+                            <FastImage source={{ uri: tab.favicon }} style={styles.headerFavicon as ImageStyle} />
+                        ) : (
+                            <BaseView style={[styles.headerFavicon, styles.headerFaviconNotFound]}>
+                                <BaseIcon name="icon-globe" size={8} color={COLORS.GREY_400} />
+                            </BaseView>
+                        )}
                         <BaseText typographyFont="bodySemiBold" color={"white"} numberOfLines={1}>
                             {tab.title}
                         </BaseText>
@@ -84,19 +89,23 @@ const baseStyles = (theme: ColorThemeType) => {
             flexDirection: "row",
             alignItems: "center",
             gap: 8,
-            paddingLeft: 12,
-            paddingVertical: 10,
+            paddingLeft: 8,
+            paddingVertical: 8,
         },
         headerFavicon: {
             width: 16,
             height: 16,
             borderRadius: 4,
         },
+        headerFaviconNotFound: {
+            padding: 4,
+            backgroundColor: COLORS.GREY_200,
+        },
         closeIcon: {
             alignItems: "center",
             justifyContent: "center",
             paddingHorizontal: 12,
-            paddingVertical: 10,
+            paddingVertical: 8,
         },
         image: {
             width: "100%",
@@ -104,14 +113,6 @@ const baseStyles = (theme: ColorThemeType) => {
             flexDirection: "column",
             justifyContent: "space-between",
             borderRadius: 8,
-        },
-        footer: {
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#202226BF",
-            paddingHorizontal: 12,
-            paddingVertical: 10,
         },
     })
 }

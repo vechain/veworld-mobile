@@ -34,8 +34,16 @@ export const AppsStack = () => {
                 />
             </Group>
 
-            <Screen name={Routes.APPS_SEARCH} component={AppsSearchScreen} options={{ headerShown: false }} />
-            <Screen name={Routes.APPS_TABS_MANAGER} component={TabsManagerScreen} options={{ headerShown: false }} />
+            <Screen
+                name={Routes.APPS_SEARCH}
+                component={AppsSearchScreen}
+                options={{ headerShown: false, animation: "slide_from_bottom" }}
+            />
+            <Screen
+                name={Routes.APPS_TABS_MANAGER}
+                component={TabsManagerScreen}
+                options={{ headerShown: false, animation: "slide_from_bottom" }}
+            />
         </Navigator>
     )
 }

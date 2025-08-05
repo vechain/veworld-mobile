@@ -21,7 +21,19 @@ export const useBrowserScreenshot = () => {
                 fileName: `${selectedTabId}-preview-${Date.now()}`,
                 result: "data-uri",
             })
-            dispatch(updateTab({ id: selectedTabId, preview: uri, ...(!isDapp && { title: navigationState?.title }) }))
+
+            const favicon = navigationState?.url
+                ? `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(navigationState?.url).origin}`
+                : undefined
+
+            dispatch(
+                updateTab({
+                    id: selectedTabId,
+                    preview: uri,
+                    favicon,
+                    ...(!isDapp && { title: navigationState?.title }),
+                }),
+            )
 
             // update the last visited url
             const _url = new URL(navigationState?.url ?? "")

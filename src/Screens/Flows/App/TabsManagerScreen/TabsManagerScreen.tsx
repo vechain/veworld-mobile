@@ -54,7 +54,8 @@ export const TabsManagerScreen = () => {
         return <BaseSpacer height={16} />
     }, [])
 
-    const buttonTextColor = useMemo(() => (theme.isDark ? COLORS.PRIMARY_200 : COLORS.GREY_600), [theme.isDark])
+    const iconButtonTextColor = useMemo(() => (theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600), [theme.isDark])
+    const buttonTextColor = useMemo(() => (theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600), [theme.isDark])
     const disabledTextColor = useMemo(
         () => (theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300),
         [theme.isDark],
@@ -82,8 +83,8 @@ export const TabsManagerScreen = () => {
                         <BaseIcon
                             name={"icon-plus"}
                             size={16}
-                            color={buttonTextColor}
-                            bg={COLORS.GREY_200}
+                            color={iconButtonTextColor}
+                            bg={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200}
                             style={styles.footerIcon}
                         />
                     </BaseTouchable>

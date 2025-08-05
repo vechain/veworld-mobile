@@ -12,6 +12,7 @@ export type Tab = {
     id: string
     href: string
     preview?: string
+    favicon?: string
     title: string
 }
 

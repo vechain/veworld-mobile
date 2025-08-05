@@ -1061,6 +1061,14 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_EMPTY: string
 	/**
+	 * F​o​u​n​d
+	 */
+	BROWSER_HISTORY_FOUND: string
+	/**
+	 * M​o​r​e​ ​r​e​s​u​l​t​s
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: string
+	/**
 	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
 	 */
 	BROWSER_HISTORY_No_RECORDS: string
@@ -1077,14 +1085,6 @@ type RootTranslation = {
 	 * B​r​o​w​s​e​r​ ​H​i​s​t​o​r​y
 	 */
 	BROWSER_HISTORY_TITLE: string
-	/**
-	 * M​o​r​e​ ​r​e​s​u​l​t​s
-	 */
-	BROWSER_HISTORY_MORE_RESULTS: string
-	/**
-	 * F​o​u​n​d
-	 */
-	BROWSER_HISTORY_FOUND: string
 	/**
 	 * T​h​e​r​e​ ​w​a​s​ ​a​n​ ​e​r​r​o​r​ ​t​r​y​i​n​g​ ​t​o​ ​a​c​c​e​s​ ​t​h​i​s​ ​l​i​n​k​.​ ​M​a​k​e​ ​s​u​r​e​ ​i​t​'​s​ ​c​o​r​r​e​c​t​ ​a​n​d​ ​t​r​y​ ​a​g​a​i​n​.
 	 */
@@ -2251,6 +2251,10 @@ type RootTranslation = {
 	 * S​E​A​R​C​H​ ​T​H​E​ ​W​E​B
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
+	/**
+	 * A​p​p​s
+	 */
+	APPS_SCREEN_TITLE: string
 	/**
 	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
 	 */
@@ -5582,6 +5586,14 @@ Thanks for your patience!
 	 */
 	BROWSER_HISTORY_EMPTY: () => LocalizedString
 	/**
+	 * Found
+	 */
+	BROWSER_HISTORY_FOUND: () => LocalizedString
+	/**
+	 * More results
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: () => LocalizedString
+	/**
 	 * No History Available
 	 */
 	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
@@ -5597,14 +5609,6 @@ Thanks for your patience!
 	 * Browser History
 	 */
 	BROWSER_HISTORY_TITLE: () => LocalizedString
-	/**
-	 * More results
-	 */
-	BROWSER_HISTORY_MORE_RESULTS: () => LocalizedString
-	/**
-	 * Found
-	 */
-	BROWSER_HISTORY_FOUND: () => LocalizedString
 	/**
 	 * There was an error trying to acces this link. Make sure it's correct and try again.
 	 */
@@ -6761,6 +6765,10 @@ Thanks for your patience!
 	 * SEARCH THE WEB
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	APPS_SCREEN_TITLE: () => LocalizedString
 	/**
 	 * Don't see your NFTs?
 	 */
