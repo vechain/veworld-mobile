@@ -32,7 +32,6 @@ import { assertDefined } from "~Utils/TypeUtils"
 import { useI18nContext } from "~i18n"
 import { useInAppBrowser } from "../../InAppBrowserProvider"
 import { TransactionDetails } from "./TransactionDetails"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 type Props = {
     request: TransactionRequest
     onCancel: (request: TransactionRequest) => Promise<void>
@@ -182,7 +181,7 @@ export const TransactionBottomSheetContent = ({
                 </GasFeeSpeed>
             </BottomSheetScrollView>
 
-            <BaseView flexDirection="row" gap={16} mt={24} px={24} mb={isIOS() ? 16 : 0}>
+            <BaseView flexDirection="row" gap={16} mt={24} px={24} mb={16}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"

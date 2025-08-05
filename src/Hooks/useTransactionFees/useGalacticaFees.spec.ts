@@ -24,6 +24,7 @@ const mockRewards = [
     [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
     [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
     [`0x${BigInt(10).toString(16)}`, `0x${BigInt(20).toString(16)}`, `0x${BigInt(30).toString(16)}`],
+    ["0x0", "0x0", "0x0"],
 ]
 
 function* bigNumberBuilder(
@@ -75,7 +76,7 @@ describe("useGalacticaFees", () => {
                     BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
                 }`,
                 feeHistory: {
-                    baseFeePerGas: Array.from({ length: 8 }, () => ethers.utils.parseUnits("1", "gwei").toHexString()),
+                    baseFeePerGas: Array.from({ length: 9 }, () => ethers.utils.parseUnits("1", "gwei").toHexString()),
                     reward: mockRewards,
                 },
             },
@@ -155,12 +156,12 @@ describe("useGalacticaFees", () => {
         {
             values: buildBaseFeeArray({ decreaseOffset: 1 }),
             expectedResult: true,
-            description: "rmmp-up - 1 block ramp-down",
+            description: "ramp-up - 1 block ramp-down",
         },
         {
             values: buildBaseFeeArray({ decreaseOffset: 2 }),
             expectedResult: true,
-            description: "rmmp-up - 2 blocks ramp-down",
+            description: "ramp-up - 2 blocks ramp-down",
         },
         { values: buildBaseFeeArray({ decreaseOffset: 3 }), expectedResult: false, description: "ramp down 3 blocks" },
         { values: buildBaseFeeArray({ decreaseOffset: 4 }), expectedResult: false, description: "ramp down 4 blocks" },
@@ -229,4 +230,232 @@ describe("useGalacticaFees", () => {
             expect(result.current.speedChangeEnabled).toBe(expectedResult)
         },
     )
+
+    it("should use the latest base fee but not reward", () => {
+        mocked(useQuery).mockReturnValue({
+            isFetching: false,
+            isLoading: false,
+            data: {
+                maxPriorityFee: `0x${
+                    BigNutils(ethers.utils.parseUnits("1", "gwei").toString()).multiply("0.05").decimals(0).toHex
+                }`,
+                feeHistory: {
+                    baseFeePerGas: Array.from({ length: 8 }, () => "0x0").concat([
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                    ]),
+                    reward: mockRewards,
+                },
+            },
+            dataUpdatedAt: Date.now(),
+        } as any)
+
+        const { result } = renderHook(
+            () => useGalacticaFees({ isGalactica: true, blockId: "0x00000001", gas: { gas: 21000 } as any }),
+            { wrapper: TestWrapper },
+        )
+
+        expect(result.current).toStrictEqual({
+            dataUpdatedAt: expect.any(Number),
+            isBaseFeeRampingUp: true,
+            speedChangeEnabled: true,
+            options: {
+                [GasPriceCoefficient.REGULAR]: {
+                    estimatedFee: BigNutils("21000000210000"),
+                    maxFee: BigNutils("21420000210000"),
+                    priorityFee: BigNutils("210000"),
+                },
+                [GasPriceCoefficient.MEDIUM]: {
+                    estimatedFee: BigNutils("21000000420000"),
+                    maxFee: BigNutils("21630000420000"),
+                    priorityFee: BigNutils("420000"),
+                },
+                [GasPriceCoefficient.HIGH]: {
+                    estimatedFee: BigNutils("21000000630000"),
+                    maxFee: BigNutils("21966000630000"),
+                    priorityFee: BigNutils("630000"),
+                },
+            },
+            txOptions: {
+                [GasPriceCoefficient.REGULAR]: {
+                    maxFeePerGas: "1020000010",
+                    maxPriorityFeePerGas: "10",
+                },
+                [GasPriceCoefficient.MEDIUM]: {
+                    maxFeePerGas: "1030000020",
+                    maxPriorityFeePerGas: "20",
+                },
+                [GasPriceCoefficient.HIGH]: {
+                    maxFeePerGas: "1046000030",
+                    maxPriorityFeePerGas: "30",
+                },
+            },
+            maxPriorityFee: BigNutils("50000000"),
+            isLoading: false,
+            isFirstTimeLoading: false,
+        })
+    })
+
+    it("should perform an average of fees", () => {
+        mocked(useQuery).mockReturnValue({
+            isFetching: false,
+            isLoading: false,
+            data: {
+                maxPriorityFee: `0x${BigNutils(ethers.utils.parseUnits("100", "gwei").toString()).decimals(0).toHex}`,
+                feeHistory: {
+                    baseFeePerGas: [
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                    ],
+                    reward: [
+                        [
+                            ethers.utils.parseUnits("1", "gwei").toHexString(),
+                            ethers.utils.parseUnits("2", "gwei").toHexString(),
+                            ethers.utils.parseUnits("3", "gwei").toHexString(),
+                        ],
+                        [
+                            ethers.utils.parseUnits("4", "gwei").toHexString(),
+                            ethers.utils.parseUnits("5", "gwei").toHexString(),
+                            ethers.utils.parseUnits("6", "gwei").toHexString(),
+                        ],
+                        [
+                            ethers.utils.parseUnits("9", "gwei").toHexString(),
+                            ethers.utils.parseUnits("9", "gwei").toHexString(),
+                            ethers.utils.parseUnits("9", "gwei").toHexString(),
+                        ],
+                        ["0x0", "0x0", "0x0"],
+                    ],
+                },
+            },
+            dataUpdatedAt: Date.now(),
+        } as any)
+
+        const { result } = renderHook(
+            () => useGalacticaFees({ isGalactica: true, blockId: "0x00000001", gas: { gas: 21000 } as any }),
+            { wrapper: TestWrapper },
+        )
+
+        expect(result.current).toStrictEqual({
+            dataUpdatedAt: expect.any(Number),
+            isBaseFeeRampingUp: false,
+            speedChangeEnabled: false,
+            options: {
+                [GasPriceCoefficient.REGULAR]: {
+                    estimatedFee: BigNutils("119000000007000"),
+                    maxFee: BigNutils("119420000007000"),
+                    priorityFee: BigNutils("98000000007000"),
+                },
+                [GasPriceCoefficient.MEDIUM]: {
+                    estimatedFee: BigNutils("132999999993000"),
+                    maxFee: BigNutils("133629999993000"),
+                    priorityFee: BigNutils("111999999993000"),
+                },
+                [GasPriceCoefficient.HIGH]: {
+                    estimatedFee: BigNutils("147000000000000"),
+                    maxFee: BigNutils("147966000000000"),
+                    priorityFee: BigNutils("126000000000000"),
+                },
+            },
+            txOptions: {
+                [GasPriceCoefficient.REGULAR]: {
+                    maxFeePerGas: "5686666667",
+                    maxPriorityFeePerGas: "4666666667",
+                },
+                [GasPriceCoefficient.MEDIUM]: {
+                    maxFeePerGas: "6363333333",
+                    maxPriorityFeePerGas: "5333333333",
+                },
+                [GasPriceCoefficient.HIGH]: {
+                    maxFeePerGas: "7046000000",
+                    maxPriorityFeePerGas: "6000000000",
+                },
+            },
+            maxPriorityFee: BigNutils("100000000000"),
+            isLoading: false,
+            isFirstTimeLoading: false,
+        })
+    })
+
+    it("should take the last block's fees if they're different", () => {
+        mocked(useQuery).mockReturnValue({
+            isFetching: false,
+            isLoading: false,
+            data: {
+                maxPriorityFee: `0x${BigNutils(ethers.utils.parseUnits("100", "gwei").toString()).decimals(0).toHex}`,
+                feeHistory: {
+                    baseFeePerGas: [
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                        ethers.utils.parseUnits("1", "gwei").toHexString(),
+                    ],
+                    reward: [
+                        [
+                            ethers.utils.parseUnits("1", "gwei").toHexString(),
+                            ethers.utils.parseUnits("2", "gwei").toHexString(),
+                            ethers.utils.parseUnits("3", "gwei").toHexString(),
+                        ],
+                        [
+                            ethers.utils.parseUnits("4", "gwei").toHexString(),
+                            ethers.utils.parseUnits("5", "gwei").toHexString(),
+                            ethers.utils.parseUnits("6", "gwei").toHexString(),
+                        ],
+                        [
+                            ethers.utils.parseUnits("7", "gwei").toHexString(),
+                            ethers.utils.parseUnits("8", "gwei").toHexString(),
+                            ethers.utils.parseUnits("9", "gwei").toHexString(),
+                        ],
+                        ["0x0", "0x0", "0x0"],
+                    ],
+                },
+            },
+            dataUpdatedAt: Date.now(),
+        } as any)
+
+        const { result } = renderHook(
+            () => useGalacticaFees({ isGalactica: true, blockId: "0x00000001", gas: { gas: 21000 } as any }),
+            { wrapper: TestWrapper },
+        )
+
+        expect(result.current).toStrictEqual({
+            dataUpdatedAt: expect.any(Number),
+            isBaseFeeRampingUp: false,
+            speedChangeEnabled: false,
+            options: {
+                [GasPriceCoefficient.REGULAR]: {
+                    estimatedFee: BigNutils("168000000000000"),
+                    maxFee: BigNutils("168420000000000"),
+                    priorityFee: BigNutils("147000000000000"),
+                },
+                [GasPriceCoefficient.MEDIUM]: {
+                    estimatedFee: BigNutils("189000000000000"),
+                    maxFee: BigNutils("189630000000000"),
+                    priorityFee: BigNutils("168000000000000"),
+                },
+                [GasPriceCoefficient.HIGH]: {
+                    estimatedFee: BigNutils("210000000000000"),
+                    maxFee: BigNutils("210966000000000"),
+                    priorityFee: BigNutils("189000000000000"),
+                },
+            },
+            txOptions: {
+                [GasPriceCoefficient.REGULAR]: {
+                    maxFeePerGas: "8020000000",
+                    maxPriorityFeePerGas: "7000000000",
+                },
+                [GasPriceCoefficient.MEDIUM]: {
+                    maxFeePerGas: "9030000000",
+                    maxPriorityFeePerGas: "8000000000",
+                },
+                [GasPriceCoefficient.HIGH]: {
+                    maxFeePerGas: "10046000000",
+                    maxPriorityFeePerGas: "9000000000",
+                },
+            },
+            maxPriorityFee: BigNutils("100000000000"),
+            isLoading: false,
+            isFirstTimeLoading: false,
+        })
+    })
 })
