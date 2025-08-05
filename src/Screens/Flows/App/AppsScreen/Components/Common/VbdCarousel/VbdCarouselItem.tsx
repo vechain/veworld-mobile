@@ -15,7 +15,10 @@ type Props = {
 export const VbdCarouselItem = ({ app }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
 
-    const bannerUri = useMemo(() => URIUtils.convertUriToUrl(app.ve_world?.banner as string), [app])
+    const bannerUri = useMemo(
+        () => (app.ve_world?.banner ? URIUtils.convertUriToUrl(app.ve_world?.banner as string) : undefined),
+        [app],
+    )
     const iconUri = useMemo(() => URIUtils.convertUriToUrl(app.logo), [app])
 
     const category = useMemo(() => {

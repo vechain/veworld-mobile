@@ -1,7 +1,8 @@
 import React, { useMemo } from "react"
-import { BaseText, CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
+import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { useVeBetterDaoDapps } from "~Hooks"
 import { VbdCarouselItem } from "./VbdCarouselItem"
+import { VbdCarouselItemSkeleton } from "./VbdCarouselItemSkeleton"
 
 type Props = {
     appIds: string[]
@@ -13,7 +14,7 @@ export const VbdCarousel = ({ appIds }: Props) => {
     const items = useMemo(() => {
         if (isLoading || !vbdApps?.length)
             return appIds.map(
-                appId => ({ content: <BaseText>TEST</BaseText>, name: appId } satisfies CarouselSlideItem),
+                appId => ({ content: <VbdCarouselItemSkeleton />, name: appId } satisfies CarouselSlideItem),
             )
 
         return appIds.map(appId => {
