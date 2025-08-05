@@ -19,7 +19,7 @@ import { useSmartWallet } from "../useSmartWallet"
 import { delegateGenericDelegator, delegateGenericDelegatorSmartAccount } from "~Networking/GenericDelegator"
 import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNumberUtils, debug, HexUtils, warn } from "~Utils"
-import { validateGenericDelegatorTx } from "~Utils/GenericDelegatorUtils"
+import { validateGenericDelegatorTx, validateGenericDelegatorTxSmartAccount } from "~Utils/GenericDelegatorUtils"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
@@ -30,6 +30,7 @@ type Props = {
     dappRequest?: TransactionRequest
     selectedDelegationToken: string
     genericDelegatorFee?: BigNumberUtils
+    genericDelegatorDepositAccount?: string
 }
 
 export enum SignStatus {
@@ -64,6 +65,7 @@ export const useSignTransaction = ({
     initialRoute,
     selectedDelegationToken,
     genericDelegatorFee,
+    genericDelegatorDepositAccount,
 }: Props) => {
     const { LL } = useI18nContext()
     const account = useAppSelector(selectSelectedAccount)
@@ -207,6 +209,24 @@ export const useSignTransaction = ({
                 const result = await getGenericDelegationTransaction(transaction)
                 if (result === SignStatus.DELEGATION_FAILURE)
                     return { transaction, signature: SignStatus.DELEGATION_FAILURE }
+
+                if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET) {
+                    if (genericDelegatorDepositAccount === undefined) {
+                        return { transaction, signature: SignStatus.DELEGATION_FAILURE }
+                    }
+                    const validationResult = await validateGenericDelegatorTxSmartAccount(
+                        result.transaction,
+                        selectedDelegationToken,
+                        genericDelegatorFee,
+                        genericDelegatorDepositAccount,
+                    )
+                    if (!validationResult.valid) {
+                        debug("SIGN", validationResult.reason, validationResult.metadata)
+                        return { transaction, signature: SignStatus.DELEGATION_FAILURE }
+                    }
+                    return { transaction: result.transaction, signature: result.signature }
+                }
+
                 const validationResult = await validateGenericDelegatorTx(
                     transaction,
                     result.transaction,

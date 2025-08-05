@@ -1,12 +1,11 @@
-import { Transaction, TransactionClause, ABIFunction, Hex } from "@vechain/sdk-core"
+import { Transaction, TransactionClause } from "@vechain/sdk-core"
 import { ethers } from "ethers"
 import _ from "lodash"
-import { keccak256 } from "@ethersproject/keccak256"
-import { toUtf8Bytes } from "@ethersproject/strings"
 import { abis, VET } from "~Constants"
 import BigNutils, { BigNumberUtils } from "~Utils/BigNumberUtils"
-import { SimpleAccountABI } from "~VechainWalletKit/utils/abi"
+import { SimpleAccountABI } from "../../VechainWalletKit/utils/abi"
 
+/* -------------------------- helpers -------------------------- */
 const lowercaseClauseMap = (clause: TransactionClause): TransactionClause => ({
     ...clause,
     to: clause.to?.toLowerCase() || null,
@@ -14,73 +13,51 @@ const lowercaseClauseMap = (clause: TransactionClause): TransactionClause => ({
     value: clause.value === "0x" ? "0x" : `0x${BigNutils(clause.value).toHex.toLowerCase()}`,
 })
 
-// Helper function to calculate function selector from ABI
-export const getFunctionSelector = (abi: readonly any[], functionName: string): string => {
-    const functionABI = abi.find((fn: any) => fn.name === functionName)
-    if (!functionABI) {
-        throw new Error(`Function ${functionName} not found in ABI`)
+const simpleAccountIface = new ethers.utils.Interface(SimpleAccountABI)
+
+const parseSmartAccountData = (data?: string) => {
+    if (!data || data === "0x") return null
+    try {
+        return simpleAccountIface.parseTransaction({ data })
+    } catch {
+        console.log("not a SimpleAccount call")
+        return null // not a SimpleAccount call
     }
-    const signature = `${functionABI.name}(${functionABI.inputs.map((input: any) => input.type).join(",")})`
-    return keccak256(toUtf8Bytes(signature)).slice(0, 10)
 }
 
 const isSmartAccountTransaction = (clause: TransactionClause): boolean => {
-    if (!clause.data || clause.data === "0x") return false
-
-    try {
-        const executeBatchSelector = getFunctionSelector(SimpleAccountABI, "executeBatchWithAuthorization")
-        const executeSelector = getFunctionSelector(SimpleAccountABI, "executeWithAuthorization")
-
-        return (
-            clause.data.toLowerCase().startsWith(executeBatchSelector.toLowerCase()) ||
-            clause.data.toLowerCase().startsWith(executeSelector.toLowerCase())
-        )
-    } catch {
-        return false
-    }
+    const parsed = parseSmartAccountData(clause.data)
+    return parsed?.name === "executeBatchWithAuthorization" || parsed?.name === "executeWithAuthorization"
 }
 
 const extractClausesFromExecuteBatch = (clause: TransactionClause): TransactionClause[] => {
-    try {
-        const executeBatchAbi = new ABIFunction(
-            SimpleAccountABI.find(fn => fn.name === "executeBatchWithAuthorization")!,
-        )
-        const decodedData = executeBatchAbi.decodeData(Hex.of(clause.data!))
+    const parsed = parseSmartAccountData(clause.data!)
+    if (!parsed || parsed.name !== "executeBatchWithAuthorization") return []
 
-        const addresses = decodedData.args![0] as string[]
-        const values = decodedData.args![1] as BigInt[]
-        const dataArray = decodedData.args![2] as string[]
-
-        return addresses.map((to, index) => ({
-            to: to || null,
-            value: `0x${values[index].toString(16)}`,
-            data: dataArray[index],
-        }))
-    } catch {
-        return []
-    }
+    const [addrs, values, datas] = parsed.args as [string[], ethers.BigNumber[], string[]]
+    return addrs.map((to, i) => ({
+        to: to || null,
+        value: values[i].toHexString(),
+        data: datas[i],
+    }))
 }
 
 const extractClausesFromExecute = (clause: TransactionClause): TransactionClause[] => {
-    try {
-        const executeAbi = new ABIFunction(SimpleAccountABI.find(fn => fn.name === "executeWithAuthorization")!)
-        const decodedData = executeAbi.decodeData(Hex.of(clause.data!))
+    const parsed = parseSmartAccountData(clause.data!)
+    if (!parsed || parsed.name !== "executeWithAuthorization") return []
 
-        return [
-            {
-                to: (decodedData.args![0] as string) || null,
-                value: `0x${(decodedData.args![1] as BigInt).toString(16)}`,
-                data: decodedData.args![2] as string,
-            },
-        ]
-    } catch {
-        return []
-    }
+    const [to, value, calldata] = parsed.args as [string, ethers.BigNumber, string]
+    return [
+        {
+            to: to || null,
+            value: value.toHexString(),
+            data: calldata,
+        },
+    ]
 }
 
-export type GenericDelegatorTransactionValidationResultValid = {
-    valid: true
-}
+/* -------------------------- types -------------------------- */
+export type GenericDelegatorTransactionValidationResultValid = { valid: true }
 export type GenericDelegatorTransactionValidationResultInvalid = {
     valid: false
     metadata: Record<string, unknown>
@@ -90,6 +67,7 @@ export type GenericDelegatorTransactionValidationResult =
     | GenericDelegatorTransactionValidationResultValid
     | GenericDelegatorTransactionValidationResultInvalid
 
+/* --------------------- base-tx validation --------------------- */
 export const validateGenericDelegatorTx = async (
     baseTransaction: Transaction,
     genericDelegatorTransaction: Transaction,
@@ -100,27 +78,28 @@ export const validateGenericDelegatorTx = async (
     const genericTxClauses = genericDelegatorTransaction.body.clauses.map(lowercaseClauseMap)
 
     const difference = _.differenceWith(genericTxClauses, baseTxClauses, _.isEqual)
-
-    //Check if the generic tx includes all the clauses of base tx clauses
-    if (difference.length !== 1)
+    if (difference.length !== 1) {
         return {
             valid: false,
             reason: "CLAUSES_DIFF",
             metadata: { difference, sentClauses: baseTxClauses },
         }
+    }
 
-    const [lastClause] = difference
-    return validateFeeClause(lastClause, delegationToken, selectedFee)
+    return validateFeeClause(difference[0], delegationToken, selectedFee)
 }
 
+/* -------------------- fee-clause validation ------------------- */
 const validateFeeClause = (
     clause: TransactionClause,
     delegationToken: string,
     selectedFee: BigNumberUtils,
 ): GenericDelegatorTransactionValidationResult => {
+    console.log("validating fee clause")
     if (delegationToken === VET.symbol) {
-        //Check if the amount of VET sent is off by more than 10%
-        if (selectedFee.clone().minus(BigNutils(clause.value).toBN).div(selectedFee.clone().toBN).toBN.abs().gt("0.1"))
+        if (
+            selectedFee.clone().minus(BigNutils(clause.value).toBN).div(selectedFee.clone().toBN).toBN.abs().gt("0.1")
+        ) {
             return {
                 valid: false,
                 reason: "OVER_THRESHOLD",
@@ -129,16 +108,18 @@ const validateFeeClause = (
                     valueSent: BigNutils(clause.value).toBigInt.toString(),
                 },
             }
-        //Check if it's trying sending some code
-        if (clause.data !== "0x")
+        }
+        if (clause.data !== "0x") {
             return {
                 valid: false,
                 reason: "SENT_DATA",
                 metadata: { data: clause.data },
             }
+        }
+        console.log(`validating delegationToken fee clause true ${delegationToken}`)
         return { valid: true }
     }
-    //Check ERC-20 tokens
+
     const iface = new ethers.utils.Interface([abis.VIP180.transfer])
     let decoded: ethers.utils.Result
     try {
@@ -150,7 +131,7 @@ const validateFeeClause = (
             metadata: { data: clause.data },
         }
     }
-    //Check if the amount of tokens sent is off by more than 1%
+
     if (
         selectedFee
             .clone()
@@ -158,7 +139,7 @@ const validateFeeClause = (
             .div(selectedFee.clone().toBN)
             .toBN.abs()
             .gt("0.1")
-    )
+    ) {
         return {
             valid: false,
             reason: "OVER_THRESHOLD",
@@ -167,6 +148,8 @@ const validateFeeClause = (
                 valueSent: BigNutils(decoded.amount?.toString()).toBigInt.toString(),
             },
         }
+    }
+
     return { valid: true }
 }
 
@@ -176,56 +159,61 @@ export const validateGenericDelegatorTxSmartAccount = async (
     selectedFee: BigNumberUtils,
     depositAccount: string,
 ): Promise<GenericDelegatorTransactionValidationResult> => {
+    console.log("validating generic delegator tx smart account")
     const genericTxClauses = genericDelegatorTransaction.body.clauses.map(lowercaseClauseMap)
-
-    // Extract nested clauses from smart account transactions
     const expandedGenericClauses: TransactionClause[] = []
-
-    const executeBatchSelector = getFunctionSelector(SimpleAccountABI, "executeBatchWithAuthorization")
-    const executeSelector = getFunctionSelector(SimpleAccountABI, "executeWithAuthorization")
 
     for (const clause of genericTxClauses) {
         if (isSmartAccountTransaction(clause)) {
-            // Check if it's executeBatch or execute based on function selector
-            if (clause.data!.toLowerCase().startsWith(executeBatchSelector.toLowerCase())) {
-                // executeBatchWithAuthorization
-                expandedGenericClauses.push(...extractClausesFromExecuteBatch(clause))
-            } else if (clause.data!.toLowerCase().startsWith(executeSelector.toLowerCase())) {
-                // executeWithAuthorization
-                expandedGenericClauses.push(...extractClausesFromExecute(clause))
-            }
+            console.log("is smart account transaction")
+            const parsedName = parseSmartAccountData(clause.data!)!.name
+
+            const clauses =
+                parsedName === "executeBatchWithAuthorization"
+                    ? extractClausesFromExecuteBatch(clause)
+                    : extractClausesFromExecute(clause)
+            console.log("clauses", parsedName)
+            expandedGenericClauses.push(...clauses)
         } else {
             expandedGenericClauses.push(clause)
         }
     }
 
     const normalizedExpandedClauses = expandedGenericClauses.map(lowercaseClauseMap)
+    console.log("normalizedExpandedClauses", normalizedExpandedClauses)
 
-    // Find the delegation fee clause by matching the depositAccount
-    const delegationFeeClause = normalizedExpandedClauses.find(clause => {
+    const delegationFeeClauses = normalizedExpandedClauses.filter(clause => {
         if (delegationToken === VET.symbol) {
-            // For VET transfers, check if the 'to' address matches depositAccount
             return clause.to?.toLowerCase() === depositAccount.toLowerCase()
-        } else {
-            // For ERC-20 transfers, decode the transfer function and check the recipient
-            try {
-                const iface = new ethers.utils.Interface([abis.VIP180.transfer])
-                const decoded = iface.decodeFunctionData("transfer", clause.data)
-                return decoded.recipient?.toLowerCase() === depositAccount.toLowerCase()
-            } catch {
-                return false
-            }
+        }
+        try {
+            const iface = new ethers.utils.Interface([abis.VIP180.transfer])
+
+            const decoded = iface.decodeFunctionData("transfer", clause.data)
+            console.log("decoded", decoded, depositAccount)
+            console.log("decoded amount", decoded.amount)
+            console.log("decoded recipient", decoded[0])
+            return decoded[0].toLowerCase() === depositAccount.toLowerCase()
+        } catch {
+            console.log("not a transfer call")
+            return false
         }
     })
 
-    if (!delegationFeeClause) {
-        return {
-            valid: false,
-            reason: "NO_DELEGATION_FEE_CLAUSE",
-            metadata: { depositAccount, expandedClauses: normalizedExpandedClauses },
-        }
+    let validationResult: GenericDelegatorTransactionValidationResult = {
+        valid: false,
+        reason: "NO_DELEGATION_FEE_CLAUSE",
+        metadata: { depositAccount, expandedClauses: normalizedExpandedClauses },
+    }
+    if (!delegationFeeClauses || delegationFeeClauses.length === 0) {
+        return validationResult
     }
 
-    // Validate the fee clause
-    return validateFeeClause(delegationFeeClause, delegationToken, selectedFee)
+    for (const clause of normalizedExpandedClauses) {
+        validationResult = validateFeeClause(clause, delegationToken, selectedFee)
+        if (validationResult.valid) {
+            return validationResult
+        }
+    }
+    return validationResult
 }
