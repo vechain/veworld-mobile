@@ -95,7 +95,6 @@ const validateFeeClause = (
     delegationToken: string,
     selectedFee: BigNumberUtils,
 ): GenericDelegatorTransactionValidationResult => {
-    console.log("validating fee clause")
     if (delegationToken === VET.symbol) {
         if (
             selectedFee.clone().minus(BigNutils(clause.value).toBN).div(selectedFee.clone().toBN).toBN.abs().gt("0.1")
@@ -116,7 +115,6 @@ const validateFeeClause = (
                 metadata: { data: clause.data },
             }
         }
-        console.log(`validating delegationToken fee clause true ${delegationToken}`)
         return { valid: true }
     }
 
@@ -159,20 +157,17 @@ export const validateGenericDelegatorTxSmartAccount = async (
     selectedFee: BigNumberUtils,
     depositAccount: string,
 ): Promise<GenericDelegatorTransactionValidationResult> => {
-    console.log("validating generic delegator tx smart account")
     const genericTxClauses = genericDelegatorTransaction.body.clauses.map(lowercaseClauseMap)
     const expandedGenericClauses: TransactionClause[] = []
 
     for (const clause of genericTxClauses) {
         if (isSmartAccountTransaction(clause)) {
-            console.log("is smart account transaction")
             const parsedName = parseSmartAccountData(clause.data!)!.name
 
             const clauses =
                 parsedName === "executeBatchWithAuthorization"
                     ? extractClausesFromExecuteBatch(clause)
                     : extractClausesFromExecute(clause)
-            console.log("clauses", parsedName)
             expandedGenericClauses.push(...clauses)
         } else {
             expandedGenericClauses.push(clause)
@@ -180,7 +175,6 @@ export const validateGenericDelegatorTxSmartAccount = async (
     }
 
     const normalizedExpandedClauses = expandedGenericClauses.map(lowercaseClauseMap)
-    console.log("normalizedExpandedClauses", normalizedExpandedClauses)
 
     const delegationFeeClauses = normalizedExpandedClauses.filter(clause => {
         if (delegationToken === VET.symbol) {
@@ -190,12 +184,8 @@ export const validateGenericDelegatorTxSmartAccount = async (
             const iface = new ethers.utils.Interface([abis.VIP180.transfer])
 
             const decoded = iface.decodeFunctionData("transfer", clause.data)
-            console.log("decoded", decoded, depositAccount)
-            console.log("decoded amount", decoded.amount)
-            console.log("decoded recipient", decoded[0])
             return decoded[0].toLowerCase() === depositAccount.toLowerCase()
         } catch {
-            console.log("not a transfer call")
             return false
         }
     })
