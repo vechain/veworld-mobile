@@ -2108,6 +2108,54 @@ type RootTranslation = {
 	 */
 	DATE_NOT_AVAILABLE: string
 	/**
+	 * F​o​o​d​ ​&​ ​D​r​i​n​k​s
+	 */
+	DAPP_CATEGORY_NUTRITION: string
+	/**
+	 * R​e​c​y​c​l​i​n​g
+	 */
+	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: string
+	/**
+	 * L​i​f​e​s​t​y​l​e
+	 */
+	DAPP_CATEGORY_FITNESS_WELLNESS: string
+	/**
+	 * E​n​e​r​g​y
+	 */
+	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: string
+	/**
+	 * S​h​o​p​p​i​n​g
+	 */
+	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: string
+	/**
+	 * T​r​a​n​s​p​o​r​t​a​t​i​o​n
+	 */
+	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: string
+	/**
+	 * P​e​t​s
+	 */
+	DAPP_CATEGORY_PETS: string
+	/**
+	 * L​e​a​r​n​i​n​g
+	 */
+	DAPP_CATEGORY_EDUCATION_LEARNING: string
+	/**
+	 * W​e​b​3
+	 */
+	DAPP_CATEGORY_GREEN_FINANCE_DEFI: string
+	/**
+	 * O​t​h​e​r​s
+	 */
+	DAPP_CATEGORY_OTHERS: string
+	/**
+	 * S​o​c​i​a​l​,​ ​C​o​m​m​u​n​i​t​y​,​ ​A​c​t​i​v​i​s​m
+	 */
+	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: string
+	/**
+	 * C​a​r​b​o​n​ ​F​o​o​t​p​r​i​n​t
+	 */
+	DAPP_CATEGORY_CARBON_FOOTPRINT: string
+	/**
 	 * D​e​c​e​m​b​e​r
 	 */
 	DECEMBER: string
@@ -6762,6 +6810,54 @@ Thanks for your patience!
 	 * Date not available
 	 */
 	DATE_NOT_AVAILABLE: () => LocalizedString
+	/**
+	 * Food & Drinks
+	 */
+	DAPP_CATEGORY_NUTRITION: () => LocalizedString
+	/**
+	 * Recycling
+	 */
+	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: () => LocalizedString
+	/**
+	 * Lifestyle
+	 */
+	DAPP_CATEGORY_FITNESS_WELLNESS: () => LocalizedString
+	/**
+	 * Energy
+	 */
+	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: () => LocalizedString
+	/**
+	 * Shopping
+	 */
+	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: () => LocalizedString
+	/**
+	 * Transportation
+	 */
+	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: () => LocalizedString
+	/**
+	 * Pets
+	 */
+	DAPP_CATEGORY_PETS: () => LocalizedString
+	/**
+	 * Learning
+	 */
+	DAPP_CATEGORY_EDUCATION_LEARNING: () => LocalizedString
+	/**
+	 * Web3
+	 */
+	DAPP_CATEGORY_GREEN_FINANCE_DEFI: () => LocalizedString
+	/**
+	 * Others
+	 */
+	DAPP_CATEGORY_OTHERS: () => LocalizedString
+	/**
+	 * Social, Community, Activism
+	 */
+	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: () => LocalizedString
+	/**
+	 * Carbon Footprint
+	 */
+	DAPP_CATEGORY_CARBON_FOOTPRINT: () => LocalizedString
 	/**
 	 * December
 	 */
