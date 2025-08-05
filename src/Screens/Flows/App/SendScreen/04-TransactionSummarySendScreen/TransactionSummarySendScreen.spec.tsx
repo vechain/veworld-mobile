@@ -167,9 +167,9 @@ describe("TransactionSummarySendScreen", () => {
         expect(fallbackToVTHO).toHaveBeenCalled()
     })
 
-    it.only("should not auto fallback to vtho if user has enough balance to cover fees at least", () => {
+    it("should not auto fallback to vtho if user has enough balance to cover fees at least", () => {
         const balance = `0x${BigNutils("1492").multiply(BigNutils(10).toBN.pow(18)).toHex}`
-        console.log("balance", balance)
+
         render(
             <TransactionSummarySendScreen
                 {...createTestProps()}

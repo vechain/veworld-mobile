@@ -184,13 +184,6 @@ export const TransactionSummarySendScreen = ({ route }: Props) => {
         token.symbol,
     ])
 
-    useEffect(() => {
-        //Given that we use only 4 decimals, I'll do a check on 4 decimals
-        if (BigNutils(finalAmount).minus(amount).toBN.abs().gt("0.0001") || selectedDelegationToken !== token.symbol) {
-            fallbackToVTHO()
-        }
-    }, [amount, fallbackToVTHO, finalAmount, selectedDelegationToken, token.symbol])
-
     return (
         <Layout
             safeAreaTestID="Transaction_Summary_Send_Screen"
