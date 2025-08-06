@@ -122,11 +122,9 @@ export const useX2EAppAnimation = ({
 
     const fontStyle = useAnimatedStyle(() => {
         const fontSize = interpolate(animationProgress.value, [0, 1], [15, 17])
-        const fontWeight = Math.round(interpolate(animationProgress.value, [0, 1], [500, 600])) as 500 | 600
 
         return {
             fontSize,
-            fontWeight,
         }
     })
 
