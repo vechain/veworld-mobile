@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, PropsWithChildren } from "react"
+import React, { useState, useCallback, PropsWithChildren } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, {
     LinearTransition,
@@ -45,16 +45,9 @@ export const X2EAppWithDetails = React.memo(
         const [showDetails, setShowDetails] = useState(isDefaultVisible)
         const [isAnimating, setIsAnimating] = useState(false)
         const [contentVisible, setContentVisible] = useState(isDefaultVisible)
-        const [detailsLayoutReady, setDetailsLayoutReady] = useState(isDefaultVisible)
 
         const animationProgress = useSharedValue(isDefaultVisible ? 1 : 0)
         const scale = useSharedValue(1)
-
-        useEffect(() => {
-            if (isDefaultVisible) {
-                setDetailsLayoutReady(true)
-            }
-        }, [isDefaultVisible])
 
         const toggleDetails = useCallback(() => {
             if (isAnimating) return
@@ -64,7 +57,6 @@ export const X2EAppWithDetails = React.memo(
 
             if (isOpening) {
                 setShowDetails(true)
-                setDetailsLayoutReady(true)
 
                 animationProgress.value = withTiming(1, {
                     duration: ANIMATION_TIMING.totalDuration,
@@ -87,7 +79,6 @@ export const X2EAppWithDetails = React.memo(
                 })
 
                 setTimeout(() => {
-                    setDetailsLayoutReady(false)
                     setShowDetails(false)
                     setIsAnimating(false)
                 }, ANIMATION_TIMING.totalDuration)
@@ -297,7 +288,7 @@ export const X2EAppWithDetails = React.memo(
 
                 {showDetails && (
                     <Animated.View>
-                        <X2EAppDetails show={showDetails && detailsLayoutReady} visible={contentVisible}>
+                        <X2EAppDetails show={showDetails} visible={contentVisible}>
                             {children}
                         </X2EAppDetails>
                     </Animated.View>
