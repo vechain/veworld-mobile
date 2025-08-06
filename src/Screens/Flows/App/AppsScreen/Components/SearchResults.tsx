@@ -67,9 +67,9 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
     )
 
     const renderSectionHeader = useCallback(
-        ({ section }: SectionProps) => {
+        (props: SectionProps) => {
             if (!isValidQuery) return <></>
-            if (section.key === "found") {
+            if (props.section.key === "found") {
                 return (
                     <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={8}>
                         <BaseText
@@ -80,7 +80,7 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                         </BaseText>
                     </BaseView>
                 )
-            } else if (section.key === "others" && results.others.length > 0) {
+            } else if (props.section.key === "others" && results.others.length > 0) {
                 return (
                     <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={8} mt={24}>
                         <BaseText
