@@ -165,7 +165,13 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
     }, [actionContainerHeight, actions.length])
 
     return (
-        <BaseBottomSheet ref={ref} snapPoints={snapPoints} blurBackdrop backgroundStyle={styles.rootSheet} noMargins>
+        <BaseBottomSheet
+            ref={ref}
+            snapPoints={snapPoints}
+            blurBackdrop
+            floating
+            backgroundStyle={styles.rootSheet}
+            noMargins>
             <BaseView
                 w={100}
                 onLayout={e => calculateActionContainerHeight(e.nativeEvent.layout.height)}
