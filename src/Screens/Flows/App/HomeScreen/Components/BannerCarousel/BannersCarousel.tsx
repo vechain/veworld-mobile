@@ -92,7 +92,7 @@ export const BannersCarousel = ({ location }: Props) => {
                     baseWidth: SCREEN_WIDTH - 32,
                 })}
             />
-            <BaseSpacer height={location === "home_screen" ? 32 : 40} />
+            <BaseSpacer height={location === "home_screen" ? 16 : 40} />
         </>
     )
 }

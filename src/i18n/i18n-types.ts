@@ -225,6 +225,54 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
+	 * A​L​L
+	 */
+	ADDITIONAL_DETAIL_ALL: string
+	/**
+	 * A​p​p
+	 */
+	ADDITIONAL_DETAIL_APP: string
+	/**
+	 * C​l​a​u​s​e
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: string
+	/**
+	 * C​o​m​m​e​n​t
+	 */
+	ADDITIONAL_DETAIL_COMMENT: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: string
+	/**
+	 * E​v​e​n​t
+	 */
+	ADDITIONAL_DETAIL_EVENT: string
+	/**
+	 * F​r​o​m
+	 */
+	ADDITIONAL_DETAIL_FROM: string
+	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	ADDITIONAL_DETAIL_RECEIVER: string
+	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	ADDITIONAL_DETAIL_SENDER: string
+	/**
+	 * S​p​e​n​d​e​r
+	 */
+	ADDITIONAL_DETAIL_SPENDER: string
+	/**
+	 * T​o
+	 */
+	ADDITIONAL_DETAIL_TO: string
+	/**
+	 * T​o​k​e​n​ ​I​D
+	 */
+	ADDITIONAL_DETAIL_TOKEN_ID: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -1755,6 +1803,10 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_URL: string
 	/**
+	 * V​a​l​u​e
+	 */
+	COMMON_LBL_VALUE: string
+	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
 	COMMON_MARKET_CAP: string
@@ -2600,6 +2652,10 @@ type RootTranslation = {
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: string
 	/**
+	 * T​y​p​e​d​ ​D​a​t​a​ ​c​a​n​n​o​t​ ​b​e​ ​s​i​g​n​e​d​ ​w​i​t​h​ ​a​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​.
+	 */
+	LEDGER_DEVICE_ALERT: string
+	/**
 	 * M​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y
 	 */
 	LEDGER_MESSAGE_READY: string
@@ -3215,6 +3271,95 @@ type RootTranslation = {
 	 * R​e​c​a​p
 	 */
 	RECAP: string
+	/**
+	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: string
+	/**
+	 * V​o​t​i​n​g​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: string
+	/**
+	 * t​o​k​e​n
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: string
+	/**
+	 * N​F​T​ ​a​p​p​r​o​v​a​l
+	 */
+	RECEIPT_OUTPUT_NFT_APPROVE: string
+	/**
+	 * N​F​T​ ​r​e​c​e​i​v​e
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: string
+	/**
+	 * N​F​T​ ​s​e​n​d
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: string
+	/**
+	 * S​u​p​p​o​r​t​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d​ ​#​{​r​o​u​n​d​I​d​}
+	 * @param {number} roundId
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: RequiredParams<'roundId'>
+	/**
+	 * B​a​s​e​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: string
+	/**
+	 * N​o​d​e​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​ ​&​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: string
+	/**
+	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: string
+	/**
+	 * V​E​T​ ​u​n​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
+	/**
+	 * S​w​a​p
+	 */
+	RECEIPT_OUTPUT_SWAP: string
+	/**
+	 * T​o​k​e​n​ ​a​p​p​r​o​v​a​l
+	 */
+	RECEIPT_OUTPUT_TOKEN_APPROVE: string
+	/**
+	 * T​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: string
+	/**
+	 * T​o​k​e​n​ ​r​e​c​e​i​v​e
+	 */
+	RECEIPT_OUTPUT_TOKEN_RECEIVE: string
+	/**
+	 * T​o​k​e​n​ ​s​e​n​d
+	 */
+	RECEIPT_OUTPUT_TOKEN_SEND: string
 	/**
 	 * R​e​c​e​i​v​e​d
 	 */
@@ -3963,6 +4108,22 @@ type RootTranslation = {
 	 * E​r​r​o​r​ ​s​i​g​n​i​n​g​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SIGN_TRANSACTION_ERROR: string
+	/**
+	 * C​o​n​f​i​r​m
+	 */
+	SIGN_TRANSACTION_REQUEST_CTA: string
+	/**
+	 * A​p​p​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SIGN_TRANSACTION_REQUEST_TITLE: string
+	/**
+	 * S​i​g​n
+	 */
+	SIGN_TYPED_DATA_REQUEST_CTA: string
+	/**
+	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
+	 */
+	SIGN_TYPED_DATA_REQUEST_TITLE: string
 	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
@@ -4762,6 +4923,54 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Transfer
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
+	/**
+	 * ALL
+	 */
+	ADDITIONAL_DETAIL_ALL: () => LocalizedString
+	/**
+	 * App
+	 */
+	ADDITIONAL_DETAIL_APP: () => LocalizedString
+	/**
+	 * Clause
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: () => LocalizedString
+	/**
+	 * Comment
+	 */
+	ADDITIONAL_DETAIL_COMMENT: () => LocalizedString
+	/**
+	 * Contract data
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: () => LocalizedString
+	/**
+	 * Event
+	 */
+	ADDITIONAL_DETAIL_EVENT: () => LocalizedString
+	/**
+	 * From
+	 */
+	ADDITIONAL_DETAIL_FROM: () => LocalizedString
+	/**
+	 * Receiver
+	 */
+	ADDITIONAL_DETAIL_RECEIVER: () => LocalizedString
+	/**
+	 * Receiver
+	 */
+	ADDITIONAL_DETAIL_SENDER: () => LocalizedString
+	/**
+	 * Spender
+	 */
+	ADDITIONAL_DETAIL_SPENDER: () => LocalizedString
+	/**
+	 * To
+	 */
+	ADDITIONAL_DETAIL_TO: () => LocalizedString
+	/**
+	 * Token ID
+	 */
+	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
 	/**
 	 * Add Account
 	 */
@@ -6278,6 +6487,10 @@ Thanks for your patience!
 	 */
 	COMMON_LBL_URL: () => LocalizedString
 	/**
+	 * Value
+	 */
+	COMMON_LBL_VALUE: () => LocalizedString
+	/**
 	 * Market Cap
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
@@ -7118,6 +7331,10 @@ Thanks for your patience!
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
+	 * Typed Data cannot be signed with a Ledger device. Please select another account.
+	 */
+	LEDGER_DEVICE_ALERT: () => LocalizedString
+	/**
 	 * Message is ready
 	 */
 	LEDGER_MESSAGE_READY: () => LocalizedString
@@ -7714,6 +7931,94 @@ Thanks for your patience!
 	 * Recap
 	 */
 	RECAP: () => LocalizedString
+	/**
+	 * VeBetter action
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: () => LocalizedString
+	/**
+	 * Voting rewards
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: () => LocalizedString
+	/**
+	 * Contract call
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
+	/**
+	 * token
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: () => LocalizedString
+	/**
+	 * NFT approval
+	 */
+	RECEIPT_OUTPUT_NFT_APPROVE: () => LocalizedString
+	/**
+	 * NFT receive
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: () => LocalizedString
+	/**
+	 * NFT send
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: () => LocalizedString
+	/**
+	 * Support VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: () => LocalizedString
+	/**
+	 * Vote on VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: () => LocalizedString
+	/**
+	 * Vote on round #{roundId}
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: (arg: { roundId: number }) => LocalizedString
+	/**
+	 * Base rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: () => LocalizedString
+	/**
+	 * Delegation rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: () => LocalizedString
+	/**
+	 * Node delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: () => LocalizedString
+	/**
+	 * VET stake
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: () => LocalizedString
+	/**
+	 * VET stake & delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: () => LocalizedString
+	/**
+	 * Node undelegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: () => LocalizedString
+	/**
+	 * VET unstake
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	RECEIPT_OUTPUT_SWAP: () => LocalizedString
+	/**
+	 * Token approval
+	 */
+	RECEIPT_OUTPUT_TOKEN_APPROVE: () => LocalizedString
+	/**
+	 * Token conversion
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: () => LocalizedString
+	/**
+	 * Token receive
+	 */
+	RECEIPT_OUTPUT_TOKEN_RECEIVE: () => LocalizedString
+	/**
+	 * Token send
+	 */
+	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
 	/**
 	 * Received
 	 */
@@ -8451,6 +8756,22 @@ Are you sure you want to continue?
 	 * Error signing transaction
 	 */
 	SIGN_TRANSACTION_ERROR: () => LocalizedString
+	/**
+	 * Confirm
+	 */
+	SIGN_TRANSACTION_REQUEST_CTA: () => LocalizedString
+	/**
+	 * App transaction
+	 */
+	SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Sign
+	 */
+	SIGN_TYPED_DATA_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Sign typed data
+	 */
+	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * Claimable
 	 */
