@@ -3,9 +3,9 @@ import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import FastImage from "react-native-fast-image"
-import { URL } from "react-native-fast-url"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { BaseIcon, BaseText, BaseTouchable, BaseView, useFeatureFlags, useInAppBrowser } from "~Components"
+import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components/Base"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
@@ -13,6 +13,7 @@ import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { Spinner } from "../Spinner"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 
 type Props = {
     onBrowserNavigation?: (error: boolean) => void
@@ -21,7 +22,7 @@ type Props = {
     isLoading?: boolean
 }
 
-const AnimatedBaseIcon = Animated.createAnimatedComponent(wrapFunctionComponent(BaseIcon))
+const AnimatedBaseIcon = Animated.createAnimatedComponent(BaseIcon)
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 const AnimatedBaseText = Animated.createAnimatedComponent(wrapFunctionComponent(BaseText))
 const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
@@ -30,6 +31,7 @@ const AnimatedFavicon = Animated.createAnimatedComponent(FastImage)
 export const URLBar = ({ onNavigate, returnScreen, isLoading }: Props) => {
     const { showToolbars, navigationState, dappMetadata } = useInAppBrowser()
     const { betterWorldFeature } = useFeatureFlags()
+
     const nav =
         useNavigation<
             NativeStackNavigationProp<
@@ -67,35 +69,25 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading }: Props) => {
         [showToolbars],
     )
 
-    const animatedIconStyles = useAnimatedStyle(() => ({
-        opacity: withTiming(showToolbars ? 1 : 0, { duration: 400 }),
-        transform: [{ scale: withTiming(showToolbars ? 1 : 0, { duration: 300 }) }],
-    }))
+    const animatedIconStyles = useAnimatedStyle(
+        () => ({
+            opacity: withTiming(showToolbars ? 1 : 0, { duration: 400 }),
+            transform: [{ scale: withTiming(showToolbars ? 1 : 0, { duration: 300 }) }],
+        }),
+        [showToolbars],
+    )
 
-    const animatedFaviconStyles = useAnimatedStyle(() => ({
-        transform: [{ scale: withTiming(showToolbars ? 1 : 0.6, { duration: 300 }) }],
-    }))
-
-    // const onSubmit = useCallback(
-    //     async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-    //         const value = e.nativeEvent.text.toLowerCase()
-    //         const isValid = await URIUtils.isValidBrowserUrl(value)
-    //         if (isValid) {
-    //             const url = URIUtils.parseUrl(value)
-    //             onBrowserNavigation?.(false)
-    //             navigateToUrl(url)
-    //             if (selectedTabId) dispatch(updateTab({ id: selectedTabId, href: url }))
-    //             return
-    //         }
-    //         onBrowserNavigation?.(true)
-    //     },
-    //     [dispatch, navigateToUrl, onBrowserNavigation, selectedTabId],
-    // )
+    const animatedFaviconStyles = useAnimatedStyle(
+        () => ({
+            transform: [{ scale: withTiming(showToolbars ? 1 : 0.6, { duration: 300 }) }],
+        }),
+        [showToolbars],
+    )
 
     const websiteFavicon = useMemo(() => {
         return dappMetadata ? (
             <AnimatedFavicon
-                testID="URL-bar-website-favicon"
+                testID="URL-bar-dapp-favicon"
                 source={{ uri: dappMetadata.icon, priority: FastImage.priority.high }}
                 style={[animatedFaviconStyles, styles.favicon]}
             />
@@ -137,7 +129,11 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading }: Props) => {
                         />
 
                         {/* URL Text centered */}
-                        <AnimatedTouchable style={styles.urlContainer} onPress={navToSearch} disabled={isLoading}>
+                        <AnimatedTouchable
+                            testID="URL-bar-website-name"
+                            style={styles.urlContainer}
+                            onPress={navToSearch}
+                            disabled={isLoading}>
                             <AnimatedBaseView
                                 flex={1}
                                 alignItems="center"
