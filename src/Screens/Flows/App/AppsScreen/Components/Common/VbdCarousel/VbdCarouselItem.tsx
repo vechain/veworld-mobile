@@ -19,7 +19,7 @@ export const VbdCarouselItem = ({ app }: Props) => {
         () => (app.ve_world?.banner ? URIUtils.convertUriToUrl(app.ve_world?.banner as string) : undefined),
         [app],
     )
-    const iconUri = useMemo(() => URIUtils.convertUriToUrl(app.logo), [app])
+    const iconUri = useMemo(() => (app.logo ? URIUtils.convertUriToUrl(app.logo) : undefined), [app])
 
     const category = useMemo(() => {
         return app.categories?.find(cat => AVAILABLE_CATEGORIES.includes(cat as any)) as
