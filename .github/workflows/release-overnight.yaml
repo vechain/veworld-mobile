@@ -3,6 +3,8 @@ name: Release Overnight - Android & iOS
 concurrency:
   group: release-overnight
   cancel-in-progress: true
+permissions:
+  contents: read
 on:
     workflow_dispatch:
         inputs:
