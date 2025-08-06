@@ -125,7 +125,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 leftElement={
                     <BaseView style={styles.headerContainer}>
                         <BaseView style={styles.headerContent}>
-                            <BaseIcon name="icon-star" size={24} color={theme.colors.text} />
+                            <BaseIcon name="icon-star" size={24} color={theme.colors.favoriteHeader} />
                         </BaseView>
                     </BaseView>
                 }
@@ -143,8 +143,8 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                                     action={() => {
                                         setIsEditingMode(true)
                                     }}
-                                    circled
                                     style={styles.reorderIcon}
+                                    rounded
                                 />
                             )}
                         </BaseView>
@@ -194,6 +194,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         bottomSheetContent: {
             paddingHorizontal: 20,
+            color: theme.colors.favoriteHeader,
         },
         headerContainer: {
             borderBottomWidth: StyleSheet.hairlineWidth,

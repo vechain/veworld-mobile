@@ -17,7 +17,7 @@ type Props = {
     px?: number
 }
 
-const IMAGE_SIZE = 48
+const IMAGE_SIZE = 64
 
 export const FavoriteDAppCard: React.FC<Props> = memo(
     ({
@@ -33,7 +33,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
-            <BaseView flexDirection="row" flex={1} px={px} mb={16}>
+            <BaseView flexDirection="row" flex={1} px={px} mb={24}>
                 <BaseView
                     flexDirection="row"
                     flex={1}
@@ -78,14 +78,14 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         </BaseView>
                     </BaseTouchable>
                     <BaseTouchable
-                        disabled={isActive}
+                        disabled={isActive || !isEditMode}
                         onLongPress={() => onRightActionLongPress?.(dapp)}
                         onPress={() => onRightActionPress(dapp)}
                         style={styles.touchableContainer}>
                         {isEditMode ? (
                             <BaseIcon name="icon-grip-horizontal" color={theme.colors.text} size={20} />
                         ) : (
-                            <BaseIcon name="icon-more-vertical" color={theme.colors.text} size={20} />
+                            <BaseIcon name="icon-star-on" color={theme.colors.disabledButton} size={20} />
                         )}
                     </BaseTouchable>
                 </BaseView>
@@ -104,7 +104,6 @@ const baseStyles = () =>
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            height: 60,
             paddingHorizontal: 4,
         },
         activeContainer: {
@@ -117,10 +116,10 @@ const baseStyles = () =>
             justifyContent: "center",
         },
         icon: {
-            borderRadius: 4,
+            borderRadius: 8,
             overflow: "hidden",
-            width: 48,
-            height: 48,
+            width: 64,
+            height: 64,
         },
         nameText: {
             fontWeight: "bold",
