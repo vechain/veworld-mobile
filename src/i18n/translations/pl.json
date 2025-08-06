@@ -252,6 +252,7 @@
   "BROWSER_HISTORY_EMPTY": "Brak historii do wyświetlenia",
   "BROWSER_HISTORY_FOUND": "Znaleziono",
   "BROWSER_HISTORY_MORE_RESULTS": "Więcej wyników",
+  "BROWSER_HISTORY_NO_RESULTS": "Nie znaleziono wyników",
   "BROWSER_HISTORY_No_RECORDS": "Brak dostępnej historii",
   "BROWSER_HISTORY_RESULTS": "{amount:number} Wyników",
   "BROWSER_HISTORY_SEARCH_PLACEHOLDER": "Szukaj",
