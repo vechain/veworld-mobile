@@ -1,43 +1,25 @@
 import React, { PropsWithChildren } from "react"
-import { StyleSheet } from "react-native"
-import Animated, { LinearTransition, useAnimatedStyle, withTiming, withSpring, Easing } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, withTiming, withSpring } from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-
-const SPRING_CONFIG = {
-    damping: 20,
-    stiffness: 150,
-    mass: 1,
-}
-
-const TIMING_CONFIG = {
-    duration: 300,
-    easing: Easing.bezier(0.4, 0.0, 0.2, 1),
-}
-
-const LAYOUT_TRANSITION = LinearTransition.springify().damping(20).stiffness(100).mass(0.6)
+import { SPRING_CONFIG, TIMING_CONFIG, LAYOUT_TRANSITION } from "./AnimationConstants"
+import { IconKey } from "~Model"
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
-
-const Title = React.memo(({ children }: PropsWithChildren) => {
-    const theme = useTheme()
-    return (
-        <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.x2eAppOpenDetails.title}>
-            {children}
-        </BaseText>
-    )
-})
 
 const Description = React.memo(({ children }: { children: string }) => {
     const theme = useTheme()
 
     return (
-        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" gap={8} alignItems="flex-start">
+        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" gap={16} alignItems="flex-start">
             <BaseView>
-                <BaseText color={theme.colors.x2eAppOpenDetails.description} typographyFont="captionMedium">
+                <BaseText
+                    color={theme.colors.x2eAppOpenDetails.description}
+                    typographyFont="captionMedium"
+                    lineHeight={16}>
                     {children}
                 </BaseText>
             </BaseView>
@@ -48,51 +30,43 @@ const Description = React.memo(({ children }: { children: string }) => {
 interface StatItemProps {
     value: string
     label: string
+    icon: IconKey
 }
 
-const StatItem = React.memo(({ value, label }: StatItemProps) => {
+const StatItem = React.memo(({ value, label, icon }: StatItemProps) => {
     const theme = useTheme()
 
     return (
-        <BaseView flexDirection="column" gap={2}>
-            <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.x2eAppOpenDetails.stats.value}>
-                {value}
-            </BaseText>
+        <BaseView flexDirection="column" flex={1} alignItems="flex-start">
+            <BaseIcon name={icon} size={20} color={theme.colors.x2eAppOpenDetails.favoriteBtn.borderActive} />
+            <BaseSpacer height={8} />
             <BaseText typographyFont="captionMedium" color={theme.colors.x2eAppOpenDetails.stats.caption}>
                 {label}
+            </BaseText>
+            <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.x2eAppOpenDetails.stats.value}>
+                {value}
             </BaseText>
         </BaseView>
     )
 })
 
 interface StatsProps {
-    rating?: StatItemProps
+    joined?: StatItemProps
     users?: StatItemProps
-    co2Saved?: StatItemProps
-    customStats?: StatItemProps[]
+    actions?: StatItemProps
 }
 
 const Stats = React.memo(
     ({
-        rating = { value: "4.5", label: "Rating" },
-        users = { value: "1.1M", label: "Users" },
-        co2Saved = { value: "10.8 T", label: "CO2 saved" },
-        customStats = [],
+        joined = { value: "4.5", label: "Joined", icon: "icon-certified" },
+        users = { value: "1.1M", label: "Users", icon: "icon-users" },
+        actions = { value: "10.8 T", label: "Actions", icon: "icon-leaf" },
     }: StatsProps) => {
         return (
-            <AnimatedBaseView
-                layout={LAYOUT_TRANSITION}
-                flexDirection="row"
-                justifyContent="space-between"
-                py={4}
-                px={8}
-                gap={8}>
-                {rating && <StatItem value={rating.value} label={rating.label} />}
-                {users && <StatItem value={users.value} label={users.label} />}
-                {co2Saved && <StatItem value={co2Saved.value} label={co2Saved.label} />}
-                {customStats.map(stat => (
-                    <StatItem key={stat.label} value={stat.value} label={stat.label} />
-                ))}
+            <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" py={8} gap={8}>
+                {joined && <StatItem value={joined.value} label={joined.label} icon={joined.icon} />}
+                {users && <StatItem value={users.value} label={users.label} icon={users.icon} />}
+                {actions && <StatItem value={actions.value} label={actions.label} icon={actions.icon} />}
             </AnimatedBaseView>
         )
     },
@@ -130,7 +104,7 @@ const FavoriteButton = React.memo(({ onAddToFavorites = () => {}, isFavorite = f
                 borderColor: buttonColors.borderColor,
             }}>
             <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} size={16} color={buttonColors.textColor} />
-            <BaseSpacer width={12} />
+            <BaseSpacer width={10} />
             <BaseText typographyFont="bodyMedium" color={buttonColors.textColor}>
                 {isFavorite ? LL.BTN_FAVORiTED() : LL.BTN_FAVORITE()}
             </BaseText>
@@ -148,7 +122,7 @@ const Actions = React.memo(({ onAddToFavorites = () => {}, onOpen = () => {}, is
     const { LL } = useI18nContext()
 
     return (
-        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" gap={8} w={100}>
+        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" gap={8} w={100} mt={8}>
             <FavoriteButton onAddToFavorites={onAddToFavorites} isFavorite={isFavorite} />
             <BaseButton flex={1} action={onOpen}>
                 {LL.BTN_OPEN()}
@@ -159,7 +133,7 @@ const Actions = React.memo(({ onAddToFavorites = () => {}, onOpen = () => {}, is
 
 const Container = React.memo(({ children }: PropsWithChildren) => {
     return (
-        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="column" gap={8} px={24} pb={24}>
+        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="column" gap={16} px={24} pb={24}>
             {children}
         </AnimatedBaseView>
     )
@@ -190,22 +164,15 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
     }, [shouldShow])
 
     return (
-        <AnimatedBaseView layout={LAYOUT_TRANSITION} style={[styles.container, containerStyle]} flexDirection="column">
+        <AnimatedBaseView layout={LAYOUT_TRANSITION} style={[containerStyle]} flexDirection="column">
             {children}
         </AnimatedBaseView>
     )
 }
 
-X2EAppDetails.Title = Title
 X2EAppDetails.Description = Description
 X2EAppDetails.Stats = Stats
 X2EAppDetails.Actions = Actions
 X2EAppDetails.Container = Container
 
 export { X2EAppDetails }
-
-const styles = StyleSheet.create({
-    container: {
-        gap: 12,
-    },
-})

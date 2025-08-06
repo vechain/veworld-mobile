@@ -1,48 +1,45 @@
-import React, { PropsWithChildren, useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, PropsWithChildren } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, {
     LinearTransition,
     useAnimatedStyle,
     withSpring,
     withTiming,
-    Easing,
     useSharedValue,
     interpolate,
     interpolateColor,
 } from "react-native-reanimated"
-import { BaseIcon, BaseText } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { X2EAppDetails } from "./X2EAppDetails"
-
-const ANIMATION_TIMING = {
-    fontSizeChange: 400,
-    labelTransition: 400,
-    contentFadeDelay: 50,
-    contentFade: 350,
-    containerExpand: 400,
-    containerCollapse: 400,
-    paddingChange: 400,
-    totalDuration: 450,
-}
-
-const SMOOTH_EASING = Easing.bezier(0.25, 0.1, 0.25, 1)
+import { ANIMATION_TIMING, SMOOTH_EASING, PRESS_SPRING_CONFIG, CONTENT_TIMING_CONFIG } from "./AnimationConstants"
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
-type Props = PropsWithChildren<{
+type X2EAppWithDetailsProps = PropsWithChildren<{
     name: string
     icon: string
     desc?: string
     categories?: string[]
-    url?: string
     isDefaultVisible?: boolean
+    isFavorite?: boolean
+    onToggleFavorite?: () => void
 }>
 
 export const X2EAppWithDetails = React.memo(
-    ({ name, icon, desc, categories = [], children, isDefaultVisible = false }: Props) => {
+    ({
+        name,
+        icon,
+        desc,
+        categories = [],
+        children,
+        isDefaultVisible = false,
+        isFavorite = false,
+        onToggleFavorite,
+    }: X2EAppWithDetailsProps) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const [loadFallback, setLoadFallback] = useState(false)
         const [showDetails, setShowDetails] = useState(isDefaultVisible)
@@ -50,15 +47,12 @@ export const X2EAppWithDetails = React.memo(
         const [contentVisible, setContentVisible] = useState(isDefaultVisible)
         const [detailsLayoutReady, setDetailsLayoutReady] = useState(isDefaultVisible)
 
-        const [hasBeenOpenedBefore, setHasBeenOpenedBefore] = useState(isDefaultVisible)
-
         const animationProgress = useSharedValue(isDefaultVisible ? 1 : 0)
         const scale = useSharedValue(1)
 
         useEffect(() => {
             if (isDefaultVisible) {
                 setDetailsLayoutReady(true)
-                setHasBeenOpenedBefore(true)
             }
         }, [isDefaultVisible])
 
@@ -69,8 +63,6 @@ export const X2EAppWithDetails = React.memo(
             const isOpening = !showDetails
 
             if (isOpening) {
-                setHasBeenOpenedBefore(true)
-
                 setShowDetails(true)
                 setDetailsLayoutReady(true)
 
@@ -103,11 +95,11 @@ export const X2EAppWithDetails = React.memo(
         }, [isAnimating, showDetails, animationProgress])
 
         const onPressIn = useCallback(() => {
-            scale.value = withSpring(0.97, { damping: 12, stiffness: 200 })
+            scale.value = withSpring(0.97, PRESS_SPRING_CONFIG)
         }, [scale])
 
         const onPressOut = useCallback(() => {
-            scale.value = withSpring(1, { damping: 12, stiffness: 200 })
+            scale.value = withSpring(1, PRESS_SPRING_CONFIG)
         }, [scale])
 
         const onImageError = useCallback(() => {
@@ -124,6 +116,8 @@ export const X2EAppWithDetails = React.memo(
             return {
                 backgroundColor,
                 borderRadius: interpolate(animationProgress.value, [0, 1], [10, 24]),
+                borderWidth: interpolate(animationProgress.value, [0, 1], [0, 1]),
+                borderColor: theme.colors.x2eAppOpenDetails.border,
             }
         }, [theme])
 
@@ -148,26 +142,12 @@ export const X2EAppWithDetails = React.memo(
 
         const contentStyle = useAnimatedStyle(() => {
             return {
-                opacity: contentVisible
-                    ? withTiming(1, {
-                          duration: ANIMATION_TIMING.contentFade,
-                          easing: SMOOTH_EASING,
-                      })
-                    : withTiming(0, {
-                          duration: ANIMATION_TIMING.contentFade,
-                          easing: SMOOTH_EASING,
-                      }),
+                opacity: contentVisible ? withTiming(1, CONTENT_TIMING_CONFIG) : withTiming(0, CONTENT_TIMING_CONFIG),
                 transform: [
                     {
                         scale: contentVisible
-                            ? withTiming(1, {
-                                  duration: ANIMATION_TIMING.contentFade,
-                                  easing: SMOOTH_EASING,
-                              })
-                            : withTiming(0.97, {
-                                  duration: ANIMATION_TIMING.contentFade,
-                                  easing: SMOOTH_EASING,
-                              }),
+                            ? withTiming(1, CONTENT_TIMING_CONFIG)
+                            : withTiming(0.97, CONTENT_TIMING_CONFIG),
                     },
                 ],
             }
@@ -212,6 +192,12 @@ export const X2EAppWithDetails = React.memo(
             }
         })
 
+        const spacerStyle = useAnimatedStyle(() => {
+            return {
+                width: interpolate(animationProgress.value, [0, 1], [24, 16]),
+            }
+        })
+
         return (
             <AnimatedBaseView
                 flexDirection="column"
@@ -236,9 +222,10 @@ export const X2EAppWithDetails = React.memo(
                         </BaseView>
                         <AnimatedBaseView
                             flexDirection="row"
+                            mb={4}
                             style={[padding]}
                             layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}>
-                            <BaseView flexDirection="row" gap={24} flex={1}>
+                            <BaseView flexDirection="row" flex={1} alignItems="flex-start">
                                 <Image
                                     source={
                                         loadFallback
@@ -251,25 +238,21 @@ export const X2EAppWithDetails = React.memo(
                                     onError={onImageError}
                                     resizeMode="contain"
                                 />
-                                <BaseView
-                                    flexDirection="column"
-                                    gap={8}
-                                    pr={16}
-                                    overflow="hidden"
-                                    flex={1}
-                                    style={styles.textContainer}>
+                                <Animated.View style={spacerStyle} />
+                                <BaseView flexDirection="column" gap={10} pr={16} overflow="hidden" flex={1}>
                                     <Animated.Text
                                         style={[styles.appNameText, fontStyle]}
                                         numberOfLines={1}
-                                        testID="DAPP_WITH_DETAILS_NAME">
+                                        testID="X2E_APP_WITH_DETAILS_NAME">
                                         {name}
                                     </Animated.Text>
+
                                     {showDetails ? (
                                         <Animated.View style={[contentStyle, categoryLabelStyle]}>
                                             <BaseView flexDirection="row" flexWrap="wrap" gap={8}>
                                                 {categories.map((category, index) => (
                                                     <BaseText
-                                                        key={index}
+                                                        key={category}
                                                         bg={theme.colors.x2eAppOpenDetails.label.background}
                                                         px={8}
                                                         py={4}
@@ -296,12 +279,23 @@ export const X2EAppWithDetails = React.memo(
                                         </Animated.View>
                                     )}
                                 </BaseView>
+                                <BaseSpacer width={12} />
                             </BaseView>
+                            {!showDetails && (
+                                <TouchableOpacity onPress={onToggleFavorite} style={styles.iconWrapper}>
+                                    <BaseIcon
+                                        name={isFavorite ? "icon-star-on" : "icon-star"}
+                                        haptics="Light"
+                                        size={20}
+                                        color={theme.colors.x2eAppOpenDetails.description}
+                                    />
+                                </TouchableOpacity>
+                            )}
                         </AnimatedBaseView>
                     </TouchableOpacity>
                 </Animated.View>
 
-                {(hasBeenOpenedBefore || showDetails) && (
+                {showDetails && (
                     <Animated.View>
                         <X2EAppDetails show={showDetails && detailsLayoutReady} visible={contentVisible}>
                             {children}
@@ -324,6 +318,9 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 8,
             overflow: "hidden",
         },
+        iconWrapper: {
+            padding: 10,
+        },
         chevron: {
             position: "absolute",
             right: 14,
@@ -331,9 +328,6 @@ const baseStyles = (theme: ColorThemeType) =>
             borderRadius: 99,
             padding: 8,
             backgroundColor: theme.colors.x2eAppOpenDetails.chevron.background,
-        },
-        textContainer: {
-            zIndex: 1,
         },
         appNameText: {
             color: theme.colors.x2eAppOpenDetails.title,

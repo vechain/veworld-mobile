@@ -220,6 +220,7 @@ export type Colors = {
     }
     x2eAppOpenDetails: {
         background: string
+        border: string
         title: string
         description: string
         label: {
@@ -563,6 +564,7 @@ const light: Colors = {
     },
     x2eAppOpenDetails: {
         background: COLORS.GREY_50,
+        border: COLORS.GREY_100,
         title: COLORS.GREY_700,
         description: COLORS.GREY_500,
         label: {
@@ -811,6 +813,7 @@ const dark: Colors = {
     },
     x2eAppOpenDetails: {
         background: COLORS.PURPLE_DISABLED,
+        border: COLORS.PURPLE_DISABLED,
         title: COLORS.GREY_50,
         description: COLORS.GREY_300,
         label: {

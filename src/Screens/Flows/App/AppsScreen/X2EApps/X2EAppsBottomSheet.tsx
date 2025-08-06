@@ -1,75 +1,23 @@
-import React, { forwardRef, useCallback, useMemo, useState } from "react"
-import { ListRenderItemInfo, ScrollView, StyleSheet } from "react-native"
+import React, { forwardRef, useCallback, useMemo } from "react"
+import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet, BaseChip, BaseIcon, BaseSpacer, BaseText, BaseView, BaseSkeleton } from "~Components"
+import { BaseBottomSheet, BaseSpacer, BaseView, BaseSkeleton, BaseText, BaseIcon } from "~Components"
 import { AnalyticsEvent } from "~Constants"
-import { X2ECategory, X2ECategoryType, VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
-import { useTheme, useVeBetterDaoDapps, useDappBookmarking, useAnalyticTracking } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
+import { useTheme, useDappBookmarking, useAnalyticTracking } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
 import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
-import { useI18nContext } from "~i18n"
 import { X2EAppWithDetails } from "./X2EAppWithDetails"
 import { X2EAppDetails } from "./X2EAppDetails"
+import { X2ECategoryFilters } from "./X2ECategoryFilters"
+import { useX2ECategoryFiltering } from "./useX2ECategoryFiltering"
+import { useX2ECategories } from "./X2ECategories"
 
 type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
-
-type Filter = {
-    key: X2ECategoryType
-    title: string
-    isSelected: boolean
-    onPress: () => void
-}
-
-const getCategoryLocalizationKey = (categoryId: X2ECategoryType) => {
-    switch (categoryId) {
-        case X2ECategoryType.OTHERS:
-            return "APP_CATEGORY_OTHERS"
-        case X2ECategoryType.EDUCATION_LEARNING:
-            return "APP_CATEGORY_LEARNING"
-        case X2ECategoryType.FITNESS_WELLNESS:
-            return "APP_CATEGORY_LIFESTYLE"
-        case X2ECategoryType.GREEN_FINANCE_DEFI:
-            return "APP_CATEGORY_WEB3"
-        case X2ECategoryType.GREEN_MOBILITY_TRAVEL:
-            return "APP_CATEGORY_TRANSPORTATION"
-        case X2ECategoryType.NUTRITION:
-            return "APP_CATEGORY_FOOD_AND_DRINK"
-        case X2ECategoryType.PLASTIC_WASTE_RECYCLING:
-            return "APP_CATEGORY_RECYCLING"
-        case X2ECategoryType.RENEWABLE_ENERGY_EFFICIENCY:
-            return "APP_CATEGORY_ENERGY"
-        case X2ECategoryType.SUSTAINABLE_SHOPPING:
-            return "APP_CATEGORY_SHOPPING"
-        case X2ECategoryType.PETS:
-            return "APP_CATEGORY_PETS"
-        default:
-            return "APP_CATEGORY_OTHERS"
-    }
-}
-
-type TopFiltersProps = {
-    filters: Filter[]
-}
-
-const TopFilters = React.memo(({ filters }: TopFiltersProps) => {
-    return (
-        <BaseView style={styles.filtersContainer}>
-            <ScrollView
-                horizontal
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.filtersScrollContainer}>
-                {filters.map(({ key, isSelected, title, onPress }) => (
-                    <BaseView key={key} mx={6}>
-                        <BaseChip label={title} active={isSelected} onPress={onPress} />
-                    </BaseView>
-                ))}
-            </ScrollView>
-        </BaseView>
-    )
-})
 
 const X2EAppSkeleton = React.memo(() => {
     const theme = useTheme()
@@ -152,11 +100,11 @@ const X2EAppsList = React.memo(({ apps, isLoading, onDismiss }: X2EAppsListProps
 })
 
 const X2EAppItem = React.memo(({ dapp, onDismiss }: { dapp: X2EDapp; onDismiss?: () => void }) => {
-    const { LL } = useI18nContext()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
     const nav = useNavigation()
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
+    const { LL } = useI18nContext()
 
     const logoUrl = useMemo(() => {
         return URIUtils.convertUriToUrl(dapp.logo)
@@ -175,13 +123,19 @@ const X2EAppItem = React.memo(({ dapp, onDismiss }: { dapp: X2EDapp; onDismiss?:
         onDismiss?.()
     }, [dapp.external_url, nav, track, dispatch, onDismiss])
 
+    const allCategories = useX2ECategories()
+
     const categoryDisplayNames = useMemo(() => {
         if (!dapp.categories || dapp.categories.length === 0) {
-            return [LL[getCategoryLocalizationKey(X2ECategoryType.OTHERS)]()]
+            const othersCategory = allCategories.find(cat => cat.id === "others")
+            return [othersCategory?.displayName ?? LL.APP_CATEGORY_OTHERS()]
         }
 
-        return dapp.categories.map(categoryId => LL[getCategoryLocalizationKey(categoryId)]())
-    }, [dapp.categories, LL])
+        return dapp.categories.map(categoryId => {
+            const category = allCategories.find(cat => cat.id === categoryId)
+            return category?.displayName ?? LL.APP_CATEGORY_OTHERS()
+        })
+    }, [dapp.categories, allCategories, LL])
 
     return (
         <X2EAppWithDetails
@@ -189,11 +143,11 @@ const X2EAppItem = React.memo(({ dapp, onDismiss }: { dapp: X2EDapp; onDismiss?:
             icon={logoUrl}
             desc={dapp.description}
             categories={categoryDisplayNames}
-            url={dapp.external_url}>
+            isFavorite={isBookMarked}
+            onToggleFavorite={toggleBookmark}>
             <X2EAppDetails.Container>
                 <X2EAppDetails.Description>{dapp.description}</X2EAppDetails.Description>
                 <X2EAppDetails.Stats />
-                <BaseSpacer height={8} />
                 <X2EAppDetails.Actions
                     onAddToFavorites={toggleBookmark}
                     isFavorite={isBookMarked}
@@ -206,13 +160,6 @@ const X2EAppItem = React.memo(({ dapp, onDismiss }: { dapp: X2EDapp; onDismiss?:
 
 const styles = StyleSheet.create({
     flatListPadding: { paddingBottom: 24, paddingTop: 32, paddingHorizontal: 24 },
-    filtersContainer: {
-        height: 48,
-    },
-    filtersScrollContainer: {
-        paddingHorizontal: 16,
-        alignItems: "center",
-    },
 })
 
 type X2EAppsBottomSheetProps = {
@@ -221,35 +168,8 @@ type X2EAppsBottomSheetProps = {
 
 export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(({ onDismiss }, ref) => {
     const theme = useTheme()
-    const { LL } = useI18nContext()
 
-    const [selectedCategory, setSelectedCategory] = useState(() => X2ECategory.RENEWABLE_ENERGY_EFFICIENCY)
-
-    const { data: allApps, isLoading } = useVeBetterDaoDapps()
-
-    const x2eAppsToShow = useMemo(() => {
-        if (!allApps) return []
-
-        const filtered = allApps?.filter(dapp => dapp.categories?.includes(selectedCategory.id) || false)
-
-        return [...filtered].sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()))
-    }, [allApps, selectedCategory.id])
-
-    const filterOptions = useMemo(() => {
-        const categoriesToShow = Object.values(X2ECategory)
-
-        return categoriesToShow
-            .map(category => {
-                const localizationKey = getCategoryLocalizationKey(category.id)
-                return {
-                    key: category.id,
-                    title: (LL[localizationKey] as () => string)(),
-                    isSelected: selectedCategory.id === category.id,
-                    onPress: () => setSelectedCategory(category),
-                }
-            })
-            .sort((a, b) => a.title.localeCompare(b.title))
-    }, [selectedCategory.id, LL])
+    const { selectedCategory, setSelectedCategory, filteredApps, isLoading } = useX2ECategoryFiltering()
 
     return (
         <BaseBottomSheet
@@ -263,13 +183,13 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
                 <BaseView flexDirection="row" gap={16} alignItems="center" px={24} mt={16}>
                     <BaseIcon name={selectedCategory.icon} size={32} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                        {LL[getCategoryLocalizationKey(selectedCategory.id)]()}
+                        {selectedCategory.displayName}
                     </BaseText>
                 </BaseView>
                 <BaseSpacer height={32} />
-                <TopFilters filters={filterOptions} />
+                <X2ECategoryFilters selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
             </BaseView>
-            <X2EAppsList apps={x2eAppsToShow} isLoading={isLoading} onDismiss={onDismiss} />
+            <X2EAppsList apps={filteredApps} isLoading={isLoading} onDismiss={onDismiss} />
         </BaseBottomSheet>
     )
 })
