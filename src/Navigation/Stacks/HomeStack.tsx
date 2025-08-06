@@ -135,6 +135,7 @@ export type RootStackParamListHome = {
     [Routes.DISCOVER_TABS_MANAGER]: undefined
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined
+    [Routes.DISCOVER_SEARCH]: undefined
 }
 
 const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListHome>()
@@ -257,7 +258,7 @@ export const HomeStack = () => {
                     options={{ headerShown: false }}
                 />
                 <Screen
-                    name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_TABS_MANAGER}
+                    name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
                     component={betterWorldFeature.appsScreen.enabled ? AppsSearchScreen : SearchScreen}
                     options={{ headerShown: false }}
                 />
