@@ -17,19 +17,17 @@ import { useThemedStyles } from "~Hooks"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { X2EAppDetails } from "./X2EAppDetails"
 
-// Consistent animation timings for opening and closing
 const ANIMATION_TIMING = {
     fontSizeChange: 400,
     labelTransition: 400,
-    contentFadeDelay: 50, // Reduced from 150 to eliminate pause
+    contentFadeDelay: 50,
     contentFade: 350,
     containerExpand: 400,
     containerCollapse: 400,
     paddingChange: 400,
-    totalDuration: 450, // Reduced from 700 for snappier feel
+    totalDuration: 450,
 }
 
-// More coordinated easing - matches X2EAppDetails
 const SMOOTH_EASING = Easing.bezier(0.25, 0.1, 0.25, 1)
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
@@ -39,9 +37,7 @@ type Props = PropsWithChildren<{
     icon: string
     desc?: string
     categories?: string[]
-    /**
-     * True if the details should be visible by default, false otherwise. Defaults to false
-     */
+    url?: string
     isDefaultVisible?: boolean
 }>
 
@@ -54,15 +50,11 @@ export const X2EAppWithDetails = React.memo(
         const [contentVisible, setContentVisible] = useState(isDefaultVisible)
         const [detailsLayoutReady, setDetailsLayoutReady] = useState(isDefaultVisible)
 
-        // Used to prevent the flash on first open
         const [hasBeenOpenedBefore, setHasBeenOpenedBefore] = useState(isDefaultVisible)
 
-        // Animation progress shared value (0 = closed, 1 = open)
         const animationProgress = useSharedValue(isDefaultVisible ? 1 : 0)
-        // Press animation scale value
         const scale = useSharedValue(1)
 
-        // Ensure details are visible if isDefaultVisible
         useEffect(() => {
             if (isDefaultVisible) {
                 setDetailsLayoutReady(true)
@@ -74,43 +66,34 @@ export const X2EAppWithDetails = React.memo(
             if (isAnimating) return
             setIsAnimating(true)
 
-            // Whether we're opening or closing
             const isOpening = !showDetails
 
             if (isOpening) {
-                // Track that we've opened it at least once
                 setHasBeenOpenedBefore(true)
 
-                // Show container immediately but content will fade in
                 setShowDetails(true)
-                setDetailsLayoutReady(true) // Remove delay - set immediately
+                setDetailsLayoutReady(true)
 
-                // Start animation to value 1 (open) - no requestAnimationFrame delay
                 animationProgress.value = withTiming(1, {
                     duration: ANIMATION_TIMING.totalDuration,
                     easing: SMOOTH_EASING,
                 })
 
-                // Show content with minimal delay for coordination
                 setTimeout(() => {
                     setContentVisible(true)
                 }, ANIMATION_TIMING.contentFadeDelay)
 
-                // Animation is complete
                 setTimeout(() => {
                     setIsAnimating(false)
                 }, ANIMATION_TIMING.totalDuration)
             } else {
-                // First fade out content
                 setContentVisible(false)
 
-                // Start animation to value 0 (closed)
                 animationProgress.value = withTiming(0, {
                     duration: ANIMATION_TIMING.totalDuration,
                     easing: SMOOTH_EASING,
                 })
 
-                // Wait for animation to complete
                 setTimeout(() => {
                     setDetailsLayoutReady(false)
                     setShowDetails(false)
@@ -119,7 +102,6 @@ export const X2EAppWithDetails = React.memo(
             }
         }, [isAnimating, showDetails, animationProgress])
 
-        // Press handlers for scaling animation
         const onPressIn = useCallback(() => {
             scale.value = withSpring(0.97, { damping: 12, stiffness: 200 })
         }, [scale])
@@ -132,22 +114,19 @@ export const X2EAppWithDetails = React.memo(
             setLoadFallback(true)
         }, [])
 
-        // Container style animation
         const containerStyle = useAnimatedStyle(() => {
-            // Smooth color interpolation that transitions early in the animation (0 to 0.3)
             const backgroundColor = interpolateColor(
                 animationProgress.value,
-                [0, 0.3], // Transition happens in first 30% of animation - earlier and smoother
-                [theme.colors.card, theme.colors.assetDetailsCard.background],
+                [0, 1],
+                [theme.colors.transparent, theme.colors.x2eAppOpenDetails.background],
             )
 
             return {
                 backgroundColor,
-                borderRadius: interpolate(animationProgress.value, [0, 1], [0, 24]),
+                borderRadius: interpolate(animationProgress.value, [0, 1], [10, 24]),
             }
         }, [theme])
 
-        // Padding animation
         const padding = useAnimatedStyle(() => {
             return {
                 paddingTop: interpolate(animationProgress.value, [0, 1], [0, 24]),
@@ -156,12 +135,9 @@ export const X2EAppWithDetails = React.memo(
             }
         }, [])
 
-        // Font size animated style
         const fontStyle = useAnimatedStyle(() => {
-            // Interpolate font size between small (15) and large (17)
             const fontSize = interpolate(animationProgress.value, [0, 1], [15, 17])
 
-            // Interpolate font weight between normal (500) and bold (600)
             const fontWeight = interpolate(animationProgress.value, [0, 1], [500, 600])
 
             return {
@@ -170,7 +146,6 @@ export const X2EAppWithDetails = React.memo(
             }
         })
 
-        // Content animation
         const contentStyle = useAnimatedStyle(() => {
             return {
                 opacity: contentVisible
@@ -198,7 +173,6 @@ export const X2EAppWithDetails = React.memo(
             }
         }, [contentVisible])
 
-        // Description text animation style
         const descriptionStyle = useAnimatedStyle(() => {
             return {
                 opacity: interpolate(animationProgress.value, [0, 0.3], [1, 0]),
@@ -210,7 +184,6 @@ export const X2EAppWithDetails = React.memo(
             }
         })
 
-        // Category label animation style
         const categoryLabelStyle = useAnimatedStyle(() => {
             return {
                 opacity: interpolate(animationProgress.value, [0.7, 1], [0, 1]),
@@ -222,14 +195,12 @@ export const X2EAppWithDetails = React.memo(
             }
         })
 
-        // Press animation style
         const pressAnimationStyle = useAnimatedStyle(() => {
             return {
                 transform: [{ scale: scale.value }],
             }
         })
 
-        // Chevron animation
         const chevronStyle = useAnimatedStyle(() => {
             return {
                 opacity: interpolate(animationProgress.value, [0.1, 0.7], [0, 1]),
@@ -244,7 +215,6 @@ export const X2EAppWithDetails = React.memo(
         return (
             <AnimatedBaseView
                 flexDirection="column"
-                // Use less bouncy animation parameters for layout transitions
                 layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}
                 style={[styles.mainContainer, containerStyle]}>
                 <Animated.View style={pressAnimationStyle}>
@@ -257,7 +227,11 @@ export const X2EAppWithDetails = React.memo(
                         testID="X2E_APP_WITH_DETAILS_ROW">
                         <BaseView justifyContent="center">
                             <Animated.View style={[styles.chevron, chevronStyle]}>
-                                <BaseIcon name="icon-chevron-down" size={16} color={theme.colors.label.text} />
+                                <BaseIcon
+                                    name="icon-chevron-down"
+                                    size={16}
+                                    color={theme.colors.x2eAppOpenDetails.chevron.icon}
+                                />
                             </Animated.View>
                         </BaseView>
                         <AnimatedBaseView
@@ -296,12 +270,12 @@ export const X2EAppWithDetails = React.memo(
                                                 {categories.map((category, index) => (
                                                     <BaseText
                                                         key={index}
-                                                        bg={theme.colors.label.backgroundLighter}
+                                                        bg={theme.colors.x2eAppOpenDetails.label.background}
                                                         px={8}
                                                         py={4}
                                                         borderRadius={4}
                                                         typographyFont="captionMedium"
-                                                        color={theme.colors.label.text}
+                                                        color={theme.colors.x2eAppOpenDetails.label.text}
                                                         testID={`DAPP_WITH_DETAILS_CATEGORY_${index}`}>
                                                         {category}
                                                     </BaseText>
@@ -314,7 +288,7 @@ export const X2EAppWithDetails = React.memo(
                                                 typographyFont="captionRegular"
                                                 numberOfLines={2}
                                                 ellipsizeMode="tail"
-                                                color={theme.colors.assetDetailsCard.text}
+                                                color={theme.colors.x2eAppOpenDetails.description}
                                                 w={100}
                                                 testID="DAPP_WITH_DETAILS_DESC">
                                                 {desc}
@@ -327,7 +301,6 @@ export const X2EAppWithDetails = React.memo(
                     </TouchableOpacity>
                 </Animated.View>
 
-                {/* Conditionally render the details component to avoid first-time layout calculation issues */}
                 {(hasBeenOpenedBefore || showDetails) && (
                     <Animated.View>
                         <X2EAppDetails show={showDetails && detailsLayoutReady} visible={contentVisible}>
@@ -343,7 +316,7 @@ export const X2EAppWithDetails = React.memo(
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         mainContainer: {
-            backgroundColor: theme.colors.editSpeedBs.result.background,
+            backgroundColor: theme.colors.x2eAppOpenDetails.background,
             transformOrigin: "center",
             overflow: "hidden",
         },
@@ -357,13 +330,13 @@ const baseStyles = (theme: ColorThemeType) =>
             top: 14,
             borderRadius: 99,
             padding: 8,
-            backgroundColor: theme.colors.label.background,
+            backgroundColor: theme.colors.x2eAppOpenDetails.chevron.background,
         },
         textContainer: {
             zIndex: 1,
         },
         appNameText: {
-            color: theme.colors.assetDetailsCard.title,
+            color: theme.colors.x2eAppOpenDetails.title,
             fontFamily: "Inter-SemiBold",
         },
     })

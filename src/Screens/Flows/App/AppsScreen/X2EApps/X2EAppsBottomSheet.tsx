@@ -3,8 +3,12 @@ import { ListRenderItemInfo, ScrollView, StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BaseBottomSheet, BaseChip, BaseIcon, BaseSpacer, BaseText, BaseView, BaseSkeleton } from "~Components"
+import { AnalyticsEvent } from "~Constants"
 import { X2ECategory, X2ECategoryType, VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
-import { useTheme, useVeBetterDaoDapps } from "~Hooks"
+import { useTheme, useVeBetterDaoDapps, useDappBookmarking, useAnalyticTracking } from "~Hooks"
+import { useNavigation } from "@react-navigation/native"
+import { Routes } from "~Navigation"
+import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { X2EAppWithDetails } from "./X2EAppWithDetails"
@@ -19,7 +23,6 @@ type Filter = {
     onPress: () => void
 }
 
-// Helper function to get localized category key (returns the key, not the translated value)
 const getCategoryLocalizationKey = (categoryId: X2ECategoryType) => {
     switch (categoryId) {
         case X2ECategoryType.OTHERS:
@@ -102,12 +105,16 @@ const X2EAppSkeleton = React.memo(() => {
 type X2EAppsListProps = {
     apps: X2EDapp[]
     isLoading: boolean
+    onDismiss?: () => void
 }
 
-const X2EAppsList = React.memo(({ apps, isLoading }: X2EAppsListProps) => {
-    const renderItem = useCallback(({ item }: ListRenderItemInfo<X2EDapp>) => {
-        return <X2EAppItem dapp={item} />
-    }, [])
+const X2EAppsList = React.memo(({ apps, isLoading, onDismiss }: X2EAppsListProps) => {
+    const renderItem = useCallback(
+        ({ item }: ListRenderItemInfo<X2EDapp>) => {
+            return <X2EAppItem dapp={item} onDismiss={onDismiss} />
+        },
+        [onDismiss],
+    )
 
     const renderSkeletonItem = useCallback(() => {
         return <X2EAppSkeleton />
@@ -144,14 +151,30 @@ const X2EAppsList = React.memo(({ apps, isLoading }: X2EAppsListProps) => {
     )
 })
 
-const X2EAppItem = React.memo(({ dapp }: { dapp: X2EDapp }) => {
+const X2EAppItem = React.memo(({ dapp, onDismiss }: { dapp: X2EDapp; onDismiss?: () => void }) => {
     const { LL } = useI18nContext()
+    const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
+    const nav = useNavigation()
+    const track = useAnalyticTracking()
+    const dispatch = useAppDispatch()
 
     const logoUrl = useMemo(() => {
         return URIUtils.convertUriToUrl(dapp.logo)
     }, [dapp.logo])
 
-    // Get all categories for display, or fallback to OTHERS if none
+    const handleOpen = useCallback(() => {
+        track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
+            url: dapp.external_url,
+        })
+
+        setTimeout(() => {
+            dispatch(addNavigationToDApp({ href: dapp.external_url, isCustom: false }))
+        }, 1000)
+
+        nav.navigate(Routes.BROWSER, { url: dapp.external_url })
+        onDismiss?.()
+    }, [dapp.external_url, nav, track, dispatch, onDismiss])
+
     const categoryDisplayNames = useMemo(() => {
         if (!dapp.categories || dapp.categories.length === 0) {
             return [LL[getCategoryLocalizationKey(X2ECategoryType.OTHERS)]()]
@@ -161,12 +184,21 @@ const X2EAppItem = React.memo(({ dapp }: { dapp: X2EDapp }) => {
     }, [dapp.categories, LL])
 
     return (
-        <X2EAppWithDetails name={dapp.name} icon={logoUrl} desc={dapp.description} categories={categoryDisplayNames}>
+        <X2EAppWithDetails
+            name={dapp.name}
+            icon={logoUrl}
+            desc={dapp.description}
+            categories={categoryDisplayNames}
+            url={dapp.external_url}>
             <X2EAppDetails.Container>
                 <X2EAppDetails.Description>{dapp.description}</X2EAppDetails.Description>
                 <X2EAppDetails.Stats />
                 <BaseSpacer height={8} />
-                <X2EAppDetails.Actions />
+                <X2EAppDetails.Actions
+                    onAddToFavorites={toggleBookmark}
+                    isFavorite={isBookMarked}
+                    onOpen={handleOpen}
+                />
             </X2EAppDetails.Container>
         </X2EAppWithDetails>
     )
@@ -237,7 +269,7 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
                 <BaseSpacer height={32} />
                 <TopFilters filters={filterOptions} />
             </BaseView>
-            <X2EAppsList apps={x2eAppsToShow} isLoading={isLoading} />
+            <X2EAppsList apps={x2eAppsToShow} isLoading={isLoading} onDismiss={onDismiss} />
         </BaseBottomSheet>
     )
 })

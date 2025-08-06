@@ -218,6 +218,32 @@ export type Colors = {
     stakedVetCard: {
         background: string
     }
+    x2eAppOpenDetails: {
+        background: string
+        title: string
+        description: string
+        label: {
+            background: string
+            text: string
+        }
+        chevron: {
+            background: string
+            icon: string
+        }
+        favoriteBtn: {
+            backgroundActive: string
+            borderActive: string
+            textActive: string
+            backgroundInactive: string
+            borderInactive: string
+            textInactive: string
+        }
+        stats: {
+            icon: string
+            caption: string
+            value: string
+        }
+    }
 }
 
 export enum COLORS {
@@ -535,6 +561,32 @@ const light: Colors = {
     stakedVetCard: {
         background: COLORS.GREY_50,
     },
+    x2eAppOpenDetails: {
+        background: COLORS.GREY_50,
+        title: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        label: {
+            background: COLORS.GREY_100,
+            text: COLORS.GREY_500,
+        },
+        chevron: {
+            background: COLORS.GREY_200,
+            icon: COLORS.GREY_600,
+        },
+        favoriteBtn: {
+            backgroundActive: COLORS.WHITE,
+            borderActive: COLORS.PURPLE,
+            textActive: COLORS.PURPLE,
+            backgroundInactive: COLORS.WHITE,
+            borderInactive: COLORS.GREY_200,
+            textInactive: COLORS.GREY_600,
+        },
+        stats: {
+            icon: COLORS.DARK_PURPLE_DISABLED,
+            caption: COLORS.GREY_500,
+            value: COLORS.GREY_700,
+        },
+    },
 }
 
 const dark: Colors = {
@@ -756,6 +808,32 @@ const dark: Colors = {
     },
     stakedVetCard: {
         background: COLORS.PURPLE,
+    },
+    x2eAppOpenDetails: {
+        background: COLORS.PURPLE_DISABLED,
+        title: COLORS.GREY_50,
+        description: COLORS.GREY_300,
+        label: {
+            background: COLORS.DARK_PURPLE_DISABLED,
+            text: COLORS.GREY_50,
+        },
+        chevron: {
+            background: COLORS.PURPLE,
+            icon: COLORS.GREY_100,
+        },
+        favoriteBtn: {
+            backgroundActive: COLORS.TRANSPARENT,
+            borderActive: COLORS.LIME_GREEN,
+            textActive: COLORS.LIME_GREEN,
+            backgroundInactive: COLORS.TRANSPARENT,
+            borderInactive: COLORS.DARK_PURPLE_DISABLED,
+            textInactive: COLORS.GREY_50,
+        },
+        stats: {
+            icon: COLORS.LIME_GREEN,
+            caption: COLORS.GREY_300,
+            value: COLORS.GREY_100,
+        },
     },
 }
 

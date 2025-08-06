@@ -424,40 +424,6 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
-	 * A​p​p​ ​u​p​d​a​t​e​d
-	 */
-	APP_UPDATED: string
-	/**
-	 * H​e​r​e​ ​i​s​ ​w​h​a​t​ ​i​s​ ​n​e​w​:
-	 */
-	APP_UPDATED_WHATS_NEW: string
-	/**
-	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
-	 */
-	APP_UPDATE_AVAILABLE: string
-	/**
-	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
-	 * @param {string} version
-	 */
-	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
-	/**
-	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
-	 */
-	APP_VERIFICATION_CONFIRM: string
-	/**
-	 * C​o​n​n​e​c​t​i​o​n​ ​t​o​ ​t​h​i​s​ ​a​p​p​l​i​c​a​t​i​o​n​ ​i​s​ ​f​o​r​b​i​d​d​e​n​ ​a​s​ ​t​h​e​ ​r​e​q​u​e​s​t​ ​l​o​o​k​s​ ​m​a​l​i​c​i​o​u​s​.
-	 */
-	APP_VERIFICATION_INVALID: string
-	/**
-	 * T​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​ ​t​h​a​t​ ​i​s​ ​m​a​k​i​n​g​ ​t​h​i​s​ ​r​e​q​u​e​s​t​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​v​e​r​i​f​i​e​d​.​ ​P​r​o​c​e​e​d​ ​a​t​ ​y​o​u​r​ ​o​w​n​ ​r​i​s​k​.
-	 */
-	APP_VERIFICATION_UNKNOWN: string
-	/**
-	 * v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
-	 * @param {string} version
-	 */
-	APP_VERSION: RequiredParams<'version'>
-	/**
 	 * E​n​e​r​g​y
 	 */
 	APP_CATEGORY_ENERGY: string
@@ -497,6 +463,40 @@ type RootTranslation = {
 	 * W​e​b​3
 	 */
 	APP_CATEGORY_WEB3: string
+	/**
+	 * A​p​p​ ​u​p​d​a​t​e​d
+	 */
+	APP_UPDATED: string
+	/**
+	 * H​e​r​e​ ​i​s​ ​w​h​a​t​ ​i​s​ ​n​e​w​:
+	 */
+	APP_UPDATED_WHATS_NEW: string
+	/**
+	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
+	 */
+	APP_UPDATE_AVAILABLE: string
+	/**
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
+	 * @param {string} version
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
+	/**
+	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
+	 */
+	APP_VERIFICATION_CONFIRM: string
+	/**
+	 * C​o​n​n​e​c​t​i​o​n​ ​t​o​ ​t​h​i​s​ ​a​p​p​l​i​c​a​t​i​o​n​ ​i​s​ ​f​o​r​b​i​d​d​e​n​ ​a​s​ ​t​h​e​ ​r​e​q​u​e​s​t​ ​l​o​o​k​s​ ​m​a​l​i​c​i​o​u​s​.
+	 */
+	APP_VERIFICATION_INVALID: string
+	/**
+	 * T​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​ ​t​h​a​t​ ​i​s​ ​m​a​k​i​n​g​ ​t​h​i​s​ ​r​e​q​u​e​s​t​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​v​e​r​i​f​i​e​d​.​ ​P​r​o​c​e​e​d​ ​a​t​ ​y​o​u​r​ ​o​w​n​ ​r​i​s​k​.
+	 */
+	APP_VERIFICATION_UNKNOWN: string
+	/**
+	 * v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * @param {string} version
+	 */
+	APP_VERSION: RequiredParams<'version'>
 	/**
 	 * A​p​r​i​l
 	 */
@@ -1342,6 +1342,14 @@ type RootTranslation = {
 	 * E​n​t​e​r​ ​p​a​s​s​w​o​r​d
 	 */
 	BTN_ENTER_PASSWORD: string
+	/**
+	 * F​a​v​o​r​i​t​e
+	 */
+	BTN_FAVORITE: string
+	/**
+	 * F​a​v​o​r​i​t​e​d
+	 */
+	BTN_FAVORiTED: string
 	/**
 	 * G​E​T​ ​S​T​A​R​T​E​D
 	 */
@@ -5141,38 +5149,6 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
-	 * App updated
-	 */
-	APP_UPDATED: () => LocalizedString
-	/**
-	 * Here is what is new:
-	 */
-	APP_UPDATED_WHATS_NEW: () => LocalizedString
-	/**
-	 * Update available
-	 */
-	APP_UPDATE_AVAILABLE: () => LocalizedString
-	/**
-	 * Version {version} is now available to update with new features and improvements.
-	 */
-	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
-	/**
-	 * Please confirm that you would like to process this request.
-	 */
-	APP_VERIFICATION_CONFIRM: () => LocalizedString
-	/**
-	 * Connection to this application is forbidden as the request looks malicious.
-	 */
-	APP_VERIFICATION_INVALID: () => LocalizedString
-	/**
-	 * The application that is making this request could not be verified. Proceed at your own risk.
-	 */
-	APP_VERIFICATION_UNKNOWN: () => LocalizedString
-	/**
-	 * version {version}
-	 */
-	APP_VERSION: (arg: { version: string }) => LocalizedString
-	/**
 	 * Energy
 	 */
 	APP_CATEGORY_ENERGY: () => LocalizedString
@@ -5212,6 +5188,38 @@ Try reconnect your device to the internet.
 	 * Web3
 	 */
 	APP_CATEGORY_WEB3: () => LocalizedString
+	/**
+	 * App updated
+	 */
+	APP_UPDATED: () => LocalizedString
+	/**
+	 * Here is what is new:
+	 */
+	APP_UPDATED_WHATS_NEW: () => LocalizedString
+	/**
+	 * Update available
+	 */
+	APP_UPDATE_AVAILABLE: () => LocalizedString
+	/**
+	 * Version {version} is now available to update with new features and improvements.
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
+	/**
+	 * Please confirm that you would like to process this request.
+	 */
+	APP_VERIFICATION_CONFIRM: () => LocalizedString
+	/**
+	 * Connection to this application is forbidden as the request looks malicious.
+	 */
+	APP_VERIFICATION_INVALID: () => LocalizedString
+	/**
+	 * The application that is making this request could not be verified. Proceed at your own risk.
+	 */
+	APP_VERIFICATION_UNKNOWN: () => LocalizedString
+	/**
+	 * version {version}
+	 */
+	APP_VERSION: (arg: { version: string }) => LocalizedString
 	/**
 	 * April
 	 */
@@ -6050,6 +6058,14 @@ Thanks for your patience!
 	 * Enter password
 	 */
 	BTN_ENTER_PASSWORD: () => LocalizedString
+	/**
+	 * Favorite
+	 */
+	BTN_FAVORITE: () => LocalizedString
+	/**
+	 * Favorited
+	 */
+	BTN_FAVORiTED: () => LocalizedString
 	/**
 	 * GET STARTED
 	 */
