@@ -6,10 +6,13 @@ import { VbdCarouselItemSkeleton } from "./VbdCarouselItemSkeleton"
 
 type Props = {
     appIds: string[]
+    isLoading?: boolean
 }
 
-export const VbdCarousel = ({ appIds }: Props) => {
-    const { data: vbdApps, isLoading } = useVeBetterDaoDapps(true)
+export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
+    const { data: vbdApps, isLoading: vbdLoading } = useVeBetterDaoDapps(true)
+
+    const isLoading = useMemo(() => propsIsLoading || vbdLoading, [propsIsLoading, vbdLoading])
 
     const items = useMemo(() => {
         if (isLoading || !vbdApps?.length)

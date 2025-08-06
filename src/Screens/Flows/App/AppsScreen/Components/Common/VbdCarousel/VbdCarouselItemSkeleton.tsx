@@ -36,20 +36,22 @@ export const VbdCarouselItemSkeleton = () => {
                         borderRadius={4}
                     />
                 </BaseView>
-                <BaseSkeleton
-                    animationDirection="horizontalLeft"
-                    boneColor={theme.colors.skeletonBoneColor}
-                    highlightColor={theme.colors.skeletonHighlightColor}
-                    height={10}
-                    width={"100%"}
-                />
-                <BaseSkeleton
-                    animationDirection="horizontalLeft"
-                    boneColor={theme.colors.skeletonBoneColor}
-                    highlightColor={theme.colors.skeletonHighlightColor}
-                    height={10}
-                    width={"50%"}
-                />
+                <BaseView flexDirection="column" gap={4} w={100}>
+                    <BaseSkeleton
+                        animationDirection="horizontalLeft"
+                        boneColor={theme.colors.skeletonBoneColor}
+                        highlightColor={theme.colors.skeletonHighlightColor}
+                        height={10}
+                        width={"100%"}
+                    />
+                    <BaseSkeleton
+                        animationDirection="horizontalLeft"
+                        boneColor={theme.colors.skeletonBoneColor}
+                        highlightColor={theme.colors.skeletonHighlightColor}
+                        height={10}
+                        width={"50%"}
+                    />
+                </BaseView>
             </BaseView>
         </BaseView>
     )
