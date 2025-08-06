@@ -8,7 +8,7 @@ export const VbdCarouselItemSkeleton = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
     return (
-        <BaseView style={styles.root}>
+        <BaseView style={styles.root} testID="VBD_CAROUSEL_ITEM_SKELETON">
             <BaseSkeleton
                 animationDirection="horizontalLeft"
                 boneColor={theme.isDark ? COLORS.LIGHT_PURPLE : COLORS.GREY_200}

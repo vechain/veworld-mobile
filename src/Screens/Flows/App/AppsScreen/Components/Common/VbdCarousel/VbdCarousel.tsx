@@ -1,6 +1,6 @@
 import React, { useMemo } from "react"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
-import { useVeBetterDaoDapps } from "~Hooks"
+import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import { VbdCarouselItem } from "./VbdCarouselItem"
 import { VbdCarouselItemSkeleton } from "./VbdCarouselItemSkeleton"
 
@@ -15,7 +15,7 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
     const isLoading = useMemo(() => propsIsLoading || vbdLoading, [propsIsLoading, vbdLoading])
 
     const items = useMemo(() => {
-        if (isLoading || !vbdApps?.length)
+        if (isLoading || !vbdApps?.length || !appIds.length)
             return appIds.map(
                 appId => ({ content: <VbdCarouselItemSkeleton />, name: appId } satisfies CarouselSlideItem),
             )

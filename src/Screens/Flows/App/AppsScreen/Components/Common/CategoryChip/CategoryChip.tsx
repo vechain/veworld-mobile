@@ -29,7 +29,8 @@ export const CategoryChip = ({ category }: { category: (typeof AVAILABLE_CATEGOR
             typographyFont="captionMedium"
             color={COLORS.WHITE}
             bg={COLORS.WHITE_RGBA_15}
-            containerStyle={styles.root}>
+            containerStyle={styles.root}
+            testID="CATEGORY_CHIP">
             {LL[`DAPP_CATEGORY_${StringUtils.toUppercase(StringUtils.replaceCharacter(category, "-", "_"))}`]()}
         </BaseText>
     )

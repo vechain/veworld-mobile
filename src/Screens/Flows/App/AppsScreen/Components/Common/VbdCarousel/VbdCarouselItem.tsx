@@ -28,7 +28,7 @@ export const VbdCarouselItem = ({ app }: Props) => {
     }, [app.categories])
 
     return (
-        <BaseView style={styles.root}>
+        <BaseView style={styles.root} testID="VBD_CAROUSEL_ITEM">
             <FastImage source={{ uri: bannerUri }} style={StyleSheet.absoluteFill} />
             <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                 <BaseView px={16} py={12} flexDirection="column" gap={8}>
@@ -39,7 +39,8 @@ export const VbdCarouselItem = ({ app }: Props) => {
                             flex={1}
                             numberOfLines={1}
                             typographyFont="subSubTitleSemiBold"
-                            color={COLORS.GREY_50}>
+                            color={COLORS.GREY_50}
+                            testID="VBD_CAROUSEL_ITEM_APP_NAME">
                             {app.name}
                         </BaseText>
                         {category && (
@@ -53,7 +54,8 @@ export const VbdCarouselItem = ({ app }: Props) => {
                         typographyFont="captionMedium"
                         color={COLORS.WHITE_RGBA_85}
                         numberOfLines={2}
-                        flexDirection="row">
+                        flexDirection="row"
+                        testID="VBD_CAROUSEL_ITEM_APP_DESCRIPTION">
                         {app.description}
                     </BaseText>
                 </BaseView>
