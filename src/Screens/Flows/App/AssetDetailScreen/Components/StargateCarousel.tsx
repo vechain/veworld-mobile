@@ -26,7 +26,8 @@ export const StargateCarousel = () => {
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
-    const isManager = stargateNodes.some(node => node.isXNodeDelegatee && !node.isXNodeHolder)
+    // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
+    const isManager = stargateNodes.some(node => !node.isXNodeDelegator)
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()

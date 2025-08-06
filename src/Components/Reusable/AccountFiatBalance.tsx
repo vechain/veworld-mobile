@@ -64,8 +64,8 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
     }, [stargateNfts])
 
     const stargateFiatBalance = useMemo(() => {
-        // We only include staked VET in fiat balance if user is the owner, not a delegatee (manager) - Stargate staking
-        const isManager = stargateNodes.some(node => node.isXNodeDelegatee && !node.isXNodeHolder)
+        // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
+        const isManager = stargateNodes.some(node => !node.isXNodeDelegator)
 
         if (isManager) return "0"
 
