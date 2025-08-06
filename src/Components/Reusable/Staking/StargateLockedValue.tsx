@@ -41,18 +41,7 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isNodeOwn
     }, [totalLockedVet.toString, vetTokenInfo.exchangeRate])
 
     const renderLockedValue = useMemo(() => {
-        if (isLoading) {
-            return (
-                <BaseSkeleton
-                    height={20}
-                    width={60}
-                    boneColor={theme.colors.skeletonBoneColor}
-                    highlightColor={theme.colors.skeletonHighlightColor}
-                />
-            )
-        }
-
-        if (!isNodeOwner) {
+        if (!isNodeOwner && !isLoading) {
             return (
                 <BaseView style={styles.tagContainer}>
                     <BaseText typographyFont="smallCaptionMedium" color={theme.colors.stakedCard.tagText}>
