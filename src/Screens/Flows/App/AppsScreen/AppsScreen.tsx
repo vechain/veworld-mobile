@@ -14,6 +14,7 @@ export const AppsScreen = () => {
             fixedBody={
                 <BaseView flex={1} gap={16}>
                     <ScrollView style={styles.scrollView}>
+                        {/* TODO: This is just a showcase. Implement it with real app ids from the needed hooks */}
                         <VbdCarousel
                             appIds={[
                                 "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",
