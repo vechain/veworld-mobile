@@ -1,4 +1,4 @@
-import React, { useState, useCallback, PropsWithChildren } from "react"
+import React, { useState, useCallback, PropsWithChildren, useEffect } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, {
     LinearTransition,
@@ -33,6 +33,9 @@ type X2EAppWithDetailsProps = PropsWithChildren<{
     isDefaultVisible?: boolean
     isFavorite?: boolean
     onToggleFavorite?: () => void
+    itemId?: string
+    isOpen?: boolean
+    onToggleOpen?: (itemId: string) => void
 }>
 
 export const X2EAppWithDetails = React.memo(
@@ -45,51 +48,78 @@ export const X2EAppWithDetails = React.memo(
         isDefaultVisible = false,
         isFavorite = false,
         onToggleFavorite,
+        itemId,
+        isOpen,
+        onToggleOpen,
     }: X2EAppWithDetailsProps) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const [loadFallback, setLoadFallback] = useState(false)
-        const [showDetails, setShowDetails] = useState(isDefaultVisible)
-        const [isAnimating, setIsAnimating] = useState(false)
-        const [contentVisible, setContentVisible] = useState(isDefaultVisible)
 
-        const animationProgress = useSharedValue(isDefaultVisible ? 1 : 0)
+        const useExternalState = itemId !== undefined && isOpen !== undefined && onToggleOpen !== undefined
+
+        const [internalShowDetails, setInternalShowDetails] = useState(isDefaultVisible)
+        const [internalIsAnimating, setInternalIsAnimating] = useState(false)
+        const [internalContentVisible, setInternalContentVisible] = useState(isDefaultVisible)
+
+        const showDetails = useExternalState ? isOpen : internalShowDetails
+        const isAnimating = useExternalState ? false : internalIsAnimating
+        const contentVisible = useExternalState ? isOpen : internalContentVisible
+
+        const animationProgress = useSharedValue(showDetails ? 1 : 0)
         const scale = useSharedValue(1)
 
-        const toggleDetails = useCallback(() => {
-            if (isAnimating) return
-            setIsAnimating(true)
-
-            const isOpening = !showDetails
-
-            if (isOpening) {
-                setShowDetails(true)
-
-                animationProgress.value = withTiming(1, {
+        useEffect(() => {
+            if (useExternalState) {
+                animationProgress.value = withTiming(isOpen ? 1 : 0, {
                     duration: ANIMATION_TIMING.totalDuration,
                     easing: SMOOTH_EASING,
                 })
 
-                setTimeout(() => {
-                    setContentVisible(true)
-                }, ANIMATION_TIMING.contentFadeDelay)
-
-                setTimeout(() => {
-                    setIsAnimating(false)
-                }, ANIMATION_TIMING.totalDuration)
-            } else {
-                setContentVisible(false)
-
-                animationProgress.value = withTiming(0, {
-                    duration: ANIMATION_TIMING.totalDuration,
-                    easing: SMOOTH_EASING,
-                })
-
-                setTimeout(() => {
-                    setShowDetails(false)
-                    setIsAnimating(false)
-                }, ANIMATION_TIMING.totalDuration)
+                if (isOpen) {
+                    setTimeout(() => {}, ANIMATION_TIMING.contentFadeDelay)
+                }
             }
-        }, [isAnimating, showDetails, animationProgress])
+        }, [isOpen, useExternalState, animationProgress])
+
+        const toggleDetails = useCallback(() => {
+            if (useExternalState) {
+                onToggleOpen(itemId)
+            } else {
+                if (internalIsAnimating) return
+                setInternalIsAnimating(true)
+
+                const isOpening = !internalShowDetails
+
+                if (isOpening) {
+                    setInternalShowDetails(true)
+
+                    animationProgress.value = withTiming(1, {
+                        duration: ANIMATION_TIMING.totalDuration,
+                        easing: SMOOTH_EASING,
+                    })
+
+                    setTimeout(() => {
+                        setInternalContentVisible(true)
+                    }, ANIMATION_TIMING.contentFadeDelay)
+
+                    setTimeout(() => {
+                        setInternalIsAnimating(false)
+                    }, ANIMATION_TIMING.totalDuration)
+                } else {
+                    setInternalContentVisible(false)
+
+                    animationProgress.value = withTiming(0, {
+                        duration: ANIMATION_TIMING.totalDuration,
+                        easing: SMOOTH_EASING,
+                    })
+
+                    setTimeout(() => {
+                        setInternalShowDetails(false)
+                        setInternalIsAnimating(false)
+                    }, ANIMATION_TIMING.totalDuration)
+                }
+            }
+        }, [useExternalState, itemId, onToggleOpen, internalIsAnimating, internalShowDetails, animationProgress])
 
         const onPressIn = useCallback(() => {
             scale.value = withSpring(0.97, PRESS_SPRING_CONFIG)

@@ -20,7 +20,7 @@ interface UseX2ECategoryFilteringReturn {
 }
 
 export const useX2ECategoryFiltering = (): UseX2ECategoryFilteringReturn => {
-    const [selectedCategoryId, setSelectedCategoryId] = useState(X2ECategoryType.RENEWABLE_ENERGY_EFFICIENCY)
+    const [selectedCategoryId, setSelectedCategoryId] = useState(X2ECategoryType.NUTRITION)
     const categories = useX2ECategories()
     const selectedCategory = categories.find(cat => cat.id === selectedCategoryId) ?? categories[0]
 

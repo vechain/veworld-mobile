@@ -15,16 +15,14 @@ export const X2ECategoryFilters = React.memo(({ selectedCategory, onCategoryChan
     const categories = useX2ECategories()
 
     const filterOptions = useMemo(() => {
-        return categories
-            .map(category => {
-                return {
-                    key: category.id,
-                    title: category.displayName,
-                    isSelected: selectedCategory.id === category.id,
-                    onPress: () => onCategoryChange(category),
-                }
-            })
-            .sort((a, b) => a.title.localeCompare(b.title))
+        return categories.map(category => {
+            return {
+                key: category.id,
+                title: category.displayName,
+                isSelected: selectedCategory.id === category.id,
+                onPress: () => onCategoryChange(category),
+            }
+        })
     }, [selectedCategory.id, categories, onCategoryChange])
 
     return (

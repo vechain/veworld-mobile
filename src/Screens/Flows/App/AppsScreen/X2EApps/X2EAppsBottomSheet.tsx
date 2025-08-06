@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useMemo } from "react"
+import React, { forwardRef, useCallback, useMemo, useState } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
@@ -24,14 +24,23 @@ type X2EAppsListProps = {
     apps: X2EDapp[]
     isLoading: boolean
     onDismiss?: () => void
+    openItemId: string | null
+    onToggleOpenItem: (itemId: string) => void
 }
 
-const X2EAppsList = React.memo(({ apps, isLoading, onDismiss }: X2EAppsListProps) => {
+const X2EAppsList = React.memo(({ apps, isLoading, onDismiss, openItemId, onToggleOpenItem }: X2EAppsListProps) => {
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<X2EDapp>) => {
-            return <X2EAppItem dapp={item} onDismiss={onDismiss} />
+            return (
+                <X2EAppItem
+                    dapp={item}
+                    onDismiss={onDismiss}
+                    openItemId={openItemId}
+                    onToggleOpenItem={onToggleOpenItem}
+                />
+            )
         },
-        [onDismiss],
+        [onDismiss, openItemId, onToggleOpenItem],
     )
 
     const renderSkeletonItem = useCallback(() => {
@@ -69,64 +78,81 @@ const X2EAppsList = React.memo(({ apps, isLoading, onDismiss }: X2EAppsListProps
     )
 })
 
-const X2EAppItem = React.memo(({ dapp, onDismiss }: { dapp: X2EDapp; onDismiss?: () => void }) => {
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
-    const nav = useNavigation()
-    const track = useAnalyticTracking()
-    const dispatch = useAppDispatch()
-    const { LL } = useI18nContext()
+const X2EAppItem = React.memo(
+    ({
+        dapp,
+        onDismiss,
+        openItemId,
+        onToggleOpenItem,
+    }: {
+        dapp: X2EDapp
+        onDismiss?: () => void
+        openItemId: string | null
+        onToggleOpenItem: (itemId: string) => void
+    }) => {
+        const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
+        const nav = useNavigation()
+        const track = useAnalyticTracking()
+        const dispatch = useAppDispatch()
+        const { LL } = useI18nContext()
 
-    const logoUrl = useMemo(() => {
-        return URIUtils.convertUriToUrl(dapp.logo)
-    }, [dapp.logo])
+        const logoUrl = useMemo(() => {
+            return URIUtils.convertUriToUrl(dapp.logo)
+        }, [dapp.logo])
 
-    const handleOpen = useCallback(() => {
-        track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-            url: dapp.external_url,
-        })
+        const handleOpen = useCallback(() => {
+            track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
+                url: dapp.external_url,
+            })
 
-        setTimeout(() => {
-            dispatch(addNavigationToDApp({ href: dapp.external_url, isCustom: false }))
-        }, 1000)
+            setTimeout(() => {
+                dispatch(addNavigationToDApp({ href: dapp.external_url, isCustom: false }))
+            }, 1000)
 
-        nav.navigate(Routes.BROWSER, { url: dapp.external_url })
-        onDismiss?.()
-    }, [dapp.external_url, nav, track, dispatch, onDismiss])
+            nav.navigate(Routes.BROWSER, { url: dapp.external_url })
+            onDismiss?.()
+        }, [dapp.external_url, nav, track, dispatch, onDismiss])
 
-    const allCategories = useX2ECategories()
+        const allCategories = useX2ECategories()
 
-    const categoryDisplayNames = useMemo(() => {
-        if (!dapp.categories || dapp.categories.length === 0) {
-            const othersCategory = allCategories.find(cat => cat.id === "others")
-            return [othersCategory?.displayName ?? LL.APP_CATEGORY_OTHERS()]
-        }
+        const categoryDisplayNames = useMemo(() => {
+            if (!dapp.categories || dapp.categories.length === 0) {
+                const othersCategory = allCategories.find(cat => cat.id === "others")
+                return [othersCategory?.displayName ?? LL.APP_CATEGORY_OTHERS()]
+            }
 
-        return dapp.categories.map(categoryId => {
-            const category = allCategories.find(cat => cat.id === categoryId)
-            return category?.displayName ?? LL.APP_CATEGORY_OTHERS()
-        })
-    }, [dapp.categories, allCategories, LL])
+            return dapp.categories.map(categoryId => {
+                const category = allCategories.find(cat => cat.id === categoryId)
+                return category?.displayName ?? LL.APP_CATEGORY_OTHERS()
+            })
+        }, [dapp.categories, allCategories, LL])
 
-    return (
-        <X2EAppWithDetails
-            name={dapp.name}
-            icon={logoUrl}
-            desc={dapp.description}
-            categories={categoryDisplayNames}
-            isFavorite={isBookMarked}
-            onToggleFavorite={toggleBookmark}>
-            <X2EAppDetails.Container>
-                <X2EAppDetails.Description>{dapp.description}</X2EAppDetails.Description>
-                <X2EAppDetails.Stats />
-                <X2EAppDetails.Actions
-                    onAddToFavorites={toggleBookmark}
-                    isFavorite={isBookMarked}
-                    onOpen={handleOpen}
-                />
-            </X2EAppDetails.Container>
-        </X2EAppWithDetails>
-    )
-})
+        const isOpen = openItemId === dapp.id
+
+        return (
+            <X2EAppWithDetails
+                name={dapp.name}
+                icon={logoUrl}
+                desc={dapp.description}
+                categories={categoryDisplayNames}
+                isFavorite={isBookMarked}
+                onToggleFavorite={toggleBookmark}
+                itemId={dapp.id}
+                isOpen={isOpen}
+                onToggleOpen={onToggleOpenItem}>
+                <X2EAppDetails.Container>
+                    <X2EAppDetails.Description>{dapp.description}</X2EAppDetails.Description>
+                    <X2EAppDetails.Stats />
+                    <X2EAppDetails.Actions
+                        onAddToFavorites={toggleBookmark}
+                        isFavorite={isBookMarked}
+                        onOpen={handleOpen}
+                    />
+                </X2EAppDetails.Container>
+            </X2EAppWithDetails>
+        )
+    },
+)
 
 const styles = StyleSheet.create({
     flatListPadding: { paddingBottom: 24, paddingTop: 32, paddingHorizontal: 24 },
@@ -138,8 +164,13 @@ type X2EAppsBottomSheetProps = {
 
 export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(({ onDismiss }, ref) => {
     const theme = useTheme()
+    const [openItemId, setOpenItemId] = useState<string | null>(null)
 
     const { selectedCategory, setSelectedCategory, filteredApps, isLoading } = useX2ECategoryFiltering()
+
+    const handleToggleOpenItem = useCallback((itemId: string) => {
+        setOpenItemId(prevId => (prevId === itemId ? null : itemId))
+    }, [])
 
     return (
         <BaseBottomSheet
@@ -159,7 +190,13 @@ export const X2EAppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBot
                 <BaseSpacer height={32} />
                 <X2ECategoryFilters selectedCategory={selectedCategory} onCategoryChange={setSelectedCategory} />
             </BaseView>
-            <X2EAppsList apps={filteredApps} isLoading={isLoading} onDismiss={onDismiss} />
+            <X2EAppsList
+                apps={filteredApps}
+                isLoading={isLoading}
+                onDismiss={onDismiss}
+                openItemId={openItemId}
+                onToggleOpenItem={handleToggleOpenItem}
+            />
         </BaseBottomSheet>
     )
 })
