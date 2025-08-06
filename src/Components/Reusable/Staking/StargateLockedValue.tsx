@@ -15,10 +15,10 @@ type Props = {
     isLoading: boolean
     nfts: Pick<NftData, "vetAmountStaked">[] | undefined
     rootStyle?: StyleProp<ViewStyle>
-    isManager: boolean
+    isNodeOwner: boolean
 }
 
-export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isManager }: Props) => {
+export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isNodeOwner }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
@@ -41,7 +41,7 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isManager
     }, [totalLockedVet.toString, vetTokenInfo.exchangeRate])
 
     const renderLockedValue = useMemo(() => {
-        if (isManager) {
+        if (!isNodeOwner) {
             return (
                 <BaseView style={styles.tagContainer}>
                     <BaseText typographyFont="smallCaptionMedium" color={theme.colors.stakedCard.tagText}>
@@ -65,7 +65,7 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isManager
             />
         )
     }, [
-        isManager,
+        isNodeOwner,
         LL,
         isBalanceVisible,
         vetTokenInfo.exchangeRateLoading,
