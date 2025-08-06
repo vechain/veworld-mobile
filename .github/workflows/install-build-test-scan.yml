@@ -10,6 +10,11 @@ on:
   pull_request:
     branches:
       - "*"
+
+  pull_request_review:
+    types: [submitted]
+    branches:
+      - "*"
   push:
     branches:
       - main
@@ -22,13 +27,13 @@ jobs:
   # defer build-and-test-<OS> until after approval 
   build-and-test-ios:
     if: >-
-      github.event_name != 'pull_request' 
+      github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
     uses: ./.github/workflows/e2e-ios.yml
     secrets: inherit
 
   build-and-test-android:
     if: >-
-      github.event_name != 'pull_request' 
+      github.event_name == 'pull_request_review' && github.event.review.state == 'approved'
     uses: ./.github/workflows/e2e-android.yml
     secrets: inherit
 
