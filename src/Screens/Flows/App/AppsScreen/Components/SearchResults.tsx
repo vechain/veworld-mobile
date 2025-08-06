@@ -113,9 +113,11 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                             name="icon-disconnect"
                             style={styles.errorIcon}
                             size={32}
-                            color={theme.colors.emptyStateIcon.foreground}
+                            color={theme.colors.history.historyItem.iconColor}
                         />
-                        <BaseText testID="search-results-address-error">{LL.BROWSER_HISTORY_ADDRESS_ERROR()}</BaseText>
+                        <BaseText testID="search-results-address-error" color={theme.colors.history.emptyStateColor}>
+                            {LL.BROWSER_HISTORY_ADDRESS_ERROR()}
+                        </BaseText>
                     </BaseView>
                 </BaseView>
             </Animated.ScrollView>
@@ -130,9 +132,11 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                             name="icon-search"
                             style={styles.errorIcon}
                             size={32}
-                            color={theme.colors.emptyStateIcon.foreground}
+                            color={theme.colors.history.historyItem.iconColor}
                         />
-                        <BaseText testID="search-no-results-title">{LL.BROWSER_HISTORY_NO_RESULTS()}</BaseText>
+                        <BaseText testID="search-no-results-title" color={theme.colors.history.emptyStateColor}>
+                            {LL.BROWSER_HISTORY_NO_RESULTS()}
+                        </BaseText>
                     </BaseView>
                 </BaseView>
             </Animated.View>
@@ -182,7 +186,7 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                             size={32}
                             color={theme.colors.history.historyItem.iconColor}
                         />
-                        <BaseText testID="search-results-empty-title" color={theme.colors.history.historyItem.title}>
+                        <BaseText testID="search-results-empty-title" color={theme.colors.history.emptyStateColor}>
                             {LL.BROWSER_HISTORY_EMPTY()}
                         </BaseText>
                     </BaseView>

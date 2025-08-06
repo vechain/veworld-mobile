@@ -234,6 +234,7 @@ export type Colors = {
             subtitle: string
             rightIconColor: string
         }
+        emptyStateColor: string
     }
 }
 
@@ -570,6 +571,7 @@ const light: Colors = {
             subtitle: COLORS.GREY_500,
             rightIconColor: COLORS.GREY_400,
         },
+        emptyStateColor: COLORS.GREY_600,
     },
 }
 
@@ -809,6 +811,7 @@ const dark: Colors = {
             subtitle: COLORS.GREY_400,
             rightIconColor: COLORS.GREY_400,
         },
+        emptyStateColor: COLORS.WHITE,
     },
 }
 
