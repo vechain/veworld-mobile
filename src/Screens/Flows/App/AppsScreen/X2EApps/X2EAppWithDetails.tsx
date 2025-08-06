@@ -15,7 +15,13 @@ import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { X2EAppDetails } from "./X2EAppDetails"
-import { ANIMATION_TIMING, SMOOTH_EASING, PRESS_SPRING_CONFIG, CONTENT_TIMING_CONFIG } from "./AnimationConstants"
+import {
+    ANIMATION_TIMING,
+    SMOOTH_EASING,
+    PRESS_SPRING_CONFIG,
+    CONTENT_TIMING_CONFIG,
+    LAYOUT_TRANSITION,
+} from "./AnimationConstants"
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
@@ -123,11 +129,11 @@ export const X2EAppWithDetails = React.memo(
         const fontStyle = useAnimatedStyle(() => {
             const fontSize = interpolate(animationProgress.value, [0, 1], [15, 17])
 
-            const fontWeight = interpolate(animationProgress.value, [0, 1], [500, 600])
+            const fontWeight = Math.round(interpolate(animationProgress.value, [0, 1], [500, 600])) as 500 | 600
 
             return {
                 fontSize,
-                fontWeight: `${fontWeight}` as any,
+                fontWeight,
             }
         })
 
@@ -192,7 +198,7 @@ export const X2EAppWithDetails = React.memo(
         return (
             <AnimatedBaseView
                 flexDirection="column"
-                layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}
+                layout={LAYOUT_TRANSITION}
                 style={[styles.mainContainer, containerStyle]}>
                 <Animated.View style={pressAnimationStyle}>
                     <TouchableOpacity

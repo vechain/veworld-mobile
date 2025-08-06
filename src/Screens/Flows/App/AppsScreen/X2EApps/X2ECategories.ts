@@ -28,24 +28,24 @@ export const useX2ECategories: () => {
             {
                 id: X2ECategoryType.NUTRITION,
                 displayName: LL.APP_CATEGORY_FOOD_AND_DRINK(),
-                icon: "icon-salad" as IconKey,
+                icon: "icon-salad",
             },
             {
                 id: X2ECategoryType.PLASTIC_WASTE_RECYCLING,
                 displayName: LL.APP_CATEGORY_RECYCLING(),
-                icon: "icon-recycle" as IconKey,
+                icon: "icon-recycle",
             },
             {
                 id: X2ECategoryType.RENEWABLE_ENERGY_EFFICIENCY,
                 displayName: LL.APP_CATEGORY_ENERGY(),
-                icon: "icon-plug" as IconKey,
+                icon: "icon-plug",
             },
             {
                 id: X2ECategoryType.SUSTAINABLE_SHOPPING,
                 displayName: LL.APP_CATEGORY_SHOPPING(),
-                icon: "icon-shopping-bag" as IconKey,
+                icon: "icon-shopping-bag",
             },
-            { id: X2ECategoryType.PETS, displayName: LL.APP_CATEGORY_PETS(), icon: "icon-cat" as IconKey },
+            { id: X2ECategoryType.PETS, displayName: LL.APP_CATEGORY_PETS(), icon: "icon-cat" },
         ],
         [LL],
     )

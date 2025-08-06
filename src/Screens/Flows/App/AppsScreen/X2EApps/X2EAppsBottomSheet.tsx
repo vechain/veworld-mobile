@@ -2,7 +2,7 @@ import React, { forwardRef, useCallback, useMemo } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet, BaseSpacer, BaseView, BaseSkeleton, BaseText, BaseIcon } from "~Components"
+import { BaseBottomSheet, BaseSpacer, BaseView, BaseText, BaseIcon } from "~Components"
 import { AnalyticsEvent } from "~Constants"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
@@ -16,39 +16,9 @@ import { X2EAppDetails } from "./X2EAppDetails"
 import { X2ECategoryFilters } from "./X2ECategoryFilters"
 import { useX2ECategoryFiltering } from "./useX2ECategoryFiltering"
 import { useX2ECategories } from "./X2ECategories"
+import { X2EAppSkeleton } from "./X2EAppSkeleton"
 
 type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
-
-const X2EAppSkeleton = React.memo(() => {
-    const theme = useTheme()
-
-    return (
-        <BaseSkeleton
-            animationDirection="horizontalLeft"
-            boneColor={theme.colors.skeletonBoneColor}
-            highlightColor={theme.colors.skeletonHighlightColor}
-            layout={[
-                {
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 24,
-                    children: [
-                        { width: 64, height: 64, borderRadius: 8 },
-                        {
-                            flexDirection: "column",
-                            gap: 8,
-                            flex: 1,
-                            children: [
-                                { width: "70%", height: 17, borderRadius: 4 },
-                                { width: "90%", height: 14, borderRadius: 4 },
-                            ],
-                        },
-                    ],
-                },
-            ]}
-        />
-    )
-})
 
 type X2EAppsListProps = {
     apps: X2EDapp[]
