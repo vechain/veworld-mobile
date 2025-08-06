@@ -21,6 +21,11 @@ describe("useBrowserScreenshot", () => {
         ;(captureRef as jest.Mock).mockReturnValue("URI")
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
             isDapp: true,
+            dappMetadata: {
+                name: "VeChain",
+                icon: "https://vechain.org/favicon.ico",
+                url: "https://vechain.org",
+            },
             navigationState: {
                 url: "https://vechain.org",
             },
@@ -38,7 +43,16 @@ describe("useBrowserScreenshot", () => {
                         hasOpenedDiscovery: false,
                         tabsManager: {
                             currentTabId: "TEST_ID",
-                            tabs: [{ href: "https://vechain.org", id: "TEST_ID", title: "TEST" }],
+                            tabs: [
+                                {
+                                    href: "https://vechain.org",
+                                    id: "TEST_ID",
+                                    title: "TEST",
+                                    favicon:
+                                        // eslint-disable-next-line max-len
+                                        "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=32&&url=https://vechain.org",
+                                },
+                            ],
                         },
                     },
                 },
@@ -53,13 +67,20 @@ describe("useBrowserScreenshot", () => {
             await result.current.performScreenshot()
         })
 
-        expect(updateTab).toHaveBeenCalledWith({ id: "TEST_ID", preview: "URI" })
+        expect(updateTab).toHaveBeenCalledWith({
+            id: "TEST_ID",
+            preview: "URI",
+            favicon:
+                // eslint-disable-next-line max-len
+                "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=32&&url=https://vechain.org",
+        })
     })
 
     it("should set the title if it is not a dapp", async () => {
         ;(captureRef as jest.Mock).mockReturnValue("URI")
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
             isDapp: false,
+            dappMetadata: undefined,
             navigationState: {
                 url: "https://vechain.org",
                 title: "NAV STATE TITLE",
@@ -78,7 +99,16 @@ describe("useBrowserScreenshot", () => {
                         hasOpenedDiscovery: false,
                         tabsManager: {
                             currentTabId: "TEST_ID",
-                            tabs: [{ href: "https://vechain.org", id: "TEST_ID", title: "TEST" }],
+                            tabs: [
+                                {
+                                    href: "https://vechain.org",
+                                    id: "TEST_ID",
+                                    title: "TEST",
+                                    favicon:
+                                        // eslint-disable-next-line max-len
+                                        "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=32&&url=https://vechain.org",
+                                },
+                            ],
                         },
                     },
                 },
@@ -93,6 +123,13 @@ describe("useBrowserScreenshot", () => {
             await result.current.performScreenshot()
         })
 
-        expect(updateTab).toHaveBeenCalledWith({ id: "TEST_ID", preview: "URI", title: "NAV STATE TITLE" })
+        expect(updateTab).toHaveBeenCalledWith({
+            id: "TEST_ID",
+            preview: "URI",
+            title: "NAV STATE TITLE",
+            favicon:
+                // eslint-disable-next-line max-len
+                "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=32&&url=https://vechain.org",
+        })
     })
 })

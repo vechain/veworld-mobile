@@ -24,14 +24,14 @@ export const useBrowserScreenshot = () => {
 
             const favicon = navigationState?.url
                 ? `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(navigationState?.url).origin}`
-                : undefined
+                : ""
 
             dispatch(
                 updateTab({
                     id: selectedTabId,
                     preview: uri,
-                    favicon,
                     ...(!isDapp && { title: navigationState?.title }),
+                    favicon,
                 }),
             )
 

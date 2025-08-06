@@ -6,7 +6,7 @@ import { useVisitedUrls } from "~Hooks/useBrowserSearch"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { DAppUtils } from "~Utils"
 import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
-import { useDAppActions } from "../../DiscoverScreen/Hooks"
+import { useDAppActions } from "../Hooks"
 
 type Props = {
     item: HistoryItem

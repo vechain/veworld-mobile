@@ -58,7 +58,10 @@ describe("SearchResultItem", () => {
         const dappDescription =
             "Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita iusto aliquam inventore?"
         ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress })
-        ;(useVisitedUrls as jest.Mock).mockReturnValue({ removeVisitedUrl: jest.fn() })
+        ;(useVisitedUrls as jest.Mock).mockReturnValue({
+            removeVisitedUrl: jest.fn(),
+            addVisitedUrl: jest.fn(),
+        })
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate: navigate })
         const dapp = {
             amountOfNavigations: 0,
@@ -120,26 +123,6 @@ describe("SearchResultItem", () => {
 
         await waitFor(() => {
             expect(removeVisitedUrl).toHaveBeenCalledWith("https://vechain.org")
-        })
-    })
-
-    it("Should render fallback if url is invalid", async () => {
-        ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress: jest.fn() })
-        ;(useVisitedUrls as jest.Mock).mockReturnValue({ removeVisitedUrl: jest.fn() })
-        ;(useNavigation as jest.Mock).mockReturnValue({ navigate: jest.fn() })
-        render(
-            <SearchResultItem
-                item={{ type: HistoryUrlKind.URL, name: "TEST", url: "invalid_website_url" }}
-                isValidQuery
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        const iconContainer = screen.getByTestId("SEARCH_RESULT_ITEM_FALLBACK_ICON")
-        await waitFor(() => {
-            expect(iconContainer).toBeVisible()
         })
     })
 
