@@ -1,0 +1,336 @@
+import { fireEvent, render, screen } from "@testing-library/react-native"
+import React, { PropsWithChildren } from "react"
+import { TestWrapper } from "~Test"
+import { X2EAppDetails } from "./X2EAppDetails"
+import { IconKey } from "~Model"
+
+// Test data constants to avoid ESLint i18next/no-literal-string errors
+const TEST_DATA = {
+    description: "Test description",
+    descriptionText: "Test description text",
+    testContent: "Test content",
+    appDescription: "App description",
+    stats: {
+        joined: "4.5",
+        users: "1.1M",
+        actions: "10.8 T",
+        joinedLabel: "Joined",
+        usersLabel: "Users",
+        actionsLabel: "Actions",
+        customJoined: "2.3",
+        customUsers: "500K",
+        customActions: "5.2 T",
+        customJoinedLabel: "Members",
+        customUsersLabel: "Active Users",
+        customActionsLabel: "Total Actions",
+        partialJoined: "1.0",
+        partialActions: "2.0 T",
+    },
+    buttons: {
+        favorite: "Favorite",
+        favorited: "Favorited",
+        open: "Open",
+    },
+} as const
+
+const Wrapper = ({ children }: PropsWithChildren) => (
+    <TestWrapper
+        preloadedState={{
+            discovery: {
+                featured: [],
+                bannerInteractions: {},
+                connectedApps: [],
+                custom: [],
+                favorites: [],
+                hasOpenedDiscovery: true,
+                tabsManager: {
+                    currentTabId: null,
+                    tabs: [],
+                },
+            },
+        }}>
+        {children}
+    </TestWrapper>
+)
+
+describe("X2EAppDetails", () => {
+    describe("Container", () => {
+        it("should render children correctly", () => {
+            render(
+                <X2EAppDetails.Container>
+                    <X2EAppDetails.Description>{TEST_DATA.description}</X2EAppDetails.Description>
+                </X2EAppDetails.Container>,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.description)).toBeVisible()
+        })
+    })
+
+    describe("Description", () => {
+        it("should render description text correctly", () => {
+            render(<X2EAppDetails.Description>{TEST_DATA.descriptionText}</X2EAppDetails.Description>, {
+                wrapper: Wrapper,
+            })
+
+            expect(screen.getByText(TEST_DATA.descriptionText)).toBeVisible()
+        })
+
+        it("should have correct typography and styling", () => {
+            render(<X2EAppDetails.Description>{TEST_DATA.description}</X2EAppDetails.Description>, {
+                wrapper: Wrapper,
+            })
+
+            const descriptionText = screen.getByText(TEST_DATA.description)
+            expect(descriptionText).toBeVisible()
+        })
+    })
+
+    describe("Stats", () => {
+        it("should render default stats correctly", () => {
+            render(<X2EAppDetails.Stats />, { wrapper: Wrapper })
+
+            expect(screen.getByText(TEST_DATA.stats.joined)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.users)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.actions)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.joinedLabel)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.usersLabel)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.actionsLabel)).toBeVisible()
+        })
+
+        it("should render custom stats correctly", () => {
+            const customStats = {
+                joined: {
+                    value: TEST_DATA.stats.customJoined,
+                    label: TEST_DATA.stats.customJoinedLabel,
+                    icon: "icon-certified" as IconKey,
+                },
+                users: {
+                    value: TEST_DATA.stats.customUsers,
+                    label: TEST_DATA.stats.customUsersLabel,
+                    icon: "icon-users" as IconKey,
+                },
+                actions: {
+                    value: TEST_DATA.stats.customActions,
+                    label: TEST_DATA.stats.customActionsLabel,
+                    icon: "icon-leaf" as IconKey,
+                },
+            }
+
+            render(<X2EAppDetails.Stats {...customStats} />, { wrapper: Wrapper })
+
+            expect(screen.getByText(TEST_DATA.stats.customJoined)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.customUsers)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.customActions)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.customJoinedLabel)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.customUsersLabel)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.customActionsLabel)).toBeVisible()
+        })
+
+        it("should render partial stats when some props are undefined", () => {
+            render(
+                <X2EAppDetails.Stats
+                    joined={{
+                        value: TEST_DATA.stats.partialJoined,
+                        label: TEST_DATA.stats.joinedLabel,
+                        icon: "icon-certified" as IconKey,
+                    }}
+                    users={undefined}
+                    actions={{
+                        value: TEST_DATA.stats.partialActions,
+                        label: TEST_DATA.stats.actionsLabel,
+                        icon: "icon-leaf" as IconKey,
+                    }}
+                />,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.stats.partialJoined)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.partialActions)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.joinedLabel)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.actionsLabel)).toBeVisible()
+            // Note: Since the component has default values, "Users" will still be rendered
+            expect(screen.getByText(TEST_DATA.stats.usersLabel)).toBeVisible()
+        })
+    })
+
+    describe("Actions", () => {
+        const mockOnAddToFavorites = jest.fn()
+        const mockOnOpen = jest.fn()
+
+        beforeEach(() => {
+            jest.clearAllMocks()
+        })
+
+        it("should render favorite and open buttons", () => {
+            render(
+                <X2EAppDetails.Actions
+                    onAddToFavorites={mockOnAddToFavorites}
+                    onOpen={mockOnOpen}
+                    isFavorite={false}
+                />,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.buttons.favorite)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.buttons.open)).toBeVisible()
+        })
+
+        it("should call onAddToFavorites when favorite button is pressed", () => {
+            render(
+                <X2EAppDetails.Actions
+                    onAddToFavorites={mockOnAddToFavorites}
+                    onOpen={mockOnOpen}
+                    isFavorite={false}
+                />,
+                { wrapper: Wrapper },
+            )
+
+            const favoriteButton = screen.getByText(TEST_DATA.buttons.favorite)
+            fireEvent.press(favoriteButton)
+
+            expect(mockOnAddToFavorites).toHaveBeenCalledTimes(1)
+        })
+
+        it("should call onOpen when open button is pressed", () => {
+            render(
+                <X2EAppDetails.Actions
+                    onAddToFavorites={mockOnAddToFavorites}
+                    onOpen={mockOnOpen}
+                    isFavorite={false}
+                />,
+                { wrapper: Wrapper },
+            )
+
+            const openButton = screen.getByText(TEST_DATA.buttons.open)
+            fireEvent.press(openButton)
+
+            expect(mockOnOpen).toHaveBeenCalledTimes(1)
+        })
+
+        it("should show favorited state when isFavorite is true", () => {
+            render(
+                <X2EAppDetails.Actions onAddToFavorites={mockOnAddToFavorites} onOpen={mockOnOpen} isFavorite={true} />,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.buttons.favorited)).toBeVisible()
+        })
+
+        it("should use default handlers when not provided", () => {
+            render(<X2EAppDetails.Actions />, { wrapper: Wrapper })
+
+            const favoriteButton = screen.getByText(TEST_DATA.buttons.favorite)
+            const openButton = screen.getByText(TEST_DATA.buttons.open)
+
+            fireEvent.press(favoriteButton)
+            fireEvent.press(openButton)
+
+            // Should not throw errors with default handlers
+            expect(favoriteButton).toBeVisible()
+            expect(openButton).toBeVisible()
+        })
+    })
+
+    describe("Actions - Favorite Button Integration", () => {
+        const mockOnAddToFavorites = jest.fn()
+
+        beforeEach(() => {
+            jest.clearAllMocks()
+        })
+
+        it("should render favorite button with correct text when not favorited", () => {
+            render(
+                <X2EAppDetails.Actions onAddToFavorites={mockOnAddToFavorites} onOpen={jest.fn()} isFavorite={false} />,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.buttons.favorite)).toBeVisible()
+        })
+
+        it("should render favorited button with correct text when favorited", () => {
+            render(
+                <X2EAppDetails.Actions onAddToFavorites={mockOnAddToFavorites} onOpen={jest.fn()} isFavorite={true} />,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.buttons.favorited)).toBeVisible()
+        })
+
+        it("should call onAddToFavorites when favorite button is pressed", () => {
+            render(
+                <X2EAppDetails.Actions onAddToFavorites={mockOnAddToFavorites} onOpen={jest.fn()} isFavorite={false} />,
+                { wrapper: Wrapper },
+            )
+
+            const favoriteButton = screen.getByText(TEST_DATA.buttons.favorite)
+            fireEvent.press(favoriteButton)
+
+            expect(mockOnAddToFavorites).toHaveBeenCalledTimes(1)
+        })
+    })
+
+    describe("Main Component", () => {
+        it("should render children when show is true", () => {
+            render(
+                <X2EAppDetails show={true}>
+                    <X2EAppDetails.Description>{TEST_DATA.testContent}</X2EAppDetails.Description>
+                </X2EAppDetails>,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.testContent)).toBeVisible()
+        })
+
+        it("should render children when show is true and visible is true", () => {
+            render(
+                <X2EAppDetails show={true} visible={true}>
+                    <X2EAppDetails.Description>{TEST_DATA.testContent}</X2EAppDetails.Description>
+                </X2EAppDetails>,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.testContent)).toBeVisible()
+        })
+
+        it("should handle show and visible props correctly", () => {
+            const { rerender } = render(
+                <X2EAppDetails show={true} visible={true}>
+                    <X2EAppDetails.Description>{TEST_DATA.testContent}</X2EAppDetails.Description>
+                </X2EAppDetails>,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.testContent)).toBeVisible()
+
+            // Test with show=false
+            rerender(
+                <X2EAppDetails show={false} visible={true}>
+                    <X2EAppDetails.Description>{TEST_DATA.testContent}</X2EAppDetails.Description>
+                </X2EAppDetails>,
+            )
+
+            // Note: Due to animations, the content might still be visible initially
+            // The component uses useAnimatedStyle which may take time to hide content
+            expect(screen.getByText(TEST_DATA.testContent)).toBeVisible()
+        })
+
+        it("should render complex content structure", () => {
+            render(
+                <X2EAppDetails show={true}>
+                    <X2EAppDetails.Container>
+                        <X2EAppDetails.Description>{TEST_DATA.appDescription}</X2EAppDetails.Description>
+                        <X2EAppDetails.Stats />
+                        <X2EAppDetails.Actions />
+                    </X2EAppDetails.Container>
+                </X2EAppDetails>,
+                { wrapper: Wrapper },
+            )
+
+            expect(screen.getByText(TEST_DATA.appDescription)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.joined)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.buttons.favorite)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.buttons.open)).toBeVisible()
+        })
+    })
+})

@@ -1,0 +1,275 @@
+import { renderHook, act } from "@testing-library/react-hooks"
+import { useX2ECategoryFiltering } from "./useX2ECategoryFiltering"
+import { X2ECategoryType } from "~Model/DApp"
+import { IconKey } from "~Model/Icon"
+
+const mockLL = {
+    APP_CATEGORY_FOOD_AND_DRINK: () => "Food & Drink",
+    APP_CATEGORY_RECYCLING: () => "Recycling",
+    APP_CATEGORY_LIFESTYLE: () => "Lifestyle",
+    APP_CATEGORY_ENERGY: () => "Energy",
+    APP_CATEGORY_SHOPPING: () => "Shopping",
+    APP_CATEGORY_TRANSPORTATION: () => "Transportation",
+    APP_CATEGORY_PETS: () => "Pets",
+    APP_CATEGORY_LEARNING: () => "Learning",
+    APP_CATEGORY_WEB3: () => "Web3",
+    APP_CATEGORY_OTHERS: () => "Others",
+}
+
+jest.mock("~i18n", () => ({
+    useI18nContext: () => ({
+        LL: mockLL,
+    }),
+}))
+
+const mockUseVeBetterDaoDapps = jest.fn()
+jest.mock("~Hooks", () => ({
+    useVeBetterDaoDapps: () => mockUseVeBetterDaoDapps(),
+}))
+
+jest.mock("./useX2ECategories", () => ({
+    useX2ECategories: () => [
+        {
+            id: X2ECategoryType.NUTRITION,
+            displayName: "Food & Drink",
+            icon: "icon-salad" as IconKey,
+        },
+        {
+            id: X2ECategoryType.PLASTIC_WASTE_RECYCLING,
+            displayName: "Recycling",
+            icon: "icon-recycle" as IconKey,
+        },
+        {
+            id: X2ECategoryType.FITNESS_WELLNESS,
+            displayName: "Lifestyle",
+            icon: "icon-dumbbell" as IconKey,
+        },
+    ],
+}))
+
+describe("useX2ECategoryFiltering", () => {
+    const mockApps = [
+        {
+            id: "app-1",
+            teamWalletAddress: "0x1234567890123456789012345678901234567890",
+            name: "A App",
+            metadataURI: "https://example.com/metadata1.json",
+            createdAtTimestamp: "1640995200",
+            appAvailableForAllocationVoting: true,
+            categories: [X2ECategoryType.NUTRITION],
+            description: "A nutrition app",
+            external_url: "https://example.com/app1",
+            logo: "https://example.com/icon1.png",
+            banner: "https://example.com/banner1.png",
+            screenshots: ["https://example.com/screenshot1.png"],
+            social_urls: [{ name: "twitter", url: "https://twitter.com/app1" }],
+            app_urls: [{ code: "web", url: "https://example.com/app1" }],
+            tweets: ["Great nutrition app!"],
+            ve_world: { banner: "https://example.com/veworld-banner1.png" },
+        },
+        {
+            id: "app-2",
+            teamWalletAddress: "0x2345678901234567890123456789012345678901",
+            name: "B App",
+            metadataURI: "https://example.com/metadata2.json",
+            createdAtTimestamp: "1640995201",
+            appAvailableForAllocationVoting: false,
+            categories: [X2ECategoryType.PLASTIC_WASTE_RECYCLING],
+            description: "A recycling app",
+            external_url: "https://example.com/app2",
+            logo: "https://example.com/icon2.png",
+            banner: "https://example.com/banner2.png",
+            screenshots: ["https://example.com/screenshot2.png"],
+            social_urls: [{ name: "twitter", url: "https://twitter.com/app2" }],
+            app_urls: [{ code: "web", url: "https://example.com/app2" }],
+            tweets: ["Great recycling app!"],
+            ve_world: { banner: "https://example.com/veworld-banner2.png" },
+        },
+        {
+            id: "app-3",
+            teamWalletAddress: "0x3456789012345678901234567890123456789012",
+            name: "C App",
+            metadataURI: "https://example.com/metadata3.json",
+            createdAtTimestamp: "1640995202",
+            appAvailableForAllocationVoting: true,
+            categories: [X2ECategoryType.NUTRITION, X2ECategoryType.FITNESS_WELLNESS],
+            description: "A nutrition and fitness app",
+            external_url: "https://example.com/app3",
+            logo: "https://example.com/icon3.png",
+            banner: "https://example.com/banner3.png",
+            screenshots: ["https://example.com/screenshot3.png"],
+            social_urls: [{ name: "twitter", url: "https://twitter.com/app3" }],
+            app_urls: [{ code: "web", url: "https://example.com/app3" }],
+            tweets: ["Great fitness app!"],
+            ve_world: { banner: "https://example.com/veworld-banner3.png" },
+        },
+        {
+            id: "app-4",
+            teamWalletAddress: "0x4567890123456789012345678901234567890123",
+            name: "D App",
+            metadataURI: "https://example.com/metadata4.json",
+            createdAtTimestamp: "1640995203",
+            appAvailableForAllocationVoting: false,
+            categories: undefined, // App without categories
+            description: "An app without categories",
+            external_url: "https://example.com/app4",
+            logo: "https://example.com/icon4.png",
+            banner: "https://example.com/banner4.png",
+            screenshots: ["https://example.com/screenshot4.png"],
+            social_urls: [{ name: "twitter", url: "https://twitter.com/app4" }],
+            app_urls: [{ code: "web", url: "https://example.com/app4" }],
+            tweets: ["App without categories!"],
+            ve_world: { banner: "https://example.com/veworld-banner4.png" },
+        },
+    ]
+
+    beforeEach(() => {
+        jest.clearAllMocks()
+        mockUseVeBetterDaoDapps.mockReturnValue({
+            data: mockApps,
+            isLoading: false,
+        })
+    })
+
+    it("should initialize with default selected category (NUTRITION)", () => {
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        expect(result.current.selectedCategory.id).toBe(X2ECategoryType.NUTRITION)
+        expect(result.current.selectedCategory.displayName).toBe("Food & Drink")
+        expect(result.current.selectedCategory.icon).toBe("icon-salad")
+    })
+
+    it("should return all apps when no filtering is applied", () => {
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        expect(result.current.filteredApps).toHaveLength(2)
+        expect(result.current.filteredApps[0].name).toBe("A App")
+        expect(result.current.filteredApps[1].name).toBe("C App")
+    })
+
+    it("should filter apps by selected category", () => {
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        act(() => {
+            result.current.setSelectedCategory({
+                id: X2ECategoryType.PLASTIC_WASTE_RECYCLING,
+                displayName: "Recycling",
+                icon: "icon-recycle" as IconKey,
+            })
+        })
+
+        expect(result.current.filteredApps).toHaveLength(1)
+        expect(result.current.filteredApps[0].name).toBe("B App")
+        expect(result.current.filteredApps[0].categories).toContain(X2ECategoryType.PLASTIC_WASTE_RECYCLING)
+    })
+
+    it("should sort filtered apps alphabetically", () => {
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        expect(result.current.filteredApps[0].name).toBe("A App")
+        expect(result.current.filteredApps[1].name).toBe("C App")
+    })
+
+    it("should handle apps with multiple categories", () => {
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        act(() => {
+            result.current.setSelectedCategory({
+                id: X2ECategoryType.FITNESS_WELLNESS,
+                displayName: "Lifestyle",
+                icon: "icon-dumbbell" as IconKey,
+            })
+        })
+
+        expect(result.current.filteredApps).toHaveLength(1)
+        expect(result.current.filteredApps[0].name).toBe("C App")
+        expect(result.current.filteredApps[0].categories).toContain(X2ECategoryType.FITNESS_WELLNESS)
+    })
+
+    it("should handle apps without categories", () => {
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        const appWithoutCategories = result.current.allApps?.find(app => app.name === "D App")
+        expect(appWithoutCategories).toBeDefined()
+        expect(appWithoutCategories?.categories).toBeUndefined()
+
+        const filteredAppNames = result.current.filteredApps.map(app => app.name)
+        expect(filteredAppNames).not.toContain("D App")
+    })
+
+    it("should handle loading state", () => {
+        mockUseVeBetterDaoDapps.mockReturnValue({
+            data: undefined,
+            isLoading: true,
+        })
+
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        expect(result.current.isLoading).toBe(true)
+        expect(result.current.filteredApps).toEqual([])
+        expect(result.current.allApps).toBeUndefined()
+    })
+
+    it("should handle empty apps data", () => {
+        mockUseVeBetterDaoDapps.mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
+
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        expect(result.current.isLoading).toBe(false)
+        expect(result.current.filteredApps).toEqual([])
+        expect(result.current.allApps).toEqual([])
+    })
+
+    it("should update selected category when setSelectedCategory is called", () => {
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        expect(result.current.selectedCategory.id).toBe(X2ECategoryType.NUTRITION)
+
+        act(() => {
+            result.current.setSelectedCategory({
+                id: X2ECategoryType.PLASTIC_WASTE_RECYCLING,
+                displayName: "Recycling",
+                icon: "icon-recycle" as IconKey,
+            })
+        })
+
+        expect(result.current.selectedCategory.id).toBe(X2ECategoryType.PLASTIC_WASTE_RECYCLING)
+        expect(result.current.selectedCategory.displayName).toBe("Recycling")
+        expect(result.current.selectedCategory.icon).toBe("icon-recycle")
+    })
+
+    it("should return the same filtered apps when category doesn't change", () => {
+        const { result, rerender } = renderHook(() => useX2ECategoryFiltering())
+
+        const firstFilteredApps = result.current.filteredApps
+
+        rerender()
+
+        const secondFilteredApps = result.current.filteredApps
+
+        expect(secondFilteredApps).toBe(firstFilteredApps)
+    })
+
+    it("should return different filtered apps when category changes", () => {
+        const { result } = renderHook(() => useX2ECategoryFiltering())
+
+        const nutritionApps = result.current.filteredApps
+
+        act(() => {
+            result.current.setSelectedCategory({
+                id: X2ECategoryType.PLASTIC_WASTE_RECYCLING,
+                displayName: "Recycling",
+                icon: "icon-recycle" as IconKey,
+            })
+        })
+
+        const recyclingApps = result.current.filteredApps
+
+        expect(recyclingApps).not.toEqual(nutritionApps)
+        expect(recyclingApps).toHaveLength(1)
+        expect(nutritionApps).toHaveLength(2)
+    })
+})

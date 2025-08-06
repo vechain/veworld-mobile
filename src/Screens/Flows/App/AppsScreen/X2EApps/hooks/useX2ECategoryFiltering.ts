@@ -1,9 +1,9 @@
 import { useState, useMemo } from "react"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
-import { useX2ECategories } from "./X2ECategories"
 import { X2ECategoryType } from "~Model/DApp"
 import { IconKey } from "~Model/Icon"
 import { useVeBetterDaoDapps } from "~Hooks"
+import { useX2ECategories } from "./useX2ECategories"
 
 type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
 

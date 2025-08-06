@@ -5,7 +5,7 @@ import { BaseView } from "~Components/Base/BaseView"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { SPRING_CONFIG, TIMING_CONFIG, LAYOUT_TRANSITION } from "./AnimationConstants"
+import { SPRING_CONFIG, TIMING_CONFIG, LAYOUT_TRANSITION } from "../AnimationConstants"
 import { IconKey } from "~Model"
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
