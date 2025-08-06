@@ -25,6 +25,7 @@ import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
 import { LedgerDeviceAlert } from "./LedgerDeviceAlert"
 import { Renderer } from "./Renderer"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     request: TypeDataRequest
@@ -113,7 +114,7 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                 )}
             </DappDetailsCard>
             <BaseSpacer height={24} />
-            <BaseView flexDirection="row" gap={16}>
+            <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"
