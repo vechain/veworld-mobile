@@ -376,6 +376,10 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
+	 * A​p​p​s
+	 */
+	APPS_SCREEN_TITLE: string
+	/**
 	 * A​p​p​ ​u​p​d​a​t​e​d
 	 */
 	APP_UPDATED: string
@@ -1072,6 +1076,10 @@ type RootTranslation = {
 	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
 	 */
 	BROWSER_HISTORY_No_RECORDS: string
+	/**
+	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d
+	 */
+	BROWSER_HISTORY_NO_RESULTS: string
 	/**
 	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
 	 * @param {number} amount
@@ -2251,10 +2259,6 @@ type RootTranslation = {
 	 * S​E​A​R​C​H​ ​T​H​E​ ​W​E​B
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
-	/**
-	 * A​p​p​s
-	 */
-	APPS_SCREEN_TITLE: string
 	/**
 	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
 	 */
@@ -4908,6 +4912,10 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
+	 * Apps
+	 */
+	APPS_SCREEN_TITLE: () => LocalizedString
+	/**
 	 * App updated
 	 */
 	APP_UPDATED: () => LocalizedString
@@ -5597,6 +5605,10 @@ Thanks for your patience!
 	 * No History Available
 	 */
 	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
+	/**
+	 * No results found
+	 */
+	BROWSER_HISTORY_NO_RESULTS: () => LocalizedString
 	/**
 	 * {amount} Results
 	 */
@@ -6765,10 +6777,6 @@ Thanks for your patience!
 	 * SEARCH THE WEB
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
-	/**
-	 * Apps
-	 */
-	APPS_SCREEN_TITLE: () => LocalizedString
 	/**
 	 * Don't see your NFTs?
 	 */

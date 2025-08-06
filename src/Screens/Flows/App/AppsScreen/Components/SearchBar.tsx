@@ -41,6 +41,7 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
         if (filteredSearch.length === 0) return undefined
         return (
             <BaseButton
+                testID="search-bar-clear-button"
                 size="sm"
                 variant="ghost"
                 leftIcon={<BaseIcon name="icon-x" size={16} color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600} />}
@@ -57,6 +58,7 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
 
     return (
         <BaseTextInput
+            testID="search-bar-input"
             placeholder={LL.DISCOVER_SEARCH()}
             placeholderTextColor={COLORS.GREY_400}
             cursorColor={COLORS.GREY_300}

@@ -253,6 +253,7 @@
   "BROWSER_HISTORY_FOUND": "Found",
   "BROWSER_HISTORY_MORE_RESULTS": "More results",
   "BROWSER_HISTORY_No_RECORDS": "No History Available",
+  "BROWSER_HISTORY_NO_RESULTS": "No results found",
   "BROWSER_HISTORY_RESULTS": "{amount:number} Results",
   "BROWSER_HISTORY_SEARCH_PLACEHOLDER": "Search",
   "BROWSER_HISTORY_TITLE": "Browser History",

@@ -1,5 +1,5 @@
 import { default as React, useCallback, useMemo } from "react"
-import { ListRenderItemInfo, SectionList, StyleSheet } from "react-native"
+import { ListRenderItemInfo, SectionList, SectionListData, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
@@ -14,7 +14,16 @@ type Props = {
     results: { found: HistoryItem[]; others: HistoryItem[] }
     isValidQuery: boolean
 }
-//TODO: section list for more results
+
+type SectionProps = {
+    section: SectionListData<
+        HistoryItem,
+        {
+            data: HistoryItem[]
+            key: string
+        }
+    >
+}
 
 export const SearchResults = ({ error, results, isValidQuery }: Props) => {
     const { LL } = useI18nContext()
@@ -32,6 +41,11 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
 
     const isQueryEmptyWithNoResults = useMemo(
         () => !isValidQuery && results.found.length === 0,
+        [isValidQuery, results.found.length],
+    )
+
+    const isQueryWithNoResults = useMemo(
+        () => isValidQuery && results.found.length === 0,
         [isValidQuery, results.found.length],
     )
 
@@ -53,12 +67,15 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
     )
 
     const renderSectionHeader = useCallback(
-        ({ section }: { section: { key: string } }) => {
+        ({ section }: SectionProps) => {
             if (!isValidQuery) return <></>
             if (section.key === "found") {
                 return (
                     <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={8}>
-                        <BaseText typographyFont="bodySemiBold" color={theme.colors.history.titleColor}>
+                        <BaseText
+                            testID="search-results-found-title"
+                            typographyFont="bodySemiBold"
+                            color={theme.colors.history.titleColor}>
                             {LL.BROWSER_HISTORY_FOUND()}
                         </BaseText>
                     </BaseView>
@@ -66,7 +83,10 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
             } else if (section.key === "others" && results.others.length > 0) {
                 return (
                     <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={8} mt={24}>
-                        <BaseText typographyFont="bodyMedium" color={theme.colors.history.historyItem.subtitle}>
+                        <BaseText
+                            testID="search-results-more-results-title"
+                            typographyFont="bodyMedium"
+                            color={theme.colors.history.historyItem.subtitle}>
                             {LL.BROWSER_HISTORY_MORE_RESULTS()}
                         </BaseText>
                     </BaseView>
@@ -95,10 +115,27 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                             size={32}
                             color={theme.colors.emptyStateIcon.foreground}
                         />
-                        <BaseText>{LL.BROWSER_HISTORY_ADDRESS_ERROR()}</BaseText>
+                        <BaseText testID="search-results-address-error">{LL.BROWSER_HISTORY_ADDRESS_ERROR()}</BaseText>
                     </BaseView>
                 </BaseView>
             </Animated.ScrollView>
+        )
+
+    if (isQueryWithNoResults)
+        return (
+            <Animated.View style={rootStyles}>
+                <BaseView alignItems="center" justifyContent="center" flexGrow={1}>
+                    <BaseView style={styles.errorContainer}>
+                        <BaseIcon
+                            name="icon-search"
+                            style={styles.errorIcon}
+                            size={32}
+                            color={theme.colors.emptyStateIcon.foreground}
+                        />
+                        <BaseText testID="search-no-results-title">{LL.BROWSER_HISTORY_NO_RESULTS()}</BaseText>
+                    </BaseView>
+                </BaseView>
+            </Animated.View>
         )
 
     return (
@@ -107,11 +144,15 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                 <BaseView justifyContent="space-between" flexDirection="row" alignItems="center" mb={24}>
                     <BaseView flexDirection="row" alignItems="center" gap={8}>
                         <BaseIcon name="icon-history" size={16} color={theme.colors.history.titleColor} />
-                        <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.history.titleColor}>
+                        <BaseText
+                            testID="search-results-default-title"
+                            typographyFont="subSubTitleSemiBold"
+                            color={theme.colors.history.titleColor}>
                             {LL.BROWSER_HISTORY_DEFAULT_TITLE()}
                         </BaseText>
                     </BaseView>
                     <BaseButton
+                        testID="search-results-clear-button"
                         action={onClear}
                         rightIcon={
                             <BaseIcon
@@ -141,7 +182,9 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                             size={32}
                             color={theme.colors.history.historyItem.iconColor}
                         />
-                        <BaseText color={theme.colors.history.historyItem.title}>{LL.BROWSER_HISTORY_EMPTY()}</BaseText>
+                        <BaseText testID="search-results-empty-title" color={theme.colors.history.historyItem.title}>
+                            {LL.BROWSER_HISTORY_EMPTY()}
+                        </BaseText>
                     </BaseView>
                 </BaseView>
             ) : (

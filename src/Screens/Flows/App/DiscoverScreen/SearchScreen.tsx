@@ -13,6 +13,10 @@ export const SearchScreen = () => {
     const { results, isValidQuery } = useBrowserSearch(search)
     const { navigateToBrowser } = useBrowserNavigation()
 
+    const allResults = useMemo(() => {
+        return results.found.concat(results.others)
+    }, [results])
+
     const onSearchUpdated = useCallback(
         (value: string) => {
             if (typeof error !== "undefined") setError(undefined)
@@ -47,7 +51,7 @@ export const SearchScreen = () => {
             fixedHeader={renderHeader}
             fixedBody={
                 <BaseView style={[styles.rootContainer]}>
-                    <SearchResults error={error} results={results} isValidQuery={isValidQuery} />
+                    <SearchResults error={error} results={allResults} isValidQuery={isValidQuery} />
                 </BaseView>
             }
         />

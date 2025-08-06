@@ -19,6 +19,7 @@ type Props = {
 
 type BottomSheetActionSeparator = {
     type: "separator"
+    id: string
 }
 
 type BottomSheetAction = {
@@ -108,6 +109,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             },
             {
                 type: "separator",
+                id: "separator-1",
             },
             {
                 type: "action",
@@ -168,7 +170,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 w={100}
                 onLayout={e => calculateActionContainerHeight(e.nativeEvent.layout.height)}
                 style={styles.actionContainer}>
-                {actions.map((action, idx) =>
+                {actions.map(action =>
                     action.type === "action" ? (
                         <BaseTouchable key={action.id} style={styles.actionItemContainer} action={action.onPress}>
                             <BaseIcon
@@ -198,7 +200,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                         </BaseTouchable>
                     ) : (
                         <BaseSpacer
-                            key={`separator-${idx}`}
+                            key={action.id}
                             height={1}
                             background={theme.colors.actionBottomSheet.iconBackground}
                             my={10}
