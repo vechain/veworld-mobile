@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react"
 import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native"
-import { BaseIcon, BaseStatusBar, BaseText, BaseTouchable, BaseView, Layout } from "~Components"
+import { BaseIcon, BaseStatusBar, BaseText, BaseTouchable, BaseView, Layout, useFeatureFlags } from "~Components"
 import { SearchError, useBrowserNavigation, useBrowserSearch, useThemedStyles } from "~Hooks"
 import { SearchBar } from "./Components/SearchBar"
 import { SearchResults } from "./Components/SearchResults"
@@ -18,6 +18,7 @@ export const AppsSearchScreen = () => {
     const { navigateToBrowser } = useBrowserNavigation()
     const nav = useNavigation()
     const tabs = useAppSelector(selectTabs)
+    const { betterWorldFeature } = useFeatureFlags()
 
     const onSearchUpdated = useCallback(
         (value: string) => {
@@ -34,6 +35,14 @@ export const AppsSearchScreen = () => {
         },
         [navigateToBrowser],
     )
+
+    const onNavigateToTabs = useCallback(() => {
+        if (betterWorldFeature.appsScreen.enabled) {
+            nav.navigate(Routes.APPS_TABS_MANAGER)
+        } else {
+            nav.navigate(Routes.DISCOVER_TABS_MANAGER)
+        }
+    }, [betterWorldFeature.appsScreen.enabled, nav])
 
     return (
         <Layout
@@ -69,11 +78,7 @@ export const AppsSearchScreen = () => {
                                 onTextChange={onSearchUpdated}
                                 onSubmit={onSearchReturn}
                             />
-                            <BaseTouchable
-                                style={styles.tabsContainer}
-                                action={() => {
-                                    nav.navigate(Routes.APPS_TABS_MANAGER)
-                                }}>
+                            <BaseTouchable style={styles.tabsContainer} action={onNavigateToTabs}>
                                 <BaseText
                                     typographyFont="captionSemiBold"
                                     color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>

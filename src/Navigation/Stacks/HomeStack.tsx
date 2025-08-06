@@ -33,7 +33,6 @@ import {
     ManageCustomTokenScreen,
     ManageTokenScreen,
     ObserveWalletScreen,
-    SearchScreen,
     SelectAmountSendScreen,
     SelectLedgerAccounts,
     SelectLedgerDevice,
@@ -255,12 +254,12 @@ export const HomeStack = () => {
                         betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER
                     }
                     component={TabsManagerScreen}
-                    options={{ headerShown: false }}
+                    options={{ headerShown: false, animation: "slide_from_bottom" }}
                 />
                 <Screen
                     name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
-                    component={betterWorldFeature.appsScreen.enabled ? AppsSearchScreen : SearchScreen}
-                    options={{ headerShown: false }}
+                    component={AppsSearchScreen}
+                    options={{ headerShown: false, animation: "slide_from_bottom" }}
                 />
             </Group>
 

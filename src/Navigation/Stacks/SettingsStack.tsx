@@ -178,12 +178,12 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER}
                 component={TabsManagerScreen}
-                options={{ headerShown: false }}
+                options={{ headerShown: false, animation: "slide_from_bottom" }}
             />
             <Settings.Screen
                 name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
                 component={AppsSearchScreen}
-                options={{ headerShown: false }}
+                options={{ headerShown: false, animation: "slide_from_bottom" }}
             />
             <Settings.Screen
                 name={Routes.BROWSER}

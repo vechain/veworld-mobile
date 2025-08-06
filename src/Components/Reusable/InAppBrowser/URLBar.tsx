@@ -42,8 +42,8 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading }: Props) => {
 
     const _returnScreen = useMemo(() => {
         if (returnScreen) return returnScreen
-        if (betterWorldFeature.appsScreen.enabled) return Routes.APPS_SEARCH
-        return Routes.DISCOVER_SEARCH
+        if (betterWorldFeature.appsScreen.enabled) return Routes.APPS
+        return Routes.DISCOVER
     }, [betterWorldFeature.appsScreen.enabled, returnScreen])
 
     const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()

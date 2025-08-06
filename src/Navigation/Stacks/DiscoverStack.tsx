@@ -36,11 +36,15 @@ export const DiscoverStack = () => {
             </Group>
 
             <Screen name={Routes.DISCOVER_FAVOURITES} component={FavouritesScreen} options={{ headerShown: false }} />
-            <Screen name={Routes.DISCOVER_SEARCH} component={AppsSearchScreen} options={{ headerShown: false }} />
+            <Screen
+                name={Routes.DISCOVER_SEARCH}
+                component={AppsSearchScreen}
+                options={{ headerShown: false, animation: "slide_from_bottom" }}
+            />
             <Screen
                 name={Routes.DISCOVER_TABS_MANAGER}
                 component={TabsManagerScreen}
-                options={{ headerShown: false }}
+                options={{ headerShown: false, animation: "slide_from_bottom" }}
             />
         </Navigator>
     )
