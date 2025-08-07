@@ -36,6 +36,8 @@ jest.mock("react-native-quick-crypto", () => ({
     })),
 }))
 
+jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
+
 jest.mock("react-native-onesignal", () => ({
     ...jest.requireActual("react-native-onesignal"),
     OneSignal: {
