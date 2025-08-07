@@ -105,7 +105,6 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "space-between",
             paddingHorizontal: 16,
-            marginBottom: 16,
             paddingVertical: 8,
             gap: 24,
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
