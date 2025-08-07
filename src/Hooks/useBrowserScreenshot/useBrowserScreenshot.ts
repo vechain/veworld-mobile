@@ -10,7 +10,7 @@ export const useBrowserScreenshot = () => {
     const webviewContainerRef = useRef<View>(null)
     const selectedTabId = useAppSelector(selectCurrentTabId)
     const dispatch = useAppDispatch()
-    const { isDapp, navigationState } = useInAppBrowser()
+    const { isDapp, navigationState, dappMetadata } = useInAppBrowser()
 
     const performScreenshot = useCallback(async () => {
         if (!webviewContainerRef.current || !selectedTabId) return
@@ -30,8 +30,8 @@ export const useBrowserScreenshot = () => {
                 updateTab({
                     id: selectedTabId,
                     preview: uri,
-                    ...(!isDapp && { title: navigationState?.title }),
-                    favicon,
+                    ...(!isDapp && { title: navigationState?.title, favicon }),
+                    favicon: dappMetadata?.icon ?? favicon,
                 }),
             )
 
@@ -51,7 +51,7 @@ export const useBrowserScreenshot = () => {
             dispatch(updateLastVisitedUrl(visitedUrl))
             releaseCapture(uri)
         } catch {}
-    }, [dispatch, isDapp, navigationState?.title, navigationState?.url, selectedTabId])
+    }, [dispatch, isDapp, navigationState?.title, navigationState?.url, selectedTabId, dappMetadata?.icon])
 
     const memoized = useMemo(() => ({ performScreenshot, ref: webviewContainerRef }), [performScreenshot])
 
