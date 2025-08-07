@@ -4,7 +4,7 @@ import { StyleSheet } from "react-native"
 import { BaseButton, BaseView, Layout } from "~Components"
 import { useBottomSheetModal, useFetchFeaturedDApps, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { X2EAppsBottomSheet } from "./X2EApps/X2EAppsBottomSheet"
+import { X2EAppsBottomSheet } from "./Components"
 
 const styles = StyleSheet.create({
     button: {

@@ -4,7 +4,6 @@ import { TestWrapper } from "~Test"
 import { X2EAppDetails } from "./X2EAppDetails"
 import { IconKey } from "~Model"
 
-// Test data constants to avoid ESLint i18next/no-literal-string errors
 const TEST_DATA = {
     description: "Test description",
     descriptionText: "Test description text",
@@ -149,7 +148,6 @@ describe("X2EAppDetails", () => {
             expect(screen.getByText(TEST_DATA.stats.partialActions)).toBeVisible()
             expect(screen.getByText(TEST_DATA.stats.joinedLabel)).toBeVisible()
             expect(screen.getByText(TEST_DATA.stats.actionsLabel)).toBeVisible()
-            // Note: Since the component has default values, "Users" will still be rendered
             expect(screen.getByText(TEST_DATA.stats.usersLabel)).toBeVisible()
         })
     })
@@ -303,15 +301,12 @@ describe("X2EAppDetails", () => {
 
             expect(screen.getByText(TEST_DATA.testContent)).toBeVisible()
 
-            // Test with show=false
             rerender(
                 <X2EAppDetails show={false} visible={true}>
                     <X2EAppDetails.Description>{TEST_DATA.testContent}</X2EAppDetails.Description>
                 </X2EAppDetails>,
             )
 
-            // Note: Due to animations, the content might still be visible initially
-            // The component uses useAnimatedStyle which may take time to hide content
             expect(screen.getByText(TEST_DATA.testContent)).toBeVisible()
         })
 

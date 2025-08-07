@@ -4,7 +4,7 @@ import { TestWrapper } from "~Test"
 import { X2EAppsList } from "./X2EAppsList"
 import { X2ECategoryType } from "~Model/DApp"
 
-jest.mock("../hooks/useX2EAppAnimation", () => ({
+jest.mock("../Hooks/useX2EAppAnimation", () => ({
     useX2EAppAnimation: () => ({
         state: {
             showDetails: false,

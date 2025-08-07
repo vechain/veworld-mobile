@@ -34,7 +34,7 @@ const mockCategories = [
     },
 ]
 
-jest.mock("../hooks/useX2ECategories", () => ({
+jest.mock("../Hooks/useX2ECategories", () => ({
     useX2ECategories: () => mockCategories,
 }))
 

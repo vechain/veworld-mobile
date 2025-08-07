@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseChip, BaseView } from "~Components"
-import { useX2ECategories } from "../hooks/useX2ECategories"
+import { useX2ECategories } from "../Hooks/useX2ECategories"
 import { X2ECategoryType } from "~Model/DApp"
 import { IconKey } from "~Model"
 import { ScrollView } from "react-native-gesture-handler"

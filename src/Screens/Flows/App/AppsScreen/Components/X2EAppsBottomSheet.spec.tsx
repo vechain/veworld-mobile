@@ -25,11 +25,11 @@ const Wrapper = ({ children }: PropsWithChildren) => (
 )
 
 const mockUseX2ECategoryFiltering = jest.fn()
-jest.mock("./hooks/useX2ECategoryFiltering", () => ({
+jest.mock("../Hooks/useX2ECategoryFiltering", () => ({
     useX2ECategoryFiltering: () => mockUseX2ECategoryFiltering(),
 }))
 
-jest.mock("./hooks/useX2EAppAnimation", () => ({
+jest.mock("../Hooks/useX2EAppAnimation", () => ({
     useX2EAppAnimation: () => ({
         state: { showDetails: false, isAnimating: false, contentVisible: false },
         handlers: { toggleDetails: jest.fn(), onPressIn: jest.fn(), onPressOut: jest.fn() },
@@ -92,14 +92,13 @@ describe("X2EAppsBottomSheet", () => {
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: mockApps,
-            isLoading: false,
         })
     })
 
     it("should render the bottom sheet component", () => {
         render(
             <Wrapper>
-                <X2EAppsBottomSheet />
+                <X2EAppsBottomSheet isLoading={false} allApps={mockApps} />
             </Wrapper>,
         )
 
@@ -111,12 +110,11 @@ describe("X2EAppsBottomSheet", () => {
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: [],
-            isLoading: true,
         })
 
         render(
             <Wrapper>
-                <X2EAppsBottomSheet />
+                <X2EAppsBottomSheet isLoading={true} allApps={mockApps} />
             </Wrapper>,
         )
 
@@ -128,12 +126,11 @@ describe("X2EAppsBottomSheet", () => {
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: [],
-            isLoading: false,
         })
 
         render(
             <Wrapper>
-                <X2EAppsBottomSheet />
+                <X2EAppsBottomSheet isLoading={false} allApps={[]} />
             </Wrapper>,
         )
 
@@ -143,7 +140,7 @@ describe("X2EAppsBottomSheet", () => {
     it("should render apps when data is available", () => {
         render(
             <Wrapper>
-                <X2EAppsBottomSheet />
+                <X2EAppsBottomSheet isLoading={false} allApps={mockApps} />
             </Wrapper>,
         )
 
@@ -155,7 +152,7 @@ describe("X2EAppsBottomSheet", () => {
         const ref = React.createRef<any>()
         render(
             <Wrapper>
-                <X2EAppsBottomSheet ref={ref} />
+                <X2EAppsBottomSheet ref={ref} isLoading={false} allApps={mockApps} />
             </Wrapper>,
         )
 
@@ -166,7 +163,7 @@ describe("X2EAppsBottomSheet", () => {
         const mockOnDismiss = jest.fn()
         render(
             <Wrapper>
-                <X2EAppsBottomSheet onDismiss={mockOnDismiss} />
+                <X2EAppsBottomSheet onDismiss={mockOnDismiss} isLoading={false} allApps={mockApps} />
             </Wrapper>,
         )
 

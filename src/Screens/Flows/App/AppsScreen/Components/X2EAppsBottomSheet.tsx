@@ -3,9 +3,9 @@ import React, { forwardRef, useCallback, useMemo, useState } from "react"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
-import { X2EAppsList } from "./components"
-import { X2ECategoryFilters } from "./components/X2ECategoryFilters"
-import { useX2ECategoryFiltering } from "./hooks/useX2ECategoryFiltering"
+import { X2EAppsList } from "./X2EAppsList"
+import { X2ECategoryFilters } from "./X2ECategoryFilters"
+import { useX2ECategoryFiltering } from "../Hooks/useX2ECategoryFiltering.ts"
 
 type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
 

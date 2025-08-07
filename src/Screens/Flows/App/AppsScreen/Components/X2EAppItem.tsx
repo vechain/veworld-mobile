@@ -9,7 +9,7 @@ import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
 import { URIUtils } from "~Utils"
 import { X2EAppWithDetails } from "./X2EAppWithDetails"
 import { X2EAppDetails } from "./X2EAppDetails"
-import { useX2ECategories } from "../hooks/useX2ECategories"
+import { useX2ECategories } from "../Hooks/useX2ECategories"
 
 type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
 

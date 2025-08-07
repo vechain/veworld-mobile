@@ -7,7 +7,12 @@ import {
     interpolate,
     interpolateColor,
 } from "react-native-reanimated"
-import { ANIMATION_TIMING, SMOOTH_EASING, PRESS_SPRING_CONFIG, CONTENT_TIMING_CONFIG } from "../AnimationConstants"
+import {
+    ANIMATION_TIMING,
+    SMOOTH_EASING,
+    PRESS_SPRING_CONFIG,
+    CONTENT_TIMING_CONFIG,
+} from "../Constants/AnimationConstants"
 import { useTheme } from "~Hooks"
 
 interface UseX2EAppAnimationProps {
@@ -126,7 +131,7 @@ export const useX2EAppAnimation = ({
         return {
             fontSize,
         }
-    })
+    }, [])
 
     const contentStyle = useAnimatedStyle(() => {
         return {
@@ -150,7 +155,7 @@ export const useX2EAppAnimation = ({
                 },
             ],
         }
-    })
+    }, [])
 
     const categoryLabelStyle = useAnimatedStyle(() => {
         return {
@@ -161,13 +166,13 @@ export const useX2EAppAnimation = ({
                 },
             ],
         }
-    })
+    }, [])
 
     const pressAnimationStyle = useAnimatedStyle(() => {
         return {
             transform: [{ scale: scale.value }],
         }
-    })
+    }, [])
 
     const chevronStyle = useAnimatedStyle(() => {
         return {
@@ -178,13 +183,13 @@ export const useX2EAppAnimation = ({
                 },
             ],
         }
-    })
+    }, [])
 
     const spacerStyle = useAnimatedStyle(() => {
         return {
             width: interpolate(animationProgress.value, [0, 1], [24, 16]),
         }
-    })
+    }, [])
 
     return {
         state: {

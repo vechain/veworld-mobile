@@ -5,10 +5,10 @@ import { BaseIcon, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { LAYOUT_TRANSITION } from "../Constants"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { X2EAppDetails } from "./X2EAppDetails"
-import { LAYOUT_TRANSITION } from "../AnimationConstants"
-import { useX2EAppAnimation } from "../hooks/useX2EAppAnimation"
+import { useX2EAppAnimation } from "../Hooks/useX2EAppAnimation"
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
