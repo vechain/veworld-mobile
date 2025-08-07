@@ -1,6 +1,6 @@
 import React, { memo } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
-import { ScaleDecorator, ShadowDecorator } from "react-native-draggable-flatlist"
+
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -14,72 +14,82 @@ type Props = {
     onLongPress: (dapp: DiscoveryDApp) => void
     onRightActionPress: (dapp: DiscoveryDApp) => void
     onRightActionLongPress?: (dapp: DiscoveryDApp) => void
+    px?: number
 }
 
-const IMAGE_SIZE = 48
+const IMAGE_SIZE = 64
 
 export const FavoriteDAppCard: React.FC<Props> = memo(
-    ({ dapp, isEditMode, isActive, onPress, onLongPress, onRightActionPress, onRightActionLongPress }: Props) => {
+    ({
+        dapp,
+        isEditMode,
+        isActive,
+        onPress,
+        onLongPress,
+        onRightActionPress,
+        onRightActionLongPress,
+        px = 0, // No outer padding needed since bottom sheet provides 20px + card provides 4px base
+    }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
-            <ScaleDecorator activeScale={1.05}>
-                <ShadowDecorator elevation={1} radius={4} opacity={0.2} color={theme.colors.backgroundReversed}>
-                    <BaseView flexDirection="row" flex={1} bg={theme.colors.background} px={16} mb={16}>
-                        <BaseTouchable
-                            disabled={isEditMode || isActive}
-                            style={[styles.card]}
-                            onPress={() => onPress(dapp)}
-                            onLongPress={() => onLongPress?.(dapp)}>
-                            <BaseView flexDirection="row" flex={1} pr={10}>
-                                <Image
-                                    source={{
-                                        uri: dapp.id
-                                            ? DAppUtils.getAppHubIconUrl(dapp.id)
-                                            : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
-                                    }}
-                                    style={
-                                        [
-                                            { height: IMAGE_SIZE, width: IMAGE_SIZE },
-                                            styles.icon,
-                                        ] as StyleProp<ImageStyle>
-                                    }
-                                    resizeMode="contain"
-                                />
-                                <BaseSpacer width={12} />
-                                <BaseView flex={1}>
-                                    <BaseText
-                                        ellipsizeMode="tail"
-                                        numberOfLines={1}
-                                        typographyFont="bodySemiBold"
-                                        color={theme.colors.assetDetailsCard.title}>
-                                        {dapp.name}
-                                    </BaseText>
-                                    <BaseSpacer height={4} />
-                                    <BaseText
-                                        ellipsizeMode="tail"
-                                        numberOfLines={1}
-                                        typographyFont="captionMedium"
-                                        color={theme.colors.assetDetailsCard.text}>
-                                        {dapp.desc ? dapp.desc : dapp.href}
-                                    </BaseText>
-                                </BaseView>
+            <BaseView flexDirection="row" flex={1} px={px} mb={24}>
+                <BaseView
+                    flexDirection="row"
+                    flex={1}
+                    px={4}
+                    bg={isActive ? theme.colors.actionBottomSheet.iconBackground : undefined}
+                    style={isActive ? styles.activeContainer : undefined}>
+                    <BaseTouchable
+                        disabled={isEditMode || isActive}
+                        style={[styles.card]}
+                        onPress={() => onPress(dapp)}
+                        onLongPress={() => onLongPress?.(dapp)}>
+                        <BaseView flexDirection="row" flex={1} pr={10}>
+                            <Image
+                                source={{
+                                    uri: dapp.id
+                                        ? DAppUtils.getAppHubIconUrl(dapp.id)
+                                        : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
+                                }}
+                                style={
+                                    [{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>
+                                }
+                                resizeMode="contain"
+                            />
+                            <BaseSpacer width={24} />
+                            <BaseView flex={1}>
+                                <BaseText
+                                    ellipsizeMode="tail"
+                                    numberOfLines={1}
+                                    typographyFont="bodySemiBold"
+                                    color={theme.colors.assetDetailsCard.title}>
+                                    {dapp.name}
+                                </BaseText>
+                                <BaseSpacer height={4} />
+                                <BaseText
+                                    ellipsizeMode="tail"
+                                    numberOfLines={1}
+                                    typographyFont="captionMedium"
+                                    color={theme.colors.assetDetailsCard.text}>
+                                    {dapp.desc ? dapp.desc : dapp.href}
+                                </BaseText>
                             </BaseView>
-                        </BaseTouchable>
-                        <BaseTouchable
-                            disabled={isActive}
-                            onLongPress={() => onRightActionLongPress?.(dapp)}
-                            onPress={() => onRightActionPress(dapp)}
-                            style={styles.touchableContainer}>
-                            {isEditMode ? (
-                                <BaseIcon name="icon-grip-horizontal" color={theme.colors.text} size={20} />
-                            ) : (
-                                <BaseIcon name="icon-more-vertical" color={theme.colors.text} size={20} />
-                            )}
-                        </BaseTouchable>
-                    </BaseView>
-                </ShadowDecorator>
-            </ScaleDecorator>
+                        </BaseView>
+                    </BaseTouchable>
+                    <BaseTouchable
+                        disabled={isActive || !isEditMode}
+                        onLongPress={() => onRightActionLongPress?.(dapp)}
+                        onPress={() => onRightActionPress(dapp)}
+                        style={styles.touchableContainer}>
+                        {isEditMode ? (
+                            <BaseIcon name="icon-grip-horizontal" color={theme.colors.text} size={20} />
+                        ) : (
+                            <BaseIcon name="icon-star-on" color={theme.colors.disabledButton} size={20} />
+                        )}
+                    </BaseTouchable>
+                </BaseView>
+            </BaseView>
         )
     },
 )
@@ -94,7 +104,10 @@ const baseStyles = () =>
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            height: 60,
+            paddingHorizontal: 4,
+        },
+        activeContainer: {
+            borderRadius: 12,
         },
         touchableContainer: {
             width: 40,
@@ -103,8 +116,10 @@ const baseStyles = () =>
             justifyContent: "center",
         },
         icon: {
-            borderRadius: 4,
+            borderRadius: 8,
             overflow: "hidden",
+            width: 64,
+            height: 64,
         },
         nameText: {
             fontWeight: "bold",
