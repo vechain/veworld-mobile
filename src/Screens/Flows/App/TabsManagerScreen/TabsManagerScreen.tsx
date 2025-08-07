@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
-import { FlatList, StyleSheet } from "react-native"
+import { FlatList, Platform, StyleSheet } from "react-native"
 import {
     BaseIcon,
     BaseSpacer,
@@ -68,7 +68,7 @@ export const TabsManagerScreen = () => {
             noMargin
             footer={
                 <BaseView style={styles.footerContainer}>
-                    <BaseStatusBar hero={true} />
+                    {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     <BaseTouchable
                         disabled={tabs.length === 0}
                         style={[styles.footerButton, styles.footerButtonStart]}

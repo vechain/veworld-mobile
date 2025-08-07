@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { MutableRefObject, useCallback, useEffect, useState } from "react"
-import { StyleSheet, View } from "react-native"
+import { Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import WebView from "react-native-webview"
@@ -92,7 +92,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
             hasTopSafeAreaOnly
             fixedBody={
                 <View style={styles.container}>
-                    <BaseStatusBar hero={true} />
+                    {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     {userAgent && !isLoading && (
                         <>
                             <Animated.View ref={webviewContainerRef} style={animatedStyles} collapsable={false}>
