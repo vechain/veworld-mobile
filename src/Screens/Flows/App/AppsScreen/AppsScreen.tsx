@@ -2,7 +2,7 @@ import { useScrollToTop } from "@react-navigation/native"
 import React, { useRef } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseView, Layout } from "~Components"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useFetchFeaturedDApps, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { X2EAppsBottomSheet } from "./X2EApps/X2EAppsBottomSheet"
 
@@ -16,6 +16,10 @@ export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
+
+    useFetchFeaturedDApps()
+
+    const { data: allApps, isLoading } = useVeBetterDaoDapps()
 
     const {
         ref: appsBottomSheetRef,
@@ -32,7 +36,12 @@ export const AppsScreen = () => {
                         {LL.DISCOVER_SEARCH_CTA()}
                     </BaseButton>
 
-                    <X2EAppsBottomSheet ref={appsBottomSheetRef} onDismiss={onCloseAppsBottomSheet} />
+                    <X2EAppsBottomSheet
+                        ref={appsBottomSheetRef}
+                        onDismiss={onCloseAppsBottomSheet}
+                        allApps={allApps}
+                        isLoading={isLoading}
+                    />
                 </BaseView>
             }
         />
