@@ -1,11 +1,12 @@
 import React from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import { BaseView, Layout } from "~Components"
-import { useThemedStyles } from "~Hooks"
+import { useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { EcosystemSection } from "./Components/Ecosystem"
 
 export const AppsScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
+    useFetchFeaturedDApps()
     return (
         <Layout
             title="Apps"
