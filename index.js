@@ -72,7 +72,7 @@ if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     LogBox.ignoreAllLogs()
 }
 
-const ConditionalSmartWallet = ({ children, nodeUrl, networkType }) => {
+const FeatureFlaggedSmartWallet = ({ children, nodeUrl, networkType }) => {
     const featureFlags = useFeatureFlags()
 
     const ff = { ...featureFlags, smartWalletFeature: { enabled: true } }
@@ -162,7 +162,7 @@ const Main = () => {
                         persister: clientPersister,
                     }}>
                     <FeatureFlagsProvider>
-                        <ConditionalSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
+                        <FeatureFlaggedSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
                             <NavigationProvider>
                                 <InteractionProvider>
                                     <WalletConnectContextProvider>
@@ -177,7 +177,7 @@ const Main = () => {
                                 </InteractionProvider>
                             </NavigationProvider>
                             <BaseToast />
-                        </ConditionalSmartWallet>
+                        </FeatureFlaggedSmartWallet>
                     </FeatureFlagsProvider>
                 </PersistQueryClientProvider>
             </ConnexContextProvider>
