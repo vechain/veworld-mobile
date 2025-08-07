@@ -1,9 +1,10 @@
 import React, { useMemo } from "react"
-import { ScrollView, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import { BaseChip, BaseView } from "~Components"
 import { useX2ECategories } from "../hooks/useX2ECategories"
 import { X2ECategoryType } from "~Model/DApp"
 import { IconKey } from "~Model"
+import { ScrollView } from "react-native-gesture-handler"
 
 interface X2ECategoryFiltersProps {
     selectedCategory: {
