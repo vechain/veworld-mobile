@@ -95,7 +95,12 @@ export const X2EAppWithDetails = React.memo(
             if (showDetails) return null
 
             return (
-                <TouchableOpacity onPress={onToggleFavorite} style={styles.iconWrapper}>
+                <TouchableOpacity
+                    onPress={e => {
+                        e.stopPropagation()
+                        onToggleFavorite?.()
+                    }}
+                    style={styles.iconWrapper}>
                     <BaseIcon
                         name={isFavorite ? "icon-star-on" : "icon-star"}
                         haptics="Light"
