@@ -213,6 +213,8 @@ export type Colors = {
     stakedCard: {
         fiatValue: string
         vetValue: string
+        tagBackground: string
+        tagText: string
     }
     stakedVetCard: {
         background: string
@@ -529,6 +531,8 @@ const light: Colors = {
     stakedCard: {
         fiatValue: COLORS.GREY_600,
         vetValue: COLORS.GREY_800,
+        tagBackground: COLORS.PRIMARY_200,
+        tagText: COLORS.PRIMARY_600,
     },
     stakedVetCard: {
         background: COLORS.GREY_50,
@@ -750,6 +754,8 @@ const dark: Colors = {
     stakedCard: {
         fiatValue: COLORS.GREY_100,
         vetValue: COLORS.WHITE,
+        tagBackground: COLORS.PRIMARY_200,
+        tagText: COLORS.PRIMARY_600,
     },
     stakedVetCard: {
         background: COLORS.PURPLE,
