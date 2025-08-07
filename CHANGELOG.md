@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.3 (2025-08-07)</small>
+
+* build: init ([e25b2aa](https://github.com/vechain/veworld-mobile/commit/e25b2aa))
+* ci: remove old and disabled nitro workflows (#3158) ([0f5a0da](https://github.com/vechain/veworld-mobile/commit/0f5a0da)), closes [#3158](https://github.com/vechain/veworld-mobile/issues/3158)
+
 ## <small>2.3.1 (2025-08-04)</small>
 
 * build: init ([ecfcbcc](https://github.com/vechain/veworld-mobile/commit/ecfcbcc))
