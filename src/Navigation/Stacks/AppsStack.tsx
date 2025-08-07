@@ -1,7 +1,7 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
-import { useNavAnimation } from "~Hooks"
 import { Routes } from "~Navigation/Enums"
+import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import { InAppBrowser, TabsManagerScreen } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AppsScreen } from "~Screens/Flows/App/AppsScreen/AppsScreen"
@@ -18,31 +18,44 @@ export type RootStackParamListApps = {
     [Routes.ACTIVITY_STAKING]: undefined
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListApps>()
+const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListApps>()
 
 export const AppsStack = () => {
-    const { animation } = useNavAnimation()
-
     return (
-        <Navigator id="AppsStack" screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="AppsStack" screenOptions={{ headerShown: false }}>
             <Group>
                 <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.BROWSER}
                     component={InAppBrowser}
-                    options={{ headerShown: false, animation: "slide_from_bottom" }}
+                    options={{
+                        headerShown: false,
+                        cardStyleInterpolator: slideFadeInTransition,
+                        presentation: "transparentModal",
+                        transitionSpec: TRANSITION_SPECS,
+                    }}
                 />
             </Group>
 
             <Screen
                 name={Routes.APPS_SEARCH}
                 component={AppsSearchScreen}
-                options={{ headerShown: false, animation: "slide_from_bottom" }}
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "transparentModal",
+                    transitionSpec: TRANSITION_SPECS,
+                }}
             />
             <Screen
                 name={Routes.APPS_TABS_MANAGER}
                 component={TabsManagerScreen}
-                options={{ headerShown: false, animation: "slide_from_bottom" }}
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "transparentModal",
+                    transitionSpec: TRANSITION_SPECS,
+                }}
             />
         </Navigator>
     )

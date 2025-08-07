@@ -19,7 +19,6 @@ import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryS
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import PlatformUtils from "~Utils/PlatformUtils"
-import { useI18nContext } from "~i18n"
 
 export type TabStackParamList = {
     HomeStack: NavigatorScreenParams<RootStackParamListHome>
@@ -34,7 +33,6 @@ const Tab = createBottomTabNavigator<TabStackParamList>()
 
 export const TabStack = () => {
     const theme = useTheme()
-    const { LL } = useI18nContext()
     const currentScreen = useAppSelector(selectCurrentScreen)
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
@@ -97,7 +95,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Wallet",
                     tabBarTestID: "wallet-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home", LL.TAB_TITLE_HOME()),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-home", "Home"),
                 }}
             />
 
@@ -107,7 +105,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "NFT",
                     tabBarTestID: "nft-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image", LL.TAB_TITLE_NFT()),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-image", "NFT"),
                 }}
             />
 
@@ -118,7 +116,7 @@ export const TabStack = () => {
                     options={{
                         tabBarLabel: "Apps",
                         tabBarTestID: "apps-tab",
-                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", LL.TAB_TITLE_APPS()),
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps", "Apps"),
                     }}
                 />
             ) : (
@@ -128,8 +126,7 @@ export const TabStack = () => {
                     options={{
                         tabBarLabel: "Discover",
                         tabBarTestID: "discover-tab",
-                        tabBarIcon: ({ focused }) =>
-                            renderTabBarIcon(focused, "icon-explorer", LL.TAB_TITLE_DISCOVER()),
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer", "Discover"),
                     }}
                 />
             )}
@@ -140,7 +137,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: Routes.HISTORY,
                     tabBarTestID: "history-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history", LL.TAB_TITLE_ACTIVITY()),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-history", "Activity"),
                 }}
             />
 
@@ -150,7 +147,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Settings",
                     tabBarTestID: "settings-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu", LL.TAB_TITLE_MORE()),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu", "More"),
                 }}
             />
         </Tab.Navigator>

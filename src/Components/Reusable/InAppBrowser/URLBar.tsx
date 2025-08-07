@@ -175,7 +175,7 @@ const styles = StyleSheet.create({
         opacity: 1,
         alignItems: "center",
         flexDirection: "row",
-        backgroundColor: COLORS.DARK_PURPLE,
+        // backgroundColor: COLORS.DARK_PURPLE,
         paddingVertical: 8,
     },
     inputContainer: {

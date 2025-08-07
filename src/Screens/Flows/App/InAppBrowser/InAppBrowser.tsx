@@ -77,7 +77,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            bg={COLORS.DARK_PURPLE}
+            bg={COLORS.TRANSPARENT}
             fixedHeader={
                 <URLBar
                     isLoading={isLoadingWebView}

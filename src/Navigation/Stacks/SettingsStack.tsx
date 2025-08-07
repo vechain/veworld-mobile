@@ -1,9 +1,9 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
 import { useFeatureFlags } from "~Components"
-import { useNavAnimation } from "~Hooks"
 import { Device, LocalDevice } from "~Model"
 import { Routes } from "~Navigation/Enums"
+import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import {
     AddContactScreen,
     AddCustomNodeScreen,
@@ -65,14 +65,13 @@ export type RootStackParamListSettings = {
     }
 }
 
-const Settings = createNativeStackNavigator<RootStackParamListSettings>()
+const Settings = createStackNavigator<RootStackParamListSettings>()
 
 export const SettingsStack = () => {
-    const { animation } = useNavAnimation()
     const { betterWorldFeature } = useFeatureFlags()
 
     return (
-        <Settings.Navigator screenOptions={{ headerShown: false, animation }}>
+        <Settings.Navigator screenOptions={{ headerShown: false }}>
             <Settings.Screen name={Routes.SETTINGS} component={SettingsScreen} options={{ headerShown: false }} />
             <Settings.Screen
                 name={Routes.SETTINGS_NETWORK}
@@ -178,17 +177,32 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER}
                 component={TabsManagerScreen}
-                options={{ headerShown: false, animation: "slide_from_bottom" }}
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "transparentModal",
+                    transitionSpec: TRANSITION_SPECS,
+                }}
             />
             <Settings.Screen
                 name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
                 component={AppsSearchScreen}
-                options={{ headerShown: false, animation: "slide_from_bottom" }}
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "transparentModal",
+                    transitionSpec: TRANSITION_SPECS,
+                }}
             />
             <Settings.Screen
                 name={Routes.BROWSER}
                 component={InAppBrowser}
-                options={{ headerShown: false, animation: "slide_from_bottom" }}
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "transparentModal",
+                    transitionSpec: TRANSITION_SPECS,
+                }}
             />
         </Settings.Navigator>
     )

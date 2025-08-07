@@ -85,6 +85,7 @@
     "@react-navigation/material-top-tabs": "^6.6.14",
     "@react-navigation/native": "^6.1.18",
     "@react-navigation/native-stack": "^6.11.0",
+    "@react-navigation/stack": "^6.4.1",
     "@reduxjs/toolkit": "^1.9.7",
     "@reown/walletkit": "1.1.0",
     "@sentry/react-native": "^6.9.1",
