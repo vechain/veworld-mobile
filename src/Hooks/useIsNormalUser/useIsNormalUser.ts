@@ -48,6 +48,7 @@ export const useIsNormalUser = () => {
     const { data: hasEnoughB3TRActions } = useQuery({
         queryKey: ["AccountsB3TRActions", addresses],
         queryFn: () => getAccountsActions(mainnetThorClient, addresses),
+        enabled: !cachedIsNormalUser,
     })
 
     const hasEnoughVET = useMemo(
