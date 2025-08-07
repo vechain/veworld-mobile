@@ -127,6 +127,7 @@ export const TransactionBottomSheetContent = ({
                 flexDirection="row"
                 gap={12}
                 justifyContent="space-between"
+                px={24}
                 testID="SIGN_TRANSACTION_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
@@ -180,7 +181,7 @@ export const TransactionBottomSheetContent = ({
                 </GasFeeSpeed>
             </BottomSheetScrollView>
 
-            <BaseView flexDirection="row" gap={16} mt={24}>
+            <BaseView flexDirection="row" gap={16} mt={24} px={24} mb={16}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"
@@ -349,11 +350,13 @@ export const TransactionBottomSheet = () => {
     const onDismiss = useCallback(async () => {
         if (isUserAction.current) {
             setTransactionBsData(null)
+            setSnapPoints(["75%"])
             isUserAction.current = false
             return
         }
         if (!transactionBsData) return
         await rejectRequest(transactionBsData)
+        setSnapPoints(["75%"])
         isUserAction.current = false
         setTransactionBsData(null)
     }, [rejectRequest, setTransactionBsData, transactionBsData])
@@ -368,7 +371,8 @@ export const TransactionBottomSheet = () => {
             snapPoints={snapPoints}
             ref={transactionBsRef}
             onDismiss={onDismiss}
-            enableContentPanningGesture={false}>
+            enableContentPanningGesture={false}
+            noMargins>
             {transactionBsData && (
                 <TransactionBottomSheetContent
                     onCancel={onCancel}
@@ -391,5 +395,6 @@ const baseStyles = () =>
         },
         scrollView: {
             flex: 1,
+            paddingHorizontal: 24,
         },
     })

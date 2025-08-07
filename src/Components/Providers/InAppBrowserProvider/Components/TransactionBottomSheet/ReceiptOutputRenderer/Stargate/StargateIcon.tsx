@@ -33,5 +33,6 @@ const baseStyles = () =>
     StyleSheet.create({
         icon: {
             padding: 6,
+            borderRadius: 16,
         },
     })

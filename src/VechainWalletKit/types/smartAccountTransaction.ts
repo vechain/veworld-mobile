@@ -2,7 +2,7 @@ export interface ExecuteWithAuthorizationSignData {
     domain: {
         name: string
         version: string
-        chainId: number
+        chainId: string
         verifyingContract: string
     }
     types: {
@@ -29,7 +29,7 @@ export interface ExecuteBatchWithAuthorizationSignData {
     domain: {
         name: string
         version: string
-        chainId: number
+        chainId: string
         verifyingContract: string
     }
     types: {

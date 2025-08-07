@@ -91,9 +91,28 @@ export const StargateBaseOutput = ({ output, ...props }: Props) => {
         }
     }, [output.name])
 
+    const label = useMemo(() => {
+        switch (output.name) {
+            case "STARGATE_CLAIM_REWARDS_BASE(uint256,uint256,address)":
+                return LL.RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE()
+            case "STARGATE_CLAIM_REWARDS_DELEGATE(uint256,uint256,address)":
+                return LL.RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION()
+            case "STARGATE_STAKE(uint256,uint256,uint8,address,bool)":
+                return LL.RECEIPT_OUTPUT_STARGATE_STAKE()
+            case "STARGATE_STAKE_DELEGATE(uint256,uint256,uint8,address,bool,bool)":
+                return LL.RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE()
+            case "STARGATE_DELEGATE(uint256,address,bool)":
+                return LL.RECEIPT_OUTPUT_STARGATE_DELEGATE()
+            case "STARGATE_UNDELEGATE(uint256)":
+                return LL.RECEIPT_OUTPUT_STARGATE_UNDELEGATE()
+            case "STARGATE_UNSTAKE(uint256,uint256,uint8,address)":
+                return LL.RECEIPT_OUTPUT_STARGATE_UNSTAKE()
+        }
+    }, [LL, output.name])
+
     return (
         <BaseReceiptOutput
-            label={LL.RECEIPT_OUTPUT_STARGATE_UNDELEGATE()}
+            label={label}
             iconNode={<StargateIcon icon={icon} />}
             output={output}
             additionalDetails={
