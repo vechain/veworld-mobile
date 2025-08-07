@@ -1,6 +1,9 @@
 // Test IPFSUtils.ts
 
-import { validateIpfsUri } from "./IPFSUtils"
+import axios from "axios"
+import { getIpfsQueryKeyOptions, getIpfsValue, validateIpfsUri } from "./IPFSUtils"
+
+jest.mock("axios")
 
 describe("IPFSUtils", () => {
     describe("validateIpfsUri", () => {
@@ -29,6 +32,49 @@ describe("IPFSUtils", () => {
         it("Should return true for version 1 CID", () => {
             const validUri = "ipfs://bafybeic2v6x57oxedqos6xruudgbgtkszzquyxjv73ux7zs2w7w3d42q"
             expect(validateIpfsUri(validUri)).toBeTruthy()
+        })
+    })
+    describe("getIpfsQueryKeyOptions", () => {
+        it("should return the correct query options", () => {
+            expect(getIpfsQueryKeyOptions("ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb")).toStrictEqual({
+                queryKey: ["IPFS_URI", "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb"],
+                staleTime: Infinity,
+                gcTime: Infinity,
+                queryFn: expect.any(Function),
+            })
+        })
+    })
+    describe("getIpfsValue", () => {
+        it("should return the correct value", async () => {
+            ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: { key: "VALUE" } })
+            const result = await getIpfsValue("ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb")
+
+            expect(result).toStrictEqual({ key: "VALUE" })
+            expect(axios.get).toHaveBeenCalledWith(
+                "https://api.gateway-proxy.vechain.org/ipfs/QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
+                {
+                    headers: {
+                        "x-project-id": "veworld-mobile",
+                    },
+                },
+            )
+        })
+        it("should work with a custom config", async () => {
+            ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: { key: "VALUE" } })
+            const result = await getIpfsValue("ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb", {
+                timeout: 1000,
+            })
+
+            expect(result).toStrictEqual({ key: "VALUE" })
+            expect(axios.get).toHaveBeenCalledWith(
+                "https://api.gateway-proxy.vechain.org/ipfs/QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
+                {
+                    headers: {
+                        "x-project-id": "veworld-mobile",
+                    },
+                    timeout: 1000,
+                },
+            )
         })
     })
 })

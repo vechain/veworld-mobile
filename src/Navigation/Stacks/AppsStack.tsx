@@ -2,36 +2,34 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { useNavAnimation } from "~Hooks"
 import { Routes } from "~Navigation/Enums"
-import { DiscoverScreen, FavouritesScreen, InAppBrowser, SearchScreen, TabsManagerScreen } from "~Screens"
+import { InAppBrowser, SearchScreen, TabsManagerScreen } from "~Screens"
+import { AppsScreen } from "~Screens/Flows/App/AppsScreen/AppsScreen"
 
-export type RootStackParamListBrowser = {
-    [Routes.DISCOVER]: undefined
-    [Routes.DISCOVER_FAVOURITES]: undefined
-    [Routes.DISCOVER_FEATURED]: undefined
-    [Routes.DISCOVER_SEARCH]: undefined
+export type RootStackParamListApps = {
+    [Routes.APPS]: undefined
     [Routes.BROWSER]: {
         url: string
         ul?: boolean
         returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
     }
+    [Routes.APPS_SEARCH]: undefined
     [Routes.DISCOVER_TABS_MANAGER]: undefined
     [Routes.ACTIVITY_STAKING]: undefined
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListBrowser>()
+const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListApps>()
 
-export const DiscoverStack = () => {
+export const AppsStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator id="BrowserStack" screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="AppsStack" screenOptions={{ headerShown: false, animation }}>
             <Group>
-                <Screen name={Routes.DISCOVER} component={DiscoverScreen} options={{ headerShown: false }} />
+                <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
                 <Screen name={Routes.BROWSER} component={InAppBrowser} options={{ headerShown: false }} />
             </Group>
 
-            <Screen name={Routes.DISCOVER_FAVOURITES} component={FavouritesScreen} options={{ headerShown: false }} />
-            <Screen name={Routes.DISCOVER_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
+            <Screen name={Routes.APPS_SEARCH} component={SearchScreen} options={{ headerShown: false }} />
             <Screen
                 name={Routes.DISCOVER_TABS_MANAGER}
                 component={TabsManagerScreen}

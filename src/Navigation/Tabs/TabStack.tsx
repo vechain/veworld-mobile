@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs"
 import { NavigatorScreenParams } from "@react-navigation/native"
 import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { TabIcon } from "~Components"
+import { TabIcon, useFeatureFlags } from "~Components"
 import { useCheckWalletBackup, useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import { Routes } from "~Navigation/Enums"
@@ -14,6 +14,7 @@ import {
     RootStackParamListSettings,
     SettingsStack,
 } from "~Navigation/Stacks"
+import { AppsStack, RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { HistoryStack, HistoryStackParamList } from "~Navigation/Stacks/HistoryStack"
 import { NFTStack, RootStackParamListNFT } from "~Navigation/Stacks/NFTStack"
 import { selectCurrentScreen, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -25,6 +26,7 @@ export type TabStackParamList = {
     DiscoverStack: NavigatorScreenParams<RootStackParamListBrowser>
     SettingsStack: NavigatorScreenParams<RootStackParamListSettings>
     [Routes.HISTORY_STACK]: NavigatorScreenParams<HistoryStackParamList>
+    AppsStack: NavigatorScreenParams<RootStackParamListApps>
 }
 
 const Tab = createBottomTabNavigator<TabStackParamList>()
@@ -35,6 +37,8 @@ export const TabStack = () => {
 
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isShowBackupModal = useCheckWalletBackup(selectedAccount)
+
+    const { betterWorldFeature } = useFeatureFlags()
 
     const renderTabBarIcon = useCallback(
         (focused: boolean, iconName: IconKey) => {
@@ -101,15 +105,27 @@ export const TabStack = () => {
                 }}
             />
 
-            <Tab.Screen
-                name="DiscoverStack"
-                component={DiscoverStack}
-                options={{
-                    tabBarLabel: "Discover",
-                    tabBarTestID: "discover-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer"),
-                }}
-            />
+            {betterWorldFeature?.appsScreen?.enabled ? (
+                <Tab.Screen
+                    name="AppsStack"
+                    component={AppsStack}
+                    options={{
+                        tabBarLabel: "Apps",
+                        tabBarTestID: "apps-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-apps"),
+                    }}
+                />
+            ) : (
+                <Tab.Screen
+                    name="DiscoverStack"
+                    component={DiscoverStack}
+                    options={{
+                        tabBarLabel: "Discover",
+                        tabBarTestID: "discover-tab",
+                        tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-explorer"),
+                    }}
+                />
+            )}
 
             <Tab.Screen
                 name={Routes.HISTORY_STACK}

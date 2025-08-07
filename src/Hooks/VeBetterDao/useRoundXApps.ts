@@ -1,5 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 import { ThorClient } from "@vechain/sdk-network"
+import moment from "moment"
 import { abis, VEBETTER_DAO_XALLOCATION_VOTING_CONTRACT } from "~Constants"
 import { useMainnetThorClient } from "~Hooks/useThorClient"
 
@@ -45,6 +46,8 @@ export const getRoundXApps = async (thor: ThorClient, roundId?: string): Promise
 
 export const getRoundXAppsQueryKey = (roundId?: string) => ["round", roundId, "getXApps"]
 
+const SEVEN_DAYS = moment.duration({ days: 7 })
+
 /**
  *  Hook to get all the available xApps (apps that can be voted on for allocation)
  *
@@ -59,5 +62,7 @@ export const useRoundXApps = (roundId?: string) => {
         queryKey: getRoundXAppsQueryKey(roundId),
         queryFn: async () => await getRoundXApps(thor, roundId),
         enabled: !!thor && !!roundId,
+        staleTime: Infinity,
+        gcTime: SEVEN_DAYS.asMilliseconds(),
     })
 }
