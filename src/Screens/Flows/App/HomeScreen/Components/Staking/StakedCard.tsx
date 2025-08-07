@@ -4,25 +4,27 @@ import { StyleSheet } from "react-native"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import { VET } from "~Constants"
+import { AccountWithDevice } from "~Model"
 import { ColorThemeType } from "~Constants/Theme"
 import { useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useUserNodes } from "~Hooks/Staking/useUserNodes"
 import { useUserStargateNfts } from "~Hooks/Staking/useUserStargateNfts"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
-export const StakedCard = memo(() => {
+type Props = {
+    account: AccountWithDevice
+}
+
+export const StakedCard = memo(({ account }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
 
-    const address = useAppSelector(selectSelectedAccountAddress)
-
-    const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
+    const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(account.address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
     // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
-    const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+    const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, account.address))
     const nav = useNavigation()
 
     const vetWithCompleteInfo = useTokenWithCompleteInfo(VET)
