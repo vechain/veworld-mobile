@@ -48,9 +48,7 @@ describe("useBrowserScreenshot", () => {
                                     href: "https://vechain.org",
                                     id: "TEST_ID",
                                     title: "TEST",
-                                    favicon:
-                                        // eslint-disable-next-line max-len
-                                        "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=32&&url=https://vechain.org",
+                                    favicon: "https://vechain.org/favicon.ico",
                                 },
                             ],
                         },
@@ -70,9 +68,7 @@ describe("useBrowserScreenshot", () => {
         expect(updateTab).toHaveBeenCalledWith({
             id: "TEST_ID",
             preview: "URI",
-            favicon:
-                // eslint-disable-next-line max-len
-                "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=32&&url=https://vechain.org",
+            favicon: "https://vechain.org/favicon.ico",
         })
     })
 
