@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react"
-import { KeyboardAvoidingView, Platform, StyleSheet } from "react-native"
+import { Platform, StyleSheet } from "react-native"
 import { BaseIcon, BaseStatusBar, BaseText, BaseTouchable, BaseView, Layout, useFeatureFlags } from "~Components"
 import { SearchError, useBrowserNavigation, useBrowserSearch, useThemedStyles } from "~Hooks"
 import { SearchBar } from "./Components/SearchBar"
@@ -8,6 +8,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { selectTabs, useAppSelector } from "~Storage/Redux"
 import { useNavigation } from "@react-navigation/native"
 import { Routes } from "~Navigation"
+import { KeyboardAvoidingView } from "react-native-keyboard-controller"
 
 export const AppsSearchScreen = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -50,45 +51,37 @@ export const AppsSearchScreen = () => {
             noBackButton
             noMargin
             fixedBody={
-                <>
-                    <BaseStatusBar hero={true} />
-                    <BaseView style={[styles.rootContainer]}>
-                        <SearchResults error={error} results={results} isValidQuery={isValidQuery} />
-                    </BaseView>
+                <KeyboardAvoidingView
+                    behavior="padding"
+                    style={styles.rootContainer}
+                    keyboardVerticalOffset={Platform.OS === "ios" ? 38 : 8}>
+                    {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
+                    <SearchResults error={error} results={results} isValidQuery={isValidQuery} />
 
-                    <KeyboardAvoidingView
-                        behavior="position"
-                        keyboardVerticalOffset={Platform.OS === "ios" ? 38 : 0} // Adjust as needed
-                        style={styles.keyboardAvoidingView}>
-                        <BaseView style={styles.footerContainer}>
-                            <BaseTouchable
-                                style={styles.tabsContainer}
-                                action={() => {
-                                    nav.goBack()
-                                }}>
-                                <BaseIcon
-                                    name={"icon-x"}
-                                    size={16}
-                                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-                                />
-                            </BaseTouchable>
-
-                            <SearchBar
-                                filteredSearch={search}
-                                onTextChange={onSearchUpdated}
-                                onSubmit={onSearchReturn}
+                    <BaseView style={styles.footerContainer}>
+                        <BaseTouchable
+                            style={styles.tabsContainer}
+                            action={() => {
+                                nav.goBack()
+                            }}>
+                            <BaseIcon
+                                name={"icon-x"}
+                                size={16}
+                                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
                             />
-                            <BaseTouchable style={styles.tabsContainer} action={onNavigateToTabs}>
-                                <BaseText
-                                    typographyFont="captionSemiBold"
-                                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
-                                    {tabs.length}
-                                </BaseText>
-                            </BaseTouchable>
-                        </BaseView>
-                        <BaseView p={4} />
-                    </KeyboardAvoidingView>
-                </>
+                        </BaseTouchable>
+
+                        <SearchBar filteredSearch={search} onTextChange={onSearchUpdated} onSubmit={onSearchReturn} />
+                        <BaseTouchable style={styles.tabsContainer} action={onNavigateToTabs}>
+                            <BaseText
+                                typographyFont="captionSemiBold"
+                                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
+                                {tabs.length}
+                            </BaseText>
+                        </BaseTouchable>
+                    </BaseView>
+                    <BaseView p={4} />
+                </KeyboardAvoidingView>
             }
         />
     )
@@ -97,7 +90,7 @@ export const AppsSearchScreen = () => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         rootContainer: {
-            flexGrow: 1,
+            flex: 1,
             borderTopLeftRadius: 24,
             borderTopRightRadius: 24,
             paddingTop: 24,
@@ -112,6 +105,7 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             justifyContent: "space-between",
             paddingHorizontal: 16,
+            marginBottom: 16,
             paddingVertical: 8,
             gap: 24,
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,

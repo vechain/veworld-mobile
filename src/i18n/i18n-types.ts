@@ -1121,13 +1121,13 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_MORE_RESULTS: string
 	/**
-	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
-	 */
-	BROWSER_HISTORY_No_RECORDS: string
-	/**
 	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d
 	 */
 	BROWSER_HISTORY_NO_RESULTS: string
+	/**
+	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
+	 */
+	BROWSER_HISTORY_No_RECORDS: string
 	/**
 	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
 	 * @param {number} amount
@@ -4734,6 +4734,30 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * H​o​m​e
+	 */
+	TAB_TITLE_HOME: string
+	/**
+	 * N​F​T​s
+	 */
+	TAB_TITLE_NFT: string
+	/**
+	 * A​p​p​s
+	 */
+	TAB_TITLE_APPS: string
+	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	TAB_TITLE_DISCOVER: string
+	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TAB_TITLE_ACTIVITY: string
+	/**
+	 * M​o​r​e
+	 */
+	TAB_TITLE_MORE: string
 }
 
 export type TranslationFunctions = {
@@ -5811,13 +5835,13 @@ Thanks for your patience!
 	 */
 	BROWSER_HISTORY_MORE_RESULTS: () => LocalizedString
 	/**
-	 * No History Available
-	 */
-	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
-	/**
 	 * No results found
 	 */
 	BROWSER_HISTORY_NO_RESULTS: () => LocalizedString
+	/**
+	 * No History Available
+	 */
+	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
 	/**
 	 * {amount} Results
 	 */
@@ -9376,6 +9400,30 @@ Are you sure you want to continue?
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Home
+	 */
+	TAB_TITLE_HOME: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	TAB_TITLE_NFT: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	TAB_TITLE_APPS: () => LocalizedString
+	/**
+	 * Discover
+	 */
+	TAB_TITLE_DISCOVER: () => LocalizedString
+	/**
+	 * Activity
+	 */
+	TAB_TITLE_ACTIVITY: () => LocalizedString
+	/**
+	 * More
+	 */
+	TAB_TITLE_MORE: () => LocalizedString
 }
 
 export type Formatters = {

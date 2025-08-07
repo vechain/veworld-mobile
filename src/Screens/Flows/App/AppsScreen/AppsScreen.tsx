@@ -12,13 +12,14 @@ import {
     Layout,
 } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
+    useFetchFeaturedDApps()
     const nav = useNavigation()
 
     const goToSearch = useCallback(() => {
@@ -29,7 +30,6 @@ export const AppsScreen = () => {
         <Layout
             bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
             noBackButton
-            hasSafeArea
             fixedHeader={
                 <BaseView style={HeaderStyleV2}>
                     <HeaderTitle

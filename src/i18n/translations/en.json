@@ -1154,5 +1154,11 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday"
+  "YESTERDAY": "Yesterday",
+  "TAB_TITLE_HOME": "Home",
+  "TAB_TITLE_NFT": "NFTs",
+  "TAB_TITLE_APPS": "Apps",
+  "TAB_TITLE_DISCOVER": "Discover",
+  "TAB_TITLE_ACTIVITY": "Activity",
+  "TAB_TITLE_MORE": "More"
 }
