@@ -120,7 +120,6 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         <>
             <BaseBottomSheet
                 ref={ref}
-                floating={false}
                 contentStyle={styles.bottomSheetContent}
                 leftElement={
                     <BaseView style={styles.headerContainer}>

@@ -122,6 +122,7 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                 onDismiss={onClose}
                 onChange={handleSheetChangePosition}
                 stackBehavior={stackBehavior}
+                floating={true}
                 backgroundStyle={styles.layout}>
                 <BottomSheetFlatList
                     data={Actions}

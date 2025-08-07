@@ -189,8 +189,8 @@ const _BaseBottomSheet = <TData,>(
         bottomSafeArea = true,
         enablePanDownToClose = true,
         blurBackdrop = false,
-        floating = true,
         stackBehavior = "push",
+        floating = false,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
