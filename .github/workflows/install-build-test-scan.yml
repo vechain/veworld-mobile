@@ -2,14 +2,14 @@ name: Build, Test & Scan
 on:
   workflow_call:
 
-  schedule:
-    # Runs at 22:00 UTC every Sunday to Thursday
-    - cron: '0 22 * * 0-4'
-
   workflow_dispatch:
   pull_request:
     branches:
       - "*"
+
+  pull_request_review:
+    types: [submitted]
+
   push:
     branches:
       - main
@@ -19,11 +19,18 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # defer build-and-test-<OS> until after approval 
   build-and-test-ios:
+    if: >-
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved') ||
+      github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/e2e-ios.yml
     secrets: inherit
 
   build-and-test-android:
+    if: >-
+      (github.event_name == 'pull_request_review' && github.event.review.state == 'approved') ||
+      github.event_name == 'workflow_dispatch'
     uses: ./.github/workflows/e2e-android.yml
     secrets: inherit
 
