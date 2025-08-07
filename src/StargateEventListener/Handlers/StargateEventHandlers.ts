@@ -102,66 +102,124 @@ const parseNodeDelegatedEvents = async (
     nodeManagementContract: string,
     thor: ThorClient,
 ): Promise<NodeDelegatedEventData[]> => {
-    const events: NodeDelegatedEventData[] = []
-
     try {
-        // Fetch the block details using the beat ID
         const block = await thor.blocks.getBlockCompressed(beat.id)
 
         if (!block?.transactions) {
             debug(ERROR_EVENTS.STARGATE, `No transactions found in block ${beat.number}`)
-            return events
+            return []
         }
 
-        // Process each transaction in the block
-        for (const txId of block.transactions) {
-            try {
-                // Fetch transaction receipt to get event logs
-                const receipt = await thor.transactions.getTransactionReceipt(txId)
-
-                if (!receipt?.outputs) continue
-
-                // Process each output in the transaction
-                for (const output of receipt.outputs) {
-                    if (!output.events) continue
-
-                    // Process each event in the output
-                    for (const event of output.events) {
-                        // Check if this is a NodeDelegated event from the correct contract
-                        if (
-                            event.address?.toLowerCase() === nodeManagementContract.toLowerCase() &&
-                            event.topics?.[0]?.toLowerCase() === NODE_DELEGATED_EVENT_SIGNATURE.toLowerCase()
-                        ) {
-                            const decoded = decodeNodeDelegatedEvent(event)
-                            if (decoded) {
-                                events.push({
-                                    ...decoded,
-                                    blockNumber: beat.number,
-                                    txId,
-                                    contractAddress: nodeManagementContract,
-                                })
-
-                                debug(
-                                    ERROR_EVENTS.STARGATE,
-                                    `Found NodeDelegated event: nodeId=${decoded.nodeId}, ` +
-                                        `delegatee=${decoded.delegatee}, isDelegated=${decoded.isDelegated}`,
-                                )
-                            }
-                        }
-                    }
-                }
-            } catch (txError) {
-                // Continue processing other transactions if one fails
-                debug(ERROR_EVENTS.STARGATE, `Error processing transaction ${txId}:`, txError)
-            }
-        }
-
+        const events = await processTransactionsForEvents(block.transactions, nodeManagementContract, thor, beat)
         debug(ERROR_EVENTS.STARGATE, `Parsed ${events.length} NodeDelegated events from beat ${beat.number}`)
+
+        return events
     } catch (err) {
         error(ERROR_EVENTS.STARGATE, "Error parsing NodeDelegated events:", err)
+        return []
+    }
+}
+
+/**
+ * Process all transactions in a block to find NodeDelegated events
+ */
+const processTransactionsForEvents = async (
+    transactions: string[],
+    nodeManagementContract: string,
+    thor: ThorClient,
+    beat: Beat,
+): Promise<NodeDelegatedEventData[]> => {
+    const events: NodeDelegatedEventData[] = []
+
+    for (const txId of transactions) {
+        try {
+            const transactionEvents = await processTransactionForEvents(txId, nodeManagementContract, thor, beat)
+            events.push(...transactionEvents)
+        } catch (txError) {
+            debug(ERROR_EVENTS.STARGATE, `Error processing transaction ${txId}:`, txError)
+        }
     }
 
     return events
+}
+
+/**
+ * Process a single transaction to find NodeDelegated events
+ */
+const processTransactionForEvents = async (
+    txId: string,
+    nodeManagementContract: string,
+    thor: ThorClient,
+    beat: Beat,
+): Promise<NodeDelegatedEventData[]> => {
+    const receipt = await thor.transactions.getTransactionReceipt(txId)
+
+    if (!receipt?.outputs) {
+        return []
+    }
+
+    const events: NodeDelegatedEventData[] = []
+
+    for (const output of receipt.outputs) {
+        if (!output.events) continue
+
+        const outputEvents = processOutputEvents(output.events, nodeManagementContract, beat, txId)
+        events.push(...outputEvents)
+    }
+
+    return events
+}
+
+/**
+ * Process events from a transaction output
+ */
+const processOutputEvents = (
+    events: any[],
+    nodeManagementContract: string,
+    beat: Beat,
+    txId: string,
+): NodeDelegatedEventData[] => {
+    const nodeDelegatedEvents: NodeDelegatedEventData[] = []
+
+    for (const event of events) {
+        if (isNodeDelegatedEvent(event, nodeManagementContract)) {
+            const decoded = decodeNodeDelegatedEvent(event)
+            if (decoded) {
+                const eventData: NodeDelegatedEventData = {
+                    ...decoded,
+                    blockNumber: beat.number,
+                    txId,
+                    contractAddress: nodeManagementContract,
+                }
+
+                nodeDelegatedEvents.push(eventData)
+                logFoundEvent(decoded)
+            }
+        }
+    }
+
+    return nodeDelegatedEvents
+}
+
+/**
+ * Check if an event is a NodeDelegated event from the correct contract
+ */
+const isNodeDelegatedEvent = (event: any, nodeManagementContract: string): boolean => {
+    return (
+        event.address?.toLowerCase() === nodeManagementContract.toLowerCase() &&
+        event.topics?.[0]?.toLowerCase() === NODE_DELEGATED_EVENT_SIGNATURE.toLowerCase()
+    )
+}
+
+/**
+ * Log details of a found NodeDelegated event
+ */
+const logFoundEvent = (decoded: Omit<NodeDelegatedEventData, "blockNumber" | "txId" | "contractAddress">): void => {
+    debug(
+        ERROR_EVENTS.STARGATE,
+        `Found NodeDelegated event: nodeId=${decoded.nodeId}, ` +
+            `delegatee=${decoded.delegatee}, isDelegated=${decoded.isDelegated}`,
+    )
 }
 
 /**
