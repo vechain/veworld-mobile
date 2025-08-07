@@ -108,7 +108,7 @@ const parseNodeDelegatedEvents = async (
         // Fetch the block details using the beat ID
         const block = await thor.blocks.getBlockCompressed(beat.id)
 
-        if (!block || !block.transactions) {
+        if (!block?.transactions) {
             debug(ERROR_EVENTS.STARGATE, `No transactions found in block ${beat.number}`)
             return events
         }
