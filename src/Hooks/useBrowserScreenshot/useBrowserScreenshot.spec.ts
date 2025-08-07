@@ -102,7 +102,7 @@ describe("useBrowserScreenshot", () => {
                                     title: "TEST",
                                     favicon:
                                         // eslint-disable-next-line max-len
-                                        "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=32&&url=https://vechain.org",
+                                        "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=48&&url=https://vechain.org",
                                 },
                             ],
                         },
@@ -125,7 +125,7 @@ describe("useBrowserScreenshot", () => {
             title: "NAV STATE TITLE",
             favicon:
                 // eslint-disable-next-line max-len
-                "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=32&&url=https://vechain.org",
+                "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=48&&url=https://vechain.org",
         })
     })
 })
