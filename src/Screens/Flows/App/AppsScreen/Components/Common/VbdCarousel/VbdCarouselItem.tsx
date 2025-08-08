@@ -1,5 +1,5 @@
 import React, { useMemo } from "react"
-import { StyleSheet } from "react-native"
+import { ImageBackground, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { BaseSpacer, BaseText, BaseView, BlurView } from "~Components"
 import { COLORS } from "~Constants"
@@ -28,8 +28,7 @@ export const VbdCarouselItem = ({ app }: Props) => {
     }, [app.categories])
 
     return (
-        <BaseView style={styles.root} testID="VBD_CAROUSEL_ITEM">
-            <FastImage source={{ uri: bannerUri }} style={StyleSheet.absoluteFill} />
+        <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_ITEM">
             <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                 <BaseView px={16} py={12} flexDirection="column" gap={8}>
                     <BaseView flexDirection="row">
@@ -60,7 +59,7 @@ export const VbdCarouselItem = ({ app }: Props) => {
                     </BaseText>
                 </BaseView>
             </BlurView>
-        </BaseView>
+        </ImageBackground>
     )
 }
 
