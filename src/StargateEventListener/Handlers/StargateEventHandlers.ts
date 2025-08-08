@@ -8,6 +8,11 @@ import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services
 // Signature used by Generated ABI map for GenericAbiManager
 const NODE_DELEGATED_EVENT_SIGNATURE_NAME = "NodeDelegated(indexed uint256,indexed address,bool)"
 
+const isNodeDelegatedOutput = (
+    out: ReceiptOutput,
+): out is Extract<ReceiptOutput, { name: typeof NODE_DELEGATED_EVENT_SIGNATURE_NAME }> =>
+    out.name === NODE_DELEGATED_EVENT_SIGNATURE_NAME
+
 interface NodeDelegatedEventData {
     nodeId: string
     delegatee: string
@@ -108,7 +113,7 @@ const parseNodeDelegatedEvents = async (
 
         let events: NodeDelegatedEventData[] = []
         if (expanded?.transactions) {
-            events = await processExpandedTransactionsForEvents(
+            events = processExpandedTransactionsForEvents(
                 expanded.transactions.map(tx => ({ id: tx.id, origin: tx.origin, outputs: tx.outputs })),
                 nodeManagementContract,
                 beat,
@@ -146,17 +151,17 @@ type ExpandedTx = {
     outputs: InspectableOutput[]
 }
 
-const processExpandedTransactionsForEvents = async (
+const processExpandedTransactionsForEvents = (
     transactions: ExpandedTx[],
     nodeManagementContract: string,
     beat: Beat,
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
-): Promise<NodeDelegatedEventData[]> => {
+): NodeDelegatedEventData[] => {
     const events: NodeDelegatedEventData[] = []
 
     for (const tx of transactions) {
         try {
-            const transactionEvents = await processExpandedTransactionForEvents(
+            const transactionEvents = processExpandedTransactionForEvents(
                 tx,
                 nodeManagementContract,
                 beat,
@@ -178,20 +183,18 @@ const processTransactionIdsForEvents = async (
     beat: Beat,
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
 ): Promise<NodeDelegatedEventData[]> => {
-    const events: NodeDelegatedEventData[] = []
+    const settledResults = await Promise.allSettled(
+        transactions.map(txId =>
+            processTransactionForEvents(txId, nodeManagementContract, thor, beat, receiptProcessor),
+        ),
+    )
 
-    for (const txId of transactions) {
-        try {
-            const transactionEvents = await processTransactionForEvents(
-                txId,
-                nodeManagementContract,
-                thor,
-                beat,
-                receiptProcessor,
-            )
-            events.push(...transactionEvents)
-        } catch (txError) {
-            debug(ERROR_EVENTS.STARGATE, "Error processing transaction", txError)
+    const events: NodeDelegatedEventData[] = []
+    for (const result of settledResults) {
+        if (result.status === "fulfilled") {
+            events.push(...result.value)
+        } else {
+            debug(ERROR_EVENTS.STARGATE, "Error processing transaction", result.reason)
         }
     }
 
@@ -201,12 +204,12 @@ const processTransactionIdsForEvents = async (
 /**
  * Process a single transaction to find NodeDelegated events
  */
-const processExpandedTransactionForEvents = async (
+const processExpandedTransactionForEvents = (
     tx: ExpandedTx,
     nodeManagementContract: string,
     beat: Beat,
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
-): Promise<NodeDelegatedEventData[]> => {
+): NodeDelegatedEventData[] => {
     const txId = tx.id
     const txOrigin = tx.origin ?? ""
     const outputs = tx.outputs
@@ -215,17 +218,13 @@ const processExpandedTransactionForEvents = async (
 
     const analyzedOutputs = receiptProcessor.analyzeReceipt(outputs, txOrigin)
     const found: NodeDelegatedEventData[] = analyzedOutputs
-        .filter(
-            (out: ReceiptOutput) =>
-                out.name === NODE_DELEGATED_EVENT_SIGNATURE_NAME &&
-                out.address?.toLowerCase() === nodeManagementContract.toLowerCase(),
-        )
+        .filter(isNodeDelegatedOutput)
+        .filter(out => out.address?.toLowerCase() === nodeManagementContract.toLowerCase())
         .map(out => {
-            const params: any = (out as any).params
             return {
-                nodeId: params.nodeId?.toString?.() ?? String(params.nodeId),
-                delegatee: params.delegatee,
-                isDelegated: Boolean(params.delegated ?? params.isDelegated),
+                nodeId: String(out.params.nodeId),
+                delegatee: out.params.delegatee,
+                isDelegated: Boolean(out.params.delegated),
                 blockNumber: beat.number,
                 txId,
                 contractAddress: nodeManagementContract,
@@ -252,17 +251,13 @@ const processTransactionForEvents = async (
     const txOrigin = receipt.meta.txOrigin ?? ""
     const analyzedOutputs = receiptProcessor.analyzeReceipt(receipt.outputs as unknown as InspectableOutput[], txOrigin)
     const found: NodeDelegatedEventData[] = analyzedOutputs
-        .filter(
-            (out: ReceiptOutput) =>
-                out.name === NODE_DELEGATED_EVENT_SIGNATURE_NAME &&
-                out.address?.toLowerCase() === nodeManagementContract.toLowerCase(),
-        )
+        .filter(isNodeDelegatedOutput)
+        .filter(out => out.address?.toLowerCase() === nodeManagementContract.toLowerCase())
         .map(out => {
-            const params: any = (out as any).params
             return {
-                nodeId: params.nodeId?.toString?.() ?? String(params.nodeId),
-                delegatee: params.delegatee,
-                isDelegated: Boolean(params.delegated ?? params.isDelegated),
+                nodeId: String(out.params.nodeId),
+                delegatee: out.params.delegatee,
+                isDelegated: Boolean(out.params.delegated),
                 blockNumber: beat.number,
                 txId,
                 contractAddress: nodeManagementContract,
