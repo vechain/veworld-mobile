@@ -17,9 +17,10 @@ export const useBottomSheetRef = () => {
 
 type UseBottomSheetModalOpts = {
     externalRef?: RefObject<BottomSheetModal>
+    afterClose?: () => void
 }
 
-export const useBottomSheetModal = <TData>({ externalRef }: UseBottomSheetModalOpts = {}) => {
+export const useBottomSheetModal = <TData>({ externalRef, afterClose }: UseBottomSheetModalOpts = {}) => {
     const ref = useRef<BottomSheetModal>(null)
 
     const onOpen = useCallback(
@@ -43,7 +44,8 @@ export const useBottomSheetModal = <TData>({ externalRef }: UseBottomSheetModalO
     const onClose = useCallback(() => {
         if (externalRef) externalRef.current?.close()
         else ref.current?.close()
-    }, [externalRef])
+        if (afterClose) afterClose()
+    }, [externalRef, afterClose])
 
     return { ref: externalRef ?? ref, onOpen, onClose, openWithDelay }
 }
