@@ -119,31 +119,26 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     {userAgent && !isLoading && (
-                        <>
-                            <Animated.View
-                                ref={webviewContainerRef}
-                                style={[styles.webviewContainer]}
-                                collapsable={false}>
-                                <WebView
-                                    ref={webviewRef as MutableRefObject<WebView>}
-                                    source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
-                                    userAgent={userAgent}
-                                    onNavigationStateChange={onNavigationStateChange}
-                                    javaScriptEnabled={true}
-                                    onMessage={onMessage}
-                                    onScroll={onScroll}
-                                    onLoadEnd={onLoadEnd}
-                                    style={styles.loginWebView}
-                                    scalesPageToFit={true}
-                                    injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
-                                    allowsInlineMediaPlayback={true}
-                                    originWhitelist={originWhitelist}
-                                    collapsable={false}
-                                    startInLoadingState={true}
-                                    renderLoading={renderLoading}
-                                />
-                            </Animated.View>
-                        </>
+                        <Animated.View ref={webviewContainerRef} style={[styles.webviewContainer]} collapsable={false}>
+                            <WebView
+                                ref={webviewRef as MutableRefObject<WebView>}
+                                source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
+                                userAgent={userAgent}
+                                onNavigationStateChange={onNavigationStateChange}
+                                javaScriptEnabled={true}
+                                onMessage={onMessage}
+                                onScroll={onScroll}
+                                onLoadEnd={onLoadEnd}
+                                style={styles.loginWebView}
+                                scalesPageToFit={true}
+                                injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
+                                allowsInlineMediaPlayback={true}
+                                originWhitelist={originWhitelist}
+                                collapsable={false}
+                                startInLoadingState={true}
+                                renderLoading={renderLoading}
+                            />
+                        </Animated.View>
                     )}
 
                     <ChangeAccountNetworkBottomSheet
