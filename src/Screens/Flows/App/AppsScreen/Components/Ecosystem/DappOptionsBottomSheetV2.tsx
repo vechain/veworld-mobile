@@ -55,7 +55,7 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
             </TouchableOpacity>
             <TouchableOpacity style={styles.button} onPress={onShare}>
                 <BaseIcon
-                    name="icon-share"
+                    name="icon-share-2"
                     size={16}
                     style={styles.icon}
                     color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
