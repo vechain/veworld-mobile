@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { ScrollView } from "react-native-gesture-handler"
 import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -41,13 +40,7 @@ export const AppsScreen = () => {
                     </BaseView>
                 </BaseView>
             }
-            fixedBody={
-                <BaseView flex={1} gap={16}>
-                    <ScrollView style={styles.scrollView}>
-                        <EcosystemSection />
-                    </ScrollView>
-                </BaseView>
-            }
+            body={<EcosystemSection />}
         />
     )
 }
@@ -58,8 +51,5 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 8,
             borderRadius: 100,
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_100,
-        },
-        scrollView: {
-            flex: 1,
         },
     })
