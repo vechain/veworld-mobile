@@ -93,7 +93,7 @@ export const DappOptionsBottomSheetV2 = ({ bsRef }: Props) => {
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         layout: {
-            backgroundColor: theme.colors.actionBottomSheet.background,
+            backgroundColor: theme.colors.newBottomSheet.background,
         },
         button: {
             flexDirection: "row",

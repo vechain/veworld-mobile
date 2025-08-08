@@ -244,6 +244,9 @@ export type Colors = {
         }
         emptyStateColor: string
     }
+    newBottomSheet: {
+        background: string
+    }
 }
 
 export enum COLORS {
@@ -589,6 +592,9 @@ const light: Colors = {
         },
         emptyStateColor: COLORS.GREY_600,
     },
+    newBottomSheet: {
+        background: COLORS.WHITE,
+    },
 }
 
 const dark: Colors = {
@@ -836,6 +842,9 @@ const dark: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.WHITE,
+    },
+    newBottomSheet: {
+        background: COLORS.WHITE,
     },
 }
 

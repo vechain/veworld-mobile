@@ -78,7 +78,7 @@ export const SortDAppsBottomSheetV2 = ({ selectedSort, onSortChange, bsRef }: Pr
                     buttons={buttons}
                     selectedId={internalSort}
                     isBottomSheet
-                    dot={false}
+                    dot={"right"}
                     action={onRadioElementSelected}
                 />
                 <BaseView flexDirection="row" gap={16}>
@@ -96,6 +96,6 @@ export const SortDAppsBottomSheetV2 = ({ selectedSort, onSortChange, bsRef }: Pr
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         layout: {
-            backgroundColor: theme.colors.actionBottomSheet.background,
+            backgroundColor: theme.colors.newBottomSheet.background,
         },
     })
