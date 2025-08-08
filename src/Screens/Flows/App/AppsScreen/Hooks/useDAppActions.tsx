@@ -1,19 +1,42 @@
-import { useCallback } from "react"
-import { useNotifications } from "~Components"
+import { useCallback, useMemo } from "react"
 import { AnalyticsEvent, DiscoveryDApp } from "~Constants"
 import { useAnalyticTracking, useCameraPermissions, useVisitedUrls } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
-import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
+import { NETWORK_TYPE } from "~Model"
+import {
+    addNavigationToDApp,
+    increaseDappVisitCounter,
+    selectNotificationFeautureEnabled,
+    selectSelectedNetwork,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 
 export const useDAppActions = () => {
     const track = useAnalyticTracking()
     const dispatch = useAppDispatch()
+    const network = useAppSelector(selectSelectedNetwork)
+
     const { addVisitedUrl } = useVisitedUrls()
-    const { increaseDappCounter } = useNotifications()
     const { checkPermissions } = useCameraPermissions({
         onCanceled: () => {},
     })
     const { navigateWithTab } = useBrowserTab()
+    const isMainnet = useMemo(() => network.type === NETWORK_TYPE.MAIN, [network.type])
+    const notificationFeatureEnabled = useAppSelector(selectNotificationFeautureEnabled)
+
+    /**
+     * This function is a copy of what there is in the Notification Provider.
+     * This is needed in order to correctly use some BottomSheets
+     */
+    const increaseDappCounter = useCallback(
+        (dappId: string) => {
+            if (dappId && isMainnet && notificationFeatureEnabled) {
+                dispatch(increaseDappVisitCounter({ dappId: dappId }))
+            }
+        },
+        [dispatch, isMainnet, notificationFeatureEnabled],
+    )
 
     const onDAppPress = useCallback(
         async (dapp: DiscoveryDApp) => {

@@ -1194,6 +1194,10 @@ type RootTranslation = {
 	 */
 	BTN_ADD_TO_FAVORITES: string
 	/**
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​s
+	 */
+	BTN_ADD_TO_FAVORITE: string
+	/**
 	 * A​l​p​h​a​b​e​t​i​c​ ​(​A​-​Z​)
 	 */
 	BTN_ALPHABETIC_ASC: string
@@ -1434,6 +1438,10 @@ type RootTranslation = {
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
 	 */
 	BTN_REMOVE_FROM_FAVORITES: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
+	 */
+	BTN_REMOVE_FROM_FAVORITE: string
 	/**
 	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
 	 */
@@ -2240,13 +2248,25 @@ type RootTranslation = {
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_DAPPS: string
 	/**
+	 * D​e​F​i
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DEFI: string
+	/**
+	 * G​o​v​e​r​n​a​n​c​e
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_GOVERNANCE: string
+	/**
 	 * N​F​T​s
 	 */
-	DISCOVER_ECOSYSTEM_FILTER_NFTS: string
+	DISCOVER_ECOSYSTEM_FILTER_NFT: string
 	/**
 	 * S​u​s​t​a​i​n​a​b​i​l​i​t​y
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: string
+	/**
+	 * T​o​o​l​s
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_TOOLS: string
 	/**
 	 * A​d​d​ ​b​o​o​k​m​a​r​k​s​ ​i​n​ ​t​h​e​ ​b​r​o​w​s​e​r
 	 */
@@ -4072,6 +4092,16 @@ type RootTranslation = {
 	 * T​r​a​n​s​a​c​t​i​o​n​s
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: string
+	/**
+	 * D​i​s​c​o​v​e​r​e​d​ ​{​n​a​m​e​}​ ​o​n​ ​V​e​W​o​r​l​d​ ​—​ ​d​e​f​i​n​i​t​e​l​y​ ​w​o​r​t​h​ ​a​ ​l​o​o​k​.​
+​H​e​r​e​'​s​ ​w​h​a​t​ ​i​t​'​s​ ​a​l​l​ ​a​b​o​u​t​:​
+​{​d​e​s​c​r​i​p​t​i​o​n​}​
+​{​u​r​l​}
+	 * @param {string} description
+	 * @param {string} name
+	 * @param {string} url
+	 */
+	SHARE_DAPP: RequiredParams<'description' | 'name' | 'url'>
 	/**
 	 * S​h​a​r​e​ ​i​m​a​g​e
 	 */
@@ -5919,6 +5949,10 @@ Thanks for your patience!
 	 */
 	BTN_ADD_TO_FAVORITES: () => LocalizedString
 	/**
+	 * Add to Favorites
+	 */
+	BTN_ADD_TO_FAVORITE: () => LocalizedString
+	/**
 	 * Alphabetic (A-Z)
 	 */
 	BTN_ALPHABETIC_ASC: () => LocalizedString
@@ -6158,6 +6192,10 @@ Thanks for your patience!
 	 * Remove from Favorite dApps
 	 */
 	BTN_REMOVE_FROM_FAVORITES: () => LocalizedString
+	/**
+	 * Remove from Favorites
+	 */
+	BTN_REMOVE_FROM_FAVORITE: () => LocalizedString
 	/**
 	 * Remove wallet
 	 */
@@ -6955,13 +6993,25 @@ Thanks for your patience!
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_DAPPS: () => LocalizedString
 	/**
+	 * DeFi
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_DEFI: () => LocalizedString
+	/**
+	 * Governance
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_GOVERNANCE: () => LocalizedString
+	/**
 	 * NFTs
 	 */
-	DISCOVER_ECOSYSTEM_FILTER_NFTS: () => LocalizedString
+	DISCOVER_ECOSYSTEM_FILTER_NFT: () => LocalizedString
 	/**
 	 * Sustainability
 	 */
 	DISCOVER_ECOSYSTEM_FILTER_SUSTAINABILITY: () => LocalizedString
+	/**
+	 * Tools
+	 */
+	DISCOVER_ECOSYSTEM_FILTER_TOOLS: () => LocalizedString
 	/**
 	 * Add bookmarks in the browser
 	 */
@@ -8752,6 +8802,13 @@ Are you sure you want to continue?
 	 * Transactions
 	 */
 	SETTINGS_TRANSACTIONS_TITLE: () => LocalizedString
+	/**
+	 * Discovered {name} on VeWorld — definitely worth a look.
+Here's what it's all about:
+{description}
+{url}
+	 */
+	SHARE_DAPP: (arg: { description: string, name: string, url: string }) => LocalizedString
 	/**
 	 * Share image
 	 */

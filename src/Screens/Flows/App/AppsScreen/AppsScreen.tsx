@@ -1,20 +1,12 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import {
-    BaseIcon,
-    BaseTouchable,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    HeaderStyleV2,
-    HeaderTitle,
-    Layout,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { EcosystemSection } from "./Components/Ecosystem"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
@@ -48,7 +40,7 @@ export const AppsScreen = () => {
                     </BaseView>
                 </BaseView>
             }
-            body={<BaseText>{"AppsScreen"}</BaseText>}
+            body={<EcosystemSection />}
         />
     )
 }

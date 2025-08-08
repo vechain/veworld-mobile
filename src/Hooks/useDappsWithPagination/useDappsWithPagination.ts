@@ -13,7 +13,10 @@ type QueryKey = ["USE_DAPPS_WITH_PAGINATION", UseDappsWithPaginationSortKey, DAp
 type PageFn = (args: { pageParam: number; queryKey: QueryKey }) => Promise<UseDappsWithPaginationFetchReturn>
 
 export const useDappsWithPagination = ({ sort, filter }: Args) => {
-    const { fetchWithPage: fetchAppHubWithPage, dependencyLoading: appHubDependencyLoading } = useAppHubDapps(filter)
+    const { fetchWithPage: fetchAppHubWithPage, dependencyLoading: appHubDependencyLoading } = useAppHubDapps({
+        filter,
+        kind: "v1",
+    })
 
     const pageFunction: PageFn = useCallback(
         async ({ pageParam, queryKey: [_, _sort, _filter] }) => {

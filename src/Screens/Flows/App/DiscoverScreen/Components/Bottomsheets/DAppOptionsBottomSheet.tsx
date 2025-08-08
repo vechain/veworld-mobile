@@ -1,15 +1,15 @@
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo } from "react"
+import { default as React, useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BottomSheetAction } from "~Components"
-import { AnalyticsEvent, ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useAnalyticTracking, useDappBookmarking, useScrollableBottomSheet, useThemedStyles } from "~Hooks"
+import { ColorThemeType, DiscoveryDApp } from "~Constants"
+import { useDappBookmarking, useScrollableBottomSheet, useThemedStyles } from "~Hooks"
 import { FastAction } from "~Model"
 import { Routes } from "~Navigation"
-import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
+import { useDAppActions } from "../../Hooks"
 
 type Props = {
     selectedDApp?: DiscoveryDApp
@@ -23,24 +23,14 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
         const { styles, theme } = useThemedStyles(baseStyles)
         const bookmarkedDApps = useDappBookmarking(selectedDApp?.href, selectedDApp?.name)
         const nav = useNavigation()
-        const track = useAnalyticTracking()
         const { LL } = useI18nContext()
-        const dispatch = useAppDispatch()
+        const { onDAppPress } = useDAppActions()
 
         const onOpenDAppPress = useCallback(() => {
             if (selectedDApp) {
-                track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-                    url: selectedDApp.href,
-                })
-
-                setTimeout(() => {
-                    dispatch(addNavigationToDApp({ href: selectedDApp.href, isCustom: selectedDApp.isCustom ?? false }))
-                }, 1000)
-
-                onClose?.()
-                nav.navigate(Routes.BROWSER, { url: selectedDApp.href })
+                onDAppPress(selectedDApp).then(() => onClose?.())
             }
-        }, [selectedDApp, onClose, nav, track, dispatch])
+        }, [selectedDApp, onDAppPress, onClose])
 
         const onSeeOnVBDPress = useCallback(() => {
             onClose?.()

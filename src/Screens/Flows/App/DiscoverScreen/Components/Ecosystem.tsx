@@ -195,7 +195,7 @@ export const Ecosystem = React.memo(({ title }: EcosystemProps) => {
             },
             {
                 key: _nft,
-                title: LL.DISCOVER_ECOSYSTEM_FILTER_NFTS(),
+                title: LL.DISCOVER_ECOSYSTEM_FILTER_NFT(),
                 isSelected: selectedDappsType === _nft,
                 onPress: () => setSelectedDappsType(_nft),
             },

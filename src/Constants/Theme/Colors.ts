@@ -222,6 +222,12 @@ export type Colors = {
     stakedVetCard: {
         background: string
     }
+    dappCard: {
+        name: string
+        description: string
+        icon: string
+    }
+    dappTitle: string
     history: {
         button: {
             background: string
@@ -237,6 +243,9 @@ export type Colors = {
             rightIconColor: string
         }
         emptyStateColor: string
+    }
+    newBottomSheet: {
+        background: string
     }
 }
 
@@ -561,6 +570,12 @@ const light: Colors = {
     stakedVetCard: {
         background: COLORS.GREY_50,
     },
+    dappCard: {
+        name: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_800,
     history: {
         button: {
             background: COLORS.WHITE,
@@ -576,6 +591,9 @@ const light: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.GREY_600,
+    },
+    newBottomSheet: {
+        background: COLORS.WHITE,
     },
 }
 
@@ -803,6 +821,12 @@ const dark: Colors = {
     stakedVetCard: {
         background: COLORS.PURPLE,
     },
+    dappCard: {
+        name: COLORS.GREY_50,
+        description: COLORS.GREY_400,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_100,
     history: {
         button: {
             background: COLORS.DARK_PURPLE_DISABLED,
@@ -818,6 +842,9 @@ const dark: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.WHITE,
+    },
+    newBottomSheet: {
+        background: COLORS.WHITE,
     },
 }
 
