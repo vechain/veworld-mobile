@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
@@ -13,6 +14,8 @@ export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+
+    const isNormalUser = useIsNormalUser()
 
     const goToSearch = useCallback(() => {
         nav.navigate(Routes.APPS_SEARCH)
@@ -44,8 +47,7 @@ export const AppsScreen = () => {
             }
             body={
                 <>
-                    <NewUserForYouCarousel />
-                    {true && <ForYouCarousel />}
+                    {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
                     <BaseSpacer height={128} />
                 </>
             }
