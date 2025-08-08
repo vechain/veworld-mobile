@@ -447,28 +447,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 isFirstRequest: !isAlreadyConnected,
             }
 
-            if (isAlreadyConnected) {
-                setCertificateBsData(req)
-                certificateBsRef.current?.present()
-            } else {
-                setConnectBsData({
-                    type: "in-app",
-                    initialRequest: req,
-                    appUrl,
-                    appName,
-                })
-                connectBsRef.current?.present()
-            }
+            setCertificateBsData(req)
+            certificateBsRef.current?.present()
         },
-        [
-            connectedDiscoveryApps,
-            switchAccount,
-            switchNetwork,
-            setCertificateBsData,
-            certificateBsRef,
-            setConnectBsData,
-            connectBsRef,
-        ],
+        [connectedDiscoveryApps, switchAccount, switchNetwork, setCertificateBsData, certificateBsRef],
     )
 
     const navigateToSignedDataScreen = useCallback(

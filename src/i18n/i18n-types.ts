@@ -209,6 +209,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
+	 * M​a​n​a​g​i​n​g
+	 */
+	STARGATE_DELEGATEE_LABEL: string
+	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: string
@@ -2252,10 +2256,6 @@ type RootTranslation = {
 	 */
 	DISCOVER_SEE_ALL_BOOKMARKS: string
 	/**
-	 * Managing
-	 */
-	STARGATE_DELEGATEE_LABEL: string
-	/**
 	 * S​o​r​t​ ​b​y
 	 */
 	DISCOVER_SORT_BY: string
@@ -4073,11 +4073,11 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * S​i​g​n
+	 * L​o​g​i​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
 	/**
-	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 * L​o​g​i​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
@@ -4888,6 +4888,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
+	/**
 	 * No Swaps to show yet
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
@@ -5496,10 +5500,6 @@ Try reconnect your device to the internet.
 	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
 	 */
 	BD_OBSERVE_WALLET: () => LocalizedString
-	/**
-	 * Managing
-	 */
-	STARGATE_DELEGATEE_LABEL: () => LocalizedString
 	/**
 	 * Viewing and managing your crypto assets has never been easier.
 	 */
@@ -8701,11 +8701,11 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Sign
+	 * Login
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
 	/**
-	 * Sign certificate
+	 * Login
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
