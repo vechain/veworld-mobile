@@ -37,7 +37,7 @@ const StatItem = React.memo(({ value, label, icon }: StatItemProps) => {
     const theme = useTheme()
 
     return (
-        <BaseView flexDirection="column" flex={1} alignItems="flex-start">
+        <BaseView flexDirection="column" alignItems="center" justifyContent="center">
             <BaseIcon name={icon} size={20} color={theme.colors.x2eAppOpenDetails.favoriteBtn.borderActive} />
             <BaseSpacer height={8} />
             <BaseText typographyFont="captionMedium" color={theme.colors.x2eAppOpenDetails.stats.caption}>
@@ -63,7 +63,12 @@ const Stats = React.memo(
         actions = { value: "10.8 T", label: "Actions", icon: "icon-leaf" },
     }: StatsProps) => {
         return (
-            <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" py={8} gap={8}>
+            <AnimatedBaseView
+                layout={LAYOUT_TRANSITION}
+                flexDirection="row"
+                justifyContent="space-between"
+                py={8}
+                gap={8}>
                 {joined && <StatItem value={joined.value} label={joined.label} icon={joined.icon} />}
                 {users && <StatItem value={users.value} label={users.label} icon={users.icon} />}
                 {actions && <StatItem value={actions.value} label={actions.label} icon={actions.icon} />}

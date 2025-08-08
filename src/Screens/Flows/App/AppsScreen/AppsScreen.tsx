@@ -63,7 +63,7 @@ export const AppsScreen = () => {
                     <BaseText>{"AppsScreen"}</BaseText>
                     <BaseView flex={1} px={16} justifyContent="center" alignItems="center">
                         <BaseButton action={onOpenAppsBottomSheet} variant="solid" size="lg" w={100}>
-                            {LL.DISCOVER_SEARCH_CTA()}
+                            {LL.BTN_OPEN()}
                         </BaseButton>
 
                         <X2EAppsBottomSheet
