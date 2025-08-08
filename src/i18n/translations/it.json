@@ -273,7 +273,7 @@
   "BROWSER_INVALID_DEEP_LINK": "Si è verificato un errore durante il tentativo di accedere a questo link. Assicurati che sia corretto e riprova.",
   "BROWSER_NETWORK_NOT_FOUND": "L'applicazione ha richiesto una rete che non è stata trovata.",
   "BROWSER_NEW_TAB": "Apri una nuova scheda",
-  "BROWSER_RELOAD_PAGE": "Ricarica la pagina",
+  "BROWSER_RELOAD_PAGE": "Ricarica pagina",
   "BROWSER_REMOVE_FAVORITE_DAPPS": "Rimuovi dai Preferiti",
   "BROWSER_SEE_ALL_TABS": "Vedi tutte le schede aperte",
   "BROWSER_SHARE": "Condividi",
