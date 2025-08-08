@@ -11,7 +11,6 @@ import {
 import { Routes } from "~Navigation/Enums"
 import { CloudKitWallet, ConnectedLedgerDevice, DrivetWallet } from "~Model"
 import { useNavAnimation } from "~Hooks"
-import { SmartAccountScreen } from "../../Screens/Flows/WalletCreation/SmartAccount"
 
 export type RootStackParamListCreateWalletApp = {
     Home: undefined
@@ -69,13 +68,6 @@ export const CreateWalletAppStack = () => {
             <CreateWalletApp.Screen
                 name={Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD}
                 component={ImportMnemonicBackupPasswordScreen}
-                options={{
-                    headerShown: false,
-                }}
-            />
-            <CreateWalletApp.Screen
-                name={Routes.IMPORT_SMART_ACCOUNT}
-                component={SmartAccountScreen}
                 options={{
                     headerShown: false,
                 }}
