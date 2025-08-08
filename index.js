@@ -15,7 +15,6 @@ import {
     WalletConnectContextProvider,
     FeatureFlagsProvider,
 } from "~Components"
-import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { GestureHandlerRootView } from "react-native-gesture-handler"
 import { useFonts } from "expo-font"
 import {
@@ -59,8 +58,7 @@ import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
-import { SmartWalletFallbackProvider } from "~Components/Providers/SmartWalletFallbackProvider"
-import { SmartWalletWithPrivyProvider } from "./src/VechainWalletKit"
+import { FeatureFlaggedSmartWallet } from "./src/Components/Providers/FeatureFlaggedSmartWallet"
 
 const { fontFamily } = typography
 
@@ -70,31 +68,6 @@ info(ERROR_EVENTS.APP, "is Hermes active : ", isHermes())
 if (__DEV__ && process.env.REACT_APP_UI_LOG === "false") {
     // hide all ui logs
     LogBox.ignoreAllLogs()
-}
-
-const FeatureFlaggedSmartWallet = ({ children, nodeUrl, networkType }) => {
-    const featureFlags = useFeatureFlags()
-
-    const ff = { ...featureFlags, smartWalletFeature: { enabled: true } }
-    if (ff.smartWalletFeature.enabled) {
-        return (
-            <SmartWalletWithPrivyProvider
-                config={{
-                    providerConfig: {
-                        appId: process.env.PRIVY_APP_ID,
-                        clientId: process.env.PRIVY_CLIENT_ID,
-                    },
-                    networkConfig: {
-                        nodeUrl,
-                        networkType,
-                    },
-                }}>
-                {children}
-            </SmartWalletWithPrivyProvider>
-        )
-    }
-
-    return <SmartWalletFallbackProvider>{children}</SmartWalletFallbackProvider>
 }
 
 const Main = () => {

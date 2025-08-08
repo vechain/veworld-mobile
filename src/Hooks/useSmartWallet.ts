@@ -12,8 +12,7 @@ export const useSmartWallet = (): SmartWalletContext => {
     // never throws; undefined when provider isn’t mounted
     const vechainCtx = useContext(SmartWalletProviderContext) as SmartWalletContext | undefined
 
-    const ff = { ...featureFlags, smartWalletFeature: { enabled: true } }
-    if (!ff.smartWalletFeature.enabled || vechainCtx == null) {
+    if (!featureFlags?.smartWalletFeature?.enabled || vechainCtx == null) {
         if (fallbackCtx == null) {
             throw new Error("SmartWallet context is unavailable and fallback context is missing.")
         }

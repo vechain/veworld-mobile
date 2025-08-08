@@ -58,7 +58,7 @@ import crypto from "react-native-quick-crypto"
 import axios, { AxiosError } from "axios"
 import { waitFor } from "@testing-library/react-native"
 import { selectDevice, selectSelectedAccount, selectVthoTokenWithBalanceByAccount } from "~Storage/Redux"
-import { WalletEncryptionKeyHelper } from "~Components"
+import { initialState, WalletEncryptionKeyHelper } from "~Components"
 import { BigNutils } from "~Utils"
 import { Transaction } from "@vechain/sdk-core"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
@@ -88,6 +88,13 @@ jest.mock("~Storage/Redux", () => ({
     selectDevice: jest.fn(),
     selectVthoTokenWithBalanceByAccount: jest.fn(),
     getDefaultDelegationUrl: jest.fn().mockReturnValue("https://example.com"),
+}))
+
+let mockUseFeatureFlags = { ...initialState }
+
+jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
+    ...jest.requireActual("~Components/Providers/FeatureFlagsProvider"),
+    useFeatureFlags: () => mockUseFeatureFlags,
 }))
 
 jest.mock("~Hooks/useSendTransaction")
@@ -534,6 +541,7 @@ describe("useTransactionScreen", () => {
         }, 20000)
 
         it("should submit transaction using a smart wallet account", async () => {
+            mockUseFeatureFlags = { ...initialState, smartWalletFeature: { enabled: true } }
             ;(useSendTransaction as jest.Mock).mockImplementation(
                 jest.requireActual("~Hooks/useSendTransaction").useSendTransaction,
             )
@@ -617,6 +625,7 @@ describe("useTransactionScreen", () => {
 
             expect(transactionId).toBeDefined()
             expect(transaction).toBeInstanceOf(Transaction)
+            mockUseFeatureFlags = { ...initialState, smartWalletFeature: { enabled: false } }
         }, 20000)
     })
 })
