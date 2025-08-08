@@ -5,6 +5,9 @@ import { SmartWalletFallbackContext } from "../Components/Providers/SmartWalletF
 import type { SmartWalletContext } from "../VechainWalletKit/types/wallet"
 import { SmartWalletProviderContext } from "../VechainWalletKit/providers/SmartWalletProvider"
 
+// This allows the smart wallet feature to be toggled on/off by using a feature flag
+// Once the feature is enabled we can remove this hook and use the VechainWalletKit
+// hook directly
 export const useSmartWallet = (): SmartWalletContext => {
     const featureFlags = useFeatureFlags()
     const fallbackCtx = useContext(SmartWalletFallbackContext) as SmartWalletContext | undefined

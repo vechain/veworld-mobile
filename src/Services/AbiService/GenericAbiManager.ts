@@ -2,7 +2,7 @@ import { ethers } from "ethers"
 import { AbiManager, EventResult, IndexableAbi, InspectableOutput } from "./AbiManager"
 import { Event } from "@vechain/sdk-network"
 import { AbiEvent, AbiEventParameter } from "abitype"
-import generatedAbi from "../../Generated/abi"
+import generatedAbi from "~Generated/abi"
 
 const getIndexedInputs = (inputs: AbiEventParameter[] | readonly AbiEventParameter[]) => {
     return inputs.filter(input => input.indexed)

@@ -143,22 +143,3 @@ export {
     resetMockOAuth,
     resetAllMocks,
 }
-
-// CommonJS exports for compatibility
-module.exports = {
-    usePrivy,
-    useEmbeddedEthereumWallet,
-    useLoginWithOAuth,
-    PrivyProvider,
-    // Helper functions for dynamic configuration
-    setAuthenticatedUser,
-    setUnauthenticatedUser,
-    setCustomUser,
-    setMockWallets,
-    setMockPrivyProviderResp,
-    setEmptyWallets,
-    setProviderError,
-    setMockOAuthLogin,
-    resetMockOAuth,
-    resetAllMocks,
-}

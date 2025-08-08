@@ -28,7 +28,6 @@ export type RootStackParamListCreateWalletApp = {
     [Routes.IMPORT_MNEMONIC_BACKUP_PASSWORD]: {
         wallet: CloudKitWallet | DrivetWallet
     }
-    [Routes.IMPORT_SMART_ACCOUNT]: undefined
 }
 
 const CreateWalletApp = createNativeStackNavigator<RootStackParamListCreateWalletApp>()
