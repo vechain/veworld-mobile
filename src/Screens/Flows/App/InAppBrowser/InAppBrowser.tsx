@@ -160,6 +160,9 @@ const baseStyles = (theme: ColorThemeType) => {
             flex: 1,
             justifyContent: "flex-start",
             alignItems: "stretch",
+            borderTopStartRadius: 24,
+            borderTopEndRadius: 24,
+            overflow: "hidden",
         },
         webviewContainer: {
             position: "relative",
