@@ -1,7 +1,17 @@
-import React, { useCallback, useEffect } from "react"
+import React, { ElementType, useCallback, useEffect, useMemo } from "react"
 import { ImageBackground, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
-import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView, BlurView } from "~Components"
+import { getTimeZone } from "react-native-localize"
+import {
+    BaseBottomSheet,
+    BaseButton,
+    BaseIcon,
+    BaseIconProps,
+    BaseSpacer,
+    BaseText,
+    BaseView,
+    BlurView,
+} from "~Components"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -10,8 +20,9 @@ import { VbdDApp } from "~Model"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { addBookmark, removeBookmark, selectFavoritesDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { URIUtils } from "~Utils"
+import { BigNutils, DateUtils, URIUtils } from "~Utils"
 import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
+import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 
 type VbdCarouselBottomSheetProps = {
     bannerUri?: string
@@ -28,6 +39,24 @@ const ANIMATION_DEFAULT = {
     opacity: 0,
 }
 
+const VbdInfoColumn = ({ Icon, title, description }: { Icon: ElementType; title: string; description: string }) => {
+    const theme = useTheme()
+    const color = useMemo(() => (!theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.LIME_GREEN), [theme.isDark])
+
+    return (
+        <BaseView justifyContent="center" alignItems="center" p={12}>
+            <Icon fill={color} color={color} size={20} />
+            <BaseText typographyFont="smallCaptionRegular" mt={8} mb={4}>
+                {title}
+            </BaseText>
+            <BaseText typographyFont="bodyMedium">{description}</BaseText>
+        </BaseView>
+    )
+}
+
+const UsersIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-users" {...props} />
+const LeafIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-leaf" {...props} />
+
 export const VbdCarouselBottomSheet = ({
     isOpen,
     setIsOpen,
@@ -36,7 +65,7 @@ export const VbdCarouselBottomSheet = ({
     category,
     app,
 }: VbdCarouselBottomSheetProps) => {
-    const { LL } = useI18nContext()
+    const { LL, locale } = useI18nContext()
     const theme = useTheme()
     const { ref, onOpen, onClose } = useBottomSheetModal()
     const opacity = useSharedValue(ANIMATION_DEFAULT.opacity)
@@ -84,6 +113,18 @@ export const VbdCarouselBottomSheet = ({
             transform: [{ translateY: translateY.value }],
         }
     }, [opacity, translateY])
+
+    const date = useMemo(() => {
+        return DateUtils.formatDateTime(
+            Number(app.createdAtTimestamp) * 1000,
+            locale,
+            getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+            { hideTime: true, hideDay: true },
+        )
+    }, [app.createdAtTimestamp, locale])
+
+    const usersNum = useMemo(() => BigNutils(12347700).toCompactString(locale), [locale])
+    const actionsNum = useMemo(() => BigNutils(12347700).toCompactString(locale), [locale])
 
     return (
         <BaseBottomSheet
@@ -135,6 +176,7 @@ export const VbdCarouselBottomSheet = ({
                         <BaseText
                             typographyFont="captionMedium"
                             color={COLORS.WHITE_RGBA_85}
+                            numberOfLines={15}
                             flexDirection="row"
                             py={5}
                             testID="VBD_CAROUSEL_ITEM_APP_DESCRIPTION">
@@ -143,7 +185,12 @@ export const VbdCarouselBottomSheet = ({
                     </BaseView>
                 </BlurView>
             </BaseView>
-            <BaseView px={24} pt={16} pb={24} gap={12}>
+            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between" gap={8} px={30} pt={16}>
+                <VbdInfoColumn Icon={BadgeCheckIconSVG} title={LL.APPS_BS_JOINED()} description={date} />
+                <VbdInfoColumn Icon={UsersIcon} title={LL.APPS_BS_USERS()} description={usersNum} />
+                <VbdInfoColumn Icon={LeafIcon} title={LL.APPS_BS_ACTIONS()} description={actionsNum} />
+            </BaseView>
+            <BaseView px={24} pt={16} pb={10} gap={12}>
                 <BaseButton
                     testID="Favorite_Button"
                     style={styles.btn}
