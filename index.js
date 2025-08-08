@@ -57,6 +57,7 @@ import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
+import { KeyboardProvider } from "react-native-keyboard-controller"
 
 const { fontFamily } = typography
 
@@ -123,30 +124,32 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <ConnexContextProvider>
-                <PersistQueryClientProvider
-                    client={queryClient}
-                    persistOptions={{
-                        persister: clientPersister,
-                    }}>
-                    <FeatureFlagsProvider>
-                        <NavigationProvider>
-                            <InteractionProvider>
-                                <WalletConnectContextProvider>
-                                    <BottomSheetModalProvider>
-                                        <InAppBrowserProvider>
-                                            <NotificationsProvider>
-                                                <EntryPoint />
-                                            </NotificationsProvider>
-                                        </InAppBrowserProvider>
-                                    </BottomSheetModalProvider>
-                                </WalletConnectContextProvider>
-                            </InteractionProvider>
-                        </NavigationProvider>
-                        <BaseToast />
-                    </FeatureFlagsProvider>
-                </PersistQueryClientProvider>
-            </ConnexContextProvider>
+            <KeyboardProvider>
+                <ConnexContextProvider>
+                    <PersistQueryClientProvider
+                        client={queryClient}
+                        persistOptions={{
+                            persister: clientPersister,
+                        }}>
+                        <FeatureFlagsProvider>
+                            <NavigationProvider>
+                                <InteractionProvider>
+                                    <WalletConnectContextProvider>
+                                        <BottomSheetModalProvider>
+                                            <InAppBrowserProvider>
+                                                <NotificationsProvider>
+                                                    <EntryPoint />
+                                                </NotificationsProvider>
+                                            </InAppBrowserProvider>
+                                        </BottomSheetModalProvider>
+                                    </WalletConnectContextProvider>
+                                </InteractionProvider>
+                            </NavigationProvider>
+                            <BaseToast />
+                        </FeatureFlagsProvider>
+                    </PersistQueryClientProvider>
+                </ConnexContextProvider>
+            </KeyboardProvider>
         </GestureHandlerRootView>
     )
 }

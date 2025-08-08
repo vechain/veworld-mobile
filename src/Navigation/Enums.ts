@@ -12,6 +12,7 @@ export enum Routes {
     BROWSER = "Browser",
     HOME_STACK = "HomeStack",
     DISCOVER_STACK = "DiscoverStack",
+    APPS_STACK = "AppsStack",
 
     IMPORT_FROM_CLOUD = "Import_From_Cloud",
     IMPORT_MNEMONIC_BACKUP_PASSWORD = "Import_Mnemonic_Backup_Password",
@@ -99,4 +100,5 @@ export enum Routes {
     // BetterWorld
     APPS = "Apps",
     APPS_SEARCH = "Apps_Search",
+    APPS_TABS_MANAGER = "Apps_Tabs_Manager",
 }

@@ -464,6 +464,10 @@ type RootTranslation = {
 	 */
 	APP_CATEGORY_WEB3: string
 	/**
+	 * A​p​p​s
+	 */
+	APPS_SCREEN_TITLE: string
+	/**
 	 * A​p​p​ ​u​p​d​a​t​e​d
 	 */
 	APP_UPDATED: string
@@ -1089,7 +1093,7 @@ type RootTranslation = {
 	 */
 	BROWSER_ADD_BOOKMARK_TITLE: string
 	/**
-	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_ADD_FAVORITE_DAPPS: string
 	/**
@@ -1149,14 +1153,30 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_EMPTY: string
 	/**
+	 * F​o​u​n​d
+	 */
+	BROWSER_HISTORY_FOUND: string
+	/**
+	 * M​o​r​e​ ​r​e​s​u​l​t​s
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: string
+	/**
+	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d
+	 */
+	BROWSER_HISTORY_NO_RESULTS: string
+	/**
 	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
 	 */
 	BROWSER_HISTORY_No_RECORDS: string
 	/**
+	 * R​e​s​u​l​t​s
+	 */
+	BROWSER_HISTORY_RESULTS: string
+	/**
 	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
 	 * @param {number} amount
 	 */
-	BROWSER_HISTORY_RESULTS: RequiredParams<'amount'>
+	BROWSER_HISTORY_RESULTS_AMOUNT: RequiredParams<'amount'>
 	/**
 	 * S​e​a​r​c​h
 	 */
@@ -1178,9 +1198,17 @@ type RootTranslation = {
 	 */
 	BROWSER_NEW_TAB: string
 	/**
-	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 * R​e​l​o​a​d​ ​p​a​g​e
+	 */
+	BROWSER_RELOAD_PAGE: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: string
+	/**
+	 * S​e​e​ ​a​l​l​ ​t​a​b​s​ ​o​p​e​n
+	 */
+	BROWSER_SEE_ALL_TABS: string
 	/**
 	 * S​h​a​r​e
 	 */
@@ -1202,7 +1230,7 @@ type RootTranslation = {
 	 */
 	BTN_ADD_CUSTOM_NODE: string
 	/**
-	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​s
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
 	 */
 	BTN_ADD_TO_FAVORITES: string
 	/**
@@ -4157,6 +4185,10 @@ type RootTranslation = {
 	 */
 	STARGATE_CLAIMABLE: string
 	/**
+	 * M​a​n​a​g​i​n​g
+	 */
+	STARGATE_DELEGATEE_LABEL: string
+	/**
 	 * L​o​c​k​e​d
 	 */
 	STARGATE_LOCKED: string
@@ -4222,6 +4254,30 @@ type RootTranslation = {
 	 * @param {number} number
 	 */
 	TAB_AMOUNT: RequiredParams<'number'>
+	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TAB_TITLE_ACTIVITY: string
+	/**
+	 * A​p​p​s
+	 */
+	TAB_TITLE_APPS: string
+	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	TAB_TITLE_DISCOVER: string
+	/**
+	 * H​o​m​e
+	 */
+	TAB_TITLE_HOME: string
+	/**
+	 * M​o​r​e
+	 */
+	TAB_TITLE_MORE: string
+	/**
+	 * N​F​T​s
+	 */
+	TAB_TITLE_NFT: string
 	/**
 	 * T​a​k​e​ ​m​e​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
@@ -5189,6 +5245,10 @@ Try reconnect your device to the internet.
 	 */
 	APP_CATEGORY_WEB3: () => LocalizedString
 	/**
+	 * Apps
+	 */
+	APPS_SCREEN_TITLE: () => LocalizedString
+	/**
 	 * App updated
 	 */
 	APP_UPDATED: () => LocalizedString
@@ -5807,7 +5867,7 @@ Thanks for your patience!
 	 */
 	BROWSER_ADD_BOOKMARK_TITLE: () => LocalizedString
 	/**
-	 * Add to Favorite dApps
+	 * Add to Favorites
 	 */
 	BROWSER_ADD_FAVORITE_DAPPS: () => LocalizedString
 	/**
@@ -5867,13 +5927,29 @@ Thanks for your patience!
 	 */
 	BROWSER_HISTORY_EMPTY: () => LocalizedString
 	/**
+	 * Found
+	 */
+	BROWSER_HISTORY_FOUND: () => LocalizedString
+	/**
+	 * More results
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: () => LocalizedString
+	/**
+	 * No results found
+	 */
+	BROWSER_HISTORY_NO_RESULTS: () => LocalizedString
+	/**
 	 * No History Available
 	 */
 	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
 	/**
+	 * Results
+	 */
+	BROWSER_HISTORY_RESULTS: () => LocalizedString
+	/**
 	 * {amount} Results
 	 */
-	BROWSER_HISTORY_RESULTS: (arg: { amount: number }) => LocalizedString
+	BROWSER_HISTORY_RESULTS_AMOUNT: (arg: { amount: number }) => LocalizedString
 	/**
 	 * Search
 	 */
@@ -5895,9 +5971,17 @@ Thanks for your patience!
 	 */
 	BROWSER_NEW_TAB: () => LocalizedString
 	/**
-	 * Remove from Favorite dApps
+	 * Reload page
+	 */
+	BROWSER_RELOAD_PAGE: () => LocalizedString
+	/**
+	 * Remove from Favorites
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
+	/**
+	 * See all tabs open
+	 */
+	BROWSER_SEE_ALL_TABS: () => LocalizedString
 	/**
 	 * Share
 	 */
@@ -5919,7 +6003,7 @@ Thanks for your patience!
 	 */
 	BTN_ADD_CUSTOM_NODE: () => LocalizedString
 	/**
-	 * Add to Favorites
+	 * Add to Favorite dApps
 	 */
 	BTN_ADD_TO_FAVORITES: () => LocalizedString
 	/**
@@ -8833,6 +8917,10 @@ Are you sure you want to continue?
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
 	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
+	/**
 	 * Locked
 	 */
 	STARGATE_LOCKED: () => LocalizedString
@@ -8896,6 +8984,30 @@ Are you sure you want to continue?
 	 * {number} tabs
 	 */
 	TAB_AMOUNT: (arg: { number: number }) => LocalizedString
+	/**
+	 * Activity
+	 */
+	TAB_TITLE_ACTIVITY: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	TAB_TITLE_APPS: () => LocalizedString
+	/**
+	 * Discover
+	 */
+	TAB_TITLE_DISCOVER: () => LocalizedString
+	/**
+	 * Home
+	 */
+	TAB_TITLE_HOME: () => LocalizedString
+	/**
+	 * More
+	 */
+	TAB_TITLE_MORE: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	TAB_TITLE_NFT: () => LocalizedString
 	/**
 	 * Take me to Google Drive
 	 */

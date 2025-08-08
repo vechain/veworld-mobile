@@ -12,6 +12,7 @@ export type Tab = {
     id: string
     href: string
     preview?: string
+    favicon?: string
     title: string
 }
 
@@ -32,6 +33,7 @@ export type DiscoveryState = {
     bannerInteractions: {
         [bannerName: string]: BannerInteractionDetails
     }
+    isNormalUser?: boolean
 }
 
 export const initialDiscoverState: DiscoveryState = {
@@ -45,6 +47,7 @@ export const initialDiscoverState: DiscoveryState = {
         tabs: [],
     },
     bannerInteractions: {},
+    isNormalUser: false,
 }
 
 const findByHref = (dapps: DiscoveryDApp[], href: string) => {
@@ -122,11 +125,7 @@ export const DiscoverySlice = createSlice({
             const { id, ...otherProps } = action.payload
             const tabIndex = state.tabsManager.tabs.findIndex(tab => tab.id === id)
             if (tabIndex !== -1) {
-                Object.entries(otherProps)
-                    .filter(([_, value]) => typeof value !== "undefined")
-                    .forEach(
-                        ([key, value]) => (state.tabsManager.tabs[tabIndex][key as keyof typeof otherProps] = value),
-                    )
+                state.tabsManager.tabs[tabIndex] = { ...state.tabsManager.tabs[tabIndex], ...otherProps }
             }
         },
         setCurrentTab: (state, action: PayloadAction<string>) => {
@@ -145,6 +144,9 @@ export const DiscoverySlice = createSlice({
             state.bannerInteractions[action.payload] = {
                 amountOfInteractions: (state.bannerInteractions[action.payload]?.amountOfInteractions ?? 0) + 1,
             }
+        },
+        setIsNormalUser: state => {
+            state.isNormalUser = true
         },
     },
 })
@@ -165,4 +167,5 @@ export const {
     closeTab,
     closeAllTabs,
     incrementBannerInteractions,
+    setIsNormalUser,
 } = DiscoverySlice.actions
