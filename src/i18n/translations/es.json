@@ -457,6 +457,8 @@
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "Cambiar cuenta",
   "CONNECTED_APP_CONNECTION_REQUESTS": "Solicitudes de conexión",
   "CONNECTED_APP_CONTRACT": "Contrato",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "¿Te gustaría eliminar esta aplicación conectada? La próxima vez que desees interactuar con ella, tendrás que iniciar sesión nuevamente.",
+  "CONNECTED_APP_DELETE_TITLE": "Eliminar aplicación conectada",
   "CONNECTED_APP_DESCRIPTION": "Descripción",
   "CONNECTED_APP_DETAILS_ACCOUNT_LABEL": "Conectado con",
   "CONNECTED_APP_DETAILS_TITLE": "Aplicación conectada",

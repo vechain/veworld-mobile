@@ -457,6 +457,8 @@
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "Verander account",
   "CONNECTED_APP_CONNECTION_REQUESTS": "Verbindingsverzoeken",
   "CONNECTED_APP_CONTRACT": "Contract",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "Wilt u deze gekoppelde app verwijderen? De volgende keer dat u ermee wilt communiceren, moet u opnieuw inloggen.",
+  "CONNECTED_APP_DELETE_TITLE": "Gekoppelde app verwijderen",
   "CONNECTED_APP_DESCRIPTION": "Beschrijving",
   "CONNECTED_APP_DETAILS_ACCOUNT_LABEL": "Verbonden met",
   "CONNECTED_APP_DETAILS_TITLE": "Verbonden app",

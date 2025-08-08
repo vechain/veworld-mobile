@@ -457,6 +457,8 @@
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "Hesap değiştir",
   "CONNECTED_APP_CONNECTION_REQUESTS": "Bağlantı istekleri",
   "CONNECTED_APP_CONTRACT": "Sözleşme",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "Bu bağlı uygulamayı kaldırmak ister misiniz? Bir dahaki sefere uygulamayla etkileşimde bulunmak istediğinizde, tekrar oturum açmanız gerekecek.",
+  "CONNECTED_APP_DELETE_TITLE": "Bağlı uygulamayı kaldır",
   "CONNECTED_APP_DESCRIPTION": "Açıklama",
   "CONNECTED_APP_DETAILS_ACCOUNT_LABEL": "Bağlantılı hesap",
   "CONNECTED_APP_DETAILS_TITLE": "Bağlı uygulama",

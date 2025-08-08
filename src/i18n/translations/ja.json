@@ -457,6 +457,8 @@
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "アカウントを変更",
   "CONNECTED_APP_CONNECTION_REQUESTS": "接続リクエスト",
   "CONNECTED_APP_CONTRACT": "契約",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "この接続されたアプリを削除しますか？次回このアプリとやり取りする際には、再度ログインする必要があります。",
+  "CONNECTED_APP_DELETE_TITLE": "接続されたアプリを削除",
   "CONNECTED_APP_DESCRIPTION": "説明",
   "CONNECTED_APP_DETAILS_ACCOUNT_LABEL": "接続されたアカウント",
   "CONNECTED_APP_DETAILS_TITLE": "接続されたアプリ",
