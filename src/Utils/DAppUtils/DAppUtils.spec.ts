@@ -96,4 +96,16 @@ describe("DAppUtils", () => {
             )
         })
     })
+
+    describe("generateFaviconUrl", () => {
+        process.env.REACT_APP_GOOGLE_FAVICON_URL =
+            "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&size=32&&url="
+        const encodedUrl =
+            "https://t3.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE%2CSIZE%2CURL&size=48&url="
+        it("should return a valid url", () => {
+            expect(DAppUtils.generateFaviconUrl("https://vechain.org")).toBe(
+                `${encodedUrl}${encodeURIComponent("https://vechain.org")}`,
+            )
+        })
+    })
 })
