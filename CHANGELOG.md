@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.3 (2025-08-08)</small>
+
+* build: init ([041cb23](https://github.com/vechain/veworld-mobile/commit/041cb23))
+* ci: switch e2e to trigger on merge only (#3166) ([5383efb](https://github.com/vechain/veworld-mobile/commit/5383efb)), closes [#3166](https://github.com/vechain/veworld-mobile/issues/3166)
+
 ## <small>2.3.1 (2025-08-04)</small>
 
 * build: init ([ecfcbcc](https://github.com/vechain/veworld-mobile/commit/ecfcbcc))
