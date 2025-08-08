@@ -3,12 +3,15 @@ import { ScrollView, StyleSheet } from "react-native"
 import { BaseView, Layout } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { VbdCarousel } from "./Components/Common/VbdCarousel/VbdCarousel"
+import { useI18nContext } from "~i18n"
 
 export const AppsScreen = () => {
     const { styles } = useThemedStyles(baseStyles)
+    const { LL } = useI18nContext()
+
     return (
         <Layout
-            title="Apps"
+            title={LL.APPS_TITLE()}
             hasTopSafeAreaOnly
             noBackButton
             fixedBody={

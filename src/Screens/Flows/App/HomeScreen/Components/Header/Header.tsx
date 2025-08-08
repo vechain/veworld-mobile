@@ -33,7 +33,7 @@ export const Header = memo(() => {
                         name: "DiscoverStack",
                         params: {
                             state: {
-                                routes: [{ name: Routes.DISCOVER }, { name: Routes.BROWSER, params: { url } }],
+                                routes: [{ name: Routes.APPS }, { name: Routes.BROWSER, params: { url } }],
                             },
                         },
                     },

@@ -4,16 +4,16 @@ import FastImage, { ImageStyle } from "react-native-fast-image"
 import { BaseSpacer, BaseText, BaseView, BlurView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
+import { VbdDApp } from "~Model"
 import { URIUtils } from "~Utils"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
 import { VbdCarouselBottomSheet } from "./VbdCarouselBottomSheet"
 
-type Props = {
-    app: VeBetterDaoDapp & VeBetterDaoDAppMetadata
+type VbdCarouselItemProps = {
+    app: VbdDApp
 }
 
-export const VbdCarouselItem = ({ app }: Props) => {
+export const VbdCarouselItem = ({ app }: VbdCarouselItemProps) => {
     const { styles } = useThemedStyles(baseStyles)
 
     const bannerUri = useMemo(

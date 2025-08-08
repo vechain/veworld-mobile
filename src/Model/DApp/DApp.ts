@@ -113,3 +113,5 @@ export type VeBetterDaoDAppMetadata = {
     }
     categories?: string[]
 }
+
+export type VbdDApp = VeBetterDaoDapp & VeBetterDaoDAppMetadata

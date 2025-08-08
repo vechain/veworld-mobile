@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
 import { DiscoveryDApp } from "~Constants"
+import { VbdDApp } from "~Model"
 import { URIUtils } from "~Utils"
 
 export type ConnectedDiscoveryApp = {
@@ -55,15 +56,28 @@ export const DiscoverySlice = createSlice({
     name: "discovery",
     initialState: initialDiscoverState,
     reducers: {
-        addBookmark: (state, action: PayloadAction<DiscoveryDApp>) => {
+        addBookmark: (state, action: PayloadAction<DiscoveryDApp | VbdDApp>) => {
             const { payload } = action
-            if (payload.isCustom) {
-                state.custom.push(payload)
+            const discoveryDapp = payload as DiscoveryDApp
+            const vbdDapp = payload as VbdDApp
+            const isCustom = (discoveryDapp.isCustom || false) ?? false
+
+            const bookmark = {
+                name: discoveryDapp.name || vbdDapp.name,
+                href: discoveryDapp.href || vbdDapp.external_url,
+                desc: discoveryDapp.desc || vbdDapp.description,
+                isCustom,
+                createAt: new Date().getTime(),
+                amountOfNavigations: 1,
+            }
+
+            if (isCustom) {
+                state.custom.push(bookmark)
             } else {
-                state.favorites.push(payload)
+                state.favorites.push(bookmark)
             }
         },
-        removeBookmark: (state, action: PayloadAction<DiscoveryDApp>) => {
+        removeBookmark: (state, action: PayloadAction<{ href: string; isCustom?: boolean }>) => {
             const { isCustom, href } = action.payload
             if (isCustom) {
                 state.custom = state.custom.filter(dapp => !URIUtils.compareURLs(dapp.href, href))

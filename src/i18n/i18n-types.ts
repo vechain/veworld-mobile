@@ -209,6 +209,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
+	 * M​a​n​a​g​i​n​g
+	 */
+	STARGATE_DELEGATEE_LABEL: string
+	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: string
@@ -224,6 +228,34 @@ type RootTranslation = {
 	 * T​r​a​n​s​f​e​r
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
+	/**
+	 * A​p​p​s
+	 */
+	APPS_TITLE: string
+	/**
+	 * J​o​i​n​e​d
+	 */
+	APPS_BS_JOINED: string
+	/**
+	 * U​s​e​r​s
+	 */
+	APPS_BS_USERS: string
+	/**
+	 * A​c​t​i​o​n​s
+	 */
+	APPS_BS_ACTIONS: string
+	/**
+	 * A​d​d​ ​t​o​ ​f​a​v​o​r​i​t​e​s
+	 */
+	APPS_BS_BTN_ADD_FAVORITE: string
+	/**
+	 * F​a​v​o​r​i​t​e​d
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: string
+	/**
+	 * O​p​e​n
+	 */
+	APPS_BS_BTN_OPEN_APP: string
 	/**
 	 * A​L​L
 	 */
@@ -2080,6 +2112,54 @@ type RootTranslation = {
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: string
 	/**
+	 * C​a​r​b​o​n​ ​F​o​o​t​p​r​i​n​t
+	 */
+	DAPP_CATEGORY_CARBON_FOOTPRINT: string
+	/**
+	 * L​e​a​r​n​i​n​g
+	 */
+	DAPP_CATEGORY_EDUCATION_LEARNING: string
+	/**
+	 * L​i​f​e​s​t​y​l​e
+	 */
+	DAPP_CATEGORY_FITNESS_WELLNESS: string
+	/**
+	 * W​e​b​3
+	 */
+	DAPP_CATEGORY_GREEN_FINANCE_DEFI: string
+	/**
+	 * T​r​a​n​s​p​o​r​t​a​t​i​o​n
+	 */
+	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: string
+	/**
+	 * F​o​o​d​ ​&​ ​D​r​i​n​k​s
+	 */
+	DAPP_CATEGORY_NUTRITION: string
+	/**
+	 * O​t​h​e​r​s
+	 */
+	DAPP_CATEGORY_OTHERS: string
+	/**
+	 * P​e​t​s
+	 */
+	DAPP_CATEGORY_PETS: string
+	/**
+	 * R​e​c​y​c​l​i​n​g
+	 */
+	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: string
+	/**
+	 * E​n​e​r​g​y
+	 */
+	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: string
+	/**
+	 * S​o​c​i​a​l​,​ ​C​o​m​m​u​n​i​t​y​,​ ​A​c​t​i​v​i​s​m
+	 */
+	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: string
+	/**
+	 * S​h​o​p​p​i​n​g
+	 */
+	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: string
+	/**
 	 * D​A​p​p​ ​C​o​n​n​e​c​t​i​o​n
 	 */
 	DAPP_CONNECTION: string
@@ -2107,54 +2187,6 @@ type RootTranslation = {
 	 * D​a​t​e​ ​n​o​t​ ​a​v​a​i​l​a​b​l​e
 	 */
 	DATE_NOT_AVAILABLE: string
-	/**
-	 * F​o​o​d​ ​&​ ​D​r​i​n​k​s
-	 */
-	DAPP_CATEGORY_NUTRITION: string
-	/**
-	 * R​e​c​y​c​l​i​n​g
-	 */
-	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: string
-	/**
-	 * L​i​f​e​s​t​y​l​e
-	 */
-	DAPP_CATEGORY_FITNESS_WELLNESS: string
-	/**
-	 * E​n​e​r​g​y
-	 */
-	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: string
-	/**
-	 * S​h​o​p​p​i​n​g
-	 */
-	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: string
-	/**
-	 * T​r​a​n​s​p​o​r​t​a​t​i​o​n
-	 */
-	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: string
-	/**
-	 * P​e​t​s
-	 */
-	DAPP_CATEGORY_PETS: string
-	/**
-	 * L​e​a​r​n​i​n​g
-	 */
-	DAPP_CATEGORY_EDUCATION_LEARNING: string
-	/**
-	 * W​e​b​3
-	 */
-	DAPP_CATEGORY_GREEN_FINANCE_DEFI: string
-	/**
-	 * O​t​h​e​r​s
-	 */
-	DAPP_CATEGORY_OTHERS: string
-	/**
-	 * S​o​c​i​a​l​,​ ​C​o​m​m​u​n​i​t​y​,​ ​A​c​t​i​v​i​s​m
-	 */
-	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: string
-	/**
-	 * C​a​r​b​o​n​ ​F​o​o​t​p​r​i​n​t
-	 */
-	DAPP_CATEGORY_CARBON_FOOTPRINT: string
 	/**
 	 * D​e​c​e​m​b​e​r
 	 */
@@ -2299,10 +2331,6 @@ type RootTranslation = {
 	 * S​e​e​ ​a​l​l
 	 */
 	DISCOVER_SEE_ALL_BOOKMARKS: string
-	/**
-	 * Managing
-	 */
-	STARGATE_DELEGATEE_LABEL: string
 	/**
 	 * S​o​r​t​ ​b​y
 	 */
@@ -4936,6 +4964,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
+	/**
 	 * No Swaps to show yet
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
@@ -4951,6 +4983,34 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Transfer
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	APPS_TITLE: () => LocalizedString
+	/**
+	 * Joined
+	 */
+	APPS_BS_JOINED: () => LocalizedString
+	/**
+	 * Users
+	 */
+	APPS_BS_USERS: () => LocalizedString
+	/**
+	 * Actions
+	 */
+	APPS_BS_ACTIONS: () => LocalizedString
+	/**
+	 * Add to favorites
+	 */
+	APPS_BS_BTN_ADD_FAVORITE: () => LocalizedString
+	/**
+	 * Favorited
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: () => LocalizedString
+	/**
+	 * Open
+	 */
+	APPS_BS_BTN_OPEN_APP: () => LocalizedString
 	/**
 	 * ALL
 	 */
@@ -5544,10 +5604,6 @@ Try reconnect your device to the internet.
 	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
 	 */
 	BD_OBSERVE_WALLET: () => LocalizedString
-	/**
-	 * Managing
-	 */
-	STARGATE_DELEGATEE_LABEL: () => LocalizedString
 	/**
 	 * Viewing and managing your crypto assets has never been easier.
 	 */
@@ -6791,6 +6847,54 @@ Thanks for your patience!
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: () => LocalizedString
 	/**
+	 * Carbon Footprint
+	 */
+	DAPP_CATEGORY_CARBON_FOOTPRINT: () => LocalizedString
+	/**
+	 * Learning
+	 */
+	DAPP_CATEGORY_EDUCATION_LEARNING: () => LocalizedString
+	/**
+	 * Lifestyle
+	 */
+	DAPP_CATEGORY_FITNESS_WELLNESS: () => LocalizedString
+	/**
+	 * Web3
+	 */
+	DAPP_CATEGORY_GREEN_FINANCE_DEFI: () => LocalizedString
+	/**
+	 * Transportation
+	 */
+	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: () => LocalizedString
+	/**
+	 * Food & Drinks
+	 */
+	DAPP_CATEGORY_NUTRITION: () => LocalizedString
+	/**
+	 * Others
+	 */
+	DAPP_CATEGORY_OTHERS: () => LocalizedString
+	/**
+	 * Pets
+	 */
+	DAPP_CATEGORY_PETS: () => LocalizedString
+	/**
+	 * Recycling
+	 */
+	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: () => LocalizedString
+	/**
+	 * Energy
+	 */
+	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: () => LocalizedString
+	/**
+	 * Social, Community, Activism
+	 */
+	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: () => LocalizedString
+	/**
+	 * Shopping
+	 */
+	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: () => LocalizedString
+	/**
 	 * DApp Connection
 	 */
 	DAPP_CONNECTION: () => LocalizedString
@@ -6818,54 +6922,6 @@ Thanks for your patience!
 	 * Date not available
 	 */
 	DATE_NOT_AVAILABLE: () => LocalizedString
-	/**
-	 * Food & Drinks
-	 */
-	DAPP_CATEGORY_NUTRITION: () => LocalizedString
-	/**
-	 * Recycling
-	 */
-	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: () => LocalizedString
-	/**
-	 * Lifestyle
-	 */
-	DAPP_CATEGORY_FITNESS_WELLNESS: () => LocalizedString
-	/**
-	 * Energy
-	 */
-	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: () => LocalizedString
-	/**
-	 * Shopping
-	 */
-	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: () => LocalizedString
-	/**
-	 * Transportation
-	 */
-	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: () => LocalizedString
-	/**
-	 * Pets
-	 */
-	DAPP_CATEGORY_PETS: () => LocalizedString
-	/**
-	 * Learning
-	 */
-	DAPP_CATEGORY_EDUCATION_LEARNING: () => LocalizedString
-	/**
-	 * Web3
-	 */
-	DAPP_CATEGORY_GREEN_FINANCE_DEFI: () => LocalizedString
-	/**
-	 * Others
-	 */
-	DAPP_CATEGORY_OTHERS: () => LocalizedString
-	/**
-	 * Social, Community, Activism
-	 */
-	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: () => LocalizedString
-	/**
-	 * Carbon Footprint
-	 */
-	DAPP_CATEGORY_CARBON_FOOTPRINT: () => LocalizedString
 	/**
 	 * December
 	 */
