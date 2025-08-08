@@ -4,9 +4,10 @@ import { default as React, RefObject, useCallback } from "react"
 import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useBottomSheetModal, useDappBookmarking, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useDappBookmarking } from "~Hooks/useDappBookmarking"
 import { useI18nContext } from "~i18n"
-import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
+import { useDAppActions } from "../../Hooks"
 
 const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }) => {
     const { LL } = useI18nContext()
@@ -38,7 +39,10 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
                     style={styles.icon}
                     color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
                 />
-                <BaseText color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600} typographyFont="bodySemiBold">
+                <BaseText
+                    color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600}
+                    typographyFont="bodySemiBold"
+                    testID="DAPP_OPTIONS_V2_OPEN_DAPP">
                     {LL.BTN_OPEN_DAPP()}
                 </BaseText>
             </TouchableOpacity>
@@ -49,7 +53,10 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
                     style={styles.icon}
                     color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
                 />
-                <BaseText color={theme.colors.dappCard.name} typographyFont="bodySemiBold">
+                <BaseText
+                    color={theme.colors.dappCard.name}
+                    typographyFont="bodySemiBold"
+                    testID="DAPP_OPTIONS_V2_TOGGLE_FAVORITE">
                     {isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITE() : LL.BTN_ADD_TO_FAVORITE()}
                 </BaseText>
             </TouchableOpacity>
@@ -60,7 +67,10 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
                     style={styles.icon}
                     color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
                 />
-                <BaseText color={theme.colors.dappCard.name} typographyFont="bodySemiBold">
+                <BaseText
+                    color={theme.colors.dappCard.name}
+                    typographyFont="bodySemiBold"
+                    testID="DAPP_OPTIONS_V2_SHARE">
                     {LL.BROWSER_SHARE()}
                 </BaseText>
             </TouchableOpacity>

@@ -82,10 +82,10 @@ export const SortDAppsBottomSheetV2 = ({ selectedSort, onSortChange, bsRef }: Pr
                     action={onRadioElementSelected}
                 />
                 <BaseView flexDirection="row" gap={16}>
-                    <BaseButton variant="outline" action={onCancel} flex={1}>
+                    <BaseButton variant="outline" action={onCancel} flex={1} testID="SORT_DAPPS_BOTTOM_SHEET_V2_CANCEL">
                         {LL.COMMON_BTN_CANCEL()}
                     </BaseButton>
-                    <BaseButton variant="solid" action={onApply} flex={1}>
+                    <BaseButton variant="solid" action={onApply} flex={1} testID="SORT_DAPPS_BOTTOM_SHEET_V2_APPLY">
                         {LL.COMMON_BTN_APPLY()}
                     </BaseButton>
                 </BaseView>
