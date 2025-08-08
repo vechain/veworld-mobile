@@ -126,6 +126,9 @@ export type Colors = {
         disabledText: string
         disabledIcon: string
         disabledIconBackground: string
+        dangerIcon: string
+        dangerIconBackground: string
+        dangerText: string
     }
     assetDetailsCard: {
         background: string
@@ -219,6 +222,22 @@ export type Colors = {
     stakedVetCard: {
         background: string
     }
+    history: {
+        button: {
+            background: string
+            text: string
+            border: string
+        }
+        titleColor: string
+        historyItem: {
+            iconBackground: string
+            iconColor: string
+            title: string
+            subtitle: string
+            rightIconColor: string
+        }
+        emptyStateColor: string
+    }
 }
 
 export enum COLORS {
@@ -236,8 +255,10 @@ export enum COLORS {
     DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
     PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
-    DARK_PURPLE_RBGA_TRANSPARENT = "rgba(172, 155, 255, 0.8)",
+    DARK_PURPLE_RBGA_TRANSPARENT = "rgba(172, 155, 255, 0.9)",
+    DARK_PURPLE_90_TRANSPARENT = "#59527FE5",
     PURPLE = "#30265F",
+    PURPLE_RGBA_TRANSPARENT = "rgba(48, 38, 95, 0.9)",
     LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",
     DARK_PURPLE_DISABLED = "#59527F",
@@ -438,7 +459,7 @@ const light: Colors = {
     actionBottomSheet: {
         background: COLORS.GREY_50,
         iconBackground: COLORS.GREY_100,
-        text: COLORS.PRIMARY_800,
+        text: COLORS.GREY_700,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
         activeIconBackground: COLORS.WHITE,
@@ -446,6 +467,9 @@ const light: Colors = {
         disabledText: COLORS.GREY_400,
         disabledIcon: COLORS.GREY_400,
         disabledIconBackground: COLORS.GREY_100,
+        dangerIcon: COLORS.RED_600,
+        dangerIconBackground: COLORS.GREY_100,
+        dangerText: COLORS.RED_600,
     },
     assetDetailsCard: {
         background: COLORS.GREY_50,
@@ -519,7 +543,7 @@ const light: Colors = {
         background: ["#0C2749", "#3EA2C3"],
     },
     tabsFooter: {
-        background: COLORS.GREY_200,
+        background: COLORS.WHITE,
     },
     errorAlert: {
         background: COLORS.RED_50,
@@ -538,6 +562,22 @@ const light: Colors = {
     },
     stakedVetCard: {
         background: COLORS.GREY_50,
+    },
+    history: {
+        button: {
+            background: COLORS.WHITE,
+            text: COLORS.GREY_600,
+            border: COLORS.GREY_200,
+        },
+        titleColor: COLORS.GREY_800,
+        historyItem: {
+            iconBackground: COLORS.GREY_200,
+            iconColor: COLORS.GREY_400,
+            title: COLORS.GREY_600,
+            subtitle: COLORS.GREY_500,
+            rightIconColor: COLORS.GREY_400,
+        },
+        emptyStateColor: COLORS.GREY_600,
     },
 }
 
@@ -669,6 +709,9 @@ const dark: Colors = {
         disabledText: COLORS.DARK_PURPLE_DISABLED,
         disabledIcon: COLORS.DARK_PURPLE_DISABLED,
         disabledIconBackground: COLORS.PURPLE_DISABLED,
+        dangerIcon: COLORS.RED_300,
+        dangerIconBackground: COLORS.PURPLE_DISABLED,
+        dangerText: COLORS.RED_300,
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,
@@ -761,6 +804,22 @@ const dark: Colors = {
     },
     stakedVetCard: {
         background: COLORS.PURPLE,
+    },
+    history: {
+        button: {
+            background: COLORS.DARK_PURPLE_DISABLED,
+            text: COLORS.GREY_100,
+            border: COLORS.TRANSPARENT,
+        },
+        titleColor: COLORS.GREY_50,
+        historyItem: {
+            iconBackground: COLORS.PURPLE_DISABLED,
+            iconColor: COLORS.DARK_PURPLE_DISABLED,
+            title: COLORS.GREY_50,
+            subtitle: COLORS.GREY_400,
+            rightIconColor: COLORS.GREY_400,
+        },
+        emptyStateColor: COLORS.WHITE,
     },
 }
 

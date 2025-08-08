@@ -9,8 +9,11 @@ import { SecurityLevelType } from "~Model/Biometrics"
 import { WALLET_STATUS } from "~Model/Wallet"
 import { MMKV } from "react-native-mmkv"
 import * as localizeMock from "react-native-localize/mock"
+import * as dotenv from "dotenv"
 
 const componentMock = ({ children }: { children: ReactNode }) => children
+
+dotenv.config({ path: "./.env" })
 
 jest.mock("react-native-safe-area-context", () => mockSafeAreaContext)
 jest.mock("react-native/Libraries/Animated/NativeAnimatedHelper")
@@ -32,6 +35,8 @@ jest.mock("react-native-quick-crypto", () => ({
         }),
     })),
 }))
+
+jest.mock("react-native-keyboard-controller", () => require("react-native-keyboard-controller/jest"))
 
 jest.mock("react-native-onesignal", () => ({
     ...jest.requireActual("react-native-onesignal"),
