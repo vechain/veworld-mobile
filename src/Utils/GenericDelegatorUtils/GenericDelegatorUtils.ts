@@ -30,7 +30,7 @@ const isSmartAccountTransaction = (clause: TransactionClause): boolean => {
 }
 
 const extractClausesFromExecuteBatch = (clause: TransactionClause): TransactionClause[] => {
-    const parsed = parseSmartAccountData(clause.data!)
+    const parsed = parseSmartAccountData(clause.data)
     if (!parsed || parsed.name !== "executeBatchWithAuthorization") return []
 
     const [addrs, values, datas] = parsed.args as [string[], ethers.BigNumber[], string[]]
@@ -42,7 +42,7 @@ const extractClausesFromExecuteBatch = (clause: TransactionClause): TransactionC
 }
 
 const extractClausesFromExecute = (clause: TransactionClause): TransactionClause[] => {
-    const parsed = parseSmartAccountData(clause.data!)
+    const parsed = parseSmartAccountData(clause.data)
     if (!parsed || parsed.name !== "executeWithAuthorization") return []
 
     const [to, value, calldata] = parsed.args as [string, ethers.BigNumber, string]
@@ -103,7 +103,7 @@ const validateFeeClause = (
                 reason: "OVER_THRESHOLD",
                 metadata: {
                     fee: selectedFee.clone().toBigInt.toString(),
-                    valueSent: BigNutils(clause.value).toBigInt.toString(),
+                    valueSent: BigNutils(clause.value).toBigInt,
                 },
             }
         }
@@ -161,7 +161,7 @@ export const validateGenericDelegatorTxSmartAccount = async (
 
     for (const clause of genericTxClauses) {
         if (isSmartAccountTransaction(clause)) {
-            const parsedName = parseSmartAccountData(clause.data!)!.name
+            const parsedName = parseSmartAccountData(clause.data)?.name
 
             const clauses =
                 parsedName === "executeBatchWithAuthorization"
