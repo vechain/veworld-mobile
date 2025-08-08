@@ -45,6 +45,18 @@ export const AppsSearchScreen = () => {
         }
     }, [betterWorldFeature.appsScreen.enabled, nav])
 
+    const onClose = useCallback(() => {
+        const routes = nav.getState()?.routes
+        const previousRoute = routes?.[routes.length - 2]
+        if (betterWorldFeature.appsScreen.enabled && previousRoute?.name === Routes.APPS_SEARCH) {
+            nav.navigate(Routes.APPS)
+        } else if (!betterWorldFeature.appsScreen.enabled && previousRoute?.name === Routes.DISCOVER_SEARCH) {
+            nav.navigate(Routes.DISCOVER)
+        } else {
+            nav.goBack()
+        }
+    }, [betterWorldFeature.appsScreen.enabled, nav])
+
     return (
         <Layout
             bg={COLORS.TRANSPARENT}
@@ -56,14 +68,15 @@ export const AppsSearchScreen = () => {
                     style={styles.rootContainer}
                     keyboardVerticalOffset={Platform.OS === "ios" ? 38 : 8}>
                     {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
-                    <SearchResults error={error} results={results} isValidQuery={isValidQuery} />
+                    <SearchResults
+                        error={error}
+                        results={results.data}
+                        isValidQuery={isValidQuery}
+                        isExactMatch={results.isExactMatch}
+                    />
 
                     <BaseView style={styles.footerContainer}>
-                        <BaseTouchable
-                            style={styles.tabsContainer}
-                            action={() => {
-                                nav.goBack()
-                            }}>
+                        <BaseTouchable style={styles.tabsContainer} action={onClose}>
                             <BaseIcon
                                 name={"icon-x"}
                                 size={16}
@@ -107,6 +120,7 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingHorizontal: 16,
             paddingVertical: 8,
             gap: 24,
+            marginBottom: 16,
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
         },
         tabsContainer: {

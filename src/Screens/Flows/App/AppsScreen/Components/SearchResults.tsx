@@ -1,5 +1,5 @@
 import { default as React, useCallback, useMemo } from "react"
-import { ListRenderItemInfo, SectionList, SectionListData, StyleSheet } from "react-native"
+import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
@@ -11,21 +11,12 @@ import { SearchResultItem } from "./SearchResultItem"
 
 type Props = {
     error?: SearchError
-    results: { found: HistoryItem[]; others: HistoryItem[] }
+    results: HistoryItem[]
+    isExactMatch: boolean
     isValidQuery: boolean
 }
 
-type SectionProps = {
-    section: SectionListData<
-        HistoryItem,
-        {
-            data: HistoryItem[]
-            key: string
-        }
-    >
-}
-
-export const SearchResults = ({ error, results, isValidQuery }: Props) => {
+export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const dispatch = useAppDispatch()
@@ -35,19 +26,16 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
     }, [dispatch])
 
     const isQueryEmptyButWithResults = useMemo(
-        () => !isValidQuery && results.found.length !== 0,
-        [isValidQuery, results.found.length],
+        () => !isValidQuery && results.length !== 0,
+        [isValidQuery, results.length],
     )
 
     const isQueryEmptyWithNoResults = useMemo(
-        () => !isValidQuery && results.found.length === 0,
-        [isValidQuery, results.found.length],
+        () => !isValidQuery && results.length === 0,
+        [isValidQuery, results.length],
     )
 
-    const isQueryWithNoResults = useMemo(
-        () => isValidQuery && results.found.length === 0,
-        [isValidQuery, results.found.length],
-    )
+    const isQueryWithNoResults = useMemo(() => isValidQuery && results.length === 0, [isValidQuery, results.length])
 
     const rootStyles = useMemo(() => {
         if (isQueryEmptyWithNoResults || error === SearchError.ADDRESS_CANNOT_BE_REACHED)
@@ -64,44 +52,6 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
             return <SearchResultItem item={item} isValidQuery={isValidQuery} />
         },
         [isValidQuery],
-    )
-
-    const renderSectionHeader = useCallback(
-        (props: SectionProps) => {
-            if (!isValidQuery) return <></>
-            if (props.section.key === "found") {
-                return (
-                    <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={8}>
-                        <BaseText
-                            testID="search-results-found-title"
-                            typographyFont="bodySemiBold"
-                            color={theme.colors.history.titleColor}>
-                            {LL.BROWSER_HISTORY_FOUND()}
-                        </BaseText>
-                    </BaseView>
-                )
-            } else if (props.section.key === "others" && results.others.length > 0) {
-                return (
-                    <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={8} mt={24}>
-                        <BaseText
-                            testID="search-results-more-results-title"
-                            typographyFont="bodyMedium"
-                            color={theme.colors.history.historyItem.subtitle}>
-                            {LL.BROWSER_HISTORY_MORE_RESULTS()}
-                        </BaseText>
-                    </BaseView>
-                )
-            }
-
-            return <></>
-        },
-        [
-            LL,
-            isValidQuery,
-            results.others.length,
-            theme.colors.history.historyItem.subtitle,
-            theme.colors.history.titleColor,
-        ],
     )
 
     if (error === SearchError.ADDRESS_CANNOT_BE_REACHED)
@@ -177,6 +127,17 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                 </BaseView>
             )}
 
+            {isValidQuery && (
+                <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={12}>
+                    <BaseText
+                        testID={`search-results${isExactMatch ? "-found" : ""}-title`}
+                        typographyFont="bodySemiBold"
+                        color={theme.colors.history.titleColor}>
+                        {isExactMatch ? LL.BROWSER_HISTORY_FOUND() : LL.BROWSER_HISTORY_RESULTS()}
+                    </BaseText>
+                </BaseView>
+            )}
+
             {isQueryEmptyWithNoResults ? (
                 <BaseView alignItems="center" justifyContent="center" flexGrow={1}>
                     <BaseView style={styles.errorContainer}>
@@ -192,7 +153,7 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                     </BaseView>
                 </BaseView>
             ) : (
-                <SectionList
+                <FlatList
                     renderItem={renderItem}
                     keyExtractor={item => (item.type === HistoryUrlKind.DAPP ? item.dapp.href : item.url)}
                     ItemSeparatorComponent={renderItemSeparator}
@@ -200,12 +161,7 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
                     scrollEnabled={true}
-                    renderSectionHeader={renderSectionHeader}
-                    stickySectionHeadersEnabled={false}
-                    sections={[
-                        { data: results.found, key: "found" },
-                        { data: results.others, key: "others" },
-                    ]}
+                    data={results}
                     style={styles.flatListRoot}
                 />
             )}

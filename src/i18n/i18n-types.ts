@@ -1129,10 +1129,14 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_No_RECORDS: string
 	/**
+	 * R​e​s​u​l​t​s
+	 */
+	BROWSER_HISTORY_RESULTS: string
+	/**
 	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
 	 * @param {number} amount
 	 */
-	BROWSER_HISTORY_RESULTS: RequiredParams<'amount'>
+	BROWSER_HISTORY_RESULTS_AMOUNT: RequiredParams<'amount'>
 	/**
 	 * S​e​a​r​c​h
 	 */
@@ -4195,6 +4199,30 @@ type RootTranslation = {
 	 */
 	TAB_AMOUNT: RequiredParams<'number'>
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TAB_TITLE_ACTIVITY: string
+	/**
+	 * A​p​p​s
+	 */
+	TAB_TITLE_APPS: string
+	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	TAB_TITLE_DISCOVER: string
+	/**
+	 * H​o​m​e
+	 */
+	TAB_TITLE_HOME: string
+	/**
+	 * M​o​r​e
+	 */
+	TAB_TITLE_MORE: string
+	/**
+	 * N​F​T​s
+	 */
+	TAB_TITLE_NFT: string
+	/**
 	 * T​a​k​e​ ​m​e​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
 	TAKE_ME_TO_DRIVE: string
@@ -4734,30 +4762,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * H​o​m​e
-	 */
-	TAB_TITLE_HOME: string
-	/**
-	 * N​F​T​s
-	 */
-	TAB_TITLE_NFT: string
-	/**
-	 * A​p​p​s
-	 */
-	TAB_TITLE_APPS: string
-	/**
-	 * D​i​s​c​o​v​e​r
-	 */
-	TAB_TITLE_DISCOVER: string
-	/**
-	 * A​c​t​i​v​i​t​y
-	 */
-	TAB_TITLE_ACTIVITY: string
-	/**
-	 * M​o​r​e
-	 */
-	TAB_TITLE_MORE: string
 }
 
 export type TranslationFunctions = {
@@ -5843,9 +5847,13 @@ Thanks for your patience!
 	 */
 	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
 	/**
+	 * Results
+	 */
+	BROWSER_HISTORY_RESULTS: () => LocalizedString
+	/**
 	 * {amount} Results
 	 */
-	BROWSER_HISTORY_RESULTS: (arg: { amount: number }) => LocalizedString
+	BROWSER_HISTORY_RESULTS_AMOUNT: (arg: { amount: number }) => LocalizedString
 	/**
 	 * Search
 	 */
@@ -8865,6 +8873,30 @@ Are you sure you want to continue?
 	 */
 	TAB_AMOUNT: (arg: { number: number }) => LocalizedString
 	/**
+	 * Activity
+	 */
+	TAB_TITLE_ACTIVITY: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	TAB_TITLE_APPS: () => LocalizedString
+	/**
+	 * Discover
+	 */
+	TAB_TITLE_DISCOVER: () => LocalizedString
+	/**
+	 * Home
+	 */
+	TAB_TITLE_HOME: () => LocalizedString
+	/**
+	 * More
+	 */
+	TAB_TITLE_MORE: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	TAB_TITLE_NFT: () => LocalizedString
+	/**
 	 * Take me to Google Drive
 	 */
 	TAKE_ME_TO_DRIVE: () => LocalizedString
@@ -9400,30 +9432,6 @@ Are you sure you want to continue?
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Home
-	 */
-	TAB_TITLE_HOME: () => LocalizedString
-	/**
-	 * NFTs
-	 */
-	TAB_TITLE_NFT: () => LocalizedString
-	/**
-	 * Apps
-	 */
-	TAB_TITLE_APPS: () => LocalizedString
-	/**
-	 * Discover
-	 */
-	TAB_TITLE_DISCOVER: () => LocalizedString
-	/**
-	 * Activity
-	 */
-	TAB_TITLE_ACTIVITY: () => LocalizedString
-	/**
-	 * More
-	 */
-	TAB_TITLE_MORE: () => LocalizedString
 }
 
 export type Formatters = {

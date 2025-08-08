@@ -9,15 +9,6 @@ const sortHistoryItem = (a: HistoryItem, b: HistoryItem) => {
     return aValue.localeCompare(bValue)
 }
 
-const isExactMatch = (url: HistoryItem, query: string) => {
-    if (url.type === HistoryUrlKind.DAPP) {
-        const _url = new URL(url.dapp.href)
-        return _url.host.toLowerCase() === query
-    }
-    const _url = new URL(url.url)
-    return _url.host.toLowerCase() === query
-}
-
 export const useBrowserSearch = (query: string) => {
     const visitedUrls = useAppSelector(selectVisitedUrls)
     const apps = useAppSelector(selectAllDapps)
@@ -31,7 +22,7 @@ export const useBrowserSearch = (query: string) => {
     )
 
     const results = useMemo(() => {
-        if (!isValidQuery) return { found: mappedUrls, others: [] }
+        if (!isValidQuery) return { data: mappedUrls, isExactMatch: false }
         const lowerQuery = query.toLowerCase()
         const urls = mappedUrls.filter(url => url.type === HistoryUrlKind.URL)
         const allDapps = uniqBy(
@@ -40,11 +31,7 @@ export const useBrowserSearch = (query: string) => {
         )
         const _results = [...urls, ...allDapps]
             .filter(url => {
-                if (url.type === HistoryUrlKind.DAPP)
-                    return (
-                        url.dapp.name.toLowerCase().includes(lowerQuery) ||
-                        url.dapp.href.toLowerCase().includes(lowerQuery)
-                    )
+                if (url.type === HistoryUrlKind.DAPP) return url.dapp.name.toLowerCase().includes(lowerQuery)
                 return url.name.toLowerCase().includes(lowerQuery) || url.url.toLowerCase().includes(lowerQuery)
             })
             .sort(sortHistoryItem)
@@ -53,28 +40,15 @@ export const useBrowserSearch = (query: string) => {
         const someExactMatch = _results.some(url => {
             if (url.type === HistoryUrlKind.DAPP) {
                 const _url = new URL(url.dapp.href)
-                return _url.host.toLowerCase() === lowerQuery
+                const dappName = url.dapp.name.toLowerCase()
+                return _url.host.toLowerCase() === lowerQuery || dappName === lowerQuery
             }
             const _url = new URL(url.url)
             return _url.host.toLowerCase() === lowerQuery
         })
 
         // reduce the results into found and others
-        return _results.reduce(
-            (acc, url) => {
-                if (!someExactMatch) {
-                    acc.found.push(url)
-                    return acc
-                }
-                if (isExactMatch(url, lowerQuery)) {
-                    acc.found.push(url)
-                } else {
-                    acc.others.push(url)
-                }
-                return acc
-            },
-            { found: [], others: [] } as { found: HistoryItem[]; others: HistoryItem[] },
-        )
+        return { data: _results, isExactMatch: someExactMatch } as { data: HistoryItem[]; isExactMatch: boolean }
     }, [isValidQuery, mappedApps, mappedUrls, query])
 
     return { results, isValidQuery }
