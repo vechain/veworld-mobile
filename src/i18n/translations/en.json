@@ -480,6 +480,8 @@
   "CONNECTED_APP_SIGN_TYPED_DATA": "Sign typed data",
   "CONNECTED_APP_SIGN_TYPED_DATA_REQUEST_DESCRIPTION": "Your Signature is being requested to sign typed data message",
   "CONNECTED_APP_TITLE": "Connected app",
+  "CONNECTED_APP_DELETE_TITLE": "Remove connected app",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "Would you like to remove this connected app? The next time you'd like to interact with it, you'd need to log in again.",
   "CONNECTED_APP_URL": "Url",
   "CONNECTED_APP_VERSION": "version",
   "CONNECTED_APP_approve_nft": "Approve NFT",

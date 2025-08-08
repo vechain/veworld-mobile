@@ -1,9 +1,10 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useMemo } from "react"
+import { default as React, useCallback, useMemo } from "react"
 import { BaseBottomSheet, BaseButton, BaseSpacer, BaseView } from "~Components"
 import { useI18nContext } from "~i18n"
-import { AppInfo } from "../../Components"
 import { ConnectedApp } from "~Screens"
+import { DAppUtils } from "~Utils"
+import { AppInfo } from "../../Components"
 
 type Props = {
     onClose: () => void
@@ -17,7 +18,8 @@ export const AppDetailsBottomSheet = React.forwardRef<BottomSheetModalMethods, P
 
         const icon = useMemo(() => {
             if (connectedApp.type === "in-app") {
-                return connectedApp.image
+                if (connectedApp.app.id) return { uri: DAppUtils.getAppHubIconUrl(connectedApp.app.id) }
+                return { uri: DAppUtils.generateFaviconUrl(connectedApp.app.href) }
             } else
                 return {
                     uri: connectedApp.session.peer.metadata.icons[0],
@@ -29,11 +31,11 @@ export const AppDetailsBottomSheet = React.forwardRef<BottomSheetModalMethods, P
                 return {
                     name: connectedApp.app.name,
                     url: connectedApp.app.href,
+                    description: connectedApp.app.desc,
                 }
             } else {
                 return {
                     name: connectedApp.session.peer.metadata.name,
-                    icon: connectedApp.session.peer.metadata.icons[0],
                     description: connectedApp.session.peer.metadata.description,
                     url: connectedApp.session.peer.metadata.url,
                 }

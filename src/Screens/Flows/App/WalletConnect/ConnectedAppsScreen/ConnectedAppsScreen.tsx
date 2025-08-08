@@ -12,7 +12,7 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AppDetailsBottomSheet, ConfirmDisconnectBottomSheet, ConnectedAppBox, EmptyListView } from "./Components"
+import { ConfirmDisconnectBottomSheet, ConnectedAppBox, EmptyListView } from "./Components"
 import { mapConnectedApps } from "./ConnectedAppUtils"
 
 type DiscoveryConnectedApp = {
@@ -67,50 +67,37 @@ export const ConnectedAppsScreen = () => {
         onClose: closeConfirmDisconnectDetailsSheet,
     } = useBottomSheetModal()
 
-    const {
-        ref: connectedAppDetailsBottomSheetRef,
-        onOpen: openConnectedAppDetailsSheet,
-        onClose: closeConnectedAppDetailsSheet,
-    } = useBottomSheetModal()
+    const disconnect = useCallback(async () => {
+        if (!selectedApp) return
+        if (selectedApp.type === "in-app") {
+            dispatch(
+                removeConnectedDiscoveryApp({
+                    href: new URL(selectedApp.app.href).hostname,
+                    name: selectedApp.app.name,
+                    connectedTime: Date.now(),
+                }),
+            )
+        } else {
+            await disconnectSession(selectedApp.session.topic)
+        }
 
-    const disconnect = useCallback(
-        async (connectedApp: ConnectedApp) => {
-            if (connectedApp.type === "in-app") {
-                dispatch(
-                    removeConnectedDiscoveryApp({
-                        href: new URL(connectedApp.app.href).hostname,
-                        name: connectedApp.app.name,
-                        connectedTime: Date.now(),
-                    }),
-                )
-            } else {
-                await disconnectSession(connectedApp.session.topic)
-            }
-
-            closeConfirmDisconnectDetailsSheet()
-        },
-        [dispatch, closeConfirmDisconnectDetailsSheet, disconnectSession],
-    )
+        closeConfirmDisconnectDetailsSheet()
+    }, [selectedApp, closeConfirmDisconnectDetailsSheet, dispatch, disconnectSession])
 
     const onClick = useCallback(
         (connectedApp: ConnectedApp) => {
             setSelectedApp(connectedApp)
-            //TODO: Why does the bottom sheet not open if called immediately?
-            setTimeout(() => {
-                openConnectedAppDetailsSheet()
-            }, 20)
+            openConfirmDisconnectDetailsSheet(connectedApp)
         },
-        [openConnectedAppDetailsSheet],
+        [openConfirmDisconnectDetailsSheet],
     )
 
     const handleTrashIconPress = useCallback(
         (item: ConnectedApp) => {
             setSelectedApp(item)
-            setTimeout(() => {
-                openConnectedAppDetailsSheet()
-            }, 20)
+            openConfirmDisconnectDetailsSheet(item)
         },
-        [openConnectedAppDetailsSheet],
+        [openConfirmDisconnectDetailsSheet],
     )
 
     return (
@@ -144,22 +131,11 @@ export const ConnectedAppsScreen = () => {
                         )
                     })}
 
-                    {selectedApp && (
-                        <>
-                            <ConfirmDisconnectBottomSheet
-                                ref={confirmDisconnectBottomSheetRef}
-                                connectedApp={selectedApp}
-                                onConfirm={disconnect}
-                                onCancel={closeConfirmDisconnectDetailsSheet}
-                            />
-                            <AppDetailsBottomSheet
-                                ref={connectedAppDetailsBottomSheetRef}
-                                onClose={closeConnectedAppDetailsSheet}
-                                connectedApp={selectedApp}
-                                onDisconnect={openConfirmDisconnectDetailsSheet}
-                            />
-                        </>
-                    )}
+                    <ConfirmDisconnectBottomSheet
+                        ref={confirmDisconnectBottomSheetRef}
+                        onConfirm={disconnect}
+                        onCancel={closeConfirmDisconnectDetailsSheet}
+                    />
                 </BaseView>
             }
         />

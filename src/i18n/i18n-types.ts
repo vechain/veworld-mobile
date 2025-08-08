@@ -1995,6 +1995,14 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_TITLE: string
 	/**
+	 * R​e​m​o​v​e​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_DELETE_TITLE: string
+	/**
+	 * W​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​?​ ​T​h​e​ ​n​e​x​t​ ​t​i​m​e​ ​y​o​u​'​d​ ​l​i​k​e​ ​t​o​ ​i​n​t​e​r​a​c​t​ ​w​i​t​h​ ​i​t​,​ ​y​o​u​'​d​ ​n​e​e​d​ ​t​o​ ​l​o​g​ ​i​n​ ​a​g​a​i​n​.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: string
+	/**
 	 * U​r​l
 	 */
 	CONNECTED_APP_URL: string
@@ -6654,6 +6662,14 @@ Thanks for your patience!
 	 * Connected app
 	 */
 	CONNECTED_APP_TITLE: () => LocalizedString
+	/**
+	 * Remove connected app
+	 */
+	CONNECTED_APP_DELETE_TITLE: () => LocalizedString
+	/**
+	 * Would you like to remove this connected app? The next time you'd like to interact with it, you'd need to log in again.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: () => LocalizedString
 	/**
 	 * Url
 	 */
