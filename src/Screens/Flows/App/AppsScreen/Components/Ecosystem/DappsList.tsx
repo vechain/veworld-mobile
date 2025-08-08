@@ -43,9 +43,6 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
         return <DappHorizontalCardSkeleton />
     }, [])
 
-    // const getItemCount = useCallback((data: any) => (Array.isArray(data) ? data.length : 0), [])
-    // const getItem = useCallback((data: any, index: number) => (Array.isArray(data) ? data[index] : null), [])
-
     if (isLoading && items.length === 0) {
         return (
             <FlatList
