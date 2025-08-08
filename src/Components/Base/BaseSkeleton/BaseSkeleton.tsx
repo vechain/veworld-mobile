@@ -4,8 +4,17 @@ import Skeleton, { ICustomViewStyle } from "react-native-reanimated-skeleton"
 import { BaseView } from "~Components"
 
 type Props = {
+    /**
+     * The color of the skeleton bone. This is the base color of the loading component.
+     */
     boneColor: string
+    /**
+     * The highlight color of the skeleton.
+     */
     highlightColor: string
+    /**
+     *  The style object to apply to the skeleton container.
+     */
     containerStyle?: StyleProp<ViewStyle>
     animationDirection?:
         | "horizontalLeft"
@@ -16,12 +25,29 @@ type Props = {
         | "diagonalDownRight"
         | "diagonalTopLeft"
         | "diagonalTopRight"
+    /**
+     * The layout structure for the skeleton. It can be customized to different shapes and sizes.
+     */
     layout?: ICustomViewStyle[]
-    height?: number
+    /**
+     * The height of the skeleton line.
+     * @default 20
+     */
+    height?: DimensionValue
+    /**
+     * The width of the skeleton container.
+     */
     width?: DimensionValue
+    /**
+     * Alignment of items within the skeleton. Default is "center".
+     */
     alignItems?: "flex-start" | "flex-end" | "center" | "stretch" | "baseline"
     testID?: string
     borderRadius?: number
+    /**
+     * Style of the wrapper container
+     */
+    rootStyle?: StyleProp<ViewStyle>
 }
 
 /**
@@ -43,14 +69,6 @@ type Props = {
  *     width={140}
  * />
  *
- * @param {string} boneColor - The color of the skeleton bone. This is the base color of the loading component.
- * @param {string} highlightColor - The highlight color of the skeleton.
- * @param {StyleProp<ViewStyle>} [containerStyle] - The style object to apply to the skeleton container.
- * @param {"horizontalLeft" | "horizontalRight" | "verticalTop" | "verticalDown" | "diagonalDownLeft" | "diagonalDownRight" | "diagonalTopLeft" | "diagonalTopRight"}
- * @param {ICustomViewStyle[]} [layout] - The layout structure for the skeleton. It can be customized to different shapes and sizes.
- * @param {number} [height=20] - The height of the skeleton line. Default is 20.
- * @param {number} [width] - The width of the skeleton container.
- * @param {"flex-start" | "flex-end" | "center" | "stretch" | "baseline"} [alignItems="center"] - Alignment of items within the skeleton. Default is "center".
  */
 export const BaseSkeleton = ({
     boneColor,
@@ -63,6 +81,7 @@ export const BaseSkeleton = ({
     alignItems = "center",
     testID,
     borderRadius = undefined,
+    rootStyle,
 }: Props) => {
     const computedContainerStyle = useMemo(() => {
         if (containerStyle) {
@@ -94,7 +113,7 @@ export const BaseSkeleton = ({
     }, [alignItems, borderRadius, height, layout])
 
     return (
-        <BaseView testID={testID}>
+        <BaseView testID={testID} style={rootStyle}>
             <Skeleton
                 containerStyle={computedContainerStyle}
                 animationDirection={animationDirection}

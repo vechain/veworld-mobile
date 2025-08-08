@@ -1,8 +1,8 @@
+import { BlurView as BV, BlurViewProps } from "@react-native-community/blur"
 import React from "react"
 import { StyleSheet } from "react-native"
-import { BlurView as BV, BlurViewProps } from "@react-native-community/blur"
-import { useThemedStyles } from "~Hooks"
 import { ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = { blurAmount?: number } & BlurViewProps
@@ -20,6 +20,7 @@ export const BlurView = (props: Props) => {
             blurType="light"
             blurAmount={blurAmount}
             reducedTransparencyFallbackColor="white"
+            overlayColor="transparent"
             {...props}
         />
     )

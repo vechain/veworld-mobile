@@ -1,20 +1,12 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import {
-    BaseIcon,
-    BaseTouchable,
-    BaseSpacer,
-    BaseText,
-    BaseView,
-    HeaderStyleV2,
-    HeaderTitle,
-    Layout,
-} from "~Components"
+import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { VbdCarousel } from "./Components/Common/VbdCarousel/VbdCarousel"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
@@ -29,8 +21,9 @@ export const AppsScreen = () => {
         <Layout
             bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
             noBackButton
+            noMargin
             fixedHeader={
-                <BaseView style={HeaderStyleV2}>
+                <BaseView style={[HeaderStyleV2, styles.header]}>
                     <HeaderTitle
                         title={LL.APPS_SCREEN_TITLE()}
                         leftIconName="icon-apps"
@@ -48,7 +41,15 @@ export const AppsScreen = () => {
                     </BaseView>
                 </BaseView>
             }
-            body={<BaseText>{"AppsScreen"}</BaseText>}
+            body={
+                <VbdCarousel
+                    appIds={[
+                        "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",
+                        "0x9643ed1637948cc571b23f836ade2bdb104de88e627fa6e8e3ffef1ee5a1739a",
+                        "0x6a825c7d259075d70a88cbd1932604ee3009777e14645ced6881a32b9c165ca4",
+                    ]}
+                />
+            }
         />
     )
 }
@@ -59,5 +60,8 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 8,
             borderRadius: 100,
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_100,
+        },
+        header: {
+            paddingHorizontal: 16,
         },
     })
