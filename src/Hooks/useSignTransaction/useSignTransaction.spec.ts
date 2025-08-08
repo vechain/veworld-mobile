@@ -9,7 +9,7 @@ import { Transaction } from "@vechain/sdk-core"
 
 jest.mock("axios")
 
-const { vetTransaction1, device1, account1D1, wallet1 } = TestHelpers.data
+const { vetTransaction1, device1, account1D1, wallet1, smartWalletDevice } = TestHelpers.data
 
 jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
     ...jest.requireActual("~Components/Base/BaseToast/BaseToast"),
@@ -17,6 +17,30 @@ jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
     showErrorToast: jest.fn(),
     showWarningToast: jest.fn(),
 }))
+
+// Hoisted mock: useSmartWallet signer
+const mockSignTransactionWithSmartWallet = jest.fn().mockResolvedValue(Buffer.from("aa", "hex"))
+jest.mock("~Hooks/useSmartWallet", () => ({
+    ...jest.requireActual("~Hooks/useSmartWallet"),
+    useSmartWallet: () => ({
+        isAuthenticated: true,
+        isInitialized: true,
+        ownerAddress: "0x4444444444444444444444444444444444444444",
+        signTransaction: mockSignTransactionWithSmartWallet,
+    }),
+}))
+
+// Hoisted mock: configurable selectDevice to force SMART_WALLET
+let __senderDevice: any
+jest.mock("~Storage/Redux", () => {
+    const actual = jest.requireActual("~Storage/Redux")
+    return {
+        ...actual,
+        selectDevice: jest.fn((state: any, rootAddress?: string) =>
+            __senderDevice !== undefined ? __senderDevice : actual.selectDevice(state, rootAddress as any),
+        ),
+    }
+})
 
 const defaultProps = {
     buildTransaction: async () => {
@@ -200,5 +224,55 @@ describe("useSignTransaction", () => {
 
             expect(res).toEqual(SignStatus.DELEGATION_FAILURE)
         })
+    })
+})
+
+// SMART_WALLET-specific tests
+describe("useSignTransaction - SMART_WALLET", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue(wallet1)
+        __senderDevice = undefined
+    })
+
+    it("sender SMART_WALLET (no delegation) calls signTransactionWithSmartWallet", async () => {
+        __senderDevice = smartWalletDevice
+
+        const { result } = renderHook(
+            () =>
+                useSignTransaction({
+                    buildTransaction: async () => vetTransaction1,
+                    selectedDelegationOption: DelegationType.NONE,
+                    selectedDelegationToken: "VTHO",
+                }),
+            { wrapper: TestWrapper },
+        )
+
+        const tx = (await result.current.signTransaction()) as Transaction
+        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledTimes(1)
+        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledWith(expect.any(Transaction))
+        expect(tx).toBeInstanceOf(Transaction)
+    })
+
+    it("delegation ACCOUNT with SMART_WALLET device uses signTransactionWithSmartWallet", async () => {
+        __senderDevice = smartWalletDevice
+        const smartDelegationAccount = { ...account1D1, device: smartWalletDevice }
+
+        const { result } = renderHook(
+            () =>
+                useSignTransaction({
+                    buildTransaction: async () => vetTransaction1,
+                    selectedDelegationOption: DelegationType.ACCOUNT,
+                    selectedDelegationAccount: smartDelegationAccount,
+                    selectedDelegationToken: "VTHO",
+                }),
+            { wrapper: TestWrapper },
+        )
+
+        const res = await result.current.signTransaction()
+        // Called once for delegation smart wallet and once for sender smart wallet
+        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledTimes(2)
+        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledWith(expect.any(Transaction))
+        expect(res === SignStatus.DELEGATION_FAILURE || res instanceof Transaction).toBe(true)
     })
 })
