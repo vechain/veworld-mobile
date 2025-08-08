@@ -21,8 +21,9 @@ export const AppsScreen = () => {
         <Layout
             bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
             noBackButton
+            noMargin
             fixedHeader={
-                <BaseView style={HeaderStyleV2}>
+                <BaseView style={[HeaderStyleV2, styles.header]}>
                     <HeaderTitle
                         title={LL.APPS_SCREEN_TITLE()}
                         leftIconName="icon-apps"
@@ -59,5 +60,8 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 8,
             borderRadius: 100,
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_100,
+        },
+        header: {
+            paddingHorizontal: 16,
         },
     })
