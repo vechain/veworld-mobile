@@ -1,22 +1,9 @@
 import { handleNodeDelegatedEvent } from "./StargateEventHandlers"
 
-// Mock thor-devkit ABI Event to control signature and decoding
-jest.mock("thor-devkit", () => ({
-    abi: {
-        Event: class MockEvent {
-            public signature: string
-            constructor(_abi: any) {
-                this.signature = "0xnodeDelegatedSig"
-            }
-            decode() {
-                return {
-                    nodeId: { toString: () => "123" },
-                    delegatee: "0xDELEGATEE",
-                    isDelegated: true,
-                }
-            }
-        },
-    },
+// Mock receipt processor to avoid real ABI decoding
+const getReceiptProcessorMock = jest.fn()
+jest.mock("~Services/AbiService", () => ({
+    getReceiptProcessor: (...args: any[]) => getReceiptProcessorMock(...args),
 }))
 
 // Mocks for config and utils
@@ -34,31 +21,30 @@ jest.mock("~Utils", () => ({
     BloomUtils: {
         testBloomForAddress: (...args: any[]) => testBloomForAddressMock(...args),
     },
+    AddressUtils: {
+        compareAddresses: (a?: string, b?: string) => (a ?? "").toLowerCase() === (b ?? "").toLowerCase(),
+    },
 }))
 
 jest.mock("~Constants", () => ({
     ERROR_EVENTS: { STARGATE: "STARGATE" },
 }))
 
-const createThorClient = (receiptsByTx: Record<string, any>) => {
+const createThorClient = (expanded?: { transactions: { id: string; origin?: string; outputs: any[] }[] }) => {
     return {
         blocks: {
-            getBlockCompressed: jest.fn().mockResolvedValue({ transactions: Object.keys(receiptsByTx) }),
+            getBlockExpanded: jest.fn().mockResolvedValue(expanded ?? { transactions: [] }),
+            getBlockCompressed: jest.fn().mockResolvedValue({ transactions: [] }),
         },
         transactions: {
-            getTransactionReceipt: jest.fn((txId: string) => {
-                const response = receiptsByTx[txId]
-                if (response instanceof Error) {
-                    return Promise.reject(response)
-                }
-                return Promise.resolve(response)
-            }),
+            getTransactionReceipt: jest.fn(),
         },
     } as any
 }
 
+const NODE_MGMT = "0xnodeMgmt"
 const createEvent = (overrides?: Partial<{ address: string; topics: string[] }>) => ({
-    address: overrides?.address ?? "0xnodeMgmt",
+    address: overrides?.address ?? NODE_MGMT,
     topics: overrides?.topics ?? ["0xnodeDelegatedSig"],
     data: "0x",
 })
@@ -79,62 +65,126 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
 
     it("returns early when no network config", async () => {
         getStargateNetworkConfigMock.mockReturnValue(undefined)
-        const thor = createThorClient({})
+        const thor = createThorClient()
         const refetch = jest.fn()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch })
+        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch, managedAddresses: [] })
 
         expect(refetch).not.toHaveBeenCalled()
-        expect(thor.blocks.getBlockCompressed).not.toHaveBeenCalled()
+        expect(thor.blocks.getBlockExpanded).not.toHaveBeenCalled()
     })
 
     it("returns early when bloom has no Stargate contracts", async () => {
         testBloomForAddressMock.mockReturnValue(false)
-        const thor = createThorClient({})
+        const thor = createThorClient()
         const refetch = jest.fn()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch })
+        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch, managedAddresses: [] })
 
         expect(refetch).not.toHaveBeenCalled()
-        expect(thor.blocks.getBlockCompressed).not.toHaveBeenCalled()
+        expect(thor.blocks.getBlockExpanded).not.toHaveBeenCalled()
     })
 
-    it("triggers refetch per matching NodeDelegated event", async () => {
-        const receipt = {
-            outputs: [
+    it("triggers refetch per matching NodeDelegated event for managed owner", async () => {
+        getReceiptProcessorMock.mockReturnValue({
+            analyzeReceipt: () => [
                 {
-                    events: [createEvent()],
+                    clauseIndex: 0,
+                    name: "NodeDelegated(indexed uint256,indexed address,bool)",
+                    params: { nodeId: "123", delegatee: "0xDELEGATEE", delegated: true },
+                    address: NODE_MGMT,
                 },
             ],
-        }
-        const thor = createThorClient({ tx1: receipt })
+        })
+        const thor = createThorClient({
+            transactions: [
+                {
+                    id: "tx1",
+                    origin: "0xOWNER",
+                    outputs: [{ events: [createEvent()] }],
+                },
+            ],
+        })
         const refetch = jest.fn()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch })
+        await handleNodeDelegatedEvent({
+            beat,
+            network,
+            thor,
+            refetchStargateData: refetch,
+            managedAddresses: ["0xOWNER"],
+        })
 
         expect(refetch).toHaveBeenCalledTimes(1)
     })
 
-    it("ignores events with wrong topic signature or address", async () => {
-        const wrongSignature = { outputs: [{ events: [createEvent({ topics: ["0xWRONG"] })] }] }
-        const wrongAddress = { outputs: [{ events: [createEvent({ address: "0xother" })] }] }
-        const thor = createThorClient({ tx1: wrongSignature, tx2: wrongAddress })
+    it("ignores events when contract address mismatch", async () => {
+        getReceiptProcessorMock.mockReturnValue({
+            analyzeReceipt: () => [
+                {
+                    clauseIndex: 0,
+                    name: "NodeDelegated(indexed uint256,indexed address,bool)",
+                    params: { nodeId: "123", delegatee: "0xDELEGATEE", delegated: true },
+                    address: "0xother",
+                },
+            ],
+        })
+        const thor = createThorClient({
+            transactions: [
+                { id: "tx1", origin: "0xOWNER", outputs: [{ events: [createEvent({ address: "0xother" })] }] },
+            ],
+        })
         const refetch = jest.fn()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch })
+        await handleNodeDelegatedEvent({
+            beat,
+            network,
+            thor,
+            refetchStargateData: refetch,
+            managedAddresses: ["0xOWNER"],
+        })
 
         expect(refetch).not.toHaveBeenCalled()
     })
 
-    it("continues processing when a transaction errors", async () => {
-        const goodReceipt = { outputs: [{ events: [createEvent()] }] }
-        const thor = createThorClient({ tx1: new Error("boom"), tx2: goodReceipt })
+    it("falls back to compressed receipts and continues on tx errors", async () => {
+        // force compressed path
+        const thor = {
+            blocks: {
+                getBlockExpanded: jest.fn().mockResolvedValue(null),
+                getBlockCompressed: jest.fn().mockResolvedValue({ transactions: ["tx1", "tx2"] }),
+            },
+            transactions: {
+                getTransactionReceipt: jest
+                    .fn()
+                    .mockRejectedValueOnce(new Error("boom"))
+                    .mockResolvedValueOnce({
+                        meta: { txOrigin: "0xOWNER" },
+                        outputs: [{ events: [createEvent()] }],
+                    }),
+            },
+        } as any
+        getReceiptProcessorMock.mockReturnValue({
+            analyzeReceipt: () => [
+                {
+                    clauseIndex: 0,
+                    name: "NodeDelegated(indexed uint256,indexed address,bool)",
+                    params: { nodeId: "123", delegatee: "0xDELEGATEE", delegated: true },
+                    address: NODE_MGMT,
+                },
+            ],
+        })
         const refetch = jest.fn()
 
-        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch })
+        await handleNodeDelegatedEvent({
+            beat,
+            network,
+            thor,
+            refetchStargateData: refetch,
+            managedAddresses: ["0xOWNER"],
+        })
 
         expect(refetch).toHaveBeenCalledTimes(1)
-        // ensure both txs were attempted
         expect(thor.transactions.getTransactionReceipt).toHaveBeenCalledTimes(2)
     })
 })
