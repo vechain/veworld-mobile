@@ -9,16 +9,11 @@ import type { ConnectedApp } from "../ConnectedAppsScreen"
 
 type Props = {
     connectedApp: ConnectedApp
-    /**
-     * Use the URL as the description of the dapp.
-     * @default false
-     */
-    useUrlAsDescription?: boolean
 }
 
 const IMAGE_SIZE = 64
 
-export const ConnectedAppBox: React.FC<Props> = memo(({ connectedApp, useUrlAsDescription }: Props) => {
+export const ConnectedAppBox: React.FC<Props> = memo(({ connectedApp }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
     const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -30,9 +25,9 @@ export const ConnectedAppBox: React.FC<Props> = memo(({ connectedApp, useUrlAsDe
 
     const description = useMemo(() => {
         if (connectedApp.type === "in-app") {
-            return useUrlAsDescription ? connectedApp.app.href : connectedApp.app.desc
+            return new URL(connectedApp.app.href).hostname
         } else return connectedApp.session.peer.metadata.description
-    }, [connectedApp, useUrlAsDescription])
+    }, [connectedApp])
 
     const icon = useMemo(() => {
         if (connectedApp.type === "in-app") {

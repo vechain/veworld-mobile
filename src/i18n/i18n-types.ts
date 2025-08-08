@@ -209,10 +209,6 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
-	 * M​a​n​a​g​i​n​g
-	 */
-	STARGATE_DELEGATEE_LABEL: string
-	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: string
@@ -1907,6 +1903,14 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_CONTRACT: string
 	/**
+	 * Y​o​u​ ​c​a​n​ ​r​e​c​o​n​n​e​c​t​ ​a​n​y​t​i​m​e​ ​—​ ​r​e​m​o​v​i​n​g​ ​i​t​ ​j​u​s​t​ ​m​e​a​n​s​ ​y​o​u​'​l​l​ ​n​e​e​d​ ​t​o​ ​l​o​g​ ​i​n​ ​a​g​a​i​n​ ​n​e​x​t​ ​t​i​m​e​.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_DELETE_TITLE: string
+	/**
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
 	CONNECTED_APP_DESCRIPTION: string
@@ -1994,14 +1998,6 @@ type RootTranslation = {
 	 * C​o​n​n​e​c​t​e​d​ ​a​p​p
 	 */
 	CONNECTED_APP_TITLE: string
-	/**
-	 * R​e​m​o​v​e​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p
-	 */
-	CONNECTED_APP_DELETE_TITLE: string
-	/**
-	 * W​o​u​l​d​ ​y​o​u​ ​l​i​k​e​ ​t​o​ ​r​e​m​o​v​e​ ​t​h​i​s​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p​?​ ​T​h​e​ ​n​e​x​t​ ​t​i​m​e​ ​y​o​u​'​d​ ​l​i​k​e​ ​t​o​ ​i​n​t​e​r​a​c​t​ ​w​i​t​h​ ​i​t​,​ ​y​o​u​'​d​ ​n​e​e​d​ ​t​o​ ​l​o​g​ ​i​n​ ​a​g​a​i​n​.
-	 */
-	CONNECTED_APP_DELETE_DESCRIPTION: string
 	/**
 	 * U​r​l
 	 */
@@ -4117,6 +4113,10 @@ type RootTranslation = {
 	 */
 	STARGATE_CLAIMABLE: string
 	/**
+	 * M​a​n​a​g​i​n​g
+	 */
+	STARGATE_DELEGATEE_LABEL: string
+	/**
 	 * L​o​c​k​e​d
 	 */
 	STARGATE_LOCKED: string
@@ -4895,10 +4895,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * VET unstaked
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
-	/**
-	 * Managing
-	 */
-	STARGATE_DELEGATEE_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yet
 	 */
@@ -6575,6 +6571,14 @@ Thanks for your patience!
 	 */
 	CONNECTED_APP_CONTRACT: () => LocalizedString
 	/**
+	 * You can reconnect anytime — removing it just means you'll need to log in again next time.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: () => LocalizedString
+	/**
+	 * Disconnect connected app
+	 */
+	CONNECTED_APP_DELETE_TITLE: () => LocalizedString
+	/**
 	 * Description
 	 */
 	CONNECTED_APP_DESCRIPTION: () => LocalizedString
@@ -6662,14 +6666,6 @@ Thanks for your patience!
 	 * Connected app
 	 */
 	CONNECTED_APP_TITLE: () => LocalizedString
-	/**
-	 * Remove connected app
-	 */
-	CONNECTED_APP_DELETE_TITLE: () => LocalizedString
-	/**
-	 * Would you like to remove this connected app? The next time you'd like to interact with it, you'd need to log in again.
-	 */
-	CONNECTED_APP_DELETE_DESCRIPTION: () => LocalizedString
 	/**
 	 * Url
 	 */
@@ -8752,6 +8748,10 @@ Are you sure you want to continue?
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
+	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
 	/**
 	 * Locked
 	 */
