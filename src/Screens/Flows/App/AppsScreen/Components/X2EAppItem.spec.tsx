@@ -68,7 +68,7 @@ jest.mock("~Utils", () => ({
 }))
 
 // Mock the animation hook to avoid Reanimated issues
-jest.mock("../hooks/useX2EAppAnimation", () => ({
+jest.mock("../Hooks/useX2EAppAnimation", () => ({
     useX2EAppAnimation: () => ({
         state: {
             showDetails: false,
