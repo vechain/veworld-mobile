@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.1 (2025-08-04)</small>
+
+* build: init ([ecfcbcc](https://github.com/vechain/veworld-mobile/commit/ecfcbcc))
+* Fix android build issue (#3142) ([38bb9a6](https://github.com/vechain/veworld-mobile/commit/38bb9a6)), closes [#3142](https://github.com/vechain/veworld-mobile/issues/3142)
+
 ## <small>2.2.10 (2025-07-24)</small>
 
 * build: init ([955e4db](https://github.com/vechain/veworld-mobile/commit/955e4db))

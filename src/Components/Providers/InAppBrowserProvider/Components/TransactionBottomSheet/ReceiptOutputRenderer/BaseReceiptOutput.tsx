@@ -165,6 +165,7 @@ const baseStyles = (theme: ColorThemeType) =>
         icon: {
             backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_100,
             padding: 6,
+            borderRadius: 16,
         },
     })
 

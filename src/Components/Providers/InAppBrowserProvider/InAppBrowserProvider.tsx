@@ -53,6 +53,13 @@ export interface PackageInfoResponse {
     verificationFailed: boolean
 }
 
+export interface DappMetadata {
+    icon: string
+    name: string
+    url: string
+    isDapp: boolean
+}
+
 // Resolve an issue with types for the WebView component
 type EnhancedScrollEvent = Omit<NativeScrollEvent, "zoomScale"> & { zoomScale?: number }
 
@@ -84,6 +91,7 @@ type ContextType = {
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean
+    dappMetadata?: DappMetadata
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -796,6 +804,28 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         )
     }, [allDapps, navigationState])
 
+    const dappMetadata = useMemo(() => {
+        if (!navigationState?.url) return undefined
+
+        const foundDapp = allDapps.find(app => new URL(app.href).origin === new URL(navigationState?.url ?? "").origin)
+        if (foundDapp)
+            return {
+                icon: foundDapp.id
+                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
+                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
+                name: foundDapp.name,
+                url: navigationState?.url,
+                isDapp: true,
+            }
+
+        return {
+            name: new URL(navigationState?.url ?? "").hostname,
+            url: navigationState?.url,
+            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(navigationState?.url ?? "").origin}`,
+            isDapp: false,
+        }
+    }, [allDapps, navigationState?.url])
+
     const contextValue = React.useMemo(() => {
         return {
             isLoading,
@@ -825,6 +855,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
             isDapp,
+            dappMetadata,
         }
     }, [
         isLoading,
@@ -853,6 +884,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         switchAccount,
         packageInfo,
         isDapp,
+        dappMetadata,
     ])
 
     return (
