@@ -1,24 +1,12 @@
-import { abi } from "thor-devkit"
 import { ThorClient } from "@vechain/sdk-network"
 import { Beat, Network } from "~Model"
-import { BloomUtils, debug, error } from "~Utils"
+import { AddressUtils, BloomUtils, debug, error } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
 import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
+import { getReceiptProcessor, InspectableOutput, ReceiptOutput } from "~Services/AbiService"
 
-// NodeDelegated event ABI - event NodeDelegated(uint256 indexed nodeId, address indexed delegatee, bool indexed isDelegated)
-const NODE_DELEGATED_EVENT_ABI = {
-    anonymous: false,
-    inputs: [
-        { indexed: true, internalType: "uint256", name: "nodeId", type: "uint256" },
-        { indexed: true, internalType: "address", name: "delegatee", type: "address" },
-        { indexed: true, internalType: "bool", name: "isDelegated", type: "bool" },
-    ],
-    name: "NodeDelegated",
-    type: "event" as const,
-}
-
-// Calculate event signature hash
-const NODE_DELEGATED_EVENT_SIGNATURE = new abi.Event(NODE_DELEGATED_EVENT_ABI).signature
+// Signature used by Generated ABI map for GenericAbiManager
+const NODE_DELEGATED_EVENT_SIGNATURE_NAME = "NodeDelegated(indexed uint256,indexed address,bool)"
 
 interface NodeDelegatedEventData {
     nodeId: string
@@ -27,6 +15,7 @@ interface NodeDelegatedEventData {
     blockNumber: number
     txId: string
     contractAddress: string
+    owner: string
 }
 
 interface NodeDelegatedEventHandlerProps {
@@ -34,6 +23,7 @@ interface NodeDelegatedEventHandlerProps {
     network: Network
     thor: ThorClient
     refetchStargateData: () => void
+    managedAddresses: string[]
 }
 
 export const handleNodeDelegatedEvent = async ({
@@ -41,6 +31,7 @@ export const handleNodeDelegatedEvent = async ({
     network,
     thor,
     refetchStargateData,
+    managedAddresses,
 }: NodeDelegatedEventHandlerProps) => {
     try {
         // Get Stargate contract addresses for the current network
@@ -76,16 +67,24 @@ export const handleNodeDelegatedEvent = async ({
             return
         }
 
-        const nodeDelegatedEvents = await parseNodeDelegatedEvents(beat, nodeManagementAddress, thor)
+        // Create a receipt processor for this network. Only Generic manager is needed here
+        const receiptProcessor = getReceiptProcessor(network.type, ["Generic"])
 
-        if (nodeDelegatedEvents.length > 0) {
+        const nodeDelegatedEvents = await parseNodeDelegatedEvents(beat, nodeManagementAddress, thor, receiptProcessor)
+
+        // Filter only events where the tx origin (node owner) is an address managed in VeWorld
+        const ownedEvents = nodeDelegatedEvents.filter(evt =>
+            managedAddresses.some(addr => AddressUtils.compareAddresses(addr, evt.owner)),
+        )
+
+        if (ownedEvents.length > 0) {
             debug(
                 ERROR_EVENTS.STARGATE,
-                `Found ${nodeDelegatedEvents.length} NodeDelegated events in beat ${beat.number}`,
+                `Found ${ownedEvents.length} NodeDelegated events in beat ${beat.number} for managed addresses`,
             )
 
             // Process each event
-            for (const eventData of nodeDelegatedEvents) {
+            for (const eventData of ownedEvents) {
                 await processNodeDelegatedEvent(eventData, refetchStargateData)
             }
         }
@@ -101,16 +100,34 @@ const parseNodeDelegatedEvents = async (
     beat: Beat,
     nodeManagementContract: string,
     thor: ThorClient,
+    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
 ): Promise<NodeDelegatedEventData[]> => {
     try {
-        const block = await thor.blocks.getBlockCompressed(beat.id)
+        // Prefer expanded block to avoid per-transaction receipt calls
+        const expanded = await thor.blocks.getBlockExpanded(beat.id)
 
-        if (!block?.transactions) {
-            debug(ERROR_EVENTS.STARGATE, `No transactions found in block ${beat.number}`)
-            return []
+        let events: NodeDelegatedEventData[] = []
+        if (expanded?.transactions) {
+            events = await processExpandedTransactionsForEvents(
+                expanded.transactions.map(tx => ({ id: tx.id, origin: tx.origin, outputs: tx.outputs })),
+                nodeManagementContract,
+                beat,
+                receiptProcessor,
+            )
+        } else {
+            const compressed = await thor.blocks.getBlockCompressed(beat.id)
+            if (!compressed?.transactions) {
+                debug(ERROR_EVENTS.STARGATE, `No transactions found in block ${beat.number}`)
+                return []
+            }
+            events = await processTransactionIdsForEvents(
+                compressed.transactions,
+                nodeManagementContract,
+                thor,
+                beat,
+                receiptProcessor,
+            )
         }
-
-        const events = await processTransactionsForEvents(block.transactions, nodeManagementContract, thor, beat)
         debug(ERROR_EVENTS.STARGATE, `Parsed ${events.length} NodeDelegated events from beat ${beat.number}`)
 
         return events
@@ -123,20 +140,58 @@ const parseNodeDelegatedEvents = async (
 /**
  * Process all transactions in a block to find NodeDelegated events
  */
-const processTransactionsForEvents = async (
+type ExpandedTx = {
+    id: string
+    origin?: string
+    outputs: InspectableOutput[]
+}
+
+const processExpandedTransactionsForEvents = async (
+    transactions: ExpandedTx[],
+    nodeManagementContract: string,
+    beat: Beat,
+    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
+): Promise<NodeDelegatedEventData[]> => {
+    const events: NodeDelegatedEventData[] = []
+
+    for (const tx of transactions) {
+        try {
+            const transactionEvents = await processExpandedTransactionForEvents(
+                tx,
+                nodeManagementContract,
+                beat,
+                receiptProcessor,
+            )
+            events.push(...transactionEvents)
+        } catch (txError) {
+            debug(ERROR_EVENTS.STARGATE, "Error processing transaction", txError)
+        }
+    }
+
+    return events
+}
+
+const processTransactionIdsForEvents = async (
     transactions: string[],
     nodeManagementContract: string,
     thor: ThorClient,
     beat: Beat,
+    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
 ): Promise<NodeDelegatedEventData[]> => {
     const events: NodeDelegatedEventData[] = []
 
     for (const txId of transactions) {
         try {
-            const transactionEvents = await processTransactionForEvents(txId, nodeManagementContract, thor, beat)
+            const transactionEvents = await processTransactionForEvents(
+                txId,
+                nodeManagementContract,
+                thor,
+                beat,
+                receiptProcessor,
+            )
             events.push(...transactionEvents)
         } catch (txError) {
-            debug(ERROR_EVENTS.STARGATE, `Error processing transaction ${txId}:`, txError)
+            debug(ERROR_EVENTS.STARGATE, "Error processing transaction", txError)
         }
     }
 
@@ -146,11 +201,47 @@ const processTransactionsForEvents = async (
 /**
  * Process a single transaction to find NodeDelegated events
  */
+const processExpandedTransactionForEvents = async (
+    tx: ExpandedTx,
+    nodeManagementContract: string,
+    beat: Beat,
+    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
+): Promise<NodeDelegatedEventData[]> => {
+    const txId = tx.id
+    const txOrigin = tx.origin ?? ""
+    const outputs = tx.outputs
+
+    if (!outputs || outputs.length === 0) return []
+
+    const analyzedOutputs = receiptProcessor.analyzeReceipt(outputs, txOrigin)
+    const found: NodeDelegatedEventData[] = analyzedOutputs
+        .filter(
+            (out: ReceiptOutput) =>
+                out.name === NODE_DELEGATED_EVENT_SIGNATURE_NAME &&
+                out.address?.toLowerCase() === nodeManagementContract.toLowerCase(),
+        )
+        .map(out => {
+            const params: any = (out as any).params
+            return {
+                nodeId: params.nodeId?.toString?.() ?? String(params.nodeId),
+                delegatee: params.delegatee,
+                isDelegated: Boolean(params.delegated ?? params.isDelegated),
+                blockNumber: beat.number,
+                txId,
+                contractAddress: nodeManagementContract,
+                owner: txOrigin,
+            } satisfies NodeDelegatedEventData
+        })
+
+    return found
+}
+
 const processTransactionForEvents = async (
     txId: string,
     nodeManagementContract: string,
     thor: ThorClient,
     beat: Beat,
+    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
 ): Promise<NodeDelegatedEventData[]> => {
     const receipt = await thor.transactions.getTransactionReceipt(txId)
 
@@ -158,93 +249,28 @@ const processTransactionForEvents = async (
         return []
     }
 
-    const events: NodeDelegatedEventData[] = []
+    const txOrigin = receipt.meta.txOrigin ?? ""
+    const analyzedOutputs = receiptProcessor.analyzeReceipt(receipt.outputs as unknown as InspectableOutput[], txOrigin)
+    const found: NodeDelegatedEventData[] = analyzedOutputs
+        .filter(
+            (out: ReceiptOutput) =>
+                out.name === NODE_DELEGATED_EVENT_SIGNATURE_NAME &&
+                out.address?.toLowerCase() === nodeManagementContract.toLowerCase(),
+        )
+        .map(out => {
+            const params: any = (out as any).params
+            return {
+                nodeId: params.nodeId?.toString?.() ?? String(params.nodeId),
+                delegatee: params.delegatee,
+                isDelegated: Boolean(params.delegated ?? params.isDelegated),
+                blockNumber: beat.number,
+                txId,
+                contractAddress: nodeManagementContract,
+                owner: txOrigin,
+            } satisfies NodeDelegatedEventData
+        })
 
-    for (const output of receipt.outputs) {
-        if (!output.events) continue
-
-        const outputEvents = processOutputEvents(output.events, nodeManagementContract, beat, txId)
-        events.push(...outputEvents)
-    }
-
-    return events
-}
-
-/**
- * Process events from a transaction output
- */
-const processOutputEvents = (
-    events: any[],
-    nodeManagementContract: string,
-    beat: Beat,
-    txId: string,
-): NodeDelegatedEventData[] => {
-    const nodeDelegatedEvents: NodeDelegatedEventData[] = []
-
-    for (const event of events) {
-        if (isNodeDelegatedEvent(event, nodeManagementContract)) {
-            const decoded = decodeNodeDelegatedEvent(event)
-            if (decoded) {
-                const eventData: NodeDelegatedEventData = {
-                    ...decoded,
-                    blockNumber: beat.number,
-                    txId,
-                    contractAddress: nodeManagementContract,
-                }
-
-                nodeDelegatedEvents.push(eventData)
-                logFoundEvent(decoded)
-            }
-        }
-    }
-
-    return nodeDelegatedEvents
-}
-
-/**
- * Check if an event is a NodeDelegated event from the correct contract
- */
-const isNodeDelegatedEvent = (event: any, nodeManagementContract: string): boolean => {
-    return (
-        event.address?.toLowerCase() === nodeManagementContract.toLowerCase() &&
-        event.topics?.[0]?.toLowerCase() === NODE_DELEGATED_EVENT_SIGNATURE.toLowerCase()
-    )
-}
-
-/**
- * Log details of a found NodeDelegated event
- */
-const logFoundEvent = (decoded: Omit<NodeDelegatedEventData, "blockNumber" | "txId" | "contractAddress">): void => {
-    debug(
-        ERROR_EVENTS.STARGATE,
-        `Found NodeDelegated event: nodeId=${decoded.nodeId}, ` +
-            `delegatee=${decoded.delegatee}, isDelegated=${decoded.isDelegated}`,
-    )
-}
-
-/**
- * Decode a NodeDelegated event from VeChain event logs
- */
-const decodeNodeDelegatedEvent = (event: {
-    topics: string[]
-    data: string
-}): Omit<NodeDelegatedEventData, "blockNumber" | "txId" | "contractAddress"> | null => {
-    try {
-        if (event.topics[0]?.toLowerCase() !== NODE_DELEGATED_EVENT_SIGNATURE.toLowerCase()) {
-            return null
-        }
-
-        const decoded = new abi.Event(NODE_DELEGATED_EVENT_ABI).decode(event.data, event.topics)
-
-        return {
-            nodeId: decoded.nodeId.toString(),
-            delegatee: decoded.delegatee,
-            isDelegated: decoded.isDelegated,
-        }
-    } catch (err) {
-        error(ERROR_EVENTS.STARGATE, "Failed to decode NodeDelegated event:", err)
-        return null
-    }
+    return found
 }
 
 /**

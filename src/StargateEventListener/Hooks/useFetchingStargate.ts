@@ -4,7 +4,6 @@ import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~S
 import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 import { debug } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
-import { getUserNodesQueryKey } from "~Hooks/Staking/useUserNodes"
 
 /**
  * Hook for managing Stargate data refetching
@@ -47,17 +46,7 @@ export const useFetchingStargate = () => {
                 },
             })
 
-            await Promise.all([
-                // Invalidate user nodes for current account
-                queryClient.invalidateQueries({
-                    queryKey: getUserNodesQueryKey(network.type, selectedAccount.address),
-                }),
-                // Invalidate user Stargate NFTs queries that start with the base key
-                queryClient.invalidateQueries({
-                    queryKey: ["userStargateNfts", network.type, selectedAccount.address],
-                    exact: false,
-                }),
-            ])
+            // Additional explicit invalidations are not required; the predicate above handles it
 
             debug(
                 ERROR_EVENTS.STARGATE,
