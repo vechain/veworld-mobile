@@ -12,14 +12,13 @@ import {
     Layout,
 } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useFetchFeaturedDApps, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    useFetchFeaturedDApps()
     const nav = useNavigation()
 
     const goToSearch = useCallback(() => {
