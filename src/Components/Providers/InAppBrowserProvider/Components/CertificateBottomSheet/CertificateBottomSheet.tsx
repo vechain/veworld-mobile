@@ -24,6 +24,7 @@ import {
 import { AccountUtils, error, HexUtils } from "~Utils"
 import { DappWithDetails } from "../DappWithDetails"
 import { Signable } from "../Signable"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Request = {
     request: CertificateRequest
@@ -97,7 +98,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 </BaseText>
             </DappWithDetails>
             <BaseSpacer height={24} />
-            <BaseView flexDirection="row" gap={16}>
+            <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"

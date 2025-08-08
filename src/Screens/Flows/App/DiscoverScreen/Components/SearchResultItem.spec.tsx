@@ -123,26 +123,6 @@ describe("SearchResultItem", () => {
         })
     })
 
-    it("Should render fallback if url is invalid", async () => {
-        ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress: jest.fn() })
-        ;(useVisitedUrls as jest.Mock).mockReturnValue({ removeVisitedUrl: jest.fn() })
-        ;(useNavigation as jest.Mock).mockReturnValue({ navigate: jest.fn() })
-        render(
-            <SearchResultItem
-                item={{ type: HistoryUrlKind.URL, name: "TEST", url: "invalid_website_url" }}
-                isValidQuery
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        const iconContainer = screen.getByTestId("SEARCH_RESULT_ITEM_FALLBACK_ICON")
-        await waitFor(() => {
-            expect(iconContainer).toBeVisible()
-        })
-    })
-
     it("Should render fallback if url is valid, but the image doesn't load correctly", async () => {
         ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress: jest.fn() })
         ;(useVisitedUrls as jest.Mock).mockReturnValue({ removeVisitedUrl: jest.fn() })

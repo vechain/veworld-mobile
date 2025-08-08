@@ -18,6 +18,7 @@ import { selectSelectedAccountAddress, useAppSelector } from "~Storage/Redux"
 import { BannersCarousel } from "../../HomeScreen/Components"
 import { NewStargateStakeCarouselItem } from "./NewStargateStakeCarouselItem"
 import { StargateCarouselItem } from "./StargateCarouselItem"
+import { AddressUtils } from "~Utils"
 
 export const StargateCarousel = () => {
     const { LL } = useI18nContext()
@@ -26,6 +27,8 @@ export const StargateCarousel = () => {
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
+    // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
+    const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()
@@ -80,6 +83,7 @@ export const StargateCarousel = () => {
                     isLoading={isLoadingNodes || isLoadingNfts}
                     nfts={ownedStargateNfts}
                     rootStyle={styles.section}
+                    isNodeOwner={isNodeOwner}
                 />
                 <BaseSpacer bg={theme.colors.cardDivider} height={1} />
                 <BaseCarousel
