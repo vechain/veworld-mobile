@@ -36,9 +36,9 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
                     name="icon-arrow-link"
                     size={16}
                     style={styles.icon}
-                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
                 />
-                <BaseText color={theme.colors.dappCard.name} typographyFont="bodySemiBold">
+                <BaseText color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600} typographyFont="bodySemiBold">
                     {LL.BTN_OPEN_DAPP()}
                 </BaseText>
             </TouchableOpacity>
@@ -47,7 +47,7 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
                     name={isBookMarked ? "icon-star-on" : "icon-star"}
                     size={16}
                     style={styles.icon}
-                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
                 />
                 <BaseText color={theme.colors.dappCard.name} typographyFont="bodySemiBold">
                     {isBookMarked ? LL.BTN_REMOVE_FROM_FAVORITE() : LL.BTN_ADD_TO_FAVORITE()}
@@ -58,7 +58,7 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
                     name="icon-share"
                     size={16}
                     style={styles.icon}
-                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                    color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
                 />
                 <BaseText color={theme.colors.dappCard.name} typographyFont="bodySemiBold">
                     {LL.BROWSER_SHARE()}
