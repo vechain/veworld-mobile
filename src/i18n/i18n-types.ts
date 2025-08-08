@@ -2280,6 +2280,10 @@ type RootTranslation = {
 	 */
 	DISCOVER_SEE_ALL_BOOKMARKS: string
 	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: string
+	/**
 	 * S​o​r​t​ ​b​y
 	 */
 	DISCOVER_SORT_BY: string
@@ -5548,6 +5552,10 @@ Try reconnect your device to the internet.
 	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
 	 */
 	BD_OBSERVE_WALLET: () => LocalizedString
+	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
 	/**
 	 * Viewing and managing your crypto assets has never been easier.
 	 */
