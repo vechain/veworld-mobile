@@ -19,6 +19,8 @@ import { EventTypeResponse } from "~Networking"
 import { fetchTransfersForBlock } from "~Networking/Transfers"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
+import { handleNodeDelegatedEvent } from "../StargateEventListener/Handlers/StargateEventHandlers"
+import { useFetchingStargate } from "../StargateEventListener/Hooks/useFetchingStargate"
 import { ERROR_EVENTS } from "~Constants"
 import { useThorClient } from "~Hooks/useThorClient"
 
@@ -38,6 +40,8 @@ export const TransferEventListener: React.FC = () => {
     const { updateBalances, updateNFTs } = useStateReconciliation()
 
     const { forTokens, forNFTs } = useInformUser({ network })
+
+    const { refetchStargateData } = useFetchingStargate()
 
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
@@ -120,6 +124,14 @@ export const TransferEventListener: React.FC = () => {
                     updateBalances,
                     informUser: forTokens,
                 })
+
+                // ~ STARGATE EVENTS
+                await handleNodeDelegatedEvent({
+                    beat,
+                    network,
+                    thor,
+                    refetchStargateData,
+                })
             } catch (e) {
                 error(ERROR_EVENTS.TOKENS, e)
             }
@@ -138,6 +150,7 @@ export const TransferEventListener: React.FC = () => {
             fetchData,
             updateBalances,
             forTokens,
+            refetchStargateData,
         ],
     )
 

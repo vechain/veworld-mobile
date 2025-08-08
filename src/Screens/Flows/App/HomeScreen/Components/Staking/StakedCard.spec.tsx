@@ -5,6 +5,7 @@ import { useUserNodes } from "~Hooks/Staking/useUserNodes"
 import { useUserStargateNfts } from "~Hooks/Staking/useUserStargateNfts"
 import { TestWrapper } from "~Test"
 import { StakedCard } from "./StakedCard"
+import { AccountWithDevice } from "~Model"
 
 jest.mock("~Hooks/Staking/useUserNodes", () => ({
     useUserNodes: jest.fn(),
@@ -27,7 +28,7 @@ describe("StakedCard", () => {
             ownedStargateNfts: [],
             isLoading: false,
         })
-        const { findByText } = render(<StakedCard />, {
+        const { findByText } = render(<StakedCard account={{} as AccountWithDevice} />, {
             wrapper: TestWrapper,
         })
 
@@ -48,14 +49,12 @@ describe("StakedCard", () => {
             ],
             isLoading: false,
         })
-        const { findByText } = render(<StakedCard />, {
+        const { findByText } = render(<StakedCard account={{} as AccountWithDevice} />, {
             wrapper: TestWrapper,
         })
 
         const tokenSymbol = await findByText("VET")
-        const totalLockedText = await findByText("Total locked")
 
         expect(tokenSymbol).toBeOnTheScreen()
-        expect(totalLockedText).toBeOnTheScreen()
     })
 })

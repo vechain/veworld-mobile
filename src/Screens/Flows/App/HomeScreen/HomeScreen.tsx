@@ -249,7 +249,7 @@ export const HomeScreen = () => {
                     <BannersCarousel location="home_screen" />
 
                     <BaseView style={styles.container} gap={24}>
-                        <StakedCard />
+                        <StakedCard account={selectedAccount} />
                         <BaseView>
                             <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                             <BaseSpacer height={8} />
