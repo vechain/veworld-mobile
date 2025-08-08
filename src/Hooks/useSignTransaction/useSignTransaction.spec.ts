@@ -234,7 +234,7 @@ describe("useSignTransaction - SMART_WALLET", () => {
         __senderDevice = undefined
     })
 
-    it("sender SMART_WALLET (no delegation) calls signTransactionWithSmartWallet", async () => {
+    it("should be possible to use the smart account for sending a transaction with SMART_WALLET device", async () => {
         __senderDevice = smartWalletDevice
 
         const { result } = renderHook(
@@ -253,7 +253,7 @@ describe("useSignTransaction - SMART_WALLET", () => {
         expect(tx).toBeInstanceOf(Transaction)
     })
 
-    it("delegation ACCOUNT with SMART_WALLET device uses signTransactionWithSmartWallet", async () => {
+    it("should be possible to use the smart account for delegation with SMART_WALLET device", async () => {
         __senderDevice = smartWalletDevice
         const smartDelegationAccount = { ...account1D1, device: smartWalletDevice }
 
