@@ -3,16 +3,19 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { MutableRefObject, useCallback, useEffect, useState } from "react"
 import { Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
-import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
+import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
-import { BaseIcon, BaseStatusBar, BaseText, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
+import { BaseIcon, BaseStatusBar, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
-import { useAnalyticTracking, useThemedStyles } from "~Hooks"
+import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
+import FastImage, { ImageStyle } from "react-native-fast-image"
+import { DAppUtils } from "~Utils/DAppUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
 
@@ -35,11 +38,11 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     const track = useAnalyticTracking()
     const nav = useNavigation()
-    const { locale, LL } = useI18nContext()
-    const [error, setError] = useState(false)
+    const { locale } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
-    const [isLoadingWebView, setIsLoadingWebView] = useState(false)
+    const [isLoadingWebView, setIsLoadingWebView] = useState(true)
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
+    const dappMetadata = useGetDappMetadataFromUrl(route.params.url)
 
     useEffect(() => {
         if (route?.params?.ul) {
@@ -61,27 +64,49 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const animatedStyles = useAnimatedStyle(() => {
-        return {
-            flex: error ? withTiming(0) : withTiming(1),
-        }
-    })
-
-    const onLoadStart = useCallback(() => {
-        setIsLoadingWebView(true)
+    const onLoadEnd = useCallback((e: WebViewNavigationEvent | WebViewErrorEvent) => {
+        setIsLoadingWebView(e.nativeEvent.loading)
     }, [])
 
-    const onLoadEnd = useCallback(() => {
-        setIsLoadingWebView(false)
-    }, [])
+    const renderLoading = useCallback(() => {
+        if (!dappMetadata)
+            return (
+                <Animated.View exiting={FadeOut.duration(400)} style={[styles.loadingWebView]}>
+                    <BaseView style={[styles.loadingIcon, styles.notDappLoadingIcon]}>
+                        <BaseIcon name="icon-globe" size={32} color={theme.colors.history.historyItem.iconColor} />
+                    </BaseView>
+                </Animated.View>
+            )
+
+        return (
+            <Animated.View
+                exiting={FadeOut.duration(400).easing(Easing.out(Easing.ease))}
+                style={[styles.loadingWebView]}>
+                <FastImage
+                    source={{
+                        uri: dappMetadata.id
+                            ? DAppUtils.getAppHubIconUrl(dappMetadata.id)
+                            : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(dappMetadata.href).origin}`,
+                    }}
+                    style={styles.loadingIcon as ImageStyle}
+                />
+            </Animated.View>
+        )
+    }, [
+        dappMetadata,
+        styles.loadingIcon,
+        styles.loadingWebView,
+        styles.notDappLoadingIcon,
+        theme.colors.history.historyItem.iconColor,
+    ])
 
     return (
         <Layout
             bg={COLORS.TRANSPARENT}
             fixedHeader={
                 <URLBar
+                    navigationUrl={route.params.url}
                     isLoading={isLoadingWebView}
-                    onBrowserNavigation={setError}
                     onNavigate={performScreenshot}
                     returnScreen={route.params.returnScreen}
                 />
@@ -95,7 +120,10 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                     {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     {userAgent && !isLoading && (
                         <>
-                            <Animated.View ref={webviewContainerRef} style={animatedStyles} collapsable={false}>
+                            <Animated.View
+                                ref={webviewContainerRef}
+                                style={[styles.webviewContainer]}
+                                collapsable={false}>
                                 <WebView
                                     ref={webviewRef as MutableRefObject<WebView>}
                                     source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
@@ -104,7 +132,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                                     javaScriptEnabled={true}
                                     onMessage={onMessage}
                                     onScroll={onScroll}
-                                    onLoadStart={onLoadStart}
                                     onLoadEnd={onLoadEnd}
                                     style={styles.loginWebView}
                                     scalesPageToFit={true}
@@ -112,29 +139,13 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                                     allowsInlineMediaPlayback={true}
                                     originWhitelist={originWhitelist}
                                     collapsable={false}
+                                    startInLoadingState={true}
+                                    renderLoading={renderLoading}
                                 />
                             </Animated.View>
-                            {error && (
-                                <Animated.ScrollView contentContainerStyle={styles.loginWebView}>
-                                    <BaseView
-                                        alignItems="center"
-                                        justifyContent="center"
-                                        flexDirection="row"
-                                        flexGrow={1}>
-                                        <BaseView style={styles.errorContainer}>
-                                            <BaseIcon
-                                                name="icon-disconnect"
-                                                style={styles.errorIcon}
-                                                size={32}
-                                                color={theme.colors.emptyStateIcon.foreground}
-                                            />
-                                            <BaseText>{LL.BROWSER_HISTORY_ADDRESS_ERROR()}</BaseText>
-                                        </BaseView>
-                                    </BaseView>
-                                </Animated.ScrollView>
-                            )}
                         </>
                     )}
+
                     <ChangeAccountNetworkBottomSheet
                         targetAccount={targetAccount}
                         targetNetwork={targetNetwork}
@@ -155,10 +166,39 @@ const baseStyles = (theme: ColorThemeType) => {
             justifyContent: "flex-start",
             alignItems: "stretch",
         },
+        webviewContainer: {
+            position: "relative",
+            flex: 1,
+        },
         loginWebView: {
             flex: 1,
             borderTopStartRadius: 24,
             borderTopEndRadius: 24,
+        },
+        loadingIcon: {
+            width: 100,
+            height: 100,
+            alignSelf: "center",
+            borderRadius: 8,
+        },
+        notDappLoadingIcon: {
+            backgroundColor: theme.colors.history.historyItem.iconBackground,
+            alignItems: "center",
+            justifyContent: "center",
+        },
+        loadingWebView: {
+            backgroundColor: theme.colors.tabsFooter.background,
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            flex: 1,
+            borderTopStartRadius: 24,
+            borderTopEndRadius: 24,
+            height: "100%",
+            justifyContent: "center",
+            alignItems: "center",
         },
         errorIcon: {
             borderRadius: 999,

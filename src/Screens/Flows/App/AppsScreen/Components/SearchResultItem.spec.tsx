@@ -40,7 +40,7 @@ describe("SearchResultItem", () => {
         const description = screen.getByTestId("SEARCH_RESULT_ITEM_DESCRIPTION")
         const container = screen.getByTestId("SEARCH_RESULT_ITEM_CONTAINER")
         expect(name).toHaveTextContent("TEST")
-        expect(description).toHaveTextContent("https://vechain.org")
+        expect(description).toHaveTextContent("vechain.org")
 
         act(() => {
             fireEvent.press(container)
@@ -88,7 +88,7 @@ describe("SearchResultItem", () => {
         const description = screen.getByTestId("SEARCH_RESULT_ITEM_DESCRIPTION")
         const container = screen.getByTestId("SEARCH_RESULT_ITEM_CONTAINER")
         expect(name).toHaveTextContent("TEST")
-        expect(description).toHaveTextContent(dappDescription)
+        expect(description).toHaveTextContent("vechain.org")
 
         act(() => {
             fireEvent.press(container)

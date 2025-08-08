@@ -51,9 +51,9 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
     const { name, description, url } = useMemo(() => {
         switch (item.type) {
             case HistoryUrlKind.DAPP:
-                return { name: item.dapp.name, description: item.dapp.desc, url: item.dapp.href }
+                return { name: item.dapp.name, description: new URL(item.dapp.href).hostname, url: item.dapp.href }
             case HistoryUrlKind.URL:
-                return { name: item.name, description: item.url, url: item.url }
+                return { name: item.name, description: new URL(item.url).hostname, url: item.url }
         }
     }, [item])
 

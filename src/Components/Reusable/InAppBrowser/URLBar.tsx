@@ -8,15 +8,16 @@ import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { BaseIcon } from "~Components/Base/BaseIcon"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal } from "~Hooks"
+import { useBottomSheetModal, useGetDappMetadataFromUrl } from "~Hooks"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { Spinner } from "~Components/Reusable/Spinner"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
+import { DAppUtils } from "~Utils/DAppUtils"
 
 type Props = {
+    navigationUrl: string
     onBrowserNavigation?: (error: boolean) => void
     onNavigate?: () => void | Promise<void>
     returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
@@ -29,9 +30,10 @@ const AnimatedBaseText = Animated.createAnimatedComponent(wrapFunctionComponent(
 const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
 const AnimatedFavicon = Animated.createAnimatedComponent(FastImage)
 
-export const URLBar = ({ onNavigate, returnScreen, isLoading }: Props) => {
-    const { showToolbars, navigationState, dappMetadata } = useInAppBrowser()
+export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: Props) => {
+    const { showToolbars } = useInAppBrowser()
     const { betterWorldFeature } = useFeatureFlags()
+    const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
 
     const nav =
         useNavigation<
@@ -85,11 +87,30 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading }: Props) => {
         [showToolbars],
     )
 
+    const parsedDappMetadata = useMemo(() => {
+        if (dappMetadata)
+            return {
+                icon: dappMetadata.id
+                    ? DAppUtils.getAppHubIconUrl(dappMetadata.id)
+                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(dappMetadata.href).origin}`,
+                name: dappMetadata.name,
+                url: navigationUrl,
+                isDapp: true,
+            }
+
+        return {
+            name: new URL(navigationUrl).hostname,
+            url: navigationUrl,
+            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(navigationUrl).origin}`,
+            isDapp: false,
+        }
+    }, [dappMetadata, navigationUrl])
+
     const websiteFavicon = useMemo(() => {
-        return dappMetadata ? (
+        return parsedDappMetadata.icon ? (
             <AnimatedFavicon
                 testID="URL-bar-dapp-favicon"
-                source={{ uri: dappMetadata.icon, priority: FastImage.priority.high }}
+                source={{ uri: parsedDappMetadata.icon, priority: FastImage.priority.high }}
                 style={[animatedFaviconStyles, styles.favicon]}
             />
         ) : (
@@ -103,68 +124,66 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading }: Props) => {
                 style={[animatedFaviconStyles, styles.favicon]}
             />
         )
-    }, [dappMetadata, animatedFaviconStyles])
+    }, [parsedDappMetadata, animatedFaviconStyles])
 
     const websiteName = useMemo(() => {
-        if (!navigationState?.url) return "about:blank"
-        const url = new URL(navigationState.url)
-        return dappMetadata ? dappMetadata.name : url.hostname.replace("www.", "")
-    }, [dappMetadata, navigationState?.url])
+        const url = new URL(navigationUrl)
+        return dappMetadata ? dappMetadata.name : url.hostname.replace("www.", "") || "about:blank"
+    }, [dappMetadata, navigationUrl])
 
     return (
         <>
-            {navigationState?.url ? (
-                <Animated.View style={[styles.animatedContainer, animatedStyles]}>
-                    <AnimatedBaseView style={styles.inputContainer}>
-                        {/* Icon on the left */}
-                        <AnimatedBaseIcon
-                            testID="URL-bar-back-button"
-                            name="icon-x"
-                            color={COLORS.GREY_50}
-                            bg={COLORS.PURPLE}
-                            action={navToDiscover}
-                            haptics="Light"
-                            size={16}
-                            p={8}
-                            style={[animatedIconStyles, styles.iconButton]}
-                        />
+            <Animated.View style={[styles.animatedContainer, animatedStyles]}>
+                <AnimatedBaseView style={styles.inputContainer}>
+                    {/* Icon on the left */}
+                    <AnimatedBaseIcon
+                        testID="URL-bar-back-button"
+                        name="icon-x"
+                        color={COLORS.GREY_50}
+                        bg={COLORS.PURPLE}
+                        action={navToDiscover}
+                        haptics="Light"
+                        size={16}
+                        p={8}
+                        style={[animatedIconStyles, styles.iconButton]}
+                    />
 
-                        {/* URL Text centered */}
-                        <AnimatedTouchable
-                            testID="URL-bar-website-name"
-                            style={styles.urlContainer}
-                            onPress={navToSearch}
-                            disabled={isLoading}>
-                            <AnimatedBaseView
-                                flex={1}
-                                alignItems="center"
-                                flexDirection="row"
-                                justifyContent="center"
-                                gap={8}>
-                                {!isLoading ? websiteFavicon : <Spinner color={COLORS.GREY_50} />}
-                                <AnimatedBaseText
-                                    allowFontScaling={false}
-                                    typographyFont="bodySemiBold"
-                                    color={COLORS.GREY_50}
-                                    style={[styles.appName]}>
-                                    {websiteName}
-                                </AnimatedBaseText>
-                            </AnimatedBaseView>
-                        </AnimatedTouchable>
+                    {/* URL Text centered */}
+                    <AnimatedTouchable
+                        testID="URL-bar-website-name"
+                        style={styles.urlContainer}
+                        onPress={navToSearch}
+                        disabled={isLoading}>
+                        <AnimatedBaseView
+                            flex={1}
+                            alignItems="center"
+                            flexDirection="row"
+                            justifyContent="center"
+                            gap={8}>
+                            {websiteFavicon}
+                            <AnimatedBaseText
+                                allowFontScaling={false}
+                                typographyFont="bodySemiBold"
+                                color={COLORS.GREY_50}
+                                style={[styles.appName]}>
+                                {websiteName}
+                            </AnimatedBaseText>
+                        </AnimatedBaseView>
+                    </AnimatedTouchable>
 
-                        <AnimatedBaseIcon
-                            name="icon-more-vertical"
-                            color={COLORS.GREY_50}
-                            bg={COLORS.PURPLE}
-                            action={openBottomSheet}
-                            haptics="Light"
-                            size={16}
-                            p={8}
-                            style={[animatedIconStyles, styles.iconButton]}
-                        />
-                    </AnimatedBaseView>
-                </Animated.View>
-            ) : null}
+                    <AnimatedBaseIcon
+                        name="icon-more-vertical"
+                        color={COLORS.GREY_50}
+                        bg={COLORS.PURPLE}
+                        action={openBottomSheet}
+                        haptics="Light"
+                        size={16}
+                        p={8}
+                        style={[animatedIconStyles, styles.iconButton]}
+                    />
+                </AnimatedBaseView>
+            </Animated.View>
+
             <BrowserBottomSheet ref={bottomSheetRef} onNavigate={onNavigate} onClose={closeBottomSheet} />
         </>
     )

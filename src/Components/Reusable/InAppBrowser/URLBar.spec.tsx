@@ -92,7 +92,7 @@ describe("URLBar", () => {
         })
         ;(useFeatureFlags as jest.Mock).mockReturnValue(mockedFeatureFlags)
 
-        render(<URLBar isLoading={false} />, {
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} />, {
             wrapper: createWrapper(),
         })
 
@@ -116,7 +116,7 @@ describe("URLBar", () => {
         ;(useNavigation as jest.Mock).mockReturnValue({
             replace: replaceFn,
         })
-        render(<URLBar isLoading={false} />, {
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} />, {
             wrapper: createWrapper(),
         })
 
@@ -147,7 +147,7 @@ describe("URLBar", () => {
         ;(useNavigation as jest.Mock).mockReturnValue({
             replace: replaceFn,
         })
-        render(<URLBar isLoading={false} />, {
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} />, {
             wrapper: createWrapper(),
         })
 
