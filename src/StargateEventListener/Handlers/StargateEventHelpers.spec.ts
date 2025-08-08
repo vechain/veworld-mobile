@@ -54,6 +54,8 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
 
     beforeEach(() => {
         jest.clearAllMocks()
+        getReceiptProcessorMock.mockReset()
+        getReceiptProcessorMock.mockReturnValue({ analyzeReceipt: () => [] })
         getStargateNetworkConfigMock.mockReturnValue({
             NODE_MANAGEMENT_CONTRACT_ADDRESS: "0xnodeMgmt",
             STARGATE_DELEGATION_CONTRACT_ADDRESS: "0xdelegation",
@@ -61,6 +63,58 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             LEGACY_NODES_CONTRACT_ADDRESS: "0xlegacy",
         })
         testBloomForAddressMock.mockReturnValue(true)
+    })
+
+    it("returns early and logs when NodeManagement contract address is missing", async () => {
+        getStargateNetworkConfigMock.mockReturnValue({
+            // Missing NODE_MANAGEMENT_CONTRACT_ADDRESS on purpose
+            STARGATE_DELEGATION_CONTRACT_ADDRESS: "0xdelegation",
+            STARGATE_NFT_CONTRACT_ADDRESS: "0xnft",
+            LEGACY_NODES_CONTRACT_ADDRESS: "0xlegacy",
+        })
+        const thor = createThorClient()
+        const refetch = jest.fn()
+
+        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch, managedAddresses: [] })
+
+        expect(refetch).not.toHaveBeenCalled()
+        expect(thor.blocks.getBlockExpanded).not.toHaveBeenCalled()
+        expect(debugMock).toHaveBeenCalledWith(
+            "STARGATE",
+            expect.stringContaining("No NodeManagement contract address found"),
+        )
+    })
+
+    it("logs error when handler throws during processing", async () => {
+        // Force error before parsing by making receipt processor creation throw
+        getReceiptProcessorMock.mockImplementation(() => {
+            throw new Error("receipt error")
+        })
+
+        const thor = createThorClient()
+
+        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: jest.fn(), managedAddresses: [] })
+
+        expect(errorMock).toHaveBeenCalledWith("STARGATE", "Error handling NodeDelegated event:", expect.any(Error))
+    })
+
+    it("falls back to compressed block and logs when no transactions are present", async () => {
+        const thor = {
+            blocks: {
+                getBlockExpanded: jest.fn().mockResolvedValue(null),
+                getBlockCompressed: jest.fn().mockResolvedValue(null),
+            },
+            transactions: { getTransactionReceipt: jest.fn() },
+        } as any
+        const refetch = jest.fn()
+
+        await handleNodeDelegatedEvent({ beat, network, thor, refetchStargateData: refetch, managedAddresses: [] })
+
+        expect(refetch).not.toHaveBeenCalled()
+        const debugHadNoTxLog = debugMock.mock.calls.some(
+            args => args[0] === "STARGATE" && String(args[1]).includes("No transactions found in block"),
+        )
+        expect(debugHadNoTxLog).toBe(true)
     })
 
     it("returns early when no network config", async () => {
