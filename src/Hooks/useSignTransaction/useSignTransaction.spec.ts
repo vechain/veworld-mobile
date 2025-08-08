@@ -227,7 +227,6 @@ describe("useSignTransaction", () => {
     })
 })
 
-// SMART_WALLET-specific tests
 describe("useSignTransaction - SMART_WALLET", () => {
     beforeEach(() => {
         jest.clearAllMocks()
@@ -273,6 +272,6 @@ describe("useSignTransaction - SMART_WALLET", () => {
         // Called once for delegation smart wallet and once for sender smart wallet
         expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledTimes(2)
         expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledWith(expect.any(Transaction))
-        expect(res === SignStatus.DELEGATION_FAILURE || res instanceof Transaction).toBe(true)
+        expect(res instanceof Transaction).toBe(true)
     })
 })
