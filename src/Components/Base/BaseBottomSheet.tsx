@@ -356,7 +356,7 @@ const baseStyles = (theme: ColorThemeType) =>
             width: 70,
             height: 4,
             borderRadius: 8,
-            backgroundColor: theme.colors.text,
+            backgroundColor: COLORS.GREY_300,
             alignSelf: "center",
         },
     })
