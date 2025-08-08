@@ -1,5 +1,5 @@
 import { useCallback } from "react"
-import { BigNumberUtils, HexUtils } from "~Utils"
+import { HexUtils } from "~Utils"
 import { DEVICE_TYPE, EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
