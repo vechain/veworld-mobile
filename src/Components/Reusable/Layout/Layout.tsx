@@ -166,13 +166,13 @@ export const Layout = ({
 
     if (hasSafeArea) {
         return (
-            <BaseSafeArea grow={1} testID={safeAreaTestID} onTouchStart={onTouchBody}>
+            <BaseSafeArea grow={1} testID={safeAreaTestID} onTouchStart={onTouchBody} bg={bg}>
                 {renderContent}
             </BaseSafeArea>
         )
     } else if (hasTopSafeAreaOnly) {
         return (
-            <SafeAreaView onTouchStart={onTouchBody} edges={["top"]}>
+            <SafeAreaView onTouchStart={onTouchBody} edges={["top"]} style={{ backgroundColor: bg }}>
                 {renderContent}
             </SafeAreaView>
         )

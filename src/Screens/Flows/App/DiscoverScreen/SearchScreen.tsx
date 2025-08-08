@@ -47,7 +47,7 @@ export const SearchScreen = () => {
             fixedHeader={renderHeader}
             fixedBody={
                 <BaseView style={[styles.rootContainer]}>
-                    <SearchResults error={error} results={results} isValidQuery={isValidQuery} />
+                    <SearchResults error={error} results={results.data} isValidQuery={isValidQuery} />
                 </BaseView>
             }
         />

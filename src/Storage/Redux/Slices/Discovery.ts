@@ -12,6 +12,7 @@ export type Tab = {
     id: string
     href: string
     preview?: string
+    favicon?: string
     title: string
 }
 
@@ -122,11 +123,7 @@ export const DiscoverySlice = createSlice({
             const { id, ...otherProps } = action.payload
             const tabIndex = state.tabsManager.tabs.findIndex(tab => tab.id === id)
             if (tabIndex !== -1) {
-                Object.entries(otherProps)
-                    .filter(([_, value]) => typeof value !== "undefined")
-                    .forEach(
-                        ([key, value]) => (state.tabsManager.tabs[tabIndex][key as keyof typeof otherProps] = value),
-                    )
+                state.tabsManager.tabs[tabIndex] = { ...state.tabsManager.tabs[tabIndex], ...otherProps }
             }
         },
         setCurrentTab: (state, action: PayloadAction<string>) => {
