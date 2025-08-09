@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from "react"
 import { render, screen } from "@testing-library/react-native"
-import { X2EAppsBottomSheet } from "./X2EAppsBottomSheet"
+import { AppsBottomSheet } from "./AppsBottomSheet"
 import { TestWrapper } from "~Test"
 import { X2ECategoryType } from "~Model/DApp"
 
@@ -24,12 +24,12 @@ const Wrapper = ({ children }: PropsWithChildren) => (
     </TestWrapper>
 )
 
-const mockUseX2ECategoryFiltering = jest.fn()
-jest.mock("../Hooks/useX2ECategoryFiltering", () => ({
-    useX2ECategoryFiltering: () => mockUseX2ECategoryFiltering(),
+const mockUseCategoryFiltering = jest.fn()
+jest.mock("./Hooks/useCategoryFiltering", () => ({
+    useCategoryFiltering: () => mockUseCategoryFiltering(),
 }))
 
-jest.mock("../Hooks/useX2EAppAnimation", () => ({
+jest.mock("./Hooks/useX2EAppAnimation", () => ({
     useX2EAppAnimation: () => ({
         state: { showDetails: false, isAnimating: false, contentVisible: false },
         handlers: { toggleDetails: jest.fn(), onPressIn: jest.fn(), onPressOut: jest.fn() },
@@ -88,7 +88,7 @@ describe("X2EAppsBottomSheet", () => {
 
     beforeEach(() => {
         jest.clearAllMocks()
-        mockUseX2ECategoryFiltering.mockReturnValue({
+        mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: mockApps,
@@ -98,7 +98,7 @@ describe("X2EAppsBottomSheet", () => {
     it("should render the bottom sheet component", () => {
         render(
             <Wrapper>
-                <X2EAppsBottomSheet isLoading={false} allApps={mockApps} />
+                <AppsBottomSheet isLoading={false} allApps={mockApps} />
             </Wrapper>,
         )
 
@@ -106,7 +106,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should handle loading state", () => {
-        mockUseX2ECategoryFiltering.mockReturnValue({
+        mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: [],
@@ -114,7 +114,7 @@ describe("X2EAppsBottomSheet", () => {
 
         render(
             <Wrapper>
-                <X2EAppsBottomSheet isLoading={true} allApps={mockApps} />
+                <AppsBottomSheet isLoading={true} allApps={mockApps} />
             </Wrapper>,
         )
 
@@ -122,7 +122,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should handle empty apps list", () => {
-        mockUseX2ECategoryFiltering.mockReturnValue({
+        mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: [],
@@ -130,7 +130,7 @@ describe("X2EAppsBottomSheet", () => {
 
         render(
             <Wrapper>
-                <X2EAppsBottomSheet isLoading={false} allApps={[]} />
+                <AppsBottomSheet isLoading={false} allApps={[]} />
             </Wrapper>,
         )
 
@@ -140,7 +140,7 @@ describe("X2EAppsBottomSheet", () => {
     it("should render apps when data is available", () => {
         render(
             <Wrapper>
-                <X2EAppsBottomSheet isLoading={false} allApps={mockApps} />
+                <AppsBottomSheet isLoading={false} allApps={mockApps} />
             </Wrapper>,
         )
 
@@ -152,7 +152,7 @@ describe("X2EAppsBottomSheet", () => {
         const ref = React.createRef<any>()
         render(
             <Wrapper>
-                <X2EAppsBottomSheet ref={ref} isLoading={false} allApps={mockApps} />
+                <AppsBottomSheet ref={ref} isLoading={false} allApps={mockApps} />
             </Wrapper>,
         )
 
@@ -163,10 +163,126 @@ describe("X2EAppsBottomSheet", () => {
         const mockOnDismiss = jest.fn()
         render(
             <Wrapper>
-                <X2EAppsBottomSheet onDismiss={mockOnDismiss} isLoading={false} allApps={mockApps} />
+                <AppsBottomSheet onDismiss={mockOnDismiss} isLoading={false} allApps={mockApps} />
             </Wrapper>,
         )
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
+    })
+
+    it("should render loading skeleton when isLoading is true", () => {
+        mockUseCategoryFiltering.mockReturnValue({
+            selectedCategory: mockSelectedCategory,
+            setSelectedCategory: mockSetSelectedCategory,
+            filteredApps: mockApps,
+        })
+
+        render(
+            <Wrapper>
+                <AppsBottomSheet isLoading={true} allApps={mockApps} />
+            </Wrapper>,
+        )
+
+        // Should render skeleton items instead of actual apps
+        expect(screen.queryByText("Test App 1")).toBeNull()
+        expect(screen.queryByText("Test App 2")).toBeNull()
+    })
+
+    it("should render apps when isLoading is false", () => {
+        mockUseCategoryFiltering.mockReturnValue({
+            selectedCategory: mockSelectedCategory,
+            setSelectedCategory: mockSetSelectedCategory,
+            filteredApps: mockApps,
+        })
+
+        render(
+            <Wrapper>
+                <AppsBottomSheet isLoading={false} allApps={mockApps} />
+            </Wrapper>,
+        )
+
+        // Should render actual app items
+        expect(screen.getByText("Test App 1")).toBeVisible()
+        expect(screen.getByText("Test App 2")).toBeVisible()
+        expect(screen.getByText("A test app")).toBeVisible()
+        expect(screen.getByText("Another test app")).toBeVisible()
+    })
+
+    it("should render empty list when no apps are provided", () => {
+        mockUseCategoryFiltering.mockReturnValue({
+            selectedCategory: mockSelectedCategory,
+            setSelectedCategory: mockSetSelectedCategory,
+            filteredApps: [],
+        })
+
+        render(
+            <Wrapper>
+                <AppsBottomSheet isLoading={false} allApps={[]} />
+            </Wrapper>,
+        )
+
+        expect(screen.queryByText("Test App 1")).toBeNull()
+        expect(screen.queryByText("Test App 2")).toBeNull()
+    })
+
+    it("should handle apps with minimal data", () => {
+        const minimalApps = [
+            {
+                id: "minimal-app",
+                teamWalletAddress: "0x1234567890123456789012345678901234567890",
+                name: "Minimal App",
+                metadataURI: "https://example.com/metadata.json",
+                createdAtTimestamp: "1640995200",
+                description: "Minimal description",
+                external_url: "https://example.com",
+                logo: "https://example.com/logo.png",
+                banner: "https://example.com/banner.png",
+                screenshots: [],
+                social_urls: [],
+                app_urls: [],
+                tweets: [],
+                ve_world: undefined,
+            },
+        ]
+
+        mockUseCategoryFiltering.mockReturnValue({
+            selectedCategory: mockSelectedCategory,
+            setSelectedCategory: mockSetSelectedCategory,
+            filteredApps: minimalApps,
+        })
+
+        render(
+            <Wrapper>
+                <AppsBottomSheet isLoading={false} allApps={minimalApps} />
+            </Wrapper>,
+        )
+
+        expect(screen.getByText("Minimal App")).toBeVisible()
+        expect(screen.getByText("Minimal description")).toBeVisible()
+    })
+
+    it("should handle different category selections", () => {
+        const recyclingCategory = {
+            id: X2ECategoryType.PLASTIC_WASTE_RECYCLING,
+            displayName: "Recycling",
+            icon: "icon-recycle",
+        }
+
+        mockUseCategoryFiltering.mockReturnValue({
+            selectedCategory: recyclingCategory,
+            setSelectedCategory: mockSetSelectedCategory,
+            filteredApps: [mockApps[1]], // Only app-2 has recycling category
+        })
+
+        render(
+            <Wrapper>
+                <AppsBottomSheet isLoading={false} allApps={mockApps} />
+            </Wrapper>,
+        )
+
+        // Check that the selected category is displayed in the header
+        expect(screen.getAllByText("Recycling").length).toBeGreaterThan(0)
+        expect(screen.getByText("Test App 2")).toBeVisible()
+        expect(screen.queryByText("Test App 1")).toBeNull() // Should not be visible in recycling category
     })
 })

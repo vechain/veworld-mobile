@@ -1,12 +1,12 @@
 import React, { PropsWithChildren } from "react"
-import Animated, { useAnimatedStyle, withTiming, withSpring } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { SPRING_CONFIG, TIMING_CONFIG, LAYOUT_TRANSITION } from "../Constants"
 import { IconKey } from "~Model"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { LAYOUT_TRANSITION, SPRING_CONFIG, TIMING_CONFIG } from "./constants"
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
@@ -149,7 +149,7 @@ type Props = PropsWithChildren<{
     visible?: boolean
 }>
 
-const X2EAppDetails = ({ children, show, visible = show }: Props) => {
+const RowExpandableDetails = ({ children, show, visible = show }: Props) => {
     const shouldShow = show && visible
 
     const containerStyle = useAnimatedStyle(() => {
@@ -175,9 +175,9 @@ const X2EAppDetails = ({ children, show, visible = show }: Props) => {
     )
 }
 
-X2EAppDetails.Description = Description
-X2EAppDetails.Stats = Stats
-X2EAppDetails.Actions = Actions
-X2EAppDetails.Container = Container
+RowExpandableDetails.Description = Description
+RowExpandableDetails.Stats = Stats
+RowExpandableDetails.Actions = Actions
+RowExpandableDetails.Container = Container
 
-export { X2EAppDetails }
+export { RowExpandableDetails }

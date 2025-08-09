@@ -1,9 +1,9 @@
 import { useMemo } from "react"
-import { IconKey } from "~Model/Icon"
-import { X2ECategoryType } from "~Model/DApp"
 import { useI18nContext } from "~i18n"
+import { X2ECategoryType } from "~Model/DApp"
+import { IconKey } from "~Model/Icon"
 
-export const useX2ECategories: () => {
+export const useCategories: () => {
     id: X2ECategoryType
     displayName: string
     icon: IconKey

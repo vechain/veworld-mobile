@@ -16,7 +16,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { X2EAppsBottomSheet } from "~Screens/Flows/App/AppsScreen/Components"
+import { AppsBottomSheet } from "./Components"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
@@ -66,7 +66,7 @@ export const AppsScreen = () => {
                             {LL.BTN_OPEN()}
                         </BaseButton>
 
-                        <X2EAppsBottomSheet
+                        <AppsBottomSheet
                             ref={appsBottomSheetRef}
                             onDismiss={onCloseAppsBottomSheet}
                             allApps={allApps}

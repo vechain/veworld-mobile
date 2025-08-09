@@ -1,19 +1,14 @@
 import { useCallback, useEffect, useState } from "react"
 import {
+    interpolate,
+    interpolateColor,
     useAnimatedStyle,
     useSharedValue,
     withSpring,
     withTiming,
-    interpolate,
-    interpolateColor,
 } from "react-native-reanimated"
-import {
-    ANIMATION_TIMING,
-    SMOOTH_EASING,
-    PRESS_SPRING_CONFIG,
-    CONTENT_TIMING_CONFIG,
-} from "../Constants/AnimationConstants"
 import { useTheme } from "~Hooks"
+import { ANIMATION_TIMING, CONTENT_TIMING_CONFIG, PRESS_SPRING_CONFIG, SMOOTH_EASING } from "../constants"
 
 interface UseX2EAppAnimationProps {
     isDefaultVisible?: boolean

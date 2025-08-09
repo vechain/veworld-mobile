@@ -1,11 +1,10 @@
 import { fireEvent, render, screen } from "@testing-library/react-native"
 import React, { PropsWithChildren } from "react"
 import { TestWrapper } from "~Test"
-import { X2ECategoryFilters } from "./X2ECategoryFilters"
+import { CategoryFilters } from "./CategoryFilters"
 import { X2ECategoryType } from "~Model/DApp"
-import { IconKey } from "~Model"
+import { IconKey } from "~Model/Icon"
 
-// Mock the useX2ECategories hook
 const mockCategories = [
     {
         id: X2ECategoryType.NUTRITION,
@@ -34,8 +33,8 @@ const mockCategories = [
     },
 ]
 
-jest.mock("../Hooks/useX2ECategories", () => ({
-    useX2ECategories: () => mockCategories,
+jest.mock("./Hooks/useCategories", () => ({
+    useCategories: () => mockCategories,
 }))
 
 const Wrapper = ({ children }: PropsWithChildren) => (
@@ -58,7 +57,7 @@ const Wrapper = ({ children }: PropsWithChildren) => (
     </TestWrapper>
 )
 
-describe("X2ECategoryFilters", () => {
+describe("CategoryFilters", () => {
     const mockOnCategoryChange = jest.fn()
 
     beforeEach(() => {
@@ -67,7 +66,7 @@ describe("X2ECategoryFilters", () => {
 
     it("should render all category chips", () => {
         render(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.NUTRITION }}
                 onCategoryChange={mockOnCategoryChange}
             />,
@@ -83,21 +82,20 @@ describe("X2ECategoryFilters", () => {
 
     it("should mark the selected category as active", () => {
         render(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.FITNESS_WELLNESS }}
                 onCategoryChange={mockOnCategoryChange}
             />,
             { wrapper: Wrapper },
         )
 
-        // The "Lifestyle" chip should be active (selected)
         const lifestyleChip = screen.getByText("Lifestyle")
         expect(lifestyleChip).toBeVisible()
     })
 
     it("should call onCategoryChange when a chip is pressed", () => {
         render(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.NUTRITION }}
                 onCategoryChange={mockOnCategoryChange}
             />,
@@ -117,7 +115,7 @@ describe("X2ECategoryFilters", () => {
 
     it("should call onCategoryChange with correct category data for different chips", () => {
         render(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.NUTRITION }}
                 onCategoryChange={mockOnCategoryChange}
             />,
@@ -136,7 +134,7 @@ describe("X2ECategoryFilters", () => {
 
     it("should handle multiple chip presses correctly", () => {
         render(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.NUTRITION }}
                 onCategoryChange={mockOnCategoryChange}
             />,
@@ -162,25 +160,9 @@ describe("X2ECategoryFilters", () => {
         })
     })
 
-    it("should render chips in a horizontal scrollable container", () => {
-        render(
-            <X2ECategoryFilters
-                selectedCategory={{ id: X2ECategoryType.NUTRITION }}
-                onCategoryChange={mockOnCategoryChange}
-            />,
-            { wrapper: Wrapper },
-        )
-
-        expect(screen.getByText("Food & Drink")).toBeVisible()
-        expect(screen.getByText("Recycling")).toBeVisible()
-        expect(screen.getByText("Lifestyle")).toBeVisible()
-        expect(screen.getByText("Energy")).toBeVisible()
-        expect(screen.getByText("Shopping")).toBeVisible()
-    })
-
     it("should update selected category when props change", () => {
         const { rerender } = render(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.NUTRITION }}
                 onCategoryChange={mockOnCategoryChange}
             />,
@@ -190,7 +172,7 @@ describe("X2ECategoryFilters", () => {
         expect(screen.getByText("Food & Drink")).toBeVisible()
 
         rerender(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.SUSTAINABLE_SHOPPING }}
                 onCategoryChange={mockOnCategoryChange}
             />,
@@ -201,7 +183,7 @@ describe("X2ECategoryFilters", () => {
 
     it("should handle edge case with empty categories", () => {
         render(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.NUTRITION }}
                 onCategoryChange={mockOnCategoryChange}
             />,
@@ -213,7 +195,7 @@ describe("X2ECategoryFilters", () => {
 
     it("should maintain chip spacing and layout", () => {
         render(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.NUTRITION }}
                 onCategoryChange={mockOnCategoryChange}
             />,
@@ -229,7 +211,7 @@ describe("X2ECategoryFilters", () => {
 
     it("should handle rapid category changes", () => {
         render(
-            <X2ECategoryFilters
+            <CategoryFilters
                 selectedCategory={{ id: X2ECategoryType.NUTRITION }}
                 onCategoryChange={mockOnCategoryChange}
             />,

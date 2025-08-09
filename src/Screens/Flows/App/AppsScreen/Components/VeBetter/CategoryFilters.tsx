@@ -1,20 +1,20 @@
 import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
-import { BaseChip, BaseView } from "~Components"
-import { useX2ECategories } from "../Hooks/useX2ECategories"
-import { X2ECategoryType } from "~Model/DApp"
-import { IconKey } from "~Model"
 import { ScrollView } from "react-native-gesture-handler"
+import { BaseChip, BaseView } from "~Components"
+import { IconKey } from "~Model"
+import { X2ECategoryType } from "~Model/DApp"
+import { useCategories } from "./Hooks/useCategories"
 
-interface X2ECategoryFiltersProps {
+interface CategoryFiltersProps {
     selectedCategory: {
         id: X2ECategoryType
     }
     onCategoryChange: (category: { id: X2ECategoryType; displayName: string; icon: IconKey }) => void
 }
 
-export const X2ECategoryFilters = React.memo(({ selectedCategory, onCategoryChange }: X2ECategoryFiltersProps) => {
-    const categories = useX2ECategories()
+export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange }: CategoryFiltersProps) => {
+    const categories = useCategories()
 
     const filterOptions = useMemo(() => {
         return categories.map(category => {

@@ -1,7 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react-native"
 import React, { PropsWithChildren } from "react"
 import { TestWrapper } from "~Test"
-import { X2EAppDetails } from "./X2EAppDetails"
+import { RowExpandableDetails } from "./RowExpandableDetails"
 import { IconKey } from "~Model"
 
 const TEST_DATA = {
@@ -56,9 +56,9 @@ describe("X2EAppDetails", () => {
     describe("Container", () => {
         it("should render children correctly", () => {
             render(
-                <X2EAppDetails.Container>
-                    <X2EAppDetails.Description>{TEST_DATA.description}</X2EAppDetails.Description>
-                </X2EAppDetails.Container>,
+                <RowExpandableDetails.Container>
+                    <RowExpandableDetails.Description>{TEST_DATA.description}</RowExpandableDetails.Description>
+                </RowExpandableDetails.Container>,
                 { wrapper: Wrapper },
             )
 
@@ -68,7 +68,7 @@ describe("X2EAppDetails", () => {
 
     describe("Description", () => {
         it("should render description text correctly", () => {
-            render(<X2EAppDetails.Description>{TEST_DATA.descriptionText}</X2EAppDetails.Description>, {
+            render(<RowExpandableDetails.Description>{TEST_DATA.descriptionText}</RowExpandableDetails.Description>, {
                 wrapper: Wrapper,
             })
 
@@ -76,7 +76,7 @@ describe("X2EAppDetails", () => {
         })
 
         it("should have correct typography and styling", () => {
-            render(<X2EAppDetails.Description>{TEST_DATA.description}</X2EAppDetails.Description>, {
+            render(<RowExpandableDetails.Description>{TEST_DATA.description}</RowExpandableDetails.Description>, {
                 wrapper: Wrapper,
             })
 
@@ -87,7 +87,7 @@ describe("X2EAppDetails", () => {
 
     describe("Stats", () => {
         it("should render default stats correctly", () => {
-            render(<X2EAppDetails.Stats />, { wrapper: Wrapper })
+            render(<RowExpandableDetails.Stats />, { wrapper: Wrapper })
 
             expect(screen.getByText(TEST_DATA.stats.joined)).toBeVisible()
             expect(screen.getByText(TEST_DATA.stats.users)).toBeVisible()
@@ -116,7 +116,7 @@ describe("X2EAppDetails", () => {
                 },
             }
 
-            render(<X2EAppDetails.Stats {...customStats} />, { wrapper: Wrapper })
+            render(<RowExpandableDetails.Stats {...customStats} />, { wrapper: Wrapper })
 
             expect(screen.getByText(TEST_DATA.stats.customJoined)).toBeVisible()
             expect(screen.getByText(TEST_DATA.stats.customUsers)).toBeVisible()
@@ -128,7 +128,7 @@ describe("X2EAppDetails", () => {
 
         it("should render partial stats when some props are undefined", () => {
             render(
-                <X2EAppDetails.Stats
+                <RowExpandableDetails.Stats
                     joined={{
                         value: TEST_DATA.stats.partialJoined,
                         label: TEST_DATA.stats.joinedLabel,
@@ -162,7 +162,7 @@ describe("X2EAppDetails", () => {
 
         it("should render favorite and open buttons", () => {
             render(
-                <X2EAppDetails.Actions
+                <RowExpandableDetails.Actions
                     onAddToFavorites={mockOnAddToFavorites}
                     onOpen={mockOnOpen}
                     isFavorite={false}
@@ -176,7 +176,7 @@ describe("X2EAppDetails", () => {
 
         it("should call onAddToFavorites when favorite button is pressed", () => {
             render(
-                <X2EAppDetails.Actions
+                <RowExpandableDetails.Actions
                     onAddToFavorites={mockOnAddToFavorites}
                     onOpen={mockOnOpen}
                     isFavorite={false}
@@ -192,7 +192,7 @@ describe("X2EAppDetails", () => {
 
         it("should call onOpen when open button is pressed", () => {
             render(
-                <X2EAppDetails.Actions
+                <RowExpandableDetails.Actions
                     onAddToFavorites={mockOnAddToFavorites}
                     onOpen={mockOnOpen}
                     isFavorite={false}
@@ -208,7 +208,11 @@ describe("X2EAppDetails", () => {
 
         it("should show favorited state when isFavorite is true", () => {
             render(
-                <X2EAppDetails.Actions onAddToFavorites={mockOnAddToFavorites} onOpen={mockOnOpen} isFavorite={true} />,
+                <RowExpandableDetails.Actions
+                    onAddToFavorites={mockOnAddToFavorites}
+                    onOpen={mockOnOpen}
+                    isFavorite={true}
+                />,
                 { wrapper: Wrapper },
             )
 
@@ -216,7 +220,7 @@ describe("X2EAppDetails", () => {
         })
 
         it("should use default handlers when not provided", () => {
-            render(<X2EAppDetails.Actions />, { wrapper: Wrapper })
+            render(<RowExpandableDetails.Actions />, { wrapper: Wrapper })
 
             const favoriteButton = screen.getByText(TEST_DATA.buttons.favorite)
             const openButton = screen.getByText(TEST_DATA.buttons.open)
@@ -239,7 +243,11 @@ describe("X2EAppDetails", () => {
 
         it("should render favorite button with correct text when not favorited", () => {
             render(
-                <X2EAppDetails.Actions onAddToFavorites={mockOnAddToFavorites} onOpen={jest.fn()} isFavorite={false} />,
+                <RowExpandableDetails.Actions
+                    onAddToFavorites={mockOnAddToFavorites}
+                    onOpen={jest.fn()}
+                    isFavorite={false}
+                />,
                 { wrapper: Wrapper },
             )
 
@@ -248,7 +256,11 @@ describe("X2EAppDetails", () => {
 
         it("should render favorited button with correct text when favorited", () => {
             render(
-                <X2EAppDetails.Actions onAddToFavorites={mockOnAddToFavorites} onOpen={jest.fn()} isFavorite={true} />,
+                <RowExpandableDetails.Actions
+                    onAddToFavorites={mockOnAddToFavorites}
+                    onOpen={jest.fn()}
+                    isFavorite={true}
+                />,
                 { wrapper: Wrapper },
             )
 
@@ -257,7 +269,11 @@ describe("X2EAppDetails", () => {
 
         it("should call onAddToFavorites when favorite button is pressed", () => {
             render(
-                <X2EAppDetails.Actions onAddToFavorites={mockOnAddToFavorites} onOpen={jest.fn()} isFavorite={false} />,
+                <RowExpandableDetails.Actions
+                    onAddToFavorites={mockOnAddToFavorites}
+                    onOpen={jest.fn()}
+                    isFavorite={false}
+                />,
                 { wrapper: Wrapper },
             )
 
@@ -271,9 +287,9 @@ describe("X2EAppDetails", () => {
     describe("Main Component", () => {
         it("should render children when show is true", () => {
             render(
-                <X2EAppDetails show={true}>
-                    <X2EAppDetails.Description>{TEST_DATA.testContent}</X2EAppDetails.Description>
-                </X2EAppDetails>,
+                <RowExpandableDetails show={true}>
+                    <RowExpandableDetails.Description>{TEST_DATA.testContent}</RowExpandableDetails.Description>
+                </RowExpandableDetails>,
                 { wrapper: Wrapper },
             )
 
@@ -282,9 +298,9 @@ describe("X2EAppDetails", () => {
 
         it("should render children when show is true and visible is true", () => {
             render(
-                <X2EAppDetails show={true} visible={true}>
-                    <X2EAppDetails.Description>{TEST_DATA.testContent}</X2EAppDetails.Description>
-                </X2EAppDetails>,
+                <RowExpandableDetails show={true} visible={true}>
+                    <RowExpandableDetails.Description>{TEST_DATA.testContent}</RowExpandableDetails.Description>
+                </RowExpandableDetails>,
                 { wrapper: Wrapper },
             )
 
@@ -293,18 +309,18 @@ describe("X2EAppDetails", () => {
 
         it("should handle show and visible props correctly", () => {
             const { rerender } = render(
-                <X2EAppDetails show={true} visible={true}>
-                    <X2EAppDetails.Description>{TEST_DATA.testContent}</X2EAppDetails.Description>
-                </X2EAppDetails>,
+                <RowExpandableDetails show={true} visible={true}>
+                    <RowExpandableDetails.Description>{TEST_DATA.testContent}</RowExpandableDetails.Description>
+                </RowExpandableDetails>,
                 { wrapper: Wrapper },
             )
 
             expect(screen.getByText(TEST_DATA.testContent)).toBeVisible()
 
             rerender(
-                <X2EAppDetails show={false} visible={true}>
-                    <X2EAppDetails.Description>{TEST_DATA.testContent}</X2EAppDetails.Description>
-                </X2EAppDetails>,
+                <RowExpandableDetails show={false} visible={true}>
+                    <RowExpandableDetails.Description>{TEST_DATA.testContent}</RowExpandableDetails.Description>
+                </RowExpandableDetails>,
             )
 
             expect(screen.getByText(TEST_DATA.testContent)).toBeVisible()
@@ -312,13 +328,13 @@ describe("X2EAppDetails", () => {
 
         it("should render complex content structure", () => {
             render(
-                <X2EAppDetails show={true}>
-                    <X2EAppDetails.Container>
-                        <X2EAppDetails.Description>{TEST_DATA.appDescription}</X2EAppDetails.Description>
-                        <X2EAppDetails.Stats />
-                        <X2EAppDetails.Actions />
-                    </X2EAppDetails.Container>
-                </X2EAppDetails>,
+                <RowExpandableDetails show={true}>
+                    <RowExpandableDetails.Container>
+                        <RowExpandableDetails.Description>{TEST_DATA.appDescription}</RowExpandableDetails.Description>
+                        <RowExpandableDetails.Stats />
+                        <RowExpandableDetails.Actions />
+                    </RowExpandableDetails.Container>
+                </RowExpandableDetails>,
                 { wrapper: Wrapper },
             )
 

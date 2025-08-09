@@ -1,7 +1,7 @@
-import { renderHook, act } from "@testing-library/react-hooks"
-import { useX2ECategoryFiltering } from "./useX2ECategoryFiltering"
+import { act, renderHook } from "@testing-library/react-hooks"
 import { X2ECategoryType } from "~Model/DApp"
 import { IconKey } from "~Model/Icon"
+import { useCategoryFiltering } from "./useCategoryFiltering"
 
 const mockLL = {
     APP_CATEGORY_FOOD_AND_DRINK: () => "Food & Drink",
@@ -22,8 +22,8 @@ jest.mock("~i18n", () => ({
     }),
 }))
 
-jest.mock("./useX2ECategories", () => ({
-    useX2ECategories: () => [
+jest.mock("./useCategories", () => ({
+    useCategories: () => [
         {
             id: X2ECategoryType.NUTRITION,
             displayName: "Food & Drink",
@@ -123,7 +123,7 @@ describe("useX2ECategoryFiltering", () => {
     })
 
     it("should initialize with default selected category (NUTRITION)", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering(mockApps))
+        const { result } = renderHook(() => useCategoryFiltering(mockApps))
 
         expect(result.current.selectedCategory.id).toBe(X2ECategoryType.NUTRITION)
         expect(result.current.selectedCategory.displayName).toBe("Food & Drink")
@@ -131,7 +131,7 @@ describe("useX2ECategoryFiltering", () => {
     })
 
     it("should return all apps when no filtering is applied", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering(mockApps))
+        const { result } = renderHook(() => useCategoryFiltering(mockApps))
 
         expect(result.current.filteredApps).toHaveLength(2)
         expect(result.current.filteredApps[0].name).toBe("A App")
@@ -139,7 +139,7 @@ describe("useX2ECategoryFiltering", () => {
     })
 
     it("should filter apps by selected category", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering(mockApps))
+        const { result } = renderHook(() => useCategoryFiltering(mockApps))
 
         act(() => {
             result.current.setSelectedCategory({
@@ -155,14 +155,14 @@ describe("useX2ECategoryFiltering", () => {
     })
 
     it("should sort filtered apps alphabetically", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering(mockApps))
+        const { result } = renderHook(() => useCategoryFiltering(mockApps))
 
         expect(result.current.filteredApps[0].name).toBe("A App")
         expect(result.current.filteredApps[1].name).toBe("C App")
     })
 
     it("should handle apps with multiple categories", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering(mockApps))
+        const { result } = renderHook(() => useCategoryFiltering(mockApps))
 
         act(() => {
             result.current.setSelectedCategory({
@@ -178,7 +178,7 @@ describe("useX2ECategoryFiltering", () => {
     })
 
     it("should handle apps without categories", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering(mockApps))
+        const { result } = renderHook(() => useCategoryFiltering(mockApps))
 
         const appWithoutCategories = mockApps.find(app => app.name === "D App")
         expect(appWithoutCategories).toBeDefined()
@@ -189,19 +189,19 @@ describe("useX2ECategoryFiltering", () => {
     })
 
     it("should handle undefined apps data", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering(undefined))
+        const { result } = renderHook(() => useCategoryFiltering(undefined))
 
         expect(result.current.filteredApps).toEqual([])
     })
 
     it("should handle empty apps data", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering([]))
+        const { result } = renderHook(() => useCategoryFiltering([]))
 
         expect(result.current.filteredApps).toEqual([])
     })
 
     it("should update selected category when setSelectedCategory is called", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering(mockApps))
+        const { result } = renderHook(() => useCategoryFiltering(mockApps))
 
         expect(result.current.selectedCategory.id).toBe(X2ECategoryType.NUTRITION)
 
@@ -219,7 +219,7 @@ describe("useX2ECategoryFiltering", () => {
     })
 
     it("should return the same filtered apps when category doesn't change", () => {
-        const { result, rerender } = renderHook(() => useX2ECategoryFiltering(mockApps))
+        const { result, rerender } = renderHook(() => useCategoryFiltering(mockApps))
 
         const firstFilteredApps = result.current.filteredApps
 
@@ -231,7 +231,7 @@ describe("useX2ECategoryFiltering", () => {
     })
 
     it("should return different filtered apps when category changes", () => {
-        const { result } = renderHook(() => useX2ECategoryFiltering(mockApps))
+        const { result } = renderHook(() => useCategoryFiltering(mockApps))
 
         const nutritionApps = result.current.filteredApps
 

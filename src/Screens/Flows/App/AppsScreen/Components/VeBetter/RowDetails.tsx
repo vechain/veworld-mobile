@@ -1,18 +1,18 @@
-import React, { useState, useCallback, PropsWithChildren, useMemo } from "react"
+import React, { PropsWithChildren, useCallback, useMemo, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
 import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseIcon, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { LAYOUT_TRANSITION } from "../Constants"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-import { X2EAppDetails } from "./X2EAppDetails"
-import { useX2EAppAnimation } from "../Hooks/useX2EAppAnimation"
+import { LAYOUT_TRANSITION } from "./constants"
+import { useX2EAppAnimation } from "./Hooks/useX2EAppAnimation"
+import { RowExpandableDetails } from "./RowExpandableDetails"
 
 const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
-type X2EAppWithDetailsProps = PropsWithChildren<{
+type AppRowDetailsProps = PropsWithChildren<{
     name: string
     icon: string
     desc?: string
@@ -25,7 +25,7 @@ type X2EAppWithDetailsProps = PropsWithChildren<{
     onToggleOpen?: (itemId: string) => void
 }>
 
-export const X2EAppWithDetails = React.memo(
+export const RowDetails = React.memo(
     ({
         name,
         icon,
@@ -38,7 +38,7 @@ export const X2EAppWithDetails = React.memo(
         itemId,
         isOpen,
         onToggleOpen,
-    }: X2EAppWithDetailsProps) => {
+    }: AppRowDetailsProps) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const [loadFallback, setLoadFallback] = useState(false)
 
@@ -55,17 +55,6 @@ export const X2EAppWithDetails = React.memo(
 
         const { showDetails, isAnimating, contentVisible } = state
         const { toggleDetails, onPressIn, onPressOut } = handlers
-        const {
-            containerStyle,
-            padding,
-            fontStyle,
-            contentStyle,
-            descriptionStyle,
-            categoryLabelStyle,
-            pressAnimationStyle,
-            chevronStyle,
-            spacerStyle,
-        } = animatedStyles
 
         const onImageError = useCallback(() => {
             setLoadFallback(true)
@@ -115,8 +104,8 @@ export const X2EAppWithDetails = React.memo(
             <AnimatedBaseView
                 flexDirection="column"
                 layout={LAYOUT_TRANSITION}
-                style={[styles.mainContainer, containerStyle]}>
-                <Animated.View style={pressAnimationStyle}>
+                style={[styles.mainContainer, animatedStyles.containerStyle]}>
+                <Animated.View style={animatedStyles.pressAnimationStyle}>
                     <TouchableOpacity
                         activeOpacity={0.9}
                         onPress={toggleDetails}
@@ -125,7 +114,7 @@ export const X2EAppWithDetails = React.memo(
                         disabled={isAnimating}
                         testID="X2E_APP_WITH_DETAILS_ROW">
                         <BaseView justifyContent="center">
-                            <Animated.View style={[styles.chevron, chevronStyle]}>
+                            <Animated.View style={[styles.chevron, animatedStyles.chevronStyle]}>
                                 <BaseIcon
                                     name="icon-chevron-down"
                                     size={16}
@@ -136,7 +125,7 @@ export const X2EAppWithDetails = React.memo(
                         <AnimatedBaseView
                             flexDirection="row"
                             mb={4}
-                            style={[padding]}
+                            style={[animatedStyles.padding]}
                             layout={LinearTransition.springify().damping(20).stiffness(100).mass(0.6)}>
                             <BaseView flexDirection="row" flex={1} alignItems="flex-start">
                                 <Image
@@ -145,23 +134,24 @@ export const X2EAppWithDetails = React.memo(
                                     onError={onImageError}
                                     resizeMode="contain"
                                 />
-                                <Animated.View style={spacerStyle} />
+                                <Animated.View style={animatedStyles.spacerStyle} />
                                 <BaseView flexDirection="column" gap={10} pr={16} overflow="hidden" flex={1}>
                                     <Animated.Text
-                                        style={[styles.appNameText, fontStyle]}
+                                        style={[styles.appNameText, animatedStyles.fontStyle]}
                                         numberOfLines={1}
                                         testID="X2E_APP_WITH_DETAILS_NAME">
                                         {name}
                                     </Animated.Text>
 
                                     {showDetails ? (
-                                        <Animated.View style={[contentStyle, categoryLabelStyle]}>
+                                        <Animated.View
+                                            style={[animatedStyles.contentStyle, animatedStyles.categoryLabelStyle]}>
                                             <BaseView flexDirection="row" flexWrap="wrap" gap={8}>
                                                 {categoryElements}
                                             </BaseView>
                                         </Animated.View>
                                     ) : (
-                                        <Animated.View style={descriptionStyle}>
+                                        <Animated.View style={animatedStyles.descriptionStyle}>
                                             <BaseText
                                                 typographyFont="captionRegular"
                                                 numberOfLines={2}
@@ -183,9 +173,9 @@ export const X2EAppWithDetails = React.memo(
 
                 {showDetails && (
                     <Animated.View>
-                        <X2EAppDetails show={showDetails} visible={contentVisible}>
+                        <RowExpandableDetails show={showDetails} visible={contentVisible}>
                             {children}
-                        </X2EAppDetails>
+                        </RowExpandableDetails>
                     </Animated.View>
                 )}
             </AnimatedBaseView>

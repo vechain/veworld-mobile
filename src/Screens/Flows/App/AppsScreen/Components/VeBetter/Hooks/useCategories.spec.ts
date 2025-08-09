@@ -1,7 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { useX2ECategories } from "./useX2ECategories"
 import { X2ECategoryType } from "~Model/DApp"
 import { IconKey } from "~Model/Icon"
+import { useCategories } from "./useCategories"
 
 const mockLL = {
     APP_CATEGORY_FOOD_AND_DRINK: () => "Food & Drink",
@@ -16,20 +16,18 @@ const mockLL = {
     APP_CATEGORY_OTHERS: () => "Others",
 }
 
-// Mock the i18n context
 jest.mock("~i18n", () => ({
     useI18nContext: () => ({
         LL: mockLL,
     }),
 }))
 
-describe("useX2ECategories", () => {
+describe("useCategories", () => {
     it("should return all X2E categories with correct structure", () => {
-        const { result } = renderHook(() => useX2ECategories())
+        const { result } = renderHook(() => useCategories())
 
         expect(result.current).toHaveLength(10)
 
-        // Check that each category has the correct structure
         result.current.forEach(category => {
             expect(category).toHaveProperty("id")
             expect(category).toHaveProperty("displayName")
@@ -41,7 +39,7 @@ describe("useX2ECategories", () => {
     })
 
     it("should return categories with correct IDs", () => {
-        const { result } = renderHook(() => useX2ECategories())
+        const { result } = renderHook(() => useCategories())
 
         const expectedIds = [
             X2ECategoryType.NUTRITION,
@@ -61,7 +59,7 @@ describe("useX2ECategories", () => {
     })
 
     it("should return categories with correct display names", () => {
-        const { result } = renderHook(() => useX2ECategories())
+        const { result } = renderHook(() => useCategories())
 
         const expectedDisplayNames = [
             "Food & Drink",
@@ -81,7 +79,7 @@ describe("useX2ECategories", () => {
     })
 
     it("should return categories with correct icons", () => {
-        const { result } = renderHook(() => useX2ECategories())
+        const { result } = renderHook(() => useCategories())
 
         const expectedIcons: IconKey[] = [
             "icon-salad",
@@ -101,7 +99,7 @@ describe("useX2ECategories", () => {
     })
 
     it("should have unique IDs for all categories", () => {
-        const { result } = renderHook(() => useX2ECategories())
+        const { result } = renderHook(() => useCategories())
 
         const ids = result.current.map(category => category.id)
         const uniqueIds = new Set(ids)
@@ -110,7 +108,7 @@ describe("useX2ECategories", () => {
     })
 
     it("should have unique display names for all categories", () => {
-        const { result } = renderHook(() => useX2ECategories())
+        const { result } = renderHook(() => useCategories())
 
         const displayNames = result.current.map(category => category.displayName)
         const uniqueDisplayNames = new Set(displayNames)
@@ -119,7 +117,7 @@ describe("useX2ECategories", () => {
     })
 
     it("should have unique icons for all categories", () => {
-        const { result } = renderHook(() => useX2ECategories())
+        const { result } = renderHook(() => useCategories())
 
         const icons = result.current.map(category => category.icon)
         const uniqueIcons = new Set(icons)
@@ -128,7 +126,7 @@ describe("useX2ECategories", () => {
     })
 
     it("should return categories in the correct order", () => {
-        const { result } = renderHook(() => useX2ECategories())
+        const { result } = renderHook(() => useCategories())
 
         const expectedOrder = [
             { id: X2ECategoryType.NUTRITION, displayName: "Food & Drink", icon: "icon-salad" },
