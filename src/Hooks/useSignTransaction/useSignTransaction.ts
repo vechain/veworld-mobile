@@ -302,7 +302,7 @@ export const useSignTransaction = ({
                 pinCode: password,
             })
 
-            senderSignature = await getSignature(transaction, senderWallet)
+            senderSignature = await getSignature(newTx, senderWallet)
         }
 
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
