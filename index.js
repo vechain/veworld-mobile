@@ -41,6 +41,7 @@ import { NotificationsProvider, PersistedThemeProvider, StoreContextProvider } f
 import {
     selectAnalyticsTrackingEnabled,
     selectLanguage,
+    selectSelectedNetwork,
     selectSentryTrackingEnabled,
     setCurrentMountedScreen,
     useAppDispatch,
@@ -57,6 +58,7 @@ import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
+import { FeatureFlaggedSmartWallet } from "./src/Components/Providers/FeatureFlaggedSmartWallet"
 
 const { fontFamily } = typography
 
@@ -119,8 +121,11 @@ const Main = () => {
         }
     }, [isAnalyticsEnabled])
 
-    if (!fontsLoaded) return
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const networkType = selectedNetwork.type
+    const nodeUrl = selectedNetwork.currentUrl
 
+    if (!fontsLoaded) return
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <ConnexContextProvider>
@@ -130,20 +135,22 @@ const Main = () => {
                         persister: clientPersister,
                     }}>
                     <FeatureFlagsProvider>
-                        <NavigationProvider>
-                            <InteractionProvider>
-                                <WalletConnectContextProvider>
-                                    <BottomSheetModalProvider>
-                                        <InAppBrowserProvider>
-                                            <NotificationsProvider>
-                                                <EntryPoint />
-                                            </NotificationsProvider>
-                                        </InAppBrowserProvider>
-                                    </BottomSheetModalProvider>
-                                </WalletConnectContextProvider>
-                            </InteractionProvider>
-                        </NavigationProvider>
-                        <BaseToast />
+                        <FeatureFlaggedSmartWallet nodeUrl={nodeUrl} networkType={networkType}>
+                            <NavigationProvider>
+                                <InteractionProvider>
+                                    <WalletConnectContextProvider>
+                                        <BottomSheetModalProvider>
+                                            <InAppBrowserProvider>
+                                                <NotificationsProvider>
+                                                    <EntryPoint />
+                                                </NotificationsProvider>
+                                            </InAppBrowserProvider>
+                                        </BottomSheetModalProvider>
+                                    </WalletConnectContextProvider>
+                                </InteractionProvider>
+                            </NavigationProvider>
+                            <BaseToast />
+                        </FeatureFlaggedSmartWallet>
                     </FeatureFlagsProvider>
                 </PersistQueryClientProvider>
             </ConnexContextProvider>

@@ -38,6 +38,9 @@ export type FeatureFlags = {
             }
         }
     }
+    smartWalletFeature: {
+        enabled: boolean
+    }
 }
 
 export const getFeatureFlags = async () => {

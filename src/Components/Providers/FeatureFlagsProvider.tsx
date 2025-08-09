@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query"
 import React from "react"
 import { FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
 
-const initialState: FeatureFlags = {
+export const initialState: FeatureFlags = {
     marketsProxyFeature: {
         enabled: true,
         url: "https://coin-api.veworld.vechain.org",
@@ -39,6 +39,9 @@ const initialState: FeatureFlags = {
                 ledger: false,
             },
         },
+    },
+    smartWalletFeature: {
+        enabled: false,
     },
 }
 

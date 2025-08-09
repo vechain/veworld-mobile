@@ -3,7 +3,7 @@ import { AxiosError } from "axios"
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { showWarningToast, useFeatureFlags } from "~Components"
 import { showErrorToast } from "~Components/Base/BaseToast"
-import { AnalyticsEvent, ERROR_EVENTS, GasPriceCoefficient, VTHO } from "~Constants"
+import { AnalyticsEvent, B3TR, ERROR_EVENTS, GasPriceCoefficient, VET, VTHO } from "~Constants"
 import {
     SignStatus,
     SignTransactionResponse,
@@ -38,6 +38,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { BigNutils, error } from "~Utils"
+import { useSmartWallet } from "../useSmartWallet"
 
 type Props = {
     clauses: TransactionClause[]
@@ -60,6 +61,34 @@ const mapGasPriceCoefficient = (value: GasPriceCoefficient) => {
             return "NORMAL"
         case GasPriceCoefficient.HIGH:
             return "FAST"
+    }
+}
+
+const getGenericDelegationForSmartWallet = (
+    deviceType: DEVICE_TYPE,
+    token: string,
+    genericDelegatorFees: ReturnType<typeof useGenericDelegationFees>,
+    selectedFeeOption: GasPriceCoefficient,
+) => {
+    if (deviceType !== DEVICE_TYPE.SMART_WALLET || genericDelegatorFees.allOptions === undefined) return undefined
+
+    const tokenAddressMap = {
+        [VET.symbol]: VET.address,
+        [B3TR.symbol]: B3TR.address,
+        // [VTHO.symbol]: VTHO.address,
+    }
+
+    const feeMap = {
+        [VET.symbol]: genericDelegatorFees.allOptions?.vetWithSmartAccount[selectedFeeOption].maxFee,
+        [B3TR.symbol]: genericDelegatorFees.allOptions?.b3trWithSmartAccount[selectedFeeOption].maxFee,
+        // [VTHO.symbol]: genericDelegatorFees.allOptions?.vthoWithSmartAccount[selectedFeeOption].maxFee,
+    }
+
+    return {
+        token,
+        tokenAddress: tokenAddressMap[token],
+        fee: feeMap[token],
+        depositAccount: genericDelegatorFees.depositAccount ?? "",
     }
 }
 
@@ -96,12 +125,39 @@ export const useTransactionScreen = ({
     const [selectedDelegationToken, setSelectedDelegationToken] = useState(defaultToken)
 
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
+
+    const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
     const { tokens: availableTokens, isLoading: isLoadingTokens } = useGenericDelegationTokens()
+
+    const [transactionClauses, setTransactionClauses] = useState<TransactionClause[]>(clauses)
+    const [isLoadingClauses, setIsLoadingClauses] = useState(false)
+
+    useEffect(() => {
+        const buildClauses = async () => {
+            if (selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET) {
+                setIsLoadingClauses(true)
+                try {
+                    const smartWalletTx = await buildTransactionWithSmartWallet(clauses)
+                    setTransactionClauses(smartWalletTx.body.clauses)
+                } catch (e) {
+                    error(ERROR_EVENTS.SEND, e)
+                    setTransactionClauses(clauses)
+                } finally {
+                    setIsLoadingClauses(false)
+                }
+            } else {
+                setTransactionClauses(clauses)
+            }
+        }
+
+        buildClauses()
+    }, [selectedAccount.device.type, buildTransactionWithSmartWallet, clauses])
 
     // 1. Gas
     const { gas, loadingGas, setGasPayer } = useTransactionGas({
-        clauses,
+        clauses: isLoadingClauses ? [] : transactionClauses,
         providedGas: dappRequest?.options?.gas,
+        disabled: isLoadingClauses,
     })
 
     const transactionOutputs = useMemo(() => gas?.outputs, [gas?.outputs])
@@ -163,7 +219,7 @@ export const useTransactionScreen = ({
     })
 
     const genericDelegatorFees = useGenericDelegationFees({
-        clauses,
+        clauses: isLoadingClauses ? [] : transactionClauses,
         signer: selectedAccount.address,
         token: selectedDelegationToken,
         isGalactica,
@@ -194,8 +250,17 @@ export const useTransactionScreen = ({
     ])
 
     const isFirstTimeLoadingFees = useMemo(
-        () => genericDelegatorFees.isFirstTimeLoading || transactionFeesResponse.isFirstTimeLoading || loadingGas,
-        [genericDelegatorFees.isFirstTimeLoading, loadingGas, transactionFeesResponse.isFirstTimeLoading],
+        () =>
+            genericDelegatorFees.isFirstTimeLoading ||
+            transactionFeesResponse.isFirstTimeLoading ||
+            loadingGas ||
+            isLoadingClauses,
+        [
+            genericDelegatorFees.isFirstTimeLoading,
+            loadingGas,
+            transactionFeesResponse.isFirstTimeLoading,
+            isLoadingClauses,
+        ],
     )
 
     const { hasEnoughBalance, hasEnoughBalanceOnAny, hasEnoughBalanceOnToken } = useIsEnoughGas({
@@ -207,7 +272,6 @@ export const useTransactionScreen = ({
         origin: selectedAccount.address,
     })
 
-    // 4. Build transaction
     const { buildTransaction } = useTransactionBuilder({
         clauses,
         gas,
@@ -215,6 +279,13 @@ export const useTransactionScreen = ({
         dependsOn: dappRequest?.options?.dependsOn,
         //We don't care about sending the correct gasOptions for the generic delegator, since the tx will be retrieved from the delegator itself
         ...transactionFeesResponse.txOptions[selectedFeeOption],
+        deviceType: selectedAccount.device.type,
+        genericDelgationDetails: getGenericDelegationForSmartWallet(
+            selectedAccount.device.type,
+            selectedDelegationToken,
+            genericDelegatorFees,
+            selectedFeeOption,
+        ),
     })
 
     // 5. Sign transaction
@@ -227,6 +298,7 @@ export const useTransactionScreen = ({
         initialRoute,
         selectedDelegationToken,
         genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].maxFee,
+        genericDelegatorDepositAccount: genericDelegatorFees.depositAccount,
     })
 
     // 6. Send transaction
@@ -330,8 +402,8 @@ export const useTransactionScreen = ({
     }, [checkIdentityBeforeOpening, onTransactionFailure])
 
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty,
-        [loading, loadingGas, isBiometricsEmpty],
+        () => loading || loadingGas || isBiometricsEmpty || isLoadingClauses,
+        [loading, loadingGas, isBiometricsEmpty, isLoadingClauses],
     )
 
     const fallbackToVTHO = useCallback(() => {

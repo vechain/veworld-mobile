@@ -9,7 +9,7 @@ import { Transaction } from "@vechain/sdk-core"
 
 jest.mock("axios")
 
-const { vetTransaction1, device1, account1D1, wallet1 } = TestHelpers.data
+const { vetTransaction1, device1, account1D1, wallet1, smartWalletDevice } = TestHelpers.data
 
 jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
     ...jest.requireActual("~Components/Base/BaseToast/BaseToast"),
@@ -18,8 +18,33 @@ jest.mock("~Components/Base/BaseToast/BaseToast", () => ({
     showWarningToast: jest.fn(),
 }))
 
+const mockSmartwalletOwnerAddress = "0x4444444444444444444444444444444444444444"
+// Hoisted mock: useSmartWallet signer
+const mockSignTransactionWithSmartWallet = jest.fn().mockResolvedValue(Buffer.from("aa", "hex"))
+jest.mock("~Hooks/useSmartWallet", () => ({
+    ...jest.requireActual("~Hooks/useSmartWallet"),
+    useSmartWallet: () => ({
+        isAuthenticated: true,
+        isInitialized: true,
+        ownerAddress: mockSmartwalletOwnerAddress,
+        signTransaction: mockSignTransactionWithSmartWallet,
+    }),
+}))
+
+// Hoisted mock: configurable selectDevice to force SMART_WALLET
+let __senderDevice: any
+jest.mock("~Storage/Redux", () => {
+    const actual = jest.requireActual("~Storage/Redux")
+    return {
+        ...actual,
+        selectDevice: jest.fn((state: any, rootAddress?: string) =>
+            __senderDevice !== undefined ? __senderDevice : actual.selectDevice(state, rootAddress as any),
+        ),
+    }
+})
+
 const defaultProps = {
-    buildTransaction: () => {
+    buildTransaction: async () => {
         return vetTransaction1
     },
     initialRoute: Routes.NFTS,
@@ -147,14 +172,14 @@ describe("useSignTransaction", () => {
     })
 
     describe("signAndSendTransaction - url delegation", () => {
-        it("works as expected", async () => {
+        it("works as expected and posts correct EOA origin", async () => {
             const { result } = renderHook(
                 () =>
                     useSignTransaction({
                         ...defaultProps,
                         selectedDelegationOption: DelegationType.URL,
                         selectedDelegationUrl: "https://vechainstats.com",
-                        initialRoute: Routes.HOME,
+                        initialRoute: Routes.NFTS,
                         selectedDelegationToken: "VTHO",
                     }),
                 { wrapper: TestWrapper },
@@ -177,6 +202,16 @@ describe("useSignTransaction", () => {
             expect(signedTransaction).toBeInstanceOf(Transaction)
             expect(signedTransaction.signature).toBeInstanceOf(Buffer)
             expect(signedTransaction.signature?.length).toEqual(130)
+
+            // Assert axios.post called with correct origin and url
+            const [[calledUrl, sponsorRequest]] = (axios.post as jest.Mock).mock.calls
+            expect(calledUrl).toBe("https://vechainstats.com")
+            expect(sponsorRequest).toEqual(
+                expect.objectContaining({
+                    origin: "0xcf130b42ae33c5531277b4b7c0f1d994b8732957",
+                    raw: expect.stringMatching(/^0x[0-9a-f]+$/),
+                }),
+            )
         })
 
         it("no url throws error", async () => {
@@ -200,5 +235,86 @@ describe("useSignTransaction", () => {
 
             expect(res).toEqual(SignStatus.DELEGATION_FAILURE)
         })
+    })
+})
+
+describe("useSignTransaction - SMART_WALLET", () => {
+    beforeEach(() => {
+        jest.clearAllMocks()
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue(wallet1)
+        __senderDevice = undefined
+    })
+
+    it("should be possible to use the smart account for sending a transaction with SMART_WALLET device", async () => {
+        __senderDevice = smartWalletDevice
+
+        const { result } = renderHook(
+            () =>
+                useSignTransaction({
+                    buildTransaction: async () => vetTransaction1,
+                    selectedDelegationOption: DelegationType.NONE,
+                    selectedDelegationToken: "VTHO",
+                }),
+            { wrapper: TestWrapper },
+        )
+
+        const tx = (await result.current.signTransaction()) as Transaction
+
+        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledTimes(1)
+        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledWith(expect.any(Transaction))
+        expect(tx).toBeInstanceOf(Transaction)
+    })
+
+    it("should be possible to use the smart account for delegation with SMART_WALLET device", async () => {
+        __senderDevice = smartWalletDevice
+        const smartDelegationAccount = { ...account1D1, device: smartWalletDevice }
+
+        const { result } = renderHook(
+            () =>
+                useSignTransaction({
+                    buildTransaction: async () => vetTransaction1,
+                    selectedDelegationOption: DelegationType.ACCOUNT,
+                    selectedDelegationAccount: smartDelegationAccount,
+                    selectedDelegationToken: "VTHO",
+                }),
+            { wrapper: TestWrapper },
+        )
+
+        const res = await result.current.signTransaction()
+
+        // Called once for delegation smart wallet and once for sender smart wallet
+        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledTimes(2)
+        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledWith(expect.any(Transaction))
+        expect(res instanceof Transaction).toBe(true)
+    })
+
+    it("URL delegation uses smart wallet owner address as origin", async () => {
+        __senderDevice = smartWalletDevice
+
+        const { result } = renderHook(
+            () =>
+                useSignTransaction({
+                    buildTransaction: async () => vetTransaction1,
+                    selectedDelegationOption: DelegationType.URL,
+                    selectedDelegationUrl: "https://sponsor.service",
+                    selectedDelegationToken: "VTHO",
+                }),
+            { wrapper: TestWrapper },
+        )
+
+        ;(axios.post as jest.Mock).mockResolvedValueOnce({ data: { signature: "0xdeadbeef" } })
+
+        const tx = (await result.current.signTransaction()) as Transaction
+
+        expect(tx).toBeInstanceOf(Transaction)
+
+        const [[calledUrl, sponsorRequest]] = (axios.post as jest.Mock).mock.calls
+        expect(calledUrl).toBe("https://sponsor.service")
+        expect(sponsorRequest).toEqual(
+            expect.objectContaining({
+                origin: mockSmartwalletOwnerAddress,
+                raw: expect.stringMatching(/^0x[0-9a-f]+$/),
+            }),
+        )
     })
 })
