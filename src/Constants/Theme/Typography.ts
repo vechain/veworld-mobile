@@ -1,6 +1,7 @@
 export type TFonts =
     | "hugeTitle"
     | "biggerTitle"
+    | "biggerTitleSemiBold"
     | "biggerTitleMedium"
     | "largeTitle"
     | "title"
@@ -122,6 +123,11 @@ export const defaults: Record<TFonts, TypographyObject> = {
         fontFamily: fontFamily["Inter-Bold"],
         fontSize: 24,
         fontWeight: fontWeight[700],
+    },
+    biggerTitleSemiBold: {
+        fontFamily: fontFamily["Inter-SemiBold"],
+        fontSize: 24,
+        fontWeight: fontWeight[600],
     },
     biggerTitleMedium: {
         fontFamily: fontFamily["Inter-Medium"],

@@ -10,16 +10,26 @@ import {
     HeaderStyleV2,
     HeaderTitle,
     Layout,
+    BaseButton,
 } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { AppsBottomSheet } from "./Components"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+
+    const { data: allApps, isLoading } = useVeBetterDaoDapps()
+
+    const {
+        ref: appsBottomSheetRef,
+        onOpen: onOpenAppsBottomSheet,
+        onClose: onCloseAppsBottomSheet,
+    } = useBottomSheetModal()
 
     const goToSearch = useCallback(() => {
         nav.navigate(Routes.APPS_SEARCH)
@@ -48,7 +58,23 @@ export const AppsScreen = () => {
                     </BaseView>
                 </BaseView>
             }
-            body={<BaseText>{"AppsScreen"}</BaseText>}
+            body={
+                <>
+                    <BaseText>{"AppsScreen"}</BaseText>
+                    <BaseView flex={1} px={16} justifyContent="center" alignItems="center">
+                        <BaseButton action={onOpenAppsBottomSheet} variant="solid" size="lg" w={100}>
+                            {LL.BTN_OPEN()}
+                        </BaseButton>
+
+                        <AppsBottomSheet
+                            ref={appsBottomSheetRef}
+                            onDismiss={onCloseAppsBottomSheet}
+                            allApps={allApps}
+                            isLoading={isLoading}
+                        />
+                    </BaseView>
+                </>
+            }
         />
     )
 }
