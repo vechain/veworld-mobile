@@ -183,7 +183,6 @@ describe("X2EAppsBottomSheet", () => {
             </Wrapper>,
         )
 
-        // Should render skeleton items instead of actual apps
         expect(screen.queryByText("Test App 1")).toBeNull()
         expect(screen.queryByText("Test App 2")).toBeNull()
     })
@@ -201,7 +200,6 @@ describe("X2EAppsBottomSheet", () => {
             </Wrapper>,
         )
 
-        // Should render actual app items
         expect(screen.getByText("Test App 1")).toBeVisible()
         expect(screen.getByText("Test App 2")).toBeVisible()
         expect(screen.getByText("A test app")).toBeVisible()
@@ -271,7 +269,7 @@ describe("X2EAppsBottomSheet", () => {
         mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: recyclingCategory,
             setSelectedCategory: mockSetSelectedCategory,
-            filteredApps: [mockApps[1]], // Only app-2 has recycling category
+            filteredApps: [mockApps[1]],
         })
 
         render(
@@ -280,9 +278,8 @@ describe("X2EAppsBottomSheet", () => {
             </Wrapper>,
         )
 
-        // Check that the selected category is displayed in the header
         expect(screen.getAllByText("Recycling").length).toBeGreaterThan(0)
         expect(screen.getByText("Test App 2")).toBeVisible()
-        expect(screen.queryByText("Test App 1")).toBeNull() // Should not be visible in recycling category
+        expect(screen.queryByText("Test App 1")).toBeNull()
     })
 })

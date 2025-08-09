@@ -228,7 +228,6 @@ describe("X2EAppDetails", () => {
             fireEvent.press(favoriteButton)
             fireEvent.press(openButton)
 
-            // Should not throw errors with default handlers
             expect(favoriteButton).toBeVisible()
             expect(openButton).toBeVisible()
         })
