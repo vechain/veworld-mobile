@@ -3,7 +3,7 @@ import { useThemedStyles } from "~Hooks"
 import { AnimatedHeaderButton } from "./AnimatedHeaderButton"
 import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
 import { StyleSheet } from "react-native"
-import { typography } from "~Constants"
+import { ColorThemeType, typography } from "~Constants"
 import { LocalizedString } from "typesafe-i18n"
 import { useI18nContext } from "~i18n"
 
@@ -86,7 +86,7 @@ export const AnimatedSaveHeaderButton = ({
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         buttonContainer: {
             minWidth: 64,
@@ -94,6 +94,7 @@ const baseStyles = () =>
             alignItems: "center",
         },
         buttonLabel: {
+            color: theme.colors.actionBottomSheet.icon,
             fontFamily: fontFamily["Inter-SemiBold"],
             fontSize: 12,
             fontWeight: "600",

@@ -83,7 +83,11 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         onPress={() => onRightActionPress(dapp)}
                         style={styles.touchableContainer}>
                         {isEditMode ? (
-                            <BaseIcon name="icon-grip-horizontal" color={theme.colors.text} size={20} />
+                            <BaseIcon
+                                name="icon-grip-horizontal"
+                                color={theme.colors.actionBottomSheet.icon}
+                                size={20}
+                            />
                         ) : (
                             <BaseIcon
                                 name="icon-star-on"
