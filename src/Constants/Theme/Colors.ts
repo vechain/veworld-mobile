@@ -222,6 +222,12 @@ export type Colors = {
     stakedVetCard: {
         background: string
     }
+    dappCard: {
+        name: string
+        description: string
+        icon: string
+    }
+    dappTitle: string
     history: {
         button: {
             background: string
@@ -237,6 +243,9 @@ export type Colors = {
             rightIconColor: string
         }
         emptyStateColor: string
+    }
+    newBottomSheet: {
+        background: string
     }
     x2eAppOpenDetails: {
         background: string
@@ -362,6 +371,8 @@ export enum COLORS {
     GRADIENT_BACKGROUND_DARK_TOP = "rgba(11, 0, 67, 0.7)",
     GRADIENT_BACKGROUND_DARK_BOTTOM = "rgba(11, 0, 67, 0.95)",
     B3TR_ICON_BACKGROUND = "#74E291",
+    WHITE_RGBA_85 = "rgba(255,255,255,0.85)",
+    WHITE_RGBA_15 = "rgba(255,255,255,0.15)",
 }
 
 const light: Colors = {
@@ -588,6 +599,12 @@ const light: Colors = {
     stakedVetCard: {
         background: COLORS.GREY_50,
     },
+    dappCard: {
+        name: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_800,
     history: {
         button: {
             background: COLORS.WHITE,
@@ -603,6 +620,9 @@ const light: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.GREY_600,
+    },
+    newBottomSheet: {
+        background: COLORS.WHITE,
     },
     x2eAppOpenDetails: {
         background: COLORS.GREY_50,
@@ -884,6 +904,12 @@ const dark: Colors = {
             value: COLORS.GREY_100,
         },
     },
+    dappCard: {
+        name: COLORS.GREY_50,
+        description: COLORS.GREY_400,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_100,
     history: {
         button: {
             background: COLORS.DARK_PURPLE_DISABLED,
@@ -899,6 +925,9 @@ const dark: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.WHITE,
+    },
+    newBottomSheet: {
+        background: COLORS.PURPLE,
     },
 }
 

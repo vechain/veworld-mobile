@@ -2,26 +2,31 @@ import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import {
+    BaseButton,
     BaseIcon,
-    BaseTouchable,
     BaseSpacer,
-    BaseText,
+    BaseTouchable,
     BaseView,
     HeaderStyleV2,
     HeaderTitle,
     Layout,
-    BaseButton,
 } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
+import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { AppsBottomSheet } from "./Components"
+import { AppsBottomSheet } from "./Components/VeBetter"
+import { EcosystemSection } from "./Components/Ecosystem"
+import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
+import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+
+    const isNormalUser = useIsNormalUser()
 
     const { data: allApps, isLoading } = useVeBetterDaoDapps()
 
@@ -39,8 +44,9 @@ export const AppsScreen = () => {
         <Layout
             bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
             noBackButton
+            noMargin
             fixedHeader={
-                <BaseView style={HeaderStyleV2}>
+                <BaseView style={[HeaderStyleV2, styles.header]}>
                     <HeaderTitle
                         title={LL.APPS_SCREEN_TITLE()}
                         leftIconName="icon-apps"
@@ -60,7 +66,9 @@ export const AppsScreen = () => {
             }
             body={
                 <>
-                    <BaseText>{"AppsScreen"}</BaseText>
+                    {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
+                    <BaseSpacer height={48} />
+                    <EcosystemSection />
                     <BaseView flex={1} px={16} justifyContent="center" alignItems="center">
                         <BaseButton action={onOpenAppsBottomSheet} variant="solid" size="lg" w={100}>
                             {LL.BTN_OPEN()}
@@ -85,5 +93,8 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 8,
             borderRadius: 100,
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_100,
+        },
+        header: {
+            paddingHorizontal: 16,
         },
     })

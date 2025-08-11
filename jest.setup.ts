@@ -189,12 +189,7 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
 jest.mock("@gorhom/bottom-sheet", () => ({
     __esModule: true,
     ...require("@gorhom/bottom-sheet/mock"),
-    BottomSheetFlatList: ({ data, renderItem }: any) => {
-        return data.map((row: any) => renderItem({ item: row }))
-    },
-    BottomSheetSectionList: ({ sections, renderItem }: any) => {
-        return sections.flatMap((s: any) => s.data).map((row: any) => renderItem({ item: row }))
-    },
+    ...require("./mocks/bottom-sheet-mock"),
 }))
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
@@ -262,6 +257,9 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
                 return null
             }
             if (name === "RNViewShot") {
+                return null
+            }
+            if (name === "SettingsManager") {
                 return null
             }
             return turboModuleRegistry.getEnforcing(name)
