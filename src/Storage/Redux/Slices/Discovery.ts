@@ -33,6 +33,7 @@ export type DiscoveryState = {
     bannerInteractions: {
         [bannerName: string]: BannerInteractionDetails
     }
+    isNormalUser?: boolean
 }
 
 export const initialDiscoverState: DiscoveryState = {
@@ -46,6 +47,7 @@ export const initialDiscoverState: DiscoveryState = {
         tabs: [],
     },
     bannerInteractions: {},
+    isNormalUser: false,
 }
 
 const findByHref = (dapps: DiscoveryDApp[], href: string) => {
@@ -143,6 +145,9 @@ export const DiscoverySlice = createSlice({
                 amountOfInteractions: (state.bannerInteractions[action.payload]?.amountOfInteractions ?? 0) + 1,
             }
         },
+        setIsNormalUser: state => {
+            state.isNormalUser = true
+        },
     },
 })
 
@@ -162,4 +167,5 @@ export const {
     closeTab,
     closeAllTabs,
     incrementBannerInteractions,
+    setIsNormalUser,
 } = DiscoverySlice.actions
