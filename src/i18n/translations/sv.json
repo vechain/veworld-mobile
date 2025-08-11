@@ -998,6 +998,7 @@
   "SIGN_TRANSACTION_REQUEST_TITLE": "Apptransaktion",
   "SIGN_TYPED_DATA_REQUEST_CTA": "Signera",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Signera typad data",
+  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Delegerad smart plånbok stöds inte ännu",
   "STARGATE_CLAIMABLE": "Kan hämtas",
   "STARGATE_DELEGATEE_LABEL": "Hantera",
   "STARGATE_LOCKED": "Låst",

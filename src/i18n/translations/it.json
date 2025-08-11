@@ -998,6 +998,7 @@
   "SIGN_TRANSACTION_REQUEST_TITLE": "Transazione dell'app",
   "SIGN_TYPED_DATA_REQUEST_CTA": "Firma",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Firma dati formattati",
+  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Delegated smart wallet non ancora supportato",
   "STARGATE_CLAIMABLE": "Riscattabile",
   "STARGATE_DELEGATEE_LABEL": "Gestione",
   "STARGATE_LOCKED": "Bloccato",

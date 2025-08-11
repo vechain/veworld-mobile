@@ -998,6 +998,7 @@
   "SIGN_TRANSACTION_REQUEST_TITLE": "Transacción de la app",
   "SIGN_TYPED_DATA_REQUEST_CTA": "Firmar",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Firmar datos tipados",
+  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Delegación de monedero inteligente no soportada aún",
   "STARGATE_CLAIMABLE": "Reclamable",
   "STARGATE_DELEGATEE_LABEL": "Gestión",
   "STARGATE_LOCKED": "Bloqueado",

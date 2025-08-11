@@ -998,6 +998,7 @@
   "SIGN_TRANSACTION_REQUEST_TITLE": "Transaction d'application",
   "SIGN_TYPED_DATA_REQUEST_CTA": "Signer",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Signer les données typées",
+  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Portefeuille intelligent délégué non pris en charge pour le moment",
   "STARGATE_CLAIMABLE": "Réclamable",
   "STARGATE_DELEGATEE_LABEL": "Gestion",
   "STARGATE_LOCKED": "Verrouillé",

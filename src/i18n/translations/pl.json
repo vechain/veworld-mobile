@@ -998,6 +998,7 @@
   "SIGN_TRANSACTION_REQUEST_TITLE": "Transakcja aplikacji",
   "SIGN_TYPED_DATA_REQUEST_CTA": "Podpisz",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Podpisz typowane dane",
+  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Delegowane inteligentne portfele nie są jeszcze obsługiwane",
   "STARGATE_CLAIMABLE": "Możliwe do odebrania",
   "STARGATE_DELEGATEE_LABEL": "Zarządzanie",
   "STARGATE_LOCKED": "Zablokowane",
