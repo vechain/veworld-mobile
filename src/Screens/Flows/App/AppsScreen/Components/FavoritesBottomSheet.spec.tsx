@@ -7,6 +7,7 @@ import { DiscoveryDApp } from "~Constants"
 const mockDispatch = jest.fn()
 const mockOnDAppPress = jest.fn()
 const mockUseAppSelector = jest.fn()
+const mockRemoveBookmark = jest.fn(dapp => ({ type: "REMOVE_BOOKMARK", payload: dapp }))
 
 jest.mock("~Hooks", () => ({
     useBottomSheetModal: () => ({
@@ -46,6 +47,7 @@ jest.mock("~Storage/Redux", () => ({
     useAppSelector: jest.fn(() => mockUseAppSelector()),
     useAppDispatch: () => mockDispatch,
     reorderBookmarks: jest.fn(),
+    removeBookmark: mockRemoveBookmark,
 }))
 
 jest.mock("../../DiscoverScreen/Hooks", () => ({
@@ -125,7 +127,10 @@ jest.mock("./FavoriteDAppCard", () => ({
                 testID={`dapp-long-press-${dapp.id || dapp.href}`}
                 onTouchEnd={() => onLongPress && onLongPress(dapp)}
             />
-            <View testID={`dapp-more-press-${dapp.id || dapp.href}`} onTouchEnd={() => onRightActionPress(dapp)} />
+            <View
+                testID={`dapp-more-press-${dapp.id || dapp.href}`}
+                onTouchEnd={() => onRightActionPress(dapp, isEditMode)}
+            />
             {isEditMode && <View testID={`edit-mode-indicator-${dapp.id || dapp.href}`} />}
         </View>
     ),
@@ -178,6 +183,8 @@ describe("FavoritesBottomSheet", () => {
     beforeEach(() => {
         jest.clearAllMocks()
         mockUseAppSelector.mockReturnValue(mockDApps)
+        mockDispatch.mockClear()
+        mockRemoveBookmark.mockClear()
     })
 
     const renderComponent = () => {
@@ -297,13 +304,48 @@ describe("FavoritesBottomSheet", () => {
             expect(getByTestId("save-button")).toBeTruthy()
         })
 
-        it("should handle more options press", () => {
+        it("should handle more options press in normal mode", () => {
             const { getByTestId } = renderComponent()
 
             const moreButton = getByTestId("dapp-more-press-dapp1")
             fireEvent(moreButton, "touchEnd")
 
             expect(getByTestId("dapp-options-bottom-sheet")).toBeTruthy()
+        })
+
+        it("should remove bookmark when more button is pressed in normal mode", () => {
+            const { getByTestId } = renderComponent()
+
+            const moreButton = getByTestId("dapp-more-press-dapp1")
+            fireEvent(moreButton, "touchEnd")
+
+            expect(mockDispatch).toHaveBeenCalledWith({
+                type: "REMOVE_BOOKMARK",
+                payload: mockDApps[0],
+            })
+        })
+
+        it("should open options sheet when more button is pressed in edit mode", async () => {
+            const { getByTestId } = renderComponent()
+
+            // Enter edit mode first
+            const reorderButton = getByTestId("reorder-button")
+            fireEvent(reorderButton, "touchEnd")
+
+            await waitFor(() => {
+                expect(getByTestId("save-button")).toBeTruthy()
+            })
+
+            // Clear previous dispatch calls
+            mockDispatch.mockClear()
+
+            // Press more button in edit mode
+            const moreButton = getByTestId("dapp-more-press-dapp1")
+            fireEvent(moreButton, "touchEnd")
+
+            // Should open options sheet, not remove bookmark
+            expect(getByTestId("dapp-options-bottom-sheet")).toBeTruthy()
+            expect(mockDispatch).not.toHaveBeenCalled()
         })
     })
 
