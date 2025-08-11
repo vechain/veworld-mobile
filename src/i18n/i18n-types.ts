@@ -424,6 +424,10 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
+	 * A​p​p​s
+	 */
+	APPS_SCREEN_TITLE: string
+	/**
 	 * A​p​p​ ​u​p​d​a​t​e​d
 	 */
 	APP_UPDATED: string
@@ -1049,7 +1053,7 @@ type RootTranslation = {
 	 */
 	BROWSER_ADD_BOOKMARK_TITLE: string
 	/**
-	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_ADD_FAVORITE_DAPPS: string
 	/**
@@ -1109,14 +1113,30 @@ type RootTranslation = {
 	 */
 	BROWSER_HISTORY_EMPTY: string
 	/**
+	 * F​o​u​n​d
+	 */
+	BROWSER_HISTORY_FOUND: string
+	/**
+	 * M​o​r​e​ ​r​e​s​u​l​t​s
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: string
+	/**
+	 * N​o​ ​r​e​s​u​l​t​s​ ​f​o​u​n​d
+	 */
+	BROWSER_HISTORY_NO_RESULTS: string
+	/**
 	 * N​o​ ​H​i​s​t​o​r​y​ ​A​v​a​i​l​a​b​l​e
 	 */
 	BROWSER_HISTORY_No_RECORDS: string
 	/**
+	 * R​e​s​u​l​t​s
+	 */
+	BROWSER_HISTORY_RESULTS: string
+	/**
 	 * {​a​m​o​u​n​t​}​ ​R​e​s​u​l​t​s
 	 * @param {number} amount
 	 */
-	BROWSER_HISTORY_RESULTS: RequiredParams<'amount'>
+	BROWSER_HISTORY_RESULTS_AMOUNT: RequiredParams<'amount'>
 	/**
 	 * S​e​a​r​c​h
 	 */
@@ -1138,9 +1158,17 @@ type RootTranslation = {
 	 */
 	BROWSER_NEW_TAB: string
 	/**
-	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 * R​e​l​o​a​d​ ​p​a​g​e
+	 */
+	BROWSER_RELOAD_PAGE: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: string
+	/**
+	 * S​e​e​ ​a​l​l​ ​t​a​b​s​ ​o​p​e​n
+	 */
+	BROWSER_SEE_ALL_TABS: string
 	/**
 	 * S​h​a​r​e
 	 */
@@ -2092,6 +2120,54 @@ type RootTranslation = {
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: string
 	/**
+	 * C​a​r​b​o​n​ ​F​o​o​t​p​r​i​n​t
+	 */
+	DAPP_CATEGORY_CARBON_FOOTPRINT: string
+	/**
+	 * L​e​a​r​n​i​n​g
+	 */
+	DAPP_CATEGORY_EDUCATION_LEARNING: string
+	/**
+	 * L​i​f​e​s​t​y​l​e
+	 */
+	DAPP_CATEGORY_FITNESS_WELLNESS: string
+	/**
+	 * W​e​b​3
+	 */
+	DAPP_CATEGORY_GREEN_FINANCE_DEFI: string
+	/**
+	 * T​r​a​n​s​p​o​r​t​a​t​i​o​n
+	 */
+	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: string
+	/**
+	 * F​o​o​d​ ​&​ ​D​r​i​n​k​s
+	 */
+	DAPP_CATEGORY_NUTRITION: string
+	/**
+	 * O​t​h​e​r​s
+	 */
+	DAPP_CATEGORY_OTHERS: string
+	/**
+	 * P​e​t​s
+	 */
+	DAPP_CATEGORY_PETS: string
+	/**
+	 * R​e​c​y​c​l​i​n​g
+	 */
+	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: string
+	/**
+	 * E​n​e​r​g​y
+	 */
+	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: string
+	/**
+	 * S​o​c​i​a​l​,​ ​C​o​m​m​u​n​i​t​y​,​ ​A​c​t​i​v​i​s​m
+	 */
+	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: string
+	/**
+	 * S​h​o​p​p​i​n​g
+	 */
+	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: string
+	/**
 	 * D​A​p​p​ ​C​o​n​n​e​c​t​i​o​n
 	 */
 	DAPP_CONNECTION: string
@@ -2264,6 +2340,10 @@ type RootTranslation = {
 	 */
 	DISCOVER_SEE_ALL_BOOKMARKS: string
 	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: string
+	/**
 	 * S​o​r​t​ ​b​y
 	 */
 	DISCOVER_SORT_BY: string
@@ -2299,6 +2379,22 @@ type RootTranslation = {
 	 * S​E​A​R​C​H​ ​T​H​E​ ​W​E​B
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
+	/**
+	 * F​o​r​ ​y​o​u
+	 */
+	DISCOVER_FOR_YOU: string
+	/**
+	 * S​u​g​g​e​s​t​e​d​ ​f​o​r​ ​y​o​u
+	 */
+	DISCOVER_SUGGESTED_FOR_YOU: string
+	/**
+	 * N​e​w
+	 */
+	DISCOVER_FOR_YOU_NEW: string
+	/**
+	 * P​o​p​u​l​a​r
+	 */
+	DISCOVER_FOR_YOU_POPULAR: string
 	/**
 	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
 	 */
@@ -4183,6 +4279,30 @@ type RootTranslation = {
 	 */
 	TAB_AMOUNT: RequiredParams<'number'>
 	/**
+	 * A​c​t​i​v​i​t​y
+	 */
+	TAB_TITLE_ACTIVITY: string
+	/**
+	 * A​p​p​s
+	 */
+	TAB_TITLE_APPS: string
+	/**
+	 * D​i​s​c​o​v​e​r
+	 */
+	TAB_TITLE_DISCOVER: string
+	/**
+	 * H​o​m​e
+	 */
+	TAB_TITLE_HOME: string
+	/**
+	 * M​o​r​e
+	 */
+	TAB_TITLE_MORE: string
+	/**
+	 * N​F​T​s
+	 */
+	TAB_TITLE_NFT: string
+	/**
 	 * T​a​k​e​ ​m​e​ ​t​o​ ​G​o​o​g​l​e​ ​D​r​i​v​e
 	 */
 	TAKE_ME_TO_DRIVE: string
@@ -5109,6 +5229,10 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
+	 * Apps
+	 */
+	APPS_SCREEN_TITLE: () => LocalizedString
+	/**
 	 * App updated
 	 */
 	APP_UPDATED: () => LocalizedString
@@ -5505,6 +5629,10 @@ Try reconnect your device to the internet.
 	 */
 	BD_OBSERVE_WALLET: () => LocalizedString
 	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
+	/**
 	 * Viewing and managing your crypto assets has never been easier.
 	 */
 	BD_ONBOARDING_SLIDE_01: () => LocalizedString
@@ -5727,7 +5855,7 @@ Thanks for your patience!
 	 */
 	BROWSER_ADD_BOOKMARK_TITLE: () => LocalizedString
 	/**
-	 * Add to Favorite dApps
+	 * Add to Favorites
 	 */
 	BROWSER_ADD_FAVORITE_DAPPS: () => LocalizedString
 	/**
@@ -5787,13 +5915,29 @@ Thanks for your patience!
 	 */
 	BROWSER_HISTORY_EMPTY: () => LocalizedString
 	/**
+	 * Found
+	 */
+	BROWSER_HISTORY_FOUND: () => LocalizedString
+	/**
+	 * More results
+	 */
+	BROWSER_HISTORY_MORE_RESULTS: () => LocalizedString
+	/**
+	 * No results found
+	 */
+	BROWSER_HISTORY_NO_RESULTS: () => LocalizedString
+	/**
 	 * No History Available
 	 */
 	BROWSER_HISTORY_No_RECORDS: () => LocalizedString
 	/**
+	 * Results
+	 */
+	BROWSER_HISTORY_RESULTS: () => LocalizedString
+	/**
 	 * {amount} Results
 	 */
-	BROWSER_HISTORY_RESULTS: (arg: { amount: number }) => LocalizedString
+	BROWSER_HISTORY_RESULTS_AMOUNT: (arg: { amount: number }) => LocalizedString
 	/**
 	 * Search
 	 */
@@ -5815,9 +5959,17 @@ Thanks for your patience!
 	 */
 	BROWSER_NEW_TAB: () => LocalizedString
 	/**
-	 * Remove from Favorite dApps
+	 * Reload page
+	 */
+	BROWSER_RELOAD_PAGE: () => LocalizedString
+	/**
+	 * Remove from Favorites
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
+	/**
+	 * See all tabs open
+	 */
+	BROWSER_SEE_ALL_TABS: () => LocalizedString
 	/**
 	 * Share
 	 */
@@ -6759,6 +6911,54 @@ Thanks for your patience!
 	 */
 	CUSTOM_TOKENS_NOT_AVAIABLE: () => LocalizedString
 	/**
+	 * Carbon Footprint
+	 */
+	DAPP_CATEGORY_CARBON_FOOTPRINT: () => LocalizedString
+	/**
+	 * Learning
+	 */
+	DAPP_CATEGORY_EDUCATION_LEARNING: () => LocalizedString
+	/**
+	 * Lifestyle
+	 */
+	DAPP_CATEGORY_FITNESS_WELLNESS: () => LocalizedString
+	/**
+	 * Web3
+	 */
+	DAPP_CATEGORY_GREEN_FINANCE_DEFI: () => LocalizedString
+	/**
+	 * Transportation
+	 */
+	DAPP_CATEGORY_GREEN_MOBILITY_TRAVEL: () => LocalizedString
+	/**
+	 * Food & Drinks
+	 */
+	DAPP_CATEGORY_NUTRITION: () => LocalizedString
+	/**
+	 * Others
+	 */
+	DAPP_CATEGORY_OTHERS: () => LocalizedString
+	/**
+	 * Pets
+	 */
+	DAPP_CATEGORY_PETS: () => LocalizedString
+	/**
+	 * Recycling
+	 */
+	DAPP_CATEGORY_PLASTIC_WASTE_RECYCLING: () => LocalizedString
+	/**
+	 * Energy
+	 */
+	DAPP_CATEGORY_RENEWABLE_ENERGY_EFFICIENCY: () => LocalizedString
+	/**
+	 * Social, Community, Activism
+	 */
+	DAPP_CATEGORY_SOCIAL_COMMUNITY_ACTIVISM: () => LocalizedString
+	/**
+	 * Shopping
+	 */
+	DAPP_CATEGORY_SUSTAINABLE_SHOPPING: () => LocalizedString
+	/**
 	 * DApp Connection
 	 */
 	DAPP_CONNECTION: () => LocalizedString
@@ -6966,6 +7166,22 @@ Thanks for your patience!
 	 * SEARCH THE WEB
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
+	/**
+	 * For you
+	 */
+	DISCOVER_FOR_YOU: () => LocalizedString
+	/**
+	 * Suggested for you
+	 */
+	DISCOVER_SUGGESTED_FOR_YOU: () => LocalizedString
+	/**
+	 * New
+	 */
+	DISCOVER_FOR_YOU_NEW: () => LocalizedString
+	/**
+	 * Popular
+	 */
+	DISCOVER_FOR_YOU_POPULAR: () => LocalizedString
 	/**
 	 * Don't see your NFTs?
 	 */
@@ -8816,6 +9032,30 @@ Are you sure you want to continue?
 	 * {number} tabs
 	 */
 	TAB_AMOUNT: (arg: { number: number }) => LocalizedString
+	/**
+	 * Activity
+	 */
+	TAB_TITLE_ACTIVITY: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	TAB_TITLE_APPS: () => LocalizedString
+	/**
+	 * Discover
+	 */
+	TAB_TITLE_DISCOVER: () => LocalizedString
+	/**
+	 * Home
+	 */
+	TAB_TITLE_HOME: () => LocalizedString
+	/**
+	 * More
+	 */
+	TAB_TITLE_MORE: () => LocalizedString
+	/**
+	 * NFTs
+	 */
+	TAB_TITLE_NFT: () => LocalizedString
 	/**
 	 * Take me to Google Drive
 	 */

@@ -111,4 +111,5 @@ export type VeBetterDaoDAppMetadata = {
     ve_world?: {
         banner: string | number
     }
+    categories?: string[]
 }

@@ -387,7 +387,11 @@ const TokenSwap = ({ activity, onPress }: TokenSwapProps) => {
             title={title}
             rightAmount={rightAmount}
             rightAmountDescription={
-                <BaseText typographyFont="smallCaptionMedium" numberOfLines={1} color={theme.colors.activityCard.swap}>
+                <BaseText
+                    typographyFont="smallCaptionMedium"
+                    numberOfLines={1}
+                    color={theme.colors.activityCard.swap}
+                    allowFontScaling={false}>
                     {rightAmountDescription}
                 </BaseText>
             }
