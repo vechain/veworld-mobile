@@ -51,7 +51,7 @@ jobs:
                   echo "Merged PRs in the last 24 hours: $merged_prs_count"
               
                   # Fetch the last 5 merged PRs and their merge dates
-                  recent_prs = $(gh api \
+                  recent_prs=$(gh api \
                     --header "Accept: application/vnd.github+json" \
                     --method GET \
                     "search/issues" \
