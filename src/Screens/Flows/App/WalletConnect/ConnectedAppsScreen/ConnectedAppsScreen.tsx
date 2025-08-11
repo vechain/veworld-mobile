@@ -1,7 +1,8 @@
 import { SessionTypes } from "@walletconnect/types"
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
-import { BaseSpacer, BaseView, Layout, SwipeableRow, useWalletConnect } from "~Components"
+import { BaseSpacer, BaseView, Layout, SwipeableRow } from "~Components"
+import { useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal } from "~Hooks"
 import { useI18nContext } from "~i18n"
@@ -124,6 +125,7 @@ export const ConnectedAppsScreen = () => {
                                     handleTrashIconPress={handleTrashIconPress}
                                     onPress={onClick}
                                     isOpen={selectedApp && key === generateAppKey(selectedApp)}
+                                    testID={`CONNECTED_APP_${key}`}
                                     xMargins={0}>
                                     <ConnectedAppBox key={key} connectedApp={connectedApp} />
                                 </SwipeableRow>

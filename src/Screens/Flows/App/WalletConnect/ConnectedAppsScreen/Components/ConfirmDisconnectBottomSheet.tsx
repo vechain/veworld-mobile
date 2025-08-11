@@ -32,7 +32,10 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<BottomSheetModalMet
                 {connectedApp => (
                     <>
                         <BaseSpacer height={8} />
-                        <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500}>
+                        <BaseText
+                            typographyFont="bodyMedium"
+                            color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_500}
+                            testID="CONFIRM_DISCONNECT_APP_DESCRIPTION">
                             {LL.CONNECTED_APP_DELETE_DESCRIPTION()}
                         </BaseText>
 
@@ -42,7 +45,12 @@ export const ConfirmDisconnectBottomSheet = React.forwardRef<BottomSheetModalMet
                         <BaseSpacer height={24} />
                         <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
                             <BaseButton variant="outline" action={onCancel} title={LL.COMMON_BTN_CANCEL()} flex={1} />
-                            <BaseButton action={confirm} title={LL.COMMON_BTN_CONFIRM()} flex={1} />
+                            <BaseButton
+                                action={confirm}
+                                title={LL.COMMON_BTN_CONFIRM()}
+                                flex={1}
+                                testID="CONFIRM_DISCONNECT_APP_APPLY"
+                            />
                         </BaseView>
                     </>
                 )}

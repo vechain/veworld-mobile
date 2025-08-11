@@ -26,7 +26,7 @@ export const ConnectedAppBox: React.FC<Props> = memo(({ connectedApp }: Props) =
     const description = useMemo(() => {
         if (connectedApp.type === "in-app") {
             return new URL(connectedApp.app.href).hostname
-        } else return connectedApp.session.peer.metadata.description
+        } else return new URL(connectedApp.session.peer.metadata.url).hostname
     }, [connectedApp])
 
     const icon = useMemo(() => {
@@ -35,7 +35,9 @@ export const ConnectedAppBox: React.FC<Props> = memo(({ connectedApp }: Props) =
             return { uri: DAppUtils.generateFaviconUrl(connectedApp.app.href) }
         } else
             return {
-                uri: connectedApp.session.peer.metadata.icons[0],
+                uri:
+                    connectedApp.session.peer.metadata.icons[0] ??
+                    DAppUtils.generateFaviconUrl(connectedApp.session.peer.metadata.url),
             }
     }, [connectedApp])
 
