@@ -29,12 +29,14 @@ export enum WALLET_MODE {
  * @value `LOCAL_MNEMONIC` - wallet is stored locally and backed up by a mnemonic
  * @value `LOCAL_PRIVATE_KEY` = A single private key stored locally. Can't derive child private keys
  * @value `LEDGER` - imported from a `ledger` hardware wallet
+ * @value `SMART_WALLET` - a smart wallet that uses a smart account contract
  */
 export enum DEVICE_TYPE {
     LOCAL_MNEMONIC = "local-mnemonic",
     LOCAL_WATCHED = "local-watched",
     LOCAL_PRIVATE_KEY = "local-pk",
     LEDGER = "ledger",
+    SMART_WALLET = "smart-wallet",
 }
 
 /**

@@ -37,6 +37,8 @@ module.exports = {
             "|@transak/react-native-sdk" +
             "|jail-monkey" +
             "|expo/.*" +
+            "|@privy-io/.*" +
+            "|uuid" +
             ")",
     ],
     moduleNameMapper: {
@@ -56,10 +58,12 @@ module.exports = {
         "^~Test$": ["<rootDir>/src/Test/index.tsx"],
         "^~Networking(.*)": ["<rootDir>/src/Networking$1"],
         "^~Logging(.*)": ["<rootDir>/src/Logging$1"],
+        "^~VechainWalletKit(.*)": ["<rootDir>/src/VechainWalletKit$1"],
         "^~Generated(.*)": ["<rootDir>/src/Generated$1"],
         "^~fixtures(.*)": ["<rootDir>/__fixtures__$1"],
         "^react-native-device-info$": "<rootDir>/src/Test/mocks/react-native-device-info.js",
         "^@react-native-community/netinfo$": "<rootDir>/src/Test/mocks/@react-native-community/netinfo.js",
+        "^@privy-io/expo$": "<rootDir>/src/Test/mocks/@privy-io/expo.js",
         Intl: "<rootDir>/node_modules/intl/",
     },
     moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],

@@ -1,5 +1,13 @@
 import { AccountUtils, AddressUtils, debug, error } from "~Utils"
-import { BaseDevice, DEVICE_TYPE, LedgerDevice, LocalDevice, NewLedgerDevice, WalletAccount } from "~Model"
+import {
+    BaseDevice,
+    DEVICE_TYPE,
+    LedgerDevice,
+    LocalDevice,
+    NewLedgerDevice,
+    SmartWalletDevice,
+    WalletAccount,
+} from "~Model"
 import { selectDevices } from "../Selectors"
 import { addDevice, bulkUpdateDevices, renameDevice, updateDevice } from "../Slices/Device"
 import { AppThunk, createAppAsyncThunk } from "../Types"
@@ -88,4 +96,58 @@ const addLedgerDeviceAndAccounts = createAppAsyncThunk(
     },
 )
 
-export { renameDevice, addDeviceAndAccounts, addLedgerDeviceAndAccounts, updateDevice, bulkUpdateDevices }
+/**
+ *  Add a Smart Wallet device and its first account
+ * @param device  the device to add (without index, will be calculated)
+ * @returns the added account
+ */
+const addSmartWalletDeviceAndAccount =
+    (device: Omit<SmartWalletDevice, "index">): AppThunk<WalletAccount> =>
+    (dispatch, getState) => {
+        const devices = selectDevices(getState())
+
+        const deviceExists = devices.find(existingDevice =>
+            AddressUtils.compareAddresses(existingDevice.rootAddress, device.rootAddress),
+        )
+
+        if (deviceExists) {
+            // Return existing account if device already exists
+            const existingAccount: WalletAccount = {
+                alias: "Smart Wallet Account",
+                address: deviceExists.rootAddress,
+                rootAddress: deviceExists.rootAddress,
+                index: deviceExists.index,
+                visible: true,
+            }
+            return existingAccount
+        }
+
+        // Calculate the next device index
+        const deviceWithIndex: SmartWalletDevice = {
+            ...device,
+            index: getNextDeviceIndex(devices),
+        }
+
+        dispatch(addDevice(deviceWithIndex))
+
+        let account: WalletAccount = {
+            alias: "Smart Wallet Account",
+            address: device.rootAddress,
+            rootAddress: device.rootAddress,
+            index: -1,
+            visible: true,
+        }
+
+        dispatch(addAccount(account))
+
+        return account
+    }
+
+export {
+    renameDevice,
+    addDeviceAndAccounts,
+    addLedgerDeviceAndAccounts,
+    addSmartWalletDeviceAndAccount,
+    updateDevice,
+    bulkUpdateDevices,
+}
