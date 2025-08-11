@@ -251,6 +251,17 @@ export type Colors = {
     newBottomSheet: {
         background: string
     }
+    favoritesSuggestionBanner: {
+        background: string
+        border: string
+        color: string
+        iconColor: string
+        emptySlot: {
+            background: string
+            border: string
+            color: string
+        }
+    }
 }
 
 export enum COLORS {
@@ -605,6 +616,17 @@ const light: Colors = {
     newBottomSheet: {
         background: COLORS.WHITE,
     },
+    favoritesSuggestionBanner: {
+        background: COLORS.GREY_50,
+        border: COLORS.GREY_200,
+        color: COLORS.GREY_600,
+        iconColor: COLORS.GREY_500,
+        emptySlot: {
+            background: COLORS.GREY_100,
+            border: COLORS.GREY_300,
+            color: COLORS.GREY_400,
+        },
+    },
 }
 
 const dark: Colors = {
@@ -859,6 +881,17 @@ const dark: Colors = {
     },
     newBottomSheet: {
         background: COLORS.PURPLE,
+    },
+    favoritesSuggestionBanner: {
+        background: COLORS.PURPLE_DISABLED,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        color: COLORS.GREY_300,
+        iconColor: COLORS.GREY_400,
+        emptySlot: {
+            background: COLORS.PURPLE,
+            border: COLORS.DARK_PURPLE_DISABLED,
+            color: COLORS.DARK_PURPLE_DISABLED,
+        },
     },
 }
 

@@ -15,6 +15,7 @@ import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
 import { useDAppActions } from "./Hooks/useDAppActions"
 import { Favourites } from "../DiscoverScreen/Components/Favourites"
 import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
+import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
@@ -70,7 +71,16 @@ export const AppsScreen = () => {
                         </>
                     )}
                     {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
+
                     <BaseSpacer height={48} />
+
+                    {!showFavorites && (
+                        <>
+                            <FavoritesSuggestionBanner onPress={() => {}} />
+                            <BaseSpacer height={48} />
+                        </>
+                    )}
+
                     <EcosystemSection />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
                 </>
