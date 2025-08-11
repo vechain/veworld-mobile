@@ -22,6 +22,7 @@ jobs:
         runs-on: ubuntu-latest
         outputs:
           should_release: ${{ steps.check_merged_prs.outputs.should_release }}
+          recent_prs: ${{ steps.check_merged_prs.outputs.recent_prs }}
         steps:
             - name: Checkout repository
               uses: actions/checkout@v4
@@ -50,8 +51,7 @@ jobs:
                   echo "Merged PRs in the last 24 hours: $merged_prs_count"
               
                   # Fetch the last 5 merged PRs and their merge dates
-                  echo "Last 5 merged PRs:"
-                  gh api \
+                  recent_prs = $(gh api \
                     --header "Accept: application/vnd.github+json" \
                     --method GET \
                     "search/issues" \
@@ -59,7 +59,11 @@ jobs:
                     -f sort="updated" \
                     -f order="desc" \
                     -f per_page=5 \
-                    --jq '.items[] | {number: .number, title: .title, merged_at: .closed_at}'
+                    --jq '.items[] | {number: .number, title: .title, merged_at: .closed_at}' | tr "'" ",")
+
+                  echo "Recent PRs: $recent_prs"
+                  echo "recent_prs='$recent_prs'" >> $GITHUB_OUTPUT
+
               
                   if [ "$merged_prs_count" -gt 0 ] || [ "$MERGED_OVERRIDE" ]; then
                     echo "should_release=true" >> $GITHUB_OUTPUT
@@ -154,6 +158,7 @@ jobs:
       with:
         version: ${{ needs.setup-version-build.outputs.new_version_ios }}
         build: ${{ needs.setup-version-build.outputs.new_build_ios }}
+        recent_prs: ${{ needs.check-merged-pr.outputs.recent_prs }}
 
     release-android:
       uses: ./.github/workflows/release-andorid.yaml
@@ -165,3 +170,4 @@ jobs:
         version: ${{ needs.setup-version-build.outputs.new_version_android }}
         build: ${{ needs.setup-version-build.outputs.new_build_android }}
         pr_branch: ${{ needs.setup-version-build.outputs.pr_branch }}
+        recent_prs: ${{ needs.check-merged-pr.outputs.recent_prs }}
