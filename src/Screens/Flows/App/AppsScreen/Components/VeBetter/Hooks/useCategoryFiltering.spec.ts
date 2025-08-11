@@ -249,4 +249,44 @@ describe("useX2ECategoryFiltering", () => {
         expect(recyclingApps).toHaveLength(1)
         expect(nutritionApps).toHaveLength(2)
     })
+
+    it("should initialize with provided initialCategoryId", () => {
+        const { result } = renderHook(() => useCategoryFiltering(mockApps, X2ECategoryType.PLASTIC_WASTE_RECYCLING))
+
+        expect(result.current.selectedCategory.id).toBe(X2ECategoryType.PLASTIC_WASTE_RECYCLING)
+        expect(result.current.selectedCategory.displayName).toBe("Recycling")
+        expect(result.current.selectedCategory.icon).toBe("icon-recycle")
+    })
+
+    it("should filter apps correctly when initialized with initialCategoryId", () => {
+        const { result } = renderHook(() => useCategoryFiltering(mockApps, X2ECategoryType.PLASTIC_WASTE_RECYCLING))
+
+        expect(result.current.filteredApps).toHaveLength(1)
+        expect(result.current.filteredApps[0].name).toBe("B App")
+        expect(result.current.filteredApps[0].categories).toContain(X2ECategoryType.PLASTIC_WASTE_RECYCLING)
+    })
+
+    it("should fallback to default category when initialCategoryId is undefined", () => {
+        const { result } = renderHook(() => useCategoryFiltering(mockApps, undefined))
+
+        expect(result.current.selectedCategory.id).toBe(X2ECategoryType.NUTRITION)
+        expect(result.current.selectedCategory.displayName).toBe("Food & Drink")
+        expect(result.current.selectedCategory.icon).toBe("icon-salad")
+    })
+
+    it("should update selected category when initialCategoryId changes", () => {
+        const { result, rerender } = renderHook(
+            ({ initialCategoryId }) => useCategoryFiltering(mockApps, initialCategoryId),
+            { initialProps: { initialCategoryId: X2ECategoryType.NUTRITION } },
+        )
+
+        expect(result.current.selectedCategory.id).toBe(X2ECategoryType.NUTRITION)
+
+        rerender({ initialCategoryId: X2ECategoryType.PLASTIC_WASTE_RECYCLING })
+
+        expect(result.current.selectedCategory.id).toBe(X2ECategoryType.PLASTIC_WASTE_RECYCLING)
+        expect(result.current.selectedCategory.displayName).toBe("Recycling")
+        expect(result.current.filteredApps).toHaveLength(1)
+        expect(result.current.filteredApps[0].name).toBe("B App")
+    })
 })

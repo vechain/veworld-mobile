@@ -265,6 +265,12 @@ export type Colors = {
             value: string
         }
     }
+    veBetterCategoryButton: {
+        background: string
+        border: string
+        icon: string
+        title: string
+    }
 }
 
 export enum COLORS {
@@ -631,6 +637,12 @@ const light: Colors = {
             value: COLORS.GREY_700,
         },
     },
+    veBetterCategoryButton: {
+        background: COLORS.GREY_50,
+        border: COLORS.GREY_100,
+        icon: COLORS.DARK_PURPLE_DISABLED,
+        title: COLORS.GREY_700,
+    },
 }
 
 const dark: Colors = {
@@ -883,6 +895,12 @@ const dark: Colors = {
             caption: COLORS.GREY_300,
             value: COLORS.GREY_100,
         },
+    },
+    veBetterCategoryButton: {
+        background: COLORS.PURPLE,
+        border: COLORS.PURPLE,
+        icon: COLORS.LIME_GREEN,
+        title: COLORS.GREY_50,
     },
     history: {
         button: {

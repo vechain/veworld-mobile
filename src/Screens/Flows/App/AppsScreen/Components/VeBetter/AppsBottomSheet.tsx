@@ -7,7 +7,7 @@ import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView
 import { AnalyticsEvent } from "~Constants"
 import { useAnalyticTracking, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
+import { VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType } from "~Model"
 import { Routes } from "~Navigation"
 import { CategoryFilters, RowDetails, RowExpandableDetails } from "~Screens/Flows/App/AppsScreen/Components"
 import { useCategories, useCategoryFiltering } from "~Screens/Flows/App/AppsScreen/Components/VeBetter/Hooks"
@@ -35,6 +35,7 @@ type X2EAppsBottomSheetProps = {
     onDismiss?: () => void
     allApps?: X2EDapp[]
     isLoading: boolean
+    initialCategoryId?: X2ECategoryType
 }
 
 const AppListItem = React.memo(({ dapp, onDismiss, openItemId, onToggleOpenItem }: X2EAppItemProps) => {
@@ -187,11 +188,11 @@ const AppList = React.memo(({ apps, isLoading, onDismiss, openItemId, onToggleOp
 })
 
 export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(
-    ({ onDismiss, allApps, isLoading }, ref) => {
+    ({ onDismiss, allApps, isLoading, initialCategoryId }, ref) => {
         const theme = useTheme()
         const [openItemId, setOpenItemId] = useState<string | null>(null)
 
-        const { selectedCategory, setSelectedCategory, filteredApps } = useCategoryFiltering(allApps)
+        const { selectedCategory, setSelectedCategory, filteredApps } = useCategoryFiltering(allApps, initialCategoryId)
 
         const handleToggleOpenItem = useCallback((itemId: string) => {
             setOpenItemId(prevId => (prevId === itemId ? null : itemId))
