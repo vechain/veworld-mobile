@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.3 (2025-08-11)</small>
+
+* build: init ([12ea558](https://github.com/vechain/veworld-mobile/commit/12ea558))
+* ci: slack messages to include recent prs ([b926bef](https://github.com/vechain/veworld-mobile/commit/b926bef))
+
 ## <small>2.3.1 (2025-08-04)</small>
 
 * build: init ([ecfcbcc](https://github.com/vechain/veworld-mobile/commit/ecfcbcc))
