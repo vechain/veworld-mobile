@@ -12,7 +12,7 @@ type Props = {
     isActive: boolean
     onPress: (dapp: DiscoveryDApp) => void
     onLongPress: (dapp: DiscoveryDApp) => void
-    onRightActionPress: (dapp: DiscoveryDApp) => void
+    onRightActionPress: (dapp: DiscoveryDApp, isEditMode: boolean) => void
     onRightActionLongPress?: (dapp: DiscoveryDApp) => void
     px?: number
 }
@@ -78,9 +78,9 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         </BaseView>
                     </BaseTouchable>
                     <BaseTouchable
-                        disabled={isActive || !isEditMode}
+                        disabled={isActive}
                         onLongPress={() => onRightActionLongPress?.(dapp)}
-                        onPress={() => onRightActionPress(dapp)}
+                        onPress={() => onRightActionPress(dapp, isEditMode)}
                         style={styles.touchableContainer}>
                         {isEditMode ? (
                             <BaseIcon

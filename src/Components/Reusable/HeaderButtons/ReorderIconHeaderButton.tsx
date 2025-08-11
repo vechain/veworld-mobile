@@ -5,6 +5,7 @@ import { useTheme } from "~Hooks"
 
 type Props = {
     action: () => void
+    iconColor?: string
     testID?: string
     rounded?: boolean
     circled?: boolean
@@ -14,6 +15,7 @@ type Props = {
 export const ReorderIconHeaderButton = ({
     action,
     testID = "Reorder-HeaderIcon",
+    iconColor,
     rounded = false,
     circled = false,
     style,
@@ -22,7 +24,7 @@ export const ReorderIconHeaderButton = ({
 
     return (
         <HeaderIconButton testID={testID} action={action} rounded={rounded} circled={circled} style={style}>
-            <BaseIcon size={16} name="icon-list-end" color={theme.colors.text} />
+            <BaseIcon size={16} name="icon-list-end" color={iconColor ?? theme.colors.text} />
         </HeaderIconButton>
     )
 }

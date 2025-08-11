@@ -66,9 +66,12 @@ export const AnimatedSaveHeaderButton = ({
 
     const animatedStyles = useAnimatedStyle(() => {
         return {
-            color: withTiming(hasBeenClicked.value ? theme.colors.successVariant.title : theme.colors.text, {
-                duration: animationDuration,
-            }),
+            color: withTiming(
+                hasBeenClicked.value ? theme.colors.successVariant.title : theme.colors.actionBottomSheet.icon,
+                {
+                    duration: animationDuration,
+                },
+            ),
         }
     })
 
