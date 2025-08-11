@@ -13,10 +13,10 @@ import {
     BaseIcon,
     BaseSpacer,
     BaseView,
-    FavoriteDAppCard,
     ListEmptyResults,
     ReorderIconHeaderButton,
 } from "~Components"
+import { FavoriteDAppCard } from "./FavoriteDAppCard"
 import { ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
