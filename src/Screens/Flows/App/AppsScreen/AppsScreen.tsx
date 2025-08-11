@@ -58,8 +58,6 @@ export const AppsScreen = () => {
             }
             body={
                 <>
-                    {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
-                    <BaseSpacer height={128} />
                     {showFavorites && (
                         <>
                             <Favourites
@@ -70,6 +68,8 @@ export const AppsScreen = () => {
                             <BaseSpacer height={48} />
                         </>
                     )}
+                    {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
+                    <BaseSpacer height={48} />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
                 </>
             }
@@ -86,5 +86,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         header: {
             paddingHorizontal: 16,
+            marginBottom: 24,
         },
     })
