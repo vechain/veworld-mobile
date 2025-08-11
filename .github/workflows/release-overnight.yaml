@@ -100,6 +100,7 @@ jobs:
           new_version_android: ${{ steps.increment.outputs.new_version_android }}
           new_build_android: ${{ steps.increment.outputs.new_build_android }}
           pr_branch: ${{ steps.increment.outputs.pr_branch }}
+          recent_prs: ${{ needs.check-merged-pr.outputs.recent_prs }}
         steps:
           - name: Generate a token
             id: generate-token
