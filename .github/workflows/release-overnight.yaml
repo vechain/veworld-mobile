@@ -51,7 +51,7 @@ jobs:
                   echo "Merged PRs in the last 24 hours: $merged_prs_count"
               
                   # Fetch the last 5 merged PRs and their merge dates
-                  recent_prs=$(gh api \
+                  recent_prs_json=$(gh api \
                     --header "Accept: application/vnd.github+json" \
                     --method GET \
                     "search/issues" \
@@ -59,10 +59,20 @@ jobs:
                     -f sort="updated" \
                     -f order="desc" \
                     -f per_page=5 \
-                    --jq '.items[] | {number: .number, title: .title, merged_at: .closed_at}' | tr "'" ",")
+                    --jq '[.items[] | {number: .number, title: .title, merged_at: .closed_at}]')
 
-                  echo "Recent PRs: $recent_prs"
-                  echo "recent_prs=$recent_prs" >> $GITHUB_OUTPUT
+                  # Create a readable format for Slack messages
+                  recent_prs_readable=$(echo "$recent_prs_json" | jq -r '.[] | "• PR #\(.number): \(.title)"' | head -5)
+                  
+                  echo "Recent PRs JSON: $recent_prs_json"
+                  echo "Recent PRs Readable: $recent_prs_readable"
+                  
+                  # Use multiline output format for GitHub Actions
+                  {
+                    echo "recent_prs<<EOF"
+                    echo "$recent_prs_readable"
+                    echo "EOF"
+                  } >> $GITHUB_OUTPUT
 
               
                   if [ "$merged_prs_count" -gt 0 ] || [ "$MERGED_OVERRIDE" ]; then
