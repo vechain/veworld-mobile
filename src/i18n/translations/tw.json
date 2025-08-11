@@ -1014,7 +1014,7 @@
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS": "委任 URL",
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY": "添加或刪除委任 URL，這樣您在發送交易時可以選擇它",
   "SETTINGS_TRANSACTIONS_TITLE": "交易",
-  "SHARE_DAPP": "在 VeWorld 發現了 {name:string} — 絕對值得一看。\n這是它的全部內容：\n{description:string}\n{url:string}",
+  "SHARE_DAPP": "在 VeWorld 發現了 {name:string} — 絕對值得一看。\n這就是它的全部內容：\n{description:string}\n{url:string}",
   "SHARE_IMAGE": "分享圖片",
   "SHARE_IMAGE_SUBTITLE": "與朋友分享您的NFT圖片",
   "SHOW_COLLECTION": "顯示收藏",

@@ -1014,7 +1014,7 @@
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS": "Delege URL'leri",
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY": "İşlem gönderirken seçebilmeniz için bir delege URL'si ekleyin veya silin",
   "SETTINGS_TRANSACTIONS_TITLE": "İşlemler",
-  "SHARE_DAPP": "VeWorld'de {name:string} keşfedildi — kesinlikle göz atmaya değer.\nİşte hakkında bilgiler:\n{description:string}\n{url:string}",
+  "SHARE_DAPP": "VeWorld üzerinde {name:string}'i keşfettim — kesinlikle bakmaya değer.\nİşte bununla ilgili bilgiler:\n{description:string}\n{url:string}",
   "SHARE_IMAGE": "Görseli Paylaş",
   "SHARE_IMAGE_SUBTITLE": "NFT görselini arkadaşlarınızla paylaşın",
   "SHOW_COLLECTION": "Koleksiyonu Göster",

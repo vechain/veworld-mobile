@@ -1014,7 +1014,7 @@
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS": "URL-e delegacji",
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY": "Dodaj lub usuń URL delegacji, aby móc go wybrać podczas wysyłania transakcji",
   "SETTINGS_TRANSACTIONS_TITLE": "Transakcje",
-  "SHARE_DAPP": "Odkryłem {name:string} na VeWorld — zdecydowanie warte uwagi.\nOto, o co w tym chodzi:\n{description:string}\n{url:string}",
+  "SHARE_DAPP": "Odkryłem {name:string} na VeWorld — zdecydowanie warto zobaczyć.\nOto o co w tym chodzi:\n{description:string}\n{url:string}",
   "SHARE_IMAGE": "Udostępnij obraz",
   "SHARE_IMAGE_SUBTITLE": "Udostępnij obraz swojego NFT ze znajomymi",
   "SHOW_COLLECTION": "Pokaż kolekcję",

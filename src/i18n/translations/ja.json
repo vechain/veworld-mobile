@@ -1014,7 +1014,7 @@
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS": "委任URL",
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY": "送金時に選択可能な委任URLを追加または削除します",
   "SETTINGS_TRANSACTIONS_TITLE": "取引",
-  "SHARE_DAPP": "VeWorldで{name:string}を発見しました。ぜひチェックしてみてください。\n詳細はこちら:\n{description:string}\n{url:string}",
+  "SHARE_DAPP": "VeWorldで{name:string}を発見しました。ぜひチェックしてみてください。\nその内容はこちらです:\n{description:string}\n{url:string}",
   "SHARE_IMAGE": "画像を共有",
   "SHARE_IMAGE_SUBTITLE": "NFT画像を友達と共有しましょう",
   "SHOW_COLLECTION": "コレクションを表示",
