@@ -132,6 +132,11 @@ jest.mock("@react-navigation/native", () => ({
 
 jest.mock("~Components/Base/BaseToast")
 
+// Mock the three hooks for generic delegation
+jest.mock("~Hooks/useGenericDelegationFees")
+jest.mock("~Hooks/useGenericDelegationTokens")
+jest.mock("~Hooks/useDelegatorDepositAddress")
+
 const mockedVtho = {
     balance: {
         balance: "0.00",
@@ -151,6 +156,11 @@ const mockedVtho = {
 // Import the getSmartAccount mock so we can configure it
 import { getSmartAccount } from "~VechainWalletKit/utils/smartAccount"
 
+// Import the hooks we need to mock
+import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
+import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
+import { useDelegatorDepositAddress } from "~Hooks/useDelegatorDepositAddress"
+
 jest.mock("~VechainWalletKit/utils/smartAccount", () => ({
     ...jest.requireActual("~VechainWalletKit/utils/smartAccount"),
     getSmartAccount: jest.fn(),
@@ -158,6 +168,13 @@ jest.mock("~VechainWalletKit/utils/smartAccount", () => ({
 
 // Cast to jest.Mock for type safety
 const mockedGetSmartAccount = getSmartAccount as jest.MockedFunction<typeof getSmartAccount>
+const mockedUseGenericDelegationFees = useGenericDelegationFees as jest.MockedFunction<typeof useGenericDelegationFees>
+const mockedUseGenericDelegationTokens = useGenericDelegationTokens as jest.MockedFunction<
+    typeof useGenericDelegationTokens
+>
+const mockedUseDelegatorDepositAddress = useDelegatorDepositAddress as jest.MockedFunction<
+    typeof useDelegatorDepositAddress
+>
 
 const mockAccount = (accountWithDevice: AccountWithDevice) => {
     // @ts-ignore
@@ -177,6 +194,23 @@ const mockDevice = (device: BaseDevice) => {
 describe("useTransactionScreen", () => {
     beforeEach(() => {
         jest.resetAllMocks()
+        // Mock the hooks to return loading states for testing
+        mockedUseGenericDelegationFees.mockReturnValue({
+            options: undefined,
+            allOptions: undefined,
+            isLoading: true,
+            isFirstTimeLoading: false,
+        })
+
+        mockedUseDelegatorDepositAddress.mockReturnValue({
+            depositAccount: "0x1234567890",
+            isLoading: true,
+        })
+
+        mockedUseGenericDelegationTokens.mockReturnValue({
+            tokens: ["VTHO"],
+            isLoading: false,
+        })
         ;(useBiometrics as jest.Mock).mockReturnValue({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,
             authTypeAvailable: "FACIAL_RECOGNITION",
@@ -188,7 +222,13 @@ describe("useTransactionScreen", () => {
             isWalletSecurityBiometrics: true,
             isWalletSecurityPassword: false,
             isWalletSecurityNone: false,
-            biometrics: {},
+            biometrics: {
+                currentSecurityLevel: SecurityLevelType.BIOMETRIC,
+                authTypeAvailable: "FACIAL_RECOGNITION",
+                isDeviceEnrolled: true,
+                isHardwareAvailable: true,
+                accessControl: true,
+            },
         })
         ;(crypto.randomFillSync as jest.Mock).mockReturnValue(Buffer.from("1234abc", "hex"))
         ;(axios.post as jest.Mock).mockResolvedValueOnce({
@@ -248,7 +288,7 @@ describe("useTransactionScreen", () => {
             selectedDelegationOption: "NONE",
             loadingGas: false,
             onSubmit: expect.any(Function),
-            isLoading: true,
+            isLoading: false,
             isPasswordPromptOpen: false,
             handleClosePasswordModal: expect.any(Function),
             onPasswordSuccess: expect.any(Function),
@@ -295,8 +335,8 @@ describe("useTransactionScreen", () => {
                 VET: true,
                 VTHO: true,
             },
-            isFirstTimeLoadingFees: true,
-            isBiometricsEmpty: true,
+            isFirstTimeLoadingFees: false,
+            isBiometricsEmpty: false,
             transactionOutputs: [],
         })
     })
@@ -611,6 +651,9 @@ describe("useTransactionScreen", () => {
                 { timeout: 5000 },
             )
 
+            // expect(result.current.txScreenHook.isDisabledButtonState).toBe(false)
+            // expect(result.current.txScreenHook.isLoading).toBe(false)
+
             await act(async () => await result.current.txScreenHook.onSubmit())
 
             await waitFor(
@@ -625,6 +668,96 @@ describe("useTransactionScreen", () => {
 
             expect(transactionId).toBeDefined()
             expect(transaction).toBeInstanceOf(Transaction)
+            mockUseFeatureFlags = { ...initialState, smartWalletFeature: { enabled: false } }
+        }, 20000)
+
+        it("should return isLoading true when smart wallet account is waiting for gen delegation fees", async () => {
+            mockUseFeatureFlags = { ...initialState, smartWalletFeature: { enabled: true } }
+            ;(useSendTransaction as jest.Mock).mockImplementation(
+                jest.requireActual("~Hooks/useSendTransaction").useSendTransaction,
+            )
+            // Set up authenticated user
+            setAuthenticatedUser("test-user-v3-deployed")
+            setMockPrivyProviderResp(
+                "0x4444444444444444444444444444444444444444",
+                "0x123456789abcdef123456789abcdef123456789abcdef123456789abcdef123456789abcdef123456789abcdef1b",
+            )
+
+            // Mock the getSmartAccount function to return desired smart account config
+            mockedGetSmartAccount.mockResolvedValue({
+                address: "0x4444444444444444444444444444444444444444",
+                version: 3,
+                isDeployed: true,
+                hasV1Account: false,
+                factoryAddress: "0x713b908Bcf77f3E00EFEf328E50b657a1A23AeaF",
+            })
+
+            const accWithDevice = {
+                ...firstLedgerAccount,
+                device: smartWalletDevice,
+            }
+
+            mockAccount(accWithDevice)
+            mockDevice(smartWalletDevice)
+
+            // Mock the hooks to return loading states for testing
+            mockedUseGenericDelegationFees.mockReturnValueOnce({
+                options: undefined,
+                allOptions: undefined,
+                isLoading: true,
+                isFirstTimeLoading: true,
+            })
+
+            mockedUseDelegatorDepositAddress.mockReturnValueOnce({
+                depositAccount: "",
+                isLoading: true,
+            })
+
+            // Now render the transaction screen hook
+            // Minimal mock is applied at module level via jest.mock("~Hooks/useTransactionGas") above
+            const { result } = renderHook(
+                () => {
+                    const smartWalletHook = useSmartWallet()
+                    const txScreenHook = useTransactionScreen({
+                        clauses: vetTransaction1.body.clauses,
+                        onTransactionSuccess,
+                        onTransactionFailure,
+                        dappRequest: {
+                            isFirstRequest: true,
+                            method: "thor_sendTransaction",
+                            id: "1234",
+                            type: "in-app",
+                            message: [],
+                            options: {
+                                gas: 210000,
+                            },
+                            appUrl: "https://example.com",
+                            appName: "Example",
+                        },
+                    })
+                    return { smartWalletHook, txScreenHook }
+                },
+
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+
+            // Wait for smart wallet authentication and initialization
+            await waitFor(
+                () => {
+                    expect(result.current.smartWalletHook.isAuthenticated).toBe(true)
+                    expect(result.current.smartWalletHook.isInitialized).toBe(true)
+                    expect(result.current.smartWalletHook.ownerAddress).toBe(
+                        "0x4444444444444444444444444444444444444444",
+                    )
+                },
+                { timeout: 5000 },
+            )
+
+            expect(result.current.txScreenHook.isLoading).toBe(true)
+            expect(result.current.txScreenHook.isDisabledButtonState).toBe(true)
+
             mockUseFeatureFlags = { ...initialState, smartWalletFeature: { enabled: false } }
         }, 20000)
     })

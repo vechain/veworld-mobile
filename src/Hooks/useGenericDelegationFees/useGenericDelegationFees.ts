@@ -6,7 +6,6 @@ import { B3TR, GasPriceCoefficient, VET } from "~Constants"
 import {
     estimateGenericDelegatorFees,
     EstimateGenericDelegatorFeesResponse,
-    getDelegatorDepositAddress,
     isValidGenericDelegatorNetwork,
 } from "~Networking/GenericDelegator"
 import { selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -20,7 +19,6 @@ type Args = {
      */
     token: string
     isGalactica: boolean
-    enabled?: boolean
 }
 
 /**
@@ -36,36 +34,32 @@ const buildTransactionCost = (
     token: string,
 ) => {
     if (!data || keys.length !== 3) return undefined
-    let tokenToUse = token
-    if (!token.includes("WithSmartAccount")) {
-        tokenToUse = token.toLowerCase()
-    }
-
+    const lowerCaseToken = token.toLowerCase()
     //Values returned from the endpoint are in WEI, they're in Ether. So, in order to be compliant with our interface, we should multiply the numbers by 1 ETH (10^18 WEI)
     return {
         [GasPriceCoefficient.REGULAR]: {
-            estimatedFee: BigNutils(data.transactionCost[keys[0]][tokenToUse]).multiply(
+            estimatedFee: BigNutils(data.transactionCost[keys[0]][lowerCaseToken]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
-            maxFee: BigNutils(data.transactionCost[keys[0]][tokenToUse]).multiply(
+            maxFee: BigNutils(data.transactionCost[keys[0]][lowerCaseToken]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
             priorityFee: BigNutils("0"),
         },
         [GasPriceCoefficient.MEDIUM]: {
-            estimatedFee: BigNutils(data.transactionCost[keys[1]][tokenToUse]).multiply(
+            estimatedFee: BigNutils(data.transactionCost[keys[1]][lowerCaseToken]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
-            maxFee: BigNutils(data.transactionCost[keys[1]][tokenToUse]).multiply(
+            maxFee: BigNutils(data.transactionCost[keys[1]][lowerCaseToken]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
             priorityFee: BigNutils("0"),
         },
         [GasPriceCoefficient.HIGH]: {
-            estimatedFee: BigNutils(data.transactionCost[keys[2]][tokenToUse]).multiply(
+            estimatedFee: BigNutils(data.transactionCost[keys[2]][lowerCaseToken]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
-            maxFee: BigNutils(data.transactionCost[keys[2]][tokenToUse]).multiply(
+            maxFee: BigNutils(data.transactionCost[keys[2]][lowerCaseToken]).multiply(
                 ethers.utils.parseEther("1").toString(),
             ),
             priorityFee: BigNutils("0"),
@@ -73,32 +67,20 @@ const buildTransactionCost = (
     }
 }
 
-const allowedTokens = [VET.symbol, B3TR.symbol, "vetWithSmartAccount", "b3trWithSmartAccount"]
+const allowedTokens = [VET.symbol, B3TR.symbol]
 
 export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }: Args) => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const {
         data,
-        isFetching: isFeesLoading,
-        isLoading: isFeesFirstTimeLoading,
+        isFetching: isLoading,
+        isLoading: isFirstTimeLoading,
     } = useQuery({
         queryKey: ["GenericDelegatorEstimate", clauses, signer],
         queryFn: () => estimateGenericDelegatorFees({ clauses, signer, networkType: selectedNetwork.type }),
-        enabled: clauses?.length > 0 && isValidGenericDelegatorNetwork(selectedNetwork.type),
+        enabled: isValidGenericDelegatorNetwork(selectedNetwork.type),
         refetchInterval: 10000,
         placeholderData: keepPreviousData,
-    })
-
-    const {
-        data: delegatorAddressResponse,
-        isFetching: isDelegatorLoading,
-        isLoading: isDelegatorFirstTimeLoading,
-    } = useQuery({
-        queryKey: ["GenericDelegatorDepositAddress", selectedNetwork.type],
-        queryFn: () => getDelegatorDepositAddress({ networkType: selectedNetwork.type }),
-        enabled: clauses?.length > 0 && isValidGenericDelegatorNetwork(selectedNetwork.type),
-        placeholderData: keepPreviousData,
-        refetchInterval: 5 * 60 * 1000,
     })
 
     const allLegacyOptions = useMemo(() => {
@@ -114,11 +96,6 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
             allowedTokens.map(tk => [tk, buildTransactionCost(data, ["regular", "medium", "high"], tk)!]),
         )
     }, [data])
-
-    const depositAccount = useMemo(() => {
-        if (delegatorAddressResponse === undefined) return undefined
-        return (delegatorAddressResponse as unknown as { depositAccount: string }).depositAccount
-    }, [delegatorAddressResponse])
 
     const legacyOptions = useMemo(() => {
         if (allLegacyOptions === undefined) return undefined
@@ -140,12 +117,9 @@ export const useGenericDelegationFees = ({ clauses, signer, token, isGalactica }
         [allGalacticaOptions, allLegacyOptions, isGalactica],
     )
 
-    const isLoading = isFeesLoading || isDelegatorLoading
-    const isFirstTimeLoading = isFeesFirstTimeLoading || isDelegatorFirstTimeLoading
-
     const memoized = useMemo(
-        () => ({ isLoading, options, allOptions, isFirstTimeLoading, depositAccount }),
-        [allOptions, isFirstTimeLoading, isLoading, options, depositAccount],
+        () => ({ isLoading, options, allOptions, isFirstTimeLoading }),
+        [allOptions, isFirstTimeLoading, isLoading, options],
     )
 
     return memoized

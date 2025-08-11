@@ -5,7 +5,7 @@ import { DelegationType } from "~Model/Delegation"
 import axios from "axios"
 import { Routes } from "~Navigation"
 import { WalletEncryptionKeyHelper } from "~Components"
-import { Transaction } from "@vechain/sdk-core"
+import { Transaction, Secp256k1 } from "@vechain/sdk-core"
 
 jest.mock("axios")
 
@@ -60,6 +60,20 @@ jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
         encryptWallet: jest.fn(),
         init: jest.fn(),
     },
+}))
+
+// Mock Generic Delegator and validation
+jest.mock("~Networking/GenericDelegator", () => {
+    const actual = jest.requireActual("~Networking/GenericDelegator")
+    return {
+        ...actual,
+        delegateGenericDelegator: jest.fn(),
+    }
+})
+
+jest.mock("~Utils/GenericDelegatorUtils", () => ({
+    ...jest.requireActual("~Utils/GenericDelegatorUtils"),
+    validateGenericDelegatorTx: jest.fn().mockResolvedValue({ valid: true }),
 }))
 
 describe("useSignTransaction", () => {
@@ -213,7 +227,6 @@ describe("useSignTransaction", () => {
                 }),
             )
         })
-
         it("no url throws error", async () => {
             const { result } = renderHook(
                 () =>
@@ -234,6 +247,68 @@ describe("useSignTransaction", () => {
             const res = await result.current.signTransaction()
 
             expect(res).toEqual(SignStatus.DELEGATION_FAILURE)
+        })
+    })
+
+    describe("signAndSendTransaction - generic delegation", () => {
+        it("signs the newTx returned by the generic delegator endpoint", async () => {
+            // Build a modified transaction (different nonce) to act as newTx from delegator
+            const body = vetTransaction1.body as any
+            const modifiedTx = Transaction.of({
+                chainTag: body.chainTag,
+                blockRef: body.blockRef,
+                expiration: body.expiration,
+                clauses: body.clauses,
+                gas: body.gas,
+                dependsOn: body.dependsOn,
+                nonce: "0xdeadbeef",
+                ...(body.maxFeePerGas && body.maxPriorityFeePerGas
+                    ? { maxFeePerGas: body.maxFeePerGas, maxPriorityFeePerGas: body.maxPriorityFeePerGas }
+                    : { gasPriceCoef: body.gasPriceCoef }),
+                ...(body.reserved ? { reserved: body.reserved } : {}),
+            })
+            const newRaw = `0x${Buffer.from(modifiedTx.encoded).toString("hex")}`
+
+            // Mock delegator to return the modified raw
+            const { delegateGenericDelegator } = require("~Networking/GenericDelegator") as {
+                delegateGenericDelegator: jest.Mock
+            }
+            delegateGenericDelegator.mockResolvedValue({
+                signature: "0x" + "a".repeat(128) + "00", // 65 bytes signature hex
+                address: "0x1111111111111111111111111111111111111111",
+                origin: "0x2222222222222222222222222222222222222222",
+                raw: newRaw,
+            })
+
+            const signSpy = jest
+                .spyOn(Secp256k1, "sign")
+                // return dummy 65-byte sig, capture input hash for assertion
+                .mockImplementation((() => new Uint8Array(65)) as any)
+
+            const { result } = renderHook(
+                () =>
+                    useSignTransaction({
+                        buildTransaction: async () => vetTransaction1,
+                        initialRoute: Routes.NFTS,
+                        selectedDelegationOption: DelegationType.URL,
+                        // Non-VTHO token and present fee → triggers generic delegator flow
+                        selectedDelegationToken: "B3TR",
+                        // any truthy value to enable generic path (validate is mocked to valid)
+                        genericDelegatorFee: {} as any,
+                    }),
+                { wrapper: TestWrapper },
+            )
+
+            const tx = (await result.current.signTransaction()) as Transaction
+            expect(tx).toBeInstanceOf(Transaction)
+
+            // Expect Secp256k1.sign called with hash computed from modifiedTx (newTx), not the original
+            expect(signSpy).toHaveBeenCalled()
+            const passedHash = Buffer.from(signSpy.mock.calls[0][0])
+            const expectedHash = Buffer.from(modifiedTx.getTransactionHash().bytes)
+            expect(passedHash.equals(expectedHash)).toBe(true)
+
+            signSpy.mockRestore()
         })
     })
 })

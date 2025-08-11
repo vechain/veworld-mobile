@@ -16,6 +16,7 @@ import {
 } from "~Hooks"
 import { useGenericDelegationFees } from "~Hooks/useGenericDelegationFees"
 import { useGenericDelegationTokens } from "~Hooks/useGenericDelegationTokens"
+import { useDelegatorDepositAddress } from "~Hooks/useDelegatorDepositAddress"
 import { useIsEnoughGas } from "~Hooks/useIsEnoughGas"
 import { useIsGalactica } from "~Hooks/useIsGalactica"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
@@ -69,6 +70,7 @@ const getGenericDelegationForSmartWallet = (
     token: string,
     genericDelegatorFees: ReturnType<typeof useGenericDelegationFees>,
     selectedFeeOption: GasPriceCoefficient,
+    depositAccount: string,
 ) => {
     if (deviceType !== DEVICE_TYPE.SMART_WALLET || genericDelegatorFees.allOptions === undefined) return undefined
 
@@ -88,7 +90,7 @@ const getGenericDelegationForSmartWallet = (
         token,
         tokenAddress: tokenAddressMap[token],
         fee: feeMap[token],
-        depositAccount: genericDelegatorFees.depositAccount ?? "",
+        depositAccount: depositAccount ?? "",
     }
 }
 
@@ -128,6 +130,7 @@ export const useTransactionScreen = ({
 
     const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
     const { tokens: availableTokens, isLoading: isLoadingTokens } = useGenericDelegationTokens()
+    const { depositAccount, isLoading: isLoadingDepositAccount } = useDelegatorDepositAddress()
 
     const [transactionClauses, setTransactionClauses] = useState<TransactionClause[]>(clauses)
     const [isLoadingClauses, setIsLoadingClauses] = useState(false)
@@ -285,6 +288,7 @@ export const useTransactionScreen = ({
             selectedDelegationToken,
             genericDelegatorFees,
             selectedFeeOption,
+            depositAccount,
         ),
     })
 
@@ -298,7 +302,7 @@ export const useTransactionScreen = ({
         initialRoute,
         selectedDelegationToken,
         genericDelegatorFee: genericDelegatorFees.options?.[selectedFeeOption].maxFee,
-        genericDelegatorDepositAccount: genericDelegatorFees.depositAccount,
+        genericDelegatorDepositAccount: depositAccount,
     })
 
     // 6. Send transaction
@@ -401,9 +405,16 @@ export const useTransactionScreen = ({
         }
     }, [checkIdentityBeforeOpening, onTransactionFailure])
 
+    const isSmartWalletLoading = useMemo(
+        () =>
+            selectedAccount.device.type === DEVICE_TYPE.SMART_WALLET &&
+            (isLoadingClauses || isLoadingDepositAccount || genericDelegatorFees.isLoading),
+        [selectedAccount.device.type, isLoadingClauses, isLoadingDepositAccount, genericDelegatorFees.isLoading],
+    )
+
     const isLoading = useMemo(
-        () => loading || loadingGas || isBiometricsEmpty || isLoadingClauses,
-        [loading, loadingGas, isBiometricsEmpty, isLoadingClauses],
+        () => loading || loadingGas || isBiometricsEmpty || isLoadingClauses || isSmartWalletLoading,
+        [loading, loadingGas, isBiometricsEmpty, isLoadingClauses, isSmartWalletLoading],
     )
 
     const fallbackToVTHO = useCallback(() => {
@@ -425,8 +436,8 @@ export const useTransactionScreen = ({
     }, [resetDelegation, selectedDelegationToken, selectedDelegationUrl])
 
     const isDisabledButtonState = useMemo(
-        () => !hasEnoughBalance || loading || isSubmitting.current || (gas?.gas ?? 0) === 0,
-        [hasEnoughBalance, loading, gas?.gas],
+        () => !hasEnoughBalance || loading || isSubmitting.current || (gas?.gas ?? 0) === 0 || isSmartWalletLoading,
+        [hasEnoughBalance, loading, gas?.gas, isSmartWalletLoading],
     )
 
     return {
