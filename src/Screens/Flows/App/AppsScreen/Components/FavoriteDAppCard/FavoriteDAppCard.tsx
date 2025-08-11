@@ -33,12 +33,12 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
         const { styles, theme } = useThemedStyles(baseStyles)
 
         return (
-            <BaseView flexDirection="row" flex={1} px={px} mb={24}>
+            <BaseView flexDirection="row" flex={1} px={px} mb={8}>
                 <BaseView
                     flexDirection="row"
                     flex={1}
                     px={4}
-                    bg={isActive ? theme.colors.actionBottomSheet.iconBackground : undefined}
+                    bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}
                     style={isActive ? styles.activeContainer : undefined}>
                     <BaseTouchable
                         disabled={isEditMode || isActive}
@@ -85,7 +85,11 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         {isEditMode ? (
                             <BaseIcon name="icon-grip-horizontal" color={theme.colors.text} size={20} />
                         ) : (
-                            <BaseIcon name="icon-star-on" color={theme.colors.disabledButton} size={20} />
+                            <BaseIcon
+                                name="icon-star-on"
+                                color={theme.colors.actionBottomSheet.favoriteIcon}
+                                size={20}
+                            />
                         )}
                     </BaseTouchable>
                 </BaseView>
@@ -105,6 +109,7 @@ const baseStyles = () =>
             alignItems: "center",
             justifyContent: "space-between",
             paddingHorizontal: 4,
+            paddingVertical: 8,
         },
         activeContainer: {
             borderRadius: 12,

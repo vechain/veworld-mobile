@@ -122,31 +122,27 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 ref={ref}
                 contentStyle={styles.bottomSheetContent}
                 leftElement={
-                    <BaseView style={styles.headerContainer}>
-                        <BaseView style={styles.headerContent}>
-                            <BaseIcon name="icon-star" size={24} color={theme.colors.favoriteHeader} />
-                        </BaseView>
+                    <BaseView style={styles.leftElement}>
+                        <BaseIcon name="icon-star" size={24} color={theme.colors.favoriteHeader} />
                     </BaseView>
                 }
                 rightElement={
-                    <BaseView style={styles.headerContainer}>
-                        <BaseView style={styles.headerContent}>
-                            {isEditingMode ? (
-                                <AnimatedSaveHeaderButton
-                                    action={onSaveReorderedDapps}
-                                    buttonTextAfterClick={LL.BTN_ORDER_SAVED()}
-                                    rounded
-                                />
-                            ) : (
-                                <ReorderIconHeaderButton
-                                    action={() => {
-                                        setIsEditingMode(true)
-                                    }}
-                                    style={styles.reorderIcon}
-                                    rounded
-                                />
-                            )}
-                        </BaseView>
+                    <BaseView style={styles.rightElement}>
+                        {isEditingMode ? (
+                            <AnimatedSaveHeaderButton
+                                action={onSaveReorderedDapps}
+                                buttonTextAfterClick={LL.BTN_ORDER_SAVED()}
+                                rounded
+                            />
+                        ) : (
+                            <ReorderIconHeaderButton
+                                action={() => {
+                                    setIsEditingMode(true)
+                                }}
+                                style={styles.reorderIcon}
+                                rounded
+                            />
+                        )}
                     </BaseView>
                 }
                 title={LL.FAVOURITES_DAPPS_TITLE()}
@@ -195,15 +191,11 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingHorizontal: 20,
             color: theme.colors.favoriteHeader,
         },
-        headerContainer: {
-            borderBottomWidth: StyleSheet.hairlineWidth,
-            borderBottomColor: "rgba(255, 255, 255, 0.1)",
-            paddingHorizontal: 8,
+        leftElement: {
+            marginLeft: 8,
         },
-        headerContent: {
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+        rightElement: {
+            marginRight: 8,
         },
         listContentContainer: {
             flexGrow: 1,
@@ -215,7 +207,10 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopLeftRadius: 24,
         },
         reorderIcon: {
+            borderColor: theme.colors.actionBottomSheet.border,
             backgroundColor: theme.colors.actionBottomSheet.iconBackground,
-            borderWidth: 0,
+            color: theme.colors.actionBottomSheet.icon,
+            borderWidth: 1,
+            borderRadius: 6,
         },
     })

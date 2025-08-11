@@ -118,11 +118,14 @@ export type Colors = {
     }
     actionBottomSheet: {
         background: string
+        border: string
         iconBackground: string
+        isActiveBackground: string
         text: string
         icon: string
         activeIcon: string
         activeIconBackground: string
+        favoriteIcon: string
         activeText: string
         disabledText: string
         disabledIcon: string
@@ -460,11 +463,14 @@ const light: Colors = {
     },
     actionBottomSheet: {
         background: COLORS.GREY_50,
-        iconBackground: COLORS.GREY_100,
+        border: COLORS.GREY_200,
+        isActiveBackground: COLORS.GREY_100,
+        iconBackground: COLORS.TRANSPARENT,
         text: COLORS.GREY_700,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
         activeIconBackground: COLORS.WHITE,
+        favoriteIcon: COLORS.DARK_PURPLE_DISABLED,
         activeText: COLORS.WHITE,
         disabledText: COLORS.GREY_400,
         disabledIcon: COLORS.GREY_400,
@@ -703,11 +709,14 @@ const dark: Colors = {
     },
     actionBottomSheet: {
         background: COLORS.PURPLE,
-        iconBackground: COLORS.PURPLE_DISABLED,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        iconBackground: COLORS.DARK_PURPLE_DISABLED,
+        isActiveBackground: COLORS.PURPLE_DISABLED,
         text: COLORS.WHITE,
         icon: COLORS.GREY_100,
         activeIcon: COLORS.GREY_100,
         activeIconBackground: COLORS.DARK_PURPLE_DISABLED,
+        favoriteIcon: COLORS.LIME_GREEN,
         activeText: COLORS.DARK_PURPLE_DISABLED,
         disabledText: COLORS.DARK_PURPLE_DISABLED,
         disabledIcon: COLORS.DARK_PURPLE_DISABLED,
