@@ -7,6 +7,7 @@ import { useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { EcosystemSection } from "./Components/Ecosystem"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 
@@ -48,7 +49,8 @@ export const AppsScreen = () => {
             body={
                 <>
                     {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
-                    <BaseSpacer height={128} />
+                    <BaseSpacer height={48} />
+                    <EcosystemSection />
                 </>
             }
         />

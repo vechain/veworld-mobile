@@ -116,7 +116,7 @@ export const Layout = ({
                         refreshControl={refreshControl}
                         testID={scrollViewTestID ?? "Layout_ScrollView"}
                         scrollEnabled={scrollViewContentHeight > scrollViewHeight}
-                        style={noMargin ? {} : styles.scrollView}
+                        style={[noMargin ? {} : styles.scrollView, { backgroundColor: bg }]}
                         contentContainerStyle={{
                             paddingBottom: isAndroid() ? androidOnlyTabBarBottomMargin : _iosOnlyTabBarBottomMargin,
                         }}>
