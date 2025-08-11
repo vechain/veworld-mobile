@@ -3,7 +3,6 @@ import { render, fireEvent, waitFor } from "@testing-library/react-native"
 import React from "react"
 import { View } from "react-native"
 import { DiscoveryDApp } from "~Constants"
-import { FavoritesBottomSheet } from "./FavoritesBottomSheet"
 
 const mockDispatch = jest.fn()
 const mockOnDAppPress = jest.fn()
@@ -16,17 +15,28 @@ jest.mock("~Hooks", () => ({
         onClose: jest.fn(),
     }),
     useTheme: () => ({
+        isDark: true,
         colors: {
             text: "#FFFFFF",
             background: "#000000",
+            favoriteHeader: "#FFFFFF",
+            actionBottomSheet: {
+                background: "#111111",
+                border: "#222222",
+                iconBackground: "#333333",
+                icon: "#FFFFFF",
+            },
         },
     }),
     useThemedStyles: () => ({
         styles: {
             container: {},
-            headerContainer: {},
-            headerContent: {},
+            leftElement: {},
+            rightElement: {},
             listContentContainer: {},
+            layout: {},
+            reorderIcon: {},
+            bottomSheetContent: {},
         },
     }),
 }))
@@ -95,17 +105,6 @@ jest.mock("~Components", () => ({
     ),
     BaseIcon: ({ name, testID }: any) => <View testID={testID || `icon-${name}`} />,
     BaseSpacer: ({ testID }: any) => <View testID={testID || "spacer"} />,
-    FavoriteDAppCard: ({ dapp, onPress, onLongPress, onRightActionPress, isEditMode }: any) => (
-        <View testID={`favorite-dapp-card-${dapp.id || dapp.href}`}>
-            <View testID={`dapp-press-${dapp.id || dapp.href}`} onTouchEnd={() => onPress(dapp)} />
-            <View
-                testID={`dapp-long-press-${dapp.id || dapp.href}`}
-                onTouchEnd={() => onLongPress && onLongPress(dapp)}
-            />
-            <View testID={`dapp-more-press-${dapp.id || dapp.href}`} onTouchEnd={() => onRightActionPress(dapp)} />
-            {isEditMode && <View testID={`edit-mode-indicator-${dapp.id || dapp.href}`} />}
-        </View>
-    ),
     ListEmptyResults: ({ subtitle }: any) => (
         <View testID="empty-results">
             <View testID="empty-results-text">{subtitle}</View>
@@ -118,14 +117,30 @@ jest.mock("~Components", () => ({
     ReorderIconHeaderButton: ({ action }: any) => <View testID="reorder-button" onTouchEnd={action} />,
 }))
 
+jest.mock("./FavoriteDAppCard", () => ({
+    FavoriteDAppCard: ({ dapp, onPress, onLongPress, onRightActionPress, isEditMode }: any) => (
+        <View testID={`favorite-dapp-card-${dapp.id || dapp.href}`}>
+            <View testID={`dapp-press-${dapp.id || dapp.href}`} onTouchEnd={() => onPress(dapp)} />
+            <View
+                testID={`dapp-long-press-${dapp.id || dapp.href}`}
+                onTouchEnd={() => onLongPress && onLongPress(dapp)}
+            />
+            <View testID={`dapp-more-press-${dapp.id || dapp.href}`} onTouchEnd={() => onRightActionPress(dapp)} />
+            {isEditMode && <View testID={`edit-mode-indicator-${dapp.id || dapp.href}`} />}
+        </View>
+    ),
+}))
+
 jest.mock("../../DiscoverScreen/Components/Bottomsheets", () => ({
-    DAppOptionsBottomSheet: React.forwardRef(({ onClose, onNavigateToDApp }: any) => (
+    DAppOptionsBottomSheet: React.forwardRef(({ onClose, onNavigateToDApp }: any, _ref) => (
         <View testID="dapp-options-bottom-sheet">
             <View testID="options-close-button" onTouchEnd={onClose} />
             <View testID="options-navigate-button" onTouchEnd={() => onNavigateToDApp && onNavigateToDApp()} />
         </View>
     )),
 }))
+
+import { FavoritesBottomSheet } from "./FavoritesBottomSheet"
 
 const mockDApps: DiscoveryDApp[] = [
     {
