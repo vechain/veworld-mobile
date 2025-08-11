@@ -1,9 +1,9 @@
-import React from "react"
-import { BaseBottomSheet, BaseIcon, BaseRadioGroup, BaseSpacer, BaseText, BaseView, RadioButton } from "~Components"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import React from "react"
 import { StyleSheet } from "react-native"
-import { useThemedStyles } from "~Hooks"
+import { BaseBottomSheet, BaseIcon, BaseRadioGroup, BaseSpacer, BaseText, BaseView, RadioButton } from "~Components"
 import { ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 export type SortableKeys = "asc" | "desc" | "newest"
 
@@ -16,7 +16,7 @@ export const SortDAppsBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     ({ sortedBy, onSortChange }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const { LL } = useI18nContext()
-        const buttons: RadioButton[] = [
+        const buttons: RadioButton<SortableKeys>[] = [
             {
                 id: "asc",
                 label: LL.BTN_ALPHABETIC_ASC(),
@@ -51,7 +51,7 @@ export const SortDAppsBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         buttons={buttons}
                         selectedId={sortedBy}
                         action={item => {
-                            onSortChange(item.id as SortableKeys)
+                            onSortChange(item.id)
                         }}
                     />
                     <BaseSpacer height={12} />

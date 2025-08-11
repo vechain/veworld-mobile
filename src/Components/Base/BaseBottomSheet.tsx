@@ -25,7 +25,10 @@ import { BaseView } from "./BaseView"
 const OPENED_STATE = 0
 const CLOSED_STATE = -1
 
-export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints" | "children"> & {
+export type BaseBottomSheetProps<TData = unknown> = Omit<
+    BottomSheetModalProps,
+    "snapPoints" | "children" | "enablePanDownToClose"
+> & {
     /**
      * The content of the modal.
      */
@@ -84,6 +87,7 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
     bottomSafeArea?: boolean
     /**
      * Enable pan down to close
+     * @default true
      */
     enablePanDownToClose?: boolean
     /**
@@ -108,6 +112,7 @@ const BaseBottomSheetContent = ({
     leftElement,
     rightElement,
     children,
+    floating,
 }: PropsWithChildren<{
     bottomSafeArea: boolean
     bottomSafeAreaSize: number
@@ -119,6 +124,7 @@ const BaseBottomSheetContent = ({
     title?: string
     leftElement?: ReactNode
     rightElement?: ReactNode
+    floating: boolean
 }>) => {
     const headerStyles = useMemo(
         () => ({
@@ -158,7 +164,7 @@ const BaseBottomSheetContent = ({
                 <BottomSheetView style={contentViewStyle}>
                     {renderHeader()}
                     {children}
-                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                    {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
                 </BottomSheetView>
             )}
             {footer && (
@@ -335,7 +341,8 @@ const _BaseBottomSheet = <TData,>(
                         snapPoints={snapPoints}
                         title={title}
                         leftElement={leftElement}
-                        rightElement={rightElement}>
+                        rightElement={rightElement}
+                        floating={floating}>
                         {children(p?.data)}
                     </BaseBottomSheetContent>
                 )
@@ -350,7 +357,8 @@ const _BaseBottomSheet = <TData,>(
                     snapPoints={snapPoints}
                     title={title}
                     leftElement={leftElement}
-                    rightElement={rightElement}>
+                    rightElement={rightElement}
+                    floating={floating}>
                     {children}
                 </BaseBottomSheetContent>
             )}

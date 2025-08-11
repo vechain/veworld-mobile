@@ -7,6 +7,7 @@ import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
+import { EcosystemSection } from "./Components/Ecosystem"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 import { useAppSelector } from "~Storage/Redux/Hooks"
@@ -71,6 +72,7 @@ export const AppsScreen = () => {
                     {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
                     <BaseSpacer height={48} />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
+                    <EcosystemSection />
                 </>
             }
         />
