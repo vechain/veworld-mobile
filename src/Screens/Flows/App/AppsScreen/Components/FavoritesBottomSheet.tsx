@@ -19,7 +19,7 @@ import {
 import { FavoriteDAppCard } from "./FavoriteDAppCard"
 import { ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
-import { reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { reorderBookmarks, removeBookmark, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { DAppOptionsBottomSheet } from "../../DiscoverScreen/Components/Bottomsheets"
 import { useDAppActions } from "../../DiscoverScreen/Hooks"
@@ -41,17 +41,27 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
-
     const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
 
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
-    const onMorePress = useCallback(
+    const toggleBookmarkForDApp = useCallback(
         (dapp: DiscoveryDApp) => {
-            setSelectedDApp(dapp)
-            onOpenDAppOptions()
+            dispatch(removeBookmark(dapp))
         },
-        [onOpenDAppOptions],
+        [dispatch],
+    )
+
+    const onMorePress = useCallback(
+        (dapp: DiscoveryDApp, isEditMode: boolean) => {
+            setSelectedDApp(dapp)
+            if (isEditMode) {
+                onOpenDAppOptions()
+            } else {
+                toggleBookmarkForDApp(dapp)
+            }
+        },
+        [onOpenDAppOptions, toggleBookmarkForDApp],
     )
 
     const onLongPress = useCallback(() => {
@@ -140,6 +150,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                                     setIsEditingMode(true)
                                 }}
                                 style={styles.reorderIcon}
+                                iconColor={theme.colors.actionBottomSheet.icon}
                                 rounded
                             />
                         )}
@@ -209,7 +220,6 @@ const baseStyles = (theme: ColorThemeType) =>
         reorderIcon: {
             borderColor: theme.colors.actionBottomSheet.border,
             backgroundColor: theme.colors.actionBottomSheet.iconBackground,
-            color: theme.colors.actionBottomSheet.icon,
             borderWidth: 1,
             borderRadius: 6,
         },
