@@ -108,31 +108,19 @@ const parseNodeDelegatedEvents = async (
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
 ): Promise<NodeDelegatedEventData[]> => {
     try {
-        // Prefer expanded block to avoid per-transaction receipt calls
         const expanded = await thor.blocks.getBlockExpanded(beat.id)
 
-        let events: NodeDelegatedEventData[] = []
-        if (expanded?.transactions) {
-            events = processExpandedTransactionsForEvents(
-                expanded.transactions.map(tx => ({ id: tx.id, origin: tx.origin, outputs: tx.outputs })),
-                nodeManagementContract,
-                beat,
-                receiptProcessor,
-            )
-        } else {
-            const compressed = await thor.blocks.getBlockCompressed(beat.id)
-            if (!compressed?.transactions) {
-                debug(ERROR_EVENTS.STARGATE, `No transactions found in block ${beat.number}`)
-                return []
-            }
-            events = await processTransactionIdsForEvents(
-                compressed.transactions,
-                nodeManagementContract,
-                thor,
-                beat,
-                receiptProcessor,
-            )
+        if (!expanded?.transactions || expanded.transactions.length === 0) {
+            debug(ERROR_EVENTS.STARGATE, `No transactions found in block ${beat.number}`)
+            return []
         }
+
+        const events: NodeDelegatedEventData[] = processExpandedTransactionsForEvents(
+            expanded.transactions.map(tx => ({ id: tx.id, origin: tx.origin, outputs: tx.outputs })),
+            nodeManagementContract,
+            beat,
+            receiptProcessor,
+        )
         debug(ERROR_EVENTS.STARGATE, `Parsed ${events.length} NodeDelegated events from beat ${beat.number}`)
 
         return events
@@ -176,34 +164,6 @@ const processExpandedTransactionsForEvents = (
     return events
 }
 
-const processTransactionIdsForEvents = async (
-    transactions: string[],
-    nodeManagementContract: string,
-    thor: ThorClient,
-    beat: Beat,
-    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
-): Promise<NodeDelegatedEventData[]> => {
-    const settledResults = await Promise.allSettled(
-        transactions.map(txId =>
-            processTransactionForEvents(txId, nodeManagementContract, thor, beat, receiptProcessor),
-        ),
-    )
-
-    const events: NodeDelegatedEventData[] = []
-    for (const result of settledResults) {
-        if (result.status === "fulfilled") {
-            events.push(...result.value)
-        } else {
-            debug(ERROR_EVENTS.STARGATE, "Error processing transaction", result.reason)
-        }
-    }
-
-    return events
-}
-
-/**
- * Process a single transaction to find NodeDelegated events
- */
 const processExpandedTransactionForEvents = (
     tx: ExpandedTx,
     nodeManagementContract: string,
@@ -217,39 +177,6 @@ const processExpandedTransactionForEvents = (
     if (!outputs || outputs.length === 0) return []
 
     const analyzedOutputs = receiptProcessor.analyzeReceipt(outputs, txOrigin)
-    const found: NodeDelegatedEventData[] = analyzedOutputs
-        .filter(isNodeDelegatedOutput)
-        .filter(out => out.address?.toLowerCase() === nodeManagementContract.toLowerCase())
-        .map(out => {
-            return {
-                nodeId: String(out.params.nodeId),
-                delegatee: out.params.delegatee,
-                isDelegated: Boolean(out.params.delegated),
-                blockNumber: beat.number,
-                txId,
-                contractAddress: nodeManagementContract,
-                owner: txOrigin,
-            } satisfies NodeDelegatedEventData
-        })
-
-    return found
-}
-
-const processTransactionForEvents = async (
-    txId: string,
-    nodeManagementContract: string,
-    thor: ThorClient,
-    beat: Beat,
-    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
-): Promise<NodeDelegatedEventData[]> => {
-    const receipt = await thor.transactions.getTransactionReceipt(txId)
-
-    if (!receipt?.outputs) {
-        return []
-    }
-
-    const txOrigin = receipt.meta.txOrigin ?? ""
-    const analyzedOutputs = receiptProcessor.analyzeReceipt(receipt.outputs as unknown as InspectableOutput[], txOrigin)
     const found: NodeDelegatedEventData[] = analyzedOutputs
         .filter(isNodeDelegatedOutput)
         .filter(out => out.address?.toLowerCase() === nodeManagementContract.toLowerCase())
