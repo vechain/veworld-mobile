@@ -98,11 +98,10 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
         expect(errorMock).toHaveBeenCalledWith("STARGATE", "Error handling NodeDelegated event:", expect.any(Error))
     })
 
-    it("falls back to compressed block and logs when no transactions are present", async () => {
+    it("logs when expanded block has no transactions", async () => {
         const thor = {
             blocks: {
-                getBlockExpanded: jest.fn().mockResolvedValue(null),
-                getBlockCompressed: jest.fn().mockResolvedValue(null),
+                getBlockExpanded: jest.fn().mockResolvedValue({ transactions: [] }),
             },
             transactions: { getTransactionReceipt: jest.fn() },
         } as any
@@ -140,6 +139,8 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
     })
 
     it("triggers refetch per matching NodeDelegated event for managed owner", async () => {
+        jest.useFakeTimers()
+
         getReceiptProcessorMock.mockReturnValue({
             analyzeReceipt: () => [
                 {
@@ -169,7 +170,12 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             managedAddresses: ["0xOWNER"],
         })
 
-        expect(refetch).toHaveBeenCalledTimes(1)
+        // Fast-forward timers to trigger the setTimeout
+        jest.runAllTimers()
+
+        expect(refetch).toHaveBeenCalledTimes(2) // Called for both owner and delegatee
+
+        jest.useRealTimers()
     })
 
     it("ignores events when contract address mismatch", async () => {
@@ -201,30 +207,39 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
         expect(refetch).not.toHaveBeenCalled()
     })
 
-    it("falls back to compressed receipts and continues on tx errors", async () => {
-        // force compressed path
-        const thor = {
-            blocks: {
-                getBlockExpanded: jest.fn().mockResolvedValue(null),
-                getBlockCompressed: jest.fn().mockResolvedValue({ transactions: ["tx1", "tx2"] }),
-            },
-            transactions: {
-                getTransactionReceipt: jest
-                    .fn()
-                    .mockRejectedValueOnce(new Error("boom"))
-                    .mockResolvedValueOnce({
-                        meta: { txOrigin: "0xOWNER" },
-                        outputs: [{ events: [createEvent()] }],
-                    }),
-            },
-        } as any
-        getReceiptProcessorMock.mockReturnValue({
-            analyzeReceipt: () => [
+    it("continues processing when individual transactions have errors", async () => {
+        jest.useFakeTimers()
+
+        // Mock receipt processor to throw on first call, succeed on second
+        const analyzeReceiptMock = jest
+            .fn()
+            .mockImplementationOnce(() => {
+                throw new Error("tx processing error")
+            })
+            .mockImplementationOnce(() => [
                 {
                     clauseIndex: 0,
                     name: "NodeDelegated(indexed uint256,indexed address,bool)",
                     params: { nodeId: "123", delegatee: "0xDELEGATEE", delegated: true },
                     address: NODE_MGMT,
+                },
+            ])
+
+        getReceiptProcessorMock.mockReturnValue({
+            analyzeReceipt: analyzeReceiptMock,
+        })
+
+        const thor = createThorClient({
+            transactions: [
+                {
+                    id: "tx1",
+                    origin: "0xOWNER",
+                    outputs: [{ events: [createEvent()] }],
+                },
+                {
+                    id: "tx2",
+                    origin: "0xOWNER",
+                    outputs: [{ events: [createEvent()] }],
                 },
             ],
         })
@@ -238,7 +253,12 @@ describe("StargateEventHandlers - handleNodeDelegatedEvent", () => {
             managedAddresses: ["0xOWNER"],
         })
 
-        expect(refetch).toHaveBeenCalledTimes(1)
-        expect(thor.transactions.getTransactionReceipt).toHaveBeenCalledTimes(2)
+        // Fast-forward timers to trigger the setTimeout
+        jest.runAllTimers()
+
+        expect(refetch).toHaveBeenCalledTimes(2) // Called for both owner and delegatee
+        expect(analyzeReceiptMock).toHaveBeenCalledTimes(2)
+
+        jest.useRealTimers()
     })
 })
