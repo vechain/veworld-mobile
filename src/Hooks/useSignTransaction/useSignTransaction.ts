@@ -134,10 +134,13 @@ export const useSignTransaction = ({
                 })
                 throw new Error("Delegated hardware wallet not supported yet")
             }
-            // If delegating to a smart wallet, sign it from the delegation smart wallet
+            // Unable to delegate to a smart wallet as the underlying EOA needs to be funded
             if (delegationDevice.type === DEVICE_TYPE.SMART_WALLET) {
-                const signature = await signTransactionWithSmartWallet(transaction)
-                return Buffer.from(signature.toString("hex"))
+                showWarningToast({
+                    text1: LL.HEADS_UP(),
+                    text2: LL.SMART_WALLET_DELEGATION_NOT_SUPPORTED(),
+                })
+                throw new Error("Smart wallet not supported yet")
             }
 
             const delegationWallet = await WalletEncryptionKeyHelper.decryptWallet({

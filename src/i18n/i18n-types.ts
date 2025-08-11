@@ -7291,6 +7291,10 @@ Thanks for your patience!
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
+	 * Smart wallet not supported yet
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
 	 * Typed Data cannot be signed with a Ledger device. Please select another account.
 	 */
 	LEDGER_DEVICE_ALERT: () => LocalizedString

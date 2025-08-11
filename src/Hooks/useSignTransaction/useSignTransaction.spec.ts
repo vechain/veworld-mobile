@@ -340,7 +340,7 @@ describe("useSignTransaction - SMART_WALLET", () => {
         expect(tx).toBeInstanceOf(Transaction)
     })
 
-    it("should be possible to use the smart account for delegation with SMART_WALLET device", async () => {
+    it("should not be possible to use the smart account for delegation with SMART_WALLET device", async () => {
         __senderDevice = smartWalletDevice
         const smartDelegationAccount = { ...account1D1, device: smartWalletDevice }
 
@@ -355,12 +355,7 @@ describe("useSignTransaction - SMART_WALLET", () => {
             { wrapper: TestWrapper },
         )
 
-        const res = await result.current.signTransaction()
-
-        // Called once for delegation smart wallet and once for sender smart wallet
-        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledTimes(2)
-        expect(mockSignTransactionWithSmartWallet).toHaveBeenCalledWith(expect.any(Transaction))
-        expect(res instanceof Transaction).toBe(true)
+        await expect(result.current.signTransaction()).resolves.toEqual(SignStatus.DELEGATION_FAILURE)
     })
 
     it("URL delegation uses smart wallet owner address as origin", async () => {
