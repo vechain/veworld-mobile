@@ -8,7 +8,7 @@ export const ANIMATION_TIMING = {
     containerExpand: 400,
     containerCollapse: 400,
     paddingChange: 400,
-    totalDuration: 450,
+    totalDuration: 300,
 }
 
 export const SMOOTH_EASING = Easing.bezier(0.25, 0.1, 0.25, 1)
