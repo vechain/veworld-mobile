@@ -27,7 +27,7 @@ export const EcosystemSection = () => {
     const openSortApps = useCallback(() => onOpenSortBs(), [onOpenSortBs])
 
     return (
-        <BaseView gap={16}>
+        <BaseView gap={16} px={16}>
             <TopSection onPress={openSortApps} />
             <FiltersSection selectedFilter={selectedFilter} onPress={setSelectedFilter} />
             <DAppsList

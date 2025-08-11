@@ -49,6 +49,7 @@ export const AppsScreen = () => {
             body={
                 <>
                     {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
+                    <BaseSpacer height={48} />
                     <EcosystemSection />
                 </>
             }
