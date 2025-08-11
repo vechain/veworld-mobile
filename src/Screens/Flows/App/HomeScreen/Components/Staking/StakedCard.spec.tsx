@@ -20,15 +20,23 @@ describe("StakedCard", () => {
         jest.clearAllMocks()
     })
     it("should render the component", async () => {
+        const mockAccount = { address: "0x123" } as AccountWithDevice
         ;(useUserNodes as jest.Mock).mockReturnValue({
-            stargateNodes: [{}],
+            stargateNodes: [
+                {
+                    nodeId: "1",
+                    xNodeOwner: "0x123",
+                    isXNodeDelegator: true,
+                    isXNodeDelegatee: false,
+                },
+            ],
             isLoading: false,
         })
         ;(useUserStargateNfts as jest.Mock).mockReturnValue({
             ownedStargateNfts: [],
             isLoading: false,
         })
-        const { findByText } = render(<StakedCard account={{} as AccountWithDevice} />, {
+        const { findByText } = render(<StakedCard account={mockAccount} />, {
             wrapper: TestWrapper,
         })
 
@@ -37,8 +45,16 @@ describe("StakedCard", () => {
     })
 
     it("should render the component with balance", async () => {
+        const mockAccount = { address: "0x456" } as AccountWithDevice
         ;(useUserNodes as jest.Mock).mockReturnValue({
-            stargateNodes: [{}],
+            stargateNodes: [
+                {
+                    nodeId: "2",
+                    xNodeOwner: "0x456",
+                    isXNodeDelegator: false,
+                    isXNodeDelegatee: true,
+                },
+            ],
             isLoading: false,
         })
         ;(useUserStargateNfts as jest.Mock).mockReturnValue({
@@ -49,7 +65,7 @@ describe("StakedCard", () => {
             ],
             isLoading: false,
         })
-        const { findByText } = render(<StakedCard account={{} as AccountWithDevice} />, {
+        const { findByText } = render(<StakedCard account={mockAccount} />, {
             wrapper: TestWrapper,
         })
 
