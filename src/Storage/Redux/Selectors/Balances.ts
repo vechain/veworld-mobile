@@ -2,7 +2,7 @@ import { createSelector } from "@reduxjs/toolkit"
 import { BigNumber } from "bignumber.js"
 import sortBy from "lodash/sortBy"
 import { VET, VTHO } from "~Constants"
-import { FungibleToken, FungibleTokenWithBalance } from "~Model"
+import { FungibleToken, FungibleTokenWithBalance, NETWORK_TYPE } from "~Model"
 import { RootState } from "~Storage/Redux/Types"
 import { compareAddresses, isVechainToken } from "~Utils/AddressUtils/AddressUtils"
 import { selectSelectedAccount } from "./Account"
@@ -14,6 +14,7 @@ import {
     selectSuggestedTokens,
     selectVot3Address,
 } from "./Tokens"
+import { AddressUtils } from "~Utils"
 
 export const selectBalancesState = (state: RootState) => state.balances
 
@@ -303,3 +304,14 @@ export const selectMissingSuggestedTokens = createSelector(
         )
     },
 )
+
+export const selectMainnetVETBalanceForAllAccounts = createSelector([selectBalancesState], balances => {
+    const netBalances = balances[NETWORK_TYPE.MAIN]
+    if (!netBalances) return []
+
+    return Object.entries(netBalances).flatMap(([userAddress, _balances]) => ({
+        address: userAddress,
+        balance:
+            _balances.find(balance => AddressUtils.compareAddresses(balance.tokenAddress, VET.address))?.balance ?? "0",
+    }))
+})
