@@ -279,11 +279,20 @@ const processNodeDelegatedEvent = async (eventData: NodeDelegatedEventData, refe
             isDelegated: eventData.isDelegated,
             blockNumber: eventData.blockNumber,
             txId: eventData.txId,
+            owner: eventData.owner,
         })
 
-        // Trigger refetch of Stargate data
-        // This will automatically update UI components (StakedCard, AccountFiatBalance, etc.)
-        refetchStargateData()
+        // Add a small delay to allow blockchain state to propagate before refetching
+        setTimeout(() => {
+            // Trigger refetch of Stargate data for the node owner (current account)
+            refetchStargateData()
+
+            // Also invalidate queries for the delegatee account if it's different from current account
+            if (eventData.delegatee !== eventData.owner) {
+                debug(ERROR_EVENTS.STARGATE, "Also invalidating queries for delegatee:", eventData.delegatee)
+                refetchStargateData()
+            }
+        }, 2000)
     } catch (err) {
         error(ERROR_EVENTS.STARGATE, "Error processing NodeDelegated event:", err)
     }

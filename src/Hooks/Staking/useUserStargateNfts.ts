@@ -117,7 +117,7 @@ export const useUserStargateNfts = (stargateNodes: NodeInfo[] = [], isLoadingNod
                 stargateDelegationAddress,
             ),
         enabled,
-        staleTime: 60 * 5 * 1000,
+        staleTime: 0,
     })
 
     const hasCallErrors = useMemo(() => {

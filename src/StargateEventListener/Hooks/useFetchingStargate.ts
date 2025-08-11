@@ -14,49 +14,89 @@ export const useFetchingStargate = () => {
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const queryClient = useQueryClient()
 
-    const refetchStargateData = useCallback(async () => {
-        const networkConfig = getStargateNetworkConfig(network.type)
+    const refetchStargateData = useCallback(
+        async (targetAddress?: string) => {
+            const networkConfig = getStargateNetworkConfig(network.type)
 
-        if (!networkConfig) {
-            debug(ERROR_EVENTS.STARGATE, `No Stargate configuration found for network: ${network.type}`)
-            return
-        }
+            if (!networkConfig) {
+                debug(ERROR_EVENTS.STARGATE, `No Stargate configuration found for network: ${network.type}`)
+                return
+            }
 
-        debug(ERROR_EVENTS.STARGATE, "Stargate data refetch triggered for network:", network.type)
-
-        try {
-            // Invalidate all Stargate-related queries for the current network and account
-            // This follows the same pattern as HomeScreen's invalidateStargateQueries
-            await queryClient.invalidateQueries({
-                predicate(query) {
-                    // Only invalidate userStargateNodes and userStargateNfts queries
-                    if (!["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string)) return false
-
-                    // Ensure query has enough parameters
-                    if (query.queryKey.length < 3) return false
-
-                    // Match current network
-                    if (query.queryKey[1] !== network.type) return false
-
-                    // Match current account address (for userStargateNodes) or any account (for userStargateNfts)
-                    const queryAddress = query.queryKey[2] as string | undefined
-                    if (!queryAddress || queryAddress !== selectedAccount.address) return false
-
-                    return true
-                },
-            })
-
-            // Additional explicit invalidations are not required; the predicate above handles it
-
+            const accountToInvalidate = targetAddress || selectedAccount.address
             debug(
                 ERROR_EVENTS.STARGATE,
-                "Successfully invalidated Stargate queries for account:",
-                selectedAccount.address,
+                "Stargate data refetch triggered for network:",
+                network.type,
+                "account:",
+                accountToInvalidate,
             )
-        } catch (error) {
-            debug(ERROR_EVENTS.STARGATE, "Error invalidating Stargate queries:", error)
-        }
-    }, [network.type, selectedAccount.address, queryClient])
+
+            try {
+                // Get all matching queries before invalidation
+                const matchingQueries = queryClient.getQueriesData({
+                    predicate(query) {
+                        const matches =
+                            ["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string) &&
+                            query.queryKey.length >= 3 &&
+                            query.queryKey[1] === network.type &&
+                            query.queryKey[2] === accountToInvalidate
+
+                        if (matches) {
+                            debug(ERROR_EVENTS.STARGATE, "Found matching query to invalidate:", query.queryKey)
+                        }
+                        return matches
+                    },
+                })
+
+                debug(ERROR_EVENTS.STARGATE, `Found ${matchingQueries.length} queries to invalidate`)
+
+                // Invalidate all Stargate-related queries for the target network and account
+                // This follows the same pattern as HomeScreen's invalidateStargateQueries
+                await queryClient.invalidateQueries({
+                    predicate(query) {
+                        // Only invalidate userStargateNodes and userStargateNfts queries
+                        if (!["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string))
+                            return false
+
+                        // Ensure query has enough parameters
+                        if (query.queryKey.length < 3) return false
+
+                        // Match current network
+                        if (query.queryKey[1] !== network.type) return false
+
+                        // Match target account address
+                        const queryAddress = query.queryKey[2] as string | undefined
+                        if (!queryAddress || queryAddress !== accountToInvalidate) return false
+
+                        debug(ERROR_EVENTS.STARGATE, "Invalidating query:", query.queryKey)
+                        return true
+                    },
+                })
+
+                // Also force refetch the queries to make sure they update immediately
+                await queryClient.refetchQueries({
+                    predicate(query) {
+                        return (
+                            ["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string) &&
+                            query.queryKey.length >= 3 &&
+                            query.queryKey[1] === network.type &&
+                            query.queryKey[2] === accountToInvalidate
+                        )
+                    },
+                })
+
+                debug(
+                    ERROR_EVENTS.STARGATE,
+                    "Successfully invalidated and refetched Stargate queries for account:",
+                    accountToInvalidate,
+                )
+            } catch (error) {
+                debug(ERROR_EVENTS.STARGATE, "Error invalidating Stargate queries:", error)
+            }
+        },
+        [network.type, selectedAccount.address, queryClient],
+    )
 
     return {
         refetchStargateData,

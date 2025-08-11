@@ -76,6 +76,15 @@ export const TransferEventListener: React.FC = () => {
                 // Store the beat in the cache for use in other parts of the app
                 dispatch(updateBeat(beat))
 
+                // ~ STARGATE EVENTS (process regardless of token transfers)
+                await handleNodeDelegatedEvent({
+                    beat,
+                    network,
+                    thor,
+                    refetchStargateData,
+                    managedAddresses: visibleAccounts.map(acc => acc.address),
+                })
+
                 if (relevantAccounts.length === 0) return
 
                 // Delay for 5 seconds to allow for the block to be indexed
@@ -125,13 +134,7 @@ export const TransferEventListener: React.FC = () => {
                     informUser: forTokens,
                 })
 
-                // ~ STARGATE EVENTS
-                await handleNodeDelegatedEvent({
-                    beat,
-                    network,
-                    thor,
-                    refetchStargateData,
-                })
+                // ~ STARGATE EVENTS (already processed above)
             } catch (e) {
                 error(ERROR_EVENTS.TOKENS, e)
             }
