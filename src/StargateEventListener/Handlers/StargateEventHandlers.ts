@@ -130,9 +130,6 @@ const parseNodeDelegatedEvents = async (
     }
 }
 
-/**
- * Process all transactions in a block to find NodeDelegated events
- */
 type ExpandedTx = {
     id: string
     origin?: string
@@ -145,59 +142,37 @@ const processExpandedTransactionsForEvents = (
     beat: Beat,
     receiptProcessor: ReturnType<typeof getReceiptProcessor>,
 ): NodeDelegatedEventData[] => {
-    const events: NodeDelegatedEventData[] = []
+    // Analyze each transaction once, then flatten all outputs to events.
+    const analyzedPerTx: { origin: string; outputs: ReceiptOutput[] }[] = []
 
     for (const tx of transactions) {
         try {
-            const transactionEvents = processExpandedTransactionForEvents(
-                tx,
-                nodeManagementContract,
-                beat,
-                receiptProcessor,
-            )
-            events.push(...transactionEvents)
+            const origin = tx.origin ?? ""
+            const analyzed = receiptProcessor.analyzeReceipt(tx.outputs, origin)
+            analyzedPerTx.push({ origin, outputs: analyzed })
         } catch (txError) {
             debug(ERROR_EVENTS.STARGATE, "Error processing transaction", txError)
         }
     }
 
-    return events
+    return analyzedPerTx.flatMap(({ origin, outputs }) =>
+        outputs
+            .filter(isNodeDelegatedOutput)
+            .filter(out => out.address?.toLowerCase() === nodeManagementContract.toLowerCase())
+            .map(out => {
+                return {
+                    nodeId: String(out.params.nodeId),
+                    delegatee: out.params.delegatee,
+                    isDelegated: Boolean(out.params.delegated),
+                    blockNumber: beat.number,
+                    txId: "",
+                    contractAddress: nodeManagementContract,
+                    owner: origin,
+                } satisfies NodeDelegatedEventData
+            }),
+    )
 }
 
-const processExpandedTransactionForEvents = (
-    tx: ExpandedTx,
-    nodeManagementContract: string,
-    beat: Beat,
-    receiptProcessor: ReturnType<typeof getReceiptProcessor>,
-): NodeDelegatedEventData[] => {
-    const txId = tx.id
-    const txOrigin = tx.origin ?? ""
-    const outputs = tx.outputs
-
-    if (!outputs || outputs.length === 0) return []
-
-    const analyzedOutputs = receiptProcessor.analyzeReceipt(outputs, txOrigin)
-    const found: NodeDelegatedEventData[] = analyzedOutputs
-        .filter(isNodeDelegatedOutput)
-        .filter(out => out.address?.toLowerCase() === nodeManagementContract.toLowerCase())
-        .map(out => {
-            return {
-                nodeId: String(out.params.nodeId),
-                delegatee: out.params.delegatee,
-                isDelegated: Boolean(out.params.delegated),
-                blockNumber: beat.number,
-                txId,
-                contractAddress: nodeManagementContract,
-                owner: txOrigin,
-            } satisfies NodeDelegatedEventData
-        })
-
-    return found
-}
-
-/**
- * Process a single NodeDelegated event
- */
 const processNodeDelegatedEvent = async (eventData: NodeDelegatedEventData, refetchStargateData: () => void) => {
     try {
         debug(ERROR_EVENTS.STARGATE, "Processing NodeDelegated event:", {
