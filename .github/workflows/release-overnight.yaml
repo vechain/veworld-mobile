@@ -62,7 +62,7 @@ jobs:
                     --jq '.items[] | {number: .number, title: .title, merged_at: .closed_at}' | tr "'" ",")
 
                   echo "Recent PRs: $recent_prs"
-                  echo "recent_prs='$recent_prs'" >> $GITHUB_OUTPUT
+                  echo "recent_prs=$recent_prs" >> $GITHUB_OUTPUT
 
               
                   if [ "$merged_prs_count" -gt 0 ] || [ "$MERGED_OVERRIDE" ]; then
