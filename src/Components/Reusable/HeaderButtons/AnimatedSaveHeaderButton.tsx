@@ -12,7 +12,6 @@ type Props = {
     testID?: string
     buttonTextAfterClick?: LocalizedString
     rounded?: boolean
-    circled?: boolean
 }
 
 const { fontFamily } = typography

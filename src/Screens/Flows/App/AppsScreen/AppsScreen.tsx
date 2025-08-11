@@ -71,8 +71,8 @@ export const AppsScreen = () => {
                     )}
                     {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
                     <BaseSpacer height={48} />
-                    <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
                     <EcosystemSection />
+                    <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
                 </>
             }
         />
