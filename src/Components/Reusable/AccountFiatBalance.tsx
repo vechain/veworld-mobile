@@ -13,7 +13,7 @@ import {
     selectVot3Address,
     useAppSelector,
 } from "~Storage/Redux"
-import { BalanceUtils, BigNutils } from "~Utils"
+import { AddressUtils, BalanceUtils, BigNutils } from "~Utils"
 
 type AccountFiatBalanceProps = {
     isVisible?: boolean
@@ -51,6 +51,7 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
     const nonVechaiTokensFiat = useNonVechainTokenFiat()
 
     const { stargateNodes, isLoading: loadingNodes } = useUserNodes(accountAddress)
+
     const { ownedStargateNfts: stargateNfts, isLoading: loadingStargateNfts } = useUserStargateNfts(
         stargateNodes,
         loadingNodes,
@@ -63,8 +64,13 @@ const AccountFiatBalance: React.FC<AccountFiatBalanceProps> = (props: AccountFia
     }, [stargateNfts])
 
     const stargateFiatBalance = useMemo(() => {
+        // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
+        const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, accountAddress))
+
+        if (!isNodeOwner) return "0"
+
         return BalanceUtils.getFiatBalance(totalStargateVet.toString, tokenWithInfoVET.exchangeRate ?? 1, VET.decimals)
-    }, [totalStargateVet, tokenWithInfoVET.exchangeRate])
+    }, [totalStargateVet, tokenWithInfoVET.exchangeRate, stargateNodes, accountAddress])
 
     const isLoading = useMemo(() => _isLoading || loadingStargateNfts, [_isLoading, loadingStargateNfts])
 
