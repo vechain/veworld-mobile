@@ -1,14 +1,13 @@
 import { Easing, LinearTransition } from "react-native-reanimated"
 
 export const ANIMATION_TIMING = {
-    fontSizeChange: 300,
-    labelTransition: 300,
+    labelTransition: 200,
     contentFadeDelay: 50,
-    contentFade: 350,
-    containerExpand: 400,
+    contentFade: 300,
+    containerExpand: 300,
     containerCollapse: 400,
-    paddingChange: 400,
-    totalDuration: 300,
+    paddingChange: 300,
+    totalDuration: 400,
 }
 
 export const SMOOTH_EASING = Easing.bezier(0.25, 0.1, 0.25, 1)
