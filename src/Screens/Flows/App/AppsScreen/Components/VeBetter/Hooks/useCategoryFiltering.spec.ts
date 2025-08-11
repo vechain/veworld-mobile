@@ -42,7 +42,7 @@ jest.mock("./useCategories", () => ({
     ],
 }))
 
-describe("useX2ECategoryFiltering", () => {
+describe("useCategoryFiltering", () => {
     const mockApps = [
         {
             id: "app-1",

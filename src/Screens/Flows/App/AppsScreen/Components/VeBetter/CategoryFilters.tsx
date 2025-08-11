@@ -1,4 +1,4 @@
-import React, { useMemo } from "react"
+import React, { useMemo, useRef, useEffect, useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { ScrollView } from "react-native-gesture-handler"
 import { BaseChip, BaseView } from "~Components"
@@ -15,6 +15,8 @@ interface CategoryFiltersProps {
 
 export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange }: CategoryFiltersProps) => {
     const categories = useCategories()
+    const scrollViewRef = useRef<ScrollView>(null)
+    const hasScrolledRef = useRef(false)
 
     const filterOptions = useMemo(() => {
         return categories.map(category => {
@@ -35,12 +37,32 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
         ))
     }, [filterOptions])
 
+    const scrollToSelectedCategory = useCallback(() => {
+        const selectedIndex = categories.findIndex(cat => cat.id === selectedCategory.id)
+        if (selectedIndex !== -1 && scrollViewRef.current && !hasScrolledRef.current) {
+            const chipWidth = 110
+            const scrollPosition = Math.max(0, selectedIndex * chipWidth - 100)
+
+            scrollViewRef.current.scrollTo({
+                x: scrollPosition,
+                animated: false,
+            })
+            hasScrolledRef.current = true
+        }
+    }, [selectedCategory.id, categories])
+
+    useEffect(() => {
+        hasScrolledRef.current = false
+    }, [selectedCategory.id])
+
     return (
         <BaseView style={styles.filtersContainer}>
             <ScrollView
+                ref={scrollViewRef}
                 horizontal
                 showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.filtersScrollContainer}>
+                contentContainerStyle={styles.filtersScrollContainer}
+                onLayout={scrollToSelectedCategory}>
                 {filterChips}
             </ScrollView>
         </BaseView>
