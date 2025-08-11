@@ -4,14 +4,18 @@ import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { VbdCarousel } from "./Components/Common/VbdCarousel/VbdCarousel"
+import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
+import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+
+    const isNormalUser = useIsNormalUser()
 
     const goToSearch = useCallback(() => {
         nav.navigate(Routes.APPS_SEARCH)
@@ -42,13 +46,10 @@ export const AppsScreen = () => {
                 </BaseView>
             }
             body={
-                <VbdCarousel
-                    appIds={[
-                        "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",
-                        "0x9643ed1637948cc571b23f836ade2bdb104de88e627fa6e8e3ffef1ee5a1739a",
-                        "0x6a825c7d259075d70a88cbd1932604ee3009777e14645ced6881a32b9c165ca4",
-                    ]}
-                />
+                <>
+                    {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
+                    <BaseSpacer height={128} />
+                </>
             }
         />
     )
