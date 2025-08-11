@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import { memo, default as React } from "react"
+import React from "react"
 import { StyleSheet } from "react-native"
 import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
@@ -17,7 +17,7 @@ type Props = {
     account: AccountWithDevice
 }
 
-export const StakedCard = memo(({ account }: Props) => {
+export const StakedCard = ({ account }: Props) => {
     const { LL } = useI18nContext()
     const { styles } = useThemedStyles(baseStyles)
 
@@ -29,7 +29,15 @@ export const StakedCard = memo(({ account }: Props) => {
 
     const vetWithCompleteInfo = useTokenWithCompleteInfo(VET)
 
-    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return null
+    // Check if user has any active relationship with nodes (owner, delegator, or delegatee)
+    const hasActiveNodes = stargateNodes.some(
+        node =>
+            AddressUtils.compareAddresses(node.xNodeOwner, account.address) || // Is owner
+            node.isXNodeDelegator || // Is delegator
+            node.isXNodeDelegatee, // Is delegatee
+    )
+
+    if (!isLoadingNfts && !isLoadingNodes && (!hasActiveNodes || stargateNodes.length === 0)) return null
 
     return (
         <BaseView>
@@ -48,7 +56,7 @@ export const StakedCard = memo(({ account }: Props) => {
             </BaseTouchable>
         </BaseView>
     )
-})
+}
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
