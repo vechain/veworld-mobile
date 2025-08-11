@@ -16,7 +16,7 @@ export const useDelegatorDepositAddress = () => {
 
     const depositAccount = useMemo(() => {
         if (delegatorAddressResponse === undefined) return ""
-        return (delegatorAddressResponse as unknown as { depositAccount: string }).depositAccount
+        return delegatorAddressResponse.depositAccount
     }, [delegatorAddressResponse])
 
     return {

@@ -108,4 +108,6 @@ export const delegateGenericDelegatorSmartAccount = ({
     )
 
 export const getDelegatorDepositAddress = ({ networkType }: { networkType: NETWORK_TYPE }) =>
-    executeIfValidNetwork(networkType, "/api/v1/deposit/account", url => fetchFromEndpoint<string>(url))
+    executeIfValidNetwork(networkType, "/api/v1/deposit/account", url =>
+        fetchFromEndpoint<{ depositAccount: string }>(url),
+    )
