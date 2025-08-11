@@ -631,6 +631,7 @@
   "ESTIMATED_FEE": "Estimated fee",
   "ESTIMATED_GAS_FEE": "Estimated gas fee",
   "FACE_ID": "Face ID",
+  "FAVORITES_SUGGESTION_BANNER_TITLE": "Add your favorite apps",
   "FAVOURITES_BOTTOM_SHEET_TITLE": "Favourites",
   "FAVOURITES_DAPPS_NO_RECORDS": "Could not find any dapps with this name",
   "FAVOURITES_DAPPS_SEARCH_PLACEHOLDER": "Search",
@@ -1187,6 +1188,5 @@
   "WELCOME_BACK": "Welcome back",
   "WE_FOUND": "We found ",
   "WOULD_YOU_LIKE_TO": "Would you like to ",
-  "YESTERDAY": "Yesterday",
-  "FAVORITES_SUGGESTION_BANNER_TITLE": "Add your favorite apps"
+  "YESTERDAY": "Yesterday"
 }
