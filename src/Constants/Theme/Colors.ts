@@ -844,7 +844,7 @@ const dark: Colors = {
         emptyStateColor: COLORS.WHITE,
     },
     newBottomSheet: {
-        background: COLORS.WHITE,
+        background: COLORS.PURPLE,
     },
 }
 
