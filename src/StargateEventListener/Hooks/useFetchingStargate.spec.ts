@@ -4,6 +4,8 @@ import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 
 // Mocks
 const invalidateQueriesMock = jest.fn().mockResolvedValue(undefined)
+const refetchQueriesMock = jest.fn().mockResolvedValue(undefined)
+const getQueriesDataMock = jest.fn().mockReturnValue([])
 
 jest.mock("@tanstack/react-query", () => {
     const actual = jest.requireActual("@tanstack/react-query")
@@ -11,6 +13,8 @@ jest.mock("@tanstack/react-query", () => {
         ...actual,
         useQueryClient: () => ({
             invalidateQueries: invalidateQueriesMock,
+            refetchQueries: refetchQueriesMock,
+            getQueriesData: getQueriesDataMock,
         }),
     }
 })
@@ -36,6 +40,7 @@ jest.mock("~Utils", () => ({
 describe("useFetchingStargate", () => {
     beforeEach(() => {
         jest.clearAllMocks()
+        getQueriesDataMock.mockReturnValue([])
     })
 
     it("should early return when no Stargate network config is available", async () => {
@@ -48,6 +53,7 @@ describe("useFetchingStargate", () => {
         })
 
         expect(invalidateQueriesMock).not.toHaveBeenCalled()
+        expect(refetchQueriesMock).not.toHaveBeenCalled()
     })
 
     it("should invalidate Stargate-related queries via predicate when config is available", async () => {
@@ -60,8 +66,14 @@ describe("useFetchingStargate", () => {
             await result.current.refetchStargateData()
         })
 
-        // Only predicate-based invalidation is expected
+        // Should call both invalidateQueries and refetchQueries with predicates
         expect(invalidateQueriesMock).toHaveBeenCalledWith(expect.objectContaining({ predicate: expect.any(Function) }))
-        expect(invalidateQueriesMock.mock.calls.length).toBe(1)
+        expect(refetchQueriesMock).toHaveBeenCalledWith(expect.objectContaining({ predicate: expect.any(Function) }))
+        expect(getQueriesDataMock).toHaveBeenCalledWith(expect.objectContaining({ predicate: expect.any(Function) }))
+
+        // Should be called exactly once each
+        expect(invalidateQueriesMock).toHaveBeenCalledTimes(1)
+        expect(refetchQueriesMock).toHaveBeenCalledTimes(1)
+        expect(getQueriesDataMock).toHaveBeenCalledTimes(1)
     })
 })
