@@ -1963,6 +1963,14 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_CONTRACT: string
 	/**
+	 * Y​o​u​ ​c​a​n​ ​r​e​c​o​n​n​e​c​t​ ​a​n​y​t​i​m​e​ ​—​ ​r​e​m​o​v​i​n​g​ ​i​t​ ​j​u​s​t​ ​m​e​a​n​s​ ​y​o​u​'​l​l​ ​n​e​e​d​ ​t​o​ ​l​o​g​ ​i​n​ ​a​g​a​i​n​ ​n​e​x​t​ ​t​i​m​e​.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_DELETE_TITLE: string
+	/**
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
 	CONNECTED_APP_DESCRIPTION: string
@@ -4177,11 +4185,11 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * S​i​g​n
+	 * L​o​g​i​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
 	/**
-	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 * L​o​g​i​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
@@ -4212,6 +4220,10 @@ type RootTranslation = {
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
+	/**
+	 * M​a​n​a​g​i​n​g
+	 */
+	STARGATE_DELEGATEE_LABEL: string
 	/**
 	 * L​o​c​k​e​d
 	 */
@@ -6751,6 +6763,14 @@ Thanks for your patience!
 	 */
 	CONNECTED_APP_CONTRACT: () => LocalizedString
 	/**
+	 * You can reconnect anytime — removing it just means you'll need to log in again next time.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: () => LocalizedString
+	/**
+	 * Disconnect connected app
+	 */
+	CONNECTED_APP_DELETE_TITLE: () => LocalizedString
+	/**
 	 * Description
 	 */
 	CONNECTED_APP_DESCRIPTION: () => LocalizedString
@@ -8933,11 +8953,11 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Sign
+	 * Login
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
 	/**
-	 * Sign certificate
+	 * Login
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
@@ -8968,6 +8988,10 @@ Are you sure you want to continue?
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
+	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
 	/**
 	 * Locked
 	 */

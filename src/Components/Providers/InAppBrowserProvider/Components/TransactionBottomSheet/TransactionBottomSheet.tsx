@@ -18,6 +18,7 @@ import {
 } from "~Hooks"
 import { TransactionRequest } from "~Model"
 import {
+    addConnectedDiscoveryApp,
     addPendingDappTransactionActivity,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
@@ -60,6 +61,8 @@ export const TransactionBottomSheetContent = ({
     })
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const dispatch = useAppDispatch()
 
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
@@ -120,6 +123,17 @@ export const TransactionBottomSheetContent = ({
         dappRequest: request,
         onNavigateToLedger,
     })
+
+    const onSign = useCallback(() => {
+        dispatch(
+            addConnectedDiscoveryApp({
+                name: request.appName,
+                href: new URL(request.appUrl).hostname,
+                connectedTime: Date.now(),
+            }),
+        )
+        return onSubmit()
+    }, [dispatch, onSubmit, request.appName, request.appUrl])
 
     return (
         <>
@@ -190,7 +204,7 @@ export const TransactionBottomSheetContent = ({
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <BaseButton
-                    action={onSubmit}
+                    action={onSign}
                     flex={1}
                     disabled={
                         AccountUtils.isObservedAccount(selectedAccount) ||
