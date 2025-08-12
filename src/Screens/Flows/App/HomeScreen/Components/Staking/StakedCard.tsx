@@ -29,15 +29,8 @@ export const StakedCard = ({ account }: Props) => {
 
     const vetWithCompleteInfo = useTokenWithCompleteInfo(VET)
 
-    // Check if user has any active relationship with nodes (owner, delegator, or delegatee)
-    const hasActiveNodes = stargateNodes.some(
-        node =>
-            AddressUtils.compareAddresses(node.xNodeOwner, account.address) || // Is owner
-            node.isXNodeDelegator || // Is delegator
-            node.isXNodeDelegatee, // Is delegatee
-    )
-
-    if (!isLoadingNfts && !isLoadingNodes && (!hasActiveNodes || stargateNodes.length === 0)) return null
+    // getUserNodes already returns only nodes where user has an active relationship
+    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return null
 
     return (
         <BaseView>
