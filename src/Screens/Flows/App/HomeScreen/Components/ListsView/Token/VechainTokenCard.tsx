@@ -21,7 +21,7 @@ export const VechainTokenCard = memo(
         const { change24h, isTokensOwnedLoading, fiatBalance, exchangeRate, isPositive24hChange, isLoading } =
             useTokenCardFiatInfo(tokenWithInfo)
 
-        const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
+        const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
 
         const renderFiatBalance = useMemo(() => {
             if (isTokensOwnedLoading)
@@ -40,7 +40,7 @@ export const VechainTokenCard = memo(
                 return <BaseText typographyFont="bodyBold">{LL.ERROR_PRICE_FEED_NOT_AVAILABLE()}</BaseText>
             return (
                 <FiatBalance
-                    typographyFont="subSubTitleSemiBold"
+                    typographyFont="bodySemiBold"
                     color={tokenValueLabelColor}
                     balances={[fiatBalance]}
                     isVisible={isBalanceVisible}
