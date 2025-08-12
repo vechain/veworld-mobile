@@ -16,13 +16,12 @@ import {
     ListEmptyResults,
     ReorderIconHeaderButton,
 } from "~Components"
-import { FavoriteDAppCard } from "./FavoriteDAppCard"
 import { ColorThemeType, DiscoveryDApp } from "~Constants"
-import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
-import { reorderBookmarks, removeBookmark, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { useTheme, useThemedStyles } from "~Hooks"
+import { removeBookmark, reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
-import { DAppOptionsBottomSheet } from "../../DiscoverScreen/Components/Bottomsheets"
-import { useDAppActions } from "../../DiscoverScreen/Hooks"
+import { useDAppActions } from "../Hooks"
+import { FavoriteDAppCard } from "./FavoriteDAppCard"
 
 type Props = {
     onClose: () => void
@@ -30,38 +29,23 @@ type Props = {
 
 export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
     const [isEditingMode, setIsEditingMode] = useState(false)
-    const [selectedDApp, setSelectedDApp] = useState<DiscoveryDApp | undefined>()
-
     const { styles } = useThemedStyles(baseStyles)
     const theme = useTheme()
     const { LL } = useI18nContext()
     const { onDAppPress } = useDAppActions()
     const dispatch = useAppDispatch()
 
-    const { ref: dappOptionsRef, onOpen: onOpenDAppOptions, onClose: onCloseDAppOptions } = useBottomSheetModal()
-
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
 
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
-    const toggleBookmarkForDApp = useCallback(
-        (dapp: DiscoveryDApp) => {
+    const onMorePress = useCallback(
+        (dapp: DiscoveryDApp, isEditMode: boolean) => {
+            if (isEditMode) return
             dispatch(removeBookmark(dapp))
         },
         [dispatch],
-    )
-
-    const onMorePress = useCallback(
-        (dapp: DiscoveryDApp, isEditMode: boolean) => {
-            setSelectedDApp(dapp)
-            if (isEditMode) {
-                onOpenDAppOptions()
-            } else {
-                toggleBookmarkForDApp(dapp)
-            }
-        },
-        [onOpenDAppOptions, toggleBookmarkForDApp],
     )
 
     const onLongPress = useCallback(() => {
@@ -113,14 +97,6 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         dispatch(reorderBookmarks(reorderedDapps))
         setIsEditingMode(false)
     }, [dispatch, reorderedDapps])
-
-    const handleNavigateToDApp = useCallback(() => {
-        setSelectedDApp(undefined)
-        onCloseDAppOptions()
-        if (ref && typeof ref !== "function" && ref.current) {
-            ref.current.dismiss()
-        }
-    }, [onCloseDAppOptions, ref])
 
     useEffect(() => {
         if (reorderedDapps.length !== bookmarkedDApps.length) setReorderedDapps(bookmarkedDApps)
@@ -180,15 +156,6 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     </NestableScrollContainer>
                 </BaseView>
             </BaseBottomSheet>
-            <DAppOptionsBottomSheet
-                ref={dappOptionsRef}
-                onClose={() => {
-                    setSelectedDApp(undefined)
-                    onCloseDAppOptions()
-                }}
-                onNavigateToDApp={handleNavigateToDApp}
-                selectedDApp={selectedDApp}
-            />
         </>
     )
 })
