@@ -9,6 +9,12 @@ const mockOnDAppPress = jest.fn()
 const mockUseAppSelector = jest.fn()
 const mockRemoveBookmark = jest.fn(dapp => ({ type: "REMOVE_BOOKMARK", payload: dapp }))
 
+// Mock selector implementations
+const mockSelectBookmarkedDapps = jest.fn()
+const mockSelectTabs = jest.fn(() => [])
+const mockSelectSelectedNetwork = jest.fn(() => ({ type: "MAIN" }))
+const mockSelectNotificationFeautureEnabled = jest.fn(() => true)
+
 jest.mock("~Hooks", () => ({
     useBottomSheetModal: () => ({
         ref: { current: null },
@@ -41,17 +47,39 @@ jest.mock("~Hooks", () => ({
         },
     }),
     useAnalyticTracking: () => jest.fn(),
+    useVisitedUrls: () => ({
+        addVisitedUrl: jest.fn(),
+    }),
+    useCameraPermissions: () => ({
+        checkPermissions: jest.fn(),
+    }),
+    useBrowserTab: () => ({
+        navigateWithTab: jest.fn(),
+    }),
 }))
 
 jest.mock("~Storage/Redux", () => ({
-    selectBookmarkedDapps: jest.fn(),
-    useAppSelector: jest.fn(() => mockUseAppSelector()),
+    selectBookmarkedDapps: mockSelectBookmarkedDapps,
+    useAppSelector: jest.fn(selector => {
+        if (selector === mockSelectBookmarkedDapps) return mockUseAppSelector()
+        if (selector === mockSelectTabs) return mockSelectTabs()
+        if (selector === mockSelectSelectedNetwork) return mockSelectSelectedNetwork()
+        if (selector === mockSelectNotificationFeautureEnabled) return mockSelectNotificationFeautureEnabled()
+        return mockUseAppSelector()
+    }),
     useAppDispatch: () => mockDispatch,
     reorderBookmarks: jest.fn(),
     removeBookmark: mockRemoveBookmark,
+    openTab: jest.fn(),
+    setCurrentTab: jest.fn(),
+    selectTabs: mockSelectTabs,
+    addNavigationToDApp: jest.fn(),
+    increaseDappVisitCounter: jest.fn(),
+    selectNotificationFeautureEnabled: mockSelectNotificationFeautureEnabled,
+    selectSelectedNetwork: mockSelectSelectedNetwork,
 }))
 
-jest.mock("../../DiscoverScreen/Hooks", () => ({
+jest.mock("../Hooks", () => ({
     useDAppActions: () => ({
         onDAppPress: mockOnDAppPress,
     }),
@@ -144,6 +172,13 @@ jest.mock("../../DiscoverScreen/Components/Bottomsheets", () => ({
             <View testID="options-navigate-button" onTouchEnd={() => onNavigateToDApp && onNavigateToDApp()} />
         </View>
     )),
+}))
+
+jest.mock("@react-navigation/native", () => ({
+    ...jest.requireActual("@react-navigation/native"),
+    useNavigation: () => ({
+        navigate: jest.fn(),
+    }),
 }))
 
 import { FavoritesBottomSheet } from "./FavoritesBottomSheet"
@@ -311,7 +346,11 @@ describe("FavoritesBottomSheet", () => {
             const moreButton = getByTestId("dapp-more-press-dapp1")
             fireEvent(moreButton, "touchEnd")
 
-            expect(getByTestId("dapp-options-bottom-sheet")).toBeTruthy()
+            // In normal mode, more button removes bookmark directly
+            expect(mockDispatch).toHaveBeenCalledWith({
+                type: "REMOVE_BOOKMARK",
+                payload: mockDApps[0],
+            })
         })
 
         it("should remove bookmark when more button is pressed in normal mode", () => {
@@ -326,7 +365,7 @@ describe("FavoritesBottomSheet", () => {
             })
         })
 
-        it("should open options sheet when more button is pressed in edit mode", async () => {
+        it("should not remove bookmark when more button is pressed in edit mode", async () => {
             const { getByTestId } = renderComponent()
 
             // Enter edit mode first
@@ -344,51 +383,13 @@ describe("FavoritesBottomSheet", () => {
             const moreButton = getByTestId("dapp-more-press-dapp1")
             fireEvent(moreButton, "touchEnd")
 
-            // Should open options sheet, not remove bookmark
-            expect(getByTestId("dapp-options-bottom-sheet")).toBeTruthy()
+            // Should not remove bookmark in edit mode
             expect(mockDispatch).not.toHaveBeenCalled()
         })
     })
 
-    describe("DApp Options Integration", () => {
-        it("should handle navigation from options sheet", () => {
-            // Test the navigation callback is called properly
-            const { getByTestId } = renderComponent()
-
-            // Open options sheet
-            const moreButton = getByTestId("dapp-more-press-dapp1")
-            fireEvent(moreButton, "touchEnd")
-
-            // Verify options sheet is rendered
-            expect(getByTestId("dapp-options-bottom-sheet")).toBeTruthy()
-
-            // Trigger navigation button (this will try to call dismiss but in test environment it's ok to fail silently)
-            const navigateButton = getByTestId("options-navigate-button")
-
-            // Wrap in try-catch since the dismiss call will fail in test environment
-            try {
-                fireEvent(navigateButton, "touchEnd")
-            } catch (error: any) {
-                // Expected to fail in test environment since ref.dismiss is not available
-                expect(error.message).toContain("dismiss is not a function")
-            }
-        })
-
-        it("should handle options sheet close", () => {
-            const { getByTestId } = renderComponent()
-
-            // Open options sheet
-            const moreButton = getByTestId("dapp-more-press-dapp1")
-            fireEvent(moreButton, "touchEnd")
-
-            // Close options sheet
-            const closeButton = getByTestId("options-close-button")
-            fireEvent(closeButton, "touchEnd")
-
-            // Options sheet should still be rendered but state should be reset
-            expect(getByTestId("dapp-options-bottom-sheet")).toBeTruthy()
-        })
-    })
+    // Note: DApp Options Integration tests removed as the current implementation
+    // does not include DAppOptionsBottomSheet functionality
 
     describe("State Management", () => {
         it("should update reordered apps when bookmarked apps change", () => {
