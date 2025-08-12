@@ -1,8 +1,8 @@
 import React from "react"
 import { StyleSheet } from "react-native"
-import { useThemedStyles } from "~Hooks"
-import { ColorThemeType } from "~Constants"
 import { BaseIcon, BaseTouchable, BaseView } from "~Components/Base"
+import { ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
 
 type Props = { onPress?: () => void; isObservable: boolean }
 export const DeleteUnderlay: React.FC<Props> = ({ onPress, isObservable }) => {
@@ -10,7 +10,7 @@ export const DeleteUnderlay: React.FC<Props> = ({ onPress, isObservable }) => {
 
     return (
         <BaseView style={styles.underlayContainer}>
-            <BaseTouchable action={onPress} style={styles.underlayLeft}>
+            <BaseTouchable action={onPress} style={styles.underlayLeft} testID="DELETE_UNDERLAY_BTN">
                 <BaseIcon
                     name="icon-trash"
                     size={24}
