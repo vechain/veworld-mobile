@@ -40,7 +40,6 @@ jobs:
                 else
                   since_date=$(date -u +"%Y-%m-%dT%H:%M:%SZ" --date="22 hours ago")
                   repo=${GITHUB_REPOSITORY}
-
                   echo "Since date: $since_date"
 
                   # Fetch the total count of merged PRs since the since_date
@@ -70,7 +69,7 @@ jobs:
                   sinceRelease_prs=$(gh pr list -R $repo --base main \
                     --state merged --search "merged:>$lastReleaseTS" \
                     --json title,url,mergedAt | jq -r '.[]|"• PR #\(.url): \(.title) \(.mergedAt)"' )
-                  echo "Since Release PRs: $sinceRelease_prs
+                  echo "Since Release PRs: $sinceRelease_prs"
 
                   # Use multiline output format for GitHub Actions
                   {
