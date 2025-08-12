@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.3 (2025-08-12)</small>
+
+* build: init ([25634ab](https://github.com/vechain/veworld-mobile/commit/25634ab))
+* ci: permissions correction ([e589211](https://github.com/vechain/veworld-mobile/commit/e589211))
+
 ## <small>2.3.1 (2025-08-04)</small>
 
 * build: init ([ecfcbcc](https://github.com/vechain/veworld-mobile/commit/ecfcbcc))
