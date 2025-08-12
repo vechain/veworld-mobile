@@ -107,10 +107,10 @@ export const getAppHubIconUrl = (appId: string) => {
     return `${process.env.REACT_APP_HUB_URL}/imgs/${appId}.png`
 }
 
-const generateFaviconUrl = (url: string) => {
+const generateFaviconUrl = (url: string, { size = 48 }: { size?: number } = {}) => {
     const fullUrl = `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${url}`
     const generatedUrl = new URL(fullUrl)
-    generatedUrl.searchParams.set("size", "48")
+    generatedUrl.searchParams.set("size", size.toString())
     return generatedUrl.href
 }
 

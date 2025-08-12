@@ -107,5 +107,10 @@ describe("DAppUtils", () => {
                 `${encodedUrl}${encodeURIComponent("https://vechain.org")}`,
             )
         })
+        it("should return a url with the correct size", () => {
+            expect(DAppUtils.generateFaviconUrl("https://vechain.org", { size: 64 })).toBe(
+                `${encodedUrl.replace("size=48", "size=64")}${encodeURIComponent("https://vechain.org")}`,
+            )
+        })
     })
 })
