@@ -40,6 +40,7 @@ jest.mock("~Hooks", () => ({
             bottomSheetContent: {},
         },
     }),
+    useAnalyticTracking: () => jest.fn(),
 }))
 
 jest.mock("~Storage/Redux", () => ({
