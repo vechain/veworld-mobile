@@ -320,21 +320,9 @@ export const BaseBottomSheet = typedForwardRef(_BaseBottomSheet)
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        closeBtn: {
-            paddingHorizontal: 16,
-            alignSelf: "flex-end",
-            color: theme.colors.text,
-            position: "absolute",
-            top: 16,
-            right: 16,
-        },
         backgroundStyle: {
             backgroundColor: theme.colors.background,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
-        },
-        backgroundFloating: {
-            transform: [{ translateY: -10 }],
+            borderRadius: 24,
         },
         blurBackdrop: {
             backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT,
