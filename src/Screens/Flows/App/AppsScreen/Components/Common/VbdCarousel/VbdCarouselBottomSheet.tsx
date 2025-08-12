@@ -1,4 +1,4 @@
-import React, { ElementType, useCallback, useEffect, useMemo } from "react"
+import React, { ElementType, useCallback, useEffect, useMemo, useState } from "react"
 import { ImageBackground, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { getTimeZone } from "react-native-localize"
@@ -7,6 +7,7 @@ import {
     BaseButton,
     BaseIcon,
     BaseIconProps,
+    BaseSkeleton,
     BaseSpacer,
     BaseText,
     BaseView,
@@ -17,12 +18,14 @@ import { useBottomSheetModal, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
 
-import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
-import Animated, { runOnJS, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import Animated, { useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated"
+import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
+import { FetchAppOverviewResponse } from "~Networking/API/Types"
+import { fetchAppOverview } from "~Networking/DApps/fetchAppOverview"
+import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
 import { addBookmark, removeBookmark, selectFavoritesDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { BigNutils, DateUtils, URIUtils } from "~Utils"
-import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
-import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
+import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
 
 type VbdCarouselBottomSheetProps = {
     bannerUri?: string
@@ -35,21 +38,36 @@ type VbdCarouselBottomSheetProps = {
 
 const ANIMATION_DEFAULT = {
     timing: 600,
-    translateY: -50,
+    scale: 0.9,
+    translateY: 50,
     opacity: 0,
 }
 
-const VbdInfoColumn = ({ Icon, title, description }: { Icon: ElementType; title: string; description: string }) => {
+const VbdInfoColumn = ({
+    Icon,
+    title,
+    description,
+    isLoading,
+}: {
+    Icon: ElementType
+    title: string
+    description: string
+    isLoading?: boolean
+}) => {
     const theme = useTheme()
     const color = useMemo(() => (!theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.LIME_GREEN), [theme.isDark])
 
     return (
-        <BaseView justifyContent="center" alignItems="center" p={12}>
+        <BaseView justifyContent="center" alignItems="center" p={12} w={33.33}>
             <Icon fill={color} color={color} size={20} />
             <BaseText typographyFont="smallCaptionRegular" mt={8} mb={4}>
                 {title}
             </BaseText>
-            <BaseText typographyFont="bodyMedium">{description}</BaseText>
+            {isLoading ? (
+                <BaseSkeleton animationDirection="horizontalLeft" width={"100%"} height={19} />
+            ) : (
+                <BaseText typographyFont="bodyMedium">{description}</BaseText>
+            )}
         </BaseView>
     )
 }
@@ -69,20 +87,28 @@ export const VbdCarouselBottomSheet = ({
     const theme = useTheme()
     const { ref, onOpen, onClose } = useBottomSheetModal()
     const opacity = useSharedValue(ANIMATION_DEFAULT.opacity)
+    const scale = useSharedValue(ANIMATION_DEFAULT.scale)
     const translateY = useSharedValue(ANIMATION_DEFAULT.translateY)
     const favorites = useAppSelector(selectFavoritesDapps)
     const dispatch = useAppDispatch()
     const { onDAppPress } = useDAppActions()
-
+    const [appOverview, setAppOverview] = useState<FetchAppOverviewResponse | null>(null)
+    const [isLoading, setIsLoading] = useState(true)
     const isFavorite = favorites.some(favorite => URIUtils.compareURLs(favorite.href, app.external_url))
 
     const handleClose = useCallback(() => {
-        opacity.value = withTiming(ANIMATION_DEFAULT.opacity, { duration: 100 }, () => {
-            translateY.value = withTiming(ANIMATION_DEFAULT.translateY)
-            runOnJS(onClose)()
-            runOnJS(setIsOpen)(false)
-        })
-    }, [onClose, opacity, setIsOpen, translateY])
+        setTimeout(() => {
+            onClose()
+            setIsOpen(false)
+        }, ANIMATION_DEFAULT.timing / 2)
+    }, [onClose, setIsOpen])
+
+    const animateClose = useCallback(() => {
+        scale.value = withTiming(ANIMATION_DEFAULT.scale, { duration: ANIMATION_DEFAULT.timing })
+        translateY.value = withTiming(ANIMATION_DEFAULT.translateY, { duration: ANIMATION_DEFAULT.timing })
+        opacity.value = withTiming(ANIMATION_DEFAULT.opacity, { duration: ANIMATION_DEFAULT.timing })
+        handleClose()
+    }, [handleClose, opacity, scale, translateY])
 
     const onToggleFavorite = useCallback(() => {
         if (!isFavorite) {
@@ -92,27 +118,38 @@ export const VbdCarouselBottomSheet = ({
         }
     }, [app, dispatch, isFavorite])
 
+    const getAppOverview = useCallback(async () => {
+        if (app.id && !appOverview) {
+            setIsLoading(true)
+            const overview = await fetchAppOverview(app.id)
+            setAppOverview(overview)
+            setIsLoading(false)
+        }
+    }, [app, appOverview])
+
     const onOpenApp = useCallback(() => {
         onDAppPress(app)
-        handleClose()
-    }, [app, onDAppPress, handleClose])
+        animateClose()
+    }, [app, onDAppPress, animateClose])
 
     useEffect(() => {
         if (isOpen) {
             opacity.value = withTiming(1, { duration: ANIMATION_DEFAULT.timing })
+            scale.value = withTiming(1, { duration: ANIMATION_DEFAULT.timing })
             translateY.value = withTiming(0, { duration: ANIMATION_DEFAULT.timing })
+            getAppOverview()
             onOpen()
         } else {
-            handleClose()
+            animateClose()
         }
-    }, [isOpen, onOpen, onClose, opacity, handleClose, translateY])
+    }, [isOpen, onOpen, onClose, opacity, animateClose, scale, translateY, getAppOverview])
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
             opacity: opacity.value,
-            transform: [{ translateY: translateY.value }],
+            transform: [{ scale: scale.value }, { translateY: translateY.value }],
         }
-    }, [opacity, translateY])
+    }, [opacity, scale])
 
     const date = useMemo(() => {
         return DateUtils.formatDateTime(
@@ -123,8 +160,14 @@ export const VbdCarouselBottomSheet = ({
         )
     }, [app.createdAtTimestamp, locale])
 
-    const usersNum = useMemo(() => BigNutils(12347700).toCompactString(locale), [locale])
-    const actionsNum = useMemo(() => BigNutils(12347700).toCompactString(locale), [locale])
+    const usersNum = useMemo(
+        () => BigNutils(appOverview?.totalUniqueUserInteractions ?? 0).toCompactString(locale),
+        [locale, appOverview],
+    )
+    const actionsNum = useMemo(
+        () => BigNutils(appOverview?.actionsRewarded ?? 0).toCompactString(locale),
+        [locale, appOverview],
+    )
 
     return (
         <BaseBottomSheet
@@ -139,17 +182,24 @@ export const VbdCarouselBottomSheet = ({
             floating
             ref={ref}>
             <BaseView testID="VBD_CAROUSEL_ITEM" style={styles.root}>
-                <Animated.View style={[styles.heroWrapper, animatedStyle]}>
-                    <ImageBackground source={{ uri: bannerUri }} style={styles.hero}>
-                        <BaseIcon
-                            style={styles.closeBtn}
-                            size={36}
-                            name="icon-x"
-                            action={handleClose}
-                            testID="bottom-sheet-close-btn"
-                        />
-                    </ImageBackground>
-                </Animated.View>
+                {!isLoading && (
+                    <Animated.View style={[styles.heroWrapper, animatedStyle]}>
+                        <ImageBackground
+                            source={{ uri: bannerUri }}
+                            style={styles.hero}
+                            borderTopLeftRadius={24}
+                            borderTopRightRadius={24}>
+                            <BaseIcon
+                                style={styles.closeBtn}
+                                color={COLORS.WHITE}
+                                size={22}
+                                name="icon-x"
+                                action={animateClose}
+                                testID="bottom-sheet-close-btn"
+                            />
+                        </ImageBackground>
+                    </Animated.View>
+                )}
                 <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                     <BaseView px={20} pt={16} pb={12} flexDirection="column" gap={8}>
                         <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
@@ -185,42 +235,58 @@ export const VbdCarouselBottomSheet = ({
                     </BaseView>
                 </BlurView>
             </BaseView>
-            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between" gap={8} px={30} pt={16}>
-                <VbdInfoColumn Icon={BadgeCheckIconSVG} title={LL.APPS_BS_JOINED()} description={date} />
-                <VbdInfoColumn Icon={UsersIcon} title={LL.APPS_BS_USERS()} description={usersNum} />
-                <VbdInfoColumn Icon={LeafIcon} title={LL.APPS_BS_ACTIONS()} description={actionsNum} />
-            </BaseView>
-            <BaseView px={24} pt={16} pb={10} gap={12}>
-                <BaseButton
-                    testID="Favorite_Button"
-                    style={styles.btn}
-                    leftIcon={
-                        isFavorite ? (
-                            <BaseIcon
-                                style={styles.favIcon}
-                                size={20}
-                                name="icon-star-on"
-                                testID="bottom-sheet-close-btn"
-                            />
-                        ) : (
-                            <BaseIcon
-                                style={styles.favIcon}
-                                size={20}
-                                name="icon-star"
-                                testID="bottom-sheet-close-btn"
-                            />
-                        )
-                    }
-                    action={onToggleFavorite}
-                    title={isFavorite ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
-                    variant="outline"
-                />
-                <BaseButton
-                    testID="Open_Button"
-                    style={styles.btn}
-                    action={onOpenApp}
-                    title={LL.APPS_BS_BTN_OPEN_APP()}
-                />
+            <BaseView bg={theme.colors.actionBottomSheet.background}>
+                <BaseView flexDirection="row" alignItems="center" justifyContent="center" gap={8} px={30} pt={16}>
+                    <VbdInfoColumn Icon={BadgeCheckIconSVG} title={LL.APPS_BS_JOINED()} description={date} />
+                    <VbdInfoColumn
+                        Icon={UsersIcon}
+                        title={LL.APPS_BS_USERS()}
+                        description={usersNum}
+                        isLoading={isLoading}
+                    />
+                    <VbdInfoColumn
+                        Icon={LeafIcon}
+                        title={LL.APPS_BS_ACTIONS()}
+                        description={actionsNum}
+                        isLoading={isLoading}
+                    />
+                </BaseView>
+                <BaseView px={24} pt={16} pb={10} gap={12}>
+                    <BaseButton
+                        testID="Favorite_Button"
+                        style={styles.btn}
+                        leftIcon={
+                            isFavorite ? (
+                                <BaseIcon
+                                    style={styles.favIcon}
+                                    color={theme.isDark ? COLORS.LIME_GREEN : undefined}
+                                    size={20}
+                                    name="icon-star-on"
+                                    testID="bottom-sheet-close-btn"
+                                />
+                            ) : (
+                                <BaseIcon
+                                    style={styles.favIcon}
+                                    color={theme.isDark ? COLORS.WHITE : undefined}
+                                    size={20}
+                                    name="icon-star"
+                                    testID="bottom-sheet-close-btn"
+                                />
+                            )
+                        }
+                        action={onToggleFavorite}
+                        title={isFavorite ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
+                        variant="outline"
+                        textColor={theme.isDark ? (isFavorite ? COLORS.LIME_GREEN : COLORS.WHITE) : undefined}
+                        borderColor={theme.isDark ? (isFavorite ? COLORS.LIME_GREEN : COLORS.WHITE) : undefined}
+                    />
+                    <BaseButton
+                        testID="Open_Button"
+                        style={styles.btn}
+                        action={onOpenApp}
+                        title={LL.APPS_BS_BTN_OPEN_APP()}
+                    />
+                </BaseView>
             </BaseView>
         </BaseBottomSheet>
     )
@@ -232,9 +298,7 @@ const styles = StyleSheet.create({
         overflow: "hidden",
         height: 360,
         zIndex: 1,
-        marginTop: -10,
-        borderTopLeftRadius: 12,
-        borderTopRightRadius: 12,
+        marginTop: -360,
     },
     heroWrapper: {
         width: "100%",
@@ -263,6 +327,9 @@ const styles = StyleSheet.create({
         position: "absolute",
         top: 16,
         right: 16,
+        backgroundColor: "rgba(0, 0, 0, 0.30)",
+        borderRadius: 100,
+        padding: 10,
     },
     logo: {
         width: 32,

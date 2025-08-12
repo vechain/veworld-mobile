@@ -92,7 +92,7 @@ const baseStyles = () =>
     StyleSheet.create({
         root: {
             height: "100%",
-            borderRadius: 16,
+            borderRadius: 24,
             position: "relative",
             overflow: "hidden",
             justifyContent: "flex-end",

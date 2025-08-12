@@ -19,6 +19,7 @@ type Props = {
     isDisabledTextOnly?: boolean
     variant?: "solid" | "outline" | "ghost" | "link"
     bgColor?: string
+    borderColor?: string
     textColor?: string
     title?: string
     m?: number
@@ -80,6 +81,7 @@ export const BaseButton = ({
         haptics,
         action,
         bgColor,
+        borderColor,
         px,
         py,
         w,
@@ -169,7 +171,7 @@ export const BaseButton = ({
             style={[
                 {
                     backgroundColor: calculateBackgroundColor,
-                    borderColor: isOutlineButton ? backgroundColor : theme.colors.transparent,
+                    borderColor: borderColor || (isOutlineButton ? backgroundColor : theme.colors.transparent),
                     width: w && `${w}%`,
                     height: h && `${h}%`,
                     margin: m,
