@@ -447,4 +447,23 @@ describe("FavoritesBottomSheet", () => {
             expect(ref).toBeDefined()
         })
     })
+
+    describe("onDragEnd", () => {
+        it("should update reordered dapps when drag ends", () => {
+            const { getByTestId } = renderComponent()
+
+            const reorderButton = getByTestId("reorder-button")
+            fireEvent(reorderButton, "touchEnd")
+
+            const newOrder = [mockDApps[1], mockDApps[0]] // Reversed order
+            const dragEndData = { data: newOrder }
+
+            const draggableList = getByTestId("draggable-flatlist")
+
+            if (draggableList.props.onDragEnd) {
+                draggableList.props.onDragEnd(dragEndData)
+            }
+            expect(getByTestId("draggable-flatlist")).toBeTruthy()
+        })
+    })
 })

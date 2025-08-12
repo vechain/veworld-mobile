@@ -103,60 +103,59 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     }, [bookmarkedDApps, reorderedDapps.length])
 
     return (
-        <>
-            <BaseBottomSheet
-                ref={ref}
-                contentStyle={styles.bottomSheetContent}
-                leftElement={
-                    <BaseView style={styles.leftElement}>
-                        <BaseIcon name="icon-star" size={24} color={theme.colors.favoriteHeader} />
-                    </BaseView>
-                }
-                rightElement={
-                    <BaseView style={styles.rightElement}>
-                        {isEditingMode ? (
-                            <AnimatedSaveHeaderButton
-                                action={onSaveReorderedDapps}
-                                buttonTextAfterClick={LL.BTN_ORDER_SAVED()}
-                                rounded
-                            />
-                        ) : (
-                            <ReorderIconHeaderButton
-                                action={() => {
-                                    setIsEditingMode(true)
-                                }}
-                                style={styles.reorderIcon}
-                                iconColor={theme.colors.actionBottomSheet.icon}
-                                rounded
-                            />
-                        )}
-                    </BaseView>
-                }
-                title={LL.FAVOURITES_DAPPS_TITLE()}
-                snapPoints={["90%"]}
-                backgroundStyle={styles.layout}
-                onDismiss={onClose}>
-                <BaseView style={styles.container}>
-                    <NestableScrollContainer>
-                        <NestableDraggableFlatList
-                            scrollEnabled={!isEditingMode}
-                            contentContainerStyle={styles.listContentContainer}
-                            extraData={isEditingMode}
-                            data={reorderedDapps}
-                            onDragEnd={onDragEnd}
-                            keyExtractor={(item, index) => item?.href ?? index.toString()}
-                            renderItem={renderItem}
-                            ListFooterComponent={renderFooter}
-                            showsVerticalScrollIndicator={false}
-                            activationDistance={isEditingMode ? 10 : 30}
-                            ListEmptyComponent={
-                                <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
-                            }
-                        />
-                    </NestableScrollContainer>
+        <BaseBottomSheet
+            ref={ref}
+            contentStyle={styles.bottomSheetContent}
+            leftElement={
+                <BaseView style={styles.leftElement}>
+                    <BaseIcon name="icon-star" size={24} color={theme.colors.favoriteHeader} />
                 </BaseView>
-            </BaseBottomSheet>
-        </>
+            }
+            rightElement={
+                <BaseView style={styles.rightElement}>
+                    {isEditingMode ? (
+                        <AnimatedSaveHeaderButton
+                            action={onSaveReorderedDapps}
+                            buttonTextAfterClick={LL.BTN_ORDER_SAVED()}
+                            rounded
+                        />
+                    ) : (
+                        <ReorderIconHeaderButton
+                            action={() => {
+                                setIsEditingMode(true)
+                            }}
+                            style={styles.reorderIcon}
+                            iconColor={theme.colors.actionBottomSheet.icon}
+                            rounded
+                        />
+                    )}
+                </BaseView>
+            }
+            title={LL.FAVOURITES_DAPPS_TITLE()}
+            snapPoints={["90%"]}
+            backgroundStyle={styles.layout}
+            onDismiss={onClose}>
+            <BaseView style={styles.container}>
+                <NestableScrollContainer>
+                    <NestableDraggableFlatList
+                        scrollEnabled={!isEditingMode}
+                        contentContainerStyle={styles.listContentContainer}
+                        extraData={isEditingMode}
+                        data={reorderedDapps}
+                        onDragEnd={onDragEnd}
+                        keyExtractor={(item, index) => item?.href ?? index.toString()}
+                        renderItem={renderItem}
+                        ListFooterComponent={renderFooter}
+                        showsVerticalScrollIndicator={false}
+                        testID="draggable-dapps-list"
+                        activationDistance={isEditingMode ? 10 : 30}
+                        ListEmptyComponent={
+                            <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
+                        }
+                    />
+                </NestableScrollContainer>
+            </BaseView>
+        </BaseBottomSheet>
     )
 })
 
