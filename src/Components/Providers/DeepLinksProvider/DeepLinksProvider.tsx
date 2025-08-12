@@ -23,6 +23,8 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
         Linking.addEventListener("url", handleDeepLink)
 
+        Linking.getInitialURL().then(url => url && handleDeepLink({ url }))
+
         return () => {
             Linking.removeAllListeners("url")
         }
