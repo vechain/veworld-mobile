@@ -470,7 +470,7 @@
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "Сменить счет",
   "CONNECTED_APP_CONNECTION_REQUESTS": "Запросы на подключение",
   "CONNECTED_APP_CONTRACT": "Контракт",
-  "CONNECTED_APP_DELETE_DESCRIPTION": "Вы можете подключиться снова в любое время — удаление просто означает, что вам нужно будет войти в систему в следующий раз.",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "Вы можете подключиться в любое время — удаление просто означает, что вам нужно будет войти снова в следующий раз.",
   "CONNECTED_APP_DELETE_TITLE": "Отключить подключенное приложение",
   "CONNECTED_APP_DESCRIPTION": "Описание",
   "CONNECTED_APP_DETAILS_ACCOUNT_LABEL": "Подключено в",
