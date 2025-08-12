@@ -51,8 +51,8 @@ export const useFetchingStargate = () => {
 
                 debug(ERROR_EVENTS.STARGATE, `Found ${matchingQueries.length} queries to invalidate`)
 
-                // Invalidate all Stargate-related queries for the target network and account
-                // This follows the same pattern as HomeScreen's invalidateStargateQueries
+                // Invalidate and refetch all Stargate-related queries for the target network and account
+                // Using refetchType: 'all' eliminates the need for a separate refetchQueries call
                 await queryClient.invalidateQueries({
                     predicate(query) {
                         // Only invalidate userStargateNodes and userStargateNfts queries
@@ -69,21 +69,10 @@ export const useFetchingStargate = () => {
                         const queryAddress = query.queryKey[2] as string | undefined
                         if (!queryAddress || queryAddress !== accountToInvalidate) return false
 
-                        debug(ERROR_EVENTS.STARGATE, "Invalidating query:", query.queryKey)
+                        debug(ERROR_EVENTS.STARGATE, "Invalidating and refetching query:", query.queryKey)
                         return true
                     },
-                })
-
-                // Also force refetch the queries to make sure they update immediately
-                await queryClient.refetchQueries({
-                    predicate(query) {
-                        return (
-                            ["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string) &&
-                            query.queryKey.length >= 3 &&
-                            query.queryKey[1] === network.type &&
-                            query.queryKey[2] === accountToInvalidate
-                        )
-                    },
+                    refetchType: "all",
                 })
 
                 debug(
