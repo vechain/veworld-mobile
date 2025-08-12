@@ -158,7 +158,7 @@ const processExpandedTransactionsForEvents = (
     return analyzedPerTx.flatMap(({ origin, outputs }) =>
         outputs
             .filter(isNodeDelegatedOutput)
-            .filter(out => out.address?.toLowerCase() === nodeManagementContract.toLowerCase())
+            .filter(out => AddressUtils.compareAddresses(out.address, nodeManagementContract))
             .map(out => {
                 return {
                     nodeId: String(out.params.nodeId),
@@ -173,7 +173,10 @@ const processExpandedTransactionsForEvents = (
     )
 }
 
-const processNodeDelegatedEvent = async (eventData: NodeDelegatedEventData, refetchStargateData: () => void) => {
+const processNodeDelegatedEvent = async (
+    eventData: NodeDelegatedEventData,
+    refetchStargateData: (targetAddress?: string) => void,
+) => {
     try {
         debug(ERROR_EVENTS.STARGATE, "Processing NodeDelegated event:", {
             nodeId: eventData.nodeId,
@@ -186,15 +189,15 @@ const processNodeDelegatedEvent = async (eventData: NodeDelegatedEventData, refe
 
         // Add a small delay to allow blockchain state to propagate before refetching
         setTimeout(() => {
-            // Trigger refetch of Stargate data for the node owner (current account)
-            refetchStargateData()
+            // Trigger refetch of Stargate data for the specific node owner involved in the event
+            refetchStargateData(eventData.owner)
 
-            // Also invalidate queries for the delegatee account if it's different from current account
+            // Also invalidate queries for the delegatee account if it's different from the owner
             if (eventData.delegatee !== eventData.owner) {
                 debug(ERROR_EVENTS.STARGATE, "Also invalidating queries for delegatee:", eventData.delegatee)
-                refetchStargateData()
+                refetchStargateData(eventData.delegatee)
             }
-        }, 2000)
+        }, 500)
     } catch (err) {
         error(ERROR_EVENTS.STARGATE, "Error processing NodeDelegated event:", err)
     }
