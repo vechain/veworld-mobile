@@ -64,7 +64,13 @@ const VbdInfoColumn = ({
                 {title}
             </BaseText>
             {isLoading ? (
-                <BaseSkeleton animationDirection="horizontalLeft" width={"100%"} height={19} />
+                <BaseSkeleton
+                    animationDirection="horizontalLeft"
+                    boneColor={theme.colors.skeletonBoneColor}
+                    highlightColor={theme.colors.skeletonHighlightColor}
+                    width={"100%"}
+                    height={19}
+                />
             ) : (
                 <BaseText typographyFont="bodyMedium">{description}</BaseText>
             )}
@@ -182,24 +188,22 @@ export const VbdCarouselBottomSheet = ({
             floating
             ref={ref}>
             <BaseView testID="VBD_CAROUSEL_ITEM" style={styles.root}>
-                {!isLoading && (
-                    <Animated.View style={[styles.heroWrapper, animatedStyle]}>
-                        <ImageBackground
-                            source={{ uri: bannerUri }}
-                            style={styles.hero}
-                            borderTopLeftRadius={24}
-                            borderTopRightRadius={24}>
-                            <BaseIcon
-                                style={styles.closeBtn}
-                                color={COLORS.WHITE}
-                                size={22}
-                                name="icon-x"
-                                action={animateClose}
-                                testID="bottom-sheet-close-btn"
-                            />
-                        </ImageBackground>
-                    </Animated.View>
-                )}
+                <Animated.View style={[styles.heroWrapper, animatedStyle]}>
+                    <ImageBackground
+                        source={{ uri: bannerUri }}
+                        style={styles.hero}
+                        borderTopLeftRadius={24}
+                        borderTopRightRadius={24}>
+                        <BaseIcon
+                            style={styles.closeBtn}
+                            color={COLORS.WHITE}
+                            size={22}
+                            name="icon-x"
+                            action={animateClose}
+                            testID="bottom-sheet-close-btn"
+                        />
+                    </ImageBackground>
+                </Animated.View>
                 <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                     <BaseView px={20} pt={16} pb={12} flexDirection="column" gap={8}>
                         <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
