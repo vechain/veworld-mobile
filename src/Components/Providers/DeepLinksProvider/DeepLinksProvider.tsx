@@ -1,8 +1,9 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useRef } from "react"
 import { Linking } from "react-native"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) => {
     const { navigateWithTab } = useBrowserTab()
+    const mounted = useRef(false)
     useEffect(() => {
         const handleDeepLink = ({ url }: { url: string }) => {
             const parsed = new URL(url)
@@ -23,7 +24,10 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
         Linking.addEventListener("url", handleDeepLink)
 
-        Linking.getInitialURL().then(url => url && handleDeepLink({ url }))
+        if (!mounted.current) {
+            mounted.current = true
+            Linking.getInitialURL().then(url => url && handleDeepLink({ url }))
+        }
 
         return () => {
             Linking.removeAllListeners("url")
