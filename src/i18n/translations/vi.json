@@ -457,7 +457,7 @@
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "Thay đổi tài khoản",
   "CONNECTED_APP_CONNECTION_REQUESTS": "Yêu cầu kết nối",
   "CONNECTED_APP_CONTRACT": "Hợp đồng",
-  "CONNECTED_APP_DELETE_DESCRIPTION": "Bạn có thể kết nối lại bất cứ lúc nào — loại bỏ ứng dụng chỉ có nghĩa là bạn sẽ cần đăng nhập lại lần sau.",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "Bạn có thể kết nối lại bất kỳ lúc nào — xóa ứng dụng chỉ có nghĩa là bạn sẽ cần phải đăng nhập lại lần tới.",
   "CONNECTED_APP_DELETE_TITLE": "Ngắt kết nối ứng dụng đã kết nối",
   "CONNECTED_APP_DESCRIPTION": "Mô tả",
   "CONNECTED_APP_DETAILS_ACCOUNT_LABEL": "Đã kết nối với",

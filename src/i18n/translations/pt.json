@@ -457,7 +457,7 @@
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "Mudar conta",
   "CONNECTED_APP_CONNECTION_REQUESTS": "Solicitações de conexão",
   "CONNECTED_APP_CONTRACT": "Contrato",
-  "CONNECTED_APP_DELETE_DESCRIPTION": "Você pode se reconectar a qualquer momento — removê-lo apenas significa que você precisará fazer o login novamente na próxima vez.",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "Você pode reconectar a qualquer momento — removê-lo significa apenas que você precisará fazer login novamente na próxima vez.",
   "CONNECTED_APP_DELETE_TITLE": "Desconectar aplicativo conectado",
   "CONNECTED_APP_DESCRIPTION": "Descrição",
   "CONNECTED_APP_DETAILS_ACCOUNT_LABEL": "Conectado com",
