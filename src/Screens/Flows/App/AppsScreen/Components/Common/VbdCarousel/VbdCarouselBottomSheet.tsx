@@ -266,7 +266,7 @@ export const VbdCarouselBottomSheet = ({
                                     color={theme.isDark ? COLORS.LIME_GREEN : undefined}
                                     size={20}
                                     name="icon-star-on"
-                                    testID="bottom-sheet-close-btn"
+                                    testID="bottom-sheet-remove-favorite-icon"
                                 />
                             ) : (
                                 <BaseIcon
@@ -274,7 +274,7 @@ export const VbdCarouselBottomSheet = ({
                                     color={theme.isDark ? COLORS.WHITE : undefined}
                                     size={20}
                                     name="icon-star"
-                                    testID="bottom-sheet-close-btn"
+                                    testID="bottom-sheet-add-favorite-icon"
                                 />
                             )
                         }
