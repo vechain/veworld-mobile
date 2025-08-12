@@ -33,24 +33,6 @@ export const useFetchingStargate = () => {
             )
 
             try {
-                // Get all matching queries before invalidation
-                const matchingQueries = queryClient.getQueriesData({
-                    predicate(query) {
-                        const matches =
-                            ["userStargateNodes", "userStargateNfts"].includes(query.queryKey[0] as string) &&
-                            query.queryKey.length >= 3 &&
-                            query.queryKey[1] === network.type &&
-                            query.queryKey[2] === accountToInvalidate
-
-                        if (matches) {
-                            debug(ERROR_EVENTS.STARGATE, "Found matching query to invalidate:", query.queryKey)
-                        }
-                        return matches
-                    },
-                })
-
-                debug(ERROR_EVENTS.STARGATE, `Found ${matchingQueries.length} queries to invalidate`)
-
                 // Invalidate and refetch all Stargate-related queries for the target network and account
                 // Using refetchType: 'all' eliminates the need for a separate refetchQueries call
                 await queryClient.invalidateQueries({
