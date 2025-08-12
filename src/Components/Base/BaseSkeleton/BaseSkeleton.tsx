@@ -7,11 +7,11 @@ type Props = {
     /**
      * The color of the skeleton bone. This is the base color of the loading component.
      */
-    boneColor: string
+    boneColor?: string
     /**
      * The highlight color of the skeleton.
      */
-    highlightColor: string
+    highlightColor?: string
     /**
      *  The style object to apply to the skeleton container.
      */
