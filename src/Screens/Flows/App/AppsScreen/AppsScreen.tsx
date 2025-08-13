@@ -92,6 +92,8 @@ export const AppsScreen = () => {
                         </>
                     )}
                     <VeBetterSection />
+                    <BaseSpacer height={48} />
+
                     <EcosystemSection />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
                 </>

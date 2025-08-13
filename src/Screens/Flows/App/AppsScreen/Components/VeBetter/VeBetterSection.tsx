@@ -84,7 +84,9 @@ export const VeBetterSection = () => {
 
     return (
         <BaseView gap={16} justifyContent="flex-start" alignItems="flex-start">
-            <BaseText typographyFont="subSubTitleSemiBold">{LL.TITLE_VEBETTER()}</BaseText>
+            <BaseText mx={16} typographyFont="subSubTitleSemiBold">
+                {LL.TITLE_VEBETTER()}
+            </BaseText>
             <VeBetterCategoryList categories={categories} onPressCategory={handleCategoryPress} />
             <AppsBottomSheet
                 ref={appsBottomSheetRef}
@@ -114,5 +116,6 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         root: {
             gap: 8,
+            paddingHorizontal: 16,
         },
     })
