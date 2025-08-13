@@ -3,15 +3,34 @@ import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseTouchable, BaseSpacer, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { VeBetterSection } from "./Components"
+import { EcosystemSection } from "./Components/Ecosystem"
+import { VeBetterSection } from "./Components/VeBetter"
+import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
+import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
+import { useAppSelector } from "~Storage/Redux/Hooks"
+import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
+import { useDAppActions } from "./Hooks/useDAppActions"
+import { Favourites } from "../DiscoverScreen/Components/Favourites"
+import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
+import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
+import { VeBetterDAOCarousel } from "../DiscoverScreen/Components/VeBetterDAOCarousel"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+    const { ref: favoritesRef, onOpen: onOpenFavorites, onClose: onCloseFavorites } = useBottomSheetModal()
+
+    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const { onDAppPress } = useDAppActions()
+
+    const showFavorites = bookmarkedDApps.length > 0
+
+    const isNormalUser = useIsNormalUser()
 
     const goToSearch = useCallback(() => {
         nav.navigate(Routes.APPS_SEARCH)
@@ -21,8 +40,9 @@ export const AppsScreen = () => {
         <Layout
             bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
             noBackButton
+            noMargin
             fixedHeader={
-                <BaseView style={HeaderStyleV2}>
+                <BaseView style={[HeaderStyleV2, styles.header]}>
                     <HeaderTitle
                         title={LL.APPS_SCREEN_TITLE()}
                         leftIconName="icon-apps"
@@ -40,7 +60,42 @@ export const AppsScreen = () => {
                     </BaseView>
                 </BaseView>
             }
-            body={<VeBetterSection />}
+            body={
+                <>
+                    <BaseSpacer height={24} />
+
+                    {showFavorites && (
+                        <>
+                            <Favourites
+                                bookmarkedDApps={bookmarkedDApps}
+                                onActionLabelPress={onOpenFavorites}
+                                onDAppPress={onDAppPress}
+                            />
+                            <BaseSpacer height={48} />
+                        </>
+                    )}
+                    {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
+
+                    <BaseSpacer height={48} />
+
+                    {!showFavorites && (
+                        <>
+                            <FavoritesSuggestionBanner onPress={() => {}} />
+                            <BaseSpacer height={48} />
+                        </>
+                    )}
+
+                    {isNormalUser && (
+                        <>
+                            <VeBetterDAOCarousel />
+                            <BaseSpacer height={48} />
+                        </>
+                    )}
+                    <VeBetterSection />
+                    <EcosystemSection />
+                    <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
+                </>
+            }
         />
     )
 }
@@ -51,5 +106,8 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 8,
             borderRadius: 100,
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_100,
+        },
+        header: {
+            paddingHorizontal: 16,
         },
     })

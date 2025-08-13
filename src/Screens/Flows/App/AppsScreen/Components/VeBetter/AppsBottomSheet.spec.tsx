@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react"
 import { render, screen } from "@testing-library/react-native"
 import { AppsBottomSheet } from "./AppsBottomSheet"
-import { TestWrapper } from "~Test"
+import { TestWrapper, TestHelpers } from "~Test"
 import { X2ECategoryType } from "~Model/DApp"
 
 const Wrapper = ({ children }: PropsWithChildren) => (
@@ -39,44 +39,7 @@ jest.mock("./Hooks/useX2EAppAnimation", () => ({
 }))
 
 describe("X2EAppsBottomSheet", () => {
-    const mockApps = [
-        {
-            id: "app-1",
-            teamWalletAddress: "0x1234567890123456789012345678901234567890",
-            name: "Test App 1",
-            metadataURI: "https://example.com/metadata1.json",
-            createdAtTimestamp: "1640995200",
-            appAvailableForAllocationVoting: true,
-            categories: [X2ECategoryType.NUTRITION],
-            description: "A test app",
-            external_url: "https://example.com/app1",
-            logo: "https://example.com/icon1.png",
-            banner: "https://example.com/banner1.png",
-            screenshots: ["https://example.com/screenshot1.png"],
-            social_urls: [{ name: "twitter", url: "https://twitter.com/app1" }],
-            app_urls: [{ code: "web", url: "https://example.com/app1" }],
-            tweets: ["Great app!"],
-            ve_world: { banner: "https://example.com/veworld-banner1.png" },
-        },
-        {
-            id: "app-2",
-            teamWalletAddress: "0x2345678901234567890123456789012345678901",
-            name: "Test App 2",
-            metadataURI: "https://example.com/metadata2.json",
-            createdAtTimestamp: "1640995201",
-            appAvailableForAllocationVoting: false,
-            categories: [X2ECategoryType.PLASTIC_WASTE_RECYCLING],
-            description: "Another test app",
-            external_url: "https://example.com/app2",
-            logo: "https://example.com/icon2.png",
-            banner: "https://example.com/banner2.png",
-            screenshots: ["https://example.com/screenshot2.png"],
-            social_urls: [{ name: "twitter", url: "https://twitter.com/app2" }],
-            app_urls: [{ code: "web", url: "https://example.com/app2" }],
-            tweets: ["Another great app!"],
-            ve_world: { banner: "https://example.com/veworld-banner2.png" },
-        },
-    ]
+    const mockApps = [TestHelpers.data.mockApp1, TestHelpers.data.mockApp2]
 
     const mockSelectedCategory = {
         id: X2ECategoryType.NUTRITION,
@@ -96,11 +59,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should render the bottom sheet component", () => {
-        render(
-            <Wrapper>
-                <AppsBottomSheet isLoading={false} allApps={mockApps} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
@@ -112,11 +71,7 @@ describe("X2EAppsBottomSheet", () => {
             filteredApps: [],
         })
 
-        render(
-            <Wrapper>
-                <AppsBottomSheet isLoading={true} allApps={mockApps} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet isLoading={true} allApps={mockApps} />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
@@ -128,44 +83,28 @@ describe("X2EAppsBottomSheet", () => {
             filteredApps: [],
         })
 
-        render(
-            <Wrapper>
-                <AppsBottomSheet isLoading={false} allApps={[]} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet isLoading={false} allApps={[]} />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
 
     it("should render apps when data is available", () => {
-        render(
-            <Wrapper>
-                <AppsBottomSheet isLoading={false} allApps={mockApps} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
 
-        expect(screen.getByText("Test App 1")).toBeTruthy()
-        expect(screen.getByText("Test App 2")).toBeTruthy()
+        expect(screen.getByText("A App")).toBeTruthy()
+        expect(screen.getByText("B App")).toBeTruthy()
     })
 
     it("should handle forwardRef correctly", () => {
         const ref = React.createRef<any>()
-        render(
-            <Wrapper>
-                <AppsBottomSheet ref={ref} isLoading={false} allApps={mockApps} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet ref={ref} isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
 
     it("should handle onDismiss prop", () => {
         const mockOnDismiss = jest.fn()
-        render(
-            <Wrapper>
-                <AppsBottomSheet onDismiss={mockOnDismiss} isLoading={false} allApps={mockApps} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet onDismiss={mockOnDismiss} isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
@@ -177,14 +116,10 @@ describe("X2EAppsBottomSheet", () => {
             filteredApps: mockApps,
         })
 
-        render(
-            <Wrapper>
-                <AppsBottomSheet isLoading={true} allApps={mockApps} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet isLoading={true} allApps={mockApps} />, { wrapper: Wrapper })
 
-        expect(screen.queryByText("Test App 1")).toBeNull()
-        expect(screen.queryByText("Test App 2")).toBeNull()
+        expect(screen.queryByText("A App")).toBeNull()
+        expect(screen.queryByText("B App")).toBeNull()
     })
 
     it("should render apps when isLoading is false", () => {
@@ -194,16 +129,12 @@ describe("X2EAppsBottomSheet", () => {
             filteredApps: mockApps,
         })
 
-        render(
-            <Wrapper>
-                <AppsBottomSheet isLoading={false} allApps={mockApps} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
 
-        expect(screen.getByText("Test App 1")).toBeVisible()
-        expect(screen.getByText("Test App 2")).toBeVisible()
-        expect(screen.getByText("A test app")).toBeVisible()
-        expect(screen.getByText("Another test app")).toBeVisible()
+        expect(screen.getByText("A App")).toBeVisible()
+        expect(screen.getByText("B App")).toBeVisible()
+        expect(screen.getByText("A nutrition app")).toBeVisible()
+        expect(screen.getByText("A recycling app")).toBeVisible()
     })
 
     it("should render empty list when no apps are provided", () => {
@@ -213,14 +144,10 @@ describe("X2EAppsBottomSheet", () => {
             filteredApps: [],
         })
 
-        render(
-            <Wrapper>
-                <AppsBottomSheet isLoading={false} allApps={[]} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet isLoading={false} allApps={[]} />, { wrapper: Wrapper })
 
-        expect(screen.queryByText("Test App 1")).toBeNull()
-        expect(screen.queryByText("Test App 2")).toBeNull()
+        expect(screen.queryByText("A App")).toBeNull()
+        expect(screen.queryByText("B App")).toBeNull()
     })
 
     it("should handle apps with minimal data", () => {
@@ -249,11 +176,7 @@ describe("X2EAppsBottomSheet", () => {
             filteredApps: minimalApps,
         })
 
-        render(
-            <Wrapper>
-                <AppsBottomSheet isLoading={false} allApps={minimalApps} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet isLoading={false} allApps={minimalApps} />, { wrapper: Wrapper })
 
         expect(screen.getByText("Minimal App")).toBeVisible()
         expect(screen.getByText("Minimal description")).toBeVisible()
@@ -272,14 +195,10 @@ describe("X2EAppsBottomSheet", () => {
             filteredApps: [mockApps[1]],
         })
 
-        render(
-            <Wrapper>
-                <AppsBottomSheet isLoading={false} allApps={mockApps} />
-            </Wrapper>,
-        )
+        render(<AppsBottomSheet isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Recycling").length).toBeGreaterThan(0)
-        expect(screen.getByText("Test App 2")).toBeVisible()
-        expect(screen.queryByText("Test App 1")).toBeNull()
+        expect(screen.getByText("B App")).toBeVisible()
+        expect(screen.queryByText("A App")).toBeNull()
     })
 })

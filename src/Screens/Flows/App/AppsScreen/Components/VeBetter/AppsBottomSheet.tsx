@@ -1,17 +1,14 @@
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { useNavigation } from "@react-navigation/native"
 import React, { forwardRef, useCallback, useMemo, useState } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
-import { AnalyticsEvent } from "~Constants"
-import { useAnalyticTracking, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType } from "~Model"
-import { Routes } from "~Navigation"
 import { CategoryFilters, RowDetails, RowExpandableDetails } from "~Screens/Flows/App/AppsScreen/Components"
 import { useCategories, useCategoryFiltering } from "~Screens/Flows/App/AppsScreen/Components/VeBetter/Hooks"
-import { addNavigationToDApp, useAppDispatch } from "~Storage/Redux"
+import { useDAppActions } from "~Screens/Flows/App/AppsScreen/Hooks"
 import { URIUtils } from "~Utils"
 
 type X2EDapp = VeBetterDaoDapp & VeBetterDaoDAppMetadata
@@ -40,9 +37,7 @@ type X2EAppsBottomSheetProps = {
 
 const AppListItem = React.memo(({ dapp, onDismiss, openItemId, onToggleOpenItem }: X2EAppItemProps) => {
     const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
-    const nav = useNavigation()
-    const track = useAnalyticTracking()
-    const dispatch = useAppDispatch()
+    const { onDAppPress } = useDAppActions()
     const { LL } = useI18nContext()
 
     const allCategories = useCategories()
@@ -51,18 +46,21 @@ const AppListItem = React.memo(({ dapp, onDismiss, openItemId, onToggleOpenItem 
         return URIUtils.convertUriToUrl(dapp.logo)
     }, [dapp.logo])
 
-    const handleOpen = useCallback(() => {
-        track(AnalyticsEvent.DISCOVERY_USER_OPENED_DAPP, {
-            url: dapp.external_url,
-        })
+    const handleOpen = useCallback(async () => {
+        const discoveryDApp = {
+            id: dapp.id,
+            name: dapp.name,
+            href: dapp.external_url,
+            desc: dapp.description,
+            createAt: parseInt(dapp.createdAtTimestamp),
+            isCustom: false,
+            amountOfNavigations: 0,
+            veBetterDaoId: dapp.id,
+        }
 
-        setTimeout(() => {
-            dispatch(addNavigationToDApp({ href: dapp.external_url, isCustom: false }))
-        }, 1000)
-
-        nav.navigate(Routes.BROWSER, { url: dapp.external_url })
+        await onDAppPress(discoveryDApp)
         onDismiss?.()
-    }, [dapp.external_url, nav, track, dispatch, onDismiss])
+    }, [dapp, onDAppPress, onDismiss])
 
     const categoryDisplayNames = useMemo(() => {
         if (!dapp.categories || dapp.categories.length === 0) {

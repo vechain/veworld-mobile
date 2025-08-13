@@ -73,6 +73,7 @@ export type Colors = {
     graphStatsText: string
     accountCard: string
     marketInfoBackground: string
+    favoriteHeader: string
     successVariant: {
         background: string
         border: string
@@ -117,11 +118,14 @@ export type Colors = {
     }
     actionBottomSheet: {
         background: string
+        border: string
         iconBackground: string
+        isActiveBackground: string
         text: string
         icon: string
         activeIcon: string
         activeIconBackground: string
+        favoriteIcon: string
         activeText: string
         disabledText: string
         disabledIcon: string
@@ -222,6 +226,12 @@ export type Colors = {
     stakedVetCard: {
         background: string
     }
+    dappCard: {
+        name: string
+        description: string
+        icon: string
+    }
+    dappTitle: string
     history: {
         button: {
             background: string
@@ -237,6 +247,20 @@ export type Colors = {
             rightIconColor: string
         }
         emptyStateColor: string
+    }
+    newBottomSheet: {
+        background: string
+    }
+    favoritesSuggestionBanner: {
+        background: string
+        border: string
+        color: string
+        iconColor: string
+        emptySlot: {
+            background: string
+            border: string
+            color: string
+        }
     }
     x2eAppOpenDetails: {
         background: string
@@ -368,6 +392,8 @@ export enum COLORS {
     GRADIENT_BACKGROUND_DARK_TOP = "rgba(11, 0, 67, 0.7)",
     GRADIENT_BACKGROUND_DARK_BOTTOM = "rgba(11, 0, 67, 0.95)",
     B3TR_ICON_BACKGROUND = "#74E291",
+    WHITE_RGBA_85 = "rgba(255,255,255,0.85)",
+    WHITE_RGBA_15 = "rgba(255,255,255,0.15)",
 }
 
 const light: Colors = {
@@ -408,7 +434,7 @@ const light: Colors = {
     card: COLORS.WHITE,
     icon: COLORS.PRIMARY_800,
     pinEmpty: COLORS.GREY_400,
-    pinFilled: COLORS.PRIMARY_500,
+    pinFilled: COLORS.PRIMARY_800,
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
@@ -445,6 +471,7 @@ const light: Colors = {
     accountCard: COLORS.PURPLE,
     graphStatsText: COLORS.GREY_600,
     marketInfoBackground: COLORS.GREY_200,
+    favoriteHeader: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -489,11 +516,14 @@ const light: Colors = {
     },
     actionBottomSheet: {
         background: COLORS.GREY_50,
-        iconBackground: COLORS.GREY_100,
+        border: COLORS.GREY_200,
+        isActiveBackground: COLORS.GREY_100,
+        iconBackground: COLORS.TRANSPARENT,
         text: COLORS.GREY_700,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
         activeIconBackground: COLORS.WHITE,
+        favoriteIcon: COLORS.DARK_PURPLE_DISABLED,
         activeText: COLORS.WHITE,
         disabledText: COLORS.GREY_400,
         disabledIcon: COLORS.GREY_400,
@@ -505,7 +535,7 @@ const light: Colors = {
     assetDetailsCard: {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
-        title: COLORS.GREY_800,
+        title: COLORS.GREY_700,
         text: COLORS.GREY_500,
     },
     convertBetterCard: {
@@ -594,6 +624,12 @@ const light: Colors = {
     stakedVetCard: {
         background: COLORS.GREY_50,
     },
+    dappCard: {
+        name: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_800,
     history: {
         button: {
             background: COLORS.WHITE,
@@ -609,6 +645,20 @@ const light: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.GREY_600,
+    },
+    newBottomSheet: {
+        background: COLORS.WHITE,
+    },
+    favoritesSuggestionBanner: {
+        background: COLORS.GREY_50,
+        border: COLORS.GREY_200,
+        color: COLORS.GREY_600,
+        iconColor: COLORS.GREY_500,
+        emptySlot: {
+            background: COLORS.GREY_100,
+            border: COLORS.GREY_300,
+            color: COLORS.GREY_400,
+        },
     },
     x2eAppOpenDetails: {
         background: COLORS.GREY_50,
@@ -678,7 +728,7 @@ const dark: Colors = {
     splashColorLayer: COLORS.LIME_GREEN,
     splashBackground: COLORS.DARK_PURPLE,
     pinEmpty: COLORS.GREY_500,
-    pinFilled: COLORS.PRIMARY_300,
+    pinFilled: COLORS.LIME_GREEN,
     title: COLORS.WHITE,
     subtitle: COLORS.GREY_300,
     subSubtitle: COLORS.GREY_200,
@@ -720,6 +770,7 @@ const dark: Colors = {
     accountCard: COLORS.LIME_GREEN,
     graphStatsText: COLORS.GREY_400,
     marketInfoBackground: COLORS.PURPLE_DISABLED,
+    favoriteHeader: COLORS.GREY_50,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
@@ -764,11 +815,14 @@ const dark: Colors = {
     },
     actionBottomSheet: {
         background: COLORS.PURPLE,
-        iconBackground: COLORS.PURPLE_DISABLED,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        iconBackground: COLORS.DARK_PURPLE_DISABLED,
+        isActiveBackground: COLORS.PURPLE_DISABLED,
         text: COLORS.WHITE,
         icon: COLORS.GREY_100,
         activeIcon: COLORS.GREY_100,
         activeIconBackground: COLORS.DARK_PURPLE_DISABLED,
+        favoriteIcon: COLORS.LIME_GREEN,
         activeText: COLORS.DARK_PURPLE_DISABLED,
         disabledText: COLORS.DARK_PURPLE_DISABLED,
         disabledIcon: COLORS.DARK_PURPLE_DISABLED,
@@ -780,8 +834,8 @@ const dark: Colors = {
     assetDetailsCard: {
         background: COLORS.PURPLE,
         border: COLORS.PURPLE,
-        title: COLORS.WHITE,
-        text: COLORS.GREY_300,
+        title: COLORS.GREY_50,
+        text: COLORS.GREY_400,
     },
     convertBetterCard: {
         inputBg: COLORS.PURPLE_DISABLED,
@@ -896,6 +950,12 @@ const dark: Colors = {
             value: COLORS.GREY_100,
         },
     },
+    dappCard: {
+        name: COLORS.GREY_50,
+        description: COLORS.GREY_400,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_100,
     veBetterCategoryButton: {
         background: COLORS.PURPLE,
         border: COLORS.PURPLE,
@@ -917,6 +977,20 @@ const dark: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.WHITE,
+    },
+    newBottomSheet: {
+        background: COLORS.PURPLE,
+    },
+    favoritesSuggestionBanner: {
+        background: COLORS.PURPLE_DISABLED,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        color: COLORS.GREY_300,
+        iconColor: COLORS.GREY_400,
+        emptySlot: {
+            background: COLORS.PURPLE,
+            border: COLORS.DARK_PURPLE_DISABLED,
+            color: COLORS.DARK_PURPLE_DISABLED,
+        },
     },
 }
 
