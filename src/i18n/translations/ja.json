@@ -469,7 +469,7 @@
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "アカウントの変更",
   "CONNECTED_APP_CONNECTION_REQUESTS": "接続リクエスト",
   "CONNECTED_APP_CONTRACT": "契約",
-  "CONNECTED_APP_DELETE_DESCRIPTION": "いつでも再接続できます。削除するだけで、次回ログインが必要になります。",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "いつでも再接続できます。削除すると次回ログインが必要になります。",
   "CONNECTED_APP_DELETE_TITLE": "接続されたアプリを切断",
   "CONNECTED_APP_DESCRIPTION": "説明",
   "CONNECTED_APP_DETAILS_ACCOUNT_LABEL": "接続済みアカウント",

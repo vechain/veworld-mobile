@@ -16,6 +16,7 @@ import { useDAppActions } from "./Hooks/useDAppActions"
 import { Favourites } from "../DiscoverScreen/Components/Favourites"
 import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
 import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
+import { VeBetterDAOCarousel } from "../DiscoverScreen/Components/VeBetterDAOCarousel"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
@@ -60,6 +61,8 @@ export const AppsScreen = () => {
             }
             body={
                 <>
+                    <BaseSpacer height={24} />
+
                     {showFavorites && (
                         <>
                             <Favourites
@@ -81,6 +84,13 @@ export const AppsScreen = () => {
                         </>
                     )}
 
+                    {isNormalUser && (
+                        <>
+                            <VeBetterDAOCarousel />
+                            <BaseSpacer height={48} />
+                        </>
+                    )}
+
                     <EcosystemSection />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
                 </>
@@ -98,6 +108,5 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         header: {
             paddingHorizontal: 16,
-            marginBottom: 24,
         },
     })

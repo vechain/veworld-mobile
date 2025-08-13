@@ -30,6 +30,8 @@ export const useVeBetterDaoDapps = (enabled = true) => {
         queryFn: () => getFullVBDDapps(thor),
         enabled: !!thor && enabled,
         placeholderData: [],
+        retry: 5,
+        retryDelay: 2000,
         staleTime: 1000 * 60 * 60,
         gcTime: 1000 * 60 * 60,
     })
