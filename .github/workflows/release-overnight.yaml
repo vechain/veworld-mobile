@@ -55,7 +55,7 @@ jobs:
                   # Fetch the last 5 merged PRs and their merge dates
                   recent_prs=$(gh api \
                     --header "Accept: application/vnd.github+json" \
-                    --method GET
+                    --method GET \
                     "search/issues" \
                     -f q="repo:$repo is:pr is:merged base:main" \
                     -f sort="updated" \
