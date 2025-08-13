@@ -17,6 +17,16 @@ jest.mock("@react-navigation/native", () => ({
     useNavigationState: jest.fn(),
 }))
 
+// Provide safe defaults for safe area in tests
+jest.mock("react-native-safe-area-context", () => {
+    const actual = jest.requireActual("react-native-safe-area-context")
+    return {
+        ...actual,
+        SafeAreaProvider: ({ children }: any) => children,
+        useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+    }
+})
+
 describe("VbdCarousel", () => {
     beforeEach(() => {
         jest.resetAllMocks()
@@ -27,7 +37,7 @@ describe("VbdCarousel", () => {
                 {
                     app_urls: [],
                     banner: "banner",
-                    createdAtTimestamp: new Date().toISOString(),
+                    createdAtTimestamp: Math.floor(Date.now() / 1000).toString(),
                     description: "TEST DESCRIPTION",
                     external_url: "https://vechain.org",
                     id: "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",
@@ -77,7 +87,7 @@ describe("VbdCarousel", () => {
                 {
                     app_urls: [],
                     banner: "banner",
-                    createdAtTimestamp: new Date().toISOString(),
+                    createdAtTimestamp: Math.floor(Date.now() / 1000).toString(),
                     description: "TEST DESCRIPTION",
                     external_url: "https://vechain.org",
                     id: "0x2fc30c2ad41a2994061efaf218f1d52dc92bc4a31a0f02a4916490076a7a393a",

@@ -103,7 +103,7 @@ describe("VbdCarouselBottomSheet", () => {
                 wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
             })
 
-            expect(screen.getByTestId("VBD_CAROUSEL_ITEM")).toBeOnTheScreen()
+            expect(screen.getByTestId("VBD_CAROUSEL_BS")).toBeOnTheScreen()
         })
 
         it("should render app information correctly", () => {
@@ -111,8 +111,8 @@ describe("VbdCarouselBottomSheet", () => {
                 wrapper: ({ children }) => <TestWrapper preloadedState={mockState}>{children}</TestWrapper>,
             })
 
-            expect(screen.getByTestId("VBD_CAROUSEL_ITEM_APP_NAME")).toHaveTextContent("Test DApp")
-            expect(screen.getByTestId("VBD_CAROUSEL_ITEM_APP_DESCRIPTION")).toHaveTextContent(
+            expect(screen.getByTestId("VBD_CAROUSEL_BS_APP_NAME")).toHaveTextContent("Test DApp")
+            expect(screen.getByTestId("VBD_CAROUSEL_BS_APP_DESCRIPTION")).toHaveTextContent(
                 "A test DApp for unit testing",
             )
         })

@@ -187,7 +187,7 @@ export const VbdCarouselBottomSheet = ({
             noMargins
             floating
             ref={ref}>
-            <BaseView testID="VBD_CAROUSEL_ITEM" style={styles.root}>
+            <BaseView testID="VBD_CAROUSEL_BS" style={styles.root}>
                 <Animated.View style={[styles.heroWrapper, animatedStyle]}>
                     <ImageBackground
                         source={{ uri: bannerUri }}
@@ -214,7 +214,7 @@ export const VbdCarouselBottomSheet = ({
                                     numberOfLines={1}
                                     typographyFont="subSubTitleSemiBold"
                                     color={COLORS.GREY_50}
-                                    testID="VBD_CAROUSEL_ITEM_APP_NAME">
+                                    testID="VBD_CAROUSEL_BS_APP_NAME">
                                     {app.name}
                                 </BaseText>
                             </BaseView>
@@ -233,7 +233,7 @@ export const VbdCarouselBottomSheet = ({
                             numberOfLines={15}
                             flexDirection="row"
                             py={5}
-                            testID="VBD_CAROUSEL_ITEM_APP_DESCRIPTION">
+                            testID="VBD_CAROUSEL_BS_APP_DESCRIPTION">
                             {app.description}
                         </BaseText>
                     </BaseView>
