@@ -1023,7 +1023,7 @@
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS": "Delegations-URL:er",
   "SETTINGS_TRANSACTIONS_SELECT_DELEGATION_URLS_BODY": "Lägg till eller ta bort en delegations-URL för att kunna välja den när du skickar transaktioner",
   "SETTINGS_TRANSACTIONS_TITLE": "Transaktioner",
-  "SHARE_DAPP": "Upptäckte {name:string} på VeWorld — absolut värt att kolla in.\nHär är vad det handlar om:\n{description:string}\n{url:string}",
+  "SHARE_DAPP": "Upptäckte {name:string} på VeWorld — definitivt värt att kolla in.\nHär är vad det handlar om:\n{description:string}\n{url:string}",
   "SHARE_IMAGE": "Dela bild",
   "SHARE_IMAGE_SUBTITLE": "Dela din NFT-bild med dina vänner",
   "SHOW_COLLECTION": "Visa samling",
