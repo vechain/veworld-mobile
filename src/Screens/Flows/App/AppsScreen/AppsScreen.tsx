@@ -20,11 +20,24 @@ import { AppsBottomSheet } from "./Components/VeBetter"
 import { EcosystemSection } from "./Components/Ecosystem"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
+import { useAppSelector } from "~Storage/Redux/Hooks"
+import { selectBookmarkedDapps } from "~Storage/Redux/Selectors"
+import { useDAppActions } from "./Hooks/useDAppActions"
+import { Favourites } from "../DiscoverScreen/Components/Favourites"
+import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
+import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
+import { VeBetterDAOCarousel } from "../DiscoverScreen/Components/VeBetterDAOCarousel"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+    const { ref: favoritesRef, onOpen: onOpenFavorites, onClose: onCloseFavorites } = useBottomSheetModal()
+
+    const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
+    const { onDAppPress } = useDAppActions()
+
+    const showFavorites = bookmarkedDApps.length > 0
 
     const isNormalUser = useIsNormalUser()
 
@@ -66,9 +79,38 @@ export const AppsScreen = () => {
             }
             body={
                 <>
+                    <BaseSpacer height={24} />
+
+                    {showFavorites && (
+                        <>
+                            <Favourites
+                                bookmarkedDApps={bookmarkedDApps}
+                                onActionLabelPress={onOpenFavorites}
+                                onDAppPress={onDAppPress}
+                            />
+                            <BaseSpacer height={48} />
+                        </>
+                    )}
                     {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
+
                     <BaseSpacer height={48} />
+
+                    {!showFavorites && (
+                        <>
+                            <FavoritesSuggestionBanner onPress={() => {}} />
+                            <BaseSpacer height={48} />
+                        </>
+                    )}
+
+                    {isNormalUser && (
+                        <>
+                            <VeBetterDAOCarousel />
+                            <BaseSpacer height={48} />
+                        </>
+                    )}
+
                     <EcosystemSection />
+                    <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
                     <BaseView flex={1} px={16} justifyContent="center" alignItems="center">
                         <BaseButton action={onOpenAppsBottomSheet} variant="solid" size="lg" w={100}>
                             {LL.BTN_OPEN()}

@@ -14,12 +14,14 @@ import { useDAppActions } from "../../Hooks"
 type Props = {
     selectedDApp?: DiscoveryDApp
     onClose?: () => void
+    onNavigateToDApp?: (dapp: DiscoveryDApp) => void
+    stackBehavior?: "push" | "replace"
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer height={14} />
 
 export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ selectedDApp, onClose }, ref) => {
+    ({ selectedDApp, onClose, stackBehavior = "push" }, ref) => {
         const { styles, theme } = useThemedStyles(baseStyles)
         const bookmarkedDApps = useDappBookmarking(selectedDApp?.href, selectedDApp?.name)
         const nav = useNavigation()
@@ -105,6 +107,8 @@ export const DAppOptionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                 snapPoints={computeSnappoints}
                 onDismiss={onClose}
                 onChange={handleSheetChangePosition}
+                stackBehavior={stackBehavior}
+                floating={true}
                 backgroundStyle={styles.layout}>
                 <BottomSheetFlatList
                     data={Actions}

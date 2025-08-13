@@ -1230,13 +1230,13 @@ type RootTranslation = {
 	 */
 	BTN_ADD_CUSTOM_NODE: string
 	/**
-	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
-	 */
-	BTN_ADD_TO_FAVORITES: string
-	/**
 	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BTN_ADD_TO_FAVORITE: string
+	/**
+	 * A​d​d​ ​t​o​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BTN_ADD_TO_FAVORITES: string
 	/**
 	 * A​l​p​h​a​b​e​t​i​c​ ​(​A​-​Z​)
 	 */
@@ -1475,6 +1475,10 @@ type RootTranslation = {
 	 */
 	BTN_OPEN_DAPP: string
 	/**
+	 * O​r​d​e​r​ ​s​a​v​e​d​!
+	 */
+	BTN_ORDER_SAVED: string
+	/**
 	 * P​a​s​t​e​ ​A​d​d​r​e​s​s
 	 */
 	BTN_PASTE_ADDRESS: string
@@ -1487,13 +1491,13 @@ type RootTranslation = {
 	 */
 	BTN_REMOVE_ACCOUNT: string
 	/**
-	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
-	 */
-	BTN_REMOVE_FROM_FAVORITES: string
-	/**
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BTN_REMOVE_FROM_FAVORITE: string
+	/**
+	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​ ​d​A​p​p​s
+	 */
+	BTN_REMOVE_FROM_FAVORITES: string
 	/**
 	 * R​e​m​o​v​e​ ​w​a​l​l​e​t
 	 */
@@ -1518,6 +1522,14 @@ type RootTranslation = {
 	 * R​e​t​r​y
 	 */
 	BTN_RETRY: string
+	/**
+	 * S​a​v​e
+	 */
+	BTN_SAVE: string
+	/**
+	 * S​a​v​e​d​!
+	 */
+	BTN_SAVED: string
 	/**
 	 * S​c​a​n​ ​Q​R​ ​C​o​d​e
 	 */
@@ -1991,6 +2003,14 @@ type RootTranslation = {
 	 */
 	CONNECTED_APP_CONTRACT: string
 	/**
+	 * Y​o​u​ ​c​a​n​ ​r​e​c​o​n​n​e​c​t​ ​a​n​y​t​i​m​e​ ​—​ ​r​e​m​o​v​i​n​g​ ​i​t​ ​j​u​s​t​ ​m​e​a​n​s​ ​y​o​u​'​l​l​ ​n​e​e​d​ ​t​o​ ​l​o​g​ ​i​n​ ​a​g​a​i​n​ ​n​e​x​t​ ​t​i​m​e​.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_DELETE_TITLE: string
+	/**
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
 	CONNECTED_APP_DESCRIPTION: string
@@ -2384,6 +2404,18 @@ type RootTranslation = {
 	 */
 	DISCOVER_EMPTY_SEARCH: string
 	/**
+	 * F​o​r​ ​y​o​u
+	 */
+	DISCOVER_FOR_YOU: string
+	/**
+	 * N​e​w
+	 */
+	DISCOVER_FOR_YOU_NEW: string
+	/**
+	 * P​o​p​u​l​a​r
+	 */
+	DISCOVER_FOR_YOU_POPULAR: string
+	/**
 	 * N​o​ ​D​a​p​p​ ​f​o​u​n​d
 	 */
 	DISCOVER_NO_DAPPS_FOUND: string
@@ -2407,6 +2439,10 @@ type RootTranslation = {
 	 * D​i​s​c​o​v​e​r​ ​a​p​p​l​i​c​a​t​i​o​n​s​ ​i​n​ ​t​h​e​ ​v​e​c​h​a​i​n​ ​e​c​o​s​y​s​t​e​m
 	 */
 	DISCOVER_SUB_TITLE: string
+	/**
+	 * S​u​g​g​e​s​t​e​d​ ​f​o​r​ ​y​o​u
+	 */
+	DISCOVER_SUGGESTED_FOR_YOU: string
 	/**
 	 * F​a​v​o​u​r​i​t​e​s
 	 */
@@ -2435,22 +2471,6 @@ type RootTranslation = {
 	 * S​E​A​R​C​H​ ​T​H​E​ ​W​E​B
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: string
-	/**
-	 * F​o​r​ ​y​o​u
-	 */
-	DISCOVER_FOR_YOU: string
-	/**
-	 * S​u​g​g​e​s​t​e​d​ ​f​o​r​ ​y​o​u
-	 */
-	DISCOVER_SUGGESTED_FOR_YOU: string
-	/**
-	 * N​e​w
-	 */
-	DISCOVER_FOR_YOU_NEW: string
-	/**
-	 * P​o​p​u​l​a​r
-	 */
-	DISCOVER_FOR_YOU_POPULAR: string
 	/**
 	 * D​o​n​'​t​ ​s​e​e​ ​y​o​u​r​ ​N​F​T​s​?
 	 */
@@ -4243,11 +4263,11 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * S​i​g​n
+	 * L​o​g​i​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
 	/**
-	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 * L​o​g​i​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
@@ -4912,6 +4932,10 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
+	/**
+	 * A​d​d​ ​y​o​u​r​ ​f​a​v​o​r​i​t​e​ ​a​p​p​s
+	 */
+	FAVORITES_SUGGESTION_BANNER_TITLE: string
 }
 
 export type TranslationFunctions = {
@@ -6097,13 +6121,13 @@ Thanks for your patience!
 	 */
 	BTN_ADD_CUSTOM_NODE: () => LocalizedString
 	/**
-	 * Add to Favorite dApps
-	 */
-	BTN_ADD_TO_FAVORITES: () => LocalizedString
-	/**
 	 * Add to Favorites
 	 */
 	BTN_ADD_TO_FAVORITE: () => LocalizedString
+	/**
+	 * Add to Favorite dApps
+	 */
+	BTN_ADD_TO_FAVORITES: () => LocalizedString
 	/**
 	 * Alphabetic (A-Z)
 	 */
@@ -6341,6 +6365,10 @@ Thanks for your patience!
 	 */
 	BTN_OPEN_DAPP: () => LocalizedString
 	/**
+	 * Order saved!
+	 */
+	BTN_ORDER_SAVED: () => LocalizedString
+	/**
 	 * Paste Address
 	 */
 	BTN_PASTE_ADDRESS: () => LocalizedString
@@ -6353,13 +6381,13 @@ Thanks for your patience!
 	 */
 	BTN_REMOVE_ACCOUNT: () => LocalizedString
 	/**
-	 * Remove from Favorite dApps
-	 */
-	BTN_REMOVE_FROM_FAVORITES: () => LocalizedString
-	/**
 	 * Remove from Favorites
 	 */
 	BTN_REMOVE_FROM_FAVORITE: () => LocalizedString
+	/**
+	 * Remove from Favorite dApps
+	 */
+	BTN_REMOVE_FROM_FAVORITES: () => LocalizedString
 	/**
 	 * Remove wallet
 	 */
@@ -6384,6 +6412,14 @@ Thanks for your patience!
 	 * Retry
 	 */
 	BTN_RETRY: () => LocalizedString
+	/**
+	 * Save
+	 */
+	BTN_SAVE: () => LocalizedString
+	/**
+	 * Saved!
+	 */
+	BTN_SAVED: () => LocalizedString
 	/**
 	 * Scan QR Code
 	 */
@@ -6849,6 +6885,14 @@ Thanks for your patience!
 	 */
 	CONNECTED_APP_CONTRACT: () => LocalizedString
 	/**
+	 * You can reconnect anytime — removing it just means you'll need to log in again next time.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: () => LocalizedString
+	/**
+	 * Disconnect connected app
+	 */
+	CONNECTED_APP_DELETE_TITLE: () => LocalizedString
+	/**
 	 * Description
 	 */
 	CONNECTED_APP_DESCRIPTION: () => LocalizedString
@@ -7241,6 +7285,18 @@ Thanks for your patience!
 	 */
 	DISCOVER_EMPTY_SEARCH: () => LocalizedString
 	/**
+	 * For you
+	 */
+	DISCOVER_FOR_YOU: () => LocalizedString
+	/**
+	 * New
+	 */
+	DISCOVER_FOR_YOU_NEW: () => LocalizedString
+	/**
+	 * Popular
+	 */
+	DISCOVER_FOR_YOU_POPULAR: () => LocalizedString
+	/**
 	 * No Dapp found
 	 */
 	DISCOVER_NO_DAPPS_FOUND: () => LocalizedString
@@ -7264,6 +7320,10 @@ Thanks for your patience!
 	 * Discover applications in the vechain ecosystem
 	 */
 	DISCOVER_SUB_TITLE: () => LocalizedString
+	/**
+	 * Suggested for you
+	 */
+	DISCOVER_SUGGESTED_FOR_YOU: () => LocalizedString
 	/**
 	 * Favourites
 	 */
@@ -7292,22 +7352,6 @@ Thanks for your patience!
 	 * SEARCH THE WEB
 	 */
 	DISCOVER_WEB_SEARCH_FLOATING_BUTTON_LABEL: () => LocalizedString
-	/**
-	 * For you
-	 */
-	DISCOVER_FOR_YOU: () => LocalizedString
-	/**
-	 * Suggested for you
-	 */
-	DISCOVER_SUGGESTED_FOR_YOU: () => LocalizedString
-	/**
-	 * New
-	 */
-	DISCOVER_FOR_YOU_NEW: () => LocalizedString
-	/**
-	 * Popular
-	 */
-	DISCOVER_FOR_YOU_POPULAR: () => LocalizedString
 	/**
 	 * Don't see your NFTs?
 	 */
@@ -9066,11 +9110,11 @@ Here's what it's all about:
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Sign
+	 * Login
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
 	/**
-	 * Sign certificate
+	 * Login
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
@@ -9729,6 +9773,10 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
+	/**
+	 * Add your favorite apps
+	 */
+	FAVORITES_SUGGESTION_BANNER_TITLE: () => LocalizedString
 }
 
 export type Formatters = {
