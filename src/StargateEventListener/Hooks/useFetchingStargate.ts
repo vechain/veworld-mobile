@@ -1,6 +1,6 @@
 import { useCallback } from "react"
 import { useQueryClient } from "@tanstack/react-query"
-import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccountOrNull, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { getStargateNetworkConfig } from "~Constants/Constants/Staking"
 import { debug } from "~Utils"
 import { ERROR_EVENTS } from "~Constants"
@@ -11,7 +11,7 @@ import { ERROR_EVENTS } from "~Constants"
  */
 export const useFetchingStargate = () => {
     const network = useAppSelector(selectSelectedNetwork)
-    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const queryClient = useQueryClient()
 
     const refetchStargateData = useCallback(
@@ -23,7 +23,13 @@ export const useFetchingStargate = () => {
                 return
             }
 
-            const accountToInvalidate = targetAddress || selectedAccount.address
+            // If no target address is provided and no account is selected, return early
+            if (!targetAddress && !selectedAccount?.address) {
+                debug(ERROR_EVENTS.STARGATE, "No target address provided and no account selected, skipping refetch")
+                return
+            }
+
+            const accountToInvalidate = targetAddress || selectedAccount!.address
             debug(
                 ERROR_EVENTS.STARGATE,
                 "Stargate data refetch triggered for network:",
@@ -64,7 +70,7 @@ export const useFetchingStargate = () => {
                 debug(ERROR_EVENTS.STARGATE, "Error invalidating Stargate queries:", error)
             }
         },
-        [network.type, selectedAccount.address, queryClient],
+        [network.type, selectedAccount, queryClient],
     )
 
     return {
