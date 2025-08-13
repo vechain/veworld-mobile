@@ -189,7 +189,7 @@ jest.mock("@react-navigation/bottom-tabs", () => ({
 jest.mock("@gorhom/bottom-sheet", () => ({
     __esModule: true,
     ...require("@gorhom/bottom-sheet/mock"),
-    ...require("./mocks/bottom-sheet-mock"),
+    ...require("./src/Test/mocks/bottom-sheet-mock"),
 }))
 
 jest.mock("react-native-reanimated-skeleton", () => "Skeleton")
