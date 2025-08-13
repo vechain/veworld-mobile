@@ -259,6 +259,9 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
             if (name === "RNViewShot") {
                 return null
             }
+            if (name === "SettingsManager") {
+                return null
+            }
             return turboModuleRegistry.getEnforcing(name)
         },
     }

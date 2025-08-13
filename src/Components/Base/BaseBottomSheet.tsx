@@ -25,7 +25,10 @@ import { BaseView } from "./BaseView"
 const OPENED_STATE = 0
 const CLOSED_STATE = -1
 
-export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints" | "children"> & {
+export type BaseBottomSheetProps<TData = unknown> = Omit<
+    BottomSheetModalProps,
+    "snapPoints" | "children" | "enablePanDownToClose"
+> & {
     /**
      * The content of the modal.
      */
@@ -34,6 +37,14 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
      * The title of the modal.
      */
     title?: LocalizedString
+    /**
+     * Optional left element in the header (e.g., close button, icon).
+     */
+    leftElement?: ReactNode
+    /**
+     * Optional right element in the header (e.g., action button, icon).
+     */
+    rightElement?: ReactNode
     /**
      * Snap points for the bottom sheet. They should be an array of strings, each representing a percentage.
      */
@@ -76,6 +87,7 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
     bottomSafeArea?: boolean
     /**
      * Enable pan down to close
+     * @default true
      */
     enablePanDownToClose?: boolean
 
@@ -98,7 +110,10 @@ const BaseBottomSheetContent = ({
     footerStyle,
     snapPoints,
     title,
+    leftElement,
+    rightElement,
     children,
+    floating,
 }: PropsWithChildren<{
     bottomSafeArea: boolean
     bottomSafeAreaSize: number
@@ -108,20 +123,49 @@ const BaseBottomSheetContent = ({
     footerStyle: StyleProp<ViewStyle>[] | StyleProp<ViewStyle>
     snapPoints?: string[]
     title?: string
+    leftElement?: ReactNode
+    rightElement?: ReactNode
+    floating: boolean
 }>) => {
+    const headerStyles = useMemo(
+        () => ({
+            headerContainer: { marginBottom: 16 },
+            leftElement: { marginRight: 16 },
+            rightElement: { marginLeft: 16 },
+        }),
+        [],
+    )
+
+    const renderHeader = () => {
+        const hasHeader = title || leftElement || rightElement
+        if (!hasHeader) return null
+
+        return (
+            <BaseView flexDirection="row" alignItems="center" style={headerStyles.headerContainer}>
+                {leftElement && <BaseView style={headerStyles.leftElement}>{leftElement}</BaseView>}
+                {title && (
+                    <BaseView flex={1}>
+                        <BaseText typographyFont="biggerTitleSemiBold">{title}</BaseText>
+                    </BaseView>
+                )}
+                {rightElement && <BaseView style={headerStyles.rightElement}>{rightElement}</BaseView>}
+            </BaseView>
+        )
+    }
+
     return (
         <BaseView>
             {snapPoints ? (
                 <BaseView style={contentViewStyle}>
-                    {title && <BaseText typographyFont="title">{title}</BaseText>}
+                    {renderHeader()}
                     {children}
                     {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
                 </BaseView>
             ) : (
                 <BottomSheetView style={contentViewStyle}>
-                    {title && <BaseText typographyFont="title">{title}</BaseText>}
+                    {renderHeader()}
                     {children}
-                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                    {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
                 </BottomSheetView>
             )}
             {footer && (
@@ -140,6 +184,8 @@ const _BaseBottomSheet = <TData,>(
         snapPoints,
         dynamicHeight = false,
         title,
+        leftElement,
+        rightElement,
         ignoreMinimumSnapPoint = false,
         footerStyle,
         noMargins = false,
@@ -150,8 +196,9 @@ const _BaseBottomSheet = <TData,>(
         bottomSafeArea = true,
         enablePanDownToClose = true,
         blurBackdrop = false,
-        floating = true,
         backgroundStyle,
+        stackBehavior = "push",
+        floating = false,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
@@ -261,7 +308,7 @@ const _BaseBottomSheet = <TData,>(
     return (
         <BottomSheetModal
             animateOnMount={!reducedMotion}
-            stackBehavior="push"
+            stackBehavior={stackBehavior}
             ref={ref}
             enablePanDownToClose={enablePanDownToClose}
             index={0}
@@ -291,7 +338,10 @@ const _BaseBottomSheet = <TData,>(
                         footer={footer}
                         footerStyle={footerStyle}
                         snapPoints={snapPoints}
-                        title={title}>
+                        title={title}
+                        leftElement={leftElement}
+                        rightElement={rightElement}
+                        floating={floating}>
                         {children(p?.data)}
                     </BaseBottomSheetContent>
                 )
@@ -304,7 +354,10 @@ const _BaseBottomSheet = <TData,>(
                     footer={footer}
                     footerStyle={footerStyle}
                     snapPoints={snapPoints}
-                    title={title}>
+                    title={title}
+                    leftElement={leftElement}
+                    rightElement={rightElement}
+                    floating={floating}>
                     {children}
                 </BaseBottomSheetContent>
             )}

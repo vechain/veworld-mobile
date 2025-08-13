@@ -852,6 +852,12 @@ export const useInAppBrowser = () => {
     return context
 }
 
+export const useInAppBrowserOrNull = () => {
+    const context = useContext(Context)
+
+    return context ?? null
+}
+
 /**
  * @developer: uncomment and add the below to debug tho console logs in the mobile browser (
  */
