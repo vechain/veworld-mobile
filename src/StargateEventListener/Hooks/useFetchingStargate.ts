@@ -33,8 +33,6 @@ export const useFetchingStargate = () => {
             )
 
             try {
-                // Invalidate and refetch all Stargate-related queries for the target network and account
-                // Using refetchType: 'all' eliminates the need for a separate refetchQueries call
                 await queryClient.invalidateQueries({
                     predicate(query) {
                         // Only invalidate userStargateNodes and userStargateNfts queries

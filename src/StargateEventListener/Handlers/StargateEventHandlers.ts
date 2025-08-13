@@ -77,19 +77,23 @@ export const handleNodeDelegatedEvent = async ({
 
         const nodeDelegatedEvents = await parseNodeDelegatedEvents(beat, nodeManagementAddress, thor, receiptProcessor)
 
-        // Filter only events where the tx origin (node owner) is an address managed in VeWorld
-        const ownedEvents = nodeDelegatedEvents.filter(evt =>
-            managedAddresses.some(addr => AddressUtils.compareAddresses(addr, evt.owner)),
+        // Filter events where either the owner or delegatee is an address managed in VeWorld
+        const relevantEvents = nodeDelegatedEvents.filter(evt =>
+            managedAddresses.some(
+                addr =>
+                    AddressUtils.compareAddresses(addr, evt.owner) ||
+                    AddressUtils.compareAddresses(addr, evt.delegatee),
+            ),
         )
 
-        if (ownedEvents.length > 0) {
+        if (relevantEvents.length > 0) {
             debug(
                 ERROR_EVENTS.STARGATE,
-                `Found ${ownedEvents.length} NodeDelegated events in beat ${beat.number} for managed addresses`,
+                `Found ${relevantEvents.length} NodeDelegated events in beat ${beat.number} for managed addresses`,
             )
 
             // Process each event
-            for (const eventData of ownedEvents) {
+            for (const eventData of relevantEvents) {
                 await processNodeDelegatedEvent(eventData, refetchStargateData)
             }
         }
@@ -189,11 +193,10 @@ const processNodeDelegatedEvent = async (
 
         // Add a small delay to allow blockchain state to propagate before refetching
         setTimeout(() => {
-            // Trigger refetch of Stargate data for the specific node owner involved in the event
             refetchStargateData(eventData.owner)
 
             // Also invalidate queries for the delegatee account if it's different from the owner
-            if (eventData.delegatee !== eventData.owner) {
+            if (!AddressUtils.compareAddresses(eventData.delegatee, eventData.owner)) {
                 debug(ERROR_EVENTS.STARGATE, "Also invalidating queries for delegatee:", eventData.delegatee)
                 refetchStargateData(eventData.delegatee)
             }
