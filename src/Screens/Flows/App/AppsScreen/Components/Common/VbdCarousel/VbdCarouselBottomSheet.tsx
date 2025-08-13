@@ -13,8 +13,8 @@ import {
     BaseView,
     BlurView,
 } from "~Components"
-import { COLORS } from "~Constants"
-import { useBottomSheetModal, useTheme } from "~Hooks"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
 
@@ -102,6 +102,8 @@ export const VbdCarouselBottomSheet = ({
     const [isLoading, setIsLoading] = useState(true)
     const isFavorite = favorites.some(favorite => URIUtils.compareURLs(favorite.href, app.external_url))
 
+    const { styles } = useThemedStyles(baseStyles)
+
     const handleClose = useCallback(() => {
         setTimeout(() => {
             onClose()
@@ -179,9 +181,7 @@ export const VbdCarouselBottomSheet = ({
         <BaseBottomSheet
             blurBackdrop
             dynamicHeight
-            backgroundStyle={{
-                backgroundColor: theme.colors.actionBottomSheet.background,
-            }}
+            backgroundStyle={styles.backgroundStyle}
             enablePanDownToClose={false}
             onPressOutside="none"
             noMargins
@@ -239,7 +239,7 @@ export const VbdCarouselBottomSheet = ({
                     </BaseView>
                 </BlurView>
             </BaseView>
-            <BaseView bg={theme.colors.actionBottomSheet.background}>
+            <BaseView style={styles.infoContainer} bg={theme.colors.actionBottomSheet.background}>
                 <BaseView flexDirection="row" alignItems="center" justifyContent="center" gap={8} px={30} pt={16}>
                     <VbdInfoColumn Icon={BadgeCheckIconSVG} title={LL.APPS_BS_JOINED()} description={date} />
                     <VbdInfoColumn
@@ -296,48 +296,57 @@ export const VbdCarouselBottomSheet = ({
     )
 }
 
-const styles = StyleSheet.create({
-    root: {
-        position: "relative",
-        overflow: "hidden",
-        height: 360,
-        zIndex: 1,
-        marginTop: -360,
-    },
-    heroWrapper: {
-        width: "100%",
-        height: "100%",
-    },
-    hero: {
-        height: "100%",
-        width: "100%",
-    },
-    btn: {
-        justifyContent: "center",
-    },
-    favIcon: {
-        marginRight: 12,
-        marginVertical: -2,
-    },
-    blurView: {
-        backgroundColor: "rgba(0, 0, 0, 0.30)",
-        position: "absolute",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 10,
-    },
-    closeBtn: {
-        position: "absolute",
-        top: 16,
-        right: 16,
-        backgroundColor: "rgba(0, 0, 0, 0.30)",
-        borderRadius: 100,
-        padding: 10,
-    },
-    logo: {
-        width: 32,
-        height: 32,
-        borderRadius: 4,
-    },
-})
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        root: {
+            position: "relative",
+            overflow: "hidden",
+            height: 360,
+            zIndex: 1,
+            marginTop: -360,
+        },
+        backgroundStyle: {
+            backgroundColor: theme.colors.actionBottomSheet.background,
+        },
+        heroWrapper: {
+            width: "100%",
+            height: "100%",
+        },
+        hero: {
+            height: "100%",
+            width: "100%",
+        },
+        infoContainer: {
+            borderBottomLeftRadius: 24,
+            borderBottomRightRadius: 24,
+            paddingBottom: 12,
+        },
+        btn: {
+            justifyContent: "center",
+        },
+        favIcon: {
+            marginRight: 12,
+            marginVertical: -2,
+        },
+        blurView: {
+            backgroundColor: "rgba(0, 0, 0, 0.30)",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 10,
+        },
+        closeBtn: {
+            position: "absolute",
+            top: 16,
+            right: 16,
+            backgroundColor: "rgba(0, 0, 0, 0.30)",
+            borderRadius: 100,
+            padding: 10,
+        },
+        logo: {
+            width: 32,
+            height: 32,
+            borderRadius: 4,
+        },
+    })

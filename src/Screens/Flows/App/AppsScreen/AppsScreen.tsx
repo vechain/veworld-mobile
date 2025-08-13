@@ -18,7 +18,6 @@ import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
 import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
 
 export const AppsScreen = () => {
-    const { styles } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
@@ -37,8 +36,7 @@ export const AppsScreen = () => {
 
     return (
         <Layout
-            title={LL.APPS_TITLE()}
-            hasTopSafeAreaOnly
+            bg={theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE}
             noBackButton
             noMargin
             fixedHeader={
@@ -91,10 +89,12 @@ export const AppsScreen = () => {
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
-        scrollView: {
-            flex: 1,
+        iconContainer: {
+            padding: 8,
+            borderRadius: 100,
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.GREY_100,
         },
         header: {
             paddingHorizontal: 16,

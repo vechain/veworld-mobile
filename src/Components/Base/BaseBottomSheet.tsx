@@ -90,7 +90,6 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<
      * @default true
      */
     enablePanDownToClose?: boolean
-
     /**
      * Enable blur backdrop on iOS
      */
