@@ -17,7 +17,7 @@ export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: 
     const theme = useTheme()
     const { formatLocale } = useFormatFiat()
 
-    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
+    const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
 
     const tokenWithCompleteInfo = useTokenWithCompleteInfo(tokenWithBalance)
 
@@ -56,7 +56,7 @@ export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: 
                         isPositive24hChange={isPositive24hChange}
                         renderFiatBalance={
                             <FiatBalance
-                                typographyFont="bodySemiBold"
+                                typographyFont="bodyMedium"
                                 color={tokenValueLabelColor}
                                 balances={[fiatBalance]}
                                 isVisible={isBalanceVisible}
