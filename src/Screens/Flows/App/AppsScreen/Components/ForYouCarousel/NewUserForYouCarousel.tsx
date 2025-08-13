@@ -1,8 +1,9 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
+import { selectSuggestedAppIds, setSuggestedAppIds, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { VbdCarousel } from "../Common/VbdCarousel/VbdCarousel"
 
 const SUGGESTED_APP_IDS = [
@@ -20,6 +21,18 @@ export const NewUserForYouCarousel = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
 
+    const appIds = useAppSelector(selectSuggestedAppIds)
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        if (appIds?.length === SUGGESTED_APP_IDS.length) return
+
+        const shuffled = SUGGESTED_APP_IDS.slice(0, -1)
+            .sort(() => (Math.random() < 0.5 ? -1 : 1))
+            .concat([SUGGESTED_APP_IDS[SUGGESTED_APP_IDS.length - 1]])
+        dispatch(setSuggestedAppIds(shuffled))
+    }, [appIds?.length, dispatch])
+
     return (
         <BaseView flexDirection="column" gap={16}>
             <BaseText
@@ -28,7 +41,7 @@ export const NewUserForYouCarousel = () => {
                 px={16}>
                 {LL.DISCOVER_SUGGESTED_FOR_YOU()}
             </BaseText>
-            <VbdCarousel appIds={SUGGESTED_APP_IDS} />
+            <VbdCarousel appIds={appIds ?? []} isLoading={!appIds} />
         </BaseView>
     )
 }
