@@ -78,6 +78,9 @@ export const AppsScreen = () => {
 
                     <BaseSpacer height={48} />
 
+                    <VeBetterSection />
+                    <BaseSpacer height={48} />
+
                     {!showFavorites && (
                         <>
                             <FavoritesSuggestionBanner onPress={() => {}} />
@@ -91,8 +94,6 @@ export const AppsScreen = () => {
                             <BaseSpacer height={48} />
                         </>
                     )}
-                    <VeBetterSection />
-                    <BaseSpacer height={48} />
 
                     <EcosystemSection />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
