@@ -14,6 +14,7 @@ export const VeBetterDAOCarousel = () => {
     const featureFlags = useFeatureFlags()
     const track = useAnalyticTracking()
     const location = useRoute()
+    const { betterWorldFeature } = useFeatureFlags()
 
     const slides: CarouselSlideItem[] = useMemo(
         () => [
@@ -76,6 +77,7 @@ export const VeBetterDAOCarousel = () => {
             onSlidePressActivation="before"
             onSlidePress={onSlidePress}
             padding={16}
+            itemHeight={betterWorldFeature.appsScreen.enabled ? 108 : undefined}
             gap={8}
             baseWidth={SCREEN_WIDTH}
         />
