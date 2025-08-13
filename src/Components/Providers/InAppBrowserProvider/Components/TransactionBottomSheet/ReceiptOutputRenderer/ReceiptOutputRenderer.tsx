@@ -18,6 +18,7 @@ import { SwapOutput } from "./Tokens/SwapOutput"
 import { TokenApprovalOutput } from "./Tokens/TokenApprovalOutput"
 import { TokenReceiveOutput } from "./Tokens/TokenReceiveOutput"
 import { TokenSendOutput } from "./Tokens/TokenSendOutput"
+import { VeVoteCastOutput } from "./VeVote/VeVoteCastOutput"
 
 type Props = {
     expanded: boolean
@@ -73,6 +74,8 @@ export const ReceiptOutputRenderer = ({ expanded, output, clauses }: Props) => {
             //Show the event only if approved == true
             if (output.params.approved) return <NftApprovalOutput expanded={expanded} output={output} clause={clause} />
             return <ContractCallOutput expanded={expanded} output={output} clause={clause} />
+        case "VeVote_VoteCast(address,uint256,uint8,string,uint256,uint256[],address)":
+            return <VeVoteCastOutput expanded={expanded} output={output} clause={clause} />
         default:
             return <ContractCallOutput expanded={expanded} output={output} clause={clause} />
     }

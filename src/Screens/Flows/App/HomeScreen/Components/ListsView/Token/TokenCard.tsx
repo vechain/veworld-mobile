@@ -17,7 +17,7 @@ type Props = {
 
 export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: Props) => {
     const theme = useTheme()
-    const tokenValueLabelColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
+    const tokenValueLabelColor = theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
 
     const { formatLocale } = useFormatFiat()
 
@@ -63,7 +63,7 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
                         isLoading={isTokensOwnedLoading}
                         renderFiatBalance={
                             <FiatBalance
-                                typographyFont="subSubTitleSemiBold"
+                                typographyFont="bodyMedium"
                                 color={tokenValueLabelColor}
                                 balances={[fiatBalance]}
                                 isVisible={isBalanceVisible}
