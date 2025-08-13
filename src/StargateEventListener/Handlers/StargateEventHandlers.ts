@@ -27,8 +27,9 @@ interface NodeDelegatedEventHandlerProps {
     beat: Beat
     network: Network
     thor: ThorClient
-    refetchStargateData: () => void
+    refetchStargateData: (targetAddress?: string) => void
     managedAddresses: string[]
+    selectedAccountAddress?: string
 }
 
 export const handleNodeDelegatedEvent = async ({
@@ -37,6 +38,7 @@ export const handleNodeDelegatedEvent = async ({
     thor,
     refetchStargateData,
     managedAddresses,
+    selectedAccountAddress,
 }: NodeDelegatedEventHandlerProps) => {
     try {
         // Get Stargate contract addresses for the current network
@@ -92,10 +94,40 @@ export const handleNodeDelegatedEvent = async ({
                 `Found ${relevantEvents.length} NodeDelegated events in beat ${beat.number} for managed addresses`,
             )
 
-            // Process each event
+            const uniqueAddresses = new Set<string>()
+
+            // Process each event for logging and collect unique addresses
             for (const eventData of relevantEvents) {
-                await processNodeDelegatedEvent(eventData, refetchStargateData)
+                debug(ERROR_EVENTS.STARGATE, "Processing NodeDelegated event:", {
+                    nodeId: eventData.nodeId,
+                    delegatee: eventData.delegatee,
+                    isDelegated: eventData.isDelegated,
+                    blockNumber: eventData.blockNumber,
+                    txId: eventData.txId,
+                    owner: eventData.owner,
+                })
+
+                // Add owner address
+                uniqueAddresses.add(eventData.owner.toLowerCase())
+
+                // Add delegatee address if different from owner
+                if (!AddressUtils.compareAddresses(eventData.delegatee, eventData.owner)) {
+                    uniqueAddresses.add(eventData.delegatee.toLowerCase())
+                }
             }
+
+            // Refetch data once per unique address with a delay to allow blockchain state to propagate
+            // Only refetch for the selected account to avoid unnecessary network calls
+            setTimeout(() => {
+                uniqueAddresses.forEach(address => {
+                    if (!selectedAccountAddress || AddressUtils.compareAddresses(address, selectedAccountAddress)) {
+                        debug(ERROR_EVENTS.STARGATE, "Refetching Stargate data for address:", address)
+                        refetchStargateData(address)
+                    } else {
+                        debug(ERROR_EVENTS.STARGATE, "Skipping refetch for non-selected address:", address)
+                    }
+                })
+            }, 500)
         }
     } catch (err) {
         error(ERROR_EVENTS.STARGATE, "Error handling NodeDelegated event:", err)
@@ -175,33 +207,4 @@ const processExpandedTransactionsForEvents = (
                 } satisfies NodeDelegatedEventData
             }),
     )
-}
-
-const processNodeDelegatedEvent = async (
-    eventData: NodeDelegatedEventData,
-    refetchStargateData: (targetAddress?: string) => void,
-) => {
-    try {
-        debug(ERROR_EVENTS.STARGATE, "Processing NodeDelegated event:", {
-            nodeId: eventData.nodeId,
-            delegatee: eventData.delegatee,
-            isDelegated: eventData.isDelegated,
-            blockNumber: eventData.blockNumber,
-            txId: eventData.txId,
-            owner: eventData.owner,
-        })
-
-        // Add a small delay to allow blockchain state to propagate before refetching
-        setTimeout(() => {
-            refetchStargateData(eventData.owner)
-
-            // Also invalidate queries for the delegatee account if it's different from the owner
-            if (!AddressUtils.compareAddresses(eventData.delegatee, eventData.owner)) {
-                debug(ERROR_EVENTS.STARGATE, "Also invalidating queries for delegatee:", eventData.delegatee)
-                refetchStargateData(eventData.delegatee)
-            }
-        }, 500)
-    } catch (err) {
-        error(ERROR_EVENTS.STARGATE, "Error processing NodeDelegated event:", err)
-    }
 }

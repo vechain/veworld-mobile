@@ -83,6 +83,7 @@ export const TransferEventListener: React.FC = () => {
                     thor,
                     refetchStargateData,
                     managedAddresses: visibleAccounts.map(acc => acc.address),
+                    selectedAccountAddress: selectedAccount.address,
                 })
 
                 if (relevantAccounts.length === 0) return
