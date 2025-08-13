@@ -26,6 +26,10 @@ on:
                 description: "PR branch"
                 type: string
                 required: true
+            recent_prs:
+                description: "Recent PRs for release"
+                type: string
+                required: false
 
 jobs:
     build-test-android:
@@ -146,7 +150,8 @@ jobs:
                   export STORE_PASSWORD="$(<store_password.txt)"
                   export KEY_PASSWORD="$(<store_password.txt)"
                   export KEY_ALIAS="$(<key_alias.txt)"
-                  fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}}
+                  fastlane build_android_ci version_code:${{inputs.build}} version_name:${{inputs.version}} recent_prs:'${{inputs.recent_prs}}'
+
 
             - name: Artifact apk
               id: upload
