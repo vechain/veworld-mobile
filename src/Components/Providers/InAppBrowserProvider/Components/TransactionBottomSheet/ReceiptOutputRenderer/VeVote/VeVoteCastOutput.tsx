@@ -7,5 +7,13 @@ type Props = ReceiptOutputProps<"VeVote_VoteCast(address,uint256,uint8,string,ui
 export const VeVoteCastOutput = ({ output, ...props }: Props) => {
     const { LL } = useI18nContext()
 
-    return <BaseReceiptOutput label={LL.RECEIPT_OUTPUT_VEVOTE_CAST()} iconKey="icon-vote" output={output} {...props} />
+    return (
+        <BaseReceiptOutput
+            label={LL.RECEIPT_OUTPUT_VEVOTE_CAST()}
+            iconKey="icon-vote"
+            output={output}
+            testID="VEVOTE_VOTE_CAST"
+            {...props}
+        />
+    )
 }

@@ -763,6 +763,34 @@ describe("ReceiptOutputRenderer", () => {
             })
         })
     })
+    describe("VeVote", () => {
+        it("Vote cast", () => {
+            renderComponentWithProps(
+                <ReceiptOutputRenderer
+                    expanded
+                    clauses={clauses}
+                    output={{
+                        clauseIndex: 0,
+                        name: "VeVote_VoteCast(address,uint256,uint8,string,uint256,uint256[],address)",
+                        params: {
+                            from: ethers.Wallet.createRandom().address,
+                            proposalId: 1n,
+                            reason: "",
+                            support: 1,
+                            tokenIds: [1n],
+                            validator: ethers.Wallet.createRandom().address,
+                            voteWeight: 1n,
+                        },
+                    }}
+                />,
+                {
+                    wrapper: TestWrapper,
+                },
+            )
+
+            expect(screen.getByTestId("VEVOTE_VOTE_CAST")).toBeVisible()
+        })
+    })
     it("Generic contract call", () => {
         renderComponentWithProps(
             <ReceiptOutputRenderer
