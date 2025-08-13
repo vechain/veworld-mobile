@@ -486,6 +486,14 @@ type RootTranslation = {
 	 */
 	B3TR_PROPOSAL_VOTE: string
 	/**
+	 * V​e​V​o​t​e
+	 */
+	VEVOTE_CAST_TITLE: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​p​r​o​p​o​s​a​l
+	 */
+	VEVOTE_CAST_DESCRIPTION: string
+	/**
 	 * N​e​w​ ​g​a​l​a​x​y​ ​m​e​m​b​e​r​ ​l​e​v​e​l
 	 */
 	B3TR_UPGRADE_GM: string
@@ -5168,6 +5176,14 @@ Try reconnect your device to the internet.
 	 * Vote on VeBetterDAO proposal
 	 */
 	B3TR_PROPOSAL_VOTE: () => LocalizedString
+	/**
+	 * VeVote
+	 */
+	VEVOTE_CAST_TITLE: () => LocalizedString
+	/**
+	 * Vote on proposal
+	 */
+	VEVOTE_CAST_DESCRIPTION: () => LocalizedString
 	/**
 	 * New galaxy member level
 	 */

@@ -9,6 +9,7 @@ import {
     FungibleTokenActivity,
     SignCertActivity,
     StargateActivity,
+    VeVoteCastActivity,
 } from "~Model"
 import { TokenLevelId } from "~Utils/StargateUtils"
 
@@ -563,9 +564,23 @@ const STARGATE_ACTIVITIES: StargateActivity[] = [
     },
 ]
 
+const VEVOTE_CAST_ACTIVITIES: VeVoteCastActivity[] = [
+    {
+        eventName: ActivityEvent.VEVOTE_VOTE_CAST,
+        from: "0xf6EDf674a43F725EBa52915f0a3A49A2AF4580E6",
+        to: ["0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"],
+        id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaz03",
+        isTransaction: true,
+        proposalId: "",
+        timestamp: 1482337919000,
+        type: ActivityEvent.VEVOTE_VOTE_CAST,
+    },
+]
+
 export const ACTIVITIES_MOCK: Activity[] = [
     FUNGIBLE_TOKEN_ACTIVITIES,
     CONNECTED_APP_ACTIVITIES,
     SIGN_CERT_ACTIVITIES,
     STARGATE_ACTIVITIES,
+    VEVOTE_CAST_ACTIVITIES,
 ].flat()

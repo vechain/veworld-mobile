@@ -57,5 +57,5 @@ export const filterValues = {
             ActivityEvent.STARGATE_DELEGATE_ONLY,
         ],
     },
-    other: { type: FilterType.OTHER, value: [ActivityEvent.UNKNOWN_TX] },
+    other: { type: FilterType.OTHER, value: [ActivityEvent.UNKNOWN_TX, ActivityEvent.VEVOTE_VOTE_CAST] },
 } as const

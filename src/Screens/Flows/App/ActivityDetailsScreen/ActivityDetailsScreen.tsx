@@ -46,8 +46,8 @@ import {
     NonFungibleTokenTransferDetails,
     SignCertificateDetails,
 } from "./Components"
-import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
 import { StargateActivityDetails } from "./Components/StakingDetails"
+import TypedDataTransactionDetails from "./Components/TypedDataTransactionDetails"
 
 type Props = NativeStackScreenProps<HistoryStackParamList, Routes.ACTIVITY_DETAILS>
 
@@ -167,6 +167,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
             case ActivityType.SWAP_FT_TO_VET:
             case ActivityType.SWAP_VET_TO_FT:
             case ActivityType.UNKNOWN_TX:
+            case ActivityType.VEVOTE_VOTE_CAST:
             case ActivityType.DAPP_TRANSACTION: {
                 return (
                     <DappTransactionDetails
