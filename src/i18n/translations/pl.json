@@ -482,7 +482,7 @@
   "CONNECTED_APP_CHANGE_ACCOUNT_REQUEST_TITLE": "Zmień konto",
   "CONNECTED_APP_CONNECTION_REQUESTS": "Żądania połączenia",
   "CONNECTED_APP_CONTRACT": "Kontrakt",
-  "CONNECTED_APP_DELETE_DESCRIPTION": "Możesz ponownie połączyć się w dowolnym momencie — usunięcie oznacza tylko, że następnym razem będziesz musiał się ponownie zalogować.",
+  "CONNECTED_APP_DELETE_DESCRIPTION": "Możesz połączyć ponownie w każdej chwili — usunięcie oznacza tylko, że następnym razem będziesz musiał się zalogować ponownie.",
   "CONNECTED_APP_DELETE_TITLE": "Odłącz połączoną aplikację",
   "CONNECTED_APP_DESCRIPTION": "Opis",
   "CONNECTED_APP_DETAILS_ACCOUNT_LABEL": "Połączono z",
