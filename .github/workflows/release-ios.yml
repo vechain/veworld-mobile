@@ -42,8 +42,8 @@ jobs:
                   gem install cocoapods # Install CocoaPods globally
                   gem install xcode-install
 
-                  export XCODE_INSTALL_USER="${{ secrets.APPLE_ID }}"
-                  export XCODE_INSTALL_PASSWORD="${{ secrets.APPLE_PASSWORD }}"
+                  export XCODE_INSTALL_USER="${{ secrets.APPLE_V_ID }}"
+                  export XCODE_INSTALL_PASSWORD="${{ secrets.APPLE_V_PASSWORD }}"
                   xcversion update
                   xcversion install "16.2"
 
