@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.3 (2025-08-14)</small>
+
+* build: init ([e80f8ef](https://github.com/vechain/veworld-mobile/commit/e80f8ef))
+* chore: try switching to macos14 with xcode 16.2 ([82ed9f0](https://github.com/vechain/veworld-mobile/commit/82ed9f0))
+
 ## <small>2.3.1 (2025-08-04)</small>
 
 * build: init ([ecfcbcc](https://github.com/vechain/veworld-mobile/commit/ecfcbcc))
