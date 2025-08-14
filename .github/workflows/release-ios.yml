@@ -60,7 +60,7 @@ jobs:
                   brew install fastlane
                   gem install cocoapods # Install CocoaPods globally
                   brew install xcodesorg/xcodes/xcodes
-                  xcodes signin "$APPLE_ID" --password "$APP_SPECIFIC_PASSWORD"
+                  xcodes signin "${{ secrets.APPLE_ID }}" --password "${{ secrets.APPLE_PASSWORD }}"
                   xcodes install 16.2 --directory /Applications --experimental-unxip --select
                   sudo xcodebuild -license accept || true
                   xcodebuild -version
