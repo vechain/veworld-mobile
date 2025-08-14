@@ -33,25 +33,6 @@ jobs:
         if: ${{ github.event_name != 'release' || (github.event_name == 'release' && github.event.release.prerelease) }}
 
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@v3
-              with:
-                  # If it's a pre-release, check out the tag corresponding to the pre-release;
-                  # otherwise, use the triggering branch unless it's a non-pre-release event.
-                  ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
-
-            # Setup Node.js
-            - name: Setup Node
-              uses: actions/setup-node@v3
-              with:
-                  node-version-file: .nvmrc
-                  cache: "yarn"
-
-            - name: Install Node.js dependencies
-              run: |
-                yarn install:all
-
-            # Install Homebrew and applesimutils for Detox
             - name: Install macOS dependencies
               run: |
                   
@@ -80,7 +61,27 @@ jobs:
                   HOMEBREW_NO_AUTO_UPDATE: 1
                   HOMEBREW_NO_INSTALL_CLEANUP: 1
 
-                
+         
+            - name: Checkout repository
+              uses: actions/checkout@v3
+              with:
+                  # If it's a pre-release, check out the tag corresponding to the pre-release;
+                  # otherwise, use the triggering branch unless it's a non-pre-release event.
+                  ref: ${{ (github.event_name == 'release' && github.event.release.prerelease && github.event.release.tag_name) || github.ref }}
+
+            # Setup Node.js
+            - name: Setup Node
+              uses: actions/setup-node@v3
+              with:
+                  node-version-file: .nvmrc
+                  cache: "yarn"
+
+            - name: Install Node.js dependencies
+              run: |
+                yarn install:all
+
+            # Install Homebrew and applesimutils for Detox
+       
             # Setup Ruby
             - name: Setup Ruby
               uses: ruby/setup-ruby@v1
