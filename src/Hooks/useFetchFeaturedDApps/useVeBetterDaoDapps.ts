@@ -17,7 +17,7 @@ const getFullVBDDapps = async (thor: ThorClient) => {
                 return { ...dapp, ...md }
             }),
         )
-        result.push(...fullResults)
+        result.push(...(fullResults as VbdDApp[]))
     }
     return result
 }

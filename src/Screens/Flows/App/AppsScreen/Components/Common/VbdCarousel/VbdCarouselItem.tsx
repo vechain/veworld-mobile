@@ -17,10 +17,10 @@ type VbdCarouselItemProps = {
 export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
     const { styles } = useThemedStyles(baseStyles)
 
-    const bannerUri = useMemo(
-        () => (app.ve_world?.banner ? URIUtils.convertUriToUrl(app.ve_world?.banner as string) : undefined),
-        [app],
-    )
+    const bannerUri = useMemo(() => {
+        const uri = app.ve_world?.featured_image ?? app.ve_world?.banner
+        return uri ? URIUtils.convertUriToUrl(uri) : undefined
+    }, [app])
     const iconUri = useMemo(() => (app.logo ? URIUtils.convertUriToUrl(app.logo) : undefined), [app])
 
     const category = useMemo(() => {

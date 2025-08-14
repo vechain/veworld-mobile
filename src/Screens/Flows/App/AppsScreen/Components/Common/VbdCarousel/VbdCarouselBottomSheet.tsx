@@ -94,18 +94,24 @@ export const VbdCarouselBottomSheet = ({
 }: VbdCarouselBottomSheetProps) => {
     const { LL, locale } = useI18nContext()
     const theme = useTheme()
+    const { styles } = useThemedStyles(baseStyles)
     const { ref, onOpen, onClose: onCloseBS } = useBottomSheetModal()
+
     const opacity = useSharedValue(ANIMATION_DEFAULT.opacity)
     const scale = useSharedValue(ANIMATION_DEFAULT.scale)
     const translateY = useSharedValue(ANIMATION_DEFAULT.translateY)
+
     const favorites = useAppSelector(selectFavoritesDapps)
     const dispatch = useAppDispatch()
     const { onDAppPress } = useDAppActions()
+
     const [appOverview, setAppOverview] = useState<Partial<FetchAppOverviewResponse>>({})
     const [isLoading, setIsLoading] = useState(true)
-    const isFavorite = favorites.some(favorite => URIUtils.compareURLs(favorite.href, app?.external_url))
 
-    const { styles } = useThemedStyles(baseStyles)
+    const isFavorite = useMemo(
+        () => favorites.some(favorite => URIUtils.compareURLs(favorite.href, app?.external_url)),
+        [app?.external_url, favorites],
+    )
 
     const handleClose = useCallback(() => {
         setTimeout(() => {
@@ -122,14 +128,6 @@ export const VbdCarouselBottomSheet = ({
         handleClose()
     }, [handleClose, opacity, scale, translateY])
 
-    const onToggleFavorite = useCallback(() => {
-        if (!isFavorite && app) {
-            return dispatch(addBookmark(app))
-        } else {
-            dispatch(removeBookmark({ href: app?.external_url ?? "" }))
-        }
-    }, [app, dispatch, isFavorite])
-
     const getAppOverview = useCallback(async () => {
         if (app?.id) {
             setIsLoading(true)
@@ -138,6 +136,14 @@ export const VbdCarouselBottomSheet = ({
             setIsLoading(false)
         }
     }, [app?.id])
+
+    const onToggleFavorite = useCallback(() => {
+        if (!isFavorite && app) {
+            return dispatch(addBookmark(app))
+        } else {
+            dispatch(removeBookmark({ href: app?.external_url ?? "" }))
+        }
+    }, [app, dispatch, isFavorite])
 
     const onOpenApp = useCallback(() => {
         if (app) onDAppPress(app)
@@ -154,21 +160,24 @@ export const VbdCarouselBottomSheet = ({
         }
     }, [isOpen, onOpen, opacity, scale, translateY, getAppOverview])
 
-    const animatedStyle = useAnimatedStyle(() => {
-        return {
+    const animatedStyle = useAnimatedStyle(
+        () => ({
             opacity: opacity.value,
             transform: [{ scale: scale.value }, { translateY: translateY.value }],
-        }
-    }, [opacity, scale])
+        }),
+        [opacity, scale],
+    )
 
-    const date = useMemo(() => {
-        return DateUtils.formatDateTime(
-            Number(app?.createdAtTimestamp) * 1000,
-            locale,
-            getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
-            { hideTime: true, hideDay: true },
-        )
-    }, [app?.createdAtTimestamp, locale])
+    const date = useMemo(
+        () =>
+            DateUtils.formatDateTime(
+                Number(app?.createdAtTimestamp) * 1000,
+                locale,
+                getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+                { hideTime: true, hideDay: true },
+            ),
+        [app?.createdAtTimestamp, locale],
+    )
 
     const usersNum = useMemo(
         () => BigNutils(appOverview?.totalUniqueUserInteractions ?? 0).toCompactString(locale),
@@ -179,16 +188,36 @@ export const VbdCarouselBottomSheet = ({
         [locale, appOverview],
     )
 
+    const leftIcon = useMemo(() => {
+        return isFavorite ? (
+            <BaseIcon
+                style={styles.favIcon}
+                color={theme.isDark ? COLORS.LIME_GREEN : undefined}
+                size={20}
+                name="icon-star-on"
+                testID="bottom-sheet-remove-favorite-icon"
+            />
+        ) : (
+            <BaseIcon
+                style={styles.favIcon}
+                color={theme.isDark ? COLORS.WHITE : undefined}
+                size={20}
+                name="icon-star"
+                testID="bottom-sheet-add-favorite-icon"
+            />
+        )
+    }, [isFavorite, theme.isDark, styles.favIcon])
+
     return (
         <BaseBottomSheet
+            ref={ref}
             blurBackdrop
             dynamicHeight
             backgroundStyle={styles.backgroundStyle}
             enablePanDownToClose={false}
             onPressOutside="none"
             noMargins
-            floating
-            ref={ref}>
+            floating>
             <BaseView testID="VBD_CAROUSEL_BS" style={styles.root}>
                 <Animated.View style={[styles.heroWrapper, animatedStyle]}>
                     <ImageBackground
@@ -206,6 +235,7 @@ export const VbdCarouselBottomSheet = ({
                         />
                     </ImageBackground>
                 </Animated.View>
+
                 <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                     <BaseView px={20} pt={16} pb={12} flexDirection="column" gap={8}>
                         <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
@@ -241,6 +271,7 @@ export const VbdCarouselBottomSheet = ({
                     </BaseView>
                 </BlurView>
             </BaseView>
+
             <BaseView style={styles.infoContainer} bg={theme.colors.actionBottomSheet.background}>
                 <BaseView flexDirection="row" alignItems="center" justifyContent="center" gap={8} px={30} pt={16}>
                     <VbdInfoColumn Icon={BadgeCheckIconSVG} title={LL.APPS_BS_JOINED()} description={date} />
@@ -257,29 +288,12 @@ export const VbdCarouselBottomSheet = ({
                         isLoading={isLoading}
                     />
                 </BaseView>
+
                 <BaseView px={24} pt={16} pb={10} gap={12}>
                     <BaseButton
                         testID="Favorite_Button"
                         style={styles.btn}
-                        leftIcon={
-                            isFavorite ? (
-                                <BaseIcon
-                                    style={styles.favIcon}
-                                    color={theme.isDark ? COLORS.LIME_GREEN : undefined}
-                                    size={20}
-                                    name="icon-star-on"
-                                    testID="bottom-sheet-remove-favorite-icon"
-                                />
-                            ) : (
-                                <BaseIcon
-                                    style={styles.favIcon}
-                                    color={theme.isDark ? COLORS.WHITE : undefined}
-                                    size={20}
-                                    name="icon-star"
-                                    testID="bottom-sheet-add-favorite-icon"
-                                />
-                            )
-                        }
+                        leftIcon={leftIcon}
                         action={onToggleFavorite}
                         title={isFavorite ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
                         variant="outline"
