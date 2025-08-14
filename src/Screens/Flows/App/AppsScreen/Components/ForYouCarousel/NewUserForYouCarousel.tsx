@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useMemo } from "react"
 import { BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -33,6 +33,8 @@ export const NewUserForYouCarousel = () => {
         dispatch(setSuggestedAppIds(shuffled))
     }, [appIds?.length, dispatch])
 
+    const isLoading = useMemo(() => !appIds || appIds.length !== SUGGESTED_APP_IDS.length, [appIds])
+
     return (
         <BaseView flexDirection="column" gap={16}>
             <BaseText
@@ -41,7 +43,7 @@ export const NewUserForYouCarousel = () => {
                 px={16}>
                 {LL.DISCOVER_SUGGESTED_FOR_YOU()}
             </BaseText>
-            <VbdCarousel appIds={appIds ?? []} isLoading={!appIds} />
+            <VbdCarousel appIds={appIds ?? []} isLoading={isLoading} />
         </BaseView>
     )
 }
