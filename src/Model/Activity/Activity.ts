@@ -317,6 +317,14 @@ export interface B3trProposalSupportEvent extends IndexedHistoryEvent {
     proposalId: string
 }
 
+export interface B3trProposalSupportEvent extends IndexedHistoryEvent {
+    eventName: ActivityEvent.B3TR_PROPOSAL_SUPPORT
+    to: string
+    from: string
+    value: string
+    proposalId: string
+}
+
 export interface StargateActivity extends Activity {
     eventName:
         | ActivityEvent.STARGATE_DELEGATE
@@ -334,4 +342,9 @@ export interface StargateActivity extends Activity {
     delegationRewards?: string
     migrated?: boolean
     autorenew?: boolean
+}
+
+export interface VeVoteCastActivity extends Activity {
+    eventName: ActivityEvent.VEVOTE_VOTE_CAST
+    proposalId: string
 }

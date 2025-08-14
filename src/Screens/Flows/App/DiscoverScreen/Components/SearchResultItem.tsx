@@ -16,13 +16,6 @@ type Props = {
 
 const IMAGE_SIZE = 48
 
-const generateFaviconUrl = (url: string) => {
-    const fullUrl = `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${url}`
-    const generatedUrl = new URL(fullUrl)
-    generatedUrl.searchParams.set("size", "48")
-    return generatedUrl.href
-}
-
 export const SearchResultItem = ({ item, isValidQuery }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
     const { removeVisitedUrl } = useVisitedUrls()
@@ -33,8 +26,9 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
     const iconUri = useMemo(() => {
         try {
             if (item.type === HistoryUrlKind.DAPP && item.dapp.id) return DAppUtils.getAppHubIconUrl(item.dapp.id)
-            if (item.type === HistoryUrlKind.DAPP) return generateFaviconUrl(item.dapp.href)
-            return generateFaviconUrl(item.url)
+            if (item.type === HistoryUrlKind.DAPP)
+                return DAppUtils.generateFaviconUrl(item.dapp.href, { size: IMAGE_SIZE })
+            return DAppUtils.generateFaviconUrl(item.url, { size: IMAGE_SIZE })
         } catch {
             return undefined
         }
