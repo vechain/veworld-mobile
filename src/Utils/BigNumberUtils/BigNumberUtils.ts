@@ -62,6 +62,7 @@ interface IBigNumberUtils {
     ): { value: string; preciseValue: string; isLeesThan_0_01: boolean }
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
+    toCompactString(locale?: Intl.LocalesArgument): string
     clone(): BigNumberUtils
 
     // Math Methods
@@ -338,6 +339,26 @@ class BigNumberUtils implements IBigNumberUtils {
         }
 
         return this
+    }
+
+    /**
+     * Converts large numbers to a compact UI string format with suffixes.
+     * Examples: 10000000 -> "10 M", 200000 -> "200 K", 1500 -> "1.5 K"
+     * @param decimals Number of decimal places to show (defaults to 1)
+     * @returns A compact formatted string
+     */
+    toCompactString(locale: Intl.LocalesArgument = "en-US", decimals: number = 1): string {
+        try {
+            const formatter = new Intl.NumberFormat(locale, {
+                notation: "compact",
+                compactDisplay: "short",
+                maximumFractionDigits: decimals,
+            })
+            return formatter.format(this.toNumber)
+        } catch {
+            // Fallback to current implementation
+            return this.data.toFixed(0)
+        }
     }
 
     clone() {

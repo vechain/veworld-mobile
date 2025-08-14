@@ -209,6 +209,10 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
+	 * M​a​n​a​g​i​n​g
+	 */
+	STARGATE_DELEGATEE_LABEL: string
+	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: string
@@ -224,6 +228,34 @@ type RootTranslation = {
 	 * T​r​a​n​s​f​e​r
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
+	/**
+	 * A​p​p​s
+	 */
+	APPS_TITLE: string
+	/**
+	 * J​o​i​n​e​d
+	 */
+	APPS_BS_JOINED: string
+	/**
+	 * U​s​e​r​s
+	 */
+	APPS_BS_USERS: string
+	/**
+	 * A​c​t​i​o​n​s
+	 */
+	APPS_BS_ACTIONS: string
+	/**
+	 * A​d​d​ ​t​o​ ​f​a​v​o​r​i​t​e​s
+	 */
+	APPS_BS_BTN_ADD_FAVORITE: string
+	/**
+	 * F​a​v​o​r​i​t​e​d
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: string
+	/**
+	 * O​p​e​n
+	 */
+	APPS_BS_BTN_OPEN_APP: string
 	/**
 	 * A​L​L
 	 */
@@ -5110,6 +5142,10 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
+	/**
 	 * No Swaps to show yet
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
@@ -5125,6 +5161,34 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Transfer
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	APPS_TITLE: () => LocalizedString
+	/**
+	 * Joined
+	 */
+	APPS_BS_JOINED: () => LocalizedString
+	/**
+	 * Users
+	 */
+	APPS_BS_USERS: () => LocalizedString
+	/**
+	 * Actions
+	 */
+	APPS_BS_ACTIONS: () => LocalizedString
+	/**
+	 * Add to favorites
+	 */
+	APPS_BS_BTN_ADD_FAVORITE: () => LocalizedString
+	/**
+	 * Favorited
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: () => LocalizedString
+	/**
+	 * Open
+	 */
+	APPS_BS_BTN_OPEN_APP: () => LocalizedString
 	/**
 	 * ALL
 	 */

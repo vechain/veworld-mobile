@@ -123,7 +123,10 @@ export type VeBetterDaoDAppMetadata = {
     }[]
     tweets?: string[]
     ve_world?: {
-        banner: string | number
+        banner: string
+        featured_image: string
     }
     categories?: string[]
 }
+
+export type VbdDApp = VeBetterDaoDapp & VeBetterDaoDAppMetadata

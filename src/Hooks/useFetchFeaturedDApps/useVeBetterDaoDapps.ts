@@ -3,13 +3,13 @@ import { ThorClient } from "@vechain/sdk-network"
 import _ from "lodash"
 import { VEBETTER_DAO_DAPPS_MAIN_ADDRESS } from "~Constants"
 import { useMainnetThorClient } from "~Hooks/useThorClient"
-import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
+import { VbdDApp } from "~Model"
 import { getVeBetterDaoDAppMetadata, getVeBetterDaoDapps } from "~Networking"
 
 const getFullVBDDapps = async (thor: ThorClient) => {
     const dapps = await getVeBetterDaoDapps(thor, VEBETTER_DAO_DAPPS_MAIN_ADDRESS)
     const buckets = _.chunk(dapps, 10)
-    const result: (VeBetterDaoDapp & VeBetterDaoDAppMetadata)[] = []
+    const result: VbdDApp[] = []
     for (const bucket of buckets) {
         const fullResults = await Promise.all(
             bucket.map(async dapp => {
@@ -17,7 +17,7 @@ const getFullVBDDapps = async (thor: ThorClient) => {
                 return { ...dapp, ...md }
             }),
         )
-        result.push(...fullResults)
+        result.push(...(fullResults as VbdDApp[]))
     }
     return result
 }

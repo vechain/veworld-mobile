@@ -7,17 +7,17 @@ const style = StyleSheet.create({
     backButton: { paddingHorizontal: 16, alignSelf: "flex-start" },
 })
 
-type Props = {
+export type CloseModalButtonProps = {
     iconTestID?: string
     hasBottomSpacer?: boolean
-    onPress: (success: boolean) => void
+    onPress?: (success?: boolean) => void
 }
 
 export const CloseModalButton = ({
     iconTestID = "CloseModalButton-BaseIcon-closeModal",
     hasBottomSpacer = true,
     onPress,
-}: Props) => {
+}: CloseModalButtonProps) => {
     const theme = useTheme()
 
     return (
@@ -27,7 +27,7 @@ export const CloseModalButton = ({
                 size={36}
                 name="icon-chevron-left"
                 color={theme.colors.text}
-                action={() => onPress(false)}
+                action={() => onPress?.(false)}
                 testID={iconTestID}
             />
             {hasBottomSpacer && <BaseSpacer height={16} />}

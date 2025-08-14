@@ -3,6 +3,28 @@ import React from "react"
 import { TestWrapper } from "~Test"
 import { VbdCarouselItem } from "./VbdCarouselItem"
 
+// Mock safe area for tests
+jest.mock("react-native-safe-area-context", () => {
+    const actual = jest.requireActual("react-native-safe-area-context")
+    return {
+        ...actual,
+        SafeAreaProvider: ({ children }: any) => children,
+        useSafeAreaInsets: () => ({ top: 0, bottom: 0, left: 0, right: 0 }),
+    }
+})
+
+beforeAll(() => {
+    jest.useFakeTimers()
+})
+
+afterEach(() => {
+    jest.runOnlyPendingTimers()
+})
+
+afterAll(() => {
+    jest.useRealTimers()
+})
+
 describe("VbdCarouselItem", () => {
     it("should render a normal dapp", () => {
         render(
@@ -10,7 +32,7 @@ describe("VbdCarouselItem", () => {
                 app={{
                     app_urls: [],
                     banner: "banner",
-                    createdAtTimestamp: new Date().toISOString(),
+                    createdAtTimestamp: Math.floor(Date.now() / 1000).toString(),
                     description: "TEST DESCRIPTION",
                     external_url: "https://vechain.org",
                     id: "ID",
@@ -42,7 +64,7 @@ describe("VbdCarouselItem", () => {
                 app={{
                     app_urls: [],
                     banner: "banner",
-                    createdAtTimestamp: new Date().toISOString(),
+                    createdAtTimestamp: Math.floor(Date.now() / 1000).toString(),
                     description: "TEST DESCRIPTION",
                     external_url: "https://vechain.org",
                     id: "ID",
@@ -63,7 +85,7 @@ describe("VbdCarouselItem", () => {
             },
         )
 
-        expect(screen.getByTestId("CATEGORY_CHIP")).toBeVisible()
+        expect(screen.getAllByTestId("CATEGORY_CHIP")[0]).toBeVisible()
     })
 
     it("should not render an unknown category", () => {
@@ -72,7 +94,7 @@ describe("VbdCarouselItem", () => {
                 app={{
                     app_urls: [],
                     banner: "banner",
-                    createdAtTimestamp: new Date().toISOString(),
+                    createdAtTimestamp: Math.floor(Date.now() / 1000).toString(),
                     description: "TEST DESCRIPTION",
                     external_url: "https://vechain.org",
                     id: "ID",

@@ -1,9 +1,9 @@
-import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
+import { VbdDApp } from "~Model"
 import { mapVBDDappToDiscoveryDapp, sortVBDDapps } from "./vbd.functions"
 import { URIUtils } from "~Utils"
 import moment from "moment"
 
-const buildDapp = (overrides?: Partial<VeBetterDaoDapp & VeBetterDaoDAppMetadata>) => ({
+const buildDapp = (overrides?: Partial<VbdDApp>) => ({
     app_urls: [],
     banner: "ipfs://123",
     createdAtTimestamp: new Date().toISOString(),
