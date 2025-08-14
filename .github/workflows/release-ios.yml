@@ -22,10 +22,6 @@ on:
                 description: "Build number"
                 type: string
                 required: true
-            recent_prs:
-                description: "Recent PRs for release"
-                type: string
-                required: false
 
 jobs:
     build-release-ios:
@@ -129,4 +125,4 @@ jobs:
                   cd ios
                   git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
                   cd fastlane
-                  fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}} recent_prs:'${{inputs.recent_prs}}'
+                  fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}

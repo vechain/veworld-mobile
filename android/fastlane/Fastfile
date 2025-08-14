@@ -70,8 +70,7 @@ platform :android do
       )
 
       slack(
-        message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android] recent Prs: #{options[:recent_prs]}" : "VeWorld version number: #{version_name} was successfully released! [Android] recent Prs: #{options[:recent_prs]}",
-
+        message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: true,
         payload: {
@@ -84,7 +83,7 @@ platform :android do
       puts exception
 
       slack(
-        message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android] recent Prs: #{options[:recent_prs]}" : "Error releasing VeWorld version number: #{version_name} [Android] recent Prs: #{options[:recent_prs]}",
+        message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: false,
         payload: {
@@ -145,7 +144,7 @@ platform :android do
 
      
        slack(
-         message: "VeWorld version number: #{version_name} build number: #{version_code} was successfully released! [Android] recent Prs: #{options[:recent_prs]}",
+         message: "VeWorld version number: #{version_name} build number: #{version_code} was successfully released! [Android]",
          slack_url: ENV["SLACK_WEBHOOK"],
          success: true,
          payload: {
@@ -159,7 +158,7 @@ platform :android do
 
       
        slack(
-         message: "Error releasing VeWorld version number: #{version_name} build number: #{version_code} [Android] recent Prs: #{options[:recent_prs]}",
+         message: "Error releasing VeWorld version number: #{version_name} build number: #{version_code} [Android]",
          slack_url: ENV["SLACK_WEBHOOK"],
          success: false,
          payload: {
