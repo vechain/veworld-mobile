@@ -218,13 +218,6 @@ describe("RowDetails", () => {
                 },
                 styles: {
                     containerStyle: {},
-                    fontStyle: {},
-                    imageStyle: {},
-                    detailsStyle: {},
-                    categoryLabelStyle: {},
-                    pressAnimationStyle: {},
-                    chevronStyle: {},
-                    spacerStyle: {},
                 },
                 animationProgress: { value: 1 },
             })
@@ -255,13 +248,6 @@ describe("RowDetails", () => {
                 },
                 styles: {
                     containerStyle: {},
-                    fontStyle: {},
-                    imageStyle: {},
-                    detailsStyle: {},
-                    categoryLabelStyle: {},
-                    pressAnimationStyle: {},
-                    chevronStyle: {},
-                    spacerStyle: {},
                 },
                 animationProgress: { value: 1 },
             })

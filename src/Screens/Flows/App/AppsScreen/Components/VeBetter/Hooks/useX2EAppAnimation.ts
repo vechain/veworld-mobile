@@ -120,14 +120,6 @@ export const useX2EAppAnimation = ({
         }
     }, [])
 
-    const fontStyle = useAnimatedStyle(() => {
-        const fontSize = interpolate(animationProgress.value, [0, 1], [15, 17])
-
-        return {
-            fontSize,
-        }
-    }, [])
-
     const contentStyle = useAnimatedStyle(() => {
         return {
             opacity: contentVisible ? withTiming(1, CONTENT_TIMING_CONFIG) : withTiming(0, CONTENT_TIMING_CONFIG),
@@ -144,11 +136,6 @@ export const useX2EAppAnimation = ({
     const descriptionStyle = useAnimatedStyle(() => {
         return {
             opacity: interpolate(animationProgress.value, [0, 0.3], [1, 0]),
-            transform: [
-                {
-                    translateY: interpolate(animationProgress.value, [0, 0.3], [0, -10]),
-                },
-            ],
         }
     }, [])
 
@@ -200,7 +187,6 @@ export const useX2EAppAnimation = ({
         styles: {
             containerStyle,
             padding,
-            fontStyle,
             contentStyle,
             descriptionStyle,
             categoryLabelStyle,

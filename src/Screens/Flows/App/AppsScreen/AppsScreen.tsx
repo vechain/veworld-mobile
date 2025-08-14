@@ -1,23 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import {
-    BaseButton,
-    BaseIcon,
-    BaseSpacer,
-    BaseTouchable,
-    BaseView,
-    HeaderStyleV2,
-    HeaderTitle,
-    Layout,
-} from "~Components"
+import { BaseIcon, BaseTouchable, BaseSpacer, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { AppsBottomSheet } from "./Components/VeBetter"
 import { EcosystemSection } from "./Components/Ecosystem"
+import { VeBetterSection } from "./Components/VeBetter"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 import { useAppSelector } from "~Storage/Redux/Hooks"
@@ -40,14 +31,6 @@ export const AppsScreen = () => {
     const showFavorites = bookmarkedDApps.length > 0
 
     const isNormalUser = useIsNormalUser()
-
-    const { data: allApps, isLoading } = useVeBetterDaoDapps()
-
-    const {
-        ref: appsBottomSheetRef,
-        onOpen: onOpenAppsBottomSheet,
-        onClose: onCloseAppsBottomSheet,
-    } = useBottomSheetModal()
 
     const goToSearch = useCallback(() => {
         nav.navigate(Routes.APPS_SEARCH)
@@ -95,6 +78,9 @@ export const AppsScreen = () => {
 
                     <BaseSpacer height={48} />
 
+                    <VeBetterSection />
+                    <BaseSpacer height={48} />
+
                     {!showFavorites && (
                         <>
                             <FavoritesSuggestionBanner onPress={() => {}} />
@@ -111,18 +97,6 @@ export const AppsScreen = () => {
 
                     <EcosystemSection />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
-                    <BaseView flex={1} px={16} justifyContent="center" alignItems="center">
-                        <BaseButton action={onOpenAppsBottomSheet} variant="solid" size="lg" w={100}>
-                            {LL.BTN_OPEN()}
-                        </BaseButton>
-
-                        <AppsBottomSheet
-                            ref={appsBottomSheetRef}
-                            onDismiss={onCloseAppsBottomSheet}
-                            allApps={allApps}
-                            isLoading={isLoading}
-                        />
-                    </BaseView>
                 </>
             }
         />

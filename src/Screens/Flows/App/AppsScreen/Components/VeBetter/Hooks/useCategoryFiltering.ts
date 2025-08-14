@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react"
+import { useEffect, useMemo, useState } from "react"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
 import { X2ECategoryType } from "~Model/DApp"
 import { IconKey } from "~Model/Icon"
@@ -16,10 +16,19 @@ interface UseCategoryFilteringReturn {
     filteredApps: X2EDapp[]
 }
 
-export const useCategoryFiltering = (allApps?: X2EDapp[]): UseCategoryFilteringReturn => {
-    const [selectedCategoryId, setSelectedCategoryId] = useState(X2ECategoryType.NUTRITION)
+export const useCategoryFiltering = (
+    allApps?: X2EDapp[],
+    initialCategoryId?: X2ECategoryType,
+): UseCategoryFilteringReturn => {
+    const [selectedCategoryId, setSelectedCategoryId] = useState(initialCategoryId || X2ECategoryType.NUTRITION)
     const categories = useCategories()
     const selectedCategory = categories.find(cat => cat.id === selectedCategoryId) ?? categories[0]
+
+    useEffect(() => {
+        if (initialCategoryId) {
+            setSelectedCategoryId(initialCategoryId)
+        }
+    }, [initialCategoryId])
 
     const filteredApps = useMemo(() => {
         if (!allApps) return []

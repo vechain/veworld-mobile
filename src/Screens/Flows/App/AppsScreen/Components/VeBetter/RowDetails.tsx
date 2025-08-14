@@ -135,13 +135,14 @@ export const RowDetails = React.memo(
                                     resizeMode="contain"
                                 />
                                 <Animated.View style={animatedStyles.spacerStyle} />
-                                <BaseView flexDirection="column" gap={10} pr={16} overflow="hidden" flex={1}>
-                                    <Animated.Text
-                                        style={[styles.appNameText, animatedStyles.fontStyle]}
+                                <BaseView flexDirection="column" gap={10} overflow="hidden" pr={16} flex={1}>
+                                    <BaseText
+                                        style={styles.appNameText}
+                                        typographyFont="bodySemiBold"
                                         numberOfLines={1}
                                         testID="X2E_APP_WITH_DETAILS_NAME">
                                         {name}
-                                    </Animated.Text>
+                                    </BaseText>
 
                                     {showDetails ? (
                                         <Animated.View
