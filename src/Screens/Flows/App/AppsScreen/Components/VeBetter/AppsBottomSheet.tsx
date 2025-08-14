@@ -1,6 +1,6 @@
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { forwardRef, useCallback, useMemo, useState } from "react"
+import React, { forwardRef, useCallback, useMemo, useState, useEffect } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
@@ -196,6 +196,15 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
             setOpenItemId(prevId => (prevId === itemId ? null : itemId))
         }, [])
 
+        useEffect(() => {
+            setOpenItemId(null)
+        }, [selectedCategory.id])
+
+        const handleDismiss = useCallback(() => {
+            setOpenItemId(null)
+            onDismiss?.()
+        }, [onDismiss])
+
         const headerContent = useMemo(
             () => (
                 <BaseView>
@@ -216,7 +225,7 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
             <BaseBottomSheet
                 snapPoints={["93%"]}
                 ref={ref}
-                onDismiss={onDismiss}
+                onDismiss={handleDismiss}
                 floating={false}
                 noMargins={true}
                 backgroundStyle={{ backgroundColor: theme.colors.card }}>
@@ -224,7 +233,7 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
                 <AppList
                     apps={filteredApps}
                     isLoading={isLoading}
-                    onDismiss={onDismiss}
+                    onDismiss={handleDismiss}
                     openItemId={openItemId}
                     onToggleOpenItem={handleToggleOpenItem}
                 />
