@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useMemo } from "react"
 import { ImageBackground, Pressable, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { BaseSpacer, BaseText, BaseView, BlurView } from "~Components"
@@ -7,13 +7,14 @@ import { useThemedStyles } from "~Hooks"
 import { VbdDApp } from "~Model"
 import { URIUtils } from "~Utils"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
-import { VbdCarouselBottomSheet } from "./VbdCarouselBottomSheet"
+import { VbdCarouselBottomSheetMetadata } from "./VbdCarouselBottomSheet"
 
 type VbdCarouselItemProps = {
     app: VbdDApp
+    onPressItem: (props: VbdCarouselBottomSheetMetadata) => void
 }
 
-export const VbdCarouselItem = ({ app }: VbdCarouselItemProps) => {
+export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
     const { styles } = useThemedStyles(baseStyles)
 
     const bannerUri = useMemo(
@@ -28,15 +29,9 @@ export const VbdCarouselItem = ({ app }: VbdCarouselItemProps) => {
             | undefined
     }, [app.categories])
 
-    const [isOpen, setIsOpen] = useState(false)
-
-    const onPress = useCallback(() => {
-        setIsOpen(true)
-    }, [])
-
     return (
         <>
-            <Pressable onPress={onPress}>
+            <Pressable onPress={() => onPressItem({ bannerUri, iconUri, app, category })}>
                 <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_ITEM">
                     <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                         <BaseView px={16} py={12} flexDirection="column" gap={8}>
@@ -70,15 +65,6 @@ export const VbdCarouselItem = ({ app }: VbdCarouselItemProps) => {
                     </BlurView>
                 </ImageBackground>
             </Pressable>
-
-            <VbdCarouselBottomSheet
-                isOpen={isOpen}
-                setIsOpen={setIsOpen}
-                bannerUri={bannerUri}
-                iconUri={iconUri}
-                app={app}
-                category={category}
-            />
         </>
     )
 }

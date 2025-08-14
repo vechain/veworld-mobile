@@ -153,7 +153,7 @@ const BaseBottomSheetContent = ({
     }
 
     return (
-        <BaseView>
+        <>
             {snapPoints ? (
                 <BaseView style={contentViewStyle}>
                     {renderHeader()}
@@ -173,7 +173,7 @@ const BaseBottomSheetContent = ({
                 </BaseView>
             )}
             {bottomSafeArea && <BaseSpacer height={bottomSafeAreaSize} />}
-        </BaseView>
+        </>
     )
 }
 

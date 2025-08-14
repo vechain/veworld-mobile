@@ -46,9 +46,9 @@ export const formatDateTime = (
     timeZone: string,
     options?: { hideTime?: boolean; hideDay: boolean },
 ): string => {
-    if (!isValidDateLocale(locale)) throw new Error(`Invalid locale: ${locale}.`)
-    if (!timestamp || timestamp < 0) throw new Error(`Invalid date: ${timestamp}.`)
-    if (!isValidTimezone(timeZone)) throw new Error(`Invalid timezone: ${timeZone}.`)
+    if (!isValidDateLocale(locale)) return ""
+    if (isNaN(timestamp) || !timestamp || timestamp < 0) return ""
+    if (!isValidTimezone(timeZone)) return ""
 
     const date: Date = new Date(timestamp)
 

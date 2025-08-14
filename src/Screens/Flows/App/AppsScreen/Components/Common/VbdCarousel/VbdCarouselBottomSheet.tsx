@@ -27,14 +27,17 @@ import { addBookmark, removeBookmark, selectFavoritesDapps, useAppDispatch, useA
 import { BigNutils, DateUtils, URIUtils } from "~Utils"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
 
-type VbdCarouselBottomSheetProps = {
+export type VbdCarouselBottomSheetMetadata = {
     bannerUri?: string
     iconUri?: string
     category?: (typeof AVAILABLE_CATEGORIES)[number]
-    app: VbdDApp
-    isOpen: boolean
-    setIsOpen: (isOpen: boolean) => void
+    app?: VbdDApp
 }
+
+type VbdCarouselBottomSheetProps = {
+    isOpen: boolean
+    onClose: () => void
+} & VbdCarouselBottomSheetMetadata
 
 const ANIMATION_DEFAULT = {
     timing: 600,
@@ -83,7 +86,7 @@ const LeafIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-leaf" {
 
 export const VbdCarouselBottomSheet = ({
     isOpen,
-    setIsOpen,
+    onClose,
     bannerUri,
     iconUri,
     category,
@@ -91,25 +94,26 @@ export const VbdCarouselBottomSheet = ({
 }: VbdCarouselBottomSheetProps) => {
     const { LL, locale } = useI18nContext()
     const theme = useTheme()
-    const { ref, onOpen, onClose } = useBottomSheetModal()
+    const { ref, onOpen, onClose: onCloseBS } = useBottomSheetModal()
     const opacity = useSharedValue(ANIMATION_DEFAULT.opacity)
     const scale = useSharedValue(ANIMATION_DEFAULT.scale)
     const translateY = useSharedValue(ANIMATION_DEFAULT.translateY)
     const favorites = useAppSelector(selectFavoritesDapps)
     const dispatch = useAppDispatch()
     const { onDAppPress } = useDAppActions()
-    const [appOverview, setAppOverview] = useState<FetchAppOverviewResponse | null>(null)
+    const [appOverview, setAppOverview] = useState<Partial<FetchAppOverviewResponse>>({})
     const [isLoading, setIsLoading] = useState(true)
-    const isFavorite = favorites.some(favorite => URIUtils.compareURLs(favorite.href, app.external_url))
+    const isFavorite = favorites.some(favorite => URIUtils.compareURLs(favorite.href, app?.external_url))
 
     const { styles } = useThemedStyles(baseStyles)
 
     const handleClose = useCallback(() => {
         setTimeout(() => {
             onClose()
-            setIsOpen(false)
+            onCloseBS()
+            setAppOverview({})
         }, ANIMATION_DEFAULT.timing / 2)
-    }, [onClose, setIsOpen])
+    }, [onClose, onCloseBS])
 
     const animateClose = useCallback(() => {
         scale.value = withTiming(ANIMATION_DEFAULT.scale, { duration: ANIMATION_DEFAULT.timing })
@@ -119,24 +123,24 @@ export const VbdCarouselBottomSheet = ({
     }, [handleClose, opacity, scale, translateY])
 
     const onToggleFavorite = useCallback(() => {
-        if (!isFavorite) {
+        if (!isFavorite && app) {
             return dispatch(addBookmark(app))
         } else {
-            dispatch(removeBookmark({ href: app.external_url }))
+            dispatch(removeBookmark({ href: app?.external_url ?? "" }))
         }
     }, [app, dispatch, isFavorite])
 
     const getAppOverview = useCallback(async () => {
-        if (app.id && !appOverview) {
+        if (app?.id) {
             setIsLoading(true)
-            const overview = await fetchAppOverview(app.id)
+            const overview = await fetchAppOverview(app?.id)
             setAppOverview(overview)
             setIsLoading(false)
         }
-    }, [app, appOverview])
+    }, [app?.id])
 
     const onOpenApp = useCallback(() => {
-        onDAppPress(app)
+        if (app) onDAppPress(app)
         animateClose()
     }, [app, onDAppPress, animateClose])
 
@@ -147,10 +151,8 @@ export const VbdCarouselBottomSheet = ({
             translateY.value = withTiming(0, { duration: ANIMATION_DEFAULT.timing })
             getAppOverview()
             onOpen()
-        } else {
-            animateClose()
         }
-    }, [isOpen, onOpen, onClose, opacity, animateClose, scale, translateY, getAppOverview])
+    }, [isOpen, onOpen, opacity, scale, translateY, getAppOverview])
 
     const animatedStyle = useAnimatedStyle(() => {
         return {
@@ -161,12 +163,12 @@ export const VbdCarouselBottomSheet = ({
 
     const date = useMemo(() => {
         return DateUtils.formatDateTime(
-            Number(app.createdAtTimestamp) * 1000,
+            Number(app?.createdAtTimestamp) * 1000,
             locale,
             getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
             { hideTime: true, hideDay: true },
         )
-    }, [app.createdAtTimestamp, locale])
+    }, [app?.createdAtTimestamp, locale])
 
     const usersNum = useMemo(
         () => BigNutils(appOverview?.totalUniqueUserInteractions ?? 0).toCompactString(locale),
@@ -215,7 +217,7 @@ export const VbdCarouselBottomSheet = ({
                                     typographyFont="subSubTitleSemiBold"
                                     color={COLORS.GREY_50}
                                     testID="VBD_CAROUSEL_BS_APP_NAME">
-                                    {app.name}
+                                    {app?.name}
                                 </BaseText>
                             </BaseView>
                             <BaseView flexDirection="row">
@@ -234,7 +236,7 @@ export const VbdCarouselBottomSheet = ({
                             flexDirection="row"
                             py={5}
                             testID="VBD_CAROUSEL_BS_APP_DESCRIPTION">
-                            {app.description}
+                            {app?.description}
                         </BaseText>
                     </BaseView>
                 </BlurView>
