@@ -34,6 +34,7 @@ export type DiscoveryState = {
         [bannerName: string]: BannerInteractionDetails
     }
     isNormalUser?: boolean
+    suggestedAppIds?: string[]
 }
 
 export const initialDiscoverState: DiscoveryState = {
@@ -148,6 +149,9 @@ export const DiscoverySlice = createSlice({
         setIsNormalUser: state => {
             state.isNormalUser = true
         },
+        setSuggestedAppIds: (state, action: PayloadAction<string[]>) => {
+            state.suggestedAppIds = action.payload
+        },
     },
 })
 
@@ -168,4 +172,5 @@ export const {
     closeAllTabs,
     incrementBannerInteractions,
     setIsNormalUser,
+    setSuggestedAppIds,
 } = DiscoverySlice.actions
