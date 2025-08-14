@@ -1,13 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
+import { BaseIcon, BaseTouchable, BaseSpacer, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { EcosystemSection } from "./Components/Ecosystem"
+import { VeBetterSection } from "./Components/VeBetter"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 import { useAppSelector } from "~Storage/Redux/Hooks"
@@ -16,6 +17,7 @@ import { useDAppActions } from "./Hooks/useDAppActions"
 import { Favourites } from "../DiscoverScreen/Components/Favourites"
 import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
 import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
+import { VeBetterDAOCarousel } from "../DiscoverScreen/Components/VeBetterDAOCarousel"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
@@ -60,6 +62,8 @@ export const AppsScreen = () => {
             }
             body={
                 <>
+                    <BaseSpacer height={24} />
+
                     {showFavorites && (
                         <>
                             <Favourites
@@ -74,9 +78,19 @@ export const AppsScreen = () => {
 
                     <BaseSpacer height={48} />
 
+                    <VeBetterSection />
+                    <BaseSpacer height={48} />
+
                     {!showFavorites && (
                         <>
                             <FavoritesSuggestionBanner onPress={() => {}} />
+                            <BaseSpacer height={48} />
+                        </>
+                    )}
+
+                    {isNormalUser && (
+                        <>
+                            <VeBetterDAOCarousel />
                             <BaseSpacer height={48} />
                         </>
                     )}
@@ -98,6 +112,5 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         header: {
             paddingHorizontal: 16,
-            marginBottom: 24,
         },
     })

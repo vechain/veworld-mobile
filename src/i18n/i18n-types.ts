@@ -456,6 +456,46 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
+	 * E​n​e​r​g​y
+	 */
+	APP_CATEGORY_ENERGY: string
+	/**
+	 * F​o​o​d​ ​&​ ​D​r​i​n​k
+	 */
+	APP_CATEGORY_FOOD_AND_DRINK: string
+	/**
+	 * L​e​a​r​n​i​n​g
+	 */
+	APP_CATEGORY_LEARNING: string
+	/**
+	 * L​i​f​e​s​t​y​l​e
+	 */
+	APP_CATEGORY_LIFESTYLE: string
+	/**
+	 * O​t​h​e​r​s
+	 */
+	APP_CATEGORY_OTHERS: string
+	/**
+	 * P​e​t​s
+	 */
+	APP_CATEGORY_PETS: string
+	/**
+	 * R​e​c​y​c​l​i​n​g
+	 */
+	APP_CATEGORY_RECYCLING: string
+	/**
+	 * S​h​o​p​p​i​n​g
+	 */
+	APP_CATEGORY_SHOPPING: string
+	/**
+	 * T​r​a​n​s​p​o​r​t​a​t​i​o​n
+	 */
+	APP_CATEGORY_TRANSPORTATION: string
+	/**
+	 * W​e​b​3
+	 */
+	APP_CATEGORY_WEB3: string
+	/**
 	 * A​p​p​s
 	 */
 	APPS_SCREEN_TITLE: string
@@ -1367,6 +1407,14 @@ type RootTranslation = {
 	 */
 	BTN_ENTER_PASSWORD: string
 	/**
+	 * F​a​v​o​r​i​t​e
+	 */
+	BTN_FAVORITE: string
+	/**
+	 * F​a​v​o​r​i​t​e​d
+	 */
+	BTN_FAVORiTED: string
+	/**
 	 * G​E​T​ ​S​T​A​R​T​E​D
 	 */
 	BTN_GET_STARTED: string
@@ -1450,6 +1498,10 @@ type RootTranslation = {
 	 * N​E​X​T​:​ ​C​R​E​A​T​E​ ​P​A​S​S​W​O​R​D
 	 */
 	BTN_ONBOARDING_SLIDE_03: string
+	/**
+	 * O​p​e​n
+	 */
+	BTN_OPEN: string
 	/**
 	 * O​p​e​n​ ​d​A​p​p
 	 */
@@ -5335,6 +5387,46 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
+	 * Energy
+	 */
+	APP_CATEGORY_ENERGY: () => LocalizedString
+	/**
+	 * Food & Drink
+	 */
+	APP_CATEGORY_FOOD_AND_DRINK: () => LocalizedString
+	/**
+	 * Learning
+	 */
+	APP_CATEGORY_LEARNING: () => LocalizedString
+	/**
+	 * Lifestyle
+	 */
+	APP_CATEGORY_LIFESTYLE: () => LocalizedString
+	/**
+	 * Others
+	 */
+	APP_CATEGORY_OTHERS: () => LocalizedString
+	/**
+	 * Pets
+	 */
+	APP_CATEGORY_PETS: () => LocalizedString
+	/**
+	 * Recycling
+	 */
+	APP_CATEGORY_RECYCLING: () => LocalizedString
+	/**
+	 * Shopping
+	 */
+	APP_CATEGORY_SHOPPING: () => LocalizedString
+	/**
+	 * Transportation
+	 */
+	APP_CATEGORY_TRANSPORTATION: () => LocalizedString
+	/**
+	 * Web3
+	 */
+	APP_CATEGORY_WEB3: () => LocalizedString
+	/**
 	 * Apps
 	 */
 	APPS_SCREEN_TITLE: () => LocalizedString
@@ -6237,6 +6329,14 @@ Thanks for your patience!
 	 */
 	BTN_ENTER_PASSWORD: () => LocalizedString
 	/**
+	 * Favorite
+	 */
+	BTN_FAVORITE: () => LocalizedString
+	/**
+	 * Favorited
+	 */
+	BTN_FAVORiTED: () => LocalizedString
+	/**
 	 * GET STARTED
 	 */
 	BTN_GET_STARTED: () => LocalizedString
@@ -6320,6 +6420,10 @@ Thanks for your patience!
 	 * NEXT: CREATE PASSWORD
 	 */
 	BTN_ONBOARDING_SLIDE_03: () => LocalizedString
+	/**
+	 * Open
+	 */
+	BTN_OPEN: () => LocalizedString
 	/**
 	 * Open dApp
 	 */
