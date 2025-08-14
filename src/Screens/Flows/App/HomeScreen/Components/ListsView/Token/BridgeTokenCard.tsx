@@ -56,7 +56,7 @@ export const BridgeTokenCard = ({ tokenWithBalance, isBalanceVisible, isEdit }: 
                         isPositive24hChange={isPositive24hChange}
                         renderFiatBalance={
                             <FiatBalance
-                                typographyFont="bodyMedium"
+                                typographyFont="subSubTitleMedium"
                                 color={tokenValueLabelColor}
                                 balances={[fiatBalance]}
                                 isVisible={isBalanceVisible}

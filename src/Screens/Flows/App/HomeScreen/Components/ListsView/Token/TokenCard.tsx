@@ -1,11 +1,11 @@
 import React, { memo, useMemo } from "react"
+import { useVechainStatsTokenInfo } from "~Api/Coingecko"
 import { FiatBalance } from "~Components"
 import { B3TR, COLORS, VeDelegate } from "~Constants"
 import { useBalances, useFormatFiat, useTheme } from "~Hooks"
-import { BalanceUtils } from "~Utils"
 import { FungibleTokenWithBalance } from "~Model"
 import { selectIsTokensOwnedLoading, useAppSelector } from "~Storage/Redux"
-import { useVechainStatsTokenInfo } from "~Api/Coingecko"
+import { BalanceUtils } from "~Utils"
 import { BaseTokenCard } from "./BaseTokenCard"
 import { TokenCardBalanceInfo } from "./TokenCardBalanceInfo"
 
@@ -63,7 +63,7 @@ export const TokenCard = memo(({ tokenWithBalance, isEdit, isBalanceVisible }: P
                         isLoading={isTokensOwnedLoading}
                         renderFiatBalance={
                             <FiatBalance
-                                typographyFont="bodyMedium"
+                                typographyFont="subSubTitleMedium"
                                 color={tokenValueLabelColor}
                                 balances={[fiatBalance]}
                                 isVisible={isBalanceVisible}

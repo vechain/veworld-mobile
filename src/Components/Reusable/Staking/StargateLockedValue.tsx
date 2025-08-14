@@ -82,7 +82,7 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isNodeOwn
         <BaseView style={[styles.container, rootStyle]}>
             <FastImage source={StargateAvatar} style={styles.avatar as ImageStyle} />
             <BaseView flex={1}>
-                <BaseText typographyFont="captionMedium" color={theme.colors.tokenCardText}>
+                <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
                     {LL.TITLE_TOTAL_LOCKED()}
                 </BaseText>
                 <BaseView style={styles.valueContainer}>
@@ -96,10 +96,10 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isNodeOwn
                             />
                         ) : (
                             <>
-                                <BaseText typographyFont="bodySemiBold" color={theme.colors.stakedCard.vetValue}>
+                                <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.stakedCard.vetValue}>
                                     {VET.symbol}
                                 </BaseText>
-                                <BaseText typographyFont="bodySemiBold" color={theme.colors.stakedCard.vetValue}>
+                                <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.stakedCard.vetValue}>
                                     {isBalanceVisible ? formattedLockedVet : "••••••"}
                                 </BaseText>
                             </>

@@ -49,7 +49,7 @@ export const BaseTokenCard = ({
                     isCrossChainToken={isCrossChainToken}
                 />
                 <BaseView alignItems="center" justifyContent="center" flexDirection="row" gap={4}>
-                    <BaseText typographyFont="bodySemiBold">{symbol}</BaseText>
+                    <BaseText typographyFont="subSubTitleSemiBold">{symbol}</BaseText>
 
                     <BaseView flexDirection="row">
                         {isLoading ? (
@@ -64,7 +64,10 @@ export const BaseTokenCard = ({
                             </BaseView>
                         ) : (
                             <BaseView flexDirection="row">
-                                <BaseText typographyFont="bodySemiBold" color={tokenValueLabelColor} lineHeight={24}>
+                                <BaseText
+                                    typographyFont="subSubTitleSemiBold"
+                                    color={tokenValueLabelColor}
+                                    lineHeight={24}>
                                     {isBalanceVisible ? tokenBalance : "•••••"}{" "}
                                 </BaseText>
                             </BaseView>
