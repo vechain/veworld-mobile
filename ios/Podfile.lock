@@ -2150,7 +2150,7 @@ SPEC CHECKSUMS:
   MixpanelReactNative: cd3d7129cfc77d796d07e117846f1f2a9d2fe02d
   MMKV: b4802ebd5a7c68fc0c4a5ccb4926fbdfb62d68e0
   MMKVCore: a255341a3746955f50da2ad9121b18cb2b346e61
-  MultiplatformBleAdapter: b1fddd0d499b96b607e00f0faa8e60648343dc1d
+  MultiplatformBleAdapter: ea8bac405ec200d0ca9de0f89afef6f06fb2abbc
   OneSignalXCFramework: 1a3b28dfbff23aabce585796d23c1bef37772774
   OpenSSL-Universal: ca89c20240633a77c776082ba76b7d90f992bf77
   RCT-Folly: 02617c592a293bd6d418e0a88ff4ee1f88329b47
