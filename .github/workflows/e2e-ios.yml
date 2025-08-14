@@ -8,7 +8,8 @@ on:
 jobs:
     build-e2e-ios:
         name: Build & Test iOS
-        runs-on: macos-15-xlarge
+        # down bump due to  xcode16.3 incompatibility
+        runs-on: macos-14-xlarge
         environment: ios-release
         outputs:
             resultUrl: ${{ steps.test-result.outputs.resultUrl }}
@@ -44,6 +45,7 @@ jobs:
                   brew tap wix/brew
                   brew install applesimutils
                   brew install fastlane
+                  sudo xcode-select -s /Applications/Xcode_16.2.app
                   bundle install
               env:
                   HOMEBREW_NO_AUTO_UPDATE: 1
