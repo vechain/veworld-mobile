@@ -1,13 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { useCallback } from "react"
 import { StyleSheet } from "react-native"
-import { BaseIcon, BaseSpacer, BaseTouchable, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
+import { BaseIcon, BaseTouchable, BaseSpacer, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { EcosystemSection } from "./Components/Ecosystem"
+import { VeBetterSection } from "./Components/VeBetter"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 import { useAppSelector } from "~Storage/Redux/Hooks"
@@ -75,6 +76,9 @@ export const AppsScreen = () => {
                     )}
                     {isNormalUser ? <ForYouCarousel /> : <NewUserForYouCarousel />}
 
+                    <BaseSpacer height={48} />
+
+                    <VeBetterSection />
                     <BaseSpacer height={48} />
 
                     {!showFavorites && (
