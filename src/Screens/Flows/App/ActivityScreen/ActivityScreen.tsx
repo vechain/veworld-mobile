@@ -4,7 +4,7 @@ import {
     BaseSpacer,
     BaseView,
     ChangeAccountButtonPill,
-    HeaderStyle,
+    HeaderStyleV2,
     HeaderTitle,
     Layout,
     SelectAccountBottomSheet,
@@ -54,8 +54,8 @@ export const ActivityScreen = () => {
             safeAreaTestID="History_Screen"
             noBackButton
             fixedHeader={
-                <BaseView style={HeaderStyle}>
-                    <HeaderTitle title={LL.BTN_HISTORY()} />
+                <BaseView style={HeaderStyleV2}>
+                    <HeaderTitle title={LL.BTN_HISTORY()} leftIconName="icon-history" />
                     <BaseView flexDirection="row" justifyContent="space-between" alignItems="center">
                         <SelectedNetworkViewer />
                         <BaseSpacer width={8} />
