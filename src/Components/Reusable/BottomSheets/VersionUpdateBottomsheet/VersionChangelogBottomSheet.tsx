@@ -16,10 +16,17 @@ export const VersionChangelogBottomSheet = () => {
     const installedVersion = useAppSelector(selectInstalledAppVersion)
 
     useEffect(() => {
-        if (shouldShowChangelog) {
+        if (shouldShowChangelog && changelog.length > 0) {
             onOpen()
+        } else if (shouldShowChangelog) {
+            dispatch(
+                setChangelogToShow({
+                    shouldShow: false,
+                    changelogKey: null,
+                }),
+            )
         }
-    }, [shouldShowChangelog, onOpen])
+    }, [shouldShowChangelog, onOpen, changelog, dispatch])
 
     const handleDismiss = useCallback(() => {
         dispatch(
