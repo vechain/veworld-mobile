@@ -29,11 +29,11 @@ const RowItem = ({ label, value, icon, testID }: { label: string; value: string;
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" py={2} testID={testID}>
-            <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="captionMedium">
+            <BaseText color={theme.colors.assetDetailsCard.text} typographyFont="bodyMedium">
                 {label}
             </BaseText>
             <BaseView gap={8} flexDirection="row">
-                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800} typographyFont="captionMedium">
+                <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_800} typographyFont="bodyMedium">
                     {formattedValue}
                 </BaseText>
                 <TokenImage icon={icon} isVechainToken iconSize={16} />
@@ -67,7 +67,7 @@ export const StargateCarouselItem = ({ item }: Props) => {
     return (
         <BaseCard containerStyle={styles.root} style={styles.rootContent}>
             <StargateImage uri={data?.image} />
-            <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="bodySemiBold">
+            <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                 {getTokenLevelName(
                     (item.levelId ? (parseInt(item.levelId, 10) as TokenLevelId) : undefined) ?? TokenLevelId.None,
                 )}

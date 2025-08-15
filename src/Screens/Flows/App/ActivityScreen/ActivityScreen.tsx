@@ -12,7 +12,7 @@ import {
 } from "~Components"
 import { useBottomSheetModal, useSetSelectedAccount } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
-import { selectBalanceVisible, selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
+import { selectSelectedAccount, selectVisibleAccounts, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
 import { useResetActivityStack } from "./Hooks"
 import { ActivityTabBar } from "./navigation"
@@ -33,8 +33,6 @@ const Tab = createMaterialTopTabNavigator()
 export const ActivityScreen = () => {
     const { LL } = useI18nContext()
     useResetActivityStack()
-
-    const isBalanceVisible = useAppSelector(selectBalanceVisible)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
@@ -120,7 +118,6 @@ export const ActivityScreen = () => {
                         accounts={accounts}
                         setSelectedAccount={setSelectedAccount}
                         selectedAccount={selectedAccount}
-                        isBalanceVisible={isBalanceVisible}
                         ref={selectAccountBottomSheetRef}
                     />
                 </>

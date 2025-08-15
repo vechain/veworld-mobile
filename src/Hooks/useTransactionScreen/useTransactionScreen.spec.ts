@@ -189,6 +189,7 @@ describe("useTransactionScreen", () => {
                 VTHO: true,
             },
             isFirstTimeLoadingFees: true,
+            isBiometricsEmpty: true,
         })
     })
 
@@ -371,6 +372,7 @@ describe("useTransactionScreen", () => {
             }
 
             mockAccount(accWithDevice)
+            mockDevice(ledgerDevice)
 
             const dappRequest: TransactionRequest = {
                 isFirstRequest: true,

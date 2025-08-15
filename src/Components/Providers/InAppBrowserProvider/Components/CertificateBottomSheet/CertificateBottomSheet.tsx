@@ -14,15 +14,16 @@ import { useI18nContext } from "~i18n"
 import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { Routes } from "~Navigation"
 import {
+    addConnectedDiscoveryApp,
     addSignCertificateActivity,
-    selectFeaturedDapps,
     selectSelectedAccountOrNull,
     selectVerifyContext,
     selectVisibleAccountsWithoutObserved,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils, DAppUtils, error, HexUtils } from "~Utils"
+import { AccountUtils, error, HexUtils } from "~Utils"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappWithDetails } from "../DappWithDetails"
 import { Signable } from "../Signable"
 
@@ -44,8 +45,6 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
     const theme = useTheme()
     const track = useAnalyticTracking()
 
-    const allApps = useAppSelector(selectFeaturedDapps)
-
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
     const { onClose: onCloseSelectAccountBs, onOpen: onOpenSelectAccountBs } = useBottomSheetModal({
@@ -64,24 +63,6 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
         return sessionContext.verifyContext.validation === "VALID"
     }, [sessionContext])
 
-    const { icon, name, url } = useMemo(() => {
-        const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(request.appUrl).origin)
-        if (foundDapp)
-            return {
-                icon: foundDapp.id
-                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
-                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
-                name: foundDapp.name,
-                url: request.appUrl,
-            }
-
-        return {
-            name: request.appName,
-            url: request.appUrl,
-            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(request.appUrl).origin}`,
-        }
-    }, [allApps, request.appName, request.appUrl])
-
     const signableArgs = useMemo(() => ({ request }), [request])
 
     const onChangeAccountPress = useCallback(() => {
@@ -97,23 +78,28 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 justifyContent="space-between"
                 testID="SIGN_CERTIFICATE_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
-                    <BaseIcon name="icon-certificate" size={20} color={theme.colors.editSpeedBs.title} />
+                    <BaseIcon name="icon-user-check" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
                         {LL.SIGN_CERTIFICATE_REQUEST_TITLE()}
                     </BaseText>
                 </BaseView>
                 {selectedAccount && (
-                    <AccountSelector account={selectedAccount} onPress={onChangeAccountPress} variant="short" />
+                    <AccountSelector
+                        account={selectedAccount}
+                        onPress={onChangeAccountPress}
+                        variant="short"
+                        changeable
+                    />
                 )}
             </BaseView>
             <BaseSpacer height={12} />
-            <DappWithDetails name={name} icon={icon} url={url}>
+            <DappWithDetails appName={request.appName} appUrl={request.appUrl}>
                 <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
                     {request.message.payload.content}
                 </BaseText>
             </DappWithDetails>
             <BaseSpacer height={24} />
-            <BaseView flexDirection="row" gap={16}>
+            <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"
@@ -147,7 +133,6 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 setSelectedAccount={onSetSelectedAccount}
                 selectedAccount={selectedAccount}
                 ref={selectAccountBsRef}
-                cardVersion="v2"
             />
         </>
     )
@@ -200,6 +185,13 @@ export const CertificateBottomSheet = () => {
         async ({ request, password }: { request: CertificateRequest; password?: string }) => {
             try {
                 const { certificate, payload } = buildCertificate(request)!
+                dispatch(
+                    addConnectedDiscoveryApp({
+                        name: request.appName,
+                        href: new URL(request.appUrl).hostname,
+                        connectedTime: Date.now(),
+                    }),
+                )
                 if (selectedAccount!.device.type === DEVICE_TYPE.LEDGER) {
                     // Do not reject request if it's a ledger request
                     isUserAction.current = true

@@ -248,15 +248,14 @@ export const HomeScreen = () => {
 
                     <BannersCarousel location="home_screen" />
 
-                    <BaseView style={styles.container}>
+                    <BaseView style={styles.container} gap={24}>
                         <StakedCard />
-                    </BaseView>
-
-                    <BaseView style={styles.container}>
-                        <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-                        <BaseSpacer height={8} />
-                        <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
-                        <BaseSpacer height={24} />
+                        <BaseView>
+                            <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                            <BaseSpacer height={8} />
+                            <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
+                            <BaseSpacer height={24} />
+                        </BaseView>
                     </BaseView>
 
                     {/*Account Selection*/}
@@ -265,7 +264,6 @@ export const HomeScreen = () => {
                         accounts={accounts}
                         setSelectedAccount={setSelectedAccount}
                         selectedAccount={selectedAccount}
-                        isBalanceVisible={isBalanceVisible}
                         ref={selectAccountBottomSheetRef}
                     />
 

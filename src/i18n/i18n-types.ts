@@ -225,6 +225,54 @@ type RootTranslation = {
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
 	/**
+	 * A​L​L
+	 */
+	ADDITIONAL_DETAIL_ALL: string
+	/**
+	 * A​p​p
+	 */
+	ADDITIONAL_DETAIL_APP: string
+	/**
+	 * C​l​a​u​s​e
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: string
+	/**
+	 * C​o​m​m​e​n​t
+	 */
+	ADDITIONAL_DETAIL_COMMENT: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​d​a​t​a
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: string
+	/**
+	 * E​v​e​n​t
+	 */
+	ADDITIONAL_DETAIL_EVENT: string
+	/**
+	 * F​r​o​m
+	 */
+	ADDITIONAL_DETAIL_FROM: string
+	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	ADDITIONAL_DETAIL_RECEIVER: string
+	/**
+	 * R​e​c​e​i​v​e​r
+	 */
+	ADDITIONAL_DETAIL_SENDER: string
+	/**
+	 * S​p​e​n​d​e​r
+	 */
+	ADDITIONAL_DETAIL_SPENDER: string
+	/**
+	 * T​o
+	 */
+	ADDITIONAL_DETAIL_TO: string
+	/**
+	 * T​o​k​e​n​ ​I​D
+	 */
+	ADDITIONAL_DETAIL_TOKEN_ID: string
+	/**
 	 * A​d​d​ ​A​c​c​o​u​n​t
 	 */
 	ADD_ACCOUNT: string
@@ -376,15 +424,6 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
-	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
-	 */
-	APP_UPDATE_AVAILABLE: string
-	/**
-	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
-	 * @param {string} version
-	 */
-	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
-	/**
 	 * A​p​p​ ​u​p​d​a​t​e​d
 	 */
 	APP_UPDATED: string
@@ -393,10 +432,14 @@ type RootTranslation = {
 	 */
 	APP_UPDATED_WHATS_NEW: string
 	/**
-	 * v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * U​p​d​a​t​e​ ​a​v​a​i​l​a​b​l​e
+	 */
+	APP_UPDATE_AVAILABLE: string
+	/**
+	 * V​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}​ ​i​s​ ​n​o​w​ ​a​v​a​i​l​a​b​l​e​ ​t​o​ ​u​p​d​a​t​e​ ​w​i​t​h​ ​n​e​w​ ​f​e​a​t​u​r​e​s​ ​a​n​d​ ​i​m​p​r​o​v​e​m​e​n​t​s​.
 	 * @param {string} version
 	 */
-	APP_VERSION: RequiredParams<'version'>
+	APP_UPDATE_AVAILABLE_MESSAGE: RequiredParams<'version'>
 	/**
 	 * P​l​e​a​s​e​ ​c​o​n​f​i​r​m​ ​t​h​a​t​ ​y​o​u​ ​w​o​u​l​d​ ​l​i​k​e​ ​t​o​ ​p​r​o​c​e​s​s​ ​t​h​i​s​ ​r​e​q​u​e​s​t​.
 	 */
@@ -409,6 +452,11 @@ type RootTranslation = {
 	 * T​h​e​ ​a​p​p​l​i​c​a​t​i​o​n​ ​t​h​a​t​ ​i​s​ ​m​a​k​i​n​g​ ​t​h​i​s​ ​r​e​q​u​e​s​t​ ​c​o​u​l​d​ ​n​o​t​ ​b​e​ ​v​e​r​i​f​i​e​d​.​ ​P​r​o​c​e​e​d​ ​a​t​ ​y​o​u​r​ ​o​w​n​ ​r​i​s​k​.
 	 */
 	APP_VERIFICATION_UNKNOWN: string
+	/**
+	 * v​e​r​s​i​o​n​ ​{​v​e​r​s​i​o​n​}
+	 * @param {string} version
+	 */
+	APP_VERSION: RequiredParams<'version'>
 	/**
 	 * A​p​r​i​l
 	 */
@@ -1731,6 +1779,10 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_URL: string
 	/**
+	 * V​a​l​u​e
+	 */
+	COMMON_LBL_VALUE: string
+	/**
 	 * M​a​r​k​e​t​ ​C​a​p
 	 */
 	COMMON_MARKET_CAP: string
@@ -1850,6 +1902,14 @@ type RootTranslation = {
 	 * C​o​n​t​r​a​c​t
 	 */
 	CONNECTED_APP_CONTRACT: string
+	/**
+	 * Y​o​u​ ​c​a​n​ ​r​e​c​o​n​n​e​c​t​ ​a​n​y​t​i​m​e​ ​—​ ​r​e​m​o​v​i​n​g​ ​i​t​ ​j​u​s​t​ ​m​e​a​n​s​ ​y​o​u​'​l​l​ ​n​e​e​d​ ​t​o​ ​l​o​g​ ​i​n​ ​a​g​a​i​n​ ​n​e​x​t​ ​t​i​m​e​.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: string
+	/**
+	 * D​i​s​c​o​n​n​e​c​t​ ​c​o​n​n​e​c​t​e​d​ ​a​p​p
+	 */
+	CONNECTED_APP_DELETE_TITLE: string
 	/**
 	 * D​e​s​c​r​i​p​t​i​o​n
 	 */
@@ -2576,6 +2636,10 @@ type RootTranslation = {
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: string
 	/**
+	 * T​y​p​e​d​ ​D​a​t​a​ ​c​a​n​n​o​t​ ​b​e​ ​s​i​g​n​e​d​ ​w​i​t​h​ ​a​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​.
+	 */
+	LEDGER_DEVICE_ALERT: string
+	/**
 	 * M​e​s​s​a​g​e​ ​i​s​ ​r​e​a​d​y
 	 */
 	LEDGER_MESSAGE_READY: string
@@ -3191,6 +3255,99 @@ type RootTranslation = {
 	 * R​e​c​a​p
 	 */
 	RECAP: string
+	/**
+	 * V​e​B​e​t​t​e​r​ ​a​c​t​i​o​n
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: string
+	/**
+	 * V​o​t​i​n​g​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: string
+	/**
+	 * C​o​n​t​r​a​c​t​ ​c​a​l​l
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: string
+	/**
+	 * t​o​k​e​n
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: string
+	/**
+	 * N​F​T​ ​a​p​p​r​o​v​a​l
+	 */
+	RECEIPT_OUTPUT_NFT_APPROVE: string
+	/**
+	 * N​F​T​ ​r​e​c​e​i​v​e
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: string
+	/**
+	 * N​F​T​ ​s​e​n​d
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: string
+	/**
+	 * S​u​p​p​o​r​t​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​V​e​B​e​t​t​e​r​D​A​O​ ​p​r​o​p​o​s​a​l
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​r​o​u​n​d​ ​#​{​r​o​u​n​d​I​d​}
+	 * @param {number} roundId
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: RequiredParams<'roundId'>
+	/**
+	 * B​a​s​e​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: string
+	/**
+	 * D​e​l​e​g​a​t​i​o​n​ ​r​e​w​a​r​d​s
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: string
+	/**
+	 * N​o​d​e​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: string
+	/**
+	 * V​E​T​ ​s​t​a​k​e​ ​&​ ​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: string
+	/**
+	 * N​o​d​e​ ​u​n​d​e​l​e​g​a​t​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: string
+	/**
+	 * V​E​T​ ​u​n​s​t​a​k​e
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: string
+	/**
+	 * S​w​a​p
+	 */
+	RECEIPT_OUTPUT_SWAP: string
+	/**
+	 * T​o​k​e​n​ ​a​p​p​r​o​v​a​l
+	 */
+	RECEIPT_OUTPUT_TOKEN_APPROVE: string
+	/**
+	 * T​o​k​e​n​ ​c​o​n​v​e​r​s​i​o​n
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: string
+	/**
+	 * T​o​k​e​n​ ​r​e​c​e​i​v​e
+	 */
+	RECEIPT_OUTPUT_TOKEN_RECEIVE: string
+	/**
+	 * T​o​k​e​n​ ​s​e​n​d
+	 */
+	RECEIPT_OUTPUT_TOKEN_SEND: string
+	/**
+	 * C​a​s​t​ ​v​o​t​e
+	 */
+	RECEIPT_OUTPUT_VEVOTE_CAST: string
 	/**
 	 * R​e​c​e​i​v​e​d
 	 */
@@ -3924,11 +4081,11 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * S​i​g​n
+	 * L​o​g​i​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
 	/**
-	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
+	 * L​o​g​i​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
@@ -3940,13 +4097,37 @@ type RootTranslation = {
 	 */
 	SIGN_TRANSACTION_ERROR: string
 	/**
+	 * C​o​n​f​i​r​m
+	 */
+	SIGN_TRANSACTION_REQUEST_CTA: string
+	/**
+	 * A​p​p​ ​t​r​a​n​s​a​c​t​i​o​n
+	 */
+	SIGN_TRANSACTION_REQUEST_TITLE: string
+	/**
+	 * S​i​g​n
+	 */
+	SIGN_TYPED_DATA_REQUEST_CTA: string
+	/**
+	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
+	 */
+	SIGN_TYPED_DATA_REQUEST_TITLE: string
+	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
 	/**
+	 * M​a​n​a​g​i​n​g
+	 */
+	STARGATE_DELEGATEE_LABEL: string
+	/**
 	 * L​o​c​k​e​d
 	 */
 	STARGATE_LOCKED: string
+	/**
+	 * M​a​n​a​g​e​ ​y​o​u​r​ ​s​t​a​k​i​n​g
+	 */
+	STARGATE_MANAGE_STAKING: string
 	/**
 	 * N​e​w​ ​s​t​a​k​e
 	 */
@@ -3955,10 +4136,6 @@ type RootTranslation = {
 	 * R​e​w​a​r​d​s
 	 */
 	STARGATE_REWARDS: string
-	/**
-	 * M​a​n​a​g​e​ ​y​o​u​r​ ​s​t​a​k​i​n​g
-	 */
-	STARGATE_MANAGE_STAKING: string
 	/**
 	 * S​t​a​t​u​s
 	 */
@@ -4347,6 +4524,14 @@ type RootTranslation = {
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
 	VECHAIN_NEWS_AND_UPDATES: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​p​r​o​p​o​s​a​l
+	 */
+	VEVOTE_CAST_DESCRIPTION: string
+	/**
+	 * V​e​V​o​t​e
+	 */
+	VEVOTE_CAST_TITLE: string
 	/**
 	 * V​e​W​o​r​l​d
 	 */
@@ -4739,6 +4924,54 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
 	/**
+	 * ALL
+	 */
+	ADDITIONAL_DETAIL_ALL: () => LocalizedString
+	/**
+	 * App
+	 */
+	ADDITIONAL_DETAIL_APP: () => LocalizedString
+	/**
+	 * Clause
+	 */
+	ADDITIONAL_DETAIL_CLAUSE: () => LocalizedString
+	/**
+	 * Comment
+	 */
+	ADDITIONAL_DETAIL_COMMENT: () => LocalizedString
+	/**
+	 * Contract data
+	 */
+	ADDITIONAL_DETAIL_CONTRACT_DATA: () => LocalizedString
+	/**
+	 * Event
+	 */
+	ADDITIONAL_DETAIL_EVENT: () => LocalizedString
+	/**
+	 * From
+	 */
+	ADDITIONAL_DETAIL_FROM: () => LocalizedString
+	/**
+	 * Receiver
+	 */
+	ADDITIONAL_DETAIL_RECEIVER: () => LocalizedString
+	/**
+	 * Receiver
+	 */
+	ADDITIONAL_DETAIL_SENDER: () => LocalizedString
+	/**
+	 * Spender
+	 */
+	ADDITIONAL_DETAIL_SPENDER: () => LocalizedString
+	/**
+	 * To
+	 */
+	ADDITIONAL_DETAIL_TO: () => LocalizedString
+	/**
+	 * Token ID
+	 */
+	ADDITIONAL_DETAIL_TOKEN_ID: () => LocalizedString
+	/**
 	 * Add Account
 	 */
 	ADD_ACCOUNT: () => LocalizedString
@@ -4888,14 +5121,6 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
-	 * Update available
-	 */
-	APP_UPDATE_AVAILABLE: () => LocalizedString
-	/**
-	 * Version {version} is now available to update with new features and improvements.
-	 */
-	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
-	/**
 	 * App updated
 	 */
 	APP_UPDATED: () => LocalizedString
@@ -4904,9 +5129,13 @@ Try reconnect your device to the internet.
 	 */
 	APP_UPDATED_WHATS_NEW: () => LocalizedString
 	/**
-	 * version {version}
+	 * Update available
 	 */
-	APP_VERSION: (arg: { version: string }) => LocalizedString
+	APP_UPDATE_AVAILABLE: () => LocalizedString
+	/**
+	 * Version {version} is now available to update with new features and improvements.
+	 */
+	APP_UPDATE_AVAILABLE_MESSAGE: (arg: { version: string }) => LocalizedString
 	/**
 	 * Please confirm that you would like to process this request.
 	 */
@@ -4919,6 +5148,10 @@ Try reconnect your device to the internet.
 	 * The application that is making this request could not be verified. Proceed at your own risk.
 	 */
 	APP_VERIFICATION_UNKNOWN: () => LocalizedString
+	/**
+	 * version {version}
+	 */
+	APP_VERSION: (arg: { version: string }) => LocalizedString
 	/**
 	 * April
 	 */
@@ -6230,6 +6463,10 @@ Thanks for your patience!
 	 */
 	COMMON_LBL_URL: () => LocalizedString
 	/**
+	 * Value
+	 */
+	COMMON_LBL_VALUE: () => LocalizedString
+	/**
 	 * Market Cap
 	 */
 	COMMON_MARKET_CAP: () => LocalizedString
@@ -6345,6 +6582,14 @@ Thanks for your patience!
 	 * Contract
 	 */
 	CONNECTED_APP_CONTRACT: () => LocalizedString
+	/**
+	 * You can reconnect anytime — removing it just means you'll need to log in again next time.
+	 */
+	CONNECTED_APP_DELETE_DESCRIPTION: () => LocalizedString
+	/**
+	 * Disconnect connected app
+	 */
+	CONNECTED_APP_DELETE_TITLE: () => LocalizedString
 	/**
 	 * Description
 	 */
@@ -7070,6 +7315,10 @@ Thanks for your patience!
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
+	 * Typed Data cannot be signed with a Ledger device. Please select another account.
+	 */
+	LEDGER_DEVICE_ALERT: () => LocalizedString
+	/**
 	 * Message is ready
 	 */
 	LEDGER_MESSAGE_READY: () => LocalizedString
@@ -7666,6 +7915,98 @@ Thanks for your patience!
 	 * Recap
 	 */
 	RECAP: () => LocalizedString
+	/**
+	 * VeBetter action
+	 */
+	RECEIPT_OUTPUT_B3TR_ACTION: () => LocalizedString
+	/**
+	 * Voting rewards
+	 */
+	RECEIPT_OUTPUT_CLAIM_VOTING_REWARDS: () => LocalizedString
+	/**
+	 * Contract call
+	 */
+	RECEIPT_OUTPUT_CONTRACT_CALL: () => LocalizedString
+	/**
+	 * token
+	 */
+	RECEIPT_OUTPUT_GENERIC_TOKEN: () => LocalizedString
+	/**
+	 * NFT approval
+	 */
+	RECEIPT_OUTPUT_NFT_APPROVE: () => LocalizedString
+	/**
+	 * NFT receive
+	 */
+	RECEIPT_OUTPUT_NFT_RECEIVE: () => LocalizedString
+	/**
+	 * NFT send
+	 */
+	RECEIPT_OUTPUT_NFT_SEND: () => LocalizedString
+	/**
+	 * Support VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_SUPPORT: () => LocalizedString
+	/**
+	 * Vote on VeBetterDAO proposal
+	 */
+	RECEIPT_OUTPUT_PROPOSAL_VOTE: () => LocalizedString
+	/**
+	 * Vote on round #{roundId}
+	 */
+	RECEIPT_OUTPUT_ROUND_VOTE: (arg: { roundId: number }) => LocalizedString
+	/**
+	 * Base rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_BASE: () => LocalizedString
+	/**
+	 * Delegation rewards
+	 */
+	RECEIPT_OUTPUT_STARGATE_CLAIM_REWARDS_DELEGATION: () => LocalizedString
+	/**
+	 * Node delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_DELEGATE: () => LocalizedString
+	/**
+	 * VET stake
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE: () => LocalizedString
+	/**
+	 * VET stake & delegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_STAKE_DELEGATE: () => LocalizedString
+	/**
+	 * Node undelegate
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNDELEGATE: () => LocalizedString
+	/**
+	 * VET unstake
+	 */
+	RECEIPT_OUTPUT_STARGATE_UNSTAKE: () => LocalizedString
+	/**
+	 * Swap
+	 */
+	RECEIPT_OUTPUT_SWAP: () => LocalizedString
+	/**
+	 * Token approval
+	 */
+	RECEIPT_OUTPUT_TOKEN_APPROVE: () => LocalizedString
+	/**
+	 * Token conversion
+	 */
+	RECEIPT_OUTPUT_TOKEN_CONVERSION: () => LocalizedString
+	/**
+	 * Token receive
+	 */
+	RECEIPT_OUTPUT_TOKEN_RECEIVE: () => LocalizedString
+	/**
+	 * Token send
+	 */
+	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
+	/**
+	 * Cast vote
+	 */
+	RECEIPT_OUTPUT_VEVOTE_CAST: () => LocalizedString
 	/**
 	 * Received
 	 */
@@ -8388,11 +8729,11 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Sign
+	 * Login
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
 	/**
-	 * Sign certificate
+	 * Login
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
@@ -8404,13 +8745,37 @@ Are you sure you want to continue?
 	 */
 	SIGN_TRANSACTION_ERROR: () => LocalizedString
 	/**
+	 * Confirm
+	 */
+	SIGN_TRANSACTION_REQUEST_CTA: () => LocalizedString
+	/**
+	 * App transaction
+	 */
+	SIGN_TRANSACTION_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Sign
+	 */
+	SIGN_TYPED_DATA_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Sign typed data
+	 */
+	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
+	/**
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
 	/**
+	 * Managing
+	 */
+	STARGATE_DELEGATEE_LABEL: () => LocalizedString
+	/**
 	 * Locked
 	 */
 	STARGATE_LOCKED: () => LocalizedString
+	/**
+	 * Manage your staking
+	 */
+	STARGATE_MANAGE_STAKING: () => LocalizedString
 	/**
 	 * New stake
 	 */
@@ -8419,10 +8784,6 @@ Are you sure you want to continue?
 	 * Rewards
 	 */
 	STARGATE_REWARDS: () => LocalizedString
-	/**
-	 * Manage your staking
-	 */
-	STARGATE_MANAGE_STAKING: () => LocalizedString
 	/**
 	 * Status
 	 */
@@ -8807,6 +9168,14 @@ Are you sure you want to continue?
 	 * Vechain news & updates
 	 */
 	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
+	/**
+	 * Vote on proposal
+	 */
+	VEVOTE_CAST_DESCRIPTION: () => LocalizedString
+	/**
+	 * VeVote
+	 */
+	VEVOTE_CAST_TITLE: () => LocalizedString
 	/**
 	 * VeWorld
 	 */

@@ -26,7 +26,7 @@ on:
 jobs:
     build-release-ios:
         name: Build release for iOS
-        runs-on: macos-15
+        runs-on: macos-14-xlarge
         environment: ios-release
 
         # Proceed only if it's either not a release event or it's a pre-release.
@@ -58,6 +58,7 @@ jobs:
                   brew install applesimutils
                   brew install fastlane
                   gem install cocoapods # Install CocoaPods globally
+                  sudo xcode-select -s /Applications/Xcode_16.2.app
 
                   bundle install
               env:

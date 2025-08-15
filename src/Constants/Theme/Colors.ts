@@ -213,6 +213,8 @@ export type Colors = {
     stakedCard: {
         fiatValue: string
         vetValue: string
+        tagBackground: string
+        tagText: string
     }
     stakedVetCard: {
         background: string
@@ -289,6 +291,7 @@ export enum COLORS {
     GREY_50 = "#F9F9FA",
     ORANGE_50 = "#FFFAF0",
     ORANGE_100 = "#FEEBCB",
+    ORANGE_300 = "#F6AD55",
     ORANGE_500 = "#DD6B20",
     ORANGE_700 = "#9C4221",
     PRIMARY_50 = "#F9F8FB",
@@ -351,7 +354,7 @@ const light: Colors = {
     card: COLORS.WHITE,
     icon: COLORS.PRIMARY_800,
     pinEmpty: COLORS.GREY_400,
-    pinFilled: COLORS.PRIMARY_500,
+    pinFilled: COLORS.PRIMARY_800,
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
@@ -526,8 +529,10 @@ const light: Colors = {
         text: COLORS.GREY_600,
     },
     stakedCard: {
-        fiatValue: COLORS.GREY_600,
+        fiatValue: COLORS.GREY_500,
         vetValue: COLORS.GREY_800,
+        tagBackground: COLORS.PRIMARY_200,
+        tagText: COLORS.PRIMARY_600,
     },
     stakedVetCard: {
         background: COLORS.GREY_50,
@@ -567,7 +572,7 @@ const dark: Colors = {
     splashColorLayer: COLORS.LIME_GREEN,
     splashBackground: COLORS.DARK_PURPLE,
     pinEmpty: COLORS.GREY_500,
-    pinFilled: COLORS.PRIMARY_300,
+    pinFilled: COLORS.LIME_GREEN,
     title: COLORS.WHITE,
     subtitle: COLORS.GREY_300,
     subSubtitle: COLORS.GREY_200,
@@ -747,8 +752,10 @@ const dark: Colors = {
         text: COLORS.GREY_300,
     },
     stakedCard: {
-        fiatValue: COLORS.GREY_100,
+        fiatValue: COLORS.GREY_300,
         vetValue: COLORS.WHITE,
+        tagBackground: COLORS.PRIMARY_200,
+        tagText: COLORS.PRIMARY_600,
     },
     stakedVetCard: {
         background: COLORS.PURPLE,
