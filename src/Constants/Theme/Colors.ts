@@ -219,10 +219,12 @@ export type Colors = {
     stakedVetCard: {
         background: string
     }
+    veworldLogo: string
 }
 
 export enum COLORS {
     TRANSPARENT = "transparent",
+    BLACK = "#000000",
     WHITE = "#FFFFFF",
     WHITE_DISABLED = "rgba(255, 255, 255, 0.7)",
     GRAY = "#A6A6A6",
@@ -537,6 +539,7 @@ const light: Colors = {
     stakedVetCard: {
         background: COLORS.GREY_50,
     },
+    veworldLogo: COLORS.BLACK,
 }
 
 const dark: Colors = {
@@ -760,6 +763,7 @@ const dark: Colors = {
     stakedVetCard: {
         background: COLORS.PURPLE,
     },
+    veworldLogo: COLORS.WHITE,
 }
 
 export const colors = { light, dark }
