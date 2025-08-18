@@ -122,8 +122,8 @@ describe("AssetDetailScreen", () => {
         ;(useRoute as jest.Mock).mockReturnValue({
             name: Routes.HOME,
         })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [] })
-        ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [] })
+        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+        ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
         render(
             <AssetDetailScreen
                 navigation={navigationMock}
@@ -142,8 +142,8 @@ describe("AssetDetailScreen", () => {
         ;(useRoute as jest.Mock).mockReturnValue({
             name: Routes.HOME,
         })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [] })
-        ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [] })
+        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
+        ;(useUserStargateNfts as jest.Mock).mockReturnValue({ ownedStargateNfts: [], isLoading: false })
         render(
             <AssetDetailScreen
                 navigation={navigationMock}
@@ -163,7 +163,22 @@ describe("AssetDetailScreen", () => {
         ;(useRoute as jest.Mock).mockReturnValue({
             name: Routes.HOME,
         })
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [{}] })
+        ;(useUserNodes as jest.Mock).mockReturnValue({
+            stargateNodes: [
+                {
+                    nodeId: "8",
+                    nodeLevel: 1,
+                    xNodeOwner: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    isXNodeHolder: true,
+                    isXNodeDelegated: false,
+                    isXNodeDelegator: true,
+                    isXNodeDelegatee: false,
+                    delegatee: "",
+                    isLegacyNode: false,
+                },
+            ],
+            isLoading: false,
+        })
         ;(useUserStargateNfts as jest.Mock).mockReturnValue({
             ownedStargateNfts: [
                 {
@@ -172,8 +187,10 @@ describe("AssetDetailScreen", () => {
                     claimableRewards: ethers.utils.parseEther("1").toString(),
                     levelId: "8",
                     tokenId: "8",
+                    isDelegated: false,
                 },
             ],
+            isLoading: false,
         })
         render(
             <AssetDetailScreen
