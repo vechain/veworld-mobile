@@ -124,7 +124,7 @@ export type VeBetterDaoDAppMetadata = {
     tweets?: string[]
     ve_world?: {
         banner: string
-        featured_image: string
+        featured_image?: string
     }
     categories?: string[]
 }
