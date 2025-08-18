@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.4.0 (2025-08-18)
+
+* build: init ([e23e1ea](https://github.com/vechain/veworld-mobile/commit/e23e1ea))
+* feat: add build_android_test lane to Fastfile for local Android builds (#3194) ([0a8fcc3](https://github.com/vechain/veworld-mobile/commit/0a8fcc3)), closes [#3194](https://github.com/vechain/veworld-mobile/issues/3194)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
