@@ -114,11 +114,9 @@ export const VbdCarouselBottomSheet = ({
     )
 
     const handleClose = useCallback(() => {
-        setTimeout(() => {
-            onClose()
-            onCloseBS()
-            setAppOverview({})
-        }, ANIMATION_DEFAULT.timing / 2)
+        onClose()
+        onCloseBS()
+        setAppOverview({})
     }, [onClose, onCloseBS])
 
     const animateClose = useCallback(() => {
@@ -219,22 +217,24 @@ export const VbdCarouselBottomSheet = ({
             noMargins
             floating>
             <BaseView testID="VBD_CAROUSEL_BS" style={styles.root}>
-                <Animated.View style={[styles.heroWrapper, animatedStyle]}>
-                    <ImageBackground
-                        source={{ uri: bannerUri }}
-                        style={styles.hero}
-                        borderTopLeftRadius={24}
-                        borderTopRightRadius={24}>
-                        <BaseIcon
-                            style={styles.closeBtn}
-                            color={COLORS.WHITE}
-                            size={22}
-                            name="icon-x"
-                            action={animateClose}
-                            testID="bottom-sheet-close-btn"
-                        />
-                    </ImageBackground>
-                </Animated.View>
+                {bannerUri ? (
+                    <Animated.View style={[styles.heroWrapper, animatedStyle]}>
+                        <ImageBackground
+                            source={{ uri: bannerUri }}
+                            style={styles.hero}
+                            borderTopLeftRadius={24}
+                            borderTopRightRadius={24}>
+                            <BaseIcon
+                                style={styles.closeBtn}
+                                color={COLORS.WHITE}
+                                size={22}
+                                name="icon-x"
+                                action={animateClose}
+                                testID="bottom-sheet-close-btn"
+                            />
+                        </ImageBackground>
+                    </Animated.View>
+                ) : null}
 
                 <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                     <BaseView px={20} pt={16} pb={12} flexDirection="column" gap={8}>
