@@ -2,7 +2,7 @@ import React from "react"
 import { render, screen, fireEvent, waitFor } from "@testing-library/react-native"
 import { VbdCarouselBottomSheet } from "./VbdCarouselBottomSheet"
 import { TestWrapper } from "~Test"
-import { VbdDApp } from "~Model"
+import { VbdDApp, X2ECategoryType } from "~Model"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
 import { RootState } from "~Storage/Redux/Types"
 
@@ -30,7 +30,7 @@ const mockVbdDApp: VbdDApp = {
     screenshots: ["https://example.com/screenshot1.png"],
     social_urls: [{ name: "twitter", url: "https://twitter.com/testdapp" }],
     app_urls: [{ code: "en", url: "https://test-dapp.com" }],
-    categories: ["pets"],
+    categories: [X2ECategoryType.PETS],
 }
 
 describe("VbdCarouselBottomSheet", () => {
@@ -67,7 +67,7 @@ describe("VbdCarouselBottomSheet", () => {
 
     const defaultProps = {
         isOpen: false,
-        setIsOpen: mockSetIsOpen,
+        onClose: mockSetIsOpen,
         bannerUri: "https://example.com/banner.png",
         iconUri: "https://example.com/icon.png",
         category: "green-finance-defi" as const,
