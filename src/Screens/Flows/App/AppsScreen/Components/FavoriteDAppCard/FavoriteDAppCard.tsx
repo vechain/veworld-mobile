@@ -4,7 +4,7 @@ import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { DAppUtils } from "~Utils"
+import { useAppLogo } from "~Hooks/useAppLogo"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -32,6 +32,8 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
     }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
 
+        const iconUri = useAppLogo({ app: dapp })
+
         return (
             <BaseView flexDirection="row" flex={1} px={px} mb={8}>
                 <BaseView
@@ -48,9 +50,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         <BaseView flexDirection="row" flex={1} pr={10}>
                             <Image
                                 source={{
-                                    uri: dapp.id
-                                        ? DAppUtils.getAppHubIconUrl(dapp.id)
-                                        : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
+                                    uri: iconUri,
                                 }}
                                 style={
                                     [{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>

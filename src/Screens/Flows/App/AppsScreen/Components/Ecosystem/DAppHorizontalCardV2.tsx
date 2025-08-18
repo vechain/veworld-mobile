@@ -3,7 +3,7 @@ import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { DAppUtils } from "~Utils"
+import { useAppLogo } from "~Hooks/useAppLogo"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -18,9 +18,7 @@ export const DAppHorizontalCardV2 = ({ dapp, onOpenDApp, onPress }: Props) => {
 
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const iconUri = dapp.id
-        ? DAppUtils.getAppHubIconUrl(dapp.id)
-        : dapp.iconUri ?? `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
+    const iconUri = useAppLogo({ app: dapp })
 
     return (
         <BaseView flexDirection="row" justifyContent="space-between" alignItems="center" style={[styles.rootContainer]}>

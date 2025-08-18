@@ -4,6 +4,7 @@ import FastImage, { ImageStyle } from "react-native-fast-image"
 import { BaseCard, BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { DAppUtils } from "~Utils"
 import type { ConnectedApp } from "../ConnectedAppsScreen"
 
@@ -16,6 +17,7 @@ const IMAGE_SIZE = 64
 export const ConnectedAppBox: React.FC<Props> = memo(({ connectedApp }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
     const { styles, theme } = useThemedStyles(baseStyles)
+    const fetchDynamicAppLogo = useDynamicAppLogo({ size: IMAGE_SIZE })
 
     const name = useMemo(() => {
         if (connectedApp.type === "in-app") {
@@ -31,15 +33,14 @@ export const ConnectedAppBox: React.FC<Props> = memo(({ connectedApp }: Props) =
 
     const icon = useMemo(() => {
         if (connectedApp.type === "in-app") {
-            if (connectedApp.app.id) return { uri: DAppUtils.getAppHubIconUrl(connectedApp.app.id) }
-            return { uri: DAppUtils.generateFaviconUrl(connectedApp.app.href, { size: IMAGE_SIZE }) }
+            return { uri: fetchDynamicAppLogo({ app: connectedApp.app }) }
         } else
             return {
                 uri:
                     connectedApp.session.peer.metadata.icons[0] ??
                     DAppUtils.generateFaviconUrl(connectedApp.session.peer.metadata.url, { size: IMAGE_SIZE }),
             }
-    }, [connectedApp])
+    }, [connectedApp, fetchDynamicAppLogo])
 
     return (
         <BaseCard style={styles.container}>

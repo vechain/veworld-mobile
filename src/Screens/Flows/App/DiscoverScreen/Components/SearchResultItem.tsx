@@ -3,6 +3,7 @@ import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "reac
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useVisitedUrls } from "~Hooks/useBrowserSearch"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { DAppUtils } from "~Utils"
@@ -23,16 +24,16 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
     const { onDAppPress } = useDAppActions()
     const { navigateWithTab } = useBrowserTab()
 
+    const fetchDynamicAppLogo = useDynamicAppLogo({ size: IMAGE_SIZE })
+
     const iconUri = useMemo(() => {
         try {
-            if (item.type === HistoryUrlKind.DAPP && item.dapp.id) return DAppUtils.getAppHubIconUrl(item.dapp.id)
-            if (item.type === HistoryUrlKind.DAPP)
-                return DAppUtils.generateFaviconUrl(item.dapp.href, { size: IMAGE_SIZE })
+            if (item.type === HistoryUrlKind.DAPP) return fetchDynamicAppLogo({ app: item.dapp })
             return DAppUtils.generateFaviconUrl(item.url, { size: IMAGE_SIZE })
         } catch {
             return undefined
         }
-    }, [item])
+    }, [fetchDynamicAppLogo, item])
 
     const websiteUrl = useMemo(() => {
         switch (item.type) {
