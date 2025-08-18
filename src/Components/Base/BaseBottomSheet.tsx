@@ -374,7 +374,8 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         backgroundStyle: {
             backgroundColor: theme.colors.background,
-            borderRadius: 24,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
         },
         blurBackdrop: {
             backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT,
