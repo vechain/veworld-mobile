@@ -101,7 +101,7 @@ export const BalanceView = ({
                     iconSize={26}
                     isCrossChainToken={!!tokenWithInfo.crossChainProvider}
                 />
-                <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="bodySemiBold">
+                <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                     {symbol}
                 </BaseText>
                 {isTokensOwnedLoading ? (
@@ -113,7 +113,7 @@ export const BalanceView = ({
                         width={60}
                     />
                 ) : (
-                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="bodySemiBold">
+                    <BaseText color={theme.colors.assetDetailsCard.title} typographyFont="subSubTitleSemiBold">
                         {isBalanceVisible
                             ? BigNutils(balance?.balance).toHuman(decimals).toTokenFormatFull_string(7, formatLocale)
                             : "•••••"}
