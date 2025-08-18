@@ -26,7 +26,8 @@ type BaseInAppRequest = BaseRequest & {
 type BaseCertificateRequest = {
     message: Connex.Vendor.CertMessage
     options: Connex.Signer.CertOptions
-    method: "thor_signCertificate"
+    method: "thor_signCertificate" | "thor_connect"
+    external?: boolean
 }
 
 type BaseTransactionRequest = {
@@ -37,11 +38,11 @@ type BaseTransactionRequest = {
 
 type BaseTypedDataRequest = {
     domain: ethers.TypedDataDomain
-    origin: string
     options: Connex.Signer.CertOptions
     types: Record<string, ethers.TypedDataField[]>
     value: Record<string, unknown>
-    method: "thor_signTypedData"
+    method: "thor_signTypedData" | "thor_connect"
+    external?: boolean
 }
 
 type WcConnectAppRequest = BaseRequest & {
@@ -51,7 +52,16 @@ type WcConnectAppRequest = BaseRequest & {
 
 type InAppConnectAppRequest = BaseRequest & {
     type: "in-app"
-    initialRequest: InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
+    initialRequest:
+        | InAppCertRequest
+        | InAppTxRequest
+        | InAppTypedDataRequest
+        | {
+              method: "thor_connect"
+              params: {
+                  external?: boolean
+              }
+          }
 }
 
 type WcCertRequest = BaseCertificateRequest & BaseWcRequest

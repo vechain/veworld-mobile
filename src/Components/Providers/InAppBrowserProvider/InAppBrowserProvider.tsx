@@ -42,7 +42,17 @@ import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
 import { TypedDataBottomSheet } from "./Components/TypedDataBottomSheet"
-import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
+import {
+    CertRequest,
+    ConnectRequest,
+    ConnectRequestCertificate,
+    ConnectRequestNull,
+    ConnectRequestTypedData,
+    SignedDataRequest,
+    TxRequest,
+    WindowRequest,
+    WindowResponse,
+} from "./types"
 
 const { PackageDetails } = NativeModules
 
@@ -115,6 +125,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         setTransactionBsData,
         typedDataBsRef,
         setTypedDataBsData,
+        setConnectBsData,
+        connectBsRef,
     } = useInteraction()
 
     useEffect(() => {
@@ -271,6 +283,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const switchAccount = useCallback(
         (request: WindowRequest) => {
+            if (!("options" in request)) return
             if (!request.options.signer) return
 
             if (compareAddresses(selectedAccountAddress, request.options.signer)) {
@@ -304,7 +317,11 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const initAndOpenChangeAccountNetworkBottomSheet = useCallback(
         (request: WindowRequest) => {
-            if (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) {
+            if (
+                !("options" in request) ||
+                !request.options.signer ||
+                compareAddresses(selectedAccountAddress, request.options.signer)
+            ) {
                 setTargetAccount(undefined)
             } else {
                 const requestedAccount: AccountWithDevice | undefined = accounts.find(acct => {
@@ -404,9 +421,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     )
 
     const navigateToCertificateScreen = useCallback(
-        (request: CertRequest, appUrl: string, appName: string) => {
-            const message = request.message as Connex.Vendor.CertMessage
-
+        (request: CertRequest | ConnectRequestCertificate, appUrl: string, appName: string) => {
             try {
                 switchAccount(request)
                 switchNetwork(request)
@@ -415,6 +430,24 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
+
+            if ("params" in request) {
+                setCertificateBsData({
+                    method: request.method,
+                    id: request.id,
+                    type: "in-app",
+                    message: request.params.value,
+                    options: {},
+                    appUrl,
+                    appName,
+                    isFirstRequest: !isAlreadyConnected,
+                    external: request.params.external,
+                })
+                certificateBsRef.current?.present()
+                return
+            }
+
+            const message = request.message as Connex.Vendor.CertMessage
 
             const req: CertificateRequest = {
                 method: request.method,
@@ -434,7 +467,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     )
 
     const navigateToSignedDataScreen = useCallback(
-        (request: SignedDataRequest, appUrl: string, appName: string) => {
+        (request: SignedDataRequest | ConnectRequestTypedData, appUrl: string, appName: string) => {
             try {
                 switchAccount(request)
                 switchNetwork(request)
@@ -443,6 +476,24 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
+
+            if ("params" in request) {
+                setTypedDataBsData({
+                    method: request.method,
+                    id: request.id,
+                    type: "in-app",
+                    appUrl,
+                    appName,
+                    isFirstRequest: !isAlreadyConnected,
+                    domain: request.params.value.domain,
+                    types: request.params.value.types,
+                    value: request.params.value.value,
+                    options: {},
+                    external: request.params.external,
+                })
+                typedDataBsRef.current?.present()
+                return
+            }
 
             const req: TypeDataRequest = {
                 method: request.method,
@@ -455,13 +506,32 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 domain: request.domain,
                 types: request.types,
                 value: request.value,
-                origin: request.origin,
             }
 
             setTypedDataBsData(req)
             typedDataBsRef.current?.present()
         },
         [connectedDiscoveryApps, setTypedDataBsData, switchAccount, switchNetwork, typedDataBsRef],
+    )
+
+    const navigateToConnectScreen = useCallback(
+        (request: ConnectRequestNull, appUrl: string, appName: string) => {
+            try {
+                switchAccount(request)
+                switchNetwork(request)
+            } catch {
+                return
+            }
+
+            setConnectBsData({
+                appName,
+                appUrl,
+                type: "in-app",
+                initialRequest: request,
+            })
+            connectBsRef.current?.present()
+        },
+        [connectBsRef, setConnectBsData, switchAccount, switchNetwork],
     )
 
     // ~ MESSAGE VALIDATION
@@ -583,6 +653,70 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         ],
     )
 
+    const validateConnectMessage = useCallback(
+        (request: ConnectRequest, appUrl: string, appName: string) => {
+            //TODO: Add Analytics
+            if (request.params.value === null) {
+                //Handle login without anything
+                if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                    return navigateToConnectScreen(request as ConnectRequestNull, appUrl, appName)
+                }
+
+                setNavigateToOperation(
+                    () => () => navigateToConnectScreen(request as ConnectRequestNull, appUrl, appName),
+                )
+                initAndOpenChangeAccountNetworkBottomSheet(request)
+                return
+            } else if ("purpose" in request.params.value) {
+                //Certificate message
+                const isValid = DAppUtils.isValidCertMessage(request.params.value)
+                if (!isValid) {
+                    return postMessage({
+                        id: request.id,
+                        error: "Invalid certificate message for connecting",
+                        method: RequestMethods.CONNECT,
+                    })
+                }
+
+                if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                    return navigateToCertificateScreen(request as ConnectRequestCertificate, appUrl, appName)
+                }
+
+                setNavigateToOperation(
+                    () => () => navigateToCertificateScreen(request as ConnectRequestCertificate, appUrl, appName),
+                )
+                initAndOpenChangeAccountNetworkBottomSheet(request)
+            } else if ("domain" in request.params.value) {
+                //Sign typed data message
+                const isValid = DAppUtils.isValidSignedDataMessage(request.params.value)
+                if (!isValid) {
+                    return postMessage({
+                        id: request.id,
+                        error: "Invalid typed data message for connecting",
+                        method: RequestMethods.CONNECT,
+                    })
+                }
+
+                if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                    return navigateToSignedDataScreen(request as ConnectRequestTypedData, appUrl, appName)
+                }
+
+                setNavigateToOperation(
+                    () => () => navigateToSignedDataScreen(request as ConnectRequestTypedData, appUrl, appName),
+                )
+                initAndOpenChangeAccountNetworkBottomSheet(request)
+            }
+        },
+        [
+            initAndOpenChangeAccountNetworkBottomSheet,
+            navigateToCertificateScreen,
+            navigateToConnectScreen,
+            navigateToSignedDataScreen,
+            postMessage,
+            selectedNetwork.genesis.id,
+        ],
+    )
+
     const addAppAndNavToRequest = useCallback(
         (request: InAppRequest) => {
             dispatch(
@@ -629,17 +763,20 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
             const data = JSON.parse(event.nativeEvent.data)
 
-            if (data.method === RequestMethods.REQUEST_TRANSACTION) {
-                return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
-            } else if (data.method === RequestMethods.SIGN_CERTIFICATE) {
-                return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
-            } else if (data.method === RequestMethods.SIGN_TYPED_DATA) {
-                return validateSignedDataMessage(data, event.nativeEvent.url, event.nativeEvent.title)
-            } else {
-                warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
+            switch (data.method) {
+                case RequestMethods.REQUEST_TRANSACTION:
+                    return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.SIGN_CERTIFICATE:
+                    return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.SIGN_TYPED_DATA:
+                    return validateSignedDataMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.CONNECT:
+                    return validateConnectMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                default:
+                    warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
             }
         },
-        [validateTxMessage, validateCertMessage, validateSignedDataMessage],
+        [validateTxMessage, validateCertMessage, validateSignedDataMessage, validateConnectMessage],
     )
 
     const detectScrollDirection = useCallback(
@@ -914,6 +1051,20 @@ window.vechain = {
             }, 
         }
     },
+    request: function (params) {
+        const id = generateRandomId()
+        const request = {
+            id,
+            method: params.method,
+            origin: window.origin,
+            params: params.params,
+            genesisId: params.genesisId
+        }
+
+        window.ReactNativeWebView.postMessage(JSON.stringify(request))
+
+        return newResponseHandler(request.id)
+    }
 }
 
 true
