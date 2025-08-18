@@ -218,6 +218,8 @@ export const VbdCarouselBottomSheet = ({
         }
     }, [animateClose])
 
+    const darkColorFavBtn = useMemo(() => (theme.isDark ? COLORS.LIME_GREEN : COLORS.WHITE), [theme.isDark])
+
     return (
         <BaseBottomSheet
             ref={ref}
@@ -309,8 +311,8 @@ export const VbdCarouselBottomSheet = ({
                         action={onToggleFavorite}
                         title={isFavorite ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
                         variant="outline"
-                        textColor={theme.isDark ? (isFavorite ? COLORS.LIME_GREEN : COLORS.WHITE) : undefined}
-                        borderColor={theme.isDark ? (isFavorite ? COLORS.LIME_GREEN : COLORS.WHITE) : undefined}
+                        textColor={theme.isDark ? darkColorFavBtn : undefined}
+                        borderColor={theme.isDark ? darkColorFavBtn : undefined}
                     />
                     <BaseButton
                         testID="Open_Button"

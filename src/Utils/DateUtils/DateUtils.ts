@@ -72,8 +72,9 @@ export const formatDateTime = (
 
     const formattedDate = dateFormatter.format(date)
     const formattedTime = timeFormatter.format(date)
+    const time = options?.hideTime ? "" : ` - ${formattedTime.replace(/ (AM|PM)/, "")}`
 
-    return `${formattedDate}${options?.hideTime ? "" : ` - ${formattedTime.replace(/ (AM|PM)/, "")}`}`
+    return `${formattedDate}${time}`
 }
 
 export const DEFAULT_TIMEZONE = "UTC"

@@ -30,42 +30,40 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
     }, [app.categories])
 
     return (
-        <>
-            <Pressable onPress={() => onPressItem({ bannerUri, iconUri, app, category })}>
-                <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_ITEM">
-                    <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
-                        <BaseView px={16} py={12} flexDirection="column" gap={8}>
-                            <BaseView flexDirection="row">
-                                <FastImage source={{ uri: iconUri }} style={styles.logo as ImageStyle} />
-                                <BaseSpacer width={12} flexShrink={0} />
-                                <BaseText
-                                    flex={1}
-                                    numberOfLines={1}
-                                    typographyFont="subSubTitleSemiBold"
-                                    color={COLORS.GREY_50}
-                                    testID="VBD_CAROUSEL_ITEM_APP_NAME">
-                                    {app.name}
-                                </BaseText>
-                                {category && (
-                                    <>
-                                        <BaseSpacer width={24} flexShrink={0} />
-                                        <CategoryChip category={category} />
-                                    </>
-                                )}
-                            </BaseView>
+        <Pressable onPress={() => onPressItem({ bannerUri, iconUri, app, category })}>
+            <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_ITEM">
+                <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
+                    <BaseView px={16} py={12} flexDirection="column" gap={8}>
+                        <BaseView flexDirection="row">
+                            <FastImage source={{ uri: iconUri }} style={styles.logo as ImageStyle} />
+                            <BaseSpacer width={12} flexShrink={0} />
                             <BaseText
-                                typographyFont="captionMedium"
-                                color={COLORS.WHITE_RGBA_85}
-                                numberOfLines={2}
-                                flexDirection="row"
-                                testID="VBD_CAROUSEL_ITEM_APP_DESCRIPTION">
-                                {app.description}
+                                flex={1}
+                                numberOfLines={1}
+                                typographyFont="subSubTitleSemiBold"
+                                color={COLORS.GREY_50}
+                                testID="VBD_CAROUSEL_ITEM_APP_NAME">
+                                {app.name}
                             </BaseText>
+                            {category && (
+                                <>
+                                    <BaseSpacer width={24} flexShrink={0} />
+                                    <CategoryChip category={category} />
+                                </>
+                            )}
                         </BaseView>
-                    </BlurView>
-                </ImageBackground>
-            </Pressable>
-        </>
+                        <BaseText
+                            typographyFont="captionMedium"
+                            color={COLORS.WHITE_RGBA_85}
+                            numberOfLines={2}
+                            flexDirection="row"
+                            testID="VBD_CAROUSEL_ITEM_APP_DESCRIPTION">
+                            {app.description}
+                        </BaseText>
+                    </BaseView>
+                </BlurView>
+            </ImageBackground>
+        </Pressable>
     )
 }
 
