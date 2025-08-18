@@ -1002,6 +1002,7 @@
   "SIGN_TYPED_DATA_REQUEST_CTA": "Sign",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Sign typed data",
   "STARGATE_CLAIMABLE": "Claimable",
+  "STARGATE_OWN_LABEL": "Own",
   "STARGATE_DELEGATEE_LABEL": "Managing",
   "STARGATE_LOCKED": "Locked",
   "STARGATE_MANAGE_STAKING": "Manage your staking",
