@@ -165,7 +165,7 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
             </DappDetailsCard>
             <BaseSpacer height={24} />
             {!request.external && (
-                <BaseView flexDirection="row" gap={16}>
+                <BaseView flexDirection="row" gap={16} mb={24}>
                     <BaseSwitch value={keepMeLoggedIn} onValueChange={setKeepMeLoggedIn} />
                     <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
                         {LL.LOGIN_KEEP_ME_SIGNED_IN()}

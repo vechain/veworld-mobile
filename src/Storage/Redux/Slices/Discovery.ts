@@ -164,23 +164,12 @@ export const DiscoverySlice = createSlice({
         },
         deleteSession(state, action: PayloadAction<string>) {
             delete state.sessions?.[action.payload]
-            const parsedUrl = new URL(action.payload)
-            this.removeConnectedDiscoveryApp(state, {
-                type: "discovery/addConnectedDiscoveryApp",
-                payload: { connectedTime: Date.now(), href: parsedUrl.hostname, name: parsedUrl.hostname },
-            })
         },
         addSession(state, action: PayloadAction<{ url: string } & LoginSession>) {
             const { url, ...rest } = action.payload
             const parsedUrl = new URL(url)
             if (!state.sessions) state.sessions = {}
             state.sessions[parsedUrl.origin] = rest
-
-            //Keep backwards compatibility
-            this.addConnectedDiscoveryApp(state, {
-                type: "discovery/addConnectedDiscoveryApp",
-                payload: { connectedTime: Date.now(), href: parsedUrl.hostname, name: parsedUrl.hostname },
-            })
         },
     },
 })

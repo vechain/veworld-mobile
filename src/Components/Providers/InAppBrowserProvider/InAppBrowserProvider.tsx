@@ -495,8 +495,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 value: request.params.value,
                 external: request.params.external,
                 method: RequestMethods.CONNECT,
-                kind,
-            } as any)
+                kind: kind as any,
+                id: request.id,
+                isFirstRequest: true,
+            })
             loginBsRef.current?.present()
         },
         [loginBsRef, setLoginBsData, switchAccount, switchNetwork],
