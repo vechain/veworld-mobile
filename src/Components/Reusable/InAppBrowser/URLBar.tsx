@@ -7,14 +7,15 @@ import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { BaseIcon } from "~Components/Base/BaseIcon"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { COLORS } from "~Constants"
 import { useBottomSheetModal, useGetDappMetadataFromUrl } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { DAppUtils } from "~Utils/DAppUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { DAppUtils } from "~Utils/DAppUtils"
 
 type Props = {
     navigationUrl: string
@@ -34,6 +35,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
     const { showToolbars } = useInAppBrowser()
     const { betterWorldFeature } = useFeatureFlags()
     const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
+    const fetchDynamicLogo = useDynamicAppLogo({})
 
     const nav =
         useNavigation<
@@ -90,9 +92,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
     const parsedDappMetadata = useMemo(() => {
         if (dappMetadata)
             return {
-                icon: dappMetadata.id
-                    ? DAppUtils.getAppHubIconUrl(dappMetadata.id)
-                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(dappMetadata.href).origin}`,
+                icon: fetchDynamicLogo({ app: dappMetadata }),
                 name: dappMetadata.name,
                 url: navigationUrl,
                 isDapp: true,
@@ -101,10 +101,10 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
         return {
             name: new URL(navigationUrl).hostname,
             url: navigationUrl,
-            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(navigationUrl).origin}`,
+            icon: DAppUtils.generateFaviconUrl(navigationUrl, { size: 64 }),
             isDapp: false,
         }
-    }, [dappMetadata, navigationUrl])
+    }, [dappMetadata, fetchDynamicLogo, navigationUrl])
 
     const websiteFavicon = useMemo(() => {
         return parsedDappMetadata.icon ? (

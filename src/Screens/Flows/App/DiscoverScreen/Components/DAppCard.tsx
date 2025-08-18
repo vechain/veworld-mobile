@@ -4,7 +4,7 @@ import Animated, { ZoomIn, ZoomOut } from "react-native-reanimated"
 import { BaseText, BaseTouchable } from "~Components"
 import { COLORS, DiscoveryDApp, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { DAppUtils } from "~Utils"
+import { useAppLogo } from "~Hooks/useAppLogo"
 
 type DAppCardProps = {
     dapp: DiscoveryDApp
@@ -19,9 +19,7 @@ export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
     const imageDimension = Math.min(SCREEN_WIDTH * 0.2, 72)
     const textColor = theme.isDark ? COLORS.WHITE : COLORS.GREY_800
 
-    const iconUri = dapp.id
-        ? DAppUtils.getAppHubIconUrl(dapp.id)
-        : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`
+    const iconUri = useAppLogo({ app: dapp })
 
     return (
         <Animated.View entering={ZoomIn} exiting={ZoomOut}>

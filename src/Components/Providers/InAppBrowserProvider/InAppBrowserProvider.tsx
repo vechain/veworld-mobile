@@ -14,6 +14,7 @@ import { showInfoToast, showWarningToast } from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, usePrevious, useSetSelectedAccount } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { Locales, useI18nContext } from "~i18n"
 import {
     AccountWithDevice,
@@ -156,6 +157,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
+
+    const fetchDynamicAppLogo = useDynamicAppLogo({ size: 64 })
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -754,9 +757,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         const foundDapp = allDapps.find(app => new URL(app.href).origin === new URL(navigationState?.url ?? "").origin)
         if (foundDapp)
             return {
-                icon: foundDapp.id
-                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
-                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
+                icon: fetchDynamicAppLogo({ app: foundDapp }),
                 name: foundDapp.name,
                 url: navigationState?.url,
                 isDapp: true,
@@ -765,10 +766,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         return {
             name: new URL(navigationState?.url ?? "").hostname,
             url: navigationState?.url,
-            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(navigationState?.url ?? "").origin}`,
+            icon: DAppUtils.generateFaviconUrl(navigationState.url),
             isDapp: false,
         }
-    }, [allDapps, navigationState?.url])
+    }, [allDapps, fetchDynamicAppLogo, navigationState?.url])
 
     const contextValue = React.useMemo(() => {
         return {

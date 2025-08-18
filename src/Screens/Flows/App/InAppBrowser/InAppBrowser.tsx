@@ -1,21 +1,21 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { MutableRefObject, useCallback, useEffect, useState } from "react"
+import React, { MutableRefObject, useCallback, useEffect, useMemo, useState } from "react"
 import { Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
+import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
 import { BaseIcon, BaseStatusBar, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
-import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
-import FastImage, { ImageStyle } from "react-native-fast-image"
-import { DAppUtils } from "~Utils/DAppUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
 
@@ -43,6 +43,11 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const [isLoadingWebView, setIsLoadingWebView] = useState(true)
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
     const dappMetadata = useGetDappMetadataFromUrl(route.params.url)
+    const fetchDynamicLogo = useDynamicAppLogo({ size: 48 })
+
+    const iconUri = useMemo(() => {
+        return dappMetadata ? fetchDynamicLogo({ app: dappMetadata }) : undefined
+    }, [dappMetadata, fetchDynamicLogo])
 
     useEffect(() => {
         if (route?.params?.ul) {
@@ -84,9 +89,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 style={[styles.loadingWebView]}>
                 <FastImage
                     source={{
-                        uri: dappMetadata.id
-                            ? DAppUtils.getAppHubIconUrl(dappMetadata.id)
-                            : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(dappMetadata.href).origin}`,
+                        uri: iconUri,
                     }}
                     style={styles.loadingIcon as ImageStyle}
                 />
@@ -94,6 +97,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         )
     }, [
         dappMetadata,
+        iconUri,
         styles.loadingIcon,
         styles.loadingWebView,
         styles.notDappLoadingIcon,
