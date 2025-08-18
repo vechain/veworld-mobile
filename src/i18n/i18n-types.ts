@@ -4121,6 +4121,10 @@ type RootTranslation = {
 	 */
 	LOGIN_REQUEST_TITLE: string
 	/**
+	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: string
+	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
@@ -8776,6 +8780,10 @@ Are you sure you want to continue?
 	 * Login
 	 */
 	LOGIN_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Keep me signed in for future sessions
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
 	/**
 	 * Claimable
 	 */

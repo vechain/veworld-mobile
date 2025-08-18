@@ -1003,6 +1003,7 @@
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Sign typed data",
   "LOGIN_REQUEST_CTA": "Login",
   "LOGIN_REQUEST_TITLE": "Login",
+  "LOGIN_KEEP_ME_SIGNED_IN": "Keep me signed in for future sessions",
   "STARGATE_CLAIMABLE": "Claimable",
   "STARGATE_DELEGATEE_LABEL": "Managing",
   "STARGATE_LOCKED": "Locked",

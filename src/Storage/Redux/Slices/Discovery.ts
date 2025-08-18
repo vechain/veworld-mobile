@@ -8,6 +8,11 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
+export type LoginSession =
+    | { kind: "external"; address: string }
+    | { kind: "temporary"; address: string }
+    | { kind: "permanent" }
+
 export type Tab = {
     id: string
     href: string
@@ -31,6 +36,9 @@ export type DiscoveryState = {
     }
     bannerInteractions: {
         [bannerName: string]: BannerInteractionDetails
+    }
+    sessions?: {
+        [appOrigin: string]: LoginSession
     }
 }
 
@@ -146,6 +154,34 @@ export const DiscoverySlice = createSlice({
                 amountOfInteractions: (state.bannerInteractions[action.payload]?.amountOfInteractions ?? 0) + 1,
             }
         },
+        clearTemporarySessions: state => {
+            state.sessions = Object.fromEntries(
+                Object.entries(state.sessions ?? {}).filter(([_, session]) => {
+                    if (session.kind === "temporary") return false
+                    return true
+                }),
+            )
+        },
+        deleteSession(state, action: PayloadAction<string>) {
+            delete state.sessions?.[action.payload]
+            const parsedUrl = new URL(action.payload)
+            this.removeConnectedDiscoveryApp(state, {
+                type: "discovery/addConnectedDiscoveryApp",
+                payload: { connectedTime: Date.now(), href: parsedUrl.hostname, name: parsedUrl.hostname },
+            })
+        },
+        addSession(state, action: PayloadAction<{ url: string } & LoginSession>) {
+            const { url, ...rest } = action.payload
+            const parsedUrl = new URL(url)
+            if (!state.sessions) state.sessions = {}
+            state.sessions[parsedUrl.origin] = rest
+
+            //Keep backwards compatibility
+            this.addConnectedDiscoveryApp(state, {
+                type: "discovery/addConnectedDiscoveryApp",
+                payload: { connectedTime: Date.now(), href: parsedUrl.hostname, name: parsedUrl.hostname },
+            })
+        },
     },
 })
 
@@ -165,4 +201,7 @@ export const {
     closeTab,
     closeAllTabs,
     incrementBannerInteractions,
+    clearTemporarySessions,
+    deleteSession,
+    addSession,
 } = DiscoverySlice.actions

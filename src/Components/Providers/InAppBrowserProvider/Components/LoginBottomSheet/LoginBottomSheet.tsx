@@ -2,7 +2,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import { Blake2b256, Certificate } from "@vechain/sdk-core"
 import { ethers } from "ethers"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
-import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components/Base"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseSwitch, BaseText, BaseView } from "~Components/Base"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { SelectAccountBottomSheet } from "~Components/Reusable"
@@ -12,7 +12,13 @@ import { useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } 
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, LoginRequest, TypedDataMessage } from "~Model"
-import { selectSelectedAccountOrNull, selectVisibleAccountsWithoutObserved, useAppSelector } from "~Storage/Redux"
+import {
+    addSession,
+    selectSelectedAccountOrNull,
+    selectVisibleAccountsWithoutObserved,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AccountUtils, HexUtils } from "~Utils"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappDetails } from "../DappDetails"
@@ -24,7 +30,7 @@ import { Renderer as TypedDataRenderer } from "../TypedDataBottomSheet/Renderer"
 type Props = {
     request: LoginRequest
     onCancel: (request: LoginRequest) => Promise<void>
-    onSign: (args: { request: LoginRequest; password?: string }) => Promise<void>
+    onSign: (args: { request: LoginRequest; keepMeLoggedIn: boolean; password?: string }) => Promise<void>
     selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
     isLoading: boolean
 }
@@ -33,6 +39,7 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
     const { LL } = useI18nContext()
     const theme = useTheme()
 
+    const [keepMeLoggedIn, setKeepMeLoggedIn] = useState(false)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
     const { onClose: onCloseSelectAccountBs, onOpen: onOpenSelectAccountBs } = useBottomSheetModal({
@@ -91,7 +98,10 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
         }
     }, [request, selectedAccount?.address])
 
-    const signableArgs = useMemo(() => ({ request: enhancedRequest }), [enhancedRequest])
+    const signableArgs = useMemo(
+        () => ({ request: enhancedRequest, keepMeLoggedIn }),
+        [enhancedRequest, keepMeLoggedIn],
+    )
 
     const onChangeAccountPress = useCallback(() => {
         onOpenSelectAccountBs()
@@ -154,6 +164,15 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
                 )}
             </DappDetailsCard>
             <BaseSpacer height={24} />
+            {!request.external && (
+                <BaseView flexDirection="row" gap={16}>
+                    <BaseSwitch value={keepMeLoggedIn} onValueChange={setKeepMeLoggedIn} />
+                    <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
+                        {LL.LOGIN_KEEP_ME_SIGNED_IN()}
+                    </BaseText>
+                </BaseView>
+            )}
+
             <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
@@ -200,6 +219,8 @@ export const LoginBottomSheet = () => {
     const isUserAction = useRef(false)
 
     const [isLoading, setIsLoading] = useState(false)
+
+    const dispatch = useAppDispatch()
 
     const buildTypedData = useCallback(
         (request: Extract<LoginRequest, { kind: "typed-data" }>) => {
@@ -266,11 +287,44 @@ export const LoginBottomSheet = () => {
     )
 
     const onSign = useCallback(
-        async ({ request, password }: { request: LoginRequest; password?: string }) => {
+        async ({
+            request,
+            password,
+            keepMeLoggedIn,
+        }: {
+            request: LoginRequest
+            keepMeLoggedIn: boolean
+            password?: string
+        }) => {
             try {
                 setIsLoading(true)
 
                 const result = await signRequest(request, password)
+
+                if (request.external) {
+                    dispatch(
+                        addSession({
+                            kind: "external",
+                            url: request.appUrl,
+                            address: selectedAccount?.address.toLowerCase() ?? "",
+                        }),
+                    )
+                } else if (keepMeLoggedIn) {
+                    dispatch(
+                        addSession({
+                            kind: "permanent",
+                            url: request.appUrl,
+                        }),
+                    )
+                } else {
+                    dispatch(
+                        addSession({
+                            kind: "temporary",
+                            url: request.appUrl,
+                            address: selectedAccount?.address.toLowerCase() ?? "",
+                        }),
+                    )
+                }
 
                 postMessage({
                     id: request.id,
@@ -291,7 +345,7 @@ export const LoginBottomSheet = () => {
             }
             onCloseBs()
         },
-        [onCloseBs, postMessage, signRequest],
+        [dispatch, onCloseBs, postMessage, selectedAccount?.address, signRequest],
     )
 
     const rejectRequest = useCallback(

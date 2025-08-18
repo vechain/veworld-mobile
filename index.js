@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useEffect, useMemo, useRef, useState } from "react"
-import { AppRegistry, LogBox } from "react-native"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { AppRegistry, AppState, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
@@ -39,6 +39,7 @@ import { AnalyticsUtils, info, URIUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
 import { NotificationsProvider, PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
 import {
+    clearTemporarySessions,
     selectAnalyticsTrackingEnabled,
     selectLanguage,
     selectSentryTrackingEnabled,
@@ -88,6 +89,8 @@ const Main = () => {
         [fontFamily.DesignSystemIcons]: DesignSystemIcons,
     })
 
+    const dispatch = useAppDispatch()
+
     // Online status management
     // https://tanstack.com/query/v4/docs/react/react-native#online-status-management
     onlineManager.setEventListener(setOnline => {
@@ -119,6 +122,27 @@ const Main = () => {
             AnalyticsUtils.initialize()
         }
     }, [isAnalyticsEnabled])
+
+    /**
+     * @param  {import("react-native").AppStateStatus} nextAppState
+     */
+    const handleAppStateChange = useCallback(
+        nextAppState => {
+            if (nextAppState === "inactive") {
+                dispatch(clearTemporarySessions())
+            }
+        },
+        [dispatch],
+    )
+
+    // Clear all temporary sessions
+    useEffect(() => {
+        const appStateId = AppState.addEventListener("change", handleAppStateChange)
+
+        return () => {
+            appStateId.remove()
+        }
+    }, [handleAppStateChange])
 
     if (!fontsLoaded) return
 
