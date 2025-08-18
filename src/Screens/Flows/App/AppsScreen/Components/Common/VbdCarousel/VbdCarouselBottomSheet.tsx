@@ -1,5 +1,5 @@
 import React, { ElementType, useCallback, useEffect, useMemo, useState } from "react"
-import { ImageBackground, StyleSheet } from "react-native"
+import { BackHandler, ImageBackground, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { getTimeZone } from "react-native-localize"
 import {
@@ -205,6 +205,18 @@ export const VbdCarouselBottomSheet = ({
             />
         )
     }, [isFavorite, theme.isDark, styles.favIcon])
+
+    useEffect(() => {
+        const handleBackButton = () => {
+            animateClose()
+            return true
+        }
+
+        BackHandler.addEventListener("hardwareBackPress", handleBackButton)
+        return () => {
+            BackHandler.removeEventListener("hardwareBackPress", handleBackButton)
+        }
+    }, [animateClose])
 
     return (
         <BaseBottomSheet
