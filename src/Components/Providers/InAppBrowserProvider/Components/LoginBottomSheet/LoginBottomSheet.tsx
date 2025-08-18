@@ -11,7 +11,7 @@ import { COLORS } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE, LoginRequest, TypedDataMessage } from "~Model"
+import { DEVICE_TYPE, LoginRequest } from "~Model"
 import {
     addSession,
     selectSelectedAccountOrNull,
@@ -69,31 +69,32 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
                 }
             }
             case "typed-data": {
-                if ("VeWorldLogin" in request.value.types)
-                    return {
-                        ...request,
-                        value: {
-                            ...request.value,
-                            value: {
-                                ...request.value.value,
-                                veworld_login_address: ethers.utils.getAddress(selectedAccount?.address ?? ""),
-                            },
-                        } satisfies TypedDataMessage,
-                    }
-                return {
-                    ...request,
-                    value: {
-                        ...request.value,
-                        types: {
-                            ...request.value.types,
-                            VeWorldLogin: [{ name: "veworld_login_address", type: "address" }],
-                        },
-                        value: {
-                            ...request.value.value,
-                            veworld_login_address: ethers.utils.getAddress(selectedAccount?.address ?? ""),
-                        },
-                    } satisfies TypedDataMessage,
-                }
+                return request
+                // if ("VeWorldLogin" in request.value.types)
+                //     return {
+                //         ...request,
+                //         value: {
+                //             ...request.value,
+                //             value: {
+                //                 ...request.value.value,
+                //                 veworld_login_address: ethers.utils.getAddress(selectedAccount?.address ?? ""),
+                //             },
+                //         } satisfies TypedDataMessage,
+                //     }
+                // return {
+                //     ...request,
+                //     value: {
+                //         ...request.value,
+                //         types: {
+                //             ...request.value.types,
+                //             VeWorldLogin: [{ name: "veworld_login_address", type: "address" }],
+                //         },
+                //         value: {
+                //             ...request.value.value,
+                //             veworld_login_address: ethers.utils.getAddress(selectedAccount?.address ?? ""),
+                //         },
+                //     } satisfies TypedDataMessage,
+                // }
             }
         }
     }, [request, selectedAccount?.address])
@@ -150,7 +151,7 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
                         <DappDetails show={visible}>
                             {enhancedRequest.kind === "typed-data" ? (
                                 <TypedDataRenderer.Container>
-                                    <TypedDataRenderer value={enhancedRequest.value} />
+                                    <TypedDataRenderer value={enhancedRequest.value.value} />
                                 </TypedDataRenderer.Container>
                             ) : enhancedRequest.kind === "certificate" ? (
                                 <BaseText

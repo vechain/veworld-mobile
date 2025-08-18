@@ -43,7 +43,15 @@ import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { LoginBottomSheet } from "./Components/LoginBottomSheet/LoginBottomSheet"
 import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
 import { TypedDataBottomSheet } from "./Components/TypedDataBottomSheet"
-import { CertRequest, LoginRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
+import {
+    CertRequest,
+    LoginRequest,
+    LoginRequestTypedData,
+    SignedDataRequest,
+    TxRequest,
+    WindowRequest,
+    WindowResponse,
+} from "./types"
 
 const { PackageDetails } = NativeModules
 
@@ -654,7 +662,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 }
             } else if ("domain" in request.params.value) {
                 //Sign typed data message
-                const isValid = DAppUtils.isValidSignedDataMessage(request.params.value)
+                const isValid = DAppUtils.isValidSignedData(request.params.value)
                 if (!isValid) {
                     return postMessage({
                         id: request.id,
@@ -662,15 +670,16 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                         method: RequestMethods.CONNECT,
                     })
                 }
-                if ("VeWorldLogin" in request.params.value.types) {
-                    const loginType = request.params.value.types.VeWorldLogin
+                const parsedReq = request as LoginRequestTypedData
+                if ("VeWorldLogin" in parsedReq.params.value.types) {
+                    const loginType = parsedReq.params.value.types.VeWorldLogin
                     if (
                         loginType.length !== 1 ||
                         loginType[0].name !== "veworld_login_address" ||
                         loginType[0].type !== "address"
                     )
                         return postMessage({
-                            id: request.id,
+                            id: parsedReq.id,
                             error: "Invalid VeWorldLogin type in typed data message for connecting",
                             method: RequestMethods.CONNECT,
                         })
