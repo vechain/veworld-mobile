@@ -26,6 +26,7 @@ export const StakedCard = memo<StakedCardProps>(({ nodes, nfts, isOwner, isLoadi
     return (
         <BaseTouchable
             style={styles.container}
+            testID="staked-card-container"
             onPress={() => nav.navigate(Routes.TOKEN_DETAILS, { token: vetWithCompleteInfo })}>
             <StargateLockedValue isLoading={isLoading} nfts={nfts} isNodeOwner={isOwner} />
         </BaseTouchable>
