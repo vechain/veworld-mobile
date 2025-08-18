@@ -60,6 +60,7 @@ type InAppLoginRequest = BaseInAppRequest & {
     type: "in-app"
     method: "thor_connect"
     external: boolean | undefined
+    genesisId: string
 } & (
         | { kind: "simple"; value: null }
         | { kind: "certificate"; value: Connex.Vendor.CertMessage }

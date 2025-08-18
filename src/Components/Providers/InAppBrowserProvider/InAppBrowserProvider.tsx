@@ -506,6 +506,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 kind: kind as any,
                 id: request.id,
                 isFirstRequest: true,
+                genesisId: request.genesisId,
             })
             loginBsRef.current?.present()
         },

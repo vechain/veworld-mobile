@@ -308,6 +308,7 @@ export const LoginBottomSheet = () => {
                             kind: "external",
                             url: request.appUrl,
                             address: selectedAccount?.address.toLowerCase() ?? "",
+                            genesisId: request.genesisId,
                         }),
                     )
                 } else if (keepMeLoggedIn) {
@@ -315,6 +316,7 @@ export const LoginBottomSheet = () => {
                         addSession({
                             kind: "permanent",
                             url: request.appUrl,
+                            genesisId: request.genesisId,
                         }),
                     )
                 } else {
@@ -323,6 +325,7 @@ export const LoginBottomSheet = () => {
                             kind: "temporary",
                             url: request.appUrl,
                             address: selectedAccount?.address.toLowerCase() ?? "",
+                            genesisId: request.genesisId,
                         }),
                     )
                 }

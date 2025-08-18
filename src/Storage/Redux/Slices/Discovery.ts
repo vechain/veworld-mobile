@@ -8,10 +8,11 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
-export type LoginSession =
+export type LoginSession = { genesisId: string } & (
     | { kind: "external"; address: string }
     | { kind: "temporary"; address: string }
     | { kind: "permanent" }
+)
 
 export type Tab = {
     id: string
