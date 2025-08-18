@@ -86,3 +86,12 @@ export const selectCurrentTab = createSelector(selectTabs, selectCurrentTabId, (
     tabs.find(tab => tab.id === currentTabId),
 )
 export const selectBannerInteractions = createSelector(getDiscoveryState, discovery => discovery.bannerInteractions)
+
+export const selectSession = createSelector(
+    getDiscoveryState,
+    (_: RootState, url?: string) => url,
+    (state, url) => {
+        if (!url) return undefined
+        return state.sessions?.[new URL(url).origin]
+    },
+)

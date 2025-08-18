@@ -33,6 +33,7 @@ import {
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
+    selectSession,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -159,6 +160,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
+    const loginSession = useAppSelector(state => selectSession(state, navigationState?.url))
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -733,6 +735,36 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         ],
     )
 
+    const validateWalletMessage = useCallback(
+        (request: { id: string }) => {
+            if (!loginSession)
+                return postMessage({
+                    id: request.id,
+                    method: RequestMethods.WALLET,
+                    data: null,
+                })
+            if (loginSession.kind === "external")
+                return postMessage({
+                    id: request.id,
+                    method: RequestMethods.WALLET,
+                    data: loginSession.address,
+                })
+            if (loginSession.kind === "permanent")
+                return postMessage({
+                    id: request.id,
+                    method: RequestMethods.WALLET,
+                    data: selectedAccountAddress ?? null,
+                })
+            if (loginSession.kind === "temporary")
+                return postMessage({
+                    id: request.id,
+                    method: RequestMethods.WALLET,
+                    data: loginSession.address,
+                })
+        },
+        [loginSession, postMessage, selectedAccountAddress],
+    )
+
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
             debug(ERROR_EVENTS.DAPP, event.nativeEvent.url)
@@ -752,11 +784,19 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     return validateSignedDataMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 case RequestMethods.CONNECT:
                     return validateConnectMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.WALLET:
+                    return validateWalletMessage(data)
                 default:
                     warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
             }
         },
-        [validateTxMessage, validateCertMessage, validateSignedDataMessage, validateConnectMessage],
+        [
+            validateTxMessage,
+            validateCertMessage,
+            validateSignedDataMessage,
+            validateConnectMessage,
+            validateWalletMessage,
+        ],
     )
 
     const detectScrollDirection = useCallback(

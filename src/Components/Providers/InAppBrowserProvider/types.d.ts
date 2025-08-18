@@ -1,7 +1,11 @@
 import { ethers } from "ethers"
 import { RequestMethods } from "~Constants"
 
-export type ConnectResponse = Connex.Vendor.CertResponse | { signer: string; signature: string } | { signer: string }
+export type ConnectResponse =
+    | Connex.Vendor.CertResponse
+    | { signer: string; signature: string }
+    | { signer: string }
+    | null
 
 type ErrorResponse = {
     id: string
