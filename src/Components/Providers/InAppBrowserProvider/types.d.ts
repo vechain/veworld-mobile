@@ -1,6 +1,8 @@
 import { ethers } from "ethers"
 import { RequestMethods } from "~Constants"
 
+export type ConnectResponse = Connex.Vendor.CertResponse | { signer: string; signature: string } | { signer: string }
+
 type ErrorResponse = {
     id: string
     error: string
@@ -9,8 +11,8 @@ type ErrorResponse = {
 
 type SuccessResponse = {
     id: string
-    data: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse | SignedTypedDataResponse
-    method: (typeof RequestMethods)["REQUEST_TRANSACTION"] | (typeof RequestMethods)["SIGN_CERTIFICATE"]
+    data: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse | string | ConnectResponse
+    method: (typeof RequestMethods)[keyof typeof RequestMethods]
 }
 
 export type WindowResponse = ErrorResponse | SuccessResponse
@@ -44,8 +46,8 @@ export type SignedDataRequest = Omit<BaseRequest, "message"> & {
     options: Connex.Signer.CertOptions
 }
 
-type BaseConnectRequest = Omit<BaseRequest, "message" | "options" | "domain" | "origin" | "types" | "value">
-export type ConnectRequestCertificate = BaseConnectRequest & {
+type BaseLoginRequest = Omit<BaseRequest, "message" | "options" | "domain" | "origin" | "types" | "value">
+export type LoginRequestCertificate = BaseLoginRequest & {
     method: (typeof RequestMethods)["CONNECT"]
     params: {
         value: Connex.Vendor.CertMessage
@@ -53,7 +55,7 @@ export type ConnectRequestCertificate = BaseConnectRequest & {
     }
 }
 
-export type ConnectRequestTypedData = BaseConnectRequest & {
+export type LoginRequestTypedData = BaseLoginRequest & {
     method: (typeof RequestMethods)["CONNECT"]
     params: {
         value: {
@@ -65,7 +67,7 @@ export type ConnectRequestTypedData = BaseConnectRequest & {
     }
 }
 
-export type ConnectRequestNull = BaseConnectRequest & {
+export type LoginRequestNull = BaseLoginRequest & {
     method: (typeof RequestMethods)["CONNECT"]
     params: {
         value: null
@@ -73,6 +75,6 @@ export type ConnectRequestNull = BaseConnectRequest & {
     }
 }
 
-export type ConnectRequest = ConnectRequestCertificate | ConnectRequestTypedData | ConnectRequestNull
+export type LoginRequest = LoginRequestCertificate | LoginRequestTypedData | LoginRequestNull
 
-export type WindowRequest = TxRequest | CertRequest | SignedDataRequest | ConnectRequest
+export type WindowRequest = TxRequest | CertRequest | SignedDataRequest | LoginRequest

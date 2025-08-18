@@ -40,6 +40,11 @@ type Props = {
     showSpacer?: boolean
     children: (props: { visible: boolean }) => React.ReactNode
     onShowDetails?: (newValue: boolean) => void
+    /**
+     * True if the `Details` button should be renderer, false otherwise.
+     * @default true
+     */
+    renderDetailsButton?: boolean
 }
 
 export const DappDetailsCard = ({
@@ -50,6 +55,7 @@ export const DappDetailsCard = ({
     isDefaultVisible = false,
     showSpacer = true,
     onShowDetails,
+    renderDetailsButton = true,
 }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
@@ -124,26 +130,28 @@ export const DappDetailsCard = ({
                         </BaseText>
                     </BaseView>
                 </BaseView>
-                <BaseButton
-                    action={() => {
-                        setShowDetails(old => !old)
-                        onShowDetails?.(!showDetails)
-                    }}
-                    variant="ghost"
-                    textColor={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
-                    typographyFont="bodyMedium"
-                    px={0}
-                    rightIcon={
-                        <BaseIcon
-                            name={showDetails ? "icon-chevron-up" : "icon-chevron-down"}
-                            size={12}
-                            color={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
-                            style={styles.rightIcon}
-                        />
-                    }
-                    testID="DAPP_WITH_DETAILS_DETAILS_BTN">
-                    {showDetails ? LL.HIDE() : LL.DETAILS()}
-                </BaseButton>
+                {renderDetailsButton && (
+                    <BaseButton
+                        action={() => {
+                            setShowDetails(old => !old)
+                            onShowDetails?.(!showDetails)
+                        }}
+                        variant="ghost"
+                        textColor={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
+                        typographyFont="bodyMedium"
+                        px={0}
+                        rightIcon={
+                            <BaseIcon
+                                name={showDetails ? "icon-chevron-up" : "icon-chevron-down"}
+                                size={12}
+                                color={theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800}
+                                style={styles.rightIcon}
+                            />
+                        }
+                        testID="DAPP_WITH_DETAILS_DETAILS_BTN">
+                        {showDetails ? LL.HIDE() : LL.DETAILS()}
+                    </BaseButton>
+                )}
             </AnimatedBaseView>
             {!isDapp && showDappWarning && (
                 <>

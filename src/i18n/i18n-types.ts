@@ -4081,11 +4081,11 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * L​o​g​i​n
+	 * S​i​g​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
 	/**
-	 * L​o​g​i​n
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
@@ -4112,6 +4112,14 @@ type RootTranslation = {
 	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_CTA: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_TITLE: string
 	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
@@ -8729,11 +8737,11 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Login
+	 * Sign
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
 	/**
-	 * Login
+	 * Sign certificate
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
@@ -8760,6 +8768,14 @@ Are you sure you want to continue?
 	 * Sign typed data
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * Claimable
 	 */

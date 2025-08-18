@@ -213,7 +213,7 @@ export const TypedDataBottomSheet = () => {
                 } else {
                     postMessage({
                         id: request.id,
-                        data: signedTypedData.signature,
+                        data: signedTypedData.signature!,
                         method: RequestMethods.SIGN_TYPED_DATA,
                     })
                 }

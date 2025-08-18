@@ -40,19 +40,10 @@ import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
+import { LoginBottomSheet } from "./Components/LoginBottomSheet/LoginBottomSheet"
 import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
 import { TypedDataBottomSheet } from "./Components/TypedDataBottomSheet"
-import {
-    CertRequest,
-    ConnectRequest,
-    ConnectRequestCertificate,
-    ConnectRequestNull,
-    ConnectRequestTypedData,
-    SignedDataRequest,
-    TxRequest,
-    WindowRequest,
-    WindowResponse,
-} from "./types"
+import { CertRequest, LoginRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
 
 const { PackageDetails } = NativeModules
 
@@ -125,8 +116,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         setTransactionBsData,
         typedDataBsRef,
         setTypedDataBsData,
-        setConnectBsData,
-        connectBsRef,
+        loginBsRef,
+        setLoginBsData,
     } = useInteraction()
 
     useEffect(() => {
@@ -421,7 +412,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     )
 
     const navigateToCertificateScreen = useCallback(
-        (request: CertRequest | ConnectRequestCertificate, appUrl: string, appName: string) => {
+        (request: CertRequest, appUrl: string, appName: string) => {
             try {
                 switchAccount(request)
                 switchNetwork(request)
@@ -430,22 +421,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
-
-            if ("params" in request) {
-                setCertificateBsData({
-                    method: request.method,
-                    id: request.id,
-                    type: "in-app",
-                    message: request.params.value,
-                    options: {},
-                    appUrl,
-                    appName,
-                    isFirstRequest: !isAlreadyConnected,
-                    external: request.params.external,
-                })
-                certificateBsRef.current?.present()
-                return
-            }
 
             const message = request.message as Connex.Vendor.CertMessage
 
@@ -467,7 +442,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     )
 
     const navigateToSignedDataScreen = useCallback(
-        (request: SignedDataRequest | ConnectRequestTypedData, appUrl: string, appName: string) => {
+        (request: SignedDataRequest, appUrl: string, appName: string) => {
             try {
                 switchAccount(request)
                 switchNetwork(request)
@@ -476,24 +451,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
-
-            if ("params" in request) {
-                setTypedDataBsData({
-                    method: request.method,
-                    id: request.id,
-                    type: "in-app",
-                    appUrl,
-                    appName,
-                    isFirstRequest: !isAlreadyConnected,
-                    domain: request.params.value.domain,
-                    types: request.params.value.types,
-                    value: request.params.value.value,
-                    options: {},
-                    external: request.params.external,
-                })
-                typedDataBsRef.current?.present()
-                return
-            }
 
             const req: TypeDataRequest = {
                 method: request.method,
@@ -506,6 +463,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 domain: request.domain,
                 types: request.types,
                 value: request.value,
+                origin: request.origin,
             }
 
             setTypedDataBsData(req)
@@ -514,8 +472,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [connectedDiscoveryApps, setTypedDataBsData, switchAccount, switchNetwork, typedDataBsRef],
     )
 
-    const navigateToConnectScreen = useCallback(
-        (request: ConnectRequestNull, appUrl: string, appName: string) => {
+    const navigateToLoginScreen = useCallback(
+        (request: LoginRequest, appUrl: string, appName: string) => {
             try {
                 switchAccount(request)
                 switchNetwork(request)
@@ -523,15 +481,25 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             }
 
-            setConnectBsData({
+            const kind =
+                request.params.value === null
+                    ? "simple"
+                    : "payload" in request.params.value
+                    ? "certificate"
+                    : "typed-data"
+
+            setLoginBsData({
                 appName,
                 appUrl,
                 type: "in-app",
-                initialRequest: request,
-            })
-            connectBsRef.current?.present()
+                value: request.params.value,
+                external: request.params.external,
+                method: RequestMethods.CONNECT,
+                kind,
+            } as any)
+            loginBsRef.current?.present()
         },
-        [connectBsRef, setConnectBsData, switchAccount, switchNetwork],
+        [loginBsRef, setLoginBsData, switchAccount, switchNetwork],
     )
 
     // ~ MESSAGE VALIDATION
@@ -654,17 +622,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     )
 
     const validateConnectMessage = useCallback(
-        (request: ConnectRequest, appUrl: string, appName: string) => {
+        (request: LoginRequest, appUrl: string, appName: string) => {
             //TODO: Add Analytics
             if (request.params.value === null) {
                 //Handle login without anything
                 if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
-                    return navigateToConnectScreen(request as ConnectRequestNull, appUrl, appName)
+                    return navigateToLoginScreen(request, appUrl, appName)
                 }
 
-                setNavigateToOperation(
-                    () => () => navigateToConnectScreen(request as ConnectRequestNull, appUrl, appName),
-                )
+                setNavigateToOperation(() => () => navigateToLoginScreen(request, appUrl, appName))
                 initAndOpenChangeAccountNetworkBottomSheet(request)
                 return
             } else if ("purpose" in request.params.value) {
@@ -677,15 +643,13 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                         method: RequestMethods.CONNECT,
                     })
                 }
-
-                if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
-                    return navigateToCertificateScreen(request as ConnectRequestCertificate, appUrl, appName)
+                if (request.params.value.purpose !== "identification") {
+                    return postMessage({
+                        id: request.id,
+                        error: "Invalid purpose in certificate message for connecting",
+                        method: RequestMethods.CONNECT,
+                    })
                 }
-
-                setNavigateToOperation(
-                    () => () => navigateToCertificateScreen(request as ConnectRequestCertificate, appUrl, appName),
-                )
-                initAndOpenChangeAccountNetworkBottomSheet(request)
             } else if ("domain" in request.params.value) {
                 //Sign typed data message
                 const isValid = DAppUtils.isValidSignedDataMessage(request.params.value)
@@ -696,25 +660,29 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                         method: RequestMethods.CONNECT,
                     })
                 }
-
-                if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
-                    return navigateToSignedDataScreen(request as ConnectRequestTypedData, appUrl, appName)
+                if ("VeWorldLogin" in request.params.value.types) {
+                    const loginType = request.params.value.types.VeWorldLogin
+                    if (
+                        loginType.length !== 1 ||
+                        loginType[0].name !== "veworld_login_address" ||
+                        loginType[0].type !== "address"
+                    )
+                        return postMessage({
+                            id: request.id,
+                            error: "Invalid VeWorldLogin type in typed data message for connecting",
+                            method: RequestMethods.CONNECT,
+                        })
                 }
-
-                setNavigateToOperation(
-                    () => () => navigateToSignedDataScreen(request as ConnectRequestTypedData, appUrl, appName),
-                )
-                initAndOpenChangeAccountNetworkBottomSheet(request)
             }
+
+            if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                return navigateToLoginScreen(request, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => navigateToLoginScreen(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(request)
         },
-        [
-            initAndOpenChangeAccountNetworkBottomSheet,
-            navigateToCertificateScreen,
-            navigateToConnectScreen,
-            navigateToSignedDataScreen,
-            postMessage,
-            selectedNetwork.genesis.id,
-        ],
+        [initAndOpenChangeAccountNetworkBottomSheet, navigateToLoginScreen, postMessage, selectedNetwork.genesis.id],
     )
 
     const addAppAndNavToRequest = useCallback(
@@ -912,7 +880,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         onMessage,
         onScroll,
         postMessage,
-        locale,
         onNavigationStateChange,
         nav,
         canGoBack,
@@ -932,8 +899,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
         switchAccount,
-        packageInfo,
         isDapp,
+        locale,
+        packageInfo,
     ])
 
     return (
@@ -942,6 +910,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             <CertificateBottomSheet />
             <TransactionBottomSheet />
             <TypedDataBottomSheet />
+            <LoginBottomSheet />
             {children}
         </Context.Provider>
     )
