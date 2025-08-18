@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "348660039597",
+    "project_id": "veworld---dev",
+    "storage_bucket": "veworld---dev.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:348660039597:android:59a7d671b6259ce18f2b24",
+        "android_client_info": {
+          "package_name": "org.vechain.veworld.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdIK9n3_T8PVHrlHP46lrKiCX2VMtLNBg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
