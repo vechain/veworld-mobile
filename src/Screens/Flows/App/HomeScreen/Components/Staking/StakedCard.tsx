@@ -1,55 +1,36 @@
 import { useNavigation } from "@react-navigation/native"
-import React from "react"
+import { memo, default as React } from "react"
 import { StyleSheet } from "react-native"
-import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseTouchable } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
 import { VET } from "~Constants"
-import { AccountWithDevice } from "~Model"
 import { ColorThemeType } from "~Constants/Theme"
 import { useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
-import { useUserNodes } from "~Hooks/Staking/useUserNodes"
-import { useUserStargateNfts } from "~Hooks/Staking/useUserStargateNfts"
-import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
-import { AddressUtils } from "~Utils"
+import { NftData, NodeInfo } from "~Model/Staking"
 
-type Props = {
-    account: AccountWithDevice
+interface StakedCardProps {
+    nodes: NodeInfo[]
+    nfts: NftData[]
+    isOwner: boolean
+    isLoading: boolean
 }
 
-export const StakedCard = ({ account }: Props) => {
-    const { LL } = useI18nContext()
+export const StakedCard = memo<StakedCardProps>(({ nodes, nfts, isOwner, isLoading }) => {
     const { styles } = useThemedStyles(baseStyles)
-
-    const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(account.address)
-    const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
-    // We only include staked VET in fiat balance if user is the owner, not a manager - Stargate staking
-    const isNodeOwner = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, account.address))
     const nav = useNavigation()
-
     const vetWithCompleteInfo = useTokenWithCompleteInfo(VET)
 
-    // getUserNodes already returns only nodes where user has an active relationship
-    if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0) return null
+    if (!isLoading && nodes.length === 0) return null
 
     return (
-        <BaseView>
-            <BaseText py={10} typographyFont="bodySemiBold">
-                {LL.ACTIVITY_STAKING_LABEL()}
-            </BaseText>
-            <BaseSpacer height={8} />
-            <BaseTouchable
-                style={styles.container}
-                onPress={() => nav.navigate(Routes.TOKEN_DETAILS, { token: vetWithCompleteInfo })}>
-                <StargateLockedValue
-                    isLoading={isLoadingNfts || isLoadingNodes}
-                    nfts={ownedStargateNfts}
-                    isNodeOwner={isNodeOwner}
-                />
-            </BaseTouchable>
-        </BaseView>
+        <BaseTouchable
+            style={styles.container}
+            onPress={() => nav.navigate(Routes.TOKEN_DETAILS, { token: vetWithCompleteInfo })}>
+            <StargateLockedValue isLoading={isLoading} nfts={nfts} isNodeOwner={isOwner} />
+        </BaseTouchable>
     )
-}
+})
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
