@@ -255,7 +255,7 @@ export const VbdBalanceCard = memo(
             return (
                 <>
                     <FiatBalance
-                        typographyFont={"bodySemiBold"}
+                        typographyFont={"subSubTitleSemiBold"}
                         color={theme.colors.assetDetailsCard.title}
                         balances={balances}
                         isVisible={isBalanceVisible}

@@ -317,7 +317,7 @@ platform :ios do
 
       # send slack message
       slack(
-        message: versionType.nil? ? "VeWorld build number: #{build} was successfully released! [iOS] #{options[:recent_prs]}" : "VeWorld version number: #{version} was successfully released! [iOS] #{options[:recent_prs]}",
+        message: versionType.nil? ? "VeWorld build number: #{build} was successfully released! [iOS]" : "VeWorld version number: #{version} was successfully released! [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: true,
         payload: {
@@ -335,7 +335,7 @@ platform :ios do
 
       # send slack message
       slack(
-        message: versionType.nil? ? "Error releasing VeWorld build number: #{build} [iOS] #{options[:recent_prs]}" : "Error releasing VeWorld version number: #{version} [iOS] #{options[:recent_prs]}",
+        message: versionType.nil? ? "Error releasing VeWorld build number: #{build} [iOS]" : "Error releasing VeWorld version number: #{version} [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: false,
         payload: {
@@ -475,7 +475,7 @@ platform :ios do
 
       # send slack message
       slack(
-        message:  "CI: VeWorld version number: #{version}  build number: #{build} was successfully released! [iOS] recent Prs: #{options[:recent_prs]}",
+        message:  "CI: VeWorld version number: #{version}  build number: #{build} was successfully released! [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: true,
         payload: {
@@ -493,7 +493,7 @@ platform :ios do
 
       ## send slack message
       slack(
-        message: "CI:Error releasing VeWorld version number: #{version} build number: #{build} [iOS] recent Prs: #{options[:recent_prs]}",
+        message: "CI:Error releasing VeWorld version number: #{version} build number: #{build} [iOS]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: false,
         payload: {

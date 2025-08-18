@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.3 (2025-08-14)</small>
+
+* build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
+* fix: fix font sizes (#3185) ([5713164](https://github.com/vechain/veworld-mobile/commit/5713164)), closes [#3185](https://github.com/vechain/veworld-mobile/issues/3185)
+
 ## <small>2.3.1 (2025-08-04)</small>
 
 * build: init ([ecfcbcc](https://github.com/vechain/veworld-mobile/commit/ecfcbcc))
