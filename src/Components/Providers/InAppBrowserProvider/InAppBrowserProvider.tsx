@@ -203,8 +203,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     }, [navigationState])
 
     const getLoginSession = useCallback(
-        (url: string, genesisId: string) => {
+        (url: string, genesisId?: string) => {
             const session = loginSessions[new URL(url).origin]
+            if (!genesisId) return session
             if (session?.genesisId?.toLowerCase() === genesisId.toLowerCase()) return session
             return undefined
         },
