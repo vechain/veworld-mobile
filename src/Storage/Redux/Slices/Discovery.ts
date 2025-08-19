@@ -8,7 +8,7 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
-export type LoginSession = { genesisId: string } & (
+export type LoginSession = { genesisId: string; url: string } & (
     | { kind: "external"; address: string }
     | { kind: "temporary"; address: string }
     | { kind: "permanent" }
@@ -166,11 +166,10 @@ export const DiscoverySlice = createSlice({
         deleteSession(state, action: PayloadAction<string>) {
             delete state.sessions?.[new URL(action.payload).origin]
         },
-        addSession(state, action: PayloadAction<{ url: string } & LoginSession>) {
-            const { url, ...rest } = action.payload
-            const parsedUrl = new URL(url)
+        addSession(state, action: PayloadAction<LoginSession>) {
+            const parsedUrl = new URL(action.payload.url)
             if (!state.sessions) state.sessions = {}
-            state.sessions[parsedUrl.origin] = rest
+            state.sessions[parsedUrl.origin] = { ...action.payload, url: parsedUrl.origin }
         },
     },
 })

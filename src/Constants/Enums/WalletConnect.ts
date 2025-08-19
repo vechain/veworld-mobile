@@ -7,4 +7,5 @@ export const RequestMethods = {
     SWITCH_WALLET: "thor_switchWallet",
     DISCONNECT: "thor_disconnect",
     WALLET: "thor_wallet",
+    METHODS: "thor_methods",
 } as const

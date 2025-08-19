@@ -27,6 +27,7 @@ import { Routes } from "~Navigation"
 import {
     addConnectedDiscoveryApp,
     changeSelectedNetwork,
+    deleteSession,
     selectAccounts,
     selectConnectedDiscoverDApps,
     selectFeaturedDapps,
@@ -766,6 +767,29 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [loginSession, postMessage, selectedAccountAddress],
     )
 
+    const validateDisconnectMessage = useCallback(
+        (request: { id: string }) => {
+            if (loginSession) dispatch(deleteSession(loginSession.url))
+            postMessage({
+                id: request.id,
+                method: RequestMethods.DISCONNECT,
+                data: null,
+            })
+        },
+        [dispatch, loginSession, postMessage],
+    )
+
+    const validateMethodsMessage = useCallback(
+        (request: { id: string }) => {
+            postMessage({
+                id: request.id,
+                method: RequestMethods.METHODS,
+                data: Object.values(RequestMethods),
+            })
+        },
+        [postMessage],
+    )
+
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
             debug(ERROR_EVENTS.DAPP, event.nativeEvent.url)
@@ -787,6 +811,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     return validateConnectMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 case RequestMethods.WALLET:
                     return validateWalletMessage(data)
+                case RequestMethods.DISCONNECT:
+                    return validateDisconnectMessage(data)
+                case RequestMethods.METHODS:
+                    return validateMethodsMessage(data)
                 default:
                     warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
             }
@@ -797,6 +825,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             validateSignedDataMessage,
             validateConnectMessage,
             validateWalletMessage,
+            validateDisconnectMessage,
+            validateMethodsMessage,
         ],
     )
 
@@ -1080,7 +1110,8 @@ window.vechain = {
             method: params.method,
             origin: window.origin,
             params: params.params,
-            genesisId: params.genesisId
+            genesisId: params.genesisId,
+            requestAPI: true
         }
 
         window.ReactNativeWebView.postMessage(JSON.stringify(request))
