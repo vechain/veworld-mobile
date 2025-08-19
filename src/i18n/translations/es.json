@@ -1020,6 +1020,8 @@
   "SWAP_DESCRIPTION": "Usando estos dApps de Vechain puedes intercambiar tokens en tu billetera por diferentes, sin tener que comprar o vender.",
   "SWAP_EMPTY_LIST": "No se encontraron dApps",
   "SWAP_TITLE": "Intercambiar tokens",
+  "SWITCH_WALLET_REQUEST_CTA": "Aplicar",
+  "SWITCH_WALLET_REQUEST_TITLE": "Cambiar cartera",
   "SYSTEM_THEME": "Sistema",
   "TAB_AMOUNT": "{number:number} pestañas",
   "TAKE_ME_TO_DRIVE": "Llévame a Google Drive",

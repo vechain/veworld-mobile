@@ -1020,6 +1020,8 @@
   "SWAP_DESCRIPTION": "Met deze Vechain dApps kun je tokens in je wallet ruilen voor andere, zonder dat je hoeft te kopen en verkopen.",
   "SWAP_EMPTY_LIST": "Geen dApps gevonden",
   "SWAP_TITLE": "Ruil tokens",
+  "SWITCH_WALLET_REQUEST_CTA": "Toepassen",
+  "SWITCH_WALLET_REQUEST_TITLE": "Wijzig portemonnee",
   "SYSTEM_THEME": "Systeem",
   "TAB_AMOUNT": "{number:number} tabs",
   "TAKE_ME_TO_DRIVE": "Breng me naar Google Drive",
