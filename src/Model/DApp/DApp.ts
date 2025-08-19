@@ -57,7 +57,6 @@ type InAppConnectAppRequest = BaseRequest & {
 }
 
 type InAppLoginRequest = BaseInAppRequest & {
-    type: "in-app"
     method: "thor_connect"
     external: boolean | undefined
     genesisId: string
@@ -69,6 +68,11 @@ type InAppLoginRequest = BaseInAppRequest & {
               value: TypedDataMessage
           }
     )
+
+type InAppSwitchWalletRequest = BaseInAppRequest & {
+    method: "thor_switchWallet"
+    genesisId: string
+}
 
 type WcCertRequest = BaseCertificateRequest & BaseWcRequest
 
@@ -95,7 +99,14 @@ export type LoginRequest = InAppLoginRequest
 
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
 
-export type InAppRequest = InAppCertRequest | InAppTxRequest | InAppTypedDataRequest | InAppLoginRequest
+export type SwitchWalletRequest = InAppSwitchWalletRequest
+
+export type InAppRequest =
+    | InAppCertRequest
+    | InAppTxRequest
+    | InAppTypedDataRequest
+    | InAppLoginRequest
+    | InAppSwitchWalletRequest
 
 export enum DAppType {
     ALL = "all",

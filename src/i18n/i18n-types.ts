@@ -2672,6 +2672,18 @@ type RootTranslation = {
 	 */
 	LOADING_MORE: string
 	/**
+	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_CTA: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_TITLE: string
+	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
 	MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: string
@@ -4089,6 +4101,14 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
+	 * A​p​p​l​y
+	 */
+	SWITCH_WALLET_REQUEST_CTA: string
+	/**
+	 * C​h​a​n​g​e​ ​w​a​l​l​e​t
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: string
+	/**
 	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SIGN_TRANSACTION: string
@@ -4112,18 +4132,6 @@ type RootTranslation = {
 	 * S​i​g​n​ ​t​y​p​e​d​ ​d​a​t​a
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: string
-	/**
-	 * L​o​g​i​n
-	 */
-	LOGIN_REQUEST_CTA: string
-	/**
-	 * L​o​g​i​n
-	 */
-	LOGIN_REQUEST_TITLE: string
-	/**
-	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
-	 */
-	LOGIN_KEEP_ME_SIGNED_IN: string
 	/**
 	 * C​l​a​i​m​a​b​l​e
 	 */
@@ -7363,6 +7371,18 @@ Thanks for your patience!
 	 */
 	LOADING_MORE: () => LocalizedString
 	/**
+	 * Keep me signed in for future sessions
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_TITLE: () => LocalizedString
+	/**
 	 * Are you sure you want to add the selected token?
 	 */
 	MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION: () => LocalizedString
@@ -8749,6 +8769,14 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
+	 * Apply
+	 */
+	SWITCH_WALLET_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Change wallet
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: () => LocalizedString
+	/**
 	 * Sign transaction
 	 */
 	SIGN_TRANSACTION: () => LocalizedString
@@ -8772,18 +8800,6 @@ Are you sure you want to continue?
 	 * Sign typed data
 	 */
 	SIGN_TYPED_DATA_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * Login
-	 */
-	LOGIN_REQUEST_CTA: () => LocalizedString
-	/**
-	 * Login
-	 */
-	LOGIN_REQUEST_TITLE: () => LocalizedString
-	/**
-	 * Keep me signed in for future sessions
-	 */
-	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
 	/**
 	 * Claimable
 	 */

@@ -20,6 +20,7 @@ import {
     CertificateRequest,
     InAppRequest,
     Network,
+    SwitchWalletRequest,
     TransactionRequest,
     TypeDataRequest,
 } from "~Model"
@@ -43,6 +44,7 @@ import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { LoginBottomSheet } from "./Components/LoginBottomSheet/LoginBottomSheet"
+import { SwitchWalletBottomSheet } from "./Components/SwitchWalletBottomSheet"
 import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
 import { TypedDataBottomSheet } from "./Components/TypedDataBottomSheet"
 import {
@@ -128,6 +130,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         setTypedDataBsData,
         loginBsRef,
         setLoginBsData,
+        switchWalletBsRef,
+        setSwitchWalletBsData,
     } = useInteraction()
 
     useEffect(() => {
@@ -793,6 +797,28 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [postMessage],
     )
 
+    const validateSwitchWalletMessage = useCallback(
+        (request: SwitchWalletRequest, appUrl: string, appName: string) => {
+            if (!loginSession || loginSession.kind !== "permanent")
+                return postMessage({
+                    id: request.id,
+                    error: "User cannot switch wallet",
+                    method: RequestMethods.SWITCH_WALLET,
+                })
+            setSwitchWalletBsData({
+                appName,
+                appUrl,
+                genesisId: request.genesisId,
+                id: request.id,
+                isFirstRequest: false,
+                method: "thor_switchWallet",
+                type: "in-app",
+            })
+            switchWalletBsRef.current?.present()
+        },
+        [loginSession, postMessage, setSwitchWalletBsData, switchWalletBsRef],
+    )
+
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
             debug(ERROR_EVENTS.DAPP, event.nativeEvent.url)
@@ -857,6 +883,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     return validateDisconnectMessage(data)
                 case RequestMethods.METHODS:
                     return validateMethodsMessage(data)
+                case RequestMethods.SWITCH_WALLET:
+                    return validateSwitchWalletMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 default:
                     warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
                     if (data.id)
@@ -875,6 +903,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             validateWalletMessage,
             validateDisconnectMessage,
             validateMethodsMessage,
+            validateSwitchWalletMessage,
             postMessage,
         ],
     )
@@ -1043,6 +1072,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             <TransactionBottomSheet />
             <TypedDataBottomSheet />
             <LoginBottomSheet />
+            <SwitchWalletBottomSheet />
             {children}
         </Context.Provider>
     )

@@ -6,9 +6,10 @@ import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Comp
 import { COLORS, isSmallScreen } from "~Constants"
 import { useScrollableBottomSheet, useTheme } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
+import { AccountUtils } from "~Utils"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     /**
@@ -88,11 +89,11 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
 
         const sections = useMemo(() => {
             const groupedAccounts = accounts.reduce((acc, curr) => {
-                const key = curr.device?.alias ?? curr.alias
+                const key = AccountUtils.isObservedAccount(curr) ? LL.BTN_OBSERVED() : curr.device?.alias ?? curr.alias
                 return { ...acc, [key]: [...(acc[key] ?? []), curr] }
             }, {} as { [alias: string]: AccountWithDevice[] })
             return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
-        }, [accounts])
+        }, [LL, accounts])
 
         return (
             <BaseBottomSheet

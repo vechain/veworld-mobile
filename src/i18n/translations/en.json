@@ -998,6 +998,8 @@
   "SIGN_CERTIFICATE": "Sign certificate",
   "SIGN_CERTIFICATE_REQUEST_CTA": "Sign",
   "SIGN_CERTIFICATE_REQUEST_TITLE": "Sign certificate",
+  "SWITCH_WALLET_REQUEST_CTA": "Apply",
+  "SWITCH_WALLET_REQUEST_TITLE": "Change wallet",
   "SIGN_TRANSACTION": "Sign transaction",
   "SIGN_TRANSACTION_ERROR": "Error signing transaction",
   "SIGN_TRANSACTION_REQUEST_CTA": "Confirm",
