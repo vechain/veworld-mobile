@@ -35,7 +35,7 @@ import {
     selectNetworks,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
-    selectSession,
+    selectSessions,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -189,7 +189,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
     const previousUrl = usePrevious(navigationState?.url)
 
-    const loginSession = useAppSelector(state => selectSession(state, navigationState?.url))
+    const loginSessions = useAppSelector(selectSessions)
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -198,6 +198,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const canGoForward = useMemo(() => {
         return navigationState?.canGoForward ?? false
     }, [navigationState])
+
+    const getLoginSession = useCallback((url: string) => loginSessions[new URL(url).origin], [loginSessions])
 
     const postMessage = useCallback(
         (message: WindowResponse) => {
@@ -742,7 +744,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     )
 
     const validateWalletMessage = useCallback(
-        (request: { id: string }) => {
+        (request: { id: string }, appUrl: string) => {
+            const loginSession = getLoginSession(appUrl)
             if (!loginSession)
                 return postMessage({
                     id: request.id,
@@ -768,11 +771,12 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     data: loginSession.address,
                 })
         },
-        [loginSession, postMessage, selectedAccountAddress],
+        [getLoginSession, postMessage, selectedAccountAddress],
     )
 
     const validateDisconnectMessage = useCallback(
-        (request: { id: string }) => {
+        (request: { id: string }, appUrl: string) => {
+            const loginSession = getLoginSession(appUrl)
             if (loginSession) dispatch(deleteSession(loginSession.url))
             postMessage({
                 id: request.id,
@@ -780,7 +784,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 data: null,
             })
         },
-        [dispatch, loginSession, postMessage],
+        [dispatch, getLoginSession, postMessage],
     )
 
     const validateMethodsMessage = useCallback(
@@ -799,6 +803,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const validateSwitchWalletMessage = useCallback(
         (request: SwitchWalletRequest, appUrl: string, appName: string) => {
+            const loginSession = getLoginSession(appUrl)
             if (!loginSession || loginSession.kind !== "permanent")
                 return postMessage({
                     id: request.id,
@@ -816,7 +821,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             })
             switchWalletBsRef.current?.present()
         },
-        [loginSession, postMessage, setSwitchWalletBsData, switchWalletBsRef],
+        [getLoginSession, postMessage, setSwitchWalletBsData, switchWalletBsRef],
     )
 
     const onMessage = useCallback(
@@ -878,9 +883,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 case RequestMethods.CONNECT:
                     return validateConnectMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 case RequestMethods.WALLET:
-                    return validateWalletMessage(data)
+                    return validateWalletMessage(data, event.nativeEvent.url)
                 case RequestMethods.DISCONNECT:
-                    return validateDisconnectMessage(data)
+                    return validateDisconnectMessage(data, event.nativeEvent.url)
                 case RequestMethods.METHODS:
                     return validateMethodsMessage(data)
                 case RequestMethods.SWITCH_WALLET:

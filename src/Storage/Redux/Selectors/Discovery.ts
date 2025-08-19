@@ -95,3 +95,7 @@ export const selectSession = createSelector(
         return state.sessions?.[new URL(url).origin]
     },
 )
+
+export const selectSessions = createSelector(getDiscoveryState, state => {
+    return state.sessions ?? {}
+})
