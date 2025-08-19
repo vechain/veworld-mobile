@@ -11,7 +11,7 @@ import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
-import { deleteSession, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { deleteSession, selectSelectedNetwork, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
@@ -41,7 +41,10 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
     const dispatch = useAppDispatch()
-    const activeSession = useAppSelector(state => selectSession(state, navigationState?.url ?? ""))
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const activeSession = useAppSelector(state =>
+        selectSession(state, navigationState?.url ?? "", selectedNetwork.genesis.id),
+    )
 
     useEffect(() => {
         if (route?.params?.ul) {

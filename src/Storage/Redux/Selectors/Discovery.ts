@@ -89,10 +89,13 @@ export const selectBannerInteractions = createSelector(getDiscoveryState, discov
 
 export const selectSession = createSelector(
     getDiscoveryState,
-    (_: RootState, url?: string) => url,
-    (state, url) => {
+    (_: RootState, url: string, genesisId?: string) => ({ url, genesisId }),
+    (state, { url, genesisId }) => {
         if (!url) return undefined
-        return state.sessions?.[new URL(url).origin]
+        const session = state.sessions?.[new URL(url).origin]
+        if (!genesisId) return session
+        if (session?.genesisId?.toLowerCase() === genesisId) return session
+        return undefined
     },
 )
 
