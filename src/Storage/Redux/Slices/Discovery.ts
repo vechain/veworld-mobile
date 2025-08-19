@@ -164,7 +164,7 @@ export const DiscoverySlice = createSlice({
             )
         },
         deleteSession(state, action: PayloadAction<string>) {
-            delete state.sessions?.[action.payload]
+            delete state.sessions?.[new URL(action.payload).origin]
         },
         addSession(state, action: PayloadAction<{ url: string } & LoginSession>) {
             const { url, ...rest } = action.payload

@@ -1,6 +1,6 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
-import { AppRegistry, AppState, LogBox } from "react-native"
+import React, { useEffect, useMemo, useRef, useState } from "react"
+import { AppRegistry, LogBox } from "react-native"
 import { EntryPoint } from "./src/EntryPoint"
 import { name as appName } from "./app.json"
 import "@walletconnect/react-native-compat"
@@ -123,26 +123,13 @@ const Main = () => {
         }
     }, [isAnalyticsEnabled])
 
-    /**
-     * @param  {import("react-native").AppStateStatus} nextAppState
-     */
-    const handleAppStateChange = useCallback(
-        nextAppState => {
-            if (nextAppState === "inactive") {
-                dispatch(clearTemporarySessions())
-            }
-        },
-        [dispatch],
-    )
+    const mounted = useRef(false)
 
-    // Clear all temporary sessions
     useEffect(() => {
-        const appStateId = AppState.addEventListener("change", handleAppStateChange)
-
-        return () => {
-            appStateId.remove()
-        }
-    }, [handleAppStateChange])
+        if (mounted.current) return
+        mounted.current = true
+        dispatch(clearTemporarySessions())
+    }, [dispatch])
 
     if (!fontsLoaded) return
 

@@ -160,7 +160,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
-    const loginSession = useAppSelector(state => selectSession(state, navigationState?.url))
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -184,6 +183,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
     const previousUrl = usePrevious(navigationState?.url)
+
+    const loginSession = useAppSelector(state => selectSession(state, navigationState?.url))
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false

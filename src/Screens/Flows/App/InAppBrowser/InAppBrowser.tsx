@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { MutableRefObject, useEffect, useState } from "react"
+import React, { MutableRefObject, useCallback, useEffect, useState } from "react"
 import { StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
@@ -11,6 +11,7 @@ import { useAnalyticTracking, useThemedStyles } from "~Hooks"
 import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
+import { deleteSession, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser, Routes.BROWSER>
@@ -30,6 +31,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
         isLoading,
+        navigationState,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -38,6 +40,8 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const [error, setError] = useState(false)
     const { styles, theme } = useThemedStyles(baseStyles)
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
+    const dispatch = useAppDispatch()
+    const activeSession = useAppSelector(state => selectSession(state, navigationState?.url ?? ""))
 
     useEffect(() => {
         if (route?.params?.ul) {
@@ -65,12 +69,18 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         }
     })
 
+    const onNavigate = useCallback(async () => {
+        await performScreenshot()
+        if (!activeSession || !navigationState?.url || activeSession.kind !== "temporary") return
+        dispatch(deleteSession(navigationState?.url))
+    }, [activeSession, dispatch, navigationState?.url, performScreenshot])
+
     return (
         <Layout
             fixedHeader={
                 <URLBar
                     onBrowserNavigation={setError}
-                    onNavigate={performScreenshot}
+                    onNavigate={onNavigate}
                     returnScreen={route.params.returnScreen}
                 />
             }
