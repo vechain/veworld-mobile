@@ -1,9 +1,10 @@
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import * as Haptics from "expo-haptics"
 import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
-import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,
@@ -16,15 +17,14 @@ import {
     showErrorToast,
     Step,
     StepsProgressBar,
-    useWalletConnect,
     useInAppBrowser,
+    useWalletConnect,
 } from "~Components"
+import { ERROR_EVENTS, LEDGER_ERROR_CODES } from "~Constants"
+import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { useNavigation } from "@react-navigation/native"
-import * as Haptics from "expo-haptics"
-import { ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 
 const MUTEX_TIMEOUT = 1000
 
@@ -193,10 +193,10 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
             if (request.type === "wallet-connect") {
                 await processRequest(request.requestEvent, certResponse)
             } else {
-                await postMessage({
+                postMessage({
                     id: request.id,
                     data: certResponse,
-                    method: RequestMethods.SIGN_CERTIFICATE,
+                    method: request.method,
                 })
             }
 

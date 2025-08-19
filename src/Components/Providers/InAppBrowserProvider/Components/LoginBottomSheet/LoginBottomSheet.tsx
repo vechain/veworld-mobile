@@ -1,4 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useNavigation } from "@react-navigation/native"
 import { Blake2b256, Certificate } from "@vechain/sdk-core"
 import { ethers } from "ethers"
 import { default as React, useCallback, useMemo, useRef, useState } from "react"
@@ -11,7 +12,8 @@ import { COLORS } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE, LoginRequest } from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice, LoginRequest } from "~Model"
+import { Routes } from "~Navigation"
 import {
     addSession,
     selectSelectedAccountOrNull,
@@ -70,31 +72,6 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
             }
             case "typed-data": {
                 return request
-                // if ("VeWorldLogin" in request.value.types)
-                //     return {
-                //         ...request,
-                //         value: {
-                //             ...request.value,
-                //             value: {
-                //                 ...request.value.value,
-                //                 veworld_login_address: ethers.utils.getAddress(selectedAccount?.address ?? ""),
-                //             },
-                //         } satisfies TypedDataMessage,
-                //     }
-                // return {
-                //     ...request,
-                //     value: {
-                //         ...request.value,
-                //         types: {
-                //             ...request.value.types,
-                //             VeWorldLogin: [{ name: "veworld_login_address", type: "address" }],
-                //         },
-                //         value: {
-                //             ...request.value.value,
-                //             veworld_login_address: ethers.utils.getAddress(selectedAccount?.address ?? ""),
-                //         },
-                //     } satisfies TypedDataMessage,
-                // }
             }
         }
     }, [request, selectedAccount?.address])
@@ -223,6 +200,8 @@ export const LoginBottomSheet = () => {
 
     const dispatch = useAppDispatch()
 
+    const nav = useNavigation()
+
     const buildTypedData = useCallback(
         (request: Extract<LoginRequest, { kind: "typed-data" }>) => {
             if (!selectedAccount) return
@@ -300,6 +279,22 @@ export const LoginBottomSheet = () => {
             try {
                 setIsLoading(true)
 
+                if (request.kind === "certificate") {
+                    if (selectedAccount?.device.type === DEVICE_TYPE.LEDGER) {
+                        const cert = buildCertificate(request)!
+                        // Do not reject request if it's a ledger request
+                        isUserAction.current = true
+                        onCloseBs()
+                        setIsLoading(false)
+
+                        nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
+                            request,
+                            accountWithDevice: selectedAccount as LedgerAccountWithDevice,
+                            certificate: cert.certificate,
+                        })
+                    }
+                }
+
                 const result = await signRequest(request, password)
 
                 if (request.external) {
@@ -349,7 +344,7 @@ export const LoginBottomSheet = () => {
             }
             onCloseBs()
         },
-        [dispatch, onCloseBs, postMessage, selectedAccount?.address, signRequest],
+        [buildCertificate, dispatch, nav, onCloseBs, postMessage, selectedAccount, signRequest],
     )
 
     const rejectRequest = useCallback(

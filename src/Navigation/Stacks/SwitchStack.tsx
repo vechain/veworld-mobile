@@ -7,7 +7,7 @@ import { Certificate } from "thor-devkit"
 import { useWalletStatus } from "~Components"
 import { WindowRequest } from "~Components/Providers/InAppBrowserProvider/types"
 import { CertificateRequest, LedgerAccountWithDevice, LocalDevice, WALLET_STATUS } from "~Model"
-import { TransactionRequest } from "~Model/DApp"
+import { LoginRequest, TransactionRequest } from "~Model/DApp"
 import { CreateWalletAppStack, Routes } from "~Navigation"
 import { TabStack, TabStackParamList } from "~Navigation/Tabs"
 import {
@@ -37,7 +37,7 @@ export type RootStackParamListSwitch = {
         message: string
     }
     [Routes.LEDGER_SIGN_CERTIFICATE]: {
-        request: CertificateRequest
+        request: CertificateRequest | Extract<LoginRequest, { kind: "certificate" }>
         certificate: Certificate
         accountWithDevice: LedgerAccountWithDevice
     }
