@@ -23,6 +23,7 @@ import {
     SwitchWalletRequest,
     TransactionRequest,
     TypeDataRequest,
+    WalletRequest,
 } from "~Model"
 import { Routes } from "~Navigation"
 import {
@@ -34,12 +35,13 @@ import {
     selectFeaturedDapps,
     selectNetworks,
     selectSelectedAccountAddress,
+    selectSelectedAccountOrNull,
     selectSelectedNetwork,
     selectSessions,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
+import { AccountUtils, AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
@@ -154,6 +156,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const { LL, locale } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
     const allDapps = useAppSelector(selectFeaturedDapps)
     const {
@@ -199,7 +202,14 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         return navigationState?.canGoForward ?? false
     }, [navigationState])
 
-    const getLoginSession = useCallback((url: string) => loginSessions[new URL(url).origin], [loginSessions])
+    const getLoginSession = useCallback(
+        (url: string, genesisId: string) => {
+            const session = loginSessions[new URL(url).origin]
+            if (session?.genesisId?.toLowerCase() === genesisId.toLowerCase()) return session
+            return undefined
+        },
+        [loginSessions],
+    )
 
     const postMessage = useCallback(
         (message: WindowResponse) => {
@@ -743,9 +753,14 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         ],
     )
 
-    const validateWalletMessage = useCallback(
-        (request: { id: string }, appUrl: string) => {
-            const loginSession = getLoginSession(appUrl)
+    const executeWalletMessage = useCallback(
+        (request: WalletRequest, appUrl: string, appName: string) => {
+            try {
+                switchNetwork(request)
+            } catch {
+                return
+            }
+            const loginSession = getLoginSession(appUrl, request.genesisId)
             if (!loginSession)
                 return postMessage({
                     id: request.id,
@@ -758,12 +773,26 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     method: RequestMethods.WALLET,
                     data: loginSession.address,
                 })
-            if (loginSession.kind === "permanent")
+            if (loginSession.kind === "permanent") {
+                if (AccountUtils.isObservedAccount(selectedAccount)) {
+                    setSwitchWalletBsData({
+                        appName,
+                        appUrl,
+                        genesisId: request.genesisId,
+                        id: request.id,
+                        isFirstRequest: false,
+                        method: "thor_switchWallet",
+                        type: "in-app",
+                    })
+                    switchWalletBsRef.current?.present()
+                    return
+                }
                 return postMessage({
                     id: request.id,
                     method: RequestMethods.WALLET,
                     data: selectedAccountAddress ?? null,
                 })
+            }
             if (loginSession.kind === "temporary")
                 return postMessage({
                     id: request.id,
@@ -771,12 +800,32 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     data: loginSession.address,
                 })
         },
-        [getLoginSession, postMessage, selectedAccountAddress],
+        [
+            getLoginSession,
+            postMessage,
+            selectedAccount,
+            selectedAccountAddress,
+            setSwitchWalletBsData,
+            switchNetwork,
+            switchWalletBsRef,
+        ],
+    )
+
+    const validateWalletMessage = useCallback(
+        (request: WalletRequest, appUrl: string, appName: string) => {
+            if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                return executeWalletMessage(request, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => executeWalletMessage(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(request)
+        },
+        [executeWalletMessage, initAndOpenChangeAccountNetworkBottomSheet, selectedNetwork.genesis.id],
     )
 
     const validateDisconnectMessage = useCallback(
-        (request: { id: string }, appUrl: string) => {
-            const loginSession = getLoginSession(appUrl)
+        (request: { id: string; genesisId: string }, appUrl: string) => {
+            const loginSession = getLoginSession(appUrl, request.genesisId)
             if (loginSession) dispatch(deleteSession(loginSession.url))
             postMessage({
                 id: request.id,
@@ -801,9 +850,14 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [postMessage],
     )
 
-    const validateSwitchWalletMessage = useCallback(
+    const executeSwitchWalletMessage = useCallback(
         (request: SwitchWalletRequest, appUrl: string, appName: string) => {
-            const loginSession = getLoginSession(appUrl)
+            try {
+                switchNetwork(request)
+            } catch {
+                return
+            }
+            const loginSession = getLoginSession(appUrl, request.genesisId)
             if (!loginSession || loginSession.kind !== "permanent")
                 return postMessage({
                     id: request.id,
@@ -821,7 +875,19 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             })
             switchWalletBsRef.current?.present()
         },
-        [getLoginSession, postMessage, setSwitchWalletBsData, switchWalletBsRef],
+        [getLoginSession, postMessage, setSwitchWalletBsData, switchNetwork, switchWalletBsRef],
+    )
+
+    const validateSwitchWalletMessage = useCallback(
+        (request: SwitchWalletRequest, appUrl: string, appName: string) => {
+            if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                return executeSwitchWalletMessage(request, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => executeSwitchWalletMessage(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(request)
+        },
+        [executeSwitchWalletMessage, initAndOpenChangeAccountNetworkBottomSheet, selectedNetwork.genesis.id],
     )
 
     const onMessage = useCallback(
@@ -883,7 +949,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 case RequestMethods.CONNECT:
                     return validateConnectMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 case RequestMethods.WALLET:
-                    return validateWalletMessage(data, event.nativeEvent.url)
+                    return validateWalletMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 case RequestMethods.DISCONNECT:
                     return validateDisconnectMessage(data, event.nativeEvent.url)
                 case RequestMethods.METHODS:

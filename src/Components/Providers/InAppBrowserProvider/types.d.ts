@@ -50,8 +50,8 @@ export type SignedDataRequest = Omit<BaseRequest, "message"> & {
     options: Connex.Signer.CertOptions
 }
 
-type BaseLoginRequest = Omit<BaseRequest, "message" | "options" | "domain" | "origin" | "types" | "value">
-export type LoginRequestCertificate = BaseLoginRequest & {
+type BaseRequestAPIRequest = Omit<BaseRequest, "message" | "options" | "domain" | "origin" | "types" | "value">
+export type LoginRequestCertificate = BaseRequestAPIRequest & {
     method: (typeof RequestMethods)["CONNECT"]
     params: {
         value: Connex.Vendor.CertMessage
@@ -59,7 +59,7 @@ export type LoginRequestCertificate = BaseLoginRequest & {
     }
 }
 
-export type LoginRequestTypedData = BaseLoginRequest & {
+export type LoginRequestTypedData = BaseRequestAPIRequest & {
     method: (typeof RequestMethods)["CONNECT"]
     params: {
         value: {
@@ -71,7 +71,7 @@ export type LoginRequestTypedData = BaseLoginRequest & {
     }
 }
 
-export type LoginRequestNull = BaseLoginRequest & {
+export type LoginRequestNull = BaseRequestAPIRequest & {
     method: (typeof RequestMethods)["CONNECT"]
     params: {
         value: null
@@ -80,5 +80,24 @@ export type LoginRequestNull = BaseLoginRequest & {
 }
 
 export type LoginRequest = LoginRequestCertificate | LoginRequestTypedData | LoginRequestNull
+type WalletRequest = BaseRequestAPIRequest & {
+    method: (typeof RequestMethods)["WALLET"]
+    params?: undefined
+}
+type DisconnectRequest = BaseRequestAPIRequest & {
+    method: (typeof RequestMethods)["DISCONNECT"]
+    params?: undefined
+}
+type SwitchWalletRequest = BaseRequestAPIRequest & {
+    method: (typeof RequestMethods)["SWITCH_WALLET"]
+    params?: undefined
+}
 
-export type WindowRequest = TxRequest | CertRequest | SignedDataRequest | LoginRequest
+export type WindowRequest =
+    | TxRequest
+    | CertRequest
+    | SignedDataRequest
+    | LoginRequest
+    | WalletRequest
+    | DisconnectRequest
+    | SwitchWalletRequest

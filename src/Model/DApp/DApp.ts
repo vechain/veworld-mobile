@@ -74,6 +74,11 @@ type InAppSwitchWalletRequest = BaseInAppRequest & {
     genesisId: string
 }
 
+type InAppWalletRequest = BaseInAppRequest & {
+    method: "thor_wallet"
+    genesisId: string
+}
+
 type WcCertRequest = BaseCertificateRequest & BaseWcRequest
 
 type InAppCertRequest = BaseCertificateRequest & BaseInAppRequest
@@ -100,6 +105,7 @@ export type LoginRequest = InAppLoginRequest
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest
 
 export type SwitchWalletRequest = InAppSwitchWalletRequest
+export type WalletRequest = InAppWalletRequest
 
 export type InAppRequest =
     | InAppCertRequest

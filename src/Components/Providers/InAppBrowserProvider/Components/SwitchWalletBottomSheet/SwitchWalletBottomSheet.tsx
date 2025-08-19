@@ -4,19 +4,19 @@ import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView }
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { SelectableAccountCard } from "~Components/Reusable/SelectableAccountCard"
-import { RequestMethods, SCREEN_HEIGHT } from "~Constants"
+import { SCREEN_HEIGHT } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, SwitchWalletRequest, WatchedAccount } from "~Model"
+import { AccountWithDevice, SwitchWalletRequest, WalletRequest, WatchedAccount } from "~Model"
 import { selectSelectedAccountOrNull, selectVisibleAccountsWithoutObserved, useAppSelector } from "~Storage/Redux"
 import { AccountUtils } from "~Utils"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappWithDetails } from "../DappWithDetails"
 
 type Props = {
-    request: SwitchWalletRequest
-    onCancel: (request: SwitchWalletRequest) => Promise<void>
-    onConfirm: (args: { request: SwitchWalletRequest; selectedAddress: string }) => Promise<void>
+    request: SwitchWalletRequest | WalletRequest
+    onCancel: (request: SwitchWalletRequest | WalletRequest) => Promise<void>
+    onConfirm: (args: { request: SwitchWalletRequest | WalletRequest; selectedAddress: string }) => Promise<void>
     /**
      * Triggered when onLayout is called
      * @param newValue True when it's small, false when it isn't
@@ -75,7 +75,7 @@ const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm, onResize
             </BaseView>
             <BaseSpacer height={12} />
             <DappWithDetails appName={request.appName} appUrl={request.appUrl} renderDetailsButton={false} />
-            <BaseSpacer height={12} background="white" />
+            <BaseSpacer height={12} />
 
             <SectionList
                 sections={sections}
@@ -115,7 +115,7 @@ const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm, onResize
                 scrollEnabled
                 style={{ maxHeight: height }}
             />
-            <BaseSpacer height={24} background="green" />
+            <BaseSpacer height={24} />
             <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
@@ -127,7 +127,7 @@ const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm, onResize
                 <BaseButton
                     action={handleConfirm}
                     flex={1}
-                    disabled={AccountUtils.isObservedAccount(selectedAccount) || !selectedAccount}
+                    disabled={AccountUtils.isObservedAccount(internalAccount) || !internalAccount}
                     testID="SWITCH_WALLET_REQUEST_BTN_SIGN">
                     {LL.SWITCH_WALLET_REQUEST_CTA()}
                 </BaseButton>
@@ -151,9 +151,15 @@ export const SwitchWalletBottomSheet = () => {
     const { onSetSelectedAccount } = useSetSelectedAccount()
 
     const onConfirm = useCallback(
-        async ({ request, selectedAddress }: { request: SwitchWalletRequest; selectedAddress: string }) => {
+        async ({
+            request,
+            selectedAddress,
+        }: {
+            request: SwitchWalletRequest | WalletRequest
+            selectedAddress: string
+        }) => {
             onSetSelectedAccount({ address: selectedAddress })
-            postMessage({ id: request.id, data: selectedAddress, method: RequestMethods.SWITCH_WALLET })
+            postMessage({ id: request.id, data: selectedAddress, method: request.method })
             isUserAction.current = true
             onCloseBs()
         },
@@ -161,18 +167,24 @@ export const SwitchWalletBottomSheet = () => {
     )
 
     const rejectRequest = useCallback(
-        async (request: SwitchWalletRequest) => {
-            postMessage({
+        async (request: SwitchWalletRequest | WalletRequest) => {
+            if (request.method === "thor_switchWallet")
+                return postMessage({
+                    id: request.id,
+                    data: selectedAccount?.address ?? "",
+                    method: request.method,
+                })
+            return postMessage({
                 id: request.id,
-                data: selectedAccount?.address ?? "",
-                method: RequestMethods.SWITCH_WALLET,
+                data: null,
+                method: request.method,
             })
         },
         [postMessage, selectedAccount?.address],
     )
 
     const onCancel = useCallback(
-        async (request: SwitchWalletRequest) => {
+        async (request: SwitchWalletRequest | WalletRequest) => {
             await rejectRequest(request)
             isUserAction.current = true
             onCloseBs()
