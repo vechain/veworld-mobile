@@ -784,7 +784,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             postMessage({
                 id: request.id,
                 method: RequestMethods.METHODS,
-                data: Object.values(RequestMethods),
+                data: Object.values(RequestMethods).filter(value => {
+                    // personal_sign isn't supported at all
+                    return value !== "personal_sign"
+                }),
             })
         },
         [postMessage],
@@ -802,10 +805,49 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
             switch (data.method) {
                 case RequestMethods.REQUEST_TRANSACTION:
+                    if (data.requestAPI)
+                        return validateTxMessage(
+                            {
+                                genesisId: data.genesisId,
+                                id: data.id,
+                                message: data.params.clauses,
+                                method: RequestMethods.REQUEST_TRANSACTION,
+                                options: data.params.options,
+                            },
+                            event.nativeEvent.url,
+                            event.nativeEvent.title,
+                        )
                     return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 case RequestMethods.SIGN_CERTIFICATE:
+                    if (data.requestAPI)
+                        return validateCertMessage(
+                            {
+                                genesisId: data.genesisId,
+                                id: data.id,
+                                message: data.params.message,
+                                method: RequestMethods.SIGN_CERTIFICATE,
+                                options: data.params.options,
+                            },
+                            event.nativeEvent.url,
+                            event.nativeEvent.title,
+                        )
                     return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 case RequestMethods.SIGN_TYPED_DATA:
+                    if (data.requestAPI)
+                        return validateSignedDataMessage(
+                            {
+                                genesisId: data.genesisId,
+                                id: data.id,
+                                domain: data.params.domain,
+                                method: RequestMethods.SIGN_TYPED_DATA,
+                                options: data.params.options,
+                                origin: data.params.origin,
+                                types: data.params.types,
+                                value: data.params.value,
+                            },
+                            event.nativeEvent.url,
+                            event.nativeEvent.title,
+                        )
                     return validateSignedDataMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 case RequestMethods.CONNECT:
                     return validateConnectMessage(data, event.nativeEvent.url, event.nativeEvent.title)
@@ -817,6 +859,12 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     return validateMethodsMessage(data)
                 default:
                     warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
+                    if (data.id)
+                        return postMessage({
+                            id: data.id,
+                            error: "Unknown method called",
+                            method: data.method ?? "UNKNOWN_METHOD",
+                        })
             }
         },
         [
@@ -827,6 +875,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             validateWalletMessage,
             validateDisconnectMessage,
             validateMethodsMessage,
+            postMessage,
         ],
     )
 
@@ -1104,9 +1153,8 @@ window.vechain = {
         }
     },
     request: function (params) {
-        const id = generateRandomId()
         const request = {
-            id,
+            id: generateRandomId(),
             method: params.method,
             origin: window.origin,
             params: params.params,
