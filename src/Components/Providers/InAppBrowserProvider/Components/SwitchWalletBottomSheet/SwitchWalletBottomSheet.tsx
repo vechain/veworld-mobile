@@ -88,7 +88,7 @@ const SwitchWalletBottomSheetContent = ({ request, onCancel, onConfirm, onResize
                         onPress={handlePress}
                         selected={item.address === internalAccount?.address}
                         balanceToken={"VET"}
-                        testID="selectAccount"
+                        testID="SWITCH_WALLET_ACCOUNT_BOX"
                     />
                 )}
                 ItemSeparatorComponent={ItemSeparatorComponent}
