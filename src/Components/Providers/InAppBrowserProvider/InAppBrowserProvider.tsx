@@ -1,5 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
+import { ethers } from "ethers"
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import {
     NativeModules,
@@ -693,18 +694,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                     })
                 }
                 const parsedReq = request as LoginRequestTypedData
-                if ("VeWorldLogin" in parsedReq.params.value.types) {
-                    const loginType = parsedReq.params.value.types.VeWorldLogin
-                    if (
-                        loginType.length !== 1 ||
-                        loginType[0].name !== "veworld_login_address" ||
-                        loginType[0].type !== "address"
-                    )
-                        return postMessage({
-                            id: parsedReq.id,
-                            error: "Invalid VeWorldLogin type in typed data message for connecting",
-                            method: RequestMethods.CONNECT,
-                        })
+                if (
+                    "veworld_login_address" in parsedReq.params.value.value &&
+                    parsedReq.params.value.value.veworld_login_address !== ethers.constants.AddressZero
+                ) {
+                    return postMessage({
+                        id: parsedReq.id,
+                        error: "Invalid veworld_login_address default value in typed data message for connecting",
+                        method: RequestMethods.CONNECT,
+                    })
                 }
             }
 
