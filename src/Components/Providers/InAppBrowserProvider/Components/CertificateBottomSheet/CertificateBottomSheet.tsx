@@ -98,7 +98,8 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                     {request.message.payload.content}
                 </BaseText>
             </DappWithDetails>
-            <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0} bg={theme.colors.background} pt={24}>
+            <BaseSpacer height={24} />
+            <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"

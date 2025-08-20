@@ -1,14 +1,10 @@
 import React, { PropsWithChildren } from "react"
 import { StyleProp, StyleSheet, ViewStyle } from "react-native"
-import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
 import { BaseIcon, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
-
-const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
 
 const Title = ({ children }: PropsWithChildren) => {
     const theme = useTheme()
@@ -22,20 +18,20 @@ const Title = ({ children }: PropsWithChildren) => {
 const CheckItem = ({ children }: { children: string }) => {
     const theme = useTheme()
     return (
-        <AnimatedBaseView layout={LinearTransition.duration(300)} flexDirection="row" gap={8} alignItems="flex-start">
+        <BaseView flexDirection="row" gap={8} alignItems="flex-start">
             <BaseIcon name="icon-check" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_400} size={12} />
             <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
                 {children}
             </BaseText>
-        </AnimatedBaseView>
+        </BaseView>
     )
 }
 
 const Container = ({ children }: PropsWithChildren) => {
     return (
-        <AnimatedBaseView layout={LinearTransition.duration(300)} flexDirection="column" ml={8} gap={8}>
+        <BaseView flexDirection="column" ml={8} gap={8}>
             {children}
-        </AnimatedBaseView>
+        </BaseView>
     )
 }
 
@@ -71,24 +67,21 @@ type Props = PropsWithChildren<{
     testID?: string
 }>
 
-const DappDetails = ({ children, show, style, noAnimation = false, testID }: Props) => {
+const DappDetails = ({ children, show, style, testID }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
-    const animatedStyles = useAnimatedStyle(() => {
-        return {
-            opacity: show ? withTiming(1, { duration: 300 }) : withTiming(0, { duration: 300 }),
-            height: show ? "auto" : 0,
-            padding: show ? 16 : 0,
-        }
-    }, [show])
+
+    const dynamicStyles = {
+        height: show ? ("auto" as const) : 0,
+        overflow: "hidden" as const,
+        opacity: show ? 1 : 0,
+        paddingVertical: show ? 16 : 0,
+        borderWidth: show ? 1 : 0,
+    }
+
     return (
-        <AnimatedBaseView
-            layout={LinearTransition.duration(300)}
-            style={[styles.detailsContainer, noAnimation ? undefined : animatedStyles, style]}
-            flexDirection="column"
-            borderRadius={8}
-            testID={testID}>
+        <BaseView style={[styles.detailsContainer, style, dynamicStyles]} flexDirection="column" testID={testID}>
             {children}
-        </AnimatedBaseView>
+        </BaseView>
     )
 }
 
@@ -104,8 +97,7 @@ const baseStyles = (theme: ColorThemeType) =>
         detailsContainer: {
             backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_50,
             borderColor: theme.colors.editSpeedBs.result.border,
-            borderWidth: 1,
-            padding: 16,
+            paddingHorizontal: 16,
             gap: 12,
         },
     })
