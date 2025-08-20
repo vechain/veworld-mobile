@@ -195,6 +195,7 @@ const _BaseBottomSheet = <TData,>(
         bottomSafeArea = true,
         enablePanDownToClose = true,
         blurBackdrop = false,
+        backgroundStyle,
         stackBehavior = "push",
         floating = false,
         ...props
@@ -215,12 +216,9 @@ const _BaseBottomSheet = <TData,>(
     }, [])
 
     const renderBackdrop = useCallback(
-        (props_: BottomSheetBackdropProps) => {
-            return (
-                <BottomSheetBackdrop {...props_} pressBehavior={onPressOutside} opacity={0.8} disappearsOnIndex={-1} />
-            )
-        },
-
+        (props_: BottomSheetBackdropProps) => (
+            <BottomSheetBackdrop {...props_} pressBehavior={onPressOutside} opacity={0.8} disappearsOnIndex={-1} />
+        ),
         [onPressOutside],
     )
 
@@ -315,7 +313,7 @@ const _BaseBottomSheet = <TData,>(
             index={0}
             style={floating && styles.floating}
             bottomInset={floating ? floatingBottomInset : undefined}
-            backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
+            backgroundStyle={[backgroundStyle ?? styles.backgroundStyle]}
             // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry. Bug lagging (https://github.com/gorhom/react-native-bottom-sheet/issues/2046)
             backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
             handleComponent={enablePanDownToClose ? renderHandle : null}
