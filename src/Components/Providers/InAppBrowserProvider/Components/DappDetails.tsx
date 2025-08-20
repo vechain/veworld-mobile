@@ -98,6 +98,7 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.isDark ? COLORS.PURPLE_DISABLED : COLORS.GREY_50,
             borderColor: theme.colors.editSpeedBs.result.border,
             paddingHorizontal: 16,
+            borderRadius: 8,
             gap: 12,
         },
     })
