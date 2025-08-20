@@ -29,6 +29,7 @@ import {
     addPendingDappTransactionActivity,
     addPendingNFTtransferTransactionActivity,
     addPendingTransferTransactionActivity,
+    addSession,
     selectSelectedNetwork,
     setIsAppLoading,
     useAppDispatch,
@@ -57,7 +58,7 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
     const dispatch = useAppDispatch()
     const { LL } = useI18nContext()
     const { processRequest } = useWalletConnect()
-    const { postMessage } = useInAppBrowser()
+    const { postMessage, getLoginSession } = useInAppBrowser()
     const network = useAppSelector(selectSelectedNetwork)
 
     const [signature, setSignature] = useState<Buffer>()
@@ -224,6 +225,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
 
             if (res.success) {
                 setSignature(res.payload)
+                if (dappRequest?.type === "in-app") {
+                    const session = getLoginSession(dappRequest.appUrl, network.genesis.id)
+                    if (!session)
+                        dispatch(
+                            addSession({
+                                kind: "temporary",
+                                address: accountWithDevice.address,
+                                genesisId: network.genesis.id,
+                                url: dappRequest.appUrl,
+                            }),
+                        )
+                }
             } else {
                 if (res.err === LEDGER_ERROR_CODES.USER_REJECTED) {
                     setUserRejected(true)
@@ -237,7 +250,18 @@ export const LedgerSignTransaction: React.FC<Props> = ({ route }) => {
         } finally {
             setIsAwaitingSignature(false)
         }
-    }, [accountWithDevice, withTransport, transaction])
+    }, [
+        withTransport,
+        accountWithDevice.index,
+        accountWithDevice.device,
+        accountWithDevice.address,
+        transaction,
+        dappRequest?.type,
+        dappRequest?.appUrl,
+        getLoginSession,
+        network.genesis.id,
+        dispatch,
+    ])
 
     /** Effects */
 

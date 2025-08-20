@@ -23,6 +23,7 @@ import {
 import { ERROR_EVENTS, LEDGER_ERROR_CODES } from "~Constants"
 import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { addSession, selectSelectedNetwork, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -40,7 +41,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const { accountWithDevice, request, certificate } = route.params
 
     const { processRequest } = useWalletConnect()
-    const { postMessage } = useInAppBrowser()
+    const { postMessage, getLoginSession } = useInAppBrowser()
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -67,6 +68,9 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     } = useLedgerDevice({
         deviceId: accountWithDevice.device.deviceId,
     })
+
+    const dispatch = useAppDispatch()
+    const network = useAppSelector(selectSelectedNetwork)
 
     useEffect(() => {
         if (errorCode) {
@@ -202,6 +206,19 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
             await disconnectLedger()
 
+            if (request.type === "in-app") {
+                const session = getLoginSession(request.appUrl, network.genesis.id)
+                if (!session)
+                    dispatch(
+                        addSession({
+                            kind: "temporary",
+                            address: certificate.signer,
+                            genesisId: network.genesis.id,
+                            url: request.appUrl,
+                        }),
+                    )
+            }
+
             navigateOnFinish()
         } catch (e) {
             error(ERROR_EVENTS.LEDGER, e)
@@ -213,7 +230,21 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         } finally {
             setIsSending(false)
         }
-    }, [disconnectLedger, request, postMessage, processRequest, LL, signature, certificate, navigateOnFinish])
+    }, [
+        signature,
+        certificate.domain,
+        certificate.timestamp,
+        certificate.signer,
+        request,
+        disconnectLedger,
+        navigateOnFinish,
+        processRequest,
+        postMessage,
+        getLoginSession,
+        network.genesis.id,
+        dispatch,
+        LL,
+    ])
 
     const handleOnRetry = useCallback(() => {
         // this will trigger the useEffect to sign the transaction again

@@ -15,8 +15,10 @@ import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model
 import { Routes } from "~Navigation"
 import {
     addConnectedDiscoveryApp,
+    addSession,
     addSignCertificateActivity,
     selectSelectedAccountOrNull,
+    selectSelectedNetwork,
     selectVerifyContext,
     selectVisibleAccountsWithoutObserved,
     useAppDispatch,
@@ -146,7 +148,7 @@ export const CertificateBottomSheet = () => {
 
     const track = useAnalyticTracking()
 
-    const { postMessage } = useInAppBrowser()
+    const { postMessage, getLoginSession } = useInAppBrowser()
 
     const { failRequest, processRequest } = useWalletConnect()
 
@@ -159,6 +161,8 @@ export const CertificateBottomSheet = () => {
     const isUserAction = useRef(false)
 
     const [isLoading, setIsLoading] = useState(false)
+
+    const network = useAppSelector(selectSelectedNetwork)
 
     const buildCertificate = useCallback(
         (request: CertificateRequest) => {
@@ -236,6 +240,19 @@ export const CertificateBottomSheet = () => {
                     ),
                 )
 
+                if (request.type === "in-app") {
+                    const session = getLoginSession(request.appUrl, network.genesis.id)
+                    if (!session)
+                        dispatch(
+                            addSession({
+                                kind: "temporary",
+                                address: selectedAccount!.address ?? "",
+                                genesisId: network.genesis.id,
+                                url: request.appUrl,
+                            }),
+                        )
+                }
+
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
                 isUserAction.current = true
             } catch (err: unknown) {
@@ -259,7 +276,9 @@ export const CertificateBottomSheet = () => {
             buildCertificate,
             dispatch,
             failRequest,
+            getLoginSession,
             nav,
+            network.genesis.id,
             onCloseBs,
             postMessage,
             processRequest,

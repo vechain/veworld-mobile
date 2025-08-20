@@ -29,8 +29,10 @@ import {
 import { Routes } from "~Navigation"
 import {
     addConnectedDiscoveryApp,
+    addSession,
     changeSelectedNetwork,
     deleteSession,
+    LoginSession,
     selectAccounts,
     selectConnectedDiscoverDApps,
     selectFeaturedDapps,
@@ -100,6 +102,7 @@ type ContextType = {
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean
+    getLoginSession: (url: string, genesisId?: string | undefined) => LoginSession | undefined
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -422,6 +425,18 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             }
 
+            const session = getLoginSession(appUrl, request.genesisId)
+
+            if (!session && request.options.signer)
+                dispatch(
+                    addSession({
+                        address: request.options.signer,
+                        genesisId: request.genesisId,
+                        kind: "temporary",
+                        url: appUrl,
+                    }),
+                )
+
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
             const req: TransactionRequest = {
@@ -438,7 +453,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setTransactionBsData(req)
             transactionBsRef.current?.present()
         },
-        [connectedDiscoveryApps, setTransactionBsData, switchAccount, switchNetwork, transactionBsRef],
+        [
+            connectedDiscoveryApps,
+            dispatch,
+            getLoginSession,
+            setTransactionBsData,
+            switchAccount,
+            switchNetwork,
+            transactionBsRef,
+        ],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -449,6 +472,18 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             } catch {
                 return
             }
+
+            const session = getLoginSession(appUrl, request.genesisId)
+
+            if (!session && request.options.signer)
+                dispatch(
+                    addSession({
+                        address: request.options.signer,
+                        genesisId: request.genesisId,
+                        kind: "temporary",
+                        url: appUrl,
+                    }),
+                )
 
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
@@ -468,7 +503,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setCertificateBsData(req)
             certificateBsRef.current?.present()
         },
-        [connectedDiscoveryApps, switchAccount, switchNetwork, setCertificateBsData, certificateBsRef],
+        [
+            getLoginSession,
+            dispatch,
+            connectedDiscoveryApps,
+            setCertificateBsData,
+            certificateBsRef,
+            switchAccount,
+            switchNetwork,
+        ],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -479,6 +522,18 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             } catch {
                 return
             }
+
+            const session = getLoginSession(appUrl, request.genesisId)
+
+            if (!session && request.options.signer)
+                dispatch(
+                    addSession({
+                        address: request.options.signer,
+                        genesisId: request.genesisId,
+                        kind: "temporary",
+                        url: appUrl,
+                    }),
+                )
 
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
@@ -499,7 +554,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setTypedDataBsData(req)
             typedDataBsRef.current?.present()
         },
-        [connectedDiscoveryApps, setTypedDataBsData, switchAccount, switchNetwork, typedDataBsRef],
+        [
+            connectedDiscoveryApps,
+            dispatch,
+            getLoginSession,
+            setTypedDataBsData,
+            switchAccount,
+            switchNetwork,
+            typedDataBsRef,
+        ],
     )
 
     const navigateToLoginScreen = useCallback(
@@ -536,6 +599,33 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [loginBsRef, setLoginBsData, switchAccount, switchNetwork],
     )
 
+    /**
+     * Validate an old request (sign tx/sign cert/sign typed data) to check for sessions.
+     * @returns true if it's invalid, false otherwise
+     */
+    const checkIfOldRequestIsInvalid = useCallback(
+        (
+            request: TxRequest | CertRequest | SignedDataRequest,
+            appUrl: string,
+            method: (typeof RequestMethods)[keyof typeof RequestMethods],
+        ) => {
+            const loginSession = getLoginSession(appUrl, request.genesisId)
+            if (!loginSession) return false
+            if (loginSession.kind === "permanent") return false
+            if (!request.options.signer) return false
+            if (!AddressUtils.compareAddresses(request.options.signer, loginSession.address)) {
+                postMessage({
+                    id: request.id,
+                    error: "Invalid transaction. Request signer is different from the session signer.",
+                    method,
+                })
+                return true
+            }
+            return false
+        },
+        [getLoginSession, postMessage],
+    )
+
     // ~ MESSAGE VALIDATION
     const validateTxMessage = useCallback(
         (request: TxRequest, appUrl: string, appName: string) => {
@@ -556,6 +646,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
 
+            const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.REQUEST_TRANSACTION)
+            if (res) return
+
             if (
                 (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
                 selectedNetwork.genesis.id === request.genesisId
@@ -569,6 +662,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         [
             track,
             navigationState?.url,
+            checkIfOldRequestIsInvalid,
             selectedAccountAddress,
             selectedNetwork.genesis.id,
             initAndOpenChangeAccountNetworkBottomSheet,
@@ -595,6 +689,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
 
+            const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.SIGN_CERTIFICATE)
+            if (res) return
+
             if (
                 (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
                 selectedNetwork.genesis.id === request.genesisId
@@ -606,6 +703,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             initAndOpenChangeAccountNetworkBottomSheet(request)
         },
         [
+            checkIfOldRequestIsInvalid,
             initAndOpenChangeAccountNetworkBottomSheet,
             navigateToCertificateScreen,
             navigationState?.url,
@@ -634,6 +732,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
 
+            const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.SIGN_TYPED_DATA)
+            if (res) return
+
             if (
                 (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
                 selectedNetwork.genesis.id === request.genesisId
@@ -645,6 +746,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             initAndOpenChangeAccountNetworkBottomSheet(message)
         },
         [
+            checkIfOldRequestIsInvalid,
             initAndOpenChangeAccountNetworkBottomSheet,
             navigateToSignedDataScreen,
             navigationState?.url,
@@ -694,13 +796,13 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                         method: RequestMethods.CONNECT,
                     })
                 }
-                const parsedReq = request as LoginRequestTypedData
+                const reqValue = (request as LoginRequestTypedData).params.value.value
                 if (
-                    "veworld_login_address" in parsedReq.params.value.value &&
-                    parsedReq.params.value.value.veworld_login_address !== ethers.constants.AddressZero
+                    "veworld_login_address" in reqValue &&
+                    reqValue.veworld_login_address !== ethers.constants.AddressZero
                 ) {
                     return postMessage({
-                        id: parsedReq.id,
+                        id: request.id,
                         error: "Invalid veworld_login_address default value in typed data message for connecting",
                         method: RequestMethods.CONNECT,
                     })
@@ -1106,6 +1208,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
             isDapp,
+            getLoginSession,
         }
     }, [
         isLoading,
@@ -1134,6 +1237,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         isDapp,
         locale,
         packageInfo,
+        getLoginSession,
     ])
 
     return (

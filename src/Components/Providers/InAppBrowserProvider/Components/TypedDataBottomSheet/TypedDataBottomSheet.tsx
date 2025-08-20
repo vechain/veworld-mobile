@@ -13,8 +13,10 @@ import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, SignedTypedDataResponse, TypeDataRequest, TypedData } from "~Model"
 import {
     addConnectedDiscoveryApp,
+    addSession,
     addSignTypedDataActivity,
     selectSelectedAccountOrNull,
+    selectSelectedNetwork,
     selectVerifyContext,
     selectVisibleAccountsWithoutObserved,
     useAppDispatch,
@@ -156,7 +158,7 @@ export const TypedDataBottomSheet = () => {
 
     const track = useAnalyticTracking()
 
-    const { postMessage } = useInAppBrowser()
+    const { postMessage, getLoginSession } = useInAppBrowser()
 
     const { failRequest, processRequest } = useWalletConnect()
 
@@ -167,6 +169,8 @@ export const TypedDataBottomSheet = () => {
     const isUserAction = useRef(false)
 
     const [isLoading, setIsLoading] = useState(false)
+
+    const network = useAppSelector(selectSelectedNetwork)
 
     const buildTypedData = useCallback(
         (request: TypeDataRequest) => {
@@ -220,6 +224,19 @@ export const TypedDataBottomSheet = () => {
 
                 dispatch(addSignTypedDataActivity(request.origin, signedTypedData))
 
+                if (request.type === "in-app") {
+                    const session = getLoginSession(request.appUrl, network.genesis.id)
+                    if (!session)
+                        dispatch(
+                            addSession({
+                                kind: "temporary",
+                                address: selectedAccount!.address ?? "",
+                                genesisId: network.genesis.id,
+                                url: request.appUrl,
+                            }),
+                        )
+                }
+
                 track(AnalyticsEvent.DAPP_TYPED_DATA_SUCCESS)
                 isUserAction.current = true
             } catch (err: unknown) {
@@ -239,7 +256,19 @@ export const TypedDataBottomSheet = () => {
             }
             onCloseBs()
         },
-        [buildTypedData, dispatch, failRequest, onCloseBs, postMessage, processRequest, signTypedData, track],
+        [
+            buildTypedData,
+            dispatch,
+            failRequest,
+            getLoginSession,
+            network.genesis.id,
+            onCloseBs,
+            postMessage,
+            processRequest,
+            selectedAccount,
+            signTypedData,
+            track,
+        ],
     )
 
     const rejectRequest = useCallback(
