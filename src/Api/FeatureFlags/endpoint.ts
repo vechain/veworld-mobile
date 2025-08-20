@@ -1,5 +1,50 @@
 import { PaymentProvidersEnum } from "~Screens/Flows/App/BuyScreen/Hooks"
 
+export type FeatureFlagResponse = {
+    marketsProxyFeature: {
+        enabled: string
+        url: string
+        fallbackUrl: string
+    }
+    pushNotificationFeature: {
+        enabled: string
+    }
+    subdomainClaimFeature: {
+        enabled: string
+    }
+    paymentProvidersFeature: {
+        [PaymentProvidersEnum.CoinbasePay]: {
+            android: string
+            iOS: string
+        }
+        [PaymentProvidersEnum.Transak]: {
+            android: string
+            iOS: string
+        }
+        [PaymentProvidersEnum.Coinify]: {
+            android: string
+            iOS: string
+        }
+    }
+    discoveryFeature: {
+        bannersAutoplay: string
+        showStellaPayBanner: string
+        showStargateBanner: string
+    }
+    forks: {
+        GALACTICA: {
+            transactions: {
+                ledger: string
+            }
+        }
+    }
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: string
+        }
+    }
+}
+
 export type FeatureFlags = {
     marketsProxyFeature: {
         enabled: boolean
@@ -47,8 +92,8 @@ export type FeatureFlags = {
 
 export const getFeatureFlags = async () => {
     const featureFlagsUrl = __DEV__
-        ? "https://vechain.github.io/veworld-feature-flags/dev/mobile-feature-flags.json"
-        : "https://vechain.github.io/veworld-feature-flags/mobile-feature-flags.json"
+        ? "https://vechain.github.io/veworld-feature-flags/dev/mobile-versioned-feature-flags.json"
+        : "https://vechain.github.io/veworld-feature-flags/mobile-versioned-feature-flags.json"
 
     const req = await fetch(featureFlagsUrl, {
         method: "GET",
@@ -59,6 +104,6 @@ export const getFeatureFlags = async () => {
         },
     })
 
-    const response: FeatureFlags = await req.json()
+    const response: FeatureFlagResponse = await req.json()
     return response
 }
