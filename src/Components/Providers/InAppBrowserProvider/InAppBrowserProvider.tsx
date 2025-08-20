@@ -511,12 +511,13 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             }
 
-            const kind =
-                request.params.value === null
-                    ? "simple"
-                    : "payload" in request.params.value
-                    ? "certificate"
-                    : "typed-data"
+            const getKind = () => {
+                if (request.params.value === null) return "simple"
+                if ("payload" in request.params.value) return "certificate"
+                return "typed-data"
+            }
+
+            const kind = getKind()
 
             setLoginBsData({
                 appName,
@@ -937,7 +938,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                                 domain: data.params.domain,
                                 method: RequestMethods.SIGN_TYPED_DATA,
                                 options: data.params.options,
-                                origin: data.params.origin,
+                                origin: data.origin,
                                 types: data.params.types,
                                 value: data.params.value,
                             },

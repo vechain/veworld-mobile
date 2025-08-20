@@ -105,6 +105,25 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
         [isLoading, request.kind, selectedAccount],
     )
 
+    const detailsChildren = useMemo(() => {
+        switch (enhancedRequest.kind) {
+            case "simple":
+                return null
+            case "certificate":
+                return (
+                    <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
+                        {enhancedRequest.value.payload.content}
+                    </BaseText>
+                )
+            case "typed-data":
+                return (
+                    <TypedDataRenderer.Container>
+                        <TypedDataRenderer value={enhancedRequest.value.value} />
+                    </TypedDataRenderer.Container>
+                )
+        }
+    }, [enhancedRequest.kind, enhancedRequest.value, theme.isDark])
+
     return (
         <>
             <BaseView flexDirection="row" gap={12} justifyContent="space-between" testID="LOGIN_REQUEST_TITLE">
@@ -136,19 +155,7 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
                                 <BaseSpacer height={16} />
                             </>
                         )}
-                        <DappDetails show={visible}>
-                            {enhancedRequest.kind === "typed-data" ? (
-                                <TypedDataRenderer.Container>
-                                    <TypedDataRenderer value={enhancedRequest.value.value} />
-                                </TypedDataRenderer.Container>
-                            ) : enhancedRequest.kind === "certificate" ? (
-                                <BaseText
-                                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-                                    typographyFont="captionRegular">
-                                    {enhancedRequest.value.payload.content}
-                                </BaseText>
-                            ) : null}
-                        </DappDetails>
+                        <DappDetails show={visible}>{detailsChildren}</DappDetails>
                     </>
                 )}
             </DappDetailsCard>
@@ -346,7 +353,7 @@ export const LoginBottomSheet = () => {
                 //TODO: Maybe track Login with MP
 
                 isUserAction.current = true
-            } catch (err: unknown) {
+            } catch {
                 postMessage({
                     id: request.id,
                     error: "Login failed",
