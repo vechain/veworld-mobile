@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query"
 import React, { useCallback } from "react"
 import DeviceInfo from "react-native-device-info"
-import { FeatureFlagResponse, FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
+import { FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
 import { SemanticVersionUtils } from "~Utils"
 
 const initialState: FeatureFlags = {
@@ -85,7 +85,7 @@ export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }
     )
 
     const parseFeatureFlags = useCallback(
-        (data: FeatureFlagResponse) => {
+        (data: unknown): FeatureFlags => {
             if (!data || typeof data !== "object") {
                 return initialState
             }
