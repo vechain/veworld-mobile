@@ -16,6 +16,7 @@ import * as InteractionProvider from "../InteractionProvider"
 import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
 
 import { ethers } from "ethers"
+import _ from "lodash"
 import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
 
 jest.mock("../InteractionProvider")
@@ -395,8 +396,8 @@ describe("useInAppBrowser hook", () => {
                 })
             })
         })
-        describe("navigateToCertificateScreen", () => {
-            it("should return an error for an invalid tx message", async () => {
+        describe("validateCertMessage", () => {
+            it("should return an error for an invalid message", async () => {
                 const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
                 const postWebviewMessage = jest.fn()
                 ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
@@ -513,7 +514,7 @@ describe("useInAppBrowser hook", () => {
                     error: "Invalid request. Request signer is different from the session signer.",
                 })
             })
-            it("should navigate to the tx screen if everything is valid", async () => {
+            it("should navigate to the screen if everything is valid", async () => {
                 const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
                 const postWebviewMessage = jest.fn()
                 ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
@@ -583,7 +584,7 @@ describe("useInAppBrowser hook", () => {
                     type: "in-app",
                 })
             })
-            it("should navigate to the tx screen if everything is valid and create a session", async () => {
+            it("should navigate to the screen if everything is valid and create a session", async () => {
                 const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
                 const postWebviewMessage = jest.fn()
                 ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
@@ -651,6 +652,277 @@ describe("useInAppBrowser hook", () => {
                         },
                     },
                     method: RequestMethods.SIGN_CERTIFICATE,
+                    options: {
+                        signer: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    },
+                    type: "in-app",
+                })
+
+                expect(addSession).toHaveBeenCalledWith({
+                    address: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    genesisId: TESTNET_NETWORK.genesisBlock.id,
+                    kind: "temporary",
+                    url: "https://vechain.org",
+                })
+            })
+        })
+        describe("validateSignedDataMessage", () => {
+            const typedDataMsg = {
+                domain: {
+                    name: "Ether Mail",
+                    version: "1",
+                    chainId: "1176455790972829965191905223412607679856028701100105089447013101863",
+                    verifyingContract: "0x1CAB02Ec1922F1a5a55996de8c590161A88378b9",
+                },
+                types: {
+                    Person: [
+                        { name: "name", type: "string" },
+                        { name: "wallet", type: "address" },
+                    ],
+                    Mail: [
+                        { name: "from", type: "Person" },
+                        { name: "to", type: "Person" },
+                        { name: "contents", type: "string" },
+                    ],
+                },
+                value: {
+                    from: {
+                        name: "Cow",
+                        wallet: "0xCD2a3d9F938E13CD947Ec05AbC7FE734Df8DD826",
+                    },
+                    to: {
+                        name: "Bob",
+                        wallet: "0xbBbBBBBbbBBBbbbBbbBbbbbBBbBbbbbBbBbbBBbB",
+                    },
+                    contents: "Hello, Bob!",
+                },
+            }
+            it("should return an error for an invalid message", async () => {
+                const typedDataBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+                const postWebviewMessage = jest.fn()
+                ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
+
+                jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+                    typedDataBsRef,
+                    setTypedDataBsData: jest.fn(),
+                } as any)
+
+                const { result } = renderHook(() => useInAppBrowser(), {
+                    wrapper: createWrapper("ios"),
+                })
+
+                await act(() => {
+                    result.current.onMessage({
+                        nativeEvent: {
+                            title: "https://vechain.org",
+                            url: "https://vechain.org",
+                            canGoBack: false,
+                            canGoForward: false,
+                            loading: false,
+                            lockIdentifier: 1,
+                            data: JSON.stringify({
+                                method: RequestMethods.SIGN_TYPED_DATA,
+                                ..._.omit(typedDataMsg, "domain"),
+                                origin: "https://vechain.org",
+                                options: {},
+                                genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                id: "0x1",
+                            }),
+                        },
+                    } as any)
+                })
+
+                expect(postWebviewMessage).toHaveBeenCalledWith({
+                    id: "0x1",
+                    method: RequestMethods.SIGN_TYPED_DATA,
+                    error: "Invalid signed data message",
+                })
+            })
+            it("should return an error if there is a session with a different wallet", async () => {
+                const typedDataBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+                const postWebviewMessage = jest.fn()
+                ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
+
+                jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+                    typedDataBsRef,
+                    setTypedDataBsData: jest.fn(),
+                } as any)
+
+                const { result } = renderHook(() => useInAppBrowser(), {
+                    wrapper: createWrapper("ios"),
+                    initialProps: {
+                        preloadedState: {
+                            discovery: {
+                                bannerInteractions: {},
+                                connectedApps: [],
+                                custom: [],
+                                favorites: [],
+                                featured: [],
+                                hasOpenedDiscovery: true,
+                                tabsManager: {
+                                    currentTabId: null,
+                                    tabs: [],
+                                },
+                                sessions: {
+                                    "https://vechain.org": {
+                                        address: ethers.Wallet.createRandom().address,
+                                        genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                        url: "https://vechain.org",
+                                        kind: "temporary",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                })
+
+                await act(() => {
+                    result.current.onMessage({
+                        nativeEvent: {
+                            title: "https://vechain.org",
+                            url: "https://vechain.org",
+                            canGoBack: false,
+                            canGoForward: false,
+                            loading: false,
+                            lockIdentifier: 1,
+                            data: JSON.stringify({
+                                method: RequestMethods.SIGN_TYPED_DATA,
+                                ...typedDataMsg,
+                                origin: "https://vechain.org",
+                                options: {
+                                    signer: ethers.Wallet.createRandom().address,
+                                },
+                                genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                id: "0x1",
+                            }),
+                        },
+                    } as any)
+                })
+
+                expect(postWebviewMessage).toHaveBeenCalledWith({
+                    id: "0x1",
+                    method: RequestMethods.SIGN_TYPED_DATA,
+                    error: "Invalid request. Request signer is different from the session signer.",
+                })
+            })
+            it("should navigate to the screen if everything is valid", async () => {
+                const typedDataBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+                const postWebviewMessage = jest.fn()
+                ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
+
+                const setTypedDataBsData = jest.fn()
+                jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+                    typedDataBsRef,
+                    setTypedDataBsData,
+                } as any)
+
+                const { result } = renderHook(() => useInAppBrowser(), {
+                    wrapper: createWrapper("ios"),
+                    initialProps: {
+                        preloadedState: {
+                            networks: {
+                                customNetworks: [],
+                                hardfork: {},
+                                isNodeError: false,
+                                selectedNetwork: defaultTestNetwork.id,
+                                showConversionOtherNets: false,
+                                showTestNetTag: false,
+                            },
+                        },
+                    },
+                })
+
+                await act(() => {
+                    result.current.onMessage({
+                        nativeEvent: {
+                            title: "https://vechain.org",
+                            url: "https://vechain.org",
+                            canGoBack: false,
+                            canGoForward: false,
+                            loading: false,
+                            lockIdentifier: 1,
+                            data: JSON.stringify({
+                                method: RequestMethods.SIGN_TYPED_DATA,
+                                ...typedDataMsg,
+                                origin: "https://vechain.org",
+                                options: {},
+                                genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                id: "0x1",
+                            }),
+                        },
+                    } as any)
+                })
+
+                expect(setTypedDataBsData).toHaveBeenCalledWith({
+                    appName: "https://vechain.org",
+                    appUrl: "https://vechain.org",
+                    id: "0x1",
+                    isFirstRequest: true,
+                    ...typedDataMsg,
+                    origin: "https://vechain.org",
+                    method: RequestMethods.SIGN_TYPED_DATA,
+                    options: {},
+                    type: "in-app",
+                })
+            })
+            it("should navigate to the screen if everything is valid and create a session", async () => {
+                const typedDataBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+                const postWebviewMessage = jest.fn()
+                ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
+
+                const setTypedDataBsData = jest.fn()
+                jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+                    typedDataBsRef,
+                    setTypedDataBsData,
+                } as any)
+
+                const { result } = renderHook(() => useInAppBrowser(), {
+                    wrapper: createWrapper("ios"),
+                    initialProps: {
+                        preloadedState: {
+                            networks: {
+                                customNetworks: [],
+                                hardfork: {},
+                                isNodeError: false,
+                                selectedNetwork: defaultTestNetwork.id,
+                                showConversionOtherNets: false,
+                                showTestNetTag: false,
+                            },
+                        },
+                    },
+                })
+
+                await act(() => {
+                    result.current.onMessage({
+                        nativeEvent: {
+                            title: "https://vechain.org",
+                            url: "https://vechain.org",
+                            canGoBack: false,
+                            canGoForward: false,
+                            loading: false,
+                            lockIdentifier: 1,
+                            data: JSON.stringify({
+                                method: RequestMethods.SIGN_TYPED_DATA,
+                                ...typedDataMsg,
+                                origin: "https://vechain.org",
+                                options: {
+                                    signer: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                                },
+                                genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                id: "0x1",
+                            }),
+                        },
+                    } as any)
+                })
+
+                expect(setTypedDataBsData).toHaveBeenCalledWith({
+                    appName: "https://vechain.org",
+                    appUrl: "https://vechain.org",
+                    id: "0x1",
+                    isFirstRequest: true,
+                    ...typedDataMsg,
+                    origin: "https://vechain.org",
+                    method: RequestMethods.SIGN_TYPED_DATA,
                     options: {
                         signer: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
                     },
