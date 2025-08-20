@@ -60,10 +60,6 @@ const NotVerifiedWarning = () => {
 type Props = PropsWithChildren<{
     show: boolean
     style?: StyleProp<ViewStyle>
-    /**
-     * Skip the animated styles
-     */
-    noAnimation?: boolean
     testID?: string
 }>
 

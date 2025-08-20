@@ -1,6 +1,5 @@
 import { default as React, useMemo, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, LayoutAnimation } from "react-native"
-
 import { BaseButton, BaseIcon, BaseText } from "~Components"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
@@ -54,6 +53,23 @@ export const DappDetailsCard = ({
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const allApps = useAppSelector(selectFeaturedDapps)
+
+    const configureDetailsAnimation = () => {
+        LayoutAnimation.configureNext({
+            duration: 300,
+            create: {
+                type: LayoutAnimation.Types.easeInEaseOut,
+                property: LayoutAnimation.Properties.scaleXY,
+            },
+            update: {
+                type: LayoutAnimation.Types.easeInEaseOut,
+            },
+            delete: {
+                type: LayoutAnimation.Types.easeInEaseOut,
+                property: LayoutAnimation.Properties.scaleXY,
+            },
+        })
+    }
 
     const { icon, name, url, isDapp } = useMemo(() => {
         const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(appUrl).origin)
@@ -110,20 +126,7 @@ export const DappDetailsCard = ({
                 </BaseView>
                 <BaseButton
                     action={() => {
-                        LayoutAnimation.configureNext({
-                            duration: 300,
-                            create: {
-                                type: LayoutAnimation.Types.easeInEaseOut,
-                                property: LayoutAnimation.Properties.scaleXY,
-                            },
-                            update: {
-                                type: LayoutAnimation.Types.easeInEaseOut,
-                            },
-                            delete: {
-                                type: LayoutAnimation.Types.easeInEaseOut,
-                                property: LayoutAnimation.Properties.scaleXY,
-                            },
-                        })
+                        configureDetailsAnimation()
                         setShowDetails(old => !old)
                         onShowDetails?.(!showDetails)
                     }}
