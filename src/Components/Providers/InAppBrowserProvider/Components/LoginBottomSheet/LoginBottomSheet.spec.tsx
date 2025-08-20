@@ -9,6 +9,7 @@ import { RequestMethods } from "~Constants"
 import { AccountWithDevice, LoginRequest } from "~Model"
 
 import { TESTNET_NETWORK } from "@vechain/sdk-core"
+import { ethers } from "ethers"
 import { HDNode } from "thor-devkit"
 import { WalletEncryptionKeyHelper } from "~Components/Providers/EncryptedStorageProvider"
 import { CryptoUtils } from "~Utils"
@@ -263,5 +264,88 @@ describe("LoginBottomSheet", () => {
                     method: RequestMethods.CONNECT,
                 })
         }
+    })
+    it("should be able to replace typed data placeholder", async () => {
+        const loginBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+        const postMessage = jest.fn()
+        const getValue = () => {
+            return {
+                domain: {
+                    name: "Ether Mail",
+                    version: "1",
+                    chainId: "1176455790972829965191905223412607679856028701100105089447013101863",
+                    verifyingContract: "0x1CAB02Ec1922F1a5a55996de8c590161A88378b9",
+                },
+                types: {
+                    Authentication: [
+                        { name: "name", type: "string" },
+                        { name: "veworld_login_address", type: "address" },
+                    ],
+                },
+                value: {
+                    name: "Cow",
+                    veworld_login_address: ethers.constants.AddressZero,
+                },
+            }
+        }
+        jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+            loginBsRef,
+            loginBsData: {
+                method: RequestMethods.CONNECT,
+                id: "0x1",
+                type: "in-app",
+                appUrl: "https://vechain.org",
+                appName: "TEST APP",
+                isFirstRequest: false,
+                external: false,
+                genesisId: TESTNET_NETWORK.genesisBlock.id,
+                kind: "typed-data",
+                value: getValue(),
+            },
+            setLoginBsData: jest.fn(),
+        } as any)
+        jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
+            postMessage,
+        } as any)
+        const wallet = HDNode.fromMnemonic(defaultMnemonicPhrase).derive(0)
+        ;(WalletEncryptionKeyHelper.decryptWallet as jest.Mock).mockResolvedValue({
+            mnemonic: defaultMnemonicPhrase,
+            rootAddress: wallet.address,
+            nonce: "nonce",
+        })
+
+        TestHelpers.render.renderComponentWithProps(<LoginBottomSheet />, {
+            wrapper: TestWrapper,
+            initialProps: {
+                preloadedState: {
+                    accounts: {
+                        accounts: [mockAccountWithDevice1],
+                        selectedAccount: mockAccountWithDevice1.address,
+                    },
+                    devices: [device1],
+                },
+            },
+        })
+        await act(() => {
+            loginBsRef.current.present()
+        })
+        expect(screen.queryByTestId("LOGIN_REQUEST_TITLE")).not.toBeNull()
+        await act(() => {
+            fireEvent.press(screen.getByTestId("LOGIN_REQUEST_BTN_SIGN"))
+        })
+
+        const value = getValue()
+
+        expect(postMessage).toHaveBeenCalledWith({
+            id: "0x1",
+            data: {
+                signer: mockAccountWithDevice1.address,
+                signature: await new ethers.Wallet(wallet.privateKey!)._signTypedData(value.domain, value.types, {
+                    ...value.value,
+                    veworld_login_address: ethers.utils.getAddress(mockAccountWithDevice1.address),
+                }),
+            },
+            method: RequestMethods.CONNECT,
+        })
     })
 })

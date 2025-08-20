@@ -12,7 +12,7 @@ import { COLORS } from "~Constants"
 import { useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE, LedgerAccountWithDevice, LoginRequest } from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice, LoginRequest, TypedDataMessage } from "~Model"
 import { Routes } from "~Navigation"
 import {
     addSession,
@@ -71,7 +71,18 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
                 }
             }
             case "typed-data": {
-                return request
+                return {
+                    ...request,
+                    value: {
+                        ...request.value,
+                        value: {
+                            ...request.value.value,
+                            ...("veworld_login_address" in request.value.value && {
+                                veworld_login_address: ethers.utils.getAddress(selectedAccount?.address ?? ""),
+                            }),
+                        },
+                    } satisfies TypedDataMessage,
+                }
             }
         }
     }, [request, selectedAccount?.address])
