@@ -600,7 +600,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             if (!AddressUtils.compareAddresses(request.options.signer, loginSession.address)) {
                 postMessage({
                     id: request.id,
-                    error: "Invalid transaction. Request signer is different from the session signer.",
+                    error: "Invalid request. Request signer is different from the session signer.",
                     method,
                 })
                 return true

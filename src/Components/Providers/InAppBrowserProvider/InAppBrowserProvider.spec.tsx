@@ -240,7 +240,7 @@ describe("useInAppBrowser hook", () => {
                 expect(postWebviewMessage).toHaveBeenCalledWith({
                     id: "0x1",
                     method: RequestMethods.REQUEST_TRANSACTION,
-                    error: "Invalid transaction. Request signer is different from the session signer.",
+                    error: "Invalid request. Request signer is different from the session signer.",
                 })
             })
             it("should navigate to the tx screen if everything is valid", async () => {
@@ -381,6 +381,276 @@ describe("useInAppBrowser hook", () => {
                         },
                     ],
                     method: "thor_sendTransaction",
+                    options: {
+                        signer: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    },
+                    type: "in-app",
+                })
+
+                expect(addSession).toHaveBeenCalledWith({
+                    address: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                    genesisId: TESTNET_NETWORK.genesisBlock.id,
+                    kind: "temporary",
+                    url: "https://vechain.org",
+                })
+            })
+        })
+        describe("navigateToCertificateScreen", () => {
+            it("should return an error for an invalid tx message", async () => {
+                const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+                const postWebviewMessage = jest.fn()
+                ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
+
+                jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+                    certificateBsRef,
+                    setCertificateBsData: jest.fn(),
+                } as any)
+
+                const { result } = renderHook(() => useInAppBrowser(), {
+                    wrapper: createWrapper("ios"),
+                })
+
+                await act(() => {
+                    result.current.onMessage({
+                        nativeEvent: {
+                            title: "https://vechain.org",
+                            url: "https://vechain.org",
+                            canGoBack: false,
+                            canGoForward: false,
+                            loading: false,
+                            lockIdentifier: 1,
+                            data: JSON.stringify({
+                                method: RequestMethods.SIGN_CERTIFICATE,
+                                message: {
+                                    payload: {
+                                        type: "text",
+                                        content: "CERT CONTENT",
+                                    },
+                                },
+                                options: {},
+                                genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                id: "0x1",
+                            }),
+                        },
+                    } as any)
+                })
+
+                expect(postWebviewMessage).toHaveBeenCalledWith({
+                    id: "0x1",
+                    method: RequestMethods.SIGN_CERTIFICATE,
+                    error: "Invalid certificate message",
+                })
+            })
+            it("should return an error if there is a session with a different wallet", async () => {
+                const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+                const postWebviewMessage = jest.fn()
+                ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
+
+                jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+                    certificateBsRef,
+                    setCertificateBsData: jest.fn(),
+                } as any)
+
+                const { result } = renderHook(() => useInAppBrowser(), {
+                    wrapper: createWrapper("ios"),
+                    initialProps: {
+                        preloadedState: {
+                            discovery: {
+                                bannerInteractions: {},
+                                connectedApps: [],
+                                custom: [],
+                                favorites: [],
+                                featured: [],
+                                hasOpenedDiscovery: true,
+                                tabsManager: {
+                                    currentTabId: null,
+                                    tabs: [],
+                                },
+                                sessions: {
+                                    "https://vechain.org": {
+                                        address: ethers.Wallet.createRandom().address,
+                                        genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                        url: "https://vechain.org",
+                                        kind: "temporary",
+                                    },
+                                },
+                            },
+                        },
+                    },
+                })
+
+                await act(() => {
+                    result.current.onMessage({
+                        nativeEvent: {
+                            title: "https://vechain.org",
+                            url: "https://vechain.org",
+                            canGoBack: false,
+                            canGoForward: false,
+                            loading: false,
+                            lockIdentifier: 1,
+                            data: JSON.stringify({
+                                method: RequestMethods.SIGN_CERTIFICATE,
+                                message: {
+                                    purpose: "identification",
+                                    payload: {
+                                        type: "text",
+                                        content: "CERT CONTENT",
+                                    },
+                                },
+                                options: {
+                                    signer: ethers.Wallet.createRandom().address,
+                                },
+                                genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                id: "0x1",
+                            }),
+                        },
+                    } as any)
+                })
+
+                expect(postWebviewMessage).toHaveBeenCalledWith({
+                    id: "0x1",
+                    method: RequestMethods.SIGN_CERTIFICATE,
+                    error: "Invalid request. Request signer is different from the session signer.",
+                })
+            })
+            it("should navigate to the tx screen if everything is valid", async () => {
+                const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+                const postWebviewMessage = jest.fn()
+                ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
+
+                const setCertificateBsData = jest.fn()
+                jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+                    certificateBsRef,
+                    setCertificateBsData,
+                } as any)
+
+                const { result } = renderHook(() => useInAppBrowser(), {
+                    wrapper: createWrapper("ios"),
+                    initialProps: {
+                        preloadedState: {
+                            networks: {
+                                customNetworks: [],
+                                hardfork: {},
+                                isNodeError: false,
+                                selectedNetwork: defaultTestNetwork.id,
+                                showConversionOtherNets: false,
+                                showTestNetTag: false,
+                            },
+                        },
+                    },
+                })
+
+                await act(() => {
+                    result.current.onMessage({
+                        nativeEvent: {
+                            title: "https://vechain.org",
+                            url: "https://vechain.org",
+                            canGoBack: false,
+                            canGoForward: false,
+                            loading: false,
+                            lockIdentifier: 1,
+                            data: JSON.stringify({
+                                method: RequestMethods.SIGN_CERTIFICATE,
+                                message: {
+                                    purpose: "identification",
+                                    payload: {
+                                        type: "text",
+                                        content: "CERT CONTENT",
+                                    },
+                                },
+                                options: {},
+                                genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                id: "0x1",
+                            }),
+                        },
+                    } as any)
+                })
+
+                expect(setCertificateBsData).toHaveBeenCalledWith({
+                    appName: "https://vechain.org",
+                    appUrl: "https://vechain.org",
+                    id: "0x1",
+                    isFirstRequest: true,
+                    message: {
+                        purpose: "identification",
+                        payload: {
+                            type: "text",
+                            content: "CERT CONTENT",
+                        },
+                    },
+                    method: RequestMethods.SIGN_CERTIFICATE,
+                    options: {},
+                    type: "in-app",
+                })
+            })
+            it("should navigate to the tx screen if everything is valid and create a session", async () => {
+                const certificateBsRef = { current: { present: jest.fn(), close: jest.fn() } }
+                const postWebviewMessage = jest.fn()
+                ;(usePostWebviewMessage as jest.Mock).mockReturnValue(postWebviewMessage)
+
+                const setCertificateBsData = jest.fn()
+                jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
+                    certificateBsRef,
+                    setCertificateBsData,
+                } as any)
+
+                const { result } = renderHook(() => useInAppBrowser(), {
+                    wrapper: createWrapper("ios"),
+                    initialProps: {
+                        preloadedState: {
+                            networks: {
+                                customNetworks: [],
+                                hardfork: {},
+                                isNodeError: false,
+                                selectedNetwork: defaultTestNetwork.id,
+                                showConversionOtherNets: false,
+                                showTestNetTag: false,
+                            },
+                        },
+                    },
+                })
+
+                await act(() => {
+                    result.current.onMessage({
+                        nativeEvent: {
+                            title: "https://vechain.org",
+                            url: "https://vechain.org",
+                            canGoBack: false,
+                            canGoForward: false,
+                            loading: false,
+                            lockIdentifier: 1,
+                            data: JSON.stringify({
+                                method: RequestMethods.SIGN_CERTIFICATE,
+                                message: {
+                                    purpose: "identification",
+                                    payload: {
+                                        type: "text",
+                                        content: "CERT CONTENT",
+                                    },
+                                },
+                                options: {
+                                    signer: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
+                                },
+                                genesisId: TESTNET_NETWORK.genesisBlock.id,
+                                id: "0x1",
+                            }),
+                        },
+                    } as any)
+                })
+
+                expect(setCertificateBsData).toHaveBeenCalledWith({
+                    appName: "https://vechain.org",
+                    appUrl: "https://vechain.org",
+                    id: "0x1",
+                    isFirstRequest: true,
+                    message: {
+                        purpose: "identification",
+                        payload: {
+                            type: "text",
+                            content: "CERT CONTENT",
+                        },
+                    },
+                    method: RequestMethods.SIGN_CERTIFICATE,
                     options: {
                         signer: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
                     },
