@@ -16,11 +16,11 @@ import {
     useThemedStyles,
     useTransactionScreen,
 } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { TransactionRequest } from "~Model"
 import {
     addConnectedDiscoveryApp,
     addPendingDappTransactionActivity,
-    addSession,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
     selectVerifyContext,
@@ -246,7 +246,8 @@ export const TransactionBottomSheet = () => {
 
     const track = useAnalyticTracking()
 
-    const { postMessage, getLoginSession } = useInAppBrowser()
+    const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
 
     const { failRequest, processRequest } = useWalletConnect()
 
@@ -272,34 +273,14 @@ export const TransactionBottomSheet = () => {
                         dappUrl: transactionBsData.appUrl ?? transactionBsData.appName,
                     }),
                 })
-                if (transactionBsData.type === "in-app") {
-                    const session = getLoginSession(transactionBsData.appUrl, network.genesis.id)
-                    if (!session)
-                        dispatch(
-                            addSession({
-                                kind: "temporary",
-                                address: selectedAccount!.address ?? "",
-                                genesisId: network.genesis.id,
-                                url: transactionBsData.appUrl,
-                            }),
-                        )
-                }
+                createSessionIfNotExists(transactionBsData)
             }
 
             isUserAction.current = true
             dispatch(setIsAppLoading(false))
             onCloseBs()
         },
-        [
-            transactionBsData,
-            dispatch,
-            onCloseBs,
-            track,
-            network.name,
-            network.genesis.id,
-            getLoginSession,
-            selectedAccount,
-        ],
+        [transactionBsData, dispatch, onCloseBs, track, network.name, createSessionIfNotExists],
     )
 
     const onTransactionSuccess = useCallback(

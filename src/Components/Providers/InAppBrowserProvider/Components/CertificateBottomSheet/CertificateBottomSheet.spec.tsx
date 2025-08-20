@@ -55,7 +55,6 @@ describe("CertificateBottomSheet", () => {
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage: jest.fn(),
-            getLoginSession: jest.fn(),
         } as any)
         jest.spyOn(WalletConnectProvider, "useWalletConnect").mockReturnValue({
             failRequest: jest.fn(),
@@ -131,7 +130,6 @@ describe("CertificateBottomSheet", () => {
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,
-            getLoginSession: jest.fn(),
         } as any)
         const failRequest = jest.fn()
         jest.spyOn(WalletConnectProvider, "useWalletConnect").mockReturnValue({
@@ -246,7 +244,6 @@ describe("CertificateBottomSheet", () => {
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,
-            getLoginSession: jest.fn(),
         } as any)
         const processRequest = jest.fn()
         jest.spyOn(WalletConnectProvider, "useWalletConnect").mockReturnValue({

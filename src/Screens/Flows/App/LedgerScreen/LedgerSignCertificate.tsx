@@ -22,8 +22,8 @@ import {
 } from "~Components"
 import { ERROR_EVENTS, LEDGER_ERROR_CODES } from "~Constants"
 import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { addSession, selectSelectedNetwork, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -41,7 +41,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const { accountWithDevice, request, certificate } = route.params
 
     const { processRequest } = useWalletConnect()
-    const { postMessage, getLoginSession } = useInAppBrowser()
+    const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -68,9 +69,6 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     } = useLedgerDevice({
         deviceId: accountWithDevice.device.deviceId,
     })
-
-    const dispatch = useAppDispatch()
-    const network = useAppSelector(selectSelectedNetwork)
 
     useEffect(() => {
         if (errorCode) {
@@ -206,18 +204,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
             await disconnectLedger()
 
-            if (request.type === "in-app") {
-                const session = getLoginSession(request.appUrl, network.genesis.id)
-                if (!session)
-                    dispatch(
-                        addSession({
-                            kind: "temporary",
-                            address: certificate.signer,
-                            genesisId: network.genesis.id,
-                            url: request.appUrl,
-                        }),
-                    )
-            }
+            if (request.method === "thor_signCertificate") createSessionIfNotExists(request)
 
             navigateOnFinish()
         } catch (e) {
@@ -237,12 +224,10 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         certificate.signer,
         request,
         disconnectLedger,
+        createSessionIfNotExists,
         navigateOnFinish,
         processRequest,
         postMessage,
-        getLoginSession,
-        network.genesis.id,
-        dispatch,
         LL,
     ])
 

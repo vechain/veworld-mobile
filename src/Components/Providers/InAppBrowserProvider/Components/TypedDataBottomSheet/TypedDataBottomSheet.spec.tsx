@@ -136,7 +136,6 @@ describe("TypedDataBottomSheet", () => {
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,
-            getLoginSession: jest.fn(),
         } as any)
         const failRequest = jest.fn()
         jest.spyOn(WalletConnectProvider, "useWalletConnect").mockReturnValue({
@@ -290,7 +289,6 @@ describe("TypedDataBottomSheet", () => {
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,
-            getLoginSession: jest.fn(),
         } as any)
         const processRequest = jest.fn()
         jest.spyOn(WalletConnectProvider, "useWalletConnect").mockReturnValue({
@@ -392,7 +390,6 @@ describe("TypedDataBottomSheet", () => {
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage,
-            getLoginSession: jest.fn(),
         } as any)
         const processRequest = jest.fn()
         jest.spyOn(WalletConnectProvider, "useWalletConnect").mockReturnValue({

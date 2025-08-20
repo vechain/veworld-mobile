@@ -10,15 +10,14 @@ import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { useI18nContext } from "~i18n"
 import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { Routes } from "~Navigation"
 import {
     addConnectedDiscoveryApp,
-    addSession,
     addSignCertificateActivity,
     selectSelectedAccountOrNull,
-    selectSelectedNetwork,
     selectVerifyContext,
     selectVisibleAccountsWithoutObserved,
     useAppDispatch,
@@ -148,7 +147,8 @@ export const CertificateBottomSheet = () => {
 
     const track = useAnalyticTracking()
 
-    const { postMessage, getLoginSession } = useInAppBrowser()
+    const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
 
     const { failRequest, processRequest } = useWalletConnect()
 
@@ -161,8 +161,6 @@ export const CertificateBottomSheet = () => {
     const isUserAction = useRef(false)
 
     const [isLoading, setIsLoading] = useState(false)
-
-    const network = useAppSelector(selectSelectedNetwork)
 
     const buildCertificate = useCallback(
         (request: CertificateRequest) => {
@@ -240,18 +238,7 @@ export const CertificateBottomSheet = () => {
                     ),
                 )
 
-                if (request.type === "in-app") {
-                    const session = getLoginSession(request.appUrl, network.genesis.id)
-                    if (!session)
-                        dispatch(
-                            addSession({
-                                kind: "temporary",
-                                address: selectedAccount!.address ?? "",
-                                genesisId: network.genesis.id,
-                                url: request.appUrl,
-                            }),
-                        )
-                }
+                createSessionIfNotExists(request)
 
                 track(AnalyticsEvent.DAPP_CERTIFICATE_SUCCESS)
                 isUserAction.current = true
@@ -274,11 +261,10 @@ export const CertificateBottomSheet = () => {
         },
         [
             buildCertificate,
+            createSessionIfNotExists,
             dispatch,
             failRequest,
-            getLoginSession,
             nav,
-            network.genesis.id,
             onCloseBs,
             postMessage,
             processRequest,

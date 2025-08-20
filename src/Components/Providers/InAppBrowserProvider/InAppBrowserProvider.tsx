@@ -15,6 +15,8 @@ import { showInfoToast, showWarningToast } from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, usePrevious, useSetSelectedAccount } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
+import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
 import { Locales, useI18nContext } from "~i18n"
 import {
     AccountWithDevice,
@@ -32,7 +34,6 @@ import {
     addSession,
     changeSelectedNetwork,
     deleteSession,
-    LoginSession,
     selectAccounts,
     selectConnectedDiscoverDApps,
     selectFeaturedDapps,
@@ -40,7 +41,6 @@ import {
     selectSelectedAccountAddress,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
-    selectSessions,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
@@ -102,7 +102,6 @@ type ContextType = {
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean
-    getLoginSession: (url: string, genesisId?: string | undefined) => LoginSession | undefined
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -172,6 +171,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
+    const { getLoginSession } = useLoginSession()
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -193,10 +193,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     let prevY = useRef<number>(0) // Used to detect the scroll direction of the web view
     const webviewRef = useRef<WebView | undefined>()
 
+    const postWebviewMessage = usePostWebviewMessage(webviewRef)
+
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
     const previousUrl = usePrevious(navigationState?.url)
-
-    const loginSessions = useAppSelector(selectSessions)
 
     const canGoBack = useMemo(() => {
         return navigationState?.canGoBack ?? false
@@ -206,27 +206,11 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         return navigationState?.canGoForward ?? false
     }, [navigationState])
 
-    const getLoginSession = useCallback(
-        (url: string, genesisId?: string) => {
-            const session = loginSessions[new URL(url).origin]
-            if (!genesisId) return session
-            if (session?.genesisId?.toLowerCase() === genesisId.toLowerCase()) return session
-            return undefined
-        },
-        [loginSessions],
-    )
-
     const postMessage = useCallback(
         (message: WindowResponse) => {
             debug(ERROR_EVENTS.DAPP, "responding to dapp request", message.id)
 
-            webviewRef.current?.injectJavaScript(
-                `
-                    setTimeout(function() { 
-                    postMessage(${JSON.stringify(message)}, "*")
-                    }, 1);
-                    `,
-            )
+            postWebviewMessage(message)
 
             /**
              * Track the success / failure rates against the dapp URL
@@ -234,7 +218,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             let analyticEvent: AnalyticsEvent | undefined
 
             if (message.method === RequestMethods.REQUEST_TRANSACTION) {
-                if ("err" in message) {
+                if ("error" in message) {
                     analyticEvent = AnalyticsEvent.DISCOVERY_TRANSACTION_ERROR
                 } else {
                     analyticEvent = AnalyticsEvent.DISCOVERY_TRANSACTION_SUCCESS
@@ -242,7 +226,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (message.method === RequestMethods.SIGN_CERTIFICATE) {
-                if ("err" in message) {
+                if ("error" in message) {
                     analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_ERROR
                 } else {
                     analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_SUCCESS
@@ -250,7 +234,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (message.method === RequestMethods.SIGN_TYPED_DATA) {
-                if ("err" in message) {
+                if ("error" in message) {
                     analyticEvent = AnalyticsEvent.DISCOVERY_SIGNED_DATA_ERROR
                 } else {
                     analyticEvent = AnalyticsEvent.DISCOVERY_SIGNED_DATA_SUCCESS
@@ -263,7 +247,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [navigationState, track],
+        [navigationState, postWebviewMessage, track],
     )
 
     const navigateToUrl = useCallback((url: string) => {
@@ -655,7 +639,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             ) {
                 return navigateToTransactionScreen(request, appUrl, appName)
             }
-
             setNavigateToOperation(() => () => navigateToTransactionScreen(request, appUrl, appName))
             initAndOpenChangeAccountNetworkBottomSheet(request)
         },
