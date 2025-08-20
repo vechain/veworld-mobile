@@ -23,6 +23,14 @@ For _fastlane_ installation instructions, see [Installing _fastlane_](https://do
 
 Validate the keystore and credentials
 
+### android build_android_test
+
+```sh
+[bundle exec] fastlane android build_android_test
+```
+
+
+
 ### android build_android
 
 ```sh
