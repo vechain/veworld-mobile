@@ -77,7 +77,7 @@ const DappDetails = ({ children, show, style, noAnimation = false, testID }: Pro
         return {
             opacity: show ? withTiming(1, { duration: 300 }) : withTiming(0, { duration: 300 }),
             height: show ? "auto" : 0,
-            padding: show ? withTiming(16, { duration: 300 }) : withTiming(0, { duration: 300 }),
+            padding: show ? 16 : 0,
         }
     }, [show])
     return (
