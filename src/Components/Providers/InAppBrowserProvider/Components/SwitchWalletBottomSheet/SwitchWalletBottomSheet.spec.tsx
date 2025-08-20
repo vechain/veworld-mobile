@@ -36,7 +36,6 @@ const mockAccountWithDevice2: AccountWithDevice = {
     device: device1,
 }
 
-//Rendering <InAppBrowserProvider /> because it renders the CertificateBottomSheet too
 describe("SwitchWalletBottomSheet", () => {
     beforeEach(() => {
         jest.clearAllMocks()
@@ -46,7 +45,7 @@ describe("SwitchWalletBottomSheet", () => {
         jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
             switchWalletBsRef,
             switchWalletBsData: null,
-            setCertificateData: jest.fn(),
+            setSwitchWalletBsData: jest.fn(),
         } as any)
         jest.spyOn(InAppBrowserProvider, "useInAppBrowser").mockReturnValue({
             postMessage: jest.fn(),
@@ -115,7 +114,7 @@ describe("SwitchWalletBottomSheet", () => {
         })
     })
 
-    it.each(["in-app"] as const)("should be able to sign certificate (%s)", async () => {
+    it.each(["in-app"] as const)("should be able to switch wallet (%s)", async () => {
         const switchWalletBsRef = { current: { present: jest.fn(), close: jest.fn() } }
         const postMessage = jest.fn()
         jest.spyOn(InteractionProvider, "useInteraction").mockReturnValue({
