@@ -508,7 +508,7 @@
   "DAPP_LOGIN_METHOD_CERTIFICATE": "Certificate",
   "DAPP_LOGIN_METHOD_SIMPLE": "No signature",
   "DAPP_LOGIN_METHOD_TYPED_DATA": "Typed data",
-  "DAPP_LOGIN_TITLE": "DApp Login",
+  "DAPP_LOGIN_TITLE": "dApp login",
   "DAPP_SIGN_CERT": "Sign certificate",
   "DAPP_TRANSACTION": "DApp Transaction",
   "DAPP_TRANSACTION_SWAP": "Token swap",
