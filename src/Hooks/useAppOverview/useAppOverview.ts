@@ -19,6 +19,6 @@ export const useAppOverview = (appId: string | undefined, enabled = true) => {
         },
         enabled: enabled && !!appId,
         staleTime: 1000 * 60 * 60 * 24,
-        gcTime: 1000 * 60 * 60,
+        gcTime: 1000 * 60 * 60 * 24,
     })
 }
