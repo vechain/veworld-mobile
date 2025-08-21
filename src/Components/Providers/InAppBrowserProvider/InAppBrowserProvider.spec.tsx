@@ -1,5 +1,6 @@
 import { renderHook } from "@testing-library/react-hooks"
 import { act } from "@testing-library/react-native"
+import { TESTNET_NETWORK } from "@vechain/sdk-core"
 import React from "react"
 import { PlatformOSType } from "react-native"
 import { BaseToast } from "react-native-toast-message"
@@ -8,10 +9,8 @@ import { defaultTestNetwork, RequestMethods, ThemeEnum } from "~Constants"
 import { SecurePersistedCache } from "~Storage/PersistedCache"
 import { RootState } from "../../../Storage/Redux/Types"
 import { getStore } from "../../../Test"
-
 import { usePersistedTheme } from "../PersistedThemeProvider"
 
-import { TESTNET_NETWORK } from "@vechain/sdk-core"
 import * as InteractionProvider from "../InteractionProvider"
 import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
 
