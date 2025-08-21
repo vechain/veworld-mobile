@@ -1,10 +1,13 @@
-import React, { PropsWithChildren } from "react"
+import React, { PropsWithChildren, useMemo } from "react"
 import Animated, { useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated"
-import { BaseButton, BaseIcon, BaseSpacer, BaseText } from "~Components"
+import { getTimeZone } from "react-native-localize"
+import { BaseButton, BaseIcon, BaseSkeleton, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
 import { useTheme } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
+import { FetchAppOverviewResponse } from "~Networking/API/Types"
+import { BigNutils, DateUtils } from "~Utils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { LAYOUT_TRANSITION, SPRING_CONFIG, TIMING_CONFIG } from "./constants"
 
@@ -33,7 +36,7 @@ interface StatItemProps {
     icon: IconKey
 }
 
-const StatItem = React.memo(({ value, label, icon }: StatItemProps) => {
+const StatItem = React.memo(({ value, label, icon, isLoading = false }: StatItemProps & { isLoading?: boolean }) => {
     const theme = useTheme()
 
     return (
@@ -43,14 +46,28 @@ const StatItem = React.memo(({ value, label, icon }: StatItemProps) => {
             <BaseText typographyFont="captionMedium" color={theme.colors.x2eAppOpenDetails.stats.caption}>
                 {label}
             </BaseText>
-            <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.x2eAppOpenDetails.stats.value}>
-                {value}
-            </BaseText>
+            <BaseSpacer height={2} />
+            {isLoading ? (
+                <BaseSkeleton
+                    animationDirection="horizontalLeft"
+                    boneColor={theme.colors.skeletonBoneColor}
+                    highlightColor={theme.colors.skeletonHighlightColor}
+                    width={60}
+                    height={16}
+                />
+            ) : (
+                <BaseText typographyFont="subSubTitleSemiBold" color={theme.colors.x2eAppOpenDetails.stats.value}>
+                    {value}
+                </BaseText>
+            )}
         </BaseView>
     )
 })
 
 interface StatsProps {
+    appOverview?: FetchAppOverviewResponse
+    isLoading?: boolean
+    createdAtTimestamp?: string
     joined?: StatItemProps
     users?: StatItemProps
     actions?: StatItemProps
@@ -58,10 +75,41 @@ interface StatsProps {
 
 const Stats = React.memo(
     ({
-        joined = { value: "4.5", label: "Joined", icon: "icon-certified" },
-        users = { value: "1.1M", label: "Users", icon: "icon-users" },
-        actions = { value: "10.8 T", label: "Actions", icon: "icon-leaf" },
+        appOverview,
+        isLoading = false,
+        createdAtTimestamp,
+        joined = { value: "", label: "Joined", icon: "icon-certified" },
+        users = { value: "", label: "Users", icon: "icon-users" },
+        actions = { value: "", label: "Actions", icon: "icon-leaf" },
     }: StatsProps) => {
+        const { locale } = useI18nContext()
+
+        const joinedDate = useMemo(() => {
+            if (createdAtTimestamp) {
+                return DateUtils.formatDateTime(
+                    Number(createdAtTimestamp) * 1000,
+                    locale,
+                    getTimeZone() ?? DateUtils.DEFAULT_TIMEZONE,
+                    { hideTime: true, hideDay: true },
+                )
+            }
+            return joined.value
+        }, [createdAtTimestamp, locale, joined.value])
+
+        const usersCount = useMemo(() => {
+            if (appOverview?.totalUniqueUserInteractions !== undefined) {
+                return BigNutils(appOverview.totalUniqueUserInteractions).toCompactString(locale)
+            }
+            return users.value
+        }, [appOverview?.totalUniqueUserInteractions, locale, users.value])
+
+        const actionsCount = useMemo(() => {
+            if (appOverview?.actionsRewarded !== undefined) {
+                return BigNutils(appOverview.actionsRewarded).toCompactString(locale)
+            }
+            return actions.value
+        }, [appOverview?.actionsRewarded, locale, actions.value])
+
         return (
             <AnimatedBaseView
                 layout={LAYOUT_TRANSITION}
@@ -69,9 +117,9 @@ const Stats = React.memo(
                 justifyContent="space-between"
                 py={8}
                 gap={8}>
-                {joined && <StatItem value={joined.value} label={joined.label} icon={joined.icon} />}
-                {users && <StatItem value={users.value} label={users.label} icon={users.icon} />}
-                {actions && <StatItem value={actions.value} label={actions.label} icon={actions.icon} />}
+                <StatItem value={joinedDate} label={joined.label} icon={joined.icon} isLoading={false} />
+                <StatItem value={usersCount} label={users.label} icon={users.icon} isLoading={isLoading} />
+                <StatItem value={actionsCount} label={actions.label} icon={actions.icon} isLoading={isLoading} />
             </AnimatedBaseView>
         )
     },
@@ -127,7 +175,7 @@ const Actions = React.memo(({ onAddToFavorites = () => {}, onOpen = () => {}, is
     const { LL } = useI18nContext()
 
     return (
-        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" gap={8} w={100} mt={8}>
+        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" gap={16} w={100} mt={8}>
             <FavoriteButton onAddToFavorites={onAddToFavorites} isFavorite={isFavorite} />
             <BaseButton flex={1} action={onOpen}>
                 {LL.BTN_OPEN()}
