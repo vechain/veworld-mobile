@@ -51,6 +51,7 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
                 keyExtractor={item => item.toString()}
                 scrollEnabled={false}
                 shouldRasterizeIOS
+                windowSize={5}
                 ItemSeparatorComponent={renderItemSeparator}
                 contentContainerStyle={styles.flatListPadding}
             />
@@ -68,6 +69,7 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
             showsVerticalScrollIndicator={false}
             showsHorizontalScrollIndicator={false}
             renderItem={renderItem}
+            windowSize={5}
         />
     )
 }

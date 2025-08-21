@@ -148,6 +148,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         ListFooterComponent={renderFooter}
                         showsVerticalScrollIndicator={false}
                         testID="draggable-dapps-list"
+                        windowSize={5}
                         activationDistance={isEditingMode ? 10 : 30}
                         ListEmptyComponent={
                             <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />

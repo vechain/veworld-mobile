@@ -67,12 +67,14 @@ export const DiscoverySlice = createSlice({
             const isCustom = (discoveryDapp.isCustom || false) ?? false
 
             const bookmark = {
+                id: discoveryDapp.id || vbdDapp.id,
                 name: discoveryDapp.name || vbdDapp.name,
                 href: discoveryDapp.href || vbdDapp.external_url,
                 desc: discoveryDapp.desc || vbdDapp.description,
                 isCustom,
                 createAt: new Date().getTime(),
                 amountOfNavigations: 1,
+                veBetterDaoId: vbdDapp.id || discoveryDapp.veBetterDaoId,
             }
 
             if (isCustom) {

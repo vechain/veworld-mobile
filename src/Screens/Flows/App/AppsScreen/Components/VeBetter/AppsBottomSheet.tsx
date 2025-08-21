@@ -52,15 +52,16 @@ const AppListItem = React.memo(({ dapp, onDismiss, openItemId, onToggleOpenItem 
             name: dapp.name,
             href: dapp.external_url,
             desc: dapp.description,
-            createAt: parseInt(dapp.createdAtTimestamp),
+            createAt: parseInt(dapp.createdAtTimestamp, 10),
             isCustom: false,
             amountOfNavigations: 0,
             veBetterDaoId: dapp.id,
+            iconUri: logoUrl,
         }
 
         await onDAppPress(discoveryDApp)
         onDismiss?.()
-    }, [dapp, onDAppPress, onDismiss])
+    }, [dapp, onDAppPress, onDismiss, logoUrl])
 
     const categoryDisplayNames = useMemo(() => {
         if (!dapp.categories || dapp.categories.length === 0) {
@@ -169,6 +170,7 @@ const AppList = React.memo(({ apps, isLoading, onDismiss, openItemId, onToggleOp
                 ItemSeparatorComponent={renderItemSeparator}
                 scrollEnabled={false}
                 contentContainerStyle={styles.flatListPadding}
+                windowSize={5}
             />
         )
     }
