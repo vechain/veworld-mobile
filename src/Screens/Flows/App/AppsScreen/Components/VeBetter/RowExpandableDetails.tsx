@@ -93,21 +93,21 @@ const Stats = React.memo(
                     { hideTime: true, hideDay: true },
                 )
             }
-            return joined.value || "N/A"
+            return joined.value
         }, [createdAtTimestamp, locale, joined.value])
 
         const usersCount = useMemo(() => {
             if (appOverview?.totalUniqueUserInteractions !== undefined) {
                 return BigNutils(appOverview.totalUniqueUserInteractions).toCompactString(locale)
             }
-            return users.value || "N/A"
+            return users.value
         }, [appOverview?.totalUniqueUserInteractions, locale, users.value])
 
         const actionsCount = useMemo(() => {
             if (appOverview?.actionsRewarded !== undefined) {
                 return BigNutils(appOverview.actionsRewarded).toCompactString(locale)
             }
-            return actions.value || "N/A"
+            return actions.value
         }, [appOverview?.actionsRewarded, locale, actions.value])
 
         return (
