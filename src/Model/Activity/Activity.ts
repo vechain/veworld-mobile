@@ -1,5 +1,5 @@
 import { DIRECTIONS } from "~Constants"
-import { TypedData } from "~Model"
+import { TypedData, TypedDataMessage } from "~Model"
 import { ActivityEvent, ActivityStatus, ActivitySupport, ActivityType } from "./enum"
 import { TokenLevelId } from "~Utils/StargateUtils"
 
@@ -140,6 +140,26 @@ export interface TypedDataActivity extends Activity {
     typedData: TypedData
     sender: string
 }
+
+/**
+ * Type for describing the activity value
+ */
+export type LoginActivityValue =
+    | { kind: "simple"; value: null }
+    | { kind: "certificate"; value: Connex.Vendor.CertMessage }
+    | {
+          kind: "typed-data"
+          value: TypedDataMessage
+      }
+
+/**
+ * The LoginActivity type represents a dapp login from the in app browser.
+ */
+export type LoginActivity = Activity & {
+    type: ActivityType.DAPP_LOGIN
+    linkUrl: string
+} & LoginActivityValue
+
 export interface B3trActionActivity extends Activity {
     type: ActivityType.B3TR_ACTION
     value: string

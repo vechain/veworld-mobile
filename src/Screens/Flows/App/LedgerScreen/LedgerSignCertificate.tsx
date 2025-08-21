@@ -23,8 +23,9 @@ import {
 import { ERROR_EVENTS, LEDGER_ERROR_CODES } from "~Constants"
 import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
 import { useLoginSession } from "~Hooks/useLoginSession"
+import { LoginActivityValue } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
-import { addSession, useAppDispatch } from "~Storage/Redux"
+import { addLoginActivity, addSession, addSignCertificateActivity, useAppDispatch } from "~Storage/Redux"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -206,8 +207,23 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
 
             await disconnectLedger()
 
-            if (request.method === "thor_signCertificate") createSessionIfNotExists(request)
-            if (request.method === "thor_connect") {
+            if (request.method === "thor_signCertificate") {
+                createSessionIfNotExists(request)
+                dispatch(
+                    addSignCertificateActivity(
+                        request.appName,
+                        certificate.domain,
+                        certificate.payload.content,
+                        certificate.purpose,
+                    ),
+                )
+            } else if (request.method === "thor_connect") {
+                dispatch(
+                    addLoginActivity({
+                        appUrl: request.appUrl,
+                        ...({ kind: request.kind, value: request.value } as LoginActivityValue),
+                    }),
+                )
                 if (request.external) {
                     dispatch(
                         addSession({
@@ -253,14 +269,16 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         certificate.domain,
         certificate.timestamp,
         certificate.signer,
+        certificate.payload.content,
+        certificate.purpose,
         request,
         disconnectLedger,
-        createSessionIfNotExists,
         navigateOnFinish,
         processRequest,
         postMessage,
-        keepMeLoggedIn,
+        createSessionIfNotExists,
         dispatch,
+        keepMeLoggedIn,
         LL,
     ])
 

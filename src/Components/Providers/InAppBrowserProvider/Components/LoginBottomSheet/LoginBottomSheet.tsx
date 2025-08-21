@@ -8,20 +8,21 @@ import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
-import { COLORS } from "~Constants"
-import { useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
+import { AnalyticsEvent, COLORS, ERROR_EVENTS } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
-import { DEVICE_TYPE, LedgerAccountWithDevice, LoginRequest, TypedDataMessage } from "~Model"
+import { DEVICE_TYPE, LedgerAccountWithDevice, LoginActivityValue, LoginRequest, TypedDataMessage } from "~Model"
 import { Routes } from "~Navigation"
 import {
+    addLoginActivity,
     addSession,
     selectSelectedAccountOrNull,
     selectVisibleAccountsWithoutObserved,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AccountUtils, HexUtils } from "~Utils"
+import { AccountUtils, error, HexUtils } from "~Utils"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappDetails } from "../DappDetails"
 import { DappDetailsCard } from "../DappDetailsCard"
@@ -220,6 +221,8 @@ export const LoginBottomSheet = () => {
 
     const nav = useNavigation()
 
+    const track = useAnalyticTracking()
+
     const buildTypedData = useCallback(
         (request: Extract<LoginRequest, { kind: "typed-data" }>) => {
             if (!selectedAccount) return
@@ -351,11 +354,18 @@ export const LoginBottomSheet = () => {
                     method: request.method,
                 })
 
-                //TODO: Maybe add Login activity?
-                //TODO: Maybe track Login with MP
+                dispatch(
+                    addLoginActivity({
+                        appUrl: request.appUrl,
+                        ...({ kind: request.kind, value: request.value } as LoginActivityValue),
+                    }),
+                )
 
+                track(AnalyticsEvent.DAPP_LOGIN_SUCCESS)
                 isUserAction.current = true
-            } catch (error) {
+            } catch (err) {
+                track(AnalyticsEvent.DAPP_LOGIN_FAILED)
+                error(ERROR_EVENTS.DAPP_METHODS, err)
                 postMessage({
                     id: request.id,
                     error: "Login failed",
@@ -364,7 +374,7 @@ export const LoginBottomSheet = () => {
             }
             onCloseBs()
         },
-        [buildCertificate, dispatch, nav, onCloseBs, postMessage, selectedAccount, signRequest],
+        [buildCertificate, dispatch, nav, onCloseBs, postMessage, selectedAccount, signRequest, track],
     )
 
     const rejectRequest = useCallback(
