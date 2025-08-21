@@ -29,7 +29,7 @@ jest.mock("react-native-safe-area-context", () => {
 
 describe("VbdCarousel", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.restoreAllMocks()
     })
     it("should render items if loaded", () => {
         ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({

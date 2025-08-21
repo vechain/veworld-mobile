@@ -293,7 +293,7 @@ describe("useCheckAppVersion", () => {
                     },
                 },
             }
-
+            jest.mocked(DeviceInfo.getVersion).mockReturnValue("1.0.0")
             jest.mocked(SemanticVersionUtils.moreThan).mockImplementation((major, installed) => {
                 return major === "2.0.0" && installed === "1.0.0"
             })
