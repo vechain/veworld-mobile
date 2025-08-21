@@ -76,6 +76,7 @@ export const selectSession = createSelector(
     getDiscoveryState,
     (_: RootState, url: string, genesisId?: string) => ({ url, genesisId }),
     (state, { url, genesisId }) => {
+        if (!url) return undefined
         const session = state.sessions?.[new URL(url).origin]
         if (!genesisId) return session
         if (session?.genesisId?.toLowerCase() === genesisId) return session

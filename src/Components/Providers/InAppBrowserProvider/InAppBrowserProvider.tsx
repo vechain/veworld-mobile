@@ -632,7 +632,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
             const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.REQUEST_TRANSACTION)
             if (res) return
-
             if (
                 (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
                 selectedNetwork.genesis.id === request.genesisId

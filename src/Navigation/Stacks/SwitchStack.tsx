@@ -40,6 +40,7 @@ export type RootStackParamListSwitch = {
         request: CertificateRequest | Extract<LoginRequest, { kind: "certificate" }>
         certificate: Certificate
         accountWithDevice: LedgerAccountWithDevice
+        keepMeLoggedIn?: boolean
     }
     [Routes.LEDGER_SIGN_TRANSACTION]: {
         accountWithDevice: LedgerAccountWithDevice

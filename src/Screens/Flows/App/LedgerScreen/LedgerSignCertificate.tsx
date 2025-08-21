@@ -24,6 +24,7 @@ import { ERROR_EVENTS, LEDGER_ERROR_CODES } from "~Constants"
 import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
 import { useLoginSession } from "~Hooks/useLoginSession"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { addSession, useAppDispatch } from "~Storage/Redux"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 
@@ -38,7 +39,7 @@ enum SigningStep {
 }
 
 export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, request, certificate } = route.params
+    const { accountWithDevice, request, certificate, keepMeLoggedIn } = route.params
 
     const { processRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
@@ -52,6 +53,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
     const [signingError, setSigningError] = useState<boolean>()
     const [isSending, setIsSending] = useState(false)
+    const dispatch = useAppDispatch()
 
     const {
         ref: connectionErrorSheetRef,
@@ -205,6 +207,35 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
             await disconnectLedger()
 
             if (request.method === "thor_signCertificate") createSessionIfNotExists(request)
+            if (request.method === "thor_connect") {
+                if (request.external) {
+                    dispatch(
+                        addSession({
+                            kind: "external",
+                            url: request.appUrl,
+                            address: certificate.signer.toLowerCase() ?? "",
+                            genesisId: request.genesisId,
+                        }),
+                    )
+                } else if (keepMeLoggedIn) {
+                    dispatch(
+                        addSession({
+                            kind: "permanent",
+                            url: request.appUrl,
+                            genesisId: request.genesisId,
+                        }),
+                    )
+                } else {
+                    dispatch(
+                        addSession({
+                            kind: "temporary",
+                            url: request.appUrl,
+                            address: certificate.signer.toLowerCase() ?? "",
+                            genesisId: request.genesisId,
+                        }),
+                    )
+                }
+            }
 
             navigateOnFinish()
         } catch (e) {
@@ -228,6 +259,8 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         navigateOnFinish,
         processRequest,
         postMessage,
+        keepMeLoggedIn,
+        dispatch,
         LL,
     ])
 

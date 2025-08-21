@@ -149,7 +149,7 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
                 renderDetailsButton={request.kind !== "simple"}>
                 {({ visible }) => (
                     <>
-                        {selectedAccount?.device.type === DEVICE_TYPE.LEDGER && (
+                        {selectedAccount?.device.type === DEVICE_TYPE.LEDGER && request.kind === "typed-data" && (
                             <>
                                 <TypedDataLedgerDeviceAlert />
                                 <BaseSpacer height={16} />
@@ -309,7 +309,9 @@ export const LoginBottomSheet = () => {
                             request,
                             accountWithDevice: selectedAccount as LedgerAccountWithDevice,
                             certificate: cert.certificate,
+                            keepMeLoggedIn,
                         })
+                        return
                     }
                 }
 
@@ -353,7 +355,7 @@ export const LoginBottomSheet = () => {
                 //TODO: Maybe track Login with MP
 
                 isUserAction.current = true
-            } catch {
+            } catch (error) {
                 postMessage({
                     id: request.id,
                     error: "Login failed",
