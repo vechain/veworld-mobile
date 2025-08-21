@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseTouchable, BaseSpacer, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -8,7 +8,7 @@ import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { EcosystemSection } from "./Components/Ecosystem"
-import { VeBetterSection } from "./Components/VeBetter"
+import { AppsBottomSheet, VeBetterSection } from "./Components/VeBetter"
 import { ForYouCarousel } from "./Components/ForYouCarousel/ForYouCarousel"
 import { NewUserForYouCarousel } from "./Components/ForYouCarousel/NewUserForYouCarousel"
 import { useAppSelector } from "~Storage/Redux/Hooks"
@@ -18,12 +18,20 @@ import { Favourites } from "../DiscoverScreen/Components/Favourites"
 import { FavoritesBottomSheet } from "./Components/FavoritesBottomSheet"
 import { FavoritesSuggestionBanner } from "./Components/FavoritesSuggestionBanner"
 import { VeBetterDAOCarousel } from "../DiscoverScreen/Components/VeBetterDAOCarousel"
+import { X2ECategoryType } from "~Model"
 
 export const AppsScreen = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav = useNavigation()
+    const [selectedCategoryId, setSelectedCategoryId] = useState<X2ECategoryType | undefined>()
+
     const { ref: favoritesRef, onOpen: onOpenFavorites, onClose: onCloseFavorites } = useBottomSheetModal()
+    const {
+        ref: appsBottomSheetRef,
+        onOpen: onOpenAppsBottomSheet,
+        onClose: onCloseAppsBottomSheet,
+    } = useBottomSheetModal()
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const { onDAppPress } = useDAppActions()
@@ -35,6 +43,24 @@ export const AppsScreen = () => {
     const goToSearch = useCallback(() => {
         nav.navigate(Routes.APPS_SEARCH)
     }, [nav])
+
+    const handleCategoryPress = useCallback(
+        (categoryId: X2ECategoryType) => {
+            setSelectedCategoryId(categoryId)
+            onOpenAppsBottomSheet()
+        },
+        [onOpenAppsBottomSheet],
+    )
+
+    const handleCloseAppsBottomSheet = useCallback(() => {
+        onCloseAppsBottomSheet()
+        setSelectedCategoryId(undefined)
+    }, [onCloseAppsBottomSheet])
+
+    const handleFavoritesSuggestionPress = useCallback(() => {
+        setSelectedCategoryId(X2ECategoryType.NUTRITION)
+        onOpenAppsBottomSheet()
+    }, [onOpenAppsBottomSheet])
 
     return (
         <Layout
@@ -78,12 +104,12 @@ export const AppsScreen = () => {
 
                     <BaseSpacer height={48} />
 
-                    <VeBetterSection />
+                    <VeBetterSection onPressCategory={handleCategoryPress} />
                     <BaseSpacer height={48} />
 
                     {!showFavorites && (
                         <>
-                            <FavoritesSuggestionBanner onPress={() => {}} />
+                            <FavoritesSuggestionBanner onPress={handleFavoritesSuggestionPress} />
                             <BaseSpacer height={48} />
                         </>
                     )}
@@ -97,6 +123,11 @@ export const AppsScreen = () => {
 
                     <EcosystemSection />
                     <FavoritesBottomSheet ref={favoritesRef} onClose={onCloseFavorites} />
+                    <AppsBottomSheet
+                        ref={appsBottomSheetRef}
+                        onDismiss={handleCloseAppsBottomSheet}
+                        initialCategoryId={selectedCategoryId}
+                    />
                 </>
             }
         />

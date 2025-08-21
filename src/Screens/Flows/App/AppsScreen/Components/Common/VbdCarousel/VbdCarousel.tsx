@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
 import { VbdCarouselItem } from "./VbdCarouselItem"
 import { VbdCarouselItemSkeleton } from "./VbdCarouselItemSkeleton"
@@ -17,19 +17,23 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { data: vbdApps, isLoading: vbdLoading } = useVeBetterDaoDapps(true)
 
+    const { ref, onOpen, onClose: onCloseBS } = useBottomSheetModal()
+
     const isLoading = useMemo(() => propsIsLoading || vbdLoading, [propsIsLoading, vbdLoading])
-    const [isBSOpen, setIsBSOpen] = useState(false)
     const [BSMetadata, setBSMetadata] = useState<Partial<VbdCarouselBottomSheetMetadata>>({})
 
-    const onPressItem = useCallback((newMetadata: VbdCarouselBottomSheetMetadata) => {
-        setBSMetadata(newMetadata)
-        setIsBSOpen(true)
-    }, [])
+    const onPressItem = useCallback(
+        (newMetadata: VbdCarouselBottomSheetMetadata) => {
+            setBSMetadata(newMetadata)
+            onOpen()
+        },
+        [onOpen],
+    )
 
-    const onCloseBS = useCallback(() => {
-        setIsBSOpen(false)
+    const onCloseBottomSheet = useCallback(() => {
+        onCloseBS()
         setBSMetadata({})
-    }, [])
+    }, [onCloseBS])
 
     const items = useMemo(() => {
         if (isLoading || !vbdApps?.length || !appIds.length)
@@ -65,8 +69,8 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
             />
 
             <VbdCarouselBottomSheet
-                isOpen={isBSOpen}
-                onClose={onCloseBS}
+                bsRef={ref}
+                onClose={onCloseBottomSheet}
                 bannerUri={BSMetadata?.bannerUri}
                 iconUri={BSMetadata?.iconUri}
                 app={BSMetadata?.app}

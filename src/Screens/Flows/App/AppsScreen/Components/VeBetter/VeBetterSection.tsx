@@ -1,13 +1,12 @@
-import React, { useCallback, useState } from "react"
+import React from "react"
 import { ScrollView, StyleSheet } from "react-native"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
 import { ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useTheme, useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { X2ECategoryType } from "~Model/DApp"
 import { useCategories } from "./Hooks"
-import { AppsBottomSheet } from "./AppsBottomSheet"
 
 type Props = {
     title: string
@@ -56,45 +55,20 @@ const VeBetterCategoryList = React.memo(({ categories, onPressCategory }: VeBett
     )
 })
 
-export const VeBetterSection = () => {
+type VeBetterSectionProps = {
+    onPressCategory: (categoryId: X2ECategoryType) => void
+}
+
+export const VeBetterSection = ({ onPressCategory }: VeBetterSectionProps) => {
     const { LL } = useI18nContext()
-    const { data: allApps, isLoading } = useVeBetterDaoDapps()
     const categories = useCategories()
-
-    const [selectedCategoryId, setSelectedCategoryId] = useState<X2ECategoryType | undefined>()
-
-    const {
-        ref: appsBottomSheetRef,
-        onOpen: onOpenAppsBottomSheet,
-        onClose: onCloseAppsBottomSheet,
-    } = useBottomSheetModal()
-
-    const handleCategoryPress = useCallback(
-        (categoryId: X2ECategoryType) => {
-            setSelectedCategoryId(categoryId)
-            onOpenAppsBottomSheet()
-        },
-        [onOpenAppsBottomSheet],
-    )
-
-    const handleCloseAppsBottomSheet = useCallback(() => {
-        onCloseAppsBottomSheet()
-        setSelectedCategoryId(undefined)
-    }, [onCloseAppsBottomSheet])
 
     return (
         <BaseView gap={16} justifyContent="flex-start" alignItems="flex-start">
             <BaseText mx={16} typographyFont="subSubTitleSemiBold">
                 {LL.TITLE_VEBETTER()}
             </BaseText>
-            <VeBetterCategoryList categories={categories} onPressCategory={handleCategoryPress} />
-            <AppsBottomSheet
-                ref={appsBottomSheetRef}
-                onDismiss={handleCloseAppsBottomSheet}
-                allApps={allApps}
-                isLoading={isLoading}
-                initialCategoryId={selectedCategoryId}
-            />
+            <VeBetterCategoryList categories={categories} onPressCategory={onPressCategory} />
         </BaseView>
     )
 }

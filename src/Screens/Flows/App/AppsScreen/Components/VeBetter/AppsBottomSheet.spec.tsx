@@ -3,6 +3,7 @@ import { render, screen } from "@testing-library/react-native"
 import { AppsBottomSheet } from "./AppsBottomSheet"
 import { TestWrapper, TestHelpers } from "~Test"
 import { X2ECategoryType } from "~Model/DApp"
+import { useVeBetterDaoDapps } from "~Hooks"
 
 const Wrapper = ({ children }: PropsWithChildren) => (
     <TestWrapper
@@ -38,9 +39,15 @@ jest.mock("./Hooks/useX2EAppAnimation", () => ({
     }),
 }))
 
+jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps", () => ({
+    useVeBetterDaoDapps: jest.fn().mockReturnValue({
+        data: [],
+        isLoading: false,
+    }),
+}))
+
 describe("X2EAppsBottomSheet", () => {
     const mockApps = [TestHelpers.data.mockApp1, TestHelpers.data.mockApp2]
-
     const mockSelectedCategory = {
         id: X2ECategoryType.NUTRITION,
         displayName: "Food & Drink",
@@ -59,77 +66,105 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should render the bottom sheet component", () => {
-        render(<AppsBottomSheet isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
+        render(<AppsBottomSheet />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
 
     it("should handle loading state", () => {
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: mockApps,
+            isLoading: true,
+        })
         mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: [],
         })
 
-        render(<AppsBottomSheet isLoading={true} allApps={mockApps} />, { wrapper: Wrapper })
+        render(<AppsBottomSheet />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
 
     it("should handle empty apps list", () => {
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
         mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: [],
         })
 
-        render(<AppsBottomSheet isLoading={false} allApps={[]} />, { wrapper: Wrapper })
+        render(<AppsBottomSheet />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
 
     it("should render apps when data is available", () => {
-        render(<AppsBottomSheet isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: mockApps,
+            isLoading: false,
+        })
+        render(<AppsBottomSheet />, { wrapper: Wrapper })
 
         expect(screen.getByText("A App")).toBeTruthy()
         expect(screen.getByText("B App")).toBeTruthy()
     })
 
     it("should handle forwardRef correctly", () => {
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: mockApps,
+            isLoading: false,
+        })
         const ref = React.createRef<any>()
-        render(<AppsBottomSheet ref={ref} isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
+        render(<AppsBottomSheet ref={ref} />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
 
     it("should handle onDismiss prop", () => {
         const mockOnDismiss = jest.fn()
-        render(<AppsBottomSheet onDismiss={mockOnDismiss} isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: mockApps,
+            isLoading: false,
+        })
+        render(<AppsBottomSheet onDismiss={mockOnDismiss} />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
 
     it("should render loading skeleton when isLoading is true", () => {
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: mockApps,
+            isLoading: true,
+        })
         mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: mockApps,
         })
 
-        render(<AppsBottomSheet isLoading={true} allApps={mockApps} />, { wrapper: Wrapper })
+        render(<AppsBottomSheet />, { wrapper: Wrapper })
 
         expect(screen.queryByText("A App")).toBeNull()
         expect(screen.queryByText("B App")).toBeNull()
     })
 
     it("should render apps when isLoading is false", () => {
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: mockApps,
+            isLoading: false,
+        })
         mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: mockApps,
         })
 
-        render(<AppsBottomSheet isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
+        render(<AppsBottomSheet />, { wrapper: Wrapper })
 
         expect(screen.getByText("A App")).toBeVisible()
         expect(screen.getByText("B App")).toBeVisible()
@@ -138,13 +173,17 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should render empty list when no apps are provided", () => {
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: [],
+            isLoading: false,
+        })
         mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: mockSelectedCategory,
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: [],
         })
 
-        render(<AppsBottomSheet isLoading={false} allApps={[]} />, { wrapper: Wrapper })
+        render(<AppsBottomSheet />, { wrapper: Wrapper })
 
         expect(screen.queryByText("A App")).toBeNull()
         expect(screen.queryByText("B App")).toBeNull()
@@ -169,6 +208,10 @@ describe("X2EAppsBottomSheet", () => {
                 ve_world: undefined,
             },
         ]
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: minimalApps,
+            isLoading: false,
+        })
 
         mockUseCategoryFiltering.mockReturnValue({
             selectedCategory: mockSelectedCategory,
@@ -176,7 +219,7 @@ describe("X2EAppsBottomSheet", () => {
             filteredApps: minimalApps,
         })
 
-        render(<AppsBottomSheet isLoading={false} allApps={minimalApps} />, { wrapper: Wrapper })
+        render(<AppsBottomSheet />, { wrapper: Wrapper })
 
         expect(screen.getByText("Minimal App")).toBeVisible()
         expect(screen.getByText("Minimal description")).toBeVisible()
@@ -194,8 +237,12 @@ describe("X2EAppsBottomSheet", () => {
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: [mockApps[1]],
         })
+        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+            data: mockApps,
+            isLoading: false,
+        })
 
-        render(<AppsBottomSheet isLoading={false} allApps={mockApps} />, { wrapper: Wrapper })
+        render(<AppsBottomSheet />, { wrapper: Wrapper })
 
         expect(screen.getAllByText("Recycling").length).toBeGreaterThan(0)
         expect(screen.getByText("B App")).toBeVisible()

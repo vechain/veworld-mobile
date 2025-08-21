@@ -4,6 +4,7 @@ import React, { forwardRef, useCallback, useMemo, useState, useEffect } from "re
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBatchAppOverviews, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType } from "~Model"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
@@ -35,8 +36,6 @@ type X2EAppItemProps = {
 
 type X2EAppsBottomSheetProps = {
     onDismiss?: () => void
-    allApps?: X2EDapp[]
-    isLoading: boolean
     initialCategoryId?: X2ECategoryType
 }
 
@@ -58,15 +57,16 @@ const AppListItem = React.memo(
                 name: dapp.name,
                 href: dapp.external_url,
                 desc: dapp.description,
-                createAt: parseInt(dapp.createdAtTimestamp),
+                createAt: parseInt(dapp.createdAtTimestamp, 10),
                 isCustom: false,
                 amountOfNavigations: 0,
                 veBetterDaoId: dapp.id,
+                iconUri: logoUrl,
             }
 
             await onDAppPress(discoveryDApp)
             onDismiss?.()
-        }, [dapp, onDAppPress, onDismiss])
+        }, [dapp, onDAppPress, onDismiss, logoUrl])
 
         const categoryDisplayNames = useMemo(() => {
             if (!dapp.categories || dapp.categories.length === 0) {
@@ -199,6 +199,7 @@ const AppList = React.memo(
                     ItemSeparatorComponent={renderItemSeparator}
                     scrollEnabled={false}
                     contentContainerStyle={styles.flatListPadding}
+                    windowSize={5}
                 />
             )
         }
@@ -217,7 +218,8 @@ const AppList = React.memo(
 )
 
 export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(
-    ({ onDismiss, allApps, isLoading, initialCategoryId }, ref) => {
+    ({ onDismiss, initialCategoryId }, ref) => {
+        const { data: allApps, isLoading } = useVeBetterDaoDapps()
         const theme = useTheme()
         const [openItemId, setOpenItemId] = useState<string | null>(null)
 
