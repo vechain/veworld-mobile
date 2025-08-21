@@ -23,6 +23,7 @@ import {
     FungibleToken,
     FungibleTokenActivity,
     IconKey,
+    LoginActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
     StargateActivity,
@@ -964,6 +965,31 @@ const VeVoteCast = ({ activity, onPress }: VeVoteCastProps) => {
     )
 }
 
+type DappLoginProps = {
+    activity: LoginActivity
+    onPress: (activity: Activity) => void
+}
+
+const DappLogin = ({ activity, onPress }: DappLoginProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    return (
+        <BaseActivityBox
+            testID={`DAPP-LOGIN-${activity.id}`}
+            icon="icon-user-check"
+            time={time}
+            title={LL.DAPP_LOGIN_TITLE()}
+            description={new URL(activity.linkUrl).hostname}
+            onPress={onPressHandler}
+        />
+    )
+}
+
 export const ActivityBox = {
     TokenTransfer: TokenTransfer,
     DAppTransaction: DAppTransaction,
@@ -983,4 +1009,5 @@ export const ActivityBox = {
     B3trProposalSupport: B3trProposalSupport,
     UnknownTx: UnknownTx,
     VeVoteCast,
+    DappLogin,
 }

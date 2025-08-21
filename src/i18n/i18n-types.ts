@@ -4101,14 +4101,6 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
-	 * A​p​p​l​y
-	 */
-	SWITCH_WALLET_REQUEST_CTA: string
-	/**
-	 * C​h​a​n​g​e​ ​w​a​l​l​e​t
-	 */
-	SWITCH_WALLET_REQUEST_TITLE: string
-	/**
 	 * S​i​g​n​ ​t​r​a​n​s​a​c​t​i​o​n
 	 */
 	SIGN_TRANSACTION: string
@@ -4197,6 +4189,14 @@ type RootTranslation = {
 	 * S​w​a​p​ ​t​o​k​e​n​s
 	 */
 	SWAP_TITLE: string
+	/**
+	 * A​p​p​l​y
+	 */
+	SWITCH_WALLET_REQUEST_CTA: string
+	/**
+	 * C​h​a​n​g​e​ ​w​a​l​l​e​t
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: string
 	/**
 	 * S​y​s​t​e​m
 	 */
@@ -4552,6 +4552,10 @@ type RootTranslation = {
 	 * V​e​V​o​t​e
 	 */
 	VEVOTE_CAST_TITLE: string
+	/**
+	 * D​A​p​p​ ​L​o​g​i​n
+	 */
+	DAPP_LOGIN_TITLE: string
 	/**
 	 * V​e​W​o​r​l​d
 	 */
@@ -8769,14 +8773,6 @@ Are you sure you want to continue?
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
-	 * Apply
-	 */
-	SWITCH_WALLET_REQUEST_CTA: () => LocalizedString
-	/**
-	 * Change wallet
-	 */
-	SWITCH_WALLET_REQUEST_TITLE: () => LocalizedString
-	/**
 	 * Sign transaction
 	 */
 	SIGN_TRANSACTION: () => LocalizedString
@@ -8864,6 +8860,14 @@ Are you sure you want to continue?
 	 * Swap tokens
 	 */
 	SWAP_TITLE: () => LocalizedString
+	/**
+	 * Apply
+	 */
+	SWITCH_WALLET_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Change wallet
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * System
 	 */
@@ -9216,6 +9220,10 @@ Are you sure you want to continue?
 	 * VeVote
 	 */
 	VEVOTE_CAST_TITLE: () => LocalizedString
+	/**
+	 * DApp Login
+	 */
+	DAPP_LOGIN_TITLE: () => LocalizedString
 	/**
 	 * VeWorld
 	 */
