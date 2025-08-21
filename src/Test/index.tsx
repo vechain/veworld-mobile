@@ -22,7 +22,6 @@ import { RootState } from "~Storage/Redux/Types"
 import { usePersistedTheme } from "../Components/Providers/PersistedThemeProvider/PersistedThemeProvider"
 import TestHelpers from "./helpers"
 import { B3TRWithBalance, token1WithBalance, token2WithBalance, VOT3WithBalance } from "./helpers/data"
-import DeviceInfo from "react-native-device-info"
 
 export { default as TestHelpers } from "./helpers"
 
@@ -138,7 +137,6 @@ export const TestWrapper = ({
     children?: React.ReactNode
     preloadedState: Partial<RootState>
 }) => {
-    jest.spyOn(DeviceInfo, "getVersion").mockReturnValue("1.0.0")
     ;(usePersistedTheme as jest.Mock<ReturnType<typeof usePersistedTheme>>).mockReturnValue({
         themeCache: new SecurePersistedCache<ThemeEnum>("test-theme-key", "test-theme"),
         theme: ThemeEnum.DARK,
