@@ -86,15 +86,33 @@ describe("X2EAppDetails", () => {
     })
 
     describe("Stats", () => {
-        it("should render default stats correctly", () => {
-            render(<RowExpandableDetails.Stats />, { wrapper: Wrapper })
+        it("should render stats with app overview data", () => {
+            const mockAppOverview = {
+                totalUniqueUserInteractions: 1100000,
+                actionsRewarded: 10800000000000,
+            }
 
-            expect(screen.getByText(TEST_DATA.stats.joined)).toBeVisible()
-            expect(screen.getByText(TEST_DATA.stats.users)).toBeVisible()
-            expect(screen.getByText(TEST_DATA.stats.actions)).toBeVisible()
+            render(
+                <RowExpandableDetails.Stats appOverview={mockAppOverview as any} createdAtTimestamp="1640995200" />,
+                { wrapper: Wrapper },
+            )
+
             expect(screen.getByText(TEST_DATA.stats.joinedLabel)).toBeVisible()
             expect(screen.getByText(TEST_DATA.stats.usersLabel)).toBeVisible()
             expect(screen.getByText(TEST_DATA.stats.actionsLabel)).toBeVisible()
+            expect(screen.getByText("1.1M")).toBeVisible() // formatted users
+            expect(screen.getByText("10.8T")).toBeVisible() // formatted actions
+        })
+
+        it("should render loading state for stats", () => {
+            render(<RowExpandableDetails.Stats isLoading={true} createdAtTimestamp="1640995200" />, {
+                wrapper: Wrapper,
+            })
+
+            expect(screen.getByText(TEST_DATA.stats.joinedLabel)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.usersLabel)).toBeVisible()
+            expect(screen.getByText(TEST_DATA.stats.actionsLabel)).toBeVisible()
+            // Should show skeleton loading for users and actions, but actual date for joined
         })
 
         it("should render custom stats correctly", () => {
@@ -326,11 +344,19 @@ describe("X2EAppDetails", () => {
         })
 
         it("should render complex content structure", () => {
+            const mockAppOverview = {
+                totalUniqueUserInteractions: 1100000,
+                actionsRewarded: 10800000000000,
+            }
+
             render(
                 <RowExpandableDetails show={true}>
                     <RowExpandableDetails.Container>
                         <RowExpandableDetails.Description>{TEST_DATA.appDescription}</RowExpandableDetails.Description>
-                        <RowExpandableDetails.Stats />
+                        <RowExpandableDetails.Stats
+                            appOverview={mockAppOverview as any}
+                            createdAtTimestamp="1640995200"
+                        />
                         <RowExpandableDetails.Actions />
                     </RowExpandableDetails.Container>
                 </RowExpandableDetails>,
@@ -338,7 +364,7 @@ describe("X2EAppDetails", () => {
             )
 
             expect(screen.getByText(TEST_DATA.appDescription)).toBeVisible()
-            expect(screen.getByText(TEST_DATA.stats.joined)).toBeVisible()
+            expect(screen.getByText("1.1M")).toBeVisible() // formatted users from mock data
             expect(screen.getByText(TEST_DATA.buttons.favorite)).toBeVisible()
             expect(screen.getByText(TEST_DATA.buttons.open)).toBeVisible()
         })

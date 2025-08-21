@@ -616,10 +616,10 @@ const light: Colors = {
         text: COLORS.GREY_600,
     },
     stakedCard: {
-        fiatValue: COLORS.GREY_600,
+        fiatValue: COLORS.GREY_500,
         vetValue: COLORS.GREY_800,
-        tagBackground: COLORS.PRIMARY_200,
-        tagText: COLORS.PRIMARY_600,
+        tagBackground: COLORS.GREY_200,
+        tagText: COLORS.GREY_600,
     },
     stakedVetCard: {
         background: COLORS.GREY_50,
@@ -915,10 +915,10 @@ const dark: Colors = {
         text: COLORS.GREY_300,
     },
     stakedCard: {
-        fiatValue: COLORS.GREY_100,
+        fiatValue: COLORS.GREY_300,
         vetValue: COLORS.WHITE,
-        tagBackground: COLORS.PRIMARY_200,
-        tagText: COLORS.PRIMARY_600,
+        tagBackground: COLORS.PURPLE_DISABLED,
+        tagText: COLORS.GREY_300,
     },
     stakedVetCard: {
         background: COLORS.PURPLE,

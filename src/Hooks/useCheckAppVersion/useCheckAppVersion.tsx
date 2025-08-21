@@ -62,15 +62,11 @@ export const useCheckAppVersion = () => {
     const { data: versionInfo } = useQuery({
         queryKey: ["versionManifest"],
         queryFn: fetchVersionInfo,
-        select: data => ({
-            major: data.major,
-            latest: data.latest,
-            changelogKey: data.history.find(v => v.version === data.major)?.key ?? null,
-        }),
         staleTime: TWENTY_FOUR_HOURS,
         gcTime: TWENTY_FOUR_HOURS,
         retry: 3,
     })
+
     const { data: changelog } = useQuery({
         queryKey: ["changelog", versionUpdateStatus.changelogKey],
         queryFn: () => fetchChangelog(versionUpdateStatus.changelogKey),
@@ -83,10 +79,12 @@ export const useCheckAppVersion = () => {
             const installedVersion = DeviceInfo.getVersion()
             if (installedVersion !== versionUpdateStatus.installedVersion) {
                 dispatch(VersionUpdateSlice.actions.setInstalledVersion(installedVersion))
+
+                const userVersionInfo = versionInfo.history.find(v => v.version === installedVersion)
                 dispatch(
                     setChangelogToShow({
-                        shouldShow: true,
-                        changelogKey: versionInfo.changelogKey,
+                        shouldShow: !!userVersionInfo?.key,
+                        changelogKey: userVersionInfo?.key ?? null,
                     }),
                 )
             }
@@ -110,6 +108,7 @@ export const useCheckAppVersion = () => {
         versionUpdateStatus.installedVersion,
         versionUpdateStatus.majorVersion,
         versionUpdateStatus.latestVersion,
+        changelog,
     ])
 
     const shouldShowUpdatePrompt = useMemo(() => {

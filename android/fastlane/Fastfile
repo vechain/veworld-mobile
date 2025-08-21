@@ -9,6 +9,56 @@ platform :android do
     )
   end
 
+  lane :build_android_test do 
+    store_password = ENV["STORE_PASSWORD"]
+    key_password = ENV["KEY_PASSWORD"]
+    key_alias = ENV["KEY_ALIAS"] 
+    version_name = "9.9.9"
+    version_code = 99
+
+    Dir.chdir "../.." do
+      sh("yarn purge:android && yarn install:android")
+    end
+
+    begin
+      releaseFilePath = File.join(Dir.pwd, "..", "release.keystore")
+
+      gradle(task: 'clean')
+      gradle(
+        task: 'assemble',
+        build_type: 'Release',
+        print_command: true,
+        print_command_output: true,
+        properties: {
+          "android.injected.version.code" => version_code,
+          "android.injected.version.name" => version_name,
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => store_password,
+          "android.injected.signing.key.alias" => key_alias,
+          "android.injected.signing.key.password" => key_password,
+        }
+      )
+
+      gradle(
+        task: 'bundle',
+        build_type: 'Release',
+        print_command: true,
+        print_command_output: true,
+        properties: {
+          "android.injected.version.code" => version_code,
+          "android.injected.version.name" => version_name,
+          "android.injected.signing.store.file" => releaseFilePath,
+          "android.injected.signing.store.password" => store_password,
+          "android.injected.signing.key.alias" => key_alias,
+          "android.injected.signing.key.password" => key_password,
+        }
+      )
+
+    rescue => exception
+      puts exception
+    end
+  end
+
   # @param {object} options - The options for the build process.
   # @param {string} options.version_name - The version name of the build.
   # @param {string} options.version_code - The version code of the build.
@@ -70,8 +120,7 @@ platform :android do
       )
 
       slack(
-        message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android] recent Prs: #{options[:recent_prs]}" : "VeWorld version number: #{version_name} was successfully released! [Android] recent Prs: #{options[:recent_prs]}",
-
+        message: version_name.nil? ? "VeWorld build number: #{version_code} was successfully released! [Android]" : "VeWorld version number: #{version_name} was successfully released! [Android]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: true,
         payload: {
@@ -84,7 +133,7 @@ platform :android do
       puts exception
 
       slack(
-        message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android] recent Prs: #{options[:recent_prs]}" : "Error releasing VeWorld version number: #{version_name} [Android] recent Prs: #{options[:recent_prs]}",
+        message: version_name.nil? ? "Error releasing VeWorld build number: #{version_code} [Android]" : "Error releasing VeWorld version number: #{version_name} [Android]",
         slack_url: ENV["SLACK_WEBHOOK"],
         success: false,
         payload: {
@@ -145,7 +194,7 @@ platform :android do
 
      
        slack(
-         message: "VeWorld version number: #{version_name} build number: #{version_code} was successfully released! [Android] recent Prs: #{options[:recent_prs]}",
+         message: "VeWorld version number: #{version_name} build number: #{version_code} was successfully released! [Android]",
          slack_url: ENV["SLACK_WEBHOOK"],
          success: true,
          payload: {
@@ -159,7 +208,7 @@ platform :android do
 
       
        slack(
-         message: "Error releasing VeWorld version number: #{version_name} build number: #{version_code} [Android] recent Prs: #{options[:recent_prs]}",
+         message: "Error releasing VeWorld version number: #{version_name} build number: #{version_code} [Android]",
          slack_url: ENV["SLACK_WEBHOOK"],
          success: false,
          payload: {
