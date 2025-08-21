@@ -3553,6 +3553,10 @@ type RootTranslation = {
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: string
 	/**
+	 * C​a​s​t​ ​v​o​t​e
+	 */
+	RECEIPT_OUTPUT_VEVOTE_CAST: string
+	/**
 	 * R​e​c​e​i​v​e​d
 	 */
 	RECEIVED: string
@@ -4762,6 +4766,14 @@ type RootTranslation = {
 	 * V​e​c​h​a​i​n​ ​n​e​w​s​ ​&​ ​u​p​d​a​t​e​s
 	 */
 	VECHAIN_NEWS_AND_UPDATES: string
+	/**
+	 * V​o​t​e​ ​o​n​ ​p​r​o​p​o​s​a​l
+	 */
+	VEVOTE_CAST_DESCRIPTION: string
+	/**
+	 * V​e​V​o​t​e
+	 */
+	VEVOTE_CAST_TITLE: string
 	/**
 	 * V​e​W​o​r​l​d
 	 */
@@ -8446,6 +8458,10 @@ Thanks for your patience!
 	 */
 	RECEIPT_OUTPUT_TOKEN_SEND: () => LocalizedString
 	/**
+	 * Cast vote
+	 */
+	RECEIPT_OUTPUT_VEVOTE_CAST: () => LocalizedString
+	/**
 	 * Received
 	 */
 	RECEIVED: () => LocalizedString
@@ -9637,6 +9653,14 @@ Here's what it's all about:
 	 * Vechain news & updates
 	 */
 	VECHAIN_NEWS_AND_UPDATES: () => LocalizedString
+	/**
+	 * Vote on proposal
+	 */
+	VEVOTE_CAST_DESCRIPTION: () => LocalizedString
+	/**
+	 * VeVote
+	 */
+	VEVOTE_CAST_TITLE: () => LocalizedString
 	/**
 	 * VeWorld
 	 */

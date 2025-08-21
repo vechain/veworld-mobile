@@ -31,6 +31,7 @@ import {
     TypedDataActivity,
     UnknownTxActivity,
     VeBetterDaoDapp,
+    VeVoteCastActivity,
 } from "~Model"
 import { selectAllTokens, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
@@ -942,6 +943,31 @@ const Staking = ({ activity, onPress }: StakingProps) => {
     )
 }
 
+type VeVoteCastProps = {
+    activity: VeVoteCastActivity
+    onPress: (activity: Activity) => void
+}
+
+const VeVoteCast = ({ activity, onPress }: VeVoteCastProps) => {
+    const { LL } = useI18nContext()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    return (
+        <BaseActivityBox
+            testID={`VEVOTE-CAST-${activity.id}`}
+            icon="icon-vote"
+            time={time}
+            title={LL.VEVOTE_CAST_TITLE()}
+            description={LL.VEVOTE_CAST_DESCRIPTION()}
+            onPress={onPressHandler}
+        />
+    )
+}
+
 export const ActivityBox = {
     TokenTransfer: TokenTransfer,
     DAppTransaction: DAppTransaction,
@@ -960,4 +986,5 @@ export const ActivityBox = {
     B3trSwapVot3ToB3tr: B3trSwapVot3ToB3tr,
     B3trProposalSupport: B3trProposalSupport,
     UnknownTx: UnknownTx,
+    VeVoteCast,
 }

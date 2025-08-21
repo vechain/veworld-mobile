@@ -58,6 +58,7 @@ import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
 import { KeyboardProvider } from "react-native-keyboard-controller"
+import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
 
 const { fontFamily } = typography
 
@@ -134,15 +135,17 @@ const Main = () => {
                         <FeatureFlagsProvider>
                             <NavigationProvider>
                                 <InteractionProvider>
-                                    <WalletConnectContextProvider>
-                                        <BottomSheetModalProvider>
-                                            <InAppBrowserProvider>
-                                                <NotificationsProvider>
-                                                    <EntryPoint />
-                                                </NotificationsProvider>
-                                            </InAppBrowserProvider>
-                                        </BottomSheetModalProvider>
-                                    </WalletConnectContextProvider>
+                                    <DeepLinksProvider>
+                                        <WalletConnectContextProvider>
+                                            <BottomSheetModalProvider>
+                                                <InAppBrowserProvider>
+                                                    <NotificationsProvider>
+                                                        <EntryPoint />
+                                                    </NotificationsProvider>
+                                                </InAppBrowserProvider>
+                                            </BottomSheetModalProvider>
+                                        </WalletConnectContextProvider>
+                                    </DeepLinksProvider>
                                 </InteractionProvider>
                             </NavigationProvider>
                             <BaseToast />
