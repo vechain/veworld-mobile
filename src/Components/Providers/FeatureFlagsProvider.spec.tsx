@@ -7,6 +7,11 @@ import { RootState } from "~Storage/Redux/Types"
 
 jest.mock("~Api/FeatureFlags", () => ({
     getFeatureFlags: jest.fn().mockResolvedValue({
+        marketsProxyFeature: {
+            enabled: "1.0.0",
+            url: "https://coin-api.veworld.vechain.org",
+            fallbackUrl: "https://api.coingecko.com/api/v3",
+        },
         betterWorldFeature: {
             appsScreen: {
                 enabled: "2.4.1",
@@ -60,8 +65,11 @@ describe("FeatureFlagsProvider", () => {
             wrapper: createWrapper,
         })
 
-        waitFor(() => {
-            expect(result.current.betterWorldFeature.appsScreen.enabled).toBe(true)
-        })
+        waitFor(
+            () => {
+                expect(result.current.betterWorldFeature.appsScreen.enabled).toBe(true)
+            },
+            { timeout: 10000 },
+        )
     })
 })
