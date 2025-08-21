@@ -125,5 +125,7 @@ jobs:
               run: |
                   cd ios
                   git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
+                  git config --local user.name  "github-actions[bot]"
+                  git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   cd fastlane
                   fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}
