@@ -3,9 +3,10 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import React, { forwardRef, useCallback, useMemo, useState, useEffect } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { useBatchAppOverviews, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType } from "~Model"
+import { FetchAppOverviewResponse } from "~Networking/API/Types"
 import { CategoryFilters, RowDetails, RowExpandableDetails } from "~Screens/Flows/App/AppsScreen/Components"
 import { useCategories, useCategoryFiltering } from "~Screens/Flows/App/AppsScreen/Components/VeBetter/Hooks"
 import { useDAppActions } from "~Screens/Flows/App/AppsScreen/Hooks"
@@ -19,6 +20,8 @@ type X2EAppsListProps = {
     onDismiss?: () => void
     openItemId: string | null
     onToggleOpenItem: (itemId: string) => void
+    appOverviews: Record<string, FetchAppOverviewResponse | undefined>
+    isOverviewsLoading: boolean
 }
 
 type X2EAppItemProps = {
@@ -26,6 +29,8 @@ type X2EAppItemProps = {
     onDismiss?: () => void
     openItemId: string | null
     onToggleOpenItem: (itemId: string) => void
+    appOverview?: FetchAppOverviewResponse
+    isOverviewLoading?: boolean
 }
 
 type X2EAppsBottomSheetProps = {
@@ -35,155 +40,181 @@ type X2EAppsBottomSheetProps = {
     initialCategoryId?: X2ECategoryType
 }
 
-const AppListItem = React.memo(({ dapp, onDismiss, openItemId, onToggleOpenItem }: X2EAppItemProps) => {
-    const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
-    const { onDAppPress } = useDAppActions()
-    const { LL } = useI18nContext()
+const AppListItem = React.memo(
+    ({ dapp, onDismiss, openItemId, onToggleOpenItem, appOverview, isOverviewLoading = false }: X2EAppItemProps) => {
+        const { isBookMarked, toggleBookmark } = useDappBookmarking(dapp.external_url, dapp.name)
+        const { onDAppPress } = useDAppActions()
+        const { LL } = useI18nContext()
 
-    const allCategories = useCategories()
+        const allCategories = useCategories()
 
-    const logoUrl = useMemo(() => {
-        return URIUtils.convertUriToUrl(dapp.logo)
-    }, [dapp.logo])
+        const logoUrl = useMemo(() => {
+            return URIUtils.convertUriToUrl(dapp.logo)
+        }, [dapp.logo])
 
-    const handleOpen = useCallback(async () => {
-        const discoveryDApp = {
-            id: dapp.id,
-            name: dapp.name,
-            href: dapp.external_url,
-            desc: dapp.description,
-            createAt: parseInt(dapp.createdAtTimestamp),
-            isCustom: false,
-            amountOfNavigations: 0,
-            veBetterDaoId: dapp.id,
-        }
+        const handleOpen = useCallback(async () => {
+            const discoveryDApp = {
+                id: dapp.id,
+                name: dapp.name,
+                href: dapp.external_url,
+                desc: dapp.description,
+                createAt: parseInt(dapp.createdAtTimestamp),
+                isCustom: false,
+                amountOfNavigations: 0,
+                veBetterDaoId: dapp.id,
+            }
 
-        await onDAppPress(discoveryDApp)
-        onDismiss?.()
-    }, [dapp, onDAppPress, onDismiss])
+            await onDAppPress(discoveryDApp)
+            onDismiss?.()
+        }, [dapp, onDAppPress, onDismiss])
 
-    const categoryDisplayNames = useMemo(() => {
-        if (!dapp.categories || dapp.categories.length === 0) {
-            const othersCategory = allCategories.find(cat => cat.id === "others")
-            return [othersCategory?.displayName ?? LL.APP_CATEGORY_OTHERS()]
-        }
+        const categoryDisplayNames = useMemo(() => {
+            if (!dapp.categories || dapp.categories.length === 0) {
+                const othersCategory = allCategories.find(cat => cat.id === "others")
+                return [othersCategory?.displayName ?? LL.APP_CATEGORY_OTHERS()]
+            }
 
-        return dapp.categories.map(categoryId => {
-            const category = allCategories.find(cat => cat.id === categoryId)
-            return category?.displayName ?? LL.APP_CATEGORY_OTHERS()
-        })
-    }, [dapp.categories, allCategories, LL])
+            return dapp.categories.map(categoryId => {
+                const category = allCategories.find(cat => cat.id === categoryId)
+                return category?.displayName ?? LL.APP_CATEGORY_OTHERS()
+            })
+        }, [dapp.categories, allCategories, LL])
 
-    const isOpen = useMemo(() => openItemId === dapp.id, [openItemId, dapp.id])
+        const isOpen = useMemo(() => openItemId === dapp.id, [openItemId, dapp.id])
 
-    const detailsChildren = useMemo(
-        () => (
-            <RowExpandableDetails.Container>
-                <RowExpandableDetails.Description>{dapp.description}</RowExpandableDetails.Description>
-                <RowExpandableDetails.Stats />
-                <RowExpandableDetails.Actions
-                    onAddToFavorites={toggleBookmark}
-                    isFavorite={isBookMarked}
-                    onOpen={handleOpen}
-                />
-            </RowExpandableDetails.Container>
-        ),
-        [dapp.description, toggleBookmark, isBookMarked, handleOpen],
-    )
+        const detailsChildren = useMemo(
+            () => (
+                <RowExpandableDetails.Container>
+                    <RowExpandableDetails.Description>{dapp.description}</RowExpandableDetails.Description>
+                    <RowExpandableDetails.Stats
+                        appOverview={appOverview}
+                        isLoading={isOverviewLoading}
+                        createdAtTimestamp={dapp.createdAtTimestamp}
+                    />
+                    <RowExpandableDetails.Actions
+                        onAddToFavorites={toggleBookmark}
+                        isFavorite={isBookMarked}
+                        onOpen={handleOpen}
+                    />
+                </RowExpandableDetails.Container>
+            ),
+            [
+                dapp.description,
+                appOverview,
+                isOverviewLoading,
+                dapp.createdAtTimestamp,
+                toggleBookmark,
+                isBookMarked,
+                handleOpen,
+            ],
+        )
 
-    return (
-        <RowDetails
-            name={dapp.name}
-            icon={logoUrl}
-            desc={dapp.description}
-            categories={categoryDisplayNames}
-            isFavorite={isBookMarked}
-            onToggleFavorite={toggleBookmark}
-            itemId={dapp.id}
-            isOpen={isOpen}
-            onToggleOpen={onToggleOpenItem}>
-            {detailsChildren}
-        </RowDetails>
-    )
-})
+        return (
+            <RowDetails
+                name={dapp.name}
+                icon={logoUrl}
+                desc={dapp.description}
+                categories={categoryDisplayNames}
+                isFavorite={isBookMarked}
+                onToggleFavorite={toggleBookmark}
+                itemId={dapp.id}
+                isOpen={isOpen}
+                onToggleOpen={onToggleOpenItem}>
+                {detailsChildren}
+            </RowDetails>
+        )
+    },
+)
 
-const AppList = React.memo(({ apps, isLoading, onDismiss, openItemId, onToggleOpenItem }: X2EAppsListProps) => {
-    const theme = useTheme()
-    const { styles } = useThemedStyles(baseStyles)
+const AppList = React.memo(
+    ({
+        apps,
+        isLoading,
+        onDismiss,
+        openItemId,
+        onToggleOpenItem,
+        appOverviews,
+        isOverviewsLoading,
+    }: X2EAppsListProps) => {
+        const theme = useTheme()
+        const { styles } = useThemedStyles(baseStyles)
 
-    const renderItem = useCallback(
-        ({ item }: ListRenderItemInfo<X2EDapp>) => {
+        const renderItem = useCallback(
+            ({ item }: ListRenderItemInfo<X2EDapp>) => {
+                return (
+                    <AppListItem
+                        dapp={item}
+                        onDismiss={onDismiss}
+                        openItemId={openItemId}
+                        onToggleOpenItem={onToggleOpenItem}
+                        appOverview={appOverviews[item.id]}
+                        isOverviewLoading={isOverviewsLoading}
+                    />
+                )
+            },
+            [onDismiss, openItemId, onToggleOpenItem, appOverviews, isOverviewsLoading],
+        )
+
+        const renderSkeletonItem = useCallback(() => {
             return (
-                <AppListItem
-                    dapp={item}
-                    onDismiss={onDismiss}
-                    openItemId={openItemId}
-                    onToggleOpenItem={onToggleOpenItem}
+                <BaseSkeleton
+                    animationDirection="horizontalLeft"
+                    boneColor={theme.colors.skeletonBoneColor}
+                    highlightColor={theme.colors.skeletonHighlightColor}
+                    layout={[
+                        {
+                            flexDirection: "row",
+                            alignItems: "center",
+                            gap: 24,
+                            children: [
+                                { width: 64, height: 64, borderRadius: 8 },
+                                {
+                                    flexDirection: "column",
+                                    gap: 8,
+                                    flex: 1,
+                                    children: [
+                                        { width: "70%", height: 17, borderRadius: 4 },
+                                        { width: "90%", height: 14, borderRadius: 4 },
+                                    ],
+                                },
+                            ],
+                        },
+                    ]}
                 />
             )
-        },
-        [onDismiss, openItemId, onToggleOpenItem],
-    )
+        }, [theme.colors.skeletonBoneColor, theme.colors.skeletonHighlightColor])
 
-    const renderSkeletonItem = useCallback(() => {
-        return (
-            <BaseSkeleton
-                animationDirection="horizontalLeft"
-                boneColor={theme.colors.skeletonBoneColor}
-                highlightColor={theme.colors.skeletonHighlightColor}
-                layout={[
-                    {
-                        flexDirection: "row",
-                        alignItems: "center",
-                        gap: 24,
-                        children: [
-                            { width: 64, height: 64, borderRadius: 8 },
-                            {
-                                flexDirection: "column",
-                                gap: 8,
-                                flex: 1,
-                                children: [
-                                    { width: "70%", height: 17, borderRadius: 4 },
-                                    { width: "90%", height: 14, borderRadius: 4 },
-                                ],
-                            },
-                        ],
-                    },
-                ]}
-            />
-        )
-    }, [theme.colors.skeletonBoneColor, theme.colors.skeletonHighlightColor])
+        const renderItemSeparator = useCallback(() => {
+            return <BaseSpacer height={24} />
+        }, [])
 
-    const renderItemSeparator = useCallback(() => {
-        return <BaseSpacer height={24} />
-    }, [])
+        const keyExtractor = useCallback((item: X2EDapp) => item.id, [])
 
-    const keyExtractor = useCallback((item: X2EDapp) => item.id, [])
+        if (isLoading) {
+            return (
+                <BottomSheetFlatList
+                    data={[1, 2, 3, 4, 5, 6]}
+                    keyExtractor={item => item.toString()}
+                    renderItem={renderSkeletonItem}
+                    ItemSeparatorComponent={renderItemSeparator}
+                    scrollEnabled={false}
+                    contentContainerStyle={styles.flatListPadding}
+                />
+            )
+        }
 
-    if (isLoading) {
         return (
             <BottomSheetFlatList
-                data={[1, 2, 3, 4, 5, 6]}
-                keyExtractor={item => item.toString()}
-                renderItem={renderSkeletonItem}
+                data={apps}
+                keyExtractor={keyExtractor}
+                renderItem={renderItem}
                 ItemSeparatorComponent={renderItemSeparator}
-                scrollEnabled={false}
+                onEndReachedThreshold={0.5}
                 contentContainerStyle={styles.flatListPadding}
             />
         )
-    }
-
-    return (
-        <BottomSheetFlatList
-            data={apps}
-            keyExtractor={keyExtractor}
-            renderItem={renderItem}
-            ItemSeparatorComponent={renderItemSeparator}
-            onEndReachedThreshold={0.5}
-            contentContainerStyle={styles.flatListPadding}
-        />
-    )
-})
+    },
+)
 
 export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(
     ({ onDismiss, allApps, isLoading, initialCategoryId }, ref) => {
@@ -191,6 +222,12 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
         const [openItemId, setOpenItemId] = useState<string | null>(null)
 
         const { selectedCategory, setSelectedCategory, filteredApps } = useCategoryFiltering(allApps, initialCategoryId)
+
+        const appIds = useMemo(() => filteredApps.map(app => app.id), [filteredApps])
+        const { overviews: appOverviews, isLoading: isOverviewsLoading } = useBatchAppOverviews(
+            appIds,
+            !isLoading && appIds.length > 0,
+        )
 
         const handleToggleOpenItem = useCallback((itemId: string) => {
             setOpenItemId(prevId => (prevId === itemId ? null : itemId))
@@ -236,6 +273,8 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
                     onDismiss={handleDismiss}
                     openItemId={openItemId}
                     onToggleOpenItem={handleToggleOpenItem}
+                    appOverviews={appOverviews}
+                    isOverviewsLoading={isOverviewsLoading}
                 />
             </BaseBottomSheet>
         )
