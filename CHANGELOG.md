@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-21)</small>
+
+* build: init ([b25fe8e](https://github.com/vechain/veworld-mobile/commit/b25fe8e))
+* fix: add bot as user before fastlane ([ba6038f](https://github.com/vechain/veworld-mobile/commit/ba6038f))
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
