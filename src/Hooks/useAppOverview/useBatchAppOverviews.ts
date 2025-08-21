@@ -15,7 +15,7 @@ export const useBatchAppOverviews = (appIds: string[], enabled = true) => {
             queryKey: ["appOverview", appId],
             queryFn: () => fetchAppOverview(appId),
             enabled: enabled && !!appId,
-            staleTime: 1000 * 60 * 60,
+            staleTime: 1000 * 60 * 60 * 24,
             gcTime: 1000 * 60 * 60,
         })),
     })
