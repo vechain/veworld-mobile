@@ -72,7 +72,7 @@ export const DiscoverySlice = createSlice({
                 href: discoveryDapp.href || vbdDapp.external_url,
                 desc: discoveryDapp.desc || vbdDapp.description,
                 isCustom,
-                createAt: new Date().getTime(),
+                createAt: discoveryDapp.createAt || parseInt(vbdDapp.createdAtTimestamp, 10),
                 amountOfNavigations: 1,
                 veBetterDaoId: vbdDapp.id || discoveryDapp.veBetterDaoId,
             }

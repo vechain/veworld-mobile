@@ -388,6 +388,7 @@ const baseStyles = (theme: ColorThemeType) =>
         floating: {
             borderRadius: 24,
             marginHorizontal: 8,
+            overflow: "hidden",
         },
         handleWrapper: {
             marginTop: 8,
