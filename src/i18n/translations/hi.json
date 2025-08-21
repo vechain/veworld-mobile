@@ -508,7 +508,7 @@
   "DAPP_LOGIN_METHOD_CERTIFICATE": "प्रमाणपत्र",
   "DAPP_LOGIN_METHOD_SIMPLE": "कोई हस्ताक्षर नहीं",
   "DAPP_LOGIN_METHOD_TYPED_DATA": "टाइप किए गए डेटा",
-  "DAPP_LOGIN_TITLE": "DApp लॉगिन",
+  "DAPP_LOGIN_TITLE": "dApp लॉगिन",
   "DAPP_SIGN_CERT": "प्रमाणपत्र पर हस्ताक्षर करें",
   "DAPP_TRANSACTION": "DApp लेनदेन",
   "DAPP_TRANSACTION_SWAP": "टोकन अदला-बदली",

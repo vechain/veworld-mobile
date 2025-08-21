@@ -508,7 +508,7 @@
   "DAPP_LOGIN_METHOD_CERTIFICATE": "Certificaat",
   "DAPP_LOGIN_METHOD_SIMPLE": "Geen handtekening",
   "DAPP_LOGIN_METHOD_TYPED_DATA": "Getypte gegevens",
-  "DAPP_LOGIN_TITLE": "DApp Login",
+  "DAPP_LOGIN_TITLE": "dApp-aanmelding",
   "DAPP_SIGN_CERT": "Certificaat ondertekenen",
   "DAPP_TRANSACTION": "DApp Transactie",
   "DAPP_TRANSACTION_SWAP": "Token-ruil",

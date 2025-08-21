@@ -508,7 +508,7 @@
   "DAPP_LOGIN_METHOD_CERTIFICATE": "Sertifika",
   "DAPP_LOGIN_METHOD_SIMPLE": "İmzasız",
   "DAPP_LOGIN_METHOD_TYPED_DATA": "Yazılmış veri",
-  "DAPP_LOGIN_TITLE": "DApp Girişi",
+  "DAPP_LOGIN_TITLE": "dApp girişi",
   "DAPP_SIGN_CERT": "Sertifika imzala",
   "DAPP_TRANSACTION": "DApp İşlemi",
   "DAPP_TRANSACTION_SWAP": "Token değişimi",

@@ -508,7 +508,7 @@
   "DAPP_LOGIN_METHOD_CERTIFICATE": "Chứng chỉ",
   "DAPP_LOGIN_METHOD_SIMPLE": "Không chữ ký",
   "DAPP_LOGIN_METHOD_TYPED_DATA": "Dữ liệu gõ tay",
-  "DAPP_LOGIN_TITLE": "Đăng nhập DApp",
+  "DAPP_LOGIN_TITLE": "Đăng nhập dApp",
   "DAPP_SIGN_CERT": "Chứng nhận chữ ký",
   "DAPP_TRANSACTION": "Giao dịch DApp",
   "DAPP_TRANSACTION_SWAP": "Hoán đổi token",

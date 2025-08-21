@@ -508,7 +508,7 @@
   "DAPP_LOGIN_METHOD_CERTIFICATE": "Certifikat",
   "DAPP_LOGIN_METHOD_SIMPLE": "Ingen signatur",
   "DAPP_LOGIN_METHOD_TYPED_DATA": "Skriven data",
-  "DAPP_LOGIN_TITLE": "DApp Inloggning",
+  "DAPP_LOGIN_TITLE": "dApp-inloggning",
   "DAPP_SIGN_CERT": "Signeringscertifikat",
   "DAPP_TRANSACTION": "DApp-transaktion",
   "DAPP_TRANSACTION_SWAP": "Tokenswap",

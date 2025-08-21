@@ -508,7 +508,7 @@
   "DAPP_LOGIN_METHOD_CERTIFICATE": "인증서",
   "DAPP_LOGIN_METHOD_SIMPLE": "서명 없음",
   "DAPP_LOGIN_METHOD_TYPED_DATA": "입력된 데이터",
-  "DAPP_LOGIN_TITLE": "DApp 로그인",
+  "DAPP_LOGIN_TITLE": "dApp 로그인",
   "DAPP_SIGN_CERT": "인증서 서명",
   "DAPP_TRANSACTION": "DApp 거래",
   "DAPP_TRANSACTION_SWAP": "토큰 스왑",
