@@ -31,7 +31,7 @@ export const TabIcon: FC<Props> = memo(({ focused, title, label, isSettings, isS
 const baseStyles = (isFocused: boolean) => (theme: ColorThemeType) => {
     const iconColor = () => {
         if (isFocused) return theme.isDark ? COLORS.LIME_GREEN : theme.colors.text
-        return theme.isDark ? COLORS.GREY_300 : COLORS.GREY_400
+        return theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500
     }
 
     return StyleSheet.create({
