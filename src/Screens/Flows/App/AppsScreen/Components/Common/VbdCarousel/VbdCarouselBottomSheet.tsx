@@ -51,11 +51,13 @@ const VbdInfoColumn = ({
 }) => {
     const theme = useTheme()
     const color = useMemo(() => (!theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.LIME_GREEN), [theme.isDark])
+    const titleColor = useMemo(() => (theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500), [theme.isDark])
+    const descriptionColor = useMemo(() => (theme.isDark ? COLORS.GREY_100 : COLORS.GREY_700), [theme.isDark])
 
     return (
         <BaseView justifyContent="center" alignItems="center" w={33.33}>
             <Icon fill={color} color={color} size={20} />
-            <BaseText typographyFont="captionMedium" mt={8} mb={4}>
+            <BaseText typographyFont="captionMedium" mt={8} mb={4} color={titleColor}>
                 {title}
             </BaseText>
             {isLoading ? (
@@ -67,7 +69,9 @@ const VbdInfoColumn = ({
                     height={20}
                 />
             ) : (
-                <BaseText typographyFont="bodySemiBold">{description}</BaseText>
+                <BaseText typographyFont="bodySemiBold" color={descriptionColor}>
+                    {description}
+                </BaseText>
             )}
         </BaseView>
     )
@@ -161,7 +165,7 @@ export const VbdCarouselBottomSheet = ({
         return isFavorite ? (
             <BaseIcon
                 style={styles.favIcon}
-                color={theme.isDark ? COLORS.LIME_GREEN : undefined}
+                color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
                 size={20}
                 name="icon-star-on"
                 testID="bottom-sheet-remove-favorite-icon"
@@ -169,7 +173,7 @@ export const VbdCarouselBottomSheet = ({
         ) : (
             <BaseIcon
                 style={styles.favIcon}
-                color={theme.isDark ? COLORS.WHITE : undefined}
+                color={theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600}
                 size={20}
                 name="icon-star"
                 testID="bottom-sheet-add-favorite-icon"
@@ -177,7 +181,18 @@ export const VbdCarouselBottomSheet = ({
         )
     }, [isFavorite, theme.isDark, styles.favIcon])
 
-    const darkColorFavBtn = useMemo(() => (theme.isDark ? COLORS.LIME_GREEN : COLORS.WHITE), [theme.isDark])
+    const favButtonStyles = useMemo(() => {
+        if (isFavorite) {
+            return {
+                textColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
+                borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
+            }
+        }
+        return {
+            textColor: theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600,
+            borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200,
+        }
+    }, [isFavorite, theme.isDark])
 
     return (
         <BaseBottomSheet
@@ -259,8 +274,7 @@ export const VbdCarouselBottomSheet = ({
                         action={onToggleFavorite}
                         title={isFavorite ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
                         variant="outline"
-                        textColor={theme.isDark ? darkColorFavBtn : undefined}
-                        borderColor={theme.isDark ? darkColorFavBtn : undefined}
+                        {...favButtonStyles}
                     />
                     <BaseButton
                         testID="Open_Button"
