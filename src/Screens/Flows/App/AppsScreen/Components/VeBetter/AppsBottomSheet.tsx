@@ -3,7 +3,7 @@ import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/typ
 import React, { forwardRef, useCallback, useMemo, useState, useEffect } from "react"
 import { ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
-import { useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
+import { useDappBookmarking, useTheme, useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType } from "~Model"
 import { CategoryFilters, RowDetails, RowExpandableDetails } from "~Screens/Flows/App/AppsScreen/Components"
@@ -30,8 +30,6 @@ type X2EAppItemProps = {
 
 type X2EAppsBottomSheetProps = {
     onDismiss?: () => void
-    allApps?: X2EDapp[]
-    isLoading: boolean
     initialCategoryId?: X2ECategoryType
 }
 
@@ -188,7 +186,8 @@ const AppList = React.memo(({ apps, isLoading, onDismiss, openItemId, onToggleOp
 })
 
 export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(
-    ({ onDismiss, allApps, isLoading, initialCategoryId }, ref) => {
+    ({ onDismiss, initialCategoryId }, ref) => {
+        const { data: allApps, isLoading } = useVeBetterDaoDapps()
         const theme = useTheme()
         const [openItemId, setOpenItemId] = useState<string | null>(null)
 

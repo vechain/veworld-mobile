@@ -3,7 +3,7 @@ import React, { useCallback, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseTouchable, BaseSpacer, BaseView, HeaderStyleV2, HeaderTitle, Layout } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useThemedStyles, useVeBetterDaoDapps } from "~Hooks"
+import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useIsNormalUser } from "~Hooks/useIsNormalUser"
 import { useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
@@ -33,7 +33,6 @@ export const AppsScreen = () => {
         onClose: onCloseAppsBottomSheet,
     } = useBottomSheetModal()
 
-    const { data: allApps, isLoading } = useVeBetterDaoDapps()
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const { onDAppPress } = useDAppActions()
 
@@ -127,8 +126,6 @@ export const AppsScreen = () => {
                     <AppsBottomSheet
                         ref={appsBottomSheetRef}
                         onDismiss={handleCloseAppsBottomSheet}
-                        allApps={allApps}
-                        isLoading={isLoading}
                         initialCategoryId={selectedCategoryId}
                     />
                 </>
