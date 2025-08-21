@@ -4557,6 +4557,22 @@ type RootTranslation = {
 	 */
 	DAPP_LOGIN_TITLE: string
 	/**
+	 * N​o​ ​s​i​g​n​a​t​u​r​e
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: string
+	/**
+	 * M​e​t​h​o​d
+	 */
+	DAPP_LOGIN_METHOD: string
+	/**
+	 * C​e​r​t​i​f​i​c​a​t​e
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: string
+	/**
+	 * T​y​p​e​d​ ​d​a​t​a
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: string
+	/**
 	 * V​e​W​o​r​l​d
 	 */
 	VEWORLD: string
@@ -9224,6 +9240,22 @@ Are you sure you want to continue?
 	 * DApp Login
 	 */
 	DAPP_LOGIN_TITLE: () => LocalizedString
+	/**
+	 * No signature
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: () => LocalizedString
+	/**
+	 * Method
+	 */
+	DAPP_LOGIN_METHOD: () => LocalizedString
+	/**
+	 * Certificate
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: () => LocalizedString
+	/**
+	 * Typed data
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: () => LocalizedString
 	/**
 	 * VeWorld
 	 */

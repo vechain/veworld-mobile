@@ -6,6 +6,7 @@ import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
+import { TypedDataRenderer } from "~Components/Reusable/TypedDataRenderer"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
 import { useLoginSession } from "~Hooks/useLoginSession"
@@ -27,7 +28,6 @@ import { DappDetails } from "../DappDetails"
 import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
 import { LedgerDeviceAlert } from "./LedgerDeviceAlert"
-import { Renderer } from "./Renderer"
 
 type Props = {
     request: TypeDataRequest
@@ -108,9 +108,9 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                             </>
                         )}
                         <DappDetails show={visible}>
-                            <Renderer.Container>
-                                <Renderer value={request.value} />
-                            </Renderer.Container>
+                            <TypedDataRenderer.Container>
+                                <TypedDataRenderer value={request.value} />
+                            </TypedDataRenderer.Container>
                         </DappDetails>
                     </>
                 )}

@@ -8,6 +8,7 @@ import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
+import { TypedDataRenderer } from "~Components/Reusable/TypedDataRenderer"
 import { AnalyticsEvent, COLORS, ERROR_EVENTS } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
@@ -28,7 +29,6 @@ import { DappDetails } from "../DappDetails"
 import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
 import { LedgerDeviceAlert as TypedDataLedgerDeviceAlert } from "../TypedDataBottomSheet/LedgerDeviceAlert"
-import { Renderer as TypedDataRenderer } from "../TypedDataBottomSheet/Renderer"
 
 type Props = {
     request: LoginRequest

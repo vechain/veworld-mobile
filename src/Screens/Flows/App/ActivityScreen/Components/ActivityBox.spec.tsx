@@ -20,6 +20,7 @@ import {
     B3trUpgradeGmActivity,
     B3trXAllocationVoteActivity,
     FungibleTokenActivity,
+    LoginActivity,
     NETWORK_TYPE,
     NonFungibleTokenActivity,
     SwapActivity,
@@ -323,6 +324,21 @@ const activities: Activity[] = [
         gasPayer: "0xfc5a8bbff0cfc616472772167024e7cd977f27f6",
         delegated: true,
     } as VeVoteCastActivity,
+    {
+        from: "0xf6EDf674a43F725EBa52915f0a3A49A2AF4580E6",
+        to: ["0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"],
+        id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaz04",
+        isTransaction: true,
+        timestamp: 1482337929999,
+        type: ActivityType.DAPP_LOGIN,
+        blockNumber: 21412814,
+        genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+        gasPayer: "0xfc5a8bbff0cfc616472772167024e7cd977f27f6",
+        delegated: true,
+        linkUrl: "https://vechain.org",
+        kind: "simple",
+        value: null,
+    } as LoginActivity,
 ]
 
 describe("ActivityBox", () => {
@@ -579,6 +595,18 @@ describe("ActivityBox", () => {
             )
 
             expect(screen.getByTestId(/^VEVOTE-CAST-/i)).toBeTruthy()
+        })
+    })
+    describe("dApps", () => {
+        it("should render dapp login correctly", () => {
+            const activity = activities[14] as LoginActivity
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.DappLogin activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^DAPP-LOGIN-/i)).toBeTruthy()
         })
     })
 })
