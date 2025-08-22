@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { ElementType, useCallback, useMemo } from "react"
-import { ImageBackground, StyleSheet } from "react-native"
+import { ImageBackground, StyleSheet, View } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { getTimeZone } from "react-native-localize"
 import Animated from "react-native-reanimated"
@@ -166,57 +166,58 @@ export const AppsPreviewScreen = ({ route, navigation }: Props) => {
     )
 
     return (
-        <Animated.View
+        <View
             style={[
                 styles.rootContainer,
                 { marginBottom: PlatformUtils.isAndroid() ? bottomSafeAreaSize + 32 : bottomSafeAreaSize },
-            ]}
-            sharedTransitionTag={`PREVIEW_IMAGE_${app.id}`}>
-            {bannerUri ? (
-                <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
-                    <BaseIcon
-                        style={styles.closeBtn}
-                        color={COLORS.WHITE}
-                        size={22}
-                        name="icon-x"
-                        action={handleClose}
-                        testID="bottom-sheet-close-btn"
-                    />
-                    <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
-                        <BaseView flexDirection="column" gap={16} px={24} py={16}>
-                            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
-                                <BaseView flexDirection="row" alignItems="center">
-                                    <FastImage source={{ uri: appLogo }} style={styles.logo as ImageStyle} />
-                                    <BaseSpacer width={12} flexShrink={0} />
-                                    <BaseText
-                                        numberOfLines={1}
-                                        typographyFont="subSubTitleSemiBold"
-                                        color={COLORS.GREY_50}
-                                        testID="VBD_CAROUSEL_BS_APP_NAME">
-                                        {app?.name}
-                                    </BaseText>
+            ]}>
+            <Animated.View style={styles.root} sharedTransitionTag={`PREVIEW_IMAGE_${app.id}`}>
+                {bannerUri ? (
+                    <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
+                        <BaseIcon
+                            style={styles.closeBtn}
+                            color={COLORS.WHITE}
+                            size={22}
+                            name="icon-x"
+                            action={handleClose}
+                            testID="bottom-sheet-close-btn"
+                        />
+                        {/* <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
+                            <BaseView flexDirection="column" gap={16} px={24} py={16}>
+                                <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
+                                    <BaseView flexDirection="row" alignItems="center">
+                                        <FastImage source={{ uri: appLogo }} style={styles.logo as ImageStyle} />
+                                        <BaseSpacer width={12} flexShrink={0} />
+                                        <BaseText
+                                            numberOfLines={1}
+                                            typographyFont="subSubTitleSemiBold"
+                                            color={COLORS.GREY_50}
+                                            testID="VBD_CAROUSEL_BS_APP_NAME">
+                                            {app?.name}
+                                        </BaseText>
+                                    </BaseView>
+                                    <BaseView flexDirection="row">
+                                        {category && (
+                                            <BaseView flexDirection="row" alignItems="center">
+                                                <BaseSpacer width={24} flexShrink={0} />
+                                                <CategoryChip category={category} />
+                                            </BaseView>
+                                        )}
+                                    </BaseView>
                                 </BaseView>
-                                <BaseView flexDirection="row">
-                                    {category && (
-                                        <BaseView flexDirection="row" alignItems="center">
-                                            <BaseSpacer width={24} flexShrink={0} />
-                                            <CategoryChip category={category} />
-                                        </BaseView>
-                                    )}
-                                </BaseView>
+                                <BaseText
+                                    typographyFont="captionMedium"
+                                    color={COLORS.WHITE_RGBA_85}
+                                    numberOfLines={15}
+                                    flexDirection="row"
+                                    testID="VBD_CAROUSEL_BS_APP_DESCRIPTION">
+                                    {app?.description}
+                                </BaseText>
                             </BaseView>
-                            <BaseText
-                                typographyFont="captionMedium"
-                                color={COLORS.WHITE_RGBA_85}
-                                numberOfLines={15}
-                                flexDirection="row"
-                                testID="VBD_CAROUSEL_BS_APP_DESCRIPTION">
-                                {app?.description}
-                            </BaseText>
-                        </BaseView>
-                    </BlurView>
-                </ImageBackground>
-            ) : null}
+                        </BlurView> */}
+                    </ImageBackground>
+                ) : null}
+            </Animated.View>
 
             <BaseView style={styles.infoContainer} bg={theme.colors.actionBottomSheet.background}>
                 <BaseView flexDirection="row" alignItems="center" justifyContent="center" gap={8} py={8}>
@@ -253,7 +254,7 @@ export const AppsPreviewScreen = ({ route, navigation }: Props) => {
                     />
                 </BaseView>
             </BaseView>
-        </Animated.View>
+        </View>
     )
 }
 
@@ -261,13 +262,14 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         rootContainer: {
             marginTop: "auto",
-            marginHorizontal: 8,
+            height: "90%",
+            marginHorizontal: 16,
             borderRadius: 24,
             overflow: "hidden",
             position: "relative",
         },
         root: {
-            height: 360,
+            height: 257,
             position: "relative",
             overflow: "hidden",
             justifyContent: "flex-end",
@@ -289,6 +291,7 @@ const baseStyles = (theme: ColorThemeType) =>
             paddingBottom: 24,
             paddingHorizontal: 24,
             paddingTop: 16,
+            height: "100%",
         },
         btn: {
             justifyContent: "center",

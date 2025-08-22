@@ -1,4 +1,4 @@
-import { createStackNavigator } from "@react-navigation/stack"
+import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { VbdDApp } from "~Model"
 import { Routes } from "~Navigation/Enums"
@@ -23,7 +23,7 @@ export type RootStackParamListApps = {
     [Routes.ACTIVITY_STAKING]: undefined
 }
 
-const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListApps>()
+const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListApps>()
 
 export const AppsStack = () => {
     return (
@@ -40,9 +40,9 @@ export const AppsStack = () => {
                     component={InAppBrowser}
                     options={{
                         headerShown: false,
-                        cardStyleInterpolator: slideFadeInTransition,
+                        //cardStyleInterpolator: slideFadeInTransition,
                         presentation: "transparentModal",
-                        transitionSpec: TRANSITION_SPECS,
+                        //transitionSpec: TRANSITION_SPECS,
                     }}
                 />
             </Group>
@@ -52,9 +52,9 @@ export const AppsStack = () => {
                 component={AppsSearchScreen}
                 options={{
                     headerShown: false,
-                    cardStyleInterpolator: slideFadeInTransition,
+                    //cardStyleInterpolator: slideFadeInTransition,
                     presentation: "transparentModal",
-                    transitionSpec: TRANSITION_SPECS,
+                    //transitionSpec: TRANSITION_SPECS,
                 }}
             />
             <Screen
@@ -62,9 +62,9 @@ export const AppsStack = () => {
                 component={TabsManagerScreen}
                 options={{
                     headerShown: false,
-                    cardStyleInterpolator: slideFadeInTransition,
+                    //cardStyleInterpolator: slideFadeInTransition,
                     presentation: "transparentModal",
-                    transitionSpec: TRANSITION_SPECS,
+                    //transitionSpec: TRANSITION_SPECS,
                 }}
             />
         </Navigator>
