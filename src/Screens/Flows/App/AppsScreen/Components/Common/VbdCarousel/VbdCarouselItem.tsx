@@ -1,6 +1,7 @@
 import React, { useMemo } from "react"
-import { ImageBackground, Pressable, StyleSheet } from "react-native"
+import { Pressable, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
+import Animated from "react-native-reanimated"
 import { BaseSpacer, BaseText, BaseView, BlurView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -31,7 +32,11 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
 
     return (
         <Pressable onPress={() => onPressItem({ bannerUri, iconUri, app, category })}>
-            <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_ITEM">
+            <Animated.View
+                sharedTransitionTag={`PREVIEW_IMAGE_${app.id}`}
+                style={styles.root}
+                testID="VBD_CAROUSEL_ITEM">
+                <FastImage source={{ uri: bannerUri }} style={StyleSheet.absoluteFill} />
                 <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                     <BaseView px={16} py={12} flexDirection="column" gap={8}>
                         <BaseView flexDirection="row">
@@ -62,7 +67,7 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
                         </BaseText>
                     </BaseView>
                 </BlurView>
-            </ImageBackground>
+            </Animated.View>
         </Pressable>
     )
 }

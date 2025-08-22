@@ -101,4 +101,5 @@ export enum Routes {
     APPS = "Apps",
     APPS_SEARCH = "Apps_Search",
     APPS_TABS_MANAGER = "Apps_Tabs_Manager",
+    APPS_PREVIEW = "Apps_Preview",
 }

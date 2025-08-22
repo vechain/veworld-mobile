@@ -1,9 +1,11 @@
 import { createStackNavigator } from "@react-navigation/stack"
 import React from "react"
+import { VbdDApp } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import { InAppBrowser, TabsManagerScreen } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { AppsPreviewScreen } from "~Screens/Flows/App/AppsScreen/AppsPreviewScreen"
 import { AppsScreen } from "~Screens/Flows/App/AppsScreen/AppsScreen"
 
 export type RootStackParamListApps = {
@@ -14,6 +16,9 @@ export type RootStackParamListApps = {
         returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
     }
     [Routes.APPS_SEARCH]: undefined
+    [Routes.APPS_PREVIEW]: {
+        app: VbdDApp
+    }
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.ACTIVITY_STAKING]: undefined
 }
@@ -25,6 +30,11 @@ export const AppsStack = () => {
         <Navigator id="AppsStack" screenOptions={{ headerShown: false }}>
             <Group>
                 <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.APPS_PREVIEW}
+                    component={AppsPreviewScreen}
+                    options={{ headerShown: false, presentation: "transparentModal" }}
+                />
                 <Screen
                     name={Routes.BROWSER}
                     component={InAppBrowser}

@@ -1,12 +1,14 @@
-import React, { useCallback, useMemo, useState } from "react"
+import { useNavigation } from "@react-navigation/native"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useThemedStyles } from "~Hooks"
+import { useThemedStyles } from "~Hooks"
 import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
+import { Routes } from "~Navigation"
+import { VbdCarouselBottomSheetMetadata } from "./VbdCarouselBottomSheet"
 import { VbdCarouselItem } from "./VbdCarouselItem"
 import { VbdCarouselItemSkeleton } from "./VbdCarouselItemSkeleton"
-import { VbdCarouselBottomSheet, VbdCarouselBottomSheetMetadata } from "./VbdCarouselBottomSheet"
 
 type Props = {
     appIds: string[]
@@ -17,23 +19,15 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
     const { styles } = useThemedStyles(baseStyles)
     const { data: vbdApps, isLoading: vbdLoading } = useVeBetterDaoDapps(true)
 
-    const { ref, onOpen, onClose: onCloseBS } = useBottomSheetModal()
-
     const isLoading = useMemo(() => propsIsLoading || vbdLoading, [propsIsLoading, vbdLoading])
-    const [BSMetadata, setBSMetadata] = useState<Partial<VbdCarouselBottomSheetMetadata>>({})
+    const nav = useNavigation()
 
     const onPressItem = useCallback(
         (newMetadata: VbdCarouselBottomSheetMetadata) => {
-            setBSMetadata(newMetadata)
-            onOpen()
+            nav.navigate(Routes.APPS_PREVIEW, { app: newMetadata.app! })
         },
-        [onOpen],
+        [nav],
     )
-
-    const onCloseBottomSheet = useCallback(() => {
-        onCloseBS()
-        setBSMetadata({})
-    }, [onCloseBS])
 
     const items = useMemo(() => {
         if (isLoading || !vbdApps?.length || !appIds.length)
@@ -66,15 +60,6 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
                 itemHeight={257}
                 rootStyle={styles.root}
                 dotStyles={dotStyles}
-            />
-
-            <VbdCarouselBottomSheet
-                bsRef={ref}
-                onClose={onCloseBottomSheet}
-                bannerUri={BSMetadata?.bannerUri}
-                iconUri={BSMetadata?.iconUri}
-                app={BSMetadata?.app}
-                category={BSMetadata?.category}
             />
         </>
     )
