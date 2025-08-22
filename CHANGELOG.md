@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-22)</small>
+
+* build: init ([3825ffc](https://github.com/vechain/veworld-mobile/commit/3825ffc))
+* 203 - Epic Apps page (#3205) ([9a2919a](https://github.com/vechain/veworld-mobile/commit/9a2919a)), closes [#3205](https://github.com/vechain/veworld-mobile/issues/3205) [#3133](https://github.com/vechain/veworld-mobile/issues/3133) [#3155](https://github.com/vechain/veworld-mobile/issues/3155)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
