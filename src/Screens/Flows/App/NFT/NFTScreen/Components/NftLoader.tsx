@@ -27,12 +27,15 @@ export const NftLoader = ({ children, isLoading }: Props) => {
         return {
             opacity: opacity.value,
         }
-    })
+    }, [opacity])
 
     return (
         <View style={StyleSheet.absoluteFill}>
             {children}
-            <Animated.View style={[themedStyles.overlay, animatedStyle]} pointerEvents={isLoading ? "auto" : "none"}>
+            <Animated.View
+                testID="nft-loader-overlay"
+                style={[themedStyles.overlay, animatedStyle]}
+                pointerEvents={isLoading ? "auto" : "none"}>
                 <BaseView style={[themedStyles.overlay, themedStyles.opacityBackground]} />
 
                 <LottieView
