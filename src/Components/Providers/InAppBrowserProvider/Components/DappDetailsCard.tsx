@@ -1,20 +1,16 @@
 import { default as React, useMemo, useState } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
-import Animated, { LinearTransition, useAnimatedStyle, withTiming } from "react-native-reanimated"
+import { Image, ImageStyle, LayoutAnimation, StyleProp, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseText } from "~Components"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
 import { selectFeaturedDapps, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { DAppUtils } from "~Utils"
-import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { DappDetails } from "./DappDetails"
-
-const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
-const AnimatedBaseSpacer = Animated.createAnimatedComponent(wrapFunctionComponent(BaseSpacer))
 
 type Props = {
     /**
@@ -59,20 +55,29 @@ export const DappDetailsCard = ({
 
     const allApps = useAppSelector(selectFeaturedDapps)
 
-    const spacerStyles = useAnimatedStyle(() => {
-        return {
-            opacity: showDetails ? withTiming(1, { duration: 300 }) : withTiming(0, { duration: 300 }),
-            height: showDetails ? 16 : 0,
-        }
-    }, [showDetails])
+    const fetchDynamicAppLogo = useDynamicAppLogo({ size: 64 })
+    const configureDetailsAnimation = () => {
+        LayoutAnimation.configureNext({
+            duration: 300,
+            create: {
+                type: LayoutAnimation.Types.easeInEaseOut,
+                property: LayoutAnimation.Properties.scaleXY,
+            },
+            update: {
+                type: LayoutAnimation.Types.easeInEaseOut,
+            },
+            delete: {
+                type: LayoutAnimation.Types.easeInEaseOut,
+                property: LayoutAnimation.Properties.scaleXY,
+            },
+        })
+    }
 
     const { icon, name, url, isDapp } = useMemo(() => {
         const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(appUrl).origin)
         if (foundDapp)
             return {
-                icon: foundDapp.id
-                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
-                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
+                icon: fetchDynamicAppLogo({ app: foundDapp }),
                 name: foundDapp.name,
                 url: appUrl,
                 isDapp: true,
@@ -81,19 +86,14 @@ export const DappDetailsCard = ({
         return {
             name: appName,
             url: appUrl,
-            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(appUrl).origin}`,
+            icon: DAppUtils.generateFaviconUrl(appUrl, { size: 64 }),
             isDapp: selectedNetwork.type !== NETWORK_TYPE.MAIN,
         }
-    }, [allApps, appName, appUrl, selectedNetwork.type])
+    }, [allApps, appName, appUrl, fetchDynamicAppLogo, selectedNetwork.type])
 
     return (
-        <AnimatedBaseView
-            bg={theme.isDark ? COLORS.PURPLE : COLORS.WHITE}
-            p={16}
-            flexDirection="column"
-            layout={LinearTransition.duration(300)}
-            borderRadius={12}>
-            <AnimatedBaseView flexDirection="row" gap={12} layout={LinearTransition.duration(300)}>
+        <BaseView bg={theme.isDark ? COLORS.PURPLE : COLORS.WHITE} p={16} flexDirection="column" borderRadius={12}>
+            <BaseView flexDirection="row" gap={12}>
                 <BaseView flexDirection="row" gap={16} flex={1}>
                     <Image
                         source={
@@ -126,6 +126,7 @@ export const DappDetailsCard = ({
                 </BaseView>
                 <BaseButton
                     action={() => {
+                        configureDetailsAnimation()
                         setShowDetails(old => !old)
                         onShowDetails?.(!showDetails)
                     }}
@@ -144,17 +145,17 @@ export const DappDetailsCard = ({
                     testID="DAPP_WITH_DETAILS_DETAILS_BTN">
                     {showDetails ? LL.HIDE() : LL.DETAILS()}
                 </BaseButton>
-            </AnimatedBaseView>
+            </BaseView>
             {!isDapp && showDappWarning && (
                 <>
                     <BaseSpacer height={16} />
                     <DappDetails.NotVerifiedWarning />
                 </>
             )}
-            {showSpacer && <AnimatedBaseSpacer style={[spacerStyles]} />}
+            {showSpacer && showDetails && <BaseSpacer height={16} />}
 
             {children({ visible: showDetails })}
-        </AnimatedBaseView>
+        </BaseView>
     )
 }
 

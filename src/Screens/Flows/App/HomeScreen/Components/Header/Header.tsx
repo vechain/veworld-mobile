@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import React, { memo, useCallback } from "react"
 import { useBlockchainNetwork, useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
-import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect, HeaderStyle } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect, HeaderStyleV2 } from "~Components"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListHome, Routes, TabStackParamList } from "~Navigation"
 import HapticsService from "~Services/HapticsService"
@@ -33,7 +33,7 @@ export const Header = memo(() => {
                         name: "DiscoverStack",
                         params: {
                             state: {
-                                routes: [{ name: Routes.DISCOVER }, { name: Routes.BROWSER, params: { url } }],
+                                routes: [{ name: Routes.APPS }, { name: Routes.BROWSER, params: { url } }],
                             },
                         },
                     },
@@ -74,11 +74,11 @@ export const Header = memo(() => {
     }, [nav])
 
     return (
-        <BaseView w={100} style={HeaderStyle}>
+        <BaseView w={100} style={HeaderStyleV2}>
             <BaseView flexDirection="row" alignItems="center" alignSelf="center">
                 <VeWorldLogoSVG height={32} width={32} color={theme.colors.veworldLogo} />
                 <BaseSpacer width={8} />
-                <BaseText typographyFont="bodySemiBold" testID="veworld-homepage">
+                <BaseText typographyFont="subTitleSemiBold" testID="veworld-homepage">
                     {LL.VEWORLD()}
                 </BaseText>
             </BaseView>

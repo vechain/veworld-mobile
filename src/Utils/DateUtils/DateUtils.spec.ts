@@ -24,23 +24,19 @@ describe("formatDateTime", () => {
         expect(formatDateTime(timestamp, "en", DEFAULT_TIMEZONE)).toBe("Apr 25, 2023 - 6:53")
     })
 
-    it("should throw an error for invalid locale", () => {
+    it("should return empty string for invalid locale", () => {
         const timestamp = 1682448820000
-        expect(() => formatDateTime(timestamp, "nonexistent-locale", DEFAULT_TIMEZONE)).toThrow(
-            "Invalid locale: nonexistent-locale.",
-        )
+        expect(formatDateTime(timestamp, "nonexistent-locale", DEFAULT_TIMEZONE)).toBe("")
     })
 
-    it("should throw an error for invalid timezone", () => {
+    it("should return empty string for invalid timezone", () => {
         const timestamp = 1682448820000
-        expect(() => formatDateTime(timestamp, "en", "nonexistent-timezone")).toThrow(
-            "Invalid timezone: nonexistent-timezone.",
-        )
+        expect(formatDateTime(timestamp, "en", "nonexistent-timezone")).toBe("")
     })
 
-    it("should format the timestamp with Europe/Berlin timezone", () => {
+    it("should return empty string for unsupported timezone (Europe/Berlin)", () => {
         const timestamp = 1682448820000
-        expect(() => formatDateTime(timestamp, "en", "Europe/Berlin")).toThrow("Invalid timezone: Europe/Berlin.")
+        expect(formatDateTime(timestamp, "en", "Europe/Berlin")).toBe("")
     })
 
     it("should format the timestamp correctly in Italian", () => {

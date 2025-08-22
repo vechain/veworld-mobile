@@ -1,6 +1,6 @@
 import { queryClient } from "~Api/QueryProvider"
 import { DiscoveryDApp } from "~Constants"
-import { VeBetterDaoDapp, VeBetterDaoDAppMetadata } from "~Model"
+import { VeBetterDaoDapp, VbdDApp } from "~Model"
 import { getVeBetterDaoDAppMetadata } from "~Networking"
 import { UseDappsWithPaginationSortKey } from "./types"
 import { URIUtils } from "~Utils"
@@ -23,7 +23,7 @@ export const fetchVBDMetadata = (dapp: VeBetterDaoDapp) => {
     })
 }
 
-export const mapVBDDappToDiscoveryDapp = (dapp: VeBetterDaoDapp & VeBetterDaoDAppMetadata): DiscoveryDApp => {
+export const mapVBDDappToDiscoveryDapp = (dapp: VbdDApp): DiscoveryDApp => {
     return {
         name: dapp.name,
         href: new URL(dapp.external_url).origin,

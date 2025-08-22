@@ -19,6 +19,8 @@ import { EventTypeResponse } from "~Networking"
 import { fetchTransfersForBlock } from "~Networking/Transfers"
 import { filterNFTTransferEvents, filterTransferEventsByType } from "./Helpers"
 import { handleNFTTransfers, handleTokenTransfers, handleVETTransfers } from "./Handlers"
+import { handleNodeDelegatedEvent } from "../StargateEventListener/Handlers/StargateEventHandlers"
+import { useFetchingStargate } from "../StargateEventListener/Hooks/useFetchingStargate"
 import { ERROR_EVENTS } from "~Constants"
 import { useThorClient } from "~Hooks/useThorClient"
 
@@ -38,6 +40,8 @@ export const TransferEventListener: React.FC = () => {
     const { updateBalances, updateNFTs } = useStateReconciliation()
 
     const { forTokens, forNFTs } = useInformUser({ network })
+
+    const { refetchStargateData } = useFetchingStargate()
 
     const blackListedCollections = useAppSelector(selectBlackListedCollections)
 
@@ -71,6 +75,16 @@ export const TransferEventListener: React.FC = () => {
 
                 // Store the beat in the cache for use in other parts of the app
                 dispatch(updateBeat(beat))
+
+                // ~ STARGATE EVENTS (process regardless of token transfers)
+                await handleNodeDelegatedEvent({
+                    beat,
+                    network,
+                    thor,
+                    refetchStargateData,
+                    managedAddresses: visibleAccounts.map(acc => acc.address),
+                    selectedAccountAddress: selectedAccount.address,
+                })
 
                 if (relevantAccounts.length === 0) return
 
@@ -120,6 +134,8 @@ export const TransferEventListener: React.FC = () => {
                     updateBalances,
                     informUser: forTokens,
                 })
+
+                // ~ STARGATE EVENTS (already processed above)
             } catch (e) {
                 error(ERROR_EVENTS.TOKENS, e)
             }
@@ -138,6 +154,7 @@ export const TransferEventListener: React.FC = () => {
             fetchData,
             updateBalances,
             forTokens,
+            refetchStargateData,
         ],
     )
 

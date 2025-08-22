@@ -14,8 +14,6 @@ type Props = {
     onClose: () => void
 }
 
-const snapPoints = ["50%", "90%"]
-
 export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onClose }, ref) => {
     const { LL } = useI18nContext()
     const dispatch = useAppDispatch()
@@ -81,17 +79,25 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
 
     const renderSectionSeparator = useCallback(() => <BaseSpacer height={24} />, [])
 
+    const snapPoints = useMemo(() => {
+        if (!otherNetworks.length) return ["45%"]
+
+        if (otherNetworks.length < 2) return ["60%"]
+
+        return ["90%"]
+    }, [otherNetworks.length])
+
     const [snapIndex, setSnapIndex] = useState<number>(0)
 
     // The list is scrollable when the bottom sheet is fully expanded
-    const isListScrollable = useMemo(() => snapIndex === snapPoints.length - 1, [snapIndex])
+    const isListScrollable = useMemo(() => snapIndex === snapPoints.length - 1, [snapIndex, snapPoints.length])
 
     const handleSheetChanges = useCallback((index: number) => {
         setSnapIndex(index)
     }, [])
 
     return (
-        <BaseBottomSheet snapPoints={snapPoints} ref={ref} onChange={handleSheetChanges}>
+        <BaseBottomSheet floating snapPoints={snapPoints} ref={ref} onChange={handleSheetChanges}>
             <BaseView flexDirection="column" w={100}>
                 <BaseText typographyFont="subTitleBold">{LL.BD_SELECT_NETWORK()}</BaseText>
             </BaseView>
@@ -105,6 +111,7 @@ export const SelectNetworkBottomSheet = React.forwardRef<BottomSheetModalMethods
                     SectionSeparatorComponent={renderSectionSeparator}
                     renderSectionHeader={renderSectionHeader}
                     renderItem={renderItem}
+                    stickySectionHeadersEnabled={false}
                     scrollEnabled={isListScrollable}
                     showsVerticalScrollIndicator={false}
                     showsHorizontalScrollIndicator={false}
