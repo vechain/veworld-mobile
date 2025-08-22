@@ -62,7 +62,7 @@ interface IBigNumberUtils {
     ): { value: string; preciseValue: string; isLeesThan_0_01: boolean }
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
-    toCompactString(decimals?: number): string
+    toCompactString(locale: Intl.LocalesArgument, decimals?: number): string
     clone(): BigNumberUtils
 
     // Math Methods
@@ -347,7 +347,7 @@ class BigNumberUtils implements IBigNumberUtils {
      * @param decimals Number of decimal places to show (defaults to 1)
      * @returns A compact formatted string
      */
-    toCompactString(decimals: number = 1): string {
+    toCompactString(locale: Intl.LocalesArgument, decimals: number = 1): string {
         const powers: Record<number, number> = {
             4: Math.pow(10, 12),
             3: Math.pow(10, 9),
@@ -363,7 +363,16 @@ class BigNumberUtils implements IBigNumberUtils {
         const power = Math.floor(log10 / 3)
         const value = this.toNumber / powers[power]
         const suffix = ["", "K", "M", "B", "T"][power]
-        return `${value.toFixed(decimals)}${suffix}`
+
+        const formatter = getNumberFormatter({
+            locale,
+            precision: decimals,
+            style: "decimal",
+            useGrouping: true,
+        })
+
+        const formatted = formatter.format(value)
+        return formatted + suffix
     }
 
     clone() {

@@ -131,10 +131,13 @@ export const VbdCarouselBottomSheet = ({
     )
 
     const usersNum = useMemo(
-        () => BigNutils(appOverview?.totalUniqueUserInteractions ?? 0).toCompactString(),
-        [appOverview],
+        () => BigNutils(appOverview?.totalUniqueUserInteractions ?? 0).toCompactString(locale),
+        [appOverview, locale],
     )
-    const actionsNum = useMemo(() => BigNutils(appOverview?.actionsRewarded ?? 0).toCompactString(), [appOverview])
+    const actionsNum = useMemo(
+        () => BigNutils(appOverview?.actionsRewarded ?? 0).toCompactString(locale),
+        [appOverview, locale],
+    )
 
     const leftIcon = useMemo(() => {
         return isBookMarked ? (
