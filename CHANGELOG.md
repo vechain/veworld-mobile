@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-22)</small>
+
+* build: init ([2990bd1](https://github.com/vechain/veworld-mobile/commit/2990bd1))
+* 269 Refactor :: created custom toCompactString function (#3209) ([26081e9](https://github.com/vechain/veworld-mobile/commit/26081e9)), closes [#3209](https://github.com/vechain/veworld-mobile/issues/3209)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
