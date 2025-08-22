@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-22)</small>
+
+* build: init ([de858a0](https://github.com/vechain/veworld-mobile/commit/de858a0))
+* fix: fix app logo (#3213) ([4f656e7](https://github.com/vechain/veworld-mobile/commit/4f656e7)), closes [#3213](https://github.com/vechain/veworld-mobile/issues/3213)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
