@@ -121,6 +121,19 @@ export enum DAppType {
     DAPPS = "DAPPS",
 }
 
+export enum X2ECategoryType {
+    OTHERS = "others",
+    EDUCATION_LEARNING = "education-learning",
+    FITNESS_WELLNESS = "fitness-wellness",
+    GREEN_FINANCE_DEFI = "green-finance-defi",
+    GREEN_MOBILITY_TRAVEL = "green-mobility-travel",
+    NUTRITION = "nutrition",
+    PLASTIC_WASTE_RECYCLING = "plastic-waste-recycling",
+    RENEWABLE_ENERGY_EFFICIENCY = "renewable-energy-efficiency",
+    SUSTAINABLE_SHOPPING = "sustainable-shopping",
+    PETS = "pets",
+}
+
 export type VeBetterDaoDapp = {
     id: string
     teamWalletAddress: string
@@ -128,6 +141,7 @@ export type VeBetterDaoDapp = {
     metadataURI: string
     createdAtTimestamp: string
     appAvailableForAllocationVoting?: boolean
+    categories?: X2ECategoryType[]
 }
 
 export type VeBetterDaoDAppMetadata = {
@@ -147,6 +161,10 @@ export type VeBetterDaoDAppMetadata = {
     }[]
     tweets?: string[]
     ve_world?: {
-        banner: string | number
+        banner: string
+        featured_image?: string
     }
+    categories?: string[]
 }
+
+export type VbdDApp = VeBetterDaoDapp & VeBetterDaoDAppMetadata

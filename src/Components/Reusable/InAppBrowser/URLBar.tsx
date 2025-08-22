@@ -1,145 +1,191 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback, useMemo } from "react"
-import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
+import { StyleSheet } from "react-native"
+import FastImage from "react-native-fast-image"
 import Animated, { useAnimatedStyle, withTiming } from "react-native-reanimated"
-import { TabsIconSVG } from "~Assets"
-import { BaseIcon, BaseText, BaseTextInput, BaseTouchable, BaseView, useInAppBrowser } from "~Components"
+import { BaseText, BaseTouchable, BaseView } from "~Components/Base"
+import { BaseIcon } from "~Components/Base/BaseIcon"
+import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { COLORS } from "~Constants"
-import { useTheme } from "~Hooks"
+import { useBottomSheetModal, useGetDappMetadataFromUrl } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
-import { selectCurrentTabId, selectTabs, updateTab, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { URIUtils } from "~Utils"
+import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { DAppUtils } from "~Utils/DAppUtils"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
+import { BrowserBottomSheet } from "./BrowserBottomSheet"
 
 type Props = {
-    onBrowserNavigation?: (error: boolean) => void
+    navigationUrl: string
     onNavigate?: () => void | Promise<void>
-    returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING
+    returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
+    isLoading?: boolean
 }
 
-export const URLBar = ({ onBrowserNavigation, onNavigate, returnScreen = Routes.DISCOVER }: Props) => {
-    const { showToolbars, navigationState, isDapp, navigateToUrl } = useInAppBrowser()
+const AnimatedBaseIcon = Animated.createAnimatedComponent(BaseIcon)
+const AnimatedBaseView = Animated.createAnimatedComponent(wrapFunctionComponent(BaseView))
+const AnimatedBaseText = Animated.createAnimatedComponent(wrapFunctionComponent(BaseText))
+const AnimatedTouchable = Animated.createAnimatedComponent(wrapFunctionComponent(BaseTouchable))
+const AnimatedFavicon = Animated.createAnimatedComponent(FastImage)
+
+export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: Props) => {
+    const { showToolbars } = useInAppBrowser()
+    const { betterWorldFeature } = useFeatureFlags()
+    const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
+    const fetchDynamicLogo = useDynamicAppLogo({})
+
     const nav =
         useNavigation<
-            NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListHome>
+            NativeStackNavigationProp<
+                RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListHome & RootStackParamListApps
+            >
         >()
 
-    const tabs = useAppSelector(selectTabs)
-    const selectedTabId = useAppSelector(selectCurrentTabId)
-    const dispatch = useAppDispatch()
+    const _returnScreen = useMemo(() => {
+        if (returnScreen) return returnScreen
+        if (betterWorldFeature.appsScreen.enabled) return Routes.APPS
+        return Routes.DISCOVER
+    }, [betterWorldFeature.appsScreen.enabled, returnScreen])
+
+    const { onOpen: openBottomSheet, ref: bottomSheetRef, onClose: closeBottomSheet } = useBottomSheetModal()
 
     const navToDiscover = useCallback(async () => {
         await onNavigate?.()
-        nav.navigate(returnScreen)
-    }, [nav, onNavigate, returnScreen])
+        nav.navigate(_returnScreen)
+    }, [nav, onNavigate, _returnScreen])
 
-    const navToTabsManager = useCallback(async () => {
+    const navToSearch = useCallback(async () => {
         await onNavigate?.()
-        nav.replace(Routes.DISCOVER_TABS_MANAGER)
-    }, [nav, onNavigate])
-
-    const theme = useTheme()
+        if (betterWorldFeature.appsScreen.enabled) {
+            nav.replace(Routes.APPS_SEARCH)
+        } else {
+            nav.replace(Routes.DISCOVER_SEARCH)
+        }
+    }, [betterWorldFeature.appsScreen.enabled, nav, onNavigate])
 
     const animatedStyles = useAnimatedStyle(
         () => ({
             height: showToolbars ? withTiming(56) : withTiming(24),
+            marginBottom: showToolbars ? 0 : 8,
         }),
         [showToolbars],
     )
 
-    const onSubmit = useCallback(
-        async (e: NativeSyntheticEvent<TextInputSubmitEditingEventData>) => {
-            const value = e.nativeEvent.text.toLowerCase()
-            const isValid = await URIUtils.isValidBrowserUrl(value)
-            if (isValid) {
-                const url = URIUtils.parseUrl(value)
-                onBrowserNavigation?.(false)
-                navigateToUrl(url)
-                if (selectedTabId) dispatch(updateTab({ id: selectedTabId, href: url }))
-                return
-            }
-            onBrowserNavigation?.(true)
-        },
-        [dispatch, navigateToUrl, onBrowserNavigation, selectedTabId],
+    const animatedIconStyles = useAnimatedStyle(
+        () => ({
+            opacity: withTiming(showToolbars ? 1 : 0, { duration: 400 }),
+            transform: [{ scale: withTiming(showToolbars ? 1 : 0, { duration: 300 }) }],
+        }),
+        [showToolbars],
     )
 
-    const renderWithToolbar = useMemo(() => {
-        return (
-            <BaseView style={styles.inputContainer}>
-                {/* Icon on the left */}
-                <BaseIcon
-                    testID="URL-bar-back-button"
-                    name="icon-arrow-left"
-                    color={theme.colors.text}
-                    action={navToDiscover}
-                    haptics="Light"
-                    size={24}
-                    p={8}
-                />
+    const animatedFaviconStyles = useAnimatedStyle(
+        () => ({
+            transform: [{ scale: withTiming(showToolbars ? 1 : 0.6, { duration: 300 }) }],
+        }),
+        [showToolbars],
+    )
 
-                {/* URL Text centered */}
-                <BaseView flex={1} alignItems="center" flexDirection="row">
-                    {isDapp ? (
-                        <BaseView flex={0.9} flexDirection="row" alignItems="center" style={styles.dappContainer}>
-                            <BaseIcon name="icon-lock" color={theme.colors.textLight} size={12} />
+    const parsedDappMetadata = useMemo(() => {
+        if (dappMetadata)
+            return {
+                icon: fetchDynamicLogo({ app: dappMetadata }),
+                name: dappMetadata.name,
+                url: navigationUrl,
+                isDapp: true,
+            }
 
-                            <BaseText
-                                testID="URL-bar-dapp-name"
-                                typographyFont="captionRegular"
-                                color={theme.colors.subtitle}
-                                numberOfLines={1}>
-                                {navigationState?.url}
-                            </BaseText>
-                        </BaseView>
-                    ) : (
-                        <BaseTextInput
-                            testID="URL-bar-input"
-                            defaultValue={navigationState?.url}
-                            onSubmitEditing={onSubmit}
-                            style={styles.textInput}
-                            inputContainerStyle={styles.textInputContainer}
-                            containerStyle={styles.textInputContainerRoot}
-                        />
-                    )}
-                </BaseView>
+        return {
+            name: new URL(navigationUrl).hostname,
+            url: navigationUrl,
+            icon: DAppUtils.generateFaviconUrl(navigationUrl, { size: 64 }),
+            isDapp: false,
+        }
+    }, [dappMetadata, fetchDynamicLogo, navigationUrl])
 
-                <BaseTouchable onPress={navToTabsManager} testID="TABS_BTN">
-                    <TabsIconSVG
-                        count={tabs.length}
-                        textColor={theme.colors.text}
-                        color={theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_300}
+    const websiteFavicon = useMemo(() => {
+        return parsedDappMetadata.icon ? (
+            <AnimatedFavicon
+                testID="URL-bar-dapp-favicon"
+                source={{ uri: parsedDappMetadata.icon, priority: FastImage.priority.high }}
+                style={[animatedFaviconStyles, styles.favicon]}
+            />
+        ) : (
+            <AnimatedBaseIcon
+                testID="URL-bar-website-favicon"
+                name="icon-globe"
+                color={COLORS.GREY_400}
+                bg={COLORS.GREY_600}
+                size={12}
+                p={6}
+                style={[animatedFaviconStyles, styles.favicon]}
+            />
+        )
+    }, [parsedDappMetadata, animatedFaviconStyles])
+
+    const websiteName = useMemo(() => {
+        const url = new URL(navigationUrl)
+        return dappMetadata ? dappMetadata.name : url.hostname.replace("www.", "") || "about:blank"
+    }, [dappMetadata, navigationUrl])
+
+    return (
+        <>
+            <Animated.View style={[styles.animatedContainer, animatedStyles]}>
+                <AnimatedBaseView style={styles.inputContainer}>
+                    {/* Icon on the left */}
+                    <AnimatedBaseIcon
+                        testID="URL-bar-back-button"
+                        name="icon-x"
+                        color={COLORS.GREY_50}
+                        bg={COLORS.PURPLE}
+                        action={navToDiscover}
+                        haptics="Light"
+                        size={16}
+                        p={8}
+                        style={[animatedIconStyles, styles.iconButton]}
                     />
-                </BaseTouchable>
-            </BaseView>
-        )
-    }, [
-        isDapp,
-        navToDiscover,
-        navToTabsManager,
-        navigationState?.url,
-        onSubmit,
-        tabs.length,
-        theme.colors.subtitle,
-        theme.colors.text,
-        theme.colors.textLight,
-        theme.isDark,
-    ])
 
-    const renderWithoutToolbar = useMemo(() => {
-        return (
-            <BaseView style={styles.noToolbarContainer}>
-                <BaseText typographyFont="smallCaptionMedium" color={theme.colors.subtitle} numberOfLines={1}>
-                    {navigationState?.url}
-                </BaseText>
-            </BaseView>
-        )
-    }, [navigationState?.url, theme.colors.subtitle])
+                    {/* URL Text centered */}
+                    <AnimatedTouchable
+                        testID="URL-bar-website-name"
+                        style={styles.urlContainer}
+                        onPress={navToSearch}
+                        disabled={isLoading}>
+                        <AnimatedBaseView
+                            flex={1}
+                            alignItems="center"
+                            flexDirection="row"
+                            justifyContent="center"
+                            gap={8}>
+                            {websiteFavicon}
+                            <AnimatedBaseText
+                                allowFontScaling={false}
+                                typographyFont="bodySemiBold"
+                                color={COLORS.GREY_50}
+                                style={[styles.appName]}>
+                                {websiteName}
+                            </AnimatedBaseText>
+                        </AnimatedBaseView>
+                    </AnimatedTouchable>
 
-    return navigationState?.url ? (
-        <Animated.View style={[styles.animatedContainer, animatedStyles]}>
-            {showToolbars ? renderWithToolbar : renderWithoutToolbar}
-        </Animated.View>
-    ) : null
+                    <AnimatedBaseIcon
+                        name="icon-more-vertical"
+                        color={COLORS.GREY_50}
+                        bg={COLORS.PURPLE}
+                        action={openBottomSheet}
+                        haptics="Light"
+                        size={16}
+                        p={8}
+                        style={[animatedIconStyles, styles.iconButton]}
+                    />
+                </AnimatedBaseView>
+            </Animated.View>
+
+            <BrowserBottomSheet ref={bottomSheetRef} onNavigate={onNavigate} onClose={closeBottomSheet} />
+        </>
+    )
 }
 
 const styles = StyleSheet.create({
@@ -147,6 +193,8 @@ const styles = StyleSheet.create({
         opacity: 1,
         alignItems: "center",
         flexDirection: "row",
+        // backgroundColor: COLORS.DARK_PURPLE,
+        paddingVertical: 8,
     },
     inputContainer: {
         width: "100%",
@@ -163,14 +211,16 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         flex: 1,
         paddingHorizontal: 16,
+        marginVertical: 8,
     },
     dappContainer: {
         gap: 8,
     },
-    urlText: {
+    appName: {
         textAlign: "center", // centers the text
-        marginHorizontal: 10, // adds space around the text
-        marginVertical: 10,
+        transformOrigin: "center",
+        fontSize: 14,
+        fontWeight: "700",
     },
     textInput: {
         fontSize: 12,
@@ -183,5 +233,21 @@ const styles = StyleSheet.create({
     },
     textInputContainerRoot: {
         width: "100%",
+    },
+    urlContainer: {
+        flex: 1,
+        alignItems: "center",
+        flexDirection: "row",
+        justifyContent: "center",
+        gap: 8,
+    },
+    favicon: {
+        width: 24,
+        height: 24,
+        borderRadius: 4,
+        transformOrigin: "center",
+    },
+    iconButton: {
+        transformOrigin: "center",
     },
 })

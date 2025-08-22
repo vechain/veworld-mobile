@@ -1,7 +1,7 @@
 import { ComponentProps, default as React } from "react"
 import { ViewProps } from "react-native"
 import Animated from "react-native-reanimated"
-import { BaseIcon } from "~Components/Base"
+import { BaseIcon } from "~Components/Base/BaseIcon"
 import { Stroke } from "./Stroke"
 import { useSpinAnimation } from "./useSpinAnimation"
 

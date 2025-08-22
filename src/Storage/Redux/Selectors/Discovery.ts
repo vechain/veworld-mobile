@@ -87,3 +87,6 @@ export const selectSession = createSelector(
 export const selectSessions = createSelector(getDiscoveryState, state => {
     return state.sessions ?? {}
 })
+export const selectIsNormalUser = createSelector(getDiscoveryState, state => state.isNormalUser ?? false)
+
+export const selectSuggestedAppIds = createSelector(getDiscoveryState, state => state.suggestedAppIds)

@@ -6,7 +6,7 @@ import {
     AlertCard,
     BaseSpacer,
     BaseView,
-    HeaderStyle,
+    HeaderStyleV2,
     HeaderTitle,
     Layout,
     SelectedNetworkViewer,
@@ -112,8 +112,8 @@ export const SettingsScreen = () => {
         <Layout
             noBackButton
             fixedHeader={
-                <BaseView style={HeaderStyle}>
-                    <HeaderTitle title={LL.TITLE_MENU()} testID="settings-screen" />
+                <BaseView style={HeaderStyleV2}>
+                    <HeaderTitle title={LL.TITLE_MENU()} leftIconName="icon-menu" testID="settings-screen" />
                     <SelectedNetworkViewer />
                 </BaseView>
             }
