@@ -19,7 +19,6 @@ import { BrowserBottomSheet } from "./BrowserBottomSheet"
 
 type Props = {
     navigationUrl: string
-    onBrowserNavigation?: (error: boolean) => void
     onNavigate?: () => void | Promise<void>
     returnScreen?: Routes.DISCOVER | Routes.SETTINGS | Routes.HOME | Routes.ACTIVITY_STAKING | Routes.APPS
     isLoading?: boolean
