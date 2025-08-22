@@ -539,7 +539,7 @@ const light: Colors = {
     stakedVetCard: {
         background: COLORS.GREY_50,
     },
-    veworldLogo: COLORS.BLACK,
+    veworldLogo: COLORS.PURPLE,
 }
 
 const dark: Colors = {
@@ -763,7 +763,7 @@ const dark: Colors = {
     stakedVetCard: {
         background: COLORS.PURPLE,
     },
-    veworldLogo: COLORS.WHITE,
+    veworldLogo: COLORS.GREY_50,
 }
 
 export const colors = { light, dark }
