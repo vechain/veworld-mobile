@@ -98,17 +98,17 @@ const Stats = React.memo(
 
         const usersCount = useMemo(() => {
             if (appOverview?.totalUniqueUserInteractions !== undefined) {
-                return BigNutils(appOverview.totalUniqueUserInteractions).toCompactString(locale)
+                return BigNutils(appOverview.totalUniqueUserInteractions).toCompactString()
             }
             return users.value
-        }, [appOverview?.totalUniqueUserInteractions, locale, users.value])
+        }, [appOverview?.totalUniqueUserInteractions, users.value])
 
         const actionsCount = useMemo(() => {
             if (appOverview?.actionsRewarded !== undefined) {
-                return BigNutils(appOverview.actionsRewarded).toCompactString(locale)
+                return BigNutils(appOverview.actionsRewarded).toCompactString()
             }
             return actions.value
-        }, [appOverview?.actionsRewarded, locale, actions.value])
+        }, [appOverview?.actionsRewarded, actions.value])
 
         return (
             <AnimatedBaseView
