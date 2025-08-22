@@ -23,6 +23,7 @@ import {
     getVeDelegateBalanceQueryKey,
     useAnalyticTracking,
     useBottomSheetModal,
+    useFetchFeaturedDApps,
     useMemoizedAnimation,
     usePrefetchAllVns,
     useSetSelectedAccount,
@@ -60,6 +61,9 @@ import { useTokenBalances } from "./Hooks"
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
     usePrefetchAllVns()
+
+    // Pre Fetch featured dapps
+    useFetchFeaturedDApps()
 
     const nav = useNavigation()
     const queryClient = useQueryClient()

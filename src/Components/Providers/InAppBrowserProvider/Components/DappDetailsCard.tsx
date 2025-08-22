@@ -1,10 +1,11 @@
 import { default as React, useMemo, useState } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet, LayoutAnimation } from "react-native"
+import { Image, ImageStyle, LayoutAnimation, StyleProp, StyleSheet } from "react-native"
 import { BaseButton, BaseIcon, BaseText } from "~Components"
 import { BaseSpacer } from "~Components/Base/BaseSpacer"
 import { BaseView } from "~Components/Base/BaseView"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { useI18nContext } from "~i18n"
 import { NETWORK_TYPE } from "~Model"
 import { selectFeaturedDapps, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -54,6 +55,7 @@ export const DappDetailsCard = ({
 
     const allApps = useAppSelector(selectFeaturedDapps)
 
+    const fetchDynamicAppLogo = useDynamicAppLogo({ size: 64 })
     const configureDetailsAnimation = () => {
         LayoutAnimation.configureNext({
             duration: 300,
@@ -75,9 +77,7 @@ export const DappDetailsCard = ({
         const foundDapp = allApps.find(app => new URL(app.href).origin === new URL(appUrl).origin)
         if (foundDapp)
             return {
-                icon: foundDapp.id
-                    ? DAppUtils.getAppHubIconUrl(foundDapp.id)
-                    : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(foundDapp.href).origin}`,
+                icon: fetchDynamicAppLogo({ app: foundDapp }),
                 name: foundDapp.name,
                 url: appUrl,
                 isDapp: true,
@@ -86,10 +86,10 @@ export const DappDetailsCard = ({
         return {
             name: appName,
             url: appUrl,
-            icon: `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(appUrl).origin}`,
+            icon: DAppUtils.generateFaviconUrl(appUrl, { size: 64 }),
             isDapp: selectedNetwork.type !== NETWORK_TYPE.MAIN,
         }
-    }, [allApps, appName, appUrl, selectedNetwork.type])
+    }, [allApps, appName, appUrl, fetchDynamicAppLogo, selectedNetwork.type])
 
     return (
         <BaseView bg={theme.isDark ? COLORS.PURPLE : COLORS.WHITE} p={16} flexDirection="column" borderRadius={12}>
