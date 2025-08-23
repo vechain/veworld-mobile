@@ -16,6 +16,7 @@ import {
     useThemedStyles,
     useTransactionScreen,
 } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { TransactionRequest } from "~Model"
 import {
     addConnectedDiscoveryApp,
@@ -246,6 +247,7 @@ export const TransactionBottomSheet = () => {
     const track = useAnalyticTracking()
 
     const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
 
     const { failRequest, processRequest } = useWalletConnect()
 
@@ -271,13 +273,14 @@ export const TransactionBottomSheet = () => {
                         dappUrl: transactionBsData.appUrl ?? transactionBsData.appName,
                     }),
                 })
+                createSessionIfNotExists(transactionBsData)
             }
 
             isUserAction.current = true
             dispatch(setIsAppLoading(false))
             onCloseBs()
         },
-        [transactionBsData, dispatch, onCloseBs, track, network.name],
+        [transactionBsData, dispatch, onCloseBs, track, network.name, createSessionIfNotExists],
     )
 
     const onTransactionSuccess = useCallback(

@@ -1,16 +1,22 @@
 import { ethers } from "ethers"
 import { RequestMethods } from "~Constants"
 
+export type ConnectResponse =
+    | Connex.Vendor.CertResponse
+    | { signer: string; signature: string }
+    | { signer: string }
+    | null
+
 type ErrorResponse = {
     id: string
     error: string
-    method: RequestMethods.REQUEST_TRANSACTION | RequestMethods.SIGN_CERTIFICATE
+    method: (typeof RequestMethods)[keyof typeof RequestMethods]
 }
 
 type SuccessResponse = {
     id: string
-    data: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse | SignedTypedDataResponse
-    method: RequestMethods.REQUEST_TRANSACTION | RequestMethods.SIGN_CERTIFICATE
+    data: Connex.Vendor.CertResponse | Connex.Vendor.TxResponse | string | ConnectResponse | string[]
+    method: (typeof RequestMethods)[keyof typeof RequestMethods]
 }
 
 export type WindowResponse = ErrorResponse | SuccessResponse
@@ -28,20 +34,70 @@ interface BaseRequest {
 }
 
 export type TxRequest = Omit<BaseRequest, "domain" | "origin" | "types" | "value"> & {
-    method: RequestMethods.REQUEST_TRANSACTION
+    method: (typeof RequestMethods)["REQUEST_TRANSACTION"]
     message: Connex.Vendor.TxMessage
     options: Connex.Signer.TxOptions
 }
 
 export type CertRequest = Omit<BaseRequest, "domain" | "origin" | "types" | "value"> & {
-    method: RequestMethods.SIGN_CERTIFICATE
+    method: (typeof RequestMethods)["SIGN_CERTIFICATE"]
     message: Connex.Vendor.CertMessage
     options: Connex.Signer.CertOptions
 }
 
 export type SignedDataRequest = Omit<BaseRequest, "message"> & {
-    method: RequestMethods.SIGN_TYPED_DATA
+    method: (typeof RequestMethods)["SIGN_TYPED_DATA"]
     options: Connex.Signer.CertOptions
 }
 
-export type WindowRequest = TxRequest | CertRequest | SignedDataRequest
+type BaseRequestAPIRequest = Omit<BaseRequest, "message" | "options" | "domain" | "origin" | "types" | "value">
+export type LoginRequestCertificate = BaseRequestAPIRequest & {
+    method: (typeof RequestMethods)["CONNECT"]
+    params: {
+        value: Connex.Vendor.CertMessage
+        external?: boolean
+    }
+}
+
+export type LoginRequestTypedData = BaseRequestAPIRequest & {
+    method: (typeof RequestMethods)["CONNECT"]
+    params: {
+        value: {
+            domain: ethers.TypedDataDomain
+            types: Record<string, ethers.TypedDataField[]>
+            value: Record<string, unknown>
+        }
+        external?: boolean
+    }
+}
+
+export type LoginRequestNull = BaseRequestAPIRequest & {
+    method: (typeof RequestMethods)["CONNECT"]
+    params: {
+        value: null
+        external?: boolean
+    }
+}
+
+export type LoginRequest = LoginRequestCertificate | LoginRequestTypedData | LoginRequestNull
+type WalletRequest = BaseRequestAPIRequest & {
+    method: (typeof RequestMethods)["WALLET"]
+    params?: undefined
+}
+type DisconnectRequest = BaseRequestAPIRequest & {
+    method: (typeof RequestMethods)["DISCONNECT"]
+    params?: undefined
+}
+type SwitchWalletRequest = BaseRequestAPIRequest & {
+    method: (typeof RequestMethods)["SWITCH_WALLET"]
+    params?: undefined
+}
+
+export type WindowRequest =
+    | TxRequest
+    | CertRequest
+    | SignedDataRequest
+    | LoginRequest
+    | WalletRequest
+    | DisconnectRequest
+    | SwitchWalletRequest

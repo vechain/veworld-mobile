@@ -6,8 +6,10 @@ import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { getRpcError, useWalletConnect } from "~Components/Providers/WalletConnectProvider"
 import { SelectAccountBottomSheet } from "~Components/Reusable"
 import { AccountSelector } from "~Components/Reusable/AccountSelector"
+import { TypedDataRenderer } from "~Components/Reusable/TypedDataRenderer"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useTheme } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
 import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, SignedTypedDataResponse, TypeDataRequest, TypedData } from "~Model"
@@ -26,7 +28,6 @@ import { DappDetails } from "../DappDetails"
 import { DappDetailsCard } from "../DappDetailsCard"
 import { Signable } from "../Signable"
 import { LedgerDeviceAlert } from "./LedgerDeviceAlert"
-import { Renderer } from "./Renderer"
 
 type Props = {
     request: TypeDataRequest
@@ -107,9 +108,9 @@ const TypedDataBottomSheetContent = ({ request, onCancel, onSign, selectAccountB
                             </>
                         )}
                         <DappDetails show={visible}>
-                            <Renderer.Container>
-                                <Renderer value={request.value} />
-                            </Renderer.Container>
+                            <TypedDataRenderer.Container>
+                                <TypedDataRenderer value={request.value} />
+                            </TypedDataRenderer.Container>
                         </DappDetails>
                     </>
                 )}
@@ -157,6 +158,7 @@ export const TypedDataBottomSheet = () => {
     const track = useAnalyticTracking()
 
     const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
 
     const { failRequest, processRequest } = useWalletConnect()
 
@@ -213,12 +215,14 @@ export const TypedDataBottomSheet = () => {
                 } else {
                     postMessage({
                         id: request.id,
-                        data: signedTypedData.signature,
+                        data: signedTypedData.signature!,
                         method: RequestMethods.SIGN_TYPED_DATA,
                     })
                 }
 
                 dispatch(addSignTypedDataActivity(request.origin, signedTypedData))
+
+                createSessionIfNotExists(request)
 
                 track(AnalyticsEvent.DAPP_TYPED_DATA_SUCCESS)
                 isUserAction.current = true
@@ -239,7 +243,17 @@ export const TypedDataBottomSheet = () => {
             }
             onCloseBs()
         },
-        [buildTypedData, dispatch, failRequest, onCloseBs, postMessage, processRequest, signTypedData, track],
+        [
+            buildTypedData,
+            createSessionIfNotExists,
+            dispatch,
+            failRequest,
+            onCloseBs,
+            postMessage,
+            processRequest,
+            signTypedData,
+            track,
+        ],
     )
 
     const rejectRequest = useCallback(

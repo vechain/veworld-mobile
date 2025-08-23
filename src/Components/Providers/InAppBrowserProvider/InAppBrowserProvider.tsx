@@ -1,5 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { useNavigation } from "@react-navigation/native"
+import { ethers } from "ethers"
 import React, { useCallback, useContext, useEffect, useMemo, useRef, useState } from "react"
 import {
     NativeModules,
@@ -15,35 +16,52 @@ import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, usePrevious, useSetSelectedAccount } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
+import { useLoginSession } from "~Hooks/useLoginSession"
+import { usePostWebviewMessage } from "~Hooks/usePostWebviewMessage"
 import { Locales, useI18nContext } from "~i18n"
 import {
     AccountWithDevice,
     CertificateRequest,
     InAppRequest,
     Network,
+    SwitchWalletRequest,
     TransactionRequest,
     TypeDataRequest,
+    WalletRequest,
 } from "~Model"
 import { Routes } from "~Navigation"
 import {
     addConnectedDiscoveryApp,
+    addSession,
     changeSelectedNetwork,
+    deleteSession,
     selectAccounts,
     selectConnectedDiscoverDApps,
     selectFeaturedDapps,
     selectNetworks,
     selectSelectedAccountAddress,
+    selectSelectedAccountOrNull,
     selectSelectedNetwork,
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import { AddressUtils, DAppUtils, debug, warn } from "~Utils"
+import { AccountUtils, AddressUtils, DAppUtils, debug, warn } from "~Utils"
 import { compareAddresses } from "~Utils/AddressUtils/AddressUtils"
 import { CertificateBottomSheet } from "./Components/CertificateBottomSheet"
 import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
+import { LoginBottomSheet } from "./Components/LoginBottomSheet/LoginBottomSheet"
+import { SwitchWalletBottomSheet } from "./Components/SwitchWalletBottomSheet"
 import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
 import { TypedDataBottomSheet } from "./Components/TypedDataBottomSheet"
-import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
+import {
+    CertRequest,
+    LoginRequest,
+    LoginRequestTypedData,
+    SignedDataRequest,
+    TxRequest,
+    WindowRequest,
+    WindowResponse,
+} from "./types"
 
 const { PackageDetails } = NativeModules
 
@@ -124,6 +142,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         setTransactionBsData,
         typedDataBsRef,
         setTypedDataBsData,
+        loginBsRef,
+        setLoginBsData,
+        switchWalletBsRef,
+        setSwitchWalletBsData,
     } = useInteraction()
 
     useEffect(() => {
@@ -146,6 +168,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const { onSetSelectedAccount } = useSetSelectedAccount()
     const { LL, locale } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
     const allDapps = useAppSelector(selectFeaturedDapps)
     const {
@@ -157,6 +180,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
+    const { getLoginSession } = useLoginSession()
 
     const fetchDynamicAppLogo = useDynamicAppLogo({ size: 64 })
 
@@ -180,6 +204,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     let prevY = useRef<number>(0) // Used to detect the scroll direction of the web view
     const webviewRef = useRef<WebView | undefined>()
 
+    const postWebviewMessage = usePostWebviewMessage(webviewRef)
+
     const [navigationState, setNavigationState] = useState<WebViewNavigation | undefined>(undefined)
     const previousUrl = usePrevious(navigationState?.url)
 
@@ -195,13 +221,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         (message: WindowResponse) => {
             debug(ERROR_EVENTS.DAPP, "responding to dapp request", message.id)
 
-            webviewRef.current?.injectJavaScript(
-                `
-                    setTimeout(function() { 
-                    postMessage(${JSON.stringify(message)}, "*")
-                    }, 1);
-                    `,
-            )
+            postWebviewMessage(message)
 
             /**
              * Track the success / failure rates against the dapp URL
@@ -209,7 +229,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             let analyticEvent: AnalyticsEvent | undefined
 
             if (message.method === RequestMethods.REQUEST_TRANSACTION) {
-                if ("err" in message) {
+                if ("error" in message) {
                     analyticEvent = AnalyticsEvent.DISCOVERY_TRANSACTION_ERROR
                 } else {
                     analyticEvent = AnalyticsEvent.DISCOVERY_TRANSACTION_SUCCESS
@@ -217,7 +237,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (message.method === RequestMethods.SIGN_CERTIFICATE) {
-                if ("err" in message) {
+                if ("error" in message) {
                     analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_ERROR
                 } else {
                     analyticEvent = AnalyticsEvent.DISCOVERY_CERTIFICATE_SUCCESS
@@ -225,7 +245,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             }
 
             if (message.method === RequestMethods.SIGN_TYPED_DATA) {
-                if ("err" in message) {
+                if ("error" in message) {
                     analyticEvent = AnalyticsEvent.DISCOVERY_SIGNED_DATA_ERROR
                 } else {
                     analyticEvent = AnalyticsEvent.DISCOVERY_SIGNED_DATA_SUCCESS
@@ -238,7 +258,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
         },
-        [navigationState, track],
+        [navigationState, postWebviewMessage, track],
     )
 
     const navigateToUrl = useCallback((url: string) => {
@@ -282,6 +302,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const switchAccount = useCallback(
         (request: WindowRequest) => {
+            if (!("options" in request)) return
             if (!request.options.signer) return
 
             if (compareAddresses(selectedAccountAddress, request.options.signer)) {
@@ -315,7 +336,11 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const initAndOpenChangeAccountNetworkBottomSheet = useCallback(
         (request: WindowRequest) => {
-            if (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) {
+            if (
+                !("options" in request) ||
+                !request.options.signer ||
+                compareAddresses(selectedAccountAddress, request.options.signer)
+            ) {
                 setTargetAccount(undefined)
             } else {
                 const requestedAccount: AccountWithDevice | undefined = accounts.find(acct => {
@@ -395,6 +420,18 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             }
 
+            const session = getLoginSession(appUrl, request.genesisId)
+
+            if (!session && request.options.signer)
+                dispatch(
+                    addSession({
+                        address: request.options.signer,
+                        genesisId: request.genesisId,
+                        kind: "temporary",
+                        url: appUrl,
+                    }),
+                )
+
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
             const req: TransactionRequest = {
@@ -411,13 +448,19 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setTransactionBsData(req)
             transactionBsRef.current?.present()
         },
-        [connectedDiscoveryApps, setTransactionBsData, switchAccount, switchNetwork, transactionBsRef],
+        [
+            connectedDiscoveryApps,
+            dispatch,
+            getLoginSession,
+            setTransactionBsData,
+            switchAccount,
+            switchNetwork,
+            transactionBsRef,
+        ],
     )
 
     const navigateToCertificateScreen = useCallback(
         (request: CertRequest, appUrl: string, appName: string) => {
-            const message = request.message as Connex.Vendor.CertMessage
-
             try {
                 switchAccount(request)
                 switchNetwork(request)
@@ -425,7 +468,21 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             }
 
+            const session = getLoginSession(appUrl, request.genesisId)
+
+            if (!session && request.options.signer)
+                dispatch(
+                    addSession({
+                        address: request.options.signer,
+                        genesisId: request.genesisId,
+                        kind: "temporary",
+                        url: appUrl,
+                    }),
+                )
+
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
+
+            const message = request.message as Connex.Vendor.CertMessage
 
             const req: CertificateRequest = {
                 method: request.method,
@@ -441,7 +498,15 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setCertificateBsData(req)
             certificateBsRef.current?.present()
         },
-        [connectedDiscoveryApps, switchAccount, switchNetwork, setCertificateBsData, certificateBsRef],
+        [
+            getLoginSession,
+            dispatch,
+            connectedDiscoveryApps,
+            setCertificateBsData,
+            certificateBsRef,
+            switchAccount,
+            switchNetwork,
+        ],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -452,6 +517,18 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             } catch {
                 return
             }
+
+            const session = getLoginSession(appUrl, request.genesisId)
+
+            if (!session && request.options.signer)
+                dispatch(
+                    addSession({
+                        address: request.options.signer,
+                        genesisId: request.genesisId,
+                        kind: "temporary",
+                        url: appUrl,
+                    }),
+                )
 
             const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
@@ -472,7 +549,76 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setTypedDataBsData(req)
             typedDataBsRef.current?.present()
         },
-        [connectedDiscoveryApps, setTypedDataBsData, switchAccount, switchNetwork, typedDataBsRef],
+        [
+            connectedDiscoveryApps,
+            dispatch,
+            getLoginSession,
+            setTypedDataBsData,
+            switchAccount,
+            switchNetwork,
+            typedDataBsRef,
+        ],
+    )
+
+    const navigateToLoginScreen = useCallback(
+        (request: LoginRequest, appUrl: string, appName: string) => {
+            try {
+                switchAccount(request)
+                switchNetwork(request)
+            } catch {
+                return
+            }
+
+            const getKind = () => {
+                if (request.params.value === null) return "simple"
+                if ("payload" in request.params.value) return "certificate"
+                return "typed-data"
+            }
+
+            const kind = getKind()
+
+            setLoginBsData({
+                appName,
+                appUrl,
+                type: "in-app",
+                value: request.params.value,
+                external: request.params.external,
+                method: RequestMethods.CONNECT,
+                kind: kind as any,
+                id: request.id,
+                isFirstRequest: true,
+                genesisId: request.genesisId,
+            })
+            loginBsRef.current?.present()
+        },
+        [loginBsRef, setLoginBsData, switchAccount, switchNetwork],
+    )
+
+    /**
+     * Validate an old request (sign tx/sign cert/sign typed data) to check for sessions.
+     * @returns true if it's invalid, false otherwise
+     */
+    const checkIfOldRequestIsInvalid = useCallback(
+        (
+            request: TxRequest | CertRequest | SignedDataRequest,
+            appUrl: string,
+            method: (typeof RequestMethods)[keyof typeof RequestMethods],
+        ) => {
+            const loginSession = getLoginSession(appUrl, request.genesisId)
+            if (!loginSession) return false
+            if (loginSession.kind === "permanent") return false
+            if (!request.options.signer) return false
+            if (!AddressUtils.compareAddresses(request.options.signer, loginSession.address)) {
+                postMessage({
+                    id: request.id,
+                    error: "Invalid request. Request signer is different from the session signer.",
+                    method,
+                })
+                return true
+            }
+            return false
+        },
+        [getLoginSession, postMessage],
     )
 
     // ~ MESSAGE VALIDATION
@@ -495,19 +641,21 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
 
+            const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.REQUEST_TRANSACTION)
+            if (res) return
             if (
                 (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
                 selectedNetwork.genesis.id === request.genesisId
             ) {
                 return navigateToTransactionScreen(request, appUrl, appName)
             }
-
             setNavigateToOperation(() => () => navigateToTransactionScreen(request, appUrl, appName))
             initAndOpenChangeAccountNetworkBottomSheet(request)
         },
         [
             track,
             navigationState?.url,
+            checkIfOldRequestIsInvalid,
             selectedAccountAddress,
             selectedNetwork.genesis.id,
             initAndOpenChangeAccountNetworkBottomSheet,
@@ -534,6 +682,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
 
+            const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.SIGN_CERTIFICATE)
+            if (res) return
+
             if (
                 (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
                 selectedNetwork.genesis.id === request.genesisId
@@ -545,6 +696,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             initAndOpenChangeAccountNetworkBottomSheet(request)
         },
         [
+            checkIfOldRequestIsInvalid,
             initAndOpenChangeAccountNetworkBottomSheet,
             navigateToCertificateScreen,
             navigationState?.url,
@@ -573,6 +725,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 })
             }
 
+            const res = checkIfOldRequestIsInvalid(request, appUrl, RequestMethods.SIGN_TYPED_DATA)
+            if (res) return
+
             if (
                 (!request.options.signer || compareAddresses(selectedAccountAddress, request.options.signer)) &&
                 selectedNetwork.genesis.id === request.genesisId
@@ -584,6 +739,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             initAndOpenChangeAccountNetworkBottomSheet(message)
         },
         [
+            checkIfOldRequestIsInvalid,
             initAndOpenChangeAccountNetworkBottomSheet,
             navigateToSignedDataScreen,
             navigationState?.url,
@@ -592,6 +748,68 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             selectedNetwork.genesis.id,
             track,
         ],
+    )
+
+    const validateConnectMessage = useCallback(
+        (request: LoginRequest, appUrl: string, appName: string) => {
+            //TODO: Add Analytics
+            if (request.params.value === null) {
+                //Handle login without anything
+                if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                    return navigateToLoginScreen(request, appUrl, appName)
+                }
+
+                setNavigateToOperation(() => () => navigateToLoginScreen(request, appUrl, appName))
+                initAndOpenChangeAccountNetworkBottomSheet(request)
+                return
+            } else if ("purpose" in request.params.value) {
+                //Certificate message
+                const isValid = DAppUtils.isValidCertMessage(request.params.value)
+                if (!isValid) {
+                    return postMessage({
+                        id: request.id,
+                        error: "Invalid certificate message for connecting",
+                        method: RequestMethods.CONNECT,
+                    })
+                }
+                if (request.params.value.purpose !== "identification") {
+                    return postMessage({
+                        id: request.id,
+                        error: "Invalid purpose in certificate message for connecting",
+                        method: RequestMethods.CONNECT,
+                    })
+                }
+            } else if ("domain" in request.params.value) {
+                //Sign typed data message
+                const isValid = DAppUtils.isValidSignedData(request.params.value)
+                if (!isValid) {
+                    return postMessage({
+                        id: request.id,
+                        error: "Invalid typed data message for connecting",
+                        method: RequestMethods.CONNECT,
+                    })
+                }
+                const reqValue = (request as LoginRequestTypedData).params.value.value
+                if (
+                    "veworld_login_address" in reqValue &&
+                    reqValue.veworld_login_address !== ethers.constants.AddressZero
+                ) {
+                    return postMessage({
+                        id: request.id,
+                        error: "Invalid veworld_login_address default value in typed data message for connecting",
+                        method: RequestMethods.CONNECT,
+                    })
+                }
+            }
+
+            if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                return navigateToLoginScreen(request, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => navigateToLoginScreen(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(request)
+        },
+        [initAndOpenChangeAccountNetworkBottomSheet, navigateToLoginScreen, postMessage, selectedNetwork.genesis.id],
     )
 
     const addAppAndNavToRequest = useCallback(
@@ -630,6 +848,143 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         ],
     )
 
+    const executeWalletMessage = useCallback(
+        (request: WalletRequest, appUrl: string, appName: string) => {
+            try {
+                switchNetwork(request)
+            } catch {
+                return
+            }
+            const loginSession = getLoginSession(appUrl, request.genesisId)
+            if (!loginSession)
+                return postMessage({
+                    id: request.id,
+                    method: RequestMethods.WALLET,
+                    data: null,
+                })
+            if (loginSession.kind === "external")
+                return postMessage({
+                    id: request.id,
+                    method: RequestMethods.WALLET,
+                    data: loginSession.address,
+                })
+            if (loginSession.kind === "permanent") {
+                if (AccountUtils.isObservedAccount(selectedAccount)) {
+                    setSwitchWalletBsData({
+                        appName,
+                        appUrl,
+                        genesisId: request.genesisId,
+                        id: request.id,
+                        isFirstRequest: false,
+                        method: "thor_switchWallet",
+                        type: "in-app",
+                    })
+                    switchWalletBsRef.current?.present()
+                    return
+                }
+                return postMessage({
+                    id: request.id,
+                    method: RequestMethods.WALLET,
+                    data: selectedAccountAddress ?? null,
+                })
+            }
+            if (loginSession.kind === "temporary")
+                return postMessage({
+                    id: request.id,
+                    method: RequestMethods.WALLET,
+                    data: loginSession.address,
+                })
+        },
+        [
+            getLoginSession,
+            postMessage,
+            selectedAccount,
+            selectedAccountAddress,
+            setSwitchWalletBsData,
+            switchNetwork,
+            switchWalletBsRef,
+        ],
+    )
+
+    const validateWalletMessage = useCallback(
+        (request: WalletRequest, appUrl: string, appName: string) => {
+            if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                return executeWalletMessage(request, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => executeWalletMessage(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(request)
+        },
+        [executeWalletMessage, initAndOpenChangeAccountNetworkBottomSheet, selectedNetwork.genesis.id],
+    )
+
+    const validateDisconnectMessage = useCallback(
+        (request: { id: string; genesisId: string }, appUrl: string) => {
+            const loginSession = getLoginSession(appUrl, request.genesisId)
+            if (loginSession) dispatch(deleteSession(loginSession.url))
+            postMessage({
+                id: request.id,
+                method: RequestMethods.DISCONNECT,
+                data: null,
+            })
+        },
+        [dispatch, getLoginSession, postMessage],
+    )
+
+    const validateMethodsMessage = useCallback(
+        (request: { id: string }) => {
+            postMessage({
+                id: request.id,
+                method: RequestMethods.METHODS,
+                data: Object.values(RequestMethods).filter(value => {
+                    // personal_sign isn't supported at all
+                    return value !== "personal_sign"
+                }),
+            })
+        },
+        [postMessage],
+    )
+
+    const executeSwitchWalletMessage = useCallback(
+        (request: SwitchWalletRequest, appUrl: string, appName: string) => {
+            try {
+                switchNetwork(request)
+            } catch {
+                return
+            }
+            const loginSession = getLoginSession(appUrl, request.genesisId)
+            if (!loginSession || loginSession.kind !== "permanent")
+                return postMessage({
+                    id: request.id,
+                    error: "User cannot switch wallet",
+                    method: RequestMethods.SWITCH_WALLET,
+                })
+            setSwitchWalletBsData({
+                appName,
+                appUrl,
+                genesisId: request.genesisId,
+                id: request.id,
+                isFirstRequest: false,
+                method: "thor_switchWallet",
+                type: "in-app",
+            })
+            switchWalletBsRef.current?.present()
+        },
+        [getLoginSession, postMessage, setSwitchWalletBsData, switchNetwork, switchWalletBsRef],
+    )
+
+    const validateSwitchWalletMessage = useCallback(
+        (request: SwitchWalletRequest, appUrl: string, appName: string) => {
+            if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
+                return executeSwitchWalletMessage(request, appUrl, appName)
+            }
+
+            setNavigateToOperation(() => () => executeSwitchWalletMessage(request, appUrl, appName))
+            initAndOpenChangeAccountNetworkBottomSheet(request)
+        },
+        [executeSwitchWalletMessage, initAndOpenChangeAccountNetworkBottomSheet, selectedNetwork.genesis.id],
+    )
+
     const onMessage = useCallback(
         (event: WebViewMessageEvent) => {
             debug(ERROR_EVENTS.DAPP, event.nativeEvent.url)
@@ -640,17 +995,83 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
             const data = JSON.parse(event.nativeEvent.data)
 
-            if (data.method === RequestMethods.REQUEST_TRANSACTION) {
-                return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
-            } else if (data.method === RequestMethods.SIGN_CERTIFICATE) {
-                return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
-            } else if (data.method === RequestMethods.SIGN_TYPED_DATA) {
-                return validateSignedDataMessage(data, event.nativeEvent.url, event.nativeEvent.title)
-            } else {
-                warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
+            switch (data.method) {
+                case RequestMethods.REQUEST_TRANSACTION:
+                    if (data.requestAPI)
+                        return validateTxMessage(
+                            {
+                                genesisId: data.genesisId,
+                                id: data.id,
+                                message: data.params.clauses,
+                                method: RequestMethods.REQUEST_TRANSACTION,
+                                options: data.params.options,
+                            },
+                            event.nativeEvent.url,
+                            event.nativeEvent.title,
+                        )
+                    return validateTxMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.SIGN_CERTIFICATE:
+                    if (data.requestAPI)
+                        return validateCertMessage(
+                            {
+                                genesisId: data.genesisId,
+                                id: data.id,
+                                message: data.params.message,
+                                method: RequestMethods.SIGN_CERTIFICATE,
+                                options: data.params.options,
+                            },
+                            event.nativeEvent.url,
+                            event.nativeEvent.title,
+                        )
+                    return validateCertMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.SIGN_TYPED_DATA:
+                    if (data.requestAPI)
+                        return validateSignedDataMessage(
+                            {
+                                genesisId: data.genesisId,
+                                id: data.id,
+                                domain: data.params.domain,
+                                method: RequestMethods.SIGN_TYPED_DATA,
+                                options: data.params.options,
+                                origin: data.origin,
+                                types: data.params.types,
+                                value: data.params.value,
+                            },
+                            event.nativeEvent.url,
+                            event.nativeEvent.title,
+                        )
+                    return validateSignedDataMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.CONNECT:
+                    return validateConnectMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.WALLET:
+                    return validateWalletMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                case RequestMethods.DISCONNECT:
+                    return validateDisconnectMessage(data, event.nativeEvent.url)
+                case RequestMethods.METHODS:
+                    return validateMethodsMessage(data)
+                case RequestMethods.SWITCH_WALLET:
+                    return validateSwitchWalletMessage(data, event.nativeEvent.url, event.nativeEvent.title)
+                default:
+                    warn(ERROR_EVENTS.DAPP, "Unknown method", event.nativeEvent)
+                    if (data.id)
+                        return postMessage({
+                            id: data.id,
+                            error: "Unknown method called",
+                            method: data.method ?? "UNKNOWN_METHOD",
+                        })
             }
         },
-        [validateTxMessage, validateCertMessage, validateSignedDataMessage],
+        [
+            validateTxMessage,
+            validateCertMessage,
+            validateSignedDataMessage,
+            validateConnectMessage,
+            validateWalletMessage,
+            validateDisconnectMessage,
+            validateMethodsMessage,
+            validateSwitchWalletMessage,
+            postMessage,
+        ],
     )
 
     const detectScrollDirection = useCallback(
@@ -800,6 +1221,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
             isDapp,
+            getLoginSession,
             dappMetadata,
         }
     }, [
@@ -807,7 +1229,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         onMessage,
         onScroll,
         postMessage,
-        locale,
         onNavigationStateChange,
         nav,
         canGoBack,
@@ -827,8 +1248,10 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         handleConfirmChangeAccountNetworkBottomSheet,
         ChangeAccountNetworkBottomSheetRef,
         switchAccount,
-        packageInfo,
         isDapp,
+        locale,
+        packageInfo,
+        getLoginSession,
         dappMetadata,
     ])
 
@@ -838,6 +1261,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             <CertificateBottomSheet />
             <TransactionBottomSheet />
             <TypedDataBottomSheet />
+            <LoginBottomSheet />
+            <SwitchWalletBottomSheet />
             {children}
         </Context.Provider>
     )
@@ -953,6 +1378,20 @@ window.vechain = {
             }, 
         }
     },
+    request: function (params) {
+        const request = {
+            id: generateRandomId(),
+            method: params.method,
+            origin: window.origin,
+            params: params.params,
+            genesisId: params.genesisId,
+            requestAPI: true
+        }
+
+        window.ReactNativeWebView.postMessage(JSON.stringify(request))
+
+        return newResponseHandler(request.id)
+    }
 }
 
 true

@@ -19,6 +19,8 @@ import {
     DappTxActivity,
     FungibleTokenActivity,
     IndexedHistoryEvent,
+    LoginActivity,
+    LoginActivityValue,
     Network,
     NonFungibleTokenActivity,
     SignCertActivity,
@@ -283,6 +285,24 @@ export const createSingTypedDataActivity = (
         sender,
         clauses: [],
         genesisId: network.genesis.id,
+    }
+}
+
+export const createLoginActivity = ({
+    url,
+    signer,
+    network,
+    ...rest
+}: { url: string; signer: string; network: Network } & LoginActivityValue): LoginActivity => {
+    return {
+        from: signer,
+        id: uuid.v4().toString(),
+        type: ActivityType.DAPP_LOGIN,
+        timestamp: Date.now(),
+        isTransaction: false,
+        linkUrl: url,
+        genesisId: network.genesis.id,
+        ...rest,
     }
 }
 

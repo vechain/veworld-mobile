@@ -1,8 +1,8 @@
 import React, { memo } from "react"
-import { ActivityDetail } from "../Type"
+import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSkeleton, BaseText, BaseTouchable, BaseView, FiatBalance } from "~Components"
 import { useTheme } from "~Hooks"
-import { StyleSheet } from "react-native"
+import { ActivityDetail } from "../Type"
 
 export type ActivityDetailContent = ActivityDetail
 
@@ -54,9 +54,13 @@ export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, borde
                 <BaseText typographyFont="body" pb={5}>
                     {activityDetail.eventName ?? ""}
                 </BaseText>
-                <BaseText typographyFont="body" pb={5}>
-                    {activityDetail.title}
-                </BaseText>
+                {typeof activityDetail.title === "string" ? (
+                    <BaseText typographyFont="body" pb={5}>
+                        {activityDetail.title}
+                    </BaseText>
+                ) : (
+                    activityDetail.title
+                )}
 
                 <BaseTouchable
                     action={activityDetail.onValuePress}
@@ -64,10 +68,12 @@ export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, borde
                     style={baseStyles.valueContainer}>
                     {isLoading ? (
                         <ActivityDetailItemSkeleton />
-                    ) : (
+                    ) : typeof activityDetail.value === "string" ? (
                         <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
                             {activityDetail.value ?? ""}
                         </BaseText>
+                    ) : (
+                        activityDetail.value
                     )}
 
                     {activityDetail.valueAdditional && (
