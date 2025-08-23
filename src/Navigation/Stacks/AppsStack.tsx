@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
 import { VbdDApp } from "~Model"
 import { Routes } from "~Navigation/Enums"
-import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
+// import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import { InAppBrowser, TabsManagerScreen } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AppsPreviewScreen } from "~Screens/Flows/App/AppsScreen/AppsPreviewScreen"
@@ -33,7 +33,12 @@ export const AppsStack = () => {
                 <Screen
                     name={Routes.APPS_PREVIEW}
                     component={AppsPreviewScreen}
-                    options={{ headerShown: false, presentation: "transparentModal" }}
+                    options={{
+                        headerShown: false,
+                        presentation: "containedTransparentModal",
+                        animation: "fade",
+                        gestureDirection: "vertical",
+                    }}
                 />
                 <Screen
                     name={Routes.BROWSER}

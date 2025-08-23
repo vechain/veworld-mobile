@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
-import { ImageBackground, Pressable, StyleSheet } from "react-native"
-import FastImage, { ImageStyle } from "react-native-fast-image"
-import Animated from "react-native-reanimated"
+import { ImageStyle, Pressable, StyleSheet } from "react-native"
+import FastImage, { ImageStyle as FastImageStyle } from "react-native-fast-image"
+import Animated, { SharedTransition, withTiming } from "react-native-reanimated"
 import { BaseSpacer, BaseText, BaseView, BlurView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -30,44 +30,57 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
             | undefined
     }, [app.categories])
 
+    const sharedTransitionStyle = SharedTransition.custom(values => {
+        "worklet"
+        return {
+            width: values.targetWidth,
+            height: withTiming(values.targetHeight),
+            borderRadius: withTiming(24),
+        }
+    })
+
     return (
         <Pressable onPress={() => onPressItem({ bannerUri, iconUri, app, category })}>
             <Animated.View
-                sharedTransitionTag={`PREVIEW_IMAGE_${app.id}`}
-                style={styles.root}
+                style={styles.imageWrapper}
+                sharedTransitionStyle={sharedTransitionStyle}
                 testID="VBD_CAROUSEL_ITEM">
-                <ImageBackground source={{ uri: bannerUri }} style={StyleSheet.absoluteFill} />
-            </Animated.View>
-            {/* <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
-                <BaseView px={16} py={12} flexDirection="column" gap={8}>
-                    <BaseView flexDirection="row">
-                        <FastImage source={{ uri: iconUri }} style={styles.logo as ImageStyle} />
-                        <BaseSpacer width={12} flexShrink={0} />
+                <Animated.Image
+                    sharedTransitionTag={`PREVIEW_IMAGE_${app.id}`}
+                    source={{ uri: bannerUri }}
+                    style={[StyleSheet.absoluteFill, styles.root as ImageStyle]}
+                />
+                <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
+                    <BaseView px={16} py={12} flexDirection="column" gap={8}>
+                        <BaseView flexDirection="row">
+                            <FastImage source={{ uri: iconUri }} style={styles.logo as FastImageStyle} />
+                            <BaseSpacer width={12} flexShrink={0} />
+                            <BaseText
+                                flex={1}
+                                numberOfLines={1}
+                                typographyFont="subSubTitleSemiBold"
+                                color={COLORS.GREY_50}
+                                testID="VBD_CAROUSEL_ITEM_APP_NAME">
+                                {app.name}
+                            </BaseText>
+                            {category && (
+                                <>
+                                    <BaseSpacer width={24} flexShrink={0} />
+                                    <CategoryChip category={category} />
+                                </>
+                            )}
+                        </BaseView>
                         <BaseText
-                            flex={1}
-                            numberOfLines={1}
-                            typographyFont="subSubTitleSemiBold"
-                            color={COLORS.GREY_50}
-                            testID="VBD_CAROUSEL_ITEM_APP_NAME">
-                            {app.name}
+                            typographyFont="captionMedium"
+                            color={COLORS.WHITE_RGBA_85}
+                            numberOfLines={2}
+                            flexDirection="row"
+                            testID="VBD_CAROUSEL_ITEM_APP_DESCRIPTION">
+                            {app.description}
                         </BaseText>
-                        {category && (
-                            <>
-                                <BaseSpacer width={24} flexShrink={0} />
-                                <CategoryChip category={category} />
-                            </>
-                        )}
                     </BaseView>
-                    <BaseText
-                        typographyFont="captionMedium"
-                        color={COLORS.WHITE_RGBA_85}
-                        numberOfLines={2}
-                        flexDirection="row"
-                        testID="VBD_CAROUSEL_ITEM_APP_DESCRIPTION">
-                        {app.description}
-                    </BaseText>
-                </BaseView>
-            </BlurView> */}
+                </BlurView>
+            </Animated.View>
         </Pressable>
     )
 }
@@ -75,14 +88,25 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
 const baseStyles = () =>
     StyleSheet.create({
         root: {
-            height: "100%",
+            height: 257,
             borderRadius: 16,
             position: "relative",
             overflow: "hidden",
             justifyContent: "flex-end",
         },
+        imageWrapper: {
+            position: "relative",
+            height: 257,
+            width: "100%",
+            borderRadius: 16,
+            overflow: "hidden",
+        },
         blurView: {
             backgroundColor: "rgba(0, 0, 0, 0.30)",
+            position: "absolute",
+            bottom: 0,
+            left: 0,
+            right: 0,
         },
         logo: {
             width: 24,

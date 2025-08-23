@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { ElementType, useCallback, useMemo } from "react"
-import { ImageBackground, StyleSheet, View } from "react-native"
-import FastImage, { ImageStyle } from "react-native-fast-image"
+import { ImageStyle, StyleSheet } from "react-native"
+import FastImage, { ImageStyle as FastImageStyle } from "react-native-fast-image"
 import { getTimeZone } from "react-native-localize"
-import Animated from "react-native-reanimated"
+import Animated, { EntryAnimationsValues, EntryExitAnimationFunction, withTiming } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import {
@@ -165,15 +165,64 @@ export const AppsPreviewScreen = ({ route, navigation }: Props) => {
         [locale, appOverview],
     )
 
+    const customEnteringTransition: EntryExitAnimationFunction = (values: EntryAnimationsValues) => {
+        "worklet"
+        const animations = {
+            width: withTiming(values.targetWidth, { duration: 600 }),
+            height: withTiming(values.targetHeight, { duration: 600 }),
+            borderRadius: withTiming(24, { duration: 100 }),
+        }
+        const initialValues = {
+            width: values.targetWidth,
+            height: 0,
+            borderRadius: 0,
+        }
+        return {
+            animations,
+            initialValues,
+        }
+    }
+
+    const customExitingTransition: EntryExitAnimationFunction = (values: EntryAnimationsValues) => {
+        "worklet"
+
+        const animations = {
+            width: withTiming(values.targetWidth),
+            height: withTiming(0),
+            borderRadius: withTiming(0, { duration: 100 }),
+        }
+        const initialValues = {
+            width: values.targetWidth,
+            height: values.targetHeight,
+            borderRadius: 24,
+        }
+        return {
+            animations,
+            initialValues,
+        }
+    }
+
     return (
-        <View
+        <BlurView
+            overlayColor="transparent"
+            blurAmount={10}
+            blurType="dark"
             style={[
                 styles.rootContainer,
                 { marginBottom: PlatformUtils.isAndroid() ? bottomSafeAreaSize + 32 : bottomSafeAreaSize },
-            ]}>
-            <Animated.View style={styles.root} sharedTransitionTag={`PREVIEW_IMAGE_${app.id}`}>
+            ]}
+            onTouchEnd={() => {
+                navigation.goBack()
+            }}>
+            <Animated.View style={styles.modal} entering={customEnteringTransition} exiting={customExitingTransition}>
                 {bannerUri ? (
-                    <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_BS">
+                    <Animated.View style={styles.root}>
+                        <Animated.Image
+                            sharedTransitionTag={`PREVIEW_IMAGE_${app.id}`}
+                            source={{ uri: bannerUri }}
+                            testID="VBD_CAROUSEL_BS"
+                            style={[StyleSheet.absoluteFill, styles.bannerImage as ImageStyle]}
+                        />
                         <BaseIcon
                             style={styles.closeBtn}
                             color={COLORS.WHITE}
@@ -182,11 +231,11 @@ export const AppsPreviewScreen = ({ route, navigation }: Props) => {
                             action={handleClose}
                             testID="bottom-sheet-close-btn"
                         />
-                        {/* <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
+                        <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
                             <BaseView flexDirection="column" gap={16} px={24} py={16}>
                                 <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                                     <BaseView flexDirection="row" alignItems="center">
-                                        <FastImage source={{ uri: appLogo }} style={styles.logo as ImageStyle} />
+                                        <FastImage source={{ uri: appLogo }} style={styles.logo as FastImageStyle} />
                                         <BaseSpacer width={12} flexShrink={0} />
                                         <BaseText
                                             numberOfLines={1}
@@ -214,65 +263,80 @@ export const AppsPreviewScreen = ({ route, navigation }: Props) => {
                                     {app?.description}
                                 </BaseText>
                             </BaseView>
-                        </BlurView> */}
-                    </ImageBackground>
+                        </BlurView>
+                    </Animated.View>
                 ) : null}
+
+                <BaseView style={styles.infoContainer} bg={theme.colors.actionBottomSheet.background}>
+                    <BaseView flexDirection="row" alignItems="center" justifyContent="center" gap={8} py={8}>
+                        <VbdInfoColumn Icon={BadgeCheckIconSVG} title={LL.APPS_BS_JOINED()} description={date} />
+                        <VbdInfoColumn
+                            Icon={UsersIcon}
+                            title={LL.APPS_BS_USERS()}
+                            description={usersNum}
+                            isLoading={isLoading}
+                        />
+                        <VbdInfoColumn
+                            Icon={LeafIcon}
+                            title={LL.APPS_BS_ACTIONS()}
+                            description={actionsNum}
+                            isLoading={isLoading}
+                        />
+                    </BaseView>
+
+                    <BaseView pt={16} gap={12}>
+                        <BaseButton
+                            testID="Favorite_Button"
+                            style={styles.btn}
+                            leftIcon={leftIcon}
+                            action={onToggleFavorite}
+                            title={isFavorite ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
+                            variant="outline"
+                            {...favButtonStyles}
+                        />
+                        <BaseButton
+                            testID="Open_Button"
+                            style={styles.btn}
+                            action={() => {}}
+                            title={LL.APPS_BS_BTN_OPEN_APP()}
+                        />
+                    </BaseView>
+                </BaseView>
             </Animated.View>
-
-            <BaseView style={styles.infoContainer} bg={theme.colors.actionBottomSheet.background}>
-                <BaseView flexDirection="row" alignItems="center" justifyContent="center" gap={8} py={8}>
-                    <VbdInfoColumn Icon={BadgeCheckIconSVG} title={LL.APPS_BS_JOINED()} description={date} />
-                    <VbdInfoColumn
-                        Icon={UsersIcon}
-                        title={LL.APPS_BS_USERS()}
-                        description={usersNum}
-                        isLoading={isLoading}
-                    />
-                    <VbdInfoColumn
-                        Icon={LeafIcon}
-                        title={LL.APPS_BS_ACTIONS()}
-                        description={actionsNum}
-                        isLoading={isLoading}
-                    />
-                </BaseView>
-
-                <BaseView pt={16} gap={12}>
-                    <BaseButton
-                        testID="Favorite_Button"
-                        style={styles.btn}
-                        leftIcon={leftIcon}
-                        action={onToggleFavorite}
-                        title={isFavorite ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
-                        variant="outline"
-                        {...favButtonStyles}
-                    />
-                    <BaseButton
-                        testID="Open_Button"
-                        style={styles.btn}
-                        action={() => {}}
-                        title={LL.APPS_BS_BTN_OPEN_APP()}
-                    />
-                </BaseView>
-            </BaseView>
-        </View>
+        </BlurView>
     )
 }
 
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         rootContainer: {
-            marginTop: "auto",
-            height: "90%",
+            height: "100%",
+            width: "100%",
+            position: "relative",
+            backgroundColor: "rgba(0, 0, 0, 0.30)",
+            pointerEvents: "box-only",
+        },
+        modal: {
+            height: "70%",
             marginHorizontal: 16,
             borderRadius: 24,
             overflow: "hidden",
-            position: "relative",
+            position: "absolute",
+            bottom: 32,
+            left: 0,
+            right: 0,
+            pointerEvents: "none",
         },
         root: {
-            height: 257,
+            height: 360,
             position: "relative",
             overflow: "hidden",
             justifyContent: "flex-end",
+        },
+        bannerImage: {
+            height: 360,
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
         },
         blurView: {
             backgroundColor: "rgba(0, 0, 0, 0.30)",
