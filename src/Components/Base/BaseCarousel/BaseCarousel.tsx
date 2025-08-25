@@ -222,6 +222,7 @@ export const BaseCarousel = ({
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 decelerationRate={"fast"}
                 alwaysBounceHorizontal={false}
+                bounces={false}
                 snapToAlignment="start"
                 horizontal
                 style={containerStyle}
