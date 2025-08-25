@@ -210,7 +210,7 @@ export const BaseCarousel = ({
                 ItemSeparatorComponent={ItemSeparatorComponent}
                 viewabilityConfig={{ itemVisiblePercentThreshold: 100 }}
                 onViewableItemsChanged={onViewableItemsChanged}
-                decelerationRate="fast"
+                decelerationRate={0}
                 snapToAlignment="start"
                 horizontal
                 style={containerStyle}
