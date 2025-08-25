@@ -48,7 +48,7 @@ const TransactionCarousel = ({
             baseWidth={SCREEN_WIDTH - 80}
             paginationAlignment="center"
             padding={0}
-            gap={0}
+            gap={8}
             showPagination
             rootStyle={styles.carouselRoot}
             bottomSheet

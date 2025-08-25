@@ -55,7 +55,8 @@ export const FullscreenBaseCarousel = ({
      * The cards in the middle need to show a card on the left and right, that's why it's double the gap
      */
     const calculateWidth = useCallback(
-        (idx: number) => {
+        (idx: number, arrayLength: number) => {
+            if (arrayLength === 1) return baseWidth
             if (idx === 0 || idx === data.length - 1) return baseWidth - 2 * gap
             return baseWidth - 4 * gap
         },
@@ -66,9 +67,9 @@ export const FullscreenBaseCarousel = ({
      */
     const mappedData = useMemo(
         () =>
-            data.map((d, idx) => ({
+            data.map((d, idx, array) => ({
                 ...d,
-                style: [d.style, { width: calculateWidth(idx) }],
+                style: [d.style, { width: calculateWidth(idx, array.length) }],
             })),
         [calculateWidth, data],
     )
