@@ -119,7 +119,6 @@ export const BaseCarousel = ({
 
     const ref = useRef<Animated.FlatList<any> | BottomSheetFlatListMethods>(null)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
-
     const ItemSeparatorComponent = useCallback(() => <BaseSpacer width={gap} />, [gap])
 
     const w = useMemo(() => {
@@ -210,7 +209,8 @@ export const BaseCarousel = ({
                 snapToStart={false}
                 disableIntervalMomentum
                 ItemSeparatorComponent={ItemSeparatorComponent}
-                decelerationRate={0}
+                decelerationRate={"fast"}
+                alwaysBounceHorizontal={false}
                 snapToAlignment="start"
                 horizontal
                 style={containerStyle}
