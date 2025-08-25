@@ -66,6 +66,21 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         onClose?.()
     }, [nav, onNavigate, onClose, betterWorldFeature.appsScreen.enabled])
 
+    const navToSearch = useCallback(() => {
+        if (betterWorldFeature.appsScreen.enabled) {
+            nav.replace(Routes.APPS_SEARCH)
+        } else {
+            nav.replace(Routes.DISCOVER_SEARCH)
+        }
+    }, [nav, betterWorldFeature.appsScreen.enabled])
+
+    const closeCurrentTab = useCallback(() => {
+        if (currentTabId) {
+            dispatch(closeTab(currentTabId))
+            navToSearch()
+        }
+    }, [currentTabId, dispatch, navToSearch])
+
     const actions: BottomSheetActionItem[] = useMemo(() => {
         const favoriteItem: BottomSheetAction = isBookMarked
             ? {
@@ -130,12 +145,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 id: "close-tab",
                 icon: "icon-x",
                 label: LL.BROWSER_CLOSE_TAB(),
-                onPress: () => {
-                    if (currentTabId) {
-                        dispatch(closeTab(currentTabId))
-                        nav.replace(Routes.DISCOVER_SEARCH)
-                    }
-                },
+                onPress: () => closeCurrentTab(),
             },
         ]
     }, [
@@ -144,14 +154,12 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         toggleBookmark,
         isDapp,
         webviewRef,
+        onClose,
         navigationState?.title,
         navigationState?.url,
         navToNewTab,
         navToTabsManager,
-        currentTabId,
-        dispatch,
-        nav,
-        onClose,
+        closeCurrentTab,
     ])
 
     const calculateActionContainerHeight = (height: number) => {

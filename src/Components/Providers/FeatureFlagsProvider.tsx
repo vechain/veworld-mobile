@@ -44,7 +44,7 @@ const initialState: FeatureFlags = {
     },
     betterWorldFeature: {
         appsScreen: {
-            enabled: false,
+            enabled: true,
         },
     },
 }
