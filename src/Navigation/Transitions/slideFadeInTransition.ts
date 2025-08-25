@@ -24,7 +24,7 @@ export const slideFadeInTransition: StackCardStyleInterpolator = ({
     const scale = next
         ? next.progress.interpolate({
               inputRange: [0, 1],
-              outputRange: [1, 0.8],
+              outputRange: [1, 0.7],
               extrapolate: "clamp",
           })
         : 1
@@ -41,12 +41,12 @@ export const slideFadeInTransition: StackCardStyleInterpolator = ({
                 {
                     translateY: translateYProgress.interpolate({
                         inputRange: [0, 1, 2],
-                        outputRange: [layouts.screen.height, 0, layouts.screen.height * 0.3],
-                        extrapolate: "clamp",
+                        outputRange: [layouts.screen.height, 0, layouts.screen.height * 0.8],
+                        extrapolate: "extend",
                     }),
                 },
                 {
-                    scale: scale,
+                    scale,
                 },
             ],
             opacity: 1,
