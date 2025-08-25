@@ -60,7 +60,7 @@ const TransactionCarousel = ({
 export const TransactionDetails = ({ request, outputs = [], clauses = [], onShowDetails }: Props) => {
     const network = useAppSelector(selectSelectedNetwork)
 
-    const receiptProcessor = useMemo(() => getReceiptProcessor(network.type, ["Generic", "Native"]), [network.type])
+    const receiptProcessor = useMemo(() => getReceiptProcessor(network.type), [network.type])
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const analyzedOutputs = useMemo(
         () => receiptProcessor.analyzeReceipt(outputs, selectedAccount.address),
