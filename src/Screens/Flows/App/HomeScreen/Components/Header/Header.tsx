@@ -10,11 +10,16 @@ import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewe
 import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { VeWorldLogoSVG } from "~Assets"
+import { StyleProp, ViewStyle } from "react-native"
 
 type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
     NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
 
-export const Header = memo(() => {
+type Props = {
+    headerStyle?: StyleProp<ViewStyle>
+}
+
+export const Header = memo(({ headerStyle }: Props) => {
     const theme = useTheme()
     const nav = useNavigation<Navigation>()
     const { LL } = useI18nContext()
@@ -74,7 +79,7 @@ export const Header = memo(() => {
     }, [nav])
 
     return (
-        <BaseView w={100} style={HeaderStyleV2}>
+        <BaseView w={100} style={[HeaderStyleV2, headerStyle]}>
             <BaseView flexDirection="row" alignItems="center" alignSelf="center">
                 <VeWorldLogoSVG height={32} width={32} color={theme.colors.veworldLogo} />
                 <BaseSpacer width={8} />

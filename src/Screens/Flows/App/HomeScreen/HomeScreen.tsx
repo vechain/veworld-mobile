@@ -1,3 +1,4 @@
+import { useHeaderHeight } from "@react-navigation/elements"
 import { useFocusEffect, useNavigation, useScrollToTop } from "@react-navigation/native"
 import { useQueryClient } from "@tanstack/react-query"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
@@ -11,7 +12,6 @@ import {
     BaseView,
     DisabledBuySwapIosBottomSheet,
     FastActionsBar,
-    Layout,
     QRCodeBottomSheet,
     SelectAccountBottomSheet,
     useFeatureFlags,
@@ -50,7 +50,6 @@ import {
     DeviceJailBrokenAlert,
     DeviceJailBrokenWarningModal,
     EditTokensBar,
-    Header,
     TokenList,
 } from "./Components"
 import { BannersCarousel } from "./Components/BannerCarousel"
@@ -74,6 +73,7 @@ export const HomeScreen = () => {
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
+    const headerHeight = useHeaderHeight()
 
     /*
         This is used to reset the state of the app when the user presses the reload button
@@ -223,67 +223,62 @@ export const HomeScreen = () => {
     )
 
     return (
-        <Layout
-            fixedHeader={<Header />}
-            noBackButton
-            fixedBody={
-                <NestableScrollContainer
-                    ref={scrollViewRef}
-                    testID="HomeScreen_ScrollView"
-                    refreshControl={
-                        <RefreshControl onRefresh={onRefresh} tintColor={theme.colors.border} refreshing={refreshing} />
-                    }>
-                    <BaseView style={styles.container}>
-                        <BaseView alignItems="center">
-                            <DeviceJailBrokenAlert />
-                            <ClaimUsernameBanner />
-                            <AccountCard
-                                balanceVisible={isBalanceVisible}
-                                openSelectAccountBottomSheet={openSelectAccountBottomSheet}
-                                account={selectedAccount}
-                                selectedCurrency={selectedCurrency}
-                                openQRCodeSheet={openQRCodeSheet}
-                            />
-                        </BaseView>
-                        <BaseSpacer height={16} />
-                        <FastActionsBar actions={Actions} />
-                        <BaseSpacer height={16} />
-                    </BaseView>
-
-                    <BannersCarousel location="home_screen" />
-
-                    <BaseView style={styles.container} gap={24}>
-                        <StakedCard account={selectedAccount} />
-                        <BaseView>
-                            <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
-                            <BaseSpacer height={8} />
-                            <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
-                            <BaseSpacer height={24} />
-                        </BaseView>
-                    </BaseView>
-
-                    {/*Account Selection*/}
-                    <SelectAccountBottomSheet
-                        closeBottomSheet={closeSelectAccountBottonSheet}
-                        accounts={accounts}
-                        setSelectedAccount={setSelectedAccount}
-                        selectedAccount={selectedAccount}
-                        ref={selectAccountBottomSheetRef}
+        <NestableScrollContainer
+            style={{ paddingTop: headerHeight }}
+            ref={scrollViewRef}
+            testID="HomeScreen_ScrollView"
+            refreshControl={
+                <RefreshControl onRefresh={onRefresh} tintColor={theme.colors.border} refreshing={refreshing} />
+            }>
+            <BaseView style={styles.container}>
+                <BaseView alignItems="center">
+                    <DeviceJailBrokenAlert />
+                    <ClaimUsernameBanner />
+                    <AccountCard
+                        balanceVisible={isBalanceVisible}
+                        openSelectAccountBottomSheet={openSelectAccountBottomSheet}
+                        account={selectedAccount}
+                        selectedCurrency={selectedCurrency}
+                        openQRCodeSheet={openQRCodeSheet}
                     />
+                </BaseView>
+                <BaseSpacer height={16} />
+                <FastActionsBar actions={Actions} />
+                <BaseSpacer height={16} />
+            </BaseView>
 
-                    <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
-                    <DeviceBackupBottomSheet />
-                    <DeviceJailBrokenWarningModal />
-                    <EnableNotificationsBottomSheet />
-                    <VersionUpdateAvailableBottomSheet />
-                    <VersionChangelogBottomSheet />
-                    <DisabledBuySwapIosBottomSheet
-                        ref={blockedFeaturesIOSBottomSheetRef}
-                        onConfirm={closeBlockedFeaturesIOSBottomSheet}
-                    />
-                </NestableScrollContainer>
-            }
-        />
+            <BannersCarousel location="home_screen" />
+
+            <BaseView style={styles.container} gap={24}>
+                <StakedCard account={selectedAccount} />
+                <BaseView>
+                    <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
+                    <BaseSpacer height={8} />
+                    <TokenList isEdit={isEdit} isBalanceVisible={isBalanceVisible} entering={animateEntering} />
+                    <BaseSpacer height={24} />
+                </BaseView>
+            </BaseView>
+
+            {/*Account Selection*/}
+            <SelectAccountBottomSheet
+                closeBottomSheet={closeSelectAccountBottonSheet}
+                accounts={accounts}
+                setSelectedAccount={setSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBottomSheetRef}
+            />
+
+            <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />
+            <DeviceBackupBottomSheet />
+            <DeviceJailBrokenWarningModal />
+            <EnableNotificationsBottomSheet />
+            <VersionUpdateAvailableBottomSheet />
+            <VersionChangelogBottomSheet />
+            <DisabledBuySwapIosBottomSheet
+                ref={blockedFeaturesIOSBottomSheetRef}
+                onConfirm={closeBlockedFeaturesIOSBottomSheet}
+            />
+        </NestableScrollContainer>
     )
 }
 

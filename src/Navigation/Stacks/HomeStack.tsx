@@ -1,8 +1,9 @@
-import { createStackNavigator } from "@react-navigation/stack"
+import { createStackNavigator, StackHeaderProps } from "@react-navigation/stack"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
-import React from "react"
+import React, { useCallback } from "react"
 import { useFeatureFlags } from "~Components"
-import { TokenWithCompleteInfo } from "~Hooks"
+import { TranslucentHeader } from "~Components/Reusable/Header/TranslucentHeader"
+import { TokenWithCompleteInfo, useTheme } from "~Hooks"
 import {
     CloudKitWallet,
     ConnectedLedgerDevice,
@@ -23,6 +24,7 @@ import {
     ConnectedAppsScreen,
     ConvertTransactionScreen,
     EnableAdditionalSettings,
+    Header,
     HomeScreen,
     ImportFromCloudScreen,
     ImportLocalWallet,
@@ -142,11 +144,31 @@ const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListHome
 
 export const HomeStack = () => {
     const { betterWorldFeature } = useFeatureFlags()
+    const theme = useTheme()
+
+    const HomeHeader = useCallback((props: StackHeaderProps) => {
+        return (
+            <TranslucentHeader {...props}>
+                <Header />
+            </TranslucentHeader>
+        )
+    }, [])
 
     return (
         <Navigator id="HomeStack" screenOptions={{ headerShown: false }}>
             <Group>
-                <Screen name={Routes.HOME} component={HomeScreen} options={{ headerShown: false }} />
+                <Screen
+                    name={Routes.HOME}
+                    component={HomeScreen}
+                    options={{
+                        headerShown: true,
+                        headerTransparent: true,
+                        headerStyle: {
+                            backgroundColor: theme.isDark ? "rgba(11, 0, 67, 0.9)" : "rgba(255, 255, 255, 0.9)",
+                        },
+                        header: HomeHeader,
+                    }}
+                />
                 <Screen
                     name={Routes.SELECT_TOKEN_SEND}
                     component={SelectTokenSendScreen}

@@ -48,7 +48,7 @@ export const EntryPoint = () => {
                     playAnimation={true}
                     useFadeOutAnimation={securityType === SecurityLevelType.SECRET}>
                     <AppLoader>
-                        <BaseStatusBar />
+                        <BaseStatusBar transparent translucent />
                         <SwitchStack />
                     </AppLoader>
                 </AnimatedSplashScreen>
