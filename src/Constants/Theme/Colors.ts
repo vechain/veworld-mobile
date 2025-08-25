@@ -295,6 +295,7 @@ export type Colors = {
         icon: string
         title: string
     }
+    veworldLogo: string
 }
 
 export enum COLORS {
@@ -624,6 +625,7 @@ const light: Colors = {
     stakedVetCard: {
         background: COLORS.GREY_50,
     },
+    veworldLogo: COLORS.PURPLE,
     dappCard: {
         name: COLORS.GREY_700,
         description: COLORS.GREY_500,
@@ -992,6 +994,7 @@ const dark: Colors = {
             color: COLORS.DARK_PURPLE_DISABLED,
         },
     },
+    veworldLogo: COLORS.GREY_50,
 }
 
 export const colors = { light, dark }
