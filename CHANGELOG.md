@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-25)</small>
+
+* build: init ([4488c90](https://github.com/vechain/veworld-mobile/commit/4488c90))
+* 274 Tune screen transition animations (#3217) ([f6a8225](https://github.com/vechain/veworld-mobile/commit/f6a8225)), closes [#3217](https://github.com/vechain/veworld-mobile/issues/3217)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
