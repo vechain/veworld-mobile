@@ -57,6 +57,7 @@ import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
+import { KeyboardProvider } from "react-native-keyboard-controller"
 import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
 
 const { fontFamily } = typography
@@ -124,32 +125,34 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <ConnexContextProvider>
-                <PersistQueryClientProvider
-                    client={queryClient}
-                    persistOptions={{
-                        persister: clientPersister,
-                    }}>
-                    <FeatureFlagsProvider>
-                        <NavigationProvider>
-                            <InteractionProvider>
-                                <DeepLinksProvider>
-                                    <WalletConnectContextProvider>
-                                        <BottomSheetModalProvider>
-                                            <InAppBrowserProvider>
-                                                <NotificationsProvider>
-                                                    <EntryPoint />
-                                                </NotificationsProvider>
-                                            </InAppBrowserProvider>
-                                        </BottomSheetModalProvider>
-                                    </WalletConnectContextProvider>
-                                </DeepLinksProvider>
-                            </InteractionProvider>
-                        </NavigationProvider>
-                        <BaseToast />
-                    </FeatureFlagsProvider>
-                </PersistQueryClientProvider>
-            </ConnexContextProvider>
+            <KeyboardProvider>
+                <ConnexContextProvider>
+                    <PersistQueryClientProvider
+                        client={queryClient}
+                        persistOptions={{
+                            persister: clientPersister,
+                        }}>
+                        <FeatureFlagsProvider>
+                            <NavigationProvider>
+                                <InteractionProvider>
+                                    <DeepLinksProvider>
+                                        <WalletConnectContextProvider>
+                                            <BottomSheetModalProvider>
+                                                <InAppBrowserProvider>
+                                                    <NotificationsProvider>
+                                                        <EntryPoint />
+                                                    </NotificationsProvider>
+                                                </InAppBrowserProvider>
+                                            </BottomSheetModalProvider>
+                                        </WalletConnectContextProvider>
+                                    </DeepLinksProvider>
+                                </InteractionProvider>
+                            </NavigationProvider>
+                            <BaseToast />
+                        </FeatureFlagsProvider>
+                    </PersistQueryClientProvider>
+                </ConnexContextProvider>
+            </KeyboardProvider>
         </GestureHandlerRootView>
     )
 }
@@ -173,6 +176,19 @@ const linking = {
                     DiscoverStack: {
                         path: "discover",
                         initialRouteName: "Discover",
+                        screens: {
+                            Browser: {
+                                path: "browser/:redirect?/:ul/:url",
+                                parse: {
+                                    ul: () => true,
+                                    url: url => URIUtils.decodeUrl_HACK(url),
+                                },
+                            },
+                        },
+                    },
+                    AppsStack: {
+                        path: "apps",
+                        initialRouteName: "Apps",
                         screens: {
                             Browser: {
                                 path: "browser/:redirect?/:ul/:url",

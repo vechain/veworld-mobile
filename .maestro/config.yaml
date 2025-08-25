@@ -9,4 +9,4 @@ flows:
   - onboarding/*
   - userActivity/userActivity.yaml
   - universal_link/*
-  - discover/*
+  # - discover/* Currently skipped since it will need to be adapted to the new apps screen

@@ -1,7 +1,8 @@
+const semVerPattern = /^\d+(\.\d+){0,2}$/
+
 /* eslint-disable radix */
 function compareSemanticVersions(version1: string, version2: string) {
     // Regular expression to validate the semantic version format
-    const semVerPattern = /^\d+(\.\d+){0,2}$/
 
     // Function to validate and parse a version string
     function parseVersion(version: string) {
@@ -54,4 +55,8 @@ const moreThanOrEqual = (a: string, b: string): boolean => {
     return moreThan(a, b) || a === b
 }
 
-export default { compareSemanticVersions, moreThan, moreThanOrEqual }
+const isVersion = (version: string): boolean => {
+    return semVerPattern.test(version)
+}
+
+export default { compareSemanticVersions, moreThan, moreThanOrEqual, isVersion }

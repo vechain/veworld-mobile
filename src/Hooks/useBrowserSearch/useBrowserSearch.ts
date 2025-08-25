@@ -22,19 +22,33 @@ export const useBrowserSearch = (query: string) => {
     )
 
     const results = useMemo(() => {
-        if (!isValidQuery) return mappedUrls
+        if (!isValidQuery) return { data: mappedUrls, isExactMatch: false }
         const lowerQuery = query.toLowerCase()
         const urls = mappedUrls.filter(url => url.type === HistoryUrlKind.URL)
         const allDapps = uniqBy(
             mappedUrls.filter(url => url.type === HistoryUrlKind.DAPP).concat(mappedApps),
             "dapp.href",
         )
-        return [...urls, ...allDapps]
+        const _results = [...urls, ...allDapps]
             .filter(url => {
                 if (url.type === HistoryUrlKind.DAPP) return url.dapp.name.toLowerCase().includes(lowerQuery)
                 return url.name.toLowerCase().includes(lowerQuery) || url.url.toLowerCase().includes(lowerQuery)
             })
             .sort(sortHistoryItem)
+
+        // check if there is an exact match
+        const someExactMatch = _results.some(url => {
+            if (url.type === HistoryUrlKind.DAPP) {
+                const _url = new URL(url.dapp.href)
+                const dappName = url.dapp.name.toLowerCase()
+                return _url.host.toLowerCase() === lowerQuery || dappName === lowerQuery
+            }
+            const _url = new URL(url.url)
+            return _url.host.toLowerCase() === lowerQuery
+        })
+
+        // reduce the results into found and others
+        return { data: _results, isExactMatch: someExactMatch } as { data: HistoryItem[]; isExactMatch: boolean }
     }, [isValidQuery, mappedApps, mappedUrls, query])
 
     return { results, isValidQuery }

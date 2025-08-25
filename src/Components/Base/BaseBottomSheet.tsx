@@ -25,7 +25,10 @@ import { BaseView } from "./BaseView"
 const OPENED_STATE = 0
 const CLOSED_STATE = -1
 
-export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, "snapPoints" | "children"> & {
+export type BaseBottomSheetProps<TData = unknown> = Omit<
+    BottomSheetModalProps,
+    "snapPoints" | "children" | "enablePanDownToClose"
+> & {
     /**
      * The content of the modal.
      */
@@ -34,6 +37,14 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
      * The title of the modal.
      */
     title?: LocalizedString
+    /**
+     * Optional left element in the header (e.g., close button, icon).
+     */
+    leftElement?: ReactNode
+    /**
+     * Optional right element in the header (e.g., action button, icon).
+     */
+    rightElement?: ReactNode
     /**
      * Snap points for the bottom sheet. They should be an array of strings, each representing a percentage.
      */
@@ -76,12 +87,17 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<BottomSheetModalProps, 
     bottomSafeArea?: boolean
     /**
      * Enable pan down to close
+     * @default true
      */
     enablePanDownToClose?: boolean
     /**
      * Enable blur backdrop on iOS
      */
     blurBackdrop?: boolean
+    /**
+     * Enable floating behavior - detach from the bottom of the screen
+     */
+    floating?: boolean
 }
 
 const BaseBottomSheetContent = ({
@@ -93,7 +109,10 @@ const BaseBottomSheetContent = ({
     footerStyle,
     snapPoints,
     title,
+    leftElement,
+    rightElement,
     children,
+    floating,
 }: PropsWithChildren<{
     bottomSafeArea: boolean
     bottomSafeAreaSize: number
@@ -103,20 +122,49 @@ const BaseBottomSheetContent = ({
     footerStyle: StyleProp<ViewStyle>[] | StyleProp<ViewStyle>
     snapPoints?: string[]
     title?: string
+    leftElement?: ReactNode
+    rightElement?: ReactNode
+    floating: boolean
 }>) => {
+    const headerStyles = useMemo(
+        () => ({
+            headerContainer: { marginBottom: 16 },
+            leftElement: { marginRight: 16 },
+            rightElement: { marginLeft: 16 },
+        }),
+        [],
+    )
+
+    const renderHeader = () => {
+        const hasHeader = title || leftElement || rightElement
+        if (!hasHeader) return null
+
+        return (
+            <BaseView flexDirection="row" alignItems="center" style={headerStyles.headerContainer}>
+                {leftElement && <BaseView style={headerStyles.leftElement}>{leftElement}</BaseView>}
+                {title && (
+                    <BaseView flex={1}>
+                        <BaseText typographyFont="biggerTitleSemiBold">{title}</BaseText>
+                    </BaseView>
+                )}
+                {rightElement && <BaseView style={headerStyles.rightElement}>{rightElement}</BaseView>}
+            </BaseView>
+        )
+    }
+
     return (
         <>
             {snapPoints ? (
                 <BaseView style={contentViewStyle}>
-                    {title && <BaseText typographyFont="title">{title}</BaseText>}
+                    {renderHeader()}
                     {children}
                     {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
                 </BaseView>
             ) : (
                 <BottomSheetView style={contentViewStyle}>
-                    {title && <BaseText typographyFont="title">{title}</BaseText>}
+                    {renderHeader()}
                     {children}
-                    {dynamicHeight && isAndroid() && <BaseSpacer height={16} />}
+                    {dynamicHeight && isAndroid() && !floating && <BaseSpacer height={16} />}
                 </BottomSheetView>
             )}
             {footer && (
@@ -135,6 +183,8 @@ const _BaseBottomSheet = <TData,>(
         snapPoints,
         dynamicHeight = false,
         title,
+        leftElement,
+        rightElement,
         ignoreMinimumSnapPoint = false,
         footerStyle,
         noMargins = false,
@@ -145,6 +195,9 @@ const _BaseBottomSheet = <TData,>(
         bottomSafeArea = true,
         enablePanDownToClose = true,
         blurBackdrop = false,
+        backgroundStyle,
+        stackBehavior = "push",
+        floating = false,
         ...props
     }: BaseBottomSheetProps<TData>,
     ref: React.ForwardedRef<BottomSheetModalMethods>,
@@ -163,12 +216,9 @@ const _BaseBottomSheet = <TData,>(
     }, [])
 
     const renderBackdrop = useCallback(
-        (props_: BottomSheetBackdropProps) => {
-            return (
-                <BottomSheetBackdrop {...props_} pressBehavior={onPressOutside} opacity={0.8} disappearsOnIndex={-1} />
-            )
-        },
-
+        (props_: BottomSheetBackdropProps) => (
+            <BottomSheetBackdrop {...props_} pressBehavior={onPressOutside} opacity={0.8} disappearsOnIndex={-1} />
+        ),
         [onPressOutside],
     )
 
@@ -233,6 +283,12 @@ const _BaseBottomSheet = <TData,>(
         return Math.floor((windowHeight - bottomSafeAreaSize) * 0.85)
     }, [dynamicHeight, windowHeight, bottomSafeAreaSize])
 
+    const floatingBottomInset = useMemo(() => {
+        if (!floating) return undefined
+        if (isAndroid()) return bottomSafeAreaSize + 32
+        return bottomSafeAreaSize
+    }, [floating, bottomSafeAreaSize])
+
     // Create content style object
     const contentViewStyle = useMemo(
         () => [
@@ -251,11 +307,13 @@ const _BaseBottomSheet = <TData,>(
     return (
         <BottomSheetModal
             animateOnMount={!reducedMotion}
-            stackBehavior="push"
+            stackBehavior={stackBehavior}
             ref={ref}
             enablePanDownToClose={enablePanDownToClose}
             index={0}
-            backgroundStyle={[props.backgroundStyle ?? styles.backgroundStyle]}
+            style={floating ? styles.floating : styles.notFloating}
+            bottomInset={floating ? floatingBottomInset : undefined}
+            backgroundStyle={[backgroundStyle ?? styles.backgroundStyle]}
             // BlurView screws up navigation on Android. Sometimes it renders a blank page, and sometimes the new page is blurry. Bug lagging (https://github.com/gorhom/react-native-bottom-sheet/issues/2046)
             backdropComponent={blurBackdrop && Platform.OS !== "android" ? renderBlurBackdrop : renderBackdrop}
             handleComponent={enablePanDownToClose ? renderHandle : null}
@@ -267,6 +325,7 @@ const _BaseBottomSheet = <TData,>(
             onChange={onSheetPositionChange}
             maxDynamicContentSize={maxDynamicContentSize}
             enableDynamicSizing={dynamicHeight}
+            detached={floating}
             {...sheetProps}>
             {typeof children === "function" ? (
                 p => (
@@ -278,7 +337,10 @@ const _BaseBottomSheet = <TData,>(
                         footer={footer}
                         footerStyle={footerStyle}
                         snapPoints={snapPoints}
-                        title={title}>
+                        title={title}
+                        leftElement={leftElement}
+                        rightElement={rightElement}
+                        floating={floating}>
                         {children(p?.data)}
                     </BaseBottomSheetContent>
                 )
@@ -291,7 +353,10 @@ const _BaseBottomSheet = <TData,>(
                     footer={footer}
                     footerStyle={footerStyle}
                     snapPoints={snapPoints}
-                    title={title}>
+                    title={title}
+                    leftElement={leftElement}
+                    rightElement={rightElement}
+                    floating={floating}>
                     {children}
                 </BaseBottomSheetContent>
             )}
@@ -309,8 +374,6 @@ const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         backgroundStyle: {
             backgroundColor: theme.colors.background,
-            borderTopLeftRadius: 24,
-            borderTopRightRadius: 24,
         },
         blurBackdrop: {
             backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT,
@@ -319,6 +382,15 @@ const baseStyles = (theme: ColorThemeType) =>
             justifyContent: "center",
             alignItems: "center",
             opacity: 0.5,
+        },
+        notFloating: {
+            borderTopLeftRadius: 24,
+            borderTopRightRadius: 24,
+        },
+        floating: {
+            borderRadius: 24,
+            marginHorizontal: 8,
+            overflow: "hidden",
         },
         handleWrapper: {
             marginTop: 8,
@@ -330,7 +402,7 @@ const baseStyles = (theme: ColorThemeType) =>
             width: 70,
             height: 4,
             borderRadius: 8,
-            backgroundColor: theme.colors.text,
+            backgroundColor: COLORS.GREY_300,
             alignSelf: "center",
         },
     })

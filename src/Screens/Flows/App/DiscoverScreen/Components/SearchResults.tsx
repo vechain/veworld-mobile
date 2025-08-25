@@ -89,7 +89,7 @@ export const SearchResults = ({ error, results, isValidQuery }: Props) => {
             {isValidQuery && (
                 <BaseView justifyContent="flex-start" flexDirection="row" alignItems="flex-start" mb={24}>
                     <BaseText typographyFont="bodyMedium">
-                        {LL.BROWSER_HISTORY_RESULTS({ amount: results.length })}
+                        {LL.BROWSER_HISTORY_RESULTS_AMOUNT({ amount: results.length })}
                     </BaseText>
                 </BaseView>
             )}

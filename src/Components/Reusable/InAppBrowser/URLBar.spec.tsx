@@ -1,76 +1,161 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react-native"
-import axios from "axios"
 import React from "react"
-import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { TestWrapper } from "~Test"
+import { fireEvent, render, screen, waitFor } from "@testing-library/react-native"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { URLBar } from "./URLBar"
+import { RootState } from "~Storage/Redux/Types"
+import { Routes } from "~Navigation"
+import { useFeatureFlags, FeatureFlagsProvider } from "~Components/Providers/FeatureFlagsProvider"
+import { FeatureFlags } from "~Api/FeatureFlags"
+import { useNavigation } from "@react-navigation/native"
 
 jest.mock("~Components/Providers/InAppBrowserProvider")
-jest.mock("axios")
+
+const createWrapper = () => {
+    return ({ children, preloadedState }: { children: React.ReactNode; preloadedState: Partial<RootState> }) => {
+        return (
+            <TestWrapper preloadedState={preloadedState}>
+                <FeatureFlagsProvider>{children}</FeatureFlagsProvider>
+            </TestWrapper>
+        )
+    }
+}
+
+const mockedFeatureFlags: FeatureFlags = {
+    marketsProxyFeature: {
+        enabled: true,
+        url: "https://coin-api.veworld.vechain.org",
+        fallbackUrl: "https://api.coingecko.com/api/v3",
+    },
+    pushNotificationFeature: {
+        enabled: true,
+    },
+    subdomainClaimFeature: {
+        enabled: true,
+    },
+    paymentProvidersFeature: {
+        "coinbase-pay": {
+            android: true,
+            iOS: false,
+        },
+        transak: {
+            android: true,
+            iOS: true,
+        },
+        coinify: {
+            android: true,
+            iOS: false,
+        },
+    },
+    discoveryFeature: {
+        bannersAutoplay: true,
+        showStellaPayBanner: false,
+        showStargateBanner: true,
+    },
+    forks: {
+        GALACTICA: {
+            transactions: {
+                ledger: false,
+            },
+        },
+    },
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: true,
+        },
+    },
+}
+
+jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
+    ...jest.requireActual("~Components/Providers/FeatureFlagsProvider"),
+    useFeatureFlags: jest.fn(),
+}))
+
+jest.mock("@react-navigation/native", () => ({
+    ...jest.requireActual("@react-navigation/native"),
+    useNavigation: jest.fn(),
+}))
 
 describe("URLBar", () => {
     beforeEach(() => {
         jest.restoreAllMocks()
     })
-    it("should render correctly", () => {
+
+    it("should render correctly", async () => {
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
             showToolbars: true,
             isDapp: false,
+            dappMetadata: undefined,
             navigationState: {
                 url: "https://vechain.org",
             },
         })
-        render(<URLBar />, {
-            wrapper: TestWrapper,
+        ;(useFeatureFlags as jest.Mock).mockReturnValue(mockedFeatureFlags)
+
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} />, {
+            wrapper: createWrapper(),
         })
 
-        expect(screen.getByTestId("URL-bar-input")).toBeVisible()
+        screen.debug()
+
+        const urlInput = await screen.findByTestId("URL-bar-website-name")
+
+        expect(urlInput).toBeVisible()
     })
 
-    it("should navigate to HTTPS URL", async () => {
-        const navigateFn = jest.fn()
+    it("should navigate to apps search if betterWorldFeature.appsScreen.enabled is true", async () => {
+        const replaceFn = jest.fn()
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
             showToolbars: true,
             isDapp: false,
             navigationState: {
                 url: "https://vechain.org",
             },
-            navigateToUrl: navigateFn,
         })
-        render(<URLBar />, {
-            wrapper: TestWrapper,
+        ;(useFeatureFlags as jest.Mock).mockReturnValue(mockedFeatureFlags)
+        ;(useNavigation as jest.Mock).mockReturnValue({
+            replace: replaceFn,
+        })
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} />, {
+            wrapper: createWrapper(),
         })
 
-        const urlInput = screen.getByTestId("URL-bar-input")
-        fireEvent.changeText(urlInput, "https://google.com")
-        fireEvent(urlInput, "submitEditing", { nativeEvent: { text: "https://google.com" } })
+        const urlInput = await screen.getByTestId("URL-bar-website-name")
+        fireEvent.press(urlInput)
 
         await waitFor(() => {
-            expect(navigateFn).toHaveBeenCalledWith("https://google.com")
+            expect(replaceFn).toHaveBeenCalledWith(Routes.APPS_SEARCH)
         })
     })
 
-    it("should navigate to HTTP URL", async () => {
-        const navigateFn = jest.fn()
+    it("should navigate to discover search if betterWorldFeature.appsScreen.enabled is false", async () => {
+        const replaceFn = jest.fn()
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
             showToolbars: true,
             isDapp: false,
             navigationState: {
                 url: "https://vechain.org",
             },
-            navigateToUrl: navigateFn,
         })
-        render(<URLBar />, {
-            wrapper: TestWrapper,
+        ;(useFeatureFlags as jest.Mock).mockReturnValue({
+            ...mockedFeatureFlags,
+            betterWorldFeature: {
+                ...mockedFeatureFlags.betterWorldFeature,
+                appsScreen: { ...mockedFeatureFlags.betterWorldFeature.appsScreen, enabled: false },
+            },
+        })
+        ;(useNavigation as jest.Mock).mockReturnValue({
+            replace: replaceFn,
+        })
+        render(<URLBar navigationUrl="https://vechain.org" isLoading={false} />, {
+            wrapper: createWrapper(),
         })
 
-        const urlInput = screen.getByTestId("URL-bar-input")
-        ;(axios.get as jest.Mock).mockResolvedValue({ status: 200 })
-        fireEvent.changeText(urlInput, "http://localhost:1234")
-        fireEvent(urlInput, "submitEditing", { nativeEvent: { text: "http://localhost:1234" } })
+        const urlInput = await screen.getByTestId("URL-bar-website-name")
+        fireEvent.press(urlInput)
 
         await waitFor(() => {
-            expect(navigateFn).toHaveBeenCalledWith("http://localhost:1234")
+            expect(replaceFn).toHaveBeenCalledWith(Routes.DISCOVER_SEARCH)
         })
     })
 })

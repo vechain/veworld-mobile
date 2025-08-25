@@ -7,7 +7,7 @@ import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
 import HapticsService from "~Services/HapticsService"
 
-type Props =
+export type BaseIconProps =
     | {
           size?: number
           bg?: string
