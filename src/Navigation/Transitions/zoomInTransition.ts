@@ -2,32 +2,20 @@ import { StackCardInterpolationProps, StackCardStyleInterpolator } from "@react-
 import { Animated } from "react-native"
 import { COLORS } from "~Constants"
 
-export const slideFadeInTransition: StackCardStyleInterpolator = ({
-    current,
-    next,
-    layouts,
-}: StackCardInterpolationProps) => {
-    const translateY = current.progress.interpolate({
+export const zoomInTransition: StackCardStyleInterpolator = ({ current, next }: StackCardInterpolationProps) => {
+    const scale = current.progress.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 1],
+        outputRange: [0.2, 1],
         extrapolate: "clamp",
     })
 
-    const translateYClosing = next?.progress.interpolate({
+    const scaleClosing = next?.progress.interpolate({
         inputRange: [0, 1],
-        outputRange: [0, 1],
+        outputRange: [0.2, 1],
         extrapolate: "clamp",
     })
 
-    const translateYProgress = Animated.add(translateY, translateYClosing ?? 0)
-
-    const scale = next
-        ? next.progress.interpolate({
-              inputRange: [0, 1],
-              outputRange: [1, 0.8],
-              extrapolate: "clamp",
-          })
-        : 1
+    const scaleProgress = Animated.add(scale, scaleClosing ?? 1)
 
     const backgroundColor = current.progress.interpolate({
         inputRange: [0, 0.5, 1],
@@ -39,14 +27,11 @@ export const slideFadeInTransition: StackCardStyleInterpolator = ({
         cardStyle: {
             transform: [
                 {
-                    translateY: translateYProgress.interpolate({
+                    scale: scaleProgress.interpolate({
                         inputRange: [0, 1, 2],
-                        outputRange: [layouts.screen.height, 0, layouts.screen.height * 0.3],
+                        outputRange: [1, 0.2, 1],
                         extrapolate: "clamp",
                     }),
-                },
-                {
-                    scale: scale,
                 },
             ],
             opacity: 1,
