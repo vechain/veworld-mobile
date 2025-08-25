@@ -188,8 +188,19 @@ export const BaseCarousel = ({
 
     const onScroll = useCallback(
         (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            if (
+                e.nativeEvent.contentOffset.x + e.nativeEvent.layoutMeasurement.width ===
+                e.nativeEvent.contentSize.width
+            ) {
+                //This is the last page
+                setPage(offsets.length - 1)
+                return
+            }
             const pointIdx = [...offsets].reverse().findIndex(offset => offset <= e.nativeEvent.contentOffset.x)
-            if (pointIdx === -1) setPage(0)
+            if (pointIdx === -1) {
+                setPage(0)
+                return
+            }
             setPage(offsets.length - 1 - pointIdx)
         },
         [offsets],
