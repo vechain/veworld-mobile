@@ -1,7 +1,7 @@
 import React, { useMemo } from "react"
 import { ImageStyle, Pressable, StyleSheet } from "react-native"
 import FastImage, { ImageStyle as FastImageStyle } from "react-native-fast-image"
-import Animated, { SharedTransition, withTiming } from "react-native-reanimated"
+import Animated from "react-native-reanimated"
 import { BaseSpacer, BaseText, BaseView, BlurView } from "~Components"
 import { COLORS } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -30,23 +30,21 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
             | undefined
     }, [app.categories])
 
-    const sharedTransitionStyle = SharedTransition.custom(values => {
-        "worklet"
-        return {
-            width: values.targetWidth,
-            height: withTiming(values.targetHeight),
-            borderRadius: withTiming(24),
-        }
-    })
+    // const sharedTransitionStyle = SharedTransition.custom(values => {
+    //     "worklet"
+    //     return {
+    //         width: values.targetWidth,
+    //         height: withTiming(values.targetHeight),
+    //         borderRadius: withTiming(24),
+    //     }
+    // })
 
     return (
         <Pressable onPress={() => onPressItem({ bannerUri, iconUri, app, category })}>
-            <Animated.View
-                style={styles.imageWrapper}
-                sharedTransitionStyle={sharedTransitionStyle}
-                testID="VBD_CAROUSEL_ITEM">
+            <Animated.View style={styles.imageWrapper} testID="VBD_CAROUSEL_ITEM">
                 <Animated.Image
                     sharedTransitionTag={`PREVIEW_IMAGE_${app.id}`}
+                    // sharedTransitionStyle={sharedTransitionStyle}
                     source={{ uri: bannerUri }}
                     style={[StyleSheet.absoluteFill, styles.root as ImageStyle]}
                 />

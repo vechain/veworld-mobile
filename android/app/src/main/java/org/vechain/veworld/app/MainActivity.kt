@@ -12,8 +12,8 @@ class MainActivity : ReactActivity() {
     override fun getMainComponentName(): String = "VeWorld"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        RNBootSplash.init(this, R.style.BootTheme)
         super.onCreate(null)
+        RNBootSplash.init(this, R.style.BootTheme)
 
         // Handle app links (deep linking)
         intent?.data?.let { appLinkData ->

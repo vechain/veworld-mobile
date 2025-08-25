@@ -3,7 +3,13 @@ import React, { ElementType, useCallback, useMemo } from "react"
 import { ImageStyle, StyleSheet } from "react-native"
 import FastImage, { ImageStyle as FastImageStyle } from "react-native-fast-image"
 import { getTimeZone } from "react-native-localize"
-import Animated, { EntryAnimationsValues, EntryExitAnimationFunction, withTiming } from "react-native-reanimated"
+import Animated, {
+    EntryAnimationsValues,
+    EntryExitAnimationFunction,
+    FadeIn,
+    FadeOut,
+    withTiming,
+} from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import {
@@ -24,6 +30,7 @@ import { addBookmark, removeBookmark, selectFavoritesDapps, useAppDispatch, useA
 import { BigNutils, DateUtils, PlatformUtils, URIUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "./Components/Common/CategoryChip"
+import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 
 type Props = NativeStackScreenProps<RootStackParamListApps, Routes.APPS_PREVIEW>
 
@@ -68,6 +75,8 @@ const VbdInfoColumn = ({
 
 const UsersIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-users" {...props} />
 const LeafIcon = (props: Partial<BaseIconProps>) => <BaseIcon name="icon-leaf" {...props} />
+
+const AnimatedBlurView = Animated.createAnimatedComponent(wrapFunctionComponent(BlurView))
 
 export const AppsPreviewScreen = ({ route, navigation }: Props) => {
     const { LL, locale } = useI18nContext()
@@ -231,7 +240,8 @@ export const AppsPreviewScreen = ({ route, navigation }: Props) => {
                             action={handleClose}
                             testID="bottom-sheet-close-btn"
                         />
-                        <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
+
+                        <AnimatedBlurView style={styles.blurView} blurAmount={10} entering={FadeIn} exiting={FadeOut}>
                             <BaseView flexDirection="column" gap={16} px={24} py={16}>
                                 <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                                     <BaseView flexDirection="row" alignItems="center">
@@ -263,7 +273,7 @@ export const AppsPreviewScreen = ({ route, navigation }: Props) => {
                                     {app?.description}
                                 </BaseText>
                             </BaseView>
-                        </BlurView>
+                        </AnimatedBlurView>
                     </Animated.View>
                 ) : null}
 

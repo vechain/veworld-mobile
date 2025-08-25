@@ -1,5 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack"
 import React from "react"
+
 import { VbdDApp } from "~Model"
 import { Routes } from "~Navigation/Enums"
 // import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
@@ -23,34 +24,33 @@ export type RootStackParamListApps = {
     [Routes.ACTIVITY_STAKING]: undefined
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListApps>()
+const { Navigator, Screen } = createNativeStackNavigator<RootStackParamListApps>()
 
 export const AppsStack = () => {
     return (
         <Navigator id="AppsStack" screenOptions={{ headerShown: false }}>
-            <Group>
-                <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
-                <Screen
-                    name={Routes.APPS_PREVIEW}
-                    component={AppsPreviewScreen}
-                    options={{
-                        headerShown: false,
-                        presentation: "containedTransparentModal",
-                        animation: "fade",
-                        gestureDirection: "vertical",
-                    }}
-                />
-                <Screen
-                    name={Routes.BROWSER}
-                    component={InAppBrowser}
-                    options={{
-                        headerShown: false,
-                        //cardStyleInterpolator: slideFadeInTransition,
-                        presentation: "transparentModal",
-                        //transitionSpec: TRANSITION_SPECS,
-                    }}
-                />
-            </Group>
+            <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
+            <Screen
+                name={Routes.APPS_PREVIEW}
+                component={AppsPreviewScreen}
+                options={{
+                    headerShown: false,
+                    presentation: "transparentModal",
+                    animation: "fade",
+                    gestureDirection: "vertical",
+                }}
+            />
+            <Screen
+                name={Routes.BROWSER}
+                component={InAppBrowser}
+                options={{
+                    headerShown: false,
+
+                    //cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "transparentModal",
+                    //transitionSpec: TRANSITION_SPECS,
+                }}
+            />
 
             <Screen
                 name={Routes.APPS_SEARCH}
