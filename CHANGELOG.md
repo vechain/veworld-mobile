@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-26)</small>
+
+* build: init ([43a6cd2](https://github.com/vechain/veworld-mobile/commit/43a6cd2))
+* 284 - Removed header from settings page (#3222) ([47ef345](https://github.com/vechain/veworld-mobile/commit/47ef345)), closes [#3222](https://github.com/vechain/veworld-mobile/issues/3222)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
