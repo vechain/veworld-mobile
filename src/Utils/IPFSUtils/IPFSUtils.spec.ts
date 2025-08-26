@@ -41,7 +41,7 @@ describe("IPFSUtils", () => {
                 staleTime: Infinity,
                 gcTime: Infinity,
                 queryFn: expect.any(Function),
-                retry: 6,
+                retry: 3,
             })
         })
     })
@@ -55,6 +55,7 @@ describe("IPFSUtils", () => {
                 "https://api.gateway-proxy.vechain.org/ipfs/QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
                 {
                     responseType: "json",
+                    timeout: 20000,
                     headers: {
                         "x-project-id": "veworld-mobile",
                     },

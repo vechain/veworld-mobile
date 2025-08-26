@@ -5,8 +5,13 @@ import { NFTMedia } from "~Model"
 import { MediaUtils, debug } from "~Utils"
 import IPFSUtils from "~Utils/IPFSUtils"
 
+const IMAGE_FETCH_TIMEOUT = 60000
 const retrieveNftMediaProps = async (uri: string): Promise<NFTMedia> => {
-    const response = await IPFSUtils.getIpfsValue<Blob>(uri, { responseType: "blob", maxContentLength: MAX_IMAGE_SIZE })
+    const response = await IPFSUtils.getIpfsValue<Blob>(uri, {
+        responseType: "blob",
+        maxContentLength: MAX_IMAGE_SIZE,
+        timeout: IMAGE_FETCH_TIMEOUT,
+    })
     // Check if the MIME type is allowed
     const allowedMimeTypes = [
         "image/jpeg",
@@ -46,7 +51,6 @@ export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
             staleTime: Infinity,
             gcTime: Infinity,
             retry: 3,
-            retryDelay: 2000,
         })
     } catch (err) {
         debug(ERROR_EVENTS.NFT, JSON.stringify(err))
