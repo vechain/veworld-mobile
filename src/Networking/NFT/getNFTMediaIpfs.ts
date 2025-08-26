@@ -45,6 +45,8 @@ export const getNFTMediaIpfs = async (uri: string): Promise<NFTMedia> => {
             queryFn: () => retrieveNftMediaProps(uri),
             staleTime: Infinity,
             gcTime: Infinity,
+            retry: 3,
+            retryDelay: 2000,
         })
     } catch (err) {
         debug(ERROR_EVENTS.NFT, JSON.stringify(err))

@@ -39,4 +39,6 @@ export const getIpfsQueryKeyOptions = <TData>(uri: string, config?: NoInfer<Axio
         staleTime: Infinity,
         gcTime: Infinity,
         queryFn: () => getIpfsValue<TData>(uri, config),
+        retry: 3,
+        retryDelay: 2000,
     })
