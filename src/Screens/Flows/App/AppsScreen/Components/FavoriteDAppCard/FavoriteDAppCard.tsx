@@ -81,7 +81,8 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         disabled={isActive}
                         onLongPress={() => onRightActionLongPress?.(dapp)}
                         onPress={() => onRightActionPress(dapp, isEditMode)}
-                        style={styles.touchableContainer}>
+                        style={styles.touchableContainer}
+                        activeOpacity={0.7}>
                         {isEditMode ? (
                             <BaseIcon
                                 name="icon-grip-horizontal"
