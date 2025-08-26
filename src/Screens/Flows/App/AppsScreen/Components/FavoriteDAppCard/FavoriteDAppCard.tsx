@@ -47,7 +47,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         style={[styles.card]}
                         onPress={() => onPress(dapp)}
                         onLongPress={() => onLongPress?.(dapp)}>
-                        <BaseView flexDirection="row" flex={1} pr={10}>
+                        <BaseView flexDirection="row" alignItems="flex-start" flex={1} pr={10}>
                             <Image
                                 source={{
                                     uri: iconUri,
@@ -62,14 +62,14 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                                 <BaseText
                                     ellipsizeMode="tail"
                                     numberOfLines={1}
-                                    typographyFont="bodySemiBold"
+                                    typographyFont="subSubTitleSemiBold"
                                     color={theme.colors.assetDetailsCard.title}>
                                     {dapp.name}
                                 </BaseText>
                                 <BaseSpacer height={4} />
                                 <BaseText
+                                    numberOfLines={2}
                                     ellipsizeMode="tail"
-                                    numberOfLines={1}
                                     typographyFont="captionMedium"
                                     color={theme.colors.assetDetailsCard.text}>
                                     {dapp.desc ? dapp.desc : dapp.href}

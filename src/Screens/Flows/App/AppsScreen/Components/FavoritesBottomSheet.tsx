@@ -167,6 +167,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         bottomSheetContent: {
             paddingHorizontal: 20,
+            paddingBottom: 0,
             color: theme.colors.favoriteHeader,
         },
         leftElement: {
