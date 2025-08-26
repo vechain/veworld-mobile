@@ -63,7 +63,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
                             name="icon-disconnect"
                             style={styles.errorIcon}
                             size={32}
-                            color={theme.colors.history.historyItem.iconColor}
+                            color={theme.colors.history.emptyStateIcon.color}
                         />
                         <BaseText testID="search-results-address-error" color={theme.colors.history.emptyStateColor}>
                             {LL.BROWSER_HISTORY_ADDRESS_ERROR()}
@@ -82,7 +82,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
                             name="icon-search"
                             style={styles.errorIcon}
                             size={32}
-                            color={theme.colors.history.historyItem.iconColor}
+                            color={theme.colors.history.emptyStateIcon.color}
                         />
                         <BaseText testID="search-no-results-title" color={theme.colors.history.emptyStateColor}>
                             {LL.BROWSER_HISTORY_NO_RESULTS()}
@@ -145,7 +145,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
                             name="icon-history"
                             style={styles.errorIcon}
                             size={32}
-                            color={theme.colors.history.historyItem.iconColor}
+                            color={theme.colors.history.emptyStateIcon.color}
                         />
                         <BaseText testID="search-results-empty-title" color={theme.colors.history.emptyStateColor}>
                             {LL.BROWSER_HISTORY_EMPTY()}
@@ -188,7 +188,7 @@ const baseStyles = (theme: ColorThemeType) => {
         errorIcon: {
             borderRadius: 999,
             padding: 16,
-            backgroundColor: theme.colors.history.historyItem.iconBackground,
+            backgroundColor: theme.colors.history.emptyStateIcon.background,
             alignSelf: "center",
         },
         flatListPadding: { paddingBottom: 24 },

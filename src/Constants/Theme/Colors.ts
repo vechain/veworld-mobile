@@ -247,6 +247,10 @@ export type Colors = {
             rightIconColor: string
         }
         emptyStateColor: string
+        emptyStateIcon: {
+            background: string
+            color: string
+        }
     }
     newBottomSheet: {
         background: string
@@ -647,6 +651,10 @@ const light: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.GREY_600,
+        emptyStateIcon: {
+            background: COLORS.GREY_50,
+            color: COLORS.GREY_400,
+        },
     },
     newBottomSheet: {
         background: COLORS.WHITE,
@@ -979,6 +987,10 @@ const dark: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.WHITE,
+        emptyStateIcon: {
+            background: COLORS.PURPLE_DISABLED,
+            color: COLORS.DARK_PURPLE_DISABLED,
+        },
     },
     newBottomSheet: {
         background: COLORS.PURPLE,
