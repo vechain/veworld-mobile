@@ -16,7 +16,7 @@ import {
     ListEmptyResults,
     ReorderIconHeaderButton,
 } from "~Components"
-import { ColorThemeType, DiscoveryDApp } from "~Constants"
+import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { removeBookmark, reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -186,7 +186,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         reorderIcon: {
             borderColor: theme.colors.actionBottomSheet.border,
-            backgroundColor: theme.colors.actionBottomSheet.iconBackground,
+            backgroundColor: COLORS.TRANSPARENT,
             borderWidth: 1,
             borderRadius: 6,
         },

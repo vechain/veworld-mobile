@@ -191,11 +191,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                                 name={action.icon}
                                 size={16}
                                 iconPadding={8}
-                                bg={
-                                    action.id === "close-tab"
-                                        ? theme.colors.actionBottomSheet.dangerIconBackground
-                                        : theme.colors.actionBottomSheet.iconBackground
-                                }
+                                bg={theme.colors.actionBottomSheet.dangerIconBackground}
                                 color={
                                     action.id === "close-tab"
                                         ? theme.colors.actionBottomSheet.dangerIcon
@@ -216,7 +212,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                         <BaseSpacer
                             key={action.id}
                             height={1}
-                            background={theme.colors.actionBottomSheet.iconBackground}
+                            background={theme.colors.actionBottomSheet.dangerIconBackground}
                             my={10}
                         />
                     ),

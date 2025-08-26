@@ -523,7 +523,7 @@ const light: Colors = {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
         isActiveBackground: COLORS.GREY_100,
-        iconBackground: COLORS.TRANSPARENT,
+        iconBackground: COLORS.GREY_100,
         text: COLORS.GREY_700,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
