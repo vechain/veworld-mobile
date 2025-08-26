@@ -37,7 +37,7 @@ describe("IPFSUtils", () => {
     describe("getIpfsQueryKeyOptions", () => {
         it("should return the correct query options", () => {
             expect(getIpfsQueryKeyOptions("ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb")).toStrictEqual({
-                queryKey: ["IPFS_URI", "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb"],
+                queryKey: ["IPFS_URI", "v2", "ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb"],
                 staleTime: Infinity,
                 gcTime: Infinity,
                 queryFn: expect.any(Function),
@@ -53,6 +53,7 @@ describe("IPFSUtils", () => {
             expect(axios.get).toHaveBeenCalledWith(
                 "https://api.gateway-proxy.vechain.org/ipfs/QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
                 {
+                    responseType: "json",
                     headers: {
                         "x-project-id": "veworld-mobile",
                     },
@@ -73,6 +74,26 @@ describe("IPFSUtils", () => {
                         "x-project-id": "veworld-mobile",
                     },
                     timeout: 1000,
+                    responseType: "json",
+                },
+            )
+        })
+        it("should work with a custom responseType", async () => {
+            ;(axios.get as jest.Mock).mockResolvedValueOnce({ data: { key: "VALUE" } })
+            const result = await getIpfsValue("ipfs://QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb", {
+                timeout: 1000,
+                responseType: "blob",
+            })
+
+            expect(result).toStrictEqual({ key: "VALUE" })
+            expect(axios.get).toHaveBeenCalledWith(
+                "https://api.gateway-proxy.vechain.org/ipfs/QmZ8f9Qn5W2ZgZyf5j8JYp3kQXJ7xuZ9qW9VwZ6fXkZpZb",
+                {
+                    headers: {
+                        "x-project-id": "veworld-mobile",
+                    },
+                    timeout: 1000,
+                    responseType: "blob",
                 },
             )
         })
