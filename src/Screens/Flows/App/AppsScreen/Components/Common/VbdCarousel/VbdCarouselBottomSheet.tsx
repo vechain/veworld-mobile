@@ -191,7 +191,7 @@ export const VbdCarouselBottomSheet = ({
                         action={handleClose}
                         testID="bottom-sheet-close-btn"
                     />
-                    <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
+                    <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
                         <BaseView flexDirection="column" gap={16} px={24} py={16}>
                             <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                                 <BaseView flexDirection="row" alignItems="center">
