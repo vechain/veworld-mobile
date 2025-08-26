@@ -94,7 +94,7 @@ export interface NonFungibleTokenActivity extends Activity {
 export interface NFTMarketplaceActivity extends Activity {
     tokenId: string
     contractAddress: string
-    type: ActivityType.NFT_SALE | ActivityType.NFT_PURCHASE
+    type: ActivityType.NFT_SALE
     direction: DIRECTIONS
     price: string
     paymentToken?: string
@@ -232,8 +232,8 @@ export interface TransferVetEvent extends IndexedHistoryEvent {
 }
 
 export interface TransferNftEvent extends IndexedHistoryEvent {
-    eventName: ActivityEvent.TRANSFER_NFT
-    tokendId: string
+    eventName: ActivityEvent.TRANSFER_NFT | ActivityEvent.NFT_SALE
+    tokenId: string
     to: string
     from: string
 }

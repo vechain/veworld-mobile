@@ -61,7 +61,6 @@ export const isTransactionActivity = (activity: Activity) => {
         type === ActivityType.TRANSFER_VET ||
         type === ActivityType.TRANSFER_NFT ||
         type === ActivityType.NFT_SALE ||
-        type === ActivityType.NFT_PURCHASE ||
         type === ActivityType.DAPP_TRANSACTION ||
         activity.isTransaction
     )

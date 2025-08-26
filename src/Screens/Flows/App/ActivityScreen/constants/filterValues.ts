@@ -43,7 +43,10 @@ export const filterValues = {
         type: FilterType.TRANSFER,
         value: [ActivityEvent.TRANSFER_FT, ActivityEvent.TRANSFER_SF, ActivityEvent.TRANSFER_VET],
     },
-    nfts: { type: FilterType.NFTS, value: [ActivityEvent.TRANSFER_NFT] },
+    nfts: {
+        type: FilterType.NFTS,
+        value: [ActivityEvent.TRANSFER_NFT, ActivityEvent.NFT_SALE],
+    },
     dapps: { type: FilterType.DAPPS, value: [] },
     staking: {
         type: FilterType.STAKING,

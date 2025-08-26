@@ -508,7 +508,6 @@ const processActivity = (
             return enrichActivityWithVetTransfer(activity, clause, direction)
         case ActivityType.TRANSFER_NFT:
         case ActivityType.NFT_SALE:
-        case ActivityType.NFT_PURCHASE:
             return enrichActivityWithNFTData(activity, clause, direction)
         default:
             return enrichActivityWithDappData(activity, appName, appUrl)
@@ -610,8 +609,7 @@ export const createActivityFromIndexedHistoryEvent = (
                 direction: direction,
             } as NonFungibleTokenActivity
         }
-        case ActivityEvent.NFT_SALE:
-        case ActivityEvent.NFT_PURCHASE: {
+        case ActivityEvent.NFT_SALE: {
             const direction = AddressUtils.compareAddresses(from, selectedAccountAddress)
                 ? DIRECTIONS.UP
                 : DIRECTIONS.DOWN

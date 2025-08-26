@@ -3153,6 +3153,14 @@ type RootTranslation = {
 	 */
 	NFT_TRANSFER_SENT: string
 	/**
+	 * N​F​T​ ​p​u​r​c​h​a​s​e​d
+	 */
+	NFT_PURCHASED: () => LocalizedString
+	/**
+	 * N​F​T​ ​s​o​l​d
+	 */
+	NFT_SOLD: () => LocalizedString
+	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: string
@@ -4334,10 +4342,7 @@ type RootTranslation = {
 	 * C​l​a​i​m​a​b​l​e
 	 */
 	STARGATE_CLAIMABLE: string
-	/**
-	 * M​a​n​a​g​i​n​g
-	 */
-	STARGATE_DELEGATEE_LABEL: string
+
 	/**
 	 * L​o​c​k​e​d
 	 */
@@ -5153,10 +5158,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * VET unstaked
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
-	/**
-	 * Managing
-	 */
-	STARGATE_DELEGATEE_LABEL: () => LocalizedString
 	/**
 	 * No Swaps to show yet
 	 */
@@ -8077,6 +8078,14 @@ Thanks for your patience!
 	 * NFT sent
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
+	/**
+	 * NFT purchased
+	 */
+	NFT_PURCHASED: () => LocalizedString
+	/**
+	 * NFT sold
+	 */
+	NFT_SOLD: () => LocalizedString
 	/**
 	 * Go to NFTs
 	 */

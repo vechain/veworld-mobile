@@ -24,6 +24,7 @@ import {
     FungibleTokenActivity,
     IconKey,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SignCertActivity,
     StargateActivity,
     SwapActivity,
@@ -33,7 +34,13 @@ import {
     VeBetterDaoDapp,
     VeVoteCastActivity,
 } from "~Model"
-import { selectAllTokens, selectCustomTokens, selectOfficialTokens, useAppSelector } from "~Storage/Redux"
+import {
+    selectAllTokens,
+    selectCustomTokens,
+    selectOfficialTokens,
+    selectSelectedAccount,
+    useAppSelector,
+} from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 import { getTokenLevelName } from "~Utils/StargateUtils"
 import { ActivityStatusIndicator } from "./ActivityStatusIndicator"
@@ -516,6 +523,55 @@ const NFTTransfer = ({ activity, onPress }: NFTTransferActivityBoxProps) => {
     )
 }
 
+type NFTSaleActivityBoxProps = {
+    activity: NFTMarketplaceActivity
+    onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
+}
+
+const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
+    const { LL } = useI18nContext()
+    const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
+    const { formatLocale } = useFormatFiat()
+
+    // Determine if user is buyer or seller based on their address
+    const selectedAccount = useAppSelector(selectSelectedAccount)
+    const isBuyer = AddressUtils.compareAddresses(activity.buyer, selectedAccount.address)
+
+    const title = isBuyer ? LL.NFT_PURCHASED() : LL.NFT_SOLD()
+    const time = moment(activity.timestamp).format("HH:mm")
+
+    const validatedCollectionName = () => {
+        if (!collectionName) return LL.UNKNOWN_COLLECTION()
+        return collectionName
+    }
+
+    // Format the price
+    const formattedPrice = BigNutils(activity.price).toHuman(18).toTokenFormat_string(2, formatLocale)
+
+    const onPressHandler = () => {
+        onPress(activity)
+    }
+
+    const rightAmount = isBuyer ? `${DIRECTIONS.DOWN} ${formattedPrice}` : `${DIRECTIONS.UP} ${formattedPrice}`
+
+    const iconBackgroundColor = isBuyer ? "#3B82F6" : "#10B981"
+
+    return (
+        <BaseActivityBox
+            testID={`NFT-SALE-${activity.id}`}
+            icon="icon-image"
+            iconBackgroundColor={iconBackgroundColor}
+            time={time}
+            title={title}
+            description={validatedCollectionName()}
+            rightAmount={rightAmount}
+            rightAmountDescription={activity.paymentToken || "VET"}
+            onPress={onPressHandler}
+            nftImage={tokenMetadata?.image}
+        />
+    )
+}
+
 type ConnectedAppActivityProps = {
     activity: ConnectedAppActivity
     onPress: (activity: Activity, token?: FungibleToken, isSwap?: boolean, decodedClauses?: TransactionOutcomes) => void
@@ -972,6 +1028,7 @@ export const ActivityBox = {
     TokenTransfer: TokenTransfer,
     DAppTransaction: DAppTransaction,
     NFTTransfer: NFTTransfer,
+    NFTSale: NFTSale,
     DAppSignCert: DAppSignCertBox,
     ConnectedAppActivity: ConnectedAppActivityBox,
     SignedTypedData: SignedTypedData,
