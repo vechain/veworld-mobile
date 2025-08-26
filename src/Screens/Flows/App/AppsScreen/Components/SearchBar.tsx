@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
-import { TextInput } from "react-native-gesture-handler"
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler"
 import { BaseIcon, BaseTextInput } from "~Components"
 import { Spinner } from "~Components/Reusable/Spinner"
 import { COLORS, ColorThemeType } from "~Constants"
@@ -40,15 +40,15 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
         if (!filteredSearch) return undefined
         if (filteredSearch.length === 0) return undefined
         return (
-            <BaseIcon
+            <TouchableOpacity
                 testID="search-bar-clear-button"
-                name="icon-x"
-                size={16}
-                color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}
-                action={onClear}
-            />
+                activeOpacity={0.9}
+                onPress={onClear}
+                style={styles.searchInputRightIconContainer}>
+                <BaseIcon name="icon-x" size={16} color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600} />
+            </TouchableOpacity>
         )
-    }, [filteredSearch, onClear, theme.isDark])
+    }, [filteredSearch, onClear, styles.searchInputRightIconContainer, theme.isDark])
 
     const renderLeftIcon = useMemo(() => {
         if (loading) return <Spinner color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
@@ -107,6 +107,12 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopRightRadius: 7,
             borderBottomRightRadius: 7,
             paddingRight: 12,
+        },
+        searchInputRightIconContainer: {
+            height: "100%",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
         },
         searchBar: {
             paddingVertical: 10,
