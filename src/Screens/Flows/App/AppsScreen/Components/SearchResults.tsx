@@ -47,12 +47,9 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
         return <BaseSpacer height={24} />
     }, [])
 
-    const renderItem = useCallback(
-        ({ item }: ListRenderItemInfo<HistoryItem>) => {
-            return <SearchResultItem item={item} isValidQuery={isValidQuery} />
-        },
-        [isValidQuery],
-    )
+    const renderItem = useCallback(({ item }: ListRenderItemInfo<HistoryItem>) => {
+        return <SearchResultItem item={item} />
+    }, [])
 
     if (error === SearchError.ADDRESS_CANNOT_BE_REACHED)
         return (
@@ -97,7 +94,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
             {isQueryEmptyButWithResults && (
                 <BaseView justifyContent="space-between" flexDirection="row" alignItems="center" mb={24}>
                     <BaseView flexDirection="row" alignItems="center" gap={8}>
-                        <BaseIcon name="icon-history" size={16} color={theme.colors.history.titleColor} />
+                        <BaseIcon name="icon-history" size={20} color={theme.colors.history.titleColor} />
                         <BaseText
                             testID="search-results-default-title"
                             typographyFont="subSubTitleSemiBold"
@@ -197,6 +194,7 @@ const baseStyles = (theme: ColorThemeType) => {
             backgroundColor: theme.colors.history.button.background,
             borderColor: theme.colors.history.button.border,
             borderWidth: 1,
+            height: 32,
         },
     })
 }
