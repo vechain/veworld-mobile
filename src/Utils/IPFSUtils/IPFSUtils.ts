@@ -23,6 +23,7 @@ export const validateIpfsUri = (uri: string): boolean => {
 
 export const getIpfsValue = async <TData>(uri: string, config?: NoInfer<AxiosRequestConfig<TData>>): Promise<TData> => {
     const metadata = await axios.get<TData>(URIUtils.convertUriToUrl(uri), {
+        responseType: "json",
         ...config,
         headers: {
             "x-project-id": "veworld-mobile",
@@ -34,7 +35,7 @@ export const getIpfsValue = async <TData>(uri: string, config?: NoInfer<AxiosReq
 
 export const getIpfsQueryKeyOptions = <TData>(uri: string, config?: NoInfer<AxiosRequestConfig<TData>>) =>
     queryOptions({
-        queryKey: ["IPFS_URI", uri],
+        queryKey: ["IPFS_URI", "v2", uri],
         staleTime: Infinity,
         gcTime: Infinity,
         queryFn: () => getIpfsValue<TData>(uri, config),
