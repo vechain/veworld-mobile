@@ -26,15 +26,9 @@ describe("SearchResultItem", () => {
         ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress })
         ;(useVisitedUrls as jest.Mock).mockReturnValue({ removeVisitedUrl: jest.fn() })
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate: navigate })
-        render(
-            <SearchResultItem
-                item={{ type: HistoryUrlKind.URL, name: "TEST", url: "https://vechain.org" }}
-                isValidQuery
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<SearchResultItem item={{ type: HistoryUrlKind.URL, name: "TEST", url: "https://vechain.org" }} />, {
+            wrapper: TestWrapper,
+        })
 
         const name = screen.getByTestId("SEARCH_RESULT_ITEM_NAME")
         const description = screen.getByTestId("SEARCH_RESULT_ITEM_DESCRIPTION")
@@ -77,7 +71,6 @@ describe("SearchResultItem", () => {
                     type: HistoryUrlKind.DAPP,
                     dapp,
                 }}
-                isValidQuery
             />,
             {
                 wrapper: TestWrapper,
@@ -100,45 +93,13 @@ describe("SearchResultItem", () => {
         })
     })
 
-    it("Should remove a website url from visited url", async () => {
-        const removeVisitedUrl = jest.fn()
-        ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress: jest.fn() })
-        ;(useVisitedUrls as jest.Mock).mockReturnValue({ removeVisitedUrl })
-        ;(useNavigation as jest.Mock).mockReturnValue({ navigate: jest.fn() })
-        render(
-            <SearchResultItem
-                item={{ type: HistoryUrlKind.URL, name: "TEST", url: "https://vechain.org" }}
-                isValidQuery={false}
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
-
-        const removeBtn = screen.getByTestId("SEARCH_RESULT_ITEM_REMOVE")
-
-        act(() => {
-            fireEvent.press(removeBtn)
-        })
-
-        await waitFor(() => {
-            expect(removeVisitedUrl).toHaveBeenCalledWith("https://vechain.org")
-        })
-    })
-
     it("Should render fallback if url is valid, but the image doesn't load correctly", async () => {
         ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress: jest.fn() })
         ;(useVisitedUrls as jest.Mock).mockReturnValue({ removeVisitedUrl: jest.fn() })
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate: jest.fn() })
-        render(
-            <SearchResultItem
-                item={{ type: HistoryUrlKind.URL, name: "TEST", url: "https://vechain.org" }}
-                isValidQuery
-            />,
-            {
-                wrapper: TestWrapper,
-            },
-        )
+        render(<SearchResultItem item={{ type: HistoryUrlKind.URL, name: "TEST", url: "https://vechain.org" }} />, {
+            wrapper: TestWrapper,
+        })
 
         const imageContainer = screen.getByTestId("SEARCH_RESULT_ITEM_IMAGE")
         act(() => {
