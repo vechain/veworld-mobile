@@ -101,6 +101,7 @@ export const SettingsScreen = () => {
 
     return (
         <Layout
+            safeAreaTestID="settings-screen"
             noBackButton
             body={
                 <BaseView mt={-16} style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
