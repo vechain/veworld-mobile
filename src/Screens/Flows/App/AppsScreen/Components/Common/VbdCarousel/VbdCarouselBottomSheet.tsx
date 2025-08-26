@@ -217,7 +217,7 @@ export const VbdCarouselBottomSheet = ({
                             <BaseText
                                 typographyFont="captionMedium"
                                 color={COLORS.WHITE_RGBA_85}
-                                numberOfLines={15}
+                                numberOfLines={5}
                                 flexDirection="row"
                                 testID="VBD_CAROUSEL_BS_APP_DESCRIPTION">
                                 {app?.description}
