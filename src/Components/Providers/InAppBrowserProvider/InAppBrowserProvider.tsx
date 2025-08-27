@@ -758,7 +758,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         const foundDapp = allDapps.find(app => new URL(app.href).origin === new URL(navigationState?.url ?? "").origin)
         if (foundDapp)
             return {
-                icon: fetchDynamicAppLogo({ app: foundDapp })!,
+                icon: fetchDynamicAppLogo({ app: foundDapp }),
                 name: foundDapp.name,
                 url: navigationState?.url,
                 isDapp: true,

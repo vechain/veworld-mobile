@@ -21,7 +21,7 @@ export const useDynamicAppLogo = ({ size = 64 }: Args) => {
 
     return useCallback(
         ({ app }: FnArgs) => {
-            if (!app) return process.env.REACT_APP_GOOGLE_FAVICON_URL
+            if (!app) return process.env.REACT_APP_GOOGLE_FAVICON_URL!
             if ("external_url" in app) {
                 //It's a VBD app
                 return URIUtils.convertUriToUrl(app.logo)
