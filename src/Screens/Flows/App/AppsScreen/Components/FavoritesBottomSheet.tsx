@@ -121,9 +121,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                 testID="dapps-list-header">
                 <BaseView flexDirection="row" gap={16} alignItems="center">
                     <BaseIcon name="icon-star" size={26} color={theme.colors.favoriteHeader} />
-                    <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
-                        {LL.FAVOURITES_DAPPS_TITLE()}
-                    </BaseText>
+                    <BaseText typographyFont="biggerTitleSemiBold">{LL.FAVOURITES_DAPPS_TITLE()}</BaseText>
                 </BaseView>
                 <BaseView style={styles.rightElement}>
                     {isEditingMode ? (
