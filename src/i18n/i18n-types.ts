@@ -1161,7 +1161,7 @@ type RootTranslation = {
 	 */
 	BROWSER_COPY_LINK_SUCCESS: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_FAVOURITES_TITLE: string
 	/**
@@ -1862,11 +1862,11 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_ERROR: string
 	/**
-	 * F​a​v​o​u​r​i​t​e
+	 * F​a​v​o​r​i​t​e
 	 */
 	COMMON_LBL_FAVOURITE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	COMMON_LBL_FAVOURITES: string
 	/**
@@ -2424,7 +2424,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_EMPTY_FAVOURITES: string
 	/**
-	 * N​o​ ​f​a​v​o​u​r​i​t​e​s​ ​a​d​d​e​d
+	 * N​o​ ​f​a​v​o​r​i​t​e​s​ ​a​d​d​e​d
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: string
 	/**
@@ -2472,7 +2472,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUGGESTED_FOR_YOU: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	DISCOVER_TAB_FAVOURITES: string
 	/**
@@ -2692,7 +2692,7 @@ type RootTranslation = {
 	 */
 	FAVORITES_SUGGESTION_BANNER_TITLE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: string
 	/**
@@ -2704,7 +2704,7 @@ type RootTranslation = {
 	 */
 	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	FAVOURITES_DAPPS_TITLE: string
 	/**
@@ -4561,6 +4561,10 @@ type RootTranslation = {
 	 */
 	TITLE_MNEMONIC: string
 	/**
+	 * M​o​r​e​ ​o​p​t​i​o​n​s
+	 */
+	TITLE_MORE_OPTIONS: string
+	/**
 	 * N​e​t​w​o​r​k
 	 */
 	TITLE_NETWORK: string
@@ -4685,10 +4689,6 @@ type RootTranslation = {
 	 * W​e​l​c​o​m​e​ ​t​o​ 
 	 */
 	TITLE_WELCOME_TO: string
-	/**
-	 * M​o​r​e​ ​o​p​t​i​o​n​s
-	 */
-	TITLE_MORE_OPTIONS: string
 	/**
 	 * T​o
 	 */
@@ -6097,7 +6097,7 @@ Thanks for your patience!
 	 */
 	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	BROWSER_FAVOURITES_TITLE: () => LocalizedString
 	/**
@@ -6793,11 +6793,11 @@ Thanks for your patience!
 	 */
 	COMMON_LBL_ERROR: () => LocalizedString
 	/**
-	 * Favourite
+	 * Favorite
 	 */
 	COMMON_LBL_FAVOURITE: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	COMMON_LBL_FAVOURITES: () => LocalizedString
 	/**
@@ -7349,7 +7349,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_EMPTY_FAVOURITES: () => LocalizedString
 	/**
-	 * No favourites added
+	 * No favorites added
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: () => LocalizedString
 	/**
@@ -7397,7 +7397,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_SUGGESTED_FOR_YOU: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	DISCOVER_TAB_FAVOURITES: () => LocalizedString
 	/**
@@ -7617,7 +7617,7 @@ Thanks for your patience!
 	 */
 	FAVORITES_SUGGESTION_BANNER_TITLE: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
@@ -7629,7 +7629,7 @@ Thanks for your patience!
 	 */
 	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	FAVOURITES_DAPPS_TITLE: () => LocalizedString
 	/**
@@ -9450,6 +9450,10 @@ Here's what it's all about:
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
 	/**
+	 * More options
+	 */
+	TITLE_MORE_OPTIONS: () => LocalizedString
+	/**
 	 * Network
 	 */
 	TITLE_NETWORK: () => LocalizedString
@@ -9573,10 +9577,6 @@ Here's what it's all about:
 	 * Welcome to 
 	 */
 	TITLE_WELCOME_TO: () => LocalizedString
-	/**
-	 * More options
-	 */
-	TITLE_MORE_OPTIONS: () => LocalizedString
 	/**
 	 * To
 	 */
