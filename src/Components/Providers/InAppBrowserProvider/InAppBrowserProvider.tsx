@@ -59,6 +59,7 @@ export interface DappMetadata {
     name: string
     url: string
     isDapp: boolean
+    description?: string
 }
 
 // Resolve an issue with types for the WebView component
@@ -757,10 +758,11 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         const foundDapp = allDapps.find(app => new URL(app.href).origin === new URL(navigationState?.url ?? "").origin)
         if (foundDapp)
             return {
-                icon: fetchDynamicAppLogo({ app: foundDapp }),
+                icon: fetchDynamicAppLogo({ app: foundDapp })!,
                 name: foundDapp.name,
                 url: navigationState?.url,
                 isDapp: true,
+                description: foundDapp.desc,
             }
 
         return {

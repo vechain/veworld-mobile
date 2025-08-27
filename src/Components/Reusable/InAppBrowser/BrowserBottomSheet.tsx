@@ -34,7 +34,7 @@ type BottomSheetActionItem = BottomSheetActionSeparator | BottomSheetAction
 
 export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onNavigate, onClose }, ref) => {
     const { LL } = useI18nContext()
-    const { isDapp, navigationState, webviewRef } = useInAppBrowser()
+    const { isDapp, navigationState, webviewRef, dappMetadata } = useInAppBrowser()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav =
@@ -116,6 +116,16 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 icon: "icon-share-2",
                 label: LL.BROWSER_SHARE(),
                 onPress: () => {
+                    if (!navigationState?.url || !dappMetadata) return
+                    const url = new URL(dappMetadata.url).origin
+                    Share.share({
+                        message: LL.SHARE_DAPP({
+                            name: dappMetadata.name,
+                            description: dappMetadata.description ?? "",
+                            url,
+                        }),
+                        url,
+                    })
                     Share.share({
                         message: navigationState?.title || new URL(navigationState?.url || "").href,
                         url: navigationState?.url ?? "",
@@ -155,8 +165,9 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         isDapp,
         webviewRef,
         onClose,
-        navigationState?.title,
         navigationState?.url,
+        navigationState?.title,
+        dappMetadata,
         navToNewTab,
         navToTabsManager,
         closeCurrentTab,
