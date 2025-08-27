@@ -14,7 +14,7 @@ export const HeaderTitle: React.FC<HeaderTitleProps> = ({ title, leftIconName, t
     return (
         <BaseView flexDirection="row" alignItems="center" gap={16}>
             {leftIconName && <BaseIcon name={leftIconName} size={24} color={theme.colors.text} />}
-            <BaseText testID={testID} color={theme.colors.title} typographyFont="subTitleSemiBold">
+            <BaseText testID={testID} color={theme.colors.headerTitle} typographyFont="headerTitle">
                 {title}
             </BaseText>
         </BaseView>

@@ -12,8 +12,8 @@ import {
     SelectedNetworkViewer,
     useNotifications,
 } from "~Components"
-import { ColorThemeType, isSmallScreen } from "~Constants"
-import { useCheckWalletBackup, useClaimableUsernames, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
+import { isSmallScreen } from "~Constants"
+import { useCheckWalletBackup, useClaimableUsernames, useThemedStyles } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
 import { Routes } from "~Navigation"
 import { selectAreDevFeaturesEnabled, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
@@ -41,7 +41,6 @@ export const SettingsScreen = () => {
 
     const { unclaimedAddresses } = useClaimableUsernames()
     const { styles: themedStyles } = useThemedStyles(baseStyles)
-    const { androidOnlyTabBarBottomMargin } = useTabBarBottomMargin()
 
     const flatSettingListRef = useRef(null)
 
@@ -111,47 +110,37 @@ export const SettingsScreen = () => {
     return (
         <Layout
             noBackButton
+            noMargin
             fixedHeader={
-                <BaseView style={HeaderStyleV2}>
+                <BaseView style={HeaderStyleV2} px={16}>
                     <HeaderTitle title={LL.TITLE_MORE_OPTIONS()} testID="settings-screen" />
                     <SelectedNetworkViewer />
                 </BaseView>
             }
             body={
-                <BaseView mt={-16} style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
-                    <FlatList
-                        ref={flatSettingListRef}
-                        data={settingsList}
-                        scrollEnabled={isShowBackupModal || isSmallScreen}
-                        keyExtractor={(item, index) =>
-                            item.element === "settingsRow" ? item.icon : `${item.element}-${index}`
-                        }
-                        showsVerticalScrollIndicator={false}
-                        showsHorizontalScrollIndicator={false}
-                        renderItem={renderItem}
-                    />
-                </BaseView>
+                <FlatList
+                    ref={flatSettingListRef}
+                    data={settingsList}
+                    style={themedStyles.list}
+                    scrollEnabled={isShowBackupModal || isSmallScreen}
+                    keyExtractor={(item, index) =>
+                        item.element === "settingsRow" ? item.icon : `${item.element}-${index}`
+                    }
+                    showsVerticalScrollIndicator={false}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={renderItem}
+                />
             }
         />
     )
 }
 
-const baseStyles = (theme: ColorThemeType) =>
+const baseStyles = () =>
     StyleSheet.create({
-        separator: {
-            backgroundColor: theme.colors.text,
-            height: 0.5,
-        },
         list: {
-            paddingTop: 0,
-            paddingHorizontal: 8,
-            flex: 1,
-        },
-        header: {
-            height: 48,
-            flexDirection: "row",
-            justifyContent: "space-between",
-            alignItems: "center",
+            paddingBottom: 28,
+            paddingHorizontal: 24,
+            paddingTop: 16,
         },
     })
 
@@ -169,6 +158,7 @@ const getLists = (LL: TranslationFunctions, devEnabled: boolean, notificationFea
             screenName: Routes.WALLET_MANAGEMENT,
             icon: "icon-wallet",
         },
+
         {
             element: "settingsRow",
             title: LL.TITLE_TRANSACTIONS(),
