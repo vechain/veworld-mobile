@@ -247,6 +247,10 @@ export type Colors = {
             rightIconColor: string
         }
         emptyStateColor: string
+        emptyStateIcon: {
+            background: string
+            color: string
+        }
     }
     newBottomSheet: {
         background: string
@@ -295,6 +299,7 @@ export type Colors = {
         icon: string
         title: string
     }
+    veworldLogo: string
 }
 
 export enum COLORS {
@@ -518,7 +523,7 @@ const light: Colors = {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
         isActiveBackground: COLORS.GREY_100,
-        iconBackground: COLORS.TRANSPARENT,
+        iconBackground: COLORS.GREY_100,
         text: COLORS.GREY_700,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
@@ -624,6 +629,7 @@ const light: Colors = {
     stakedVetCard: {
         background: COLORS.GREY_50,
     },
+    veworldLogo: COLORS.PURPLE,
     dappCard: {
         name: COLORS.GREY_700,
         description: COLORS.GREY_500,
@@ -645,6 +651,10 @@ const light: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.GREY_600,
+        emptyStateIcon: {
+            background: COLORS.GREY_50,
+            color: COLORS.GREY_400,
+        },
     },
     newBottomSheet: {
         background: COLORS.WHITE,
@@ -977,6 +987,10 @@ const dark: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.WHITE,
+        emptyStateIcon: {
+            background: COLORS.PURPLE_DISABLED,
+            color: COLORS.DARK_PURPLE_DISABLED,
+        },
     },
     newBottomSheet: {
         background: COLORS.PURPLE,
@@ -992,6 +1006,7 @@ const dark: Colors = {
             color: COLORS.DARK_PURPLE_DISABLED,
         },
     },
+    veworldLogo: COLORS.GREY_50,
 }
 
 export const colors = { light, dark }

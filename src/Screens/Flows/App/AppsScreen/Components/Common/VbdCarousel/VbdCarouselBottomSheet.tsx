@@ -1,4 +1,4 @@
-import React, { ElementType, useCallback, useEffect, useMemo, useState } from "react"
+import React, { ElementType, useCallback, useMemo } from "react"
 import { ImageBackground, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { getTimeZone } from "react-native-localize"
@@ -14,16 +14,14 @@ import {
     BlurView,
 } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useBottomSheetModal, useTheme, useThemedStyles } from "~Hooks"
+import { useAppOverview, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
-import { FetchAppOverviewResponse } from "~Networking/API/Types"
-import { fetchAppOverview } from "~Networking/DApps/fetchAppOverview"
 import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
-import { addBookmark, removeBookmark, selectFavoritesDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
-import { BigNutils, DateUtils, URIUtils } from "~Utils"
+import { addBookmark, removeBookmark, useAppDispatch } from "~Storage/Redux"
+import { BigNutils, DateUtils } from "~Utils"
 import { AVAILABLE_CATEGORIES, CategoryChip } from "../CategoryChip"
 
 export type VbdCarouselBottomSheetMetadata = {
@@ -95,44 +93,24 @@ export const VbdCarouselBottomSheet = ({
         externalRef: bsRef,
     })
 
-    const favorites = useAppSelector(selectFavoritesDapps)
     const dispatch = useAppDispatch()
     const { onDAppPress } = useDAppActions()
+    const { data: appOverview, isLoading } = useAppOverview(app?.id)
 
-    const [appOverview, setAppOverview] = useState<Partial<FetchAppOverviewResponse>>({})
-    const [isLoading, setIsLoading] = useState(true)
-
-    const isFavorite = useMemo(
-        () => favorites.some(favorite => URIUtils.compareURLs(favorite.href, app?.external_url)),
-        [app?.external_url, favorites],
-    )
+    const { isBookMarked } = useDappBookmarking(app?.external_url, app?.name)
 
     const handleClose = useCallback(() => {
         onClose()
         onCloseBS()
-        setAppOverview({})
     }, [onClose, onCloseBS])
 
-    const getAppOverview = useCallback(async () => {
-        if (app?.id) {
-            setIsLoading(true)
-            const overview = await fetchAppOverview(app?.id)
-            setAppOverview(overview)
-            setIsLoading(false)
-        }
-    }, [app?.id])
-
-    useEffect(() => {
-        getAppOverview()
-    }, [getAppOverview])
-
     const onToggleFavorite = useCallback(() => {
-        if (!isFavorite && app) {
+        if (!isBookMarked && app) {
             return dispatch(addBookmark(app))
         } else {
             dispatch(removeBookmark({ href: app?.external_url ?? "" }))
         }
-    }, [app, dispatch, isFavorite])
+    }, [app, dispatch, isBookMarked])
 
     const onOpenApp = useCallback(() => {
         if (app) {
@@ -154,15 +132,15 @@ export const VbdCarouselBottomSheet = ({
 
     const usersNum = useMemo(
         () => BigNutils(appOverview?.totalUniqueUserInteractions ?? 0).toCompactString(locale),
-        [locale, appOverview],
+        [appOverview, locale],
     )
     const actionsNum = useMemo(
         () => BigNutils(appOverview?.actionsRewarded ?? 0).toCompactString(locale),
-        [locale, appOverview],
+        [appOverview, locale],
     )
 
     const leftIcon = useMemo(() => {
-        return isFavorite ? (
+        return isBookMarked ? (
             <BaseIcon
                 style={styles.favIcon}
                 color={theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE}
@@ -179,10 +157,10 @@ export const VbdCarouselBottomSheet = ({
                 testID="bottom-sheet-add-favorite-icon"
             />
         )
-    }, [isFavorite, theme.isDark, styles.favIcon])
+    }, [isBookMarked, theme.isDark, styles.favIcon])
 
     const favButtonStyles = useMemo(() => {
-        if (isFavorite) {
+        if (isBookMarked) {
             return {
                 textColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
                 borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
@@ -192,7 +170,7 @@ export const VbdCarouselBottomSheet = ({
             textColor: theme.isDark ? COLORS.GREY_50 : COLORS.GREY_600,
             borderColor: theme.isDark ? COLORS.DARK_PURPLE_DISABLED : COLORS.GREY_200,
         }
-    }, [isFavorite, theme.isDark])
+    }, [isBookMarked, theme.isDark])
 
     return (
         <BaseBottomSheet
@@ -213,7 +191,7 @@ export const VbdCarouselBottomSheet = ({
                         action={handleClose}
                         testID="bottom-sheet-close-btn"
                     />
-                    <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
+                    <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
                         <BaseView flexDirection="column" gap={16} px={24} py={16}>
                             <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                                 <BaseView flexDirection="row" alignItems="center">
@@ -239,7 +217,7 @@ export const VbdCarouselBottomSheet = ({
                             <BaseText
                                 typographyFont="captionMedium"
                                 color={COLORS.WHITE_RGBA_85}
-                                numberOfLines={15}
+                                numberOfLines={5}
                                 flexDirection="row"
                                 testID="VBD_CAROUSEL_BS_APP_DESCRIPTION">
                                 {app?.description}
@@ -272,7 +250,7 @@ export const VbdCarouselBottomSheet = ({
                         style={styles.btn}
                         leftIcon={leftIcon}
                         action={onToggleFavorite}
-                        title={isFavorite ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
+                        title={isBookMarked ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
                         variant="outline"
                         {...favButtonStyles}
                     />

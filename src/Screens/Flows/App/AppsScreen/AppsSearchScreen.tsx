@@ -59,7 +59,7 @@ export const AppsSearchScreen = () => {
 
     return (
         <Layout
-            bg={COLORS.TRANSPARENT}
+            bg={COLORS.DARK_PURPLE}
             noBackButton
             noMargin
             fixedBody={

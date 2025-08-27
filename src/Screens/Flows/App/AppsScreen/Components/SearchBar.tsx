@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useRef, useState } from "react"
 import { NativeSyntheticEvent, StyleSheet, TextInputSubmitEditingEventData } from "react-native"
-import { TextInput } from "react-native-gesture-handler"
-import { BaseButton, BaseIcon, BaseTextInput } from "~Components"
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler"
+import { BaseIcon, BaseTextInput } from "~Components"
 import { Spinner } from "~Components/Reusable/Spinner"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
@@ -40,20 +40,19 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
         if (!filteredSearch) return undefined
         if (filteredSearch.length === 0) return undefined
         return (
-            <BaseButton
+            <TouchableOpacity
                 testID="search-bar-clear-button"
-                size="sm"
-                variant="ghost"
-                leftIcon={<BaseIcon name="icon-x" size={16} color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600} />}
-                action={onClear}
-                py={0}
-            />
+                activeOpacity={0.9}
+                onPress={onClear}
+                style={styles.searchInputRightIconContainer}>
+                <BaseIcon name="icon-x" size={16} color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600} />
+            </TouchableOpacity>
         )
-    }, [filteredSearch, onClear, theme.isDark])
+    }, [filteredSearch, onClear, styles.searchInputRightIconContainer, theme.isDark])
 
     const renderLeftIcon = useMemo(() => {
         if (loading) return <Spinner color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
-        return <BaseIcon name="icon-search" size={16} color={theme.isDark ? COLORS.GREY_400 : COLORS.GREY_600} />
+        return <BaseIcon name="icon-search" size={16} color={COLORS.GREY_400} />
     }, [loading, theme.isDark])
 
     return (
@@ -101,11 +100,19 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
             borderTopLeftRadius: 7,
             borderBottomLeftRadius: 7,
+            paddingLeft: 12,
         },
         searchInputRightIcon: {
             backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
             borderTopRightRadius: 7,
             borderBottomRightRadius: 7,
+            paddingRight: 12,
+        },
+        searchInputRightIconContainer: {
+            height: "100%",
+            width: "100%",
+            justifyContent: "center",
+            alignItems: "center",
         },
         searchBar: {
             paddingVertical: 10,

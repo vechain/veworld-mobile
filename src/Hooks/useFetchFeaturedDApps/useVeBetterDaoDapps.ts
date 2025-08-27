@@ -26,7 +26,7 @@ export const useVeBetterDaoDapps = (enabled = true) => {
     const thor = useMainnetThorClient()
 
     return useQuery({
-        queryKey: ["VeBetterDao"],
+        queryKey: ["VeBetterDao", "v2"],
         queryFn: () => getFullVBDDapps(thor),
         enabled: !!thor && enabled,
         placeholderData: [],

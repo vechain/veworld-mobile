@@ -40,8 +40,9 @@ export const HistoryStack = () => {
                 options={{
                     headerShown: false,
                     cardStyleInterpolator: slideFadeInTransition,
-                    presentation: "transparentModal",
+                    presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
                 }}
             />
             <Screen
@@ -50,8 +51,9 @@ export const HistoryStack = () => {
                 options={{
                     headerShown: false,
                     cardStyleInterpolator: slideFadeInTransition,
-                    presentation: "transparentModal",
+                    presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
                 }}
             />
             <Screen
@@ -60,8 +62,9 @@ export const HistoryStack = () => {
                 options={{
                     headerShown: false,
                     cardStyleInterpolator: slideFadeInTransition,
-                    presentation: "transparentModal",
+                    presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
                 }}
             />
         </Navigator>

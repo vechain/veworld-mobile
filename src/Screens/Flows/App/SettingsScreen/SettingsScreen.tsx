@@ -2,16 +2,7 @@ import { useScrollToTop } from "@react-navigation/native"
 import React, { useCallback, useMemo, useRef } from "react"
 import { StyleSheet } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
-import {
-    AlertCard,
-    BaseSpacer,
-    BaseView,
-    HeaderStyleV2,
-    HeaderTitle,
-    Layout,
-    SelectedNetworkViewer,
-    useNotifications,
-} from "~Components"
+import { AlertCard, BaseSpacer, BaseView, Layout, useNotifications } from "~Components"
 import { ColorThemeType, isSmallScreen } from "~Constants"
 import { useCheckWalletBackup, useClaimableUsernames, useTabBarBottomMargin, useThemedStyles } from "~Hooks"
 import { TranslationFunctions, useI18nContext } from "~i18n"
@@ -110,13 +101,8 @@ export const SettingsScreen = () => {
 
     return (
         <Layout
+            safeAreaTestID="settings-screen"
             noBackButton
-            fixedHeader={
-                <BaseView style={HeaderStyleV2}>
-                    <HeaderTitle title={LL.TITLE_MENU()} leftIconName="icon-menu" testID="settings-screen" />
-                    <SelectedNetworkViewer />
-                </BaseView>
-            }
             body={
                 <BaseView mt={-16} style={[themedStyles.list, { paddingBottom: androidOnlyTabBarBottomMargin }]}>
                     <FlatList
