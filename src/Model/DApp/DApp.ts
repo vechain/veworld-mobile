@@ -25,7 +25,6 @@ type BaseWcRequest = BaseRequest & {
 type BaseInAppRequest = BaseRequest & {
     type: "in-app"
     id: string
-    isFirstRequest: boolean
 }
 
 type BaseCertificateRequest = {

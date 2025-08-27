@@ -14,7 +14,6 @@ import { useSignTypedMessage } from "~Hooks/useSignTypedData"
 import { useI18nContext } from "~i18n"
 import { DEVICE_TYPE, SignedTypedDataResponse, TypeDataRequest, TypedData } from "~Model"
 import {
-    addConnectedDiscoveryApp,
     addSignTypedDataActivity,
     selectSelectedAccountOrNull,
     selectVerifyContext,
@@ -189,14 +188,6 @@ export const TypedDataBottomSheet = () => {
         async ({ request, password }: { request: TypeDataRequest; password?: string }) => {
             try {
                 const tData = buildTypedData(request)!
-
-                dispatch(
-                    addConnectedDiscoveryApp({
-                        name: request.appName,
-                        href: new URL(request.appUrl).hostname,
-                        connectedTime: Date.now(),
-                    }),
-                )
 
                 setIsLoading(true)
 

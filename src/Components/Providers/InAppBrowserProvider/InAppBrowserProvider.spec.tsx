@@ -213,6 +213,7 @@ describe("useInAppBrowser hook", () => {
                                         genesisId: TESTNET_NETWORK.genesisBlock.id,
                                         url: "https://vechain.org",
                                         kind: "temporary",
+                                        name: "test",
                                     },
                                 },
                             },
@@ -403,6 +404,7 @@ describe("useInAppBrowser hook", () => {
                     genesisId: TESTNET_NETWORK.genesisBlock.id,
                     kind: "temporary",
                     url: "https://vechain.org",
+                    name: "https://vechain.org",
                 })
             })
         })
@@ -483,6 +485,7 @@ describe("useInAppBrowser hook", () => {
                                         genesisId: TESTNET_NETWORK.genesisBlock.id,
                                         url: "https://vechain.org",
                                         kind: "temporary",
+                                        name: "test",
                                     },
                                 },
                             },
@@ -673,6 +676,7 @@ describe("useInAppBrowser hook", () => {
                     genesisId: TESTNET_NETWORK.genesisBlock.id,
                     kind: "temporary",
                     url: "https://vechain.org",
+                    name: "https://vechain.org",
                 })
             })
         })
@@ -779,6 +783,7 @@ describe("useInAppBrowser hook", () => {
                                         genesisId: TESTNET_NETWORK.genesisBlock.id,
                                         url: "https://vechain.org",
                                         kind: "temporary",
+                                        name: "test",
                                     },
                                 },
                             },
@@ -944,6 +949,7 @@ describe("useInAppBrowser hook", () => {
                     genesisId: TESTNET_NETWORK.genesisBlock.id,
                     kind: "temporary",
                     url: "https://vechain.org",
+                    name: "https://vechain.org",
                 })
             })
         })

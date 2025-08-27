@@ -35,6 +35,7 @@ export const useLoginSession = () => {
                     address: selectedAccount!.address ?? "",
                     genesisId: selectedNetwork.genesis.id,
                     url: request.appUrl,
+                    name: request.appName,
                 }),
             )
         },

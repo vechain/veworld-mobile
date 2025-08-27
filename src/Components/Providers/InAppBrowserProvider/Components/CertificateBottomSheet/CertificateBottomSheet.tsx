@@ -15,7 +15,6 @@ import { useI18nContext } from "~i18n"
 import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { Routes } from "~Navigation"
 import {
-    addConnectedDiscoveryApp,
     addSignCertificateActivity,
     selectSelectedAccountOrNull,
     selectVerifyContext,
@@ -187,13 +186,6 @@ export const CertificateBottomSheet = () => {
         async ({ request, password }: { request: CertificateRequest; password?: string }) => {
             try {
                 const { certificate, payload } = buildCertificate(request)!
-                dispatch(
-                    addConnectedDiscoveryApp({
-                        name: request.appName,
-                        href: new URL(request.appUrl).hostname,
-                        connectedTime: Date.now(),
-                    }),
-                )
                 if (selectedAccount!.device.type === DEVICE_TYPE.LEDGER) {
                     // Do not reject request if it's a ledger request
                     isUserAction.current = true

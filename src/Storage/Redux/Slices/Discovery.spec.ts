@@ -136,6 +136,7 @@ describe("DiscoverySlice", () => {
                 address: ethers.Wallet.createRandom().address,
                 genesisId: HexUInt.random(32).toString(),
                 url: "https://vechain.org",
+                name: "test",
             } as const
             const newState = DiscoverySlice.reducer(
                 mockSessions(
@@ -147,6 +148,7 @@ describe("DiscoverySlice", () => {
                             address: ethers.Wallet.createRandom().address,
                             genesisId: HexUInt.random(32).toString(),
                             url: "https://docs.vechain.org",
+                            name: "test",
                         },
                     ],
                 ),
@@ -166,6 +168,7 @@ describe("DiscoverySlice", () => {
                         address: ethers.Wallet.createRandom().address,
                         genesisId: HexUInt.random(32).toString(),
                         url: "https://docs.vechain.org",
+                        name: "test",
                     },
                 ]),
                 deleteSession("https://docs.vechain.org/test"),
@@ -184,6 +187,7 @@ describe("DiscoverySlice", () => {
                         address: ethers.Wallet.createRandom().address,
                         genesisId: HexUInt.random(32).toString(),
                         url: "https://docs.vechain.org",
+                        name: "test",
                     },
                 ]),
                 deleteSession("https://docs.vebetterdao.org/test"),
@@ -199,6 +203,7 @@ describe("DiscoverySlice", () => {
                         address: ethers.Wallet.createRandom().address,
                         genesisId: HexUInt.random(32).toString(),
                         url: "https://docs.vechain.org",
+                        name: "test",
                     },
                 ]),
                 addSession({
@@ -206,6 +211,7 @@ describe("DiscoverySlice", () => {
                     address: "0x0",
                     genesisId: "0x0",
                     kind: "temporary",
+                    name: "test",
                 }),
             )
             expect(Object.keys(newState.sessions ?? {}).length).toBe(2)
@@ -214,6 +220,7 @@ describe("DiscoverySlice", () => {
                 address: "0x0",
                 genesisId: "0x0",
                 kind: "temporary",
+                name: "test",
             })
             const stateWithoutSessions = DiscoverySlice.reducer(
                 mockSessions(),
@@ -222,6 +229,7 @@ describe("DiscoverySlice", () => {
                     address: "0x0",
                     genesisId: "0x0",
                     kind: "temporary",
+                    name: "test",
                 }),
             )
             expect(Object.keys(stateWithoutSessions.sessions ?? {}).length).toBe(1)
@@ -230,6 +238,7 @@ describe("DiscoverySlice", () => {
                 address: "0x0",
                 genesisId: "0x0",
                 kind: "temporary",
+                name: "test",
             })
         })
     })

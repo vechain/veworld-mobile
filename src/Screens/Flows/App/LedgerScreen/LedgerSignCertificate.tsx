@@ -231,6 +231,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                             url: request.appUrl,
                             address: certificate.signer.toLowerCase() ?? "",
                             genesisId: request.genesisId,
+                            name: request.appName,
                         }),
                     )
                 } else if (keepMeLoggedIn) {
@@ -239,6 +240,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                             kind: "permanent",
                             url: request.appUrl,
                             genesisId: request.genesisId,
+                            name: request.appName,
                         }),
                     )
                 } else {
@@ -248,6 +250,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
                             url: request.appUrl,
                             address: certificate.signer.toLowerCase() ?? "",
                             genesisId: request.genesisId,
+                            name: request.appName,
                         }),
                     )
                 }

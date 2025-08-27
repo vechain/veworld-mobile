@@ -9,7 +9,7 @@ export type ConnectedDiscoveryApp = {
     connectedTime: number
 }
 
-export type LoginSession = { genesisId: string; url: string } & (
+export type LoginSession = { genesisId: string; url: string; name: string } & (
     | { kind: "external"; address: string }
     | { kind: "temporary"; address: string }
     | { kind: "permanent" }

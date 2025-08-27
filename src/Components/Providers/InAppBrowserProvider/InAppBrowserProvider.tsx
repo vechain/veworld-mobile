@@ -31,12 +31,10 @@ import {
 } from "~Model"
 import { Routes } from "~Navigation"
 import {
-    addConnectedDiscoveryApp,
     addSession,
     changeSelectedNetwork,
     deleteSession,
     selectAccounts,
-    selectConnectedDiscoverDApps,
     selectFeaturedDapps,
     selectNetworks,
     selectSelectedAccountAddress,
@@ -169,7 +167,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const { LL, locale } = useI18nContext()
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
-    const connectedDiscoveryApps = useAppSelector(selectConnectedDiscoverDApps)
+
     const allDapps = useAppSelector(selectFeaturedDapps)
     const {
         ref: ChangeAccountNetworkBottomSheetRef,
@@ -429,10 +427,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                         genesisId: request.genesisId,
                         kind: "temporary",
                         url: appUrl,
+                        name: appName,
                     }),
                 )
-
-            const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
             const req: TransactionRequest = {
                 method: request.method,
@@ -442,21 +439,12 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 options: request.options,
                 appUrl,
                 appName,
-                isFirstRequest: !isAlreadyConnected,
             }
 
             setTransactionBsData(req)
             transactionBsRef.current?.present()
         },
-        [
-            connectedDiscoveryApps,
-            dispatch,
-            getLoginSession,
-            setTransactionBsData,
-            switchAccount,
-            switchNetwork,
-            transactionBsRef,
-        ],
+        [dispatch, getLoginSession, setTransactionBsData, switchAccount, switchNetwork, transactionBsRef],
     )
 
     const navigateToCertificateScreen = useCallback(
@@ -477,10 +465,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                         genesisId: request.genesisId,
                         kind: "temporary",
                         url: appUrl,
+                        name: appName,
                     }),
                 )
-
-            const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
             const message = request.message as Connex.Vendor.CertMessage
 
@@ -492,21 +479,12 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 options: request.options,
                 appUrl,
                 appName,
-                isFirstRequest: !isAlreadyConnected,
             }
 
             setCertificateBsData(req)
             certificateBsRef.current?.present()
         },
-        [
-            getLoginSession,
-            dispatch,
-            connectedDiscoveryApps,
-            setCertificateBsData,
-            certificateBsRef,
-            switchAccount,
-            switchNetwork,
-        ],
+        [getLoginSession, dispatch, setCertificateBsData, certificateBsRef, switchAccount, switchNetwork],
     )
 
     const navigateToSignedDataScreen = useCallback(
@@ -527,10 +505,9 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                         genesisId: request.genesisId,
                         kind: "temporary",
                         url: appUrl,
+                        name: appName,
                     }),
                 )
-
-            const isAlreadyConnected = !!connectedDiscoveryApps?.find(app => app.href === new URL(appUrl).hostname)
 
             const req: TypeDataRequest = {
                 method: request.method,
@@ -539,7 +516,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 options: request.options,
                 appUrl,
                 appName,
-                isFirstRequest: !isAlreadyConnected,
                 domain: request.domain,
                 types: request.types,
                 value: request.value,
@@ -549,15 +525,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setTypedDataBsData(req)
             typedDataBsRef.current?.present()
         },
-        [
-            connectedDiscoveryApps,
-            dispatch,
-            getLoginSession,
-            setTypedDataBsData,
-            switchAccount,
-            switchNetwork,
-            typedDataBsRef,
-        ],
+        [dispatch, getLoginSession, setTypedDataBsData, switchAccount, switchNetwork, typedDataBsRef],
     )
 
     const navigateToLoginScreen = useCallback(
@@ -586,7 +554,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 method: RequestMethods.CONNECT,
                 kind: kind as any,
                 id: request.id,
-                isFirstRequest: true,
                 genesisId: request.genesisId,
             })
             loginBsRef.current?.present()
@@ -814,14 +781,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const addAppAndNavToRequest = useCallback(
         (request: InAppRequest) => {
-            dispatch(
-                addConnectedDiscoveryApp({
-                    name: request.appName,
-                    href: new URL(request.appUrl).hostname,
-                    connectedTime: Date.now(),
-                }),
-            )
-
             if (request.method === "thor_sendTransaction") {
                 setTransactionBsData(request)
                 transactionBsRef.current?.present()
@@ -839,7 +798,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         },
         [
             certificateBsRef,
-            dispatch,
             setCertificateBsData,
             setTransactionBsData,
             setTypedDataBsData,
@@ -875,7 +833,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                         appUrl,
                         genesisId: request.genesisId,
                         id: request.id,
-                        isFirstRequest: false,
                         method: "thor_switchWallet",
                         type: "in-app",
                     })
@@ -976,7 +933,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 appUrl,
                 genesisId: request.genesisId,
                 id: request.id,
-                isFirstRequest: false,
                 method: "thor_switchWallet",
                 type: "in-app",
             })
