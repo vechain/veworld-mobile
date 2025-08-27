@@ -158,7 +158,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
             onDismiss={handleClose}>
             <BaseView style={styles.container}>
                 {headerContent}
-                <NestableScrollContainer style={styles.bottomSheetContent}>
+                <NestableScrollContainer style={styles.bottomSheetContent} showsVerticalScrollIndicator={false}>
                     <NestableDraggableFlatList
                         scrollEnabled={!isEditingMode}
                         contentContainerStyle={styles.listContentContainer}
