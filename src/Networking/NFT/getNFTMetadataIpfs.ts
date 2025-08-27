@@ -7,5 +7,5 @@ import IPFSUtils from "~Utils/IPFSUtils"
 
 export const getNFTMetadataIpfs = (uri: string) =>
     queryClient.fetchQuery(
-        IPFSUtils.getIpfsQueryKeyOptions<NFTMetadata>(uri, { responseType: "blob", timeout: NFT_AXIOS_TIMEOUT }),
+        IPFSUtils.getIpfsQueryKeyOptions<NFTMetadata>(uri, { responseType: "json", timeout: NFT_AXIOS_TIMEOUT }),
     )

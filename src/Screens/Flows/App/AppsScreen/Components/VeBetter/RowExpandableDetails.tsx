@@ -1,9 +1,10 @@
 import React, { PropsWithChildren, useMemo } from "react"
+import { StyleSheet } from "react-native"
 import Animated, { useAnimatedStyle, withSpring, withTiming } from "react-native-reanimated"
 import { getTimeZone } from "react-native-localize"
 import { BaseButton, BaseIcon, BaseSkeleton, BaseSpacer, BaseText } from "~Components"
 import { BaseView } from "~Components/Base/BaseView"
-import { useTheme } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
@@ -133,6 +134,7 @@ interface FavoriteButtonProps {
 const FavoriteButton = React.memo(({ onAddToFavorites = () => {}, isFavorite = false }: FavoriteButtonProps) => {
     const { LL } = useI18nContext()
     const theme = useTheme()
+    const { styles } = useThemedStyles(baseStyles)
 
     const favoriteColors = theme.colors.x2eAppOpenDetails.favoriteBtn
     const buttonColors = isFavorite
@@ -152,10 +154,13 @@ const FavoriteButton = React.memo(({ onAddToFavorites = () => {}, isFavorite = f
             flex={1}
             action={onAddToFavorites}
             variant="outline"
-            style={{
-                backgroundColor: buttonColors.backgroundColor,
-                borderColor: buttonColors.borderColor,
-            }}>
+            style={
+                (styles.buttonHeight,
+                {
+                    backgroundColor: buttonColors.backgroundColor,
+                    borderColor: buttonColors.borderColor,
+                })
+            }>
             <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} size={16} color={buttonColors.textColor} />
             <BaseSpacer width={10} />
             <BaseText typographyFont="bodyMedium" color={buttonColors.textColor}>
@@ -173,16 +178,24 @@ interface ActionsProps {
 
 const Actions = React.memo(({ onAddToFavorites = () => {}, onOpen = () => {}, isFavorite = false }: ActionsProps) => {
     const { LL } = useI18nContext()
+    const { styles } = useThemedStyles(baseStyles)
 
     return (
         <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" gap={16} w={100} mt={8}>
             <FavoriteButton onAddToFavorites={onAddToFavorites} isFavorite={isFavorite} />
-            <BaseButton flex={1} action={onOpen}>
+            <BaseButton flex={1} action={onOpen} style={styles.buttonHeight}>
                 {LL.BTN_OPEN()}
             </BaseButton>
         </AnimatedBaseView>
     )
 })
+
+const baseStyles = () =>
+    StyleSheet.create({
+        buttonHeight: {
+            height: 48,
+        },
+    })
 
 const Container = React.memo(({ children }: PropsWithChildren) => {
     return (

@@ -29,6 +29,7 @@ export type Colors = {
     splashBackground: string
     splashColorLayer: string
     title: string
+    headerTitle: string
     subtitle: string
     subSubtitle: string
     card: string
@@ -247,6 +248,10 @@ export type Colors = {
             rightIconColor: string
         }
         emptyStateColor: string
+        emptyStateIcon: {
+            background: string
+            color: string
+        }
     }
     newBottomSheet: {
         background: string
@@ -430,6 +435,7 @@ const light: Colors = {
     splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
     title: COLORS.PRIMARY_800,
+    headerTitle: COLORS.DARK_PURPLE,
     subtitle: COLORS.GREY_600,
     subSubtitle: COLORS.GREY_700,
     card: COLORS.WHITE,
@@ -519,7 +525,7 @@ const light: Colors = {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
         isActiveBackground: COLORS.GREY_100,
-        iconBackground: COLORS.TRANSPARENT,
+        iconBackground: COLORS.GREY_100,
         text: COLORS.GREY_700,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
@@ -647,6 +653,10 @@ const light: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.GREY_600,
+        emptyStateIcon: {
+            background: COLORS.GREY_50,
+            color: COLORS.GREY_400,
+        },
     },
     newBottomSheet: {
         background: COLORS.WHITE,
@@ -732,6 +742,7 @@ const dark: Colors = {
     pinEmpty: COLORS.GREY_500,
     pinFilled: COLORS.LIME_GREEN,
     title: COLORS.WHITE,
+    headerTitle: COLORS.WHITE,
     subtitle: COLORS.GREY_300,
     subSubtitle: COLORS.GREY_200,
     card: COLORS.PURPLE,
@@ -979,6 +990,10 @@ const dark: Colors = {
             rightIconColor: COLORS.GREY_400,
         },
         emptyStateColor: COLORS.WHITE,
+        emptyStateIcon: {
+            background: COLORS.PURPLE_DISABLED,
+            color: COLORS.DARK_PURPLE_DISABLED,
+        },
     },
     newBottomSheet: {
         background: COLORS.PURPLE,

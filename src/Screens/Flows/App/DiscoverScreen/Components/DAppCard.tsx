@@ -8,10 +8,11 @@ import { useAppLogo } from "~Hooks/useAppLogo"
 
 type DAppCardProps = {
     dapp: DiscoveryDApp
+    showDappTitle: boolean
     onPress: () => void
 }
 
-export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
+export const DAppCard = ({ dapp, onPress, showDappTitle = true }: DAppCardProps) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [loadFallback, setLoadFallback] = useState(false)
 
@@ -41,9 +42,11 @@ export const DAppCard = ({ dapp, onPress }: DAppCardProps) => {
                     onError={() => setLoadFallback(true)}
                     resizeMode="contain"
                 />
-                <BaseText numberOfLines={1} typographyFont="bodyMedium" color={textColor}>
-                    {dapp.name}
-                </BaseText>
+                {showDappTitle ?? (
+                    <BaseText numberOfLines={1} typographyFont="bodyMedium" color={textColor}>
+                        {dapp.name}
+                    </BaseText>
+                )}
             </BaseTouchable>
         </Animated.View>
     )

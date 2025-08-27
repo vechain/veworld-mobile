@@ -83,7 +83,7 @@ describe("DappOptionsBottomSheetV2", () => {
 
         expect(Share.share).toHaveBeenCalledWith({
             message: expect.any(String),
-            url: `https://www.veworld.com/discover/browser/redirect/ul/${encodeURIComponent("https://vechain.org")}`,
+            url: "https://vechain.org",
         })
     })
 })

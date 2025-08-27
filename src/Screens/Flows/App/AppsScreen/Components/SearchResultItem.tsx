@@ -1,9 +1,8 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { Image, ImageStyle, StyleProp, StyleSheet, TouchableOpacity } from "react-native"
-import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
-import { useVisitedUrls } from "~Hooks/useBrowserSearch"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { DAppUtils } from "~Utils"
 import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
@@ -11,14 +10,12 @@ import { useDAppActions } from "../Hooks"
 
 type Props = {
     item: HistoryItem
-    isValidQuery: boolean
 }
 
 const IMAGE_SIZE = 48
 
-export const SearchResultItem = ({ item, isValidQuery }: Props) => {
+export const SearchResultItem = ({ item }: Props) => {
     const [loadFallback, setLoadFallback] = useState(false)
-    const { removeVisitedUrl } = useVisitedUrls()
     const { styles, theme } = useThemedStyles(baseStyles)
     const { onDAppPress } = useDAppActions()
     const { navigateWithTab } = useBrowserTab()
@@ -42,7 +39,7 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
         }
     }, [item])
 
-    const { name, description, url } = useMemo(() => {
+    const { name, description } = useMemo(() => {
         switch (item.type) {
             case HistoryUrlKind.DAPP:
                 return { name: item.dapp.name, description: new URL(item.dapp.href).hostname, url: item.dapp.href }
@@ -50,10 +47,6 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
                 return { name: item.name, description: new URL(item.url).hostname, url: item.url }
         }
     }, [item])
-
-    const handleRemoveClick = useCallback(() => {
-        removeVisitedUrl(url)
-    }, [removeVisitedUrl, url])
 
     const handleNavigate = useCallback(() => {
         if (item.type === HistoryUrlKind.DAPP) onDAppPress(item.dapp)
@@ -105,18 +98,8 @@ export const SearchResultItem = ({ item, isValidQuery }: Props) => {
                         {description}
                     </BaseText>
                 </BaseView>
+                <BaseIcon name={"icon-arrow-link"} size={20} color={theme.colors.history.historyItem.rightIconColor} />
             </TouchableOpacity>
-
-            {/* Action Btn */}
-            <BaseTouchable
-                onPress={isValidQuery ? handleNavigate : handleRemoveClick}
-                testID="SEARCH_RESULT_ITEM_REMOVE">
-                <BaseIcon
-                    name={isValidQuery ? "icon-arrow-link" : "icon-x"}
-                    size={20}
-                    color={theme.colors.history.historyItem.rightIconColor}
-                />
-            </BaseTouchable>
         </BaseView>
     )
 }
@@ -128,7 +111,7 @@ const baseStyles = () =>
             alignItems: "center",
         },
         touchableContainer: {
-            gap: 16,
+            gap: 24,
             alignItems: "center",
             flexDirection: "row",
             flexShrink: 1,

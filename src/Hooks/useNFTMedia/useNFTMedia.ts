@@ -28,7 +28,6 @@ export const useNFTMedia = () => {
                         }
                     }
 
-                    case URIProtocol.IPFS:
                     case URIProtocol.ARWEAVE: {
                         const cachedData = mediaCache?.getItem(uri)
                         if (cachedData) {
@@ -37,10 +36,15 @@ export const useNFTMedia = () => {
                         }
 
                         debug(ERROR_EVENTS.NFT, `Fetching media for ${uri}`)
-                        const media =
-                            URIProtocol.IPFS === protocol ? await getNFTMediaIpfs(uri) : await getNFTMediaArweave(uri)
+                        const media = await getNFTMediaArweave(uri)
 
                         mediaCache?.setItem(uri, media)
+
+                        return media
+                    }
+                    case URIProtocol.IPFS: {
+                        debug(ERROR_EVENTS.NFT, `Fetching media for ${uri}`)
+                        const media = await getNFTMediaIpfs(uri)
 
                         return media
                     }

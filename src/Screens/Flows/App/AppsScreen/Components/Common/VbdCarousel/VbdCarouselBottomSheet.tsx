@@ -191,7 +191,7 @@ export const VbdCarouselBottomSheet = ({
                         action={handleClose}
                         testID="bottom-sheet-close-btn"
                     />
-                    <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
+                    <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
                         <BaseView flexDirection="column" gap={16} px={24} py={16}>
                             <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                                 <BaseView flexDirection="row" alignItems="center">
@@ -217,7 +217,7 @@ export const VbdCarouselBottomSheet = ({
                             <BaseText
                                 typographyFont="captionMedium"
                                 color={COLORS.WHITE_RGBA_85}
-                                numberOfLines={15}
+                                numberOfLines={5}
                                 flexDirection="row"
                                 testID="VBD_CAROUSEL_BS_APP_DESCRIPTION">
                                 {app?.description}
@@ -294,6 +294,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         btn: {
             justifyContent: "center",
+            height: 48,
         },
         favIcon: {
             marginRight: 12,

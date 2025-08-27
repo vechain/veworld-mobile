@@ -34,7 +34,7 @@ type BottomSheetActionItem = BottomSheetActionSeparator | BottomSheetAction
 
 export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onNavigate, onClose }, ref) => {
     const { LL } = useI18nContext()
-    const { isDapp, navigationState, webviewRef } = useInAppBrowser()
+    const { isDapp, navigationState, webviewRef, dappMetadata } = useInAppBrowser()
     const { isBookMarked, toggleBookmark } = useDappBookmarking(navigationState?.url)
     const { styles, theme } = useThemedStyles(baseStyles)
     const nav =
@@ -65,6 +65,21 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         }
         onClose?.()
     }, [nav, onNavigate, onClose, betterWorldFeature.appsScreen.enabled])
+
+    const navToSearch = useCallback(() => {
+        if (betterWorldFeature.appsScreen.enabled) {
+            nav.replace(Routes.APPS_SEARCH)
+        } else {
+            nav.replace(Routes.DISCOVER_SEARCH)
+        }
+    }, [nav, betterWorldFeature.appsScreen.enabled])
+
+    const closeCurrentTab = useCallback(() => {
+        if (currentTabId) {
+            dispatch(closeTab(currentTabId))
+            navToSearch()
+        }
+    }, [currentTabId, dispatch, navToSearch])
 
     const actions: BottomSheetActionItem[] = useMemo(() => {
         const favoriteItem: BottomSheetAction = isBookMarked
@@ -101,9 +116,15 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 icon: "icon-share-2",
                 label: LL.BROWSER_SHARE(),
                 onPress: () => {
+                    if (!navigationState?.url || !dappMetadata) return
+                    const url = new URL(dappMetadata.url).origin
                     Share.share({
-                        message: navigationState?.title || new URL(navigationState?.url || "").href,
-                        url: navigationState?.url ?? "",
+                        message: LL.SHARE_DAPP({
+                            name: dappMetadata.name,
+                            description: dappMetadata.description ?? "",
+                            url,
+                        }),
+                        url,
                     })
                 },
             },
@@ -130,12 +151,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 id: "close-tab",
                 icon: "icon-x",
                 label: LL.BROWSER_CLOSE_TAB(),
-                onPress: () => {
-                    if (currentTabId) {
-                        dispatch(closeTab(currentTabId))
-                        nav.replace(Routes.DISCOVER_SEARCH)
-                    }
-                },
+                onPress: () => closeCurrentTab(),
             },
         ]
     }, [
@@ -144,14 +160,12 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         toggleBookmark,
         isDapp,
         webviewRef,
-        navigationState?.title,
+        onClose,
         navigationState?.url,
+        dappMetadata,
         navToNewTab,
         navToTabsManager,
-        currentTabId,
-        dispatch,
-        nav,
-        onClose,
+        closeCurrentTab,
     ])
 
     const calculateActionContainerHeight = (height: number) => {
@@ -183,11 +197,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                                 name={action.icon}
                                 size={16}
                                 iconPadding={8}
-                                bg={
-                                    action.id === "close-tab"
-                                        ? theme.colors.actionBottomSheet.dangerIconBackground
-                                        : theme.colors.actionBottomSheet.iconBackground
-                                }
+                                bg={theme.colors.actionBottomSheet.dangerIconBackground}
                                 color={
                                     action.id === "close-tab"
                                         ? theme.colors.actionBottomSheet.dangerIcon
@@ -208,7 +218,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                         <BaseSpacer
                             key={action.id}
                             height={1}
-                            background={theme.colors.actionBottomSheet.iconBackground}
+                            background={theme.colors.actionBottomSheet.dangerIconBackground}
                             my={10}
                         />
                     ),

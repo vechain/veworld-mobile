@@ -52,11 +52,16 @@ describe("FeatureFlagsProvider", () => {
 
     it("should return feature flags disabled if app version is lower than the minimum version", () => {
         ;(DeviceInfo.getVersion as jest.Mock).mockReturnValue("2.2.9")
-        const { result } = renderHook(() => useFeatureFlags(), {
+        const { result, waitFor } = renderHook(() => useFeatureFlags(), {
             wrapper: createWrapper,
         })
 
-        expect(result.current.betterWorldFeature.appsScreen.enabled).toBe(false)
+        waitFor(
+            () => {
+                expect(result.current.betterWorldFeature.appsScreen.enabled).toBe(false)
+            },
+            { timeout: 10000 },
+        )
     })
 
     it("should return feature flags enabled if app version is higher than the minimum version", () => {

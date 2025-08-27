@@ -116,7 +116,7 @@ export const RowDetails = React.memo(
                         <BaseView justifyContent="center">
                             <Animated.View style={[styles.chevron, animatedStyles.chevronStyle]}>
                                 <BaseIcon
-                                    name="icon-chevron-down"
+                                    name="icon-chevron-up"
                                     size={16}
                                     color={theme.colors.x2eAppOpenDetails.chevron.icon}
                                 />
