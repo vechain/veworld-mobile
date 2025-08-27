@@ -2,12 +2,13 @@ import { BottomSheetFlatList, BottomSheetFlatListMethods } from "@gorhom/bottom-
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
     ListRenderItemInfo,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
     ScrollView,
     StyleProp,
     StyleSheet,
     TouchableOpacity,
     ViewStyle,
-    ViewToken,
 } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
@@ -118,7 +119,6 @@ export const BaseCarousel = ({
 
     const ref = useRef<Animated.FlatList<any> | BottomSheetFlatListMethods>(null)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
-
     const ItemSeparatorComponent = useCallback(() => <BaseSpacer width={gap} />, [gap])
 
     const w = useMemo(() => {
@@ -156,14 +156,6 @@ export const BaseCarousel = ({
         [data.length, padding],
     )
 
-    const onViewableItemsChanged = useCallback(
-        (info: { viewableItems: ViewToken<CarouselSlideItem>[]; changed: ViewToken<CarouselSlideItem>[] }) => {
-            if (info.viewableItems.length === 0) return
-            setPage(info.viewableItems[0].index!)
-        },
-        [],
-    )
-
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<CarouselSlideItem>) => {
             return (
@@ -194,6 +186,26 @@ export const BaseCarousel = ({
 
     const names = useMemo(() => data.map(d => d.name ?? ""), [data])
 
+    const onScroll = useCallback(
+        (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            if (
+                e.nativeEvent.contentOffset.x + e.nativeEvent.layoutMeasurement.width ===
+                e.nativeEvent.contentSize.width
+            ) {
+                //This is the last page
+                setPage(offsets.length - 1)
+                return
+            }
+            const pointIdx = [...offsets].reverse().findIndex(offset => offset <= e.nativeEvent.contentOffset.x)
+            if (pointIdx === -1) {
+                setPage(0)
+                return
+            }
+            setPage(offsets.length - 1 - pointIdx)
+        },
+        [offsets],
+    )
+
     useEffect(() => {
         ref.current?.scrollToOffset({ animated: true, offset: 0 })
     }, [names])
@@ -208,9 +220,9 @@ export const BaseCarousel = ({
                 snapToStart={false}
                 disableIntervalMomentum
                 ItemSeparatorComponent={ItemSeparatorComponent}
-                viewabilityConfig={{ itemVisiblePercentThreshold: 100 }}
-                onViewableItemsChanged={onViewableItemsChanged}
-                decelerationRate="fast"
+                decelerationRate={"fast"}
+                alwaysBounceHorizontal={false}
+                bounces={false}
                 snapToAlignment="start"
                 horizontal
                 style={containerStyle}
@@ -218,6 +230,7 @@ export const BaseCarousel = ({
                 testID={testID}
                 renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
+                onScroll={onScroll}
             />
             {showPagination && data.length > 1 && (
                 <ScrollView

@@ -180,8 +180,9 @@ export const SettingsStack = () => {
                 options={{
                     headerShown: false,
                     cardStyleInterpolator: slideFadeInTransition,
-                    presentation: "transparentModal",
+                    presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
                 }}
             />
             <Settings.Screen
@@ -190,8 +191,9 @@ export const SettingsStack = () => {
                 options={{
                     headerShown: false,
                     cardStyleInterpolator: slideFadeInTransition,
-                    presentation: "transparentModal",
+                    presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
                 }}
             />
             <Settings.Screen
@@ -200,8 +202,9 @@ export const SettingsStack = () => {
                 options={{
                     headerShown: false,
                     cardStyleInterpolator: slideFadeInTransition,
-                    presentation: "transparentModal",
+                    presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
                 }}
             />
         </Settings.Navigator>

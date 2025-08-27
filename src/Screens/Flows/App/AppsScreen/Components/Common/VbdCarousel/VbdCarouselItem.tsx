@@ -32,7 +32,7 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
     return (
         <Pressable onPress={() => onPressItem({ bannerUri, iconUri, app, category })}>
             <ImageBackground source={{ uri: bannerUri }} style={styles.root} testID="VBD_CAROUSEL_ITEM">
-                <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={10}>
+                <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
                     <BaseView px={16} py={12} flexDirection="column" gap={8}>
                         <BaseView flexDirection="row">
                             <FastImage source={{ uri: iconUri }} style={styles.logo as ImageStyle} />

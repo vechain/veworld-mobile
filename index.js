@@ -37,7 +37,12 @@ import {
 import { ERROR_EVENTS, typography } from "~Constants"
 import { AnalyticsUtils, info, URIUtils } from "~Utils"
 import { BottomSheetModalProvider } from "@gorhom/bottom-sheet"
-import { NotificationsProvider, PersistedThemeProvider, StoreContextProvider } from "~Components/Providers"
+import {
+    NotificationsProvider,
+    PersistedThemeProvider,
+    StoreContextProvider,
+    useFeatureFlags,
+} from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
     selectLanguage,
@@ -157,52 +162,66 @@ const Main = () => {
     )
 }
 
-const linking = {
-    prefixes: [
-        "https://www.veworld.com/",
-        "veworld://",
-        "https://veworld.com/",
-        "https://veworld.net/",
-        "https://www.veworld.net/",
-    ],
-    config: {
-        screens: {
-            TabStack: {
-                screens: {
-                    NFTStack: {
-                        path: "nfts",
-                        initialRouteName: Routes.NFTS,
-                    },
-                    DiscoverStack: {
-                        path: "discover",
-                        initialRouteName: "Discover",
-                        screens: {
-                            Browser: {
-                                path: "browser/:redirect?/:ul/:url",
-                                parse: {
-                                    ul: () => true,
-                                    url: url => URIUtils.decodeUrl_HACK(url),
-                                },
-                            },
-                        },
-                    },
-                    AppsStack: {
-                        path: "apps",
-                        initialRouteName: "Apps",
-                        screens: {
-                            Browser: {
-                                path: "browser/:redirect?/:ul/:url",
-                                parse: {
-                                    ul: () => true,
-                                    url: url => URIUtils.decodeUrl_HACK(url),
-                                },
-                            },
-                        },
+/**
+ *
+ * @param {import ('~Api/FeatureFlags').FeatureFlags} featureFlags
+ * @returns
+ */
+const generateLinkingConfig = featureFlags => {
+    const appsStack = {
+        AppsStack: {
+            path: "discover",
+            initialRouteName: "Apps",
+            screens: {
+                Browser: {
+                    path: "browser/:redirect?/:ul/:url",
+                    parse: {
+                        ul: () => true,
+                        url: url => URIUtils.decodeUrl_HACK(url),
                     },
                 },
             },
         },
-    },
+    }
+
+    const discoverStack = {
+        DiscoverStack: {
+            path: "discover",
+            initialRouteName: "Discover",
+            screens: {
+                Browser: {
+                    path: "browser/:redirect?/:ul/:url",
+                    parse: {
+                        ul: () => true,
+                        url: url => URIUtils.decodeUrl_HACK(url),
+                    },
+                },
+            },
+        },
+    }
+
+    return {
+        prefixes: [
+            "https://www.veworld.com/",
+            "veworld://",
+            "https://veworld.com/",
+            "https://veworld.net/",
+            "https://www.veworld.net/",
+        ],
+        config: {
+            screens: {
+                TabStack: {
+                    screens: {
+                        NFTStack: {
+                            path: "nfts",
+                            initialRouteName: Routes.NFTS,
+                        },
+                        ...(featureFlags.betterWorldFeature.appsScreen.enabled ? appsStack : discoverStack),
+                    },
+                },
+            },
+        },
+    }
 }
 
 const NavigationProvider = ({ children }) => {
@@ -221,6 +240,7 @@ const NavigationProvider = ({ children }) => {
     const navigationRef = useNavigationContainerRef()
     const routeNameRef = useRef(null)
     const dispatch = useAppDispatch()
+    const featureFlags = useFeatureFlags()
 
     return (
         <NavigationContainer
@@ -243,7 +263,7 @@ const NavigationProvider = ({ children }) => {
                 }
             }}
             theme={navigationTheme}
-            linking={linking}>
+            linking={generateLinkingConfig(featureFlags)}>
             {ready ? children : null}
         </NavigationContainer>
     )

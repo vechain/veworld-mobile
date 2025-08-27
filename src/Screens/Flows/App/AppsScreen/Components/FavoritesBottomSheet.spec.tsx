@@ -134,6 +134,11 @@ jest.mock("~Components", () => ({
             {children}
         </View>
     ),
+    BaseText: ({ children, testID, ...props }: any) => (
+        <View testID={testID || "base-text"} {...props}>
+            {children}
+        </View>
+    ),
     BaseIcon: ({ name, testID }: any) => <View testID={testID || `icon-${name}`} />,
     BaseSpacer: ({ testID }: any) => <View testID={testID || "spacer"} />,
     ListEmptyResults: ({ subtitle }: any) => (

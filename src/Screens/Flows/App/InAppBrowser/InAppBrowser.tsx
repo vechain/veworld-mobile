@@ -106,7 +106,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     return (
         <Layout
-            bg={COLORS.TRANSPARENT}
+            bg={COLORS.DARK_PURPLE}
             fixedHeader={
                 <URLBar
                     navigationUrl={route.params.url}

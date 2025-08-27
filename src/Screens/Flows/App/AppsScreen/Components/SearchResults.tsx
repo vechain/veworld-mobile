@@ -47,12 +47,9 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
         return <BaseSpacer height={24} />
     }, [])
 
-    const renderItem = useCallback(
-        ({ item }: ListRenderItemInfo<HistoryItem>) => {
-            return <SearchResultItem item={item} isValidQuery={isValidQuery} />
-        },
-        [isValidQuery],
-    )
+    const renderItem = useCallback(({ item }: ListRenderItemInfo<HistoryItem>) => {
+        return <SearchResultItem item={item} />
+    }, [])
 
     if (error === SearchError.ADDRESS_CANNOT_BE_REACHED)
         return (
@@ -63,7 +60,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
                             name="icon-disconnect"
                             style={styles.errorIcon}
                             size={32}
-                            color={theme.colors.history.historyItem.iconColor}
+                            color={theme.colors.history.emptyStateIcon.color}
                         />
                         <BaseText testID="search-results-address-error" color={theme.colors.history.emptyStateColor}>
                             {LL.BROWSER_HISTORY_ADDRESS_ERROR()}
@@ -82,7 +79,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
                             name="icon-search"
                             style={styles.errorIcon}
                             size={32}
-                            color={theme.colors.history.historyItem.iconColor}
+                            color={theme.colors.history.emptyStateIcon.color}
                         />
                         <BaseText testID="search-no-results-title" color={theme.colors.history.emptyStateColor}>
                             {LL.BROWSER_HISTORY_NO_RESULTS()}
@@ -97,7 +94,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
             {isQueryEmptyButWithResults && (
                 <BaseView justifyContent="space-between" flexDirection="row" alignItems="center" mb={24}>
                     <BaseView flexDirection="row" alignItems="center" gap={8}>
-                        <BaseIcon name="icon-history" size={16} color={theme.colors.history.titleColor} />
+                        <BaseIcon name="icon-history" size={20} color={theme.colors.history.titleColor} />
                         <BaseText
                             testID="search-results-default-title"
                             typographyFont="subSubTitleSemiBold"
@@ -145,7 +142,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
                             name="icon-history"
                             style={styles.errorIcon}
                             size={32}
-                            color={theme.colors.history.historyItem.iconColor}
+                            color={theme.colors.history.emptyStateIcon.color}
                         />
                         <BaseText testID="search-results-empty-title" color={theme.colors.history.emptyStateColor}>
                             {LL.BROWSER_HISTORY_EMPTY()}
@@ -188,7 +185,7 @@ const baseStyles = (theme: ColorThemeType) => {
         errorIcon: {
             borderRadius: 999,
             padding: 16,
-            backgroundColor: theme.colors.history.historyItem.iconBackground,
+            backgroundColor: theme.colors.history.emptyStateIcon.background,
             alignSelf: "center",
         },
         flatListPadding: { paddingBottom: 24 },
@@ -197,6 +194,7 @@ const baseStyles = (theme: ColorThemeType) => {
             backgroundColor: theme.colors.history.button.background,
             borderColor: theme.colors.history.button.border,
             borderWidth: 1,
+            height: 32,
         },
     })
 }

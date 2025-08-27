@@ -1,8 +1,8 @@
 import { TransitionSpec } from "@react-navigation/stack/lib/typescript/src/types"
 import { Easing } from "react-native"
 
-export const TRANSITION_DURATION_OPEN = 500
-export const TRANSITION_DURATION_CLOSE = 900
+export const TRANSITION_DURATION_OPEN = 400
+export const TRANSITION_DURATION_CLOSE = 500
 
 type TransitionSpecs = {
     open: TransitionSpec
@@ -14,14 +14,13 @@ export const TRANSITION_SPECS: TransitionSpecs = {
         animation: "timing",
         config: {
             duration: TRANSITION_DURATION_OPEN,
-            easing: Easing.in(Easing.ease),
+            easing: Easing.inOut(Easing.ease),
         },
     },
     close: {
         animation: "timing",
         config: {
             duration: TRANSITION_DURATION_CLOSE,
-            easing: Easing.out(Easing.ease),
         },
     },
 }

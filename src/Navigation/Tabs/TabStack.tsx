@@ -150,7 +150,7 @@ export const TabStack = () => {
                 options={{
                     tabBarLabel: "Settings",
                     tabBarTestID: "settings-tab",
-                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-menu", LL.TAB_TITLE_MORE()),
+                    tabBarIcon: ({ focused }) => renderTabBarIcon(focused, "icon-more-horizontal", LL.TAB_TITLE_MORE()),
                 }}
             />
         </Tab.Navigator>
