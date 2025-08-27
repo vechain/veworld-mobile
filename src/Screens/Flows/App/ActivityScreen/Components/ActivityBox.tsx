@@ -554,13 +554,10 @@ const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
 
     const rightAmount = isBuyer ? `${DIRECTIONS.DOWN} ${formattedPrice}` : `${DIRECTIONS.UP} ${formattedPrice}`
 
-    const iconBackgroundColor = isBuyer ? "#3B82F6" : "#10B981"
-
     return (
         <BaseActivityBox
             testID={`NFT-SALE-${activity.id}`}
             icon="icon-image"
-            iconBackgroundColor={iconBackgroundColor}
             time={time}
             title={title}
             description={validatedCollectionName()}
