@@ -158,15 +158,19 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         extraData={isEditingMode}
                         data={reorderedDapps}
                         onDragEnd={onDragEnd}
-                        keyExtractor={(item, index) => item?.href ?? index.toString()}
+                        keyExtractor={item => item.href}
                         renderItem={renderItem}
                         ListFooterComponent={renderFooter}
                         showsVerticalScrollIndicator={false}
-                        testID="draggable-dapps-list"
+                        testID="draggable-flatlist"
                         activationDistance={10}
                         windowSize={5}
                         ListEmptyComponent={
-                            <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
+                            <ListEmptyResults
+                                subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()}
+                                icon={"icon-search"}
+                                testID="empty-results"
+                            />
                         }
                     />
                 </BaseView>
