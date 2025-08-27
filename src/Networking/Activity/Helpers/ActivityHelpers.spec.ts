@@ -18,6 +18,7 @@ import {
     IndexedHistoryEvent,
     Network,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SwapActivity,
     UnknownTxActivity,
 } from "~Model"
@@ -309,6 +310,50 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             tokenId: activity?.tokenId,
             contractAddress: activity?.contractAddress,
             direction: DIRECTIONS.DOWN,
+        })
+    })
+
+    it("Should create a activity from NFT_SALE history event", () => {
+        const event: IndexedHistoryEvent = {
+            id: "f4c3d2e1a9b8c7d6e5f4a3b2c1d0e9f8a7b6c5d4",
+            blockId: "0x014c83beb7dfa0094d177629d44083d30aa977499a8490ec8ec51aaa9088b4ab",
+            blockNumber: 21791680,
+            blockTimestamp: 1748446100,
+            txId: "0xfa3122a317bb0c4349462558cbb2dcc038978075672749484f047f4b396763fc",
+            origin: "0x0e73ea971849e16ca9098a7a987130e1a53eeab1",
+            gasPayer: "0x0e73ea971849e16ca9098a7a987130e1a53eeab1",
+            contractAddress: "0x93b8cd34a7fc4f53271b9011161f7a2b5fea9d1f",
+            tokenId: "12345",
+            eventName: ActivityEvent.NFT_SALE,
+            to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
+            from: "0x0e73ea971849e16ca9098a7a987130e1a53eeab1",
+            value: "2500000000000000000",
+        }
+        const activity = createActivityFromIndexedHistoryEvent(
+            event,
+            "0x0e73ea971849e16ca9098a7a987130e1a53eeab1",
+            defaultTestNetwork,
+        ) as NFTMarketplaceActivity
+
+        expect(activity).toStrictEqual({
+            from: activity?.from ?? "",
+            to: [...(activity?.to ?? [])],
+            id: activity?.id,
+            txId: activity?.txId,
+            blockNumber: activity?.blockNumber,
+            genesisId: defaultTestNetwork.genesis.id,
+            isTransaction: activity?.isTransaction ?? false,
+            type: ActivityType.NFT_SALE,
+            timestamp: expect.any(Number),
+            gasPayer: activity?.gasPayer,
+            delegated: activity?.delegated ?? false,
+            status: activity?.status ?? ActivityStatus.SUCCESS,
+            tokenId: activity?.tokenId,
+            contractAddress: activity?.contractAddress,
+            direction: DIRECTIONS.UP,
+            price: activity?.price,
+            buyer: activity?.buyer,
+            seller: activity?.seller,
         })
     })
 
