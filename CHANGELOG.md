@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-27)</small>
+
+* build: init ([eb959e7](https://github.com/vechain/veworld-mobile/commit/eb959e7))
+* Fix share app + deeplinks (#3229) ([9713be0](https://github.com/vechain/veworld-mobile/commit/9713be0)), closes [#3229](https://github.com/vechain/veworld-mobile/issues/3229)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
