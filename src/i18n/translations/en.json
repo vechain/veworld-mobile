@@ -118,6 +118,7 @@
   "APP_VERIFICATION_INVALID": "Connection to this application is forbidden as the request looks malicious.",
   "APP_VERIFICATION_UNKNOWN": "The application that is making this request could not be verified. Proceed at your own risk.",
   "APP_VERSION": "version {version:string}",
+  "APPS_SEARCH_PLACEHOLDER": "Search an App or Website...",
   "APRIL": "April",
   "AUGUST": "August",
   "B3TR_ACTION": "VeBetter action on",
