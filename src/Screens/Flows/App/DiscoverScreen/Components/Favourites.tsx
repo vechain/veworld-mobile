@@ -1,5 +1,5 @@
 import React, { useCallback } from "react"
-import { FlatList, ListRenderItemInfo } from "react-native"
+import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { COLORS, DiscoveryDApp } from "~Constants"
 import { useTheme } from "~Hooks"
@@ -15,11 +15,11 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<DiscoveryDApp>) => {
             const isLast = index === bookmarkedDApps.length - 1
-            const columnsGap = 16
+            const columnsGap = 8
 
             return (
-                <BaseView pl={columnsGap} pr={isLast ? columnsGap : 0} justifyContent="center" alignItems="center">
-                    <DAppCard dapp={item} onPress={() => onDAppPress(item)} />
+                <BaseView pr={isLast ? 16 : columnsGap} justifyContent="center" alignItems="center">
+                    <DAppCard dapp={item} onPress={() => onDAppPress(item)} showDappTitle={false} />
                 </BaseView>
             )
         },
@@ -36,6 +36,7 @@ const BookmarkedDAppsList = ({ bookmarkedDApps, onDAppPress }: BookmarkListProps
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 showsHorizontalScrollIndicator={false}
+                contentContainerStyle={styles.flatListContainer}
             />
         </BaseView>
     )
@@ -83,4 +84,10 @@ export const Favourites = React.memo(({ bookmarkedDApps, onActionLabelPress, onD
             )}
         </BaseView>
     )
+})
+
+const styles = StyleSheet.create({
+    flatListContainer: {
+        paddingLeft: 16,
+    },
 })
