@@ -35,12 +35,13 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
         const iconUri = useAppLogo({ app: dapp })
 
         return (
-            <BaseView flexDirection="row" flex={1} px={px} mb={8}>
+            <BaseView flexDirection="row" flex={1} px={px} mb={8} ml={-8}>
                 <BaseView
                     flexDirection="row"
                     flex={1}
-                    bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}
-                    style={isActive ? styles.activeContainer : undefined}>
+                    style={isActive ? styles.activeContainer : undefined}
+                    pl={8}
+                    bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}>
                     <BaseTouchable
                         disabled={isEditMode || isActive}
                         style={[styles.card]}
