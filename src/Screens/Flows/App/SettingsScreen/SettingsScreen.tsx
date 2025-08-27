@@ -113,7 +113,7 @@ export const SettingsScreen = () => {
             noBackButton
             fixedHeader={
                 <BaseView style={HeaderStyleV2}>
-                    <HeaderTitle title={LL.TITLE_MENU()} leftIconName="icon-menu" testID="settings-screen" />
+                    <HeaderTitle title={LL.TITLE_MORE_OPTIONS()} testID="settings-screen" />
                     <SelectedNetworkViewer />
                 </BaseView>
             }
