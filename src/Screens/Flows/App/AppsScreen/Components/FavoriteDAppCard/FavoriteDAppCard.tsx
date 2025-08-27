@@ -39,7 +39,6 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                 <BaseView
                     flexDirection="row"
                     flex={1}
-                    px={4}
                     bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}
                     style={isActive ? styles.activeContainer : undefined}>
                     <BaseTouchable
@@ -113,7 +112,6 @@ const baseStyles = () =>
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            paddingHorizontal: 4,
             paddingVertical: 8,
         },
         activeContainer: {

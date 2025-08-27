@@ -1,5 +1,5 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useEffect, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import {
     DragEndParams,
@@ -12,11 +12,12 @@ import {
     BaseBottomSheet,
     BaseIcon,
     BaseSpacer,
+    BaseText,
     BaseView,
     ListEmptyResults,
     ReorderIconHeaderButton,
 } from "~Components"
-import { ColorThemeType, DiscoveryDApp } from "~Constants"
+import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { removeBookmark, reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -37,6 +38,12 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
+
+    const handleClose = useCallback(() => {
+        setIsEditingMode(false)
+        setReorderedDapps(bookmarkedDApps)
+        onClose()
+    }, [onClose, bookmarkedDApps])
 
     const renderFooter = useCallback(() => <BaseSpacer height={24} />, [])
 
@@ -66,9 +73,9 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const handleDAppPress = useCallback(
         (dapp: DiscoveryDApp) => {
             onDAppPress(dapp)
-            onClose()
+            handleClose()
         },
-        [onDAppPress, onClose],
+        [onDAppPress, handleClose],
     )
 
     const renderItem: RenderItem<DiscoveryDApp> = useCallback(
@@ -102,16 +109,22 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
         if (reorderedDapps.length !== bookmarkedDApps.length) setReorderedDapps(bookmarkedDApps)
     }, [bookmarkedDApps, reorderedDapps.length])
 
-    return (
-        <BaseBottomSheet
-            ref={ref}
-            contentStyle={styles.bottomSheetContent}
-            leftElement={
-                <BaseView style={styles.leftElement}>
-                    <BaseIcon name="icon-star" size={24} color={theme.colors.favoriteHeader} />
+    const headerContent = useMemo(
+        () => (
+            <BaseView
+                flexDirection="row"
+                alignItems="center"
+                justifyContent="space-between"
+                px={24}
+                pt={16}
+                pb={24}
+                testID="dapps-list-header">
+                <BaseView flexDirection="row" gap={16} alignItems="center">
+                    <BaseIcon name="icon-star" size={26} color={theme.colors.favoriteHeader} />
+                    <BaseText typographyFont="biggerTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                        {LL.FAVOURITES_DAPPS_TITLE()}
+                    </BaseText>
                 </BaseView>
-            }
-            rightElement={
                 <BaseView style={styles.rightElement}>
                     {isEditingMode ? (
                         <AnimatedSaveHeaderButton
@@ -130,13 +143,22 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         />
                     )}
                 </BaseView>
-            }
-            title={LL.FAVOURITES_DAPPS_TITLE()}
+            </BaseView>
+        ),
+        [LL, isEditingMode, onSaveReorderedDapps, styles.reorderIcon, styles.rightElement, theme.colors],
+    )
+
+    return (
+        <BaseBottomSheet
+            ref={ref}
+            enableContentPanningGesture={isEditingMode}
+            noMargins
             snapPoints={["90%"]}
             backgroundStyle={styles.layout}
-            onDismiss={onClose}>
+            onDismiss={handleClose}>
             <BaseView style={styles.container}>
-                <NestableScrollContainer>
+                {headerContent}
+                <NestableScrollContainer style={styles.bottomSheetContent}>
                     <NestableDraggableFlatList
                         scrollEnabled={!isEditingMode}
                         contentContainerStyle={styles.listContentContainer}
@@ -149,9 +171,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         showsVerticalScrollIndicator={false}
                         testID="draggable-dapps-list"
                         windowSize={5}
-                        activationDistance={isEditingMode ? 10 : 50}
-                        autoscrollThreshold={100}
-                        dragHitSlop={{ top: 20, bottom: 20, left: 0, right: 0 }}
+                        activationDistance={isEditingMode ? 10 : 30}
                         ListEmptyComponent={
                             <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
                         }
@@ -168,9 +188,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flex: 1,
         },
         bottomSheetContent: {
-            paddingHorizontal: 20,
-            paddingBottom: 0,
-            color: theme.colors.favoriteHeader,
+            paddingHorizontal: 24,
         },
         leftElement: {
             marginLeft: 8,
@@ -189,7 +207,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         reorderIcon: {
             borderColor: theme.colors.actionBottomSheet.border,
-            backgroundColor: theme.colors.actionBottomSheet.iconBackground,
+            backgroundColor: COLORS.TRANSPARENT,
             borderWidth: 1,
             borderRadius: 6,
         },
