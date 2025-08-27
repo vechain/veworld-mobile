@@ -294,6 +294,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         btn: {
             justifyContent: "center",
+            height: 48,
         },
         favIcon: {
             marginRight: 12,
