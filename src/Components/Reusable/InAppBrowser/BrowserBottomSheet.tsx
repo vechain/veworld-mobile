@@ -126,10 +126,6 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                         }),
                         url,
                     })
-                    Share.share({
-                        message: navigationState?.title || new URL(navigationState?.url || "").href,
-                        url: navigationState?.url ?? "",
-                    })
                 },
             },
             {
@@ -166,7 +162,6 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         webviewRef,
         onClose,
         navigationState?.url,
-        navigationState?.title,
         dappMetadata,
         navToNewTab,
         navToTabsManager,
