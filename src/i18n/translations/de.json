@@ -1078,7 +1078,7 @@
   "SWAP_DESCRIPTION": "Mit diesen Vechain dApps können Sie Tokens in Ihrer Wallet gegen andere tauschen, ohne kaufen und verkaufen zu müssen.",
   "SWAP_EMPTY_LIST": "Keine dApps gefunden",
   "SWAP_TITLE": "Tokens tauschen",
-  "SWITCH_WALLET_REQUEST_CTA": "Anwenden",
+  "SWITCH_WALLET_REQUEST_CTA": "Wechseln",
   "SWITCH_WALLET_REQUEST_TITLE": "Wallet wechseln",
   "SYSTEM_THEME": "System",
   "TAB_AMOUNT": "{number:number} Tabs",

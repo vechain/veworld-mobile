@@ -1078,7 +1078,7 @@
   "SWAP_DESCRIPTION": "Korzystając z tych aplikacji Vechain, możesz wymieniać tokeny w swoim portfelu na inne, bez konieczności kupowania i sprzedawania.",
   "SWAP_EMPTY_LIST": "Nie znaleziono dApps",
   "SWAP_TITLE": "Wymień tokeny",
-  "SWITCH_WALLET_REQUEST_CTA": "Zastosuj",
+  "SWITCH_WALLET_REQUEST_CTA": "Zmień",
   "SWITCH_WALLET_REQUEST_TITLE": "Zmień portfel",
   "SYSTEM_THEME": "System",
   "TAB_AMOUNT": "{number:number} zakładki",

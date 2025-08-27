@@ -1078,7 +1078,7 @@
   "SWAP_DESCRIPTION": "En utilisant ces dApps Vechain, vous pouvez échanger des tokens de votre portefeuille contre d'autres, sans avoir à acheter et vendre.",
   "SWAP_EMPTY_LIST": "Aucune dApp trouvée",
   "SWAP_TITLE": "Échanger des jetons",
-  "SWITCH_WALLET_REQUEST_CTA": "Appliquer",
+  "SWITCH_WALLET_REQUEST_CTA": "Changer",
   "SWITCH_WALLET_REQUEST_TITLE": "Changer de portefeuille",
   "SYSTEM_THEME": "Système",
   "TAB_AMOUNT": "{number:number} onglets",
