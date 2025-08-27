@@ -126,50 +126,6 @@ const Stats = React.memo(
     },
 )
 
-interface FavoriteButtonProps {
-    onAddToFavorites?: () => void
-    isFavorite?: boolean
-}
-
-const FavoriteButton = React.memo(({ onAddToFavorites = () => {}, isFavorite = false }: FavoriteButtonProps) => {
-    const { LL } = useI18nContext()
-    const theme = useTheme()
-    const { styles } = useThemedStyles(baseStyles)
-
-    const favoriteColors = theme.colors.x2eAppOpenDetails.favoriteBtn
-    const buttonColors = isFavorite
-        ? {
-              backgroundColor: favoriteColors.backgroundActive,
-              borderColor: favoriteColors.borderActive,
-              textColor: favoriteColors.textActive,
-          }
-        : {
-              backgroundColor: favoriteColors.backgroundInactive,
-              borderColor: favoriteColors.borderInactive,
-              textColor: favoriteColors.textInactive,
-          }
-
-    return (
-        <BaseButton
-            flex={1}
-            action={onAddToFavorites}
-            variant="outline"
-            style={
-                (styles.buttonHeight,
-                {
-                    backgroundColor: buttonColors.backgroundColor,
-                    borderColor: buttonColors.borderColor,
-                })
-            }>
-            <BaseIcon name={isFavorite ? "icon-star-on" : "icon-star"} size={16} color={buttonColors.textColor} />
-            <BaseSpacer width={10} />
-            <BaseText typographyFont="bodyMedium" color={buttonColors.textColor}>
-                {isFavorite ? LL.BTN_FAVORiTED() : LL.BTN_FAVORITE()}
-            </BaseText>
-        </BaseButton>
-    )
-})
-
 interface ActionsProps {
     onAddToFavorites?: () => void
     onOpen?: () => void
@@ -178,14 +134,65 @@ interface ActionsProps {
 
 const Actions = React.memo(({ onAddToFavorites = () => {}, onOpen = () => {}, isFavorite = false }: ActionsProps) => {
     const { LL } = useI18nContext()
+    const theme = useTheme()
     const { styles } = useThemedStyles(baseStyles)
+    const favoriteColors = theme.colors.x2eAppOpenDetails.favoriteBtn
+
+    const leftIcon = useMemo(() => {
+        return isFavorite ? (
+            <BaseIcon
+                style={styles.favIcon}
+                color={favoriteColors.textActive}
+                size={20}
+                name="icon-star-on"
+                testID="row-expandable-remove-favorite-icon"
+            />
+        ) : (
+            <BaseIcon
+                style={styles.favIcon}
+                color={favoriteColors.textInactive}
+                size={20}
+                name="icon-star"
+                testID="row-expandable-add-favorite-icon"
+            />
+        )
+    }, [isFavorite, styles.favIcon, favoriteColors.textActive, favoriteColors.textInactive])
+
+    const favButtonStyles = useMemo(() => {
+        if (isFavorite) {
+            return {
+                textColor: favoriteColors.textActive,
+                borderColor: favoriteColors.borderActive,
+                backgroundColor: favoriteColors.backgroundActive,
+            }
+        }
+        return {
+            textColor: favoriteColors.textInactive,
+            borderColor: favoriteColors.borderInactive,
+            backgroundColor: favoriteColors.backgroundInactive,
+        }
+    }, [isFavorite, favoriteColors])
 
     return (
-        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" gap={16} w={100} mt={8}>
-            <FavoriteButton onAddToFavorites={onAddToFavorites} isFavorite={isFavorite} />
-            <BaseButton flex={1} action={onOpen} style={styles.buttonHeight}>
-                {LL.BTN_OPEN()}
-            </BaseButton>
+        <AnimatedBaseView layout={LAYOUT_TRANSITION} flexDirection="row" gap={16} mt={8}>
+            <BaseButton
+                testID="Favorite_Button"
+                style={[styles.btn, { backgroundColor: favButtonStyles.backgroundColor }]}
+                leftIcon={leftIcon}
+                action={onAddToFavorites}
+                title={isFavorite ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.COMMON_LBL_FAVOURITE()}
+                variant="outline"
+                textColor={favButtonStyles.textColor}
+                borderColor={favButtonStyles.borderColor}
+                flex={1}
+            />
+            <BaseButton
+                testID="Open_Button"
+                style={styles.btn}
+                action={onOpen}
+                title={LL.APPS_BS_BTN_OPEN_APP()}
+                flex={1}
+            />
         </AnimatedBaseView>
     )
 })
@@ -194,6 +201,15 @@ const baseStyles = () =>
     StyleSheet.create({
         buttonHeight: {
             height: 48,
+            justifyContent: "center",
+        },
+        btn: {
+            justifyContent: "center",
+            height: 48,
+        },
+        favIcon: {
+            marginRight: 12,
+            marginVertical: -2,
         },
     })
 
