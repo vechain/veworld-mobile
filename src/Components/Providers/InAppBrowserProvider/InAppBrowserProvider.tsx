@@ -932,17 +932,29 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     )
 
     const validateMethodsMessage = useCallback(
-        (request: { id: string }) => {
-            postMessage({
+        (request: { id: string; genesisId: string }, appUrl: string) => {
+            const session = getLoginSession(appUrl, request.genesisId)
+            if (session?.kind === "permanent") {
+                return postMessage({
+                    id: request.id,
+                    method: RequestMethods.METHODS,
+                    data: Object.values(RequestMethods).filter(value => {
+                        // personal_sign isn't supported at all
+                        return value !== "personal_sign"
+                    }),
+                })
+            }
+            //thor_switchWallet only works for permanent sessions, so it doesn't make sense to send it if does nothing
+            return postMessage({
                 id: request.id,
                 method: RequestMethods.METHODS,
                 data: Object.values(RequestMethods).filter(value => {
                     // personal_sign isn't supported at all
-                    return value !== "personal_sign"
+                    return value !== "personal_sign" && value !== "thor_switchWallet"
                 }),
             })
         },
-        [postMessage],
+        [getLoginSession, postMessage],
     )
 
     const executeSwitchWalletMessage = useCallback(
@@ -1048,7 +1060,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 case RequestMethods.DISCONNECT:
                     return validateDisconnectMessage(data, event.nativeEvent.url)
                 case RequestMethods.METHODS:
-                    return validateMethodsMessage(data)
+                    return validateMethodsMessage(data, event.nativeEvent.url)
                 case RequestMethods.SWITCH_WALLET:
                     return validateSwitchWalletMessage(data, event.nativeEvent.url, event.nativeEvent.title)
                 default:
