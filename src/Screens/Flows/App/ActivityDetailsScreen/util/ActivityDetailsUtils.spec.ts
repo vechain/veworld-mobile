@@ -34,6 +34,7 @@ describe("ActivityDetailsUtils", () => {
             [ActivityType.DAPP_TRANSACTION, "DApp Transaction"],
             [ActivityType.TRANSFER_FT, "Receive"],
             [ActivityType.TRANSFER_NFT, "NFT Receive"],
+            [ActivityType.NFT_SALE, "NFT purchased"],
             [ActivityType.TRANSFER_VET, "Receive"],
             [ActivityType.TRANSFER_SF, "Receive"],
         ])("should return the correct title for an %s activity", (type, expected) => {
@@ -48,6 +49,7 @@ describe("ActivityDetailsUtils", () => {
         it.each([
             [ActivityType.TRANSFER_FT, "Send"],
             [ActivityType.TRANSFER_NFT, "NFT Send"],
+            [ActivityType.NFT_SALE, "NFT sold"],
             [ActivityType.TRANSFER_VET, "Send"],
             [ActivityType.TRANSFER_SF, "Send"],
         ])("should return the correct title for a %s send activity", (type, expected) => {
