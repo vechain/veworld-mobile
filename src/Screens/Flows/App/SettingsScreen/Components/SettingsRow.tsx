@@ -1,8 +1,9 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback } from "react"
+import React, { useCallback, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { LocalizedString } from "typesafe-i18n"
 import { BaseIcon, BaseText, BaseTouchable, BaseView } from "~Components"
+import { COLORS } from "~Constants"
 import { useTheme } from "~Hooks"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 import { IconKey } from "~Model"
@@ -47,17 +48,21 @@ export const SettingsRow = ({ title, screenName, icon, url, showBadge }: RowProp
         nav.navigate(screenName as keyof Omit<RootStackParamListSettings, ExcludedSettingRoutes>)
     }, [url, screenName, nav, navigateWithTab, title])
 
+    const textColor = useMemo(() => {
+        return theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE
+    }, [theme.isDark])
+
     return (
         <BaseTouchable action={onPress} style={baseStyles.container} haptics="Light" testID={title}>
             <BaseView flexDirection="row">
-                <BaseIcon color={theme.colors.text} name={icon} size={24} />
-                <BaseText mx={14} typographyFont="button" color={theme.colors.text}>
+                <BaseIcon color={textColor} name={icon} size={24} />
+                <BaseText mx={14} typographyFont="button" color={textColor}>
                     {title}
                 </BaseText>
             </BaseView>
             <BaseView flexDirection="row" style={baseStyles.actionContainer}>
                 {showBadge && <BaseView p={2} bg={theme.colors.errorVariant.icon} borderRadius={4} />}
-                <BaseIcon color={theme.colors.text} name={"icon-chevron-right"} size={16} />
+                <BaseIcon color={textColor} name={"icon-chevron-right"} size={16} />
             </BaseView>
         </BaseTouchable>
     )

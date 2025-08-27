@@ -4561,6 +4561,10 @@ type RootTranslation = {
 	 */
 	TITLE_MNEMONIC: string
 	/**
+	 * M​o​r​e​ ​o​p​t​i​o​n​s
+	 */
+	TITLE_MORE_OPTIONS: string
+	/**
 	 * N​e​t​w​o​r​k
 	 */
 	TITLE_NETWORK: string
@@ -9445,6 +9449,10 @@ Here's what it's all about:
 	 * Your Mnemonic
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
+	/**
+	 * More options
+	 */
+	TITLE_MORE_OPTIONS: () => LocalizedString
 	/**
 	 * Network
 	 */
