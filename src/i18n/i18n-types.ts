@@ -530,6 +530,10 @@ type RootTranslation = {
 	 */
 	APP_VERSION: RequiredParams<'version'>
 	/**
+	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
+	 */
+	APPS_SEARCH_PLACEHOLDER: string
+	/**
 	 * A​p​r​i​l
 	 */
 	APRIL: string
@@ -5470,6 +5474,10 @@ Try reconnect your device to the internet.
 	 * version {version}
 	 */
 	APP_VERSION: (arg: { version: string }) => LocalizedString
+	/**
+	 * Search an App or Website...
+	 */
+	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
 	/**
 	 * April
 	 */
