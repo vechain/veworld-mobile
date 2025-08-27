@@ -61,7 +61,7 @@ export const NonFungibleTokenMarketplaceDetails: React.FC<Props> = memo(({ activ
         },
         {
             id: 2,
-            title: LL.PRICE(),
+            title: LL.COMMON_PRICE(),
             value: `${priceDirection} ${formattedPrice}`,
             typographyFont: "subSubTitle",
             underline: false,
