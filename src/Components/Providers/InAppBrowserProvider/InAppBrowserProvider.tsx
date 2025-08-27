@@ -1346,7 +1346,7 @@ window.vechain = {
             }, 
         }
     },
-    request: function (params) {
+    send: function (params) {
         const request = {
             id: generateRandomId(),
             method: params.method,
