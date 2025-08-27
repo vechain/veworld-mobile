@@ -16,7 +16,10 @@ export const useNFTMetadata = () => {
             let tokenMetadata: NFTMetadata | undefined
 
             switch (protocol) {
-                case URIProtocol.IPFS:
+                case URIProtocol.IPFS: {
+                    tokenMetadata = await getNFTMetadataIpfs(uri)
+                    break
+                }
                 case URIProtocol.ARWEAVE: {
                     const cachedData = metadataCache?.getItem(uri)
                     if (cachedData) {
@@ -25,8 +28,7 @@ export const useNFTMetadata = () => {
                     }
 
                     debug(ERROR_EVENTS.NFT, `Fetching metadata for ${uri}`)
-                    const retrievedData =
-                        URIProtocol.IPFS === protocol ? await getNFTMetadataIpfs(uri) : await getNFTMetadataArweave(uri)
+                    const retrievedData = await getNFTMetadataArweave(uri)
 
                     metadataCache?.setItem(uri, retrievedData)
                     tokenMetadata = retrievedData
