@@ -42,7 +42,7 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
     const { LL } = useI18nContext()
     const theme = useTheme()
 
-    const [keepMeLoggedIn, setKeepMeLoggedIn] = useState(false)
+    const [keepMeLoggedIn, setKeepMeLoggedIn] = useState(true)
     const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
     const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
     const { onClose: onCloseSelectAccountBs, onOpen: onOpenSelectAccountBs } = useBottomSheetModal({
@@ -125,6 +125,8 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
         }
     }, [enhancedRequest.kind, enhancedRequest.value, theme.isDark])
 
+    const onSimpleRequestSubmit = useCallback(() => onSign(signableArgs), [onSign, signableArgs])
+
     return (
         <>
             <BaseView flexDirection="row" gap={12} justifyContent="space-between" testID="LOGIN_REQUEST_TITLE">
@@ -178,18 +180,29 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
                     testID="LOGIN_REQUEST_BTN_CANCEL">
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
-                <Signable args={signableArgs} onSign={onSign}>
-                    {({ checkIdentityBeforeOpening, isBiometricsEmpty }) => (
-                        <BaseButton
-                            action={checkIdentityBeforeOpening}
-                            flex={1}
-                            disabled={isConfirmDisabled || isBiometricsEmpty}
-                            isLoading={isLoading}
-                            testID="LOGIN_REQUEST_BTN_SIGN">
-                            {LL.LOGIN_REQUEST_TITLE()}
-                        </BaseButton>
-                    )}
-                </Signable>
+                {enhancedRequest.kind === "simple" ? (
+                    <BaseButton
+                        action={onSimpleRequestSubmit}
+                        flex={1}
+                        disabled={isConfirmDisabled}
+                        isLoading={isLoading}
+                        testID="LOGIN_REQUEST_BTN_SIGN">
+                        {LL.LOGIN_REQUEST_CTA()}
+                    </BaseButton>
+                ) : (
+                    <Signable args={signableArgs} onSign={onSign}>
+                        {({ checkIdentityBeforeOpening, isBiometricsEmpty }) => (
+                            <BaseButton
+                                action={checkIdentityBeforeOpening}
+                                flex={1}
+                                disabled={isConfirmDisabled || isBiometricsEmpty}
+                                isLoading={isLoading}
+                                testID="LOGIN_REQUEST_BTN_SIGN">
+                                {LL.LOGIN_REQUEST_CTA()}
+                            </BaseButton>
+                        )}
+                    </Signable>
+                )}
             </BaseView>
 
             <SelectAccountBottomSheet
