@@ -33,7 +33,7 @@ export const useAccountActivities = (filterType: FilterType, filters: Readonly<A
         queryFn: fetchActivities,
         initialPageParam: 0,
         getNextPageParam: (lastPage, pages) => {
-            return lastPage.pagination.hasNext ? pages.length + 1 : undefined
+            return lastPage.pagination.hasNext ? pages.length : undefined
         },
         enabled: isFocused && filters.length > 0,
         gcTime: 1000 * 60 * 2, // 2 minutes

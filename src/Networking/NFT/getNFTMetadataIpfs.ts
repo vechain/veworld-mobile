@@ -1,17 +1,11 @@
-import axios from "axios"
-import { NFTMetadata } from "~Model/Nft/Nft"
+import { queryClient } from "~Api/QueryProvider"
 import { NFT_AXIOS_TIMEOUT } from "~Constants/Constants/NFT"
-import URIUtils from "~Utils/URIUtils"
+import { NFTMetadata } from "~Model/Nft/Nft"
+import IPFSUtils from "~Utils/IPFSUtils"
 
 // TODO (Piero) (https://github.com/vechainfoundation/veworld-mobile/issues/803) Remove centralization to only 1 Public gateway.
 
-export const getNFTMetadataIpfs = async (uri: string): Promise<NFTMetadata> => {
-    const metadata = await axios.get<NFTMetadata>(URIUtils.convertUriToUrl(uri), {
-        timeout: NFT_AXIOS_TIMEOUT,
-        headers: {
-            "x-project-id": "veworld-mobile",
-        },
-    })
-
-    return metadata.data
-}
+export const getNFTMetadataIpfs = (uri: string) =>
+    queryClient.fetchQuery(
+        IPFSUtils.getIpfsQueryKeyOptions<NFTMetadata>(uri, { responseType: "json", timeout: NFT_AXIOS_TIMEOUT }),
+    )

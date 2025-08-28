@@ -3,7 +3,7 @@ import { StyleProp, StyleSheet, ViewStyle } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { StargateAvatar } from "~Assets"
 import { BaseSkeleton, BaseText, BaseView } from "~Components/Base"
-import { VET } from "~Constants"
+import { ColorThemeType, VET } from "~Constants"
 import { useFormatFiat, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { NftData } from "~Model"
@@ -15,9 +15,10 @@ type Props = {
     isLoading: boolean
     nfts: Pick<NftData, "vetAmountStaked">[] | undefined
     rootStyle?: StyleProp<ViewStyle>
+    isNodeOwner: boolean
 }
 
-export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle }: Props) => {
+export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isNodeOwner }: Props) => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const isBalanceVisible = useAppSelector(selectBalanceVisible)
@@ -38,13 +39,54 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle }: Props) 
     const fiatBalance = useMemo(() => {
         return BalanceUtils.getFiatBalance(totalLockedVet.toString, vetTokenInfo.exchangeRate ?? 1, VET.decimals)
     }, [totalLockedVet.toString, vetTokenInfo.exchangeRate])
+
+    const renderLockedValue = useMemo(() => {
+        if (!isNodeOwner && !isLoading) {
+            return (
+                <BaseView style={styles.tagContainer}>
+                    <BaseText typographyFont="smallCaptionMedium" color={theme.colors.stakedCard.tagText}>
+                        {LL.STARGATE_DELEGATEE_LABEL()}
+                    </BaseText>
+                </BaseView>
+            )
+        }
+
+        return (
+            <FiatBalance
+                isLoading={vetTokenInfo.exchangeRateLoading || isLoading}
+                isVisible={isBalanceVisible}
+                balances={[fiatBalance]}
+                typographyFont="bodyMedium"
+                color={theme.colors.stakedCard.fiatValue}
+                skeletonHeight={12}
+                skeletonWidth={60}
+                skeletonBoneColor={theme.colors.skeletonBoneColor}
+                skeletonHighlightColor={theme.colors.skeletonHighlightColor}
+            />
+        )
+    }, [
+        isNodeOwner,
+        LL,
+        isBalanceVisible,
+        vetTokenInfo.exchangeRateLoading,
+        isLoading,
+        fiatBalance,
+        theme.colors.skeletonBoneColor,
+        theme.colors.skeletonHighlightColor,
+        theme.colors.stakedCard.fiatValue,
+        styles.tagContainer,
+        theme.colors.stakedCard.tagText,
+    ])
+
     return (
         <BaseView style={[styles.container, rootStyle]}>
             <FastImage source={StargateAvatar} style={styles.avatar as ImageStyle} />
             <BaseView flex={1}>
-                <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
-                    {LL.TITLE_TOTAL_LOCKED()}
-                </BaseText>
+                {isNodeOwner && !isLoading && (
+                    <BaseText typographyFont="bodyMedium" color={theme.colors.tokenCardText}>
+                        {LL.TITLE_TOTAL_LOCKED()}
+                    </BaseText>
+                )}
                 <BaseView style={styles.valueContainer}>
                     <BaseView style={styles.vetContainer}>
                         {isLoading ? (
@@ -65,24 +107,14 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle }: Props) 
                             </>
                         )}
                     </BaseView>
-                    <FiatBalance
-                        isLoading={vetTokenInfo.exchangeRateLoading || isLoading}
-                        isVisible={isBalanceVisible}
-                        balances={[fiatBalance]}
-                        typographyFont="bodyMedium"
-                        color={theme.colors.stakedCard.fiatValue}
-                        skeletonHeight={12}
-                        skeletonWidth={60}
-                        skeletonBoneColor={theme.colors.skeletonBoneColor}
-                        skeletonHighlightColor={theme.colors.skeletonHighlightColor}
-                    />
+                    {renderLockedValue}
                 </BaseView>
             </BaseView>
         </BaseView>
     )
 }
 
-const baseStyles = () =>
+const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         container: {
             flexDirection: "row",
@@ -103,5 +135,14 @@ const baseStyles = () =>
             flexDirection: "row",
             alignItems: "center",
             gap: 4,
+        },
+        tagContainer: {
+            flexDirection: "row",
+            height: 20,
+            paddingHorizontal: 8,
+            alignItems: "center",
+            gap: 6,
+            borderRadius: 4,
+            backgroundColor: theme.colors.stakedCard.tagBackground,
         },
     })

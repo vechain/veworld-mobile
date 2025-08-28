@@ -38,7 +38,12 @@ export const useDappBookmarking = (url?: string, title?: string) => {
         if (!url) return
 
         if (existingBookmark) {
-            dispatch(removeBookmark(existingBookmark))
+            dispatch(
+                removeBookmark({
+                    href: existingBookmark.href ?? "",
+                    isCustom: existingBookmark.isCustom,
+                }),
+            )
 
             track(AnalyticsEvent.DISCOVERY_BOOKMARK_REMOVED, {
                 dapp: url,

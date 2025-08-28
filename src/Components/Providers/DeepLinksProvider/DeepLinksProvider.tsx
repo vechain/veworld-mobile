@@ -1,11 +1,12 @@
-import React, { useCallback, useEffect } from "react"
+import React, { useCallback, useEffect, useRef } from "react"
 import { Linking } from "react-native"
 import { ConnectionLinkParams, SignTransactionParams } from "./types"
 import { useInteraction } from "../InteractionProvider"
-import { DeepLinkError } from "~Utils/ErrorMessageUtils"
-import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
-import { error } from "~Utils"
+// import { DeepLinkError } from "~Utils/ErrorMessageUtils"
+// import { DeepLinkErrorCode } from "~Utils/ErrorMessageUtils/ErrorMessageUtils"
+// import { error } from "~Utils"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
+import { useBrowserTab } from "~Hooks/useBrowserTab"
 
 const parseUrl = (url: string) => {
     const urlObj = new URL(url)
@@ -16,6 +17,8 @@ const parseUrl = (url: string) => {
 }
 
 export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) => {
+    const { navigateWithTab } = useBrowserTab()
+    const mounted = useRef(false)
     const { setConnectBsData, connectBsRef, setTransactionBsData, transactionBsRef } = useInteraction()
     const { parseTransactionRequest } = useExternalDappConnection()
 
@@ -47,16 +50,26 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         [parseTransactionRequest, setTransactionBsData, transactionBsRef],
     )
 
-    const handleInvalidEvent = (redirectUrl: string) => {
-        const err = new DeepLinkError(DeepLinkErrorCode.MethodNotFound)
-        error("EXTERNAL_DAPP_CONNECTION", err)
-        Linking.openURL(`${redirectUrl}?errorMessage=${err.message}&errorCode=${err.name}`)
-    }
+    // const handleInvalidEvent = (redirectUrl: string) => {
+    //     const err = new DeepLinkError(DeepLinkErrorCode.MethodNotFound)
+    //     error("EXTERNAL_DAPP_CONNECTION", err)
+    //     Linking.openURL(`${redirectUrl}?errorMessage=${err.message}&errorCode=${err.name}`)
+    // }
 
     useEffect(() => {
         const handleDeepLink = ({ url }: { url: string }) => {
             const { event, request } = parseUrl(url)
+            const parsed = new URL(url)
+            const pathname = parsed.pathname
+            //Filter out all the useless elements
+            const splitPathname = pathname.split("/").filter(Boolean)
             switch (event) {
+                case "discover": {
+                    const lastElement = splitPathname[splitPathname.length - 1]
+                    const decodedURI = decodeURIComponent(lastElement)
+                    navigateWithTab({ url: decodedURI, title: decodedURI, navigationFn: () => {} })
+                    break
+                }
                 case "connect":
                     handleConnectionLink(request as ConnectionLinkParams)
                     return
@@ -68,15 +81,21 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                 case "disconnect":
                     return
                 default:
-                    handleInvalidEvent(request.redirect_url)
                     return
             }
         }
 
         Linking.addEventListener("url", handleDeepLink)
 
-        return () => Linking.removeAllListeners("url")
-    }, [handleConnectionLink, handleSignTransaction])
+        if (!mounted.current) {
+            mounted.current = true
+            Linking.getInitialURL().then(url => url && handleDeepLink({ url }))
+        }
+
+        return () => {
+            Linking.removeAllListeners("url")
+        }
+    }, [navigateWithTab, handleConnectionLink, handleSignTransaction])
 
     return <>{children}</>
 }

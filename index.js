@@ -41,7 +41,7 @@ import {
     NotificationsProvider,
     PersistedThemeProvider,
     StoreContextProvider,
-    DeepLinksProvider,
+    useFeatureFlags,
 } from "~Components/Providers"
 import {
     selectAnalyticsTrackingEnabled,
@@ -63,6 +63,8 @@ import { Routes } from "~Navigation"
 import { isLocale, useI18nContext } from "~i18n"
 import { getLocales } from "react-native-localize"
 import { InteractionProvider } from "~Components/Providers/InteractionProvider"
+import { KeyboardProvider } from "react-native-keyboard-controller"
+import { DeepLinksProvider } from "~Components/Providers/DeepLinksProvider"
 import { decodeBase64 } from "tweetnacl-util"
 import nacl from "tweetnacl"
 
@@ -131,64 +133,93 @@ const Main = () => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <ConnexContextProvider>
-                <PersistQueryClientProvider
-                    client={queryClient}
-                    persistOptions={{
-                        persister: clientPersister,
-                    }}>
-                    <FeatureFlagsProvider>
-                        <NavigationProvider>
-                            <InteractionProvider>
-                                <DeepLinksProvider>
-                                    <WalletConnectContextProvider>
-                                        <BottomSheetModalProvider>
-                                            <InAppBrowserProvider>
-                                                <NotificationsProvider>
-                                                    <EntryPoint />
-                                                </NotificationsProvider>
-                                            </InAppBrowserProvider>
-                                        </BottomSheetModalProvider>
-                                    </WalletConnectContextProvider>
-                                </DeepLinksProvider>
-                            </InteractionProvider>
-                        </NavigationProvider>
-                        <BaseToast />
-                    </FeatureFlagsProvider>
-                </PersistQueryClientProvider>
-            </ConnexContextProvider>
+            <KeyboardProvider>
+                <ConnexContextProvider>
+                    <PersistQueryClientProvider
+                        client={queryClient}
+                        persistOptions={{
+                            persister: clientPersister,
+                        }}>
+                        <FeatureFlagsProvider>
+                            <NavigationProvider>
+                                <InteractionProvider>
+                                    <DeepLinksProvider>
+                                        <WalletConnectContextProvider>
+                                            <BottomSheetModalProvider>
+                                                <InAppBrowserProvider>
+                                                    <NotificationsProvider>
+                                                        <EntryPoint />
+                                                    </NotificationsProvider>
+                                                </InAppBrowserProvider>
+                                            </BottomSheetModalProvider>
+                                        </WalletConnectContextProvider>
+                                    </DeepLinksProvider>
+                                </InteractionProvider>
+                            </NavigationProvider>
+                            <BaseToast />
+                        </FeatureFlagsProvider>
+                    </PersistQueryClientProvider>
+                </ConnexContextProvider>
+            </KeyboardProvider>
         </GestureHandlerRootView>
     )
 }
 
-const linking = externalDappSessions => ({
-    prefixes: [
-        "https://www.veworld.com/",
-        "veworld://",
-        "https://veworld.com/",
-        "https://veworld.net/",
-        "https://www.veworld.net/",
-    ],
-    config: {
-        screens: {
-            TabStack: {
-                screens: {
-                    NFTStack: {
-                        path: "nfts",
-                        initialRouteName: Routes.NFTS,
+/**
+ * @param {import ('~Api/FeatureFlags').FeatureFlags} featureFlags
+ * @param {import ('~Storage/Redux').ExternalDappSession[]} externalDappSessions
+ * @returns
+ */
+const generateLinkingConfig = (featureFlags, externalDappSessions) => {
+    const appsStack = {
+        AppsStack: {
+            path: "discover",
+            initialRouteName: "Apps",
+            screens: {
+                Browser: {
+                    path: "browser/:redirect?/:ul/:url",
+                    parse: {
+                        ul: () => true,
+                        url: url => URIUtils.decodeUrl_HACK(url),
                     },
-                    DiscoverStack: {
-                        path: "discover",
-                        initialRouteName: "Discover",
-                        screens: {
-                            Browser: {
-                                path: "browser/:redirect?/:ul/:url",
-                                parse: {
-                                    ul: () => true,
-                                    url: url => URIUtils.decodeUrl_HACK(url),
-                                },
-                            },
+                },
+            },
+        },
+    }
+
+    const discoverStack = {
+        DiscoverStack: {
+            path: "discover",
+            initialRouteName: "Discover",
+            screens: {
+                Browser: {
+                    path: "browser/:redirect?/:ul/:url",
+                    parse: {
+                        ul: () => true,
+                        url: url => URIUtils.decodeUrl_HACK(url),
+                    },
+                },
+            },
+        },
+    }
+
+    return {
+        prefixes: [
+            "https://www.veworld.com/",
+            "veworld://",
+            "https://veworld.com/",
+            "https://veworld.net/",
+            "https://www.veworld.net/",
+        ],
+        config: {
+            screens: {
+                TabStack: {
+                    screens: {
+                        NFTStack: {
+                            path: "nfts",
+                            initialRouteName: Routes.NFTS,
                         },
+                        ...(featureFlags.betterWorldFeature.appsScreen.enabled ? appsStack : discoverStack),
                     },
                 },
             },
@@ -258,8 +289,8 @@ const linking = externalDappSessions => ({
                 path: "api/v1/disconnect/:public_key/:redirect_url/:nonce",
             },
         },
-    },
-})
+    }
+}
 
 const NavigationProvider = ({ children }) => {
     const theme = useTheme()
@@ -278,6 +309,7 @@ const NavigationProvider = ({ children }) => {
     const navigationRef = useNavigationContainerRef()
     const routeNameRef = useRef(null)
     const dispatch = useAppDispatch()
+    const featureFlags = useFeatureFlags()
 
     return (
         <NavigationContainer
@@ -300,7 +332,7 @@ const NavigationProvider = ({ children }) => {
                 }
             }}
             theme={navigationTheme}
-            linking={linking(externalDappSessions)}>
+            linking={generateLinkingConfig(featureFlags, externalDappSessions)}>
             {ready ? children : null}
         </NavigationContainer>
     )

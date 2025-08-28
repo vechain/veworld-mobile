@@ -15,3 +15,17 @@ export const withPerf = async <T extends () => any>(
     console.log(prefix, end - start)
     return result
 }
+
+/**
+ * Call function and monitor how long it took to perform, with the {@link performance.now} function. Logs the result in the console with the parameter {@link prefix}
+ * @param fn Function to call
+ * @param prefix String prefix to show it in the logs
+ * @returns Result of the function {@link fn}
+ */
+export const withPerfSync = <T extends () => any>(fn: T, prefix: string): ReturnType<T> => {
+    const start = performance.now()
+    const result = fn()
+    const end = performance.now()
+    console.log(prefix, end - start)
+    return result
+}

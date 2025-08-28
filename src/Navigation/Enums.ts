@@ -12,6 +12,7 @@ export enum Routes {
     BROWSER = "Browser",
     HOME_STACK = "HomeStack",
     DISCOVER_STACK = "DiscoverStack",
+    APPS_STACK = "AppsStack",
 
     IMPORT_FROM_CLOUD = "Import_From_Cloud",
     IMPORT_MNEMONIC_BACKUP_PASSWORD = "Import_Mnemonic_Backup_Password",
@@ -95,6 +96,11 @@ export enum Routes {
     SECURITY_UPGRADE_V2_HOME = "Security_Upgrade_V2_Home",
     SECURITY_UPGRADE_V2_MNEMONIC_BACKUP = "Security_Upgrade_V2_Mnemonic_Backup",
     DISCOVER_TABS_MANAGER = "Discover_Tabs_Manager",
+
+    // BetterWorld
+    APPS = "Apps",
+    APPS_SEARCH = "Apps_Search",
+    APPS_TABS_MANAGER = "Apps_Tabs_Manager",
 
     // Routes for external apps that request connection/sign/send transactions with deep links
 

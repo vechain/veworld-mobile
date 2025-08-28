@@ -14,6 +14,7 @@ import { useI18nContext } from "~i18n"
 import { CertificateRequest, DEVICE_TYPE, LedgerAccountWithDevice } from "~Model"
 import { Routes } from "~Navigation"
 import {
+    addConnectedDiscoveryApp,
     addSignCertificateActivity,
     selectSelectedAccountOrNull,
     selectVerifyContext,
@@ -22,6 +23,7 @@ import {
     useAppSelector,
 } from "~Storage/Redux"
 import { AccountUtils, error, HexUtils } from "~Utils"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { DappWithDetails } from "../DappWithDetails"
 import { Signable } from "../Signable"
 
@@ -76,7 +78,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 justifyContent="space-between"
                 testID="SIGN_CERTIFICATE_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
-                    <BaseIcon name="icon-certificate" size={20} color={theme.colors.editSpeedBs.title} />
+                    <BaseIcon name="icon-user-check" size={20} color={theme.colors.editSpeedBs.title} />
                     <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
                         {LL.SIGN_CERTIFICATE_REQUEST_TITLE()}
                     </BaseText>
@@ -97,7 +99,7 @@ const CertificateBottomSheetContent = ({ request, onCancel, onSign, selectAccoun
                 </BaseText>
             </DappWithDetails>
             <BaseSpacer height={24} />
-            <BaseView flexDirection="row" gap={16}>
+            <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"
@@ -183,6 +185,13 @@ export const CertificateBottomSheet = () => {
         async ({ request, password }: { request: CertificateRequest; password?: string }) => {
             try {
                 const { certificate, payload } = buildCertificate(request)!
+                dispatch(
+                    addConnectedDiscoveryApp({
+                        name: request.appName,
+                        href: new URL(request.appUrl).hostname,
+                        connectedTime: Date.now(),
+                    }),
+                )
                 if (selectedAccount!.device.type === DEVICE_TYPE.LEDGER) {
                     // Do not reject request if it's a ledger request
                     isUserAction.current = true

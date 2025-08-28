@@ -1,8 +1,9 @@
-import React from "react"
-import { BaseTouchable } from "./BaseTouchable"
-import { BaseText } from "./BaseText"
-import { useThemedStyles } from "~Hooks"
+import React, { useMemo } from "react"
 import { StyleSheet } from "react-native"
+import { COLORS } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { BaseText } from "./BaseText"
+import { BaseTouchable } from "./BaseTouchable"
 
 type Props = {
     label: string
@@ -12,8 +13,19 @@ type Props = {
 
 export const BaseChip = ({ label, active, onPress }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyle)
-    const backgroundColor = active ? theme.colors.primaryLight : theme.colors.card
-    const textColor = active ? theme.colors.textReversed : theme.colors.text
+    const backgroundColor = useMemo(() => {
+        if (active) {
+            return theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE
+        }
+        return theme.isDark ? COLORS.PURPLE : COLORS.GREY_50
+    }, [active, theme.isDark])
+
+    const textColor = useMemo(() => {
+        if (active) {
+            return theme.isDark ? COLORS.PURPLE : COLORS.WHITE
+        }
+        return theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600
+    }, [active, theme.isDark])
     return (
         <BaseTouchable
             style={[styles.rootContainer, { backgroundColor: backgroundColor }]}

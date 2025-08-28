@@ -1,13 +1,14 @@
 import { BottomSheetFlatList, BottomSheetFlatListMethods } from "@gorhom/bottom-sheet"
-import React, { useCallback, useMemo, useRef, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
     ListRenderItemInfo,
+    NativeScrollEvent,
+    NativeSyntheticEvent,
     ScrollView,
     StyleProp,
     StyleSheet,
     TouchableOpacity,
     ViewStyle,
-    ViewToken,
 } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseCarouselItem } from "~Components/Base/BaseCarousel/BaseCarouselItem"
@@ -80,6 +81,19 @@ type Props = {
      * @default false
      */
     bottomSheet?: boolean
+    /**
+     * Style for the pagination dots
+     */
+    dotStyles?: {
+        /**
+         * Style for the active dot
+         */
+        active: StyleProp<ViewStyle>
+        /**
+         * Default style of the dot
+         */
+        default: StyleProp<ViewStyle>
+    }
 }
 
 export const BaseCarousel = ({
@@ -99,12 +113,12 @@ export const BaseCarousel = ({
     snapOffsets,
     itemHeight,
     bottomSheet,
+    dotStyles,
 }: Props) => {
     const [page, setPage] = useState(0)
 
     const ref = useRef<Animated.FlatList<any> | BottomSheetFlatListMethods>(null)
     const { styles } = useThemedStyles(baseStyles(paginationAlignment))
-
     const ItemSeparatorComponent = useCallback(() => <BaseSpacer width={gap} />, [gap])
 
     const w = useMemo(() => {
@@ -142,14 +156,6 @@ export const BaseCarousel = ({
         [data.length, padding],
     )
 
-    const onViewableItemsChanged = useCallback(
-        (info: { viewableItems: ViewToken<CarouselSlideItem>[]; changed: ViewToken<CarouselSlideItem>[] }) => {
-            if (info.viewableItems.length === 0) return
-            setPage(info.viewableItems[0].index!)
-        },
-        [],
-    )
-
     const renderItem = useCallback(
         ({ item, index }: ListRenderItemInfo<CarouselSlideItem>) => {
             return (
@@ -178,6 +184,32 @@ export const BaseCarousel = ({
 
     const Component = useMemo(() => (bottomSheet ? BottomSheetFlatList : Animated.FlatList), [bottomSheet])
 
+    const names = useMemo(() => data.map(d => d.name ?? ""), [data])
+
+    const onScroll = useCallback(
+        (e: NativeSyntheticEvent<NativeScrollEvent>) => {
+            if (
+                e.nativeEvent.contentOffset.x + e.nativeEvent.layoutMeasurement.width ===
+                e.nativeEvent.contentSize.width
+            ) {
+                //This is the last page
+                setPage(offsets.length - 1)
+                return
+            }
+            const pointIdx = [...offsets].reverse().findIndex(offset => offset <= e.nativeEvent.contentOffset.x)
+            if (pointIdx === -1) {
+                setPage(0)
+                return
+            }
+            setPage(offsets.length - 1 - pointIdx)
+        },
+        [offsets],
+    )
+
+    useEffect(() => {
+        ref.current?.scrollToOffset({ animated: true, offset: 0 })
+    }, [names])
+
     return (
         <BaseView flex={1} flexDirection="column" style={[styles.root, rootStyle]}>
             <Component
@@ -188,9 +220,9 @@ export const BaseCarousel = ({
                 snapToStart={false}
                 disableIntervalMomentum
                 ItemSeparatorComponent={ItemSeparatorComponent}
-                viewabilityConfig={{ itemVisiblePercentThreshold: 100 }}
-                onViewableItemsChanged={onViewableItemsChanged}
-                decelerationRate="fast"
+                decelerationRate={"fast"}
+                alwaysBounceHorizontal={false}
+                bounces={false}
                 snapToAlignment="start"
                 horizontal
                 style={containerStyle}
@@ -198,6 +230,7 @@ export const BaseCarousel = ({
                 testID={testID}
                 renderItem={renderItem}
                 showsHorizontalScrollIndicator={false}
+                onScroll={onScroll}
             />
             {showPagination && data.length > 1 && (
                 <ScrollView
@@ -206,7 +239,12 @@ export const BaseCarousel = ({
                     {Array.from({ length: data.length }, (_, idx) => (
                         <TouchableOpacity
                             key={idx}
-                            style={[styles.dot, page === idx ? styles.activeDot : undefined]}
+                            style={[
+                                styles.dot,
+                                page === idx ? styles.activeDot : undefined,
+                                dotStyles?.default,
+                                page === idx ? dotStyles?.active : undefined,
+                            ]}
                             onPress={onPressPagination.bind(null, idx)}
                         />
                     ))}

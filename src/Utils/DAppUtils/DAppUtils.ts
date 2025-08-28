@@ -111,6 +111,13 @@ export const getAppHubIconUrl = (appId: string) => {
     return `${process.env.REACT_APP_HUB_URL}/imgs/${appId}.png`
 }
 
+const generateFaviconUrl = (url: string, { size = 48 }: { size?: number } = {}) => {
+    const fullUrl = `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(url).origin}`
+    const generatedUrl = new URL(fullUrl)
+    generatedUrl.searchParams.set("size", size.toString())
+    return generatedUrl.href
+}
+
 const validateExternalAppSession = (session: string, signKeyPair: KeyPair) => {
     const sessionKeyPair = nacl.sign.keyPair.fromSecretKey(decodeBase64(signKeyPair.privateKey))
 
@@ -177,5 +184,6 @@ export const DAppUtils = {
     isValidCertMessage,
     getAppHubIconUrl,
     isValidSignedDataMessage,
+    generateFaviconUrl,
     parseSignTxRequest,
 }

@@ -29,6 +29,7 @@ export type Colors = {
     splashBackground: string
     splashColorLayer: string
     title: string
+    headerTitle: string
     subtitle: string
     subSubtitle: string
     card: string
@@ -73,6 +74,7 @@ export type Colors = {
     graphStatsText: string
     accountCard: string
     marketInfoBackground: string
+    favoriteHeader: string
     successVariant: {
         background: string
         border: string
@@ -117,15 +119,21 @@ export type Colors = {
     }
     actionBottomSheet: {
         background: string
+        border: string
         iconBackground: string
+        isActiveBackground: string
         text: string
         icon: string
         activeIcon: string
         activeIconBackground: string
+        favoriteIcon: string
         activeText: string
         disabledText: string
         disabledIcon: string
         disabledIconBackground: string
+        dangerIcon: string
+        dangerIconBackground: string
+        dangerText: string
     }
     assetDetailsCard: {
         background: string
@@ -213,10 +221,86 @@ export type Colors = {
     stakedCard: {
         fiatValue: string
         vetValue: string
+        tagBackground: string
+        tagText: string
     }
     stakedVetCard: {
         background: string
     }
+    dappCard: {
+        name: string
+        description: string
+        icon: string
+    }
+    dappTitle: string
+    history: {
+        button: {
+            background: string
+            text: string
+            border: string
+        }
+        titleColor: string
+        historyItem: {
+            iconBackground: string
+            iconColor: string
+            title: string
+            subtitle: string
+            rightIconColor: string
+        }
+        emptyStateColor: string
+        emptyStateIcon: {
+            background: string
+            color: string
+        }
+    }
+    newBottomSheet: {
+        background: string
+    }
+    favoritesSuggestionBanner: {
+        background: string
+        border: string
+        color: string
+        iconColor: string
+        emptySlot: {
+            background: string
+            border: string
+            color: string
+        }
+    }
+    x2eAppOpenDetails: {
+        background: string
+        border: string
+        title: string
+        description: string
+        label: {
+            background: string
+            text: string
+        }
+        chevron: {
+            background: string
+            icon: string
+        }
+        favoriteBtn: {
+            backgroundActive: string
+            borderActive: string
+            textActive: string
+            backgroundInactive: string
+            borderInactive: string
+            textInactive: string
+        }
+        stats: {
+            icon: string
+            caption: string
+            value: string
+        }
+    }
+    veBetterCategoryButton: {
+        background: string
+        border: string
+        icon: string
+        title: string
+    }
+    veworldLogo: string
 }
 
 export enum COLORS {
@@ -234,8 +318,10 @@ export enum COLORS {
     DARK_PURPLE_TRANSPARENT = "rgba(11, 0, 67, 0.0)",
     PURPLE_BLUR_TRANSPARENT = "rgba(11, 0, 67, 0.25)",
     DARK_PURPLE_RBGA = "rgba(11, 0, 67, 0.7)",
-    DARK_PURPLE_RBGA_TRANSPARENT = "rgba(172, 155, 255, 0.8)",
+    DARK_PURPLE_RBGA_TRANSPARENT = "rgba(172, 155, 255, 0.9)",
+    DARK_PURPLE_90_TRANSPARENT = "#59527FE5",
     PURPLE = "#30265F",
+    PURPLE_RGBA_TRANSPARENT = "rgba(48, 38, 95, 0.9)",
     LIGHT_PURPLE = "#55498c",
     PURPLE_DISABLED = "#261E4C",
     DARK_PURPLE_DISABLED = "#59527F",
@@ -312,6 +398,8 @@ export enum COLORS {
     GRADIENT_BACKGROUND_DARK_TOP = "rgba(11, 0, 67, 0.7)",
     GRADIENT_BACKGROUND_DARK_BOTTOM = "rgba(11, 0, 67, 0.95)",
     B3TR_ICON_BACKGROUND = "#74E291",
+    WHITE_RGBA_85 = "rgba(255,255,255,0.85)",
+    WHITE_RGBA_15 = "rgba(255,255,255,0.15)",
 }
 
 const light: Colors = {
@@ -347,12 +435,13 @@ const light: Colors = {
     splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
     title: COLORS.PRIMARY_800,
+    headerTitle: COLORS.DARK_PURPLE,
     subtitle: COLORS.GREY_600,
     subSubtitle: COLORS.GREY_700,
     card: COLORS.WHITE,
     icon: COLORS.PRIMARY_800,
     pinEmpty: COLORS.GREY_400,
-    pinFilled: COLORS.PRIMARY_500,
+    pinFilled: COLORS.PRIMARY_800,
     button: COLORS.DARK_PURPLE,
     rightIconHeaderBorder: COLORS.GREY_200,
     cardBorder: COLORS.GREY_300,
@@ -389,6 +478,7 @@ const light: Colors = {
     accountCard: COLORS.PURPLE,
     graphStatsText: COLORS.GREY_600,
     marketInfoBackground: COLORS.GREY_200,
+    favoriteHeader: COLORS.PURPLE,
     successVariant: {
         background: COLORS.GREEN_50,
         border: COLORS.GREEN_200,
@@ -433,20 +523,26 @@ const light: Colors = {
     },
     actionBottomSheet: {
         background: COLORS.GREY_50,
+        border: COLORS.GREY_200,
+        isActiveBackground: COLORS.GREY_100,
         iconBackground: COLORS.GREY_100,
-        text: COLORS.PRIMARY_800,
+        text: COLORS.GREY_700,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
         activeIconBackground: COLORS.WHITE,
+        favoriteIcon: COLORS.DARK_PURPLE_DISABLED,
         activeText: COLORS.WHITE,
         disabledText: COLORS.GREY_400,
         disabledIcon: COLORS.GREY_400,
         disabledIconBackground: COLORS.GREY_100,
+        dangerIcon: COLORS.RED_600,
+        dangerIconBackground: COLORS.GREY_100,
+        dangerText: COLORS.RED_600,
     },
     assetDetailsCard: {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
-        title: COLORS.GREY_800,
+        title: COLORS.GREY_700,
         text: COLORS.GREY_500,
     },
     convertBetterCard: {
@@ -515,7 +611,7 @@ const light: Colors = {
         background: ["#0C2749", "#3EA2C3"],
     },
     tabsFooter: {
-        background: COLORS.GREY_200,
+        background: COLORS.WHITE,
     },
     errorAlert: {
         background: COLORS.RED_50,
@@ -527,11 +623,87 @@ const light: Colors = {
         text: COLORS.GREY_600,
     },
     stakedCard: {
-        fiatValue: COLORS.GREY_600,
+        fiatValue: COLORS.GREY_500,
         vetValue: COLORS.GREY_800,
+        tagBackground: COLORS.GREY_200,
+        tagText: COLORS.GREY_600,
     },
     stakedVetCard: {
         background: COLORS.GREY_50,
+    },
+    veworldLogo: COLORS.PURPLE,
+    dappCard: {
+        name: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_800,
+    history: {
+        button: {
+            background: COLORS.WHITE,
+            text: COLORS.GREY_600,
+            border: COLORS.GREY_200,
+        },
+        titleColor: COLORS.GREY_800,
+        historyItem: {
+            iconBackground: COLORS.GREY_200,
+            iconColor: COLORS.GREY_400,
+            title: COLORS.GREY_600,
+            subtitle: COLORS.GREY_500,
+            rightIconColor: COLORS.GREY_400,
+        },
+        emptyStateColor: COLORS.GREY_600,
+        emptyStateIcon: {
+            background: COLORS.GREY_50,
+            color: COLORS.GREY_400,
+        },
+    },
+    newBottomSheet: {
+        background: COLORS.WHITE,
+    },
+    favoritesSuggestionBanner: {
+        background: COLORS.GREY_50,
+        border: COLORS.GREY_200,
+        color: COLORS.GREY_600,
+        iconColor: COLORS.GREY_500,
+        emptySlot: {
+            background: COLORS.GREY_100,
+            border: COLORS.GREY_300,
+            color: COLORS.GREY_400,
+        },
+    },
+    x2eAppOpenDetails: {
+        background: COLORS.GREY_50,
+        border: COLORS.GREY_100,
+        title: COLORS.GREY_700,
+        description: COLORS.GREY_500,
+        label: {
+            background: COLORS.GREY_100,
+            text: COLORS.GREY_500,
+        },
+        chevron: {
+            background: COLORS.GREY_200,
+            icon: COLORS.GREY_600,
+        },
+        favoriteBtn: {
+            backgroundActive: COLORS.WHITE,
+            borderActive: COLORS.PURPLE,
+            textActive: COLORS.PURPLE,
+            backgroundInactive: COLORS.WHITE,
+            borderInactive: COLORS.GREY_200,
+            textInactive: COLORS.GREY_600,
+        },
+        stats: {
+            icon: COLORS.DARK_PURPLE_DISABLED,
+            caption: COLORS.GREY_500,
+            value: COLORS.GREY_700,
+        },
+    },
+    veBetterCategoryButton: {
+        background: COLORS.GREY_50,
+        border: COLORS.GREY_100,
+        icon: COLORS.DARK_PURPLE_DISABLED,
+        title: COLORS.GREY_700,
     },
 }
 
@@ -568,8 +740,9 @@ const dark: Colors = {
     splashColorLayer: COLORS.LIME_GREEN,
     splashBackground: COLORS.DARK_PURPLE,
     pinEmpty: COLORS.GREY_500,
-    pinFilled: COLORS.PRIMARY_300,
+    pinFilled: COLORS.LIME_GREEN,
     title: COLORS.WHITE,
+    headerTitle: COLORS.WHITE,
     subtitle: COLORS.GREY_300,
     subSubtitle: COLORS.GREY_200,
     card: COLORS.PURPLE,
@@ -610,6 +783,7 @@ const dark: Colors = {
     accountCard: COLORS.LIME_GREEN,
     graphStatsText: COLORS.GREY_400,
     marketInfoBackground: COLORS.PURPLE_DISABLED,
+    favoriteHeader: COLORS.GREY_50,
     successVariant: {
         background: COLORS.GREEN_100,
         border: COLORS.GREEN_200,
@@ -654,21 +828,27 @@ const dark: Colors = {
     },
     actionBottomSheet: {
         background: COLORS.PURPLE,
-        iconBackground: COLORS.PURPLE_DISABLED,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        iconBackground: COLORS.DARK_PURPLE_DISABLED,
+        isActiveBackground: COLORS.PURPLE_DISABLED,
         text: COLORS.WHITE,
         icon: COLORS.GREY_100,
         activeIcon: COLORS.GREY_100,
         activeIconBackground: COLORS.DARK_PURPLE_DISABLED,
+        favoriteIcon: COLORS.LIME_GREEN,
         activeText: COLORS.DARK_PURPLE_DISABLED,
         disabledText: COLORS.DARK_PURPLE_DISABLED,
         disabledIcon: COLORS.DARK_PURPLE_DISABLED,
         disabledIconBackground: COLORS.PURPLE_DISABLED,
+        dangerIcon: COLORS.RED_300,
+        dangerIconBackground: COLORS.PURPLE_DISABLED,
+        dangerText: COLORS.RED_300,
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,
         border: COLORS.PURPLE,
-        title: COLORS.WHITE,
-        text: COLORS.GREY_300,
+        title: COLORS.GREY_50,
+        text: COLORS.GREY_400,
     },
     convertBetterCard: {
         inputBg: COLORS.PURPLE_DISABLED,
@@ -748,12 +928,88 @@ const dark: Colors = {
         text: COLORS.GREY_300,
     },
     stakedCard: {
-        fiatValue: COLORS.GREY_100,
+        fiatValue: COLORS.GREY_300,
         vetValue: COLORS.WHITE,
+        tagBackground: COLORS.PURPLE_DISABLED,
+        tagText: COLORS.GREY_300,
     },
     stakedVetCard: {
         background: COLORS.PURPLE,
     },
+    x2eAppOpenDetails: {
+        background: COLORS.PURPLE_DISABLED,
+        border: COLORS.PURPLE_DISABLED,
+        title: COLORS.GREY_50,
+        description: COLORS.GREY_300,
+        label: {
+            background: COLORS.DARK_PURPLE_DISABLED,
+            text: COLORS.GREY_50,
+        },
+        chevron: {
+            background: COLORS.PURPLE,
+            icon: COLORS.GREY_100,
+        },
+        favoriteBtn: {
+            backgroundActive: COLORS.TRANSPARENT,
+            borderActive: COLORS.LIME_GREEN,
+            textActive: COLORS.LIME_GREEN,
+            backgroundInactive: COLORS.TRANSPARENT,
+            borderInactive: COLORS.DARK_PURPLE_DISABLED,
+            textInactive: COLORS.GREY_50,
+        },
+        stats: {
+            icon: COLORS.LIME_GREEN,
+            caption: COLORS.GREY_300,
+            value: COLORS.GREY_100,
+        },
+    },
+    dappCard: {
+        name: COLORS.GREY_50,
+        description: COLORS.GREY_400,
+        icon: COLORS.GREY_400,
+    },
+    dappTitle: COLORS.GREY_100,
+    veBetterCategoryButton: {
+        background: COLORS.PURPLE,
+        border: COLORS.PURPLE,
+        icon: COLORS.LIME_GREEN,
+        title: COLORS.GREY_50,
+    },
+    history: {
+        button: {
+            background: COLORS.DARK_PURPLE_DISABLED,
+            text: COLORS.GREY_100,
+            border: COLORS.TRANSPARENT,
+        },
+        titleColor: COLORS.GREY_50,
+        historyItem: {
+            iconBackground: COLORS.PURPLE_DISABLED,
+            iconColor: COLORS.DARK_PURPLE_DISABLED,
+            title: COLORS.GREY_50,
+            subtitle: COLORS.GREY_400,
+            rightIconColor: COLORS.GREY_400,
+        },
+        emptyStateColor: COLORS.WHITE,
+        emptyStateIcon: {
+            background: COLORS.PURPLE_DISABLED,
+            color: COLORS.DARK_PURPLE_DISABLED,
+        },
+    },
+    newBottomSheet: {
+        background: COLORS.PURPLE,
+    },
+    favoritesSuggestionBanner: {
+        background: COLORS.PURPLE_DISABLED,
+        border: COLORS.DARK_PURPLE_DISABLED,
+        color: COLORS.GREY_300,
+        iconColor: COLORS.GREY_400,
+        emptySlot: {
+            background: COLORS.PURPLE,
+            border: COLORS.DARK_PURPLE_DISABLED,
+            color: COLORS.DARK_PURPLE_DISABLED,
+        },
+    },
+    veworldLogo: COLORS.GREY_50,
 }
 
 export const colors = { light, dark }

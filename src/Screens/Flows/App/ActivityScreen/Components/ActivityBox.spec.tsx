@@ -1,9 +1,15 @@
 import { render, screen } from "@testing-library/react-native"
-import { ActivityBox } from "./ActivityBox"
 import React from "react"
+import LinearGradient from "react-native-linear-gradient"
+import { ActivityBox } from "./ActivityBox"
+
 import { TestWrapper } from "~Test"
+
+import { BaseIcon } from "~Components/Base/BaseIcon"
+import { DIRECTIONS } from "~Constants"
 import {
     Activity,
+    ActivityStatus,
     ActivityType,
     B3trActionActivity,
     B3trClaimRewardActivity,
@@ -14,15 +20,12 @@ import {
     B3trUpgradeGmActivity,
     B3trXAllocationVoteActivity,
     FungibleTokenActivity,
-    SwapActivity,
-    UnknownTxActivity,
     NETWORK_TYPE,
     NonFungibleTokenActivity,
-    ActivityStatus,
+    SwapActivity,
+    UnknownTxActivity,
+    VeVoteCastActivity,
 } from "~Model"
-import { DIRECTIONS } from "~Constants"
-import LinearGradient from "react-native-linear-gradient"
-import { BaseIcon } from "~Components/Base/BaseIcon"
 
 const mockTheme = {
     colors: {
@@ -306,6 +309,20 @@ const activities: Activity[] = [
         status: "REVERTED",
         eventName: "UNKNOWN_TX",
     } as UnknownTxActivity,
+    {
+        eventName: "VEVOTE_VOTE_CAST",
+        from: "0xf6EDf674a43F725EBa52915f0a3A49A2AF4580E6",
+        to: ["0x435933c8064b4Ae76bE665428e0307eF2cCFBD68"],
+        id: "0x6a05ecf6a1305ec61fb8ea65bf077589998149fa10d44c80464df6d93cffaz03",
+        isTransaction: true,
+        proposalId: "",
+        timestamp: 1482337919000,
+        type: "VEVOTE_VOTE_CAST",
+        blockNumber: 21412814,
+        genesisId: "0x000000000b2bce3c70bc649a02749e8687721b09ed2e15997f466536b20bb127",
+        gasPayer: "0xfc5a8bbff0cfc616472772167024e7cd977f27f6",
+        delegated: true,
+    } as VeVoteCastActivity,
 ]
 
 describe("ActivityBox", () => {
@@ -549,6 +566,19 @@ describe("ActivityBox", () => {
 
             expect(screen.getByTestId("magnify")).toBeTruthy()
             expect(screen.UNSAFE_queryAllByType(LinearGradient).length).toBeGreaterThan(0)
+        })
+    })
+
+    describe("VeVote", () => {
+        it("should render vevote cast correctly", () => {
+            const activity = activities[13] as VeVoteCastActivity
+            render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.VeVoteCast activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+
+            expect(screen.getByTestId(/^VEVOTE-CAST-/i)).toBeTruthy()
         })
     })
 })

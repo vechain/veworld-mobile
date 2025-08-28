@@ -6,7 +6,7 @@ import { TestWrapper } from "~Test"
 import { useVisitedUrls } from "./useVisitedUrls"
 
 jest.mock("~Components/Providers/InAppBrowserProvider", () => ({
-    useInAppBrowser: jest.fn().mockReturnValue({
+    useInAppBrowserOrNull: jest.fn().mockReturnValue({
         navigationState: {},
     } as any),
 }))

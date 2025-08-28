@@ -96,16 +96,23 @@ describe("AccountFiatBalance", () => {
             fiatBalance: "0",
         })
         ;(useNonVechainTokenFiat as jest.Mock).mockReturnValue([])
-        ;(useUserNodes as jest.Mock).mockReturnValue({ stargateNodes: [], isLoading: false })
         ;(useUserStargateNfts as jest.Mock).mockReturnValue({
             ownedStargateNfts: [{ vetAmountStaked: ethers.utils.parseEther("1").toString() }],
+            isLoading: false,
+        })
+
+        const preloadedState = createPreloadedState()
+        // Update the stargate nodes to use the same user address as in the preloaded state
+        const selectedAccountAddress = preloadedState.accounts?.selectedAccount
+        ;(useUserNodes as jest.Mock).mockReturnValue({
+            stargateNodes: [{ xNodeOwner: selectedAccountAddress }],
             isLoading: false,
         })
 
         renderComponentWithProps(<AccountFiatBalance isLoading={false} isVisible />, {
             wrapper: TestWrapper,
             initialProps: {
-                preloadedState: createPreloadedState(),
+                preloadedState,
             },
         })
 

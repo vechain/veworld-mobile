@@ -62,7 +62,7 @@ export const AboutScreen = () => {
                         containerStyle={styles.logoCardContainer}
                         // @ts-ignore
                         style={styles.logoCard}>
-                        <VeWorldLogoSVG width={90} height={62} />
+                        <VeWorldLogoSVG width={90} height={62} color={theme.colors.veworldLogo} />
                     </BaseCard>
                     <BaseSpacer height={16} />
                     <BaseText typographyFont="subTitleBold">{LL.VEWORLD()}</BaseText>

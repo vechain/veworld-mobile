@@ -18,6 +18,7 @@ import {
 } from "~Hooks"
 import { TransactionRequest } from "~Model"
 import {
+    addConnectedDiscoveryApp,
     addPendingDappTransactionActivity,
     selectSelectedAccountOrNull,
     selectSelectedNetwork,
@@ -61,6 +62,8 @@ export const TransactionBottomSheetContent = ({
     })
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const dispatch = useAppDispatch()
 
     const sessionContext = useAppSelector(state =>
         selectVerifyContext(state, request.type === "wallet-connect" ? request.session.topic : undefined),
@@ -122,12 +125,24 @@ export const TransactionBottomSheetContent = ({
         onNavigateToLedger,
     })
 
+    const onSign = useCallback(() => {
+        dispatch(
+            addConnectedDiscoveryApp({
+                name: request.appName,
+                href: new URL(request.appUrl).hostname,
+                connectedTime: Date.now(),
+            }),
+        )
+        return onSubmit()
+    }, [dispatch, onSubmit, request.appName, request.appUrl])
+
     return (
         <>
             <BaseView
                 flexDirection="row"
                 gap={12}
                 justifyContent="space-between"
+                px={24}
                 testID="SIGN_TRANSACTION_REQUEST_TITLE">
                 <BaseView flex={1} flexDirection="row" gap={12}>
                     <BaseIcon name="icon-apps" size={20} color={theme.colors.editSpeedBs.title} />
@@ -181,7 +196,7 @@ export const TransactionBottomSheetContent = ({
                 </GasFeeSpeed>
             </BottomSheetScrollView>
 
-            <BaseView flexDirection="row" gap={16} mt={24}>
+            <BaseView flexDirection="row" gap={16} mt={24} px={24} mb={16}>
                 <BaseButton
                     action={onCancel.bind(null, request)}
                     variant="outline"
@@ -190,7 +205,7 @@ export const TransactionBottomSheetContent = ({
                     {LL.COMMON_BTN_CANCEL()}
                 </BaseButton>
                 <BaseButton
-                    action={onSubmit}
+                    action={onSign}
                     flex={1}
                     disabled={
                         AccountUtils.isObservedAccount(selectedAccount) ||
@@ -382,7 +397,8 @@ export const TransactionBottomSheet = () => {
             snapPoints={snapPoints}
             ref={transactionBsRef}
             onDismiss={onDismiss}
-            enableContentPanningGesture={false}>
+            enableContentPanningGesture={false}
+            noMargins>
             {transactionBsData && (
                 <TransactionBottomSheetContent
                     onCancel={onCancel}
@@ -405,5 +421,6 @@ const baseStyles = () =>
         },
         scrollView: {
             flex: 1,
+            paddingHorizontal: 24,
         },
     })

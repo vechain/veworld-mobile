@@ -33,10 +33,6 @@ export const BannersCarousel = ({ location }: Props) => {
                 href: STARGATE_DAPP_URL_HOME_BANNER,
                 content: <StargateBannerClosable />,
                 closable: location === "home_screen",
-                closeButtonStyle: {
-                    right: 18,
-                    top: 2,
-                },
                 onClose: () => {
                     if (location === "home_screen") {
                         dispatch(setHideStargateBannerHomeScreen(true))
