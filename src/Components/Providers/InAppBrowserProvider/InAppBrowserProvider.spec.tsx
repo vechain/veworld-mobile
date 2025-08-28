@@ -312,7 +312,6 @@ describe("useInAppBrowser hook", () => {
                     appName: "https://vechain.org",
                     appUrl: "https://vechain.org",
                     id: "0x1",
-                    isFirstRequest: true,
                     message: [
                         {
                             data: "0x",
@@ -384,7 +383,6 @@ describe("useInAppBrowser hook", () => {
                     appName: "https://vechain.org",
                     appUrl: "https://vechain.org",
                     id: "0x1",
-                    isFirstRequest: true,
                     message: [
                         {
                             data: "0x",
@@ -584,7 +582,6 @@ describe("useInAppBrowser hook", () => {
                     appName: "https://vechain.org",
                     appUrl: "https://vechain.org",
                     id: "0x1",
-                    isFirstRequest: true,
                     message: {
                         purpose: "identification",
                         payload: {
@@ -656,7 +653,6 @@ describe("useInAppBrowser hook", () => {
                     appName: "https://vechain.org",
                     appUrl: "https://vechain.org",
                     id: "0x1",
-                    isFirstRequest: true,
                     message: {
                         purpose: "identification",
                         payload: {
@@ -872,7 +868,6 @@ describe("useInAppBrowser hook", () => {
                     appName: "https://vechain.org",
                     appUrl: "https://vechain.org",
                     id: "0x1",
-                    isFirstRequest: true,
                     ...typedDataMsg,
                     origin: "https://vechain.org",
                     method: RequestMethods.SIGN_TYPED_DATA,
@@ -934,7 +929,6 @@ describe("useInAppBrowser hook", () => {
                     appName: "https://vechain.org",
                     appUrl: "https://vechain.org",
                     id: "0x1",
-                    isFirstRequest: true,
                     ...typedDataMsg,
                     origin: "https://vechain.org",
                     method: RequestMethods.SIGN_TYPED_DATA,
