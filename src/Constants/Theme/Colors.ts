@@ -1014,7 +1014,7 @@ const dark: Colors = {
     veworldLogo: COLORS.GREY_50,
     switch: {
         true: COLORS.LIGHT_GREEN,
-        false: COLORS.PURPLE_DISABLED,
+        false: COLORS.DARK_PURPLE_DISABLED,
     },
 }
 
