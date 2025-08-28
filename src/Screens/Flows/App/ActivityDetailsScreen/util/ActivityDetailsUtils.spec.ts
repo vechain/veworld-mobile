@@ -83,6 +83,32 @@ describe("ActivityDetailsUtils", () => {
             expect(title).toBe("Vote on round #1")
         })
 
+        it("should return 'NFT sold' when NFT_SALE activity has direction UP", () => {
+            const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
+            const { LL } = result.current
+
+            const activity = {
+                ...activityMock,
+                type: ActivityType.NFT_SALE,
+                direction: DIRECTIONS.UP,
+            }
+            const title = getActivityTitle(activity, LL)
+            expect(title).toBe("NFT sold")
+        })
+
+        it("should return 'NFT purchased' when NFT_SALE activity has direction DOWN", () => {
+            const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
+            const { LL } = result.current
+
+            const activity = {
+                ...activityMock,
+                type: ActivityType.NFT_SALE,
+                direction: DIRECTIONS.DOWN,
+            }
+            const title = getActivityTitle(activity, LL)
+            expect(title).toBe("NFT purchased")
+        })
+
         it("should return the undefined for an unknown activity type", () => {
             const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
             const { LL } = result.current
