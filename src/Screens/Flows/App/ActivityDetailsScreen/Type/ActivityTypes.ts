@@ -12,5 +12,5 @@ export type ActivityDetail = {
     valueAdditional?: string
     icon?: IconKey
     isLoading?: boolean
-    onValuePress?: () => void
+    onValuePress?: () => void | Promise<void>
 }

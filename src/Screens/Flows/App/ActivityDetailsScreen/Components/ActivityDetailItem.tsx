@@ -1,4 +1,4 @@
-import React, { memo } from "react"
+import React, { memo, useMemo } from "react"
 import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSkeleton, BaseText, BaseTouchable, BaseView, FiatBalance } from "~Components"
 import { useTheme } from "~Hooks"
@@ -36,6 +36,17 @@ const ActivityDetailItemSkeleton = () => {
 export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, border = true, isLoading = false }) => {
     const theme = useTheme()
 
+    const activityDetailValue = useMemo(() => {
+        if (isLoading) return <ActivityDetailItemSkeleton />
+        if (typeof activityDetail.value === "string")
+            return (
+                <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
+                    {activityDetail.value ?? ""}
+                </BaseText>
+            )
+        return activityDetail.value
+    }, [activityDetail.typographyFont, activityDetail.underline, activityDetail.value, isLoading])
+
     return (
         <BaseView
             key={activityDetail.id}
@@ -66,15 +77,7 @@ export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, borde
                     action={activityDetail.onValuePress}
                     disabled={!activityDetail.onValuePress}
                     style={baseStyles.valueContainer}>
-                    {isLoading ? (
-                        <ActivityDetailItemSkeleton />
-                    ) : typeof activityDetail.value === "string" ? (
-                        <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
-                            {activityDetail.value ?? ""}
-                        </BaseText>
-                    ) : (
-                        activityDetail.value
-                    )}
+                    {activityDetailValue}
 
                     {activityDetail.valueAdditional && (
                         <FiatBalance

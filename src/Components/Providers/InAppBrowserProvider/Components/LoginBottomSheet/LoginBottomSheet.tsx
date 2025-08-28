@@ -164,7 +164,7 @@ const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef
             </DappDetailsCard>
             <BaseSpacer height={24} />
             {!request.external && (
-                <BaseView flexDirection="row" gap={16} mb={24}>
+                <BaseView flexDirection="row" gap={16} mb={24} py={6}>
                     <BaseSwitch value={keepMeLoggedIn} onValueChange={setKeepMeLoggedIn} />
                     <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
                         {LL.LOGIN_KEEP_ME_SIGNED_IN()}
@@ -402,9 +402,9 @@ export const LoginBottomSheet = () => {
                 method: request.method,
             })
 
-            //TODO: Maybe add MP event
+            track(AnalyticsEvent.DAPP_LOGIN_REJECTED)
         },
-        [postMessage],
+        [postMessage, track],
     )
 
     const onCancel = useCallback(
@@ -433,7 +433,7 @@ export const LoginBottomSheet = () => {
     }, [loginBsData, rejectRequest, setLoginBsData])
 
     return (
-        <BaseBottomSheet dynamicHeight ref={loginBsRef} onDismiss={onDismiss}>
+        <BaseBottomSheet dynamicHeight ref={loginBsRef} onDismiss={onDismiss} floating>
             {loginBsData && (
                 <LoginBottomSheetContent
                     onCancel={onCancel}

@@ -60,6 +60,7 @@ import {
     WindowRequest,
     WindowResponse,
 } from "./types"
+import { getLoginKind } from "./Utils/LoginUtils"
 
 const { PackageDetails } = NativeModules
 
@@ -537,13 +538,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 return
             }
 
-            const getKind = () => {
-                if (request.params.value === null) return "simple"
-                if ("payload" in request.params.value) return "certificate"
-                return "typed-data"
-            }
-
-            const kind = getKind()
+            const kind = getLoginKind(request)
 
             setLoginBsData({
                 appName,
@@ -594,7 +589,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             const message = request.message
 
             track(AnalyticsEvent.DISCOVERY_TRANSACTION_REQUESTED, {
-                dapp: navigationState?.url,
+                dapp: new URL(appUrl).origin,
             })
 
             const isValid = DAppUtils.isValidTxMessage(message)
@@ -621,7 +616,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         },
         [
             track,
-            navigationState?.url,
             checkIfOldRequestIsInvalid,
             selectedAccountAddress,
             selectedNetwork.genesis.id,
@@ -636,7 +630,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             const message = request.message
 
             track(AnalyticsEvent.DISCOVERY_CERTIFICATE_REQUESTED, {
-                dapp: navigationState?.url,
+                dapp: new URL(appUrl).origin,
             })
 
             const isValid = DAppUtils.isValidCertMessage(message)
@@ -666,7 +660,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             checkIfOldRequestIsInvalid,
             initAndOpenChangeAccountNetworkBottomSheet,
             navigateToCertificateScreen,
-            navigationState?.url,
             postMessage,
             selectedAccountAddress,
             selectedNetwork.genesis.id,
@@ -681,7 +674,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             const isValid = DAppUtils.isValidSignedDataMessage(message)
 
             track(AnalyticsEvent.DISCOVERY_SIGNED_DATA_REQUESTED, {
-                dapp: navigationState?.url,
+                dapp: new URL(appUrl).origin,
             })
 
             if (!isValid) {
@@ -709,7 +702,6 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             checkIfOldRequestIsInvalid,
             initAndOpenChangeAccountNetworkBottomSheet,
             navigateToSignedDataScreen,
-            navigationState?.url,
             postMessage,
             selectedAccountAddress,
             selectedNetwork.genesis.id,
@@ -719,7 +711,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
 
     const validateConnectMessage = useCallback(
         (request: LoginRequest, appUrl: string, appName: string) => {
-            //TODO: Add Analytics
+            track(AnalyticsEvent.DAPP_LOGIN_REQUESTED, { kind: getLoginKind(request), dapp: new URL(appUrl).origin })
             if (request.params.value === null) {
                 //Handle login without anything
                 if (selectedNetwork.genesis.id.toLowerCase() === request.genesisId.toLowerCase()) {
@@ -776,7 +768,13 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             setNavigateToOperation(() => () => navigateToLoginScreen(request, appUrl, appName))
             initAndOpenChangeAccountNetworkBottomSheet(request)
         },
-        [initAndOpenChangeAccountNetworkBottomSheet, navigateToLoginScreen, postMessage, selectedNetwork.genesis.id],
+        [
+            initAndOpenChangeAccountNetworkBottomSheet,
+            navigateToLoginScreen,
+            postMessage,
+            selectedNetwork.genesis.id,
+            track,
+        ],
     )
 
     const addAppAndNavToRequest = useCallback(
