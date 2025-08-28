@@ -1,12 +1,7 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
-import {
-    DragEndParams,
-    NestableDraggableFlatList,
-    NestableScrollContainer,
-    RenderItem,
-} from "react-native-draggable-flatlist"
+import DraggableFlatList, { DragEndParams, RenderItem } from "react-native-draggable-flatlist"
 import {
     AnimatedSaveHeaderButton,
     BaseBottomSheet,
@@ -156,25 +151,29 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
             onDismiss={handleClose}>
             <BaseView style={styles.container}>
                 {headerContent}
-                <NestableScrollContainer style={styles.bottomSheetContent} showsVerticalScrollIndicator={false}>
-                    <NestableDraggableFlatList
-                        scrollEnabled={!isEditingMode}
+                <BaseView flex={1}>
+                    <DraggableFlatList
+                        scrollEnabled={true}
                         contentContainerStyle={styles.listContentContainer}
                         extraData={isEditingMode}
                         data={reorderedDapps}
                         onDragEnd={onDragEnd}
-                        keyExtractor={(item, index) => item?.href ?? index.toString()}
+                        keyExtractor={item => item.href}
                         renderItem={renderItem}
                         ListFooterComponent={renderFooter}
                         showsVerticalScrollIndicator={false}
-                        testID="draggable-dapps-list"
+                        testID="draggable-flatlist"
+                        activationDistance={10}
                         windowSize={5}
-                        activationDistance={isEditingMode ? 10 : 30}
                         ListEmptyComponent={
-                            <ListEmptyResults subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()} icon={"icon-search"} />
+                            <ListEmptyResults
+                                subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()}
+                                icon={"icon-search"}
+                                testID="empty-results"
+                            />
                         }
                     />
-                </NestableScrollContainer>
+                </BaseView>
             </BaseView>
         </BaseBottomSheet>
     )
@@ -185,9 +184,6 @@ const baseStyles = (theme: ColorThemeType) =>
         container: {
             flex: 1,
         },
-        bottomSheetContent: {
-            paddingHorizontal: 24,
-        },
         leftElement: {
             marginLeft: 8,
         },
@@ -195,8 +191,8 @@ const baseStyles = (theme: ColorThemeType) =>
             marginRight: 8,
         },
         listContentContainer: {
-            flexGrow: 1,
             paddingTop: 12,
+            paddingHorizontal: 24,
         },
         layout: {
             backgroundColor: theme.colors.actionBottomSheet.background,

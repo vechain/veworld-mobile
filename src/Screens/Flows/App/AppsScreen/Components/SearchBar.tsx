@@ -58,7 +58,7 @@ export const SearchBar = ({ onTextChange, filteredSearch, onSubmit }: Props) => 
     return (
         <BaseTextInput
             testID="search-bar-input"
-            placeholder={LL.DISCOVER_SEARCH()}
+            placeholder={LL.APPS_SEARCH_PLACEHOLDER()}
             placeholderTextColor={COLORS.GREY_400}
             cursorColor={COLORS.GREY_300}
             onChangeText={onTextChange}
