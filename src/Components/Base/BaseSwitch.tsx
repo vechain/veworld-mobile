@@ -13,34 +13,63 @@ import { useThemedStyles } from "~Hooks"
 
 type Props = {
     onValueChange: (newValue: boolean) => void
-    value: boolean | undefined
+    value?: boolean
+    testID?: string
 }
 
-export const BaseSwitch = ({ onValueChange, value }: Props) => {
+/**
+ * Calculated by doing 40(width)-2(padding from the left)-16(size of the ball)
+ */
+const LEFT_TRUE = 22
+const LEFT_FALSE = 2
+
+export const BaseSwitch = ({ onValueChange, value, testID }: Props) => {
     const { styles, theme } = useThemedStyles(baseStyles)
 
-    const leftSharedValue = useSharedValue(value ? 22 : 2)
+    const leftSharedValue = useSharedValue(value ? LEFT_TRUE : LEFT_FALSE)
+    const baseValue = useSharedValue(0)
 
     useEffect(() => {
-        leftSharedValue.value = value ? 22 : 2
+        //Align the value
+        leftSharedValue.value = value ? LEFT_TRUE : LEFT_FALSE
     }, [leftSharedValue, value])
 
     const toggleValue = useCallback(() => {
         const newValue = !value
-        leftSharedValue.value = withTiming(newValue ? 22 : 2, { duration: 300 }, () => {
+        leftSharedValue.value = withTiming(newValue ? LEFT_TRUE : LEFT_FALSE, { duration: 300 }, () => {
             "worklet"
             runOnJS(onValueChange)(newValue)
         })
     }, [leftSharedValue, onValueChange, value])
 
     const tap = Gesture.Tap().onEnd(toggleValue)
+    const pan = Gesture.Pan()
+        .onStart(() => {
+            baseValue.value = leftSharedValue.value
+        })
+        .onUpdate(e => {
+            let newValue = e.translationX + baseValue.value
+            if (newValue <= LEFT_FALSE) newValue = LEFT_FALSE
+            if (newValue >= LEFT_TRUE) newValue = LEFT_TRUE
+            leftSharedValue.value = newValue
+        })
+        .onEnd(() => {
+            "worklet"
+            if (leftSharedValue.value <= LEFT_FALSE) {
+                leftSharedValue.value = LEFT_FALSE
+                runOnJS(onValueChange)(false)
+            } else if (leftSharedValue.value >= LEFT_TRUE) {
+                leftSharedValue.value = LEFT_TRUE
+                runOnJS(onValueChange)(true)
+            } else leftSharedValue.value = value ? LEFT_TRUE : 2
+        })
 
     const rootAnimatedStyles = useAnimatedStyle(() => {
         return {
             backgroundColor: interpolateColor(
                 leftSharedValue.value,
-                [2, 22],
-                [theme.colors.primaryDisabled, theme.colors.switchEnabled],
+                [2, LEFT_TRUE],
+                [theme.colors.switch.false, theme.colors.switch.true],
             ),
         }
     }, [leftSharedValue.value])
@@ -53,8 +82,10 @@ export const BaseSwitch = ({ onValueChange, value }: Props) => {
 
     return (
         <GestureDetector gesture={tap}>
-            <Animated.View style={[styles.root, rootAnimatedStyles]}>
-                <Animated.View style={[styles.ball, ballStyles]} />
+            <Animated.View style={[styles.root, rootAnimatedStyles]} testID={testID}>
+                <GestureDetector gesture={pan}>
+                    <Animated.View style={[styles.ball, ballStyles]} />
+                </GestureDetector>
             </Animated.View>
         </GestureDetector>
     )
