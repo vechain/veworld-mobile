@@ -28,6 +28,7 @@ import {
     TypedDataActivity,
     UnknownTxActivity,
     VeBetterDaoDapp,
+    VeVoteCastActivity,
 } from "~Model"
 import { Routes } from "~Navigation"
 import { selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
@@ -168,6 +169,8 @@ const Item = ({
         case ActivityType.STARGATE_UNSTAKE:
         case ActivityType.STARGATE_DELEGATE_ONLY:
             return <ActivityBox.Staking activity={activity as StargateActivity} onPress={onPress} />
+        case ActivityType.VEVOTE_VOTE_CAST:
+            return <ActivityBox.VeVoteCast activity={activity as VeVoteCastActivity} onPress={onPress} />
         default:
             return null
     }

@@ -1,3 +1,4 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { renderHook } from "@testing-library/react-hooks"
 import { act } from "@testing-library/react-native"
 import React from "react"
@@ -64,14 +65,24 @@ const createWrapper = (platform: PlatformOSType) => {
             resetThemeCache: jest.fn(),
             changeTheme: jest.fn(),
         })
+        const queryClient = new QueryClient({
+            defaultOptions: {
+                queries: {
+                    // ✅ turns retries off
+                    retry: false,
+                },
+            },
+        })
         return (
             <Provider store={getStore(preloadedState)}>
                 <FeatureFlaggedSmartWallet nodeUrl="https://testnet.vechain.com" networkType="testnet">
                     <InteractionProvider>
-                        <InAppBrowserProvider platform={platform}>
-                            {children}
-                            <BaseToast />
-                        </InAppBrowserProvider>
+                        <QueryClientProvider client={queryClient}>
+                            <InAppBrowserProvider platform={platform}>
+                                {children}
+                                <BaseToast />
+                            </InAppBrowserProvider>
+                        </QueryClientProvider>
                     </InteractionProvider>
                 </FeatureFlaggedSmartWallet>
             </Provider>

@@ -27,6 +27,7 @@ import {
     TypedData,
     TypedDataActivity,
     UnknownTxActivity,
+    VeVoteCastActivity,
 } from "~Model"
 import { EventTypeResponse } from "~Networking"
 import { ActivityUtils, AddressUtils, debug, TransactionUtils } from "~Utils"
@@ -710,6 +711,9 @@ export const createActivityFromIndexedHistoryEvent = (
                 tokenId: tokenId,
                 levelId: levelId,
             } as StargateActivity
+        }
+        case ActivityEvent.VEVOTE_VOTE_CAST: {
+            return { ...baseActivity, proposalId } as VeVoteCastActivity
         }
         case ActivityEvent.UNKNOWN_TX:
             return {

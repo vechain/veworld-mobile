@@ -2,8 +2,9 @@ import { useNavigation } from "@react-navigation/native"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import React, { useCallback } from "react"
 import { ImageBackground, StyleSheet, TouchableOpacity, View } from "react-native"
+import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated from "react-native-reanimated"
-import { BaseIcon, BaseText } from "~Components"
+import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
@@ -37,13 +38,22 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
             onPress={onPress}>
             <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
                 <View style={styles.header}>
-                    <BaseText typographyFont="bodySemiBold" color={"white"} numberOfLines={1} flexGrow={1}>
-                        {tab.title}
-                    </BaseText>
+                    <View style={styles.headerText}>
+                        {tab.favicon ? (
+                            <FastImage source={{ uri: tab.favicon }} style={styles.headerFavicon as ImageStyle} />
+                        ) : (
+                            <BaseView style={[styles.headerFavicon, styles.headerFaviconNotFound]}>
+                                <BaseIcon name="icon-globe" size={8} color={COLORS.GREY_400} />
+                            </BaseView>
+                        )}
+                        <BaseText typographyFont="bodySemiBold" color={"white"} numberOfLines={1}>
+                            {tab.title}
+                        </BaseText>
+                    </View>
+                    <TouchableOpacity style={styles.closeIcon} onPress={onClose} activeOpacity={0.8}>
+                        <BaseIcon name="icon-x" size={16} color={"white"} />
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity style={styles.footer} onPress={onClose} activeOpacity={0.8}>
-                    <BaseIcon name="icon-x" size={16} color={"white"} />
-                </TouchableOpacity>
             </ImageBackground>
         </AnimatedTouchableOpacity>
     )
@@ -56,23 +66,46 @@ const baseStyles = (theme: ColorThemeType) => {
     return StyleSheet.create({
         container: {
             width: cardSize,
-            height: 188,
+            height: 194,
             minWidth: 148,
             borderRadius: 12,
             borderWidth: 3,
-            backgroundColor: theme.colors.background,
-            borderColor: theme.colors.background,
+            backgroundColor: theme.colors.tabsFooter.background,
+            borderColor: theme.colors.tabsFooter.background,
             overflow: "hidden",
         },
         selected: {
-            borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.GREY_400,
+            borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
         },
         header: {
             flexDirection: "row",
             alignItems: "center",
-            backgroundColor: "#202226BF",
+            justifyContent: "space-between",
+            gap: 8,
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE_90_TRANSPARENT : COLORS.PURPLE_RGBA_TRANSPARENT,
+        },
+        headerText: {
+            flex: 0.8,
+            flexDirection: "row",
+            alignItems: "center",
+            gap: 8,
+            paddingLeft: 8,
+            paddingVertical: 8,
+        },
+        headerFavicon: {
+            width: 16,
+            height: 16,
+            borderRadius: 4,
+        },
+        headerFaviconNotFound: {
+            padding: 4,
+            backgroundColor: COLORS.GREY_200,
+        },
+        closeIcon: {
+            alignItems: "center",
+            justifyContent: "center",
             paddingHorizontal: 12,
-            paddingVertical: 10,
+            paddingVertical: 8,
         },
         image: {
             width: "100%",
@@ -80,14 +113,6 @@ const baseStyles = (theme: ColorThemeType) => {
             flexDirection: "column",
             justifyContent: "space-between",
             borderRadius: 8,
-        },
-        footer: {
-            flexDirection: "row",
-            justifyContent: "center",
-            alignItems: "center",
-            backgroundColor: "#202226BF",
-            paddingHorizontal: 12,
-            paddingVertical: 10,
         },
     })
 }

@@ -6,6 +6,8 @@ on:
   pull_request:
     branches:
       - "*"
+  schedule:
+    - cron: '0 22 * * 0-4'
 
   push:
     branches:
@@ -19,14 +21,16 @@ jobs:
   build-and-test-ios:
     if: >
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      github.event_name == 'workflow_dispatch'
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule'
     uses: ./.github/workflows/e2e-ios.yml
     secrets: inherit
 
   build-and-test-android:
     if: >
       (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
-      github.event_name == 'workflow_dispatch'
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'schedule'
     uses: ./.github/workflows/e2e-android.yml
     secrets: inherit
 

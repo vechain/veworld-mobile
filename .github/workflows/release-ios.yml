@@ -26,7 +26,7 @@ on:
 jobs:
     build-release-ios:
         name: Build release for iOS
-        runs-on: macos-15-xlarge
+        runs-on: macos-14-xlarge
         environment: ios-release
 
         # Proceed only if it's either not a release event or it's a pre-release.
@@ -58,6 +58,7 @@ jobs:
                   brew install applesimutils
                   brew install fastlane
                   gem install cocoapods # Install CocoaPods globally
+                  sudo xcode-select -s /Applications/Xcode_16.2.app
 
                   bundle install
               env:
@@ -124,5 +125,7 @@ jobs:
               run: |
                   cd ios
                   git config --global url."https://${{ secrets.CI_USER_TOKEN }}@github.com".insteadOf https://github.com
+                  git config --local user.name  "github-actions[bot]"
+                  git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
                   cd fastlane
                   fastlane build_ci username:${{secrets.CI_USER}} token:${{secrets.CI_USER_TOKEN}} version:${{inputs.version}} build:${{inputs.build}}

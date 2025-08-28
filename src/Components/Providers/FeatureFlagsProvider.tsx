@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
-import React from "react"
+import React, { useCallback } from "react"
+import DeviceInfo from "react-native-device-info"
 import { FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
+import { SemanticVersionUtils } from "~Utils"
 
 export const initialState: FeatureFlags = {
     marketsProxyFeature: {
@@ -9,7 +11,7 @@ export const initialState: FeatureFlags = {
         fallbackUrl: "https://api.coingecko.com/api/v3",
     },
     pushNotificationFeature: {
-        enabled: false,
+        enabled: true,
     },
     subdomainClaimFeature: {
         enabled: true,
@@ -43,6 +45,11 @@ export const initialState: FeatureFlags = {
     smartWalletFeature: {
         enabled: false,
     },
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: true,
+        },
+    },
 }
 
 const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)
@@ -50,12 +57,53 @@ const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initial
 export const featureFlagsQueryKey = ["Feature", "Flags"]
 
 export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }) => {
+    const currentVersion = DeviceInfo.getVersion()
+
+    const isFeatureEnabled = useCallback(
+        (value: string) => {
+            if (SemanticVersionUtils.isVersion(value)) {
+                return SemanticVersionUtils.moreThanOrEqual(currentVersion, value)
+            }
+
+            return value
+        },
+        [currentVersion],
+    )
+
+    const parseFeature = useCallback(
+        (feature: string | object): string | object | boolean => {
+            // If not an object, return as is
+            if (typeof feature !== "object") {
+                return isFeatureEnabled(feature)
+            }
+
+            // Recursively process all keys if no availability keys at this level
+            const parsedEntries = Object.entries(feature).map(([key, value]) => {
+                return [key, parseFeature(value)]
+            })
+
+            return Object.fromEntries(parsedEntries)
+        },
+        [isFeatureEnabled],
+    )
+
+    const parseFeatureFlags = useCallback(
+        (data: unknown): FeatureFlags => {
+            if (!data || typeof data !== "object") {
+                return initialState
+            }
+
+            return parseFeature(data) as FeatureFlags
+        },
+        [parseFeature],
+    )
+
     const { data } = useQuery({
         queryKey: featureFlagsQueryKey,
         queryFn: getFeatureFlags,
         staleTime: 0,
         enabled: true,
-        placeholderData: initialState,
+        select: parseFeatureFlags,
     })
 
     return <FeatureFlagsContex.Provider value={data ?? initialState}>{children}</FeatureFlagsContex.Provider>

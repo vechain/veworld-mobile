@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useCallback } from "react"
 import { StyleSheet, View } from "react-native"
 import LottieView from "lottie-react-native"
-import { AppLoader as AppLoaderAnimation } from "~Assets"
+import { AppLoaderLight, AppLoaderDark } from "~Assets"
 import { BaseView, BlurView } from "~Components"
 import { SCREEN_HEIGHT, SCREEN_WIDTH } from "~Constants"
 import Animated, {
@@ -130,7 +130,7 @@ export const AppLoader = ({ children }: Props) => {
                 {RenderBackdrop}
                 <LottieView
                     ref={lottieRef}
-                    source={AppLoaderAnimation}
+                    source={theme.isDark ? AppLoaderDark : AppLoaderLight}
                     autoPlay={isAppLoading}
                     loop
                     style={styles.lottie}
@@ -153,6 +153,6 @@ const styles = StyleSheet.create({
     },
     lottie: {
         width: "100%",
-        height: 100,
+        height: 140,
     },
 })
