@@ -76,6 +76,7 @@ export interface DappMetadata {
     name: string
     url: string
     isDapp: boolean
+    description?: string
 }
 
 // Resolve an issue with types for the WebView component
@@ -1148,6 +1149,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
                 name: foundDapp.name,
                 url: navigationState?.url,
                 isDapp: true,
+                description: foundDapp.desc,
             }
 
         return {

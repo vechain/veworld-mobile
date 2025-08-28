@@ -209,10 +209,6 @@ type RootTranslation = {
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: string
 	/**
-	 * M​a​n​a​g​i​n​g
-	 */
-	STARGATE_DELEGATEE_LABEL: string
-	/**
 	 * N​o​ ​S​w​a​p​s​ ​t​o​ ​s​h​o​w​ ​y​e​t
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: string
@@ -228,34 +224,6 @@ type RootTranslation = {
 	 * T​r​a​n​s​f​e​r
 	 */
 	ACTIVITY_TRANSFER_LABEL: string
-	/**
-	 * A​p​p​s
-	 */
-	APPS_TITLE: string
-	/**
-	 * J​o​i​n​e​d
-	 */
-	APPS_BS_JOINED: string
-	/**
-	 * U​s​e​r​s
-	 */
-	APPS_BS_USERS: string
-	/**
-	 * A​c​t​i​o​n​s
-	 */
-	APPS_BS_ACTIONS: string
-	/**
-	 * A​d​d​ ​t​o​ ​f​a​v​o​r​i​t​e​s
-	 */
-	APPS_BS_BTN_ADD_FAVORITE: string
-	/**
-	 * F​a​v​o​r​i​t​e​d
-	 */
-	APPS_BS_BTN_REMOVE_FAVORITE: string
-	/**
-	 * O​p​e​n
-	 */
-	APPS_BS_BTN_OPEN_APP: string
 	/**
 	 * A​L​L
 	 */
@@ -456,6 +424,38 @@ type RootTranslation = {
 	 */
 	ALERT_TITLE_VOT3: string
 	/**
+	 * A​c​t​i​o​n​s
+	 */
+	APPS_BS_ACTIONS: string
+	/**
+	 * A​d​d​ ​t​o​ ​f​a​v​o​r​i​t​e​s
+	 */
+	APPS_BS_BTN_ADD_FAVORITE: string
+	/**
+	 * O​p​e​n
+	 */
+	APPS_BS_BTN_OPEN_APP: string
+	/**
+	 * F​a​v​o​r​i​t​e​d
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: string
+	/**
+	 * J​o​i​n​e​d
+	 */
+	APPS_BS_JOINED: string
+	/**
+	 * U​s​e​r​s
+	 */
+	APPS_BS_USERS: string
+	/**
+	 * A​p​p​s
+	 */
+	APPS_SCREEN_TITLE: string
+	/**
+	 * A​p​p​s
+	 */
+	APPS_TITLE: string
+	/**
 	 * E​n​e​r​g​y
 	 */
 	APP_CATEGORY_ENERGY: string
@@ -496,10 +496,6 @@ type RootTranslation = {
 	 */
 	APP_CATEGORY_WEB3: string
 	/**
-	 * A​p​p​s
-	 */
-	APPS_SCREEN_TITLE: string
-	/**
 	 * A​p​p​ ​u​p​d​a​t​e​d
 	 */
 	APP_UPDATED: string
@@ -533,6 +529,10 @@ type RootTranslation = {
 	 * @param {string} version
 	 */
 	APP_VERSION: RequiredParams<'version'>
+	/**
+	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
+	 */
+	APPS_SEARCH_PLACEHOLDER: string
 	/**
 	 * A​p​r​i​l
 	 */
@@ -1165,7 +1165,7 @@ type RootTranslation = {
 	 */
 	BROWSER_COPY_LINK_SUCCESS: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_FAVOURITES_TITLE: string
 	/**
@@ -1866,11 +1866,11 @@ type RootTranslation = {
 	 */
 	COMMON_LBL_ERROR: string
 	/**
-	 * F​a​v​o​u​r​i​t​e
+	 * F​a​v​o​r​i​t​e
 	 */
 	COMMON_LBL_FAVOURITE: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	COMMON_LBL_FAVOURITES: string
 	/**
@@ -2448,7 +2448,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_EMPTY_FAVOURITES: string
 	/**
-	 * N​o​ ​f​a​v​o​u​r​i​t​e​s​ ​a​d​d​e​d
+	 * N​o​ ​f​a​v​o​r​i​t​e​s​ ​a​d​d​e​d
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: string
 	/**
@@ -2496,7 +2496,7 @@ type RootTranslation = {
 	 */
 	DISCOVER_SUGGESTED_FOR_YOU: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	DISCOVER_TAB_FAVOURITES: string
 	/**
@@ -2712,7 +2712,11 @@ type RootTranslation = {
 	 */
 	FACE_ID: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * A​d​d​ ​y​o​u​r​ ​f​a​v​o​r​i​t​e​ ​a​p​p​s
+	 */
+	FAVORITES_SUGGESTION_BANNER_TITLE: string
+	/**
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: string
 	/**
@@ -2724,7 +2728,7 @@ type RootTranslation = {
 	 */
 	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: string
 	/**
-	 * F​a​v​o​u​r​i​t​e​s
+	 * F​a​v​o​r​i​t​e​s
 	 */
 	FAVOURITES_DAPPS_TITLE: string
 	/**
@@ -4601,6 +4605,10 @@ type RootTranslation = {
 	 */
 	TITLE_MNEMONIC: string
 	/**
+	 * M​o​r​e​ ​o​p​t​i​o​n​s
+	 */
+	TITLE_MORE_OPTIONS: string
+	/**
 	 * N​e​t​w​o​r​k
 	 */
 	TITLE_NETWORK: string
@@ -5016,10 +5024,6 @@ type RootTranslation = {
 	 * Y​e​s​t​e​r​d​a​y
 	 */
 	YESTERDAY: string
-	/**
-	 * A​d​d​ ​y​o​u​r​ ​f​a​v​o​r​i​t​e​ ​a​p​p​s
-	 */
-	FAVORITES_SUGGESTION_BANNER_TITLE: string
 }
 
 export type TranslationFunctions = {
@@ -5194,10 +5198,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 */
 	ACTIVITY_STARGATE_UNSTAKE_LABEL: () => LocalizedString
 	/**
-	 * Managing
-	 */
-	STARGATE_DELEGATEE_LABEL: () => LocalizedString
-	/**
 	 * No Swaps to show yet
 	 */
 	ACTIVITY_SWAP_EMPTY_LABEL: () => LocalizedString
@@ -5213,34 +5213,6 @@ Wanchain manages the cross-chain process and ensures the wrapped {symbol} is bac
 	 * Transfer
 	 */
 	ACTIVITY_TRANSFER_LABEL: () => LocalizedString
-	/**
-	 * Apps
-	 */
-	APPS_TITLE: () => LocalizedString
-	/**
-	 * Joined
-	 */
-	APPS_BS_JOINED: () => LocalizedString
-	/**
-	 * Users
-	 */
-	APPS_BS_USERS: () => LocalizedString
-	/**
-	 * Actions
-	 */
-	APPS_BS_ACTIONS: () => LocalizedString
-	/**
-	 * Add to favorites
-	 */
-	APPS_BS_BTN_ADD_FAVORITE: () => LocalizedString
-	/**
-	 * Favorited
-	 */
-	APPS_BS_BTN_REMOVE_FAVORITE: () => LocalizedString
-	/**
-	 * Open
-	 */
-	APPS_BS_BTN_OPEN_APP: () => LocalizedString
 	/**
 	 * ALL
 	 */
@@ -5439,6 +5411,38 @@ Try reconnect your device to the internet.
 	 */
 	ALERT_TITLE_VOT3: () => LocalizedString
 	/**
+	 * Actions
+	 */
+	APPS_BS_ACTIONS: () => LocalizedString
+	/**
+	 * Add to favorites
+	 */
+	APPS_BS_BTN_ADD_FAVORITE: () => LocalizedString
+	/**
+	 * Open
+	 */
+	APPS_BS_BTN_OPEN_APP: () => LocalizedString
+	/**
+	 * Favorited
+	 */
+	APPS_BS_BTN_REMOVE_FAVORITE: () => LocalizedString
+	/**
+	 * Joined
+	 */
+	APPS_BS_JOINED: () => LocalizedString
+	/**
+	 * Users
+	 */
+	APPS_BS_USERS: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	APPS_SCREEN_TITLE: () => LocalizedString
+	/**
+	 * Apps
+	 */
+	APPS_TITLE: () => LocalizedString
+	/**
 	 * Energy
 	 */
 	APP_CATEGORY_ENERGY: () => LocalizedString
@@ -5479,10 +5483,6 @@ Try reconnect your device to the internet.
 	 */
 	APP_CATEGORY_WEB3: () => LocalizedString
 	/**
-	 * Apps
-	 */
-	APPS_SCREEN_TITLE: () => LocalizedString
-	/**
 	 * App updated
 	 */
 	APP_UPDATED: () => LocalizedString
@@ -5514,6 +5514,10 @@ Try reconnect your device to the internet.
 	 * version {version}
 	 */
 	APP_VERSION: (arg: { version: string }) => LocalizedString
+	/**
+	 * Search an App or Website...
+	 */
+	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
 	/**
 	 * April
 	 */
@@ -6141,7 +6145,7 @@ Thanks for your patience!
 	 */
 	BROWSER_COPY_LINK_SUCCESS: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	BROWSER_FAVOURITES_TITLE: () => LocalizedString
 	/**
@@ -6837,11 +6841,11 @@ Thanks for your patience!
 	 */
 	COMMON_LBL_ERROR: () => LocalizedString
 	/**
-	 * Favourite
+	 * Favorite
 	 */
 	COMMON_LBL_FAVOURITE: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	COMMON_LBL_FAVOURITES: () => LocalizedString
 	/**
@@ -7413,7 +7417,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_EMPTY_FAVOURITES: () => LocalizedString
 	/**
-	 * No favourites added
+	 * No favorites added
 	 */
 	DISCOVER_EMPTY_FAVOURITES_SUBTITLE: () => LocalizedString
 	/**
@@ -7461,7 +7465,7 @@ Thanks for your patience!
 	 */
 	DISCOVER_SUGGESTED_FOR_YOU: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	DISCOVER_TAB_FAVOURITES: () => LocalizedString
 	/**
@@ -7677,7 +7681,11 @@ Thanks for your patience!
 	 */
 	FACE_ID: () => LocalizedString
 	/**
-	 * Favourites
+	 * Add your favorite apps
+	 */
+	FAVORITES_SUGGESTION_BANNER_TITLE: () => LocalizedString
+	/**
+	 * Favorites
 	 */
 	FAVOURITES_BOTTOM_SHEET_TITLE: () => LocalizedString
 	/**
@@ -7689,7 +7697,7 @@ Thanks for your patience!
 	 */
 	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: () => LocalizedString
 	/**
-	 * Favourites
+	 * Favorites
 	 */
 	FAVOURITES_DAPPS_TITLE: () => LocalizedString
 	/**
@@ -9530,6 +9538,10 @@ Here's what it's all about:
 	 */
 	TITLE_MNEMONIC: () => LocalizedString
 	/**
+	 * More options
+	 */
+	TITLE_MORE_OPTIONS: () => LocalizedString
+	/**
 	 * Network
 	 */
 	TITLE_NETWORK: () => LocalizedString
@@ -9941,10 +9953,6 @@ Here's what it's all about:
 	 * Yesterday
 	 */
 	YESTERDAY: () => LocalizedString
-	/**
-	 * Add your favorite apps
-	 */
-	FAVORITES_SUGGESTION_BANNER_TITLE: () => LocalizedString
 }
 
 export type Formatters = {

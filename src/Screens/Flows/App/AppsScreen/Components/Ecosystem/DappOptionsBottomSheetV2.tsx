@@ -23,7 +23,7 @@ const Content = ({ dapp, onClose }: { dapp: DiscoveryDApp; onClose: () => void }
     }, [dapp, onClose, onDAppPress])
 
     const onShare = useCallback(() => {
-        const url = `https://www.veworld.com/discover/browser/redirect/ul/${encodeURIComponent(dapp.href)}`
+        const url = new URL(dapp.href).origin
         Share.share({
             message: LL.SHARE_DAPP({ name: dapp.name, description: dapp.desc ?? "", url }),
             url,

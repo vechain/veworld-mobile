@@ -29,6 +29,7 @@ export type Colors = {
     splashBackground: string
     splashColorLayer: string
     title: string
+    headerTitle: string
     subtitle: string
     subSubtitle: string
     card: string
@@ -437,6 +438,7 @@ const light: Colors = {
     splashColorLayer: COLORS.DARK_PURPLE,
     splashBackground: COLORS.DARK_PURPLE,
     title: COLORS.PRIMARY_800,
+    headerTitle: COLORS.DARK_PURPLE,
     subtitle: COLORS.GREY_600,
     subSubtitle: COLORS.GREY_700,
     card: COLORS.WHITE,
@@ -746,6 +748,7 @@ const dark: Colors = {
     pinEmpty: COLORS.GREY_500,
     pinFilled: COLORS.LIME_GREEN,
     title: COLORS.WHITE,
+    headerTitle: COLORS.WHITE,
     subtitle: COLORS.GREY_300,
     subSubtitle: COLORS.GREY_200,
     card: COLORS.PURPLE,

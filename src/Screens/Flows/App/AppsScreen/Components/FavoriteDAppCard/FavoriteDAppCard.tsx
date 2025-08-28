@@ -35,19 +35,19 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
         const iconUri = useAppLogo({ app: dapp })
 
         return (
-            <BaseView flexDirection="row" flex={1} px={px} mb={8}>
+            <BaseView flexDirection="row" flex={1} px={px} mb={8} ml={-8}>
                 <BaseView
                     flexDirection="row"
                     flex={1}
-                    px={4}
-                    bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}
-                    style={isActive ? styles.activeContainer : undefined}>
+                    style={isActive ? styles.activeContainer : undefined}
+                    pl={8}
+                    bg={isActive ? theme.colors.actionBottomSheet.isActiveBackground : undefined}>
                     <BaseTouchable
                         disabled={isEditMode || isActive}
                         style={[styles.card]}
                         onPress={() => onPress(dapp)}
                         onLongPress={() => onLongPress?.(dapp)}>
-                        <BaseView flexDirection="row" flex={1} pr={10}>
+                        <BaseView flexDirection="row" alignItems="flex-start" flex={1} pr={10}>
                             <Image
                                 source={{
                                     uri: iconUri,
@@ -62,14 +62,14 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                                 <BaseText
                                     ellipsizeMode="tail"
                                     numberOfLines={1}
-                                    typographyFont="bodySemiBold"
+                                    typographyFont="subSubTitleSemiBold"
                                     color={theme.colors.assetDetailsCard.title}>
                                     {dapp.name}
                                 </BaseText>
                                 <BaseSpacer height={4} />
                                 <BaseText
+                                    numberOfLines={2}
                                     ellipsizeMode="tail"
-                                    numberOfLines={1}
                                     typographyFont="captionMedium"
                                     color={theme.colors.assetDetailsCard.text}>
                                     {dapp.desc ? dapp.desc : dapp.href}
@@ -81,7 +81,8 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         disabled={isActive}
                         onLongPress={() => onRightActionLongPress?.(dapp)}
                         onPress={() => onRightActionPress(dapp, isEditMode)}
-                        style={styles.touchableContainer}>
+                        style={styles.touchableContainer}
+                        activeOpacity={0.7}>
                         {isEditMode ? (
                             <BaseIcon
                                 name="icon-grip-horizontal"
@@ -112,7 +113,6 @@ const baseStyles = () =>
             flexDirection: "row",
             alignItems: "center",
             justifyContent: "space-between",
-            paddingHorizontal: 4,
             paddingVertical: 8,
         },
         activeContainer: {
