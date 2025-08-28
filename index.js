@@ -222,71 +222,71 @@ const generateLinkingConfig = (featureFlags, externalDappSessions) => {
                         ...(featureFlags.betterWorldFeature.appsScreen.enabled ? appsStack : discoverStack),
                     },
                 },
-            },
-            // [Routes.CONNECT_EXTERNAL_APP_SCREEN_V1]: {
-            //     path: "api/v1/connect/:app_name?/:app_url?/:public_key?/:redirect_url?/:network?",
-            // },
-            [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
-                path: "api/v1/signTransaction/:request?",
-                parse: {
-                    request: r => {
-                        const request = decodeURIComponent(r)
-                        const { payload: encPayload, ...decodedRequest } = JSON.parse(
-                            new TextDecoder().decode(decodeBase64(request)),
-                        )
-
-                        const session = externalDappSessions[decodedRequest.publicKey]
-
-                        if (!session) {
-                            Linking.openURL(
-                                `${decodedRequest.redirectUrl}?error=${encodeURIComponent(
-                                    "Unauthorized",
-                                )}&error_code=401`,
+                // [Routes.CONNECT_EXTERNAL_APP_SCREEN_V1]: {
+                //     path: "api/v1/connect/:app_name?/:app_url?/:public_key?/:redirect_url?/:network?",
+                // },
+                [Routes.CONNECTED_APP_SEND_TRANSACTION_SCREEN]: {
+                    path: "api/v1/signTransaction/:request?",
+                    parse: {
+                        request: r => {
+                            const request = decodeURIComponent(r)
+                            const { payload: encPayload, ...decodedRequest } = JSON.parse(
+                                new TextDecoder().decode(decodeBase64(request)),
                             )
-                            return
-                        }
 
-                        const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
+                            const session = externalDappSessions[decodedRequest.publicKey]
 
-                        // Decrypt the payload
-                        const sharedSecret = nacl.box.before(decodeBase64(decodedRequest.publicKey), KP.secretKey)
+                            if (!session) {
+                                Linking.openURL(
+                                    `${decodedRequest.redirectUrl}?error=${encodeURIComponent(
+                                        "Unauthorized",
+                                    )}&error_code=401`,
+                                )
+                                return
+                            }
 
-                        const decryptedPayload = nacl.box.open.after(
-                            decodeBase64(encPayload),
-                            decodeBase64(decodedRequest.nonce),
-                            sharedSecret,
-                        )
+                            const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
 
-                        if (!decryptedPayload) {
-                            Linking.openURL(
-                                `${decodedRequest.redirectUrl}?error=${encodeURIComponent(
-                                    "Invalid payload",
-                                )}&error_code=400`,
+                            // Decrypt the payload
+                            const sharedSecret = nacl.box.before(decodeBase64(decodedRequest.publicKey), KP.secretKey)
+
+                            const decryptedPayload = nacl.box.open.after(
+                                decodeBase64(encPayload),
+                                decodeBase64(decodedRequest.nonce),
+                                sharedSecret,
                             )
-                            return
-                        }
 
-                        const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
+                            if (!decryptedPayload) {
+                                Linking.openURL(
+                                    `${decodedRequest.redirectUrl}?error=${encodeURIComponent(
+                                        "Invalid payload",
+                                    )}&error_code=400`,
+                                )
+                                return
+                            }
 
-                        const req = {
-                            ...payload.transaction,
-                            ...decodedRequest,
-                        }
-                        return req
+                            const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
+
+                            const req = {
+                                ...payload.transaction,
+                                ...decodedRequest,
+                            }
+                            return req
+                        },
                     },
                 },
-            },
-            [Routes.SIGN_MESSAGE_EXTERNAL_APP_SCREEN_V1]: {
-                path: "api/v1/signMessage/:public_key/:request/:redirect_url/:nonce",
-            },
-            [Routes.SIGN_CERT_EXTERNAL_APP_SCREEN_V1]: {
-                path: "api/v1/signCertificate/:public_key/:request/:redirect_url/:nonce",
-            },
-            [Routes.SIGN_TYPED_MESSAGE_EXTERNAL_APP_SCREEN_V1]: {
-                path: "api/v1/signTypedMessage/:public_key/:request/:redirect_url/:nonce",
-            },
-            [Routes.DISCONNECT_EXTERNAL_APP_SCREEN_V1]: {
-                path: "api/v1/disconnect/:public_key/:redirect_url/:nonce",
+                [Routes.SIGN_MESSAGE_EXTERNAL_APP_SCREEN_V1]: {
+                    path: "api/v1/signMessage/:public_key/:request/:redirect_url/:nonce",
+                },
+                [Routes.SIGN_CERT_EXTERNAL_APP_SCREEN_V1]: {
+                    path: "api/v1/signCertificate/:public_key/:request/:redirect_url/:nonce",
+                },
+                [Routes.SIGN_TYPED_MESSAGE_EXTERNAL_APP_SCREEN_V1]: {
+                    path: "api/v1/signTypedMessage/:public_key/:request/:redirect_url/:nonce",
+                },
+                [Routes.DISCONNECT_EXTERNAL_APP_SCREEN_V1]: {
+                    path: "api/v1/disconnect/:public_key/:redirect_url/:nonce",
+                },
             },
         },
     }
