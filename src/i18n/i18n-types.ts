@@ -2708,6 +2708,10 @@ type RootTranslation = {
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: string
 	/**
+	 * No favorited apps to show
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: string
+	/**
 	 * S​e​a​r​c​h
 	 */
 	FAVOURITES_DAPPS_SEARCH_PLACEHOLDER: string
@@ -7640,6 +7644,10 @@ Thanks for your patience!
 	 * Could not find any dapps with this name
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
+	/**
+	 * No favorited apps to show
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: () => LocalizedString
 	/**
 	 * Search
 	 */
