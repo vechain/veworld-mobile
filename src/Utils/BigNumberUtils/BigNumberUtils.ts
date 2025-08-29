@@ -62,6 +62,7 @@ interface IBigNumberUtils {
     ): { value: string; preciseValue: string; isLeesThan_0_01: boolean }
     toTokenConversion(balance: string, rate?: number, callback?: (result: BN) => void): BigNumberUtils
     addTrailingZeros(decimals: number, callback?: (result: BN) => void): BigNumberUtils
+    toCompactString(locale: Intl.LocalesArgument, decimals?: number): string
     clone(): BigNumberUtils
 
     // Math Methods
@@ -338,6 +339,40 @@ class BigNumberUtils implements IBigNumberUtils {
         }
 
         return this
+    }
+
+    /**
+     * Converts large numbers to a compact UI string format with suffixes.
+     * Examples: 10000000 -> "10 M", 200000 -> "200 K", 1500 -> "1.5 K"
+     * @param decimals Number of decimal places to show (defaults to 1)
+     * @returns A compact formatted string
+     */
+    toCompactString(locale: Intl.LocalesArgument, decimals: number = 1): string {
+        const powers: Record<number, number> = {
+            4: Math.pow(10, 12),
+            3: Math.pow(10, 9),
+            2: Math.pow(10, 6),
+            1: Math.pow(10, 3),
+            0: 1,
+        }
+
+        const log10 = Math.log10(this.data.toNumber())
+
+        if (log10 < 3) return this.data.toFixed(0)
+
+        const power = Math.floor(log10 / 3)
+        const value = this.toNumber / powers[power]
+        const suffix = ["", "K", "M", "B", "T"][power]
+
+        const formatter = getNumberFormatter({
+            locale,
+            precision: decimals,
+            style: "decimal",
+            useGrouping: true,
+        })
+
+        const formatted = formatter.format(value)
+        return formatted + suffix
     }
 
     clone() {

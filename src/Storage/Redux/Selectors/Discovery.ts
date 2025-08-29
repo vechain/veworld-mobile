@@ -86,3 +86,7 @@ export const selectCurrentTab = createSelector(selectTabs, selectCurrentTabId, (
     tabs.find(tab => tab.id === currentTabId),
 )
 export const selectBannerInteractions = createSelector(getDiscoveryState, discovery => discovery.bannerInteractions)
+
+export const selectIsNormalUser = createSelector(getDiscoveryState, state => state.isNormalUser ?? false)
+
+export const selectSuggestedAppIds = createSelector(getDiscoveryState, state => state.suggestedAppIds)

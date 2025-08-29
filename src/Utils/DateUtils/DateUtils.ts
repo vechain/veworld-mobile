@@ -33,25 +33,38 @@ export const isValidTimezone = (timezone: string): boolean => {
  *
  * @param {number} timestamp - The timestamp to format.
  * @param {string} locale - The locale to use for formatting.
- * @param {string} timezone - The timezone to use for formatting.
+ * @param {string} timeZone - The timezone to use for formatting.
+ * @param {Object} options - The options for formatting.
+ *    @param {boolean} options.hideTime - Whether to only include the date in the formatted string.
+ *    @param {boolean} options.hideDay - Whether to include the day number in the formatted string.
  * @returns {string} The formatted date and time string.
  * @throws {Error} If the provided locale or timezone is invalid.
  */
-export const formatDateTime = (timestamp: number, locale: string, timezone: string): string => {
-    if (!isValidDateLocale(locale)) throw new Error(`Invalid locale: ${locale}.`)
-    if (!isValidTimezone(timezone)) throw new Error(`Invalid timezone: ${timezone}.`)
+export const formatDateTime = (
+    timestamp: number,
+    locale: string,
+    timeZone: string,
+    options?: { hideTime?: boolean; hideDay: boolean },
+): string => {
+    if (!isValidDateLocale(locale)) return ""
+    if (isNaN(timestamp) || !timestamp || timestamp < 0) return ""
+    if (!isValidTimezone(timeZone)) return ""
 
     const date: Date = new Date(timestamp)
 
-    const dateFormatter = new Intl.DateTimeFormat(locale, {
-        timeZone: timezone,
+    const dateFormatterOptions: Intl.DateTimeFormatOptions = {
+        timeZone,
         year: "numeric",
         month: "short",
-        day: "numeric",
-    })
+    }
 
+    if (!options?.hideDay) {
+        dateFormatterOptions.day = "2-digit"
+    }
+
+    const dateFormatter = new Intl.DateTimeFormat(locale, dateFormatterOptions)
     const timeFormatter = new Intl.DateTimeFormat(locale, {
-        timeZone: timezone,
+        timeZone,
         hour: "numeric",
         minute: "2-digit",
         hour12: true,
@@ -59,8 +72,9 @@ export const formatDateTime = (timestamp: number, locale: string, timezone: stri
 
     const formattedDate = dateFormatter.format(date)
     const formattedTime = timeFormatter.format(date)
+    const time = options?.hideTime ? "" : ` - ${formattedTime.replace(/ (AM|PM)/, "")}`
 
-    return `${formattedDate} - ${formattedTime.replace(/ (AM|PM)/, "")}`
+    return `${formattedDate}${time}`
 }
 
 export const DEFAULT_TIMEZONE = "UTC"

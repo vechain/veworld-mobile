@@ -90,6 +90,11 @@ const mockedFeatureFlags: FeatureFlags = {
             },
         },
     },
+    betterWorldFeature: {
+        appsScreen: {
+            enabled: false,
+        },
+    },
 }
 
 jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({

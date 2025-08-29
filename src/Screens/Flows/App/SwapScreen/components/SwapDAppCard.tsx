@@ -1,9 +1,9 @@
 import React from "react"
-import { ImageStyle, StyleProp, Image, StyleSheet } from "react-native"
-import { BaseView, BaseTouchable, BaseText, BaseSpacer } from "~Components"
+import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
+import { BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
-import { DAppUtils } from "~Utils"
+import { useAppLogo } from "~Hooks/useAppLogo"
 
 type Props = {
     dapp: DiscoveryDApp
@@ -14,15 +14,16 @@ const IMAGE_SIZE = 48
 
 export const SwapDAppCard = ({ dapp, onDAppPress }: Props) => {
     const { theme, styles } = useThemedStyles(baseStyles)
+
+    const iconUri = useAppLogo({ app: dapp, size: IMAGE_SIZE })
+
     return (
         <BaseView flexDirection="row" flex={1} bg={theme.colors.background} px={16}>
             <BaseTouchable style={[styles.card]} onPress={() => onDAppPress(dapp)}>
                 <BaseView flexDirection="row" flex={1} pr={10}>
                     <Image
                         source={{
-                            uri: dapp.id
-                                ? DAppUtils.getAppHubIconUrl(dapp.id)
-                                : `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${dapp.href}`,
+                            uri: iconUri,
                         }}
                         style={[{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>}
                         resizeMode="contain"

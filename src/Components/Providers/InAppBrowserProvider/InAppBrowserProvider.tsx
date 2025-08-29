@@ -14,6 +14,7 @@ import { showInfoToast, showWarningToast } from "~Components"
 import { useInteraction } from "~Components/Providers/InteractionProvider"
 import { AnalyticsEvent, ERROR_EVENTS, RequestMethods } from "~Constants"
 import { useAnalyticTracking, useBottomSheetModal, usePrevious, useSetSelectedAccount } from "~Hooks"
+import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { Locales, useI18nContext } from "~i18n"
 import {
     AccountWithDevice,
@@ -53,6 +54,14 @@ export interface PackageInfoResponse {
     verificationFailed: boolean
 }
 
+export interface DappMetadata {
+    icon: string
+    name: string
+    url: string
+    isDapp: boolean
+    description?: string
+}
+
 // Resolve an issue with types for the WebView component
 type EnhancedScrollEvent = Omit<NativeScrollEvent, "zoomScale"> & { zoomScale?: number }
 
@@ -84,6 +93,7 @@ type ContextType = {
     switchAccount: (request: WindowRequest) => void
     isLoading: boolean
     isDapp: boolean
+    dappMetadata?: DappMetadata
 }
 
 const Context = React.createContext<ContextType | undefined>(undefined)
@@ -148,6 +158,8 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     const [targetNetwork, setTargetNetwork] = useState<Network>()
     const [navigateToOperation, setNavigateToOperation] = useState<Function>()
     const [showToolbars, setShowToolbars] = useState(true)
+
+    const fetchDynamicAppLogo = useDynamicAppLogo({ size: 64 })
 
     const handleCloseChangeAccountNetworkBottomSheet = useCallback(() => {
         closeChangeAccountNetworkBottomSheet()
@@ -740,6 +752,27 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         )
     }, [allDapps, navigationState])
 
+    const dappMetadata = useMemo(() => {
+        if (!navigationState?.url) return undefined
+
+        const foundDapp = allDapps.find(app => new URL(app.href).origin === new URL(navigationState?.url ?? "").origin)
+        if (foundDapp)
+            return {
+                icon: fetchDynamicAppLogo({ app: foundDapp }),
+                name: foundDapp.name,
+                url: navigationState?.url,
+                isDapp: true,
+                description: foundDapp.desc,
+            }
+
+        return {
+            name: new URL(navigationState?.url ?? "").hostname,
+            url: navigationState?.url,
+            icon: DAppUtils.generateFaviconUrl(navigationState.url),
+            isDapp: false,
+        }
+    }, [allDapps, fetchDynamicAppLogo, navigationState?.url])
+
     const contextValue = React.useMemo(() => {
         return {
             isLoading,
@@ -769,6 +802,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
             ChangeAccountNetworkBottomSheetRef,
             switchAccount,
             isDapp,
+            dappMetadata,
         }
     }, [
         isLoading,
@@ -797,6 +831,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
         switchAccount,
         packageInfo,
         isDapp,
+        dappMetadata,
     ])
 
     return (
@@ -818,6 +853,12 @@ export const useInAppBrowser = () => {
     }
 
     return context
+}
+
+export const useInAppBrowserOrNull = () => {
+    const context = useContext(Context)
+
+    return context ?? null
 }
 
 /**

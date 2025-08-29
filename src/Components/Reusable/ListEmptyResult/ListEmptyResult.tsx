@@ -8,12 +8,13 @@ export type ListEmptyResultsProps = {
     title?: string
     subtitle: string
     icon: IconKey
+    testID?: string
 }
 
-export const ListEmptyResults = ({ onClick, title, subtitle, icon }: ListEmptyResultsProps) => {
+export const ListEmptyResults = ({ onClick, title, subtitle, icon, testID }: ListEmptyResultsProps) => {
     const theme = useTheme()
     return (
-        <BaseView justifyContent="center" alignItems="center" flex={1}>
+        <BaseView testID={testID} justifyContent="center" alignItems="center" flex={1}>
             <BaseIcon name={icon} size={45} color={theme.colors.text} />
             <BaseSpacer height={8} />
             <BaseText mx={20} typographyFont="body" align="center">
