@@ -1234,6 +1234,10 @@ type RootTranslation = {
 	 */
 	BROWSER_RELOAD_PAGE: string
 	/**
+	 * G​o​ ​t​o​ ​p​r​e​v​i​o​u​s​ ​p​a​g​e
+	 */
+	BROWSER_GO_BACK: string
+	/**
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: string
@@ -2703,6 +2707,10 @@ type RootTranslation = {
 	 * C​o​u​l​d​ ​n​o​t​ ​f​i​n​d​ ​a​n​y​ ​d​a​p​p​s​ ​w​i​t​h​ ​t​h​i​s​ ​n​a​m​e
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: string
+	/**
+	 * No favorited apps to show
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: string
 	/**
 	 * S​e​a​r​c​h
 	 */
@@ -6173,6 +6181,10 @@ Thanks for your patience!
 	 */
 	BROWSER_RELOAD_PAGE: () => LocalizedString
 	/**
+	 * Go to previous page
+	 */
+	BROWSER_GO_BACK: () => LocalizedString
+	/**
 	 * Remove from Favorites
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: () => LocalizedString
@@ -7632,6 +7644,10 @@ Thanks for your patience!
 	 * Could not find any dapps with this name
 	 */
 	FAVOURITES_DAPPS_NO_RECORDS: () => LocalizedString
+	/**
+	 * No favorited apps to show
+	 */
+	FAVOURITES_DAPPS_EMPTY_LIST: () => LocalizedString
 	/**
 	 * Search
 	 */

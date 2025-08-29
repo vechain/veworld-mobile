@@ -1,6 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { StyleSheet } from "react-native"
+import { Dimensions, StyleSheet } from "react-native"
 import DraggableFlatList, { DragEndParams, RenderItem } from "react-native-draggable-flatlist"
 import {
     AnimatedSaveHeaderButton,
@@ -12,7 +12,7 @@ import {
     ListEmptyResults,
     ReorderIconHeaderButton,
 } from "~Components"
-import { COLORS, ColorThemeType, DiscoveryDApp } from "~Constants"
+import { ColorThemeType, DiscoveryDApp } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { removeBookmark, reorderBookmarks, selectBookmarkedDapps, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { useI18nContext } from "~i18n"
@@ -33,6 +33,10 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
+
+    // Calculate minimum height for empty state (90% of screen height minus header)
+    const screenHeight = Dimensions.get("window").height
+    const emptyStateMinHeight = screenHeight * 0.9 - 120 // 120px approximate header height
 
     const handleClose = useCallback(() => {
         setIsEditingMode(false)
@@ -167,9 +171,13 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                         windowSize={5}
                         ListEmptyComponent={
                             <ListEmptyResults
-                                subtitle={LL.FAVOURITES_DAPPS_NO_RECORDS()}
-                                icon={"icon-search"}
+                                subtitle={LL.FAVOURITES_DAPPS_EMPTY_LIST()}
+                                icon={"icon-alert-circle"}
+                                iconColor={theme.colors.mnemonicCardBorder}
                                 testID="empty-results"
+                                minHeight={emptyStateMinHeight}
+                                iconStyle={styles.emptyIcon}
+                                subtitleColor={theme.colors.actionBottomSheet.text}
                             />
                         }
                     />
@@ -193,6 +201,7 @@ const baseStyles = (theme: ColorThemeType) =>
         listContentContainer: {
             paddingTop: 12,
             paddingHorizontal: 24,
+            flexGrow: 1,
         },
         layout: {
             backgroundColor: theme.colors.actionBottomSheet.background,
@@ -200,9 +209,14 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopLeftRadius: 24,
         },
         reorderIcon: {
-            borderColor: theme.colors.actionBottomSheet.border,
-            backgroundColor: COLORS.TRANSPARENT,
+            borderColor: theme.colors.actionBottomSheet.iconBackground,
+            backgroundColor: theme.colors.actionBottomSheet.iconBackground,
             borderWidth: 1,
             borderRadius: 6,
+        },
+        emptyIcon: {
+            backgroundColor: theme.colors.actionBottomSheet.iconBackground,
+            borderRadius: 100,
+            padding: 18,
         },
     })

@@ -69,9 +69,10 @@ const baseStyles = (theme: ColorThemeType) => {
             height: 194,
             minWidth: 148,
             borderRadius: 12,
-            borderWidth: 3,
+            borderStyle: "solid",
+            borderWidth: 1,
             backgroundColor: theme.colors.tabsFooter.background,
-            borderColor: theme.colors.tabsFooter.background,
+            borderColor: theme.colors.tabsFooter.border,
             overflow: "hidden",
         },
         selected: {
