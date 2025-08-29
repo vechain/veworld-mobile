@@ -1,7 +1,9 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { ElementType, useCallback, useMemo } from "react"
 import { ImageBackground, StyleSheet } from "react-native"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import { getTimeZone } from "react-native-localize"
+import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import {
     BaseBottomSheet,
     BaseButton,
@@ -17,8 +19,6 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useAppOverview, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
-import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BadgeCheckIconSVG } from "~Assets/IconComponents/BadgeCheckIconSVG"
 import { useDAppActions } from "~Screens/Flows/App/DiscoverScreen/Hooks"
 import { addBookmark, removeBookmark, useAppDispatch } from "~Storage/Redux"
 import { BigNutils, DateUtils } from "~Utils"
@@ -194,14 +194,16 @@ export const VbdCarouselBottomSheet = ({
                     <BlurView style={styles.blurView} overlayColor="transparent" blurAmount={18}>
                         <BaseView flexDirection="column" gap={16} px={24} py={16}>
                             <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
-                                <BaseView flexDirection="row" alignItems="center">
+                                <BaseView flexDirection="row" alignItems="center" flex={1}>
                                     <FastImage source={{ uri: iconUri }} style={styles.logo as ImageStyle} />
                                     <BaseSpacer width={12} flexShrink={0} />
                                     <BaseText
                                         numberOfLines={1}
                                         typographyFont="subSubTitleSemiBold"
                                         color={COLORS.GREY_50}
-                                        testID="VBD_CAROUSEL_BS_APP_NAME">
+                                        testID="VBD_CAROUSEL_BS_APP_NAME"
+                                        flexDirection="row"
+                                        flex={1}>
                                         {app?.name}
                                     </BaseText>
                                 </BaseView>
