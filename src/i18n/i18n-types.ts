@@ -4339,6 +4339,10 @@ type RootTranslation = {
 	 */
 	STARGATE_CLAIMABLE: string
 	/**
+	 * Own
+	 */
+	STARGATE_OWN_LABEL: string
+	/**
 	 * M​a​n​a​g​i​n​g
 	 */
 	STARGATE_DELEGATEE_LABEL: string
@@ -9233,6 +9237,10 @@ Here's what it's all about:
 	 * Claimable
 	 */
 	STARGATE_CLAIMABLE: () => LocalizedString
+	/**
+	 * Own
+	 */
+	STARGATE_OWN_LABEL: () => LocalizedString
 	/**
 	 * Managing
 	 */
