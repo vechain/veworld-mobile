@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-29)</small>
+
+* build: init ([7557570](https://github.com/vechain/veworld-mobile/commit/7557570))
+* fix: fix favorite (#3234) ([059960d](https://github.com/vechain/veworld-mobile/commit/059960d)), closes [#3234](https://github.com/vechain/veworld-mobile/issues/3234)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
