@@ -112,6 +112,16 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             },
             {
                 type: "action",
+                id: "go-back",
+                icon: "icon-chevron-left",
+                label: LL.BROWSER_GO_BACK(),
+                onPress: () => {
+                    webviewRef.current?.goBack()
+                    onClose?.()
+                },
+            },
+            {
+                type: "action",
                 id: "share",
                 icon: "icon-share-2",
                 label: LL.BROWSER_SHARE(),

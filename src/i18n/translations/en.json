@@ -292,6 +292,7 @@
   "BROWSER_NETWORK_NOT_FOUND": "The DApp reequested a network that is not found.",
   "BROWSER_NEW_TAB": "Open new tab",
   "BROWSER_RELOAD_PAGE": "Reload page",
+  "BROWSER_GO_BACK": "Go to previous page",
   "BROWSER_REMOVE_FAVORITE_DAPPS": "Remove from Favorites",
   "BROWSER_SEE_ALL_TABS": "See all tabs open",
   "BROWSER_SHARE": "Share",

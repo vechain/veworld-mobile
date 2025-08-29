@@ -208,6 +208,7 @@ export type Colors = {
     }
     tabsFooter: {
         background: string
+        border: string
     }
     errorAlert: {
         background: string
@@ -612,6 +613,7 @@ const light: Colors = {
     },
     tabsFooter: {
         background: COLORS.WHITE,
+        border: COLORS.GREY_200,
     },
     errorAlert: {
         background: COLORS.RED_50,
@@ -917,6 +919,7 @@ const dark: Colors = {
     },
     tabsFooter: {
         background: COLORS.PURPLE,
+        border: COLORS.DARK_PURPLE_DISABLED,
     },
     errorAlert: {
         background: COLORS.RED_100,

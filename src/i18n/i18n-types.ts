@@ -1234,6 +1234,10 @@ type RootTranslation = {
 	 */
 	BROWSER_RELOAD_PAGE: string
 	/**
+	 * G​o​ ​t​o​ ​p​r​e​v​i​o​u​s​ ​p​a​g​e
+	 */
+	BROWSER_GO_BACK: string
+	/**
 	 * R​e​m​o​v​e​ ​f​r​o​m​ ​F​a​v​o​r​i​t​e​s
 	 */
 	BROWSER_REMOVE_FAVORITE_DAPPS: string
@@ -6172,6 +6176,10 @@ Thanks for your patience!
 	 * Reload page
 	 */
 	BROWSER_RELOAD_PAGE: () => LocalizedString
+	/**
+	 * Go to previous page
+	 */
+	BROWSER_GO_BACK: () => LocalizedString
 	/**
 	 * Remove from Favorites
 	 */
