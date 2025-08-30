@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-27)</small>
+
+* build: init ([9080dd1](https://github.com/vechain/veworld-mobile/commit/9080dd1))
+* Fix :: favorites scrolling and small UI an copy (#3231) ([09ee344](https://github.com/vechain/veworld-mobile/commit/09ee344)), closes [#3231](https://github.com/vechain/veworld-mobile/issues/3231)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))
