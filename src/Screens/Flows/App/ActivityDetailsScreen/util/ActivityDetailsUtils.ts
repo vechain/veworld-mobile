@@ -41,6 +41,10 @@ export const getActivityTitle = (activity: Activity, LL: TranslationFunctions) =
             return LL.B3TR_UPGRADE_GM()
         case ActivityType.TRANSFER_NFT:
             return (activity as NonFungibleTokenActivity).direction === DIRECTIONS.UP ? LL.NFT_SEND() : LL.NFT_RECEIVE()
+        case ActivityType.NFT_SALE:
+            return (activity as NonFungibleTokenActivity).direction === DIRECTIONS.UP
+                ? LL.NFT_SOLD()
+                : LL.NFT_PURCHASED()
         case ActivityType.CONNECTED_APP_TRANSACTION:
             return LL.CONNECTED_APP_TITLE()
         case ActivityType.SIGN_TYPED_DATA:

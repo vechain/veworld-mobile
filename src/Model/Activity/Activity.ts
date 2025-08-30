@@ -91,6 +91,18 @@ export interface NonFungibleTokenActivity extends Activity {
     direction: DIRECTIONS
 }
 
+export interface NFTMarketplaceActivity extends Activity {
+    tokenId: string
+    contractAddress: string
+    type: ActivityType.NFT_SALE
+    direction: DIRECTIONS
+    price: string
+    paymentToken?: string
+    marketplace?: string
+    buyer: string
+    seller: string
+}
+
 export interface SwapActivity extends Activity {
     eventName: ActivityEvent.SWAP_FT_TO_FT
     to: string[]
@@ -220,8 +232,8 @@ export interface TransferVetEvent extends IndexedHistoryEvent {
 }
 
 export interface TransferNftEvent extends IndexedHistoryEvent {
-    eventName: ActivityEvent.TRANSFER_NFT
-    tokendId: string
+    eventName: ActivityEvent.TRANSFER_NFT | ActivityEvent.NFT_SALE
+    tokenId: string
     to: string
     from: string
 }
