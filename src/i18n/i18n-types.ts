@@ -2272,6 +2272,26 @@ type RootTranslation = {
 	 */
 	DAPP_CONNECTION: string
 	/**
+	 * M​e​t​h​o​d
+	 */
+	DAPP_LOGIN_METHOD: string
+	/**
+	 * C​e​r​t​i​f​i​c​a​t​e
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: string
+	/**
+	 * N​o​ ​s​i​g​n​a​t​u​r​e
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: string
+	/**
+	 * T​y​p​e​d​ ​d​a​t​a
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: string
+	/**
+	 * d​A​p​p​ ​l​o​g​i​n
+	 */
+	DAPP_LOGIN_TITLE: string
+	/**
 	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	DAPP_SIGN_CERT: string
@@ -2883,6 +2903,18 @@ type RootTranslation = {
 	 * L​o​a​d​i​n​g​ ​m​o​r​e
 	 */
 	LOADING_MORE: string
+	/**
+	 * K​e​e​p​ ​m​e​ ​s​i​g​n​e​d​ ​i​n​ ​f​o​r​ ​f​u​t​u​r​e​ ​s​e​s​s​i​o​n​s
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_CTA: string
+	/**
+	 * L​o​g​i​n
+	 */
+	LOGIN_REQUEST_TITLE: string
 	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
@@ -4303,11 +4335,11 @@ type RootTranslation = {
 	 */
 	SIGN_CERTIFICATE: string
 	/**
-	 * L​o​g​i​n
+	 * S​i​g​n
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: string
 	/**
-	 * L​o​g​i​n
+	 * S​i​g​n​ ​c​e​r​t​i​f​i​c​a​t​e
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: string
 	/**
@@ -4399,6 +4431,14 @@ type RootTranslation = {
 	 * S​w​a​p​ ​t​o​k​e​n​s
 	 */
 	SWAP_TITLE: string
+	/**
+	 * A​p​p​l​y
+	 */
+	SWITCH_WALLET_REQUEST_CTA: string
+	/**
+	 * C​h​a​n​g​e​ ​w​a​l​l​e​t
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: string
 	/**
 	 * S​y​s​t​e​m
 	 */
@@ -7201,6 +7241,26 @@ Thanks for your patience!
 	 */
 	DAPP_CONNECTION: () => LocalizedString
 	/**
+	 * Method
+	 */
+	DAPP_LOGIN_METHOD: () => LocalizedString
+	/**
+	 * Certificate
+	 */
+	DAPP_LOGIN_METHOD_CERTIFICATE: () => LocalizedString
+	/**
+	 * No signature
+	 */
+	DAPP_LOGIN_METHOD_SIMPLE: () => LocalizedString
+	/**
+	 * Typed data
+	 */
+	DAPP_LOGIN_METHOD_TYPED_DATA: () => LocalizedString
+	/**
+	 * dApp login
+	 */
+	DAPP_LOGIN_TITLE: () => LocalizedString
+	/**
 	 * Sign certificate
 	 */
 	DAPP_SIGN_CERT: () => LocalizedString
@@ -7812,6 +7872,18 @@ Thanks for your patience!
 	 * Loading more
 	 */
 	LOADING_MORE: () => LocalizedString
+	/**
+	 * Keep me signed in for future sessions
+	 */
+	LOGIN_KEEP_ME_SIGNED_IN: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Login
+	 */
+	LOGIN_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * Are you sure you want to add the selected token?
 	 */
@@ -9198,11 +9270,11 @@ Here's what it's all about:
 	 */
 	SIGN_CERTIFICATE: () => LocalizedString
 	/**
-	 * Login
+	 * Sign
 	 */
 	SIGN_CERTIFICATE_REQUEST_CTA: () => LocalizedString
 	/**
-	 * Login
+	 * Sign certificate
 	 */
 	SIGN_CERTIFICATE_REQUEST_TITLE: () => LocalizedString
 	/**
@@ -9293,6 +9365,14 @@ Here's what it's all about:
 	 * Swap tokens
 	 */
 	SWAP_TITLE: () => LocalizedString
+	/**
+	 * Apply
+	 */
+	SWITCH_WALLET_REQUEST_CTA: () => LocalizedString
+	/**
+	 * Change wallet
+	 */
+	SWITCH_WALLET_REQUEST_TITLE: () => LocalizedString
 	/**
 	 * System
 	 */

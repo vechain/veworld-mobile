@@ -1,13 +1,19 @@
+import { ethers } from "ethers"
 import {
+    addSession,
+    clearTemporarySessions,
     closeAllTabs,
     closeTab,
+    deleteSession,
     DiscoverySlice,
     DiscoveryState,
     incrementBannerInteractions,
+    LoginSession,
     openTab,
     Tab,
     updateTab,
 } from "./Discovery"
+import { HexUInt } from "@vechain/sdk-core"
 
 describe("DiscoverySlice", () => {
     describe("bannerInteractions", () => {
@@ -106,6 +112,134 @@ describe("DiscoverySlice", () => {
             )
             expect(newState.tabsManager.tabs).toHaveLength(0)
             expect(newState.tabsManager.currentTabId).toBeNull()
+        })
+    })
+    describe("sessions", () => {
+        const mockSessions = (...sessions: [string, LoginSession][]): DiscoveryState => {
+            return {
+                connectedApps: [],
+                custom: [],
+                favorites: [],
+                featured: [],
+                hasOpenedDiscovery: true,
+                bannerInteractions: {},
+                tabsManager: {
+                    currentTabId: null,
+                    tabs: [],
+                },
+                sessions: sessions.length === 0 ? undefined : Object.fromEntries(sessions),
+            }
+        }
+        it("clearTemporarySessions", () => {
+            const externalSession = {
+                kind: "external",
+                address: ethers.Wallet.createRandom().address,
+                genesisId: HexUInt.random(32).toString(),
+                url: "https://vechain.org",
+                name: "test",
+            } as const
+            const newState = DiscoverySlice.reducer(
+                mockSessions(
+                    ["https://vechain.org", externalSession],
+                    [
+                        "https://docs.vechain.org",
+                        {
+                            kind: "temporary",
+                            address: ethers.Wallet.createRandom().address,
+                            genesisId: HexUInt.random(32).toString(),
+                            url: "https://docs.vechain.org",
+                            name: "test",
+                        },
+                    ],
+                ),
+                clearTemporarySessions(),
+            )
+            expect(Object.keys(newState.sessions ?? {}).length).toBe(1)
+            expect(newState.sessions).toStrictEqual({
+                "https://vechain.org": externalSession,
+            })
+        })
+        it("deleteSession", () => {
+            const newState = DiscoverySlice.reducer(
+                mockSessions([
+                    "https://docs.vechain.org",
+                    {
+                        kind: "temporary",
+                        address: ethers.Wallet.createRandom().address,
+                        genesisId: HexUInt.random(32).toString(),
+                        url: "https://docs.vechain.org",
+                        name: "test",
+                    },
+                ]),
+                deleteSession("https://docs.vechain.org/test"),
+            )
+            expect(Object.keys(newState.sessions ?? {}).length).toBe(0)
+            const stateWithoutSessions = DiscoverySlice.reducer(
+                mockSessions(),
+                deleteSession("https://docs.vechain.org/test"),
+            )
+            expect(Object.keys(stateWithoutSessions.sessions ?? {}).length).toBe(0)
+            const stateWithNotFoundSession = DiscoverySlice.reducer(
+                mockSessions([
+                    "https://docs.vechain.org",
+                    {
+                        kind: "temporary",
+                        address: ethers.Wallet.createRandom().address,
+                        genesisId: HexUInt.random(32).toString(),
+                        url: "https://docs.vechain.org",
+                        name: "test",
+                    },
+                ]),
+                deleteSession("https://docs.vebetterdao.org/test"),
+            )
+            expect(Object.keys(stateWithNotFoundSession.sessions ?? {}).length).toBe(1)
+        })
+        it("addSession", () => {
+            const newState = DiscoverySlice.reducer(
+                mockSessions([
+                    "https://docs.vechain.org",
+                    {
+                        kind: "temporary",
+                        address: ethers.Wallet.createRandom().address,
+                        genesisId: HexUInt.random(32).toString(),
+                        url: "https://docs.vechain.org",
+                        name: "test",
+                    },
+                ]),
+                addSession({
+                    url: "https://docs.vebetterdao.org/test",
+                    address: "0x0",
+                    genesisId: "0x0",
+                    kind: "temporary",
+                    name: "test",
+                }),
+            )
+            expect(Object.keys(newState.sessions ?? {}).length).toBe(2)
+            expect(newState.sessions?.["https://docs.vebetterdao.org"]).toStrictEqual({
+                url: "https://docs.vebetterdao.org",
+                address: "0x0",
+                genesisId: "0x0",
+                kind: "temporary",
+                name: "test",
+            })
+            const stateWithoutSessions = DiscoverySlice.reducer(
+                mockSessions(),
+                addSession({
+                    url: "https://docs.vebetterdao.org/test",
+                    address: "0x0",
+                    genesisId: "0x0",
+                    kind: "temporary",
+                    name: "test",
+                }),
+            )
+            expect(Object.keys(stateWithoutSessions.sessions ?? {}).length).toBe(1)
+            expect(stateWithoutSessions.sessions?.["https://docs.vebetterdao.org"]).toStrictEqual({
+                url: "https://docs.vebetterdao.org",
+                address: "0x0",
+                genesisId: "0x0",
+                kind: "temporary",
+                name: "test",
+            })
         })
     })
 })

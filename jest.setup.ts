@@ -268,3 +268,7 @@ jest.mock("react-native/Libraries/TurboModule/TurboModuleRegistry", () => {
 })
 
 require("react-native-reanimated").setUpTests()
+
+jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps", () => ({
+    useVeBetterDaoDapps: jest.fn().mockReturnValue({ data: [] }),
+}))

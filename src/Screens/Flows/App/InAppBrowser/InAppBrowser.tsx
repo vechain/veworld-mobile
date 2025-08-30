@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
-import React, { MutableRefObject, useCallback, useEffect, useMemo, useState } from "react"
+import { MutableRefObject, default as React, useCallback, useEffect, useMemo, useState } from "react"
 import { Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import FastImage, { ImageStyle } from "react-native-fast-image"
@@ -15,6 +15,7 @@ import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
+import { deleteSession, selectSelectedNetwork, selectSession, useAppDispatch, useAppSelector } from "~Storage/Redux"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
@@ -34,6 +35,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
         isLoading,
+        navigationState,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -42,6 +44,11 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const [isLoadingWebView, setIsLoadingWebView] = useState(true)
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
+    const dispatch = useAppDispatch()
+    const selectedNetwork = useAppSelector(selectSelectedNetwork)
+    const activeSession = useAppSelector(state =>
+        selectSession(state, navigationState?.url ?? "", selectedNetwork.genesis.id),
+    )
     const dappMetadata = useGetDappMetadataFromUrl(route.params.url)
     const fetchDynamicLogo = useDynamicAppLogo({ size: 48 })
 
@@ -104,6 +111,12 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         theme.colors.history.historyItem.iconColor,
     ])
 
+    const onNavigate = useCallback(async () => {
+        await performScreenshot()
+        if (!activeSession || !navigationState?.url || activeSession.kind !== "temporary") return
+        dispatch(deleteSession(navigationState?.url))
+    }, [activeSession, dispatch, navigationState?.url, performScreenshot])
+
     return (
         <Layout
             bg={COLORS.DARK_PURPLE}
@@ -111,7 +124,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <URLBar
                     navigationUrl={route.params.url}
                     isLoading={isLoadingWebView}
-                    onNavigate={performScreenshot}
+                    onNavigate={onNavigate}
                     returnScreen={route.params.returnScreen}
                 />
             }

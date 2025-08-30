@@ -20,6 +20,7 @@ import {
     DappTxActivity,
     FungibleToken,
     FungibleTokenActivity,
+    LoginActivity,
     NonFungibleTokenActivity,
     SignCertActivity,
     StargateActivity,
@@ -171,6 +172,8 @@ const Item = ({
             return <ActivityBox.Staking activity={activity as StargateActivity} onPress={onPress} />
         case ActivityType.VEVOTE_VOTE_CAST:
             return <ActivityBox.VeVoteCast activity={activity as VeVoteCastActivity} onPress={onPress} />
+        case ActivityType.DAPP_LOGIN:
+            return <ActivityBox.DappLogin activity={activity as LoginActivity} onPress={onPress} />
         default:
             return null
     }

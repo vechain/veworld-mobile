@@ -1,9 +1,10 @@
 import { renderHook } from "@testing-library/react-hooks"
+import { TestWrapper } from "~Test"
+
 import { useTransactionFees } from "./useTransactionFees"
 import { GasPriceCoefficient } from "~Constants"
 import { ethers } from "ethers"
 import { BigNutils } from "~Utils"
-import { TestWrapper } from "~Test"
 import { useLegacyFees } from "./useLegacyFees"
 import { useGalacticaFees } from "./useGalacticaFees"
 
@@ -62,11 +63,12 @@ const gasObj = {
     reverted: false,
     revertReason: "",
     vmError: "",
+    outputs: [],
 }
 
 describe("useTransactionFees", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
     })
     it("should render correctly for legacy txs", () => {
         ;(useLegacyFees as jest.Mock).mockReturnValue({

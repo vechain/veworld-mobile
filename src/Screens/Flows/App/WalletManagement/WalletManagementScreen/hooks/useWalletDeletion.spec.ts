@@ -1,6 +1,7 @@
 import { renderHook } from "@testing-library/react-hooks"
-import { useWalletDeletion } from "./useWalletDeletion"
 import { TestHelpers, TestWrapper } from "~Test"
+
+import { useWalletDeletion } from "./useWalletDeletion"
 import { selectDevices, useAppSelector } from "~Storage/Redux"
 import { WalletAccount } from "~Model"
 import { CryptoUtils, AddressUtils } from "~Utils"
@@ -24,7 +25,7 @@ const account2: WalletAccount = {
 
 describe("useWalletDeletion", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
     })
 
     it("should remove the wallet from the device", async () => {

@@ -65,7 +65,7 @@ const buildBaseFeeArray = ({
 
 describe("useGalacticaFees", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
     })
     it("should render correctly", () => {
         mocked(useQuery).mockReturnValue({

@@ -1,15 +1,16 @@
 import { act, renderHook } from "@testing-library/react-hooks"
-import { useBiometrics, useTransactionScreen, useWalletSecurity } from "~Hooks"
 import { TestHelpers, TestWrapper } from "~Test"
+import { waitFor } from "@testing-library/react-native"
+import { Transaction } from "@vechain/sdk-core"
+
+import { useBiometrics, useTransactionScreen, useWalletSecurity } from "~Hooks"
 import { Routes } from "~Navigation"
 import { AccountWithDevice, BaseDevice, SecurityLevelType, TransactionRequest } from "~Model"
 import crypto from "react-native-quick-crypto"
 import axios, { AxiosError } from "axios"
-import { waitFor } from "@testing-library/react-native"
 import { selectDevice, selectSelectedAccount, selectVthoTokenWithBalanceByAccount } from "~Storage/Redux"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { BigNutils } from "~Utils"
-import { Transaction } from "@vechain/sdk-core"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
 import { i18nObject } from "~i18n"
 import { showErrorToast } from "~Components/Base/BaseToast"
@@ -93,7 +94,7 @@ const mockDevice = (device: BaseDevice) => {
 
 describe("useTransactionScreen", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
         ;(useBiometrics as jest.Mock).mockReturnValue({
             currentSecurityLevel: SecurityLevelType.BIOMETRIC,
             authTypeAvailable: "FACIAL_RECOGNITION",
@@ -205,7 +206,6 @@ describe("useTransactionScreen", () => {
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: {
-                            isFirstRequest: true,
                             method: "thor_sendTransaction",
                             id: "1234",
                             type: "in-app",
@@ -284,7 +284,6 @@ describe("useTransactionScreen", () => {
                                 onTransactionSuccess,
                                 onTransactionFailure,
                                 dappRequest: {
-                                    isFirstRequest: true,
                                     method: "thor_sendTransaction",
                                     id: "1234",
                                     type: "in-app",
@@ -330,7 +329,6 @@ describe("useTransactionScreen", () => {
                         onTransactionSuccess,
                         onTransactionFailure,
                         dappRequest: {
-                            isFirstRequest: true,
                             method: "thor_sendTransaction",
                             id: "1234",
                             type: "in-app",
@@ -375,7 +373,6 @@ describe("useTransactionScreen", () => {
             mockDevice(ledgerDevice)
 
             const dappRequest: TransactionRequest = {
-                isFirstRequest: true,
                 method: "thor_sendTransaction",
                 id: "1234",
                 type: "in-app",
