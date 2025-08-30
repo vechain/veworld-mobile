@@ -1,7 +1,7 @@
 // Devices
-import { hdnode1, hdnode2, keystoreWallet, wallet1, wallet2 } from "./wallets"
+import { hdnode1, hdnode2, keystoreWallet, smartWallet, wallet1, wallet2 } from "./wallets"
 import { mockLedgerAccount } from "./ledger"
-import { DEVICE_TYPE, LedgerDevice, LocalDevice } from "~Model"
+import { DEVICE_TYPE, LedgerDevice, LocalDevice, SmartWalletDevice } from "~Model"
 import { CryptoUtils } from "~Utils"
 
 export const device1: LocalDevice = {
@@ -54,6 +54,14 @@ export const ledgerDevice: LedgerDevice = {
         publicKey: mockLedgerAccount.publicKey,
         chainCode: mockLedgerAccount.chainCode,
     },
+    index: 0,
+    position: 0,
+}
+
+export const smartWalletDevice: SmartWalletDevice = {
+    alias: "Smart Wallet Device 1",
+    rootAddress: smartWallet.rootAddress,
+    type: DEVICE_TYPE.SMART_WALLET,
     index: 0,
     position: 0,
 }

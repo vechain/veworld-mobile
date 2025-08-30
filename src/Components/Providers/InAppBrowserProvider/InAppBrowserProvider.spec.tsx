@@ -12,6 +12,7 @@ import { getStore } from "../../../Test"
 import { InteractionProvider } from "../InteractionProvider"
 import { usePersistedTheme } from "../PersistedThemeProvider"
 import { InAppBrowserProvider, useInAppBrowser } from "./InAppBrowserProvider"
+import { FeatureFlaggedSmartWallet } from "../FeatureFlaggedSmartWallet"
 
 jest.mock("react-native", () => ({
     ...jest.requireActual("react-native"),
@@ -74,14 +75,16 @@ const createWrapper = (platform: PlatformOSType) => {
         })
         return (
             <Provider store={getStore(preloadedState)}>
-                <InteractionProvider>
-                    <QueryClientProvider client={queryClient}>
-                        <InAppBrowserProvider platform={platform}>
-                            {children}
-                            <BaseToast />
-                        </InAppBrowserProvider>
-                    </QueryClientProvider>
-                </InteractionProvider>
+                <FeatureFlaggedSmartWallet nodeUrl="https://testnet.vechain.com" networkType="testnet">
+                    <InteractionProvider>
+                        <QueryClientProvider client={queryClient}>
+                            <InAppBrowserProvider platform={platform}>
+                                {children}
+                                <BaseToast />
+                            </InAppBrowserProvider>
+                        </QueryClientProvider>
+                    </InteractionProvider>
+                </FeatureFlaggedSmartWallet>
             </Provider>
         )
     }

@@ -4,24 +4,33 @@ import { HDNode } from "thor-devkit"
 import { showWarningToast, WalletEncryptionKeyHelper } from "~Components"
 import { ERROR_EVENTS, VTHO } from "~Constants"
 import { useI18nContext } from "~i18n"
-import { AccountWithDevice, DEVICE_TYPE, LedgerAccountWithDevice, TransactionRequest, Wallet } from "~Model"
+import {
+    AccountWithDevice,
+    DEVICE_TYPE,
+    LedgerAccountWithDevice,
+    LocalDevice,
+    TransactionRequest,
+    Wallet,
+} from "~Model"
 import { DelegationType } from "~Model/Delegation"
 import { Routes } from "~Navigation"
 import { sponsorTransaction } from "~Networking"
-import { delegateGenericDelegator } from "~Networking/GenericDelegator"
+import { useSmartWallet } from "../useSmartWallet"
+import { delegateGenericDelegator, delegateGenericDelegatorSmartAccount } from "~Networking/GenericDelegator"
 import { selectDevice, selectSelectedAccount, selectSelectedNetwork, useAppSelector } from "~Storage/Redux"
 import { BigNumberUtils, debug, HexUtils, warn } from "~Utils"
-import { validateGenericDelegatorTx } from "~Utils/GenericDelegatorUtils"
+import { validateGenericDelegatorTx, validateGenericDelegatorTxSmartAccount } from "~Utils/GenericDelegatorUtils"
 
 type Props = {
     selectedDelegationAccount?: AccountWithDevice
     selectedDelegationOption: DelegationType
     selectedDelegationUrl?: string
     initialRoute?: Routes.NFTS | Routes.HOME
-    buildTransaction: () => Transaction
+    buildTransaction: () => Promise<Transaction>
     dappRequest?: TransactionRequest
     selectedDelegationToken: string
     genericDelegatorFee?: BigNumberUtils
+    genericDelegatorDepositAccount?: string
 }
 
 export enum SignStatus {
@@ -56,12 +65,14 @@ export const useSignTransaction = ({
     initialRoute,
     selectedDelegationToken,
     genericDelegatorFee,
+    genericDelegatorDepositAccount,
 }: Props) => {
     const { LL } = useI18nContext()
     const account = useAppSelector(selectSelectedAccount)
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
     const senderDevice = useAppSelector(state => selectDevice(state, account.rootAddress))
     const nav = useNavigation()
+    const { signTransaction: signTransactionWithSmartWallet, ownerAddress: smartWalletOwnerAddress } = useSmartWallet()
 
     const getSignature = async (
         transaction: Transaction,
@@ -85,9 +96,13 @@ export const useSignTransaction = ({
             // build hex encoded version of the transaction for signing request
             const rawTransaction = HexUtils.addPrefix(Buffer.from(transaction.encoded).toString("hex"))
 
+            // If the sender is a smart wallet, the origin is the smart wallet owner address as this is where
+            // where the initial transaction will be sent from
+            const origin = senderDevice?.type === DEVICE_TYPE.SMART_WALLET ? smartWalletOwnerAddress : account.address
+
             // request to send for sponsorship/fee delegation
             const sponsorRequest = {
-                origin: account.address.toLowerCase(),
+                origin: origin.toLowerCase(),
                 raw: rawTransaction,
             }
 
@@ -119,13 +134,27 @@ export const useSignTransaction = ({
                 })
                 throw new Error("Delegated hardware wallet not supported yet")
             }
+            // Unable to delegate to a smart wallet as the underlying EOA needs to be funded
+            if (delegationDevice.type === DEVICE_TYPE.SMART_WALLET) {
+                showWarningToast({
+                    text1: LL.HEADS_UP(),
+                    text2: LL.SMART_WALLET_DELEGATION_NOT_SUPPORTED(),
+                })
+                throw new Error("Smart wallet not supported yet")
+            }
 
             const delegationWallet = await WalletEncryptionKeyHelper.decryptWallet({
                 encryptedWallet: delegationDevice.wallet,
                 pinCode: password,
             })
 
-            return await getSignature(transaction, delegationWallet, account.address, selectedDelegationAccount)
+            // If the sender is a smart wallet, the delegateForAddress is the smart wallet owner address
+            // This is because the intial transaction to the chain will be sent from the smart wallet owner address,
+            // not the smart wallet address
+            const delegationForAddress =
+                senderDevice?.type === DEVICE_TYPE.SMART_WALLET ? smartWalletOwnerAddress : account.address
+
+            return await getSignature(transaction, delegationWallet, delegationForAddress, selectedDelegationAccount)
         } catch (e) {
             warn(ERROR_EVENTS.SIGN, "Error getting account delegator signature", e)
             return SignStatus.DELEGATION_FAILURE
@@ -137,17 +166,26 @@ export const useSignTransaction = ({
             // build hex encoded version of the transaction for signing request
             const rawTransaction = HexUtils.addPrefix(Buffer.from(transaction.encoded).toString("hex"))
 
+            const origin = senderDevice?.type === DEVICE_TYPE.SMART_WALLET ? smartWalletOwnerAddress : account.address
             // request to send for sponsorship/fee delegation
             const sponsorRequest = {
-                origin: account.address.toLowerCase(),
+                origin: origin.toLowerCase(),
                 raw: rawTransaction,
             }
-
-            const newTx = await delegateGenericDelegator({
-                ...sponsorRequest,
-                token: selectedDelegationToken,
-                networkType: selectedNetwork.type,
-            })
+            let newTx
+            if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET) {
+                newTx = await delegateGenericDelegatorSmartAccount({
+                    ...sponsorRequest,
+                    token: selectedDelegationToken,
+                    networkType: selectedNetwork.type,
+                })
+            } else {
+                newTx = await delegateGenericDelegator({
+                    ...sponsorRequest,
+                    token: selectedDelegationToken,
+                    networkType: selectedNetwork.type,
+                })
+            }
 
             if (!newTx) {
                 throw new Error("[GENERIC DELEGATOR]: Error getting delegator signature")
@@ -174,6 +212,24 @@ export const useSignTransaction = ({
                 const result = await getGenericDelegationTransaction(transaction)
                 if (result === SignStatus.DELEGATION_FAILURE)
                     return { transaction, signature: SignStatus.DELEGATION_FAILURE }
+
+                if (senderDevice?.type === DEVICE_TYPE.SMART_WALLET) {
+                    if (genericDelegatorDepositAccount === undefined) {
+                        return { transaction, signature: SignStatus.DELEGATION_FAILURE }
+                    }
+                    const validationResult = await validateGenericDelegatorTxSmartAccount(
+                        result.transaction,
+                        selectedDelegationToken,
+                        genericDelegatorFee,
+                        genericDelegatorDepositAccount,
+                    )
+                    if (!validationResult.valid) {
+                        debug("SIGN", validationResult.reason, validationResult.metadata)
+                        return { transaction, signature: SignStatus.DELEGATION_FAILURE }
+                    }
+                    return { transaction: result.transaction, signature: result.signature }
+                }
+
                 const validationResult = await validateGenericDelegatorTx(
                     transaction,
                     result.transaction,
@@ -222,7 +278,7 @@ export const useSignTransaction = ({
     const signTransaction = async (password?: string): Promise<SignTransactionResponse> => {
         if (!senderDevice) throw new Error("Sender device not found")
 
-        let transaction = buildTransaction()
+        let transaction = await buildTransaction()
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) {
             const result = await navigateToLedger(transaction, account as LedgerAccountWithDevice, password)
@@ -230,22 +286,29 @@ export const useSignTransaction = ({
             return SignStatus.NAVIGATE_TO_LEDGER
         }
 
-        //local mnemonic, identity already verified via useCheckIdentity
-        if (!senderDevice.wallet) {
-            throw new Error("Hardware wallet not supported yet")
-        }
-
-        const senderWallet = await WalletEncryptionKeyHelper.decryptWallet({
-            encryptedWallet: senderDevice.wallet,
-            pinCode: password,
-        })
-
         const { signature: delegationSignature, transaction: newTx } = await getDelegationSignature(
             transaction,
             password,
         )
+
+        let senderSignature: Buffer
+        if (senderDevice.type === DEVICE_TYPE.SMART_WALLET) {
+            senderSignature = await signTransactionWithSmartWallet(transaction)
+        } else {
+            //local mnemonic, identity already verified via useCheckIdentity
+            if (!(senderDevice as LocalDevice).wallet) {
+                throw new Error("Hardware wallet not supported yet")
+            }
+
+            const senderWallet = await WalletEncryptionKeyHelper.decryptWallet({
+                encryptedWallet: (senderDevice as LocalDevice).wallet,
+                pinCode: password,
+            })
+
+            senderSignature = await getSignature(newTx, senderWallet)
+        }
+
         if (delegationSignature === SignStatus.DELEGATION_FAILURE) return SignStatus.DELEGATION_FAILURE
-        const senderSignature = await getSignature(newTx, senderWallet)
 
         return Transaction.of(
             newTx.body,

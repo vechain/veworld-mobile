@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit"
-import { BaseDevice, LedgerDevice, LocalDevice } from "~Model"
+import { BaseDevice, LedgerDevice, LocalDevice, SmartWalletDevice } from "~Model"
 import { AddressUtils } from "~Utils"
 
-type Device = LedgerDevice | LocalDevice
+type Device = LedgerDevice | LocalDevice | SmartWalletDevice
 export const initialDeviceState: Device[] = []
 
 export const DeviceSlice = createSlice({

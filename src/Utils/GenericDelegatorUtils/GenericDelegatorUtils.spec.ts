@@ -3,7 +3,12 @@ import { TESTNET_URL, ThorClient } from "@vechain/sdk-network"
 import { ethers } from "ethers"
 import { abis, B3TR } from "~Constants"
 import BigNutils from "~Utils/BigNumberUtils"
-import { GenericDelegatorTransactionValidationResultInvalid, validateGenericDelegatorTx } from "./GenericDelegatorUtils"
+import {
+    GenericDelegatorTransactionValidationResultInvalid,
+    validateGenericDelegatorTx,
+    validateGenericDelegatorTxSmartAccount,
+} from "./GenericDelegatorUtils"
+import { SimpleAccountABI } from "../../VechainWalletKit/utils/abi"
 
 const thorClient = ThorClient.at(TESTNET_URL)
 
@@ -28,6 +33,51 @@ const constructTokenApprove = (address = ethers.Wallet.createRandom().address, a
         ABIContract.ofAbi([abis.VIP180.approve as any]).getFunction("approve"),
         [address, amount.wei.toString()],
     )
+
+const simpleAccountIface = new ethers.utils.Interface(SimpleAccountABI)
+
+const constructExecuteWithAuthorization = (
+    smartAccountAddress: string,
+    to: string,
+    value: string = "0",
+    data: string = "0x",
+) => {
+    const executeData = simpleAccountIface.encodeFunctionData("executeWithAuthorization", [
+        to,
+        value,
+        data,
+        0, // validAfter
+        0, // validBefore
+        "0x", // signature placeholder
+    ])
+    return {
+        to: smartAccountAddress,
+        value: "0",
+        data: executeData,
+    }
+}
+
+const constructExecuteBatchWithAuthorization = (
+    smartAccountAddress: string,
+    addresses: string[],
+    values: string[],
+    datas: string[],
+) => {
+    const executeData = simpleAccountIface.encodeFunctionData("executeBatchWithAuthorization", [
+        addresses,
+        values,
+        datas,
+        0, // validAfter
+        0, // validBefore
+        "0x0000000000000000000000000000000000000000000000000000000000000000", // nonce
+        "0x", // signature placeholder
+    ])
+    return {
+        to: smartAccountAddress,
+        value: "0",
+        data: executeData,
+    }
+}
 
 describe("GenericDelegatorUtils", () => {
     describe("validateGenericDelegatorTx", () => {
@@ -129,6 +179,278 @@ describe("GenericDelegatorUtils", () => {
                     "B3TR",
                     BigNutils("99"),
                 )
+                expect(result.valid).toBe(true)
+            })
+        })
+    })
+
+    describe("validateGenericDelegatorTxSmartAccount", () => {
+        const depositAccount = ethers.Wallet.createRandom().address
+        const smartAccountAddress = ethers.Wallet.createRandom().address
+
+        describe("VET delegation", () => {
+            it("should return false if no delegation fee clause is found", async () => {
+                const userTransaction = constructVETTransfer()
+                const smartAccountTx = await constructTx([
+                    constructExecuteWithAuthorization(
+                        smartAccountAddress,
+                        userTransaction.to!,
+                        userTransaction.value!,
+                        userTransaction.data!,
+                    ),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "VET",
+                    BigNutils("100"),
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(false)
+                expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe(
+                    "NO_DELEGATION_FEE_CLAUSE",
+                )
+            })
+
+            it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
+                const userTransaction = constructVETTransfer()
+                const vetFeeClause = constructVETTransfer(depositAccount, VET.of(100, Units.wei))
+                const smartAccountTx = await constructTx([
+                    constructExecuteBatchWithAuthorization(
+                        smartAccountAddress,
+                        [userTransaction.to!, vetFeeClause.to!],
+                        [userTransaction.value!, vetFeeClause.value!],
+                        [userTransaction.data!, vetFeeClause.data!],
+                    ),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "VET",
+                    BigNutils("89"), // 11% difference
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(false)
+                expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("OVER_THRESHOLD")
+            })
+
+            it("should return true if all checks are ok with executeBatchWithAuthorization", async () => {
+                const userTransaction = constructVETTransfer()
+                const vetFeeClause = constructVETTransfer(depositAccount, VET.of(100, Units.wei))
+                const smartAccountTx = await constructTx([
+                    constructExecuteBatchWithAuthorization(
+                        smartAccountAddress,
+                        [userTransaction.to!, vetFeeClause.to!],
+                        [userTransaction.value!, vetFeeClause.value!],
+                        [userTransaction.data!, vetFeeClause.data!],
+                    ),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "VET",
+                    BigNutils("99"),
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(true)
+            })
+
+            it("should return true if all checks are ok with executeWithAuthorization", async () => {
+                const vetFeeClause = constructVETTransfer(depositAccount, VET.of(100, Units.wei))
+                const smartAccountTx = await constructTx([
+                    constructExecuteWithAuthorization(
+                        smartAccountAddress,
+                        vetFeeClause.to!,
+                        vetFeeClause.value!,
+                        vetFeeClause.data!,
+                    ),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "VET",
+                    BigNutils("99"),
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(true)
+            })
+        })
+
+        describe("B3TR delegation", () => {
+            it("should return false if no delegation fee clause is found", async () => {
+                const userTransaction = constructVETTransfer()
+                const smartAccountTx = await constructTx([
+                    constructExecuteWithAuthorization(
+                        smartAccountAddress,
+                        userTransaction.to!,
+                        userTransaction.value!,
+                        userTransaction.data!,
+                    ),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "B3TR",
+                    BigNutils("100"),
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(false)
+                expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe(
+                    "NO_DELEGATION_FEE_CLAUSE",
+                )
+            })
+
+            it("should return false if the signature is wrong", async () => {
+                // This test demonstrates that clauses with invalid data (not ERC20 transfers)
+                // are filtered out during delegation fee clause detection
+                const userTransaction = constructVETTransfer()
+                const validTransferToDeposit = constructTokenTransfer(depositAccount, VET.of(100, Units.wei))
+                const smartAccountTx = await constructTx([
+                    constructExecuteWithAuthorization(
+                        smartAccountAddress,
+                        userTransaction.to!,
+                        userTransaction.value!,
+                        userTransaction.data!,
+                    ),
+                    { ...validTransferToDeposit, data: "0x12345678" }, // Invalid data but to deposit account
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "B3TR",
+                    BigNutils("100"),
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(false)
+                expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe(
+                    "NO_DELEGATION_FEE_CLAUSE",
+                )
+            })
+
+            it("should return false if the difference between the sent value and the estimate is > 10%", async () => {
+                const userTransaction = constructVETTransfer()
+                const tokenFeeClause = constructTokenTransfer(depositAccount, VET.of(100, Units.wei))
+                const smartAccountTx = await constructTx([
+                    constructExecuteBatchWithAuthorization(
+                        smartAccountAddress,
+                        [userTransaction.to!, B3TR.address],
+                        [userTransaction.value!, "0"],
+                        [userTransaction.data!, tokenFeeClause.data!],
+                    ),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "B3TR",
+                    BigNutils("89"), // 11% difference
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(false)
+                expect((result as GenericDelegatorTransactionValidationResultInvalid).reason).toBe("OVER_THRESHOLD")
+            })
+
+            it("should return true if all checks are ok with executeBatchWithAuthorization", async () => {
+                const userTransaction = constructVETTransfer()
+                const tokenFeeClause = constructTokenTransfer(depositAccount, VET.of(100, Units.wei))
+                const smartAccountTx = await constructTx([
+                    constructExecuteBatchWithAuthorization(
+                        smartAccountAddress,
+                        [userTransaction.to!, B3TR.address],
+                        [userTransaction.value!, "0"],
+                        [userTransaction.data!, tokenFeeClause.data!],
+                    ),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "B3TR",
+                    BigNutils("99"),
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(true)
+            })
+
+            it("should return true if all checks are ok with executeWithAuthorization", async () => {
+                const tokenFeeClause = constructTokenTransfer(depositAccount, VET.of(100, Units.wei))
+                const smartAccountTx = await constructTx([
+                    constructExecuteWithAuthorization(smartAccountAddress, B3TR.address, "0", tokenFeeClause.data!),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "B3TR",
+                    BigNutils("99"),
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(true)
+            })
+        })
+
+        describe("mixed transactions", () => {
+            it("should handle smart account transactions mixed with regular clauses", async () => {
+                const regularClause = constructVETTransfer(depositAccount, VET.of(100, Units.wei))
+                const userTransaction = constructVETTransfer()
+                const smartAccountTx = await constructTx([
+                    regularClause,
+                    constructExecuteWithAuthorization(
+                        smartAccountAddress,
+                        userTransaction.to!,
+                        userTransaction.value!,
+                        userTransaction.data!,
+                    ),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "VET",
+                    BigNutils("99"),
+                    depositAccount,
+                )
+
+                expect(result.valid).toBe(true)
+            })
+
+            it("should validate multiple smart account clauses correctly", async () => {
+                const userTransaction1 = constructVETTransfer()
+                const userTransaction2 = constructVETTransfer()
+                const vetFeeClause = constructVETTransfer(depositAccount, VET.of(100, Units.wei))
+                const smartAccountTx = await constructTx([
+                    constructExecuteWithAuthorization(
+                        smartAccountAddress,
+                        userTransaction1.to!,
+                        userTransaction1.value!,
+                        userTransaction1.data!,
+                    ),
+                    constructExecuteWithAuthorization(
+                        smartAccountAddress,
+                        userTransaction2.to!,
+                        userTransaction2.value!,
+                        userTransaction2.data!,
+                    ),
+                    constructExecuteWithAuthorization(
+                        smartAccountAddress,
+                        vetFeeClause.to!,
+                        vetFeeClause.value!,
+                        vetFeeClause.data!,
+                    ),
+                ])
+
+                const result = await validateGenericDelegatorTxSmartAccount(
+                    smartAccountTx,
+                    "VET",
+                    BigNutils("99"),
+                    depositAccount,
+                )
+
                 expect(result.valid).toBe(true)
             })
         })

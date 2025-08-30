@@ -2848,6 +2848,10 @@ type RootTranslation = {
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: string
 	/**
+	 * Delegated smart wallet not supported yet
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: string
+	/**
 	 * T​y​p​e​d​ ​D​a​t​a​ ​c​a​n​n​o​t​ ​b​e​ ​s​i​g​n​e​d​ ​w​i​t​h​ ​a​ ​L​e​d​g​e​r​ ​d​e​v​i​c​e​.​ ​P​l​e​a​s​e​ ​s​e​l​e​c​t​ ​a​n​o​t​h​e​r​ ​a​c​c​o​u​n​t​.
 	 */
 	LEDGER_DEVICE_ALERT: string
@@ -7776,6 +7780,10 @@ Thanks for your patience!
 	 * Delegated hardware wallet not supported yet
 	 */
 	LEDGER_DELEGATION_NOT_SUPPORTED: () => LocalizedString
+	/**
+	 * Smart wallet not supported yet
+	 */
+	SMART_WALLET_DELEGATION_NOT_SUPPORTED: () => LocalizedString
 	/**
 	 * Typed Data cannot be signed with a Ledger device. Please select another account.
 	 */
