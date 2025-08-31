@@ -8,12 +8,33 @@ import { useInteraction } from "../InteractionProvider"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 
-const parseUrl = (url: string) => {
+type DeepLinkEvent = "discover" | "connect" | "singTransaction" | "signCertificate" | "signTypedData" | "disconnect"
+
+type DiscoverURLRequest = {
+    event: "discover"
+    request: string
+}
+
+type DappURLRequest = {
+    event: Exclude<DeepLinkEvent, "discover">
+    request: Record<string, string>
+}
+
+const parseUrl = (url: string): DiscoverURLRequest | DappURLRequest => {
     const urlObj = new URL(url)
     const path = urlObj.pathname
-    const request = Object.fromEntries(urlObj.searchParams)
-    const event = path.split("/").pop()
-    return { request, event }
+    const destructuredPath = path.split("/")
+
+    if (destructuredPath[0] === "discover") {
+        return {
+            event: "discover",
+            request: decodeURIComponent(destructuredPath[destructuredPath.length - 1]),
+        }
+    }
+    return {
+        event: destructuredPath.pop() as Exclude<DeepLinkEvent, "discover">,
+        request: Object.fromEntries(urlObj.searchParams),
+    }
 }
 
 export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) => {
@@ -59,17 +80,11 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
     useEffect(() => {
         const handleDeepLink = ({ url }: { url: string }) => {
             const { event, request } = parseUrl(url)
-            const parsed = new URL(url)
-            const pathname = parsed.pathname
-            //Filter out all the useless elements
-            const splitPathname = pathname.split("/").filter(Boolean)
+
             switch (event) {
-                case "discover": {
-                    const lastElement = splitPathname[splitPathname.length - 1]
-                    const decodedURI = decodeURIComponent(lastElement)
-                    navigateWithTab({ url: decodedURI, title: decodedURI, navigationFn: () => {} })
+                case "discover":
+                    navigateWithTab({ url: request, title: request, navigationFn: () => {} })
                     break
-                }
                 case "connect":
                     handleConnectionLink(request as ConnectionLinkParams)
                     return
