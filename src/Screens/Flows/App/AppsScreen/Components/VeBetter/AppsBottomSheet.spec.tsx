@@ -1,9 +1,10 @@
-import React, { PropsWithChildren } from "react"
 import { render, screen } from "@testing-library/react-native"
-import { AppsBottomSheet } from "./AppsBottomSheet"
-import { TestWrapper, TestHelpers } from "~Test"
+import React, { PropsWithChildren } from "react"
+import { TestHelpers, TestWrapper } from "~Test"
+
+import { useVeBetterDaoActiveDapps } from "~Hooks"
 import { X2ECategoryType } from "~Model/DApp"
-import { useVeBetterDaoDapps } from "~Hooks"
+import { AppsBottomSheet } from "./AppsBottomSheet"
 
 const Wrapper = ({ children }: PropsWithChildren) => (
     <TestWrapper
@@ -39,8 +40,8 @@ jest.mock("./Hooks/useX2EAppAnimation", () => ({
     }),
 }))
 
-jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps", () => ({
-    useVeBetterDaoDapps: jest.fn().mockReturnValue({
+jest.mock("~Hooks/useFetchFeaturedDApps/useVeBetterDaoActiveApps", () => ({
+    useVeBetterDaoActiveDapps: jest.fn().mockReturnValue({
         data: [],
         isLoading: false,
     }),
@@ -72,7 +73,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should handle loading state", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: mockApps,
             isLoading: true,
         })
@@ -88,7 +89,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should handle empty apps list", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
         })
@@ -104,7 +105,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should render apps when data is available", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: mockApps,
             isLoading: false,
         })
@@ -115,7 +116,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should handle forwardRef correctly", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: mockApps,
             isLoading: false,
         })
@@ -127,7 +128,7 @@ describe("X2EAppsBottomSheet", () => {
 
     it("should handle onDismiss prop", () => {
         const mockOnDismiss = jest.fn()
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: mockApps,
             isLoading: false,
         })
@@ -137,7 +138,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should render loading skeleton when isLoading is true", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: mockApps,
             isLoading: true,
         })
@@ -154,7 +155,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should render apps when isLoading is false", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: mockApps,
             isLoading: false,
         })
@@ -173,7 +174,7 @@ describe("X2EAppsBottomSheet", () => {
     })
 
     it("should render empty list when no apps are provided", () => {
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: [],
             isLoading: false,
         })
@@ -208,7 +209,7 @@ describe("X2EAppsBottomSheet", () => {
                 ve_world: undefined,
             },
         ]
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: minimalApps,
             isLoading: false,
         })
@@ -237,7 +238,7 @@ describe("X2EAppsBottomSheet", () => {
             setSelectedCategory: mockSetSelectedCategory,
             filteredApps: [mockApps[1]],
         })
-        ;(useVeBetterDaoDapps as jest.Mock).mockReturnValue({
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
             data: mockApps,
             isLoading: false,
         })

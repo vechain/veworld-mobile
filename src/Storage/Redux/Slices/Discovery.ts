@@ -71,22 +71,25 @@ export const DiscoverySlice = createSlice({
     reducers: {
         addBookmark: (state, action: PayloadAction<DiscoveryDApp | VbdDApp>) => {
             const { payload } = action
-            const discoveryDapp = payload as DiscoveryDApp
-            const vbdDapp = payload as VbdDApp
-            const isCustom = (discoveryDapp.isCustom || false) ?? false
-
-            const bookmark = {
-                id: discoveryDapp.id || vbdDapp.id,
-                name: discoveryDapp.name || vbdDapp.name,
-                href: discoveryDapp.href || vbdDapp.external_url,
-                desc: discoveryDapp.desc || vbdDapp.description,
-                isCustom,
-                createAt: discoveryDapp.createAt || parseInt(vbdDapp.createdAtTimestamp, 10),
-                amountOfNavigations: 1,
-                veBetterDaoId: vbdDapp.id || discoveryDapp.veBetterDaoId,
+            let bookmark: DiscoveryDApp
+            if ("external_url" in payload) {
+                //Treat the app as a VBD app
+                bookmark = {
+                    name: payload.name,
+                    href: payload.external_url,
+                    desc: payload.description,
+                    isCustom: false,
+                    createAt: parseInt(payload.createdAtTimestamp, 10),
+                    amountOfNavigations: 1,
+                    veBetterDaoId: payload.id,
+                }
+            } else {
+                bookmark = {
+                    ...payload,
+                }
             }
 
-            if (isCustom) {
+            if (bookmark.isCustom) {
                 state.custom.push(bookmark)
             } else {
                 state.favorites.push(bookmark)
