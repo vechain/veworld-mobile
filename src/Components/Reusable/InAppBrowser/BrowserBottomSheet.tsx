@@ -185,6 +185,16 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         setActionContainerHeight(height)
     }
 
+    const getActionTextColor = (action: BottomSheetAction) => {
+        if (action.disabled) {
+            return theme.colors.actionBottomSheet.disabledText
+        }
+        if (action.id === "close-tab") {
+            return theme.colors.actionBottomSheet.dangerText
+        }
+        return theme.colors.actionBottomSheet.text
+    }
+
     const snapPoints = useMemo(() => {
         const heightPercentage = (actionContainerHeight * 100) / SCREEN_HEIGHT
         //This will keep the bottom sheet content inside the padding of the bottom sheet
@@ -222,15 +232,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                                         : theme.colors.actionBottomSheet.icon
                                 }
                             />
-                            <BaseText
-                                typographyFont="bodySemiBold"
-                                color={
-                                    action.disabled
-                                        ? theme.colors.actionBottomSheet.disabledText
-                                        : action.id === "close-tab"
-                                        ? theme.colors.actionBottomSheet.dangerText
-                                        : theme.colors.actionBottomSheet.text
-                                }>
+                            <BaseText typographyFont="bodySemiBold" color={getActionTextColor(action)}>
                                 {action.label}
                             </BaseText>
                         </BaseTouchable>
