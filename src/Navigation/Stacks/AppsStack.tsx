@@ -40,6 +40,7 @@ export const AppsStack = () => {
                               }
                             : {
                                   headerShown: false,
+                                  animationEnabled: false,
                               }
                     }
                 />
@@ -59,6 +60,7 @@ export const AppsStack = () => {
                           }
                         : {
                               headerShown: false,
+                              animationEnabled: false,
                           }
                 }
             />
@@ -76,6 +78,7 @@ export const AppsStack = () => {
                           }
                         : {
                               headerShown: false,
+                              animationEnabled: false,
                           }
                 }
             />
