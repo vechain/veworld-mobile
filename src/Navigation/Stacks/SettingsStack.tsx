@@ -29,6 +29,7 @@ import {
 } from "~Screens"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -177,35 +178,53 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER}
                 component={TabsManagerScreen}
-                options={{
-                    headerShown: false,
-                    cardStyleInterpolator: slideFadeInTransition,
-                    presentation: "modal",
-                    transitionSpec: TRANSITION_SPECS,
-                    gestureDirection: "vertical",
-                }}
+                options={
+                    isIOS()
+                        ? {
+                              headerShown: false,
+                              cardStyleInterpolator: slideFadeInTransition,
+                              presentation: "modal",
+                              transitionSpec: TRANSITION_SPECS,
+                              gestureDirection: "vertical",
+                          }
+                        : {
+                              headerShown: false,
+                          }
+                }
             />
             <Settings.Screen
                 name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
                 component={AppsSearchScreen}
-                options={{
-                    headerShown: false,
-                    cardStyleInterpolator: slideFadeInTransition,
-                    presentation: "modal",
-                    transitionSpec: TRANSITION_SPECS,
-                    gestureDirection: "vertical",
-                }}
+                options={
+                    isIOS()
+                        ? {
+                              headerShown: false,
+                              cardStyleInterpolator: slideFadeInTransition,
+                              presentation: "modal",
+                              transitionSpec: TRANSITION_SPECS,
+                              gestureDirection: "vertical",
+                          }
+                        : {
+                              headerShown: false,
+                          }
+                }
             />
             <Settings.Screen
                 name={Routes.BROWSER}
                 component={InAppBrowser}
-                options={{
-                    headerShown: false,
-                    cardStyleInterpolator: slideFadeInTransition,
-                    presentation: "modal",
-                    transitionSpec: TRANSITION_SPECS,
-                    gestureDirection: "vertical",
-                }}
+                options={
+                    isIOS()
+                        ? {
+                              headerShown: false,
+                              cardStyleInterpolator: slideFadeInTransition,
+                              presentation: "modal",
+                              transitionSpec: TRANSITION_SPECS,
+                              gestureDirection: "vertical",
+                          }
+                        : {
+                              headerShown: false,
+                          }
+                }
             />
         </Settings.Navigator>
     )

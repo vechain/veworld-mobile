@@ -16,6 +16,7 @@ import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { DAppUtils } from "~Utils/DAppUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     navigationUrl: string
@@ -110,7 +111,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
             <AnimatedFavicon
                 testID="URL-bar-dapp-favicon"
                 source={{ uri: parsedDappMetadata.icon, priority: FastImage.priority.high }}
-                style={[animatedFaviconStyles, styles.favicon]}
+                style={isIOS() ? [animatedFaviconStyles, styles.favicon] : styles.favicon}
             />
         ) : (
             <AnimatedBaseIcon
@@ -120,7 +121,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                 bg={COLORS.GREY_600}
                 size={12}
                 p={6}
-                style={[animatedFaviconStyles, styles.favicon]}
+                style={isIOS() ? [animatedFaviconStyles, styles.favicon] : styles.favicon}
             />
         )
     }, [parsedDappMetadata, animatedFaviconStyles])
@@ -132,7 +133,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
 
     return (
         <>
-            <Animated.View style={[styles.animatedContainer, animatedStyles]}>
+            <Animated.View style={isIOS() ? [styles.animatedContainer, animatedStyles] : styles.animatedContainer}>
                 <AnimatedBaseView style={styles.inputContainer}>
                     {/* Icon on the left */}
                     <AnimatedBaseIcon
@@ -144,7 +145,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                         haptics="Light"
                         size={16}
                         p={8}
-                        style={[animatedIconStyles, styles.iconButton]}
+                        style={isIOS() ? [animatedIconStyles, styles.iconButton] : styles.iconButton}
                     />
 
                     {/* URL Text centered */}
@@ -178,7 +179,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                         haptics="Light"
                         size={16}
                         p={8}
-                        style={[animatedIconStyles, styles.iconButton]}
+                        style={isIOS() ? [animatedIconStyles, styles.iconButton] : styles.iconButton}
                     />
                 </AnimatedBaseView>
             </Animated.View>
