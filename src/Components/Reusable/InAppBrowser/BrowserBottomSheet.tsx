@@ -272,3 +272,16 @@ const baseStyles = (theme: ColorThemeType) => {
         },
     })
 }
+
+export const getActionTextColorForTesting = (
+    action: { disabled?: boolean; id: string },
+    theme: { colors: { actionBottomSheet: { disabledText: string; dangerText: string; text: string } } },
+) => {
+    if (action.disabled) {
+        return theme.colors.actionBottomSheet.disabledText
+    }
+    if (action.id === "close-tab") {
+        return theme.colors.actionBottomSheet.dangerText
+    }
+    return theme.colors.actionBottomSheet.text
+}
