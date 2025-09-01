@@ -70,7 +70,6 @@ export const useExternalDappConnection = () => {
                 )
 
                 const response = JSON.stringify({
-                    public_key: encodeBase64(keyPair.publicKey),
                     address: selectedAccount.address,
                     session: sessionDataBytes,
                 })
