@@ -658,6 +658,7 @@
   "FAVORITES_SUGGESTION_BANNER_TITLE": "Add your favorite apps",
   "FAVOURITES_BOTTOM_SHEET_TITLE": "Favorites",
   "FAVOURITES_DAPPS_NO_RECORDS": "Could not find any dapps with this name",
+  "FAVOURITES_DAPPS_EMPTY_LIST": "No favorited apps to show",
   "FAVOURITES_DAPPS_SEARCH_PLACEHOLDER": "Search",
   "FAVOURITES_DAPPS_TITLE": "Favorites",
   "FEBRUARY": "February",
