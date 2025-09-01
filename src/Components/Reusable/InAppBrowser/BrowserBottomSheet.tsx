@@ -28,6 +28,7 @@ type BottomSheetAction = {
     icon: IconKey
     label: string
     onPress: () => void
+    disabled?: boolean
 }
 
 type BottomSheetActionItem = BottomSheetActionSeparator | BottomSheetAction
@@ -115,6 +116,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 id: "go-back",
                 icon: "icon-chevron-left",
                 label: LL.BROWSER_GO_BACK(),
+                disabled: !navigationState?.canGoBack,
                 onPress: () => {
                     webviewRef.current?.goBack()
                     onClose?.()
@@ -171,6 +173,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         isDapp,
         webviewRef,
         onClose,
+        navigationState?.canGoBack,
         navigationState?.url,
         dappMetadata,
         navToNewTab,
@@ -202,11 +205,16 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 style={styles.actionContainer}>
                 {actions.map(action =>
                     action.type === "action" ? (
-                        <BaseTouchable key={action.id} style={styles.actionItemContainer} action={action.onPress}>
+                        <BaseTouchable
+                            key={action.id}
+                            style={styles.actionItemContainer}
+                            action={action.onPress}
+                            disabled={action.disabled}>
                             <BaseIcon
                                 name={action.icon}
                                 size={16}
                                 iconPadding={8}
+                                disabled={action.disabled}
                                 bg={theme.colors.actionBottomSheet.dangerIconBackground}
                                 color={
                                     action.id === "close-tab"
@@ -217,7 +225,9 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                             <BaseText
                                 typographyFont="bodySemiBold"
                                 color={
-                                    action.id === "close-tab"
+                                    action.disabled
+                                        ? theme.colors.actionBottomSheet.disabledText
+                                        : action.id === "close-tab"
                                         ? theme.colors.actionBottomSheet.dangerText
                                         : theme.colors.actionBottomSheet.text
                                 }>
