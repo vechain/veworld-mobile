@@ -1,11 +1,11 @@
-import React, { useCallback } from "react"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
-import { useI18nContext } from "~i18n"
-import { useAnalyticTracking, useTheme } from "~Hooks"
 import { useNavigation } from "@react-navigation/native"
-import { Routes } from "~Navigation"
+import React, { useCallback } from "react"
+import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchableBox, BaseView } from "~Components"
 import { AnalyticsEvent } from "~Constants"
+import { useAnalyticTracking, useTheme } from "~Hooks"
+import { useI18nContext } from "~i18n"
+import { Routes } from "~Navigation"
 import { selectHasOnboarded, useAppSelector } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 
@@ -107,7 +107,7 @@ export const CreateOrImportWalletBottomSheet = React.forwardRef<BottomSheetModal
                             action={onObserveWallet}
                             py={16}
                             justifyContent="space-between">
-                            <BaseIcon name="icon-users" size={24} color={theme.colors.text} />
+                            <BaseIcon name="icon-eye" size={24} color={theme.colors.text} />
                             <BaseView flex={1} px={12}>
                                 <BaseText align="left" typographyFont="subSubTitle">
                                     {LL.BTN_OBSERVE_WALLET()}

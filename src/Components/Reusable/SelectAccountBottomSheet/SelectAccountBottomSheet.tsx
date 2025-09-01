@@ -6,9 +6,9 @@ import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Comp
 import { COLORS, isSmallScreen } from "~Constants"
 import { useScrollableBottomSheet, useTheme } from "~Hooks"
 import { AccountWithDevice, WatchedAccount } from "~Model"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     /**
@@ -100,9 +100,20 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 ref={ref}
                 onChange={handleSheetChangePosition}
                 onDismiss={onDismiss}>
-                <BaseView flexDirection="row" alignItems="center" gap={12}>
-                    <BaseIcon name="icon-wallet" size={20} color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900} />
-                    <BaseText typographyFont="subTitleBold">{LL.COMMON_SELECT_ACCOUNT()}</BaseText>
+                <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
+                    <BaseView flexDirection="column" gap={8}>
+                        <BaseView flexDirection="row" alignItems="center" gap={12}>
+                            <BaseIcon
+                                name="icon-wallet"
+                                size={20}
+                                color={theme.isDark ? COLORS.WHITE : COLORS.PRIMARY_900}
+                            />
+                            <BaseText typographyFont="subTitleBold">{LL.SELECT_ACCOUNT_TITLE()}</BaseText>
+                        </BaseView>
+                        <BaseText typographyFont="body" color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_600}>
+                            {LL.SELECT_ACCOUNT_DESCRIPTION()}
+                        </BaseText>
+                    </BaseView>
                 </BaseView>
 
                 <BaseSpacer height={12} />

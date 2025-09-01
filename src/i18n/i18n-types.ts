@@ -452,6 +452,10 @@ type RootTranslation = {
 	 */
 	APPS_SCREEN_TITLE: string
 	/**
+	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
+	 */
+	APPS_SEARCH_PLACEHOLDER: string
+	/**
 	 * A​p​p​s
 	 */
 	APPS_TITLE: string
@@ -529,10 +533,6 @@ type RootTranslation = {
 	 * @param {string} version
 	 */
 	APP_VERSION: RequiredParams<'version'>
-	/**
-	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
-	 */
-	APPS_SEARCH_PLACEHOLDER: string
 	/**
 	 * A​p​r​i​l
 	 */
@@ -1479,7 +1479,7 @@ type RootTranslation = {
 	 */
 	BTN_OBSERVE_WALLET: string
 	/**
-	 * I​m​p​o​r​t​ ​a​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s​ ​t​o​ ​o​n​l​y​ ​o​b​s​e​r​v​e​ ​t​h​i​s​ ​w​a​l​l​e​t
+	 * O​b​s​e​r​v​e​ ​a​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: string
 	/**
@@ -3870,6 +3870,22 @@ type RootTranslation = {
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: string
 	/**
+	 * W​a​l​l​e​t​s
+	 */
+	SELECT_ACCOUNT_TITLE: string
+	/**
+	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t
+	 */
+	SELECT_ACCOUNT_DESCRIPTION: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​s
+	 */
+	SELECT_ACCOUNT_YOURS: string
+	/**
+	 * W​a​t​c​h​i​n​g
+	 */
+	SELECT_ACCOUNT_WATCHING: string
+	/**
 	 * I​ ​U​N​D​E​R​S​T​A​N​D
 	 */
 	SEND_ACCEPT_NO_GAS_ACCEPT: string
@@ -5399,6 +5415,10 @@ Try reconnect your device to the internet.
 	 */
 	APPS_SCREEN_TITLE: () => LocalizedString
 	/**
+	 * Search an App or Website...
+	 */
+	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Apps
 	 */
 	APPS_TITLE: () => LocalizedString
@@ -5474,10 +5494,6 @@ Try reconnect your device to the internet.
 	 * version {version}
 	 */
 	APP_VERSION: (arg: { version: string }) => LocalizedString
-	/**
-	 * Search an App or Website...
-	 */
-	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
 	/**
 	 * April
 	 */
@@ -6417,7 +6433,7 @@ Thanks for your patience!
 	 */
 	BTN_OBSERVE_WALLET: () => LocalizedString
 	/**
-	 * Import a wallet address to only observe this wallet
+	 * Observe a public wallet address
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
 	/**
@@ -8773,6 +8789,22 @@ Thanks for your patience!
 	 * Please, make sure you have backed up your recovery phrase before proceeding with the upgrade.
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: () => LocalizedString
+	/**
+	 * Wallets
+	 */
+	SELECT_ACCOUNT_TITLE: () => LocalizedString
+	/**
+	 * Select the active account
+	 */
+	SELECT_ACCOUNT_DESCRIPTION: () => LocalizedString
+	/**
+	 * Your wallets
+	 */
+	SELECT_ACCOUNT_YOURS: () => LocalizedString
+	/**
+	 * Watching
+	 */
+	SELECT_ACCOUNT_WATCHING: () => LocalizedString
 	/**
 	 * I UNDERSTAND
 	 */

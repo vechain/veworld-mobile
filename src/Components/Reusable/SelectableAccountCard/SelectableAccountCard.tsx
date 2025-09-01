@@ -57,14 +57,14 @@ export const SelectableAccountCard = memo(
                         <AccountIcon address={account.address} size={40} />
                         <BaseView flexDirection="column" gap={4}>
                             <BaseText numberOfLines={1} color={theme.colors.title} typographyFont="bodySemiBold">
-                                {account.alias}
+                                {vnsName || account.alias}
                             </BaseText>
                             <BaseView flexDirection="row" gap={8}>
                                 {account?.device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge mr={8} />}
                                 <BaseText
                                     typographyFont="captionRegular"
                                     color={theme.isDark ? COLORS.GREY_100 : theme.colors.textLight}>
-                                    {vnsName || AddressUtils.humanAddress(vnsAddress || account.address)}
+                                    {AddressUtils.humanAddress(vnsAddress || account.address)}
                                 </BaseText>
                             </BaseView>
                         </BaseView>
