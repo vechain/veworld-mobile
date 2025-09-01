@@ -83,7 +83,12 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         const labels = useMemo(() => [LL.SELECT_ACCOUNT_YOURS(), LL.SELECT_ACCOUNT_WATCHING()], [LL])
 
         return (
-            <BaseBottomSheet dynamicHeight ref={ref} onDismiss={onDismiss} contentStyle={contentStyle}>
+            <BaseBottomSheet
+                dynamicHeight
+                ref={ref}
+                onDismiss={onDismiss}
+                contentStyle={contentStyle}
+                enableContentPanningGesture={false}>
                 <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                     <BaseView flexDirection="column" gap={8}>
                         <BaseView flexDirection="row" alignItems="center" gap={12}>
