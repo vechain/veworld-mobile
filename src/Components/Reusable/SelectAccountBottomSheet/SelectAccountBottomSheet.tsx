@@ -1,12 +1,13 @@
-import { BottomSheetSectionList } from "@gorhom/bottom-sheet"
+import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useMemo } from "react"
-import { SectionListData } from "react-native"
+import React, { useCallback, useMemo, useState } from "react"
+import { SectionList, SectionListData, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
-import { COLORS, isSmallScreen } from "~Constants"
-import { useScrollableBottomSheet, useTheme } from "~Hooks"
+import { BaseTabs } from "~Components/Base/BaseTabs"
+import { COLORS, ColorThemeType } from "~Constants"
+import { useThemedStyles } from "~Hooks"
+import { useScrollableBottomSheetList, useScrollableBottomSheetListWrapper } from "~Hooks/useScrollableBottomSheetList"
 import { AccountWithDevice, WatchedAccount } from "~Model"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
 
@@ -48,10 +49,16 @@ const SectionHeader = ({
     return <BaseText typographyFont="bodyMedium">{section.alias}</BaseText>
 }
 
+const KEYS = ["YOUR_WALLETS", "WATCHING"] as const
+
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss, accounts, isVthoBalance = false }, ref) => {
         const { LL } = useI18nContext()
+
+        const { onResize, contentStyle } = useScrollableBottomSheetListWrapper()
+        const scrollableListProps = useScrollableBottomSheetList({ onResize })
+        const [selectedKey, setSelectedKey] = useState<(typeof KEYS)[number]>("YOUR_WALLETS")
 
         const handlePress = useCallback(
             (account: AccountWithDevice | WatchedAccount) => {
@@ -61,30 +68,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             [closeBottomSheet, setSelectedAccount],
         )
 
-        const computeSnappoints = useMemo(() => {
-            if (accounts.length < 4) {
-                return ["50%"]
-            }
-
-            if (accounts.length === 5 && !isSmallScreen) {
-                return isIOS() ? ["65%"] : ["55%"]
-            }
-
-            if (accounts.length < 6) {
-                return ["75%"]
-            }
-
-            if (accounts.length < 8) return ["80%"]
-
-            return ["90%"]
-        }, [accounts.length])
-
-        const { flatListScrollProps, handleSheetChangePosition } = useScrollableBottomSheet({
-            data: accounts,
-            snapPoints: computeSnappoints,
-        })
-
-        const theme = useTheme()
+        const { styles, theme } = useThemedStyles(baseStyles)
 
         const sections = useMemo(() => {
             const groupedAccounts = accounts.reduce((acc, curr) => {
@@ -94,12 +78,12 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
         }, [accounts])
 
+        const onSettingsClick = useCallback(() => {}, [])
+
+        const labels = useMemo(() => [LL.SELECT_ACCOUNT_YOURS(), LL.SELECT_ACCOUNT_WATCHING()], [LL])
+
         return (
-            <BaseBottomSheet
-                snapPoints={computeSnappoints}
-                ref={ref}
-                onChange={handleSheetChangePosition}
-                onDismiss={onDismiss}>
+            <BaseBottomSheet dynamicHeight ref={ref} onDismiss={onDismiss} contentStyle={contentStyle}>
                 <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                     <BaseView flexDirection="column" gap={8}>
                         <BaseView flexDirection="row" alignItems="center" gap={12}>
@@ -114,10 +98,17 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                             {LL.SELECT_ACCOUNT_DESCRIPTION()}
                         </BaseText>
                     </BaseView>
+                    <BSTouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
+                        <BaseIcon name="icon-settings" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
+                    </BSTouchableOpacity>
                 </BaseView>
 
-                <BaseSpacer height={12} />
-                <BottomSheetSectionList
+                <BaseSpacer height={24} />
+
+                <BaseTabs keys={KEYS} labels={labels} selectedKey={selectedKey} setSelectedKey={setSelectedKey} />
+
+                <BaseSpacer height={24} />
+                <SectionList
                     sections={sections}
                     keyExtractor={item => item.address}
                     renderSectionHeader={SectionHeader}
@@ -133,10 +124,20 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     )}
                     ItemSeparatorComponent={ItemSeparatorComponent}
                     SectionSeparatorComponent={ItemSeparatorComponent}
-                    {...flatListScrollProps}
+                    {...scrollableListProps}
                     scrollEnabled
                 />
             </BaseBottomSheet>
         )
     },
 )
+
+const baseStyles = (theme: ColorThemeType) =>
+    StyleSheet.create({
+        settingsBtn: {
+            backgroundColor: theme.isDark ? COLORS.PURPLE : COLORS.WHITE,
+            padding: 8,
+            borderWidth: 1,
+            borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
+        },
+    })
