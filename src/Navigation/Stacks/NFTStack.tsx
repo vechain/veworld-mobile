@@ -1,5 +1,5 @@
 import React from "react"
-import { createNativeStackNavigator } from "@react-navigation/native-stack"
+import { createStackNavigator } from "@react-navigation/stack"
 import { TransactionClause } from "@vechain/sdk-core"
 import {
     InsertAddressSendScreen,
@@ -40,13 +40,13 @@ export type RootStackParamListNFT = {
     }
 }
 
-const { Navigator, Group, Screen } = createNativeStackNavigator<RootStackParamListNFT>()
+const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListNFT>()
 
 export const NFTStack = () => {
     const { animation } = useNavAnimation()
 
     return (
-        <Navigator id="NftStack" screenOptions={{ headerShown: false, animation }}>
+        <Navigator id="NftStack" screenOptions={{ headerShown: false, animationEnabled: animation !== "none" }}>
             <Group>
                 <Screen name={Routes.NFTS} component={NFTScreen} options={{ headerShown: false }} />
 
