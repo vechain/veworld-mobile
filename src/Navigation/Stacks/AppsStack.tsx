@@ -23,64 +23,43 @@ const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListApps
 
 export const AppsStack = () => {
     return (
-        <Navigator id="AppsStack" screenOptions={{ headerShown: false }}>
+        <Navigator id="AppsStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
                 <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
                 <Screen
                     name={Routes.BROWSER}
                     component={InAppBrowser}
-                    options={
-                        isIOS()
-                            ? {
-                                  headerShown: false,
-                                  cardStyleInterpolator: slideFadeInTransition,
-                                  presentation: "modal",
-                                  transitionSpec: TRANSITION_SPECS,
-                                  gestureDirection: "vertical",
-                              }
-                            : {
-                                  headerShown: false,
-                                  animationEnabled: false,
-                              }
-                    }
+                    options={{
+                        headerShown: false,
+                        cardStyleInterpolator: slideFadeInTransition,
+                        presentation: "modal",
+                        transitionSpec: TRANSITION_SPECS,
+                        gestureDirection: "vertical",
+                    }}
                 />
             </Group>
 
             <Screen
                 name={Routes.APPS_SEARCH}
                 component={AppsSearchScreen}
-                options={
-                    isIOS()
-                        ? {
-                              headerShown: false,
-                              cardStyleInterpolator: slideFadeInTransition,
-                              presentation: "modal",
-                              transitionSpec: TRANSITION_SPECS,
-                              gestureDirection: "vertical",
-                          }
-                        : {
-                              headerShown: false,
-                              animationEnabled: false,
-                          }
-                }
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "modal",
+                    transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
+                }}
             />
             <Screen
                 name={Routes.APPS_TABS_MANAGER}
                 component={TabsManagerScreen}
-                options={
-                    isIOS()
-                        ? {
-                              headerShown: false,
-                              cardStyleInterpolator: slideFadeInTransition,
-                              presentation: "modal",
-                              transitionSpec: TRANSITION_SPECS,
-                              gestureDirection: "vertical",
-                          }
-                        : {
-                              headerShown: false,
-                              animationEnabled: false,
-                          }
-                }
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "modal",
+                    transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
+                }}
             />
         </Navigator>
     )

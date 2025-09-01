@@ -72,7 +72,7 @@ export const SettingsStack = () => {
     const { betterWorldFeature } = useFeatureFlags()
 
     return (
-        <Settings.Navigator screenOptions={{ headerShown: false }}>
+        <Settings.Navigator screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Settings.Screen name={Routes.SETTINGS} component={SettingsScreen} options={{ headerShown: false }} />
             <Settings.Screen
                 name={Routes.SETTINGS_NETWORK}
@@ -178,53 +178,35 @@ export const SettingsStack = () => {
             <Settings.Screen
                 name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_TABS_MANAGER : Routes.DISCOVER_TABS_MANAGER}
                 component={TabsManagerScreen}
-                options={
-                    isIOS()
-                        ? {
-                              headerShown: false,
-                              cardStyleInterpolator: slideFadeInTransition,
-                              presentation: "modal",
-                              transitionSpec: TRANSITION_SPECS,
-                              gestureDirection: "vertical",
-                          }
-                        : {
-                              headerShown: false,
-                          }
-                }
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "modal",
+                    transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
+                }}
             />
             <Settings.Screen
                 name={betterWorldFeature.appsScreen.enabled ? Routes.APPS_SEARCH : Routes.DISCOVER_SEARCH}
                 component={AppsSearchScreen}
-                options={
-                    isIOS()
-                        ? {
-                              headerShown: false,
-                              cardStyleInterpolator: slideFadeInTransition,
-                              presentation: "modal",
-                              transitionSpec: TRANSITION_SPECS,
-                              gestureDirection: "vertical",
-                          }
-                        : {
-                              headerShown: false,
-                          }
-                }
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "modal",
+                    transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
+                }}
             />
             <Settings.Screen
                 name={Routes.BROWSER}
                 component={InAppBrowser}
-                options={
-                    isIOS()
-                        ? {
-                              headerShown: false,
-                              cardStyleInterpolator: slideFadeInTransition,
-                              presentation: "modal",
-                              transitionSpec: TRANSITION_SPECS,
-                              gestureDirection: "vertical",
-                          }
-                        : {
-                              headerShown: false,
-                          }
-                }
+                options={{
+                    headerShown: false,
+                    cardStyleInterpolator: slideFadeInTransition,
+                    presentation: "modal",
+                    transitionSpec: TRANSITION_SPECS,
+                    gestureDirection: "vertical",
+                }}
             />
         </Settings.Navigator>
     )
