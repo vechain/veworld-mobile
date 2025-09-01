@@ -1,11 +1,12 @@
-import React from "react"
 import { fireEvent, render, screen } from "@testing-library/react-native"
-import { SearchBar } from "~Screens/Flows/App/AppsScreen/Components/SearchBar"
+import React from "react"
 import { TestWrapper } from "~Test"
+
+import { SearchBar } from "~Screens/Flows/App/AppsScreen/Components/SearchBar"
 
 describe("SearchBar", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
     })
 
     it("should render correctly", () => {

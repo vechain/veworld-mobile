@@ -1,9 +1,10 @@
-import React from "react"
 import { render, screen } from "@testing-library/react-native"
-import { BaseCustomTokenIcon } from "./BaseCustomTokenIcon"
-import { ColorUtils } from "~Utils"
-import { COLORS } from "~Constants"
+import React from "react"
 import { TestWrapper } from "~Test"
+
+import { COLORS } from "~Constants"
+import { ColorUtils } from "~Utils"
+import { BaseCustomTokenIcon } from "./BaseCustomTokenIcon"
 
 // Mock for ColorUtils.generateColor
 jest.mock("~Utils/ColorUtils", () => ({
@@ -19,7 +20,7 @@ describe("BaseCustomTokenIcon", () => {
     const shortTokenSymbol = "USD"
 
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
     })
 
     it("renders correctly with provided tokenSymbol and tokenAddress", async () => {

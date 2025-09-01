@@ -42,7 +42,8 @@ export const VbdCarouselItem = ({ app, onPressItem }: VbdCarouselItemProps) => {
                                 numberOfLines={1}
                                 typographyFont="subSubTitleSemiBold"
                                 color={COLORS.GREY_50}
-                                testID="VBD_CAROUSEL_ITEM_APP_NAME">
+                                testID="VBD_CAROUSEL_ITEM_APP_NAME"
+                                flexDirection="row">
                                 {app.name}
                             </BaseText>
                             {category && (
