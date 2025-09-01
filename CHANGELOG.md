@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.1 (2025-09-01)</small>
+
+* build: init ([0439716](https://github.com/vechain/veworld-mobile/commit/0439716))
+* refactor: removed animations on android (#3241) ([b685b2f](https://github.com/vechain/veworld-mobile/commit/b685b2f)), closes [#3241](https://github.com/vechain/veworld-mobile/issues/3241)
+
 ## <small>2.3.10 (2025-08-29)</small>
 
 * build: init ([bc9b729](https://github.com/vechain/veworld-mobile/commit/bc9b729))
