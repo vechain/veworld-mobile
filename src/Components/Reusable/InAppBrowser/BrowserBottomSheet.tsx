@@ -33,6 +33,19 @@ type BottomSheetAction = {
 
 type BottomSheetActionItem = BottomSheetActionSeparator | BottomSheetAction
 
+export const getActionTextColor = (
+    action: BottomSheetAction,
+    theme: { colors: { actionBottomSheet: { disabledText: string; dangerText: string; text: string } } },
+) => {
+    if (action.disabled) {
+        return theme.colors.actionBottomSheet.disabledText
+    }
+    if (action.id === "close-tab") {
+        return theme.colors.actionBottomSheet.dangerText
+    }
+    return theme.colors.actionBottomSheet.text
+}
+
 export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onNavigate, onClose }, ref) => {
     const { LL } = useI18nContext()
     const { isDapp, navigationState, webviewRef, dappMetadata } = useInAppBrowser()
@@ -185,16 +198,6 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         setActionContainerHeight(height)
     }
 
-    const getActionTextColor = (action: BottomSheetAction) => {
-        if (action.disabled) {
-            return theme.colors.actionBottomSheet.disabledText
-        }
-        if (action.id === "close-tab") {
-            return theme.colors.actionBottomSheet.dangerText
-        }
-        return theme.colors.actionBottomSheet.text
-    }
-
     const snapPoints = useMemo(() => {
         const heightPercentage = (actionContainerHeight * 100) / SCREEN_HEIGHT
         //This will keep the bottom sheet content inside the padding of the bottom sheet
@@ -232,7 +235,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                                         : theme.colors.actionBottomSheet.icon
                                 }
                             />
-                            <BaseText typographyFont="bodySemiBold" color={getActionTextColor(action)}>
+                            <BaseText typographyFont="bodySemiBold" color={getActionTextColor(action, theme)}>
                                 {action.label}
                             </BaseText>
                         </BaseTouchable>
@@ -271,17 +274,4 @@ const baseStyles = (theme: ColorThemeType) => {
             borderTopRightRadius: 24,
         },
     })
-}
-
-export const getActionTextColorForTesting = (
-    action: { disabled?: boolean; id: string },
-    theme: { colors: { actionBottomSheet: { disabledText: string; dangerText: string; text: string } } },
-) => {
-    if (action.disabled) {
-        return theme.colors.actionBottomSheet.disabledText
-    }
-    if (action.id === "close-tab") {
-        return theme.colors.actionBottomSheet.dangerText
-    }
-    return theme.colors.actionBottomSheet.text
 }

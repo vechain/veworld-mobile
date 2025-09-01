@@ -70,7 +70,7 @@ jest.mock("~Storage/Redux", () => ({
 }))
 
 // Import the component after all mocks are set up
-import { BrowserBottomSheet, getActionTextColorForTesting } from "./BrowserBottomSheet"
+import { BrowserBottomSheet, getActionTextColor } from "./BrowserBottomSheet"
 
 describe("BrowserBottomSheet", () => {
     it("should be defined and exportable", () => {
@@ -84,7 +84,7 @@ describe("BrowserBottomSheet", () => {
         expect(component.type).toBe(BrowserBottomSheet)
     })
 
-    describe("getActionTextColor logic (exported test function)", () => {
+    describe("getActionTextColor logic", () => {
         const mockTheme = {
             colors: {
                 actionBottomSheet: {
@@ -96,44 +96,99 @@ describe("BrowserBottomSheet", () => {
         }
 
         it("should return disabled text color when action is disabled", () => {
-            const action = { id: "reload", disabled: true }
-            const result = getActionTextColorForTesting(action, mockTheme)
+            const action = {
+                type: "action" as const,
+                id: "reload",
+                icon: "icon-retry" as const,
+                label: "Reload",
+                onPress: jest.fn(),
+                disabled: true,
+            }
+            const result = getActionTextColor(action, mockTheme)
             expect(result).toBe(COLORS.GREY_400)
         })
 
         it("should return danger text color for close-tab action when not disabled", () => {
-            const action = { id: "close-tab", disabled: false }
-            const result = getActionTextColorForTesting(action, mockTheme)
+            const action = {
+                type: "action" as const,
+                id: "close-tab",
+                icon: "icon-x" as const,
+                label: "Close",
+                onPress: jest.fn(),
+                disabled: false,
+            }
+            const result = getActionTextColor(action, mockTheme)
             expect(result).toBe(COLORS.RED_500)
         })
 
         it("should return disabled text color for close-tab action when disabled (disabled takes priority)", () => {
-            const action = { id: "close-tab", disabled: true }
-            const result = getActionTextColorForTesting(action, mockTheme)
+            const action = {
+                type: "action" as const,
+                id: "close-tab",
+                icon: "icon-x" as const,
+                label: "Close",
+                onPress: jest.fn(),
+                disabled: true,
+            }
+            const result = getActionTextColor(action, mockTheme)
             expect(result).toBe(COLORS.GREY_400)
         })
 
         it("should return regular text color for normal actions", () => {
-            const action = { id: "reload", disabled: false }
-            const result = getActionTextColorForTesting(action, mockTheme)
+            const action = {
+                type: "action" as const,
+                id: "reload",
+                icon: "icon-retry" as const,
+                label: "Reload",
+                onPress: jest.fn(),
+                disabled: false,
+            }
+            const result = getActionTextColor(action, mockTheme)
             expect(result).toBe(COLORS.GREY_700)
         })
 
         it("should return regular text color when disabled is undefined", () => {
-            const action = { id: "reload" }
-            const result = getActionTextColorForTesting(action, mockTheme)
+            const action = {
+                type: "action" as const,
+                id: "reload",
+                icon: "icon-retry" as const,
+                label: "Reload",
+                onPress: jest.fn(),
+            }
+            const result = getActionTextColor(action, mockTheme)
             expect(result).toBe(COLORS.GREY_700)
         })
 
         it("should handle various action IDs correctly", () => {
             const actions = [
-                { id: "share", disabled: false },
-                { id: "new-tab", disabled: false },
-                { id: "go-back", disabled: false },
+                {
+                    type: "action" as const,
+                    id: "share",
+                    icon: "icon-share-2" as const,
+                    label: "Share",
+                    onPress: jest.fn(),
+                    disabled: false,
+                },
+                {
+                    type: "action" as const,
+                    id: "new-tab",
+                    icon: "icon-plus" as const,
+                    label: "New Tab",
+                    onPress: jest.fn(),
+                    disabled: false,
+                },
+                {
+                    type: "action" as const,
+                    id: "go-back",
+                    icon: "icon-chevron-left" as const,
+                    label: "Go Back",
+                    onPress: jest.fn(),
+                    disabled: false,
+                },
             ]
 
             actions.forEach(action => {
-                const result = getActionTextColorForTesting(action, mockTheme)
+                const result = getActionTextColor(action, mockTheme)
                 expect(result).toBe(COLORS.GREY_700)
             })
         })
