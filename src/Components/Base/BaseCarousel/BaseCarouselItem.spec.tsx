@@ -34,7 +34,7 @@ const onPress = jest.fn()
 
 describe("BaseCarouselItem", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
     })
 
     it("should render correctly", () => {
