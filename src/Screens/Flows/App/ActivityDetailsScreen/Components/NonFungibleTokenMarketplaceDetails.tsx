@@ -106,7 +106,12 @@ export const NonFungibleTokenMarketplaceDetails: React.FC<Props> = memo(({ activ
     return (
         <>
             {details.map((detail: ActivityDetail, index: number) => (
-                <ActivityDetailItem key={detail.id} activityDetail={detail} border={index !== details.length - 1} />
+                <ActivityDetailItem
+                    key={detail.id}
+                    activityDetail={detail}
+                    border={index !== details.length - 1}
+                    testID={`nft-marketplace-detail-${detail.id}`}
+                />
             ))}
         </>
     )
