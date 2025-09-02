@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.1 (2025-09-02)</small>
+
+* build: init ([662bcc6](https://github.com/vechain/veworld-mobile/commit/662bcc6))
+* fix: update VbdCarouselBottomSheet layout and button titles for improved UI (#3246) ([cc9c085](https://github.com/vechain/veworld-mobile/commit/cc9c085)), closes [#3246](https://github.com/vechain/veworld-mobile/issues/3246)
+
 ## <small>2.3.10 (2025-08-29)</small>
 
 * build: init ([bc9b729](https://github.com/vechain/veworld-mobile/commit/bc9b729))
