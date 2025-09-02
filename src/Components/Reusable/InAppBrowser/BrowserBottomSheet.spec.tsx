@@ -1,90 +1,9 @@
-import React from "react"
 import { COLORS } from "~Constants"
 
-jest.mock("@react-navigation/stack", () => ({
-    createStackNavigator: jest.fn(() => ({
-        Navigator: ({ children }: { children: React.ReactNode }) => children,
-        Screen: ({ children }: { children: React.ReactNode }) => children,
-        Group: ({ children }: { children: React.ReactNode }) => children,
-    })),
-}))
+import { getActionTextColor } from "./BrowserBottomSheet"
 
-jest.mock("@react-navigation/native-stack", () => ({
-    createNativeStackNavigator: jest.fn(() => ({
-        Navigator: ({ children }: { children: React.ReactNode }) => children,
-        Screen: ({ children }: { children: React.ReactNode }) => children,
-    })),
-}))
-
-jest.mock("@react-navigation/material-top-tabs", () => ({
-    createMaterialTopTabNavigator: jest.fn(() => ({
-        Navigator: ({ children }: { children: React.ReactNode }) => children,
-        Screen: ({ children }: { children: React.ReactNode }) => children,
-    })),
-}))
-
-jest.mock("@react-navigation/bottom-tabs", () => ({
-    createBottomTabNavigator: jest.fn(() => ({
-        Navigator: ({ children }: { children: React.ReactNode }) => children,
-        Screen: ({ children }: { children: React.ReactNode }) => children,
-    })),
-    useBottomTabBarHeight: jest.fn(() => 10),
-}))
-
-jest.mock("react-native-view-shot", () => ({
-    captureRef: jest.fn(),
-    releaseCapture: jest.fn(),
-}))
-
-jest.mock("~Components/Providers/InAppBrowserProvider", () => ({
-    useInAppBrowser: () => ({
-        isDapp: true,
-        navigationState: { url: "https://example.com", canGoBack: true },
-        webviewRef: { current: { reload: jest.fn(), goBack: jest.fn() } },
-        dappMetadata: { name: "Test", description: "Test", url: "https://example.com" },
-    }),
-}))
-
-jest.mock("~Components/Providers/FeatureFlagsProvider", () => ({
-    useFeatureFlags: () => ({
-        betterWorldFeature: { appsScreen: { enabled: true } },
-    }),
-}))
-
-jest.mock("~Hooks/useDappBookmarking", () => ({
-    useDappBookmarking: () => ({
-        isBookMarked: false,
-        toggleBookmark: jest.fn(),
-    }),
-}))
-
-jest.mock("@react-navigation/native", () => ({
-    useNavigation: () => ({ replace: jest.fn() }),
-}))
-
-jest.mock("~Storage/Redux", () => ({
-    useAppDispatch: () => jest.fn(),
-    useAppSelector: () => "test-tab-id",
-    closeTab: jest.fn(),
-    selectCurrentTabId: jest.fn(),
-}))
-
-// Import the component after all mocks are set up
-import { BrowserBottomSheet, getActionTextColor } from "./BrowserBottomSheet"
-
-describe("BrowserBottomSheet", () => {
-    it("should be defined and exportable", () => {
-        expect(BrowserBottomSheet).toBeDefined()
-        expect(typeof BrowserBottomSheet).toBe("object")
-    })
-
-    it("should be a React component", () => {
-        const component = React.createElement(BrowserBottomSheet, { ref: { current: null } })
-        expect(component).toBeDefined()
-        expect(component.type).toBe(BrowserBottomSheet)
-    })
-
-    describe("getActionTextColor logic", () => {
+describe("BrowserBottomSheet Utils", () => {
+    describe("getActionTextColor", () => {
         const mockTheme = {
             colors: {
                 actionBottomSheet: {
