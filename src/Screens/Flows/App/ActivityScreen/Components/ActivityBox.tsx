@@ -532,7 +532,10 @@ const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
     const { LL } = useI18nContext()
     const { collectionName, tokenMetadata } = useNFTInfo(activity?.tokenId, activity.contractAddress)
     const { formatLocale } = useFormatFiat()
+    const customTokens = useAppSelector(selectCustomTokens)
+    const officialTokens = useAppSelector(selectOfficialTokens)
 
+    const allTokens = [customTokens, officialTokens].flat()
     // Determine if user is buyer or seller based on their address
     const selectedAccount = useAppSelector(selectSelectedAccount)
     const isBuyer = AddressUtils.compareAddresses(activity.buyer, selectedAccount.address)
@@ -544,6 +547,10 @@ const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
         if (!collectionName) return LL.UNKNOWN_COLLECTION()
         return collectionName
     }
+
+    const token = AddressUtils.compareAddresses(activity.tokenAddress, VET.address)
+        ? VET
+        : allTokens.find(_token => _token.address === activity.tokenAddress)
 
     // Format the price
     const formattedPrice = BigNutils(activity.price).toHuman(18).toTokenFormat_string(2, formatLocale)
@@ -562,7 +569,7 @@ const NFTSale = ({ activity, onPress }: NFTSaleActivityBoxProps) => {
             title={title}
             description={validatedCollectionName()}
             rightAmount={rightAmount}
-            rightAmountDescription={activity.paymentToken || "VET"}
+            rightAmountDescription={token?.symbol ?? "VET"}
             onPress={onPressHandler}
             nftImage={tokenMetadata?.image}
         />

@@ -328,6 +328,7 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             to: "0x3ca506f873e5819388aa3ce0b1c4fc77b6db0048",
             from: "0x0e73ea971849e16ca9098a7a987130e1a53eeab1",
             value: "2500000000000000000",
+            tokenAddress: "0x14653fca6319c7170db288ca9c2c599292ad303e", // Payment token address
         }
         const activity = createActivityFromIndexedHistoryEvent(
             event,
@@ -354,6 +355,7 @@ describe("createActivityFromIndexedHistoryEvent", () => {
             price: activity?.price,
             buyer: activity?.buyer,
             seller: activity?.seller,
+            tokenAddress: activity?.tokenAddress,
         })
     })
 

@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react-native"
 import React from "react"
 import { NonFungibleTokenMarketplaceDetails } from "./NonFungibleTokenMarketplaceDetails"
-import { DIRECTIONS, genesisesId } from "~Constants"
+import { B3TR, DIRECTIONS, genesisesId, VET } from "~Constants"
 import { ActivityStatus, ActivityType, NFTMarketplaceActivity } from "~Model"
 import { TestWrapper } from "~Test"
 
@@ -61,7 +61,7 @@ describe("NonFungibleTokenMarketplaceDetails", () => {
         price: "2500000000000000000",
         buyer: "0x3ca506",
         seller: "0xCF130b42Ae33C5531277B4B7c0F1D994B8732957",
-        paymentToken: "VET",
+        tokenAddress: VET.address,
     }
 
     it("should be a valid React component", () => {
@@ -93,13 +93,13 @@ describe("NonFungibleTokenMarketplaceDetails", () => {
     })
 
     it("should handle different payment tokens", () => {
-        const vetActivity = { ...mockNFTMarketplaceActivity, paymentToken: "VET" }
-        const customTokenActivity = { ...mockNFTMarketplaceActivity, paymentToken: "B3TR" }
-        const noTokenActivity = { ...mockNFTMarketplaceActivity, paymentToken: undefined }
+        const vetActivity = { ...mockNFTMarketplaceActivity, tokenAddress: VET.address }
+        const customTokenActivity = { ...mockNFTMarketplaceActivity, tokenAddress: B3TR.address }
+        const noTokenActivity = { ...mockNFTMarketplaceActivity, tokenAddress: undefined }
 
-        expect(vetActivity.paymentToken).toBe("VET")
-        expect(customTokenActivity.paymentToken).toBe("B3TR")
-        expect(noTokenActivity.paymentToken).toBeUndefined()
+        expect(vetActivity.tokenAddress).toBe(VET.address)
+        expect(customTokenActivity.tokenAddress).toBe(B3TR.address)
+        expect(noTokenActivity.tokenAddress).toBeUndefined()
     })
 
     it("should handle different price values", () => {
@@ -141,7 +141,7 @@ describe("NonFungibleTokenMarketplaceDetails", () => {
             })
 
             const transactionTypeValue = screen.getByTestId("nft-marketplace-detail-1-value")
-            expect(transactionTypeValue).toHaveTextContent("NFT purchased")
+            expect(transactionTypeValue).toHaveTextContent("NFT Purchased")
         })
 
         it("should display price with correct direction for seller", () => {
@@ -269,7 +269,7 @@ describe("NonFungibleTokenMarketplaceDetails", () => {
         it("should handle custom payment token", () => {
             const customTokenActivity = {
                 ...mockNFTMarketplaceActivity,
-                paymentToken: "B3TR",
+                tokenAddress: "B3TR",
             }
 
             render(<NonFungibleTokenMarketplaceDetails activity={customTokenActivity} paid="0x33450" />, {

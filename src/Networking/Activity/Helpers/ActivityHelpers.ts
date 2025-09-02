@@ -621,6 +621,7 @@ export const createActivityFromIndexedHistoryEvent = (
                 price: value ?? "0",
                 buyer: to ?? "",
                 seller: from ?? "",
+                tokenAddress: event.tokenAddress,
             } as NFTMarketplaceActivity
         }
         case ActivityEvent.SWAP_FT_TO_VET: {

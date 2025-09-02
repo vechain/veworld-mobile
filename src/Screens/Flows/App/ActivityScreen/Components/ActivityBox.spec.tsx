@@ -556,7 +556,7 @@ describe("ActivityBox", () => {
             price: "2500000000000000000",
             buyer: "0x3ca506",
             seller: "0x0e73ea",
-            paymentToken: "VET",
+            tokenAddress: "VET",
         }
 
         it("renders NFT sale correctly", () => {

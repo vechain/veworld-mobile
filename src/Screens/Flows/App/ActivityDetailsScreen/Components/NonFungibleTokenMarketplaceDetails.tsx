@@ -1,8 +1,8 @@
 import React, { memo, useMemo } from "react"
-import { DIRECTIONS, VTHO, genesisesId } from "~Constants"
+import { DIRECTIONS, VET, VTHO, genesisesId } from "~Constants"
 import { useCopyClipboard, useFormatFiat } from "~Hooks"
 import { NFTMarketplaceActivity } from "~Model"
-import { selectSelectedAccount, useAppSelector } from "~Storage/Redux"
+import { selectCustomTokens, selectOfficialTokens, selectSelectedAccount, useAppSelector } from "~Storage/Redux"
 import { AddressUtils, BigNutils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { useGasFee } from "../Hooks"
@@ -18,12 +18,16 @@ type Props = {
 export const NonFungibleTokenMarketplaceDetails: React.FC<Props> = memo(({ activity, paid, isLoading = false }) => {
     const { LL } = useI18nContext()
     const { formatLocale } = useFormatFiat()
+    const selectedAccount = useAppSelector(selectSelectedAccount)
 
+    const customTokens = useAppSelector(selectCustomTokens)
+    const officialTokens = useAppSelector(selectOfficialTokens)
+
+    const allTokens = [customTokens, officialTokens].flat()
     const { onCopyToClipboard } = useCopyClipboard()
 
     const { vthoGasFee, fiatValueGasFeeSpent } = useGasFee(paid)
 
-    const selectedAccount = useAppSelector(selectSelectedAccount)
     const isBuyer = AddressUtils.compareAddresses(activity.buyer, selectedAccount.address)
 
     const transactionIDshort = useMemo(() => {
@@ -50,6 +54,10 @@ export const NonFungibleTokenMarketplaceDetails: React.FC<Props> = memo(({ activ
         return isBuyer ? DIRECTIONS.DOWN : DIRECTIONS.UP
     }, [isBuyer])
 
+    const token = AddressUtils.compareAddresses(activity.tokenAddress, VET.address)
+        ? VET
+        : allTokens.find(_token => _token.address === activity.tokenAddress)
+
     // Details List
     const details: Array<ActivityDetail> = [
         {
@@ -65,7 +73,7 @@ export const NonFungibleTokenMarketplaceDetails: React.FC<Props> = memo(({ activ
             value: `${priceDirection} ${formattedPrice}`,
             typographyFont: "subSubTitle",
             underline: false,
-            valueAdditional: activity.paymentToken || "VET",
+            valueAdditional: token?.symbol ?? "VET",
         },
         {
             id: 3,

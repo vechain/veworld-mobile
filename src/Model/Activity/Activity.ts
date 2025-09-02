@@ -41,6 +41,7 @@ export interface IndexedHistoryEvent {
     gasPayer?: string
     tokenId?: string
     contractAddress?: string
+    tokenAddress?: string // Payment token address for NFT sales
     eventName: ActivityEvent
     to?: string
     from?: string
@@ -97,7 +98,7 @@ export interface NFTMarketplaceActivity extends Activity {
     type: ActivityType.NFT_SALE
     direction: DIRECTIONS
     price: string
-    paymentToken?: string
+    tokenAddress?: string
     marketplace?: string
     buyer: string
     seller: string

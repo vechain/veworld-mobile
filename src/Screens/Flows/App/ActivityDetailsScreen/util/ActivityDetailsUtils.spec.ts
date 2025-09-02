@@ -34,7 +34,7 @@ describe("ActivityDetailsUtils", () => {
             [ActivityType.DAPP_TRANSACTION, "DApp Transaction"],
             [ActivityType.TRANSFER_FT, "Receive"],
             [ActivityType.TRANSFER_NFT, "NFT Receive"],
-            [ActivityType.NFT_SALE, "NFT purchased"],
+            [ActivityType.NFT_SALE, "NFT Purchased"],
             [ActivityType.TRANSFER_VET, "Receive"],
             [ActivityType.TRANSFER_SF, "Receive"],
         ])("should return the correct title for an %s activity", (type, expected) => {
@@ -96,7 +96,7 @@ describe("ActivityDetailsUtils", () => {
             expect(title).toBe("NFT sold")
         })
 
-        it("should return 'NFT purchased' when NFT_SALE activity has direction DOWN", () => {
+        it("should return 'NFT Purchased' when NFT_SALE activity has direction DOWN", () => {
             const { result } = renderHook(() => useI18nContext(), { wrapper: TestWrapper })
             const { LL } = result.current
 
@@ -106,7 +106,7 @@ describe("ActivityDetailsUtils", () => {
                 direction: DIRECTIONS.DOWN,
             }
             const title = getActivityTitle(activity, LL)
-            expect(title).toBe("NFT purchased")
+            expect(title).toBe("NFT Purchased")
         })
 
         it("should return the undefined for an unknown activity type", () => {
