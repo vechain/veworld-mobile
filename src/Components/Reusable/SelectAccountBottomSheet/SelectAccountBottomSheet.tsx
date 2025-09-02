@@ -1,6 +1,6 @@
 import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { SectionList, SectionListData, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
@@ -11,6 +11,11 @@ import { AccountWithDevice, WatchedAccount } from "~Model"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
+
+export enum SelectAccountBottomSheetType {
+    PERSONAL = "YOUR_WALLETS",
+    WATCHING = "WATCHING",
+}
 
 type Props = {
     /**
@@ -50,16 +55,17 @@ const SectionHeader = ({
     return <BaseText typographyFont="bodyMedium">{section.alias}</BaseText>
 }
 
-const KEYS = ["YOUR_WALLETS", "WATCHING"] as const
-
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss, accounts, isVthoBalance = false }, ref) => {
         const { LL } = useI18nContext()
 
-        const { onResize, contentStyle } = useScrollableBottomSheetListWrapper()
-        const scrollableListProps = useScrollableBottomSheetList({ onResize })
-        const [selectedKey, setSelectedKey] = useState<(typeof KEYS)[number]>("YOUR_WALLETS")
+        const { onResize, contentStyle, setSmallViewport } = useScrollableBottomSheetListWrapper()
+        const initialLayout = useRef(false)
+        const { resetHeight, ...scrollableListProps } = useScrollableBottomSheetList({ onResize, initialLayout })
+        const [selectedKey, setSelectedKey] = useState<SelectAccountBottomSheetType>(
+            SelectAccountBottomSheetType.PERSONAL,
+        )
 
         const handlePress = useCallback(
             (account: AccountWithDevice | WatchedAccount) => {
@@ -72,7 +78,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         const { styles, theme } = useThemedStyles(baseStyles)
 
         const sections = useMemo(() => {
-            if (selectedKey === "YOUR_WALLETS") {
+            if (selectedKey === SelectAccountBottomSheetType.PERSONAL) {
                 const groupedAccounts = accounts
                     .filter(account => !AccountUtils.isObservedAccount(account))
                     .reduce((acc, curr) => {
@@ -92,7 +98,21 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
 
         const onSettingsClick = useCallback(() => {}, [])
 
-        const labels = useMemo(() => [LL.SELECT_ACCOUNT_YOURS(), LL.SELECT_ACCOUNT_WATCHING()], [LL])
+        const keys = useMemo(() => {
+            const hasObserved = accounts.some(AccountUtils.isObservedAccount)
+            return hasObserved
+                ? [SelectAccountBottomSheetType.PERSONAL, SelectAccountBottomSheetType.WATCHING]
+                : ([SelectAccountBottomSheetType.PERSONAL] as const)
+        }, [accounts])
+
+        const labels = useMemo(() => keys.map(key => LL[`SELECT_ACCOUNT_${key}`]()), [LL, keys])
+
+        //Reset the state in order for the BS to fix its size
+        useEffect(() => {
+            setSmallViewport(false)
+            initialLayout.current = false
+            resetHeight()
+        }, [resetHeight, selectedKey, setSmallViewport])
 
         return (
             <BaseBottomSheet
@@ -122,9 +142,19 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
 
                 <BaseSpacer height={24} />
 
-                <BaseTabs keys={KEYS} labels={labels} selectedKey={selectedKey} setSelectedKey={setSelectedKey} />
+                {keys.length > 1 && (
+                    <>
+                        <BaseTabs
+                            keys={keys}
+                            labels={labels}
+                            selectedKey={selectedKey}
+                            setSelectedKey={setSelectedKey}
+                        />
 
-                <BaseSpacer height={24} />
+                        <BaseSpacer height={24} />
+                    </>
+                )}
+
                 <SectionList
                     sections={sections}
                     keyExtractor={item => item.address}
@@ -141,6 +171,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     )}
                     ItemSeparatorComponent={ItemSeparatorComponent}
                     SectionSeparatorComponent={ItemSeparatorComponent}
+                    key={selectedKey}
                     {...scrollableListProps}
                     scrollEnabled
                 />
@@ -156,5 +187,6 @@ const baseStyles = (theme: ColorThemeType) =>
             padding: 8,
             borderWidth: 1,
             borderColor: theme.isDark ? "transparent" : COLORS.GREY_200,
+            borderRadius: 6,
         },
     })

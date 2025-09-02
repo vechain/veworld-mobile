@@ -12,5 +12,5 @@ export const useScrollableBottomSheetListWrapper = () => {
 
     const contentStyle = useMemo(() => (smallViewport ? undefined : { height: "100%" as const }), [smallViewport])
 
-    return useMemo(() => ({ contentStyle, onResize }), [contentStyle, onResize])
+    return useMemo(() => ({ contentStyle, onResize, setSmallViewport }), [contentStyle, onResize])
 }

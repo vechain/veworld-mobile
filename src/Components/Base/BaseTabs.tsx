@@ -42,7 +42,10 @@ export const BaseTabs = <TKeys extends string[] | readonly string[]>({
     const indicatorStyles = useAnimatedStyle(() => {
         const offset = tabOffsets[selectedIndex]
         if (!offset) return { width: withTiming(100), left: withTiming(0) }
-        return { width: withTiming(offset.width), left: withTiming(offset.offsetX) }
+        return {
+            width: withTiming(offset.width),
+            left: withTiming(offset.offsetX),
+        }
     }, [tabOffsets, selectedIndex, keys.length])
     if (keys.length !== labels.length) throw new Error("Keys and Labels should have the same length")
     return (

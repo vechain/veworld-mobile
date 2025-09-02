@@ -3870,21 +3870,21 @@ type RootTranslation = {
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: string
 	/**
-	 * W​a​l​l​e​t​s
-	 */
-	SELECT_ACCOUNT_TITLE: string
-	/**
 	 * S​e​l​e​c​t​ ​t​h​e​ ​a​c​t​i​v​e​ ​a​c​c​o​u​n​t
 	 */
 	SELECT_ACCOUNT_DESCRIPTION: string
 	/**
-	 * Y​o​u​r​ ​w​a​l​l​e​t​s
+	 * W​a​l​l​e​t​s
 	 */
-	SELECT_ACCOUNT_YOURS: string
+	SELECT_ACCOUNT_TITLE: string
 	/**
 	 * W​a​t​c​h​i​n​g
 	 */
 	SELECT_ACCOUNT_WATCHING: string
+	/**
+	 * Y​o​u​r​ ​w​a​l​l​e​t​s
+	 */
+	SELECT_ACCOUNT_YOUR_WALLETS: string
 	/**
 	 * I​ ​U​N​D​E​R​S​T​A​N​D
 	 */
@@ -8790,21 +8790,21 @@ Thanks for your patience!
 	 */
 	SECURITY_UPGRADE_REMINDER_DESC: () => LocalizedString
 	/**
-	 * Wallets
-	 */
-	SELECT_ACCOUNT_TITLE: () => LocalizedString
-	/**
 	 * Select the active account
 	 */
 	SELECT_ACCOUNT_DESCRIPTION: () => LocalizedString
 	/**
-	 * Your wallets
+	 * Wallets
 	 */
-	SELECT_ACCOUNT_YOURS: () => LocalizedString
+	SELECT_ACCOUNT_TITLE: () => LocalizedString
 	/**
 	 * Watching
 	 */
 	SELECT_ACCOUNT_WATCHING: () => LocalizedString
+	/**
+	 * Your wallets
+	 */
+	SELECT_ACCOUNT_YOUR_WALLETS: () => LocalizedString
 	/**
 	 * I UNDERSTAND
 	 */
