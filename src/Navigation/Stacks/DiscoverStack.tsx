@@ -4,6 +4,7 @@ import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import { DiscoverScreen, FavouritesScreen, InAppBrowser, TabsManagerScreen } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type RootStackParamListBrowser = {
     [Routes.DISCOVER]: undefined
@@ -23,7 +24,7 @@ const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListBrow
 
 export const DiscoverStack = () => {
     return (
-        <Navigator id="BrowserStack" screenOptions={{ headerShown: false }}>
+        <Navigator id="BrowserStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
                 <Screen name={Routes.DISCOVER} component={DiscoverScreen} options={{ headerShown: false }} />
                 <Screen
