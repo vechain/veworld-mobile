@@ -945,7 +945,7 @@
   "SELECT_ACCOUNT_DESCRIPTION": "Välj det aktiva kontot",
   "SELECT_ACCOUNT_TITLE": "Plånböcker",
   "SELECT_ACCOUNT_WATCHING": "Bevakar",
-  "SELECT_ACCOUNT_YOURS": "Dina plånböcker",
+  "SELECT_ACCOUNT_YOUR_WALLETS": "Dina plånböcker",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "JAG FÖRSTÅR",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO är gastoken (inte VET). Köp eller överför lite VTHO till ditt konto för att genomföra denna transaktion.",
   "SEND_ACCEPT_NO_GAS_TITLE": "OTILLRÄCKLIGT GAS",

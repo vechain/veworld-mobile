@@ -945,7 +945,7 @@
   "SELECT_ACCOUNT_DESCRIPTION": "सक्रिय खाता चुनें",
   "SELECT_ACCOUNT_TITLE": "वॉलेट्स",
   "SELECT_ACCOUNT_WATCHING": "देख रहे हैं",
-  "SELECT_ACCOUNT_YOURS": "आपके वॉलेट्स",
+  "SELECT_ACCOUNT_YOUR_WALLETS": "आपकी वालेट्स",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "मैं समझता हूँ",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO गैस टोकन है (VET नहीं)। इस लेनदेन को करने के लिए अपने खाते में कुछ VTHO खरीदें या ट्रांसफर करें।",
   "SEND_ACCEPT_NO_GAS_TITLE": "अपर्याप्त गैस",

@@ -945,7 +945,7 @@
   "SELECT_ACCOUNT_DESCRIPTION": "Seleziona il conto attivo",
   "SELECT_ACCOUNT_TITLE": "Portafogli",
   "SELECT_ACCOUNT_WATCHING": "Osservando",
-  "SELECT_ACCOUNT_YOURS": "I tuoi portafogli",
+  "SELECT_ACCOUNT_YOUR_WALLETS": "I tuoi portafogli",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "HO CAPITO",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO è il token gas (non VET). Acquista o trasferisci un po' di VTHO nel tuo account per eseguire questa transazione.",
   "SEND_ACCEPT_NO_GAS_TITLE": "GAS INSUFFICIENTE",

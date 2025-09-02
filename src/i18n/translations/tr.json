@@ -945,7 +945,7 @@
   "SELECT_ACCOUNT_DESCRIPTION": "Aktif hesabı seçin",
   "SELECT_ACCOUNT_TITLE": "Cüzdanlar",
   "SELECT_ACCOUNT_WATCHING": "Gözlemleme",
-  "SELECT_ACCOUNT_YOURS": "Sizin cüzdanlarınız",
+  "SELECT_ACCOUNT_YOUR_WALLETS": "Cüzdanlarınız",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "ANLADIM",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO, işlem tokenıdır (VET değil). Bu işlemi gerçekleştirmek için hesabınıza biraz VTHO satın alın veya transfer edin.",
   "SEND_ACCEPT_NO_GAS_TITLE": "YETERSİZ GAZ",

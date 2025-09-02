@@ -945,7 +945,7 @@
   "SELECT_ACCOUNT_DESCRIPTION": "Sélectionnez le compte actif",
   "SELECT_ACCOUNT_TITLE": "Portefeuilles",
   "SELECT_ACCOUNT_WATCHING": "En surveillance",
-  "SELECT_ACCOUNT_YOURS": "Vos portefeuilles",
+  "SELECT_ACCOUNT_YOUR_WALLETS": "Vos portefeuilles",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "JE COMPRENDS",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO est le jeton de gaz (pas VET). Achetez ou transférez du VTHO dans votre compte pour effectuer cette transaction.",
   "SEND_ACCEPT_NO_GAS_TITLE": "GAZ INSUFFISANT",
