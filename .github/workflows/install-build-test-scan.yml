@@ -41,7 +41,10 @@ jobs:
   report:
     runs-on: ubuntu-latest
     needs: [build-and-test-ios, build-and-test-android, scan]
-    if: always()
+    if: >
+     always() && (needs.scan.result == 'success' || needs.scan.result == 'failure') &&
+     (needs.build-and-test-ios.result == 'success' || needs.build-and-test-ios.result == 'failure') && 
+     (needs.build-and-test-android.result == 'success' || needs.build-and-test-android.result == 'failure')
     steps:
       - name: ReportE2E2Slack
         if: ${{ github.event_name == 'schedule' }}
@@ -52,8 +55,8 @@ jobs:
           payload: |
             {
               "text": "${{ job.status }} scan ${{ needs.scan.result }}, \
-                       iOS ${{ needs.build-and-test-ios.result }} \
-                       url: ${{ needs.build-and-test-ios.outputs.resultUrl }}, \
-                       Android ${{needs.build-and-test-android.result}} \
-                       url: ${{ needs.build-and-test-android.outputs.resultUrl }}"
+                       iOS ${{ needs.build-and-test-ios.result || 'skipped' }} \
+                       url: ${{ needs.build-and-test-ios.outputs.resultUrl || 'N/A' }}, \
+                       Android ${{ needs.build-and-test-android.result || 'skipped' }} \
+                       url: ${{ needs.build-and-test-android.outputs.resultUrl || 'N/A' }}"
             }
