@@ -945,7 +945,7 @@
   "SELECT_ACCOUNT_DESCRIPTION": "Chọn tài khoản đang hoạt động",
   "SELECT_ACCOUNT_TITLE": "Ví",
   "SELECT_ACCOUNT_WATCHING": "Đang theo dõi",
-  "SELECT_ACCOUNT_YOURS": "Ví của bạn",
+  "SELECT_ACCOUNT_YOUR_WALLETS": "Ví của bạn",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "TÔI HIỂU",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO là token gas (không phải VET). Mua hoặc chuyển một ít VTHO vào tài khoản của bạn để thực hiện giao dịch này.",
   "SEND_ACCEPT_NO_GAS_TITLE": "KHÔNG ĐỦ GAS",

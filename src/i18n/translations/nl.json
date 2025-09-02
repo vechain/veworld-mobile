@@ -945,7 +945,7 @@
   "SELECT_ACCOUNT_DESCRIPTION": "Selecteer de actieve account",
   "SELECT_ACCOUNT_TITLE": "Wallets",
   "SELECT_ACCOUNT_WATCHING": "Bekijken",
-  "SELECT_ACCOUNT_YOURS": "Jouw wallets",
+  "SELECT_ACCOUNT_YOUR_WALLETS": "Uw portemonnees",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "IK BEGRIJP HET",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHO is de gastoken (niet VET). Koop of verplaats wat VTHO naar uw account om deze transactie uit te voeren.",
   "SEND_ACCEPT_NO_GAS_TITLE": "ONGENOEG GASFONDS",

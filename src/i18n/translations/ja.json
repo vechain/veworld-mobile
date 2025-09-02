@@ -945,7 +945,7 @@
   "SELECT_ACCOUNT_DESCRIPTION": "アクティブなアカウントを選択",
   "SELECT_ACCOUNT_TITLE": "ウォレット",
   "SELECT_ACCOUNT_WATCHING": "監視中",
-  "SELECT_ACCOUNT_YOURS": "あなたのウォレット",
+  "SELECT_ACCOUNT_YOUR_WALLETS": "あなたのウォレット",
   "SEND_ACCEPT_NO_GAS_ACCEPT": "了解しました",
   "SEND_ACCEPT_NO_GAS_MESSAGE": "VTHOはガストークンです（VETではありません）。この取引を行うためには、アカウントにVTHOを購入または転送してください。",
   "SEND_ACCEPT_NO_GAS_TITLE": "ガス不足",
