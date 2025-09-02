@@ -770,7 +770,7 @@
   "NFT_REPORT_COLLECTION_MSG": "Bitte melden Sie, wenn diese Sammlung verdächtig oder unangemessen erscheint.",
   "NFT_SEND": "NFT senden",
   "NFT_SOLD": "NFT verkauft",
-  "NFT_TRANSFER_RECEIVED": "NFT empfangen",
+  "NFT_TRANSFER_RECEIVED": "NFT erhalten",
   "NFT_TRANSFER_SENT": "NFT gesendet",
   "NOTIFIACTION_INCOMING_NFT_ACTION": "Zu NFTs gehen",
   "NOTIFIACTION_OUTGOING_TOKEN_BODY_WITH_TOKEN": "{amount: string} {token: string} wurde erfolgreich an {to: string} gesendet.",
