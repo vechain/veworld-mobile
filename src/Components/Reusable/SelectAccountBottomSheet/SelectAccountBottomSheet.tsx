@@ -1,11 +1,11 @@
 import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { SectionList, SectionListData, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useTheme, useThemedStyles } from "~Hooks"
 import { useScrollableBottomSheetList, useScrollableBottomSheetListWrapper } from "~Hooks/useScrollableBottomSheetList"
 import { AccountWithDevice, WatchedAccount } from "~Model"
 import { AccountUtils } from "~Utils"
@@ -46,13 +46,33 @@ type Props = {
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
+const SectionSeparatorComponent = (props: {
+    highlighted: boolean
+    leadingItem?: AccountWithDevice
+    leadingSection?: SectionListData<AccountWithDevice, { data: AccountWithDevice[]; alias: string }>
+    trailingItem?: AccountWithDevice
+    trailingSection?: SectionListData<AccountWithDevice, { data: AccountWithDevice[]; alias: string }>
+    section: SectionListData<AccountWithDevice, { data: AccountWithDevice[]; alias: string }>
+}) => {
+    //If leadingItem is present, it means that it's trying to render the bottom section separator,
+    //otherwise it's trying to render the separator between the header and the section
+    return props.leadingItem ? <BaseSpacer height={24} /> : <BaseSpacer height={8} />
+}
 
+const SectionHeaderTitle = ({ children }: PropsWithChildren) => {
+    const theme = useTheme()
+    return (
+        <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_300 : COLORS.PURPLE}>
+            {children}
+        </BaseText>
+    )
+}
 const SectionHeader = ({
     section,
 }: {
     section: SectionListData<AccountWithDevice, { data: AccountWithDevice[]; alias: string }>
 }) => {
-    return <BaseText typographyFont="bodyMedium">{section.alias}</BaseText>
+    return <SectionHeaderTitle>{section.alias}</SectionHeaderTitle>
 }
 
 // component to select an account
@@ -170,8 +190,9 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                         />
                     )}
                     ItemSeparatorComponent={ItemSeparatorComponent}
-                    SectionSeparatorComponent={ItemSeparatorComponent}
+                    SectionSeparatorComponent={SectionSeparatorComponent}
                     key={selectedKey}
+                    showsVerticalScrollIndicator={false}
                     {...scrollableListProps}
                     scrollEnabled
                 />

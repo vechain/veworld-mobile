@@ -41,6 +41,11 @@ export const SelectableAccountCard = memo(
                 .toTokenFormat_string(2)
         }, [balanceToken, isBalanceVisible, vetBalance, vthoBalance])
 
+        const nameColor = useMemo(() => {
+            if (selected) return theme.colors.title
+            return theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800
+        }, [selected, theme.colors.title, theme.isDark])
+
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <BaseTouchableBox
@@ -56,14 +61,17 @@ export const SelectableAccountCard = memo(
                     <BaseView flexDirection="row" gap={12} alignItems="center" flex={1}>
                         <AccountIcon address={account.address} size={40} />
                         <BaseView flexDirection="column" gap={4}>
-                            <BaseText numberOfLines={1} color={theme.colors.title} typographyFont="bodySemiBold">
+                            <BaseText
+                                numberOfLines={1}
+                                color={nameColor}
+                                typographyFont={selected ? "bodySemiBold" : "captionSemiBold"}>
                                 {vnsName || account.alias}
                             </BaseText>
                             <BaseView flexDirection="row" gap={8}>
                                 {account?.device?.type === DEVICE_TYPE.LEDGER && <LedgerBadge mr={8} />}
                                 <BaseText
                                     typographyFont="captionRegular"
-                                    color={theme.isDark ? COLORS.GREY_100 : theme.colors.textLight}>
+                                    color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_500}>
                                     {AddressUtils.humanAddress(vnsAddress || account.address)}
                                 </BaseText>
                             </BaseView>
@@ -71,12 +79,12 @@ export const SelectableAccountCard = memo(
                     </BaseView>
                     <BaseView flexDirection="column">
                         <BaseText
-                            color={theme.isDark ? COLORS.GREY_100 : theme.colors.subtitle}
-                            typographyFont="bodySemiBold"
+                            color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                            typographyFont="captionMedium"
                             align="right">
                             {balance}
                         </BaseText>
-                        <BaseText color={theme.colors.textLight} typographyFont="captionRegular" align="right">
+                        <BaseText color={COLORS.GREY_500} typographyFont="captionRegular" align="right">
                             {balanceToken}
                         </BaseText>
                     </BaseView>
@@ -94,11 +102,13 @@ const baseStyles = (theme: ColorThemeType) =>
             alignItems: "center",
             flexDirection: "row",
             borderRadius: 8,
-            borderWidth: 2,
-            borderColor: theme.colors.transparent,
+            borderWidth: 1,
+            borderColor: theme.isDark ? theme.colors.transparent : COLORS.GREY_200,
+            gap: 12,
         },
         selectedContainer: {
-            borderColor: theme.colors.text,
+            borderWidth: 2,
+            borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PRIMARY_800,
         },
         innerTouchable: {
             borderRadius: 8,
