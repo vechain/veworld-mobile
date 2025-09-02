@@ -43,7 +43,7 @@ const filterDappsV2 = (filter: DappTypeV2, _vbdDapps: VeBetterDaoDapp[] | undefi
         case DappTypeV2.ALL:
             return true
         case DappTypeV2.DEFI:
-            return dapp.tags?.includes("defi")
+            return dapp.tags?.includes("defi") || dapp.tags?.includes("swap")
         case DappTypeV2.NFTS:
             return dapp.tags?.includes("nft")
         case DappTypeV2.GOVERNANCE:
