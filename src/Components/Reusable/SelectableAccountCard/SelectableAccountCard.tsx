@@ -1,11 +1,13 @@
 import { memo, default as React, useMemo } from "react"
 import { StyleProp, StyleSheet, ViewProps, ViewStyle } from "react-native"
-import { AccountIcon, BaseText, BaseTouchableBox, BaseView, LedgerBadge } from "~Components"
+import { AccountIcon, BaseSkeleton, BaseText, BaseTouchableBox, BaseView, LedgerBadge } from "~Components"
 import { COLORS, ColorThemeType, VET } from "~Constants"
 import { useThemedStyles, useVns } from "~Hooks"
+import { useTotalFiatBalance } from "~Hooks/useTotalFiatBalance"
 import { AccountWithDevice, DEVICE_TYPE } from "~Model"
 import {
     selectBalanceVisible,
+    selectCurrency,
     selectVetBalanceByAccount,
     selectVthoBalanceByAccount,
     useAppSelector,
@@ -17,14 +19,19 @@ type Props = {
     onPress?: (account: AccountWithDevice) => void
     selected?: boolean
     containerStyle?: StyleProp<ViewStyle>
-    balanceToken?: "VTHO" | "VET"
+    balanceToken?: "VTHO" | "VET" | "FIAT"
 } & Pick<ViewProps, "testID" | "children">
 
 export const SelectableAccountCard = memo(
     ({ account, onPress, selected, containerStyle, testID, children, balanceToken = "VET" }: Props) => {
         const { styles, theme } = useThemedStyles(baseStyles)
+        const currency = useAppSelector(selectCurrency)
         const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
         const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, account.address))
+        const { renderedBalance: renderedFiatBalance, isLoading } = useTotalFiatBalance({
+            account,
+            enabled: balanceToken === "FIAT",
+        })
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
         const { name: vnsName, address: vnsAddress } = useVns({
             name: "",
@@ -36,10 +43,12 @@ export const SelectableAccountCard = memo(
                 return "••••"
             }
 
+            if (balanceToken === "FIAT") return renderedFiatBalance
+
             return BigNutils(balanceToken === "VET" ? vetBalance : vthoBalance)
                 .toHuman(VET.decimals)
                 .toTokenFormat_string(2)
-        }, [balanceToken, isBalanceVisible, vetBalance, vthoBalance])
+        }, [balanceToken, isBalanceVisible, renderedFiatBalance, vetBalance, vthoBalance])
 
         const nameColor = useMemo(() => {
             if (selected) return theme.colors.title
@@ -78,14 +87,25 @@ export const SelectableAccountCard = memo(
                         </BaseView>
                     </BaseView>
                     <BaseView flexDirection="column">
-                        <BaseText
-                            color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
-                            typographyFont="captionMedium"
-                            align="right">
-                            {balance}
-                        </BaseText>
+                        {isLoading ? (
+                            <BaseSkeleton
+                                animationDirection="horizontalLeft"
+                                boneColor={theme.colors.skeletonBoneColor}
+                                highlightColor={theme.colors.skeletonHighlightColor}
+                                width={40}
+                                height={14}
+                            />
+                        ) : (
+                            <BaseText
+                                color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}
+                                typographyFont="captionMedium"
+                                align="right">
+                                {balance}
+                            </BaseText>
+                        )}
+
                         <BaseText color={COLORS.GREY_500} typographyFont="captionRegular" align="right">
-                            {balanceToken}
+                            {balanceToken === "FIAT" ? currency : balanceToken}
                         </BaseText>
                     </BaseView>
                     {children}

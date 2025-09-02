@@ -1,6 +1,6 @@
 import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
+import React, { ComponentProps, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { SectionList, SectionListData, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
@@ -39,10 +39,7 @@ type Props = {
      * The selected account
      */
     selectedAccount?: AccountWithDevice
-    /**
-     * If false, show the VET balance, otherwise VTHO. Defaults to false
-     */
-    isVthoBalance?: boolean
+    balanceToken?: ComponentProps<typeof SelectableAccountCard>["balanceToken"]
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
@@ -77,7 +74,7 @@ const SectionHeader = ({
 
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss, accounts, isVthoBalance = false }, ref) => {
+    ({ closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss, accounts, balanceToken = "FIAT" }, ref) => {
         const { LL } = useI18nContext()
 
         const { onResize, contentStyle, setSmallViewport } = useScrollableBottomSheetListWrapper()
@@ -185,7 +182,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                             account={item}
                             onPress={handlePress}
                             selected={item.address === selectedAccount?.address}
-                            balanceToken={isVthoBalance ? "VTHO" : "VET"}
+                            balanceToken={balanceToken}
                             testID="selectAccount"
                         />
                     )}
