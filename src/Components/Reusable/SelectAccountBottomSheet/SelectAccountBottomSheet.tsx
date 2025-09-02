@@ -8,6 +8,7 @@ import { COLORS, ColorThemeType } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useScrollableBottomSheetList, useScrollableBottomSheetListWrapper } from "~Hooks/useScrollableBottomSheetList"
 import { AccountWithDevice, WatchedAccount } from "~Model"
+import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
 
@@ -71,12 +72,23 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         const { styles, theme } = useThemedStyles(baseStyles)
 
         const sections = useMemo(() => {
-            const groupedAccounts = accounts.reduce((acc, curr) => {
-                const key = curr.device?.alias ?? curr.alias
-                return { ...acc, [key]: [...(acc[key] ?? []), curr] }
-            }, {} as { [alias: string]: AccountWithDevice[] })
-            return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
-        }, [accounts])
+            if (selectedKey === "YOUR_WALLETS") {
+                const groupedAccounts = accounts
+                    .filter(account => !AccountUtils.isObservedAccount(account))
+                    .reduce((acc, curr) => {
+                        const key = curr.device?.alias ?? curr.alias
+                        return { ...acc, [key]: [...(acc[key] ?? []), curr] }
+                    }, {} as { [alias: string]: AccountWithDevice[] })
+                return Object.entries(groupedAccounts).map(([alias, data]) => ({ alias, data }))
+            }
+
+            return [
+                {
+                    alias: LL.SELECT_ACCOUNT_TITLE(),
+                    data: accounts.filter(AccountUtils.isObservedAccount),
+                },
+            ]
+        }, [LL, accounts, selectedKey])
 
         const onSettingsClick = useCallback(() => {}, [])
 
