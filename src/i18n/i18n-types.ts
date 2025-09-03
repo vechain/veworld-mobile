@@ -898,7 +898,7 @@ type RootTranslation = {
 	 */
 	BD_NO_TOKEN_FOUND: string
 	/**
-	 * Y​o​u​ ​c​a​n​ ​o​b​s​e​r​v​e​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
+	 * Y​o​u​ ​c​a​n​ ​w​a​t​c​h​ ​a​ ​w​a​l​l​e​t​ ​b​y​ ​a​d​d​i​n​g​ ​i​t​s​ ​a​d​d​r​e​s​s​.​ ​T​h​i​s​ ​w​i​l​l​ ​a​l​l​o​w​ ​y​o​u​ ​t​o​ ​v​i​e​w​ ​t​h​e​ ​w​a​l​l​e​t​'​s​ ​b​a​l​a​n​c​e​ ​a​n​d​ ​t​r​a​n​s​a​c​t​i​o​n​s​.
 	 */
 	BD_OBSERVE_WALLET: string
 	/**
@@ -1471,15 +1471,15 @@ type RootTranslation = {
 	 */
 	BTN_NO_GO_BACK: string
 	/**
-	 * O​b​s​e​r​v​e​d
+	 * W​a​t​c​h​i​n​g
 	 */
 	BTN_OBSERVED: string
 	/**
-	 * O​b​s​e​r​v​e​ ​w​a​l​l​e​t
+	 * W​a​t​c​h​ ​w​a​l​l​e​t
 	 */
 	BTN_OBSERVE_WALLET: string
 	/**
-	 * O​b​s​e​r​v​e​ ​a​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
+	 * W​a​t​c​h​ ​a​ ​p​u​b​l​i​c​ ​w​a​l​l​e​t​ ​a​d​d​r​e​s​s
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: string
 	/**
@@ -4605,7 +4605,7 @@ type RootTranslation = {
 	 */
 	TITLE_NOTIFICATIONS: string
 	/**
-	 * O​b​s​e​r​v​e​ ​W​a​l​l​e​t
+	 * W​a​t​c​h​ ​w​a​l​l​e​t
 	 */
 	TITLE_OBSERVE_WALLET: string
 	/**
@@ -5855,7 +5855,7 @@ Try reconnect your device to the internet.
 	 */
 	BD_NO_TOKEN_FOUND: () => LocalizedString
 	/**
-	 * You can observe a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
+	 * You can watch a wallet by adding its address. This will allow you to view the wallet's balance and transactions.
 	 */
 	BD_OBSERVE_WALLET: () => LocalizedString
 	/**
@@ -6425,15 +6425,15 @@ Thanks for your patience!
 	 */
 	BTN_NO_GO_BACK: () => LocalizedString
 	/**
-	 * Observed
+	 * Watching
 	 */
 	BTN_OBSERVED: () => LocalizedString
 	/**
-	 * Observe wallet
+	 * Watch wallet
 	 */
 	BTN_OBSERVE_WALLET: () => LocalizedString
 	/**
-	 * Observe a public wallet address
+	 * Watch a public wallet address
 	 */
 	BTN_OBSERVE_WALLET_SUBTITLE: () => LocalizedString
 	/**
@@ -9514,7 +9514,7 @@ Here's what it's all about:
 	 */
 	TITLE_NOTIFICATIONS: () => LocalizedString
 	/**
-	 * Observe Wallet
+	 * Watch wallet
 	 */
 	TITLE_OBSERVE_WALLET: () => LocalizedString
 	/**
