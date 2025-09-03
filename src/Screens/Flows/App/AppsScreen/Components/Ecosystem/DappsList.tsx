@@ -1,24 +1,80 @@
 import { useScrollToTop } from "@react-navigation/native"
-import React, { useCallback, useRef } from "react"
-import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
-import Animated from "react-native-reanimated"
+import React, { useCallback, useEffect, useRef } from "react"
+import { FlatList, ListRenderItemInfo, StyleSheet, Dimensions } from "react-native"
+import Animated, { useSharedValue, useAnimatedStyle, withTiming, Easing, runOnJS } from "react-native-reanimated"
 import { BaseSpacer } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { DappHorizontalCardSkeleton } from "~Screens/Flows/App/DiscoverScreen/Components/DappHorizontalCardSkeleton"
 import { DAppHorizontalCardV2 } from "./DAppHorizontalCardV2"
+
+const SCREEN_WIDTH = Dimensions.get("window").width
 
 type Props = {
     items: DiscoveryDApp[]
     onOpenDApp: (dapp: DiscoveryDApp) => void
     onMorePress: (dapp: DiscoveryDApp) => void
     isLoading: boolean
+    animationDirection?: "left" | "right" | null
+    onAnimationComplete?: () => void
 }
 
 const keyExtractor = (dapp: DiscoveryDApp) => dapp.href
 
-export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) => {
+export const DAppsList = ({
+    items,
+    onMorePress,
+    onOpenDApp,
+    isLoading,
+    animationDirection,
+    onAnimationComplete,
+}: Props) => {
     const flatListRef = useRef(null)
     useScrollToTop(flatListRef)
+
+    const translateX = useSharedValue(0)
+    const opacity = useSharedValue(1)
+
+    useEffect(() => {
+        if (!animationDirection) return
+
+        const startTranslateX = animationDirection === "left" ? SCREEN_WIDTH : -SCREEN_WIDTH
+        const exitTranslateX = animationDirection === "left" ? -SCREEN_WIDTH : SCREEN_WIDTH
+
+        translateX.value = 0
+        opacity.value = 1
+
+        translateX.value = withTiming(exitTranslateX, {
+            duration: 100,
+            easing: Easing.out(Easing.quad),
+        })
+        opacity.value = withTiming(0.3, { duration: 100 })
+
+        const timeoutId = setTimeout(() => {
+            translateX.value = startTranslateX
+            translateX.value = withTiming(
+                0,
+                {
+                    duration: 150,
+                    easing: Easing.out(Easing.quad),
+                },
+                finished => {
+                    if (finished && onAnimationComplete) {
+                        runOnJS(onAnimationComplete)()
+                    }
+                },
+            )
+            opacity.value = withTiming(1, { duration: 150 })
+        }, 100)
+
+        return () => clearTimeout(timeoutId)
+    }, [animationDirection, translateX, opacity, onAnimationComplete])
+
+    const animatedStyle = useAnimatedStyle(() => {
+        return {
+            transform: [{ translateX: translateX.value }],
+            opacity: opacity.value,
+        }
+    })
 
     const renderItem = useCallback(
         ({ item }: ListRenderItemInfo<DiscoveryDApp>) => {
@@ -43,34 +99,38 @@ export const DAppsList = ({ items, onMorePress, onOpenDApp, isLoading }: Props) 
         return <DappHorizontalCardSkeleton />
     }, [])
 
-    if (isLoading && items.length === 0) {
+    if (isLoading) {
         return (
-            <FlatList
-                renderItem={renderSkeletonItem}
-                data={[1, 2, 3, 4, 5, 6, 7]}
-                keyExtractor={item => item.toString()}
-                scrollEnabled={false}
-                shouldRasterizeIOS
-                windowSize={5}
-                ItemSeparatorComponent={renderItemSeparator}
-                contentContainerStyle={styles.flatListPadding}
-            />
+            <Animated.View style={animatedStyle}>
+                <FlatList
+                    renderItem={renderSkeletonItem}
+                    data={[1, 2, 3, 4, 5, 6, 7]}
+                    keyExtractor={item => item.toString()}
+                    scrollEnabled={false}
+                    shouldRasterizeIOS
+                    windowSize={5}
+                    ItemSeparatorComponent={renderItemSeparator}
+                    contentContainerStyle={styles.flatListPadding}
+                />
+            </Animated.View>
         )
     }
 
     return (
-        <Animated.FlatList
-            ref={flatListRef}
-            data={items}
-            scrollEnabled={true}
-            keyExtractor={keyExtractor}
-            contentContainerStyle={styles.flatListPadding}
-            ItemSeparatorComponent={renderItemSeparator}
-            showsVerticalScrollIndicator={false}
-            showsHorizontalScrollIndicator={false}
-            renderItem={renderItem}
-            windowSize={5}
-        />
+        <Animated.View style={animatedStyle}>
+            <Animated.FlatList
+                ref={flatListRef}
+                data={items}
+                scrollEnabled={true}
+                keyExtractor={keyExtractor}
+                contentContainerStyle={styles.flatListPadding}
+                ItemSeparatorComponent={renderItemSeparator}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
+                renderItem={renderItem}
+                windowSize={5}
+            />
+        </Animated.View>
     )
 }
 
