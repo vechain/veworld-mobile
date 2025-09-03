@@ -44,17 +44,17 @@ export const DAppsList = ({
         opacity.value = 1
 
         translateX.value = withTiming(exitTranslateX, {
-            duration: 100,
+            duration: 160,
             easing: Easing.out(Easing.quad),
         })
-        opacity.value = withTiming(0.3, { duration: 100 })
+        opacity.value = withTiming(0.4, { duration: 160 })
 
         const timeoutId = setTimeout(() => {
             translateX.value = startTranslateX
             translateX.value = withTiming(
                 0,
                 {
-                    duration: 150,
+                    duration: 230,
                     easing: Easing.out(Easing.quad),
                 },
                 finished => {
@@ -63,8 +63,8 @@ export const DAppsList = ({
                     }
                 },
             )
-            opacity.value = withTiming(1, { duration: 150 })
-        }, 100)
+            opacity.value = withTiming(1, { duration: 230 })
+        }, 150)
 
         return () => clearTimeout(timeoutId)
     }, [animationDirection, translateX, opacity, onAnimationComplete])

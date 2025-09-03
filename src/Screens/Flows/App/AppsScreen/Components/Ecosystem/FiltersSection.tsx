@@ -195,7 +195,7 @@ const baseStyles = () =>
             position: "relative",
         },
         root: {
-            gap: 0,
+            gap: 4,
             paddingVertical: 8,
         },
         chipWrapper: {
