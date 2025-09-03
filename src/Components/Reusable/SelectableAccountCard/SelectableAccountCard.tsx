@@ -104,7 +104,10 @@ export const SelectableAccountCard = memo(
                             </BaseText>
                         )}
 
-                        <BaseText color={COLORS.GREY_500} typographyFont="captionRegular" align="right">
+                        <BaseText
+                            color={theme.isDark ? COLORS.GREY_300 : COLORS.GREY_500}
+                            typographyFont="captionRegular"
+                            align="right">
                             {balanceToken === "FIAT" ? currency : balanceToken}
                         </BaseText>
                     </BaseView>
