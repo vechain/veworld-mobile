@@ -120,7 +120,10 @@ export type Colors = {
     actionBottomSheet: {
         background: string
         border: string
-        iconBackground: string
+        iconBackground: {
+            background: string
+            border: string
+        }
         isActiveBackground: string
         text: string
         icon: string
@@ -134,6 +137,10 @@ export type Colors = {
         dangerIcon: string
         dangerIconBackground: string
         dangerText: string
+        emptyFavoritesIcon: {
+            color: string
+            background: string
+        }
     }
     assetDetailsCard: {
         background: string
@@ -523,10 +530,13 @@ const light: Colors = {
         buttonTextDisabled: COLORS.GREY_400,
     },
     actionBottomSheet: {
-        background: COLORS.GREY_50,
+        background: COLORS.WHITE,
         border: COLORS.GREY_200,
         isActiveBackground: COLORS.GREY_100,
-        iconBackground: COLORS.GREY_100,
+        iconBackground: {
+            background: COLORS.TRANSPARENT,
+            border: COLORS.GREY_200,
+        },
         text: COLORS.GREY_700,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
@@ -539,6 +549,10 @@ const light: Colors = {
         dangerIcon: COLORS.RED_600,
         dangerIconBackground: COLORS.GREY_100,
         dangerText: COLORS.RED_600,
+        emptyFavoritesIcon: {
+            color: COLORS.GREY_400,
+            background: COLORS.GREY_50,
+        },
     },
     assetDetailsCard: {
         background: COLORS.GREY_50,
@@ -831,7 +845,10 @@ const dark: Colors = {
     actionBottomSheet: {
         background: COLORS.PURPLE,
         border: COLORS.DARK_PURPLE_DISABLED,
-        iconBackground: COLORS.DARK_PURPLE_DISABLED,
+        iconBackground: {
+            background: COLORS.DARK_PURPLE_DISABLED,
+            border: COLORS.DARK_PURPLE_DISABLED,
+        },
         isActiveBackground: COLORS.PURPLE_DISABLED,
         text: COLORS.WHITE,
         icon: COLORS.GREY_100,
@@ -845,6 +862,10 @@ const dark: Colors = {
         dangerIcon: COLORS.RED_300,
         dangerIconBackground: COLORS.PURPLE_DISABLED,
         dangerText: COLORS.RED_300,
+        emptyFavoritesIcon: {
+            color: COLORS.DARK_PURPLE_DISABLED,
+            background: COLORS.PURPLE_DISABLED,
+        },
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,
