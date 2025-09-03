@@ -15,7 +15,9 @@ jest.mock("expo-file-system", () => ({
 }))
 
 const updateTab = jest.fn().mockImplementation(payload => ({ type: "discovery/updateTab", payload }))
-const updateLastVisitedUrl = jest.fn().mockImplementation(payload => ({ type: "discovery/updateLastVisitedUrl", payload }))
+const updateLastVisitedUrl = jest
+    .fn()
+    .mockImplementation(payload => ({ type: "discovery/updateLastVisitedUrl", payload }))
 
 jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),

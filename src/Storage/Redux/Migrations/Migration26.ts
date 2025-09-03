@@ -17,7 +17,7 @@ export const Migration26 = (state: PersistedState): PersistedState => {
     // Remove the preview field from all tabs
     const updatedTabs =
         currentState.tabsManager?.tabs?.map(tab => {
-            // @ts-ignore - preview field exists in old state but not in new type
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
             const { preview, ...tabWithoutPreview } = tab
             return tabWithoutPreview
         }) || []
