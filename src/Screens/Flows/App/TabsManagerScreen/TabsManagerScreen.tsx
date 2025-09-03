@@ -13,10 +13,10 @@ import {
     useFeatureFlags,
 } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useTabManagement } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListApps, RootStackParamListBrowser, Routes } from "~Navigation"
-import { Tab, closeAllTabs, selectTabs, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { Tab } from "~Storage/Redux"
 import { PlatformUtils } from "~Utils"
 import { TabViewCard } from "./Components"
 
@@ -25,14 +25,11 @@ export const TabsManagerScreen = () => {
     const { styles, theme } = useThemedStyles(baseStyles)
     const { LL } = useI18nContext()
     const { betterWorldFeature } = useFeatureFlags()
-
-    const tabs = useAppSelector(selectTabs)
-
-    const dispatch = useAppDispatch()
+    const { tabs, closeAllTabs } = useTabManagement()
 
     const onCloseAll = useCallback(() => {
-        dispatch(closeAllTabs())
-    }, [dispatch])
+        closeAllTabs()
+    }, [closeAllTabs])
 
     const onNewTab = useCallback(() => {
         if (betterWorldFeature.appsScreen.enabled) {
