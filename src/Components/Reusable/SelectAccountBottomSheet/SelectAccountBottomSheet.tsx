@@ -1,13 +1,16 @@
 import { TouchableOpacity as BSTouchableOpacity } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useNavigation } from "@react-navigation/native"
 import React, { ComponentProps, PropsWithChildren, useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { SectionList, SectionListData, StyleSheet } from "react-native"
+import Animated, { LinearTransition } from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { BaseTabs } from "~Components/Base/BaseTabs"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useTheme, useThemedStyles } from "~Hooks"
 import { useScrollableBottomSheetList, useScrollableBottomSheetListWrapper } from "~Hooks/useScrollableBottomSheetList"
 import { AccountWithDevice, WatchedAccount } from "~Model"
+import { Routes } from "~Navigation"
 import { AccountUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
 import { SelectableAccountCard } from "../SelectableAccountCard"
@@ -72,6 +75,16 @@ const SectionHeader = ({
     return <SectionHeaderTitle>{section.alias}</SectionHeaderTitle>
 }
 
+const AnimatedSectionList = Animated.createAnimatedComponent(
+    SectionList<
+        AccountWithDevice,
+        {
+            data: AccountWithDevice[]
+            alias: string
+        }
+    >,
+)
+
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     ({ closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss, accounts, balanceToken = "FIAT" }, ref) => {
@@ -80,6 +93,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         const { onResize, contentStyle, setSmallViewport } = useScrollableBottomSheetListWrapper()
         const initialLayout = useRef(false)
         const { resetHeight, ...scrollableListProps } = useScrollableBottomSheetList({ onResize, initialLayout })
+        const nav = useNavigation()
         const [selectedKey, setSelectedKey] = useState<SelectAccountBottomSheetType>(
             SelectAccountBottomSheetType.PERSONAL,
         )
@@ -113,7 +127,10 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             ]
         }, [LL, accounts, selectedKey])
 
-        const onSettingsClick = useCallback(() => {}, [])
+        const onSettingsClick = useCallback(() => {
+            nav.navigate(Routes.WALLET_MANAGEMENT)
+            closeBottomSheet?.()
+        }, [closeBottomSheet, nav])
 
         const keys = useMemo(() => {
             const hasObserved = accounts.some(AccountUtils.isObservedAccount)
@@ -137,7 +154,8 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 ref={ref}
                 onDismiss={onDismiss}
                 contentStyle={contentStyle}
-                enableContentPanningGesture={false}>
+                enableContentPanningGesture={false}
+                animationConfigs={{ stiffness: 90, damping: 15 }}>
                 <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                     <BaseView flexDirection="column" gap={8}>
                         <BaseView flexDirection="row" alignItems="center" gap={12}>
@@ -172,7 +190,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     </>
                 )}
 
-                <SectionList
+                <AnimatedSectionList
                     sections={sections}
                     keyExtractor={item => item.address}
                     renderSectionHeader={SectionHeader}
@@ -190,6 +208,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                     SectionSeparatorComponent={SectionSeparatorComponent}
                     key={selectedKey}
                     showsVerticalScrollIndicator={false}
+                    layout={LinearTransition.duration(500)}
                     {...scrollableListProps}
                     scrollEnabled
                 />
