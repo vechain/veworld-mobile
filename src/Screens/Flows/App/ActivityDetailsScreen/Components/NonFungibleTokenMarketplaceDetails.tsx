@@ -54,9 +54,20 @@ export const NonFungibleTokenMarketplaceDetails: React.FC<Props> = memo(({ activ
         return isBuyer ? DIRECTIONS.DOWN : DIRECTIONS.UP
     }, [isBuyer])
 
-    const token = AddressUtils.compareAddresses(activity.tokenAddress, VET.address)
-        ? VET
-        : allTokens.find(_token => _token.address === activity.tokenAddress)
+    const token = useMemo(
+        () =>
+            !activity.tokenAddress
+                ? VET
+                : allTokens.find(t => t.address === activity.tokenAddress) || {
+                      symbol: AddressUtils.humanAddress(activity.tokenAddress),
+                      name: AddressUtils.humanAddress(activity.tokenAddress),
+                      address: activity.tokenAddress,
+                      decimals: 18,
+                      custom: true,
+                      icon: undefined,
+                  },
+        [activity.tokenAddress, allTokens],
+    )
 
     // Details List
     const details: Array<ActivityDetail> = [
@@ -73,7 +84,7 @@ export const NonFungibleTokenMarketplaceDetails: React.FC<Props> = memo(({ activ
             value: `${priceDirection} ${formattedPrice}`,
             typographyFont: "subSubTitle",
             underline: false,
-            valueAdditional: token?.symbol ?? "VET",
+            valueAdditional: token.symbol,
         },
         {
             id: 3,
