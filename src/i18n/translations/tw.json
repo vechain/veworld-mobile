@@ -353,7 +353,7 @@
   "BTN_NO_GO_BACK": "不，返回",
   "BTN_OBSERVED": "觀察中",
   "BTN_OBSERVE_WALLET": "觀察錢包",
-  "BTN_OBSERVE_WALLET_SUBTITLE": "觀察公有錢包地址",
+  "BTN_OBSERVE_WALLET_SUBTITLE": "添加任何公開錢包地址並跟蹤其餘額和活動",
   "BTN_ONBOARDING_SKIP": "跳過創建密碼",
   "BTN_ONBOARDING_SLIDE_01": "下一步：可持續",
   "BTN_ONBOARDING_SLIDE_02": "下一步：安全快捷",

@@ -353,7 +353,7 @@
   "BTN_NO_GO_BACK": "いいえ、戻る",
   "BTN_OBSERVED": "ウォッチ中",
   "BTN_OBSERVE_WALLET": "ウォレットをウォッチ",
-  "BTN_OBSERVE_WALLET_SUBTITLE": "公開ウォレットアドレスをウォッチする",
+  "BTN_OBSERVE_WALLET_SUBTITLE": "任意の公開ウォレットアドレスを追加し、その残高とアクティビティを追跡しましょう",
   "BTN_ONBOARDING_SKIP": "パスワード作成へスキップ",
   "BTN_ONBOARDING_SLIDE_01": "次へ: サステナブル",
   "BTN_ONBOARDING_SLIDE_02": "次へ: 安全かつ高速",

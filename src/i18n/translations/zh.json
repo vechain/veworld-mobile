@@ -353,7 +353,7 @@
   "BTN_NO_GO_BACK": "不，返回",
   "BTN_OBSERVED": "已关注",
   "BTN_OBSERVE_WALLET": "关注钱包",
-  "BTN_OBSERVE_WALLET_SUBTITLE": "关注一个公共钱包地址",
+  "BTN_OBSERVE_WALLET_SUBTITLE": "添加任何公共钱包地址，并跟踪其余额和活动",
   "BTN_ONBOARDING_SKIP": "跳过直接创建密码",
   "BTN_ONBOARDING_SLIDE_01": "下一步：可持续",
   "BTN_ONBOARDING_SLIDE_02": "下一步：安全快捷",

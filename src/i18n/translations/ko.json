@@ -353,7 +353,7 @@
   "BTN_NO_GO_BACK": "아니요, 돌아가기",
   "BTN_OBSERVED": "관찰 중",
   "BTN_OBSERVE_WALLET": "지갑 관찰",
-  "BTN_OBSERVE_WALLET_SUBTITLE": "공개 지갑 주소 관찰",
+  "BTN_OBSERVE_WALLET_SUBTITLE": "공개 지갑 주소를 추가하고 그 잔액과 활동을 추적하세요",
   "BTN_ONBOARDING_SKIP": "비밀번호 생성을 위해 건너뛰기",
   "BTN_ONBOARDING_SLIDE_01": "다음: 지속 가능",
   "BTN_ONBOARDING_SLIDE_02": "다음: 안전하고 빠름",
