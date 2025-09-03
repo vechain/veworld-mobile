@@ -7,6 +7,8 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
+import { debug, ErrorMessageUtils } from "../../Utils"
+import { ERROR_EVENTS } from "../../Constants"
 
 const deleteTabScreenshot = async (tabId: string) => {
     try {
@@ -16,10 +18,9 @@ const deleteTabScreenshot = async (tabId: string) => {
         const fileInfo = await FileSystem.getInfoAsync(screenshotPath)
         if (fileInfo.exists) {
             await FileSystem.deleteAsync(screenshotPath, { idempotent: true })
-            console.log(`Deleted screenshot for tab ${tabId}`)
         }
     } catch (error) {
-        console.error(`Failed to delete screenshot for tab ${tabId}:`, error)
+        debug(ERROR_EVENTS.APP, ErrorMessageUtils.getErrorMessage(error))
     }
 }
 
@@ -32,10 +33,9 @@ const deleteAllScreenshots = async () => {
             // Delete the entire screenshots directory and recreate it empty
             await FileSystem.deleteAsync(screenshotsDir, { idempotent: true })
             await FileSystem.makeDirectoryAsync(screenshotsDir, { intermediates: true })
-            console.log("Deleted all screenshots")
         }
     } catch (error) {
-        console.error("Failed to delete all screenshots:", error)
+        debug(ERROR_EVENTS.APP, ErrorMessageUtils.getErrorMessage(error))
     }
 }
 

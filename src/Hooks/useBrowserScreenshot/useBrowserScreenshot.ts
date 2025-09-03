@@ -3,9 +3,9 @@ import { View } from "react-native"
 import { captureRef, releaseCapture } from "react-native-view-shot"
 import * as FileSystem from "expo-file-system"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
-import { DiscoveryDApp } from "~Constants"
+import { DiscoveryDApp, ERROR_EVENTS } from "~Constants"
 import { useAppSelector, useAppDispatch, updateTab, selectCurrentTabId, updateLastVisitedUrl } from "~Storage/Redux"
-import { URIUtils } from "~Utils"
+import { ErrorMessageUtils, debug, URIUtils } from "~Utils"
 
 export const useBrowserScreenshot = () => {
     const webviewContainerRef = useRef<View>(null)
@@ -28,9 +28,9 @@ export const useBrowserScreenshot = () => {
         try {
             tempUri = await captureRef(webviewContainerRef, {
                 format: "jpg",
-                quality: 0.4, // Aggressive compression for small previews
-                result: "tmpfile", // Save to temp file instead of base64
-                height: 400, // Capture at lower resolution for 194px display height in tab manager screen
+                quality: 0.4, // Compression for small previews
+                result: "tmpfile",
+                height: 400, // Capture at lower resolution for display height of tab in tab manager screen
             })
 
             // Store temp URI for async processing
@@ -73,7 +73,7 @@ export const useBrowserScreenshot = () => {
                     dispatch(
                         updateTab({
                             id: selectedTabId,
-                            previewPath: persistentPath, // Store file path instead of base64
+                            previewPath: persistentPath,
                             ...(!isDapp && { title: navigationState?.title, favicon }),
                             favicon: dappMetadata?.icon ?? favicon,
                         }),
@@ -94,7 +94,7 @@ export const useBrowserScreenshot = () => {
 
                     dispatch(updateLastVisitedUrl(visitedUrl))
                 } catch (error) {
-                    console.error("Screenshot processing failed:", error)
+                    debug(ERROR_EVENTS.APP, ErrorMessageUtils.getErrorMessage(error))
                 } finally {
                     // Clean up temp file
                     if (capturedTempUri) {
@@ -104,7 +104,7 @@ export const useBrowserScreenshot = () => {
                 }
             }, 0) // Process on next tick
         } catch (error) {
-            console.error("Screenshot capture failed:", error)
+            debug(ERROR_EVENTS.APP, ErrorMessageUtils.getErrorMessage(error))
             setPerformingScreenshot(false)
             if (tempUri) {
                 releaseCapture(tempUri)
