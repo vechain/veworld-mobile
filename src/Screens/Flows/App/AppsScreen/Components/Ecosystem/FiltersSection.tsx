@@ -39,9 +39,13 @@ export const FiltersSection = ({ selectedFilter, onPress }: Props) => {
 
     const scrollViewRef = useRef<ScrollView>(null)
 
-    const [measurements, setMeasurements] = useState({
-        chipPositions: [] as number[],
-        chipWidths: [] as number[],
+    const [measurements, setMeasurements] = useState<{
+        chipPositions: number[]
+        chipWidths: number[]
+        scrollViewWidth: number
+    }>({
+        chipPositions: [],
+        chipWidths: [],
         scrollViewWidth: 0,
     })
 
