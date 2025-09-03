@@ -5,9 +5,9 @@ import { NftData, NodeInfo } from "~Model/Staking"
 import { AddressUtils } from "~Utils"
 
 export interface StakingGroup {
-    /** Owner/Manager address */
+    /** User address for owned nodes, or first managed node's owner address for managed group */
     address: string
-    /** Nodes for this address */
+    /** Nodes for this group */
     nodes: NodeInfo[]
     /** NFT data for these nodes */
     nfts: NftData[]
@@ -24,37 +24,49 @@ export const useGroupedStakingData = (userAddress?: string) => {
     const stakingGroups = useMemo((): StakingGroup[] => {
         if (!stargateNodes.length) return []
 
-        // Group nodes by owner address
-        const nodesByOwner = stargateNodes.reduce((acc, node) => {
-            const ownerAddress = node.xNodeOwner
-            if (!acc[ownerAddress]) {
-                acc[ownerAddress] = []
+        // Separate owned and managed nodes
+        const ownedNodes: NodeInfo[] = []
+        const managedNodes: NodeInfo[] = []
+
+        stargateNodes.forEach(node => {
+            if (AddressUtils.compareAddresses(node.xNodeOwner, userAddress)) {
+                ownedNodes.push(node)
+            } else {
+                managedNodes.push(node)
             }
-            acc[ownerAddress].push(node)
-            return acc
-        }, {} as Record<string, NodeInfo[]>)
+        })
 
-        // Create staking groups and sort by ownership (owned nodes first)
-        return Object.entries(nodesByOwner)
-            .map(([ownerAddress, nodes]) => {
-                // Filter NFTs for this owner's nodes
-                const nodeIds = new Set(nodes.map(n => n.nodeId))
-                const nftsForOwner = ownedStargateNfts.filter(nft => nodeIds.has(nft.tokenId))
+        const groups: StakingGroup[] = []
 
-                return {
-                    address: ownerAddress,
-                    nodes,
-                    nfts: nftsForOwner,
-                    isOwner: AddressUtils.compareAddresses(ownerAddress, userAddress),
-                    isLoading: isLoadingNodes || isLoadingNfts,
-                }
+        // Create owned group if there are owned nodes
+        if (ownedNodes.length > 0) {
+            const ownedNodeIds = new Set(ownedNodes.map(n => n.nodeId))
+            const ownedNfts = ownedStargateNfts.filter(nft => ownedNodeIds.has(nft.tokenId))
+
+            groups.push({
+                address: userAddress || "",
+                nodes: ownedNodes,
+                nfts: ownedNfts,
+                isOwner: true,
+                isLoading: isLoadingNodes || isLoadingNfts,
             })
-            .sort((a, b) => {
-                // Owned nodes first, then managed nodes
-                if (a.isOwner && !b.isOwner) return -1
-                if (!a.isOwner && b.isOwner) return 1
-                return 0
+        }
+
+        // Create managed group if there are managed nodes
+        if (managedNodes.length > 0) {
+            const managedNodeIds = new Set(managedNodes.map(n => n.nodeId))
+            const managedNfts = ownedStargateNfts.filter(nft => managedNodeIds.has(nft.tokenId))
+
+            groups.push({
+                address: managedNodes[0].xNodeOwner,
+                nodes: managedNodes,
+                nfts: managedNfts,
+                isOwner: false,
+                isLoading: isLoadingNodes || isLoadingNfts,
             })
+        }
+
+        return groups
     }, [stargateNodes, ownedStargateNfts, userAddress, isLoadingNodes, isLoadingNfts])
 
     return {

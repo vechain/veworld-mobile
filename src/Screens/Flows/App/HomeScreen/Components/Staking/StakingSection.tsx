@@ -20,7 +20,7 @@ export const StakingSection = memo(() => {
             </BaseText>
             <BaseSpacer height={8} />
             {stakingGroups.map((group, index) => (
-                <BaseView key={group.address}>
+                <BaseView key={`${group.address}-${group.isOwner}`}>
                     <StakedCard
                         nodes={group.nodes}
                         nfts={group.nfts}
