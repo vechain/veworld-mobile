@@ -15,15 +15,22 @@ jest.mock("expo-file-system", () => ({
 }))
 
 const updateTab = jest.fn().mockImplementation(payload => ({ type: "discovery/updateTab", payload }))
+const updateLastVisitedUrl = jest.fn().mockImplementation(payload => ({ type: "discovery/updateLastVisitedUrl", payload }))
 
 jest.mock("~Storage/Redux", () => ({
     ...jest.requireActual("~Storage/Redux"),
     updateTab: (...args: any[]) => updateTab(...args),
+    updateLastVisitedUrl: (...args: any[]) => updateLastVisitedUrl(...args),
 }))
 
 jest.mock("~Components/Providers/InAppBrowserProvider")
 
 describe("useBrowserScreenshot", () => {
+    beforeEach(() => {
+        updateTab.mockClear()
+        updateLastVisitedUrl.mockClear()
+    })
+
     it("should be able to perform a screenshot and update tab with file path", async () => {
         ;(captureRef as jest.Mock).mockReturnValue("/tmp/screenshot.jpg")
         ;(useInAppBrowser as jest.Mock).mockReturnValue({
@@ -70,6 +77,11 @@ describe("useBrowserScreenshot", () => {
                 set: jest.fn(() => "TEST"),
             })
             await result.current.performScreenshot()
+        })
+
+        // Wait for the setTimeout to execute
+        await act(async () => {
+            await new Promise(resolve => setTimeout(resolve, 10))
         })
 
         expect(updateTab).toHaveBeenCalledWith({
@@ -124,6 +136,11 @@ describe("useBrowserScreenshot", () => {
                 set: jest.fn(() => "TEST"),
             })
             await result.current.performScreenshot()
+        })
+
+        // Wait for the setTimeout to execute
+        await act(async () => {
+            await new Promise(resolve => setTimeout(resolve, 10))
         })
 
         expect(updateTab).toHaveBeenCalledWith({

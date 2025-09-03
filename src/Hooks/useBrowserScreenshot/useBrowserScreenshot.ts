@@ -26,15 +26,12 @@ export const useBrowserScreenshot = () => {
         // Capture screenshot immediately (blocking part)
         let tempUri: string | null = null
         try {
-            const startTimeCaptureRef = performance.now()
             tempUri = await captureRef(webviewContainerRef, {
                 format: "jpg",
                 quality: 0.4, // Aggressive compression for small previews
                 result: "tmpfile", // Save to temp file instead of base64
                 height: 400, // Capture at lower resolution for 194px display height in tab manager screen
             })
-            const endTimeCaptureRef = performance.now()
-            console.log(`captureRef duration: ${endTimeCaptureRef - startTimeCaptureRef}ms`)
 
             // Store temp URI for async processing
             const capturedTempUri = tempUri
@@ -42,8 +39,6 @@ export const useBrowserScreenshot = () => {
             // Process screenshot asynchronously (non-blocking)
             setTimeout(async () => {
                 try {
-                    const startTimeAsync = performance.now()
-
                     // Ensure screenshots directory exists
                     const screenshotsDir = `${FileSystem.documentDirectory}screenshots/`
                     const dirInfo = await FileSystem.getInfoAsync(screenshotsDir)
@@ -71,8 +66,8 @@ export const useBrowserScreenshot = () => {
                         ? `${process.env.REACT_APP_GOOGLE_FAVICON_URL}${new URL(navigationState?.url).origin}`
                         : ""
 
-                    // Batch Redux updates together
-                    const startTimeRedux = performance.now()
+                    // The following dispatches affect the Discovery state but they will be batched together
+                    // when saved to redux state
 
                     // Update tab with screenshot path
                     dispatch(
@@ -84,8 +79,7 @@ export const useBrowserScreenshot = () => {
                         }),
                     )
 
-                    // Update last visited URL (defer this to reduce immediate load)
-
+                    // Update last visited URL
                     const _url = new URL(navigationState?.url ?? "")
                     const href = _url.search.length === 0 ? URIUtils.clean(_url.href) : navigationState?.url ?? ""
 
@@ -99,12 +93,6 @@ export const useBrowserScreenshot = () => {
                     }
 
                     dispatch(updateLastVisitedUrl(visitedUrl))
-
-                    const endTimeRedux = performance.now()
-                    console.log(`Redux updates duration: ${endTimeRedux - startTimeRedux}ms`)
-
-                    const endTimeAsync = performance.now()
-                    console.log(`Async processing duration: ${endTimeAsync - startTimeAsync}ms`)
                 } catch (error) {
                     console.error("Screenshot processing failed:", error)
                 } finally {

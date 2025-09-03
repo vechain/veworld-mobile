@@ -78,22 +78,9 @@ async function decrypt<T>(data: string, encryptionKey: string, salt: string, iv:
 }
 
 function encryptState<T>(data: T, key: string): string {
-    // console.log("encryptState START", key)
-    // profle
-    const startTime = performance.now()
     const cipher = crypto.createCipheriv("aes256", key, null)
-    // profile
-    const startTime2 = performance.now()
     let ciph = cipher.update(stringify(data), "utf-8", "hex")
-    const endTime2 = performance.now()
-    // console.log(`encryptState  cipher.update: ${endTime2 - startTime2}ms`)
     ciph += cipher.final("hex")
-    const endTime = performance.now()
-
-    // console.log("encryptState data", JSON.stringify(data))
-    console.log(new Date().toISOString() + `encryptState duration: ${endTime - startTime}ms`)
-    // console.log("encryptState data", data)
-    // console.log("encryptState END", key)
     return ciph as string
 }
 
