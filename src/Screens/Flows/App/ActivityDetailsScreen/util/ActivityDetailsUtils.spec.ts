@@ -49,7 +49,7 @@ describe("ActivityDetailsUtils", () => {
         it.each([
             [ActivityType.TRANSFER_FT, "Send"],
             [ActivityType.TRANSFER_NFT, "NFT Send"],
-            [ActivityType.NFT_SALE, "NFT sold"],
+            [ActivityType.NFT_SALE, "NFT Sold"],
             [ActivityType.TRANSFER_VET, "Send"],
             [ActivityType.TRANSFER_SF, "Send"],
         ])("should return the correct title for a %s send activity", (type, expected) => {
@@ -93,7 +93,7 @@ describe("ActivityDetailsUtils", () => {
                 direction: DIRECTIONS.UP,
             }
             const title = getActivityTitle(activity, LL)
-            expect(title).toBe("NFT sold")
+            expect(title).toBe("NFT Sold")
         })
 
         it("should return 'NFT Purchased' when NFT_SALE activity has direction DOWN", () => {
