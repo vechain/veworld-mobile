@@ -99,7 +99,6 @@ export interface NFTMarketplaceActivity extends Activity {
     direction: DIRECTIONS
     price: string
     tokenAddress?: string
-    marketplace?: string
     buyer: string
     seller: string
 }
