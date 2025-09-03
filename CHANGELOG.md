@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.1 (2025-09-03)</small>
+
+* build: init ([09799b5](https://github.com/vechain/veworld-mobile/commit/09799b5))
+* fix(apps): include swaps in defi filter (#3248) ([af1e41a](https://github.com/vechain/veworld-mobile/commit/af1e41a)), closes [#3248](https://github.com/vechain/veworld-mobile/issues/3248)
+
 ## <small>2.3.10 (2025-08-29)</small>
 
 * build: init ([bc9b729](https://github.com/vechain/veworld-mobile/commit/bc9b729))
