@@ -77,6 +77,7 @@ const baseStyles = (theme: ColorThemeType) => {
         },
         selected: {
             borderColor: theme.isDark ? COLORS.LIME_GREEN : COLORS.PURPLE,
+            borderWidth: 3,
         },
         header: {
             flexDirection: "row",

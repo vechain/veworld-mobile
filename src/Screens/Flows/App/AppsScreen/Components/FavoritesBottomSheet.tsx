@@ -173,7 +173,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                             <ListEmptyResults
                                 subtitle={LL.FAVOURITES_DAPPS_EMPTY_LIST()}
                                 icon={"icon-alert-circle"}
-                                iconColor={theme.colors.mnemonicCardBorder}
+                                iconColor={theme.colors.actionBottomSheet.emptyFavoritesIcon.color}
                                 testID="empty-results"
                                 minHeight={emptyStateMinHeight}
                                 iconStyle={styles.emptyIcon}
@@ -209,13 +209,13 @@ const baseStyles = (theme: ColorThemeType) =>
             borderTopLeftRadius: 24,
         },
         reorderIcon: {
-            borderColor: theme.colors.actionBottomSheet.iconBackground,
-            backgroundColor: theme.colors.actionBottomSheet.iconBackground,
+            borderColor: theme.colors.actionBottomSheet.iconBackground.border,
+            backgroundColor: theme.colors.actionBottomSheet.iconBackground.background,
             borderWidth: 1,
             borderRadius: 6,
         },
         emptyIcon: {
-            backgroundColor: theme.colors.actionBottomSheet.iconBackground,
+            backgroundColor: theme.colors.actionBottomSheet.emptyFavoritesIcon.background,
             borderRadius: 100,
             padding: 18,
         },
