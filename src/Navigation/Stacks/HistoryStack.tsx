@@ -6,6 +6,7 @@ import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
 import { ActivityDetailsScreen, ActivityScreen, InAppBrowser, TabsManagerScreen } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type HistoryStackParamList = {
     [Routes.HISTORY]: undefined
@@ -31,7 +32,7 @@ const { Navigator, Screen } = createStackNavigator<HistoryStackParamList>()
 export const HistoryStack = () => {
     const { betterWorldFeature } = useFeatureFlags()
     return (
-        <Navigator id="HistoryStack" screenOptions={{ headerShown: false }}>
+        <Navigator id="HistoryStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Screen name={Routes.HISTORY} component={ActivityScreen} options={{ headerShown: false }} />
             <Screen name={Routes.ACTIVITY_DETAILS} component={ActivityDetailsScreen} options={{ headerShown: false }} />
             <Screen

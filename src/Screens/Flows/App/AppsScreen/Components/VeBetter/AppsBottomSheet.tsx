@@ -1,12 +1,12 @@
 import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
-import React, { forwardRef, useCallback, useMemo, useState, useEffect } from "react"
+import React, { forwardRef, useCallback, useEffect, useMemo, useState } from "react"
 import { ListRenderItemInfo, StyleSheet, Dimensions } from "react-native"
 import { FlatList } from "react-native-gesture-handler"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, Easing, runOnJS } from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBatchAppOverviews, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
-import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoDapps"
+import { useVeBetterDaoActiveDapps } from "~Hooks/useFetchFeaturedDApps/useVeBetterDaoActiveApps"
 import { useI18nContext } from "~i18n"
 import { VeBetterDaoDapp, VeBetterDaoDAppMetadata, X2ECategoryType, IconKey } from "~Model"
 import { FetchAppOverviewResponse } from "~Networking/API/Types"
@@ -225,7 +225,7 @@ const AppList = React.memo(
 
 export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottomSheetProps>(
     ({ onDismiss, initialCategoryId }, ref) => {
-        const { data: allApps, isLoading } = useVeBetterDaoDapps()
+        const { data: allApps, isLoading } = useVeBetterDaoActiveDapps()
         const theme = useTheme()
         const [openItemId, setOpenItemId] = useState<string | null>(null)
         const [animationDirection, setAnimationDirection] = useState<"left" | "right" | null>(null)

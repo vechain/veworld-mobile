@@ -1,6 +1,6 @@
 {
   "name": "veworld",
-  "version": "2.3.9",
+  "version": "2.4.0",
   "private": true,
   "scripts": {
     "purge": "rm -rf node_modules && rm -rf android/app/build && cd ios && pod deintegrate && rm -rf Podfile.lock && cd ..",
@@ -121,6 +121,7 @@
     "expo-clipboard": "~6.0.3",
     "expo-constants": "~16.0.2",
     "expo-crypto": "~13.0.2",
+    "expo-file-system": "~17.0.1",
     "expo-font": "~12.0.10",
     "expo-haptics": "~13.0.1",
     "expo-linking": "~6.3.1",
