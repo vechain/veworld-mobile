@@ -34,21 +34,47 @@ export const selectAllDapps = createSelector(
     selectFeaturedDapps,
     selectCustomDapps,
     (favorites, featured, custom) => {
-        const dapps = [...favorites]
+        // Use a Set to track normalized URLs for O(1) lookups
+        const seenUrls = new Set<string>()
+        const result: DiscoveryDApp[] = []
 
+        // Helper to normalize URL for comparison
+        const normalizeUrl = (url: string) => {
+            try {
+                const parsed = new URL(url.toLowerCase())
+                parsed.hostname = parsed.hostname.replace("www.", "")
+                return parsed.origin + parsed.pathname
+            } catch {
+                return url.toLowerCase()
+            }
+        }
+
+        // Add favorites first (highest priority)
+        for (const dapp of favorites) {
+            const normalized = normalizeUrl(dapp.href)
+            seenUrls.add(normalized)
+            result.push(dapp)
+        }
+
+        // Add custom dapps (skip if URL already seen)
         for (const dapp of custom) {
-            if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
-                dapps.push(dapp)
+            const normalized = normalizeUrl(dapp.href)
+            if (!seenUrls.has(normalized)) {
+                seenUrls.add(normalized)
+                result.push(dapp)
             }
         }
 
+        // Add all apps (skip if URL already seen)
         for (const dapp of featured) {
-            if (!dapps.find(d => URIUtils.compareURLs(d.href, dapp.href))) {
-                dapps.push(dapp)
+            const normalized = normalizeUrl(dapp.href)
+            if (!seenUrls.has(normalized)) {
+                seenUrls.add(normalized)
+                result.push(dapp)
             }
         }
 
-        return dapps
+        return result
     },
 )
 

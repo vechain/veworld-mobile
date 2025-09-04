@@ -15,7 +15,7 @@ import {
     BaseView,
     BlurView,
 } from "~Components"
-import { COLORS, ColorThemeType } from "~Constants"
+import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
 import { useAppOverview, useBottomSheetModal, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdDApp } from "~Model"
@@ -246,17 +246,19 @@ export const VbdCarouselBottomSheet = ({
                     />
                 </BaseView>
 
-                <BaseView pt={16} gap={12}>
+                <BaseView pt={24} gap={16} flexDirection="row">
                     <BaseButton
+                        flex={1}
                         testID="Favorite_Button"
                         style={styles.btn}
                         leftIcon={leftIcon}
                         action={onToggleFavorite}
-                        title={isBookMarked ? LL.APPS_BS_BTN_REMOVE_FAVORITE() : LL.APPS_BS_BTN_ADD_FAVORITE()}
+                        title={isBookMarked ? LL.BTN_FAVORiTED() : LL.BTN_FAVORITE()}
                         variant="outline"
                         {...favButtonStyles}
                     />
                     <BaseButton
+                        flex={1}
                         testID="Open_Button"
                         style={styles.btn}
                         action={onOpenApp}
@@ -271,7 +273,7 @@ export const VbdCarouselBottomSheet = ({
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         root: {
-            height: 360,
+            height: isSmallScreen ? 320 : 360,
             position: "relative",
             overflow: "hidden",
             justifyContent: "flex-end",
