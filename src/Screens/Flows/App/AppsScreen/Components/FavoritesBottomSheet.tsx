@@ -177,7 +177,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                                 testID="empty-results"
                                 minHeight={emptyStateMinHeight}
                                 iconStyle={styles.emptyIcon}
-                                subtitleColor={theme.colors.actionBottomSheet.text}
+                                subtitleColor={theme.colors.actionBottomSheet.subText}
                             />
                         }
                     />
@@ -217,6 +217,6 @@ const baseStyles = (theme: ColorThemeType) =>
         emptyIcon: {
             backgroundColor: theme.colors.actionBottomSheet.emptyFavoritesIcon.background,
             borderRadius: 100,
-            padding: 18,
+            padding: 16,
         },
     })
