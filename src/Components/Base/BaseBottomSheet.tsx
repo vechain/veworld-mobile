@@ -373,7 +373,7 @@ export const BaseBottomSheet = typedForwardRef(_BaseBottomSheet)
 const baseStyles = (theme: ColorThemeType) =>
     StyleSheet.create({
         backgroundStyle: {
-            backgroundColor: theme.colors.background,
+            backgroundColor: theme.isDark ? COLORS.DARK_PURPLE : COLORS.WHITE,
         },
         blurBackdrop: {
             backgroundColor: COLORS.PURPLE_BLUR_TRANSPARENT,
