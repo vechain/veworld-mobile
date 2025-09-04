@@ -1,5 +1,5 @@
 import React from "react"
-import { StyleProp, StyleSheet, ViewStyle } from "react-native"
+import { StyleProp, ViewStyle } from "react-native"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useTheme } from "~Hooks"
 import { IconKey } from "~Model"
@@ -28,10 +28,14 @@ export const ListEmptyResults = ({
     iconStyle,
 }: ListEmptyResultsProps) => {
     const theme = useTheme()
-const containerStyle = useMemo(() => ({ flex: 1, justifyContent: "center", alignItems: "center", minHeight }), [minHeight])
 
     return (
-        <BaseView testID={testID} style={containerStyle.container}>
+        <BaseView
+            testID={testID}
+            flex={1}
+            justifyContent="center"
+            alignItems="center"
+            style={minHeight ? { minHeight } : undefined}>
             <BaseIcon name={icon} size={32} color={iconColor || theme.colors.text} style={iconStyle} />
             <BaseSpacer height={24} />
             <BaseText mx={20} typographyFont="body" color={subtitleColor || theme.colors.text} align="center">
