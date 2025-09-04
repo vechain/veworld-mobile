@@ -4,9 +4,9 @@ import { CarouselSlideItem, FullscreenBaseCarousel } from "~Components"
 import { COLORS, ColorThemeType } from "~Constants"
 import { useBottomSheetModal, useThemedStyles } from "~Hooks"
 import { useVeBetterDaoDapps } from "~Hooks/useFetchFeaturedDApps"
+import { VbdCarouselBottomSheet, VbdCarouselBottomSheetMetadata } from "./VbdCarouselBottomSheet"
 import { VbdCarouselItem } from "./VbdCarouselItem"
 import { VbdCarouselItemSkeleton } from "./VbdCarouselItemSkeleton"
-import { VbdCarouselBottomSheet, VbdCarouselBottomSheetMetadata } from "./VbdCarouselBottomSheet"
 
 type Props = {
     appIds: string[]
@@ -36,10 +36,10 @@ export const VbdCarousel = ({ appIds, isLoading: propsIsLoading }: Props) => {
     }, [onCloseBS])
 
     const items = useMemo(() => {
-        if (isLoading || !vbdApps?.length || !appIds.length)
-            return appIds.map(
-                appId => ({ content: <VbdCarouselItemSkeleton />, name: appId } satisfies CarouselSlideItem),
-            )
+        if (isLoading || !vbdApps?.length || !appIds.length) {
+            const ids = appIds.length ? appIds : ["1", "2", "3"]
+            return ids.map(appId => ({ content: <VbdCarouselItemSkeleton />, name: appId } satisfies CarouselSlideItem))
+        }
 
         return appIds.map(appId => {
             const app = vbdApps?.find(_app => _app.id === appId)

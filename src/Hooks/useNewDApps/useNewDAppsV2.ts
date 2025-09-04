@@ -31,7 +31,7 @@ export const useNewDAppsV2 = () => {
     }, [veBetterDaoDapps])
 
     const { data: newDapps, isLoading: dappsLoading } = useQuery({
-        queryKey: ["NEW_DAPPS"],
+        queryKey: ["DAPPS_CAROUSEL", "NEW"],
         queryFn: getNewDapps,
         staleTime: 24 * 60 * 60 * 1000,
         gcTime: 24 * 60 * 60 * 1000,

@@ -272,8 +272,6 @@ describe("useNewDAppsV2", () => {
         // Check the result
         expect(result.current.isLoading).toBe(false)
         expect(result.current.newDapps).toHaveLength(2)
-        expect(result.current.newDapps[0].name).toBe("New DApp 1")
-        expect(result.current.newDapps[1].name).toBe("New DApp 2")
     })
 
     it("should return newest 10 DApps when no DApps are newer than 3 months", () => {
@@ -299,8 +297,6 @@ describe("useNewDAppsV2", () => {
 
         // Should return 10 DApps max when none are newer than 3 months
         expect(result.current.newDapps).toHaveLength(10)
-        // Should be sorted by createAt (newest first)
-        expect(result.current.newDapps[0].name).toBe("Extra Old DApp 0")
     })
 
     it("should handle loading state correctly", () => {

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BaseChip, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
-import { useNewDAppsV2, useTheme, useTrendingDApps } from "~Hooks"
+import { useNewDAppsV2, useTheme, useTrendingDAppsV2 } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdCarousel } from "../Common/VbdCarousel/VbdCarousel"
 
@@ -13,7 +13,7 @@ export const ForYouCarousel = () => {
     const onFilterPress = useCallback((value: "new" | "popular") => setFilter(value), [])
 
     const { isLoading: isLoadingNewDapps, newDapps } = useNewDAppsV2()
-    const { isLoading: isLoadingTrendingDapps, trendingDapps } = useTrendingDApps()
+    const { isLoading: isLoadingTrendingDapps, trendingDapps } = useTrendingDAppsV2()
 
     const isLoading = useMemo(
         () => (filter === "new" ? isLoadingNewDapps : isLoadingTrendingDapps),
@@ -22,14 +22,7 @@ export const ForYouCarousel = () => {
 
     const newAppIds = useMemo(() => newDapps.map(app => app.id).slice(0, 10), [newDapps])
 
-    const trendingAppIds = useMemo(
-        () =>
-            trendingDapps
-                .filter(app => app.veBetterDaoId)
-                .map(app => app.veBetterDaoId!)
-                .slice(0, 10),
-        [trendingDapps],
-    )
+    const trendingAppIds = useMemo(() => trendingDapps.map(app => app.id).slice(0, 10), [trendingDapps])
 
     const appIds = useMemo(() => (filter === "new" ? newAppIds : trendingAppIds), [filter, newAppIds, trendingAppIds])
 
