@@ -4,7 +4,7 @@ import React, { MutableRefObject, useCallback, useEffect, useMemo, useState } fr
 import { Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import FastImage, { ImageStyle } from "react-native-fast-image"
-import Animated, { Easing, FadeOut } from "react-native-reanimated"
+import Animated, { Easing, FadeOut, runOnJS } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
 import { BaseIcon, BaseStatusBar, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
@@ -17,8 +17,11 @@ import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { Gesture, GestureDetector } from "react-native-gesture-handler"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
+
+const NAVIGATION_GESTURE_THRESHOLD = 50
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {
@@ -35,6 +38,8 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         ChangeAccountNetworkBottomSheetRef,
         originWhitelist,
         isLoading,
+        goBack,
+        goForward,
     } = useInAppBrowser()
 
     const track = useAnalyticTracking()
@@ -105,6 +110,17 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         theme.colors.history.historyItem.iconColor,
     ])
 
+    const navigationGesture = useMemo(() => {
+        return Gesture.Pan().onChange(event => {
+            if (event.translationX > NAVIGATION_GESTURE_THRESHOLD) {
+                runOnJS(goBack)()
+            }
+            if (event.translationX < -NAVIGATION_GESTURE_THRESHOLD) {
+                runOnJS(goForward)()
+            }
+        }) // Remove the webviewRef.current check
+    }, [goBack, goForward])
+
     return (
         <Layout
             bg={COLORS.DARK_PURPLE}
@@ -124,26 +140,32 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     {userAgent && !isLoading && (
-                        <Animated.View ref={webviewContainerRef} style={[styles.webviewContainer]} collapsable={false}>
-                            <WebView
-                                ref={webviewRef as MutableRefObject<WebView>}
-                                source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
-                                userAgent={userAgent}
-                                onNavigationStateChange={onNavigationStateChange}
-                                javaScriptEnabled={true}
-                                onMessage={onMessage}
-                                onScroll={onScroll}
-                                onLoadEnd={onLoadEnd}
-                                style={styles.loginWebView}
-                                scalesPageToFit={true}
-                                injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
-                                allowsInlineMediaPlayback={true}
-                                originWhitelist={originWhitelist}
-                                collapsable={false}
-                                startInLoadingState={true}
-                                renderLoading={renderLoading}
-                            />
-                        </Animated.View>
+                        <GestureDetector gesture={navigationGesture}>
+                            <Animated.View
+                                ref={webviewContainerRef}
+                                style={[styles.webviewContainer]}
+                                collapsable={false}>
+                                <WebView
+                                    ref={webviewRef as MutableRefObject<WebView>}
+                                    source={{ uri: route.params.url, headers: { "Accept-Language": locale } }}
+                                    userAgent={userAgent}
+                                    onNavigationStateChange={onNavigationStateChange}
+                                    javaScriptEnabled={true}
+                                    onMessage={onMessage}
+                                    onScroll={onScroll}
+                                    onLoadEnd={onLoadEnd}
+                                    style={styles.loginWebView}
+                                    scalesPageToFit={true}
+                                    injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
+                                    allowsInlineMediaPlayback={true}
+                                    originWhitelist={originWhitelist}
+                                    collapsable={false}
+                                    pullToRefreshEnabled
+                                    startInLoadingState={true}
+                                    renderLoading={renderLoading}
+                                />
+                            </Animated.View>
+                        </GestureDetector>
                     )}
 
                     <ChangeAccountNetworkBottomSheet
