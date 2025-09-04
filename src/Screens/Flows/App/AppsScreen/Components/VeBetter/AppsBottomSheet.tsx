@@ -2,6 +2,7 @@ import { BottomSheetFlatList } from "@gorhom/bottom-sheet"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { forwardRef, useCallback, useMemo, useState, useEffect } from "react"
 import { ListRenderItemInfo, StyleSheet, Dimensions } from "react-native"
+import { FlatList } from "react-native-gesture-handler"
 import Animated, { useAnimatedStyle, useSharedValue, withTiming, Easing, runOnJS } from "react-native-reanimated"
 import { BaseBottomSheet, BaseIcon, BaseSkeleton, BaseSpacer, BaseText, BaseView } from "~Components"
 import { useBatchAppOverviews, useDappBookmarking, useTheme, useThemedStyles } from "~Hooks"
@@ -208,13 +209,15 @@ const AppList = React.memo(
         }
 
         return (
-            <BottomSheetFlatList
+            <FlatList
                 data={apps}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
                 ItemSeparatorComponent={renderItemSeparator}
                 onEndReachedThreshold={0.5}
                 contentContainerStyle={styles.flatListPadding}
+                showsVerticalScrollIndicator={false}
+                showsHorizontalScrollIndicator={false}
             />
         )
     },
@@ -371,6 +374,7 @@ export const AppsBottomSheet = forwardRef<BottomSheetModalMethods, X2EAppsBottom
                 onDismiss={handleDismiss}
                 floating={false}
                 noMargins={true}
+                enableContentPanningGesture={false}
                 backgroundStyle={{ backgroundColor: theme.colors.card }}>
                 {headerContent}
                 <Animated.View style={contentAnimatedStyle}>

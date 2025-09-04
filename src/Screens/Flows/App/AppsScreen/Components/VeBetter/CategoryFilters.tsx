@@ -118,12 +118,9 @@ export const CategoryFilters = React.memo(({ selectedCategory, onCategoryChange 
         setMeasurements(prev => (prev.scrollViewWidth === width ? prev : { ...prev, scrollViewWidth: width }))
     }, [])
 
-    const scrollHandler = useAnimatedScrollHandler({
-        onScroll: event => {
-            "worklet"
-            scrollOffset.value = event.contentOffset.x
-        },
-    })
+    const scrollHandler = useAnimatedScrollHandler(event => {
+        scrollOffset.value = event.contentOffset.x
+    }, [])
 
     const indicatorAnimatedStyle = useAnimatedStyle(() => {
         "worklet"
