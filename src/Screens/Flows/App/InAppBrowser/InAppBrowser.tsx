@@ -16,6 +16,7 @@ import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
 
@@ -76,7 +77,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const renderLoading = useCallback(() => {
         if (!dappMetadata)
             return (
-                <Animated.View exiting={FadeOut.duration(400)} style={[styles.loadingWebView]}>
+                <Animated.View exiting={isIOS() ? FadeOut.duration(400) : undefined} style={[styles.loadingWebView]}>
                     <BaseView style={[styles.loadingIcon, styles.notDappLoadingIcon]}>
                         <BaseIcon name="icon-globe" size={32} color={theme.colors.history.historyItem.iconColor} />
                     </BaseView>
@@ -85,7 +86,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
         return (
             <Animated.View
-                exiting={FadeOut.duration(400).easing(Easing.out(Easing.ease))}
+                exiting={isIOS() ? FadeOut.duration(400).easing(Easing.out(Easing.ease)) : undefined}
                 style={[styles.loadingWebView]}>
                 <FastImage
                     source={{

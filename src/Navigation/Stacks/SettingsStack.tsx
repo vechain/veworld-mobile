@@ -29,6 +29,7 @@ import {
 } from "~Screens"
 import { AboutScreen } from "~Screens/Flows/App/AboutScreen"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type RootStackParamListSettings = {
     [Routes.SETTINGS]: undefined
@@ -71,7 +72,7 @@ export const SettingsStack = () => {
     const { betterWorldFeature } = useFeatureFlags()
 
     return (
-        <Settings.Navigator screenOptions={{ headerShown: false }}>
+        <Settings.Navigator screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Settings.Screen name={Routes.SETTINGS} component={SettingsScreen} options={{ headerShown: false }} />
             <Settings.Screen
                 name={Routes.SETTINGS_NETWORK}

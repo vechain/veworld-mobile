@@ -5,6 +5,7 @@ import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions
 import { InAppBrowser, TabsManagerScreen } from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { AppsScreen } from "~Screens/Flows/App/AppsScreen/AppsScreen"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 export type RootStackParamListApps = {
     [Routes.APPS]: undefined
@@ -22,7 +23,7 @@ const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListApps
 
 export const AppsStack = () => {
     return (
-        <Navigator id="AppsStack" screenOptions={{ headerShown: false }}>
+        <Navigator id="AppsStack" screenOptions={{ headerShown: false, animationEnabled: isIOS() }}>
             <Group>
                 <Screen name={Routes.APPS} component={AppsScreen} options={{ headerShown: false }} />
                 <Screen

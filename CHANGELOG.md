@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.3.10 (2025-08-29)</small>
+
+* build: init ([bc9b729](https://github.com/vechain/veworld-mobile/commit/bc9b729))
+* Fix vbd apps vebetter section (#3236) ([d37bfd1](https://github.com/vechain/veworld-mobile/commit/d37bfd1)), closes [#3236](https://github.com/vechain/veworld-mobile/issues/3236)
+
 ## <small>2.3.3 (2025-08-14)</small>
 
 * build: init ([0afca2d](https://github.com/vechain/veworld-mobile/commit/0afca2d))

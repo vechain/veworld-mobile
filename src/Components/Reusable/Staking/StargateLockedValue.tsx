@@ -56,7 +56,7 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isNodeOwn
                 isLoading={vetTokenInfo.exchangeRateLoading || isLoading}
                 isVisible={isBalanceVisible}
                 balances={[fiatBalance]}
-                typographyFont="bodyMedium"
+                typographyFont="subSubTitleMedium"
                 color={theme.colors.stakedCard.fiatValue}
                 skeletonHeight={12}
                 skeletonWidth={60}

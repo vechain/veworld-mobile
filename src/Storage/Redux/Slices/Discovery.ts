@@ -12,7 +12,7 @@ export type ConnectedDiscoveryApp = {
 export type Tab = {
     id: string
     href: string
-    preview?: string
+    previewPath?: string
     favicon?: string
     title: string
 }
