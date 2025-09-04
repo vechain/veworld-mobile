@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useRef } from "react"
-import { Linking } from "react-native"
+import { InteractionManager, Linking } from "react-native"
 import { ConnectionLinkParams, SignTransactionParams } from "./types"
 import { useInteraction } from "../InteractionProvider"
 // import { DeepLinkError } from "~Utils/ErrorMessageUtils"
@@ -8,7 +8,7 @@ import { useInteraction } from "../InteractionProvider"
 import { useExternalDappConnection } from "~Hooks/useExternalDappConnection"
 import { useBrowserTab } from "~Hooks/useBrowserTab"
 
-type DeepLinkEvent = "discover" | "connect" | "singTransaction" | "signCertificate" | "signTypedData" | "disconnect"
+type DeepLinkEvent = "discover" | "connect" | "signTransaction" | "signCertificate" | "signTypedData" | "disconnect"
 
 type DiscoverURLRequest = {
     event: "discover"
@@ -40,8 +40,15 @@ const parseUrl = (url: string): DiscoverURLRequest | DappURLRequest => {
 export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) => {
     const { navigateWithTab } = useBrowserTab()
     const mounted = useRef(false)
-    const { setConnectBsData, connectBsRef, setTransactionBsData, transactionBsRef } = useInteraction()
-    const { parseTransactionRequest } = useExternalDappConnection()
+    const {
+        setConnectBsData,
+        connectBsRef,
+        setTransactionBsData,
+        transactionBsRef,
+        setDisconnectBsData,
+        disconnectBsRef,
+    } = useInteraction()
+    const { parseTransactionRequest, parseDisconnectRequest } = useExternalDappConnection()
 
     const handleConnectionLink = useCallback(
         (params: ConnectionLinkParams) => {
@@ -71,6 +78,17 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
         [parseTransactionRequest, setTransactionBsData, transactionBsRef],
     )
 
+    const handleDisconnect = useCallback(
+        async (params: SignTransactionParams) => {
+            const request = await parseDisconnectRequest(params.request)
+            if (request) {
+                setDisconnectBsData(request)
+                disconnectBsRef.current?.present()
+            }
+        },
+        [parseDisconnectRequest, setDisconnectBsData, disconnectBsRef],
+    )
+
     // const handleInvalidEvent = (redirectUrl: string) => {
     //     const err = new DeepLinkError(DeepLinkErrorCode.MethodNotFound)
     //     error("EXTERNAL_DAPP_CONNECTION", err)
@@ -87,16 +105,19 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
                     break
                 case "connect":
                     handleConnectionLink(request as ConnectionLinkParams)
-                    return
-                case "singTransaction":
+                    break
+                case "signTransaction":
                     handleSignTransaction(request as SignTransactionParams)
-                    return
+                    break
                 case "signCertificate":
-                    return
+                    break
+                case "signTypedData":
+                    break
                 case "disconnect":
-                    return
+                    handleDisconnect(request as SignTransactionParams)
+                    break
                 default:
-                    return
+                    break
             }
         }
 
@@ -104,13 +125,16 @@ export const DeepLinksProvider = ({ children }: { children: React.ReactNode }) =
 
         if (!mounted.current) {
             mounted.current = true
-            Linking.getInitialURL().then(url => url && handleDeepLink({ url }))
+            InteractionManager.runAfterInteractions(() =>
+                Linking.getInitialURL().then(url => url && handleDeepLink({ url })),
+            )
         }
 
         return () => {
             Linking.removeAllListeners("url")
         }
-    }, [navigateWithTab, handleConnectionLink, handleSignTransaction])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     return <>{children}</>
 }

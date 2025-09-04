@@ -3,7 +3,7 @@ import { Linking } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import nacl from "tweetnacl"
 import { decodeBase64, encodeBase64 } from "tweetnacl-util"
-import { TransactionRequest } from "~Model"
+import { BaseExternalAppRequest, DisconnectAppRequest, NETWORK_TYPE, TransactionRequest } from "~Model"
 import {
     useAppSelector,
     selectSignKeyPair,
@@ -13,6 +13,7 @@ import {
     setSignKeyPair,
     selectSelectedAccountOrNull,
     selectExternalDappSessions,
+    deleteExternalDappSession,
 } from "~Storage/Redux"
 import { error } from "~Utils"
 import { DeepLinkError } from "~Utils/ErrorMessageUtils"
@@ -23,6 +24,24 @@ type OnConnectParams = {
     redirectUrl: string
     dappName: string
     dappUrl?: string
+}
+
+type OnDappDisconnectedParams = {
+    dappPublicKey: string
+    network: NETWORK_TYPE
+    redirectUrl: string
+}
+
+type ExternalRequestParsedPayload<T> = {
+    transaction?: T
+    typedData?: T
+    certificate?: T
+    session: string
+}
+
+type ParsedRequest<T> = {
+    payload: ExternalRequestParsedPayload<T>
+    request: BaseExternalAppRequest
 }
 
 export const useExternalDappConnection = () => {
@@ -93,7 +112,7 @@ export const useExternalDappConnection = () => {
                 )
 
                 await Linking.openURL(
-                    `${redirectUrl}/onVeWorldConnected?public_key=${encodeURIComponent(
+                    `${redirectUrl}?public_key=${encodeURIComponent(
                         encodeBase64(keyPair.publicKey),
                     )}&data=${encodeURIComponent(encodeBase64(encrypted))}&nonce=${encodeURIComponent(
                         encodeBase64(nonce),
@@ -108,8 +127,19 @@ export const useExternalDappConnection = () => {
         [dispatch, network.type, selectedAccount, signKeyPair],
     )
 
-    const parseTransactionRequest = useCallback(
-        async (encodedRequest: string): Promise<TransactionRequest | undefined> => {
+    const onDappDisconnected = useCallback(
+        async ({ dappPublicKey, network: dappNetwork, redirectUrl }: OnDappDisconnectedParams) => {
+            // console.log("dappPublicKey", dappPublicKey)
+            // console.log("dappNetwork", dappNetwork)
+            // console.log("redirectUrl", redirectUrl)
+            dispatch(deleteExternalDappSession({ appPublicKey: dappPublicKey, network: dappNetwork }))
+            await Linking.openURL(`${redirectUrl}`)
+        },
+        [dispatch],
+    )
+
+    const parseRequest = useCallback(
+        async <T,>(encodedRequest: string): Promise<ParsedRequest<T> | undefined> => {
             const request = decodeURIComponent(encodedRequest)
             const { payload: encPayload, ...decodedRequest } = JSON.parse(
                 new TextDecoder().decode(decodeBase64(request)),
@@ -119,10 +149,13 @@ export const useExternalDappConnection = () => {
 
                 if (!session) {
                     await Linking.openURL(
-                        `${decodedRequest.redirectUrl}?error=${encodeURIComponent("Unauthorized")}&error_code=401`,
+                        `${decodedRequest.redirectUrl}?errorMessage=${encodeURIComponent(
+                            "Unauthorized",
+                        )}&error_code=401`,
                     )
                     return
                 }
+                //TODO: verify session is valid
 
                 const KP = nacl.box.keyPair.fromSecretKey(decodeBase64(session.keyPair.privateKey))
 
@@ -137,18 +170,16 @@ export const useExternalDappConnection = () => {
 
                 if (!decryptedPayload) {
                     await Linking.openURL(
-                        `${decodedRequest.redirectUrl}?error=${encodeURIComponent("Invalid payload")}&error_code=400`,
+                        `${decodedRequest.redirectUrl}?erroMessage=${encodeURIComponent(
+                            "Invalid payload",
+                        )}&error_code=400`,
                     )
                     return
                 }
 
                 const payload = JSON.parse(new TextDecoder().decode(decryptedPayload))
 
-                const req = {
-                    ...payload.transaction,
-                    ...decodedRequest,
-                }
-                return req as TransactionRequest
+                return { payload, request: decodedRequest } as ParsedRequest<T>
             } catch (e) {
                 const err = new DeepLinkError(DeepLinkErrorCode.InternalError)
                 error("EXTERNAL_DAPP_CONNECTION", err)
@@ -157,6 +188,40 @@ export const useExternalDappConnection = () => {
             }
         },
         [externalDappSessions],
+    )
+
+    const parseTransactionRequest = useCallback(
+        async (encodedRequest: string): Promise<TransactionRequest | undefined> => {
+            const parsedRequest = await parseRequest<TransactionRequest>(encodedRequest)
+
+            // console.log("parsedRequest", parsedRequest)
+
+            if (!parsedRequest) {
+                throw new Error("Invalid request") //TODO: handle invalid request
+            }
+
+            if (!("transaction" in parsedRequest.payload)) {
+                await Linking.openURL(
+                    `${parsedRequest?.request.redirectUrl}?errorMessage=${encodeURIComponent(
+                        "Invalid request",
+                    )}&error_code=400`,
+                )
+                throw new Error("Invalid request") //TODO: handle invalid request
+            }
+            return { ...parsedRequest.payload.transaction, ...parsedRequest.request } as TransactionRequest
+        },
+        [parseRequest],
+    )
+
+    const parseDisconnectRequest = useCallback(
+        async (encodedRequest: string): Promise<DisconnectAppRequest | undefined> => {
+            const parsedRequest = await parseRequest<DisconnectAppRequest>(encodedRequest)
+            if (!parsedRequest) {
+                throw new Error("Invalid request") //TODO: handle invalid request
+            }
+            return { ...parsedRequest.request } as DisconnectAppRequest
+        },
+        [parseRequest],
     )
 
     const onTransactionSuccess = useCallback(async (redirectUrl: string, txId: string) => {
@@ -180,7 +245,9 @@ export const useExternalDappConnection = () => {
         getKeyPairFromPrivateKey,
         onRejectRequest,
         parseTransactionRequest,
+        parseDisconnectRequest,
         onTransactionSuccess,
         onTransactionFailure,
+        onDappDisconnected,
     }
 }

@@ -24,11 +24,12 @@ type BaseInAppRequest = BaseRequest & {
     isFirstRequest: boolean
 }
 
-type BaseExternalAppRequest = BaseRequest & {
+export type BaseExternalAppRequest = BaseRequest & {
     type: "external-app"
     publicKey: string
     redirectUrl: string
     nonce: string
+    network?: NETWORK_TYPE
 }
 
 type BaseCertificateRequest = {
@@ -56,6 +57,10 @@ type BaseExternalConnectAppRequest = BaseRequest & {
     type: "external-app"
     publicKey: string
     redirectUrl: string
+    network: NETWORK_TYPE
+}
+
+type BaseExternalDisconnectAppRequest = BaseExternalAppRequest & {
     network: NETWORK_TYPE
 }
 
@@ -90,6 +95,8 @@ export type TransactionRequest = WcTxRequest | InAppTxRequest | ExternalAppTxReq
 export type TypeDataRequest = WcSignDataRequest | InAppTypedDataRequest
 
 export type ConnectAppRequest = WcConnectAppRequest | InAppConnectAppRequest | BaseExternalConnectAppRequest
+
+export type DisconnectAppRequest = BaseExternalDisconnectAppRequest
 
 export type InAppRequest = InAppCertRequest | InAppTxRequest | InAppTypedDataRequest
 

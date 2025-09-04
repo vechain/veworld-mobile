@@ -44,6 +44,7 @@ import { ConnectBottomSheet } from "./Components/ConnectBottomSheet"
 import { TransactionBottomSheet } from "./Components/TransactionBottomSheet/TransactionBottomSheet"
 import { TypedDataBottomSheet } from "./Components/TypedDataBottomSheet"
 import { CertRequest, SignedDataRequest, TxRequest, WindowRequest, WindowResponse } from "./types"
+import { DisconnectBottomSheet } from "./Components/DisconnectBottomSheet"
 
 const { PackageDetails } = NativeModules
 
@@ -837,6 +838,7 @@ export const InAppBrowserProvider = ({ children, platform = Platform.OS }: Props
     return (
         <Context.Provider value={contextValue}>
             <ConnectBottomSheet />
+            <DisconnectBottomSheet />
             <CertificateBottomSheet />
             <TransactionBottomSheet />
             <TypedDataBottomSheet />

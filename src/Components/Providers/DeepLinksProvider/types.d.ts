@@ -9,6 +9,12 @@ type ConnectionLinkParams = {
     network: NETWORK_TYPE
 }
 
+type DisconnectParams = {
+    public_key: string
+    network: NETWORK_TYPE
+    redirect_url: string
+}
+
 type SignTransactionParams = {
     /**
      * Encoded URI of the transaction request object
