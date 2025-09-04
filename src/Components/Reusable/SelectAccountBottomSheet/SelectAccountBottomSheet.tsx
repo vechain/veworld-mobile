@@ -43,6 +43,11 @@ type Props = {
      */
     selectedAccount?: AccountWithDevice
     balanceToken?: ComponentProps<typeof SelectableAccountCard>["balanceToken"]
+    /**
+     * Enable the functionality go to the wallet section.
+     * @default false
+     */
+    goToWalletEnabled?: boolean
 }
 
 const ItemSeparatorComponent = () => <BaseSpacer height={8} />
@@ -87,7 +92,18 @@ const AnimatedSectionList = Animated.createAnimatedComponent(
 
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
-    ({ closeBottomSheet, setSelectedAccount, selectedAccount, onDismiss, accounts, balanceToken = "FIAT" }, ref) => {
+    (
+        {
+            closeBottomSheet,
+            setSelectedAccount,
+            selectedAccount,
+            onDismiss,
+            accounts,
+            balanceToken = "FIAT",
+            goToWalletEnabled,
+        },
+        ref,
+    ) => {
         const { LL } = useI18nContext()
 
         const { onResize, contentStyle, setSmallViewport } = useScrollableBottomSheetListWrapper()
@@ -170,9 +186,11 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                             {LL.SELECT_ACCOUNT_DESCRIPTION()}
                         </BaseText>
                     </BaseView>
-                    <BSTouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
-                        <BaseIcon name="icon-settings" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
-                    </BSTouchableOpacity>
+                    {goToWalletEnabled && (
+                        <BSTouchableOpacity onPress={onSettingsClick} style={styles.settingsBtn}>
+                            <BaseIcon name="icon-settings" color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} />
+                        </BSTouchableOpacity>
+                    )}
                 </BaseView>
 
                 <BaseSpacer height={24} />
