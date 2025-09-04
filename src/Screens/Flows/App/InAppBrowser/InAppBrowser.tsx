@@ -75,7 +75,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     }, [])
 
     const renderLoading = useCallback(() => {
-        if (isLoadingWebView || !dappMetadata)
+        if (!dappMetadata)
             return (
                 <Animated.View exiting={isIOS() ? FadeOut.duration(400) : undefined} style={[styles.loadingWebView]}>
                     <BaseView style={[styles.loadingIcon, styles.notDappLoadingIcon]}>
@@ -99,7 +99,6 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     }, [
         dappMetadata,
         iconUri,
-        isLoadingWebView,
         styles.loadingIcon,
         styles.loadingWebView,
         styles.notDappLoadingIcon,
