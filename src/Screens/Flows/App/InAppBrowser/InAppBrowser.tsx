@@ -21,7 +21,7 @@ import { Gesture, GestureDetector } from "react-native-gesture-handler"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
 
-const NAVIGATION_GESTURE_THRESHOLD = 50
+const NAVIGATION_GESTURE_THRESHOLD = 80
 
 export const InAppBrowser: React.FC<Props> = ({ route }) => {
     const {
