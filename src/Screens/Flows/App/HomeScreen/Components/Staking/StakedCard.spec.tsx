@@ -85,6 +85,7 @@ describe("StakedCard", () => {
         )
 
         // The skeleton loader should be present when loading
-        expect(findByTestId).toBeDefined()
+        const skeleton = await findByTestId("stargate-locked-value-skeleton")
+        expect(skeleton).toBeOnTheScreen()
     })
 })

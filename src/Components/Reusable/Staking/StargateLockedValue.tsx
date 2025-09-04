@@ -91,6 +91,7 @@ export const StargateLockedValue = ({ isLoading, nfts = [], rootStyle, isNodeOwn
                     <BaseView style={styles.vetContainer}>
                         {isLoading ? (
                             <BaseSkeleton
+                                testID="stargate-locked-value-skeleton"
                                 height={20}
                                 width={100}
                                 boneColor={theme.colors.skeletonBoneColor}
