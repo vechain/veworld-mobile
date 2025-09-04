@@ -1,18 +1,18 @@
 import React, { useCallback, useMemo, useState } from "react"
 import { BaseChip, BaseText, BaseView } from "~Components"
 import { COLORS } from "~Constants"
-import { useNewDApps, useTheme, useTrendingDApps } from "~Hooks"
+import { useNewDAppsV2, useTheme, useTrendingDApps } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { VbdCarousel } from "../Common/VbdCarousel/VbdCarousel"
 
 export const ForYouCarousel = () => {
     const { LL } = useI18nContext()
     const theme = useTheme()
-    const [filter, setFilter] = useState<"new" | "popular">("new")
+    const [filter, setFilter] = useState<"new" | "popular">("popular")
 
     const onFilterPress = useCallback((value: "new" | "popular") => setFilter(value), [])
 
-    const { isLoading: isLoadingNewDapps, newDapps } = useNewDApps()
+    const { isLoading: isLoadingNewDapps, newDapps } = useNewDAppsV2()
     const { isLoading: isLoadingTrendingDapps, trendingDapps } = useTrendingDApps()
 
     const isLoading = useMemo(
@@ -20,14 +20,7 @@ export const ForYouCarousel = () => {
         [filter, isLoadingNewDapps, isLoadingTrendingDapps],
     )
 
-    const newAppIds = useMemo(
-        () =>
-            newDapps
-                .filter(app => app.veBetterDaoId)
-                .map(app => app.veBetterDaoId!)
-                .slice(0, 10),
-        [newDapps],
-    )
+    const newAppIds = useMemo(() => newDapps.map(app => app.id).slice(0, 10), [newDapps])
 
     const trendingAppIds = useMemo(
         () =>
@@ -48,14 +41,14 @@ export const ForYouCarousel = () => {
                 </BaseText>
                 <BaseView flexDirection="row" gap={12}>
                     <BaseChip
-                        label={LL.DISCOVER_FOR_YOU_NEW()}
-                        active={filter === "new"}
-                        onPress={() => onFilterPress("new")}
-                    />
-                    <BaseChip
                         label={LL.DISCOVER_FOR_YOU_POPULAR()}
                         active={filter === "popular"}
                         onPress={() => onFilterPress("popular")}
+                    />
+                    <BaseChip
+                        label={LL.DISCOVER_FOR_YOU_NEW()}
+                        active={filter === "new"}
+                        onPress={() => onFilterPress("new")}
                     />
                 </BaseView>
             </BaseView>
