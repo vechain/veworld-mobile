@@ -33,7 +33,7 @@ export const useScrollableBottomSheetList = ({ onResize, initialLayout }: Args) 
                 //If the height increased, just set it as a small viewport to set the correct size
                 if ((previousHeight ?? 0) < contentHeight) onResize(true)
                 //Otherwise make the component figure it out itself
-                else onResize(overflows ? false : true)
+                else onResize(!overflows)
             } else {
                 onResize(false)
             }
