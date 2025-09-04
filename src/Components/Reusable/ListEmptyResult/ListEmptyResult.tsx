@@ -28,14 +28,7 @@ export const ListEmptyResults = ({
     iconStyle,
 }: ListEmptyResultsProps) => {
     const theme = useTheme()
-    const containerStyle = StyleSheet.create({
-        container: {
-            flex: 1,
-            justifyContent: "center",
-            alignItems: "center",
-            minHeight: minHeight,
-        },
-    })
+const containerStyle = useMemo(() => ({ flex: 1, justifyContent: "center", alignItems: "center", minHeight }), [minHeight])
 
     return (
         <BaseView testID={testID} style={containerStyle.container}>
