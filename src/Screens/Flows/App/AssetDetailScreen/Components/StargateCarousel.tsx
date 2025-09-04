@@ -101,10 +101,10 @@ export const StargateCarousel = () => {
 
     return (
         <BaseView flexDirection="column" gap={12} w={100} mb={40}>
-            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between" py={10}>
+            <BaseView flexDirection="row" alignItems="center" justifyContent="space-between" py={8}>
                 <BaseText typographyFont="bodySemiBold">{LL.ACTIVITY_STAKING_LABEL()}</BaseText>
                 {hasOwnedNodes && hasManagedNodes && (
-                    <BaseView flexDirection="row" gap={8}>
+                    <BaseView flexDirection="row" gap={12}>
                         {filterButtons.map(button => (
                             <BaseChip
                                 key={button.id}

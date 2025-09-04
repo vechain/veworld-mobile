@@ -19,15 +19,14 @@ export const StakingSection = memo(() => {
                 {LL.ACTIVITY_STAKING_LABEL()}
             </BaseText>
             <BaseSpacer height={8} />
-            {stakingGroups.map((group, index) => (
-                <BaseView key={`${group.address}-${group.isOwner}`}>
+            {stakingGroups.map(group => (
+                <BaseView key={`${group.address}-${group.isOwner}`} gap={8}>
                     <StakedCard
                         nodes={group.nodes}
                         nfts={group.nfts}
                         isOwner={group.isOwner}
                         isLoading={group.isLoading}
                     />
-                    {index < stakingGroups.length - 1 && <BaseSpacer height={12} />}
                 </BaseView>
             ))}
         </BaseView>
