@@ -9,7 +9,7 @@ import { BaseIcon } from "~Components/Base/BaseIcon"
 import { useFeatureFlags } from "~Components/Providers/FeatureFlagsProvider"
 import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
 import { COLORS } from "~Constants"
-import { useBottomSheetModal, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
+import { useBottomSheetModal, useGetDappMetadataFromUrl } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
 import { RootStackParamListBrowser, RootStackParamListHome, RootStackParamListSettings, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
@@ -17,7 +17,6 @@ import { DAppUtils } from "~Utils/DAppUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
-import { baseStyles } from "~Screens/Flows/App/DiscoverScreen/DiscoverScreen"
 import { Spinner } from "../Spinner"
 
 type Props = {
@@ -38,7 +37,6 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
     const { betterWorldFeature } = useFeatureFlags()
     const dappMetadata = useGetDappMetadataFromUrl(navigationUrl)
     const fetchDynamicLogo = useDynamicAppLogo({})
-    const { theme } = useThemedStyles(baseStyles)
 
     const nav =
         useNavigation<
@@ -164,11 +162,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                             justifyContent="center"
                             gap={8}>
                             {isLoading ? (
-                                <Spinner
-                                    color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}
-                                    size={20}
-                                    style={styles.spinner}
-                                />
+                                <Spinner color={COLORS.WHITE} size={20} style={styles.spinner} />
                             ) : (
                                 websiteFavicon
                             )}
