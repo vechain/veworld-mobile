@@ -6,11 +6,11 @@ import { Share, StyleSheet } from "react-native"
 import { BaseBottomSheet, BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components/Base"
 import { useFeatureFlags, useInAppBrowser } from "~Components/Providers"
 import { ColorThemeType, SCREEN_HEIGHT } from "~Constants"
-import { useDappBookmarking, useThemedStyles } from "~Hooks"
+import { useDappBookmarking, useThemedStyles, useTabManagement } from "~Hooks"
 import { useI18nContext } from "~i18n"
 import { IconKey } from "~Model"
 import { RootStackParamListApps, RootStackParamListBrowser, RootStackParamListSettings, Routes } from "~Navigation"
-import { closeTab, selectCurrentTabId, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectCurrentTabId, useAppSelector } from "~Storage/Redux"
 
 type Props = {
     onNavigate?: () => void | Promise<void>
@@ -55,7 +55,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         useNavigation<
             NativeStackNavigationProp<RootStackParamListBrowser & RootStackParamListSettings & RootStackParamListApps>
         >()
-    const dispatch = useAppDispatch()
+    const { closeTab } = useTabManagement()
     const currentTabId = useAppSelector(selectCurrentTabId)
     const { betterWorldFeature } = useFeatureFlags()
     const [actionContainerHeight, setActionContainerHeight] = useState(SCREEN_HEIGHT / 2)
@@ -90,10 +90,10 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
 
     const closeCurrentTab = useCallback(() => {
         if (currentTabId) {
-            dispatch(closeTab(currentTabId))
+            closeTab(currentTabId)
             navToSearch()
         }
-    }, [currentTabId, dispatch, navToSearch])
+    }, [currentTabId, closeTab, navToSearch])
 
     const actions: BottomSheetActionItem[] = useMemo(() => {
         const favoriteItem: BottomSheetAction = isBookMarked

@@ -34,7 +34,7 @@ export const DefaultBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 enablePanDownToClose={enablePanDownToClose}
                 blurBackdrop={true}>
                 <BaseView testID={testId}>
-                    {enablePanDownToClose && <BaseSpacer height={16} />}
+                    {enablePanDownToClose ? <BaseSpacer height={16} /> : <BaseSpacer height={32} />}
                     <BaseView justifyContent="center" alignItems="center">
                         <BaseIcon name={icon} style={styles.icon} size={iconSize} color={theme.colors.text} />
                         <BaseSpacer height={24} />

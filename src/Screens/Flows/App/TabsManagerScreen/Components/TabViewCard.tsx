@@ -6,9 +6,9 @@ import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
-import { useThemedStyles } from "~Hooks"
+import { useThemedStyles, useTabManagement } from "~Hooks"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
-import { closeTab, selectCurrentTabId, setCurrentTab, Tab, useAppDispatch, useAppSelector } from "~Storage/Redux"
+import { selectCurrentTabId, setCurrentTab, Tab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 
 type TabViewCardProps = {
     tab: Tab
@@ -20,6 +20,7 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
     const { styles } = useThemedStyles(baseStyles)
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
     const selectedTabId = useAppSelector(selectCurrentTabId)
+    const { closeTab } = useTabManagement()
 
     const dispatch = useAppDispatch()
 
@@ -29,14 +30,14 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
     }, [dispatch, tab.id, tab.href, nav])
 
     const onClose = useCallback(() => {
-        dispatch(closeTab(tab.id))
-    }, [dispatch, tab.id])
+        closeTab(tab.id)
+    }, [closeTab, tab.id])
 
     return (
         <AnimatedTouchableOpacity
             style={[styles.container, tab.id === selectedTabId && styles.selected]}
             onPress={onPress}>
-            <ImageBackground source={{ uri: tab.preview }} resizeMode="cover" style={[styles.image]}>
+            <ImageBackground source={{ uri: tab.previewPath }} resizeMode="cover" style={[styles.image]}>
                 <View style={styles.header}>
                     <View style={styles.headerText}>
                         {tab.favicon ? (
