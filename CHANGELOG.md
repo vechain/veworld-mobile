@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.1 (2025-09-04)</small>
+
+* build: init ([a84b83c](https://github.com/vechain/veworld-mobile/commit/a84b83c))
+* fix: bottomsheet top margin (#3257) ([f2d09b5](https://github.com/vechain/veworld-mobile/commit/f2d09b5)), closes [#3257](https://github.com/vechain/veworld-mobile/issues/3257)
+
 ## <small>2.3.10 (2025-08-29)</small>
 
 * build: init ([bc9b729](https://github.com/vechain/veworld-mobile/commit/bc9b729))
