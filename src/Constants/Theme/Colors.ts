@@ -126,6 +126,7 @@ export type Colors = {
         }
         isActiveBackground: string
         text: string
+        subText: string
         icon: string
         activeIcon: string
         activeIconBackground: string
@@ -538,6 +539,7 @@ const light: Colors = {
             border: COLORS.GREY_200,
         },
         text: COLORS.GREY_700,
+        subText: COLORS.GREY_600,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
         activeIconBackground: COLORS.WHITE,
@@ -851,6 +853,7 @@ const dark: Colors = {
         },
         isActiveBackground: COLORS.PURPLE_DISABLED,
         text: COLORS.WHITE,
+        subText: COLORS.WHITE,
         icon: COLORS.GREY_100,
         activeIcon: COLORS.GREY_100,
         activeIconBackground: COLORS.DARK_PURPLE_DISABLED,
