@@ -7,8 +7,7 @@ import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated, { Easing, FadeOut } from "react-native-reanimated"
 import WebView from "react-native-webview"
 import { WebViewErrorEvent, WebViewNavigationEvent } from "react-native-webview/lib/WebViewTypes"
-import { BaseStatusBar, BaseText, Layout, URLBar, useInAppBrowser } from "~Components"
-import { Spinner } from "~Components/Reusable/Spinner"
+import { BaseIcon, BaseStatusBar, BaseView, Layout, URLBar, useInAppBrowser } from "~Components"
 import { AnalyticsEvent, COLORS, ColorThemeType } from "~Constants"
 import { useAnalyticTracking, useGetDappMetadataFromUrl, useThemedStyles } from "~Hooks"
 import { useDynamicAppLogo } from "~Hooks/useAppLogo"
@@ -16,8 +15,8 @@ import { useBrowserScreenshot } from "~Hooks/useBrowserScreenshot"
 import { useI18nContext } from "~i18n"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { RootStackParamListApps } from "~Navigation/Stacks/AppsStack"
-import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 import { ChangeAccountNetworkBottomSheet } from "./Components/ChangeAccountNetworkBottomSheet"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = NativeStackScreenProps<RootStackParamListBrowser | RootStackParamListApps, Routes.BROWSER>
 
@@ -40,7 +39,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
 
     const track = useAnalyticTracking()
     const nav = useNavigation()
-    const { locale, LL } = useI18nContext()
+    const { locale } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const [isLoadingWebView, setIsLoadingWebView] = useState(true)
     const { ref: webviewContainerRef, performScreenshot } = useBrowserScreenshot()
@@ -79,13 +78,9 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         if (isLoadingWebView || !dappMetadata)
             return (
                 <Animated.View exiting={isIOS() ? FadeOut.duration(400) : undefined} style={[styles.loadingWebView]}>
-                    <Spinner color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600} size={54} />
-                    <BaseText
-                        typographyFont="bodySemiBold"
-                        mt={16}
-                        color={theme.isDark ? COLORS.WHITE : COLORS.GREY_600}>
-                        {LL.LOADING_PAGE_CONTENT()}
-                    </BaseText>
+                    <BaseView style={[styles.loadingIcon, styles.notDappLoadingIcon]}>
+                        <BaseIcon name="icon-globe" size={32} color={theme.colors.history.historyItem.iconColor} />
+                    </BaseView>
                 </Animated.View>
             )
 
@@ -101,7 +96,15 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 />
             </Animated.View>
         )
-    }, [LL, dappMetadata, iconUri, isLoadingWebView, styles.loadingIcon, styles.loadingWebView, theme.isDark])
+    }, [
+        dappMetadata,
+        iconUri,
+        isLoadingWebView,
+        styles.loadingIcon,
+        styles.loadingWebView,
+        styles.notDappLoadingIcon,
+        theme.colors.history.historyItem.iconColor,
+    ])
 
     return (
         <Layout
