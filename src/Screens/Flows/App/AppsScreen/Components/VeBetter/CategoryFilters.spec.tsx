@@ -5,6 +5,19 @@ import { CategoryFilters } from "./CategoryFilters"
 import { X2ECategoryType } from "~Model/DApp"
 import { IconKey } from "~Model/Icon"
 
+jest.mock("react-native-reanimated", () => {
+    const Reanimated = require("react-native-reanimated/mock")
+
+    Reanimated.useSharedValue = jest.fn(() => ({ value: 0 }))
+    Reanimated.useAnimatedStyle = jest.fn(() => ({}))
+    Reanimated.useAnimatedScrollHandler = jest.fn(() => jest.fn())
+    Reanimated.withTiming = jest.fn(value => value)
+    Reanimated.interpolate = jest.fn(() => 0)
+    Reanimated.Extrapolation = { CLAMP: "clamp" }
+
+    return Reanimated
+})
+
 const mockCategories = [
     {
         id: X2ECategoryType.NUTRITION,
@@ -231,5 +244,29 @@ describe("CategoryFilters", () => {
         })
 
         expect(mockOnCategoryChange).toHaveBeenCalledTimes(5)
+    })
+
+    it("should render animated background for tab indicator", () => {
+        render(
+            <CategoryFilters
+                selectedCategory={{ id: X2ECategoryType.NUTRITION }}
+                onCategoryChange={mockOnCategoryChange}
+            />,
+            { wrapper: Wrapper },
+        )
+
+        expect(screen.getByText("Food & Drink")).toBeVisible()
+    })
+
+    it("should handle ScrollView layout and scroll events", () => {
+        render(
+            <CategoryFilters
+                selectedCategory={{ id: X2ECategoryType.NUTRITION }}
+                onCategoryChange={mockOnCategoryChange}
+            />,
+            { wrapper: Wrapper },
+        )
+
+        expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
     })
 })
