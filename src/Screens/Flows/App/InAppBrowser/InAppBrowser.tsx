@@ -111,14 +111,16 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
     ])
 
     const navigationGesture = useMemo(() => {
-        return Gesture.Pan().onChange(event => {
-            if (event.translationX > NAVIGATION_GESTURE_THRESHOLD) {
-                runOnJS(goBack)()
-            }
-            if (event.translationX < -NAVIGATION_GESTURE_THRESHOLD) {
-                runOnJS(goForward)()
-            }
-        }) // Remove the webviewRef.current check
+        return Gesture.Pan()
+            .onChange(event => {
+                if (event.translationX > NAVIGATION_GESTURE_THRESHOLD) {
+                    runOnJS(goBack)()
+                }
+                if (event.translationX < -NAVIGATION_GESTURE_THRESHOLD) {
+                    runOnJS(goForward)()
+                }
+            })
+            .activeOffsetX([-100, 100])
     }, [goBack, goForward])
 
     return (
@@ -140,7 +142,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                 <View style={styles.container}>
                     {Platform.OS === "ios" && <BaseStatusBar hero={true} />}
                     {userAgent && !isLoading && (
-                        <GestureDetector gesture={navigationGesture}>
+                        <GestureDetector gesture={Gesture.Exclusive(navigationGesture)}>
                             <Animated.View
                                 ref={webviewContainerRef}
                                 style={[styles.webviewContainer]}
