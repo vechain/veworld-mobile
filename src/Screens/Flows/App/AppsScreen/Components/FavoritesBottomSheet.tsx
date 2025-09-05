@@ -34,9 +34,9 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
 
-    // Calculate minimum height for empty state (90% of screen height minus header)
+    // Calculate minimum height for empty state (80% of screen height minus header)
     const screenHeight = Dimensions.get("window").height
-    const emptyStateMinHeight = screenHeight * 0.9 - 120 // 120px approximate header height
+    const emptyStateMinHeight = screenHeight * 0.8 - 120
 
     const handleClose = useCallback(() => {
         setIsEditingMode(false)
