@@ -1,6 +1,6 @@
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { Dimensions, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 import DraggableFlatList, { DragEndParams, RenderItem } from "react-native-draggable-flatlist"
 import {
     AnimatedSaveHeaderButton,
@@ -33,10 +33,6 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
 
     const bookmarkedDApps = useAppSelector(selectBookmarkedDapps)
     const [reorderedDapps, setReorderedDapps] = useState<DiscoveryDApp[]>(bookmarkedDApps)
-
-    // Calculate minimum height for empty state (80% of screen height minus header)
-    const screenHeight = Dimensions.get("window").height
-    const emptyStateMinHeight = screenHeight * 0.8 - 120
 
     const handleClose = useCallback(() => {
         setIsEditingMode(false)
@@ -159,6 +155,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                     <DraggableFlatList
                         scrollEnabled={true}
                         contentContainerStyle={styles.listContentContainer}
+                        style={reorderedDapps.length === 0 ? styles.emptyListStyle : undefined}
                         extraData={isEditingMode}
                         data={reorderedDapps}
                         onDragEnd={onDragEnd}
@@ -175,7 +172,6 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
                                 icon={"icon-alert-circle"}
                                 iconColor={theme.colors.actionBottomSheet.emptyFavoritesIcon.color}
                                 testID="empty-results"
-                                minHeight={emptyStateMinHeight}
                                 iconStyle={styles.emptyIcon}
                                 subtitleColor={theme.colors.actionBottomSheet.subText}
                             />
@@ -200,8 +196,8 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         listContentContainer: {
             paddingTop: 12,
-            paddingHorizontal: 24,
             flexGrow: 1,
+            paddingHorizontal: 24,
         },
         layout: {
             backgroundColor: theme.colors.card,
@@ -218,5 +214,8 @@ const baseStyles = (theme: ColorThemeType) =>
             backgroundColor: theme.colors.actionBottomSheet.emptyFavoritesIcon.background,
             borderRadius: 100,
             padding: 16,
+        },
+        emptyListStyle: {
+            alignSelf: "center",
         },
     })

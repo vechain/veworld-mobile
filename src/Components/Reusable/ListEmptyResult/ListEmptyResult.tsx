@@ -13,7 +13,6 @@ export type ListEmptyResultsProps = {
     iconColor?: string
     iconStyle?: StyleProp<ViewStyle>
     testID?: string
-    minHeight?: number
 }
 
 export const ListEmptyResults = ({
@@ -24,18 +23,12 @@ export const ListEmptyResults = ({
     icon,
     iconColor,
     testID,
-    minHeight,
     iconStyle,
 }: ListEmptyResultsProps) => {
     const theme = useTheme()
 
     return (
-        <BaseView
-            testID={testID}
-            flex={1}
-            justifyContent="center"
-            alignItems="center"
-            style={minHeight ? { minHeight } : undefined}>
+        <BaseView testID={testID} flex={1} justifyContent="center" alignItems="center">
             <BaseIcon name={icon} size={32} color={iconColor || theme.colors.text} style={iconStyle} />
             <BaseSpacer height={24} />
             <BaseText mx={20} typographyFont="body" color={subtitleColor || theme.colors.text} align="center">
