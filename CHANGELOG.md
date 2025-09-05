@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.1 (2025-09-04)</small>
+
+* build: init ([055b5de](https://github.com/vechain/veworld-mobile/commit/055b5de))
+* fix: store tab preview images on disk instead of redux state (#3252) ([c611155](https://github.com/vechain/veworld-mobile/commit/c611155)), closes [#3252](https://github.com/vechain/veworld-mobile/issues/3252)
+
 ## <small>2.3.10 (2025-08-29)</small>
 
 * build: init ([bc9b729](https://github.com/vechain/veworld-mobile/commit/bc9b729))
