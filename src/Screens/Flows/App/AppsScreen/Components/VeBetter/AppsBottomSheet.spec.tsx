@@ -6,6 +6,34 @@ import { useVeBetterDaoActiveDapps } from "~Hooks"
 import { X2ECategoryType } from "~Model/DApp"
 import { AppsBottomSheet } from "./AppsBottomSheet"
 
+jest.mock("react-native-reanimated", () => {
+    const Reanimated = require("react-native-reanimated/mock")
+
+    Reanimated.useSharedValue = jest.fn(() => ({ value: 0 }))
+    Reanimated.useAnimatedStyle = jest.fn(() => ({}))
+    Reanimated.withTiming = jest.fn(value => value)
+    Reanimated.Easing = {
+        out: jest.fn(() => jest.fn()),
+        quad: jest.fn(() => jest.fn()),
+        inOut: jest.fn(() => jest.fn()),
+        bezier: jest.fn(() => jest.fn()),
+    }
+    Reanimated.runOnJS = jest.fn(fn => fn)
+    Reanimated.useReducedMotion = jest.fn(() => false)
+
+    return Reanimated
+})
+
+jest.mock("react-native", () => {
+    const RN = jest.requireActual("react-native")
+    return {
+        ...RN,
+        Dimensions: {
+            get: jest.fn(() => ({ width: 375, height: 812 })),
+        },
+    }
+})
+
 const Wrapper = ({ children }: PropsWithChildren) => (
     <TestWrapper
         preloadedState={{
@@ -29,6 +57,21 @@ const Wrapper = ({ children }: PropsWithChildren) => (
 const mockUseCategoryFiltering = jest.fn()
 jest.mock("./Hooks/useCategoryFiltering", () => ({
     useCategoryFiltering: () => mockUseCategoryFiltering(),
+}))
+
+jest.mock("./Hooks/useCategories", () => ({
+    useCategories: () => [
+        {
+            id: "NUTRITION",
+            displayName: "Food & Drink",
+            icon: "icon-salad",
+        },
+        {
+            id: "PLASTIC_WASTE_RECYCLING",
+            displayName: "Recycling",
+            icon: "icon-recycle",
+        },
+    ],
 }))
 
 jest.mock("./Hooks/useX2EAppAnimation", () => ({
@@ -248,5 +291,41 @@ describe("X2EAppsBottomSheet", () => {
         expect(screen.getAllByText("Recycling").length).toBeGreaterThan(0)
         expect(screen.getByText("B App")).toBeVisible()
         expect(screen.queryByText("A App")).toBeNull()
+    })
+
+    it("should handle initial category ID prop", () => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
+            data: mockApps,
+            isLoading: false,
+        })
+
+        render(<AppsBottomSheet initialCategoryId={X2ECategoryType.NUTRITION} />, { wrapper: Wrapper })
+
+        expect(screen.getAllByText("Food & Drink").length).toBeGreaterThan(0)
+    })
+
+    it("should handle animation direction state changes", () => {
+        ;(useVeBetterDaoActiveDapps as jest.Mock).mockReturnValue({
+            data: mockApps,
+            isLoading: false,
+        })
+
+        const { rerender } = render(<AppsBottomSheet />, { wrapper: Wrapper })
+
+        const newCategory = {
+            id: X2ECategoryType.PLASTIC_WASTE_RECYCLING,
+            displayName: "Recycling",
+            icon: "icon-recycle",
+        }
+
+        mockUseCategoryFiltering.mockReturnValue({
+            selectedCategory: newCategory,
+            setSelectedCategory: mockSetSelectedCategory,
+            filteredApps: [mockApps[1]],
+        })
+
+        rerender(<AppsBottomSheet />)
+
+        expect(screen.getAllByText("Recycling").length).toBeGreaterThan(0)
     })
 })
