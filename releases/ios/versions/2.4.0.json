@@ -4,87 +4,70 @@
   "descriptions": {
     "en": [
      "Major redesign of the Apps section"
-     "New: StarGate manager role component"
      "Bug fixes and performance improvements"
     ],
     "de": [  
       "Größeres Redesign des Apps-Bereichs",
-      "Neu: StarGate-Managerrollen-Komponente",
       "Fehlerbehebungen und Leistungsverbesserungen"
     ],
     "es": [
      "Rediseño importante de la sección de Aplicaciones",
-     "Nuevo: componente de rol de administrador de StarGate",
      "Corrección de errores y mejoras de rendimiento"
     ],
     "fr": [  
      "Refonte majeure de la section Applications",
-     "Nouveau : composant rôle gestionnaire StarGate",
      "Corrections de bugs et améliorations des performances"
     ],
     "hi": [  
     "ऐप्स सेक्शन का बड़ा पुनः डिज़ाइन",
-    "नया: स्टारगेट मैनेजर रोल कंपोनेंट",
     "बग फिक्स और प्रदर्शन सुधार"
     ],
     "it": [  
     "Grande redesign della sezione App",
-    "Nuovo: componente ruolo manager StarGate",
     "Correzioni di bug e miglioramenti delle prestazioni"
     ],
     "ja": [
     "アプリセクションの大幅な再設計",
-    "新機能: StarGate マネージャーロールコンポーネント",
     "バグ修正とパフォーマンス改善"
     ],
     "ko": [
     "앱 섹션 주요 개편",
-    "신규: StarGate 관리자 역할 컴포넌트",
     "버그 수정 및 성능 개선"
     ],
     "nl": [
     "Grote herontwerp van de Apps-sectie",
-    "Nieuw: StarGate-managerrolcomponent",
     "Bugfixes en prestatieverbeteringen"
     ],
     "pl": [
     "Znaczący redesign sekcji Aplikacji",
-    "Nowość: komponent roli menedżera StarGate",
     "Poprawki błędów i ulepszenia wydajności"
     ],
     "pt": [
     "Grande reformulação da seção de Aplicativos",
-    "Novo: componente de função de gerente do StarGate",
     "Correções de bugs e melhorias de desempenho"
     ],
     "ru": [
     "Крупный редизайн раздела Приложений",
-    "Новое: компонент роли менеджера StarGate",
     "Исправления ошибок и улучшение производительности"
     ],
     "sv": [ 
     "Större omdesign av App-sektionen",
-    "Nytt: StarGate-chefsrollskomponent",
     "Buggfixar och prestandaförbättringar"
     ],
     "tr": [
     "Uygulamalar bölümünde büyük yeniden tasarım",
-    "Yeni: StarGate yönetici rolü bileşeni",
     "Hata düzeltmeleri ve performans iyileştirmeleri"
     ],
     "tw": [  
     "應用程式區域重大重新設計",
-    "新增：StarGate 管理員角色元件",
     "錯誤修正與效能改進"
   ],
     "vi": [  
     "Thiết kế lại lớn phần Ứng dụng",
-    "Mới: thành phần vai trò quản lý StarGate",
     "Sửa lỗi và cải thiện hiệu suất"
   ],
     "zh": [
     "应用程序部分重大改版",
-    "新增：StarGate 管理员角色组件",
     "错误修复和性能改进"
     ]
   }
