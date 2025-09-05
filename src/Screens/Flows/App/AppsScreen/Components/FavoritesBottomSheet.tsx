@@ -210,7 +210,7 @@ const baseStyles = (theme: ColorThemeType) =>
         },
         reorderIcon: {
             borderColor: theme.colors.actionBottomSheet.iconBackground.border,
-            backgroundColor: theme.colors.actionBottomSheet.iconBackground.background,
+            backgroundColor: theme.colors.actionBottomSheet.reorderButtonBackground,
             borderWidth: 1,
             borderRadius: 6,
         },

@@ -45,7 +45,7 @@ export const AnimatedSaveHeaderButton = ({
             backgroundColor: withTiming(
                 hasBeenClicked.value
                     ? theme.colors.successVariant.background
-                    : theme.colors.actionBottomSheet.iconBackground.background,
+                    : theme.colors.actionBottomSheet.reorderButtonBackground,
                 {
                     duration: animationDuration,
                 },
