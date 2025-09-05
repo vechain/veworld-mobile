@@ -66,22 +66,6 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
         }
     }, [betterWorldFeature.appsScreen.enabled, nav, onNavigate])
 
-    const animatedStyles = useAnimatedStyle(
-        () => ({
-            height: showToolbars ? withTiming(56) : withTiming(24),
-            marginBottom: showToolbars ? 0 : 8,
-        }),
-        [showToolbars],
-    )
-
-    const animatedIconStyles = useAnimatedStyle(
-        () => ({
-            opacity: withTiming(showToolbars ? 1 : 0, { duration: 400 }),
-            transform: [{ scale: withTiming(showToolbars ? 1 : 0, { duration: 300 }) }],
-        }),
-        [showToolbars],
-    )
-
     const animatedFaviconStyles = useAnimatedStyle(
         () => ({
             transform: [{ scale: withTiming(showToolbars ? 1 : 0.6, { duration: 300 }) }],
@@ -133,7 +117,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
 
     return (
         <>
-            <Animated.View style={isIOS() ? [styles.animatedContainer, animatedStyles] : styles.animatedContainer}>
+            <Animated.View style={styles.animatedContainer}>
                 <AnimatedBaseView style={styles.inputContainer}>
                     {/* Icon on the left */}
                     <AnimatedBaseIcon
@@ -145,7 +129,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                         haptics="Light"
                         size={16}
                         p={8}
-                        style={isIOS() ? [animatedIconStyles, styles.iconButton] : styles.iconButton}
+                        style={styles.iconButton}
                     />
 
                     {/* URL Text centered */}
@@ -179,7 +163,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                         haptics="Light"
                         size={16}
                         p={8}
-                        style={isIOS() ? [animatedIconStyles, styles.iconButton] : styles.iconButton}
+                        style={styles.iconButton}
                     />
                 </AnimatedBaseView>
             </Animated.View>
