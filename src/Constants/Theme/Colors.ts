@@ -120,6 +120,7 @@ export type Colors = {
     actionBottomSheet: {
         background: string
         border: string
+        reorderButtonBackground: string
         iconBackground: {
             background: string
             border: string
@@ -534,8 +535,9 @@ const light: Colors = {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
         isActiveBackground: COLORS.GREY_100,
+        reorderButtonBackground: COLORS.TRANSPARENT,
         iconBackground: {
-            background: COLORS.TRANSPARENT,
+            background: COLORS.GREY_100,
             border: COLORS.GREY_200,
         },
         text: COLORS.GREY_700,
@@ -847,6 +849,7 @@ const dark: Colors = {
     actionBottomSheet: {
         background: COLORS.PURPLE,
         border: COLORS.DARK_PURPLE_DISABLED,
+        reorderButtonBackground: COLORS.DARK_PURPLE_DISABLED,
         iconBackground: {
             background: COLORS.DARK_PURPLE_DISABLED,
             border: COLORS.DARK_PURPLE_DISABLED,
