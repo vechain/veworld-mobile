@@ -120,9 +120,14 @@ export type Colors = {
     actionBottomSheet: {
         background: string
         border: string
-        iconBackground: string
+        reorderButtonBackground: string
+        iconBackground: {
+            background: string
+            border: string
+        }
         isActiveBackground: string
         text: string
+        subText: string
         icon: string
         activeIcon: string
         activeIconBackground: string
@@ -134,6 +139,10 @@ export type Colors = {
         dangerIcon: string
         dangerIconBackground: string
         dangerText: string
+        emptyFavoritesIcon: {
+            color: string
+            background: string
+        }
     }
     assetDetailsCard: {
         background: string
@@ -208,6 +217,7 @@ export type Colors = {
     }
     tabsFooter: {
         background: string
+        border: string
     }
     errorAlert: {
         background: string
@@ -525,8 +535,13 @@ const light: Colors = {
         background: COLORS.GREY_50,
         border: COLORS.GREY_200,
         isActiveBackground: COLORS.GREY_100,
-        iconBackground: COLORS.GREY_100,
+        reorderButtonBackground: COLORS.TRANSPARENT,
+        iconBackground: {
+            background: COLORS.GREY_100,
+            border: COLORS.GREY_200,
+        },
         text: COLORS.GREY_700,
+        subText: COLORS.GREY_600,
         icon: COLORS.GREY_600,
         activeIcon: COLORS.GREY_600,
         activeIconBackground: COLORS.WHITE,
@@ -538,6 +553,10 @@ const light: Colors = {
         dangerIcon: COLORS.RED_600,
         dangerIconBackground: COLORS.GREY_100,
         dangerText: COLORS.RED_600,
+        emptyFavoritesIcon: {
+            color: COLORS.GREY_400,
+            background: COLORS.GREY_50,
+        },
     },
     assetDetailsCard: {
         background: COLORS.GREY_50,
@@ -612,6 +631,7 @@ const light: Colors = {
     },
     tabsFooter: {
         background: COLORS.WHITE,
+        border: COLORS.GREY_200,
     },
     errorAlert: {
         background: COLORS.RED_50,
@@ -829,9 +849,14 @@ const dark: Colors = {
     actionBottomSheet: {
         background: COLORS.PURPLE,
         border: COLORS.DARK_PURPLE_DISABLED,
-        iconBackground: COLORS.DARK_PURPLE_DISABLED,
+        reorderButtonBackground: COLORS.DARK_PURPLE_DISABLED,
+        iconBackground: {
+            background: COLORS.DARK_PURPLE_DISABLED,
+            border: COLORS.DARK_PURPLE_DISABLED,
+        },
         isActiveBackground: COLORS.PURPLE_DISABLED,
         text: COLORS.WHITE,
+        subText: COLORS.WHITE,
         icon: COLORS.GREY_100,
         activeIcon: COLORS.GREY_100,
         activeIconBackground: COLORS.DARK_PURPLE_DISABLED,
@@ -843,6 +868,10 @@ const dark: Colors = {
         dangerIcon: COLORS.RED_300,
         dangerIconBackground: COLORS.PURPLE_DISABLED,
         dangerText: COLORS.RED_300,
+        emptyFavoritesIcon: {
+            color: COLORS.DARK_PURPLE_DISABLED,
+            background: COLORS.PURPLE_DISABLED,
+        },
     },
     assetDetailsCard: {
         background: COLORS.PURPLE,
@@ -917,6 +946,7 @@ const dark: Colors = {
     },
     tabsFooter: {
         background: COLORS.PURPLE,
+        border: COLORS.DARK_PURPLE_DISABLED,
     },
     errorAlert: {
         background: COLORS.RED_100,

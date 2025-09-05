@@ -64,7 +64,11 @@ export const FastActionsBottomSheet = React.forwardRef<BottomSheetModalMethods, 
                         style={[styles.action]}>
                         <BaseView flexDirection="row" justifyContent={"center"} alignItems="center">
                             <BaseView
-                                bg={action.disabled ? iconColor.disabledIconBackground : iconColor.iconBackground}
+                                bg={
+                                    action.disabled
+                                        ? iconColor.disabledIconBackground
+                                        : iconColor.iconBackground.background
+                                }
                                 style={styles.actionIconBottomSheet}>
                                 {action.icon}
                             </BaseView>
