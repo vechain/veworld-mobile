@@ -204,7 +204,7 @@ const baseStyles = (theme: ColorThemeType) =>
             flexGrow: 1,
         },
         layout: {
-            backgroundColor: theme.colors.actionBottomSheet.background,
+            backgroundColor: theme.colors.card,
             borderTopRightRadius: 24,
             borderTopLeftRadius: 24,
         },

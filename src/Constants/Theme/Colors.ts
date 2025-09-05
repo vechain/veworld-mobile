@@ -531,7 +531,7 @@ const light: Colors = {
         buttonTextDisabled: COLORS.GREY_400,
     },
     actionBottomSheet: {
-        background: COLORS.WHITE,
+        background: COLORS.GREY_50,
         border: COLORS.GREY_200,
         isActiveBackground: COLORS.GREY_100,
         iconBackground: {
