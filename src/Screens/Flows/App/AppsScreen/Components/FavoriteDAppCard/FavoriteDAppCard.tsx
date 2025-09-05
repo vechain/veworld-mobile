@@ -1,7 +1,7 @@
 import React, { memo } from "react"
-import { Image, ImageStyle, StyleProp, StyleSheet } from "react-native"
+import { StyleSheet } from "react-native"
 
-import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView } from "~Components"
+import { BaseIcon, BaseSpacer, BaseText, BaseTouchable, BaseView, DAppIcon } from "~Components"
 import { DiscoveryDApp } from "~Constants"
 import { useThemedStyles } from "~Hooks"
 import { useAppLogo } from "~Hooks/useAppLogo"
@@ -48,15 +48,7 @@ export const FavoriteDAppCard: React.FC<Props> = memo(
                         onPress={() => onPress(dapp)}
                         onLongPress={() => onLongPress?.(dapp)}>
                         <BaseView flexDirection="row" alignItems="flex-start" flex={1} pr={10}>
-                            <Image
-                                source={{
-                                    uri: iconUri,
-                                }}
-                                style={
-                                    [{ height: IMAGE_SIZE, width: IMAGE_SIZE }, styles.icon] as StyleProp<ImageStyle>
-                                }
-                                resizeMode="contain"
-                            />
+                            <DAppIcon size={IMAGE_SIZE} fallbackIcon="icon-globe" iconUri={iconUri} />
                             <BaseSpacer width={24} />
                             <BaseView flex={1}>
                                 <BaseText
