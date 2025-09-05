@@ -29,6 +29,7 @@ import {
     DappTxActivity,
     FungibleTokenActivity,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SignCertActivity,
     StargateActivity,
     SwapActivity,
@@ -44,6 +45,7 @@ import {
     DappTransactionDetails,
     FungibleTokenTransferDetails,
     NonFungibleTokenTransferDetails,
+    NonFungibleTokenMarketplaceDetails,
     SignCertificateDetails,
 } from "./Components"
 import { StargateActivityDetails } from "./Components/StakingDetails"
@@ -133,7 +135,7 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
     }, [transaction?.reverted])
 
     const isNFTtransfer = useMemo(() => {
-        return activity.type === ActivityType.TRANSFER_NFT
+        return activity.type === ActivityType.TRANSFER_NFT || activity.type === ActivityType.NFT_SALE
     }, [activity.type])
 
     const explorerUrl = useMemo(() => {
@@ -174,6 +176,15 @@ export const ActivityDetailsScreen = ({ route, navigation }: Props) => {
                         activity={(activityFromStore ?? activity) as DappTxActivity}
                         clauses={transaction?.clauses}
                         status={isPendingOrFailedActivity ? ActivityStatus.REVERTED : ActivityStatus.SUCCESS}
+                        paid={transaction?.paid}
+                        isLoading={isloadingTxDetails}
+                    />
+                )
+            }
+            case ActivityType.NFT_SALE: {
+                return (
+                    <NonFungibleTokenMarketplaceDetails
+                        activity={(activityFromStore ?? activity) as NFTMarketplaceActivity}
                         paid={transaction?.paid}
                         isLoading={isloadingTxDetails}
                     />

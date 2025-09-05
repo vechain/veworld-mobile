@@ -10,6 +10,7 @@ type Props = {
     activityDetail: ActivityDetailContent
     border?: boolean
     isLoading?: boolean
+    testID?: string
 }
 
 const ActivityDetailItemSkeleton = () => {
@@ -33,61 +34,68 @@ const ActivityDetailItemSkeleton = () => {
     )
 }
 
-export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, border = true, isLoading = false }) => {
-    const theme = useTheme()
+export const ActivityDetailItem: React.FC<Props> = memo(
+    ({ activityDetail, border = true, isLoading = false, testID }) => {
+        const theme = useTheme()
 
-    return (
-        <BaseView
-            key={activityDetail.id}
-            w={100}
-            pt={12}
-            style={[
-                baseStyles.container,
-                // eslint-disable-next-line react-native/no-inline-styles
-                {
-                    borderBottomColor: border ? theme.colors.separator : "",
-                    borderBottomWidth: border ? 0.5 : 0,
-                },
-            ]}
-            justifyContent="flex-start">
-            <BaseView>
-                <BaseText typographyFont="body" pb={5}>
-                    {activityDetail.eventName ?? ""}
-                </BaseText>
-                <BaseText typographyFont="body" pb={5}>
-                    {activityDetail.title}
-                </BaseText>
+        return (
+            <BaseView
+                key={activityDetail.id}
+                w={100}
+                pt={12}
+                style={[
+                    baseStyles.container,
+                    // eslint-disable-next-line react-native/no-inline-styles
+                    {
+                        borderBottomColor: border ? theme.colors.separator : "",
+                        borderBottomWidth: border ? 0.5 : 0,
+                    },
+                ]}
+                justifyContent="flex-start"
+                testID={testID}>
+                <BaseView>
+                    <BaseText typographyFont="body" pb={5}>
+                        {activityDetail.eventName ?? ""}
+                    </BaseText>
+                    <BaseText typographyFont="body" pb={5} testID={testID ? `${testID}-title` : undefined}>
+                        {activityDetail.title}
+                    </BaseText>
 
-                <BaseTouchable
-                    action={activityDetail.onValuePress}
-                    disabled={!activityDetail.onValuePress}
-                    style={baseStyles.valueContainer}>
-                    {isLoading ? (
-                        <ActivityDetailItemSkeleton />
-                    ) : (
-                        <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
-                            {activityDetail.value ?? ""}
-                        </BaseText>
-                    )}
+                    <BaseTouchable
+                        action={activityDetail.onValuePress}
+                        disabled={!activityDetail.onValuePress}
+                        style={baseStyles.valueContainer}>
+                        {isLoading ? (
+                            <ActivityDetailItemSkeleton />
+                        ) : (
+                            <BaseText
+                                typographyFont={activityDetail.typographyFont}
+                                underline={activityDetail.underline}
+                                testID={testID ? `${testID}-value` : undefined}>
+                                {activityDetail.value ?? ""}
+                            </BaseText>
+                        )}
 
-                    {activityDetail.valueAdditional && (
-                        <FiatBalance
-                            typographyFont="buttonSecondary"
-                            ml={6}
-                            balances={[activityDetail.valueAdditional]}
-                            prefix="≈ "
-                        />
-                    )}
-                    {activityDetail.icon && (
-                        <BaseView pl={3}>
-                            <BaseIcon name={activityDetail.icon} size={12} color={theme.colors.text} />
-                        </BaseView>
-                    )}
-                </BaseTouchable>
+                        {activityDetail.valueAdditional && (
+                            <FiatBalance
+                                typographyFont="buttonSecondary"
+                                ml={6}
+                                balances={[activityDetail.valueAdditional]}
+                                prefix="≈ "
+                                testID={testID ? `${testID}-additional` : undefined}
+                            />
+                        )}
+                        {activityDetail.icon && (
+                            <BaseView pl={3}>
+                                <BaseIcon name={activityDetail.icon} size={12} color={theme.colors.text} />
+                            </BaseView>
+                        )}
+                    </BaseTouchable>
+                </BaseView>
             </BaseView>
-        </BaseView>
-    )
-})
+        )
+    },
+)
 
 const baseStyles = StyleSheet.create({
     container: {

@@ -162,6 +162,15 @@ describe("isTransactionActivity", () => {
         expect(isTransaction).toBe(true)
     })
 
+    test("should return true for a NFT sale activity", () => {
+        const activity: Activity = {
+            ...BASE_SAMPLE_ACTIVITY,
+            type: ActivityType.NFT_SALE,
+        }
+        const isTransaction = ActivityUtils.isTransactionActivity(activity)
+        expect(isTransaction).toBe(true)
+    })
+
     test("should return false for a non-transaction activity", () => {
         const activity: Activity = {
             ...BASE_SAMPLE_ACTIVITY,
