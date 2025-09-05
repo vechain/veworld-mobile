@@ -120,7 +120,7 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                     runOnJS(goForward)()
                 }
             })
-            .activeOffsetX([-100, 100])
+            .activeOffsetX([-NAVIGATION_GESTURE_THRESHOLD, NAVIGATION_GESTURE_THRESHOLD])
     }, [goBack, goForward])
 
     return (
