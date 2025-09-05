@@ -180,6 +180,11 @@ function getHostName(url: string) {
     return isValid(url) ? new URL(url).hostname : null
 }
 
+/**
+ * Return the origin of the provided url
+ * @param url URL to check for
+ * @returns Either the `origin` of the URL if the URL is valid, or undefined otherwise
+ */
 function getBaseURL(url: string) {
     return isValid(url) ? new URL(url).origin : undefined
 }

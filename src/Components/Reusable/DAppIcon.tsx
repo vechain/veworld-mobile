@@ -31,6 +31,21 @@ type Props = {
     fallbackIconColor?: string
 }
 
+/**
+ * Known mapping for fallback sizes.
+ * Key is the size of the whole image (which is passed in props)
+ * Value is the size of the fallback icon
+ */
+const KNOWN_FALLBACK_SIZE = {
+    16: 8,
+    24: 12,
+    32: 16,
+    48: 20,
+    64: 24,
+    72: 24,
+    88: 32,
+} as Record<number, number>
+
 export const DAppIcon = ({
     size,
     iconUri,
@@ -58,8 +73,7 @@ export const DAppIcon = ({
             {loadFallback || !iconUri ? (
                 <BaseIcon
                     name={fallbackIcon}
-                    //Keep the same aspect ratio as the original design
-                    size={(20 / 48) * size}
+                    size={KNOWN_FALLBACK_SIZE[size] ?? 20}
                     color={fallbackIconColor}
                     testID="DAPP_ICON_FALLBACK_ICON"
                 />

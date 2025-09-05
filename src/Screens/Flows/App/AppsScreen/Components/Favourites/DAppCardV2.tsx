@@ -33,11 +33,7 @@ export const DAppCardV2 = ({ dapp, onPress, showDappTitle = false, iconSize = 64
                 testID={`dapp-card-${dapp.id}`}
                 style={[styles.rootContainer, { width: iconSize }]}
                 onPress={onPress}>
-                <DAppIcon
-                    size={iconSize}
-                    iconUri={iconUri}
-                    fallbackBg={theme.isDark ? COLORS.PURPLE : COLORS.GREY_50}
-                />
+                <DAppIcon size={iconSize} iconUri={iconUri} />
                 {showDappTitle ?? (
                     <BaseText numberOfLines={1} typographyFont="bodyMedium" color={textColor}>
                         {dapp.name}
