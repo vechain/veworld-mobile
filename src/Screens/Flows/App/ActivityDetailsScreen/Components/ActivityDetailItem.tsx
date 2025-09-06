@@ -1,8 +1,8 @@
-import React, { memo } from "react"
-import { ActivityDetail } from "../Type"
+import React, { memo, useMemo } from "react"
+import { StyleSheet } from "react-native"
 import { BaseIcon, BaseSkeleton, BaseText, BaseTouchable, BaseView, FiatBalance } from "~Components"
 import { useTheme } from "~Hooks"
-import { StyleSheet } from "react-native"
+import { ActivityDetail } from "../Type"
 
 export type ActivityDetailContent = ActivityDetail
 
@@ -36,6 +36,17 @@ const ActivityDetailItemSkeleton = () => {
 export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, border = true, isLoading = false }) => {
     const theme = useTheme()
 
+    const activityDetailValue = useMemo(() => {
+        if (isLoading) return <ActivityDetailItemSkeleton />
+        if (typeof activityDetail.value === "string")
+            return (
+                <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
+                    {activityDetail.value ?? ""}
+                </BaseText>
+            )
+        return activityDetail.value
+    }, [activityDetail.typographyFont, activityDetail.underline, activityDetail.value, isLoading])
+
     return (
         <BaseView
             key={activityDetail.id}
@@ -54,21 +65,19 @@ export const ActivityDetailItem: React.FC<Props> = memo(({ activityDetail, borde
                 <BaseText typographyFont="body" pb={5}>
                     {activityDetail.eventName ?? ""}
                 </BaseText>
-                <BaseText typographyFont="body" pb={5}>
-                    {activityDetail.title}
-                </BaseText>
+                {typeof activityDetail.title === "string" ? (
+                    <BaseText typographyFont="body" pb={5}>
+                        {activityDetail.title}
+                    </BaseText>
+                ) : (
+                    activityDetail.title
+                )}
 
                 <BaseTouchable
                     action={activityDetail.onValuePress}
                     disabled={!activityDetail.onValuePress}
                     style={baseStyles.valueContainer}>
-                    {isLoading ? (
-                        <ActivityDetailItemSkeleton />
-                    ) : (
-                        <BaseText typographyFont={activityDetail.typographyFont} underline={activityDetail.underline}>
-                            {activityDetail.value ?? ""}
-                        </BaseText>
-                    )}
+                    {activityDetailValue}
 
                     {activityDetail.valueAdditional && (
                         <FiatBalance

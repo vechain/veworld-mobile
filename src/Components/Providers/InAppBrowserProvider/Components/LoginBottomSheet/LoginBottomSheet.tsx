@@ -1,0 +1,448 @@
+import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
+import { useNavigation } from "@react-navigation/native"
+import { Blake2b256, Certificate } from "@vechain/sdk-core"
+import { ethers } from "ethers"
+import { default as React, useCallback, useMemo, useRef, useState } from "react"
+import { BaseBottomSheet, BaseButton, BaseIcon, BaseSpacer, BaseSwitch, BaseText, BaseView } from "~Components/Base"
+import { useInAppBrowser } from "~Components/Providers/InAppBrowserProvider"
+import { useInteraction } from "~Components/Providers/InteractionProvider"
+import { SelectAccountBottomSheet } from "~Components/Reusable"
+import { AccountSelector } from "~Components/Reusable/AccountSelector"
+import { TypedDataRenderer } from "~Components/Reusable/TypedDataRenderer"
+import { AnalyticsEvent, COLORS, ERROR_EVENTS } from "~Constants"
+import { useAnalyticTracking, useBottomSheetModal, useSetSelectedAccount, useSignMessage, useTheme } from "~Hooks"
+import { useSignTypedMessage } from "~Hooks/useSignTypedData"
+import { useI18nContext } from "~i18n"
+import { DEVICE_TYPE, LedgerAccountWithDevice, LoginActivityValue, LoginRequest, TypedDataMessage } from "~Model"
+import { Routes } from "~Navigation"
+import {
+    addLoginActivity,
+    addSession,
+    selectSelectedAccountOrNull,
+    selectVisibleAccountsWithoutObserved,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import { AccountUtils, error, HexUtils } from "~Utils"
+import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { DappDetails } from "../DappDetails"
+import { DappDetailsCard } from "../DappDetailsCard"
+import { Signable } from "../Signable"
+import { LedgerDeviceAlert as TypedDataLedgerDeviceAlert } from "../TypedDataBottomSheet/LedgerDeviceAlert"
+
+type Props = {
+    request: LoginRequest
+    onCancel: (request: LoginRequest) => Promise<void>
+    onSign: (args: { request: LoginRequest; keepMeLoggedIn: boolean; password?: string }) => Promise<void>
+    selectAccountBsRef: React.RefObject<BottomSheetModalMethods>
+    isLoading: boolean
+}
+
+const LoginBottomSheetContent = ({ request, onCancel, onSign, selectAccountBsRef, isLoading }: Props) => {
+    const { LL } = useI18nContext()
+    const theme = useTheme()
+
+    const [keepMeLoggedIn, setKeepMeLoggedIn] = useState(true)
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+    const visibleAccounts = useAppSelector(selectVisibleAccountsWithoutObserved)
+    const { onClose: onCloseSelectAccountBs, onOpen: onOpenSelectAccountBs } = useBottomSheetModal({
+        externalRef: selectAccountBsRef,
+    })
+
+    const { onSetSelectedAccount } = useSetSelectedAccount()
+
+    const enhancedRequest = useMemo(() => {
+        //Using ethers.utils.getAddress to checksum the address
+        switch (request.kind) {
+            case "simple":
+                return request
+            case "certificate": {
+                return {
+                    ...request,
+                    value: {
+                        ...request.value,
+                        payload: {
+                            type: "text",
+                            content: request.value.payload.content.replace(
+                                "<<veworld_address>>",
+                                ethers.utils.getAddress(selectedAccount?.address ?? ""),
+                            ),
+                        },
+                    } satisfies Connex.Vendor.CertMessage,
+                }
+            }
+            case "typed-data": {
+                return {
+                    ...request,
+                    value: {
+                        ...request.value,
+                        value: {
+                            ...request.value.value,
+                            ...("veworld_login_address" in request.value.value && {
+                                veworld_login_address: ethers.utils.getAddress(selectedAccount?.address ?? ""),
+                            }),
+                        },
+                    } satisfies TypedDataMessage,
+                }
+            }
+        }
+    }, [request, selectedAccount?.address])
+
+    const signableArgs = useMemo(
+        () => ({ request: enhancedRequest, keepMeLoggedIn }),
+        [enhancedRequest, keepMeLoggedIn],
+    )
+
+    const onChangeAccountPress = useCallback(() => {
+        onOpenSelectAccountBs()
+    }, [onOpenSelectAccountBs])
+
+    const isConfirmDisabled = useMemo(
+        () =>
+            AccountUtils.isObservedAccount(selectedAccount) ||
+            isLoading ||
+            !selectedAccount ||
+            (request.kind === "typed-data" && selectedAccount.device.type === DEVICE_TYPE.LEDGER),
+        [isLoading, request.kind, selectedAccount],
+    )
+
+    const detailsChildren = useMemo(() => {
+        switch (enhancedRequest.kind) {
+            case "simple":
+                return null
+            case "certificate":
+                return (
+                    <BaseText color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600} typographyFont="captionRegular">
+                        {enhancedRequest.value.payload.content}
+                    </BaseText>
+                )
+            case "typed-data":
+                return (
+                    <TypedDataRenderer.Container>
+                        <TypedDataRenderer value={enhancedRequest.value.value} />
+                    </TypedDataRenderer.Container>
+                )
+        }
+    }, [enhancedRequest.kind, enhancedRequest.value, theme.isDark])
+
+    const onSimpleRequestSubmit = useCallback(() => onSign(signableArgs), [onSign, signableArgs])
+
+    return (
+        <>
+            <BaseView flexDirection="row" gap={12} justifyContent="space-between" testID="LOGIN_REQUEST_TITLE">
+                <BaseView flex={1} flexDirection="row" gap={12}>
+                    <BaseIcon name="icon-user-check" size={20} color={theme.colors.editSpeedBs.title} />
+                    <BaseText typographyFont="subTitleSemiBold" color={theme.colors.editSpeedBs.title}>
+                        {LL.LOGIN_REQUEST_TITLE()}
+                    </BaseText>
+                </BaseView>
+                {selectedAccount && (
+                    <AccountSelector
+                        account={selectedAccount}
+                        onPress={onChangeAccountPress}
+                        variant="short"
+                        changeable
+                    />
+                )}
+            </BaseView>
+            <BaseSpacer height={12} />
+            <DappDetailsCard
+                appName={request.appName}
+                appUrl={request.appUrl}
+                renderDetailsButton={request.kind !== "simple"}>
+                {({ visible }) => (
+                    <>
+                        {selectedAccount?.device.type === DEVICE_TYPE.LEDGER && request.kind === "typed-data" && (
+                            <>
+                                <TypedDataLedgerDeviceAlert />
+                                <BaseSpacer height={16} />
+                            </>
+                        )}
+                        <DappDetails show={visible}>{detailsChildren}</DappDetails>
+                    </>
+                )}
+            </DappDetailsCard>
+            <BaseSpacer height={24} />
+            {!request.external && (
+                <BaseView flexDirection="row" gap={16} mb={24} py={6}>
+                    <BaseSwitch value={keepMeLoggedIn} onValueChange={setKeepMeLoggedIn} />
+                    <BaseText typographyFont="bodyMedium" color={theme.isDark ? COLORS.GREY_100 : COLORS.GREY_600}>
+                        {LL.LOGIN_KEEP_ME_SIGNED_IN()}
+                    </BaseText>
+                </BaseView>
+            )}
+
+            <BaseView flexDirection="row" gap={16} mb={isIOS() ? 16 : 0}>
+                <BaseButton
+                    action={onCancel.bind(null, request)}
+                    variant="outline"
+                    flex={1}
+                    testID="LOGIN_REQUEST_BTN_CANCEL">
+                    {LL.COMMON_BTN_CANCEL()}
+                </BaseButton>
+                {enhancedRequest.kind === "simple" ? (
+                    <BaseButton
+                        action={onSimpleRequestSubmit}
+                        flex={1}
+                        disabled={isConfirmDisabled}
+                        isLoading={isLoading}
+                        testID="LOGIN_REQUEST_BTN_SIGN">
+                        {LL.LOGIN_REQUEST_CTA()}
+                    </BaseButton>
+                ) : (
+                    <Signable args={signableArgs} onSign={onSign}>
+                        {({ checkIdentityBeforeOpening, isBiometricsEmpty }) => (
+                            <BaseButton
+                                action={checkIdentityBeforeOpening}
+                                flex={1}
+                                disabled={isConfirmDisabled || isBiometricsEmpty}
+                                isLoading={isLoading}
+                                testID="LOGIN_REQUEST_BTN_SIGN">
+                                {LL.LOGIN_REQUEST_CTA()}
+                            </BaseButton>
+                        )}
+                    </Signable>
+                )}
+            </BaseView>
+
+            <SelectAccountBottomSheet
+                closeBottomSheet={onCloseSelectAccountBs}
+                accounts={visibleAccounts}
+                setSelectedAccount={onSetSelectedAccount}
+                selectedAccount={selectedAccount}
+                ref={selectAccountBsRef}
+            />
+        </>
+    )
+}
+
+export const LoginBottomSheet = () => {
+    const { loginBsRef, loginBsData, setLoginBsData } = useInteraction()
+    const { onClose: onCloseBs } = useBottomSheetModal({ externalRef: loginBsRef })
+
+    const { ref: selectAccountBsRef } = useBottomSheetModal()
+
+    const { postMessage } = useInAppBrowser()
+
+    const selectedAccount = useAppSelector(selectSelectedAccountOrNull)
+
+    const isUserAction = useRef(false)
+
+    const [isLoading, setIsLoading] = useState(false)
+
+    const dispatch = useAppDispatch()
+
+    const nav = useNavigation()
+
+    const track = useAnalyticTracking()
+
+    const buildTypedData = useCallback(
+        (request: Extract<LoginRequest, { kind: "typed-data" }>) => {
+            if (!selectedAccount) return
+            return {
+                timestamp: Math.round(Date.now() / 1000),
+                signer: selectedAccount?.address ?? "",
+                ...request.value,
+            }
+        },
+        [selectedAccount],
+    )
+
+    const buildCertificate = useCallback(
+        (request: Extract<LoginRequest, { kind: "certificate" }>) => {
+            if (!selectedAccount) return
+            const certificate = Certificate.of({
+                purpose: request.value.purpose,
+                payload: request.value.payload,
+                timestamp: Math.round(Date.now() / 1000),
+                domain: new URL(request.appUrl).hostname,
+                signer: selectedAccount.address ?? "",
+            })
+            return {
+                certificate,
+                payload: Buffer.from(Blake2b256.of(certificate.encode()).bytes),
+            }
+        },
+        [selectedAccount],
+    )
+
+    // Sign
+    const { signTypedData } = useSignTypedMessage()
+    const { signMessage } = useSignMessage()
+
+    const signRequest = useCallback(
+        async (request: LoginRequest, password?: string) => {
+            switch (request.kind) {
+                case "simple":
+                    return { signer: selectedAccount?.address ?? "" }
+                case "certificate": {
+                    const { certificate, payload } = buildCertificate(request)!
+                    const signature = await signMessage(payload, password)
+                    return {
+                        signature: HexUtils.addPrefix(signature!.toString("hex")),
+                        annex: {
+                            domain: certificate.domain,
+                            timestamp: certificate.timestamp,
+                            signer: certificate.signer,
+                        },
+                    }
+                }
+                case "typed-data": {
+                    const typedData = buildTypedData(request)!
+                    const signature = await signTypedData(typedData, password)
+                    return {
+                        signature: signature!,
+                        signer: selectedAccount?.address ?? "",
+                    }
+                }
+            }
+        },
+        [buildCertificate, buildTypedData, selectedAccount?.address, signMessage, signTypedData],
+    )
+
+    const onSign = useCallback(
+        async ({
+            request,
+            password,
+            keepMeLoggedIn,
+        }: {
+            request: LoginRequest
+            keepMeLoggedIn: boolean
+            password?: string
+        }) => {
+            try {
+                setIsLoading(true)
+
+                if (request.kind === "certificate") {
+                    if (selectedAccount?.device.type === DEVICE_TYPE.LEDGER) {
+                        const cert = buildCertificate(request)!
+                        // Do not reject request if it's a ledger request
+                        isUserAction.current = true
+                        onCloseBs()
+                        setIsLoading(false)
+
+                        nav.navigate(Routes.LEDGER_SIGN_CERTIFICATE, {
+                            request,
+                            accountWithDevice: selectedAccount as LedgerAccountWithDevice,
+                            certificate: cert.certificate,
+                            keepMeLoggedIn,
+                        })
+                        return
+                    }
+                }
+
+                const result = await signRequest(request, password)
+
+                if (request.external) {
+                    dispatch(
+                        addSession({
+                            kind: "external",
+                            url: request.appUrl,
+                            address: selectedAccount?.address.toLowerCase() ?? "",
+                            genesisId: request.genesisId,
+                            name: request.appName,
+                        }),
+                    )
+                } else if (keepMeLoggedIn) {
+                    dispatch(
+                        addSession({
+                            kind: "permanent",
+                            url: request.appUrl,
+                            genesisId: request.genesisId,
+                            name: request.appName,
+                        }),
+                    )
+                } else {
+                    dispatch(
+                        addSession({
+                            kind: "temporary",
+                            url: request.appUrl,
+                            address: selectedAccount?.address.toLowerCase() ?? "",
+                            genesisId: request.genesisId,
+                            name: request.appName,
+                        }),
+                    )
+                }
+
+                postMessage({
+                    id: request.id,
+                    data: result,
+                    method: request.method,
+                })
+
+                dispatch(
+                    addLoginActivity({
+                        appUrl: request.appUrl,
+                        ...({ kind: request.kind, value: request.value } as LoginActivityValue),
+                    }),
+                )
+
+                track(AnalyticsEvent.DAPP_LOGIN_SUCCESS)
+                isUserAction.current = true
+            } catch (err) {
+                track(AnalyticsEvent.DAPP_LOGIN_FAILED)
+                error(ERROR_EVENTS.DAPP_METHODS, err)
+                postMessage({
+                    id: request.id,
+                    error: "Login failed",
+                    method: request.method,
+                })
+            }
+            onCloseBs()
+        },
+        [buildCertificate, dispatch, nav, onCloseBs, postMessage, selectedAccount, signRequest, track],
+    )
+
+    const rejectRequest = useCallback(
+        async (request: LoginRequest) => {
+            setIsLoading(true)
+            postMessage({
+                id: request.id,
+                error: "User rejected request",
+                method: request.method,
+            })
+
+            track(AnalyticsEvent.DAPP_LOGIN_REJECTED)
+        },
+        [postMessage, track],
+    )
+
+    const onCancel = useCallback(
+        async (request: LoginRequest) => {
+            await rejectRequest(request)
+            isUserAction.current = true
+            onCloseBs()
+        },
+        [onCloseBs, rejectRequest],
+    )
+
+    const onDismiss = useCallback(async () => {
+        try {
+            if (isUserAction.current) {
+                setLoginBsData(null)
+                isUserAction.current = false
+                return
+            }
+            if (!loginBsData) return
+            await rejectRequest(loginBsData)
+            isUserAction.current = false
+            setLoginBsData(null)
+        } finally {
+            setIsLoading(false)
+        }
+    }, [loginBsData, rejectRequest, setLoginBsData])
+
+    return (
+        <BaseBottomSheet dynamicHeight ref={loginBsRef} onDismiss={onDismiss} floating>
+            {loginBsData && (
+                <LoginBottomSheetContent
+                    onCancel={onCancel}
+                    onSign={onSign}
+                    request={loginBsData}
+                    selectAccountBsRef={selectAccountBsRef}
+                    isLoading={isLoading}
+                />
+            )}
+        </BaseBottomSheet>
+    )
+}

@@ -3,12 +3,12 @@ import { StyleSheet } from "react-native"
 import { BaseSpacer, BaseText, BaseView } from "~Components/Base"
 import { useThemedStyles } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { TypedData } from "~Model"
+import { TypedDataMessage } from "~Model"
 import { CopyToClipboardAddress } from "./CopyToClipboardAddress"
 import { JsonViewer } from "./JsonViewer"
 
 type Props = {
-    typedData: Partial<TypedData>
+    typedData: Partial<TypedDataMessage>
     origin: string
 }
 

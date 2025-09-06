@@ -1,8 +1,16 @@
 import { Transaction } from "@vechain/sdk-core"
 import { ThorClient } from "@vechain/sdk-network"
-import { Activity, ActivityStatus, FungibleTokenActivity, NonFungibleTokenActivity, TypedData } from "~Model"
+import {
+    Activity,
+    ActivityStatus,
+    FungibleTokenActivity,
+    LoginActivityValue,
+    NonFungibleTokenActivity,
+    TypedData,
+} from "~Model"
 import {
     createConnectedAppActivity,
+    createLoginActivity,
     createPendingDappTransactionActivity,
     createPendingNFTTransferActivityFromTx,
     createPendingTransferActivityFromTx,
@@ -157,6 +165,24 @@ export const addSignTypedDataActivity =
 
         const typedDataActivity = createSingTypedDataActivity(selectedNetwork, typedData.signer, sender, typedData)
         dispatch(addActivity(typedDataActivity))
+    }
+
+export const addLoginActivity =
+    ({ appUrl, ...rest }: { appUrl: string } & LoginActivityValue): AppThunk<void> =>
+    (dispatch, getState) => {
+        const selectedAccount = selectSelectedAccount(getState())
+        const selectedNetwork = selectSelectedNetwork(getState())
+
+        if (!selectedAccount) return
+
+        const activity = createLoginActivity({
+            url: appUrl,
+            network: selectedNetwork,
+            signer: selectedAccount.address,
+            ...rest,
+        })
+
+        dispatch(addActivity(activity))
     }
 
 /**

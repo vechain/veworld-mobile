@@ -1,9 +1,10 @@
+import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
+import * as Haptics from "expo-haptics"
 import Lottie from "lottie-react-native"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BlePairingDark } from "~Assets"
-import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
 import {
     BackButtonHeader,
     BaseButton,
@@ -16,15 +17,17 @@ import {
     showErrorToast,
     Step,
     StepsProgressBar,
-    useWalletConnect,
     useInAppBrowser,
+    useWalletConnect,
 } from "~Components"
+import { ERROR_EVENTS, LEDGER_ERROR_CODES } from "~Constants"
+import { useBottomSheetModal, useLedgerDevice } from "~Hooks"
+import { useLoginSession } from "~Hooks/useLoginSession"
+import { LoginActivityValue } from "~Model"
 import { RootStackParamListSwitch, Routes } from "~Navigation"
+import { addLoginActivity, addSession, addSignCertificateActivity, useAppDispatch } from "~Storage/Redux"
 import { debug, error, HexUtils, LedgerUtils } from "~Utils"
 import { useI18nContext } from "~i18n"
-import { useNavigation } from "@react-navigation/native"
-import * as Haptics from "expo-haptics"
-import { ERROR_EVENTS, LEDGER_ERROR_CODES, RequestMethods } from "~Constants"
 
 const MUTEX_TIMEOUT = 1000
 
@@ -37,10 +40,11 @@ enum SigningStep {
 }
 
 export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
-    const { accountWithDevice, request, certificate } = route.params
+    const { accountWithDevice, request, certificate, keepMeLoggedIn } = route.params
 
     const { processRequest } = useWalletConnect()
     const { postMessage } = useInAppBrowser()
+    const { createSessionIfNotExists } = useLoginSession()
 
     const { LL } = useI18nContext()
     const nav = useNavigation()
@@ -50,6 +54,7 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
     const [isAwaitingSignature, setIsAwaitingSignature] = useState(false)
     const [signingError, setSigningError] = useState<boolean>()
     const [isSending, setIsSending] = useState(false)
+    const dispatch = useAppDispatch()
 
     const {
         ref: connectionErrorSheetRef,
@@ -193,14 +198,63 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
             if (request.type === "wallet-connect") {
                 await processRequest(request.requestEvent, certResponse)
             } else {
-                await postMessage({
+                postMessage({
                     id: request.id,
                     data: certResponse,
-                    method: RequestMethods.SIGN_CERTIFICATE,
+                    method: request.method,
                 })
             }
 
             await disconnectLedger()
+
+            if (request.method === "thor_signCertificate") {
+                createSessionIfNotExists(request)
+                dispatch(
+                    addSignCertificateActivity(
+                        request.appName,
+                        certificate.domain,
+                        certificate.payload.content,
+                        certificate.purpose,
+                    ),
+                )
+            } else if (request.method === "thor_connect") {
+                dispatch(
+                    addLoginActivity({
+                        appUrl: request.appUrl,
+                        ...({ kind: request.kind, value: request.value } as LoginActivityValue),
+                    }),
+                )
+                if (request.external) {
+                    dispatch(
+                        addSession({
+                            kind: "external",
+                            url: request.appUrl,
+                            address: certificate.signer.toLowerCase() ?? "",
+                            genesisId: request.genesisId,
+                            name: request.appName,
+                        }),
+                    )
+                } else if (keepMeLoggedIn) {
+                    dispatch(
+                        addSession({
+                            kind: "permanent",
+                            url: request.appUrl,
+                            genesisId: request.genesisId,
+                            name: request.appName,
+                        }),
+                    )
+                } else {
+                    dispatch(
+                        addSession({
+                            kind: "temporary",
+                            url: request.appUrl,
+                            address: certificate.signer.toLowerCase() ?? "",
+                            genesisId: request.genesisId,
+                            name: request.appName,
+                        }),
+                    )
+                }
+            }
 
             navigateOnFinish()
         } catch (e) {
@@ -213,7 +267,23 @@ export const LedgerSignCertificate: React.FC<Props> = ({ route }) => {
         } finally {
             setIsSending(false)
         }
-    }, [disconnectLedger, request, postMessage, processRequest, LL, signature, certificate, navigateOnFinish])
+    }, [
+        signature,
+        certificate.domain,
+        certificate.timestamp,
+        certificate.signer,
+        certificate.payload.content,
+        certificate.purpose,
+        request,
+        disconnectLedger,
+        navigateOnFinish,
+        processRequest,
+        postMessage,
+        createSessionIfNotExists,
+        dispatch,
+        keepMeLoggedIn,
+        LL,
+    ])
 
     const handleOnRetry = useCallback(() => {
         // this will trigger the useEffect to sign the transaction again
