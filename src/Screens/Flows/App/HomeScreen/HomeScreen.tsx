@@ -269,6 +269,7 @@ export const HomeScreen = () => {
                         setSelectedAccount={setSelectedAccount}
                         selectedAccount={selectedAccount}
                         ref={selectAccountBottomSheetRef}
+                        goToWalletEnabled
                     />
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />

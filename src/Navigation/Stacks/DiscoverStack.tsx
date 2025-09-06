@@ -1,8 +1,16 @@
 import { createStackNavigator } from "@react-navigation/stack"
-import React from "react"
+import { default as React } from "react"
+import { Device } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
-import { DiscoverScreen, FavouritesScreen, InAppBrowser, TabsManagerScreen } from "~Screens"
+import {
+    DiscoverScreen,
+    FavouritesScreen,
+    InAppBrowser,
+    TabsManagerScreen,
+    WalletDetailScreen,
+    WalletManagementScreen,
+} from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
@@ -18,6 +26,8 @@ export type RootStackParamListBrowser = {
     }
     [Routes.DISCOVER_TABS_MANAGER]: undefined
     [Routes.ACTIVITY_STAKING]: undefined
+    [Routes.WALLET_MANAGEMENT]: undefined
+    [Routes.WALLET_DETAILS]: { device: Device }
 }
 
 const { Navigator, Group, Screen } = createStackNavigator<RootStackParamListBrowser>()
@@ -63,6 +73,12 @@ export const DiscoverStack = () => {
                     gestureDirection: "vertical",
                 }}
             />
+            <Screen
+                name={Routes.WALLET_MANAGEMENT}
+                component={WalletManagementScreen}
+                options={{ headerShown: false }}
+            />
+            <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }

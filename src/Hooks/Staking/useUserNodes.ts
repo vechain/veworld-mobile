@@ -39,7 +39,7 @@ export const getUserNodes = async (
     }
 }
 
-export const useUserNodes = (address?: string) => {
+export const useUserNodes = (address?: string, _enabled: boolean = true) => {
     const thor = useThorClient()
     const network = useAppSelector(selectSelectedNetwork)
 
@@ -51,7 +51,7 @@ export const useUserNodes = (address?: string) => {
         return getUserNodesQueryKey(network.type, address)
     }, [address, network.type])
 
-    const enabled = !!thor && !!address && !!nodeManagementAddress
+    const enabled = !!thor && !!address && !!nodeManagementAddress && _enabled
 
     const { data, error, isError, isFetching } = useQuery({
         queryKey,
