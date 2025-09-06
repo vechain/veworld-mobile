@@ -702,6 +702,7 @@
   "LEDGER_STATUS_OK": "Estado OK",
   "LIGHT_THEME": "Claro",
   "LOADING_MORE": "Cargando más",
+  "LOADING_PAGE_CONTENT": "Cargando contenido de la página",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "¿Estás seguro de que deseas añadir el token seleccionado?",
   "MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE": "Añadir token personalizado",
   "MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE": "Confirmar token personalizado",

@@ -9,16 +9,18 @@ export const Spinner = ({
     style,
     color,
     duration = 1000,
+    size = 16,
 }: {
     style?: ViewProps["style"]
     color?: string
     duration?: number
+    size?: number
 }) => {
     const spinStyle = useSpinAnimation({ duration })
 
     return (
         <Animated.View style={[spinStyle, style]}>
-            <Stroke color={color} />
+            <Stroke color={color} size={size} />
         </Animated.View>
     )
 }
