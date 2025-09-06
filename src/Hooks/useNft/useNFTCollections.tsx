@@ -96,7 +96,7 @@ export const useNFTCollections = () => {
                     description,
                     updated: true,
                     symbol,
-                    totalSupply: Number(totalSupply),
+                    totalSupply: totalSupply !== undefined ? Number(totalSupply) : undefined,
                 }
                 dispatch(
                     updateCollection({
