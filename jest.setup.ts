@@ -121,6 +121,19 @@ jest.mock("expo-local-authentication", () => ({
 jest.mock("expo-av", () => {})
 jest.mock("expo-background-fetch", () => {})
 
+jest.mock("expo-file-system", () => ({
+    documentDirectory: "file:///test/documents/",
+    getInfoAsync: jest.fn().mockResolvedValue({ exists: false }),
+    makeDirectoryAsync: jest.fn().mockResolvedValue(undefined),
+    deleteAsync: jest.fn().mockResolvedValue(undefined),
+    copyAsync: jest.fn().mockResolvedValue(undefined),
+}))
+
+jest.mock("react-native-view-shot", () => ({
+    captureRef: jest.fn().mockResolvedValue("file:///test/screenshot.jpg"),
+    releaseCapture: jest.fn(),
+}))
+
 jest.mock("expo-haptics", () => ({
     ImpactFeedbackStyle: {
         Light: "light",
