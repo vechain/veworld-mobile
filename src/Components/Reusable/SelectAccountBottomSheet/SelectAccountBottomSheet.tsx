@@ -89,6 +89,8 @@ const AnimatedSectionList = Animated.createAnimatedComponent(
     >,
 )
 
+const ANIMATION_CONFIG = { stiffness: 90, damping: 15 }
+
 // component to select an account
 export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
     (
@@ -170,7 +172,7 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                 onDismiss={onDismiss}
                 contentStyle={contentStyle}
                 enableContentPanningGesture={false}
-                animationConfigs={{ stiffness: 90, damping: 15 }}>
+                animationConfigs={ANIMATION_CONFIG}>
                 <BaseView flexDirection="row" alignItems="center" justifyContent="space-between">
                     <BaseView flexDirection="column" gap={8}>
                         <BaseView flexDirection="row" alignItems="center" gap={12}>
