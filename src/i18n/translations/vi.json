@@ -702,6 +702,7 @@
   "LEDGER_STATUS_OK": "Trạng thái OK",
   "LIGHT_THEME": "Sáng",
   "LOADING_MORE": "Đang tải thêm",
+  "LOADING_PAGE_CONTENT": "Đang tải nội dung trang",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "Bạn có chắc chắn muốn thêm token đã chọn?",
   "MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE": "Thêm token tùy chỉnh",
   "MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE": "Xác nhận token tùy chỉnh",

@@ -17,6 +17,7 @@ import { DAppUtils } from "~Utils/DAppUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { Spinner } from "../Spinner"
 
 type Props = {
     navigationUrl: string
@@ -144,7 +145,11 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                             flexDirection="row"
                             justifyContent="center"
                             gap={8}>
-                            {websiteFavicon}
+                            {isLoading ? (
+                                <Spinner color={COLORS.WHITE} size={20} style={styles.spinner} />
+                            ) : (
+                                websiteFavicon
+                            )}
                             <AnimatedBaseText
                                 allowFontScaling={false}
                                 typographyFont="bodySemiBold"
@@ -234,5 +239,8 @@ const styles = StyleSheet.create({
     },
     iconButton: {
         transformOrigin: "center",
+    },
+    spinner: {
+        padding: 2,
     },
 })

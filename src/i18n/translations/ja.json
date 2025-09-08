@@ -702,6 +702,7 @@
   "LEDGER_STATUS_OK": "ステータス OK",
   "LIGHT_THEME": "ライト",
   "LOADING_MORE": "もっと読み込む",
+  "LOADING_PAGE_CONTENT": "ページコンテンツを読み込んでいます",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "選択したトークンを追加してもよろしいですか？",
   "MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE": "カスタムトークンを追加",
   "MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE": "カスタムトークンの確認",

@@ -702,6 +702,7 @@
   "LEDGER_STATUS_OK": "Статус OK",
   "LIGHT_THEME": "Светлая",
   "LOADING_MORE": "Загрузка еще",
+  "LOADING_PAGE_CONTENT": "Загрузка содержимого страницы",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "Вы уверены, что хотите добавить выбранный токен?",
   "MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE": "Добавить пользовательский токен",
   "MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE": "Подтвердите пользовательский токен",

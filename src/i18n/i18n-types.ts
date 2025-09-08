@@ -452,6 +452,10 @@ type RootTranslation = {
 	 */
 	APPS_SCREEN_TITLE: string
 	/**
+	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
+	 */
+	APPS_SEARCH_PLACEHOLDER: string
+	/**
 	 * A​p​p​s
 	 */
 	APPS_TITLE: string
@@ -529,10 +533,6 @@ type RootTranslation = {
 	 * @param {string} version
 	 */
 	APP_VERSION: RequiredParams<'version'>
-	/**
-	 * S​e​a​r​c​h​ ​a​n​ ​A​p​p​ ​o​r​ ​W​e​b​s​i​t​e​.​.​.
-	 */
-	APPS_SEARCH_PLACEHOLDER: string
 	/**
 	 * A​p​r​i​l
 	 */
@@ -2887,6 +2887,10 @@ type RootTranslation = {
 	 * L​o​a​d​i​n​g​ ​m​o​r​e
 	 */
 	LOADING_MORE: string
+	/**
+	 * L​o​a​d​i​n​g​ ​p​a​g​e​ ​c​o​n​t​e​n​t
+	 */
+	LOADING_PAGE_CONTENT: string
 	/**
 	 * A​r​e​ ​y​o​u​ ​s​u​r​e​ ​y​o​u​ ​w​a​n​t​ ​t​o​ ​a​d​d​ ​t​h​e​ ​s​e​l​e​c​t​e​d​ ​t​o​k​e​n​?
 	 */
@@ -5403,6 +5407,10 @@ Try reconnect your device to the internet.
 	 */
 	APPS_SCREEN_TITLE: () => LocalizedString
 	/**
+	 * Search an App or Website...
+	 */
+	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
+	/**
 	 * Apps
 	 */
 	APPS_TITLE: () => LocalizedString
@@ -5478,10 +5486,6 @@ Try reconnect your device to the internet.
 	 * version {version}
 	 */
 	APP_VERSION: (arg: { version: string }) => LocalizedString
-	/**
-	 * Search an App or Website...
-	 */
-	APPS_SEARCH_PLACEHOLDER: () => LocalizedString
 	/**
 	 * April
 	 */
@@ -7820,6 +7824,10 @@ Thanks for your patience!
 	 * Loading more
 	 */
 	LOADING_MORE: () => LocalizedString
+	/**
+	 * Loading page content
+	 */
+	LOADING_PAGE_CONTENT: () => LocalizedString
 	/**
 	 * Are you sure you want to add the selected token?
 	 */

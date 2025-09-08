@@ -702,6 +702,7 @@
   "LEDGER_STATUS_OK": "स्टेटस ठीक है",
   "LIGHT_THEME": "प्रकाश",
   "LOADING_MORE": "अधिक लोड हो रहा है",
+  "LOADING_PAGE_CONTENT": "पृष्ठ सामग्री लोड हो रही है",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "क्या आप सुनिश्चित हैं कि आप चयनित टोकन जोड़ना चाहते हैं?",
   "MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE": "कस्टम टोकन जोड़ें",
   "MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE": "कस्टम टोकन की पुष्टि करें",

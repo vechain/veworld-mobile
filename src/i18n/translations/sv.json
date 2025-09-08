@@ -702,6 +702,7 @@
   "LEDGER_STATUS_OK": "Status OK",
   "LIGHT_THEME": "Ljust",
   "LOADING_MORE": "Läser in mer",
+  "LOADING_PAGE_CONTENT": "Laddar sida innehåll",
   "MANAGE_CUSTOM_TOKENS_ADD_DESCRIPTION": "Är du säker på att du vill lägga till den valda token?",
   "MANAGE_CUSTOM_TOKENS_ADD_TOKEN_TITLE": "Lägg till anpassad token",
   "MANAGE_CUSTOM_TOKENS_CONFIRM_TOKEN_TITLE": "Bekräfta anpassad token",
