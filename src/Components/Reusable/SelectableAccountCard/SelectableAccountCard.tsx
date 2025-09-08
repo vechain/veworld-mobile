@@ -1,8 +1,8 @@
-import { memo, default as React, useEffect, useMemo } from "react"
+import { memo, default as React, useCallback, useEffect, useMemo, useRef } from "react"
 import { StyleProp, StyleSheet, TouchableOpacity, ViewProps, ViewStyle } from "react-native"
 import Animated, {
+    interpolate,
     interpolateColor,
-    LinearTransition,
     runOnJS,
     useAnimatedStyle,
     useSharedValue,
@@ -58,10 +58,17 @@ export const SelectableAccountCard = memo(
             address: account.address,
         })
         const selectedAnimationValue = useSharedValue(Number(selected ?? false))
+        const userClicked = useRef(false)
 
         useEffect(() => {
-            selectedAnimationValue.value = withTiming(Number(selected ?? false))
-        }, [selected, selectedAnimationValue])
+            selectedAnimationValue.value = withTiming(Number(selected ?? false), {}, finished => {
+                "worklet"
+                if (finished && userClicked.current && onAnimationFinished) {
+                    userClicked.current = false
+                    runOnJS(onAnimationFinished)()
+                }
+            })
+        }, [onAnimationFinished, selected, selectedAnimationValue])
 
         const balance = useMemo(() => {
             if (!isBalanceVisible) {
@@ -75,24 +82,22 @@ export const SelectableAccountCard = memo(
                 .toTokenFormat_string(2)
         }, [balanceToken, isBalanceVisible, renderedFiatBalance, vetBalance, vthoBalance])
 
-        const layoutTransition = useMemo(() => {
-            return LinearTransition.duration(300).withCallback(finished => {
-                "worklet"
-                if (finished && onAnimationFinished) runOnJS(onAnimationFinished)()
-            })
-        }, [onAnimationFinished])
-
         const rootAnimatedStyles = useAnimatedStyle(() => {
             const selectedColor = theme.isDark ? COLORS.LIME_GREEN : COLORS.PRIMARY_800
             const borderColor = interpolateColor(selectedAnimationValue.value, [0, 1], ["transparent", selectedColor])
+            const paddingVertical = interpolate(selectedAnimationValue.value, [0, 1], [12, 20])
             if (selected)
                 return {
                     borderWidth: withTiming(2),
                     borderColor,
+                    paddingHorizontal: withTiming(12),
+                    paddingVertical,
                 }
             return {
                 borderWidth: withTiming(1),
                 borderColor,
+                paddingHorizontal: withTiming(12),
+                paddingVertical,
             }
         }, [selected, theme.isDark])
 
@@ -103,31 +108,40 @@ export const SelectableAccountCard = memo(
             const unselectedColor = theme.isDark ? COLORS.GREY_100 : COLORS.PRIMARY_800
 
             const color = interpolateColor(selectedAnimationValue.value, [0, 1], [unselectedColor, theme.colors.title])
+            const fontSize = interpolate(
+                selectedAnimationValue.value,
+                [0, 1],
+                [baseTypography.fontSize, selectedTypography.fontSize],
+            )
 
             if (selected)
                 return {
                     fontFamily: selectedTypography.fontFamily,
-                    fontSize: withTiming(selectedTypography.fontSize),
+                    fontSize,
                     fontWeight: selectedTypography.fontWeight,
                     color: color,
                 }
 
             return {
                 fontFamily: baseTypography.fontFamily,
-                fontSize: withTiming(baseTypography.fontSize),
+                fontSize,
                 fontWeight: baseTypography.fontWeight,
                 color: color,
             }
         }, [selected, theme.colors.title, theme.isDark])
 
+        const _onPress = useCallback(() => {
+            userClicked.current = true
+            onPress?.(account)
+        }, [account, onPress])
+
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
                 <AnimatedTouchableOpacity
                     testID={testID}
-                    onPress={() => onPress?.(account)}
+                    onPress={_onPress}
                     style={[styles.container, rootAnimatedStyles, containerStyle]}
-                    accessibilityValue={{ text: selected ? "selected" : "not selected" }}
-                    layout={layoutTransition}>
+                    accessibilityValue={{ text: selected ? "selected" : "not selected" }}>
                     <BaseView flexDirection="row" gap={12} alignItems="center" flex={1}>
                         <AccountIcon address={account.address} size={40} />
                         <BaseView flexDirection="column" gap={4}>
@@ -188,7 +202,6 @@ const baseStyles = (theme: ColorThemeType) =>
             gap: 12,
             //New
             justifyContent: "space-between",
-            padding: 16,
             backgroundColor: theme.colors.card,
         },
         selectedContainer: {
