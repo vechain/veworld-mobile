@@ -1056,7 +1056,7 @@
   "SIGN_TRANSACTION_REQUEST_TITLE": "Транзакция приложения",
   "SIGN_TYPED_DATA_REQUEST_CTA": "Подписать",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Подписать типизированные данные",
-  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Делегирование умного кошелька пока не поддерживается",
+  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Делегированный смарт-кошелек пока не поддерживается",
   "STARGATE_CLAIMABLE": "Доступно для получения",
   "STARGATE_DELEGATEE_LABEL": "Управление",
   "STARGATE_LOCKED": "Заблокировано",

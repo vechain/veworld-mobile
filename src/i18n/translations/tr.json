@@ -1056,7 +1056,7 @@
   "SIGN_TRANSACTION_REQUEST_TITLE": "Uygulama işlemi",
   "SIGN_TYPED_DATA_REQUEST_CTA": "İmzala",
   "SIGN_TYPED_DATA_REQUEST_TITLE": "Türlü veriyi imzala",
-  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Delegelendirilmiş akıllı cüzdan henüz desteklenmiyor",
+  "SMART_WALLET_DELEGATION_NOT_SUPPORTED": "Delege edilmiş akıllı cüzdan henüz desteklenmiyor",
   "STARGATE_CLAIMABLE": "Talep edilebilir",
   "STARGATE_DELEGATEE_LABEL": "Yönetme",
   "STARGATE_LOCKED": "Kilitli",
