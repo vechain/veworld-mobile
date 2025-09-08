@@ -1,8 +1,9 @@
 import { act, renderHook } from "@testing-library/react-hooks"
+import { TestHelpers, TestWrapper } from "~Test"
+
 import { useDelegation } from "~Hooks"
 import { DelegationType } from "~Model/Delegation"
 import { getDefaultDelegationAccount, getDefaultDelegationOption, getDefaultDelegationUrl } from "~Storage/Redux"
-import { TestHelpers, TestWrapper } from "~Test"
 
 const { account1D1, device1 } = TestHelpers.data
 const setGasPayer = jest.fn()
@@ -16,7 +17,7 @@ jest.mock("~Storage/Redux/Selectors", () => ({
 
 describe("useDelegation", () => {
     beforeEach(() => {
-        jest.resetAllMocks()
+        jest.clearAllMocks()
         // @ts-ignore
         ;(getDefaultDelegationOption as jest.Mock).mockReturnValue(DelegationType.NONE)
         // @ts-ignore

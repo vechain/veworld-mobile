@@ -50,17 +50,18 @@ jest.mock("@vechain/sdk-network", () => {
 })
 
 import { act, renderHook } from "@testing-library/react-hooks"
-import { useBiometrics, useTransactionScreen, useWalletSecurity } from "~Hooks"
 import { TestHelpers, TestWrapper } from "~Test"
+import { waitFor } from "@testing-library/react-native"
+import { Transaction } from "@vechain/sdk-core"
+
+import { useBiometrics, useTransactionScreen, useWalletSecurity } from "~Hooks"
 import { Routes } from "~Navigation"
 import { AccountWithDevice, BaseDevice, SecurityLevelType, TransactionRequest } from "~Model"
 import crypto from "react-native-quick-crypto"
 import axios, { AxiosError } from "axios"
-import { waitFor } from "@testing-library/react-native"
 import { selectDevice, selectSelectedAccount, selectVthoTokenWithBalanceByAccount } from "~Storage/Redux"
 import { initialState, WalletEncryptionKeyHelper } from "~Components"
 import { BigNutils } from "~Utils"
-import { Transaction } from "@vechain/sdk-core"
 import { useSendTransaction } from "~Hooks/useSendTransaction"
 import { i18nObject } from "~i18n"
 import { showErrorToast } from "~Components/Base/BaseToast"
@@ -119,6 +120,15 @@ jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
         encryptWallet: jest.fn(),
         init: jest.fn(),
     },
+}))
+
+jest.mock("~Components/Providers/NotificationsProvider", () => ({
+    NotificationsProvider: ({ children }: { children: React.ReactNode }) => children,
+    useNotifications: () => ({
+        // Add any methods/properties that NotificationsProvider exposes
+        showNotification: jest.fn(),
+        hideNotification: jest.fn(),
+    }),
 }))
 
 jest.mock("@react-navigation/native", () => ({
