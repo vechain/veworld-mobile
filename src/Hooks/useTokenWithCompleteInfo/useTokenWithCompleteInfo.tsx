@@ -9,8 +9,9 @@ import {
 } from "~Api/Coingecko"
 import { B3TR, VOT3 } from "~Constants"
 import { useBalances } from "~Hooks/useBalances"
+import { useTokenBalance } from "~Hooks/useTokenBalance"
 import { Balance, FungibleToken } from "~Model"
-import { selectBalanceForToken, selectBalanceForTokenByAccount, selectCurrency, useAppSelector } from "~Storage/Redux"
+import { selectCurrency, useAppSelector } from "~Storage/Redux"
 
 export type TokenWithCompleteInfo = FungibleToken & {
     fiatBalance: string
@@ -30,11 +31,7 @@ export type TokenWithCompleteInfo = FungibleToken & {
  * @returns  token with complete info (fiatBalance, tokenUnitBalance, exchangeRate, exchangeRateCurrency, exchangeRateLoading, tokenInfo, tokenInfoLoading)
  */
 export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: string): TokenWithCompleteInfo => {
-    const balance = useAppSelector(state =>
-        accountAddress
-            ? selectBalanceForTokenByAccount(state, token.address, accountAddress)
-            : selectBalanceForToken(state, token.address),
-    )
+    const { data: balance } = useTokenBalance({ tokenAddress: token.address, address: accountAddress })
 
     const parsedSymbol = useMemo(() => {
         if (token.symbol === VOT3.symbol) return B3TR.symbol

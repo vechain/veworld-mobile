@@ -1,12 +1,16 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { memo, useCallback, useRef, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
+import React, { memo, useCallback, useMemo, useRef, useState } from "react"
 import { StyleSheet, ViewProps } from "react-native"
 import { NestableDraggableFlatList, RenderItem } from "react-native-draggable-flatlist"
 import Animated, { AnimateProps } from "react-native-reanimated"
 import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 import { BaseView, SwipeableRow } from "~Components"
-import { ColorThemeType, VeDelegate, VET, VTHO } from "~Constants"
+import { ColorThemeType, VeDelegate, VET, VOT3, VTHO } from "~Constants"
 import { useBottomSheetModal, useThemedStyles, useTokenWithCompleteInfo } from "~Hooks"
+import { useOfficialTokens } from "~Hooks/useOfficialTokens"
+import { useMultipleTokensBalance } from "~Hooks/useTokenBalance/useMultipleTokensBalance"
+import { getUseUserTokensConfig } from "~Hooks/useUserTokens"
 import { FungibleTokenWithBalance } from "~Model"
 import { Routes } from "~Navigation"
 import { RemoveCustomTokenBottomSheet } from "~Screens"
@@ -17,12 +21,8 @@ import {
     useAppDispatch,
     useAppSelector,
 } from "~Storage/Redux"
-import {
-    selectNonVechainTokensWithBalances,
-    selectSelectedAccount,
-    selectSelectedNetwork,
-} from "~Storage/Redux/Selectors"
-import { AccountUtils, BalanceUtils } from "~Utils"
+import { selectCustomTokens, selectSelectedAccount, selectSelectedNetwork } from "~Storage/Redux/Selectors"
+import { AccountUtils, AddressUtils, BalanceUtils } from "~Utils"
 import { AnimatedChartCard } from "./AnimatedChartCard"
 import { AnimatedTokenCard } from "./AnimatedTokenCard"
 
@@ -34,13 +34,55 @@ interface Props extends AnimateProps<ViewProps> {
 export const TokenList = memo(({ isEdit, isBalanceVisible, ...animatedViewProps }: Props) => {
     const dispatch = useAppDispatch()
     const network = useAppSelector(selectSelectedNetwork)
-    const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+    const selectedAccount = useAppSelector(selectSelectedAccount)
     const { B3TR } = useAppSelector(state => selectNetworkVBDTokens(state))
+    const { data: userTokens } = useQuery({
+        ...getUseUserTokensConfig({ address: selectedAccount.address, network }),
+        select(data) {
+            return data.filter(d => ![B3TR, VET, VTHO, VOT3].find(u => AddressUtils.compareAddresses(u.address, d)))
+        },
+    })
+    // const tokenBalances = useAppSelector(selectNonVechainTokensWithBalances)
+    const { data: officialTokens } = useOfficialTokens()
+    const customTokens = useAppSelector(selectCustomTokens)
+
+    const userValidTokens = useMemo(() => {
+        if (!userTokens) return []
+        if (!officialTokens) return []
+        return userTokens
+            .map(ut => {
+                const foundOfficial = officialTokens.find(ot => AddressUtils.compareAddresses(ot.address, ut))
+                if (foundOfficial) return foundOfficial
+                const foundCustom = customTokens.find(ct => AddressUtils.compareAddresses(ct.address, ut))
+                if (foundCustom) return foundCustom
+                return null
+            })
+            .filter((u): u is NonNullable<typeof u> => Boolean(u))
+    }, [customTokens, officialTokens, userTokens])
+    const userValidTokenAddresses = useMemo(() => userValidTokens.map(u => u.address), [userValidTokens])
+    const _tokenBalances = useMultipleTokensBalance(userValidTokenAddresses, selectedAccount.address)
+
+    const tokenBalances = useMemo(
+        () =>
+            userValidTokens.map(
+                tk =>
+                    ({
+                        ...tk,
+                        balance: _tokenBalances?.find(b =>
+                            AddressUtils.compareAddresses(b.tokenAddress, tk.address),
+                        ) ?? {
+                            balance: "0",
+                            isHidden: false,
+                            timeUpdated: new Date().toISOString(),
+                            tokenAddress: tk.address,
+                        },
+                    } satisfies FungibleTokenWithBalance),
+            ),
+        [_tokenBalances, userValidTokens],
+    )
 
     // Keep track of the swipeable items refs
     const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
-
-    const selectedAccount = useAppSelector(selectSelectedAccount)
 
     const [selectedToken, setSelectedToken] = useState<FungibleTokenWithBalance>()
 
