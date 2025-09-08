@@ -1,8 +1,9 @@
 import { useCallback, useState } from "react"
-import { IMPORT_TYPE, NewLedgerDevice } from "~Model"
+import { DEVICE_TYPE, IMPORT_TYPE, NewLedgerDevice } from "~Model"
 import { useDeviceUtils } from "../useDeviceUtils"
 import {
     addDeviceAndAccounts,
+    addSmartWalletDeviceAndAccount,
     addLedgerDeviceAndAccounts,
     setMnemonic,
     setNewLedgerDevice,
@@ -150,11 +151,65 @@ export const useCreateWallet = () => {
         },
         [dispatch, selectedAccount, track, userHasOnboarded],
     )
+
+    /**
+     * Insert new Smart Wallet in store
+     * @param address the address for the owner private key of the smart account contract
+     * @param onError callback called if error
+     * @returns void
+     */
+    const createSmartWallet = useCallback(
+        async ({ address, onError }: { address: string; onError?: (error: unknown) => void }) => {
+            try {
+                //Create the new Smart Wallet device and persist it
+                const smartWalletDevice = {
+                    rootAddress: address,
+                    type: DEVICE_TYPE.SMART_WALLET as const,
+                    alias: "Smart Wallet",
+                    position: 0, // this will be updated when the device is added to the redux store
+                }
+
+                // add the device and account to redux
+                const newAccount = dispatch(addSmartWalletDeviceAndAccount(smartWalletDevice))
+
+                // set the selected account
+                if (!selectedAccount) dispatch(setSelectedAccount({ address: newAccount.address }))
+
+                setIsComplete(true)
+                track(AnalyticsEvent.WALLET_ADD_SMART_WALLET_SUCCESS)
+                track(AnalyticsEvent.WALLET_GENERATION, {
+                    context: userHasOnboarded ? "management" : "onboarding",
+                    type: "import",
+                    signature: "smart-wallet",
+                })
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_SUCCESS, {
+                        type: "import",
+                        signature: "smart-wallet",
+                    })
+                }
+            } catch (e) {
+                warn(ERROR_EVENTS.WALLET_CREATION, e)
+                track(AnalyticsEvent.WALLET_ADD_SMART_WALLET_ERROR)
+                if (!userHasOnboarded) {
+                    track(AnalyticsEvent.ONBOARDING_FAILED, {
+                        type: "import",
+                        signature: "smart-wallet",
+                    })
+                }
+                onError?.(e)
+                throw e
+            }
+        },
+        [dispatch, track, userHasOnboarded, selectedAccount],
+    )
+
     //* [END] - Create Wallet
 
     return {
         createLocalWallet,
         createLedgerWallet,
+        createSmartWallet,
         accessControl: biometrics?.accessControl,
         isComplete,
     }

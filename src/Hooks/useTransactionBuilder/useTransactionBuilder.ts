@@ -1,9 +1,11 @@
 import { useCallback } from "react"
 import { HexUtils } from "~Utils"
-import { EstimateGasResult } from "~Model"
+import { DEVICE_TYPE, EstimateGasResult } from "~Model"
 import { useThor } from "~Components"
 import { GasPriceCoefficient } from "~Constants"
 import { Transaction, TransactionClause } from "@vechain/sdk-core"
+import { GenericDelegationDetails } from "../../VechainWalletKit"
+import { useSmartWallet } from "../useSmartWallet"
 
 type Props = {
     providedGas?: number
@@ -14,6 +16,8 @@ type Props = {
     gasPriceCoef?: number
     maxPriorityFeePerGas?: string
     maxFeePerGas?: string
+    deviceType: DEVICE_TYPE
+    genericDelgationDetails?: GenericDelegationDetails
 }
 
 export const useTransactionBuilder = ({
@@ -24,13 +28,29 @@ export const useTransactionBuilder = ({
     gasPriceCoef = GasPriceCoefficient.REGULAR,
     maxPriorityFeePerGas,
     maxFeePerGas,
+    deviceType,
+    genericDelgationDetails,
 }: Props) => {
     const thor = useThor()
+    const { buildTransaction: buildTransactionWithSmartWallet } = useSmartWallet()
 
-    const buildTransaction = useCallback(() => {
+    const buildTransaction = useCallback(async () => {
         const nonce = HexUtils.generateRandom(8)
 
         const txGas = gas?.gas ?? 0
+
+        if (deviceType === DEVICE_TYPE.SMART_WALLET) {
+            return buildTransactionWithSmartWallet(
+                clauses,
+                {
+                    maxFeePerGas: `0x${BigInt(maxFeePerGas ?? 0).toString(16)}`,
+                    maxPriorityFeePerGas: `0x${BigInt(maxPriorityFeePerGas ?? 0).toString(16)}`,
+                    isDelegated,
+                    gasPriceCoef,
+                },
+                genericDelgationDetails,
+            )
+        }
 
         return Transaction.of({
             chainTag: parseInt(thor.genesis.id.slice(-2), 16),
@@ -66,6 +86,9 @@ export const useTransactionBuilder = ({
         maxFeePerGas,
         maxPriorityFeePerGas,
         gasPriceCoef,
+        deviceType,
+        buildTransactionWithSmartWallet,
+        genericDelgationDetails,
     ])
 
     return {
