@@ -142,8 +142,8 @@ async function isValidBrowserUrl(url: string): Promise<boolean> {
 
         if (navInput) {
             const userAgent = await DeviceInfo.getUserAgent()
-            const response = await axios.get(navInput, { headers: { "User-Agent": userAgent } })
-            return response.status === 200
+            await axios.get(navInput, { headers: { "User-Agent": userAgent } })
+            return true
         } else {
             return false
         }
