@@ -4,7 +4,7 @@ import DeviceInfo from "react-native-device-info"
 import { FeatureFlags, getFeatureFlags } from "~Api/FeatureFlags"
 import { SemanticVersionUtils } from "~Utils"
 
-const initialState: FeatureFlags = {
+export const initialState: FeatureFlags = {
     marketsProxyFeature: {
         enabled: true,
         url: "https://coin-api.veworld.vechain.org",
@@ -41,6 +41,9 @@ const initialState: FeatureFlags = {
                 ledger: false,
             },
         },
+    },
+    smartWalletFeature: {
+        enabled: false,
     },
     betterWorldFeature: {
         appsScreen: {

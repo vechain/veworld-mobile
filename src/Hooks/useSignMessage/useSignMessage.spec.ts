@@ -7,7 +7,8 @@ import TestData from "../../Test/helpers"
 import { LedgerDevice, LocalDevice, WalletAccount } from "~Model"
 import { WalletEncryptionKeyHelper } from "~Components"
 
-const { firstLedgerAccount, ledgerDevice, account1D1, device1, wallet1, keystoreDevice } = TestData.data
+const { firstLedgerAccount, ledgerDevice, account1D1, device1, wallet1, keystoreDevice, smartWalletDevice } =
+    TestData.data
 
 jest.mock("axios")
 
@@ -37,6 +38,15 @@ jest.mock("~Components/Providers/EncryptedStorageProvider/Helpers", () => ({
         encryptWallet: jest.fn(),
         init: jest.fn(),
     },
+}))
+
+// Mock useSmartWallet to capture smart wallet message signing
+const mockSignMessageWithSmartWallet = jest.fn().mockResolvedValue(Buffer.from("aa", "hex"))
+jest.mock("~Hooks/useSmartWallet", () => ({
+    ...jest.requireActual("~Hooks/useSmartWallet"),
+    useSmartWallet: () => ({
+        signMessage: mockSignMessageWithSmartWallet,
+    }),
 }))
 
 const mockDevice = (device: LocalDevice | LedgerDevice) => {
@@ -118,5 +128,24 @@ describe("useSignMessage", () => {
         })
 
         await expect(result.current.signMessage(messageToSign)).rejects.toThrow("The device doesn't have a wallet")
+    })
+
+    it("should call smart wallet signer for SMART_WALLET device", async () => {
+        jest.clearAllMocks()
+        mockAccount(account1D1)
+        // @ts-ignore - fixture shape matches SmartWallet device type
+        mockDevice(smartWalletDevice)
+
+        const { result } = renderHook(() => useSignMessage(), { wrapper: TestWrapper })
+
+        expect(result.current).toEqual({
+            signMessage: expect.any(Function),
+        })
+
+        const signature = await result.current.signMessage(messageToSign)
+
+        expect(mockSignMessageWithSmartWallet).toHaveBeenCalledTimes(1)
+        expect(mockSignMessageWithSmartWallet).toHaveBeenCalledWith(messageToSign)
+        expect(signature).toEqual(Buffer.from("aa", "hex"))
     })
 })
