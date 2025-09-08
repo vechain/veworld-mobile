@@ -1,4 +1,4 @@
-import { memo, default as React, useCallback, useEffect, useMemo, useRef } from "react"
+import { memo, default as React, useCallback, useEffect, useMemo } from "react"
 import { StyleProp, StyleSheet, TouchableOpacity, ViewProps, ViewStyle } from "react-native"
 import Animated, {
     interpolate,
@@ -58,17 +58,19 @@ export const SelectableAccountCard = memo(
             address: account.address,
         })
         const selectedAnimationValue = useSharedValue(Number(selected ?? false))
-        const userClicked = useRef(false)
+        //`useSharedValue` instead of `useRef` due to this bug on react-native-reanimated
+        //https://github.com/software-mansion/react-native-reanimated/issues/3670
+        const userClicked = useSharedValue(false)
 
         useEffect(() => {
             selectedAnimationValue.value = withTiming(Number(selected ?? false), {}, finished => {
                 "worklet"
-                if (finished && userClicked.current && onAnimationFinished) {
-                    userClicked.current = false
+                if (finished && userClicked.value && onAnimationFinished) {
+                    userClicked.value = false
                     runOnJS(onAnimationFinished)()
                 }
             })
-        }, [onAnimationFinished, selected, selectedAnimationValue])
+        }, [onAnimationFinished, selected, selectedAnimationValue, userClicked, userClicked.value])
 
         const balance = useMemo(() => {
             if (!isBalanceVisible) {
@@ -131,9 +133,9 @@ export const SelectableAccountCard = memo(
         }, [selected, theme.colors.title, theme.isDark])
 
         const _onPress = useCallback(() => {
-            userClicked.current = true
+            userClicked.value = true
             onPress?.(account)
-        }, [account, onPress])
+        }, [account, onPress, userClicked])
 
         return (
             <BaseView w={100} flexDirection="row" style={containerStyle}>
