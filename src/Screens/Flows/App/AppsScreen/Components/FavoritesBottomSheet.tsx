@@ -144,7 +144,7 @@ export const FavoritesBottomSheet = React.forwardRef<BottomSheetModalMethods, Pr
     return (
         <BaseBottomSheet
             ref={ref}
-            enableContentPanningGesture={isEditingMode}
+            enableContentPanningGesture={!isEditingMode}
             noMargins
             snapPoints={["90%"]}
             backgroundStyle={styles.layout}
