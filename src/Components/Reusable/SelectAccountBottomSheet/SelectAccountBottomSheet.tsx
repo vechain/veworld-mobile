@@ -118,13 +118,10 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
         const handlePress = useCallback(
             (account: AccountWithDevice | WatchedAccount) => {
                 setSelectedAccount(account)
+                if (closeBottomSheet) closeBottomSheet()
             },
-            [setSelectedAccount],
+            [closeBottomSheet, setSelectedAccount],
         )
-
-        const onAnimationFinished = useCallback(() => {
-            if (closeBottomSheet) closeBottomSheet()
-        }, [closeBottomSheet])
 
         const { styles, theme } = useThemedStyles(baseStyles)
 
@@ -224,7 +221,6 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
                             selected={item.address === selectedAccount?.address}
                             balanceToken={balanceToken}
                             testID="selectAccount"
-                            onAnimationFinished={onAnimationFinished}
                         />
                     )}
                     ItemSeparatorComponent={ItemSeparatorComponent}
