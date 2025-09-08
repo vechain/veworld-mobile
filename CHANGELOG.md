@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.2 (2025-09-08)</small>
+
+* build: init ([3d5b6f9](https://github.com/vechain/veworld-mobile/commit/3d5b6f9))
+* 277 - Various UI fixes (#3237) ([e78069e](https://github.com/vechain/veworld-mobile/commit/e78069e)), closes [#3237](https://github.com/vechain/veworld-mobile/issues/3237)
+
 ## <small>2.4.1 (2025-09-04)</small>
 
 * build: init ([055b5de](https://github.com/vechain/veworld-mobile/commit/055b5de))
