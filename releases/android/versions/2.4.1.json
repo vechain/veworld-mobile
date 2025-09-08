@@ -1,8 +1,10 @@
 {
   "version": "2.4.1",
-  "major": false,
+  "major": true,
   "descriptions": {
-    "en": [],
+    "en": [
+      "Major redesign of the Apps section",
+      "Bug fixes and performance improvements"],
     "de": [],
     "es": [],
     "fr": [],
