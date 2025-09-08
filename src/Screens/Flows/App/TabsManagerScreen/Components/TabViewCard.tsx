@@ -6,7 +6,7 @@ import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated from "react-native-reanimated"
 import { BaseIcon, BaseText, BaseView } from "~Components"
 import { COLORS, ColorThemeType, SCREEN_WIDTH } from "~Constants"
-import { useThemedStyles, useTabManagement } from "~Hooks"
+import { useThemedStyles, useTabManagement, useVisitedUrls } from "~Hooks"
 import { RootStackParamListBrowser, Routes } from "~Navigation"
 import { selectCurrentTabId, setCurrentTab, Tab, useAppDispatch, useAppSelector } from "~Storage/Redux"
 
@@ -21,13 +21,15 @@ export const TabViewCard = ({ tab }: TabViewCardProps) => {
     const nav = useNavigation<NativeStackNavigationProp<RootStackParamListBrowser>>()
     const selectedTabId = useAppSelector(selectCurrentTabId)
     const { closeTab } = useTabManagement()
+    const { addVisitedUrl } = useVisitedUrls()
 
     const dispatch = useAppDispatch()
 
     const onPress = useCallback(() => {
         dispatch(setCurrentTab(tab.id))
+        addVisitedUrl(tab.href)
         nav.replace(Routes.BROWSER, { url: tab.href })
-    }, [dispatch, tab.id, tab.href, nav])
+    }, [dispatch, tab.id, tab.href, nav, addVisitedUrl])
 
     const onClose = useCallback(() => {
         closeTab(tab.id)

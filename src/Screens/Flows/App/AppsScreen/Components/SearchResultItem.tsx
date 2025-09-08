@@ -69,6 +69,7 @@ export const SearchResultItem = ({ item, swipeableItemRefs }: Props) => {
                 yMargins={0}
                 item={item}
                 itemKey={url}
+                snapPointsLeft={[50]}
                 handleTrashIconPress={handleRemoveClick}
                 swipeableItemRefs={swipeableItemRefs}
                 onPress={handleNavigate}>
@@ -134,13 +135,11 @@ const baseStyles = () =>
             alignItems: "center",
             flexDirection: "row",
             flexShrink: 1,
+            paddingRight: 10,
         },
         icon: {
             borderRadius: 8,
             overflow: "hidden",
-        },
-        touchableContainerOpen: {
-            paddingRight: 16,
         },
         dappImage: {
             width: IMAGE_SIZE,
