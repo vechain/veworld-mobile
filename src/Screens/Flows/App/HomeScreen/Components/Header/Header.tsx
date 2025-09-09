@@ -94,11 +94,11 @@ export const Header = memo(() => {
         return [
             ...networkOptions,
             {
-                title: "Add Network",
+                title: LL.NETWORK_ADD_CUSTOM_NODE(),
                 selected: false,
             },
         ] as ContextMenuAction[]
-    }, [networks, currentNetwork.id])
+    }, [LL, networks, currentNetwork.id])
 
     const onContextMenuPress = useCallback(
         (e: NativeSyntheticEvent<ContextMenuOnPressNativeEvent>) => {
