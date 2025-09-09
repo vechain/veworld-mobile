@@ -9,21 +9,18 @@ import {
 import { BackdropPressBehavior } from "@gorhom/bottom-sheet/lib/typescript/components/bottomSheetBackdrop/types"
 import { BottomSheetModalMethods } from "@gorhom/bottom-sheet/lib/typescript/types"
 import { isFinite } from "lodash"
-import { PropsWithChildren, default as React, ReactNode, useCallback, useEffect, useMemo, useState } from "react"
+import { PropsWithChildren, default as React, ReactNode, useCallback, useMemo } from "react"
 import { Platform, StyleProp, StyleSheet, ViewStyle, useWindowDimensions } from "react-native"
 import { useReducedMotion } from "react-native-reanimated"
 import { useSafeAreaInsets } from "react-native-safe-area-context"
 import { LocalizedString } from "typesafe-i18n"
 import { BaseSpacer, BaseText, BlurBackdropBottomSheet } from "~Components"
 import { COLORS, ColorThemeType, isSmallScreen } from "~Constants"
-import { useBackHandler, useThemedStyles } from "~Hooks"
-import { BackHandlerEvent } from "~Model"
+import { useThemedStyles } from "~Hooks"
+import { useBottomSheetBackHandler } from "~Hooks/useBottomSheetBackHandler"
 import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 import { typedForwardRef } from "~Utils/ReactUtils"
 import { BaseView } from "./BaseView"
-
-const OPENED_STATE = 0
-const CLOSED_STATE = -1
 
 export type BaseBottomSheetProps<TData = unknown> = Omit<
     BottomSheetModalProps,
@@ -78,10 +75,6 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<
      */
     onPressOutside?: BackdropPressBehavior
     /**
-     * Determines the behavior when the Android hardware back button is pressed. Use `BackHandlerEvent.BLOCK` to prevent the back button from closing the modal.
-     */
-    backHandlerEvent?: BackHandlerEvent
-    /**
      * If `true`, there's a bottom safe area.
      */
     bottomSafeArea?: boolean
@@ -98,6 +91,11 @@ export type BaseBottomSheetProps<TData = unknown> = Omit<
      * Enable floating behavior - detach from the bottom of the screen
      */
     floating?: boolean
+    /**
+     * Enable back to close. If set to true when clicking the back button on Android it'll close the BS.
+     * @default true
+     */
+    enableBackToClose?: boolean
 }
 
 const BaseBottomSheetContent = ({
@@ -191,7 +189,7 @@ const _BaseBottomSheet = <TData,>(
         footer,
         children,
         onPressOutside = "close",
-        backHandlerEvent = BackHandlerEvent.DONT_BLOCK,
+        enableBackToClose = true,
         bottomSafeArea = true,
         enablePanDownToClose = true,
         blurBackdrop = false,
@@ -207,9 +205,7 @@ const _BaseBottomSheet = <TData,>(
     const { height: windowHeight } = useWindowDimensions()
     const { bottom: bottomSafeAreaSize } = useSafeAreaInsets()
     const reducedMotion = useReducedMotion()
-    const { addBackHandlerListener, removeBackHandlerListener } = useBackHandler(backHandlerEvent)
-
-    const [sheetState, setSheetState] = useState<number>(-1)
+    const { handleSheetPositionChange } = useBottomSheetBackHandler(ref)
 
     const renderBlurBackdrop = useCallback((props_: BottomSheetBackdropProps) => {
         return <BlurBackdropBottomSheet animatedIndex={props_.animatedIndex} />
@@ -233,21 +229,11 @@ const _BaseBottomSheet = <TData,>(
 
     const onSheetPositionChange = useCallback(
         (index: number) => {
-            setSheetState(index)
+            if (enableBackToClose) handleSheetPositionChange(index)
             onChange?.(index)
         },
-        [onChange],
+        [enableBackToClose, handleSheetPositionChange, onChange],
     )
-
-    useEffect(() => {
-        if (sheetState === OPENED_STATE) {
-            addBackHandlerListener()
-        }
-
-        if (sheetState === CLOSED_STATE) {
-            removeBackHandlerListener()
-        }
-    }, [addBackHandlerListener, removeBackHandlerListener, sheetState])
 
     /**
      * `snapPoints` should be an array of strings, each representing a percentage.
