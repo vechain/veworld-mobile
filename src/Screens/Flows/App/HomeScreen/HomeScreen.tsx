@@ -123,13 +123,26 @@ export const HomeScreen = () => {
         })
     }, [queryClient, selectedAccount.address, selectedNetwork.type])
 
+    const invalidateBalanceQueries = useCallback(async () => {
+        await queryClient.invalidateQueries({
+            predicate(query) {
+                const queryKey = query.queryKey as string[]
+                if (!["TOKENS"].includes(queryKey[0])) return false
+                if (!["SINGLE", "MULTIPLE"].includes(queryKey[1])) return false
+                if (!AddressUtils.compareAddresses(queryKey[2], selectedAccount.address)) return false
+                if (queryKey[3] !== selectedNetwork.genesis.id) return false
+                return true
+            },
+        })
+    }, [queryClient, selectedAccount.address, selectedNetwork.genesis.id])
+
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await Promise.all([invalidateStargateQueries()])
+        await Promise.all([invalidateStargateQueries(), invalidateBalanceQueries()])
 
         setRefreshing(false)
-    }, [invalidateStargateQueries])
+    }, [invalidateBalanceQueries, invalidateStargateQueries])
 
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),

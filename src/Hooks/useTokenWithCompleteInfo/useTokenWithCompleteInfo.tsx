@@ -31,7 +31,7 @@ export type TokenWithCompleteInfo = FungibleToken & {
  * @returns  token with complete info (fiatBalance, tokenUnitBalance, exchangeRate, exchangeRateCurrency, exchangeRateLoading, tokenInfo, tokenInfoLoading)
  */
 export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: string): TokenWithCompleteInfo => {
-    const { data: balance, isLoading } = useTokenBalance({ tokenAddress: token.address, address: accountAddress })
+    const { data: balance, isFetching } = useTokenBalance({ tokenAddress: token.address, address: accountAddress })
 
     const parsedSymbol = useMemo(() => {
         if (token.symbol === VOT3.symbol) return B3TR.symbol
@@ -58,7 +58,7 @@ export const useTokenWithCompleteInfo = (token: FungibleToken, accountAddress?: 
         days: 1,
     })
 
-    const tokenInfoLoading = useMemo(() => _tokenInfoLoading || isLoading, [_tokenInfoLoading, isLoading])
+    const tokenInfoLoading = useMemo(() => _tokenInfoLoading || isFetching, [_tokenInfoLoading, isFetching])
 
     return {
         ...token,

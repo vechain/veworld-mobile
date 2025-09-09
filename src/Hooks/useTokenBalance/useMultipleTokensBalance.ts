@@ -14,7 +14,7 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress: st
     const qc = useQueryClient()
 
     const { data, dataUpdatedAt } = useQuery({
-        queryKey: ["TOKENS", "MULTIPLE", accountAddress, sortedAddresses],
+        queryKey: ["TOKENS", "MULTIPLE", accountAddress, network.genesis.id, sortedAddresses],
         queryFn: () => BalanceUtils.getBalancesFromBlockchain(sortedAddresses, accountAddress, network, thor),
         staleTime: 5 * 60 * 1000,
         gcTime: 5 * 60 * 1000,

@@ -24,7 +24,7 @@ export const useTokenBalanceConfig = ({
     thor: Connex.Thor
 }) =>
     queryOptions({
-        queryKey: ["TOKEN_BALANCE", address, network.genesis.id, tokenAddress],
+        queryKey: ["TOKENS", "SINGLE", address, network.genesis.id, tokenAddress],
         queryFn: () =>
             BalanceUtils.getBalancesFromBlockchain([tokenAddress], address, network, thor).then(res => res[0]),
         staleTime: 5 * 60 * 1000,
