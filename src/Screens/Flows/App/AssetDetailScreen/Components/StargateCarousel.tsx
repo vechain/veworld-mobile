@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { useCallback, useMemo, useState } from "react"
+import React, { useCallback, useEffect, useMemo, useState } from "react"
 import { StyleSheet } from "react-native"
 import { BaseButton, BaseCarousel, BaseChip, BaseSpacer, BaseText, BaseView, CarouselSlideItem } from "~Components"
 import { StargateLockedValue } from "~Components/Reusable/Staking"
@@ -39,10 +39,16 @@ export const StargateCarousel = () => {
     const hasOwnedNodes = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
     const hasManagedNodes = stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
 
-    // Set initial filter based on what user has - prefer owned, fallback to managing
-    const [filter, setFilter] = useState<StakingFilter>(() =>
-        hasOwnedNodes ? StakingFilter.OWN : StakingFilter.MANAGING,
-    )
+    // Initialize filter state
+    const [filter, setFilter] = useState<StakingFilter>(StakingFilter.OWN)
+
+    // Update filter when data loads - prefer owned, fallback to managing
+    useEffect(() => {
+        if (!isLoadingNodes && stargateNodes.length > 0) {
+            const preferredFilter = hasOwnedNodes ? StakingFilter.OWN : StakingFilter.MANAGING
+            setFilter(preferredFilter)
+        }
+    }, [hasOwnedNodes, isLoadingNodes, stargateNodes.length])
 
     const filteredNodes = useMemo(() => {
         return filter === StakingFilter.OWN
