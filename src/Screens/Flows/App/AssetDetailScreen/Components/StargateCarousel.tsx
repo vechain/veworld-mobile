@@ -29,13 +29,20 @@ export const StargateCarousel = () => {
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const address = useAppSelector(selectSelectedAccountAddress)
-    const [filter, setFilter] = useState<StakingFilter>(StakingFilter.OWN)
 
     const { stargateNodes, isLoading: isLoadingNodes } = useUserNodes(address)
     const { ownedStargateNfts, isLoading: isLoadingNfts } = useUserStargateNfts(stargateNodes, isLoadingNodes)
     const nav = useNavigation()
 
     const { navigateWithTab } = useBrowserTab()
+
+    const hasOwnedNodes = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
+    const hasManagedNodes = stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
+
+    // Set initial filter based on what user has - prefer owned, fallback to managing
+    const [filter, setFilter] = useState<StakingFilter>(() =>
+        hasOwnedNodes ? StakingFilter.OWN : StakingFilter.MANAGING,
+    )
 
     const filteredNodes = useMemo(() => {
         return filter === StakingFilter.OWN
@@ -93,9 +100,6 @@ export const StargateCarousel = () => {
         [LL],
     )
 
-    const hasOwnedNodes = stargateNodes.some(node => AddressUtils.compareAddresses(node.xNodeOwner, address))
-    const hasManagedNodes = stargateNodes.some(node => !AddressUtils.compareAddresses(node.xNodeOwner, address))
-
     if (!isLoadingNfts && !isLoadingNodes && stargateNodes.length === 0)
         return <BannersCarousel location="token_screen" />
 
@@ -121,7 +125,7 @@ export const StargateCarousel = () => {
                     isLoading={isLoadingNodes || isLoadingNfts}
                     nfts={filteredNfts}
                     rootStyle={styles.section}
-                    isNodeOwner={filter === StakingFilter.OWN}
+                    isNodeOwner={filter === StakingFilter.OWN && hasOwnedNodes}
                 />
                 <BaseSpacer bg={theme.colors.cardDivider} height={1} />
                 <BaseCarousel
