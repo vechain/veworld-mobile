@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native"
-import React, { memo, useCallback } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import { useBlockchainNetwork, useCameraBottomSheet, useCopyClipboard, useTheme, useVisitedUrls } from "~Hooks"
 import { BaseIcon, BaseSpacer, BaseText, BaseView, useWalletConnect, HeaderStyleV2 } from "~Components"
 import { useI18nContext } from "~i18n"
@@ -10,6 +10,16 @@ import { SelectedNetworkViewer } from "~Components/Reusable/SelectedNetworkViewe
 import { AddressUtils, debug, URIUtils, WalletConnectUtils } from "~Utils"
 import { NativeStackNavigationProp } from "@react-navigation/native-stack"
 import { VeWorldLogoSVG } from "~Assets"
+import {
+    changeSelectedNetwork,
+    clearNFTCache,
+    selectNetworks,
+    selectSelectedNetwork,
+    useAppDispatch,
+    useAppSelector,
+} from "~Storage/Redux"
+import ContextMenu, { ContextMenuAction, ContextMenuOnPressNativeEvent } from "react-native-context-menu-view"
+import { NativeSyntheticEvent } from "react-native"
 
 type Navigation = NativeStackNavigationProp<TabStackParamList, "HomeStack"> &
     NativeStackNavigationProp<RootStackParamListHome, Routes.HOME>
@@ -20,8 +30,10 @@ export const Header = memo(() => {
     const { LL } = useI18nContext()
     const { addVisitedUrl } = useVisitedUrls()
     const { isMainnet } = useBlockchainNetwork()
-
     const { onPair } = useWalletConnect()
+    const dispatch = useAppDispatch()
+    const networks = useAppSelector(selectNetworks)
+    const currentNetwork = useAppSelector(selectSelectedNetwork)
 
     const { onCopyToClipboard } = useCopyClipboard()
 
@@ -73,6 +85,35 @@ export const Header = memo(() => {
         nav.navigate(Routes.SETTINGS_NETWORK)
     }, [nav])
 
+    const renderNetworkOptions: ContextMenuAction[] = useMemo(() => {
+        const networkOptions = networks.map(net => ({
+            title: net.name,
+            subtitle: net.currentUrl,
+            selected: net.id === currentNetwork.id,
+        }))
+        return [
+            ...networkOptions,
+            {
+                title: "Add Network",
+                selected: false,
+            },
+        ] as ContextMenuAction[]
+    }, [networks, currentNetwork.id])
+
+    const onContextMenuPress = useCallback(
+        (e: NativeSyntheticEvent<ContextMenuOnPressNativeEvent>) => {
+            HapticsService.triggerImpact({ level: "Light" })
+            if (e.nativeEvent.index === networks.length) {
+                goToChooseNetwork()
+                return
+            }
+
+            dispatch(clearNFTCache())
+            dispatch(changeSelectedNetwork(networks[e.nativeEvent.index]))
+        },
+        [dispatch, networks, goToChooseNetwork],
+    )
+
     return (
         <BaseView w={100} style={HeaderStyleV2}>
             <BaseView flexDirection="row" alignItems="center" alignSelf="center">
@@ -103,17 +144,22 @@ export const Header = memo(() => {
                     testID="HomeScreen_WalletManagementButton"
                 />
                 <BaseSpacer width={8} />
-                <SelectedNetworkViewer />
-                {isMainnet && (
-                    <BaseIcon
-                        p={4}
-                        name={"icon-globe"}
-                        size={24}
-                        color={theme.colors.text}
-                        action={goToChooseNetwork}
-                        haptics="Light"
-                    />
-                )}
+                <ContextMenu
+                    previewBackgroundColor="transparent"
+                    actions={renderNetworkOptions}
+                    onPress={onContextMenuPress}>
+                    <SelectedNetworkViewer />
+                    {isMainnet && (
+                        <BaseIcon
+                            p={4}
+                            name={"icon-globe"}
+                            size={24}
+                            color={theme.colors.text}
+                            action={goToChooseNetwork}
+                            haptics="Light"
+                        />
+                    )}
+                </ContextMenu>
             </BaseView>
 
             {RenderCameraModal}

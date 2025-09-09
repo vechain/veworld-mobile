@@ -38,6 +38,7 @@ export const AppsStack = () => {
                         presentation: "modal",
                         transitionSpec: TRANSITION_SPECS,
                         gestureDirection: "vertical",
+                        gestureEnabled: true,
                     }}
                 />
             </Group>
@@ -51,6 +52,7 @@ export const AppsStack = () => {
                     presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
                     gestureDirection: "vertical",
+                    gestureEnabled: true,
                 }}
             />
             <Screen
@@ -62,6 +64,7 @@ export const AppsStack = () => {
                     presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
                     gestureDirection: "vertical",
+                    gestureEnabled: true,
                 }}
             />
 

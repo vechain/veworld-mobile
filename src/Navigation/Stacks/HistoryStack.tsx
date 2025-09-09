@@ -75,6 +75,7 @@ export const HistoryStack = () => {
                     presentation: "modal",
                     transitionSpec: TRANSITION_SPECS,
                     gestureDirection: "vertical",
+                    gestureEnabled: true,
                 }}
             />
             <Screen
