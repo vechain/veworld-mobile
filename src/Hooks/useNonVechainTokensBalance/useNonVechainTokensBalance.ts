@@ -14,7 +14,13 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
-export const useNonVechainTokensBalance = (accountAddress?: string) => {
+export const useNonVechainTokensBalance = ({
+    accountAddress,
+    enabled = true,
+}: {
+    accountAddress?: string
+    enabled?: boolean
+} = {}) => {
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const network = useAppSelector(selectSelectedNetwork)
     const parsedAddress = useMemo(
@@ -27,6 +33,7 @@ export const useNonVechainTokensBalance = (accountAddress?: string) => {
 
     const { data: userTokens, isLoading: isLoadingUserTokens } = useQuery({
         ...getUseUserTokensConfig({ address: parsedAddress, network }),
+        enabled,
         select(data) {
             return data.filter(d => ![B3TR, VET, VTHO, VOT3].find(u => AddressUtils.compareAddresses(u.address, d)))
         },

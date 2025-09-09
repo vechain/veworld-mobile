@@ -5,8 +5,14 @@ import { useNonVechainTokensBalance } from "~Hooks/useNonVechainTokensBalance"
 import { selectCurrency, useAppSelector } from "~Storage/Redux"
 import { BalanceUtils } from "~Utils"
 
-export const useNonVechainTokenFiat = (accountAddress?: string) => {
-    const { data: visibleTokens } = useNonVechainTokensBalance(accountAddress)
+export const useNonVechainTokenFiat = ({
+    accountAddress,
+    enabled = true,
+}: {
+    accountAddress?: string
+    enabled?: boolean
+} = {}) => {
+    const { data: visibleTokens } = useNonVechainTokensBalance({ accountAddress, enabled })
     const currency = useAppSelector(selectCurrency).toLowerCase()
 
     const { data: nonVeChainTokens } = useVechainStatsTokensInfo()
