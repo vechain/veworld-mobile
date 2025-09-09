@@ -52,7 +52,7 @@ export const initialState: FeatureFlags = {
     },
 }
 
-const FeatureFlagsContex = React.createContext<FeatureFlags | undefined>(initialState)
+export const FeatureFlagsContext = React.createContext<FeatureFlags | undefined>(initialState)
 
 export const featureFlagsQueryKey = ["Feature", "Flags"]
 
@@ -106,11 +106,11 @@ export const FeatureFlagsProvider = ({ children }: { children: React.ReactNode }
         select: parseFeatureFlags,
     })
 
-    return <FeatureFlagsContex.Provider value={data ?? initialState}>{children}</FeatureFlagsContex.Provider>
+    return <FeatureFlagsContext.Provider value={data ?? initialState}>{children}</FeatureFlagsContext.Provider>
 }
 
 export const useFeatureFlags = () => {
-    const context = React.useContext(FeatureFlagsContex)
+    const context = React.useContext(FeatureFlagsContext)
     if (!context) {
         throw new Error("useFeatureFlags Context must be used within a FeatureFlagsProvider")
     }
