@@ -8,10 +8,10 @@ import { StakedCard } from "./StakedCard"
 export const StakingSection = memo(() => {
     const { LL } = useI18nContext()
     const address = useAppSelector(selectSelectedAccountAddress)
-    const { stakingGroups, isLoading } = useGroupedStakingData(address)
+    const { stakingGroups } = useGroupedStakingData(address)
 
     // Don't render if no staking data and not loading
-    if (!isLoading && stakingGroups.length === 0) return null
+    if (stakingGroups.length === 0) return null
 
     return (
         <BaseView>
