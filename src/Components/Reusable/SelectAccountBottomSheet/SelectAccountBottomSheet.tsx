@@ -165,10 +165,22 @@ export const SelectAccountBottomSheet = React.forwardRef<BottomSheetModalMethods
             resetHeight()
         }, [resetHeight, selectedKey, setSmallViewport])
 
+        const onAnimate = useCallback(
+            (_fromIndex: number, toIndex: number) => {
+                if (toIndex === -1) {
+                    setSmallViewport(false)
+                    initialLayout.current = false
+                    resetHeight()
+                }
+            },
+            [resetHeight, setSmallViewport],
+        )
+
         return (
             <BaseBottomSheet
                 dynamicHeight
                 ref={ref}
+                onAnimate={onAnimate}
                 onDismiss={onDismiss}
                 contentStyle={contentStyle}
                 enableContentPanningGesture={false}
