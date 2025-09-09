@@ -4,7 +4,8 @@ import { StyleSheet } from "react-native"
 import LinearGradient from "react-native-linear-gradient"
 import { BaseCard, BaseIcon, BaseSpacer, BaseText, BaseView, NFTMedia } from "~Components"
 import { B3TR, COLORS, DIRECTIONS, VET, VOT3, VTHO } from "~Constants"
-import { useFormatFiat, useNFTInfo, useTheme, useThemedStyles, useVns } from "~Hooks"
+import { useFormatFiat, useTheme, useThemedStyles, useVns } from "~Hooks"
+import { useNFTInfo } from "~Hooks/useNFTInfo"
 import { useI18nContext } from "~i18n"
 import {
     Activity,
