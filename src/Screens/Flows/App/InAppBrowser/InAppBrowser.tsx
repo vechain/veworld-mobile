@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native"
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import React, { MutableRefObject, useCallback, useEffect, useMemo, useState } from "react"
-import { Platform, StyleSheet, View } from "react-native"
+import { BackHandler, Platform, StyleSheet, View } from "react-native"
 import DeviceInfo from "react-native-device-info"
 import FastImage, { ImageStyle } from "react-native-fast-image"
 import Animated, { Easing, FadeOut } from "react-native-reanimated"
@@ -105,6 +105,23 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
         theme.colors.history.historyItem.iconColor,
     ])
 
+    const onAndroidBackPress = useCallback((): boolean => {
+        if (webviewRef.current) {
+            webviewRef.current.goBack()
+            return true // prevent default behavior (exit app)
+        }
+        return false
+    }, [webviewRef])
+
+    useEffect((): (() => void) | undefined => {
+        if (Platform.OS === "android") {
+            const nativeEventSubscription = BackHandler.addEventListener("hardwareBackPress", onAndroidBackPress)
+            return (): void => {
+                nativeEventSubscription.remove()
+            }
+        }
+    }, [onAndroidBackPress])
+
     return (
         <Layout
             bg={COLORS.DARK_PURPLE}
@@ -134,12 +151,14 @@ export const InAppBrowser: React.FC<Props> = ({ route }) => {
                                 onMessage={onMessage}
                                 onScroll={onScroll}
                                 onLoadEnd={onLoadEnd}
+                                allowsBackForwardNavigationGestures
                                 style={styles.loginWebView}
                                 scalesPageToFit={true}
                                 injectedJavaScriptBeforeContentLoaded={injectVechainScript()}
                                 allowsInlineMediaPlayback={true}
                                 originWhitelist={originWhitelist}
                                 collapsable={false}
+                                pullToRefreshEnabled
                                 startInLoadingState={true}
                                 renderLoading={renderLoading}
                             />

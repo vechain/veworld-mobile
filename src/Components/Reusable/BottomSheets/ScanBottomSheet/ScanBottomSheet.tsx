@@ -7,7 +7,6 @@ import { ScanTarget, SCREEN_WIDTH } from "~Constants"
 import { COLORS } from "~Constants/Theme"
 import { useDisclosure } from "~Hooks"
 import { useI18nContext } from "~i18n"
-import { BackHandlerEvent } from "~Model"
 import HapticsService from "~Services/HapticsService"
 import { AddressUtils, URIUtils, WalletConnectUtils } from "~Utils"
 import { CameraFooter } from "./components/CameraFooter"
@@ -114,8 +113,7 @@ export const ScanBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(
             handleComponent={null}
             noMargins={true}
             snapPoints={snapPoints}
-            ref={ref}
-            backHandlerEvent={BackHandlerEvent.BLOCK}>
+            ref={ref}>
             {isOpen && (
                 <CameraView
                     style={baseStyles.camera}

@@ -28,9 +28,23 @@ type BottomSheetAction = {
     icon: IconKey
     label: string
     onPress: () => void
+    disabled?: boolean
 }
 
 type BottomSheetActionItem = BottomSheetActionSeparator | BottomSheetAction
+
+export const getActionTextColor = (
+    action: BottomSheetAction,
+    theme: { colors: { actionBottomSheet: { disabledText: string; dangerText: string; text: string } } },
+) => {
+    if (action.disabled) {
+        return theme.colors.actionBottomSheet.disabledText
+    }
+    if (action.id === "close-tab") {
+        return theme.colors.actionBottomSheet.dangerText
+    }
+    return theme.colors.actionBottomSheet.text
+}
 
 export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Props>(({ onNavigate, onClose }, ref) => {
     const { LL } = useI18nContext()
@@ -112,6 +126,17 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
             },
             {
                 type: "action",
+                id: "go-back",
+                icon: "icon-chevron-left",
+                label: LL.BROWSER_GO_BACK(),
+                disabled: !navigationState?.canGoBack,
+                onPress: () => {
+                    webviewRef.current?.goBack()
+                    onClose?.()
+                },
+            },
+            {
+                type: "action",
                 id: "share",
                 icon: "icon-share-2",
                 label: LL.BROWSER_SHARE(),
@@ -160,6 +185,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
         toggleBookmark,
         webviewRef,
         onClose,
+        navigationState?.canGoBack,
         navigationState?.url,
         dappMetadata,
         navToNewTab,
@@ -191,11 +217,16 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                 style={styles.actionContainer}>
                 {actions.map(action =>
                     action.type === "action" ? (
-                        <BaseTouchable key={action.id} style={styles.actionItemContainer} action={action.onPress}>
+                        <BaseTouchable
+                            key={action.id}
+                            style={styles.actionItemContainer}
+                            action={action.onPress}
+                            disabled={action.disabled}>
                             <BaseIcon
                                 name={action.icon}
                                 size={16}
                                 iconPadding={8}
+                                disabled={action.disabled}
                                 bg={theme.colors.actionBottomSheet.dangerIconBackground}
                                 color={
                                     action.id === "close-tab"
@@ -203,13 +234,7 @@ export const BrowserBottomSheet = React.forwardRef<BottomSheetModalMethods, Prop
                                         : theme.colors.actionBottomSheet.icon
                                 }
                             />
-                            <BaseText
-                                typographyFont="bodySemiBold"
-                                color={
-                                    action.id === "close-tab"
-                                        ? theme.colors.actionBottomSheet.dangerText
-                                        : theme.colors.actionBottomSheet.text
-                                }>
+                            <BaseText typographyFont="bodySemiBold" color={getActionTextColor(action, theme)}>
                                 {action.label}
                             </BaseText>
                         </BaseTouchable>

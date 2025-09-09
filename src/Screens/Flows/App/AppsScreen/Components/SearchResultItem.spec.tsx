@@ -1,12 +1,14 @@
 import { useNavigation } from "@react-navigation/native"
 import { act, fireEvent, render, screen, waitFor } from "@testing-library/react-native"
-import React from "react"
+import React, { useRef } from "react"
 import { useVisitedUrls } from "~Hooks/useBrowserSearch"
 import { Routes } from "~Navigation"
 import { TestWrapper } from "~Test"
 import { HistoryUrlKind } from "~Utils/HistoryUtils"
 import { useDAppActions } from "../Hooks"
 import { SearchResultItem } from "./SearchResultItem"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
+import { renderHook } from "@testing-library/react-hooks"
 
 jest.mock("../Hooks")
 jest.mock("~Hooks/useBrowserSearch")
@@ -26,9 +28,16 @@ describe("SearchResultItem", () => {
         ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress })
         ;(useVisitedUrls as jest.Mock).mockReturnValue({ removeVisitedUrl: jest.fn() })
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate: navigate })
-        render(<SearchResultItem item={{ type: HistoryUrlKind.URL, name: "TEST", url: "https://vechain.org" }} />, {
-            wrapper: TestWrapper,
-        })
+        const { result } = renderHook(() => useRef<Map<string, SwipeableItemImperativeRef>>(new Map()))
+        render(
+            <SearchResultItem
+                item={{ type: HistoryUrlKind.URL, name: "TEST", url: "https://vechain.org" }}
+                swipeableItemRefs={result.current}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         const name = screen.getByTestId("SEARCH_RESULT_ITEM_NAME")
         const description = screen.getByTestId("SEARCH_RESULT_ITEM_DESCRIPTION")
@@ -57,6 +66,7 @@ describe("SearchResultItem", () => {
             addVisitedUrl: jest.fn(),
         })
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate: navigate })
+        const { result } = renderHook(() => useRef<Map<string, SwipeableItemImperativeRef>>(new Map()))
         const dapp = {
             amountOfNavigations: 0,
             createAt: Date.now(),
@@ -71,6 +81,7 @@ describe("SearchResultItem", () => {
                     type: HistoryUrlKind.DAPP,
                     dapp,
                 }}
+                swipeableItemRefs={result.current}
             />,
             {
                 wrapper: TestWrapper,
@@ -97,9 +108,16 @@ describe("SearchResultItem", () => {
         ;(useDAppActions as jest.Mock).mockReturnValue({ onDAppPress: jest.fn() })
         ;(useVisitedUrls as jest.Mock).mockReturnValue({ removeVisitedUrl: jest.fn() })
         ;(useNavigation as jest.Mock).mockReturnValue({ navigate: jest.fn() })
-        render(<SearchResultItem item={{ type: HistoryUrlKind.URL, name: "TEST", url: "https://vechain.org" }} />, {
-            wrapper: TestWrapper,
-        })
+        const { result } = renderHook(() => useRef<Map<string, SwipeableItemImperativeRef>>(new Map()))
+        render(
+            <SearchResultItem
+                item={{ type: HistoryUrlKind.URL, name: "TEST", url: "https://vechain.org" }}
+                swipeableItemRefs={result.current}
+            />,
+            {
+                wrapper: TestWrapper,
+            },
+        )
 
         const imageContainer = screen.getByTestId("SEARCH_RESULT_ITEM_IMAGE")
         act(() => {

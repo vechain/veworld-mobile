@@ -3,10 +3,12 @@ import { DEVICE_TYPE, Wallet } from "~Model"
 import { selectDevice, selectSelectedAccountOrNull, useAppSelector } from "~Storage/Redux"
 import { WalletEncryptionKeyHelper } from "~Components"
 import { HexUtils } from "~Utils"
+import { useSmartWallet } from "../useSmartWallet"
 
 export const useSignMessage = () => {
     const account = useAppSelector(selectSelectedAccountOrNull)
     const senderDevice = useAppSelector(state => selectDevice(state, account?.rootAddress))
+    const { signMessage: signMessageWithSmartWallet } = useSmartWallet()
 
     const getMnemonicSignature = async (hash: Buffer, wallet: Wallet) => {
         if (!account) throw new Error("No account selected")
@@ -39,6 +41,10 @@ export const useSignMessage = () => {
         if (!senderDevice) return
 
         if (senderDevice.type === DEVICE_TYPE.LEDGER) throw new Error("Ledger devices not supported in this hook")
+
+        if (senderDevice.type === DEVICE_TYPE.SMART_WALLET) {
+            return await signMessageWithSmartWallet(hash)
+        }
 
         //local mnemonic, identity already verified via useCheckIdentity
         if (!senderDevice.wallet) throw new Error("The device doesn't have a wallet")
