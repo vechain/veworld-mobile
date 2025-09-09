@@ -49,7 +49,7 @@ export const SelectableAccountCard = memo(
         const vetBalance = useAppSelector(state => selectVetBalanceByAccount(state, account.address))
         const vthoBalance = useAppSelector(state => selectVthoBalanceByAccount(state, account.address))
         const { renderedBalance: renderedFiatBalance, isLoading } = useTotalFiatBalance({
-            account,
+            address: account.address,
             enabled: balanceToken === "FIAT",
         })
         const isBalanceVisible = useAppSelector(selectBalanceVisible)
