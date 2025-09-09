@@ -67,7 +67,7 @@ env:
           platform: Android
       commands:
           - tapOn:
-                text: "Account 1"
+                text: "ankit.veworld.vet"
 - runFlow:
       when:
           platform: iOS
