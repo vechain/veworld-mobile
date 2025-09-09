@@ -6,7 +6,7 @@ import { useMultipleTokensBalance } from "~Hooks/useTokenBalance/useMultipleToke
 import { getUseUserTokensConfig } from "~Hooks/useUserTokens"
 import { FungibleTokenWithBalance } from "~Model"
 import {
-    selectCustomTokens,
+    selectCustomTokensByAccount,
     selectNetworkVBDTokens,
     selectSelectedAccountAddress,
     selectSelectedNetwork,
@@ -14,18 +14,18 @@ import {
 } from "~Storage/Redux"
 import { AddressUtils } from "~Utils"
 
-export const useNonVechainTokensBalance = ({ accountAddress }: { accountAddress?: string }) => {
+export const useNonVechainTokensBalance = (accountAddress?: string) => {
     const selectedAccountAddress = useAppSelector(selectSelectedAccountAddress)
     const network = useAppSelector(selectSelectedNetwork)
     const parsedAddress = useMemo(
         () => accountAddress ?? selectedAccountAddress!,
         [accountAddress, selectedAccountAddress],
     )
-    const { data: officialTokens } = useOfficialTokens()
-    const customTokens = useAppSelector(selectCustomTokens)
+    const { data: officialTokens, isLoading: isLoadingOfficialTokens } = useOfficialTokens()
+    const customTokens = useAppSelector(state => selectCustomTokensByAccount(state, parsedAddress))
     const { B3TR, VOT3 } = useAppSelector(selectNetworkVBDTokens)
 
-    const { data: userTokens } = useQuery({
+    const { data: userTokens, isLoading: isLoadingUserTokens } = useQuery({
         ...getUseUserTokensConfig({ address: parsedAddress, network }),
         select(data) {
             return data.filter(d => ![B3TR, VET, VTHO, VOT3].find(u => AddressUtils.compareAddresses(u.address, d)))
@@ -46,17 +46,18 @@ export const useNonVechainTokensBalance = ({ accountAddress }: { accountAddress?
     }, [customTokens, officialTokens, userTokens])
 
     const userValidTokenAddresses = useMemo(() => userValidTokens.map(u => u.address), [userValidTokens])
-    const _tokenBalances = useMultipleTokensBalance(userValidTokenAddresses, parsedAddress)
+    const { data: balances, isLoading: isLoadingBalances } = useMultipleTokensBalance(
+        userValidTokenAddresses,
+        parsedAddress,
+    )
 
-    return useMemo(
+    const tokensWithBalance = useMemo(
         () =>
             userValidTokens.map(
                 tk =>
                     ({
                         ...tk,
-                        balance: _tokenBalances?.find(b =>
-                            AddressUtils.compareAddresses(b.tokenAddress, tk.address),
-                        ) ?? {
+                        balance: balances?.find(b => AddressUtils.compareAddresses(b.tokenAddress, tk.address)) ?? {
                             balance: "0",
                             isHidden: false,
                             timeUpdated: new Date().toISOString(),
@@ -64,6 +65,13 @@ export const useNonVechainTokensBalance = ({ accountAddress }: { accountAddress?
                         },
                     } satisfies FungibleTokenWithBalance),
             ),
-        [_tokenBalances, userValidTokens],
+        [balances, userValidTokens],
     )
+
+    const isLoading = useMemo(
+        () => isLoadingOfficialTokens || isLoadingUserTokens || isLoadingBalances,
+        [isLoadingBalances, isLoadingOfficialTokens, isLoadingUserTokens],
+    )
+
+    return useMemo(() => ({ isLoading, data: tokensWithBalance }), [isLoading, tokensWithBalance])
 }

@@ -13,7 +13,7 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress: st
 
     const qc = useQueryClient()
 
-    const { data, dataUpdatedAt } = useQuery({
+    const { data, dataUpdatedAt, isLoading } = useQuery({
         queryKey: ["TOKENS", "MULTIPLE", accountAddress, network.genesis.id, sortedAddresses],
         queryFn: () => BalanceUtils.getBalancesFromBlockchain(sortedAddresses, accountAddress, network, thor),
         staleTime: 5 * 60 * 1000,
@@ -36,7 +36,7 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress: st
         })
     }, [accountAddress, data, dataUpdatedAt, network.genesis.id, qc])
 
-    return useMemo(() => {
+    const mappedData = useMemo(() => {
         if (!data) return undefined
         return data.map(d => {
             const queryKey = buildUseTokenBalanceQueryKey({
@@ -48,4 +48,6 @@ export const useMultipleTokensBalance = (addresses: string[], accountAddress: st
             return qData ?? d
         })
     }, [accountAddress, data, network.genesis.id, qc])
+
+    return useMemo(() => ({ isLoading, data: mappedData }), [isLoading, mappedData])
 }
