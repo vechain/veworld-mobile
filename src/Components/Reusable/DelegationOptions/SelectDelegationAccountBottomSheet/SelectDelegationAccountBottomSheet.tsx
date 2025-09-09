@@ -40,7 +40,7 @@ export const SelectDelegationAccountBottomSheet = React.forwardRef<BottomSheetMo
                 setSelectedAccount={onAccountIsSelected}
                 selectedAccount={selectedAccount as AccountWithDevice}
                 ref={ref}
-                isVthoBalance
+                balanceToken="VTHO"
             />
         )
     },

@@ -1,4 +1,4 @@
-import { default as React, useCallback, useMemo } from "react"
+import { default as React, useCallback, useMemo, useRef } from "react"
 import { FlatList, ListRenderItemInfo, StyleSheet } from "react-native"
 import Animated from "react-native-reanimated"
 import { BaseButton, BaseIcon, BaseSpacer, BaseText, BaseView } from "~Components"
@@ -8,6 +8,7 @@ import { useI18nContext } from "~i18n"
 import { resetBrowserState, useAppDispatch } from "~Storage/Redux"
 import { HistoryItem, HistoryUrlKind } from "~Utils/HistoryUtils"
 import { SearchResultItem } from "./SearchResultItem"
+import { SwipeableItemImperativeRef } from "react-native-swipeable-item"
 
 type Props = {
     error?: SearchError
@@ -20,6 +21,8 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
     const { LL } = useI18nContext()
     const { styles, theme } = useThemedStyles(baseStyles)
     const dispatch = useAppDispatch()
+
+    const swipeableItemRefs = useRef<Map<string, SwipeableItemImperativeRef>>(new Map())
 
     const onClear = useCallback(() => {
         dispatch(resetBrowserState())
@@ -48,7 +51,7 @@ export const SearchResults = ({ error, results, isValidQuery, isExactMatch }: Pr
     }, [])
 
     const renderItem = useCallback(({ item }: ListRenderItemInfo<HistoryItem>) => {
-        return <SearchResultItem item={item} />
+        return <SearchResultItem item={item} swipeableItemRefs={swipeableItemRefs} />
     }, [])
 
     if (error === SearchError.ADDRESS_CANNOT_BE_REACHED)

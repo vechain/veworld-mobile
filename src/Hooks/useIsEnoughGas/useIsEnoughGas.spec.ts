@@ -156,7 +156,8 @@ describe("useIsEnoughGas", () => {
             () =>
                 useIsEnoughGas({
                     selectedToken: "VTHO",
-                    clauses: [],
+                    transactionOutputs: [],
+                    origin: "0x0",
                     isDelegated: true,
                     allFeeOptions: { B3TR: BigNutils("0"), VTHO: BigNutils("2"), VET: BigNutils("0") },
                     isLoadingFees: false,

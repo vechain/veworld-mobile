@@ -17,6 +17,7 @@ import { DAppUtils } from "~Utils/DAppUtils"
 import { wrapFunctionComponent } from "~Utils/ReanimatedUtils/Reanimated"
 import { BrowserBottomSheet } from "./BrowserBottomSheet"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
+import { Spinner } from "../Spinner"
 
 type Props = {
     navigationUrl: string
@@ -65,22 +66,6 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
             nav.replace(Routes.DISCOVER_SEARCH)
         }
     }, [betterWorldFeature.appsScreen.enabled, nav, onNavigate])
-
-    const animatedStyles = useAnimatedStyle(
-        () => ({
-            height: showToolbars ? withTiming(56) : withTiming(24),
-            marginBottom: showToolbars ? 0 : 8,
-        }),
-        [showToolbars],
-    )
-
-    const animatedIconStyles = useAnimatedStyle(
-        () => ({
-            opacity: withTiming(showToolbars ? 1 : 0, { duration: 400 }),
-            transform: [{ scale: withTiming(showToolbars ? 1 : 0, { duration: 300 }) }],
-        }),
-        [showToolbars],
-    )
 
     const animatedFaviconStyles = useAnimatedStyle(
         () => ({
@@ -133,7 +118,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
 
     return (
         <>
-            <Animated.View style={isIOS() ? [styles.animatedContainer, animatedStyles] : styles.animatedContainer}>
+            <Animated.View style={styles.animatedContainer}>
                 <AnimatedBaseView style={styles.inputContainer}>
                     {/* Icon on the left */}
                     <AnimatedBaseIcon
@@ -145,7 +130,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                         haptics="Light"
                         size={16}
                         p={8}
-                        style={isIOS() ? [animatedIconStyles, styles.iconButton] : styles.iconButton}
+                        style={styles.iconButton}
                     />
 
                     {/* URL Text centered */}
@@ -160,7 +145,11 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                             flexDirection="row"
                             justifyContent="center"
                             gap={8}>
-                            {websiteFavicon}
+                            {isLoading ? (
+                                <Spinner color={COLORS.WHITE} size={20} style={styles.spinner} />
+                            ) : (
+                                websiteFavicon
+                            )}
                             <AnimatedBaseText
                                 allowFontScaling={false}
                                 typographyFont="bodySemiBold"
@@ -179,7 +168,7 @@ export const URLBar = ({ onNavigate, returnScreen, isLoading, navigationUrl }: P
                         haptics="Light"
                         size={16}
                         p={8}
-                        style={isIOS() ? [animatedIconStyles, styles.iconButton] : styles.iconButton}
+                        style={styles.iconButton}
                     />
                 </AnimatedBaseView>
             </Animated.View>
@@ -250,5 +239,8 @@ const styles = StyleSheet.create({
     },
     iconButton: {
         transformOrigin: "center",
+    },
+    spinner: {
+        padding: 2,
     },
 })
