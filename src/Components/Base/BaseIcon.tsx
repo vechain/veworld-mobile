@@ -74,8 +74,6 @@ const BaseIconWrapperWithRef = forwardRef<View | TouchableOpacity, BaseIconWrapp
             return (
                 <TouchableOpacity
                     onPress={onButtonPress}
-                    /**THIS IS A WORKAROUND TO AVOID ACCIDENTAL FIRING OF BUTTON */
-                    onLongPress={() => {}}
                     ref={ref as RefObject<TouchableOpacity>}
                     style={[
                         {

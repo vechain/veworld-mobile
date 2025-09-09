@@ -24,11 +24,7 @@ export const SelectedNetworkViewer = ({ showEvenIfMainnet = false }: Props) => {
     }, [nav])
 
     return showEvenIfMainnet || !isMainnet ? (
-        <TouchableOpacity
-            style={styles.networkViewer}
-            onPress={onNetworkLabelPress}
-            /**THIS IS A WORKAROUND TO AVOID ACCIDENTAL FIRING OF BUTTON */
-            onLongPress={() => {}}>
+        <TouchableOpacity style={styles.networkViewer} onPress={onNetworkLabelPress}>
             <BaseView style={styles.networkViewerIconText}>
                 <BaseIcon name="icon-globe" color={theme.colors.testnetText} size={16} testID="web" />
                 <BaseText pl={5} typographyFont="smallCaptionSemiBold" color={theme.colors.testnetText}>
