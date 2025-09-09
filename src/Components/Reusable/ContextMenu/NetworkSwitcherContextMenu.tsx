@@ -9,6 +9,7 @@ import { useNavigation } from "@react-navigation/native"
 import HapticsService from "~Services/HapticsService"
 import { changeSelectedNetwork } from "~Storage/Redux/Actions"
 import { clearNFTCache } from "~Storage/Redux/Slices/Nft"
+import { isAndroid } from "~Utils/PlatformUtils/PlatformUtils"
 
 type Props = {
     children: React.ReactNode
@@ -24,14 +25,15 @@ export const NetworkSwitcherContextMenu = ({ children }: Props) => {
     const renderNetworkOptions: ContextMenuAction[] = useMemo(() => {
         const networkOptions = networks.map(net => ({
             title: net.name,
-            subtitle: net.currentUrl,
             selected: net.id === currentNetwork.id,
+            systemIcon: "globe",
         }))
         return [
             ...networkOptions,
             {
                 title: LL.NETWORK_ADD_CUSTOM_NODE(),
                 selected: false,
+                systemIcon: "plus",
             },
         ] as ContextMenuAction[]
     }, [LL, networks, currentNetwork.id])
@@ -51,7 +53,11 @@ export const NetworkSwitcherContextMenu = ({ children }: Props) => {
     )
 
     return (
-        <ContextMenu previewBackgroundColor="transparent" actions={renderNetworkOptions} onPress={onContextMenuPress}>
+        <ContextMenu
+            previewBackgroundColor="transparent"
+            actions={renderNetworkOptions}
+            onPress={onContextMenuPress}
+            disabled={isAndroid()}>
             {children}
         </ContextMenu>
     )
