@@ -56,7 +56,6 @@ import {
 import { BannersCarousel } from "./Components/BannerCarousel"
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
 import { StakedCard } from "./Components/Staking"
-import { useTokenBalances } from "./Hooks"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -70,7 +69,6 @@ export const HomeScreen = () => {
 
     const selectedCurrency = useAppSelector(selectCurrency)
     const track = useAnalyticTracking()
-    const { updateBalances, updateSuggested } = useTokenBalances()
     const selectedNetwork = useAppSelector(selectSelectedNetwork)
 
     const { onSetSelectedAccount } = useSetSelectedAccount()
@@ -128,10 +126,10 @@ export const HomeScreen = () => {
     const onRefresh = useCallback(async () => {
         setRefreshing(true)
 
-        await Promise.all([updateBalances(true), updateSuggested(), invalidateStargateQueries()])
+        await Promise.all([invalidateStargateQueries()])
 
         setRefreshing(false)
-    }, [invalidateStargateQueries, updateBalances, updateSuggested])
+    }, [invalidateStargateQueries])
 
     const { animateEntering } = useMemoizedAnimation({
         enteringAnimation: new FadeInRight(),
