@@ -1,5 +1,10 @@
 # Changelog
 
+## <small>2.4.2 (2025-09-09)</small>
+
+* build: init ([895b3b7](https://github.com/vechain/veworld-mobile/commit/895b3b7))
+* test: mock LayoutAnimation to try reducing flakyness (#3272) ([f6902d0](https://github.com/vechain/veworld-mobile/commit/f6902d0)), closes [#3272](https://github.com/vechain/veworld-mobile/issues/3272)
+
 ## <small>2.4.1 (2025-09-04)</small>
 
 * build: init ([055b5de](https://github.com/vechain/veworld-mobile/commit/055b5de))
