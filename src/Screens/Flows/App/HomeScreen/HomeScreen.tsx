@@ -55,7 +55,7 @@ import {
 } from "./Components"
 import { BannersCarousel } from "./Components/BannerCarousel"
 import { EnableNotificationsBottomSheet } from "./Components/EnableNotificationsBottomSheet"
-import { StakedCard } from "./Components/Staking"
+import { StakingSection } from "./Components/Staking"
 
 export const HomeScreen = () => {
     /* Pre Fetch all VNS names and addresses */
@@ -251,7 +251,7 @@ export const HomeScreen = () => {
                     <BannersCarousel location="home_screen" />
 
                     <BaseView style={styles.container} gap={24}>
-                        <StakedCard account={selectedAccount} />
+                        <StakingSection />
                         <BaseView>
                             <EditTokensBar isEdit={isEdit} setIsEdit={setIsEdit} />
                             <BaseSpacer height={8} />
@@ -267,6 +267,7 @@ export const HomeScreen = () => {
                         setSelectedAccount={setSelectedAccount}
                         selectedAccount={selectedAccount}
                         ref={selectAccountBottomSheetRef}
+                        goToWalletEnabled
                     />
 
                     <QRCodeBottomSheet ref={QRCodeBottomSheetRef} />

@@ -1,10 +1,17 @@
 import { createStackNavigator } from "@react-navigation/stack"
-import React from "react"
+import { default as React } from "react"
 import { useFeatureFlags } from "~Components"
-import { Activity, FungibleToken, TransactionOutcomes } from "~Model"
+import { Activity, Device, FungibleToken, TransactionOutcomes } from "~Model"
 import { Routes } from "~Navigation/Enums"
 import { slideFadeInTransition, TRANSITION_SPECS } from "~Navigation/Transitions"
-import { ActivityDetailsScreen, ActivityScreen, InAppBrowser, TabsManagerScreen } from "~Screens"
+import {
+    ActivityDetailsScreen,
+    ActivityScreen,
+    InAppBrowser,
+    TabsManagerScreen,
+    WalletDetailScreen,
+    WalletManagementScreen,
+} from "~Screens"
 import { AppsSearchScreen } from "~Screens/Flows/App/AppsScreen"
 import { isIOS } from "~Utils/PlatformUtils/PlatformUtils"
 
@@ -25,6 +32,8 @@ export type HistoryStackParamList = {
     [Routes.DISCOVER_SEARCH]: undefined
     [Routes.APPS_TABS_MANAGER]: undefined
     [Routes.APPS_SEARCH]: undefined
+    [Routes.WALLET_MANAGEMENT]: undefined
+    [Routes.WALLET_DETAILS]: { device: Device }
 }
 
 const { Navigator, Screen } = createStackNavigator<HistoryStackParamList>()
@@ -68,6 +77,12 @@ export const HistoryStack = () => {
                     gestureDirection: "vertical",
                 }}
             />
+            <Screen
+                name={Routes.WALLET_MANAGEMENT}
+                component={WalletManagementScreen}
+                options={{ headerShown: false }}
+            />
+            <Screen name={Routes.WALLET_DETAILS} component={WalletDetailScreen} options={{ headerShown: false }} />
         </Navigator>
     )
 }

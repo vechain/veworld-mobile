@@ -84,3 +84,30 @@ export const delegateGenericDelegator = ({
             method: "POST",
         }),
     )
+
+export const delegateGenericDelegatorSmartAccount = ({
+    raw,
+    origin,
+    token,
+    networkType,
+}: {
+    raw: string
+    origin: string
+    token: string
+    networkType: NETWORK_TYPE
+}) =>
+    executeIfValidNetwork(networkType, `/api/v1/sign/transaction/authorized/${token.toLowerCase()}`, url =>
+        requestFromEndpoint<{ signature: string; address: string; raw: string; origin: string }>({
+            url: url,
+            data: {
+                raw,
+                origin,
+            },
+            method: "POST",
+        }),
+    )
+
+export const getDelegatorDepositAddress = ({ networkType }: { networkType: NETWORK_TYPE }) =>
+    executeIfValidNetwork(networkType, "/api/v1/deposit/account", url =>
+        fetchFromEndpoint<{ depositAccount: string }>(url),
+    )
