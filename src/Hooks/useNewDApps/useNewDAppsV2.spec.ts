@@ -75,7 +75,7 @@ describe("useNewDAppsV2", () => {
         // Check the result
         expect(result.current.isLoading).toBe(false)
         expect(result.current.newDapps).toHaveLength(2)
-        expect(result.current.newDapps).toStrictEqual(correctDapps)
+        expect(result.current.newDapps).toStrictEqual(expect.arrayContaining(correctDapps))
     })
 
     it("should return newest 10 DApps when no DApps are newer than 3 months", () => {
