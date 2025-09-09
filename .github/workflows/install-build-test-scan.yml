@@ -60,7 +60,7 @@ jobs:
                        Android ${{ needs.build-and-test-android.result || 'skipped' }} \
                        url: ${{ needs.build-and-test-android.outputs.resultUrl || 'N/A' }}\n \
                        Action Run: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}" 
-              "slack-message": "🚨🚨🚨 ${{ needs.build-and-test-ios.result != 'success' && needs.build-and-test-android.result != 'success' && 'Android and iOS' || (needs.build-and-test-android.result != 'success' && 'Android' || 'iOS') }} Nightly E2E Tests failed on 🚨🚨🚨"
+              "slack-message": "🚨🚨🚨 ${{ needs.build-and-test-ios.result != 'success' && needs.build-and-test-android.result != 'success' && 'Android and iOS' || (needs.build-and-test-android.result != 'success' && 'Android' || 'iOS') }} Nightly E2E Tests failed 🚨🚨🚨"
             }
       - name: FailureReportE2E2Slack
         if:  github.ref == 'refs/heads/main' && (needs.build-and-test-ios.result != 'success' || needs.build-and-test-android.result != 'success' || needs.scan.result != 'success')  
