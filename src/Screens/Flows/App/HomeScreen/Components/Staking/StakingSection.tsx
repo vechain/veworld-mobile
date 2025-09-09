@@ -8,10 +8,10 @@ import { StakedCard } from "./StakedCard"
 export const StakingSection = memo(() => {
     const { LL } = useI18nContext()
     const address = useAppSelector(selectSelectedAccountAddress)
-    const { stakingGroups, isLoading } = useGroupedStakingData(address)
+    const { stakingGroups } = useGroupedStakingData(address)
 
     // Don't render if no staking data and not loading
-    if (!isLoading && stakingGroups.length === 0) return null
+    if (stakingGroups.length === 0) return null
 
     return (
         <BaseView>
@@ -19,16 +19,18 @@ export const StakingSection = memo(() => {
                 {LL.ACTIVITY_STAKING_LABEL()}
             </BaseText>
             <BaseSpacer height={8} />
-            {stakingGroups.map(group => (
-                <BaseView key={`${group.address}-${group.isOwner}`} gap={8}>
-                    <StakedCard
-                        nodes={group.nodes}
-                        nfts={group.nfts}
-                        isOwner={group.isOwner}
-                        isLoading={group.isLoading}
-                    />
-                </BaseView>
-            ))}
+            <BaseView gap={8}>
+                {stakingGroups.map(group => (
+                    <BaseView key={`${group.address}-${group.isOwner}`}>
+                        <StakedCard
+                            nodes={group.nodes}
+                            nfts={group.nfts}
+                            isOwner={group.isOwner}
+                            isLoading={group.isLoading}
+                        />
+                    </BaseView>
+                ))}
+            </BaseView>
         </BaseView>
     )
 })
