@@ -99,12 +99,12 @@ onFlowComplete:
             when:
                platform: Android
             commands:
-              - assertVisible:
-                 text: "Account 2"
-                 index: 1
-              - tapOn:
-                 text: "Account 2"
-                 index: 1
+               - assertVisible:
+                  id: "DELEGATE_ACCOUNT_CARD_RADIO"
+                  index: 0
+               - tapOn:
+                  id: "DELEGATE_ACCOUNT_CARD_RADIO"
+                  index: 0
       - runFlow:
             when:
                platform: iOS
