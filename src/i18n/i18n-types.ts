@@ -3173,6 +3173,14 @@ type RootTranslation = {
 	 */
 	NFT_TRANSFER_SENT: string
 	/**
+	 * N​F​T​ ​p​u​r​c​h​a​s​e​d
+	 */
+	NFT_PURCHASED: () => LocalizedString
+	/**
+	 * N​F​T​ ​s​o​l​d
+	 */
+	NFT_SOLD: () => LocalizedString
+	/**
 	 * G​o​ ​t​o​ ​N​F​T​s
 	 */
 	NOTIFIACTION_INCOMING_NFT_ACTION: string
@@ -8137,6 +8145,14 @@ Thanks for your patience!
 	 * NFT sent
 	 */
 	NFT_TRANSFER_SENT: () => LocalizedString
+	/**
+	 * NFT purchased
+	 */
+	NFT_PURCHASED: () => LocalizedString
+	/**
+	 * NFT sold
+	 */
+	NFT_SOLD: () => LocalizedString
 	/**
 	 * Go to NFTs
 	 */

@@ -22,6 +22,7 @@ import {
     FungibleTokenActivity,
     NETWORK_TYPE,
     NonFungibleTokenActivity,
+    NFTMarketplaceActivity,
     SwapActivity,
     UnknownTxActivity,
     VeVoteCastActivity,
@@ -498,6 +499,45 @@ describe("ActivityBox", () => {
             const { getByTestId } = render(
                 <TestWrapper preloadedState={mockPreloadedState}>
                     <ActivityBox.NFTTransfer activity={activity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+            expect(getByTestId("nft-media")).toBeTruthy()
+        })
+    })
+
+    describe("NFT Sale", () => {
+        const nftSaleActivity: NFTMarketplaceActivity = {
+            id: "test-nft-sale-id",
+            blockNumber: 123,
+            timestamp: Date.now(),
+            type: ActivityType.NFT_SALE,
+            tokenId: "12345",
+            contractAddress: "0x123",
+            direction: DIRECTIONS.UP,
+            from: "0x0e73ea",
+            to: ["0x3ca506"],
+            status: ActivityStatus.SUCCESS,
+            isTransaction: false,
+            delegated: false,
+            price: "2500000000000000000",
+            buyer: "0x3ca506",
+            seller: "0x0e73ea",
+            tokenAddress: "VET",
+        }
+
+        it("renders NFT sale correctly", () => {
+            const { getByTestId } = render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.NFTSale activity={nftSaleActivity} onPress={mockOnPress} />
+                </TestWrapper>,
+            )
+            expect(getByTestId(`NFT-SALE-${nftSaleActivity.id}`)).toBeTruthy()
+        })
+
+        it("renders NFTMedia when NFT metadata is available for sale", () => {
+            const { getByTestId } = render(
+                <TestWrapper preloadedState={mockPreloadedState}>
+                    <ActivityBox.NFTSale activity={nftSaleActivity} onPress={mockOnPress} />
                 </TestWrapper>,
             )
             expect(getByTestId("nft-media")).toBeTruthy()
