@@ -48,7 +48,6 @@ export const StargateCarousel = () => {
     // Initialize filter state
     const [filter, setFilter] = useState<StakingFilter>(StakingFilter.OWN)
 
-    // Update filter when data loads - prefer owned, fallback to managing
     useEffect(() => {
         if (isLoadingNodes || !stargateNodes.length) return
 
@@ -56,7 +55,7 @@ export const StargateCarousel = () => {
         setFilter(currentFilter => {
             return currentFilter !== preferredFilter ? preferredFilter : currentFilter
         })
-    }, [hasOwnedNodes, hasManagedNodes, isLoadingNodes, stargateNodes.length])
+    }, [hasOwnedNodes, isLoadingNodes, stargateNodes.length])
 
     const filteredNodes = useMemo(() => {
         return filter === StakingFilter.OWN
